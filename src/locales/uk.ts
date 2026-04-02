@@ -1638,7 +1638,6 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Назва курсу",
 	"pages.rooms.importCourse.step_3": "Імпортований курс можна перейменувати під час наступного кроку.",
 	"pages.rooms.ccImportCourse.title": "Імпортний курс",
-	"pages.rooms.ccImportCourse.confirm": "Імпорт",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Виберіть файл",
 	"pages.rooms.ccImportCourse.loading": "Триває завантаження...",
 	"pages.rooms.ccImportCourse.success": "Файл вашого курсу завантажено та зараз імпортується у фоновому режимі.",

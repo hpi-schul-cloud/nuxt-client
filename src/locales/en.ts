@@ -1626,7 +1626,6 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Course name",
 	"pages.rooms.importCourse.step_3": "The imported course can be renamed in the next step.",
 	"pages.rooms.ccImportCourse.title": "Import course",
-	"pages.rooms.ccImportCourse.confirm": "Import",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Select file",
 	"pages.rooms.ccImportCourse.loading": "Upload in progress...",
 	"pages.rooms.ccImportCourse.success":

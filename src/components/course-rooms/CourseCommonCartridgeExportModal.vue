@@ -1,12 +1,5 @@
 <template>
-	<SvsDialog
-		ref="exportDialog"
-		v-model="isExportModalOpen"
-		:title="title"
-		data-testid="export-dialog"
-		@close="onCloseDialog"
-		@after-leave="resetDialog"
-	>
+	<SvsDialog v-model="isExportModalOpen" :title="title" data-testid="export-dialog" @after-leave="resetDialog">
 		<template #content>
 			<template v-if="step === 0">
 				<InfoAlert class="mb-4">
@@ -138,7 +131,7 @@ const { t } = useI18n();
 const commonCartridgeExportModule = injectStrict(COMMON_CARTRIDGE_EXPORT_MODULE_KEY);
 const courseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
 
-const emit = defineEmits(["update:isExportModalOpen", "dialog-closed", "dialog-confirmed", "next", "back"]);
+const emit = defineEmits(["update:isExportModalOpen"]);
 
 const isExportModalOpen = computed({
 	get: () => commonCartridgeExportModule.getIsExportModalOpen,
@@ -209,11 +202,11 @@ const someColumnBoardsSelected = computed(
 );
 
 const onCloseDialog = () => {
-	emit("dialog-closed", false);
 	isExportModalOpen.value = false;
 };
 
 function resetDialog(): void {
+	radios.value = "1.1.0";
 	commonCartridgeExportModule.resetExportFlow();
 	step.value = 0;
 	allTasks.value.forEach((task) => {
@@ -228,13 +221,11 @@ function resetDialog(): void {
 }
 
 function onNext(): void {
-	emit("next", false);
 	commonCartridgeExportModule.setVersion(radios.value);
 	step.value++;
 }
 
 async function onExport() {
-	emit("dialog-confirmed", false);
 	notifySuccess(t("common.words.export"));
 
 	const topicIds: string[] = allTopics.value.filter((topic) => topic.isSelected).map((topic) => topic.id);
@@ -258,7 +249,6 @@ async function onExport() {
 }
 
 function onBack(): void {
-	emit("back", false);
 	step.value = 0;
 	allTasks.value.forEach((task) => {
 		task.isSelected = true;

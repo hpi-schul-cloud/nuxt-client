@@ -1648,7 +1648,6 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Kursname",
 	"pages.rooms.importCourse.step_3": "Der importierte Kurs kann im nächsten Schritt umbenannt werden.",
 	"pages.rooms.ccImportCourse.title": "Kurs importieren",
-	"pages.rooms.ccImportCourse.confirm": "Importieren",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Datei auswählen",
 	"pages.rooms.ccImportCourse.loading": "Upload läuft...",
 	"pages.rooms.ccImportCourse.success": "Deine Kursdatei wurde hochgeladen und wird nun im Hintergrund importiert.",
