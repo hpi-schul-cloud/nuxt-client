@@ -37,6 +37,7 @@
 
 					<div class="board-menu" :class="boardMenuClasses">
 						<BoardMenu v-if="hasMenuItem" :scope="BoardMenuScope.CARD" has-background :data-testid="boardMenuTestId">
+							<KebabMenuAction @click="onOpenCard">Open</KebabMenuAction>
 							<KebabMenuActionEdit v-if="allowedOperations?.deleteCard && !isEditMode" @click="onStartEditMode" />
 							<KebabMenuActionDuplicate
 								v-if="allowedOperations?.copyCard"
@@ -110,6 +111,7 @@ import { delay } from "@/utils/helpers";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
+	KebabMenuAction,
 	KebabMenuActionDelete,
 	KebabMenuActionDuplicate,
 	KebabMenuActionEdit,
@@ -246,6 +248,10 @@ const boardMenuClasses = computed(() => {
 const { run: duplicateCard, isRunning: isDuplicating } = useSafeTaskRunner(async () => {
 	await cardStore.duplicateCard({ cardId: props.cardId });
 });
+
+const onOpenCard = () => {
+	isDetailView.value = true;
+};
 
 onMounted(async () => {
 	if (card.value === undefined) {
