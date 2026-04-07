@@ -1,10 +1,10 @@
-import { CommonCartridgeVersion, useCommonCartridgeExport } from "@data-common-cartridge";
+import { type CommonCartridgeVersion, startExport } from "@data-common-cartridge";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { vi } from "vitest";
 import { mock } from "vitest-mock-extended";
 
-describe("useCommonCartridgeExport composable", () => {
+describe("CommonCartridge Export utility", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		vi.clearAllMocks();
@@ -12,8 +12,6 @@ describe("useCommonCartridgeExport composable", () => {
 
 	describe("startExport", () => {
 		const setup = () => {
-			const { startExport } = useCommonCartridgeExport();
-
 			const version: CommonCartridgeVersion = "1.1.0";
 			const roomId = "roomId";
 			const topics = ["topic1", "topic2"];
@@ -89,15 +87,15 @@ describe("useCommonCartridgeExport composable", () => {
 				expect(inputMockColumnBoardIds.value).toBe(JSON.stringify(columnBoards));
 			});
 
-			it("should append/remove form to/from body", async () => {
+			it("should append form to body and remove it after submit", async () => {
 				const { formMock, appendChildSpy, removeChildSpy, startExport, version, roomId, topics, tasks, columnBoards } =
 					setup();
 
 				await startExport(version, roomId, topics, tasks, columnBoards);
 
 				expect(appendChildSpy).toHaveBeenCalledWith(formMock);
-				expect(removeChildSpy).toHaveBeenCalledWith(formMock);
 				expect(formMock.submit).toHaveBeenCalled();
+				expect(removeChildSpy).toHaveBeenCalledWith(formMock);
 			});
 		});
 

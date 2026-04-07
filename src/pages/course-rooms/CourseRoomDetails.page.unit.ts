@@ -6,12 +6,8 @@ import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
 import { COPY_MODULE_KEY, COURSE_ROOM_DETAILS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject/injection-keys";
-import { mockComposable } from "@@/tests/test-utils/mockComposable";
-import { useCommonCartridgeExport } from "@data-common-cartridge";
-import { Mocked } from "vitest";
 
 vi.mock("@data-common-cartridge");
-const useCommonCartridgeExportMock = vi.mocked(useCommonCartridgeExport);
 
 import { createTestAppStore, createTestEnvStore, singleColumnBoardResponseFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -70,19 +66,12 @@ describe("CourseRoomDetails.page.vue", () => {
 	let copyModule: CopyModule;
 	let shareModule: ShareModule;
 	let courseRoomDetailsModule: CourseRoomDetailsModule;
-	let useCommonCartridgeExportMockReturn: Mocked<ReturnType<typeof useCommonCartridgeExport>>;
 	let router: RouterMock;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		router = createRouterMock();
 		injectRouterMock(router);
-
-		useCommonCartridgeExportMockReturn = mockComposable(useCommonCartridgeExport, {
-			startExport: vi.fn(),
-			allowedVersions: ["1.1.0", "1.3.0"],
-		});
-		useCommonCartridgeExportMock.mockReturnValue(useCommonCartridgeExportMockReturn);
 	});
 
 	afterEach(() => {

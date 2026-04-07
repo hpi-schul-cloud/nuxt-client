@@ -181,7 +181,7 @@ import {
 } from "@/types/course-room/CourseRoom";
 import { COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifyError, notifySuccess } from "@data-app";
-import { CommonCartridgeVersion, useCommonCartridgeExport } from "@data-common-cartridge";
+import { type CommonCartridgeVersion, startExport } from "@data-common-cartridge";
 import { mdiInformation } from "@icons/material";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -196,7 +196,6 @@ type Steps = "VersionSelection" | "ContentSelection";
 
 const { t } = useI18n();
 const courseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
-const { startExport } = useCommonCartridgeExport();
 
 const props = defineProps<{
 	isOpen: boolean;

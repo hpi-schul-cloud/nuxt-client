@@ -1,33 +1,24 @@
 import CourseCommonCartridgeExportModal from "./CourseCommonCartridgeExportModal.vue";
 import courseRoomDetailsModule from "@/store/course-room-details";
 import { COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject";
-import { expectNotification, mockComposable } from "@@/tests/test-utils";
+import { expectNotification } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardElementResponse, BoardElementResponseType } from "@api-server";
-import { useCommonCartridgeExport } from "@data-common-cartridge";
+import { startExport } from "@data-common-cartridge";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mocked } from "vitest";
 import { nextTick, reactive } from "vue";
 import { VDialog } from "vuetify/components";
 
 vi.mock("@data-common-cartridge");
-const useCommonCartridgeExportMock = vi.mocked(useCommonCartridgeExport);
 
 describe("CourseCommonCartridgeExportModal", () => {
 	let courseRoomDetailsModuleMock: courseRoomDetailsModule;
-	let useCommonCartridgeExportMockReturn: Mocked<ReturnType<typeof useCommonCartridgeExport>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-
-		useCommonCartridgeExportMockReturn = mockComposable(useCommonCartridgeExport, {
-			startExport: vi.fn(),
-			allowedVersions: ["1.1.0", "1.3.0"],
-		});
-		useCommonCartridgeExportMock.mockReturnValue(useCommonCartridgeExportMockReturn);
 	});
 
 	const createRoomData = (elements: BoardElementResponse[] = []) =>
@@ -181,7 +172,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 			await goToContentSelection(wrapper);
 			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
 
-			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", [], [], []);
+			expect(startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", [], [], []);
 		});
 
 		it("should close dialog after starting export", async () => {
@@ -257,13 +248,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 			await goToContentSelection(wrapper);
 			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
 
-			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith(
-				"1.1.0",
-				"room-id-1",
-				["lesson1"],
-				["task1"],
-				["board1"]
-			);
+			expect(startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", ["lesson1"], ["task1"], ["board1"]);
 		});
 	});
 
@@ -285,13 +270,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 			await wrapper.findComponent('[data-testid="all-topics-checkbox"]').trigger("click");
 			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
 
-			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith(
-				"1.1.0",
-				"room-id-1",
-				[],
-				["t1", "t2"],
-				["b1", "b2"]
-			);
+			expect(startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", [], ["t1", "t2"], ["b1", "b2"]);
 		});
 
 		it("should deselect all tasks when toggle is clicked", async () => {
@@ -301,13 +280,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 			await wrapper.findComponent('[data-testid="all-tasks-checkbox"]').trigger("click");
 			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
 
-			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith(
-				"1.1.0",
-				"room-id-1",
-				["l1", "l2"],
-				[],
-				["b1", "b2"]
-			);
+			expect(startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", ["l1", "l2"], [], ["b1", "b2"]);
 		});
 
 		it("should deselect all column boards when toggle is clicked", async () => {
@@ -317,13 +290,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 			await wrapper.findComponent('[data-testid="all-column-boards-checkbox"]').trigger("click");
 			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
 
-			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith(
-				"1.1.0",
-				"room-id-1",
-				["l1", "l2"],
-				["t1", "t2"],
-				[]
-			);
+			expect(startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", ["l1", "l2"], ["t1", "t2"], []);
 		});
 
 		it("should reselect all items when toggle is clicked twice", async () => {
@@ -335,13 +302,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 			await checkbox.trigger("click");
 			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
 
-			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith(
-				"1.1.0",
-				"room-id-1",
-				["l1", "l2"],
-				["t1", "t2"],
-				["b1", "b2"]
-			);
+			expect(startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", ["l1", "l2"], ["t1", "t2"], ["b1", "b2"]);
 		});
 	});
 
@@ -363,13 +324,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 			await goToContentSelection(wrapper);
 			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
 
-			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith(
-				"1.1.0",
-				"room-id-1",
-				["l1"],
-				["t1"],
-				["b1"]
-			);
+			expect(startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", ["l1"], ["t1"], ["b1"]);
 		});
 	});
 
@@ -396,13 +351,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 
 			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
 
-			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith(
-				"1.1.0",
-				"room-id-1",
-				["l2"],
-				["t2"],
-				["b2"]
-			);
+			expect(startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", ["l2"], ["t2"], ["b2"]);
 		});
 	});
 
