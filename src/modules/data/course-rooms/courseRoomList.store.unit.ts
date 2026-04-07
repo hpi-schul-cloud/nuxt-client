@@ -8,6 +8,7 @@ import {
 	DashboardResponse,
 } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
+import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -55,6 +56,7 @@ describe("useCourseRoomListStore", () => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		vi.mocked(DashboardApiFactory).mockReturnValue(dashboardApiMock);
 		vi.mocked(CoursesApiFactory).mockReturnValue(coursesApiMock);
+		vi.spyOn(logger, "error").mockImplementation(vi.fn());
 	});
 
 	describe("fetchCourses", () => {
