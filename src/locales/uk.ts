@@ -1659,7 +1659,7 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Меню інструментів",
 	"pages.rooms.tools.outdated": "Конфігурація не завершена",
 	"pages.rooms.tools.outdatedDialog.title": "Інструмент „{toolName}“ застарів",
-	"pages.room.modal.course.export.header": "Формат експорту",
+	"pages.room.modal.course.export.header": "Версія для експорту",
 	"pages.room.modal.course.export.options.header": "Експорт налаштувань",
 	"pages.room.modal.course.export.options.topics": "Теми",
 	"pages.room.modal.course.export.options.tasks": "Завдання без теми",

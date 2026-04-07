@@ -1679,7 +1679,7 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Menú de herramienta",
 	"pages.rooms.tools.outdated": "Configuración incompleta",
 	"pages.rooms.tools.outdatedDialog.title": "Herramienta „{toolName}“ obsoleta",
-	"pages.room.modal.course.export.header": "Formato de exportación",
+	"pages.room.modal.course.export.header": "Version de exportación",
 	"pages.room.modal.course.export.options.header": "Exportar configuración",
 	"pages.room.modal.course.export.options.topics": "Temas",
 	"pages.room.modal.course.export.options.tasks": "Tareas sin tema",
