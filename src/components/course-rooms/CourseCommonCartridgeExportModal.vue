@@ -65,7 +65,7 @@
 										<li>{{ $t(`components.molecules.export.options.info.point4.sub1`) }}</li>
 										<li>{{ $t(`components.molecules.export.options.info.point4.sub2`) }}</li>
 										<li>{{ $t(`components.molecules.export.options.info.point4.sub3`) }}</li>
-										<span v-if="radios && radios == '1.1.0'" data-testid="export-options-info-point3">
+										<span v-if="radios && radios == '1.1.0'" data-testid="export-options-info-point4-sub4">
 											<li>{{ $t(`components.molecules.export.options.info.point4.sub4`) }}</li>
 										</span>
 										<li>{{ $t(`components.molecules.export.options.info.point4.sub5`) }}</li>
