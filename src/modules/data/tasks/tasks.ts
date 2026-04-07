@@ -91,3 +91,39 @@ export const useTasks = ({ range }: { range?: DateRange } = {}, fetchImmediate =
 		gradedTasksForStudent,
 	};
 };
+
+export const useTaskActions = () => {
+	const tasksApi = TaskApiFactory(undefined, "/v3", $axios);
+	const { execute, isRunning, error } = useSafeAxiosTask();
+
+	// TODO: add onSuccess ?!
+	const deleteTask = async (taskId: string) =>
+		await execute(() => tasksApi.taskControllerDelete(taskId), "Fehler beim Löschen");
+
+	// TODO: sample onSuccess
+	// const deleteTask = async (taskId: string, onSuccess) =>
+	// 	await execute(() => tasksApi.taskControllerDelete(taskId), "Fehler beim Löschen", onSuccess);
+
+	// finishTask, revertPublishedTask analog
+	return { deleteTask, isRunning, error };
+	// return { deleteTask, finishTask, revertPublishedTask, isRunning, error };
+};
+
+const componentSetup = async () => {
+	const { fetch } = useTasks();
+	const { deleteTask } = useTaskActions();
+
+	const { success } = await deleteTask("task-id");
+	if (success) await fetch();
+
+	// TODO: sample onSuccess, optional
+	// const { success } = await deleteTask("task-id", fetch);
+
+	// TODO: All from one composable
+	// const { tasks, deleteTask, isRunning } = useTasks();
+};
+
+// Other options:
+// - Have actions also in useTasks() ? --> allows implementing refetching automatically, when e.g. deleting
+// - Also allows getting all actions/getters by one instead of two destructs
+// - mutating and fetching could, but dont need to share the same transmission state (isRunning) vs (isFetching, isMutating)
