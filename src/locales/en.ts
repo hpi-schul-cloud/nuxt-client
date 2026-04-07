@@ -963,6 +963,9 @@ export default {
 	"mixins.typeMeta.types.image": "Image",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Website",
+	"loggedin.text.backupFeatures":
+		"Back up your cloud content and also use the new function for exporting courses. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "More information and instructions can be found here.",
 	"pages.dashboard.title": "Dashboard",
 	"pages.dashboard.empty.news": "So far there is no news.",
 	"pages.dashboard.new.features": "There are new features in the {instanceTitle}.",

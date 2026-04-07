@@ -4,6 +4,16 @@
 			<h1 data-testid="dashboard-title">{{ t("pages.dashboard.title") }}</h1>
 		</template>
 		<template #default>
+			<InfoAlert v-if="hasGlobalAnnouncement" class="mt-6">
+				<i18n-t keypath="loggedin.text.backupFeatures" scope="global">
+					<template #helpLink>
+						<a href="https://dbildungscloud.de/help/confluence/485132545" target="_blank" rel="noopener noreferrer">
+							{{ t("loggedin.text.backupFeatures.helpLink") }}
+						</a>
+					</template>
+				</i18n-t>
+			</InfoAlert>
+
 			<SvsSuspense :loading="isLoadingNews">
 				<h2 class="mb-4">{{ t("pages.news.title") }}</h2>
 
@@ -57,11 +67,13 @@ import { useSafeAxiosRunner } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { NewsApiFactory } from "@api-server";
+import { NewsApiFactory, SchulcloudTheme } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { DashboardReleaseDialog, DashboardTasks } from "@feature-dashboard";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
+import { InfoAlert } from "@ui-alert";
 import { SvsSuspense } from "@ui-containers";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
@@ -80,6 +92,10 @@ const { data: newsResponse, isRunning: isLoadingNews } = useSafeAxiosRunner(() =
 	newsApi.newsControllerFindAll("schools", undefined, undefined, undefined, NEWS_LIMIT)
 );
 const latestNews = computed(() => newsResponse.value?.data.data ?? []);
+
+const envConfig = useEnvConfig();
+// Workaround, since accessing the same parameters is in progress.
+const hasGlobalAnnouncement = computed(() => envConfig.value.SC_THEME === SchulcloudTheme.DEFAULT);
 </script>
 
 <style scoped>
