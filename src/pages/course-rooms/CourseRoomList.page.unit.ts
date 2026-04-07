@@ -81,18 +81,20 @@ describe("CourseRoomListPage", () => {
 				expect(wrapper.vm.rooms[0].title).toBe("History");
 			});
 
-			it("should filter rooms when typing in search field", async () => {
-				const { wrapper } = setup();
-				await nextTick();
+			describe("when typing in search field", () => {
+				it("should filter rooms", async () => {
+					const { wrapper } = setup();
+					await nextTick();
 
-				expect(wrapper.vm.rooms.length).toEqual(4);
+					expect(wrapper.vm.rooms.length).toEqual(4);
 
-				const searchField = wrapper.find('[data-testid="search-field-course"] input');
-				await searchField.setValue("Mathe");
-				await nextTick();
+					const searchField = wrapper.find('[data-testid="search-field-course"] input');
+					await searchField.setValue("Mathe");
+					await nextTick();
 
-				expect(wrapper.vm.rooms.length).toEqual(1);
-				expect(wrapper.vm.rooms[0].title).toBe("Mathe");
+					expect(wrapper.vm.rooms.length).toEqual(1);
+					expect(wrapper.vm.rooms[0].title).toBe("Mathe");
+				});
 			});
 		});
 	});

@@ -26,15 +26,15 @@ describe("useCourseRoomListStore", () => {
 	const dashboardApiMock = mockApi<ReturnType<typeof DashboardApiFactory>>();
 	const coursesApiMock = mockApi<ReturnType<typeof CoursesApiFactory>>();
 
-	const setup = (
+	const setup = async (
 		options: {
 			elementCount?: number;
 			elements?: Partial<DashboardGridElementResponse>[];
 		} = {}
-	): {
+	): Promise<{
 		store: ReturnType<typeof useCourseRoomListStore>;
 		mockElements: DashboardGridElementResponse[];
-	} => {
+	}> => {
 		const { elementCount = 1, elements } = options;
 		const mockElements = elements
 			? elements.map((override) => buildDashboardElement(override))
@@ -47,6 +47,7 @@ describe("useCourseRoomListStore", () => {
 		);
 
 		const store = useCourseRoomListStore();
+		await store.fetchCourses();
 		return { store, mockElements };
 	};
 
@@ -58,9 +59,7 @@ describe("useCourseRoomListStore", () => {
 
 	describe("fetchCourses", () => {
 		it("should load courses successfully", async () => {
-			const { store } = setup({ elementCount: 2 });
-
-			await store.fetchCourses();
+			const { store } = await setup({ elementCount: 2 });
 
 			expect(store.gridElementsId).toBe("dashboard-1");
 			expect(store.roomsData).toHaveLength(2);
@@ -68,15 +67,13 @@ describe("useCourseRoomListStore", () => {
 		});
 
 		it("should process room data and add 'to' property", async () => {
-			const { store } = setup({ elements: [{ id: "course-123" }] });
-
-			await store.fetchCourses();
+			const { store } = await setup({ elements: [{ id: "course-123" }] });
 
 			expect(store.roomsData[0]).toHaveProperty("to", "/rooms/course-123");
 		});
 
 		it("should process groupElements and add 'to' property", async () => {
-			const { store } = setup({
+			const { store } = await setup({
 				elements: [
 					{
 						id: "group-1",
@@ -93,8 +90,6 @@ describe("useCourseRoomListStore", () => {
 				],
 			});
 
-			await store.fetchCourses();
-
 			expect(store.roomsData[0].groupElements?.[0]).toHaveProperty("to", "/rooms/sub-course-1");
 		});
 
@@ -105,25 +100,22 @@ describe("useCourseRoomListStore", () => {
 				})
 			);
 
-			const store = useCourseRoomListStore();
-			await store.fetchCourses();
+			const { store } = await setup({ elements: [] });
 
 			expect(store.roomsData).toEqual([]);
 			expect(store.hasCurrentRooms).toBe(false);
 		});
 
 		it("should handle element without groupElements", async () => {
-			const { store } = setup({
+			const { store } = await setup({
 				elements: [{ id: "course-no-group", groupElements: undefined }],
 			});
-
-			await store.fetchCourses();
 
 			expect(store.roomsData[0]).toHaveProperty("to", "/rooms/course-no-group");
 		});
 
 		it("should handle groupElement without id", async () => {
-			const { store } = setup({
+			const { store } = await setup({
 				elements: [
 					{
 						id: "group-1",
@@ -140,40 +132,36 @@ describe("useCourseRoomListStore", () => {
 				],
 			});
 
-			await store.fetchCourses();
-
 			expect(store.roomsData[0].groupElements?.[0]).toHaveProperty("to", "");
 		});
 
 		it("should handle element without id", async () => {
-			const { store } = setup({ elements: [{ id: undefined }] });
-
-			await store.fetchCourses();
+			const { store } = await setup({ elements: [{ id: undefined }] });
 
 			expect(store.roomsData[0]).toHaveProperty("to", "");
 		});
 
-		it("should not update state when API call fails", async () => {
-			dashboardApiMock.dashboardControllerFindForUser.mockRejectedValue(new Error("API Error"));
+		describe("when API call fails", () => {
+			it("should not update state", async () => {
+				vi.clearAllMocks();
+				dashboardApiMock.dashboardControllerFindForUser.mockRejectedValue(new Error("API Error"));
+				const store = useCourseRoomListStore();
+				await store.fetchCourses();
 
-			const store = useCourseRoomListStore();
-			await store.fetchCourses();
-
-			expect(store.gridElementsId).toBe("");
-			expect(store.roomsData).toEqual([]);
+				expect(store.gridElementsId).toBe("");
+				expect(store.roomsData).toEqual([]);
+			});
 		});
 	});
 
 	describe("alignCourse", () => {
 		it("should move element successfully", async () => {
-			const { store, mockElements } = setup({ elementCount: 2 });
+			const { store, mockElements } = await setup({ elementCount: 2 });
 			dashboardApiMock.dashboardControllerMoveElement.mockResolvedValue(
 				mockApiResponse<DashboardResponse>({
 					data: { id: "dashboard-1", gridElements: mockElements },
 				})
 			);
-
-			await store.fetchCourses();
 
 			const payload = {
 				from: { x: 0, y: 0 },
@@ -190,7 +178,7 @@ describe("useCourseRoomListStore", () => {
 		});
 
 		it("should update position of moved element", async () => {
-			const { store, mockElements } = setup({
+			const { store, mockElements } = await setup({
 				elements: [{ id: "element-1", xPosition: 0, yPosition: 0 }],
 			});
 			const updatedElements = [buildDashboardElement({ id: "element-1", xPosition: 2, yPosition: 1 })];
@@ -199,8 +187,6 @@ describe("useCourseRoomListStore", () => {
 					data: { id: "dashboard-1", gridElements: updatedElements },
 				})
 			);
-
-			await store.fetchCourses();
 
 			const payload = {
 				from: { x: 0, y: 0 },
@@ -215,64 +201,57 @@ describe("useCourseRoomListStore", () => {
 			expect(movedElement?.yPosition).toBe(1);
 		});
 
-		it("should not update state when API call fails", async () => {
-			const { store, mockElements } = setup({
-				elements: [{ id: "element-1", xPosition: 0, yPosition: 0 }],
+		describe("when API call fails", () => {
+			it("should not update state", async () => {
+				const { store, mockElements } = await setup({
+					elements: [{ id: "element-1", xPosition: 0, yPosition: 0 }],
+				});
+				dashboardApiMock.dashboardControllerMoveElement.mockRejectedValue(new Error("API Error"));
+
+				const payload = {
+					from: { x: 0, y: 0 },
+					to: { x: 2, y: 1 },
+					item: mockElements[0],
+				};
+
+				await store.alignCourse(payload);
+
+				const element = store.roomsData.find((item) => item.id === "element-1");
+				expect(element?.xPosition).toBe(0);
+				expect(element?.yPosition).toBe(0);
 			});
-			dashboardApiMock.dashboardControllerMoveElement.mockRejectedValue(new Error("API Error"));
-
-			await store.fetchCourses();
-
-			const payload = {
-				from: { x: 0, y: 0 },
-				to: { x: 2, y: 1 },
-				item: mockElements[0],
-			};
-
-			await store.alignCourse(payload);
-
-			const element = store.roomsData.find((item) => item.id === "element-1");
-			expect(element?.xPosition).toBe(0);
-			expect(element?.yPosition).toBe(0);
 		});
 
-		it("should handle when item to be moved is not found", async () => {
-			const { store } = setup({
-				elements: [{ id: "element-1", xPosition: 0, yPosition: 0 }],
+		describe("when item to be moved is not found", () => {
+			it("should not update state", async () => {
+				const { store } = await setup({
+					elements: [{ id: "element-1", xPosition: 0, yPosition: 0 }],
+				});
+				const updatedElements = [buildDashboardElement({ id: "element-1", xPosition: 2, yPosition: 1 })];
+				dashboardApiMock.dashboardControllerMoveElement.mockResolvedValue(
+					mockApiResponse<DashboardResponse>({
+						data: { id: "dashboard-1", gridElements: updatedElements },
+					})
+				);
+
+				const payload = {
+					from: { x: 0, y: 0 },
+					to: { x: 2, y: 1 },
+					item: { id: "non-existent-id" } as DashboardGridElementResponse,
+				};
+
+				await store.alignCourse(payload);
+
+				expect(store.roomsData).toHaveLength(1);
 			});
-			const updatedElements = [buildDashboardElement({ id: "element-1", xPosition: 2, yPosition: 1 })];
-			dashboardApiMock.dashboardControllerMoveElement.mockResolvedValue(
-				mockApiResponse<DashboardResponse>({
-					data: { id: "dashboard-1", gridElements: updatedElements },
-				})
-			);
-
-			await store.fetchCourses();
-
-			const payload = {
-				from: { x: 0, y: 0 },
-				to: { x: 2, y: 1 },
-				item: { id: "non-existent-id" } as DashboardGridElementResponse,
-			};
-
-			await store.alignCourse(payload);
-
-			expect(store.roomsData).toHaveLength(1);
 		});
 	});
 
 	describe("updateCourse", () => {
 		it("should update course title successfully", async () => {
-			const { store, mockElements } = setup({
+			const { store, mockElements } = await setup({
 				elements: [{ xPosition: 0, yPosition: 0, title: "Old" }],
 			});
-			dashboardApiMock.dashboardControllerPatchGroup.mockResolvedValue(
-				mockApiResponse<DashboardResponse>({
-					data: { id: "dashboard-1", gridElements: mockElements },
-				})
-			);
-
-			await store.fetchCourses();
 
 			await store.updateCourse({
 				id: mockElements[0].id,
@@ -290,58 +269,51 @@ describe("useCourseRoomListStore", () => {
 			expect(store.roomsData[0].title).toBe("New Title");
 		});
 
-		it("should not update when room is not found", async () => {
-			const { store, mockElements } = setup({
-				elements: [{ xPosition: 0, yPosition: 0, title: "Old" }],
+		describe("when room is not found", () => {
+			it("should not update state", async () => {
+				const { store } = await setup({
+					elements: [{ xPosition: 0, yPosition: 0, title: "Old" }],
+				});
+
+				await store.updateCourse({
+					id: "some-id",
+					xPosition: 99,
+					yPosition: 99,
+					title: "New Title",
+					shortTitle: "NT",
+					displayColor: "#54616e",
+					isSynchronized: false,
+				});
+
+				expect(store.roomsData[0].title).toBe("Old");
 			});
-			dashboardApiMock.dashboardControllerPatchGroup.mockResolvedValue(
-				mockApiResponse<DashboardResponse>({
-					data: { id: "dashboard-1", gridElements: mockElements },
-				})
-			);
-
-			await store.fetchCourses();
-
-			await store.updateCourse({
-				id: "some-id",
-				xPosition: 99,
-				yPosition: 99,
-				title: "New Title",
-				shortTitle: "NT",
-				displayColor: "#54616e",
-				isSynchronized: false,
-			});
-
-			expect(store.roomsData[0].title).toBe("Old");
 		});
 
-		it("should not update state when API call fails", async () => {
-			const { store, mockElements } = setup({
-				elements: [{ xPosition: 0, yPosition: 0, title: "Old" }],
+		describe("when API call fails", () => {
+			it("should not update state", async () => {
+				const { store, mockElements } = await setup({
+					elements: [{ xPosition: 0, yPosition: 0, title: "Old" }],
+				});
+				dashboardApiMock.dashboardControllerPatchGroup.mockRejectedValue(new Error("API Error"));
+
+				await store.updateCourse({
+					id: mockElements[0].id,
+					xPosition: 0,
+					yPosition: 0,
+					title: "New Title",
+					shortTitle: "NT",
+					displayColor: "#54616e",
+					isSynchronized: false,
+				});
+
+				expect(store.roomsData[0].title).toBe("Old");
 			});
-			dashboardApiMock.dashboardControllerPatchGroup.mockRejectedValue(new Error("API Error"));
-
-			await store.fetchCourses();
-
-			await store.updateCourse({
-				id: mockElements[0].id,
-				xPosition: 0,
-				yPosition: 0,
-				title: "New Title",
-				shortTitle: "NT",
-				displayColor: "#54616e",
-				isSynchronized: false,
-			});
-
-			expect(store.roomsData[0].title).toBe("Old");
 		});
 	});
 
 	describe("delete", () => {
 		it("should remove room from roomsData", async () => {
-			const { store, mockElements } = setup({ elementCount: 3 });
-
-			await store.fetchCourses();
+			const { store, mockElements } = await setup({ elementCount: 3 });
 
 			expect(store.roomsData).toHaveLength(3);
 
@@ -425,7 +397,7 @@ describe("useCourseRoomListStore", () => {
 			expect(store.allElements[0]).toHaveProperty("isArchived", false);
 		});
 
-		it("should format titleDate with symbol '/' when difference is 1 year", async () => {
+		it("should format titleDate with symbol '/'", async () => {
 			const mockCourses = [
 				courseMetadataResponseFactory.build({
 					id: "one-year-course",
@@ -445,44 +417,48 @@ describe("useCourseRoomListStore", () => {
 			expect((store.allElements[0] as { titleDate?: string }).titleDate).toBe("2019/20");
 		});
 
-		it("should format titleDate with symbol '-' when difference is more than 1 year", async () => {
-			const mockCourses = [
-				courseMetadataResponseFactory.build({
-					id: "multi-year-course",
-					startDate: "2018-09-01",
-					untilDate: "2020-06-30",
-				}),
-			];
-			coursesApiMock.courseControllerFindForUser.mockResolvedValue(
-				mockApiResponse<CourseMetadataListResponse>({
-					data: { data: mockCourses, total: 1, skip: 0, limit: 100 },
-				})
-			);
+		describe("when difference is more than 1 year", () => {
+			it("should format titleDate with symbol '-'", async () => {
+				const mockCourses = [
+					courseMetadataResponseFactory.build({
+						id: "multi-year-course",
+						startDate: "2018-09-01",
+						untilDate: "2020-06-30",
+					}),
+				];
+				coursesApiMock.courseControllerFindForUser.mockResolvedValue(
+					mockApiResponse<CourseMetadataListResponse>({
+						data: { data: mockCourses, total: 1, skip: 0, limit: 100 },
+					})
+				);
 
-			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+				const store = useCourseRoomListStore();
+				await store.fetchAllElements();
 
-			expect((store.allElements[0] as { titleDate?: string }).titleDate).toBe("2018-2020");
+				expect((store.allElements[0] as { titleDate?: string }).titleDate).toBe("2018-2020");
+			});
 		});
 
-		it("should set titleDate to untilDate year when startDate equals untilDate year", async () => {
-			const mockCourses = [
-				courseMetadataResponseFactory.build({
-					id: "same-year-course",
-					startDate: "2020-01-01",
-					untilDate: "2020-06-30",
-				}),
-			];
-			coursesApiMock.courseControllerFindForUser.mockResolvedValue(
-				mockApiResponse<CourseMetadataListResponse>({
-					data: { data: mockCourses, total: 1, skip: 0, limit: 100 },
-				})
-			);
+		describe("when startDate equals untilDate year", () => {
+			it("should set titleDate to untilDate year", async () => {
+				const mockCourses = [
+					courseMetadataResponseFactory.build({
+						id: "same-year-course",
+						startDate: "2020-01-01",
+						untilDate: "2020-06-30",
+					}),
+				];
+				coursesApiMock.courseControllerFindForUser.mockResolvedValue(
+					mockApiResponse<CourseMetadataListResponse>({
+						data: { data: mockCourses, total: 1, skip: 0, limit: 100 },
+					})
+				);
 
-			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+				const store = useCourseRoomListStore();
+				await store.fetchAllElements();
 
-			expect((store.allElements[0] as { titleDate?: string }).titleDate).toBe("2020");
+				expect((store.allElements[0] as { titleDate?: string }).titleDate).toBe("2020");
+			});
 		});
 
 		it("should handle course without id", async () => {
@@ -501,7 +477,7 @@ describe("useCourseRoomListStore", () => {
 			const store = useCourseRoomListStore();
 			await store.fetchAllElements();
 
-			expect(store.allElements[0]).toHaveProperty("to", null);
+			expect(store.allElements[0]).toHaveProperty("to", "");
 		});
 
 		it("should handle archived course without startDate", async () => {
@@ -545,51 +521,59 @@ describe("useCourseRoomListStore", () => {
 			expect(store.allElements[0]).not.toHaveProperty("titleDate");
 		});
 
-		it("should not update state when API call fails", async () => {
-			coursesApiMock.courseControllerFindForUser.mockRejectedValue(new Error("API Error"));
+		describe("when API call fails", () => {
+			it("should not update state", async () => {
+				coursesApiMock.courseControllerFindForUser.mockRejectedValue(new Error("API Error"));
 
-			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+				const store = useCourseRoomListStore();
+				await store.fetchAllElements();
 
-			expect(store.allElements).toEqual([]);
-			expect(store.hasRooms).toBe(false);
+				expect(store.allElements).toEqual([]);
+				expect(store.hasRooms).toBe(false);
+			});
 		});
 	});
 
 	describe("computed properties", () => {
 		describe("hasRooms", () => {
-			it("should be false when no elements exist", () => {
-				const store = useCourseRoomListStore();
-				expect(store.hasRooms).toBe(false);
+			describe("when no elements exist", () => {
+				it("should be false", () => {
+					const store = useCourseRoomListStore();
+					expect(store.hasRooms).toBe(false);
+				});
 			});
 
-			it("should be true when elements exist", async () => {
-				const mockCourses = courseMetadataResponseFactory.buildList(1);
-				coursesApiMock.courseControllerFindForUser.mockResolvedValue(
-					mockApiResponse<CourseMetadataListResponse>({
-						data: { data: mockCourses, total: 1, skip: 0, limit: 100 },
-					})
-				);
+			describe("when elements exist", () => {
+				it("should be true", async () => {
+					const mockCourses = courseMetadataResponseFactory.buildList(1);
+					coursesApiMock.courseControllerFindForUser.mockResolvedValue(
+						mockApiResponse<CourseMetadataListResponse>({
+							data: { data: mockCourses, total: 1, skip: 0, limit: 100 },
+						})
+					);
 
-				const store = useCourseRoomListStore();
-				await store.fetchAllElements();
+					const store = useCourseRoomListStore();
+					await store.fetchAllElements();
 
-				expect(store.hasRooms).toBe(true);
+					expect(store.hasRooms).toBe(true);
+				});
 			});
 		});
 
 		describe("hasCurrentRooms", () => {
-			it("should be false when no roomsData exist", () => {
-				const store = useCourseRoomListStore();
-				expect(store.hasCurrentRooms).toBe(false);
+			describe("when no roomsData exist", () => {
+				it("should be false", () => {
+					const store = useCourseRoomListStore();
+					expect(store.hasCurrentRooms).toBe(false);
+				});
 			});
 
-			it("should be true when roomsData exist", async () => {
-				const { store } = setup();
+			describe("when roomsData exist", () => {
+				it("should be true", async () => {
+					const { store } = await setup();
 
-				await store.fetchCourses();
-
-				expect(store.hasCurrentRooms).toBe(true);
+					expect(store.hasCurrentRooms).toBe(true);
+				});
 			});
 		});
 

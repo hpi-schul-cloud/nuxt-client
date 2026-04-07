@@ -27,30 +27,20 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 
 	const dashboardApi = DashboardApiFactory(undefined, "/v3", $axios);
 	const coursesApi = CoursesApiFactory(undefined, "/v3", $axios);
+	const createLink = (id: string | undefined) => (id ? `/rooms/${id}` : "");
 
-	const processRoomData = (data: DashboardGridElementResponse[]): DashboardGridElementResponse[] =>
+	const extendGridElementResponse = (data: DashboardGridElementResponse[]): DashboardGridElementResponse[] =>
 		data.map((item) => {
-			let to = "";
 			if (item.groupElements) {
-				item.groupElements = item.groupElements.map((groupItem) => {
-					if (groupItem.id) {
-						to = `/rooms/${groupItem.id}`;
-					}
-					return { ...groupItem, to };
-				});
+				item.groupElements = item.groupElements.map((groupItem) => ({ ...groupItem, to: createLink(groupItem.id) }));
 			}
-			if (item.id) {
-				to = `/rooms/${item.id}`;
-			}
-			return { ...item, to };
+			return { ...item, to: createLink(item.id) };
 		});
 
-	const processAllElements = (data: CourseMetadataResponse[]) =>
+	const extendCourseMetadataResponse = (data: CourseMetadataResponse[]) =>
 		data.map((item: CourseMetadataResponse) => {
-			let to = null;
-			if (item.id) {
-				to = `/rooms/${item.id}`;
-			}
+			const to = createLink(item.id);
+
 			const isArchived = item.untilDate && isInPast(item.untilDate);
 			if (!isArchived) {
 				return { ...item, searchText: item.title, isArchived, to };
@@ -94,7 +84,7 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 
 		if (success && result) {
 			gridElementsId.value = result.data.id;
-			roomsData.value = processRoomData(result.data.gridElements || []);
+			roomsData.value = extendGridElementResponse(result.data.gridElements || []);
 		}
 	};
 
@@ -108,7 +98,7 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 
 		if (success && result) {
 			setPosition(payload);
-			roomsData.value = processRoomData(result.data.gridElements || []);
+			roomsData.value = extendGridElementResponse(result.data.gridElements || []);
 		}
 	};
 
@@ -147,7 +137,7 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 		);
 
 		if (success && result) {
-			allElements.value = processAllElements(result.data.data);
+			allElements.value = extendCourseMetadataResponse(result.data.data);
 		}
 	};
 
