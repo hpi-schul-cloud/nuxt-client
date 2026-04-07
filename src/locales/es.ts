@@ -793,6 +793,13 @@ export default {
 	"components.molecules.export.options.info.point2": "Envíos asignados a una tarea.",
 	"components.molecules.export.options.info.point3":
 		"Las carpetas de archivos no se exportan con la Common Cartridge versión 1.1",
+	"components.molecules.export.options.info.point4": "Los siguientes elementos del mapa dentro de las áreas:",
+	"components.molecules.export.options.info.point4.sub1": "Pizarra",
+	"components.molecules.export.options.info.point4.sub2": "Etherpad",
+	"components.molecules.export.options.info.point4.sub3": "Herramientas externas",
+	"components.molecules.export.options.info.point4.sub4": "Carpeta de archivos",
+	"components.molecules.export.options.info.point4.sub5": "Merlin biblioteca",
+	"components.molecules.export.options.info.point4.sub6": "H5P",
 	"components.organisms.ContentCard.report.body": "Informar del contenido con el ID",
 	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":

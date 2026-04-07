@@ -776,6 +776,13 @@ export default {
 	"components.molecules.export.options.info.point1": "Uploaded files within the course.",
 	"components.molecules.export.options.info.point2": "Submissions assigned to a task.",
 	"components.molecules.export.options.info.point3": "File folders are not exported with Common Cartridge Version 1.1",
+	"components.molecules.export.options.info.point4": "Following Card Elements within sections:",
+	"components.molecules.export.options.info.point4.sub1": "Whiteboard",
+	"components.molecules.export.options.info.point4.sub2": "Etherpad",
+	"components.molecules.export.options.info.point4.sub3": "External Tools",
+	"components.molecules.export.options.info.point4.sub4": "File folders",
+	"components.molecules.export.options.info.point4.sub5": "Merlin Bibliothek",
+	"components.molecules.export.options.info.point4.sub6": "H5P",
 	"components.organisms.ContentCard.report.body": "Reporting the content with the ID",
 	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":

@@ -711,6 +711,13 @@ export default {
 	"components.molecules.export.options.info.point2": "Abgaben, die einer Aufgabe zugeordnet sind.",
 	"components.molecules.export.options.info.point3":
 		"Dateiordner werden mit Common Cartridge Version 1.1 nicht exportiert",
+	"components.molecules.export.options.info.point4": "Folgende Karten Elemente innerhalb von Bereichen:",
+	"components.molecules.export.options.info.point4.sub1": "Whiteboard",
+	"components.molecules.export.options.info.point4.sub2": "Etherpad",
+	"components.molecules.export.options.info.point4.sub3": "Externe Tools",
+	"components.molecules.export.options.info.point4.sub4": "Dateiordner",
+	"components.molecules.export.options.info.point4.sub5": "Merlin Bibliothek",
+	"components.molecules.export.options.info.point4.sub6": "H5P",
 	"components.molecules.import.tasks.options.selectCourse": "Kurs wählen",
 	"components.molecules.import.tasks.options.title": "Aufgabe importieren",
 	"components.molecules.importUsersMatch.deleteMatch": "Verknüpfung löschen",
