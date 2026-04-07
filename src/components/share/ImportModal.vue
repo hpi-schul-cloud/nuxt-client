@@ -9,7 +9,7 @@
 		@cancel="onCancel"
 	>
 		<template #content>
-			<InfoAlert v-if="showAlertInfo" class="mb-4">
+			<InfoAlert v-if="showAlertInfo" data-testid="import-options-table-header" class="mb-4">
 				{{ t("components.molecules.import.options.tableHeader.InfoText") }}
 				<ul class="ml-6">
 					<li v-if="showCourseInfo" data-testid="import-options-personal-data-text">
