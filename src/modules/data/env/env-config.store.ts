@@ -150,14 +150,14 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		}
 
 		const { locale } = useI18nGlobal();
-		const textByLocale: Record<string, string> = {
-			de: runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_TEXT_DE,
-			en: runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_TEXT_EN,
-			es: runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_TEXT_ES,
-			uk: runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_TEXT_UK,
+		const textByLocale: Record<LanguageType, string> = {
+			[LanguageType.DE]: runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_TEXT_DE,
+			[LanguageType.EN]: runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_TEXT_EN,
+			[LanguageType.ES]: runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_TEXT_ES,
+			[LanguageType.UK]: runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_TEXT_UK,
 		};
 
-		return textByLocale[locale.value] || textByLocale.de;
+		return textByLocale[locale.value as LanguageType];
 	});
 
 	const fetchRuntimeAnnouncement = async () => {
