@@ -91,7 +91,8 @@ export const defaultConfigEnvs: ConfigResponse = {
 	ROOM_MEMBER_INFO_URL: "",
 	ROOM_MEMBER_ADD_EXTERNAL_PERSON_REQUIREMENTS_URL: "",
 };
-type RuntimeConfig = {
+
+type RuntimeConfigAnnouncement = {
 	DASHBOARD_ANNOUNCEMENT_TEXT_ENABLED: boolean;
 	DASHBOARD_ANNOUNCEMENT_TEXT_FOR_ROLES: string;
 	DASHBOARD_ANNOUNCEMENT_TEXT_DE: string;
@@ -100,20 +101,18 @@ type RuntimeConfig = {
 	DASHBOARD_ANNOUNCEMENT_TEXT_UK: string;
 };
 
-const defaultRuntimeConfig: RuntimeConfig = {
-	DASHBOARD_ANNOUNCEMENT_TEXT_ENABLED: false,
-	DASHBOARD_ANNOUNCEMENT_TEXT_FOR_ROLES: "",
-	DASHBOARD_ANNOUNCEMENT_TEXT_DE: "",
-	DASHBOARD_ANNOUNCEMENT_TEXT_EN: "",
-	DASHBOARD_ANNOUNCEMENT_TEXT_ES: "",
-	DASHBOARD_ANNOUNCEMENT_TEXT_UK: "",
-};
-
 export const useEnvStore = defineStore("envConfigStore", () => {
 	const serverApi = ServerConfigApiFactory(undefined, "/v3", $axios);
 	const fileConfigApi = FileConfigApiFactory(undefined, "/v3", $axios);
 	const runtimeConfigApi = RuntimeConfigApiFactory(undefined, "/v3", $axios);
-	const runtimeConfig = reactive<RuntimeConfig>({ ...defaultRuntimeConfig });
+	const runtimeConfigAnnouncement = reactive<RuntimeConfigAnnouncement>({
+		DASHBOARD_ANNOUNCEMENT_TEXT_ENABLED: false,
+		DASHBOARD_ANNOUNCEMENT_TEXT_FOR_ROLES: "",
+		DASHBOARD_ANNOUNCEMENT_TEXT_DE: "",
+		DASHBOARD_ANNOUNCEMENT_TEXT_EN: "",
+		DASHBOARD_ANNOUNCEMENT_TEXT_ES: "",
+		DASHBOARD_ANNOUNCEMENT_TEXT_UK: "",
+	});
 
 	const envFile = reactive<FilesStorageConfigResponse>({
 		MAX_FILE_SIZE: 2684354560,
@@ -145,21 +144,28 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		}
 	});
 
-	const { log } = console;
+	const dashboardAnnouncement = computed((): string | undefined => {
+		if (!runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_TEXT_ENABLED) {
+			return undefined;
+		}
 
-	const getRuntimeConfig = async () => {
-		try {
-			const { data } = await runtimeConfigApi.runtimeConfigControllerGetRuntimeConfig();
-			log("Runtime config loaded:", data);
+		const { locale } = useI18nGlobal();
+		const textByLocale: Record<string, string> = {
+			de: runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_TEXT_DE,
+			en: runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_TEXT_EN,
+			es: runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_TEXT_ES,
+			uk: runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_TEXT_UK,
+		};
 
-			if (data?.data) {
-				const configMap = Object.fromEntries(data.data.map((item) => [item.key, item.value]));
+		return textByLocale[locale.value] || textByLocale.de;
+	});
 
-				Object.assign(runtimeConfig, configMap);
-			}
-		} catch (error) {
-			log("Failed to load runtime config:", error);
-			throw error;
+	const fetchRuntimeAnnouncement = async () => {
+		const { data } = await runtimeConfigApi.runtimeConfigControllerGetRuntimeConfig();
+
+		if (data?.data) {
+			const configMap = Object.fromEntries(data.data.map((item) => [item.key, item.value]));
+			Object.assign(runtimeConfigAnnouncement, configMap);
 		}
 	};
 
@@ -184,12 +190,12 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 
 	return {
 		loadConfiguration,
-		getRuntimeConfig,
+		fetchRuntimeAnnouncement,
+		dashboardAnnouncement,
 		env,
 		envFile,
 		fallBackLanguage,
 		instituteTitle,
-		runtimeConfig,
 	};
 });
 
@@ -202,23 +208,3 @@ export const useEnvFileConfig = createSharedComposable(() => {
 	const { envFile } = storeToRefs(useEnvStore());
 	return envFile;
 });
-
-export const useDashboardAnnouncementText = () => {
-	const { runtimeConfig } = useEnvStore();
-	const { locale } = useI18nGlobal();
-
-	return computed(() => {
-		if (!runtimeConfig.DASHBOARD_ANNOUNCEMENT_TEXT_ENABLED) {
-			return "";
-		}
-
-		const textByLocale: Record<string, string> = {
-			de: runtimeConfig.DASHBOARD_ANNOUNCEMENT_TEXT_DE,
-			en: runtimeConfig.DASHBOARD_ANNOUNCEMENT_TEXT_EN,
-			es: runtimeConfig.DASHBOARD_ANNOUNCEMENT_TEXT_ES,
-			uk: runtimeConfig.DASHBOARD_ANNOUNCEMENT_TEXT_UK,
-		};
-
-		return textByLocale[locale.value] || textByLocale.en || textByLocale.de;
-	});
-};
