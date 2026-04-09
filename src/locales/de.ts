@@ -982,6 +982,14 @@ export default {
 	"loggedin.text.backupFeatures":
 		"Sichern Sie Ihre Inhalte der Cloud und nutzen Sie auch die neue Funktion zum Export von Kursen. {helpLink}",
 	"loggedin.text.backupFeatures.helpLink": "Weitere Informationen und Hilfestellungen sind hier zu finden.",
+	"loggedin.text.schoolInTransferPhaseContactAdmin":
+		"Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte kontaktiere deinen Schul-Admin!",
+	"loggedin.text.schoolInTransferPhaseStartNew":
+		'Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte läute <a href="/administration/school/"> hier das neue Schuljahr ein!</a>',
+	"loggedin.text.schoolInMigrationModeStarted":
+		'Die Schule befindet sich im Modus der Benutzermigration. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
+	"loggedin.text.schoolInMigrationMode":
+		'Die Schule kann Benutzerkonten von Schulportal importieren. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
 	"pages.dashboard.title": "Übersicht",
 	"pages.dashboard.empty.news": "Bisher gibt es keine News.",
 	"pages.dashboard.new.features": "Es gibt neue Features in der {instanceTitle}.",

@@ -966,6 +966,14 @@ export default {
 	"loggedin.text.backupFeatures":
 		"Back up your cloud content and also use the new function for exporting courses. {helpLink}",
 	"loggedin.text.backupFeatures.helpLink": "More information and instructions can be found here.",
+	"loggedin.text.schoolInTransferPhaseContactAdmin":
+		"The school is in the transfer phase to the new school year. No classes and users can be created. Please contact the school administrator!",
+	"loggedin.text.schoolInTransferPhaseStartNew":
+		'The school is in the transfer phase to the new school year. No classes and users can be created. Please ring in <a href="/administration/school/"> the new school year here!</a>',
+	"loggedin.text.schoolInMigrationModeStarted":
+		'The school is in user migration mode. To migrate users, please go to <a href="/administration/migration/">this page</a>.',
+	"loggedin.text.schoolInMigrationMode":
+		'The school can import user accounts from Schulportal. To migrate users, please go to <a href="/administration/migration/">this page</a>.',
 	"pages.dashboard.title": "Dashboard",
 	"pages.dashboard.empty.news": "So far there is no news.",
 	"pages.dashboard.new.features": "There are new features in the {instanceTitle}.",
@@ -1004,9 +1012,9 @@ export default {
 		"With all changes and settings in the administration area, it is confirmed that these are carried out by a school admin with authority to make adjustments to the school in the cloud. Adjustments made by the school admin are deemed to be instructions from the school to the cloud operator {institute_title}.",
 	"pages.administration.classes.index.add": "Add class",
 	"pages.administration.classes.index.title": "Manage classes",
-	"pages.administration.classes.thr.hint.title": "Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.title": "Why can’t I edit any entries?",
 	"pages.administration.classes.thr.hint.text":
-		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
+		"Your school is synchronized with the Thuringian school portal. The data for teachers, students, and classes is managed centrally there and can only be changed in that portal. This also includes password changes.",
 	"pages.administration.common.label.archive": "Archive",
 	"pages.administration.common.label.active": "Current",
 	"pages.administration.classes.manage": "Manage class",

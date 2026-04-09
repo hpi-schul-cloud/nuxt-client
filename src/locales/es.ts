@@ -984,6 +984,14 @@ export default {
 	"loggedin.text.backupFeatures":
 		"Haga una copia de seguridad de sus contenidos de la nube y utilice también la nueva función para exportar cursos. {helpLink}",
 	"loggedin.text.backupFeatures.helpLink": "Más información y ayuda disponible aquí",
+	"loggedin.text.schoolInTransferPhaseContactAdmin":
+		"La escuela está en fase de transferencia al nuevo año escolar. No se pueden crear clases ni usuarios. ¡Ponte en contacto con el administrador de la escuela!",
+	"loggedin.text.schoolInTransferPhaseStartNew":
+		'La escuela está en fase de transferencia al nuevo año escolar. No se pueden crear clases ni usuarios. ¡Accede al <a href="/administration/school/">nuevo año escolar aquí!</a>',
+	"loggedin.text.schoolInMigrationModeStarted":
+		'La escuela está en modo de migración de usuarios. Para migrar los usuarios, por favor vaya a <a href="/administration/migration/">esta página</a>.',
+	"loggedin.text.schoolInMigrationMode":
+		'La escuela puede importar cuentas de usuario de Schulportal. Para migrar los usuarios, por favor vaya a <a href="/administration/migration/">esta página</a>.',
 	"pages.dashboard.title": "Panel",
 	"pages.dashboard.empty.news": "Hasta el momento no hay noticias.",
 	"pages.dashboard.new.features": "Hay nuevas funciones en {instanceTitle}.",
@@ -1023,9 +1031,9 @@ export default {
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {institute_title}.",
 	"pages.administration.classes.index.add": "Agregar clase",
 	"pages.administration.classes.index.title": "Administrar clases",
-	"pages.administration.classes.thr.hint.title": "Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.title": "¿Por qué no puedo editar las entradas?",
 	"pages.administration.classes.thr.hint.text":
-		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
+		"Tu escuela está sincronizada con el portal escolar de Turingia. Los datos de docentes, alumnado y clases se gestionan centralmente allí y solo pueden modificarse en ese portal. Esto incluye también los cambios de contraseña.",
 	"pages.administration.common.label.archive": "Archivo",
 	"pages.administration.common.label.active": "Actual",
 	"pages.administration.classes.manage": "Administrar clase",
