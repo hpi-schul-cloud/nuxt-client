@@ -172,22 +172,26 @@ describe("useTasks", () => {
 			expect(gradedTasksForTeacher.value[0].id).toBe("already-graded");
 		});
 
-		it("should filter ungradedForStudent (published with graded === 0)", async () => {
-			const notGraded = taskResponseFactory.build({
-				id: "not-graded",
-				status: { graded: 0 },
+		it("should filter ungradedForStudent (published, submitted > 0, not graded)", async () => {
+			const submittedNotGraded = taskResponseFactory.build({
+				id: "submitted-not-graded",
+				status: { submitted: 1, graded: 0 },
+			});
+			const notSubmitted = taskResponseFactory.build({
+				id: "not-submitted",
+				status: { submitted: 0, graded: 0 },
 			});
 			const graded = taskResponseFactory.build({
 				id: "graded",
-				status: { graded: 1 },
+				status: { submitted: 1, graded: 1 },
 			});
-			setupApiResponse([notGraded, graded]);
+			setupApiResponse([submittedNotGraded, notSubmitted, graded]);
 
 			const { fetch, ungradedTasksForStudent } = useTasks({}, false);
 			await fetch();
 
 			expect(ungradedTasksForStudent.value).toHaveLength(1);
-			expect(ungradedTasksForStudent.value[0].id).toBe("not-graded");
+			expect(ungradedTasksForStudent.value[0].id).toBe("submitted-not-graded");
 		});
 	});
 });
