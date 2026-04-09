@@ -1,4 +1,4 @@
-import { defaultConfigEnvs, useEnvConfig, useEnvStore } from "./env-config.store";
+import { defaultConfigEnvs, useEnvConfig, useEnvFileConfig, useEnvStore } from "./env-config.store";
 import { mockApiResponse } from "@@/tests/test-utils";
 import { FileConfigApiFactory } from "@api-file-storage";
 import { FilesStorageConfigResponse } from "@api-file-storage";
@@ -27,6 +27,13 @@ const mockLocale = ref("de");
 vi.mock("@/plugins/i18n", () => ({
 	useI18nGlobal: () => ({
 		locale: mockLocale,
+	}),
+}));
+
+vi.mock("@data-app", () => ({
+	useAppStore: () => ({
+		userRoles: ["teacher"],
+		handleApplicationError: vi.fn(),
 	}),
 }));
 
@@ -189,7 +196,7 @@ describe("useEnvStore", () => {
 		describe("when dashboard announcement is disabled", () => {
 			it("should return undefined", async () => {
 				doMockRuntimeConfigApiData({
-					data: [{ key: "DASHBOARD_ANNOUNCEMENT_TEXT_ENABLED", value: false }],
+					data: [{ key: "DASHBOARD_ANNOUNCEMENT_ENABLED", value: false }],
 				});
 				await setup();
 
@@ -203,7 +210,8 @@ describe("useEnvStore", () => {
 			it("should return undefined", async () => {
 				doMockRuntimeConfigApiData({
 					data: [
-						{ key: "DASHBOARD_ANNOUNCEMENT_TEXT_ENABLED", value: true },
+						{ key: "DASHBOARD_ANNOUNCEMENT_ENABLED", value: true },
+						{ key: "DASHBOARD_ANNOUNCEMENT_FOR_ROLES", value: "teacher" },
 						{ key: "DASHBOARD_ANNOUNCEMENT_TEXT_DE", value: "German text" },
 					],
 				});
@@ -224,7 +232,8 @@ describe("useEnvStore", () => {
 		])("should return $expected when locale is $locale", async ({ locale, key, expected }) => {
 			doMockRuntimeConfigApiData({
 				data: [
-					{ key: "DASHBOARD_ANNOUNCEMENT_TEXT_ENABLED", value: true },
+					{ key: "DASHBOARD_ANNOUNCEMENT_ENABLED", value: true },
+					{ key: "DASHBOARD_ANNOUNCEMENT_FOR_ROLES", value: "teacher" },
 					{ key, value: expected },
 				],
 			});
@@ -241,8 +250,8 @@ describe("useEnvStore", () => {
 		it("should fetch and set runtime announcement config", async () => {
 			doMockRuntimeConfigApiData({
 				data: [
-					{ key: "DASHBOARD_ANNOUNCEMENT_TEXT_ENABLED", value: true },
-					{ key: "DASHBOARD_ANNOUNCEMENT_TEXT_FOR_ROLES", value: "teacher,student" },
+					{ key: "DASHBOARD_ANNOUNCEMENT_ENABLED", value: true },
+					{ key: "DASHBOARD_ANNOUNCEMENT_FOR_ROLES", value: "teacher,student" },
 					{ key: "DASHBOARD_ANNOUNCEMENT_TEXT_DE", value: "Test announcement" },
 				],
 			});
@@ -273,5 +282,24 @@ describe("useEnvConfig", () => {
 	it("should proxy env config as ref from useEnvStore", () => {
 		useEnvStore().$patch({ env: { SC_TITLE: "School" } });
 		expect(useEnvConfig().value.SC_TITLE).toEqual("School");
+	});
+});
+
+describe("useEnvFileConfig", () => {
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
+
+	it("should proxy envFile config as ref from useEnvStore", () => {
+		useEnvStore().$patch({
+			envFile: {
+				MAX_FILE_SIZE: 500,
+				COLLABORA_MAX_FILE_SIZE_IN_BYTES: 100,
+				FILES_STORAGE_MAX_FILES_PER_PARENT: 200,
+			},
+		});
+		expect(useEnvFileConfig().value.MAX_FILE_SIZE).toEqual(500);
+		expect(useEnvFileConfig().value.COLLABORA_MAX_FILE_SIZE_IN_BYTES).toEqual(100);
+		expect(useEnvFileConfig().value.FILES_STORAGE_MAX_FILES_PER_PARENT).toEqual(200);
 	});
 });
