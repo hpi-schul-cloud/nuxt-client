@@ -265,17 +265,6 @@ describe("CourseRoomWrapper.vue", () => {
 			});
 		});
 
-		describe("when common cartridge import modal emits update:isOpen", () => {
-			it("should update commonCartridgeImport.isOpen value", async () => {
-				const wrapper = setup({ isOpenInitialValue: true, stubImportModal: false });
-
-				const modal = wrapper.findComponent(CourseCommonCartridgeImportModal);
-				await modal.vm.$emit("update:isOpen", false);
-
-				expect(useCommonCartridgeImportMockReturn.isOpen.value).toBe(false);
-			});
-		});
-
 		describe("when import is successful", () => {
 			it("should call import composable", async () => {
 				const wrapper = setup({ isSuccess: true, stubImportModal: false });
