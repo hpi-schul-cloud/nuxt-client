@@ -87,14 +87,13 @@
 		</div>
 
 		<SvsDialog
-			v-if="metadata"
 			v-model="isDeleteDialogOpen"
 			:title="t('components.administration.externalToolsSection.dialog.title', { itemName: getItemName })"
 			data-testid="delete-dialog"
 			@confirm="onDeleteTool"
 			@close="onCloseDeleteDialog"
 		>
-			<template #content>
+			<template v-if="metadata" #content>
 				<p>{{ t("components.administration.externalToolsSection.dialog.content.header") }}</p>
 
 				<ul class="ml-6 mb-4">
@@ -193,11 +192,12 @@ const isDeleteDialogOpen = ref(false);
 
 const openDeleteDialog = async (item: SchoolExternalToolItem) => {
 	itemToDelete.value = item;
-	isDeleteDialogOpen.value = true;
 	await fetchSchoolExternalToolUsage(item.id);
 
 	if (!metadata.value) {
 		notifyError(t("components.administration.externalToolsSection.dialog.content.metadata.error"));
+	} else {
+		isDeleteDialogOpen.value = true;
 	}
 };
 
