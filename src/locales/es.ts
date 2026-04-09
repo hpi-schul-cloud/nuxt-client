@@ -126,7 +126,6 @@ export default {
 	"common.labels.visible": "Visible",
 	"common.labels.welcome": "Bienvenido",
 	"common.labels.fileName": "Nombre del archivo",
-	"common.labels.tasks.assigned": "Tareas asignadas",
 	"common.labels.tasks.more": "Otras tareas...",
 	"common.loading.text": "Los datos se están cargando...",
 	"common.medium.alert.deactivated": "Los medios están deshabilitados.",
@@ -981,12 +980,22 @@ export default {
 	"mixins.typeMeta.types.image": "Imagen",
 	"mixins.typeMeta.types.video": "Vídeo",
 	"mixins.typeMeta.types.webpage": "Página web",
+	"loggedin.text.backupFeatures":
+		"Haga una copia de seguridad de sus contenidos de la nube y utilice también la nueva función para exportar cursos. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "Más información y ayuda disponible aquí",
+	"loggedin.text.schoolInTransferPhaseContactAdmin":
+		"La escuela está en fase de transferencia al nuevo año escolar. No se pueden crear clases ni usuarios. ¡Ponte en contacto con el administrador de la escuela!",
+	"loggedin.text.schoolInTransferPhaseStartNew":
+		'La escuela está en fase de transferencia al nuevo año escolar. No se pueden crear clases ni usuarios. ¡Accede al <a href="/administration/school/">nuevo año escolar aquí!</a>',
+	"loggedin.text.schoolInMigrationModeStarted":
+		'La escuela está en modo de migración de usuarios. Para migrar los usuarios, por favor vaya a <a href="/administration/migration/">esta página</a>.',
+	"loggedin.text.schoolInMigrationMode":
+		'La escuela puede importar cuentas de usuario de Schulportal. Para migrar los usuarios, por favor vaya a <a href="/administration/migration/">esta página</a>.',
 	"pages.dashboard.title": "Panel",
 	"pages.dashboard.empty.news": "Hasta el momento no hay noticias.",
 	"pages.dashboard.new.features": "Hay nuevas funciones en {instanceTitle}.",
 	"pages.dashboard.new.features.available": "Nuevas funciones disponibles",
 	"pages.dashboard.new.features.forward": "Para más información, consulta las notas de la versión.",
-	"pages.dashboard.no.tasks": "No hay tareas asignadas. Puedes encontrarar todas las tareas en el área de tareas.",
 	"pages.dashboard.no.due.date": "No se ha fijado una fecha de envío",
 	"pages.dashboard.welcome": "Hola",
 	"pages.dashboard.schedule": "Programación",
@@ -1021,9 +1030,9 @@ export default {
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {institute_title}.",
 	"pages.administration.classes.index.add": "Agregar clase",
 	"pages.administration.classes.index.title": "Administrar clases",
-	"pages.administration.classes.thr.hint.title": "Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.title": "¿Por qué no puedo editar las entradas?",
 	"pages.administration.classes.thr.hint.text":
-		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
+		"Tu escuela está sincronizada con el portal escolar de Turingia. Los datos de docentes, alumnado y clases se gestionan centralmente allí y solo pueden modificarse en ese portal. Esto incluye también los cambios de contraseña.",
 	"pages.administration.common.label.archive": "Archivo",
 	"pages.administration.common.label.active": "Actual",
 	"pages.administration.classes.manage": "Administrar clase",
@@ -1890,7 +1899,6 @@ export default {
 	"pages.tasks.labels.planned": "Planificada",
 	"pages.tasks.student.completed.emptyState.title": "Actualmente no hay tareas completadas",
 	"pages.tasks.student.open.emptyState.title": "Actualmente no hay tareas abiertas",
-	"pages.tasks.student.openTasks": "Tareas abiertas",
 	"pages.tasks.student.submittedTasks": "Completed Tasks",
 	"pages.tasks.student.subtitleOverDue": "Tareas perdidas",
 	"pages.tasks.subtitleGraded": "Calificado",
@@ -1899,7 +1907,7 @@ export default {
 	"pages.tasks.subtitleOpen": "Tareas abiertas",
 	"pages.tasks.subtitleWithDue": "Con plazo",
 	"pages.tasks.teacher.drafts.emptyState.title": "Actualmente no hay borradores",
-	"pages.tasks.teacher.open.emptyState.title": "Actualmente no hay tareas",
+	"pages.tasks.open.emptyState.title": "Actualmente no hay tareas",
 	"pages.tasks.teacher.subtitleOverDue": "Tareas expiradas",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"pages.tool.apiError.tool_param_duplicate":

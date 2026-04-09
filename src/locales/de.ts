@@ -126,7 +126,6 @@ export default {
 	"common.labels.visible": "Sichtbar",
 	"common.labels.welcome": "Willkommen",
 	"common.labels.fileName": "Dateiname",
-	"common.labels.tasks.assigned": "Gestellte Aufgaben",
 	"common.labels.tasks.more": "Weitere Aufgaben...",
 	"common.loading.text": "Daten werden geladen...",
 	"common.medium.alert.deactivated": "Medium ist deaktiviert.",
@@ -979,12 +978,22 @@ export default {
 	"mixins.typeMeta.types.image": "Bild",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Webseite",
+	"loggedin.text.backupFeatures":
+		"Sichern Sie Ihre Inhalte der Cloud und nutzen Sie auch die neue Funktion zum Export von Kursen. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "Weitere Informationen und Hilfestellungen sind hier zu finden.",
+	"loggedin.text.schoolInTransferPhaseContactAdmin":
+		"Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte kontaktiere deinen Schul-Admin!",
+	"loggedin.text.schoolInTransferPhaseStartNew":
+		'Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte läute <a href="/administration/school/"> hier das neue Schuljahr ein!</a>',
+	"loggedin.text.schoolInMigrationModeStarted":
+		'Die Schule befindet sich im Modus der Benutzermigration. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
+	"loggedin.text.schoolInMigrationMode":
+		'Die Schule kann Benutzerkonten von Schulportal importieren. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
 	"pages.dashboard.title": "Übersicht",
 	"pages.dashboard.empty.news": "Bisher gibt es keine News.",
 	"pages.dashboard.new.features": "Es gibt neue Features in der {instanceTitle}.",
 	"pages.dashboard.new.features.available": "Neue Features sind verfügbar",
 	"pages.dashboard.new.features.forward": "Mehr Informationen sind in den Release Notes zu finden.",
-	"pages.dashboard.no.tasks": "Keine gestellten Aufgaben. Du findest alle Aufgaben im Aufgaben-Bereich.",
 	"pages.dashboard.no.due.date": "Kein Abgabedatum festgelegt",
 	"pages.dashboard.welcome": "Hallo",
 	"pages.dashboard.schedule": "Stundenplan",
@@ -1872,7 +1881,6 @@ export default {
 	"pages.tasks.labels.planned": "Geplant",
 	"pages.tasks.student.completed.emptyState.title": "Aktuell gibt es keine erledigten Aufgaben",
 	"pages.tasks.student.open.emptyState.title": "Aktuell gibt es keine offenen Aufgaben",
-	"pages.tasks.student.openTasks": "Offene Aufgaben",
 	"pages.tasks.student.submittedTasks": "Erledigte Aufgaben",
 	"pages.tasks.student.subtitleOverDue": "Verpasste Aufgaben",
 	"pages.tasks.subtitleGraded": "Bewertet",
@@ -1881,7 +1889,7 @@ export default {
 	"pages.tasks.subtitleOpen": "Offene Aufgaben",
 	"pages.tasks.subtitleWithDue": "Mit Abgabefrist",
 	"pages.tasks.teacher.drafts.emptyState.title": "Aktuell gibt es  keine Entwürfe",
-	"pages.tasks.teacher.open.emptyState.title": "Aktuell gibt es keine Aufgaben",
+	"pages.tasks.open.emptyState.title": "Es gibt keine aktuellen Aufgaben",
 	"pages.tasks.teacher.subtitleOverDue": "Abgelaufene Aufgaben",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"pages.tool.apiError.tool_param_duplicate":
