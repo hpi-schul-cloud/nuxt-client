@@ -35,7 +35,7 @@ import { SvsDialog } from "@ui-dialog";
 
 const { isDialogOpen, isDialogLoading, elementTypeOptions } = useSharedElementTypeSelection();
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .elements-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
