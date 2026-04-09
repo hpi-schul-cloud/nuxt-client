@@ -1,13 +1,7 @@
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { VideoConferenceInfo, VideoConferenceOptions, VideoConferenceState } from "@/store/types/video-conference";
 import { $axios } from "@/utils/api";
-import {
-	VideoConferenceApiFactory,
-	VideoConferenceInfoResponse,
-	VideoConferenceJoinResponse,
-	VideoConferenceScope,
-	VideoConferenceStateResponse,
-} from "@api-server";
-import { AxiosResponse } from "axios";
+import { VideoConferenceApiFactory, VideoConferenceScope, VideoConferenceStateResponse } from "@api-server";
 import { computed, ref } from "vue";
 
 const videoConferenceStateMapping: Partial<Record<VideoConferenceStateResponse, VideoConferenceState>> = {
@@ -27,72 +21,64 @@ export const useVideoConference = (scope: VideoConferenceScope, scopeId: string)
 		},
 	});
 
-	const loading = ref(false);
-	const error = ref<unknown | null>(null);
+	const { execute: execFetch, isRunning: isFetching, error: fetchError } = useSafeAxiosTask();
 
-	const isRunning = computed(() => videoConferenceInfo.value.state === VideoConferenceState.RUNNING);
+	const { execute: execStart, isRunning: isStarting, error: startError } = useSafeAxiosTask();
+
+	const { execute: execJoin, isRunning: isJoining, error: joinError } = useSafeAxiosTask();
+
+	const isConferenceRunning = computed(() => videoConferenceInfo.value.state === VideoConferenceState.RUNNING);
 	const isWaitingRoomActive = computed(() => videoConferenceInfo.value.options.moderatorMustApproveJoinRequests);
 
+	// not sure yet if needed
+	const loading = computed(() => isFetching.value || isStarting.value || isJoining.value);
+
 	const fetchVideoConferenceInfo = async () => {
-		loading.value = true;
-		try {
-			const response: AxiosResponse<VideoConferenceInfoResponse> =
-				await videoConferenceApi.videoConferenceControllerInfo(scope, scopeId);
+		const { result, success } = await execFetch(
+			() => videoConferenceApi.videoConferenceControllerInfo(scope, scopeId),
+			"error.fetch-video-conference"
+		);
+		if (success && result) {
 			videoConferenceInfo.value = {
-				state: videoConferenceStateMapping[response.data.state] ?? VideoConferenceState.UNKNOWN,
-				options: response.data.options,
+				state: videoConferenceStateMapping[result.data.state] ?? VideoConferenceState.UNKNOWN,
+				options: result.data.options,
 			};
-		} catch (err) {
-			error.value = err;
-		} finally {
-			loading.value = false;
 		}
 	};
 
 	const startVideoConference = async (options: VideoConferenceOptions) => {
-		loading.value = true;
-		try {
-			await videoConferenceApi.videoConferenceControllerStart(scope, scopeId, {
-				...options,
-			});
-
-			videoConferenceInfo.value = {
-				state: VideoConferenceState.RUNNING,
-				options,
-			};
-		} catch (err) {
-			error.value = err;
-		} finally {
-			loading.value = false;
+		const { success } = await execStart(
+			() => videoConferenceApi.videoConferenceControllerStart(scope, scopeId, { ...options }),
+			"error.start-video-conference"
+		);
+		if (success) {
+			videoConferenceInfo.value = { state: VideoConferenceState.RUNNING, options };
 		}
 	};
 
 	const joinVideoConference = async (): Promise<string | undefined> => {
-		loading.value = true;
-		try {
-			const response: AxiosResponse<VideoConferenceJoinResponse> =
-				await videoConferenceApi.videoConferenceControllerJoin(scope, scopeId);
-			return response.data.url;
-		} catch (err) {
-			error.value = err;
-		} finally {
-			loading.value = false;
+		const { result, success } = await execJoin(
+			() => videoConferenceApi.videoConferenceControllerJoin(scope, scopeId),
+			"error.join-video-conference"
+		);
+		if (success && result) {
+			return result.data.url;
 		}
-	};
-
-	const resetError = () => {
-		error.value = null;
 	};
 
 	return {
 		videoConferenceInfo,
 		loading,
-		error,
-		isRunning,
+		isFetching,
+		isStarting,
+		isJoining,
+		fetchError,
+		startError,
+		joinError,
+		isConferenceRunning,
 		isWaitingRoomActive,
 		fetchVideoConferenceInfo,
 		startVideoConference,
 		joinVideoConference,
-		resetError,
 	};
 };
