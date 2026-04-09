@@ -1,7 +1,6 @@
 import { defaultConfigEnvs, useEnvConfig, useEnvFileConfig, useEnvStore } from "./env-config.store";
 import { mockApiResponse } from "@@/tests/test-utils";
-import { FileConfigApiFactory } from "@api-file-storage";
-import { FilesStorageConfigResponse } from "@api-file-storage";
+import { FileConfigApiFactory, FilesStorageConfigResponse } from "@api-file-storage";
 import {
 	ConfigResponse,
 	LanguageType,
