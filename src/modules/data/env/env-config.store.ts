@@ -94,7 +94,7 @@ export const defaultConfigEnvs: ConfigResponse = {
 
 type RuntimeConfigAnnouncement = {
 	DASHBOARD_ANNOUNCEMENT_ENABLED: boolean;
-	DASHBOARD_ANNOUNCEMENT_TEXT_FOR_ROLES: string;
+	DASHBOARD_ANNOUNCEMENT_FOR_ROLES: string;
 	DASHBOARD_ANNOUNCEMENT_TEXT_DE: string;
 	DASHBOARD_ANNOUNCEMENT_TEXT_EN: string;
 	DASHBOARD_ANNOUNCEMENT_TEXT_ES: string;
@@ -107,7 +107,7 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 	const runtimeConfigApi = RuntimeConfigApiFactory(undefined, "/v3", $axios);
 	const runtimeConfigAnnouncement = reactive<RuntimeConfigAnnouncement>({
 		DASHBOARD_ANNOUNCEMENT_ENABLED: false,
-		DASHBOARD_ANNOUNCEMENT_TEXT_FOR_ROLES: "",
+		DASHBOARD_ANNOUNCEMENT_FOR_ROLES: "",
 		DASHBOARD_ANNOUNCEMENT_TEXT_DE: "",
 		DASHBOARD_ANNOUNCEMENT_TEXT_EN: "",
 		DASHBOARD_ANNOUNCEMENT_TEXT_ES: "",
@@ -146,6 +146,13 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 
 	const dashboardAnnouncement = computed((): string | undefined => {
 		if (!runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_ENABLED) {
+			return undefined;
+		}
+
+		const userRoles = useAppStore().userRoles;
+		const rolesForAnnouncement = runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_FOR_ROLES.split(",");
+
+		if (!userRoles.some((role) => rolesForAnnouncement.includes(role))) {
 			return undefined;
 		}
 
