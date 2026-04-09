@@ -93,7 +93,7 @@ export const defaultConfigEnvs: ConfigResponse = {
 };
 
 type RuntimeConfigAnnouncement = {
-	DASHBOARD_ANNOUNCEMENT_TEXT_ENABLED: boolean;
+	DASHBOARD_ANNOUNCEMENT_ENABLED: boolean;
 	DASHBOARD_ANNOUNCEMENT_TEXT_FOR_ROLES: string;
 	DASHBOARD_ANNOUNCEMENT_TEXT_DE: string;
 	DASHBOARD_ANNOUNCEMENT_TEXT_EN: string;
@@ -106,7 +106,7 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 	const fileConfigApi = FileConfigApiFactory(undefined, "/v3", $axios);
 	const runtimeConfigApi = RuntimeConfigApiFactory(undefined, "/v3", $axios);
 	const runtimeConfigAnnouncement = reactive<RuntimeConfigAnnouncement>({
-		DASHBOARD_ANNOUNCEMENT_TEXT_ENABLED: false,
+		DASHBOARD_ANNOUNCEMENT_ENABLED: false,
 		DASHBOARD_ANNOUNCEMENT_TEXT_FOR_ROLES: "",
 		DASHBOARD_ANNOUNCEMENT_TEXT_DE: "",
 		DASHBOARD_ANNOUNCEMENT_TEXT_EN: "",
@@ -145,7 +145,7 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 	});
 
 	const dashboardAnnouncement = computed((): string | undefined => {
-		if (!runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_TEXT_ENABLED) {
+		if (!runtimeConfigAnnouncement.DASHBOARD_ANNOUNCEMENT_ENABLED) {
 			return undefined;
 		}
 
