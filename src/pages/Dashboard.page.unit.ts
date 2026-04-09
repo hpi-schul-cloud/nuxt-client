@@ -1,4 +1,6 @@
 import DashboardPage from "./Dashboard.page.vue";
+import { schoolsModule } from "@/store";
+import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import {
 	createTestAppStore,
@@ -6,9 +8,18 @@ import {
 	mockApiResponse,
 	mockAxiosInstance,
 	newsResponseFactory,
+	schoolFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { NewsApiInterface, NewsResponse, ReleaseItemResponse, RoleName, ServerReleaseApiInterface } from "@api-server";
+import setupStores from "@@/tests/test-utils/setupStores";
+import {
+	NewsApiInterface,
+	NewsResponse,
+	Permission,
+	ReleaseItemResponse,
+	RoleName,
+	ServerReleaseApiInterface,
+} from "@api-server";
 import * as serverApi from "@api-server";
 import { DashboardTasks } from "@feature-dashboard";
 import { createTestingPinia } from "@pinia/testing";
@@ -30,6 +41,11 @@ describe("DashboardPage", () => {
 		newsApi = mockApi<NewsApiInterface>();
 		releasesApi = mockApi<ServerReleaseApiInterface>();
 
+		setupStores({
+			schoolsModule: SchoolsModule,
+		});
+		schoolsModule.setSchool(schoolFactory.build());
+
 		vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(newsApi);
 		vi.spyOn(serverApi, "ServerReleaseApiFactory").mockReturnValue(releasesApi);
 	});
@@ -39,13 +55,24 @@ describe("DashboardPage", () => {
 		news?: NewsResponse[];
 		releaseDate?: string;
 		latestReleasePublishedAt?: string;
+		permissions?: Permission[];
+		schoolInMaintenance?: boolean;
+		schoolInMigration?: boolean;
 	}) => {
 		createTestAppStore({
 			me: {
 				roles: options?.roleName ? [{ id: options.roleName, name: options.roleName }] : [],
 				preferences: options?.releaseDate ? { releaseDate: options.releaseDate } : undefined,
+				permissions: options?.permissions ?? [],
 			},
 		});
+
+		schoolsModule.setSchool(
+			schoolFactory.build({
+				inMaintenance: options?.schoolInMaintenance ?? false,
+				inUserMigration: options?.schoolInMigration ?? false,
+			})
+		);
 
 		newsApi.newsControllerFindAll.mockResolvedValue(
 			mockApiResponse({
@@ -115,6 +142,41 @@ describe("DashboardPage", () => {
 			await flushPromises();
 
 			expect(wrapper.findComponent(DashboardTasks).exists()).toBe(false);
+		});
+	});
+
+	describe("inMaintenanceOrMigrationText", () => {
+		it("shows migration warning for admin with IMPORT_USER_VIEW permission when school is in migration", async () => {
+			const { wrapper } = setup({
+				roleName: RoleName.ADMINISTRATOR,
+				permissions: [Permission.IMPORT_USER_VIEW],
+				schoolInMigration: true,
+			});
+			await flushPromises();
+
+			const warningAlert = wrapper.findComponent({ name: "WarningAlert" });
+			expect(warningAlert.exists()).toBe(true);
+		});
+
+		it("shows maintenance warning for admin when school is in maintenance", async () => {
+			const { wrapper } = setup({
+				roleName: RoleName.ADMINISTRATOR,
+				schoolInMaintenance: true,
+			});
+			await flushPromises();
+
+			const warningAlert = wrapper.findComponent({ name: "WarningAlert" });
+			expect(warningAlert.exists()).toBe(true);
+		});
+
+		it("does not show warning when school is neither in maintenance nor migration", async () => {
+			const { wrapper } = setup({
+				roleName: RoleName.ADMINISTRATOR,
+			});
+			await flushPromises();
+
+			const warningAlert = wrapper.findComponent({ name: "WarningAlert" });
+			expect(warningAlert.exists()).toBe(false);
 		});
 	});
 });

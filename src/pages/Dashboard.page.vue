@@ -114,7 +114,7 @@ const inMaintenanceOrMigrationText = computed(() => {
 });
 
 const { data: newsResponse, isRunning: isLoadingNews } = useSafeAxiosRunner(() =>
-	newsApi.newsControllerFindAll(undefined, undefined, undefined, undefined, 4)
+	newsApi.newsControllerFindAll(undefined, undefined, undefined, undefined, NEWS_LIMIT)
 );
 const latestNews = computed(() => newsResponse.value?.data.data ?? []);
 
