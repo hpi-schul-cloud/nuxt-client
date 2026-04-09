@@ -32,7 +32,7 @@
 					</template>
 				</TasksDashBoardPanels>
 				<VContainer>
-					<EmptyState v-if="openTasksForTeacherIsEmpty" :title="t('pages.tasks.teacher.open.emptyState.title')">
+					<EmptyState v-if="openTasksForTeacherIsEmpty" :title="t('pages.tasks.open.emptyState.title')">
 						<template #media> <TasksEmptyStateSvg /></template>
 					</EmptyState>
 				</VContainer>
