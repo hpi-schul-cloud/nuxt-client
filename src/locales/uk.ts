@@ -126,7 +126,6 @@ export default {
 	"common.labels.visible": "Видимий",
 	"common.labels.welcome": "Ласкаво просимо",
 	"common.labels.fileName": "Ім'я файлу",
-	"common.labels.tasks.assigned": "Призначені завдання",
 	"common.labels.tasks.more": "Інші завдання...",
 	"common.loading.text": "Дані завантажуються...",
 	"common.medium.alert.deactivated": "Медіа вимкнено.",
@@ -974,12 +973,22 @@ export default {
 	"mixins.typeMeta.types.image": "Зображення",
 	"mixins.typeMeta.types.video": "Відео",
 	"mixins.typeMeta.types.webpage": "Веб-сайт",
+	"loggedin.text.backupFeatures":
+		"Зробіть резервну копію вашого контенту в хмарі та використовуйте також нову функцію для експорту курсів. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "Додаткову інформацію та допомогу можна знайти тут.",
+	"loggedin.text.schoolInTransferPhaseContactAdmin":
+		"Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів.",
+	"loggedin.text.schoolInTransferPhaseStartNew":
+		'Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів. Зателефонуйте в <a href="/administration/school/"> новий навчальний рік тут!</a>',
+	"loggedin.text.schoolInMigrationModeStarted":
+		'Школа перебуває в режимі міграції користувачів. Щоб перенести користувачів, перейдіть на <a href="/administration/migration/">цю сторінку</a>.',
+	"loggedin.text.schoolInMigrationMode":
+		'Школа може імпортувати облікові записи користувачів з Schulportal. Для виконання міграції користувачів відвідайте, будь ласка, <a href="/administration/migration/">цю сторінку</a>.',
 	"pages.dashboard.title": "Панель керування",
 	"pages.dashboard.empty.news": "Немає останніх новин. Перегляньте розділ новин, щоб бути в курсі.",
 	"pages.dashboard.new.features": "В {instanceTitle} є нові функції",
 	"pages.dashboard.new.features.available": "Доступні нові функції",
 	"pages.dashboard.new.features.forward": "Дізнайтеся більше про нові функції в розділі новин.",
-	"pages.dashboard.no.tasks": "Усі домашні завдання показуються в розділі домашніх завдань.",
 	"pages.dashboard.no.due.date": "Дата подання не встановлена",
 	"pages.dashboard.welcome": "Вітаємо",
 	"pages.dashboard.schedule": "Розклад",
@@ -1013,9 +1022,9 @@ export default {
 		"Усі зміни та налаштування в області адміністрування підтверджують, що вони внесені авторизованим адміністратором школи з повноваженнями вносити зміни до школи в хмарі. Коригування, внесені адміністратором школи, вважаються вказівками школи оператору хмари {institute_title}.",
 	"pages.administration.classes.index.add": "Додати клас",
 	"pages.administration.classes.index.title": "Керувати заняттями",
-	"pages.administration.classes.thr.hint.title": "Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.title": "Чому я не можу редагувати записи?",
 	"pages.administration.classes.thr.hint.text":
-		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
+		"Твоя школа синхронізована з Тюринзьким шкільним порталом. Дані вчителів, учнів і класів управляються там централізовано та можуть бути змінені лише там. Це також стосується змін паролів.",
 	"pages.administration.common.label.archive": "Архів",
 	"pages.administration.common.label.active": "поточний",
 	"pages.administration.classes.manage": "Керувати класом",
@@ -1855,7 +1864,6 @@ export default {
 	"pages.tasks.labels.planned": "Заплановано",
 	"pages.tasks.student.completed.emptyState.title": "Наразі немає жодного виконаного завдання",
 	"pages.tasks.student.open.emptyState.title": "Наразі немає відкритих завдань",
-	"pages.tasks.student.openTasks": "Відкриті завдання",
 	"pages.tasks.student.submittedTasks": "Виконані завдання",
 	"pages.tasks.student.subtitleOverDue": "Пропущені завдання",
 	"pages.tasks.subtitleGraded": "Оцінено",
@@ -1864,7 +1872,7 @@ export default {
 	"pages.tasks.subtitleOpen": "Відкриті завдання",
 	"pages.tasks.subtitleWithDue": "З терміном виконання",
 	"pages.tasks.teacher.drafts.emptyState.title": "Наразі немає чернеток",
-	"pages.tasks.teacher.open.emptyState.title": "Наразі завдань немає",
+	"pages.tasks.open.emptyState.title": "Наразі завдань немає",
 	"pages.tasks.teacher.subtitleOverDue": "Завдання, термін дії яких минув",
 	"pages.termsofuse.title": "Умови використання та політика конфіденційності",
 	"pages.tool.apiError.tool_param_duplicate":
