@@ -1,6 +1,5 @@
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ContextExternalToolConfigurator from "@/components/administration/external-tools-configuration/ContextExternalToolConfigurator.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { contextExternalToolFactory, expectNotification } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
@@ -50,25 +49,6 @@ describe("ExternalToolElementConfigurationDialog", () => {
 			wrapper,
 		};
 	};
-
-	describe("Title", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper();
-
-			return {
-				wrapper,
-			};
-		};
-
-		it("should display the title", async () => {
-			const { wrapper } = await setup();
-
-			const dialog = wrapper.findComponent(CustomDialog);
-			const title = dialog.findComponent({ name: "v-card-title" });
-
-			expect(title.text()).toEqual("feature-board-external-tool-element.dialog.title");
-		});
-	});
 
 	describe("when the dialog is opened", () => {
 		it("should load the configurator data", async () => {

@@ -1,21 +1,18 @@
 <template>
-	<CustomDialog ref="customDialog" :is-open="isOpen" class="room-dialog" @dialog-closed="$emit('update:isOpen', false)">
-		<template #title>
-			<div class="pt-2 room-title">
-				<VTextField
-					v-model="data.title"
-					density="compact"
-					flat
-					:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
-					:placeholder="$t('pages.rooms.roomModal.courseGroupTitle')"
-					:label="$t('pages.rooms.roomModal.courseGroupTitle')"
-					:rules="[validateOnOpeningTag]"
-					@blur="onBlur"
-					@keyup.enter="onEnterInput"
-				/>
-			</div>
-		</template>
+	<SvsDialog :model-value="isOpen" no-actions :title="data.title" @cancel="emit('update:isOpen', false)">
 		<template #content>
+			<VTextField
+				v-model="data.title"
+				density="compact"
+				class="pt-2"
+				flat
+				:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
+				:placeholder="$t('pages.rooms.roomModal.courseGroupTitle')"
+				:label="$t('pages.rooms.roomModal.courseGroupTitle')"
+				:rules="[validateOnOpeningTag]"
+				@blur="onBlur"
+				@keyup.enter="onEnterInput"
+			/>
 			<CourseRoomAvatarIterator
 				class="iterator"
 				:avatars="groupData.groupElements"
@@ -27,12 +24,12 @@
 				@start-drag="$emit('drag-from-group', $event)"
 			/>
 		</template>
-	</CustomDialog>
+	</SvsDialog>
 </template>
 <script setup lang="ts">
 import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { type GroupDataType, useCourseRoomListStore } from "@data-course-rooms";
+import { SvsDialog } from "@ui-dialog";
 import { useOpeningTagValidator } from "@util-validators";
 import { ref, watch } from "vue";
 
@@ -48,7 +45,7 @@ const props = withDefaults(defineProps<Props>(), {
 	draggable: false,
 });
 
-defineEmits(["update:isOpen", "drag-from-group"]);
+const emit = defineEmits(["update:isOpen", "drag-from-group"]);
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const courseRoomListStore = useCourseRoomListStore();
@@ -98,9 +95,3 @@ watch(
 	{ deep: true }
 );
 </script>
-
-<style lang="scss" scoped>
-.room-title {
-	width: 100%;
-}
-</style>
