@@ -14,7 +14,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="node in boardNodes" :key="node.id">
+				<tr v-for="node in boardNodes" :key="node.id.toString()">
 					<td>{{ stripHtmlTags((node.payload as any)?.text) }}</td>
 					<td>{{ node.score }}</td>
 					<td>
@@ -45,13 +45,11 @@
 
 <script setup lang="ts">
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { BoardDto, BoardExternalReferenceType } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { Permission, ShareTokenBodyParamsParentType } from "@api-server";
+import { BoardDto, BoardExternalReferenceType, Permission, ShareTokenBodyParamsParentType } from "@api-server";
 import { notifySuccess, useAppStore } from "@data-app";
 import { useFolderState } from "@data-folder";
-import { useRoomAuthorization, useRoomStore } from "@data-room";
+import { useRoomStore } from "@data-room";
 import { ImportCardDialog } from "@feature-board";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
@@ -66,7 +64,6 @@ const { fetchParentNodeInfos } = useFolderState();
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const { canCreateRoom } = useRoomAuthorization();
 const { rooms, isLoading, isEmpty } = storeToRefs(useRoomStore());
 
 const { fetchRooms, searchBoardNode } = useRoomStore();
