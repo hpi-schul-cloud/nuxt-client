@@ -5,6 +5,7 @@
 </template>
 
 <script setup lang="ts">
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
 import { LanguageType, RuntimeConfigApiFactory } from "@api-server";
@@ -32,10 +33,13 @@ const runtimeConfigAnnouncement = reactive<RuntimeConfigAnnouncement>({
 });
 
 const fetchRuntimeAnnouncement = async () => {
-	const { data } = await runtimeConfigApi.runtimeConfigControllerGetRuntimeConfig();
+	const { execute } = useSafeAxiosTask();
+	const { result } = await execute(() => runtimeConfigApi.runtimeConfigControllerGetRuntimeConfig());
 
-	if (data?.data) {
-		const configMap = Object.fromEntries(data.data.map((item) => [item.key, item.value]));
+	const announcementResult = result?.data.data;
+
+	if (announcementResult) {
+		const configMap = Object.fromEntries(announcementResult.map((item) => [item.key, item.value]));
 		Object.assign(runtimeConfigAnnouncement, configMap);
 	}
 };
