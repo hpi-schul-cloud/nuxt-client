@@ -28,6 +28,40 @@ export function downloadFile(url: string, fileName: string) {
 	document.body.removeChild(link);
 }
 
+// It creates a form element, populates it with hidden input fields for each key-value pair in the data array,
+// and then submits the form to initiate the download. After the form is submitted, it is removed from the document body to clean up.
+export const enforceDownload = (url: string, data: Array<{ key: string; value: string }>, target = "_blank") => {
+	const form = createDownloadForm(url, data, target);
+	form.submit();
+	document.body.removeChild(form);
+};
+
+const createDownloadForm = (url: string, data: Array<{ key: string; value: string }>, target: string) => {
+	const form = document.createElement("form");
+	form.method = "POST";
+	form.action = url;
+	form.enctype = "application/json";
+	form.target = target;
+
+	for (const { key, value } of data) {
+		const input = createHiddenInputElement(key, value);
+		form.appendChild(input);
+	}
+
+	document.body.appendChild(form);
+
+	return form;
+};
+
+const createHiddenInputElement = (name: string, value: string): HTMLInputElement => {
+	const input = document.createElement("input");
+	input.type = "hidden";
+	input.name = name;
+	input.value = value;
+
+	return input;
+};
+
 // This function is used to download multiple files as a zip archive.
 // It creates a form with the necessary parameters and submits it to the server.
 // The server will then create the zip archive and return it as a file download.
