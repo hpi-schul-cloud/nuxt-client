@@ -1,35 +1,19 @@
 <template>
-	<CustomDialog
+	<SvsDialog
+		v-model="isOpen"
 		data-testid="end-course-sync-dialog"
-		:has-buttons="true"
-		:buttons="['cancel', 'confirm']"
-		:is-open="isOpen"
+		:title="endSyncTitle"
 		:confirm-btn-disabled="!courseId"
-		@dialog-confirmed="onConfirm"
-		@dialog-canceled="closeDialog"
-	>
-		<template #title>
-			<h2 class="my-2 text-break-word">
-				{{ $t("feature-course-sync.EndCourseSyncDialog.title") }}
-			</h2>
-		</template>
-		<template #content>
-			<p data-testid="end-course-sync-dialog-info-text">
-				{{
-					$t("feature-course-sync.EndCourseSyncDialog.description", {
-						courseName: courseName,
-						groupName: groupName,
-					})
-				}}
-			</p>
-		</template>
-	</CustomDialog>
+		@confirm="onConfirm"
+		@cancel="closeDialog"
+	/>
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { notifyError, notifySuccess } from "@data-app";
 import { useCourseApi } from "@data-room";
+import { SvsDialog } from "@ui-dialog";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -57,6 +41,13 @@ const props = defineProps({
 const emit = defineEmits<{
 	(e: "success"): void;
 }>();
+
+const endSyncTitle = computed(() =>
+	t("feature-course-sync.EndCourseSyncDialog", {
+		courseName: props.courseName,
+		groupName: props.groupName,
+	})
+);
 
 const closeDialog = () => {
 	isOpen.value = false;
