@@ -73,6 +73,7 @@
 import SvgNewsEmpty from "@/assets/img/SvgNewsEmpty.vue";
 import Announcement from "@/components/announcement/Announcement.vue";
 import { useSafeAxiosRunner } from "@/composables/async-tasks.composable";
+import { schoolsModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -94,8 +95,6 @@ const { t } = useI18n();
 const { isTeacher, isStudent, isAdmin } = useAppStoreRefs();
 const NEWS_LIMIT = 4;
 const newsApi = NewsApiFactory(undefined, "/v3", $axios);
-
-import { schoolsModule } from "@/store";
 
 useTitle(buildPageTitle(t("pages.dashboard.title")));
 
