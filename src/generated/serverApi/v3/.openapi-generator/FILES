@@ -34,6 +34,7 @@ api/oauth-api.ts
 api/oauth2-api.ts
 api/pseudonym-api.ts
 api/registration-api.ts
+api/release-api.ts
 api/room-api.ts
 api/room-invitation-link-api.ts
 api/runtime-config-api.ts
@@ -41,7 +42,6 @@ api/school-api.ts
 api/school-license-api.ts
 api/server-api.ts
 api/server-config-api.ts
-api/server-release-api.ts
 api/share-token-api.ts
 api/shd-api.ts
 api/submission-api.ts
@@ -75,6 +75,7 @@ models/authorized-response.ts
 models/basic-tool-config-params.ts
 models/board-column-board-response.ts
 models/board-context-response.ts
+models/board-dto.ts
 models/board-element-response.ts
 models/board-error-report-body-params.ts
 models/board-external-reference-type.ts
@@ -414,6 +415,8 @@ models/user-match-list-response.ts
 models/user-match-response.ts
 models/user-response.ts
 models/validation-error.ts
+models/vector-dto.ts
+models/vector-indices-values-dto.ts
 models/video-conference-content-body.ts
 models/video-conference-create-params.ts
 models/video-conference-element-content-body.ts

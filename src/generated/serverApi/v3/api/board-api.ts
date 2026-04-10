@@ -25,6 +25,8 @@ import { ApiValidationError } from '../models';
 // @ts-ignore
 import { BoardContextResponse } from '../models';
 // @ts-ignore
+import { BoardDto } from '../models';
+// @ts-ignore
 import { BoardResponse } from '../models';
 // @ts-ignore
 import { ColumnResponse } from '../models';
@@ -266,6 +268,47 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Search board nodes by embedding similarity.
+         * @param {string} query Search string
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerSearchEmbedding: async (query: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'query' is not null or undefined
+            assertParamExists('boardControllerSearchEmbedding', 'query', query)
+            const localVarPath = `/boards/search-embedding`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (query !== undefined) {
+                localVarQueryParameter['query'] = query;
+            }
 
 
     
@@ -532,6 +575,17 @@ export const BoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Search board nodes by embedding similarity.
+         * @param {string} query Search string
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerSearchEmbedding(query: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BoardDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerSearchEmbedding(query, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {UpdateBoardTitleParams} updateBoardTitleParams 
@@ -650,6 +704,16 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
+         * @summary Search board nodes by embedding similarity.
+         * @param {string} query Search string
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerSearchEmbedding(query: string, options?: any): AxiosPromise<Array<BoardDto>> {
+            return localVarFp.boardControllerSearchEmbedding(query, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {UpdateBoardTitleParams} updateBoardTitleParams 
@@ -760,6 +824,16 @@ export interface BoardApiInterface {
      * @memberof BoardApiInterface
      */
     boardControllerGetBoardSkeleton(boardId: string, options?: any): AxiosPromise<BoardResponse>;
+
+    /**
+     * 
+     * @summary Search board nodes by embedding similarity.
+     * @param {string} query Search string
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApiInterface
+     */
+    boardControllerSearchEmbedding(query: string, options?: any): AxiosPromise<Array<BoardDto>>;
 
     /**
      * 
@@ -884,6 +958,18 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      */
     public boardControllerGetBoardSkeleton(boardId: string, options?: any) {
         return BoardApiFp(this.configuration).boardControllerGetBoardSkeleton(boardId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Search board nodes by embedding similarity.
+     * @param {string} query Search string
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApi
+     */
+    public boardControllerSearchEmbedding(query: string, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerSearchEmbedding(query, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

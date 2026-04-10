@@ -17,15 +17,21 @@
 /**
  * 
  * @export
- * @interface MePreferencesResponse
+ * @interface VectorIndicesValuesDto
  */
-export interface MePreferencesResponse {
+export interface VectorIndicesValuesDto {
     /**
      * 
-     * @type {string}
-     * @memberof MePreferencesResponse
+     * @type {Array<number>}
+     * @memberof VectorIndicesValuesDto
      */
-    releaseDate?: string | null;
+    indices: Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof VectorIndicesValuesDto
+     */
+    values: Array<number>;
 }
 
 

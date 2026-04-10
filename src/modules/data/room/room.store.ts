@@ -1,8 +1,9 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { RoomCreateParams, RoomItem } from "@/types/room/Room";
-import { $axios } from "@/utils/api";
-import { MoveItemBodyParams, RoomApiFactory } from "@api-server";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { BoardApiFactory, MoveItemBodyParams, RoomApiFactory } from "@api-server";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
@@ -15,6 +16,20 @@ export const useRoomStore = defineStore("room-store", () => {
 	const isEmpty = computed(() => rooms.value.length === 0);
 
 	const { execute, isRunning: isLoading } = useSafeAxiosTask();
+
+	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
+
+	const searchBoardNode = async (searchTerm: string) => {
+		try {
+			const response = await boardApi.boardControllerSearchEmbedding(searchTerm);
+
+			return response.data;
+		} catch (error) {
+			const responseError = mapAxiosErrorToResponseError(error);
+
+			throw createApplicationError(responseError.code);
+		}
+	};
 
 	const fetchRoomsPlain = async () => {
 		const { result } = await execute(
@@ -72,5 +87,6 @@ export const useRoomStore = defineStore("room-store", () => {
 		moveRoom,
 		deleteRoom,
 		leaveRoom,
+		searchBoardNode,
 	};
 });
