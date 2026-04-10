@@ -42,7 +42,7 @@
 			</div>
 		</template>
 		<div class="content-max-width mx-auto mt-5 mb-14">
-			<v-autocomplete
+			<VAutocomplete
 				v-if="showCourseFilter"
 				v-model="selectedCourseFilters"
 				closable-chips
@@ -65,7 +65,7 @@
 			/>
 			<div v-else class="course-filter-placeholder" />
 			<tasks-dashboard-student v-if="isStudent" :tab-routes="tabRoutes" />
-			<tasks-dashboard-teacher v-else :tab-routes="tabRoutes" />
+			<TasksDashboardTeacher v-else :tab-routes="tabRoutes" />
 		</div>
 		<copy-result-modal
 			v-if="isTeacher"

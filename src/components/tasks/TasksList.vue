@@ -1,8 +1,8 @@
 <template>
-	<v-list role="feed" lines="two">
-		<v-list-subheader v-if="title && isListFilled" class="text-subtitle-1 ml-n4 mx-sm-0">
+	<VList role="feed" lines="two">
+		<VListSubheader v-if="title && isListFilled" class="text-subtitle-1 ml-n4 mx-sm-0">
 			{{ title }}
-		</v-list-subheader>
+		</VListSubheader>
 		<template v-if="showSkeleton">
 			<v-skeleton-loader type="text" :max-width="'15%'" />
 			<v-skeleton-loader v-for="task of 4" ref="skeleton" :key="task" :type="'list-item-avatar-two-line'" />
@@ -29,7 +29,7 @@
 		<div v-if="showSpinner" class="d-flex justify-center my-10">
 			<v-progress-circular indeterminate />
 		</div>
-	</v-list>
+	</VList>
 </template>
 
 <script>
