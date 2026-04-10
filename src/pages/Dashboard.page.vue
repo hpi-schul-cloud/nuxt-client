@@ -1,8 +1,8 @@
 <template>
 	<DefaultWireframe max-width="full" main-with-bottom-padding>
 		<template #header>
-			<h1 data-testid="dashboard-title">{{ t("pages.dashboard.title") }}</h1>
 			<Announcement />
+			<h1 data-testid="dashboard-title">{{ t("pages.dashboard.title") }}</h1>
 		</template>
 		<template #default>
 			<InfoAlert v-if="hasGlobalAnnouncement && (isTeacher || isAdmin)" class="mt-6">
