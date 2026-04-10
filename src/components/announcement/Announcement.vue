@@ -67,5 +67,3 @@ onMounted(() => {
 	fetchRuntimeAnnouncement();
 });
 </script>
-
-<style lang="scss" scoped></style>
