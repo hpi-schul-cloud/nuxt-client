@@ -62,14 +62,9 @@ export const useBoardAriaNotification = () => {
 	const getElementOwner = (elementId: string) => {
 		if (!cards) return;
 
-		// TODO - fix ts errors
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
 		const card = Object.values(cards).find((c) => c.elements.find((element) => element.id === elementId));
 		if (!card) return;
 
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
 		return card.id;
 	};
 

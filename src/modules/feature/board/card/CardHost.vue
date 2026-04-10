@@ -260,7 +260,6 @@ onMounted(async () => {
 	}
 });
 
-// Card Color
 const onUpdateColor = (newColor: Colors) => {
 	cardStore.updateCardColorRequest({ cardId: props.cardId, newColor });
 };
