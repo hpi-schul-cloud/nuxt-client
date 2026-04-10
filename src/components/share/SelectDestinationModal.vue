@@ -1,52 +1,36 @@
 <template>
-	<CustomDialog
-		ref="dialog"
-		:is-open="isOpen"
-		:size="480"
-		has-buttons
-		:buttons="['cancel', 'next']"
-		@next="onNext()"
-		@dialog-canceled="onCancel"
+	<SvsDialog
+		:model-value="isOpen"
+		:title="`components.molecules.import.${parentType}.options.title`"
+		confirm-btn-lang-key="common.actions.continue"
+		data-testid="select-destination-modal"
+		@confirm="onNext"
+		@cancel="emit('cancel')"
 	>
-		<template #title>
-			<h2 class="mt-2">
-				{{ t(`components.molecules.import.${parentType}.options.title`) }}
-			</h2>
-		</template>
-
 		<template #content>
-			<div>
-				<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
-					<div class="mx-2">
-						<v-icon color="info">{{ mdiInformation }}</v-icon>
-					</div>
-					<div>
-						{{ infoText }}
-					</div>
-				</div>
-				<v-select
-					v-model="selectedReference"
-					return-object
-					item-value="id"
-					item-title="name"
-					:items="destinations"
-					:placeholder="selectionPlaceholder"
-					:rules="[rules.required]"
-					:error="showError()"
-					:hint="selectionHint"
-					persistent-hint
-					data-testId="import-destination-select"
-				/>
-			</div>
+			<InfoAlert> {{ infoText }} </InfoAlert>
+			<VSelect
+				v-model="selectedReference"
+				return-object
+				item-value="id"
+				item-title="name"
+				:items="destinations"
+				:placeholder="selectionPlaceholder"
+				:rules="[rules.required]"
+				:error="showError()"
+				:hint="selectionHint"
+				persistent-hint
+				data-testId="import-destination-select"
+			/>
 		</template>
-	</CustomDialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { ImportDestinationItem } from "@/store/types/rooms";
 import { BoardExternalReferenceType } from "@api-server";
-import { mdiInformation } from "@icons/material";
+import { InfoAlert } from "@ui-alert";
+import { SvsDialog } from "@ui-dialog";
 import { computed, PropType, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -102,5 +86,4 @@ const onNext = () => {
 		emit("next", id);
 	}
 };
-const onCancel = () => emit("cancel");
 </script>

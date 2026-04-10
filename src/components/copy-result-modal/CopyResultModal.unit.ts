@@ -1,12 +1,13 @@
 import CopyResultModal from "./CopyResultModal.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { CopyApiResponseType } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
+import { SvsDialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
+import { VCardText, VCardTitle } from "vuetify/components";
 
 const mockGeoGebraItem = {
 	title: "GeoGebra Element Title",
@@ -68,36 +69,13 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		});
 	});
 
-	describe("isOpen", () => {
-		it("should be closed by default", () => {
-			const wrapper = createWrapper();
-
-			const dialog = wrapper.findComponent(CustomDialog);
-			const title = dialog.findComponent('[data-testid="dialog-title"');
-
-			expect(dialog.vm.isOpen).toBe(false);
-			expect(title.exists()).toBe(false);
-		});
-
-		it("should be open when is-open property is true", () => {
-			const wrapper = createWrapper({ isOpen: true });
-
-			const dialog = wrapper.findComponent(CustomDialog);
-			const title = dialog.findComponent('[data-testid="dialog-title"');
-
-			expect(dialog.vm.isOpen).toBe(true);
-			expect(title.exists()).toBe(true);
-		});
-	});
-
 	describe("title", () => {
 		it("should show partial-title when copy was partially successful", () => {
 			const wrapper = createWrapper({ isOpen: true });
 
-			const dialog = wrapper.findComponent(CustomDialog);
-			const headline = dialog.findComponent('[data-testid="dialog-title"]').text();
+			const dialog = wrapper.findComponent(SvsDialog);
 
-			expect(headline).toBe("components.molecules.copyResult.title.partial");
+			expect(dialog.findComponent(VCardTitle).text()).toContain("components.molecules.copyResult.title.partial");
 		});
 	});
 
@@ -105,8 +83,8 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should forward the dialog-closed event of the wrapped dialog", () => {
 			const wrapper = createWrapper({ isOpen: true });
 
-			const dialog = wrapper.findComponent(CustomDialog);
-			dialog.vm.$emit("dialog-closed");
+			const dialog = wrapper.findComponent(SvsDialog);
+			dialog.vm.$emit("cancel");
 
 			expect(wrapper.emitted("copy-dialog-closed")).toHaveLength(1);
 		});
@@ -122,8 +100,8 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				copyResultRootItemType: CopyApiResponseType.COURSE,
 			});
 
-			const dialog = wrapper.findComponent(CustomDialog);
-			const content = dialog.findComponent(".v-card-text").text();
+			const dialog = wrapper.findComponent(SvsDialog);
+			const content = dialog.findComponent(VCardText).text();
 
 			expect(content).toContain("components.molecules.copyResult.courseFiles.info");
 		});
@@ -152,8 +130,8 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				it("should show the warning text for non-copyable course external tools", () => {
 					const { wrapper } = setup();
 
-					const dialog = wrapper.findComponent(CustomDialog);
-					const content = dialog.findComponent(".v-card-text").text();
+					const dialog = wrapper.findComponent(SvsDialog);
+					const content = dialog.findComponent(VCardText).text();
 
 					expect(content).toContain("components.molecules.copyResult.ctlTools.withFeature.info");
 				});
@@ -182,8 +160,8 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				it("should show the warning text for non-copyable course external tools", () => {
 					const { wrapper } = setup();
 
-					const dialog = wrapper.findComponent(CustomDialog);
-					const content = dialog.findComponent(".v-card-text").text();
+					const dialog = wrapper.findComponent(SvsDialog);
+					const content = dialog.findComponent(VCardText).text();
 
 					expect(content).toContain("components.molecules.copyResult.ctlTools.withFeature.info");
 				});
@@ -218,8 +196,8 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should render members and permission information", () => {
 			const wrapper = setup();
 
-			const dialog = wrapper.findComponent(CustomDialog);
-			const content = dialog.findComponent(".v-card-text").text();
+			const dialog = wrapper.findComponent(SvsDialog);
+			const content = dialog.findComponent(VCardText).text();
 
 			expect(content).toContain("components.molecules.copyResult.membersAndPermissions");
 		});
@@ -244,8 +222,8 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should not render members and permission information", () => {
 			const wrapper = setup();
 
-			const dialog = wrapper.findComponent(CustomDialog);
-			const content = dialog.findComponent(".v-card-text").text();
+			const dialog = wrapper.findComponent(SvsDialog);
+			const content = dialog.findComponent(VCardText).text();
 
 			expect(content).not.toContain("components.molecules.copyResult.membersAndPermissions");
 		});
@@ -270,8 +248,8 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should not render members and permission information", () => {
 			const wrapper = setup();
 
-			const dialog = wrapper.findComponent(CustomDialog);
-			const content = dialog.findComponent(".v-card-text").text();
+			const dialog = wrapper.findComponent(SvsDialog);
+			const content = dialog.findComponent(VCardText).text();
 
 			expect(content).not.toContain("components.molecules.copyResult.membersAndPermissions");
 		});
@@ -296,8 +274,8 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should not render members and permission information", () => {
 			const wrapper = setup();
 
-			const dialog = wrapper.findComponent(CustomDialog);
-			const content = dialog.findComponent(".v-card-text").text();
+			const dialog = wrapper.findComponent(SvsDialog);
+			const content = dialog.findComponent(VCardText).text();
 
 			expect(content).not.toContain("components.molecules.copyResult.membersAndPermissions");
 		});
@@ -322,8 +300,8 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should not render members and permission information", () => {
 			const wrapper = setup();
 
-			const dialog = wrapper.findComponent(CustomDialog);
-			const content = dialog.findComponent(".v-card-text").text();
+			const dialog = wrapper.findComponent(SvsDialog);
+			const content = dialog.findComponent(VCardText).text();
 
 			expect(content).not.toContain("components.molecules.copyResult.membersAndPermissions");
 		});
