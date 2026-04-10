@@ -1,4 +1,5 @@
 import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import {
 	createTestAppStoreWithSchool,
 	createTestEnvStore,
@@ -124,38 +125,7 @@ describe("SchoolYearChangeSection", () => {
 		});
 	});
 
-	describe("StartTransferButton", () => {
-		describe("when transfer button is clicked", () => {
-			const setup = () => {
-				vi.useFakeTimers();
-				vi.setSystemTime(new Date(2000, 11, 31));
-
-				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build();
-				const { wrapper } = getWrapper();
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should open dialog", async () => {
-				const { wrapper } = setup();
-
-				const button = wrapper.find('[data-testid="start-transfer-button"]');
-				await button.trigger("click");
-
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel"]');
-				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
-
-				expect(title.isVisible()).toBeTruthy();
-				expect(cancelBtn.isVisible()).toBeTruthy();
-				expect(confirmBtn.isVisible()).toBeTruthy();
-			});
-		});
-	});
-
-	describe("Start transfer Dialog", () => {
+	describe("Start transfer", () => {
 		const setup = () => {
 			vi.useFakeTimers();
 			vi.setSystemTime(new Date(2000, 11, 31));
@@ -178,74 +148,24 @@ describe("SchoolYearChangeSection", () => {
 			};
 		};
 
-		describe("when cancel button is clicked", () => {
-			it("should not call setMaintenance", async () => {
-				const { wrapper } = setup();
-
-				const button = wrapper.find('[data-testid="start-transfer-button"]');
-				await button.trigger("click");
-
-				const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel"]');
-				await cancelBtn.trigger("click");
-				expect(useSharedSchoolYearChangeApiMock.setMaintenanceMode).not.toHaveBeenCalled();
-			});
-
-			it("should not show the dialog", async () => {
-				const { wrapper } = setup();
-
-				const button = wrapper.find('[data-testid="start-transfer-button"]');
-				await button.trigger("click");
-
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel"]');
-				await cancelBtn.trigger("click");
-
-				expect(title.isVisible()).toBeFalsy();
-			});
-
-			it("should show the start transfer button", () => {
-				const { wrapper } = setup();
-
-				const button = wrapper.find('[data-testid="start-transfer-button"]');
-
-				expect(button.isVisible()).toBeTruthy();
-			});
-		});
-
-		describe("when confirm button is clicked", () => {
-			it("should not show the dialog", async () => {
-				const { wrapper } = setup();
-
-				const button = wrapper.find('[data-testid="start-transfer-button"]');
-				await button.trigger("click");
-
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
-				await confirmBtn.trigger("click");
-
-				expect(title.isVisible()).toBeFalsy();
-			});
-
+		describe("when transfer is confirmed", () => {
 			it("should call setMaintenance", async () => {
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
+
 				const { wrapper } = setup();
 
 				const button = wrapper.find('[data-testid="start-transfer-button"]');
 				await button.trigger("click");
-
-				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
-				await confirmBtn.trigger("click");
 
 				expect(useSharedSchoolYearChangeApiMock.setMaintenanceMode).toHaveBeenCalledWith("schoolId", true);
 			});
 
 			it("should enable the get ldap data button", async () => {
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 				const { wrapper } = setup();
 
 				const button = wrapper.find('[data-testid="start-transfer-button"]');
 				await button.trigger("click");
-
-				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
-				await confirmBtn.trigger("click");
 
 				const ldapButton = wrapper.findComponent<typeof VBtn>('[data-testid="ldap-data-button"]');
 
@@ -254,13 +174,11 @@ describe("SchoolYearChangeSection", () => {
 			});
 
 			it("should show the transfer started button", async () => {
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 				const { wrapper } = setup();
 
 				const button = wrapper.find('[data-testid="start-transfer-button"]');
 				await button.trigger("click");
-
-				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
-				await confirmBtn.trigger("click");
 
 				const transferStartedButton = wrapper.findComponent<typeof VBtn>('[data-testid="started-transfer-button"]');
 
@@ -409,51 +327,7 @@ describe("SchoolYearChangeSection", () => {
 		});
 	});
 
-	describe("transfer finish button", () => {
-		describe("when transfer finish button is clicked", () => {
-			const setup = async () => {
-				vi.useFakeTimers();
-				vi.setSystemTime(new Date(2000, 11, 31));
-
-				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build({
-					maintenance: {
-						active: true,
-						startDate: new Date(2000, 11, 31).toString(),
-					},
-				});
-
-				const { wrapper } = getWrapper();
-
-				const ldapButton = wrapper.findComponent<typeof VBtn>('[data-testid="ldap-data-button"]');
-				await ldapButton.trigger("click");
-
-				const checkBox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox-update-data"]');
-				checkBox.vm.$emit("update:modelValue", true);
-				await nextTick();
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should open dialog", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.find('[data-testid="finish-transfer-button"]');
-				await button.trigger("click");
-
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel"]');
-				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
-
-				expect(title.isVisible()).toBeTruthy();
-				expect(cancelBtn.isVisible()).toBeTruthy();
-				expect(confirmBtn.isVisible()).toBeTruthy();
-			});
-		});
-	});
-
-	describe("Finish transfer Dialog", () => {
+	describe("Finish transfer", () => {
 		const setup = async () => {
 			vi.useFakeTimers();
 			vi.setSystemTime(new Date(2000, 11, 31));
@@ -486,67 +360,20 @@ describe("SchoolYearChangeSection", () => {
 			};
 		};
 
-		describe("when cancel button is clicked", () => {
-			it("should not call setMaintenance", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.find('[data-testid="finish-transfer-button"]');
-				await button.trigger("click");
-
-				const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel"]');
-				await cancelBtn.trigger("click");
-				expect(useSharedSchoolYearChangeApiMock.setMaintenanceMode).not.toHaveBeenCalled();
-			});
-
-			it("should not show the dialog", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.find('[data-testid="finish-transfer-button"]');
-				await button.trigger("click");
-
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel"]');
-				await cancelBtn.trigger("click");
-
-				expect(title.isVisible()).toBeFalsy();
-			});
-
-			it("should show the finish transfer button", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.find('[data-testid="finish-transfer-button"]');
-
-				expect(button.isVisible()).toBeTruthy();
-			});
-		});
-
 		describe("when confirm button is clicked", () => {
-			it("should not show the dialog", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.find('[data-testid="finish-transfer-button"]');
-				await button.trigger("click");
-
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
-				await confirmBtn.trigger("click");
-
-				expect(title.isVisible()).toBeFalsy();
-			});
-
 			it("should call setMaintenance", async () => {
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
+
 				const { wrapper } = await setup();
 
 				const button = wrapper.find('[data-testid="finish-transfer-button"]');
 				await button.trigger("click");
-
-				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
-				await confirmBtn.trigger("click");
 
 				expect(useSharedSchoolYearChangeApiMock.setMaintenanceMode).toHaveBeenCalledWith("schoolId", false);
 			});
 
 			it("should show all buttons disabled, but checkbox enabled", async () => {
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 				const { wrapper } = await setup();
 
 				const transferStartButton = wrapper.findComponent<typeof VBtn>('[data-testid="start-transfer-button"]');
@@ -558,9 +385,6 @@ describe("SchoolYearChangeSection", () => {
 
 				const button = wrapper.find('[data-testid="finish-transfer-button"]');
 				await button.trigger("click");
-
-				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
-				await confirmBtn.trigger("click");
 
 				expect(transferStartButton.exists()).toBeFalsy();
 

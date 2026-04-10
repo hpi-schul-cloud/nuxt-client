@@ -1,77 +1,61 @@
 <template>
-	<CustomDialog
-		ref="dialog"
-		:is-open="isOpen"
-		:size="480"
-		has-buttons
-		:buttons="['cancel', 'confirm']"
-		confirm-btn-title-key="common.actions.import"
+	<SvsDialog
+		:model-value="isOpen"
+		:title="t(`components.molecules.import.${parentType}.options.title`)"
 		data-testid="import-modal"
+		confirm-btn-lang-key="common.actions.import"
 		:confirm-btn-disabled="!isTitleValid"
-		@dialog-confirmed="onConfirm"
-		@dialog-canceled="onCancel"
+		@confirm="onConfirm"
+		@cancel="onCancel"
 	>
-		<template #title>
-			<h2 class="mt-2">
-				{{ t(`components.molecules.import.${parentType}.options.title`) }}
-			</h2>
-		</template>
-
 		<template #content>
-			<div>
-				<div v-if="showAlertInfo" class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
-					<div class="mx-2">
-						<v-icon color="info" :icon="mdiInformation" />
-					</div>
-					<div data-testid="import-options-table-header">
-						{{ t("components.molecules.import.options.tableHeader.InfoText") }}
-						<ul class="ml-6">
-							<li v-if="showCourseInfo" data-testid="import-options-personal-data-text">
-								{{ t("components.molecules.shareImport.options.restrictions.infoText.personalData") }}
-							</li>
-							<li v-if="showCourseInfo || showLessonInfo">
-								{{ t("components.molecules.shareImport.options.restrictions.infoText.geogebra") }}
-							</li>
-							<li v-if="showCourseInfo || showBoardInfo || showLessonInfo">
-								{{ t("components.molecules.shareImport.options.restrictions.infoText.etherpad") }}
-							</li>
-							<li v-if="showCourseInfo || showBoardInfo">
-								{{ t("components.molecules.shareImport.options.restrictions.infoText.whiteboard") }}
-							</li>
-							<li v-if="showCtlToolsInfo" data-testid="import-modal-external-tools-info">
-								{{ t("components.molecules.shareImport.options.ctlTools.infoText.unavailable") }}
-							</li>
-							<li v-if="showCtlToolsInfo" data-testid="import-modal-external-tools-protected-parameter-info">
-								{{ t("components.molecules.shareImport.options.ctlTools.infoText.protected") }}
-							</li>
-							<li v-if="showCourseInfo" data-testid="import-modal-coursefiles-info">
-								{{ t("components.molecules.shareImport.options.restrictions.infoText.courseFiles") }}
-							</li>
+			<InfoAlert v-if="showAlertInfo" class="mb-4">
+				{{ t("components.molecules.import.options.tableHeader.InfoText") }}
+				<ul class="ml-6">
+					<li v-if="showCourseInfo" data-testid="import-options-personal-data-text">
+						{{ t("components.molecules.shareImport.options.restrictions.infoText.personalData") }}
+					</li>
+					<li v-if="showCourseInfo || showLessonInfo">
+						{{ t("components.molecules.shareImport.options.restrictions.infoText.geogebra") }}
+					</li>
+					<li v-if="showCourseInfo || showBoardInfo || showLessonInfo">
+						{{ t("components.molecules.shareImport.options.restrictions.infoText.etherpad") }}
+					</li>
+					<li v-if="showCourseInfo || showBoardInfo">
+						{{ t("components.molecules.shareImport.options.restrictions.infoText.whiteboard") }}
+					</li>
+					<li v-if="showCtlToolsInfo" data-testid="import-modal-external-tools-info">
+						{{ t("components.molecules.shareImport.options.ctlTools.infoText.unavailable") }}
+					</li>
+					<li v-if="showCtlToolsInfo" data-testid="import-modal-external-tools-protected-parameter-info">
+						{{ t("components.molecules.shareImport.options.ctlTools.infoText.protected") }}
+					</li>
+					<li v-if="showCourseInfo" data-testid="import-modal-coursefiles-info">
+						{{ t("components.molecules.shareImport.options.restrictions.infoText.courseFiles") }}
+					</li>
 
-							<li v-if="showCourseInfo">
-								{{ t("components.molecules.shareImport.options.restrictions.infoText.courseGroups") }}
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div class="mb-4">
-					{{ t(`components.molecules.import.${parentType}.rename`) }}
-				</div>
-				<v-text-field
-					ref="nameInputText"
-					v-model="newName"
-					:label="t(`components.molecules.import.${parentType}.label`)"
-					:rules="[rules.required, rules.validateOnOpeningTag]"
-					data-testid="import-modal-name-input"
-				/>
+					<li v-if="showCourseInfo">
+						{{ t("components.molecules.shareImport.options.restrictions.infoText.courseGroups") }}
+					</li>
+				</ul>
+			</InfoAlert>
+			<div class="mb-4">
+				{{ t(`components.molecules.import.${parentType}.rename`) }}
 			</div>
+			<VTextField
+				ref="nameInputText"
+				v-model="newName"
+				:label="t(`components.molecules.import.${parentType}.label`)"
+				:rules="[rules.required, rules.validateOnOpeningTag]"
+				data-testid="import-modal-name-input"
+			/>
 		</template>
-	</CustomDialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { mdiInformation } from "@icons/material";
+import { InfoAlert } from "@ui-alert";
+import { SvsDialog } from "@ui-dialog";
 import { useOpeningTagValidator } from "@util-validators";
 import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
