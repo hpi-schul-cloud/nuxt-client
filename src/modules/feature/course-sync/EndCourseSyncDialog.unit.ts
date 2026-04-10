@@ -3,6 +3,7 @@ import { expectNotification, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useCourseApi } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
+import { SvsDialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
@@ -41,34 +42,12 @@ describe("EndCourseSyncDialog", () => {
 		vi.resetAllMocks();
 	});
 
-	describe("when clicking on cancel", () => {
-		it("should close the dialog", async () => {
-			const { wrapper } = getWrapper();
-
-			const cancelBtn = wrapper.findComponent("[data-testid=dialog-cancel]");
-			await cancelBtn.trigger("click");
-
-			expect(wrapper.vm.isOpen).toEqual(false);
-			expect(wrapper.emitted("update:isOpen")).toBeDefined();
-		});
-	});
-
 	describe("when clicking on confirm", () => {
-		it("should close the dialog", async () => {
-			const { wrapper } = getWrapper();
-
-			const confirmBtn = wrapper.findComponent("[data-testid=dialog-confirm]");
-			await confirmBtn.trigger("click");
-
-			expect(wrapper.vm.isOpen).toEqual(false);
-			expect(wrapper.emitted("update:isOpen")).toBeDefined();
-		});
-
 		it("should call the api", async () => {
 			const { wrapper } = getWrapper();
 
-			const confirmBtn = wrapper.findComponent("[data-testid=dialog-confirm]");
-			await confirmBtn.trigger("click");
+			const dialog = wrapper.findComponent(SvsDialog);
+			dialog.vm.$emit("confirm");
 
 			expect(courseApiMock.stopSynchronization).toHaveBeenCalledWith("courseId");
 		});
@@ -76,8 +55,8 @@ describe("EndCourseSyncDialog", () => {
 		it("should show a success notification", async () => {
 			const { wrapper } = getWrapper();
 
-			const confirmBtn = wrapper.findComponent("[data-testid=dialog-confirm]");
-			await confirmBtn.trigger("click");
+			const dialog = wrapper.findComponent(SvsDialog);
+			await dialog.vm.$emit("confirm");
 
 			expectNotification("success");
 		});
@@ -85,8 +64,8 @@ describe("EndCourseSyncDialog", () => {
 		it("should emit a success event", async () => {
 			const { wrapper } = getWrapper();
 
-			const confirmBtn = wrapper.findComponent("[data-testid=dialog-confirm]");
-			await confirmBtn.trigger("click");
+			const dialog = wrapper.findComponent(SvsDialog);
+			await dialog.vm.$emit("confirm");
 
 			expect(wrapper.emitted("success")).toBeDefined();
 		});
@@ -106,8 +85,8 @@ describe("EndCourseSyncDialog", () => {
 		it("should show an error notification", async () => {
 			const { wrapper } = setup();
 
-			const confirmBtn = wrapper.findComponent("[data-testid=dialog-confirm]");
-			await confirmBtn.trigger("click");
+			const dialog = wrapper.findComponent(SvsDialog);
+			await dialog.vm.$emit("confirm");
 
 			expectNotification("error");
 		});
@@ -115,8 +94,8 @@ describe("EndCourseSyncDialog", () => {
 		it("should not emit a success event", async () => {
 			const { wrapper } = setup();
 
-			const confirmBtn = wrapper.findComponent("[data-testid=dialog-confirm]");
-			await confirmBtn.trigger("click");
+			const dialog = wrapper.findComponent(SvsDialog);
+			await dialog.vm.$emit("confirm");
 
 			expect(wrapper.emitted("success")).toBeUndefined();
 		});

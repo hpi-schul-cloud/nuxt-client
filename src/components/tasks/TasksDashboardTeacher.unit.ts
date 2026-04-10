@@ -159,7 +159,7 @@ describe("TasksDashboardTeacher", () => {
 			const wrapper = setup("current", true);
 
 			const emptyStateComponent = wrapper.findComponent(EmptyState);
-			expect(emptyStateComponent.props("title")).toBe("pages.tasks.teacher.open.emptyState.title");
+			expect(emptyStateComponent.props("title")).toBe("pages.tasks.open.emptyState.title");
 		});
 
 		it("should render empty state with correct title for drafts tab", () => {

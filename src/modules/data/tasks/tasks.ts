@@ -60,7 +60,9 @@ export const useTasks = ({ range }: { range?: DateRange } = {}, fetchImmediate =
 	);
 
 	const ungradedTasksForTeacher = computed(() => overdueTasks.value.filter((t) => !isGradedForTeacher(t)));
-	const ungradedTasksForStudent = computed(() => publishedTasks.value.filter((t) => !isGradedForStudent(t)));
+	const ungradedTasksForStudent = computed(() =>
+		publishedTasks.value.filter((t) => t.status.submitted > 0 && !isGradedForStudent(t))
+	);
 
 	const gradedTasksForTeacher = computed(() => overdueTasks.value.filter(isGradedForTeacher));
 	const gradedTasksForStudent = computed(() => publishedTasks.value.filter(isGradedForStudent));
