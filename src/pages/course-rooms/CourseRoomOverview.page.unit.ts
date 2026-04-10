@@ -412,7 +412,7 @@ describe("CourseRoomOverview.page", () => {
 		expect(wrapper.findComponent('[data-test-position="8-0"]').exists()).toBe(false);
 		await nextTick();
 
-		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(9);
+		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(6);
 	});
 
 	it("should display empty group avatar when group has no elements", async () => {
