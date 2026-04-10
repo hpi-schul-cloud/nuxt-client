@@ -329,10 +329,8 @@ export default {
 		"Möchten Sie die Account-Migration zu moin.schule jetzt wirklich starten?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"Sind Sie sicher, dass Sie die automatisch gefundenen Verknüpfungen zurücksetzen wollen?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
-		"Der Migrationsassistent hat Konten-Verknüpfungen anhand der Nutzer-Namen automatisch gefunden.",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
-		"Möchten Sie die automatisch gefundenen Verknüpfungen jetzt zurücksetzen?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"Der Migrationsassistent hat Konten-Verknüpfungen anhand der Nutzer-Namen automatisch gefunden. Möchten Sie die automatisch gefundenen Verknüpfungen jetzt zurücksetzen?",
 	"components.administration.externalToolsSection.action.add": "Externes Tool hinzufügen",
 	"components.administration.externalToolsSection.action.delete": "Tool löschen",
 	"components.administration.externalToolsSection.action.edit": "Tool bearbeiten",
@@ -385,11 +383,9 @@ export default {
 	"components.administration.provisioningOptions.schoolExternalTools.label": "Freischaltung von externen Tools",
 
 	"components.administration.provisioningOptions.page.title": "Optionen für Datensynchronisation",
-	"components.administration.provisioningOptions.warning.consequence":
+	"components.administration.provisioningOptions.warning":
 		"Alle bisher synchronisierten {groupTypes} werden aus Ihrer Schule entfernt!",
-	"components.administration.provisioningOptions.warning.question":
-		"Sind Sie sich sicher, dass die Synchronisation für {groupTypes} deaktivieren möchten?",
-	"components.administration.provisioningOptions.warning.title": "Synchronisation deaktivieren",
+	"components.administration.provisioningOptions.warning.title": "Synchronisation deaktivieren?",
 	"components.administration.schoolYearChangeSection.headers": "Schuljahreswechsel",
 	"components.administration.schoolYearChangeSection.info.part.one":
 		"Mit Hilfe der Transferphase können Klassenzugehörigkeit und Personendaten im LDAP in Ruhe angepasst werden. Abschließend können alle Änderungen mit einem Mal in die {instance} übertragen werden.",
@@ -911,7 +907,7 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectContent": "{toolName} Inhalt auswählen...",
 	"feature-board-file-element.placeholder.uploadFile": "Datei hochladen",
 	"feature-course-sync.EndCourseSyncDialog.title": "Synchronisation beenden",
-	"feature-course-sync.EndCourseSyncDialog.description":
+	"feature-course-sync.EndCourseSyncDialog":
 		"Soll die Synchronisation des Kurses {courseName} mit der Nutzendengruppe {groupName} wirklich beendet werden?",
 	"feature-course-sync.EndCourseSyncDialog.success": "Synchronisation erfolgreich beendet",
 	"feature-course-sync.GroupSelectionDialog.title": "Nutzendengruppe auswählen",

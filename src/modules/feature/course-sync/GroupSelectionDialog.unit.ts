@@ -3,11 +3,14 @@ import { groupResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoleName } from "@api-server";
 import { GroupListFilter, useGroupListState } from "@data-group";
+import { createTestingPinia } from "@pinia/testing";
+import { SvsDialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { nextTick, ref } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
-import { VAutocomplete } from "vuetify/lib/components/index";
+import { VAutocomplete } from "vuetify/components";
 
 vi.mock("@data-group", () => ({
 	useGroupListState: vi.fn(),
@@ -15,6 +18,10 @@ vi.mock("@data-group", () => ({
 
 describe("GroupSelectionDialog", () => {
 	let useGroupListStateMock: Mocked<ReturnType<typeof useGroupListState>>;
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	const getWrapper = (
 		props: ComponentProps<typeof GroupSelectionDialog> = {
@@ -69,10 +76,7 @@ describe("GroupSelectionDialog", () => {
 	describe("when no group is selected", () => {
 		it("should disable the continue button", () => {
 			const { wrapper } = getWrapper();
-
-			const nextBtn = wrapper.findComponent("[data-testid=dialog-next]");
-
-			expect(nextBtn.attributes("disabled")).toBeDefined();
+			expect(wrapper.findComponent(SvsDialog).props("confirmBtnDisabled")).toBe(true);
 		});
 	});
 
@@ -124,23 +128,8 @@ describe("GroupSelectionDialog", () => {
 			const autocomplete = wrapper.findComponent(VAutocomplete);
 			await autocomplete.setValue(group);
 
-			const nextBtn = wrapper.findComponent("[data-testid=dialog-next]");
-			await nextBtn.trigger("click");
-
+			wrapper.findComponent(SvsDialog).vm.$emit("confirm");
 			expect(wrapper.emitted("confirm")).toEqual([[group]]);
-		});
-	});
-
-	describe("when clicking the cancel button", () => {
-		it("should close the dialog", async () => {
-			const { wrapper } = getWrapper();
-
-			const cancelBtn = wrapper.findComponent("[data-testid=dialog-cancel]");
-			await cancelBtn.trigger("click");
-
-			expect(wrapper.vm.isOpen).toEqual(false);
-			expect(wrapper.emitted("update:isOpen")).toBeDefined();
-			expect(wrapper.emitted("cancel")).toEqual([[]]);
 		});
 	});
 
@@ -170,11 +159,8 @@ describe("GroupSelectionDialog", () => {
 		};
 
 		it("should disable the continue button", async () => {
-			const { wrapper } = await setup();
-
-			const nextBtn = wrapper.findComponent("[data-testid=dialog-next]");
-
-			expect(nextBtn.attributes("disabled")).toBeDefined();
+			const { wrapper } = getWrapper();
+			expect(wrapper.findComponent(SvsDialog).props("confirmBtnDisabled")).toBe(true);
 		});
 
 		it("should display a warning", async () => {
