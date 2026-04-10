@@ -1,40 +1,18 @@
-import { defaultConfigEnvs, useEnvConfig, useEnvFileConfig, useEnvStore } from "./env-config.store";
+import { defaultConfigEnvs, useEnvConfig, useEnvStore } from "./env-config.store";
 import { mockApiResponse } from "@@/tests/test-utils";
-import { FileConfigApiFactory, FilesStorageConfigResponse } from "@api-file-storage";
-import {
-	ConfigResponse,
-	LanguageType,
-	RuntimeConfigApiFactory,
-	RuntimeConfigListResponse,
-	SchulcloudTheme,
-	ServerConfigApiFactory,
-} from "@api-server";
+import { FileConfigApiFactory } from "@api-file-storage";
+import { FilesStorageConfigResponse } from "@api-file-storage";
+import { ConfigResponse, LanguageType, SchulcloudTheme, ServerConfigApiFactory } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
-import { beforeAll, beforeEach, expect, vi } from "vitest";
-import { ref } from "vue";
+import { beforeAll, beforeEach, expect } from "vitest";
 
 vi.mock("@api-server");
 const mockedServerApi = vi.mocked(ServerConfigApiFactory);
-const mockedRuntimeConfigApi = vi.mocked(RuntimeConfigApiFactory);
 
 vi.mock("@api-file-storage");
 const mockedFileConfigApi = vi.mocked(FileConfigApiFactory);
-
-const mockLocale = ref("de");
-vi.mock("@/plugins/i18n", () => ({
-	useI18nGlobal: () => ({
-		locale: mockLocale,
-	}),
-}));
-
-vi.mock("@data-app", () => ({
-	useAppStore: () => ({
-		userRoles: ["teacher"],
-		handleApplicationError: vi.fn(),
-	}),
-}));
 
 describe("useEnvStore", () => {
 	const doMockServerApiData = (data: ConfigResponse) => {
@@ -50,15 +28,6 @@ describe("useEnvStore", () => {
 			publicConfig(): Promise<AxiosResponse<FilesStorageConfigResponse>> {
 				return Promise.resolve(mockApiResponse({ data }));
 			},
-		});
-	};
-
-	const doMockRuntimeConfigApiData = (data: { data: Array<{ key: string; value: unknown }> | undefined }) => {
-		mockedRuntimeConfigApi.mockReturnValue({
-			runtimeConfigControllerGetRuntimeConfig(): Promise<AxiosResponse<RuntimeConfigListResponse>> {
-				return Promise.resolve(mockApiResponse({ data: data as RuntimeConfigListResponse }));
-			},
-			runtimeConfigControllerUpdateRuntimeConfigValue: vi.fn(),
 		});
 	};
 
@@ -80,7 +49,6 @@ describe("useEnvStore", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		mockLocale.value = "de";
 	});
 
 	describe("initialization", () => {
@@ -190,87 +158,6 @@ describe("useEnvStore", () => {
 			expect(success).toEqual(false);
 		});
 	});
-
-	describe("dashboardAnnouncement", () => {
-		describe("when dashboard announcement is disabled", () => {
-			it("should return undefined", async () => {
-				doMockRuntimeConfigApiData({
-					data: [{ key: "DASHBOARD_ANNOUNCEMENT_ENABLED", value: false }],
-				});
-				await setup();
-
-				await useEnvStore().fetchRuntimeAnnouncement();
-
-				expect(useEnvStore().dashboardAnnouncement).toBeUndefined();
-			});
-		});
-
-		describe("when locale text is not available", () => {
-			it("should return undefined", async () => {
-				doMockRuntimeConfigApiData({
-					data: [
-						{ key: "DASHBOARD_ANNOUNCEMENT_ENABLED", value: true },
-						{ key: "DASHBOARD_ANNOUNCEMENT_FOR_ROLES", value: "teacher" },
-						{ key: "DASHBOARD_ANNOUNCEMENT_TEXT_DE", value: "German text" },
-					],
-				});
-				await setup();
-				mockLocale.value = "fr";
-
-				await useEnvStore().fetchRuntimeAnnouncement();
-
-				expect(useEnvStore().dashboardAnnouncement).toBeUndefined();
-			});
-		});
-
-		it.each([
-			{ locale: "de", key: "DASHBOARD_ANNOUNCEMENT_TEXT_DE", expected: "German announcement" },
-			{ locale: "en", key: "DASHBOARD_ANNOUNCEMENT_TEXT_EN", expected: "English announcement" },
-			{ locale: "es", key: "DASHBOARD_ANNOUNCEMENT_TEXT_ES", expected: "Spanish announcement" },
-			{ locale: "uk", key: "DASHBOARD_ANNOUNCEMENT_TEXT_UK", expected: "Ukrainian announcement" },
-		])("should return $expected when locale is $locale", async ({ locale, key, expected }) => {
-			doMockRuntimeConfigApiData({
-				data: [
-					{ key: "DASHBOARD_ANNOUNCEMENT_ENABLED", value: true },
-					{ key: "DASHBOARD_ANNOUNCEMENT_FOR_ROLES", value: "teacher" },
-					{ key, value: expected },
-				],
-			});
-			await setup();
-			mockLocale.value = locale;
-
-			await useEnvStore().fetchRuntimeAnnouncement();
-
-			expect(useEnvStore().dashboardAnnouncement).toBe(expected);
-		});
-	});
-
-	describe("fetchRuntimeAnnouncement", () => {
-		it("should fetch and set runtime announcement config", async () => {
-			doMockRuntimeConfigApiData({
-				data: [
-					{ key: "DASHBOARD_ANNOUNCEMENT_ENABLED", value: true },
-					{ key: "DASHBOARD_ANNOUNCEMENT_FOR_ROLES", value: "teacher,student" },
-					{ key: "DASHBOARD_ANNOUNCEMENT_TEXT_DE", value: "Test announcement" },
-				],
-			});
-			await setup();
-			mockLocale.value = "de";
-
-			await useEnvStore().fetchRuntimeAnnouncement();
-
-			expect(useEnvStore().dashboardAnnouncement).toBe("Test announcement");
-		});
-
-		it("should handle empty data gracefully", async () => {
-			doMockRuntimeConfigApiData({ data: undefined as unknown as [] });
-			await setup();
-
-			await useEnvStore().fetchRuntimeAnnouncement();
-
-			expect(useEnvStore().dashboardAnnouncement).toBeUndefined();
-		});
-	});
 });
 
 describe("useEnvConfig", () => {
@@ -281,24 +168,5 @@ describe("useEnvConfig", () => {
 	it("should proxy env config as ref from useEnvStore", () => {
 		useEnvStore().$patch({ env: { SC_TITLE: "School" } });
 		expect(useEnvConfig().value.SC_TITLE).toEqual("School");
-	});
-});
-
-describe("useEnvFileConfig", () => {
-	beforeAll(() => {
-		setActivePinia(createTestingPinia());
-	});
-
-	it("should proxy envFile config as ref from useEnvStore", () => {
-		useEnvStore().$patch({
-			envFile: {
-				MAX_FILE_SIZE: 500,
-				COLLABORA_MAX_FILE_SIZE_IN_BYTES: 100,
-				FILES_STORAGE_MAX_FILES_PER_PARENT: 200,
-			},
-		});
-		expect(useEnvFileConfig().value.MAX_FILE_SIZE).toEqual(500);
-		expect(useEnvFileConfig().value.COLLABORA_MAX_FILE_SIZE_IN_BYTES).toEqual(100);
-		expect(useEnvFileConfig().value.FILES_STORAGE_MAX_FILES_PER_PARENT).toEqual(200);
 	});
 });
