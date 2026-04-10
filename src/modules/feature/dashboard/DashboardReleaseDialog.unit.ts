@@ -1,18 +1,18 @@
-import DashboardReleaseDialog from "./DashboardReleaseDialog.vue";
 import { initializeAxios } from "@/utils/api";
 import { createTestAppStore, mockApi, mockApiResponse, mockAxiosInstance } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { MeApiInterface, ReleaseItemResponse, ServerReleaseApiInterface } from "@api-server";
 import * as serverApi from "@api-server";
+import { MeApiInterface, ReleaseApiInterface, ReleaseItemResponse } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
 import { flushPromises } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
+import DashboardReleaseDialog from "./DashboardReleaseDialog.vue";
 
 describe("DashboardReleaseDialog", () => {
-	let releasesApi: Mocked<ServerReleaseApiInterface>;
+	let releasesApi: Mocked<ReleaseApiInterface>;
 	let meApi: Mocked<MeApiInterface>;
 	let axiosMock: Mocked<AxiosInstance>;
 
@@ -21,10 +21,10 @@ describe("DashboardReleaseDialog", () => {
 		initializeAxios(axiosMock);
 		setActivePinia(createTestingPinia({ stubActions: false }));
 
-		releasesApi = mockApi<ServerReleaseApiInterface>();
+		releasesApi = mockApi<ReleaseApiInterface>();
 		meApi = mockApi<MeApiInterface>();
 
-		vi.spyOn(serverApi, "ServerReleaseApiFactory").mockReturnValue(releasesApi);
+		vi.spyOn(serverApi, "ReleaseApiFactory").mockReturnValue(releasesApi);
 		vi.spyOn(serverApi, "MeApiFactory").mockReturnValue(meApi);
 	});
 
@@ -39,7 +39,7 @@ describe("DashboardReleaseDialog", () => {
 			? [{ id: "release-1", publishedAt: options.latestReleasePublishedAt } as ReleaseItemResponse]
 			: [];
 
-		releasesApi.serverReleaseControllerGetReleases.mockResolvedValue(
+		releasesApi.releaseControllerGetReleases.mockResolvedValue(
 			mockApiResponse({
 				data: { data: releaseData, total: releaseData.length, skip: 0, limit: 1 },
 			})

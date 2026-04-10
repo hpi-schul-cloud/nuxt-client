@@ -1,36 +1,36 @@
-import DashboardPage from "./Dashboard.page.vue";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import {
-	createTestAppStore,
-	mockApi,
-	mockApiResponse,
-	mockAxiosInstance,
-	newsResponseFactory,
-	schoolFactory,
+    createTestAppStore,
+    mockApi,
+    mockApiResponse,
+    mockAxiosInstance,
+    newsResponseFactory,
+    schoolFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import {
-	NewsApiInterface,
-	NewsResponse,
-	Permission,
-	ReleaseItemResponse,
-	RoleName,
-	ServerReleaseApiInterface,
-} from "@api-server";
 import * as serverApi from "@api-server";
+import {
+    NewsApiInterface,
+    NewsResponse,
+    Permission,
+    ReleaseApiInterface,
+    ReleaseItemResponse,
+    RoleName,
+} from "@api-server";
 import { DashboardTasks } from "@feature-dashboard";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
+import DashboardPage from "./Dashboard.page.vue";
 
 describe("DashboardPage", () => {
 	let newsApi: Mocked<NewsApiInterface>;
-	let releasesApi: Mocked<ServerReleaseApiInterface>;
+	let releasesApi: Mocked<ReleaseApiInterface>;
 	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
@@ -39,7 +39,7 @@ describe("DashboardPage", () => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 
 		newsApi = mockApi<NewsApiInterface>();
-		releasesApi = mockApi<ServerReleaseApiInterface>();
+		releasesApi = mockApi<ReleaseApiInterface>();
 
 		setupStores({
 			schoolsModule: SchoolsModule,
@@ -47,7 +47,7 @@ describe("DashboardPage", () => {
 		schoolsModule.setSchool(schoolFactory.build());
 
 		vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(newsApi);
-		vi.spyOn(serverApi, "ServerReleaseApiFactory").mockReturnValue(releasesApi);
+		vi.spyOn(serverApi, "ReleaseApiFactory").mockReturnValue(releasesApi);
 	});
 
 	const setup = (options?: {
@@ -84,7 +84,7 @@ describe("DashboardPage", () => {
 			? [{ id: "release-1", publishedAt: options.latestReleasePublishedAt } as ReleaseItemResponse]
 			: [];
 
-		releasesApi.serverReleaseControllerGetReleases.mockResolvedValue(
+		releasesApi.releaseControllerGetReleases.mockResolvedValue(
 			mockApiResponse({
 				data: { data: releaseData, total: releaseData.length, skip: 0, limit: 1 },
 			})
