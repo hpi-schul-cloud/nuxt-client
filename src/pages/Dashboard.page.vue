@@ -2,9 +2,7 @@
 	<DefaultWireframe max-width="full" main-with-bottom-padding>
 		<template #header>
 			<h1 data-testid="dashboard-title">{{ t("pages.dashboard.title") }}</h1>
-			<InfoAlert v-if="!!dashboardAnnouncement" class="mb-4" data-testid="dashboard-announcement-alert">{{
-				dashboardAnnouncement
-			}}</InfoAlert>
+			<Announcement />
 		</template>
 		<template #default>
 			<InfoAlert v-if="hasGlobalAnnouncement && (isTeacher || isAdmin)" class="mt-6">
@@ -79,7 +77,7 @@ import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { NewsApiFactory, NewsTargetModel, Permission, SchulcloudTheme } from "@api-server";
 import { useAppStore, useAppStoreRefs } from "@data-app";
-import { useEnvConfig, useEnvStore } from "@data-env";
+import { useEnvConfig } from "@data-env";
 import { DashboardReleaseDialog, DashboardTasks } from "@feature-dashboard";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
@@ -96,8 +94,7 @@ const { isTeacher, isStudent, isAdmin } = useAppStoreRefs();
 const NEWS_LIMIT = 4;
 const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 
-const { dashboardAnnouncement } = useEnvStore();
-
+import Announcement from "@/components/announcement/Announcement.vue";
 import { schoolsModule } from "@/store";
 
 useTitle(buildPageTitle(t("pages.dashboard.title")));

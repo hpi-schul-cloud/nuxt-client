@@ -75,7 +75,6 @@ app.use(VueDOMPurifyHTML, {
 	initializeAxios(axios, useSessionBroadcast().handleUnauthorizedError);
 
 	const success = await useEnvStore().loadConfiguration();
-	await useEnvStore().fetchRuntimeAnnouncement();
 
 	if (success) {
 		filePathsModule.init();
