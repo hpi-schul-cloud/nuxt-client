@@ -1,16 +1,9 @@
 import CourseRoomOverviewPage from "./CourseRoomOverview.page.vue";
-import RoomModal from "@/components/molecules/RoomModal";
+import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
 import { courseRoomListModule } from "@/store";
-import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import CopyModule from "@/store/copy";
 import CourseRoomListModule from "@/store/course-room-list";
-import LoadingStateModule from "@/store/loading-state";
-import {
-	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
-	COPY_MODULE_KEY,
-	COURSE_ROOM_LIST_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
-} from "@/utils/inject";
+import { COPY_MODULE_KEY, COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -21,6 +14,14 @@ import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 
 vi.mock("vue-router");
+vi.mock("@data-common-cartridge", () => ({
+	useCommonCartridgeImport: () => ({
+		isOpen: { value: false },
+		isSuccess: { value: false },
+		file: { value: undefined },
+		importCommonCartridgeFile: vi.fn(),
+	}),
+}));
 
 const mockRoomStoreData = [
 	{
@@ -96,7 +97,6 @@ const spyMocks = {
 };
 
 let copyModuleMock;
-let loadingStateModuleMock;
 
 const defaultMocks = {
 	$route: { query: {} },
@@ -107,24 +107,20 @@ const getWrapper = () => {
 	copyModuleMock = createModuleMocks(CopyModule, {
 		getIsResultModalOpen: false,
 	});
-	loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 	const courseRoomListModuleMock = createModuleMocks(courseRoomListModule);
 	return mount(CourseRoomOverviewPage, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-				loadingStateModule: loadingStateModuleMock,
-				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(CommonCartridgeImportModule),
 				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: courseRoomListModuleMock,
-				[LOADING_STATE_MODULE_KEY.valueOf()]: loadingStateModuleMock,
 			},
 			mocks: defaultMocks,
 		},
 	});
 };
 
-describe("@/pages/CourseRoomOverview.page", () => {
+describe("CourseRoomOverview.page", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStore();
@@ -192,7 +188,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		await nextTick();
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
-		const customDialog = wrapper.findComponent({ name: "room-modal" });
+		const customDialog = wrapper.findComponent(CourseRoomModal);
 		expect(customDialog.props("isOpen")).toBe(true);
 	});
 
@@ -203,7 +199,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
 		await nextTick();
-		const customDialog = wrapper.findComponent({ name: "room-modal" });
+		const customDialog = wrapper.findComponent(CourseRoomModal);
 		await nextTick();
 		const input = customDialog.findComponent({ name: "v-text-field" });
 		expect(customDialog.props("isOpen")).toBe(true);
@@ -356,7 +352,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 			},
 		});
 
-		const roomModal = wrapper.findComponent(RoomModal);
+		const roomModal = wrapper.findComponent(CourseRoomModal);
 		roomModal.vm.$emit("drag-from-group", wrapper.vm.groupDialog.groupData.groupElements[0]);
 
 		const emptyAvatarComponent = wrapper.findComponent('[data-test-position="2-1"]');

@@ -1,5 +1,5 @@
 <template>
-	<v-card-actions class="py-2 px-4">
+	<v-card-actions class="py-2 pl-4">
 		<FileAttributes :file-size="fileProperties.size" :file-name="fileProperties.name" />
 
 		<v-spacer />

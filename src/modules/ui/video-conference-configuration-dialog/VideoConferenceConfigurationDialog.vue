@@ -91,7 +91,7 @@ defineEmits(["close", "start-video-conference"]);
 const localOptions: ComputedRef<VideoConferenceOptions> = computed(() => props.options);
 
 const showInfoAlert = computed(() => {
-	if (props.boardParentType === BoardContextType.Course) {
+	if (props.boardParentType === BoardContextType.COURSE) {
 		// courses can never have external participants - so the info alert is not needed
 		return false;
 	}

@@ -7,26 +7,17 @@ function setTagCspNonce(tag: string, nonce: string): string {
 	return cleaned.replace(/^<(\w+)/, `<$1 nonce="${nonce}"`);
 }
 
-const CspNoncePlaceholder = (nonce: string): Plugin => {
-	return {
-		name: "csp-nonce-placeholder",
-		transformIndexHtml(html) {
-			// Set nonce in <script> tags
-			html = html.replace(/<script[^>]*>/gi, (match) =>
-				setTagCspNonce(match, nonce)
-			);
-			// Set nonce in <style> tags
-			html = html.replace(/<style[^>]*>/gi, (match) =>
-				setTagCspNonce(match, nonce)
-			);
-			// Set nonce in <link rel="stylesheet"> tags
-			html = html.replace(
-				/<link([^>]*rel=["']stylesheet["'][^>]*)>/gi,
-				(match) => setTagCspNonce(match, nonce)
-			);
-			return html;
-		},
-	};
-};
+const CspNoncePlaceholder = (nonce: string): Plugin => ({
+	name: "csp-nonce-placeholder",
+	transformIndexHtml(html) {
+		// Set nonce in <script> tags
+		html = html.replace(/<script[^>]*>/gi, (match) => setTagCspNonce(match, nonce));
+		// Set nonce in <style> tags
+		html = html.replace(/<style[^>]*>/gi, (match) => setTagCspNonce(match, nonce));
+		// Set nonce in <link rel="stylesheet"> tags
+		html = html.replace(/<link([^>]*rel=["']stylesheet["'][^>]*)>/gi, (match) => setTagCspNonce(match, nonce));
+		return html;
+	},
+});
 
 export { CspNoncePlaceholder };

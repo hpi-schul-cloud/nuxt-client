@@ -1,10 +1,10 @@
 import RoomInvitationLinkStatusPage from "./RoomInvitationLinkStatus.page.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomInvitationLinkValidationError, UseLinkResult, useRoomInvitationLinkStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
+import { DefaultWireframe } from "@ui-layout";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
@@ -142,23 +142,23 @@ describe("RoomInvitationLinkStatusPage", () => {
 	describe("when link store returns a message", () => {
 		const testCases = [
 			{
-				message: RoomInvitationLinkValidationError.CantInviteStudentsFromOtherSchool,
+				message: RoomInvitationLinkValidationError.CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL,
 				expectedMessage: "pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool",
 			},
 			{
-				message: RoomInvitationLinkValidationError.Expired,
+				message: RoomInvitationLinkValidationError.EXPIRED,
 				expectedMessage: "pages.rooms.invitationLinkStatus.expired",
 			},
 			{
-				message: RoomInvitationLinkValidationError.NotUsableForCurrentRole,
+				message: RoomInvitationLinkValidationError.NOT_USABLE_FOR_CURRENT_ROLE,
 				expectedMessage: "pages.rooms.invitationLinkStatus.notUsableForCurrentRole",
 			},
 			{
-				message: RoomInvitationLinkValidationError.RestrictedToCreatorSchool,
+				message: RoomInvitationLinkValidationError.RESTRICTED_TO_CREATOR_SCHOOL,
 				expectedMessage: "pages.rooms.invitationLinkStatus.restrictedToCreatorSchool",
 			},
 			{
-				message: RoomInvitationLinkValidationError.InvalidLink,
+				message: RoomInvitationLinkValidationError.INVALID_LINK,
 				expectedMessage: "pages.rooms.invitationLinkStatus.invalidLink",
 			},
 		];
@@ -179,7 +179,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 		it("should show bird image", async () => {
 			const { wrapper } = await setup({
 				roomId: "",
-				validationMessage: RoomInvitationLinkValidationError.Expired,
+				validationMessage: RoomInvitationLinkValidationError.EXPIRED,
 				schoolName: "Beispielschule",
 			});
 

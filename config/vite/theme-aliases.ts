@@ -1,11 +1,10 @@
 /* eslint-disable no-console */
 
-import path from "node:path";
 import fs from "node:fs";
+import path from "node:path";
 import { pathToFileURL } from "url";
 
-const getThemeConfig = async (themePath: string) =>
-	(await import(pathToFileURL(themePath).href)).default;
+const getThemeConfig = async (themePath: string) => (await import(pathToFileURL(themePath).href)).default;
 
 const getAvailableThemes = (dirname: string) =>
 	fs
@@ -13,8 +12,7 @@ const getAvailableThemes = (dirname: string) =>
 		.filter((dirent) => dirent.isDirectory())
 		.map((dirent) => dirent.name);
 
-const isThemeAvailable = (dirname: string, themeName: string) =>
-	getAvailableThemes(dirname).includes(themeName);
+const isThemeAvailable = (dirname: string, themeName: string) => getAvailableThemes(dirname).includes(themeName);
 
 type AliasConfig = {
 	find: string;
@@ -31,9 +29,7 @@ const generateAliases = async (dirname: string) => {
 
 		const themePath = `./src/themes/${usedTheme}`;
 
-		const { replacements } = await getThemeConfig(
-			path.join(dirname, themePath, "alias.config.mjs")
-		);
+		const { replacements } = await getThemeConfig(path.join(dirname, themePath, "alias.config.mjs"));
 
 		replacements.forEach((alias: AliasConfig) => {
 			if (typeof alias === "string") {
@@ -43,11 +39,7 @@ const generateAliases = async (dirname: string) => {
 				});
 			}
 
-			if (
-				typeof alias === "object" &&
-				typeof alias.find === "string" &&
-				typeof alias.replacement === "string"
-			) {
+			if (typeof alias === "object" && typeof alias.find === "string" && typeof alias.replacement === "string") {
 				aliases.push({
 					find: path.join(dirname, `src/${alias.find}`),
 					replacement: path.join(dirname, `${themePath}/${alias.replacement}`),
@@ -63,4 +55,4 @@ const generateAliases = async (dirname: string) => {
 	return aliases;
 };
 
-export { generateAliases, AliasConfig };
+export { AliasConfig, generateAliases };

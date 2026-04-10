@@ -1,5 +1,5 @@
 <template>
-	<DefaultWireframe v-if="!isLoading && canEditRoom" max-width="short" :breadcrumbs="breadcrumbs">
+	<DefaultWireframe v-if="!isLoading && allowedOperations.updateRoom" max-width="short" :breadcrumbs="breadcrumbs">
 		<template #header>
 			<h1 data-testid="page-title">
 				{{ t("pages.roomDetails.ariaLabels.menu.action.edit") }}
@@ -12,15 +12,14 @@
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ApiResponseError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { RoomUpdateParams } from "@/types/room/Room";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, useAppStore } from "@data-app";
-import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
+import { useRoomAllowedOperations, useRoomDetailsStore } from "@data-room";
 import { RoomForm } from "@feature-room";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, ref } from "vue";
@@ -35,7 +34,7 @@ const router = useRouter();
 const roomDetailsStore = useRoomDetailsStore();
 const { room, isLoading } = storeToRefs(roomDetailsStore);
 const { fetchRoom, updateRoom } = roomDetailsStore;
-const { canEditRoom } = useRoomAuthorization();
+const { allowedOperations } = useRoomAllowedOperations();
 
 const roomData = ref<RoomUpdateParams>();
 
@@ -55,7 +54,7 @@ onMounted(async () => {
 		};
 	}
 
-	if (!canEditRoom.value) {
+	if (!allowedOperations.value.updateRoom) {
 		router.replace({
 			name: "room-details",
 			params: { id: route.params.id as string },

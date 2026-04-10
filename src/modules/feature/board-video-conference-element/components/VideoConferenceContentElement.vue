@@ -20,6 +20,7 @@
 			:has-participation-permission="hasParticipationPermission"
 			:is-video-conference-enabled="isVideoConferenceEnabled"
 			:can-start="canStart"
+			:can-join="canJoin"
 			:is-running="isRunning"
 			:is-edit-mode="isEditMode"
 			@click="onContentClick"
@@ -32,7 +33,7 @@
 			>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<KebabMenuActionDelete scope-language-key="components.cardElement.videoConferenceElement" @click="onDelete" />
+				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</VideoConferenceContentElementDisplay>
 		<VideoConferenceContentElementCreate v-if="isCreating" @create:title="onCreateTitle">
@@ -43,7 +44,7 @@
 			>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<KebabMenuActionDelete scope-language-key="components.cardElement.videoConferenceElement" @click="onDelete" />
+				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</VideoConferenceContentElementCreate>
 		<VDialog
@@ -83,12 +84,13 @@
 import { useVideoConference } from "../composables/VideoConference.composable";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
-import { BoardFeature, VideoConferenceElementResponse, VideoConferenceScope } from "@/serverApi/v3";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
+import { BoardFeature, VideoConferenceElementResponse, VideoConferenceScope } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import {
+	useBoardAllowedOperations,
 	useBoardFeatures,
 	useBoardFocusHandler,
-	useBoardPermissions,
 	useContentElementState,
 	useSharedBoardPageInformation,
 } from "@data-board";
@@ -97,7 +99,6 @@ import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp }
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import { computed, onMounted, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
 
 const props = defineProps({
 	element: {
@@ -111,7 +112,10 @@ const props = defineProps({
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
 });
+
 const emit = defineEmits(["delete:element", "move-down:edit", "move-up:edit", "move-keyboard:edit"]);
+
+const { allowedOperations } = useBoardAllowedOperations();
 
 const element = toRef(props, "element");
 const videoConferenceElement = ref(null);
@@ -125,10 +129,10 @@ const {
 	startVideoConference,
 	joinVideoConference,
 	resetError,
-} = useVideoConference(VideoConferenceScope.VideoConferenceElement, element.value.id);
+} = useVideoConference(VideoConferenceScope.VIDEO_CONFERENCE_ELEMENT, element.value.id);
 
 const { isFeatureEnabled } = useBoardFeatures();
-const isVideoConferenceEnabled = computed(() => isFeatureEnabled(BoardFeature.Videoconference));
+const isVideoConferenceEnabled = computed(() => isFeatureEnabled(BoardFeature.VIDEOCONFERENCE));
 
 useBoardFocusHandler(element.value.id, videoConferenceElement);
 
@@ -149,12 +153,8 @@ const { modelValue, computedElement } = useContentElementState(props, {
 	autoSaveDebounce: 100,
 });
 
-const route = useRoute();
-const boardId = route.params.id;
-
 const { isStudent, isTeacher, isExternalPerson } = useAppStoreRefs();
 
-const { hasManageVideoConferencePermission } = useBoardPermissions();
 const { t } = useI18n();
 
 const isHidden = computed(() => !props.isEditMode && !computedElement.value.content.title);
@@ -170,14 +170,14 @@ const canJoin = computed(
 	() => isStudent.value || isTeacher.value || (isExternalPerson.value && isWaitingRoomActive.value)
 );
 
-const canStart = computed(() => hasManageVideoConferencePermission.value);
+const canStart = computed(() => allowedOperations.value.manageVideoConference);
 const isCreating = computed(() => props.isEditMode && !computedElement.value.content.title);
 
 const boardParentType = computed(() => contextType.value);
 
 const onContentClick = async () => {
 	if (isRunning.value && preFetchedUrl.value && hasParticipationPermission.value) {
-		window.open(preFetchedUrl.value, "_blank");
+		globalThis.open(preFetchedUrl.value, "_blank");
 	} else if (!isRunning.value && canStart.value) {
 		isConfigurationDialogOpen.value = true;
 	}
@@ -195,14 +195,14 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 };
 const onMoveDown = () => emit("move-down:edit");
 const onMoveUp = () => emit("move-up:edit");
-const onDelete = async (confirmation: Promise<boolean>) => {
-	if (await confirmation) emit("delete:element", computedElement.value.id);
+const onDelete = async () => {
+	if (await askDeletionForType("components.cardElement.videoConferenceElement"))
+		emit("delete:element", computedElement.value.id);
 };
 const onStartVideoConference = async () => {
-	const logoutUrl: URL = new URL(`/boards/${boardId}`, window.location.origin);
 	const windowReference = window.open();
 
-	await startVideoConference(videoConferenceInfo.value.options, logoutUrl.toString());
+	await startVideoConference(videoConferenceInfo.value.options);
 
 	joinVideoConference().then((response: string | undefined) => {
 		if (response && windowReference) {

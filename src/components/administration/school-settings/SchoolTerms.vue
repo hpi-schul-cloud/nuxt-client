@@ -1,0 +1,113 @@
+<template>
+	<ErrorAlert v-if="status === 'error'" data-testid="error-alert" class="mb-6">
+		{{ t("pages.administration.school.index.termsOfUse.error") }}
+	</ErrorAlert>
+	<template v-else>
+		<VProgressLinear v-if="status === 'pending'" indeterminate class="mb-6" data-testid="progress-bar" />
+		<VListItem
+			v-else
+			lines="two"
+			class="mb-6"
+			data-testid="terms-item"
+			:prepend-icon="mdiFilePdfBox"
+			v-on="termsOfUse ? { click: downloadTerms } : {}"
+		>
+			<VListItemTitle class="text-body-1 mb-2">
+				{{ t("pages.administration.school.index.termsOfUse.fileName") }}
+			</VListItemTitle>
+			<VListItemSubtitle class="text-body-2">
+				{{
+					termsOfUse
+						? t("pages.administration.school.index.termsOfUse.uploadedOn", {
+								date: formatRecentOrActual(termsOfUse.publishedAt),
+							})
+						: t("pages.administration.school.index.termsOfUse.notUploadedYet")
+				}}
+			</VListItemSubtitle>
+			<template #append>
+				<VListItemAction
+					v-if="hasSchoolEditPermission"
+					data-testid="edit-button"
+					@click.stop="isSchoolTermsFormDialogOpen = true"
+				>
+					<VBtn
+						:icon="mdiTrayArrowUp"
+						variant="text"
+						:aria-label="t('pages.administration.school.index.termsOfUse.edit')"
+					/>
+				</VListItemAction>
+				<VListItemAction v-if="termsOfUse" data-testid="delete-button" @click.stop="onDelete">
+					<VBtn
+						:icon="mdiTrashCanOutline"
+						variant="text"
+						:aria-label="t('pages.administration.school.index.termsOfUse.delete.title')"
+					/>
+				</VListItemAction>
+			</template>
+		</VListItem>
+		<SchoolTermsFormDialog
+			v-if="hasSchoolEditPermission"
+			:is-open="isSchoolTermsFormDialogOpen"
+			data-testid="form-dialog"
+			@confirm="onCreate"
+			@close="closeDialog"
+		/>
+	</template>
+</template>
+
+<script setup lang="ts">
+import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
+import { School } from "@/store/types/schools";
+import { askDeletion } from "@/utils/confirmation-dialog.utils";
+import { formatRecentOrActual } from "@/utils/date-time.utils";
+import { downloadFile } from "@/utils/fileHelper";
+import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { Permission } from "@api-server";
+import { useAppStore } from "@data-app";
+import { CreateConsentVersionPayload, useSchoolTermsOfUse } from "@data-school";
+import { mdiFilePdfBox, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
+import { ErrorAlert } from "@ui-alert";
+import { computed, ComputedRef, Ref, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+const isSchoolTermsFormDialogOpen: Ref<boolean> = ref(false);
+const { status, fetchTermsOfUse, termsOfUse, createTermsOfUse, deleteTermsOfUse } = useSchoolTermsOfUse();
+
+const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
+watch(
+	school,
+	async (newValue) => {
+		await fetchTermsOfUse(newValue.id);
+	},
+	{ immediate: true }
+);
+
+const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SCHOOL_EDIT);
+
+const downloadTerms = () => {
+	if (termsOfUse.value) {
+		downloadFile(termsOfUse.value.consentData.data, t("pages.administration.school.index.termsOfUse.fileName"));
+	}
+};
+
+const onDelete = async () => {
+	const confirmed = await askDeletion(
+		t("pages.administration.school.index.termsOfUse.delete.title"),
+		t("pages.administration.school.index.termsOfUse.delete.text"),
+		"info"
+	);
+	if (confirmed) {
+		await deleteTermsOfUse();
+	}
+};
+
+const closeDialog = () => {
+	isSchoolTermsFormDialogOpen.value = false;
+};
+
+const onCreate = async (newConsentVersion: CreateConsentVersionPayload) => {
+	await createTermsOfUse(newConsentVersion);
+};
+</script>

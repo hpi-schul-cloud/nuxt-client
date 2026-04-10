@@ -1,9 +1,9 @@
 import { useExternalToolApi } from "./ExternalToolApi.composable";
-import { ContextExternalToolBodyParams, LaunchType } from "@/serverApi/v3";
 import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { ContextExternalToolBodyParams, LaunchType } from "@api-server";
 import { uniqueId } from "lodash-es";
 import { onUnmounted, Ref, ref } from "vue";
 
@@ -119,7 +119,7 @@ export const useExternalToolLaunchState = (refreshCallback?: () => Promise<void>
 
 		form.submit();
 
-		if (toolLaunch.launchType === LaunchType.Lti11ContentItemSelection) {
+		if (toolLaunch.launchType === LaunchType.LTI11_CONTENT_ITEM_SELECTION) {
 			windowIntervalHandle.value = setInterval(async () => {
 				if (windowRef.value?.closed) {
 					await refreshCallback?.();

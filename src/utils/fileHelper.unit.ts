@@ -17,7 +17,7 @@ import {
 	removeFileExtension,
 } from "./fileHelper";
 import { ArchiveFileParams, FilePreviewStatus, FilePreviewWidth, FileRecordVirusScanStatus } from "@/types/file/File";
-import { createMock } from "@golevelup/ts-vitest";
+import { mock } from "vitest-mock-extended";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: vi.fn().mockReturnValue({
@@ -61,9 +61,9 @@ describe("@/utils/fileHelper", () => {
 
 	describe("downloadFilesAsArchive", () => {
 		const setup = () => {
-			const inputMockArchiveName = createMock<HTMLInputElement>();
-			const inputMockFileRecordIds = createMock<HTMLInputElement>();
-			const formMock = createMock<HTMLFormElement>();
+			const inputMockArchiveName = mock<HTMLInputElement>();
+			const inputMockFileRecordIds = mock<HTMLInputElement>();
+			const formMock = mock<HTMLFormElement>();
 
 			vi.spyOn(document, "createElement").mockImplementationOnce(() => formMock);
 

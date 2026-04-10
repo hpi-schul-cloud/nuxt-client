@@ -1,53 +1,39 @@
 import RoomsPage from "./Rooms.page.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
-import LoadingStateModule from "@/store/loading-state";
 import { RoomItem } from "@/types/room/Room";
-import { COPY_MODULE_KEY, LOADING_STATE_MODULE_KEY } from "@/utils/inject";
-import { createTestRoomStore, expectNotification, roomItemFactory } from "@@/tests/test-utils";
+import { COPY_MODULE_KEY } from "@/utils/inject";
+import {
+	createTestAppStoreWithPermissions,
+	createTestRoomStore,
+	expectNotification,
+	mockApi,
+	roomItemFactory,
+} from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useRoomAuthorization } from "@data-room";
+import * as serverApi from "@api-server";
+import { Permission, ShareTokenBodyParamsParentType } from "@api-server";
 import { ImportCardDialog } from "@feature-board";
 import { RoomGrid } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";
 import { EmptyState } from "@ui-empty-state";
+import { DefaultWireframe } from "@ui-layout";
 import { setActivePinia } from "pinia";
-import { computed } from "vue";
-import { createRouterMock, injectRouterMock } from "vue-router-mock";
+import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VSkeletonLoader } from "vuetify/components";
 
-vi.mock("@data-room/roomAuthorization.composable");
-const roomAuthorization = vi.mocked(useRoomAuthorization);
-
 describe("RoomsPage", () => {
-	const router = createRouterMock();
-	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
+	let router: RouterMock;
 
 	beforeEach(() => {
-		roomPermissions = {
-			canAddRoomMembers: computed(() => true),
-			canAddAllStudents: computed(() => false),
-			canCreateRoom: computed(() => false),
-			canChangeOwner: computed(() => false),
-			canCopyRoom: computed(() => false),
-			canViewRoom: computed(() => false),
-			canEditRoom: computed(() => false),
-			canDeleteRoom: computed(() => false),
-			canLeaveRoom: computed(() => false),
-			canRemoveRoomMembers: computed(() => false),
-			canEditRoomContent: computed(() => false),
-			canSeeAllStudents: computed(() => false),
-			canShareRoom: computed(() => false),
-			canListDrafts: computed(() => false),
-			canManageRoomInvitationLinks: computed(() => false),
-			canManageVideoconferences: computed(() => false),
-			canSeeMembersList: computed(() => false),
-		};
-		roomAuthorization.mockReturnValue(roomPermissions);
+		const roomApiMock = mockApi<ReturnType<typeof serverApi.RoomApiFactory>>();
+		roomApiMock.roomControllerGetRooms.mockResolvedValue({ data: { data: [] } } as never);
+		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
+
+		router = createRouterMock();
+		injectRouterMock(router);
 	});
 
 	const setup = (
@@ -55,20 +41,19 @@ describe("RoomsPage", () => {
 		isLoading = false
 	) => {
 		const copyModule = createModuleMocks(CopyModule);
-		const loadingState = createModuleMocks(LoadingStateModule);
 
-		injectRouterMock(router);
-
-		setActivePinia(createTestingPinia());
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		const { roomStore } = createTestRoomStore(roomItems);
 		roomStore.isLoading = isLoading;
+		roomStore.fetchRooms.mockResolvedValue();
+
+		createTestAppStoreWithPermissions([Permission.SCHOOL_CREATE_ROOM]);
 
 		const wrapper = mount(RoomsPage, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 				provide: {
 					[COPY_MODULE_KEY]: copyModule,
-					[LOADING_STATE_MODULE_KEY]: loadingState,
 				},
 				stubs: { ImportFlow: true, ImportCardDialog: true, RouterLink: true },
 			},
@@ -126,7 +111,7 @@ describe("RoomsPage", () => {
 		};
 
 		it("should render import card dialog with card type", () => {
-			router.setQuery({ import: token, importedType: ShareTokenBodyParamsParentTypeEnum.Card });
+			router.setQuery({ import: token, importedType: ShareTokenBodyParamsParentType.CARD });
 			const { wrapper } = setup();
 
 			const importFLow = wrapper.findComponent(ImportCardDialog);
@@ -136,7 +121,7 @@ describe("RoomsPage", () => {
 		});
 
 		it("should not render import card dialog with room type", () => {
-			router.setQuery({ import: token, type: ShareTokenBodyParamsParentTypeEnum.Room });
+			router.setQuery({ import: token, type: ShareTokenBodyParamsParentType.ROOM });
 			const { wrapper } = setup();
 			const importFLow = wrapper.findComponent(ImportCardDialog);
 			expect(importFLow.exists()).toBe(false);
@@ -196,9 +181,7 @@ describe("RoomsPage", () => {
 				expect(wireframe.exists()).toBe(true);
 			});
 
-			it("should have the correct props", () => {
-				roomPermissions.canCreateRoom = computed(() => true);
-
+			it("should have the correct props", async () => {
 				const { wrapper } = setup();
 				const wireframe = wrapper.findComponent(DefaultWireframe);
 

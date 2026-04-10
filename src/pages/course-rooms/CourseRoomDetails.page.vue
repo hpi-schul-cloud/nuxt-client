@@ -64,7 +64,7 @@
 			:copy-result-root-item-type="copyResultRootItemType"
 			@copy-dialog-closed="onCopyResultModalClosed"
 		/>
-		<CommonCartridgeExportModal />
+		<CourseCommonCartridgeExportModal />
 		<end-course-sync-dialog
 			v-model:is-open="isEndSyncDialogOpen"
 			group-name=""
@@ -84,20 +84,12 @@
 
 <script>
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
-import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import CommonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
+import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCommonCartridgeExportModal.vue";
+import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.vue";
+import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import RoomDashboard from "@/components/templates/RoomDashboard.vue";
 import { useCopy } from "@/composables/copy";
-import { useLoadingState } from "@/composables/loadingState";
-import {
-	BoardParentType,
-	ImportUserResponseRoleNamesEnum as Roles,
-	Permission,
-	ShareTokenBodyParamsParentTypeEnum,
-} from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
@@ -106,6 +98,12 @@ import {
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import {
+	BoardParentType,
+	ImportUserResponseRoleNames as Roles,
+	Permission,
+	ShareTokenBodyParamsParentType,
+} from "@api-server";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
@@ -126,10 +124,10 @@ import {
 	mdiViewGridPlusOutline,
 	mdiViewListOutline,
 } from "@icons/material";
+import { DefaultWireframe } from "@ui-layout";
 import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
-import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
 export default defineComponent({
@@ -137,11 +135,11 @@ export default defineComponent({
 		StartExistingCourseSyncDialog,
 		EndCourseSyncDialog,
 		DefaultWireframe,
-		RoomDashboard,
+		CourseRoomDashboard,
 		RoomDotMenu,
 		CopyResultModal,
 		ShareModal,
-		CommonCartridgeExportModal,
+		CourseCommonCartridgeExportModal,
 		SelectBoardLayoutDialog,
 		CourseRoomLockedPage,
 	},
@@ -152,11 +150,9 @@ export default defineComponent({
 		courseRoomDetailsModule: { from: COURSE_ROOM_DETAILS_MODULE_KEY },
 	},
 	setup() {
-		const { t } = useI18n();
 		const { mdAndUp } = useDisplay();
-		const { isLoadingDialogOpen } = useLoadingState(t("components.molecules.copyResult.title.loading"));
 
-		const { copy, backgroundCopyProcesses, isCopyProcessInBackground } = useCopy(isLoadingDialogOpen);
+		const { copy, backgroundCopyProcesses, isCopyProcessInBackground } = useCopy();
 
 		const { roomVariant } = storeToRefs(useRoomDetailsStore());
 
@@ -216,7 +212,7 @@ export default defineComponent({
 					label: this.$t("common.words.learnContent"),
 					icon: mdiFileDocumentOutline,
 					dataTestId: "learnContent-tab",
-					component: RoomDashboard,
+					component: CourseRoomDashboard,
 					fabItems: this.learnContentFabItems,
 				},
 			];
@@ -262,7 +258,7 @@ export default defineComponent({
 		learnContentFabItems() {
 			const actions = [];
 
-			if (useAppStore().userPermissions.includes(Permission.HomeworkCreate)) {
+			if (useAppStore().userPermissions.includes(Permission.HOMEWORK_CREATE)) {
 				actions.push({
 					label: this.$t("pages.courseRoomDetails.fab.add.task"),
 					icon: mdiFormatListChecks,
@@ -271,7 +267,7 @@ export default defineComponent({
 				});
 			}
 
-			if (useAppStore().userPermissions.includes(Permission.TopicCreate)) {
+			if (useAppStore().userPermissions.includes(Permission.TOPIC_CREATE)) {
 				actions.push({
 					label: this.$t("pages.courseRoomDetails.fab.add.lesson"),
 					icon: mdiViewListOutline,
@@ -280,7 +276,7 @@ export default defineComponent({
 				});
 			}
 
-			if (useAppStore().userPermissions.includes(Permission.CourseEdit) && useAppStore().isTeacher) {
+			if (useAppStore().userPermissions.includes(Permission.COURSE_EDIT) && useAppStore().isTeacher) {
 				actions.push({
 					label: this.$t("pages.courseRoomDetails.fab.add.board"),
 					icon: mdiViewGridPlusOutline,
@@ -311,12 +307,12 @@ export default defineComponent({
 			return this.courseRoomDetailsModule.getPermissionData || [];
 		},
 		dashBoardRole() {
-			if (useAppStore().isTeacher) return Roles.Teacher;
-			if (useAppStore().isStudent) return Roles.Student;
+			if (useAppStore().isTeacher) return Roles.TEACHER;
+			if (useAppStore().isStudent) return Roles.STUDENT;
 			return undefined;
 		},
 		canEditTools() {
-			return !!useAppStore().userPermissions?.includes(Permission.ContextToolAdmin);
+			return !!useAppStore().userPermissions?.includes(Permission.CONTEXT_TOOL_ADMIN);
 		},
 		headlineMenuItems() {
 			if (!this.scopedPermissions.includes("COURSE_EDIT")) return [];
@@ -459,7 +455,7 @@ export default defineComponent({
 			if (useEnvConfig().value.FEATURE_COURSE_SHARE) {
 				this.shareModule.startShareFlow({
 					id: this.courseId,
-					type: ShareTokenBodyParamsParentTypeEnum.Courses,
+					type: ShareTokenBodyParamsParentType.COURSES,
 				});
 			}
 		},
@@ -498,7 +494,7 @@ export default defineComponent({
 		async onCreateBoard(courseId, layout) {
 			const params = {
 				title: this.$t("pages.room.boardCard.label.courseBoard").toString(),
-				parentType: BoardParentType.Course,
+				parentType: BoardParentType.COURSE,
 				parentId: courseId,
 				layout,
 			};

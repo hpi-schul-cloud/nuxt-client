@@ -1,14 +1,10 @@
 import { useRoomDetailsStore } from "../RoomDetails.store";
 import { useI18nGlobal } from "@/plugins/i18n";
-import {
-	LanguageType,
-	RegistrationApiFactory,
-	RegistrationItemResponse,
-	RegistrationListResponse,
-} from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { LanguageType, RegistrationApiFactory, RegistrationItemResponse, RegistrationListResponse } from "@api-server";
 import { notifyError, notifyInfo, notifySuccess } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -29,6 +25,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 		firstName: string;
 		lastName: string;
 		email: string;
+		registeredUserExists: boolean;
 	} | null>(null);
 	const hasApiErrorOccurred = ref<boolean>(false);
 
@@ -37,6 +34,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 
 	const fetchRegistrationsForCurrentRoom = async () => {
 		if (!roomId.value) return;
+		if (useEnvConfig().value.FEATURE_EXTERNAL_PERSON_REGISTRATION_ENABLED === false) return;
 
 		isLoading.value = true;
 		try {
@@ -53,11 +51,11 @@ export const useRegistrationStore = defineStore("registration", () => {
 	const fetchUserData = async () => {
 		isLoading.value = true;
 		try {
-			const { firstName, lastName, email } = (
+			const { firstName, lastName, email, registeredUserExists } = (
 				await registrationApi.registrationControllerGetBySecret(registrationSecret.value)
 			).data;
 
-			userData.value = { firstName, lastName, email };
+			userData.value = { firstName, lastName, email, registeredUserExists: !!registeredUserExists };
 		} catch (error: unknown) {
 			const { code } = mapAxiosErrorToResponseError(error);
 			hasApiErrorOccurred.value = true;

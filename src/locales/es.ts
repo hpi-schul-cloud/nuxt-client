@@ -13,6 +13,7 @@ export default {
 	"common.actions.discard": "Descartar",
 	"common.actions.download": "Descargar",
 	"common.actions.export": "Exportar",
+	"common.actions.show.all": "Mostrar todo",
 	"common.actions.edit": "Editar",
 	"common.actions.finish": "Finalizar",
 	"common.actions.import": "Importar",
@@ -30,6 +31,7 @@ export default {
 	"common.actions.shareLink": "Copiar enlace",
 	"common.actions.update": "Actualizar",
 	"common.actions.moved": "{elementName} se movió a la posición {position}",
+	"common.labels.moreInfo": "Más información",
 	"common.ariaLabel.newTab": "se abre en una nueva pestaña",
 	"common.ariaLabel.openImageInLightBox": "Mostrar imagen en tamaño completo",
 	"common.ariaLabel.sameTab": "se abre en la misma pestaña",
@@ -124,6 +126,7 @@ export default {
 	"common.labels.visible": "Visible",
 	"common.labels.welcome": "Bienvenido",
 	"common.labels.fileName": "Nombre del archivo",
+	"common.labels.tasks.more": "Otras tareas...",
 	"common.loading.text": "Los datos se están cargando...",
 	"common.medium.alert.deactivated": "Los medios están deshabilitados.",
 	"common.medium.alert.notLicensed": "El medio no está autorizado.",
@@ -145,7 +148,6 @@ export default {
 	"common.notifications.errors.notExited": "{type} no se ha podido salir. | {type} no se han podido salir.",
 	"common.notification.connection.restored": "La conexión se ha reestablecido.",
 	"common.placeholder.birthdate": "20.2.2002",
-	"common.placeholder.dateformat": "DD.MM.AAAA",
 	"common.placeholder.email.confirmation": "Repetir la dirección de correo electrónico",
 	"common.placeholder.email.update": "Nueva dirección de correo electrónico",
 	"common.placeholder.email": "clara.fall{'@'}mail.de",
@@ -184,12 +186,18 @@ export default {
 	"common.tool.context.type.boardElements": "Tableros",
 	"common.tool.context.type.mediaShelves": "Estante multimedia",
 	"common.validation.email": "Por favor, introduzca una dirección de correo electrónico válida",
+	"common.validation.file": "Por favor, suba un archivo {fileHint}",
 	"common.validation.invalid": "Los datos introducidos no son válidos",
 	"common.validation.number": "Se debe ingresar un número entero.",
+	"common.validation.password.upperCase": "La contraseña debe contener al menos una letra mayúscula.",
+	"common.validation.password.lowerCase": "La contraseña debe contener al menos una letra minúscula.",
+	"common.validation.password.number": "La contraseña debe contener al menos un número.",
+	"common.validation.password.specialCharacter": "La contraseña debe contener al menos un carácter especial.",
 	"common.validation.regex": "La entrada debe cumplir con la siguiente regla: {comentario}.",
 	"common.validation.required": "Por favor, rellene este campo",
 	"common.validation.required2": "Este es un campo obligatorio.",
 	"common.validation.tooLong": "The text you entered exceeds the maximum length",
+	"common.validation.tooShort": "El texto que ingresó es inferior a la longitud mínima",
 	"common.validation.containsOpeningTag": "Inserte un espacio después del signo menos-que.",
 	"common.validation.nonEmptyString": "Este campo es obligatorio y no debe contener sólo espacios.",
 	"common.words.also": "también",
@@ -222,7 +230,6 @@ export default {
 	"common.words.languages.es": "Español",
 	"common.words.languages.uk": "Ucranio",
 	"common.words.learnContent": "Contenidos de aprendizaje",
-	"common.words.lernstore": "Lern-Store",
 	"common.words.mainSchool": "Escuela principal",
 	"common.words.no": "No",
 	"common.words.not": "no",
@@ -464,7 +471,6 @@ export default {
 	"components.board.menu.fileElement": "Configuración del archivo",
 	"components.board.menu.folderElement": "Configuración de la carpeta de archivos",
 	"components.board.menu.linkElement": "Configuración del enlace",
-	"components.board.menu.submissionElement": "Configuración del envío",
 	"components.board.menu.videoConferenceElement": "Configuración de la videoconferencia",
 	"components.board.menu.h5pElement": "Configuración de elementos de aprendizaje interactivo",
 	"components.board.menu.deletedElement": "Configuración de contenido eliminado",
@@ -474,6 +480,8 @@ export default {
 	"components.board.notifications.errors.fileNotDeleted": "No se han podido eliminar los archivos.",
 	"components.board.notifications.errors.fileToBig":
 		"Los archivos adjuntos superan el tamaño máximo permitido de {maxFileSizeWithUnit}.",
+	"components.board.notifications.errors.fileLimitPerParentExceeded":
+		"El número de archivos supera el límite permitido de {fileLimitPerParent} archivos.",
 	"components.board.notifications.errors.notCreated": "{type} no se ha podido crear.",
 	"components.board.notifications.errors.notDeleted": "{type} no se ha podido eliminar.",
 	"components.board.notifications.errors.notDuplicated": "{type} no se ha podido duplicar.",
@@ -555,11 +563,6 @@ export default {
 		"Esta pizarra es visible y editable para todos los participantes en el curso.",
 	"components.cardElement.richTextElement.placeholder": "Añadir texto",
 	"components.cardElement.richTextElement": "Elemento texto",
-	"components.cardElement.submissionElement.completed": "completado",
-	"components.cardElement.submissionElement.expired": "expirado",
-	"components.cardElement.submissionElement.open": "abrir",
-	"components.cardElement.submissionElement.until": "hasta el",
-	"components.cardElement.submissionElement": "Envío",
 	"components.cardElement.titleElement.placeholder": "Añadir título",
 	"components.cardElement.titleElement.validation.maxLength": "El título solo puede tener {maxLength} caracteres.",
 	"components.cardElement.titleElement.validation.required": "Por favor ingrese un título.",
@@ -573,10 +576,8 @@ export default {
 	"components.cardElement.h5pElement.create": "Crear elemento de aprendizaje...",
 	"components.cardElement.h5pElement.title.error.load":
 		"No se pudo cargar el título de un elemento de aprendizaje interactivo.",
-	"components.datePicker.validation.format": "Por favor utilice el formato DD.MM.AAAA",
+	"components.datePicker.validation.format": "Por favor utilice el formato {datePlaceHolder}",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
-	"components.dateTimePicker.messages.dateInPast": "La fecha y la hora están en el pasado.",
-	"components.dateTimePicker.messages.dateRequired": "Sin fecha no es posible especificar la hora.",
 	"components.editor.fonts.colors.oliveGreen": "Verde Oliva",
 	"components.editor.fonts.colors.indigo": "Índigo",
 	"components.editor.fonts.colors.darkPurple": "Púrpura Oscuro",
@@ -589,7 +590,6 @@ export default {
 	"components.elementTypeSelection.elements.folderElement.subtitle": "Carpeta de archivos",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle": "Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Enlace",
-	"components.elementTypeSelection.elements.submissionElement.subtitle": "Envíos",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Texto",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle": "Videoconferencia",
 	"components.elementTypeSelection.elements.h5pElement.subtitle": "Elemento de aprendizaje interactivo",
@@ -656,8 +656,6 @@ export default {
 	"components.molecules.copyResult.title.partial": "Información importante sobre la duplicación",
 	"components.molecules.copyResult.title.success": "Duplicación exitosa",
 	"components.molecules.copyResult.followingNotCopied": "No se ha copiado lo siguiente:",
-	"components.molecules.EdusharingFooter.img_alt": "edusharing-logotipo",
-	"components.molecules.EdusharingFooter.text": "desarrollado por",
 	"components.molecules.import.card.options.title": "Importar tarjeta",
 	"components.molecules.import.columnBoard.label": "Título del tablero",
 	"components.molecules.label.room": "Seleccionar sala",
@@ -792,6 +790,8 @@ export default {
 	"components.molecules.export.options.info": "El siguiente contenido no se exporta:",
 	"components.molecules.export.options.info.point1": "Archivos subidos dentro del curso.",
 	"components.molecules.export.options.info.point2": "Envíos asignados a una tarea.",
+	"components.molecules.export.options.info.point3":
+		"Las carpetas de archivos no se exportan con la Common Cartridge versión 1.1",
 	"components.organisms.ContentCard.report.body": "Informar del contenido con el ID",
 	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":
@@ -800,21 +800,16 @@ export default {
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.changeSorting": "cambiar clasificación",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.asc": "ordenados en orden ascendente",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.desc": "ordenados en orden descendente",
-	"components.organisms.FormNews.cancel.confirm.cancel": "Continuar",
-	"components.organisms.FormNews.cancel.confirm.confirm": "Descartar los cambios",
-	"components.organisms.FormNews.cancel.confirm.message":
-		"Si cancelas la edición, se perderán todos los cambios no guardados.",
 	"components.organisms.FormNews.editor.placeholder": "Érase una vez...",
 	"components.organisms.FormNews.error.patch": "Error al actualizar.",
 	"components.organisms.FormNews.error.remove": "Error durante la eliminación.",
 	"components.organisms.FormNews.errors.create": "Error durante la creación.",
-	"components.organisms.FormNews.errors.missing_content": "Tu artículo está vacío. ;)",
-	"components.organisms.FormNews.errors.missing_title": "Cada artículo debe tener un título.",
+	"components.organisms.FormNews.errors.missing_content": "Por favor, ingrese contenido",
+	"components.organisms.FormNews.errors.missing_title": "Por favor, ingrese un título",
 	"components.organisms.FormNews.input.title.label": "Título de la noticia",
 	"components.organisms.FormNews.input.title.placeholder": "Empecemos con el título",
 	"components.organisms.FormNews.label.planned_publish":
 		"Aquí puedes establecer una fecha para la publicación automática en el futuro (opcional):",
-	"components.organisms.FormNews.remove.confirm.cancel": "Cancelar",
 	"components.organisms.FormNews.remove.confirm.confirm": "Eliminar artículo",
 	"components.organisms.FormNews.remove.confirm.message":
 		"¿Estás seguro de que quieres borrar este artículo de forma irreversible?",
@@ -880,7 +875,7 @@ export default {
 		"Se ha producido un error al guardar. Por favor, compruebe sus entradas e inténtelo de nuevo.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
 		"La fecha de inicio debe ser anterior a la fecha de finalización.",
-	"components.timePicker.validation.format": "Por favor utilice el formato HH:MM",
+	"components.timePicker.validation.format": "Por favor utilice el formato {timePlaceHolder}",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",
 	"data-room.copy.alert.success": "Sala duplicada con éxito.",
 	"data-room.copy.alert.error": "No se pudo completar el proceso de duplicación.",
@@ -895,15 +890,18 @@ export default {
 	"error.load": "Error al cargar los datos.",
 	"error.proxy.action": "Volver a cargar la página",
 	"error.proxy.description": "Tenemos un pequeño problema con nuestra infraestructura. Enseguida volvemos.",
+	"feature-autoLogout.button.title": "Ampliar sesión",
 	"feature-autoLogout.button.confirm": "Ampliar sesión",
 	"feature-autoLogout.button.confirm.returnToLogin": "Volver a la página de inicio de sesión",
 	"feature-autoLogout.message.error.401": "Tu sesión ya ha caducado. Inicia sesión de nuevo.",
-	"feature-autoLogout.message.error":
+	"feature-autoLogout.message.extending-session-failure":
 		"Vaya... ¡Eso no debería haber sucedido! No se ha podido ampliar tu sesión. Vuelve a intentarlo de inmediato.",
-	"feature-autoLogout.component.image.alt": "Perezoso",
-	"feature-autoLogout.message.success": "Sesión ampliada correctamente.",
+	"feature-autoLogout.message.extending-session-success": "Sesión ampliada correctamente.",
 	"feature-autoLogout.warning.remainingTime": "menos de un minuto | un minuto | {remainingTime} minutos",
 	"feature-autoLogout.warning": "Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
+	"feature-loggedout.title": "Sesión expirada",
+	"feature-loggedout.message": "La sesión ha expirado por razones de seguridad.",
+	"feature-loggedout.button": "Iniciar sesión de nuevo",
 	"feature-board-external-tool-element.alert.error.student":
 		"La herramienta no se puede iniciar actualmente. Actualice el tablero o comuníquese con el maestro o instructor del curso.",
 	"feature-board-external-tool-element.alert.error.teacher":
@@ -939,13 +937,6 @@ export default {
 	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Contenidos de los Etherpads",
 	"feature-room.CopyInfoDialog.text.alert.whiteboard": "Contenidos de las pizarras blancas",
 	"feature-room.CopyInfoDialog.text.alert.protectedSettings": "Configuraciones protegidas de herramientas externas",
-	"format.date": "DD/MM/YYYY",
-	"format.dateLong": "dddd, DD. MMMM YYYY",
-	"format.dateTime": "DD/MM/YYYY HH:mm",
-	"format.dateTimeYY": "DD/MM/YY HH:mm",
-	"format.dateUTC": "AAAA-MM-DD",
-	"format.dateYY": "DD/MM/YY",
-	"format.time": "HH:mm",
 	"global.cloudLogo": "Logo",
 	"global.sidebar.item.addons": "Complementos",
 	"global.sidebar.item.calendar": "Calendario",
@@ -975,7 +966,7 @@ export default {
 	"global.topbar.language.longName.de": "Deutsch",
 	"global.topbar.language.longName.en": "English",
 	"global.topbar.language.longName.es": "Español",
-	"global.topbar.language.longName.uk": "Українська",
+	"global.topbar.language.longName.uk": "Yкраїнська",
 	"global.topbar.language.select": "Selección de idioma",
 	"global.topbar.language.selectedLanguage": "Idioma seleccionado",
 	"global.topbar.loggedOut.actions.blog": "Blog",
@@ -990,6 +981,25 @@ export default {
 	"mixins.typeMeta.types.image": "Imagen",
 	"mixins.typeMeta.types.video": "Vídeo",
 	"mixins.typeMeta.types.webpage": "Página web",
+	"loggedin.text.backupFeatures":
+		"Haga una copia de seguridad de sus contenidos de la nube y utilice también la nueva función para exportar cursos. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "Más información y ayuda disponible aquí",
+	"loggedin.text.schoolInTransferPhaseContactAdmin":
+		"La escuela está en fase de transferencia al nuevo año escolar. No se pueden crear clases ni usuarios. ¡Ponte en contacto con el administrador de la escuela!",
+	"loggedin.text.schoolInTransferPhaseStartNew":
+		'La escuela está en fase de transferencia al nuevo año escolar. No se pueden crear clases ni usuarios. ¡Accede al <a href="/administration/school/">nuevo año escolar aquí!</a>',
+	"loggedin.text.schoolInMigrationModeStarted":
+		'La escuela está en modo de migración de usuarios. Para migrar los usuarios, por favor vaya a <a href="/administration/migration/">esta página</a>.',
+	"loggedin.text.schoolInMigrationMode":
+		'La escuela puede importar cuentas de usuario de Schulportal. Para migrar los usuarios, por favor vaya a <a href="/administration/migration/">esta página</a>.',
+	"pages.dashboard.title": "Panel",
+	"pages.dashboard.empty.news": "Hasta el momento no hay noticias.",
+	"pages.dashboard.new.features": "Hay nuevas funciones en {instanceTitle}.",
+	"pages.dashboard.new.features.available": "Nuevas funciones disponibles",
+	"pages.dashboard.new.features.forward": "Para más información, consulta las notas de la versión.",
+	"pages.dashboard.no.due.date": "No se ha fijado una fecha de envío",
+	"pages.dashboard.welcome": "Hola",
+	"pages.dashboard.schedule": "Programación",
 	"pages.classMembers.infoBox.text.firstParagraph":
 		"No es necesario obtener una declaración de consentimiento al registrar estudiantes. El uso de Niedersächsischen Bildungscloud está regulado por la Ley de escuelas de Baja Sajonia (artículo 31, párrafo 5 de la NSchG).",
 	"pages.classMembers.infoBox.text.firstParagraph.bold": "No",
@@ -1010,11 +1020,6 @@ export default {
 	"page-class-members.systemInfoText":
 		"Los datos de la clase se sincronizan con {systemName}. La lista de clases puede estar temporalmente desactualizada hasta que se actualice con la última versión en {systemName}. Los datos se actualizan cada vez que un miembro del grupo se registra en Niedersächsischen Bildungscloud.",
 	"page-class-members.title.info": "importado desde un sistema externo",
-	"pages.activation._activationCode.index.error.description":
-		"No se han podido realizar tus cambios porque el enlace no es válido o ha caducado. Inténtalo de nuevo.",
-	"pages.activation._activationCode.index.error.title": "No se han podido cambiar tus datos",
-	"pages.activation._activationCode.index.success.email":
-		"Tu dirección de correo electrónico se ha cambiado correctamente",
 	"pages.administration.actions": "Acciones",
 	"pages.administration.all": "todos",
 	"pages.administration.classes.createSuccessor": "Mover la clase al próximo año escolar",
@@ -1026,9 +1031,9 @@ export default {
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {institute_title}.",
 	"pages.administration.classes.index.add": "Agregar clase",
 	"pages.administration.classes.index.title": "Administrar clases",
-	"pages.administration.classes.thr.hint.title": "Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.title": "¿Por qué no puedo editar las entradas?",
 	"pages.administration.classes.thr.hint.text":
-		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
+		"Tu escuela está sincronizada con el portal escolar de Turingia. Los datos de docentes, alumnado y clases se gestionan centralmente allí y solo pueden modificarse en ese portal. Esto incluye también los cambios de contraseña.",
 	"pages.administration.common.label.archive": "Archivo",
 	"pages.administration.common.label.active": "Actual",
 	"pages.administration.classes.manage": "Administrar clase",
@@ -1209,6 +1214,7 @@ export default {
 	"pages.administration.migration.identical_user_login_migration_system":
 		"¡La migración no puede comenzar porque el sistema de inicio de sesión de destino y el sistema de inicio de sesión actual de su escuela son el mismo!",
 	"pages.administration.migration.moin_schule_system_not_found": "¡No puedo encontrar el sistema moin.schule!",
+	"pages.administration.migration.multipleUsersFound": "Se encontró más de una migración para el usuario.",
 	"pages.administration.or": "o",
 	"pages.administration.printQr.printPageTabTitle": "Compartir códigos QR",
 	"pages.administration.printQr.printPageTitle": "Por favor, escanea el código QR para registrarte.",
@@ -1256,7 +1262,6 @@ export default {
 	"pages.administration.school.index.info":
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {instituteTitle}.",
 	"pages.administration.school.index.privacySettings.labels.chatFunction": "Activar función de chat",
-	"pages.administration.school.index.privacySettings.labels.lernStore": "Lern-Store para estudiantes",
 	"pages.administration.school.index.privacySettings.labels.studentVisibility":
 		"Activar la visibilidad de los estudiantes para los profesores",
 	"pages.administration.school.index.privacySettings.labels.videoConference": "Activar la videoconferencia",
@@ -1265,8 +1270,6 @@ export default {
 		"Si los chats están habilitados en tu escuela, los administradores del equipo pueden desbloquear la función de chat de manera selectiva y respectivamente para su equipo.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
 		"Se trata de un ajuste no editable que controla la visibilidad de los alumnos para los profesores.",
-	"pages.administration.school.index.privacySettings.longText.lernStore":
-		"Si no está seleccionado, los estudiantes no podrán acceder a Lern-Store",
 	"pages.administration.school.index.privacySettings.longText.studentVisibility":
 		"La activación de esta opción tiene un nivel alto según la ley de protección de datos. Para activar la visibilidad de todos los alumnos de la escuela para cada profesor, es necesario que cada alumno haya dado su consentimiento de manera efectiva para este tratamiento de datos.",
 	"pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg":
@@ -1290,7 +1293,8 @@ export default {
 	"pages.administration.school.index.schoolPolicy.error":
 		"Se ha producido un error al cargar la Política de Privacidad",
 	"pages.administration.school.index.schoolPolicy.fileName": "Política de Privacidad de la escuela",
-	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Cargar archivo (sólo PDF, 4 MB como máximo)",
+	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Cargar archivo {fileHint}",
+	"pages.administration.school.index.schoolPolicy.fileHint": "(sólo PDF, 4 MB como máximo)",
 	"pages.administration.school.index.schoolPolicy.labels.uploadFile": "Seleccionar archivo",
 	"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent":
 		"La nueva Política de Privacidad sustituirá irremediablemente a la anterior y se presentará a todos los usuarios de esta escuela para su aprobación.",
@@ -1312,7 +1316,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.edit": "Editar Condiciones de Uso",
 	"pages.administration.school.index.termsOfUse.error": "Se ha producido un error al cargar la Condiciones de Uso",
 	"pages.administration.school.index.termsOfUse.fileName": "Condiciones de Uso de la escuela",
-	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Cargar archivo (sólo PDF, 4 MB como máximo)",
+	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Cargar archivo {fileHint}",
+	"pages.administration.school.index.termsOfUse.fileHint": "(sólo PDF, 4 MB como máximo)",
 	"pages.administration.school.index.termsOfUse.labels.uploadFile": "Seleccionar archivo",
 	"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent":
 		"La nueva Condiciones de Uso sustituirá irremediablemente a la anterior y se presentará a todos los usuarios de esta escuela para su aprobación.",
@@ -1334,14 +1339,13 @@ export default {
 		"No se ha podido enviar el enlace de registro | No se han podido enviar los enlaces de registro",
 	"pages.administration.sendMail.success":
 		"Enlace de registro enviado correctamente | Enlaces de registro enviados correctamente",
-	"pages.administration.students.consent.cancel.modal.confirm": "Cancelar de todos modos",
-	"pages.administration.students.consent.cancel.modal.continue": "Continuar con el registro",
-	"pages.administration.students.consent.cancel.modal.download.continue": "Imprimir datos de acceso",
+	"pages.administration.students.consent.cancel.modal": "Finalizar registro",
+	"pages.administration.students.consent.cancel.modal.download.continue": "Imprimir credenciales de acceso",
+	"pages.administration.students.consent.cancel.modal.title": "¿Realmente finalizar el registro?",
 	"pages.administration.students.consent.cancel.modal.download.info":
-		"Atención: ¿Está seguro de que quiere cancelar el proceso sin haber descargado los datos de acceso? No se puede volver a acceder a esta página.",
+		"¿Realmente desea finalizar el registro sin haber descargado las credenciales de acceso? No se podrán recuperar nuevamente.",
 	"pages.administration.students.consent.cancel.modal.info":
-		"Advertencia: ¿Estás seguro de que deseas cancelar el proceso? Se perderán los cambios realizados.",
-	"pages.administration.students.consent.cancel.modal.title": "¿Estás seguro?",
+		"¿Realmente desea finalizar el registro? Los cambios realizados se perderán.",
 	"pages.administration.students.consent.handout": "Impreso",
 	"pages.administration.students.consent.info":
 		"Puedes declarar el consentimiento de la {dataProtection} y los {terms} de la nube de la escuela en nombre de tus estudiantes, si has obtenido el consentimiento por adelantado de forma analógica, a través de {handout}.",
@@ -1382,15 +1386,11 @@ export default {
 	"pages.administration.students.consent.title": "Registrarse de forma analógica",
 	"pages.administration.students.fab.add": "Crear estudiante",
 	"pages.administration.students.fab.import": "Importar estudiante",
-	"pages.administration.students.index.remove.confirm.btnText": "Eliminar estudiante",
-	"pages.administration.students.index.remove.confirm.message.all":
-		"¿Estás seguro de que deseas eliminar a todos los estudiantes?",
-	"pages.administration.students.index.remove.confirm.message.many":
-		"¿Estás seguro de que deseas eliminar a todos los estudiantes excepto a {number}?",
-	"pages.administration.students.index.remove.confirm.message.some":
-		"¿Estás seguro de que deseas eliminar a este estudiante? | ¿Estás seguro de que deseas eliminar a este estudiante de {number}?",
+	"pages.administration.students.index.remove.confirm.message":
+		"¿Desea eliminar a este alumno? | ¿Desea eliminar a los siguientes estudiantes?",
 	"pages.administration.students.index.remove.progress.description": "Por favor, espera...",
 	"pages.administration.students.index.remove.progress.title": "Eliminando alumn{'@'}s",
+	"pages.administration.students.index.searchbar.ariaLabel": "Buscar estudiantes por nombre",
 	"pages.administration.students.index.searchbar.placeholder": "Buscar estudiantes",
 	"pages.administration.students.index.tableActions.consent": "Formulario de consentimiento analógico",
 	"pages.administration.students.index.tableActions.delete": "Eliminar",
@@ -1451,16 +1451,12 @@ export default {
 	"pages.administration.students.table.edit.ariaLabel": "Editar estudiante",
 	"pages.administration.teachers.fab.add": "Crear profesor",
 	"pages.administration.teachers.fab.import": "Importar profesor",
-	"pages.administration.teachers.index.remove.confirm.btnText": "Eliminar profesor",
-	"pages.administration.teachers.index.remove.confirm.message.all":
-		"¿Estás seguro de que deseas eliminar a todos los profesores?",
-	"pages.administration.teachers.index.remove.confirm.message.many":
-		"¿Estás seguro de que deseas eliminar a todos los estudiantes excepto a {number}?",
-	"pages.administration.teachers.index.remove.confirm.message.some":
-		"¿Estás seguro de que deseas eliminar a este profesor: en? | ¿Estás seguro de que deseas eliminar a este profesor de {number}?",
+	"pages.administration.teachers.index.remove.confirm.message":
+		"¿Desea eliminar a este profesor? | ¿Desea eliminar a estos profesores?",
 	"pages.administration.teachers.index.remove.progress.description": "Por favor, espera...",
 	"pages.administration.teachers.index.remove.progress.title": "Eliminando profesor{'@'}s",
-	"pages.administration.teachers.index.searchbar.placeholder": "Buscar",
+	"pages.administration.teachers.index.searchbar.ariaLabel": "Buscar profesores por nombre",
+	"pages.administration.teachers.index.searchbar.placeholder": "Buscar profesores",
 	"pages.administration.teachers.index.tableActions.consent": "Formulario de consentimiento analógico",
 	"pages.administration.teachers.index.tableActions.delete": "Eliminar",
 	"pages.administration.teachers.index.tableActions.email": "Enviar los enlaces de registro por correo electrónico",
@@ -1480,65 +1476,6 @@ export default {
 	"pages.common.tools.configureVideoconferenceDialog.text.mute": "Silenciar a los participantes al entrar",
 	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
 		"Activar la sala de espera para los participantes",
-	"pages.content._id.addToTopic": "Para ser añadido a",
-	"pages.content._id.collection.selectElements": "Selecciona los elementos que deses añadir al tema",
-	"pages.content._id.metadata.author": "Autor",
-	"pages.content._id.metadata.createdAt": "Creado el",
-	"pages.content._id.metadata.noTags": "Sin etiquetas",
-	"pages.content._id.metadata.provider": "Editor",
-	"pages.content._id.metadata.updatedAt": "Última modificación el",
-	"pages.content.card.collection": "Colección",
-	"pages.content.emptyState.error.message.suggestions": "Sugerencia:",
-	"pages.content.emptyState.error.message.suggestions.moreThanOneCharacter":
-		"La consulta de búsqueda debe contener al menos 2 caracteres.",
-	"pages.content.emptyState.error.message.suggestions.correctSpelling":
-		"Comprueba si todas las palabras están escritas correctamente.",
-	"pages.content.emptyState.error.message.suggestions.otherSearchTerms": "Prueba otras consultas de búsqueda.",
-	"pages.content.emptyState.error.message.suggestions.generalSearchTerms": "Prueba con consultas más comunes.",
-	"pages.content.emptyState.error.message.suggestions.lessSearchTerms": "Intenta usar una consulta más corta.",
-	"pages.content.emptyState.error.title": "¡Vaya, no hay resultados!",
-	"pages.content.index.backToCourse": "Volver al curso",
-	"pages.content.index.backToOverview": "Volver a la vista general",
-	"pages.content.index.search_for": "Buscar...",
-	"pages.content.index.search_resources": "Recursos",
-	"pages.content.index.search_results": "Resultados de la búsqueda de",
-	"pages.content.index.search.placeholder": "Buscar tienda de aprendizaje",
-	"pages.content.initState.description": "Aquí encontrará contenidos de alta calidad adaptados a su estado.",
-	"pages.content.initState.description.newMaterials":
-		"Nuestro equipo está desarrollando constantemente nuevos materiales para mejorar su experiencia de aprendizaje.",
-	"pages.content.initState.description.hint": "Nota:",
-	"pages.content.initState.description.hint.materials":
-		"Los materiales expuestos en la Tienda de Aprendizaje no se encuentran en nuestro servidor, sino que están disponibles a través de interfaces con otros servidores (las fuentes incluyen servidores educativos individuales, WirLernenOnline, Mundo, etc.).",
-	"pages.content.initState.description.hint.availability":
-		"Por esta razón, nuestro equipo no tiene ninguna influencia en la disponibilidad permanente de los materiales individuales y en toda la gama de materiales ofrecidos por las fuentes individuales.",
-	"pages.content.initState.description.usage":
-		"En el contexto del uso en instituciones educativas, se permite la copia de los medios en línea en medios de almacenamiento, en un dispositivo final privado o en plataformas de aprendizaje para un círculo cerrado de usuarios, si es necesario, en la medida en que esto sea necesario para la distribución y/o uso interno.",
-	"pages.content.initState.description.usage.deleteHint":
-		"Una vez finalizado el trabajo con los respectivos medios de comunicación en línea, éstos deben ser eliminados de los dispositivos finales privados, de los soportes de datos y de las plataformas de aprendizaje; a más tardar cuando se abandone la institución educativa.",
-	"pages.content.initState.description.usage.notPermitted":
-		"Por lo general, no se permite la publicación fundamental (por ejemplo, en Internet) de los medios de comunicación en línea o con partes de ellos de obras nuevas y/o editadas, o se requiere el consentimiento del propietario de los derechos.",
-	"pages.content.initState.title": "¡Bienvenido a la nueva Lern-Store!",
-	"pages.content.label.chooseACourse": "Selecciona un curso/asignatura",
-	"pages.content.label.chooseALessonTopic": "Elige un tema de la lección",
-	"pages.content.label.deselect": "Eliminar",
-	"pages.content.label.select": "Seleccionar",
-	"pages.content.label.selected": "Activo",
-	"pages.content.material.leavePageWarningFooter":
-		"El uso de estas ofertas puede estar sujeto a otras condiciones legales. Por lo tanto, consulta la política de privacidad del proveedor externo.",
-	"pages.content.material.leavePageWarningMain": "Nota: al hacer clic en el enlace, te irás de Schul-Cloud Brandenburg",
-	"pages.content.material.showMaterialHint":
-		"Nota: Utilice la parte izquierda de la pantalla para acceder al contenido.",
-	"pages.content.material.showMaterialHintMobile":
-		"Nota: Utilice el elemento anterior de la pantalla para acceder al contenido.",
-	"pages.content.material.toMaterial": "Material",
-	"pages.content.notification.errorMsg": "Algo ha salido mal. No se ha podido añadir material.",
-	"pages.content.notification.lernstoreNotAvailable": "La tienda de aprendizaje no está disponible",
-	"pages.content.notification.loading": "Se añade material",
-	"pages.content.notification.successMsg": "El material se ha añadido correctamente",
-	"pages.content.page.window.title": "Crear tema: {instance} - Tu entorno de aprendizaje digital",
-	"pages.content.placeholder.chooseACourse": "Elige un curso / asignatura",
-	"pages.content.placeholder.noLessonTopic": "Crear un tema en el curso",
-	"pages.content.preview_img.alt": "Vista previa de la imagen",
 	"pages.courseRoomDetails.fab.add.tool": "Agregar herramienta",
 	"pages.courseRoomDetails.fab.add.learnContent": "Crear contenido",
 	"pages.courseRoomDetails.fab.add.board": "Nuevo tablero",
@@ -1624,14 +1561,6 @@ export default {
 	"pages.registrationExternalMembers.steps.password.validation.required": "Por favor, introduce una contraseña.",
 	"pages.registrationExternalMembers.steps.password.validation.minLength":
 		"La contraseña debe tener al menos 8 caracteres.",
-	"pages.registrationExternalMembers.steps.password.validation.upperCase":
-		"La contraseña debe contener al menos una letra mayúscula.",
-	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
-		"La contraseña debe contener al menos una letra minúscula.",
-	"pages.registrationExternalMembers.steps.password.validation.number":
-		"La contraseña debe contener al menos un número.",
-	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
-		"La contraseña debe contener al menos un carácter especial.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Las contraseñas no coinciden.",
 	"pages.registrationExternalMembers.steps.registration.heading": "Registro exitoso",
 	"pages.registrationExternalMembers.steps.language.heading": "Por favor seleccione su idioma",
@@ -1657,8 +1586,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Seleccionar vista",
 	"pages.room.dialog.boardLayout.singleColumn": "monocolumna",
 	"pages.room.dialog.boardLayout.multiColumn": "multicolumna",
-	"pages.room.itemDelete.text": '¿Eliminar {itemType} "{itemTitle}"?',
-	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
 	"pages.room.lessonCard.menu.ariaLabel": "Menú de tema",
 	"pages.room.locked":
@@ -1682,14 +1609,15 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.heading": "Añadir persona externa",
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
 		"Por favor, introduzca la dirección de correo electrónico de la persona externa que desea añadir a la sala.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal":
+		"La invitación por correo electrónico no es posible. Por favor, compruebe los {link} necesarios.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal.requirements": "requisitos",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Invitar a persona externa",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
 		"No se ha encontrado ninguna cuenta con esta dirección de correo electrónico. Se puede invitar a la persona a registrarse en {applicationName}.",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
 		"Por favor, introduzca el nombre y apellido de la persona externa. La persona recibirá un correo electrónico con un enlace de registro para {applicationName}. En cuanto haya creado una cuenta, se añadirá automáticamente a la sala.",
 	"pages.rooms.members.dialog.addExternalPerson.label.email": "Dirección de correo electrónico",
-	"pages.rooms.members.dialog.addExternalPerson.label.email.error":
-		"Por favor, introduzca una dirección de correo electrónico válida",
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "Nombre",
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Por favor, introduzca un nombre",
 	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Apellido",
@@ -1698,6 +1626,7 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Enviar invitación",
 	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
 		"No se ha podido enviar la invitación. Por favor, inténtelo de nuevo más tarde",
+	"pages.rooms.members.dialog.addExternalPerson.success.addingMember": "Invitación enviada a {email}",
 	"pages.rooms.emptyState.title": "Actualmente no hay cursos",
 	"pages.rooms.fab.create.course": "Crear curso",
 	"pages.rooms.fab.add.course": "Nuevo curso",
@@ -1741,9 +1670,10 @@ export default {
 	"pages.rooms.ccImportCourse.title": "Importar curso",
 	"pages.rooms.ccImportCourse.confirm": "Importar",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Seleccionar archivo",
-	"pages.rooms.ccImportCourse.loading": "Importación en curso...",
-	"pages.rooms.ccImportCourse.success": "El curso {name} se ha importado correctamente.",
-	"pages.rooms.ccImportCourse.error": "Se ha producido un error al importar el curso.",
+	"pages.rooms.ccImportCourse.loading": "Subida en progreso...",
+	"pages.rooms.ccImportCourse.success":
+		"Su archivo del curso se ha cargado y ahora se está importando en segundo plano.",
+	"pages.rooms.ccImportCourse.error": "Se produjo un error al cargar el archivo del curso.",
 	"pages.rooms.ccExportCourse.error": "Se produjo un error al exportar el curso.",
 	"pages.rooms.roomModal.courseGroupTitle": "Título del grupo del curso",
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",
@@ -1953,6 +1883,10 @@ export default {
 	"pages.rooms.administration.roomDetail.anonymized": "(anónimo)",
 	"pages.rooms.administration.roomDetail.breadcrumb": "Miembros de la sala {roomName}",
 	"pages.rooms.administration.roomDetail.header.text": "Miembros de la sala “{roomName}”",
+	"pages.security.headline": "Informar del problema de seguridad",
+	"pages.security.text":
+		"dBildungscloud está sometido a controles de seguridad y pruebas de intrusión regularmente, ya que la seguridad de los datos de nuestros usuarios es muy importante para nosotros. ¿Sigues con problemas de seguridad? Escríbenos para que podamos cerrar la incidencia lo antes posible: ",
+
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text": "¿Estás seguro de que deseas eliminar este elemento?",
 	"pages.taskCard.deleteElement.title": "Eliminar elemento",
@@ -1965,7 +1899,6 @@ export default {
 	"pages.tasks.labels.planned": "Planificada",
 	"pages.tasks.student.completed.emptyState.title": "Actualmente no hay tareas completadas",
 	"pages.tasks.student.open.emptyState.title": "Actualmente no hay tareas abiertas",
-	"pages.tasks.student.openTasks": "Tareas abiertas",
 	"pages.tasks.student.submittedTasks": "Completed Tasks",
 	"pages.tasks.student.subtitleOverDue": "Tareas perdidas",
 	"pages.tasks.subtitleGraded": "Calificado",
@@ -1974,7 +1907,7 @@ export default {
 	"pages.tasks.subtitleOpen": "Tareas abiertas",
 	"pages.tasks.subtitleWithDue": "Con plazo",
 	"pages.tasks.teacher.drafts.emptyState.title": "Actualmente no hay borradores",
-	"pages.tasks.teacher.open.emptyState.title": "Actualmente no hay tareas",
+	"pages.tasks.open.emptyState.title": "Actualmente no hay tareas",
 	"pages.tasks.teacher.subtitleOverDue": "Tareas expiradas",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"pages.tool.apiError.tool_param_duplicate":
@@ -2063,8 +1996,11 @@ export default {
 	"error.ws.connectionLost": "La conexión se ha interrumpido. Intenta restablecer la conexión...",
 	"tldraw.error.ws.4400": "Falta el nombre de la sala en los parámetros de la URL",
 	"tldraw.error.ws.4404": "No se ha encontrado la pizarra con este nombre",
-	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
+	"ui-confirmation-dialog.ask-delete": '¿Eliminar {itemType} "{itemTitle}"?',
+	"ui-confirmation-dialog.ask-delete-type": "¿Eliminar {itemType}?",
 	"ui-confirmation-dialog.ask-cancel-form": "¿Descartar cambios?",
+	"ui-confirmation-dialog.ask-cancel-warning-message":
+		"Si cancelas la edición, se perderán todos los cambios no guardados.",
 	"ui-layout.topbar.pageShare.printQRCode": "Imprimir código QR",
 	"ui.actionMenu.selectedRows": "Menú de acciones para {count} líneas seleccionadas",
 	"ui.actionMenu.actions": "Acciones",
@@ -2109,6 +2045,8 @@ export default {
 	"feature.collabora.add-collabora-file-dialog.option.text": ".docx (Texto)",
 	"feature.collabora.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Hoja de cálculo)",
 	"feature.collabora.add-collabora-file-dialog.option.presentation": ".pptx (Presentación)",
+	"pages.fwu-media.title": "FWU Medios",
+	"pages.fwu-media.items": "FWU Medios",
 	"pages.folder.emptyState": "Actualmente no hay archivos aquí",
 	"pages.folder.fab.title": "Añadir archivo",
 	"pages.folder.untitled": "Carpeta sin título",

@@ -1,22 +1,21 @@
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import StartExistingCourseSyncDialog from "./StartExistingCourseSyncDialog.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { MeResponse, RoleName } from "@/serverApi/v3";
-import { createTestAppStore, expectNotification, groupResponseFactory } from "@@/tests/test-utils";
+import { createTestAppStore, expectNotification, groupResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { MeResponse, RoleName } from "@api-server";
 import { useCourseApi } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { nextTick } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 vi.mock("@data-room");
 
 describe("StartExistingCourseSyncDialog", () => {
-	let courseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
+	let courseApiMock: Mocked<ReturnType<typeof useCourseApi>>;
 
 	const getWrapper = (
 		props: ComponentProps<typeof StartExistingCourseSyncDialog> = {
@@ -31,7 +30,7 @@ describe("StartExistingCourseSyncDialog", () => {
 
 		const wrapper = mount(StartExistingCourseSyncDialog, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: {
 					GroupSelectionDialog: true,
 					VDialog: true,
@@ -48,7 +47,7 @@ describe("StartExistingCourseSyncDialog", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		courseApiMock = createMock<ReturnType<typeof useCourseApi>>();
+		courseApiMock = mockComposable(useCourseApi);
 
 		vi.mocked(useCourseApi).mockReturnValue(courseApiMock);
 	});
@@ -234,7 +233,7 @@ describe("StartExistingCourseSyncDialog", () => {
 						id: me.user?.id,
 						firstName: me.user.firstName,
 						lastName: me.user.lastName,
-						role: RoleName.Teacher,
+						role: RoleName.TEACHER,
 					},
 				],
 			});
@@ -267,7 +266,7 @@ describe("StartExistingCourseSyncDialog", () => {
 						id: "otherUserId",
 						firstName: "firstname",
 						lastName: "lastname",
-						role: RoleName.Teacher,
+						role: RoleName.TEACHER,
 					},
 				],
 			});
@@ -302,7 +301,7 @@ describe("StartExistingCourseSyncDialog", () => {
 					courseTeachers: ["firstname lastname"],
 				},
 				{
-					roles: [{ id: "0", name: RoleName.Administrator }],
+					roles: [{ id: "0", name: RoleName.ADMINISTRATOR }],
 				}
 			);
 
@@ -312,19 +311,19 @@ describe("StartExistingCourseSyncDialog", () => {
 						id: "otherUserId",
 						firstName: "firstname",
 						lastName: "lastname",
-						role: RoleName.Teacher,
+						role: RoleName.TEACHER,
 					},
 					{
 						id: "otherUserId1",
 						firstName: "firstname1",
 						lastName: "lastname1",
-						role: RoleName.Teacher,
+						role: RoleName.TEACHER,
 					},
 					{
 						id: "otherUserId2",
 						firstName: "firstname2",
 						lastName: "lastname2",
-						role: RoleName.Teacher,
+						role: RoleName.TEACHER,
 					},
 				],
 			});
@@ -357,7 +356,7 @@ describe("StartExistingCourseSyncDialog", () => {
 					courseTeachers: ["Firstname Lastname", "another teacher"],
 				},
 				{
-					roles: [{ id: "0", name: RoleName.Administrator }],
+					roles: [{ id: "0", name: RoleName.ADMINISTRATOR }],
 				}
 			);
 
@@ -367,7 +366,7 @@ describe("StartExistingCourseSyncDialog", () => {
 						id: "otherUserId",
 						firstName: "Firstname",
 						lastName: "Lastname",
-						role: RoleName.Teacher,
+						role: RoleName.TEACHER,
 					},
 				],
 			});

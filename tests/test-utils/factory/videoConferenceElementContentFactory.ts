@@ -1,7 +1,6 @@
+import { VideoConferenceElementContent } from "@api-server";
 import { Factory } from "fishery";
-import { VideoConferenceElementContent } from "@/serverApi/v3";
 
-export const videoConferenceElementContentFactory =
-	Factory.define<VideoConferenceElementContent>(({ sequence }) => ({
-		title: `name${sequence}`,
-	}));
+export const videoConferenceElementContentFactory = Factory.define<VideoConferenceElementContent>(({ sequence }) => ({
+	title: `name${sequence}`,
+}));

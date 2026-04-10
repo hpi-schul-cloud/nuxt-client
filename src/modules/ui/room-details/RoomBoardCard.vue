@@ -15,15 +15,15 @@
 		@keydown.down.prevent="onMoveCardDown"
 		@keydown.up.prevent="onMoveCardUp"
 	>
-		<VCardText class="pb-1">
+		<VCardText class="pt-2">
 			<div class="top-row-container mb-0">
-				<div class="d-flex align-center mb-3 tagline">
+				<div class="d-flex align-center tagline">
 					<VIcon size="14" class="mr-1" :icon="titleIcon" />
 					<span class="title-board-card" :data-testid="`board-card-title-${boardCardIndex}`">
 						{{ cardTitle }}
 					</span>
 				</div>
-				<div v-if="userRole === Roles.Teacher" class="dot-menu-section">
+				<div v-if="userRole === Roles.TEACHER" class="dot-menu-section">
 					<RoomDotMenu
 						:menu-items="actionsMenuItems"
 						:data-testid="`board-card-menu-${boardCardIndex}`"
@@ -31,11 +31,11 @@
 					/>
 				</div>
 			</div>
-			<h2 class="text-h4 board-title mt-2" :data-testid="`board-title-${boardCardIndex}`">
+			<h2 class="text-h4 board-title mt-1 mb-1" :data-testid="`board-title-${boardCardIndex}`">
 				{{ boardTitle }}
 			</h2>
 		</VCardText>
-		<VCardActions v-if="isDraft && userRole === Roles.Teacher" data-testid="board-card-actions">
+		<VCardActions v-if="isDraft && userRole === Roles.TEACHER" data-testid="board-card-actions">
 			<VBtn
 				v-for="(action, index) in cardActions"
 				:key="index"
@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import RoomDotMenu from "./RoomDotMenu.vue";
-import { BoardLayout, ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import { BoardLayout, ImportUserResponseRoleNames as Roles } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiContentCopy,
@@ -109,7 +109,7 @@ const cardTitle = computed(() => {
 
 const isDraft = computed(() => !props.columnBoardItem.published);
 
-const isListBoard = computed(() => props.columnBoardItem.layout === BoardLayout.List);
+const isListBoard = computed(() => props.columnBoardItem.layout === BoardLayout.LIST);
 
 const titleIcon = computed(() => {
 	const icon = isListBoard.value ? mdiViewAgendaOutline : mdiViewDashboardOutline;
@@ -225,7 +225,7 @@ const actionsMenuItems = computed(() => {
 .top-row-container {
 	display: grid;
 	grid-template-columns: 94% 6%;
-	align-items: center;
+	min-height: 36px;
 
 	.tagline {
 		text-align: left;

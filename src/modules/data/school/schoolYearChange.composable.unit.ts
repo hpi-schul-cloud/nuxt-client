@@ -6,17 +6,18 @@ import {
 	expectNotification,
 	i18nMock,
 	maintenanceStatusFactory,
+	mockComposable,
 	mountComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 vi.mock("@data-school/schoolApi.composable");
 
 describe("SchoolYearChange.composable", () => {
-	let useSchoolApiMock: DeepMocked<ReturnType<typeof useSchoolApi>>;
+	let useSchoolApiMock: Mocked<ReturnType<typeof useSchoolApi>>;
 
 	const setupComposable = () => {
 		const composable = mountComposable(() => useSchoolYearChange(), {
@@ -33,7 +34,7 @@ describe("SchoolYearChange.composable", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		useSchoolApiMock = createMock<ReturnType<typeof useSchoolApi>>();
+		useSchoolApiMock = mockComposable(useSchoolApi);
 
 		vi.mocked(useSchoolApi).mockReturnValue(useSchoolApiMock);
 	});

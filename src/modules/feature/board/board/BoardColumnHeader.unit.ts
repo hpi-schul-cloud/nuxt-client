@@ -1,8 +1,8 @@
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
-import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useBoardFocusHandler, useBoardPermissions, useCourseBoardEditMode } from "@data-board";
+import { useBoardFocusHandler, useCourseBoardEditMode } from "@data-board";
 import { BoardColumnInteractionHandler } from "@feature-board";
 import {
 	KebabMenuActionDelete,
@@ -13,11 +13,8 @@ import {
 	KebabMenuActionRename,
 } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
-import { flatten } from "lodash";
-import { computed, nextTick, ref } from "vue";
-
-vi.mock("@data-board/BoardPermissions.composable");
-const mockedUserPermissions = vi.mocked(useBoardPermissions);
+import { flatten } from "lodash-es";
+import { computed } from "vue";
 
 vi.mock("@data-board/BoardFocusHandler.composable");
 const mockUseBoardFocusHandler = vi.mocked(useBoardFocusHandler);
@@ -31,21 +28,19 @@ describe("BoardColumnHeader", () => {
 
 	const setup = (
 		options: {
-			permissions?: Partial<BoardPermissionChecks>;
 			isEditMode?: boolean;
+			canEditColumn?: boolean;
+			canDeleteColumn?: boolean;
 		} = {},
 		props?: object
 	) => {
 		const isEditMode = computed(() => options.isEditMode ?? true);
+		const { canEditColumn = true, canDeleteColumn = true } = options;
 
 		mockedUseEditMode.mockReturnValue({
 			isEditMode,
 			startEditMode: mockedStartEditMode,
 			stopEditMode: mockedStopEditMode,
-		});
-		mockedUserPermissions.mockReturnValue({
-			...defaultPermissions,
-			...options?.permissions,
 		});
 		mockUseBoardFocusHandler.mockReturnValue({
 			isFocusContained: undefined,
@@ -57,10 +52,11 @@ describe("BoardColumnHeader", () => {
 			},
 			propsData: {
 				title: "title-text",
-				titlePlaceholder: "Spalte 1",
 				columnId: "abc123",
 				isListBoard: false,
 				index: 0,
+				canEditColumn,
+				canDeleteColumn,
 				...props,
 			},
 		});
@@ -165,7 +161,7 @@ describe("BoardColumnHeader", () => {
 		describe("when move-column-keyboard-event is received", () => {
 			describe("when arrow-up-key is received", () => {
 				it("should emit move:column-left", () => {
-					const wrapper = setup({ permissions: { hasDeletePermission: ref(true) } }, { isListBoard: true });
+					const wrapper = setup({ canDeleteColumn: true }, { isListBoard: true });
 
 					const interactionHandler = wrapper.findComponent(BoardColumnInteractionHandler);
 					interactionHandler.vm.$emit("move:column-keyboard", {
@@ -179,7 +175,7 @@ describe("BoardColumnHeader", () => {
 
 			describe("when arrow-right-key is received", () => {
 				it("should emit move:column-left", () => {
-					const wrapper = setup({ permissions: { hasDeletePermission: ref(true) } }, { isListBoard: true });
+					const wrapper = setup({ canDeleteColumn: true }, { isListBoard: true });
 
 					const interactionHandler = wrapper.findComponent(BoardColumnInteractionHandler);
 					interactionHandler.vm.$emit("move:column-keyboard", {
@@ -256,7 +252,7 @@ describe("BoardColumnHeader", () => {
 				it("should emit move:column-left", () => {
 					const wrapper = setup({
 						isEditMode: false,
-						permissions: { hasDeletePermission: ref(true) },
+						canDeleteColumn: true,
 					});
 
 					const interactionHandler = wrapper.findComponent(BoardColumnInteractionHandler);
@@ -273,7 +269,7 @@ describe("BoardColumnHeader", () => {
 				it("should emit move:column-left", () => {
 					const wrapper = setup({
 						isEditMode: false,
-						permissions: { hasDeletePermission: ref(true) },
+						canDeleteColumn: true,
 					});
 
 					const interactionHandler = wrapper.findComponent(BoardColumnInteractionHandler);
@@ -292,7 +288,7 @@ describe("BoardColumnHeader", () => {
 		it("should start the edit mode", () => {
 			const wrapper = setup({
 				isEditMode: false,
-				permissions: { hasDeletePermission: ref(true) },
+				canEditColumn: true,
 			});
 
 			const action = wrapper.findComponent(KebabMenuActionRename);
@@ -300,13 +296,27 @@ describe("BoardColumnHeader", () => {
 
 			expect(mockedStartEditMode).toHaveBeenCalled();
 		});
+
+		describe("when user cannot edit columns", () => {
+			it("should not start the edit mode", () => {
+				const wrapper = setup({
+					isEditMode: false,
+					canEditColumn: false,
+				});
+
+				const action = wrapper.findComponent(KebabMenuActionRename);
+				action.trigger("click");
+
+				expect(mockedStartEditMode).not.toHaveBeenCalled();
+			});
+		});
 	});
 
 	describe("when end-edit-mode event is received", () => {
 		it("should stop the edit mode", () => {
 			const wrapper = setup({
 				isEditMode: false,
-				permissions: { hasDeletePermission: ref(true) },
+				canDeleteColumn: true,
 			});
 
 			const interactionHandler = wrapper.findComponent(BoardColumnInteractionHandler);
@@ -314,19 +324,33 @@ describe("BoardColumnHeader", () => {
 
 			expect(mockedStopEditMode).toHaveBeenCalled();
 		});
+
+		describe("when user cannot edit columns", () => {
+			it("should not stop the edit mode", () => {
+				const wrapper = setup({
+					isEditMode: false,
+					canEditColumn: false,
+				});
+
+				const interactionHandler = wrapper.findComponent(BoardColumnInteractionHandler);
+				interactionHandler.vm.$emit("end-edit-mode");
+
+				expect(mockedStopEditMode).not.toHaveBeenCalled();
+			});
+		});
 	});
 
 	describe("when delete button is clicked", () => {
 		describe("when delete is confirmed", () => {
 			it("should emit delete:column", async () => {
+				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 				const wrapper = setup({
 					isEditMode: false,
-					permissions: { hasDeletePermission: ref(true) },
+					canDeleteColumn: true,
 				});
 
 				const deleteAction = wrapper.findComponent(KebabMenuActionDelete);
-				deleteAction.vm.$emit("click", true);
-				await nextTick();
+				await deleteAction.trigger("click");
 
 				const emitted = wrapper.emitted();
 				expect(emitted["delete:column"]).toBeDefined();
@@ -334,15 +358,15 @@ describe("BoardColumnHeader", () => {
 		});
 
 		describe("when delete is refused", () => {
-			it("should emit delete:column", async () => {
+			it("should not emit delete:column", async () => {
+				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(false);
 				const wrapper = setup({
 					isEditMode: false,
-					permissions: { hasDeletePermission: ref(true) },
+					canDeleteColumn: true,
 				});
 
 				const deleteAction = wrapper.findComponent(KebabMenuActionDelete);
-				deleteAction.vm.$emit("click", false);
-				await nextTick();
+				await deleteAction.trigger("click");
 
 				const emitted = wrapper.emitted();
 				expect(emitted["delete:column"]).not.toBeDefined();
@@ -354,7 +378,7 @@ describe("BoardColumnHeader", () => {
 		describe("when user is not permitted to delete a column", () => {
 			it("should not be rendered on DOM", () => {
 				const wrapper = setup({
-					permissions: { hasDeletePermission: ref(false) },
+					canDeleteColumn: false,
 				});
 
 				const boardMenuComponent = wrapper.findAllComponents({
@@ -363,6 +387,17 @@ describe("BoardColumnHeader", () => {
 
 				expect(boardMenuComponent.length).toStrictEqual(0);
 			});
+		});
+	});
+
+	describe("when the title prop changes externally", () => {
+		it("should update the input value", async () => {
+			const wrapper = setup();
+			const newTitle = "Externally updated title";
+			await wrapper.setProps({ title: newTitle });
+
+			const titleInput = wrapper.findComponent(BoardAnyTitleInput);
+			expect(titleInput.props("value")).toBe(newTitle);
 		});
 	});
 });

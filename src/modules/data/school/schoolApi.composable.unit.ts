@@ -1,13 +1,13 @@
 import { useSchoolApi } from "./schoolApi.composable";
-import * as serverApi from "@/serverApi/v3/api";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { mockApi } from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
+import { Mocked } from "vitest";
 
 describe("SchoolApi.composable", () => {
-	let schoolApi: DeepMocked<serverApi.SchoolApiInterface>;
+	let schoolApi: Mocked<serverApi.SchoolApiInterface>;
 
 	beforeEach(() => {
-		schoolApi = createMock<serverApi.SchoolApiInterface>();
-
+		schoolApi = mockApi<serverApi.SchoolApiInterface>();
 		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
 	});
 

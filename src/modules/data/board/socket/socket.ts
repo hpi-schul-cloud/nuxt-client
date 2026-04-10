@@ -2,8 +2,11 @@ import { useBoardStore } from "../Board.store";
 import { useCardStore } from "../Card.store";
 import { useConnectionErrorHandling } from "./socket-error-handler";
 import { Action } from "@/types/board/ActionFactory";
+import { $axios } from "@/utils/api";
+import { BoardErrorReportApiFactory } from "@api-server";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
+import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
 import { useTimeoutFn } from "@vueuse/shared";
 import { io, type Socket } from "socket.io-client";
@@ -30,8 +33,12 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 	const cardStore = useCardStore();
 	const { t } = useI18n();
 
+	const boardErrorReportApi = BoardErrorReportApiFactory(undefined, "/v3", $axios);
+
+	const { isJwtExpired } = useSessionBroadcast();
+
 	const getConnectedSocket = () => {
-		if (instance === null) {
+		if (instance === null && isJwtExpired.value === false) {
 			instance = io(useEnvConfig().value.BOARD_COLLABORATION_URI, {
 				path: "/board-collaboration",
 				withCredentials: true,
@@ -73,7 +80,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 		}
 
 		connected.value = instance?.connected ?? false;
-		if (!instance.connected) {
+		if (instance?.connected === false) {
 			instance.connect();
 		}
 
@@ -82,12 +89,12 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 	const emitOnSocket = (action: string, data: unknown) => {
 		const socket = getConnectedSocket();
-		socket.emit(action, data);
+		socket?.emit(action, data);
 	};
 
 	const emitWithAck = (action: string, data: unknown) => {
 		const socket = getConnectedSocket();
-		return socket.timeout(30000).emitWithAck(action, data);
+		return socket?.timeout(30000).emitWithAck(action, data);
 	};
 
 	const disconnectSocket = () => {

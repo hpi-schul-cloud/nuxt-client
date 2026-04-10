@@ -15,41 +15,31 @@
 		@keydown.space.prevent="onKeyPress"
 		@keydown.tab="$emit('tab-pressed')"
 	>
-		<v-card-text class="pb-0" data-testid="content-card-lesson-content">
+		<v-card-text class="pt-2" data-testid="content-card-lesson-content">
 			<div class="top-row-container mb-0">
 				<div class="title-section">
 					{{ $t("common.words.topic") }}
 				</div>
 				<div class="dot-menu-section">
 					<RoomDotMenu
-						v-if="userRole === Roles.Teacher"
+						v-if="userRole === Roles.TEACHER"
 						:menu-items="moreActionsMenuItems"
 						:data-testid="`lesson-card-menu-${lessonCardIndex}`"
 						:aria-label="$t('pages.room.lessonCard.menu.ariaLabel')"
 					/>
 				</div>
 			</div>
-			<div
-				class="text-h4 text--primary mb-2 lesson-name"
-				role="heading"
-				aria-level="2"
-				tabindex="-1"
-				:data-testid="`lesson-name-${lessonCardIndex}`"
-			>
+			<h2 class="text-h4 mt-1 mb-1 lesson-name" :data-testid="`lesson-name-${lessonCardIndex}`">
 				{{ lesson.name }}
-			</div>
-		</v-card-text>
-		<v-card-text v-if="showChip" class="ma-0 pb-0 pt-0 submitted-section" data-testid="content-card-lesson-info">
-			<div class="chip-items-group">
-				<div class="bg-grey-lighten-2 chip-item px-1 mr-1 mb-0">
-					<div class="chip-value">
-						{{ taskChipValue }}
-					</div>
+			</h2>
+			<div v-if="showChip" class="ma-0 pb-1 pt-0 submitted-section" data-testid="content-card-lesson-info">
+				<div class="chip-items-group">
+					<v-chip size="small" :text="taskChipValue" />
 				</div>
 			</div>
 		</v-card-text>
 		<v-card-actions
-			v-if="userRole === Roles.Teacher"
+			v-if="userRole === Roles.TEACHER && cardActions.length > 0"
 			class="pt-1"
 			:data-testid="`lesson-card-actions-${lessonCardIndex}`"
 		>
@@ -71,8 +61,8 @@
 <script setup lang="ts">
 import RoomDotMenu from "./RoomDotMenu.vue";
 import { LessonData } from "./types";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { RoomData } from "@/store/types/room";
+import { ImportUserResponseRoleNames as Roles } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiContentCopy,

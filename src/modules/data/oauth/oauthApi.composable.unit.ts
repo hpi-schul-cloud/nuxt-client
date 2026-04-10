@@ -1,15 +1,15 @@
 import { useOAuthApi } from "./oauthApi.composable";
-import * as serverApi from "@/serverApi/v3/api";
-import { OAuthApiInterface, OAuthSessionTokenExpirationResponse } from "@/serverApi/v3/api";
-import { axiosErrorFactory, mockApiResponse } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { axiosErrorFactory, mockApi, mockApiResponse } from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
+import { OAuthApiInterface, OAuthSessionTokenExpirationResponse } from "@api-server";
 import { HttpStatusCode } from "axios";
+import { Mocked } from "vitest";
 
 describe("oauthApi.composable", () => {
-	let oauthApi: DeepMocked<OAuthApiInterface>;
+	let oauthApi: Mocked<OAuthApiInterface>;
 
 	beforeEach(() => {
-		oauthApi = createMock<OAuthApiInterface>();
+		oauthApi = mockApi<OAuthApiInterface>();
 
 		vi.spyOn(serverApi, "OAuthApiFactory").mockReturnValue(oauthApi);
 	});

@@ -1,19 +1,20 @@
 import { useExternalToolReferenceApi } from "./externalToolReferenceApi.composable";
 import { ExternalToolDisplayData } from "./types";
-import * as serverApi from "@/serverApi/v3/api";
-import { ToolContextType, ToolReferenceResponse } from "@/serverApi/v3/api";
 import {
 	contextExternalToolConfigurationStatusFactory,
+	mockApi,
 	mockApiResponse,
 	toolReferenceResponseFactory,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import * as serverApi from "@api-server";
+import { ToolContextType, ToolReferenceResponse } from "@api-server";
+import { Mocked } from "vitest";
 
 describe("externalToolReferenceApi.composable", () => {
-	let toolApi: DeepMocked<serverApi.ToolApiInterface>;
+	let toolApi: Mocked<serverApi.ToolApiInterface>;
 
 	beforeEach(() => {
-		toolApi = createMock<serverApi.ToolApiInterface>();
+		toolApi = mockApi<serverApi.ToolApiInterface>();
 
 		vi.spyOn(serverApi, "ToolApiFactory").mockReturnValue(toolApi);
 	});
@@ -74,11 +75,11 @@ describe("externalToolReferenceApi.composable", () => {
 		it("should call the api for tool references", async () => {
 			setup();
 
-			await useExternalToolReferenceApi().fetchDisplayDataForContext("contextId", ToolContextType.Course);
+			await useExternalToolReferenceApi().fetchDisplayDataForContext("contextId", ToolContextType.COURSE);
 
 			expect(toolApi.toolReferenceControllerGetToolReferencesForContext).toHaveBeenCalledWith(
 				"contextId",
-				ToolContextType.Course
+				ToolContextType.COURSE
 			);
 		});
 
@@ -87,7 +88,7 @@ describe("externalToolReferenceApi.composable", () => {
 
 			const result: ExternalToolDisplayData[] = await useExternalToolReferenceApi().fetchDisplayDataForContext(
 				"contextId",
-				ToolContextType.Course
+				ToolContextType.COURSE
 			);
 
 			expect(result).toEqual<ExternalToolDisplayData[]>([

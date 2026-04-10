@@ -5,9 +5,8 @@
 		data-testid="collaborative-text-editor-element"
 		variant="outlined"
 		:ripple="false"
-		tabindex="0"
-		role="button"
 		:aria-label="ariaLabel"
+		:role="isEditMode ? undefined : 'link'"
 		@keydown.up.down="onKeydownArrow"
 		@click="redirectToEditorUrl"
 		@keydown.enter.space="redirectToEditorUrl"
@@ -45,8 +44,8 @@
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
 import image from "@/assets/img/collaborativeEditor.svg";
-import { CollaborativeTextEditorElementResponse, CollaborativeTextEditorParentType } from "@/serverApi/v3";
 import { injectStrict } from "@/utils/inject";
+import { CollaborativeTextEditorElementResponse, CollaborativeTextEditorParentType } from "@api-server";
 import { useBoardFocusHandler } from "@data-board";
 import { mdiTextBoxEditOutline } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
@@ -81,7 +80,7 @@ const { getUrl } = useCollaborativeTextEditorApi();
 const redirectToEditorUrl = async () => {
 	const windowReference = window.open();
 
-	getUrl(element.value.id, CollaborativeTextEditorParentType.ContentElement).then((url) => {
+	getUrl(element.value.id, CollaborativeTextEditorParentType.CONTENT_ELEMENT).then((url) => {
 		if (url && windowReference) {
 			windowReference.location = url;
 		}

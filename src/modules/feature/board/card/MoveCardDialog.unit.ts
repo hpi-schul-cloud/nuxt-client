@@ -1,6 +1,5 @@
 import { useCardDialogData } from "./card-dialog-composable";
 import MoveCardDialog from "./MoveCardDialog.vue";
-import { Permission } from "@/serverApi/v3";
 import {
 	columnResponseFactory,
 	mockApiResponse,
@@ -13,7 +12,7 @@ import { useBoardStore } from "@data-board";
 import { useRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { WarningAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -33,9 +32,9 @@ const mockCardDialogData: ReturnType<typeof useCardDialogData> = {
 };
 
 const mockRooms = [
-	roomItemFactory.build({ permissions: [Permission.RoomEditContent] }),
-	roomItemFactory.build({ permissions: [Permission.RoomEditContent] }),
-	roomItemFactory.build({ permissions: [] }),
+	roomItemFactory.build({ allowedOperations: { editContent: true } }),
+	roomItemFactory.build({ allowedOperations: { editContent: true } }),
+	roomItemFactory.build({ allowedOperations: { editContent: false } }),
 ];
 
 vi.mock("./card-dialog-composable", () => ({
@@ -83,7 +82,7 @@ describe("MoveCardDialog", () => {
 	it("should notify about the success of the move action.", async () => {
 		const { wrapper } = setup();
 
-		const dialog = wrapper.findComponent(Dialog);
+		const dialog = wrapper.findComponent(SvsDialog);
 		await dialog.vm.$emit("confirm");
 		await flushPromises();
 		expect(useBoardStore().moveCardToBoardRequest).toHaveBeenCalled();

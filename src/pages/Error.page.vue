@@ -7,10 +7,10 @@
 	</div>
 </template>
 <script lang="ts" setup>
-import ErrorContent from "@/components/error-handling/ErrorContent.vue";
 import { useStorage } from "@/composables/locale-storage.composable";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStore, useAppStoreRefs } from "@data-app";
+import { ErrorContent } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, onUnmounted } from "vue";
 import { useI18n } from "vue-i18n";

@@ -1,14 +1,14 @@
 import { SchoolExternalTool, SchoolExternalToolSave } from "./external-tool";
 import { SchoolExternalToolMapper } from "./external-tool/mapper";
 import { BusinessError } from "./types/commons";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	SchoolExternalToolConfigurationTemplateListResponse,
 	SchoolExternalToolConfigurationTemplateResponse,
 	SchoolExternalToolResponse,
 	ToolApiFactory,
 	ToolApiInterface,
-} from "@/serverApi/v3";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+} from "@api-server";
 import { ContextExternalToolConfigurationTemplate, SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";

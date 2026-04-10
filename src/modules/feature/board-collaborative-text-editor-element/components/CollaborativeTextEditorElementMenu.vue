@@ -6,14 +6,12 @@
 	>
 		<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 		<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-		<KebabMenuActionDelete
-			scope-language-key="components.cardElement.collaborativeTextEditorElement"
-			@click="onDelete"
-		/>
+		<KebabMenuActionDelete @click="onDelete" />
 	</BoardMenu>
 </template>
 
 <script setup lang="ts">
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 
@@ -31,8 +29,8 @@ const emit = defineEmits<{
 	(e: "move-up:element"): void;
 }>();
 
-const onDelete = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDelete = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.collaborativeTextEditorElement");
 	if (shouldDelete) {
 		emit("delete:element");
 	}

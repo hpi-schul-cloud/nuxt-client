@@ -1,15 +1,15 @@
 import { useSchoolExternalToolApi } from "./SchoolExternalToolApi.composable";
-import { SchoolExternalToolMetadataResponse } from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3/api";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
-import { mockApiResponse, schoolExternalToolMetadataResponseFactory } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { mockApi, mockApiResponse, schoolExternalToolMetadataResponseFactory } from "@@/tests/test-utils";
+import { SchoolExternalToolMetadataResponse } from "@api-server";
+import * as serverApi from "@api-server";
+import { Mocked } from "vitest";
 
 describe("SchoolExternalToolApi.composable", () => {
-	let toolApi: DeepMocked<serverApi.ToolApiInterface>;
+	let toolApi: Mocked<serverApi.ToolApiInterface>;
 
 	beforeEach(() => {
-		toolApi = createMock<serverApi.ToolApiInterface>();
+		toolApi = mockApi<serverApi.ToolApiInterface>();
 
 		vi.spyOn(serverApi, "ToolApiFactory").mockReturnValue(toolApi);
 	});

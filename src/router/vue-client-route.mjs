@@ -4,8 +4,6 @@
 
 const mongoId = "[a-z0-9]{24}";
 const h5pId = "[a-z0-9]+";
-const activationCode = "[a-z0-9]+";
-const uuid = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
 
 const vueRoutes = [
 	`^/favicon.png$`,
@@ -14,7 +12,6 @@ const vueRoutes = [
 	`^/collabora/spreadsheet.xlsx$`,
 	`^/_nuxt/*`,
 	`^/runtime.config.json`,
-	`^/activation/${activationCode}/?$`,
 	`^/administration/?$`,
 	`^/administration/students/?$`,
 	`^/administration/students/new/?$`,
@@ -35,18 +32,18 @@ const vueRoutes = [
 	`^/administration/rooms/manage/${mongoId}?$`,
 	`^/boards/${mongoId}/?$`,
 	`^/collabora/${mongoId}/?$`,
-	`^/content/?$`,
-	`^/content/${uuid}/?$`,
 	`^/error/?$`,
 	`^/h5p/player/${h5pId}/?$`,
 	`^/h5p/editor/?$`,
 	`^/h5p/editor/${h5pId}/?$`,
+	`^/dashboard/?$`,
 	`^/imprint/?$`,
 	`^/licenses/?$`,
 	`^/migration/?$`,
 	`^/migration/success/?$`,
 	`^/migration/error/?$`,
 	`^/media-shelf/?$`,
+	`^/media-shelf/fwu-media/?$`,
 	`^/news/new/?$`,
 	`^/news/${mongoId}/edit/?$`,
 	`^/poc-files/?$`,
@@ -61,6 +58,7 @@ const vueRoutes = [
 	`^/rooms/courses-list/?$`,
 	`^/rooms/courses-overview/?$`,
 	`^/rooms-overview/?$`,
+	`^/system/security`,
 	`^/tasks/?$`,
 	`^/tools/context/tool-configuration/?$`,
 	`^/tools/context/tool-configuration/${mongoId}/?$`,

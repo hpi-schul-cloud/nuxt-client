@@ -1,16 +1,16 @@
 import EndCourseSyncDialog from "./EndCourseSyncDialog.vue";
-import { expectNotification } from "@@/tests/test-utils";
+import { expectNotification, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useCourseApi } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 vi.mock("@data-room");
 
 describe("EndCourseSyncDialog", () => {
-	let courseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
+	let courseApiMock: Mocked<ReturnType<typeof useCourseApi>>;
 
 	const getWrapper = () => {
 		const wrapper = mount(EndCourseSyncDialog, {
@@ -32,7 +32,7 @@ describe("EndCourseSyncDialog", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		courseApiMock = createMock<ReturnType<typeof useCourseApi>>();
+		courseApiMock = mockComposable(useCourseApi);
 
 		vi.mocked(useCourseApi).mockReturnValue(courseApiMock);
 	});

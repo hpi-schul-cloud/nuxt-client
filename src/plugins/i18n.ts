@@ -1,7 +1,3 @@
-// It looks like we have to use default exports and no additional imports in the language files. Otherwise resource pre-compilation will fail.
-// https://github.com/intlify/bundle-tools/blob/b245313be48c089db3f325f9bc96ad37ab2011b8/packages/bundle-utils/src/js.ts#L83C1-L109C6
-// Pre-compilation is needed in order to make CSP work
-// https://github.com/intlify/bundle-tools/blob/main/packages/vue-i18n-loader/README.md#-i18n-resource-pre-compilation
 import deDE from "../locales/de";
 import enGB from "../locales/en";
 import esES from "../locales/es";
@@ -24,9 +20,7 @@ const messages: Record<SupportedLanguages, MessageSchema> = {
 	uk: { ...ukUA, $vuetify: ukVuetify },
 };
 
-const fileSizeFormat = {
-	maximumFractionDigits: 2,
-};
+const fileSizeFormat = { maximumFractionDigits: 2 };
 
 const numberFormats = {
 	de: {
@@ -46,6 +40,7 @@ const numberFormats = {
 const localCreateI18n = () => {
 	// If false, the type is a Composer instance for the Composition API, if true, the type is a VueI18n instance for the legacy API
 	// https://vue-i18n.intlify.dev/guide/advanced/typescript#global-resource-schema-type-definition
+
 	const i18n = createI18n<false>({
 		legacy: false,
 		locale: useAppStore().locale,

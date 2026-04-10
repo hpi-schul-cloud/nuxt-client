@@ -8,7 +8,7 @@ import { ComponentProps } from "vue-component-type-helpers";
 const mockBoard: RoomBoardItem = {
 	id: "59cce2c61113d1132c98dc06",
 	title: "A11Y for Beginners",
-	layout: BoardLayout.Columns,
+	layout: BoardLayout.COLUMNS,
 	isVisible: false,
 	createdAt: "2017-09-28T11:49:39.924Z",
 	updatedAt: "2017-09-28T11:49:39.924Z",

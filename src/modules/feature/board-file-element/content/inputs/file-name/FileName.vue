@@ -50,7 +50,7 @@ const rules = {
 
 		return validateOnOpeningTag(nameWithExtension);
 	},
-	isRequired: (value: string) => isRequired(t("common.validation.required"))(value),
+	isRequired: (value: string) => isRequired()(value),
 	invalidCharacters: (value: string) => validateInvalidCharacters(value, ["/"]),
 };
 

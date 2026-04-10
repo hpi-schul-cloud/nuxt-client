@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { SchulcloudTheme } from "@/serverApi/v3";
+import { SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { mdiLogin } from "@icons/material";
 import { computed, ref } from "vue";
@@ -60,7 +60,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const activeLink = ref(window.location.pathname);
 
-const isDefaultTheme = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.Default);
+const isDefaultTheme = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.DEFAULT);
 
 const hasButtons = computed(() => !props.hideButtons && isDefaultTheme.value);
 

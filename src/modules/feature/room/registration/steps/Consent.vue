@@ -70,7 +70,7 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { SchulcloudTheme } from "@/serverApi/v3";
+import { SchulcloudTheme } from "@api-server";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { isRequired } from "@util-validators";
@@ -92,7 +92,7 @@ const envConfig = useEnvConfig();
 const { instituteTitle, env } = storeToRefs(useEnvStore());
 const BRB_INSTANCE_TITLE = "Schul-Cloud Brandenburg";
 const instanceTitle = computed(() =>
-	envConfig.value.SC_THEME === SchulcloudTheme.Brb ? BRB_INSTANCE_TITLE : envConfig.value.SC_TITLE
+	envConfig.value.SC_THEME === SchulcloudTheme.BRB ? BRB_INSTANCE_TITLE : envConfig.value.SC_TITLE
 );
 
 const sanitizedSupportEmail = computed(() =>
@@ -100,14 +100,14 @@ const sanitizedSupportEmail = computed(() =>
 );
 
 const declarationOfConsentText = computed(() => {
-	if (envConfig.value.SC_THEME === SchulcloudTheme.Brb) {
+	if (envConfig.value.SC_THEME === SchulcloudTheme.BRB) {
 		return "pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.brb";
 	}
 	return "pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.default";
 });
 
 const declarationOfConsentSubtext = computed(() => {
-	if (envConfig.value.SC_THEME === SchulcloudTheme.Brb) {
+	if (envConfig.value.SC_THEME === SchulcloudTheme.BRB) {
 		return "pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.brb";
 	}
 	return "pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.default";

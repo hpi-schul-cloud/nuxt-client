@@ -5,9 +5,10 @@
 		data-testid="drawing-element"
 		variant="outlined"
 		:ripple="false"
-		:href="sanitizedUrl"
-		target="_blank"
 		:aria-label="ariaLabel"
+		v-bind="isEditMode ? {} : { href: sanitizedUrl, target: '_blank', rel: 'noopener noreferrer' }"
+		v-on="isEditMode ? { click: redirectToSanitizedUrl } : {}"
+		@keydown.enter.space="redirectToSanitizedUrl"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
@@ -21,10 +22,7 @@
 					>
 						<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveDrawingElementEditUp" />
 						<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDrawingElementEditDown" />
-						<KebabMenuActionDelete
-							scope-language-key="components.cardElement.drawingElement"
-							@click="onDeleteElement"
-						/>
+						<KebabMenuActionDelete @click="onDeleteElement" />
 					</BoardMenu>
 				</template>
 			</InnerContent>
@@ -34,7 +32,8 @@
 
 <script setup lang="ts">
 import InnerContent from "./InnerContent.vue";
-import { DrawingElementResponse } from "@/serverApi/v3";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
+import { DrawingElementResponse } from "@api-server";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
@@ -62,6 +61,10 @@ const element = toRef(props, "element");
 
 const sanitizedUrl = computed(() => sanitizeUrl(`/tldraw?parentId=${element.value.id}`));
 
+const redirectToSanitizedUrl = () => {
+	window.open(sanitizedUrl.value, "_blank", "noopener noreferrer");
+};
+
 useBoardFocusHandler(element.value.id, drawingElement);
 
 const onKeydownArrow = (event: KeyboardEvent) => {
@@ -72,8 +75,8 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 };
 const onMoveDrawingElementEditDown = () => emit("move-down:edit");
 const onMoveDrawingElementEditUp = () => emit("move-up:edit");
-const onDeleteElement = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDeleteElement = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.drawingElement");
 	if (shouldDelete) {
 		emit("delete:element", props.element.id);
 	}

@@ -1,0 +1,78 @@
+import AdminTableLegend from "./AdminTableLegend.vue";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { SchulcloudTheme } from "@api-server";
+import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
+import { nextTick } from "vue";
+
+const icons = [
+	{ icon: "mdi-check", color: "green", label: "Label 1" },
+	{ icon: "mdi-close", color: "red", label: "Label 2" },
+];
+
+describe("AdminTableLegend", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore();
+	});
+
+	afterEach(() => {
+		vi.clearAllMocks();
+	});
+
+	const setup = (props = {}) => {
+		const wrapper = mount(AdminTableLegend, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				mocks: {
+					$t: (key: string, placeholders: Record<string, string> = {}) =>
+						`${key}|${Object.values(placeholders || {}).join("|")}`,
+				},
+			},
+			props: {
+				icons,
+				showIcons: true,
+				showExternalSyncHint: false,
+				...props,
+			},
+		});
+
+		return { wrapper };
+	};
+
+	it("renders icons and labels when showIcons is true", () => {
+		const { wrapper } = setup({ showIcons: true });
+		const legend = wrapper.find('[data-testid="legend-icons"]');
+		expect(legend.findAll(".consent-icon li").length).toBe(icons.length);
+		expect(legend.text()).toContain("Label 1");
+		expect(legend.text()).toContain("Label 2");
+	});
+
+	it("does not render icons when showIcons is false", () => {
+		const { wrapper } = setup({ showIcons: false });
+		expect(wrapper.find('[data-testid="legend-icons"]').exists()).toBe(false);
+	});
+
+	it("renders THR-specific text if isThr is true", () => {
+		createTestEnvStore({ SC_THEME: SchulcloudTheme.THR });
+		const { wrapper } = setup();
+
+		expect(wrapper.text()).toContain("components.molecules.admintablelegend.thr");
+	});
+
+	it.each([
+		[SchulcloudTheme.DEFAULT, "Dataport"],
+		[SchulcloudTheme.BRB, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
+		[SchulcloudTheme.N21, "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)"],
+	])("uses %s-instance specific text placeholders", async (theme, expected) => {
+		createTestEnvStore({ SC_THEME: theme });
+		const { wrapper } = setup();
+
+		await nextTick();
+
+		expect(wrapper.text()).toContain(expected);
+	});
+});

@@ -1,12 +1,12 @@
 import NavigationBar from "./NavigationBar.vue";
-import { SchulcloudTheme } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 
-describe("@/components/legacy/NavigationBar", () => {
+describe("NavigationBar", () => {
 	const navbarLinks = [
 		{
 			title: "global.topbar.loggedOut.actions.blog",
@@ -31,7 +31,6 @@ describe("@/components/legacy/NavigationBar", () => {
 		const wrapper = mount(NavigationBar, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				stubs: ["base-link"],
 			},
 			props: {
 				links: navbarLinks,
@@ -44,7 +43,7 @@ describe("@/components/legacy/NavigationBar", () => {
 	};
 
 	it("renders logo, links and buttons for default theme", () => {
-		createTestEnvStore({ SC_THEME: SchulcloudTheme.Default });
+		createTestEnvStore({ SC_THEME: SchulcloudTheme.DEFAULT });
 		const { wrapper, img } = getWrapper();
 
 		const wrapperVm = wrapper.vm as unknown as typeof NavigationBar;
@@ -59,7 +58,7 @@ describe("@/components/legacy/NavigationBar", () => {
 		expect(wrapperVm.hasButtons).toBe(true);
 	});
 
-	it.each([SchulcloudTheme.N21, SchulcloudTheme.Brb])(
+	it.each([SchulcloudTheme.N21, SchulcloudTheme.BRB])(
 		"does render logo but not links and Buttons for %s theme",
 		(theme) => {
 			createTestEnvStore({ SC_THEME: theme });

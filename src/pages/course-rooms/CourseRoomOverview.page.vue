@@ -1,9 +1,10 @@
 <template>
-	<room-wrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
+	<CourseRoomWrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
 		<template #header>
 			<h1 class="py-2">
 				{{ $t("pages.courseRooms.index.courses.active") }}
 			</h1>
+
 			<div class="mb-5 header-actions-section">
 				<v-btn variant="outlined" size="small" to="/rooms/courses-list" data-testid="go-to-all-courses">
 					{{ $t("pages.courseRooms.index.courses.all") }}
@@ -13,7 +14,6 @@
 					v-model="allowDragging"
 					class="enable-disable"
 					:label="$t('pages.courseRooms.index.courses.arrangeCourses')"
-					:aria-label="$t('pages.courseRooms.index.courses.arrangeCourses')"
 					:true-icon="mdiCheck"
 					hide-details
 				/>
@@ -21,16 +21,13 @@
 		</template>
 		<template #page-content>
 			<div>
-				<v-text-field
+				<SvsSearchField
 					ref="search"
 					v-model="searchText"
-					class="room-search px-1"
-					variant="solo"
-					rounded
-					single-line
+					density="default"
+					class="px-1 mb-6"
 					:label="$t('pages.courseRooms.index.search.label')"
-					:append-inner-icon="mdiMagnify"
-					:aria-label="$t('pages.courseRooms.index.search.label')"
+					:clearable="false"
 					data-testid="search-field-course"
 				/>
 				<div v-for="(row, rowIndex) in dimensions.rowCount" :key="rowIndex" class="room-overview-row">
@@ -92,7 +89,7 @@
 				</div>
 			</div>
 		</template>
-	</room-wrapper>
+	</CourseRoomWrapper>
 	<room-modal
 		v-model:is-open="groupDialog.isOpen"
 		aria-describedby="folder open"
@@ -112,28 +109,29 @@
 </template>
 
 <script>
-import RoomAvatar from "@/components/atoms/RoomAvatar.vue";
-import RoomEmptyAvatar from "@/components/atoms/RoomEmptyAvatar.vue";
-import RoomGroupAvatar from "@/components/molecules/RoomGroupAvatar.vue";
-import RoomModal from "@/components/molecules/RoomModal.vue";
+import CourseRoomAvatar from "@/components/course-rooms/CourseRoomAvatar.vue";
+import CourseRoomEmptyAvatar from "@/components/course-rooms/CourseRoomEmptyAvatar.vue";
+import CourseRoomGroupAvatar from "@/components/course-rooms/CourseRoomGroupAvatar.vue";
+import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
+import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { courseRoomListModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
-import { mdiCheck, mdiMagnify } from "@icons/material";
+import { mdiCheck } from "@icons/material";
+import { SvsSearchField } from "@ui-controls";
 import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
 	components: {
-		RoomWrapper,
-		RoomAvatar,
-		RoomGroupAvatar,
-		RoomEmptyAvatar,
-		RoomModal,
+		CourseRoomWrapper,
+		RoomAvatar: CourseRoomAvatar,
+		RoomGroupAvatar: CourseRoomGroupAvatar,
+		RoomEmptyAvatar: CourseRoomEmptyAvatar,
+		RoomModal: CourseRoomModal,
 		ImportFlow,
+		SvsSearchField,
 	},
-	layout: "defaultVuetify",
 	setup() {
 		const refs = reactive({});
 
@@ -166,7 +164,6 @@ export default defineComponent({
 			showDeleteSection: false,
 			roomNameEditMode: false,
 			draggedElementName: "",
-			mdiMagnify,
 			searchText: "",
 			dragging: false,
 			allowDragging: false,

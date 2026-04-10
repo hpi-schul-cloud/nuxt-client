@@ -1,5 +1,6 @@
-import { LanguageType, MeResponse, Permission, RoleName } from "@/serverApi/v3";
+import { createDayJs } from "@/utils/date-time.utils";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { LanguageType, MeResponse, Permission, RoleName } from "@api-server";
 import { AlertStatus, useAppStore, useNotificationStore } from "@data-app";
 import { DeepPartial, Factory } from "fishery";
 import { Pinia } from "pinia";
@@ -19,9 +20,12 @@ export const meResponseFactory = Factory.define<MeResponse>(({ sequence }) => ({
 			name: `logoName${sequence}`,
 		},
 	},
+	preferences: {
+		releaseDate: null,
+	},
 	roles: [],
 	permissions: [],
-	language: LanguageType.De,
+	language: LanguageType.DE,
 	account: {
 		id: `account-${sequence}`,
 	},
@@ -37,8 +41,9 @@ export const createTestAppStore = ({
 	const mockedMe = meResponseFactory.build(me);
 	const store = useAppStore(pinia);
 
-	store.$patch({ meResponse: mockedMe });
+	store.$patch({ meResponse: mockedMe, userLocale: mockedMe.language });
 	const appStore = mockedPiniaStoreTyping(useAppStore);
+	createDayJs();
 
 	return { mockedMe, appStore };
 };
@@ -60,4 +65,8 @@ export const createTestAppStoreWithRole = (roleName: RoleName, pinia?: Pinia) =>
 
 export const expectNotification = (status: AlertStatus) => {
 	expect(useNotificationStore().notify).toHaveBeenCalledWith(expect.objectContaining({ status }));
+};
+
+export const expectNoNotification = () => {
+	expect(useNotificationStore().notify).not.toHaveBeenCalled();
 };

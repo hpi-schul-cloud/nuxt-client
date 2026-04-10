@@ -1,7 +1,7 @@
 import { useRegistrationStore } from "./registration.store";
 import { useRegistrationStepper } from "./registrationStepper.composable";
-import { LanguageType } from "@/serverApi/v3";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { LanguageType } from "@api-server";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
@@ -13,7 +13,7 @@ vi.mock("vue-i18n", async () => {
 		...actual,
 		useI18n: () => ({
 			t: vi.fn((key: string) => key),
-			locale: ref(LanguageType.En),
+			locale: ref(LanguageType.EN),
 		}),
 	};
 });
@@ -47,12 +47,12 @@ describe("useRegistrationStepper", () => {
 	});
 
 	it("should initialize selectedLanguage from USER_LANG cookie", () => {
-		document.cookie = `USER_LANG=${LanguageType.En}`;
+		document.cookie = `USER_LANG=${LanguageType.EN}`;
 
 		const { selectedLanguage, initializeLanguage } = setup();
 		initializeLanguage();
 
-		expect(selectedLanguage.value).toBe(LanguageType.En);
+		expect(selectedLanguage.value).toBe(LanguageType.EN);
 	});
 
 	describe("when setSelectedLanguage is called", () => {
@@ -63,10 +63,10 @@ describe("useRegistrationStepper", () => {
 			const oneDay = 24 * 60 * 60 * 1000;
 			expires.setTime(expires.getTime() + oneDay);
 
-			setSelectedLanguage(LanguageType.De);
+			setSelectedLanguage(LanguageType.DE);
 
 			expect(document.cookie).toBe(
-				`USER_LANG=${LanguageType.De}; path=/; expires=${expires.toUTCString()}; SameSite=Lax`
+				`USER_LANG=${LanguageType.DE}; path=/; expires=${expires.toUTCString()}; SameSite=Lax`
 			);
 		});
 
@@ -75,9 +75,9 @@ describe("useRegistrationStepper", () => {
 
 			expect(selectedLanguage.value).toBeUndefined();
 
-			setSelectedLanguage(LanguageType.Es);
+			setSelectedLanguage(LanguageType.ES);
 
-			expect(selectedLanguage.value).toBe(LanguageType.Es);
+			expect(selectedLanguage.value).toBe(LanguageType.ES);
 		});
 	});
 
@@ -90,6 +90,7 @@ describe("useRegistrationStepper", () => {
 			firstName: "Jane",
 			lastName: "Doe",
 			email: "",
+			registeredUserExists: false,
 		};
 
 		expect(fullName.value).toBe("Jane Doe");

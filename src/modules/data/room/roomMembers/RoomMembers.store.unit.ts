@@ -1,6 +1,4 @@
 import { useI18nGlobal } from "@/plugins/i18n";
-import * as serverApi from "@/serverApi/v3/api";
-import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName, SchoolUserListResponse } from "@/serverApi/v3/api";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
@@ -9,7 +7,9 @@ import {
 	axiosErrorFactory,
 	createTestAppStore,
 	expectNotification,
+	mockApi,
 	mockApiResponse,
+	mockAxiosInstance,
 	mockedPiniaStoreTyping,
 	roomFactory,
 	roomMemberFactory,
@@ -18,22 +18,28 @@ import {
 	schoolFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
+import * as serverApi from "@api-server";
+import {
+	ChangeRoomRoleBodyParamsRoleName,
+	RoleName,
+	RoomMemberListResponse,
+	SchoolUserListResponse,
+} from "@api-server";
 import { ExternalMemberCheckStatus, RoomMember, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
-import { Mock, MockInstance, vi } from "vitest";
+import { Mock, Mocked, MockInstance, vi } from "vitest";
 import { nextTick } from "vue";
 
 vi.mock("@/plugins/i18n");
 (useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("useRoomMembers", () => {
-	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
-	let schoolApiMock: DeepMocked<serverApi.SchoolApiInterface>;
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let roomApiMock: Mocked<serverApi.RoomApiInterface>;
+	let schoolApiMock: Mocked<serverApi.SchoolApiInterface>;
+	let axiosMock: Mocked<AxiosInstance>;
 	let consoleErrorSpy: MockInstance;
 	const ownSchool = {
 		id: "school-id",
@@ -51,9 +57,9 @@ describe("useRoomMembers", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		roomApiMock = createMock<serverApi.RoomApiInterface>();
-		schoolApiMock = createMock<serverApi.SchoolApiInterface>();
-		axiosMock = createMock<AxiosInstance>();
+		roomApiMock = mockApi<serverApi.RoomApiInterface>();
+		schoolApiMock = mockApi<serverApi.SchoolApiInterface>();
+		axiosMock = mockAxiosInstance();
 		consoleErrorSpy = vi.spyOn(logger, "error").mockImplementation(vi.fn());
 
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
@@ -94,8 +100,8 @@ describe("useRoomMembers", () => {
 				const { roomMembersStore } = setup();
 
 				const membersMock = roomMemberFactory.buildList(3, {
-					roomRoleName: RoleName.Roomadmin,
-					schoolRoleNames: [RoleName.Teacher],
+					roomRoleName: RoleName.ROOMADMIN,
+					schoolRoleNames: [RoleName.TEACHER],
 					schoolId: "school-id-1",
 				});
 
@@ -121,8 +127,8 @@ describe("useRoomMembers", () => {
 				const { roomMembersStore } = setup();
 
 				const membersMock = roomMemberFactory.buildList(3, {
-					roomRoleName: RoleName.Roomviewer,
-					schoolRoleNames: [RoleName.Student],
+					roomRoleName: RoleName.ROOMVIEWER,
+					schoolRoleNames: [RoleName.STUDENT],
 				});
 
 				roomApiMock.roomControllerGetMembers.mockResolvedValue(
@@ -146,8 +152,8 @@ describe("useRoomMembers", () => {
 			it("should fetch expert members and map members with role names", async () => {
 				const { roomMembersStore } = setup();
 				const membersMock = roomMemberFactory.buildList(3, {
-					roomRoleName: RoleName.Roomeditor,
-					schoolRoleNames: [RoleName.ExternalPerson],
+					roomRoleName: RoleName.ROOMEDITOR,
+					schoolRoleNames: [RoleName.EXTERNAL_PERSON],
 				});
 				roomApiMock.roomControllerGetMembers.mockResolvedValue(
 					mockApiResponse({
@@ -170,7 +176,7 @@ describe("useRoomMembers", () => {
 			it("should fetch members and map members with role names", async () => {
 				const { roomMembersStore } = setup();
 				const membersMock = roomMemberFactory.buildList(3, {
-					roomRoleName: RoleName.Roomowner,
+					roomRoleName: RoleName.ROOMOWNER,
 				});
 
 				roomApiMock.roomControllerGetMembers.mockResolvedValue(
@@ -198,8 +204,8 @@ describe("useRoomMembers", () => {
 			it("should map the school role to teacher", async () => {
 				const { roomMembersStore } = setup();
 				const membersMock = roomMemberFactory.buildList(1, {
-					roomRoleName: RoleName.Roomadmin,
-					schoolRoleNames: [RoleName.Administrator, RoleName.Teacher],
+					roomRoleName: RoleName.ROOMADMIN,
+					schoolRoleNames: [RoleName.ADMINISTRATOR, RoleName.TEACHER],
 				});
 
 				roomApiMock.roomControllerGetMembers.mockResolvedValue(
@@ -258,14 +264,14 @@ describe("useRoomMembers", () => {
 				})
 			);
 
-			await roomMembersStore.getPotentialMembers(RoleName.Teacher);
+			await roomMembersStore.getPotentialMembers(RoleName.TEACHER);
 
 			expect(roomMembersStore.potentialRoomMembers).toEqual(
 				schoolTeachersList.data.map((user) => ({
 					...user,
 					userId: user.id,
 					fullName: `${user.lastName}, ${user.firstName}`,
-					schoolRoleNames: [RoleName.Teacher],
+					schoolRoleNames: [RoleName.TEACHER],
 					schoolName: "Paul-Gerhardt-Gymnasium",
 					schoolId: "school-id",
 					displaySchoolRole: "common.labels.teacher.neutral",
@@ -298,14 +304,14 @@ describe("useRoomMembers", () => {
 				})
 			);
 
-			await roomMembersStore.getPotentialMembers(RoleName.Student);
+			await roomMembersStore.getPotentialMembers(RoleName.STUDENT);
 
 			expect(roomMembersStore.potentialRoomMembers).toEqual(
 				schoolStudentList.data.map((user) => ({
 					...user,
 					userId: user.id,
 					fullName: `${user.lastName}, ${user.firstName}`,
-					schoolRoleNames: [RoleName.Student],
+					schoolRoleNames: [RoleName.STUDENT],
 					schoolName: "Paul-Gerhardt-Gymnasium",
 					schoolId: "school-id",
 					displaySchoolRole: "common.labels.student.neutral",
@@ -317,7 +323,7 @@ describe("useRoomMembers", () => {
 			const { roomMembersStore } = setup();
 
 			const membersMock = roomMemberFactory.build({
-				roomRoleName: RoleName.Roomeditor,
+				roomRoleName: RoleName.ROOMEDITOR,
 			});
 
 			roomMembersStore.roomMembers = [membersMock];
@@ -338,7 +344,7 @@ describe("useRoomMembers", () => {
 				})
 			);
 
-			await roomMembersStore.getPotentialMembers(RoleName.Teacher);
+			await roomMembersStore.getPotentialMembers(RoleName.TEACHER);
 
 			expect(roomMembersStore.potentialRoomMembers).toEqual([]);
 		});
@@ -349,7 +355,7 @@ describe("useRoomMembers", () => {
 			const error = new Error("Test error");
 			schoolApiMock.schoolControllerGetTeachers.mockRejectedValue(error);
 
-			await roomMembersStore.getPotentialMembers(RoleName.Teacher);
+			await roomMembersStore.getPotentialMembers(RoleName.TEACHER);
 			expectNotification("error");
 		});
 	});
@@ -358,15 +364,15 @@ describe("useRoomMembers", () => {
 		describe("when the current user is a student", () => {
 			it("should return true", () => {
 				const userId = "student-id";
-				createAuthTestUser(userId, RoleName.Student);
+				createAuthTestUser(userId, RoleName.STUDENT);
 
 				const { roomMembersStore } = setup();
 
 				const roomMembers = roomMemberFactory.buildList(2, {
-					roomRoleName: RoleName.Roomviewer,
+					roomRoleName: RoleName.ROOMVIEWER,
 				});
 
-				roomMembers[0].schoolRoleNames = [RoleName.Student];
+				roomMembers[0].schoolRoleNames = [RoleName.STUDENT];
 				roomMembers[0].userId = userId;
 				roomMembersStore.roomMembers = [...roomMembers];
 
@@ -376,15 +382,15 @@ describe("useRoomMembers", () => {
 		describe("when the current user is not a student", () => {
 			it("should return false", () => {
 				const userId = "teacher-id";
-				createAuthTestUser(userId, RoleName.Teacher);
+				createAuthTestUser(userId, RoleName.TEACHER);
 
 				const { roomMembersStore } = setup();
 
 				const roomMembers = roomMemberFactory.buildList(2, {
-					roomRoleName: RoleName.Roomviewer,
+					roomRoleName: RoleName.ROOMVIEWER,
 				});
 
-				roomMembers[0].schoolRoleNames = [RoleName.Teacher];
+				roomMembers[0].schoolRoleNames = [RoleName.TEACHER];
 				roomMembers[0].userId = userId;
 				roomMembersStore.roomMembers = [...roomMembers];
 
@@ -452,15 +458,15 @@ describe("useRoomMembers", () => {
 		describe("when the current user is a student", () => {
 			it("should not fetch the school list", async () => {
 				const userId = "student-id";
-				createAuthTestUser(userId, RoleName.Student);
+				createAuthTestUser(userId, RoleName.STUDENT);
 
 				const { roomMembersStore } = setup();
 
 				const roomMembers = roomMemberFactory.buildList(2, {
-					roomRoleName: RoleName.Roomviewer,
+					roomRoleName: RoleName.ROOMVIEWER,
 				});
 
-				roomMembers[0].schoolRoleNames = [RoleName.Student];
+				roomMembers[0].schoolRoleNames = [RoleName.STUDENT];
 				roomMembers[0].userId = userId;
 				roomMembersStore.roomMembers = [...roomMembers];
 
@@ -476,58 +482,85 @@ describe("useRoomMembers", () => {
 	});
 
 	describe("addMembers", () => {
-		it("should add teachers to the room", async () => {
-			const { roomMembersStore, roomDetailsStore } = setup();
+		describe("when adding teachers to the room", () => {
+			it("should update the memberlist afterwards", async () => {
+				const { roomMembersStore, roomDetailsStore } = setup();
 
-			roomApiMock.roomControllerAddMembers.mockResolvedValue(
-				mockApiResponse({ data: { roomRoleName: RoleName.Roomadmin } })
-			);
+				roomMembersStore.potentialRoomMembers = roomMemberFactory.buildList(3, {
+					roomRoleName: RoleName.ROOMADMIN,
+					schoolRoleNames: [RoleName.TEACHER],
+				});
+				const firstPotentialMember = roomMembersStore.potentialRoomMembers[0];
+				roomApiMock.roomControllerAddMembers.mockResolvedValue(
+					mockApiResponse({ data: { roomRoleName: RoleName.ROOMADMIN } })
+				);
+				roomApiMock.roomControllerGetMembers.mockResolvedValue(
+					mockApiResponse<RoomMemberListResponse>({
+						data: {
+							data: [
+								{
+									...firstPotentialMember,
+									roomRoleName: RoleName.ROOMADMIN,
+								},
+							],
+						},
+					})
+				);
 
-			roomMembersStore.potentialRoomMembers = roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomadmin,
-				schoolRoleNames: [RoleName.Teacher],
+				await roomMembersStore.addMembers([firstPotentialMember.userId]);
+
+				expect(roomApiMock.roomControllerAddMembers).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
+					userIds: [firstPotentialMember.userId],
+				});
+				expect(roomMembersStore.roomMembers).toEqual([
+					{
+						...firstPotentialMember,
+						displayRoomRole: "pages.rooms.members.roomPermissions.admin",
+						displaySchoolRole: "common.labels.teacher.neutral",
+					},
+				]);
 			});
-			const firstPotentialMember = roomMembersStore.potentialRoomMembers[0];
-
-			await roomMembersStore.addMembers([firstPotentialMember.userId]);
-
-			expect(roomApiMock.roomControllerAddMembers).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
-				userIds: [firstPotentialMember.userId],
-			});
-			expect(roomMembersStore.roomMembers).toEqual([
-				{
-					...firstPotentialMember,
-					displayRoomRole: "pages.rooms.members.roomPermissions.admin",
-					displaySchoolRole: "common.labels.teacher.neutral",
-				},
-			]);
 		});
 
-		it("should add students to the room", async () => {
-			const { roomMembersStore, roomDetailsStore } = setup();
+		describe("when adding students to the room", () => {
+			it("should update the memberlist afterwards", async () => {
+				const { roomMembersStore, roomDetailsStore } = setup();
 
-			roomApiMock.roomControllerAddMembers.mockResolvedValue(
-				mockApiResponse({ data: { roomRoleName: RoleName.Roomviewer } })
-			);
+				roomApiMock.roomControllerAddMembers.mockResolvedValue(
+					mockApiResponse({ data: { roomRoleName: RoleName.ROOMVIEWER } })
+				);
 
-			roomMembersStore.potentialRoomMembers = roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomviewer,
-				schoolRoleNames: [RoleName.Student],
+				roomMembersStore.potentialRoomMembers = roomMemberFactory.buildList(3, {
+					roomRoleName: RoleName.ROOMVIEWER,
+					schoolRoleNames: [RoleName.STUDENT],
+				});
+				const firstPotentialMember = roomMembersStore.potentialRoomMembers[0];
+				roomApiMock.roomControllerGetMembers.mockResolvedValue(
+					mockApiResponse<serverApi.RoomMemberListResponse>({
+						data: {
+							data: [
+								{
+									...firstPotentialMember,
+									roomRoleName: RoleName.ROOMVIEWER,
+								},
+							],
+						},
+					})
+				);
+
+				await roomMembersStore.addMembers([firstPotentialMember.userId]);
+
+				expect(roomApiMock.roomControllerAddMembers).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
+					userIds: [firstPotentialMember.userId],
+				});
+				expect(roomMembersStore.roomMembers).toEqual([
+					{
+						...firstPotentialMember,
+						displayRoomRole: "pages.rooms.members.roomPermissions.viewer",
+						displaySchoolRole: "common.labels.student.neutral",
+					},
+				]);
 			});
-			const firstPotentialMember = roomMembersStore.potentialRoomMembers[0];
-
-			await roomMembersStore.addMembers([firstPotentialMember.userId]);
-
-			expect(roomApiMock.roomControllerAddMembers).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
-				userIds: [firstPotentialMember.userId],
-			});
-			expect(roomMembersStore.roomMembers).toEqual([
-				{
-					...firstPotentialMember,
-					displayRoomRole: "pages.rooms.members.roomPermissions.viewer",
-					displaySchoolRole: "common.labels.student.neutral",
-				},
-			]);
 		});
 
 		it("should throw an error if the API call fails", async () => {
@@ -548,7 +581,7 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerRemoveMembers.mockResolvedValue(mockApiResponse({}));
 
 			const membersMock = roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomeditor,
+				roomRoleName: RoleName.ROOMEDITOR,
 			});
 			roomMembersStore.roomMembers = membersMock;
 
@@ -601,20 +634,20 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerChangeRolesOfMembers.mockResolvedValue(mockApiResponse({}));
 
 			const membersMock = roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomviewer,
+				roomRoleName: RoleName.ROOMVIEWER,
 			});
 			roomMembersStore.roomMembers = membersMock;
 
 			roomMembersStore.selectedIds = [membersMock[1].userId];
 
-			await roomMembersStore.updateMembersRole(ChangeRoomRoleBodyParamsRoleNameEnum.Roomadmin);
+			await roomMembersStore.updateMembersRole(ChangeRoomRoleBodyParamsRoleName.ROOMADMIN);
 
 			expect(roomApiMock.roomControllerChangeRolesOfMembers).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
 				userIds: [membersMock[1].userId],
-				roleName: RoleName.Roomadmin,
+				roleName: RoleName.ROOMADMIN,
 			});
 
-			expect(roomMembersStore.roomMembers[1].roomRoleName).toBe(RoleName.Roomadmin);
+			expect(roomMembersStore.roomMembers[1].roomRoleName).toBe(RoleName.ROOMADMIN);
 			expect(roomMembersStore.roomMembers[1].displayRoomRole).toBe("pages.rooms.members.roomPermissions.admin");
 		});
 
@@ -624,18 +657,18 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerChangeRolesOfMembers.mockResolvedValue(mockApiResponse({}));
 
 			const membersMock = roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomviewer,
+				roomRoleName: RoleName.ROOMVIEWER,
 			});
 			roomMembersStore.roomMembers = membersMock;
 
-			await roomMembersStore.updateMembersRole(ChangeRoomRoleBodyParamsRoleNameEnum.Roomadmin, membersMock[1].userId);
+			await roomMembersStore.updateMembersRole(ChangeRoomRoleBodyParamsRoleName.ROOMADMIN, membersMock[1].userId);
 
 			expect(roomApiMock.roomControllerChangeRolesOfMembers).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
 				userIds: [membersMock[1].userId],
-				roleName: RoleName.Roomadmin,
+				roleName: RoleName.ROOMADMIN,
 			});
 
-			expect(roomMembersStore.roomMembers[1].roomRoleName).toBe(RoleName.Roomadmin);
+			expect(roomMembersStore.roomMembers[1].roomRoleName).toBe(RoleName.ROOMADMIN);
 			expect(roomMembersStore.roomMembers[1].displayRoomRole).toBe("pages.rooms.members.roomPermissions.admin");
 		});
 
@@ -645,7 +678,7 @@ describe("useRoomMembers", () => {
 			const error = new Error("Test error");
 			roomApiMock.roomControllerChangeRolesOfMembers.mockRejectedValue(error);
 
-			await roomMembersStore.updateMembersRole(ChangeRoomRoleBodyParamsRoleNameEnum.Roomadmin);
+			await roomMembersStore.updateMembersRole(ChangeRoomRoleBodyParamsRoleName.ROOMADMIN);
 			expectNotification("error");
 		});
 	});
@@ -655,7 +688,7 @@ describe("useRoomMembers", () => {
 			const { roomMembersStore, roomDetailsStore } = setup();
 
 			const membersMock = roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomviewer,
+				roomRoleName: RoleName.ROOMVIEWER,
 			});
 			roomMembersStore.roomMembers = membersMock;
 
@@ -670,30 +703,30 @@ describe("useRoomMembers", () => {
 			const { roomMembersStore } = setup();
 
 			const roomViewers = roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomviewer,
+				roomRoleName: RoleName.ROOMVIEWER,
 			});
 			const roomOwner = roomMemberFactory.build({
-				roomRoleName: RoleName.Roomowner,
+				roomRoleName: RoleName.ROOMOWNER,
 			});
 			const futureRoomOwner = roomViewers.pop();
 			if (futureRoomOwner) {
 				roomMembersStore.roomMembers = [roomOwner, futureRoomOwner, ...roomViewers];
 			}
 
-			expect(roomOwner.roomRoleName).toBe(RoleName.Roomowner);
-			expect(futureRoomOwner?.roomRoleName).toBe(RoleName.Roomviewer);
+			expect(roomOwner.roomRoleName).toBe(RoleName.ROOMOWNER);
+			expect(futureRoomOwner?.roomRoleName).toBe(RoleName.ROOMVIEWER);
 
 			await roomMembersStore.changeRoomOwner(futureRoomOwner?.userId ?? "");
 
-			expect(roomOwner.roomRoleName).toBe(RoleName.Roomadmin);
-			expect(futureRoomOwner?.roomRoleName).toBe(RoleName.Roomowner);
+			expect(roomOwner.roomRoleName).toBe(RoleName.ROOMADMIN);
+			expect(futureRoomOwner?.roomRoleName).toBe(RoleName.ROOMOWNER);
 		});
 
 		it('should show an error if the "currentOwner" or "memberToBeOwner" is not found', async () => {
 			const { roomMembersStore } = setup();
 
 			const membersMock = roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomviewer,
+				roomRoleName: RoleName.ROOMVIEWER,
 			});
 			const futureRoomOwner = membersMock.pop();
 			if (futureRoomOwner) {
@@ -720,7 +753,7 @@ describe("useRoomMembers", () => {
 			const { roomMembersStore, roomDetailsStore } = setup();
 
 			const membersMock = roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomapplicant,
+				roomRoleName: RoleName.ROOMAPPLICANT,
 			});
 			roomMembersStore.roomMembers = membersMock;
 
@@ -728,7 +761,7 @@ describe("useRoomMembers", () => {
 
 			expect(roomApiMock.roomControllerChangeRolesOfMembers).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
 				userIds: [membersMock[0].userId],
-				roleName: ChangeRoomRoleBodyParamsRoleNameEnum.Roomviewer,
+				roleName: ChangeRoomRoleBodyParamsRoleName.ROOMVIEWER,
 			});
 		});
 
@@ -736,7 +769,7 @@ describe("useRoomMembers", () => {
 			const { roomMembersStore } = setup();
 
 			const membersMock = roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomapplicant,
+				roomRoleName: RoleName.ROOMAPPLICANT,
 			});
 			roomMembersStore.roomMembers = membersMock;
 
@@ -744,7 +777,7 @@ describe("useRoomMembers", () => {
 
 			await roomMembersStore.confirmInvitations([membersMock[0].userId]);
 
-			expect(roomMembersStore.roomMembers[0].roomRoleName).toBe(RoleName.Roomviewer);
+			expect(roomMembersStore.roomMembers[0].roomRoleName).toBe(RoleName.ROOMVIEWER);
 			expect(roomMembersStore.roomMembers[0].displayRoomRole).toBe("pages.rooms.members.roomPermissions.viewer");
 		});
 
@@ -764,7 +797,7 @@ describe("useRoomMembers", () => {
 			const { roomMembersStore, roomDetailsStore } = setup();
 
 			const membersMock = roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomapplicant,
+				roomRoleName: RoleName.ROOMAPPLICANT,
 			});
 			roomMembersStore.roomMembers = membersMock;
 
@@ -779,7 +812,7 @@ describe("useRoomMembers", () => {
 			const { roomMembersStore } = setup();
 
 			const membersMock = roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomapplicant,
+				roomRoleName: RoleName.ROOMAPPLICANT,
 			});
 			roomMembersStore.roomMembers = membersMock;
 
@@ -808,7 +841,7 @@ describe("useRoomMembers", () => {
 					const { roomMembersStore } = setup();
 
 					const membersMock = roomMemberFactory.buildList(3, {
-						roomRoleName: RoleName.Roomapplicant,
+						roomRoleName: RoleName.ROOMAPPLICANT,
 					});
 					roomMembersStore.roomMembers = membersMock;
 
@@ -821,7 +854,7 @@ describe("useRoomMembers", () => {
 					const { roomMembersStore } = setup();
 
 					const membersMock = roomMemberFactory.buildList(3, {
-						roomRoleName: RoleName.Roomapplicant,
+						roomRoleName: RoleName.ROOMAPPLICANT,
 					});
 					roomMembersStore.roomMembers = membersMock;
 
@@ -837,7 +870,7 @@ describe("useRoomMembers", () => {
 					const { roomMembersStore } = setup();
 
 					const membersMock = roomMemberFactory.buildList(3, {
-						roomRoleName: RoleName.Roomapplicant,
+						roomRoleName: RoleName.ROOMAPPLICANT,
 					});
 					roomMembersStore.roomMembers = membersMock;
 
@@ -850,7 +883,7 @@ describe("useRoomMembers", () => {
 					const { roomMembersStore } = setup();
 
 					const membersMock = roomMemberFactory.buildList(3, {
-						roomRoleName: RoleName.Roomapplicant,
+						roomRoleName: RoleName.ROOMAPPLICANT,
 					});
 					roomMembersStore.roomMembers = membersMock;
 
@@ -866,7 +899,7 @@ describe("useRoomMembers", () => {
 			const { roomMembersStore } = setup();
 
 			const membersMock = roomMemberFactory.build({
-				roomRoleName: RoleName.Roomeditor,
+				roomRoleName: RoleName.ROOMEDITOR,
 			});
 			roomMembersStore.roomMembers = [membersMock];
 			expect(roomMembersStore.roomMembers).toHaveLength(1);
@@ -901,7 +934,7 @@ describe("useRoomMembers", () => {
 				})
 			);
 
-			await roomMembersStore.getPotentialMembers(RoleName.Student);
+			await roomMembersStore.getPotentialMembers(RoleName.STUDENT);
 			expect(roomMembersStore.potentialRoomMembers).toHaveLength(1);
 
 			roomMembersStore.resetPotentialMembers();
@@ -914,7 +947,7 @@ describe("useRoomMembers", () => {
 			it("should return true", () => {
 				const { roomMembersStore } = setup();
 				const roomOwner = roomMemberFactory.build({
-					roomRoleName: RoleName.Roomowner,
+					roomRoleName: RoleName.ROOMOWNER,
 				});
 				roomMembersStore.roomMembers = [roomOwner];
 
@@ -926,7 +959,7 @@ describe("useRoomMembers", () => {
 			it("should return false", () => {
 				const { roomMembersStore } = setup();
 				const roomViewer = roomMemberFactory.build({
-					roomRoleName: RoleName.Roomviewer,
+					roomRoleName: RoleName.ROOMVIEWER,
 				});
 				roomMembersStore.roomMembers = [roomViewer];
 
@@ -970,7 +1003,7 @@ describe("useRoomMembers", () => {
 	describe("getMemberFullName", () => {
 		it("should return the full name of the member", async () => {
 			const member = roomMemberFactory.build({
-				roomRoleName: RoleName.Roomadmin,
+				roomRoleName: RoleName.ROOMADMIN,
 			});
 			const { roomMembersStore } = setup([member]);
 
@@ -983,7 +1016,7 @@ describe("useRoomMembers", () => {
 	describe("getRoomOwnerFullName", () => {
 		it("should return the full name of the room owner", async () => {
 			const roomOwner = roomMemberFactory.build({
-				roomRoleName: RoleName.Roomowner,
+				roomRoleName: RoleName.ROOMOWNER,
 			});
 			const { roomMembersStore } = setup([roomOwner]);
 
@@ -998,10 +1031,10 @@ describe("useRoomMembers", () => {
 			const { roomMembersStore } = setup();
 
 			const roomApplicants = roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomapplicant,
+				roomRoleName: RoleName.ROOMAPPLICANT,
 			});
 			const roomMembersWithoutApplicants = roomMemberFactory.buildList(2, {
-				roomRoleName: RoleName.Roomviewer,
+				roomRoleName: RoleName.ROOMVIEWER,
 			});
 
 			roomMembersStore.roomMembers = [...roomApplicants, ...roomMembersWithoutApplicants];

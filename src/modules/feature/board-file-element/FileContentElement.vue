@@ -30,11 +30,7 @@
 			>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<KebabMenuActionDelete
-					:name="fileProperties.name"
-					scope-language-key="components.cardElement.fileElement"
-					@click="onDelete"
-				/>
+				<KebabMenuActionDelete :name="fileProperties.name" @click="onDelete" />
 			</BoardMenu>
 		</FileContent>
 		<FileUpload
@@ -47,7 +43,7 @@
 			<BoardMenu :scope="BoardMenuScope.FILE_ELEMENT" has-background>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<KebabMenuActionDelete scope-language-key="components.cardElement.fileElement" @click="onDelete" />
+				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</FileUpload>
 		<FileAlerts :alerts="alerts" @on-status-reload="onFetchFile" />
@@ -60,10 +56,11 @@ import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
-import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
-import { FileElementResponse } from "@/serverApi/v3";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { convertDownloadToPreviewUrl, isPreviewPossible, isScanStatusBlocked } from "@/utils/fileHelper";
-import { useBoardFocusHandler, useBoardPermissions, useContentElementState } from "@data-board";
+import { FileRecordParentType, PreviewWidth } from "@api-file-storage";
+import { FileElementResponse } from "@api-server";
+import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { useFileStorageApi } from "@data-file";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
@@ -92,6 +89,8 @@ const emit = defineEmits<{
 	(e: "move-keyboard:edit", event: KeyboardEvent): void;
 }>();
 
+const { allowedOperations } = useBoardAllowedOperations();
+
 const { t } = useI18n();
 const router = useRouter();
 
@@ -103,7 +102,6 @@ useBoardFocusHandler(element.value.id, fileContentElement);
 
 const { modelValue } = useContentElementState(props);
 const { fetchFiles, upload, getFileRecordsByParentId, rename } = useFileStorageApi();
-const { hasEditPermission } = useBoardPermissions();
 
 const fileRecord = computed(() => getFileRecordsByParentId(element.value.id)[0]);
 
@@ -195,8 +193,8 @@ const onAddAlert = (alert: FileAlert) => {
 	addAlert(alert);
 };
 
-const onDelete = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDelete = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.fileElement");
 	if (shouldDelete) {
 		emit("delete:element", element.value.id);
 	}
@@ -228,7 +226,7 @@ const openCollabora = () => {
 			id: fileRecord.value.id,
 		},
 		query: {
-			edit: hasEditPermission.value.toString(),
+			edit: allowedOperations.value.createFileElement.toString(),
 		},
 	}).href;
 

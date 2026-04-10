@@ -1,9 +1,9 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { BoardApiFactory, BoardLayout, BoardParentType, CreateBoardBodyParams, RoomApiFactory } from "@/serverApi/v3";
 import { RoomBoardItem, RoomDetails, RoomUpdateParams } from "@/types/room/Room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createApplicationError } from "@/utils/create-application-error.factory";
+import { BoardApiFactory, BoardLayout, BoardParentType, CreateBoardBodyParams, RoomApiFactory } from "@api-server";
+import { useAppStore } from "@data-app";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
@@ -39,7 +39,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 			} else if (responseError.code === 403 && responseError.type === "LOCKED_ROOM") {
 				return { isLocked: true, lockedRoomName: responseError.message };
 			} else {
-				throw createApplicationError(responseError.code);
+				useAppStore().handleApplicationError(responseError.code);
 			}
 		} finally {
 			isLoading.value = false;
@@ -60,7 +60,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		const params: CreateBoardBodyParams = {
 			title: title,
 			parentId: roomId,
-			parentType: BoardParentType.Room,
+			parentType: BoardParentType.ROOM,
 			layout,
 		};
 		const boardId = (await boardApi.boardControllerCreateBoard(params)).data.id;

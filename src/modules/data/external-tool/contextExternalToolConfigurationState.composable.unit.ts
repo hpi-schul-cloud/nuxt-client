@@ -1,19 +1,23 @@
 import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
 import { useContextExternalToolConfigurationState } from "./contextExternalToolConfigurationState.composable";
 import { ContextExternalToolConfigurationTemplate } from "./types";
-import { ToolContextType } from "@/serverApi/v3";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { axiosErrorFactory, contextExternalToolConfigurationTemplateFactory } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import {
+	axiosErrorFactory,
+	contextExternalToolConfigurationTemplateFactory,
+	mockComposable,
+} from "@@/tests/test-utils";
+import { ToolContextType } from "@api-server";
+import { Mocked } from "vitest";
 
 vi.mock("@data-external-tool/contextExternalToolApi.composable");
 
 describe("contextExternalToolConfigurationState.composable", () => {
-	let useContextExternalToolApiMock: DeepMocked<ReturnType<typeof useContextExternalToolApi>>;
+	let useContextExternalToolApiMock: Mocked<ReturnType<typeof useContextExternalToolApi>>;
 
 	beforeEach(() => {
-		useContextExternalToolApiMock = createMock<ReturnType<typeof useContextExternalToolApi>>();
+		useContextExternalToolApiMock = mockComposable(useContextExternalToolApi);
 
 		vi.mocked(useContextExternalToolApi).mockReturnValue(useContextExternalToolApiMock);
 	});
@@ -54,7 +58,7 @@ describe("contextExternalToolConfigurationState.composable", () => {
 			it("should reset the error", async () => {
 				const { composable } = setup();
 
-				await composable.fetchAvailableToolConfigurationsForContext("contextId", ToolContextType.Course);
+				await composable.fetchAvailableToolConfigurationsForContext("contextId", ToolContextType.COURSE);
 
 				expect(composable.error.value).toBeUndefined();
 			});
@@ -62,18 +66,18 @@ describe("contextExternalToolConfigurationState.composable", () => {
 			it("should call the api for available tools", async () => {
 				const { composable } = setup();
 
-				await composable.fetchAvailableToolConfigurationsForContext("contextId", ToolContextType.Course);
+				await composable.fetchAvailableToolConfigurationsForContext("contextId", ToolContextType.COURSE);
 
 				expect(useContextExternalToolApiMock.fetchAvailableToolsForContextCall).toHaveBeenCalledWith(
 					"contextId",
-					ToolContextType.Course
+					ToolContextType.COURSE
 				);
 			});
 
 			it("should set the available tools in the state", async () => {
 				const { composable, toolConfigurationTemplate } = setup();
 
-				await composable.fetchAvailableToolConfigurationsForContext("contextId", ToolContextType.Course);
+				await composable.fetchAvailableToolConfigurationsForContext("contextId", ToolContextType.COURSE);
 
 				expect(composable.availableTools.value).toEqual([toolConfigurationTemplate]);
 			});
@@ -98,7 +102,7 @@ describe("contextExternalToolConfigurationState.composable", () => {
 			it("should set the error", async () => {
 				const { composable, apiError } = setup();
 
-				await composable.fetchAvailableToolConfigurationsForContext("contextId", ToolContextType.Course);
+				await composable.fetchAvailableToolConfigurationsForContext("contextId", ToolContextType.COURSE);
 
 				expect(composable.error.value).toEqual<BusinessError>({
 					error: apiError,

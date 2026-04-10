@@ -1,9 +1,9 @@
 import { useBoardStore } from "./Board.store";
 import { useBoardApi } from "./BoardApi.composable";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { BoardContextType } from "@/types/board/BoardContext";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { Breadcrumb } from "@ui-layout";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -17,8 +17,8 @@ const useBoardPageInformation = () => {
 	const roomId = computed(() => boardContext.value?.id);
 	const contextType = computed(() => boardContext.value?.type);
 
-	const isCourse = computed(() => contextType.value === BoardContextType.Course);
-	const isRoom = computed(() => contextType.value === BoardContextType.Room);
+	const isCourse = computed(() => contextType.value === BoardContextType.COURSE);
+	const isRoom = computed(() => contextType.value === BoardContextType.ROOM);
 
 	const roomName = computed(() => {
 		const roomNameFallback = isCourse.value ? t("common.labels.course") : t("common.labels.room");

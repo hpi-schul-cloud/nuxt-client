@@ -108,7 +108,7 @@ const noPermissionMessage = computed(() => {
 });
 
 const notEnabledMessage = computed(() => {
-	if (props.boardParentType === BoardContextType.Course) {
+	if (props.boardParentType === BoardContextType.COURSE) {
 		return t("pages.videoConference.info.courseParent.notEnabledTeacher");
 	} else {
 		return t("pages.videoConference.info.roomParent.notEnabledTeacher");

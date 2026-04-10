@@ -1,5 +1,5 @@
 import { ContextExternalToolConfigurationStatus } from "./context-external-tool-configuration-status";
-import { LtiDeepLinkResponse } from "@/serverApi/v3";
+import { LtiDeepLinkResponse } from "@api-server";
 
 export type ExternalToolDisplayData = {
 	contextExternalToolId: string;

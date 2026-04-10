@@ -8,7 +8,7 @@
 				size="20"
 				width="2"
 			/>
-			<v-icon v-else color="green" class="mr-2"> {{ mdiCheckCircle }}</v-icon>
+			<v-icon v-else color="green" class="mr-1"> {{ mdiCheckCircle }}</v-icon>
 			<span data-testid="upload-progress">
 				{{
 					t("pages.folder.uploadstats", {

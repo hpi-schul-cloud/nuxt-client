@@ -1,4 +1,5 @@
 <template>
+	<!--  Deprecated: Use SvsDialog component instead -->
 	<v-dialog ref="vDialog" v-model="isOpen" :max-width="size" @click:outside="closeDialog" @keydown.esc="closeDialog">
 		<v-card :ripple="false" data-testid="dialog-content">
 			<v-card-title data-testid="dialog-title" class="dialog-title px-6 pt-4">
@@ -60,6 +61,7 @@
 </template>
 
 <script setup lang="ts">
+// Deprecated: Use SvsDialog component instead
 import { ModelRef, PropType } from "vue";
 
 const props = defineProps({

@@ -1,7 +1,6 @@
 import ExternalToolElement from "./ExternalToolElement.vue";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
-import { ExternalToolElementResponse } from "@/serverApi/v3";
 import { BusinessError } from "@/store/types/commons";
 import {
 	contextExternalToolConfigurationStatusFactory,
@@ -10,9 +9,11 @@ import {
 	externalToolDisplayDataFactory,
 	externalToolElementResponseFactory,
 	ltiDeepLinkResponseFactory,
+	mockComposable,
 	schoolToolConfigurationStatusFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ExternalToolElementResponse } from "@api-server";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
 	ContextExternalTool,
@@ -21,13 +22,13 @@ import {
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiPuzzleOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { ContentElementBar } from "@ui-board";
 import { useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { nextTick, ref } from "vue";
 import { VImg } from "vuetify/lib/components/index";
 
@@ -36,31 +37,31 @@ vi.mock("@data-external-tool");
 vi.mock("@util-board");
 
 describe("ExternalToolElement", () => {
-	let useContentElementStateMock: DeepMocked<ReturnType<typeof useContentElementState>>;
-	let useBoardFocusHandlerMock: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
-	let useExternalToolElementDisplayStateMock: DeepMocked<ReturnType<typeof useExternalToolDisplayState>>;
-	let useExternalToolLaunchStateMock: DeepMocked<ReturnType<typeof useExternalToolLaunchState>>;
-	let useSharedLastCreatedElementMock: DeepMocked<ReturnType<typeof useSharedLastCreatedElement>>;
+	let useContentElementStateMock: Mocked<ReturnType<typeof useContentElementState>>;
+	let useBoardFocusHandlerMock: Mocked<ReturnType<typeof useBoardFocusHandler>>;
+	let useExternalToolElementDisplayStateMock: Mocked<ReturnType<typeof useExternalToolDisplayState>>;
+	let useExternalToolLaunchStateMock: Mocked<ReturnType<typeof useExternalToolLaunchState>>;
+	let useSharedLastCreatedElementMock: Mocked<ReturnType<typeof useSharedLastCreatedElement>>;
 
-	let useToolConfigurationStatusMock: DeepMocked<ReturnType<typeof useContextExternalToolConfigurationStatus>>;
+	let useToolConfigurationStatusMock: Mocked<ReturnType<typeof useContextExternalToolConfigurationStatus>>;
 
 	beforeEach(() => {
-		useContentElementStateMock = createMock<ReturnType<typeof useContentElementState>>();
-		useBoardFocusHandlerMock = createMock<ReturnType<typeof useBoardFocusHandler>>();
-		useExternalToolElementDisplayStateMock = createMock<ReturnType<typeof useExternalToolDisplayState>>({
+		useContentElementStateMock = mockComposable(useContentElementState);
+		useBoardFocusHandlerMock = mockComposable(useBoardFocusHandler);
+		useExternalToolElementDisplayStateMock = mockComposable(useExternalToolDisplayState, {
 			error: ref(),
 			displayData: ref(),
 			isLoading: ref(false),
 		});
-		useExternalToolLaunchStateMock = createMock<ReturnType<typeof useExternalToolLaunchState>>({
+		useExternalToolLaunchStateMock = mockComposable(useExternalToolLaunchState, {
 			error: ref(),
 			toolLaunchRequest: ref(),
 			isLoading: ref(false),
 		});
-		useSharedLastCreatedElementMock = createMock<ReturnType<typeof useSharedLastCreatedElement>>({
+		useSharedLastCreatedElementMock = mockComposable(useSharedLastCreatedElement, {
 			lastCreatedElementId: ref(),
 		});
-		useToolConfigurationStatusMock = createMock<ReturnType<typeof useContextExternalToolConfigurationStatus>>();
+		useToolConfigurationStatusMock = mockComposable(useContextExternalToolConfigurationStatus);
 
 		vi.mocked(useContentElementState).mockReturnValue(useContentElementStateMock);
 		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
@@ -961,6 +962,40 @@ describe("ExternalToolElement", () => {
 			await card.trigger("keydown.up");
 
 			expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
+		});
+	});
+
+	describe("role attribute", () => {
+		const setup = (isEditMode: boolean) => {
+			const { wrapper } = getWrapper({
+				element: externalToolElementResponseFactory.build({
+					content: { contextExternalToolId: null },
+				}),
+				isEditMode,
+			});
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should have role link in view mode", () => {
+			const { wrapper } = setup(false);
+
+			const element = wrapper.findComponent({ ref: "externalToolElement" });
+
+			expect(element.attributes("role")).toEqual("link");
+		});
+
+		it("should not have role link in edit mode", () => {
+			// The card should not be a link in edit mode otherwise the three dot menu would not be accessible for screen readers,
+			// because of nested interactive elements
+			const { wrapper } = setup(true);
+
+			const element = wrapper.findComponent({ ref: "externalToolElement" });
+
+			expect(element.attributes("role")).not.toEqual("link");
+			expect(element.attributes("role")).toBeUndefined();
 		});
 	});
 

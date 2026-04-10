@@ -432,16 +432,16 @@
 	</DefaultWireframe>
 </template>
 <script setup lang="ts">
-import ImportUsers from "@/components/organisms/administration/ImportUsers.vue";
+import ImportUsers from "@/components/administration/ImportUsers.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { SchulcloudTheme } from "@/serverApi/v3";
 import { importUsersModule, schoolsModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { mdiClose } from "@icons/material";
+import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, onUnmounted, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -491,7 +491,7 @@ const totalUnmatched = computed(() => importUsersModule.getTotalUnmatched);
 
 const totalImportUsers = computed(() => importUsersModule.getTotal);
 
-const isBrb = computed(() => useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.Brb);
+const isBrb = computed(() => useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.BRB);
 
 const isNbc = computed(() => useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.N21);
 

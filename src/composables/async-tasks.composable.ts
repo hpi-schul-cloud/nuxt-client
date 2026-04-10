@@ -94,5 +94,41 @@ export const useSafeTaskRunner = <T>(fn: AsyncFunction<T>, onErrorNotifyMessage?
 		data.value = result;
 		return { result, success };
 	};
-	return { error, status, data, isRunning, run, reset };
+	return { data: readonly(data), error, status, isRunning, run, reset };
+};
+
+export const useSafeAxiosRunner = <T>(
+	fn: AsyncFunction<T>,
+	options: {
+		immediate?: boolean;
+		onErrorNotifyMessage?: string;
+	} = {}
+) => {
+	const { immediate = true, onErrorNotifyMessage } = options;
+	const { execute: safeExec, isRunning, reset, status, error } = useSafeAxiosTask();
+
+	const data = ref<T>();
+
+	const execute = async (): Promise<TaskResult<T>> => {
+		const { result, success, error } = await safeExec(fn, onErrorNotifyMessage);
+
+		if (success) {
+			data.value = result;
+		}
+
+		return { result, success, error } as TaskResult<T>;
+	};
+
+	if (immediate) {
+		execute();
+	}
+
+	return {
+		data: readonly(data),
+		error,
+		status,
+		isRunning,
+		execute,
+		reset,
+	};
 };

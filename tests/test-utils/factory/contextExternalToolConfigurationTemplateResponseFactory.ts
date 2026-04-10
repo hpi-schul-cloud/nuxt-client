@@ -1,13 +1,11 @@
-import { ContextExternalToolConfigurationTemplateResponse } from "@/serverApi/v3";
+import { ContextExternalToolConfigurationTemplateResponse } from "@api-server";
 import { Factory } from "fishery";
 
 export const contextExternalToolConfigurationTemplateResponseFactory =
-	Factory.define<ContextExternalToolConfigurationTemplateResponse>(
-		({ sequence }) => ({
-			externalToolId: `external-tool-${sequence}`,
-			schoolExternalToolId: `school-external-tool-${sequence}`,
-			name: `SchoolExternalTool${sequence}`,
-			baseUrl: `https://school-external-tool-${sequence}.com`,
-			parameters: [],
-		})
-	);
+	Factory.define<ContextExternalToolConfigurationTemplateResponse>(({ sequence }) => ({
+		externalToolId: `external-tool-${sequence}`,
+		schoolExternalToolId: `school-external-tool-${sequence}`,
+		name: `SchoolExternalTool${sequence}`,
+		baseUrl: `https://school-external-tool-${sequence}.com`,
+		parameters: [],
+	}));

@@ -1,5 +1,3 @@
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import { BoardElementApiFactory } from "@/serverApi/v3";
 import {
 	AnyContentElement,
 	ContentElementType,
@@ -10,7 +8,9 @@ import {
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { BoardElementApiFactory } from "@api-server";
 import { useAppStore } from "@data-app";
+import { Breadcrumb } from "@ui-layout";
 import { computed, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -69,7 +69,7 @@ export const useFolderState = () => {
 	const renameFolder = async (title: string, fileFolderElementId: string): Promise<void> => {
 		try {
 			await boardElementApi.elementControllerUpdateElement(fileFolderElementId, {
-				data: { content: { title }, type: ContentElementType.FileFolder },
+				data: { content: { title }, type: ContentElementType.FILE_FOLDER },
 			});
 			await fetchFileFolderElement(fileFolderElementId);
 		} catch (error) {
@@ -82,18 +82,18 @@ export const useFolderState = () => {
 
 		const firstItem = parentNodeInfos.value[0];
 
-		if (firstItem.type === ParentNodeType.Course) {
+		if (firstItem.type === ParentNodeType.COURSE) {
 			return {
 				title: t("common.words.courses"),
 				to: "/rooms/courses-overview",
 			};
-		} else if (ParentNodeType.Room) {
+		} else if (ParentNodeType.ROOM) {
 			return { title: t("pages.rooms.title"), to: "/rooms" };
 		}
 	};
 
 	const castToFileFolderElement = (element: AnyContentElement): FileFolderElement => {
-		if (element.type === ContentElementType.FileFolder) {
+		if (element.type === ContentElementType.FILE_FOLDER) {
 			return element as FileFolderElement;
 		} else {
 			throw createApplicationError(404);
@@ -108,11 +108,11 @@ export const useFolderState = () => {
 
 	const mapNodeTypeToPathType = (nodeType: string): string => {
 		switch (nodeType) {
-			case ParentNodeType.Course:
+			case ParentNodeType.COURSE:
 				return "courses";
-			case ParentNodeType.Room:
+			case ParentNodeType.ROOM:
 				return "rooms";
-			case ParentNodeType.Board:
+			case ParentNodeType.BOARD:
 				return "boards";
 			default:
 				throw new Error(`Unknown node type: ${nodeType}`);

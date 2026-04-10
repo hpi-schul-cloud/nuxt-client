@@ -20,7 +20,7 @@
 				</div>
 				<div class="d-flex mt-1">
 					<VCheckbox
-						:model-value="roomData.features.includes(RoomFeatures.EditorManageVideoconference)"
+						:model-value="roomData.features.includes(RoomFeatures.EDITOR_MANAGE_VIDEOCONFERENCE)"
 						class="align-start video-conference-checkbox"
 						data-testid="room-video-conference-checkbox"
 						@update:model-value="onToggleVideoConferenceFeature"
@@ -46,15 +46,14 @@
 				{{ t("common.actions.save") }}
 			</VBtn>
 		</div>
-		<ConfirmationDialog />
 	</VForm>
 </template>
 
 <script setup lang="ts">
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
-import { RoomFeatures } from "@/serverApi/v3";
 import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
-import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
+import { askCancel } from "@/utils/confirmation-dialog.utils";
+import { RoomFeatures } from "@api-server";
 import { isNonEmptyString, isOfMaxLength, useOpeningTagValidator } from "@util-validators";
 import { computed, PropType, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
@@ -69,25 +68,20 @@ const props = defineProps({
 const emit = defineEmits(["save", "cancel"]);
 
 const { t } = useI18n();
-const { askConfirmation } = useConfirmationDialog();
 
 const roomData = computed(() => props.room);
 const initialRoomData = ref(JSON.stringify(roomData.value));
 const roomForm = useTemplateRef("roomForm");
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
-const validationRules = [
-	isNonEmptyString(t("common.validation.nonEmptyString")),
-	isOfMaxLength(100)(t("common.validation.tooLong")),
-	validateOnOpeningTag,
-];
+const validationRules = [isNonEmptyString(), isOfMaxLength(100)(), validateOnOpeningTag];
 
 const onToggleVideoConferenceFeature = (isChecked: boolean | null) => {
 	const features = roomData.value.features;
 
-	const index = features.indexOf(RoomFeatures.EditorManageVideoconference);
+	const index = features.indexOf(RoomFeatures.EDITOR_MANAGE_VIDEOCONFERENCE);
 	if (isChecked && index === -1) {
-		features.push(RoomFeatures.EditorManageVideoconference);
+		features.push(RoomFeatures.EDITOR_MANAGE_VIDEOCONFERENCE);
 	}
 	if (!isChecked && index > -1) {
 		features.splice(index, 1);
@@ -111,16 +105,7 @@ const onSave = async () => {
 
 const onCancel = async () => {
 	const isFormUnchanged = JSON.stringify(roomData.value) === initialRoomData.value;
-	if (isFormUnchanged) emit("cancel");
-
-	const shouldCancel = await askConfirmation({
-		message: t("ui-confirmation-dialog.ask-cancel-form"),
-		confirmActionLangKey: "common.actions.discard",
-	});
-
-	if (shouldCancel) {
-		emit("cancel");
-	}
+	if (isFormUnchanged || (await askCancel())) emit("cancel");
 };
 </script>
 

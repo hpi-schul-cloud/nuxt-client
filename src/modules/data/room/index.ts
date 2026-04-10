@@ -5,7 +5,7 @@ export { useAdministrationRoomStore } from "./manageRoom/AdministrationRoom.stor
 export { type Registration, useRegistrationStore } from "./registration/registration.store";
 export { useRegistrationStepper } from "./registration/registrationStepper.composable";
 export * from "./room.store";
-export { useRoomAuthorization } from "./roomAuthorization.composable";
+export { useRoomAllowedOperations } from "./room-allowed-operations.composable";
 export { RoomVariant, useRoomDetailsStore } from "./RoomDetails.store";
 export { useRoomInvitationLinkStore } from "./roomMembers/RoomInvitationLink.store";
 export { useRoomMembersStore } from "./roomMembers/RoomMembers.store";
@@ -17,4 +17,9 @@ export type {
 	UpdateRoomInvitationLinkDto,
 	UseLinkResult,
 } from "./roomMembers/types";
-export { ExternalMemberCheckStatus, InvitationStep, RoomInvitationLinkValidationError } from "./roomMembers/types";
+export {
+	ExternalMemberCheckStatus,
+	ExternalMembersInvitationSteps,
+	InvitationStep,
+	RoomInvitationLinkValidationError,
+} from "./roomMembers/types";

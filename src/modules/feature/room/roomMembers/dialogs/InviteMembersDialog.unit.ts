@@ -1,9 +1,10 @@
 import InviteMembersDialog from "./InviteMembersDialog.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
-import { SchulcloudTheme } from "@/serverApi/v3/api";
+import { toEndOfDayIso, toIsoDate } from "@/utils/date-time.utils";
 import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { SchulcloudTheme } from "@api-server";
 import { InvitationStep, RoomInvitationLink, useRoomInvitationLinkStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { DatePicker } from "@ui-date-time-picker";
@@ -265,7 +266,7 @@ describe("InviteMembersDialog", () => {
 					const { wrapper } = await setup();
 					createTestEnvStore({
 						FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
-						SC_THEME: SchulcloudTheme.Thr,
+						SC_THEME: SchulcloudTheme.THR,
 					});
 
 					const radioGroup = wrapper.getComponent(VRadioGroup);
@@ -307,7 +308,7 @@ describe("InviteMembersDialog", () => {
 					const { wrapper } = await setup();
 					createTestEnvStore({
 						FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
-						SC_THEME: SchulcloudTheme.Thr,
+						SC_THEME: SchulcloudTheme.THR,
 					});
 
 					const radioGroup = wrapper.getComponent(VRadioGroup);
@@ -537,7 +538,7 @@ describe("InviteMembersDialog", () => {
 				await linkExpiresCheckbox.setValue(true);
 
 				const datePicker = wrapper.getComponent(DatePicker);
-				const selectedDateISO = new Date(2024, 0, 1).toISOString();
+				const selectedDateISO = toIsoDate("01.01.2024");
 				datePicker.vm.$emit("update:date", selectedDateISO);
 				await nextTick();
 
@@ -547,7 +548,7 @@ describe("InviteMembersDialog", () => {
 
 				expect(roomInvitationLinkStore.createLink).toHaveBeenCalledWith(
 					expect.objectContaining({
-						activeUntil: selectedDateISO,
+						activeUntil: toEndOfDayIso(selectedDateISO),
 					})
 				);
 			});
@@ -568,7 +569,7 @@ describe("InviteMembersDialog", () => {
 
 				expect(roomInvitationLinkStore.createLink).not.toHaveBeenCalled();
 				expect(roomInvitationLinkStore.updateLink).not.toHaveBeenCalled();
-				expect(descriptionField.text()).toContain("common.validation.nonEmptyString");
+				expect(descriptionField.text()).toContain("Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.");
 			});
 
 			it("should focus the description field when it is the first invalid input", async () => {
@@ -631,7 +632,7 @@ describe("InviteMembersDialog", () => {
 
 			const descriptionField = await setDescription(wrapper, "");
 
-			expect(descriptionField.text()).toContain("common.validation.nonEmptyString");
+			expect(descriptionField.text()).toContain("Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.");
 		});
 
 		it("should show error when description contains only whitespaces", async () => {
@@ -639,7 +640,7 @@ describe("InviteMembersDialog", () => {
 
 			const descriptionField = await setDescription(wrapper, "   ");
 
-			expect(descriptionField.text()).toContain("common.validation.nonEmptyString");
+			expect(descriptionField.text()).toContain("Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.");
 		});
 
 		it("should show error when description contains < followed by a string", async () => {
@@ -662,7 +663,7 @@ describe("InviteMembersDialog", () => {
 			const descriptionField = wrapper.findComponent({
 				ref: "descriptionField",
 			});
-			expect(descriptionField.text()).toContain("common.validation.tooLong");
+			expect(descriptionField.text()).toContain("Der eingegebene Text überschreitet die Maximallänge");
 		});
 	});
 });

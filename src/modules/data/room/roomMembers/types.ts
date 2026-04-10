@@ -3,7 +3,7 @@ import {
 	RoomInvitationLinkResponse,
 	RoomMemberResponse,
 	UpdateRoomInvitationLinkBodyParams,
-} from "@/serverApi/v3";
+} from "@api-server";
 
 export type RoomMember = RoomMemberResponse & {
 	isSelectable?: boolean;
@@ -43,10 +43,16 @@ export enum InvitationStep {
 	EDIT = "edit",
 }
 
+export enum ExternalMembersInvitationSteps {
+	Email = "email",
+	Details = "details",
+	Error = "error",
+}
+
 export enum ExternalMemberCheckStatus {
 	ACCOUNT_FOUND_AND_ADDED = "account_found_and_added",
 	ACCOUNT_NOT_FOUND = "account_not_found",
 	ACCOUNT_IS_NOT_EXTERNAL = "account_is_not_external",
 }
 
-export { RoomInvitationLinkValidationError } from "@/serverApi/v3";
+export { RoomInvitationLinkValidationError } from "@api-server";

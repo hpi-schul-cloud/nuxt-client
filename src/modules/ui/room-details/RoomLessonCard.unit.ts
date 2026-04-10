@@ -1,9 +1,8 @@
 import RoomLessonCard from "./RoomLessonCard.vue";
 import { LessonData } from "./types";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
+import { ImportUserResponseRoleNames as Roles } from "@api-server";
 import { mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeAll } from "vitest";
@@ -72,7 +71,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 	});
 
 	describe("common behaviors and actions", () => {
-		const userRole = Roles.Teacher;
+		const userRole = Roles.TEACHER;
 
 		it("should have correct props", () => {
 			const { wrapper, room, ariaLabel } = setup({
@@ -106,12 +105,11 @@ describe("@/components/molecules/RoomLessonCard", () => {
 				dragInProgress: true,
 			});
 
+			const locationSpy = vi.fn();
 			Object.defineProperty(window, "location", {
 				set: vi.fn(),
-				get: () => createMock<Location>(),
+				get: () => ({}),
 			});
-
-			const locationSpy = vi.spyOn(window, "location", "set");
 
 			const lessonCard = wrapper.find(".lesson-card");
 			await lessonCard.trigger("click");
@@ -145,14 +143,14 @@ describe("@/components/molecules/RoomLessonCard", () => {
 
 		it("should show information about the visibility of tasks for hidden lesson card", async () => {
 			const { wrapper } = setup({ lesson: hiddenTestLesson, userRole });
-			const chipElement = wrapper.find(".chip-value");
-			expect(chipElement.element.textContent).toContain("pages.room.lessonCard.label.notVisible");
+			const chipText = wrapper.find(".chip-items-group").text();
+			expect(chipText).toContain("pages.room.lessonCard.label.notVisible");
 		});
 	});
 
 	describe("user role based behaviors and actions", () => {
 		describe("teachers", () => {
-			const userRole = Roles.Teacher;
+			const userRole = Roles.TEACHER;
 
 			afterEach(() => {
 				window.location.href = "";
@@ -285,9 +283,9 @@ describe("@/components/molecules/RoomLessonCard", () => {
 
 				const { wrapper } = setup({ lesson: lessonObject, userRole });
 				const expectedString = `common.words.tasks: 3 common.words.published / 4 common.words.planned / 2 common.words.drafts`;
-				const chipElement = wrapper.find(".chip-value");
+				const chipText = wrapper.find(".chip-items-group").text();
 
-				expect(chipElement.element.innerHTML).toContain(expectedString);
+				expect(chipText).toContain(expectedString);
 			});
 
 			it("should have the proper string in the chip element for published tasks when lesson is a draft)", () => {
@@ -305,9 +303,9 @@ describe("@/components/molecules/RoomLessonCard", () => {
 
 				const { wrapper } = setup({ lesson: lessonObject, userRole });
 				const expectedString = `common.words.tasks: 3 common.words.ready / 4 common.words.planned / 2 common.words.drafts`;
-				const chipElement = wrapper.find(".chip-value");
+				const chipText = wrapper.find(".chip-items-group").text();
 
-				expect(chipElement.element.innerHTML).toContain(expectedString);
+				expect(chipText).toContain(expectedString);
 			});
 
 			it("should have the proper string in the chip element (not all the 3 numbers are available)", () => {
@@ -326,9 +324,9 @@ describe("@/components/molecules/RoomLessonCard", () => {
 				const { wrapper } = setup({ lesson: lessonObject, userRole });
 				const expectedString = `common.words.tasks: 3 common.words.published / 2 common.words.drafts`;
 
-				const chipElement = wrapper.find(".chip-value");
+				const chipText = wrapper.find(".chip-items-group").text();
 
-				expect(chipElement.element.innerHTML).toContain(expectedString);
+				expect(chipText).toContain(expectedString);
 			});
 
 			it("should not show the chip section if 'numberOf' properties are '0'", async () => {
@@ -344,7 +342,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 					numberOfDraftTasks: 0,
 				};
 				const { wrapper } = setup({ lesson: lessonObject, userRole });
-				const chipElement = wrapper.findAll(".chip-value");
+				const chipElement = wrapper.findAll(".chip-items-group");
 
 				expect(chipElement).toHaveLength(0);
 			});
@@ -362,13 +360,13 @@ describe("@/components/molecules/RoomLessonCard", () => {
 					numberOfDraftTasks: 0,
 				};
 				const { wrapper } = setup({ lesson: lessonObject, userRole });
-				const chipElement = wrapper.findAll(".chip-value");
+				const chipElement = wrapper.findAll(".chip-items-group");
 
 				expect(chipElement).toHaveLength(0);
 			});
 		});
 		describe("students", () => {
-			const userRole = Roles.Student;
+			const userRole = Roles.STUDENT;
 			it("should have no action button", () => {
 				const { wrapper } = setup({ lesson: baseTestLesson, userRole });
 				const actionButtons = wrapper.findAll(".action-button");
@@ -379,7 +377,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 	});
 
 	describe("keypress events", () => {
-		const userRole = Roles.Teacher;
+		const userRole = Roles.TEACHER;
 
 		it("should call 'handleClick' event when 'enter' key is pressed", async () => {
 			Object.defineProperty(window, "location", {

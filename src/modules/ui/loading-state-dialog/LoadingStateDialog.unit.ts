@@ -1,89 +1,64 @@
 import LoadingStateDialog from "./LoadingStateDialog.vue";
-import LoadingStateModule from "@/store/loading-state";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
-import { VCard } from "vuetify/lib/components/index";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils/mockedPiniaStoreTyping";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useLoadingStore } from "@data-app";
+import { createTestingPinia } from "@pinia/testing";
+import { nextTick } from "vue";
+import { VCard, VDialog, VProgressLinear } from "vuetify/lib/components/index";
 
-describe("@/components/molecules/LoadingModal", () => {
-	let loadingStateModuleMock: LoadingStateModule;
-
-	const mountComponent = (attrs = {}) => {
+describe("LoadingStateDialog", () => {
+	const setup = async (isLoading: boolean) => {
 		const wrapper = mount(LoadingStateDialog, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: { loadingStateModule: loadingStateModuleMock },
+				plugins: [createTestingVuetify(), createTestingPinia()],
 			},
-			...attrs,
 		});
+		const loadingStore = mockedPiniaStoreTyping(useLoadingStore);
+		loadingStore.isLoading = isLoading;
+		await nextTick();
 
-		return wrapper;
+		return { wrapper, loadingStore };
 	};
 
-	const loadingStateModuleGetters: Partial<LoadingStateModule> = {
-		getIsOpen: false,
-		getLoadingState: {
-			hasOverlay: false,
-			isPersistent: false,
-			text: "Loading...",
-		},
-	};
+	it("should display its contents when is loading true", async () => {
+		const { wrapper } = await setup(true);
 
-	it("should display its contents when requested by store", () => {
-		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
-			...loadingStateModuleGetters,
-			getIsOpen: true,
-		});
-
-		const wrapper = mountComponent();
-		const dialog = wrapper.findComponent(VCard);
-
-		expect(dialog.exists()).toBe(true);
+		const dialog = wrapper.findComponent(VDialog);
+		const card = dialog.findComponent(VCard);
+		expect(card.exists()).toBe(true);
 	});
 
-	it("should hide its contents when not requested by store", () => {
-		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
-			...loadingStateModuleGetters,
-		});
+	it("should not display its contents when is loading false", async () => {
+		const { wrapper } = await setup(false);
 
-		const wrapper = mountComponent();
+		const card = wrapper.findComponent(VCard);
+		expect(card.exists()).toBe(false);
+	});
 
-		expect(wrapper.findComponent(VCard).exists()).toBe(false);
+	it("should update model value to false when is loading set to false", async () => {
+		const { wrapper, loadingStore } = await setup(true);
+		loadingStore.isLoading = false;
+		await nextTick();
+
+		const dialog = wrapper.findComponent(VDialog);
+		expect(dialog.props().modelValue).toBe(false);
 	});
 
 	it("should display the text", async () => {
-		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
-			...loadingStateModuleGetters,
-			getIsOpen: true,
-		});
+		const { wrapper, loadingStore } = await setup(true);
+		const loadingText = "Loading...";
+		loadingStore.loadingText = loadingText;
+		await nextTick();
 
-		const wrapper = mountComponent();
-		const dialog = wrapper.findComponent(VCard);
-		const dialogTitle = dialog.find('[data-testid="dialog-text"]');
+		const card = wrapper.findComponent(VCard);
+		const dialogTitle = card.find('[data-testid="dialog-text"]');
 
-		expect(dialogTitle.text()).toBe("Loading...");
+		expect(dialogTitle.text()).toBe(loadingText);
 	});
 
-	it("should display the progress bar", () => {
-		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
-			...loadingStateModuleGetters,
-			getIsOpen: true,
-		});
+	it("should display the progress bar", async () => {
+		const { wrapper } = await setup(true);
 
-		const wrapper = mountComponent();
-
-		expect(wrapper.findComponent({ name: "v-progress-linear" }).exists()).toBe(true);
-	});
-
-	it("should bind the dialog to our store", () => {
-		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
-			...loadingStateModuleGetters,
-			getIsOpen: true,
-		});
-
-		const wrapper = mountComponent();
-		wrapper.vm.isDialogOpen = false;
-
-		expect(loadingStateModuleMock.close).toHaveBeenCalled();
+		expect(wrapper.findComponent(VProgressLinear).exists()).toBe(true);
 	});
 });

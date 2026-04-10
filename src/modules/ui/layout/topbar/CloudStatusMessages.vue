@@ -19,9 +19,9 @@
 				>
 					<template v-if="item.timestamp !== item.createdAt">
 						{{ $t("common.labels.updateAt") }}
-						{{ formatDate(item.timestamp) }} |
+						{{ formatRecentOrActual(item.timestamp) }} |
 					</template>
-					{{ $t("common.labels.createAt") }} {{ formatDate(item.createdAt) }}
+					{{ $t("common.labels.createAt") }} {{ formatRecentOrActual(item.createdAt) }}
 				</VListItemSubtitle>
 			</VListItem>
 			<VDivider />
@@ -30,22 +30,18 @@
 </template>
 
 <script setup lang="ts">
-import { formatDateForAlerts } from "@/plugins/datetime";
 import { StatusAlert } from "@/store/types/status-alert";
+import { formatRecentOrActual } from "@/utils/date-time.utils";
 import { mdiAlertCircle, mdiInformation } from "@icons/material";
-import { PropType } from "vue";
 
-defineProps({
-	statusAlerts: {
-		type: Array as PropType<StatusAlert[]>,
-		default: () => [],
-	},
-});
+type Props = {
+	statusAlerts: readonly StatusAlert[];
+};
+
+defineProps<Props>();
 
 const getIcon = (status: string) =>
 	status === "danger" ? { icon: mdiAlertCircle, color: "error" } : { icon: mdiInformation, color: "info" };
-
-const formatDate = (dateTime: string) => formatDateForAlerts(dateTime, true);
 </script>
 
 <style lang="scss" scoped>

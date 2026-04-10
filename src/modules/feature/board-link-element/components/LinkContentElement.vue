@@ -2,14 +2,13 @@
 	<v-card
 		ref="linkContentElement"
 		class="mb-4"
-		:target="target"
 		data-testid="board-link-element"
 		:class="{ 'd-none': isHidden }"
 		:variant="outlined"
 		:ripple="false"
 		:aria-label="ariaLabel"
-		:href="sanitizedUrl"
-		tabindex="0"
+		v-bind="isEditMode ? {} : { href: sanitizedUrl, target: target, rel: 'noopener noreferrer' }"
+		@keydown.enter.space="onClick"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 		@click="onClick"
@@ -27,14 +26,14 @@
 			>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<KebabMenuActionDelete scope-language-key="components.cardElement.LinkElement" @click="onDelete" />
+				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementDisplay>
 		<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
 			><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<KebabMenuActionDelete scope-language-key="components.cardElement.LinkElement" @click="onDelete" />
+				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementCreate>
 	</v-card>
@@ -46,7 +45,8 @@ import { usePreviewGenerator } from "../composables/PreviewGenerator.composable"
 import { ensureProtocolIncluded } from "../util/url.util";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
-import { LinkElementResponse } from "@/serverApi/v3";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
+import { LinkElementResponse } from "@api-server";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
@@ -148,8 +148,8 @@ const onMoveDown = () => emit("move-down:edit");
 
 const onMoveUp = () => emit("move-up:edit");
 
-const onDelete = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDelete = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.LinkElement");
 	if (shouldDelete) {
 		emit("delete:element", element.value.id);
 	}
@@ -159,6 +159,8 @@ const { focusNodeFromHash } = useElementFocus();
 const onClick = () => {
 	if (sanitizedUrl.value === window.location.href) {
 		focusNodeFromHash();
+	} else if (props.isEditMode && !isCreating.value) {
+		window.open(sanitizedUrl.value, "_blank", "noopener noreferrer");
 	}
 };
 </script>

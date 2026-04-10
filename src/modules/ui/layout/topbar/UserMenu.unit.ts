@@ -1,13 +1,13 @@
 import UserMenu from "./UserMenu.vue";
-import { LanguageType } from "@/serverApi/v3";
-import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
+import { createTestAppStore, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { LanguageType } from "@api-server";
 import { useOAuthApi } from "@data-oauth";
 import { System, useSystemApi } from "@data-system";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { nextTick } from "vue";
 import { VBtn, VListItem } from "vuetify/lib/components/index";
 
@@ -15,8 +15,8 @@ vi.mock("@data-system");
 vi.mock("@data-oauth");
 
 describe("@ui-layout/UserMenu", () => {
-	let useSystemApiMock: DeepMocked<ReturnType<typeof useSystemApi>>;
-	let useOAuthApiMock: DeepMocked<ReturnType<typeof useOAuthApi>>;
+	let useSystemApiMock: Mocked<ReturnType<typeof useSystemApi>>;
+	let useOAuthApiMock: Mocked<ReturnType<typeof useOAuthApi>>;
 
 	const setupWrapper = (isExternalFeatureEnabled = false, mockedSystem?: System, mockedTokenExpiration?: Date) => {
 		setActivePinia(createTestingPinia());
@@ -26,11 +26,11 @@ describe("@ui-layout/UserMenu", () => {
 
 		createTestEnvStore({
 			FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED: isExternalFeatureEnabled,
-			I18N__AVAILABLE_LANGUAGES: [LanguageType.De, LanguageType.En],
+			I18N__AVAILABLE_LANGUAGES: [LanguageType.DE, LanguageType.EN],
 		});
 
-		useSystemApiMock = createMock<ReturnType<typeof useSystemApi>>();
-		useOAuthApiMock = createMock<ReturnType<typeof useOAuthApi>>();
+		useSystemApiMock = mockComposable(useSystemApi);
+		useOAuthApiMock = mockComposable(useOAuthApi);
 
 		vi.mocked(useSystemApi).mockReturnValue(useSystemApiMock);
 		vi.mocked(useOAuthApi).mockReturnValue(useOAuthApiMock);

@@ -15,12 +15,12 @@ import {
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useSharedEditMode } from "./edit-mode.composable";
-import { CardResponse, ContentElementType, PreferredToolResponse, ToolContextType } from "@/serverApi/v3";
 import { FileRecordParent } from "@/types/file/File";
+import { CardResponse, ContentElementType, PreferredToolResponse, ToolContextType } from "@api-server";
 import { notifyInfo } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { CollaboraFileType, useFileStorageApi } from "@data-file";
-import { useSharedLastCreatedElement } from "@util-board";
+import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
 import { nextTick, Ref, ref } from "vue";
 
@@ -30,6 +30,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	const isPreferredToolsLoading: Ref<boolean> = ref(false);
 
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
+	const { disableFileSelectOnMount, resetFileSelectOnMountEnabled } = useSharedFileSelect();
 
 	const restApi = useCardRestApi();
 	const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
@@ -83,9 +84,9 @@ export const useCardStore = defineStore("cardStore", () => {
 	const hasRelevantContentForDuplicationWarning = (card: CardResponse): boolean =>
 		card.elements.some((element) =>
 			[
-				ContentElementType.CollaborativeTextEditor,
-				ContentElementType.Drawing,
-				ContentElementType.ExternalTool,
+				ContentElementType.COLLABORATIVE_TEXT_EDITOR,
+				ContentElementType.DRAWING,
+				ContentElementType.EXTERNAL_TOOL,
 			].includes(element.type)
 		);
 
@@ -118,11 +119,13 @@ export const useCardStore = defineStore("cardStore", () => {
 			return;
 		}
 
+		disableFileSelectOnMount();
 		const element = await createElementRequest({
-			type: ContentElementType.File,
+			type: ContentElementType.FILE,
 			cardId: editModeId.value,
 		});
 		if (!element) {
+			resetFileSelectOnMountEnabled();
 			return;
 		}
 
@@ -130,6 +133,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (!uploadedCollaboraFile) {
 			await deleteElementRequest({ elementId: element.id, cardId: editModeId.value });
 		}
+		resetFileSelectOnMountEnabled();
 	};
 
 	const createPreferredElement = (payload: CreateElementRequestPayload, tool: PreferredToolResponse) => {
@@ -160,7 +164,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (card === undefined) return;
 
 		return await createElementRequest({
-			type: ContentElementType.RichText,
+			type: ContentElementType.RICH_TEXT,
 			cardId: card.id,
 			toPosition: 0,
 		});
@@ -237,10 +241,8 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (elementIndex <= 0) return cardId;
 
 		const previousElement = elements[elementIndex - 1];
-		const { setEditModeId } = useSharedEditMode();
-		setEditModeId(cardId);
 
-		if (previousElement.type === ContentElementType.RichText) {
+		if (previousElement.type === ContentElementType.RICH_TEXT) {
 			return getPreviousElementId(previousElement.id, cardId);
 		}
 

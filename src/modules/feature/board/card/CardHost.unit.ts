@@ -2,23 +2,18 @@ import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import ContentElementList from "./ContentElementList.vue";
-import { CardResponse } from "@/serverApi/v3";
-import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
+import { mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import {
-	useBoardFocusHandler,
-	useBoardPermissions,
-	useCardStore,
-	useCourseBoardEditMode,
-	useSharedEditMode,
-} from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { BoardResponseAllowedOperations, CardResponse } from "@api-server";
+import { useBoardFocusHandler, useCardStore, useCourseBoardEditMode, useSharedEditMode } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionDuplicate,
@@ -27,91 +22,77 @@ import {
 	KebabMenuActionShare,
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";
-import { useShareBoardLink, useSharedLastCreatedElement } from "@util-board";
+import { useShareBoardLink, useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
+import { Mocked } from "vitest";
 import { computed, ref } from "vue";
-
-vi.mock("vue-router");
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("@util-board");
-const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
-const mockedUseShareBoardLink = vi.mocked(useShareBoardLink);
 
 vi.mock("@data-board/BoardFocusHandler.composable");
-const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
-
 vi.mock("@data-board/edit-mode.composable");
-const mockedEditMode = vi.mocked(useCourseBoardEditMode);
-const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
-
-vi.mock("@data-board/BoardPermissions.composable");
-const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);
 
 vi.mock("../shared/AddElementDialog.composable");
-vi.mock("@ui-confirmation-dialog");
-const mockedUseDeleteConfirmationDialog = vi.mocked(useDeleteConfirmationDialog);
+
+vi.mock("@data-board/cardActions/cardRestApi.composable");
+vi.mocked(useCardRestApi).mockReturnValue(mockComposable(useCardRestApi));
+
+vi.mock("@data-board/cardActions/cardSocketApi.composable");
+vi.mocked(useCardSocketApi).mockReturnValue(mockComposable(useCardSocketApi));
 
 describe("CardHost", () => {
-	let mockedBoardPermissionsHandler: DeepMocked<ReturnType<typeof useBoardPermissions>>;
-	let mockedBoardPermissions: BoardPermissionChecks;
-	let mockedSharedLastCreatedElementCalls: DeepMocked<ReturnType<typeof useSharedLastCreatedElement>>;
-	let useShareBoardLinkMock: DeepMocked<ReturnType<typeof useShareBoardLink>>;
+	let useShareBoardLinkMock: Mocked<ReturnType<typeof useShareBoardLink>>;
+	let useSharedFileSelectMock: Mocked<ReturnType<typeof useSharedFileSelect>>;
 
 	beforeEach(() => {
-		mockedUseSharedEditMode.mockReturnValue({
-			editModeId: ref(undefined),
-			setEditModeId: vi.fn(),
-			isInEditMode: computed(() => true),
-		});
+		vi.mocked(useSharedEditMode).mockReturnValue(
+			mockComposable(useSharedEditMode, {
+				editModeId: ref(undefined),
+				isInEditMode: computed(() => true),
+			})
+		);
 
-		useShareBoardLinkMock = createMock<ReturnType<typeof useShareBoardLink>>({
-			getShareLinkId: vi.fn().mockReturnValue("shareLinkId"),
-		});
-		mockedUseShareBoardLink.mockReturnValue(useShareBoardLinkMock);
+		useShareBoardLinkMock = mockComposable(useShareBoardLink);
+		vi.mocked(useShareBoardLink).mockReturnValue(useShareBoardLinkMock);
 
-		mockedBoardFocusHandler.mockReturnValue({
-			isFocusContained: computed(() => true),
-			isFocused: computed(() => true),
-			isFocusWithin: computed(() => true),
-			isFocusedById: computed(() => true),
-		});
+		vi.mocked(useBoardFocusHandler).mockReturnValue(
+			mockComposable(useBoardFocusHandler, {
+				isFocusContained: computed(() => true),
+				isFocused: computed(() => true),
+				isFocusWithin: computed(() => true),
+				isFocusedById: computed(() => true),
+			})
+		);
 
-		mockedEditMode.mockReturnValue({
-			isEditMode: computed(() => true),
-			startEditMode: vi.fn(),
-			stopEditMode: vi.fn(),
-		});
+		vi.mocked(useCourseBoardEditMode).mockReturnValue(
+			mockComposable(useCourseBoardEditMode, {
+				isEditMode: computed(() => true),
+			})
+		);
 
 		setupAddElementDialogMock();
-		const askDeleteConfirmationMock = () => Promise.resolve(true);
-		setupDeleteConfirmationComposableMock({
-			askDeleteConfirmationMock,
+
+		vi.mocked(useSharedLastCreatedElement).mockReturnValue(mockComposable(useSharedLastCreatedElement));
+
+		useSharedFileSelectMock = mockComposable(useSharedFileSelect, {
+			isFileSelectOnMountEnabled: ref(true),
 		});
+		vi.mocked(useSharedFileSelect).mockReturnValue(useSharedFileSelectMock);
 
-		mockedUseDeleteConfirmationDialog.mockReturnValue({
-			askDeleteConfirmation: askDeleteConfirmationMock,
-			isDeleteDialogOpen: ref(false),
-		});
-
-		mockedBoardPermissionsHandler = createMock<ReturnType<typeof useBoardPermissions>>();
-		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissionsHandler);
-
-		mockedBoardPermissions = { ...defaultPermissions };
-		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissions);
-		mockedSharedLastCreatedElementCalls = createMock<ReturnType<typeof useSharedLastCreatedElement>>();
-		mockedSharedLastCreatedElement.mockReturnValue(mockedSharedLastCreatedElementCalls);
+		injectRouterMock(createRouterMock());
 	});
 
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
 
-	const setup = (options?: { hasCard?: boolean; hasElement?: boolean }) => {
-		const { hasElement, hasCard } = {
-			hasCard: true,
-			hasElement: false,
-			...options,
-		};
+	const setup = (options?: {
+		hasCard?: boolean;
+		hasElement?: boolean;
+		allowedOperations?: Partial<BoardResponseAllowedOperations>;
+	}) => {
+		const { hasElement = false, hasCard = true, allowedOperations = {} } = options ?? {};
 
 		let card: CardResponse | null = null;
 		if (hasCard) {
@@ -129,6 +110,11 @@ describe("CardHost", () => {
 						initialState: {
 							cardStore: {
 								cards: card ? { [card.id]: card } : {},
+							},
+							boardStore: {
+								board: {
+									allowedOperations: allowedOperations,
+								},
 							},
 						},
 						stubActions: false,
@@ -185,15 +171,13 @@ describe("CardHost", () => {
 	describe("user permissions", () => {
 		describe("when user wants to share a card.", () => {
 			it("should show share button", () => {
-				mockedBoardPermissions.hasShareBoardPermission.value = true;
-				const { wrapper } = setup();
+				const { wrapper } = setup({ allowedOperations: { shareCard: true } });
 				const shareButton = wrapper.findComponent(KebabMenuActionShare);
 				expect(shareButton.exists()).toEqual(true);
 			});
 
 			it("should not show share button", () => {
-				mockedBoardPermissions.hasShareBoardPermission.value = false;
-				const { wrapper } = setup();
+				const { wrapper } = setup({ allowedOperations: { shareCard: false } });
 				const shareButton = wrapper.findComponent(KebabMenuActionShare);
 				expect(shareButton.exists()).toEqual(false);
 			});
@@ -201,8 +185,7 @@ describe("CardHost", () => {
 
 		describe("when user is not permitted to delete", () => {
 			it("should not show an edit button", () => {
-				mockedBoardPermissions.hasDeletePermission.value = false;
-				const { wrapper } = setup();
+				const { wrapper } = setup({ allowedOperations: { deleteCard: false } });
 
 				const deleteButton = wrapper.findComponent(KebabMenuActionEdit);
 
@@ -210,8 +193,7 @@ describe("CardHost", () => {
 			});
 
 			it("should not show a delete button", () => {
-				mockedBoardPermissions.hasDeletePermission.value = false;
-				const { wrapper } = setup();
+				const { wrapper } = setup({ allowedOperations: { deleteCard: false } });
 
 				const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
 
@@ -221,16 +203,18 @@ describe("CardHost", () => {
 
 		describe("when user wants to move a card.", () => {
 			it("should show move button when allowed to edit", () => {
-				mockedBoardPermissions.hasEditPermission.value = true;
-				const { wrapper } = setup();
+				const { wrapper } = setup({ allowedOperations: { moveCard: true } });
+
 				const moveButton = wrapper.findComponent(KebabMenuActionExport);
+
 				expect(moveButton.exists()).toEqual(true);
 			});
 
 			it("should not show move button when not allowed to edit", () => {
-				mockedBoardPermissions.hasEditPermission.value = false;
-				const { wrapper } = setup();
+				const { wrapper } = setup({ allowedOperations: { moveCard: false } });
+
 				const moveButton = wrapper.findComponent(KebabMenuActionExport);
+
 				expect(moveButton.exists()).toEqual(false);
 			});
 		});
@@ -239,8 +223,7 @@ describe("CardHost", () => {
 	describe("card menus", () => {
 		describe("when users clicks duplicate menu btn", () => {
 			it("should call cardStore.duplicateCardRequest", async () => {
-				mockedBoardPermissions.hasEditPermission.value = true;
-				const { wrapper, cardId } = setup();
+				const { wrapper, cardId } = setup({ allowedOperations: { copyCard: true } });
 
 				const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
 
@@ -250,8 +233,7 @@ describe("CardHost", () => {
 			});
 
 			it("should show card skeleton while duplicating", async () => {
-				mockedBoardPermissions.hasEditPermission.value = true;
-				const { wrapper } = setup();
+				const { wrapper } = setup({ allowedOperations: { copyCard: true } });
 				const cardStore = mockedPiniaStoreTyping(useCardStore);
 				cardStore.duplicateCard.mockResolvedValueOnce();
 
@@ -270,8 +252,7 @@ describe("CardHost", () => {
 
 		describe("when user clicks move button", () => {
 			it("should emit move:card event", () => {
-				mockedBoardPermissions.hasEditPermission.value = true;
-				const { wrapper } = setup();
+				const { wrapper } = setup({ allowedOperations: { moveCard: true } });
 
 				const moveButton = wrapper.findComponent(KebabMenuActionExport);
 				moveButton.vm.$emit("click");
@@ -282,8 +263,7 @@ describe("CardHost", () => {
 
 		describe("when user clicks share button", () => {
 			it("should emit share:card event", () => {
-				mockedBoardPermissions.hasShareBoardPermission.value = true;
-				const { wrapper } = setup();
+				const { wrapper } = setup({ allowedOperations: { shareCard: true } });
 
 				const shareButton = wrapper.findComponent(KebabMenuActionShare);
 				shareButton.vm.$emit("click");
@@ -294,8 +274,7 @@ describe("CardHost", () => {
 
 		describe("when users clicks share link menu", () => {
 			it("should copy a share link", async () => {
-				mockedBoardPermissions.hasDeletePermission.value = true;
-				const { wrapper, cardId } = setup();
+				const { wrapper, cardId } = setup({ allowedOperations: { shareCard: true } });
 
 				const shareLinkButton = wrapper.findComponent(KebabMenuActionShareLink);
 				await shareLinkButton.trigger("click");
@@ -305,13 +284,14 @@ describe("CardHost", () => {
 		});
 
 		describe("when users click delete menu", () => {
-			it("should emit 'delete:card'", async () => {
-				mockedBoardPermissions.hasDeletePermission.value = true;
-				const { wrapper } = setup();
+			it("should emit 'delete:card' when confirmed", async () => {
+				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
+				const { wrapper } = setup({ allowedOperations: { deleteCard: true } });
 
 				const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
-				await deleteButton.vm.$emit("click", true);
+				await deleteButton.trigger("click");
 
+				expect(confirmDialogUtils.askDeletionForType).toHaveBeenCalledWith("components.boardCard");
 				expect(wrapper.emitted("delete:card")).toHaveLength(1);
 			});
 		});

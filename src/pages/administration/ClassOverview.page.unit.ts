@@ -1,11 +1,11 @@
 import ClassOverview from "./ClassOverview.page.vue";
-import { ConfigResponse, Permission, SchulcloudTheme } from "@/serverApi/v3";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassRootType } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
 import { School, Year } from "@/store/types/schools";
 import { SortOrder } from "@/store/types/sort-order.enum";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { GROUP_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import {
 	classInfoFactory,
@@ -15,22 +15,14 @@ import {
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
+import { ConfigResponse, Permission, SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
+import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
 import { nextTick } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
-import { Router, useRoute, useRouter } from "vue-router";
-import { VBtn, VDataTableServer } from "vuetify/lib/components/index";
-
-vi.mock("vue-router", () => ({
-	useRoute: vi.fn(),
-	useRouter: vi.fn(),
-}));
-const useRouteMock = <Mock>useRoute;
-const useRouterMock = <Mock>useRouter;
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
+import { VBtn, VDataTableServer } from "vuetify/components";
 
 type Tab = "current" | "next" | "archive";
 
@@ -49,19 +41,17 @@ const createWrapper = ({
 	userPermissions,
 	envs = {},
 }: CreateWrapperOptions) => {
-	const route = { query: { tab: "current" } };
-	useRouteMock.mockReturnValue(route);
-	const router = createMock<Router>();
-	useRouterMock.mockReturnValue(router);
+	const { router } = injectRouterMock(createRouterMock());
+	const route = router.currentRoute.value;
 
-	const defaultPermissions = [Permission.ClassEdit, Permission.ClassCreate];
+	const defaultPermissions = [Permission.CLASS_EDIT, Permission.CLASS_CREATE];
 
 	const groupModule = createModuleMocks(GroupModule, {
 		getClasses: [
 			classInfoFactory.build(),
 			classInfoFactory.build({
 				externalSourceName: undefined,
-				type: ClassRootType.Class,
+				type: ClassRootType.CLASS,
 				teacherNames: ["Test Teacher"],
 				isUpgradable: true,
 			}),
@@ -100,7 +90,7 @@ const createWrapper = ({
 
 	const wrapper = mount(ClassOverview, {
 		global: {
-			plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
+			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[GROUP_MODULE_KEY.valueOf()]: groupModule,
 				[SCHOOLS_MODULE_KEY.valueOf()]: schoolModule,
@@ -161,7 +151,7 @@ describe("ClassOverview", () => {
 					classInfoFactory.build(),
 					classInfoFactory.build({
 						externalSourceName: undefined,
-						type: ClassRootType.Class,
+						type: ClassRootType.CLASS,
 						isUpgradable: true,
 					}),
 				];
@@ -485,7 +475,7 @@ describe("ClassOverview", () => {
 						getClasses: [
 							classInfoFactory.build({
 								externalSourceName: undefined,
-								type: ClassRootType.Class,
+								type: ClassRootType.CLASS,
 								isUpgradable: false,
 							}),
 						],
@@ -508,26 +498,6 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on the delete class button", () => {
 			const setup = () => {
-				const { wrapper } = createWrapper({});
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should open the delete dialog", async () => {
-				const { wrapper } = setup();
-
-				await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
-				await nextTick();
-
-				const dialog = wrapper.findComponent({ name: "CustomDialog" });
-				expect(dialog.vm.isOpen).toBe(true);
-			});
-		});
-
-		describe("when delete dialog is open", () => {
-			const setup = () => {
 				const { wrapper, groupModule } = createWrapper({});
 
 				return {
@@ -536,32 +506,26 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			describe("when clicking on cancel button", () => {
-				it("should not delete class", async () => {
-					const { wrapper, groupModule } = setup();
+			it("should call deleteClass when confirmed", async () => {
+				vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(true);
+				const { wrapper, groupModule } = setup();
 
-					await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
+				await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
 
-					const dialog = wrapper.findComponent({ name: "CustomDialog" });
-
-					await dialog.findComponent('[data-testid="dialog-cancel"').trigger("click");
-
-					expect(groupModule.deleteClass).not.toHaveBeenCalled();
-				});
+				expect(confirmDialogUtils.askDeletion).toHaveBeenCalledWith(
+					"pages.administration.classes.deleteDialog.title",
+					"pages.administration.classes.deleteDialog.content"
+				);
+				expect(groupModule.deleteClass).toHaveBeenCalled();
 			});
 
-			describe("when clicking on confirm button", () => {
-				it("should delete class", async () => {
-					const { wrapper, groupModule } = setup();
+			it("should not call deleteClass when cancelled", async () => {
+				vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(false);
+				const { wrapper, groupModule } = setup();
 
-					await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
+				await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
 
-					const dialog = wrapper.findComponent({ name: "CustomDialog" });
-
-					await dialog.findComponent('[data-testid="dialog-confirm"').trigger("click");
-
-					expect(groupModule.deleteClass).toHaveBeenCalled();
-				});
+				expect(groupModule.deleteClass).not.toHaveBeenCalled();
 			});
 		});
 	});
@@ -699,7 +663,7 @@ describe("ClassOverview", () => {
 					props: {
 						tab: "current",
 					},
-					userPermissions: [Permission.ClassCreate],
+					userPermissions: [Permission.CLASS_CREATE],
 				});
 
 				return {
@@ -707,13 +671,13 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			it("should render add class button", () => {
+			it("should render add class fab button", () => {
 				const { wrapper } = setup();
-
-				expect(wrapper.find('[data-testid="admin-class-add-button"]').exists()).toEqual(true);
+				const fabComponent = wrapper.find(`[data-testid="fab_button_add_class"]`);
+				expect(fabComponent.exists()).toBe(true);
 			});
 
-			describe("when clicking on add class buttton", () => {
+			describe("when clicking on add class fab", () => {
 				const setup = () => {
 					const { wrapper } = createWrapper({});
 
@@ -722,12 +686,10 @@ describe("ClassOverview", () => {
 					};
 				};
 
-				it("should redirect to legacy create class page", () => {
+				it("should have link to legacy create class page", () => {
 					const { wrapper } = setup();
-
-					const addClassBtn = wrapper.find('[data-testid="admin-class-add-button"]');
-
-					expect(addClassBtn.attributes().href).toStrictEqual("/administration/classes/create");
+					const fabComponent = wrapper.findComponent(SpeedDialMenu);
+					expect(fabComponent.vm.actions[0].href).toStrictEqual("/administration/classes/create");
 				});
 			});
 		});
@@ -746,16 +708,10 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			it("should not render add class button", () => {
+			it("should not render add class fab button", () => {
 				const { wrapper } = setup();
 
-				expect(wrapper.find('[data-testid="admin-class-add-button"]').exists()).toEqual(false);
-			});
-
-			it("should render info alert", () => {
-				const { wrapper } = setup();
-
-				expect(wrapper.find('[data-testid="admin-class-info-alert"]').exists()).toEqual(true);
+				expect(wrapper.find('[data-testid="fab_button_add_class"]').exists()).toEqual(false);
 			});
 		});
 	});
@@ -807,8 +763,8 @@ describe("ClassOverview", () => {
 		};
 
 		it.each([
-			[SchulcloudTheme.Default, "Dataport"],
-			[SchulcloudTheme.Brb, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
+			[SchulcloudTheme.DEFAULT, "Dataport"],
+			[SchulcloudTheme.BRB, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
 			[SchulcloudTheme.N21, "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)"],
 		])("uses %s-instance specific text placeholders", async (theme, expected) => {
 			const { wrapper } = setup({ SC_THEME: theme });

@@ -1,8 +1,8 @@
 import H5pElementMenu from "./H5pElementMenu.vue";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { KebabMenuAction, KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
-import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 
 describe("H5pElementMenu", () => {
@@ -118,7 +118,6 @@ describe("H5pElementMenu", () => {
 			const { wrapper } = setup();
 
 			const menuItem = wrapper.findComponent(KebabMenuAction);
-
 			await menuItem.trigger("click");
 
 			expect(wrapper.emitted("edit:element")).toBeDefined();
@@ -152,9 +151,7 @@ describe("H5pElementMenu", () => {
 			const { wrapper } = setup();
 
 			const menuItem = wrapper.findComponent(KebabMenuAction);
-
-			menuItem.vm.$emit("click");
-			await nextTick();
+			await menuItem.trigger("click");
 
 			expect(wrapper.emitted("edit:element")).toBeDefined();
 		});
@@ -184,12 +181,11 @@ describe("H5pElementMenu", () => {
 		});
 
 		it("should emit the delete event on click", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 			const { wrapper } = setup();
 
 			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
-
-			menuItem.vm.$emit("click", Promise.resolve(true));
-			await nextTick();
+			await menuItem.trigger("click");
 
 			expect(wrapper.emitted("delete:element")).toBeDefined();
 		});

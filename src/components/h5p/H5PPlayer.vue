@@ -8,8 +8,9 @@
 </template>
 
 <script setup lang="ts">
-import { H5pEditorApiFactory, LanguageType } from "@/h5pEditorApi/v3";
 import { $axios } from "@/utils/api";
+import { H5pEditorApiFactory } from "@api-h5p";
+import { LanguageType } from "@api-h5p";
 import { defineElements, H5PPlayerComponent } from "@lumieducation/h5p-webcomponents";
 import { ref, watch } from "vue";
 

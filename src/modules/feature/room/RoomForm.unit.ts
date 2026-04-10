@@ -1,9 +1,12 @@
 import RoomForm from "./RoomForm.vue";
-import { RoomFeatures } from "@/serverApi/v3";
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { roomFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoomFeatures } from "@api-server";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { VTextField } from "vuetify/components";
 
@@ -13,7 +16,7 @@ describe("@feature-room/RoomForm", () => {
 	const setup = (roomOverrides: Partial<RoomCreateParams> = {}) => {
 		const defaultRoom: RoomCreateParams = {
 			name: "A11Y for Beginners",
-			color: RoomColor.Magenta,
+			color: RoomColor.MAGENTA,
 			startDate: "",
 			endDate: "",
 			features: [],
@@ -34,6 +37,10 @@ describe("@feature-room/RoomForm", () => {
 		return { wrapper, room };
 	};
 
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	afterEach(() => {
 		// needed because of attachTo to remove the component from the DOM
 		// and ensure a clean state for subsequent tests.
@@ -52,7 +59,7 @@ describe("@feature-room/RoomForm", () => {
 			await textField.setValue("");
 			await textField.trigger("blur");
 
-			expect(textField.text()).toContain("common.validation.nonEmptyString");
+			expect(textField.text()).toContain("Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.");
 		});
 
 		it("should show error message when name contains < followed by a string", async () => {
@@ -75,7 +82,7 @@ describe("@feature-room/RoomForm", () => {
 			await textField.setValue(exceedsMaxLengthName);
 			await textField.trigger("blur");
 
-			expect(textField.text()).toContain("common.validation.tooLong");
+			expect(textField.text()).toContain("Der eingegebene Text überschreitet die Maximallänge");
 		});
 	});
 
@@ -137,19 +144,33 @@ describe("@feature-room/RoomForm", () => {
 		});
 
 		describe("when room values were changed", () => {
-			it("should not directly emit cancel", async () => {
+			it("should emit cancel when askCancel is confirmed", async () => {
+				vi.spyOn(confirmDialogUtils, "askCancel").mockResolvedValue(true);
 				const { wrapper } = setup();
 
 				const textField = wrapper.getComponent(VTextField);
-				const input = textField.find("input");
-
-				await input.setValue("New Name");
-
-				expect(textField.props().modelValue).toEqual("New Name");
+				await textField.setValue("New Name");
 
 				const cancelButton = wrapper.get('[data-testid="room-form-cancel-btn"]');
 				await cancelButton.trigger("click");
+				await flushPromises();
 
+				expect(confirmDialogUtils.askCancel).toHaveBeenCalled();
+				expect(wrapper.emitted("cancel")).toHaveLength(1);
+			});
+
+			it("should not emit cancel when askCancel is declined", async () => {
+				vi.spyOn(confirmDialogUtils, "askCancel").mockResolvedValue(false);
+				const { wrapper } = setup();
+
+				const textField = wrapper.getComponent(VTextField);
+				await textField.setValue("New Name");
+
+				const cancelButton = wrapper.get('[data-testid="room-form-cancel-btn"]');
+				await cancelButton.trigger("click");
+				await flushPromises();
+
+				expect(confirmDialogUtils.askCancel).toHaveBeenCalled();
 				expect(wrapper.emitted("cancel")).toBeUndefined();
 			});
 		});
@@ -173,7 +194,7 @@ describe("@feature-room/RoomForm", () => {
 
 		it("should check the video conference checkbox if the feature is enabled", () => {
 			const { wrapper } = setup({
-				features: [RoomFeatures.EditorManageVideoconference],
+				features: [RoomFeatures.EDITOR_MANAGE_VIDEOCONFERENCE],
 			});
 
 			const checkbox = wrapper.get('[data-testid="room-video-conference-checkbox"]');
@@ -186,12 +207,12 @@ describe("@feature-room/RoomForm", () => {
 			const checkbox = wrapper.getComponent('[data-testid="room-video-conference-checkbox"]');
 			await checkbox.setValue(true);
 
-			expect(room.features).toEqual([RoomFeatures.EditorManageVideoconference]);
+			expect(room.features).toEqual([RoomFeatures.EDITOR_MANAGE_VIDEOCONFERENCE]);
 		});
 
 		it("should remove video conference feature", async () => {
 			const { room, wrapper } = setup({
-				features: [RoomFeatures.EditorManageVideoconference],
+				features: [RoomFeatures.EDITOR_MANAGE_VIDEOCONFERENCE],
 			});
 
 			const checkbox = wrapper.getComponent('[data-testid="room-video-conference-checkbox"]');

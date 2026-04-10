@@ -1,3 +1,7 @@
+import { BoardContextType } from "@/types/board/BoardContext";
+import { AnyContentElement } from "@/types/board/ContentElement";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
 	BoardApiFactory,
 	BoardCardApiFactory,
@@ -9,7 +13,7 @@ import {
 	ColumnResponse,
 	ContentElementType,
 	CourseRoomsApiFactory,
-	CreateCardBodyParamsRequiredEmptyElementsEnum,
+	CreateCardBodyParamsRequiredEmptyElements,
 	CreateContentElementBodyParams,
 	DrawingElementContentBody,
 	DrawingElementResponse,
@@ -28,15 +32,9 @@ import {
 	RichTextElementContentBody,
 	RichTextElementResponse,
 	RoomApiFactory,
-	SubmissionContainerElementContentBody,
-	SubmissionContainerElementResponse,
 	VideoConferenceElementContentBody,
 	VideoConferenceElementResponse,
-} from "@/serverApi/v3";
-import { BoardContextType } from "@/types/board/BoardContext";
-import { AnyContentElement } from "@/types/board/ContentElement";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createApplicationError } from "@/utils/create-application-error.factory";
+} from "@api-server";
 import { AxiosPromise, AxiosResponse } from "axios";
 
 export const useBoardApi = () => {
@@ -96,103 +94,92 @@ export const useBoardApi = () => {
 
 	const generateDataProp = (element: AnyContentElement) => {
 		const isRichTextElement = (element: AnyContentElement): element is RichTextElementResponse =>
-			element.type === ContentElementType.RichText;
+			element.type === ContentElementType.RICH_TEXT;
 
 		if (isRichTextElement(element)) {
 			const body: RichTextElementContentBody = {
 				content: element.content,
-				type: ContentElementType.RichText,
+				type: ContentElementType.RICH_TEXT,
 			};
 			return body;
 		}
 
 		const isFileElement = (element: AnyContentElement): element is FileElementResponse =>
-			element.type === ContentElementType.File;
+			element.type === ContentElementType.FILE;
 
 		if (isFileElement(element)) {
 			const body: FileElementContentBody = {
 				content: element.content,
-				type: ContentElementType.File,
+				type: ContentElementType.FILE,
 			};
 			return body;
 		}
 
 		const isFileFolderElement = (element: AnyContentElement): element is FileElementResponse =>
-			element.type === ContentElementType.FileFolder;
+			element.type === ContentElementType.FILE_FOLDER;
 
 		if (isFileFolderElement(element)) {
 			const body: FileElementContentBody = {
 				content: element.content,
-				type: ContentElementType.FileFolder,
-			};
-			return body;
-		}
-
-		const isSubmissionContainerElement = (element: AnyContentElement): element is SubmissionContainerElementResponse =>
-			element.type === ContentElementType.SubmissionContainer;
-
-		if (isSubmissionContainerElement(element)) {
-			const body: SubmissionContainerElementContentBody = {
-				content: element.content,
-				type: ContentElementType.SubmissionContainer,
+				type: ContentElementType.FILE_FOLDER,
 			};
 			return body;
 		}
 
 		const isLinkElement = (element: AnyContentElement): element is LinkElementResponse =>
-			element.type === ContentElementType.Link;
+			element.type === ContentElementType.LINK;
 
 		if (isLinkElement(element)) {
 			const body: LinkElementContentBody = {
 				// LinkElementContent is not type equal with LinkContentBody
 				content: element.content as LinkContentBody,
-				type: ContentElementType.Link,
+				type: ContentElementType.LINK,
 			};
 			return body;
 		}
 
 		const isExternalToolElement = (element: AnyContentElement): element is ExternalToolElementResponse =>
-			element.type === ContentElementType.ExternalTool;
+			element.type === ContentElementType.EXTERNAL_TOOL;
 
 		if (isExternalToolElement(element)) {
 			const body: ExternalToolElementContentBody = {
 				// ExternalToolElementContent is not type equal with ExternalToolContentBody
 				content: element.content as ExternalToolContentBody,
-				type: ContentElementType.ExternalTool,
+				type: ContentElementType.EXTERNAL_TOOL,
 			};
 			return body;
 		}
 
 		const isDrawingElement = (element: AnyContentElement): element is DrawingElementResponse =>
-			element.type === ContentElementType.Drawing;
+			element.type === ContentElementType.DRAWING;
 
 		if (isDrawingElement(element)) {
 			const body: DrawingElementContentBody = {
 				content: element.content,
-				type: ContentElementType.Drawing,
+				type: ContentElementType.DRAWING,
 			};
 			return body;
 		}
 
 		const isVideoConferenceElement = (element: AnyContentElement): element is VideoConferenceElementResponse =>
-			element.type === ContentElementType.VideoConference;
+			element.type === ContentElementType.VIDEO_CONFERENCE;
 
 		if (isVideoConferenceElement(element)) {
 			const body: VideoConferenceElementContentBody = {
 				content: element.content,
-				type: ContentElementType.VideoConference,
+				type: ContentElementType.VIDEO_CONFERENCE,
 			};
 			return body;
 		}
 
 		const isH5pElement = (element: AnyContentElement): element is H5pElementResponse =>
-			element.type === ContentElementType.H5p;
+			element.type === ContentElementType.H5P;
 
 		if (isH5pElement(element)) {
 			const body: H5pElementContentBody = {
 				// H5pElementContent is not type equal with H5pContentBody
 				content: element.content as H5pContentBody,
-				type: ContentElementType.H5p,
+				type: ContentElementType.H5P,
 			};
 
 			return body;
@@ -214,7 +201,7 @@ export const useBoardApi = () => {
 
 	const createCardCall = async (columnId: string): Promise<CardResponse> => {
 		const response = await boardColumnApi.columnControllerCreateCard(columnId, {
-			requiredEmptyElements: [CreateCardBodyParamsRequiredEmptyElementsEnum.RichText],
+			requiredEmptyElements: [CreateCardBodyParamsRequiredEmptyElements.RICH_TEXT],
 		});
 		return response.data;
 	};
@@ -251,7 +238,7 @@ export const useBoardApi = () => {
 
 	const fetchRoomName = async (type: BoardContextType, id: string): Promise<string | undefined> => {
 		const name =
-			type === BoardContextType.Room
+			type === BoardContextType.ROOM
 				? (await roomApi.roomControllerGetRoomDetails(id)).data.name
 				: (await courseRoomApi.courseRoomsControllerGetRoomBoard(id)).data.title;
 

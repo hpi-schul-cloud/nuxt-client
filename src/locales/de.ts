@@ -26,10 +26,12 @@ export default {
 	"common.actions.scrollToTop": "Nach oben scrollen",
 	"common.actions.share": "Teilen",
 	"common.actions.export": "Exportieren",
+	"common.actions.show.all": "Alle anzeigen",
 	"common.actions.shareCopy": "Kopie teilen",
 	"common.actions.shareLink": "Link kopieren",
 	"common.actions.update": "Aktualisieren",
 	"common.actions.moved": "{elementName} wurde verschoben an Position {position}",
+	"common.labels.moreInfo": "Mehr Infos",
 	"common.ariaLabel.newTab": "öffnet in einem neuen Tab",
 	"common.ariaLabel.openImageInLightBox": "Bild in voller Größe anzeigen",
 	"common.ariaLabel.sameTab": "öffnet im selben Tab",
@@ -124,6 +126,7 @@ export default {
 	"common.labels.visible": "Sichtbar",
 	"common.labels.welcome": "Willkommen",
 	"common.labels.fileName": "Dateiname",
+	"common.labels.tasks.more": "Weitere Aufgaben...",
 	"common.loading.text": "Daten werden geladen...",
 	"common.medium.alert.deactivated": "Medium ist deaktiviert.",
 	"common.medium.alert.notLicensed": "Medium ist nicht freigegeben.",
@@ -150,7 +153,6 @@ export default {
 	"common.notifications.errors.notExited":
 		"{type} konnte nicht verlassen werden. | {type} konnten nicht verlassen werden.",
 	"common.placeholder.birthdate": "20.2.2002",
-	"common.placeholder.dateformat": "TT.MM.JJJJ",
 	"common.placeholder.email.confirmation": "E-Mail-Adresse wiederholen",
 	"common.placeholder.email.update": "Neue E-Mail-Adresse",
 	"common.placeholder.email": "clara.fall{'@'}mail.de",
@@ -189,12 +191,18 @@ export default {
 	"common.tool.context.type.boardElements": "Bereiche",
 	"common.tool.context.type.mediaShelves": "Medienregal",
 	"common.validation.email": "Bitte eine gültige E-Mail-Adresse eingeben",
+	"common.validation.file": "Bitte eine Datei hochladen {fileHint}",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",
 	"common.validation.number": "Es muss ein Ganzzahl eingegeben werden.",
+	"common.validation.password.upperCase": "Das Passwort muss mindestens einen Großbuchstaben enthalten.",
+	"common.validation.password.lowerCase": "Das Passwort muss mindestens einen Kleinbuchstaben enthalten.",
+	"common.validation.password.number": "Das Passwort muss mindestens eine Zahl enthalten.",
+	"common.validation.password.specialCharacter": "Das Passwort muss mindestens ein Sonderzeichen enthalten.",
 	"common.validation.regex": "Die Eingabe muss der folgenden Regel entsprechen: {comment}.",
 	"common.validation.required": "Bitte fülle dieses Feld aus",
 	"common.validation.required2": "Dies ist ein Pflichtfeld.",
 	"common.validation.tooLong": "Der eingegebene Text überschreitet die Maximallänge",
+	"common.validation.tooShort": "Der eingegebene Text unterschreitet die Mindestlänge",
 	"common.validation.containsOpeningTag": "Bitte Leerzeichen nach Kleiner-als-Zeichen einfügen.",
 	"common.validation.nonEmptyString": "Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
 	"common.words.also": "auch",
@@ -229,7 +237,6 @@ export default {
 	"common.words.languages.uk": "Ukrainisch",
 	"common.words.learnContent": "Lerninhalte",
 	"common.words.export": "Kurs-Export wird heruntergeladen",
-	"common.words.lernstore": "Lern-Store",
 	"common.words.mainSchool": "Stammschule",
 	"common.words.no": "Nein",
 	"common.words.not": "nicht",
@@ -466,7 +473,6 @@ export default {
 	"components.board.menu.fileElement": "Datei-Einstellungen",
 	"components.board.menu.folderElement": "Dateiordner-Einstellungen",
 	"components.board.menu.linkElement": "Link-Einstellungen",
-	"components.board.menu.submissionElement": "Abgabe-Einstellungen",
 	"components.board.menu.videoConferenceElement": "Videokonferenz-Einstellungen",
 	"components.board.menu.h5pElement": "Interaktives-Lernelement-Einstellungen",
 	"components.board.menu.deletedElement": "Gelöschter-Inhalt-Einstellungen",
@@ -475,6 +481,8 @@ export default {
 	"components.board.notifications.errors.fileNotDeleted": "Die Datei/en konnte/n nicht gelöscht werden.",
 	"components.board.notifications.errors.fileToBig":
 		"Die angehängte Datei überschreitet die maximal zulässige Größe von {maxFileSizeWithUnit}.",
+	"components.board.notifications.errors.fileLimitPerParentExceeded":
+		"Die Anzahl der Dateien überschreitet das zulässige Limit von {fileLimitPerParent} Dateien.",
 	"components.board.notifications.errors.notCreated": "{type} konnte nicht erstellt werden.",
 	"components.board.notifications.errors.notDeleted": "{type} konnte nicht gelöscht werden.",
 	"components.board.notifications.errors.notDuplicated": "{type} konnte nicht dupliziert werden.",
@@ -560,11 +568,6 @@ export default {
 		"Dieses Whiteboard ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
 	"components.cardElement.richTextElement.placeholder": "Text hinzufügen",
 	"components.cardElement.richTextElement": "Textelement",
-	"components.cardElement.submissionElement.completed": "erledigt",
-	"components.cardElement.submissionElement.expired": "abgelaufen",
-	"components.cardElement.submissionElement.open": "offen",
-	"components.cardElement.submissionElement.until": "bis",
-	"components.cardElement.submissionElement": "Abgabe",
 	"components.cardElement.titleElement.placeholder": "Titel hinzufügen",
 	"components.cardElement.titleElement.validation.maxLength": "Der Titel darf nur {maxLength} Zeichen lang sein.",
 	"components.cardElement.titleElement.validation.required": "Bitte Titel angeben.",
@@ -578,10 +581,8 @@ export default {
 	"components.cardElement.h5pElement.create": "Lernelement erstellen...",
 	"components.cardElement.h5pElement.title.error.load":
 		"Der Titel eines interaktiven Lernelements konnte nicht geladen werden.",
-	"components.datePicker.validation.format": "Bitte Format DD.MM.YYYY verwenden.",
+	"components.datePicker.validation.format": "Bitte Format {datePlaceHolder} verwenden",
 	"components.datePicker.validation.required": "Bitte Datum angeben",
-	"components.dateTimePicker.messages.dateInPast": "Datum und Uhrzeit liegen in der Vergangenheit.",
-	"components.dateTimePicker.messages.dateRequired": "Uhrzeitangabe ohne Datum nicht möglich.",
 	"components.editor.fonts.colors.oliveGreen": "Olivgrün",
 	"components.editor.fonts.colors.indigo": "Indigo",
 	"components.editor.fonts.colors.darkPurple": "Dunkelviolett",
@@ -593,7 +594,6 @@ export default {
 	"components.elementTypeSelection.elements.folderElement.subtitle": "Dateiordner",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle": "Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
-	"components.elementTypeSelection.elements.submissionElement.subtitle": "Abgabe",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle": "Videokonferenz",
 	"components.elementTypeSelection.elements.h5pElement.subtitle": "Interaktives Lernelement",
@@ -659,8 +659,6 @@ export default {
 	"components.molecules.copyResult.title.partial": "Wichtige Kopier-Informationen",
 	"components.molecules.copyResult.title.success": "Duplizieren erfolgreich",
 	"components.molecules.copyResult.followingNotCopied": "Folgendes wurde nicht kopiert:",
-	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
-	"components.molecules.EdusharingFooter.text": "powered by",
 	"components.molecules.label.room": "Raum wählen",
 	"components.molecules.label.board": "Bereich wählen",
 	"components.molecules.label.section": "Abschnitt wählen",
@@ -710,6 +708,8 @@ export default {
 	"components.molecules.export.options.info": "Folgende Inhalte werden nicht exportiert:",
 	"components.molecules.export.options.info.point1": "Hochgeladene Dateien innerhalb des Kurses.",
 	"components.molecules.export.options.info.point2": "Abgaben, die einer Aufgabe zugeordnet sind.",
+	"components.molecules.export.options.info.point3":
+		"Dateiordner werden mit Common Cartridge Version 1.1 nicht exportiert",
 	"components.molecules.import.tasks.options.selectCourse": "Kurs wählen",
 	"components.molecules.import.tasks.options.title": "Aufgabe importieren",
 	"components.molecules.importUsersMatch.deleteMatch": "Verknüpfung löschen",
@@ -799,21 +799,16 @@ export default {
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.changeSorting": "Sortierung ändern",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.asc": "aufsteigend sortiert",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.desc": "absteigend sortiert",
-	"components.organisms.FormNews.cancel.confirm.cancel": "Weiter arbeiten",
-	"components.organisms.FormNews.cancel.confirm.confirm": "Änderungen verwerfen",
-	"components.organisms.FormNews.cancel.confirm.message":
-		"Wenn du die Bearbeitung abbrichst, gehen alle ungesicherten Änderungen verloren.",
 	"components.organisms.FormNews.editor.placeholder": "Es war einmal …",
 	"components.organisms.FormNews.error.patch": "Fehler beim Aktualisieren.",
 	"components.organisms.FormNews.error.remove": "Fehler beim Löschen.",
 	"components.organisms.FormNews.errors.create": "Fehler beim Erstellen.",
-	"components.organisms.FormNews.errors.missing_content": "Deinem Artikel fehlt es an Inhalt. ;)",
-	"components.organisms.FormNews.errors.missing_title": "Jeder Artikel braucht einen Titel.",
+	"components.organisms.FormNews.errors.missing_content": "Bitte einen Inhalt eingeben",
+	"components.organisms.FormNews.errors.missing_title": "Bitte einen Titel eingeben",
 	"components.organisms.FormNews.input.title.label": "Titel der Neuigkeit",
 	"components.organisms.FormNews.input.title.placeholder": "Los geht's mit dem Titel",
 	"components.organisms.FormNews.label.planned_publish":
 		"Hier kannst du ein Datum für die automatische Veröffentlichung in der Zukunft setzen (optional):",
-	"components.organisms.FormNews.remove.confirm.cancel": "Abbrechen",
 	"components.organisms.FormNews.remove.confirm.confirm": "Artikel löschen",
 	"components.organisms.FormNews.remove.confirm.message": "Möchtest du diesen Artikel wirklich unwiderruflich löschen?",
 	"components.organisms.FormNews.success.create": "Artikel erstellt.",
@@ -877,7 +872,7 @@ export default {
 	"components.roomForm.validation.generalSaveError":
 		"Beim Speichern ist ein Fehler aufgetreten. Bitte überprüfe deine Eingaben und versuche es erneut.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd": "Das Startdatum muss vor dem Enddatum liegen.",
-	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
+	"components.timePicker.validation.format": "Bitte Format {timePlaceHolder} verwenden.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
 	"data-room.copy.alert.success": "Raum erfolgreich dupliziert.",
 	"data-room.copy.alert.error": "Der Dupliziervorgang konnte nicht abgeschlossen werden.",
@@ -892,16 +887,19 @@ export default {
 	"error.load": "Fehler beim Laden der Daten.",
 	"error.proxy.action": "Seite neu laden",
 	"error.proxy.description": "Wir haben ein kleines Problem mit unserer Infrastruktur. Wir sind gleich wieder da.",
+	"feature-autoLogout.button.title": "Sitzung verlängern",
 	"feature-autoLogout.button.confirm": "Sitzung verlängern",
 	"feature-autoLogout.button.confirm.returnToLogin": "Zurück zur Anmeldeseite",
 	"feature-autoLogout.message.error.401": "Deine Sitzung ist bereits abgelaufen. Bitte melde dich erneut an.",
-	"feature-autoLogout.message.error":
+	"feature-autoLogout.message.extending-session-failure":
 		"Uups… das hätte nicht passieren dürfen! Deine Sitzung konnte nicht verlängert werden. Bitte versuche es gleich noch einmal.",
-	"feature-autoLogout.component.image.alt": "Faultier",
-	"feature-autoLogout.message.success": "Sitzung erfolgreich verlängert.",
+	"feature-autoLogout.message.extending-session-success": "Sitzung erfolgreich verlängert.",
 	"feature-autoLogout.warning.remainingTime": "weniger als einer Minute | einer Minute | {remainingTime} Minuten",
 	"feature-autoLogout.warning":
 		"Achtung: Du wirst in {0} automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
+	"feature-loggedout.title": "Sitzung abgelaufen",
+	"feature-loggedout.message": "Die Sitzung ist aus Sicherheitsgründen abgelaufen.",
+	"feature-loggedout.button": "Erneut anmelden",
 	"feature-board-external-tool-element.alert.error.student":
 		"Das Tool kann aktuell nicht gestartet werden. Bitte Bereich aktualisieren oder an die Lehrkraft oder Kursleiter:in wenden.",
 	"feature-board-external-tool-element.alert.error.teacher":
@@ -937,13 +935,6 @@ export default {
 	"feature-room.CopyInfoDialog.text.alert.Etherpad": "Inhalte aus Etherpads",
 	"feature-room.CopyInfoDialog.text.alert.whiteboard": "Inhalte aus Whiteboards",
 	"feature-room.CopyInfoDialog.text.alert.protectedSettings": "Geschützte Einstellungen externer Tools",
-	"format.date": "DD.MM.YYYY",
-	"format.dateLong": "dddd, DD. MMMM YYYY",
-	"format.dateTime": "DD.MM.YYYY HH:mm",
-	"format.dateTimeYY": "DD.MM.YY HH:mm",
-	"format.dateUTC": "JJJJ-MM-DD",
-	"format.dateYY": "DD.MM.YY",
-	"format.time": "HH:mm",
 	"global.cloudLogo": "Logo",
 	"global.sidebar.item.addons": "Add-ons",
 	"global.sidebar.item.calendar": "Termine",
@@ -973,7 +964,7 @@ export default {
 	"global.topbar.language.longName.de": "Deutsch",
 	"global.topbar.language.longName.en": "English",
 	"global.topbar.language.longName.es": "Español",
-	"global.topbar.language.longName.uk": "Українська",
+	"global.topbar.language.longName.uk": "Yкраїнська",
 	"global.topbar.language.select": "Sprachauswahl",
 	"global.topbar.language.selectedLanguage": "Ausgewählte Sprache",
 	"global.topbar.loggedOut.actions.blog": "Blog",
@@ -988,6 +979,25 @@ export default {
 	"mixins.typeMeta.types.image": "Bild",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Webseite",
+	"loggedin.text.backupFeatures":
+		"Sichern Sie Ihre Inhalte der Cloud und nutzen Sie auch die neue Funktion zum Export von Kursen. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "Weitere Informationen und Hilfestellungen sind hier zu finden.",
+	"loggedin.text.schoolInTransferPhaseContactAdmin":
+		"Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte kontaktiere deinen Schul-Admin!",
+	"loggedin.text.schoolInTransferPhaseStartNew":
+		'Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte läute <a href="/administration/school/"> hier das neue Schuljahr ein!</a>',
+	"loggedin.text.schoolInMigrationModeStarted":
+		'Die Schule befindet sich im Modus der Benutzermigration. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
+	"loggedin.text.schoolInMigrationMode":
+		'Die Schule kann Benutzerkonten von Schulportal importieren. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
+	"pages.dashboard.title": "Übersicht",
+	"pages.dashboard.empty.news": "Bisher gibt es keine News.",
+	"pages.dashboard.new.features": "Es gibt neue Features in der {instanceTitle}.",
+	"pages.dashboard.new.features.available": "Neue Features sind verfügbar",
+	"pages.dashboard.new.features.forward": "Mehr Informationen sind in den Release Notes zu finden.",
+	"pages.dashboard.no.due.date": "Kein Abgabedatum festgelegt",
+	"pages.dashboard.welcome": "Hallo",
+	"pages.dashboard.schedule": "Stundenplan",
 	"pages.classMembers.infoBox.text.firstParagraph":
 		"Eine Einverständniserklärung bei der Registrierung von Schüler:innen muss {0} eingeholt werden. Die Nutzung der Niedersächsischen Bildungscloud ist im niedersächsischen Schulgesetz (§ 31 Abs. 5 NSchG) geregelt.",
 	"pages.classMembers.infoBox.text.firstParagraph.bold": "nicht",
@@ -1008,10 +1018,6 @@ export default {
 	"page-class-members.systemInfoText":
 		"Daten der Klasse werden mit {systemName} synchronisiert. Die Klassenliste kann vorübergehend veraltet sein, bis sie mit dem neusten Stand in {systemName} abgeglichen wird. Die Daten werden nach jeder Anmeldung eines Klassenmitglieds in der Niedersächsischen Bildungscloud aktualisiert.",
 	"page-class-members.title.info": "importiert aus einem externen System",
-	"pages.activation._activationCode.index.error.description":
-		"Deine Änderungen konnten leider nicht durchgeführt werden, da der Link ungültig oder abgelaufen ist. Bitte versuche es erneut.",
-	"pages.activation._activationCode.index.error.title": "Deine Daten konnten nicht geändert werden",
-	"pages.activation._activationCode.index.success.email": "Deine E-Mail-Adresse wurde erfolgreich geändert",
 	"pages.administration.actions": "Aktionen",
 	"pages.administration.all": "alle",
 	"pages.administration.classes.createSuccessor": "Klasse in das nächste Schuljahr versetzen",
@@ -1205,6 +1211,7 @@ export default {
 	"pages.administration.migration.identical_user_login_migration_system":
 		"Die Migration kann nicht gestartet werden, da das Ziel-Login-System und das derzeitige Login-System Ihrer Schule identisch sind!",
 	"pages.administration.migration.moin_schule_system_not_found": "Das moin.schule-System kann nicht gefunden werden!",
+	"pages.administration.migration.multipleUsersFound": "Für diesen Nutzer wurden mehrere Migrationen gefunden.",
 	"pages.administration.or": "oder",
 	"pages.administration.printQr.printPageTabTitle": "QR-Codes teilen",
 	"pages.administration.printQr.printPageTitle": "Zum Registrieren bitte den QR Code scannen.",
@@ -1252,7 +1259,6 @@ export default {
 	"pages.administration.school.index.info":
 		"Mit allen Änderungen und Einstellungen im Verwaltungsbereich wird bestätigt, dass diese durch einen weisungsberechtigten Schul-Admin mit Befugnis zu Anpassungen der Schule in der Cloud durchgeführt werden. Anpassungen durch den Schul-Admin gelten insofern als Weisung der Schule gegenüber dem Cloudbetreiber {instituteTitle}.",
 	"pages.administration.school.index.privacySettings.labels.chatFunction": "Chatfunktion aktivieren",
-	"pages.administration.school.index.privacySettings.labels.lernStore": "Lern-Store für Schüler:innen",
 	"pages.administration.school.index.privacySettings.labels.studentVisibility":
 		"Sichtbarkeit von Schüler:innen für Lehrkräfte aktivieren",
 	"pages.administration.school.index.privacySettings.labels.videoConference": "Videokonferenzen aktivieren",
@@ -1261,8 +1267,6 @@ export default {
 		"Sind Chats an deiner Schule aktiviert, können Team-Admins im jeweiligen Team die Chatfunktion gezielt freischalten.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
 		"Dies ist eine instanzweite, nicht editierbare Einstellung, die die Sichtbarkeit von Schüler:innen für Lehrkräfte steuert.",
-	"pages.administration.school.index.privacySettings.longText.lernStore":
-		"Wenn diese Option nicht aktiviert ist, können die Schüler:innen nicht auf den Lern-Store zugreifen.",
 	"pages.administration.school.index.privacySettings.longText.studentVisibility":
 		"Die Aktivierung dieser Option hat datenschutzrechtlich eine hohe Schwelle. Um die Sichtbarkeit aller Schüler:innen der Schule für jede Lehrkraft zu aktivieren, ist es erforderlich, dass jede/r Schüler:in wirksam in diese Datenverarbeitung eingewilligt hat.",
 	"pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg":
@@ -1286,7 +1290,8 @@ export default {
 	"pages.administration.school.index.schoolPolicy.error":
 		"Beim Laden der Datenschutzerklärung ist ein Fehler aufgetreten",
 	"pages.administration.school.index.schoolPolicy.fileName": "Datenschutzerklärung der Schule",
-	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Datei hochladen (nur PDF, max. 4MB)",
+	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Datei hochladen {fileHint}",
+	"pages.administration.school.index.schoolPolicy.fileHint": "(nur PDF, max. 4 MB)",
 	"pages.administration.school.index.schoolPolicy.labels.uploadFile": "Datei auswählen",
 	"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent":
 		"Die neue Datenschutzerklärung wird die alte unwiderruflich ersetzen und allen Nutzern dieser Schule zur Genehmigung vorgelegt werden.",
@@ -1295,7 +1300,7 @@ export default {
 	"pages.administration.school.index.schoolPolicy.success": "Neue Datei wurde erfolgreich hochgeladen.",
 	"pages.administration.school.index.schoolPolicy.uploadedOn": "Hochgeladen {date}",
 	"pages.administration.school.index.schoolPolicy.validation.fileTooBig":
-		"Die Datei ist größer als 4MB. Bitte reduzieren sie die Dateigröße",
+		"Die Datei ist größer als 4 MB. Bitte reduzieren sie die Dateigröße",
 	"pages.administration.school.index.schoolPolicy.validation.notPdf":
 		"Dieses Dateiformat wird nicht unterstützt. Verwenden Sie bitte PDF",
 	"pages.administration.school.index.termsOfUse.cancel": "Abbrechen",
@@ -1308,7 +1313,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.edit": "Nutzungsordnung bearbeiten",
 	"pages.administration.school.index.termsOfUse.error": "Beim Laden der Nutzungsordnung ist ein Fehler aufgetreten",
 	"pages.administration.school.index.termsOfUse.fileName": "Nutzungsordnung der Schule",
-	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Datei hochladen (nur PDF, max. 4MB)",
+	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Datei hochladen {fileHint}",
+	"pages.administration.school.index.termsOfUse.fileHint": "(nur PDF, max. 4 MB)",
 	"pages.administration.school.index.termsOfUse.labels.uploadFile": "Datei auswählen",
 	"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent":
 		"Die neue Nutzungsordnung wird die alte unwiderruflich ersetzen und allen Nutzern dieser Schule zur Genehmigung vorgelegt werden.",
@@ -1317,7 +1323,7 @@ export default {
 	"pages.administration.school.index.termsOfUse.success": "Neue Datei wurde erfolgreich hochgeladen.",
 	"pages.administration.school.index.termsOfUse.uploadedOn": "Hochgeladen {date}",
 	"pages.administration.school.index.termsOfUse.validation.fileTooBig":
-		"Die Datei ist größer als 4MB. Bitte reduzieren sie die Dateigröße",
+		"Die Datei ist größer als 4 MB. Bitte reduzieren sie die Dateigröße",
 	"pages.administration.school.index.termsOfUse.validation.notPdf":
 		"Dieses Dateiformat wird nicht unterstützt. Verwenden Sie bitte PDF",
 	"pages.administration.school.index.title": "Schule verwalten",
@@ -1328,14 +1334,13 @@ export default {
 		"Die Registrierungsmail wurde nicht versendet, weil bereits eine Registrierung erfolgt ist",
 	"pages.administration.sendMail.error": "Registrierungslink(s) konnte(n) nicht erfolgreich verschickt werden",
 	"pages.administration.sendMail.success": "Registrierungslink(s) erfolgreich verschickt",
-	"pages.administration.students.consent.cancel.modal.confirm": "Trotzdem abbrechen",
-	"pages.administration.students.consent.cancel.modal.continue": "Registrierung weiter machen",
+	"pages.administration.students.consent.cancel.modal": "Registrierung beenden",
 	"pages.administration.students.consent.cancel.modal.download.continue": "Zugangsdaten drucken",
+	"pages.administration.students.consent.cancel.modal.title": "Registrierung wirklich beenden?",
 	"pages.administration.students.consent.cancel.modal.download.info":
-		"Achtung: Bist du sicher, dass du den Vorgang abbrechen möchtest ohne die Zugangsdaten heruntergeladen zu haben? Diese Seite kann nicht wieder aufgerufen werden.",
+		"Soll die Registrierung wirklich beendet werden ohne die Zugangsdaten heruntergeladen zu haben? Sie können nicht erneut abgerufen werden.",
 	"pages.administration.students.consent.cancel.modal.info":
-		"Achtung: Bist du sicher, dass du den Vorgang abbrechen möchtest? Vorgenommene Änderungen gehen dabei verloren.",
-	"pages.administration.students.consent.cancel.modal.title": "Bist du sicher?",
+		"Soll die Registrierung wirklich beendet werden? Vorgenommene Änderungen gehen dabei verloren.",
 	"pages.administration.students.consent.handout": "Handzettel",
 	"pages.administration.students.consent.info":
 		"Du kannst im Namen deiner Schüler:innen das Einverständnis zur {dataProtection} und zur {terms} der Schul-Cloud erklären, wenn du im Vorfeld das Einverständnis analog, per {handout}, eingeholt hast.",
@@ -1375,16 +1380,12 @@ export default {
 	"pages.administration.students.consent.title": "Analoge Registrierung",
 	"pages.administration.students.fab.add": "Schüler:in erstellen",
 	"pages.administration.students.fab.import": "Schüler:in importieren",
-	"pages.administration.students.index.remove.confirm.btnText": "Schüler:in löschen",
-	"pages.administration.students.index.remove.confirm.message.all":
-		"Bist du sicher, dass du alle Schüler:innen löschen möchtest?",
-	"pages.administration.students.index.remove.confirm.message.many":
-		"Bist du sicher, dass du alle Schüler:innen bis auf {number} löschen möchtest?",
-	"pages.administration.students.index.remove.confirm.message.some":
-		"Bist du sicher, dass du diesen Schüler:in löschen möchtest? | Bist du sicher, dass du diese {number} Schüler:innen löschen möchtest?",
+	"pages.administration.students.index.remove.confirm.message":
+		"Soll diese:r Schüler:in wirklich gelöscht werden? | Sollen diese Schüler:innen wirklich gelöscht werden?",
 	"pages.administration.students.index.remove.progress.description": "Bitte warten...",
 	"pages.administration.students.index.remove.progress.title": "Schüler:innen werden gelöscht",
-	"pages.administration.students.index.searchbar.placeholder": "Schüler:innen durchsuchen nach",
+	"pages.administration.students.index.searchbar.ariaLabel": "Schüler:innen nach Namen durchsuchen",
+	"pages.administration.students.index.searchbar.placeholder": "Schüler:innen durchsuchen",
 	"pages.administration.students.index.tableActions.consent": "Analoge Einverständniserklärung",
 	"pages.administration.students.index.tableActions.delete": "Löschen",
 	"pages.administration.students.index.tableActions.email": "Registrierungslinks per E-Mail versenden",
@@ -1444,16 +1445,12 @@ export default {
 	"pages.administration.students.table.edit.ariaLabel": "Schüler:in bearbeiten",
 	"pages.administration.teachers.fab.add": "Lehrkraft erstellen",
 	"pages.administration.teachers.fab.import": "Lehrkraft importieren",
-	"pages.administration.teachers.index.remove.confirm.btnText": "Lehrkraft löschen",
-	"pages.administration.teachers.index.remove.confirm.message.all":
-		"Bist du sicher, dass du alle Lehrkräfte löschen möchtest?",
-	"pages.administration.teachers.index.remove.confirm.message.many":
-		"Bist du sicher, dass du alle Schüler:innen bis auf {number} löschen möchtest?",
-	"pages.administration.teachers.index.remove.confirm.message.some":
-		"Bist du sicher, dass du diesen Lehrkraft löschen möchtest? | Bist du sicher, dass du diese {number} Lehrkraft löschen möchtest?",
+	"pages.administration.teachers.index.remove.confirm.message":
+		"Soll diese Lehrkraft wirklich gelöscht werden? | Sollen diese Lehrkräfte wirklich gelöscht werden?",
 	"pages.administration.teachers.index.remove.progress.description": "Bitte warten...",
 	"pages.administration.teachers.index.remove.progress.title": "Lehrkräfte löschen",
-	"pages.administration.teachers.index.searchbar.placeholder": "Lehrkräfte durchsuchen nach",
+	"pages.administration.teachers.index.searchbar.ariaLabel": "Lehrkräfte nach Namen durchsuchen",
+	"pages.administration.teachers.index.searchbar.placeholder": "Lehrkräfte durchsuchen",
 	"pages.administration.teachers.index.tableActions.consent": "Analoge Einverständniserklärung",
 	"pages.administration.teachers.index.tableActions.delete": "Löschen",
 	"pages.administration.teachers.index.tableActions.email": "Registrierungslinks per E-Mail versenden",
@@ -1472,67 +1469,6 @@ export default {
 		"Moderationsrechte für alle Teilnehmenden",
 	"pages.common.tools.configureVideoconferenceDialog.text.mute": "Teilnehmende beim Betreten stummschalten",
 	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom": "Warteraum für Teilnehmende aktivieren",
-	"pages.content._id.addToTopic": "Hinzufügen zu",
-	"pages.content._id.collection.selectElements": "Wählen Sie die Elemente, die Sie zum Thema hinzufügen möchten",
-	"pages.content._id.metadata.author": "Autor",
-	"pages.content._id.metadata.createdAt": "abgerufen am",
-	"pages.content._id.metadata.noTags": "Keine Tags",
-	"pages.content._id.metadata.provider": "Herausgeber",
-	"pages.content._id.metadata.updatedAt": "zuletzt geändert am",
-	"pages.content.card.collection": "Lernobjekt",
-	"pages.content.emptyState.error.message.suggestions": "Vorschlag:",
-	"pages.content.emptyState.error.message.suggestions.moreThanOneCharacter":
-		"Der Suchbegriff muss mindestens 2 Zeichen enthalten.",
-	"pages.content.emptyState.error.message.suggestions.correctSpelling":
-		"Achte darauf, dass alle Wörter richtig geschrieben sind.",
-	"pages.content.emptyState.error.message.suggestions.otherSearchTerms": "Probiere es mit anderen Suchbegriffen.",
-	"pages.content.emptyState.error.message.suggestions.generalSearchTerms":
-		"Probiere es mit allgemeineren Suchbegriffen.",
-	"pages.content.emptyState.error.message.suggestions.lessSearchTerms": "Probiere es mit weniger Suchbegriffen.",
-	"pages.content.emptyState.error.title": "Ooops, keine Ergebnisse!",
-	"pages.content.index.backToCourse": "Zurück zum Kurs",
-	"pages.content.index.backToOverview": "Zurück zur Übersicht",
-	"pages.content.index.search_for": "Suche nach …",
-	"pages.content.index.search_resources": "Ressourcen",
-	"pages.content.index.search_results": "Suchergebnisse für",
-	"pages.content.index.search.placeholder": "Lern-Store durchsuchen",
-	"pages.content.initState.description": "Hier findest du hochwertige, auf dein Bundesland abgestimmte Inhalte.",
-	"pages.content.initState.description.newMaterials":
-		"Unser Team erschließt fortlaufend neue Materialien, um so dein Lernerlebnis weiter zu verbessern.",
-	"pages.content.initState.description.hint": "Hinweis:",
-	"pages.content.initState.description.hint.materials":
-		"Die im Lernstore angezeigten Materialien liegen nicht auf unserem Server, sondern werden über Schnittstellen zu anderen Servern verfügbar gemacht (Quellen sind zum Beispiel einzelne Bildungsserver, WirLernenOnline, Mundo u.a.).",
-	"pages.content.initState.description.hint.availability":
-		"Aus diesem Grund hat unser Team auch keinen Einfluss auf die dauerhafte Verfügbarkeit einzelner Materialien und auf das vollumfängliche Materialangebot der einzelnen Quellen.",
-	"pages.content.initState.description.usage":
-		"Im Rahmen der Nutzung in Bildungseinrichtungen ist das Kopieren der Online-Medien auf Speichermedien, auf ein privates Endgerät oder auf Lernplattformen für einen geschlossenen Benutzerkreis ggf. erlaubt, soweit dies für die interne Verteilung und/oder Nutzung erforderlich ist.",
-	"pages.content.initState.description.usage.deleteHint":
-		"Nach Beendigung der Arbeiten mit den jeweiligen Online-Medien sind diese von den privaten Endgeräten, Datenträgern und Lernplattformen zu löschen; spätestens beim Verlassen der Bildungseinrichtung.",
-	"pages.content.initState.description.usage.notPermitted":
-		"Eine grundsätzliche Veröffentlichung (z.B. im Internet) der Online-Medien oder mit Teilen daraus neu hergestellten neuen und/oder bearbeiteten Werken ist grundsätzlich nicht zulässig, bzw. bedarf der Zustimmung des Rechtegebers.",
-	"pages.content.initState.title": "Willkommen im Lern-Store!",
-	"pages.content.label.chooseACourse": "Wähle einen Kurs / Fach",
-	"pages.content.label.chooseALessonTopic": "Wähle ein Unterrichtsthema",
-	"pages.content.label.deselect": "Entfernen",
-	"pages.content.label.select": "Auswählen",
-	"pages.content.label.selected": "Aktiv",
-	"pages.content.material.leavePageWarningFooter":
-		"Die Nutzung dieser Angebote unterliegt gegebenenfalls anderen rechtlichen Bedingungen. Bitte schauen Sie daher in die Datenschutzerklärung des externen Anbieters!",
-	"pages.content.material.leavePageWarningMain":
-		"Hinweis: Beim Klicken des Links verlassen Sie das Angebot der Schul-Cloud Brandenburg.",
-	"pages.content.material.showMaterialHint":
-		"Hinweis: Um auf den Inhalt zuzugreifen, bitte den linken Bereich bearbeiten.",
-	"pages.content.material.showMaterialHintMobile":
-		"Hinweis: Um auf den Inhalt zuzugreifen, bitte den oberen Bereich bearbeiten.",
-	"pages.content.material.toMaterial": "Zum Inhalt",
-	"pages.content.notification.errorMsg": "Material konnte nicht hinzugefügt werden",
-	"pages.content.notification.lernstoreNotAvailable": "Lern-Store ist nicht verfügbar",
-	"pages.content.notification.loading": "Material wird hinzugefügt",
-	"pages.content.notification.successMsg": "Material wurde erfolgreich hinzugefügt",
-	"pages.content.page.window.title": "Thema anlegen - {instance} - Deine digitale Lernumgebung",
-	"pages.content.placeholder.chooseACourse": "Wähle einen Kurs / Fach",
-	"pages.content.placeholder.noLessonTopic": "Lege ein Thema im Kurs an",
-	"pages.content.preview_img.alt": "Bildvorschau",
 	"pages.courseRoomDetails.fab.add.tool": "Tool hinzufügen",
 	"pages.courseRoomDetails.fab.add.learnContent": "Lerninhalt erstellen",
 	"pages.courseRoomDetails.fab.add.board": "Neuer Bereich",
@@ -1617,14 +1553,6 @@ export default {
 	"pages.registrationExternalMembers.steps.password.validation.required": "Bitte ein Passwort eingeben.",
 	"pages.registrationExternalMembers.steps.password.validation.minLength":
 		"Das Passwort muss mindestens 8 Zeichen lang sein.",
-	"pages.registrationExternalMembers.steps.password.validation.upperCase":
-		"Das Passwort muss mindestens einen Großbuchstaben enthalten.",
-	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
-		"Das Passwort muss mindestens einen Kleinbuchstaben enthalten.",
-	"pages.registrationExternalMembers.steps.password.validation.number":
-		"Das Passwort muss mindestens eine Zahl enthalten.",
-	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
-		"Das Passwort muss mindestens ein Sonderzeichen enthalten.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Die Passwörter stimmen nicht überein.",
 	"pages.registrationExternalMembers.steps.registration.heading": "Registrierung erfolgreich",
 	"pages.registrationExternalMembers.steps.language.heading": "Bitte Sprache wählen",
@@ -1651,8 +1579,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Ansicht wählen",
 	"pages.room.dialog.boardLayout.singleColumn": "einspaltig",
 	"pages.room.dialog.boardLayout.multiColumn": "mehrspaltig",
-	"pages.room.itemDelete.text": '{itemType} "{itemTitle}" wirklich löschen?',
-	"pages.room.itemDelete.title": "Element löschen",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
 	"pages.room.lessonCard.menu.ariaLabel": "Themenmenü",
 	"pages.room.locked":
@@ -1676,13 +1602,16 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.heading": "Externe Person hinzufügen",
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
 		"Bitte die E-Mail-Adresse der schulfremden bzw. Externen Person angeben, die zum Raum hinzugefügt werden soll.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal":
+		"Einladung per E-Mail nicht möglich. Bitte nötige {link} prüfen.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal.requirements": "Voraussetzungen",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Externe Person einladen",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
 		"Es wurde kein Account mit dieser E-Mail-Adresse gefunden. Die Person kann eingeladen werden, sich in der {applicationName} zu registrieren.",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
 		"Bitte Vor- und Nachnamen der schulfremden Person eingeben. Die Person erhält eine E-Mail mit einem Registrierungslink für die {applicationName}. Sobald sie einen Account erstellt hat, wird sie automatisch zum Raum hinzugefügt.",
 	"pages.rooms.members.dialog.addExternalPerson.label.email": "E-Mail-Adresse",
-	"pages.rooms.members.dialog.addExternalPerson.label.email.error": "Bitte eine gültige E-Mail-Adresse eingeben",
+
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "Vorname",
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Bitte einen Vornamen eingeben",
 	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Nachname",
@@ -1691,6 +1620,7 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Einladung absenden",
 	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
 		"Die Einladung konnte leider nicht versendet werden. Bitte später erneut versuchen",
+	"pages.rooms.members.dialog.addExternalPerson.success.addingMember": "Einladung an {email} versendet",
 	"pages.rooms.emptyState.title": "Aktuell gibt es keine Kurse",
 	"pages.rooms.fab.create.course": "Kurs erstellen",
 	"pages.rooms.fab.add.course": "Neuer Kurs",
@@ -1732,9 +1662,9 @@ export default {
 	"pages.rooms.ccImportCourse.title": "Kurs importieren",
 	"pages.rooms.ccImportCourse.confirm": "Importieren",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Datei auswählen",
-	"pages.rooms.ccImportCourse.loading": "Import läuft...",
-	"pages.rooms.ccImportCourse.success": "Kurs {name} wurde erfolgreich importiert.",
-	"pages.rooms.ccImportCourse.error": "Beim Importieren des Kurses ist ein Fehler aufgetreten.",
+	"pages.rooms.ccImportCourse.loading": "Upload läuft...",
+	"pages.rooms.ccImportCourse.success": "Deine Kursdatei wurde hochgeladen und wird nun im Hintergrund importiert.",
+	"pages.rooms.ccImportCourse.error": "Beim Hochladen der Kursdatei ist ein Fehler aufgetreten.",
 	"pages.rooms.ccExportCourse.error": "Beim Exportieren des Kurses ist ein Fehler aufgetreten.",
 	"pages.rooms.roomModal.courseGroupTitle": "Kursgruppentitel",
 	"pages.rooms.tools.deactivated": "Deaktiviert",
@@ -1936,6 +1866,9 @@ export default {
 	"pages.rooms.administration.roomDetail.anonymized": "(anonymisiert)",
 	"pages.rooms.administration.roomDetail.breadcrumb": "Raum-Mitglieder {roomName}",
 	"pages.rooms.administration.roomDetail.header.text": "Raum-Mitglieder „{roomName}“",
+	"pages.security.headline": "Sicherheitsproblem melden",
+	"pages.security.text":
+		"Die dBildungscloud wird regelmäßig Sicherheitsüberprüfungen und Penetrationstests unterzogen, da uns die Sicherheit der Daten unserer Nutzer:innen sehr wichtig ist. Du hast trotzdem ein Sicherheitsproblem gefunden? Schreib uns, damit wir die Lücke schnellstmöglich schließen können: ",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text": "Bist du dir sicher, dass du das Element löschen möchtest?",
 	"pages.taskCard.deleteElement.title": "Element löschen",
@@ -1948,7 +1881,6 @@ export default {
 	"pages.tasks.labels.planned": "Geplant",
 	"pages.tasks.student.completed.emptyState.title": "Aktuell gibt es keine erledigten Aufgaben",
 	"pages.tasks.student.open.emptyState.title": "Aktuell gibt es keine offenen Aufgaben",
-	"pages.tasks.student.openTasks": "Offene Aufgaben",
 	"pages.tasks.student.submittedTasks": "Erledigte Aufgaben",
 	"pages.tasks.student.subtitleOverDue": "Verpasste Aufgaben",
 	"pages.tasks.subtitleGraded": "Bewertet",
@@ -1957,7 +1889,7 @@ export default {
 	"pages.tasks.subtitleOpen": "Offene Aufgaben",
 	"pages.tasks.subtitleWithDue": "Mit Abgabefrist",
 	"pages.tasks.teacher.drafts.emptyState.title": "Aktuell gibt es  keine Entwürfe",
-	"pages.tasks.teacher.open.emptyState.title": "Aktuell gibt es keine Aufgaben",
+	"pages.tasks.open.emptyState.title": "Es gibt keine aktuellen Aufgaben",
 	"pages.tasks.teacher.subtitleOverDue": "Abgelaufene Aufgaben",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"pages.tool.apiError.tool_param_duplicate":
@@ -2046,8 +1978,11 @@ export default {
 	"error.ws.connectionLost": "Die Verbindung wurde unterbrochen. Versuche, die Verbindung wiederherzustellen...",
 	"tldraw.error.ws.4400": "Der Raumname fehlt in den URL-Parametern",
 	"tldraw.error.ws.4404": "Whiteboard mit diesem Namen wurde nicht gefunden",
-	"ui-confirmation-dialog.ask-delete": "{type}{title} wirklich löschen?",
+	"ui-confirmation-dialog.ask-delete": '{itemType} "{itemTitle}" wirklich löschen?',
+	"ui-confirmation-dialog.ask-delete-type": "{itemType} wirklich löschen?",
 	"ui-confirmation-dialog.ask-cancel-form": "Änderungen verwerfen?",
+	"ui-confirmation-dialog.ask-cancel-warning-message":
+		"Wenn du die Bearbeitung abbrichst, gehen alle ungesicherten Änderungen verloren.",
 	"ui-layout.topbar.pageShare.printQRCode": "QR-Code drucken",
 	"ui.actionMenu.selectedRows": "Aktionsmenü für {count} ausgewählte Zeilen",
 	"ui.actionMenu.actions": "Aktionen",
@@ -2092,6 +2027,8 @@ export default {
 	"feature.collabora.add-collabora-file-dialog.option.text": ".docx (Text)",
 	"feature.collabora.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Tabelle)",
 	"feature.collabora.add-collabora-file-dialog.option.presentation": ".pptx (Präsentation)",
+	"pages.fwu-media.title": "FWU Medien",
+	"pages.fwu-media.items": "FWU Medien",
 	"pages.folder.emptyState": "Aktuell gibt es hier noch keine Dateien",
 	"pages.folder.fab.title": "Datei hinzufügen",
 	"pages.folder.untitled": "Unbenannter Ordner",

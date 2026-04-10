@@ -3,16 +3,16 @@ import { useExternalToolReferenceApi } from "./externalToolReferenceApi.composab
 import { ExternalToolDisplayData } from "./types";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { axiosErrorFactory, externalToolDisplayDataFactory } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { axiosErrorFactory, externalToolDisplayDataFactory, mockComposable } from "@@/tests/test-utils";
+import { Mocked } from "vitest";
 
 vi.mock("@data-external-tool/externalToolReferenceApi.composable");
 
 describe("externalToolDisplayState.composable", () => {
-	let useExternalToolReferenceApiMock: DeepMocked<ReturnType<typeof useExternalToolReferenceApi>>;
+	let useExternalToolReferenceApiMock: Mocked<ReturnType<typeof useExternalToolReferenceApi>>;
 
 	beforeEach(() => {
-		useExternalToolReferenceApiMock = createMock<ReturnType<typeof useExternalToolReferenceApi>>();
+		useExternalToolReferenceApiMock = mockComposable(useExternalToolReferenceApi);
 
 		vi.mocked(useExternalToolReferenceApi).mockReturnValue(useExternalToolReferenceApiMock);
 	});

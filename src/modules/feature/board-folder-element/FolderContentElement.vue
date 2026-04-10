@@ -1,28 +1,24 @@
 <template>
-	<v-card
+	<VCard
 		ref="folderContentElement"
 		class="mb-4"
 		data-testid="board-folder-element"
-		elevation="0"
 		variant="outlined"
 		:ripple="false"
 		:tabindex="isEditMode ? 0 : undefined"
-		:aria-label="t('components.cardElement.folderElement') + ' ' + element.content.title"
+		:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
-		<ContentElementBar
-			:has-grey-background="true"
-			:icon="mdiFolderOpenOutline"
-			tabindex="0"
-			role="button"
-			class="content-element-bar"
-			:aria-label="t('components.cardElement.folderElement') + ' ' + element.content.title"
-			@click="onTitleClick"
-			@keydown.enter="onTitleClick"
-		>
+		<ContentElementBar :has-grey-background="true" :icon="mdiFolderOpenOutline" @click="onTitleClick">
 			<template #title>
-				{{ element.content.title || t("components.cardElement.folderElement.untitled") }}
+				<RouterLink
+					class="folder-title"
+					:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
+					:to="folderRoute"
+				>
+					{{ elementTitle }}
+				</RouterLink>
 			</template>
 			<template v-if="isEditMode" #menu>
 				<BoardMenu
@@ -32,33 +28,55 @@
 				>
 					<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 					<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-					<KebabMenuActionDelete scope-language-key="components.cardElement.folderElement" @click="onDelete" />
+					<KebabMenuActionDelete @click="onDelete" />
 				</BoardMenu>
 			</template>
 		</ContentElementBar>
-		<v-card-text>
+		<VCardText v-if="isEditMode">
 			<FolderTitleInput
-				v-if="isEditMode"
 				:data-testid="`folder-title-input-${columnIndex}-${rowIndex}-${elementIndex}`"
 				:title="element.content.title"
 				@update:title="onUpdateTitle"
 			/>
-			<FileStatistic :element-id="element.id" />
-		</v-card-text>
-	</v-card>
+		</VCardText>
+		<VCardActions v-if="alerts.length === 0" class="py-2 pl-4">
+			<FileStatistic :element-id="element.id" :file-statistics="fileStatistics" />
+			<v-spacer />
+			<VBtn
+				:aria-label="t('components.board.action.download')"
+				:disabled="!isDownloadAllowed"
+				data-testid="board-folder-element-download-button"
+				class="float-right download-button"
+				:icon="mdiTrayArrowDown"
+				size="small"
+				variant="text"
+				@click="onDownload"
+				@keydown.enter="onDownload"
+			/>
+		</VCardActions>
+		<FolderAlerts v-else :alerts="alerts" />
+	</VCard>
 </template>
 
 <script setup lang="ts">
 import FileStatistic from "./FileStatistic.vue";
+import { FolderAlert } from "./FolderAlert.enum";
+import FolderAlerts from "./FolderAlerts.vue";
 import FolderTitleInput from "./FolderTitleInput.vue";
+import { useFolderAlerts } from "./useFolderAlerts.composable";
 import { FileFolderElement } from "@/types/board/ContentElement";
+import { FileRecordParent } from "@/types/file/File";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
+import { downloadFilesAsArchive } from "@/utils/fileHelper";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { mdiFolderOpenOutline } from "@icons/material";
+import { useFileStorageApi } from "@data-file";
+import { mdiFolderOpenOutline, mdiTrayArrowDown } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
-import { ref, toRef } from "vue";
+import dayjs from "dayjs";
+import { computed, onMounted, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 
 interface FolderContentElementProps {
 	element: FileFolderElement;
@@ -85,6 +103,27 @@ const folderContentElement = ref(null);
 const element = toRef(props, "element");
 const { modelValue } = useContentElementState(props, { autoSaveDebounce: 100 });
 
+const elementTitle = computed(() => element.value.content.title || t("components.cardElement.folderElement.untitled"));
+
+const { tryGetParentStatisticFromApi, getStatisticByParentId, getFileRecordsByParentId, fetchFiles } =
+	useFileStorageApi();
+
+const { alerts, addAlert } = useFolderAlerts();
+
+const fileStatistics = computed(() => {
+	const statistics = getStatisticByParentId(props.element.id);
+
+	return statistics;
+});
+
+onMounted(async () => {
+	try {
+		await tryGetParentStatisticFromApi(props.element.id, FileRecordParent.BOARDNODES);
+	} catch {
+		addAlert(FolderAlert.FILE_STORAGE_ERROR);
+	}
+});
+
 const onUpdateTitle = (value: string) => {
 	modelValue.value.title = value;
 };
@@ -98,8 +137,8 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 	}
 };
 
-const onDelete = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDelete = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.folderElement");
 	if (shouldDelete) {
 		emit("delete:element", element.value.id);
 	}
@@ -108,16 +147,30 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 const onMoveUp = () => emit("move-up:edit");
 const onMoveDown = () => emit("move-down:edit");
 
-const router = useRouter();
-const onTitleClick = () => {
-	const folderRoute = `/folder/${element.value.id}`;
+const onDownload = async () => {
+	await fetchFiles(element.value.id, FileRecordParent.BOARDNODES);
+	const fileRecords = getFileRecordsByParentId(element.value.id);
+	const fileRecordIds = fileRecords.map((fr) => fr.id);
 
-	router.push(folderRoute);
+	const now = dayjs().format("YYYYMMDD");
+	const archiveName = `${now}_${elementTitle.value}`;
+
+	downloadFilesAsArchive({ fileRecordIds, archiveName });
 };
+
+const isDownloadAllowed = computed(() => (fileStatistics.value?.fileCount ?? 0) > 0);
+
+const router = useRouter();
+const folderRoute = computed(() => `/folder/${element.value.id}`);
+const onTitleClick = () => router.push(folderRoute.value);
 </script>
 
-<style scoped>
-.content-element-bar:focus {
-	outline-offset: -10px;
+<style scoped lang="scss">
+.download-button {
+	padding-right: 10px;
+}
+.folder-title:focus {
+	outline: 2px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
 }
 </style>

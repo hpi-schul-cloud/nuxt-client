@@ -5,17 +5,23 @@ import { useI18n } from "vue-i18n";
 import { createVuetify } from "vuetify";
 import { createVueI18nAdapter } from "vuetify/locale/adapters/vue-i18n";
 
-export default (i18n: ReturnType<typeof createI18n>) =>
+export const createVuetifyPlugin = (i18n: ReturnType<typeof createI18n>) =>
 	createVuetify({
 		...theme,
 		locale: {
 			adapter: createVueI18nAdapter({ i18n, useI18n }),
 		},
 		defaults: {
+			VDialog: {
+				VCardText: {
+					class: "text-body-1",
+				},
+			},
 			VAlert: { variant: "tonal" },
 			VAutocomplete: { color: "primary", variant: "underlined" },
 			VCheckbox: { color: "primary" },
 			VFileInput: { variant: "underlined", color: "primary" },
+			VProgressLinear: { color: "primary" },
 			VRadioGroup: { color: "primary" },
 			VSelect: { variant: "underlined", color: "primary" },
 			VSwitch: { inset: true, flat: true, color: "primary" },

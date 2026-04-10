@@ -3,24 +3,26 @@ import MediaBoard from "./MediaBoard.vue";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
-import { MediaBoardColors } from "@/serverApi/v3";
 import {
 	mediaAvailableLineResponseFactory,
 	mediaBoardResponseFactory,
 	mediaLineResponseFactory,
+	mockComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { MediaBoardColors } from "@api-server";
 import { shallowMount, VueWrapper } from "@vue/test-utils";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
+import { Mocked } from "vitest";
+import { mock } from "vitest-mock-extended";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 
 vi.mock("./data/mediaBoardState.composable");
 
 describe("MediaBoard", () => {
-	let useSharedMediaBoardStateMock: DeepMocked<ReturnType<typeof useSharedMediaBoardState>>;
+	let useSharedMediaBoardStateMock: Mocked<ReturnType<typeof useSharedMediaBoardState>>;
 
 	const getWrapper = (
 		props: ComponentProps<typeof MediaBoard> = {
@@ -44,7 +46,7 @@ describe("MediaBoard", () => {
 	};
 
 	beforeEach(() => {
-		useSharedMediaBoardStateMock = createMock<ReturnType<typeof useSharedMediaBoardState>>();
+		useSharedMediaBoardStateMock = mockComposable(useSharedMediaBoardState);
 
 		vi.mocked(useSharedMediaBoardState).mockReturnValue(useSharedMediaBoardStateMock);
 	});
@@ -88,11 +90,11 @@ describe("MediaBoard", () => {
 
 			const availableLine = wrapper.findComponent(MediaBoardAvailableLine);
 
-			availableLine.vm.$emit("update:line-background-color", MediaBoardColors.Red);
+			availableLine.vm.$emit("update:line-background-color", MediaBoardColors.RED);
 			await nextTick();
 
 			expect(useSharedMediaBoardStateMock.updateAvailableLineBackgroundColor).toHaveBeenCalledWith(
-				MediaBoardColors.Red
+				MediaBoardColors.RED
 			);
 		});
 	});
@@ -158,12 +160,12 @@ describe("MediaBoard", () => {
 
 			const mediaLine = wrapper.findComponent(MediaBoardLine);
 
-			mediaLine.vm.$emit("update:line-background-color", MediaBoardColors.Red);
+			mediaLine.vm.$emit("update:line-background-color", MediaBoardColors.RED);
 			await nextTick();
 
 			expect(useSharedMediaBoardStateMock.updateLineBackgroundColor).toHaveBeenCalledWith(
 				expect.any(String),
-				MediaBoardColors.Red
+				MediaBoardColors.RED
 			);
 		});
 	});
@@ -261,7 +263,7 @@ describe("MediaBoard", () => {
 			const sortableEvent: Partial<SortableEvent> = {
 				oldIndex: 0,
 				newIndex: 1,
-				item: createMock<HTMLElement>({
+				item: mock<HTMLElement>({
 					dataset: {
 						lineId,
 					},

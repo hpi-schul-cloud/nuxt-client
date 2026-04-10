@@ -1,10 +1,11 @@
+import { RoomColor, RoomItem } from "@/types/room/Room";
+import { RoomItemResponseAllowedOperations } from "@api-server";
 import { Factory } from "fishery";
-import { RoomItem, RoomColor } from "@/types/room/Room";
 
 export const roomItemFactory = Factory.define<RoomItem>(({ sequence }) => ({
 	id: `room${sequence}`,
 	name: `room #${sequence}`,
-	color: RoomColor.BlueGrey,
+	color: RoomColor.BLUE_GREY,
 	schoolId: `school${sequence}`,
 	startDate: new Date().toISOString(),
 	endDate: new Date().toISOString(),
@@ -12,5 +13,10 @@ export const roomItemFactory = Factory.define<RoomItem>(({ sequence }) => ({
 	createdAt: new Date().toISOString(),
 	updatedAt: new Date().toISOString(),
 	features: [],
+	allowedOperations: {
+		accessRoom: false,
+		viewContent: false,
+		viewDraftContent: false,
+	} as unknown as RoomItemResponseAllowedOperations,
 	isLocked: false,
 }));

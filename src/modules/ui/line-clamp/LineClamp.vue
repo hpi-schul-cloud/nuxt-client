@@ -20,29 +20,32 @@
 </template>
 
 <script setup lang="ts">
-import { useResizeObserver } from "@vueuse/core";
-import { computed, onMounted, ref, useTemplateRef } from "vue";
+import { useMutationObserver } from "@vueuse/core";
+import { onMounted, onUnmounted, ref, useTemplateRef } from "vue";
 
 const textElement = useTemplateRef<HTMLDivElement>("textElement");
 
 const isOverflowingLongText = ref<boolean>(false);
-
 let tooltipWidth = "320px";
-const tooltipText = computed<string>(() => textElement.value?.innerText ?? "");
+const tooltipText = ref<string>("");
 
 const checkOverflow = () => {
 	if (textElement.value) {
+		tooltipText.value = textElement.value.textContent;
 		isOverflowingLongText.value = textElement.value.offsetWidth < textElement.value.scrollWidth;
 		tooltipWidth = `${textElement.value.offsetWidth * 0.8}px`;
 	}
 };
 
-useResizeObserver(textElement, () => {
-	checkOverflow();
-});
+const mutationObserverConfig = { attributes: false, childList: true, subtree: true };
+const mutationObserver = useMutationObserver(textElement, checkOverflow, mutationObserverConfig);
 
 onMounted(() => {
 	checkOverflow();
+});
+
+onUnmounted(() => {
+	mutationObserver.stop();
 });
 </script>
 
