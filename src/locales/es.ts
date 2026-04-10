@@ -323,10 +323,8 @@ export default {
 		"¿Realmente desea iniciar la migración de la cuenta a moin.schule ahora?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"¿Estás seguro de que quieres restablecer los accesos directos encontrados automáticamente?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
-		"El asistente de migración ha encontrado automáticamente los enlaces de las cuentas basándose en los nombres de usuario.",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
-		"¿Desea restablecer ahora los enlaces encontrados automáticamente?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"El asistente de migración ha encontrado automáticamente los enlaces de las cuentas basándose en los nombres de usuario. ¿Desea restablecer ahora los enlaces encontrados automáticamente?",
 	"components.administration.externalToolsSection.action.add": "Añadir Herramienta Externa",
 	"components.administration.externalToolsSection.action.delete": "Eliminar herramienta",
 	"components.administration.externalToolsSection.action.edit": "Editar herramienta",
@@ -379,11 +377,9 @@ export default {
 	"components.administration.provisioningOptions.schoolExternalTools.label": "Activación de herramientas externas",
 
 	"components.administration.provisioningOptions.page.title": "Opciones de sincronización de datos",
-	"components.administration.provisioningOptions.warning.consequence":
+	"components.administration.provisioningOptions.warning":
 		"¡Todos los {groupTypes} previamente sincronizados se eliminarán de tu escuela!",
-	"components.administration.provisioningOptions.warning.question":
-		"¿Está seguro de que desea desactivar la sincronización de {groupTypes}?",
-	"components.administration.provisioningOptions.warning.title": "Deshabilitar la sincronización",
+	"components.administration.provisioningOptions.warning.title": "¿Deshabilitar la sincronización?",
 	"components.administration.schoolYearChangeSection.headers": "Cambio de año escolar",
 	"components.administration.schoolYearChangeSection.info.part.one":
 		"Con la ayuda de la fase de transferencia, la membresía de clase y los datos personales en el LDAP se pueden ajustar en paz. Finalmente, todos los cambios se pueden transferir a la {instance}.",
@@ -910,7 +906,7 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectContent": "Seleccionar contenido de {toolName}...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Finalizar sincronización",
-	"feature-course-sync.EndCourseSyncDialog.description":
+	"feature-course-sync.EndCourseSyncDialog":
 		"¿Debería realmente detenerse la sincronización del curso {courseName} con el grupo de usuarios {groupName}?",
 	"feature-course-sync.EndCourseSyncDialog.success": "Sincronización completada exitosamente",
 	"feature-course-sync.GroupSelectionDialog.title": "Seleccionar grupo de usuarios",

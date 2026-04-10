@@ -1,7 +1,11 @@
 import SelectDestinationModal from "@/components/share/SelectDestinationModal.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardExternalReferenceType } from "@api-server";
+import { createTestingPinia } from "@pinia/testing";
+import { SvsDialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { VSelect } from "vuetify/components";
 
 describe("@components/share/SelectDestinationModal", () => {
 	const course = {
@@ -18,6 +22,10 @@ describe("@components/share/SelectDestinationModal", () => {
 		destinations: [],
 		destinationType: BoardExternalReferenceType.COURSE,
 	};
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	const setup = () => {
 		const wrapper = mount(SelectDestinationModal, {
@@ -39,15 +47,12 @@ describe("@components/share/SelectDestinationModal", () => {
 	it("should emit input value on next", async () => {
 		const { wrapper } = setup();
 
-		const select = wrapper.findComponent({ name: "v-select" });
+		const select = wrapper.findComponent(VSelect);
 		await select.setValue(course);
 
-		const dialog = wrapper.findComponent({
-			ref: "dialog",
-		});
+		const dialog = wrapper.findComponent(SvsDialog);
 
-		const nextButton = dialog.findComponent('[data-testid="dialog-next"]');
-		await nextButton.trigger("click");
+		await dialog.vm.$emit("confirm");
 
 		const emitted = wrapper.emitted("next");
 
@@ -59,11 +64,8 @@ describe("@components/share/SelectDestinationModal", () => {
 	it("should not emit value on next if course not selected", async () => {
 		const { wrapper } = setup();
 
-		const dialog = wrapper.findComponent({
-			ref: "dialog",
-		});
-
-		await dialog.vm.$emit("next");
+		const dialog = wrapper.findComponent(SvsDialog);
+		await dialog.vm.$emit("confirm");
 
 		expect(wrapper.emitted("next")).toBeUndefined();
 	});
@@ -71,11 +73,9 @@ describe("@components/share/SelectDestinationModal", () => {
 	it("should cancel on dialog cancel", async () => {
 		const { wrapper } = setup();
 
-		const dialog = wrapper.findComponent({
-			ref: "dialog",
-		});
+		const dialog = wrapper.findComponent(SvsDialog);
 
-		await dialog.vm.$emit("dialog-canceled");
+		await dialog.vm.$emit("cancel");
 		expect(wrapper.emitted("cancel")).toHaveLength(1);
 	});
 });

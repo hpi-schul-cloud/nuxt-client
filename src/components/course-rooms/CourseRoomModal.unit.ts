@@ -1,13 +1,19 @@
 import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
 import CourseRoomModal from "./CourseRoomModal.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { courseRoomListModule } from "@/store";
 import CourseRoomListModule from "@/store/course-room-list";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestingPinia } from "@pinia/testing";
+import { SvsDialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 
-describe("RoomModal", () => {
+describe("CourseRoomModal", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	const getWrapper = (props: { isOpen: boolean }) => {
 		const { isOpen } = props;
 		setupStores({ courseRoomListModule: CourseRoomListModule });
@@ -35,48 +41,6 @@ describe("RoomModal", () => {
 
 	afterEach(() => {
 		vi.resetAllMocks();
-	});
-
-	describe("when modal is not open", () => {
-		describe("when component is mounted", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper({ isOpen: false });
-				return { wrapper };
-			};
-
-			it("it should be rendered", () => {
-				const { wrapper } = setup();
-
-				const dialog = wrapper.findComponent(CustomDialog);
-
-				expect(dialog.exists()).toBe(true);
-			});
-
-			it("it should pass isOpen to CustomDialog", () => {
-				const { wrapper } = setup();
-
-				const dialog = wrapper.findComponent(CustomDialog);
-				expect(dialog.props("isOpen")).toBeFalsy();
-			});
-		});
-
-		describe("when modal receives isOpen as true", () => {
-			const setup = async () => {
-				const { wrapper } = getWrapper({ isOpen: false });
-				await wrapper.setProps({
-					isOpen: true,
-				});
-
-				return { wrapper };
-			};
-
-			it("should pass isOpen to CustomDialog", async () => {
-				const { wrapper } = await setup();
-
-				const dialog = wrapper.findComponent(CustomDialog);
-				expect(dialog.props("isOpen")).toBeTruthy();
-			});
-		});
 	});
 
 	describe("when modal is open", () => {
@@ -303,12 +267,12 @@ describe("RoomModal", () => {
 		});
 	});
 
-	describe("when CustomDialog emits dialog-closed", () => {
+	describe("when SvsDialog emits cancel", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({ isOpen: true });
 
-			const dialog = wrapper.findComponent(CustomDialog);
-			dialog.vm.$emit("dialog-closed");
+			const dialog = wrapper.findComponent(SvsDialog);
+			dialog.vm.$emit("cancel");
 
 			return { wrapper };
 		};
