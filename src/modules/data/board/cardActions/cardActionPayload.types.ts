@@ -23,11 +23,11 @@ export type UpdateCardTitleFailurePayload = UpdateCardTitleRequestPayload;
 
 export type UpdateCardColorRequestPayload = {
 	cardId: string;
-	newColor: Colors;
+	backgroundColor: Colors;
 };
 export type UpdateCardColorSuccessPayload = {
 	cardId: string;
-	newColor: Colors;
+	backgroundColor: Colors;
 	isOwnAction: boolean;
 };
 export type UpdateCardColorFailurePayload = UpdateCardColorRequestPayload;

@@ -77,7 +77,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
-		card.backgroundColor = payload.newColor;
+		card.backgroundColor = payload.backgroundColor;
 	};
 
 	const updateCardHeightRequest = socketOrRest.updateCardHeightRequest;

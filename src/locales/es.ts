@@ -516,6 +516,8 @@ export default {
 		"El título de la tarjeta {cardPosition} en la columna {columnPosition} fue cambiado a {newTitle} por otro usuario.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"La tarjeta {cardPosition} de la columna {columnPosition} ha sido actualizada por otro usuario.",
+	"components.board.screenReader.notification.cardColorUpdated.success":
+		"El color de la tarjeta {cardPosition} en la sección {columnPosition} ha sido cambiado.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Otro usuario cambió la vista del panel a {layout}.",
 	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":

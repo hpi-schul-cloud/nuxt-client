@@ -208,7 +208,7 @@ export const useBoardAriaNotification = () => {
 	};
 
 	const notifyUpdateCardColorSuccess = (action: UpdateCardColorSuccessPayload) => {
-		const { newColor, isOwnAction, cardId } = action;
+		const { isOwnAction, cardId } = action;
 		if (isOwnAction) return;
 
 		const { columnIndex, cardIndex } = boardStore.getCardLocation(cardId) as {
@@ -220,7 +220,6 @@ export const useBoardAriaNotification = () => {
 			t(SR_I18N_KEYS_MAP.CARD_COLOR_UPDATED_SUCCESS, {
 				cardPosition: cardIndex + 1,
 				columnPosition: columnIndex + 1,
-				newColor,
 			})
 		);
 	};

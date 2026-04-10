@@ -3,9 +3,9 @@ import { ElementCreate, ElementMove, LineMove } from "./types";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import {
 	BoardLayout,
+	Colors,
 	DeletedElementResponse,
 	MediaAvailableLineResponse,
-	Colors,
 	MediaBoardResponse,
 	MediaExternalToolElementResponse,
 	MediaLineResponse,

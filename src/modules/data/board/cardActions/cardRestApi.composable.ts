@@ -265,7 +265,7 @@ export const useCardRestApi = () => {
 		if (card === undefined) return;
 
 		try {
-			await updateCardColor(payload.cardId, payload.newColor);
+			await updateCardColor(payload.cardId, payload.backgroundColor);
 			cardStore.updateCardColorSuccess({ ...payload, isOwnAction: true });
 		} catch (error) {
 			handleError(error, {

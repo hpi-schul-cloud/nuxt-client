@@ -507,6 +507,8 @@ export default {
 		"Title of card {cardPosition} in column {columnPosition} was changed to {newTitle} by another user.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Card {cardPosition} in column {columnPosition} was updated by another user.",
+	"components.board.screenReader.notification.cardColorUpdated.success":
+		"The color of the card {cardPosition} in section {columnPosition} has been changed.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"The board's view was changed to {layout} by another user.",
 	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":

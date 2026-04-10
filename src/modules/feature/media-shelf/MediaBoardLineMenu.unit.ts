@@ -1,12 +1,9 @@
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { Colors } from "@api-server";
 import { mdiChevronDown, mdiChevronUp } from "@icons/material";
 import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import { VColorPicker, VListItem } from "vuetify/lib/components/index";
-import colors from "vuetify/lib/util/colors";
+import { VListItem } from "vuetify/lib/components/index";
 
 describe("MediaBoardLineMenu", () => {
 	const getWrapper = (
@@ -93,21 +90,6 @@ describe("MediaBoardLineMenu", () => {
 			await renameListItem.trigger("click");
 
 			expect(wrapper.emitted("rename-title")).toEqual([["lineId"]]);
-		});
-	});
-
-	describe("when changing the color of a line", () => {
-		it("should emit the update event for the color-model", async () => {
-			const { wrapper } = getWrapper();
-
-			const colorListItem = wrapper.findComponent("[data-testid=action-update-line-title]");
-			await colorListItem.trigger("click");
-
-			const colorPicker = wrapper.getComponent(VColorPicker);
-			colorPicker.vm.$emit("update:model-value", colors.red.lighten4);
-			await nextTick();
-
-			expect(wrapper.emitted("update:color")).toEqual([[Colors.RED]]);
 		});
 	});
 

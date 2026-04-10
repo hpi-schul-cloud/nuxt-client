@@ -516,6 +516,8 @@ export default {
 		"Заголовок картки {cardPosition} у колонці {columnPosition} було змінено на {newTitle} іншим користувачем.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Картку {cardPosition} у стовпчику {columnPosition} було оновлено іншим користувачем.",
+	"components.board.screenReader.notification.cardColorUpdated.success":
+		"Колір картки {cardPosition} у розділі {columnPosition} було змінено.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Інший користувач змінив вигляд панелі на {layout}.",
 	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":

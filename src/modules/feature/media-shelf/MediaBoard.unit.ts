@@ -93,9 +93,7 @@ describe("MediaBoard", () => {
 			availableLine.vm.$emit("update:line-background-color", Colors.RED);
 			await nextTick();
 
-			expect(useSharedMediaBoardStateMock.updateAvailableLineBackgroundColor).toHaveBeenCalledWith(
-				Colors.RED
-			);
+			expect(useSharedMediaBoardStateMock.updateAvailableLineBackgroundColor).toHaveBeenCalledWith(Colors.RED);
 		});
 	});
 
