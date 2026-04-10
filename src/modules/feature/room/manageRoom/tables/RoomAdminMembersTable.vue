@@ -11,48 +11,53 @@
 		@update:selected-ids="onUpdateSelectedIds"
 	>
 		<template #[`action-menu-items`]>
-			<KebabMenuActionChangePermission />
-			<KebabMenuActionRemoveMember />
+			<KebabMenuActionChangePermission
+				v-if="selectedIds.length === 1 && canChangeRole(selectedIds)"
+				@click="onChangePermission(selectedIds)"
+			/>
+			<KebabMenuActionRemoveMember v-if="canRemoveMember(selectedIds)" @click="onRemoveMembers(selectedIds)" />
 		</template>
 		<template #[`item.displaySchoolRole`]="{ item }">
 			<span class="text-no-wrap">
-				<VIcon
-					v-if="getSchoolRoleIcon(item.schoolRoleNames)"
-					:icon="getSchoolRoleIcon(item.schoolRoleNames)"
-				/>
+				<VIcon v-if="getSchoolRoleIcon(item.schoolRoleNames)" :icon="getSchoolRoleIcon(item.schoolRoleNames)" />
 				{{ item.displaySchoolRole }}
 			</span>
 		</template>
-		<template #[`item.actions`]="{ item }">
-			<KebabMenu
-				v-if="item.isSelectable"
-				:data-testid="`kebab-menu-${item.userId}`"
-				:aria-label="getAriaLabel(item)"
-			>
+		<template #[`item.actions`]="{ item: member }">
+			<KebabMenu :data-testid="`kebab-menu-${member.userId}`" :aria-label="getAriaLabel(member)">
 				<KebabMenuActionChangePermission
-					:aria-label="getAriaLabel(item, 'changeRole')"
+					v-if="member.allowedOperations?.passOwnershipTo"
+					:data-testid="`kebab-menu-${member.userId}-change-permission`"
+					:aria-label="getAriaLabel(member, 'changeRole')"
+					@click="onChangePermission([member.userId])"
 				/>
 				<KebabMenuActionRemoveMember
-					v-if="!isRoomOwner(item.userId)"
-					:aria-label="getAriaLabel(item, 'remove')"
+					v-if="member.allowedOperations?.removeMember"
+					:data-testid="`kebab-menu-${member.userId}-remove-member`"
+					:aria-label="getAriaLabel(member, 'remove')"
+					@click="onRemoveMembers([member.userId])"
 				/>
 			</KebabMenu>
 		</template>
 	</DataTable>
+	<ChangeRole
+		v-model="isChangeRoleDialogOpen"
+		:members="membersToChangeRole"
+		:is-admin-mode="true"
+		@close="onDialogClose"
+	/>
 </template>
 
 <script setup lang="ts">
-import { RoleName } from "@/serverApi/v3";
-import {
-	KebabMenu,
-	KebabMenuActionChangePermission,
-	KebabMenuActionRemoveMember,
-} from "@ui-kebab-menu";
+import ChangeRole from "../../roomMembers/dialogs/ChangeRole.vue";
+import { askConfirmation } from "@/utils/confirmation-dialog.utils";
+import { RoleName } from "@api-server";
 import { RoomMember, useRoomMembersStore } from "@data-room";
-import { mdiAccountSchoolOutline, mdiAccountOutline } from "@icons/material";
+import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { DataTable } from "@ui-data-table";
+import { KebabMenu, KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 type Props = {
@@ -67,51 +72,91 @@ withDefaults(defineProps<Props>(), {
 
 const { t } = useI18n();
 const roomMembersStore = useRoomMembersStore();
-const { roomMembersForAdmins, selectedIds, baseTableHeaders } =
-	storeToRefs(roomMembersStore);
-const { isRoomOwner } = roomMembersStore;
+roomMembersStore.setAdminMode(true);
+const { roomMembersWithoutApplicants, selectedIds, baseTableHeaders } = storeToRefs(roomMembersStore);
+const { removeMembers, fetchMembers } = roomMembersStore;
 
-const tableData = computed(
-	() => roomMembersForAdmins.value as unknown as Record<string, unknown>[]
-);
+const isChangeRoleDialogOpen = ref(false);
+const membersToChangeRole = ref<RoomMember[]>([]);
+
+const tableData = computed(() => roomMembersWithoutApplicants.value as unknown as Record<string, unknown>[]);
+
+const getAriaLabel = (member: RoomMember, actionFor: "remove" | "changeRole" | "" = "") => {
+	const memberFullName = member.fullName;
+	const mapActionToLanguageKey = {
+		remove: "pages.rooms.members.remove.ariaLabel",
+		changeRole: "pages.rooms.members.changePermission.ariaLabel",
+		"": "pages.rooms.members.actionMenu.ariaLabel",
+	};
+	const languageKey = mapActionToLanguageKey[actionFor];
+	return t(languageKey, { memberFullName });
+};
+
+const tableHeaders = computed(() => [
+	...baseTableHeaders.value,
+	{
+		title: t("pages.rooms.members.tableHeader.actions"),
+		key: "actions",
+		sortable: false,
+		width: 50,
+	},
+]);
+
+const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
+	if (schoolRoleNames.includes(RoleName.TEACHER)) {
+		return mdiAccountSchoolOutline;
+	}
+	if (schoolRoleNames.includes(RoleName.STUDENT)) {
+		return mdiAccountOutline;
+	}
+	if (schoolRoleNames.includes(RoleName.EXTERNAL_PERSON)) {
+		return mdiAccountClockOutline;
+	}
+	return undefined;
+};
+
+const canChangeRole = (userIds: string[]) => {
+	if (userIds.length !== 1) return false;
+	const member = roomMembersStore.getMemberById(userIds[0]);
+	return member?.allowedOperations?.passOwnershipTo;
+};
+
+const canRemoveMember = (userIds: string[]) => {
+	if (userIds.length === 0) return false;
+	return userIds.every((userId) => {
+		const member = roomMembersStore.getMemberById(userId);
+		return member?.allowedOperations?.removeMember;
+	});
+};
+
+const onRemoveMembers = async (userIds: string[]) => {
+	let title = t("pages.rooms.members.multipleRemove.confirmation");
+	if (userIds.length === 1) {
+		const memberFullName = roomMembersStore.getMemberFullName(userIds[0]);
+		title = t("pages.rooms.members.remove.confirmation", { memberFullName });
+	}
+	const shouldRemove = await askConfirmation({
+		title,
+		confirmBtnKey: "common.actions.remove",
+	});
+
+	if (shouldRemove) await removeMembers(userIds);
+};
+
+const onChangePermission = (ids: string[]) => {
+	membersToChangeRole.value = roomMembersWithoutApplicants.value.filter((member) => ids.includes(member.userId));
+
+	isChangeRoleDialogOpen.value = true;
+};
 
 const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;
 };
 
-const getAriaLabel = (
-	member: RoomMember,
-	actionFor: "remove" | "changeRole" | "" = ""
-) => {
-	const memberFullName = member.fullName;
-	const mapActionToConst = {
-		remove: "pages.rooms.members.remove.ariaLabel",
-		changeRole: "pages.rooms.members.changePermission.ariaLabel",
-		"": "pages.rooms.members.actionMenu.ariaLabel",
-	};
-	const languageKey = mapActionToConst[actionFor];
-	return t(languageKey, { memberFullName });
-};
-
-const tableHeaders = computed(() => {
-	return [
-		...baseTableHeaders.value,
-		{
-			title: t("pages.rooms.members.tableHeader.actions"),
-			key: "actions",
-			sortable: false,
-			width: 50,
-		},
-	];
-});
-
-const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
-	if (schoolRoleNames.includes(RoleName.Teacher)) {
-		return mdiAccountSchoolOutline;
-	}
-	if (schoolRoleNames.includes(RoleName.Student)) {
-		return mdiAccountOutline;
-	}
-	return undefined;
+const onDialogClose = () => {
+	fetchMembers();
+	membersToChangeRole.value = [];
+	selectedIds.value = [];
+	isChangeRoleDialogOpen.value = false;
 };
 </script>

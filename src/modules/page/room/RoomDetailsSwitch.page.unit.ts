@@ -1,87 +1,54 @@
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import EnvConfigModule from "@/store/env-config";
-import { envsFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { roomFactory } from "@@/tests/test-utils/factory/room/roomFactory";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { RoomDetailsSwitchPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { roomFactory } from "@@/tests/test-utils/factory/room/roomFactory";
-import { Router, useRoute, useRouter } from "vue-router";
-import { createMock } from "@golevelup/ts-vitest";
-import { Mock } from "vitest";
-
-vi.mock("vue-router", () => ({
-	useRoute: vi.fn(),
-	useRouter: vi.fn(),
-}));
+import { setActivePinia } from "pinia";
+import { nextTick } from "vue";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 describe("@pages/RoomsDetailsSwitch.page.vue", () => {
-	const router = createMock<Router>();
-	const useRouteMock = <Mock>useRoute;
-	useRouteMock.mockReturnValue({ params: { id: "room-id" }, push: vi.fn() });
-	const useRouterMock = <Mock>useRouter;
-
-	beforeEach(() => {
-		useRouterMock.mockReturnValue(router);
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
-	});
-
 	const setup = (
 		{
-			isLoading,
 			roomVariant,
-			lockedRoomName,
+			isLocked,
 		}: {
-			isLoading: boolean;
 			roomVariant?: RoomVariant;
-			lockedRoomName?: string;
-		} = { isLoading: false, roomVariant: RoomVariant.ROOM }
+			isLocked?: boolean;
+		} = { roomVariant: RoomVariant.ROOM, isLocked: false }
 	) => {
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getEnv: envsFactory.build({
-				FEATURE_BOARD_LAYOUT_ENABLED: true,
-			}),
-		});
+		const { router } = injectRouterMock(createRouterMock());
+		router.setParams({ id: "room-id" });
 
 		const room = roomFactory.build();
+		setActivePinia(createTestingPinia());
+		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
+
+		roomDetailsStore.$patch({
+			room,
+			roomVariant,
+			roomBoards: [],
+		});
+
+		if (isLocked) {
+			roomDetailsStore.fetchRoomAndBoards.mockResolvedValue({
+				isLocked: true,
+				lockedRoomName: "Locked Room",
+			});
+		}
 
 		const wrapper = mount(RoomDetailsSwitchPage, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					createTestingPinia({
-						initialState: {
-							roomDetailsStore: {
-								isLoading,
-								room,
-								roomVariant,
-								roomBoards: [],
-								lockedRoomName,
-							},
-						},
-					}),
-				],
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-				},
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: {
 					CourseRoomDetailsPage: true,
-					"RoomLocked.page": true,
-					"RoomDetails.page": true,
+					RoomLockedPage: true,
+					RoomDetailsPage: true,
 				},
 			},
 			router,
 		});
-
-		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 
 		return {
 			wrapper,
@@ -91,66 +58,55 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 
 	describe("when page is loading", () => {
 		it("should render loading state", async () => {
-			const { wrapper } = setup({ isLoading: true });
+			const { wrapper } = setup();
 			const loadingState = wrapper.findComponent({ name: "VProgressCircular" });
 
 			expect(loadingState.exists()).toBe(true);
 		});
 
-		it("should fetch room", () => {
-			const { roomDetailsStore } = setup({ isLoading: true });
+		it("should fetch room and boards", () => {
+			const { roomDetailsStore } = setup();
 
-			expect(roomDetailsStore.fetchRoom).toHaveBeenCalled();
+			expect(roomDetailsStore.fetchRoomAndBoards).toHaveBeenCalled();
 		});
 	});
 
-	describe("when page has loaded", () => {
+	describe("when page was loaded", () => {
 		it("should not render a loading indication", async () => {
-			const { wrapper } = setup({ isLoading: false });
+			const { wrapper } = setup();
 			const loadingState = wrapper.findComponent({ name: "VProgressCircular" });
 
+			await nextTick();
 			expect(loadingState.exists()).toBe(false);
 		});
 
 		describe("and room variant is ROOM", () => {
-			describe("and room is locked", () => {
-				it("should render room locked page", () => {
-					const { wrapper } = setup({
-						isLoading: false,
-						roomVariant: RoomVariant.ROOM,
-						lockedRoomName: "Locked Room",
-					});
-
-					expect(wrapper.html()).toBe(
-						'<room-locked.page-stub title="Locked Room"></room-locked.page-stub>'
-					);
+			it("should render room locked page for locked room", async () => {
+				const { wrapper } = setup({
+					roomVariant: RoomVariant.ROOM,
+					isLocked: true,
 				});
+				await nextTick();
+
+				expect(wrapper.html()).toBe('<room-locked-page-stub title="Locked Room"></room-locked-page-stub>');
 			});
 
-			describe("and room is not locked", () => {
-				it("should render room details page", () => {
-					const { wrapper } = setup({
-						isLoading: false,
-						roomVariant: RoomVariant.ROOM,
-					});
-
-					expect(wrapper.html()).toBe(
-						'<room-details.page-stub room="[object Object]"></room-details.page-stub>'
-					);
+			it("should render room details page", async () => {
+				const { wrapper } = setup({
+					roomVariant: RoomVariant.ROOM,
 				});
+				await nextTick();
+				expect(wrapper.html()).toBe('<room-details-page-stub room="[object Object]"></room-details-page-stub>');
 			});
 		});
 
 		describe("and room variant is COURSE_ROOM", () => {
-			it("should render course-room details page", () => {
+			it("should render course-room details page", async () => {
 				const { wrapper } = setup({
-					isLoading: false,
 					roomVariant: RoomVariant.COURSE_ROOM,
 				});
-
-				expect(wrapper.html()).toBe(
-					"<course-room-details-page-stub></course-room-details-page-stub>"
-				);
+				await nextTick();
+				expect(wrapper.html()).toBe("<course-room-details-page-stub></course-room-details-page-stub>");
 			});
 		});
 	});

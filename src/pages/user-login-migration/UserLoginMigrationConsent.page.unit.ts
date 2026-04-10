@@ -1,32 +1,24 @@
-import UserLoginMigrationConsent from "@/pages/user-login-migration/UserLoginMigrationConsent.page.vue";
+import UserLoginMigrationConsent from "./UserLoginMigrationConsent.page.vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import UserLoginMigrationModule from "@/store/user-login-migrations";
-import {
-	SYSTEMS_MODULE_KEY,
-	USER_LOGIN_MIGRATION_MODULE_KEY,
-} from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { shallowMount } from "@vue/test-utils";
-import { UserLoginMigration } from "@/store/user-login-migration";
+import { SYSTEMS_MODULE_KEY } from "@/utils/inject";
+import { mockComposable } from "@@/tests/test-utils";
 import { userLoginMigrationFactory } from "@@/tests/test-utils/factory/userLoginMigration.factory";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { UserLoginMigration, useUserLoginMigration } from "@data-user-login-migration";
+import { createTestingPinia } from "@pinia/testing";
+import { shallowMount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import type { Mocked } from "vitest";
+import { ref } from "vue";
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
+vi.mock("@data-user-login-migration");
+const useUserLoginMigrationMock = vi.mocked(useUserLoginMigration);
 
 describe("UserLoginMigrationConsent", () => {
 	let systemsModule: Mocked<SystemsModule>;
-	let userLoginMigrationModule: Mocked<UserLoginMigrationModule>;
+	let useUserLoginMigrationMockReturn: Mocked<ReturnType<typeof useUserLoginMigration>>;
 
 	const setup = async (userLoginMigration?: Partial<UserLoginMigration>) => {
 		const systemsMock: System[] = [
@@ -43,22 +35,20 @@ describe("UserLoginMigrationConsent", () => {
 		systemsModule = createModuleMocks(SystemsModule, {
 			getSystems: systemsMock,
 		});
-		const userLoginMigrationMock: UserLoginMigration =
-			userLoginMigrationFactory.build({ ...userLoginMigration });
-		userLoginMigrationModule = createModuleMocks(UserLoginMigrationModule, {
-			getUserLoginMigration: userLoginMigrationMock,
-		});
+		const userLoginMigrationMock: UserLoginMigration = userLoginMigrationFactory.build({ ...userLoginMigration });
+
+		useUserLoginMigrationMockReturn = mockComposable(useUserLoginMigration);
+		useUserLoginMigrationMock.mockReturnValue(useUserLoginMigrationMockReturn);
+		useUserLoginMigrationMockReturn.userLoginMigration = ref(userLoginMigrationMock);
 
 		const wrapper = shallowMount(UserLoginMigrationConsent, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
-					[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
 				},
 				mocks: {
-					$t: (key: string, dynamic?: object): string =>
-						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
+					$t: (key: string, dynamic?: object): string => key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
 				},
 			},
 		});
@@ -66,17 +56,20 @@ describe("UserLoginMigrationConsent", () => {
 		return {
 			wrapper,
 			userLoginMigrationMock,
+			useUserLoginMigrationMockReturn,
 		};
 	};
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	describe("Rendering", () => {
 		describe("when all mandatory props are defined", () => {
 			it("should render the component", async () => {
 				const { wrapper } = await setup();
 
-				const result: boolean = wrapper
-					.findComponent(UserLoginMigrationConsent)
-					.exists();
+				const result: boolean = wrapper.findComponent(UserLoginMigrationConsent).exists();
 
 				expect(result).toEqual(true);
 			});
@@ -104,12 +97,8 @@ describe("UserLoginMigrationConsent", () => {
 
 				const button = wrapper.find("[data-testId=btn-proceed]");
 
-				expect(button.text()).toEqual(
-					"pages.userMigration.button.startMigration"
-				);
-				expect(button.attributes().href).toEqual(
-					"/login/oauth2/targetSystemId?migration=true"
-				);
+				expect(button.text()).toEqual("pages.userMigration.button.startMigration");
+				expect(button.attributes().href).toEqual("/login/oauth2/targetSystemId?migration=true");
 			});
 
 			it("should show the skip migration button", async () => {

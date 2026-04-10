@@ -25,11 +25,7 @@ export const corePlugins: PluginName[] = [
 	"Strikethrough",
 ];
 
-export const corePluginsWithImage: PluginName[] = [
-	...corePlugins,
-	"Image",
-	"ImageInsertViaUrl",
-];
+export const corePluginsWithImage: PluginName[] = [...corePlugins, "Image", "ImageInsertViaUrl"];
 
 export const advancedPlugins: PluginName[] = [
 	...corePlugins,
@@ -99,7 +95,6 @@ export const mediaFormattingToolbar: ToolbarItem[] = [
 	"numberedList",
 	"removeFormat",
 	"|",
-	"insertImage",
 ];
 
 export const compactHeadings: { options: HeadingOption[] } = {
@@ -152,9 +147,7 @@ export const prominentHeadings: { options: HeadingOption[] } = {
 	],
 };
 
-export const fontColors = (
-	t: (key: string) => string
-): { colors: FontColor[] } => ({
+export const fontColors = (t: (key: string) => string): { colors: FontColor[] } => ({
 	colors: [
 		{ color: "#827717", label: t("components.editor.fonts.colors.oliveGreen") },
 		{ color: "#388E3C", label: "Green" },
@@ -168,9 +161,7 @@ export const fontColors = (
 	],
 });
 
-export const fontBackgroundColors = (
-	t: (key: string) => string
-): { colors: FontColor[] } => ({
+export const fontBackgroundColors = (t: (key: string) => string): { colors: FontColor[] } => ({
 	colors: [
 		{ color: "#DCEDC8", label: "Light green" },
 		{ color: "#C8E6C9", label: "Green" },

@@ -1,39 +1,27 @@
-$system-fonts: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, ubuntu,
+$system-fonts:
+	-apple-system, blinkmacsystemfont, "Segoe UI", roboto, ubuntu,
 	"Helvetica Neue", arial, sans-serif;
 
 :root {
 	--font-primary: "PT Sans", #{$system-fonts};
 	--font-accent: "PT Sans Narrow", #{$system-fonts};
 
-	/* set base values */
-	--text-base-size: 1rem;
-	--text-scale-ratio: 1.2;
-	--text-device-scale-ratio: 1.125;
-
 	/* heading sizes */
-	--heading-1: calc(var(--heading-2) * var(--text-scale-ratio));
-	--heading-2: calc(var(--heading-3) * var(--text-scale-ratio));
-	--heading-3: calc(var(--heading-4) * var(--text-scale-ratio));
-	--heading-4: calc(var(--heading-5) * var(--text-scale-ratio));
-	--heading-5: calc(var(--heading-6) * var(--text-scale-ratio));
-	--heading-6: calc(var(--text-base-size) * var(--text-scale-ratio));
+	--heading-1: 33px;
+	--heading-2: 28px;
+	--heading-3: 23px;
+	--heading-4: 19px;
+	--heading-5: 23px; // currently the same as heading-3
+	--heading-6: 19px; // currently the same as heading-4
 
 	/* text sizes */
-	--text-xs: calc(
-		var(--text-base-size) / var(--text-scale-ratio) / var(--text-scale-ratio)
-	);
-	--text-sm: calc(var(--text-base-size) / var(--text-scale-ratio));
-	--text-md: var(--text-base-size);
-	--text-lg: calc(var(--text-base-size) * var(--text-scale-ratio));
+	--text-xs: 0.694rem; // 11.11px
+	--text-sm: 0.833rem; // 13.33px --v-text-body-2
+	--text-md: 1rem; // 16px --v-text-body-1
+	--text-lg: 1.2rem; // 19.2px
 
 	/* line-height */
 	--line-height-sm: 1.05;
 	--line-height-md: 1.2;
 	--line-height-lg: 1.4;
-	--line-height-xl: 2;
-
-	/* font-weight */
-	--font-weight-light: 200;
-	--font-weight-normal: 400;
-	--font-weight-bold: 700;
 }

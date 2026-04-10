@@ -1,24 +1,8 @@
-import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionMoveDown,
-	KebabMenuActionMoveUp,
-} from "@ui-kebab-menu";
-import { shallowMount } from "@vue/test-utils";
-import { nextTick, ref } from "vue";
 import CollaborativeTextEditorElementMenu from "./CollaborativeTextEditorElementMenu.vue";
-
-// Mocks
-vi.mock("@ui-confirmation-dialog");
-
-const mockedUseDeleteConfirmationDialog = vi.mocked(
-	useDeleteConfirmationDialog
-);
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
+import { flushPromises, shallowMount } from "@vue/test-utils";
 
 describe("CollaborativeTextEditorElementMenu", () => {
 	const getWrapper = (propsData: {
@@ -29,17 +13,6 @@ describe("CollaborativeTextEditorElementMenu", () => {
 		rowIndex: number;
 		elementIndex: number;
 	}) => {
-		const askDeleteConfirmationMock = async () => await Promise.resolve(true);
-
-		setupDeleteConfirmationComposableMock({
-			askDeleteConfirmationMock,
-		});
-
-		mockedUseDeleteConfirmationDialog.mockReturnValue({
-			askDeleteConfirmation: askDeleteConfirmationMock,
-			isDeleteDialogOpen: ref(false),
-		});
-
 		const wrapper = shallowMount(CollaborativeTextEditorElementMenu, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -121,12 +94,13 @@ describe("CollaborativeTextEditorElementMenu", () => {
 		});
 
 		it("should emit the delete event on click", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 			const { wrapper } = setup();
 
 			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 
-			menuItem.vm.$emit("click", Promise.resolve(true));
-			await nextTick();
+			await menuItem.trigger("click");
+			await flushPromises();
 
 			expect(wrapper.emitted("delete:element")).toBeDefined();
 		});

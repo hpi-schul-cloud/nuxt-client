@@ -1,10 +1,7 @@
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
-import { mount } from "@vue/test-utils";
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
+import { mount } from "@vue/test-utils";
 
 type Props = {
 	url?: string;
@@ -14,11 +11,7 @@ type Props = {
 };
 
 describe("LinkContentElementDisplay", () => {
-	const setup = (options: {
-		props: Props;
-		isListBoard?: boolean;
-		windowWidth?: number;
-	}) => {
+	const setup = (options: { props: Props; isListBoard?: boolean; windowWidth?: number }) => {
 		Object.defineProperty(window, "innerWidth", {
 			writable: true,
 			configurable: true,
@@ -96,23 +89,18 @@ describe("LinkContentElementDisplay", () => {
 			${"small"}  | ${600}
 			${"medium"} | ${960}
 			${"large"}  | ${1280}
-		`(
-			"content should have row style for $screenSize display sizes when image url is given",
-			({ px: windowWidth }) => {
-				const { wrapper } = setup({
-					props: {
-						url: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus",
-						imageUrl: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus.jpg",
-					},
-					isListBoard: true,
-					windowWidth,
-				});
+		`("content should have row style for $screenSize display sizes when image url is given", ({ px: windowWidth }) => {
+			const { wrapper } = setup({
+				props: {
+					url: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus",
+					imageUrl: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus.jpg",
+				},
+				isListBoard: true,
+				windowWidth,
+			});
 
-				expect(wrapper.find(".content-element-bar").classes()).toContain(
-					"flex-row"
-				);
-			}
-		);
+			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-row");
+		});
 
 		it("content should have column style when display size is smaller than 600px", () => {
 			const { wrapper } = setup({
@@ -124,9 +112,7 @@ describe("LinkContentElementDisplay", () => {
 				windowWidth: 599,
 			});
 
-			expect(wrapper.find(".content-element-bar").classes()).toContain(
-				"flex-column"
-			);
+			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
 		});
 
 		it("content should have column style when no imageUrl is given", () => {
@@ -137,9 +123,7 @@ describe("LinkContentElementDisplay", () => {
 				isListBoard: true,
 			});
 
-			expect(wrapper.find(".content-element-bar").classes()).toContain(
-				"flex-column"
-			);
+			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
 		});
 	});
 
@@ -162,9 +146,7 @@ describe("LinkContentElementDisplay", () => {
 					windowWidth,
 				});
 
-				expect(wrapper.find(".content-element-bar").classes()).toContain(
-					"flex-column"
-				);
+				expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
 			}
 		);
 
@@ -176,9 +158,7 @@ describe("LinkContentElementDisplay", () => {
 				isListBoard: false,
 			});
 
-			expect(wrapper.find(".content-element-bar").classes()).toContain(
-				"flex-column"
-			);
+			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
 		});
 	});
 });

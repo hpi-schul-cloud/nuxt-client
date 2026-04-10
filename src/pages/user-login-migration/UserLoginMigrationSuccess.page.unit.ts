@@ -1,22 +1,13 @@
+import UserLoginMigrationSuccessPage from "./UserLoginMigrationSuccess.page.vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import { shallowMount } from "@vue/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import UserLoginMigrationSuccessPage from "./UserLoginMigrationSuccess.page.vue";
 import { SYSTEMS_MODULE_KEY } from "@/utils/inject";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { shallowMount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import type { Mocked } from "vitest";
-
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
 
 describe("UserLoginMigrationSuccess", () => {
 	let systemsModule: Mocked<SystemsModule>;
@@ -52,6 +43,10 @@ describe("UserLoginMigrationSuccess", () => {
 		};
 	};
 
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	describe("Rendering", () => {
 		describe("when all mandatory props are defined", () => {
 			it("should render the component", () => {
@@ -59,9 +54,7 @@ describe("UserLoginMigrationSuccess", () => {
 					targetSystem: "targetSystemId",
 				});
 
-				const result: boolean = wrapper
-					.findComponent(UserLoginMigrationSuccessPage)
-					.exists();
+				const result: boolean = wrapper.findComponent(UserLoginMigrationSuccessPage).exists();
 
 				expect(result).toEqual(true);
 			});

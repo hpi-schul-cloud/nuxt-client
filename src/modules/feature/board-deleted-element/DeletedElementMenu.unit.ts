@@ -1,11 +1,8 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { KebabMenuActionDelete } from "@ui-kebab-menu";
-import { shallowMount } from "@vue/test-utils";
-import { nextTick } from "vue";
 import DeletedElementMenu from "./DeletedElementMenu.vue";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { KebabMenuActionDelete } from "@ui-kebab-menu";
+import { flushPromises, shallowMount } from "@vue/test-utils";
 
 describe("DeletedElementMenu", () => {
 	const getWrapper = () => {
@@ -39,12 +36,13 @@ describe("DeletedElementMenu", () => {
 		});
 
 		it("should emit the delete event on click", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 			const { wrapper } = getWrapper();
 
 			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 
-			menuItem.vm.$emit("click", Promise.resolve(true));
-			await nextTick();
+			await menuItem.trigger("click");
+			await flushPromises();
 
 			expect(wrapper.emitted("delete:element")).toBeDefined();
 		});

@@ -1,12 +1,9 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardSectionCreationHeader } from "@ui-board";
 import { mount } from "@vue/test-utils";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick } from "vue";
-import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
 
 describe("MediaBoardLineGhost", () => {
 	const getWrapper = () => {

@@ -9,15 +9,8 @@
 	>
 		<template #[`item.owner`]="{ item }: RoomAdminTableItem">
 			<span data-testid="room-admin-table-owner-not-existing">
-				<VIcon
-					v-if="!item.owner"
-					:icon="mdiAlert"
-					color="warning"
-					class="text-medium-emphasis"
-				/>
-				{{
-					item.owner || t("pages.rooms.administration.table.row.owner.notExist")
-				}}
+				<VIcon v-if="!item.owner" :icon="mdiAlert" color="warning" class="text-medium-emphasis" />
+				{{ item.owner || t("pages.rooms.administration.table.row.owner.notExist") }}
 			</span>
 		</template>
 
@@ -31,9 +24,7 @@
 				"
 			>
 				<KebabMenuActionRoomMembers
-					:members-info-text="
-						t('pages.rooms.administration.table.actionMenu.manageRoom')
-					"
+					:members-info-text="t('pages.rooms.administration.table.actionMenu.manageRoom')"
 					:data-testid="`menu-manage-room-${item.roomId}`"
 					@click="onManageRoom(item.roomId)"
 				/>
@@ -48,33 +39,18 @@
 			</KebabMenu>
 		</template>
 	</DataTable>
-	<ConfirmationDialog>
-		<template #alert>
-			<WarningAlert data-testid="warning-alert">
-				{{ t("pages.rooms.administration.table.delete.infoMessage") }}
-			</WarningAlert>
-		</template>
-	</ConfirmationDialog>
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import { DataTable } from "@ui-data-table";
+import { askDeletion } from "@/utils/confirmation-dialog.utils";
+import { RoomStatsItemResponse } from "@api-server";
 import { useAdministrationRoomStore } from "@data-room";
-import {
-	KebabMenu,
-	KebabMenuAction,
-	KebabMenuActionRoomMembers,
-} from "@ui-kebab-menu";
-import { storeToRefs } from "pinia";
 import { mdiAlert, mdiTrashCanOutline } from "@icons/material";
+import { DataTable } from "@ui-data-table";
+import { KebabMenu, KebabMenuAction, KebabMenuActionRoomMembers } from "@ui-kebab-menu";
+import { storeToRefs } from "pinia";
 import { computed } from "vue";
-import {
-	useConfirmationDialog,
-	ConfirmationDialog,
-} from "@ui-confirmation-dialog";
-import { RoomStatsItemResponse } from "@/serverApi/v3";
-import { WarningAlert } from "@ui-alert";
+import { useI18n } from "vue-i18n";
 import { DataTableHeader } from "vuetify";
 
 type RoomAdminTableItem = { item: RoomStatsItemResponse };
@@ -94,26 +70,19 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const { askConfirmation } = useConfirmationDialog();
 
 const administrationRoomStore = useAdministrationRoomStore();
 const { deleteRoom } = administrationRoomStore;
 const { roomList, userSchoolId } = storeToRefs(administrationRoomStore);
 
-const confirmDeletion = async (roomName: string) => {
-	const shouldDelete = await askConfirmation({
-		message: t("pages.room.itemDelete.text", {
-			itemType: t("common.labels.room"),
-			itemTitle: roomName,
-		}),
-		confirmActionLangKey: "common.actions.delete",
-	});
-
-	return shouldDelete;
-};
-
 const onDeleteRoom = async (item: RoomStatsItemResponse) => {
-	const shouldDelete = await confirmDeletion(item.name);
+	const shouldDelete = await askDeletion(
+		t("ui-confirmation-dialog.ask-delete", {
+			itemType: t("common.labels.room"),
+			itemTitle: item.name,
+		}),
+		"pages.rooms.administration.table.delete.infoMessage"
+	);
 	if (shouldDelete) {
 		await deleteRoom(item.roomId);
 	}

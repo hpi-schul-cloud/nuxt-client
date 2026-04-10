@@ -1,30 +1,48 @@
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
-import { envsFactory } from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { buildPageTitle } from "./pageTitle";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { beforeAll } from "vitest";
 
 describe("pageTitle", () => {
 	const instanceTitle = "mockedTitle";
 
-	beforeEach(() => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
-		const envs = envsFactory.build({
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore({
 			SC_TITLE: instanceTitle,
 		});
-		envConfigModule.setEnvs(envs);
 	});
 
-	it("should set default page title", async () => {
-		const pageTitle = buildPageTitle();
-		expect(pageTitle).toBe(instanceTitle);
+	describe("when no titles are passed", () => {
+		it("should set default page title", () => {
+			const pageTitle = buildPageTitle();
+			expect(pageTitle).toBe(instanceTitle);
+		});
 	});
 
-	it("should add prefix to default page title if custom page title is passed", async () => {
-		const customPageTitle = "customPageTitle";
-		const pageTitle = buildPageTitle(customPageTitle);
-		expect(pageTitle).toEqual(`${customPageTitle} - ${instanceTitle}`);
+	describe("when only parent title is passed", () => {
+		it("should set page title with parent title", () => {
+			const parentTitle = "parentTitle";
+			const pageTitle = buildPageTitle(undefined, parentTitle);
+			expect(pageTitle).toEqual(`${parentTitle} - ${instanceTitle}`);
+		});
+	});
+
+	describe("when only custom page title is passed", () => {
+		it("should set page title with custom page title", () => {
+			const customPageTitle = "customPageTitle";
+			const pageTitle = buildPageTitle(customPageTitle);
+			expect(pageTitle).toEqual(`${customPageTitle} - ${instanceTitle}`);
+		});
+	});
+
+	describe("when custom page title and parent title are passed", () => {
+		it("should include both titles in the page title", () => {
+			const customPageTitle = "customPageTitle";
+			const parentTitle = "parentTitle";
+			const pageTitle = buildPageTitle(customPageTitle, parentTitle);
+			expect(pageTitle).toEqual(`${customPageTitle} - ${parentTitle} - ${instanceTitle}`);
+		});
 	});
 });

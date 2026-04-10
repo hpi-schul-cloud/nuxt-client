@@ -8,35 +8,19 @@ export type Logger = {
 
 const logger: Logger = {
 	info: (message: unknown, ...optionalParams: unknown[]) => {
-		console.log(
-			`[INFO] ${new Date().toISOString()} -`,
-			message,
-			...optionalParams
-		);
+		console.log(`[INFO] ${new Date().toISOString()} -`, message, ...optionalParams);
 	},
 
 	warn: (message: unknown, ...optionalParams: unknown[]) => {
-		console.warn(
-			`[WARN] ${new Date().toISOString()} -`,
-			message,
-			...optionalParams
-		);
+		console.warn(`[WARN] ${new Date().toISOString()} -`, message, ...optionalParams);
 	},
 
 	error: (message: unknown, ...optionalParams: unknown[]) => {
-		console.error(
-			`[ERROR] ${new Date().toISOString()} -`,
-			message,
-			...optionalParams
-		);
+		console.error(`[ERROR] ${new Date().toISOString()} -`, message, ...optionalParams);
 	},
 
 	log: (message: unknown, ...optionalParams: unknown[]) => {
-		console.log(
-			`[LOG] ${new Date().toISOString()} -`,
-			message,
-			...optionalParams
-		);
+		console.log(`[LOG] ${new Date().toISOString()} -`, message, ...optionalParams);
 	},
 };
 

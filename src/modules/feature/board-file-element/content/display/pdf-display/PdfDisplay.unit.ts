@@ -1,10 +1,7 @@
-import { fileElementResponseFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import PdfDisplay from "./PdfDisplay.vue";
+import { fileElementResponseFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("PdfDisplay", () => {
 	const setup = (props: { isEditMode: boolean; showMenu?: boolean }) => {

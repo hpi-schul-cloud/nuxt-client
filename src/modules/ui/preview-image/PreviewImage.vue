@@ -10,6 +10,7 @@
 		:aspect-ratio="aspectRatio"
 		:max-width="imageWidth"
 		:max-height="maxHeight"
+		:position="position"
 		@load="setWidth"
 		@error="setError"
 	>

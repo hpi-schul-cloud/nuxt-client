@@ -1,21 +1,16 @@
 <template>
-	<DefaultWireframe max-width="nativ" :breadcrumbs="breadcrumbs">
+	<DefaultWireframe max-width="native" :breadcrumbs="breadcrumbs">
 		<template #header>
-			<h1 class="text-h3 mb-4" data-testid="page-title">
+			<h1 data-testid="page-title">
 				{{ t("pages.rooms.invitationLinkStatus.title") }}
 			</h1>
 		</template>
 		<div v-if="isLoading" class="w-100 text-center">
-			<VProgressCircular
-				color="primary"
-				indeterminate
-				:size="51"
-				class="my-10"
-			/>
+			<VProgressCircular color="primary" indeterminate :size="51" class="my-10" />
 		</div>
 		<div v-else class="w-100 text-center">
 			<CrossedHandsSvg data-testid="img-crossed-hands" />
-			<div class="text-h4" data-testid="status-message">
+			<div class="text-h2" data-testid="status-message">
 				{{ infoMessage }}
 			</div>
 		</div>
@@ -23,17 +18,13 @@
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CrossedHandsSvg from "@/assets/img/CrossedHandsSvg.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { RoomInvitationLinkValidationError, useRoomInvitationLinkStore } from "@data-room";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import {
-	RoomInvitationLinkValidationError,
-	useRoomInvitationLinkStore,
-} from "@data-room";
 import { useRouter } from "vue-router";
 
 const { t } = useI18n();
@@ -53,8 +44,7 @@ const router = useRouter();
 const roomInvitationLinkStore = useRoomInvitationLinkStore();
 
 const useLink = async () => {
-	const { roomId, validationMessage, schoolName } =
-		await roomInvitationLinkStore.useLink(props.invitationLinkId);
+	const { roomId, validationMessage, schoolName } = await roomInvitationLinkStore.useLink(props.invitationLinkId);
 	isLoading.value = false;
 
 	if (roomId !== "") {
@@ -65,9 +55,7 @@ const useLink = async () => {
 	updateInfoMessage(validationMessage, schoolName);
 };
 
-const pageTitle = computed(() =>
-	buildPageTitle(`${t("pages.rooms.invitationLinkStatus.title")}`)
-);
+const pageTitle = computed(() => buildPageTitle(t("pages.rooms.invitationLinkStatus.title")));
 useTitle(pageTitle);
 
 const breadcrumbs: Breadcrumb[] = [
@@ -87,31 +75,23 @@ onMounted(() => {
 
 const updateInfoMessage = (validationMessage: string, schoolName: string) => {
 	switch (validationMessage) {
-		case RoomInvitationLinkValidationError.CantInviteStudentsFromOtherSchool:
-			infoMessage.value = t(
-				"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool",
-				{ schoolName }
-			);
+		case RoomInvitationLinkValidationError.CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL:
+			infoMessage.value = t("pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool", { schoolName });
 			break;
-		case RoomInvitationLinkValidationError.Expired:
+		case RoomInvitationLinkValidationError.EXPIRED:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.expired");
 			break;
-		case RoomInvitationLinkValidationError.OnlyForTeachers:
-			infoMessage.value = t("pages.rooms.invitationLinkStatus.onlyForTeachers");
+		case RoomInvitationLinkValidationError.NOT_USABLE_FOR_CURRENT_ROLE:
+			infoMessage.value = t("pages.rooms.invitationLinkStatus.notUsableForCurrentRole");
 			break;
-		case RoomInvitationLinkValidationError.RestrictedToCreatorSchool:
-			infoMessage.value = t(
-				"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool",
-				{ schoolName }
-			);
+		case RoomInvitationLinkValidationError.RESTRICTED_TO_CREATOR_SCHOOL:
+			infoMessage.value = t("pages.rooms.invitationLinkStatus.restrictedToCreatorSchool", { schoolName });
 			break;
-		case RoomInvitationLinkValidationError.InvalidLink:
+		case RoomInvitationLinkValidationError.INVALID_LINK:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.invalidLink");
 			break;
-		case RoomInvitationLinkValidationError.RoomApplicantWaiting:
-			infoMessage.value = t(
-				"pages.rooms.invitationLinkStatus.confirmationPending"
-			);
+		case RoomInvitationLinkValidationError.ROOM_APPLICANT_WAITING:
+			infoMessage.value = t("pages.rooms.invitationLinkStatus.confirmationPending");
 			break;
 		default:
 			infoMessage.value = t("error.generic");

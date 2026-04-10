@@ -1,56 +1,24 @@
 import AdministrationRoomsPage from "./AdministrationRooms.page.vue";
-import {
-	envsFactory,
-	mockedPiniaStoreTyping,
-	schoolFactory,
-} from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { schoolsModule } from "@/store";
+import SchoolsModule from "@/store/schools";
+import { createTestEnvStore, mockedPiniaStoreTyping, schoolFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { useAdministrationRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import SchoolsModule from "@/store/schools";
-import { schoolsModule, envConfigModule } from "@/store";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { Router, useRouter } from "vue-router";
-import { Mock } from "vitest";
-import EnvConfigModule from "@/store/env-config";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
-
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
-
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
-
-vi.mock("vue-router", () => ({
-	useRoute: vi.fn(),
-	useRouter: vi.fn(),
-}));
-const useRouterMock = <Mock>useRouter;
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 describe("AdministrationRooms.page", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	const ownSchool = {
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
 	};
 
 	beforeEach(() => {
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 		setupStores({
 			schoolsModule: SchoolsModule,
-			envConfigModule: EnvConfigModule,
 		});
 
 		schoolsModule.setSchool(schoolFactory.build(ownSchool));
@@ -59,17 +27,13 @@ describe("AdministrationRooms.page", () => {
 		vi.clearAllMocks();
 	});
 
-	const setup = (options?: {
-		isEmptyList?: boolean;
-		featureFlag?: boolean;
-	}) => {
-		const envs = envsFactory.build({
+	const setup = (options?: { isEmptyList?: boolean; featureFlag?: boolean }) => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore({
 			FEATURE_ADMINISTRATE_ROOMS_ENABLED: options?.featureFlag ?? true,
 		});
-		envConfigModule.setEnvs(envs);
 		const isEmptyList = options?.isEmptyList ?? false;
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+		const { router } = injectRouterMock(createRouterMock());
 
 		const wrapper = mount(AdministrationRoomsPage, {
 			global: {
@@ -100,7 +64,7 @@ describe("AdministrationRooms.page", () => {
 	};
 
 	describe("rendering", () => {
-		it("should render the page and Table component ", async () => {
+		it("should render the page and Table component ", () => {
 			const { wrapper } = setup();
 			const roomAdminTable = wrapper.findComponent({ name: "RoomAdminTable" });
 			const emptyStateComponent = wrapper.findComponent({ name: "EmptyState" });
@@ -110,7 +74,7 @@ describe("AdministrationRooms.page", () => {
 			expect(emptyStateComponent.exists()).toBe(false);
 		});
 
-		it("should render the EmptyState component when isEmptyList is true", async () => {
+		it("should render the EmptyState component when isEmptyList is true", () => {
 			const { wrapper } = setup({ isEmptyList: true });
 			const roomAdminTable = wrapper.findComponent({ name: "RoomAdminTable" });
 			const emptyStateComponent = wrapper.findComponent({ name: "EmptyState" });
@@ -137,7 +101,7 @@ describe("AdministrationRooms.page", () => {
 			await roomAdminTable.vm.$emit("manage-room-members", roomId);
 
 			const expectedRoute = {
-				name: "administration-rooms-manage-details",
+				name: "administration-rooms-manage-members",
 				params: { roomId },
 			};
 

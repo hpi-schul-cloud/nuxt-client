@@ -1,15 +1,12 @@
-import { MediaBoardColors } from "@/serverApi/v3";
+import { isMediaBoardColor, MediaBoardColorMapper } from "./mediaBoardColorMapper";
+import { MediaBoardColors } from "@api-server";
 import colors from "vuetify/lib/util/colors";
-import {
-	isMediaBoardColor,
-	MediaBoardColorMapper,
-} from "./mediaBoardColorMapper";
 
 describe(MediaBoardColorMapper.name, () => {
 	describe("isMediaBoardColor", () => {
 		describe("when it is a media board color", () => {
 			it("should return true", () => {
-				const result = isMediaBoardColor(MediaBoardColors.Red);
+				const result = isMediaBoardColor(MediaBoardColors.RED);
 
 				expect(result).toEqual(true);
 			});
@@ -27,10 +24,7 @@ describe(MediaBoardColorMapper.name, () => {
 	describe("mapColorToHex", () => {
 		describe("when the color is a vuetify color", () => {
 			it("should return the hex value for the vuetify color", () => {
-				const result = MediaBoardColorMapper.mapColorToHex(
-					MediaBoardColors.Red,
-					"lighten5"
-				);
+				const result = MediaBoardColorMapper.mapColorToHex(MediaBoardColors.RED, "lighten5");
 
 				expect(result).toEqual(colors.red.lighten5);
 			});
@@ -38,10 +32,7 @@ describe(MediaBoardColorMapper.name, () => {
 
 		describe("when the color is transparent", () => {
 			it("should return white", () => {
-				const result = MediaBoardColorMapper.mapColorToHex(
-					MediaBoardColors.Transparent,
-					"lighten5"
-				);
+				const result = MediaBoardColorMapper.mapColorToHex(MediaBoardColors.TRANSPARENT, "lighten5");
 
 				expect(result).toEqual(colors.shades.white);
 			});
@@ -53,7 +44,7 @@ describe(MediaBoardColorMapper.name, () => {
 			it("should return the color name", () => {
 				const result = MediaBoardColorMapper.mapHexToColor(colors.blue.darken1);
 
-				expect(result).toEqual(MediaBoardColors.Blue);
+				expect(result).toEqual(MediaBoardColors.BLUE);
 			});
 		});
 
@@ -61,7 +52,7 @@ describe(MediaBoardColorMapper.name, () => {
 			it("should return transparent", () => {
 				const result = MediaBoardColorMapper.mapHexToColor(colors.shades.white);
 
-				expect(result).toEqual(MediaBoardColors.Transparent);
+				expect(result).toEqual(MediaBoardColors.TRANSPARENT);
 			});
 		});
 

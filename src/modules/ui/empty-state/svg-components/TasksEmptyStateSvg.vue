@@ -1,35 +1,8 @@
 <template>
-	<svg
-		height="200"
-		viewBox="0 0 1026 642"
-		fill="none"
-		xmlns="http://www.w3.org/2000/svg"
-		aria-hidden="true"
-	>
-		<ellipse
-			opacity="0.78683"
-			cx="211.172"
-			cy="608.577"
-			rx="95.4844"
-			ry="9"
-			fill="#ECEEF0"
-		/>
-		<ellipse
-			opacity="0.801153"
-			cx="922.5"
-			cy="616"
-			rx="103.5"
-			ry="9"
-			fill="#ECEEF0"
-		/>
-		<ellipse
-			opacity="0.606934"
-			cx="75.9995"
-			cy="336.75"
-			rx="45"
-			ry="5.75"
-			fill="#ECEEF0"
-		/>
+	<svg height="200" viewBox="0 0 1026 642" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+		<ellipse opacity="0.78683" cx="211.172" cy="608.577" rx="95.4844" ry="9" fill="#ECEEF0" />
+		<ellipse opacity="0.801153" cx="922.5" cy="616" rx="103.5" ry="9" fill="#ECEEF0" />
+		<ellipse opacity="0.606934" cx="75.9995" cy="336.75" rx="45" ry="5.75" fill="#ECEEF0" />
 		<g opacity="0.5">
 			<path
 				fill-rule="evenodd"
@@ -68,14 +41,7 @@
 				fill="#B4BDC3"
 			/>
 		</g>
-		<ellipse
-			opacity="0.916713"
-			cx="455.615"
-			cy="581.665"
-			rx="51"
-			ry="9"
-			fill="#ECEEF0"
-		/>
+		<ellipse opacity="0.916713" cx="455.615" cy="581.665" rx="51" ry="9" fill="#ECEEF0" />
 		<path
 			d="M59.1389 160.746C56.6373 150.702 71.01 148.42 75.2801 152.513C79.5498 156.605 82.8717 167.904 79.7233 169.907C77.9062 170.955 75.6976 171.487 73.4028 171.492L78.3129 183.931L67.2987 187.509L65.4194 169.293C62.4988 167.527 60.1209 164.689 59.1389 160.746Z"
 			fill="#997659"
@@ -188,14 +154,7 @@
 			fill="black"
 			fill-opacity="0.1"
 		/>
-		<rect
-			x="134.287"
-			y="247.012"
-			width="544.394"
-			height="89.9167"
-			rx="10"
-			fill="#E3E7E9"
-		/>
+		<rect x="134.287" y="247.012" width="544.394" height="89.9167" rx="10" fill="#E3E7E9" />
 		<path
 			opacity="0.926851"
 			fill-rule="evenodd"
@@ -235,14 +194,7 @@
 			d="M257.107 228.693C255.898 228.69 254.92 227.709 254.92 226.5V226.5C254.92 225.289 255.902 224.307 257.114 224.307H456.486C457.865 224.307 458.982 225.424 458.982 226.803V226.803C458.982 228.184 457.86 229.303 456.478 229.299L257.107 228.693Z"
 			fill="#E3E7E9"
 		/>
-		<rect
-			x="358.365"
-			y="105.745"
-			width="318.496"
-			height="64"
-			rx="5"
-			fill="#ECEEF0"
-		/>
+		<rect x="358.365" y="105.745" width="318.496" height="64" rx="5" fill="#ECEEF0" />
 		<rect x="443.114" y="105.745" width="29.6681" height="64" fill="#B4BDC3" />
 		<rect x="412.137" y="105.745" width="11.4891" height="64" fill="#B4BDC3" />
 		<path

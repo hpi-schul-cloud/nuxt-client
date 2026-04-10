@@ -11,8 +11,8 @@
 </template>
 
 <script setup lang="ts">
-import { mdiInformation, mdiClose } from "@icons/material";
 import BaseAlert from "./BaseAlert.vue";
+import { mdiClose, mdiInformation } from "@icons/material";
 
 interface Props {
 	showCloseIcon?: boolean;

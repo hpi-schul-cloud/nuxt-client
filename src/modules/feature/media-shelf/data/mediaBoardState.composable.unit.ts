@@ -1,24 +1,18 @@
-import {
-	ApiErrorHandler,
-	useErrorHandler,
-} from "@/components/error-handling/ErrorHandler.composable";
-import { BoardLayout, MediaBoardColors } from "@/serverApi/v3";
+import { useMediaBoardApi } from "./mediaBoardApi.composable";
+import { useSharedMediaBoardState as useMediaBoardState } from "./mediaBoardState.composable";
 import {
 	mediaAvailableLineResponseFactory,
 	mediaBoardResponseFactory,
 	mediaExternalToolElementResponseFactory,
 	mediaLineResponseFactory,
+	mockComposable,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useMediaBoardApi } from "./mediaBoardApi.composable";
-import { useSharedMediaBoardState as useMediaBoardState } from "./mediaBoardState.composable";
-import { useBoardNotifier } from "@util-board";
+import { BoardLayout, MediaBoardColors } from "@api-server";
+import { ApiErrorHandler, useErrorHandler } from "@util-error-handling";
+import { Mocked } from "vitest";
 
 vi.mock("./mediaBoardApi.composable");
-vi.mock("@/components/error-handling/ErrorHandler.composable");
-
-vi.mock("@util-board");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+vi.mock("@util-error-handling/ErrorHandler.composable");
 
 vi.mock(
 	"@/utils/create-shared-composable",
@@ -29,20 +23,16 @@ vi.mock(
 );
 
 describe("mediaBoardState.composable", () => {
-	let mediaBoardApiMock: DeepMocked<ReturnType<typeof useMediaBoardApi>>;
-	let useErrorHandlerMock: DeepMocked<ReturnType<typeof useErrorHandler>>;
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	let mediaBoardApiMock: Mocked<ReturnType<typeof useMediaBoardApi>>;
+	let useErrorHandlerMock: Mocked<ReturnType<typeof useErrorHandler>>;
 
 	beforeEach(() => {
-		mediaBoardApiMock = createMock<ReturnType<typeof useMediaBoardApi>>();
-		useErrorHandlerMock = createMock<ReturnType<typeof useErrorHandler>>({
+		mediaBoardApiMock = mockComposable(useMediaBoardApi);
+		useErrorHandlerMock = mockComposable(useErrorHandler, {
 			notifyWithTemplate: vi.fn().mockReturnValue(() => {
 				Promise.resolve();
 			}),
 		});
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		vi.mocked(useMediaBoardApi).mockReturnValue(mediaBoardApiMock);
 		vi.mocked(useErrorHandler).mockReturnValue(useErrorHandlerMock);
@@ -158,9 +148,7 @@ describe("mediaBoardState.composable", () => {
 				const composable = useMediaBoardState();
 
 				const mediaBoardResponse = mediaBoardResponseFactory.build();
-				mediaBoardApiMock.getMediaBoardForUser.mockResolvedValueOnce(
-					mediaBoardResponse
-				);
+				mediaBoardApiMock.getMediaBoardForUser.mockResolvedValueOnce(mediaBoardResponse);
 
 				return {
 					composable,
@@ -215,15 +203,9 @@ describe("mediaBoardState.composable", () => {
 				 */
 				useErrorHandlerMock.handleAnyError.mock.calls[0][1]();
 
-				expect(useErrorHandlerMock.notifyWithTemplate).toHaveBeenCalledWith(
-					"notLoaded",
-					"board"
-				);
+				expect(useErrorHandlerMock.notifyWithTemplate).toHaveBeenCalledWith("notLoaded", "board");
 
-				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalledWith(
-					"error",
-					expect.any(Function)
-				);
+				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalledWith("error", expect.any(Function));
 			});
 		});
 	});
@@ -242,7 +224,7 @@ describe("mediaBoardState.composable", () => {
 			it("should not call the api", async () => {
 				const { composable } = setup();
 
-				await composable.updateMediaBoardLayout(BoardLayout.Grid);
+				await composable.updateMediaBoardLayout(BoardLayout.GRID);
 
 				expect(mediaBoardApiMock.updateBoardLayout).not.toHaveBeenCalled();
 			});
@@ -253,7 +235,7 @@ describe("mediaBoardState.composable", () => {
 				const composable = useMediaBoardState();
 
 				const mediaBoardResponse = mediaBoardResponseFactory.build({
-					layout: BoardLayout.List,
+					layout: BoardLayout.LIST,
 				});
 				composable.mediaBoard.value = mediaBoardResponse;
 
@@ -266,20 +248,17 @@ describe("mediaBoardState.composable", () => {
 			it("should call the api to change the layout", async () => {
 				const { composable, mediaBoardResponse } = setup();
 
-				await composable.updateMediaBoardLayout(BoardLayout.Grid);
+				await composable.updateMediaBoardLayout(BoardLayout.GRID);
 
-				expect(mediaBoardApiMock.updateBoardLayout).toHaveBeenCalledWith(
-					mediaBoardResponse.id,
-					BoardLayout.Grid
-				);
+				expect(mediaBoardApiMock.updateBoardLayout).toHaveBeenCalledWith(mediaBoardResponse.id, BoardLayout.GRID);
 			});
 
 			it("should set the layout", async () => {
 				const { composable } = setup();
 
-				await composable.updateMediaBoardLayout(BoardLayout.Grid);
+				await composable.updateMediaBoardLayout(BoardLayout.GRID);
 
-				expect(composable.mediaBoard.value?.layout).toEqual(BoardLayout.Grid);
+				expect(composable.mediaBoard.value?.layout).toEqual(BoardLayout.GRID);
 			});
 		});
 
@@ -288,7 +267,7 @@ describe("mediaBoardState.composable", () => {
 				const composable = useMediaBoardState();
 
 				const mediaBoardResponse = mediaBoardResponseFactory.build({
-					layout: BoardLayout.List,
+					layout: BoardLayout.LIST,
 				});
 				composable.mediaBoard.value = mediaBoardResponse;
 
@@ -303,7 +282,7 @@ describe("mediaBoardState.composable", () => {
 			it("should call handleAnyError", async () => {
 				const { composable } = setup();
 
-				await composable.updateMediaBoardLayout(BoardLayout.List);
+				await composable.updateMediaBoardLayout(BoardLayout.LIST);
 
 				/**
 				 * Simulates actually calling the error handling function.
@@ -311,15 +290,9 @@ describe("mediaBoardState.composable", () => {
 				 */
 				useErrorHandlerMock.handleAnyError.mock.calls[0][1]();
 
-				expect(useErrorHandlerMock.notifyWithTemplate).toHaveBeenCalledWith(
-					"notUpdated",
-					"boardRow"
-				);
+				expect(useErrorHandlerMock.notifyWithTemplate).toHaveBeenCalledWith("notUpdated", "boardRow");
 
-				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalledWith(
-					"error",
-					expect.any(Function)
-				);
+				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalledWith("error", expect.any(Function));
 			});
 		});
 	});
@@ -352,9 +325,7 @@ describe("mediaBoardState.composable", () => {
 				composable.mediaBoard.value = mediaBoardResponse;
 
 				const availableLineResponse = mediaAvailableLineResponseFactory.build();
-				mediaBoardApiMock.getAvailableMedia.mockResolvedValueOnce(
-					availableLineResponse
-				);
+				mediaBoardApiMock.getAvailableMedia.mockResolvedValueOnce(availableLineResponse);
 
 				return {
 					composable,
@@ -368,9 +339,7 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.fetchAvailableMedia();
 
-				expect(mediaBoardApiMock.getAvailableMedia).toHaveBeenCalledWith(
-					mediaBoardResponse.id
-				);
+				expect(mediaBoardApiMock.getAvailableMedia).toHaveBeenCalledWith(mediaBoardResponse.id);
 			});
 
 			it("should set isLoading to false", async () => {
@@ -386,9 +355,7 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.fetchAvailableMedia();
 
-				expect(composable.availableMediaLine.value).toEqual(
-					availableLineResponse
-				);
+				expect(composable.availableMediaLine.value).toEqual(availableLineResponse);
 			});
 		});
 
@@ -398,8 +365,8 @@ describe("mediaBoardState.composable", () => {
 				composable.mediaBoard.value = mediaBoardResponseFactory.build();
 
 				mediaBoardApiMock.getAvailableMedia.mockRejectedValueOnce("error");
-				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error: unknown, handler: ApiErrorHandler) => handler()
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce((_error: unknown, handler: ApiErrorHandler) =>
+					handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -472,9 +439,7 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.createLine();
 
-				expect(mediaBoardApiMock.createLine).toHaveBeenCalledWith(
-					mediaBoardResponse.id
-				);
+				expect(mediaBoardApiMock.createLine).toHaveBeenCalledWith(mediaBoardResponse.id);
 			});
 
 			it("should exit board operation loading state", async () => {
@@ -490,9 +455,7 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.createLine();
 
-				expect(composable.mediaBoard.value?.lines).toContainEqual(
-					newLineResponse
-				);
+				expect(composable.mediaBoard.value?.lines).toContainEqual(newLineResponse);
 			});
 
 			it("should return the new line", async () => {
@@ -510,8 +473,8 @@ describe("mediaBoardState.composable", () => {
 				composable.mediaBoard.value = mediaBoardResponseFactory.build();
 
 				mediaBoardApiMock.createLine.mockRejectedValueOnce("error");
-				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error: unknown, handler: ApiErrorHandler) => handler()
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce((_error: unknown, handler: ApiErrorHandler) =>
+					handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -582,9 +545,7 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.deleteLine(line.id);
 
-				expect(composable.mediaBoard.value?.lines).not.toContainEqual(
-					expect.objectContaining({ id: line.id })
-				);
+				expect(composable.mediaBoard.value?.lines).not.toContainEqual(expect.objectContaining({ id: line.id }));
 			});
 
 			it("should call the api to delete the line", async () => {
@@ -608,9 +569,7 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.deleteLine(line.id);
 
-				expect(mediaBoardApiMock.getAvailableMedia).toHaveBeenCalledWith(
-					composable.mediaBoard.value?.id
-				);
+				expect(mediaBoardApiMock.getAvailableMedia).toHaveBeenCalledWith(composable.mediaBoard.value?.id);
 			});
 		});
 
@@ -643,8 +602,8 @@ describe("mediaBoardState.composable", () => {
 				});
 
 				mediaBoardApiMock.deleteLine.mockRejectedValueOnce("error");
-				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error: unknown, handler: ApiErrorHandler) => handler()
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce((_error: unknown, handler: ApiErrorHandler) =>
+					handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -800,11 +759,7 @@ describe("mediaBoardState.composable", () => {
 						oldLineIndex: 0,
 					});
 
-					expect(mediaBoardApiMock.moveLine).toHaveBeenCalledWith(
-						line1.id,
-						composable.mediaBoard.value?.id,
-						1
-					);
+					expect(mediaBoardApiMock.moveLine).toHaveBeenCalledWith(line1.id, composable.mediaBoard.value?.id, 1);
 				});
 
 				it("should exit board operation loading state", async () => {
@@ -832,8 +787,8 @@ describe("mediaBoardState.composable", () => {
 				});
 
 				mediaBoardApiMock.moveLine.mockRejectedValueOnce("error");
-				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error: unknown, handler: ApiErrorHandler) => handler()
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce((_error: unknown, handler: ApiErrorHandler) =>
+					handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -943,10 +898,7 @@ describe("mediaBoardState.composable", () => {
 
 					await composable.updateLineTitle(line.id, "newTitle");
 
-					expect(mediaBoardApiMock.updateLineTitle).toHaveBeenCalledWith(
-						line.id,
-						"newTitle"
-					);
+					expect(mediaBoardApiMock.updateLineTitle).toHaveBeenCalledWith(line.id, "newTitle");
 				});
 			});
 		});
@@ -961,8 +913,8 @@ describe("mediaBoardState.composable", () => {
 				});
 
 				mediaBoardApiMock.updateLineTitle.mockRejectedValueOnce("error");
-				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error: unknown, handler: ApiErrorHandler) => handler()
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce((_error: unknown, handler: ApiErrorHandler) =>
+					handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -1006,10 +958,7 @@ describe("mediaBoardState.composable", () => {
 			it("should not call the api", async () => {
 				const { composable } = setup();
 
-				await composable.updateLineBackgroundColor(
-					"lineId",
-					MediaBoardColors.Blue
-				);
+				await composable.updateLineBackgroundColor("lineId", MediaBoardColors.BLUE);
 
 				expect(mediaBoardApiMock.updateLineColor).not.toHaveBeenCalled();
 			});
@@ -1029,10 +978,7 @@ describe("mediaBoardState.composable", () => {
 				it("should not call the api", async () => {
 					const { composable } = setup();
 
-					await composable.updateLineBackgroundColor(
-						"lineId",
-						MediaBoardColors.Blue
-					);
+					await composable.updateLineBackgroundColor("lineId", MediaBoardColors.BLUE);
 
 					expect(mediaBoardApiMock.updateLineColor).not.toHaveBeenCalled();
 				});
@@ -1043,7 +989,7 @@ describe("mediaBoardState.composable", () => {
 					const composable = useMediaBoardState();
 
 					const line = mediaLineResponseFactory.build({
-						backgroundColor: MediaBoardColors.Red,
+						backgroundColor: MediaBoardColors.RED,
 					});
 					composable.mediaBoard.value = mediaBoardResponseFactory.build({
 						lines: [line],
@@ -1058,15 +1004,12 @@ describe("mediaBoardState.composable", () => {
 				it("should update the color of the line", async () => {
 					const { composable, line } = setup();
 
-					await composable.updateLineBackgroundColor(
-						line.id,
-						MediaBoardColors.Blue
-					);
+					await composable.updateLineBackgroundColor(line.id, MediaBoardColors.BLUE);
 
 					expect(composable.mediaBoard.value?.lines).toContainEqual(
 						expect.objectContaining({
 							id: line.id,
-							backgroundColor: MediaBoardColors.Blue,
+							backgroundColor: MediaBoardColors.BLUE,
 						})
 					);
 				});
@@ -1074,15 +1017,9 @@ describe("mediaBoardState.composable", () => {
 				it("should call the api to update the color of the line", async () => {
 					const { composable, line } = setup();
 
-					await composable.updateLineBackgroundColor(
-						line.id,
-						MediaBoardColors.Blue
-					);
+					await composable.updateLineBackgroundColor(line.id, MediaBoardColors.BLUE);
 
-					expect(mediaBoardApiMock.updateLineColor).toHaveBeenCalledWith(
-						line.id,
-						MediaBoardColors.Blue
-					);
+					expect(mediaBoardApiMock.updateLineColor).toHaveBeenCalledWith(line.id, MediaBoardColors.BLUE);
 				});
 			});
 		});
@@ -1092,15 +1029,15 @@ describe("mediaBoardState.composable", () => {
 				const composable = useMediaBoardState();
 
 				const line = mediaLineResponseFactory.build({
-					backgroundColor: MediaBoardColors.Red,
+					backgroundColor: MediaBoardColors.RED,
 				});
 				composable.mediaBoard.value = mediaBoardResponseFactory.build({
 					lines: [line],
 				});
 
 				mediaBoardApiMock.updateLineColor.mockRejectedValueOnce("error");
-				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error: unknown, handler: ApiErrorHandler) => handler()
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce((_error: unknown, handler: ApiErrorHandler) =>
+					handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -1115,10 +1052,7 @@ describe("mediaBoardState.composable", () => {
 			it("should call handleAnyError", async () => {
 				const { composable, lineId } = setup();
 
-				await composable.updateLineBackgroundColor(
-					lineId,
-					MediaBoardColors.Blue
-				);
+				await composable.updateLineBackgroundColor(lineId, MediaBoardColors.BLUE);
 
 				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalled();
 			});
@@ -1126,10 +1060,7 @@ describe("mediaBoardState.composable", () => {
 			it("should reload board", async () => {
 				const { composable, lineId } = setup();
 
-				await composable.updateLineBackgroundColor(
-					lineId,
-					MediaBoardColors.Blue
-				);
+				await composable.updateLineBackgroundColor(lineId, MediaBoardColors.BLUE);
 
 				expect(mediaBoardApiMock.getMediaBoardForUser).toHaveBeenCalled();
 			});
@@ -1141,8 +1072,7 @@ describe("mediaBoardState.composable", () => {
 			const setup = () => {
 				const composable = useMediaBoardState();
 				composable.mediaBoard.value = undefined;
-				composable.availableMediaLine.value =
-					mediaAvailableLineResponseFactory.build();
+				composable.availableMediaLine.value = mediaAvailableLineResponseFactory.build();
 
 				return {
 					composable,
@@ -1152,13 +1082,9 @@ describe("mediaBoardState.composable", () => {
 			it("should not call the api", async () => {
 				const { composable } = setup();
 
-				await composable.updateAvailableLineBackgroundColor(
-					MediaBoardColors.Blue
-				);
+				await composable.updateAvailableLineBackgroundColor(MediaBoardColors.BLUE);
 
-				expect(
-					mediaBoardApiMock.updateAvailableLineColor
-				).not.toHaveBeenCalled();
+				expect(mediaBoardApiMock.updateAvailableLineColor).not.toHaveBeenCalled();
 			});
 		});
 
@@ -1176,13 +1102,9 @@ describe("mediaBoardState.composable", () => {
 			it("should not call the api", async () => {
 				const { composable } = setup();
 
-				await composable.updateAvailableLineBackgroundColor(
-					MediaBoardColors.Blue
-				);
+				await composable.updateAvailableLineBackgroundColor(MediaBoardColors.BLUE);
 
-				expect(
-					mediaBoardApiMock.updateAvailableLineColor
-				).not.toHaveBeenCalled();
+				expect(mediaBoardApiMock.updateAvailableLineColor).not.toHaveBeenCalled();
 			});
 		});
 
@@ -1191,7 +1113,7 @@ describe("mediaBoardState.composable", () => {
 				const composable = useMediaBoardState();
 
 				const availableLine = mediaAvailableLineResponseFactory.build({
-					backgroundColor: MediaBoardColors.Red,
+					backgroundColor: MediaBoardColors.RED,
 				});
 				const mediaBoard = mediaBoardResponseFactory.build();
 				composable.availableMediaLine.value = availableLine;
@@ -1207,26 +1129,17 @@ describe("mediaBoardState.composable", () => {
 			it("should update the color of the line", async () => {
 				const { composable } = setup();
 
-				await composable.updateAvailableLineBackgroundColor(
-					MediaBoardColors.Blue
-				);
+				await composable.updateAvailableLineBackgroundColor(MediaBoardColors.BLUE);
 
-				expect(composable.availableMediaLine.value?.backgroundColor).toEqual(
-					MediaBoardColors.Blue
-				);
+				expect(composable.availableMediaLine.value?.backgroundColor).toEqual(MediaBoardColors.BLUE);
 			});
 
 			it("should call the api to update the color of the line", async () => {
 				const { composable, mediaBoard } = setup();
 
-				await composable.updateAvailableLineBackgroundColor(
-					MediaBoardColors.Blue
-				);
+				await composable.updateAvailableLineBackgroundColor(MediaBoardColors.BLUE);
 
-				expect(mediaBoardApiMock.updateAvailableLineColor).toHaveBeenCalledWith(
-					mediaBoard.id,
-					MediaBoardColors.Blue
-				);
+				expect(mediaBoardApiMock.updateAvailableLineColor).toHaveBeenCalledWith(mediaBoard.id, MediaBoardColors.BLUE);
 			});
 		});
 
@@ -1235,17 +1148,15 @@ describe("mediaBoardState.composable", () => {
 				const composable = useMediaBoardState();
 
 				const availableLine = mediaAvailableLineResponseFactory.build({
-					backgroundColor: MediaBoardColors.Red,
+					backgroundColor: MediaBoardColors.RED,
 				});
 				const mediaBoard = mediaBoardResponseFactory.build();
 				composable.availableMediaLine.value = availableLine;
 				composable.mediaBoard.value = mediaBoard;
 
-				mediaBoardApiMock.updateAvailableLineColor.mockRejectedValueOnce(
-					"error"
-				);
-				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error: unknown, handler: ApiErrorHandler) => handler()
+				mediaBoardApiMock.updateAvailableLineColor.mockRejectedValueOnce("error");
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce((_error: unknown, handler: ApiErrorHandler) =>
+					handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -1259,9 +1170,7 @@ describe("mediaBoardState.composable", () => {
 			it("should call handleAnyError", async () => {
 				const { composable } = setup();
 
-				await composable.updateAvailableLineBackgroundColor(
-					MediaBoardColors.Blue
-				);
+				await composable.updateAvailableLineBackgroundColor(MediaBoardColors.BLUE);
 
 				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalled();
 			});
@@ -1269,9 +1178,7 @@ describe("mediaBoardState.composable", () => {
 			it("should reload board", async () => {
 				const { composable } = setup();
 
-				await composable.updateAvailableLineBackgroundColor(
-					MediaBoardColors.Blue
-				);
+				await composable.updateAvailableLineBackgroundColor(MediaBoardColors.BLUE);
 
 				expect(mediaBoardApiMock.getMediaBoardForUser).toHaveBeenCalled();
 			});
@@ -1353,10 +1260,7 @@ describe("mediaBoardState.composable", () => {
 
 					await composable.updateLineCollapsed(line.id, true);
 
-					expect(mediaBoardApiMock.updateLineCollapsed).toHaveBeenCalledWith(
-						line.id,
-						true
-					);
+					expect(mediaBoardApiMock.updateLineCollapsed).toHaveBeenCalledWith(line.id, true);
 				});
 			});
 		});
@@ -1373,8 +1277,8 @@ describe("mediaBoardState.composable", () => {
 				});
 
 				mediaBoardApiMock.updateLineCollapsed.mockRejectedValueOnce("error");
-				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error: unknown, handler: ApiErrorHandler) => handler()
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce((_error: unknown, handler: ApiErrorHandler) =>
+					handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -1409,8 +1313,7 @@ describe("mediaBoardState.composable", () => {
 			const setup = () => {
 				const composable = useMediaBoardState();
 				composable.mediaBoard.value = undefined;
-				composable.availableMediaLine.value =
-					mediaAvailableLineResponseFactory.build();
+				composable.availableMediaLine.value = mediaAvailableLineResponseFactory.build();
 
 				return {
 					composable,
@@ -1422,9 +1325,7 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.updateAvailableLineCollapsed(true);
 
-				expect(
-					mediaBoardApiMock.updateAvailableLineCollapsed
-				).not.toHaveBeenCalled();
+				expect(mediaBoardApiMock.updateAvailableLineCollapsed).not.toHaveBeenCalled();
 			});
 		});
 
@@ -1444,9 +1345,7 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.updateAvailableLineCollapsed(true);
 
-				expect(
-					mediaBoardApiMock.updateAvailableLineCollapsed
-				).not.toHaveBeenCalled();
+				expect(mediaBoardApiMock.updateAvailableLineCollapsed).not.toHaveBeenCalled();
 			});
 		});
 
@@ -1481,9 +1380,7 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.updateAvailableLineCollapsed(true);
 
-				expect(
-					mediaBoardApiMock.updateAvailableLineCollapsed
-				).toHaveBeenCalledWith(mediaBoard.id, true);
+				expect(mediaBoardApiMock.updateAvailableLineCollapsed).toHaveBeenCalledWith(mediaBoard.id, true);
 			});
 		});
 
@@ -1498,11 +1395,9 @@ describe("mediaBoardState.composable", () => {
 				composable.availableMediaLine.value = availableLine;
 				composable.mediaBoard.value = mediaBoard;
 
-				mediaBoardApiMock.updateAvailableLineCollapsed.mockRejectedValueOnce(
-					"error"
-				);
-				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error: unknown, handler: ApiErrorHandler) => handler()
+				mediaBoardApiMock.updateAvailableLineCollapsed.mockRejectedValueOnce("error");
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce((_error: unknown, handler: ApiErrorHandler) =>
+					handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -1586,8 +1481,7 @@ describe("mediaBoardState.composable", () => {
 				const setup = () => {
 					const composable = useMediaBoardState();
 					composable.mediaBoard.value = mediaBoardResponseFactory.build();
-					composable.availableMediaLine.value =
-						mediaAvailableLineResponseFactory.build();
+					composable.availableMediaLine.value = mediaAvailableLineResponseFactory.build();
 
 					return {
 						composable,
@@ -1603,9 +1497,7 @@ describe("mediaBoardState.composable", () => {
 						schoolExternalToolId: "schoolExternalToolId",
 					});
 
-					expect(mediaBoardApiMock.createLine).toHaveBeenCalledWith(
-						composable.mediaBoard.value?.id
-					);
+					expect(mediaBoardApiMock.createLine).toHaveBeenCalledWith(composable.mediaBoard.value?.id);
 				});
 
 				it("should exit board operation loading state", async () => {
@@ -1625,8 +1517,7 @@ describe("mediaBoardState.composable", () => {
 				const setup = () => {
 					const composable = useMediaBoardState();
 					composable.mediaBoard.value = mediaBoardResponseFactory.build();
-					composable.availableMediaLine.value =
-						mediaAvailableLineResponseFactory.build();
+					composable.availableMediaLine.value = mediaAvailableLineResponseFactory.build();
 
 					return {
 						composable,
@@ -1653,12 +1544,11 @@ describe("mediaBoardState.composable", () => {
 					composable.mediaBoard.value = mediaBoardResponseFactory.build({
 						lines: [],
 					});
-					composable.availableMediaLine.value =
-						mediaAvailableLineResponseFactory.build();
+					composable.availableMediaLine.value = mediaAvailableLineResponseFactory.build();
 
 					mediaBoardApiMock.createLine.mockRejectedValueOnce("error");
-					useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-						(_error: unknown, handler: ApiErrorHandler) => handler()
+					useErrorHandlerMock.handleAnyError.mockImplementationOnce((_error: unknown, handler: ApiErrorHandler) =>
+						handler()
 					);
 					useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 						Promise.resolve();
@@ -1700,14 +1590,10 @@ describe("mediaBoardState.composable", () => {
 					composable.mediaBoard.value = mediaBoardResponseFactory.build({
 						lines: [],
 					});
-					composable.availableMediaLine.value =
-						mediaAvailableLineResponseFactory.build();
+					composable.availableMediaLine.value = mediaAvailableLineResponseFactory.build();
 
-					const newElementResponse =
-						mediaExternalToolElementResponseFactory.build();
-					mediaBoardApiMock.createElement.mockResolvedValueOnce(
-						newElementResponse
-					);
+					const newElementResponse = mediaExternalToolElementResponseFactory.build();
+					mediaBoardApiMock.createElement.mockResolvedValueOnce(newElementResponse);
 					const newLine = mediaLineResponseFactory.build({ elements: [] });
 					mediaBoardApiMock.createLine.mockResolvedValueOnce(newLine);
 
@@ -1727,9 +1613,7 @@ describe("mediaBoardState.composable", () => {
 						schoolExternalToolId: "schoolExternalToolId",
 					});
 
-					expect(composable.mediaBoard.value?.lines[0].elements).toContainEqual(
-						newElementResponse
-					);
+					expect(composable.mediaBoard.value?.lines[0].elements).toContainEqual(newElementResponse);
 				});
 
 				it("should call the api to create a new element", async () => {
@@ -1742,11 +1626,7 @@ describe("mediaBoardState.composable", () => {
 						schoolExternalToolId: "schoolExternalToolId",
 					});
 
-					expect(mediaBoardApiMock.createElement).toHaveBeenCalledWith(
-						"lineId",
-						1,
-						"schoolExternalToolId"
-					);
+					expect(mediaBoardApiMock.createElement).toHaveBeenCalledWith("lineId", 1, "schoolExternalToolId");
 				});
 
 				it("should return the new element", async () => {
@@ -1768,12 +1648,11 @@ describe("mediaBoardState.composable", () => {
 					composable.mediaBoard.value = mediaBoardResponseFactory.build({
 						lines: [],
 					});
-					composable.availableMediaLine.value =
-						mediaAvailableLineResponseFactory.build();
+					composable.availableMediaLine.value = mediaAvailableLineResponseFactory.build();
 
 					mediaBoardApiMock.createElement.mockRejectedValueOnce("error");
-					useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-						(_error: unknown, handler: ApiErrorHandler) => handler()
+					useErrorHandlerMock.handleAnyError.mockImplementationOnce((_error: unknown, handler: ApiErrorHandler) =>
+						handler()
 					);
 					useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 						Promise.resolve();
@@ -1855,9 +1734,9 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.deleteElement(elementId);
 
-				expect(
-					composable.mediaBoard.value?.lines[0].elements
-				).not.toContainEqual(expect.objectContaining({ id: elementId }));
+				expect(composable.mediaBoard.value?.lines[0].elements).not.toContainEqual(
+					expect.objectContaining({ id: elementId })
+				);
 			});
 
 			it("should call the api to delete the element", async () => {
@@ -1881,9 +1760,7 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.deleteElement(elementId);
 
-				expect(mediaBoardApiMock.getAvailableMedia).toHaveBeenCalledWith(
-					composable.mediaBoard.value?.id
-				);
+				expect(mediaBoardApiMock.getAvailableMedia).toHaveBeenCalledWith(composable.mediaBoard.value?.id);
 			});
 		});
 
@@ -1917,8 +1794,8 @@ describe("mediaBoardState.composable", () => {
 				});
 
 				mediaBoardApiMock.deleteElement.mockRejectedValueOnce("error");
-				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error: unknown, handler: ApiErrorHandler) => handler()
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce((_error: unknown, handler: ApiErrorHandler) =>
+					handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -2008,11 +1885,7 @@ describe("mediaBoardState.composable", () => {
 					toLineId: line2.id,
 				});
 
-				expect(mediaBoardApiMock.moveElement).toHaveBeenCalledWith(
-					element.id,
-					line2.id,
-					1
-				);
+				expect(mediaBoardApiMock.moveElement).toHaveBeenCalledWith(element.id, line2.id, 1);
 			});
 
 			it("should exit board operation loading state", async () => {
@@ -2140,8 +2013,8 @@ describe("mediaBoardState.composable", () => {
 				});
 
 				mediaBoardApiMock.createLine.mockRejectedValueOnce("error");
-				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error: unknown, handler: ApiErrorHandler) => handler()
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce((_error: unknown, handler: ApiErrorHandler) =>
+					handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();
@@ -2193,8 +2066,8 @@ describe("mediaBoardState.composable", () => {
 				});
 
 				mediaBoardApiMock.moveElement.mockRejectedValueOnce("error");
-				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
-					(_error: unknown, handler: ApiErrorHandler) => handler()
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce((_error: unknown, handler: ApiErrorHandler) =>
+					handler()
 				);
 				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
 					Promise.resolve();

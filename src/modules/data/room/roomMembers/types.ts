@@ -3,7 +3,7 @@ import {
 	RoomInvitationLinkResponse,
 	RoomMemberResponse,
 	UpdateRoomInvitationLinkBodyParams,
-} from "@/serverApi/v3";
+} from "@api-server";
 
 export type RoomMember = RoomMemberResponse & {
 	isSelectable?: boolean;
@@ -15,19 +15,17 @@ export type RoomMember = RoomMemberResponse & {
 export type RoomInvitationLink = RoomInvitationLinkResponse;
 
 export type RoomInvitationFormData = {
-	activeUntil: Date | undefined;
+	activeUntil: string | undefined;
 	activeUntilChecked: boolean;
-	isValidForStudents: boolean;
+	isUsableByStudents: boolean;
+	isUsableByExternalPersons: boolean;
 	requiresConfirmation: boolean;
 	restrictedToCreatorSchool: boolean;
 	title: string;
 	id: string;
 };
 
-export type CreateRoomInvitationLinkDto = Omit<
-	CreateRoomInvitationLinkBodyParams,
-	"roomId"
->;
+export type CreateRoomInvitationLinkDto = Omit<CreateRoomInvitationLinkBodyParams, "roomId">;
 
 export type UpdateRoomInvitationLinkDto = UpdateRoomInvitationLinkBodyParams & {
 	id: string;
@@ -45,4 +43,16 @@ export enum InvitationStep {
 	EDIT = "edit",
 }
 
-export { RoomInvitationLinkValidationError } from "@/serverApi/v3";
+export enum ExternalMembersInvitationSteps {
+	Email = "email",
+	Details = "details",
+	Error = "error",
+}
+
+export enum ExternalMemberCheckStatus {
+	ACCOUNT_FOUND_AND_ADDED = "account_found_and_added",
+	ACCOUNT_NOT_FOUND = "account_not_found",
+	ACCOUNT_IS_NOT_EXTERNAL = "account_is_not_external",
+}
+
+export { RoomInvitationLinkValidationError } from "@api-server";

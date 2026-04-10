@@ -2,13 +2,7 @@
 	<ContentElementBar>
 		<template #display>
 			<div @click="openPdf">
-				<PreviewImage
-					:src="previewSrc"
-					alt=""
-					:aspect-ratio="1.77777"
-					position="top"
-					:cover="true"
-				/>
+				<PreviewImage :src="previewSrc" alt="" :aspect-ratio="1.77777" position="top" :cover="true" />
 			</div>
 		</template>
 		<template v-if="showMenu" #menu><slot /></template>
@@ -16,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { FileElementResponse } from "@/serverApi/v3";
+import { FileElementResponse } from "@api-server";
 import { ContentElementBar } from "@ui-board";
 import { PreviewImage } from "@ui-preview-image";
 

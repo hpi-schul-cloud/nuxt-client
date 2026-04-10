@@ -1,5 +1,5 @@
-import { SchoolFeature } from "@/serverApi/v3";
 import { School } from "@/store/types/schools";
+import { SchoolFeature } from "@api-server";
 
 export const mockSchool: School = {
 	id: "mockSchoolId",
@@ -35,15 +35,14 @@ export const mockSchool: School = {
 	purpose: undefined,
 	features: [],
 	featureObject: {
-		[SchoolFeature.RocketChat]: false,
-		[SchoolFeature.Videoconference]: false,
-		[SchoolFeature.StudentVisibility]: false,
-		[SchoolFeature.LdapUniventionMigrationSchool]: false,
-		[SchoolFeature.ShowOutdatedUsers]: false,
-		[SchoolFeature.EnableLdapSyncDuringMigration]: false,
-		[SchoolFeature.OauthProvisioningEnabled]: false,
-		[SchoolFeature.Nextcloud]: false,
-		[SchoolFeature.AiTutor]: false,
+		[SchoolFeature.VIDEOCONFERENCE]: false,
+		[SchoolFeature.STUDENT_VISIBILITY]: false,
+		[SchoolFeature.LDAP_UNIVENTION_MIGRATION_SCHOOL]: false,
+		[SchoolFeature.SHOW_OUTDATED_USERS]: false,
+		[SchoolFeature.ENABLE_LDAP_SYNC_DURING_MIGRATION]: false,
+		[SchoolFeature.OAUTH_PROVISIONING_ENABLED]: false,
+		[SchoolFeature.NEXTCLOUD]: false,
+		[SchoolFeature.AI_TUTOR]: false,
 	},
 	instanceFeatures: [],
 	permissions: {},

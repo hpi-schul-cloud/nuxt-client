@@ -1,22 +1,16 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import ExtendedIconBtn from "./ExtendedIconBtn.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
 
 describe("@ui-extended-icon-btn/ExtendedIconBtn.vue", () => {
-	const mountComponent = (
-		options: ComponentMountingOptions<typeof ExtendedIconBtn> = {}
-	) => {
-		return mount(ExtendedIconBtn, {
+	const mountComponent = (options: ComponentMountingOptions<typeof ExtendedIconBtn> = {}) =>
+		mount(ExtendedIconBtn, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: { VTooltip: true },
 			},
 			...options,
 		});
-	};
 
 	it("should render component", () => {
 		const wrapper = mountComponent({

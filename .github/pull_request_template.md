@@ -17,7 +17,6 @@
 -->
 
 ## Links to Ticket and related Pull-Requests
-
 <!--
 Base links to copy
 - https://ticketsystem.dbildungscloud.de/browse/BC-????
@@ -25,6 +24,8 @@ Base links to copy
 - https://github.com/hpi-schul-cloud/end-to-end-tests/pull/????
 - https://github.com/hpi-schul-cloud/schulcloud-client/pull/????
 -->
+<!-- related-prs-and-tickets-start -->
+<!-- related-prs-and-tickets-end -->
 
 ## Changes
 

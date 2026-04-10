@@ -25,7 +25,5 @@ const humanReadableFileSize = computed(() => {
 	return localizedString;
 });
 
-const fileExtension = computed(() =>
-	getFileExtension(props.fileName).toUpperCase()
-);
+const fileExtension = computed(() => getFileExtension(props.fileName).toUpperCase());
 </script>

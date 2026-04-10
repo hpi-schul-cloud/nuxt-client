@@ -1,6 +1,8 @@
 <template>
 	<div :key="renderKey" :class="columnClasses" class="d-flex flex-column">
 		<BoardColumnHeader
+			:can-edit-column="allowedOperations?.updateColumnTitle ?? false"
+			:can-delete-column="allowedOperations?.deleteColumn ?? false"
 			:column-id="column.id"
 			:title="column.title"
 			:index="index"
@@ -25,10 +27,10 @@
 					bubbleScroll: true,
 					direction: 'vertical',
 					delayOnTouchOnly: true,
-					delay: 300,
+					delay: 200,
 					touchStartThreshold: 3, // needed for sensitive touch devices
 					fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
-					disabled: !hasMovePermission,
+					disabled: !allowedOperations?.moveColumn,
 					dragClass: 'elevation-10',
 					dragoverBubble: false,
 					draggable: '.draggable',
@@ -51,43 +53,37 @@
 						:data-card-id="element.cardId"
 						class="draggable mb-3"
 						:class="{
-							'drag-disabled': !hasMovePermission,
+							'drag-disabled': !allowedOperations?.moveCard,
 							'mx-2': !isListBoard,
 						}"
 						:card-id="element.cardId"
 						:height="element.height"
 						:row-index="elementIndex"
 						:column-index="reactiveIndex"
-						@move:card-keyboard="
-							onMoveCardKeyboard(elementIndex, element.cardId, $event)
-						"
+						@move:card-keyboard="onMoveCardKeyboard(elementIndex, element.cardId, $event)"
 						@delete:card="onDeleteCard"
 						@reload:board="onReloadBoard"
+						@share:card="emit('share:card', $event)"
+						@move:card="emit('move:card', $event)"
 					/>
 				</template>
 			</Sortable>
-			<BoardAddCardButton
-				v-if="showAddButton"
-				:data-testid="`column-${index}-add-card-btn`"
-				@add-card="onCreateCard"
-			/>
+			<BoardAddCardButton v-if="showAddButton" :data-testid="`column-${index}-add-card-btn`" @add-card="onCreateCard" />
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
+import CardHost from "../card/CardHost.vue";
+import BoardAddCardButton from "./BoardAddCardButton.vue";
+import BoardColumnHeader from "./BoardColumnHeader.vue";
 import { BoardColumn } from "@/types/board/Board";
-import { useBoardPermissions, useForceRender } from "@data-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
+import { useBoardAllowedOperations, useBoardStore, useForceRender, useSharedEditMode } from "@data-board";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, toRef } from "vue";
-import CardHost from "../card/CardHost.vue";
-import BoardAddCardButton from "./BoardAddCardButton.vue";
-import BoardColumnHeader from "./BoardColumnHeader.vue";
 
 type Props = {
 	column: BoardColumn;
@@ -100,6 +96,7 @@ const props = defineProps<Props>();
 
 const emit = defineEmits<{
 	(e: "create:card", columnId: string): void;
+	(e: "move:card", cardId: string): void;
 	(e: "delete:card", cardId: string): void;
 	(e: "delete:column", columnId: string): void;
 	(e: "move:column-down"): void;
@@ -108,13 +105,13 @@ const emit = defineEmits<{
 	(e: "move:column-up"): void;
 	(e: "reload:board"): void;
 	(e: "update:column-title", newTitle: string): void;
+	(e: "share:card", cardId: string): void;
 }>();
 
 const boardStore = useBoardStore();
+const { allowedOperations } = useBoardAllowedOperations();
 const reactiveIndex = toRef(props, "index");
-
-const { hasEditPermission, hasMovePermission, hasCreateColumnPermission } =
-	useBoardPermissions();
+const { editModeId } = useSharedEditMode();
 
 const columnClasses = computed(() => {
 	const classes = ["column-drag-handle", "bg-white"];
@@ -127,8 +124,13 @@ const columnClasses = computed(() => {
 });
 
 const { isDragging, dragStart, dragEnd } = useDragAndDrop();
+
+const isCardOfColumnInEditMode = computed(
+	() => props.column.cards.find((c) => c.cardId === editModeId.value) !== undefined
+);
+
 const showAddButton = computed(
-	() => hasCreateColumnPermission.value && isDragging.value === false
+	() => allowedOperations.value.createCard && isDragging.value === false && !isCardOfColumnInEditMode.value
 );
 
 const isNotFirstColumn = computed(() => props.index !== 0);
@@ -136,11 +138,11 @@ const isNotLastColumn = computed(() => props.index !== props.columnCount - 1);
 
 const onCreateCard = () => emit("create:card", props.column.id);
 
-const onColumnDelete = (columnId: string): void => {
+const onColumnDelete = (columnId: string) => {
 	emit("delete:column", columnId);
 };
 
-const onDeleteCard = (cardId: string): void => {
+const onDeleteCard = (cardId: string) => {
 	emit("delete:card", cardId);
 };
 
@@ -148,15 +150,13 @@ const onDragStart = (): void => {
 	dragStart();
 };
 
-const onDragEnd = async (event: SortableEvent) => {
+const onDragEnd = (event: SortableEvent) => {
 	dragEnd();
 	const { newIndex, oldIndex, to, from, item } = event;
 	const cardId = extractDataAttribute(item, "cardId") as string;
 	const fromColumnId = extractDataAttribute(from, "columnId") as string;
 	const toColumnId = extractDataAttribute(to, "columnId");
-	const toColumnIndex = toColumnId
-		? boardStore.getColumnIndex(toColumnId)
-		: undefined;
+	const toColumnIndex = toColumnId ? boardStore.getColumnIndex(toColumnId) : undefined;
 
 	if (toColumnId !== fromColumnId) {
 		item?.parentNode?.removeChild(item);
@@ -181,21 +181,14 @@ const onDragEnd = async (event: SortableEvent) => {
 	}
 };
 
-const onMoveCardKeyboard = (
-	cardIndex: number,
-	cardId: string | undefined,
-	keyString: string
-) => {
+const onMoveCardKeyboard = (cardIndex: number, cardId: string | undefined, keyString: string) => {
 	if (cardId === undefined) return;
-	if (!hasEditPermission.value) return;
+	if (!allowedOperations.value.moveCard) return;
 
 	const fromColumnId = props.column.id;
 	const fromColumnIndex = boardStore.getColumnIndex(fromColumnId);
 
-	if (
-		keyString === "ArrowRight" &&
-		fromColumnIndex === boardStore.getLastColumnIndex()
-	) {
+	if (keyString === "ArrowRight" && fromColumnIndex === boardStore.getLastColumnIndex()) {
 		boardStore.moveCardToNewColumn(cardId);
 		return;
 	}

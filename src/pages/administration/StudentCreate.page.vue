@@ -1,115 +1,86 @@
 <template>
-	<default-wireframe
-		:headline="$t('pages.administration.students.new.title')"
+	<DefaultWireframe
+		:headline="t('pages.administration.students.new.title')"
 		:breadcrumbs="breadcrumbs"
 		max-width="short"
 	>
-		<form-create-user @create-user="createStudent">
+		<CreateUserForm @create-user="createStudentHandler">
 			<template #inputs>
-				<v-text-field
-					v-model="date"
-					:label="$t('common.labels.birthdate')"
-					:min="minDate"
-					:max="maxDate"
+				<DatePicker
+					:label="t('common.labels.birthdate')"
 					data-testid="input_create-student_birthdate"
-					:class="{ hideCurrentDate: !date }"
-					type="date"
+					:min-date="minDate"
+					:max-date="maxDate"
+					:date="date"
+					@update:date="date = $event"
 				/>
-				<v-checkbox
+				<VCheckbox
 					v-model="sendRegistration"
 					name="switch"
 					class="mt-8"
-					:label="$t('pages.administration.students.new.checkbox.label')"
+					:label="t('pages.administration.students.new.checkbox.label')"
 					data-testid="input_create-student_send-registration"
 				/>
 			</template>
 			<template #errors>
-				<info-message
-					v-if="businessError"
-					:message="$t('pages.administration.students.new.error')"
-					type="bc-error"
-				/>
+				<InfoMessage v-if="businessError" :message="t('pages.administration.students.new.error')" type="bc-error" />
 			</template>
-		</form-create-user>
-	</default-wireframe>
+		</CreateUserForm>
+	</DefaultWireframe>
 </template>
 
-<script>
-import FormCreateUser from "@/components/organisms/FormCreateUser";
-import InfoMessage from "@/components/atoms/InfoMessage";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { inputRangeDate } from "@/plugins/datetime";
-import { notifierModule } from "@/store";
+<script setup lang="ts">
+import CreateUserForm from "@/components/administration/CreateUserForm.vue";
+import InfoMessage from "@/components/administration/InfoMessage.vue";
+import { dateFromToday } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { mapGetters } from "vuex";
+import { RoleName } from "@api-server";
+import { useAppStore } from "@data-app";
+import { UserCreatingData, useUsersStore } from "@data-users";
+import { DatePicker } from "@ui-date-time-picker";
+import { DefaultWireframe } from "@ui-layout";
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
-export default {
-	components: {
-		FormCreateUser,
-		InfoMessage,
-		DefaultWireframe,
+const { t } = useI18n();
+const usersStore = useUsersStore();
+usersStore.init(RoleName.STUDENT);
+const { createUser } = usersStore;
+const router = useRouter();
+
+const date = ref<string | undefined>(undefined);
+const minDate = dateFromToday(-100, "year");
+const maxDate = dateFromToday(-4, "year");
+const sendRegistration = ref(false);
+const businessError = ref(false);
+const breadcrumbs = [
+	{
+		title: t("pages.administration.students.index.title"),
+		to: "/administration/students",
 	},
-	data() {
-		return {
-			birthday: null,
-			date: null,
-			menu: false,
-			minDate: inputRangeDate(-100, "y"),
-			maxDate: inputRangeDate(-4, "y"),
-			sendRegistration: false,
-			breadcrumbs: [
-				{
-					title: this.$t("pages.administration.index.title"),
-					disabled: true,
-				},
-				{
-					title: this.$t("pages.administration.students.index.title"),
-					to: "/administration/students",
-				},
-				{
-					title: this.$t("pages.administration.students.new.title"),
-					to: "/administration/students/new",
-					disabled: true,
-				},
-			],
-		};
+	{
+		title: t("pages.administration.students.new.title"),
+		disabled: true,
 	},
-	computed: {
-		...mapGetters("users", {
-			businessError: "getBusinessError",
-		}),
-	},
-	created() {
-		this.$store.commit("users/resetBusinessError");
-	},
-	mounted() {
-		document.title = buildPageTitle(
-			this.$t("pages.administration.students.new.title")
-		);
-	},
-	methods: {
-		async createStudent(userData) {
-			await this.$store.dispatch("users/createStudent", {
-				firstName: userData.firstName,
-				lastName: userData.lastName,
-				email: userData.email,
-				birthday: this.date,
-				roles: ["student"],
-				schoolId: this.$me.school.id,
-				sendRegistration: this.sendRegistration,
-			});
-			if (!this.businessError) {
-				notifierModule.show({
-					text: this.$t("pages.administration.students.new.success"),
-					status: "success",
-					timeout: 5000,
-				});
-				this.$router.push({
-					path: `/administration/students`,
-				});
-			}
-		},
-	},
+];
+document.title = buildPageTitle(t("pages.administration.students.new.title"));
+
+const createStudentHandler = async (userData: UserCreatingData) => {
+	const { error } = await createUser({
+		firstName: userData.firstName,
+		lastName: userData.lastName,
+		email: userData.email,
+		birthday: date.value ? new Date(date.value) : undefined,
+		roles: [RoleName.STUDENT],
+		schoolId: useAppStore().school?.id ?? "",
+		sendRegistration: sendRegistration.value,
+	});
+	if (error) {
+		businessError.value = true;
+		return;
+	}
+	router.push("/administration/students");
 };
 </script>
 

@@ -1,10 +1,5 @@
-import {
-	FileApiFactory,
-	FileApiInterface,
-	WopiApiFactory,
-	WopiApiInterface,
-} from "@/fileStorageApi/v3";
-import { authModule } from "@/store/store-accessor";
+import { useFileRecordsStore } from "./FileRecords.state";
+import { useParentStatisticsStore } from "./ParentStatistics.state";
 import {
 	EditorMode,
 	FileRecord,
@@ -14,9 +9,11 @@ import {
 	StorageLocation,
 } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { useFileRecordsStore } from "./FileRecords.state";
-import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
-import { useParentStatisticsStore } from "./ParentStatistics.state";
+import { formatFileSize, getFileExtension } from "@/utils/fileHelper";
+import { FileApiFactory, FileApiInterface, WopiApiFactory, WopiApiInterface } from "@api-file-storage";
+import { notifyError, useAppStore } from "@data-app";
+import { useEnvFileConfig } from "@data-env";
+import { useI18n } from "vue-i18n";
 
 export enum ErrorType {
 	FILE_IS_BLOCKED = "FILE_IS_BLOCKED",
@@ -25,41 +22,42 @@ export enum ErrorType {
 	FILE_NAME_EMPTY = "FILE_NAME_EMPTY",
 	COULD_NOT_CREATE_PATH = "COULD_NOT_CREATE_PATH",
 	FILE_TOO_BIG = "FILE_TOO_BIG",
+	FILE_LIMIT_PER_PARENT_EXCEEDED = "FILE_LIMIT_PER_PARENT_EXCEEDED",
 	Unauthorized = "Unauthorized",
 	Forbidden = "Forbidden",
 }
 
+export enum CollaboraFileType {
+	Text = "TEXT",
+	Spreadsheet = "SPREADSHEET",
+	Presentation = "PRESENTATION",
+}
+
 export const useFileStorageApi = () => {
+	const { t } = useI18n();
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
 	const wopiApi: WopiApiInterface = WopiApiFactory(undefined, "/v3", $axios);
+	const fileConfig = useEnvFileConfig();
 
-	const {
-		showFileTooBigError,
-		showForbiddenError,
-		showUnauthorizedError,
-		showInternalServerError,
-		showFileNotDeletedError,
-		showFileExistsError,
-	} = useFileStorageNotifier();
+	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords, getFileRecordById } = useFileRecordsStore();
 
-	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords } =
-		useFileRecordsStore();
+	const { getStatisticByParentId, setStatisticForParent } = useParentStatisticsStore();
 
-	const { getStatisticByParentId, setStatisticForParent } =
-		useParentStatisticsStore();
-
-	const fetchFiles = async (
-		parentId: string,
-		parentType: FileRecordParent
-	): Promise<void> => {
+	const fetchFileById = async (fileRecordId: string): Promise<void> => {
 		try {
-			const schoolId = authModule.getSchool?.id as string;
-			const response = await fileApi.list(
-				schoolId,
-				StorageLocation.SCHOOL,
-				parentId,
-				parentType
-			);
+			const response = await fileApi.getFileRecord(fileRecordId);
+
+			upsertFileRecords([response.data]);
+		} catch (error) {
+			showError(error);
+			throw error;
+		}
+	};
+
+	const fetchFiles = async (parentId: string, parentType: FileRecordParent): Promise<void> => {
+		try {
+			const schoolId = useAppStore().school?.id as string;
+			const response = await fileApi.list(schoolId, StorageLocation.SCHOOL, parentId, parentType);
 
 			upsertFileRecords(response.data.data);
 		} catch (error) {
@@ -68,20 +66,10 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const upload = async (
-		file: File,
-		parentId: string,
-		parentType: FileRecordParent
-	): Promise<void> => {
+	const upload = async (file: File, parentId: string, parentType: FileRecordParent): Promise<void> => {
 		try {
-			const schoolId = authModule.getSchool?.id as string;
-			const response = await fileApi.upload(
-				schoolId,
-				StorageLocation.SCHOOL,
-				parentId,
-				parentType,
-				file
-			);
+			const schoolId = useAppStore().school?.id as string;
+			const response = await fileApi.upload(schoolId, StorageLocation.SCHOOL, parentId, parentType, file);
 			upsertFileRecords([response.data]);
 		} catch (error) {
 			showError(error);
@@ -89,18 +77,47 @@ export const useFileStorageApi = () => {
 		}
 	};
 
+	const getCollaboraAssetUrl = (collaboraFileType: CollaboraFileType): string => {
+		const base = `${window.location.origin}/collabora`;
+
+		if (collaboraFileType === CollaboraFileType.Text) {
+			return `${base}/doc.docx`;
+		}
+		if (collaboraFileType === CollaboraFileType.Spreadsheet) {
+			return `${base}/spreadsheet.xlsx`;
+		}
+
+		return `${base}/presentation.pptx`;
+	};
+
+	const uploadCollaboraFile = async (
+		type: CollaboraFileType,
+		parentId: string,
+		parentType: FileRecordParent,
+		fileName: string
+	) => {
+		const assetUrl = getCollaboraAssetUrl(type);
+		const fileExtension = getFileExtension(assetUrl);
+		const fullFileName = `${fileName}.${fileExtension}`;
+
+		const fileRecord = await uploadFromUrl(assetUrl, parentId, parentType, fullFileName);
+
+		return fileRecord;
+	};
+
 	const uploadFromUrl = async (
 		imageUrl: string,
 		parentId: string,
-		parentType: FileRecordParent
-	): Promise<void> => {
+		parentType: FileRecordParent,
+		fileName?: string
+	): Promise<FileRecord | void> => {
 		try {
 			const { pathname } = new URL(imageUrl);
-			const fileName = pathname.substring(pathname.lastIndexOf("/") + 1);
-			const schoolId = authModule.getSchool?.id as string;
+			fileName = fileName ?? pathname.substring(pathname.lastIndexOf("/") + 1);
+			const schoolId = useAppStore().school?.id as string;
 			const fileUrlParams: FileUrlParams = {
 				url: imageUrl,
-				fileName,
+				fileName: fileName === "" ? "file" : fileName,
 				headers: { "User-Agent": "Embed Request User Agent" },
 			};
 			const response = await fileApi.uploadFromUrl(
@@ -112,15 +129,14 @@ export const useFileStorageApi = () => {
 			);
 
 			upsertFileRecords([response.data]);
+
+			return response.data;
 		} catch (error) {
 			showError(error);
 		}
 	};
 
-	const rename = async (
-		fileRecordId: FileRecord["id"],
-		params: RenameFileParams
-	): Promise<void> => {
+	const rename = async (fileRecordId: FileRecord["id"], params: RenameFileParams): Promise<void> => {
 		try {
 			const response = await fileApi.patchFilename(fileRecordId, params);
 
@@ -146,14 +162,11 @@ export const useFileStorageApi = () => {
 		} catch (error) {
 			upsertFileRecords(fileRecords);
 			showError(error);
-			showFileNotDeletedError();
+			notifyError(t("components.board.notifications.errors.fileNotDeleted"));
 		}
 	};
 
-	const fetchFileStatistic = async (
-		parentId: string,
-		parentType: FileRecordParent
-	): Promise<void> => {
+	const fetchFileStatistic = async (parentId: string, parentType: FileRecordParent): Promise<void> => {
 		try {
 			const response = await fileApi.getParentStatistic(parentId, parentType);
 			const newStatistic = response.data;
@@ -171,11 +184,7 @@ export const useFileStorageApi = () => {
 		userDisplayName: string
 	): Promise<string> => {
 		try {
-			const response = await wopiApi.getAuthorizedCollaboraDocumentUrl(
-				fileRecordId,
-				editorMode,
-				userDisplayName
-			);
+			const response = await wopiApi.getAuthorizedCollaboraDocumentUrl(fileRecordId, editorMode, userDisplayName);
 			const url = response.data.authorizedCollaboraDocumentUrl;
 
 			return url;
@@ -187,20 +196,34 @@ export const useFileStorageApi = () => {
 
 	const showMessageByType = (message: ErrorType | string) => {
 		switch (message) {
-			case ErrorType.FILE_TOO_BIG:
-				showFileTooBigError();
+			case ErrorType.FILE_TOO_BIG: {
+				const maxFileSizeWithUnit = formatFileSize(useEnvFileConfig().value.MAX_FILE_SIZE);
+
+				notifyError(
+					t("components.board.notifications.errors.fileToBig", {
+						maxFileSizeWithUnit,
+					})
+				);
 				break;
+			}
 			case ErrorType.FILE_NAME_EXISTS:
-				showFileExistsError();
+				notifyError(t("components.board.notifications.errors.fileNameExists"));
 				break;
 			case ErrorType.Unauthorized:
-				showUnauthorizedError();
+				notifyError(t("error.401"));
 				break;
 			case ErrorType.Forbidden:
-				showForbiddenError();
+				notifyError(t("error.403"));
+				break;
+			case ErrorType.FILE_LIMIT_PER_PARENT_EXCEEDED:
+				notifyError(
+					t("components.board.notifications.errors.fileLimitPerParentExceeded", {
+						fileLimitPerParent: fileConfig.value.FILES_STORAGE_MAX_FILES_PER_PARENT,
+					})
+				);
 				break;
 			default:
-				showInternalServerError();
+				notifyError(t("components.board.notifications.errors.fileServiceNotAvailable"));
 				break;
 		}
 	};
@@ -211,9 +234,12 @@ export const useFileStorageApi = () => {
 		upload,
 		uploadFromUrl,
 		getFileRecordsByParentId,
+		getFileRecordById,
 		deleteFiles,
 		getStatisticByParentId,
 		tryGetParentStatisticFromApi: fetchFileStatistic,
 		getAuthorizedCollaboraDocumentUrl,
+		fetchFileById,
+		uploadCollaboraFile,
 	};
 };

@@ -1,46 +1,37 @@
-import { SchulcloudTheme } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
-import FilePathsModule from "@/store/filePaths";
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	FILE_PATHS_MODULE_KEY,
-	STATUS_ALERTS_MODULE_KEY,
-	THEME_KEY,
-} from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { envsFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
-import { h, nextTick } from "vue";
-import { VApp } from "vuetify/lib/components/index";
 import LoggedInLayout from "./LoggedIn.layout.vue";
-import { Topbar, Sidebar } from "@ui-layout";
+import FilePathsModule from "@/store/filePaths";
+import { FILE_PATHS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { SchulcloudTheme } from "@api-server";
+import { useStatusAlerts } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
+import { Sidebar, Topbar } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
-import StatusAlertsModule from "@/store/status-alerts";
+import { mount } from "@vue/test-utils";
+import { h, nextTick, ref } from "vue";
+import { VApp } from "vuetify/components";
+
+vi.mock("@data-app/status-alerts.composable");
+vi.mocked(useStatusAlerts).mockReturnValue({
+	status: ref(""),
+	statusAlerts: ref([]),
+	fetchStatusAlerts: vi.fn(),
+});
 
 vi.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
+	useRouter: vi.fn(),
 }));
 
+vi.mock("@data-app/status-alerts.composable");
+vi.mocked(useStatusAlerts).mockReturnValue({
+	status: ref(""),
+	statusAlerts: ref([]),
+	fetchStatusAlerts: vi.fn(),
+});
+
 const setup = () => {
-	const statusAlertsModule = createModuleMocks(StatusAlertsModule, {
-		getStatusAlerts: [],
-	});
-	const authModule = createModuleMocks(AuthModule, {
-		getUserPermissions: [],
-	});
-
-	const envConfigModule = createModuleMocks(EnvConfigModule, {
-		getEnv: envsFactory.build(),
-		getTheme: SchulcloudTheme.Brb,
-	});
-
 	const filePathsModule = createModuleMocks(FilePathsModule, {
 		getSpecificFiles: {
 			accessibilityStatement: "statement",
@@ -55,19 +46,12 @@ const setup = () => {
 			default: h(LoggedInLayout),
 		},
 		global: {
-			plugins: [
-				createTestingVuetify(),
-				createTestingI18n(),
-				createTestingPinia(),
-			],
+			plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
 			provide: {
-				[AUTH_MODULE_KEY.valueOf()]: authModule,
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
 				[THEME_KEY.valueOf()]: {
 					name: SchulcloudTheme.N21,
 				},
-				[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 			},
 			stubs: {
 				"application-error-wrapper": { template: "<div></div>" },
@@ -76,6 +60,7 @@ const setup = () => {
 				"loading-state-dialog": { template: "<div></div>" },
 				"keep-alive": { template: "<div></div>" },
 				autoLogoutWarning: { template: "<div></div>" },
+				AlertContainer: true,
 			},
 		},
 	});
@@ -166,9 +151,7 @@ describe("LoggedIn.layout.vue", () => {
 					const { wrapper } = setup();
 
 					const sidebar = wrapper.getComponent(Sidebar);
-					const sidebarToggle = wrapper.getComponent(
-						"[data-testid='sidebar-toggle-close']"
-					);
+					const sidebarToggle = wrapper.getComponent("[data-testid='sidebar-toggle-close']");
 					await sidebarToggle.trigger("click");
 					const nav = sidebar.get("nav");
 
@@ -249,10 +232,7 @@ describe("LoggedIn.layout.vue", () => {
 
 		await sidebar.trigger("click");
 
-		expect(mockSetLocalStorage).toHaveBeenCalledWith(
-			"sidebarExpanded",
-			"false"
-		);
+		expect(mockSetLocalStorage).toHaveBeenCalledWith("sidebarExpanded", "false");
 	});
 
 	it("should set localStorage key 'sidebarExpanded' to 'true' on topbar click", async () => {

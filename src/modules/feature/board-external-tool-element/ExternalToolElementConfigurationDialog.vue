@@ -1,11 +1,7 @@
 <template>
-	<v-custom-dialog
-		:is-open="isOpen"
-		:has-buttons="false"
-		@dialog-closed="onCancel"
-	>
+	<CustomDialog :is-open="isOpen" :has-buttons="false" @dialog-closed="onCancel">
 		<template #title>
-			<h2 class="text-h4 my-2">
+			<h2 class="my-2">
 				{{ t("feature-board-external-tool-element.dialog.title") }}
 			</h2>
 		</template>
@@ -21,16 +17,16 @@
 				@cancel="onCancel"
 			/>
 		</template>
-	</v-custom-dialog>
+	</CustomDialog>
 </template>
 
 <script setup lang="ts">
-import ContextExternalToolConfigurator from "@/components/external-tools/configuration/ContextExternalToolConfigurator.vue";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { ToolContextType } from "@/serverApi/v3";
+import ContextExternalToolConfigurator from "@/components/administration/external-tools-configuration/ContextExternalToolConfigurator.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
+import { ToolContextType } from "@api-server";
+import { notifySuccess } from "@data-app";
 import { ContextExternalTool } from "@data-external-tool";
-import { useBoardNotifier } from "@util-board";
-import { nextTick, onMounted, PropType, ref, Ref, watch } from "vue";
+import { nextTick, onMounted, PropType, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -44,7 +40,7 @@ const props = defineProps({
 	},
 	contextType: {
 		type: String as PropType<ToolContextType>,
-		default: ToolContextType.BoardElement,
+		default: ToolContextType.BOARD_ELEMENT,
 	},
 	configId: {
 		type: [String, null],
@@ -58,11 +54,8 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const { showSuccess } = useBoardNotifier();
 
-const contextExternalToolConfigurator: Ref<InstanceType<
-	typeof ContextExternalToolConfigurator
-> | null> = ref(null);
+const contextExternalToolConfigurator: Ref<InstanceType<typeof ContextExternalToolConfigurator> | null> = ref(null);
 
 const closeDialog = () => {
 	contextExternalToolConfigurator.value?.clearData();
@@ -81,7 +74,7 @@ const onSuccess = (savedTool: ContextExternalTool) => {
 		? t("components.administration.externalToolsSection.notification.updated")
 		: t("components.administration.externalToolsSection.notification.created");
 
-	showSuccess(message);
+	notifySuccess(message);
 
 	closeDialog();
 };

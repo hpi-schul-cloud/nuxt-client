@@ -1,175 +1,136 @@
 <template>
-	<v-menu
-		v-model="showDateDialog"
+	<VTextField
+		:id="datePickerId"
+		ref="date-text-field"
+		v-bind.attr="$attrs"
+		v-model="dateString"
+		v-maska="dateMask"
+		:prepend-inner-icon="!hideIcon ? mdiCalendar : undefined"
+		:label="label"
+		:aria-label="ariaLabelWithFormat"
+		:placeholder="datePlaceHolder"
+		:disabled="disabled"
+		:rules="validationRules"
+		@keydown.space="showDatePicker = true"
+		@keydown.prevent.enter="showDatePicker = true"
+		@keydown.up.down.stop
+		@keydown.tab="showDatePicker = false"
+	/>
+	<VMenu
+		v-model="showDatePicker"
 		transition="scale-transition"
 		:close-on-content-click="false"
+		:activator="`#${datePickerId}`"
 	>
-		<template #activator="{ props: menuProps }">
-			<v-text-field
-				ref="date-text-field"
-				v-bind="menuProps"
-				v-bind.attr="$attrs"
-				v-model="dateString"
-				v-date-input-mask
-				:prepend-inner-icon="mdiCalendar"
-				:label="label"
-				:aria-label="ariaLabel"
-				:placeholder="t('common.placeholder.dateformat')"
-				:error-messages="errorMessages"
-				@update:model-value="onUpdateTextfield"
-				@keydown.space="showDateDialog = true"
-				@keydown.prevent.enter="showDateDialog = true"
-				@keydown.up.down.stop
-				@keydown.tab="showDateDialog = false"
-			/>
-		</template>
-		<UseFocusTrap>
-			<v-date-picker
+		<UseFocusTrap :options="{ immediate: true }">
+			<VDatePicker
 				v-model="dateObject"
-				:aria-expanded="showDateDialog"
+				:aria-expanded="showDatePicker"
 				:min="minDate"
 				:max="maxDate"
 				color="primary"
 				hide-header
 				show-adjacent-months
 				elevation="6"
-				@update:model-value="onPickDate"
 			/>
 		</UseFocusTrap>
-	</v-menu>
+	</VMenu>
 </template>
 
 <script setup lang="ts">
-import {
-	computed,
-	ref,
-	watchEffect,
-	unref,
-	PropType,
-	toRef,
-	useTemplateRef,
-} from "vue";
-import dayjs from "dayjs";
-import { useI18n } from "vue-i18n";
-import { useVuelidate, ErrorObject } from "@vuelidate/core";
-import { helpers, requiredIf } from "@vuelidate/validators";
-import { dateInputMask as vDateInputMask } from "@util-input-masks";
-import { isValidDateFormat } from "@util-validators";
-import { DATETIME_FORMAT } from "@/plugins/datetime";
+import { useLocalizedDateTime } from "@/composables/date-time.composables";
+import { formatUtc, toDateFromLocalString, toIsoDate } from "@/utils/date-time.utils";
 import { mdiCalendar } from "@icons/material";
+import { isRequired, isValidDate } from "@util-validators";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
+import { vMaska } from "maska/vue";
+import { computed, ref, useId, useTemplateRef, watch, watchEffect } from "vue";
+import { useI18n } from "vue-i18n";
 
-defineOptions({
-	inheritAttrs: false,
-});
+const props = withDefaults(
+	defineProps<{
+		date?: string; // ISO 8601 string
+		label?: string;
+		ariaLabel?: string;
+		required?: boolean;
+		disabled?: boolean;
+		minDate?: string;
+		maxDate?: string;
+		hideIcon?: boolean;
+	}>(),
+	{
+		date: undefined,
+		label: undefined,
+		ariaLabel: undefined,
+		disabled: false,
+		required: false,
+		minDate: undefined,
+		maxDate: undefined,
+		hideIcon: false,
+	}
+);
 
-const props = defineProps({
-	date: { type: String, default: undefined }, // ISO 8601 string
-	label: { type: String, default: "" },
-	ariaLabel: { type: String, default: "" },
-	required: { type: Boolean },
-	minDate: { type: String, default: undefined },
-	maxDate: { type: String, default: undefined },
-	errors: { type: Array as PropType<ErrorObject[]>, default: () => [] },
-});
-const emit = defineEmits(["update:date", "error"]);
+const emit = defineEmits<{
+	(e: "update:date", value: string | undefined): void;
+}>();
+
+const { dateMask, datePlaceHolder } = useLocalizedDateTime();
+
 const { t } = useI18n();
 
-const showDateDialog = ref(false);
+const showDatePicker = ref(false);
 const dateTextField = useTemplateRef("date-text-field");
 const dateString = ref<string>();
-const externalErrors = toRef(props, "errors");
+
+const uniqueId = useId();
+const datePickerId = computed(() => `menu-activator-${uniqueId}`);
 
 watchEffect(() => {
-	if (dateString.value === undefined)
-		dateString.value = props.date
-			? dayjs(props.date).format(DATETIME_FORMAT.date)
-			: undefined;
+	if (dateString.value === undefined && props.date) dateString.value = formatUtc(props.date, "date");
 });
 
 const dateObject = computed({
 	get() {
-		if (isValid.value) {
-			return dateString.value
-				? dayjs(dateString.value, DATETIME_FORMAT.date).toDate()
-				: undefined;
-		}
-
-		return props.date ? new Date(props.date) : undefined;
+		if (!dateString.value) return undefined;
+		return toDateFromLocalString(dateString.value);
 	},
-	set(newValue) {
-		dateString.value = dayjs(newValue).format(DATETIME_FORMAT.date);
+	set(isoString: string) {
+		dateString.value = formatUtc(isoString, "date");
+		showDatePicker.value = false;
 	},
 });
 
-const rules = computed(() => ({
-	dateString: {
-		requiredIfProp: helpers.withMessage(
-			t("components.datePicker.validation.required"),
-			requiredIf(props.required)
-		),
-		validDateFormat: helpers.withMessage(
-			t("components.datePicker.validation.format"),
-			isValidDateFormat
-		),
-	},
-}));
+const validationRules = computed(() => [
+	props.required ? isRequired(t("components.datePicker.validation.required")) : true,
+	isValidDate,
+]);
 
-const v$ = useVuelidate(rules, { dateString }, { $lazy: true });
-
-const isValid = computed(() => {
-	return !v$.value.dateString.$invalid;
+const ariaLabelWithFormat = computed(() => {
+	const prefix = props.ariaLabel || props.label || t("common.labels.date");
+	return `${prefix} (${datePlaceHolder.value})`;
 });
 
-const combinedErrors = computed(() => {
-	return v$.value.dateString.$errors.concat(externalErrors.value);
-});
+const validateAndEmitDate = async () => {
+	if (dateTextField.value === null) return;
 
-const errorMessages = computed(() => {
-	const messages = getErrorMessages(combinedErrors.value);
-	return messages ?? [];
-});
-
-const getErrorMessages = (errors: ErrorObject[] | undefined) => {
-	const messages = errors?.map((e: ErrorObject) => {
-		return unref(e.$message);
-	});
-
-	return messages;
-};
-
-watchEffect(async () => {
-	if (props.required === true) {
-		v$.value.dateString.$touch();
-		await v$.value.$validate();
-	}
-});
-
-const onUpdateTextfield = async () => {
-	await emitDate();
-};
-
-const onPickDate = async () => {
-	dateString.value = dateObject.value
-		? dayjs(dateObject.value).format(DATETIME_FORMAT.date)
-		: undefined;
-	await emitDate();
-	showDateDialog.value = false;
-	dateTextField.value?.focus();
-};
-
-const emitDate = async () => {
-	v$.value.dateString.$touch();
-	const isValid = await v$.value.$validate();
+	await dateTextField.value.validate();
+	const isValid = dateTextField.value.isValid;
 	if (isValid) {
-		const formattedDate = dateString.value
-			? dayjs(dateString.value, DATETIME_FORMAT.date).toISOString()
-			: null;
-
-		emit("update:date", formattedDate);
+		const isoDate = toIsoDate(dateString.value);
+		emit("update:date", isoDate);
 	} else {
-		emit("update:date", null);
-		emit("error");
+		emit("update:date", undefined);
 	}
 };
+
+watch(() => dateTextField.value?.modelValue, validateAndEmitDate);
+
+watch(
+	() => props.required,
+	async (required) => {
+		if (required === false) {
+			await dateTextField.value?.resetValidation();
+		}
+	}
+);
 </script>

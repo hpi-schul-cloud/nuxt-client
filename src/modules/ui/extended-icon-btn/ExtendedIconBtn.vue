@@ -39,8 +39,7 @@ const isLabelTruncated = ref(false);
 
 onMounted(() => {
 	if (textElement.value) {
-		isLabelTruncated.value =
-			textElement.value.offsetWidth < textElement.value.scrollWidth;
+		isLabelTruncated.value = textElement.value.offsetWidth < textElement.value.scrollWidth;
 	}
 });
 </script>

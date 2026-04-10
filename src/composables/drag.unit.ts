@@ -14,8 +14,7 @@ describe("drag composable", () => {
 	it("should alter status on stop dragging after delay", () => {
 		vi.useFakeTimers();
 
-		const { dragInProgressDelay, startDragging, endDragging, dragInProgress } =
-			useDrag();
+		const { dragInProgressDelay, startDragging, endDragging, dragInProgress } = useDrag();
 
 		startDragging();
 

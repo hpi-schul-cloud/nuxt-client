@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import FilePicker from "./FilePicker.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import FilePicker from "./FilePicker.vue";
 
 describe("FilePicker", () => {
 	afterEach(() => {

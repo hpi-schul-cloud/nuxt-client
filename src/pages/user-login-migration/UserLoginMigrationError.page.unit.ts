@@ -1,41 +1,26 @@
-import EnvConfigModule from "@/store/env-config";
+import UserLoginMigrationError from "./UserLoginMigrationError.page.vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	SYSTEMS_MODULE_KEY,
-	USER_LOGIN_MIGRATION_MODULE_KEY,
-} from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { shallowMount } from "@vue/test-utils";
-import { nextTick } from "vue";
-import UserLoginMigrationError from "./UserLoginMigrationError.page.vue";
-import UserLoginMigrationModule from "@/store/user-login-migrations";
+import { SYSTEMS_MODULE_KEY } from "@/utils/inject";
+import { createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { userLoginMigrationFactory } from "@@/tests/test-utils/factory/userLoginMigration.factory";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useUserLoginMigration } from "@data-user-login-migration";
+import { createTestingPinia } from "@pinia/testing";
+import { shallowMount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import type { Mocked } from "vitest";
+import { nextTick, ref } from "vue";
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
+vi.mock("@data-user-login-migration");
+const useUserLoginMigrationMock = vi.mocked(useUserLoginMigration);
 
 describe("UserLoginMigrationError", () => {
 	let systemsModule: Mocked<SystemsModule>;
-	let envConfigModule: Mocked<EnvConfigModule>;
-	let userLoginMigrationModule: Mocked<UserLoginMigrationModule>;
+	let useUserLoginMigrationMockReturn: Mocked<ReturnType<typeof useUserLoginMigration>>;
 
-	const setup = (props: {
-		sourceSchoolNumber?: string;
-		targetSchoolNumber?: string;
-		multipleUsersFound?: boolean;
-	}) => {
+	const setup = (props: { sourceSchoolNumber?: string; targetSchoolNumber?: string; multipleUsersFound?: boolean }) => {
 		const systemsMock: System[] = [
 			{
 				id: "sourceSystemId",
@@ -50,20 +35,20 @@ describe("UserLoginMigrationError", () => {
 		systemsModule = createModuleMocks(SystemsModule, {
 			getSystems: systemsMock,
 		});
-		envConfigModule = createModuleMocks(EnvConfigModule, {
-			getAccessibilityReportEmail: "ticketsystem@niedersachsen.support",
+		setActivePinia(createTestingPinia());
+		createTestEnvStore({
+			ACCESSIBILITY_REPORT_EMAIL: "ticketsystem@niedersachsen.support",
 		});
-		userLoginMigrationModule = createModuleMocks(UserLoginMigrationModule, {
-			getUserLoginMigration: userLoginMigrationFactory.build(),
-		});
+
+		useUserLoginMigrationMockReturn = mockComposable(useUserLoginMigration);
+		useUserLoginMigrationMock.mockReturnValue(useUserLoginMigrationMockReturn);
+		useUserLoginMigrationMockReturn.userLoginMigration = ref(userLoginMigrationFactory.build());
 
 		const wrapper = shallowMount(UserLoginMigrationError, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-					[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
 				},
 				mocks: {
 					$theme: {
@@ -76,6 +61,7 @@ describe("UserLoginMigrationError", () => {
 
 		return {
 			wrapper,
+			useUserLoginMigrationMockReturn,
 		};
 	};
 
@@ -108,9 +94,7 @@ describe("UserLoginMigrationError", () => {
 					targetSchoolNumber: "22222",
 				});
 
-				const schoolNumberMismatchText = wrapper.get(
-					"[data-testId=text-schoolnumber-mismatch]"
-				);
+				const schoolNumberMismatchText = wrapper.get("[data-testId=text-schoolnumber-mismatch]");
 
 				expect(schoolNumberMismatchText.text()).toEqual(
 					"pages.userMigration.error.schoolNumberMismatch.information pages.userMigration.error.schoolNumberMismatch.information.schoolNumber"
@@ -123,9 +107,7 @@ describe("UserLoginMigrationError", () => {
 					multipleUsersFound: true,
 				});
 
-				const multipleUsersFoundText = wrapper.get(
-					"[data-testid=text-multiple-users-found]"
-				);
+				const multipleUsersFoundText = wrapper.get("[data-testid=text-multiple-users-found]");
 
 				expect(multipleUsersFoundText.text()).toEqual(
 					"pages.userMigration.error.multipleUsersFound pages.userMigration.error.description.support.link"
@@ -139,13 +121,9 @@ describe("UserLoginMigrationError", () => {
 				targetSchoolNumber: "22222",
 			});
 
-			const supportLink = wrapper
-				.get("[data-testid=text-description]")
-				.find("a");
+			const supportLink = wrapper.get("[data-testid=text-description]").find("a");
 
-			expect(supportLink.text()).toEqual(
-				"pages.userMigration.error.description.support.link"
-			);
+			expect(supportLink.text()).toEqual("pages.userMigration.error.description.support.link");
 			expect(supportLink.element.href).toEqual(
 				"mailto:ticketsystem@niedersachsen.support?subject=Schulnummer%20nicht%20korrekt"
 			);
@@ -163,13 +141,11 @@ describe("UserLoginMigrationError", () => {
 			});
 
 			it("should fetch the user login migration", async () => {
-				setup({});
+				const { useUserLoginMigrationMockReturn } = setup({});
 
 				await nextTick();
 
-				expect(
-					userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser
-				).toHaveBeenCalled();
+				expect(useUserLoginMigrationMockReturn.fetchLatestUserLoginMigrationForSchool).toHaveBeenCalled();
 			});
 		});
 	});

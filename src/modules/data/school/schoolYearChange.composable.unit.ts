@@ -1,33 +1,27 @@
-import NotifierModule from "@/store/notifier";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import {
-	axiosErrorFactory,
-	i18nMock,
-	maintenanceStatusFactory,
-	mountComposable,
-} from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useSchoolApi } from "./schoolApi.composable";
 import { useSchoolYearChange } from "./schoolYearChange.composable";
-import type { Mocked } from "vitest";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import {
+	axiosErrorFactory,
+	expectNotification,
+	i18nMock,
+	maintenanceStatusFactory,
+	mockComposable,
+	mountComposable,
+} from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 vi.mock("@data-school/schoolApi.composable");
 
 describe("SchoolYearChange.composable", () => {
-	let useSchoolApiMock: DeepMocked<ReturnType<typeof useSchoolApi>>;
-
-	const notifierModule: Mocked<NotifierModule> =
-		createModuleMocks(NotifierModule);
+	let useSchoolApiMock: Mocked<ReturnType<typeof useSchoolApi>>;
 
 	const setupComposable = () => {
 		const composable = mountComposable(() => useSchoolYearChange(), {
 			global: {
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 				plugins: [createTestingI18n()],
 				mocks: i18nMock,
 			},
@@ -39,7 +33,8 @@ describe("SchoolYearChange.composable", () => {
 	};
 
 	beforeEach(() => {
-		useSchoolApiMock = createMock<ReturnType<typeof useSchoolApi>>();
+		setActivePinia(createTestingPinia());
+		useSchoolApiMock = mockComposable(useSchoolApi);
 
 		vi.mocked(useSchoolApi).mockReturnValue(useSchoolApiMock);
 	});
@@ -52,9 +47,7 @@ describe("SchoolYearChange.composable", () => {
 		describe("when fetching the current school year status", () => {
 			const setup = () => {
 				const maintenanceStatus = maintenanceStatusFactory.build();
-				useSchoolApiMock.fetchMaintenanceStatus.mockResolvedValue(
-					maintenanceStatus
-				);
+				useSchoolApiMock.fetchMaintenanceStatus.mockResolvedValue(maintenanceStatus);
 
 				const { composable } = setupComposable();
 
@@ -69,9 +62,7 @@ describe("SchoolYearChange.composable", () => {
 
 				await composable.fetchSchoolYearStatus("id");
 
-				expect(useSchoolApiMock.fetchMaintenanceStatus).toHaveBeenCalledWith(
-					"id"
-				);
+				expect(useSchoolApiMock.fetchMaintenanceStatus).toHaveBeenCalledWith("id");
 			});
 
 			it("should set maintenance status", async () => {
@@ -79,9 +70,7 @@ describe("SchoolYearChange.composable", () => {
 
 				await composable.fetchSchoolYearStatus("id");
 
-				expect(composable.maintenanceStatus.value).toStrictEqual(
-					maintenanceStatus
-				);
+				expect(composable.maintenanceStatus.value).toStrictEqual(maintenanceStatus);
 			});
 
 			it("should set isLoading to false", async () => {
@@ -97,9 +86,7 @@ describe("SchoolYearChange.composable", () => {
 			const setup = () => {
 				const errorResponse = axiosErrorFactory.build();
 
-				useSchoolApiMock.fetchMaintenanceStatus.mockRejectedValueOnce(
-					errorResponse
-				);
+				useSchoolApiMock.fetchMaintenanceStatus.mockRejectedValueOnce(errorResponse);
 
 				const { composable } = setupComposable();
 
@@ -121,10 +108,7 @@ describe("SchoolYearChange.composable", () => {
 
 				await composable.fetchSchoolYearStatus("id");
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					status: "error",
-					text: "error.generic",
-				});
+				expectNotification("error");
 			});
 
 			it("should set maintenance status undefined", async () => {
@@ -161,10 +145,7 @@ describe("SchoolYearChange.composable", () => {
 
 				await composable.setMaintenanceMode("id", true);
 
-				expect(useSchoolApiMock.setMaintenance).toHaveBeenCalledWith(
-					"id",
-					true
-				);
+				expect(useSchoolApiMock.setMaintenance).toHaveBeenCalledWith("id", true);
 			});
 
 			it("should set maintenance status", async () => {
@@ -172,9 +153,7 @@ describe("SchoolYearChange.composable", () => {
 
 				await composable.setMaintenanceMode("id", true);
 
-				expect(composable.maintenanceStatus.value).toStrictEqual(
-					maintenanceStatus
-				);
+				expect(composable.maintenanceStatus.value).toStrictEqual(maintenanceStatus);
 			});
 
 			it("should show success message for starting transfer phase", async () => {
@@ -182,10 +161,7 @@ describe("SchoolYearChange.composable", () => {
 
 				await composable.setMaintenanceMode("id", true);
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					status: "success",
-					text: "components.administration.schoolYearChangeSection.notification.start.success",
-				});
+				expectNotification("success");
 			});
 
 			it("should show success message for finishing transfer phase", async () => {
@@ -193,10 +169,7 @@ describe("SchoolYearChange.composable", () => {
 
 				await composable.setMaintenanceMode("id", false);
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					status: "success",
-					text: "components.administration.schoolYearChangeSection.notification.finish.success",
-				});
+				expectNotification("success");
 			});
 
 			it("should set isLoading to false", async () => {
@@ -251,11 +224,7 @@ describe("SchoolYearChange.composable", () => {
 
 					await composable.setMaintenanceMode("id", false);
 
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						status: "error",
-						text: "components.administration.schoolYearChangeSection.notification.finish.error.missingYears",
-						autoClose: false,
-					});
+					expectNotification("error");
 				});
 			});
 
@@ -287,10 +256,7 @@ describe("SchoolYearChange.composable", () => {
 
 					await composable.setMaintenanceMode("id", false);
 
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						status: "error",
-						text: "components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear",
-					});
+					expectNotification("error");
 				});
 
 				it("should set maintenanceStatus", async () => {
@@ -330,10 +296,7 @@ describe("SchoolYearChange.composable", () => {
 
 					await composable.setMaintenanceMode("id", false);
 
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						status: "error",
-						text: "error.generic",
-					});
+					expectNotification("error");
 				});
 			});
 		});

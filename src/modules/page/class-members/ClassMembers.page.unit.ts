@@ -1,23 +1,17 @@
-import { mount } from "@vue/test-utils";
-import { ref } from "vue";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import ClassMembersPage from "./ClassMembers.page.vue";
-import { Group, useGroupState } from "@data-group";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { groupFactory } from "@@/tests/test-utils/factory";
 import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { groupFactory } from "@@/tests/test-utils/factory";
+import { mockComposable } from "@@/tests/test-utils/mockComposable";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Group, useGroupState } from "@data-group";
+import { mount } from "@vue/test-utils";
+import { Mocked } from "vitest";
+import { ref } from "vue";
 
 vi.mock("@data-group/GroupState.composable");
 
 describe("@pages/ClassMembers.page.vue", () => {
-	let useGroupStateMock: DeepMocked<ReturnType<typeof useGroupState>>;
+	let useGroupStateMock: Mocked<ReturnType<typeof useGroupState>>;
 
 	const setup = (props: { groupId: string }) => {
 		const group: Group = groupFactory.build();
@@ -25,19 +19,10 @@ describe("@pages/ClassMembers.page.vue", () => {
 		useGroupStateMock.isLoading = ref(false);
 		useGroupStateMock.group = ref(group);
 
-		const notifierModule = createModuleMocks(NotifierModule);
-
 		const wrapper = mount(ClassMembersPage, {
 			props,
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					vueDompurifyHTMLPlugin,
-				],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: { ClassMembersInfoBox: true },
 			},
 		});
@@ -49,7 +34,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 	};
 
 	beforeEach(() => {
-		useGroupStateMock = createMock<ReturnType<typeof useGroupState>>();
+		useGroupStateMock = mockComposable(useGroupState);
 
 		vi.mocked(useGroupState).mockReturnValue(useGroupStateMock);
 	});
@@ -89,12 +74,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
-			expect(breadcrumbs.at(0)?.text()).toEqual(
-				"pages.administration.index.title"
-			);
-			expect(breadcrumbs.at(1)?.text()).toEqual(
-				"pages.administration.classes.index.title"
-			);
+			expect(breadcrumbs.at(0)?.text()).toEqual("pages.administration.classes.index.title");
 		});
 
 		it("should render dynamic class name breadcrumb", () => {
@@ -102,14 +82,14 @@ describe("@pages/ClassMembers.page.vue", () => {
 				groupId: "groupId",
 			});
 
-			const breadcrumb = wrapper.findAll(".breadcrumbs-item").at(2);
+			const breadcrumb = wrapper.findAll(".breadcrumbs-item").at(1);
 
 			expect(breadcrumb?.text()).toEqual(`common.labels.class '${group.name}'`);
 		});
 	});
 
 	describe("onMounted", () => {
-		it("should load the group for given groupId", async () => {
+		it("should load the group for given groupId", () => {
 			setup({
 				groupId: "groupId",
 			});

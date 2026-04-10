@@ -2,11 +2,11 @@ import KebabMenu from "./KebabMenu.vue";
 import KebabMenuAction from "./KebabMenuAction.vue";
 import KebabMenuActionChangeLayout from "./KebabMenuActionChangeLayout.vue";
 import KebabMenuActionChangePermission from "./KebabMenuActionChangePermission.vue";
-import KebabMenuActionCopy from "./KebabMenuActionCopy.vue";
 import KebabMenuActionDelete from "./KebabMenuActionDelete.vue";
 import KebabMenuActionDeleteMemberInvitation from "./KebabMenuActionDeleteMemberInvitation.vue";
-import KebabMenuActionRoomCopy from "./KebabMenuActionRoomCopy.vue";
+import KebabMenuActionDuplicate from "./KebabMenuActionDuplicate.vue";
 import KebabMenuActionEdit from "./KebabMenuActionEdit.vue";
+import KebabMenuActionExport from "./KebabMenuActionExport.vue";
 import KebabMenuActionLeaveRoom from "./KebabMenuActionLeaveRoom.vue";
 import KebabMenuActionMoveDown from "./KebabMenuActionMoveDown.vue";
 import KebabMenuActionMoveLeft from "./KebabMenuActionMoveLeft.vue";
@@ -16,6 +16,7 @@ import KebabMenuActionPublish from "./KebabMenuActionPublish.vue";
 import KebabMenuActionRemoveMember from "./KebabMenuActionRemoveMember.vue";
 import KebabMenuActionRename from "./KebabMenuActionRename.vue";
 import KebabMenuActionRevert from "./KebabMenuActionRevert.vue";
+import KebabMenuActionRoomCopy from "./KebabMenuActionRoomCopy.vue";
 import KebabMenuActionRoomMembers from "./KebabMenuActionRoomMembers.vue";
 import KebabMenuActionShare from "./KebabMenuActionShare.vue";
 import KebabMenuActionShareLink from "./KebabMenuActionShareLink.vue";
@@ -26,11 +27,11 @@ export {
 	KebabMenuAction,
 	KebabMenuActionChangeLayout,
 	KebabMenuActionChangePermission,
-	KebabMenuActionCopy,
 	KebabMenuActionDelete,
 	KebabMenuActionDeleteMemberInvitation,
-	KebabMenuActionRoomCopy,
+	KebabMenuActionDuplicate,
 	KebabMenuActionEdit,
+	KebabMenuActionExport,
 	KebabMenuActionLeaveRoom,
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveLeft,
@@ -40,6 +41,7 @@ export {
 	KebabMenuActionRemoveMember,
 	KebabMenuActionRename,
 	KebabMenuActionRevert,
+	KebabMenuActionRoomCopy,
 	KebabMenuActionRoomMembers,
 	KebabMenuActionShare,
 	KebabMenuActionShareLink,

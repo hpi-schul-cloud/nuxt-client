@@ -1,17 +1,13 @@
-import { BoardLayout } from "@/serverApi/v3";
-import {
-	mediaAvailableLineResponseFactory,
-	mediaBoardResponseFactory,
-} from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { flushPromises, mount } from "@vue/test-utils";
-import { ref } from "vue";
 import MediaShelfPage from "./MediaShelf.page.vue";
+import { mediaAvailableLineResponseFactory, mediaBoardResponseFactory, mockComposable } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardLayout } from "@api-server";
+import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";
+import { createTestingPinia } from "@pinia/testing";
+import { flushPromises, mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
+import { ref } from "vue";
 
 vi.mock("@feature-media-shelf", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("@feature-media-shelf")>();
@@ -21,14 +17,8 @@ vi.mock("@feature-media-shelf", async (importOriginal) => {
 	};
 });
 
-vi.mock("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle: string | undefined) => pageTitle ?? "",
-}));
-
 describe("MediaShelfPage", () => {
-	let useSharedMediaBoardStateMock: DeepMocked<
-		ReturnType<typeof useSharedMediaBoardState>
-	>;
+	let useSharedMediaBoardStateMock: Mocked<ReturnType<typeof useSharedMediaBoardState>>;
 
 	const getWrapper = () => {
 		const wrapper = mount(MediaShelfPage, {
@@ -46,19 +36,19 @@ describe("MediaShelfPage", () => {
 		};
 	};
 
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	beforeEach(() => {
-		useSharedMediaBoardStateMock = createMock<
-			ReturnType<typeof useSharedMediaBoardState>
-		>({
+		useSharedMediaBoardStateMock = mockComposable(useSharedMediaBoardState, {
 			isLoading: ref(false),
 			isBoardOperationLoading: ref(false),
 			mediaBoard: ref(mediaBoardResponseFactory.build()),
 			availableMediaLine: ref(mediaAvailableLineResponseFactory.build()),
 		});
 
-		vi.mocked(useSharedMediaBoardState).mockReturnValue(
-			useSharedMediaBoardStateMock
-		);
+		vi.mocked(useSharedMediaBoardState).mockReturnValue(useSharedMediaBoardStateMock);
 	});
 
 	afterEach(() => {
@@ -101,17 +91,13 @@ describe("MediaShelfPage", () => {
 		it("should load the media board", async () => {
 			await setup();
 
-			expect(
-				useSharedMediaBoardStateMock.fetchMediaBoardForUser
-			).toHaveBeenCalled();
+			expect(useSharedMediaBoardStateMock.fetchMediaBoardForUser).toHaveBeenCalled();
 		});
 
 		it("should load the available line", async () => {
 			await setup();
 
-			expect(
-				useSharedMediaBoardStateMock.fetchAvailableMedia
-			).toHaveBeenCalled();
+			expect(useSharedMediaBoardStateMock.fetchAvailableMedia).toHaveBeenCalled();
 		});
 
 		it("should display the media board", async () => {
@@ -125,12 +111,10 @@ describe("MediaShelfPage", () => {
 
 	describe("when the page is loaded and there are no media elements", () => {
 		const setup = async () => {
-			useSharedMediaBoardStateMock.availableMediaLine.value =
-				mediaAvailableLineResponseFactory.build({ elements: [] });
-			useSharedMediaBoardStateMock.mediaBoard.value =
-				mediaBoardResponseFactory.build({
-					lines: [],
-				});
+			useSharedMediaBoardStateMock.availableMediaLine.value = mediaAvailableLineResponseFactory.build({ elements: [] });
+			useSharedMediaBoardStateMock.mediaBoard.value = mediaBoardResponseFactory.build({
+				lines: [],
+			});
 
 			const { wrapper } = getWrapper();
 
@@ -151,10 +135,9 @@ describe("MediaShelfPage", () => {
 	describe("Layout buttons", () => {
 		describe("when changing to the grid layout", () => {
 			const setup = () => {
-				useSharedMediaBoardStateMock.mediaBoard.value =
-					mediaBoardResponseFactory.build({
-						layout: BoardLayout.List,
-					});
+				useSharedMediaBoardStateMock.mediaBoard.value = mediaBoardResponseFactory.build({
+					layout: BoardLayout.LIST,
+				});
 
 				const { wrapper } = getWrapper();
 
@@ -169,18 +152,15 @@ describe("MediaShelfPage", () => {
 				const gridBtn = wrapper.find("[data-testid=media-board-layout-grid]");
 				await gridBtn.trigger("click");
 
-				expect(
-					useSharedMediaBoardStateMock.updateMediaBoardLayout
-				).toHaveBeenCalledWith(BoardLayout.Grid);
+				expect(useSharedMediaBoardStateMock.updateMediaBoardLayout).toHaveBeenCalledWith(BoardLayout.GRID);
 			});
 		});
 
 		describe("when changing to the list layout", () => {
 			const setup = () => {
-				useSharedMediaBoardStateMock.mediaBoard.value =
-					mediaBoardResponseFactory.build({
-						layout: BoardLayout.Grid,
-					});
+				useSharedMediaBoardStateMock.mediaBoard.value = mediaBoardResponseFactory.build({
+					layout: BoardLayout.GRID,
+				});
 
 				const { wrapper } = getWrapper();
 
@@ -195,9 +175,7 @@ describe("MediaShelfPage", () => {
 				const listBtn = wrapper.find("[data-testid=media-board-layout-list]");
 				await listBtn.trigger("click");
 
-				expect(
-					useSharedMediaBoardStateMock.updateMediaBoardLayout
-				).toHaveBeenCalledWith(BoardLayout.List);
+				expect(useSharedMediaBoardStateMock.updateMediaBoardLayout).toHaveBeenCalledWith(BoardLayout.LIST);
 			});
 		});
 	});

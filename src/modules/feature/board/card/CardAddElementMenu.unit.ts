@@ -1,10 +1,6 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { shallowMount } from "@vue/test-utils";
-
 import CardAddElementMenu from "./CardAddElementMenu.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 
 describe("CardAddElementMenu", () => {
 	const setup = () => {

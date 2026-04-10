@@ -1,9 +1,14 @@
+import { htmlConfig } from "@feature-render-html";
 import { config, mount, shallowMount } from "@vue/test-utils";
 import { beforeAll } from "vitest";
+import VueDompurifyHTML from "vue-dompurify-html";
 
 // enable rendering of default slot on stubbed components
 // see https://test-utils.vuejs.org/migration/#shallowMount-and-renderStubDefaultSlot
 config.global.renderStubDefaultSlot = true;
+
+// Register VueDompurifyHTML plugin globally to avoid warnings about missing directives in tests
+config.global.plugins = [[VueDompurifyHTML, { namedConfigurations: htmlConfig }]];
 
 global.mount = mount;
 global.shallowMount = shallowMount;
@@ -22,21 +27,11 @@ beforeAll(() => {
 			matches: false,
 			media: query,
 			onchange: null,
-			addListener: () => {
-				return;
-			}, // deprecated
-			removeListener: () => {
-				return;
-			}, // deprecated
-			addEventListener: () => {
-				return;
-			},
-			removeEventListener: () => {
-				return;
-			},
-			dispatchEvent: () => {
-				return;
-			},
+			addListener: () => undefined, // deprecated
+			removeListener: () => undefined, // deprecated
+			addEventListener: () => undefined,
+			removeEventListener: () => undefined,
+			dispatchEvent: () => undefined,
 		}),
 	});
 
@@ -49,12 +44,8 @@ beforeAll(() => {
 			offsetTop: 0,
 			pageLeft: 0,
 			pageTop: 0,
-			addEventListener: () => {
-				return;
-			},
-			removeEventListener: () => {
-				return;
-			},
+			addEventListener: () => undefined,
+			removeEventListener: () => undefined,
 		},
 		writable: true,
 	});

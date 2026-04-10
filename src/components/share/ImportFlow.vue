@@ -26,24 +26,16 @@
 </template>
 
 <script setup lang="ts">
-import ImportModal from "@/components/share/ImportModal.vue";
-import { useLoadingState } from "@/composables/loadingState";
-import {
-	BoardExternalReferenceType,
-	ShareTokenInfoResponseParentTypeEnum,
-} from "@/serverApi/v3/api";
-import { ImportDestinationItem } from "@/store/types/rooms";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
-import {
-	COPY_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
-import { PropType, computed, ref } from "vue";
-import { useI18n } from "vue-i18n";
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
 import SelectDestinationModal from "./SelectDestinationModal.vue";
+import ImportModal from "@/components/share/ImportModal.vue";
+import { ImportDestinationItem } from "@/store/types/rooms";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { BoardExternalReferenceType, ShareTokenInfoResponseParentType } from "@api-server";
+import { notifyError, useLoadingStore } from "@data-app";
+import { computed, PropType, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	token: {
@@ -69,13 +61,11 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const copyModule = injectStrict(COPY_MODULE_KEY);
-const notifier = injectStrict(NOTIFIER_MODULE_KEY);
-const loadingStateModule = injectStrict(LOADING_STATE_MODULE_KEY);
+
+const { setLoadingState } = useLoadingStore();
 
 const parentName = ref("");
-const parentType = ref<ShareTokenInfoResponseParentTypeEnum>(
-	ShareTokenInfoResponseParentTypeEnum.Lessons
-);
+const parentType = ref<ShareTokenInfoResponseParentType>(ShareTokenInfoResponseParentType.LESSONS);
 const newName = ref("");
 
 const destinationId = ref<string>();
@@ -88,19 +78,17 @@ const isCopyResultModalOpen = computed({
 	set: (bool) => copyModule.setResultModalOpen(bool),
 });
 
-const copyResultModalItems = computed(
-	() => copyModule.getCopyResultFailedItems
-);
+const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
 const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
-
-const { isLoadingDialogOpen } = useLoadingState(
-	t("components.molecules.import.options.loadingMessage")
-);
 
 const openModal = (modalName: string) => {
 	isSelectCourseModalOpen.value = modalName === "selectCourse";
 	isImportModalOpen.value = modalName === "import";
-	isLoadingDialogOpen.value = modalName === "loading";
+	if (modalName === "loading") {
+		setLoadingState(true, t("components.molecules.import.options.loadingMessage"));
+	} else {
+		setLoadingState(false);
+	}
 	isCopyResultModalOpen.value = modalName === "result";
 };
 
@@ -109,31 +97,21 @@ const closeModals = () => openModal("none");
 // notifiers
 
 const showFailureBackend = (name: string) => {
-	notifier.show({
-		text: t("components.molecules.import.options.failure.backendError", {
+	notifyError(
+		t("components.molecules.import.options.failure.backendError", {
 			name,
-		}),
-		status: "error",
-		timeout: 5000,
-	});
+		})
+	);
 	closeModals();
 };
 
 const showFailureInvalidToken = () => {
-	notifier.show({
-		text: t("components.molecules.import.options.failure.invalidToken"),
-		status: "error",
-		timeout: 5000,
-	});
+	notifyError(t("components.molecules.import.options.failure.invalidToken"));
 	closeModals();
 };
 
 const showFailurePermission = () => {
-	notifier.show({
-		text: t("components.molecules.import.options.failure.permissionError"),
-		status: "error",
-		timeout: 5000,
-	});
+	notifyError(t("components.molecules.import.options.failure.permissionError"));
 	closeModals();
 };
 
@@ -149,8 +127,8 @@ async function validateShareToken() {
 		parentName.value = validateResult.parentName;
 		parentType.value = validateResult.parentType;
 		openModal(
-			parentType.value === ShareTokenInfoResponseParentTypeEnum.Courses ||
-				parentType.value === ShareTokenInfoResponseParentTypeEnum.Room
+			parentType.value === ShareTokenInfoResponseParentType.COURSES ||
+				parentType.value === ShareTokenInfoResponseParentType.ROOM
 				? "import"
 				: "selectCourse"
 		);
@@ -177,7 +155,7 @@ async function startImport(name: string) {
 			destinationId: destinationId.value,
 		});
 		if (copyResultModalItems.value.length === 0) {
-			loadingStateModule.close();
+			setLoadingState(false);
 			emit("success", newName.value, destinationId.value);
 			copyModule.reset();
 		} else {

@@ -1,12 +1,10 @@
-import { mdiAlert } from "@icons/material";
-import { shallowMount } from "@vue/test-utils";
 import BaseAlert from "./BaseAlert.vue";
 import WarningAlert from "./WarningAlert.vue";
+import { mdiAlert } from "@icons/material";
+import { shallowMount } from "@vue/test-utils";
 
 describe("WarningAlert", () => {
 	const setup = () => {
-		document.body.setAttribute("data-app", "true");
-
 		const slot = "TestSlot";
 		const wrapper = shallowMount(WarningAlert, {
 			slots: {

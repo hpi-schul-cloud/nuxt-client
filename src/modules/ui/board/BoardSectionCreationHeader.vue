@@ -1,11 +1,7 @@
 <template>
 	<div ref="headerRef" class="mb-4">
 		<div class="d-flex flex-column justify-space-between align-stretch pt-3">
-			<VBtn
-				variant="text"
-				class="d-flex flex-row justify-start"
-				@click="onAddColumn"
-			>
+			<VBtn variant="text" class="d-flex flex-row justify-start" @click="onAddColumn">
 				<VIcon>{{ mdiPlus }}</VIcon> {{ label }}
 			</VBtn>
 		</div>

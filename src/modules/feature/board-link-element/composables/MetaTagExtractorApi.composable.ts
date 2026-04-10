@@ -1,9 +1,5 @@
-import {
-	MetaDataEntityType,
-	MetaTagExtractorApiFactory,
-	MetaTagExtractorResponse,
-} from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { MetaDataEntityType, MetaTagExtractorApiFactory, MetaTagExtractorResponse } from "@api-server";
 import { AxiosResponse } from "axios";
 import { useI18n } from "vue-i18n";
 
@@ -19,9 +15,7 @@ export const useMetaTagExtractorApi = () => {
 	const { t } = useI18n();
 	const metaTagApi = MetaTagExtractorApiFactory(undefined, "/v3", $axios);
 
-	const mapMetaTagResponse = (
-		response: MetaTagExtractorResponse
-	): MetaTagResult => {
+	const mapMetaTagResponse = (response: MetaTagExtractorResponse): MetaTagResult => {
 		const titleParts = [
 			getPrefix(response.type),
 			getTitle(response.type, response.title),
@@ -37,11 +31,11 @@ export const useMetaTagExtractorApi = () => {
 
 	const getPrefix = (type: MetaDataEntityType): string => {
 		const typeToLanguageKeyMap: Partial<Record<MetaDataEntityType, string>> = {
-			[MetaDataEntityType.Course]: "common.labels.course",
-			[MetaDataEntityType.Lesson]: "common.words.topic",
-			[MetaDataEntityType.Task]: "common.words.task",
-			[MetaDataEntityType.Board]: "common.words.board",
-			[MetaDataEntityType.BoardCard]: "components.boardCard",
+			[MetaDataEntityType.COURSE]: "common.labels.course",
+			[MetaDataEntityType.LESSON]: "common.words.topic",
+			[MetaDataEntityType.TASK]: "common.words.task",
+			[MetaDataEntityType.BOARD]: "common.words.board",
+			[MetaDataEntityType.BOARD_CARD]: "components.boardCard",
 		};
 
 		const prefixKey: string | undefined = typeToLanguageKeyMap[type];
@@ -50,18 +44,15 @@ export const useMetaTagExtractorApi = () => {
 	};
 
 	const getTitle = (type: MetaDataEntityType, title: string): string => {
-		if (type === MetaDataEntityType.Board && !title) {
+		if (type === MetaDataEntityType.BOARD && !title) {
 			return t("pages.room.boardCard.label.courseBoard");
 		}
 
 		return title;
 	};
 
-	const getSuffix = (
-		type: MetaDataEntityType,
-		parentTitle: string | undefined
-	): string => {
-		if (type === MetaDataEntityType.Board && parentTitle) {
+	const getSuffix = (type: MetaDataEntityType, parentTitle: string | undefined): string => {
+		if (type === MetaDataEntityType.BOARD && parentTitle) {
 			return `(${parentTitle})`;
 		}
 
@@ -70,10 +61,9 @@ export const useMetaTagExtractorApi = () => {
 
 	const getMetaTags = async (url: string): Promise<MetaTagResult> => {
 		try {
-			const res: AxiosResponse<MetaTagExtractorResponse> =
-				await metaTagApi.metaTagExtractorControllerGetMetaTags({
-					url,
-				});
+			const res: AxiosResponse<MetaTagExtractorResponse> = await metaTagApi.metaTagExtractorControllerGetMetaTags({
+				url,
+			});
 
 			const metaTagResult: MetaTagResult = mapMetaTagResponse(res.data);
 

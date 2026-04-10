@@ -1,5 +1,5 @@
 import { createSharedComposable } from "@vueuse/core";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 export interface ElementTypeSelectionOptions {
 	icon: string;
@@ -14,6 +14,13 @@ export const useSharedElementTypeSelection = createSharedComposable(() => {
 	const staticElementTypeOptions = ref<Array<ElementTypeSelectionOptions>>([]);
 	const dynamicElementTypeOptions = ref<Array<ElementTypeSelectionOptions>>([]);
 
+	const elementTypeOptions = computed(() => {
+		const combined = [...staticElementTypeOptions.value, ...dynamicElementTypeOptions.value];
+		const alphabeticalSorted = combined.sort((a, b) => a.label.localeCompare(b.label));
+
+		return alphabeticalSorted;
+	});
+
 	const closeDialog = () => {
 		isDialogOpen.value = false;
 	};
@@ -24,5 +31,6 @@ export const useSharedElementTypeSelection = createSharedComposable(() => {
 		closeDialog,
 		staticElementTypeOptions,
 		dynamicElementTypeOptions,
+		elementTypeOptions,
 	};
 });

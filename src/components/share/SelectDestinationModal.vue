@@ -1,5 +1,5 @@
 <template>
-	<v-custom-dialog
+	<CustomDialog
 		ref="dialog"
 		:is-open="isOpen"
 		:size="480"
@@ -9,9 +9,9 @@
 		@dialog-canceled="onCancel"
 	>
 		<template #title>
-			<div ref="textTitle" class="text-h4 my-2">
+			<h2 class="mt-2">
 				{{ t(`components.molecules.import.${parentType}.options.title`) }}
-			</div>
+			</h2>
 		</template>
 
 		<template #content>
@@ -39,16 +39,16 @@
 				/>
 			</div>
 		</template>
-	</v-custom-dialog>
+	</CustomDialog>
 </template>
 
 <script setup lang="ts">
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
+import { ImportDestinationItem } from "@/store/types/rooms";
+import { BoardExternalReferenceType } from "@api-server";
 import { mdiInformation } from "@icons/material";
 import { computed, PropType, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { ImportDestinationItem } from "@/store/types/rooms";
-import { BoardExternalReferenceType } from "@/serverApi/v3";
 
 const emit = defineEmits(["import", "cancel", "next"]);
 const props = defineProps({
@@ -72,13 +72,12 @@ const showErrorOnEmpty = ref(false);
 const showError = () => !selectedReference.value && showErrorOnEmpty.value;
 
 const rules = reactive({
-	required: (value: string | undefined) =>
-		!!value || t("common.validation.required"),
+	required: (value: string | undefined) => !!value || t("common.validation.required"),
 });
 
 const infoText = computed(() =>
 	t(
-		props.destinationType === BoardExternalReferenceType.Room
+		props.destinationType === BoardExternalReferenceType.ROOM
 			? `components.molecules.import.${props.parentType}.options.selectRoom.infoText`
 			: `components.molecules.import.${props.parentType}.options.selectCourse.infoText`
 	)
@@ -86,18 +85,14 @@ const infoText = computed(() =>
 
 const selectionPlaceholder = computed(() =>
 	t(
-		props.destinationType === BoardExternalReferenceType.Room
+		props.destinationType === BoardExternalReferenceType.ROOM
 			? `components.molecules.import.${props.parentType}.options.selectRoom`
 			: `components.molecules.import.${props.parentType}.options.selectCourse`
 	)
 );
 
 const selectionHint = computed(() =>
-	t(
-		props.destinationType === BoardExternalReferenceType.Room
-			? "common.labels.room"
-			: "common.labels.course"
-	)
+	t(props.destinationType === BoardExternalReferenceType.ROOM ? "common.labels.room" : "common.labels.course")
 );
 
 const onNext = () => {

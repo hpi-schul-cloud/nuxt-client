@@ -1,28 +1,24 @@
 <template>
-	<default-wireframe
+	<DefaultWireframe
 		:headline="t('pages.administration.classes.index.title')"
-		:breadcrumbs="breadcrumbs"
 		max-width="full"
+		:fab-items="fab"
 		data-testid="admin-class-title"
 	>
-		<template #header>
-			<h1 class="text-h3 pl-2">
-				{{ t("pages.administration.classes.index.title") }}
-			</h1>
-			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs v-model="activeTab" class="tabs-max-width" grow>
-					<v-tab value="next" data-testid="admin-class-next-year-tab">
-						<span>{{ nextYear }}</span>
-					</v-tab>
-					<v-tab value="current" data-testid="admin-class-current-year-tab">
-						<span>{{ currentYear }}</span>
-					</v-tab>
-					<v-tab value="archive" data-testid="admin-class-previous-years-tab">
-						<span>{{ t("pages.administration.common.label.archive") }}</span>
-					</v-tab>
-				</v-tabs>
-			</div>
-		</template>
+		<ThrInfoBanner />
+		<div class="mt-6 mx-n6 mx-md-0 pb-0 d-flex justify-center">
+			<v-tabs v-model="activeTab" class="tabs-max-width" grow>
+				<v-tab value="next" data-testid="admin-class-next-year-tab">
+					<span>{{ nextYear }}</span>
+				</v-tab>
+				<v-tab value="current" data-testid="admin-class-current-year-tab">
+					<span>{{ currentYear }}</span>
+				</v-tab>
+				<v-tab value="archive" data-testid="admin-class-previous-years-tab">
+					<span>{{ t("pages.administration.common.label.archive") }}</span>
+				</v-tab>
+			</v-tabs>
+		</div>
 		<v-data-table-server
 			v-model:items-per-page="pagination.limit"
 			:headers="headers"
@@ -46,11 +42,7 @@
 			</template>
 			<template #[`item.synchronizedCourses`]="{ item }">
 				<span data-testid="class-table-synced-courses">
-					{{
-						(item.synchronizedCourses || [])
-							.map((course: CourseInfo) => course.name)
-							.join(", ") || ""
-					}}
+					{{ (item.synchronizedCourses || []).map((course: CourseInfo) => course.name).join(", ") || "" }}
 				</span>
 			</template>
 			<template #[`item.externalSourceName`]="{ item }">
@@ -102,7 +94,7 @@
 						size="small"
 						class="mx-1 px-1"
 						min-width="0"
-						@click="onClickDeleteIcon(item)"
+						@click="onDelete(item)"
 					>
 						<v-icon>{{ mdiTrashCanOutline }}</v-icon>
 					</v-btn>
@@ -152,31 +144,6 @@
 				</template>
 			</template>
 		</v-data-table-server>
-		<v-custom-dialog
-			:is-open="isDeleteDialogOpen"
-			max-width="360"
-			data-testid="delete-dialog"
-			has-buttons
-			confirm-btn-title-key="common.actions.delete"
-			:buttons="['cancel', 'confirm']"
-			@dialog-closed="onCancelClassDeletion"
-			@dialog-confirmed="onConfirmClassDeletion"
-		>
-			<template #title>
-				<h2 class="text-h4 my-2">
-					{{ t("pages.administration.classes.deleteDialog.title") }}
-				</h2>
-			</template>
-			<template #content>
-				<p>
-					{{
-						t("pages.administration.classes.deleteDialog.content", {
-							itemName: selectedItemName,
-						})
-					}}
-				</p>
-			</template>
-		</v-custom-dialog>
 		<end-course-sync-dialog
 			v-model:is-open="isEndSyncDialogOpen"
 			data-testid="end-course-sync-dialog"
@@ -186,73 +153,44 @@
 			@success="loadClassList"
 		/>
 
-		<v-btn
-			v-if="hasCreatePermission"
-			class="my-5 button-start"
-			color="primary"
-			variant="flat"
-			data-testid="admin-class-add-button"
-			href="/administration/classes/create"
-		>
-			{{ t("pages.administration.classes.index.add") }}
-		</v-btn>
-
-		<InfoAlert
-			v-if="!hasCreatePermission"
-			class="mb-4"
-			:class="{ 'mt-4': !hasCreatePermission }"
-			data-testid="admin-class-info-alert"
-			alert-title="pages.administration.classes.thr.hint.title"
-		>
-			{{ t("pages.administration.classes.thr.hint.text") }}
-		</InfoAlert>
-
-		<p class="text-muted">
+		<p class="mt-4" data-testid="admin-class-hint">
 			{{
 				t("pages.administration.common.hint", {
 					institute_title: instituteTitle,
 				})
 			}}
 		</p>
-	</default-wireframe>
+	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import {
-	ClassSortQueryType,
-	SchoolYearQueryType,
-	SchulcloudTheme,
-} from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
+import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	GROUP_MODULE_KEY,
-	injectStrict,
-	SCHOOLS_MODULE_KEY,
-} from "@/utils/inject";
+import { askDeletion } from "@/utils/confirmation-dialog.utils";
+import { GROUP_MODULE_KEY, injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { ClassSortQueryType, Permission, SchoolYearQueryType, SchulcloudTheme } from "@api-server";
+import { useAppStore } from "@data-app";
+import { useEnvConfig, useEnvStore } from "@data-env";
 import { EndCourseSyncDialog } from "@feature-course-sync";
 import {
 	mdiAccountGroupOutline,
 	mdiArrowUp,
 	mdiPencilOutline,
+	mdiPlus,
 	mdiSyncOff,
 	mdiTrashCanOutline,
 } from "@icons/material";
+import { DefaultWireframe } from "@ui-layout";
+import { FabAction } from "@ui-speed-dial-menu";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
+import { storeToRefs } from "pinia";
+import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { InfoAlert } from "@ui-alert";
 import { useRoute, useRouter } from "vue-router";
 import { DataTableHeader } from "vuetify";
 
@@ -270,10 +208,9 @@ const props = defineProps({
 	},
 });
 
+const { hasPermission } = useAppStore();
 const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
-const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const route = useRoute();
 const router = useRouter();
@@ -294,83 +231,61 @@ const footerProps = {
 	itemsPerPageOptions: [5, 10, 25, 50, 100],
 };
 
-const breadcrumbs: Ref<Breadcrumb[]> = computed(() => [
-	{
-		title: t("pages.administration.index.title"),
-		disabled: true,
-	},
-	{
-		title: t("pages.administration.classes.index.title"),
-		disabled: true,
-	},
-]);
-
 useTitle(buildPageTitle(t("pages.administration.classes.index.title")));
 
 const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(() => {
 	switch (props.tab) {
 		case "next":
-			return SchoolYearQueryType.NextYear;
+			return SchoolYearQueryType.NEXT_YEAR;
 		case "current":
-			return SchoolYearQueryType.CurrentYear;
+			return SchoolYearQueryType.CURRENT_YEAR;
 		case "archive":
-			return SchoolYearQueryType.PreviousYears;
+			return SchoolYearQueryType.PREVIOUS_YEARS;
 		default:
-			return SchoolYearQueryType.CurrentYear;
+			return SchoolYearQueryType.CURRENT_YEAR;
 	}
 });
 
-const nextYear: ComputedRef<string> = computed(
-	() => schoolsModule.getSchool.years.nextYear.name
+const nextYear = computed(() => schoolsModule.getSchool.years.nextYear.name);
+
+const currentYear = computed(() => schoolsModule.getSchool.years.activeYear.name);
+
+const classes = computed(() => groupModule.getClasses);
+
+const showSourceHeader = computed(() => classes.value.some((classItem) => classItem.externalSourceName !== undefined));
+
+const isLoading = computed(() => groupModule.getLoading);
+
+const hasEditPermission = hasPermission(Permission.CLASS_EDIT);
+const hasCreatePermission = hasPermission(Permission.CLASS_CREATE);
+
+const fab: ComputedRef<FabAction[] | undefined> = computed(() =>
+	!(useEnvConfig().value.SC_THEME === SchulcloudTheme.THR) && hasCreatePermission.value
+		? [
+				{
+					icon: mdiPlus,
+					label: t("pages.administration.classes.index.add"),
+					href: "/administration/classes/create",
+					dataTestId: "fab_button_add_class",
+				},
+			]
+		: undefined
 );
 
-const currentYear: ComputedRef<string> = computed(
-	() => schoolsModule.getSchool.years.activeYear.name
-);
+const showClassAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.CLASS;
 
-const classes: ComputedRef<ClassInfo[]> = computed(
-	() => groupModule.getClasses
-);
+const showGroupAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.GROUP;
 
-const showSourceHeader: ComputedRef<boolean> = computed(() => {
-	return classes.value.some(
-		(classItem) => classItem.externalSourceName !== undefined
-	);
-});
-
-const isLoading: ComputedRef<boolean> = computed(() => groupModule.getLoading);
-
-const hasEditPermission: ComputedRef<boolean> = computed(() =>
-	authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
-);
-
-const showClassAction = (item: ClassInfo) =>
-	hasEditPermission.value && item.type === ClassRootType.Class;
-
-const showGroupAction = (item: ClassInfo) =>
-	hasEditPermission.value && item.type === ClassRootType.Group;
-
-const hasCreatePermission: ComputedRef<boolean> = computed(() =>
-	authModule.getUserPermissions.includes("CLASS_CREATE".toLowerCase())
-);
-
-const isDeleteDialogOpen: Ref<boolean> = ref(false);
-
-const isEndSyncDialogOpen: Ref<boolean> = ref(false);
+const isEndSyncDialogOpen = ref(false);
 
 const selectedItem: Ref<ClassInfo | undefined> = ref();
-
-const selectedItemName: ComputedRef<string> = computed(
-	() => selectedItem.value?.name || "???"
-);
 
 const selectedItemForSync: ComputedRef<{
 	courseName: string;
 	groupName: string;
 	courseId?: string;
 }> = computed(() => {
-	const synchronizedCourse: CourseInfo | undefined =
-		selectedItem.value?.synchronizedCourse;
+	const synchronizedCourse: CourseInfo | undefined = selectedItem.value?.synchronizedCourse;
 
 	return {
 		courseId: synchronizedCourse?.id,
@@ -384,25 +299,24 @@ const onClickEndSyncIcon = (selectedClass: ClassInfo) => {
 	isEndSyncDialogOpen.value = true;
 };
 
-const onClickDeleteIcon = (selectedClass: ClassInfo) => {
-	selectedItem.value = selectedClass;
-	isDeleteDialogOpen.value = true;
+const onDelete = async (selectedClass: ClassInfo) => {
+	const shouldDelete = await askDeletion(
+		"pages.administration.classes.deleteDialog.title",
+		t("pages.administration.classes.deleteDialog.content", { itemName: selectedClass.name })
+	);
+	if (!shouldDelete) return;
+
+	await groupModule.deleteClass({
+		classId: selectedClass.id,
+		query: schoolYearQueryType.value,
+	});
 };
 
-const onCancelClassDeletion = () => {
-	selectedItem.value = undefined;
-	isDeleteDialogOpen.value = false;
-};
-
-const pagination: ComputedRef<Pagination> = computed(
-	() => groupModule.getPagination
-);
+const pagination: ComputedRef<Pagination> = computed(() => groupModule.getPagination);
 
 const page: ComputedRef<number> = computed(() => groupModule.getPage);
 
-const courseSyncEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED
-);
+const courseSyncEnabled = computed(() => useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED);
 
 const headers = computed(() => {
 	const headerList: DataTableHeader<ClassInfo>[] = [
@@ -415,10 +329,7 @@ const headers = computed(() => {
 	if (courseSyncEnabled.value) {
 		headerList.push({
 			key: "synchronizedCourses",
-			value: (item: ClassInfo) =>
-				item.synchronizedCourses
-					?.map((course: CourseInfo): string => course.name)
-					.join(", "),
+			value: (item: ClassInfo) => item.synchronizedCourses?.map((course: CourseInfo): string => course.name).join(", "),
 			title: t("pages.administration.classes.header.sync"),
 			sortable: true,
 		});
@@ -452,15 +363,6 @@ const headers = computed(() => {
 	return headerList;
 });
 
-const onConfirmClassDeletion = async () => {
-	if (selectedItem.value) {
-		await groupModule.deleteClass({
-			classId: selectedItem.value.id,
-			query: schoolYearQueryType.value,
-		});
-	}
-};
-
 const loadClassList = async () => {
 	await groupModule.loadClassesForSchool({
 		schoolYearQuery: schoolYearQueryType.value,
@@ -476,13 +378,10 @@ const onTabsChange = async (tab: string) => {
 
 const onUpdateSortBy = async (sortBy: ClassSortItem[]) => {
 	const fieldToSortBy: ClassSortItem = sortBy[0];
-	const key: ClassSortQueryType | undefined = fieldToSortBy
-		? fieldToSortBy.key
-		: undefined;
+	const key: ClassSortQueryType | undefined = fieldToSortBy ? fieldToSortBy.key : undefined;
 	groupModule.setSortBy(key);
 
-	const sortOrder =
-		fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
+	const sortOrder = fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
 	groupModule.setSortOrder(sortOrder);
 
 	await loadClassList();
@@ -505,18 +404,7 @@ onMounted(() => {
 	onTabsChange(activeTab.value);
 });
 
-const instituteTitle: ComputedRef<string> = computed(() => {
-	switch (envConfigModule.getTheme) {
-		case SchulcloudTheme.N21:
-			return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
-		case SchulcloudTheme.Thr:
-			return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-		case SchulcloudTheme.Brb:
-			return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
-		default:
-			return "Dataport";
-	}
-});
+const { instituteTitle } = storeToRefs(useEnvStore());
 </script>
 
 <style scoped>

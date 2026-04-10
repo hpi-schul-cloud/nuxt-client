@@ -1,44 +1,44 @@
-import { printDateFromStringUTC } from "@/plugins/datetime";
-import { RoleName } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import { FileRecord, FileRecordVirusScanStatus } from "@/types/file/File";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
-import { fileRecordFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { DataTable } from "@ui-data-table";
-import { EmptyState } from "@ui-empty-state";
-import { VSkeletonLoader } from "vuetify/lib/components/index";
 import FilePreview from "./FilePreview.vue";
 import FileTable from "./FileTable.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
+import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
+import { FileRecord, FileRecordVirusScanStatus } from "@/types/file/File";
+import { createTestAppStoreWithRole, fileRecordFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoleName } from "@api-server";
+import { createTestingPinia } from "@pinia/testing";
+import { DataTable } from "@ui-data-table";
+import { EmptyState } from "@ui-empty-state";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
+import { VSkeletonLoader } from "vuetify/lib/components/index";
+
+vi.mock("vue-router");
 
 describe("FileTable", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestAppStoreWithRole(RoleName.TEACHER);
+	});
+
 	const setupWrapper = (props: {
 		isLoading: boolean;
 		isEmpty: boolean;
+		fileStorageError: boolean;
 		fileRecords: FileRecord[];
 		uploadProgress: {
 			uploaded: number;
 			total: number;
 		};
 	}) => {
-		const authModule = createModuleMocks(AuthModule, {
-			getUserRoles: [RoleName.Teacher],
-		});
 		const wrapper = mount(FileTable, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-				},
 			},
 			props: {
 				isLoading: props.isLoading,
 				isEmpty: props.isEmpty,
+				fileStorageError: props.fileStorageError,
 				isStudent: false,
 				fileRecords: props.fileRecords,
 				uploadProgress: props.uploadProgress,
@@ -54,13 +54,12 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: true,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [],
 				uploadProgress: { uploaded: 0, total: 0 },
 			});
 
-			expect(wrapper.findComponent({ name: "VSkeletonLoader" }).exists()).toBe(
-				true
-			);
+			expect(wrapper.findComponent({ name: "VSkeletonLoader" }).exists()).toBe(true);
 			expect(wrapper.findComponent(EmptyState).exists()).toBe(false);
 			expect(wrapper.findComponent(DataTable).exists()).toBe(false);
 		});
@@ -71,6 +70,7 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: true,
+				fileStorageError: false,
 				fileRecords: [],
 				uploadProgress: { uploaded: 0, total: 0 },
 			});
@@ -86,6 +86,7 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [],
 				uploadProgress: { uploaded: 0, total: 0 },
 			});
@@ -96,11 +97,28 @@ describe("FileTable", () => {
 		});
 	});
 
+	describe("when file storage has an error", () => {
+		it("should show error state", () => {
+			const { wrapper } = setupWrapper({
+				isLoading: false,
+				isEmpty: false,
+				fileStorageError: true,
+				fileRecords: [],
+				uploadProgress: { uploaded: 0, total: 0 },
+			});
+
+			expect(wrapper.findComponent(VSkeletonLoader).exists()).toBe(false);
+			expect(wrapper.findComponent(EmptyState).exists()).toBe(true);
+			expect(wrapper.findComponent(BrokenPencilSvg).exists()).toBe(true);
+		});
+	});
+
 	describe("when isLoading is false and isEmpty is false and uploadProgress.total > 0", () => {
 		it("should show data table", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [],
 				uploadProgress: { uploaded: 1, total: 2 },
 			});
@@ -115,6 +133,7 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [fileRecord],
 				uploadProgress: { uploaded: 1, total: 2 },
 			});
@@ -122,21 +141,71 @@ describe("FileTable", () => {
 			expect(wrapper.findComponent(FilePreview).exists()).toBe(true);
 		});
 
-		it("should render created at column", () => {
+		it("should render content modified column", () => {
 			const fileRecord = fileRecordFactory.build();
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [fileRecord],
 				uploadProgress: { uploaded: 1, total: 2 },
 			});
 
-			const createdAt = wrapper.find(
-				`[data-testid='created-at-${fileRecord.name}']`
-			);
+			const contentLastModifiedAt = wrapper.find(`[data-testid='content-modified-at-${fileRecord.name}']`);
+			expect(contentLastModifiedAt.exists()).toBe(true);
+		});
 
-			const date = printDateFromStringUTC(fileRecord.createdAt);
-			expect(createdAt.text()).toContain(date);
+		describe("when contentLastModifiedAt is set", () => {
+			it("should render content modified column with contentLastModifiedAt", () => {
+				const fileRecord = fileRecordFactory.build();
+				fileRecord.contentLastModifiedAt = new Date().toISOString();
+				const { wrapper } = setupWrapper({
+					isLoading: false,
+					isEmpty: false,
+					fileStorageError: false,
+					fileRecords: [fileRecord],
+					uploadProgress: { uploaded: 1, total: 2 },
+				});
+
+				const contentLastModifiedAt = wrapper.find(`[data-testid='content-modified-at-${fileRecord.name}']`);
+				expect(contentLastModifiedAt.text()).toContain(wrapper.vm.$d(new Date(fileRecord.contentLastModifiedAt)));
+			});
+		});
+
+		describe("when contentLastModifiedAt is not existing", () => {
+			it("should render content modified column with createdAt", () => {
+				const fileRecord = fileRecordFactory.build();
+				delete fileRecord.contentLastModifiedAt;
+				fileRecord.createdAt = new Date().toISOString();
+				const { wrapper } = setupWrapper({
+					isLoading: false,
+					isEmpty: false,
+					fileStorageError: false,
+					fileRecords: [fileRecord],
+					uploadProgress: { uploaded: 1, total: 2 },
+				});
+
+				const contentLastModifiedAt = wrapper.find(`[data-testid='content-modified-at-${fileRecord.name}']`);
+				expect(contentLastModifiedAt.text()).toContain(wrapper.vm.$d(new Date(fileRecord.createdAt)));
+			});
+		});
+
+		describe("when contentLastModifiedAt and createdAt are not existing", () => {
+			it("should render content modified column with empty string", () => {
+				const fileRecord = fileRecordFactory.build();
+				delete fileRecord.contentLastModifiedAt;
+				delete fileRecord.createdAt;
+				const { wrapper } = setupWrapper({
+					isLoading: false,
+					isEmpty: false,
+					fileStorageError: false,
+					fileRecords: [fileRecord],
+					uploadProgress: { uploaded: 1, total: 2 },
+				});
+
+				const contentLastModifiedAt = wrapper.find(`[data-testid='content-modified-at-${fileRecord.name}']`);
+				expect(contentLastModifiedAt.text()).toBe("");
+			});
 		});
 
 		it("should render file name column", () => {
@@ -144,6 +213,7 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [fileRecord],
 				uploadProgress: { uploaded: 1, total: 2 },
 			});
@@ -157,6 +227,7 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [fileRecord],
 				uploadProgress: { uploaded: 1, total: 2 },
 			});
@@ -172,6 +243,7 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [fileRecord],
 				uploadProgress: { uploaded: 1, total: 2 },
 			});
@@ -189,33 +261,24 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [fileRecord],
 				uploadProgress: { uploaded: 0, total: 0 },
 			});
 
-			const checkbox = wrapper.find(
-				`[data-testid='select-checkbox-${fileRecord.name}']`
-			);
+			const checkbox = wrapper.find(`[data-testid='select-checkbox-${fileRecord.name}']`);
 			expect(checkbox.classes()).toContain("v-selection-control--disabled");
 
-			const previewColumn = wrapper.find(
-				`[data-testid='file-preview-${fileRecord.name}']`
-			);
+			const previewColumn = wrapper.find(`[data-testid='file-preview-${fileRecord.name}']`);
 			expect(previewColumn.classes()).toContain("text-disabled");
 
-			const nameColumn = wrapper.find(
-				`[data-testid='name-${fileRecord.name}']`
-			);
+			const nameColumn = wrapper.find(`[data-testid='name-${fileRecord.name}']`);
 			expect(nameColumn.classes()).toContain("text-disabled");
 
-			const createdAtColumn = wrapper.find(
-				`[data-testid='created-at-${fileRecord.name}']`
-			);
-			expect(createdAtColumn.classes()).toContain("text-disabled");
+			const contentLastModifiedAt = wrapper.find(`[data-testid='content-modified-at-${fileRecord.name}']`);
+			expect(contentLastModifiedAt.classes()).toContain("text-disabled");
 
-			const sizeColumn = wrapper.find(
-				`[data-testid='size-${fileRecord.name}']`
-			);
+			const sizeColumn = wrapper.find(`[data-testid='size-${fileRecord.name}']`);
 			expect(sizeColumn.classes()).toContain("text-disabled");
 		});
 
@@ -224,33 +287,24 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [fileRecord],
 				uploadProgress: { uploaded: 0, total: 0 },
 			});
 
-			const checkbox = wrapper.find(
-				`[data-testid='select-checkbox-${fileRecord.name}']`
-			);
+			const checkbox = wrapper.find(`[data-testid='select-checkbox-${fileRecord.name}']`);
 			expect(checkbox.classes()).not.toContain("v-selection-control--disabled");
 
-			const previewColumn = wrapper.find(
-				`[data-testid='file-preview-${fileRecord.name}']`
-			);
+			const previewColumn = wrapper.find(`[data-testid='file-preview-${fileRecord.name}']`);
 			expect(previewColumn.classes()).not.toContain("text-disabled");
 
-			const nameColumn = wrapper.find(
-				`[data-testid='name-${fileRecord.name}']`
-			);
+			const nameColumn = wrapper.find(`[data-testid='name-${fileRecord.name}']`);
 			expect(nameColumn.classes()).not.toContain("text-disabled");
 
-			const createdAtColumn = wrapper.find(
-				`[data-testid='created-at-${fileRecord.name}']`
-			);
-			expect(createdAtColumn.classes()).not.toContain("text-disabled");
+			const contentLastModifiedAt = wrapper.find(`[data-testid='content-modified-at-${fileRecord.name}']`);
+			expect(contentLastModifiedAt.classes()).not.toContain("text-disabled");
 
-			const sizeColumn = wrapper.find(
-				`[data-testid='size-${fileRecord.name}']`
-			);
+			const sizeColumn = wrapper.find(`[data-testid='size-${fileRecord.name}']`);
 			expect(sizeColumn.classes()).not.toContain("text-disabled");
 		});
 	});

@@ -4,9 +4,7 @@ export function useDrag() {
 	const dragInProgressDelay = 300;
 	const dragInProgress = ref(false);
 
-	const isTouchDevice = () => {
-		return window.ontouchstart !== undefined;
-	};
+	const isTouchDevice = () => window.ontouchstart !== undefined;
 
 	const touchDelay = isTouchDevice() ? 200 : 20;
 

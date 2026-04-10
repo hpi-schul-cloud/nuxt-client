@@ -2,17 +2,7 @@
 	<BaseAlert color="error" :icon="mdiAlertCircle"> <slot /> </BaseAlert>
 </template>
 
-<script lang="ts">
-import { mdiAlertCircle } from "@icons/material";
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import BaseAlert from "./BaseAlert.vue";
-
-export default defineComponent({
-	name: "ErrorAlert",
-	components: { BaseAlert },
-
-	setup() {
-		return { mdiAlertCircle };
-	},
-});
+import { mdiAlertCircle } from "@icons/material";
 </script>

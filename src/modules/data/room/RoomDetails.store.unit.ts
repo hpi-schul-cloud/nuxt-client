@@ -1,38 +1,26 @@
-import { useApplicationError } from "@/composables/application-error.composable";
-import * as serverApi from "@/serverApi/v3/api";
-import { RoomColor } from "@/serverApi/v3/api";
+import { RoomVariant, useRoomDetailsStore } from "./RoomDetails.store";
 import { RoomUpdateParams } from "@/types/room/Room";
 import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { apiResponseErrorFactory, mockApiResponse } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { apiResponseErrorFactory, mockApi, mockApiResponse, mockAxiosInstance } from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
+import { RoomColor } from "@api-server";
 import { AxiosInstance } from "axios";
 import { createPinia, setActivePinia } from "pinia";
-import { RoomVariant, useRoomDetailsStore } from "./RoomDetails.store";
+import { Mocked } from "vitest";
 
 vi.mock("@/utils/api");
-const mockedMapAxiosErrorToResponseError = vi.mocked(
-	mapAxiosErrorToResponseError
-);
-
-vi.mock("@/composables/application-error.composable");
-const mockedCreateApplicationError = vi.mocked(useApplicationError);
+const mockedMapAxiosErrorToResponseError = vi.mocked(mapAxiosErrorToResponseError);
 
 describe("useRoomDetailsStore", () => {
-	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
-	let boardApiMock: DeepMocked<serverApi.BoardApiInterface>;
-	let axiosMock: DeepMocked<AxiosInstance>;
-	let mockedCreateApplicationErrorCalls: ReturnType<typeof useApplicationError>;
+	let roomApiMock: Mocked<serverApi.RoomApiInterface>;
+	let boardApiMock: Mocked<serverApi.BoardApiInterface>;
+	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
-		roomApiMock = createMock<serverApi.RoomApiInterface>();
-		boardApiMock = createMock<serverApi.BoardApiInterface>();
-		axiosMock = createMock<AxiosInstance>();
-		mockedCreateApplicationErrorCalls =
-			createMock<ReturnType<typeof useApplicationError>>();
-		mockedCreateApplicationError.mockReturnValue(
-			mockedCreateApplicationErrorCalls
-		);
+		roomApiMock = mockApi<serverApi.RoomApiInterface>();
+		boardApiMock = mockApi<serverApi.BoardApiInterface>();
+		axiosMock = mockAxiosInstance();
 
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
 		vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApiMock);
@@ -49,15 +37,7 @@ describe("useRoomDetailsStore", () => {
 		return { store };
 	};
 
-	const mockErrorResponse = ({
-		code,
-		type,
-		message,
-	}: {
-		code: number;
-		type?: string;
-		message?: string;
-	}) => {
+	const mockErrorResponse = ({ code, type, message }: { code: number; type?: string; message?: string }) => {
 		const expectedPayload = apiResponseErrorFactory.build({
 			code,
 			type,
@@ -74,12 +54,31 @@ describe("useRoomDetailsStore", () => {
 			expect(store.isLoading).toBe(true);
 			await store.fetchRoom("room-id");
 
-			expect(roomApiMock.roomControllerGetRoomDetails).toHaveBeenCalledWith(
-				"room-id"
-			);
-			expect(roomApiMock.roomControllerGetRoomBoards).toHaveBeenCalledWith(
-				"room-id"
-			);
+			expect(roomApiMock.roomControllerGetRoomDetails).toHaveBeenCalledWith("room-id");
+			expect(store.isLoading).toBe(false);
+		});
+
+		describe("when fetching room fails with other errors", () => {
+			it("should throw an error", async () => {
+				const { store } = setup();
+				expect(store.isLoading).toBe(true);
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue(new Error("test error"));
+
+				await expect(store.fetchRoom("room-id")).rejects.toThrow();
+				expect(store.isLoading).toBe(false);
+			});
+		});
+	});
+
+	describe("fetchRoomAndBoards", () => {
+		it("should call fetchRoomAndBoards api", async () => {
+			const { store } = setup();
+
+			expect(store.isLoading).toBe(true);
+			await store.fetchRoomAndBoards("room-id");
+
+			expect(roomApiMock.roomControllerGetRoomDetails).toHaveBeenCalledWith("room-id");
+			expect(roomApiMock.roomControllerGetRoomBoards).toHaveBeenCalledWith("room-id");
 			expect(store.isLoading).toBe(false);
 		});
 
@@ -87,10 +86,10 @@ describe("useRoomDetailsStore", () => {
 			it("should set roomVariant to COURSE_ROOM", async () => {
 				const { store } = setup();
 				expect(store.isLoading).toBe(true);
-				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue(new Error("not found"));
 				mockErrorResponse({ code: 404 });
 
-				await store.fetchRoom("room-id");
+				await store.fetchRoomAndBoards("room-id");
 
 				expect(store.roomVariant).toBe(RoomVariant.COURSE_ROOM);
 				expect(store.isLoading).toBe(false);
@@ -101,17 +100,16 @@ describe("useRoomDetailsStore", () => {
 			it("should set lockedRoomName to the error message", async () => {
 				const { store } = setup();
 				expect(store.isLoading).toBe(true);
-				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue(new Error("forbidden"));
 				mockErrorResponse({
 					code: 403,
 					type: "LOCKED_ROOM",
 					message: "Locker Room",
 				});
 
-				await store.fetchRoom("room-id");
+				const result = await store.fetchRoomAndBoards("room-id");
 
-				expect(store.lockedRoomName).toBe("Locker Room");
-				expect(store.isLoading).toBe(false);
+				expect(result?.isLocked).toBe(true);
 			});
 		});
 
@@ -119,9 +117,9 @@ describe("useRoomDetailsStore", () => {
 			it("should throw an error", async () => {
 				const { store } = setup();
 				expect(store.isLoading).toBe(true);
-				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue(new Error("test error"));
 
-				await expect(store.fetchRoom("room-id")).rejects.toThrow();
+				await expect(store.fetchRoomAndBoards("room-id")).rejects.toThrow();
 				expect(store.isLoading).toBe(false);
 			});
 		});
@@ -141,7 +139,7 @@ describe("useRoomDetailsStore", () => {
 			const { store } = setup();
 			const boardId = "board-id";
 			const roomId = "room-id";
-			const layout = serverApi.BoardLayout.Columns;
+			const layout = serverApi.BoardLayout.COLUMNS;
 			const title = "title";
 
 			boardApiMock.boardControllerCreateBoard.mockResolvedValue(
@@ -156,7 +154,7 @@ describe("useRoomDetailsStore", () => {
 			expect(boardApiMock.boardControllerCreateBoard).toHaveBeenCalledWith({
 				title,
 				parentId: roomId,
-				parentType: serverApi.BoardParentType.Room,
+				parentType: serverApi.BoardParentType.ROOM,
 				layout,
 			});
 		});
@@ -168,16 +166,13 @@ describe("useRoomDetailsStore", () => {
 			expect(store.isLoading).toBe(true);
 			const params: RoomUpdateParams = {
 				name: "room-name",
-				color: RoomColor.BlueGrey,
+				color: RoomColor.BLUE_GREY,
 				features: [],
 			};
 
 			await store.updateRoom("room-id", params);
 
-			expect(roomApiMock.roomControllerUpdateRoom).toHaveBeenCalledWith(
-				"room-id",
-				params
-			);
+			expect(roomApiMock.roomControllerUpdateRoom).toHaveBeenCalledWith("room-id", params);
 
 			expect(store.isLoading).toBe(false);
 		});
@@ -187,15 +182,12 @@ describe("useRoomDetailsStore", () => {
 		const { store } = setup();
 		const params: RoomUpdateParams = {
 			name: "room-name",
-			color: RoomColor.BlueGrey,
+			color: RoomColor.BLUE_GREY,
 			features: [],
 		};
 		roomApiMock.roomControllerUpdateRoom.mockRejectedValue({ code: 404 });
 
-		expect(roomApiMock.roomControllerUpdateRoom).not.toHaveBeenCalledWith(
-			"room-id",
-			params
-		);
+		expect(roomApiMock.roomControllerUpdateRoom).not.toHaveBeenCalledWith("room-id", params);
 
 		await store.updateRoom("room-id", params).catch(() => {
 			expect(mockedMapAxiosErrorToResponseError).toHaveBeenCalledWith({

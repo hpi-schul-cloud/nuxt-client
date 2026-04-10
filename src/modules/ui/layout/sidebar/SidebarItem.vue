@@ -20,9 +20,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType } from "vue";
 import { SidebarSingleItem } from "../types";
 import { useSidebarSelection } from "./SidebarSelection.composable";
+import { computed, PropType } from "vue";
 
 const props = defineProps({
 	item: {
@@ -33,13 +33,9 @@ const props = defineProps({
 
 const { isActive } = useSidebarSelection(() => props.item);
 
-const density = computed(() => {
-	return props.item.icon ? "default" : "compact";
-});
+const density = computed(() => (props.item.icon ? "default" : "compact"));
 
-const hasIcon = (item: SidebarSingleItem) => {
-	return item.icon !== undefined && item.icon !== "";
-};
+const hasIcon = (item: SidebarSingleItem) => item.icon !== undefined && item.icon !== "";
 </script>
 
 <style scoped>

@@ -41,9 +41,7 @@
 			</v-list-item>
 			<v-list-item @click="onSelect(1)">
 				<div class="ml-3">
-					<v-list-item-title>{{
-						$t("components.audioPlayer.speed.normal")
-					}}</v-list-item-title>
+					<v-list-item-title>{{ $t("components.audioPlayer.speed.normal") }}</v-list-item-title>
 				</div>
 				<template v-if="1 === rate" #append>
 					<v-icon>{{ mdiCheck }}</v-icon>

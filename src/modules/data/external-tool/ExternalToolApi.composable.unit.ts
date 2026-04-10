@@ -1,26 +1,15 @@
-import * as serverApi from "@/serverApi/v3/api";
-import {
-	ContextExternalToolBodyParams,
-	LaunchType,
-	ToolContextType,
-	ToolLaunchRequestResponse,
-} from "@/serverApi/v3/api";
-import {
-	ToolLaunchRequest,
-	ToolLaunchRequestMethodEnum,
-} from "@/store/external-tool";
-import {
-	mockApiResponse,
-	toolLaunchRequestResponseFactory,
-} from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useExternalToolApi } from "./ExternalToolApi.composable";
+import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@/store/external-tool";
+import { mockApi, mockApiResponse, toolLaunchRequestResponseFactory } from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
+import { ContextExternalToolBodyParams, LaunchType, ToolContextType, ToolLaunchRequestResponse } from "@api-server";
+import { Mocked } from "vitest";
 
 describe("ExternalToolApi.composable", () => {
-	let toolApi: DeepMocked<serverApi.ToolApiInterface>;
+	let toolApi: Mocked<serverApi.ToolApiInterface>;
 
 	beforeEach(() => {
-		toolApi = createMock<serverApi.ToolApiInterface>();
+		toolApi = mockApi<serverApi.ToolApiInterface>();
 
 		vi.spyOn(serverApi, "ToolApiFactory").mockReturnValue(toolApi);
 	});
@@ -31,8 +20,7 @@ describe("ExternalToolApi.composable", () => {
 
 	describe("fetchContextLaunchDataCall", () => {
 		const setup = () => {
-			const launchRequest: ToolLaunchRequestResponse =
-				toolLaunchRequestResponseFactory.build();
+			const launchRequest: ToolLaunchRequestResponse = toolLaunchRequestResponseFactory.build();
 
 			toolApi.toolLaunchControllerGetContextExternalToolLaunchRequest.mockResolvedValue(
 				mockApiResponse({ data: launchRequest })
@@ -46,41 +34,35 @@ describe("ExternalToolApi.composable", () => {
 		it("should call the api for a tool launch request", async () => {
 			setup();
 
-			await useExternalToolApi().fetchContextLaunchDataCall(
+			await useExternalToolApi().fetchContextLaunchDataCall("contextExternalToolId");
+
+			expect(toolApi.toolLaunchControllerGetContextExternalToolLaunchRequest).toHaveBeenCalledWith(
 				"contextExternalToolId"
 			);
-
-			expect(
-				toolApi.toolLaunchControllerGetContextExternalToolLaunchRequest
-			).toHaveBeenCalledWith("contextExternalToolId");
 		});
 
 		it("should return launch request data", async () => {
 			const { launchRequest } = setup();
 
-			const result: ToolLaunchRequest =
-				await useExternalToolApi().fetchContextLaunchDataCall(
-					"contextExternalToolId"
-				);
+			const result = await useExternalToolApi().fetchContextLaunchDataCall("contextExternalToolId");
 
 			expect(result).toEqual<ToolLaunchRequest>({
 				url: launchRequest.url,
 				payload: launchRequest.payload,
 				method: ToolLaunchRequestMethodEnum.Get,
 				openNewTab: launchRequest.openNewTab,
-				launchType: LaunchType.Basic,
+				launchType: LaunchType.BASIC,
 			});
 		});
 	});
 
 	describe("fetchSchoolLaunchDataCall", () => {
 		const setup = () => {
-			const launchRequest: ToolLaunchRequestResponse =
-				toolLaunchRequestResponseFactory.build();
+			const launchRequest: ToolLaunchRequestResponse = toolLaunchRequestResponseFactory.build();
 
 			const bodyParams: ContextExternalToolBodyParams = {
 				contextId: "contextId",
-				contextType: ToolContextType.MediaBoard,
+				contextType: ToolContextType.MEDIA_BOARD,
 			};
 
 			toolApi.toolLaunchControllerGetSchoolExternalToolLaunchRequest.mockResolvedValue(
@@ -96,31 +78,25 @@ describe("ExternalToolApi.composable", () => {
 		it("should call the api for a tool launch request", async () => {
 			const { bodyParams } = setup();
 
-			await useExternalToolApi().fetchSchoolLaunchDataCall(
+			await useExternalToolApi().fetchSchoolLaunchDataCall("schoolExternalToolId", bodyParams);
+
+			expect(toolApi.toolLaunchControllerGetSchoolExternalToolLaunchRequest).toHaveBeenCalledWith(
 				"schoolExternalToolId",
 				bodyParams
 			);
-
-			expect(
-				toolApi.toolLaunchControllerGetSchoolExternalToolLaunchRequest
-			).toHaveBeenCalledWith("schoolExternalToolId", bodyParams);
 		});
 
 		it("should return launch request data", async () => {
 			const { launchRequest, bodyParams } = setup();
 
-			const result: ToolLaunchRequest =
-				await useExternalToolApi().fetchSchoolLaunchDataCall(
-					"contextExternalToolId",
-					bodyParams
-				);
+			const result = await useExternalToolApi().fetchSchoolLaunchDataCall("contextExternalToolId", bodyParams);
 
 			expect(result).toEqual<ToolLaunchRequest>({
 				url: launchRequest.url,
 				payload: launchRequest.payload,
 				method: ToolLaunchRequestMethodEnum.Get,
 				openNewTab: launchRequest.openNewTab,
-				launchType: LaunchType.Basic,
+				launchType: LaunchType.BASIC,
 			});
 		});
 	});

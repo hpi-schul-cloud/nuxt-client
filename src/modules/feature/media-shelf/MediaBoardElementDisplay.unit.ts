@@ -1,14 +1,12 @@
+import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ContentElementBar } from "@ui-board";
 import { mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 import { VImg, VSkeletonLoader } from "vuetify/lib/components/index";
-import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 
 describe("MediaBoardElementDisplay", () => {
-	const getWrapper = (
-		props: ComponentProps<typeof MediaBoardElementDisplay>
-	) => {
+	const getWrapper = (props: ComponentProps<typeof MediaBoardElementDisplay>) => {
 		const wrapper = mount(MediaBoardElementDisplay, {
 			global: {
 				plugins: [createTestingVuetify()],
@@ -108,9 +106,7 @@ describe("MediaBoardElementDisplay", () => {
 		it("should display the thumbnail", () => {
 			const { wrapper, thumbnailUrl } = setup();
 
-			const thumbnail = wrapper.findComponent<typeof VImg>(
-				"[data-testid=media-element-thumbnail]"
-			);
+			const thumbnail = wrapper.findComponent<typeof VImg>("[data-testid=media-element-thumbnail]");
 
 			expect(thumbnail.isVisible()).toEqual(true);
 			expect(thumbnail.props().src).toEqual(thumbnailUrl);
@@ -135,9 +131,7 @@ describe("MediaBoardElementDisplay", () => {
 		it("should display the default thumbnail", () => {
 			const { wrapper } = setup();
 
-			const thumbnail = wrapper.findComponent<typeof VImg>(
-				"[data-testid=media-element-default-thumbnail]"
-			);
+			const thumbnail = wrapper.findComponent<typeof VImg>("[data-testid=media-element-default-thumbnail]");
 
 			expect(thumbnail.isVisible()).toEqual(true);
 		});

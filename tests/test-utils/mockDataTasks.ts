@@ -169,11 +169,7 @@ const gradedTasks = [
 	},
 ];
 
-const openTasks = [
-	...openTasksWithDueDate,
-	...overDueTasks,
-	...openTasksWithoutDueDate,
-];
+const openTasks = [...openTasksWithDueDate, ...overDueTasks, ...openTasksWithoutDueDate];
 const completedTasks = [...submittedTasks, ...gradedTasks];
 const tasks: Task[] = [...openTasks, ...completedTasks];
 
@@ -339,11 +335,7 @@ const noDueDateTasksTeacher = [
 	},
 ];
 
-const tasksTeacher = [
-	...overDueTasksTeacher,
-	...dueDateTasksTeacher,
-	...noDueDateTasksTeacher,
-];
+const tasksTeacher = [...overDueTasksTeacher, ...dueDateTasksTeacher, ...noDueDateTasksTeacher];
 
 const drafts = [
 	{
@@ -473,10 +465,9 @@ const mathTasks = [
 
 const hex = (value: number) => Math.floor(value).toString(16);
 const rnd = () => Math.random() * 16;
-const ObjectId = () =>
-	hex(Date.now() / 1000) + " ".repeat(16).replace(/./g, () => hex(rnd()));
+const ObjectId = () => hex(Date.now() / 1000) + " ".repeat(16).replace(/./g, () => hex(rnd()));
 
-const generateTask = (status: TaskStatus, props: any) => {
+const generateTask = (status: TaskStatus, props: unknown) => {
 	const id = ObjectId();
 
 	return Object.assign(

@@ -1,45 +1,38 @@
-import type { Mock } from "vitest";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { useBoardApi } from "./BoardApi.composable";
+import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
+import { useCardRestApi } from "./cardActions/cardRestApi.composable";
+import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import {
-	ContentElementType,
-	PreferredToolResponse,
-	ToolContextType,
-} from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
-import {
-	envsFactory,
+	collaborativeTextEditorElementResponseFactory,
+	createTestEnvStore,
+	expectNotification,
 	externalToolElementResponseFactory,
 	fileElementResponseFactory,
+	mockComposable,
 	ObjectIdMock,
 	richTextElementContentFactory,
 	richTextElementResponseFactory,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { drawingElementResponseFactory } from "@@/tests/test-utils/factory/drawingElementResponseFactory";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { FileRecordResponse } from "@api-file-storage";
 import {
-	CreateElementRequestPayload,
-	useCardStore,
-	useSocketConnection,
-} from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import {
-	useBoardNotifier,
-	useSharedEditMode,
-	useSharedLastCreatedElement,
-} from "@util-board";
-import { cloneDeep } from "lodash";
+	CollaborativeTextEditorElementResponse,
+	ContentElementType,
+	PreferredToolResponse,
+	ToolContextType,
+} from "@api-server";
+import { useNotificationStore } from "@data-app";
+import { CreateElementRequestPayload, useCardStore, useSharedEditMode, useSocketConnection } from "@data-board";
+import { CollaboraFileType, useFileStorageApi } from "@data-file";
+import { createTestingPinia } from "@pinia/testing";
+import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
+import { useErrorHandler } from "@util-error-handling";
+import { cloneDeep } from "lodash-es";
 import { createPinia, setActivePinia } from "pinia";
-import { computed, Ref, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { useBoardApi } from "./BoardApi.composable";
-import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
-import { useCardRestApi } from "./cardActions/cardRestApi.composable";
-import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-
-vi.mock("vue-i18n");
-(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
+import type { Mocked } from "vitest";
+import { computed, ref } from "vue";
 
 vi.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(useBoardApi);
@@ -51,11 +44,13 @@ vi.mock("./cardActions/cardRestApi.composable");
 const mockedUseCardRestApi = vi.mocked(useCardRestApi);
 
 vi.mock("@util-board");
-const mockedSharedEditMode = vi.mocked(useSharedEditMode);
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
+const mockedUseSharedFileSelect = vi.mocked(useSharedFileSelect);
 
-vi.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("@data-board/edit-mode.composable");
+const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
+
+vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 vi.mock("@data-board/socket/socket");
@@ -64,100 +59,65 @@ const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 vi.mock("./BoardFocusHandler.composable");
 const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
+vi.mock("@data-file");
+const mockedFileStorageApi = vi.mocked(useFileStorageApi);
+
 describe("CardStore", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
-	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
-	let mockedSocketApiHandler: DeepMocked<
-		ReturnType<typeof useSocketConnection>
-	>;
-	let mockedCardSocketApiActions: DeepMocked<
-		ReturnType<typeof useCardSocketApi>
-	>;
-	let mockedCardRestApiActions: DeepMocked<ReturnType<typeof useCardRestApi>>;
-	let mockedSharedLastCreatedElementActions: DeepMocked<
-		ReturnType<typeof useSharedLastCreatedElement>
-	>;
-	let setEditModeId: Mock;
-	let editModeId: Ref<string | undefined>;
-	let mockedBoardFocusCalls: DeepMocked<
-		ReturnType<typeof useBoardFocusHandler>
-	>;
+	let mockedBoardApiCalls: Mocked<ReturnType<typeof useBoardApi>>;
+	let mockedErrorHandlerCalls: Mocked<ReturnType<typeof useErrorHandler>>;
+	let mockedSocketApiHandler: Mocked<ReturnType<typeof useSocketConnection>>;
+	let mockedCardSocketApiActions: Mocked<ReturnType<typeof useCardSocketApi>>;
+	let mockedCardRestApiActions: Mocked<ReturnType<typeof useCardRestApi>>;
+	let mockedSharedLastCreatedElementActions: Mocked<ReturnType<typeof useSharedLastCreatedElement>>;
+	let mockedUseSharedFileSelectActions: Mocked<ReturnType<typeof useSharedFileSelect>>;
+	let mockedSharedEditMode: Mocked<ReturnType<typeof useSharedEditMode>>;
+	let mockedBoardFocusCalls: Mocked<ReturnType<typeof useBoardFocusHandler>>;
+	let mockedFileStorageActions: Mocked<ReturnType<typeof useFileStorageApi>>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
-		setupStores({ envConfigModule: EnvConfigModule });
-		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
+		useNotificationStore(createTestingPinia({ stubActions: false }));
+		createTestEnvStore();
+		mockedBoardApiCalls = mockComposable(useBoardApi);
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
-		mockedErrorHandlerCalls = createMock<ReturnType<typeof useErrorHandler>>();
+		mockedErrorHandlerCalls = mockComposable(useErrorHandler);
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandlerCalls);
 
-		mockedSocketApiHandler =
-			createMock<ReturnType<typeof useSocketConnection>>();
+		mockedSocketApiHandler = mockComposable(useSocketConnection);
 		mockedUseSocketConnection.mockReturnValue(mockedSocketApiHandler);
 
-		mockedCardSocketApiActions = createMock<
-			ReturnType<typeof useCardSocketApi>
-		>({
+		mockedCardSocketApiActions = mockComposable(useCardSocketApi, {
 			dispatch: vi.fn().mockResolvedValue(undefined),
-			fetchCardRequest: vi.fn(),
-			createElementRequest: vi.fn(),
-			deleteElementRequest: vi.fn(),
-			updateElementRequest: vi.fn(),
-			moveElementRequest: vi.fn(),
-			deleteCardRequest: vi.fn(),
-			updateCardTitleRequest: vi.fn(),
-			updateCardHeightRequest: vi.fn(),
-			disconnectSocketRequest: vi.fn(),
 		});
 		mockedUseCardSocketApi.mockReturnValue(mockedCardSocketApiActions);
 
-		mockedCardRestApiActions = createMock<ReturnType<typeof useCardRestApi>>({
-			fetchCardRequest: vi.fn(),
-			createElementRequest: vi.fn(),
-			createPreferredElement: vi.fn(),
-			getPreferredTools: vi.fn(),
-			deleteElementRequest: vi.fn(),
-			updateElementRequest: vi.fn(),
-			moveElementRequest: vi.fn(),
-			deleteCardRequest: vi.fn(),
-			updateCardTitleRequest: vi.fn(),
-			updateCardHeightRequest: vi.fn(),
-			disconnectSocketRequest: vi.fn(),
-		});
+		mockedCardRestApiActions = mockComposable(useCardRestApi);
 		mockedUseCardRestApi.mockReturnValue(mockedCardRestApiActions);
 
-		mockedSharedLastCreatedElementActions =
-			createMock<ReturnType<typeof useSharedLastCreatedElement>>();
-		mockedSharedLastCreatedElement.mockReturnValue(
-			mockedSharedLastCreatedElementActions
-		);
+		mockedSharedLastCreatedElementActions = mockComposable(useSharedLastCreatedElement);
+		mockedSharedLastCreatedElement.mockReturnValue(mockedSharedLastCreatedElementActions);
 
-		mockedBoardFocusCalls =
-			createMock<ReturnType<typeof useBoardFocusHandler>>();
+		mockedUseSharedFileSelectActions = mockComposable(useSharedFileSelect, {
+			isFileSelectOnMountEnabled: ref(true),
+		});
+		mockedUseSharedFileSelect.mockReturnValue(mockedUseSharedFileSelectActions);
+
+		mockedBoardFocusCalls = mockComposable(useBoardFocusHandler);
 		mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
 
-		setEditModeId = vi.fn();
-		editModeId = ref(undefined);
-		mockedSharedEditMode.mockReturnValue({
-			setEditModeId,
-			editModeId,
+		mockedFileStorageActions = mockComposable(useFileStorageApi);
+		mockedFileStorageApi.mockReturnValue(mockedFileStorageActions);
+
+		mockedSharedEditMode = mockComposable(useSharedEditMode, {
+			editModeId: ref(undefined),
 			isInEditMode: computed(() => true),
 		});
+		mockedUseSharedEditMode.mockReturnValue(mockedSharedEditMode);
 	});
 
 	const setup = (socketFlag = false) => {
-		if (socketFlag) {
-			const envs = envsFactory.build({
-				FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
-			});
-			envConfigModule.setEnvs(envs);
-		}
+		createTestEnvStore({ FEATURE_COLUMN_BOARD_SOCKET_ENABLED: socketFlag });
 
 		const cardStore = useCardStore();
 		const cards = cardResponseFactory.buildList(3);
@@ -233,21 +193,19 @@ describe("CardStore", () => {
 
 	describe("createCardSuccess", () => {
 		describe("when card is provided", () => {
-			it("should add the card to the store", async () => {
+			it("should add the card to the store", () => {
 				const { cardStore } = setup();
 
 				const newCardId = "idNewCard";
 				const newCard = cardResponseFactory.build({ id: newCardId });
-				await cardStore.createCardSuccess({
+				cardStore.createCardSuccess({
 					newCard,
 					columnId: "any-column-id",
 					isOwnAction: true,
 				});
 
 				expect(cardStore.cards[newCardId]).toBeDefined();
-				expect(cardStore.cards[newCardId]).toEqual(
-					expect.objectContaining({ id: newCardId, elements: [] })
-				);
+				expect(cardStore.cards[newCardId]).toEqual(expect.objectContaining({ id: newCardId, elements: [] }));
 			});
 		});
 	});
@@ -260,11 +218,9 @@ describe("CardStore", () => {
 				cardId,
 			});
 
-			expect(mockedCardSocketApiActions.deleteCardRequest).toHaveBeenCalledWith(
-				{
-					cardId,
-				}
-			);
+			expect(mockedCardSocketApiActions.deleteCardRequest).toHaveBeenCalledWith({
+				cardId,
+			});
 		});
 
 		it("should call rest Api if feature flag is enabled", () => {
@@ -281,7 +237,7 @@ describe("CardStore", () => {
 	});
 
 	describe("deleteCardSuccess", () => {
-		it("should not delete any card when card is undefined", async () => {
+		it("should not delete any card when card is undefined", () => {
 			const { cardStore } = setup();
 
 			const oldCards = cloneDeep(cardStore.cards);
@@ -294,20 +250,20 @@ describe("CardStore", () => {
 			expect(cardStore.cards).toEqual(oldCards);
 		});
 
-		it("set editModeId to undefined if cardId is equal to editModeId", async () => {
+		it("set editModeId to undefined if cardId is equal to editModeId", () => {
 			const { cardStore, cardId } = setup();
 
-			editModeId.value = cardId;
+			mockedSharedEditMode.editModeId.value = cardId;
 
 			cardStore.deleteCardSuccess({
 				cardId,
 				isOwnAction: true,
 			});
 
-			expect(setEditModeId).toHaveBeenCalledWith(undefined);
+			expect(mockedSharedEditMode.setEditModeId).toHaveBeenCalledWith(undefined);
 		});
 
-		it("should delete a card", async () => {
+		it("should delete a card", () => {
 			const { cardStore, cardId } = setup();
 
 			cardStore.deleteCardSuccess({
@@ -319,6 +275,133 @@ describe("CardStore", () => {
 		});
 	});
 
+	describe("duplicateCardRequest", () => {
+		it("should call socket Api if feature flag is enabled", () => {
+			const { cardStore, cardId } = setup(true);
+
+			cardStore.duplicateCard({
+				cardId,
+			});
+
+			expect(mockedCardSocketApiActions.duplicateCardRequest).toHaveBeenCalledWith({
+				cardId,
+			});
+		});
+
+		it("should call rest Api if feature flag is enabled", () => {
+			const { cardStore, cardId } = setup();
+
+			cardStore.duplicateCard({
+				cardId,
+			});
+
+			expect(mockedCardRestApiActions.duplicateCardRequest).toHaveBeenCalledWith({
+				cardId,
+			});
+		});
+	});
+
+	describe("duplicateCardSuccess", () => {
+		it("should not duplicate card when card is undefined", () => {
+			const { cardStore } = setup();
+
+			const oldCards = cloneDeep(cardStore.cards);
+
+			cardStore.duplicateCardSuccess({
+				cardId: "unknownId",
+				duplicatedCard: cardResponseFactory.build({ id: undefined }),
+				isOwnAction: true,
+			});
+
+			expect(cardStore.cards).toEqual(oldCards);
+		});
+
+		it("should duplicate card", () => {
+			const { cardStore } = setup();
+
+			const cardId = "newCardId";
+			const duplicatedCard = cardResponseFactory.build({ id: cardId });
+			cardStore.duplicateCardSuccess({
+				cardId: "unknownId",
+				duplicatedCard,
+				isOwnAction: true,
+			});
+
+			expect(cardStore.cards[cardId]).toEqual(duplicatedCard);
+		});
+
+		describe("notification behavior", () => {
+			beforeEach(() => {
+				vi.clearAllMocks();
+			});
+
+			const setupDuplicate = (elements: AnyContentElement[], isOwnAction = true) => {
+				const { cardStore } = setup();
+
+				cardStore.duplicateCardSuccess({
+					cardId: "originalCardId",
+					duplicatedCard: cardResponseFactory.build({
+						id: "newCardId",
+						elements,
+					}),
+					isOwnAction,
+				});
+			};
+
+			const testCases = [
+				{
+					description: "collaborative text editor (Etherpad)",
+					element: collaborativeTextEditorElementResponseFactory.build({
+						type: ContentElementType.COLLABORATIVE_TEXT_EDITOR,
+					}),
+				},
+				{
+					description: "drawing element (Whiteboard)",
+					element: drawingElementResponseFactory.build({
+						type: ContentElementType.DRAWING,
+					}),
+				},
+				{
+					description: "external tool",
+					element: externalToolElementResponseFactory.build({
+						type: ContentElementType.EXTERNAL_TOOL,
+					}),
+				},
+			];
+
+			testCases.forEach(({ description, element }) => {
+				it(`should show notification when duplicating card with ${description}`, () => {
+					setupDuplicate([element]);
+					expectNotification("info");
+				});
+			});
+
+			it("should not show notification when duplicating card with only regular elements (text, files)", () => {
+				setupDuplicate([
+					fileElementResponseFactory.build(),
+					richTextElementResponseFactory.build({
+						type: ContentElementType.RICH_TEXT,
+					}),
+				]);
+
+				expect(useNotificationStore().notify).not.toHaveBeenCalled();
+			});
+
+			it("should not show notification when isOwnAction is false", () => {
+				setupDuplicate(
+					[
+						collaborativeTextEditorElementResponseFactory.build({
+							type: ContentElementType.COLLABORATIVE_TEXT_EDITOR,
+						}),
+					],
+					false
+				);
+
+				expect(useNotificationStore().notify).not.toHaveBeenCalled();
+			});
+		});
+	});
+
 	describe("updateCardTitleRequest", () => {
 		it("should call socket Api if feature flag is enabled", () => {
 			const { cardStore, cardId } = setup(true);
@@ -326,9 +409,7 @@ describe("CardStore", () => {
 
 			cardStore.updateCardTitleRequest(payload);
 
-			expect(
-				mockedCardSocketApiActions.updateCardTitleRequest
-			).toHaveBeenCalledWith(payload);
+			expect(mockedCardSocketApiActions.updateCardTitleRequest).toHaveBeenCalledWith(payload);
 		});
 
 		it("should call rest Api if feature flag is enabled", () => {
@@ -337,20 +418,16 @@ describe("CardStore", () => {
 
 			cardStore.updateCardTitleRequest(payload);
 
-			expect(
-				mockedCardRestApiActions.updateCardTitleRequest
-			).toHaveBeenCalledWith(payload);
+			expect(mockedCardRestApiActions.updateCardTitleRequest).toHaveBeenCalledWith(payload);
 		});
 	});
 
 	describe("updateCardTitleSuccess", () => {
 		const NEW_TITLE = "newTitle";
-		it("should not update card title when card is undefined", async () => {
+		it("should not update card title when card is undefined", () => {
 			const { cardStore } = setup();
 
-			const cardTitles = Object.values(cardStore.cards).map(
-				(card) => card.title
-			);
+			const cardTitles = Object.values(cardStore.cards).map((card) => card.title);
 
 			cardStore.updateCardTitleSuccess({
 				cardId: "unkownId",
@@ -358,12 +435,10 @@ describe("CardStore", () => {
 				isOwnAction: true,
 			});
 
-			expect(Object.values(cardStore.cards).map((card) => card.title)).toEqual(
-				cardTitles
-			);
+			expect(Object.values(cardStore.cards).map((card) => card.title)).toEqual(cardTitles);
 		});
 
-		it("should update card title", async () => {
+		it("should update card title", () => {
 			const { cardStore, cardId } = setup();
 
 			cardStore.updateCardTitleSuccess({
@@ -383,9 +458,7 @@ describe("CardStore", () => {
 
 			cardStore.updateCardHeightRequest(payload);
 
-			expect(
-				mockedCardSocketApiActions.updateCardHeightRequest
-			).toHaveBeenCalledWith(payload);
+			expect(mockedCardSocketApiActions.updateCardHeightRequest).toHaveBeenCalledWith(payload);
 		});
 
 		it("should call rest Api if feature flag is enabled", () => {
@@ -394,20 +467,16 @@ describe("CardStore", () => {
 
 			cardStore.updateCardHeightRequest(payload);
 
-			expect(
-				mockedCardRestApiActions.updateCardHeightRequest
-			).toHaveBeenCalledWith(payload);
+			expect(mockedCardRestApiActions.updateCardHeightRequest).toHaveBeenCalledWith(payload);
 		});
 	});
 
 	describe("updateCardHeightSuccess", () => {
 		const NEW_HEIGHT = 100;
-		it("should not update card height when card is undefined", async () => {
+		it("should not update card height when card is undefined", () => {
 			const { cardStore } = setup();
 
-			const cardHeights = Object.values(cardStore.cards).map(
-				(card) => card.height
-			);
+			const cardHeights = Object.values(cardStore.cards).map((card) => card.height);
 
 			cardStore.updateCardHeightSuccess({
 				cardId: "unkownId",
@@ -415,12 +484,10 @@ describe("CardStore", () => {
 				isOwnAction: true,
 			});
 
-			expect(Object.values(cardStore.cards).map((card) => card.height)).toEqual(
-				cardHeights
-			);
+			expect(Object.values(cardStore.cards).map((card) => card.height)).toEqual(cardHeights);
 		});
 
-		it("should update card height", async () => {
+		it("should update card height", () => {
 			const { cardStore, cardId } = setup();
 
 			cardStore.updateCardHeightSuccess({
@@ -456,42 +523,38 @@ describe("CardStore", () => {
 			const { cardStore, cardId } = setup(true);
 
 			const payload = {
-				type: ContentElementType.Link,
+				type: ContentElementType.LINK,
 				cardId,
 			};
 
 			await cardStore.createElementRequest(payload);
 
-			expect(
-				mockedCardSocketApiActions.createElementRequest
-			).toHaveBeenCalledWith(payload);
+			expect(mockedCardSocketApiActions.createElementRequest).toHaveBeenCalledWith(payload);
 		});
 
 		it("should call rest Api if feature flag is disabled", async () => {
 			const { cardStore, cardId } = setup();
 
 			const payload = {
-				type: ContentElementType.Link,
+				type: ContentElementType.LINK,
 				cardId,
 			};
 
 			await cardStore.createElementRequest(payload);
 
-			expect(
-				mockedCardRestApiActions.createElementRequest
-			).toHaveBeenCalledWith(payload);
+			expect(mockedCardRestApiActions.createElementRequest).toHaveBeenCalledWith(payload);
 		});
 	});
 
 	describe("createElementSuccess", () => {
 		describe("when element is provided", () => {
-			it("should add element to specified position", async () => {
+			it("should add element to specified position", () => {
 				const { cardStore, cardId } = setup();
 				const newElement = drawingElementResponseFactory.build();
 				const toPosition = 1;
 
-				await cardStore.createElementSuccess({
-					type: ContentElementType.Drawing,
+				cardStore.createElementSuccess({
+					type: ContentElementType.DRAWING,
 					cardId,
 					newElement,
 					toPosition,
@@ -499,9 +562,7 @@ describe("CardStore", () => {
 				});
 
 				expect(cardStore.cards[cardId].elements.length).toEqual(6);
-				expect(cardStore.cards[cardId].elements[toPosition]).toEqual(
-					newElement
-				);
+				expect(cardStore.cards[cardId].elements[toPosition]).toEqual(newElement);
 			});
 			it("should add element to last position if toPosition is undefined", async () => {
 				const { cardStore, cardId } = setup();
@@ -509,7 +570,7 @@ describe("CardStore", () => {
 
 				expect(cardStore.cards[cardId].elements.length).toEqual(5);
 				await cardStore.createElementSuccess({
-					type: ContentElementType.Drawing,
+					type: ContentElementType.DRAWING,
 					cardId,
 					newElement,
 					isOwnAction: true,
@@ -527,7 +588,7 @@ describe("CardStore", () => {
 
 				expect(Object.keys(cardStore.cards).length).toEqual(3);
 				await cardStore.createElementSuccess({
-					type: ContentElementType.Drawing,
+					type: ContentElementType.DRAWING,
 					cardId: "invalidId",
 					newElement,
 					isOwnAction: true,
@@ -544,7 +605,7 @@ describe("CardStore", () => {
 
 				expect(Object.keys(cardStore.cards).length).toEqual(3);
 				await cardStore.createElementSuccess({
-					type: ContentElementType.Drawing,
+					type: ContentElementType.DRAWING,
 					cardId,
 					newElement,
 					toPosition: 100,
@@ -562,16 +623,9 @@ describe("CardStore", () => {
 		it("should not move element when card is undefined", async () => {
 			const { cardStore } = setup();
 
-			await cardStore.moveElementRequest(
-				"unknownId",
-				" elementId",
-				-1,
-				MOVE_DOWN
-			);
+			await cardStore.moveElementRequest("unknownId", " elementId", -1, MOVE_DOWN);
 
-			expect(
-				mockedCardRestApiActions.moveElementRequest
-			).not.toHaveBeenCalled();
+			expect(mockedCardRestApiActions.moveElementRequest).not.toHaveBeenCalled();
 		});
 
 		it("should not move element up if first element is moved", async () => {
@@ -588,12 +642,7 @@ describe("CardStore", () => {
 			const lastIndex = elements.length - 1;
 			const elementId = elements[lastIndex].id;
 
-			await cardStore.moveElementRequest(
-				cardId,
-				elementId,
-				lastIndex,
-				MOVE_DOWN
-			);
+			await cardStore.moveElementRequest(cardId, elementId, lastIndex, MOVE_DOWN);
 
 			expect(cardStore.cards[cardId].elements[4].id).toEqual(elementId);
 		});
@@ -604,9 +653,7 @@ describe("CardStore", () => {
 
 			await cardStore.moveElementRequest(cardId, elementId, 0, MOVE_DOWN);
 
-			expect(
-				mockedCardSocketApiActions.moveElementRequest
-			).toHaveBeenCalledWith({
+			expect(mockedCardSocketApiActions.moveElementRequest).toHaveBeenCalledWith({
 				elementId,
 				toCardId: cardId,
 				toPosition: 1,
@@ -654,9 +701,7 @@ describe("CardStore", () => {
 				isOwnAction: true,
 			});
 
-			expect(cardStore.cards[cardId].elements[toPosition].id).toEqual(
-				elementId
-			);
+			expect(cardStore.cards[cardId].elements[toPosition].id).toEqual(elementId);
 		});
 
 		it("should move element up", async () => {
@@ -704,9 +749,7 @@ describe("CardStore", () => {
 				isOwnAction: true,
 			});
 
-			expect(cardStore.cards[cardId].elements.length).toEqual(
-				numberOfElements - 1
-			);
+			expect(cardStore.cards[cardId].elements.length).toEqual(numberOfElements - 1);
 		});
 
 		describe("when previous element needs to be focused", () => {
@@ -725,7 +768,7 @@ describe("CardStore", () => {
 					});
 
 					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(cardId);
-					expect(setEditModeId).toHaveBeenCalledWith(cardId);
+					expect(mockedSharedEditMode.setEditModeId).toHaveBeenCalledWith(cardId);
 				});
 			});
 
@@ -743,10 +786,8 @@ describe("CardStore", () => {
 						isOwnAction: true,
 					});
 
-					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(
-						cardStore.cards[cardId].elements[3].id
-					);
-					expect(setEditModeId).toHaveBeenCalledWith(cardId);
+					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(cardStore.cards[cardId].elements[3].id);
+					expect(mockedSharedEditMode.setEditModeId).toHaveBeenCalledWith(cardId);
 				});
 			});
 
@@ -775,9 +816,7 @@ describe("CardStore", () => {
 
 			await cardStore.addTextAfterTitle("unknownId");
 
-			expect(
-				mockedCardRestApiActions.createElementRequest
-			).not.toHaveBeenCalled();
+			expect(mockedCardRestApiActions.createElementRequest).not.toHaveBeenCalled();
 		});
 
 		it("should add text after title", async () => {
@@ -791,9 +830,7 @@ describe("CardStore", () => {
 				toPosition: 0,
 			};
 
-			expect(
-				mockedCardRestApiActions.createElementRequest
-			).toHaveBeenCalledWith(expectedCall);
+			expect(mockedCardRestApiActions.createElementRequest).toHaveBeenCalledWith(expectedCall);
 		});
 	});
 
@@ -806,7 +843,7 @@ describe("CardStore", () => {
 			await cardStore.updateElementSuccess({
 				elementId: "non existing id",
 				data: {
-					type: ContentElementType.RichText,
+					type: ContentElementType.RICH_TEXT,
 					content: richTextElementContentFactory.build(),
 				},
 				isOwnAction: true,
@@ -847,9 +884,7 @@ describe("CardStore", () => {
 					},
 				];
 
-				mockedCardRestApiActions.getPreferredTools.mockResolvedValueOnce(
-					preferredTools
-				);
+				mockedCardRestApiActions.getPreferredTools.mockResolvedValueOnce(preferredTools);
 
 				return { cardStore, preferredTools };
 			};
@@ -857,27 +892,23 @@ describe("CardStore", () => {
 			it("should call getPreferredTools", async () => {
 				const { cardStore } = successSetup();
 
-				await cardStore.loadPreferredTools(ToolContextType.BoardElement);
+				await cardStore.loadPreferredTools(ToolContextType.BOARD_ELEMENT);
 
-				expect(mockedCardRestApiActions.getPreferredTools).toHaveBeenCalledWith(
-					ToolContextType.BoardElement
-				);
+				expect(mockedCardRestApiActions.getPreferredTools).toHaveBeenCalledWith(ToolContextType.BOARD_ELEMENT);
 			});
 
 			it("should set the preferredTools ref", async () => {
 				const { cardStore, preferredTools } = successSetup();
 
-				await cardStore.loadPreferredTools(ToolContextType.BoardElement);
+				await cardStore.loadPreferredTools(ToolContextType.BOARD_ELEMENT);
 
-				expect(cardStore.preferredTools).toEqual(
-					expect.arrayContaining(preferredTools)
-				);
+				expect(cardStore.preferredTools).toEqual(expect.arrayContaining(preferredTools));
 			});
 
 			it("should set the isPreferredToolsLoading at the end to false", async () => {
 				const { cardStore } = successSetup();
 
-				await cardStore.loadPreferredTools(ToolContextType.BoardElement);
+				await cardStore.loadPreferredTools(ToolContextType.BOARD_ELEMENT);
 
 				expect(cardStore.isPreferredToolsLoading).toBe(false);
 			});
@@ -890,7 +921,7 @@ describe("CardStore", () => {
 
 			const payload: CreateElementRequestPayload = {
 				cardId: "cardId",
-				type: ContentElementType.ExternalTool,
+				type: ContentElementType.EXTERNAL_TOOL,
 			};
 
 			const preferredTool: PreferredToolResponse = {
@@ -907,14 +938,11 @@ describe("CardStore", () => {
 		};
 
 		it("should call createPreferredElement", () => {
-			const { cardStore, payload, preferredTool } =
-				setupCreatePreferredElement();
+			const { cardStore, payload, preferredTool } = setupCreatePreferredElement();
 
 			cardStore.createPreferredElement(payload, preferredTool);
 
-			expect(
-				mockedCardRestApiActions.createPreferredElement
-			).toHaveBeenCalledWith(payload, preferredTool);
+			expect(mockedCardRestApiActions.createPreferredElement).toHaveBeenCalledWith(payload, preferredTool);
 		});
 	});
 
@@ -925,9 +953,7 @@ describe("CardStore", () => {
 
 				cardStore.disconnectSocketRequest();
 
-				expect(
-					mockedCardSocketApiActions.disconnectSocketRequest
-				).toHaveBeenCalled();
+				expect(mockedCardSocketApiActions.disconnectSocketRequest).toHaveBeenCalled();
 			});
 		});
 
@@ -937,9 +963,111 @@ describe("CardStore", () => {
 
 				cardStore.disconnectSocketRequest();
 
-				expect(
-					mockedCardRestApiActions.disconnectSocketRequest
-				).toHaveBeenCalled();
+				expect(mockedCardRestApiActions.disconnectSocketRequest).toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("createFileElementWithCollabora", () => {
+		const setupCreateFileElementWithCollabora = (editMode = false, createElementFails = false, uploadFails = false) => {
+			const { cardStore } = setup(false);
+
+			mockedSharedEditMode.editModeId.value = editMode ? "cardId" : undefined;
+
+			const createElementRequestReturnValue = createElementFails
+				? undefined
+				: ({
+						id: "elementId",
+						type: ContentElementType.FILE,
+						content: {},
+					} as CollaborativeTextEditorElementResponse);
+			mockedCardRestApiActions.createElementRequest.mockResolvedValue(createElementRequestReturnValue);
+
+			const uploadCollaboraFileReturnValue = uploadFails ? undefined : ({ id: "fileId" } as FileRecordResponse);
+			mockedFileStorageActions.uploadCollaboraFile.mockResolvedValue(uploadCollaboraFileReturnValue);
+
+			return {
+				cardStore,
+			};
+		};
+
+		describe("when a card is in edit mode", () => {
+			it("should disable file picker", () => {
+				const { cardStore } = setupCreateFileElementWithCollabora(true, false, false);
+
+				cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+				expect(mockedUseSharedFileSelectActions.disableFileSelectOnMount).toHaveBeenCalled();
+			});
+
+			it("should call createElementRequest", () => {
+				const { cardStore } = setupCreateFileElementWithCollabora(true, false, false);
+
+				cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+				expect(mockedCardRestApiActions.createElementRequest).toHaveBeenCalled();
+			});
+
+			it("should call uploadCollaboraFile", async () => {
+				const { cardStore } = setupCreateFileElementWithCollabora(true, false, false);
+
+				await cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+				expect(mockedFileStorageActions.uploadCollaboraFile).toHaveBeenCalled();
+			});
+
+			it("should reset file picker", async () => {
+				const { cardStore } = setupCreateFileElementWithCollabora(true, false, false);
+
+				await cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+				expect(mockedUseSharedFileSelectActions.resetFileSelectOnMountEnabled).toHaveBeenCalled();
+			});
+
+			describe("when element creation fails", () => {
+				it("should reset file picker", async () => {
+					const { cardStore } = setupCreateFileElementWithCollabora(true, true, false);
+
+					await cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+					expect(mockedUseSharedFileSelectActions.resetFileSelectOnMountEnabled).toHaveBeenCalled();
+				});
+
+				it("should not call uploadCollaboraFile", async () => {
+					const { cardStore } = setupCreateFileElementWithCollabora(true, true, false);
+
+					await cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+					expect(mockedFileStorageActions.uploadCollaboraFile).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("when uploading collabora file fails", () => {
+				it("should delete created element", async () => {
+					const { cardStore } = setupCreateFileElementWithCollabora(true, false, true);
+
+					await cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+					expect(mockedCardRestApiActions.deleteElementRequest).toHaveBeenCalled();
+				});
+			});
+		});
+
+		describe("when no card is in edit mode", () => {
+			it("should not call createElementRequest", () => {
+				const { cardStore } = setupCreateFileElementWithCollabora(false, false, false);
+
+				cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+				expect(mockedCardRestApiActions.createElementRequest).not.toHaveBeenCalled();
+			});
+
+			it("should not call uploadCollaboraFile", async () => {
+				const { cardStore } = setupCreateFileElementWithCollabora(false, false, false);
+
+				await cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+				expect(mockedFileStorageActions.uploadCollaboraFile).not.toHaveBeenCalled();
 			});
 		});
 	});

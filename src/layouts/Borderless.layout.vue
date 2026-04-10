@@ -2,10 +2,10 @@
 	<div>
 		<SkipLink />
 		<VMain id="main-content">
-			<ApplicationErrorWrapper>
+			<ApplicationError>
 				<AlertContainer />
 				<RouterView />
-			</ApplicationErrorWrapper>
+			</ApplicationError>
 		</VMain>
 		<LoadingStateDialog />
 		<KeepAlive>
@@ -15,9 +15,8 @@
 </template>
 
 <script setup lang="ts">
-import AlertContainer from "@/components/molecules/AlertContainer.vue";
-import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
 import { AutoLogoutWarning } from "@feature-auto-logout";
+import { AlertContainer, ApplicationError } from "@ui-layout";
 import { LoadingStateDialog } from "@ui-loading-state-dialog";
 import { SkipLink } from "@ui-skip-link";
 import { RouterView } from "vue-router";

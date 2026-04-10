@@ -21,12 +21,7 @@
 					{{ route.title }}
 				</v-btn>
 				<div v-if="hasButtons" class="buttons-container">
-					<v-btn
-						color="primary"
-						variant="outlined"
-						to="/loginRedirect"
-						class="mx-2"
-					>
+					<v-btn color="primary" variant="outlined" to="/loginRedirect" class="mx-2">
 						<v-icon size="20" class="mr-1">{{ mdiLogin }}</v-icon>
 						{{ $t("common.labels.login") }}
 					</v-btn>
@@ -40,8 +35,8 @@
 </template>
 
 <script setup lang="ts">
-import { SchulcloudTheme } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
+import { SchulcloudTheme } from "@api-server";
+import { useEnvConfig } from "@data-env";
 import { mdiLogin } from "@icons/material";
 import { computed, ref } from "vue";
 
@@ -54,24 +49,22 @@ type Props = {
 		to?: string;
 		target?: string;
 	}>;
+	hideButtons?: boolean;
 };
 
 const props = withDefaults(defineProps<Props>(), {
 	logoLink: "/",
 	links: () => [],
+	hideButtons: false,
 });
 
 const activeLink = ref(window.location.pathname);
 
-const hasButtons = computed(() => {
-	return envConfigModule.getEnv.SC_THEME === SchulcloudTheme.Default;
-});
+const isDefaultTheme = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.DEFAULT);
 
-const linksToDisplay = computed(() => {
-	return envConfigModule.getEnv.SC_THEME === SchulcloudTheme.Default
-		? props.links
-		: [];
-});
+const hasButtons = computed(() => !props.hideButtons && isDefaultTheme.value);
+
+const linksToDisplay = computed(() => (isDefaultTheme.value ? props.links : []));
 
 const setActive = (idx: number) => {
 	activeLink.value = props.links[idx].href;
@@ -224,7 +217,7 @@ const setActive = (idx: number) => {
 }
 
 a.active {
-	font-weight: var(--font-weight-bold);
+	font-weight: bold;
 	color: rgba(var(--v-theme-white));
 	background-color: rgba(var(--v-theme-accent));
 	border-radius: 4px;

@@ -2,7 +2,7 @@
 	<VMenu>
 		<template #activator="{ props }">
 			<v-btn
-				v-bind="props"
+				v-bind="{ ...props, ...safariAriaOwnsWorkaround }"
 				v-bind.attr="$attrs"
 				:icon="icon"
 				:color="color"
@@ -17,6 +17,8 @@
 </template>
 
 <script setup lang="ts">
+import { safariAriaOwnsWorkaround } from "@util-device-detection";
+
 defineOptions({
 	inheritAttrs: false,
 });

@@ -25,9 +25,7 @@ describe("InlineEditInteractionHandler", () => {
 	describe("when component is mounted", () => {
 		it("should be found in the dom", () => {
 			const { wrapper } = setup();
-			expect(wrapper.findComponent(InlineEditInteractionHandler).exists()).toBe(
-				true
-			);
+			expect(wrapper.findComponent(InlineEditInteractionHandler).exists()).toBe(true);
 		});
 	});
 
@@ -48,10 +46,7 @@ describe("InlineEditInteractionHandler", () => {
 				const event = document.createEvent("MouseEvent");
 				const linkElement = document.createElement("a");
 				linkElement.setAttribute("href", "https://www.test.url");
-				linkElement.setAttribute(
-					"data-testid",
-					"board-file-element-edit-menu-download"
-				);
+				linkElement.setAttribute("data-testid", "board-file-element-edit-menu-download");
 
 				Object.defineProperty(event, "target", {
 					value: linkElement,

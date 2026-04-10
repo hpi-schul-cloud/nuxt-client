@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import SpeedMenu from "./SpeedMenu.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mdiCheck } from "@icons/material";
 import { shallowMount } from "@vue/test-utils";
-import SpeedMenu from "./SpeedMenu.vue";
 
 describe("SpeedMenu", () => {
 	const listItemSelektor = "v-list-item";
@@ -33,9 +30,7 @@ describe("SpeedMenu", () => {
 				.filter((listItem) => listItem.text().includes(`${rate}`))
 				.at(0);
 
-			const icon = listItem?.vm.$slots
-				.append()[0]
-				.children.default()[0].children;
+			const icon = listItem?.vm.$slots.append()[0].children.default()[0].children;
 
 			expect(icon).toBe(mdiCheck);
 		});
@@ -80,9 +75,7 @@ describe("SpeedMenu", () => {
 				.findAllComponents({ name: listItemSelektor })
 				.filter((listItem) => listItem.text().includes(`${rate}`))
 				.at(0);
-			const icon = listItem?.vm.$slots
-				.append()[0]
-				.children.default()[0].children;
+			const icon = listItem?.vm.$slots.append()[0].children.default()[0].children;
 
 			expect(icon).toBe(mdiCheck);
 		});

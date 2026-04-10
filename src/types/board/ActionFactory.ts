@@ -1,7 +1,5 @@
 export type EmptyPayload = Record<string, never>;
-export type PermittedStoreActions<
-	T extends { [k: string]: GenericActionFactory },
-> = {
+export type PermittedStoreActions<T extends { [k: string]: GenericActionFactory }> = {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	[K in keyof T]: T[K] extends (...args: any[]) => infer R ? R : never;
 }[keyof T];
@@ -16,7 +14,7 @@ export function props<T extends Props>(): ActionProps<T> {
 
 export function createAction<T extends string, P extends Props>(
 	type: T,
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	// eslint-disable-next-line
 	props: ActionProps<P>
 ): ActionFactory<T, P> {
 	return (payload: P) => ({ type, payload }) as const;
@@ -39,6 +37,5 @@ export function on<T extends GenericActionFactory, P extends ReturnType<T>>(
 	callback: (payload: P["payload"]) => void
 ) {
 	const permittedAction = action({}).type;
-	return (a: ReturnType<T>) =>
-		permittedAction === a.type ? callback(a.payload as P["payload"]) : null;
+	return (a: ReturnType<T>) => (permittedAction === a.type ? callback(a.payload as P["payload"]) : null);
 }

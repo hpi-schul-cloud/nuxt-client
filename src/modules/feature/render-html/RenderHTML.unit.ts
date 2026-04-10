@@ -1,25 +1,9 @@
-import { mount } from "@vue/test-utils";
 import RenderHTML from "./RenderHTML.vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
-import { default as htmlConfig } from "./config";
+import { mount } from "@vue/test-utils";
 
 describe("RenderHTML", () => {
-	const setup = (props: {
-		html: string;
-		component?: string;
-		config?: "richText";
-	}) => {
+	const setup = (props: { html: string; component?: string; config?: "richText" }) => {
 		const wrapper = mount(RenderHTML, {
-			global: {
-				plugins: [
-					[
-						vueDompurifyHTMLPlugin,
-						{
-							namedConfigurations: htmlConfig,
-						},
-					],
-				],
-			},
 			props,
 		});
 

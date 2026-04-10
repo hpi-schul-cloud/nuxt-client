@@ -1,101 +1,69 @@
-import { RoomColor, RoomCreateParams } from "@/types/room/Room";
-import { useRoomCreateState } from "@data-room";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { RoomCreatePage } from "@page-room";
-import { useRouter } from "vue-router";
+import { RoomCreateParams } from "@/types/room/Room";
+import { createTestRoomStore, mockApiResponse, roomItemFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoomColor } from "@api-server";
 import { RoomForm } from "@feature-room";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
+import { RoomCreatePage } from "@page-room";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
-
-vi.mock("vue-router", () => ({
-	useRouter: vi.fn().mockReturnValue({
-		push: vi.fn(),
-	}),
-}));
-
-vi.mock("@data-room/RoomCreate.state.ts", () => ({
-	useRoomCreateState: vi.fn().mockReturnValue({
-		createRoom: vi.fn().mockResolvedValue({
-			id: "123",
-			name: "test",
-			color: "blue",
-			features: [],
-		}),
-		roomData: {
-			name: "test-room-data",
-			color: "blue",
-			features: [],
-		},
-	}),
-}));
-
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
-
-const roomParams: RoomCreateParams = {
-	name: "test",
-	color: RoomColor.Blue,
-	features: [],
-};
+import { setActivePinia } from "pinia";
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 
 describe("@pages/RoomCreate.page.vue", () => {
 	const setup = () => {
-		const notifierModule = createModuleMocks(NotifierModule);
+		injectRouterMock(createRouterMock());
 
 		const wrapper = mount(RoomCreatePage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 		});
 
-		const { createRoom } = useRoomCreateState();
+		const { roomStore } = createTestRoomStore();
 		const roomFormComponent = wrapper.findComponent(RoomForm);
 
 		return {
 			wrapper,
-			router: useRouter(),
-			createRoom,
+			roomStore,
 			roomFormComponent,
 		};
 	};
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	it("should have roomFormComponent", () => {
 		const { roomFormComponent } = setup();
 		expect(roomFormComponent).toBeDefined();
 	});
 
-	it("should call createRoom with correct parameters on save", async () => {
-		const { createRoom, roomFormComponent } = setup();
+	it("should navigate to 'room-details' with correct room id on save", async () => {
+		const { roomFormComponent, roomStore } = setup();
+
+		const roomParams: RoomCreateParams = {
+			name: "test",
+			color: RoomColor.BLUE,
+			features: [],
+		};
+
+		roomStore.createRoom.mockResolvedValue({
+			result: mockApiResponse({ data: roomItemFactory.build({ id: "123" }) }),
+			success: true,
+		});
 		roomFormComponent.vm.$emit("save", { room: roomParams });
 		await flushPromises();
-		expect(createRoom).toHaveBeenCalledWith(roomParams);
-	});
 
-	it("should navigate to 'room-details' with correct room id on save", async () => {
-		const { roomFormComponent, router } = setup();
-		roomFormComponent.vm.$emit("save", roomParams);
-		expect(router.push).toHaveBeenCalledWith({
+		expect(roomStore.createRoom).toHaveBeenCalledWith(roomParams);
+		expect(getRouter().push).toHaveBeenCalledWith({
 			name: "room-details",
 			params: { id: "123" },
 		});
 	});
 
-	it("should navigate to 'rooms' on cancel", async () => {
-		const { router, roomFormComponent } = setup();
+	it("should navigate to 'rooms' on cancel", () => {
+		const { roomFormComponent } = setup();
 		roomFormComponent.vm.$emit("cancel");
-		expect(router.push).toHaveBeenCalledWith({ name: "rooms" });
+		expect(getRouter().push).toHaveBeenCalledWith({ name: "rooms" });
 	});
 });

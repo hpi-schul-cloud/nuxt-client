@@ -1,14 +1,14 @@
-import { ref, Ref } from "vue";
-import { Group, useGroupApi } from "@data-group";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { useGroupApi } from "./GroupApi.composable";
+import { Group } from "./types/group";
 import { BusinessError } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { notifyError } from "@data-app";
+import { Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export const useGroupState = () => {
 	const { getGroup } = useGroupApi();
 	const { t } = useI18n();
-	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 	const isLoading: Ref<boolean> = ref(false);
 	const group: Ref<Group | undefined> = ref();
@@ -29,10 +29,7 @@ export const useGroupState = () => {
 				message: apiError.message,
 			};
 
-			notifierModule.show({
-				text: t("error.load"),
-				status: "error",
-			});
+			notifyError(t("error.load"));
 		}
 
 		isLoading.value = false;

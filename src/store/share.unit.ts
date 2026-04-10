@@ -1,12 +1,12 @@
-import ShareModule, { ShareOptions } from "./share";
-import * as serverApi from "../serverApi/v3/api";
+import * as serverApi from "../generated/serverApi/v3";
 import {
-	ShareTokenApiInterface,
-	ShareTokenBodyParamsParentTypeEnum,
 	BoardExternalReferenceType,
-} from "../serverApi/v3/api";
-import setupStores from "@@/tests/test-utils/setupStores";
+	ShareTokenApiInterface,
+	ShareTokenBodyParamsParentType,
+} from "../generated/serverApi/v3";
+import ShareModule, { ShareOptions } from "./share";
 import courseRoomDetailsModule from "@/store/course-room-details";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 const shareOptions: ShareOptions = {
 	hasExpiryDate: true,
@@ -46,37 +46,31 @@ describe("share module", () => {
 				it("should call the backend with the correct payload", async () => {
 					const shareModule = new ShareModule({});
 					shareModule.setParentId("sampleCourseId");
-					shareModule.setParentType(ShareTokenBodyParamsParentTypeEnum.Courses);
+					shareModule.setParentType(ShareTokenBodyParamsParentType.COURSES);
 
 					await shareModule.createShareUrl(shareOptions);
 
-					expect(
-						shareTokenMockApi.shareTokenControllerCreateShareToken
-					).toHaveBeenCalledTimes(1);
-					expect(
-						shareTokenMockApi.shareTokenControllerCreateShareToken
-					).toHaveBeenCalledWith(expectedServerPayload);
+					expect(shareTokenMockApi.shareTokenControllerCreateShareToken).toHaveBeenCalledTimes(1);
+					expect(shareTokenMockApi.shareTokenControllerCreateShareToken).toHaveBeenCalledWith(expectedServerPayload);
 				});
 
 				it("should call setShareUrl mutation", async () => {
 					const shareModule = new ShareModule({});
 					shareModule.setParentId("sampleCourseId");
-					shareModule.setParentType(ShareTokenBodyParamsParentTypeEnum.Courses);
+					shareModule.setParentType(ShareTokenBodyParamsParentType.COURSES);
 					const setShareUrlMock = vi.spyOn(shareModule, "setShareUrl");
 
 					await shareModule.createShareUrl(shareOptions);
 					const result = setShareUrlMock.mock.calls[0][0];
 
-					expect(result).toContain("rooms/courses-overview?import=sampleToken");
+					expect(result).toContain("rooms/courses-overview?import=sampleToken&importedType=course");
 				});
 
 				it("should return undefined on error", async () => {
 					const shareModule = new ShareModule({});
 					const error = { statusCode: 418, message: "server error" };
 					const shareTokenErrorMockApi = {
-						shareTokenControllerCreateShareToken: vi.fn(() =>
-							Promise.reject({ ...error })
-						),
+						shareTokenControllerCreateShareToken: vi.fn(() => Promise.reject({ ...error })),
 					};
 					vi.spyOn(serverApi, "ShareTokenApiFactory").mockReturnValue(
 						shareTokenErrorMockApi as unknown as ShareTokenApiInterface
@@ -91,9 +85,7 @@ describe("share module", () => {
 				it("should return undefined if shareTokenResult is undefined", async () => {
 					const shareModule = new ShareModule({});
 					const shareTokenErrorMockApi = {
-						shareTokenControllerCreateShareToken: vi.fn(() =>
-							Promise.resolve(undefined)
-						),
+						shareTokenControllerCreateShareToken: vi.fn(() => Promise.resolve(undefined)),
 					};
 					vi.spyOn(serverApi, "ShareTokenApiFactory").mockReturnValue(
 						shareTokenErrorMockApi as unknown as ShareTokenApiInterface
@@ -112,17 +104,11 @@ describe("share module", () => {
 				const shareModule = new ShareModule({});
 				const setParentIdMock = vi.spyOn(shareModule, "setParentId");
 				const setParentTypeMock = vi.spyOn(shareModule, "setParentType");
-				const setDestinationTypeMock = vi.spyOn(
-					shareModule,
-					"setDestinationType"
-				);
-				const setShareModalOpenMock = vi.spyOn(
-					shareModule,
-					"setShareModalOpen"
-				);
+				const setDestinationTypeMock = vi.spyOn(shareModule, "setDestinationType");
+				const setShareModalOpenMock = vi.spyOn(shareModule, "setShareModalOpen");
 				const testId = "test-id";
-				const type = ShareTokenBodyParamsParentTypeEnum.Courses;
-				const destinationType = BoardExternalReferenceType.Room;
+				const type = ShareTokenBodyParamsParentType.COURSES;
+				const destinationType = BoardExternalReferenceType.ROOM;
 				shareModule.startShareFlow({
 					id: testId,
 					type,
@@ -141,10 +127,7 @@ describe("share module", () => {
 				const shareModule = new ShareModule({});
 				const setIdMock = vi.spyOn(shareModule, "setParentId");
 				const setShareUrlMock = vi.spyOn(shareModule, "setShareUrl");
-				const setShareModalOpenMock = vi.spyOn(
-					shareModule,
-					"setShareModalOpen"
-				);
+				const setShareModalOpenMock = vi.spyOn(shareModule, "setShareModalOpen");
 				shareModule.resetShareFlow();
 
 				expect(setIdMock).toHaveBeenCalledWith("");
@@ -172,11 +155,9 @@ describe("share module", () => {
 
 		it("setParentType should set 'shareUrl' state", async () => {
 			const shareModule = new ShareModule({});
-			shareModule.setParentType(ShareTokenBodyParamsParentTypeEnum.Courses);
+			shareModule.setParentType(ShareTokenBodyParamsParentType.COURSES);
 
-			expect(shareModule.getParentType).toStrictEqual(
-				ShareTokenBodyParamsParentTypeEnum.Courses
-			);
+			expect(shareModule.getParentType).toStrictEqual(ShareTokenBodyParamsParentType.COURSES);
 		});
 	});
 });

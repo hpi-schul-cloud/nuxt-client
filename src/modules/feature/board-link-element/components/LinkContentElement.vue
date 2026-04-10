@@ -2,14 +2,13 @@
 	<v-card
 		ref="linkContentElement"
 		class="mb-4"
-		:target="target"
 		data-testid="board-link-element"
 		:class="{ 'd-none': isHidden }"
 		:variant="outlined"
 		:ripple="false"
 		:aria-label="ariaLabel"
-		:href="sanitizedUrl"
-		tabindex="0"
+		v-bind="isEditMode ? {} : { href: sanitizedUrl, target: target, rel: 'noopener noreferrer' }"
+		@keydown.enter.space="onClick"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 		@click="onClick"
@@ -27,45 +26,34 @@
 			>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<KebabMenuActionDelete
-					scope-language-key="components.cardElement.LinkElement"
-					@click="onDelete"
-				/>
+				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementDisplay>
 		<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
 			><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<KebabMenuActionDelete
-					scope-language-key="components.cardElement.LinkElement"
-					@click="onDelete"
-				/>
+				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementCreate>
 	</v-card>
 </template>
 
 <script setup lang="ts">
-import { LinkElementResponse } from "@/serverApi/v3";
-import { sanitizeUrl } from "@braintree/sanitize-url";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { BoardMenuScope } from "@ui-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionMoveDown,
-	KebabMenuActionMoveUp,
-} from "@ui-kebab-menu";
-import { useElementFocus } from "@util-board";
-import { computed, ComputedRef, PropType, ref, toRef } from "vue";
-import { useI18n } from "vue-i18n";
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
 import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
 import { ensureProtocolIncluded } from "../util/url.util";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
+import { LinkElementResponse } from "@api-server";
+import { sanitizeUrl } from "@braintree/sanitize-url";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
+import { useElementFocus } from "@util-board";
+import { computed, ComputedRef, PropType, ref, toRef } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	element: {
@@ -92,11 +80,9 @@ const linkContentElement = ref(null);
 const isLoading = ref(false);
 const element = toRef(props, "element");
 
-const outlined = computed(() => {
-	return props.isEditMode === true || computedElement.value.content.url !== ""
-		? "outlined"
-		: "text";
-});
+const outlined = computed(() =>
+	props.isEditMode === true || computedElement.value.content.url !== "" ? "outlined" : "text"
+);
 
 useBoardFocusHandler(element.value.id, linkContentElement);
 
@@ -104,18 +90,13 @@ const { modelValue, computedElement } = useContentElementState(props, {
 	autoSaveDebounce: 100,
 });
 
-const sanitizedUrl = computed(() =>
-	props.element.content.url ? sanitizeUrl(props.element.content.url) : ""
-);
+const sanitizedUrl = computed(() => (props.element.content.url ? sanitizeUrl(props.element.content.url) : ""));
 
 const target: ComputedRef<string> = computed(() => {
 	if (props.element.content.url) {
 		const url = new URL(sanitizedUrl.value);
 
-		if (
-			url.host === window.location.host &&
-			url.pathname === window.location.pathname
-		) {
+		if (url.host === window.location.host && url.pathname === window.location.pathname) {
 			return "_self";
 		}
 	}
@@ -123,13 +104,9 @@ const target: ComputedRef<string> = computed(() => {
 	return "_blank";
 });
 
-const isCreating = computed(
-	() => props.isEditMode && !computedElement.value.content.url
-);
+const isCreating = computed(() => props.isEditMode && !computedElement.value.content.url);
 
-const isHidden = computed(
-	() => props.isEditMode === false && !computedElement.value.content.url
-);
+const isHidden = computed(() => props.isEditMode === false && !computedElement.value.content.url);
 
 const { getMetaTags } = useMetaTagExtractorApi();
 
@@ -140,8 +117,7 @@ const onCreateUrl = async (originalUrl: string) => {
 
 	try {
 		const validUrl = ensureProtocolIncluded(originalUrl);
-		const { url, title, description, originalImageUrl } =
-			await getMetaTags(validUrl);
+		const { url, title, description, originalImageUrl } = await getMetaTags(validUrl);
 
 		modelValue.value.url = url;
 		modelValue.value.title = title;
@@ -158,9 +134,7 @@ const onCreateUrl = async (originalUrl: string) => {
 const ariaLabel = computed(() => {
 	const contentUrl = computedElement.value.content.url;
 
-	return contentUrl
-		? `${contentUrl}, ${t("common.ariaLabel.newTab")}`
-		: undefined;
+	return contentUrl ? `${contentUrl}, ${t("common.ariaLabel.newTab")}` : undefined;
 });
 
 const onKeydownArrow = (event: KeyboardEvent) => {
@@ -174,8 +148,8 @@ const onMoveDown = () => emit("move-down:edit");
 
 const onMoveUp = () => emit("move-up:edit");
 
-const onDelete = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDelete = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.LinkElement");
 	if (shouldDelete) {
 		emit("delete:element", element.value.id);
 	}
@@ -185,6 +159,8 @@ const { focusNodeFromHash } = useElementFocus();
 const onClick = () => {
 	if (sanitizedUrl.value === window.location.href) {
 		focusNodeFromHash();
+	} else if (props.isEditMode && !isCreating.value) {
+		window.open(sanitizedUrl.value, "_blank", "noopener noreferrer");
 	}
 };
 </script>

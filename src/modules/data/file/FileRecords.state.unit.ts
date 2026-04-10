@@ -1,6 +1,6 @@
+import { useFileRecordsStore } from "./FileRecords.state";
 import { fileRecordFactory } from "@@/tests/test-utils";
 import { createPinia, setActivePinia } from "pinia";
-import { useFileRecordsStore } from "./FileRecords.state";
 
 describe("FileRecords Store", () => {
 	beforeEach(() => {
@@ -36,10 +36,7 @@ describe("FileRecords Store", () => {
 
 				expect(records).toHaveLength(2);
 				expect(records).toEqual(
-					expect.arrayContaining([
-						expect.objectContaining(record1),
-						expect.objectContaining(record2),
-					])
+					expect.arrayContaining([expect.objectContaining(record1), expect.objectContaining(record2)])
 				);
 			});
 		});
@@ -90,10 +87,7 @@ describe("FileRecords Store", () => {
 
 				expect(records).toHaveLength(2);
 				expect(records).toEqual(
-					expect.arrayContaining([
-						expect.objectContaining(record),
-						expect.objectContaining(newRecord),
-					])
+					expect.arrayContaining([expect.objectContaining(record), expect.objectContaining(newRecord)])
 				);
 			});
 		});
@@ -124,14 +118,69 @@ describe("FileRecords Store", () => {
 				const records2 = store.getFileRecordsByParentId(parentId2);
 
 				expect(records1).toHaveLength(1);
-				expect(records1).toEqual(
-					expect.arrayContaining([expect.objectContaining(record1)])
-				);
+				expect(records1).toEqual(expect.arrayContaining([expect.objectContaining(record1)]));
 
 				expect(records2).toHaveLength(1);
-				expect(records2).toEqual(
-					expect.arrayContaining([expect.objectContaining(record2)])
-				);
+				expect(records2).toEqual(expect.arrayContaining([expect.objectContaining(record2)]));
+			});
+		});
+	});
+
+	describe("getFileRecordById", () => {
+		describe("when store is empty", () => {
+			it("should return undefined if no records exist", () => {
+				const store = useFileRecordsStore();
+
+				const result = store.getFileRecordById("nonexistent");
+
+				expect(result).toBeUndefined();
+			});
+		});
+
+		describe("when store has records", () => {
+			const setup = () => {
+				const store = useFileRecordsStore();
+
+				const record1 = fileRecordFactory.build();
+				const record2 = fileRecordFactory.build();
+				const record3 = fileRecordFactory.build();
+
+				return {
+					store,
+					record1,
+					record2,
+					record3,
+				};
+			};
+
+			it("should return the correct file record when it exists", () => {
+				const { store, record1, record2, record3 } = setup();
+
+				store.upsertFileRecords([record1, record2, record3]);
+
+				const result = store.getFileRecordById(record2.id);
+
+				expect(result).toEqual(expect.objectContaining(record2));
+			});
+
+			it("should return the correct file record from different parent ids", () => {
+				const { store, record1, record2, record3 } = setup();
+
+				store.upsertFileRecords([record1, record2, record3]);
+
+				const result = store.getFileRecordById(record3.id);
+
+				expect(result).toEqual(expect.objectContaining(record3));
+			});
+
+			it("should return undefined if the file record does not exist", () => {
+				const { store, record1, record2, record3 } = setup();
+
+				store.upsertFileRecords([record1, record2, record3]);
+
+				const result = store.getFileRecordById("nonexistent");
+
+				expect(result).toBeUndefined();
 			});
 		});
 	});
@@ -163,9 +212,7 @@ describe("FileRecords Store", () => {
 				const records = store.getFileRecordsByParentId(parentId);
 
 				expect(records).toHaveLength(1);
-				expect(records).toEqual(
-					expect.arrayContaining([expect.objectContaining(record2)])
-				);
+				expect(records).toEqual(expect.arrayContaining([expect.objectContaining(record2)]));
 			});
 		});
 
@@ -187,9 +234,7 @@ describe("FileRecords Store", () => {
 
 				expect(records1).toHaveLength(0);
 				expect(records2).toHaveLength(1);
-				expect(records2).toEqual(
-					expect.arrayContaining([expect.objectContaining(record2)])
-				);
+				expect(records2).toEqual(expect.arrayContaining([expect.objectContaining(record2)]));
 			});
 		});
 
@@ -209,9 +254,7 @@ describe("FileRecords Store", () => {
 				const records = store.getFileRecordsByParentId(parentId);
 
 				expect(records).toHaveLength(1);
-				expect(records).toEqual(
-					expect.arrayContaining([expect.objectContaining(record2)])
-				);
+				expect(records).toEqual(expect.arrayContaining([expect.objectContaining(record2)]));
 			});
 		});
 	});

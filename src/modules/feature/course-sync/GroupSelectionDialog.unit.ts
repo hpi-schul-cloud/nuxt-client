@@ -1,25 +1,20 @@
-import { RoleName } from "@/serverApi/v3";
-import { groupResponseFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import GroupSelectionDialog from "./GroupSelectionDialog.vue";
+import { groupResponseFactory, mockComposable } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoleName } from "@api-server";
 import { GroupListFilter, useGroupListState } from "@data-group";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
+import { Mocked } from "vitest";
 import { nextTick, ref } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
 import { VAutocomplete } from "vuetify/lib/components/index";
-import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 
-vi.mock("@data-group", () => {
-	return {
-		useGroupListState: vi.fn(),
-	};
-});
+vi.mock("@data-group", () => ({
+	useGroupListState: vi.fn(),
+}));
 
 describe("GroupSelectionDialog", () => {
-	let useGroupListStateMock: DeepMocked<ReturnType<typeof useGroupListState>>;
+	let useGroupListStateMock: Mocked<ReturnType<typeof useGroupListState>>;
 
 	const getWrapper = (
 		props: ComponentProps<typeof GroupSelectionDialog> = {
@@ -46,7 +41,7 @@ describe("GroupSelectionDialog", () => {
 	};
 
 	beforeEach(() => {
-		useGroupListStateMock = createMock<ReturnType<typeof useGroupListState>>();
+		useGroupListStateMock = mockComposable(useGroupListState);
 
 		vi.mocked(useGroupListState).mockReturnValue(useGroupListStateMock);
 	});
@@ -61,9 +56,7 @@ describe("GroupSelectionDialog", () => {
 
 			await wrapper.setProps({ isOpen: true });
 
-			expect(useGroupListStateMock.fetchGroups).toHaveBeenCalledWith<
-				[GroupListFilter, { append: boolean }?]
-			>(
+			expect(useGroupListStateMock.fetchGroups).toHaveBeenCalledWith<[GroupListFilter, { append: boolean }?]>(
 				{
 					name: "",
 					availableForSynchronization: true,
@@ -92,9 +85,7 @@ describe("GroupSelectionDialog", () => {
 			await autocomplete.setValue("testGroup", "search");
 			vi.runAllTimers();
 
-			expect(useGroupListStateMock.fetchGroups).toHaveBeenCalledWith<
-				[GroupListFilter, { append: boolean }?]
-			>(
+			expect(useGroupListStateMock.fetchGroups).toHaveBeenCalledWith<[GroupListFilter, { append: boolean }?]>(
 				{
 					name: "testGroup",
 					availableForSynchronization: true,
@@ -114,7 +105,7 @@ describe("GroupSelectionDialog", () => {
 						id: "teacher1",
 						firstName: "Teacher",
 						lastName: "1",
-						role: RoleName.Teacher,
+						role: RoleName.TEACHER,
 					},
 				],
 			});
@@ -163,15 +154,14 @@ describe("GroupSelectionDialog", () => {
 						id: "student1",
 						firstName: "Student",
 						lastName: "1",
-						role: RoleName.Student,
+						role: RoleName.STUDENT,
 					},
 				],
 			});
 
 			useGroupListStateMock.groups.value = [group];
 
-			(wrapper.vm as unknown as typeof GroupSelectionDialog).selectedGroup =
-				group;
+			(wrapper.vm as unknown as typeof GroupSelectionDialog).selectedGroup = group;
 			await nextTick();
 
 			return {

@@ -1,8 +1,6 @@
 let lastTouchDetection = new Date().getTime();
 
-export const isTouchEvent = <T extends MouseEvent | TouchEvent>(
-	evt: T
-): boolean => {
+export const isTouchEvent = <T extends MouseEvent | TouchEvent>(evt: T): boolean => {
 	const now = new Date();
 	if (!("touches" in evt)) {
 		// not a touch event

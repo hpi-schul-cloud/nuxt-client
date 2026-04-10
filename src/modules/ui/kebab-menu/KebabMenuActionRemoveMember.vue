@@ -1,8 +1,5 @@
 <template>
-	<KebabMenuAction
-		:icon="mdiTrashCanOutline"
-		data-testid="kebab-menu-action-remove-member"
-	>
+	<KebabMenuAction :icon="mdiTrashCanOutline" data-testid="kebab-menu-action-remove-member">
 		{{ t("common.actions.remove") }}
 	</KebabMenuAction>
 </template>

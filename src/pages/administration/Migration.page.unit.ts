@@ -1,44 +1,20 @@
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
-import { Router, useRouter } from "vue-router";
-import { createMock } from "@golevelup/ts-vitest";
-import { schoolFactory } from "@@/tests/test-utils";
-import { THEME_KEY } from "@/utils/inject";
-import { SchulcloudTheme } from "@/serverApi/v3";
-import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
+import MigrationWizard from "./Migration.page.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
+import { importUsersModule, schoolsModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
-import MigrationWizard from "@/pages/administration/Migration.page.vue";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { THEME_KEY } from "@/utils/inject";
+import { createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { Mock } from "vitest";
-import {
-	ComponentMountingOptions,
-	flushPromises,
-	mount,
-	shallowMount,
-	VueWrapper,
-} from "@vue/test-utils";
+import { SchulcloudTheme } from "@api-server";
+import { createTestingPinia } from "@pinia/testing";
+import { ComponentMountingOptions, flushPromises, mount, shallowMount, VueWrapper } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { ComponentPublicInstance, nextTick } from "vue";
 import { NamedValue } from "vue-i18n";
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 import { VBtn, VCardText, VProgressCircular } from "vuetify/components";
-
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-
-const router = createMock<Router>();
 
 const $theme = {
 	name: "instance name",
@@ -63,18 +39,10 @@ type MigrationPageWrapperType = Partial<{
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof MigrationWizard> = {}
-): VueWrapper<ComponentPublicInstance & MigrationPageWrapperType> => {
-	document.body.setAttribute("data-app", "true");
-
-	useRouterMock.mockReturnValue(router);
-
-	return mount(MigrationWizard, {
+): VueWrapper<ComponentPublicInstance & MigrationPageWrapperType> =>
+	mount(MigrationWizard, {
 		global: {
-			plugins: [
-				createTestingVuetify(),
-				createTestingI18n(),
-				vueDompurifyHTMLPlugin,
-			],
+			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[THEME_KEY.valueOf()]: $theme,
 			},
@@ -85,12 +53,11 @@ const getWrapper = (
 		},
 		...options,
 	});
-};
 
 const getWrapperShallow = (
 	options: ComponentMountingOptions<typeof MigrationWizard> = {}
-): VueWrapper<ComponentPublicInstance & MigrationPageWrapperType> => {
-	return shallowMount(MigrationWizard, {
+): VueWrapper<ComponentPublicInstance & MigrationPageWrapperType> =>
+	shallowMount(MigrationWizard, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -99,22 +66,24 @@ const getWrapperShallow = (
 		},
 		...options,
 	});
-};
 
 describe("User Migration / Index", () => {
 	window.scrollTo = vi.fn();
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		injectRouterMock(createRouterMock());
+		createTestEnvStore({
+			SC_TITLE: "dBildungscloud",
+			SC_THEME: SchulcloudTheme.DEFAULT,
+			FEATURE_USER_MIGRATION_ENABLED: true,
+			MIGRATION_WIZARD_DOCUMENTATION_LINK: "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true",
+		});
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			importUsersModule: ImportUsersModule,
 			schoolsModule: SchoolsModule,
 		});
 
-		envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED = true;
-		envConfigModule.getEnv.SC_THEME = SchulcloudTheme.Default;
-		envConfigModule.getEnv.MIGRATION_WIZARD_DOCUMENTATION_LINK =
-			"https://docs.dbildungscloud.de/x/VAEbDg?frameable=true";
 		importUsersModule.setTotal(100);
 		schoolsModule.setSchool(
 			schoolFactory.build({
@@ -127,10 +96,11 @@ describe("User Migration / Index", () => {
 	it("should set page title", () => {
 		const wrapper = getWrapperShallow();
 
-		const title = wrapper.vm.t?.("pages.administration.migration.title", {
-			source: "LDAP",
-			instance: $theme.name,
-		});
+		const title =
+			wrapper.vm.t?.("pages.administration.migration.title", {
+				source: "LDAP",
+				instance: $theme.name,
+			}) + " - dBildungscloud";
 		expect(document.title).toBe(title);
 	});
 
@@ -173,9 +143,7 @@ describe("User Migration / Index", () => {
 			wrapper.vm.isLoading = true;
 			await flushPromises();
 
-			const tutorialWait = wrapper.vm.t?.(
-				"pages.administration.migration.tutorialWait"
-			);
+			const tutorialWait = wrapper.vm.t?.("pages.administration.migration.tutorialWait");
 			const findText = wrapper.find("[data-testid=migration_tutorial]");
 
 			expect(findText.element.innerHTML).toContain(tutorialWait);
@@ -242,9 +210,7 @@ describe("User Migration / Index", () => {
 			wrapper.vm.isLoading = false;
 			await flushPromises();
 
-			const findText = wrapper
-				.find("[data-testid=migration_summary]")
-				.getComponent(VCardText);
+			const findText = wrapper.find("[data-testid=migration_summary]").getComponent(VCardText);
 
 			const expectedSummaryText = [
 				"pages.administration.migration.summary.firstParagraph",
@@ -274,13 +240,8 @@ describe("User Migration / Index", () => {
 		});
 
 		it("implement perform migration", async () => {
-			const performMigrationMock = vi.spyOn(
-				importUsersModule,
-				"performMigration"
-			);
-			performMigrationMock.mockImplementation(async () => {
-				return Promise.resolve();
-			});
+			const performMigrationMock = vi.spyOn(importUsersModule, "performMigration");
+			performMigrationMock.mockImplementation(async () => Promise.resolve());
 
 			const wrapper = getWrapper();
 
@@ -320,9 +281,7 @@ describe("User Migration / Index", () => {
 		it("should show text", async () => {
 			const { wrapper } = await setup();
 
-			const stepperContent = wrapper.findComponent(
-				"[data-testid=migration_finish]"
-			);
+			const stepperContent = wrapper.findComponent("[data-testid=migration_finish]");
 
 			expect(stepperContent.text()).toContain(
 				wrapper.vm.t?.("pages.administration.migration.step4.linkingFinished", {
@@ -399,9 +358,7 @@ describe("User Migration / Index", () => {
 			it("should show cancel button", async () => {
 				const { wrapper } = await setup();
 
-				const button = wrapper.findComponent(
-					"[data-testid=import-users-cancel-migration-btn]"
-				);
+				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
 
 				expect(button.exists()).toBe(true);
 			});
@@ -409,9 +366,7 @@ describe("User Migration / Index", () => {
 			it("should show dialog on click", async () => {
 				const { wrapper } = await setup();
 
-				const button = wrapper.findComponent(
-					"[data-testid=import-users-cancel-migration-btn]"
-				);
+				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
 
 				await button.trigger("click");
 
@@ -421,9 +376,7 @@ describe("User Migration / Index", () => {
 			it("should change isCancelDialogOpen on isOpen", async () => {
 				const { wrapper } = await setup();
 
-				const button = wrapper.findComponent(
-					"[data-testid=import-users-cancel-migration-btn]"
-				);
+				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
 
 				await button.trigger("click");
 
@@ -440,10 +393,7 @@ describe("User Migration / Index", () => {
 			it("should call stores on dialog-confirm", async () => {
 				const { wrapper } = await setup();
 
-				const cancelMigrationMock = vi.spyOn(
-					importUsersModule,
-					"cancelMigration"
-				);
+				const cancelMigrationMock = vi.spyOn(importUsersModule, "cancelMigration");
 
 				cancelMigrationMock.mockImplementationOnce(async () => {
 					schoolsModule.setSchool({
@@ -453,13 +403,9 @@ describe("User Migration / Index", () => {
 					});
 				});
 
-				vi.spyOn(schoolsModule, "fetchSchool").mockResolvedValueOnce(
-					await Promise.resolve()
-				);
+				vi.spyOn(schoolsModule, "fetchSchool").mockResolvedValueOnce(await Promise.resolve());
 
-				const button = wrapper.findComponent(
-					"[data-testid=import-users-cancel-migration-btn]"
-				);
+				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
 
 				await button.trigger("click");
 
@@ -478,10 +424,7 @@ describe("User Migration / Index", () => {
 			it("should redirect to school settings migration section", async () => {
 				const { wrapper } = await setup();
 
-				const cancelMigrationMock = vi.spyOn(
-					importUsersModule,
-					"cancelMigration"
-				);
+				const cancelMigrationMock = vi.spyOn(importUsersModule, "cancelMigration");
 				cancelMigrationMock.mockImplementationOnce(async () => {
 					schoolsModule.setSchool({
 						...schoolsModule.getSchool,
@@ -491,9 +434,7 @@ describe("User Migration / Index", () => {
 					return Promise.resolve();
 				});
 
-				const button = wrapper.findComponent(
-					"[data-testid=import-users-cancel-migration-btn]"
-				);
+				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
 
 				await button.trigger("click");
 
@@ -502,9 +443,9 @@ describe("User Migration / Index", () => {
 				});
 
 				dialog.vm.$emit("dialog-confirmed");
-				await nextTick();
+				await flushPromises();
 
-				expect(router.push).toHaveBeenCalledWith({
+				expect(getRouter().push).toHaveBeenCalledWith({
 					path: "/administration/school-settings",
 					query: { openPanels: "migration" },
 				});
@@ -539,9 +480,7 @@ describe("User Migration / Index", () => {
 				vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
 				const { wrapper } = await setup();
 
-				const button = wrapper.findComponent(
-					"[data-testid=summary-cancel-migration-btn]"
-				);
+				const button = wrapper.findComponent("[data-testid=summary-cancel-migration-btn]");
 
 				expect(button.exists()).toBe(true);
 			});
@@ -579,10 +518,7 @@ describe("User Migration / Index", () => {
 
 				const wrapper = getWrapper();
 
-				vi.spyOn(
-					importUsersModule,
-					"clearAllAutoMatches"
-				).mockResolvedValueOnce(await Promise.resolve());
+				vi.spyOn(importUsersModule, "clearAllAutoMatches").mockResolvedValueOnce(await Promise.resolve());
 
 				vi.spyOn(importUsersStub.methods, "reloadData");
 
@@ -602,22 +538,16 @@ describe("User Migration / Index", () => {
 			it("should show the clear auto matches button", async () => {
 				const { wrapper } = await setup();
 
-				const button = wrapper.findComponent(
-					'[data-testid="import-users-clear-auto-matches-btn"]'
-				);
+				const button = wrapper.findComponent('[data-testid="import-users-clear-auto-matches-btn"]');
 
 				expect(button.exists()).toBe(true);
-				expect(button.text()).toBe(
-					"pages.administration.migration.clearAutoMatches"
-				);
+				expect(button.text()).toBe("pages.administration.migration.clearAutoMatches");
 			});
 
 			it("should show the dialog on button click", async () => {
 				const { wrapper } = await setup();
 
-				const button = wrapper.findComponent(
-					'[data-testid="import-users-clear-auto-matches-btn"]'
-				);
+				const button = wrapper.findComponent('[data-testid="import-users-clear-auto-matches-btn"]');
 
 				await button.trigger("click");
 
@@ -633,15 +563,11 @@ describe("User Migration / Index", () => {
 			it("should display the correct dialog content and text", async () => {
 				const { wrapper } = await setup();
 
-				const button = wrapper.findComponent(
-					'[data-testid="import-users-clear-auto-matches-btn"]'
-				);
+				const button = wrapper.findComponent('[data-testid="import-users-clear-auto-matches-btn"]');
 
 				await button.trigger("click");
 
-				expect(document.body.innerHTML).toContain(
-					'data-testid="clear-auto-matches-dialog"'
-				);
+				expect(document.body.innerHTML).toContain('data-testid="clear-auto-matches-dialog"');
 				expect(document.body.innerHTML).toContain(
 					"components.administration.adminMigrationSection.clearAutoMatchesDialog.title"
 				);
@@ -653,13 +579,11 @@ describe("User Migration / Index", () => {
 			it("should close the dialog upon clicking on the cancel button", async () => {
 				const { wrapper } = await setup();
 
-				const button = wrapper.findComponent(
-					'[data-testid="import-users-clear-auto-matches-btn"]'
-				);
+				const button = wrapper.findComponent('[data-testid="import-users-clear-auto-matches-btn"]');
 
 				await button.trigger("click");
 
-				const dialog = wrapper.findComponent<typeof VCustomDialog>({
+				const dialog = wrapper.findComponent<typeof CustomDialog>({
 					ref: "clearAutoMatchesDialog",
 				});
 
@@ -674,13 +598,11 @@ describe("User Migration / Index", () => {
 			it("should call stores, reload data & close dialog upon clicking on the confirm button", async () => {
 				const { wrapper } = await setup();
 
-				const button = wrapper.findComponent(
-					'[data-testid="import-users-clear-auto-matches-btn"]'
-				);
+				const button = wrapper.findComponent('[data-testid="import-users-clear-auto-matches-btn"]');
 
 				await button.trigger("click");
 
-				const dialog = wrapper.findComponent<typeof VCustomDialog>({
+				const dialog = wrapper.findComponent<typeof CustomDialog>({
 					ref: "clearAutoMatchesDialog",
 				});
 
@@ -714,9 +636,7 @@ describe("User Migration / Index", () => {
 			it("should not disable the start user migration button", async () => {
 				const { wrapper } = await setup();
 
-				const button = wrapper.findComponent<VBtn>(
-					'[data-testid="start_user_migration"]'
-				);
+				const button = wrapper.findComponent<VBtn>('[data-testid="start_user_migration"]');
 
 				expect(button.vm.disabled).toBe(false);
 			});
@@ -741,9 +661,7 @@ describe("User Migration / Index", () => {
 				it("should not disable the next step button", async () => {
 					const { wrapper } = await migrationStartedSetup();
 
-					const button = wrapper.findComponent<VBtn>(
-						'[data-testid="migration_tutorial_next"]'
-					);
+					const button = wrapper.findComponent<VBtn>('[data-testid="migration_tutorial_next"]');
 
 					expect(button.vm.disabled).toBe(false);
 				});
@@ -761,9 +679,7 @@ describe("User Migration / Index", () => {
 				it("should show the next step text in the next step button", async () => {
 					const { wrapper } = await migrationStartedSetup();
 
-					const button = wrapper.findComponent<VBtn>(
-						'[data-testid="migration_tutorial_next"]'
-					);
+					const button = wrapper.findComponent<VBtn>('[data-testid="migration_tutorial_next"]');
 
 					expect(button.text()).toBe("pages.administration.migration.next");
 				});
@@ -789,9 +705,7 @@ describe("User Migration / Index", () => {
 			it("should disable the start user migration button", async () => {
 				const { wrapper } = await setup();
 
-				const button = wrapper.findComponent<VBtn>(
-					'[data-testid="start_user_migration"]'
-				);
+				const button = wrapper.findComponent<VBtn>('[data-testid="start_user_migration"]');
 
 				expect(button.vm.disabled).toBe(true);
 			});
@@ -816,9 +730,7 @@ describe("User Migration / Index", () => {
 				it("should disable the next step button", async () => {
 					const { wrapper } = await migrationStartedSetup();
 
-					const button = wrapper.findComponent<VBtn>(
-						'[data-testid="migration_tutorial_next"]'
-					);
+					const button = wrapper.findComponent<VBtn>('[data-testid="migration_tutorial_next"]');
 
 					expect(button.vm.disabled).toBe(true);
 				});
@@ -836,9 +748,7 @@ describe("User Migration / Index", () => {
 				it("should show the loading text in the next step button", async () => {
 					const { wrapper } = await migrationStartedSetup();
 
-					const button = wrapper.findComponent<VBtn>(
-						'[data-testid="migration_tutorial_next"]'
-					);
+					const button = wrapper.findComponent<VBtn>('[data-testid="migration_tutorial_next"]');
 
 					expect(button.text()).toBe("pages.administration.migration.waiting");
 				});

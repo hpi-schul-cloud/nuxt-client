@@ -1,16 +1,12 @@
 <template>
-	<room-wrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
+	<CourseRoomWrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
 		<template #header>
-			<h1 class="text-h3 py-2 mb-4">
+			<h1 class="py-2">
 				{{ $t("pages.courseRooms.index.courses.active") }}
 			</h1>
+
 			<div class="mb-5 header-actions-section">
-				<v-btn
-					variant="outlined"
-					size="small"
-					to="/rooms/courses-list"
-					data-testid="go-to-all-courses"
-				>
+				<v-btn variant="outlined" size="small" to="/rooms/courses-list" data-testid="go-to-all-courses">
 					{{ $t("pages.courseRooms.index.courses.all") }}
 				</v-btn>
 				<v-switch
@@ -18,7 +14,6 @@
 					v-model="allowDragging"
 					class="enable-disable"
 					:label="$t('pages.courseRooms.index.courses.arrangeCourses')"
-					:aria-label="$t('pages.courseRooms.index.courses.arrangeCourses')"
 					:true-icon="mdiCheck"
 					hide-details
 				/>
@@ -26,23 +21,16 @@
 		</template>
 		<template #page-content>
 			<div>
-				<v-text-field
+				<SvsSearchField
 					ref="search"
 					v-model="searchText"
-					class="room-search px-1"
-					variant="solo"
-					rounded
-					single-line
+					density="default"
+					class="px-1 mb-6"
 					:label="$t('pages.courseRooms.index.search.label')"
-					:append-inner-icon="mdiMagnify"
-					:aria-label="$t('pages.courseRooms.index.search.label')"
+					:clearable="false"
 					data-testid="search-field-course"
 				/>
-				<div
-					v-for="(row, rowIndex) in dimensions.rowCount"
-					:key="rowIndex"
-					class="room-overview-row"
-				>
+				<div v-for="(row, rowIndex) in dimensions.rowCount" :key="rowIndex" class="room-overview-row">
 					<div
 						v-for="(col, colIndex) in dimensions.colCount"
 						:key="colIndex"
@@ -50,17 +38,15 @@
 						:style="{ width: dimensions.cellWidth }"
 					>
 						<template v-if="getDataObject(rowIndex, colIndex) !== undefined">
-							<vRoomEmptyAvatar
+							<RoomEmptyAvatar
 								v-if="isEmptyGroup(rowIndex, colIndex)"
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								:size="dimensions.cellWidth"
-								data-avatar-type="vRoomEmptyAvatar"
+								data-avatar-type="RoomEmptyAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
-								@drop-empty-avatar="
-									setDropElement({ x: colIndex, y: rowIndex })
-								"
+								@drop-empty-avatar="setDropElement({ x: colIndex, y: rowIndex })"
 							/>
-							<vRoomGroupAvatar
+							<RoomGroupAvatar
 								v-else-if="hasGroup(rowIndex, colIndex)"
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								class="room-group-avatar"
@@ -68,23 +54,21 @@
 								:size="dimensions.cellWidth"
 								:device="device"
 								:draggable="allowDragging"
-								data-avatar-type="vRoomGroupAvatar"
+								data-avatar-type="RoomGroupAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 								@clicked="openDialog(getDataObject(rowIndex, colIndex).groupId)"
 								@start-drag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 								@dragend-group-avatar="onDragend"
-								@drop-group-avatar="
-									addGroupElements({ x: colIndex, y: rowIndex })
-								"
+								@drop-group-avatar="addGroupElements({ x: colIndex, y: rowIndex })"
 							/>
-							<vRoomAvatar
+							<RoomAvatar
 								v-else
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								class="room-avatar"
 								:item="getDataObject(rowIndex, colIndex)"
 								:size="dimensions.cellWidth"
 								:draggable="allowDragging"
-								data-avatar-type="vRoomAvatar"
+								data-avatar-type="RoomAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 								@start-drag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 								@dragend-avatar="onDragend"
@@ -92,22 +76,20 @@
 							/>
 						</template>
 						<template v-else>
-							<vRoomEmptyAvatar
+							<RoomEmptyAvatar
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								:size="dimensions.cellWidth"
 								:show-outline="dragging"
-								data-avatar-type="vRoomEmptyAvatar"
+								data-avatar-type="RoomEmptyAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
-								@drop-empty-avatar="
-									setDropElement({ x: colIndex, y: rowIndex })
-								"
+								@drop-empty-avatar="setDropElement({ x: colIndex, y: rowIndex })"
 							/>
 						</template>
 					</div>
 				</div>
 			</div>
 		</template>
-	</room-wrapper>
+	</CourseRoomWrapper>
 	<room-modal
 		v-model:is-open="groupDialog.isOpen"
 		aria-describedby="folder open"
@@ -120,38 +102,36 @@
 	<import-flow
 		:is-active="isImportMode"
 		:token="importToken"
-		:destinations="courses"
+		:destinations="courses.filter((course) => !course.isLocked)"
 		destination-type="course"
 		@success="onImportSuccess"
 	/>
 </template>
 
 <script>
-import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
-import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar.vue";
-import RoomModal from "@/components/molecules/RoomModal.vue";
-import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar.vue";
+import CourseRoomAvatar from "@/components/course-rooms/CourseRoomAvatar.vue";
+import CourseRoomEmptyAvatar from "@/components/course-rooms/CourseRoomEmptyAvatar.vue";
+import CourseRoomGroupAvatar from "@/components/course-rooms/CourseRoomGroupAvatar.vue";
+import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
+import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { courseRoomListModule } from "@/store";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { mdiCheck, mdiMagnify } from "@icons/material";
+import { notifySuccess } from "@data-app";
+import { mdiCheck } from "@icons/material";
+import { SvsSearchField } from "@ui-controls";
 import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
 	components: {
-		RoomWrapper,
-		vRoomAvatar,
-		vRoomGroupAvatar,
-		vRoomEmptyAvatar,
-		RoomModal,
+		CourseRoomWrapper,
+		RoomAvatar: CourseRoomAvatar,
+		RoomGroupAvatar: CourseRoomGroupAvatar,
+		RoomEmptyAvatar: CourseRoomEmptyAvatar,
+		RoomModal: CourseRoomModal,
 		ImportFlow,
+		SvsSearchField,
 	},
-	inject: {
-		notifierModule: { from: NOTIFIER_MODULE_KEY },
-	},
-	layout: "defaultVuetify",
 	setup() {
 		const refs = reactive({});
 
@@ -159,9 +139,7 @@ export default defineComponent({
 			refs[`${rowIndex}-${colIndex}`] = el;
 		};
 
-		const getElementNameByRef = (pos) => {
-			return refs[`${pos.y}-${pos.x}`].$attrs["data-avatar-type"];
-		};
+		const getElementNameByRef = (pos) => refs[`${pos.y}-${pos.x}`].$attrs["data-avatar-type"];
 
 		return { setElementRef, getElementNameByRef };
 	},
@@ -186,7 +164,6 @@ export default defineComponent({
 			showDeleteSection: false,
 			roomNameEditMode: false,
 			draggedElementName: "",
-			mdiMagnify,
 			searchText: "",
 			dragging: false,
 			allowDragging: false,
@@ -198,15 +175,11 @@ export default defineComponent({
 			return courseRoomListModule.hasCurrentRooms;
 		},
 		rooms() {
-			return JSON.parse(
-				JSON.stringify(courseRoomListModule.getRoomsData)
-			).filter((item) => {
+			return JSON.parse(JSON.stringify(courseRoomListModule.getRoomsData)).filter((item) => {
 				if (item.groupElements) {
-					const groupElements = item.groupElements.filter((groupItem) => {
-						return groupItem.title
-							.toLowerCase()
-							.includes(this.searchText.toLowerCase());
-					});
+					const groupElements = item.groupElements.filter((groupItem) =>
+						groupItem.title.toLowerCase().includes(this.searchText.toLowerCase())
+					);
 					item.groupElements = groupElements;
 					return groupElements;
 				}
@@ -214,12 +187,11 @@ export default defineComponent({
 			});
 		},
 		courses() {
-			return courseRoomListModule.getAllElements.map((item) => {
-				return {
-					id: item.id,
-					name: item.title,
-				};
-			});
+			return courseRoomListModule.getAllElements.map((item) => ({
+				id: item.id,
+				name: item.title,
+				isLocked: item.isLocked,
+			}));
 		},
 		hasRoomsBeingCopied() {
 			return this.rooms.some((item) => item.copyingSince !== undefined);
@@ -246,9 +218,7 @@ export default defineComponent({
 		}
 	},
 	mounted() {
-		document.title = buildPageTitle(
-			this.$t("pages.courseRooms.index.courses.active")
-		);
+		document.title = buildPageTitle(this.$t("pages.courseRooms.index.courses.active"));
 	},
 	methods: {
 		getDeviceDims() {
@@ -268,15 +238,12 @@ export default defineComponent({
 		},
 		setRowCount() {
 			const lastItem = courseRoomListModule.getRoomsData.reduce(
-				(prev, current) => {
-					return prev.yPosition > current.yPosition ? prev : current;
-				},
+				(prev, current) => (prev.yPosition > current.yPosition ? prev : current),
 				{}
 			);
 
 			this.dimensions.rowCount =
-				lastItem.yPosition &&
-				lastItem.yPosition + 2 > this.dimensions.defaultRowCount
+				lastItem.yPosition && lastItem.yPosition + 2 > this.dimensions.defaultRowCount
 					? lastItem.yPosition + 2
 					: this.dimensions.defaultRowCount;
 		},
@@ -288,18 +255,14 @@ export default defineComponent({
 			return roomObject.groupElements !== undefined;
 		},
 		isEmptyGroup(row, col) {
-			return this.findDataByPos(row, col).groupElements?.length == 0;
+			return this.findDataByPos(row, col).groupElements?.length === 0;
 		},
 		openDialog(groupId) {
-			this.groupDialog.groupData = this.rooms.find(
-				(item) => item.groupId == groupId
-			);
+			this.groupDialog.groupData = this.rooms.find((item) => item.groupId === groupId);
 			this.groupDialog.isOpen = true;
 		},
 		findDataByPos(row, col) {
-			return this.rooms.find(
-				(item) => item.xPosition == col && item.yPosition == row
-			);
+			return this.rooms.find((item) => item.xPosition === col && item.yPosition === row);
 		},
 		onStartDrag(element, pos) {
 			this.draggedElement.from = pos;
@@ -314,10 +277,9 @@ export default defineComponent({
 			this.draggedElement.to = pos;
 			const toElementName = this.getElementNameByRef(pos);
 
-			if (JSON.stringify(this.draggedElement.from) == JSON.stringify(pos))
-				return;
+			if (JSON.stringify(this.draggedElement.from) === JSON.stringify(pos)) return;
 
-			if (toElementName == "vRoomEmptyAvatar") {
+			if (toElementName === "RoomEmptyAvatar") {
 				this.savePosition();
 			}
 			this.showDeleteSection = false;
@@ -330,13 +292,11 @@ export default defineComponent({
 			this.draggedElement.to = pos;
 			const toElementName = this.getElementNameByRef(pos);
 
-			if (JSON.stringify(this.draggedElement.from) == JSON.stringify(pos))
-				return;
+			if (JSON.stringify(this.draggedElement.from) === JSON.stringify(pos)) return;
 
 			if (
-				(this.draggedElementName == "vRoomAvatar" ||
-					this.draggedElementName == "groupItem") &&
-				toElementName == "vRoomAvatar"
+				(this.draggedElementName === "RoomAvatar" || this.draggedElementName === "groupItem") &&
+				toElementName === "RoomAvatar"
 			) {
 				await this.savePosition();
 				this.defaultNaming(pos);
@@ -347,13 +307,11 @@ export default defineComponent({
 			this.draggedElement.to = pos;
 			const toElementName = this.getElementNameByRef(pos);
 
-			if (JSON.stringify(this.draggedElement.from) == JSON.stringify(pos))
-				return;
+			if (JSON.stringify(this.draggedElement.from) === JSON.stringify(pos)) return;
 
 			if (
-				(this.draggedElementName == "vRoomAvatar" ||
-					this.draggedElementName == "groupItem") &&
-				toElementName == "vRoomGroupAvatar"
+				(this.draggedElementName === "RoomAvatar" || this.draggedElementName === "groupItem") &&
+				toElementName === "RoomGroupAvatar"
 			) {
 				this.savePosition();
 			}
@@ -364,8 +322,8 @@ export default defineComponent({
 				x: this.groupDialog.groupData.xPosition,
 				y: this.groupDialog.groupData.yPosition,
 				groupIndex: courseRoomListModule.roomsData
-					.find((item) => item.groupId == this.groupDialog.groupData.groupId)
-					.groupElements.findIndex((groupItem) => groupItem.id == element.id),
+					.find((item) => item.groupId === this.groupDialog.groupData.groupId)
+					.groupElements.findIndex((groupItem) => groupItem.id === element.id),
 			};
 			this.draggedElement.item = element;
 			this.draggedElementName = "groupItem";
@@ -399,13 +357,11 @@ export default defineComponent({
 			}
 		},
 		showImportSuccess(name) {
-			this.notifierModule?.show({
-				text: this.$t("components.molecules.import.options.success", {
+			notifySuccess(
+				this.$t("components.molecules.import.options.success", {
 					name,
-				}),
-				status: "success",
-				timeout: 5000,
-			});
+				})
+			);
 		},
 		initCoursePolling(started, count = 0) {
 			const nextTimeout = count * count * 1000 + 5000;
@@ -415,12 +371,7 @@ export default defineComponent({
 					if (this.hasRoomsBeingCopied) {
 						this.initCoursePolling(started ?? new Date(), count + 1);
 					} else {
-						this.notifierModule?.show({
-							text: this.$t("components.molecules.copyResult.timeoutSuccess"),
-							status: "success",
-							autoClose: true,
-							timeout: 5000,
-						});
+						notifySuccess(this.$t("components.molecules.copyResult.timeoutSuccess"));
 					}
 				},
 				Math.min(nextTimeout, 30000)

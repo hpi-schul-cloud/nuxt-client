@@ -1,37 +1,38 @@
-import { nextTick } from "vue";
+import RoomAdminMembersTable from "./RoomAdminMembersTable.vue";
+import { useI18nGlobal } from "@/plugins/i18n";
+import { schoolsModule } from "@/store";
+import SchoolsModule from "@/store/schools";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import {
-	meResponseFactory,
+	createTestAppStoreWithUser,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
-import RoomAdminMembersTable from "./RoomAdminMembersTable.vue";
-import { authModule, schoolsModule } from "@/store";
-import { createTestingVuetify } from "@@/tests/test-utils/setup/createTestingVuetify";
 import { createTestingI18n } from "@@/tests/test-utils/setup/createTestingI18n";
-import { createTestingPinia } from "@pinia/testing";
-import { RoleName } from "@/serverApi/v3";
-import { useRoomMembersStore } from "@data-room";
+import { createTestingVuetify } from "@@/tests/test-utils/setup/createTestingVuetify";
 import setupStores from "@@/tests/test-utils/setupStores";
-import AuthModule from "@/store/auth";
-import { useBoardNotifier } from "@util-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import SchoolsModule from "@/store/schools";
+import { RoleName } from "@api-server";
+import { RoomMember, useRoomMembersStore } from "@data-room";
+import { ChangeRole } from "@feature-room";
+import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
+import { createTestingPinia } from "@pinia/testing";
 import { DataTable } from "@ui-data-table";
+import { DOMWrapper, flushPromises } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { Mock, vi } from "vitest";
+import { nextTick } from "vue";
+import { VDataTable, VIcon } from "vuetify/components";
 
-vi.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = vi.mocked(useBoardNotifier);
+vi.mock("@/plugins/i18n");
+(useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("RoomAdminMembersTable", () => {
-	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-
 	beforeEach(() => {
-		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-		boardNotifier.mockReturnValue(boardNotifierCalls);
+		setActivePinia(createTestingPinia());
 
 		setupStores({
 			schoolsModule: SchoolsModule,
-			authModule: AuthModule,
 		});
 
 		schoolsModule.setSchool(
@@ -46,28 +47,30 @@ describe("RoomAdminMembersTable", () => {
 		vi.clearAllMocks();
 	});
 
-	const setup = () => {
+	const setup = (
+		options?: Partial<{
+			members: RoomMember[];
+		}>
+	) => {
 		const currentUser = roomMemberFactory.build({});
-		const mockMe = meResponseFactory.build({
-			user: { id: currentUser.userId },
-		});
-		authModule.setMe(mockMe);
+		createTestAppStoreWithUser(currentUser.userId);
 
-		const members = [
+		const members = options?.members ?? [
 			...roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomadmin,
+				roomRoleName: RoleName.ROOMADMIN,
 			}),
 			...roomMemberFactory.buildList(2, {
 				schoolId: "different-school-id",
 				schoolName: "Different School",
 				firstName: "---",
 				lastName: "---",
-				roomRoleName: RoleName.Roomviewer,
+				roomRoleName: RoleName.ROOMVIEWER,
+				schoolRoleNames: [RoleName.STUDENT],
 			}),
 			...roomMemberFactory.buildList(1, {
 				schoolId: "different-school-id",
 				schoolName: "Different School",
-				roomRoleName: RoleName.Roomowner,
+				roomRoleName: RoleName.ROOMOWNER,
 				userId: currentUser.userId,
 			}),
 		];
@@ -91,12 +94,13 @@ describe("RoomAdminMembersTable", () => {
 		});
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
+		roomMembersStore.setAdminMode(true);
 		roomMembersStore.roomMembers = members;
 		roomMembersStore.isRoomOwner.mockReturnValue(false);
-		const roomMembersForAdmins = roomMembersStore.roomMembersForAdmins;
+		const roomMembersWithoutApplicants = roomMembersStore.roomMembersWithoutApplicants;
 		const roomMembers = roomMembersStore.roomMembers;
 
-		return { wrapper, roomMembersStore, roomMembersForAdmins, roomMembers };
+		return { wrapper, roomMembersStore, roomMembersWithoutApplicants, roomMembers };
 	};
 
 	describe("rendering", () => {
@@ -116,108 +120,234 @@ describe("RoomAdminMembersTable", () => {
 				"pages.rooms.members.tableHeader.actions",
 			];
 
-			const { wrapper, roomMembersForAdmins } = setup();
+			const { wrapper, roomMembersWithoutApplicants } = setup();
 
 			const dataTable = wrapper.getComponent(DataTable);
-			expect(dataTable.props("items")).toEqual(roomMembersForAdmins);
-			expect(
-				dataTable.props("tableHeaders")!.map((header) => header.title)
-			).toEqual(tableHeaders);
+			expect(dataTable.props("items")).toEqual(roomMembersWithoutApplicants);
+			expect(dataTable.props("tableHeaders")!.map((header) => header.title)).toEqual(tableHeaders);
+		});
+
+		describe("school role column", () => {
+			const getSchoolRoleCell = (row: DOMWrapper<Element>) => row.findAll("td")[4];
+
+			it.each([
+				{
+					description: "teacher icon for teacher",
+					schoolRoleNames: [RoleName.TEACHER],
+					expectedIcon: mdiAccountSchoolOutline,
+				},
+				{
+					description: "student icon for students",
+					schoolRoleNames: [RoleName.STUDENT],
+					expectedIcon: mdiAccountOutline,
+				},
+				{
+					description: "expert icon for external persons",
+					schoolRoleNames: [RoleName.EXTERNAL_PERSON],
+					expectedIcon: mdiAccountClockOutline,
+				},
+				{
+					description: "teacher icon if teacher and admin roles are present",
+					schoolRoleNames: [RoleName.ADMINISTRATOR, RoleName.TEACHER],
+					expectedIcon: mdiAccountSchoolOutline,
+				},
+			])("should render $description", ({ schoolRoleNames, expectedIcon }) => {
+				const { wrapper } = setup({
+					members: [
+						roomMemberFactory.build({
+							schoolRoleNames,
+						}),
+					],
+				});
+
+				const dataTable = wrapper.getComponent(VDataTable);
+				const row = dataTable.find("tbody tr");
+
+				const schoolRoleCell = getSchoolRoleCell(row);
+				expect(schoolRoleCell.findComponent(VIcon).props("icon")).toBe(expectedIcon);
+			});
+
+			it("should not render icon if no school role is present", () => {
+				const { wrapper } = setup({
+					members: [
+						roomMemberFactory.build({
+							schoolRoleNames: [],
+						}),
+					],
+				});
+
+				const dataTable = wrapper.getComponent(VDataTable);
+				const row = dataTable.find("tbody tr");
+
+				const schoolRoleCell = getSchoolRoleCell(row);
+				expect(schoolRoleCell.findComponent(VIcon).exists()).toBe(false);
+			});
 		});
 	});
 
 	describe("Anonymization", () => {
-		it("should not render kebab menu for anonymized members", async () => {
-			const { wrapper, roomMembersForAdmins } = setup();
+		it("should not render kebab menu for anonymized members", () => {
+			const { wrapper, roomMembersWithoutApplicants } = setup();
 
-			const anonymizedMembers = roomMembersForAdmins.filter(
-				(member) =>
-					member.firstName ===
-					"pages.rooms.administration.roomDetail.anonymized"
+			const anonymizedMembers = roomMembersWithoutApplicants.filter(
+				(member) => member.firstName === "pages.rooms.administration.roomDetail.anonymized"
 			);
 
 			anonymizedMembers.forEach(async (member) => {
 				await nextTick();
-				const kebabMenu = wrapper.findComponent(
-					`[data-testid="kebab-menu-${member?.userId}"]`
-				);
+				const kebabMenu = wrapper.findComponent(`[data-testid="kebab-menu-${member?.userId}"]`);
 
-				const checkBox = wrapper
-					.findComponent(`[data-testid="select-checkbox-${member?.fullName}"]`)
-					.find("input");
+				const checkBox = wrapper.findComponent(`[data-testid="select-checkbox-${member?.fullName}"]`).find("input");
 
 				expect(kebabMenu.exists()).toBe(false);
 				expect(checkBox.attributes()).toHaveProperty("disabled");
 			});
 		});
 
-		it("should not render kebab menu for the other school members but room owners", async () => {
-			const { wrapper, roomMembersForAdmins } = setup();
+		it("should render kebab menu only for users belonging to admin school", () => {
+			const { wrapper, roomMembersWithoutApplicants } = setup();
 
-			const otherSchoolMembers = roomMembersForAdmins.filter(
-				(member) => member.schoolId === "different-school-id"
-			);
-
-			otherSchoolMembers.forEach(async (member) => {
-				if (member.roomRoleName === RoleName.Roomowner) {
-					await nextTick();
-					const kebabMenu = wrapper.findComponent(
-						`[data-testid="kebab-menu-${member.userId}"]`
-					);
-
-					expect(kebabMenu.exists()).toBe(true);
-					return;
-				}
+			roomMembersWithoutApplicants.forEach(async (member) => {
 				await nextTick();
-				const kebabMenu = wrapper.findComponent(
-					`[data-testid="kebab-menu-${member.userId}"]`
-				);
+				const kebabMenu = wrapper.findComponent(`[data-testid="kebab-menu-${member.userId}"]`);
 
-				const checkBox = wrapper
-					.findComponent(`[data-testid="select-checkbox-${member?.fullName}"]`)
-					.find("input");
-
-				expect(checkBox.attributes()).toHaveProperty("disabled");
-				expect(kebabMenu.exists()).toBe(false);
+				expect(kebabMenu.exists()).toBe(member.schoolId === "school-id" ? true : false);
 			});
 		});
 
-		it("should render kebab menu for same school members", () => {
-			const { wrapper, roomMembersForAdmins } = setup();
+		it("should render kebab menu actions for same school members", () => {
+			const { wrapper, roomMembersWithoutApplicants } = setup();
 
-			const sameSchoolMembers = roomMembersForAdmins.filter(
+			const sameSchoolMembers = roomMembersWithoutApplicants.filter(
 				(member) => member.schoolName === "Paul-Gerhardt-Gymnasium"
 			);
 
 			sameSchoolMembers.forEach(async (member) => {
 				await nextTick();
 
-				const kebabMenu = wrapper.findComponent(
-					`[data-testid="kebab-menu-${member.userId}"]`
+				const removeMemberAction = wrapper.findComponent(`[data-testid="kebab-menu-${member.userId}-remove-member"]`);
+				const changePermissionAction = wrapper.findComponent(
+					`[data-testid="kebab-menu-${member.userId}-change-permission"]`
 				);
 
-				const checkBox = wrapper
-					.findComponent(`[data-testid="select-checkbox-${member?.fullName}"]`)
-					.find("input");
+				const userIsRoomOwner = member.roomRoleName === RoleName.ROOMOWNER;
 
-				expect(checkBox.attributes()).not.toHaveProperty("disabled");
-				expect(kebabMenu.exists()).toBe(true);
+				if (userIsRoomOwner) {
+					expect(removeMemberAction.exists()).toBe(false);
+					expect(changePermissionAction.exists()).toBe(false);
+				}
+				if (member.schoolId === "school-id" && !userIsRoomOwner) {
+					expect(removeMemberAction.exists()).toBe(true);
+				}
+
+				if (member.schoolId === "other-school-id") {
+					expect(removeMemberAction.exists()).toBe(false);
+					expect(changePermissionAction.exists()).toBe(false);
+				}
 			});
 		});
 	});
 
-	describe("selection", () => {
+	describe("when selecting members", () => {
 		it("should update 'selectedIds' value when a member is selected", async () => {
+			const { wrapper, roomMembersStore, roomMembers } = setup();
+
+			const dataTable = wrapper.getComponent(DataTable);
+			const checkboxes = dataTable.findAll("input[type='checkbox']");
+			checkboxes.at(3)?.trigger("click");
+			await nextTick();
+
+			const userIds = roomMembers.slice(2, 3).map((m) => m.userId);
+			expect(roomMembersStore.selectedIds).toEqual(expect.arrayContaining(userIds));
+		});
+	});
+
+	describe("when closing the dialog", () => {
+		it("should reset 'selectedIds' value", async () => {
 			const { wrapper, roomMembersStore } = setup();
 
 			const dataTable = wrapper.getComponent(DataTable);
-			const emittedIds = ["123", "456"];
-			dataTable.vm.$emit("update:selected-ids", emittedIds);
+			const checkboxes = dataTable.findAll("input[type='checkbox']");
+			checkboxes.at(3)?.trigger("click");
 			await nextTick();
 
-			expect(roomMembersStore.selectedIds).toEqual(
-				expect.arrayContaining(emittedIds)
-			);
+			const changeRoleDialog = wrapper.getComponent(ChangeRole);
+			changeRoleDialog.vm.$emit("close");
+			await nextTick();
+
+			expect(roomMembersStore.selectedIds).toEqual([]);
+			expect(roomMembersStore.fetchMembers).toHaveBeenCalled();
+		});
+	});
+
+	describe("when member actions are triggered", () => {
+		describe("when change-permission action is clicked", () => {
+			it("should open change-role dialog with selected member", async () => {
+				const member = roomMemberFactory.build({ allowedOperations: { passOwnershipTo: true } });
+				const { wrapper, roomMembersWithoutApplicants } = setup({ members: [member] });
+
+				const targetMember = roomMembersWithoutApplicants[0];
+				const menuButton = wrapper.findComponent(`[data-testid="kebab-menu-${targetMember.userId}"]`);
+				await menuButton.trigger("click");
+				await nextTick();
+
+				const changePermissionAction = wrapper.findComponent(
+					`[data-testid="kebab-menu-${targetMember.userId}-change-permission"]`
+				);
+				expect(changePermissionAction.exists()).toBe(true);
+				await changePermissionAction.trigger("click");
+				await nextTick();
+
+				const changeRoleDialog = wrapper.getComponent(ChangeRole);
+				expect(changeRoleDialog.props("modelValue")).toBe(true);
+				expect(changeRoleDialog.props("members")).toEqual([expect.objectContaining({ userId: targetMember.userId })]);
+			});
+		});
+
+		describe("when remove-member action is clicked", () => {
+			describe("when the user confirms the action", () => {
+				it("should remove member", async () => {
+					vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
+					const member = roomMemberFactory.build({ allowedOperations: { removeMember: true } });
+					const { wrapper, roomMembersWithoutApplicants, roomMembersStore } = setup({ members: [member] });
+
+					const targetMember = roomMembersWithoutApplicants[0];
+					const menuButton = wrapper.findComponent(`[data-testid="kebab-menu-${targetMember.userId}"]`);
+					await menuButton.trigger("click");
+					await nextTick();
+
+					const removeMemberAction = wrapper.findComponent(
+						`[data-testid="kebab-menu-${targetMember.userId}-remove-member"]`
+					);
+					expect(removeMemberAction.exists()).toBe(true);
+					await removeMemberAction.trigger("click");
+					await flushPromises();
+
+					expect(roomMembersStore.removeMembers).toHaveBeenCalledWith([targetMember.userId]);
+				});
+			});
+
+			describe("when the user cancels the confirmation", () => {
+				it("should not remove member", async () => {
+					vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(false);
+					const member = roomMemberFactory.build({ allowedOperations: { removeMember: true } });
+					const { wrapper, roomMembersWithoutApplicants, roomMembersStore } = setup({ members: [member] });
+
+					const targetMember = roomMembersWithoutApplicants[0];
+					const menuButton = wrapper.findComponent(`[data-testid="kebab-menu-${targetMember.userId}"]`);
+					await menuButton.trigger("click");
+					await nextTick();
+
+					const removeMemberAction = wrapper.findComponent(
+						`[data-testid="kebab-menu-${targetMember.userId}-remove-member"]`
+					);
+					expect(removeMemberAction.exists()).toBe(true);
+					await removeMemberAction.trigger("click");
+					await flushPromises();
+
+					expect(roomMembersStore.removeMembers).not.toHaveBeenCalled();
+				});
+			});
 		});
 	});
 });

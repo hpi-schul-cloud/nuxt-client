@@ -6,22 +6,14 @@
 	>
 		<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 		<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-		<KebabMenuActionDelete
-			scope-language-key="components.cardElement.collaborativeTextEditorElement"
-			@click="onDelete"
-		/>
+		<KebabMenuActionDelete @click="onDelete" />
 	</BoardMenu>
 </template>
 
 <script setup lang="ts">
-import { BoardMenuScope } from "@ui-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionMoveDown,
-	KebabMenuActionMoveUp,
-} from "@ui-kebab-menu";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 
 defineProps({
 	columnIndex: { type: Number, required: true },
@@ -37,8 +29,8 @@ const emit = defineEmits<{
 	(e: "move-up:element"): void;
 }>();
 
-const onDelete = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDelete = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.collaborativeTextEditorElement");
 	if (shouldDelete) {
 		emit("delete:element");
 	}

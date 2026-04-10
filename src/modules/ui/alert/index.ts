@@ -3,4 +3,4 @@ import InfoAlert from "./InfoAlert.vue";
 import SuccessAlert from "./SuccessAlert.vue";
 import WarningAlert from "./WarningAlert.vue";
 
-export { ErrorAlert, InfoAlert, WarningAlert, SuccessAlert };
+export { ErrorAlert, InfoAlert, SuccessAlert, WarningAlert };

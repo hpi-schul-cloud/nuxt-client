@@ -1,9 +1,5 @@
 <template>
-	<KebabMenuAction
-		:icon="mdiTrashCanOutline"
-		data-testid="kebab-menu-action-delete"
-		@click="onClick"
-	>
+	<KebabMenuAction :icon="mdiTrashCanOutline" data-testid="kebab-menu-action-delete" @click="onClick">
 		{{ t("common.actions.delete") }}
 	</KebabMenuAction>
 </template>
@@ -29,11 +25,9 @@ const props = defineProps({
 
 const emit = defineEmits(["delete-files"]);
 
-const selectedFileRecords = computed(() => {
-	return props.fileRecords.filter((fileRecord) =>
-		props.selectedIds.includes(fileRecord.id)
-	);
-});
+const selectedFileRecords = computed(() =>
+	props.fileRecords.filter((fileRecord) => props.selectedIds.includes(fileRecord.id))
+);
 
 const onClick = (): void => {
 	emit("delete-files", selectedFileRecords.value);

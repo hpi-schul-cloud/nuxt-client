@@ -1,8 +1,5 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import KebabMenuActionRoomCopy from "./KebabMenuActionRoomCopy.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("KebabMenuActionRoomCopy", () => {
 	it("should render component with correct text", async () => {

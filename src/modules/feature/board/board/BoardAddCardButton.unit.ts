@@ -1,9 +1,6 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { shallowMount } from "@vue/test-utils";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 
 describe("BoardAddCardButton Component", () => {
 	const setup = () => {

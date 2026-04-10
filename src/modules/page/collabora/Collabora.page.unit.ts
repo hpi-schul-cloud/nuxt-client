@@ -1,187 +1,368 @@
-import AuthModule from "@/store/auth";
-import NotifierModule from "@/store/notifier";
-import { EditorMode } from "@/types/file/File";
-import { AUTH_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import {
-	authorizedCollaboraDocumentUrlResponseFactory,
-	meResponseFactory,
-	ObjectIdMock,
-} from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import * as FileStorageApi from "@data-file";
-import { createMock } from "@golevelup/ts-vitest";
-import { flushPromises } from "@vue/test-utils";
 import CollaboraPage from "./Collabora.page.vue";
+import { buildPageTitle } from "@/utils/pageTitle";
+import {
+	fileElementResponseFactory,
+	fileRecordFactory,
+	mockApi,
+	mockApiResponse,
+	ObjectIdMock,
+	parentNodeInfoFactory,
+} from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ElementWithParentHierarchyResponse } from "@api-server";
+import * as serverApi from "@api-server";
+import * as FileStorageApi from "@data-file";
+import { createTestingPinia } from "@pinia/testing";
+import { flushPromises, shallowMount } from "@vue/test-utils";
+import { useTitle } from "@vueuse/core";
+import { setActivePinia } from "pinia";
+
+// Mock useTitle from @vueuse/core
+vi.mock("@vueuse/core", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@vueuse/core")>();
+	return {
+		...actual,
+		useTitle: vi.fn(),
+	};
+});
+
+vi.mock("@/utils/pageTitle", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@/utils/pageTitle")>();
+	return {
+		...actual,
+		buildPageTitle: vi.fn(),
+	};
+});
+
+const mockUseTitle = vi.mocked(useTitle);
+const mockBuildPageTitle = vi.mocked(buildPageTitle);
 
 describe("Collabora.page", () => {
-	const setup = () => {
-		const fileRecordId = ObjectIdMock();
-		const editorMode = EditorMode.EDIT;
-		const meUserResponse = meResponseFactory.build().user;
-		const authorizedCollaboraDocumentUrlResponse =
-			authorizedCollaboraDocumentUrlResponseFactory.build();
-
-		const locale = "de";
-		const authModule = createModuleMocks(AuthModule, {
-			getUser: meUserResponse,
-			getLocale: locale,
-		});
-
-		const fileStorageApiMock =
-			createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-		vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(
-			fileStorageApiMock
-		);
-		fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
-			authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl
-		);
-
-		const notifierModule = createModuleMocks(NotifierModule);
-
-		const wrapper = mount(CollaboraPage, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
-			},
-			propsData: {
-				fileRecordId,
-				editorMode,
-			},
-		});
-
-		return {
-			wrapper,
-			authorizedCollaboraDocumentUrlResponse,
-			editorMode,
-			fileStorageApiMock,
-			fileRecordId,
-			meUserResponse,
-			notifierModule,
-			locale,
-		};
-	};
-
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		vi.resetAllMocks();
+		mockUseTitle.mockClear();
+		mockBuildPageTitle.mockClear();
 	});
 
-	it("should call getAuthorizedCollaboraDocumentUrl with correct parameters", () => {
-		const { fileStorageApiMock, fileRecordId, editorMode, meUserResponse } =
-			setup();
+	describe("when file record exists in store", () => {
+		const setup = (edit?: string) => {
+			const fileStorageApiMock = mockApi<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 
-		expect(
-			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl
-		).toHaveBeenCalledWith(
-			fileRecordId,
-			editorMode,
-			`${meUserResponse.firstName} ${meUserResponse.lastName}`
-		);
-	});
+			const fileRecord = fileRecordFactory.build({ name: "test-file.xlsx" });
+			fileStorageApiMock.getFileRecordById.mockReturnValueOnce(fileRecord);
+			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
+				"https://collabora.example.com/wopi/files/123"
+			);
 
-	it("should render Collabora editor iframe", async () => {
-		const { wrapper, authorizedCollaboraDocumentUrlResponse, locale } = setup();
+			const parentNodeInfos = parentNodeInfoFactory.build({ name: "Course Board" });
+			const fileElement = fileElementResponseFactory.build();
+			const boardApi = mockApi<serverApi.BoardElementApiInterface>();
+			boardApi.elementControllerGetElementWithParentHierarchy.mockResolvedValueOnce(
+				mockApiResponse<ElementWithParentHierarchyResponse>({
+					data: {
+						element: fileElement,
+						parentHierarchy: [parentNodeInfos],
+					},
+				})
+			);
+			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValueOnce(boardApi);
 
-		await flushPromises();
+			mockBuildPageTitle.mockReturnValue("test-file.xlsx - Course Board - Instance Title");
 
-		expect(wrapper.find("iframe").exists()).toBe(true);
-		expect(wrapper.find("iframe").attributes("src")).toEqual(
-			authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl +
-				`?lang=${locale}`
-		);
-	});
-
-	describe("when iframe emits message", () => {
-		describe("when message is not a collabora message", () => {
-			describe("when MessageId is missing", () => {
-				it("should show notification", async () => {
-					const { notifierModule } = setup();
-
-					const message = `{
-					"SendTime": 1755591627240,
-					"Values": { }
-				}`;
-					const messageEvent = new MessageEvent("message", {
-						data: message,
-					});
-					window.dispatchEvent(messageEvent);
-
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						text: "pages.collabora.messageError",
-						status: "error",
-						timeout: 5000,
-					});
-				});
+			const wrapper = shallowMount(CollaboraPage, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				props: {
+					fileRecordId: fileRecord.id,
+					edit,
+				},
 			});
 
-			describe("when MessageId is not string", () => {
-				it("should show notification", async () => {
-					const { notifierModule } = setup();
+			return {
+				wrapper,
+				fileRecord,
+			};
+		};
 
-					const message = `{
-						"MessageId": 1,
-						"SendTime": 1755591627240,
-						"Values": { }
-					}`;
-					const messageEvent = new MessageEvent("message", {
-						data: message,
-					});
-					window.dispatchEvent(messageEvent);
+		it("should render CollaboraEditor component with correct props", () => {
+			const { wrapper, fileRecord } = setup("true");
 
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						text: "pages.collabora.messageError",
-						status: "error",
-						timeout: 5000,
-					});
-				});
-			});
-
-			describe("when Values is missing", () => {
-				it("should show notification", async () => {
-					const { notifierModule } = setup();
-
-					const message = `{
-						"MessageId": "Some_Other_Message",
-						"SendTime": 1755591627240
-					}`;
-					const messageEvent = new MessageEvent("message", {
-						data: message,
-					});
-					window.dispatchEvent(messageEvent);
-
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						text: "pages.collabora.messageError",
-						status: "error",
-						timeout: 5000,
-					});
-				});
-			});
+			const collaboraEditor = wrapper.findComponent({ name: "CollaboraEditor" });
+			expect(collaboraEditor.exists()).toBe(true);
+			expect(collaboraEditor.props("fileRecordId")).toBe(fileRecord.id);
+			expect(collaboraEditor.props("isEditable")).toBe(true);
 		});
 
-		describe("when message is not valid json", () => {
-			it("should show notification ", async () => {
-				const { notifierModule } = setup();
+		it("should pass isEditable as false when not editable", () => {
+			const { wrapper } = setup("false");
 
-				const modifiedMessage = `{
-					sdf
-				}`;
-				const messageEvent = new MessageEvent("message", {
-					data: modifiedMessage,
-				});
-				window.dispatchEvent(messageEvent);
+			const collaboraEditor = wrapper.findComponent({ name: "CollaboraEditor" });
+			expect(collaboraEditor.props("isEditable")).toBe(false);
+		});
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					text: "pages.collabora.jsonError",
-					status: "error",
-					timeout: 5000,
-				});
+		it("should pass isEditable as false when edit prop is undefined", () => {
+			const { wrapper } = setup(undefined);
+
+			const collaboraEditor = wrapper.findComponent({ name: "CollaboraEditor" });
+			expect(collaboraEditor.props("isEditable")).toBe(false);
+		});
+
+		it("should call useTitle with page title including file name and parent name", async () => {
+			setup("true");
+
+			await flushPromises();
+
+			expect(mockBuildPageTitle).toHaveBeenCalledWith("test-file.xlsx - Course Board");
+			expect(mockUseTitle).toHaveBeenCalledWith("test-file.xlsx - Course Board - Instance Title");
+		});
+	});
+
+	describe("when file record needs to be fetched", () => {
+		const setup = () => {
+			const fileStorageApiMock = mockApi<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
+
+			const fileRecord = fileRecordFactory.build({ name: "fetched-file.xlsx" });
+			fileStorageApiMock.getFileRecordById.mockReturnValueOnce(undefined).mockReturnValueOnce(fileRecord);
+			fileStorageApiMock.fetchFileById.mockResolvedValueOnce(undefined);
+			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
+				"https://collabora.example.com/wopi/files/123"
+			);
+
+			const parentNodeInfos = parentNodeInfoFactory.build({ name: "Course Board" });
+			const fileElement = fileElementResponseFactory.build();
+			const boardApi = mockApi<serverApi.BoardElementApiInterface>();
+			boardApi.elementControllerGetElementWithParentHierarchy.mockResolvedValueOnce(
+				mockApiResponse<ElementWithParentHierarchyResponse>({
+					data: {
+						element: fileElement,
+						parentHierarchy: [parentNodeInfos],
+					},
+				})
+			);
+			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValueOnce(boardApi);
+
+			mockBuildPageTitle.mockReturnValueOnce("fetched-file.xlsx - Course Board - Instance Title");
+
+			const wrapper = shallowMount(CollaboraPage, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				props: {
+					fileRecordId: fileRecord.id,
+					isEditable: true,
+				},
 			});
+
+			return {
+				wrapper,
+				fileStorageApiMock,
+				fileRecord,
+				parentNodeInfos,
+			};
+		};
+
+		it("should fetch file and call useTitle with correct parameters", async () => {
+			const { fileStorageApiMock, fileRecord } = setup();
+
+			await flushPromises();
+
+			expect(fileStorageApiMock.fetchFileById).toHaveBeenCalledWith(fileRecord.id);
+			expect(mockBuildPageTitle).toHaveBeenCalledWith("fetched-file.xlsx - Course Board");
+			expect(mockUseTitle).toHaveBeenCalledWith("fetched-file.xlsx - Course Board - Instance Title");
+		});
+	});
+
+	describe("when fetchFileById rejects", () => {
+		const setup = () => {
+			const fileRecordId = ObjectIdMock();
+			const fileStorageApiMock = mockApi<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
+
+			fileStorageApiMock.getFileRecordById.mockReturnValue(undefined);
+			fileStorageApiMock.fetchFileById.mockRejectedValueOnce(new Error("Fetch failed"));
+			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
+				"https://collabora.example.com/wopi/files/123"
+			);
+
+			const boardApi = mockApi<serverApi.BoardElementApiInterface>();
+			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValueOnce(boardApi);
+			boardApi.elementControllerGetElementWithParentHierarchy.mockRejectedValueOnce(new Error("Fetch parent failed"));
+
+			const expectedTitle = "Instance Title";
+			mockBuildPageTitle.mockReturnValueOnce(expectedTitle);
+
+			const wrapper = shallowMount(CollaboraPage, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				props: {
+					fileRecordId,
+					isEditable: true,
+				},
+			});
+
+			return {
+				wrapper,
+				expectedTitle,
+			};
+		};
+
+		it("should call useTitle with empty string", async () => {
+			const { expectedTitle } = setup();
+
+			await flushPromises();
+
+			expect(mockBuildPageTitle).toHaveBeenCalledWith("");
+			expect(mockUseTitle).toHaveBeenCalledWith(expectedTitle);
+		});
+	});
+
+	describe("when getElementWithParentHierarchy rejects", () => {
+		const setup = () => {
+			const fileStorageApiMock = mockApi<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValue(fileStorageApiMock);
+
+			const fileRecord = fileRecordFactory.build({ name: "standalone-file.pdf" });
+			fileStorageApiMock.getFileRecordById.mockReturnValueOnce(fileRecord);
+			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
+				"https://collabora.example.com/wopi/files/123"
+			);
+
+			const boardApi = mockApi<serverApi.BoardElementApiInterface>();
+			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValueOnce(boardApi);
+			boardApi.elementControllerGetElementWithParentHierarchy.mockRejectedValue(new Error("Fetch parent failed"));
+
+			const expectedTitle = "standalone-file.pdf - Instance Title";
+			mockBuildPageTitle.mockReturnValueOnce(expectedTitle);
+
+			const wrapper = shallowMount(CollaboraPage, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				props: {
+					fileRecordId: fileRecord.id,
+					isEditable: false,
+				},
+			});
+
+			return {
+				wrapper,
+				fileRecord,
+				expectedTitle,
+			};
+		};
+
+		it("should call useTitle with only file name", async () => {
+			const { expectedTitle } = setup();
+
+			await flushPromises();
+
+			expect(mockBuildPageTitle).toHaveBeenCalledWith("standalone-file.pdf");
+			expect(mockUseTitle).toHaveBeenCalledWith(expectedTitle);
+		});
+	});
+
+	describe("when file record has no name", () => {
+		const setup = () => {
+			const fileStorageApiMock = mockApi<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
+
+			const fileRecord = fileRecordFactory.build({ name: undefined });
+			fileStorageApiMock.getFileRecordById.mockReturnValueOnce(undefined).mockReturnValueOnce(fileRecord);
+			fileStorageApiMock.fetchFileById.mockResolvedValueOnce(undefined);
+			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
+				"https://collabora.example.com/wopi/files/123"
+			);
+
+			const parentNodeInfos = parentNodeInfoFactory.build({ name: "Task Board" });
+			const fileElement = fileElementResponseFactory.build();
+			const boardApi = mockApi<serverApi.BoardElementApiInterface>();
+			boardApi.elementControllerGetElementWithParentHierarchy.mockResolvedValue(
+				mockApiResponse<ElementWithParentHierarchyResponse>({
+					data: {
+						element: fileElement,
+						parentHierarchy: [parentNodeInfos],
+					},
+				})
+			);
+			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardApi);
+
+			const expectedTitle = "Task Board - Instance Title";
+			mockBuildPageTitle.mockReturnValueOnce(expectedTitle);
+
+			const wrapper = shallowMount(CollaboraPage, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				props: {
+					fileRecordId: fileRecord.id,
+					isEditable: true,
+				},
+			});
+
+			return {
+				wrapper,
+				parentNodeInfos,
+				expectedTitle,
+			};
+		};
+
+		it("should call useTitle with only parent name when file name is missing", async () => {
+			const { expectedTitle } = setup();
+
+			await flushPromises();
+
+			expect(mockBuildPageTitle).toHaveBeenCalledWith("Task Board");
+			expect(mockUseTitle).toHaveBeenCalledWith(expectedTitle);
+		});
+	});
+
+	describe("when both file name and parent name are missing", () => {
+		const setup = () => {
+			const fileRecordId = ObjectIdMock();
+			const fileStorageApiMock = mockApi<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
+
+			fileStorageApiMock.getFileRecordById.mockReturnValue(undefined);
+			fileStorageApiMock.fetchFileById.mockRejectedValueOnce(new Error());
+			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
+				"https://collabora.example.com/wopi/files/123"
+			);
+
+			const boardApi = mockApi<serverApi.BoardElementApiInterface>();
+			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValueOnce(boardApi);
+			boardApi.elementControllerGetElementWithParentHierarchy.mockRejectedValueOnce(new Error("Fetch parent failed"));
+
+			const instanceTitle = "Instance Title";
+			mockBuildPageTitle.mockReturnValueOnce(instanceTitle);
+
+			const wrapper = shallowMount(CollaboraPage, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				props: {
+					fileRecordId,
+					isEditable: false,
+				},
+			});
+
+			return {
+				wrapper,
+				instanceTitle,
+			};
+		};
+
+		it("should call useTitle with empty string", async () => {
+			const { instanceTitle } = setup();
+
+			await flushPromises();
+
+			expect(mockBuildPageTitle).toHaveBeenCalledWith("");
+			expect(mockUseTitle).toHaveBeenCalledWith(instanceTitle);
 		});
 	});
 });

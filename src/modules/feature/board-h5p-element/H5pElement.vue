@@ -4,35 +4,27 @@
 		ref="elementCard"
 		class="mb-4"
 		data-testid="board-hp5-element"
-		elevation="0"
 		variant="outlined"
+		:aria-label="ariaLabel"
 		:ripple="false"
-		tabindex="0"
-		role="button"
+		:role="isEditMode ? undefined : 'link'"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
-		@keyup.enter="onClickElement"
+		@keyup.enter.space="onClickElement"
 		@click="onClickElement"
 	>
-		<ContentElementBar
-			:has-grey-background="true"
-			icon="$h5pOutline"
-			:has-row-style="isSmallOrLargerListBoard"
-		>
+		<ContentElementBar :has-grey-background="true" icon="$h5pOutline" :has-row-style="isSmallOrLargerListBoard">
 			<template #display>
 				<v-img
 					v-if="hasLinkedContent"
 					:src="H5PImage"
 					:aspect-ratio="isSmallOrLargerListBoard ? 1.77777 : undefined"
 					:cover="isSmallOrLargerListBoard"
+					alt=""
 				/>
 			</template>
 			<template #title>
-				{{
-					hasLinkedContent
-						? contentTitle
-						: t("components.cardElement.h5pElement.create")
-				}}
+				{{ hasLinkedContent ? contentTitle : t("components.cardElement.h5pElement.create") }}
 			</template>
 			<template #menu>
 				<H5pElementMenu
@@ -54,19 +46,20 @@
 </template>
 
 <script setup lang="ts">
+import H5pElementMenu from "./H5pElementMenu.vue";
 import H5PImage from "@/assets/img/h5p/default_h5p_display.svg";
-import { H5PContentParentType } from "@/h5pEditorApi/v3";
-import { H5pElementResponse } from "@/serverApi/v3";
-import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { injectStrict } from "@/utils/inject";
+import { decodeHtmlEntities } from "@/utils/textFormatting";
+import { H5PContentParentType } from "@api-h5p";
+import { H5pElementResponse } from "@api-server";
 import { useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
 import { ContentElementBar } from "@ui-board";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { computed, onMounted, Ref, ref, toRef, watch } from "vue";
-import { useDisplay } from "vuetify";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import H5pElementMenu from "./H5pElementMenu.vue";
+import { useDisplay } from "vuetify";
 
 const props = defineProps<{
 	element: H5pElementResponse;
@@ -101,9 +94,7 @@ const editorWindow: Ref<Window | null> = ref(null);
 
 const isListLayout: Ref<boolean> = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 
-const isSmallOrLargerListBoard = computed(() => {
-	return smAndUp.value && isListLayout.value;
-});
+const isSmallOrLargerListBoard = computed(() => smAndUp.value && isListLayout.value);
 
 const contentTitle = ref<string>(t("components.cardElement.h5pElement"));
 
@@ -173,9 +164,17 @@ const fetchAndSetContentTitle = async (h5pElement: H5pElementResponse) => {
 	const contentId: string | null = h5pElement.content.contentId;
 	if (contentId) {
 		const title = await getContentTitle(contentId);
-		contentTitle.value = title ?? t("components.cardElement.h5pElement");
+		const decodedTitle = title ? decodeHtmlEntities(title) : t("components.cardElement.h5pElement");
+		contentTitle.value = decodedTitle;
 	}
 };
+
+const ariaLabel = computed(() => {
+	const title = hasLinkedContent.value
+		? `${t("components.cardElement.h5pElement")} ${contentTitle.value}`
+		: t("components.cardElement.h5pElement.create");
+	return `${title}, ${t("common.ariaLabel.newTab")}`;
+});
 
 onMounted(async () => {
 	await fetchAndSetContentTitle(element.value);

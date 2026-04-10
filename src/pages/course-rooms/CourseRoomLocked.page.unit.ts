@@ -1,11 +1,8 @@
-import { mount } from "@vue/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
-describe("@/pages/CourseRoomLockedPage", () => {
+describe("CourseRoomLockedPage", () => {
 	const setup = () => {
 		const wrapper = mount(CourseRoomLockedPage, {
 			global: {

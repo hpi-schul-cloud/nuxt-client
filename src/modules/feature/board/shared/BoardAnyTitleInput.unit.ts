@@ -1,11 +1,8 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
-import { VTextarea } from "vuetify/lib/components/index";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
+import { VTextarea } from "vuetify/components";
 
 vi.mock("@util-board");
 
@@ -108,9 +105,7 @@ describe("BoardAnyTitleInput", () => {
 			await wrapper.setProps({ value: newValue });
 			await nextTick();
 
-			expect(
-				(wrapper.vm as unknown as typeof BoardAnyTitleInput).modelValue
-			).toBe(newValue);
+			expect((wrapper.vm as unknown as typeof BoardAnyTitleInput).modelValue).toBe(newValue);
 		});
 	});
 
@@ -150,6 +145,7 @@ describe("BoardAnyTitleInput", () => {
 			await textFieldComponent.setValue(newTitle);
 
 			await wrapper.setProps({ isEditMode: false });
+			await wrapper.setProps({ value: newTitle }); // simulate prop update after edit mode
 			const heading = wrapper.find("h1");
 
 			expect(heading.text()).toBe(newTitle);
@@ -167,6 +163,7 @@ describe("BoardAnyTitleInput", () => {
 			await textFieldComponent.setValue("");
 
 			await wrapper.setProps({ isEditMode: false });
+			await wrapper.setProps({ value: "" }); // simulate prop update after edit mode
 			const heading = wrapper.find("h1");
 
 			expect(heading.text()).toBe(emptyValueFallback);
@@ -180,10 +177,9 @@ describe("BoardAnyTitleInput", () => {
 
 				const textAreaComponent = wrapper.findComponent(VTextarea);
 				await textAreaComponent.setValue("<abc123");
+				await flushPromises();
 
-				expect(wrapper.text()).toContain(
-					"common.validation.containsOpeningTag"
-				);
+				expect(wrapper.text()).toContain("common.validation.containsOpeningTag");
 				expect(textAreaComponent.classes()).toContain("error-message-width");
 			});
 
@@ -205,9 +201,8 @@ describe("BoardAnyTitleInput", () => {
 				const textAreaComponent = wrapper.findComponent(VTextarea);
 				await textAreaComponent.setValue("<abc123");
 
-				expect(wrapper.text()).toContain(
-					"common.validation.containsOpeningTag"
-				);
+				await flushPromises();
+				expect(wrapper.text()).toContain("common.validation.containsOpeningTag");
 				expect(textAreaComponent.classes()).toContain("error-message-width");
 			});
 
@@ -229,9 +224,8 @@ describe("BoardAnyTitleInput", () => {
 				const textAreaComponent = wrapper.findComponent(VTextarea);
 				await textAreaComponent.setValue("<abc123");
 
-				expect(wrapper.text()).toContain(
-					"common.validation.containsOpeningTag"
-				);
+				await flushPromises();
+				expect(wrapper.text()).toContain("common.validation.containsOpeningTag");
 				expect(textAreaComponent.classes()).toContain("error-message-width");
 			});
 
@@ -243,6 +237,39 @@ describe("BoardAnyTitleInput", () => {
 				const emitted = wrapper.emitted();
 
 				expect(emitted["update:value"]).toBeUndefined();
+			});
+		});
+
+		describe("applyFallbackRuleOnEmptyValue", () => {
+			describe("when title is empty", () => {
+				it("should set value to fallback", async () => {
+					const emptyValueFallback = "Fallback Title";
+					const { wrapper } = setup({
+						isEditMode: false,
+						scope: "board",
+						emptyValueFallback,
+					});
+
+					await wrapper.setProps({ value: "", isEditMode: true });
+
+					expect((wrapper.vm as unknown as typeof BoardAnyTitleInput).modelValue).toBe(emptyValueFallback);
+				});
+			});
+
+			describe("when title is non-empty", () => {
+				it("should not set value to fallback", async () => {
+					const emptyValueFallback = "Fallback Title";
+					const title = "Some Title";
+					const { wrapper } = setup({
+						isEditMode: false,
+						scope: "board",
+						emptyValueFallback,
+					});
+
+					await wrapper.setProps({ value: title, isEditMode: true });
+
+					expect((wrapper.vm as unknown as typeof BoardAnyTitleInput).modelValue).toBe(title);
+				});
 			});
 		});
 	});

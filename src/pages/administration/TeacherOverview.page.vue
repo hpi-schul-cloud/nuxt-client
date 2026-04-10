@@ -1,666 +1,414 @@
 <template>
-	<div>
-		<default-wireframe
-			:breadcrumbs="breadcrumbs"
-			max-width="full"
-			:headline="$t('pages.administration.teachers.index.title')"
-			:fab-items="fab"
-		>
-			<progress-modal
-				:active="isDeleting"
-				:percent="deletedPercent"
-				:title="$t('pages.administration.teachers.index.remove.progress.title')"
-				:description="
-					$t('pages.administration.teachers.index.remove.progress.description')
-				"
-				data-testid="progress-modal"
-			/>
-
-			<base-input
-				v-model="searchQuery"
-				type="text"
-				:placeholder="
-					$t('pages.administration.teachers.index.searchbar.placeholder')
-				"
-				class="search-section"
-				label=""
-				data-testid="searchbar"
-				@update:model-value="barSearch"
-			>
-				<template #icon>
-					<v-icon :icon="mdiMagnify" />
-				</template>
-			</base-input>
-
-			<DataFilter
-				filter-for="teacher"
-				:class-names="classNameList"
-				@update:filter="onUpdateFilter"
-			/>
-
-			<backend-data-table
-				v-model:current-page="page"
-				v-model:rows-per-page="limit"
-				v-model:selected-row-ids="tableSelection"
-				v-model:selection-type="tableSelectionType"
-				:actions="filteredActions"
-				:columns="filteredColumns"
-				:data="teachers"
-				:paginated="true"
-				:total="pagination.total"
-				:rows-selectable="true"
-				track-by="_id"
-				:sort-by="sortBy"
-				:sort-order="sortOrder"
-				data-testid="teachers_table"
-				@update:sort="onUpdateSort"
-				@update:current-page="onUpdateCurrentPage"
-				@update:rows-per-page="onUpdateRowsPerPage"
-			>
-				<template #datacolumn-classes="{ data }">
-					{{ (data || []).join(", ") }}
-				</template>
-				<template #datacolumn-createdAt="{ data }">
-					<span class="text-content">{{ printDate(data) }}</span>
-				</template>
-				<template #datacolumn-consentStatus="{ data: status }">
-					<span class="text-content">
-						<v-icon
-							v-if="status === 'ok'"
-							color="rgba(var(--v-theme-success))"
-							:icon="mdiCheck"
-						/>
-						<v-icon
-							v-else-if="status === 'missing'"
-							color="rgba(var(--v-theme-error))"
-							:icon="mdiClose"
-						/>
-					</span>
-				</template>
-				<template #datacolumn-lastLoginSystemChange="{ data }">
-					<span v-if="data" class="text-content">{{ printDate(data) }}</span>
-				</template>
-				<template #datacolumn-outdatedSince="{ data }">
-					<span v-if="data" class="text-content">{{ printDate(data) }}</span>
-				</template>
-
-				<template #datacolumn-_id="{ data, selected, highlighted }">
-					<v-btn
-						icon
-						variant="text"
-						:class="{
-							'action-button': true,
-							'row-selected': selected,
-							'row-highlighted': highlighted,
-						}"
-						:href="`/administration/teachers/${data}/edit?returnUrl=/administration/teachers`"
-						:aria-label="
-							$t('pages.administration.teachers.table.edit.ariaLabel')
-						"
-						data-testid="edit_teacher_button"
-					>
-						<v-icon size="20">{{ mdiPencilOutline }}</v-icon>
-					</v-btn>
-				</template>
-			</backend-data-table>
-			<admin-table-legend
-				:icons="icons"
-				:show-icons="showConsent"
-				:show-external-sync-hint="schoolIsExternallyManaged"
-			/>
-		</default-wireframe>
-		<base-dialog
-			v-if="isConfirmDialogActive"
-			:active="isConfirmDialogActive"
-			v-bind="confirmDialogProps"
-			@update:active="isConfirmDialogActive = false"
+	<DefaultWireframe max-width="full" :headline="t('pages.administration.teachers.index.title')" :fab-items="fab">
+		<ThrInfoBanner />
+		<ProgressModal
+			v-model="isDeleting"
+			:percent="deletedPercent"
+			:title="t('pages.administration.teachers.index.remove.progress.title')"
+			:description="t('pages.administration.teachers.index.remove.progress.description')"
+			data-testid="progress-modal"
 		/>
-	</div>
-</template>
-<script>
-import {
-	authModule,
-	envConfigModule,
-	notifierModule,
-	schoolsModule,
-} from "@/store";
-import { mapGetters } from "vuex";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
-import AdminTableLegend from "@/components/molecules/AdminTableLegend";
+		<SvsSearchField
+			:model-value="searchQuery"
+			class="mt-10 mb-2"
+			:label="t('pages.administration.teachers.index.searchbar.placeholder')"
+			data-testid="searchbar"
+			:aria-label="t('pages.administration.teachers.index.searchbar.ariaLabel')"
+			@update:model-value="onUpdateSearch"
+		/>
+		<DataFilter :filter-for="User.TEACHER" :class-names="classNameList" @update:filter="onUpdateFilter" />
+		<BackendDataTable
+			v-model:current-page="page"
+			v-model:rows-per-page="limit"
+			v-model:selected-row-ids="selectedIds"
+			v-model:selection-type="tableSelectionType"
+			:actions="filteredActions"
+			:columns="filteredColumns"
+			:data="userList"
+			:paginated="true"
+			:total="pagination.total"
+			:rows-selectable="true"
+			track-by="_id"
+			:sort-by="sortBy"
+			:sort-order="sortOrder"
+			data-testid="teachers_table"
+			@update:sort="onUpdateSort"
+			@update:current-page="onUpdateCurrentPage"
+			@update:rows-per-page="onUpdateRowsPerPage"
+		>
+			<template #datacolumn-classes="{ data }">
+				{{ (data || []).join(", ") }}
+			</template>
+			<template #datacolumn-createdAt="{ data }">
+				<span class="text-content">{{ formatUtc(data, "date") }}</span>
+			</template>
+			<template #datacolumn-consentStatus="{ data: status }">
+				<span class="text-content">
+					<VIcon v-if="status === 'ok'" color="success" :icon="mdiCheck" />
+					<VIcon v-else-if="status === 'missing'" color="error" :icon="mdiClose" />
+				</span>
+			</template>
+			<template #datacolumn-lastLoginSystemChange="{ data }">
+				<span v-if="data" class="text-content">{{ formatUtc(data, "date") }}</span>
+			</template>
+			<template #datacolumn-outdatedSince="{ data }">
+				<span v-if="data" class="text-content">{{ formatUtc(data, "date") }}</span>
+			</template>
 
-import print from "@/mixins/print";
-import UserHasPermission from "@/mixins/UserHasPermission";
-import { printDate } from "@/plugins/datetime";
-import ProgressModal from "@/components/molecules/ProgressModal";
+			<template #datacolumn-_id="{ data, selected, highlighted }">
+				<VBtn
+					icon
+					variant="text"
+					:class="{
+						'action-button': true,
+						'row-selected': selected,
+						'row-highlighted': highlighted,
+					}"
+					:href="`/administration/teachers/${data}/edit?returnUrl=/administration/teachers`"
+					:aria-label="t('pages.administration.teachers.table.edit.ariaLabel')"
+					data-testid="edit_teacher_button"
+				>
+					<VIcon size="20" :icon="mdiPencilOutline" />
+				</VBtn>
+			</template>
+		</BackendDataTable>
+		<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
+	</DefaultWireframe>
+	<DeleteUserDialog
+		v-model="isConfirmDialogOpen"
+		user-type="teacher"
+		:selected-users="selectedTeachers"
+		@confirm="onConfirmDelete"
+	/>
+</template>
+
+<script setup lang="ts">
+import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
+import BackendDataTable from "@/components/administration/BackendDataTable.vue";
+import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
+import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
+import { FilterQuery, User } from "@/components/administration/data-filter/types";
+import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
+import ProgressModal from "@/components/administration/ProgressModal.vue";
+import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
+import { schoolsModule } from "@/store";
+import { formatUtc } from "@/utils/date-time.utils";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { Permission, RoleName } from "@api-server";
+import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
+import { useClasses } from "@data-classes";
+import { useEnvConfig } from "@data-env";
+import { useUsersStore } from "@data-users";
 import {
 	mdiAccountPlus,
-	mdiAlert,
 	mdiCheck,
 	mdiClose,
 	mdiCloudDownload,
 	mdiDeleteOutline,
 	mdiEmailOutline,
-	mdiMagnify,
 	mdiPencilOutline,
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
-import { buildPageTitle } from "@/utils/pageTitle";
-import { reactive } from "vue";
-import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
+import { SvsSearchField } from "@ui-controls";
+import { DefaultWireframe } from "@ui-layout";
+import { printQrCodes } from "@util-browser";
+import { useDebounceFn, useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
+import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default {
-	components: {
-		DefaultWireframe,
-		BackendDataTable,
-		AdminTableLegend,
-		ProgressModal,
-		DataFilter,
+const { currentFilterQuery, sortBy, sortOrder, page, limit, searchQuery } = useFilterLocalStorage(User.TEACHER);
+const { fetchClasses, classNameList } = useClasses();
+
+const usersStore = useUsersStore();
+usersStore.init(RoleName.TEACHER);
+const { deletingProgress, userList, qrLinks, pagination, selectedIds } = storeToRefs(usersStore);
+const { deleteUsers, fetchUsers, sendRegistrationLink, getQrRegistrationLinks } = usersStore;
+
+const { t } = useI18n();
+
+const isConfirmDialogOpen = ref(false);
+
+const handleBulkEMail = async (rowIds: string[], selectionType: string) => {
+	await sendRegistrationLink({
+		...currentFilterQuery.value,
+		selectionType,
+		userIds: rowIds,
+	});
+};
+
+const handleBulkQR = async (rowIds: string[], selectionType: string) => {
+	await getQrRegistrationLinks({
+		userIds: rowIds,
+		selectionType,
+	});
+
+	if (qrLinks.value.length) {
+		printQrCodes(qrLinks.value, {
+			printPageTitleKey: "pages.administration.printQr.printPageTitle",
+		});
+	} else {
+		notifyInfo(t("pages.administration.printQr.emptyUser"));
+	}
+};
+
+const openDeleteDialog = () => {
+	isConfirmDialogOpen.value = true;
+};
+const tableActions = [
+	{
+		label: t("pages.administration.teachers.index.tableActions.email"),
+		icon: mdiEmailOutline,
+		action: handleBulkEMail,
+		dataTestId: "registration_link",
 	},
-	mixins: [print, UserHasPermission],
-	props: {
-		showExternalSyncHint: {
-			type: Boolean,
-		},
+	{
+		label: t("pages.administration.teachers.index.tableActions.qr"),
+		icon: mdiQrcode,
+		action: handleBulkQR,
+		dataTestId: "qr_code",
 	},
-	data() {
-		return {
-			mdiAccountPlus,
-			mdiAlert,
-			mdiCheck,
-			mdiClose,
-			mdiCloudDownload,
-			mdiDeleteOutline,
-			mdiEmailOutline,
-			mdiMagnify,
-			mdiPencilOutline,
-			mdiPlus,
-			mdiQrcode,
-			currentFilterQuery: this.getUiState(
-				"filter",
-				"pages.administration.teachers.index"
-			),
-			// test: this.$uiState,
-			page:
-				(this.getUiState("pagination", "pages.administration.teachers.index") &&
-					this.getUiState("pagination", "pages.administration.teachers.index")
-						.page) ||
-				1,
-			limit:
-				(this.getUiState("pagination", "pages.administration.teachers.index") &&
-					this.getUiState("pagination", "pages.administration.teachers.index")
-						.limit) ||
-				25,
-			sortBy:
-				(this.getUiState("sorting", "pages.administration.teachers.index") &&
-					this.getUiState("sorting", "pages.administration.teachers.index")
-						.sortBy) ||
-				"firstName",
-			sortOrder:
-				(this.getUiState("sorting", "pages.administration.teachers.index") &&
-					this.getUiState("sorting", "pages.administration.teachers.index")
-						.sortOrder) ||
-				"asc",
-			breadcrumbs: [
-				{
-					title: this.$t("pages.administration.index.title"),
-					disabled: true,
-				},
-				{
-					title: this.$t("pages.administration.teachers.index.title"),
-					disabled: true,
-				},
-			],
-
-			tableActions: [
-				{
-					label: this.$t(
-						"pages.administration.teachers.index.tableActions.email"
-					),
-					icon: mdiEmailOutline,
-					action: this.handleBulkEMail,
-					dataTestId: "registration_link",
-				},
-				{
-					label: this.$t("pages.administration.teachers.index.tableActions.qr"),
-					icon: mdiQrcode,
-					action: this.handleBulkQR,
-					dataTestId: "qr_code",
-				},
-				{
-					label: this.$t(
-						"pages.administration.teachers.index.tableActions.delete"
-					),
-					icon: mdiDeleteOutline,
-					action: this.handleBulkDelete,
-					permission: "TEACHER_DELETE",
-					dataTestId: "delete_action",
-				},
-			],
-			tableSelection: [],
-			tableSelectionType: "inclusive",
-			tableColumns: [
-				{
-					field: "firstName",
-					label: this.$t("common.labels.firstName"),
-					sortable: true,
-				},
-				{
-					field: "lastName",
-					label: this.$t("common.labels.lastName"),
-					sortable: true,
-				},
-				{
-					field: "email",
-					label: this.$t("common.labels.email"),
-					sortable: true,
-				},
-				{
-					field: "classes",
-					label: this.$t("common.labels.classes"),
-					sortable: true,
-				},
-				{
-					field: "consentStatus",
-					label: this.$t("common.labels.registration"),
-					sortable: true,
-				},
-				{
-					field: "createdAt",
-					label: this.$t("common.labels.createdAt"),
-					sortable: true,
-				},
-				{
-					field: "lastLoginSystemChange",
-					label: this.$t("common.labels.migrated"),
-					sortable: true,
-					tooltipText: this.$t("common.labels.migrated.tooltip"),
-				},
-				{
-					field: "outdatedSince",
-					label: this.$t("common.labels.outdated"),
-					sortable: true,
-					tooltipText: this.$t("common.labels.outdated.tooltip"),
-				},
-				{
-					// edit column
-					field: "_id",
-					label: "",
-				},
-			],
-			icons: [
-				{
-					icon: mdiCheck,
-					color: "rgba(var(--v-theme-success))",
-					label: this.$t("pages.administration.students.legend.icon.success"),
-				},
-				{
-					icon: mdiClose,
-					color: "rgba(var(--v-theme-error))",
-					label: this.$t("utils.adminFilter.consent.label.missing"),
-				},
-			],
-			searchQuery:
-				(this.getUiState("filter", "pages.administration.teachers.index") &&
-					this.getUiState("filter", "pages.administration.teachers.index")
-						.searchQuery) ||
-				"",
-			confirmDialogProps: {},
-			isConfirmDialogActive: false,
-			classNameList: [],
-		};
+	{
+		label: t("pages.administration.teachers.index.tableActions.delete"),
+		icon: mdiDeleteOutline,
+		action: openDeleteDialog,
+		permission: Permission.TEACHER_DELETE,
+		dataTestId: "delete_action",
 	},
-	computed: {
-		...mapGetters("users", {
-			teachers: "getList",
-			pagination: "getPagination",
-			isDeleting: "getActive",
-			deletedPercent: "getPercent",
-			qrLinks: "getQrLinks",
-		}),
-		schoolIsExternallyManaged() {
-			return schoolsModule.schoolIsExternallyManaged;
-		},
-		getFeatureUserLoginMigrationEnabled() {
-			return envConfigModule.getEnv.FEATURE_USER_LOGIN_MIGRATION_ENABLED;
-		},
-		env() {
-			return envConfigModule.getEnv;
-		},
-		tableData: {
-			get() {
-				if (this.takeOverTableData) return this.searchData;
-				return this.teachers;
-			},
-		},
-		showConsent() {
-			return this.env && this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
-		},
-		filteredActions() {
-			let editedActions = this.tableActions;
+];
 
-			// filter actions by permissions
-			editedActions = this.tableActions.filter((action) =>
-				action.permission ? this.$_userHasPermission(action.permission) : true
-			);
-
-			// filters out the QR bulk action is user is not an admin
-			if (!authModule.getUserRoles.some((name) => name === "administrator")) {
-				editedActions = editedActions.filter(
-					(action) =>
-						action.label !==
-						this.$t("pages.administration.teachers.index.tableActions.qr")
-				);
-			}
-
-			// filter the delete action if school is external
-			if (this.schoolIsExternallyManaged) {
-				editedActions = editedActions.filter(
-					(action) =>
-						action.label !==
-						this.$t("pages.administration.teachers.index.tableActions.delete")
-				);
-			}
-
-			return editedActions;
-		},
-		filteredColumns() {
-			let editedColumns = this.tableColumns;
-			// filters out edit column if school is external or if user is not an admin
-			if (
-				this.schoolIsExternallyManaged ||
-				!authModule.getUserRoles.some((name) => name === "administrator")
-			) {
-				editedColumns = this.tableColumns.filter(
-					// _id field sets the edit column
-					(col) => col.field !== "_id"
-				);
-			}
-
-			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
-			if (!this.showConsent) {
-				editedColumns = editedColumns.filter(
-					(col) => col.field !== "consentStatus"
-				);
-			}
-
-			if (!this.getFeatureUserLoginMigrationEnabled) {
-				editedColumns = editedColumns
-					.filter((col) => col.field !== "lastLoginSystemChange")
-					.filter((col) => col.field !== "outdatedSince");
-			}
-
-			return editedColumns;
-		},
-		fab() {
-			if (
-				this.schoolIsExternallyManaged ||
-				!this.$_userHasPermission("TEACHER_CREATE")
-			) {
-				return null;
-			}
-
-			return {
-				icon: mdiPlus,
-				title: this.$t("common.actions.create"),
-				dataTestId: "fab_button_teachers_table",
-				ariaLabel: this.$t("common.actions.create"),
-				actions: [
-					{
-						label: this.$t("pages.administration.teachers.fab.add"),
-						icon: mdiAccountPlus,
-						to: "/administration/teachers/new",
-						dataTestId: "fab_button_add_teachers",
-						ariaLabel: this.$t("pages.administration.teachers.fab.add"),
-					},
-					{
-						label: this.$t("pages.administration.teachers.fab.import"),
-						icon: mdiCloudDownload,
-						href: "/administration/teachers/import",
-						dataTestId: "fab_button_import_teachers",
-						ariaLabel: this.$t("pages.administration.teachers.fab.import"),
-					},
-				],
-			};
-		},
+const tableSelectionType = ref("inclusive");
+const tableColumns = [
+	{
+		field: "firstName",
+		label: t("common.labels.firstName"),
+		sortable: true,
 	},
-	watch: {
-		currentFilterQuery: function (query) {
-			const temp = this.getUiState(
-				"filter",
-				"pages.administration.teacher.index"
-			);
-
-			if (temp && temp.searchQuery) query.searchQuery = temp.searchQuery;
-
-			this.currentFilterQuery = query;
-			if (
-				JSON.stringify(query) !==
-				JSON.stringify(
-					this.getUiState("filter", "pages.administration.teachers.index")
-				)
-			) {
-				this.onUpdateCurrentPage(1);
-			}
-			this.setUiState("filter", "pages.administration.teachers.index", {
-				query,
-			});
-		},
+	{
+		field: "lastName",
+		label: t("common.labels.lastName"),
+		sortable: true,
 	},
-	created() {
-		this.find();
-		this.getClassNameList();
+	{
+		field: "email",
+		label: t("common.labels.email"),
+		sortable: true,
 	},
-	mounted() {
-		document.title = buildPageTitle(
-			this.$t("pages.administration.teachers.index.title")
+	{
+		field: "classes",
+		label: t("common.labels.classes"),
+		sortable: true,
+	},
+	{
+		field: "consentStatus",
+		label: t("common.labels.registration"),
+		sortable: true,
+	},
+	{
+		field: "createdAt",
+		label: t("common.labels.createdAt"),
+		sortable: true,
+	},
+	{
+		field: "lastLoginSystemChange",
+		label: t("common.labels.migrated"),
+		sortable: true,
+		tooltipText: t("common.labels.migrated.tooltip"),
+	},
+	{
+		field: "outdatedSince",
+		label: t("common.labels.outdated"),
+		sortable: true,
+		tooltipText: t("common.labels.outdated.tooltip"),
+	},
+	{
+		// edit column
+		field: "_id",
+		label: "",
+	},
+];
+const icons = [
+	{
+		icon: mdiCheck,
+		color: "success",
+		label: t("pages.administration.students.legend.icon.success"),
+	},
+	{
+		icon: mdiClose,
+		color: "error",
+		label: t("utils.adminFilter.consent.label.missing"),
+	},
+];
+
+const isDeleting = computed(() => deletingProgress.value.active);
+const deletedPercent = computed(() => deletingProgress.value.percent);
+const schoolIsExternallyManaged = computed(() => schoolsModule.schoolIsExternallyManaged);
+const getFeatureUserLoginMigrationEnabled = computed(() => useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED);
+
+const showConsent = computed(() => useEnvConfig().value.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN);
+
+const userPermissions = computed(() => useAppStore().userPermissions);
+const filteredActions = computed(() => {
+	let editedActions;
+
+	// filter actions by permissions
+	editedActions = tableActions.filter((action) => (action.permission ? userHasPermission(action.permission) : true));
+
+	// filters out the QR bulk action is user is not an admin
+	if (!useAppStore().userRoles.some((name) => name === RoleName.ADMINISTRATOR)) {
+		editedActions = editedActions.filter(
+			(action) => action.label !== t("pages.administration.teachers.index.tableActions.qr")
 		);
-	},
-	methods: {
-		find() {
-			const query = {
-				$limit: this.limit,
-				$skip: (this.page - 1) * this.limit,
-				$sort: {
-					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
-				},
-				...this.currentFilterQuery,
-			};
-			this.$store.dispatch("users/findTeachers", {
-				query,
-			});
-		},
-		onUpdateSort(sortBy, sortOrder) {
-			this.sortBy = sortBy;
-			this.sortOrder = sortOrder;
-			this.setUiState("sorting", "pages.administration.teachers.index", {
-				sortBy: this.sortBy,
-				sortOrder: this.sortOrder,
-			});
-			this.onUpdateCurrentPage(1); // implicitly triggers new find
-		},
-		onUpdateCurrentPage(page) {
-			this.page = page;
-			this.setUiState("pagination", "pages.administration.teachers.index", {
-				currentPage: page,
-			});
-			this.find();
-		},
-		onUpdateRowsPerPage(limit) {
-			// this.page = 1;
-			this.limit = limit;
-			// save user settings in uiState
-			this.setUiState("pagination", "pages.administration.teachers.index", {
-				itemsPerPage: limit,
-				currentPage: this.page,
-			});
-			this.find();
-		},
-		printDate,
-		getQueryForSelection(rowIds, selectionType) {
-			return {
-				...this.currentFilterQuery,
-				selectionType,
-				_ids: rowIds,
-			};
-		},
-		async handleBulkEMail(rowIds, selectionType) {
-			try {
-				// TODO wrong use of store (not so bad)
-				await this.$store.dispatch("users/sendRegistrationLink", {
-					userIds: rowIds,
-					selectionType,
-				});
-				notifierModule.show({
-					text: this.$t("pages.administration.sendMail.success", rowIds.length),
-					status: "success",
-					timeout: 5000,
-				});
-			} catch {
-				notifierModule.show({
-					text: this.$t("pages.administration.sendMail.error", rowIds.length),
-					status: "error",
-					timeout: 5000,
-				});
-			}
-		},
-		async handleBulkQR(rowIds, selectionType) {
-			try {
-				await this.$store.dispatch("users/getQrRegistrationLinks", {
-					userIds: rowIds,
-					selectionType,
-					roleName: "teacher",
-				});
-				if (this.qrLinks.length) {
-					this.$_printQRs(this.qrLinks);
-				} else {
-					notifierModule.show({
-						text: this.$t("pages.administration.printQr.emptyUser"),
-						status: "info",
-						timeout: 5000,
-					});
-				}
-			} catch {
-				notifierModule.show({
-					text: this.$t("pages.administration.printQr.error", rowIds.length),
-					status: "error",
-					timeout: 5000,
-				});
-			}
-		},
-		handleBulkDelete(rowIds, selectionType) {
-			const onConfirm = async () => {
-				try {
-					await this.$store.dispatch("users/deleteUsers", {
-						ids: rowIds,
-						userType: "teacher",
-					});
-					notifierModule.show({
-						text: this.$t("pages.administration.remove.success"),
-						status: "success",
-						timeout: 5000,
-					});
-					this.find();
-				} catch {
-					notifierModule.show({
-						text: this.$t("pages.administration.remove.error"),
-						status: "error",
-						timeout: 5000,
-					});
-				}
-			};
-			const onCancel = () => {
-				this.tableSelection = reactive([]);
-				this.tableSelectionType = "inclusive";
-			};
-			let message;
-			if (selectionType === "inclusive") {
-				message = this.$t(
-					"pages.administration.teachers.index.remove.confirm.message.some",
-					rowIds.length,
-					{ number: rowIds.length }
-				);
-			} else {
-				if (rowIds.length) {
-					message = this.$t(
-						"pages.administration.teachers.index.remove.confirm.message.many",
-						{ number: rowIds.length }
-					);
-				} else {
-					message = this.$t(
-						"pages.administration.teachers.index.remove.confirm.message.all"
-					);
-				}
-			}
-			this.dialogConfirm({
-				message,
-				confirmText: this.$t(
-					"pages.administration.teachers.index.remove.confirm.btnText"
-				),
-				cancelText: this.$t("common.actions.cancel"),
-				icon: mdiAlert,
-				iconColor: "rgba(var(--v-theme-error))",
-				onConfirm,
-				onCancel,
-			});
-		},
-		barSearch: function (searchText) {
-			if (this.timer) {
-				clearTimeout(this.timer);
-				this.timer = null;
-			}
+	}
 
-			this.timer = setTimeout(() => {
-				if (this.currentFilterQuery.searchQuery !== searchText.trim()) {
-					this.currentFilterQuery.searchQuery = searchText.trim();
+	// filter the delete action if school is external
+	if (schoolIsExternallyManaged.value) {
+		editedActions = editedActions.filter(
+			(action) => action.label !== t("pages.administration.teachers.index.tableActions.delete")
+		);
+	}
 
-					const query = this.currentFilterQuery;
+	return editedActions;
+});
 
-					this.find();
+const filteredColumns = computed(() => {
+	let editedColumns = tableColumns;
+	// filters out edit column if school is external or if user is not an admin
+	if (schoolIsExternallyManaged.value || !useAppStore().userRoles.some((name) => name === RoleName.ADMINISTRATOR)) {
+		editedColumns = tableColumns.filter(
+			// _id field sets the edit column
+			(col) => col.field !== "_id"
+		);
+	}
 
-					this.setUiState("filter", "pages.administration.teachers.index", {
-						query,
-					});
-				}
-			}, 400);
+	// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
+	if (!showConsent.value) {
+		editedColumns = editedColumns.filter((col) => col.field !== "consentStatus");
+	}
+
+	if (!getFeatureUserLoginMigrationEnabled.value) {
+		editedColumns = editedColumns
+			.filter((col) => col.field !== "lastLoginSystemChange")
+			.filter((col) => col.field !== "outdatedSince");
+	}
+
+	return editedColumns;
+});
+
+const fab = computed(() => {
+	if (schoolIsExternallyManaged.value || !userHasPermission(Permission.TEACHER_CREATE)) {
+		return;
+	}
+
+	return [
+		{
+			icon: mdiPlus,
+			label: t("pages.administration.teachers.fab.add"),
+			dataTestId: "fab_button_teachers_table",
 		},
-		setUiState(key, identifier, data) {
-			this.$store?.commit("uiState/set", {
-				key,
-				identifier,
-				object: data,
-			});
+		{
+			label: t("pages.administration.teachers.fab.add"),
+			icon: mdiAccountPlus,
+			to: "/administration/teachers/new",
+			dataTestId: "fab_button_add_teachers",
 		},
-		getUiState(key, identifier) {
-			return this.$store?.getters["uiState/get"]({ key, identifier });
+		{
+			label: t("pages.administration.teachers.fab.import"),
+			icon: mdiCloudDownload,
+			href: "/administration/teachers/import",
+			dataTestId: "fab_button_import_teachers",
 		},
-		dialogConfirm(confirmDialogProps) {
-			this.confirmDialogProps = confirmDialogProps;
-			this.isConfirmDialogActive = true;
+	];
+});
+
+const selectedTeachers = computed(() => userList.value.filter((teacher) => selectedIds.value.includes(teacher._id)));
+
+useTitle(buildPageTitle(t("pages.administration.teachers.index.title")));
+
+onMounted(() => {
+	fetchFilteredTeachers();
+	getClassNameList();
+});
+
+const userHasPermission = (permission: Permission | ((permissions?: Permission[]) => boolean)) => {
+	if (!permission) {
+		throw new Error("parameter permission is missing");
+	}
+	return typeof permission === "string"
+		? !permission || userPermissions.value.includes(permission)
+		: !permission() || permission(userPermissions.value);
+};
+
+const fetchFilteredTeachers = async () => {
+	const query = {
+		$limit: limit.value,
+		$skip: (page.value - 1) * limit.value,
+		$sort: {
+			[sortBy.value]: sortOrder.value === "asc" ? 1 : -1,
 		},
-		onUpdateFilter(query) {
-			this.currentFilterQuery = query;
-			this.find();
-		},
-		async getClassNameList() {
-			const currentYear = schoolsModule.getCurrentYear;
-			await this.$store.dispatch("classes/find", {
-				query: {
-					$limit: 1000,
-					year: currentYear?.id,
-				},
-			});
-			this.classNameList = this.$store.state["classes"].list.reduce(
-				(acc, item) =>
-					acc.concat({
-						label: item.displayName,
-						value: item.displayName,
-					}),
-				[]
-			);
-		},
-	},
+		searchQuery: searchQuery.value,
+		...currentFilterQuery.value,
+	};
+
+	await fetchUsers(query);
+};
+
+const onUpdateSort = (newSortBy: string, newSortOrder: "asc" | "desc") => {
+	sortBy.value = newSortBy;
+	sortOrder.value = newSortOrder;
+	onUpdateCurrentPage(1);
+};
+
+const onUpdateCurrentPage = (newPage: number) => {
+	page.value = newPage;
+	fetchFilteredTeachers();
+};
+
+const onUpdateRowsPerPage = (newLimit: number) => {
+	limit.value = newLimit;
+	onUpdateCurrentPage(1);
+};
+
+const onConfirmDelete = async () => {
+	try {
+		await deleteUsers(selectedIds.value);
+		notifySuccess(t("pages.administration.remove.success"));
+		fetchFilteredTeachers();
+	} catch {
+		notifyError(t("pages.administration.remove.error"));
+	} finally {
+		selectedIds.value = [];
+		tableSelectionType.value = "inclusive";
+	}
+};
+
+const debouncedFetchTeachers = useDebounceFn(fetchFilteredTeachers, 400);
+
+const onUpdateSearch = (searchText: string | null) => {
+	const newSearchQuery = searchText ?? "";
+	const shouldFetch = newSearchQuery.trim() !== searchQuery.value.trim();
+	searchQuery.value = newSearchQuery;
+	if (shouldFetch) {
+		debouncedFetchTeachers();
+	}
+};
+
+const onUpdateFilter = (query: FilterQuery) => {
+	currentFilterQuery.value = query;
+	if (JSON.stringify(query) !== JSON.stringify(currentFilterQuery.value)) {
+		onUpdateCurrentPage(1);
+	}
+	fetchFilteredTeachers();
+};
+
+const getClassNameList = async () => {
+	const currentYear = schoolsModule.getCurrentYear;
+
+	await fetchClasses({
+		$limit: 1000,
+		year: currentYear?.id || "",
+	});
 };
 </script>
 
@@ -670,7 +418,7 @@ export default {
 }
 
 span {
-	font-weight: var(--font-weight-normal);
+	font-weight: normal;
 }
 
 button:not(.is-none):focus {
@@ -679,12 +427,5 @@ button:not(.is-none):focus {
 	box-shadow:
 		0 0 0 0 rgba(var(--v-theme-white)),
 		0 0 0 3px var(--button-background);
-}
-
-.search-section {
-	max-width: 100%;
-	margin-top: 8px;
-	margin-bottom: 8px;
-	margin-left: 0;
 }
 </style>

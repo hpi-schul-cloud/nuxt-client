@@ -1,13 +1,13 @@
-import { $axios } from "@/utils/api";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	BoardExternalReferenceType,
 	ShareTokenApiFactory,
 	ShareTokenApiInterface,
 	ShareTokenBodyParams,
-	ShareTokenBodyParamsParentTypeEnum,
+	ShareTokenBodyParamsParentType,
 	ShareTokenResponse,
-} from "../serverApi/v3/api";
+} from "../generated/serverApi/v3";
+import { $axios } from "@/utils/api";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 export interface ShareOptions {
 	isSchoolInternal: boolean;
@@ -16,22 +16,22 @@ export interface ShareOptions {
 
 export interface StartFlow {
 	id: string;
-	type: ShareTokenBodyParamsParentTypeEnum;
+	type: ShareTokenBodyParamsParentType;
 	destinationType?: BoardExternalReferenceType;
 }
 
-const getSharePath = (
-	parentType: ShareTokenBodyParamsParentTypeEnum,
-	destinationType: BoardExternalReferenceType
-) => {
-	if (parentType === ShareTokenBodyParamsParentTypeEnum.ColumnBoard) {
-		if (destinationType === BoardExternalReferenceType.Room) {
+const getSharePath = (parentType: ShareTokenBodyParamsParentType, destinationType: BoardExternalReferenceType) => {
+	if (
+		parentType === ShareTokenBodyParamsParentType.COLUMN_BOARD ||
+		parentType === ShareTokenBodyParamsParentType.CARD
+	) {
+		if (destinationType === BoardExternalReferenceType.ROOM) {
 			return "rooms";
 		}
 		return "rooms/courses-overview";
 	}
 
-	if (parentType === ShareTokenBodyParamsParentTypeEnum.Room) {
+	if (parentType === ShareTokenBodyParamsParentType.ROOM) {
 		return "rooms";
 	}
 
@@ -47,18 +47,15 @@ export default class ShareModule extends VuexModule {
 	private isShareModalOpen = false;
 	private parentId = "";
 	private shareUrl: string | undefined = undefined;
-	private parentType = ShareTokenBodyParamsParentTypeEnum.Courses;
-	private destinationType: BoardExternalReferenceType =
-		BoardExternalReferenceType.Course;
+	private parentType = ShareTokenBodyParamsParentType.COURSES;
+	private destinationType: BoardExternalReferenceType = BoardExternalReferenceType.COURSE;
 
 	private get shareApi(): ShareTokenApiInterface {
 		return ShareTokenApiFactory(undefined, "v3", $axios);
 	}
 
 	@Action
-	async createShareUrl(
-		payload: ShareOptions
-	): Promise<ShareTokenResponse | undefined> {
+	async createShareUrl(payload: ShareOptions): Promise<ShareTokenResponse | undefined> {
 		const shareTokenPayload: ShareTokenBodyParams = {
 			parentType: this.parentType,
 			parentId: this.parentId,
@@ -66,14 +63,13 @@ export default class ShareModule extends VuexModule {
 			schoolExclusive: payload.isSchoolInternal,
 		};
 		try {
-			const shareTokenResult =
-				await this.shareApi.shareTokenControllerCreateShareToken(
-					shareTokenPayload
-				);
+			const shareTokenResult = await this.shareApi.shareTokenControllerCreateShareToken(shareTokenPayload);
 			if (!shareTokenResult) return undefined;
+
 			const sharePath = getSharePath(this.parentType, this.destinationType);
-			const shareUrl = `${window.location.origin}/${sharePath}?import=${shareTokenResult.data.token}`;
+			const shareUrl = `${window.location.origin}/${sharePath}?import=${shareTokenResult.data.token}&importedType=${this.parentType}`;
 			this.setShareUrl(shareUrl);
+
 			return shareTokenResult.data;
 		} catch {
 			return undefined;
@@ -103,7 +99,7 @@ export default class ShareModule extends VuexModule {
 	}
 
 	@Mutation
-	setParentType(type: ShareTokenBodyParamsParentTypeEnum): void {
+	setParentType(type: ShareTokenBodyParamsParentType): void {
 		this.parentType = type;
 	}
 
@@ -122,7 +118,7 @@ export default class ShareModule extends VuexModule {
 		this.shareUrl = url;
 	}
 
-	get getParentType(): ShareTokenBodyParamsParentTypeEnum {
+	get getParentType(): ShareTokenBodyParamsParentType {
 		return this.parentType;
 	}
 

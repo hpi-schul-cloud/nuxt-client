@@ -1,10 +1,5 @@
 <template>
-	<svg
-		height="200"
-		viewBox="0 0 1024 768"
-		xmlns="http://www.w3.org/2000/svg"
-		aria-hidden="true"
-	>
+	<svg height="200" viewBox="0 0 1024 768" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 		<g fill="none" fill-rule="evenodd">
 			<path
 				d="M828.256 646.912c-14.388-51.496-516.187-73.838-609.54-15.703-93.353 58.136 37.42 97.783 244.23 103.703 206.81 5.92 379.698-36.504 365.31-88z"

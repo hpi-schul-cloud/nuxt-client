@@ -1,5 +1,5 @@
-import { CoursesApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { CoursesApiFactory } from "@api-server";
 
 export const useCourseApi = () => {
 	const courseApi = CoursesApiFactory(undefined, "/v3", $axios);
@@ -8,10 +8,7 @@ export const useCourseApi = () => {
 		await courseApi.courseControllerStopSynchronization(courseId);
 	};
 
-	const startSynchronization = async (
-		courseId: string,
-		groupId: string
-	): Promise<void> => {
+	const startSynchronization = async (courseId: string, groupId: string): Promise<void> => {
 		await courseApi.courseControllerStartSynchronization(courseId, { groupId });
 	};
 

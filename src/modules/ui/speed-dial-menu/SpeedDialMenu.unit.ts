@@ -1,175 +1,157 @@
-import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import { mdiClose } from "@icons/material";
-import { mount, VueWrapper } from "@vue/test-utils";
-import { DefineComponent, defineComponent, nextTick } from "vue";
-import { VBtn } from "vuetify/lib/components/index";
 import SpeedDialMenu from "./SpeedDialMenu.vue";
 import SpeedDialMenuAction from "./SpeedDialMenuAction.vue";
-
-// eslint-disable-next-line vue/one-component-per-file
-const componentWithFlatSlots: DefineComponent = defineComponent({
-	components: {
-		SpeedDialMenu,
-		SpeedDialMenuAction,
-	},
-	setup() {
-		return {
-			mdiClose,
-		};
-	},
-	template: `
-  <template>
-    <SpeedDialMenu :icon="mdiClose">
-      DefaultSlotLabel
-      <template #actions>
-        <SpeedDialMenuAction :icon="mdiClose" :href="'example.com'">Action1</SpeedDialMenuAction>
-        <SpeedDialMenuAction :icon="mdiClose" :to="'example.com'">Action2</SpeedDialMenuAction>
-        <SpeedDialMenuAction :icon="mdiClose">Action3</SpeedDialMenuAction>
-      </template>
-    </SpeedDialMenu>
-    <button id="clickOutside">Test</button>
-  </template>
-  `,
-});
-
-// eslint-disable-next-line vue/one-component-per-file
-const componentWithIteratedSlots: DefineComponent = defineComponent({
-	components: {
-		SpeedDialMenu,
-		SpeedDialMenuAction,
-	},
-	setup() {
-		const actions = [
-			{ label: "Action1", icon: mdiClose, href: "example.com" },
-			{ label: "Action2", icon: mdiClose, to: "example.com" },
-			{ label: "Action3", icon: mdiClose },
-		];
-
-		return {
-			actions,
-			mdiClose,
-		};
-	},
-	template: `
-  <template>
-    <SpeedDialMenu :icon="mdiClose">
-      DefaultSlotLabel
-      <template #actions>
-        <SpeedDialMenuAction v-for="(action, index) in actions" 
-         :key="index" 
-         :icon="action.icon"
-         :href="action.href"
-        > {{ action.label }}
-        </SpeedDialMenuAction>
-      </template>
-    </SpeedDialMenu>
-    <button id="clickOutside">Test</button>
-  </template>
-  `,
-});
+import { FabAction } from "./types";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount, VueWrapper } from "@vue/test-utils";
+import { VBtn, VFab, VIcon, VSpeedDial } from "vuetify/components";
 
 describe("SpeedDialMenu", () => {
-	const setup = ({ component }: { component: DefineComponent }) => {
-		const slot = "TestSlot";
-		const wrapper = mount(component, {
+	const setup = ({ actions }: { actions: FabAction[] }) => {
+		const wrapper = mount(SpeedDialMenu, {
+			attachTo: document.body,
 			global: {
-				plugins: [createTestingVuetify()],
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: {
+				actions,
 			},
 		});
 
 		return {
 			wrapper,
-			slot,
 		};
 	};
 
-	const toggleMenu = async (wrapper: VueWrapper) => {
-		const menu = wrapper.findComponent(SpeedDialMenu);
-		const menuButton = menu.findComponent(VBtn);
-		await menuButton.trigger("click");
-		await nextTick();
+	const defineWindowWidth = (width: number) => {
+		Object.defineProperty(window, "innerWidth", {
+			writable: true,
+			configurable: true,
+			value: width,
+		});
 	};
 
-	it.each([
-		{ type: "hardcoded Slots", component: componentWithFlatSlots },
-		{ type: "iterated Slots", component: componentWithIteratedSlots },
-	])("should render with $type", async ({ component }) => {
-		const { wrapper } = setup({ component });
+	const toggleSpeedDialMenu = async (wrapper: VueWrapper) => {
+		const fab = wrapper.findComponent(VBtn);
+		await fab.trigger("click");
+	};
 
-		const result = wrapper.findComponent(SpeedDialMenu);
-		expect(result).toBeTruthy();
+	const singleAction: FabAction[] = [
+		{
+			icon: "mdi-plus",
+			label: "Add Item",
+			ariaLabel: "Add Item",
+			to: "/add-item",
+		},
+	];
+
+	const multipleActions: FabAction[] = [
+		{
+			icon: "mdi-plus",
+			label: "Add Item",
+			ariaLabel: "Add Item",
+			to: "/add-item",
+		},
+		{
+			icon: "mdi-pencil",
+			label: "Edit Item",
+			ariaLabel: "Edit Item",
+			to: "/edit-item",
+		},
+		{
+			icon: "mdi-delete",
+			label: "Delete Item",
+			ariaLabel: "Delete Item",
+			to: "/delete-item",
+		},
+		{
+			icon: "mdi-share",
+			label: "Share Item",
+			ariaLabel: "Share Item",
+			to: "/share-item",
+		},
+	];
+
+	describe("when only one action is provided", () => {
+		it("should only render a single fab", () => {
+			const { wrapper } = setup({ actions: singleAction });
+
+			const buttons = wrapper.findAllComponents(VBtn);
+
+			expect(buttons).toHaveLength(1);
+		});
 	});
 
-	it.each([
-		{ type: "hardcoded Slots", component: componentWithFlatSlots },
-		{ type: "iterated Slots", component: componentWithIteratedSlots },
-	])(
-		"should open and close menu on click with $type",
-		async ({ component }) => {
-			vi.useFakeTimers();
-			const { wrapper } = setup({ component });
+	describe("when multiple actions are provided", () => {
+		it("should render the speed dial with all action buttons", async () => {
+			const { wrapper } = setup({ actions: multipleActions });
 
-			// --- Open
-			await toggleMenu(wrapper);
+			await toggleSpeedDialMenu(wrapper);
+			const buttons = wrapper.findAllComponents(VBtn);
 
-			const actionsAfterOpen = wrapper.findAllComponents(SpeedDialMenuAction);
-			expect(actionsAfterOpen).toHaveLength(3);
+			expect(buttons).toHaveLength(7);
+		});
 
-			// --- Close
-			await toggleMenu(wrapper);
+		it("should render empty text while open", async () => {
+			const { wrapper } = setup({ actions: multipleActions });
 
-			const actionsAfterClose = wrapper.findAllComponents(SpeedDialMenuAction);
-			expect(actionsAfterClose).toHaveLength(0);
-		}
-	);
+			await toggleSpeedDialMenu(wrapper);
+			const fab = wrapper.findComponent(VFab);
 
-	it.each([
-		{ type: "hardcoded Slots", component: componentWithFlatSlots },
-		{ type: "iterated Slots", component: componentWithIteratedSlots },
-	])(
-		"should provide incremental index to actions with $type",
-		async ({ component }) => {
-			vi.useFakeTimers();
-			const { wrapper } = setup({ component });
+			expect(fab.findComponent(VIcon).exists()).toBe(true);
+			expect(fab.find("#fab-label").text()).toBe("");
+		});
 
-			// --- Open
-			await toggleMenu(wrapper);
+		it("should render a SpeedDialMenuAction component per action", async () => {
+			const { wrapper } = setup({ actions: multipleActions });
 
-			const actionsAfterOpen = wrapper.findAllComponents(SpeedDialMenuAction);
+			await toggleSpeedDialMenu(wrapper);
+			const actions = wrapper.findAllComponents(SpeedDialMenuAction);
+			expect(actions).toHaveLength(multipleActions.length - 1); // minus primary action
+		});
+	});
 
-			actionsAfterOpen.forEach((action, index) => {
-				expect(action.props("speedDialIndex")).toEqual(index);
+	describe("on large screens", () => {
+		beforeEach(() => {
+			defineWindowWidth(1300);
+		});
+
+		it("should open speed dial downwards", async () => {
+			const { wrapper } = setup({ actions: multipleActions });
+			await toggleSpeedDialMenu(wrapper);
+
+			const speedDialMenu = wrapper.findComponent(VSpeedDial);
+			expect(speedDialMenu.props("location")).toBe("bottom center");
+		});
+	});
+
+	describe("on small to medium screens", () => {
+		beforeEach(() => {
+			defineWindowWidth(800);
+		});
+
+		it("should open speed dial downwards", async () => {
+			const { wrapper } = setup({ actions: multipleActions });
+			await toggleSpeedDialMenu(wrapper);
+
+			const speedDialMenu = wrapper.findComponent(VSpeedDial);
+			expect(speedDialMenu.props("location")).toBe("top center");
+		});
+
+		describe("when not collapsed", () => {
+			it("should have pill shape", () => {
+				const { wrapper } = setup({ actions: singleAction });
+
+				const fab = wrapper.getComponent(VFab);
+				expect(fab.props("rounded")).toBe("pill");
 			});
-		}
-	);
 
-	it.each([
-		{ type: "hardcoded Slots", component: componentWithFlatSlots },
-		{ type: "iterated Slots", component: componentWithIteratedSlots },
-	])(
-		"should render labels in default slots for menu-button with $type",
-		async ({ component }) => {
-			vi.useFakeTimers();
-			const { wrapper } = setup({ component });
+			it("should only render an icon and label", () => {
+				const { wrapper } = setup({ actions: singleAction });
 
-			const menu = wrapper.findComponent(SpeedDialMenu);
-			const menuButton = menu.findComponent(VBtn);
-
-			expect(menuButton.text()).toEqual("DefaultSlotLabel");
-		}
-	);
-
-	describe("when component has no actions", () => {
-		it("should emit 'fab:clicked' after click the fab button", async () => {
-			const wrapper = mount(SpeedDialMenu, {
-				global: { plugins: [createTestingVuetify()] },
+				const fab = wrapper.getComponent(VFab);
+				expect(fab.findComponent(VIcon).exists()).toBe(true);
+				expect(fab.text()).toStrictEqual("Add Item");
 			});
-
-			wrapper.setProps({ icon: mdiClose });
-
-			const button = wrapper.findComponent({ name: "v-btn" });
-			await button.trigger("click");
-			expect(wrapper.emitted("fab:clicked")).toHaveLength(1);
 		});
 	});
 });

@@ -1,8 +1,5 @@
-import {
-	MediaSchoolLicenseListResponse,
-	SchoolLicenseApiFactory,
-} from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { MediaSchoolLicenseListResponse, SchoolLicenseApiFactory } from "@api-server";
 
 export const useSchoolLicenseApi = () => {
 	const schoolLicenseApi = SchoolLicenseApiFactory(undefined, "/v3", $axios);
@@ -11,13 +8,11 @@ export const useSchoolLicenseApi = () => {
 		await schoolLicenseApi.schoolLicenseControllerUpdateMediaSchoolLicenses();
 	};
 
-	const getMediaSchoolLicensesForSchool =
-		async (): Promise<MediaSchoolLicenseListResponse> => {
-			const response =
-				await schoolLicenseApi.schoolLicenseControllerGetMediaSchoolLicensesForSchool();
+	const getMediaSchoolLicensesForSchool = async (): Promise<MediaSchoolLicenseListResponse> => {
+		const response = await schoolLicenseApi.schoolLicenseControllerGetMediaSchoolLicensesForSchool();
 
-			return response.data;
-		};
+		return response.data;
+	};
 
 	return {
 		updateSchoolLicenses,

@@ -1,7 +1,4 @@
-export const extractDataAttribute = (
-	el: HTMLElement | null,
-	attributeName: string
-): string | undefined => {
+export const extractDataAttribute = (el: HTMLElement | null, attributeName: string): string | undefined => {
 	if (!el) {
 		return undefined;
 	}

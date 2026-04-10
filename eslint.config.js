@@ -1,12 +1,10 @@
-import js from "@eslint/js";
-import pluginVue from "eslint-plugin-vue";
-import {
-	defineConfigWithVueTs,
-	vueTsConfigs,
-	configureVueProject,
-} from "@vue/eslint-config-typescript";
 import schulcloud from "./lib/eslint-plugin-schulcloud/index.js";
+import js from "@eslint/js";
+import { configureVueProject, defineConfigWithVueTs, vueTsConfigs } from "@vue/eslint-config-typescript";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
+import unusedImports from "eslint-plugin-unused-imports";
+import pluginVue from "eslint-plugin-vue";
 import globals from "globals";
 
 configureVueProject({
@@ -27,17 +25,8 @@ export default defineConfigWithVueTs([
 	js.configs.recommended,
 	vueTsConfigs.recommended,
 	eslintPluginPrettierRecommended,
-
 	{
-		ignores: [
-			".vscode/**",
-			"node_modules/**",
-			"**/dist/**",
-			"src/serverApi/**",
-			"src/fileStorageApi/**",
-			"src/h5pEditorApi/**",
-			"src/commonCartridgeApi/**",
-		],
+		ignores: [".vscode/**", "node_modules/**", "**/dist/**", "src/generated/**"],
 	},
 	{
 		languageOptions: {
@@ -46,18 +35,27 @@ export default defineConfigWithVueTs([
 				...globals.node,
 				...globals.browser,
 				NodeJS: true,
+				EventListenerOrEventListenerObject: "readonly",
 			},
 		},
 		plugins: {
 			schulcloud,
+			"simple-import-sort": simpleImportSort,
+			"unused-imports": unusedImports,
 		},
 		rules: {
+			// "require-await": "warn", // Turn it on, on demand
+			"arrow-body-style": ["warn", "as-needed", { requireReturnForObjectLiteral: false }],
+			"simple-import-sort/imports": [
+				"warn",
+				{
+					groups: [[]],
+				},
+			],
+			"simple-import-sort/exports": "warn",
 			"@typescript-eslint/ban-ts-comment": "error",
 			"@typescript-eslint/no-empty-function": "error",
-			"@typescript-eslint/no-empty-object-type": [
-				"error",
-				{ allowInterfaces: "with-single-extends" },
-			],
+			"@typescript-eslint/no-empty-object-type": ["error", { allowInterfaces: "with-single-extends" }],
 			"@typescript-eslint/no-explicit-any": "error",
 			"@typescript-eslint/no-inferrable-types": "error",
 			"@typescript-eslint/no-require-imports": "off",
@@ -66,59 +64,68 @@ export default defineConfigWithVueTs([
 				{
 					patterns: [
 						{
-							group: [
-								"@data-*/*",
-								"@feature-*/*",
-								"@page-*/*",
-								"@ui-*/*",
-								"@util-*/*",
-							],
+							group: ["@data-*/*", "@feature-*/*", "@page-*/*", "@ui-*/*", "@util-*/*"],
 							message: "Do not deep import into a module",
 						},
 						{
 							group: ["@/modules/data/*", "*/../data/*", "../**/data/*"],
-							message:
-								"Data-Modules have to be imported using the pattern '@data-<name>'",
+							message: "Data-Modules have to be imported using the pattern '@data-<name>'",
 						},
 						{
-							group: [
-								"@/modules/feature/*",
-								"*/../feature/*",
-								"../**/feature/*",
-							],
-							message:
-								"Feature-Modules have to be imported using the pattern '@feature-<name>'",
+							group: ["@/modules/feature/*", "*/../feature/*", "../**/feature/*"],
+							message: "Feature-Modules have to be imported using the pattern '@feature-<name>'",
 						},
 						{
 							group: ["@/modules/page/*", "*/../page/*", "../**/page/*/*"],
-							message:
-								"Page-Modules have to be imported using the pattern '@page-<name>'",
+							message: "Page-Modules have to be imported using the pattern '@page-<name>'",
 						},
 						{
 							group: ["@/modules/ui/*", "*/../ui/*", "../**/ui/*/*"],
-							message:
-								"Ui-Modules have to be imported using the pattern '@ui-<name>'",
+							message: "Ui-Modules have to be imported using the pattern '@ui-<name>'",
 						},
 						{
 							group: ["@/modules/util/*", "*/../util/*", "../**/util/*/*"],
-							message:
-								"Util-Modules have to be imported using the pattern '@util-<name>'",
+							message: "Util-Modules have to be imported using the pattern '@util-<name>'",
 						},
 					],
 				},
 			],
-			"@typescript-eslint/no-unused-vars": "warn",
 			"no-console": "error",
 			"no-debugger": "warn",
 			"no-empty": "error",
 			"no-irregular-whitespace": "error",
 			"no-prototype-builtins": "error",
 			"no-undef": "warn",
-			"no-unused-vars": "off", // disable the base rule for @typescript-eslint/no-unused-vars
+			"no-unused-vars": "off",
+			eqeqeq: ["error", "smart"],
+			"@typescript-eslint/no-unused-vars": "off",
+			"unused-imports/no-unused-imports": "warn",
+			"unused-imports/no-unused-vars": [
+				"warn",
+				{
+					vars: "all",
+					args: "after-used",
+				},
+			],
 			"no-useless-escape": "error",
 			"no-var": "error",
 			"prefer-const": "error",
-			"prettier/prettier": "error",
+			"prettier/prettier": [
+				"error",
+				{
+					printWidth: 120,
+					useTabs: true,
+					trailingComma: "es5",
+					bracketSpacing: true,
+					jsxBracketSameLine: false,
+					arrowParens: "always",
+					proseWrap: "never",
+					htmlWhitespaceSensitivity: "css",
+					endOfLine: "lf",
+					semi: true,
+					singleQuote: false,
+				},
+			],
 			"schulcloud/material-icon-imports": "error",
 			"vue/html-self-closing": [
 				"error",
@@ -128,7 +135,7 @@ export default defineConfigWithVueTs([
 					},
 				},
 			],
-			"vue/multi-word-component-names": "off", // TODO - make a final decision about this rule
+			"vue/multi-word-component-names": "off",
 			"vue/no-mutating-props": "error",
 			"vue/no-setup-props-reactivity-loss": "error",
 			"vue/no-useless-template-attributes": "error",
@@ -137,12 +144,7 @@ export default defineConfigWithVueTs([
 		},
 	},
 	{
-		files: [
-			"**/*.unit.{j,t}s?(x)",
-			"tests/**",
-			"**/test-utils/**",
-			"__mocks__/**",
-		],
+		files: ["**/*.unit.{j,t}s?(x)", "tests/**", "**/test-utils/**", "__mocks__/**"],
 		languageOptions: {
 			globals: {
 				...globals.vitest,

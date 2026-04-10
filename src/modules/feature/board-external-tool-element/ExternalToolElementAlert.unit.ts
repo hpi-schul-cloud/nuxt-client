@@ -1,85 +1,72 @@
-import AuthModule from "@/store/auth";
+import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import { BusinessError } from "@/store/types/commons";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { contextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { useBoardPermissions } from "@data-board";
-import {
-	ContextExternalToolConfigurationStatus,
-	useContextExternalToolConfigurationStatus,
-} from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { contextExternalToolConfigurationStatusFactory, mockComposable } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Permission, RoleName } from "@api-server";
+import { useAppStore } from "@data-app";
+import { useBoardAllowedOperations } from "@data-board";
+import { ContextExternalToolConfigurationStatus, useContextExternalToolConfigurationStatus } from "@data-external-tool";
+import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
-import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
+import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
+import { computed } from "vue";
 
 vi.mock("@data-board");
+vi.mock("@data-app");
 
 describe("ExternalToolElementAlert", () => {
-	let useBoardPermissionsMock: DeepMocked<
-		ReturnType<typeof useBoardPermissions>
-	>;
+	let useToolConfigurationStatusMock: Mocked<ReturnType<typeof useContextExternalToolConfigurationStatus>>;
 
-	let useToolConfigurationStatusMock: DeepMocked<
-		ReturnType<typeof useContextExternalToolConfigurationStatus>
-	>;
-
-	beforeEach(() => {
-		useBoardPermissionsMock =
-			createMock<ReturnType<typeof useBoardPermissions>>();
-
-		useToolConfigurationStatusMock =
-			createMock<
-				ReturnType<typeof useContextExternalToolConfigurationStatus>
-			>();
-
-		vi.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
-	});
-
-	afterEach(() => {
-		vi.clearAllMocks();
-	});
-
-	const getWrapper = (
-		propsData: {
+	type ExternalToolElementAlertSetupOptions = {
+		allowedOperations?: Record<string, boolean>;
+		isTeacher?: boolean;
+		props?: {
 			error?: BusinessError;
 			toolStatus?: ContextExternalToolConfigurationStatus;
-		},
-		userRoles?: string[]
-	) => {
-		useToolConfigurationStatusMock.determineToolStatusTranslationKey.mockReturnValue(
-			"translated"
-		);
+			toolDisplayName?: string;
+		};
+	};
 
-		const authModule = createModuleMocks(AuthModule, {
-			getUserRoles: userRoles,
-		});
+	const setup = (options: ExternalToolElementAlertSetupOptions = {}) => {
+		const {
+			allowedOperations = { createExternalToolElement: true },
+			isTeacher = true,
+			props: overriddenProps = {},
+		} = options;
+
+		vi.mocked(useBoardAllowedOperations).mockReturnValue({
+			allowedOperations: computed(() => allowedOperations as unknown),
+		} as ReturnType<typeof useBoardAllowedOperations>);
+
+		useToolConfigurationStatusMock = mockComposable(useContextExternalToolConfigurationStatus);
+		useToolConfigurationStatusMock.determineToolStatusTranslationKey.mockReturnValue("translated");
+
+		setActivePinia(createTestingPinia());
+		const hasContextToolAdminPermission = allowedOperations.createExternalToolElement ?? false;
+		const permissions = hasContextToolAdminPermission ? [Permission.CONTEXT_TOOL_ADMIN] : [];
+		vi.mocked(useAppStore).mockReturnValue({
+			hasPermission: (permission: Permission) => permissions.includes(permission),
+			userRoles: [isTeacher ? RoleName.TEACHER : RoleName.STUDENT],
+		} as unknown as ReturnType<typeof useAppStore>);
 
 		const wrapper = mount(ExternalToolElementAlert, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-				},
 				mocks: {
-					$t: (key: string, dynamic?: object): string =>
-						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
+					$t: (key: string, dynamic?: object): string => key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
 				},
 			},
 			props: {
 				toolDisplayName: "Tool name",
 				toolStatus: contextExternalToolConfigurationStatusFactory.build(),
-				...propsData,
+				...overriddenProps,
 			},
 		});
 
 		return {
 			wrapper,
-			authModule,
 		};
 	};
 
@@ -89,410 +76,215 @@ describe("ExternalToolElementAlert", () => {
 
 	describe("when an error exists", () => {
 		describe("when the user is a teacher", () => {
-			const setup = () => {
+			it("should display a teacher friendly error message", () => {
 				const error: BusinessError = {
 					statusCode: 418,
 					message: "Loading error",
 				};
-
-				useBoardPermissionsMock.isTeacher.value = true;
-
-				const { wrapper } = getWrapper({ error });
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display a teacher friendly error message", () => {
-				const { wrapper } = setup();
-
+				const { wrapper } = setup({
+					allowedOperations: { createExternalToolElement: true },
+					props: { error },
+				});
 				const alerts = wrapper.findAllComponents(WarningAlert);
-
 				expect(alerts).toHaveLength(1);
-				expect(alerts[0].text()).toEqual(
-					"feature-board-external-tool-element.alert.error.teacher"
-				);
+				expect(alerts[0].text()).toEqual("feature-board-external-tool-element.alert.error.teacher");
 			});
 		});
 
 		describe("when the user is a student", () => {
-			const setup = () => {
+			it("should display a student friendly error message", () => {
 				const error: BusinessError = {
 					statusCode: 418,
 					message: "Loading error",
 				};
-
-				useBoardPermissionsMock.isTeacher.value = false;
-
-				const { wrapper } = getWrapper({ error });
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display a student friendly error message", () => {
-				const { wrapper } = setup();
-
+				const { wrapper } = setup({
+					allowedOperations: { createExternalToolElement: false },
+					isTeacher: false,
+					props: { error },
+				});
 				const alerts = wrapper.findAllComponents(WarningAlert);
-
 				expect(alerts).toHaveLength(1);
-				expect(alerts[0].text()).toEqual(
-					"feature-board-external-tool-element.alert.error.student"
-				);
+				expect(alerts[0].text()).toEqual("feature-board-external-tool-element.alert.error.student");
 			});
 		});
 	});
 
 	describe("when the tool is outdated on scope school", () => {
 		describe("when the user is a teacher", () => {
-			const setup = () => {
-				useBoardPermissionsMock.isTeacher.value = true;
-
-				const { wrapper } = getWrapper(
-					{
+			it("should display a teacher friendly message", () => {
+				const { wrapper } = setup({
+					allowedOperations: { createExternalToolElement: true },
+					isTeacher: true,
+					props: {
 						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
 						}),
 					},
-					["teacher"]
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display a teacher friendly message", () => {
-				const { wrapper } = setup();
+				});
 
 				const alerts = wrapper.findAllComponents(WarningAlert);
 
 				expect(alerts).toHaveLength(1);
-				expect(alerts[0].text()).toEqual(
-					'common.tool.information.outdatedOnSchool.teacher {"toolName":"Tool name"}'
-				);
+				expect(alerts[0].text()).toEqual('common.tool.information.outdatedOnSchool.teacher {"toolName":"Tool name"}');
 			});
 		});
 
 		describe("when the user is a student", () => {
-			const setup = () => {
-				useBoardPermissionsMock.isTeacher.value = false;
-
-				const { wrapper } = getWrapper(
-					{
+			it("should display a student friendly message", () => {
+				const { wrapper } = setup({
+					allowedOperations: { createExternalToolElement: false },
+					isTeacher: false,
+					props: {
 						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
 						}),
 					},
-					["student"]
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display a student friendly message", () => {
-				const { wrapper } = setup();
+				});
 
 				const alerts = wrapper.findAllComponents(WarningAlert);
 
 				expect(alerts).toHaveLength(1);
-				expect(alerts[0].text()).toEqual(
-					'common.tool.information.outdated.student {"toolName":"Tool name"}'
-				);
+				expect(alerts[0].text()).toEqual('common.tool.information.outdated.student {"toolName":"Tool name"}');
 			});
 		});
 	});
 
 	describe("when the tool is outdated on scope context", () => {
 		describe("when the user is a teacher", () => {
-			const setup = () => {
-				useBoardPermissionsMock.isTeacher.value = true;
-
-				const { wrapper } = getWrapper(
-					{
+			it("should display a teacher friendly message", () => {
+				const { wrapper } = setup({
+					allowedOperations: { createExternalToolElement: true },
+					isTeacher: true,
+					props: {
 						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeContext: true,
 						}),
 					},
-					["teacher"]
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display a teacher friendly message", () => {
-				const { wrapper } = setup();
-
+				});
 				const alerts = wrapper.findAllComponents(WarningAlert);
-
 				expect(alerts).toHaveLength(1);
-				expect(alerts[0].text()).toEqual(
-					'common.tool.information.outdated.teacher {"toolName":"Tool name"}'
-				);
+				expect(alerts[0].text()).toEqual('common.tool.information.outdated.teacher {"toolName":"Tool name"}');
 			});
 		});
 
 		describe("when the user is a student", () => {
-			const setup = () => {
-				useBoardPermissionsMock.isTeacher.value = false;
-
-				const { wrapper } = getWrapper(
-					{
-						toolStatus: contextExternalToolConfigurationStatusFactory.build({
-							isOutdatedOnScopeContext: true,
-						}),
-					},
-					["student"]
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
 			it("should display a student friendly message", () => {
-				const { wrapper } = setup();
-
-				const alerts = wrapper.findAllComponents(WarningAlert);
-
-				expect(alerts).toHaveLength(1);
-				expect(alerts[0].text()).toEqual(
-					'common.tool.information.outdated.student {"toolName":"Tool name"}'
-				);
-			});
-		});
-	});
-
-	describe("when the tool is outdated on scope school and context", () => {
-		describe("when the user is a teacher", () => {
-			const setup = () => {
-				useBoardPermissionsMock.isTeacher.value = true;
-
-				const { wrapper } = getWrapper(
-					{
+				const { wrapper } = setup({
+					allowedOperations: { createExternalToolElement: false },
+					isTeacher: false,
+					props: {
 						toolStatus: contextExternalToolConfigurationStatusFactory.build({
-							isOutdatedOnScopeSchool: true,
 							isOutdatedOnScopeContext: true,
 						}),
 					},
-					["teacher"]
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display a teacher friendly message", () => {
-				const { wrapper } = setup();
-
+				});
 				const alerts = wrapper.findAllComponents(WarningAlert);
-
 				expect(alerts).toHaveLength(1);
-				expect(alerts[0].text()).toEqual(
-					'common.tool.information.incomplete.outdated.schoolAndContext.teacher {"toolName":"Tool name"}'
-				);
+				expect(alerts[0].text()).toEqual('common.tool.information.outdated.student {"toolName":"Tool name"}');
 			});
-		});
-
-		describe("when the user is a student", () => {
-			const setup = () => {
-				useBoardPermissionsMock.isTeacher.value = false;
-
-				const { wrapper } = getWrapper(
-					{
-						toolStatus: contextExternalToolConfigurationStatusFactory.build({
-							isOutdatedOnScopeSchool: true,
-							isOutdatedOnScopeContext: true,
-						}),
-					},
-					["student"]
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display a student friendly message", () => {
-				const { wrapper } = setup();
-
-				const alerts = wrapper.findAllComponents(WarningAlert);
-
-				expect(alerts).toHaveLength(1);
-				expect(alerts[0].text()).toEqual(
-					'common.tool.information.outdated.student {"toolName":"Tool name"}'
-				);
-			});
-		});
-	});
-
-	describe("when the tool is deactivated", () => {
-		it("should display a user friendly message", () => {
-			useBoardPermissionsMock.isTeacher.value = true;
-
-			const { wrapper } = getWrapper(
-				{
-					toolStatus: contextExternalToolConfigurationStatusFactory.build({
-						isDeactivated: true,
-					}),
-				},
-				["teacher"]
-			);
-
-			const alerts = wrapper.findAllComponents(WarningAlert);
-
-			expect(alerts).toHaveLength(1);
-			expect(alerts[0].text()).toEqual(
-				'common.tool.information.deactivated.teacher {"toolName":"Tool name"}'
-			);
-		});
-	});
-
-	describe("when the tool is not licensed", () => {
-		it("should display a user friendly message", () => {
-			useBoardPermissionsMock.isTeacher.value = true;
-
-			const { wrapper } = getWrapper(
-				{
-					toolStatus: contextExternalToolConfigurationStatusFactory.build({
-						isNotLicensed: true,
-					}),
-				},
-				["teacher"]
-			);
-
-			const alerts = wrapper.findAllComponents(WarningAlert);
-
-			expect(alerts).toHaveLength(1);
-			expect(alerts[0].text()).toEqual(
-				'common.tool.information.notLicensed.teacher {"toolName":"Tool name"}'
-			);
 		});
 	});
 
 	describe("when the tool is incomplete on scope context", () => {
 		describe("when the user is a teacher", () => {
-			const setup = () => {
-				useBoardPermissionsMock.isTeacher.value = true;
-
-				const { wrapper } = getWrapper(
-					{
+			it("should display a teacher friendly message", () => {
+				const { wrapper } = setup({
+					allowedOperations: { createExternalToolElement: true },
+					isTeacher: true,
+					props: {
 						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isIncompleteOnScopeContext: true,
 						}),
 					},
-					["teacher"]
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display a teacher friendly message", () => {
-				const { wrapper } = setup();
-
+				});
 				const alerts = wrapper.findAllComponents(WarningAlert);
-
 				expect(alerts).toHaveLength(1);
-				expect(alerts[0].text()).toEqual(
-					'common.tool.information.outdated.teacher {"toolName":"Tool name"}'
-				);
+				expect(alerts[0].text()).toEqual('common.tool.information.outdated.teacher {"toolName":"Tool name"}');
 			});
 		});
 
 		describe("when the user is a student", () => {
-			const setup = () => {
-				useBoardPermissionsMock.isTeacher.value = false;
-
-				const { wrapper } = getWrapper(
-					{
+			it("should display a student friendly message", () => {
+				const { wrapper } = setup({
+					allowedOperations: { createExternalToolElement: false },
+					isTeacher: false,
+					props: {
 						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isIncompleteOnScopeContext: true,
 						}),
 					},
-					["student"]
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display a student friendly message", () => {
-				const { wrapper } = setup();
-
+				});
 				const alerts = wrapper.findAllComponents(WarningAlert);
-
 				expect(alerts).toHaveLength(1);
-				expect(alerts[0].text()).toEqual(
-					'common.tool.information.outdated.student {"toolName":"Tool name"}'
-				);
+				expect(alerts[0].text()).toEqual('common.tool.information.outdated.student {"toolName":"Tool name"}');
 			});
+		});
+	});
+
+	describe("when the user is a teacher", () => {
+		it("should display a teacher friendly message", () => {
+			const { wrapper } = setup({
+				allowedOperations: { createExternalToolElement: true },
+				isTeacher: true,
+				props: {
+					toolStatus: contextExternalToolConfigurationStatusFactory.build({
+						isOutdatedOnScopeSchool: true,
+					}),
+				},
+			});
+			const alerts = wrapper.findAllComponents(WarningAlert);
+			expect(alerts).toHaveLength(1);
+			expect(alerts[0].text()).toEqual('common.tool.information.outdatedOnSchool.teacher {"toolName":"Tool name"}');
+		});
+	});
+
+	describe("when the user is a student", () => {
+		it("should display a student friendly message", () => {
+			const { wrapper } = setup({
+				allowedOperations: { createExternalToolElement: false },
+				isTeacher: false,
+				props: {
+					toolStatus: contextExternalToolConfigurationStatusFactory.build({
+						isOutdatedOnScopeSchool: true,
+					}),
+				},
+			});
+			const alerts = wrapper.findAllComponents(WarningAlert);
+			expect(alerts).toHaveLength(1);
+			expect(alerts[0].text()).toEqual('common.tool.information.outdated.student {"toolName":"Tool name"}');
 		});
 	});
 
 	describe("when the tool is incomplete operational", () => {
 		describe("when the user is a teacher", () => {
-			const setup = () => {
-				useBoardPermissionsMock.isTeacher.value = true;
-
-				const { wrapper } = getWrapper(
-					{
+			it("should display a teacher friendly message", () => {
+				const { wrapper } = setup({
+					allowedOperations: { createExternalToolElement: true },
+					isTeacher: true,
+					props: {
 						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isIncompleteOperationalOnScopeContext: true,
 						}),
 					},
-					["teacher"]
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display a teacher friendly message", () => {
-				const { wrapper } = setup();
-
+				});
 				const alerts = wrapper.findAllComponents(InfoAlert);
-
 				expect(alerts).toHaveLength(1);
-				expect(alerts[0].text()).toEqual(
-					'common.tool.information.outdated.teacher {"toolName":"Tool name"}'
-				);
+				expect(alerts[0].text()).toEqual('common.tool.information.outdated.teacher {"toolName":"Tool name"}');
 			});
 		});
 
 		describe("when the user is a student", () => {
-			const setup = () => {
-				useBoardPermissionsMock.isTeacher.value = false;
-
-				const { wrapper } = getWrapper(
-					{
+			it("should not display a student friendly message", () => {
+				const { wrapper } = setup({
+					allowedOperations: { createExternalToolElement: false },
+					isTeacher: false,
+					props: {
 						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isIncompleteOperationalOnScopeContext: true,
 						}),
 					},
-					["student"]
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should not display a student friendly message", () => {
-				const { wrapper } = setup();
-
+				});
 				const alerts = wrapper.findAllComponents(InfoAlert);
-
 				expect(alerts).toHaveLength(0);
 			});
 		});

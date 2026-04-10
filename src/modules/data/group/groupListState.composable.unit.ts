@@ -1,22 +1,19 @@
-import { GroupListResponse } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { groupResponseFactory, mountComposable } from "@@/tests/test-utils";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { GroupListFilter, useGroupApi, useGroupListState } from "./index";
-import type { Mocked } from "vitest";
+import { expectNotification, groupResponseFactory, mockComposable, mountComposable } from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { GroupListResponse } from "@api-server";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 vi.mock("@data-group/GroupApi.composable");
 
 describe("groupListState.composable", () => {
-	let useGroupApiMock: DeepMocked<ReturnType<typeof useGroupApi>>;
-	const notifierModule: Mocked<NotifierModule> =
-		createModuleMocks(NotifierModule);
+	let useGroupApiMock: Mocked<ReturnType<typeof useGroupApi>>;
 
 	beforeEach(() => {
-		useGroupApiMock = createMock<ReturnType<typeof useGroupApi>>();
+		setActivePinia(createTestingPinia());
+		useGroupApiMock = mockComposable(useGroupApi);
 
 		vi.mocked(useGroupApi).mockReturnValue(useGroupApiMock);
 	});
@@ -29,9 +26,6 @@ describe("groupListState.composable", () => {
 		const composable = mountComposable(() => useGroupListState(), {
 			global: {
 				plugins: [createTestingI18n()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 		});
 
@@ -42,7 +36,7 @@ describe("groupListState.composable", () => {
 
 	describe("fetchGroups", () => {
 		describe("when no data is loaded", () => {
-			it("should not have data", async () => {
+			it("should not have data", () => {
 				const { composable } = getComposable();
 
 				expect(composable.groups.value).toEqual([]);
@@ -166,13 +160,9 @@ describe("groupListState.composable", () => {
 
 			it("should show notification", async () => {
 				const { composable } = setup();
-
 				await composable.fetchGroups();
 
-				expect(notifierModule.show).toHaveBeenCalledWith({
-					text: "error.load",
-					status: "error",
-				});
+				expectNotification("error");
 			});
 		});
 	});

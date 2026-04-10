@@ -1,4 +1,4 @@
-import { SchoolFeature } from "@/serverApi/v3";
+import { SchoolFeature } from "@api-server";
 
 const SCHOOL_FEATURES = Object.values(SchoolFeature);
 
@@ -15,9 +15,7 @@ export const mapSchoolFeatureObjectToArray = (f: SchoolFeatureObject) => {
 	return features;
 };
 
-export const mapFeaturesToFeaturesObject = (
-	features: SchoolFeature[]
-): SchoolFeatureObject => {
+export const mapFeaturesToFeaturesObject = (features: SchoolFeature[]): SchoolFeatureObject => {
 	const featureObject: SchoolFeatureObject = {} as SchoolFeatureObject; // Initialize featureObject
 
 	SCHOOL_FEATURES.forEach((schoolFeature) => {

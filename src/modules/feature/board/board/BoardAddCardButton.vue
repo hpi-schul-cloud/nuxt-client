@@ -1,10 +1,6 @@
 <template>
-	<div
-		ref="sticky"
-		class="d-flex justify-center button-background pb-4 pt-2 sticky"
-	>
+	<div ref="sticky" class="d-flex justify-center button-background pb-4 pt-2 sticky">
 		<VBtn
-			v-if="!isEditMode"
 			elevation="6"
 			class="bg-white"
 			icon
@@ -22,9 +18,6 @@
 
 <script setup lang="ts">
 import { mdiPlus } from "@icons/material";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
-import { computed } from "vue";
 
 defineProps({
 	dataTestid: {
@@ -35,10 +28,7 @@ defineProps({
 
 const emit = defineEmits(["add-card"]);
 
-const { editModeId } = useSharedEditMode();
 const onAddCard = () => emit("add-card");
-
-const isEditMode = computed(() => editModeId.value !== undefined);
 </script>
 
 <style scoped>
@@ -51,10 +41,6 @@ const isEditMode = computed(() => editModeId.value !== undefined);
 .button-background {
 	height: 72px; /* button height(48px) + pb-4(16px) + pt-2(8px) */
 	background: #fff;
-	background: linear-gradient(
-		0deg,
-		rgba(255, 255, 255, 1) 50%,
-		rgba(255, 255, 255, 0) 100%
-	);
+	background: linear-gradient(0deg, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
 }
 </style>

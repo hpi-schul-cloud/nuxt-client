@@ -9,13 +9,11 @@
 		@update:selected-ids="onUpdateSelectedIds"
 	>
 		<template #[`action-menu-items`]>
-			<KebabMenuActionDeleteMemberInvitation
-				@click="onDeleteLinks(selectedIds)"
-			/>
+			<KebabMenuActionDeleteMemberInvitation @click="onDeleteLinks(selectedIds)" />
 		</template>
 
 		<template #[`item.actions`]="{ item }">
-			<div class="d-flex align-center">
+			<div class="d-flex justify-end">
 				<VBtn
 					ref="shareButton"
 					variant="text"
@@ -37,17 +35,13 @@
 						})
 					"
 				>
-					<KebabMenuActionEdit
-						:data-testid="`menu-edit-button-${item.id}`"
-						@click="onEdit(item.id)"
-					/>
+					<KebabMenuActionEdit :data-testid="`menu-edit-button-${item.id}`" @click="onEdit(item.id)" />
 					<KebabMenuActionShare
 						:text="t('common.actions.share')"
 						:data-testid="`menu-share-button-${item.id}`"
 						@click="onOpenShareModal(item.id)"
 					/>
 					<KebabMenuActionDelete
-						scope-language-key="pages.rooms.invitationLinkStatus.title"
 						:name="item.title"
 						:data-testid="`menu-delete-button-${item.id}`"
 						@click="onDeleteLinks([item.id])"
@@ -59,19 +53,20 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import { DataTable } from "@ui-data-table";
+import { askConfirmation } from "@/utils/confirmation-dialog.utils";
+import { isNotNullish } from "@/utils/typeScript";
 import { InvitationStep, useRoomInvitationLinkStore } from "@data-room";
+import { mdiShareVariantOutline } from "@icons/material";
+import { DataTable } from "@ui-data-table";
 import {
 	KebabMenu,
-	KebabMenuActionShare,
-	KebabMenuActionEdit,
 	KebabMenuActionDelete,
 	KebabMenuActionDeleteMemberInvitation,
+	KebabMenuActionEdit,
+	KebabMenuActionShare,
 } from "@ui-kebab-menu";
-import { mdiShareVariantOutline } from "@icons/material";
 import { storeToRefs } from "pinia";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
@@ -95,42 +90,32 @@ const {
 	roomInvitationLinks,
 	sharedUrl,
 	selectedIds,
+	isInviteExternalPersonsFeatureEnabled,
 } = storeToRefs(roomInvitationLinkStore);
-const { askConfirmation } = useConfirmationDialog();
 
 const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;
 };
 
-const prepareRemovalMessage = (linkIds: string[]) => {
-	return linkIds.length > 1
+const prepareRemovalMessage = (linkIds: string[]) =>
+	linkIds.length > 1
 		? t("pages.rooms.members.invitationTable.multipleDelete.confirmation")
 		: t("pages.rooms.members.invitationTable.delete.confirmation", {
-				invitation: invitationTableData.value.find(
-					(link) => link.id === linkIds[0]
-				)?.title,
+				invitation: invitationTableData.value.find((link) => link.id === linkIds[0])?.title,
 			});
-};
-
-const confirmDeletion = async (linkIds: string[]) => {
-	const shouldDelete = await askConfirmation({
-		message: prepareRemovalMessage(linkIds),
-		confirmActionLangKey: "common.actions.delete",
-	});
-
-	return shouldDelete;
-};
 
 const onDeleteLinks = async (linkIds: string[]) => {
-	const shouldDelete = await confirmDeletion(linkIds);
+	const shouldDelete = await askConfirmation({
+		title: prepareRemovalMessage(linkIds),
+		confirmBtnKey: "common.actions.delete",
+	});
 	if (shouldDelete) {
 		await roomInvitationLinkStore.deleteLinks(linkIds);
 	}
 };
 
 const onEdit = async (linkId: string) => {
-	editedLink.value =
-		roomInvitationLinks.value.find((link) => link.id === linkId) || null;
+	editedLink.value = roomInvitationLinks.value.find((link) => link.id === linkId) || null;
 	invitationStep.value = InvitationStep.EDIT;
 	isInvitationDialogOpen.value = true;
 };
@@ -146,8 +131,14 @@ const tableHeaders = [
 	},
 	{
 		title: t("pages.rooms.members.tableHeader.validForStudents"),
-		key: "isValidForStudents",
+		key: "isUsableByStudents",
 	},
+	isInviteExternalPersonsFeatureEnabled.value
+		? {
+				title: t("pages.rooms.members.tableHeader.validForExternalPersons"),
+				key: "isUsableByExternalPersons",
+			}
+		: null,
 	{
 		title: t("pages.rooms.members.tableHeader.expirationDate"),
 		key: "activeUntil",
@@ -167,7 +158,7 @@ const tableHeaders = [
 		width: 100,
 		align: "center",
 	},
-];
+].filter(isNotNullish);
 
 const onOpenShareModal = (itemId: string) => {
 	invitationStep.value = InvitationStep.SHARE;

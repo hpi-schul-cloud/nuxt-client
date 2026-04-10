@@ -1,6 +1,6 @@
-import { YearsResponse } from "@/serverApi/v3";
-import { Factory } from "fishery";
 import { schoolYearResponseFactory } from "./schoolYearResponseFactory";
+import { YearsResponse } from "@api-server";
+import { Factory } from "fishery";
 
 export const yearsResponseFactory = Factory.define<YearsResponse>(() => {
 	const schoolYears = schoolYearResponseFactory.buildList(3);

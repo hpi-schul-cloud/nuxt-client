@@ -5,9 +5,10 @@
 		data-testid="drawing-element"
 		variant="outlined"
 		:ripple="false"
-		:href="sanitizedUrl"
-		target="_blank"
 		:aria-label="ariaLabel"
+		v-bind="isEditMode ? {} : { href: sanitizedUrl, target: '_blank', rel: 'noopener noreferrer' }"
+		v-on="isEditMode ? { click: redirectToSanitizedUrl } : {}"
+		@keydown.enter.space="redirectToSanitizedUrl"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
@@ -19,18 +20,9 @@
 						has-background
 						:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 					>
-						<KebabMenuActionMoveUp
-							v-if="isNotFirstElement"
-							@click="onMoveDrawingElementEditUp"
-						/>
-						<KebabMenuActionMoveDown
-							v-if="isNotLastElement"
-							@click="onMoveDrawingElementEditDown"
-						/>
-						<KebabMenuActionDelete
-							scope-language-key="components.cardElement.drawingElement"
-							@click="onDeleteElement"
-						/>
+						<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveDrawingElementEditUp" />
+						<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDrawingElementEditDown" />
+						<KebabMenuActionDelete @click="onDeleteElement" />
 					</BoardMenu>
 				</template>
 			</InnerContent>
@@ -39,20 +31,15 @@
 </template>
 
 <script setup lang="ts">
-import { DrawingElementResponse } from "@/serverApi/v3";
+import InnerContent from "./InnerContent.vue";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
+import { DrawingElementResponse } from "@api-server";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler } from "@data-board";
-import { BoardMenuScope } from "@ui-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionMoveDown,
-	KebabMenuActionMoveUp,
-} from "@ui-kebab-menu";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import InnerContent from "./InnerContent.vue";
 
 const props = defineProps({
 	element: {
@@ -66,20 +53,17 @@ const props = defineProps({
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
 });
-const emit = defineEmits([
-	"delete:element",
-	"move-down:edit",
-	"move-up:edit",
-	"move-keyboard:edit",
-]);
+const emit = defineEmits(["delete:element", "move-down:edit", "move-up:edit", "move-keyboard:edit"]);
 
 const { t } = useI18n();
 const drawingElement = ref<HTMLElement | null>(null);
 const element = toRef(props, "element");
 
-const sanitizedUrl = computed(() =>
-	sanitizeUrl(`/tldraw?parentId=${element.value.id}`)
-);
+const sanitizedUrl = computed(() => sanitizeUrl(`/tldraw?parentId=${element.value.id}`));
+
+const redirectToSanitizedUrl = () => {
+	window.open(sanitizedUrl.value, "_blank", "noopener noreferrer");
+};
 
 useBoardFocusHandler(element.value.id, drawingElement);
 
@@ -91,16 +75,12 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 };
 const onMoveDrawingElementEditDown = () => emit("move-down:edit");
 const onMoveDrawingElementEditUp = () => emit("move-up:edit");
-const onDeleteElement = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDeleteElement = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.drawingElement");
 	if (shouldDelete) {
 		emit("delete:element", props.element.id);
 	}
 };
 
-const ariaLabel = computed(() => {
-	return `${t("components.cardElement.drawingElement")}, ${t(
-		"common.ariaLabel.newTab"
-	)}`;
-});
+const ariaLabel = computed(() => `${t("components.cardElement.drawingElement")}, ${t("common.ariaLabel.newTab")}`);
 </script>

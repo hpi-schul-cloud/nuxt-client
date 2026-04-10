@@ -1,8 +1,5 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import ActionMenu from "./ActionMenu.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("ActionMenu", () => {
 	const setup = (isVisibleChangeRoleButton = false) => {
@@ -32,9 +29,7 @@ describe("ActionMenu", () => {
 
 	it("should emit 'reset:selected' event when 'Reset' button is clicked", async () => {
 		const { wrapper } = setup();
-		await wrapper
-			.findComponent({ ref: "resetSelectedMembers" })
-			.trigger("click");
+		await wrapper.findComponent({ ref: "resetSelectedMembers" }).trigger("click");
 
 		expect(wrapper.emitted()).toHaveProperty("reset:selected");
 	});

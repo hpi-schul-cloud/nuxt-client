@@ -1,4 +1,4 @@
-import RenderHTML from "./RenderHTML.vue";
 import config from "./config";
+import RenderHTML from "./RenderHTML.vue";
 
-export { RenderHTML, config as htmlConfig };
+export { config as htmlConfig, RenderHTML };

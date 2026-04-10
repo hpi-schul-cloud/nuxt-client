@@ -1,11 +1,8 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler } from "@data-board";
 import { BoardAnyTitleInput } from "@feature-board";
 import { shallowMount } from "@vue/test-utils";
-import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 
 vi.mock("@data-board/BoardFocusHandler.composable");
 

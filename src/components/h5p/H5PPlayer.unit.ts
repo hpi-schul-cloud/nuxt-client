@@ -1,10 +1,7 @@
-import { mount } from "@vue/test-utils";
 import H5PPlayer from "./H5PPlayer.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { H5PPlayerComponent } from "@lumieducation/h5p-webcomponents";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
 vi.mock(import("@lumieducation/h5p-webcomponents"), async (importOriginal) => {
@@ -18,8 +15,8 @@ vi.mock(import("@lumieducation/h5p-webcomponents"), async (importOriginal) => {
 describe("H5PPlayer", () => {
 	const contentId = "test-content-id";
 
-	const createWrapper = (props = {}) => {
-		return mount(H5PPlayer, {
+	const createWrapper = (props = {}) =>
+		mount(H5PPlayer, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -28,7 +25,6 @@ describe("H5PPlayer", () => {
 				...props,
 			},
 		});
-	};
 
 	it("renders without errors with standard props", async () => {
 		const wrapper = createWrapper();

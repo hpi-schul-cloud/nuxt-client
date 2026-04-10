@@ -1,8 +1,8 @@
 import { useSchoolExternalToolApi } from "./SchoolExternalToolApi.composable";
-import { ref, Ref } from "vue";
+import { SchoolExternalToolMetadata } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { SchoolExternalToolMetadata } from "@/store/external-tool";
+import { Ref, ref } from "vue";
 
 export const useSchoolExternalToolUsage = () => {
 	const { fetchSchoolExternalToolMetadata } = useSchoolExternalToolApi();
@@ -11,9 +11,7 @@ export const useSchoolExternalToolUsage = () => {
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
 
-	const fetchSchoolExternalToolUsage = async (
-		schoolExternalToolId: string
-	): Promise<void> => {
+	const fetchSchoolExternalToolUsage = async (schoolExternalToolId: string): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 

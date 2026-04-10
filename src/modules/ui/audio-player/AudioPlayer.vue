@@ -47,11 +47,11 @@
 </template>
 
 <script lang="ts">
+import SpeedMenu from "./SpeedMenu.vue";
 import { formatSecondsToHourMinSec } from "@/utils/fileHelper";
 import { mdiPause, mdiPlay, mdiPlaySpeed } from "@icons/material";
 import { useMediaControls } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
-import SpeedMenu from "./SpeedMenu.vue";
 
 export default defineComponent({
 	name: "AudioPlayer",
@@ -62,16 +62,13 @@ export default defineComponent({
 	emits: ["error"],
 	setup(props, { emit }) {
 		const audio = ref();
-		const source = computed(() => {
-			return props.src;
-		});
+		const source = computed(() => props.src);
 
 		const controls = useMediaControls(audio, {
 			src: source,
 		});
 
-		const { playing, currentTime, duration, volume, rate, onSourceError } =
-			controls;
+		const { playing, currentTime, duration, volume, rate, onSourceError } = controls;
 
 		onSourceError(() => {
 			emit("error");

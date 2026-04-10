@@ -1,28 +1,22 @@
-import { BoardLayout } from "@/serverApi/v3";
-import {
-	mediaAvailableLineElementResponseFactory,
-	mediaAvailableLineResponseFactory,
-} from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
-import { useDragAndDrop } from "@util-board";
-import { mount } from "@vue/test-utils";
-import { SortableEvent } from "sortablejs";
-import { Sortable } from "sortablejs-vue3";
-import { nextTick } from "vue";
-import { ComponentProps } from "vue-component-type-helpers";
 import { availableMediaLineId, ElementCreate } from "./data";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
+import { mediaAvailableLineElementResponseFactory, mediaAvailableLineResponseFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardLayout } from "@api-server";
+import { useDragAndDrop } from "@util-board";
+import { mount, VueWrapper } from "@vue/test-utils";
+import { SortableEvent } from "sortablejs";
+import { Sortable } from "sortablejs-vue3";
+import { mock } from "vitest-mock-extended";
+import { nextTick } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
 
 describe("MediaBoardAvailableLine", () => {
 	const getWrapper = (
 		props: ComponentProps<typeof MediaBoardAvailableLine> = {
 			line: mediaAvailableLineResponseFactory.build(),
-			layout: BoardLayout.List,
+			layout: BoardLayout.LIST,
 		}
 	) => {
 		const wrapper = mount(MediaBoardAvailableLine, {
@@ -79,22 +73,22 @@ describe("MediaBoardAvailableLine", () => {
 
 			const { wrapper } = getWrapper({
 				line: availableMedia,
-				layout: BoardLayout.List,
+				layout: BoardLayout.LIST,
 			});
 
 			const toLineId = "toLineId";
-			const fromLine = createMock<HTMLElement>({
+			const fromLine = mock<HTMLElement>({
 				dataset: {
 					lineId: availableMediaLineId,
 				},
 			});
-			const toLine = createMock<HTMLElement>({
+			const toLine = mock<HTMLElement>({
 				dataset: {
 					lineId: toLineId,
 				},
 			});
-			const element = createMock<HTMLElement>({
-				parentNode: createMock(),
+			const element = mock<HTMLElement>({
+				parentNode: mock(),
 			});
 
 			const sortableEvent: Partial<SortableEvent> = {
@@ -117,7 +111,7 @@ describe("MediaBoardAvailableLine", () => {
 		it("should remove the element from the line", async () => {
 			const { wrapper, sortableEvent, element } = setup();
 
-			const sortable = wrapper.findComponent(Sortable);
+			const sortable = wrapper.findComponent(Sortable) as unknown as VueWrapper<typeof Sortable>;
 
 			sortable.vm.$emit("end", sortableEvent);
 			await nextTick();
@@ -128,7 +122,7 @@ describe("MediaBoardAvailableLine", () => {
 		it("should emit the create:element event", async () => {
 			const { wrapper, sortableEvent, toLineId, availableMedium } = setup();
 
-			const sortable = wrapper.findComponent(Sortable);
+			const sortable = wrapper.findComponent(Sortable) as unknown as VueWrapper<typeof Sortable>;
 
 			sortable.vm.$emit("end", sortableEvent);
 			await nextTick();
@@ -150,9 +144,9 @@ describe("MediaBoardAvailableLine", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper();
 
-			const fromLine = createMock<HTMLElement>();
-			const toLine = createMock<HTMLElement>();
-			const element = createMock<HTMLElement>();
+			const fromLine = mock<HTMLElement>();
+			const toLine = mock<HTMLElement>();
+			const element = mock<HTMLElement>();
 			const sortableEvent: Partial<SortableEvent> = {
 				from: fromLine,
 				to: toLine,
@@ -168,7 +162,7 @@ describe("MediaBoardAvailableLine", () => {
 		it("should not emit an event", async () => {
 			const { wrapper, sortableEvent } = setup();
 
-			const sortable = wrapper.findComponent(Sortable);
+			const sortable = wrapper.findComponent(Sortable) as unknown as VueWrapper<typeof Sortable>;
 
 			sortable.vm.$emit("end", sortableEvent);
 			await nextTick();
@@ -181,7 +175,7 @@ describe("MediaBoardAvailableLine", () => {
 		it("should set the dragging state to true", async () => {
 			const { wrapper } = getWrapper();
 
-			const sortable = wrapper.findComponent(Sortable);
+			const sortable = wrapper.findComponent(Sortable) as unknown as VueWrapper<typeof Sortable>;
 
 			sortable.vm.$emit("start");
 			await nextTick();
@@ -194,9 +188,9 @@ describe("MediaBoardAvailableLine", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper();
 
-			const fromLine = createMock<HTMLElement>();
-			const toLine = createMock<HTMLElement>();
-			const element = createMock<HTMLElement>();
+			const fromLine = mock<HTMLElement>();
+			const toLine = mock<HTMLElement>();
+			const element = mock<HTMLElement>();
 			const sortableEvent: Partial<SortableEvent> = {
 				from: fromLine,
 				to: toLine,
@@ -212,7 +206,7 @@ describe("MediaBoardAvailableLine", () => {
 		it("should set the dragging state to false", async () => {
 			const { wrapper, sortableEvent } = setup();
 
-			const sortable = wrapper.findComponent(Sortable);
+			const sortable = wrapper.findComponent(Sortable) as unknown as VueWrapper<typeof Sortable>;
 
 			sortable.vm.$emit("end", sortableEvent);
 			await nextTick();
@@ -225,7 +219,7 @@ describe("MediaBoardAvailableLine", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({
 				line: mediaAvailableLineResponseFactory.build(),
-				layout: BoardLayout.Grid,
+				layout: BoardLayout.GRID,
 			});
 
 			return {
@@ -246,7 +240,7 @@ describe("MediaBoardAvailableLine", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({
 				line: mediaAvailableLineResponseFactory.build(),
-				layout: BoardLayout.List,
+				layout: BoardLayout.LIST,
 			});
 
 			return {

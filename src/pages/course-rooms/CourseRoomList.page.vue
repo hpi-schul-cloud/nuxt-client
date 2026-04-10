@@ -1,32 +1,24 @@
 <template>
-	<room-wrapper :has-rooms="hasRooms">
+	<CourseRoomWrapper :has-rooms="hasRooms">
 		<template #header>
-			<h1 class="text-h3 py-2 mb-4">
+			<h1 class="py-2">
 				{{ $t("pages.courseRooms.index.courses.all") }}
 			</h1>
 			<div class="header-actions-section mb-5">
-				<v-btn
-					variant="outlined"
-					size="small"
-					to="/rooms/courses-overview"
-					data-testid="go-to-active-courses"
-				>
+				<v-btn variant="outlined" size="small" to="/rooms/courses-overview" data-testid="go-to-active-courses">
 					{{ $t("pages.courseRooms.index.courses.active") }}
 				</v-btn>
 			</div>
 		</template>
 		<template #page-content>
 			<v-row class="d-flex justify-center search">
-				<v-text-field
+				<SvsSearchField
 					ref="search"
 					v-model="searchText"
+					density="default"
 					class="px-1"
-					variant="solo"
-					rounded
-					single-line
 					:label="$t('pages.courseRooms.index.search.label')"
-					:append-inner-icon="mdiMagnify"
-					:aria-label="$t('pages.courseRooms.index.search.label')"
+					:clearable="false"
 					data-testid="search-field-course"
 				/>
 			</v-row>
@@ -43,48 +35,39 @@
 							md="3"
 							sm="3"
 						>
-							<vRoomAvatar
-								:ref="`${room.id}-avatar`"
-								class="room-avatar"
-								:item="room"
-								size="5em"
-							/>
+							<CourseRoomAvatar :ref="`${room.id}-avatar`" class="room-avatar" :item="room" size="5em" />
 						</v-col>
 					</v-row>
 				</v-container>
 			</v-row>
 		</template>
-	</room-wrapper>
+	</CourseRoomWrapper>
 </template>
 
 <script lang="ts">
-import RoomWrapper from "@/components/templates/RoomWrapper.vue";
-import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
+import CourseRoomAvatar from "@/components/course-rooms/CourseRoomAvatar.vue";
+import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
 import { courseRoomListModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
-import { mdiMagnify } from "@icons/material";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { SvsSearchField } from "@ui-controls";
 import { defineComponent } from "vue";
 
 export default defineComponent({
 	components: {
-		RoomWrapper,
-		vRoomAvatar,
+		CourseRoomWrapper,
+		CourseRoomAvatar,
+		SvsSearchField,
 	},
 	data() {
 		return {
 			searchText: "",
-			mdiMagnify,
 		};
 	},
 	computed: {
 		rooms(): Array<ListItemsObject> {
-			return JSON.parse(
-				JSON.stringify(courseRoomListModule.getAllElements)
-			).filter((room: ListItemsObject) =>
-				room.searchText
-					?.toLowerCase()
-					.includes(this.$data.searchText.toLowerCase())
+			return JSON.parse(JSON.stringify(courseRoomListModule.getAllElements)).filter((room: ListItemsObject) =>
+				room.searchText?.toLowerCase().includes(this.$data.searchText.toLowerCase())
 			);
 		},
 		hasRooms(): boolean {
@@ -92,9 +75,7 @@ export default defineComponent({
 		},
 	},
 	async mounted() {
-		document.title = buildPageTitle(
-			this.$t("pages.courseRooms.index.courses.all").toString()
-		);
+		document.title = buildPageTitle(this.$t("pages.courseRooms.index.courses.all").toString());
 		await courseRoomListModule.fetchAllElements();
 	},
 });

@@ -1,5 +1,4 @@
 import { polyfill } from "mobile-drag-drop";
-
 // optional import of scroll behaviour
 import { scrollBehaviourDragImageTranslateOverride } from "mobile-drag-drop/scroll-behaviour";
 

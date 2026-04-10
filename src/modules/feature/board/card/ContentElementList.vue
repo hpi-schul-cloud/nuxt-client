@@ -1,9 +1,7 @@
 <template>
 	<VCardText class="mb-n4">
 		<template v-for="(element, index) in elements" :key="element.id">
-			<div
-				:data-testid="`board-contentelement-${columnIndex}-${rowIndex}-${index}`"
-			>
+			<div :data-testid="`board-contentelement-${columnIndex}-${rowIndex}-${index}`">
 				<component
 					:is="mapToComponent(element.type)"
 					:id="element.id"
@@ -27,10 +25,10 @@
 </template>
 
 <script setup lang="ts">
-import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { ContentElementType } from "@api-server";
+import { useEnvConfig } from "@data-env";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
 import { DeletedElement } from "@feature-board-deleted-element";
 import { DrawingContentElement } from "@feature-board-drawing-element";
@@ -39,7 +37,6 @@ import { FileContentElement } from "@feature-board-file-element";
 import { FolderContentElement } from "@feature-board-folder-element";
 import { H5pElement } from "@feature-board-h5p-element";
 import { LinkContentElement } from "@feature-board-link-element";
-import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import { PropType } from "vue";
@@ -74,16 +71,11 @@ const emit = defineEmits<{
 	(e: "move-keyboard:element", elementMove: ElementMove, code: string): void;
 }>();
 
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-
 const onDeleteElement = (elementId: string) => {
 	emit("delete:element", elementId);
 };
 
-const onMoveElementDown = (
-	elementIndex: number,
-	element: AnyContentElement
-) => {
+const onMoveElementDown = (elementIndex: number, element: AnyContentElement) => {
 	const elementMove: ElementMove = {
 		elementIndex,
 		payload: element.id,
@@ -99,11 +91,7 @@ const onMoveElementUp = (elementIndex: number, element: AnyContentElement) => {
 	emit("move-up:element", elementMove);
 };
 
-const onMoveElementKeyboard = (
-	elementIndex: number,
-	element: AnyContentElement,
-	event: KeyboardEvent
-) => {
+const onMoveElementKeyboard = (elementIndex: number, element: AnyContentElement, event: KeyboardEvent) => {
 	const elementMove: ElementMove = {
 		elementIndex,
 		payload: element.id,
@@ -112,53 +100,47 @@ const onMoveElementKeyboard = (
 };
 
 const mapToComponent = (type: ContentElementType) => {
+	const envConfig = useEnvConfig();
+
 	switch (type) {
-		case ContentElementType.CollaborativeTextEditor:
-			if (
-				envConfigModule.getEnv
-					.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED
-			) {
+		case ContentElementType.COLLABORATIVE_TEXT_EDITOR:
+			if (envConfig.value.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED) {
 				return CollaborativeTextEditorElement;
 			}
 			break;
-		case ContentElementType.Drawing:
-			if (envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
+		case ContentElementType.DRAWING:
+			if (envConfig.value.FEATURE_TLDRAW_ENABLED) {
 				return DrawingContentElement;
 			}
 			break;
-		case ContentElementType.ExternalTool:
-			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
+		case ContentElementType.EXTERNAL_TOOL:
+			if (envConfig.value.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
 				return ExternalToolElement;
 			}
 			break;
-		case ContentElementType.File:
+		case ContentElementType.FILE:
 			return FileContentElement;
-		case ContentElementType.Link:
-			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
+		case ContentElementType.LINK:
+			if (envConfig.value.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
 				return LinkContentElement;
 			}
 			break;
-		case ContentElementType.RichText:
+		case ContentElementType.RICH_TEXT:
 			return RichTextContentElement;
-		case ContentElementType.SubmissionContainer:
-			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
-				return SubmissionContentElement;
-			}
-			break;
-		case ContentElementType.VideoConference:
-			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED) {
+		case ContentElementType.VIDEO_CONFERENCE:
+			if (envConfig.value.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED) {
 				return VideoConferenceContentElement;
 			}
 			break;
-		case ContentElementType.Deleted:
+		case ContentElementType.DELETED:
 			return DeletedElement;
-		case ContentElementType.FileFolder:
-			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED) {
+		case ContentElementType.FILE_FOLDER:
+			if (envConfig.value.FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED) {
 				return FolderContentElement;
 			}
 			break;
-		case ContentElementType.H5p:
-			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_H5P_ENABLED) {
+		case ContentElementType.H5P:
+			if (envConfig.value.FEATURE_COLUMN_BOARD_H5P_ENABLED) {
 				return H5pElement;
 			}
 			break;
@@ -168,23 +150,20 @@ const mapToComponent = (type: ContentElementType) => {
 };
 
 const elementTypesWithTabindexZero = [
-	ContentElementType.CollaborativeTextEditor,
-	ContentElementType.Drawing,
-	ContentElementType.ExternalTool,
-	ContentElementType.File,
-	ContentElementType.Link,
-	ContentElementType.H5p,
+	ContentElementType.COLLABORATIVE_TEXT_EDITOR,
+	ContentElementType.DRAWING,
+	ContentElementType.EXTERNAL_TOOL,
+	ContentElementType.FILE,
+	ContentElementType.LINK,
+	ContentElementType.H5P,
 ];
 
 const getTabIndex = (element: AnyContentElement) => {
-	const tabindex = elementTypesWithTabindexZero.includes(element.type)
-		? 0
-		: undefined;
+	const tabindex = elementTypesWithTabindexZero.includes(element.type) ? 0 : undefined;
 	return tabindex !== undefined ? { tabindex } : undefined;
 };
 
-const isNotFirstElement = (elementIndex: number) =>
-	elementIndex !== 0 && props.elements.length > 1;
+const isNotFirstElement = (elementIndex: number) => elementIndex !== 0 && props.elements.length > 1;
 
 const isNotLastElement = (elementIndex: number) =>
 	elementIndex !== props.elements.length - 1 && props.elements.length > 1;

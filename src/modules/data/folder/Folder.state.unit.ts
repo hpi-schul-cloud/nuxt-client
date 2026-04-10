@@ -1,39 +1,40 @@
-import * as serverApi from "@/serverApi/v3/api";
+import { useFolderState } from "./Folder.state";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
 	axiosErrorFactory,
 	fileFolderElementResponseFactory,
+	mockApi,
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
-import { createMock } from "@golevelup/ts-vitest";
+import * as serverApi from "@api-server";
+import { useAppStore } from "@data-app";
+import { createTestingPinia } from "@pinia/testing";
 import { AxiosPromise } from "axios";
-import { useFolderState } from "./Folder.state";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
+}));
 
 describe("useFolderState", () => {
-	const setup = (props?: {
-		element?: unknown;
-		parentNodeInfos?: ParentNodeInfo[];
-	}) => {
-		const boardApi = createMock<serverApi.BoardElementApiInterface>();
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
+	const setup = (props?: { element?: unknown; parentNodeInfos?: ParentNodeInfo[] }) => {
+		const boardApi = mockApi<serverApi.BoardElementApiInterface>();
 		const folderElement = fileFolderElementResponseFactory.build();
 		const parentNodeInfos = parentNodeInfoFactory.build();
 
-		boardApi.elementControllerGetElementWithParentHierarchy.mockReturnValueOnce(
-			{
-				data: {
-					element: props?.element ?? folderElement,
-					parentHierarchy: props?.parentNodeInfos ?? parentNodeInfos,
-				},
-			} as unknown as AxiosPromise
-		);
+		boardApi.elementControllerGetElementWithParentHierarchy.mockReturnValueOnce({
+			data: {
+				element: props?.element ?? folderElement,
+				parentHierarchy: props?.parentNodeInfos ?? parentNodeInfos,
+			},
+		} as unknown as AxiosPromise);
 
 		vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardApi);
 
@@ -46,8 +47,7 @@ describe("useFolderState", () => {
 	};
 
 	it("should initialize with default values", () => {
-		const { breadcrumbs, fileFolderElement, folderName, parent } =
-			useFolderState();
+		const { breadcrumbs, fileFolderElement, folderName, parent } = useFolderState();
 
 		expect(breadcrumbs.value).toEqual([]);
 		expect(fileFolderElement.value).toBeUndefined();
@@ -66,39 +66,31 @@ describe("useFolderState", () => {
 					await fetchFileFolderElement(testId);
 
 					expect(
-						serverApi.BoardElementApiFactory()
-							.elementControllerGetElementWithParentHierarchy
+						serverApi.BoardElementApiFactory().elementControllerGetElementWithParentHierarchy
 					).toHaveBeenCalledWith(testId);
 				});
 			});
 
 			describe("when element is not a file folder element", () => {
 				const setupWithError = (statusCode: HttpStatusCode) => {
-					const boardApi = createMock<serverApi.BoardElementApiInterface>();
+					const boardApi = mockApi<serverApi.BoardElementApiInterface>();
 
-					const axiosError = axiosErrorFactory
-						.withStatusCode(statusCode)
-						.build();
+					const axiosError = axiosErrorFactory.withStatusCode(statusCode).build();
 
-					boardApi.elementControllerGetElementWithParentHierarchy.mockRejectedValueOnce(
-						axiosError
-					);
+					boardApi.elementControllerGetElementWithParentHierarchy.mockRejectedValueOnce(axiosError);
 
-					vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(
-						boardApi
-					);
+					vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardApi);
 				};
 
-				it("should throw an error", async () => {
+				it("should create an application error", async () => {
 					const expectedError = createApplicationError(HttpStatusCode.NotFound);
 
 					setupWithError(expectedError.statusCode);
 
 					const { fetchFileFolderElement } = useFolderState();
 
-					await expect(fetchFileFolderElement("invalid-id")).rejects.toThrow(
-						expectedError
-					);
+					await fetchFileFolderElement("invalid-id");
+					expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.NotFound);
 				});
 			});
 
@@ -106,8 +98,7 @@ describe("useFolderState", () => {
 				it("should set fileFolderElement correctly", async () => {
 					const { testId, title, createdAt, lastUpdatedAt } = setup();
 
-					const { fetchFileFolderElement, fileFolderElement } =
-						useFolderState();
+					const { fetchFileFolderElement, fileFolderElement } = useFolderState();
 
 					await fetchFileFolderElement(testId);
 
@@ -118,21 +109,38 @@ describe("useFolderState", () => {
 						timestamps: { createdAt, lastUpdatedAt },
 					});
 				});
+
+				describe("when file folder element has an empty title", () => {
+					it("should return default title", async () => {
+						const { testId } = setup({
+							element: {
+								...fileFolderElementResponseFactory.build(),
+								content: { title: "" },
+							},
+						});
+
+						const { fetchFileFolderElement, folderName } = useFolderState();
+
+						await fetchFileFolderElement(testId);
+
+						expect(folderName.value).toEqual("pages.folder.untitled");
+					});
+				});
 			});
 
 			describe("when root parent node is a course", () => {
 				it("should set breadcrumps correctly", async () => {
-					const { testId } = setup({
+					const { testId, title } = setup({
 						parentNodeInfos: [
 							{
 								id: "course-id",
 								name: "Course",
-								type: ParentNodeType.Course,
+								type: ParentNodeType.COURSE,
 							},
 							{
 								id: "column-board-id",
 								name: "Column Board",
-								type: ParentNodeType.Board,
+								type: ParentNodeType.BOARD,
 							},
 						],
 					});
@@ -154,18 +162,22 @@ describe("useFolderState", () => {
 							title: "Column Board",
 							to: "/boards/column-board-id",
 						},
+						{
+							disabled: true,
+							title,
+						},
 					]);
 				});
 			});
 
 			describe("when root parent node is a room", () => {
 				it("should set breadcrumps correctly", async () => {
-					const { testId } = setup({
+					const { testId, title } = setup({
 						parentNodeInfos: [
 							{
 								id: "room-id",
 								name: "Room",
-								type: ParentNodeType.Room,
+								type: ParentNodeType.ROOM,
 							},
 						],
 					});
@@ -183,6 +195,10 @@ describe("useFolderState", () => {
 							title: "Room",
 							to: "/rooms/room-id",
 						},
+						{
+							disabled: true,
+							title,
+						},
 					]);
 				});
 			});
@@ -194,7 +210,7 @@ describe("useFolderState", () => {
 							{
 								id: "user-id",
 								name: "User",
-								type: ParentNodeType.User,
+								type: ParentNodeType.USER,
 							},
 						],
 					});
@@ -214,8 +230,8 @@ describe("useFolderState", () => {
 		it("should return the last parent node when parentNodeInfos is populated", async () => {
 			const { testId } = setup({
 				parentNodeInfos: [
-					{ id: "parent-1", name: "Parent 1", type: ParentNodeType.Room },
-					{ id: "parent-2", name: "Parent 2", type: ParentNodeType.Course },
+					{ id: "parent-1", name: "Parent 1", type: ParentNodeType.ROOM },
+					{ id: "parent-2", name: "Parent 2", type: ParentNodeType.COURSE },
 				],
 			});
 
@@ -226,7 +242,7 @@ describe("useFolderState", () => {
 			expect(parent.value).toEqual({
 				id: "parent-2",
 				name: "Parent 2",
-				type: ParentNodeType.Course,
+				type: ParentNodeType.COURSE,
 			});
 		});
 
@@ -244,24 +260,22 @@ describe("useFolderState", () => {
 	describe("mapNodeTypeToPathType", () => {
 		it('should return "courses" for ParentNodeType.Course', () => {
 			const { mapNodeTypeToPathType } = useFolderState();
-			expect(mapNodeTypeToPathType(ParentNodeType.Course)).toBe("courses");
+			expect(mapNodeTypeToPathType(ParentNodeType.COURSE)).toBe("courses");
 		});
 
 		it('should return "rooms" for ParentNodeType.Room', () => {
 			const { mapNodeTypeToPathType } = useFolderState();
-			expect(mapNodeTypeToPathType(ParentNodeType.Room)).toBe("rooms");
+			expect(mapNodeTypeToPathType(ParentNodeType.ROOM)).toBe("rooms");
 		});
 
 		it('should return "boards" for ParentNodeType.Board', () => {
 			const { mapNodeTypeToPathType } = useFolderState();
-			expect(mapNodeTypeToPathType(ParentNodeType.Board)).toBe("boards");
+			expect(mapNodeTypeToPathType(ParentNodeType.BOARD)).toBe("boards");
 		});
 
 		it("should throw an error for an unknown node type", () => {
 			const { mapNodeTypeToPathType } = useFolderState();
-			expect(() => mapNodeTypeToPathType("unknown")).toThrow(
-				"Unknown node type: unknown"
-			);
+			expect(() => mapNodeTypeToPathType("unknown")).toThrow("Unknown node type: unknown");
 		});
 	});
 });

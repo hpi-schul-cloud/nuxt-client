@@ -16,16 +16,10 @@
 							<v-icon>{{ mdiClose }}</v-icon>
 						</v-btn>
 						<v-spacer />
-						<v-btn class="mr-4" @click="onToggleFullscreen">
-							toggle fullscreen (debug)
-						</v-btn>
-						<v-btn class="mr-4" @click="onToggleEdit">
+						<v-btn class="mr-4" @click="onToggleFullscreen"> toggle fullscreen (debug) </v-btn>
+						<v-btn class="mr-4" data-testid="toolbar-edit-button" @click="onToggleEdit">
 							{{
-								isEditMode
-									? $t("common.actions.edit") +
-										" " +
-										$t("common.actions.finish")
-									: $t("common.actions.edit")
+								isEditMode ? $t("common.actions.edit") + " " + $t("common.actions.finish") : $t("common.actions.edit")
 							}}
 						</v-btn>
 
@@ -63,119 +57,88 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { CardResponse } from "@/serverApi/v3";
-import { ElementMove } from "@/types/board/DragAndDrop";
-import { useBoardPermissions } from "@data-board";
-import { mdiClose } from "@icons/material";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { defineComponent, PropType, ref } from "vue";
+<script setup lang="ts">
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
+import type { ElementMove } from "@/types/board/DragAndDrop";
+import { askDeletionForItem } from "@/utils/confirmation-dialog.utils";
+import type { CardResponse } from "@api-server";
+import { mdiClose } from "@icons/material";
+import { ref } from "vue";
 
-export default defineComponent({
-	name: "CardHostDetailView",
-	components: {
-		CardTitle,
-		CardAddElementMenu,
-		ContentElementList,
-	},
-	props: {
-		card: {
-			type: Object as PropType<CardResponse>,
-			required: true,
-		},
-		isOpen: {
-			type: Boolean,
-			required: true,
-		},
-		rowIndex: {
-			type: Number,
-			required: true,
-		},
-		columnIndex: {
-			type: Number,
-			required: true,
-		},
-	},
-	emits: [
-		"update:title",
-		"delete:element",
-		"delete:card",
-		"move-down:element",
-		"move-up:element",
-		"move-keyboard:element",
-		"add:element",
-		"enter:title",
-		"close:detail-view",
-	],
-	setup(props, { emit }) {
-		const isEditMode = ref(false);
-		const isFullscreen = ref(true);
+type Props = {
+	card: CardResponse;
+	isOpen: boolean;
+	rowIndex: number;
+	columnIndex: number;
+};
 
-		const { hasDeletePermission, hasEditPermission } = useBoardPermissions();
-		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
+const props = defineProps<Props>();
 
-		const onToggleEdit = () => (isEditMode.value = !isEditMode.value);
-		const onToggleFullscreen = () => (isFullscreen.value = !isFullscreen.value);
-		const onDialogClose = () => emit("close:detail-view");
+const emit = defineEmits<{
+	(e: "update:title", value: string): void;
+	(e: "delete:element", elementId: string): void;
+	(e: "delete:card"): void;
+	(e: "move-down:element", elementMove: ElementMove): void;
+	(e: "move-up:element", elementMove: ElementMove): void;
+	(e: "move-keyboard:element", elementMove: ElementMove, keyCode: string): void;
+	(e: "add:element"): void;
+	(e: "enter:title"): void;
+	(e: "close:detail-view"): void;
+}>();
 
-		const onUpdateCardTitle = (value: string) => emit("update:title", value);
-		const onEnterTitle = () => emit("enter:title");
+const isEditMode = ref(false);
+const isFullscreen = ref(true);
 
-		const onAddElement = () => {
-			emit("add:element");
-			isEditMode.value = true;
-		};
+const onToggleEdit = () => {
+	isEditMode.value = !isEditMode.value;
+};
 
-		const onDeleteElement = (elementId: string) =>
-			emit("delete:element", elementId);
+const onToggleFullscreen = () => {
+	isFullscreen.value = !isFullscreen.value;
+};
 
-		const onDeleteCard = async () => {
-			let shouldDelete = true;
-			shouldDelete = await askDeleteConfirmation(
-				props.card.title,
-				"components.boardCard"
-			);
+const onDialogClose = () => {
+	emit("close:detail-view");
+};
 
-			if (shouldDelete) {
-				emit("delete:card");
-			}
-		};
+const onUpdateCardTitle = (value: string) => {
+	emit("update:title", value);
+};
 
-		const onMoveElementDown = (elementMove: ElementMove) =>
-			emit("move-down:element", elementMove);
-		const onMoveElementUp = (elementMove: ElementMove) =>
-			emit("move-up:element", elementMove);
-		const onMoveElementKeyboard = (
-			elementMove: ElementMove,
-			keyCode: string
-		) => {
-			emit("move-keyboard:element", elementMove, keyCode);
-		};
+const onEnterTitle = () => {
+	emit("enter:title");
+};
 
-		return {
-			mdiClose,
-			isEditMode,
-			hasEditPermission,
-			hasDeletePermission,
-			onToggleEdit,
-			onUpdateCardTitle,
-			onEnterTitle,
-			onAddElement,
-			onDeleteElement,
-			onMoveElementDown,
-			onMoveElementUp,
-			onMoveElementKeyboard,
-			onDialogClose,
-			onDeleteCard,
-			// debug
-			onToggleFullscreen,
-			isFullscreen,
-		};
-	},
-});
+const onAddElement = () => {
+	emit("add:element");
+	isEditMode.value = true;
+};
+
+const onDeleteElement = (elementId: string) => {
+	emit("delete:element", elementId);
+};
+
+const onDeleteCard = async () => {
+	const shouldDelete = await askDeletionForItem(props.card.title!, "components.boardCard");
+
+	if (shouldDelete) {
+		emit("delete:card");
+	}
+};
+
+const onMoveElementDown = (elementMove: ElementMove) => {
+	emit("move-down:element", elementMove);
+};
+
+const onMoveElementUp = (elementMove: ElementMove) => {
+	emit("move-up:element", elementMove);
+};
+
+const onMoveElementKeyboard = (elementMove: ElementMove, keyCode: string) => {
+	emit("move-keyboard:element", elementMove, keyCode);
+};
 </script>
 
 <style scoped>

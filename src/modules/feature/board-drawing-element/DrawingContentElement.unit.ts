@@ -1,44 +1,23 @@
-import { DrawingElementResponse } from "@/serverApi/v3";
-import { ConfigResponse } from "@/serverApi/v3/api";
-import EnvConfigModule from "@/store/env-config";
-import NotifierModule from "@/store/notifier";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { drawingElementResponseFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
-import { BoardMenu } from "@ui-board";
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionMoveDown,
-	KebabMenuActionMoveUp,
-} from "@ui-kebab-menu";
-import { shallowMount } from "@vue/test-utils";
 import DrawingContentElement from "./DrawingContentElement.vue";
 import InnerContent from "./InnerContent.vue";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
+import { drawingElementResponseFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { DrawingElementResponse } from "@api-server";
+import { BoardMenu } from "@ui-board";
+import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
+import { flushPromises, shallowMount } from "@vue/test-utils";
+import { mock } from "vitest-mock-extended";
 
 // Mocks
 vi.mock("@data-board", () => ({
 	useBoardFocusHandler: vi.fn(),
 	useContentElementState: vi.fn(() => ({ modelValue: {} })),
-	useDeleteConfirmationDialog: vi.fn(),
 }));
-vi.mock("@feature-board");
 
 const DRAWING_ELEMENT = drawingElementResponseFactory.build();
 
-const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
-	getEnv: createMock<ConfigResponse>({
-		FEATURE_TLDRAW_ENABLED: true,
-	}),
-});
-
 describe("DrawingContentElement", () => {
-	const notifierModule = createModuleMocks(NotifierModule);
-
 	const setup = (props: {
 		element: DrawingElementResponse;
 		isEditMode: boolean;
@@ -51,13 +30,12 @@ describe("DrawingContentElement", () => {
 		const wrapper = shallowMount(DrawingContentElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
-				},
 			},
 			propsData: props,
 		});
+
+		const windowMock = mock<Window>();
+		vi.spyOn(globalThis, "open").mockImplementation(() => windowMock);
 
 		return { wrapper };
 	};
@@ -78,7 +56,7 @@ describe("DrawingContentElement", () => {
 			expect(wrapper.findComponent(InnerContent).exists()).toBe(true);
 		});
 
-		it("should have the correct href and target attribute", async () => {
+		it.each(["enter", "space"])("should open element in new tab when %s is pressed", async (key) => {
 			const { wrapper } = setup({
 				element: DRAWING_ELEMENT,
 				isEditMode: false,
@@ -91,13 +69,17 @@ describe("DrawingContentElement", () => {
 				ref: "drawingElement",
 			});
 
-			expect(elementCard.attributes("href")).toBe(
-				`/tldraw?parentId=${DRAWING_ELEMENT.id}`
+			await elementCard.trigger(`keydown.${key}`);
+
+			expect(window.open).toHaveBeenCalledTimes(1);
+			expect(window.open).toHaveBeenCalledWith(
+				`/tldraw?parentId=${DRAWING_ELEMENT.id}`,
+				"_blank",
+				"noopener noreferrer"
 			);
-			expect(elementCard.attributes("target")).toBe("_blank");
 		});
 
-		it("should have the correct aria-label", async () => {
+		it("should have the correct aria-label", () => {
 			const { wrapper } = setup({
 				element: DRAWING_ELEMENT,
 				isEditMode: false,
@@ -116,26 +98,39 @@ describe("DrawingContentElement", () => {
 		});
 
 		describe("when element is in view mode", () => {
-			it.each(["up", "down"])(
-				"should not 'emit move-keyboard:edit' when arrow key %s is pressed",
-				async (key) => {
-					const { wrapper } = setup({
-						element: DRAWING_ELEMENT,
-						isEditMode: false,
-						columnIndex: 0,
-						rowIndex: 1,
-						elementIndex: 2,
-					});
+			it("should have the correct href attribute and target attribute", () => {
+				const { wrapper } = setup({
+					element: DRAWING_ELEMENT,
+					isEditMode: false,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
+				});
 
-					const elementCard = wrapper.findComponent({
-						ref: "drawingElement",
-					});
+				const elementCard = wrapper.findComponent({
+					ref: "drawingElement",
+				});
+				expect(elementCard.attributes("href")).toBe(`/tldraw?parentId=${DRAWING_ELEMENT.id}`);
+				expect(elementCard.attributes("target")).toBe("_blank");
+			});
 
-					await elementCard.trigger(`keydown.${key}`);
+			it.each(["up", "down"])("should not 'emit move-keyboard:edit' when arrow key %s is pressed", async (key) => {
+				const { wrapper } = setup({
+					element: DRAWING_ELEMENT,
+					isEditMode: false,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
+				});
 
-					expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
-				}
-			);
+				const elementCard = wrapper.findComponent({
+					ref: "drawingElement",
+				});
+
+				await elementCard.trigger(`keydown.${key}`);
+
+				expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
+			});
 
 			it("should not render element menu", () => {
 				const { wrapper } = setup({
@@ -153,26 +148,62 @@ describe("DrawingContentElement", () => {
 		});
 
 		describe("when element is in edit-mode", () => {
-			it.each(["up", "down"])(
-				"should 'emit move-keyboard:edit' when arrow key %s is pressed",
-				async (key) => {
-					const { wrapper } = setup({
-						element: DRAWING_ELEMENT,
-						isEditMode: true,
-						columnIndex: 0,
-						rowIndex: 1,
-						elementIndex: 2,
-					});
+			it("should open element in new tab when clicked", async () => {
+				const { wrapper } = setup({
+					element: DRAWING_ELEMENT,
+					isEditMode: true,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
+				});
 
-					const elementCard = wrapper.findComponent({
-						ref: "drawingElement",
-					});
+				const elementCard = wrapper.findComponent({
+					ref: "drawingElement",
+				});
+				await elementCard.trigger("click");
 
-					await elementCard.trigger(`keydown.${key}`);
+				expect(window.open).toHaveBeenCalledTimes(1);
+				expect(window.open).toHaveBeenCalledWith(
+					`/tldraw?parentId=${DRAWING_ELEMENT.id}`,
+					"_blank",
+					"noopener noreferrer"
+				);
+			});
+			it("should not have href and target attributes", () => {
+				// The card should not be a link in edit mode otherwise the three dot menu would not be accessible for screen readers,
+				// because of nested interactive elements
+				const { wrapper } = setup({
+					element: DRAWING_ELEMENT,
+					isEditMode: true,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
+				});
+				const elementCard = wrapper.findComponent({
+					ref: "drawingElement",
+				});
 
-					expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
-				}
-			);
+				expect(elementCard.attributes("href")).toBeUndefined();
+				expect(elementCard.attributes("target")).toBeUndefined();
+			});
+
+			it.each(["up", "down"])("should 'emit move-keyboard:edit' when arrow key %s is pressed", async (key) => {
+				const { wrapper } = setup({
+					element: DRAWING_ELEMENT,
+					isEditMode: true,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
+				});
+
+				const elementCard = wrapper.findComponent({
+					ref: "drawingElement",
+				});
+
+				await elementCard.trigger(`keydown.${key}`);
+
+				expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
+			});
 
 			it("should render element menu", () => {
 				const { wrapper } = setup({
@@ -189,6 +220,7 @@ describe("DrawingContentElement", () => {
 			});
 
 			it("should emit 'delete:element' event when delete menu item is clicked", async () => {
+				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 				const { wrapper } = setup({
 					element: DRAWING_ELEMENT,
 					isEditMode: true,
@@ -199,12 +231,13 @@ describe("DrawingContentElement", () => {
 
 				const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 				await menuItem.trigger("click");
+				await flushPromises();
 
 				expect(wrapper.emitted()).toHaveProperty("delete:element");
 			});
 
 			describe("when element is first element", () => {
-				it("should hide 'moveUp' menu item", async () => {
+				it("should hide 'moveUp' menu item", () => {
 					const { wrapper } = setup({
 						element: DRAWING_ELEMENT,
 						isEditMode: true,

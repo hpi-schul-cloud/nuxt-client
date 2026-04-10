@@ -5,11 +5,9 @@ describe("useUserLoginMigrationMapping", () => {
 	describe("getBusinessErrorTranslationKey", () => {
 		describe("when error type was found", () => {
 			const setup = () => {
-				const { getBusinessErrorTranslationKey } =
-					useUserLoginMigrationMappings();
+				const { getBusinessErrorTranslationKey } = useUserLoginMigrationMappings();
 
-				const key =
-					"pages.administration.migration.moin_schule_system_not_found";
+				const key = "pages.administration.migration.moin_schule_system_not_found";
 				const apiError = {
 					message: "Cannot find moin.schule system",
 					code: 500,
@@ -28,16 +26,14 @@ describe("useUserLoginMigrationMapping", () => {
 			it("should return translation key", () => {
 				const { getBusinessErrorTranslationKey, businessError, key } = setup();
 
-				const translationKey: string | undefined =
-					getBusinessErrorTranslationKey(businessError);
+				const translationKey: string | undefined = getBusinessErrorTranslationKey(businessError);
 				expect(translationKey).toEqual(key);
 			});
 		});
 
 		describe("when translation key was not found", () => {
 			const setup = () => {
-				const { getBusinessErrorTranslationKey } =
-					useUserLoginMigrationMappings();
+				const { getBusinessErrorTranslationKey } = useUserLoginMigrationMappings();
 
 				const apiError = {
 					message: "message",
@@ -57,16 +53,14 @@ describe("useUserLoginMigrationMapping", () => {
 			it("should return original error message", () => {
 				const { getBusinessErrorTranslationKey, businessError } = setup();
 
-				const translationKey: string | undefined =
-					getBusinessErrorTranslationKey(businessError);
+				const translationKey: string | undefined = getBusinessErrorTranslationKey(businessError);
 				expect(translationKey).toEqual(businessError.message);
 			});
 		});
 
 		describe("when businessError.error is undefined", () => {
 			const setup = () => {
-				const { getBusinessErrorTranslationKey } =
-					useUserLoginMigrationMappings();
+				const { getBusinessErrorTranslationKey } = useUserLoginMigrationMappings();
 
 				const businessError: BusinessError = {
 					statusCode: 500,
@@ -80,8 +74,7 @@ describe("useUserLoginMigrationMapping", () => {
 			it("should return original error message", () => {
 				const { getBusinessErrorTranslationKey, businessError } = setup();
 
-				const translationKey: string | undefined =
-					getBusinessErrorTranslationKey(businessError);
+				const translationKey: string | undefined = getBusinessErrorTranslationKey(businessError);
 
 				expect(translationKey).toEqual(businessError.message);
 			});
@@ -89,8 +82,7 @@ describe("useUserLoginMigrationMapping", () => {
 
 		describe("when error.type doesn't exist", () => {
 			const setup = () => {
-				const { getBusinessErrorTranslationKey } =
-					useUserLoginMigrationMappings();
+				const { getBusinessErrorTranslationKey } = useUserLoginMigrationMappings();
 
 				const apiError = {
 					message: "message",
@@ -109,16 +101,14 @@ describe("useUserLoginMigrationMapping", () => {
 			it("should return original error message", () => {
 				const { getBusinessErrorTranslationKey, businessError } = setup();
 
-				const translationKey: string | undefined =
-					getBusinessErrorTranslationKey(businessError);
+				const translationKey: string | undefined = getBusinessErrorTranslationKey(businessError);
 				expect(translationKey).toEqual(businessError.message);
 			});
 		});
 
 		describe("when businessError is undefined", () => {
 			const setup = () => {
-				const { getBusinessErrorTranslationKey } =
-					useUserLoginMigrationMappings();
+				const { getBusinessErrorTranslationKey } = useUserLoginMigrationMappings();
 
 				return {
 					getBusinessErrorTranslationKey,
@@ -128,8 +118,7 @@ describe("useUserLoginMigrationMapping", () => {
 			it("should return undefined", () => {
 				const { getBusinessErrorTranslationKey } = setup();
 
-				const translationKey: string | undefined =
-					getBusinessErrorTranslationKey(undefined);
+				const translationKey: string | undefined = getBusinessErrorTranslationKey(undefined);
 				expect(translationKey).toBeUndefined();
 			});
 		});

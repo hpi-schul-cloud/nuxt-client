@@ -8,24 +8,24 @@
 		<RichTextContentElementEdit
 			v-if="isEditMode"
 			:autofocus="autofocus"
-			:value="modelValue.text"
-			:data-testid="`rich-text-edit-${columnIndex}-${elementIndex}`"
 			:column-index="columnIndex"
-			@update:value="onUpdateElement"
-			@delete:element="onDeleteElement"
+			:data-testid="`rich-text-edit-${columnIndex}-${elementIndex}`"
+			:element="element"
+			:is-edit-mode="isEditMode"
 			@blur="onBlur"
+			@delete:element="onDeleteElement"
 			@keyup.capture="onKeyUp"
 		/>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { RichTextElementResponse } from "@/serverApi/v3";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { computed, PropType, ref, toRef } from "vue";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
+import { RichTextElementResponse } from "@api-server";
+import { useBoardFocusHandler } from "@data-board";
+import { computed, PropType, ref, toRef } from "vue";
 
 const props = defineProps({
 	element: {
@@ -39,31 +39,24 @@ const props = defineProps({
 
 const emit = defineEmits(["delete:element"]);
 
-const { modelValue } = useContentElementState(props);
 const { ensurePoliteNotifications } = useAriaLiveNotifier();
 
-const autofocus = ref(false);
 const element = toRef(props, "element");
+
+const autofocus = ref(false);
 useBoardFocusHandler(element.value.id, ref(null), () => {
 	autofocus.value = true;
 });
 
-const onDeleteElement = () => {
-	emit("delete:element", element.value.id);
-};
+const onBlur = () => (autofocus.value = false);
 
-const onUpdateElement = (text: string) => {
-	modelValue.value.text = text;
-};
-
-const onBlur = () => {
-	autofocus.value = false;
-};
+const onDeleteElement = () => emit("delete:element", element.value.id);
 
 const onKeyUp = () => ensurePoliteNotifications();
 
 const isFirstElement = computed(() => props.elementIndex === 0);
 </script>
+
 <style lang="scss" scoped>
 :deep(.ck-content) {
 	overflow: hidden; // prevent margin collapse
@@ -75,9 +68,8 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 	}
 
 	h4 {
-		font-size: var(--heading-6);
 		letter-spacing: 0.01em;
-		font-weight: var(--font-weight-bold);
+		font-weight: bold;
 	}
 
 	h5 {
@@ -129,9 +121,7 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 	}
 }
 
-:deep(
-	.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around
-) {
+:deep(.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around) {
 	> .ck-widget__type-around__button_before {
 		top: 8px;
 		left: 8px;

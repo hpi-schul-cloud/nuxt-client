@@ -1,8 +1,5 @@
-import {
-	OAuthApiFactory,
-	OAuthSessionTokenExpirationResponse,
-} from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { OAuthApiFactory, OAuthSessionTokenExpirationResponse } from "@api-server";
 import { AxiosResponse } from "axios";
 
 export const useOAuthApi = () => {
@@ -16,7 +13,7 @@ export const useOAuthApi = () => {
 			const expirationDate = new Date(response.data.expiresAt);
 
 			return expirationDate;
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			// eslint-disable-next-line
 		} catch (error) {
 			return undefined;
 		}

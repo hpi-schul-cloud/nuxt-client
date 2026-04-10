@@ -8,7 +8,7 @@
 		<VMenu>
 			<template #activator="{ props: menuProps }">
 				<VBtn
-					v-bind="menuProps"
+					v-bind="{ ...menuProps, ...safariAriaOwnsWorkaround }"
 					color="primary"
 					class="ml-4"
 					density="comfortable"
@@ -43,8 +43,9 @@
 
 <script setup lang="ts">
 import { mdiClose } from "@icons/material";
-import { useI18n } from "vue-i18n";
 import { KebabMenuList } from "@ui-kebab-menu";
+import { safariAriaOwnsWorkaround } from "@util-device-detection";
+import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 defineProps({

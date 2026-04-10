@@ -15,54 +15,38 @@
 		@keydown.space.prevent="onKeyPress"
 		@keydown.tab="$emit('tab-pressed')"
 	>
-		<v-card-text class="pb-0" data-testid="content-card-lesson-content">
+		<v-card-text class="pt-2" data-testid="content-card-lesson-content">
 			<div class="top-row-container mb-0">
 				<div class="title-section">
 					{{ $t("common.words.topic") }}
 				</div>
 				<div class="dot-menu-section">
 					<RoomDotMenu
-						v-if="userRole === Roles.Teacher"
+						v-if="userRole === Roles.TEACHER"
 						:menu-items="moreActionsMenuItems"
 						:data-testid="`lesson-card-menu-${lessonCardIndex}`"
 						:aria-label="$t('pages.room.lessonCard.menu.ariaLabel')"
 					/>
 				</div>
 			</div>
-			<div
-				class="text-h6 text--primary mb-2 lesson-name"
-				role="heading"
-				aria-level="2"
-				tabindex="-1"
-				:data-testid="`lesson-name-${lessonCardIndex}`"
-			>
+			<h2 class="text-h4 mt-1 mb-1 lesson-name" :data-testid="`lesson-name-${lessonCardIndex}`">
 				{{ lesson.name }}
-			</div>
-		</v-card-text>
-		<v-card-text
-			v-if="showChip"
-			class="ma-0 pb-0 pt-0 submitted-section"
-			data-testid="content-card-lesson-info"
-		>
-			<div class="chip-items-group">
-				<div class="bg-grey-lighten-2 chip-item px-1 mr-1 mb-0">
-					<div class="chip-value">
-						{{ taskChipValue }}
-					</div>
+			</h2>
+			<div v-if="showChip" class="ma-0 pb-1 pt-0 submitted-section" data-testid="content-card-lesson-info">
+				<div class="chip-items-group">
+					<v-chip size="small" :text="taskChipValue" />
 				</div>
 			</div>
 		</v-card-text>
 		<v-card-actions
-			v-if="userRole === Roles.Teacher"
+			v-if="userRole === Roles.TEACHER && cardActions.length > 0"
 			class="pt-1"
 			:data-testid="`lesson-card-actions-${lessonCardIndex}`"
 		>
 			<v-btn
 				v-for="(action, index) in cardActions"
 				:key="index"
-				:class="`action-button action-button-${action.name
-					.split(' ')
-					.join('-')}`"
+				:class="`action-button action-button-${action.name.split(' ').join('-')}`"
 				variant="text"
 				color="primary"
 				:data-testid="action.dataTestId"
@@ -75,9 +59,11 @@
 </template>
 
 <script setup lang="ts">
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
+import RoomDotMenu from "./RoomDotMenu.vue";
+import { LessonData } from "./types";
 import { RoomData } from "@/store/types/room";
+import { ImportUserResponseRoleNames as Roles } from "@api-server";
+import { useEnvConfig } from "@data-env";
 import {
 	mdiContentCopy,
 	mdiPencilOutline,
@@ -85,17 +71,14 @@ import {
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 } from "@icons/material";
-import { RoomDotMenu } from "@ui-room-details";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { LessonData } from "./types";
 
 const props = defineProps({
 	lesson: {
 		type: Object as PropType<LessonData>,
 		required: true,
-		validator: (lesson: LessonData) =>
-			["createdAt", "id", "name"].every((key) => key in lesson),
+		validator: (lesson: LessonData) => ["createdAt", "id", "name"].every((key) => key in lesson),
 	},
 	room: {
 		type: Object as PropType<Partial<RoomData>>,
@@ -123,9 +106,7 @@ const emit = defineEmits([
 
 const { t } = useI18n();
 
-const isHidden = computed(() => {
-	return props.lesson.hidden;
-});
+const isHidden = computed(() => props.lesson.hidden);
 
 const cardActions = computed(() => {
 	const actions = [];
@@ -135,9 +116,7 @@ const cardActions = computed(() => {
 			icon: "lessonSend",
 			action: () => publishLesson(),
 			name: t("common.action.publish"),
-			dataTestId: `lesson-card-action-publish-${
-				toRef(props, "lessonCardIndex").value
-			}`,
+			dataTestId: `lesson-card-action-publish-${toRef(props, "lessonCardIndex").value}`,
 		});
 	}
 
@@ -154,19 +133,15 @@ const moreActionsMenuItems = computed(() => {
 				`/courses/${props.room.roomId}/topics/${props.lesson.id}/edit?returnUrl=rooms/${props.room.roomId}`
 			),
 		name: t("pages.room.taskCard.label.edit"),
-		dataTestId: `lesson-card-menu-action-edit-${
-			toRef(props, "lessonCardIndex").value
-		}`,
+		dataTestId: `lesson-card-menu-action-edit-${toRef(props, "lessonCardIndex").value}`,
 	});
 
-	if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
+	if (useEnvConfig().value.FEATURE_COPY_SERVICE_ENABLED) {
 		actions.push({
 			icon: mdiContentCopy,
 			action: () => copyCard(),
 			name: t("common.actions.duplicate"),
-			dataTestId: `lesson-card-menu-action-copy-${
-				toRef(props, "lessonCardIndex").value
-			}`,
+			dataTestId: `lesson-card-menu-action-copy-${toRef(props, "lessonCardIndex").value}`,
 		});
 	}
 
@@ -175,20 +150,16 @@ const moreActionsMenuItems = computed(() => {
 			icon: mdiUndoVariant,
 			action: () => unPublishCard(),
 			name: t("pages.room.cards.label.revert"),
-			dataTestId: `lesson-card-menu-action-revert-${
-				toRef(props, "lessonCardIndex").value
-			}`,
+			dataTestId: `lesson-card-menu-action-revert-${toRef(props, "lessonCardIndex").value}`,
 		});
 	}
 
-	if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
+	if (useEnvConfig().value.FEATURE_LESSON_SHARE) {
 		actions.push({
 			icon: mdiShareVariantOutline,
 			action: () => emit("open-modal", props.lesson.id),
 			name: t("common.actions.shareCopy"),
-			dataTestId: `lesson-card-menu-action-share-${
-				toRef(props, "lessonCardIndex").value
-			}`,
+			dataTestId: `lesson-card-menu-action-share-${toRef(props, "lessonCardIndex").value}`,
 		});
 	}
 
@@ -196,48 +167,36 @@ const moreActionsMenuItems = computed(() => {
 		icon: mdiTrashCanOutline,
 		action: () => emit("delete-lesson"),
 		name: t("common.actions.delete"),
-		dataTestId: `lesson-card-menu-action-remove-${
-			toRef(props, "lessonCardIndex").value
-		}`,
+		dataTestId: `lesson-card-menu-action-remove-${toRef(props, "lessonCardIndex").value}`,
 	});
 
 	return actions;
 });
 
-const showChip = computed(() => {
-	return (
-		(props.lesson.numberOfPublishedTasks !== 0 &&
-			props.lesson.numberOfPublishedTasks !== undefined) ||
-		(props.lesson.numberOfPlannedTasks !== 0 &&
-			props.lesson.numberOfPlannedTasks !== undefined) ||
-		(props.lesson.numberOfDraftTasks !== 0 &&
-			props.lesson.numberOfDraftTasks !== undefined)
-	);
-});
+const showChip = computed(
+	() =>
+		(props.lesson.numberOfPublishedTasks !== 0 && props.lesson.numberOfPublishedTasks !== undefined) ||
+		(props.lesson.numberOfPlannedTasks !== 0 && props.lesson.numberOfPlannedTasks !== undefined) ||
+		(props.lesson.numberOfDraftTasks !== 0 && props.lesson.numberOfDraftTasks !== undefined)
+);
 
 const taskChipValue = computed(() => {
 	const chipValueArray = [];
 
 	if (props.lesson.numberOfPublishedTasks) {
 		chipValueArray.push(
-			`${props.lesson.numberOfPublishedTasks} ${
-				isHidden.value ? t("common.words.ready") : t("common.words.published")
-			}`
+			`${props.lesson.numberOfPublishedTasks} ${isHidden.value ? t("common.words.ready") : t("common.words.published")}`
 		);
 	}
 
 	if (props.lesson.numberOfPlannedTasks) {
-		chipValueArray.push(
-			`${props.lesson.numberOfPlannedTasks} ${t("common.words.planned")}`
-		);
+		chipValueArray.push(`${props.lesson.numberOfPlannedTasks} ${t("common.words.planned")}`);
 	}
 
 	if (props.lesson.numberOfDraftTasks) {
 		chipValueArray.push(
 			`${props.lesson.numberOfDraftTasks} ${
-				props.lesson.numberOfDraftTasks === 1
-					? t("common.words.draft")
-					: t("common.words.drafts")
+				props.lesson.numberOfDraftTasks === 1 ? t("common.words.draft") : t("common.words.drafts")
 			}`
 		);
 	}

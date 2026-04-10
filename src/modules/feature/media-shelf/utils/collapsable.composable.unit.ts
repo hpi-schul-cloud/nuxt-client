@@ -1,5 +1,5 @@
-import { ref } from "vue";
 import { useCollapsableState } from "./collapsable.composable";
+import { ref } from "vue";
 
 describe("collapsable.composable", () => {
 	const panelName = "testPanel";

@@ -1,18 +1,15 @@
-import * as serverApi from "@/serverApi/v3/api";
-import {
-	MetaDataEntityType,
-	MetaTagExtractorResponse,
-} from "@/serverApi/v3/api";
-import { mockApiResponse, mountComposable } from "@@/tests/test-utils";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useMetaTagExtractorApi } from "./MetaTagExtractorApi.composable";
+import { mockApi, mockApiResponse, mountComposable } from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
+import * as serverApi from "@api-server";
+import { MetaDataEntityType, MetaTagExtractorResponse } from "@api-server";
+import { Mocked } from "vitest";
 
 describe("useMetaTagExtractorApi", () => {
-	let api: DeepMocked<serverApi.MetaTagExtractorApi>;
+	let api: Mocked<serverApi.MetaTagExtractorApi>;
 
 	beforeEach(() => {
-		api = createMock<serverApi.MetaTagExtractorApi>();
+		api = mockApi<serverApi.MetaTagExtractorApi>();
 
 		vi.spyOn(serverApi, "MetaTagExtractorApiFactory").mockReturnValue(api);
 	});
@@ -31,14 +28,12 @@ describe("useMetaTagExtractorApi", () => {
 						description: "",
 						imageUrl: "",
 						originalImageUrl: "",
-						type: MetaDataEntityType.Unknown,
+						type: MetaDataEntityType.UNKNOWN,
 						parentTitle: "",
-						parentType: MetaDataEntityType.Unknown,
+						parentType: MetaDataEntityType.UNKNOWN,
 					};
 
-					api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
-						mockApiResponse({ data: mockedResponse })
-					);
+					api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(mockApiResponse({ data: mockedResponse }));
 
 					const composable = mountComposable(() => useMetaTagExtractorApi(), {
 						global: { plugins: [createTestingI18n()] },
@@ -75,14 +70,12 @@ describe("useMetaTagExtractorApi", () => {
 							description: "",
 							imageUrl: "",
 							originalImageUrl: "",
-							type: MetaDataEntityType.Board,
+							type: MetaDataEntityType.BOARD,
 							parentTitle: "English",
-							parentType: MetaDataEntityType.Course,
+							parentType: MetaDataEntityType.COURSE,
 						};
 
-						api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
-							mockApiResponse({ data: mockedResponse })
-						);
+						api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(mockApiResponse({ data: mockedResponse }));
 
 						const composable = mountComposable(() => useMetaTagExtractorApi(), {
 							global: { plugins: [createTestingI18n()] },
@@ -106,9 +99,7 @@ describe("useMetaTagExtractorApi", () => {
 						const url = "https://test.de/my-article";
 						const data = await composable?.getMetaTags(url);
 
-						expect(data.title).toEqual(
-							"common.words.board: Shakespear (English)"
-						);
+						expect(data.title).toEqual("common.words.board: Shakespear (English)");
 					});
 				});
 
@@ -120,14 +111,12 @@ describe("useMetaTagExtractorApi", () => {
 							description: "",
 							imageUrl: "",
 							originalImageUrl: "",
-							type: MetaDataEntityType.Board,
+							type: MetaDataEntityType.BOARD,
 							parentTitle: "English",
-							parentType: MetaDataEntityType.Course,
+							parentType: MetaDataEntityType.COURSE,
 						};
 
-						api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
-							mockApiResponse({ data: mockedResponse })
-						);
+						api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(mockApiResponse({ data: mockedResponse }));
 
 						const composable = mountComposable(() => useMetaTagExtractorApi(), {
 							global: { plugins: [createTestingI18n()] },
@@ -145,9 +134,7 @@ describe("useMetaTagExtractorApi", () => {
 						const url = "https://test.de/my-article";
 						const data = await composable?.getMetaTags(url);
 
-						expect(data.title).toEqual(
-							"common.words.board: pages.room.boardCard.label.courseBoard (English)"
-						);
+						expect(data.title).toEqual("common.words.board: pages.room.boardCard.label.courseBoard (English)");
 					});
 				});
 			});
@@ -161,9 +148,9 @@ describe("useMetaTagExtractorApi", () => {
 					description: "",
 					imageUrl: "",
 					originalImageUrl: "",
-					type: MetaDataEntityType.Unknown,
+					type: MetaDataEntityType.UNKNOWN,
 					parentTitle: "",
-					parentType: MetaDataEntityType.Unknown,
+					parentType: MetaDataEntityType.UNKNOWN,
 				};
 
 				api.metaTagExtractorControllerGetMetaTags.mockRejectedValue(false);

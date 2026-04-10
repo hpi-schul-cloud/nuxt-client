@@ -1,19 +1,19 @@
-import {
-	BoardFeature,
-	ContentElementType,
-	PreferredToolResponse,
-} from "@/serverApi/v3";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { ElementTypeSelectionOptions, useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import { AnyContentElement } from "@/types/board/ContentElement";
+import { BoardFeature, ContentElementType, PreferredToolResponse } from "@api-server";
+import { notifyInfo } from "@data-app";
 import {
 	type CreateElementRequestPayload,
+	useBoardAllowedOperations,
 	useBoardFeatures,
-	useBoardPermissions,
 	useCardStore,
 } from "@data-board";
+import { useEnvConfig } from "@data-env";
+import { useAddCollaboraFile } from "@feature-collabora";
 import {
+	mdiFileDocumentOutline,
 	mdiFolderOpenOutline,
 	mdiFormatText,
-	mdiLightbulbOnOutline,
 	mdiLink,
 	mdiPresentation,
 	mdiPuzzleOutline,
@@ -21,40 +21,23 @@ import {
 	mdiTrayArrowUp,
 	mdiVideoOutline,
 } from "@icons/material";
-import { useBoardNotifier } from "@util-board";
 import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import {
-	ElementTypeSelectionOptions,
-	useSharedElementTypeSelection,
-} from "./SharedElementTypeSelection.composable";
 
-type CreateElementRequestFn = (payload: CreateElementRequestPayload) => void;
+type CreateElementRequestFn = (payload: CreateElementRequestPayload) => Promise<AnyContentElement | undefined>;
 
-export const useAddElementDialog = (
-	createElementRequestFn: CreateElementRequestFn,
-	cardId: string
-) => {
+export const useAddElementDialog = (createElementRequestFn: CreateElementRequestFn, cardId: string) => {
 	const { isFeatureEnabled } = useBoardFeatures();
-	const isVideoConferenceEnabled = computed(() =>
-		isFeatureEnabled(BoardFeature.Videoconference)
-	);
-
-	const { hasManageVideoConferencePermission } = useBoardPermissions();
-
+	const isVideoConferenceEnabled = computed(() => isFeatureEnabled(BoardFeature.VIDEOCONFERENCE));
+	const { allowedOperations } = useBoardAllowedOperations();
 	const cardStore = useCardStore();
 
-	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-	const { showCustomNotifier } = useBoardNotifier();
 	const { t } = useI18n();
 
-	const {
-		isDialogOpen,
-		isDialogLoading,
-		closeDialog,
-		staticElementTypeOptions,
-		dynamicElementTypeOptions,
-	} = useSharedElementTypeSelection();
+	const { isDialogOpen, isDialogLoading, closeDialog, staticElementTypeOptions, dynamicElementTypeOptions } =
+		useSharedElementTypeSelection();
+
+	const { openCollaboraFileDialog } = useAddCollaboraFile();
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
@@ -63,31 +46,32 @@ export const useAddElementDialog = (
 		showNotificationByElementType(elementType);
 	};
 
-	const onPreferredElementClick = async (
-		elementType: ContentElementType,
-		tool: PreferredToolResponse
-	) => {
+	const onPreferredElementClick = async (elementType: ContentElementType, tool: PreferredToolResponse) => {
 		closeDialog();
-		await cardStore.createPreferredElement({ cardId, type: elementType }, tool);
+		cardStore.createPreferredElement({ cardId, type: elementType }, tool);
 
 		showNotificationByElementType(elementType);
+	};
+
+	const onOfficeFileClick = async () => {
+		closeDialog();
+		openCollaboraFileDialog();
 	};
 
 	const showNotificationByElementType = (elementType: ContentElementType) => {
 		const translationKeyCollaborativeTextEditor =
 			"components.cardElement.collaborativeTextEditorElement.alert.info.visible";
-		const translationKeyDrawing =
-			"components.cardElement.notification.visibleAndEditable";
+		const translationKeyDrawing = "components.cardElement.notification.visibleAndEditable";
 		let translationKey = "";
 
-		if (elementType === ContentElementType.CollaborativeTextEditor) {
+		if (elementType === ContentElementType.COLLABORATIVE_TEXT_EDITOR) {
 			translationKey = translationKeyCollaborativeTextEditor;
 		}
-		if (elementType === ContentElementType.Drawing) {
+		if (elementType === ContentElementType.DRAWING) {
 			translationKey = translationKeyDrawing;
 		}
 		if (translationKey !== "") {
-			showCustomNotifier(t(translationKey), "info");
+			notifyInfo(translationKey);
 		}
 	};
 
@@ -95,113 +79,93 @@ export const useAddElementDialog = (
 		const options: ElementTypeSelectionOptions[] = [
 			{
 				icon: mdiFormatText,
-				label: t(
-					"components.elementTypeSelection.elements.textElement.subtitle"
-				),
-				action: () => onElementClick(ContentElementType.RichText),
+				label: t("components.elementTypeSelection.elements.textElement.subtitle"),
+				action: () => onElementClick(ContentElementType.RICH_TEXT),
 				testId: "create-element-text",
 			},
 			{
 				icon: mdiTrayArrowUp,
-				label: t(
-					"components.elementTypeSelection.elements.fileElement.subtitle"
-				),
-				action: () => onElementClick(ContentElementType.File),
+				label: t("components.elementTypeSelection.elements.fileElement.subtitle"),
+				action: () => onElementClick(ContentElementType.FILE),
 				testId: "create-element-file",
 			},
 		];
 
-		if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
-			options.push({
-				icon: mdiLightbulbOnOutline,
-				label: t(
-					"components.elementTypeSelection.elements.submissionElement.subtitle"
-				),
-				action: () => onElementClick(ContentElementType.SubmissionContainer),
-				testId: "create-element-submission-container",
-			});
-		}
+		const envConfig = useEnvConfig();
 
-		if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
+		if (envConfig.value.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
 			options.push({
 				icon: mdiPuzzleOutline,
-				label: t(
-					"components.elementTypeSelection.elements.externalToolElement.subtitle"
-				),
-				action: () => onElementClick(ContentElementType.ExternalTool),
+				label: t("components.elementTypeSelection.elements.externalToolElement.subtitle"),
+				action: () => onElementClick(ContentElementType.EXTERNAL_TOOL),
 				testId: "create-element-external-tool-container",
 			});
 		}
 
-		if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
+		if (envConfig.value.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
 			options.push({
 				icon: mdiLink,
-				label: t(
-					"components.elementTypeSelection.elements.linkElement.subtitle"
-				),
-				action: () => onElementClick(ContentElementType.Link),
+				label: t("components.elementTypeSelection.elements.linkElement.subtitle"),
+				action: () => onElementClick(ContentElementType.LINK),
 				testId: "create-element-link",
 			});
 		}
 
-		if (envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
+		if (envConfig.value.FEATURE_TLDRAW_ENABLED) {
 			options.push({
 				icon: mdiPresentation,
 				label: t("components.cardElement.drawingElement"),
-				action: () => onElementClick(ContentElementType.Drawing),
+				action: () => onElementClick(ContentElementType.DRAWING),
 				testId: "create-element-drawing-element",
 			});
 		}
 
-		if (
-			envConfigModule.getEnv
-				.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED
-		) {
+		if (envConfig.value.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED) {
 			options.push({
 				icon: mdiTextBoxEditOutline,
-				label: t(
-					"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle"
-				),
-				action: () =>
-					onElementClick(ContentElementType.CollaborativeTextEditor),
+				label: t("components.elementTypeSelection.elements.collaborativeTextEditor.subtitle"),
+				action: () => onElementClick(ContentElementType.COLLABORATIVE_TEXT_EDITOR),
 				testId: "create-element-collaborative-text-editor",
 			});
 		}
 
 		if (
-			envConfigModule.getEnv.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED &&
+			envConfig.value.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED &&
 			isVideoConferenceEnabled.value &&
-			hasManageVideoConferencePermission.value
+			allowedOperations.value.manageVideoConference
 		) {
 			options.push({
 				icon: mdiVideoOutline,
-				label: t(
-					"components.elementTypeSelection.elements.videoConferenceElement.subtitle"
-				),
-				action: () => onElementClick(ContentElementType.VideoConference),
+				label: t("components.elementTypeSelection.elements.videoConferenceElement.subtitle"),
+				action: () => onElementClick(ContentElementType.VIDEO_CONFERENCE),
 				testId: "create-element-video-conference",
 			});
 		}
 
-		if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED) {
+		if (envConfig.value.FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED) {
 			options.push({
 				icon: mdiFolderOpenOutline,
-				label: t(
-					"components.elementTypeSelection.elements.folderElement.subtitle"
-				),
-				action: () => onElementClick(ContentElementType.FileFolder),
+				label: t("components.elementTypeSelection.elements.folderElement.subtitle"),
+				action: () => onElementClick(ContentElementType.FILE_FOLDER),
 				testId: "create-element-file-folder",
 			});
 		}
 
-		if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_H5P_ENABLED) {
+		if (envConfig.value.FEATURE_COLUMN_BOARD_H5P_ENABLED) {
 			options.push({
 				icon: "$h5pOutline",
-				label: t(
-					"components.elementTypeSelection.elements.h5pElement.subtitle"
-				),
-				action: () => onElementClick(ContentElementType.H5p),
+				label: t("components.elementTypeSelection.elements.h5pElement.subtitle"),
+				action: () => onElementClick(ContentElementType.H5P),
 				testId: "create-element-h5p",
+			});
+		}
+
+		if (envConfig.value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED) {
+			options.push({
+				icon: mdiFileDocumentOutline,
+				label: t("components.elementTypeSelection.elements.collabora.subtitle"),
+				action: () => onOfficeFileClick(),
+				testId: "create-element-file-with-collabora",
 			});
 		}
 
@@ -211,23 +175,18 @@ export const useAddElementDialog = (
 	const loadDynamicElementOptions = (): void => {
 		const options: ElementTypeSelectionOptions[] = [];
 
-		const hasPreferredTools =
-			!cardStore.isPreferredToolsLoading && cardStore.preferredTools.length > 0;
+		const hasPreferredTools = !cardStore.isPreferredToolsLoading && cardStore.preferredTools.length > 0;
+		const canCreateExternalToolElement = allowedOperations.value.createExternalToolElement;
 
-		if (
-			envConfigModule.getEnv.FEATURE_PREFERRED_CTL_TOOLS_ENABLED &&
-			hasPreferredTools
-		) {
+		if (useEnvConfig().value.FEATURE_PREFERRED_CTL_TOOLS_ENABLED && hasPreferredTools && canCreateExternalToolElement) {
 			cardStore.preferredTools.forEach((tool: PreferredToolResponse) => {
 				if (!tool.iconName) {
 					tool.iconName = "mdiPuzzleOutline";
 				}
-
 				options.push({
 					icon: "$" + tool.iconName,
 					label: tool.name,
-					action: () =>
-						onPreferredElementClick(ContentElementType.ExternalTool, tool),
+					action: () => onPreferredElementClick(ContentElementType.EXTERNAL_TOOL, tool),
 					testId: `create-element-preferred-element-${tool.name}`,
 				});
 			});

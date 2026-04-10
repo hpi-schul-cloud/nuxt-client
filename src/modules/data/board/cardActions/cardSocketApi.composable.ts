@@ -1,25 +1,31 @@
-import { chunk } from "lodash";
-import * as CardActions from "./cardActions";
-import { useSocketConnection } from "../socket/socket";
+import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 import { useBoardStore } from "../Board.store";
 import { useCardStore } from "../Card.store";
-import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
+import { useSocketConnection } from "../socket/socket";
 import {
 	CreateElementRequestPayload,
 	DeleteCardRequestPayload,
 	DeleteElementRequestPayload,
+	DuplicateCardRequestPayload,
 	FetchCardRequestPayload,
 	MoveElementRequestPayload,
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
 	UpdateElementRequestPayload,
 } from "./cardActionPayload.types";
+import * as CardActions from "./cardActions";
+import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
+import { AnyContentElement } from "@/types/board/ContentElement";
+import { AnyContentElementSchema } from "@/types/board/ContentElement.schema";
+import { notifyError } from "@data-app";
 import { useDebounceFn } from "@vueuse/core";
-import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
+import { chunk } from "lodash-es";
 import { storeToRefs } from "pinia";
+import { useI18n } from "vue-i18n";
 
 export const useCardSocketApi = () => {
 	const cardStore = useCardStore();
+	const { t } = useI18n();
 
 	const WAIT_AFTER_LAST_CALL_IN_MS = 30;
 	const MAX_WAIT_BEFORE_FIRST_CALL_IN_MS = 200;
@@ -29,13 +35,12 @@ export const useCardSocketApi = () => {
 		notifyUpdateCardTitleSuccess,
 		notifyCreateElementSuccess,
 		notifyDeleteElementSuccess,
+		notifyDuplicateCardSuccess,
 		notifyMoveElementSuccess,
 		notifyUpdateElementSuccess,
 	} = useBoardAriaNotification();
 
-	const dispatch = async (
-		action: PermittedStoreActions<typeof CardActions>
-	) => {
+	const dispatch = async (action: PermittedStoreActions<typeof CardActions>) => {
 		const successActions = [
 			on(CardActions.createElementSuccess, cardStore.createElementSuccess),
 			on(CardActions.deleteElementSuccess, cardStore.deleteElementSuccess),
@@ -44,10 +49,8 @@ export const useCardSocketApi = () => {
 			on(CardActions.deleteCardSuccess, cardStore.deleteCardSuccess),
 			on(CardActions.fetchCardSuccess, cardStore.fetchCardSuccess),
 			on(CardActions.updateCardTitleSuccess, cardStore.updateCardTitleSuccess),
-			on(
-				CardActions.updateCardHeightSuccess,
-				cardStore.updateCardHeightSuccess
-			),
+			on(CardActions.updateCardHeightSuccess, cardStore.updateCardHeightSuccess),
+			on(CardActions.duplicateCardSuccess, cardStore.duplicateCardSuccess),
 		];
 
 		const failureActions = [
@@ -55,13 +58,10 @@ export const useCardSocketApi = () => {
 			on(CardActions.deleteElementFailure, ({ cardId }) => reloadBoard(cardId)),
 			on(CardActions.moveElementFailure, () => reloadBoard()),
 			on(CardActions.updateElementFailure, () => reloadBoard()),
-			on(CardActions.fetchCardFailure, ({ cardIds }) =>
-				reloadBoard(cardIds[0])
-			),
-			on(CardActions.updateCardTitleFailure, ({ cardId }) =>
-				reloadBoard(cardId)
-			),
+			on(CardActions.fetchCardFailure, ({ cardIds }) => reloadBoard(cardIds[0])),
+			on(CardActions.updateCardTitleFailure, ({ cardId }) => reloadBoard(cardId)),
 			on(CardActions.deleteCardFailure, ({ cardId }) => reloadBoard(cardId)),
+			on(CardActions.duplicateCardFailure, ({ cardId }) => reloadBoard(cardId)),
 		];
 
 		const ariaLiveNotification = [
@@ -70,6 +70,7 @@ export const useCardSocketApi = () => {
 			on(CardActions.deleteElementSuccess, notifyDeleteElementSuccess),
 			on(CardActions.moveElementSuccess, notifyMoveElementSuccess),
 			on(CardActions.updateElementSuccess, notifyUpdateElementSuccess),
+			on(CardActions.duplicateCardSuccess, notifyDuplicateCardSuccess),
 		];
 
 		handle(
@@ -81,7 +82,7 @@ export const useCardSocketApi = () => {
 		);
 	};
 
-	const { emitOnSocket, disconnectSocket } = useSocketConnection(dispatch);
+	const { emitOnSocket, disconnectSocket, emitWithAck } = useSocketConnection(dispatch);
 
 	const disconnectSocketRequest = () => {
 		disconnectSocket();
@@ -95,17 +96,22 @@ export const useCardSocketApi = () => {
 	const _debouncedFetchCardEmit = useDebounceFn(
 		() => {
 			const batches = chunk(cardIdsToFetch, 50);
-			batches.forEach((cardIds) =>
-				emitOnSocket("fetch-card-request", { cardIds })
-			);
+			batches.forEach((cardIds) => emitOnSocket("fetch-card-request", { cardIds }));
 			cardIdsToFetch = [];
 		},
 		WAIT_AFTER_LAST_CALL_IN_MS,
 		{ maxWait: MAX_WAIT_BEFORE_FIRST_CALL_IN_MS }
 	);
 
-	const createElementRequest = async (payload: CreateElementRequestPayload) => {
-		emitOnSocket("create-element-request", payload);
+	const createElementRequest = async (payload: CreateElementRequestPayload): Promise<AnyContentElement | undefined> => {
+		const response = (await emitWithAck("create-element-request", payload)) as unknown;
+
+		try {
+			const anyContentElement = AnyContentElementSchema.parse(response);
+			return anyContentElement;
+		} catch {
+			notifyError(t("components.elementTypeSelection.messageError"));
+		}
 	};
 
 	const deleteElementRequest = async (payload: DeleteElementRequestPayload) => {
@@ -116,9 +122,7 @@ export const useCardSocketApi = () => {
 		emitOnSocket("move-element-request", payload);
 	};
 
-	const updateElementRequest = async ({
-		element,
-	}: UpdateElementRequestPayload) => {
+	const updateElementRequest = async ({ element }: UpdateElementRequestPayload) => {
 		emitOnSocket("update-element-request", {
 			elementId: element.id,
 			data: {
@@ -140,19 +144,17 @@ export const useCardSocketApi = () => {
 		emitOnSocket("update-card-height-request", payload);
 	};
 
+	const duplicateCardRequest = (payload: DuplicateCardRequestPayload) => {
+		emitOnSocket("duplicate-card-request", payload);
+	};
+
 	const reloadBoard = (cardId = "") => {
 		const boardStore = useBoardStore();
 		const { board } = storeToRefs(boardStore);
 		if (cardId) {
 			const location = boardStore.getCardLocation(cardId);
 			const { columnIndex, cardIndex } = location ?? {};
-			if (
-				board?.value &&
-				columnIndex !== undefined &&
-				cardIndex !== undefined &&
-				columnIndex > -1 &&
-				cardIndex > -1
-			) {
+			if (board?.value && columnIndex !== undefined && cardIndex !== undefined && columnIndex > -1 && cardIndex > -1) {
 				// remove card so that reloading data results in rerender
 				board.value.columns[columnIndex].cards.splice(cardIndex, 1);
 			}
@@ -171,5 +173,6 @@ export const useCardSocketApi = () => {
 		fetchCardRequest,
 		updateCardTitleRequest,
 		updateCardHeightRequest,
+		duplicateCardRequest,
 	};
 };

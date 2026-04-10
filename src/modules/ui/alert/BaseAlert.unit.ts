@@ -1,9 +1,6 @@
-import { shallowMount } from "@vue/test-utils";
 import BaseAlert from "./BaseAlert.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 import { VAlert } from "vuetify/components";
 
 describe("BaseAlert", () => {

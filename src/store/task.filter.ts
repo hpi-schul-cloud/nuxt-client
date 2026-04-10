@@ -35,27 +35,20 @@ export class TaskFilter {
 
 	byCourseNames(courseNames: string[]): TaskFilter {
 		const filteredTasks =
-			courseNames.length > 0
-				? this.tasks.filter((task) => courseNames.includes(task.courseName))
-				: this.tasks;
+			courseNames.length > 0 ? this.tasks.filter((task) => courseNames.includes(task.courseName)) : this.tasks;
 
 		return new TaskFilter(filteredTasks);
 	}
 
 	byOpenForTeacher(): TaskFilter {
-		const filteredTasks = this.tasks.filter(
-			(task) => task.status.isDraft === false
-		);
+		const filteredTasks = this.tasks.filter((task) => task.status.isDraft === false);
 
 		return new TaskFilter(filteredTasks);
 	}
 
 	byOpenForStudent(): TaskFilter {
 		const filteredTasks = this.tasks.filter(
-			(task) =>
-				task.status.isDraft === false &&
-				task.status.submitted === 0 &&
-				task.status.graded === 0
+			(task) => task.status.isDraft === false && task.status.submitted === 0 && task.status.graded === 0
 		);
 
 		return new TaskFilter(filteredTasks);
@@ -68,34 +61,26 @@ export class TaskFilter {
 	}
 
 	withDueDate(): TaskFilter {
-		const withDueDate = this.tasks.filter(
-			(task) => task.dueDate && new Date(task.dueDate) > new Date()
-		);
+		const withDueDate = this.tasks.filter((task) => task.dueDate && new Date(task.dueDate) > new Date());
 
 		return new TaskFilter(withDueDate);
 	}
 
 	byOverdue(): TaskFilter {
-		const overdue = this.tasks.filter(
-			(task) => task.dueDate && new Date(task.dueDate) < new Date()
-		);
+		const overdue = this.tasks.filter((task) => task.dueDate && new Date(task.dueDate) < new Date());
 
 		return new TaskFilter(overdue);
 	}
 
 	// it is a teacher based interpretation or and why or condition?
 	byCompletedForStudent(): TaskFilter {
-		const completed = this.tasks.filter(
-			(task) => task.status.submitted >= 1 || task.status.graded >= 1
-		);
+		const completed = this.tasks.filter((task) => task.status.submitted >= 1 || task.status.graded >= 1);
 
 		return new TaskFilter(completed);
 	}
 
 	bySubmittedForStudent(): TaskFilter {
-		const submitted = this.tasks.filter(
-			(task) => task.status.submitted > 0 && task.status.graded === 0
-		);
+		const submitted = this.tasks.filter((task) => task.status.submitted > 0 && task.status.graded === 0);
 
 		return new TaskFilter(submitted);
 	}
@@ -107,18 +92,14 @@ export class TaskFilter {
 	}
 
 	byDraftForTeacher(isDraft: boolean): TaskFilter {
-		const filteredTasks = this.tasks.filter(
-			(task) => task.status.isDraft === isDraft
-		);
+		const filteredTasks = this.tasks.filter((task) => task.status.isDraft === isDraft);
 		return new TaskFilter(filteredTasks);
 	}
 
 	filterSubstituteForTeacher(withSubstitute: boolean): TaskFilter {
 		const filteredTasks = withSubstitute
 			? this.tasks
-			: this.tasks.filter(
-					(task) => task.status.isSubstitutionTeacher === false
-				);
+			: this.tasks.filter((task) => task.status.isSubstitutionTeacher === false);
 
 		return new TaskFilter(filteredTasks);
 	}

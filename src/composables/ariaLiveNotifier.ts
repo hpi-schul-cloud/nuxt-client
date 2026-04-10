@@ -1,5 +1,5 @@
-import { computed, ref } from "vue";
 import { useDebounceFn } from "@vueuse/core";
+import { computed, ref } from "vue";
 
 type Importance = "polite" | "assertive";
 let mode: "write" | "queue" = "write";
@@ -11,15 +11,10 @@ let handle: NodeJS.Timeout | null = null;
 
 export const useAriaLiveNotifier = () => {
 	const numberOfNotifications = computed(
-		() =>
-			notifications.value["polite"].length +
-			notifications.value["assertive"].length
+		() => notifications.value["polite"].length + notifications.value["assertive"].length
 	);
 
-	const notifyOnScreenReader = (
-		message: string,
-		importance: Importance = "polite"
-	) => {
+	const notifyOnScreenReader = (message: string, importance: Importance = "polite") => {
 		notifications.value[importance].push(message);
 		handleNotificationWriting();
 	};
@@ -72,17 +67,13 @@ export const useAriaLiveNotifier = () => {
 		const element = getElement(importance);
 
 		if (element && notifications.value[importance].length > 0) {
-			element.innerHTML = notifications.value[importance]
-				.map((m) => `<span>${m}</span>`)
-				.join("");
+			element.innerHTML = notifications.value[importance].map((m) => `<span>${m}</span>`).join("");
 			notifications.value[importance] = [];
 		}
 	};
 
 	const getElement = (importance: Importance): HTMLElement | null => {
-		const element = document.getElementById(
-			`notify-screen-reader-${importance}`
-		);
+		const element = document.getElementById(`notify-screen-reader-${importance}`);
 
 		return element;
 	};

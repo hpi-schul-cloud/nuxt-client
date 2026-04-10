@@ -1,15 +1,13 @@
+import GroupSelectionDialog from "./GroupSelectionDialog.vue";
+import StartNewCourseSyncDialog from "./StartNewCourseSyncDialog.vue";
 import { groupResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
-import GroupSelectionDialog from "./GroupSelectionDialog.vue";
-import StartNewCourseSyncDialog from "./StartNewCourseSyncDialog.vue";
 
 describe("StartNewCourseSyncDialog", () => {
-	const getWrapper = (
-		props: ComponentProps<typeof StartNewCourseSyncDialog> = { isOpen: true }
-	) => {
+	const getWrapper = (props: ComponentProps<typeof StartNewCourseSyncDialog> = { isOpen: true }) => {
 		const wrapper = shallowMount(StartNewCourseSyncDialog, {
 			global: {
 				plugins: [createTestingI18n()],
@@ -69,9 +67,7 @@ describe("StartNewCourseSyncDialog", () => {
 			wrapper.getComponent(GroupSelectionDialog).vm.$emit("confirm", group);
 			await nextTick();
 
-			expect(window.location.assign).toHaveBeenCalledWith(
-				`/courses/add?syncedGroupId=${group.id}`
-			);
+			expect(window.location.assign).toHaveBeenCalledWith(`/courses/add?syncedGroupId=${group.id}`);
 		});
 	});
 

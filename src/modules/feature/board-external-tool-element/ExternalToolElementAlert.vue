@@ -32,13 +32,12 @@
 
 <script setup lang="ts">
 import { BusinessError } from "@/store/types/commons";
-import { useBoardPermissions } from "@data-board";
-import {
-	ContextExternalToolConfigurationStatus,
-	useContextExternalToolConfigurationStatus,
-} from "@data-external-tool";
+import { useBoardAllowedOperations } from "@data-board";
+import { ContextExternalToolConfigurationStatus, useContextExternalToolConfigurationStatus } from "@data-external-tool";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { computed, ComputedRef } from "vue";
+
+const { allowedOperations } = useBoardAllowedOperations();
 
 type Props = {
 	toolDisplayName: string;
@@ -50,13 +49,8 @@ const props = withDefaults(defineProps<Props>(), {
 	error: undefined,
 });
 
-const {
-	determineToolStatusTranslationKey,
-	determineDeactivatedTranslationKey,
-	determineNotLicensedTranslationKey,
-} = useContextExternalToolConfigurationStatus();
-
-const { isTeacher } = useBoardPermissions();
+const { determineToolStatusTranslationKey, determineDeactivatedTranslationKey, determineNotLicensedTranslationKey } =
+	useContextExternalToolConfigurationStatus();
 
 const isToolNotLaunchable: ComputedRef<boolean> = computed(
 	() =>
@@ -66,12 +60,11 @@ const isToolNotLaunchable: ComputedRef<boolean> = computed(
 );
 
 const isToolIncompleteOperational: ComputedRef<boolean> = computed(
-	() =>
-		props.toolStatus.isIncompleteOperationalOnScopeContext && isTeacher.value
+	() => props.toolStatus.isIncompleteOperationalOnScopeContext && allowedOperations.value.createExternalToolElement
 );
 
 const errorMessage: ComputedRef<string> = computed(() =>
-	isTeacher.value
+	allowedOperations.value.createExternalToolElement
 		? "feature-board-external-tool-element.alert.error.teacher"
 		: "feature-board-external-tool-element.alert.error.student"
 );

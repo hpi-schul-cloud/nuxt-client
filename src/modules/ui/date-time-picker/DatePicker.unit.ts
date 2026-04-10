@@ -1,51 +1,49 @@
-import {
-	ComponentMountingOptions,
-	flushPromises,
-	mount,
-} from "@vue/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import DatePicker from "./DatePicker.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { flushPromises, mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { VDatePicker, VMenu, VTextField } from "vuetify/components";
 
 describe("DatePicker", () => {
-	const mountComponent = (
-		options: ComponentMountingOptions<typeof DatePicker> = {}
+	const setup = (
+		options?: Partial<{
+			date: string;
+			required: boolean;
+			ariaLabel: string;
+			label: string;
+		}>
 	) => {
-		return mount(DatePicker, {
+		const wrapper = mount(DatePicker, {
+			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: {
-					"transition-group": false,
 					UseFocusTrap: true,
+					VMenu: true,
 				},
-				renderStubDefaultSlot: true, // to access content inside focus trap
 			},
-			...options,
-			attachTo: document.body,
-		});
-	};
-
-	const setup = () => {
-		const wrapper = mountComponent({
 			props: {
-				date: new Date().toISOString(),
-				required: true,
+				date: options?.date ?? undefined,
+				required: options?.required ?? true,
+				ariaLabel: options?.ariaLabel ?? undefined,
+				label: options?.label ?? undefined,
 			},
 		});
+		const textField = wrapper.findComponent(VTextField);
 
-		const textField = wrapper.findComponent({ name: "v-text-field" });
-		const input = textField.find("input");
-
-		return { wrapper, textField, input };
+		return { wrapper, textField };
 	};
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	it("should render component", () => {
-		const wrapper = mountComponent({
-			props: { date: new Date().toISOString() },
-		});
-		expect(wrapper.findComponent(DatePicker).exists()).toBe(true);
+		const { wrapper } = setup({ date: new Date().toISOString() });
+		const datePicker = wrapper.findComponent(DatePicker);
+
+		expect(datePicker.exists()).toBe(true);
 	});
 
 	it("should render text field", () => {
@@ -54,103 +52,151 @@ describe("DatePicker", () => {
 		expect(textField.exists()).toBe(true);
 	});
 
-	it("should emit update:date event on input", async () => {
-		const { wrapper, textField } = setup();
+	it("should format raw numeric input into DD.MM.YYYY pattern", async () => {
+		const { textField } = setup();
+		const input = textField.find("input");
 
-		await textField.trigger("click");
+		await input.setValue("01012026");
 
-		const datePicker = wrapper.findComponent({ name: "v-date-picker" });
-		expect(datePicker.exists()).toBe(true);
-
-		await datePicker.vm.$emit("update:modelValue", new Date().toISOString());
-		await flushPromises();
-		expect(wrapper.emitted("update:date")).toHaveLength(1);
+		expect(input.element.value).toBe("01.01.2026");
 	});
 
-	describe("when required prop is set & value is left empty", () => {
-		it("should emit error event", async () => {
-			const { wrapper, input } = setup();
+	describe("keyboard navigation", () => {
+		it("should open date picker menu on space key", async () => {
+			const { wrapper, textField } = setup();
+			const datePickerMenu = wrapper.findComponent(VMenu);
 
-			await input.setValue("");
-			await flushPromises();
+			await textField.trigger("keydown.space");
 
-			expect(wrapper.emitted("error")).not.toBeUndefined();
-			expect(wrapper.emitted("error")!.length).toBeGreaterThan(0);
+			expect(datePickerMenu.props().modelValue).toBe(true);
 		});
 
-		it("should emit update:date event with null value", async () => {
-			const { wrapper, input } = setup();
+		it("should open date picker menu on enter key", async () => {
+			const { wrapper, textField } = setup();
+			const datePickerMenu = wrapper.findComponent(VMenu);
 
-			await input.setValue("");
-			await flushPromises();
+			await textField.trigger("keydown.enter");
 
-			const updateDateEvent = wrapper.emitted("update:date");
-			const updateDateEventValue = updateDateEvent?.[0][0];
-
-			expect(updateDateEvent).not.toBeUndefined();
-			expect(updateDateEvent!.length).toBeGreaterThan(0);
-			expect(updateDateEventValue).toBe(null);
+			expect(datePickerMenu.props().modelValue).toBe(true);
 		});
 
-		it("should display error message for invalid date format", async () => {
-			vi.useFakeTimers();
-			const { textField, input } = setup();
+		it("should close date picker menu on tab key", async () => {
+			const { wrapper, textField } = setup();
+			const datePickerMenu = wrapper.findComponent(VMenu);
 
-			await input.setValue("");
-			vi.advanceTimersByTime(1000);
-			await flushPromises();
+			await textField.trigger("click");
+			await textField.trigger("keydown.tab");
 
-			const errorElement = textField.find(".v-messages");
-			expect(errorElement.text()).toEqual(
-				"components.datePicker.validation.required"
-			);
+			expect(datePickerMenu.props().modelValue).toBe(false);
 		});
 	});
 
-	describe("when date is invalid", () => {
-		it("should emit error event", async () => {
-			const wrapper = mountComponent({
-				props: { date: new Date().toISOString() },
+	describe("validation", () => {
+		it("should reset validation if required prop changes from true to false", async () => {
+			const { wrapper, textField } = setup({ required: true });
+
+			await textField.setValue("");
+			await flushPromises();
+			expect(textField.text()).toBe("components.datePicker.validation.required");
+
+			await wrapper.setProps({ required: false });
+			await flushPromises();
+			expect(textField.text()).toBe("");
+		});
+
+		describe("when input is valid", () => {
+			it("should emit update:date event", async () => {
+				const { wrapper, textField } = setup();
+
+				await textField.trigger("click");
+
+				const datePicker = wrapper.getComponent(VMenu).getComponent(VDatePicker);
+				const selectedDate = "2022-03-06T00:00:00.000Z";
+				await datePicker.setValue(selectedDate);
+				await flushPromises();
+				const updateDateEvent = wrapper.emitted("update:date");
+
+				expect(updateDateEvent![1]).toEqual(["2022-03-06"]);
 			});
 
-			const textField = wrapper.findComponent({ name: "v-text-field" });
+			it("should emit update:date with undefined if input is empty and not required", async () => {
+				const { wrapper, textField } = setup({ required: false });
+
+				await textField.setValue("");
+				await flushPromises();
+
+				const updateDateEvent = wrapper.emitted("update:date");
+				expect(updateDateEvent).toBeDefined();
+				expect(updateDateEvent![0]).toEqual([undefined]);
+			});
+		});
+
+		describe("when input is invalid", () => {
+			describe("if required and value is empty", () => {
+				it("should emit update:date with undefined on empty string", async () => {
+					const { wrapper, textField } = setup({ required: true });
+					await textField.setValue("");
+					await flushPromises();
+
+					const updateDateEvent = wrapper.emitted("update:date");
+					expect(updateDateEvent).toBeDefined();
+					expect(updateDateEvent![0]).toEqual([undefined]);
+				});
+
+				it("should display error message for required date", async () => {
+					const { textField } = setup({ required: true });
+
+					await textField.setValue("");
+					await textField.vm.validate();
+					expect(textField.vm.isValid).toBe(false);
+				});
+			});
+
+			describe("when date is invalid", () => {
+				it("should emit update:date with undefined for invalid date", async () => {
+					const { wrapper, textField } = setup();
+
+					await textField.setValue("55.55.5555");
+					await flushPromises();
+
+					const updateDateEvent = wrapper.emitted("update:date");
+					expect(updateDateEvent).toBeDefined();
+					expect(updateDateEvent![0]).toEqual([undefined]);
+				});
+
+				it("should display error message for invalid date format", async () => {
+					const { textField } = setup();
+
+					await textField.setValue("22");
+					await textField.vm.validate();
+					expect(textField.vm.isValid).toBe(false);
+				});
+			});
+		});
+	});
+
+	describe("aria label date input", () => {
+		it("should set aria-label to aria label prop if provided", () => {
+			const ariaLabel = "Date Picker Aria ariaLabel";
+			const { textField } = setup({ ariaLabel });
 			const input = textField.find("input");
 
-			await input.setValue("55.55.5555");
-			await flushPromises();
-
-			expect(wrapper.emitted("error")).not.toBeUndefined();
-			expect(wrapper.emitted("error")!.length).toBeGreaterThan(0);
+			expect(input.attributes("aria-label")).toContain(ariaLabel);
 		});
 
-		it("should emit update:date event with null value", async () => {
-			const { wrapper, input } = setup();
+		it("should set aria-label to label prop if aria label prop not provided", () => {
+			const label = "Date Picker Label";
+			const { textField } = setup({ label });
+			const input = textField.find("input");
 
-			await input.setValue("");
-			await flushPromises();
-
-			const updateDateEvent = wrapper.emitted("update:date");
-			const updateDateEventValue = updateDateEvent?.[0][0];
-
-			expect(updateDateEvent).not.toBeUndefined();
-			expect(updateDateEvent!.length).toBeGreaterThan(0);
-			expect(updateDateEventValue).toBe(null);
+			expect(input.attributes("aria-label")).toContain(label);
 		});
 
-		it("should display error message for invalid date format", async () => {
-			vi.useFakeTimers();
-			const { textField, input } = setup();
+		it("should set aria-label to default if neither aria label nor label prop provided", () => {
+			const { textField } = setup();
+			const input = textField.find("input");
 
-			await input.setValue("22");
-			vi.advanceTimersByTime(1000);
-			await flushPromises();
-
-			const errorElement = textField.find(".v-messages");
-			expect(errorElement.text()).toEqual(
-				"components.datePicker.validation.format"
-			);
+			expect(input.attributes("aria-label")).toContain("common.labels.date");
 		});
-
-		it.todo("should display external error message");
 	});
 });

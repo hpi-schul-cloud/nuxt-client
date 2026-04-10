@@ -1,17 +1,12 @@
 <template>
-	<DefaultWireframe
-		max-width="full"
-		:breadcrumbs="breadcrumbs"
-		:fab-items="fabAction"
-		@fab:clicked="fabClickHandler"
-	>
+	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabItems">
 		<template #header>
 			<div class="d-flex align-center">
-				<h1 class="text-h3 mb-4" data-testid="folder-title">
+				<h1 data-testid="folder-title">
 					{{ folderName }}
 				</h1>
 				<FolderMenu
-					v-if="hasEditPermission"
+					v-if="allowedOperations.createFileElement"
 					:folder-name="folderName"
 					@delete="onDelete"
 					@rename="onRenameActionClick"
@@ -21,7 +16,8 @@
 		<FileTable
 			:is-loading="isLoading"
 			:is-empty="isEmpty"
-			:has-edit-permission="hasEditPermission"
+			:file-storage-error="fileStorageError"
+			:has-edit-permission="allowedOperations.createFileElement"
 			:file-records="uploadedFileRecords"
 			:upload-progress="uploadProgress"
 			:are-upload-stats-visible="areUploadStatsVisible"
@@ -32,50 +28,41 @@
 			@download-files-as-archive="downloadFilesAsArchiveHandler"
 		/>
 	</DefaultWireframe>
-	<ConfirmationDialog />
 	<RenameFolderDialog
 		v-model:is-dialog-open="isRenameDialogOpen"
 		:name="folderName"
 		@confirm="onRename"
 		@cancel="onRenameCancel"
 	/>
-	<input
-		ref="fileInput"
-		type="file"
-		multiple
-		hidden
-		data-testid="input-folder-fileupload"
-		aria-hidden="true"
-	/>
+	<input ref="fileInput" type="file" multiple hidden data-testid="input-folder-fileupload" aria-hidden="true" />
 	<LightBox />
+	<AddCollaboraFileDialog @create-collabora-file="onCreateCollaboraFile" />
 </template>
 
 <script setup lang="ts">
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { ParentNodeType } from "@/types/board/ContentElement";
-import { FileRecord, FileRecordParent } from "@/types/file/File";
-import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
-import {
-	useBoardPermissions,
-	useSharedBoardPageInformation,
-} from "@data-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useBoardApi } from "@/modules/data/board/BoardApi.composable"; // FIX_CIRCULAR_DEPENDENCY
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
-import { useFileStorageApi } from "@data-file";
-import { useFolderState } from "@data-folder";
-import { mdiPlus } from "@icons/material";
-import { ConfirmationDialog } from "@ui-confirmation-dialog";
-import { LightBox } from "@ui-light-box";
-import dayjs from "dayjs";
-import { computed, onMounted, ref, toRef, watch } from "vue";
-import { useI18n } from "vue-i18n";
 import FileTable from "./file-table/FileTable.vue";
 import FolderMenu from "./FolderMenu.vue";
 import RenameFolderDialog from "./RenameFolderDialog.vue";
+import { ParentNodeType } from "@/types/board/ContentElement";
+import { FileRecord, FileRecordParent } from "@/types/file/File";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
+import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { useBoardAllowedOperations, useBoardApi, useBoardStore, useSharedBoardPageInformation } from "@data-board";
+import { useEnvConfig } from "@data-env";
+import { useFileStorageApi } from "@data-file";
+import { useFolderState } from "@data-folder";
+import type { CreateCollaboraFilePayload } from "@feature-collabora";
+import { AddCollaboraFileDialog, useAddCollaboraFile } from "@feature-collabora";
+import { mdiFileDocumentPlusOutline, mdiPlus, mdiTrayArrowUp } from "@icons/material";
+import { DefaultWireframe } from "@ui-layout";
+import { LightBox } from "@ui-light-box";
+import { FabAction } from "@ui-speed-dial-menu";
+import { useErrorHandler } from "@util-error-handling";
+import dayjs from "dayjs";
+import { computed, onMounted, ref, toRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 
 const boardApi = useBoardApi();
 
@@ -90,42 +77,59 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-	(update: "update:folder-name", folderName: string): void;
+	(update: "update:folder-name", pageTitle: string): void;
 }>();
 
-const {
-	breadcrumbs,
-	folderName,
-	fetchFileFolderElement,
-	parent,
-	mapNodeTypeToPathType,
-	renameFolder,
-} = useFolderState();
+const { allowedOperations } = useBoardAllowedOperations();
+
+const { breadcrumbs, folderName, fetchFileFolderElement, parent, mapNodeTypeToPathType, renameFolder } =
+	useFolderState();
 
 const { createPageInformation } = useSharedBoardPageInformation();
 
-const { fetchFiles, upload, getFileRecordsByParentId, deleteFiles, rename } =
-	useFileStorageApi();
+const { fetchFiles, upload, uploadCollaboraFile, getFileRecordsByParentId, deleteFiles, rename } = useFileStorageApi();
 
 const boardStore = useBoardStore();
 
-const { hasEditPermission } = useBoardPermissions();
 const { handleError, notifyWithTemplate } = useErrorHandler();
+
+const { openCollaboraFileDialog } = useAddCollaboraFile();
 
 const folderId = toRef(props, "folderId");
 const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
+
 const fileInput = ref<HTMLInputElement | null>(null);
 const isRenameDialogOpen = ref(false);
 
-const fabAction = computed(() => {
-	if (!hasEditPermission.value) return;
+const isCollaboraEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED);
 
-	return {
-		icon: mdiPlus,
-		title: t("pages.folder.fab.title"),
-		ariaLabel: t("pages.folder.fab.title"),
-		dataTestId: "fab-add-files",
-	};
+const fabItems = computed(() => {
+	if (!allowedOperations.value.createFileElement) return;
+
+	const actions: FabAction[] = [
+		{
+			icon: mdiPlus,
+			label: t("pages.folder.fab.title"),
+			dataTestId: "fab-add-files",
+		},
+		{
+			icon: mdiTrayArrowUp,
+			label: t("pages.folder.fab.upload-file"),
+			dataTestId: "fab-button-upload-file",
+			clickHandler: uploadFile,
+		},
+	];
+
+	if (isCollaboraEnabled.value) {
+		actions.push({
+			icon: mdiFileDocumentPlusOutline,
+			label: t("pages.folder.fab.create-document"),
+			dataTestId: "fab-button-create-document",
+			clickHandler: openCollaboraFileDialog,
+		});
+	}
+
+	return actions;
 });
 
 const uploadProgress = ref({
@@ -135,13 +139,12 @@ const uploadProgress = ref({
 const areUploadStatsVisible = ref(false);
 const isLoading = ref(true);
 const isEmpty = computed(() => uploadedFileRecords.value.length === 0);
+const fileStorageError = ref(false);
 const runningUploads = ref<number>(0);
 
-const uploadedFileRecords = computed(() => {
-	return fileRecords.value.filter((fileRecord) => !fileRecord.isUploading);
-});
+const uploadedFileRecords = computed(() => fileRecords.value.filter((fileRecord) => !fileRecord.isUploading));
 
-const fabClickHandler = () => {
+const uploadFile = () => {
 	if (fileInput.value) {
 		// Reset the file input to allow re-uploading the same file
 		fileInput.value.value = "";
@@ -149,14 +152,14 @@ const fabClickHandler = () => {
 	}
 };
 
-const onDelete = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDelete = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.folderElement");
 
 	if (!shouldDelete) {
 		return;
 	}
 
-	const parentIsBoard = parent.value.type === ParentNodeType.Board;
+	const parentIsBoard = parent.value.type === ParentNodeType.BOARD;
 
 	if (parentIsBoard) {
 		deleteAndNavigateToBoard(folderId.value);
@@ -170,9 +173,7 @@ const onDeleteFiles = async (fileRecords: FileRecord[]) => {
 };
 
 const downloadFileHandler = (selectedIds: string[]) => {
-	const fileRecord = fileRecords.value.find(
-		(file) => file.id === selectedIds[0]
-	);
+	const fileRecord = fileRecords.value.find((file) => file.id === selectedIds[0]);
 	if (fileRecord) {
 		downloadFile(fileRecord.url, fileRecord.name);
 	}
@@ -218,6 +219,27 @@ const onRenameCancel = () => {
 	isRenameDialogOpen.value = false;
 };
 
+const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
+	const newFile = await uploadCollaboraFile(
+		payload.type,
+		props.folderId,
+		FileRecordParent.BOARDNODES,
+		payload.fileName
+	);
+	if (!newFile) return;
+
+	const url = router.resolve({
+		name: "collabora",
+		params: {
+			id: newFile.id,
+		},
+		query: {
+			edit: allowedOperations.value.createFileElement.toString(),
+		},
+	}).href;
+	window.open(url, "_blank");
+};
+
 const resetUploadProgress = () => {
 	uploadProgress.value = { uploaded: 0, total: 0 };
 };
@@ -244,14 +266,16 @@ const decrementRunningUploads = (count: number) => {
 
 onMounted(async () => {
 	if (fileInput.value) {
-		fileInput.value.addEventListener("change", async (event) =>
-			onFileSelection(event)
-		);
+		fileInput.value.addEventListener("change", async (event) => onFileSelection(event));
 	}
 
 	await fetchFileFolderElement(props.folderId);
-	await fetchFiles(folderId.value, FileRecordParent.BOARDNODES);
-	if (!boardStore.board) {
+	try {
+		await fetchFiles(folderId.value, FileRecordParent.BOARDNODES);
+	} catch {
+		fileStorageError.value = true;
+	}
+	if (!boardStore.board || boardStore.board.id !== parent.value.id) {
 		await boardStore.fetchBoardRequest({ boardId: parent.value.id });
 	}
 
@@ -294,9 +318,9 @@ const uploadFiles = async (files: File[]) => {
 watch(
 	parent,
 	(newParent) => {
-		if (newParent && newParent.type === ParentNodeType.Board) {
+		if (newParent && newParent.type === ParentNodeType.BOARD) {
 			createPageInformation(parent.value.id);
-		} else if (newParent && newParent.type !== ParentNodeType.Board) {
+		} else if (newParent && newParent.type !== ParentNodeType.BOARD) {
 			throw new Error("Unsupported parent type");
 		}
 	},
@@ -306,7 +330,7 @@ watch(
 watch(
 	() => folderName.value,
 	(newName) => {
-		emit("update:folder-name", newName);
+		emit("update:folder-name", buildPageTitle(newName, parent.value?.name));
 	},
 	{ immediate: true }
 );

@@ -1,17 +1,15 @@
+import { useBoardStore } from "./Board.store";
+import { useCardStore } from "./Card.store";
 import { useDocumentVisibility } from "@vueuse/core";
 import { useTimeoutFn } from "@vueuse/shared";
 import { nextTick, ref, watch } from "vue";
-import { useBoardStore } from "./Board.store";
-import { useCardStore } from "./Card.store";
 
 export const connectionOptions = {
 	isTimeoutReached: false,
 	maxTimeOutForInactivity: 0,
 };
 
-export const useBoardInactivity = (
-	maxInactivityTime: number = connectionOptions.maxTimeOutForInactivity
-) => {
+export const useBoardInactivity = (maxInactivityTime: number = connectionOptions.maxTimeOutForInactivity) => {
 	const boardStore = useBoardStore();
 	const cardStore = useCardStore();
 

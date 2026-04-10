@@ -1,16 +1,15 @@
-import { ToolContextType } from "@/serverApi/v3";
-import { contextExternalToolConfigurationTemplateFactory } from "@@/tests/test-utils";
 import { ContextExternalToolMapper } from "./context-external-tool.mapper";
 import { ContextExternalToolSave } from "./types";
+import { contextExternalToolConfigurationTemplateFactory } from "@@/tests/test-utils";
+import { ToolContextType } from "@api-server";
 
 describe("ContextExternalToolMapper", () => {
 	describe("mapTemplateToContextExternalToolSave", () => {
 		describe("when the display name is provided", () => {
 			const setup = () => {
-				const template =
-					contextExternalToolConfigurationTemplateFactory.build();
+				const template = contextExternalToolConfigurationTemplateFactory.build();
 				const contextId = "contextId";
-				const contextType = ToolContextType.Course;
+				const contextType = ToolContextType.COURSE;
 				const displayName = "Test Name";
 
 				return {
@@ -24,14 +23,13 @@ describe("ContextExternalToolMapper", () => {
 			it("should map the display name", () => {
 				const { template, contextId, contextType, displayName } = setup();
 
-				const result =
-					ContextExternalToolMapper.mapTemplateToContextExternalToolSave(
-						template,
-						[],
-						contextId,
-						contextType,
-						displayName
-					);
+				const result = ContextExternalToolMapper.mapTemplateToContextExternalToolSave(
+					template,
+					[],
+					contextId,
+					contextType,
+					displayName
+				);
 
 				expect(result).toEqual(
 					expect.objectContaining<Partial<ContextExternalToolSave>>({
@@ -47,7 +45,7 @@ describe("ContextExternalToolMapper", () => {
 					name: "toolName",
 				});
 				const contextId = "contextId";
-				const contextType = ToolContextType.Course;
+				const contextType = ToolContextType.COURSE;
 
 				return {
 					template,
@@ -59,14 +57,13 @@ describe("ContextExternalToolMapper", () => {
 			it("should not set a display name", () => {
 				const { template, contextId, contextType } = setup();
 
-				const result =
-					ContextExternalToolMapper.mapTemplateToContextExternalToolSave(
-						template,
-						[],
-						contextId,
-						contextType,
-						""
-					);
+				const result = ContextExternalToolMapper.mapTemplateToContextExternalToolSave(
+					template,
+					[],
+					contextId,
+					contextType,
+					""
+				);
 
 				expect(result).toEqual(
 					expect.objectContaining<Partial<ContextExternalToolSave>>({

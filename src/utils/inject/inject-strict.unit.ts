@@ -1,6 +1,6 @@
-import { InjectionKey } from "vue";
 import { injectStrict } from "./inject-strict";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
+import { InjectionKey } from "vue";
 
 const PROVIDER_KEY: InjectionKey<string> = Symbol("provider");
 const BOOLEAN_PROVIDER_KEY: InjectionKey<boolean> = Symbol("booleanProvider");

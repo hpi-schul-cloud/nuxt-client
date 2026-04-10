@@ -1,10 +1,6 @@
-import { mount } from "@vue/test-utils";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 import { VTextField } from "vuetify/lib/components/index";
 
 describe("@/components/share/ShareModalResult", () => {
@@ -69,23 +65,20 @@ describe("@/components/share/ShareModalResult", () => {
 		displaySize               | windowWidth
 		${"small and up (>=600)"} | ${600}
 		${"xsmall (<600)"}        | ${599}
-	`(
-		"should hide all action buttons when QR code is visible for display size $displaySize",
-		async ({ windowWidth }) => {
-			const { wrapper, shareUrl } = setup({ windowWidth });
+	`("should hide all action buttons when QR code is visible for display size $displaySize", async ({ windowWidth }) => {
+		const { wrapper, shareUrl } = setup({ windowWidth });
 
-			expect(wrapper.findAll("[data-testid*=Action]")).not.toHaveLength(0);
+		expect(wrapper.findAll("[data-testid*=Action]")).not.toHaveLength(0);
 
-			const actionButton = wrapper.find("[data-testid=qrCodeAction]");
-			await actionButton.trigger("click");
+		const actionButton = wrapper.find("[data-testid=qrCodeAction]");
+		await actionButton.trigger("click");
 
-			const qrCodeComponents = wrapper.findAllComponents({ name: "QRCode" });
+		const qrCodeComponents = wrapper.findAllComponents({ name: "QRCode" });
 
-			expect(qrCodeComponents).toHaveLength(1);
-			expect(qrCodeComponents[0].props("url")).toStrictEqual(shareUrl);
-			expect(wrapper.findAll("[data-testid*=Action]")).toHaveLength(0);
-		}
-	);
+		expect(qrCodeComponents).toHaveLength(1);
+		expect(qrCodeComponents[0].props("url")).toStrictEqual(shareUrl);
+		expect(wrapper.findAll("[data-testid*=Action]")).toHaveLength(0);
+	});
 
 	describe("display sizes greater than or equal to 600", () => {
 		const largeDisplaySize = 600;
@@ -128,11 +121,9 @@ describe("@/components/share/ShareModalResult", () => {
 		it("should follow href and emit done when shareMailAction button is clicked", async () => {
 			const assignSpy = vi.fn();
 			Object.defineProperty(window, "location", {
-				set: () => createMock<Location>(),
-				get: () =>
-					createMock<Location>({
-						assign: assignSpy,
-					}),
+				value: {
+					assign: assignSpy,
+				},
 			});
 
 			const { wrapper, shareUrl } = setup();

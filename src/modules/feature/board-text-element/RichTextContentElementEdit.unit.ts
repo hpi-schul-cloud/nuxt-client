@@ -1,14 +1,30 @@
-import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { mockComposable, richTextElementResponseFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useContentElementState } from "@data-board";
+import { createTestingPinia } from "@pinia/testing";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
+import { flushPromises, mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
+import { ref } from "vue";
+
+vi.mock("@data-board/ContentElementState.composable");
 
 describe("RichTextContentElementEdit", () => {
+	let useContentElementStateMock: Mocked<ReturnType<typeof useContentElementState>>;
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		useContentElementStateMock = mockComposable(useContentElementState);
+		vi.mocked(useContentElementState).mockReturnValue(useContentElementStateMock);
+	});
+
 	const setup = ({ autofocus = true }: { autofocus: boolean }) => {
+		const element = richTextElementResponseFactory.build();
+		const modelValueOfComposable = ref(element.content);
+		useContentElementStateMock.modelValue = modelValueOfComposable;
+
 		const wrapper = mount(RichTextContentElementEdit, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -21,13 +37,14 @@ describe("RichTextContentElementEdit", () => {
 				},
 			},
 			props: {
-				value: "test value",
+				element,
+				isEditMode: true,
 				autofocus,
 				columnIndex: 0,
 			},
 		});
 
-		return { wrapper };
+		return { wrapper, modelValueOfComposable };
 	};
 
 	describe("when component is mounted", () => {
@@ -53,13 +70,14 @@ describe("RichTextContentElementEdit", () => {
 		});
 
 		it("should update modalValue when prop value changes", async () => {
-			const { wrapper } = setup({ autofocus: true });
+			const { wrapper, modelValueOfComposable } = setup({ autofocus: true });
 			const newValue = "new title";
-			await wrapper.setProps({ value: newValue });
-			await nextTick();
 
-			const emitted = wrapper.emitted();
-			expect(emitted["update:value"]).toHaveLength(1);
+			const inlineEditor = wrapper.getComponent({ name: "InlineEditor" });
+			await inlineEditor.vm.$emit("update:value", newValue);
+			await flushPromises();
+
+			expect(modelValueOfComposable.value.text).toBe(newValue);
 		});
 	});
 });

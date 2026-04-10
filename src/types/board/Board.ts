@@ -1,9 +1,8 @@
 import type {
 	BoardResponse as Board,
-	ColumnResponse as BoardColumn,
 	CardSkeletonResponse as BoardSkeletonCard,
-} from "@/serverApi/v3";
+	ColumnResponse as BoardColumn,
+} from "@api-server";
+import { BoardLayout } from "@api-server";
 
-import { BoardLayout } from "@/serverApi/v3";
-
-export { Board, BoardLayout, BoardColumn, BoardSkeletonCard };
+export { Board, BoardColumn, BoardLayout, BoardSkeletonCard };

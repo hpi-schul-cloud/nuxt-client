@@ -1,29 +1,27 @@
 import TaskOverview from "./TaskOverview.page.vue";
-import { shallowMount } from "@vue/test-utils";
-import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
-import EnvConfigModule from "@/store/env-config";
-import setupStores from "@@/tests/test-utils/setupStores";
+import TasksDashboardMain from "@/components/tasks/TasksDashboardMain.vue";
+import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
+import { RoleName } from "@api-server";
+import { createTestingPinia } from "@pinia/testing";
+import { shallowMount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 
 describe("TaskOverview", () => {
 	const fetchAllTasksSpy = vi.fn();
-	const getWrapper = (userRole: string) => {
+	const getWrapper = (userRole?: RoleName) => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore({
+			SC_TITLE: "dBildungscloud",
+		});
+		createTestAppStore({
+			me: { roles: userRole ? [{ id: "test-user", name: userRole }] : [] },
+		});
+
 		return shallowMount(TaskOverview, {
 			global: {
 				plugins: [createTestingI18n()],
 				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: {
-						getUserRoles: [userRole],
-					},
 					tasksModule: {
 						fetchAllTasks: fetchAllTasksSpy,
 					},
@@ -34,37 +32,31 @@ describe("TaskOverview", () => {
 
 	beforeEach(() => {
 		vi.resetAllMocks();
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
 	});
 
 	it("should create component", () => {
-		const wrapper = getWrapper("teacher");
+		const wrapper = getWrapper(RoleName.TEACHER);
 		expect(wrapper).toBeTruthy();
 	});
 
 	it("should set title to tasks", () => {
-		getWrapper("userRole");
-		expect(document.title).toBe(`common.words.tasks`);
+		getWrapper(RoleName.SUPERHERO);
+		expect(document.title).toBe(`common.words.tasks - dBildungscloud`);
 	});
 
 	it("should fetchAllTasks on mount", () => {
-		getWrapper("");
+		getWrapper();
 		expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
 	});
 
-	it.each(["teacher", "student"])(
-		"should render child component for %p",
-		(userRole) => {
-			const wrapper = getWrapper(userRole);
-			const childComponent = wrapper.findComponent(TasksDashboardMain);
-			expect(childComponent.exists()).toBeTruthy();
-		}
-	);
+	it.each([RoleName.TEACHER, RoleName.STUDENT])("should render child component for %p", (userRole) => {
+		const wrapper = getWrapper(userRole);
+		const childComponent = wrapper.findComponent(TasksDashboardMain);
+		expect(childComponent.exists()).toBeTruthy();
+	});
 
 	it("should not render child component for arbitrary roles", () => {
-		const wrapper = getWrapper("arbitraryRole");
+		const wrapper = getWrapper(RoleName.SUPERHERO);
 		const childComponent = wrapper.findComponent(TasksDashboardMain);
 		expect(childComponent.exists()).toBeFalsy();
 	});

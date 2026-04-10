@@ -1,0 +1,114 @@
+<template>
+	<div>
+		<ErrorAlert v-if="status === 'error'" data-testid="error-alert" class="mb-6">
+			{{ t("pages.administration.school.index.schoolPolicy.error") }}
+		</ErrorAlert>
+		<template v-else>
+			<VProgressLinear v-if="status === 'pending'" indeterminate class="mb-6" data-testid="progress-bar" />
+			<VListItem
+				v-else
+				lines="two"
+				class="mb-6"
+				data-testid="policy-item"
+				:prepend-icon="mdiFilePdfBox"
+				v-on="privacyPolicy ? { click: downloadPolicy } : {}"
+			>
+				<VListItemTitle class="text-body-1 mb-2">
+					{{ t("pages.administration.school.index.schoolPolicy.fileName") }}
+				</VListItemTitle>
+				<VListItemSubtitle class="text-body-2">
+					{{
+						privacyPolicy
+							? t("pages.administration.school.index.schoolPolicy.uploadedOn", {
+									date: formatRecentOrActual(privacyPolicy.publishedAt),
+								})
+							: t("pages.administration.school.index.schoolPolicy.notUploadedYet")
+					}}
+				</VListItemSubtitle>
+				<template #append>
+					<VListItemAction
+						v-if="hasSchoolEditPermission"
+						data-testid="edit-button"
+						@click.stop="isSchoolPolicyFormDialogOpen = true"
+					>
+						<VBtn
+							:icon="mdiTrayArrowUp"
+							variant="text"
+							:aria-label="t('pages.administration.school.index.schoolPolicy.edit')"
+						/>
+					</VListItemAction>
+					<VListItemAction v-if="privacyPolicy" data-testid="delete-button" @click.stop="onDelete">
+						<VBtn
+							:icon="mdiTrashCanOutline"
+							variant="text"
+							:aria-label="t('pages.administration.school.index.schoolPolicy.delete.title')"
+						/>
+					</VListItemAction>
+				</template>
+			</VListItem>
+			<SchoolPolicyFormDialog
+				v-if="hasSchoolEditPermission"
+				:is-open="isSchoolPolicyFormDialogOpen"
+				data-testid="form-dialog"
+				@confirm="onCreate"
+				@close="closeDialog"
+			/>
+		</template>
+	</div>
+</template>
+
+<script setup lang="ts">
+import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
+import { askDeletion } from "@/utils/confirmation-dialog.utils";
+import { formatRecentOrActual } from "@/utils/date-time.utils";
+import { downloadFile } from "@/utils/fileHelper";
+import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { Permission } from "@api-server";
+import { useAppStore } from "@data-app";
+import { CreateConsentVersionPayload, useSchoolPrivacyPolicy } from "@data-school";
+import { mdiFilePdfBox, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
+import { ErrorAlert } from "@ui-alert";
+import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+const isSchoolPolicyFormDialogOpen = ref(false);
+const { status, fetchPrivacyPolicy, privacyPolicy, createPrivacyPolicy, deletePrivacyPolicy } =
+	useSchoolPrivacyPolicy();
+const school = computed(() => schoolsModule.getSchool);
+watch(
+	school,
+	async (newValue) => {
+		await fetchPrivacyPolicy(newValue.id);
+	},
+	{ immediate: true }
+);
+
+const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SCHOOL_EDIT);
+
+const downloadPolicy = () => {
+	if (privacyPolicy.value) {
+		downloadFile(privacyPolicy.value.consentData.data, t("pages.administration.school.index.schoolPolicy.fileName"));
+	}
+};
+
+const onDelete = async () => {
+	const confirmed = await askDeletion(
+		"pages.administration.school.index.schoolPolicy.delete.title",
+		"pages.administration.school.index.schoolPolicy.delete.text",
+		"info"
+	);
+	if (confirmed) {
+		await deletePrivacyPolicy();
+	}
+};
+
+const closeDialog = () => {
+	isSchoolPolicyFormDialogOpen.value = false;
+};
+
+const onCreate = async (newConsentVersion: CreateConsentVersionPayload) => {
+	await createPrivacyPolicy(newConsentVersion);
+};
+</script>

@@ -28,11 +28,7 @@
 							@keydown="onKeydown"
 						/>
 						<div class="align-self-center pl-2">
-							<button
-								ref="submit"
-								type="submit"
-								data-testid="save-video-conference-title-button"
-							>
+							<button ref="submit" type="submit" data-testid="save-video-conference-title-button">
 								<VIcon aria-hidden="true"> {{ mdiCheck }}</VIcon>
 								<span class="d-sr-only">{{ t("common.actions.save") }}</span>
 							</button>
@@ -48,14 +44,14 @@
 </template>
 
 <script setup lang="ts">
+import image from "@/assets/img/videoConference.svg";
+import { injectStrict } from "@/utils/inject";
+import { mdiCheck } from "@icons/material";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
+import { isRequired } from "@util-validators";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import image from "@/assets/img/videoConference.svg";
-import { isRequired } from "@util-validators";
-import { mdiCheck } from "@icons/material";
-import { injectStrict } from "@/utils/inject";
 import { useDisplay } from "vuetify";
-import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 type VuetifyFormApi = {
 	validate: () => { valid: boolean };
@@ -94,9 +90,7 @@ const onKeydown = (e: KeyboardEvent) => {
 	}
 };
 
-const isRenderedAsList = computed(() => {
-	return smAndUp.value && isListLayout.value;
-});
+const isRenderedAsList = computed(() => smAndUp.value && isListLayout.value);
 </script>
 
 <style scoped>

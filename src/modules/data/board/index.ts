@@ -5,14 +5,16 @@ import { useBoardFeatures } from "./BoardFeatures.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useBoardInactivity } from "./boardInactivity.composable";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
-import { useBoardPermissions } from "./BoardPermissions.composable";
 import { useCardStore } from "./Card.store";
 import * as cardActions from "./cardActions/cardActions";
 import { useContentElementState } from "./ContentElementState.composable";
 import { useForceRender } from "./fixSamePositionDnD.composable";
 import { useSocketConnection } from "./socket/socket";
 
+export { useBoardAllowedOperations } from "./board-allowed-operations.composable";
 export * from "./cardActions/cardActionPayload.types";
+export * from "./edit-mode.composable";
+
 export {
 	boardActions,
 	cardActions,
@@ -20,7 +22,6 @@ export {
 	useBoardFeatures,
 	useBoardFocusHandler,
 	useBoardInactivity,
-	useBoardPermissions,
 	useBoardStore,
 	useCardStore,
 	useContentElementState,

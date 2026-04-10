@@ -1,4 +1,4 @@
-import * as serverApi from "../serverApi/v3/api";
+import * as serverApi from "../generated/serverApi/v3";
 import SystemsModule from "./systems";
 import { System } from "./types/system";
 
@@ -87,9 +87,7 @@ describe("SystemsModule", () => {
 					}),
 				};
 
-				vi.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(
-					mockApi as unknown as serverApi.SystemsApiInterface
-				);
+				vi.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(mockApi as unknown as serverApi.SystemsApiInterface);
 
 				return {
 					apiMock: mockApi,

@@ -1,11 +1,8 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { KebabMenuAction } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
 
 describe("MediaBoardExternalToolElementMenu", () => {
 	const getWrapper = () => {

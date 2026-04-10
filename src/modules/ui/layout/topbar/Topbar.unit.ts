@@ -1,54 +1,51 @@
-import { mount } from "@vue/test-utils";
 import Topbar from "./Topbar.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	STATUS_ALERTS_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
-import AuthModule from "@/store/auth";
-import StatusAlertsModule from "@/store/status-alerts";
+import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
-import { h, nextTick } from "vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoleName, SchulcloudTheme } from "@api-server";
+import { useStatusAlerts } from "@data-app";
+import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { h, ref } from "vue";
 import { VApp } from "vuetify/lib/components/index";
-import { envsFactory } from "@@/tests/test-utils";
-import EnvConfigModule from "@/store/env-config";
-import { SchulcloudTheme } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
+
+vi.mock("@data-app/status-alerts.composable");
+vi.mocked(useStatusAlerts).mockReturnValue({
+	status: ref(""),
+	statusAlerts: ref(mockStatusAlerts),
+	fetchStatusAlerts: vi.fn(),
+});
 
 describe("@ui-layout/Topbar", () => {
-	const setup = async (windowWidth = 1300, isSidebarExpanded?: boolean) => {
-		const authModule = createModuleMocks(AuthModule, {
-			getSchool: {
-				id: "234",
-				name: "School",
-				logo: {
-					url: "url",
+	const setup = (windowWidth = 1300, isSidebarExpanded?: boolean) => {
+		setActivePinia(createTestingPinia());
+		createTestAppStore({
+			me: {
+				school: {
+					id: "234",
+					name: "School",
+					logo: {
+						url: "url",
+					},
 				},
+				user: {
+					id: "123",
+					firstName: "Arthur",
+					lastName: "Dent",
+				},
+				roles: [
+					{
+						id: RoleName.ADMINISTRATOR,
+						name: RoleName.ADMINISTRATOR,
+					},
+				],
 			},
-			getUser: {
-				id: "123",
-				firstName: "Arthur",
-				lastName: "Dent",
-			},
-			getUserRoles: ["administrator"],
 		});
 
-		const envs = envsFactory.build();
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getEnv: envs,
-			getTheme: SchulcloudTheme.Brb,
+		createTestEnvStore({
+			SC_THEME: SchulcloudTheme.BRB,
 		});
-
-		const statusAlertsModule = createModuleMocks(StatusAlertsModule, {
-			getStatusAlerts: mockStatusAlerts,
-		});
-		const notifierModule = createModuleMocks(NotifierModule);
 
 		Object.defineProperty(window, "innerWidth", {
 			writable: true,
@@ -59,12 +56,6 @@ describe("@ui-layout/Topbar", () => {
 		const wrapper = mount(VApp, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-					[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 			slots: {
 				default: h(Topbar, {
@@ -73,28 +64,27 @@ describe("@ui-layout/Topbar", () => {
 			},
 		});
 
-		await nextTick();
 		const topbar = wrapper.findComponent({ name: "Topbar" });
 		return { wrapper, topbar };
 	};
 
-	it("should render component", async () => {
-		const { wrapper } = await setup();
+	it("should render component", () => {
+		const { wrapper } = setup();
 
 		expect(wrapper.exists()).toBe(true);
 	});
 
 	describe("when sidebar is expanded", () => {
-		it("should not show toggle button", async () => {
-			const { wrapper } = await setup();
+		it("should not show toggle button", () => {
+			const { wrapper } = setup();
 
 			const sidebarToggle = wrapper.findComponent({ name: "VAppBarNavIcon" });
 
 			expect(sidebarToggle.exists()).toEqual(false);
 		});
 
-		it("should not show logo", async () => {
-			const { wrapper } = await setup();
+		it("should not show logo", () => {
+			const { wrapper } = setup();
 
 			const topbarLogo = wrapper.findComponent({ name: "TopbarLogo" });
 
@@ -103,16 +93,16 @@ describe("@ui-layout/Topbar", () => {
 	});
 
 	describe("when sidebar is collapsed", () => {
-		it("should show toggle button", async () => {
-			const { wrapper } = await setup(1300, false);
+		it("should show toggle button", () => {
+			const { wrapper } = setup(1300, false);
 
 			const sidebarToggle = wrapper.findComponent({ name: "VAppBarNavIcon" });
 
 			expect(sidebarToggle.exists()).toEqual(true);
 		});
 
-		it("should show logo", async () => {
-			const { wrapper } = await setup(1300, false);
+		it("should show logo", () => {
+			const { wrapper } = setup(1300, false);
 
 			const topbarLogo = wrapper.findComponent({ name: "CloudLogo" });
 
@@ -120,7 +110,7 @@ describe("@ui-layout/Topbar", () => {
 		});
 
 		it("should emit sidebar-toggled", async () => {
-			const { wrapper, topbar } = await setup(1300, false);
+			const { wrapper, topbar } = setup(1300, false);
 
 			const sidebarToggle = wrapper.findComponent({ name: "VAppBarNavIcon" });
 			await sidebarToggle.trigger("click");
@@ -129,8 +119,8 @@ describe("@ui-layout/Topbar", () => {
 		});
 	});
 
-	it("should show all topbar items on large sized screens", async () => {
-		const { topbar } = await setup();
+	it("should show all topbar items on large sized screens", () => {
+		const { topbar } = setup();
 
 		const iconBtns = topbar.findAllComponents({ name: "TopbarItem" });
 		const schoolName = topbar.find("[data-testid=school-name]");
@@ -143,8 +133,8 @@ describe("@ui-layout/Topbar", () => {
 		expect(userMenu.exists()).toBe(true);
 	});
 
-	it("should not show school logo on medium sized screens", async () => {
-		const { topbar } = await setup(1200);
+	it("should not show school logo on medium sized screens", () => {
+		const { topbar } = setup(1200);
 
 		const iconBtns = topbar.findAllComponents({ name: "TopbarItem" });
 		const schoolName = topbar.find("[data-testid=school-name]");
@@ -157,8 +147,8 @@ describe("@ui-layout/Topbar", () => {
 		expect(userMenu.exists()).toBe(true);
 	});
 
-	it("should only show status alerts and user menu on small sized screens", async () => {
-		const { topbar } = await setup(500);
+	it("should only show status alerts and user menu on small sized screens", () => {
+		const { topbar } = setup(500);
 
 		const iconBtns = topbar.findAllComponents({ name: "TopbarItem" });
 		const schoolName = topbar.find("[data-testid=school-name]");

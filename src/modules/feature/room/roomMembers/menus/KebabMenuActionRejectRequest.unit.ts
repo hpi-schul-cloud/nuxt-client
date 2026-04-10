@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
-import { KebabMenuAction } from "@ui-kebab-menu";
 import KebabMenuActionRejectRequest from "./KebabMenuActionRejectRequest.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { KebabMenuAction } from "@ui-kebab-menu";
+import { mount } from "@vue/test-utils";
 
 describe("KebabMenuActionRejectRequest", () => {
 	const setup = () => {

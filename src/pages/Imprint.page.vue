@@ -3,10 +3,10 @@
 </template>
 
 <script lang="ts">
-import Impressum from "@/components/templates/impressum.vue";
-import { defineComponent } from "vue";
-import { useTitle } from "@vueuse/core";
+import Impressum from "@/components/legacy/Impressum.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useTitle } from "@vueuse/core";
+import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({

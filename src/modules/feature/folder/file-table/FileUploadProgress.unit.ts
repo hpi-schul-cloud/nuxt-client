@@ -1,13 +1,9 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import FileUploadProgress from "./FileUploadProgress.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("FileUploadProgress", () => {
-	const buildUploadStatsTranslation = (uploaded: string, total: string) => {
-		return `${uploaded} von ${total} Dateien hochgeladen`;
-	};
+	const buildUploadStatsTranslation = (uploaded: string, total: string) =>
+		`${uploaded} von ${total} Dateien hochgeladen`;
 
 	const setupWrapper = (props: {
 		uploadProgress: {
@@ -23,10 +19,7 @@ describe("FileUploadProgress", () => {
 					createTestingI18n({
 						messages: {
 							en: {
-								"pages.folder.uploadstats": buildUploadStatsTranslation(
-									"{uploaded}",
-									"{total}"
-								),
+								"pages.folder.uploadstats": buildUploadStatsTranslation("{uploaded}", "{total}"),
 							},
 						},
 					}),
@@ -47,12 +40,8 @@ describe("FileUploadProgress", () => {
 				uploadProgress: { uploaded: 1, total: 2 },
 				areUploadStatsVisible: false,
 			});
-			expect(
-				wrapper.findComponent({ name: "v-progress-circular" }).exists()
-			).toBe(false);
-			const uploadProgressText = wrapper.find(
-				"[data-testid='upload-progress']"
-			);
+			expect(wrapper.findComponent({ name: "v-progress-circular" }).exists()).toBe(false);
+			const uploadProgressText = wrapper.find("[data-testid='upload-progress']");
 			expect(uploadProgressText.exists()).toBe(false);
 		});
 
@@ -65,9 +54,7 @@ describe("FileUploadProgress", () => {
 				});
 
 				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(false);
-				const uploadProgressTextTimeA = wrapper.find(
-					"[data-testid='upload-progress']"
-				);
+				const uploadProgressTextTimeA = wrapper.find("[data-testid='upload-progress']");
 				expect(uploadProgressTextTimeA.exists()).toBe(false);
 
 				await wrapper.setProps({ areUploadStatsVisible: true });
@@ -75,9 +62,7 @@ describe("FileUploadProgress", () => {
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
-				const uploadProgressTextTimeB = wrapper.find(
-					"[data-testid='upload-progress']"
-				);
+				const uploadProgressTextTimeB = wrapper.find("[data-testid='upload-progress']");
 				expect(uploadProgressTextTimeB.exists()).toBe(true);
 			});
 		});
@@ -92,9 +77,7 @@ describe("FileUploadProgress", () => {
 				});
 
 				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
-				const uploadProgressTextTimeA = wrapper.find(
-					"[data-testid='upload-progress']"
-				);
+				const uploadProgressTextTimeA = wrapper.find("[data-testid='upload-progress']");
 				expect(uploadProgressTextTimeA.exists()).toBe(true);
 
 				await wrapper.setProps({ areUploadStatsVisible: false });
@@ -102,9 +85,7 @@ describe("FileUploadProgress", () => {
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(false);
-				const uploadProgressTextTimeB = wrapper.find(
-					"[data-testid='upload-progress']"
-				);
+				const uploadProgressTextTimeB = wrapper.find("[data-testid='upload-progress']");
 				expect(uploadProgressTextTimeB.exists()).toBe(false);
 			});
 
@@ -116,9 +97,7 @@ describe("FileUploadProgress", () => {
 				});
 
 				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
-				const uploadProgressTextTimeA = wrapper.find(
-					"[data-testid='upload-progress']"
-				);
+				const uploadProgressTextTimeA = wrapper.find("[data-testid='upload-progress']");
 				expect(uploadProgressTextTimeA.exists()).toBe(true);
 
 				await wrapper.setProps({ areUploadStatsVisible: false });
@@ -126,9 +105,7 @@ describe("FileUploadProgress", () => {
 				await wrapper.vm.$nextTick();
 
 				expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
-				const uploadProgressTextTimeB = wrapper.find(
-					"[data-testid='upload-progress']"
-				);
+				const uploadProgressTextTimeB = wrapper.find("[data-testid='upload-progress']");
 				expect(uploadProgressTextTimeB.exists()).toBe(true);
 			});
 		});
@@ -140,9 +117,7 @@ describe("FileUploadProgress", () => {
 					areUploadStatsVisible: true,
 				});
 
-				expect(
-					wrapper.findComponent({ name: "v-progress-circular" }).exists()
-				).toBe(true);
+				expect(wrapper.findComponent({ name: "v-progress-circular" }).exists()).toBe(true);
 			});
 
 			it("should not show v-icon", () => {
@@ -160,13 +135,9 @@ describe("FileUploadProgress", () => {
 					areUploadStatsVisible: true,
 				});
 
-				const uploadProgressText = wrapper.find(
-					"[data-testid='upload-progress']"
-				);
+				const uploadProgressText = wrapper.find("[data-testid='upload-progress']");
 				expect(uploadProgressText.exists()).toBe(true);
-				expect(uploadProgressText.text()).toBe(
-					buildUploadStatsTranslation("1", "2")
-				);
+				expect(uploadProgressText.text()).toBe(buildUploadStatsTranslation("1", "2"));
 			});
 		});
 
@@ -177,9 +148,7 @@ describe("FileUploadProgress", () => {
 					areUploadStatsVisible: true,
 				});
 
-				expect(
-					wrapper.findComponent({ name: "v-progress-circular" }).exists()
-				).toBe(false);
+				expect(wrapper.findComponent({ name: "v-progress-circular" }).exists()).toBe(false);
 			});
 
 			it("should show v-icon", () => {
@@ -197,13 +166,9 @@ describe("FileUploadProgress", () => {
 					areUploadStatsVisible: true,
 				});
 
-				const uploadProgressText = wrapper.find(
-					"[data-testid='upload-progress']"
-				);
+				const uploadProgressText = wrapper.find("[data-testid='upload-progress']");
 				expect(uploadProgressText.exists()).toBe(true);
-				expect(uploadProgressText.text()).toBe(
-					buildUploadStatsTranslation("2", "2")
-				);
+				expect(uploadProgressText.text()).toBe(buildUploadStatsTranslation("2", "2"));
 			});
 		});
 
@@ -214,15 +179,11 @@ describe("FileUploadProgress", () => {
 					areUploadStatsVisible: true,
 				});
 
-				expect(
-					wrapper.findComponent({ name: "v-progress-circular" }).exists()
-				).toBe(false);
+				expect(wrapper.findComponent({ name: "v-progress-circular" }).exists()).toBe(false);
 
 				await wrapper.setProps({ uploadProgress: { uploaded: 0, total: 1 } });
 
-				expect(
-					wrapper.findComponent({ name: "v-progress-circular" }).exists()
-				).toBe(true);
+				expect(wrapper.findComponent({ name: "v-progress-circular" }).exists()).toBe(true);
 			});
 		});
 
@@ -233,15 +194,11 @@ describe("FileUploadProgress", () => {
 					areUploadStatsVisible: true,
 				});
 
-				expect(
-					wrapper.findComponent({ name: "v-progress-circular" }).exists()
-				).toBe(true);
+				expect(wrapper.findComponent({ name: "v-progress-circular" }).exists()).toBe(true);
 
 				await wrapper.setProps({ uploadProgress: { uploaded: 0, total: 0 } });
 
-				expect(
-					wrapper.findComponent({ name: "v-progress-circular" }).exists()
-				).toBe(false);
+				expect(wrapper.findComponent({ name: "v-progress-circular" }).exists()).toBe(false);
 			});
 		});
 	});

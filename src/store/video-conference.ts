@@ -1,3 +1,5 @@
+import { VideoConferenceInfo, VideoConferenceOptions, VideoConferenceState } from "./types/video-conference";
+import { $axios } from "@/utils/api";
 import {
 	VideoConferenceApiFactory,
 	VideoConferenceApiInterface,
@@ -5,21 +7,13 @@ import {
 	VideoConferenceJoinResponse,
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
-} from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
+} from "@api-server";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import {
-	VideoConferenceInfo,
-	VideoConferenceOptions,
-	VideoConferenceState,
-} from "./types/video-conference";
 
-const videoConferenceStateMapping: Partial<
-	Record<VideoConferenceStateResponse, VideoConferenceState>
-> = {
-	[VideoConferenceStateResponse.Running]: VideoConferenceState.RUNNING,
-	[VideoConferenceStateResponse.NotStarted]: VideoConferenceState.NOT_STARTED,
+const videoConferenceStateMapping: Partial<Record<VideoConferenceStateResponse, VideoConferenceState>> = {
+	[VideoConferenceStateResponse.RUNNING]: VideoConferenceState.RUNNING,
+	[VideoConferenceStateResponse.NOT_STARTED]: VideoConferenceState.NOT_STARTED,
 };
 
 @Module({
@@ -76,23 +70,14 @@ export default class VideoConferenceModule extends VuexModule {
 	}
 
 	@Action
-	async fetchVideoConferenceInfo(params: {
-		scope: VideoConferenceScope;
-		scopeId: string;
-	}): Promise<void> {
+	async fetchVideoConferenceInfo(params: { scope: VideoConferenceScope; scopeId: string }): Promise<void> {
 		this.setLoading(true);
 
 		try {
 			const response: AxiosResponse<VideoConferenceInfoResponse> =
-				await this.videoConferenceApi.videoConferenceControllerInfo(
-					params.scope,
-					params.scopeId
-				);
-
+				await this.videoConferenceApi.videoConferenceControllerInfo(params.scope, params.scopeId);
 			const mapped: VideoConferenceInfo = {
-				state:
-					videoConferenceStateMapping[response.data.state] ??
-					VideoConferenceState.UNKNOWN,
+				state: videoConferenceStateMapping[response.data.state] ?? VideoConferenceState.UNKNOWN,
 				options: response.data.options,
 			};
 
@@ -105,18 +90,12 @@ export default class VideoConferenceModule extends VuexModule {
 	}
 
 	@Action
-	async joinVideoConference(params: {
-		scope: VideoConferenceScope;
-		scopeId: string;
-	}) {
+	async joinVideoConference(params: { scope: VideoConferenceScope; scopeId: string }) {
 		this.setLoading(true);
 
 		try {
 			const response: AxiosResponse<VideoConferenceJoinResponse> =
-				await this.videoConferenceApi.videoConferenceControllerJoin(
-					params.scope,
-					params.scopeId
-				);
+				await this.videoConferenceApi.videoConferenceControllerJoin(params.scope, params.scopeId);
 
 			this.setLoading(false);
 
@@ -132,19 +111,13 @@ export default class VideoConferenceModule extends VuexModule {
 		scope: VideoConferenceScope;
 		scopeId: string;
 		videoConferenceOptions: VideoConferenceOptions;
-		logoutUrl?: string;
 	}): Promise<void> {
 		this.setLoading(true);
 
 		try {
-			await this.videoConferenceApi.videoConferenceControllerStart(
-				params.scope,
-				params.scopeId,
-				{
-					...params.videoConferenceOptions,
-					logoutUrl: params.logoutUrl,
-				}
-			);
+			await this.videoConferenceApi.videoConferenceControllerStart(params.scope, params.scopeId, {
+				...params.videoConferenceOptions,
+			});
 
 			this.setVideoConferenceInfo({
 				state: VideoConferenceState.RUNNING,

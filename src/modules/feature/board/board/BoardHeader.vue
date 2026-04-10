@@ -7,7 +7,7 @@
 			tabindex="0"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
-			@keydown.enter.prevent="onStartEditMode"
+			@keydown.enter.prevent="onToggleEditMode"
 		>
 			<BoardAnyTitleInput
 				ref="boardHeader"
@@ -18,76 +18,76 @@
 				:is-edit-mode="isEditMode"
 				:is-focused="isFocusedById"
 				:max-length="100"
+				:has-edit-permission="allowedOperations.updateBoardTitle"
 				@update:value="updateBoardTitle"
 				@blur="onBoardTitleBlur"
 			/>
 			<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
 		</InlineEditInteractionHandler>
 		<div class="d-flex mt-4">
-			<BoardDraftChip v-if="isDraft" />
+			<VChip v-if="isDraft" class="align-self-center cursor-default" data-testid="board-draft-chip">
+				{{ t("common.words.draft") }}
+			</VChip>
+			<BoardEditableChip v-if="isEditableChipVisible" />
 			<BoardMenu
-				v-if="hasEditPermission"
+				v-if="allowedOperations.updateBoardTitle || allowedOperations.shareBoard"
 				:scope="BoardMenuScope.BOARD"
 				data-testid="board-menu-btn"
 			>
 				<KebabMenuActionRename @click="onStartEditMode" />
-				<KebabMenuActionCopy @click="onCopyBoard" />
-				<KebabMenuActionShare
-					v-if="isShareEnabled && hasShareBoardPermission"
-					@click="onShareBoard"
+				<KebabMenuActionDuplicate
+					v-if="allowedOperations.copyBoard"
+					data-testid="kebab-menu-action-duplicate-board"
+					@click="onCopyBoard"
 				/>
+				<KebabMenuActionShare v-if="isShareEnabled && allowedOperations.shareBoard" @click="onShareBoard" />
 				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
-				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
 				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
-				<KebabMenuActionDelete
-					:name="title"
-					scope-language-key="common.words.board"
-					@click="onDeleteBoard"
+				<KebabMenuActionEditingSettings
+					v-if="allowedOperations.updateReadersCanEditSetting && isRoomBoard"
+					@click="onEditBoardSettings"
 				/>
+				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
+				<KebabMenuActionDelete :name="title" @click="onDeleteBoard" />
 			</BoardMenu>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
-import { BoardMenuScope } from "@ui-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
+import { BoardExternalReferenceType } from "../../../../generated/serverApi/v3";
+import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
+import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
+import BoardEditableChip from "./BoardEditableChip.vue";
+import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
+import { upperCaseFirstChar } from "@/utils/textFormatting";
+import { useBoardAllowedOperations, useBoardFocusHandler, useCourseBoardEditMode } from "@data-board";
+import { useEnvConfig } from "@data-env";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	KebabMenuActionCopy,
+	KebabMenuActionChangeLayout,
 	KebabMenuActionDelete,
-	KebabMenuActionRename,
+	KebabMenuActionDuplicate,
 	KebabMenuActionPublish,
+	KebabMenuActionRename,
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
-	KebabMenuActionChangeLayout,
 } from "@ui-kebab-menu";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { useDebounceFn } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
-import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
-import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
-import BoardDraftChip from "./BoardDraftChip.vue";
-import { upperCaseFirstChar } from "@/utils/textFormatting";
 
-const props = defineProps({
-	boardId: {
-		type: String,
-		required: true,
-	},
-	title: {
-		type: String,
-		required: true,
-	},
-	isDraft: {
-		type: Boolean,
-		required: true,
-	},
-});
+type Props = {
+	boardId: string;
+	boardContextType?: BoardExternalReferenceType;
+	title: string;
+	isDraft: boolean;
+	isEditableChipVisible?: boolean;
+	hasReadersEditPermission: boolean;
+};
+
+const props = defineProps<Props>();
 
 const emit = defineEmits([
 	"copy:board",
@@ -96,16 +96,15 @@ const emit = defineEmits([
 	"update:visibility",
 	"delete:board",
 	"change-layout",
+	"edit:settings",
 ]);
 
 const { t } = useI18n();
 const boardId = toRef(props, "boardId");
-const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
-	boardId.value
-);
+const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(boardId.value);
 const boardHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
-const { hasEditPermission, hasShareBoardPermission } = useBoardPermissions();
+const { allowedOperations } = useBoardAllowedOperations();
 
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref("0px");
@@ -118,33 +117,37 @@ const boardTitleFallback = computed(() => {
 	return upperCaseFirstChar(translatedTitle);
 });
 
+const isRoomBoard = computed(() => props.boardContextType === BoardExternalReferenceType.ROOM);
+
 const onStartEditMode = () => {
-	if (!hasEditPermission.value) return;
 	startEditMode();
 };
 
 const onEndEditMode = () => {
-	if (!hasEditPermission.value) return;
 	stopEditMode();
 };
 
+const onToggleEditMode = () => {
+	if (isEditMode.value) {
+		onEndEditMode();
+	} else {
+		onStartEditMode();
+	}
+};
+
 const onCopyBoard = () => {
-	if (!hasEditPermission.value) return;
 	emit("copy:board");
 };
 
 const onShareBoard = () => {
-	if (!hasShareBoardPermission.value) return;
 	emit("share:board");
 };
 
 const onPublishBoard = () => {
-	if (!hasEditPermission.value) return;
 	emit("update:visibility", true);
 };
 
 const onUnpublishBoard = () => {
-	if (!hasEditPermission.value) return;
 	emit("update:visibility", false);
 };
 
@@ -161,8 +164,8 @@ const updateBoardTitle = async (value: string) => {
 	await emitTitle(value);
 };
 
-const onDeleteBoard = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDeleteBoard = async () => {
+	const shouldDelete = await askDeletionForType("common.words.board");
 	if (shouldDelete) {
 		emit("delete:board", props.boardId);
 	}
@@ -170,6 +173,10 @@ const onDeleteBoard = async (confirmation: Promise<boolean>) => {
 
 const onChangeBoardLayout = async () => {
 	emit("change-layout");
+};
+
+const onEditBoardSettings = () => {
+	emit("edit:settings");
 };
 
 const emitTitle = useDebounceFn((newTitle: string) => {
@@ -180,10 +187,9 @@ const emitTitle = useDebounceFn((newTitle: string) => {
 
 const calculateWidth = () => {
 	if (!inputWidthCalcSpan.value) return;
-	const title =
-		boardTitle.value || t("components.cardElement.titleElement.placeholder");
+	const title = boardTitle.value || t("components.cardElement.titleElement.placeholder");
 
-	inputWidthCalcSpan.value.innerHTML = title.replace(/\s/g, "&nbsp;");
+	inputWidthCalcSpan.value.innerHTML = title.replaceAll(/\s/g, "&nbsp;");
 
 	const width = inputWidthCalcSpan.value.offsetWidth;
 
@@ -191,11 +197,7 @@ const calculateWidth = () => {
 	fieldWidth.value = `${width + 1}px`;
 };
 
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-
-const isShareEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE
-);
+const isShareEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE);
 
 watchEffect(() => {
 	boardTitle.value = props.title;
@@ -206,17 +208,13 @@ watchEffect(() => {
 <style lang="scss" scoped>
 @use "@/styles/settings.scss" as *;
 
-.v-chip {
-	cursor: default;
-}
-
 .input-width-calc-span {
 	position: absolute;
 	left: -9999px;
 	display: inline-block;
 	min-width: 1em;
 	padding: 0 $field-control-padding-end 0 $field-control-padding-start;
-	font-size: var(--heading-3);
+	font-size: var(--heading-1);
 	font-family: var(--font-accent);
 	letter-spacing: $field-letter-spacing;
 }

@@ -1,14 +1,14 @@
-import * as serverApi from "@/serverApi/v3/api";
-import { GroupListResponse, GroupResponse } from "@/serverApi/v3/api";
-import { groupResponseFactory, mockApiResponse } from "@@/tests/test-utils";
+import { groupResponseFactory, mockApi, mockApiResponse } from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
+import { GroupListResponse, GroupResponse } from "@api-server";
 import { Group, GroupType, GroupUserRole, useGroupApi } from "@data-group";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { Mocked } from "vitest";
 
 describe("GroupApi.composable", () => {
-	let groupApi: DeepMocked<serverApi.GroupApiInterface>;
+	let groupApi: Mocked<serverApi.GroupApiInterface>;
 
 	beforeEach(() => {
-		groupApi = createMock<serverApi.GroupApiInterface>();
+		groupApi = mockApi<serverApi.GroupApiInterface>();
 
 		vi.spyOn(serverApi, "GroupApiFactory").mockReturnValue(groupApi);
 	});
@@ -21,9 +21,7 @@ describe("GroupApi.composable", () => {
 		const setup = () => {
 			const group: GroupResponse = groupResponseFactory.build();
 
-			groupApi.groupControllerGetGroup.mockResolvedValue(
-				mockApiResponse({ data: group })
-			);
+			groupApi.groupControllerGetGroup.mockResolvedValue(mockApiResponse({ data: group }));
 
 			return {
 				group,
@@ -70,9 +68,7 @@ describe("GroupApi.composable", () => {
 				limit: 10,
 			};
 
-			groupApi.groupControllerGetAllGroups.mockResolvedValue(
-				mockApiResponse({ data: groupList })
-			);
+			groupApi.groupControllerGetAllGroups.mockResolvedValue(mockApiResponse({ data: groupList }));
 
 			return {
 				groupList,
@@ -93,12 +89,7 @@ describe("GroupApi.composable", () => {
 				}
 			);
 
-			expect(groupApi.groupControllerGetAllGroups).toHaveBeenCalledWith(
-				1,
-				2,
-				true,
-				"testName"
-			);
+			expect(groupApi.groupControllerGetAllGroups).toHaveBeenCalledWith(1, 2, true, "testName");
 		});
 
 		it("should return a group", async () => {

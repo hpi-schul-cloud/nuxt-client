@@ -1,24 +1,21 @@
-import * as serverApi from "@/serverApi/v3/api";
+import { ErrorType, useCollaborativeTextEditorApi } from "./CollaborativeTextEditorApi.composable";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	apiResponseErrorFactory,
 	axiosErrorFactory,
+	expectNotification,
+	mockApi,
+	mockApiResponse,
 } from "@@/tests/test-utils";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
-import { createMock } from "@golevelup/ts-vitest";
-import { AxiosResponse } from "axios";
-import { setupCollaborativeTextEditorNotifier } from "../test-utils/collaborativeTextEditorNotifier";
-import {
-	ErrorType,
-	useCollaborativeTextEditorApi,
-} from "./CollaborativeTextEditorApi.composable";
-
-vi.mock("./CollaborativeTextEditorNotifications.composable");
+import * as serverApi from "@api-server";
+import { useNotificationStore } from "@data-app";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 vi.mock("@/utils/api");
-const mockedMapAxiosErrorToResponseError = vi.mocked(
-	mapAxiosErrorToResponseError
-);
+const mockedMapAxiosErrorToResponseError = vi.mocked(mapAxiosErrorToResponseError);
 
 vi.mock(
 	"@/utils/create-global-state",
@@ -43,7 +40,16 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 	};
 };
 
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn(() => ({
+		t: vi.fn((key) => key),
+	})),
+}));
+
 describe("CollaborativeTextEditorApi Composable", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 	afterEach(() => {
 		vi.resetAllMocks();
 	});
@@ -52,26 +58,17 @@ describe("CollaborativeTextEditorApi Composable", () => {
 		describe("when collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent returns successful", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
-				const parentType =
-					serverApi.CollaborativeTextEditorParentType.ContentElement;
+				const parentType = serverApi.CollaborativeTextEditorParentType.CONTENT_ELEMENT;
 
-				const response = createMock<
-					AxiosResponse<serverApi.CollaborativeTextEditorResponse, unknown>
-				>({
+				const response = mockApiResponse<serverApi.CollaborativeTextEditorResponse>({
 					data: { url: `${parentType}/${parentId}` },
 				});
 
-				const collaborativeTextEditorApi =
-					createMock<serverApi.CollaborativeTextEditorApiInterface>();
-				vi.spyOn(
-					serverApi,
-					"CollaborativeTextEditorApiFactory"
-				).mockReturnValue(collaborativeTextEditorApi);
+				const collaborativeTextEditorApi = mockApi<serverApi.CollaborativeTextEditorApiInterface>();
+				vi.spyOn(serverApi, "CollaborativeTextEditorApiFactory").mockReturnValue(collaborativeTextEditorApi);
 				collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent.mockResolvedValueOnce(
 					response
 				);
-
-				setupCollaborativeTextEditorNotifier();
 
 				return {
 					parentId,
@@ -108,72 +105,58 @@ describe("CollaborativeTextEditorApi Composable", () => {
 		describe("when collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent returns error", () => {
 			const setup = (message?: string) => {
 				const parentId = ObjectIdMock();
-				const parentType =
-					serverApi.CollaborativeTextEditorParentType.ContentElement;
+				const parentType = serverApi.CollaborativeTextEditorParentType.CONTENT_ELEMENT;
 
 				const { responseError, expectedPayload } = setupErrorResponse(message);
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
 
-				const collaborativeTextEditorApi =
-					createMock<serverApi.CollaborativeTextEditorApiInterface>();
-				vi.spyOn(
-					serverApi,
-					"CollaborativeTextEditorApiFactory"
-				).mockReturnValue(collaborativeTextEditorApi);
+				const collaborativeTextEditorApi = mockApi<serverApi.CollaborativeTextEditorApiInterface>();
+				vi.spyOn(serverApi, "CollaborativeTextEditorApiFactory").mockReturnValue(collaborativeTextEditorApi);
 				collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent.mockRejectedValue(
 					responseError
 				);
 
-				const {
-					showInternalServerError,
-					showUnauthorizedError,
-					showForbiddenError,
-				} = setupCollaborativeTextEditorNotifier();
-
 				return {
 					parentId,
 					parentType,
-					showInternalServerError,
-					showUnauthorizedError,
-					showForbiddenError,
 				};
 			};
 
 			it("should call showUnauthorizedError and pass error", async () => {
-				const { parentId, parentType, showUnauthorizedError } = setup(
-					ErrorType.Unauthorized
-				);
+				const { parentId, parentType } = setup(ErrorType.Unauthorized);
 
 				const { getUrl } = useCollaborativeTextEditorApi();
 
 				const result = await getUrl(parentId, parentType);
 
 				expect(result).toBeUndefined();
-				expect(showUnauthorizedError).toBeCalledTimes(1);
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({ status: "error", text: "error.401" })
+				);
 			});
 
 			it("should call showForbiddenError and pass error", async () => {
-				const { parentId, parentType, showForbiddenError } = setup(
-					ErrorType.Forbidden
-				);
+				const { parentId, parentType } = setup(ErrorType.Forbidden);
 
 				const { getUrl } = useCollaborativeTextEditorApi();
 
 				const result = await getUrl(parentId, parentType);
 
 				expect(result).toBeUndefined();
-				expect(showForbiddenError).toBeCalledTimes(1);
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({ status: "error", text: "error.403" })
+				);
 			});
 
 			it("should call showInternalServerError and pass error", async () => {
-				const { parentId, parentType, showInternalServerError } = setup();
+				const { parentId, parentType } = setup();
 
 				const { getUrl } = useCollaborativeTextEditorApi();
 
 				const result = await getUrl(parentId, parentType);
 
 				expect(result).toBeUndefined();
-				expect(showInternalServerError).toBeCalledTimes(1);
+				expectNotification("error");
 			});
 		});
 	});

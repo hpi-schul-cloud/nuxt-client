@@ -1,9 +1,6 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import ContentElementBar from "./ContentElementBar.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 type Props = { icon?: string; hasGreyBackground?: boolean };
 
@@ -203,9 +200,7 @@ describe("ContentElementBar", () => {
 				}
 			);
 
-			const statusInfoElement = wrapper.find(
-				"[data-testid='status-info-slot']"
-			);
+			const statusInfoElement = wrapper.find("[data-testid='status-info-slot']");
 
 			expect(statusInfoElement.text()).toBe(statusInfo);
 		});
@@ -220,9 +215,7 @@ describe("ContentElementBar", () => {
 				}
 			);
 
-			const statusInfoElement = wrapper.find(
-				"[data-testid='status-info-slot']"
-			);
+			const statusInfoElement = wrapper.find("[data-testid='status-info-slot']");
 
 			expect(statusInfoElement.exists()).toBe(false);
 		});

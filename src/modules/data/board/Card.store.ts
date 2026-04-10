@@ -1,21 +1,11 @@
-import {
-	CardResponse,
-	ContentElementType,
-	PreferredToolResponse,
-	ToolContextType,
-} from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
-import { defineStore } from "pinia";
-import { nextTick, Ref, ref } from "vue";
 import { CreateCardSuccessPayload } from "./boardActions/boardActionPayload.types";
-
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import {
 	CreateElementRequestPayload,
 	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
 	DeleteElementSuccessPayload,
+	DuplicateCardSuccessPayload,
 	FetchCardSuccessPayload,
 	MoveElementSuccessPayload,
 	UpdateCardHeightSuccessPayload,
@@ -24,6 +14,15 @@ import {
 } from "./cardActions/cardActionPayload.types";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
+import { useSharedEditMode } from "./edit-mode.composable";
+import { FileRecordParent } from "@/types/file/File";
+import { CardResponse, ContentElementType, PreferredToolResponse, ToolContextType } from "@api-server";
+import { notifyInfo } from "@data-app";
+import { useEnvConfig } from "@data-env";
+import { CollaboraFileType, useFileStorageApi } from "@data-file";
+import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
+import { defineStore } from "pinia";
+import { nextTick, Ref, ref } from "vue";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const cards: Ref<Record<string, CardResponse>> = ref({});
@@ -31,15 +30,16 @@ export const useCardStore = defineStore("cardStore", () => {
 	const isPreferredToolsLoading: Ref<boolean> = ref(false);
 
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
+	const { disableFileSelectOnMount, resetFileSelectOnMountEnabled } = useSharedFileSelect();
 
 	const restApi = useCardRestApi();
-	const isSocketEnabled =
-		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
+	const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
 	const socketOrRest = isSocketEnabled ? useCardSocketApi() : restApi;
 
 	const { setFocus, forceFocus } = useBoardFocusHandler();
 	const { setEditModeId, editModeId } = useSharedEditMode();
+	const { uploadCollaboraFile } = useFileStorageApi();
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
@@ -53,9 +53,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		cards.value = {};
 	};
 
-	const getCard = (cardId: string): CardResponse | undefined => {
-		return cards.value[cardId];
-	};
+	const getCard = (cardId: string): CardResponse | undefined => cards.value[cardId];
 
 	const createCardSuccess = (payload: CreateCardSuccessPayload) => {
 		if (payload.newCard) {
@@ -65,9 +63,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const updateCardTitleRequest = socketOrRest.updateCardTitleRequest;
 
-	const updateCardTitleSuccess = async (
-		payload: UpdateCardTitleSuccessPayload
-	) => {
+	const updateCardTitleSuccess = (payload: UpdateCardTitleSuccessPayload) => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
@@ -76,18 +72,37 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const updateCardHeightRequest = socketOrRest.updateCardHeightRequest;
 
-	const updateCardHeightSuccess = async (
-		payload: UpdateCardHeightSuccessPayload
-	) => {
+	const updateCardHeightSuccess = (payload: UpdateCardHeightSuccessPayload) => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
 		card.height = payload.newHeight;
 	};
 
+	const duplicateCard = socketOrRest.duplicateCardRequest;
+
+	const hasRelevantContentForDuplicationWarning = (card: CardResponse): boolean =>
+		card.elements.some((element) =>
+			[
+				ContentElementType.COLLABORATIVE_TEXT_EDITOR,
+				ContentElementType.DRAWING,
+				ContentElementType.EXTERNAL_TOOL,
+			].includes(element.type)
+		);
+
+	const duplicateCardSuccess = (payload: DuplicateCardSuccessPayload) => {
+		const { duplicatedCard } = payload;
+		if (duplicatedCard.id) {
+			cards.value[duplicatedCard.id] = duplicatedCard;
+			if (payload.isOwnAction === true && hasRelevantContentForDuplicationWarning(duplicatedCard)) {
+				notifyInfo("components.board.notifications.info.cardDuplicated");
+			}
+		}
+	};
+
 	const deleteCardRequest = socketOrRest.deleteCardRequest;
 
-	const deleteCardSuccess = async (payload: DeleteCardSuccessPayload) => {
+	const deleteCardSuccess = (payload: DeleteCardSuccessPayload) => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
@@ -99,23 +114,38 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const createElementRequest = socketOrRest.createElementRequest;
 
-	const createPreferredElement = async (
-		payload: CreateElementRequestPayload,
-		tool: PreferredToolResponse
-	) => {
+	const createFileElementWithCollabora = async (type: CollaboraFileType, fileName: string) => {
+		if (!editModeId.value) {
+			return;
+		}
+
+		disableFileSelectOnMount();
+		const element = await createElementRequest({
+			type: ContentElementType.FILE,
+			cardId: editModeId.value,
+		});
+		if (!element) {
+			resetFileSelectOnMountEnabled();
+			return;
+		}
+
+		const uploadedCollaboraFile = await uploadCollaboraFile(type, element.id, FileRecordParent.BOARDNODES, fileName);
+		if (!uploadedCollaboraFile) {
+			await deleteElementRequest({ elementId: element.id, cardId: editModeId.value });
+		}
+		resetFileSelectOnMountEnabled();
+	};
+
+	const createPreferredElement = (payload: CreateElementRequestPayload, tool: PreferredToolResponse) => {
 		restApi.createPreferredElement(payload, tool);
 	};
 
-	const createElementSuccess = async (payload: CreateElementSuccessPayload) => {
+	const createElementSuccess = (payload: CreateElementSuccessPayload) => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
 		const { toPosition } = payload;
-		if (
-			toPosition !== undefined &&
-			toPosition >= 0 &&
-			toPosition <= card.elements.length
-		) {
+		if (toPosition !== undefined && toPosition >= 0 && toPosition <= card.elements.length) {
 			card.elements.splice(toPosition, 0, payload.newElement);
 		} else {
 			card.elements.push(payload.newElement);
@@ -134,18 +164,13 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (card === undefined) return;
 
 		return await createElementRequest({
-			type: ContentElementType.RichText,
+			type: ContentElementType.RICH_TEXT,
 			cardId: card.id,
 			toPosition: 0,
 		});
 	};
 
-	const moveElementRequest = async (
-		cardId: string,
-		elementId: string,
-		elementIndex: number,
-		delta: 1 | -1
-	) => {
+	const moveElementRequest = async (cardId: string, elementId: string, elementIndex: number, delta: 1 | -1) => {
 		const card = cards.value[cardId];
 		if (card === undefined) return;
 
@@ -153,7 +178,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (toPosition < 0) return;
 		if (toPosition >= card.elements.length) return;
 
-		socketOrRest.moveElementRequest({
+		await socketOrRest.moveElementRequest({
 			elementId,
 			toCardId: cardId,
 			toPosition,
@@ -176,18 +201,13 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const deleteElementRequest = socketOrRest.deleteElementRequest;
 
-	const deleteElementSuccess = async (
-		payload: DeleteElementSuccessPayload
-	): Promise<void> => {
+	const deleteElementSuccess = (payload: DeleteElementSuccessPayload) => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
 		const { focusedId } = useBoardFocusHandler(payload.elementId);
 		if (focusedId?.value === payload.elementId) {
-			const previousId = getPreviousElementId(
-				payload.elementId,
-				payload.cardId
-			);
+			const previousId = getPreviousElementId(payload.elementId, payload.cardId);
 
 			if (!previousId) return;
 			forceFocus(previousId);
@@ -202,25 +222,18 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const updateElementRequest = socketOrRest.updateElementRequest;
 
-	const updateElementSuccess = async (payload: UpdateElementSuccessPayload) => {
-		const cardToUpdate = Object.values(cards.value).find((c) =>
-			c.elements.some((e) => e.id === payload.elementId)
-		);
+	const updateElementSuccess = (payload: UpdateElementSuccessPayload) => {
+		const cardToUpdate = Object.values(cards.value).find((c) => c.elements.some((e) => e.id === payload.elementId));
 		if (cardToUpdate === undefined) return;
 		const cardId = cardToUpdate.id;
 
 		if (cardId) {
-			const elementIndex = cardToUpdate.elements.findIndex(
-				(e) => e.id === payload.elementId
-			);
+			const elementIndex = cardToUpdate.elements.findIndex((e) => e.id === payload.elementId);
 			cards.value[cardId].elements[elementIndex].content = payload.data.content;
 		}
 	};
 
-	const getPreviousElementId = (
-		elementId: string,
-		cardId: string
-	): string | undefined => {
+	const getPreviousElementId = (elementId: string, cardId: string): string | undefined => {
 		const elements = cards.value[cardId].elements;
 		if (elements.length === 0) return cardId;
 
@@ -228,19 +241,15 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (elementIndex <= 0) return cardId;
 
 		const previousElement = elements[elementIndex - 1];
-		const { setEditModeId } = useSharedEditMode();
-		setEditModeId(cardId);
 
-		if (previousElement.type === ContentElementType.RichText) {
+		if (previousElement.type === ContentElementType.RICH_TEXT) {
 			return getPreviousElementId(previousElement.id, cardId);
 		}
 
 		return previousElement.id;
 	};
 
-	const loadPreferredTools = async (
-		contextType: ToolContextType
-	): Promise<void> => {
+	const loadPreferredTools = async (contextType: ToolContextType) => {
 		isPreferredToolsLoading.value = true;
 
 		preferredTools.value = (await restApi.getPreferredTools(contextType)) || [];
@@ -265,6 +274,8 @@ export const useCardStore = defineStore("cardStore", () => {
 		fetchCardRequest,
 		fetchCardSuccess,
 		cards,
+		duplicateCard,
+		duplicateCardSuccess,
 		deleteCardRequest,
 		deleteCardSuccess,
 		getCard,
@@ -279,5 +290,6 @@ export const useCardStore = defineStore("cardStore", () => {
 		preferredTools,
 		isPreferredToolsLoading,
 		disconnectSocketRequest,
+		createFileElementWithCollabora,
 	};
 });

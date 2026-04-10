@@ -1,7 +1,7 @@
+import { useCardStore } from "./Card.store";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { watchDebounced } from "@vueuse/core";
 import { computed, ComputedRef, Ref, ref, toRef } from "vue";
-import { useCardStore } from "./Card.store";
 
 export const useContentElementState = <T extends AnyContentElement>(
 	props: {

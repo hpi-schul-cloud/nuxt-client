@@ -22,11 +22,7 @@
 			</template>
 		</MediaBoardLineHeader>
 		<VExpansionPanels v-model="openItems">
-			<VExpansionPanel
-				value="linePanel"
-				elevation="0"
-				class="pa-0 bg-transparent"
-			>
+			<VExpansionPanel value="linePanel" elevation="0" class="pa-0 bg-transparent">
 				<VExpansionPanelText class="no-inner-padding">
 					<Sortable
 						:list="line.elements"
@@ -35,7 +31,7 @@
 						:options="{
 							group: 'elements',
 							direction: 'horizontal',
-							delay: 300,
+							delay: 200,
 							delayOnTouchOnly: true,
 							ghostClass: 'sortable-drag-ghost',
 							easing: 'cubic-bezier(1, 0, 0, 1)',
@@ -74,6 +70,13 @@
 </template>
 
 <script setup lang="ts">
+import { availableMediaLineId, ElementMove } from "./data";
+import MediaBoardExternalToolDeletedElement from "./MediaBoardExternalToolDeletedElement.vue";
+import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
+import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
+import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
+import { MediaBoardColorMapper, useCollapsableState } from "./utils";
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import {
 	BoardLayout,
 	ContentElementType,
@@ -81,29 +84,14 @@ import {
 	MediaBoardColors,
 	MediaExternalToolElementResponse,
 	MediaLineResponse,
-} from "@/serverApi/v3";
-import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
+} from "@api-server";
+import { useMediaBoardEditMode } from "@data-board";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useMediaBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import {
-	computed,
-	ComputedRef,
-	PropType,
-	Ref,
-	toRef,
-	WritableComputedRef,
-} from "vue";
+import { computed, ComputedRef, PropType, Ref, toRef, WritableComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { availableMediaLineId, ElementMove } from "./data";
-import MediaBoardExternalToolDeletedElement from "./MediaBoardExternalToolDeletedElement.vue";
-import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
-import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
-import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
-import { MediaBoardColorMapper, useCollapsableState } from "./utils";
 
 const props = defineProps({
 	line: {
@@ -152,7 +140,7 @@ const titlePlaceholder: ComputedRef<string> = computed(
 	() => `${t("feature.media-shelf.line.title").toString()} ${props.index + 1}`
 );
 
-const isList: Ref<boolean> = computed(() => props.layout === BoardLayout.List);
+const isList: Ref<boolean> = computed(() => props.layout === BoardLayout.LIST);
 
 const lineBackgroundColorHex: Ref<string> = computed(() =>
 	MediaBoardColorMapper.mapColorToHex(props.line.backgroundColor, "lighten5")
@@ -176,10 +164,7 @@ const onElementDragEnd = async (event: SortableEvent) => {
 	const elementId: string | undefined = extractDataAttribute(item, "elementId");
 
 	const isOutOfBounds =
-		newIndex === undefined ||
-		oldIndex === undefined ||
-		fromLineId === undefined ||
-		elementId === undefined;
+		newIndex === undefined || oldIndex === undefined || fromLineId === undefined || elementId === undefined;
 
 	if (isOutOfBounds) {
 		return;
@@ -210,6 +195,6 @@ const isDeletedElement = (
 	if (!("type" in element)) {
 		return false;
 	}
-	return element.type === ContentElementType.Deleted;
+	return element.type === ContentElementType.DELETED;
 };
 </script>

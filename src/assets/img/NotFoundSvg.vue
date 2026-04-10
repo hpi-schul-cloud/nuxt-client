@@ -14,13 +14,7 @@
 					d="M40.8631168,0.748134352 L55.8882637,30.5189155 C51.2126144,32.2691922 46.1496301,33.2262335 40.8631168,33.2262335 C35.576478,33.2262335 30.5133788,32.2691468 25.8376369,30.5187909 L40.8631168,0.748134352 Z"
 				/>
 			</defs>
-			<g
-				id="Error-Page"
-				stroke="none"
-				stroke-width="1"
-				:fill="fill"
-				fill-rule="evenodd"
-			>
+			<g id="Error-Page" stroke="none" stroke-width="1" :fill="fill" fill-rule="evenodd">
 				<g id="Animals/Parrot/Shadow" fill="#ECEEF0">
 					<path
 						id="Oval"

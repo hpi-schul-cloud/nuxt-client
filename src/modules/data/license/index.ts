@@ -1,2 +1,2 @@
-export * from "./schoolLicenseApi.composable";
 export { useSchoolLicenseStore } from "./SchoolLicense.store";
+export * from "./schoolLicenseApi.composable";

@@ -3,9 +3,4 @@ import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import StartExistingCourseSyncDialog from "./StartExistingCourseSyncDialog.vue";
 import StartNewCourseSyncDialog from "./StartNewCourseSyncDialog.vue";
 
-export {
-	GroupSelectionDialog,
-	EndCourseSyncDialog,
-	StartNewCourseSyncDialog,
-	StartExistingCourseSyncDialog,
-};
+export { EndCourseSyncDialog, GroupSelectionDialog, StartExistingCourseSyncDialog, StartNewCourseSyncDialog };

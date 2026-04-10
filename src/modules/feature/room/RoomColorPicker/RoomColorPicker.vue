@@ -2,11 +2,7 @@
 	<div :id="roomColorLabelId" class="d-flex mb-2">
 		{{ t("common.words.color") }}
 	</div>
-	<VRadioGroup
-		v-model="currentColor"
-		:aria-labelledby="roomColorLabelId"
-		inline
-	>
+	<VRadioGroup v-model="currentColor" :aria-labelledby="roomColorLabelId" inline>
 		<VRadio
 			v-for="swatchColor in RoomColor"
 			:key="swatchColor"
@@ -23,16 +19,16 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
 import { RoomColor } from "@/types/room/Room";
-import { useI18n } from "vue-i18n";
 import { mdiCheckCircleOutline } from "@icons/material";
+import { PropType } from "vue";
+import { useI18n } from "vue-i18n";
 
 const roomColorLabelId = "room-color-label";
 
 const currentColor = defineModel("color", {
 	type: String as PropType<RoomColor>,
-	default: RoomColor.BlueGrey,
+	default: RoomColor.BLUE_GREY,
 });
 
 const { t } = useI18n();

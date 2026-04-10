@@ -1,9 +1,3 @@
-import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
-import { applicationErrorModule } from "@/store";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { useI18n } from "vue-i18n";
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 import { useBoardStore } from "../Board.store";
 import * as CardActions from "../cardActions/cardActions";
@@ -17,13 +11,19 @@ import {
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
 	MoveCardSuccessPayload,
+	MoveCardToBoardRequestPayload,
 	MoveColumnRequestPayload,
 	UpdateBoardLayoutRequestPayload,
 	UpdateBoardTitleRequestPayload,
 	UpdateBoardVisibilityRequestPayload,
 	UpdateColumnTitleRequestPayload,
+	UpdateReaderCanEditRequestPayload,
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
+import { CreateCardBodyParamsRequiredEmptyElements } from "@api-server";
+import { useAppStore } from "@data-app";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
@@ -33,42 +33,33 @@ export const useBoardSocketApi = () => {
 		notifyDeleteCardSuccess,
 		notifyDeleteColumnSuccess,
 		notifyMoveCardSuccess,
+		notifyMoveCardToBoardSuccess,
 		notifyMoveColumnSuccess,
+		notifySetBoardAsEditableForAllUsersSuccess,
+		notifySetBoardAsNotEditableForAllUsersSuccess,
+		notifyUpdateBoardLayoutSuccess,
 		notifyUpdateBoardTitleSuccess,
 		notifyUpdateBoardVisibilitySuccess,
 		notifyUpdateColumnTitleSuccess,
-		notifyUpdateBoardLayoutSuccess,
 	} = useBoardAriaNotification();
-	const { t } = useI18n();
 
-	const dispatch = async (
-		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
-	) => {
+	const dispatch = (action: PermittedStoreActions<typeof BoardActions & typeof CardActions>) => {
 		const successActions = [
 			on(BoardActions.createCardSuccess, boardStore.createCardSuccess),
 			on(BoardActions.createColumnSuccess, boardStore.createColumnSuccess),
+			on(CardActions.duplicateCardSuccess, boardStore.duplicateCardSuccess),
 			on(CardActions.deleteCardSuccess, boardStore.deleteCardSuccess),
 			on(BoardActions.deleteColumnSuccess, boardStore.deleteColumnSuccess),
 			on(BoardActions.deleteBoardSuccess, boardStore.deleteBoardSuccess),
 			on(BoardActions.moveCardSuccess, boardStore.moveCardSuccess),
+			on(BoardActions.moveCardToBoardSuccess, boardStore.moveCardToBoardSuccess),
 			on(BoardActions.moveColumnSuccess, boardStore.moveColumnSuccess),
 			on(BoardActions.fetchBoardSuccess, boardStore.fetchBoardSuccess),
-			on(
-				BoardActions.updateColumnTitleSuccess,
-				boardStore.updateColumnTitleSuccess
-			),
-			on(
-				BoardActions.updateBoardTitleSuccess,
-				boardStore.updateBoardTitleSuccess
-			),
-			on(
-				BoardActions.updateBoardVisibilitySuccess,
-				boardStore.updateBoardVisibilitySuccess
-			),
-			on(
-				BoardActions.updateBoardLayoutSuccess,
-				boardStore.updateBoardLayoutSuccess
-			),
+			on(BoardActions.updateColumnTitleSuccess, boardStore.updateColumnTitleSuccess),
+			on(BoardActions.updateBoardTitleSuccess, boardStore.updateBoardTitleSuccess),
+			on(BoardActions.updateBoardVisibilitySuccess, boardStore.updateBoardVisibilitySuccess),
+			on(BoardActions.updateBoardLayoutSuccess, boardStore.updateBoardLayoutSuccess),
+			on(BoardActions.updateReaderCanEditSuccess, boardStore.updateReaderCanEditSuccess),
 		];
 
 		const failureActions = [
@@ -78,11 +69,13 @@ export const useBoardSocketApi = () => {
 			on(CardActions.deleteCardFailure, reloadBoard),
 			on(BoardActions.deleteColumnFailure, reloadBoard),
 			on(BoardActions.moveCardFailure, reloadBoard),
+			on(BoardActions.moveCardToBoardFailure, reloadBoard),
 			on(BoardActions.moveColumnFailure, reloadBoard),
 			on(BoardActions.updateColumnTitleFailure, reloadBoard),
 			on(BoardActions.updateBoardTitleFailure, reloadBoard),
 			on(BoardActions.updateBoardVisibilityFailure, reloadBoard),
 			on(BoardActions.updateBoardLayoutFailure, reloadBoard),
+			on(BoardActions.updateReaderCanEditFailure, reloadBoard),
 		];
 
 		const ariaLiveNotifications = [
@@ -91,14 +84,14 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.createColumnSuccess, notifyCreateColumnSuccess),
 			on(BoardActions.deleteColumnSuccess, notifyDeleteColumnSuccess),
 			on(BoardActions.moveCardSuccess, notifyMoveCardSuccess),
+			on(BoardActions.moveCardToBoardSuccess, notifyMoveCardToBoardSuccess),
 			on(BoardActions.moveColumnSuccess, notifyMoveColumnSuccess),
 			on(BoardActions.updateBoardTitleSuccess, notifyUpdateBoardTitleSuccess),
-			on(
-				BoardActions.updateBoardVisibilitySuccess,
-				notifyUpdateBoardVisibilitySuccess
-			),
+			on(BoardActions.updateBoardVisibilitySuccess, notifyUpdateBoardVisibilitySuccess),
 			on(BoardActions.updateColumnTitleSuccess, notifyUpdateColumnTitleSuccess),
 			on(BoardActions.updateBoardLayoutSuccess, notifyUpdateBoardLayoutSuccess),
+			on(BoardActions.updateReaderCanEditSuccess, notifySetBoardAsEditableForAllUsersSuccess),
+			on(BoardActions.updateReaderCanEditSuccess, notifySetBoardAsNotEditableForAllUsersSuccess),
 		];
 
 		handle(
@@ -111,22 +104,16 @@ export const useBoardSocketApi = () => {
 		);
 	};
 
-	const { emitOnSocket, emitWithAck, disconnectSocket } =
-		useSocketConnection(dispatch);
+	const { emitOnSocket, emitWithAck, disconnectSocket } = useSocketConnection(dispatch);
 
-	const createCardRequest = async (payload: CreateCardRequestPayload) => {
+	const createCardRequest = (payload: CreateCardRequestPayload) => {
 		emitOnSocket("create-card-request", {
 			...payload,
-			requiredEmptyElements: [
-				CreateCardBodyParamsRequiredEmptyElementsEnum.RichText,
-			],
+			requiredEmptyElements: [CreateCardBodyParamsRequiredEmptyElements.RICH_TEXT],
 		});
 	};
 
-	const fetchBoardRequest = async (
-		payload: FetchBoardRequestPayload,
-		loading = true
-	): Promise<void> => {
+	const fetchBoardRequest = (payload: FetchBoardRequestPayload, loading = true) => {
 		boardStore.setLoading(loading);
 		emitOnSocket("fetch-board-request", payload);
 	};
@@ -165,15 +152,17 @@ export const useBoardSocketApi = () => {
 		}
 	};
 
+	const moveCardToBoardRequest = async (payload: MoveCardToBoardRequestPayload) => {
+		emitOnSocket("move-card-to-board-request", payload);
+	};
+
 	const moveColumnRequest = (payload: MoveColumnRequestPayload) => {
 		const { addedIndex, removedIndex } = payload.columnMove;
 		if (addedIndex === removedIndex) return;
 		emitOnSocket("move-column-request", payload);
 	};
 
-	const updateColumnTitleRequest = (
-		payload: UpdateColumnTitleRequestPayload
-	) => {
+	const updateColumnTitleRequest = (payload: UpdateColumnTitleRequestPayload) => {
 		emitOnSocket("update-column-title-request", payload);
 	};
 
@@ -181,15 +170,15 @@ export const useBoardSocketApi = () => {
 		emitOnSocket("update-board-title-request", payload);
 	};
 
-	const updateBoardVisibilityRequest = (
-		payload: UpdateBoardVisibilityRequestPayload
-	) => {
+	const updateBoardVisibilityRequest = (payload: UpdateBoardVisibilityRequestPayload) => {
 		emitOnSocket("update-board-visibility-request", payload);
 	};
 
-	const updateBoardLayoutRequest = (
-		payload: UpdateBoardLayoutRequestPayload
-	) => {
+	const updateReaderCanEditRequest = (payload: UpdateReaderCanEditRequestPayload) => {
+		emitOnSocket("update-readers-can-edit-request", payload);
+	};
+
+	const updateBoardLayoutRequest = (payload: UpdateBoardLayoutRequestPayload) => {
 		emitOnSocket("update-board-layout-request", payload);
 	};
 
@@ -199,12 +188,7 @@ export const useBoardSocketApi = () => {
 	};
 
 	const fetchBoardFailure = () => {
-		applicationErrorModule.setError(
-			createApplicationError(
-				HttpStatusCode.NotFound,
-				t("components.board.error.404")
-			)
-		);
+		useAppStore().handleApplicationError(HttpStatusCode.NotFound, "components.board.error.404");
 	};
 
 	const reloadBoard = () => {
@@ -235,9 +219,11 @@ export const useBoardSocketApi = () => {
 		fetchBoardRequest,
 		moveCardRequest,
 		moveColumnRequest,
+		moveCardToBoardRequest,
 		updateColumnTitleRequest,
 		updateBoardTitleRequest,
 		updateBoardVisibilityRequest,
 		updateBoardLayoutRequest,
+		updateReaderCanEditRequest,
 	};
 };

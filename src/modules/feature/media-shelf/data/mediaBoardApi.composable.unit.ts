@@ -1,4 +1,13 @@
-import * as serverApi from "@/serverApi/v3/api";
+import { useMediaBoardApi } from "./mediaBoardApi.composable";
+import {
+	mediaAvailableLineResponseFactory,
+	mediaBoardResponseFactory,
+	mediaExternalToolElementResponseFactory,
+	mediaLineResponseFactory,
+	mockApi,
+	mockApiResponse,
+} from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
 import {
 	BoardLayout,
 	CollapsableBodyParams,
@@ -9,32 +18,22 @@ import {
 	MoveColumnBodyParams,
 	MoveElementBodyParams,
 	RenameBodyParams,
-} from "@/serverApi/v3/api";
-import {
-	mediaAvailableLineResponseFactory,
-	mediaBoardResponseFactory,
-	mediaExternalToolElementResponseFactory,
-	mediaLineResponseFactory,
-	mockApiResponse,
-} from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useMediaBoardApi } from "./mediaBoardApi.composable";
+} from "@api-server";
+import { Mocked } from "vitest";
 
 describe("mediaBoardApi.composable", () => {
-	let mediaBoardApi: DeepMocked<serverApi.MediaBoardApiInterface>;
-	let mediaLineApi: DeepMocked<serverApi.MediaLineApiInterface>;
-	let mediaElementApi: DeepMocked<serverApi.MediaElementApiInterface>;
+	let mediaBoardApi: Mocked<serverApi.MediaBoardApiInterface>;
+	let mediaLineApi: Mocked<serverApi.MediaLineApiInterface>;
+	let mediaElementApi: Mocked<serverApi.MediaElementApiInterface>;
 
 	beforeEach(() => {
-		mediaBoardApi = createMock<serverApi.MediaBoardApiInterface>();
-		mediaLineApi = createMock<serverApi.MediaLineApiInterface>();
-		mediaElementApi = createMock<serverApi.MediaElementApiInterface>();
+		mediaBoardApi = mockApi<serverApi.MediaBoardApiInterface>();
+		mediaLineApi = mockApi<serverApi.MediaLineApiInterface>();
+		mediaElementApi = mockApi<serverApi.MediaElementApiInterface>();
 
 		vi.spyOn(serverApi, "MediaBoardApiFactory").mockReturnValue(mediaBoardApi);
 		vi.spyOn(serverApi, "MediaLineApiFactory").mockReturnValue(mediaLineApi);
-		vi.spyOn(serverApi, "MediaElementApiFactory").mockReturnValue(
-			mediaElementApi
-		);
+		vi.spyOn(serverApi, "MediaElementApiFactory").mockReturnValue(mediaElementApi);
 	});
 
 	afterEach(() => {
@@ -45,9 +44,7 @@ describe("mediaBoardApi.composable", () => {
 		const setup = () => {
 			const mediaBoard = mediaBoardResponseFactory.build();
 
-			mediaBoardApi.mediaBoardControllerGetMediaBoardForUser.mockResolvedValue(
-				mockApiResponse({ data: mediaBoard })
-			);
+			mediaBoardApi.mediaBoardControllerGetMediaBoardForUser.mockResolvedValue(mockApiResponse({ data: mediaBoard }));
 
 			return {
 				mediaBoard,
@@ -59,9 +56,7 @@ describe("mediaBoardApi.composable", () => {
 
 			await useMediaBoardApi().getMediaBoardForUser();
 
-			expect(
-				mediaBoardApi.mediaBoardControllerGetMediaBoardForUser
-			).toHaveBeenCalled();
+			expect(mediaBoardApi.mediaBoardControllerGetMediaBoardForUser).toHaveBeenCalled();
 		});
 
 		it("should return a media board", async () => {
@@ -75,13 +70,14 @@ describe("mediaBoardApi.composable", () => {
 
 	describe("updateBoardLayout", () => {
 		it("should call the api to update the media board layout", async () => {
-			await useMediaBoardApi().updateBoardLayout("boardId", BoardLayout.List);
+			await useMediaBoardApi().updateBoardLayout("boardId", BoardLayout.LIST);
 
-			expect(
-				mediaBoardApi.mediaBoardControllerSetMediaBoardLayout
-			).toHaveBeenCalledWith<[string, LayoutBodyParams]>("boardId", {
-				layout: BoardLayout.List,
-			});
+			expect(mediaBoardApi.mediaBoardControllerSetMediaBoardLayout).toHaveBeenCalledWith<[string, LayoutBodyParams]>(
+				"boardId",
+				{
+					layout: BoardLayout.LIST,
+				}
+			);
 		});
 	});
 
@@ -105,9 +101,7 @@ describe("mediaBoardApi.composable", () => {
 
 			await useMediaBoardApi().getAvailableMedia(boardId);
 
-			expect(
-				mediaBoardApi.mediaBoardControllerGetMediaAvailableLine
-			).toHaveBeenCalledWith(boardId);
+			expect(mediaBoardApi.mediaBoardControllerGetMediaAvailableLine).toHaveBeenCalledWith(boardId);
 		});
 
 		it("should return an available line", async () => {
@@ -124,9 +118,7 @@ describe("mediaBoardApi.composable", () => {
 			const boardId = "boardId";
 			const mediaLine = mediaLineResponseFactory.build();
 
-			mediaBoardApi.mediaBoardControllerCreateLine.mockResolvedValue(
-				mockApiResponse({ data: mediaLine })
-			);
+			mediaBoardApi.mediaBoardControllerCreateLine.mockResolvedValue(mockApiResponse({ data: mediaLine }));
 
 			return {
 				boardId,
@@ -139,9 +131,7 @@ describe("mediaBoardApi.composable", () => {
 
 			await useMediaBoardApi().createLine(boardId);
 
-			expect(mediaBoardApi.mediaBoardControllerCreateLine).toHaveBeenCalledWith(
-				boardId
-			);
+			expect(mediaBoardApi.mediaBoardControllerCreateLine).toHaveBeenCalledWith(boardId);
 		});
 
 		it("should return a line", async () => {
@@ -169,9 +159,7 @@ describe("mediaBoardApi.composable", () => {
 
 			await useMediaBoardApi().moveLine(lineId, boardId, 1);
 
-			expect(mediaLineApi.mediaLineControllerMoveLine).toHaveBeenCalledWith<
-				[string, MoveColumnBodyParams]
-			>(lineId, {
+			expect(mediaLineApi.mediaLineControllerMoveLine).toHaveBeenCalledWith<[string, MoveColumnBodyParams]>(lineId, {
 				toBoardId: boardId,
 				toPosition: 1,
 			});
@@ -194,9 +182,7 @@ describe("mediaBoardApi.composable", () => {
 
 			await useMediaBoardApi().updateLineTitle(lineId, newTitle);
 
-			expect(
-				mediaLineApi.mediaLineControllerUpdateLineTitle
-			).toHaveBeenCalledWith<[string, RenameBodyParams]>(lineId, {
+			expect(mediaLineApi.mediaLineControllerUpdateLineTitle).toHaveBeenCalledWith<[string, RenameBodyParams]>(lineId, {
 				title: newTitle,
 			});
 		});
@@ -204,27 +190,25 @@ describe("mediaBoardApi.composable", () => {
 
 	describe("updateLineColor", () => {
 		it("should call the api to update the line color", async () => {
-			await useMediaBoardApi().updateLineColor("lineId", MediaBoardColors.Red);
+			await useMediaBoardApi().updateLineColor("lineId", MediaBoardColors.RED);
 
-			expect(
-				mediaLineApi.mediaLineControllerUpdateBackgroundColor
-			).toHaveBeenCalledWith<[string, ColorBodyParams]>("lineId", {
-				backgroundColor: MediaBoardColors.Red,
-			});
+			expect(mediaLineApi.mediaLineControllerUpdateBackgroundColor).toHaveBeenCalledWith<[string, ColorBodyParams]>(
+				"lineId",
+				{
+					backgroundColor: MediaBoardColors.RED,
+				}
+			);
 		});
 	});
 
 	describe("updateAvailableLineColor", () => {
 		it("should call the api to update the line color", async () => {
-			await useMediaBoardApi().updateAvailableLineColor(
-				"boardId",
-				MediaBoardColors.Red
-			);
+			await useMediaBoardApi().updateAvailableLineColor("boardId", MediaBoardColors.RED);
 
-			expect(
-				mediaBoardApi.mediaBoardControllerUpdateMediaAvailableLineColor
-			).toHaveBeenCalledWith<[string, ColorBodyParams]>("boardId", {
-				backgroundColor: MediaBoardColors.Red,
+			expect(mediaBoardApi.mediaBoardControllerUpdateMediaAvailableLineColor).toHaveBeenCalledWith<
+				[string, ColorBodyParams]
+			>("boardId", {
+				backgroundColor: MediaBoardColors.RED,
 			});
 		});
 	});
@@ -233,11 +217,12 @@ describe("mediaBoardApi.composable", () => {
 		it("should call the api to update the line visibility", async () => {
 			await useMediaBoardApi().updateLineCollapsed("lineId", true);
 
-			expect(
-				mediaLineApi.mediaLineControllerCollapseMediaLine
-			).toHaveBeenCalledWith<[string, CollapsableBodyParams]>("lineId", {
-				collapsed: true,
-			});
+			expect(mediaLineApi.mediaLineControllerCollapseMediaLine).toHaveBeenCalledWith<[string, CollapsableBodyParams]>(
+				"lineId",
+				{
+					collapsed: true,
+				}
+			);
 		});
 	});
 
@@ -245,9 +230,9 @@ describe("mediaBoardApi.composable", () => {
 		it("should call the api to update the line visibility", async () => {
 			await useMediaBoardApi().updateAvailableLineCollapsed("boardId", true);
 
-			expect(
-				mediaBoardApi.mediaBoardControllerCollapseMediaAvailableLine
-			).toHaveBeenCalledWith<[string, CollapsableBodyParams]>("boardId", {
+			expect(mediaBoardApi.mediaBoardControllerCollapseMediaAvailableLine).toHaveBeenCalledWith<
+				[string, CollapsableBodyParams]
+			>("boardId", {
 				collapsed: true,
 			});
 		});
@@ -267,9 +252,7 @@ describe("mediaBoardApi.composable", () => {
 
 			await useMediaBoardApi().deleteLine(lineId);
 
-			expect(mediaLineApi.mediaLineControllerDeleteLine).toHaveBeenCalledWith(
-				lineId
-			);
+			expect(mediaLineApi.mediaLineControllerDeleteLine).toHaveBeenCalledWith(lineId);
 		});
 	});
 
@@ -279,9 +262,7 @@ describe("mediaBoardApi.composable", () => {
 			const schoolExternalToolId = "schoolExternalToolId";
 			const mediaElement = mediaExternalToolElementResponseFactory.build();
 
-			mediaElementApi.mediaElementControllerCreateElement.mockResolvedValue(
-				mockApiResponse({ data: mediaElement })
-			);
+			mediaElementApi.mediaElementControllerCreateElement.mockResolvedValue(mockApiResponse({ data: mediaElement }));
 
 			return {
 				lineId,
@@ -295,9 +276,7 @@ describe("mediaBoardApi.composable", () => {
 
 			await useMediaBoardApi().createElement(lineId, 1, schoolExternalToolId);
 
-			expect(
-				mediaElementApi.mediaElementControllerCreateElement
-			).toHaveBeenCalledWith<[CreateMediaElementBodyParams]>({
+			expect(mediaElementApi.mediaElementControllerCreateElement).toHaveBeenCalledWith<[CreateMediaElementBodyParams]>({
 				lineId,
 				position: 1,
 				schoolExternalToolId,
@@ -307,11 +286,7 @@ describe("mediaBoardApi.composable", () => {
 		it("should return an element", async () => {
 			const { lineId, schoolExternalToolId, mediaElement } = setup();
 
-			const result = await useMediaBoardApi().createElement(
-				lineId,
-				0,
-				schoolExternalToolId
-			);
+			const result = await useMediaBoardApi().createElement(lineId, 0, schoolExternalToolId);
 
 			expect(result).toEqual(mediaElement);
 		});
@@ -333,12 +308,13 @@ describe("mediaBoardApi.composable", () => {
 
 			await useMediaBoardApi().moveElement(elementId, lineId, 1);
 
-			expect(
-				mediaElementApi.mediaElementControllerMoveElement
-			).toHaveBeenCalledWith<[string, MoveElementBodyParams]>(elementId, {
-				toLineId: lineId,
-				toPosition: 1,
-			});
+			expect(mediaElementApi.mediaElementControllerMoveElement).toHaveBeenCalledWith<[string, MoveElementBodyParams]>(
+				elementId,
+				{
+					toLineId: lineId,
+					toPosition: 1,
+				}
+			);
 		});
 	});
 
@@ -356,9 +332,7 @@ describe("mediaBoardApi.composable", () => {
 
 			await useMediaBoardApi().deleteElement(elementId);
 
-			expect(
-				mediaElementApi.mediaElementControllerDeleteElement
-			).toHaveBeenCalledWith(elementId);
+			expect(mediaElementApi.mediaElementControllerDeleteElement).toHaveBeenCalledWith(elementId);
 		});
 	});
 });

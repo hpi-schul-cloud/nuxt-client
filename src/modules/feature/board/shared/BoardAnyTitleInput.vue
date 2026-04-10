@@ -7,17 +7,17 @@
 			:class="{
 				'board-title-input': scope === 'board',
 				'other-title-input': scope !== 'board',
-				'error-message-width': errorMessages.length > 0,
+				'error-message-width': hasErrors,
 			}"
 			hide-details="auto"
 			variant="plain"
 			density="compact"
 			rows="1"
 			auto-grow
+			:rules="[validateOnOpeningTag]"
 			:placeholder="t('components.cardElement.titleElement.placeholder')"
 			:autofocus="internalIsFocused"
 			:maxlength="maxLength"
-			:error-messages="errorMessages"
 			@keydown.enter="onEnter"
 		/>
 	</template>
@@ -25,36 +25,37 @@
 		<component
 			:is="`h${headingLevel}`"
 			class="title"
-			:class="scope === 'board' ? 'board-title' : 'other-title'"
+			:class="[scope === 'board' ? 'board-title' : 'other-title', { 'cursor-pointer': hasEditPermission }]"
 		>
-			{{ modelValue.trim() ? modelValue : emptyValueFallback }}
+			{{ externalValue?.trim() ? externalValue : emptyValueFallback }}
 		</component>
 	</template>
 </template>
 
 <script setup lang="ts">
-import { containsOpeningTagFollowedByString } from "@/utils/validation";
 import { useInlineEditInteractionHandler } from "@util-board";
-import { ErrorObject, useVuelidate } from "@vuelidate/core";
-import { helpers } from "@vuelidate/validators";
-import { computed, nextTick, onMounted, ref, unref, watch } from "vue";
+import { useOpeningTagValidator } from "@util-validators";
+import { computed, nextTick, onMounted, ref, toRef, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { VTextarea } from "vuetify/components";
 
-type Props = {
-	isEditMode: boolean;
-	value: string;
-	scope: "card" | "column" | "board";
-	isFocused?: boolean;
-	maxLength?: number | null;
-	emptyValueFallback?: string;
-};
-
-const props = withDefaults(defineProps<Props>(), {
-	isFocused: false,
-	maxLength: null,
-	emptyValueFallback: "",
-});
+const props = withDefaults(
+	defineProps<{
+		isEditMode: boolean;
+		value: string;
+		scope: "card" | "column" | "board";
+		isFocused?: boolean;
+		maxLength?: number;
+		emptyValueFallback?: string;
+		hasEditPermission?: boolean;
+	}>(),
+	{
+		isFocused: false,
+		emptyValueFallback: "",
+		hasEditPermission: false,
+		maxLength: undefined,
+	}
+);
 
 const emit = defineEmits<{
 	(e: "update:value", value: string): void;
@@ -62,11 +63,14 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { validateOnOpeningTag } = useOpeningTagValidator();
+
 const modelValue = ref("");
-
+const externalValue = toRef(props, "value");
 const internalIsFocused = ref(false);
+const titleInput = useTemplateRef<VTextarea>("titleInput");
 
-const titleInput = ref<VTextarea | null>(null);
+const hasErrors = computed(() => (titleInput.value ? !titleInput.value.isValid : false));
 
 useInlineEditInteractionHandler(async () => {
 	await setFocusOnEdit();
@@ -81,10 +85,11 @@ const setFocusOnEdit = async () => {
 	}
 };
 
-watch(modelValue, (newValue) => {
-	const inputIsValid = v$.value.modelValue.$errors.length === 0;
+watch(modelValue, async (newValue) => {
+	await titleInput?.value?.validate();
+	const isValid = titleInput?.value?.isValid;
 
-	if (newValue !== props.value && inputIsValid) {
+	if (newValue !== props.value && isValid) {
 		emit("update:value", newValue);
 	}
 });
@@ -106,45 +111,18 @@ onMounted(() => {
 watch(
 	() => props.isEditMode,
 	async (newVal, oldVal) => {
-		if (
-			props.scope !== "column" &&
-			props.scope !== "board" &&
-			!props.isFocused
-		) {
+		if (props.scope !== "column" && props.scope !== "board" && !props.isFocused) {
 			return;
 		}
 
 		if (newVal && !oldVal) {
-			if (
-				modelValue.value.trim().length < 1 &&
-				props.emptyValueFallback.length > 0
-			) {
-				modelValue.value = props.emptyValueFallback;
-			}
+			const text = externalValue.value.length > 0 ? externalValue.value : props.emptyValueFallback;
+			modelValue.value = text;
 
 			await nextTick();
 			await setFocusOnEdit();
 		}
 	}
-);
-
-const validationRules = computed(() => ({
-	modelValue: {
-		containsOpeningTag: helpers.withMessage(
-			t("common.validation.containsOpeningTag"),
-			(name: string) => !containsOpeningTagFollowedByString(name)
-		),
-	},
-}));
-
-const v$ = useVuelidate(
-	validationRules,
-	{ modelValue },
-	{ $lazy: true, $autoDirty: true }
-);
-
-const errorMessages = computed(() =>
-	v$.value.modelValue.$errors.map((e: ErrorObject) => unref(e.$message))
 );
 
 const headingLevel = computed(() => {
@@ -179,14 +157,13 @@ const cursorToEnd = () => {
 }
 
 .title {
-	cursor: pointer;
 	white-space: pre-wrap;
-
 	letter-spacing: $field-letter-spacing;
 	font-family: var(--font-accent);
+	font-weight: normal;
 
 	&.board-title-input :deep(textarea) {
-		font-size: var(--heading-3);
+		font-size: var(--heading-1);
 		line-height: var(--line-height-md);
 		padding-top: 16px;
 		overflow: hidden; // prevent scrollbar in board title
@@ -194,7 +171,7 @@ const cursorToEnd = () => {
 
 	&.other-title-input {
 		:deep(textarea) {
-			font-size: var(--heading-5);
+			font-size: var(--heading-3);
 			line-height: var(--line-height-lg);
 			padding: 8px 16px;
 			overflow: hidden;
@@ -207,7 +184,7 @@ const cursorToEnd = () => {
 }
 
 .board-title {
-	font-size: var(--heading-3);
+	font-size: var(--heading-1);
 	line-height: var(--line-height-md);
 	margin-bottom: 0;
 	overflow-wrap: break-word;
@@ -215,7 +192,7 @@ const cursorToEnd = () => {
 }
 
 .other-title {
-	font-size: var(--heading-5);
+	font-size: var(--heading-3);
 	line-height: var(--line-height-lg);
 	margin: 0;
 	padding: 8px 16px;

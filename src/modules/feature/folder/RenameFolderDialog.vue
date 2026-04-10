@@ -1,16 +1,16 @@
 <template>
-	<Dialog
-		v-model:is-dialog-open="isDialogOpen"
-		:message="t('pages.folder.ariaLabels.menu.action.edit')"
+	<SvsDialog
+		v-model="isDialogOpen"
+		title="pages.folder.ariaLabels.menu.action.edit"
 		:confirm-btn-disabled="!isNameValid"
-		@cancel="onCancel"
+		data-testid="rename-folder-dialog"
 		@confirm="onConfirm"
+		@cancel="onCancel"
 	>
 		<template #content>
-			<v-text-field
+			<VTextField
 				v-model="nameRef"
 				data-testid="rename-dialog-input"
-				class="mt-8"
 				density="compact"
 				flat
 				:aria-label="$t('common.labels.name.new')"
@@ -18,12 +18,12 @@
 				:rules="[rules.validateOnOpeningTag]"
 			/>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
-import { useOpeningTagValidator } from "@/utils/validation";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
+import { useOpeningTagValidator } from "@util-validators";
 import { computed, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -53,14 +53,10 @@ const { t } = useI18n();
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const rules = reactive({
-	validateOnOpeningTag: (value: string) => {
-		return validateOnOpeningTag(value);
-	},
+	validateOnOpeningTag: (value: string) => validateOnOpeningTag(value),
 });
 
-const isNameValid = computed(() => {
-	return rules.validateOnOpeningTag(nameRef.value) === true;
-});
+const isNameValid = computed(() => rules.validateOnOpeningTag(nameRef.value) === true);
 
 const onCancel = () => {
 	emit("cancel");

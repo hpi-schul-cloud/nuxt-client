@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount, shallowMount } from "@vue/test-utils";
 import { BoardMenuScope } from "./board-menu-scope";
 import BoardMenu from "./BoardMenu.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount, shallowMount } from "@vue/test-utils";
 
 describe("BoardMenu Component", () => {
 	describe("when component is mounted", () => {
@@ -48,13 +45,9 @@ describe("BoardMenu Component", () => {
 			(scope: BoardMenuScope) => {
 				const { wrapper } = setupScreenreader({ scope });
 
-				const screenreaderOnlySpan = wrapper.find(
-					'[data-testid="board-menu-screen-reader-only"]'
-				);
+				const screenreaderOnlySpan = wrapper.find('[data-testid="board-menu-screen-reader-only"]');
 
-				expect(screenreaderOnlySpan.text()).toEqual(
-					`components.board.menu.${scope}`
-				);
+				expect(screenreaderOnlySpan.text()).toEqual(`components.board.menu.${scope}`);
 			}
 		);
 	});

@@ -1,27 +1,19 @@
-import AlertContainer from "@/components/molecules/AlertContainer.vue";
-import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import BorderlessLayout from "./Borderless.layout.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { AutoLogoutWarning } from "@feature-auto-logout";
 import { createTestingPinia } from "@pinia/testing";
+import { AlertContainer, ApplicationError } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
 import { shallowMount } from "@vue/test-utils";
 import { KeepAlive } from "vue";
 import { RouterView } from "vue-router";
-import { VMain } from "vuetify/lib/components/index";
-import BorderlessLayout from "./Borderless.layout.vue";
+import { VMain } from "vuetify/components";
 
 describe("BorderlessLayout", () => {
 	const getWrapper = () => {
 		const wrapper = shallowMount(BorderlessLayout, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					createTestingPinia(),
-				],
+				plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
 			},
 		});
 
@@ -50,13 +42,11 @@ describe("BorderlessLayout", () => {
 		});
 	});
 
-	describe("ApplicationErrorWrapper", () => {
-		it("should render ApplicationErrorWrapper", () => {
+	describe("ApplicationError", () => {
+		it("should render ApplicationError", () => {
 			const { wrapper } = getWrapper();
 
-			const applicationErrorWrapper = wrapper.findComponent(
-				ApplicationErrorWrapper
-			);
+			const applicationErrorWrapper = wrapper.findComponent(ApplicationError);
 
 			expect(applicationErrorWrapper.exists()).toBe(true);
 		});
@@ -86,9 +76,7 @@ describe("BorderlessLayout", () => {
 		it("should render AutoLogoutWarning inside of KeepAlive", () => {
 			const { wrapper } = getWrapper();
 
-			const autoLogoutWarning = wrapper
-				.findComponent(KeepAlive)
-				.findComponent(AutoLogoutWarning);
+			const autoLogoutWarning = wrapper.findComponent(KeepAlive).findComponent(AutoLogoutWarning);
 
 			expect(autoLogoutWarning.exists()).toBe(true);
 		});

@@ -18,8 +18,8 @@
 </template>
 
 <script setup lang="ts">
-import { ContentElementBar } from "@ui-board";
 import { FileAlert } from "../../../shared/types/FileAlert.enum";
+import { ContentElementBar } from "@ui-board";
 
 type Props = {
 	src: string;

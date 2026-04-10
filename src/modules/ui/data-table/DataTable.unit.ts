@@ -1,12 +1,9 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import BatchActionMenu from "./BatchActionMenu.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { DataTable } from "@ui-data-table";
 import { KebabMenuList } from "@ui-kebab-menu";
-import { VDataTable, VTextField } from "vuetify/lib/components/index";
-import BatchActionMenu from "./BatchActionMenu.vue";
 import { nextTick } from "vue";
+import { VDataTable, VTextField } from "vuetify/lib/components/index";
 
 describe("DataTable", () => {
 	const setupWrapper = (
@@ -92,9 +89,7 @@ describe("DataTable", () => {
 				windowWidth: 599,
 			});
 
-			const itemCheckbox = wrapper.find(
-				`[data-testid='select-checkbox-${name1}']`
-			);
+			const itemCheckbox = wrapper.find(`[data-testid='select-checkbox-${name1}']`);
 
 			itemCheckbox.trigger("click");
 			await wrapper.vm.$nextTick();
@@ -153,16 +148,12 @@ describe("DataTable", () => {
 					ariaLabelNameKey: key,
 				});
 
-				const itemCheckbox = wrapper.find(
-					`[data-testid='select-checkbox-${name1}']`
-				);
+				const itemCheckbox = wrapper.find(`[data-testid='select-checkbox-${name1}']`);
 
 				itemCheckbox.trigger("click");
 				await wrapper.vm.$nextTick();
 
-				const actionMenuButton = wrapper.find(
-					`[data-testid='action-menu-button']`
-				);
+				const actionMenuButton = wrapper.find(`[data-testid='action-menu-button']`);
 				actionMenuButton.trigger("click");
 
 				return { wrapper, name1, slotContent };
@@ -212,9 +203,7 @@ describe("DataTable", () => {
 			it("should render action menu", async () => {
 				const { wrapper, name1 } = setup();
 
-				const itemCheckbox = wrapper.find(
-					`[data-testid='select-checkbox-${name1}']`
-				);
+				const itemCheckbox = wrapper.find(`[data-testid='select-checkbox-${name1}']`);
 
 				itemCheckbox.trigger("click");
 				await wrapper.vm.$nextTick();
@@ -266,9 +255,7 @@ describe("DataTable", () => {
 
 				const actionMenu = wrapper.findComponent(BatchActionMenu);
 
-				expect(actionMenu.text()).toContain(
-					"2 pages.administration.selectedui.actionMenu.actions"
-				);
+				expect(actionMenu.text()).toContain("2 pages.administration.selectedui.actionMenu.actions");
 			});
 		});
 	});
@@ -311,9 +298,7 @@ describe("DataTable", () => {
 
 			const actionMenu = wrapper.findComponent(BatchActionMenu);
 
-			expect(actionMenu.text()).toContain(
-				"2 pages.administration.selectedui.actionMenu.actions"
-			);
+			expect(actionMenu.text()).toContain("2 pages.administration.selectedui.actionMenu.actions");
 		});
 
 		describe("when selected items are removed", () => {
@@ -328,9 +313,7 @@ describe("DataTable", () => {
 				const emitted = wrapper.emitted("update:selected-ids");
 
 				expect(emitted).toBeDefined();
-				expect(
-					emitted?.some(([e]) => Array.isArray(e) && e.length === 0)
-				).toStrictEqual(true);
+				expect(emitted?.some(([e]) => Array.isArray(e) && e.length === 0)).toStrictEqual(true);
 			});
 		});
 	});
@@ -376,17 +359,13 @@ describe("DataTable", () => {
 
 			const actionMenuBefore = wrapper.findComponent(BatchActionMenu);
 
-			expect(actionMenuBefore.text()).toContain(
-				"2 pages.administration.selectedui.actionMenu.actions"
-			);
+			expect(actionMenuBefore.text()).toContain("2 pages.administration.selectedui.actionMenu.actions");
 
 			await wrapper.setProps({ items: items.slice(0, 1) });
 
 			const actionMenuAfter = wrapper.findComponent(BatchActionMenu);
 
-			expect(actionMenuAfter.text()).toContain(
-				"1 pages.administration.selectedui.actionMenu.actions"
-			);
+			expect(actionMenuAfter.text()).toContain("1 pages.administration.selectedui.actionMenu.actions");
 		});
 	});
 
@@ -411,9 +390,7 @@ describe("DataTable", () => {
 		it("should not render checkboxes", () => {
 			const { wrapper, name1 } = setup();
 
-			const itemCheckbox = wrapper.find(
-				`[data-testid='select-checkbox-${name1}']`
-			);
+			const itemCheckbox = wrapper.find(`[data-testid='select-checkbox-${name1}']`);
 
 			expect(itemCheckbox.exists()).toBe(false);
 		});

@@ -1,11 +1,18 @@
-import { BoardContextType } from "@/types/board/BoardContext";
-import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { useBoardStore } from "./Board.store";
 import { useBoardApi } from "./BoardApi.composable";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
+import { BoardContextType } from "@/types/board/BoardContext";
+import { boardResponseFactory, mockComposable } from "@@/tests/test-utils";
+import { mountComposable } from "@@/tests/test-utils/mountComposable";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 vi.mock("./BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(useBoardApi);
+
+vi.mock("./Board.store");
+const mockedUseBoardStore = vi.mocked(useBoardStore);
 
 vi.mock(
 	"@/utils/create-shared-composable",
@@ -15,24 +22,19 @@ vi.mock(
 		}) as typeof import("@/utils/create-shared-composable")
 );
 
-vi.mock("vue-i18n", () => {
-	return {
-		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
-	};
-});
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
+}));
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
 describe("BoardPageInformation.composable", () => {
-	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
+	let mockedBoardApiCalls: Mocked<ReturnType<typeof useBoardApi>>;
 
 	beforeEach(() => {
-		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
+		mockedUseBoardStore.mockReturnValue({ board: boardResponseFactory.build() } as ReturnType<typeof useBoardStore>);
+
+		setActivePinia(createTestingPinia());
+
+		mockedBoardApiCalls = mockComposable(useBoardApi);
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 	});
 
@@ -45,17 +47,13 @@ describe("BoardPageInformation.composable", () => {
 			const setup = () => {
 				mockedBoardApiCalls.getContextInfo.mockResolvedValue({
 					id: "courseId",
-					type: BoardContextType.Course,
+					type: BoardContextType.COURSE,
 					name: "Course #1",
 				});
 
-				const {
-					createPageInformation,
-					breadcrumbs,
-					contextType,
-					pageTitle,
-					roomId,
-				} = mountComposable(() => useSharedBoardPageInformation());
+				const { createPageInformation, breadcrumbs, contextType, pageTitle, roomId } = mountComposable(() =>
+					useSharedBoardPageInformation()
+				);
 
 				return {
 					createPageInformation,
@@ -66,14 +64,14 @@ describe("BoardPageInformation.composable", () => {
 				};
 			};
 
-			it("should return two breadcrumbs: 1. course page and and 2. course-overview page", async () => {
+			it("should return three breadcrumbs: course-overview-page > course-page > board-page", async () => {
 				const { createPageInformation, breadcrumbs } = setup();
 
 				const fakeId = "abc123-1";
 
 				await createPageInformation(fakeId);
 
-				expect(breadcrumbs.value).toHaveLength(2);
+				expect(breadcrumbs.value).toHaveLength(3);
 			});
 
 			it("should set page title", async () => {
@@ -103,7 +101,7 @@ describe("BoardPageInformation.composable", () => {
 
 				await createPageInformation(fakeId);
 
-				expect(contextType.value).toEqual(BoardContextType.Course);
+				expect(contextType.value).toEqual(BoardContextType.COURSE);
 			});
 		});
 
@@ -111,17 +109,13 @@ describe("BoardPageInformation.composable", () => {
 			const setup = () => {
 				mockedBoardApiCalls.getContextInfo.mockResolvedValue({
 					id: "roomId",
-					type: BoardContextType.Room,
+					type: BoardContextType.ROOM,
 					name: "Room #1",
 				});
 
-				const {
-					createPageInformation,
-					breadcrumbs,
-					contextType,
-					pageTitle,
-					roomId,
-				} = mountComposable(() => useSharedBoardPageInformation());
+				const { createPageInformation, breadcrumbs, contextType, pageTitle, roomId } = mountComposable(() =>
+					useSharedBoardPageInformation()
+				);
 
 				return {
 					createPageInformation,
@@ -132,14 +126,14 @@ describe("BoardPageInformation.composable", () => {
 				};
 			};
 
-			it("should return two breadcrumbs: 1. room page and and 2. room-overview page", async () => {
+			it("should return three breadcrumbs: room-overview-page > room-page > board-page", async () => {
 				const { createPageInformation, breadcrumbs } = setup();
 
 				const fakeId = "abc123-1";
 
 				await createPageInformation(fakeId);
 
-				expect(breadcrumbs.value).toHaveLength(2);
+				expect(breadcrumbs.value).toHaveLength(3);
 			});
 
 			it("should set page title", async () => {
@@ -169,7 +163,7 @@ describe("BoardPageInformation.composable", () => {
 
 				await createPageInformation(fakeId);
 
-				expect(contextType.value).toEqual(BoardContextType.Room);
+				expect(contextType.value).toEqual(BoardContextType.ROOM);
 			});
 		});
 	});
@@ -178,9 +172,7 @@ describe("BoardPageInformation.composable", () => {
 		const setup = () => {
 			mockedBoardApiCalls.getContextInfo.mockResolvedValue(undefined);
 
-			const { createPageInformation, breadcrumbs, pageTitle } = mountComposable(
-				() => useSharedBoardPageInformation()
-			);
+			const { createPageInformation, breadcrumbs, pageTitle } = mountComposable(() => useSharedBoardPageInformation());
 
 			return { createPageInformation, breadcrumbs, pageTitle };
 		};
@@ -195,14 +187,14 @@ describe("BoardPageInformation.composable", () => {
 			expect(breadcrumbs.value).toEqual([]);
 		});
 
-		it("should generate empty page title", async () => {
+		it("should generate page title with generic fallback", async () => {
 			const { createPageInformation, pageTitle } = setup();
 
 			const fakeId = "abc123";
 
 			await createPageInformation(fakeId);
 
-			expect(pageTitle.value).toEqual("");
+			expect(pageTitle.value).toContain("common.labels.room");
 		});
 	});
 });

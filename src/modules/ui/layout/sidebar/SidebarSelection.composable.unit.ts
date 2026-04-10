@@ -1,51 +1,52 @@
+import { SidebarSingleItem } from "../types";
+import { useSidebarSelection } from "./SidebarSelection.composable";
 import { BoardContextType } from "@/types/board/BoardContext";
+import { mockComposable, mountComposable } from "@@/tests/test-utils";
 import { useSharedBoardPageInformation } from "@data-board";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia, storeToRefs } from "pinia";
 import { computed } from "vue";
-import { RouteLocationNormalized, useRoute } from "vue-router";
-import { SidebarSingleItem } from "../types";
-import { useSidebarSelection } from "./SidebarSelection.composable";
-import { Mock } from "vitest";
-
-vi.mock("vue-router");
-const useRouteMock = <Mock>useRoute;
+import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 
 vi.mock("@data-board/BoardPageInformation.composable");
-const mockedUseSharedBoardPageInformation = vi.mocked(
-	useSharedBoardPageInformation
-);
+const mockedUseSharedBoardPageInformation = vi.mocked(useSharedBoardPageInformation);
+
+const mountSidebarSelection = (sidebarItem: SidebarSingleItem) =>
+	mountComposable(() => useSidebarSelection(sidebarItem));
+
+const createSharedPageInformationMock = (overrides: Partial<ReturnType<typeof useSharedBoardPageInformation>> = {}) =>
+	mockComposable(useSharedBoardPageInformation, {
+		breadcrumbs: computed(() => []),
+		contextType: computed(() => undefined),
+		pageTitle: computed(() => "page-title"),
+		roomId: computed(() => "room-id"),
+		...overrides,
+	});
 
 describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
+	let router: RouterMock;
+
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		useRouteMock.mockReturnValue(
-			createMock<RouteLocationNormalized>({
-				path: "",
-				name: "",
-			})
-		);
+		router = createRouterMock();
+		injectRouterMock(router);
 
-		mockedUseSharedBoardPageInformation.mockReturnValue({
-			createPageInformation: vi.fn(),
-			breadcrumbs: computed(() => []),
-			contextType: computed(() => undefined),
-			pageTitle: computed(() => "page-title"),
-			roomId: computed(() => "room-id"),
-			resetPageInformation: vi.fn(),
-		});
+		mockedUseSharedBoardPageInformation.mockReturnValue(createSharedPageInformationMock());
 	});
 
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
 
-	const setup = (routeProps: { path: string; name: string }) => {
-		useRouteMock.mockReturnValue(
-			createMock<RouteLocationNormalized>(routeProps)
-		);
+	const setup = async (routeProps: { path: string; name: string }) => {
+		router.currentRoute.value = {
+			...router.currentRoute.value,
+			path: routeProps.path,
+			name: routeProps.name,
+			fullPath: routeProps.path,
+		};
+
 		const coursesItem: SidebarSingleItem = {
 			title: "courses",
 			testId: "courses-item",
@@ -69,48 +70,51 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 
 	describe("general matching", () => {
 		describe("when route path is different from item.to", () => {
-			const setupDifferentPath = () => {
-				return setup({
+			const setupDifferentPath = () =>
+				setup({
 					path: "/rooms",
 					name: "rooms",
 				});
-			};
 
-			it("should not be active", () => {
-				const { tasksItem } = setupDifferentPath();
-				const { isActive } = useSidebarSelection(tasksItem);
+			it("should not be active", async () => {
+				const { tasksItem } = await setupDifferentPath();
+				const { isActive } = mountSidebarSelection(tasksItem);
 
 				expect(isActive.value).toBe(false);
 			});
 		});
 
 		describe("when route path is equal to item.to", () => {
-			const setupEqualPath = () => {
-				return setup({
+			const setupEqualPath = () =>
+				setup({
 					path: "/tasks",
 					name: "tasks",
 				});
-			};
 
-			it("should be active", () => {
-				const { tasksItem } = setupEqualPath();
-				const { isActive } = useSidebarSelection(tasksItem);
+			it("should be active", async () => {
+				const { tasksItem } = await setupEqualPath();
+				const { isActive } = mountSidebarSelection(tasksItem);
 
 				expect(isActive.value).toBe(true);
 			});
 		});
 
 		describe("when route path starts with item.to", () => {
-			const setupEqualPath = () => {
-				return setup({
+			it("should be active", async () => {
+				router.currentRoute.value = {
+					...router.currentRoute.value,
 					path: "/tasks/0000dcfbfb5c7a3f00bf21ba",
 					name: "task-id",
-				});
-			};
+					fullPath: "/tasks/0000dcfbfb5c7a3f00bf21ba",
+				};
 
-			it("should be active", () => {
-				const { tasksItem } = setupEqualPath();
-				const { isActive } = useSidebarSelection(tasksItem);
+				const tasksItem: SidebarSingleItem = {
+					title: "tasks",
+					testId: "tasks-item",
+					to: "/tasks",
+				};
+
+				const { isActive } = mountSidebarSelection(tasksItem);
 
 				expect(isActive.value).toBe(true);
 			});
@@ -119,28 +123,26 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 
 	describe("rooms item", () => {
 		describe("when rooms route is matched", () => {
-			const setupRoomsRoute = () => {
-				return setup({
+			const setupRoomsRoute = () =>
+				setup({
 					path: "/rooms",
 					name: "rooms",
 				});
-			};
 
-			it("should be active", () => {
-				const { roomsItem } = setupRoomsRoute();
-				const { isActive } = useSidebarSelection(roomsItem);
+			it("should be active", async () => {
+				const { roomsItem } = await setupRoomsRoute();
+				const { isActive } = mountSidebarSelection(roomsItem);
 
 				expect(isActive.value).toBe(true);
 			});
 		});
 
 		describe("when room details route is matched", () => {
-			const setupRoomDetailsRoute = () => {
-				return setup({
+			const setupRoomDetailsRoute = () =>
+				setup({
 					path: "/rooms/0000dcfbfb5c7a3f00bf21ab",
 					name: "room-details",
 				});
-			};
 
 			describe("and resource is a room", () => {
 				const setupIsRoom = () => {
@@ -150,9 +152,9 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 					return setupRoomDetailsRoute();
 				};
 
-				it("should be active", () => {
-					const { roomsItem } = setupIsRoom();
-					const { isActive } = useSidebarSelection(roomsItem);
+				it("should be active", async () => {
+					const { roomsItem } = await setupIsRoom();
+					const { isActive } = mountSidebarSelection(roomsItem);
 
 					expect(isActive.value).toBe(true);
 				});
@@ -166,9 +168,9 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 					return setupRoomDetailsRoute();
 				};
 
-				it("should not be active", () => {
-					const { roomsItem } = setupIsOther();
-					const { isActive } = useSidebarSelection(roomsItem);
+				it("should not be active", async () => {
+					const { roomsItem } = await setupIsOther();
+					const { isActive } = mountSidebarSelection(roomsItem);
 
 					expect(isActive.value).toBe(false);
 				});
@@ -176,33 +178,29 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 		});
 
 		describe("when board details path is matched", () => {
-			const setupBoardDetailsRoute = () => {
-				return setup({
+			const setupBoardDetailsRoute = () =>
+				setup({
 					path: "/boards/0000dcfbfb5c7a3f00bf21ac",
 					name: "boards-id",
 				});
-			};
 
 			describe("and board context is a room", () => {
-				const setupIsRoom = () => {
-					mockedUseSharedBoardPageInformation.mockReturnValue({
-						createPageInformation: vi.fn(),
-						breadcrumbs: computed(() => []),
-						contextType: computed(() => BoardContextType.Room),
-						pageTitle: computed(() => "page-title"),
-						roomId: computed(() => "room-id"),
-						resetPageInformation: vi.fn(),
-					});
+				const setupIsRoom = async () => {
+					mockedUseSharedBoardPageInformation.mockReturnValue(
+						createSharedPageInformationMock({
+							contextType: computed(() => BoardContextType.ROOM),
+						})
+					);
 
 					const { roomVariant } = storeToRefs(useRoomDetailsStore());
 					roomVariant.value = RoomVariant.ROOM;
 
-					return setupBoardDetailsRoute();
+					return await setupBoardDetailsRoute();
 				};
 
-				it("should be active", () => {
-					const { roomsItem } = setupIsRoom();
-					const { isActive } = useSidebarSelection(roomsItem);
+				it("should be active", async () => {
+					const { roomsItem } = await setupIsRoom();
+					const { isActive } = mountSidebarSelection(roomsItem);
 
 					expect(isActive.value).toBe(true);
 				});
@@ -216,9 +214,9 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 					return setupBoardDetailsRoute();
 				};
 
-				it("should not be active", () => {
-					const { roomsItem } = setupIsOther();
-					const { isActive } = useSidebarSelection(roomsItem);
+				it("should not be active", async () => {
+					const { roomsItem } = await setupIsOther();
+					const { isActive } = mountSidebarSelection(roomsItem);
 
 					expect(isActive.value).toBe(false);
 				});
@@ -226,31 +224,26 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 		});
 
 		describe("when folder details path is matched", () => {
-			const setupFolderDetailsRoute = () => {
-				return setup({
+			const setupFolderDetailsRoute = () =>
+				setup({
 					path: "/folder/123",
 					name: "folder-id",
 				});
-			};
 
 			describe("and folder context is a room", () => {
-				const setupIsRoom = () => {
-					mockedUseSharedBoardPageInformation.mockReturnValue({
-						createPageInformation: vi.fn(),
-						breadcrumbs: computed(() => []),
-						contextType: computed(() => BoardContextType.Room),
-						pageTitle: computed(() => "page-title"),
-						roomId: computed(() => "room-id"),
-						resetPageInformation: vi.fn(),
-					});
+				const setupIsRoom = async () => {
+					mockedUseSharedBoardPageInformation.mockReturnValue(
+						createSharedPageInformationMock({
+							contextType: computed(() => BoardContextType.ROOM),
+						})
+					);
 
-					return setupFolderDetailsRoute();
+					return await setupFolderDetailsRoute();
 				};
 
-				it("should be active", () => {
-					const { roomsItem } = setupIsRoom();
-
-					const { isActive } = useSidebarSelection(roomsItem);
+				it("should be active", async () => {
+					const { roomsItem } = await setupIsRoom();
+					const { isActive } = mountSidebarSelection(roomsItem);
 
 					expect(isActive.value).toBe(true);
 				});
@@ -258,21 +251,18 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 
 			describe("and folder context is something else", () => {
 				const setupIsOther = () => {
-					mockedUseSharedBoardPageInformation.mockReturnValue({
-						createPageInformation: vi.fn(),
-						breadcrumbs: computed(() => []),
-						contextType: computed(() => BoardContextType.Course),
-						pageTitle: computed(() => "page-title"),
-						roomId: computed(() => "room-id"),
-						resetPageInformation: vi.fn(),
-					});
+					mockedUseSharedBoardPageInformation.mockReturnValue(
+						createSharedPageInformationMock({
+							contextType: computed(() => BoardContextType.COURSE),
+						})
+					);
 
 					return setupFolderDetailsRoute();
 				};
 
-				it("should not be active", () => {
-					const { roomsItem } = setupIsOther();
-					const { isActive } = useSidebarSelection(roomsItem);
+				it("should not be active", async () => {
+					const { roomsItem } = await setupIsOther();
+					const { isActive } = mountSidebarSelection(roomsItem);
 
 					expect(isActive.value).toBe(false);
 				});
@@ -282,44 +272,41 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 
 	describe("courses item", () => {
 		describe("when course-room-overview route is matched", () => {
-			const setupOverviewRoute = () => {
-				return setup({
+			const setupOverviewRoute = () =>
+				setup({
 					path: "/rooms/courses-overview",
-					name: "course-room-list",
+					name: "course-room-overview",
 				});
-			};
 
-			it("should be active", () => {
-				const { coursesItem } = setupOverviewRoute();
-				const { isActive } = useSidebarSelection(coursesItem);
+			it("should be active", async () => {
+				const { coursesItem } = await setupOverviewRoute();
+				const { isActive } = mountSidebarSelection(coursesItem);
 
 				expect(isActive.value).toBe(true);
 			});
 		});
 
 		describe("when course-room-list route is matched", () => {
-			const setupListRoute = () => {
-				return setup({
+			const setupListRoute = () =>
+				setup({
 					path: "/rooms/courses-list",
 					name: "course-room-list",
 				});
-			};
 
-			it("should be active", () => {
-				const { coursesItem } = setupListRoute();
-				const { isActive } = useSidebarSelection(coursesItem);
+			it("should be active", async () => {
+				const { coursesItem } = await setupListRoute();
+				const { isActive } = mountSidebarSelection(coursesItem);
 
 				expect(isActive.value).toBe(true);
 			});
 		});
 
 		describe("when room details route is matched", () => {
-			const setupRoomDetailsRoute = () => {
-				return setup({
+			const setupRoomDetailsRoute = () =>
+				setup({
 					path: "/rooms/0000dcfbfb5c7a3f00bf21ab",
 					name: "room-details",
 				});
-			};
 
 			describe("and resource is a course room", () => {
 				const setupIsCourseRoom = () => {
@@ -329,9 +316,9 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 					return setupRoomDetailsRoute();
 				};
 
-				it("should be active", () => {
-					const { coursesItem } = setupIsCourseRoom();
-					const { isActive } = useSidebarSelection(coursesItem);
+				it("should be active", async () => {
+					const { coursesItem } = await setupIsCourseRoom();
+					const { isActive } = mountSidebarSelection(coursesItem);
 
 					expect(isActive.value).toBe(true);
 				});
@@ -345,9 +332,9 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 					return setupRoomDetailsRoute();
 				};
 
-				it("should not be active", () => {
-					const { coursesItem } = setupIsOther();
-					const { isActive } = useSidebarSelection(coursesItem);
+				it("should not be active", async () => {
+					const { coursesItem } = await setupIsOther();
+					const { isActive } = mountSidebarSelection(coursesItem);
 
 					expect(isActive.value).toBe(false);
 				});
@@ -355,58 +342,51 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 		});
 
 		describe("when board details path is matched", () => {
-			const setupBoardDetailsRoute = () => {
-				return setup({
+			const setupBoardDetailsRoute = () =>
+				setup({
 					path: "/boards/0000dcfbfb5c7a3f00bf21ac",
 					name: "boards-id",
 				});
-			};
 
 			describe("and board context is a course", () => {
-				const setupCourseContext = () => {
-					mockedUseSharedBoardPageInformation.mockReturnValue({
-						createPageInformation: vi.fn(),
-						breadcrumbs: computed(() => []),
-						contextType: computed(() => BoardContextType.Course),
-						pageTitle: computed(() => "page-title"),
-						roomId: computed(() => "room-id"),
-						resetPageInformation: vi.fn(),
-					});
+				const setupCourseContext = async () => {
+					mockedUseSharedBoardPageInformation.mockReturnValue(
+						createSharedPageInformationMock({
+							contextType: computed(() => BoardContextType.COURSE),
+						})
+					);
 
 					const { roomVariant } = storeToRefs(useRoomDetailsStore());
 					roomVariant.value = RoomVariant.COURSE_ROOM;
 
-					return setupBoardDetailsRoute();
+					return await setupBoardDetailsRoute();
 				};
 
-				it("should be active", () => {
-					const { coursesItem } = setupCourseContext();
-					const { isActive } = useSidebarSelection(coursesItem);
+				it("should be active", async () => {
+					const { coursesItem } = await setupCourseContext();
+					const { isActive } = mountSidebarSelection(coursesItem);
 
 					expect(isActive.value).toBe(true);
 				});
 			});
 
 			describe("and board context is a user", () => {
-				const setupUserContext = () => {
-					mockedUseSharedBoardPageInformation.mockReturnValue({
-						createPageInformation: vi.fn(),
-						breadcrumbs: computed(() => []),
-						contextType: computed(() => BoardContextType.User),
-						pageTitle: computed(() => "page-title"),
-						roomId: computed(() => "room-id"),
-						resetPageInformation: vi.fn(),
-					});
+				const setupUserContext = async () => {
+					mockedUseSharedBoardPageInformation.mockReturnValue(
+						createSharedPageInformationMock({
+							contextType: computed(() => BoardContextType.USER),
+						})
+					);
 
 					const { roomVariant } = storeToRefs(useRoomDetailsStore());
 					roomVariant.value = undefined;
 
-					return setupBoardDetailsRoute();
+					return await setupBoardDetailsRoute();
 				};
 
-				it("should not be active", () => {
-					const { coursesItem } = setupUserContext();
-					const { isActive } = useSidebarSelection(coursesItem);
+				it("should not be active", async () => {
+					const { coursesItem } = await setupUserContext();
+					const { isActive } = mountSidebarSelection(coursesItem);
 
 					expect(isActive.value).toBe(false);
 				});
@@ -414,52 +394,45 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 		});
 
 		describe("when folder details path is matched", () => {
-			const setupFolderDetailsRoute = () => {
-				return setup({
+			const setupFolderDetailsRoute = () =>
+				setup({
 					path: "/folder/123",
 					name: "folder-id",
 				});
-			};
 
 			describe("and folder context is a course", () => {
-				const setupCourseContext = () => {
-					mockedUseSharedBoardPageInformation.mockReturnValue({
-						createPageInformation: vi.fn(),
-						breadcrumbs: computed(() => []),
-						contextType: computed(() => BoardContextType.Course),
-						pageTitle: computed(() => "page-title"),
-						roomId: computed(() => "room-id"),
-						resetPageInformation: vi.fn(),
-					});
+				const setupCourseContext = async () => {
+					mockedUseSharedBoardPageInformation.mockReturnValue(
+						createSharedPageInformationMock({
+							contextType: computed(() => BoardContextType.COURSE),
+						})
+					);
 
-					return setupFolderDetailsRoute();
+					return await setupFolderDetailsRoute();
 				};
 
-				it("should be active", () => {
-					const { coursesItem } = setupCourseContext();
-					const { isActive } = useSidebarSelection(coursesItem);
+				it("should be active", async () => {
+					const { coursesItem } = await setupCourseContext();
+					const { isActive } = mountSidebarSelection(coursesItem);
 
 					expect(isActive.value).toBe(true);
 				});
 			});
 
 			describe("and folder context is something else", () => {
-				const setupIsOther = () => {
-					mockedUseSharedBoardPageInformation.mockReturnValue({
-						createPageInformation: vi.fn(),
-						breadcrumbs: computed(() => []),
-						contextType: computed(() => BoardContextType.User),
-						pageTitle: computed(() => "page-title"),
-						roomId: computed(() => "room-id"),
-						resetPageInformation: vi.fn(),
-					});
+				const setupIsOther = async () => {
+					mockedUseSharedBoardPageInformation.mockReturnValue(
+						createSharedPageInformationMock({
+							contextType: computed(() => BoardContextType.USER),
+						})
+					);
 
-					return setupFolderDetailsRoute();
+					return await setupFolderDetailsRoute();
 				};
 
-				it("should not be active", () => {
-					const { coursesItem } = setupIsOther();
-					const { isActive } = useSidebarSelection(coursesItem);
+				it("should not be active", async () => {
+					const { coursesItem } = await setupIsOther();
+					const { isActive } = mountSidebarSelection(coursesItem);
 
 					expect(isActive.value).toBe(false);
 				});

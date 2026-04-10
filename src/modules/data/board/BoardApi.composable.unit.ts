@@ -1,32 +1,32 @@
+import { useBoardApi } from "./BoardApi.composable";
+import { ApplicationError } from "@/store/types/application-error";
+import { AnyContentElement } from "@/types/board/ContentElement";
+import { mockApi, mockApiResponse } from "@@/tests/test-utils";
+import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
 import {
 	BoardLayout,
 	ContentElementType,
 	ExternalToolElementResponse,
 	H5pElementResponse,
 	LayoutBodyParams,
-} from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3/api";
-import { CardResponse, DrawingElementResponse } from "@/serverApi/v3/api";
-import { ApplicationError } from "@/store/types/application-error";
-import { AnyContentElement } from "@/types/board/ContentElement";
-import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { AxiosPromise } from "axios";
-import { useBoardApi } from "./BoardApi.composable";
+} from "@api-server";
+import * as serverApi from "@api-server";
+import { CardResponse, DrawingElementResponse } from "@api-server";
+import { Mocked } from "vitest";
 
-let boardApi: DeepMocked<serverApi.BoardApiInterface>;
-let columnApi: DeepMocked<serverApi.BoardColumnApiInterface>;
-let cardApi: DeepMocked<serverApi.BoardCardApiInterface>;
-let elementApi: DeepMocked<serverApi.BoardElementApiInterface>;
-let roomsApi: DeepMocked<serverApi.CourseRoomsApiInterface>;
+let boardApi: Mocked<serverApi.BoardApiInterface>;
+let columnApi: Mocked<serverApi.BoardColumnApiInterface>;
+let cardApi: Mocked<serverApi.BoardCardApiInterface>;
+let elementApi: Mocked<serverApi.BoardElementApiInterface>;
+let roomsApi: Mocked<serverApi.CourseRoomsApiInterface>;
 
 describe("BoardApi.composable", () => {
 	beforeEach(() => {
-		boardApi = createMock<serverApi.BoardApiInterface>();
-		columnApi = createMock<serverApi.BoardColumnApiInterface>();
-		cardApi = createMock<serverApi.BoardCardApiInterface>();
-		elementApi = createMock<serverApi.BoardElementApiInterface>();
-		roomsApi = createMock<serverApi.CourseRoomsApiInterface>();
+		boardApi = mockApi<serverApi.BoardApiInterface>();
+		columnApi = mockApi<serverApi.BoardColumnApiInterface>();
+		cardApi = mockApi<serverApi.BoardCardApiInterface>();
+		elementApi = mockApi<serverApi.BoardElementApiInterface>();
+		roomsApi = mockApi<serverApi.CourseRoomsApiInterface>();
 
 		vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApi);
 		vi.spyOn(serverApi, "BoardColumnApiFactory").mockReturnValue(columnApi);
@@ -45,9 +45,7 @@ describe("BoardApi.composable", () => {
 			const boardId = "test-board-id";
 
 			await createColumnCall(boardId);
-			expect(boardApi.boardControllerCreateColumn).toHaveBeenCalledWith(
-				boardId
-			);
+			expect(boardApi.boardControllerCreateColumn).toHaveBeenCalledWith(boardId);
 		});
 	});
 
@@ -58,9 +56,7 @@ describe("BoardApi.composable", () => {
 
 			await fetchBoardCall(boardId);
 
-			expect(boardApi.boardControllerGetBoardSkeleton).toHaveBeenCalledWith(
-				boardId
-			);
+			expect(boardApi.boardControllerGetBoardSkeleton).toHaveBeenCalledWith(boardId);
 		});
 
 		it("should throw an application error on failure", async () => {
@@ -98,10 +94,7 @@ describe("BoardApi.composable", () => {
 
 				await updateBoardTitleCall(payload.id, payload.title);
 
-				expect(boardApi.boardControllerUpdateBoardTitle).toHaveBeenCalledWith(
-					payload.id,
-					{ title: payload.title }
-				);
+				expect(boardApi.boardControllerUpdateBoardTitle).toHaveBeenCalledWith(payload.id, { title: payload.title });
 			});
 		});
 	});
@@ -115,10 +108,7 @@ describe("BoardApi.composable", () => {
 			};
 
 			await updateCardHeightCall(payload.id, payload.height);
-			expect(cardApi.cardControllerUpdateCardHeight).toHaveBeenCalledWith(
-				payload.id,
-				{ height: payload.height }
-			);
+			expect(cardApi.cardControllerUpdateCardHeight).toHaveBeenCalledWith(payload.id, { height: payload.height });
 		});
 	});
 
@@ -131,10 +121,19 @@ describe("BoardApi.composable", () => {
 			};
 
 			await updateCardTitle(payload.id, payload.title);
-			expect(cardApi.cardControllerUpdateCardTitle).toHaveBeenCalledWith(
-				payload.id,
-				{ title: payload.title }
-			);
+			expect(cardApi.cardControllerUpdateCardTitle).toHaveBeenCalledWith(payload.id, { title: payload.title });
+		});
+	});
+
+	describe("duplicateCardCall", () => {
+		it("should call cardControllerCopyCard api", async () => {
+			const { duplicateCardCall } = useBoardApi();
+
+			const id = "duplicate-card-id";
+
+			await duplicateCardCall(id);
+
+			expect(cardApi.cardControllerCopyCard).toHaveBeenCalledWith(id);
 		});
 	});
 
@@ -147,10 +146,7 @@ describe("BoardApi.composable", () => {
 			};
 
 			await updateColumnTitleCall(payload.id, payload.title);
-			expect(columnApi.columnControllerUpdateColumnTitle).toHaveBeenCalledWith(
-				payload.id,
-				{ title: payload.title }
-			);
+			expect(columnApi.columnControllerUpdateColumnTitle).toHaveBeenCalledWith(payload.id, { title: payload.title });
 		});
 	});
 
@@ -159,7 +155,7 @@ describe("BoardApi.composable", () => {
 			const { updateElementCall } = useBoardApi();
 			const payload = {
 				id: "richt-text-element-id",
-				type: ContentElementType.RichText,
+				type: ContentElementType.RICH_TEXT,
 				content: {
 					text: "content-text",
 					inputFormat: "input-format",
@@ -169,21 +165,18 @@ describe("BoardApi.composable", () => {
 			};
 			const data = {
 				content: payload.content,
-				type: ContentElementType.RichText,
+				type: ContentElementType.RICH_TEXT,
 			};
 
 			await updateElementCall(payload);
-			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
-				payload.id,
-				{ data }
-			);
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(payload.id, { data });
 		});
 
 		it("should call elementControllerUpdateElement api with FileElement", async () => {
 			const { updateElementCall } = useBoardApi();
 			const payload = {
 				id: "file-element-id",
-				type: ContentElementType.File,
+				type: ContentElementType.FILE,
 				content: {
 					caption: "caption",
 					alternativeText: "alternative text",
@@ -192,21 +185,18 @@ describe("BoardApi.composable", () => {
 			};
 			const data = {
 				content: payload.content,
-				type: ContentElementType.File,
+				type: ContentElementType.FILE,
 			};
 
 			await updateElementCall(payload);
-			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
-				payload.id,
-				{ data }
-			);
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(payload.id, { data });
 		});
 
 		it("should call elementControllerUpdateElement api with FileFolderElement", async () => {
 			const { updateElementCall } = useBoardApi();
 			const payload = {
 				id: "file-folder-element-id",
-				type: ContentElementType.FileFolder,
+				type: ContentElementType.FILE_FOLDER,
 				content: {
 					title: "New Folder",
 				},
@@ -214,43 +204,18 @@ describe("BoardApi.composable", () => {
 			};
 			const data = {
 				content: payload.content,
-				type: ContentElementType.FileFolder,
+				type: ContentElementType.FILE_FOLDER,
 			};
 
 			await updateElementCall(payload);
-			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
-				payload.id,
-				{ data }
-			);
-		});
-
-		it("should call elementControllerUpdateElement api with SubmissionContainerElement", async () => {
-			const { updateElementCall } = useBoardApi();
-			const payload = {
-				id: "file-element-id",
-				type: ContentElementType.SubmissionContainer,
-				content: {
-					dueDate: new Date().toISOString(),
-				},
-				timestamps: timestampsResponseFactory.build(),
-			};
-			const data = {
-				content: payload.content,
-				type: ContentElementType.SubmissionContainer,
-			};
-
-			await updateElementCall(payload);
-			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
-				payload.id,
-				{ data }
-			);
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(payload.id, { data });
 		});
 
 		it("should call elementControllerUpdateElement api with ExternalToolElement", async () => {
 			const { updateElementCall } = useBoardApi();
 			const payload: ExternalToolElementResponse = {
 				id: "external-tool-element-id",
-				type: ContentElementType.ExternalTool,
+				type: ContentElementType.EXTERNAL_TOOL,
 				content: {
 					contextExternalToolId: "context-external-tool-id",
 				},
@@ -258,22 +223,19 @@ describe("BoardApi.composable", () => {
 			};
 			const data = {
 				content: payload.content,
-				type: ContentElementType.ExternalTool,
+				type: ContentElementType.EXTERNAL_TOOL,
 			};
 
 			await updateElementCall(payload);
 
-			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
-				payload.id,
-				{ data }
-			);
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(payload.id, { data });
 		});
 
 		it("should call elementControllerUpdateElement api with DrawingToolElement", async () => {
 			const { updateElementCall } = useBoardApi();
 			const payload: DrawingElementResponse = {
 				id: "drawing-tool-element-id",
-				type: ContentElementType.Drawing,
+				type: ContentElementType.DRAWING,
 				content: {
 					description: "Some description",
 				},
@@ -281,22 +243,19 @@ describe("BoardApi.composable", () => {
 			};
 			const data = {
 				content: payload.content,
-				type: ContentElementType.Drawing,
+				type: ContentElementType.DRAWING,
 			};
 
 			await updateElementCall(payload);
 
-			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
-				payload.id,
-				{ data }
-			);
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(payload.id, { data });
 		});
 
 		it("should call elementControllerUpdateElement api with VideoConferenceElement", async () => {
 			const { updateElementCall } = useBoardApi();
 			const payload: serverApi.VideoConferenceElementResponse = {
 				id: "video-conference-element-id",
-				type: ContentElementType.VideoConference,
+				type: ContentElementType.VIDEO_CONFERENCE,
 				content: {
 					title: "Some title",
 				},
@@ -304,22 +263,19 @@ describe("BoardApi.composable", () => {
 			};
 			const data = {
 				content: payload.content,
-				type: ContentElementType.VideoConference,
+				type: ContentElementType.VIDEO_CONFERENCE,
 			};
 
 			await updateElementCall(payload);
 
-			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
-				payload.id,
-				{ data }
-			);
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(payload.id, { data });
 		});
 
 		it("should call elementControllerUpdateElement api with H5pElement", async () => {
 			const { updateElementCall } = useBoardApi();
 			const payload: H5pElementResponse = {
 				id: "external-tool-element-id",
-				type: ContentElementType.H5p,
+				type: ContentElementType.H5P,
 				content: {
 					contentId: "context-external-tool-id",
 				},
@@ -327,15 +283,12 @@ describe("BoardApi.composable", () => {
 			};
 			const data = {
 				content: payload.content,
-				type: ContentElementType.H5p,
+				type: ContentElementType.H5P,
 			};
 
 			await updateElementCall(payload);
 
-			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
-				payload.id,
-				{ data }
-			);
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(payload.id, { data });
 		});
 
 		it("should throw error for unkown element type", async () => {
@@ -356,12 +309,9 @@ describe("BoardApi.composable", () => {
 			const payload = "card-id";
 
 			await createElementCall(payload, {
-				type: ContentElementType.RichText,
+				type: ContentElementType.RICH_TEXT,
 			});
-			expect(cardApi.cardControllerCreateElement).toHaveBeenCalledWith(
-				payload,
-				{ type: ContentElementType.RichText }
-			);
+			expect(cardApi.cardControllerCreateElement).toHaveBeenCalledWith(payload, { type: ContentElementType.RICH_TEXT });
 		});
 	});
 
@@ -381,9 +331,7 @@ describe("BoardApi.composable", () => {
 			const payload = "column-id";
 
 			await deleteColumnCall(payload);
-			expect(columnApi.columnControllerDeleteColumn).toHaveBeenCalledWith(
-				payload
-			);
+			expect(columnApi.columnControllerDeleteColumn).toHaveBeenCalledWith(payload);
 		});
 	});
 
@@ -393,9 +341,7 @@ describe("BoardApi.composable", () => {
 			const payload = "element-id";
 
 			await deleteElementCall(payload);
-			expect(elementApi.elementControllerDeleteElement).toHaveBeenCalledWith(
-				payload
-			);
+			expect(elementApi.elementControllerDeleteElement).toHaveBeenCalledWith(payload);
 		});
 	});
 
@@ -403,30 +349,23 @@ describe("BoardApi.composable", () => {
 		it("should call columnControllerCreateCard api", async () => {
 			const { createCardCall } = useBoardApi();
 
-			const FAKE_RESPONSE = {
+			const FAKE_RESPONSE = mockApiResponse<CardResponse>({
 				status: 200,
 				data: {
 					id: "my-little-fake-id",
-				},
-			};
+				} as CardResponse,
+			});
 
-			columnApi.columnControllerCreateCard.mockResolvedValueOnce(
-				FAKE_RESPONSE as unknown as AxiosPromise<CardResponse>
-			);
+			columnApi.columnControllerCreateCard.mockResolvedValueOnce(FAKE_RESPONSE);
 
 			const payload = "column-id";
 			const INITIAL_ELEMENTS = {
-				requiredEmptyElements: [
-					serverApi.CreateCardBodyParamsRequiredEmptyElementsEnum.RichText,
-				],
+				requiredEmptyElements: [serverApi.CreateCardBodyParamsRequiredEmptyElements.RICH_TEXT],
 			};
 
 			const result = await createCardCall(payload);
 
-			expect(columnApi.columnControllerCreateCard).toHaveBeenCalledWith(
-				payload,
-				INITIAL_ELEMENTS
-			);
+			expect(columnApi.columnControllerCreateCard).toHaveBeenCalledWith(payload, INITIAL_ELEMENTS);
 
 			expect(result).toBe(FAKE_RESPONSE.data);
 		});
@@ -443,17 +382,10 @@ describe("BoardApi.composable", () => {
 				},
 			};
 
-			await moveCardCall(
-				payload.cardId,
-				payload.position.toColumnId,
-				payload.position.toPosition
-			);
-			expect(cardApi.cardControllerMoveCard).toHaveBeenCalledWith(
-				payload.cardId,
-				{
-					...payload.position,
-				}
-			);
+			await moveCardCall(payload.cardId, payload.position.toColumnId, payload.position.toPosition);
+			expect(cardApi.cardControllerMoveCard).toHaveBeenCalledWith(payload.cardId, {
+				...payload.position,
+			});
 		});
 	});
 
@@ -468,17 +400,10 @@ describe("BoardApi.composable", () => {
 				},
 			};
 
-			await moveColumnCall(
-				payload.columnId,
-				payload.position.toBoardId,
-				payload.position.toPosition
-			);
-			expect(columnApi.columnControllerMoveColumn).toHaveBeenCalledWith(
-				payload.columnId,
-				{
-					...payload.position,
-				}
-			);
+			await moveColumnCall(payload.columnId, payload.position.toBoardId, payload.position.toPosition);
+			expect(columnApi.columnControllerMoveColumn).toHaveBeenCalledWith(payload.columnId, {
+				...payload.position,
+			});
 		});
 	});
 
@@ -493,17 +418,10 @@ describe("BoardApi.composable", () => {
 				},
 			};
 
-			await moveElementCall(
-				payload.elementId,
-				payload.position.toCardId,
-				payload.position.toPosition
-			);
-			expect(elementApi.elementControllerMoveElement).toHaveBeenCalledWith(
-				payload.elementId,
-				{
-					...payload.position,
-				}
-			);
+			await moveElementCall(payload.elementId, payload.position.toCardId, payload.position.toPosition);
+			expect(elementApi.elementControllerMoveElement).toHaveBeenCalledWith(payload.elementId, {
+				...payload.position,
+			});
 		});
 	});
 
@@ -516,9 +434,7 @@ describe("BoardApi.composable", () => {
 
 			await getContextInfo(payload.boardId);
 
-			expect(boardApi.boardControllerGetBoardContext).toHaveBeenCalledWith(
-				payload.boardId
-			);
+			expect(boardApi.boardControllerGetBoardContext).toHaveBeenCalledWith(payload.boardId);
 		});
 
 		it("should call roomsControllerGetRoomBoard api", async () => {
@@ -532,19 +448,13 @@ describe("BoardApi.composable", () => {
 				},
 			};
 
-			boardApi.boardControllerGetBoardContext = vi
-				.fn()
-				.mockResolvedValueOnce(FAKE_RESPONSE);
+			boardApi.boardControllerGetBoardContext = vi.fn().mockResolvedValueOnce(FAKE_RESPONSE);
 
 			await getContextInfo(FAKE_BOARD_ID);
 
-			expect(boardApi.boardControllerGetBoardContext).toHaveBeenCalledWith(
-				FAKE_BOARD_ID
-			);
+			expect(boardApi.boardControllerGetBoardContext).toHaveBeenCalledWith(FAKE_BOARD_ID);
 
-			expect(roomsApi.courseRoomsControllerGetRoomBoard).toHaveBeenCalledWith(
-				FAKE_RESPONSE.data.id
-			);
+			expect(roomsApi.courseRoomsControllerGetRoomBoard).toHaveBeenCalledWith(FAKE_RESPONSE.data.id);
 		});
 
 		it("should return id and name of the parent course/room", async () => {
@@ -567,22 +477,14 @@ describe("BoardApi.composable", () => {
 				},
 			};
 
-			boardApi.boardControllerGetBoardContext = vi
-				.fn()
-				.mockResolvedValueOnce(FAKE_CONTEXT_RESPONSE);
-			roomsApi.courseRoomsControllerGetRoomBoard = vi
-				.fn()
-				.mockResolvedValueOnce(FAKE_ROOM_RESPONSE);
+			boardApi.boardControllerGetBoardContext = vi.fn().mockResolvedValueOnce(FAKE_CONTEXT_RESPONSE);
+			roomsApi.courseRoomsControllerGetRoomBoard = vi.fn().mockResolvedValueOnce(FAKE_ROOM_RESPONSE);
 
 			const result = await getContextInfo(FAKE_BOARD_ID);
 
-			expect(boardApi.boardControllerGetBoardContext).toHaveBeenCalledWith(
-				FAKE_BOARD_ID
-			);
+			expect(boardApi.boardControllerGetBoardContext).toHaveBeenCalledWith(FAKE_BOARD_ID);
 
-			expect(roomsApi.courseRoomsControllerGetRoomBoard).toHaveBeenCalledWith(
-				FAKE_CONTEXT_RESPONSE.data.id
-			);
+			expect(roomsApi.courseRoomsControllerGetRoomBoard).toHaveBeenCalledWith(FAKE_CONTEXT_RESPONSE.data.id);
 
 			expect(result).toEqual(
 				expect.objectContaining({
@@ -599,10 +501,17 @@ describe("BoardApi.composable", () => {
 			const { updateBoardVisibilityCall } = useBoardApi();
 
 			await updateBoardVisibilityCall("board-id", true);
-			expect(boardApi.boardControllerUpdateVisibility).toHaveBeenCalledWith(
-				"board-id",
-				{ isVisible: true }
-			);
+			expect(boardApi.boardControllerUpdateVisibility).toHaveBeenCalledWith("board-id", { isVisible: true });
+		});
+	});
+
+	describe("@updateReadersCanEditCall", () => {
+		it("should call boardControllerUpdateReadersCanEdit api", async () => {
+			const { updateReadersCanEditCall } = useBoardApi();
+
+			await updateReadersCanEditCall("board-id", true);
+
+			expect(boardApi.boardControllerUpdateReadersCanEdit).toHaveBeenCalledWith("board-id", { readersCanEdit: true });
 		});
 	});
 
@@ -610,11 +519,11 @@ describe("BoardApi.composable", () => {
 		it("should call boardControllerUpdateLayout api", async () => {
 			const { updateBoardLayoutCall } = useBoardApi();
 
-			await updateBoardLayoutCall("board-id", BoardLayout.List);
+			await updateBoardLayoutCall("board-id", BoardLayout.LIST);
 
-			expect(boardApi.boardControllerUpdateLayout).toHaveBeenCalledWith<
-				[string, LayoutBodyParams]
-			>("board-id", { layout: BoardLayout.List });
+			expect(boardApi.boardControllerUpdateLayout).toHaveBeenCalledWith<[string, LayoutBodyParams]>("board-id", {
+				layout: BoardLayout.LIST,
+			});
 		});
 	});
 
@@ -624,9 +533,7 @@ describe("BoardApi.composable", () => {
 
 			await getElementWithParentHierarchyCall("element-id");
 
-			expect(
-				elementApi.elementControllerGetElementWithParentHierarchy
-			).toHaveBeenCalledWith("element-id");
+			expect(elementApi.elementControllerGetElementWithParentHierarchy).toHaveBeenCalledWith("element-id");
 		});
 	});
 });

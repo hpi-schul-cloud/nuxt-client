@@ -1,12 +1,9 @@
-import { mount, VueWrapper } from "@vue/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import VideoConferenceConfigurationDialog from "./VideoConferenceConfigurationDialog.vue";
+import { VideoConferenceOptions } from "@/store/types/video-conference";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount, VueWrapper } from "@vue/test-utils";
 import { ref } from "vue";
 import { VDialog } from "vuetify/lib/components/index";
-import { VideoConferenceOptions } from "@/store/types/video-conference";
 
 const defaultOptions = ref<VideoConferenceOptions>({
 	everyAttendeeJoinsMuted: false,
@@ -15,9 +12,7 @@ const defaultOptions = ref<VideoConferenceOptions>({
 });
 
 describe("VideoConferenceConfigurationDialog", () => {
-	let wrapper: VueWrapper<
-		InstanceType<typeof VideoConferenceConfigurationDialog>
-	>;
+	let wrapper: VueWrapper<InstanceType<typeof VideoConferenceConfigurationDialog>>;
 	const setup = (props: { isOpen: boolean }) => {
 		wrapper = mount(VideoConferenceConfigurationDialog, {
 			global: {
@@ -62,9 +57,7 @@ describe("VideoConferenceConfigurationDialog", () => {
 		it("should emit 'close' when cancel button is clicked", async () => {
 			const wrapper = setup({ isOpen: true });
 			const dialog = wrapper.getComponent(VDialog);
-			const cancelButton = dialog.findComponent(
-				"[data-testid='dialog-cancel']"
-			);
+			const cancelButton = dialog.findComponent("[data-testid='dialog-cancel']");
 			await cancelButton.trigger("click");
 			expect(wrapper.emitted()).toHaveProperty("close");
 		});
@@ -72,9 +65,7 @@ describe("VideoConferenceConfigurationDialog", () => {
 		it("should emit 'start-video-conference' when create button is clicked", async () => {
 			const wrapper = setup({ isOpen: true });
 			const dialog = wrapper.getComponent(VDialog);
-			const createButton = dialog.findComponent(
-				"[data-testid='dialog-create']"
-			);
+			const createButton = dialog.findComponent("[data-testid='dialog-create']");
 			await createButton.trigger("click");
 			expect(wrapper.emitted()).toHaveProperty("start-video-conference");
 		});
