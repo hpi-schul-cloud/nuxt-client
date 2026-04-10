@@ -2,6 +2,9 @@
 	<DefaultWireframe max-width="full" main-with-bottom-padding>
 		<template #header>
 			<h1 data-testid="dashboard-title">{{ t("pages.dashboard.title") }}</h1>
+			<InfoAlert v-if="!!dashboardAnnouncementText" class="mb-4" data-testid="dashboard-announcement-alert">{{
+				dashboardAnnouncementText
+			}}</InfoAlert>
 		</template>
 		<template #default>
 			<SvsSuspense :loading="isLoadingNews">
@@ -59,9 +62,11 @@ import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { NewsApiFactory } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
+import { useDashboardAnnouncementText, useEnvConfig, useEnvStore } from "@data-env";
 import { DashboardReleaseDialog, DashboardTasks } from "@feature-dashboard";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
+import { InfoAlert } from "@ui-alert";
 import { SvsSuspense } from "@ui-containers";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
@@ -73,6 +78,10 @@ const { t } = useI18n();
 const { isTeacher, isStudent } = useAppStoreRefs();
 const NEWS_LIMIT = 4;
 const newsApi = NewsApiFactory(undefined, "/v3", $axios);
+useEnvStore().
+const { runtimeConfig } = useEnvConfig();
+
+const dashboardAnnouncementText = useDashboardAnnouncementText();
 
 useTitle(buildPageTitle(t("pages.dashboard.title")));
 
