@@ -137,7 +137,7 @@ const display = useDisplay();
 const refs = reactive<Record<string, unknown>>({});
 const courseRoomListStore = useCourseRoomListStore();
 const { hasCurrentRooms, roomsData, allElements } = storeToRefs(courseRoomListStore);
-const { alignCourse, updateCourse, fetchCourses } = courseRoomListStore;
+const { alignCourse, updateCourse, fetchCourses, fetchAllElements } = courseRoomListStore;
 
 const device = ref("mobile");
 const dimensions = reactive({
@@ -385,7 +385,7 @@ const initializeComponent = async () => {
 	dimensions.colCount = newDims.colCount;
 	dimensions.cellWidth = newDims.cellWidth;
 
-	await fetchCourses();
+	await Promise.allSettled([fetchCourses(), fetchAllElements()]);
 	setRowCount();
 
 	if (hasRoomsBeingCopied.value) {
