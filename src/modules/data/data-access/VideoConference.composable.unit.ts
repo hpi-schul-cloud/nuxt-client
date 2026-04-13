@@ -9,21 +9,15 @@ import {
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
 } from "@api-server";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
-
-vi.mock("@/plugins/i18n", () => ({
-	useI18nGlobal: () => ({ t: (key: string) => key }),
-	i18nKeyExists: () => false,
-}));
-
-vi.mock("@data-app", () => ({
-	notifyError: vi.fn(),
-}));
 
 let videoConferenceApi: Mocked<serverApi.VideoConferenceApiInterface>;
 
 describe("VideoConferenceComposable", () => {
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		videoConferenceApi = mockApi<serverApi.VideoConferenceApiInterface>();
 		vi.spyOn(serverApi, "VideoConferenceApiFactory").mockReturnValue(videoConferenceApi);
 	});
@@ -201,7 +195,8 @@ describe("VideoConferenceComposable", () => {
 		it("should return the URL on success", async () => {
 			const { joinVideoConference, url } = setup();
 
-			const returnUrl = await joinVideoConference();
+			const taskResult = await joinVideoConference();
+			const returnUrl = taskResult.result?.data.url;
 
 			expect(returnUrl).toBe(url);
 		});
@@ -221,7 +216,8 @@ describe("VideoConferenceComposable", () => {
 			videoConferenceApi.videoConferenceControllerJoin.mockRejectedValueOnce(mockError);
 
 			const { joinVideoConference, joinError } = useVideoConference(scope, scopeId);
-			const url = await joinVideoConference();
+			const taskResult = await joinVideoConference();
+			const url = taskResult.result?.data.url;
 
 			expect(url).toBeUndefined();
 			expect(joinError.value).toBe(mockError);

@@ -1,11 +1,10 @@
 import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
-// TODO: move composable to shared position
-import { useVideoConference } from "@/modules/feature/board-video-conference-element/composables/VideoConference.composable";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import { createTestAppStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Permission, RoleName, VideoConferenceScope } from "@api-server";
+import { useVideoConference } from "@data-access";
 import { createTestingPinia } from "@pinia/testing";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import { setActivePinia } from "pinia";
@@ -23,15 +22,15 @@ const mockVideoConferenceInfo = ref({
 		everybodyJoinsAsModerator: false,
 	},
 });
-const mockIsFetching = ref(false);
+const mockIsLoading = ref(false);
 const mockFetchError = ref<Error | undefined>(undefined);
 const mockStartError = ref<Error | undefined>(undefined);
 const mockJoinError = ref<Error | undefined>(undefined);
 
-vi.mock("@/modules/feature/board-video-conference-element/composables/VideoConference.composable", () => ({
+vi.mock("@data-access", () => ({
 	useVideoConference: vi.fn(() => ({
 		videoConferenceInfo: mockVideoConferenceInfo,
-		isFetching: mockIsFetching,
+		isLoading: mockIsLoading,
 		fetchError: mockFetchError,
 		startError: mockStartError,
 		joinError: mockJoinError,
@@ -59,7 +58,7 @@ describe("RoomVideoConferenceSection", () => {
 					everybodyJoinsAsModerator: boolean;
 				};
 			};
-			isFetching?: boolean;
+			isLoading?: boolean;
 			fetchError?: Error;
 			startError?: Error;
 			joinError?: Error;
@@ -78,7 +77,7 @@ describe("RoomVideoConferenceSection", () => {
 				everybodyJoinsAsModerator: false,
 			},
 		};
-		mockIsFetching.value = overrides?.isFetching ?? false;
+		mockIsLoading.value = overrides?.isLoading ?? false;
 		mockFetchError.value = overrides?.fetchError;
 		mockStartError.value = overrides?.startError;
 		mockJoinError.value = overrides?.joinError;
@@ -112,12 +111,6 @@ describe("RoomVideoConferenceSection", () => {
 		getWrapper({ roomId: "roomId" }, [Permission.JOIN_MEETING], false);
 
 		expect(useVideoConference).toHaveBeenCalledWith(VideoConferenceScope.COURSE, "roomId");
-	});
-
-	it("should call fetchVideoConferenceInfo on mount", () => {
-		getWrapper({ roomId: "roomId" }, [Permission.JOIN_MEETING], false);
-
-		expect(mockFetchVideoConferenceInfo).toHaveBeenCalled();
 	});
 
 	describe("when the video conference is not running", () => {
@@ -154,10 +147,10 @@ describe("RoomVideoConferenceSection", () => {
 		});
 	});
 
-	describe("when the video conference is fetching", () => {
+	describe("when the video conference is loading", () => {
 		it("should set the video conference card to refreshing", () => {
 			const { wrapper } = getWrapper({ roomId: "roomId" }, [Permission.JOIN_MEETING], false, {
-				isFetching: true,
+				isLoading: true,
 			});
 
 			expect(wrapper.findComponent(RoomVideoConferenceCard).props("isRefreshing")).toBe(true);
@@ -257,6 +250,15 @@ describe("RoomVideoConferenceSection", () => {
 			wrapper.findComponent(RoomVideoConferenceCard).vm.$emit("refresh");
 
 			expect(mockFetchVideoConferenceInfo).toHaveBeenCalledTimes(1);
+		});
+
+		it("should not call fetchVideoConferenceInfo when already loading", () => {
+			const { wrapper } = getWrapper({ roomId: "roomId" }, [], false, { isLoading: true });
+			mockFetchVideoConferenceInfo.mockClear();
+
+			wrapper.findComponent(RoomVideoConferenceCard).vm.$emit("refresh");
+
+			expect(mockFetchVideoConferenceInfo).not.toHaveBeenCalled();
 		});
 	});
 

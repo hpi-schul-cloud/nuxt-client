@@ -4,7 +4,7 @@
 			:has-permission="hasPermission"
 			:can-start="canStart"
 			:is-running="isConferenceRunning"
-			:is-refreshing="isFetching"
+			:is-refreshing="isLoading"
 			data-testid="video-conference-card"
 			@click="onClick"
 			@refresh="onRefresh"
@@ -43,13 +43,12 @@
 
 <script setup lang="ts">
 import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
-// TODO: move composable to shared position
-import { useVideoConference } from "@/modules/feature/board-video-conference-element/composables/VideoConference.composable";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import { Permission, VideoConferenceScope } from "@api-server";
+import { useVideoConference } from "@data-access";
 import { useAppStore, useAppStoreRefs } from "@data-app";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
-import { computed, onMounted, Ref, ref, toRef } from "vue";
+import { computed, Ref, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -66,7 +65,7 @@ const roomId = toRef(props, "roomId");
 
 const {
 	videoConferenceInfo,
-	isFetching,
+	isLoading,
 	fetchError,
 	startError,
 	joinError,
@@ -84,8 +83,6 @@ const canJoin = computed(
 );
 const hasPermission = computed(() => canJoin.value || canStart.value);
 
-const isRefreshing = isFetching;
-
 const errorDismissed = ref(false);
 
 const isErrorDialogOpen = computed(
@@ -98,12 +95,8 @@ const onCloseErrorDialog = () => {
 
 const isConfigurationDialogOpen: Ref<boolean> = ref(false);
 
-onMounted(async () => {
-	await fetchVideoConferenceInfo();
-});
-
 const onRefresh = async () => {
-	if (isRefreshing.value) return;
+	if (isLoading.value) return;
 	errorDismissed.value = false;
 	await fetchVideoConferenceInfo();
 };
@@ -136,7 +129,8 @@ const startVideoConferenceAndJoin = async () => {
 };
 
 const doJoinVideoConference = async () => {
-	const videoConferenceUrl = await joinVideoConference();
+	const joinTaskResult = await joinVideoConference();
+	const videoConferenceUrl = joinTaskResult?.result?.data.url;
 	if (videoConferenceUrl) {
 		window.open(videoConferenceUrl, "_self");
 	}
