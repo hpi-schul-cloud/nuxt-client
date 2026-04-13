@@ -1,6 +1,5 @@
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import CourseRoomListModule from "@/store/course-room-list";
 import FilePathsModule from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
 import GroupModule from "@/store/group";
@@ -20,7 +19,6 @@ export const VIDEO_CONFERENCE_MODULE_KEY: InjectionKey<VideoConferenceModule> = 
 export const SYSTEMS_MODULE_KEY: InjectionKey<SystemsModule> = Symbol("systemsModule");
 export const GROUP_MODULE_KEY: InjectionKey<GroupModule> = Symbol("groupModule");
 export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> = Symbol("schoolsModule");
-export const COURSE_ROOM_LIST_MODULE_KEY: InjectionKey<CourseRoomListModule> = Symbol("courseRoomListModule");
 export const COPY_MODULE_KEY: InjectionKey<CopyModule> = Symbol("copyModule");
 export const SHARE_MODULE_KEY: InjectionKey<ShareModule> = Symbol("shareModule");
 
