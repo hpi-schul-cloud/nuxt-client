@@ -39,10 +39,10 @@ describe("Announcement", () => {
 		const {
 			enabled = false,
 			roles = "teacher,admin",
-			textDe = "Ankündigung auf Deutsch",
-			textEn = "Announcement in English",
-			textEs = "Anuncio en español",
-			textUk = "Оголошення українською",
+			textDe = "Ankündigung auf <strong>Deutsch</strong>",
+			textEn = "Announcement in <strong>English</strong>",
+			textEs = "Anuncio en <strong>español</strong>",
+			textUk = "Оголошення <strong>українською</strong>",
 		} = options;
 
 		const data: { data: Array<{ key: string; value: unknown }> } = {
@@ -65,6 +65,11 @@ describe("Announcement", () => {
 		const wrapper = shallowMount(Announcement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: {
+					"base-alert": false,
+					"render-h-t-m-l": false,
+					InfoAlert: false,
+				},
 			},
 		});
 
@@ -98,11 +103,11 @@ describe("Announcement", () => {
 	describe("when announcement is enabled", () => {
 		describe("and user role matches", () => {
 			it.each([
-				{ locale: LanguageType.DE, expectedText: "Ankündigung auf Deutsch" },
-				{ locale: LanguageType.EN, expectedText: "Announcement in English" },
-				{ locale: LanguageType.ES, expectedText: "Anuncio en español" },
-				{ locale: LanguageType.UK, expectedText: "Оголошення українською" },
-			])("should render the alert with correct text when locale is $locale", async ({ locale, expectedText }) => {
+				{ locale: LanguageType.DE, expectedHTML: "Ankündigung auf <strong>Deutsch</strong>" },
+				{ locale: LanguageType.EN, expectedHTML: "Announcement in <strong>English</strong>" },
+				{ locale: LanguageType.ES, expectedHTML: "Anuncio en <strong>español</strong>" },
+				{ locale: LanguageType.UK, expectedHTML: "Оголошення <strong>українською</strong>" },
+			])("should render the alert with correct HTML when locale is $locale", async ({ locale, expectedHTML }) => {
 				mockRuntimeConfigResponse({ enabled: true });
 				mockLocale.value = locale;
 				mockUserRoles.value = ["teacher"];
@@ -111,8 +116,10 @@ describe("Announcement", () => {
 				await flushPromises();
 
 				const alert = wrapper.find('[data-testid="dashboard-announcement-alert"]');
-				expect(alert.exists()).toBe(true);
-				expect(alert.text()).toBe(expectedText);
+				const alertInnerDiv = alert.find(".alert-text div");
+
+				expect(alertInnerDiv.exists()).toBe(true);
+				expect(alertInnerDiv.html()).toContain(expectedHTML);
 			});
 		});
 

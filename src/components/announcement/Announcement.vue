@@ -1,7 +1,7 @@
 <template>
-	<InfoAlert v-if="!!dashboardAnnouncement" class="mb-4" data-testid="dashboard-announcement-alert">{{
-		dashboardAnnouncement
-	}}</InfoAlert>
+	<InfoAlert v-if="!!dashboardAnnouncement" class="mb-4" data-testid="dashboard-announcement-alert">
+		<RenderHTML :html="dashboardAnnouncement" />
+	</InfoAlert>
 </template>
 
 <script setup lang="ts">
@@ -10,6 +10,7 @@ import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
 import { LanguageType, RuntimeConfigApiFactory } from "@api-server";
 import { useAppStore } from "@data-app";
+import { RenderHTML } from "@feature-render-html";
 import { InfoAlert } from "@ui-alert";
 import { computed, onMounted, reactive } from "vue";
 
