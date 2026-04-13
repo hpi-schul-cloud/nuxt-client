@@ -783,7 +783,7 @@ export default {
 	"components.molecules.TextEditor.noLocalFiles": "Наразі локальні файли не підтримуються.",
 	"components.molecules.export.options.info": "Наступний вміст не експортується:",
 	"components.molecules.export.options.info.point1": "Завантажені файли в межах курсу.",
-	"components.molecules.export.options.info.point2": "Подання, призначені до завдання.",
+	"components.molecules.export.options.info.point2": "Подання",
 	"components.molecules.export.options.info.point3": "Папки файлів не експортуються з Common Cartridge версією 1.1",
 	"components.molecules.export.options.info.point4": "Наступні елементи карти в межах областей:",
 	"components.molecules.export.options.info.point4.sub1": "Біла дошка",

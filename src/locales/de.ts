@@ -703,7 +703,7 @@ export default {
 		"Der Kurs, in den die Aufgabe importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.export.options.info": "Folgende Inhalte werden nicht exportiert:",
 	"components.molecules.export.options.info.point1": "Hochgeladene Dateien innerhalb des Kurses.",
-	"components.molecules.export.options.info.point2": "Abgaben, die einer Aufgabe zugeordnet sind.",
+	"components.molecules.export.options.info.point2": "Abgaben",
 	"components.molecules.export.options.info.point3":
 		"Dateiordner werden mit Common Cartridge Version 1.1 nicht exportiert",
 	"components.molecules.export.options.info.point4": "Folgende Karten Elemente innerhalb von Bereichen:",

@@ -769,7 +769,7 @@ export default {
 	"components.molecules.TextEditor.noLocalFiles": "Local files are currently not supported.",
 	"components.molecules.export.options.info": "The following content is not exported:",
 	"components.molecules.export.options.info.point1": "Uploaded files within the course.",
-	"components.molecules.export.options.info.point2": "Submissions assigned to a task.",
+	"components.molecules.export.options.info.point2": "Submissions",
 	"components.molecules.export.options.info.point3": "File folders are not exported with Common Cartridge Version 1.1",
 	"components.molecules.export.options.info.point4": "Following Card Elements within sections:",
 	"components.molecules.export.options.info.point4.sub1": "Whiteboard",

@@ -785,7 +785,7 @@ export default {
 	"components.molecules.TextEditor.noLocalFiles": "Actualmente no se admiten archivos locales.",
 	"components.molecules.export.options.info": "El siguiente contenido no se exporta:",
 	"components.molecules.export.options.info.point1": "Archivos subidos dentro del curso.",
-	"components.molecules.export.options.info.point2": "Envíos asignados a una tarea.",
+	"components.molecules.export.options.info.point2": "Envíos",
 	"components.molecules.export.options.info.point3":
 		"Las carpetas de archivos no se exportan con la Common Cartridge versión 1.1",
 	"components.molecules.export.options.info.point4": "Los siguientes elementos del mapa dentro de las áreas:",
