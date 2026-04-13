@@ -171,6 +171,7 @@ export const useTasks = (
 	const fetch = async () => {
 		const { success, result } = await execute(fetchAllTasks);
 		if (success) allTasks.value = result;
+		return result;
 	};
 
 	const deleteTask = async (taskId: string) => {

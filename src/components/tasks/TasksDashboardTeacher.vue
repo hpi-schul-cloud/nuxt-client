@@ -1,7 +1,7 @@
 <template>
 	<section class="task-dashboard-teacher">
-		<v-window v-model="tab">
-			<v-window-item :value="tabRoutes[0]" class="padding-bottom">
+		<VWindow :model-value="tab">
+			<VWindowItem :value="tabRoutes[0]" class="padding-bottom">
 				<TasksDashBoardPanels
 					:panel-one-count="noDueDateTasks.length"
 					:panel-two-count="withDueDateTasks.length + overdueTasks.length"
@@ -36,17 +36,17 @@
 						<template #media> <TasksEmptyStateSvg /></template>
 					</EmptyState>
 				</VContainer>
-			</v-window-item>
-			<v-window-item :value="tabRoutes[1]" class="padding-bottom">
-				<tasks-list :tasks="draftTasks" user-role="teacher" @copy-task="onCopyTask" @share-task="onShareTask" />
+			</VWindowItem>
+			<VWindowItem :value="tabRoutes[1]" class="padding-bottom">
+				<TasksList :tasks="draftTasks" user-role="teacher" @copy-task="onCopyTask" @share-task="onShareTask" />
 				<VContainer>
 					<EmptyState v-if="draftsForTeacherIsEmpty" :title="t('pages.tasks.teacher.drafts.emptyState.title')">
 						<template #media> <TasksEmptyStateSvg /></template>
 					</EmptyState>
 				</VContainer>
-			</v-window-item>
-			<v-window-item :value="tabRoutes[2]" class="padding-bottom">
-				<tasks-list
+			</VWindowItem>
+			<VWindowItem :value="tabRoutes[2]" class="padding-bottom">
+				<TasksList
 					:tasks="finishedTasks"
 					user-role="teacher"
 					type="finished"
@@ -59,8 +59,8 @@
 						<template #media> <TasksEmptyStateSvg /></template>
 					</EmptyState>
 				</VContainer>
-			</v-window-item>
-		</v-window>
+			</VWindowItem>
+		</VWindow>
 		<share-modal :type="ShareTokenBodyParamsParentType.TASKS" />
 	</section>
 </template>
@@ -78,13 +78,18 @@ import { FINISHED_TASKS_MODULE_KEY, injectStrict, SHARE_MODULE_KEY, TASKS_MODULE
 import { ShareTokenBodyParamsParentType } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
 const tasksModule: TasksModule = injectStrict(TASKS_MODULE_KEY);
 const finishedTasksModule: FinishedTasksModule = injectStrict(FINISHED_TASKS_MODULE_KEY);
 const shareModule: ShareModule = injectStrict(SHARE_MODULE_KEY);
+
 defineProps({
+	tab: {
+		type: String,
+		required: true,
+	},
 	tabRoutes: {
 		type: Array,
 		required: true,
@@ -93,6 +98,10 @@ defineProps({
 
 const { t } = useI18n();
 const { copy } = useCopy();
+
+onMounted(() => {
+	finishedTasksModule.fetchFinishedTasks();
+});
 
 const openTasks = computed(() => tasksModule.getOpenTasksForTeacher);
 const draftTasks = computed(() => tasksModule.getDraftTasksForTeacher);
@@ -106,15 +115,6 @@ const status = computed(() => tasksModule.getStatus);
 const openTasksForTeacherIsEmpty = computed(() => tasksModule.openTasksForTeacherIsEmpty);
 const draftsForTeacherIsEmpty = computed(() => tasksModule.draftsForTeacherIsEmpty);
 const finishedTasksIsEmpty = computed(() => finishedTasksModule.tasksIsEmpty);
-
-const tab = computed({
-	get() {
-		return tasksModule.getActiveTab;
-	},
-	set(newTab) {
-		tasksModule.setActiveTab(newTab);
-	},
-});
 
 const onCopyTask = async (payload: CopyParams) => {
 	await copy(payload);
