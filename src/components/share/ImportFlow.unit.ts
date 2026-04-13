@@ -3,9 +3,7 @@ import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue"
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import ImportModal from "@/components/share/ImportModal.vue";
 import SelectDestinationModal from "@/components/share/SelectDestinationModal.vue";
-import { courseRoomListModule } from "@/store";
 import CopyModule from "@/store/copy";
-import CourseRoomListModule from "@/store/course-room-list";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 import {
 	apiResponseErrorFactory,
@@ -15,7 +13,6 @@ import {
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	BoardExternalReferenceType,
 	CopyApiResponse,
@@ -71,10 +68,6 @@ describe("@components/share/ImportFlow", () => {
 			getIsResultModalOpen: false,
 			getCopyResult: copyResultResponse,
 		});
-		setupStores({
-			rooms: CourseRoomListModule,
-		});
-		vi.spyOn(courseRoomListModule, "fetchAllElements").mockImplementation(vi.fn());
 	});
 
 	describe("token is provided", () => {
