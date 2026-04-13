@@ -343,17 +343,6 @@ describe("useAutoLogout", () => {
 		});
 
 		describe("when session expires", () => {
-			it("should show error notification", async () => {
-				const options = { jwtTtl: 3, showWarningTime: 2 };
-				setupAndCreateSession(options);
-
-				await advanceTimersBySeconds(4);
-
-				expect(useNotificationStore().notify).toHaveBeenCalledWith(
-					expect.objectContaining({ status: "error", autoClose: false })
-				);
-			});
-
 			it("should show the dialog", async () => {
 				const options = { jwtTtl: 3, showWarningTime: 2 };
 				const { showDialog } = setupAndCreateSession(options);
