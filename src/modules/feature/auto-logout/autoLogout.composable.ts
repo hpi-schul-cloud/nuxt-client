@@ -123,16 +123,14 @@ export const useAutoLogout = () => {
 		setTime(0);
 		stopTimer();
 		useAppStore().clearUserSession();
-		setTimeout(() => {
-			showDialog.value = true;
-			logoutUserSilently();
-		}, 5000);
+		showDialog.value = true;
+		logoutUserSilently();
 	};
 
 	const setClosedState = () => {
-		stopTimer();
 		sessionState.value = SessionState.Closed;
 		setTime(0);
+		stopTimer();
 		showDialog.value = false;
 	};
 
