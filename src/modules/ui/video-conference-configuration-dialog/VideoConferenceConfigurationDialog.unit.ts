@@ -1,11 +1,11 @@
 import VideoConferenceConfigurationDialog from "./VideoConferenceConfigurationDialog.vue";
-import { VideoConferenceOptions } from "@/store/types/video-conference";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { VideoConferenceOptionsResponse } from "@api-server";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { ref } from "vue";
 import { VDialog } from "vuetify/lib/components/index";
 
-const defaultOptions = ref<VideoConferenceOptions>({
+const defaultOptions = ref<VideoConferenceOptionsResponse>({
 	everyAttendeeJoinsMuted: false,
 	everybodyJoinsAsModerator: false,
 	moderatorMustApproveJoinRequests: true,

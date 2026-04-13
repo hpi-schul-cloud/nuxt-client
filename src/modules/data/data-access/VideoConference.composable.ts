@@ -1,21 +1,21 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { VideoConferenceInfo, VideoConferenceOptions, VideoConferenceState } from "@/store/types/video-conference";
 import { $axios } from "@/utils/api";
-import { VideoConferenceApiFactory, VideoConferenceScope, VideoConferenceStateResponse } from "@api-server";
+import {
+	VideoConferenceApiFactory,
+	VideoConferenceInfoResponse,
+	VideoConferenceOptionsResponse,
+	VideoConferenceScope,
+	VideoConferenceStateResponse,
+} from "@api-server";
 import { computed, onMounted, ref } from "vue";
-
-const videoConferenceStateMapping: Partial<Record<VideoConferenceStateResponse, VideoConferenceState>> = {
-	[VideoConferenceStateResponse.RUNNING]: VideoConferenceState.RUNNING,
-	[VideoConferenceStateResponse.NOT_STARTED]: VideoConferenceState.NOT_STARTED,
-};
 
 export const useVideoConference = (scope: VideoConferenceScope, scopeId: string, fetchImmediate = true) => {
 	const { t } = useI18nGlobal();
 	const videoConferenceApi = VideoConferenceApiFactory(undefined, "v3", $axios);
 
-	const videoConferenceInfo = ref<VideoConferenceInfo>({
-		state: VideoConferenceState.NOT_STARTED,
+	const videoConferenceInfo = ref<VideoConferenceInfoResponse>({
+		state: VideoConferenceStateResponse.NOT_STARTED,
 		options: {
 			everyAttendeeJoinsMuted: false,
 			everybodyJoinsAsModerator: false,
@@ -29,7 +29,7 @@ export const useVideoConference = (scope: VideoConferenceScope, scopeId: string,
 
 	const { execute: execJoin, isRunning: isJoining, error: joinError } = useSafeAxiosTask();
 
-	const isConferenceRunning = computed(() => videoConferenceInfo.value.state === VideoConferenceState.RUNNING);
+	const isConferenceRunning = computed(() => videoConferenceInfo.value.state === VideoConferenceStateResponse.RUNNING);
 	const isWaitingRoomActive = computed(() => videoConferenceInfo.value.options.moderatorMustApproveJoinRequests);
 
 	const isLoading = computed(() => isFetching.value || isStarting.value || isJoining.value);
@@ -41,20 +41,20 @@ export const useVideoConference = (scope: VideoConferenceScope, scopeId: string,
 		);
 		if (success && result) {
 			videoConferenceInfo.value = {
-				state: videoConferenceStateMapping[result.data.state] ?? VideoConferenceState.UNKNOWN,
+				state: result.data.state,
 				options: result.data.options,
 			};
 			return result;
 		}
 	};
 
-	const startVideoConference = async (options: VideoConferenceOptions) => {
+	const startVideoConference = async (options: VideoConferenceOptionsResponse) => {
 		const { success } = await execStart(
 			() => videoConferenceApi.videoConferenceControllerStart(scope, scopeId, { ...options }),
 			t("common.notification.error")
 		);
 		if (success) {
-			videoConferenceInfo.value = { state: VideoConferenceState.RUNNING, options };
+			videoConferenceInfo.value = { state: VideoConferenceStateResponse.RUNNING, options };
 		}
 	};
 

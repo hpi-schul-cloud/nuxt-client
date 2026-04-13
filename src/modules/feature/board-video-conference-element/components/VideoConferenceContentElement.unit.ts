@@ -1,12 +1,11 @@
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
-import { VideoConferenceState } from "@/store/types/video-conference";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestAppStore, mockComposable } from "@@/tests/test-utils";
 import { videoConferenceElementContentFactory } from "@@/tests/test-utils/factory/videoConferenceElementContentFactory";
 import { videoConferenceElementResponseFactory } from "@@/tests/test-utils/factory/videoConferenceElementResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { RoleName, VideoConferenceElementContent } from "@api-server";
+import { RoleName, VideoConferenceElementContent, VideoConferenceStateResponse } from "@api-server";
 import { useVideoConference } from "@data-access";
 import { useBoardFeatures, useBoardFocusHandler, useContentElementState } from "@data-board";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
@@ -109,7 +108,7 @@ describe("VideoConferenceContentElement", () => {
 
 		const useVideoConferenceMock = mockComposable(useVideoConference, {
 			videoConferenceInfo: ref({
-				state: VideoConferenceState.NOT_STARTED,
+				state: VideoConferenceStateResponse.NOT_STARTED,
 				options: {
 					everyAttendeeJoinsMuted: false,
 					everybodyJoinsAsModerator: false,

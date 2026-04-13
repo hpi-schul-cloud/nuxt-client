@@ -57,8 +57,8 @@
 
 <script setup lang="ts">
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
-import { VideoConferenceOptions } from "@/store/types/video-conference";
 import { BoardContextType } from "@/types/board/BoardContext";
+import { VideoConferenceOptionsResponse } from "@api-server";
 import { InfoAlert } from "@ui-alert";
 import { computed, ComputedRef, ModelRef, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -66,7 +66,7 @@ import { VCard } from "vuetify/components";
 
 const props = defineProps({
 	options: {
-		type: Object as PropType<VideoConferenceOptions>,
+		type: Object as PropType<VideoConferenceOptionsResponse>,
 		required: true,
 	},
 	boardParentType: {
@@ -88,7 +88,7 @@ const { t } = useI18n();
 
 defineEmits(["close", "start-video-conference"]);
 
-const localOptions: ComputedRef<VideoConferenceOptions> = computed(() => props.options);
+const localOptions: ComputedRef<VideoConferenceOptionsResponse> = computed(() => props.options);
 
 const showInfoAlert = computed(() => {
 	if (props.boardParentType === BoardContextType.COURSE) {

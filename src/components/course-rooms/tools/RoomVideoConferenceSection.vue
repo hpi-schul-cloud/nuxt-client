@@ -43,12 +43,11 @@
 
 <script setup lang="ts">
 import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
-import { VideoConferenceState } from "@/store/types/video-conference";
-import { Permission, VideoConferenceScope } from "@api-server";
+import { Permission, VideoConferenceScope, VideoConferenceStateResponse } from "@api-server";
 import { useVideoConference } from "@data-access";
 import { useAppStore, useAppStoreRefs } from "@data-app";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
-import { computed, Ref, ref, toRef } from "vue";
+import { computed, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -93,7 +92,7 @@ const onCloseErrorDialog = () => {
 	errorDismissed.value = true;
 };
 
-const isConfigurationDialogOpen: Ref<boolean> = ref(false);
+const isConfigurationDialogOpen = ref(false);
 
 const onRefresh = async () => {
 	if (isLoading.value) return;
@@ -102,10 +101,10 @@ const onRefresh = async () => {
 };
 
 const onClick = async () => {
-	if (videoConferenceInfo.value.state === VideoConferenceState.NOT_STARTED && canStart.value) {
+	if (videoConferenceInfo.value.state === VideoConferenceStateResponse.NOT_STARTED && canStart.value) {
 		openConfigurationDialog();
 	}
-	if (videoConferenceInfo.value.state === VideoConferenceState.RUNNING && canJoin.value) {
+	if (videoConferenceInfo.value.state === VideoConferenceStateResponse.RUNNING && canJoin.value) {
 		await doJoinVideoConference();
 	}
 };

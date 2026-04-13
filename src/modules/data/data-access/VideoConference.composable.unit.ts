@@ -1,5 +1,4 @@
 import { useVideoConference } from "./VideoConference.composable";
-import { VideoConferenceState } from "@/store/types/video-conference";
 import { mockApi } from "@@/tests/test-utils/mockApiFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import * as serverApi from "@api-server";
@@ -78,11 +77,12 @@ describe("VideoConferenceComposable", () => {
 
 			await fetchVideoConferenceInfo();
 
-			expect(videoConferenceInfo.value.state).toBe(VideoConferenceState.RUNNING);
+			expect(videoConferenceInfo.value.state).toBe(VideoConferenceStateResponse.RUNNING);
 			expect(videoConferenceInfo.value.options).toEqual(FAKE_RESPONSE.data.options);
 		});
 
-		it("should set state to unknown if the response state is not recognized", async () => {
+		// never going to happen anyway, TODO: decide if we want to keep the test
+		it("should pass through unrecognized state from API response", async () => {
 			const { fetchVideoConferenceInfo, videoConferenceInfo } = setup();
 			const FAKE_RESPONSE = mockApiResponse<VideoConferenceInfoResponse>({
 				status: 200,
@@ -99,7 +99,7 @@ describe("VideoConferenceComposable", () => {
 
 			await fetchVideoConferenceInfo();
 
-			expect(videoConferenceInfo.value.state).toBe(VideoConferenceState.UNKNOWN);
+			expect(videoConferenceInfo.value.state).toBe("bla-bla");
 		});
 
 		it("should set fetchError if the API call fails", async () => {
@@ -149,7 +149,7 @@ describe("VideoConferenceComposable", () => {
 
 			await startVideoConference(options);
 
-			expect(videoConferenceInfo.value.state).toBe(VideoConferenceState.RUNNING);
+			expect(videoConferenceInfo.value.state).toBe(VideoConferenceStateResponse.RUNNING);
 			expect(videoConferenceInfo.value.options).toEqual(options);
 		});
 
@@ -251,21 +251,21 @@ describe("VideoConferenceComposable", () => {
 
 		it("should return true when video conference state is RUNNING", () => {
 			const { isConferenceRunning, videoConferenceInfo } = setup();
-			videoConferenceInfo.value.state = VideoConferenceState.RUNNING;
+			videoConferenceInfo.value.state = VideoConferenceStateResponse.RUNNING;
 
 			expect(isConferenceRunning.value).toBe(true);
 		});
 
 		it("should return false when video conference state is NOT_STARTED", () => {
 			const { isConferenceRunning, videoConferenceInfo } = setup();
-			videoConferenceInfo.value.state = VideoConferenceState.NOT_STARTED;
+			videoConferenceInfo.value.state = VideoConferenceStateResponse.NOT_STARTED;
 
 			expect(isConferenceRunning.value).toBe(false);
 		});
 
-		it("should return false when video conference state is UNKNOWN", () => {
+		it("should return false when video conference state is FINISHED", () => {
 			const { isConferenceRunning, videoConferenceInfo } = setup();
-			videoConferenceInfo.value.state = VideoConferenceState.UNKNOWN;
+			videoConferenceInfo.value.state = VideoConferenceStateResponse.FINISHED;
 
 			expect(isConferenceRunning.value).toBe(false);
 		});
