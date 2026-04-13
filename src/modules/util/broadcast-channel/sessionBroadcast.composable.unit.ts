@@ -106,7 +106,7 @@ describe("useSessionBroadcast", () => {
 				simulateIncomingMessage("logout");
 				await flushPromises();
 
-				expect(setState).toHaveBeenCalledWith(SessionState.Expired);
+				expect(setState).toHaveBeenCalledWith(SessionState.Closed);
 			});
 		});
 
