@@ -122,10 +122,18 @@ export const useAutoLogout = () => {
 		sessionState.value = SessionState.Expired;
 		setTime(0);
 		stopTimer();
-		showDialog.value = true;
-		notifyError("feature-autoLogout.message.error.401", false);
 		useAppStore().clearUserSession();
-		await logoutUserSilently();
+		setTimeout(() => {
+			showDialog.value = true;
+			logoutUserSilently();
+		}, 5000);
+	};
+
+	const setClosedState = () => {
+		stopTimer();
+		sessionState.value = SessionState.Closed;
+		setTime(0);
+		showDialog.value = false;
 	};
 
 	const setErrorState = () => {
@@ -139,6 +147,7 @@ export const useAutoLogout = () => {
 		[SessionState.AboutToExpire]: setAboutToExpireState,
 		[SessionState.Extended]: setExtendedState,
 		[SessionState.Expired]: setExpiredState,
+		[SessionState.Closed]: setClosedState,
 		[SessionState.Error]: setErrorState,
 	};
 
@@ -164,7 +173,7 @@ export const useAutoLogout = () => {
 
 	const logoutUserSilently = async () => {
 		try {
-			await fetch("/logout");
+			// await fetch("/logout");
 		} catch (error) {
 			logger.error("Unexpected error during silent logout:", error);
 		}
