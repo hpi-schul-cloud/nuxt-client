@@ -1,4 +1,5 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
 import { nowUtc, parseUtc } from "@/utils/date-time.utils";
 import { TaskApiFactory, TaskResponse } from "@api-server";
@@ -6,116 +7,253 @@ import { ManipulateType } from "dayjs";
 import { orderBy } from "lodash-es";
 import { computed, onMounted, ref } from "vue";
 
-const fetchAllTasks = async (skip = 0, limit = 100, accumulated: TaskResponse[] = []): Promise<TaskResponse[]> => {
-	const tasksApi = TaskApiFactory(undefined, "/v3", $axios);
-
-	const data = await tasksApi.taskControllerFindAll(skip, limit);
-
-	const all = [...accumulated, ...data.data.data];
-	return skip + limit < data.data.total ? fetchAllTasks(skip + limit, limit, all) : all;
-};
-
-export const isTaskOverdue = (t: TaskResponse) => !!t.dueDate && parseUtc(t.dueDate).isBefore(nowUtc());
-export const isGradedForTeacher = (t: TaskResponse) => t.status.submitted > 0 && t.status.graded === t.status.submitted;
-export const isGradedForStudent = (t: TaskResponse) => t.status.graded > 0;
-
-type DateRange = {
-	from: { amount: number; unit: ManipulateType };
-	to: { amount: number; unit: ManipulateType };
-};
-
+// === Utilities ===
 export const toSortedByDueDate = (tasks: TaskResponse[]) =>
 	orderBy(tasks, (t) => (t.dueDate ? parseUtc(t.dueDate).valueOf() : Infinity), "asc");
 
 export const toSortedByCreatedDate = (tasks: TaskResponse[]) =>
 	orderBy(tasks, (t) => parseUtc(t.createdAt).valueOf(), "desc");
 
-export const useTasks = ({ range }: { range?: DateRange } = {}, fetchImmediate = true) => {
+export const isTaskOverdue = (t: TaskResponse) => t.dueDate && parseUtc(t.dueDate).isBefore(nowUtc());
+
+type DateRange = {
+	from: { amount: number; unit: ManipulateType };
+	to: { amount: number; unit: ManipulateType };
+};
+
+const fetchAllTasks = async (skip = 0, limit = 100, accumulated: TaskResponse[] = []): Promise<TaskResponse[]> => {
+	const tasksApi = TaskApiFactory(undefined, "/v3", $axios);
+	const data = await tasksApi.taskControllerFindAll(skip, limit);
+	const all = [...accumulated, ...data.data.data];
+	return skip + limit < data.data.total ? fetchAllTasks(skip + limit, limit, all) : all;
+};
+
+const hasNoDueDate = (t: TaskResponse) => !t.dueDate;
+const hasDueDate = (t: TaskResponse) => t.dueDate && !isTaskOverdue(t);
+
+export const useTasks = (
+	options: {
+		range?: DateRange;
+		courseNames?: string[];
+		includeSubstitute?: boolean;
+		fetchImmediate?: boolean;
+	} = {}
+) => {
 	const { execute, isRunning, error, status } = useSafeAxiosTask();
+	const { t } = useI18nGlobal();
+	const tasksApi = TaskApiFactory(undefined, "/v3", $axios);
+
+	// === Raw Data ===
 	const allTasks = ref<TaskResponse[]>([]);
 
+	// === Filter State ===
+	const range = ref(options.range);
+	const selectedCourseNames = ref(options.courseNames ?? []);
+	const includeSubstitute = ref(options.includeSubstitute ?? false);
+
+	// === Filter Pipeline ===
+	const tasksFilteredBySubstitute = computed(() => {
+		if (includeSubstitute.value) return allTasks.value;
+		return allTasks.value.filter((t) => !t.status.isSubstitutionTeacher);
+	});
+
+	const tasksFilteredByCourses = computed(() => {
+		if (selectedCourseNames.value.length === 0) return tasksFilteredBySubstitute.value;
+		return tasksFilteredBySubstitute.value.filter((t) => selectedCourseNames.value.includes(t.courseName));
+	});
+
 	const tasks = computed(() => {
-		if (!range) return allTasks.value;
+		const r = range.value;
+		if (!r) return tasksFilteredByCourses.value;
 
-		const from = range.from ? nowUtc().subtract(range.from.amount, range.from.unit) : null;
-		const to = range.to ? nowUtc().add(range.to.amount, range.to.unit) : null;
+		const from = r.from ? nowUtc().subtract(r.from.amount, r.from.unit) : undefined;
+		const to = r.to ? nowUtc().add(r.to.amount, r.to.unit) : undefined;
 
-		const filteredByTime = allTasks.value.filter((t) => {
+		return tasksFilteredByCourses.value.filter((t) => {
 			if (!t.dueDate) return true;
 			const due = parseUtc(t.dueDate);
 			return (!from || due.isAfter(from)) && (!to || due.isBefore(to));
 		});
-
-		return toSortedByDueDate(filteredByTime);
 	});
 
-	const draftTasks = computed(() => tasks.value.filter((t) => t.status.isDraft));
+	// === Base Categories ===
+	const drafts = computed(() => toSortedByCreatedDate(tasks.value.filter((t) => t.status.isDraft)));
+	const published = computed(() => tasks.value.filter((t) => !t.status.isDraft));
 
-	const publishedTasks = computed(() => tasks.value.filter((t) => !t.status.isDraft));
-	const overdueTasks = computed(() => publishedTasks.value.filter(isTaskOverdue));
+	// === Due Date Grouping helper util ===
+	const splitByDueDate = <T extends TaskResponse>(list: T[]) => ({
+		overdue: toSortedByDueDate(list.filter(isTaskOverdue)),
+		withDueDate: toSortedByDueDate(list.filter(hasDueDate)),
+		noDueDate: list.filter(hasNoDueDate),
+	});
 
-	const openTasksForTeacher = computed(() => publishedTasks.value.filter((t) => !isTaskOverdue(t)));
-	const openTasksForStudents = computed(() =>
-		publishedTasks.value.filter((t) => t.status.submitted === 0 && !t.lessonHidden)
+	// Convenience computed for published tasks
+	const overdue = computed(() => toSortedByDueDate(published.value.filter(isTaskOverdue)));
+	const withDueDate = computed(() => toSortedByDueDate(published.value.filter(hasDueDate)));
+	const noDueDate = computed(() => published.value.filter(hasNoDueDate));
+
+	// === Teacher Categories ===
+
+	// All submissions graded
+	const gradedForTeacher = computed(() =>
+		published.value.filter((t) => t.status.submitted > 0 && t.status.graded === t.status.submitted)
 	);
 
-	const ungradedTasksForTeacher = computed(() => overdueTasks.value.filter((t) => !isGradedForTeacher(t)));
-	const ungradedTasksForStudent = computed(() => publishedTasks.value.filter((t) => !isGradedForStudent(t)));
+	// Not yet overdue
+	const openForTeacher = computed(() => published.value.filter((t) => !isTaskOverdue(t)));
 
-	const gradedTasksForTeacher = computed(() => overdueTasks.value.filter(isGradedForTeacher));
-	const gradedTasksForStudent = computed(() => publishedTasks.value.filter(isGradedForStudent));
+	// Has submissions but not all graded
+	const ungradedForTeacher = computed(() =>
+		published.value.filter((t) => t.status.submitted > 0 && t.status.graded < t.status.submitted)
+	);
 
+	// === Student Categories ===
+
+	// Not yet submitted, not graded, visible
+	const openForStudent = computed(() =>
+		published.value.filter((t) => t.status.submitted === 0 && t.status.graded === 0 && !t.lessonHidden)
+	);
+
+	// Submitted but not graded
+	const submittedForStudent = computed(() =>
+		published.value.filter((t) => t.status.submitted > 0 && t.status.graded === 0)
+	);
+
+	// Has been graded
+	const gradedForStudent = computed(() => published.value.filter((t) => t.status.graded > 0));
+
+	// === Filter Helpers ===
+	// const courseFilterOptions = computed(() => {
+	// 	const taskList = tasksFilteredBySubstitute.value;
+	// 	const mapped = taskList.map((t) => ({
+	// 		value: t.courseName,
+	// 		text: t.courseName,
+	// 		isSubstitution: t.status.isSubstitutionTeacher,
+	// 	}));
+	// 	return [...new Map(mapped.map((item) => [item.value, item])).values()];
+	// });
+
+	// const hasFiltersSelected = computed(() => selectedCourseNames.value.length > 0);
+
+	// const countByCourseName = (taskList: TaskResponse[]) => {
+	// 	const result: Record<string, number> = {};
+	// 	for (const t of taskList) {
+	// 		result[t.courseName] = (result[t.courseName] ?? 0) + 1;
+	// 	}
+	// 	return result;
+	// };
+
+	// === Filter Setters ===
+
+	const setRange = (newRange: DateRange) => {
+		range.value = newRange;
+	};
+
+	const setCourseNames = (names: string[]) => {
+		selectedCourseNames.value = names;
+	};
+
+	const setIncludeSubstitute = (value: boolean) => {
+		includeSubstitute.value = value;
+		// if (!value) {
+		// 	const validCourses = new Set(tasksFilteredBySubstitute.value.map((t) => t.courseName));
+		// 	selectedCourseNames.value = selectedCourseNames.value.filter((name) => validCourses.has(name));
+		// }
+	};
+
+	const clearFilters = () => {
+		selectedCourseNames.value = [];
+		includeSubstitute.value = false;
+		range.value = undefined;
+	};
+
+	// === Data Actions (with auto-refetch) ===
 	const fetch = async () => {
 		const { success, result } = await execute(fetchAllTasks);
 		if (success) allTasks.value = result;
 	};
 
-	if (fetchImmediate) {
+	const deleteTask = async (taskId: string) => {
+		const { success } = await execute(
+			() => tasksApi.taskControllerDelete(taskId),
+			t("common.notifications.errors.notDeleted", { type: t("common.words.task") })
+		);
+		if (success) await fetch();
+		return success;
+	};
+
+	const finishTask = async (taskId: string) => {
+		const { success } = await execute(
+			() => tasksApi.taskControllerFinish(taskId),
+			t("common.notifications.errors.notFinished", { type: t("common.words.task") })
+		);
+		if (success) await fetch();
+		return success;
+	};
+
+	const revertPublishedTask = async (taskId: string) => {
+		const { success } = await execute(
+			() => tasksApi.taskControllerRevertPublished(taskId),
+			t("common.notifications.errors.notReverted", { type: t("common.words.task") })
+		);
+		if (success) await fetch();
+		return success;
+	};
+
+	if (options.fetchImmediate !== false) {
 		onMounted(fetch);
 	}
 
 	return {
+		// Data
+		tasks,
+		allTasks,
+
+		// Base Categories
+		drafts,
+		published,
+
+		// Due Date Grouping
+		overdue,
+		withDueDate,
+		noDueDate,
+		splitByDueDate,
+
+		// Teacher Categories
+		openForTeacher,
+		gradedForTeacher,
+		ungradedForTeacher,
+
+		// Student Categories
+		openForStudent,
+		submittedForStudent,
+		gradedForStudent,
+
+		// Filter State
+		range,
+		selectedCourseNames,
+		includeSubstitute,
+
+		// Filter Helpers
+		// courseFilterOptions,
+		// hasFiltersSelected,
+		// countByCourseName,
+
+		// Filter Actions
+		setRange,
+		setCourseNames,
+		setIncludeSubstitute,
+		clearFilters,
+
+		// Data Actions
+		fetch,
+		deleteTask,
+		finishTask,
+		revertPublishedTask,
+
+		// Status
 		isRunning,
 		status,
 		error,
-		fetch,
-		tasks,
-		draftTasks,
-		publishedTasks,
-		overdueTasks,
-		openTasksForTeacher,
-		openTasksForStudents,
-		ungradedTasksForTeacher,
-		ungradedTasksForStudent,
-		gradedTasksForTeacher,
-		gradedTasksForStudent,
 	};
 };
-
-export const useTaskActions = () => {
-	const tasksApi = TaskApiFactory(undefined, "/v3", $axios);
-	const { execute, isRunning, error } = useSafeAxiosTask();
-
-	const deleteTask = async (taskId: string) =>
-		await execute(() => tasksApi.taskControllerDelete(taskId), "Fehler beim Löschen");
-
-	// finishTask, revertPublishedTask analog
-	return { deleteTask, isRunning, error };
-	// return { deleteTask, finishTask, revertPublishedTask, isRunning, error };
-};
-
-const componentSetup = async () => {
-	const { fetch } = useTasks();
-	const { deleteTask } = useTaskActions();
-
-	const { success } = await deleteTask("task-id");
-	if (success) await fetch();
-
-	// TODO: All from one composable
-	// const { tasks, deleteTask, isRunning } = useTasks();
-};
-
-// Other options:
-// - Have actions also in useTasks() ? --> allows implementing refetching automatically, when e.g. deleting
-// - Also allows getting all actions/getters by one instead of two destructs
-// - mutating and fetching could, but dont need to share the same transmission state (isRunning) vs (isFetching, isMutating)

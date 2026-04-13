@@ -147,6 +147,8 @@ export default {
 	"common.notifications.errors.notLoaded": "{type} no se ha podido cargar. | {type} no se han podido cargar.",
 	"common.notifications.errors.notMoved": "{type} no se ha podido mover. | {type} no se han podido mover.",
 	"common.notifications.errors.notExited": "{type} no se ha podido salir. | {type} no se han podido salir.",
+	"common.notifications.errors.notFinished": "{type} no se pudo completar. | {type} no se pudieron completar.",
+	"common.notifications.errors.notReverted": "{type} no se pudo restablecer. | {type} no se pudieron restablecer.",
 	"common.notification.connection.restored": "La conexión se ha reestablecido.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.email.confirmation": "Repetir la dirección de correo electrónico",

@@ -5,28 +5,28 @@
 				:title="t('common.labels.tasks.assigned')"
 				data-testid="teacher-tasks-open"
 				:empty-msg="t('pages.dashboard.no.tasks')"
-				:tasks="openTasksForTeacher"
+				:tasks="openForTeacher"
 			/>
 
 			<DashboardTasksSection
-				v-if="ungradedTasksForTeacher.length > 0"
+				v-if="ungradedForTeacherOverdue.length > 0"
 				data-testid="teacher-tasks-not-graded"
 				:title="t('pages.tasks.subtitleNotGraded')"
-				:tasks="ungradedTasksForTeacher"
+				:tasks="ungradedForTeacherOverdue"
 			/>
 
 			<DashboardTasksSection
-				v-if="gradedTasksForTeacher.length > 0"
+				v-if="gradedForTeacherOverdue.length > 0"
 				data-testid="teacher-tasks-graded"
 				:title="t('pages.tasks.subtitleGraded')"
-				:tasks="gradedTasksForTeacher"
+				:tasks="gradedForTeacherOverdue"
 			/>
 
 			<DashboardTasksSection
-				v-if="draftTasks.length > 0"
+				v-if="drafts.length > 0"
 				data-testid="teacher-tasks-drafts"
 				:title="t('common.words.drafts')"
-				:tasks="draftTasks"
+				:tasks="drafts"
 			/>
 		</template>
 		<template v-else-if="isStudent">
@@ -34,21 +34,21 @@
 				:title="t('pages.tasks.student.openTasks')"
 				data-testid="student-tasks-open"
 				:empty-msg="t('pages.tasks.student.open.emptyState.title')"
-				:tasks="openTasksForStudents"
+				:tasks="openForStudent"
 			/>
 
 			<DashboardTasksSection
-				v-if="ungradedTasksForStudent.length > 0"
+				v-if="submittedForStudent.length > 0"
 				data-testid="student-tasks-not-graded"
 				:title="t('pages.tasks.subtitleNotGraded')"
-				:tasks="ungradedTasksForStudent"
+				:tasks="submittedForStudent"
 			/>
 
 			<DashboardTasksSection
-				v-if="gradedTasksForStudent.length > 0"
+				v-if="gradedForStudent.length > 0"
 				data-testid="student-tasks-graded"
 				:title="t('pages.tasks.subtitleGraded')"
-				:tasks="gradedTasksForStudent"
+				:tasks="gradedForStudent"
 			/>
 		</template>
 
@@ -62,21 +62,22 @@
 import DashboardTasksOpen from "./DashboardTasksOpen.vue";
 import DashboardTasksSection from "./DashboardTasksSection.vue";
 import { useAppStoreRefs } from "@data-app";
-import { useTasks } from "@data-tasks";
+import { isTaskOverdue, toSortedByDueDate, useTasks } from "@data-tasks";
 import { SvsSuspense } from "@ui-containers";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const { isTeacher, isStudent } = useAppStoreRefs();
 
 const {
-	draftTasks,
-	gradedTasksForTeacher,
-	gradedTasksForStudent,
-	ungradedTasksForTeacher,
-	ungradedTasksForStudent,
-	openTasksForTeacher,
-	openTasksForStudents,
+	drafts,
+	openForTeacher,
+	gradedForTeacher,
+	ungradedForTeacher,
+	openForStudent,
+	submittedForStudent,
+	gradedForStudent,
 	isRunning,
 } = useTasks({
 	range: {
@@ -84,4 +85,7 @@ const {
 		to: { amount: 14, unit: "day" },
 	},
 });
+
+const gradedForTeacherOverdue = computed(() => toSortedByDueDate(gradedForTeacher.value.filter(isTaskOverdue)));
+const ungradedForTeacherOverdue = computed(() => toSortedByDueDate(ungradedForTeacher.value.filter(isTaskOverdue)));
 </script>

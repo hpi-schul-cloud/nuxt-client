@@ -153,6 +153,8 @@ export default {
 		"{type} не вдалося перемістити. | {type} не вдалося перемістити. | {type} не вдалося перемістити.",
 	"common.notifications.errors.notExited":
 		"{type} не вдалося вийти. | {type} не вдалося вийти. | {type} не вдалося вийти.",
+	"common.notifications.errors.notFinished": "{type} не вдалося завершити. | {type} не вдалося завершити.",
+	"common.notifications.errors.notReverted": "{type} не вдалося скинути. | {type} не вдалося скинути.",
 	"common.notification.connection.restored": "Зв'язок відновлено.",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.email.confirmation": "Повторно введіть адресу електронної пошти",

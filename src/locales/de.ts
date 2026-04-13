@@ -153,6 +153,10 @@ export default {
 		"{type} konnte nicht verschoben werden. | {type} konnten nicht verschoben werden.",
 	"common.notifications.errors.notExited":
 		"{type} konnte nicht verlassen werden. | {type} konnten nicht verlassen werden.",
+	"common.notifications.errors.notFinished":
+		"{type} konnte nicht abgeschlossen werden. | {type} konnten nicht abgeschlossen werden.",
+	"common.notifications.errors.notReverted":
+		"{type} konnte nicht zurückgesetzt werden. | {type} konnten nicht zurückgesetzt werden.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.email.confirmation": "E-Mail-Adresse wiederholen",
 	"common.placeholder.email.update": "Neue E-Mail-Adresse",

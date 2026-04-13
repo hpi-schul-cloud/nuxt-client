@@ -145,6 +145,8 @@ export default {
 	"common.notifications.errors.notLoaded": "{type} could not be loaded.",
 	"common.notifications.errors.notMoved": "{type} could not be moved.",
 	"common.notifications.errors.notExited": "{type} could not be exited.",
+	"common.notifications.errors.notFinished": "{type} could not be completed.",
+	"common.notifications.errors.notReverted": "{type} could not be reset",
 	"common.notification.connection.restored": "The connection has been restored.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.email.confirmation": "Repeat e-mail address",
