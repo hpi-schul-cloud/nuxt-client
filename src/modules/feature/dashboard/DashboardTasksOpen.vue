@@ -1,6 +1,5 @@
 <template>
 	<template v-if="!tasks || tasks.length === 0">
-		<h2>{{ t("common.words.tasks") }}</h2>
 		<EmptyState data-testid="empty-state-tasks" :title="emptyMsg">
 			<template #media> <SvgTasksEmpty /></template>
 		</EmptyState>
@@ -13,7 +12,6 @@ import DashboardTasksSection from "./DashboardTasksSection.vue";
 import SvgTasksEmpty from "@/assets/img/SvgTasksEmpty.vue";
 import { TaskResponse } from "@api-server";
 import { EmptyState } from "@ui-empty-state";
-import { useI18n } from "vue-i18n";
 
 defineProps<{
 	title: string;
@@ -22,6 +20,4 @@ defineProps<{
 }>();
 
 defineOptions({ inheritAttrs: false });
-
-const { t } = useI18n();
 </script>

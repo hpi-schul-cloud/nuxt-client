@@ -2,30 +2,30 @@
 	<CourseRoomWrapper :has-rooms="hasRooms">
 		<template #header>
 			<h1 class="py-2">
-				{{ $t("pages.courseRooms.index.courses.all") }}
+				{{ t("pages.courseRooms.index.courses.all") }}
 			</h1>
 			<div class="header-actions-section mb-5">
-				<v-btn variant="outlined" size="small" to="/rooms/courses-overview" data-testid="go-to-active-courses">
-					{{ $t("pages.courseRooms.index.courses.active") }}
-				</v-btn>
+				<VBtn variant="outlined" size="small" to="/rooms/courses-overview" data-testid="go-to-active-courses">
+					{{ t("pages.courseRooms.index.courses.active") }}
+				</VBtn>
 			</div>
 		</template>
 		<template #page-content>
-			<v-row class="d-flex justify-center search">
+			<VRow class="d-flex justify-center search">
 				<SvsSearchField
 					ref="search"
 					v-model="searchText"
 					density="default"
 					class="px-1"
-					:label="$t('pages.courseRooms.index.search.label')"
+					:label="t('pages.courseRooms.index.search.label')"
 					:clearable="false"
 					data-testid="search-field-course"
 				/>
-			</v-row>
-			<v-row>
-				<v-container fluid>
-					<v-row>
-						<v-col
+			</VRow>
+			<VRow>
+				<VContainer fluid>
+					<VRow>
+						<VCol
 							v-for="room in rooms"
 							:key="room.title"
 							class="d-flex justify-center cols-12 xs-6 sm-6 lg-4 xl-2"
@@ -36,48 +36,42 @@
 							sm="3"
 						>
 							<CourseRoomAvatar :ref="`${room.id}-avatar`" class="room-avatar" :item="room" size="5em" />
-						</v-col>
-					</v-row>
-				</v-container>
-			</v-row>
+						</VCol>
+					</VRow>
+				</VContainer>
+			</VRow>
 		</template>
 	</CourseRoomWrapper>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import CourseRoomAvatar from "@/components/course-rooms/CourseRoomAvatar.vue";
 import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
-import { courseRoomListModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useCourseRoomListStore } from "@data-course-rooms";
 import { SvsSearchField } from "@ui-controls";
-import { defineComponent } from "vue";
+import { useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
+import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	components: {
-		CourseRoomWrapper,
-		CourseRoomAvatar,
-		SvsSearchField,
-	},
-	data() {
-		return {
-			searchText: "",
-		};
-	},
-	computed: {
-		rooms(): Array<ListItemsObject> {
-			return JSON.parse(JSON.stringify(courseRoomListModule.getAllElements)).filter((room: ListItemsObject) =>
-				room.searchText?.toLowerCase().includes(this.$data.searchText.toLowerCase())
-			);
-		},
-		hasRooms(): boolean {
-			return courseRoomListModule.hasRooms;
-		},
-	},
-	async mounted() {
-		document.title = buildPageTitle(this.$t("pages.courseRooms.index.courses.all").toString());
-		await courseRoomListModule.fetchAllElements();
-	},
+const { t } = useI18n();
+const courseRoomListStore = useCourseRoomListStore();
+const { hasRooms, allElements } = storeToRefs(courseRoomListStore);
+
+const searchText = ref("");
+const rooms = computed<Array<ListItemsObject>>(() =>
+	JSON.parse(JSON.stringify(allElements.value)).filter((room: ListItemsObject) =>
+		room.searchText?.toLowerCase().includes(searchText.value.toLowerCase())
+	)
+);
+useTitle(buildPageTitle(t("pages.courseRooms.index.courses.all")));
+
+onMounted(async () => {
+	if (!allElements.value.length) {
+		await courseRoomListStore.fetchAllElements();
+	}
 });
 </script>
 

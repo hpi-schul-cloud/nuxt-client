@@ -124,7 +124,6 @@ export default {
 	"common.labels.visible": "Visible",
 	"common.labels.welcome": "Welcome",
 	"common.labels.fileName": "File name",
-	"common.labels.tasks.assigned": "Assigned tasks",
 	"common.labels.tasks.more": "Other tasks...",
 	"common.loading.text": "Data is loading...",
 	"common.medium.alert.deactivated": "Media is disabled.",
@@ -322,10 +321,8 @@ export default {
 		"Do you really want to start the account migration to moin.schule now?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"Are you sure you want to remove the accounts links that are found automatically?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
-		"The migration assistant had automatically found account links based on the usernames.",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
-		"Do you want to remove the accounts links that are found automatically now?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"The migration assistant had automatically found account links based on the usernames. Do you want to remove the account links that are found automatically now?",
 	"components.administration.externalToolsSection.action.add": "Add External Tool",
 	"components.administration.externalToolsSection.action.delete": "Delete Tool",
 	"components.administration.externalToolsSection.action.edit": "Edit Tool",
@@ -377,11 +374,9 @@ export default {
 	"components.administration.provisioningOptions.schoolExternalTools.label": "Activation of external tools",
 
 	"components.administration.provisioningOptions.page.title": "Data synchronization options",
-	"components.administration.provisioningOptions.warning.consequence":
+	"components.administration.provisioningOptions.warning":
 		"All previously synchronized {groupTypes} will be removed from your school!",
-	"components.administration.provisioningOptions.warning.question":
-		"Are you sure you want to disable synchronization for {groupTypes}?",
-	"components.administration.provisioningOptions.warning.title": "Disable synchronization",
+	"components.administration.provisioningOptions.warning.title": "Disable synchronization?",
 	"components.administration.schoolYearChangeSection.headers": "Change of school year",
 	"components.administration.schoolYearChangeSection.info.part.one":
 		"The transfer phase allows for class membership and personal data to be adjusted in LDAP at a leisurely pace. Finally, all changes can be transferred to the {instance} at once.",
@@ -774,8 +769,15 @@ export default {
 	"components.molecules.TextEditor.noLocalFiles": "Local files are currently not supported.",
 	"components.molecules.export.options.info": "The following content is not exported:",
 	"components.molecules.export.options.info.point1": "Uploaded files within the course.",
-	"components.molecules.export.options.info.point2": "Submissions assigned to a task.",
+	"components.molecules.export.options.info.point2": "Submissions",
 	"components.molecules.export.options.info.point3": "File folders are not exported with Common Cartridge Version 1.1",
+	"components.molecules.export.options.info.point4": "Following Card Elements within sections:",
+	"components.molecules.export.options.info.point4.sub1": "Whiteboard",
+	"components.molecules.export.options.info.point4.sub2": "Etherpad",
+	"components.molecules.export.options.info.point4.sub3": "External Tools",
+	"components.molecules.export.options.info.point4.sub4": "File folders",
+	"components.molecules.export.options.info.point4.sub5": "Merlin Bibliothek",
+	"components.molecules.export.options.info.point4.sub6": "H5P",
 	"components.organisms.ContentCard.report.body": "Reporting the content with the ID",
 	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":
@@ -893,7 +895,7 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectContent": "Select {toolName} content...",
 	"feature-board-file-element.placeholder.uploadFile": "Upload file",
 	"feature-course-sync.EndCourseSyncDialog.title": "End synchronization",
-	"feature-course-sync.EndCourseSyncDialog.description":
+	"feature-course-sync.EndCourseSyncDialog":
 		"Should the synchronization of the course {courseName} with the user group {groupName} really be stopped?",
 	"feature-course-sync.EndCourseSyncDialog.success": "Synchronization completed successfully",
 	"feature-course-sync.GroupSelectionDialog.title": "Select user group",
@@ -964,12 +966,22 @@ export default {
 	"mixins.typeMeta.types.image": "Image",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Website",
+	"loggedin.text.backupFeatures":
+		"Back up your cloud content and also use the new function for exporting courses. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "More information and instructions can be found here.",
+	"loggedin.text.schoolInTransferPhaseContactAdmin":
+		"The school is in the transfer phase to the new school year. No classes and users can be created. Please contact the school administrator!",
+	"loggedin.text.schoolInTransferPhaseStartNew":
+		'The school is in the transfer phase to the new school year. No classes and users can be created. Please ring in <a href="/administration/school/"> the new school year here!</a>',
+	"loggedin.text.schoolInMigrationModeStarted":
+		'The school is in user migration mode. To migrate users, please go to <a href="/administration/migration/">this page</a>.',
+	"loggedin.text.schoolInMigrationMode":
+		'The school can import user accounts from Schulportal. To migrate users, please go to <a href="/administration/migration/">this page</a>.',
 	"pages.dashboard.title": "Dashboard",
 	"pages.dashboard.empty.news": "So far there is no news.",
 	"pages.dashboard.new.features": "There are new features in the {instanceTitle}.",
 	"pages.dashboard.new.features.available": "New features are available",
 	"pages.dashboard.new.features.forward": "More information can be found in the release notes.",
-	"pages.dashboard.no.tasks": "No assigned tasks. You can find all tasks in the tasks area.",
 	"pages.dashboard.no.due.date": "No submission date set",
 	"pages.dashboard.welcome": "Hello",
 	"pages.dashboard.schedule": "Schedule",
@@ -1003,9 +1015,9 @@ export default {
 		"With all changes and settings in the administration area, it is confirmed that these are carried out by a school admin with authority to make adjustments to the school in the cloud. Adjustments made by the school admin are deemed to be instructions from the school to the cloud operator {institute_title}.",
 	"pages.administration.classes.index.add": "Add class",
 	"pages.administration.classes.index.title": "Manage classes",
-	"pages.administration.classes.thr.hint.title": "Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.title": "Why can’t I edit any entries?",
 	"pages.administration.classes.thr.hint.text":
-		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
+		"Your school is synchronized with the Thuringian school portal. The data for teachers, students, and classes is managed centrally there and can only be changed in that portal. This also includes password changes.",
 	"pages.administration.common.label.archive": "Archive",
 	"pages.administration.common.label.active": "Current",
 	"pages.administration.classes.manage": "Manage class",
@@ -1649,7 +1661,7 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Tool menu",
 	"pages.rooms.tools.outdated": "Configuration incomplete",
 	"pages.rooms.tools.outdatedDialog.title": "Tool „{toolName}“ outdated",
-	"pages.room.modal.course.export.header": "Export Format",
+	"pages.room.modal.course.export.header": "Export Version",
 	"pages.room.modal.course.export.options.header": "Export settings",
 	"pages.room.modal.course.export.options.topics": "Topics",
 	"pages.room.modal.course.export.options.tasks": "Tasks without Topic",
@@ -1847,7 +1859,6 @@ export default {
 	"pages.tasks.labels.planned": "Planned",
 	"pages.tasks.student.completed.emptyState.title": "Currently there are no completed tasks",
 	"pages.tasks.student.open.emptyState.title": "Currently there are no open tasks",
-	"pages.tasks.student.openTasks": "Open Tasks",
 	"pages.tasks.student.submittedTasks": "Completed Tasks",
 	"pages.tasks.student.subtitleOverDue": "Missed Tasks",
 	"pages.tasks.subtitleGraded": "Graded",
@@ -1856,7 +1867,7 @@ export default {
 	"pages.tasks.subtitleOpen": "Open Tasks",
 	"pages.tasks.subtitleWithDue": "With Due Date",
 	"pages.tasks.teacher.drafts.emptyState.title": "Currently there are no drafts",
-	"pages.tasks.teacher.open.emptyState.title": "There are currently no tasks",
+	"pages.tasks.open.emptyState.title": "There are currently no tasks",
 	"pages.tasks.teacher.subtitleOverDue": "Expired Tasks",
 	"pages.termsofuse.title": "Terms of use and privacy policy",
 	"pages.tool.apiError.tool_param_duplicate": "This Tool has at least one duplicate parameter. Please contact support.",

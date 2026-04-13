@@ -9,7 +9,6 @@ import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
-	COURSE_ROOM_LIST_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
@@ -22,7 +21,6 @@ import {
 	commonCartridgeExportModule,
 	copyModule,
 	courseRoomDetailsModule,
-	courseRoomListModule,
 	filePathsModule,
 	finishedTasksModule,
 	groupModule,
@@ -101,14 +99,17 @@ app.use(VueDOMPurifyHTML, {
 	app.provide("importUsersModule", importUsersModule);
 
 	app.provide(COURSE_ROOM_DETAILS_MODULE_KEY.valueOf(), courseRoomDetailsModule);
-	app.provide("CourseRoomListModule", courseRoomListModule);
 	app.provide(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(), schoolExternalToolsModule);
 	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
 	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
 	app.provide(COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf(), commonCartridgeExportModule);
 	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
 	app.provide("tasksModule", tasksModule);
+<<<<<<< BC-11513-vc
 	app.provide(COURSE_ROOM_LIST_MODULE_KEY.valueOf(), courseRoomListModule);
+=======
+	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
+>>>>>>> main
 	app.provide(THEME_KEY.valueOf(), themeConfig);
 
 	app.mount("#app");

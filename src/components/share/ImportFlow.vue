@@ -9,14 +9,14 @@
 			@next="onReferenceSelected"
 			@cancel="onCancel"
 		/>
-		<import-modal
+		<ImportModal
 			:is-open="isImportModalOpen"
 			:parent-name="parentName"
 			:parent-type="parentType"
 			@import="onImport"
 			@cancel="onCancel"
 		/>
-		<copy-result-modal
+		<CopyResultModal
 			:is-open="isCopyResultModalOpen"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-root-item-type="copyResultRootItemType"

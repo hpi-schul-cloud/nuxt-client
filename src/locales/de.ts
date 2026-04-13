@@ -126,7 +126,6 @@ export default {
 	"common.labels.visible": "Sichtbar",
 	"common.labels.welcome": "Willkommen",
 	"common.labels.fileName": "Dateiname",
-	"common.labels.tasks.assigned": "Gestellte Aufgaben",
 	"common.labels.tasks.more": "Weitere Aufgaben...",
 	"common.loading.text": "Daten werden geladen...",
 	"common.medium.alert.deactivated": "Medium ist deaktiviert.",
@@ -330,10 +329,8 @@ export default {
 		"Möchten Sie die Account-Migration zu moin.schule jetzt wirklich starten?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"Sind Sie sicher, dass Sie die automatisch gefundenen Verknüpfungen zurücksetzen wollen?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
-		"Der Migrationsassistent hat Konten-Verknüpfungen anhand der Nutzer-Namen automatisch gefunden.",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
-		"Möchten Sie die automatisch gefundenen Verknüpfungen jetzt zurücksetzen?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"Der Migrationsassistent hat Konten-Verknüpfungen anhand der Nutzer-Namen automatisch gefunden. Möchten Sie die automatisch gefundenen Verknüpfungen jetzt zurücksetzen?",
 	"components.administration.externalToolsSection.action.add": "Externes Tool hinzufügen",
 	"components.administration.externalToolsSection.action.delete": "Tool löschen",
 	"components.administration.externalToolsSection.action.edit": "Tool bearbeiten",
@@ -386,11 +383,9 @@ export default {
 	"components.administration.provisioningOptions.schoolExternalTools.label": "Freischaltung von externen Tools",
 
 	"components.administration.provisioningOptions.page.title": "Optionen für Datensynchronisation",
-	"components.administration.provisioningOptions.warning.consequence":
+	"components.administration.provisioningOptions.warning":
 		"Alle bisher synchronisierten {groupTypes} werden aus Ihrer Schule entfernt!",
-	"components.administration.provisioningOptions.warning.question":
-		"Sind Sie sich sicher, dass die Synchronisation für {groupTypes} deaktivieren möchten?",
-	"components.administration.provisioningOptions.warning.title": "Synchronisation deaktivieren",
+	"components.administration.provisioningOptions.warning.title": "Synchronisation deaktivieren?",
 	"components.administration.schoolYearChangeSection.headers": "Schuljahreswechsel",
 	"components.administration.schoolYearChangeSection.info.part.one":
 		"Mit Hilfe der Transferphase können Klassenzugehörigkeit und Personendaten im LDAP in Ruhe angepasst werden. Abschließend können alle Änderungen mit einem Mal in die {instance} übertragen werden.",
@@ -708,9 +703,16 @@ export default {
 		"Der Kurs, in den die Aufgabe importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.export.options.info": "Folgende Inhalte werden nicht exportiert:",
 	"components.molecules.export.options.info.point1": "Hochgeladene Dateien innerhalb des Kurses.",
-	"components.molecules.export.options.info.point2": "Abgaben, die einer Aufgabe zugeordnet sind.",
+	"components.molecules.export.options.info.point2": "Abgaben",
 	"components.molecules.export.options.info.point3":
 		"Dateiordner werden mit Common Cartridge Version 1.1 nicht exportiert",
+	"components.molecules.export.options.info.point4": "Folgende Karten Elemente innerhalb von Bereichen:",
+	"components.molecules.export.options.info.point4.sub1": "Whiteboard",
+	"components.molecules.export.options.info.point4.sub2": "Etherpad",
+	"components.molecules.export.options.info.point4.sub3": "Externe Tools",
+	"components.molecules.export.options.info.point4.sub4": "Dateiordner",
+	"components.molecules.export.options.info.point4.sub5": "Merlin Bibliothek",
+	"components.molecules.export.options.info.point4.sub6": "H5P",
 	"components.molecules.import.tasks.options.selectCourse": "Kurs wählen",
 	"components.molecules.import.tasks.options.title": "Aufgabe importieren",
 	"components.molecules.importUsersMatch.deleteMatch": "Verknüpfung löschen",
@@ -910,7 +912,7 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectContent": "{toolName} Inhalt auswählen...",
 	"feature-board-file-element.placeholder.uploadFile": "Datei hochladen",
 	"feature-course-sync.EndCourseSyncDialog.title": "Synchronisation beenden",
-	"feature-course-sync.EndCourseSyncDialog.description":
+	"feature-course-sync.EndCourseSyncDialog":
 		"Soll die Synchronisation des Kurses {courseName} mit der Nutzendengruppe {groupName} wirklich beendet werden?",
 	"feature-course-sync.EndCourseSyncDialog.success": "Synchronisation erfolgreich beendet",
 	"feature-course-sync.GroupSelectionDialog.title": "Nutzendengruppe auswählen",
@@ -980,12 +982,22 @@ export default {
 	"mixins.typeMeta.types.image": "Bild",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Webseite",
+	"loggedin.text.backupFeatures":
+		"Sichern Sie Ihre Inhalte der Cloud und nutzen Sie auch die neue Funktion zum Export von Kursen. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "Weitere Informationen und Hilfestellungen sind hier zu finden.",
+	"loggedin.text.schoolInTransferPhaseContactAdmin":
+		"Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte kontaktiere deinen Schul-Admin!",
+	"loggedin.text.schoolInTransferPhaseStartNew":
+		'Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte läute <a href="/administration/school/"> hier das neue Schuljahr ein!</a>',
+	"loggedin.text.schoolInMigrationModeStarted":
+		'Die Schule befindet sich im Modus der Benutzermigration. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
+	"loggedin.text.schoolInMigrationMode":
+		'Die Schule kann Benutzerkonten von Schulportal importieren. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
 	"pages.dashboard.title": "Übersicht",
 	"pages.dashboard.empty.news": "Bisher gibt es keine News.",
 	"pages.dashboard.new.features": "Es gibt neue Features in der {instanceTitle}.",
 	"pages.dashboard.new.features.available": "Neue Features sind verfügbar",
 	"pages.dashboard.new.features.forward": "Mehr Informationen sind in den Release Notes zu finden.",
-	"pages.dashboard.no.tasks": "Keine gestellten Aufgaben. Du findest alle Aufgaben im Aufgaben-Bereich.",
 	"pages.dashboard.no.due.date": "Kein Abgabedatum festgelegt",
 	"pages.dashboard.welcome": "Hallo",
 	"pages.dashboard.schedule": "Stundenplan",
@@ -1670,7 +1682,7 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Tool Menü",
 	"pages.rooms.tools.outdated": "Konfiguration unvollständig",
 	"pages.rooms.tools.outdatedDialog.title": "Tool „{toolName}“ veraltet",
-	"pages.room.modal.course.export.header": "Export-Format",
+	"pages.room.modal.course.export.header": "Export-Version",
 	"pages.room.modal.course.export.options.header": "Export-Einstellung",
 	"pages.room.modal.course.export.options.topics": "Themen",
 	"pages.room.modal.course.export.options.tasks": "Aufgaben ohne Themen",
@@ -1872,7 +1884,6 @@ export default {
 	"pages.tasks.labels.planned": "Geplant",
 	"pages.tasks.student.completed.emptyState.title": "Aktuell gibt es keine erledigten Aufgaben",
 	"pages.tasks.student.open.emptyState.title": "Aktuell gibt es keine offenen Aufgaben",
-	"pages.tasks.student.openTasks": "Offene Aufgaben",
 	"pages.tasks.student.submittedTasks": "Erledigte Aufgaben",
 	"pages.tasks.student.subtitleOverDue": "Verpasste Aufgaben",
 	"pages.tasks.subtitleGraded": "Bewertet",
@@ -1881,7 +1892,7 @@ export default {
 	"pages.tasks.subtitleOpen": "Offene Aufgaben",
 	"pages.tasks.subtitleWithDue": "Mit Abgabefrist",
 	"pages.tasks.teacher.drafts.emptyState.title": "Aktuell gibt es  keine Entwürfe",
-	"pages.tasks.teacher.open.emptyState.title": "Aktuell gibt es keine Aufgaben",
+	"pages.tasks.open.emptyState.title": "Es gibt keine aktuellen Aufgaben",
 	"pages.tasks.teacher.subtitleOverDue": "Abgelaufene Aufgaben",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"pages.tool.apiError.tool_param_duplicate":
