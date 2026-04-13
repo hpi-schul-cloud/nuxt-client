@@ -126,7 +126,6 @@ export default {
 	"common.labels.visible": "Видимий",
 	"common.labels.welcome": "Ласкаво просимо",
 	"common.labels.fileName": "Ім'я файлу",
-	"common.labels.tasks.assigned": "Призначені завдання",
 	"common.labels.tasks.more": "Інші завдання...",
 	"common.loading.text": "Дані завантажуються...",
 	"common.medium.alert.deactivated": "Медіа вимкнено.",
@@ -332,10 +331,8 @@ export default {
 		"Ви справді хочете розпочати міграцію облікового запису до moin.schule зараз?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"Ви впевнені, що хочете скинути автоматично знайдені ярлики?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
-		"Асистент міграції автоматично знайшов посилання на акаунти на основі імен користувачів.",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
-		"Ви хочете скинути автоматично знайдені посилання на акаунти зараз?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"Асистент міграції автоматично знайшов посилання на акаунти на основі імен користувачів. Ви хочете скинути автоматично знайдені посилання на акаунти зараз?",
 	"components.administration.externalToolsSection.action.add": "Додати зовнішній інструмент",
 	"components.administration.externalToolsSection.action.delete": "Видалити інструменти",
 	"components.administration.externalToolsSection.action.edit": "інструмент редагування",
@@ -389,11 +386,9 @@ export default {
 	"components.administration.provisioningOptions.schoolExternalTools.label": "Активація зовнішніх інструментів",
 
 	"components.administration.provisioningOptions.page.title": "Параметри синхронізації даних",
-	"components.administration.provisioningOptions.warning.consequence":
+	"components.administration.provisioningOptions.warning":
 		"Усі раніше синхронізовані {groupTypes} буде видалено з вашої школи!",
-	"components.administration.provisioningOptions.warning.question":
-		"Ви впевнені, що бажаєте вимкнути синхронізацію для {groupTypes}?",
-	"components.administration.provisioningOptions.warning.title": "Вимкнути синхронізацію",
+	"components.administration.provisioningOptions.warning.title": "Вимкнути синхронізацію?",
 	"components.administration.schoolYearChangeSection.headers": "Зміна навчального року",
 	"components.administration.schoolYearChangeSection.info.part.one":
 		"За допомогою фази передачі, членство в класі та персональні дані в LDAP можна скорегувати в мирі. Нарешті, всі зміни можна перенести на {instance}",
@@ -910,7 +905,7 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectContent": "Виберіть вміст {toolName}...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Завершити синхронізацію",
-	"feature-course-sync.EndCourseSyncDialog.description":
+	"feature-course-sync.EndCourseSyncDialog":
 		"Чи дійсно слід припинити синхронізацію курсу {courseName} із групою користувачів {groupName}?",
 	"feature-course-sync.EndCourseSyncDialog.success": "Синхронізацію успішно завершено",
 	"feature-course-sync.GroupSelectionDialog.title": "Виберіть групу користувачів",
@@ -980,12 +975,22 @@ export default {
 	"mixins.typeMeta.types.image": "Зображення",
 	"mixins.typeMeta.types.video": "Відео",
 	"mixins.typeMeta.types.webpage": "Веб-сайт",
+	"loggedin.text.backupFeatures":
+		"Зробіть резервну копію вашого контенту в хмарі та використовуйте також нову функцію для експорту курсів. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "Додаткову інформацію та допомогу можна знайти тут.",
+	"loggedin.text.schoolInTransferPhaseContactAdmin":
+		"Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів.",
+	"loggedin.text.schoolInTransferPhaseStartNew":
+		'Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів. Зателефонуйте в <a href="/administration/school/"> новий навчальний рік тут!</a>',
+	"loggedin.text.schoolInMigrationModeStarted":
+		'Школа перебуває в режимі міграції користувачів. Щоб перенести користувачів, перейдіть на <a href="/administration/migration/">цю сторінку</a>.',
+	"loggedin.text.schoolInMigrationMode":
+		'Школа може імпортувати облікові записи користувачів з Schulportal. Для виконання міграції користувачів відвідайте, будь ласка, <a href="/administration/migration/">цю сторінку</a>.',
 	"pages.dashboard.title": "Панель керування",
 	"pages.dashboard.empty.news": "Немає останніх новин. Перегляньте розділ новин, щоб бути в курсі.",
 	"pages.dashboard.new.features": "В {instanceTitle} є нові функції",
 	"pages.dashboard.new.features.available": "Доступні нові функції",
 	"pages.dashboard.new.features.forward": "Дізнайтеся більше про нові функції в розділі новин.",
-	"pages.dashboard.no.tasks": "Усі домашні завдання показуються в розділі домашніх завдань.",
 	"pages.dashboard.no.due.date": "Дата подання не встановлена",
 	"pages.dashboard.welcome": "Вітаємо",
 	"pages.dashboard.schedule": "Розклад",
@@ -1019,9 +1024,9 @@ export default {
 		"Усі зміни та налаштування в області адміністрування підтверджують, що вони внесені авторизованим адміністратором школи з повноваженнями вносити зміни до школи в хмарі. Коригування, внесені адміністратором школи, вважаються вказівками школи оператору хмари {institute_title}.",
 	"pages.administration.classes.index.add": "Додати клас",
 	"pages.administration.classes.index.title": "Керувати заняттями",
-	"pages.administration.classes.thr.hint.title": "Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.title": "Чому я не можу редагувати записи?",
 	"pages.administration.classes.thr.hint.text":
-		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
+		"Твоя школа синхронізована з Тюринзьким шкільним порталом. Дані вчителів, учнів і класів управляються там централізовано та можуть бути змінені лише там. Це також стосується змін паролів.",
 	"pages.administration.common.label.archive": "Архів",
 	"pages.administration.common.label.active": "поточний",
 	"pages.administration.classes.manage": "Керувати класом",
@@ -1861,7 +1866,6 @@ export default {
 	"pages.tasks.labels.planned": "Заплановано",
 	"pages.tasks.student.completed.emptyState.title": "Наразі немає жодного виконаного завдання",
 	"pages.tasks.student.open.emptyState.title": "Наразі немає відкритих завдань",
-	"pages.tasks.student.openTasks": "Відкриті завдання",
 	"pages.tasks.student.submittedTasks": "Виконані завдання",
 	"pages.tasks.student.subtitleOverDue": "Пропущені завдання",
 	"pages.tasks.subtitleGraded": "Оцінено",
@@ -1870,7 +1874,7 @@ export default {
 	"pages.tasks.subtitleOpen": "Відкриті завдання",
 	"pages.tasks.subtitleWithDue": "З терміном виконання",
 	"pages.tasks.teacher.drafts.emptyState.title": "Наразі немає чернеток",
-	"pages.tasks.teacher.open.emptyState.title": "Наразі завдань немає",
+	"pages.tasks.open.emptyState.title": "Наразі завдань немає",
 	"pages.tasks.teacher.subtitleOverDue": "Завдання, термін дії яких минув",
 	"pages.termsofuse.title": "Умови використання та політика конфіденційності",
 	"pages.tool.apiError.tool_param_duplicate":

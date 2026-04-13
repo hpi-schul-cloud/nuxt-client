@@ -1,9 +1,9 @@
 import TasksListItemMenu from "./TasksListItemMenu.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { finishedTasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import TasksModule from "@/store/tasks";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -186,6 +186,8 @@ describe("TasksListItemMenu", () => {
 
 	describe("when deleting a task", () => {
 		it("should call deleteTask of TasksModule", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(true);
+
 			const task = tasksTeacher[1];
 			const wrapper = getWrapper({
 				taskId: task.id,
@@ -199,9 +201,6 @@ describe("TasksListItemMenu", () => {
 
 			const deleteBtn = wrapper.findComponent("[data-testId=task-delete]");
 			await deleteBtn.trigger("click");
-
-			const confirmBtn = wrapper.findComponent(CustomDialog);
-			await confirmBtn.vm.$emit("dialog-confirmed");
 
 			expect(tasksModuleMock.deleteTask).toHaveBeenCalled();
 		});

@@ -44,6 +44,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 
 	const isTeacher = computed(() => userRoles.value.includes(RoleName.TEACHER));
 	const isStudent = computed(() => userRoles.value.includes(RoleName.STUDENT));
+	const isAdmin = computed(() => userRoles.value.includes(RoleName.ADMINISTRATOR));
 	const isExternalPerson = computed(() => userRoles.value.includes(RoleName.EXTERNAL_PERSON));
 
 	// Helpers/Utils
@@ -140,6 +141,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 		hasPermission,
 		isTeacher,
 		isStudent,
+		isAdmin,
 		isExternalPerson,
 		school,
 		userRoles,

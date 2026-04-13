@@ -1,10 +1,11 @@
 <template>
 	<SvsSuspense :loading="isRunning">
+		<h2 class="mb-0 mt-16">{{ t("common.words.tasks") }}</h2>
 		<template v-if="isTeacher">
 			<DashboardTasksOpen
-				:title="t('common.labels.tasks.assigned')"
+				:title="t('components.organisms.TasksDashboardMain.tab.current')"
 				data-testid="teacher-tasks-open"
-				:empty-msg="t('pages.dashboard.no.tasks')"
+				:empty-msg="t('pages.tasks.open.emptyState.title')"
 				:tasks="openForTeacher"
 			/>
 
@@ -31,9 +32,9 @@
 		</template>
 		<template v-else-if="isStudent">
 			<DashboardTasksOpen
-				:title="t('pages.tasks.student.openTasks')"
+				:title="t('components.organisms.TasksDashboardMain.tab.open')"
 				data-testid="student-tasks-open"
-				:empty-msg="t('pages.tasks.student.open.emptyState.title')"
+				:empty-msg="t('pages.tasks.open.emptyState.title')"
 				:tasks="openForStudent"
 			/>
 
@@ -52,7 +53,7 @@
 			/>
 		</template>
 
-		<VBtn class="mt-12" variant="outlined" data-test-id="show-all-tasks" to="/tasks">
+		<VBtn class="mt-8" variant="outlined" data-test-id="show-all-tasks" to="/tasks">
 			{{ t("common.actions.show.all") }}
 		</VBtn>
 	</SvsSuspense>
