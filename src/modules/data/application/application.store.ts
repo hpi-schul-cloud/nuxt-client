@@ -62,7 +62,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 	};
 
 	const logout = (redirectUrl = "/logout") => {
-		sendLogout();
+		// sendLogout();
 		clearUserSession();
 		globalThis.location.replace(redirectUrl);
 	};
@@ -70,7 +70,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 	const clearUserSession = () => {
 		localStorage.clear();
 		delete $axios.defaults.headers.common["Authorization"];
-		close();
+		// close();
 	};
 
 	const externalLogout = () => logout("/logout/external");
