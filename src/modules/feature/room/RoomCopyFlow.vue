@@ -3,6 +3,7 @@
 		v-model="isOpen"
 		title="feature-room.CopyInfoDialog.title"
 		confirm-btn-lang-key="common.actions.duplicate"
+		data-testid="copy-info-dialog"
 		@confirm="onConfirmCopy"
 		@cancel="onCancelCopy"
 	>

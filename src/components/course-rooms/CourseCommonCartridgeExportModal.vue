@@ -2,7 +2,7 @@
 	<SvsDialog v-model="isExportModalOpen" :title="title" data-testid="export-dialog" @after-leave="resetDialog">
 		<template #content>
 			<template v-if="step === 0">
-				<InfoAlert class="mb-4">
+				<InfoAlert data-testid="cartridge-export-folder-info" class="mb-4">
 					{{ t(`components.molecules.export.options.info.point3`) }}
 				</InfoAlert>
 				<VRadioGroup v-model="radios" data-testid="version-radio-group">
@@ -21,7 +21,7 @@
 				</VRadioGroup>
 			</template>
 			<template v-if="step === 1">
-				<InfoAlert class="mb-4">
+				<InfoAlert data-testid="cartridge-export-content-info" class="mb-4">
 					{{ t(`components.molecules.export.options.info`) }}
 
 					<ul class="ml-6">
