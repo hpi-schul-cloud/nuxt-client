@@ -21,7 +21,7 @@
 			:is-video-conference-enabled="isVideoConferenceEnabled"
 			:can-start="canStart"
 			:can-join="canJoin"
-			:is-running="isRunning"
+			:is-running="isConferenceRunning"
 			:is-edit-mode="isEditMode"
 			@click="onContentClick"
 			@refresh="fetchVideoConferenceInfo"
@@ -52,8 +52,8 @@
 			v-model="isErrorDialogOpen"
 			:max-width="480"
 			data-testid="error-dialog"
-			@click:outside="resetError"
-			@keydown.esc="resetError"
+			@click:outside="onDismissError"
+			@keydown.esc="onDismissError"
 		>
 			<VCard :ripple="false">
 				<VCardTitle data-testid="dialog-title" class="dialog-title px-6 pt-4">
@@ -63,7 +63,7 @@
 				</VCardTitle>
 				<VCardActions class="action-buttons px-6">
 					<div class="button-section button-right">
-						<VBtn data-testid="dialog-close" variant="outlined" @click="resetError">
+						<VBtn data-testid="dialog-close" variant="outlined" @click="onDismissError">
 							{{ t("common.labels.close") }}
 						</VBtn>
 					</div>
@@ -81,11 +81,11 @@
 </template>
 
 <script setup lang="ts">
-import { useVideoConference } from "../composables/VideoConference.composable";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { BoardFeature, VideoConferenceElementResponse, VideoConferenceScope } from "@api-server";
+import { useVideoConference } from "@data-access";
 import { useAppStoreRefs } from "@data-app";
 import {
 	useBoardAllowedOperations,
@@ -122,14 +122,15 @@ const videoConferenceElement = ref(null);
 
 const {
 	videoConferenceInfo,
-	error,
-	isRunning,
+	fetchError,
+	startError,
+	joinError,
+	isConferenceRunning,
 	isWaitingRoomActive,
 	fetchVideoConferenceInfo,
 	startVideoConference,
 	joinVideoConference,
-	resetError,
-} = useVideoConference(VideoConferenceScope.VIDEO_CONFERENCE_ELEMENT, element.value.id);
+} = useVideoConference(VideoConferenceScope.VIDEO_CONFERENCE_ELEMENT, element.value.id, false);
 
 const { isFeatureEnabled } = useBoardFeatures();
 const isVideoConferenceEnabled = computed(() => isFeatureEnabled(BoardFeature.VIDEOCONFERENCE));
@@ -140,11 +141,18 @@ const { contextType } = useSharedBoardPageInformation();
 
 const preFetchedUrl = ref<string | undefined>(undefined);
 
+const { isStudent, isTeacher, isExternalPerson } = useAppStoreRefs();
+const canStart = computed(() => allowedOperations.value.manageVideoConference);
+const canJoin = computed(
+	() => isStudent.value || isTeacher.value || (isExternalPerson.value && isWaitingRoomActive.value)
+);
+
 if (isVideoConferenceEnabled.value) {
 	onMounted(async () => {
 		await fetchVideoConferenceInfo();
-		if (isRunning.value && (canStart.value || canJoin.value)) {
-			preFetchedUrl.value = await joinVideoConference();
+		if (isConferenceRunning.value && (canStart.value || canJoin.value)) {
+			const taskResult = await joinVideoConference();
+			preFetchedUrl.value = taskResult?.result?.data.url;
 		}
 	});
 }
@@ -152,8 +160,6 @@ if (isVideoConferenceEnabled.value) {
 const { modelValue, computedElement } = useContentElementState(props, {
 	autoSaveDebounce: 100,
 });
-
-const { isStudent, isTeacher, isExternalPerson } = useAppStoreRefs();
 
 const { t } = useI18n();
 
@@ -163,25 +169,26 @@ const ariaLabel = computed(
 	() => `${t("components.cardElement.videoConferenceElement")}, ${t("common.ariaLabel.newTab")}`
 );
 const isConfigurationDialogOpen = ref(false);
-const isErrorDialogOpen = computed(() => !!error.value);
-const hasParticipationPermission = computed(() => canJoin.value || canStart.value);
 
-const canJoin = computed(
-	() => isStudent.value || isTeacher.value || (isExternalPerson.value && isWaitingRoomActive.value)
+const errorDismissed = ref(false);
+const isErrorDialogOpen = computed(
+	() => (!!fetchError.value || !!startError.value || !!joinError.value) && !errorDismissed.value
 );
+const onDismissError = () => {
+	errorDismissed.value = true;
+};
 
-const canStart = computed(() => allowedOperations.value.manageVideoConference);
+const hasParticipationPermission = computed(() => canJoin.value || canStart.value);
 const isCreating = computed(() => props.isEditMode && !computedElement.value.content.title);
-
 const boardParentType = computed(() => contextType.value);
 
 const onContentClick = async () => {
-	if (isRunning.value && preFetchedUrl.value && hasParticipationPermission.value) {
+	if (isConferenceRunning.value && preFetchedUrl.value && hasParticipationPermission.value) {
 		globalThis.open(preFetchedUrl.value, "_blank");
-	} else if (!isRunning.value && canStart.value) {
+	} else if (!isConferenceRunning.value && canStart.value) {
 		isConfigurationDialogOpen.value = true;
 	}
-
+	errorDismissed.value = false;
 	await fetchVideoConferenceInfo();
 };
 
@@ -199,17 +206,23 @@ const onDelete = async () => {
 	if (await askDeletionForType("components.cardElement.videoConferenceElement"))
 		emit("delete:element", computedElement.value.id);
 };
+
 const onStartVideoConference = async () => {
 	const windowReference = window.open();
+	errorDismissed.value = false;
 
 	await startVideoConference(videoConferenceInfo.value.options);
 
-	joinVideoConference().then((response: string | undefined) => {
-		if (response && windowReference) {
-			windowReference.location = response;
-			preFetchedUrl.value = response;
-		}
-	});
+	if (!startError.value) {
+		joinVideoConference().then((taskResult) => {
+			const url = taskResult?.result?.data.url;
+			if (url && windowReference) {
+				windowReference.location = url;
+				preFetchedUrl.value = url;
+			}
+		});
+	}
+
 	isConfigurationDialogOpen.value = false;
 };
 
@@ -219,7 +232,7 @@ const onContentEnter = async () => {
 	}
 };
 
-const tabIndex = computed(() => (!isCreating.value && (canStart.value || isRunning.value) ? 0 : undefined));
+const tabIndex = computed(() => (!isCreating.value && (canStart.value || isConferenceRunning.value) ? 0 : undefined));
 </script>
 
 <style scoped lang="scss">
