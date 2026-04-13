@@ -105,11 +105,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf(), commonCartridgeExportModule);
 	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
 	app.provide("tasksModule", tasksModule);
-<<<<<<< BC-11513-vc
-	app.provide(COURSE_ROOM_LIST_MODULE_KEY.valueOf(), courseRoomListModule);
-=======
-	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
->>>>>>> main
 	app.provide(THEME_KEY.valueOf(), themeConfig);
 
 	app.mount("#app");
