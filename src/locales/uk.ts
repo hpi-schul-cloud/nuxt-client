@@ -152,6 +152,9 @@ export default {
 		"{type} не вдалося перемістити. | {type} не вдалося перемістити. | {type} не вдалося перемістити.",
 	"common.notifications.errors.notExited":
 		"{type} не вдалося вийти. | {type} не вдалося вийти. | {type} не вдалося вийти.",
+	"common.notification.error.videoConference.notFetched": "Не вдалося отримати відеоконференцію.",
+	"common.notification.error.videoConference.notJoined": "Не вдалося приєднатися до відеоконференції.",
+	"common.notification.error.videoConference.notStarted": "Не вдалося розпочати відеоконференцію.",
 	"common.notification.connection.restored": "Зв'язок відновлено.",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.email.confirmation": "Повторно введіть адресу електронної пошти",

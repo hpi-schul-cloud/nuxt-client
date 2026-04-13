@@ -37,7 +37,7 @@ export const useVideoConference = (scope: VideoConferenceScope, scopeId: string,
 	const fetchVideoConferenceInfo = async () => {
 		const { result, success } = await execFetch(
 			() => videoConferenceApi.videoConferenceControllerInfo(scope, scopeId),
-			t("common.notification.error")
+			t("common.notification.error.videoConference.notFetched")
 		);
 		if (success && result) {
 			videoConferenceInfo.value = {
@@ -51,7 +51,7 @@ export const useVideoConference = (scope: VideoConferenceScope, scopeId: string,
 	const startVideoConference = async (options: VideoConferenceOptionsResponse) => {
 		const { success } = await execStart(
 			() => videoConferenceApi.videoConferenceControllerStart(scope, scopeId, { ...options }),
-			t("common.notification.error")
+			t("common.notification.error.videoConference.notStarted")
 		);
 		if (success) {
 			videoConferenceInfo.value = { state: VideoConferenceStateResponse.RUNNING, options };
@@ -61,7 +61,7 @@ export const useVideoConference = (scope: VideoConferenceScope, scopeId: string,
 	const joinVideoConference = async () =>
 		await execJoin(
 			() => videoConferenceApi.videoConferenceControllerJoin(scope, scopeId),
-			t("common.notification.error")
+			t("common.notification.error.videoConference.notJoined")
 		);
 
 	if (fetchImmediate) {
