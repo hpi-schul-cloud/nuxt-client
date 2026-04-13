@@ -10,8 +10,10 @@ import {
 	VideoConferenceStateResponse,
 } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
+import { defineComponent, nextTick } from "vue";
 
 let videoConferenceApi: Mocked<serverApi.VideoConferenceApiInterface>;
 
@@ -25,6 +27,20 @@ describe("VideoConferenceComposable", () => {
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
+
+	const withComponentSetup = <T>(composableFn: () => T): T => {
+		let result: T;
+		mount(
+			defineComponent({
+				setup() {
+					result = composableFn();
+					return {};
+				},
+				template: "<div/>",
+			})
+		);
+		return result!;
+	};
 
 	describe("fetchVideoConferenceInfo", () => {
 		const setup = () => {
@@ -276,6 +292,43 @@ describe("VideoConferenceComposable", () => {
 			videoConferenceInfo.value.options.moderatorMustApproveJoinRequests = false;
 
 			expect(isWaitingRoomActive.value).toBe(false);
+		});
+	});
+
+	describe("fetchImmediate", () => {
+		it("should call fetchVideoConferenceInfo on mount when fetchImmediate is true (default)", async () => {
+			const scope = VideoConferenceScope.ROOM;
+			const scopeId = "123124";
+
+			const FAKE_RESPONSE = mockApiResponse<VideoConferenceInfoResponse>({
+				status: 200,
+				data: {
+					state: VideoConferenceStateResponse.RUNNING,
+					options: {
+						everyAttendeeJoinsMuted: false,
+						everybodyJoinsAsModerator: false,
+						moderatorMustApproveJoinRequests: false,
+					},
+				},
+			});
+			videoConferenceApi.videoConferenceControllerInfo.mockResolvedValueOnce(FAKE_RESPONSE);
+
+			withComponentSetup(() => useVideoConference(scope, scopeId));
+
+			await nextTick();
+
+			expect(videoConferenceApi.videoConferenceControllerInfo).toHaveBeenCalledWith(scope, scopeId);
+		});
+
+		it("should not call fetchVideoConferenceInfo on mount when fetchImmediate is false", async () => {
+			const scope = VideoConferenceScope.ROOM;
+			const scopeId = "123124";
+
+			withComponentSetup(() => useVideoConference(scope, scopeId, false));
+
+			await nextTick();
+
+			expect(videoConferenceApi.videoConferenceControllerInfo).not.toHaveBeenCalled();
 		});
 	});
 });
