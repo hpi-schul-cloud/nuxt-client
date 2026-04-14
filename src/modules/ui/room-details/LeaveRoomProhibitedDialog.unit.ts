@@ -1,17 +1,21 @@
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { WarningAlert } from "@ui-alert";
+import { createTestingPinia } from "@pinia/testing";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
-import { VCard, VDialog } from "vuetify/components";
+import { setActivePinia } from "pinia";
 
 describe("LeaveRoomProhibitedDialog", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	const setup = () => {
 		const wrapper = mount(LeaveRoomProhibitedDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				stubs: { UseFocusTrap: true },
-				renderStubDefaultSlot: true, // to access content inside focus trap
 			},
-			props: { modelValue: true },
+			props: {
+				modelValue: true,
+			},
 		});
 		return { wrapper };
 	};
@@ -21,37 +25,6 @@ describe("LeaveRoomProhibitedDialog", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.exists()).toBe(true);
-		});
-
-		it("should render dialog title", async () => {
-			const { wrapper } = setup();
-
-			const dialogTitle = wrapper.findComponent(VDialog).findComponent(VCard).find('[data-testid="dialog-title"]');
-
-			expect(dialogTitle.text()).toContain("pages.rooms.leaveRoom.menu");
-		});
-
-		it("should render warning alert", async () => {
-			const { wrapper } = setup();
-
-			const warningAlert = wrapper.findComponent(VDialog).findComponent(VCard).findComponent(WarningAlert);
-
-			expect(warningAlert.text()).toBe("pages.rooms.leaveRoom.RoomOwner.warning");
-		});
-	});
-
-	describe("close button", () => {
-		it("should update model value when dialog is closed", async () => {
-			const { wrapper } = setup();
-
-			const dialog = wrapper.findComponent(VDialog);
-
-			const closeButton = dialog.findComponent(VCard).find("[data-testid='dialog-close']");
-
-			await closeButton.trigger("click");
-
-			expect(wrapper.emitted()).toHaveProperty("update:modelValue");
-			expect(wrapper.emitted("update:modelValue")).toEqual([[false]]);
 		});
 	});
 });

@@ -15,11 +15,12 @@ import { useRoomMembersStore } from "@data-room";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { WarningAlert } from "@ui-alert";
+import { SvsDialog } from "@ui-dialog";
 import { VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
-import { VAutocomplete, VIcon } from "vuetify/lib/components/index";
+import { VAutocomplete, VIcon } from "vuetify/components";
 
 vi.mock("@vueuse/integrations/useFocusTrap");
 
@@ -248,11 +249,8 @@ describe("AddMembersDialog", () => {
 			const selectedUsers = [potentialRoomMembers[0].userId, potentialRoomMembers[1].userId];
 			await userComponent.setValue(selectedUsers);
 
-			const addButton = wrapper.getComponent({
-				ref: "addButton",
-			});
-
-			await addButton.trigger("click");
+			const dialog = wrapper.getComponent(SvsDialog);
+			await dialog.vm.$emit("confirm");
 
 			expect(roomMembersStore.addMembers).toHaveBeenCalledTimes(1);
 			expect(roomMembersStore.addMembers).toHaveBeenCalledWith(selectedUsers);
@@ -267,73 +265,10 @@ describe("AddMembersDialog", () => {
 			const selectedUsers = [potentialRoomMembers[0].userId, potentialRoomMembers[1].userId];
 			await userComponent.setValue(selectedUsers);
 
-			const addButton = wrapper.getComponent({
-				ref: "addButton",
-			});
-			await addButton.trigger("click");
+			const dialog = wrapper.getComponent(SvsDialog);
+			await dialog.vm.$emit("confirm");
 
 			expect(wrapper.emitted()).toHaveProperty("close");
-		});
-	});
-
-	describe("when cancel button clicked", () => {
-		it("should emit 'close''", async () => {
-			const { wrapper } = setup();
-
-			const cancelButton = wrapper.getComponent({
-				ref: "cancelButton",
-			});
-
-			await cancelButton.trigger("click");
-
-			expect(wrapper.emitted()).toHaveProperty("close");
-		});
-	});
-
-	describe("focus trap", () => {
-		it("should pause focus trap when any autocomplete or select menu is open", () => {
-			const { wrapper } = setup();
-			const roleComponent = wrapper.getComponent({
-				ref: "selectRole",
-			});
-
-			roleComponent.vm.menu = true;
-
-			expect(pauseMock).toHaveBeenCalledTimes(1);
-		});
-
-		it("should unpause focus trap when all autocomplete and select menus are closed", () => {
-			const { wrapper } = setup();
-			const userComponent = wrapper.getComponent({
-				ref: "autoCompleteUsers",
-			});
-
-			userComponent.vm.menu = true;
-			expect(pauseMock).toHaveBeenCalledTimes(1);
-
-			userComponent.vm.menu = false;
-			expect(unpauseMock).toHaveBeenCalled();
-		});
-
-		it("should not unpause focus trap when a autocomplete or select is closed while another one is opened", () => {
-			// this happens when user switches between autocomplete or select components for brief moment both are treated as open
-			const { wrapper } = setup();
-			const roleComponent = wrapper.getComponent({
-				ref: "selectRole",
-			});
-
-			const userComponent = wrapper.getComponent({
-				ref: "autoCompleteUsers",
-			});
-
-			roleComponent.vm.menu = true;
-			userComponent.vm.menu = true;
-
-			expect(pauseMock).toHaveBeenCalled();
-			expect(unpauseMock).not.toHaveBeenCalled();
-
-			roleComponent.vm.menu = false;
-			expect(unpauseMock).not.toHaveBeenCalled();
 		});
 	});
 

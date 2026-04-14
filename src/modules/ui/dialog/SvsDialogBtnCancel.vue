@@ -1,5 +1,5 @@
 <template>
-	<VBtn data-testid="dialog-cancel" :disabled variant="text" :text="t(textLangKey)" @click="emit('click')" />
+	<VBtn data-testid="dialog-cancel" :disabled variant="text" :text="t(textLangKey)" @click.stop="emit('click')" />
 </template>
 
 <script setup lang="ts">
