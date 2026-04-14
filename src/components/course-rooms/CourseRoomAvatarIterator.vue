@@ -27,16 +27,7 @@
 
 <script setup lang="ts">
 import CourseRoomAvatar from "./CourseRoomAvatar.vue";
-
-type ItemType = {
-	id: string;
-	title: string;
-	shortTitle: string;
-	displayColor: string;
-	xPosition: number;
-	yPosition: number;
-	to: string;
-};
+import type { ItemType } from "@data-course-rooms";
 
 defineProps({
 	avatars: {
