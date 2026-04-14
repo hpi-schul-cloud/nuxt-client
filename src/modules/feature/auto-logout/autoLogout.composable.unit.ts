@@ -12,7 +12,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { SessionState } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
 import { flushPromises } from "@vue/test-utils";
-import { setActivePinia } from "pinia";
+import { Mocked, setActivePinia } from "pinia";
 
 vi.mock("@/utils/api", () => ({
 	$axios: {
@@ -22,7 +22,14 @@ vi.mock("@/utils/api", () => ({
 }));
 globalThis.fetch = vi.fn();
 
-const broadcastChannelMock = mockBroadcastChannel();
+let messageHandler: ((event: MessageEvent) => void) | null = null;
+let broadcastChannelMock: Mocked<BroadcastChannel>;
+
+const simulateIncomingMessage = (data: string) => {
+	if (messageHandler) {
+		messageHandler({ data } as MessageEvent);
+	}
+};
 
 vi.useFakeTimers();
 vi.spyOn(globalThis, "setInterval");
@@ -44,6 +51,14 @@ describe("useAutoLogout", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		vi.clearAllTimers();
+		messageHandler = null;
+		broadcastChannelMock = mockBroadcastChannel({
+			addEventListener: vi.fn().mockImplementation((type: string, listener: EventListenerOrEventListenerObject) => {
+				if (type === "message" && typeof listener === "function") {
+					messageHandler = listener as (event: MessageEvent) => void;
+				}
+			}),
+		});
 	});
 
 	afterEach(() => {
@@ -425,6 +440,64 @@ describe("useAutoLogout", () => {
 
 				expect(broadcastChannelMock.postMessage).toHaveBeenCalledWith(expect.stringContaining("expired:"));
 			});
+		});
+
+		describe("when receiving state from another tab", () => {
+			it("should set sessionState to 'Closed' when receiving closed state", async () => {
+				const { createSession, sessionState } = setup();
+				createSession();
+				await flushPromises();
+
+				// Simulate receiving closed state from another tab (e.g., due to logout)
+				simulateIncomingMessage("closed:0");
+				await flushPromises();
+
+				expect(sessionState.value).toBe(SessionState.Closed);
+			});
+
+			it("should hide dialog and reset timer when receiving closed state", async () => {
+				const { createSession, showDialog, remainingTimeInSeconds } = setup();
+				createSession();
+				await flushPromises();
+
+				// Simulate receiving closed state from another tab
+				simulateIncomingMessage("closed:0");
+				await flushPromises();
+
+				expect(showDialog.value).toBe(false);
+				expect(remainingTimeInSeconds.value).toBe(0);
+			});
+
+			it("should not change state when receiving the same state via broadcast", async () => {
+				const { createSession, sessionState } = setup();
+				createSession();
+				await flushPromises();
+
+				expect(sessionState.value).toBe(SessionState.Started);
+
+				// Simulate receiving the same state from another tab
+				simulateIncomingMessage("started:100");
+				await flushPromises();
+
+				// State should still be Started (no duplicate processing)
+				expect(sessionState.value).toBe(SessionState.Started);
+			});
+		});
+	});
+
+	describe("logoutUserSilently error handling", () => {
+		it("should log error when fetch fails during silent logout", async () => {
+			const options = { jwtTtl: 2, showWarningTime: 1 };
+			const loggerSpy = vi.spyOn(logger, "error").mockImplementation(vi.fn());
+			const fetchError = new Error("Network error");
+			vi.mocked(globalThis.fetch).mockRejectedValueOnce(fetchError);
+
+			setupAndCreateSession(options);
+
+			// Let the session expire to trigger logoutUserSilently
+			await advanceTimersBySeconds(3);
+
+			expect(loggerSpy).toHaveBeenCalledWith("Unexpected error during silent logout:", fetchError);
 		});
 	});
 });
