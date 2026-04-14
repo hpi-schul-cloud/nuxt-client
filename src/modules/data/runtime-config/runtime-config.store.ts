@@ -22,12 +22,9 @@ export const useRuntimeConfigStore = defineStore("runtimeConfigStore", () => {
 			config.data.map(({ key, value, description, type }) => [
 				key,
 				{
-					value:
-						typeof value === "string" || typeof value === "number" || typeof value === "boolean"
-							? value
-							: String(value),
+					value,
 					description: description ?? "",
-					type: String(type),
+					type,
 				},
 			])
 		);
