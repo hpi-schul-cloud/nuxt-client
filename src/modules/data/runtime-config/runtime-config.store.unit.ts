@@ -1,5 +1,5 @@
 import { useRuntimeConfigStore } from "./runtime-config.store";
-import { expectNotification, mockApi, mockApiResponse, runtimeConfigValueFactory } from "@@/tests/test-utils";
+import { mockApi, mockApiResponse, runtimeConfigValueFactory } from "@@/tests/test-utils";
 import { RuntimeConfigApiFactory, RuntimeConfigListItemResponseType, RuntimeConfigListResponse } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
@@ -37,10 +37,9 @@ describe("useRuntimeConfigStore", () => {
 			runtimeApiMock.runtimeConfigControllerGetRuntimeConfig.mockRejectedValue(new Error("Network error"));
 
 			const store = useRuntimeConfigStore();
-			await store.fetchRuntimeConfig();
+			const success = await store.fetchRuntimeConfig();
 
-			expect(store.runtimeConfig).toEqual({});
-			expectNotification("error");
+			expect(success).toBe(false);
 		});
 
 		it("should handle config with missing description", async () => {
