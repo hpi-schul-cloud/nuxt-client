@@ -31,7 +31,7 @@
 			@select="onCreateBoard"
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
-		<RoomCopyFlow v-if="hasRoomCopyStarted" :room="room" @copy:success="onCopySuccess" @copy:ended="onCopyEnded" />
+		<RoomCopyFlow v-model="hasRoomCopyStarted" :room="room" @copy:success="onCopySuccess" @copy:ended="onCopyEnded" />
 		<ShareModal :type="ShareTokenParentType.ROOM" />
 	</DefaultWireframe>
 </template>

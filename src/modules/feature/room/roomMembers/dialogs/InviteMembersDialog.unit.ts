@@ -8,6 +8,7 @@ import { SchulcloudTheme } from "@api-server";
 import { InvitationStep, RoomInvitationLink, useRoomInvitationLinkStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { DatePicker } from "@ui-date-time-picker";
+import { SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { setActivePinia } from "pinia";
@@ -144,8 +145,8 @@ describe("InviteMembersDialog", () => {
 				const actionButtons = wrapper.findAllComponents(VBtn);
 				expect(actionButtons.length).toBe(2);
 
-				const cancelButton = wrapper.getComponent({ ref: "cancelButton" });
-				const continueButton = wrapper.getComponent({ ref: "continueButton" });
+				const cancelButton = wrapper.getComponent(SvsDialogBtnCancel);
+				const continueButton = wrapper.getComponent(SvsDialogBtnConfirm);
 
 				expect(cancelButton.text()).toBe("common.actions.cancel");
 				expect(continueButton.text()).toBe("common.actions.continue");
@@ -390,11 +391,8 @@ describe("InviteMembersDialog", () => {
 			it("should have the correct action buttons", async () => {
 				const { wrapper } = await setup({ preDefinedStep: InvitationStep.EDIT });
 
-				const actionButtons = wrapper.findAllComponents(VBtn);
-				expect(actionButtons.length).toBe(2);
-
-				const cancelButton = wrapper.getComponent({ ref: "cancelButton" });
-				const continueButton = wrapper.getComponent({ ref: "continueButton" });
+				const cancelButton = wrapper.getComponent(SvsDialogBtnCancel);
+				const continueButton = wrapper.getComponent(SvsDialogBtnConfirm);
 
 				expect(cancelButton.text()).toBe("common.actions.cancel");
 				expect(continueButton.text()).toBe("common.actions.continue");
@@ -422,7 +420,7 @@ describe("InviteMembersDialog", () => {
 					await nextTick();
 					expect(roomInvitationLinkStore.editedLink).not.toBeNull();
 
-					const cancelButton = wrapper.getComponent({ ref: "cancelButton" });
+					const cancelButton = wrapper.getComponent(SvsDialogBtnCancel);
 					await cancelButton.trigger("click");
 
 					expect(roomInvitationLinkStore.editedLink).toBeNull();
@@ -442,7 +440,7 @@ describe("InviteMembersDialog", () => {
 			it("should have the correct action button", async () => {
 				const { wrapper } = await setup({ preDefinedStep: InvitationStep.SHARE });
 
-				const closeButton = wrapper.getComponent({ ref: "closeButton" });
+				const closeButton = wrapper.getComponent(SvsDialogBtnCancel);
 				expect(closeButton.text()).toBe("common.labels.close");
 			});
 
@@ -489,7 +487,7 @@ describe("InviteMembersDialog", () => {
 				const shareModalBefore = wrapper.findComponent(ShareModalResult);
 				expect(shareModalBefore.exists()).toBe(false);
 
-				const nextButton = wrapper.getComponent({ ref: "continueButton" });
+				const nextButton = wrapper.getComponent(SvsDialogBtnConfirm);
 				await nextButton.trigger("click");
 				await flushPromises();
 
@@ -514,7 +512,7 @@ describe("InviteMembersDialog", () => {
 				const shareModalBefore = wrapper.findComponent(ShareModalResult);
 				expect(shareModalBefore.exists()).toBe(false);
 
-				const nextButton = wrapper.getComponent({ ref: "continueButton" });
+				const nextButton = wrapper.getComponent(SvsDialogBtnConfirm);
 				await nextButton.trigger("click");
 				await flushPromises();
 
@@ -542,7 +540,7 @@ describe("InviteMembersDialog", () => {
 				datePicker.vm.$emit("update:date", selectedDateISO);
 				await nextTick();
 
-				const nextButton = wrapper.getComponent({ ref: "continueButton" });
+				const nextButton = wrapper.getComponent(SvsDialogBtnConfirm);
 				await nextButton.trigger("click");
 				await flushPromises();
 
@@ -559,7 +557,7 @@ describe("InviteMembersDialog", () => {
 				const { wrapper, roomInvitationLinkStore } = await setup();
 				await setDescription(wrapper, "  ");
 
-				const nextButton = wrapper.getComponent({ ref: "continueButton" });
+				const nextButton = wrapper.getComponent(SvsDialogBtnConfirm);
 				await nextButton.trigger("click");
 				await flushPromises();
 
@@ -581,7 +579,7 @@ describe("InviteMembersDialog", () => {
 
 				await setDescription(wrapper, "  ");
 
-				const nextButton = wrapper.findComponent({ ref: "continueButton" });
+				const nextButton = wrapper.getComponent(SvsDialogBtnConfirm);
 				await nextButton.trigger("click");
 				await flushPromises();
 
@@ -597,7 +595,7 @@ describe("InviteMembersDialog", () => {
 				const datePicker = wrapper.getComponent('[data-testid="date-picker-until"]');
 				const input = datePicker.get("input").element;
 
-				const nextButton = wrapper.getComponent({ ref: "continueButton" });
+				const nextButton = wrapper.getComponent(SvsDialogBtnConfirm);
 				await nextButton.trigger("click");
 				await flushPromises();
 
@@ -610,7 +608,7 @@ describe("InviteMembersDialog", () => {
 		it("should emit 'close' with false when cancel button is clicked", async () => {
 			const { wrapper } = await setup();
 
-			const cancelButton = wrapper.getComponent({ ref: "cancelButton" });
+			const cancelButton = wrapper.getComponent(SvsDialogBtnCancel);
 			await cancelButton.trigger("click");
 
 			expect(wrapper.emitted()).toHaveProperty("close");
@@ -619,7 +617,7 @@ describe("InviteMembersDialog", () => {
 		it("should emit 'close' with false when close button is clicked", async () => {
 			const { wrapper } = await setup({ preDefinedStep: InvitationStep.SHARE });
 
-			const closeButton = wrapper.getComponent({ ref: "closeButton" });
+			const closeButton = wrapper.getComponent(SvsDialogBtnCancel);
 			await closeButton.trigger("click");
 
 			expect(wrapper.emitted()).toHaveProperty("close");
