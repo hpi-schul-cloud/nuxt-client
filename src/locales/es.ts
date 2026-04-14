@@ -985,6 +985,9 @@ export default {
 	"mixins.typeMeta.types.image": "Imagen",
 	"mixins.typeMeta.types.video": "Vídeo",
 	"mixins.typeMeta.types.webpage": "Página web",
+	"loggedin.text.backupFeatures":
+		"Haga una copia de seguridad de sus contenidos de la nube y utilice también la nueva función para exportar cursos. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "Más información y ayuda disponible aquí",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"La escuela está en fase de transferencia al nuevo año escolar. No se pueden crear clases ni usuarios. ¡Ponte en contacto con el administrador de la escuela!",
 	"loggedin.text.schoolInTransferPhaseStartNew":

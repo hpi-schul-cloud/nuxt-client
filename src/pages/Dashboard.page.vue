@@ -5,6 +5,16 @@
 			<h1 data-testid="dashboard-title">{{ t("pages.dashboard.title") }}</h1>
 		</template>
 		<template #default>
+			<InfoAlert v-if="hasGlobalAnnouncement && (isTeacher || isAdmin)" class="mt-6">
+				<i18n-t keypath="loggedin.text.backupFeatures" scope="global">
+					<template #helpLink>
+						<a href="https://dbildungscloud.de/help/confluence/485132545" target="_blank" rel="noopener noreferrer">
+							{{ t("loggedin.text.backupFeatures.helpLink") }}
+						</a>
+					</template>
+				</i18n-t>
+			</InfoAlert>
+
 			<WarningAlert v-if="inMaintenanceOrMigrationText" class="mt-4">
 				<RenderHTML :html="inMaintenanceOrMigrationText" />
 			</WarningAlert>
@@ -67,12 +77,13 @@ import { schoolsModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { NewsApiFactory, NewsTargetModel, Permission } from "@api-server";
+import { NewsApiFactory, NewsTargetModel, Permission, SchulcloudTheme } from "@api-server";
 import { useAppStore, useAppStoreRefs } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { DashboardReleaseDialog, DashboardTasks } from "@feature-dashboard";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
-import { WarningAlert } from "@ui-alert";
+import { InfoAlert, WarningAlert } from "@ui-alert";
 import { SvsSuspense } from "@ui-containers";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
@@ -108,6 +119,10 @@ const { data: newsResponse, isRunning: isLoadingNews } = useSafeAxiosRunner(() =
 	newsApi.newsControllerFindAll(undefined, undefined, undefined, undefined, NEWS_LIMIT)
 );
 const latestNews = computed(() => newsResponse.value?.data.data ?? []);
+
+const envConfig = useEnvConfig();
+// Workaround, since accessing the same parameters is in progress.
+const hasGlobalAnnouncement = computed(() => envConfig.value.SC_THEME === SchulcloudTheme.DEFAULT);
 </script>
 
 <style scoped>

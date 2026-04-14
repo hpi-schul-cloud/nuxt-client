@@ -981,6 +981,9 @@ export default {
 	"mixins.typeMeta.types.image": "Зображення",
 	"mixins.typeMeta.types.video": "Відео",
 	"mixins.typeMeta.types.webpage": "Веб-сайт",
+	"loggedin.text.backupFeatures":
+		"Зробіть резервну копію вашого контенту в хмарі та використовуйте також нову функцію для експорту курсів. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "Додаткову інформацію та допомогу можна знайти тут.",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів.",
 	"loggedin.text.schoolInTransferPhaseStartNew":
