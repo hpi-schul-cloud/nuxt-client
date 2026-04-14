@@ -316,6 +316,22 @@ describe("VideoConferenceContentElement", () => {
 				});
 			});
 
+			describe("when the user is an external person", () => {
+				it("should have participation permission when waiting room is active", async () => {
+					const { wrapper } = setupWrapper({
+						content: videoConferenceElementContentFactory.build(),
+						isEditMode: false,
+						role: RoleName.EXTERNAL_PERSON,
+						hasManageVideoConferencePermission: false,
+					});
+
+					await flushPromises();
+					const videoConferenceElement = wrapper.getComponent(VideoConferenceContentElementDisplay);
+
+					expect(videoConferenceElement.props("hasParticipationPermission")).toEqual(true);
+				});
+			});
+
 			describe("and element is in edit mode", () => {
 				it("should render video conference element menu", () => {
 					const videoConferenceElementContent = videoConferenceElementContentFactory.build();
@@ -442,28 +458,47 @@ describe("VideoConferenceContentElement", () => {
 				});
 			});
 
+			describe("and element is in edit mode with title", () => {
+				describe.each(["up", "down"])("and arrow key %s is pressed", (key) => {
+					it("should emit 'move-keyboard:edit'", async () => {
+						const videoConferenceElementContent = videoConferenceElementContentFactory.build();
+						const { wrapper } = setupWrapper({
+							content: videoConferenceElementContent,
+							isEditMode: true,
+						});
+
+						const videoConferenceElement = wrapper.findComponent('[data-testid="video-conference-element"]');
+						await videoConferenceElement.trigger(`keydown.${key}`);
+
+						expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
+					});
+				});
+			});
+
 			describe("when display element was clicked", () => {
-				describe("and video conference is not running", () => {
+				describe("and video conference is not running and user can start", () => {
 					it("should open the configuration dialog", async () => {
 						const { wrapper } = setupWrapper({
 							content: videoConferenceElementContentFactory.build(),
 							isEditMode: false,
 							isConferenceRunning: false,
+							hasManageVideoConferencePermission: true,
 						});
 
 						const videoConferenceElementDisplay = wrapper.getComponent(VideoConferenceContentElementDisplay);
-						await videoConferenceElementDisplay.trigger("click");
+						await videoConferenceElementDisplay.vm.$emit("click");
+						await flushPromises();
 
 						const configurationDialog = wrapper.findComponent({
 							name: "VideoConferenceConfigurationDialog",
 						});
 
-						expect(configurationDialog.exists()).toBe(true);
+						expect(configurationDialog.props("isOpen")).toBe(true);
 					});
 				});
 
 				describe("and video conference is running", () => {
-					it("should call joinVideoConference", async () => {
+					it("should call fetchVideoConferenceInfo", async () => {
 						const { useVideoConferenceMock, wrapper } = setupWrapper({
 							content: videoConferenceElementContentFactory.build(),
 							isEditMode: false,
@@ -471,9 +506,10 @@ describe("VideoConferenceContentElement", () => {
 						});
 
 						const videoConferenceElementDisplay = wrapper.findComponent(VideoConferenceContentElementDisplay);
-						await videoConferenceElementDisplay.trigger("click");
+						await videoConferenceElementDisplay.vm.$emit("click");
+						await flushPromises();
 
-						expect(useVideoConferenceMock.joinVideoConference).toHaveBeenCalledTimes(1);
+						expect(useVideoConferenceMock.fetchVideoConferenceInfo).toHaveBeenCalled();
 					});
 				});
 			});
@@ -678,6 +714,23 @@ describe("VideoConferenceContentElement", () => {
 
 				expect(dialog.props("modelValue")).toBe(true);
 			});
+
+			it("should dismiss the error dialog when dismissed", async () => {
+				const { wrapper } = setupWrapper({
+					content: videoConferenceElementContentFactory.build(),
+					isEditMode: false,
+					fetchError: new Error("fetch error"),
+				});
+
+				const dialog = wrapper.findComponent({ ref: "errorDialog" });
+				await flushPromises();
+				expect(dialog.props("modelValue")).toBe(true);
+
+				await dialog.vm.$emit("click:outside");
+				await flushPromises();
+
+				expect(dialog.props("modelValue")).toBe(false);
+			});
 		});
 
 		describe("and no error occurs", () => {
@@ -694,6 +747,107 @@ describe("VideoConferenceContentElement", () => {
 
 				expect(dialog.props("modelValue")).toBe(false);
 			});
+		});
+	});
+
+	describe("when video conference feature is disabled", () => {
+		it("should not call fetchVideoConferenceInfo on mount", async () => {
+			vi.mocked(useBoardFeatures).mockImplementation(() => ({
+				isFeatureEnabled: vi.fn().mockReturnValue(false),
+			}));
+
+			const { useVideoConferenceMock } = setupWrapper({
+				content: videoConferenceElementContentFactory.build(),
+				isEditMode: false,
+			});
+
+			await flushPromises();
+
+			expect(useVideoConferenceMock.fetchVideoConferenceInfo).not.toHaveBeenCalled();
+
+			vi.mocked(useBoardFeatures).mockImplementation(() => ({
+				isFeatureEnabled: vi.fn().mockReturnValue(true),
+			}));
+		});
+	});
+
+	describe("onStartVideoConference", () => {
+		it("should start the video conference and join it", async () => {
+			const { wrapper, useVideoConferenceMock } = setupWrapper({
+				content: videoConferenceElementContentFactory.build(),
+				isEditMode: false,
+				hasManageVideoConferencePermission: true,
+				isConferenceRunning: false,
+			});
+
+			const configDialog = wrapper.findComponent({ name: "VideoConferenceConfigurationDialog" });
+			configDialog.vm.$emit("start-video-conference");
+			await flushPromises();
+
+			expect(useVideoConferenceMock.startVideoConference).toHaveBeenCalled();
+			expect(useVideoConferenceMock.joinVideoConference).toHaveBeenCalled();
+		});
+
+		it("should not join when start fails", async () => {
+			const { wrapper, useVideoConferenceMock } = setupWrapper({
+				content: videoConferenceElementContentFactory.build(),
+				isEditMode: false,
+				hasManageVideoConferencePermission: true,
+				isConferenceRunning: false,
+				startError: new Error("start failed"),
+			});
+
+			const configDialog = wrapper.findComponent({ name: "VideoConferenceConfigurationDialog" });
+			configDialog.vm.$emit("start-video-conference");
+			await flushPromises();
+
+			expect(useVideoConferenceMock.startVideoConference).toHaveBeenCalled();
+			expect(useVideoConferenceMock.joinVideoConference).not.toHaveBeenCalled();
+		});
+
+		it("should close the configuration dialog after starting", async () => {
+			const { wrapper } = setupWrapper({
+				content: videoConferenceElementContentFactory.build(),
+				isEditMode: false,
+				hasManageVideoConferencePermission: true,
+				isConferenceRunning: false,
+			});
+
+			const configDialog = wrapper.findComponent({ name: "VideoConferenceConfigurationDialog" });
+			configDialog.vm.$emit("start-video-conference");
+			await flushPromises();
+
+			expect(configDialog.props("isOpen")).toBe(false);
+		});
+	});
+
+	describe("onContentEnter", () => {
+		it("should delegate to onContentClick when not in edit mode", async () => {
+			const { wrapper, useVideoConferenceMock } = setupWrapper({
+				content: videoConferenceElementContentFactory.build(),
+				isEditMode: false,
+			});
+
+			const videoConferenceElement = wrapper.findComponent('[data-testid="video-conference-element"]');
+			await videoConferenceElement.trigger("keyup.enter");
+			await flushPromises();
+
+			expect(useVideoConferenceMock.fetchVideoConferenceInfo).toHaveBeenCalled();
+		});
+
+		it("should not call onContentClick when in edit mode", async () => {
+			const { wrapper, useVideoConferenceMock } = setupWrapper({
+				content: videoConferenceElementContentFactory.build(),
+				isEditMode: true,
+			});
+
+			useVideoConferenceMock.fetchVideoConferenceInfo.mockClear();
+
+			const videoConferenceElement = wrapper.findComponent('[data-testid="video-conference-element"]');
+			await videoConferenceElement.trigger("keyup.enter");
+			await flushPromises();
+
+			expect(useVideoConferenceMock.fetchVideoConferenceInfo).not.toHaveBeenCalled();
 		});
 	});
 });

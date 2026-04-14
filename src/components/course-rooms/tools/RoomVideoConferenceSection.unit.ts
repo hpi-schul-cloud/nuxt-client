@@ -27,6 +27,7 @@ describe("RoomVideoConferenceSection", () => {
 		fetchError?: Error;
 		startError?: Error;
 		joinError?: Error;
+		joinVideoConferenceResult?: { url: string };
 	}) => {
 		const {
 			roomId,
@@ -40,6 +41,7 @@ describe("RoomVideoConferenceSection", () => {
 			fetchError,
 			startError,
 			joinError,
+			joinVideoConferenceResult,
 		} = options;
 
 		Object.defineProperty(window, "location", {
@@ -62,6 +64,10 @@ describe("RoomVideoConferenceSection", () => {
 			joinError: ref(joinError),
 			isConferenceRunning: computed(() => videoConferenceState === VideoConferenceStateResponse.RUNNING),
 			isWaitingRoomActive: computed(() => moderatorMustApproveJoinRequests),
+			joinVideoConference: vi.fn().mockResolvedValue({
+				success: true,
+				result: joinVideoConferenceResult ? { data: joinVideoConferenceResult } : undefined,
+			}),
 		});
 
 		vi.mocked(useVideoConference).mockReturnValue(useVideoConferenceMock);
@@ -360,6 +366,56 @@ describe("RoomVideoConferenceSection", () => {
 
 				expect(getErrorDialog(wrapper).findComponent({ name: "VCard" }).exists()).toBe(false);
 			});
+		});
+
+		describe("when the error dialog is dismissed", () => {
+			it("should close the error dialog", async () => {
+				const { wrapper } = getWrapper({
+					roomId: "roomId",
+					userPermissions: [Permission.JOIN_MEETING],
+					fetchError: new Error("fetch failed"),
+				});
+
+				const errorDialog = getErrorDialog(wrapper);
+				expect(errorDialog.props("modelValue")).toBe(true);
+
+				await errorDialog.vm.$emit("click:outside");
+				await nextTick();
+
+				expect(errorDialog.props("modelValue")).toBe(false);
+			});
+		});
+	});
+
+	describe("when joining a running video conference", () => {
+		it("should open the video conference URL in the same window", async () => {
+			const videoConferenceUrl = "https://bbb.example.com/join/abc123";
+			window.open = vi.fn();
+
+			const { wrapper } = getWrapper({
+				roomId: "roomId",
+				userPermissions: [Permission.JOIN_MEETING],
+				videoConferenceState: VideoConferenceStateResponse.RUNNING,
+				joinVideoConferenceResult: { url: videoConferenceUrl },
+			});
+
+			await wrapper.findComponent(RoomVideoConferenceCard).trigger("click");
+
+			expect(window.open).toHaveBeenCalledWith(videoConferenceUrl, "_self");
+		});
+
+		it("should not open a window when join returns no URL", async () => {
+			window.open = vi.fn();
+
+			const { wrapper } = getWrapper({
+				roomId: "roomId",
+				userPermissions: [Permission.JOIN_MEETING],
+				videoConferenceState: VideoConferenceStateResponse.RUNNING,
+			});
+
+			await wrapper.findComponent(RoomVideoConferenceCard).trigger("click");
+
+			expect(window.open).not.toHaveBeenCalled();
 		});
 	});
 });

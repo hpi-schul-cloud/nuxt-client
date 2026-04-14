@@ -310,4 +310,26 @@ describe("VideoConferenceComposable", () => {
 			expect(videoConferenceApi.videoConferenceControllerInfo).not.toHaveBeenCalled();
 		});
 	});
+
+	describe("isLoading", () => {
+		it("should be false when no operation is in progress", () => {
+			const scope = VideoConferenceScope.ROOM;
+			const scopeId = "123124";
+
+			const { isLoading } = useVideoConference(scope, scopeId, false);
+
+			expect(isLoading.value).toBe(false);
+		});
+
+		it("should be true while fetching video conference info", () => {
+			const scope = VideoConferenceScope.ROOM;
+			const scopeId = "123124";
+
+			const { isLoading, fetchVideoConferenceInfo } = useVideoConference(scope, scopeId, false);
+
+			fetchVideoConferenceInfo();
+
+			expect(isLoading.value).toBe(true);
+		});
+	});
 });
