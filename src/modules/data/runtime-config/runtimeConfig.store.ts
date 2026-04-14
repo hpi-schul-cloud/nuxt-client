@@ -3,16 +3,22 @@ import { $axios } from "@/utils/api";
 import { RuntimeConfigApiFactory, RuntimeConfigListResponse } from "@api-server";
 import { useAppStore } from "@data-app";
 import { defineStore } from "pinia";
-import { readonly, ref } from "vue";
+import { computed, readonly, ref } from "vue";
 
-export type RuntimeConfig = Record<string, { value: string | boolean | number; description: string; type: string }>;
+export type RuntimeConfigValue = Record<string, string | boolean | number>;
+export type RuntimeConfigData = { value: string | boolean | number; description: string; type: string };
+export type RuntimeConfig = Record<string, RuntimeConfigData>;
 
 export const useRuntimeConfigStore = defineStore("runtimeConfigStore", () => {
 	const runtimeConfigApi = RuntimeConfigApiFactory(undefined, "/v3", $axios);
-	const runtimeConfig = ref<RuntimeConfig>({});
+	const runtimeConfigData = ref<RuntimeConfig>({});
+
+	const runtimeConfig = computed<RuntimeConfigValue>(() =>
+		Object.fromEntries(Object.entries(runtimeConfigData.value).map(([key, entry]) => [key, entry.value]))
+	);
 
 	const setRuntimeConfig = (config: RuntimeConfigListResponse) => {
-		runtimeConfig.value = Object.fromEntries(
+		runtimeConfigData.value = Object.fromEntries(
 			config.data.map(({ key, value, description, type }) => [
 				key,
 				{
@@ -27,9 +33,6 @@ export const useRuntimeConfigStore = defineStore("runtimeConfigStore", () => {
 		);
 	};
 
-	// const parseRuntimeConfig = (entries: RuntimeConfig[]): RuntimeConfig =>
-	// 	Object.fromEntries(entries.map(({ key, value, description, type }) => [key, { value, description, type }]));
-
 	const fetchRuntimeConfig = async () => {
 		try {
 			const runtimeConfigRes = await runtimeConfigApi.runtimeConfigControllerGetRuntimeConfig();
@@ -40,40 +43,7 @@ export const useRuntimeConfigStore = defineStore("runtimeConfigStore", () => {
 		}
 	};
 
-	// type RuntimeConfigAsObject = Record<string, string | boolean>;
-
-	// const parseRuntimeConfig = (entries: RuntimeConfigAsObject[]): RuntimeConfigAsObject =>
-	// 	Object.fromEntries(entries.map(({ key, value }) => [key, value]));
-
-	// const dashboardAnnouncement = computed((): string | undefined => {
-	// 	const runtimeConfigEntries = useRuntimeConfigStore().runtimeConfig as RuntimeConfigAsObject[] | undefined;
-
-	// 	if (!runtimeConfigEntries) {
-	// 		return undefined;
-	// 	}
-
-	// 	const config = parseRuntimeConfig(runtimeConfigEntries);
-
-	// 	if (!config.DASHBOARD_ANNOUNCEMENT_ENABLED) {
-	// 		return undefined;
-	// 	}
-
-	// 	const userRoles = useAppStore().userRoles;
-	// 	const rolesForAnnouncement = String(config.DASHBOARD_ANNOUNCEMENT_FOR_ROLES).split(",");
-	// 	const hasMatchingRole = userRoles.some((role) => rolesForAnnouncement.includes(role));
-
-	// 	if (!hasMatchingRole) {
-	// 		return undefined;
-	// 	}
-
-	// 	const { locale } = useI18nGlobal();
-	// 	const langKey = `DASHBOARD_ANNOUNCEMENT_TEXT_${locale.value.toUpperCase()}`;
-
-	// 	return config[langKey] as string | undefined;
-	// });
-
 	return {
-		// dashboardAnnouncement: dashboardAnnouncement,
 		fetchRuntimeConfig,
 		runtimeConfig: readonly(runtimeConfig),
 	};

@@ -12,29 +12,23 @@ import { RenderHTML } from "@feature-render-html";
 import { InfoAlert } from "@ui-alert";
 import { computed } from "vue";
 
-// const { dashboardAnnouncement } = storeToRefs(useRuntimeConfigStore());
-
-// const parseRuntimeConfig = (entries: RuntimeConfig[]): RuntimeConfig =>
-// 	Object.fromEntries(entries.map(({ key, value, description, type }) => [key, { value, description, type }]));
+const { locale } = useI18nGlobal();
 
 const dashboardAnnouncement = computed((): string | undefined => {
 	const { runtimeConfig } = useRuntimeConfigStore();
-
-	if (!runtimeConfig.value.DASHBOARD_ANNOUNCEMENT_ENABLED) {
+	if (!runtimeConfig.DASHBOARD_ANNOUNCEMENT_ENABLED) {
 		return undefined;
 	}
 
 	const userRoles = useAppStore().userRoles;
-	const rolesForAnnouncement = String(runtimeConfig.value.DASHBOARD_ANNOUNCEMENT_FOR_ROLES).split(",");
+	const rolesForAnnouncement = String(runtimeConfig.DASHBOARD_ANNOUNCEMENT_FOR_ROLES).split(",");
 	const hasMatchingRole = userRoles.some((role) => rolesForAnnouncement.includes(role));
 
 	if (!hasMatchingRole) {
 		return undefined;
 	}
 
-	const { locale } = useI18nGlobal();
 	const langKey = `DASHBOARD_ANNOUNCEMENT_TEXT_${locale.value.toUpperCase()}`;
-
-	return runtimeConfig.value[langKey]?.value as string | undefined;
+	return runtimeConfig[langKey] as string | undefined;
 });
 </script>
