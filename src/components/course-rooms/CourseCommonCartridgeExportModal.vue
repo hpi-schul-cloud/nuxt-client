@@ -23,7 +23,7 @@
 							<VIcon color="info">{{ mdiInformation }}</VIcon>
 						</div>
 						<p>
-							{{ t(`components.molecules.export.options.info.point3`) }}
+							{{ t("components.molecules.export.options.info.point3") }}
 						</p>
 					</div>
 					<div data-testid="version-radio-group">
@@ -48,18 +48,32 @@
 						<div class="mx-2">
 							<VIcon color="info">{{ mdiInformation }}</VIcon>
 						</div>
-						<p>
-							{{ t(`components.molecules.export.options.info`) }}
-							<br />
-							&middot;
-							{{ t(`components.molecules.export.options.info.point2`) }}
-							<span v-if="version === '1.1.0'" data-testid="export-options-info-point3">
-								<br />
-								&middot;
-								{{ t(`components.molecules.export.options.info.point3`) }}
-							</span>
-							<br />
-						</p>
+						<div>
+							{{ t("components.molecules.export.options.info") }}
+							<ul class="ml-6">
+								<li>
+									{{ t("components.molecules.export.options.info.point2") }}
+								</li>
+								<span v-if="version === '1.1.0'" data-testid="export-options-info-point3">
+									<li>
+										{{ t("components.molecules.export.options.info.point3") }}
+									</li>
+								</span>
+								<li>
+									{{ t("components.molecules.export.options.info.point4") }}
+									<ul class="ml-6">
+										<li>{{ t("components.molecules.export.options.info.point4.sub1") }}</li>
+										<li>{{ t("components.molecules.export.options.info.point4.sub2") }}</li>
+										<li>{{ t("components.molecules.export.options.info.point4.sub3") }}</li>
+										<span v-if="radios && radios == '1.1.0'" data-testid="export-options-info-point4-sub4">
+											<li>{{ t("components.molecules.export.options.info.point4.sub4") }}</li>
+										</span>
+										<li>{{ t("components.molecules.export.options.info.point4.sub5") }}</li>
+										<li>{{ t("components.molecules.export.options.info.point4.sub6") }}</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
 					</div>
 					<VContainer class="pt-0">
 						<VCheckbox
