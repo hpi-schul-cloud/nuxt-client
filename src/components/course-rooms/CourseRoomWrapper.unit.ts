@@ -1,19 +1,15 @@
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
 import CourseRoomWrapper from "./CourseRoomWrapper.vue";
-import { courseRoomListModule } from "@/store";
-import CourseRoomListModule from "@/store/course-room-list";
-import { COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
 import {
 	createTestAppStoreWithPermissions,
 	createTestEnvStore,
 	expectNotification,
 	mockComposable,
 } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { CourseMetadataResponse, Permission } from "@api-server";
+import { Permission } from "@api-server";
 import { useCommonCartridgeImport } from "@data-common-cartridge";
+import { useCourseRoomListStore } from "@data-course-rooms";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
@@ -24,49 +20,12 @@ import { ref } from "vue";
 import { VBtn, VFab } from "vuetify/components";
 
 vi.mock("@data-common-cartridge");
-const useCommonCartridgeImportMock = vi.mocked(useCommonCartridgeImport);
 
-const mockData: CourseMetadataResponse[] = [
-	{
-		id: "123",
-		title: "Mathe",
-		shortTitle: "Ma",
-		displayColor: "#54616e",
-		startDate: "2019-12-07T23:00:00.000Z",
-		untilDate: "2020-12-16T23:00:00.000Z",
-		isLocked: false,
-	},
-	{
-		id: "234",
-		title: "History",
-		shortTitle: "Hi",
-		displayColor: "#EF6C00",
-		startDate: "2015-07-31T22:00:00.000Z",
-		untilDate: "2018-07-30T22:00:00.000Z",
-		isLocked: false,
-	},
-	{
-		id: "345",
-		title: "Spanish",
-		shortTitle: "Sp",
-		displayColor: "#009688",
-		startDate: "2021-07-31T22:00:00.000Z",
-		untilDate: "2021-11-05T23:00:00.000Z",
-		isLocked: false,
-	},
-	{
-		id: "456",
-		title: "English",
-		shortTitle: "En",
-		displayColor: "#EC407A",
-		startDate: "2021-07-31T22:00:00.000Z",
-		untilDate: "2022-07-30T22:00:00.000Z",
-		isLocked: false,
-	},
-];
+const useCommonCartridgeImportMock = vi.mocked(useCommonCartridgeImport);
 
 describe("CourseRoomWrapper.vue", () => {
 	let useCommonCartridgeImportMockReturn: Mocked<ReturnType<typeof useCommonCartridgeImport>>;
+	let courseRoomListStore: ReturnType<typeof useCourseRoomListStore>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
@@ -76,10 +35,9 @@ describe("CourseRoomWrapper.vue", () => {
 		});
 		createTestAppStoreWithPermissions([Permission.COURSE_CREATE]);
 
-		setupStores({
-			courseRoomListModule: CourseRoomListModule,
-		});
-		courseRoomListModule.setAllElements(mockData);
+		courseRoomListStore = useCourseRoomListStore();
+		courseRoomListStore.fetchCourses = vi.fn().mockResolvedValue(undefined);
+		courseRoomListStore.fetchAllElements = vi.fn().mockResolvedValue(undefined);
 
 		useCommonCartridgeImportMockReturn = mockComposable(useCommonCartridgeImport, {
 			isOpen: ref(false),
@@ -115,19 +73,18 @@ describe("CourseRoomWrapper.vue", () => {
 			useCommonCartridgeImportMockReturn.isOpen = ref(true);
 		}
 		useCommonCartridgeImportMockReturn.isSuccess = ref(isSuccess);
-		useCommonCartridgeImportMockReturn.importCommonCartridgeFile.mockResolvedValue();
+		useCommonCartridgeImportMockReturn.importCommonCartridgeFile.mockImplementation(async () => {
+			useCommonCartridgeImportMockReturn.isSuccess = ref(isSuccess);
+		});
 
-		const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
-			getAllElements: mockData,
-			getLoading: isLoading,
+		Object.defineProperty(courseRoomListStore, "loading", {
+			get: () => ref(isLoading),
+			configurable: true,
 		});
 
 		return mount(CourseRoomWrapper, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: roomsModuleMock,
-				},
 				stubs: {
 					CourseCommonCartridgeImportModal: stubImportModal,
 					StartNewCourseSyncDialog: stubSyncDialog,

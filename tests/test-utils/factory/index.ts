@@ -26,6 +26,8 @@ export * from "./contextExternalToolTemplateListItemFactory";
 export * from "./courseFactory";
 export * from "./courseInfoDataResponseFactory";
 export * from "./courseMetadataResponseFactory";
+export * from "./courseRoomDataFactory";
+export * from "./courseRoomItemFactory";
 export * from "./customParameterResponseFactory";
 export * from "./deletedElementResponseFactory";
 export * from "./drawingElementResponseFactory";
