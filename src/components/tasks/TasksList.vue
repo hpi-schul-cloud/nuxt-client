@@ -65,38 +65,25 @@ export default {
 			type: Boolean,
 			required: false,
 		},
+		showSkeleton: {
+			type: Boolean,
+		},
 	},
 	emits: ["copy-task", "share-task"],
 	computed: {
-		currentTaskStatus() {
-			return this.tasksModule.getStatus;
-		},
-		finishedTasksStatus() {
-			return this.finishedTasksModule.getStatus;
-		},
 		finishedTasksIsInitialized() {
 			return this.finishedTasksModule.getIsInitialized;
 		},
-		status: function () {
-			return this.type === "current" ? this.currentTaskStatus : this.finishedTasksStatus;
-		},
-		showSkeleton: function () {
-			if (!this.hasPagination) {
-				return this.status === "pending";
-			} else {
-				return !this.finishedTasksIsInitialized && this.status === "pending";
-			}
-		},
 		showSpinner: function () {
-			return this.hasPagination && this.finishedTasksIsInitialized && this.status === "pending";
+			return this.hasPagination && this.finishedTasksIsInitialized;
 		},
 		isListFilled: function () {
-			return this.status === "completed" && this.tasks.length > 0;
+			return this.tasks.length > 0;
 		},
 	},
 	methods: {
 		loadMore(entries) {
-			if (entries[0].isIntersecting && this.status !== "pending") {
+			if (entries[0].isIntersecting) {
 				this.finishedTasksModule.fetchFinishedTasks();
 			}
 		},

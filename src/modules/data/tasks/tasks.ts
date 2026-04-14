@@ -99,8 +99,8 @@ export const useTasks = (
 		published.value.filter((t) => t.status.submitted > 0 && t.status.graded === t.status.submitted)
 	);
 
-	// Not yet overdue
-	const openForTeacher = computed(() => published.value.filter((t) => !isTaskOverdue(t)));
+	// Not yet finished
+	const openForTeacher = computed(() => published.value);
 
 	// Has submissions but not all graded
 	const ungradedForTeacher = computed(() =>
@@ -253,7 +253,7 @@ export const useTasks = (
 		revertPublishedTask,
 
 		// Status
-		isRunning,
+		isLoading: isRunning,
 		status,
 		error,
 	};

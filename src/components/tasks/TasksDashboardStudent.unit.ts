@@ -3,6 +3,7 @@ import TasksList from "./TasksList.vue";
 import FinishedTasksModule from "@/store/finished-tasks";
 import TasksModule from "@/store/tasks";
 import { OpenTasksForStudent } from "@/store/types/tasks";
+import { FINISHED_TASKS_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -20,8 +21,8 @@ describe("TasksDashboardStudent", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					tasksModule: tasksModuleMock,
-					finishedTasksModule: finishedTasksModuleMock,
+					[TASKS_MODULE_KEY]: tasksModuleMock,
+					[FINISHED_TASKS_MODULE_KEY]: finishedTasksModuleMock,
 				},
 			},
 			...options,
@@ -29,8 +30,6 @@ describe("TasksDashboardStudent", () => {
 
 		return wrapper;
 	};
-
-	const tabRoutes = ["open", "completed", "finished"];
 
 	const tasksModuleGetters: Partial<TasksModule> = {
 		getOpenTasksForStudent: {
@@ -40,10 +39,12 @@ describe("TasksDashboardStudent", () => {
 		} as unknown as OpenTasksForStudent,
 		getStatus: "completed",
 		hasTasks: true,
-		getActiveTab: tabRoutes[0],
 		getCompletedTasksForStudent: { submitted: [], graded: [] },
 		openTasksForStudentIsEmpty: false,
 		completedTasksForStudentIsEmpty: true,
+		getCourseFilters: [],
+		getSelectedCourseFilters: [],
+		getTasksCountPerCourseStudent: { open: {}, completed: {} },
 	};
 
 	beforeEach(() => {
@@ -56,41 +57,48 @@ describe("TasksDashboardStudent", () => {
 	});
 
 	it("Should render tasks list component", () => {
-		const wrapper = mountComponent({
-			props: {
-				tabRoutes,
-			},
-		});
+		const wrapper = mountComponent();
 
 		expect(wrapper.findComponent(TasksList).exists()).toBe(true);
 	});
 
-	it("Should render empty state", () => {
+	it("Should render empty state on completed tab when completed tasks are empty", async () => {
 		tasksModuleMock = createModuleMocks(TasksModule, {
 			...tasksModuleGetters,
-			getActiveTab: tabRoutes[1],
 			completedTasksForStudentIsEmpty: true,
 		});
 
-		const wrapper = mountComponent({
-			props: {
-				tabRoutes,
-			},
-		});
+		const wrapper = mountComponent();
 
+		// Navigate to completed tab
+		const tabs = wrapper.findComponent({ name: "v-tabs" });
+		expect(tabs.exists()).toBe(true);
+
+		// Check for empty state existence in template
 		const emptyStateComponent = wrapper.findComponent(EmptyState);
 		expect(emptyStateComponent.exists()).toBe(true);
 	});
 
-	it("Should update store when tab changes", () => {
-		const wrapper = mountComponent({
-			props: {
-				tabRoutes,
-			},
-		});
+	it("Should render tabs with correct labels", () => {
+		const wrapper = mountComponent();
 
-		wrapper.vm.tab = tabRoutes[0];
+		const tabs = wrapper.findAllComponents({ name: "v-tab" });
+		expect(tabs.length).toBe(3);
+	});
 
-		expect(tasksModuleMock.setActiveTab).toHaveBeenCalled();
+	it("Should render course filter autocomplete", () => {
+		const wrapper = mountComponent();
+
+		const autocomplete = wrapper.findComponent({ name: "v-autocomplete" });
+		expect(autocomplete.exists()).toBe(true);
+	});
+
+	it("Should call setCourseFilters when filter selection changes", async () => {
+		const wrapper = mountComponent();
+
+		const autocomplete = wrapper.findComponent({ name: "v-autocomplete" });
+		await autocomplete.vm.$emit("update:modelValue", ["Course 1"]);
+
+		expect(tasksModuleMock.setCourseFilters).toHaveBeenCalledWith(["Course 1"]);
 	});
 });

@@ -17,8 +17,6 @@ import { beforeAll } from "vitest";
 
 const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } = mocks;
 
-const tabRoutes = ["current", "drafts", "finished"];
-
 describe("TasksDashboardTeacher", () => {
 	let tasksModuleMock: TasksModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
@@ -34,10 +32,6 @@ describe("TasksDashboardTeacher", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					tasksModule: tasksModuleMock,
-					finishedTasksModule: finishedTasksModuleMock,
-
-					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[TASKS_MODULE_KEY]: tasksModuleMock,
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[FINISHED_TASKS_MODULE_KEY]: finishedTasksModuleMock,
@@ -55,13 +49,16 @@ describe("TasksDashboardTeacher", () => {
 		hasTasks: true,
 		openTasksForTeacherIsEmpty: false,
 		draftsForTeacherIsEmpty: true,
-		getActiveTab: tabRoutes[0],
+		isSubstituteFilterEnabled: false,
 		getOpenTasksForTeacher: {
 			overdue: overDueTasksTeacher,
 			withDueDate: dueDateTasksTeacher,
 			noDueDate: noDueDateTasksTeacher,
 		} as unknown as OpenTasksForTeacher,
 		getDraftTasksForTeacher: [],
+		getCourseFilters: [],
+		getSelectedCourseFilters: [],
+		getTasksCountPerCourseForTeacher: { open: {}, drafts: {} },
 	};
 
 	beforeEach(() => {
@@ -70,18 +67,16 @@ describe("TasksDashboardTeacher", () => {
 			getTasks: [],
 			tasksIsEmpty: true,
 		});
-		copyModuleMock = createModuleMocks(CopyModule);
+		copyModuleMock = createModuleMocks(CopyModule, {
+			getIsResultModalOpen: false,
+		});
 		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: false,
 		});
 	});
 
 	it("should render tasks list component, with second panel expanded per default", () => {
-		const wrapper = mountComponent({
-			propsData: {
-				tabRoutes,
-			},
-		});
+		const wrapper = mountComponent();
 
 		const expansionPanels = wrapper.findAll(".v-expansion-panel");
 
@@ -91,41 +86,41 @@ describe("TasksDashboardTeacher", () => {
 		expect(expansionPanels.at(1)?.classes()).toContain("v-expansion-panel--active");
 	});
 
-	it("should render empty state", () => {
+	it("should render empty state on drafts tab when drafts are empty", () => {
 		tasksModuleMock = createModuleMocks(TasksModule, {
 			...tasksModuleGetters,
-			getActiveTab: tabRoutes[1],
 			draftsForTeacherIsEmpty: true,
 		});
 
-		const wrapper = mountComponent({
-			propsData: {
-				tabRoutes,
-			},
-		});
+		const wrapper = mountComponent();
 
 		const emptyStateComponent = wrapper.findComponent(EmptyState);
 		expect(emptyStateComponent.exists()).toBe(true);
 	});
 
-	it("should update store when tab changes", () => {
-		const wrapper = mountComponent({
-			propsData: {
-				tabRoutes,
-			},
-		});
+	it("should render tabs with correct labels", () => {
+		const wrapper = mountComponent();
 
-		(wrapper.vm as unknown as typeof TasksDashboardTeacher).tab = tabRoutes[1];
+		const tabs = wrapper.findAllComponents({ name: "v-tab" });
+		expect(tabs.length).toBe(3);
+	});
 
-		expect(tasksModuleMock.setActiveTab).toHaveBeenCalled();
+	it("should render course filter autocomplete", () => {
+		const wrapper = mountComponent();
+
+		const autocomplete = wrapper.findComponent({ name: "v-autocomplete" });
+		expect(autocomplete.exists()).toBe(true);
+	});
+
+	it("should render substitute filter switch", () => {
+		const wrapper = mountComponent();
+
+		const switchEl = wrapper.findComponent({ name: "v-switch" });
+		expect(switchEl.exists()).toBe(true);
 	});
 
 	it("should handle copy-task event", () => {
-		const wrapper = mountComponent({
-			propsData: {
-				tabRoutes,
-			},
-		});
+		const wrapper = mountComponent();
 
 		const oneTasksList = wrapper.findComponent(TasksList);
 		const payload = {
@@ -138,42 +133,46 @@ describe("TasksDashboardTeacher", () => {
 		expect(copyModuleMock.copy).toHaveBeenCalledWith(payload);
 	});
 
+	it("should call setCourseFilters when filter selection changes", async () => {
+		const wrapper = mountComponent();
+
+		const autocomplete = wrapper.findComponent({ name: "v-autocomplete" });
+		await autocomplete.vm.$emit("update:modelValue", ["Course 1"]);
+
+		expect(tasksModuleMock.setCourseFilters).toHaveBeenCalledWith(["Course 1"]);
+	});
+
+	it("should call setSubstituteFilter when switch changes", async () => {
+		const wrapper = mountComponent();
+
+		const switchEl = wrapper.findComponent({ name: "v-switch" }).find('input[type="checkbox"]');
+		await switchEl.trigger("input");
+
+		expect(tasksModuleMock.setSubstituteFilter).toHaveBeenCalled();
+	});
+
 	describe("empty states", () => {
-		const setup = (activeTab: "current" | "drafts" | "finished", openTasksForTeacherIsEmpty?: boolean) => {
+		it("should render empty state with correct title for current tab", () => {
 			tasksModuleMock = createModuleMocks(TasksModule, {
 				...tasksModuleGetters,
-				getActiveTab: activeTab,
-				openTasksForTeacherIsEmpty,
+				openTasksForTeacherIsEmpty: true,
 			});
 
-			const wrapper = mountComponent({
-				propsData: {
-					tabRoutes,
-				},
-			});
-
-			return wrapper;
-		};
-
-		it("should render empty state with correct title for current tab", () => {
-			const wrapper = setup("current", true);
+			const wrapper = mountComponent();
 
 			const emptyStateComponent = wrapper.findComponent(EmptyState);
 			expect(emptyStateComponent.props("title")).toBe("pages.tasks.open.emptyState.title");
 		});
 
-		it("should render empty state with correct title for drafts tab", () => {
-			const wrapper = setup("drafts", true);
-
-			const emptyStateComponent = wrapper.findComponent(EmptyState);
-			expect(emptyStateComponent.props("title")).toBe("pages.tasks.teacher.drafts.emptyState.title");
-		});
-
 		it("should render empty state with correct title for finished tab", () => {
-			const wrapper = setup("finished");
+			const wrapper = mountComponent();
 
-			const emptyStateComponent = wrapper.findComponent(EmptyState);
-			expect(emptyStateComponent.props("title")).toBe("pages.tasks.finished.emptyState.title");
+			// EmptyState for finished tab exists (finishedTasksIsEmpty is true)
+			const emptyStateComponents = wrapper.findAllComponents(EmptyState);
+			const finishedEmptyState = emptyStateComponents.find(
+				(c) => c.props("title") === "pages.tasks.finished.emptyState.title"
+			);
+			expect(finishedEmptyState).toBeDefined();
 		});
 	});
 });

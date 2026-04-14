@@ -1,12 +1,12 @@
 <template>
-	<SvsSuspense :loading="isRunning">
+	<SvsSuspense :loading="isLoading">
 		<h2 class="mb-0 mt-16">{{ t("common.words.tasks") }}</h2>
 		<template v-if="isTeacher">
 			<DashboardTasksOpen
 				:title="t('components.organisms.TasksDashboardMain.tab.current')"
 				data-testid="teacher-tasks-open"
 				:empty-msg="t('pages.tasks.open.emptyState.title')"
-				:tasks="openForTeacher"
+				:tasks="openForTeacherNotOverdue"
 			/>
 
 			<DashboardTasksSection
@@ -79,7 +79,7 @@ const {
 	openForStudent,
 	submittedForStudent,
 	gradedForStudent,
-	isRunning,
+	isLoading,
 } = useTasks({
 	range: {
 		from: { amount: 1, unit: "month" },
@@ -87,6 +87,7 @@ const {
 	},
 });
 
+const openForTeacherNotOverdue = computed(() => openForTeacher.value.filter((task) => !isTaskOverdue(task)));
 const gradedForTeacherOverdue = computed(() => toSortedByDueDate(gradedForTeacher.value.filter(isTaskOverdue)));
 const ungradedForTeacherOverdue = computed(() => toSortedByDueDate(ungradedForTeacher.value.filter(isTaskOverdue)));
 </script>
