@@ -21,8 +21,8 @@ const dashboardAnnouncement = computed((): string | undefined => {
 	}
 
 	const userRoles = useAppStore().userRoles;
-	const rolesForAnnouncement = String(runtimeConfig.DASHBOARD_ANNOUNCEMENT_FOR_ROLES).split(",");
-	const hasMatchingRole = userRoles.some((role) => rolesForAnnouncement.includes(role));
+	const rolesForAnnouncement = new Set(String(runtimeConfig.DASHBOARD_ANNOUNCEMENT_FOR_ROLES).split(","));
+	const hasMatchingRole = userRoles.some((role) => rolesForAnnouncement.has(role));
 
 	if (!hasMatchingRole) {
 		return undefined;
