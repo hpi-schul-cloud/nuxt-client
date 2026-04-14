@@ -1,7 +1,7 @@
 <template>
 	<div class="centered-container">
 		<div
-			v-if="tools.length === 0 && !isVideoConferenceAvailable && !loading"
+			v-if="tools.length === 0 && !isVideoConferenceAvailable && !loadingTemplate"
 			class="mt-16 text-center"
 			data-testid="tools-empty-state"
 		>
@@ -19,7 +19,7 @@
 			:text="error.message"
 		/>
 
-		<v-progress-linear :active="loading" data-testId="progress-bar" indeterminate />
+		<v-progress-linear :active="loadingTemplate" data-testId="progress-bar" indeterminate />
 
 		<room-video-conference-section v-if="isVideoConferenceAvailable" class="mb-4" :room-id="roomId" />
 
@@ -36,14 +36,14 @@
 <script setup lang="ts">
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
-import CourseRoomDetailsModule from "@/store/course-room-details";
 import { Course, CourseFeatures } from "@/store/types/room";
-import { COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { ToolContextType } from "@api-server";
+import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { useEnvConfig } from "@data-env";
 import { ExternalToolDisplayData, useExternalToolDisplayListState } from "@data-external-tool";
 import { mdiAlertCircle } from "@icons/material";
 import { EmptyState, ToolsEmptyStateSvg } from "@ui-empty-state";
+import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, onUnmounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -55,7 +55,9 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const courseRoomDetailsModule: CourseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
+
+const { fetchCourse } = useCourseRoomDetailsStore();
+const { loading } = storeToRefs(useCourseRoomDetailsStore());
 
 const {
 	fetchDisplayData,
@@ -74,7 +76,7 @@ const isVideoConferenceAvailable: ComputedRef<boolean> = computed(
 onMounted(async () => {
 	await fetchDisplayData(props.roomId, ToolContextType.COURSE);
 
-	course.value = await courseRoomDetailsModule.fetchCourse(props.roomId);
+	course.value = await fetchCourse(props.roomId);
 });
 
 const refreshTimeInMs = useEnvConfig().value.CTL_TOOLS_RELOAD_TIME_MS;
@@ -87,7 +89,7 @@ onUnmounted(() => {
 	clearInterval(timer);
 });
 
-const loading: ComputedRef<boolean> = computed(() => isDisplayDataLoading.value || courseRoomDetailsModule.getLoading);
+const loadingTemplate: ComputedRef<boolean> = computed(() => isDisplayDataLoading.value || loading.value);
 
 const onDeleteTool = async (displayData: ExternalToolDisplayData) => {
 	await deleteContextExternalTool(displayData.contextExternalToolId);

@@ -181,8 +181,9 @@ import {
 	BoardLesson,
 	BoardTask,
 } from "@/types/course-room/CourseRoom";
-import { COMMON_CARTRIDGE_EXPORT_MODULE_KEY, COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { COMMON_CARTRIDGE_EXPORT_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifyError, notifySuccess } from "@data-app";
+import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { mdiInformation } from "@icons/material";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -195,7 +196,7 @@ type Selection = {
 
 const { t } = useI18n();
 const commonCartridgeExportModule = injectStrict(COMMON_CARTRIDGE_EXPORT_MODULE_KEY);
-const courseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
+const { roomData, businessError } = useCourseRoomDetailsStore();
 
 const emit = defineEmits(["update:isExportModalOpen", "dialog-closed", "dialog-confirmed", "next", "back"]);
 
@@ -219,7 +220,7 @@ const allColumnBoards = ref<Array<Selection>>([]);
 const allColumnBoardsSelected = computed(() => allColumnBoards.value.every((columnBoard) => columnBoard.isSelected));
 
 watch(
-	() => courseRoomDetailsModule.getRoomData.elements,
+	() => roomData.elements,
 	(newValue) => {
 		allTopics.value = [];
 		allTasks.value = [];
@@ -314,7 +315,7 @@ async function onExport(): Promise<void> {
 	closeDialog();
 	await commonCartridgeExportModule.startExport();
 
-	if (courseRoomDetailsModule.getBusinessError?.statusCode !== "") {
+	if (businessError?.statusCode !== "") {
 		notifyError(t("pages.rooms.ccExportCourse.error"));
 	}
 

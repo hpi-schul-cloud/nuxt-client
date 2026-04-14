@@ -44,15 +44,12 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 	const getTaskApi = () => TaskApiFactory(undefined, "/v3", $axios);
 	const getBoardApi = () => BoardApiFactory(undefined, "/v3", $axios);
 
-	// Safe task executors
-	const { execute: executeTask } = useSafeAxiosTask();
+	const { execute } = useSafeAxiosTask();
 
-	// Computed
 	const finishedLoading = computed(() => loading.value === false);
 	const roomIsEmpty = computed(() => finishedLoading.value && roomData.value.elements.length === 0);
 	const roomId = computed(() => roomData.value.roomId);
 
-	// Actions
 	const fetchCourse = async (courseId: string): Promise<Course | null> => {
 		const { result } = await execute(async () => {
 			const response = await $axios.get(`/v1/courses/${courseId}`);
@@ -258,7 +255,6 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 		}
 	};
 
-	// Mutations/Helper functions
 	const setRoomData = (payload: SingleColumnBoardResponse) => {
 		roomData.value = payload;
 	};

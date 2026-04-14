@@ -91,12 +91,7 @@ import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExter
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
 import { CopyParamsTypeEnum } from "@/store/copy";
-import {
-	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
-	COPY_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
+import { COMMON_CARTRIDGE_EXPORT_MODULE_KEY, COPY_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	BoardParentType,
@@ -105,6 +100,7 @@ import {
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
 import { useAppStore } from "@data-app";
+import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
@@ -147,7 +143,6 @@ export default defineComponent({
 		copyModule: { from: COPY_MODULE_KEY },
 		shareModule: { from: SHARE_MODULE_KEY },
 		commonCartridgeExportModule: { from: COMMON_CARTRIDGE_EXPORT_MODULE_KEY },
-		courseRoomDetailsModule: { from: COURSE_ROOM_DETAILS_MODULE_KEY },
 	},
 	setup() {
 		const { mdAndUp } = useDisplay();
@@ -156,6 +151,9 @@ export default defineComponent({
 
 		const { roomVariant } = storeToRefs(useRoomDetailsStore());
 
+		const courseRoomDetails = useCourseRoomDetailsStore();
+		const { scopePermissions, roomData, isLocked } = storeToRefs(courseRoomDetails);
+
 		return {
 			mdiPlus,
 			copy,
@@ -163,6 +161,10 @@ export default defineComponent({
 			isCopyProcessInBackground,
 			roomVariant,
 			mdAndUp,
+			courseRoomDetails,
+			scopePermissions,
+			roomData,
+			isLocked,
 		};
 	},
 	data() {
@@ -300,12 +302,12 @@ export default defineComponent({
 
 			return items;
 		},
-		roomData() {
-			return this.courseRoomDetailsModule.getRoomData;
-		},
-		scopedPermissions() {
-			return this.courseRoomDetailsModule.getPermissionData || [];
-		},
+		// roomData() {
+		// 	return storeToRefs(this.courseRoomDetails).roomData;
+		// },
+		// scopedPermissions() {
+		// 	return storeToRefs(this.courseRoomDetails).scopePermissions || [];
+		// },
 		dashBoardRole() {
 			if (useAppStore().isTeacher) return Roles.TEACHER;
 			if (useAppStore().isStudent) return Roles.STUDENT;
@@ -315,7 +317,7 @@ export default defineComponent({
 			return !!useAppStore().userPermissions?.includes(Permission.CONTEXT_TOOL_ADMIN);
 		},
 		headlineMenuItems() {
-			if (!this.scopedPermissions.includes("COURSE_EDIT")) return [];
+			if (!this.scopedPermissions?.value.includes("COURSE_EDIT")) return [];
 			const items = [
 				{
 					icon: this.icons.mdiPencilOutline,
@@ -391,9 +393,9 @@ export default defineComponent({
 		isCopyModalOpen() {
 			return this.copyModule.getIsResultModalOpen;
 		},
-		isLocked() {
-			return this.courseRoomDetailsModule.getIsLocked;
-		},
+		// isLocked() {
+		// 	return storeToRefs(this.courseRoomDetails).isLocked;
+		// },
 	},
 	watch: {
 		tabIndex(newIndex) {
@@ -418,16 +420,13 @@ export default defineComponent({
 			this.setActiveTab(activeTab);
 			this.courseId = courseId;
 
-			await this.courseRoomDetailsModule.fetchContent(courseId);
+			await this.courseRoomDetails.fetchContent(courseId);
 
 			if (this.roomData.roomId) {
 				this.roomVariant = RoomVariant.COURSE_ROOM;
 			}
 
-			await this.courseRoomDetailsModule.fetchScopePermission({
-				courseId,
-				userId: useAppStore().user?.id,
-			});
+			await this.courseRoomDetails.fetchScopePermission(courseId, useAppStore().user?.id);
 
 			document.title = buildPageTitle(this.roomData.title, this.$t("common.words.courses"));
 		},
@@ -463,7 +462,7 @@ export default defineComponent({
 			this.commonCartridgeExportModule.startExportFlow();
 		},
 		async refreshRoom() {
-			await this.courseRoomDetailsModule.fetchContent(this.courseId);
+			await this.courseRoomDetails.fetchContent(this.courseId);
 		},
 		async onCopyRoom(courseId) {
 			const copyParams = {
@@ -486,7 +485,7 @@ export default defineComponent({
 		},
 		async onCopyBoardElement(payload) {
 			await this.copy(payload);
-			await this.courseRoomDetailsModule.fetchContent(payload.courseId);
+			await this.courseRoomDetails.fetchContent(payload.courseId);
 		},
 		onCopyResultModalClosed() {
 			this.copyModule.reset();
@@ -498,7 +497,7 @@ export default defineComponent({
 				parentId: courseId,
 				layout,
 			};
-			const board = await this.courseRoomDetailsModule.createBoard(params);
+			const board = await this.courseRoomDetails.createBoard(params);
 			await this.$router.push(`/boards/${board.id}`);
 		},
 	},
