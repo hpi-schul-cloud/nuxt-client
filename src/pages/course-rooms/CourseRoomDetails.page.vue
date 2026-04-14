@@ -57,12 +57,12 @@
 			data-testid="room-content"
 			@copy-board-element="onCopyBoardElement"
 		/>
-		<ShareModal type="courses" />
-		<CopyResultModal
-			:is-open="isCopyModalOpen"
-			:copy-result-items="copyResultModalItems"
-			:copy-result-root-item-type="copyResultRootItemType"
-			@copy-dialog-closed="onCopyResultModalClosed"
+		<ShareModal :type="ShareTokenBodyParamsParentType.COURSES" />
+		<CourseRoomCopyInfoDialog
+			:is-open="isCopyDialogOpen"
+			:copy-item-type="copyItemType"
+			@copy-confirmed="onCopyConfirmed"
+			@copy-dialog-closed="isCopyDialogOpen = false"
 		/>
 		<CourseCommonCartridgeExportModal />
 		<end-course-sync-dialog
@@ -70,41 +70,47 @@
 			group-name=""
 			:course-name="roomData.title"
 			:course-id="roomData.roomId"
-			@success="refreshRoom"
+			@success="refreshCourseRoom"
 		/>
 		<start-existing-course-sync-dialog
 			v-model:is-open="isStartSyncDialogOpen"
 			:course-name="roomData.title"
 			:course-id="roomData.roomId"
-			@success="refreshRoom"
+			@success="refreshCourseRoom"
 		/>
 		<SelectBoardLayoutDialog v-model="boardLayoutDialogIsOpen" @select="onLayoutSelected" />
 	</DefaultWireframe>
 </template>
 
-<script>
+<script setup lang="ts">
+import { useSafeAxiosTask } from "../../composables/async-tasks.composable";
+import { AsyncFunction } from "../../types/async.types";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCommonCartridgeExportModal.vue";
+import CourseRoomCopyInfoDialog from "@/components/course-rooms/CourseRoomCopyInfoDialog.vue";
 import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.vue";
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import { useCopy } from "@/composables/copy";
 import { CopyParamsTypeEnum } from "@/store/copy";
+import { $axios } from "@/utils/api";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
-	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
+	injectStrict,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
+	BoardApiFactory,
+	BoardLayout,
 	BoardParentType,
+	CourseRoomsApiFactory,
 	ImportUserResponseRoleNames as Roles,
 	Permission,
 	ShareTokenBodyParamsParentType,
+	TaskApiFactory,
 } from "@api-server";
-import { useAppStore } from "@data-app";
+import { notifySuccess, useAppStore, useLoadingStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
@@ -125,384 +131,456 @@ import {
 	mdiViewListOutline,
 } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
-import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
+import { type MenuItem, RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
+import { type FabAction } from "@ui-speed-dial-menu";
 import { storeToRefs } from "pinia";
-import { defineComponent } from "vue";
+import { type Component, computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 
-export default defineComponent({
-	components: {
-		StartExistingCourseSyncDialog,
-		EndCourseSyncDialog,
-		DefaultWireframe,
-		CourseRoomDashboard,
-		RoomDotMenu,
-		CopyResultModal,
-		ShareModal,
-		CourseCommonCartridgeExportModal,
-		SelectBoardLayoutDialog,
-		CourseRoomLockedPage,
+interface FabItem {
+	icon: string;
+	label: string;
+	href?: string;
+	dataTestId: string;
+	clickHandler?: () => void;
+}
+
+interface TabItem {
+	name: string;
+	label: string;
+	icon: string;
+	dataTestId: string;
+	component?: Component;
+	fabItems?: FabItem[] | null;
+	href?: string;
+}
+
+// Composables
+const { t } = useI18n();
+const route = useRoute();
+const router = useRouter();
+const { mdAndUp } = useDisplay();
+const { roomVariant } = storeToRefs(useRoomDetailsStore());
+
+// Injections
+const shareModule = injectStrict(SHARE_MODULE_KEY);
+const commonCartridgeExportModule = injectStrict(COMMON_CARTRIDGE_EXPORT_MODULE_KEY);
+const courseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
+
+// Icons
+const icons = {
+	mdiPencilOutline,
+	mdiEmailPlusOutline,
+	mdiShareVariantOutline,
+	mdiContentCopy,
+	mdiExport,
+	mdiSyncOff,
+	mdiSync,
+	mdiViewGridPlusOutline,
+};
+
+// Reactive state
+const courseId = ref(route.params.id as string);
+const isEndSyncDialogOpen = ref(false);
+const isStartSyncDialogOpen = ref(false);
+const tabIndex = ref(0);
+const boardLayoutDialogIsOpen = ref(false);
+
+// Computed
+const roomData = computed(() => courseRoomDetailsModule.getRoomData);
+
+const scopedPermissions = computed(() => courseRoomDetailsModule.getPermissionData || []);
+
+const breadcrumbs = computed(() => [
+	{
+		title: t("common.words.courses"),
+		to: "/rooms/courses-overview",
+		disabled: false,
 	},
-	inject: {
-		copyModule: { from: COPY_MODULE_KEY },
-		shareModule: { from: SHARE_MODULE_KEY },
-		commonCartridgeExportModule: { from: COMMON_CARTRIDGE_EXPORT_MODULE_KEY },
-		courseRoomDetailsModule: { from: COURSE_ROOM_DETAILS_MODULE_KEY },
+	{
+		title: roomData.value.title,
+		disabled: true,
 	},
-	setup() {
-		const { mdAndUp } = useDisplay();
+]);
 
-		const { copy, backgroundCopyProcesses, isCopyProcessInBackground } = useCopy();
-
-		const { roomVariant } = storeToRefs(useRoomDetailsStore());
-
-		return {
-			mdiPlus,
-			copy,
-			backgroundCopyProcesses,
-			isCopyProcessInBackground,
-			roomVariant,
-			mdAndUp,
-		};
-	},
-	data() {
-		return {
-			icons: {
-				mdiPencilOutline,
-				mdiEmailPlusOutline,
-				mdiShareVariantOutline,
-				mdiContentCopy,
-				mdiExport,
-				mdiSyncOff,
-				mdiSync,
-				mdiViewGridPlusOutline,
-			},
-			courseId: this.$route.params.id,
-			isShareModalOpen: false,
-			isEndSyncDialogOpen: false,
-			isStartSyncDialogOpen: false,
-			tabIndex: 0,
-			boardLayoutDialogIsOpen: false,
-		};
-	},
-	computed: {
-		breadcrumbs() {
-			return [
-				{
-					title: this.$t("common.words.courses"),
-					to: "/rooms/courses-overview",
-					disabled: false,
-				},
-				{
-					title: this.roomData.title,
-					disabled: true,
-				},
-			];
-		},
-		getCurrentFabItems() {
-			return this.currentTab?.fabItems;
-		},
-		getCurrentComponent() {
-			return this.currentTab?.component;
-		},
-		tabItems() {
-			const tabs = [
-				{
-					name: "learn-content",
-					label: this.$t("common.words.learnContent"),
-					icon: mdiFileDocumentOutline,
-					dataTestId: "learnContent-tab",
-					component: CourseRoomDashboard,
-					fabItems: this.learnContentFabItems,
-				},
-			];
-
-			const ctlToolFabItems = [
-				{
-					icon: mdiPlus,
-					label: this.$t("pages.courseRoomDetails.fab.add.tool"),
-					dataTestId: "add-tool-button",
-					href: `/tools/context/tool-configuration?contextId=${this.courseId}&contextType=course`,
-				},
-			];
-
-			tabs.push({
-				name: "tools",
-				label: this.$t("pages.courseRooms.tabLabel.tools"),
-				icon: mdiPuzzleOutline,
-				dataTestId: "tools-tab",
-				component: RoomExternalToolsOverview,
-				fabItems: this.canEditTools ? ctlToolFabItems : undefined,
-			});
-
-			tabs.push({
-				name: "groups",
-				label: this.$t("pages.courseRooms.tabLabel.groups"),
-				icon: mdiAccountGroupOutline,
-				href: `/courses/${this.roomData.roomId}/?activeTab=groups`,
-				dataTestId: "groups-tab",
-			});
-
-			return tabs;
-		},
-		currentTab() {
-			let index = this.tabIndex;
-			if (this.tabIndex < 0 || this.tabIndex >= this.tabItems.length) {
-				index = 0;
-			}
-
-			const currentTab = this.tabItems[index];
-
-			return currentTab;
-		},
-		learnContentFabItems() {
-			const actions = [];
-
-			if (useAppStore().userPermissions.includes(Permission.HOMEWORK_CREATE)) {
-				actions.push({
-					label: this.$t("pages.courseRoomDetails.fab.add.task"),
-					icon: mdiFormatListChecks,
-					href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
-					dataTestId: "fab_button_add_task",
-				});
-			}
-
-			if (useAppStore().userPermissions.includes(Permission.TOPIC_CREATE)) {
-				actions.push({
-					label: this.$t("pages.courseRoomDetails.fab.add.lesson"),
-					icon: mdiViewListOutline,
-					href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
-					dataTestId: "fab_button_add_lesson",
-				});
-			}
-
-			if (useAppStore().userPermissions.includes(Permission.COURSE_EDIT) && useAppStore().isTeacher) {
-				actions.push({
-					label: this.$t("pages.courseRoomDetails.fab.add.board"),
-					icon: mdiViewGridPlusOutline,
-					dataTestId: "fab_button_add_board",
-					clickHandler: this.fabItemClickHandler,
-				});
-			}
-
-			if (actions.length === 0) {
-				return null;
-			}
-
-			const items = [
-				{
-					icon: mdiPlus,
-					label: this.$t("pages.courseRoomDetails.fab.add.learnContent"),
-					dataTestId: "add-content-button",
-				},
-				...actions,
-			];
-
-			return items;
-		},
-		roomData() {
-			return this.courseRoomDetailsModule.getRoomData;
-		},
-		scopedPermissions() {
-			return this.courseRoomDetailsModule.getPermissionData || [];
-		},
-		dashBoardRole() {
-			if (useAppStore().isTeacher) return Roles.TEACHER;
-			if (useAppStore().isStudent) return Roles.STUDENT;
-			return undefined;
-		},
-		canEditTools() {
-			return !!useAppStore().userPermissions?.includes(Permission.CONTEXT_TOOL_ADMIN);
-		},
-		headlineMenuItems() {
-			if (!this.scopedPermissions.includes("COURSE_EDIT")) return [];
-			const items = [
-				{
-					icon: this.icons.mdiPencilOutline,
-					action: () => (window.location.href = `/courses/${this.courseId}/edit`),
-					name: this.$t("common.actions.edit") + "/" + this.$t("common.actions.delete"),
-					dataTestId: "room-menu-edit-delete",
-				},
-			];
-
-			if (useEnvConfig().value.FEATURE_COPY_SERVICE_ENABLED) {
-				items.push({
-					icon: this.icons.mdiContentCopy,
-					action: () => this.onCopyRoom(this.roomData.roomId),
-					name: this.$t("common.actions.duplicate"),
-					dataTestId: "room-menu-copy",
-				});
-			}
-
-			if (useEnvConfig().value.FEATURE_COURSE_SHARE) {
-				items.push({
-					icon: this.icons.mdiShareVariantOutline,
-					action: () => this.shareCourse(),
-					name: this.$t("common.actions.shareCopy"),
-					dataTestId: "room-menu-share",
-				});
-			}
-
-			if (useEnvConfig().value.FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED) {
-				items.push({
-					icon: this.icons.mdiExport,
-					action: () => this.onExport(),
-					name: this.$t("common.actions.export"),
-					dataTestId: "room-menu-common-cartridge-download",
-				});
-			}
-
-			if (this.roomData.isSynchronized) {
-				items.push({
-					icon: this.icons.mdiSyncOff,
-					action: () => {
-						this.isEndSyncDialogOpen = true;
-					},
-					name: this.$t("pages.courseRooms.menuItems.endSync"),
-					dataTestId: "title-menu-end-sync",
-				});
-			}
-
-			if (useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED && !this.roomData.isSynchronized) {
-				items.push({
-					icon: this.icons.mdiSync,
-					action: () => {
-						this.isStartSyncDialogOpen = true;
-					},
-					name: this.$t("pages.rooms.menuItems.startSync"),
-					dataTestId: "title-menu-start-sync",
-				});
-			}
-
-			return items;
-		},
-		copyResultModalStatus() {
-			return this.copyModule.getCopyResult?.status;
-		},
-		copyResultModalItems() {
-			return this.copyModule.getCopyResultFailedItems;
-		},
-		copyResultRootItemType() {
-			return this.copyModule.getCopyResult?.type;
-		},
-		copyResultError() {
-			return this.copyModule.getBusinessError;
-		},
-		isCopyModalOpen() {
-			return this.copyModule.getIsResultModalOpen;
-		},
-		isLocked() {
-			return this.courseRoomDetailsModule.getIsLocked;
-		},
-	},
-	watch: {
-		tabIndex(newIndex) {
-			if (newIndex >= 0 && newIndex < this.tabItems.length) {
-				this.$router.push({
-					query: { ...this.$route.query, tab: this.tabItems[newIndex].name },
-				});
-			}
-		},
-	},
-	async created() {
-		await this.initialize(this.courseId, this.$route.query?.tab);
-	},
-	mounted() {
-		window.addEventListener("pageshow", this.setActiveTabIfPageCached);
-	},
-	beforeUnmount() {
-		window.removeEventListener("pageshow", this.setActiveTabIfPageCached);
-	},
-	methods: {
-		async initialize(courseId, activeTab = 0) {
-			this.setActiveTab(activeTab);
-			this.courseId = courseId;
-
-			await this.courseRoomDetailsModule.fetchContent(courseId);
-
-			if (this.roomData.roomId) {
-				this.roomVariant = RoomVariant.COURSE_ROOM;
-			}
-
-			await this.courseRoomDetailsModule.fetchScopePermission({
-				courseId,
-				userId: useAppStore().user?.id,
-			});
-
-			document.title = buildPageTitle(this.roomData.title, this.$t("common.words.courses"));
-		},
-		onLayoutSelected(layout) {
-			this.onCreateBoard(this.roomData.roomId, layout);
-		},
-		fabItemClickHandler() {
-			this.boardLayoutDialogIsOpen = true;
-		},
-		setActiveTabIfPageCached(event) {
-			if (event.persisted) {
-				if (this.$route.query?.tab) {
-					this.setActiveTab(this.$route.query.tab);
-				} else {
-					this.setActiveTab("learn-content");
-				}
-			}
-		},
-		setActiveTab(tabName) {
-			const index = this.tabItems.findIndex((tabItem) => tabItem.name === tabName);
-
-			this.tabIndex = index >= 0 ? index : 0;
-		},
-		async shareCourse() {
-			if (useEnvConfig().value.FEATURE_COURSE_SHARE) {
-				this.shareModule.startShareFlow({
-					id: this.courseId,
-					type: ShareTokenBodyParamsParentType.COURSES,
-				});
-			}
-		},
-		onExport() {
-			this.commonCartridgeExportModule.startExportFlow();
-		},
-		async refreshRoom() {
-			await this.courseRoomDetailsModule.fetchContent(this.courseId);
-		},
-		async onCopyRoom(courseId) {
-			const copyParams = {
-				id: courseId,
-				courseId,
-				type: CopyParamsTypeEnum.Course,
-			};
-
-			await this.copy(copyParams);
-
-			const copyResult = this.copyModule.getCopyResult;
-
-			if (copyResult?.id !== undefined) {
-				const copyId = copyResult.id.replace(/[^a-z\d]/g, "");
-				await this.$router.push({ path: "/rooms/" + copyId, replace: true });
-				await this.initialize(copyId);
-			} else {
-				await this.$router.push("/rooms/courses-overview");
-			}
-		},
-		async onCopyBoardElement(payload) {
-			await this.copy(payload);
-			await this.courseRoomDetailsModule.fetchContent(payload.courseId);
-		},
-		onCopyResultModalClosed() {
-			this.copyModule.reset();
-		},
-		async onCreateBoard(courseId, layout) {
-			const params = {
-				title: this.$t("pages.room.boardCard.label.courseBoard").toString(),
-				parentType: BoardParentType.COURSE,
-				parentId: courseId,
-				layout,
-			};
-			const board = await this.courseRoomDetailsModule.createBoard(params);
-			await this.$router.push(`/boards/${board.id}`);
-		},
-	},
+const dashBoardRole = computed(() => {
+	if (useAppStore().isTeacher) return Roles.TEACHER;
+	if (useAppStore().isStudent) return Roles.STUDENT;
+	return undefined;
 });
+
+const canEditTools = computed(() => useAppStore().hasPermission(Permission.CONTEXT_TOOL_ADMIN));
+
+const learnContentFabItems = computed((): FabItem[] | null => {
+	const actions: FabItem[] = [];
+
+	if (useAppStore().hasPermission(Permission.HOMEWORK_CREATE)) {
+		actions.push({
+			label: t("pages.courseRoomDetails.fab.add.task"),
+			icon: mdiFormatListChecks,
+			href: `/homework/new?course=${roomData.value.roomId}&returnUrl=rooms/${roomData.value.roomId}`,
+			dataTestId: "fab_button_add_task",
+		});
+	}
+
+	if (useAppStore().hasPermission(Permission.TOPIC_CREATE)) {
+		actions.push({
+			label: t("pages.courseRoomDetails.fab.add.lesson"),
+			icon: mdiViewListOutline,
+			href: `/courses/${roomData.value.roomId}/topics/add?returnUrl=rooms/${roomData.value.roomId}`,
+			dataTestId: "fab_button_add_lesson",
+		});
+	}
+
+	if (useAppStore().hasPermission(Permission.COURSE_EDIT) && useAppStore().isTeacher) {
+		actions.push({
+			label: t("pages.courseRoomDetails.fab.add.board"),
+			icon: mdiViewGridPlusOutline,
+			dataTestId: "fab_button_add_board",
+			clickHandler: fabItemClickHandler,
+		});
+	}
+
+	if (actions.length === 0) {
+		return null;
+	}
+
+	return [
+		{
+			icon: mdiPlus,
+			label: t("pages.courseRoomDetails.fab.add.learnContent"),
+			dataTestId: "add-content-button",
+		},
+		...actions,
+	];
+});
+
+const tabItems = computed<TabItem[]>(() => {
+	const tabs: TabItem[] = [
+		{
+			name: "learn-content",
+			label: t("common.words.learnContent"),
+			icon: mdiFileDocumentOutline,
+			dataTestId: "learnContent-tab",
+			component: CourseRoomDashboard,
+			fabItems: learnContentFabItems.value,
+		},
+	];
+
+	const ctlToolFabItems: FabItem[] = [
+		{
+			icon: mdiPlus,
+			label: t("pages.courseRoomDetails.fab.add.tool"),
+			dataTestId: "add-tool-button",
+			href: `/tools/context/tool-configuration?contextId=${courseId.value}&contextType=course`,
+		},
+	];
+
+	tabs.push({
+		name: "tools",
+		label: t("pages.courseRooms.tabLabel.tools"),
+		icon: mdiPuzzleOutline,
+		dataTestId: "tools-tab",
+		component: RoomExternalToolsOverview,
+		fabItems: canEditTools.value ? ctlToolFabItems : null,
+	});
+
+	tabs.push({
+		name: "groups",
+		label: t("pages.courseRooms.tabLabel.groups"),
+		icon: mdiAccountGroupOutline,
+		href: `/courses/${roomData.value.roomId}/?activeTab=groups`,
+		dataTestId: "groups-tab",
+	});
+
+	return tabs;
+});
+
+const currentTab = computed(() => {
+	let index = tabIndex.value;
+	if (tabIndex.value < 0 || tabIndex.value >= tabItems.value.length) {
+		index = 0;
+	}
+	return tabItems.value[index];
+});
+
+const getCurrentFabItems = computed((): FabAction[] | undefined => currentTab.value?.fabItems ?? undefined);
+
+const getCurrentComponent = computed(() => currentTab.value?.component);
+
+const headlineMenuItems = computed((): MenuItem[] => {
+	if (!scopedPermissions.value.includes("COURSE_EDIT")) return [];
+
+	const items: MenuItem[] = [
+		{
+			icon: icons.mdiPencilOutline,
+			action: () => {
+				window.location.href = `/courses/${courseId.value}/edit`;
+			},
+			name: t("common.actions.edit") + "/" + t("common.actions.delete"),
+			dataTestId: "room-menu-edit-delete",
+		},
+	];
+
+	if (useEnvConfig().value.FEATURE_COPY_SERVICE_ENABLED) {
+		items.push({
+			icon: icons.mdiContentCopy,
+			action: () => {
+				isCopyDialogOpen.value = true;
+			},
+			name: t("common.actions.duplicate"),
+			dataTestId: "room-menu-copy",
+		});
+	}
+
+	if (useEnvConfig().value.FEATURE_COURSE_SHARE) {
+		items.push({
+			icon: icons.mdiShareVariantOutline,
+			action: () => {
+				shareCourse();
+			},
+			name: t("common.actions.shareCopy"),
+			dataTestId: "room-menu-share",
+		});
+	}
+
+	if (useEnvConfig().value.FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED) {
+		items.push({
+			icon: icons.mdiExport,
+			action: () => {
+				onExport();
+			},
+			name: t("common.actions.export"),
+			dataTestId: "room-menu-common-cartridge-download",
+		});
+	}
+
+	if (roomData.value.isSynchronized) {
+		items.push({
+			icon: icons.mdiSyncOff,
+			action: () => {
+				isEndSyncDialogOpen.value = true;
+			},
+			name: t("pages.courseRooms.menuItems.endSync"),
+			dataTestId: "title-menu-end-sync",
+		});
+	}
+
+	if (useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED && !roomData.value.isSynchronized) {
+		items.push({
+			icon: icons.mdiSync,
+			action: () => {
+				isStartSyncDialogOpen.value = true;
+			},
+			name: t("pages.rooms.menuItems.startSync"),
+			dataTestId: "title-menu-start-sync",
+		});
+	}
+
+	return items;
+});
+
+const isLocked = computed(() => courseRoomDetailsModule.getIsLocked);
+
+// Methods
+const initialize = async (id: string, activeTab: string | number = 0) => {
+	setActiveTab(activeTab);
+	courseId.value = id;
+
+	await courseRoomDetailsModule.fetchContent(id);
+
+	if (roomData.value.roomId) {
+		roomVariant.value = RoomVariant.COURSE_ROOM;
+	}
+
+	const userId = useAppStore().user?.id;
+	if (userId) {
+		await courseRoomDetailsModule.fetchScopePermission({
+			courseId: id,
+			userId,
+		});
+	}
+
+	document.title = buildPageTitle(roomData.value.title, t("common.words.courses"));
+};
+
+const setActiveTab = (tabName: string | number) => {
+	const index = tabItems.value.findIndex((tabItem) => tabItem.name === tabName);
+	tabIndex.value = index >= 0 ? index : 0;
+};
+
+const setActiveTabIfPageCached = (event: PageTransitionEvent) => {
+	if (event.persisted) {
+		if (route.query?.tab) {
+			setActiveTab(route.query.tab as string);
+		} else {
+			setActiveTab("learn-content");
+		}
+	}
+};
+
+const fabItemClickHandler = () => {
+	boardLayoutDialogIsOpen.value = true;
+};
+
+const onLayoutSelected = (layout: BoardLayout) => {
+	onCreateBoard(roomData.value.roomId, layout);
+};
+
+const shareCourse = async () => {
+	if (useEnvConfig().value.FEATURE_COURSE_SHARE) {
+		shareModule.startShareFlow({
+			id: courseId.value,
+			type: ShareTokenBodyParamsParentType.COURSES,
+		});
+	}
+};
+
+const onExport = () => {
+	commonCartridgeExportModule.startExportFlow();
+};
+
+const refreshCourseRoom = async () => {
+	await courseRoomDetailsModule.fetchContent(courseId.value);
+};
+
+const isCopyDialogOpen = ref(false);
+const copyItemId = ref<string>("");
+const copyItemType = ref<CopyParamsTypeEnum>(CopyParamsTypeEnum.Course);
+const { execute } = useSafeAxiosTask();
+const { setLoadingState } = useLoadingStore();
+const courseRoomApi = CourseRoomsApiFactory(undefined, "/v3", $axios);
+const taskApi = TaskApiFactory(undefined, "/v3", $axios);
+const boardApi = BoardApiFactory(undefined, "/v3", $axios);
+
+const withLoadingState = async <T,>(fn: AsyncFunction<T>) => {
+	setLoadingState(true, t("components.molecules.copyResult.title.loading"));
+	const result = await fn();
+	// make sure loading state is visible
+	await new Promise((resolve) => setTimeout(resolve, 300));
+	setLoadingState(false);
+	return result;
+};
+
+const onCopyBoardElement = ({ id, type }: { id: string; type: CopyParamsTypeEnum; courseId: string }) => {
+	copyItemId.value = id;
+	copyItemType.value = type;
+	isCopyDialogOpen.value = true;
+};
+
+const onCopyConfirmed = async () => {
+	isCopyDialogOpen.value = false;
+
+	switch (copyItemType.value) {
+		case CopyParamsTypeEnum.Course:
+			await copyCourse(courseId.value);
+			break;
+		case CopyParamsTypeEnum.Task:
+			await copyTaskElement({ id: copyItemId.value, courseId: courseId.value });
+			break;
+		case CopyParamsTypeEnum.Lesson:
+			await copyLessonElement({ id: copyItemId.value, courseId: courseId.value });
+			break;
+		case CopyParamsTypeEnum.ColumnBoard:
+			await copyColumnBoardElement({ id: copyItemId.value, courseId: courseId.value });
+			break;
+	}
+};
+
+const copyCourse = async (id: string) => {
+	const { result, error } = await withLoadingState(() =>
+		execute(
+			() => courseRoomApi.courseRoomsControllerCopyCourse(id),
+			t("common.notifications.errors.notDuplicated", { type: t("common.labels.course") })
+		)
+	);
+
+	if (!error && result.data.id !== undefined) {
+		notifySuccess(t("components.molecules.copyResult.course.successfullyCopied"));
+		isCopyDialogOpen.value = false;
+		const copyId = result.data.id.replace(/[^a-z\d]/g, "");
+		await router.replace(`/rooms/${copyId}`);
+		await initialize(copyId);
+	}
+};
+
+const copyTaskElement = async ({ id, courseId }: { id: string; courseId: string }) => {
+	const { error } = await withLoadingState(() =>
+		execute(
+			() => taskApi.taskControllerCopyTask(id, { courseId }),
+			t("common.notifications.errors.notDuplicated", { type: t("common.labels.task") })
+		)
+	);
+
+	if (!error) {
+		notifySuccess(t("components.molecules.copyResult.task.successfullyCopied"));
+		await courseRoomDetailsModule.fetchContent(courseId);
+	}
+};
+
+const copyLessonElement = async ({ id, courseId }: { id: string; courseId: string }) => {
+	const { error } = await withLoadingState(() =>
+		execute(
+			() => courseRoomApi.courseRoomsControllerCopyLesson(id, { courseId }),
+			t("common.notifications.errors.notDuplicated", { type: t("common.labels.lesson") })
+		)
+	);
+
+	if (!error) {
+		notifySuccess(t("components.molecules.copyResult.lesson.successfullyCopied"));
+		await courseRoomDetailsModule.fetchContent(courseId);
+	}
+};
+
+const copyColumnBoardElement = async ({ id, courseId }: { id: string; courseId: string }) => {
+	const { error } = await withLoadingState(() =>
+		execute(
+			() => boardApi.boardControllerCopyBoard(id),
+			t("common.notifications.errors.notDuplicated", { type: t("common.labels.board") })
+		)
+	);
+
+	if (!error) {
+		notifySuccess(t("components.molecules.copyResult.board.successfullyCopied"));
+		await courseRoomDetailsModule.fetchContent(courseId);
+	}
+};
+
+const onCreateBoard = async (id: string, layout: BoardLayout) => {
+	const params = {
+		title: t("pages.room.boardCard.label.courseBoard").toString(),
+		parentType: BoardParentType.COURSE,
+		parentId: id,
+		layout,
+	};
+	const board = await courseRoomDetailsModule.createBoard(params);
+	if (board) {
+		await router.push(`/boards/${board.id}`);
+	}
+};
+
+// Watchers
+watch(tabIndex, (newIndex) => {
+	if (newIndex >= 0 && newIndex < tabItems.value.length) {
+		router.push({
+			query: { ...route.query, tab: tabItems.value[newIndex].name },
+		});
+	}
+});
+
+// Lifecycle hooks
+onMounted(() => {
+	window.addEventListener("pageshow", setActiveTabIfPageCached);
+});
+
+onBeforeUnmount(() => {
+	window.removeEventListener("pageshow", setActiveTabIfPageCached);
+});
+
+// Initialize on component creation
+initialize(courseId.value, route.query?.tab as string);
 </script>
 
 <style lang="scss" scoped>
