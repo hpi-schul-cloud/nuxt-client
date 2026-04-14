@@ -81,27 +81,6 @@ describe("VideoConferenceComposable", () => {
 			expect(videoConferenceInfo.value.options).toEqual(FAKE_RESPONSE.data.options);
 		});
 
-		// never going to happen anyway, TODO: decide if we want to keep the test
-		it("should pass through unrecognized state from API response", async () => {
-			const { fetchVideoConferenceInfo, videoConferenceInfo } = setup();
-			const FAKE_RESPONSE = mockApiResponse<VideoConferenceInfoResponse>({
-				status: 200,
-				data: {
-					state: "bla-bla" as VideoConferenceStateResponse,
-					options: {
-						everyAttendeeJoinsMuted: true,
-						everybodyJoinsAsModerator: false,
-						moderatorMustApproveJoinRequests: true,
-					},
-				},
-			});
-			videoConferenceApi.videoConferenceControllerInfo.mockResolvedValueOnce(FAKE_RESPONSE);
-
-			await fetchVideoConferenceInfo();
-
-			expect(videoConferenceInfo.value.state).toBe("bla-bla");
-		});
-
 		it("should set fetchError if the API call fails", async () => {
 			const { fetchVideoConferenceInfo, fetchError } = setup();
 			const mockError = new Error("API call failed");
