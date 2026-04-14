@@ -30,7 +30,7 @@ export const useRuntimeConfigStore = defineStore("runtimeConfigStore", () => {
 	const fetchRuntimeConfigPlain = async () => {
 		const { result } = await execute(
 			runtimeConfigApi.runtimeConfigControllerGetRuntimeConfig,
-			t("common.notifications.errors.notLoaded", { type: t("common.labels.runtimeConfig", PLURAL_COUNT) }, PLURAL_COUNT)
+			t("common.notifications.errors.notLoaded", { type: t("common.labels.runtimeConfig") }, PLURAL_COUNT)
 		);
 		return result;
 	};
