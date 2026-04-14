@@ -69,7 +69,6 @@ export const useAppStore = defineStore("applicationStore", () => {
 
 	const clearUserSession = () => {
 		localStorage.clear();
-		sessionStorage.clear();
 		delete $axios.defaults.headers.common["Authorization"];
 		close();
 	};

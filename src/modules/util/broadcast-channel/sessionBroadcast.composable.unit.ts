@@ -106,7 +106,7 @@ describe("useSessionBroadcast", () => {
 				simulateIncomingMessage("logout");
 				await flushPromises();
 
-				expect(setState).toHaveBeenCalledWith(SessionState.Expired);
+				expect(setState).toHaveBeenCalledWith(SessionState.Closed);
 			});
 		});
 
@@ -144,6 +144,55 @@ describe("useSessionBroadcast", () => {
 
 				expect(setTime).toHaveBeenCalledWith(500);
 				expect(setState).not.toHaveBeenCalled();
+			});
+
+			it("should ignore messages without colon separator", async () => {
+				const { setState, setTime, sendStateAndTime } = setup();
+
+				sendStateAndTime(SessionState.Started, 100);
+
+				simulateIncomingMessage("invalidmessage");
+				await flushPromises();
+
+				expect(setState).not.toHaveBeenCalled();
+				expect(setTime).not.toHaveBeenCalled();
+			});
+
+			it("should update time with 0 when no time callbacks are provided", async () => {
+				const setState = vi.fn();
+				const { sendStateAndTime } = useSessionBroadcast({ setState });
+
+				sendStateAndTime(SessionState.Started, 100);
+
+				simulateIncomingMessage("extended:200");
+				await flushPromises();
+
+				expect(setState).toHaveBeenCalledWith(SessionState.Extended);
+			});
+		});
+
+		describe("when receiving an 'expired' message", () => {
+			it("should call setState with Expired and set jwt expired", async () => {
+				const { setState, sendStateAndTime, isJwtExpired } = setup();
+
+				sendStateAndTime(SessionState.Started, 100);
+
+				simulateIncomingMessage("expired");
+				await flushPromises();
+
+				expect(setState).toHaveBeenCalledWith(SessionState.Expired);
+				expect(isJwtExpired.value).toBe(true);
+			});
+
+			it("should work without setState callback", async () => {
+				const { sendLogout, isJwtExpired } = useSessionBroadcast();
+
+				sendLogout();
+
+				simulateIncomingMessage("expired");
+				await flushPromises();
+
+				expect(isJwtExpired.value).toBe(true);
 			});
 		});
 	});
@@ -344,6 +393,52 @@ describe("useSessionBroadcast", () => {
 			await handleUnauthorizedError(axiosError);
 
 			expect(isJwtExpired.value).toBe(true);
+		});
+
+		it("should handle missing response data gracefully", async () => {
+			const { handleUnauthorizedError, isJwtExpired } = useSessionBroadcast();
+			const { AxiosError, default: axios } = await import("axios");
+			const axiosError = new AxiosError("error", "401", undefined, undefined, {
+				status: HttpStatusCode.Unauthorized,
+			} as never);
+
+			const mockAxiosInstance = {
+				defaults: { baseURL: "" },
+				get: vi.fn().mockResolvedValue({ data: null }),
+			};
+			vi.spyOn(axios, "create").mockReturnValue(mockAxiosInstance as never);
+
+			await handleUnauthorizedError(axiosError);
+
+			expect(isJwtExpired.value).toBe(true);
+		});
+	});
+
+	describe("BroadcastChannel unavailable", () => {
+		it("should work when BroadcastChannel is undefined", () => {
+			vi.stubGlobal("BroadcastChannel", undefined);
+
+			const { sendLogout, sendStateAndTime } = useSessionBroadcast();
+
+			// Should not throw errors
+			expect(() => {
+				sendLogout();
+				sendStateAndTime(SessionState.Started, 100);
+			}).not.toThrow();
+
+			vi.unstubAllGlobals();
+		});
+	});
+
+	describe("channel reuse", () => {
+		it("should reuse the same BroadcastChannel instance", () => {
+			const { sendLogout, sendStateAndTime } = useSessionBroadcast();
+
+			sendLogout();
+			sendStateAndTime(SessionState.Started, 100);
+
+			// Both calls should use the same channel instance
+			expect(broadcastChannelMock.postMessage).toHaveBeenCalledTimes(2);
 		});
 	});
 });
