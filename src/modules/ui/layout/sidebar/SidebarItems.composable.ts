@@ -181,7 +181,7 @@ export const useSidebarItems = () => {
 			theme: [SchulcloudTheme.BRB, SchulcloudTheme.DEFAULT, SchulcloudTheme.THR],
 		},
 		{
-			href: "/security",
+			to: "/system/security",
 			title: "components.legacy.footer.security",
 			testId: "sidebar-system-security",
 			theme: [SchulcloudTheme.DEFAULT],
