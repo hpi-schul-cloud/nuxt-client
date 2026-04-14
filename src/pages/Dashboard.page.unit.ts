@@ -16,10 +16,10 @@ import {
 	NewsApiInterface,
 	NewsResponse,
 	Permission,
+	ReleaseApiInterface,
 	ReleaseItemResponse,
 	RoleName,
 	RuntimeConfigApiInterface,
-	ServerReleaseApiInterface,
 } from "@api-server";
 import * as serverApi from "@api-server";
 import { DashboardTasks } from "@feature-dashboard";
@@ -31,7 +31,7 @@ import { Mocked } from "vitest";
 
 describe("DashboardPage", () => {
 	let newsApi: Mocked<NewsApiInterface>;
-	let releasesApi: Mocked<ServerReleaseApiInterface>;
+	let releasesApi: Mocked<ReleaseApiInterface>;
 	let runtimeConfigApi: Mocked<RuntimeConfigApiInterface>;
 	let axiosMock: Mocked<AxiosInstance>;
 
@@ -41,7 +41,7 @@ describe("DashboardPage", () => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 
 		newsApi = mockApi<NewsApiInterface>();
-		releasesApi = mockApi<ServerReleaseApiInterface>();
+		releasesApi = mockApi<ReleaseApiInterface>();
 		runtimeConfigApi = mockApi<RuntimeConfigApiInterface>();
 
 		setupStores({
@@ -50,7 +50,7 @@ describe("DashboardPage", () => {
 		schoolsModule.setSchool(schoolFactory.build());
 
 		vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(newsApi);
-		vi.spyOn(serverApi, "ServerReleaseApiFactory").mockReturnValue(releasesApi);
+		vi.spyOn(serverApi, "ReleaseApiFactory").mockReturnValue(releasesApi);
 		vi.spyOn(serverApi, "RuntimeConfigApiFactory").mockReturnValue(runtimeConfigApi);
 	});
 
@@ -88,7 +88,7 @@ describe("DashboardPage", () => {
 			? [{ id: "release-1", publishedAt: options.latestReleasePublishedAt } as ReleaseItemResponse]
 			: [];
 
-		releasesApi.serverReleaseControllerGetReleases.mockResolvedValue(
+		releasesApi.releaseControllerGetReleases.mockResolvedValue(
 			mockApiResponse({
 				data: { data: releaseData, total: releaseData.length, skip: 0, limit: 1 },
 			})
