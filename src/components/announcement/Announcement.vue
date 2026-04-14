@@ -7,41 +7,34 @@
 <script setup lang="ts">
 import { useI18nGlobal } from "@/plugins/i18n";
 import { useAppStore } from "@data-app";
-import { useRuntimeConfig } from "@data-runtime";
+import { useRuntimeConfigStore } from "@data-runtime-config";
 import { RenderHTML } from "@feature-render-html";
 import { InfoAlert } from "@ui-alert";
-import { computed, Ref } from "vue";
+import { computed } from "vue";
+
+// const { dashboardAnnouncement } = storeToRefs(useRuntimeConfigStore());
+
+// const parseRuntimeConfig = (entries: RuntimeConfig[]): RuntimeConfig =>
+// 	Object.fromEntries(entries.map(({ key, value, description, type }) => [key, { value, description, type }]));
 
 const dashboardAnnouncement = computed((): string | undefined => {
-	const runtimeConfig = useRuntimeConfig() as unknown as Ref<{ key: string; value: string | boolean }[]>;
+	const { runtimeConfig } = useRuntimeConfigStore();
 
-	if (!runtimeConfig.value) {
-		return undefined;
-	}
-
-	const asObject = runtimeConfig.value?.reduce(
-		(acc, { key, value }) => {
-			acc[key] = value;
-			return acc;
-		},
-		{} as Record<string, string | boolean>
-	);
-
-	if (!asObject.DASHBOARD_ANNOUNCEMENT_ENABLED) {
+	if (!runtimeConfig.value.DASHBOARD_ANNOUNCEMENT_ENABLED) {
 		return undefined;
 	}
 
 	const userRoles = useAppStore().userRoles;
-	const rolesForAnnouncement = (asObject.DASHBOARD_ANNOUNCEMENT_FOR_ROLES as string).split(",");
+	const rolesForAnnouncement = String(runtimeConfig.value.DASHBOARD_ANNOUNCEMENT_FOR_ROLES).split(",");
+	const hasMatchingRole = userRoles.some((role) => rolesForAnnouncement.includes(role));
 
-	if (!userRoles.some((role) => rolesForAnnouncement.includes(role))) {
+	if (!hasMatchingRole) {
 		return undefined;
 	}
 
 	const { locale } = useI18nGlobal();
-
 	const langKey = `DASHBOARD_ANNOUNCEMENT_TEXT_${locale.value.toUpperCase()}`;
 
-	return runtimeConfig.value.find((item) => item.key === langKey)?.value as string | undefined;
+	return runtimeConfig.value[langKey]?.value as string | undefined;
 });
 </script>

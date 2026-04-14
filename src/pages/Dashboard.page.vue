@@ -80,6 +80,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { NewsApiFactory, NewsTargetModel, Permission, SchulcloudTheme } from "@api-server";
 import { useAppStore, useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
+import { useRuntimeConfigStore } from "@data-runtime-config";
 import { DashboardReleaseDialog, DashboardTasks } from "@feature-dashboard";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
@@ -88,7 +89,7 @@ import { SvsSuspense } from "@ui-containers";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -123,6 +124,10 @@ const latestNews = computed(() => newsResponse.value?.data.data ?? []);
 const envConfig = useEnvConfig();
 // Workaround, since accessing the same parameters is in progress.
 const hasGlobalAnnouncement = computed(() => envConfig.value.SC_THEME === SchulcloudTheme.DEFAULT);
+
+onMounted(() => {
+	useRuntimeConfigStore()?.fetchRuntimeConfig();
+});
 </script>
 
 <style scoped>

@@ -29,7 +29,7 @@
       "@data-external-tool": ["src/modules/data/external-tool"],
       "@data-file": ["src/modules/data/file"],
       "@data-folder": ["src/modules/data/folder"],
-      "@data-runtime": ["src/modules/data/runtime"],
+      "@data-runtime-config": ["src/modules/data/runtime-config"],
       "@data-tasks": ["src/modules/data/tasks"],
       "@data-group": ["src/modules/data/group"],
       "@data-h5p": ["src/modules/data/h5p"],
