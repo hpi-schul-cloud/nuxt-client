@@ -1,15 +1,12 @@
 import Announcement from "./Announcement.vue";
-import { mockApi, mockApiResponse } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import * as serverApi from "@api-server";
-import { LanguageType, RuntimeConfigApiInterface, RuntimeConfigListResponse } from "@api-server";
+import { LanguageType } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mocked } from "vitest";
 import { ref } from "vue";
 
-let runtimeConfigApi: Mocked<RuntimeConfigApiInterface>;
+// let runtimeConfigApi: Mocked<RuntimeConfigApiInterface>;
 
 const mockLocale = ref<LanguageType>(LanguageType.DE);
 vi.mock("@/plugins/i18n", () => ({
@@ -25,7 +22,22 @@ vi.mock("@data-app", () => ({
 	}),
 }));
 
+const mockRuntimeConfig = ref<Record<string, unknown>>({
+	DASHBOARD_ANNOUNCEMENT_FOR_ROLES: "teacher,admin",
+	DASHBOARD_ANNOUNCEMENT_TEXT_DE: "Ankündigung auf <strong>Deutsch</strong>",
+	DASHBOARD_ANNOUNCEMENT_TEXT_EN: "Announcement in <strong>English</strong>",
+	DASHBOARD_ANNOUNCEMENT_TEXT_ES: "Anuncio en <strong>español</strong>",
+	DASHBOARD_ANNOUNCEMENT_TEXT_UK: "Оголошення <strong>українською</strong>",
+});
+
+vi.mock("@data-runtime", () => ({
+	useRuntimeConfig: () => ({
+		runtimeConfig: mockRuntimeConfig.value,
+	}),
+}));
+
 describe("Announcement", () => {
+	/*
 	const mockRuntimeConfigResponse = (
 		options: {
 			enabled?: boolean;
@@ -60,6 +72,7 @@ describe("Announcement", () => {
 			mockApiResponse({ data: data as RuntimeConfigListResponse })
 		);
 	};
+	*/
 
 	const setup = () => {
 		const wrapper = shallowMount(Announcement, {
@@ -77,8 +90,8 @@ describe("Announcement", () => {
 	};
 
 	beforeEach(() => {
-		runtimeConfigApi = mockApi<RuntimeConfigApiInterface>();
-		vi.spyOn(serverApi, "RuntimeConfigApiFactory").mockReturnValue(runtimeConfigApi);
+		// runtimeConfigApi = mockApi<RuntimeConfigApiInterface>();
+		// vi.spyOn(serverApi, "RuntimeConfigApiFactory").mockReturnValue(runtimeConfigApi);
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		mockLocale.value = LanguageType.DE;
 		mockUserRoles.value = ["teacher"];
@@ -90,7 +103,7 @@ describe("Announcement", () => {
 
 	describe("when announcement is disabled", () => {
 		it("should not render the alert", async () => {
-			mockRuntimeConfigResponse({ enabled: false });
+			// mockRuntimeConfigResponse({ enabled: false });
 
 			const { wrapper } = setup();
 			await flushPromises();
@@ -108,7 +121,7 @@ describe("Announcement", () => {
 				{ locale: LanguageType.ES, expectedHTML: "Anuncio en <strong>español</strong>" },
 				{ locale: LanguageType.UK, expectedHTML: "Оголошення <strong>українською</strong>" },
 			])("should render the alert with correct HTML when locale is $locale", async ({ locale, expectedHTML }) => {
-				mockRuntimeConfigResponse({ enabled: true });
+				// mockRuntimeConfigResponse({ enabled: true });
 				mockLocale.value = locale;
 				mockUserRoles.value = ["teacher"];
 
@@ -125,7 +138,7 @@ describe("Announcement", () => {
 
 		describe("and user role does not match", () => {
 			it("should not render the alert", async () => {
-				mockRuntimeConfigResponse({ enabled: true, roles: "admin" });
+				// mockRuntimeConfigResponse({ enabled: true, roles: "admin" });
 				mockUserRoles.value = ["student"];
 
 				const { wrapper } = setup();
@@ -138,7 +151,7 @@ describe("Announcement", () => {
 
 		describe("and user has multiple roles", () => {
 			it("should render the alert if any role matches", async () => {
-				mockRuntimeConfigResponse({ enabled: true, roles: "teacher,admin" });
+				// mockRuntimeConfigResponse({ enabled: true, roles: "teacher,admin" });
 				mockUserRoles.value = ["student", "teacher"];
 
 				const { wrapper } = setup();
@@ -152,11 +165,11 @@ describe("Announcement", () => {
 
 	describe("when API returns no data", () => {
 		it("should not render the alert", async () => {
-			const emptyData: { data: Array<{ key: string; value: unknown }> | undefined } = { data: undefined };
+			// const emptyData: { data: Array<{ key: string; value: unknown }> | undefined } = { data: undefined };
 
-			runtimeConfigApi.runtimeConfigControllerGetRuntimeConfig.mockResolvedValue(
-				mockApiResponse({ data: emptyData as RuntimeConfigListResponse })
-			);
+			// runtimeConfigApi.runtimeConfigControllerGetRuntimeConfig.mockResolvedValue(
+			// 	mockApiResponse({ data: emptyData as RuntimeConfigListResponse })
+			// );
 
 			const { wrapper } = setup();
 			await flushPromises();
