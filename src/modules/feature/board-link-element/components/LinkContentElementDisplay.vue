@@ -1,7 +1,6 @@
 <template>
 	<div ref="linkContentElementDisplay" data-testid="board-link-element" tabindex="-1">
 		<ContentElementBar
-			:has-grey-background="true"
 			:icon="mdiLink"
 			:has-row-style="!!imageUrl && isSmallOrLargerListBoard"
 		>

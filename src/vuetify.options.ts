@@ -5,10 +5,6 @@ import { type ThemeDefinition } from "vuetify";
 const defaultTheme: ThemeDefinition = {
 	dark: false,
 	colors: {
-		primary: "#9e292b",
-		"primary-darken-1": "#800416",
-		"primary-lighten": "#f5eaea",
-		accent: "#e98404",
 		"on-surface": "#3a424b",
 		"on-background": "#3a424b",
 		"on-white": "#3a424b",

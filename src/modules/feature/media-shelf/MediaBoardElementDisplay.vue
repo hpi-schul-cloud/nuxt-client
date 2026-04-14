@@ -42,7 +42,7 @@
 						<slot name="menu" />
 					</div>
 				</div>
-				<ContentElementBar :has-grey-background="true">
+				<ContentElementBar>
 					<template #title>
 						<div data-testid="media-element-title">
 							{{ element.title }}

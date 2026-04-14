@@ -13,7 +13,7 @@
 		@keyup.enter.space="onClickElement"
 		@click="onClickElement"
 	>
-		<ContentElementBar :has-grey-background="true" icon="$h5pOutline" :has-row-style="isSmallOrLargerListBoard">
+		<ContentElementBar icon="$h5pOutline" :has-row-style="isSmallOrLargerListBoard">
 			<template #display>
 				<v-img
 					v-if="hasLinkedContent"

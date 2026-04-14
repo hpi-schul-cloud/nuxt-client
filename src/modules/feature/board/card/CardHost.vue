@@ -11,7 +11,10 @@
 				ref="cardHost"
 				:height="isLoadingCard ? height : 'auto'"
 				class="card-host"
-				:style="{ backgroundColor: cardBackground }"
+				:style="{
+					backgroundColor: cardBackground,
+					borderLeft: cardBorderColor ? `3px solid ${cardBorderColor}` : undefined,
+				}"
 				:class="{ 'drag-disabled': isEditMode }"
 				tabindex="0"
 				min-height="120px"
@@ -111,7 +114,7 @@ import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
 import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
-import { colorToHexLighten5 } from "@/utils/color.utils";
+import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { delay } from "@/utils/helpers";
 import { Colors } from "@api-server";
@@ -177,6 +180,11 @@ const cardElevation = computed(() => {
 });
 
 const cardBackground = computed(() => colorToHexLighten5(card.value?.backgroundColor ?? Colors.TRANSPARENT));
+const cardBorderColor = computed(() => {
+	const color = card.value?.backgroundColor;
+	if (!color || color === Colors.TRANSPARENT) return undefined;
+	return colorToHexLighten3(color);
+});
 
 const { askType } = useAddElementDialog(cardStore.createElementRequest, cardId.value);
 

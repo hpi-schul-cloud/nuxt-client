@@ -13,7 +13,6 @@
 		@keydown.stop
 	>
 		<ContentElementBar
-			:has-grey-background="true"
 			:has-row-style="isSmallOrLargerListBoard"
 			:icon="mdiTextBoxEditOutline"
 		>
