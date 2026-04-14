@@ -77,7 +77,7 @@ const getNotificationText = (text: string) => (i18nKeyExists(text) ? t(text) : t
 	position: fixed;
 	right: 0;
 	// The z-index is required because it would otherwise be hidden by the element with the class .wireframe-menu-container, which has a z-index of 2000
-	z-index: 2001;
+	z-index: 80;
 	overflow: visible;
 }
 
@@ -87,7 +87,7 @@ const getNotificationText = (text: string) => (i18nKeyExists(text) ? t(text) : t
 	bottom: 5vh;
 	left: 0;
 	// The z-index is required because it would otherwise be hidden by the element with the class .wireframe-menu-container, which has a z-index of 2000
-	z-index: 2001;
+	z-index: 80;
 	overflow: visible;
 }
 
