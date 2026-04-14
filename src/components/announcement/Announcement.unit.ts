@@ -6,8 +6,6 @@ import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { ref } from "vue";
 
-// let runtimeConfigApi: Mocked<RuntimeConfigApiInterface>;
-
 const mockLocale = ref<LanguageType>(LanguageType.DE);
 vi.mock("@/plugins/i18n", () => ({
 	useI18nGlobal: () => ({
@@ -23,6 +21,7 @@ vi.mock("@data-app", () => ({
 }));
 
 const mockRuntimeConfig = ref<Record<string, unknown>>({
+	DASHBOARD_ANNOUNCEMENT_ENABLED: true,
 	DASHBOARD_ANNOUNCEMENT_FOR_ROLES: "teacher,admin",
 	DASHBOARD_ANNOUNCEMENT_TEXT_DE: "Ankündigung auf <strong>Deutsch</strong>",
 	DASHBOARD_ANNOUNCEMENT_TEXT_EN: "Announcement in <strong>English</strong>",
@@ -30,50 +29,13 @@ const mockRuntimeConfig = ref<Record<string, unknown>>({
 	DASHBOARD_ANNOUNCEMENT_TEXT_UK: "Оголошення <strong>українською</strong>",
 });
 
-vi.mock("@data-runtime", () => ({
-	useRuntimeConfig: () => ({
+vi.mock("@data-runtime-config", () => ({
+	useRuntimeConfigStore: () => ({
 		runtimeConfig: mockRuntimeConfig.value,
 	}),
 }));
 
 describe("Announcement", () => {
-	/*
-	const mockRuntimeConfigResponse = (
-		options: {
-			enabled?: boolean;
-			roles?: string;
-			textDe?: string;
-			textEn?: string;
-			textEs?: string;
-			textUk?: string;
-		} = {}
-	) => {
-		const {
-			enabled = false,
-			roles = "teacher,admin",
-			textDe = "Ankündigung auf <strong>Deutsch</strong>",
-			textEn = "Announcement in <strong>English</strong>",
-			textEs = "Anuncio en <strong>español</strong>",
-			textUk = "Оголошення <strong>українською</strong>",
-		} = options;
-
-		const data: { data: Array<{ key: string; value: unknown }> } = {
-			data: [
-				{ key: "DASHBOARD_ANNOUNCEMENT_ENABLED", value: enabled },
-				{ key: "DASHBOARD_ANNOUNCEMENT_FOR_ROLES", value: roles },
-				{ key: "DASHBOARD_ANNOUNCEMENT_TEXT_DE", value: textDe },
-				{ key: "DASHBOARD_ANNOUNCEMENT_TEXT_EN", value: textEn },
-				{ key: "DASHBOARD_ANNOUNCEMENT_TEXT_ES", value: textEs },
-				{ key: "DASHBOARD_ANNOUNCEMENT_TEXT_UK", value: textUk },
-			],
-		};
-
-		runtimeConfigApi.runtimeConfigControllerGetRuntimeConfig.mockResolvedValue(
-			mockApiResponse({ data: data as RuntimeConfigListResponse })
-		);
-	};
-	*/
-
 	const setup = () => {
 		const wrapper = shallowMount(Announcement, {
 			global: {
@@ -90,11 +52,17 @@ describe("Announcement", () => {
 	};
 
 	beforeEach(() => {
-		// runtimeConfigApi = mockApi<RuntimeConfigApiInterface>();
-		// vi.spyOn(serverApi, "RuntimeConfigApiFactory").mockReturnValue(runtimeConfigApi);
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		mockLocale.value = LanguageType.DE;
 		mockUserRoles.value = ["teacher"];
+		mockRuntimeConfig.value = {
+			DASHBOARD_ANNOUNCEMENT_ENABLED: true,
+			DASHBOARD_ANNOUNCEMENT_FOR_ROLES: "teacher,admin",
+			DASHBOARD_ANNOUNCEMENT_TEXT_DE: "Ankündigung auf <strong>Deutsch</strong>",
+			DASHBOARD_ANNOUNCEMENT_TEXT_EN: "Announcement in <strong>English</strong>",
+			DASHBOARD_ANNOUNCEMENT_TEXT_ES: "Anuncio en <strong>español</strong>",
+			DASHBOARD_ANNOUNCEMENT_TEXT_UK: "Оголошення <strong>українською</strong>",
+		};
 	});
 
 	afterEach(() => {
@@ -103,7 +71,7 @@ describe("Announcement", () => {
 
 	describe("when announcement is disabled", () => {
 		it("should not render the alert", async () => {
-			// mockRuntimeConfigResponse({ enabled: false });
+			mockRuntimeConfig.value.DASHBOARD_ANNOUNCEMENT_ENABLED = false;
 
 			const { wrapper } = setup();
 			await flushPromises();
@@ -121,7 +89,6 @@ describe("Announcement", () => {
 				{ locale: LanguageType.ES, expectedHTML: "Anuncio en <strong>español</strong>" },
 				{ locale: LanguageType.UK, expectedHTML: "Оголошення <strong>українською</strong>" },
 			])("should render the alert with correct HTML when locale is $locale", async ({ locale, expectedHTML }) => {
-				// mockRuntimeConfigResponse({ enabled: true });
 				mockLocale.value = locale;
 				mockUserRoles.value = ["teacher"];
 
@@ -138,7 +105,7 @@ describe("Announcement", () => {
 
 		describe("and user role does not match", () => {
 			it("should not render the alert", async () => {
-				// mockRuntimeConfigResponse({ enabled: true, roles: "admin" });
+				mockRuntimeConfig.value.DASHBOARD_ANNOUNCEMENT_FOR_ROLES = "admin";
 				mockUserRoles.value = ["student"];
 
 				const { wrapper } = setup();
@@ -151,7 +118,6 @@ describe("Announcement", () => {
 
 		describe("and user has multiple roles", () => {
 			it("should render the alert if any role matches", async () => {
-				// mockRuntimeConfigResponse({ enabled: true, roles: "teacher,admin" });
 				mockUserRoles.value = ["student", "teacher"];
 
 				const { wrapper } = setup();
@@ -165,11 +131,7 @@ describe("Announcement", () => {
 
 	describe("when API returns no data", () => {
 		it("should not render the alert", async () => {
-			// const emptyData: { data: Array<{ key: string; value: unknown }> | undefined } = { data: undefined };
-
-			// runtimeConfigApi.runtimeConfigControllerGetRuntimeConfig.mockResolvedValue(
-			// 	mockApiResponse({ data: emptyData as RuntimeConfigListResponse })
-			// );
+			mockRuntimeConfig.value = {};
 
 			const { wrapper } = setup();
 			await flushPromises();
