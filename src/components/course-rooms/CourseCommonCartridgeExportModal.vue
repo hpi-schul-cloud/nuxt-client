@@ -27,6 +27,19 @@
 					<ul class="ml-6">
 						<li>{{ t(`components.molecules.export.options.info.point2`) }}</li>
 						<li v-if="radios && radios == '1.1.0'">{{ t(`components.molecules.export.options.info.point3`) }}</li>
+						<li>
+							{{ t(`components.molecules.export.options.info.point4`) }}
+							<ul class="ml-6">
+								<li>{{ t(`components.molecules.export.options.info.point4.sub1`) }}</li>
+								<li>{{ t(`components.molecules.export.options.info.point4.sub2`) }}</li>
+								<li>{{ t(`components.molecules.export.options.info.point4.sub3`) }}</li>
+								<li v-if="radios && radios == '1.1.0'" data-testid="export-options-info-point4-sub4">
+									{{ t(`components.molecules.export.options.info.point4.sub4`) }}
+								</li>
+								<li>{{ t(`components.molecules.export.options.info.point4.sub5`) }}</li>
+								<li>{{ t(`components.molecules.export.options.info.point4.sub6`) }}</li>
+							</ul>
+						</li>
 					</ul>
 				</InfoAlert>
 				<VCheckbox
