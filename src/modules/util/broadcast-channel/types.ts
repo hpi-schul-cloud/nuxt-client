@@ -4,4 +4,5 @@ export enum SessionState {
 	Expired = "expired",
 	Error = "error",
 	Started = "started",
+	Closed = "closed",
 }
