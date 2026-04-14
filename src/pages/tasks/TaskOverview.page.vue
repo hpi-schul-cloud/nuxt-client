@@ -40,7 +40,6 @@
 		</template>
 		<div class="content-max-width mx-auto mt-5 mb-14">
 			<VAutocomplete
-				v-if="showCourseFilter"
 				v-model="selectedCourseFilters"
 				closable-chips
 				multiple
@@ -54,12 +53,11 @@
 				:prepend-inner-icon="mdiMagnify"
 				:menu-props="{ closeOnContentClick: false, zIndex: 30 }"
 				:items="getSortedCoursesFilters"
-				:label="$t('pages.tasks.labels.filter')"
-				:aria-label="$t('pages.tasks.labels.filter')"
-				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
+				:label="t('pages.tasks.labels.filter')"
+				:aria-label="t('pages.tasks.labels.filter')"
+				:no-data-text="t('pages.tasks.labels.noCoursesAvailable')"
 				class="mb-4"
 			/>
-			<div v-else class="course-filter-placeholder" />
 			<TasksDashboardStudent v-if="isStudent" :tab-routes="tabRoutes" />
 			<TasksDashboardTeacher v-else :tab="activeTab" :tab-routes />
 		</div>
@@ -103,11 +101,9 @@ const { t } = useI18n();
 
 const tasksModule = inject("tasksModule");
 const copyModule = inject(COPY_MODULE_KEY);
-const finishedTasksModule = inject("finishedTasksModule");
 
 if (!tasksModule) throw new Error("TasksDashboardMain: missing injection 'tasksModule'");
 if (!copyModule) throw new Error("TasksDashboardMain: missing injection copyModule (COPY_MODULE_KEY)");
-if (!finishedTasksModule) throw new Error("TasksDashboardMain: missing injection 'finishedTasksModule'");
 
 useTitle(buildPageTitle(t("common.words.tasks")));
 
@@ -134,11 +130,6 @@ const tabRoutes = computed(() => {
 const selectedCourseFilters = computed({
 	get: () => tasksModule.getSelectedCourseFilters,
 	set: (courseNames) => tasksModule.setCourseFilters(courseNames),
-});
-
-const showCourseFilter = computed(() => {
-	if (activeTab.value === tabRoutes.value[2]) return false;
-	return allTasks.value.length > 0;
 });
 
 const showSubstituteFilter = computed(() => isTeacher.value && activeTab.value !== tabRoutes.value[2]);
