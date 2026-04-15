@@ -38,7 +38,7 @@ import { BoardContextType } from "@/types/board/BoardContext";
 import { VideoConferenceOptionsResponse } from "@api-server";
 import { InfoAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { computed, ComputedRef, PropType } from "vue";
+import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -62,7 +62,7 @@ const { t } = useI18n();
 
 defineEmits(["close", "start-video-conference"]);
 
-const localOptions: ComputedRef<VideoConferenceOptionsResponse> = computed(() => props.options);
+const localOptions = computed(() => props.options);
 
 const showInfoAlert = computed(() => {
 	if (props.boardParentType === BoardContextType.COURSE) {
