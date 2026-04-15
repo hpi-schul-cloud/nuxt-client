@@ -12,6 +12,7 @@ import { useBoardFeatures, useBoardFocusHandler, useContentElementState } from "
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenu } from "@ui-board";
+import { SvsDialog } from "@ui-dialog";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { flushPromises } from "@vue/test-utils";
@@ -651,9 +652,8 @@ describe("VideoConferenceContentElement", () => {
 
 				useVideoConferenceMock.error.value = new Error("error");
 
-				const dialog = wrapper.findComponent({
-					ref: "errorDialog",
-				});
+				const dialog = wrapper.findComponent(SvsDialog);
+
 				await flushPromises();
 
 				expect(dialog.props("modelValue")).toBe(true);
@@ -670,10 +670,7 @@ describe("VideoConferenceContentElement", () => {
 				const videoConferenceElement = wrapper.findComponent('[data-testid="video-conference-element"]');
 				await videoConferenceElement.trigger("click");
 
-				const dialog = wrapper.findComponent({
-					ref: "errorDialog",
-				});
-
+				const dialog = wrapper.findComponent(SvsDialog);
 				expect(dialog.props("modelValue")).toBe(false);
 			});
 		});

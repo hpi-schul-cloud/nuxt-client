@@ -349,13 +349,10 @@ export default {
 		"Die Aktualisierung der VIDIS-Medien läuft im Hintergrund weiter. Bitte gedulden Sie sich noch einen Moment.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Die Verwendung des Tools konnte nicht ermittelt werden.",
-	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
-		"Sind Sie sich sicher, dass Sie das Tool {0} löschen wollen?",
-	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
-		"Zurzeit wird das Tool wie folgt genutzt:",
+	"components.administration.externalToolsSection.dialog.content.header": "Zurzeit wird das Tool wie folgt genutzt:",
 	"components.administration.externalToolsSection.dialog.content.warning":
-		"Achtung: Wenn das Tool entfernt wird, kann es für diese Schule nicht mehr genutzt werden.",
-	"components.administration.externalToolsSection.dialog.title": "Externes Tool entfernen?",
+		"Wenn das Tool entfernt wird, kann es für diese Schule nicht mehr genutzt werden.",
+	"components.administration.externalToolsSection.dialog.title": `Externes Tool {itemName} wirklich löschen?`,
 	"components.administration.externalToolsSection.header": "Externe Tools",
 	"components.administration.externalToolsSection.info":
 		"Dieser Bereich ermöglicht es, Drittanbieter-Tools nahtlos in die Cloud zu integrieren. Mit den bereitgestellten Funktionen können Tools hinzugefügt, bestehende aktualisiert oder nicht mehr benötigte entfernt werden. Lehrkräfte müssen die Tools dann zu Kursen hinzufügen.",
@@ -703,9 +700,16 @@ export default {
 		"Der Kurs, in den die Aufgabe importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.export.options.info": "Folgende Inhalte werden nicht exportiert:",
 	"components.molecules.export.options.info.point1": "Hochgeladene Dateien innerhalb des Kurses.",
-	"components.molecules.export.options.info.point2": "Abgaben, die einer Aufgabe zugeordnet sind.",
+	"components.molecules.export.options.info.point2": "Abgaben",
 	"components.molecules.export.options.info.point3":
 		"Dateiordner werden mit Common Cartridge Version 1.1 nicht exportiert",
+	"components.molecules.export.options.info.point4": "Folgende Karten Elemente innerhalb von Bereichen:",
+	"components.molecules.export.options.info.point4.sub1": "Whiteboard",
+	"components.molecules.export.options.info.point4.sub2": "Etherpad",
+	"components.molecules.export.options.info.point4.sub3": "Externe Tools",
+	"components.molecules.export.options.info.point4.sub4": "Dateiordner",
+	"components.molecules.export.options.info.point4.sub5": "Merlin Bibliothek",
+	"components.molecules.export.options.info.point4.sub6": "H5P",
 	"components.molecules.import.tasks.options.selectCourse": "Kurs wählen",
 	"components.molecules.import.tasks.options.title": "Aufgabe importieren",
 	"components.molecules.importUsersMatch.deleteMatch": "Verknüpfung löschen",
@@ -1656,7 +1660,6 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Kursname",
 	"pages.rooms.importCourse.step_3": "Der importierte Kurs kann im nächsten Schritt umbenannt werden.",
 	"pages.rooms.ccImportCourse.title": "Kurs importieren",
-	"pages.rooms.ccImportCourse.confirm": "Importieren",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Datei auswählen",
 	"pages.rooms.ccImportCourse.loading": "Upload läuft...",
 	"pages.rooms.ccImportCourse.success": "Deine Kursdatei wurde hochgeladen und wird nun im Hintergrund importiert.",
@@ -1675,7 +1678,7 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Tool Menü",
 	"pages.rooms.tools.outdated": "Konfiguration unvollständig",
 	"pages.rooms.tools.outdatedDialog.title": "Tool „{toolName}“ veraltet",
-	"pages.room.modal.course.export.header": "Export-Format",
+	"pages.room.modal.course.export.header": "Export-Version",
 	"pages.room.modal.course.export.options.header": "Export-Einstellung",
 	"pages.room.modal.course.export.options.topics": "Themen",
 	"pages.room.modal.course.export.options.tasks": "Aufgaben ohne Themen",

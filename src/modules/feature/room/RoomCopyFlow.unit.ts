@@ -10,6 +10,8 @@ import { CopyApiResponseStatus, CopyApiResponseType } from "@api-server";
 import { useLoadingStore } from "@data-app";
 import { RoomCopyFlow } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
+import { WarningAlert } from "@ui-alert";
+import { SvsDialog } from "@ui-dialog";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
@@ -43,13 +45,14 @@ describe("@feature-room/RoomCopyFlow", () => {
 			},
 			props: {
 				room,
+				modelValue: true,
 			},
 		});
 
 		// allow components to render
 		await nextTick();
 
-		const infoDialog = wrapper.findComponent({ name: "RoomCopyInfoDialog" });
+		const infoDialog = wrapper.findComponent(SvsDialog);
 
 		return {
 			wrapper,
@@ -74,19 +77,22 @@ describe("@feature-room/RoomCopyFlow", () => {
 		});
 	});
 
+	it("should render component with correct text", async () => {
+		const { infoDialog } = await mountComponent();
+
+		await flushPromises();
+		expect(infoDialog.findComponent(WarningAlert).text()).toContain(
+			"feature-room.CopyInfoDialog.text.alert.membersPermissions"
+		);
+	});
+
 	describe("when the dialog cancel button is clicked", () => {
 		const setupWithCancel = async () => {
 			const { infoDialog, ...rest } = await mountComponent();
-			await infoDialog.vm.$emit("copy:cancel");
+			await infoDialog.vm.$emit("cancel");
 
 			return { infoDialog, ...rest };
 		};
-
-		it("should close the dialog", async () => {
-			const { infoDialog } = await setupWithCancel();
-
-			expect(infoDialog.exists()).toBe(false);
-		});
 
 		it("should emit 'copy:cancel' event", async () => {
 			const { wrapper } = await setupWithCancel();
@@ -105,17 +111,11 @@ describe("@feature-room/RoomCopyFlow", () => {
 		const setupWithConfirm = async () => {
 			const { infoDialog, ...rest } = await mountComponent();
 
-			await infoDialog.vm.$emit("copy:confirm");
+			await infoDialog.vm.$emit("confirm");
 			await flushPromises(); // wait for ref to be updated
 
 			return { infoDialog, ...rest };
 		};
-
-		it("should close the dialog", async () => {
-			const { infoDialog } = await setupWithConfirm();
-
-			expect(infoDialog.exists()).toBe(false);
-		});
 
 		it("should set the loading status to true with the correct message", async () => {
 			const { loadingStore } = await setupWithConfirm();
@@ -133,7 +133,7 @@ describe("@feature-room/RoomCopyFlow", () => {
 		const setupWithApiSuccess = async () => {
 			const { infoDialog, ...rest } = await mountComponent();
 
-			await infoDialog.vm.$emit("copy:confirm");
+			await infoDialog.vm.$emit("confirm");
 			await flushPromises(); // wait for ref to be updated
 
 			return { infoDialog, ...rest };
@@ -178,7 +178,7 @@ describe("@feature-room/RoomCopyFlow", () => {
 				success: true,
 			});
 
-			await infoDialog.vm.$emit("copy:confirm");
+			await infoDialog.vm.$emit("confirm");
 			await flushPromises(); // wait for ref to be updated
 
 			return { infoDialog, roomStore, ...rest };
@@ -223,7 +223,7 @@ describe("@feature-room/RoomCopyFlow", () => {
 				success: true,
 			});
 
-			await infoDialog.vm.$emit("copy:confirm");
+			await infoDialog.vm.$emit("confirm");
 			await flushPromises(); // wait for ref to be updated
 
 			return { infoDialog, roomStore, ...rest };
@@ -257,7 +257,7 @@ describe("@feature-room/RoomCopyFlow", () => {
 		const setupWithError = async () => {
 			const { infoDialog, ...rest } = await mountComponent();
 
-			await infoDialog.vm.$emit("copy:confirm");
+			await infoDialog.vm.$emit("confirm");
 			await flushPromises(); // wait for ref to be updated
 
 			return { infoDialog, ...rest };
