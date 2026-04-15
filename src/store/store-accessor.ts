@@ -8,7 +8,6 @@
 import CommonCartridgeExportModule from "./common-cartridge-export";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import CourseRoomListModule from "@/store/course-room-list";
 import FilePaths from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
 import GroupModule from "@/store/group";
@@ -31,7 +30,6 @@ export let finishedTasksModule: FinishedTasksModule;
 export let groupModule: GroupModule;
 export let importUsersModule: ImportUsersModule;
 export let courseRoomDetailsModule: CourseRoomDetailsModule;
-export let courseRoomListModule: CourseRoomListModule;
 export let schoolExternalToolsModule: SchoolExternalToolsModule;
 export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
@@ -48,7 +46,6 @@ export function initializeStores(store: Store<unknown>): void {
 	groupModule = getModule(GroupModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	courseRoomDetailsModule = getModule(CourseRoomDetailsModule, store);
-	courseRoomListModule = getModule(CourseRoomListModule, store);
 	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	shareModule = getModule(ShareModule, store);
@@ -68,7 +65,6 @@ export const modules = {
 	groupModule: GroupModule,
 	importUsersModule: ImportUsersModule,
 	courseRoomDetailsModule: CourseRoomDetailsModule,
-	courseRoomListModule: CourseRoomListModule,
 	schoolExternalToolsModule: SchoolExternalToolsModule,
 	schoolsModule: SchoolsModule,
 	shareModule: ShareModule,

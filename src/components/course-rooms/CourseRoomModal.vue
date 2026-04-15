@@ -1,22 +1,19 @@
 <template>
-	<CustomDialog ref="customDialog" :is-open="isOpen" class="room-dialog" @dialog-closed="$emit('update:isOpen', false)">
-		<template #title>
-			<div class="pt-2 room-title">
-				<v-text-field
-					v-model="data.title"
-					density="compact"
-					flat
-					:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
-					:placeholder="$t('pages.rooms.roomModal.courseGroupTitle')"
-					:label="$t('pages.rooms.roomModal.courseGroupTitle')"
-					:rules="[validateOnOpeningTag]"
-					@blur="onBlur"
-					@keyup.enter="onEnterInput"
-				/>
-			</div>
-		</template>
+	<SvsDialog :model-value="isOpen" no-actions :title="data.title" @cancel="emit('update:isOpen', false)">
 		<template #content>
-			<course-room-avatar-iterator
+			<VTextField
+				v-model="data.title"
+				density="compact"
+				class="pt-2"
+				flat
+				:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
+				:placeholder="$t('pages.rooms.roomModal.courseGroupTitle')"
+				:label="$t('pages.rooms.roomModal.courseGroupTitle')"
+				:rules="[validateOnOpeningTag]"
+				@blur="onBlur"
+				@keyup.enter="onEnterInput"
+			/>
+			<CourseRoomAvatarIterator
 				class="iterator"
 				:avatars="groupData.groupElements"
 				:item-size="itemSize"
@@ -27,61 +24,35 @@
 				@start-drag="$emit('drag-from-group', $event)"
 			/>
 		</template>
-	</CustomDialog>
+	</SvsDialog>
 </template>
 <script setup lang="ts">
 import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { courseRoomListModule } from "@/store";
+import { type GroupDataType, useCourseRoomListStore } from "@data-course-rooms";
+import { SvsDialog } from "@ui-dialog";
 import { useOpeningTagValidator } from "@util-validators";
-import { PropType, ref, watch } from "vue";
+import { ref, watch } from "vue";
 
-type ItemType = {
-	id: string;
-	title: string;
-	shortTitle: string;
-	displayColor: string;
-	xPosition: number;
-	yPosition: number;
-	to: string;
+type Props = {
+	isOpen: boolean;
+	groupData: GroupDataType;
+	itemSize?: string;
+	draggable?: boolean;
 };
 
-type GroupDataType = {
-	title: string;
-	shortTitle: string;
-	displayColor: string;
-	xPosition: number;
-	yPosition: number;
-	groupId: string;
-	groupElements: ItemType[];
-	isSynchronized: boolean;
-	to: string;
-};
-
-const props = defineProps({
-	isOpen: {
-		type: Boolean,
-		required: true,
-	},
-	groupData: {
-		type: Object as PropType<GroupDataType>,
-		required: true,
-	},
-	itemSize: {
-		type: String,
-		default: "5em",
-	},
-	draggable: {
-		type: Boolean,
-		default: false,
-	},
+const props = withDefaults(defineProps<Props>(), {
+	itemSize: "5em",
+	draggable: false,
 });
 
-defineEmits(["update:isOpen", "drag-from-group"]);
+const emit = defineEmits(["update:isOpen", "drag-from-group"]);
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
+const courseRoomListStore = useCourseRoomListStore();
+const { updateCourse } = courseRoomListStore;
 
 const data = ref<GroupDataType>({
+	id: "",
 	title: "",
 	shortTitle: "",
 	displayColor: "",
@@ -89,13 +60,14 @@ const data = ref<GroupDataType>({
 	yPosition: -1,
 	groupId: "",
 	groupElements: [],
+	copyingSince: "",
 	isSynchronized: false,
-	to: "",
+	isLocked: false,
 });
 
 const updateCourseGroupName = async () => {
 	if (validateOnOpeningTag(data.value.title) === true) {
-		await courseRoomListModule.update({
+		await updateCourse({
 			id: data.value.groupId,
 			title: data.value.title,
 			shortTitle: data.value.shortTitle,
@@ -123,9 +95,3 @@ watch(
 	{ deep: true }
 );
 </script>
-
-<style lang="scss" scoped>
-.room-title {
-	width: 100%;
-}
-</style>

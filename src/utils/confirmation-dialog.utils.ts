@@ -11,13 +11,7 @@ export const askDeletion = (
 	message?: string,
 	messageType: "info" | "warning" = "warning",
 	confirmBtnKey = "common.actions.delete"
-) =>
-	askConfirmation({
-		title,
-		message,
-		messageType: messageType,
-		confirmBtnKey: confirmBtnKey,
-	});
+) => askConfirmation({ title, message, messageType, confirmBtnKey });
 
 export const askDeletionForItem = async (itemName: string, itemType: string) => {
 	const { t } = useI18nGlobal();
@@ -42,11 +36,12 @@ export const askDeletionForType = async (itemType: string) => {
 
 export const askCancel = (
 	title = "ui-confirmation-dialog.ask-cancel-form",
-	message = "ui-confirmation-dialog.ask-cancel-warning-message"
+	message = "ui-confirmation-dialog.ask-cancel-warning-message",
+	confirmBtnKey = "common.actions.discard"
 ) =>
 	askConfirmation({
 		title,
 		message,
 		messageType: "warning",
-		confirmBtnKey: "common.actions.discard",
+		confirmBtnKey,
 	});

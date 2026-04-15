@@ -3,7 +3,7 @@
 		<template #header>
 			<slot name="header" />
 		</template>
-		<template v-if="isLoading">
+		<template v-if="loading">
 			<VContainer class="loader">
 				<VSkeletonLoader ref="skeleton-loader" type="date-picker-days" class="mt-6" />
 			</VContainer>
@@ -19,33 +19,28 @@
 			<slot name="page-content" />
 		</template>
 		<StartNewCourseSyncDialog v-model:is-open="isCourseSyncDialogOpen" />
-		<CourseCommonCartridgeImportModal
-			v-model:is-open="commonCartridgeImport.isOpen.value"
-			:max-width="480"
-			class="upload-modal"
-			@import="handleImport"
-		/>
+		<CourseCommonCartridgeImportModal v-model="commonCartridgeImport.isOpen.value" @import="handleImport" />
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
-import { COURSE_ROOM_LIST_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { Permission } from "@api-server";
 import { notifyError, notifySuccess, useAppStore, useLoadingStore } from "@data-app";
 import { useCommonCartridgeImport } from "@data-common-cartridge";
+import { useCourseRoomListStore } from "@data-course-rooms";
 import { useEnvConfig } from "@data-env";
 import { StartNewCourseSyncDialog } from "@feature-course-sync";
 import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@icons/material";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { FabAction } from "@ui-speed-dial-menu";
+import { storeToRefs } from "pinia";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const courseRoomListModule = injectStrict(COURSE_ROOM_LIST_MODULE_KEY);
 const { setLoadingState } = useLoadingStore();
 
 const props = defineProps({
@@ -58,6 +53,10 @@ const props = defineProps({
 		required: false,
 	},
 });
+
+const courseRoomListStore = useCourseRoomListStore();
+const { fetchCourses, fetchAllElements } = courseRoomListStore;
+const { loading } = storeToRefs(courseRoomListStore);
 
 const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 
@@ -115,8 +114,6 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 	}
 });
 
-const isLoading = computed(() => courseRoomListModule.getLoading);
-
 const handleImport = async (file: File): Promise<void> => {
 	commonCartridgeImport.isOpen.value = false;
 	setLoadingState(true, t("pages.rooms.ccImportCourse.loading"));
@@ -124,7 +121,7 @@ const handleImport = async (file: File): Promise<void> => {
 	await commonCartridgeImport.importCommonCartridgeFile(file);
 	setLoadingState(false);
 
-	await Promise.allSettled([courseRoomListModule.fetch(), courseRoomListModule.fetchAllElements()]);
+	await Promise.allSettled([fetchCourses(), fetchAllElements()]);
 
 	if (commonCartridgeImport.isSuccess.value) {
 		notifySuccess(t("pages.rooms.ccImportCourse.success"));
@@ -133,7 +130,7 @@ const handleImport = async (file: File): Promise<void> => {
 	}
 };
 
-const isEmptyState = computed(() => !courseRoomListModule.getLoading && !props.hasRooms && !props.hasImportToken);
+const isEmptyState = computed(() => !loading.value && !props.hasRooms && !props.hasImportToken);
 </script>
 
 <style lang="scss" scoped>

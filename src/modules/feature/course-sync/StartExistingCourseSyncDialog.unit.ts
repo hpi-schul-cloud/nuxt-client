@@ -1,6 +1,6 @@
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import StartExistingCourseSyncDialog from "./StartExistingCourseSyncDialog.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestAppStore, expectNotification, groupResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { MeResponse, RoleName } from "@api-server";
@@ -8,7 +8,7 @@ import { useCourseApi } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mocked } from "vitest";
+import { expect, Mocked } from "vitest";
 import { nextTick } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
 
@@ -33,7 +33,6 @@ describe("StartExistingCourseSyncDialog", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: {
 					GroupSelectionDialog: true,
-					VDialog: true,
 				},
 			},
 			props,
@@ -67,17 +66,11 @@ describe("StartExistingCourseSyncDialog", () => {
 	});
 
 	describe("when the dialog is closed", () => {
-		it("should close the all dialogs", () => {
+		it("should close the dialog", () => {
 			const { wrapper } = getWrapper({ isOpen: false });
 
 			const groupSelectionDialog = wrapper.getComponent(GroupSelectionDialog);
-			const confirmationDialog = wrapper.getComponent<typeof CustomDialog>({
-				ref: "start-existing-course-sync-dialog",
-			});
-
 			expect(groupSelectionDialog.props().isOpen).toEqual(false);
-			expect(confirmationDialog.props().isOpen).toEqual(false);
-			expect((wrapper.vm as unknown as typeof StartExistingCourseSyncDialog).step).toEqual(0);
 		});
 	});
 
@@ -94,35 +87,28 @@ describe("StartExistingCourseSyncDialog", () => {
 		};
 
 		it("should open the confirmation dialog", async () => {
+			const spy = vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 			const { wrapper, group } = setup();
 
 			wrapper.getComponent(GroupSelectionDialog).vm.$emit("confirm", group);
 			await nextTick();
 
 			const groupSelectionDialog = wrapper.getComponent(GroupSelectionDialog);
-			const confirmationDialog = wrapper.getComponent<typeof CustomDialog>({
-				ref: "start-existing-course-sync-dialog",
-			});
 
 			expect(groupSelectionDialog.props().isOpen).toEqual(false);
-			expect(confirmationDialog.props().isOpen).toEqual(true);
+			expect(spy).toHaveBeenCalled();
 		});
 	});
 
 	describe("when confirming the confirm dialog", () => {
 		const setup = async () => {
+			vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 			const { wrapper } = getWrapper();
 
 			const group = groupResponseFactory.build();
 
 			wrapper.getComponent(GroupSelectionDialog).vm.$emit("confirm", group);
 			await nextTick();
-
-			const confirmationDialog = wrapper.getComponent<typeof CustomDialog>({
-				ref: "start-existing-course-sync-dialog",
-			});
-			const confirmBtn = confirmationDialog.findComponent("[data-testid=dialog-confirm]");
-			await confirmBtn.trigger("click");
 
 			return {
 				wrapper,
@@ -158,6 +144,7 @@ describe("StartExistingCourseSyncDialog", () => {
 
 	describe("when starting the sync fails", () => {
 		const setup = async () => {
+			vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 			const { wrapper } = getWrapper();
 
 			courseApiMock.startSynchronization.mockRejectedValueOnce(new Error());
@@ -166,12 +153,6 @@ describe("StartExistingCourseSyncDialog", () => {
 
 			wrapper.getComponent(GroupSelectionDialog).vm.$emit("confirm", group);
 			await nextTick();
-
-			const confirmationDialog = wrapper.getComponent<typeof CustomDialog>({
-				ref: "start-existing-course-sync-dialog",
-			});
-			const confirmBtn = confirmationDialog.findComponent("[data-testid=dialog-confirm]");
-			await confirmBtn.trigger("click");
 
 			return {
 				wrapper,
@@ -193,18 +174,14 @@ describe("StartExistingCourseSyncDialog", () => {
 
 	describe("when data is missing on confirming the group", () => {
 		const setup = async () => {
+			vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
+
 			const { wrapper } = getWrapper({
 				isOpen: true,
 			});
 
 			wrapper.getComponent(GroupSelectionDialog).vm.$emit("confirm", undefined);
 			await nextTick();
-
-			const confirmationDialog = wrapper.getComponent<typeof CustomDialog>({
-				ref: "start-existing-course-sync-dialog",
-			});
-			const confirmBtn = confirmationDialog.findComponent("[data-testid=dialog-confirm]");
-			await confirmBtn.trigger("click");
 
 			return {
 				wrapper,
@@ -248,11 +225,14 @@ describe("StartExistingCourseSyncDialog", () => {
 		};
 
 		it("should display the correct warning in the confirmation dialog", async () => {
-			const { wrapper } = await setup();
+			const spy = vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
+			await setup();
 
-			const text = wrapper.find("[data-testid=no-teacher-warning-text]");
-
-			expect(text.text()).toEqual("feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning");
+			expect(spy).toHaveBeenCalledWith(
+				expect.objectContaining({
+					message: "feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning",
+				})
+			);
 		});
 	});
 
@@ -281,12 +261,13 @@ describe("StartExistingCourseSyncDialog", () => {
 		};
 
 		it("should display the correct warning in the confirmation dialog", async () => {
-			const { wrapper } = await setup();
+			const spy = vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
+			await setup();
 
-			const text = wrapper.find("[data-testid=no-teacher-warning-text]");
-
-			expect(text.text()).toEqual(
-				"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning"
+			expect(spy).toHaveBeenCalledWith(
+				expect.objectContaining({
+					message: "feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning",
+				})
 			);
 		});
 	});
@@ -338,11 +319,14 @@ describe("StartExistingCourseSyncDialog", () => {
 		};
 
 		it("should display the correct warning in the confirmation dialog", async () => {
-			const { wrapper } = await setup();
+			const spy = vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
+			await setup();
 
-			const text = wrapper.find("[data-testid=no-teacher-warning-text]");
-
-			expect(text.text()).toEqual("feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning");
+			expect(spy).toHaveBeenCalledWith(
+				expect.objectContaining({
+					message: "feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning",
+				})
+			);
 		});
 	});
 
@@ -381,12 +365,13 @@ describe("StartExistingCourseSyncDialog", () => {
 		};
 
 		it("should display the correct warning in the confirmation dialog", async () => {
-			const { wrapper } = await setup();
+			const spy = vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
+			await setup();
 
-			const text = wrapper.find("[data-testid=no-teacher-warning-text]");
-
-			expect(text.text()).toEqual(
-				"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning"
+			expect(spy).toHaveBeenCalledWith(
+				expect.objectContaining({
+					message: "feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning",
+				})
 			);
 		});
 	});

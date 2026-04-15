@@ -329,10 +329,8 @@ export default {
 		"Ви справді хочете розпочати міграцію облікового запису до moin.schule зараз?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"Ви впевнені, що хочете скинути автоматично знайдені ярлики?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
-		"Асистент міграції автоматично знайшов посилання на акаунти на основі імен користувачів.",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
-		"Ви хочете скинути автоматично знайдені посилання на акаунти зараз?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"Асистент міграції автоматично знайшов посилання на акаунти на основі імен користувачів. Ви хочете скинути автоматично знайдені посилання на акаунти зараз?",
 	"components.administration.externalToolsSection.action.add": "Додати зовнішній інструмент",
 	"components.administration.externalToolsSection.action.delete": "Видалити інструменти",
 	"components.administration.externalToolsSection.action.edit": "інструмент редагування",
@@ -352,13 +350,11 @@ export default {
 		"Оновлення VIDIS Media триває на задньому плані. Будь ласка, будьте терплячі на мить.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Неможливо визначити використання інструменту.",
-	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
-		"Ви впевнені, що хочете видалити інструмент {0}?",
-	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
+	"components.administration.externalToolsSection.dialog.content.header":
 		"Наразі інструмент використовується таким чином:",
 	"components.administration.externalToolsSection.dialog.content.warning":
-		"Увага: якщо інструмент видалено, його більше не можна використовувати для цієї школи.",
-	"components.administration.externalToolsSection.dialog.title": "Видаліть зовнішній інструмент",
+		"якщо інструмент видалено, його більше не можна використовувати для цієї школи.",
+	"components.administration.externalToolsSection.dialog.title": "Чи дійсно видалити зовнішнє інструмент {itemName}?",
 	"components.administration.externalToolsSection.header": "Зовнішні інструменти",
 	"components.administration.externalToolsSection.info":
 		"Ця область дозволяє легко інтегрувати сторонні інструменти в хмару. За допомогою наданих функцій можна додавати інструменти, оновлювати існуючі або видаляти інструменти, які більше не потрібні. Потім викладачі мають додати ці інструменти до курсів.",
@@ -386,11 +382,9 @@ export default {
 	"components.administration.provisioningOptions.schoolExternalTools.label": "Активація зовнішніх інструментів",
 
 	"components.administration.provisioningOptions.page.title": "Параметри синхронізації даних",
-	"components.administration.provisioningOptions.warning.consequence":
+	"components.administration.provisioningOptions.warning":
 		"Усі раніше синхронізовані {groupTypes} буде видалено з вашої школи!",
-	"components.administration.provisioningOptions.warning.question":
-		"Ви впевнені, що бажаєте вимкнути синхронізацію для {groupTypes}?",
-	"components.administration.provisioningOptions.warning.title": "Вимкнути синхронізацію",
+	"components.administration.provisioningOptions.warning.title": "Вимкнути синхронізацію?",
 	"components.administration.schoolYearChangeSection.headers": "Зміна навчального року",
 	"components.administration.schoolYearChangeSection.info.part.one":
 		"За допомогою фази передачі, членство в класі та персональні дані в LDAP можна скорегувати в мирі. Нарешті, всі зміни можна перенести на {instance}",
@@ -787,8 +781,15 @@ export default {
 	"components.molecules.TextEditor.noLocalFiles": "Наразі локальні файли не підтримуються.",
 	"components.molecules.export.options.info": "Наступний вміст не експортується:",
 	"components.molecules.export.options.info.point1": "Завантажені файли в межах курсу.",
-	"components.molecules.export.options.info.point2": "Подання, призначені до завдання.",
+	"components.molecules.export.options.info.point2": "Подання",
 	"components.molecules.export.options.info.point3": "Папки файлів не експортуються з Common Cartridge версією 1.1",
+	"components.molecules.export.options.info.point4": "Наступні елементи карти в межах областей:",
+	"components.molecules.export.options.info.point4.sub1": "Біла дошка",
+	"components.molecules.export.options.info.point4.sub2": "Etherpad",
+	"components.molecules.export.options.info.point4.sub3": "Зовнішні інструменти",
+	"components.molecules.export.options.info.point4.sub4": "Папка з файлами",
+	"components.molecules.export.options.info.point4.sub5": "Merlin Бібліотека",
+	"components.molecules.export.options.info.point4.sub6": "H5P",
 	"components.organisms.ContentCard.report.body": "Повідомлення про вміст з ідентифікатором",
 	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":
@@ -907,7 +908,7 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectContent": "Виберіть вміст {toolName}...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Завершити синхронізацію",
-	"feature-course-sync.EndCourseSyncDialog.description":
+	"feature-course-sync.EndCourseSyncDialog":
 		"Чи дійсно слід припинити синхронізацію курсу {courseName} із групою користувачів {groupName}?",
 	"feature-course-sync.EndCourseSyncDialog.success": "Синхронізацію успішно завершено",
 	"feature-course-sync.GroupSelectionDialog.title": "Виберіть групу користувачів",
@@ -1649,7 +1650,6 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Назва курсу",
 	"pages.rooms.importCourse.step_3": "Імпортований курс можна перейменувати під час наступного кроку.",
 	"pages.rooms.ccImportCourse.title": "Імпортний курс",
-	"pages.rooms.ccImportCourse.confirm": "Імпорт",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Виберіть файл",
 	"pages.rooms.ccImportCourse.loading": "Триває завантаження...",
 	"pages.rooms.ccImportCourse.success": "Файл вашого курсу завантажено та зараз імпортується у фоновому режимі.",
@@ -1668,7 +1668,7 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Меню інструментів",
 	"pages.rooms.tools.outdated": "Конфігурація не завершена",
 	"pages.rooms.tools.outdatedDialog.title": "Інструмент „{toolName}“ застарів",
-	"pages.room.modal.course.export.header": "Формат експорту",
+	"pages.room.modal.course.export.header": "Версія для експорту",
 	"pages.room.modal.course.export.options.header": "Експорт налаштувань",
 	"pages.room.modal.course.export.options.topics": "Теми",
 	"pages.room.modal.course.export.options.tasks": "Завдання без теми",

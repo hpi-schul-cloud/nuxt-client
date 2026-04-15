@@ -321,10 +321,8 @@ export default {
 		"Do you really want to start the account migration to moin.schule now?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"Are you sure you want to remove the accounts links that are found automatically?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
-		"The migration assistant had automatically found account links based on the usernames.",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
-		"Do you want to remove the accounts links that are found automatically now?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"The migration assistant had automatically found account links based on the usernames. Do you want to remove the account links that are found automatically now?",
 	"components.administration.externalToolsSection.action.add": "Add External Tool",
 	"components.administration.externalToolsSection.action.delete": "Delete Tool",
 	"components.administration.externalToolsSection.action.edit": "Edit Tool",
@@ -343,13 +341,10 @@ export default {
 		"The update of the VIDIS media continues in the background. Please be patient for a moment.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"The usage of the tool could not be determined.",
-	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
-		"Are you sure you want to delete the {0} tool?",
-	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
-		"Currently, the tool is used as follows:",
+	"components.administration.externalToolsSection.dialog.content.header": "Currently, the tool is used as follows:",
 	"components.administration.externalToolsSection.dialog.content.warning":
-		"Attention: If the tool is removed, it can no longer be used for this school.",
-	"components.administration.externalToolsSection.dialog.title": "Remove External Tool",
+		"If the tool is removed, it can no longer be used for this school.",
+	"components.administration.externalToolsSection.dialog.title": "Really delete the external tool {itemName}?",
 	"components.administration.externalToolsSection.header": "External Tools",
 	"components.administration.externalToolsSection.info":
 		"This area allows third-party tools to be seamlessly integrated into the cloud. With the functions provided, tools can be added, existing tools can be updated or tools that are no longer needed can be removed. Teachers must then add the tools to courses.",
@@ -376,11 +371,9 @@ export default {
 	"components.administration.provisioningOptions.schoolExternalTools.label": "Activation of external tools",
 
 	"components.administration.provisioningOptions.page.title": "Data synchronization options",
-	"components.administration.provisioningOptions.warning.consequence":
+	"components.administration.provisioningOptions.warning":
 		"All previously synchronized {groupTypes} will be removed from your school!",
-	"components.administration.provisioningOptions.warning.question":
-		"Are you sure you want to disable synchronization for {groupTypes}?",
-	"components.administration.provisioningOptions.warning.title": "Disable synchronization",
+	"components.administration.provisioningOptions.warning.title": "Disable synchronization?",
 	"components.administration.schoolYearChangeSection.headers": "Change of school year",
 	"components.administration.schoolYearChangeSection.info.part.one":
 		"The transfer phase allows for class membership and personal data to be adjusted in LDAP at a leisurely pace. Finally, all changes can be transferred to the {instance} at once.",
@@ -773,8 +766,15 @@ export default {
 	"components.molecules.TextEditor.noLocalFiles": "Local files are currently not supported.",
 	"components.molecules.export.options.info": "The following content is not exported:",
 	"components.molecules.export.options.info.point1": "Uploaded files within the course.",
-	"components.molecules.export.options.info.point2": "Submissions assigned to a task.",
+	"components.molecules.export.options.info.point2": "Submissions",
 	"components.molecules.export.options.info.point3": "File folders are not exported with Common Cartridge Version 1.1",
+	"components.molecules.export.options.info.point4": "Following Card Elements within sections:",
+	"components.molecules.export.options.info.point4.sub1": "Whiteboard",
+	"components.molecules.export.options.info.point4.sub2": "Etherpad",
+	"components.molecules.export.options.info.point4.sub3": "External Tools",
+	"components.molecules.export.options.info.point4.sub4": "File folders",
+	"components.molecules.export.options.info.point4.sub5": "Merlin Bibliothek",
+	"components.molecules.export.options.info.point4.sub6": "H5P",
 	"components.organisms.ContentCard.report.body": "Reporting the content with the ID",
 	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":
@@ -892,7 +892,7 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectContent": "Select {toolName} content...",
 	"feature-board-file-element.placeholder.uploadFile": "Upload file",
 	"feature-course-sync.EndCourseSyncDialog.title": "End synchronization",
-	"feature-course-sync.EndCourseSyncDialog.description":
+	"feature-course-sync.EndCourseSyncDialog":
 		"Should the synchronization of the course {courseName} with the user group {groupName} really be stopped?",
 	"feature-course-sync.EndCourseSyncDialog.success": "Synchronization completed successfully",
 	"feature-course-sync.GroupSelectionDialog.title": "Select user group",
@@ -1638,7 +1638,6 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Course name",
 	"pages.rooms.importCourse.step_3": "The imported course can be renamed in the next step.",
 	"pages.rooms.ccImportCourse.title": "Import course",
-	"pages.rooms.ccImportCourse.confirm": "Import",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Select file",
 	"pages.rooms.ccImportCourse.loading": "Upload in progress...",
 	"pages.rooms.ccImportCourse.success":
@@ -1658,7 +1657,7 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Tool menu",
 	"pages.rooms.tools.outdated": "Configuration incomplete",
 	"pages.rooms.tools.outdatedDialog.title": "Tool „{toolName}“ outdated",
-	"pages.room.modal.course.export.header": "Export Format",
+	"pages.room.modal.course.export.header": "Export Version",
 	"pages.room.modal.course.export.options.header": "Export settings",
 	"pages.room.modal.course.export.options.topics": "Topics",
 	"pages.room.modal.course.export.options.tasks": "Tasks without Topic",
