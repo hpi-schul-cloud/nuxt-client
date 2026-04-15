@@ -47,29 +47,14 @@
 				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</VideoConferenceContentElementCreate>
-		<VDialog
-			ref="errorDialog"
-			v-model="isErrorDialogOpen"
-			:max-width="480"
+		<SvsDialog
+			:model-value="isErrorDialogOpen"
+			title="error.generic"
 			data-testid="error-dialog"
-			@click:outside="onDismissError"
-			@keydown.esc="onDismissError"
-		>
-			<VCard :ripple="false">
-				<VCardTitle data-testid="dialog-title" class="dialog-title px-6 pt-4">
-					<h2 class="my-2 text-break-word">
-						{{ t("error.generic") }}
-					</h2>
-				</VCardTitle>
-				<VCardActions class="action-buttons px-6">
-					<div class="button-section button-right">
-						<VBtn data-testid="dialog-close" variant="outlined" @click="onDismissError">
-							{{ t("common.labels.close") }}
-						</VBtn>
-					</div>
-				</VCardActions>
-			</VCard>
-		</VDialog>
+			no-confirm
+			cancel-btn-lang-key="common.labels.close"
+			@cancel="onDismissError"
+		/>
 		<VideoConferenceConfigurationDialog
 			:board-parent-type="boardParentType"
 			:is-open="isConfigurationDialogOpen"
@@ -95,6 +80,7 @@ import {
 	useSharedBoardPageInformation,
 } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { SvsDialog } from "@ui-dialog";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import { computed, onMounted, PropType, ref, toRef } from "vue";

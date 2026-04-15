@@ -352,13 +352,10 @@ export default {
 		"Die Aktualisierung der VIDIS-Medien läuft im Hintergrund weiter. Bitte gedulden Sie sich noch einen Moment.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Die Verwendung des Tools konnte nicht ermittelt werden.",
-	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
-		"Sind Sie sich sicher, dass Sie das Tool {0} löschen wollen?",
-	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
-		"Zurzeit wird das Tool wie folgt genutzt:",
+	"components.administration.externalToolsSection.dialog.content.header": "Zurzeit wird das Tool wie folgt genutzt:",
 	"components.administration.externalToolsSection.dialog.content.warning":
-		"Achtung: Wenn das Tool entfernt wird, kann es für diese Schule nicht mehr genutzt werden.",
-	"components.administration.externalToolsSection.dialog.title": "Externes Tool entfernen?",
+		"Wenn das Tool entfernt wird, kann es für diese Schule nicht mehr genutzt werden.",
+	"components.administration.externalToolsSection.dialog.title": `Externes Tool {itemName} wirklich löschen?`,
 	"components.administration.externalToolsSection.header": "Externe Tools",
 	"components.administration.externalToolsSection.info":
 		"Dieser Bereich ermöglicht es, Drittanbieter-Tools nahtlos in die Cloud zu integrieren. Mit den bereitgestellten Funktionen können Tools hinzugefügt, bestehende aktualisiert oder nicht mehr benötigte entfernt werden. Lehrkräfte müssen die Tools dann zu Kursen hinzufügen.",
@@ -1666,7 +1663,6 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Kursname",
 	"pages.rooms.importCourse.step_3": "Der importierte Kurs kann im nächsten Schritt umbenannt werden.",
 	"pages.rooms.ccImportCourse.title": "Kurs importieren",
-	"pages.rooms.ccImportCourse.confirm": "Importieren",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Datei auswählen",
 	"pages.rooms.ccImportCourse.loading": "Upload läuft...",
 	"pages.rooms.ccImportCourse.success": "Deine Kursdatei wurde hochgeladen und wird nun im Hintergrund importiert.",

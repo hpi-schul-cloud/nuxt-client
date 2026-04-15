@@ -9,33 +9,17 @@
 			@click="onClick"
 			@refresh="onRefresh"
 		/>
-		<VDialog
-			ref="vDialog"
-			v-model="isErrorDialogOpen"
-			:max-width="480"
+		<SvsDialog
+			:model-value="isErrorDialogOpen"
+			title="error.generic"
 			data-testid="error-dialog"
-			@click:outside="onCloseErrorDialog"
-			@keydown.esc="onCloseErrorDialog"
-		>
-			<VCard :ripple="false">
-				<VCardTitle data-testid="dialog-title" class="dialog-title px-6 pt-4">
-					<h2 class="my-2 text-break-word">
-						{{ t("error.generic") }}
-					</h2>
-				</VCardTitle>
-				<VCardActions class="action-buttons px-6">
-					<div class="button-section button-right">
-						<VBtn data-testid="dialog-close" variant="outlined" @click="onCloseErrorDialog">
-							{{ t("common.labels.close") }}
-						</VBtn>
-					</div>
-				</VCardActions>
-			</VCard>
-		</VDialog>
+			no-confirm
+			cancel-btn-lang-key="common.labels.close"
+			@cancel="errorDismissed = true"
+		/>
 		<VideoConferenceConfigurationDialog
-			:is-open="isConfigurationDialogOpen"
+			v-model:is-open="isConfigurationDialogOpen"
 			:options="videoConferenceInfo.options"
-			@close="onCloseConfigurationDialog"
 			@start-video-conference="startVideoConferenceAndJoin"
 		/>
 	</div>
@@ -46,9 +30,9 @@ import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
 import { Permission, VideoConferenceScope, VideoConferenceStateResponse } from "@api-server";
 import { useVideoConference } from "@data-access";
 import { useAppStore, useAppStoreRefs } from "@data-app";
+import { SvsDialog } from "@ui-dialog";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import { computed, ref, toRef } from "vue";
-import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	roomId: {
@@ -57,7 +41,6 @@ const props = defineProps({
 	},
 });
 
-const { t } = useI18n();
 const { hasPermission: hasAuthPermission } = useAppStore();
 const { isExternalPerson, userRoles } = useAppStoreRefs();
 const roomId = toRef(props, "roomId");
@@ -88,10 +71,6 @@ const isErrorDialogOpen = computed(
 	() => (!!fetchError.value || !!startError.value || !!joinError.value) && !errorDismissed.value
 );
 
-const onCloseErrorDialog = () => {
-	errorDismissed.value = true;
-};
-
 const isConfigurationDialogOpen = ref(false);
 
 const onRefresh = async () => {
@@ -102,23 +81,15 @@ const onRefresh = async () => {
 
 const onClick = async () => {
 	if (videoConferenceInfo.value.state === VideoConferenceStateResponse.NOT_STARTED && canStart.value) {
-		openConfigurationDialog();
+		isConfigurationDialogOpen.value = true;
 	}
 	if (videoConferenceInfo.value.state === VideoConferenceStateResponse.RUNNING && canJoin.value) {
 		await doJoinVideoConference();
 	}
 };
 
-const openConfigurationDialog = () => {
-	isConfigurationDialogOpen.value = true;
-};
-
-const onCloseConfigurationDialog = () => {
-	isConfigurationDialogOpen.value = false;
-};
-
 const startVideoConferenceAndJoin = async () => {
-	onCloseConfigurationDialog();
+	isConfigurationDialogOpen.value = false;
 	errorDismissed.value = false;
 	await startVideoConference(videoConferenceInfo.value.options);
 

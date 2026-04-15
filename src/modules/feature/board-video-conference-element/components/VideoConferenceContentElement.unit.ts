@@ -11,6 +11,7 @@ import { useBoardFeatures, useBoardFocusHandler, useContentElementState } from "
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenu } from "@ui-board";
+import { SvsDialog } from "@ui-dialog";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { flushPromises } from "@vue/test-utils";
@@ -683,7 +684,7 @@ describe("VideoConferenceContentElement", () => {
 					fetchError: new Error("fetch error"),
 				});
 
-				const dialog = wrapper.findComponent({ ref: "errorDialog" });
+				const dialog = wrapper.findComponent(SvsDialog);
 				await flushPromises();
 
 				expect(dialog.props("modelValue")).toBe(true);
@@ -696,7 +697,7 @@ describe("VideoConferenceContentElement", () => {
 					startError: new Error("start error"),
 				});
 
-				const dialog = wrapper.findComponent({ ref: "errorDialog" });
+				const dialog = wrapper.findComponent(SvsDialog);
 				await flushPromises();
 
 				expect(dialog.props("modelValue")).toBe(true);
@@ -709,7 +710,7 @@ describe("VideoConferenceContentElement", () => {
 					joinError: new Error("join error"),
 				});
 
-				const dialog = wrapper.findComponent({ ref: "errorDialog" });
+				const dialog = wrapper.findComponent(SvsDialog);
 				await flushPromises();
 
 				expect(dialog.props("modelValue")).toBe(true);
@@ -722,11 +723,11 @@ describe("VideoConferenceContentElement", () => {
 					fetchError: new Error("fetch error"),
 				});
 
-				const dialog = wrapper.findComponent({ ref: "errorDialog" });
+				const dialog = wrapper.findComponent(SvsDialog);
 				await flushPromises();
 				expect(dialog.props("modelValue")).toBe(true);
 
-				await dialog.vm.$emit("click:outside");
+				dialog.vm.$emit("cancel");
 				await flushPromises();
 
 				expect(dialog.props("modelValue")).toBe(false);
@@ -743,8 +744,7 @@ describe("VideoConferenceContentElement", () => {
 				const videoConferenceElement = wrapper.findComponent('[data-testid="video-conference-element"]');
 				await videoConferenceElement.trigger("click");
 
-				const dialog = wrapper.findComponent({ ref: "errorDialog" });
-
+				const dialog = wrapper.findComponent(SvsDialog);
 				expect(dialog.props("modelValue")).toBe(false);
 			});
 		});

@@ -101,9 +101,7 @@ describe("AddExternalPersonDialog", () => {
 			const { wrapper } = setup();
 
 			await clickButton("cancel");
-			const emitted = wrapper.emitted();
-
-			expect(emitted).toHaveProperty("close");
+			expect(wrapper.emitted("update:modelValue")?.[0][0]).toEqual(false);
 		});
 	});
 
@@ -138,7 +136,7 @@ describe("AddExternalPersonDialog", () => {
 						await clickButton("add-email");
 
 						expect(roomMembersStore.addMemberByEmail).toHaveBeenCalledWith(email);
-						expect(wrapper.emitted()).toHaveProperty("close");
+						expect(wrapper.emitted("update:modelValue")?.[0][0]).toEqual(false);
 					});
 
 					describe("when adding the external member fails", () => {
@@ -245,7 +243,7 @@ describe("AddExternalPersonDialog", () => {
 					firstName,
 					lastName,
 				});
-				expect(wrapper.emitted()).toHaveProperty("close");
+				expect(wrapper.emitted("update:modelValue")?.[0][0]).toEqual(false);
 				expect(useNotificationStore().notify).toHaveBeenCalledWith({
 					autoClose: true,
 					status: "success",
@@ -272,7 +270,7 @@ describe("AddExternalPersonDialog", () => {
 					status: "error",
 					text: "pages.rooms.members.dialog.addExternalPerson.errors.addingMember",
 				});
-				expect(wrapper.emitted()).toHaveProperty("close");
+				expect(wrapper.emitted("update:modelValue")?.[0][0]).toEqual(false);
 			});
 		});
 	});

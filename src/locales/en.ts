@@ -344,13 +344,10 @@ export default {
 		"The update of the VIDIS media continues in the background. Please be patient for a moment.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"The usage of the tool could not be determined.",
-	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
-		"Are you sure you want to delete the {0} tool?",
-	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
-		"Currently, the tool is used as follows:",
+	"components.administration.externalToolsSection.dialog.content.header": "Currently, the tool is used as follows:",
 	"components.administration.externalToolsSection.dialog.content.warning":
-		"Attention: If the tool is removed, it can no longer be used for this school.",
-	"components.administration.externalToolsSection.dialog.title": "Remove External Tool",
+		"If the tool is removed, it can no longer be used for this school.",
+	"components.administration.externalToolsSection.dialog.title": "Really delete the external tool {itemName}?",
 	"components.administration.externalToolsSection.header": "External Tools",
 	"components.administration.externalToolsSection.info":
 		"This area allows third-party tools to be seamlessly integrated into the cloud. With the functions provided, tools can be added, existing tools can be updated or tools that are no longer needed can be removed. Teachers must then add the tools to courses.",
@@ -1644,7 +1641,6 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Course name",
 	"pages.rooms.importCourse.step_3": "The imported course can be renamed in the next step.",
 	"pages.rooms.ccImportCourse.title": "Import course",
-	"pages.rooms.ccImportCourse.confirm": "Import",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Select file",
 	"pages.rooms.ccImportCourse.loading": "Upload in progress...",
 	"pages.rooms.ccImportCourse.success":
