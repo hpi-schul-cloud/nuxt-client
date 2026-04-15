@@ -18,12 +18,9 @@
 			:icon="mdiAlertCircle"
 			:text="error.message"
 		/>
-
 		<v-progress-linear :active="loadingTemplate" data-testId="progress-bar" indeterminate />
-
-		<room-video-conference-section v-if="isVideoConferenceAvailable" class="mb-4" :room-id="roomId" />
-
-		<room-external-tools-section
+		<RoomVideoConferenceSection v-if="isVideoConferenceAvailable" class="mb-4" :room-id="roomId" />
+		<RoomExternalToolsSection
 			:tools="tools"
 			:room-id="roomId"
 			data-testid="room-external-tool-section"

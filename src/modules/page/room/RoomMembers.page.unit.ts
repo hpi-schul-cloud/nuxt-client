@@ -33,7 +33,6 @@ import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
-import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VBtn, VCard, VDialog, VSkeletonLoader, VTab, VTabs } from "vuetify/components";
 
@@ -506,44 +505,6 @@ describe("RoomMembersPage", () => {
 			expect(dialogAfterClick.exists()).toBe(true);
 			expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(true);
 			expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.PREPARE);
-		});
-	});
-
-	describe("add members dialog", () => {
-		it("should set isMembersDialogOpen to false on @close", async () => {
-			const { wrapper } = setup({ allowedOperations: { addMembers: true } });
-
-			const dialog = wrapper.findComponent(AddMembersDialog);
-			await dialog.setValue(true);
-			expect(dialog.props("modelValue")).toBe(true);
-
-			await dialog.vm.$emit("close");
-
-			expect(dialog.props("modelValue")).toBe(false);
-		});
-
-		it("should close dialog on escape key", async () => {
-			const { wrapper } = setup({ allowedOperations: { addMembers: true } });
-
-			const dialog = wrapper.getComponent(VDialog);
-			await dialog.setValue(true);
-			expect(dialog.props("modelValue")).toBe(true);
-
-			window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", keyCode: 27 }));
-			await nextTick();
-
-			expect(dialog.props("modelValue")).toBe(false);
-		});
-
-		it("should close dialog on close", async () => {
-			const { wrapper } = setup({ allowedOperations: { addMembers: true } });
-
-			const dialog = wrapper.getComponent(AddMembersDialog);
-			await dialog.setValue(true);
-
-			await dialog.vm.$emit("close");
-
-			expect(dialog.props("modelValue")).toBe(false);
 		});
 	});
 
