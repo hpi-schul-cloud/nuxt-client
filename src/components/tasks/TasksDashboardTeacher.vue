@@ -62,6 +62,12 @@
 			</v-window-item>
 		</v-window>
 		<share-modal :type="ShareTokenBodyParamsParentType.TASKS" />
+		<CopyInfoDialog
+			:is-open="copyFlow.isDialogOpen.value"
+			:copy-item-type="copyFlow.copyItemType.value"
+			@confirm="copyFlow.onConfirmed"
+			@cancel="copyFlow.onCancelled"
+		/>
 	</section>
 </template>
 
@@ -69,14 +75,17 @@
 import TasksDashBoardPanels from "./TasksDashBoardPanels.vue";
 import TasksList from "./TasksList.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import { useCopy } from "@/composables/copy";
-import { CopyParams } from "@/store/copy";
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
+import { $axios } from "@/utils/api";
 import { FINISHED_TASKS_MODULE_KEY, injectStrict, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
-import { ShareTokenBodyParamsParentType } from "@api-server";
+import { ShareTokenBodyParamsParentType, TaskApiFactory } from "@api-server";
+import { notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
+import { CopyInfoDialog, useCopyFlow } from "@feature-copy";
 import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -92,7 +101,6 @@ defineProps({
 });
 
 const { t } = useI18n();
-const { copy } = useCopy();
 
 const openTasks = computed(() => tasksModule.getOpenTasksForTeacher);
 const draftTasks = computed(() => tasksModule.getDraftTasksForTeacher);
@@ -116,11 +124,25 @@ const tab = computed({
 	},
 });
 
-const onCopyTask = async (payload: CopyParams) => {
-	await copy(payload);
+const copyFlow = useCopyFlow();
+const { execute } = useSafeAxiosTask();
+const taskApi = TaskApiFactory(undefined, "/v3", $axios);
 
-	tasksModule.setActiveTab("drafts");
-	await tasksModule.fetchAllTasks();
+const onCopyTask = async ({ id, type, courseId }: { id: string; type: CopyParamsTypeEnum; courseId: string }) => {
+	const confirmed = await copyFlow.confirm(type);
+	if (!confirmed) return;
+
+	const { error } = await copyFlow.withCopyLoading(() =>
+		execute(
+			() => taskApi.taskControllerCopyTask(id, { courseId }),
+			t("common.notifications.errors.notDuplicated", { type: t("common.labels.task") })
+		)
+	);
+	if (!error) {
+		notifySuccess(t("components.molecules.copyResult.task.successfullyCopied"));
+		tasksModule.setActiveTab("drafts");
+		await tasksModule.fetchAllTasks();
+	}
 };
 
 const onShareTask = (taskId: string) => {

@@ -59,10 +59,10 @@
 		/>
 		<ShareModal :type="ShareTokenBodyParamsParentType.COURSES" />
 		<CopyInfoDialog
-			:is-open="copyDialog.isOpen.value"
-			:copy-item-type="copyDialog.copyItemType.value"
-			@confirm="copyDialog.onConfirmed"
-			@cancel="copyDialog.onCancelled"
+			:is-open="copyFlow.isDialogOpen.value"
+			:copy-item-type="copyFlow.copyItemType.value"
+			@confirm="copyFlow.onConfirmed"
+			@cancel="copyFlow.onCancelled"
 		/>
 		<CourseCommonCartridgeExportModal />
 		<end-course-sync-dialog
@@ -84,7 +84,6 @@
 
 <script setup lang="ts">
 import { useSafeAxiosTask } from "../../composables/async-tasks.composable";
-import { AsyncFunction } from "../../types/async.types";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCommonCartridgeExportModal.vue";
 import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.vue";
@@ -109,10 +108,10 @@ import {
 	ShareTokenBodyParamsParentType,
 	TaskApiFactory,
 } from "@api-server";
-import { notifySuccess, useAppStore, useLoadingStore } from "@data-app";
+import { notifySuccess, useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
-import { CopyInfoDialog, useCopyInfoDialog } from "@feature-copy";
+import { CopyInfoDialog, useCopyFlow } from "@feature-copy";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
 import {
 	mdiAccountGroupOutline,
@@ -445,25 +444,15 @@ const refreshCourseRoom = async () => {
 	await courseRoomDetailsModule.fetchContent(courseId.value);
 };
 
-const copyDialog = useCopyInfoDialog();
+const copyFlow = useCopyFlow();
 
 const { execute } = useSafeAxiosTask();
-const { setLoadingState } = useLoadingStore();
 const courseRoomApi = CourseRoomsApiFactory(undefined, "/v3", $axios);
 const taskApi = TaskApiFactory(undefined, "/v3", $axios);
 const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 
-const withLoadingState = async <T,>(fn: AsyncFunction<T>) => {
-	setLoadingState(true, t("components.molecules.copyResult.title.loading"));
-	const result = await fn();
-	// make sure loading state is visible
-	await new Promise((resolve) => setTimeout(resolve, 300));
-	setLoadingState(false);
-	return result;
-};
-
 const onCopyRequested = async ({ id, type }: { id: string; type: CopyParamsTypeEnum }) => {
-	const confirmed = await copyDialog.confirm(type);
+	const confirmed = await copyFlow.confirm(type);
 	if (!confirmed) return;
 
 	switch (type) {
@@ -483,7 +472,7 @@ const onCopyRequested = async ({ id, type }: { id: string; type: CopyParamsTypeE
 };
 
 const copyCourse = async (id: string) => {
-	const { result, error } = await withLoadingState(() =>
+	const { result, error } = await copyFlow.withCopyLoading(() =>
 		execute(
 			() => courseRoomApi.courseRoomsControllerCopyCourse(id),
 			t("common.notifications.errors.notDuplicated", { type: t("common.labels.course") })
@@ -499,7 +488,7 @@ const copyCourse = async (id: string) => {
 };
 
 const copyTaskElement = async (id: string) => {
-	const { error } = await withLoadingState(() =>
+	const { error } = await copyFlow.withCopyLoading(() =>
 		execute(
 			() => taskApi.taskControllerCopyTask(id, { courseId: courseId.value }),
 			t("common.notifications.errors.notDuplicated", { type: t("common.labels.task") })
@@ -512,7 +501,7 @@ const copyTaskElement = async (id: string) => {
 };
 
 const copyLessonElement = async (id: string) => {
-	const { error } = await withLoadingState(() =>
+	const { error } = await copyFlow.withCopyLoading(() =>
 		execute(
 			() => courseRoomApi.courseRoomsControllerCopyLesson(id, { courseId: courseId.value }),
 			t("common.notifications.errors.notDuplicated", { type: t("common.labels.lesson") })
@@ -526,7 +515,7 @@ const copyLessonElement = async (id: string) => {
 };
 
 const copyColumnBoardElement = async (id: string) => {
-	const { error } = await withLoadingState(() =>
+	const { error } = await copyFlow.withCopyLoading(() =>
 		execute(
 			() => boardApi.boardControllerCopyBoard(id),
 			t("common.notifications.errors.notDuplicated", { type: t("common.labels.board") })

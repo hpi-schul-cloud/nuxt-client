@@ -96,11 +96,11 @@
 					:has-relocate-board-content-permission="allowedOperations?.relocateContent ?? false"
 					:card-id="moveCardOptions.cardId"
 				/>
-				<CopyResultModal
-					:is-open="isCopyModalOpen"
-					:copy-result-items="copyResultModalItems"
-					:copy-result-root-item-type="copyResultRootItemType"
-					@copy-dialog-closed="onCopyResultModalClosed"
+				<CopyInfoDialog
+					:is-open="copyFlow.isDialogOpen.value"
+					:copy-item-type="copyFlow.copyItemType.value"
+					@confirm="copyFlow.onConfirmed"
+					@cancel="copyFlow.onCancelled"
 				/>
 				<ShareModal v-if="shareModalContextType" :type="shareModalContextType" />
 				<SelectBoardLayoutDialog
@@ -128,14 +128,15 @@ import EditSettingsDialog from "../shared/EditSettingsDialog.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import { useCopy } from "@/composables/copy";
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
-import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
+import { $axios } from "@/utils/api";
+import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import {
+	BoardApiFactory,
 	BoardExternalReferenceType,
 	BoardLayout,
 	ColumnResponse,
@@ -154,6 +155,7 @@ import {
 import { useEnvConfig } from "@data-env";
 import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog } from "@feature-collabora";
+import { CopyInfoDialog, useCopyFlow } from "@feature-copy";
 import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
@@ -161,6 +163,7 @@ import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@ut
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, ComputedRef, onMounted, onUnmounted, provide, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 const props = defineProps({
@@ -180,6 +183,7 @@ const isDragging = ref(false);
 const isEditSettingsDialogOpen = ref(false);
 const shareModalContextType = ref();
 const router = useRouter();
+const { t } = useI18n();
 
 watch(board, async () => {
 	await createPageInformation(props.boardId);
@@ -357,19 +361,9 @@ watch(
 	{ immediate: true }
 );
 
-const { copy } = useCopy();
-
-const copyModule = injectStrict(COPY_MODULE_KEY);
-
-const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
-
 const isListBoard = computed(() => board.value?.layout === BoardLayout.LIST);
 
 provide(BOARD_IS_LIST_LAYOUT, isListBoard);
-
-const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
-
-const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
 
 const boardClasses = computed(() => {
 	const classes = ["d-flex", "flex-shrink-1", "board"];
@@ -399,18 +393,26 @@ const boardColumnClass = computed(() => {
 	return classes;
 });
 
-const onCopyResultModalClosed = () => {
-	copyModule.reset();
-};
+const copyFlow = useCopyFlow();
+const { execute } = useSafeAxiosTask();
+const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 
 const onCopyBoard = async () => {
 	if (!allowedOperations.value.copyBoard) return;
 
-	await copy({ id: props.boardId, type: CopyParamsTypeEnum.ColumnBoard });
-	const copyId = copyModule.getCopyResult?.id;
-	if (copyId) {
-		boardStore.fetchBoardRequest({ boardId: copyId });
-		router.push({ name: "boards-id", params: { id: copyId } });
+	const confirmed = await copyFlow.confirm(CopyParamsTypeEnum.ColumnBoard);
+	if (!confirmed) return;
+
+	const { result, error } = await copyFlow.withCopyLoading(() =>
+		execute(
+			() => boardApi.boardControllerCopyBoard(props.boardId),
+			t("common.notifications.errors.notDuplicated", { type: t("common.labels.board") })
+		)
+	);
+
+	if (!error && result.data.id !== undefined) {
+		boardStore.fetchBoardRequest({ boardId: result.data.id });
+		router.push({ name: "boards-id", params: { id: result.data.id } });
 	}
 };
 

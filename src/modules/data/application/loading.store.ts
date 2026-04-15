@@ -14,9 +14,22 @@ export const useLoadingStore = defineStore("loadingStore", () => {
 		isLoading.value = value;
 	}
 
+	const withLoadingState = async <T>(
+		fn: () => Promise<T>,
+		loadingMessage: string,
+		minDisplayTime = 300
+	): Promise<T> => {
+		setLoadingState(true, loadingMessage);
+		const result = await fn();
+		await new Promise((resolve) => setTimeout(resolve, minDisplayTime));
+		setLoadingState(false);
+		return result;
+	};
+
 	return {
 		loadingText,
 		isLoading,
 		setLoadingState,
+		withLoadingState,
 	};
 });
