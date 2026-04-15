@@ -86,62 +86,33 @@
 			</VBtn>
 		</div>
 
-		<v-dialog v-if="metadata" v-model="isDeleteDialogOpen" data-testid="delete-dialog" max-width="360">
-			<v-card :ripple="false">
-				<v-card-title data-testid="delete-dialog-title">
-					<h2 class="my-2">
-						{{ t("components.administration.externalToolsSection.dialog.title") }}
-					</h2>
-				</v-card-title>
-				<v-card-text>
-					<div data-testid="delete-dialog-content-header">
-						<i18n-t
-							keypath="components.administration.externalToolsSection.dialog.content.header.firstParagraph"
-							scope="global"
-							tag="p"
-						>
-							<b>{{ getItemName }}</b>
-						</i18n-t>
-						<p class="mb-0">
-							{{ t("components.administration.externalToolsSection.dialog.content.header.secondParagraph") }}
-						</p>
-					</div>
-					<p data-testid="delete-dialog-content-courses" class="text-md mb-0">
-						{{ t("common.tool.context.type.courses") }}
-						<b>({{ metadata.course }})</b>
-					</p>
-					<p
-						data-testid="delete-dialog-content-board-elements"
-						:class="isMediaBoardUsageVisible ? 'text-md mb-0' : 'text-md'"
-					>
-						{{ t("common.tool.context.type.boardElements") }}
-						<b>({{ metadata.boardElement }})</b>
-					</p>
-					<p v-if="isMediaBoardUsageVisible" data-testid="delete-dialog-content-media-shelves" class="text-md">
-						{{ t("common.tool.context.type.mediaShelves") }}
-						<b>({{ metadata.mediaBoard }})</b>
-					</p>
-					<p data-testid="delete-dialog-content-media-warning">
-						{{ t("components.administration.externalToolsSection.dialog.content.warning") }}
-					</p>
-				</v-card-text>
-				<v-card-actions>
-					<v-spacer />
-					<v-btn data-testId="delete-dialog-cancel" class="dialog-closed" variant="text" @click="onCloseDeleteDialog">
-						{{ t("common.actions.cancel") }}
-					</v-btn>
-					<v-btn
-						data-testId="delete-dialog-confirm"
-						class="dialog-confirmed px-6"
-						color="primary"
-						variant="flat"
-						@click="onDeleteTool"
-					>
-						{{ t("common.actions.confirm") }}
-					</v-btn>
-				</v-card-actions>
-			</v-card>
-		</v-dialog>
+		<SvsDialog
+			v-model="isDeleteDialogOpen"
+			:title="t('components.administration.externalToolsSection.dialog.title', { itemName: getItemName })"
+			data-testid="delete-dialog"
+			@confirm="onDeleteTool"
+			@close="onCloseDeleteDialog"
+		>
+			<template v-if="metadata" #content>
+				<p>{{ t("components.administration.externalToolsSection.dialog.content.header") }}</p>
+
+				<ul class="ml-6 mb-4">
+					<li data-testid="delete-dialog-content-courses">
+						{{ t("common.tool.context.type.courses") }} <b>({{ metadata.course }})</b>
+					</li>
+					<li data-testid="delete-dialog-content-board-elements">
+						{{ t("common.tool.context.type.boardElements") }} <b>({{ metadata.boardElement }})</b>
+					</li>
+					<li v-if="isMediaBoardUsageVisible" data-testid="delete-dialog-content-media-shelves">
+						{{ t("common.tool.context.type.mediaShelves") }} <b>({{ metadata.mediaBoard }})</b>
+					</li>
+				</ul>
+
+				<WarningAlert data-testid="delete-dialog-content-media-warning">
+					{{ t("components.administration.externalToolsSection.dialog.content.warning") }}
+				</WarningAlert>
+			</template>
+		</SvsDialog>
 	</div>
 	<VidisMediaSyncSection v-if="isVidisEnabled" />
 </template>
@@ -159,6 +130,8 @@ import { useEnvConfig } from "@data-env";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
+import { WarningAlert } from "@ui-alert";
+import { SvsDialog } from "@ui-dialog";
 import { computed, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -219,11 +192,12 @@ const isDeleteDialogOpen = ref(false);
 
 const openDeleteDialog = async (item: SchoolExternalToolItem) => {
 	itemToDelete.value = item;
-	isDeleteDialogOpen.value = true;
 	await fetchSchoolExternalToolUsage(item.id);
 
 	if (!metadata.value) {
 		notifyError(t("components.administration.externalToolsSection.dialog.content.metadata.error"));
+	} else {
+		isDeleteDialogOpen.value = true;
 	}
 };
 
@@ -234,11 +208,8 @@ const onCloseDeleteDialog = () => {
 };
 
 const isMediaBoardUsageVisible = computed(() => {
-	if (!metadata.value) {
-		return false;
-	}
-	const isVisible = metadata.value.mediaBoard > 0 || useEnvConfig().value.FEATURE_MEDIA_SHELF_ENABLED;
-	return isVisible;
+	if (!metadata.value) return false;
+	return metadata.value.mediaBoard > 0 || useEnvConfig().value.FEATURE_MEDIA_SHELF_ENABLED;
 });
 
 const isVidisEnabled = computed(() => useEnvConfig().value.FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED);
