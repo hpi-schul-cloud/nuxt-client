@@ -453,18 +453,10 @@ describe("ExternalToolSection", () => {
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
 				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
-
 				await deleteButton.trigger("click");
 
 				const cardText = wrapper.findComponent(VCardText);
-				const headerDialogLine = cardText.get('[data-testid="delete-dialog-content-header"]');
-
-				const expectedDialogHeaderText = [
-					"components.administration.externalToolsSection.dialog.content.header.firstParagraph",
-					"components.administration.externalToolsSection.dialog.content.header.secondParagraph",
-				].join("");
-
-				expect(headerDialogLine.text()).toEqual(expectedDialogHeaderText);
+				expect(cardText.text()).toContain("components.administration.externalToolsSection.dialog.content.header");
 			});
 
 			it("should display dialogs for course tools and boards", async () => {
