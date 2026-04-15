@@ -359,6 +359,11 @@ describe("CourseCommonCartridgeExportModal", () => {
 			await goToContentSelection(wrapper);
 			await wrapper.findComponent('[data-testid="dialog-cancel-btn"]').trigger("click");
 
+			// resetting the dialog step happens in a function triggerd by the dialog's after-leave event
+			// as CSS transitions are not triggered in testing the after-leave event is called manually
+			const dialog = wrapper.findComponent(SvsDialog);
+			await dialog.vm.$emit("after-leave");
+
 			await wrapper.setProps({ isOpen: true });
 
 			expect(wrapper.findComponent('[data-testid="dialog-next-btn"]').exists()).toBe(true);
