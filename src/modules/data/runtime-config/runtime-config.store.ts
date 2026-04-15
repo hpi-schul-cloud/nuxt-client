@@ -1,12 +1,12 @@
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
-import { RuntimeConfigApiFactory, RuntimeConfigListResponse } from "@api-server";
+import { RuntimeConfigApiFactory, RuntimeConfigListItemResponse, RuntimeConfigListResponse } from "@api-server";
 import { useAppStore } from "@data-app";
 import { defineStore } from "pinia";
 import { computed, readonly, ref } from "vue";
 
-export type RuntimeConfigValue = Record<string, string | boolean | number>;
-export type RuntimeConfigData = { value: string | boolean | number; description: string; type: string };
+export type RuntimeConfigValue = Record<string, RuntimeConfigListItemResponse["value"]>;
+export type RuntimeConfigData = Omit<RuntimeConfigListItemResponse, "key">;
 export type RuntimeConfig = Record<string, RuntimeConfigData>;
 
 export const useRuntimeConfigStore = defineStore("runtimeConfigStore", () => {
