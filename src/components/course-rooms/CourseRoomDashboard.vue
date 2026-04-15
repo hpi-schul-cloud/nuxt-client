@@ -28,7 +28,7 @@
 								courseName: roomData.title,
 								courseId: roomData.roomId,
 							}"
-							:aria-label="$t('pages.room.cards.aria', boardLayoutAriaLabel(item.content.layout))"
+							:aria-label="t('pages.room.cards.aria', boardLayoutAriaLabel(item.content.layout))"
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
@@ -45,9 +45,9 @@
 							:room="taskData"
 							:task="item.content"
 							:aria-label="
-								$t('pages.room.cards.aria', {
-									itemType: $t('common.words.tasks'),
-									itemName: item.content.name,
+								t('pages.room.cards.aria', {
+									itemType: t('common.words.tasks'),
+									itemName: getContentName(item.content),
 								})
 							"
 							:key-drag="isDragging"
@@ -68,12 +68,12 @@
 							:ref="`item_${index}`"
 							:lesson-card-index="index"
 							:user-role="role"
-							:lesson="item.content"
+							:lesson="item.content as BoardLessonResponse"
 							:room="lessonData"
 							:aria-label="
-								$t('pages.room.cards.aria', {
-									itemType: $t('common.words.topic'),
-									itemName: item.content.name,
+								t('pages.room.cards.aria', {
+									itemType: t('common.words.topic'),
+									itemName: getContentName(item.content),
 								})
 							"
 							:key-drag="isDragging"
@@ -106,9 +106,9 @@
 						courseId: roomData.roomId,
 					}"
 					:aria-label="
-						$t('pages.room.cards.aria', {
-							itemType: $t('pages.room.boardCard.label.columnBoard'),
-							itemName: $t('pages.room.boardCard.label.courseBoard'),
+						t('pages.room.cards.aria', {
+							itemType: t('pages.room.boardCard.label.columnBoard'),
+							itemName: t('pages.room.boardCard.label.courseBoard'),
 						})
 					"
 				/>
@@ -119,9 +119,9 @@
 					:user-role="role"
 					:task="item.content"
 					:aria-label="
-						$t('pages.room.cards.aria', {
-							itemType: $t('common.words.tasks'),
-							itemName: item.content.name,
+						t('pages.room.cards.aria', {
+							itemType: t('common.words.tasks'),
+							itemName: getContentName(item.content),
 						})
 					"
 					:key-drag="isDragging"
@@ -135,12 +135,12 @@
 					:ref="`item_${index}`"
 					:lesson-card-index="index"
 					:user-role="role"
-					:lesson="item.content"
+					:lesson="item.content as BoardLessonResponse"
 					:room="lessonData"
 					:aria-label="
-						$t('pages.room.cards.aria', {
-							itemType: $t('common.words.topic'),
-							itemName: item.content.name,
+						t('pages.room.cards.aria', {
+							itemType: t('common.words.topic'),
+							itemName: getContentName(item.content),
 						})
 					"
 					:key-drag="isDragging"
@@ -149,234 +149,246 @@
 				/>
 			</div>
 		</div>
-		<EmptyState v-if="roomIsEmpty" data-testid="empty-state-item" :title="$t(`pages.room.learningContent.emptyState`)">
+		<EmptyState v-if="roomIsEmpty" data-testid="empty-state-item" :title="t('pages.room.learningContent.emptyState')">
 			<template #media>
 				<LearningContentEmptyStateSvg />
 			</template>
 		</EmptyState>
-		<share-modal type="columnBoard" />
-		<share-modal type="lessons" />
-		<share-modal type="tasks" />
+		<ShareModal :type="ShareTokenBodyParamsParentType.COLUMN_BOARD" />
+		<ShareModal :type="ShareTokenBodyParamsParentType.LESSONS" />
+		<ShareModal :type="ShareTokenBodyParamsParentType.TASKS" />
 	</div>
 </template>
 
-<script>
+<script setup lang="ts">
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-// import { courseRoomDetailsModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
-import { askDeletionForItem } from "@/utils/confirmation-dialog.utils.ts";
+import { askDeletionForItem } from "@/utils/confirmation-dialog.utils";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import {
+	BoardColumnBoardResponse,
 	BoardElementResponseType,
 	BoardLayout,
+	BoardLessonResponse,
+	BoardTaskResponse,
 	ImportUserResponseRoleNames,
 	ShareTokenBodyParamsParentType,
+	SingleColumnBoardResponse,
 } from "@api-server";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { useEnvConfig } from "@data-env";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import { storeToRefs } from "pinia";
+import { computed, inject, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import draggable from "vuedraggable";
 
-export default {
-	components: {
-		RoomBoardCard,
-		CourseRoomTaskCard,
-		RoomLessonCard,
-		draggable,
-		EmptyState,
-		ShareModal,
-		LearningContentEmptyStateSvg,
-	},
-	inject: {
-		shareModule: { from: SHARE_MODULE_KEY },
-	},
-	props: {
-		roomDataObject: {
-			type: Object,
-			required: true,
-		},
-		role: { type: String, required: true },
-	},
-	emits: ["copy-board-element"],
-	setup() {
-		const courseRoomDetailsStore = useCourseRoomDetailsStore();
-		const { roomIsEmpty } = storeToRefs(courseRoomDetailsStore);
+// Props
+const props = defineProps<{
+	roomDataObject: SingleColumnBoardResponse;
+	role: string;
+}>();
 
-		return {
-			courseRoomDetailsStore,
-			roomIsEmpty,
-		};
-	},
-	data() {
-		return {
-			cardTypes: BoardElementResponseType,
-			isDragging: false,
-			Roles: ImportUserResponseRoleNames,
-			dragInProgressDelay: 100,
-			dragInProgress: false,
-		};
-	},
-	computed: {
-		lessonData() {
-			return {
-				roomId: this.roomData.roomId,
-				displayColor: this.roomData.displayColor,
-			};
-		},
-		taskData() {
-			return {
-				roomId: this.roomData.roomId,
-			};
-		},
-		isTouchDevice() {
-			return window.ontouchstart !== undefined;
-		},
-		sortable() {
-			return this.role === this.Roles.TEACHER || false;
-		},
-		touchDelay() {
-			return this.isTouchDevice ? 200 : 20;
-		},
-		// roomIsEmpty: () => courseRoomDetailsModule.roomIsEmpty,
-		roomData() {
-			return { ...this.roomDataObject };
-		},
-	},
-	created() {
-		if (this.isTouchDevice) {
-			window.addEventListener("contextmenu", (e) => e.preventDefault());
-		}
-	},
-	methods: {
-		async updateCardVisibility(elementId, visibility) {
-			await this.courseRoomDetailsStore.publishCard({ elementId, visibility });
-		},
-		async onSort(items) {
-			const idList = {};
-			idList.elements = items.map((item) => item.content.id);
+// Emits
+const emit = defineEmits<{
+	"copy-board-element": [payload: { id: string; type: CopyParamsTypeEnum; courseId: string }];
+}>();
 
-			await this.courseRoomDetailsStore.sortElements(idList);
-		},
-		async moveByKeyboard(e) {
-			if (this.role === this.Roles.STUDENT) return;
-			const items = this.roomData.elements.map((item) => item.content.id);
-			const itemIndex = items.findIndex((item) => item === e.id);
-			const position = itemIndex + e.moveIndex;
-			if (position < 0 || position > items.length - 1) {
-				return;
-			}
+// Inject
+const shareModule = inject(SHARE_MODULE_KEY)!;
 
-			[items[itemIndex], items[itemIndex + e.moveIndex]] = [items[itemIndex + e.moveIndex], items[itemIndex]];
+// i18n
+const { t } = useI18n();
 
-			await this.courseRoomDetailsStore.sortElements({ elements: items });
-			this.$refs[`item_${position}`].$el.focus();
-		},
-		boardLayoutAriaLabel(itemLayout) {
-			const columnBoardInfo = {
-				itemType: this.$t("pages.room.boardCard.label.columnBoard"),
-			};
-			const listBoardInfo = {
-				itemType: this.$t("pages.room.boardCard.label.listBoard"),
-			};
-			if (itemLayout === BoardLayout.LIST) {
-				return listBoardInfo;
-			} else {
-				return columnBoardInfo;
-			}
-		},
-		getSharedBoard(boardId) {
-			if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
-				this.shareModule.startShareFlow({
-					id: boardId,
-					type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
-				});
-			}
-		},
-		getSharedLesson(lessonId) {
-			if (useEnvConfig().value.FEATURE_LESSON_SHARE) {
-				this.shareModule.startShareFlow({
-					id: lessonId,
-					type: ShareTokenBodyParamsParentType.LESSONS,
-				});
-			}
-		},
-		getSharedTask(taskId) {
-			if (useEnvConfig().value.FEATURE_TASK_SHARE) {
-				this.shareModule.startShareFlow({
-					id: taskId,
-					type: ShareTokenBodyParamsParentType.TASKS,
-				});
-			}
-		},
-		endDragging() {
-			setTimeout(() => {
-				this.dragInProgress = false;
-			}, this.dragInProgressDelay);
-		},
-		async onDeleteItem(itemContent, itemType) {
-			let typeKey;
-			switch (itemType) {
-				case this.cardTypes.TASK:
-					typeKey = "common.words.task";
-					break;
-				case this.cardTypes.LESSON:
-					typeKey = "common.words.topic";
-					break;
-				case this.cardTypes.COLUMN_BOARD:
-					typeKey = "common.words.board";
-					break;
-				default:
-					return;
-			}
+// Store
+const courseRoomDetailsStore = useCourseRoomDetailsStore();
+const { roomIsEmpty } = storeToRefs(courseRoomDetailsStore);
 
-			const confirmed = await askDeletionForItem(itemContent.name || itemContent.title, typeKey);
+// Constants
+const cardTypes = BoardElementResponseType;
+const Roles = ImportUserResponseRoleNames;
+const dragInProgressDelay = 100;
 
-			if (!confirmed) return;
+// Reactive state
+const isDragging = ref(false);
+const dragInProgress = ref(false);
 
-			if (itemType === this.cardTypes.TASK) {
-				await this.courseRoomDetailsStore.deleteTask(itemContent.id);
-			} else if (itemType === this.cardTypes.LESSON) {
-				await this.courseRoomDetailsStore.deleteLesson(itemContent.id);
-			} else if (itemType === this.cardTypes.COLUMN_BOARD) {
-				await this.courseRoomDetailsStore.deleteBoard(itemContent.columnBoardId);
-			}
-			await this.courseRoomDetailsStore.fetchContent(this.roomData.roomId);
-		},
-		async finishTask(itemId) {
-			await this.courseRoomDetailsStore.finishTask({ itemId, action: "finish" });
-		},
-		async restoreTask(itemId) {
-			await this.courseRoomDetailsStore.finishTask({ itemId, action: "restore" });
-		},
-		copyTask(taskId) {
-			this.$emit("copy-board-element", {
-				id: taskId,
-				type: CopyParamsTypeEnum.Task,
-				courseId: this.roomData.roomId,
-			});
-		},
-		copyLesson(lessonId) {
-			this.$emit("copy-board-element", {
-				id: lessonId,
-				type: CopyParamsTypeEnum.Lesson,
-				courseId: this.roomData.roomId,
-			});
-		},
-		copyBoard(columnBoardId) {
-			this.$emit("copy-board-element", {
-				id: columnBoardId,
-				type: CopyParamsTypeEnum.ColumnBoard,
-				courseId: this.roomData.roomId,
-			});
-		},
-		boardCardIsVisibleToStudent(card) {
-			const isBoardCard = card.type === this.cardTypes.COLUMN_BOARD;
-			const isVisibleToStudent = card.content.published;
-			return isBoardCard && isVisibleToStudent;
-		},
-	},
+// Template refs - dynamic refs for items
+const itemRefs = ref<Record<string, { $el?: HTMLElement } | null>>({});
+
+// Computed
+const roomData = computed(() => ({ ...props.roomDataObject }));
+
+const lessonData = computed(() => ({
+	roomId: roomData.value.roomId,
+	displayColor: roomData.value.displayColor,
+}));
+
+const taskData = computed(() => ({
+	roomId: roomData.value.roomId,
+}));
+
+const isTouchDevice = computed(() => window.ontouchstart !== undefined);
+
+const sortable = computed(() => props.role === Roles.TEACHER || false);
+
+const touchDelay = computed(() => (isTouchDevice.value ? 200 : 20));
+
+// Type guards and helpers
+const getContentName = (content: BoardTaskResponse | BoardLessonResponse | BoardColumnBoardResponse): string =>
+	"name" in content ? content.name : content.title;
+
+// Lifecycle
+onMounted(() => {
+	if (isTouchDevice.value) {
+		window.addEventListener("contextmenu", (e) => e.preventDefault());
+	}
+});
+
+// Methods
+const updateCardVisibility = async (elementId: string, visibility: boolean) => {
+	await courseRoomDetailsStore.publishCard(elementId, visibility);
+};
+
+const onSort = async (items: Array<{ content: { id: string } }>) => {
+	const idList = {
+		elements: items.map((item) => item.content.id),
+	};
+	await courseRoomDetailsStore.sortElements(idList);
+};
+
+const moveByKeyboard = async (e: { id: string; moveIndex: number }) => {
+	if (props.role === Roles.STUDENT) return;
+	const items = roomData.value.elements.map((item) => item.content.id);
+	const itemIndex = items.findIndex((item: string) => item === e.id);
+	const position = itemIndex + e.moveIndex;
+	if (position < 0 || position > items.length - 1) {
+		return;
+	}
+
+	[items[itemIndex], items[itemIndex + e.moveIndex]] = [items[itemIndex + e.moveIndex], items[itemIndex]];
+
+	await courseRoomDetailsStore.sortElements({ elements: items });
+	itemRefs.value[`item_${position}`]?.$el?.focus();
+};
+
+const boardLayoutAriaLabel = (itemLayout: BoardLayout) => {
+	const columnBoardInfo = {
+		itemType: t("pages.room.boardCard.label.columnBoard"),
+	};
+	const listBoardInfo = {
+		itemType: t("pages.room.boardCard.label.listBoard"),
+	};
+	if (itemLayout === BoardLayout.LIST) {
+		return listBoardInfo;
+	} else {
+		return columnBoardInfo;
+	}
+};
+
+const getSharedBoard = (boardId: string) => {
+	if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
+		shareModule.startShareFlow({
+			id: boardId,
+			type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
+		});
+	}
+};
+
+const getSharedLesson = (lessonId: string) => {
+	if (useEnvConfig().value.FEATURE_LESSON_SHARE) {
+		shareModule.startShareFlow({
+			id: lessonId,
+			type: ShareTokenBodyParamsParentType.LESSONS,
+		});
+	}
+};
+
+const getSharedTask = (taskId: string) => {
+	if (useEnvConfig().value.FEATURE_TASK_SHARE) {
+		shareModule.startShareFlow({
+			id: taskId,
+			type: ShareTokenBodyParamsParentType.TASKS,
+		});
+	}
+};
+
+const endDragging = () => {
+	setTimeout(() => {
+		dragInProgress.value = false;
+	}, dragInProgressDelay);
+};
+
+const onDeleteItem = async (
+	itemContent: { id: string; columnBoardId?: string; name?: string; title?: string },
+	itemType: BoardElementResponseType
+) => {
+	let typeKey: string;
+	switch (itemType) {
+		case cardTypes.TASK:
+			typeKey = "common.words.task";
+			break;
+		case cardTypes.LESSON:
+			typeKey = "common.words.topic";
+			break;
+		case cardTypes.COLUMN_BOARD:
+			typeKey = "common.words.board";
+			break;
+		default:
+			return;
+	}
+
+	const confirmed = await askDeletionForItem(itemContent.name || itemContent.title || "", typeKey);
+
+	if (!confirmed) return;
+
+	if (itemType === cardTypes.TASK) {
+		await courseRoomDetailsStore.deleteTask(itemContent.id);
+	} else if (itemType === cardTypes.LESSON) {
+		await courseRoomDetailsStore.deleteLesson(itemContent.id);
+	} else if (itemType === cardTypes.COLUMN_BOARD) {
+		await courseRoomDetailsStore.deleteBoard(itemContent.columnBoardId!);
+	}
+	await courseRoomDetailsStore.fetchContent(roomData.value.roomId);
+};
+
+const finishTask = async (itemId: string) => {
+	await courseRoomDetailsStore.finishTask(itemId, "finish");
+};
+
+const restoreTask = async (itemId: string) => {
+	await courseRoomDetailsStore.finishTask(itemId, "restore");
+};
+
+const copyTask = (taskId: string) => {
+	emit("copy-board-element", {
+		id: taskId,
+		type: CopyParamsTypeEnum.Task,
+		courseId: roomData.value.roomId,
+	});
+};
+
+const copyLesson = (lessonId: string) => {
+	emit("copy-board-element", {
+		id: lessonId,
+		type: CopyParamsTypeEnum.Lesson,
+		courseId: roomData.value.roomId,
+	});
+};
+
+const copyBoard = (columnBoardId: string) => {
+	emit("copy-board-element", {
+		id: columnBoardId,
+		type: CopyParamsTypeEnum.ColumnBoard,
+		courseId: roomData.value.roomId,
+	});
+};
+
+const boardCardIsVisibleToStudent = (card: SingleColumnBoardResponse["elements"][number]) => {
+	const isBoardCard = card.type === cardTypes.COLUMN_BOARD;
+	if (!isBoardCard) return false;
+	return (card.content as BoardColumnBoardResponse).published;
 };
 </script>
