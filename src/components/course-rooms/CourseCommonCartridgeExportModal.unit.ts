@@ -7,10 +7,10 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { BoardElementResponse, BoardElementResponseType } from "@api-server";
 import { startExport } from "@data-common-cartridge";
 import { createTestingPinia } from "@pinia/testing";
+import { SvsDialog } from "@ui-dialog";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick, reactive } from "vue";
-import { VDialog } from "vuetify/components";
 
 vi.mock("@data-common-cartridge");
 
@@ -61,7 +61,11 @@ describe("CourseCommonCartridgeExportModal", () => {
 			getBusinessError: { message: "", statusCode: "" },
 		});
 
-		const wrapper = mount(CourseCommonCartridgeExportModal, {
+		roomData.elements = elements;
+		await nextTick();
+		await flushPromises();
+
+		return mount(CourseCommonCartridgeExportModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -70,12 +74,6 @@ describe("CourseCommonCartridgeExportModal", () => {
 			},
 			props: { isOpen: true, roomId: "room-id-1" },
 		});
-
-		roomData.elements = elements;
-		await nextTick();
-		await flushPromises();
-
-		return wrapper;
 	};
 
 	const goToContentSelection = async (wrapper: VueWrapper): Promise<void> => {
@@ -90,7 +88,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 
 		it("should open when isOpen is true", () => {
 			const wrapper = setup();
-			const dialog = wrapper.findComponent(VDialog);
+			const dialog = wrapper.findComponent(SvsDialog);
 			expect(dialog.props("modelValue")).toBe(true);
 		});
 	});

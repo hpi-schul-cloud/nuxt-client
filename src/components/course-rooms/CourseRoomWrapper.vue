@@ -19,12 +19,7 @@
 			<slot name="page-content" />
 		</template>
 		<StartNewCourseSyncDialog v-model:is-open="isCourseSyncDialogOpen" />
-		<CourseCommonCartridgeImportModal
-			v-model:is-open="commonCartridgeImport.isOpen.value"
-			:max-width="480"
-			class="upload-modal"
-			@import="handleImport"
-		/>
+		<CourseCommonCartridgeImportModal v-model="commonCartridgeImport.isOpen.value" @import="handleImport" />
 	</DefaultWireframe>
 </template>
 

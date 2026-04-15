@@ -1,71 +1,61 @@
 <template>
-	<VCard ref="addExternalPersonContent">
-		<template #title>
-			<h2 class="mt-2">
-				{{ t("pages.rooms.members.dialog.addExternalPerson.steps.email.heading") }}
-			</h2>
+	<p>
+		{{ t("pages.rooms.members.dialog.addExternalPerson.steps.email.text") }}
+	</p>
+	<VForm ref="emailForm" class="mt-5" data-testid="add-external-person-email-form" @submit.prevent="onConfirmEmail">
+		<VTextField
+			ref="emailInput"
+			v-model="email"
+			class="mb-4"
+			:readonly="hasError"
+			:label="t('pages.rooms.members.dialog.addExternalPerson.label.email')"
+			data-testid="add-external-person-email"
+			:rules="[isValidEmail()]"
+			validate-on="submit"
+			@keydown.enter.prevent="onConfirmEmail()"
+		/>
+	</VForm>
+	<ErrorAlert v-if="hasError" class="error-message">
+		<i18n-t keypath="pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal" scope="global">
+			<template #link>
+				<a :href="requirementsLink!" class="link" target="_blank" rel="noopener" :ariaLabel="linkAriaLabel">
+					{{ t("pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal.requirements") }}
+				</a>
+			</template>
+		</i18n-t>
+	</ErrorAlert>
+	<VSpacer />
+	<div class="mr-4 mb-3 float-right">
+		<template v-if="!hasError">
+			<VBtn
+				ref="cancelButton"
+				class="ms-auto mr-2"
+				variant="flat"
+				:text="t('common.actions.cancel')"
+				data-testid="add-external-person-cancel-btn"
+				@click="onCancel"
+			/>
+			<VBtn
+				ref="addButton"
+				class="ms-auto"
+				color="primary"
+				variant="flat"
+				:text="t('pages.rooms.members.dialog.addExternalPerson.button.add')"
+				data-testid="add-external-person-add-email-btn"
+				@click="onConfirmEmail"
+			/>
 		</template>
-		<template #text>
-			<p>
-				{{ t("pages.rooms.members.dialog.addExternalPerson.steps.email.text") }}
-			</p>
-			<VForm ref="emailForm" class="mt-5" data-testid="add-external-person-email-form" @submit.prevent="onConfirmEmail">
-				<VTextField
-					ref="emailInput"
-					v-model="email"
-					class="mb-4"
-					:readonly="hasError"
-					:label="t('pages.rooms.members.dialog.addExternalPerson.label.email')"
-					data-testid="add-external-person-email"
-					:rules="[isValidEmail()]"
-					validate-on="submit"
-					@keydown.enter.prevent="onConfirmEmail()"
-				/>
-			</VForm>
-			<ErrorAlert v-if="hasError" class="error-message">
-				<i18n-t keypath="pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal" scope="global">
-					<template #link>
-						<a :href="requirementsLink!" class="link" target="_blank" rel="noopener" :ariaLabel="linkAriaLabel">
-							{{ t("pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal.requirements") }}
-						</a>
-					</template>
-				</i18n-t>
-			</ErrorAlert>
+		<template v-else>
+			<VBtn
+				ref="closeButton"
+				class="ms-auto"
+				variant="outlined"
+				:text="t('common.labels.close')"
+				data-testid="add-external-person-close-btn"
+				@click="onCancel"
+			/>
 		</template>
-		<template #actions>
-			<VSpacer />
-			<div class="mr-4 mb-3">
-				<template v-if="!hasError">
-					<VBtn
-						ref="cancelButton"
-						class="ms-auto mr-2"
-						:text="t('common.actions.cancel')"
-						data-testid="add-external-person-cancel-btn"
-						@click="onCancel"
-					/>
-					<VBtn
-						ref="addButton"
-						class="ms-auto"
-						color="primary"
-						variant="flat"
-						:text="t('pages.rooms.members.dialog.addExternalPerson.button.add')"
-						data-testid="add-external-person-add-email-btn"
-						@click="onConfirmEmail"
-					/>
-				</template>
-				<template v-else>
-					<VBtn
-						ref="closeButton"
-						class="ms-auto"
-						variant="outlined"
-						:text="t('common.labels.close')"
-						data-testid="add-external-person-close-btn"
-						@click="onCancel"
-					/>
-				</template>
-			</div>
-		</template>
-	</VCard>
+	</div>
 </template>
 
 <script setup lang="ts">

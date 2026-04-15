@@ -1,188 +1,122 @@
 <template>
-	<VDialog
-		:model-value="isOpen"
-		:max-width="560"
-		data-testid="export-dialog"
-		@update:model-value="(value) => emit('update:isOpen', value)"
-		@click:outside="closeDialog"
-		@keydown.esc="closeDialog"
-	>
-		<VCard :ripple="false">
-			<template #title>
-				<h2 class="mt-2 text-break">
-					{{ t(title) }}
-				</h2>
+	<SvsDialog :model-value="props.isOpen" :title="title" data-testid="export-dialog" @after-leave="resetDialog">
+		<template #content>
+			<template v-if="step === 'VersionSelection'">
+				<InfoAlert data-testid="cartridge-export-folder-info" class="mb-4">
+					{{ t(`components.molecules.export.options.info.point3`) }}
+				</InfoAlert>
+				<VRadioGroup v-model="version" data-testid="version-radio-group">
+					<VRadio
+						id="1.1.0"
+						data-testid="version-110-radio-button"
+						:label="$t('pages.room.modal.course.export.version1.1')"
+						value="1.1.0"
+					/>
+					<VRadio
+						id="1.3.0"
+						data-testid="version-130-radio-button"
+						:label="$t('pages.room.modal.course.export.version1.3')"
+						value="1.3.0"
+					/>
+				</VRadioGroup>
 			</template>
-			<template #text>
-				<div v-if="step === 'VersionSelection'">
-					<div
-						data-testid="fixed-export-options-warning-info-point3"
-						class="d-flex flex-row pa-2 mb-4 rounded blue bg-blue-lighten-5"
-					>
-						<div class="mx-2">
-							<VIcon color="info">{{ mdiInformation }}</VIcon>
-						</div>
-						<p>
-							{{ t("components.molecules.export.options.info.point3") }}
-						</p>
-					</div>
-					<div data-testid="version-radio-group">
-						<VRadioGroup v-model="version">
-							<VRadio
-								id="1.1.0"
-								data-testid="version-110-radio-button"
-								:label="t('pages.room.modal.course.export.version1.1')"
-								value="1.1.0"
-							/>
-							<VRadio
-								id="1.3.0"
-								data-testid="version-130-radio-button"
-								:label="t('pages.room.modal.course.export.version1.3')"
-								value="1.3.0"
-							/>
-						</VRadioGroup>
-					</div>
-				</div>
-				<div v-if="step === 'ContentSelection'">
-					<div class="d-flex flex-row pa-2 mb-4 rounded blue bg-blue-lighten-5">
-						<div class="mx-2">
-							<VIcon color="info">{{ mdiInformation }}</VIcon>
-						</div>
-						<div>
-							{{ t("components.molecules.export.options.info") }}
+			<template v-if="step === 'ContentSelection'">
+				<InfoAlert data-testid="cartridge-export-content-info" class="mb-4">
+					{{ t(`components.molecules.export.options.info`) }}
+
+					<ul class="ml-6">
+						<li>{{ t(`components.molecules.export.options.info.point2`) }}</li>
+						<li v-if="version === '1.1.0'">{{ t(`components.molecules.export.options.info.point3`) }}</li>
+						<li>
+							{{ t(`components.molecules.export.options.info.point4`) }}
 							<ul class="ml-6">
-								<li>
-									{{ t("components.molecules.export.options.info.point2") }}
+								<li>{{ t(`components.molecules.export.options.info.point4.sub1`) }}</li>
+								<li>{{ t(`components.molecules.export.options.info.point4.sub2`) }}</li>
+								<li>{{ t(`components.molecules.export.options.info.point4.sub3`) }}</li>
+								<li v-if="version === '1.1.0'" data-testid="export-options-info-point4-sub4">
+									{{ t(`components.molecules.export.options.info.point4.sub4`) }}
 								</li>
-								<span v-if="version === '1.1.0'" data-testid="export-options-info-point3">
-									<li>
-										{{ t("components.molecules.export.options.info.point3") }}
-									</li>
-								</span>
-								<li>
-									{{ t("components.molecules.export.options.info.point4") }}
-									<ul class="ml-6">
-										<li>{{ t("components.molecules.export.options.info.point4.sub1") }}</li>
-										<li>{{ t("components.molecules.export.options.info.point4.sub2") }}</li>
-										<li>{{ t("components.molecules.export.options.info.point4.sub3") }}</li>
-										<span v-if="version === '1.1.0'" data-testid="export-options-info-point4-sub4">
-											<li>{{ t("components.molecules.export.options.info.point4.sub4") }}</li>
-										</span>
-										<li>{{ t("components.molecules.export.options.info.point4.sub5") }}</li>
-										<li>{{ t("components.molecules.export.options.info.point4.sub6") }}</li>
-									</ul>
-								</li>
+								<li>{{ t(`components.molecules.export.options.info.point4.sub5`) }}</li>
+								<li>{{ t(`components.molecules.export.options.info.point4.sub6`) }}</li>
 							</ul>
-						</div>
-					</div>
-					<VContainer class="pt-0">
-						<VCheckbox
-							v-model="allTasksSelected"
-							class="d-flex"
-							data-testid="all-tasks-checkbox"
-							:indeterminate="someTasksSelected"
-							:disabled="allTasks.length === 0"
-							:label="t('pages.room.modal.course.export.options.tasks')"
-							density="compact"
-							@click="toggleAllTasks"
-						/>
-						<VCheckbox
-							v-for="item in allTasks"
-							:key="item.id"
-							v-model="item.isSelected"
-							class="d-flex ml-8"
-							:label="item.title"
-							density="compact"
-						/>
-						<VCheckbox
-							v-model="allTopicsSelected"
-							class="d-flex"
-							data-testid="all-topics-checkbox"
-							:indeterminate="someTopicsSelected"
-							:disabled="allTopics.length === 0"
-							:label="t('pages.room.modal.course.export.options.topics')"
-							density="compact"
-							@click="toggleAllTopics"
-						/>
-						<VCheckbox
-							v-for="item in allTopics"
-							:key="item.id"
-							v-model="item.isSelected"
-							class="d-flex ml-8"
-							:label="item.title"
-							density="compact"
-						/>
-						<VCheckbox
-							v-model="allColumnBoardsSelected"
-							class="d-flex"
-							data-testid="all-column-boards-checkbox"
-							:indeterminate="someColumnBoardsSelected"
-							:disabled="allColumnBoards.length === 0"
-							:label="t('pages.room.modal.course.export.options.columnBoards')"
-							density="compact"
-							@click="toggleAllColumnBoards"
-						/>
-						<VCheckbox
-							v-for="item in allColumnBoards"
-							:key="item.id"
-							v-model="item.isSelected"
-							class="d-flex ml-8"
-							:label="item.title"
-							density="compact"
-						/>
-					</VContainer>
-				</div>
+						</li>
+					</ul>
+				</InfoAlert>
+				<VCheckbox
+					v-model="allTasksSelected"
+					class="d-flex"
+					data-testid="all-tasks-checkbox"
+					:indeterminate="someTasksSelected"
+					:disabled="allTasks.length === 0"
+					:label="t('pages.room.modal.course.export.options.tasks')"
+					density="compact"
+					@click="toggleAllTasks"
+				/>
+				<VCheckbox
+					v-for="item in allTasks"
+					:key="item.id"
+					v-model="item.isSelected"
+					class="d-flex ml-8"
+					:label="item.title"
+					density="compact"
+				/>
+				<VCheckbox
+					v-model="allTopicsSelected"
+					class="d-flex"
+					data-testid="all-topics-checkbox"
+					:indeterminate="someTopicsSelected"
+					:disabled="allTopics.length === 0"
+					:label="t('pages.room.modal.course.export.options.topics')"
+					density="compact"
+					@click="toggleAllTopics"
+				/>
+				<VCheckbox
+					v-for="item in allTopics"
+					:key="item.id"
+					v-model="item.isSelected"
+					class="d-flex ml-8"
+					:label="item.title"
+					density="compact"
+				/>
+				<VCheckbox
+					v-model="allColumnBoardsSelected"
+					class="d-flex"
+					data-testid="all-column-boards-checkbox"
+					:indeterminate="someColumnBoardsSelected"
+					:disabled="allColumnBoards.length === 0"
+					:label="t('pages.room.modal.course.export.options.columnBoards')"
+					density="compact"
+					@click="toggleAllColumnBoards"
+				/>
+				<VCheckbox
+					v-for="item in allColumnBoards"
+					:key="item.id"
+					v-model="item.isSelected"
+					class="d-flex ml-8"
+					:label="item.title"
+					density="compact"
+				/>
 			</template>
-			<template #actions>
-				<div class="mb-2">
-					<VBtn
-						v-if="step === 'ContentSelection'"
-						data-testid="dialog-back-btn"
-						class="ml-2"
-						depressed
-						@click="onPreviousStep"
-					>
-						{{ t("common.actions.back") }}
-					</VBtn>
-				</div>
-				<VSpacer />
-				<div class="mb-2">
-					<VBtn
-						v-if="step === 'ContentSelection'"
-						data-testid="dialog-cancel-btn"
-						class="ml-2"
-						depressed
-						@click="closeDialog"
-					>
-						{{ t("common.actions.cancel") }}
-					</VBtn>
-					<VBtn v-if="step === 'VersionSelection'" data-testid="dialog-cancel-btn" depressed @click="closeDialog">
-						{{ t("common.actions.cancel") }}
-					</VBtn>
-					<VBtn
-						v-if="step === 'VersionSelection'"
-						data-testid="dialog-next-btn"
-						class="ml-2"
-						color="primary"
-						variant="flat"
-						@click="onNextStep"
-					>
-						{{ t("common.actions.continue") }}
-					</VBtn>
-					<VBtn
-						v-if="step === 'ContentSelection'"
-						data-testid="dialog-export-btn"
-						class="ml-2"
-						color="primary"
-						variant="flat"
-						@click="onExport"
-					>
-						{{ t("common.actions.export") }}
-					</VBtn>
-				</div>
-			</template>
-		</VCard>
-	</VDialog>
+		</template>
+		<template #actions>
+			<VBtn v-if="step === 'ContentSelection'" data-testid="dialog-back-btn" class="mr-auto" @click="onPreviousStep">
+				{{ t("common.actions.back") }}
+			</VBtn>
+			<SvsDialogBtnCancel data-testid="dialog-cancel-btn" @click="closeDialog" />
+			<SvsDialogBtnConfirm
+				v-if="step === 'VersionSelection'"
+				data-testid="dialog-next-btn"
+				text-lang-key="common.actions.continue"
+				@click="onNextStep"
+			/>
+			<SvsDialogBtnConfirm
+				v-if="step === 'ContentSelection'"
+				data-testid="dialog-export-btn"
+				text-lang-key="common.actions.export"
+				@click="onExport"
+			/>
+		</template>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
@@ -196,7 +130,8 @@ import {
 import { COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifyError, notifySuccess } from "@data-app";
 import { type CommonCartridgeVersion, startExport } from "@data-common-cartridge";
-import { mdiInformation } from "@icons/material";
+import { InfoAlert } from "@ui-alert";
+import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -285,7 +220,6 @@ const setSelectedOnAllItems = (items: Selection[], newValue: boolean): void => {
 
 const closeDialog = (): void => {
 	emit("update:isOpen", false);
-	resetDialog();
 };
 
 const resetDialog = (): void => {
