@@ -352,13 +352,11 @@ export default {
 		"Оновлення VIDIS Media триває на задньому плані. Будь ласка, будьте терплячі на мить.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Неможливо визначити використання інструменту.",
-	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
-		"Ви впевнені, що хочете видалити інструмент {0}?",
-	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
+	"components.administration.externalToolsSection.dialog.content.header":
 		"Наразі інструмент використовується таким чином:",
 	"components.administration.externalToolsSection.dialog.content.warning":
-		"Увага: якщо інструмент видалено, його більше не можна використовувати для цієї школи.",
-	"components.administration.externalToolsSection.dialog.title": "Видаліть зовнішній інструмент",
+		"якщо інструмент видалено, його більше не можна використовувати для цієї школи.",
+	"components.administration.externalToolsSection.dialog.title": "Чи дійсно видалити зовнішнє інструмент {itemName}?",
 	"components.administration.externalToolsSection.header": "Зовнішні інструменти",
 	"components.administration.externalToolsSection.info":
 		"Ця область дозволяє легко інтегрувати сторонні інструменти в хмару. За допомогою наданих функцій можна додавати інструменти, оновлювати існуючі або видаляти інструменти, які більше не потрібні. Потім викладачі мають додати ці інструменти до курсів.",
@@ -1654,7 +1652,6 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Назва курсу",
 	"pages.rooms.importCourse.step_3": "Імпортований курс можна перейменувати під час наступного кроку.",
 	"pages.rooms.ccImportCourse.title": "Імпортний курс",
-	"pages.rooms.ccImportCourse.confirm": "Імпорт",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Виберіть файл",
 	"pages.rooms.ccImportCourse.loading": "Триває завантаження...",
 	"pages.rooms.ccImportCourse.success": "Файл вашого курсу завантажено та зараз імпортується у фоновому режимі.",

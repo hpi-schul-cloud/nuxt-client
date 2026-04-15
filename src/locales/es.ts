@@ -346,13 +346,12 @@ export default {
 		"La actualización de los medios de VIDIS continúa en segundo plano. Por favor, tenga paciencia un momento.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"No se pudo determinar el uso de la herramienta.",
-	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
-		"¿Está seguro de que desea eliminar la herramienta {0}?",
-	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
+	"components.administration.externalToolsSection.dialog.content.header":
 		"Actualmente la herramienta se utiliza de la siguiente manera:",
 	"components.administration.externalToolsSection.dialog.content.warning":
-		"Atención: Si se retira la herramienta, ya no se podrá utilizar para esta escuela.",
-	"components.administration.externalToolsSection.dialog.title": "Quitar Herramienta Externa",
+		"Si se retira la herramienta, ya no se podrá utilizar para esta escuela.",
+	"components.administration.externalToolsSection.dialog.title":
+		"¿Realmente eliminar la herramienta externa {itemName}?",
 	"components.administration.externalToolsSection.header": "Herramientas Externas",
 	"components.administration.externalToolsSection.info":
 		"Esta área permite integrar herramientas de terceros en la nube. Utilizando las funciones proporcionadas, se puede añadir herramientas, actualizar las existentes o eliminar las que ya no sean necesarias. A continuación, los profesores podrán añadir las herramientas a los cursos.",
@@ -1673,7 +1672,6 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Nombre del curso",
 	"pages.rooms.importCourse.step_3": "El curso importado se puede renombrar en el siguiente paso.",
 	"pages.rooms.ccImportCourse.title": "Importar curso",
-	"pages.rooms.ccImportCourse.confirm": "Importar",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Seleccionar archivo",
 	"pages.rooms.ccImportCourse.loading": "Subida en progreso...",
 	"pages.rooms.ccImportCourse.success":
