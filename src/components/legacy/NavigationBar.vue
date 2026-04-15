@@ -80,7 +80,7 @@ const setActive = (idx: number) => {
 	position: -webkit-sticky;
 	top: 0;
 	left: 0;
-	z-index: 40;
+	z-index: var(--z-sticky);
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;

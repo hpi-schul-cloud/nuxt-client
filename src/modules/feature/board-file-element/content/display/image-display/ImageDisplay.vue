@@ -78,6 +78,6 @@ const openLightBox = () => {
 /* Ensure the focus indicator is visible and not obscured by the image */
 .image-container {
 	position: relative;
-	z-index: -1;
+	z-index: var(--z-background);
 }
 </style>

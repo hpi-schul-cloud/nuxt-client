@@ -131,7 +131,7 @@ const onContentClick = () => {
 	position: absolute;
 	right: 10px;
 	top: 10px;
-	z-index: 40;
+	z-index: var(--z-sticky);
 }
 
 $pulseIconColor: #15ba97;

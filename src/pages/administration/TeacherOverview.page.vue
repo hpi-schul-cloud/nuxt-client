@@ -422,7 +422,7 @@ span {
 }
 
 button:not(.is-none):focus {
-	z-index: 40;
+	z-index: var(--z-sticky);
 	outline: none;
 	box-shadow:
 		0 0 0 0 rgba(var(--v-theme-white)),

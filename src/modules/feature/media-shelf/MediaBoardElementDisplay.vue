@@ -114,6 +114,6 @@ $card-width: 288px;
 	position: absolute;
 	right: 0.75rem;
 	top: 0.75rem;
-	z-index: 40;
+	z-index: var(--z-sticky);
 }
 </style>

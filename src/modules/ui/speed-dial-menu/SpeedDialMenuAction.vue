@@ -37,6 +37,6 @@ defineProps<{
 
 <style scoped>
 .z-index-100 {
-	z-index: 40;
+	z-index: var(--z-sticky);
 }
 </style>

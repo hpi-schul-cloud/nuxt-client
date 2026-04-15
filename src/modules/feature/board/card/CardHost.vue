@@ -259,7 +259,7 @@ onMounted(async () => {
 	position: absolute;
 	top: 0.25rem;
 	right: 0.25rem;
-	z-index: 1;
+	z-index: var(--z-raised);
 }
 .hidden {
 	transition: opacity 200ms;

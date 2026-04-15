@@ -150,7 +150,7 @@ const onMoveElementKeyboard = (elementMove: ElementMove, keyCode: string) => {
 .toolbar-position {
 	position: absolute;
 	width: 100%;
-	z-index: 50;
+	z-index: var(--z-topbar);
 }
 
 .toolbar-fixed-offset {

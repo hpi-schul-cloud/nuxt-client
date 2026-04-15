@@ -38,6 +38,6 @@ const skipToMainContent = () => {
 	border: 1px solid #555;
 	border-radius: 2px;
 	transform: translate(-50%, 0);
-	z-index: 60;
+	z-index: var(--z-skip-link);
 }
 </style>

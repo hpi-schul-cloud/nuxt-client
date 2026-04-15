@@ -90,7 +90,7 @@ const handleReady = (editor: Editor) => {
 
 :root {
 	// z-index must be less than z-index of the headers to prevent that the toolbar is shown in front of the headers when scrolling.
-	--ck-z-modal: 15;
+	--ck-z-modal: var(--z-editor);
 }
 
 .ck-content {
