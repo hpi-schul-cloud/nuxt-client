@@ -13,16 +13,16 @@ import { InfoAlert } from "@ui-alert";
 import { computed } from "vue";
 
 const { locale } = useI18nGlobal();
+const { runtimeConfig } = useRuntimeConfigStore();
 
 const dashboardAnnouncement = computed((): string | undefined => {
-	const { runtimeConfig } = useRuntimeConfigStore();
 	if (!runtimeConfig.DASHBOARD_ANNOUNCEMENT_ENABLED) {
 		return undefined;
 	}
 
 	const userRoles = useAppStore().userRoles;
-	const rolesForAnnouncement = new Set(String(runtimeConfig.DASHBOARD_ANNOUNCEMENT_FOR_ROLES).split(","));
-	const hasMatchingRole = userRoles.some((role) => rolesForAnnouncement.has(role));
+	const rolesForAnnouncement = getAnnouncementUserRoles();
+	const hasMatchingRole = userRoles.some((role) => rolesForAnnouncement.has(simplifyRoleName(role)));
 
 	if (!hasMatchingRole) {
 		return undefined;
@@ -31,4 +31,12 @@ const dashboardAnnouncement = computed((): string | undefined => {
 	const langKey = `DASHBOARD_ANNOUNCEMENT_TEXT_${locale.value.toUpperCase()}`;
 	return runtimeConfig[langKey] as string | undefined;
 });
+
+const getAnnouncementUserRoles = () => {
+	const allowedUserRoles = String(runtimeConfig.DASHBOARD_ANNOUNCEMENT_FOR_ROLES ?? "");
+	const simplifiedUserRoles = simplifyRoleName(allowedUserRoles);
+	return new Set(simplifiedUserRoles.split(","));
+};
+
+const simplifyRoleName = (role: string) => role.replaceAll(/[^a-z,]+/gi, "").toLowerCase();
 </script>
