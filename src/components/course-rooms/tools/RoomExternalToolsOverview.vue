@@ -11,14 +11,14 @@
 				</template>
 			</EmptyState>
 		</div>
-		<v-alert
+		<VAlert
 			v-if="error && error.message"
 			type="error"
 			data-testId="context-tool-error"
 			:icon="mdiAlertCircle"
 			:text="error.message"
 		/>
-		<v-progress-linear :active="loadingTemplate" data-testId="progress-bar" indeterminate />
+		<VProgressLinear :active="loadingTemplate" data-testId="progress-bar" indeterminate />
 		<RoomVideoConferenceSection v-if="isVideoConferenceAvailable" class="mb-4" :room-id="roomId" />
 		<RoomExternalToolsSection
 			:tools="tools"

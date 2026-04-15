@@ -163,7 +163,7 @@
 <script>
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import { courseRoomDetailsModule } from "@/store";
+// import { courseRoomDetailsModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { askDeletionForItem } from "@/utils/confirmation-dialog.utils.ts";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
@@ -173,9 +173,11 @@ import {
 	ImportUserResponseRoleNames,
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
+import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { useEnvConfig } from "@data-env";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
+import { storeToRefs } from "pinia";
 import draggable from "vuedraggable";
 
 export default {
@@ -199,6 +201,15 @@ export default {
 		role: { type: String, required: true },
 	},
 	emits: ["copy-board-element"],
+	setup() {
+		const courseRoomDetailsStore = useCourseRoomDetailsStore();
+		const { roomIsEmpty } = storeToRefs(courseRoomDetailsStore);
+
+		return {
+			courseRoomDetailsStore,
+			roomIsEmpty,
+		};
+	},
 	data() {
 		return {
 			cardTypes: BoardElementResponseType,
@@ -229,7 +240,7 @@ export default {
 		touchDelay() {
 			return this.isTouchDevice ? 200 : 20;
 		},
-		roomIsEmpty: () => courseRoomDetailsModule.roomIsEmpty,
+		// roomIsEmpty: () => courseRoomDetailsModule.roomIsEmpty,
 		roomData() {
 			return { ...this.roomDataObject };
 		},
@@ -241,13 +252,13 @@ export default {
 	},
 	methods: {
 		async updateCardVisibility(elementId, visibility) {
-			await courseRoomDetailsModule.publishCard({ elementId, visibility });
+			await this.courseRoomDetailsStore.publishCard({ elementId, visibility });
 		},
 		async onSort(items) {
 			const idList = {};
 			idList.elements = items.map((item) => item.content.id);
 
-			await courseRoomDetailsModule.sortElements(idList);
+			await this.courseRoomDetailsStore.sortElements(idList);
 		},
 		async moveByKeyboard(e) {
 			if (this.role === this.Roles.STUDENT) return;
@@ -260,7 +271,7 @@ export default {
 
 			[items[itemIndex], items[itemIndex + e.moveIndex]] = [items[itemIndex + e.moveIndex], items[itemIndex]];
 
-			await courseRoomDetailsModule.sortElements({ elements: items });
+			await this.courseRoomDetailsStore.sortElements({ elements: items });
 			this.$refs[`item_${position}`].$el.focus();
 		},
 		boardLayoutAriaLabel(itemLayout) {
@@ -326,19 +337,19 @@ export default {
 			if (!confirmed) return;
 
 			if (itemType === this.cardTypes.TASK) {
-				await courseRoomDetailsModule.deleteTask(itemContent.id);
+				await this.courseRoomDetailsStore.deleteTask(itemContent.id);
 			} else if (itemType === this.cardTypes.LESSON) {
-				await courseRoomDetailsModule.deleteLesson(itemContent.id);
+				await this.courseRoomDetailsStore.deleteLesson(itemContent.id);
 			} else if (itemType === this.cardTypes.COLUMN_BOARD) {
-				await courseRoomDetailsModule.deleteBoard(itemContent.columnBoardId);
+				await this.courseRoomDetailsStore.deleteBoard(itemContent.columnBoardId);
 			}
-			await courseRoomDetailsModule.fetchContent(this.roomData.roomId);
+			await this.courseRoomDetailsStore.fetchContent(this.roomData.roomId);
 		},
 		async finishTask(itemId) {
-			await courseRoomDetailsModule.finishTask({ itemId, action: "finish" });
+			await this.courseRoomDetailsStore.finishTask({ itemId, action: "finish" });
 		},
 		async restoreTask(itemId) {
-			await courseRoomDetailsModule.finishTask({ itemId, action: "restore" });
+			await this.courseRoomDetailsStore.finishTask({ itemId, action: "restore" });
 		},
 		copyTask(taskId) {
 			this.$emit("copy-board-element", {
