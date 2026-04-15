@@ -59,9 +59,9 @@
 			</VTabsWindowItem>
 		</VTabsWindow>
 	</DefaultWireframe>
-	<AddMembersDialog v-model="isMembersDialogOpen" @close="onDialogClose" />
+	<AddMembersDialog v-model="isMembersDialogOpen" />
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
-	<InviteMembersDialog v-model="isInvitationDialogOpen" :school-name="currentUserSchoolName" @close="onDialogClose" />
+	<InviteMembersDialog v-model="isInvitationDialogOpen" :school-name="currentUserSchoolName" />
 	<AddExternalPersonDialog v-model="isExternalPersonDialogOpen" />
 </template>
 
@@ -241,11 +241,6 @@ const currentUserSchoolName = computed(() => {
 
 	return member?.schoolName || "";
 });
-
-const onDialogClose = () => {
-	isMembersDialogOpen.value = false;
-	isInvitationDialogOpen.value = false;
-};
 
 const onLeaveRoom = async () => {
 	if (!allowedOperations.value.leaveRoom) {

@@ -344,13 +344,12 @@ export default {
 		"La actualización de los medios de VIDIS continúa en segundo plano. Por favor, tenga paciencia un momento.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"No se pudo determinar el uso de la herramienta.",
-	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
-		"¿Está seguro de que desea eliminar la herramienta {0}?",
-	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
+	"components.administration.externalToolsSection.dialog.content.header":
 		"Actualmente la herramienta se utiliza de la siguiente manera:",
 	"components.administration.externalToolsSection.dialog.content.warning":
-		"Atención: Si se retira la herramienta, ya no se podrá utilizar para esta escuela.",
-	"components.administration.externalToolsSection.dialog.title": "Quitar Herramienta Externa",
+		"Si se retira la herramienta, ya no se podrá utilizar para esta escuela.",
+	"components.administration.externalToolsSection.dialog.title":
+		"¿Realmente eliminar la herramienta externa {itemName}?",
 	"components.administration.externalToolsSection.header": "Herramientas Externas",
 	"components.administration.externalToolsSection.info":
 		"Esta área permite integrar herramientas de terceros en la nube. Utilizando las funciones proporcionadas, se puede añadir herramientas, actualizar las existentes o eliminar las que ya no sean necesarias. A continuación, los profesores podrán añadir las herramientas a los cursos.",
@@ -785,9 +784,16 @@ export default {
 	"components.molecules.TextEditor.noLocalFiles": "Actualmente no se admiten archivos locales.",
 	"components.molecules.export.options.info": "El siguiente contenido no se exporta:",
 	"components.molecules.export.options.info.point1": "Archivos subidos dentro del curso.",
-	"components.molecules.export.options.info.point2": "Envíos asignados a una tarea.",
+	"components.molecules.export.options.info.point2": "Envíos",
 	"components.molecules.export.options.info.point3":
 		"Las carpetas de archivos no se exportan con la Common Cartridge versión 1.1",
+	"components.molecules.export.options.info.point4": "Los siguientes elementos del mapa dentro de las áreas:",
+	"components.molecules.export.options.info.point4.sub1": "Pizarra",
+	"components.molecules.export.options.info.point4.sub2": "Etherpad",
+	"components.molecules.export.options.info.point4.sub3": "Herramientas externas",
+	"components.molecules.export.options.info.point4.sub4": "Carpeta de archivos",
+	"components.molecules.export.options.info.point4.sub5": "Merlin biblioteca",
+	"components.molecules.export.options.info.point4.sub6": "H5P",
 	"components.organisms.ContentCard.report.body": "Informar del contenido con el ID",
 	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":
@@ -1664,7 +1670,6 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Nombre del curso",
 	"pages.rooms.importCourse.step_3": "El curso importado se puede renombrar en el siguiente paso.",
 	"pages.rooms.ccImportCourse.title": "Importar curso",
-	"pages.rooms.ccImportCourse.confirm": "Importar",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Seleccionar archivo",
 	"pages.rooms.ccImportCourse.loading": "Subida en progreso...",
 	"pages.rooms.ccImportCourse.success":
@@ -1684,7 +1689,7 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Menú de herramienta",
 	"pages.rooms.tools.outdated": "Configuración incompleta",
 	"pages.rooms.tools.outdatedDialog.title": "Herramienta „{toolName}“ obsoleta",
-	"pages.room.modal.course.export.header": "Formato de exportación",
+	"pages.room.modal.course.export.header": "Version de exportación",
 	"pages.room.modal.course.export.options.header": "Exportar configuración",
 	"pages.room.modal.course.export.options.topics": "Temas",
 	"pages.room.modal.course.export.options.tasks": "Tareas sin tema",

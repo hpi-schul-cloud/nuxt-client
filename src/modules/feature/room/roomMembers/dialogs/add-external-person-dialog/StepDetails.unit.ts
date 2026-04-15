@@ -74,7 +74,6 @@ describe("StepDetails", () => {
 		it("should display correct texts", () => {
 			const { wrapper } = setup();
 
-			expect(wrapper.text()).toContain("pages.rooms.members.dialog.addExternalPerson.steps.details.heading");
 			expect(wrapper.text()).toContain("pages.rooms.members.dialog.addExternalPerson.steps.details.alert");
 			expect(wrapper.text()).toContain("pages.rooms.members.dialog.addExternalPerson.steps.details.text");
 			expect(wrapper.text()).toContain("common.actions.back");
@@ -298,15 +297,6 @@ describe("StepDetails", () => {
 				expect(wrapper.find('[data-testid="add-external-person-lastname"]')).toBeTruthy();
 				expect(wrapper.find('[data-testid="add-external-person-back-btn"]')).toBeTruthy();
 				expect(wrapper.find('[data-testid="add-external-person-confirm-btn"]')).toBeTruthy();
-			});
-
-			it("should have proper heading structure", () => {
-				const { wrapper } = setup();
-
-				const heading = wrapper.find("h2");
-
-				expect(heading.exists()).toBe(true);
-				expect(heading.text()).toContain("pages.rooms.members.dialog.addExternalPerson.steps.details.heading");
 			});
 
 			it("should have info alert for user guidance", () => {

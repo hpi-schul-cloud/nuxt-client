@@ -278,11 +278,11 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						allowedOperations: { accessRoom: true, copyRoom: false },
 					});
 
-					const menu = wrapper.getComponent({ name: "RoomMenu" });
+					const menu = wrapper.getComponent(RoomMenu);
 					await menu.vm.$emit("room:copy");
 
 					const copyFlow = wrapper.findComponent(RoomCopyFlow);
-					expect(copyFlow.exists()).toBe(false);
+					expect(copyFlow.emitted()["update:modelValue"]).toBeFalsy();
 				});
 			});
 		});
@@ -320,14 +320,14 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					allowedOperations: { accessRoom: true, copyRoom: true },
 				});
 
-				const menu = wrapper.getComponent({ name: "RoomMenu" });
+				const menu = wrapper.getComponent(RoomMenu);
 				await menu.vm.$emit("room:copy");
 
 				const copyFlow = wrapper.getComponent(RoomCopyFlow);
 				await copyFlow.vm.$emit("copy:ended");
 				await wrapper.vm.$nextTick();
 
-				expect(wrapper.findComponent(RoomCopyFlow).exists()).toBe(false);
+				expect(copyFlow.emitted()["update:modelValue"]).toBeFalsy();
 			});
 		});
 
