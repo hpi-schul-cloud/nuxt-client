@@ -29,9 +29,36 @@ import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { mock } from "vitest-mock-extended";
-import { nextTick } from "vue";
+import { nextTick, ref } from "vue";
+import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VBtn } from "vuetify/components";
 
+const mockExecuteCopyCourse = vi.fn().mockResolvedValue({ result: { id: "copied-id" }, error: undefined });
+const mockExecuteCopyTask = vi.fn().mockResolvedValue({ result: { id: "copied-task-id" }, error: undefined });
+const mockExecuteCopyLesson = vi.fn().mockResolvedValue({ result: { id: "copied-lesson-id" }, error: undefined });
+const mockExecuteCopyBoard = vi.fn().mockResolvedValue({ result: { id: "copied-board-id" }, error: undefined });
+
+vi.mock("@feature-copy", () => ({
+	CopyInfoDialog: { template: "<div></div>" },
+	useCopyFlow: () => ({
+		isDialogOpen: ref(false),
+		copyItemType: ref("course"),
+		onConfirmed: vi.fn(),
+		onCancelled: vi.fn(),
+		executeCopyCourse: mockExecuteCopyCourse,
+		executeCopyTask: mockExecuteCopyTask,
+		executeCopyLesson: mockExecuteCopyLesson,
+		executeCopyBoard: mockExecuteCopyBoard,
+	}),
+}));
+
+vi.mock("@/components/course-rooms/CourseRoomDashboard.vue", () => ({
+	default: { template: "<div data-testid='course-room-dashboard-stub'></div>" },
+}));
+
+vi.mock("@/components/course-rooms/tools/RoomExternalToolsOverview.vue", () => ({
+	default: { template: "<div data-testid='room-external-tools-stub'></div>" },
+}));
 const boardElements: Array<BoardElementResponse> = [
 	{
 		type: BoardTypes.TASK,
@@ -88,9 +115,12 @@ describe("CourseRoomDetails.page.vue", () => {
 	let shareModule: ShareModule;
 	let downloadModule: CommonCartridgeExportModule;
 	let courseRoomDetailsModule: CourseRoomDetailsModule;
+	let router: RouterMock;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+		router = createRouterMock();
+		injectRouterMock(router);
 	});
 
 	afterEach(() => {
@@ -142,21 +172,18 @@ describe("CourseRoomDetails.page.vue", () => {
 		// https://github.com/vueuse/vueuse/blob/main/packages/core/useMediaQuery/index.ts#L44
 		vi.spyOn(window, "matchMedia").mockReturnValue(mock<MediaQueryList>());
 
-		const $route = {
-			params: {
-				id: singleColumnBoard.roomId,
-			},
-			path: "/rooms/",
+		// Set up router with route params
+		router.currentRoute.value = {
+			...router.currentRoute.value,
+			params: { id: singleColumnBoard.roomId },
+			path: `/rooms/${singleColumnBoard.roomId}`,
+			fullPath: `/rooms/${singleColumnBoard.roomId}`,
+			name: "course-room-details",
 		};
-		const $router = { push: vi.fn(), resolve: vi.fn(), replace: vi.fn() };
 
 		const wrapper = mount(CourseRoomDetailsPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				mocks: {
-					$router,
-					$route,
-				},
 				provide: {
 					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
@@ -164,11 +191,10 @@ describe("CourseRoomDetails.page.vue", () => {
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				},
 				stubs: {
-					CourseRoomDashboard: true,
-					RoomExternalToolsOverview: true,
 					EndCourseSyncDialog: true,
 					StartExistingCourseSyncDialog: true,
 					UseFocusTrap: true,
+					CopyInfoDialog: true,
 				},
 			},
 		});
@@ -356,7 +382,7 @@ describe("CourseRoomDetails.page.vue", () => {
 			});
 
 			describe("testing FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
-				it("should call the onCopyRoom method when 'Copy course' menu was clicked", async () => {
+				it("should call executeCopyCourse when 'Copy course' menu was clicked", async () => {
 					createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
 
 					const { wrapper, singleColumnBoard } = setup();
@@ -368,8 +394,7 @@ describe("CourseRoomDetails.page.vue", () => {
 					const moreActionButton = wrapper.findComponent(`[data-testid=room-menu-copy]`);
 					await moreActionButton.trigger("click");
 
-					expect(copyModule.copy).toHaveBeenCalled();
-					expect(wrapper.vm.courseId).toBe("copiedid");
+					expect(mockExecuteCopyCourse).toHaveBeenCalledWith(singleColumnBoard.roomId);
 				});
 			});
 

@@ -129,14 +129,10 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { CopyParamsTypeEnum } from "@/store/copy";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
-import { $axios } from "@/utils/api";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import {
-	BoardApiFactory,
 	BoardExternalReferenceType,
 	BoardLayout,
 	ColumnResponse,
@@ -394,25 +390,15 @@ const boardColumnClass = computed(() => {
 });
 
 const copyFlow = useCopyFlow();
-const { execute } = useSafeAxiosTask();
-const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 
 const onCopyBoard = async () => {
 	if (!allowedOperations.value.copyBoard) return;
 
-	const confirmed = await copyFlow.confirm(CopyParamsTypeEnum.ColumnBoard);
-	if (!confirmed) return;
+	const { result } = await copyFlow.executeCopyBoard(props.boardId);
 
-	const { result, error } = await copyFlow.withCopyLoading(() =>
-		execute(
-			() => boardApi.boardControllerCopyBoard(props.boardId),
-			t("common.notifications.errors.notDuplicated", { type: t("common.labels.board") })
-		)
-	);
-
-	if (!error && result.data.id !== undefined) {
-		boardStore.fetchBoardRequest({ boardId: result.data.id });
-		router.push({ name: "boards-id", params: { id: result.data.id } });
+	if (result?.id) {
+		boardStore.fetchBoardRequest({ boardId: result.id });
+		router.push({ name: "boards-id", params: { id: result.id } });
 	}
 };
 

@@ -75,15 +75,11 @@
 import TasksDashBoardPanels from "./TasksDashBoardPanels.vue";
 import TasksList from "./TasksList.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
-import { $axios } from "@/utils/api";
 import { FINISHED_TASKS_MODULE_KEY, injectStrict, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
-import { ShareTokenBodyParamsParentType, TaskApiFactory } from "@api-server";
-import { notifySuccess } from "@data-app";
+import { ShareTokenBodyParamsParentType } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { CopyInfoDialog, useCopyFlow } from "@feature-copy";
 import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
@@ -125,21 +121,11 @@ const tab = computed({
 });
 
 const copyFlow = useCopyFlow();
-const { execute } = useSafeAxiosTask();
-const taskApi = TaskApiFactory(undefined, "/v3", $axios);
 
-const onCopyTask = async ({ id, type, courseId }: { id: string; type: CopyParamsTypeEnum; courseId: string }) => {
-	const confirmed = await copyFlow.confirm(type);
-	if (!confirmed) return;
+const onCopyTask = async ({ id, courseId }: { id: string; courseId: string }) => {
+	const { error } = await copyFlow.executeCopyTask(id, courseId);
 
-	const { error } = await copyFlow.withCopyLoading(() =>
-		execute(
-			() => taskApi.taskControllerCopyTask(id, { courseId }),
-			t("common.notifications.errors.notDuplicated", { type: t("common.labels.task") })
-		)
-	);
 	if (!error) {
-		notifySuccess(t("components.molecules.copyResult.task.successfullyCopied"));
 		tasksModule.setActiveTab("drafts");
 		await tasksModule.fetchAllTasks();
 	}

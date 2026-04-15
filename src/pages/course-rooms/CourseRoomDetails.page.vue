@@ -83,14 +83,12 @@
 </template>
 
 <script setup lang="ts">
-import { useSafeAxiosTask } from "../../composables/async-tasks.composable";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCommonCartridgeExportModal.vue";
 import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.vue";
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { CopyParamsTypeEnum } from "@/store/copy";
-import { $axios } from "@/utils/api";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
@@ -99,16 +97,13 @@ import {
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
-	BoardApiFactory,
 	BoardLayout,
 	BoardParentType,
-	CourseRoomsApiFactory,
 	ImportUserResponseRoleNames as Roles,
 	Permission,
 	ShareTokenBodyParamsParentType,
-	TaskApiFactory,
 } from "@api-server";
-import { notifySuccess, useAppStore } from "@data-app";
+import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { CopyInfoDialog, useCopyFlow } from "@feature-copy";
@@ -446,85 +441,37 @@ const refreshCourseRoom = async () => {
 
 const copyFlow = useCopyFlow();
 
-const { execute } = useSafeAxiosTask();
-const courseRoomApi = CourseRoomsApiFactory(undefined, "/v3", $axios);
-const taskApi = TaskApiFactory(undefined, "/v3", $axios);
-const boardApi = BoardApiFactory(undefined, "/v3", $axios);
-
 const onCopyRequested = async ({ id, type }: { id: string; type: CopyParamsTypeEnum }) => {
-	const confirmed = await copyFlow.confirm(type);
-	if (!confirmed) return;
-
 	switch (type) {
-		case CopyParamsTypeEnum.Course:
-			await copyCourse(id);
+		case CopyParamsTypeEnum.Course: {
+			const { result } = await copyFlow.executeCopyCourse(id);
+			if (result?.id) {
+				await router.replace(`/rooms/${result.id}`);
+				await initialize(result.id);
+			}
 			break;
-		case CopyParamsTypeEnum.Task:
-			await copyTaskElement(id);
+		}
+		case CopyParamsTypeEnum.Task: {
+			const { error } = await copyFlow.executeCopyTask(id, courseId.value);
+			if (!error) {
+				await courseRoomDetailsModule.fetchContent(courseId.value);
+			}
 			break;
-		case CopyParamsTypeEnum.Lesson:
-			await copyLessonElement(id);
+		}
+		case CopyParamsTypeEnum.Lesson: {
+			const { error } = await copyFlow.executeCopyLesson(id, courseId.value);
+			if (!error) {
+				await courseRoomDetailsModule.fetchContent(courseId.value);
+			}
 			break;
-		case CopyParamsTypeEnum.ColumnBoard:
-			await copyColumnBoardElement(id);
+		}
+		case CopyParamsTypeEnum.ColumnBoard: {
+			const { error } = await copyFlow.executeCopyBoard(id);
+			if (!error) {
+				await courseRoomDetailsModule.fetchContent(courseId.value);
+			}
 			break;
-	}
-};
-
-const copyCourse = async (id: string) => {
-	const { result, error } = await copyFlow.withCopyLoading(() =>
-		execute(
-			() => courseRoomApi.courseRoomsControllerCopyCourse(id),
-			t("common.notifications.errors.notDuplicated", { type: t("common.labels.course") })
-		)
-	);
-
-	if (!error && result.data.id !== undefined) {
-		notifySuccess(t("components.molecules.copyResult.course.successfullyCopied"));
-		const copyId = result.data.id.replace(/[^a-z\d]/g, "");
-		await router.replace(`/rooms/${copyId}`);
-		await initialize(copyId);
-	}
-};
-
-const copyTaskElement = async (id: string) => {
-	const { error } = await copyFlow.withCopyLoading(() =>
-		execute(
-			() => taskApi.taskControllerCopyTask(id, { courseId: courseId.value }),
-			t("common.notifications.errors.notDuplicated", { type: t("common.labels.task") })
-		)
-	);
-	if (!error) {
-		notifySuccess(t("components.molecules.copyResult.task.successfullyCopied"));
-		await courseRoomDetailsModule.fetchContent(courseId.value);
-	}
-};
-
-const copyLessonElement = async (id: string) => {
-	const { error } = await copyFlow.withCopyLoading(() =>
-		execute(
-			() => courseRoomApi.courseRoomsControllerCopyLesson(id, { courseId: courseId.value }),
-			t("common.notifications.errors.notDuplicated", { type: t("common.labels.lesson") })
-		)
-	);
-
-	if (!error) {
-		notifySuccess(t("components.molecules.copyResult.lesson.successfullyCopied"));
-		await courseRoomDetailsModule.fetchContent(courseId.value);
-	}
-};
-
-const copyColumnBoardElement = async (id: string) => {
-	const { error } = await copyFlow.withCopyLoading(() =>
-		execute(
-			() => boardApi.boardControllerCopyBoard(id),
-			t("common.notifications.errors.notDuplicated", { type: t("common.labels.board") })
-		)
-	);
-
-	if (!error) {
-		notifySuccess(t("components.molecules.copyResult.board.successfullyCopied"));
-		await courseRoomDetailsModule.fetchContent(courseId.value);
+		}
 	}
 };
 
