@@ -20,7 +20,7 @@
 					<slot name="panelOne" />
 				</v-expansion-panel-text>
 			</v-expansion-panel>
-			<v-expansion-panel elevation="0" :disabled="isPanelTwoDisabled">
+			<v-expansion-panel elevation="0"  :disabled="isPanelTwoDisabled">
 				<v-expansion-panel-title v-if="isLoading">
 					<v-skeleton-loader type="text" max-width="30%" />
 					<template #actions>
@@ -63,9 +63,9 @@ export default {
 			type: String,
 			required: true,
 		},
-		status: {
+		isLoading: {
+			type: Boolean,
 			required: true,
-			validator: (val) => [null, "", "pending", "completed", "error"].includes(val),
 		},
 		isEmpty: {
 			type: Boolean,
@@ -87,40 +87,23 @@ export default {
 		updatedDefault: function () {
 			return this.updateDefault();
 		},
-		isPanelOneEmpty: function () {
+		isPanelOneEmpty() {
 			return this.panelOneCount === 0;
 		},
-		isPanelTwoEmpty: function () {
+		isPanelTwoEmpty() {
 			return this.panelTwoCount === 0;
 		},
-		isLoading: function () {
-			return this.status === "pending";
+		isPanelOneDisabled() {
+			return this.isPanelOneEmpty;
 		},
-		isCompleted: function () {
-			return this.status === "completed";
+		isPanelTwoDisabled() {
+			return this.isPanelTwoEmpty;
 		},
-		isPanelOneDisabled: function () {
-			return this.isPanelOneEmpty && this.isCompleted;
-		},
-		isPanelTwoDisabled: function () {
-			return this.isPanelTwoEmpty && this.isCompleted;
-		},
-		areBothPanelsEmpty: function () {
+		areBothPanelsEmpty() {
 			return this.isPanelOneDisabled && this.isPanelTwoDisabled;
 		},
-		areBothPanelsFilled: function () {
+		areBothPanelsFilled() {
 			return !this.isPanelOneDisabled && !this.isPanelTwoDisabled;
-		},
-	},
-	watch: {
-		isPanelOneDisabled: function () {
-			this.expanded = 1;
-		},
-		isPanelTwoDisabled: function () {
-			this.expanded = 0;
-		},
-		areBothPanelsEmpty: function () {
-			this.expanded = this.updatedDefault;
 		},
 	},
 	created() {

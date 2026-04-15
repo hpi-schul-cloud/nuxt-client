@@ -1,5 +1,5 @@
 <template>
-	<DefaultWireframe :headline="$t('common.words.tasks')" max-width="short" :fab-items="fabItems">
+	<DefaultWireframe :headline="$t('common.words.tasks')" max-width="native" :fab-items="fabItems">
 		<TasksDashboardStudent v-if="isStudent" />
 		<TasksDashboardTeacher v-else-if="isTeacher" />
 	</DefaultWireframe>

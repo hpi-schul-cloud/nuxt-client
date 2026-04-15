@@ -37,8 +37,8 @@ describe("useTasks", () => {
 			});
 			setupApiResponse([openTask]);
 
-			const { fetch, tasks, isRunning } = useTasks({}, false);
-			expect(isRunning.value).toBe(false);
+			const { fetch, tasks, isLoading } = useTasks({}, false);
+			expect(isLoading.value).toBe(false);
 
 			await fetch();
 			await flushPromises();

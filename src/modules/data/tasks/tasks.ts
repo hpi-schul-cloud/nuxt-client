@@ -4,7 +4,7 @@ import { $axios } from "@/utils/api";
 import { nowUtc, parseUtc } from "@/utils/date-time.utils";
 import { TaskApiFactory, TaskResponse } from "@api-server";
 import { ManipulateType } from "dayjs";
-import { orderBy } from "lodash-es";
+import { orderBy, uniqBy } from "lodash-es";
 import { computed, onMounted, ref } from "vue";
 
 // === Utilities ===
@@ -56,6 +56,11 @@ export const useTasks = (
 		if (includeSubstitute.value) return allTasks.value;
 		return allTasks.value.filter((t) => !t.status.isSubstitutionTeacher);
 	});
+
+	const draftsUnfiltered = computed(() =>
+		toSortedByCreatedDate(tasksFilteredBySubstitute.value.filter((t) => t.status.isDraft))
+	);
+	const publishedUnfiltered = computed(() => tasksFilteredBySubstitute.value.filter((t) => !t.status.isDraft));
 
 	const tasksFilteredByCourses = computed(() => {
 		if (selectedCourseNames.value.length === 0) return tasksFilteredBySubstitute.value;
@@ -123,25 +128,15 @@ export const useTasks = (
 	const gradedForStudent = computed(() => published.value.filter((t) => t.status.graded > 0));
 
 	// === Filter Helpers ===
-	// const courseFilterOptions = computed(() => {
-	// 	const taskList = tasksFilteredBySubstitute.value;
-	// 	const mapped = taskList.map((t) => ({
-	// 		value: t.courseName,
-	// 		text: t.courseName,
-	// 		isSubstitution: t.status.isSubstitutionTeacher,
-	// 	}));
-	// 	return [...new Map(mapped.map((item) => [item.value, item])).values()];
-	// });
+	const uniqCourseFilters = computed(() =>
+		uniqBy(tasksFilteredBySubstitute.value, (t) => t.courseName).map((task) => ({
+			value: task.courseName,
+			text: task.courseName || t("pages.tasks.labels.noCourse"),
+			isSubstitution: task.status.isSubstitutionTeacher,
+		}))
+	);
 
-	// const hasFiltersSelected = computed(() => selectedCourseNames.value.length > 0);
-
-	// const countByCourseName = (taskList: TaskResponse[]) => {
-	// 	const result: Record<string, number> = {};
-	// 	for (const t of taskList) {
-	// 		result[t.courseName] = (result[t.courseName] ?? 0) + 1;
-	// 	}
-	// 	return result;
-	// };
+	const sortedCourseFilters = computed(() => orderBy(uniqCourseFilters.value, [(f) => f.text], ["asc"]));
 
 	// === Filter Setters ===
 
@@ -214,6 +209,9 @@ export const useTasks = (
 		drafts,
 		published,
 
+		draftsUnfiltered,
+		publishedUnfiltered,
+
 		// Due Date Grouping
 		overdue,
 		withDueDate,
@@ -236,7 +234,7 @@ export const useTasks = (
 		includeSubstitute,
 
 		// Filter Helpers
-		// courseFilterOptions,
+		sortedCourseFilters,
 		// hasFiltersSelected,
 		// countByCourseName,
 
