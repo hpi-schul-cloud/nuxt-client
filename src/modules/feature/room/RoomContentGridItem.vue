@@ -4,6 +4,7 @@
 		:class="isDraft ? 'bg-white' : 'bg-surface-light'"
 		:variant="isDraft ? 'outlined' : 'flat'"
 		:data-testid="`board-grid-item-${index}`"
+		:ripple="false"
 	>
 		<VCardSubtitle
 			class="mt-4 d-flex align-center"

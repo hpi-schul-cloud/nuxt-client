@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<v-dialog
+		<VDialog
 			:model-value="isOpen"
 			:fullscreen="isFullscreen"
 			:scrim="isFullscreen"
@@ -53,7 +53,7 @@
 					</div>
 				</v-card-text>
 			</v-card>
-		</v-dialog>
+		</VDialog>
 	</div>
 </template>
 

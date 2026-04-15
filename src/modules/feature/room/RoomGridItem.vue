@@ -1,5 +1,10 @@
 <template>
-	<VCard class="room-grid-item d-flex flex-column" :data-testid="`board-grid-item-${index}`" variant="elevated">
+	<VCard
+		class="room-grid-item d-flex flex-column"
+		:data-testid="`board-grid-item-${index}`"
+		:ripple="false"
+		variant="elevated"
+	>
 		<VCardTitle
 			class="text-body-1 flex-grow-1"
 			style="max-width: max-content"

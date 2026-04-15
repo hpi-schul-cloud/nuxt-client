@@ -1,178 +1,142 @@
 <template>
-	<VDialog
-		v-model="isOpen"
-		:width="xs ? 'auto' : 480"
-		data-testid="dialog-invite-participants"
-		max-width="480"
-		@keydown.esc="onClose"
-		@click:outside="onClose"
-	>
-		<VCard ref="inviteMembersContent">
-			<template #title>
-				<h2 class="mt-2">
-					{{ modalTitle }}
-				</h2>
-			</template>
-			<template #text>
-				<template v-if="invitationStep !== InvitationStep.SHARE">
-					<p>
-						{{ subTitle }}
-					</p>
+	<SvsDialog v-model="isOpen" :title="modalTitle" data-testid="dialog-invite-participants" @close="onClose">
+		<template #content>
+			<template v-if="invitationStep !== InvitationStep.SHARE">
+				<p>
+					{{ subTitle }}
+				</p>
 
-					<VForm ref="inviteMembersForm" class="mt-2">
-						<VTextField
-							ref="descriptionField"
-							v-model="formData.title"
-							class="mb-8"
-							:rules="validationRules"
-							autofocus
-							:label="t('pages.rooms.members.inviteMember.form.description.label')"
-							:hint="t('pages.rooms.members.inviteMember.form.description.hint')"
-							persistent-hint
-							data-testid="invite-participant-description-input"
-						/>
+				<VForm ref="inviteMembersForm" class="mt-2">
+					<VTextField
+						ref="descriptionField"
+						v-model="formData.title"
+						class="mb-8"
+						:rules="validationRules"
+						autofocus
+						:label="t('pages.rooms.members.inviteMember.form.description.label')"
+						:hint="t('pages.rooms.members.inviteMember.form.description.hint')"
+						persistent-hint
+						data-testid="invite-participant-description-input"
+					/>
 
-						<div class="d-flex flex-column ga-0 checkbox-container">
-							<div id="school-radiogroup-label" class="d-flex mb-2">
-								{{ t("pages.rooms.members.inviteMember.form.validForSchools.label") }}
-							</div>
-							<VRadioGroup
-								v-model="formData.restrictedToCreatorSchool"
-								aria-labelledby="school-radiogroup-label"
-								@update:model-value="resetRoleSelection"
-							>
-								<VRadio :value="true" data-testid="input-invite-participants-restricted-to-creator-school">
-									<template #label> {{ t("common.labels.only") }} {{ schoolName }} </template>
-								</VRadio>
-								<VRadio
-									:label="t('common.labels.allSchools')"
-									:value="false"
-									data-testid="input-invite-participants-all-schools"
-								/>
-							</VRadioGroup>
-							<VDivider class="mb-6" role="presentation" />
-							<div id="valid-for-roles-label" class="mb-4">
-								{{ t("pages.rooms.members.inviteMember.form.validForRoles.label") }}
-							</div>
-							<div role="group" aria-labelledby="valid-for-roles-label">
-								<VCheckbox
-									:label="t('common.labels.teacher.neutral.plural')"
-									data-testid="input-invite-participants-valid-for-teachers"
-									disabled
-									:model-value="true"
-									hide-details
-								/>
-								<template v-if="formData.restrictedToCreatorSchool">
-									<VCheckbox
-										v-model="formData.isUsableByStudents"
-										:label="t('common.labels.students.neutral')"
-										hide-details
-										data-testid="input-invite-participants-valid-for-students"
-									/>
-									<InfoAlert
-										v-if="isInviteExternalPersonsFeatureEnabled"
-										class="mt-2 mb-2"
-										data-testid="info-alert-external-persons"
-									>
-										{{ t("pages.rooms.members.inviteMember.infoAlert.text.externalPersons") }}
-									</InfoAlert>
-								</template>
-								<template v-else>
-									<VCheckbox
-										v-if="isInviteExternalPersonsFeatureEnabled"
-										v-model="formData.isUsableByExternalPersons"
-										:label="t('pages.rooms.members.inviteMember.form.validForExternalPersons.label')"
-										hide-details
-										data-testid="input-invite-participants-valid-for-external-persons"
-									/>
-									<InfoAlert class="mt-2 mb-2" data-testid="info-alert-students-from-other-schools">
-										{{ t("pages.rooms.members.inviteMember.infoAlert.text.studentsFromOtherSchools") }}
-									</InfoAlert>
-								</template>
-							</div>
-
-							<VDivider class="mt-4 mb-5" role="presentation" />
-							<div class="d-flex">
-								<VCheckbox
-									v-model="formData.activeUntilChecked"
-									:label="t('pages.rooms.members.inviteMember.form.linkExpires.label')"
-									hide-details
-									class="align-self-start mr-2"
-									data-testid="input-invite-participants-link-expires"
-								/>
-								<DatePicker
-									ref="datePicker"
-									aria-label="pages.rooms.members.tableHeader.expirationDate"
-									:disabled="isDatePickerDisabled"
-									:required="!isDatePickerDisabled"
-									:min-date="new Date().toString()"
-									:date="datePickerDate"
-									density="compact"
-									class="align-self-start"
-									data-testid="date-picker-until"
-									@click.prevent="pause"
-									@keydown.space.enter.prevent="pause"
-									@update:date="onUpdateDate"
-								/>
-							</div>
-
-							<VCheckbox
-								v-model="formData.requiresConfirmation"
-								hide-details
-								data-testid="input-invite-participants-requires-confirmation"
-							>
-								<template #label>
-									<div>
-										<i18n-t keypath="pages.rooms.members.inviteMember.form.isConfirmationNeeded.label" scope="global">
-											<a :href="informationLink!" target="_blank" rel="noopener">
-												{{ t("pages.rooms.members.infoText.moreInformation") }}
-											</a>
-										</i18n-t>
-									</div>
-								</template>
-							</VCheckbox>
+					<div class="d-flex flex-column ga-0 checkbox-container">
+						<div id="school-radiogroup-label" class="d-flex mb-2">
+							{{ t("pages.rooms.members.inviteMember.form.validForSchools.label") }}
 						</div>
-					</VForm>
-				</template>
-				<template v-else>
-					<ShareModalResult :share-url="sharedUrl" type="roomMemberInvitation" @copied="onCopyLink" @done="onClose" />
-				</template>
+						<VRadioGroup
+							v-model="formData.restrictedToCreatorSchool"
+							aria-labelledby="school-radiogroup-label"
+							@update:model-value="resetRoleSelection"
+						>
+							<VRadio :value="true" data-testid="input-invite-participants-restricted-to-creator-school">
+								<template #label> {{ t("common.labels.only") }} {{ schoolName }} </template>
+							</VRadio>
+							<VRadio
+								:label="t('common.labels.allSchools')"
+								:value="false"
+								data-testid="input-invite-participants-all-schools"
+							/>
+						</VRadioGroup>
+						<VDivider class="mb-6" role="presentation" />
+						<div id="valid-for-roles-label" class="mb-4">
+							{{ t("pages.rooms.members.inviteMember.form.validForRoles.label") }}
+						</div>
+						<div role="group" aria-labelledby="valid-for-roles-label">
+							<VCheckbox
+								:label="t('common.labels.teacher.neutral.plural')"
+								data-testid="input-invite-participants-valid-for-teachers"
+								disabled
+								:model-value="true"
+								hide-details
+							/>
+							<template v-if="formData.restrictedToCreatorSchool">
+								<VCheckbox
+									v-model="formData.isUsableByStudents"
+									:label="t('common.labels.students.neutral')"
+									hide-details
+									data-testid="input-invite-participants-valid-for-students"
+								/>
+								<InfoAlert
+									v-if="isInviteExternalPersonsFeatureEnabled"
+									class="mt-2 mb-2"
+									data-testid="info-alert-external-persons"
+								>
+									{{ t("pages.rooms.members.inviteMember.infoAlert.text.externalPersons") }}
+								</InfoAlert>
+							</template>
+							<template v-else>
+								<VCheckbox
+									v-if="isInviteExternalPersonsFeatureEnabled"
+									v-model="formData.isUsableByExternalPersons"
+									:label="t('pages.rooms.members.inviteMember.form.validForExternalPersons.label')"
+									hide-details
+									data-testid="input-invite-participants-valid-for-external-persons"
+								/>
+								<InfoAlert class="mt-2 mb-2" data-testid="info-alert-students-from-other-schools">
+									{{ t("pages.rooms.members.inviteMember.infoAlert.text.studentsFromOtherSchools") }}
+								</InfoAlert>
+							</template>
+						</div>
+
+						<VDivider class="mt-4 mb-5" role="presentation" />
+						<div class="d-flex">
+							<VCheckbox
+								v-model="formData.activeUntilChecked"
+								:label="t('pages.rooms.members.inviteMember.form.linkExpires.label')"
+								hide-details
+								class="align-self-start mr-2"
+								data-testid="input-invite-participants-link-expires"
+							/>
+							<DatePicker
+								ref="datePicker"
+								aria-label="pages.rooms.members.tableHeader.expirationDate"
+								:disabled="isDatePickerDisabled"
+								:required="!isDatePickerDisabled"
+								:min-date="new Date().toString()"
+								:date="datePickerDate"
+								density="compact"
+								class="align-self-start"
+								data-testid="date-picker-until"
+								@click.prevent="pause"
+								@keydown.space.enter.prevent="pause"
+								@update:date="onUpdateDate"
+							/>
+						</div>
+
+						<VCheckbox
+							v-model="formData.requiresConfirmation"
+							hide-details
+							data-testid="input-invite-participants-requires-confirmation"
+						>
+							<template #label>
+								<div>
+									<i18n-t keypath="pages.rooms.members.inviteMember.form.isConfirmationNeeded.label" scope="global">
+										<a :href="informationLink!" target="_blank" rel="noopener">
+											{{ t("pages.rooms.members.infoText.moreInformation") }}
+										</a>
+									</i18n-t>
+								</div>
+							</template>
+						</VCheckbox>
+					</div>
+				</VForm>
+			</template>
+			<template v-else>
+				<ShareModalResult :share-url="sharedUrl" type="roomMemberInvitation" @copied="onCopyLink" @done="onClose" />
+			</template>
+		</template>
+
+		<template #actions>
+			<template v-if="invitationStep !== InvitationStep.SHARE">
+				<SvsDialogBtnCancel @click="onClose" />
+				<SvsDialogBtnConfirm text-lang-key="common.actions.continue" @click="onContinue" />
 			</template>
 
-			<template #actions>
-				<VSpacer />
-				<div v-if="invitationStep !== InvitationStep.SHARE" class="mr-4 mb-3">
-					<VBtn
-						ref="cancelButton"
-						class="ms-auto mr-2"
-						:text="t('common.actions.cancel')"
-						data-testid="invite-participant-cancel-btn"
-						@click="onClose"
-					/>
-					<VBtn
-						ref="continueButton"
-						class="ms-auto"
-						color="primary"
-						variant="flat"
-						:text="t('common.actions.continue')"
-						data-testid="invite-participant-save-btn"
-						@click="onContinue"
-					/>
-				</div>
-
-				<div v-else class="mr-4 mb-3">
-					<VBtn
-						ref="closeButton"
-						class="ms-auto"
-						variant="outlined"
-						:text="t('common.labels.close')"
-						data-testid="invite-participant-close-btn"
-						@click="onClose"
-					/>
-				</div>
+			<template v-else>
+				<SvsDialogBtnCancel text-lang-key="common.labels.close" @click="onClose" />
 			</template>
-		</VCard>
-	</VDialog>
+		</template>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
@@ -190,12 +154,12 @@ import {
 } from "@data-room";
 import { InfoAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
+import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { isNonEmptyString, isOfMaxLength, useOpeningTagValidator } from "@util-validators";
 import { storeToRefs } from "pinia";
 import { computed, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useDisplay } from "vuetify";
-import { VBtn, type VCard, VSpacer, VTextField } from "vuetify/components";
+import { type VCard, VTextField } from "vuetify/components";
 
 defineProps({
 	schoolName: {
@@ -219,7 +183,6 @@ const { invitationStep, sharedUrl, editedLink, DEFAULT_EXPIRED_DATE, isInviteExt
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const { t } = useI18n();
-const { xs } = useDisplay();
 
 const defaultFormData: RoomInvitationFormData = {
 	title: "",
@@ -266,6 +229,7 @@ const onUpdateDate = (isoDate: string | undefined) => {
 
 const onClose = () => {
 	emit("close");
+	isOpen.value = false;
 	editedLink.value = null;
 
 	setTimeout(() => {

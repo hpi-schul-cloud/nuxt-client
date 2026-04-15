@@ -1,5 +1,5 @@
 <template>
-	<VDialog :model-value="isLoading" width="300" :scrim="false" persistent>
+	<VDialog :model-value="isLoading" width="300" persistent>
 		<VCard class="px-2 py-3">
 			<VCardText class="pb-0">
 				<div class="mb-2 text-center" data-testid="dialog-text">
