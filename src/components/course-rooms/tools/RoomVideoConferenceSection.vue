@@ -99,6 +99,7 @@ const startVideoConferenceAndJoin = async () => {
 };
 
 const doJoinVideoConference = async () => {
+	errorDismissed.value = false;
 	const joinTaskResult = await joinVideoConference();
 	const videoConferenceUrl = joinTaskResult?.result?.data.url;
 	if (videoConferenceUrl) {

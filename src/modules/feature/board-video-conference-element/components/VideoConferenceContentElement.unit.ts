@@ -123,7 +123,7 @@ describe("VideoConferenceContentElement", () => {
 			isConferenceRunning: computed(() => isConferenceRunning),
 			isWaitingRoomActive: computed(() => true),
 			fetchVideoConferenceInfo: vi.fn().mockResolvedValue(undefined),
-			startVideoConference: vi.fn().mockResolvedValue({ success: true }),
+			startVideoConference: vi.fn().mockResolvedValue(undefined),
 			joinVideoConference: vi.fn().mockResolvedValue({
 				success: true,
 				result: { data: { url: "https://example.com" } },
