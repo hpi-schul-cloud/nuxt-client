@@ -72,7 +72,7 @@ import { hasSlotContent } from "@util-vue";
 import { PropType } from "vue";
 import { IconProps } from "vuetify";
 
-const props = defineProps({
+defineProps({
 	hasRowStyle: {
 		type: Boolean,
 		default: false,
