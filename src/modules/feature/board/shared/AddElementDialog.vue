@@ -33,7 +33,7 @@
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { SvsDialog } from "@ui-dialog";
 
-const { isDialogOpen, isDialogLoading, elementTypeOptions, closeDialog } = useSharedElementTypeSelection();
+const { isDialogOpen, isDialogLoading, elementTypeOptions } = useSharedElementTypeSelection();
 </script>
 <style scoped>
 .elements-grid {

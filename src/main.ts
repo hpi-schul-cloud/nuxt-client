@@ -6,7 +6,6 @@ import { createVuetifyPlugin } from "./plugins/vuetify";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
 import {
-	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
@@ -16,10 +15,8 @@ import {
 	SHARE_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
 	THEME_KEY,
-	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
 import {
-	commonCartridgeExportModule,
 	copyModule,
 	courseRoomDetailsModule,
 	filePathsModule,
@@ -31,7 +28,6 @@ import {
 	shareModule,
 	systemsModule,
 	tasksModule,
-	videoConferenceModule,
 } from "@/store";
 import themeConfig from "@/theme.config";
 import { createDayJs } from "@/utils/date-time.utils";
@@ -104,10 +100,8 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(), schoolExternalToolsModule);
 	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
 	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
-	app.provide(COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf(), commonCartridgeExportModule);
 	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
 	app.provide("tasksModule", tasksModule);
-	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
 	app.provide(THEME_KEY.valueOf(), themeConfig);
 
 	app.mount("#app");
