@@ -13,6 +13,7 @@ import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 // Create a hoisted ref that can be accessed by the mock
 const { mockIsJwtExpired } = vi.hoisted(() => {
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const { ref: vueRef } = require("vue");
 	return { mockIsJwtExpired: vueRef(false) as Ref<boolean> };
 });
