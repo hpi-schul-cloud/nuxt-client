@@ -30,7 +30,6 @@ import {
 	shareModule,
 	systemsModule,
 	tasksModule,
-	videoConferenceModule,
 } from "@/store";
 import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
@@ -102,7 +101,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf(), commonCartridgeExportModule);
 	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
 	app.provide("tasksModule", tasksModule);
-	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
 
 	app.mount("#app");
 })();

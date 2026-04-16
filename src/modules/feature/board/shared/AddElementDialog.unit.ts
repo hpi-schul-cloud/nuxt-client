@@ -15,7 +15,7 @@ describe("ElementTypeSelection", () => {
 	});
 
 	const setupMocks = () => {
-		const { closeDialog, isDialogOpen, isDialogLoading, staticElementTypeOptions, dynamicElementTypeOptions } =
+		const { isDialogOpen, isDialogLoading, staticElementTypeOptions, dynamicElementTypeOptions } =
 			setupSharedElementTypeSelectionMock();
 
 		staticElementTypeOptions.value = elementTypeSelectionOptionsFactory.createUnsortedElementList();
@@ -25,12 +25,11 @@ describe("ElementTypeSelection", () => {
 			isDialogLoading,
 			staticElementTypeOptions,
 			dynamicElementTypeOptions,
-			closeDialog,
 		};
 	};
 
 	const setup = async () => {
-		const { isDialogOpen, staticElementTypeOptions, dynamicElementTypeOptions, closeDialog } = setupMocks();
+		const { isDialogOpen, staticElementTypeOptions, dynamicElementTypeOptions } = setupMocks();
 
 		const wrapper = mount(AddElementDialog, {
 			global: {
@@ -41,7 +40,7 @@ describe("ElementTypeSelection", () => {
 		isDialogOpen.value = true;
 		await nextTick();
 
-		return { isDialogOpen, staticElementTypeOptions, dynamicElementTypeOptions, closeDialog, wrapper };
+		return { staticElementTypeOptions, dynamicElementTypeOptions, wrapper };
 	};
 
 	describe("when isDialogOpen is changed from false to true", () => {
