@@ -1,34 +1,76 @@
 import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
-import CourseRoomDetailsModule from "@/store/course-room-details";
-import { VideoConferenceState } from "@/store/types/video-conference";
-import VideoConferenceModule from "@/store/video-conference";
-import { COURSE_ROOM_DETAILS_MODULE_KEY, VIDEO_CONFERENCE_MODULE_KEY } from "@/utils/inject";
-import { createTestAppStore } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestAppStore, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { Permission, RoleName, VideoConferenceScope } from "@api-server";
+import { Permission, RoleName, VideoConferenceScope, VideoConferenceStateResponse } from "@api-server";
+import { useVideoConference } from "@data-access";
 import { createTestingPinia } from "@pinia/testing";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import { setActivePinia } from "pinia";
-import { nextTick } from "vue";
-import { VDialog } from "vuetify/components";
+import { Mocked } from "vitest";
+import { computed, nextTick, ref } from "vue";
+
+vi.mock("@data-access");
 
 describe("RoomVideoConferenceSection", () => {
-	const mockUrl = "https://mock.com";
+	let useVideoConferenceMock: Mocked<ReturnType<typeof useVideoConference>>;
 
-	const getWrapper = (
-		props: { roomId: string },
-		userPermissions: (Permission.JOIN_MEETING | Permission.START_MEETING)[],
-		isExternalPerson: boolean,
-		videoConferenceModuleGetter?: Partial<VideoConferenceModule>
-	) => {
+	const getWrapper = (options: {
+		roomId: string;
+		userPermissions?: (Permission.JOIN_MEETING | Permission.START_MEETING)[];
+		isExternalPerson?: boolean;
+		videoConferenceState?: VideoConferenceStateResponse;
+		everyAttendeeJoinsMuted?: boolean;
+		moderatorMustApproveJoinRequests?: boolean;
+		everybodyJoinsAsModerator?: boolean;
+		isLoading?: boolean;
+		fetchError?: Error;
+		startError?: Error;
+		joinError?: Error;
+		joinVideoConferenceResult?: { url: string };
+	}) => {
+		const {
+			roomId,
+			userPermissions = [],
+			isExternalPerson = false,
+			videoConferenceState = VideoConferenceStateResponse.NOT_STARTED,
+			everyAttendeeJoinsMuted = false,
+			moderatorMustApproveJoinRequests = false,
+			everybodyJoinsAsModerator = false,
+			isLoading = false,
+			fetchError,
+			startError,
+			joinError,
+			joinVideoConferenceResult,
+		} = options;
+
 		Object.defineProperty(window, "location", {
-			value: {
-				origin: mockUrl,
-			},
-			writable: true, // possibility to override
+			value: { origin: "https://mock.com" },
+			writable: true,
 		});
+
+		useVideoConferenceMock = mockComposable(useVideoConference, {
+			videoConferenceInfo: ref({
+				state: videoConferenceState,
+				options: {
+					everyAttendeeJoinsMuted,
+					moderatorMustApproveJoinRequests,
+					everybodyJoinsAsModerator,
+				},
+			}),
+			isLoading: computed(() => isLoading),
+			fetchError: ref(fetchError),
+			startError: ref(startError),
+			joinError: ref(joinError),
+			isConferenceRunning: computed(() => videoConferenceState === VideoConferenceStateResponse.RUNNING),
+			isWaitingRoomActive: computed(() => moderatorMustApproveJoinRequests),
+			joinVideoConference: vi.fn().mockResolvedValue({
+				success: true,
+				result: joinVideoConferenceResult ? { data: joinVideoConferenceResult } : undefined,
+			}),
+		});
+
+		vi.mocked(useVideoConference).mockReturnValue(useVideoConferenceMock);
 
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStore({
@@ -38,659 +80,342 @@ describe("RoomVideoConferenceSection", () => {
 			},
 		});
 
-		const videoConferenceModule = createModuleMocks(VideoConferenceModule, {
-			getVideoConferenceInfo: {
-				state: VideoConferenceState.NOT_STARTED,
-				options: {
-					everyAttendeeJoinsMuted: false,
-					moderatorMustApproveJoinRequests: false,
-					everybodyJoinsAsModerator: false,
-				},
-			},
-			getLoading: false,
-			...videoConferenceModuleGetter,
-		});
-
-		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
-			getRoomData: {
-				roomId: props.roomId,
-				title: "roomName",
-				displayColor: "displayColor",
-				elements: [],
-				isArchived: false,
-				isSynchronized: false,
-			},
-		});
-
 		const wrapper = mount(RoomVideoConferenceSection, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
-					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
-				},
 				stubs: {
 					VideoConferenceConfigurationDialog: true,
 				},
 			},
-			props,
+			props: { roomId },
 		});
 
-		return {
-			wrapper,
-			videoConferenceModule,
-			courseRoomDetailsModule,
-		};
+		return { wrapper, useVideoConferenceMock };
 	};
 
 	afterEach(() => {
-		vi.resetAllMocks();
+		vi.clearAllMocks();
+	});
+
+	it("should call useVideoConference with COURSE scope and roomId", () => {
+		getWrapper({ roomId: "roomId", userPermissions: [Permission.JOIN_MEETING] });
+
+		expect(useVideoConference).toHaveBeenCalledWith(VideoConferenceScope.COURSE, "roomId");
 	});
 
 	describe("when the video conference is not running", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper(
-				{
-					roomId: "roomId",
-				},
-				[Permission.JOIN_MEETING],
-				false,
-				{
-					getVideoConferenceInfo: {
-						state: VideoConferenceState.NOT_STARTED,
-						options: {
-							everyAttendeeJoinsMuted: false,
-							moderatorMustApproveJoinRequests: false,
-							everybodyJoinsAsModerator: false,
-						},
-					},
-				}
-			);
-
-			return {
-				wrapper,
-			};
-		};
-
 		it("should set the video conference card to not running", () => {
-			const { wrapper } = setup();
+			const { wrapper } = getWrapper({
+				roomId: "roomId",
+				userPermissions: [Permission.JOIN_MEETING],
+				videoConferenceState: VideoConferenceStateResponse.NOT_STARTED,
+			});
 
-			const card = wrapper.findComponent(RoomVideoConferenceCard);
-
-			expect(card.props("isRunning")).toEqual(false);
+			expect(wrapper.findComponent(RoomVideoConferenceCard).props("isRunning")).toBe(false);
 		});
 	});
 
 	describe("when the video conference is running", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper(
-				{
-					roomId: "roomId",
-				},
-				[Permission.JOIN_MEETING],
-				false,
-				{
-					getVideoConferenceInfo: {
-						state: VideoConferenceState.RUNNING,
-						options: {
-							everyAttendeeJoinsMuted: false,
-							moderatorMustApproveJoinRequests: false,
-							everybodyJoinsAsModerator: false,
-						},
-					},
-				}
-			);
-
-			return {
-				wrapper,
-			};
-		};
-
 		it("should set the video conference card to running", () => {
-			const { wrapper } = setup();
+			const { wrapper } = getWrapper({
+				roomId: "roomId",
+				userPermissions: [Permission.JOIN_MEETING],
+				videoConferenceState: VideoConferenceStateResponse.RUNNING,
+			});
 
-			const card = wrapper.findComponent(RoomVideoConferenceCard);
-
-			expect(card.props("isRunning")).toEqual(true);
+			expect(wrapper.findComponent(RoomVideoConferenceCard).props("isRunning")).toBe(true);
 		});
 	});
 
 	describe("when the video conference is loading", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper(
-				{
-					roomId: "roomId",
-				},
-				[Permission.JOIN_MEETING],
-				false,
-				{
-					getVideoConferenceInfo: {
-						state: VideoConferenceState.NOT_STARTED,
-						options: {
-							everyAttendeeJoinsMuted: false,
-							moderatorMustApproveJoinRequests: false,
-							everybodyJoinsAsModerator: false,
-						},
-					},
-					getLoading: true,
-				}
-			);
-
-			return {
-				wrapper,
-			};
-		};
-
 		it("should set the video conference card to refreshing", () => {
-			const { wrapper } = setup();
+			const { wrapper } = getWrapper({
+				roomId: "roomId",
+				userPermissions: [Permission.JOIN_MEETING],
+				isLoading: true,
+			});
 
-			const card = wrapper.findComponent(RoomVideoConferenceCard);
-
-			expect(card.props("isRefreshing")).toEqual(true);
+			expect(wrapper.findComponent(RoomVideoConferenceCard).props("isRefreshing")).toBe(true);
 		});
 	});
 
 	describe("when the user is an expert and the waiting room is not active", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper(
-				{
-					roomId: "roomId",
-				},
-				[Permission.JOIN_MEETING],
-				true,
-				{
-					getVideoConferenceInfo: {
-						state: VideoConferenceState.RUNNING,
-						options: {
-							everyAttendeeJoinsMuted: false,
-							moderatorMustApproveJoinRequests: false,
-							everybodyJoinsAsModerator: false,
-						},
-					},
-					getLoading: true,
-				}
-			);
-
-			return {
-				wrapper,
-			};
-		};
-
 		it("should set the video conference card to not have permission", () => {
-			const { wrapper } = setup();
+			const { wrapper } = getWrapper({
+				roomId: "roomId",
+				userPermissions: [Permission.JOIN_MEETING],
+				isExternalPerson: true,
+				videoConferenceState: VideoConferenceStateResponse.RUNNING,
+			});
 
-			const card = wrapper.findComponent(RoomVideoConferenceCard);
-
-			expect(card.props("hasPermission")).toEqual(false);
+			expect(wrapper.findComponent(RoomVideoConferenceCard).props("hasPermission")).toBe(false);
 		});
 	});
 
 	describe("when the user is an expert and the waiting room is active", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper(
-				{
-					roomId: "roomId",
-				},
-				[Permission.JOIN_MEETING],
-				true,
-				{
-					getVideoConferenceInfo: {
-						state: VideoConferenceState.RUNNING,
-						options: {
-							everyAttendeeJoinsMuted: false,
-							moderatorMustApproveJoinRequests: true,
-							everybodyJoinsAsModerator: false,
-						},
-					},
-					getLoading: true,
-				}
-			);
-
-			return {
-				wrapper,
-			};
-		};
-
 		it("should set the video conference card to have permission", () => {
-			const { wrapper } = setup();
+			const { wrapper } = getWrapper({
+				roomId: "roomId",
+				userPermissions: [Permission.JOIN_MEETING],
+				isExternalPerson: true,
+				videoConferenceState: VideoConferenceStateResponse.RUNNING,
+				moderatorMustApproveJoinRequests: true,
+			});
 
-			const card = wrapper.findComponent(RoomVideoConferenceCard);
-
-			expect(card.props("hasPermission")).toEqual(true);
+			expect(wrapper.findComponent(RoomVideoConferenceCard).props("hasPermission")).toBe(true);
 		});
 	});
 
 	describe("when the user has the join permission", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper(
-				{
-					roomId: "roomId",
-				},
-				[Permission.JOIN_MEETING],
-				false,
-				{
-					getVideoConferenceInfo: {
-						state: VideoConferenceState.RUNNING,
-						options: {
-							everyAttendeeJoinsMuted: false,
-							moderatorMustApproveJoinRequests: false,
-							everybodyJoinsAsModerator: false,
-						},
-					},
-					getLoading: true,
-				}
-			);
-
-			return {
-				wrapper,
-			};
-		};
-
 		it("should set the video conference card to have permission", () => {
-			const { wrapper } = setup();
+			const { wrapper } = getWrapper({
+				roomId: "roomId",
+				userPermissions: [Permission.JOIN_MEETING],
+				videoConferenceState: VideoConferenceStateResponse.RUNNING,
+			});
 
-			const card = wrapper.findComponent(RoomVideoConferenceCard);
-
-			expect(card.props("hasPermission")).toEqual(true);
+			expect(wrapper.findComponent(RoomVideoConferenceCard).props("hasPermission")).toBe(true);
 		});
 	});
 
 	describe("when the user has the start permission", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper(
-				{
-					roomId: "roomId",
-				},
-				[Permission.START_MEETING],
-				false,
-				{
-					getVideoConferenceInfo: {
-						state: VideoConferenceState.RUNNING,
-						options: {
-							everyAttendeeJoinsMuted: false,
-							moderatorMustApproveJoinRequests: false,
-							everybodyJoinsAsModerator: false,
-						},
-					},
-					getLoading: true,
-				}
-			);
-
-			return {
-				wrapper,
-			};
-		};
-
 		it("should set the video conference card to have permission", () => {
-			const { wrapper } = setup();
+			const { wrapper } = getWrapper({
+				roomId: "roomId",
+				userPermissions: [Permission.START_MEETING],
+				videoConferenceState: VideoConferenceStateResponse.RUNNING,
+			});
 
-			const card = wrapper.findComponent(RoomVideoConferenceCard);
-
-			expect(card.props("hasPermission")).toEqual(true);
+			expect(wrapper.findComponent(RoomVideoConferenceCard).props("hasPermission")).toBe(true);
 		});
 	});
 
 	describe("when the user does not have the permissions", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper(
-				{
-					roomId: "roomId",
-				},
-				[],
-				false,
-				{
-					getVideoConferenceInfo: {
-						state: VideoConferenceState.RUNNING,
-						options: {
-							everyAttendeeJoinsMuted: false,
-							moderatorMustApproveJoinRequests: false,
-							everybodyJoinsAsModerator: false,
-						},
-					},
-					getLoading: true,
-				}
-			);
+		it("should set the video conference card to not have permission", () => {
+			const { wrapper } = getWrapper({
+				roomId: "roomId",
+				videoConferenceState: VideoConferenceStateResponse.RUNNING,
+			});
 
-			return {
-				wrapper,
-			};
-		};
-
-		it("should set the video conference card to have permission", () => {
-			const { wrapper } = setup();
-
-			const card = wrapper.findComponent(RoomVideoConferenceCard);
-
-			expect(card.props("hasPermission")).toEqual(false);
+			expect(wrapper.findComponent(RoomVideoConferenceCard).props("hasPermission")).toBe(false);
 		});
 	});
 
 	describe("when the video conference card requests a refresh", () => {
-		const setup = () => {
-			const { wrapper, videoConferenceModule } = getWrapper(
-				{
-					roomId: "roomId",
-				},
-				[],
-				false,
-				{
-					getVideoConferenceInfo: {
-						state: VideoConferenceState.RUNNING,
-						options: {
-							everyAttendeeJoinsMuted: false,
-							moderatorMustApproveJoinRequests: false,
-							everybodyJoinsAsModerator: false,
-						},
-					},
-					getLoading: true,
-				}
-			);
-
-			return {
-				wrapper,
-				videoConferenceModule,
-			};
-		};
-
 		it("should call fetchVideoConferenceInfo", () => {
-			const { wrapper, videoConferenceModule } = setup();
+			const { wrapper, useVideoConferenceMock } = getWrapper({ roomId: "roomId" });
 
-			const card = wrapper.findComponent(RoomVideoConferenceCard);
+			wrapper.findComponent(RoomVideoConferenceCard).vm.$emit("refresh");
 
-			card.vm.$emit("refresh");
+			expect(useVideoConferenceMock.fetchVideoConferenceInfo).toHaveBeenCalledTimes(1);
+		});
 
-			expect(videoConferenceModule.fetchVideoConferenceInfo).toHaveBeenCalledWith({
-				scope: VideoConferenceScope.COURSE,
-				scopeId: "roomId",
+		it("should not call fetchVideoConferenceInfo when already loading", () => {
+			const { wrapper, useVideoConferenceMock } = getWrapper({
+				roomId: "roomId",
+				isLoading: true,
 			});
+
+			wrapper.findComponent(RoomVideoConferenceCard).vm.$emit("refresh");
+
+			expect(useVideoConferenceMock.fetchVideoConferenceInfo).not.toHaveBeenCalled();
 		});
 	});
 
-	describe("when the video conference card requests a click", () => {
+	describe("when the video conference card is clicked", () => {
 		describe("when the video conference is running", () => {
-			const setup = () => {
-				const { wrapper, videoConferenceModule } = getWrapper(
-					{
-						roomId: "roomId",
-					},
-					[Permission.JOIN_MEETING],
-					false,
-					{
-						getVideoConferenceInfo: {
-							state: VideoConferenceState.RUNNING,
-							options: {
-								everyAttendeeJoinsMuted: false,
-								moderatorMustApproveJoinRequests: false,
-								everybodyJoinsAsModerator: false,
-							},
-						},
-						getLoading: true,
-					}
-				);
-
-				return {
-					wrapper,
-					videoConferenceModule,
-				};
-			};
-
 			it("should call joinVideoConference", async () => {
-				const { wrapper, videoConferenceModule } = setup();
-
-				const card = wrapper.findComponent(RoomVideoConferenceCard);
-
-				await card.trigger("click");
-
-				expect(videoConferenceModule.joinVideoConference).toHaveBeenCalledWith({
-					scope: VideoConferenceScope.COURSE,
-					scopeId: "roomId",
+				const { wrapper, useVideoConferenceMock } = getWrapper({
+					roomId: "roomId",
+					userPermissions: [Permission.JOIN_MEETING],
+					videoConferenceState: VideoConferenceStateResponse.RUNNING,
 				});
+
+				await wrapper.findComponent(RoomVideoConferenceCard).trigger("click");
+
+				expect(useVideoConferenceMock.joinVideoConference).toHaveBeenCalled();
 			});
 		});
 
 		describe("when the video conference is not running", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper(
-					{
-						roomId: "roomId",
-					},
-					[Permission.START_MEETING],
-					false,
-					{
-						getVideoConferenceInfo: {
-							state: VideoConferenceState.NOT_STARTED,
-							options: {
-								everyAttendeeJoinsMuted: false,
-								moderatorMustApproveJoinRequests: false,
-								everybodyJoinsAsModerator: false,
-							},
-						},
-						getLoading: true,
-					}
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
 			it("should open the videoconference configuration dialog", async () => {
-				const { wrapper } = setup();
+				const { wrapper } = getWrapper({
+					roomId: "roomId",
+					userPermissions: [Permission.START_MEETING],
+					videoConferenceState: VideoConferenceStateResponse.NOT_STARTED,
+				});
 
-				const card = wrapper.findComponent(RoomVideoConferenceCard);
-				await card.trigger("click");
+				await wrapper.findComponent(RoomVideoConferenceCard).trigger("click");
 
-				const configurationDialog = wrapper.findComponent(VideoConferenceConfigurationDialog);
-
-				expect(configurationDialog.props("isOpen")).toBe(true);
+				expect(wrapper.findComponent(VideoConferenceConfigurationDialog).props("isOpen")).toBe(true);
 			});
 		});
 	});
 
 	describe("when videoconference configuration dialog emits 'start-video-conference'", () => {
-		const setup = () => {
-			const roomId = "roomId";
+		const setup = () =>
+			getWrapper({
+				roomId: "roomId",
+				userPermissions: [Permission.START_MEETING],
+				videoConferenceState: VideoConferenceStateResponse.NOT_STARTED,
+				moderatorMustApproveJoinRequests: true,
+			});
 
-			const { wrapper, videoConferenceModule } = getWrapper(
-				{
-					roomId,
-				},
-				[Permission.START_MEETING],
-				false,
-				{
-					getVideoConferenceInfo: {
-						state: VideoConferenceState.NOT_STARTED,
-						options: {
-							everyAttendeeJoinsMuted: false,
-							moderatorMustApproveJoinRequests: true,
-							everybodyJoinsAsModerator: false,
-						},
-					},
-					getLoading: true,
-				}
-			);
+		it("should call startVideoConference with correct options", () => {
+			const { wrapper, useVideoConferenceMock } = setup();
 
-			const params = {
-				scope: VideoConferenceScope.COURSE,
-				scopeId: roomId,
-			};
+			wrapper.findComponent(VideoConferenceConfigurationDialog).vm.$emit("start-video-conference");
 
-			return {
-				wrapper,
-				videoConferenceModule,
-				params,
-				roomId,
-			};
-		};
-
-		it("should call start with correct options", () => {
-			const { wrapper, videoConferenceModule, params } = setup();
-
-			const configurationDialog = wrapper.findComponent(VideoConferenceConfigurationDialog);
-			configurationDialog.vm.$emit("start-video-conference");
-
-			expect(videoConferenceModule.startVideoConference).toHaveBeenCalledWith({
-				scope: params.scope,
-				scopeId: params.scopeId,
-				videoConferenceOptions: {
-					everyAttendeeJoinsMuted: false,
-					moderatorMustApproveJoinRequests: true,
-					everybodyJoinsAsModerator: false,
-				},
+			expect(useVideoConferenceMock.startVideoConference).toHaveBeenCalledWith({
+				everyAttendeeJoinsMuted: false,
+				moderatorMustApproveJoinRequests: true,
+				everybodyJoinsAsModerator: false,
 			});
 		});
 
-		it("should call start and join videoconference function of store", async () => {
-			const { wrapper, videoConferenceModule, params } = setup();
+		it("should call joinVideoConference after a successful start", async () => {
+			const { wrapper, useVideoConferenceMock } = setup();
 
-			const configurationDialog = wrapper.findComponent<typeof VDialog>(VideoConferenceConfigurationDialog);
-			configurationDialog.vm.$emit("start-video-conference");
+			wrapper.findComponent(VideoConferenceConfigurationDialog).vm.$emit("start-video-conference");
 			await nextTick();
 
-			const dialogContent = configurationDialog.findComponent({
-				name: "VCard",
+			expect(useVideoConferenceMock.startVideoConference).toHaveBeenCalled();
+			expect(useVideoConferenceMock.joinVideoConference).toHaveBeenCalled();
+		});
+
+		it("should not call joinVideoConference if start failed", async () => {
+			const { wrapper, useVideoConferenceMock } = getWrapper({
+				roomId: "roomId",
+				userPermissions: [Permission.START_MEETING],
+				videoConferenceState: VideoConferenceStateResponse.NOT_STARTED,
+				moderatorMustApproveJoinRequests: true,
+				startError: new Error("start failed"),
 			});
 
-			expect(dialogContent.exists()).toBe(false);
-			expect(videoConferenceModule.startVideoConference).toHaveBeenCalledWith({
-				scope: params.scope,
-				scopeId: params.scopeId,
-				videoConferenceOptions: videoConferenceModule.getVideoConferenceInfo.options,
-			});
-			expect(videoConferenceModule.joinVideoConference).toHaveBeenCalledWith({
-				scope: params.scope,
-				scopeId: params.scopeId,
-			});
+			wrapper.findComponent(VideoConferenceConfigurationDialog).vm.$emit("start-video-conference");
+			await nextTick();
+
+			expect(useVideoConferenceMock.startVideoConference).toHaveBeenCalled();
+			expect(useVideoConferenceMock.joinVideoConference).not.toHaveBeenCalled();
 		});
 	});
 
 	describe("when videoconference configuration dialog emits 'close'", () => {
-		const setup = () => {
-			const { wrapper, videoConferenceModule } = getWrapper(
-				{
-					roomId: "roomId",
-				},
-				[Permission.START_MEETING],
-				false,
-				{
-					getVideoConferenceInfo: {
-						state: VideoConferenceState.NOT_STARTED,
-						options: {
-							everyAttendeeJoinsMuted: false,
-							moderatorMustApproveJoinRequests: false,
-							everybodyJoinsAsModerator: false,
-						},
-					},
-					getLoading: true,
-				}
-			);
-
-			return {
-				wrapper,
-				videoConferenceModule,
-			};
-		};
-
-		it("should close the videoconference configuration dialog", async () => {
-			const { wrapper, videoConferenceModule } = setup();
-
-			const configurationDialog = wrapper.findComponent<typeof VDialog>(VideoConferenceConfigurationDialog);
-			configurationDialog.vm.$emit("close");
-			await nextTick();
-
-			const dialogContent = configurationDialog.findComponent({
-				name: "VCard",
+		it("should close the configuration dialog without starting or joining", async () => {
+			const { wrapper, useVideoConferenceMock } = getWrapper({
+				roomId: "roomId",
+				userPermissions: [Permission.START_MEETING],
+				videoConferenceState: VideoConferenceStateResponse.NOT_STARTED,
 			});
 
-			expect(dialogContent.exists()).toBe(false);
-			expect(videoConferenceModule.startVideoConference).not.toHaveBeenCalled();
-			expect(videoConferenceModule.joinVideoConference).not.toHaveBeenCalled();
+			wrapper.findComponent(VideoConferenceConfigurationDialog).vm.$emit("close");
+			await nextTick();
+
+			expect(wrapper.findComponent(VideoConferenceConfigurationDialog).props("isOpen")).toBe(false);
+			expect(useVideoConferenceMock.startVideoConference).not.toHaveBeenCalled();
+			expect(useVideoConferenceMock.joinVideoConference).not.toHaveBeenCalled();
 		});
 	});
 
-	describe("when a videoconference is started or joined", () => {
-		describe("when an error occurs", () => {
-			const setup = () => {
-				const error = vi.fn(() => {
-					throw new Error();
+	describe("error dialog", () => {
+		const getErrorDialog = (wrapper: ReturnType<typeof getWrapper>["wrapper"]) =>
+			wrapper.findAllComponents({ name: "VDialog" })[0];
+
+		describe("when a fetchError is present", () => {
+			it("should display the error dialog", () => {
+				const { wrapper } = getWrapper({
+					roomId: "roomId",
+					userPermissions: [Permission.JOIN_MEETING],
+					fetchError: new Error("fetch failed"),
 				});
 
-				const { wrapper } = getWrapper(
-					{
-						roomId: "roomId",
-					},
-					[Permission.JOIN_MEETING],
-					false,
-					{
-						getVideoConferenceInfo: {
-							state: VideoConferenceState.RUNNING,
-							options: {
-								everyAttendeeJoinsMuted: false,
-								moderatorMustApproveJoinRequests: false,
-								everybodyJoinsAsModerator: false,
-							},
-						},
-						getLoading: false,
-						getError: error,
-					}
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display an error dialog", async () => {
-				const { wrapper } = setup();
-
-				const card = wrapper.findComponent(RoomVideoConferenceCard);
-				await card.trigger("click");
-
-				const errorDialog = wrapper.findAllComponents({ name: "VDialog" })[0];
-				const dialogContent = errorDialog.findComponent({ name: "VCard" });
-
-				expect(dialogContent.exists()).toBe(true);
+				expect(getErrorDialog(wrapper).findComponent({ name: "VCard" }).exists()).toBe(true);
 			});
 		});
 
-		describe("when no error occurs", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper(
-					{
-						roomId: "roomId",
-					},
-					[Permission.JOIN_MEETING],
-					false,
-					{
-						getVideoConferenceInfo: {
-							state: VideoConferenceState.RUNNING,
-							options: {
-								everyAttendeeJoinsMuted: false,
-								moderatorMustApproveJoinRequests: false,
-								everybodyJoinsAsModerator: false,
-							},
-						},
-						getLoading: true,
-						getError: null,
-					}
-				);
+		describe("when a startError is present", () => {
+			it("should display the error dialog", () => {
+				const { wrapper } = getWrapper({
+					roomId: "roomId",
+					userPermissions: [Permission.START_MEETING],
+					startError: new Error("start failed"),
+				});
 
-				return {
-					wrapper,
-				};
-			};
-
-			it("should not display an error dialog", async () => {
-				const { wrapper } = setup();
-
-				const card = wrapper.findComponent(RoomVideoConferenceCard);
-				await card.trigger("click");
-
-				const errorDialog = wrapper.findAllComponents({ name: "VDialog" })[0];
-				const dialogContent = errorDialog.findComponent({ name: "VCard" });
-
-				expect(dialogContent.exists()).toBe(false);
+				expect(getErrorDialog(wrapper).findComponent({ name: "VCard" }).exists()).toBe(true);
 			});
+		});
+
+		describe("when a joinError is present", () => {
+			it("should display the error dialog", () => {
+				const { wrapper } = getWrapper({
+					roomId: "roomId",
+					userPermissions: [Permission.JOIN_MEETING],
+					joinError: new Error("join failed"),
+				});
+
+				expect(getErrorDialog(wrapper).findComponent({ name: "VCard" }).exists()).toBe(true);
+			});
+		});
+
+		describe("when no error is present", () => {
+			it("should not display the error dialog", () => {
+				const { wrapper } = getWrapper({
+					roomId: "roomId",
+					userPermissions: [Permission.JOIN_MEETING],
+				});
+
+				expect(getErrorDialog(wrapper).findComponent({ name: "VCard" }).exists()).toBe(false);
+			});
+		});
+
+		describe("when the error dialog is dismissed", () => {
+			it("should close the error dialog", async () => {
+				const { wrapper } = getWrapper({
+					roomId: "roomId",
+					userPermissions: [Permission.JOIN_MEETING],
+					fetchError: new Error("fetch failed"),
+				});
+
+				const errorDialog = getErrorDialog(wrapper);
+				expect(errorDialog.props("modelValue")).toBe(true);
+
+				await errorDialog.vm.$emit("click:outside");
+				await nextTick();
+
+				expect(errorDialog.props("modelValue")).toBe(false);
+			});
+		});
+	});
+
+	describe("when joining a running video conference", () => {
+		it("should open the video conference URL in the same window", async () => {
+			const videoConferenceUrl = "https://bbb.example.com/join/abc123";
+			window.open = vi.fn();
+
+			const { wrapper } = getWrapper({
+				roomId: "roomId",
+				userPermissions: [Permission.JOIN_MEETING],
+				videoConferenceState: VideoConferenceStateResponse.RUNNING,
+				joinVideoConferenceResult: { url: videoConferenceUrl },
+			});
+
+			await wrapper.findComponent(RoomVideoConferenceCard).trigger("click");
+
+			expect(window.open).toHaveBeenCalledWith(videoConferenceUrl, "_self");
+		});
+
+		it("should not open a window when join returns no URL", async () => {
+			window.open = vi.fn();
+
+			const { wrapper } = getWrapper({
+				roomId: "roomId",
+				userPermissions: [Permission.JOIN_MEETING],
+				videoConferenceState: VideoConferenceStateResponse.RUNNING,
+			});
+
+			await wrapper.findComponent(RoomVideoConferenceCard).trigger("click");
+
+			expect(window.open).not.toHaveBeenCalled();
 		});
 	});
 });
