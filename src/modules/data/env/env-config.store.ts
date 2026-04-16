@@ -118,7 +118,7 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 	});
 
 	const instanceName = computed(() => {
-		switch (useEnvConfig().value.SC_THEME.toLowerCase()) {
+		switch (env.SC_THEME.toLowerCase()) {
 			case SchulcloudTheme.THR:
 				return "Thüringer Schulcloud";
 			case SchulcloudTheme.BRB:
