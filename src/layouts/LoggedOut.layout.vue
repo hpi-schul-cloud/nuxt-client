@@ -1,7 +1,7 @@
 <template>
 	<div class="page">
 		<div class="topbar" data-testid="logged-out-top-bar">
-			<NavigationBar :img="Logo" :links="navbarItems" />
+			<NavigationBar :img="logo" :links="navbarItems" />
 		</div>
 		<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
 			<slot />
@@ -11,7 +11,6 @@
 </template>
 
 <script setup lang="ts">
-import Logo from "@/assets/img/logo/logo-image-mono.svg";
 import NavigationBar from "@/components/legacy/NavigationBar.vue";
 import TheFooter from "@/components/legacy/TheFooter.vue";
 import { useAppStoreRefs } from "@data-app";
@@ -27,6 +26,7 @@ const { applicationError } = useAppStoreRefs();
 const router = useRouter();
 
 const ghostBaseUrl = computed(() => useEnvConfig().value.GHOST_BASE_URL);
+const logo = computed(() => `/src/assets/img/logo/${useEnvConfig().value.SC_THEME}/logo-image-mono.svg`);
 
 const navbarItems = computed(() => [
 	{

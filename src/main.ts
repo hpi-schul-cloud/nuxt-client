@@ -15,7 +15,6 @@ import {
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
-	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
 import {
 	commonCartridgeExportModule,

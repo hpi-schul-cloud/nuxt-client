@@ -9,7 +9,9 @@ import { createVueI18nAdapter } from "vuetify/locale/adapters/vue-i18n";
 
 export const createVuetifyPlugin = (i18n: ReturnType<typeof createI18n>) =>
 	createVuetify({
-		...(useEnvConfig().value.SC_THEME === SchulcloudTheme.DEFAULT ? dbcThemeOptions : federalStateThemeOptions),
+		...(useEnvConfig().value.SC_THEME === SchulcloudTheme.DEFAULT || !useEnvConfig().value.SC_THEME
+			? dbcThemeOptions
+			: federalStateThemeOptions),
 		locale: {
 			adapter: createVueI18nAdapter({ i18n, useI18n }),
 		},
