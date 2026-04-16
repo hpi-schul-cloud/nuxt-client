@@ -34,6 +34,7 @@ api/oauth-api.ts
 api/oauth2-api.ts
 api/pseudonym-api.ts
 api/registration-api.ts
+api/release-api.ts
 api/room-api.ts
 api/room-invitation-link-api.ts
 api/runtime-config-api.ts
@@ -41,7 +42,6 @@ api/school-api.ts
 api/school-license-api.ts
 api/server-api.ts
 api/server-config-api.ts
-api/server-release-api.ts
 api/share-token-api.ts
 api/shd-api.ts
 api/submission-api.ts

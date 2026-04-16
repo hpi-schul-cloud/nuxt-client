@@ -1,6 +1,7 @@
 <template>
 	<DefaultWireframe max-width="full" main-with-bottom-padding>
 		<template #header>
+			<Announcement />
 			<h1 data-testid="dashboard-title">{{ t("pages.dashboard.title") }}</h1>
 		</template>
 		<template #default>
@@ -70,7 +71,9 @@
 
 <script lang="ts" setup>
 import SvgNewsEmpty from "@/assets/img/SvgNewsEmpty.vue";
+import Announcement from "@/components/announcement/Announcement.vue";
 import { useSafeAxiosRunner } from "@/composables/async-tasks.composable";
+import { schoolsModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -92,7 +95,6 @@ const { t } = useI18n();
 const { isTeacher, isStudent, isAdmin } = useAppStoreRefs();
 const NEWS_LIMIT = 4;
 const newsApi = NewsApiFactory(undefined, "/v3", $axios);
-import { schoolsModule } from "@/store";
 
 useTitle(buildPageTitle(t("pages.dashboard.title")));
 
