@@ -3,8 +3,8 @@ import CourseRoomModal from "./CourseRoomModal.vue";
 import { courseRoomElementFactory, courseRoomGroupFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useCourseRoomListStore } from "@data-course-rooms";
-import { SvsDialog } from "@ui-dialog";
 import { createTestingPinia } from "@pinia/testing";
+import { SvsDialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 
