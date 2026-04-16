@@ -227,6 +227,8 @@ describe("Board", () => {
 			openDeleteBoardDialog: () => void;
 			isBoardVisible: boolean;
 			isEditSettingsDialogOpen: boolean;
+			showLoadingDialog: boolean;
+			onBackToOverview: () => void;
 		};
 
 		return {
@@ -1168,6 +1170,14 @@ describe("Board", () => {
 			const dialog = wrapper.findComponent({ name: "VDialog" });
 			expect(dialog.exists()).toBe(true);
 		});
+
+		it("should call router.push with dashboard path when invoked", () => {
+			const { wrapperVM } = setup();
+
+			wrapperVM.onBackToOverview();
+
+			expect(router.push).toHaveBeenCalledWith({ path: "/dashboard" });
+		});
 	});
 
 	describe("showLoadingDialog", () => {
@@ -1192,6 +1202,47 @@ describe("Board", () => {
 
 			const dialogText = wrapper.find("[data-testid='dialog-text']");
 			expect(dialogText.exists()).toBe(false);
+		});
+
+		it("should return false when isConnected is true after 500ms", async () => {
+			const { wrapperVM, boardStore } = setup();
+
+			boardStore.isConnected = true;
+			boardStore.isLoading = false;
+			vi.advanceTimersByTime(600);
+			await nextTick();
+
+			expect(wrapperVM.showLoadingDialog).toBe(false);
+		});
+
+		it("should return true when isConnected is false after 500ms", async () => {
+			const { wrapperVM, boardStore } = setup();
+
+			boardStore.isConnected = false;
+			vi.advanceTimersByTime(600);
+			await nextTick();
+
+			expect(wrapperVM.showLoadingDialog).toBe(true);
+		});
+
+		it("should return true when isLoading is true after 500ms", async () => {
+			const { wrapperVM, boardStore } = setup();
+
+			boardStore.isLoading = true;
+			vi.advanceTimersByTime(600);
+			await nextTick();
+
+			expect(wrapperVM.showLoadingDialog).toBe(true);
+		});
+
+		it("should return false before 500ms even when conditions are met", async () => {
+			const { wrapperVM, boardStore } = setup();
+
+			boardStore.isConnected = false;
+			vi.advanceTimersByTime(400);
+			await nextTick();
+
+			expect(wrapperVM.showLoadingDialog).toBe(false);
 		});
 	});
 
