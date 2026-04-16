@@ -1651,6 +1651,8 @@ export default {
 	"pages.rooms.importCourse.step_3": "Імпортований курс можна перейменувати під час наступного кроку.",
 	"pages.rooms.ccImportCourse.title": "Імпортний курс",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Виберіть файл",
+	"pages.rooms.ccImportCourse.maxFileSize": "Максимальний розмір файлу: {maxSize}",
+	"pages.rooms.ccImportCourse.fileSizeExceeded": "Файл перевищує максимальний розмір {maxSize}.",
 	"pages.rooms.ccImportCourse.loading": "Триває завантаження...",
 	"pages.rooms.ccImportCourse.success": "Файл вашого курсу завантажено та зараз імпортується у фоновому режимі.",
 	"pages.rooms.ccImportCourse.error": "Під час завантаження файлу курсу сталася помилка.",

@@ -1671,6 +1671,8 @@ export default {
 	"pages.rooms.importCourse.step_3": "El curso importado se puede renombrar en el siguiente paso.",
 	"pages.rooms.ccImportCourse.title": "Importar curso",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Seleccionar archivo",
+	"pages.rooms.ccImportCourse.maxFileSize": "Tamaño máximo de archivo: {maxSize}",
+	"pages.rooms.ccImportCourse.fileSizeExceeded": "El archivo supera el tamaño máximo de {maxSize}.",
 	"pages.rooms.ccImportCourse.loading": "Subida en progreso...",
 	"pages.rooms.ccImportCourse.success":
 		"Su archivo del curso se ha cargado y ahora se está importando en segundo plano.",
