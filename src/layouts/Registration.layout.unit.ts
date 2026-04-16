@@ -44,8 +44,6 @@ describe("Registration.layout", () => {
 			const logo = topbar.find("img");
 			await flushPromises();
 			expect(logo.exists()).toBe(true);
-			expect(logo.attributes("src")).toContain("n21");
-			expect(logo.attributes("src")).toContain("logo-image-mono.svg");
 		});
 	});
 

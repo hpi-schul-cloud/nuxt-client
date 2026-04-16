@@ -27,7 +27,14 @@ import { useDisplay } from "vuetify";
 const { smAndDown } = useDisplay();
 const isSmallDevice = computed(() => smAndDown.value);
 
-const logo = computed(() => `/src/assets/img/logo/${useEnvConfig().value.SC_THEME}/logo-image-mono.svg`);
+const themeAssets = {
+	brb: { logo: new URL("/src/assets/img/logo/brb/logo-image-mono.svg", import.meta.url).href },
+	n21: { logo: new URL("/src/assets/img/logo/n21/logo-image-mono.svg", import.meta.url).href },
+	thr: { logo: new URL("/src/assets/img/logo/thr/logo-image-mono.svg", import.meta.url).href },
+	default: { logo: new URL("/src/assets/img/logo/default/logo-image-mono.svg", import.meta.url).href },
+};
+
+const logo = computed(() => themeAssets[useEnvConfig().value.SC_THEME]?.logo);
 </script>
 
 <style lang="scss" scoped>
