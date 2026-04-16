@@ -159,6 +159,8 @@ export default {
 		"{type} konnte nicht abgeschlossen werden. | {type} konnten nicht abgeschlossen werden.",
 	"common.notifications.errors.notReverted":
 		"{type} konnte nicht zurückgesetzt werden. | {type} konnten nicht zurückgesetzt werden.",
+	"common.notifications.errors.notRestored":
+		"{type} konnte nicht wiederhergestellt werden. | {type} konnten nicht wiederhergestellt werden.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.email.confirmation": "E-Mail-Adresse wiederholen",
 	"common.placeholder.email.update": "Neue E-Mail-Adresse",

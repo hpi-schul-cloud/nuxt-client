@@ -44,7 +44,6 @@
 									{{ t("pages.room.taskCard.label.graded") }}
 									{{ task.status.graded }}/{{ task.status.submitted }}
 								</VChip>
-
 								<VChip
 									v-if="isTaskOverdue(task)"
 									:prepend-icon="mdiClockAlertOutline"
@@ -53,6 +52,9 @@
 									data-testid="task-overdue-teacher"
 								>
 									{{ t("pages.room.taskCard.teacher.label.overdue") }}
+								</VChip>
+								<VChip v-if="isTaskUnpublished(task)" size="x-small" data-testid="task-lesson-not-published">
+									{{ t("components.molecules.TaskItemTeacher.lessonIsNotPublished") }}
 								</VChip>
 							</template>
 							<template v-if="isStudent">
@@ -87,7 +89,7 @@
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
-import { isTaskOverdue } from "@data-tasks";
+import { isTaskOverdue, isTaskUnpublished } from "@data-tasks";
 import { mdiCheckCircleOutline, mdiClockAlertOutline, mdiFormatListChecks } from "@icons/material";
 import { useI18n } from "vue-i18n";
 

@@ -154,6 +154,7 @@ export default {
 		"{type} не вдалося вийти. | {type} не вдалося вийти. | {type} не вдалося вийти.",
 	"common.notifications.errors.notFinished": "{type} не вдалося завершити. | {type} не вдалося завершити.",
 	"common.notifications.errors.notReverted": "{type} не вдалося скинути. | {type} не вдалося скинути.",
+	"common.notifications.errors.notRestored": "{type} не вдалося відновити. | Не вдалося відновити {type}.",
 	"common.notification.error.videoConference.notFetched": "Не вдалося отримати відеоконференцію.",
 	"common.notification.error.videoConference.notJoined": "Не вдалося приєднатися до відеоконференції.",
 	"common.notification.error.videoConference.notStarted": "Не вдалося розпочати відеоконференцію.",

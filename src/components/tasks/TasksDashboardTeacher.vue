@@ -103,11 +103,13 @@
 						:tasks="finishedTasks"
 						user-role="teacher"
 						has-pagination
+						:is-loading-more-items="isLoadingFinished"
 						@copy-task="onCopyTask"
 						@share-task="onShareTask"
+						@load-more-tasks="fetchFinishedTasks"
 					/>
 					<VContainer>
-						<EmptyState v-if="finishedTasksIsEmpty" :title="t('pages.tasks.finished.emptyState.title')">
+						<EmptyState v-if="finishedTasks.length === 0" :title="t('pages.tasks.finished.emptyState.title')">
 							<template #media> <TasksEmptyStateSvg /></template>
 						</EmptyState>
 					</VContainer>
@@ -132,9 +134,8 @@ import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue"
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
 import { CopyParams } from "@/store/copy";
-import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
-import { COPY_MODULE_KEY, FINISHED_TASKS_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { ShareTokenBodyParamsParentType } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { useTasksOfOverview } from "@data-tasks";
@@ -145,7 +146,6 @@ import { countBy } from "lodash-es";
 import { computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
-const finishedTasksModule: FinishedTasksModule = injectStrict(FINISHED_TASKS_MODULE_KEY);
 const shareModule: ShareModule = injectStrict(SHARE_MODULE_KEY);
 const copyModule = injectStrict(COPY_MODULE_KEY);
 
@@ -172,10 +172,6 @@ const activeTab = computed({
 	},
 });
 
-onMounted(() => {
-	finishedTasksModule.fetchFinishedTasks();
-});
-
 const {
 	draftsUnfiltered,
 	publishedUnfiltered,
@@ -183,11 +179,18 @@ const {
 	openForTeacher,
 	splitByDueDate,
 	isLoading,
+	isLoadingFinished,
 	includeSubstitute,
-	fetch: fetchTasks,
+	fetchTasks,
+	fetchFinishedTasks,
+	finishedTasks,
 	sortedCourseFilters,
 	selectedCourseNames,
 } = useTasksOfOverview({ includeSubstitute: false });
+
+onMounted(async () => {
+	await fetchFinishedTasks();
+});
 
 const openTasks = computed(() => splitByDueDate(openForTeacher.value));
 const overdueTasks = computed(() => openTasks.value.overdue);
@@ -208,10 +211,6 @@ const countedCourseFilters = computed(() => {
 		};
 	});
 });
-
-const finishedTasks = computed(() => finishedTasksModule.getTasks);
-
-const finishedTasksIsEmpty = computed(() => finishedTasksModule.tasksIsEmpty);
 
 const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
 const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);

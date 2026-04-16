@@ -148,6 +148,7 @@ export default {
 	"common.notifications.errors.notExited": "{type} no se ha podido salir. | {type} no se han podido salir.",
 	"common.notifications.errors.notFinished": "{type} no se pudo completar. | {type} no se pudieron completar.",
 	"common.notifications.errors.notReverted": "{type} no se pudo restablecer. | {type} no se pudieron restablecer.",
+	"common.notifications.errors.notRestored": "No se ha podido restaurar {type}. | No se han podido restaurar {type}.",
 	"common.notification.error.videoConference.notFetched": "No se pudo obtener la videoconferencia.",
 	"common.notification.error.videoConference.notJoined": "No se pudo unirse a la videoconferencia.",
 	"common.notification.error.videoConference.notStarted": "No se pudo iniciar la videoconferencia.",

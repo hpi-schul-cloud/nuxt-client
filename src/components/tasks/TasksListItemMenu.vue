@@ -82,7 +82,6 @@
 </template>
 
 <script setup lang="ts">
-import { finishedTasksModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { useEnvConfig } from "@data-env";
@@ -122,7 +121,7 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const envConfig = useEnvConfig();
 
-const { deleteTask, finishTask, revertPublishedTask } = useTasksOfOverview();
+const { deleteTask, finishTask, restoreFinishedTask, revertPublishedTask } = useTasksOfOverview();
 
 const isTeacher = computed(() => props.userRole === "teacher");
 const editLink = computed(() => `/homework/${props.taskId}/edit`);
@@ -144,7 +143,7 @@ const onDelete = async () => {
 
 const onFinish = () => {
 	if (props.taskIsFinished) {
-		finishedTasksModule.restoreTask(props.taskId);
+		restoreFinishedTask(props.taskId);
 	} else {
 		finishTask(props.taskId);
 	}

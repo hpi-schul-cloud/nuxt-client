@@ -39,9 +39,8 @@
 import TasksListItemStudent from "./TasksListItemStudent.vue";
 import TasksListItemTeacher from "./TasksListItemTeacher.vue";
 import { CopyParams } from "@/store/copy";
-import FinishedTasksModule from "@/store/finished-tasks";
 import { TaskResponse } from "@api-server";
-import { computed, inject } from "vue";
+import { computed } from "vue";
 
 const props = withDefaults(
 	defineProps<{
@@ -49,29 +48,30 @@ const props = withDefaults(
 		title?: string;
 		userRole: "student" | "teacher";
 		hasPagination?: boolean;
+		isLoadingMoreItems?: boolean;
 		showSkeleton?: boolean;
 	}>(),
 	{
 		title: undefined,
 		hasPagination: false,
 		showSkeleton: false,
+		isLoadingMoreItems: false,
 	}
 );
 
 const emit = defineEmits<{
 	"copy-task": [payload: CopyParams];
 	"share-task": [taskId: string];
+	"load-more-tasks": [];
 }>();
 
-const finishedTasksModule = inject<FinishedTasksModule>("finishedTasksModule");
-
 const isListFilled = computed(() => props.tasks.length > 0);
-const showSpinner = computed(() => props.hasPagination && finishedTasksModule?.getIsInitialized);
+const showSpinner = computed(() => props.hasPagination && props.isLoadingMoreItems);
 const isLastTaskItem = (index: number) => props.hasPagination && index === props.tasks.length - 1;
 
-const loadMore = (entries: IntersectionObserverEntry[]) => {
-	if (entries[0].isIntersecting) {
-		finishedTasksModule?.fetchFinishedTasks();
+const loadMore = (isIntersecting: boolean) => {
+	if (isIntersecting) {
+		emit("load-more-tasks");
 	}
 };
 
