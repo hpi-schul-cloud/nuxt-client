@@ -53,6 +53,7 @@ export * from "./registrationFactory";
 export * from "./richTextElementContentFactory";
 export * from "./richTextElementResponseFactory";
 export * from "./room";
+export * from "./runtimeConfigValueFactory";
 export * from "./schoolExternalToolConfigurationFactory";
 export * from "./schoolExternalToolConfigurationStatusResponseFactory";
 export * from "./schoolExternalToolConfigurationTemplate.factory";
