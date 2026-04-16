@@ -34,10 +34,10 @@ export interface RuntimeConfigListItemResponse {
     type: RuntimeConfigListItemResponseType;
     /**
      * guaranteed to be of the type defined in \"type\" property
-     * @type {object}
+     * @type {string | number | boolean}
      * @memberof RuntimeConfigListItemResponse
      */
-    value: object;
+    value: string | number | boolean;
     /**
      * 
      * @type {string}
