@@ -146,6 +146,9 @@ export default {
 	"common.notifications.errors.notExited": "{type} could not be exited.",
 	"common.notifications.errors.notFinished": "{type} could not be completed.",
 	"common.notifications.errors.notReverted": "{type} could not be reset",
+	"common.notification.error.videoConference.notFetched": "The video conference could not be fetched.",
+	"common.notification.error.videoConference.notJoined": "The video conference could not be joined.",
+	"common.notification.error.videoConference.notStarted": "The video conference could not be started.",
 	"common.notification.connection.restored": "The connection has been restored.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.email.confirmation": "Repeat e-mail address",
@@ -250,7 +253,6 @@ export default {
 	"common.words.topic": "Topic",
 	"common.words.topics": "Topics",
 	"common.words.yes": "Yes",
-	"common.words.export": "Course export is downloading",
 	"common.alerts.room.not.available": "No room available. | No rooms available.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"During the migration, the registration system for students and teachers is changed to moin.schule. The data belonging to the affected accounts will be preserved.",
@@ -1645,6 +1647,7 @@ export default {
 	"pages.rooms.ccImportCourse.success":
 		"Your course file has been uploaded and is now being imported in the background.",
 	"pages.rooms.ccImportCourse.error": "An error occurred while uploading the course.",
+	"pages.rooms.ccExportCourse.started": "Course export is downloading.",
 	"pages.rooms.ccExportCourse.error": "An error occurred while exporting the course.",
 	"pages.rooms.roomModal.courseGroupTitle": "Course group title",
 	"pages.rooms.tools.deactivated": "Tool deactivated",
