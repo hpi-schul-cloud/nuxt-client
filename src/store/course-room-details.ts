@@ -205,42 +205,6 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}
 
 	@Action
-	async downloadCommonCartridgeCourse(exportSettings: {
-		version: "1.1.0" | "1.3.0";
-		topics: string[];
-		tasks: string[];
-		columnBoards: string[];
-	}): Promise<void> {
-		const form = document.createElement("form");
-		form.method = "POST";
-		form.action = `/api/v3/common-cartridge/export/${this.roomData.roomId}?version=${exportSettings.version}`;
-		form.enctype = "application/json";
-		form.target = "_blank";
-
-		const topicIdsInput = document.createElement("input");
-		topicIdsInput.type = "hidden";
-		topicIdsInput.name = "topics";
-		topicIdsInput.value = JSON.stringify(exportSettings.topics);
-		form.appendChild(topicIdsInput);
-
-		const taskIdsInput = document.createElement("input");
-		taskIdsInput.type = "hidden";
-		taskIdsInput.name = "tasks";
-		taskIdsInput.value = JSON.stringify(exportSettings.tasks);
-		form.appendChild(taskIdsInput);
-
-		const columnBoardIdsInput = document.createElement("input");
-		columnBoardIdsInput.type = "hidden";
-		columnBoardIdsInput.name = "columnBoards";
-		columnBoardIdsInput.value = JSON.stringify(exportSettings.columnBoards);
-		form.appendChild(columnBoardIdsInput);
-
-		document.body.appendChild(form);
-		form.submit();
-		document.body.removeChild(form);
-	}
-
-	@Action
 	async finishTask(payload: { itemId: string; action: "finish" | "restore" }): Promise<void> {
 		this.resetBusinessError();
 		try {
