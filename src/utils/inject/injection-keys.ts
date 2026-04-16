@@ -29,5 +29,3 @@ export const SHARE_MODULE_KEY: InjectionKey<ShareModule> = Symbol("shareModule")
 export const TASKS_MODULE_KEY: InjectionKey<TasksModule> = "tasksModule" as unknown as InjectionKey<TasksModule>;
 export const FINISHED_TASKS_MODULE_KEY: InjectionKey<FinishedTasksModule> =
 	"finishedTasksModule" as unknown as InjectionKey<FinishedTasksModule>;
-
-export const THEME_KEY: InjectionKey<{ name: string }> = Symbol("theme");

@@ -15,7 +15,6 @@ import {
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
-	THEME_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
 import {
@@ -33,7 +32,6 @@ import {
 	tasksModule,
 	videoConferenceModule,
 } from "@/store";
-import themeConfig from "@/theme.config";
 import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
@@ -59,8 +57,6 @@ app.config.errorHandler = (err: unknown) => {
 	logger.error(err);
 	useAppStore().handleUnknownError(err);
 };
-
-app.config.globalProperties.$theme = themeConfig;
 
 app.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
@@ -89,7 +85,6 @@ app.use(VueDOMPurifyHTML, {
 	// creation of i18n relies on App.store
 	const i18n = createI18n();
 	const vuetify = createVuetifyPlugin(i18n);
-
 	app.use(router).use(store).use(vuetify).use(i18n);
 
 	// NUXT_REMOVAL get rid of store DI
@@ -108,7 +103,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
 	app.provide("tasksModule", tasksModule);
 	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
-	app.provide(THEME_KEY.valueOf(), themeConfig);
 
 	app.mount("#app");
 })();
