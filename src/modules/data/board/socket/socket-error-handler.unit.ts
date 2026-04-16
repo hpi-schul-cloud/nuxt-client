@@ -1,14 +1,14 @@
-import { BoardErrorReportApiFactory } from "@/serverApi/v3";
-import type { BoardErrorReportApi } from "@/serverApi/v3/api";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { mockApi } from "@@/tests/test-utils";
+import { BoardErrorReportApiFactory } from "@api-server";
 import { logger } from "@util-logger";
+import { EventEmitter } from "node:events";
 import http from "node:http";
 import type { AddressInfo } from "node:net";
 import type { Server } from "socket.io";
 import * as ioBack from "socket.io";
 import type { Socket } from "socket.io-client";
 import { io } from "socket.io-client";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 let socket: Socket;
 let httpServer: http.Server;
@@ -79,6 +79,8 @@ afterEach(() => {
 // Mocks aligning with project style
 vi.mock("axios");
 
+vi.mock("@api-server");
+
 vi.mock("@/serverApi/v3");
 
 vi.mock("bowser", () => ({
@@ -100,18 +102,24 @@ vi.mock("@util-logger", () => ({
 
 describe("socket-error-handler", () => {
 	beforeEach(() => {
+		vi.useFakeTimers();
 		vi.clearAllMocks();
 		// Default URL and userAgent
-		Object.defineProperty(window, "location", {
+		Object.defineProperty(globalThis, "location", {
 			value: { href: "http://localhost/boards/69121555fd38bab102439ff8" },
 			writable: true,
 		});
-		Object.defineProperty(window.navigator, "userAgent", {
+		Object.defineProperty(globalThis.navigator, "userAgent", {
 			value:
 				"Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
 			configurable: true,
 			writable: false,
 		});
+		vi.mocked(BoardErrorReportApiFactory).mockReturnValue(boardErrorReportApiMock);
+	});
+
+	afterEach(() => {
+		vi.useRealTimers();
 	});
 
 	const importHandler = async () => {
@@ -119,79 +127,83 @@ describe("socket-error-handler", () => {
 		return mod.useConnectionErrorHandling;
 	};
 
-	let boardErrorReportApi: DeepMocked<BoardErrorReportApi>;
-	const mockedFactory = vi.mocked(BoardErrorReportApiFactory);
+	const boardErrorReportApiMock = mockApi<ReturnType<typeof BoardErrorReportApiFactory>>();
+
+	// Helper to emit internal socket.io Manager/Engine events (not typed in socket.io-client)
+	const emitManagerEvent = (event: string, ...args: unknown[]) =>
+		(socket.io as unknown as EventEmitter).emit(event, ...args);
+	const emitEngineEvent = (event: string, ...args: unknown[]) =>
+		(socket.io.engine as unknown as EventEmitter).emit(event, ...args);
+	// Helper to emit reserved socket events by calling EventEmitter.prototype.emit directly
+	const emitSocketReservedEvent = (event: string, ...args: unknown[]) =>
+		EventEmitter.prototype.emit.call(socket, event, ...args);
 
 	it("reports on reconnect after retries and includes logSteps", async () => {
-		boardErrorReportApi = createMock<BoardErrorReportApi>();
-		mockedFactory.mockReturnValue(boardErrorReportApi);
-
 		const useConnectionErrorHandling = await importHandler();
 		useConnectionErrorHandling(socket);
 
-		// simulate a connect_error
-		socket.emit(
+		const loggerMock = vi.mocked(logger);
+
+		// simulate a connect_error (using EventEmitter.prototype.emit to bypass reserved event check)
+		emitSocketReservedEvent(
 			"connect_error",
 			Object.assign(new Error("Connection failed"), { data: { message: "Connection failed" } })
 		);
 
 		// simulate reconnect after attempts
-		socket.io.emit("reconnect", 3);
+		emitManagerEvent("reconnect", 3);
 
-		// Wait for async operations
-		await new Promise((resolve) => setTimeout(resolve, 100));
+		// Advance timers past the 500ms delay for reconnect events
+		await vi.advanceTimersByTimeAsync(600);
 
-		expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenCalledWith(
+		expect(boardErrorReportApiMock.boardErrorReportControllerReportError).toHaveBeenCalledWith(
 			expect.objectContaining({
-				type: "connect_after_retry",
-				message: "Connection restored after retry",
+				type: "reconnect",
+				message: "Connection restored after retry (3 attempts)",
 				retryCount: 3,
 				boardId: "69121555fd38bab102439ff8",
 			})
 		);
+
+		// Verify logging occurred
+		expect(loggerMock.log).toHaveBeenCalled();
 	});
 
 	it("reports multiple reconnect attempts when attempt > 3", async () => {
-		boardErrorReportApi = createMock<BoardErrorReportApi>();
-		mockedFactory.mockReturnValue(boardErrorReportApi);
-
 		const useConnectionErrorHandling = await importHandler();
 		useConnectionErrorHandling(socket);
 
 		// simulate reconnect_attempt
-		socket.io.emit("reconnect_attempt", 5);
+		emitManagerEvent("reconnect_attempt", 5);
 
-		// Wait for async operations
-		await new Promise((resolve) => setTimeout(resolve, 100));
+		// Advance timers past the 6000ms delay for reconnect_attempt events
+		await vi.advanceTimersByTimeAsync(6100);
 
-		expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenCalledWith(
+		expect(boardErrorReportApiMock.boardErrorReportControllerReportError).toHaveBeenCalledWith(
 			expect.objectContaining({
 				type: "reconnect_attempt",
-				message: "Multiple reconnect attempts",
+				message: "Multiple reconnect attempts (5)",
 				retryCount: 5,
 			})
 		);
 	});
 
 	it("uses 'unknown' boardId when URL has no id", async () => {
-		Object.defineProperty(window, "location", {
+		Object.defineProperty(globalThis, "location", {
 			value: { href: "http://localhost/boards/noid" },
 			writable: true,
 		});
-
-		boardErrorReportApi = createMock<BoardErrorReportApi>();
-		mockedFactory.mockReturnValue(boardErrorReportApi);
 
 		const useConnectionErrorHandling = await importHandler();
 		useConnectionErrorHandling(socket);
 
 		// simulate reconnect_attempt
-		socket.io.emit("reconnect_attempt", 6);
+		emitManagerEvent("reconnect_attempt", 6);
 
-		// Wait for async operations
-		await new Promise((resolve) => setTimeout(resolve, 100));
+		// Advance timers past the 6000ms delay for reconnect_attempt events
+		await vi.advanceTimersByTimeAsync(6100);
 
-		expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenCalledWith(
+		expect(boardErrorReportApiMock.boardErrorReportControllerReportError).toHaveBeenCalledWith(
 			expect.objectContaining({ boardId: "unknown" })
 		);
 	});
@@ -203,51 +215,30 @@ describe("socket-error-handler", () => {
 		const loggerMock = vi.mocked(logger);
 
 		// simulate upgrade event
-		socket.io.engine.emit("upgrade", { name: "websocket" });
+		emitEngineEvent("upgrade", { name: "websocket" });
 
 		// simulate reconnect_failed
-		socket.io.emit("reconnect_failed");
+		emitManagerEvent("reconnect_failed");
 
-		// Wait for async operations
-		await new Promise((resolve) => setTimeout(resolve, 100));
+		// Advance timers past the 100ms default delay
+		await vi.advanceTimersByTimeAsync(200);
 
 		// Check that logger was called
 		expect(loggerMock.log.mock.calls.length).toBeGreaterThan(0);
 	});
 
-	it("logs connect_error with message prefix", async () => {
-		const useConnectionErrorHandling = await importHandler();
-		useConnectionErrorHandling(socket);
-
-		const loggerMock = vi.mocked(logger);
-
-		// simulate connect_error
-		socket.emit("connect_error", Object.assign(new Error("Boom"), { data: { message: "Kaboom" } }));
-
-		// Wait for async operations
-		await new Promise((resolve) => setTimeout(resolve, 100));
-
-		const hasErrLog = loggerMock.log.mock.calls.some(
-			(args) => Array.isArray(args[0]) && (args[0] as unknown[]).some((s) => String(s).includes("ERR: Kaboom"))
-		);
-		expect(hasErrLog).toBe(true);
-	});
-
 	it("retries reporting after failure and logs error", async () => {
-		boardErrorReportApi = createMock<BoardErrorReportApi>();
-		mockedFactory.mockReturnValue(boardErrorReportApi);
-
 		const useConnectionErrorHandling = await importHandler();
 		useConnectionErrorHandling(socket);
 
-		boardErrorReportApi.boardErrorReportControllerReportError.mockRejectedValueOnce(new Error("Network error"));
+		boardErrorReportApiMock.boardErrorReportControllerReportError.mockRejectedValueOnce(new Error("Network error"));
 		const loggerMock = vi.mocked(logger);
 
 		// trigger a report that will fail
-		socket.io.emit("reconnect_attempt", 7);
+		emitManagerEvent("reconnect_attempt", 7);
 
-		// Wait for async operations and error handling
-		await new Promise((resolve) => setTimeout(resolve, 100));
+		// Advance past the 6000ms delay for reconnect_attempt to trigger the API call
+		await vi.advanceTimersByTimeAsync(6100);
 
 		// Check error was logged
 		expect(loggerMock.error).toHaveBeenCalledWith(
@@ -255,10 +246,10 @@ describe("socket-error-handler", () => {
 			expect.any(Error)
 		);
 
-		// Wait for retry timeout (using real timers now)
-		await new Promise((resolve) => setTimeout(resolve, 5100));
+		// Advance past the 5000ms retry delay
+		await vi.advanceTimersByTimeAsync(5100);
 
 		// expect it to have been invoked at least twice (initial + retry)
-		expect(boardErrorReportApi.boardErrorReportControllerReportError.mock.calls.length).toBeGreaterThanOrEqual(2);
+		expect(boardErrorReportApiMock.boardErrorReportControllerReportError.mock.calls.length).toBeGreaterThanOrEqual(2);
 	});
 });

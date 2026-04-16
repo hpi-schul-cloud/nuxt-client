@@ -1,5 +1,6 @@
-import { BoardErrorReportApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { BoardErrorReportApiFactory } from "@api-server";
+import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
 import Bowser from "bowser";
 import { type Socket } from "socket.io-client";
@@ -20,8 +21,12 @@ enum ConnectionState {
 
 let connectionState: ConnectionState = ConnectionState.STARTING;
 
+const { isJwtExpired } = useSessionBroadcast();
+
 export const useConnectionErrorHandling = (socket: Socket) => {
 	let startTime = Date.now();
+	let timeoutHandle: NodeJS.Timeout | null = null;
+
 	const log = (message: string) => {
 		if (logs.length === 0) {
 			startTime = Date.now();
@@ -40,51 +45,81 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 		log(`ERR: ${errorData?.message ?? error.message}`);
 	};
 
-	const reportBoardError = (type: string, message: string, retryCount: number) => {
+	const reportBoardError = (type: string, message: string, retryCount: number, delayMs = 100) => {
+		const data = {
+			type,
+			message,
+			retryCount,
+			logSteps: logs,
+		};
+		logger.log(JSON.stringify(data, null, 2));
+		delayedReportBoardError(type, message, retryCount, delayMs);
+	};
+
+	// whenever this function is called the actual execution is delayed by 100ms, if the function is called again within this delay, the previous call is canceled and the timer restarts
+	const delayedReportBoardError = (type: string, message: string, retryCount: number, delayMs: number) => {
+		if (timeoutHandle) {
+			clearTimeout(timeoutHandle);
+		}
+		timeoutHandle = setTimeout(() => {
+			apiCall(type, message, retryCount);
+		}, delayMs);
+	};
+
+	const apiCall = (type: string, message: string, retryCount: number) => {
 		const url = globalThis.location.href;
 		const boardId = /boards\/([0-9a-fA-F]{24})/.exec(url)?.[1] ?? "unknown";
 		const { browser, os, platform } = Bowser.parse(globalThis.navigator.userAgent);
-		const data = {
+		const dataSubset = {
 			type,
 			message,
 			url,
 			boardId,
 			retryCount,
-			logSteps: logs,
 			browser: `${browser.name} ${browser.version}`,
 			os: `${os.name} ${os.version}`,
 			deviceType: `${platform.type ?? "unknown"}`,
 		};
-		logger.log(data);
 
-		boardErrorReportApi.boardErrorReportControllerReportError(data).catch((err) => {
-			logger.error("Failed to report error - will retry in 5 seconds", err);
-			setTimeout(() => {
-				// try again in 5 seconds
-				reportBoardError(type, message, retryCount);
-			}, 5000);
-		});
+		boardErrorReportApi
+			.boardErrorReportControllerReportError(dataSubset)
+			.then(() => {
+				if (timeoutHandle) {
+					clearTimeout(timeoutHandle);
+				}
+			})
+			.catch((err) => {
+				logger.error("Failed to report error - will retry in 5 seconds", err);
+				timeoutHandle = setTimeout(() => {
+					// try again in 5 seconds
+					apiCall(type, message + " Failed => retry", retryCount);
+				}, 5000);
+			});
 	};
 
 	const manager = socket.io;
 
 	manager.on("reconnect_attempt", (attempt) => {
+		if (isJwtExpired.value) {
+			log("JWT expired - will not attempt to reconnect");
+			socket.disconnect();
+			return;
+		}
 		connectionState = ConnectionState.RECONNECTING;
 		log("reconnect_attempt");
-		if (attempt > 3) {
-			reportBoardError("reconnect_attempt", "Multiple reconnect attempts", attempt);
-		}
+		reportBoardError("reconnect_attempt", `Multiple reconnect attempts (${attempt})`, attempt, 6000);
 	});
 
 	manager.on("reconnect", (attempts: number) => {
 		connectionState = ConnectionState.SUCCESS_AFTER_RETRIES;
 		log(`reconnected after ${attempts} attempts`);
-		reportBoardError("connect_after_retry", "Connection restored after retry", attempts);
+		reportBoardError("reconnect", `Connection restored after retry (${attempts} attempts)`, attempts, 500);
 		resetLogs();
 	});
 
 	manager.on("reconnect_failed", () => {
 		connectionState = ConnectionState.FAILED_AFTER_MAX_ATTEMPTS;
+		reportBoardError("reconnect_failed", "Connection failed after maximum attempts", 0);
 		log("reconnect_failed");
 	});
 
