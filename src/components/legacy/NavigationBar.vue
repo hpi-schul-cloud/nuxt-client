@@ -8,7 +8,7 @@
 			</div>
 			<div v-if="linksToDisplay.length || hasButtons" class="link-container">
 				<v-btn
-					v-for="(route, idx) in linksToDisplay"
+					v-for="route in linksToDisplay"
 					:key="route.href"
 					variant="text"
 					class="nav-item font-weight-regular mx-0"
@@ -36,7 +36,7 @@
 import { SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { mdiLogin } from "@icons/material";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 
 type Props = {
 	logoLink?: string;
@@ -56,13 +56,11 @@ const props = withDefaults(defineProps<Props>(), {
 	hideButtons: false,
 });
 
-
 const isDefaultTheme = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.DEFAULT);
 
 const hasButtons = computed(() => !props.hideButtons && isDefaultTheme.value);
 
 const linksToDisplay = computed(() => (isDefaultTheme.value ? props.links : []));
-
 </script>
 
 <style lang="scss" scoped>
