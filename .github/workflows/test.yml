@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 env:
-  node: 22
+  node: 24
 jobs:
   unit:
     runs-on: ubuntu-24.04
