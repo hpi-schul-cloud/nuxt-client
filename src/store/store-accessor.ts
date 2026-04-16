@@ -16,7 +16,6 @@ import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
 import SystemsModule from "@/store/systems";
 import TasksModule from "@/store/tasks";
-import VideoConferenceModule from "@/store/video-conference";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 
@@ -34,7 +33,6 @@ export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
 export let systemsModule: SystemsModule;
 export let tasksModule: TasksModule;
-export let videoConferenceModule: VideoConferenceModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<unknown>): void {
@@ -49,7 +47,6 @@ export function initializeStores(store: Store<unknown>): void {
 	shareModule = getModule(ShareModule, store);
 	systemsModule = getModule(SystemsModule, store);
 	tasksModule = getModule(TasksModule, store);
-	videoConferenceModule = getModule(VideoConferenceModule, store);
 }
 
 // for use in 'modules' store init (see store/index.ts), so each module
@@ -67,5 +64,4 @@ export const modules = {
 	shareModule: ShareModule,
 	systemsModule: SystemsModule,
 	tasksModule: TasksModule,
-	videoConferenceModule: VideoConferenceModule,
 };

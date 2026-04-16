@@ -1,12 +1,13 @@
 import VideoConferenceConfigurationDialog from "./VideoConferenceConfigurationDialog.vue";
-import { VideoConferenceOptions } from "@/store/types/video-conference";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { VideoConferenceOptionsResponse } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
+import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { ref } from "vue";
 
-const defaultOptions = ref<VideoConferenceOptions>({
+const defaultOptions = ref<VideoConferenceOptionsResponse>({
 	everyAttendeeJoinsMuted: false,
 	everybodyJoinsAsModerator: false,
 	moderatorMustApproveJoinRequests: true,

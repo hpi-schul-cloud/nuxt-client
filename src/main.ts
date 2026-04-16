@@ -15,7 +15,6 @@ import {
 	SHARE_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
 	THEME_KEY,
-	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
 import {
 	copyModule,
@@ -29,7 +28,6 @@ import {
 	shareModule,
 	systemsModule,
 	tasksModule,
-	videoConferenceModule,
 } from "@/store";
 import themeConfig from "@/theme.config";
 import { createDayJs } from "@/utils/date-time.utils";
@@ -104,7 +102,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
 	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
 	app.provide("tasksModule", tasksModule);
-	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
 	app.provide(THEME_KEY.valueOf(), themeConfig);
 
 	app.mount("#app");
