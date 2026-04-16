@@ -342,4 +342,53 @@ describe("socket.ts", () => {
 			expect(dispatchMock).toHaveBeenCalledWith({ type: eventName, payload });
 		});
 	});
+
+	describe("connect event with board and cards", () => {
+		it("should not call fetchCardRequest when cards is null", () => {
+			const { eventCallbacks } = setup();
+
+			const { boardStore, cardStore } = getOrInitialiseBoardStore();
+			boardStore.board = boardResponseFactory.build();
+			cardStore.cards = null as never;
+
+			eventCallbacks.disconnect();
+			eventCallbacks.connect();
+
+			expect(boardStore.reloadBoard).not.toHaveBeenCalled();
+			expect(cardStore.fetchCardRequest).not.toHaveBeenCalled();
+		});
+
+		it("should not call reloadBoard when board is undefined", () => {
+			const { eventCallbacks } = setup();
+
+			const { boardStore, cardStore } = getOrInitialiseBoardStore();
+			boardStore.board = undefined;
+			cardStore.cards = { "card-1": {} as never };
+
+			eventCallbacks.disconnect();
+			eventCallbacks.connect();
+
+			expect(boardStore.reloadBoard).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("connected ref", () => {
+		it("should return connected state", () => {
+			mockSocket.connected = true;
+			const { connected, getConnectedSocket } = setup();
+
+			getConnectedSocket();
+
+			expect(connected.value).toBe(true);
+		});
+
+		it("should return false when socket is not connected", () => {
+			mockSocket.connected = false;
+			const { connected, getConnectedSocket } = setup();
+
+			getConnectedSocket();
+
+			expect(connected.value).toBe(false);
+		});
+	});
 });

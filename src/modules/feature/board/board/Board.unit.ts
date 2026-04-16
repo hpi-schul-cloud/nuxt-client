@@ -1159,4 +1159,148 @@ describe("Board", () => {
 			});
 		});
 	});
+
+	describe("onBackToOverview", () => {
+		it("should have a loading dialog component", () => {
+			const { wrapper } = setup();
+
+			// The VDialog should exist in the component
+			const dialog = wrapper.findComponent({ name: "VDialog" });
+			expect(dialog.exists()).toBe(true);
+		});
+	});
+
+	describe("showLoadingDialog", () => {
+		it("should not show loading dialog when isConnected is true", async () => {
+			const { wrapper, boardStore } = setup();
+
+			boardStore.isConnected = true;
+			boardStore.isLoading = false;
+			vi.advanceTimersByTime(600);
+			await nextTick();
+
+			const dialogText = wrapper.find("[data-testid='dialog-text']");
+			expect(dialogText.exists()).toBe(false);
+		});
+
+		it("should not show loading dialog before 500ms have passed even when disconnected", async () => {
+			const { wrapper, boardStore } = setup();
+
+			boardStore.isConnected = false;
+			vi.advanceTimersByTime(400);
+			await nextTick();
+
+			const dialogText = wrapper.find("[data-testid='dialog-text']");
+			expect(dialogText.exists()).toBe(false);
+		});
+	});
+
+	describe("@onDropColumn", () => {
+		describe("when extractDataAttribute returns undefined", () => {
+			it("should not call moveColumnRequest", () => {
+				mockExtractDataAttribute.mockReturnValue(undefined);
+				const { wrapper, boardStore } = setup({
+					numberOfColumns: 2,
+					allowedOperations: { moveColumn: true },
+				});
+
+				const containerComponent = wrapper.findAllComponents({
+					name: "Sortable",
+				});
+				const payload = {
+					item: document.createElement("div"),
+					newIndex: 1,
+					oldIndex: 0,
+				};
+
+				containerComponent[0].vm.$emit("end", payload);
+
+				expect(boardStore.moveColumnRequest).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when newIndex is undefined", () => {
+			it("should not call moveColumnRequest", () => {
+				mockExtractDataAttribute.mockReturnValue("column-id");
+				const { wrapper, boardStore } = setup({
+					numberOfColumns: 2,
+					allowedOperations: { moveColumn: true },
+				});
+
+				const containerComponent = wrapper.findAllComponents({
+					name: "Sortable",
+				});
+				const payload = {
+					item: document.createElement("div"),
+					newIndex: undefined,
+					oldIndex: 0,
+				};
+
+				containerComponent[0].vm.$emit("end", payload);
+
+				expect(boardStore.moveColumnRequest).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("@onCopyBoard", () => {
+		describe("when user is not permitted to copy board", () => {
+			it("should not call the copy function", async () => {
+				const { wrapper } = setup({ allowedOperations: { copyBoard: false } });
+
+				const boardHeader = wrapper.findComponent({
+					name: "BoardHeader",
+				});
+				await boardHeader.vm.$emit("copy:board");
+
+				expect(mockedCopyCalls.copy).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("@onShareBoard", () => {
+		describe("when user is not permitted to share board", () => {
+			it("should not start the share flow", async () => {
+				const { wrapper, shareModule } = setup({ allowedOperations: { shareBoard: false } });
+
+				const boardHeader = wrapper.findComponent({
+					name: "BoardHeader",
+				});
+				await boardHeader.vm.$emit("share:board");
+
+				expect(shareModule.startShareFlow).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("@onUpdateBoardLayout", () => {
+		describe("when user is not permitted to update board layout", () => {
+			it("should not open the change dialog", async () => {
+				const { wrapper } = setup({ allowedOperations: { updateBoardLayout: false } });
+
+				const boardHeader = wrapper.findComponent(BoardHeader);
+				const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
+
+				boardHeader.vm.$emit("change-layout");
+				await nextTick();
+
+				expect(boardLayoutDialog.props("modelValue")).toEqual(false);
+			});
+		});
+	});
+
+	describe("@onSelectBoardLayout", () => {
+		describe("when user is not permitted to update board layout", () => {
+			it("should not send update request", async () => {
+				const { wrapper, boardStore } = setup({ allowedOperations: { updateBoardLayout: false } });
+
+				const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
+
+				boardLayoutDialog.vm.$emit("select", BoardLayout.LIST);
+				await nextTick();
+
+				expect(boardStore.updateBoardLayoutRequest).not.toHaveBeenCalled();
+			});
+		});
+	});
 });
