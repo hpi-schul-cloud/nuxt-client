@@ -105,6 +105,7 @@ export default {
 	"common.labels.restore": "Wiederherstellen",
 	"common.labels.role": "Rolle",
 	"common.labels.room": "Raum | Räume",
+	"common.labels.runtimeConfig": "Laufzeitkonfiguration",
 	"common.labels.search": "Suche",
 	"common.labels.settings": "Einstellungen",
 	"common.labels.size": "Größe",

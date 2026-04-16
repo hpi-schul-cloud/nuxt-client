@@ -12,7 +12,8 @@ import { createTestingPinia } from "@pinia/testing";
 import { SessionState } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
 import { flushPromises } from "@vue/test-utils";
-import { Mocked, setActivePinia } from "pinia";
+import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 vi.mock("@/utils/api", () => ({
 	$axios: {
