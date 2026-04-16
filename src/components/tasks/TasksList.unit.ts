@@ -3,8 +3,7 @@ import TasksListItemTeacher from "./TasksListItemTeacher.vue";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
-import TasksModule from "@/store/tasks";
-import { COPY_MODULE_KEY, FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY, FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -17,7 +16,6 @@ import { beforeAll } from "vitest";
 const { tasks } = mocks;
 
 describe("TasksList", () => {
-	let tasksModuleMock: TasksModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let copyModuleMock: CopyModule;
 	let shareModuleMock: ShareModule;
@@ -28,7 +26,6 @@ describe("TasksList", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-					[TASKS_MODULE_KEY.valueOf()]: tasksModuleMock,
 					[FINISHED_TASKS_MODULE_KEY.valueOf()]: finishedTasksModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 				},
@@ -39,12 +36,6 @@ describe("TasksList", () => {
 		return wrapper;
 	};
 
-	const tasksModuleGetters: Partial<TasksModule> = {
-		getTasks: tasks,
-		getStatus: "completed",
-		hasTasks: true,
-	};
-
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
 	});
@@ -52,7 +43,6 @@ describe("TasksList", () => {
 	beforeEach(() => {
 		copyModuleMock = createModuleMocks(CopyModule);
 		shareModuleMock = createModuleMocks(ShareModule);
-		tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
 		finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 			getTasks: [],
 			tasksIsEmpty: true,
@@ -134,12 +124,6 @@ describe("TasksList", () => {
 	});
 
 	it("Should render an empty list, if there are no tasks", () => {
-		tasksModuleMock = createModuleMocks(TasksModule, {
-			getTasks: [],
-			getStatus: "completed",
-			hasTasks: false,
-		});
-
 		const wrapper = mountComponent({
 			propsData: {
 				userRole: "student",
@@ -158,12 +142,6 @@ describe("TasksList", () => {
 
 	describe("when loading tasks", () => {
 		it("Should render loading state while fetching initial tasks", () => {
-			tasksModuleMock = createModuleMocks(TasksModule, {
-				...tasksModuleGetters,
-				hasTasks: true,
-				getStatus: "pending",
-			});
-
 			const wrapper = mountComponent({
 				propsData: {
 					tasks: [],
@@ -185,11 +163,6 @@ describe("TasksList", () => {
 		});
 
 		it("Should render loading state while fetching more tasks", () => {
-			tasksModuleMock = createModuleMocks(TasksModule, {
-				...tasksModuleGetters,
-				getStatus: "pending",
-			});
-
 			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 				getIsInitialized: true,
 			});
@@ -205,26 +178,6 @@ describe("TasksList", () => {
 			expect(wrapper.find(".v-progress-circular").exists()).toBe(true);
 			expect(wrapper.find(".v-skeleton-loader__text").exists()).toBe(false);
 			expect(wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()).toBe(false);
-		});
-
-		it("Should compute correct status", () => {
-			tasksModuleMock = createModuleMocks(TasksModule, {
-				...tasksModuleGetters,
-				getStatus: "completed",
-			});
-
-			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
-				getStatus: "pending",
-			});
-
-			const wrapper = mountComponent({
-				propsData: {
-					tasks,
-					userRole: RoleName.STUDENT,
-				},
-			});
-
-			expect(wrapper.vm.status).toBe("completed");
 		});
 	});
 

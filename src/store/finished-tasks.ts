@@ -2,7 +2,6 @@ import { TaskApiFactory, TaskApiInterface } from "../generated/serverApi/v3";
 import { $axios } from "../utils/api";
 import { BusinessError, Pagination, Status } from "./types/commons";
 import { Task } from "./types/tasks";
-import { tasksModule } from "@/store";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 @Module({
@@ -98,7 +97,7 @@ export default class FinishedTasksModule extends VuexModule {
 			await this.taskApi.taskControllerRestore(taskId);
 
 			await this.refetchTasks();
-			await tasksModule.fetchAllTasks();
+			// await tasksModule.fetchAllTasks();
 
 			this.setStatus("completed");
 		} catch (error) {

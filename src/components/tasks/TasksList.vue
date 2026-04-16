@@ -4,7 +4,7 @@
 
 		<template v-if="showSkeleton">
 			<VSkeletonLoader type="text" :max-width="'15%'" />
-			<VSkeletonLoader v-for="task in 4" ref="skeleton" :key="task" type="list-item-avatar-two-line" />
+			<VSkeletonLoader v-for="task in 3" ref="skeleton" :key="task" type="list-item-avatar-two-line" />
 		</template>
 
 		<template v-else>

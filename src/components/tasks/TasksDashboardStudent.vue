@@ -15,7 +15,7 @@
 				item-value="value"
 				:prepend-inner-icon="mdiMagnify"
 				:menu-props="{ closeOnContentClick: false, zIndex: 30 }"
-				:items="sortedCourseFilters"
+				:items="countedCourseFilters"
 				:label="t('pages.tasks.labels.filter')"
 				:aria-label="t('pages.tasks.labels.filter')"
 				class="mb-4"
@@ -157,24 +157,28 @@ const {
 	selectedCourseNames,
 	submittedForStudent,
 	gradedForStudent,
-	publishedUnfiltered,
+	openForStudentUnfiltered,
+	submittedForStudentUnfiltered,
+	gradedForStudentUnfiltered,
 } = useTasks({ includeSubstitute: false });
 
 const openTasks = computed(() => splitByDueDate(openForStudent.value));
 
+const completedForStudentUnfiltered = computed(() => [
+	...submittedForStudentUnfiltered.value,
+	...gradedForStudentUnfiltered.value,
+]);
+
 const countedCourseFilters = computed(() => {
 	const count = countBy(
-		activeTab.value === TaskTab.COMPLETED ? publishedUnfiltered.value : publishedUnfiltered.value,
+		activeTab.value === TaskTab.OPEN ? openForStudentUnfiltered.value : completedForStudentUnfiltered.value,
 		(t) => t.courseName
 	);
 
-	return sortedCourseFilters.value.map((filter) => {
-		const substitution = filter.isSubstitution ? `${t("common.words.substitute")} ` : "";
-		return {
-			...filter,
-			text: `${substitution}${filter.text} (${count[filter.value] ?? 0})`,
-		};
-	});
+	return sortedCourseFilters.value.map((filter) => ({
+		...filter,
+		text: `${filter.text} (${count[filter.value] ?? 0})`,
+	}));
 });
 
 const overdueTasks = computed(() => openTasks.value.overdue);

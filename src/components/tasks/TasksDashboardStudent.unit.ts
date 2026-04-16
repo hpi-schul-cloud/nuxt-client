@@ -1,19 +1,13 @@
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksList from "./TasksList.vue";
 import FinishedTasksModule from "@/store/finished-tasks";
-import TasksModule from "@/store/tasks";
-import { OpenTasksForStudent } from "@/store/types/tasks";
-import { FINISHED_TASKS_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
+import { FINISHED_TASKS_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { EmptyState } from "@ui-empty-state";
 import { shallowMount } from "@vue/test-utils";
 
-const { overDueTasks, openTasksWithoutDueDate, openTasksWithDueDate } = mocks;
-
 describe("TasksDashboardStudent", () => {
-	let tasksModuleMock: TasksModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 
 	const mountComponent = (options = {}) => {
@@ -21,7 +15,6 @@ describe("TasksDashboardStudent", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[TASKS_MODULE_KEY]: tasksModuleMock,
 					[FINISHED_TASKS_MODULE_KEY]: finishedTasksModuleMock,
 				},
 			},
@@ -31,25 +24,7 @@ describe("TasksDashboardStudent", () => {
 		return wrapper;
 	};
 
-	const tasksModuleGetters: Partial<TasksModule> = {
-		getOpenTasksForStudent: {
-			overdue: overDueTasks,
-			withDueDate: openTasksWithDueDate,
-			noDueDate: openTasksWithoutDueDate,
-		} as unknown as OpenTasksForStudent,
-		getStatus: "completed",
-		hasTasks: true,
-		getCompletedTasksForStudent: { submitted: [], graded: [] },
-		openTasksForStudentIsEmpty: false,
-		completedTasksForStudentIsEmpty: true,
-		getCourseFilters: [],
-		getSelectedCourseFilters: [],
-		getTasksCountPerCourseStudent: { open: {}, completed: {} },
-	};
-
 	beforeEach(() => {
-		tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
-
 		finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 			getTasks: [],
 			tasksIsEmpty: true,
@@ -63,11 +38,6 @@ describe("TasksDashboardStudent", () => {
 	});
 
 	it("Should render empty state on completed tab when completed tasks are empty", async () => {
-		tasksModuleMock = createModuleMocks(TasksModule, {
-			...tasksModuleGetters,
-			completedTasksForStudentIsEmpty: true,
-		});
-
 		const wrapper = mountComponent();
 
 		// Navigate to completed tab
@@ -91,14 +61,5 @@ describe("TasksDashboardStudent", () => {
 
 		const autocomplete = wrapper.findComponent({ name: "v-autocomplete" });
 		expect(autocomplete.exists()).toBe(true);
-	});
-
-	it("Should call setCourseFilters when filter selection changes", async () => {
-		const wrapper = mountComponent();
-
-		const autocomplete = wrapper.findComponent({ name: "v-autocomplete" });
-		await autocomplete.vm.$emit("update:modelValue", ["Course 1"]);
-
-		expect(tasksModuleMock.setCourseFilters).toHaveBeenCalledWith(["Course 1"]);
 	});
 });

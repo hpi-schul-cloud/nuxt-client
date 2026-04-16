@@ -1,6 +1,6 @@
 <template>
-	<KebabMenu :aria-label="ariaLabel" data-testid="task-menu">
-		<v-list-item
+	<KebabMenu :aria-label="t('common.words.task')" data-testid="task-menu">
+		<VListItem
 			v-if="isTeacher"
 			id="task-action-edit"
 			:href="editLink"
@@ -9,12 +9,12 @@
 			role="menuitem"
 			:draggable="false"
 		>
-			<v-list-item-title>
-				<v-icon :icon="mdiPencilOutline" class="task-action-icon" />
+			<VListItemTitle>
+				<VIcon :icon="mdiPencilOutline" class="task-action-icon" />
 				{{ $t("common.actions.edit") }}
-			</v-list-item-title>
-		</v-list-item>
-		<v-list-item
+			</VListItemTitle>
+		</VListItem>
+		<VListItem
 			v-if="isTeacher && copyServiceEnabled"
 			id="task-action-copy"
 			class="task-action"
@@ -22,12 +22,12 @@
 			role="menuitem"
 			@click="onCopyTask"
 		>
-			<v-list-item-title>
-				<v-icon :icon="mdiContentCopy" class="task-action-icon" />
+			<VListItemTitle>
+				<VIcon :icon="mdiContentCopy" class="task-action-icon" />
 				{{ $t("common.actions.duplicate") }}
-			</v-list-item-title>
-		</v-list-item>
-		<v-list-item
+			</VListItemTitle>
+		</VListItem>
+		<VListItem
 			v-if="isTeacher && shareTaskEnabled"
 			id="task-action-share"
 			class="task-action"
@@ -35,43 +35,37 @@
 			role="menuitem"
 			@click="onShareTask"
 		>
-			<v-list-item-title>
-				<v-icon :icon="mdiShareVariantOutline" class="task-action-icon" />
+			<VListItemTitle>
+				<VIcon :icon="mdiShareVariantOutline" class="task-action-icon" />
 				{{ $t("common.actions.shareCopy") }}
-			</v-list-item-title>
-		</v-list-item>
-		<v-list-item
+			</VListItemTitle>
+		</VListItem>
+		<VListItem
 			v-if="isTeacher && taskIsPublished"
 			id="task-action-revert"
 			class="task-action"
 			data-testId="task-revert"
 			role="menuitem"
-			@click="handleRevertPublished"
+			@click="onRevert"
 		>
-			<v-list-item-title>
-				<v-icon :icon="mdiUndoVariant" class="task-action-icon" />
+			<VListItemTitle>
+				<VIcon :icon="mdiUndoVariant" class="task-action-icon" />
 				{{ $t("pages.room.cards.label.revert") }}
-			</v-list-item-title>
-		</v-list-item>
-		<v-list-item
-			id="task-action-finish"
-			class="task-action"
-			data-testId="task-finish"
-			role="menuitem"
-			@click="handleFinish"
-		>
-			<v-list-item-title>
+			</VListItemTitle>
+		</VListItem>
+		<VListItem id="task-action-finish" class="task-action" data-testId="task-finish" role="menuitem" @click="onFinish">
+			<VListItemTitle>
 				<template v-if="taskIsFinished">
-					<v-icon :icon="mdiUndoVariant" class="task-action-icon" />
+					<VIcon :icon="mdiUndoVariant" class="task-action-icon" />
 					{{ $t("common.labels.restore") }}
 				</template>
 				<template v-else>
-					<v-icon :icon="mdiArchiveOutline" class="task-action-icon" />
+					<VIcon :icon="mdiArchiveOutline" class="task-action-icon" />
 					{{ $t("components.molecules.TaskItemMenu.finish") }}
 				</template>
-			</v-list-item-title>
-		</v-list-item>
-		<v-list-item
+			</VListItemTitle>
+		</VListItem>
+		<VListItem
 			v-if="isTeacher"
 			id="task-action-delete"
 			class="task-action"
@@ -79,19 +73,20 @@
 			role="menuitem"
 			@click="onDelete"
 		>
-			<v-list-item-title>
-				<v-icon :icon="mdiTrashCanOutline" class="task-action-icon" />
+			<VListItemTitle>
+				<VIcon :icon="mdiTrashCanOutline" class="task-action-icon" />
 				{{ $t("common.actions.delete") }}
-			</v-list-item-title>
-		</v-list-item>
+			</VListItemTitle>
+		</VListItem>
 	</KebabMenu>
 </template>
 
-<script>
+<script setup lang="ts">
 import { finishedTasksModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
-import { askDeletion } from "@/utils/confirmation-dialog.utils.ts";
+import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { useEnvConfig } from "@data-env";
+import { useTasksOfOverview } from "@data-tasks";
 import {
 	mdiArchiveOutline,
 	mdiContentCopy,
@@ -101,117 +96,83 @@ import {
 	mdiUndoVariant,
 } from "@icons/material";
 import { KebabMenu } from "@ui-kebab-menu";
-import { defineComponent } from "vue";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	components: { KebabMenu },
-	inject: ["tasksModule"],
-	props: {
-		taskId: {
-			type: String,
-			required: true,
-		},
-		taskIsFinished: {
-			type: Boolean,
-			required: true,
-		},
-		taskIsPublished: {
-			type: Boolean,
-		},
-		taskTitle: {
-			type: String,
-			required: false,
-			default: "",
-		},
-		courseId: {
-			type: String,
-			default: "",
-		},
-		userRole: {
-			type: String,
-			required: true,
-			validator: (role) => ["student", "teacher"].includes(role),
-		},
-	},
-	emits: ["copy-task", "share-task"],
-	data() {
-		return {
-			mdiPencilOutline,
-			mdiUndoVariant,
-			mdiTrashCanOutline,
-			mdiContentCopy,
-			mdiShareVariantOutline,
-			mdiArchiveOutline,
-		};
-	},
-	computed: {
-		editLink() {
-			return `/homework/${this.taskId}/edit`;
-		},
-		copyLink() {
-			return `/homework/${this.taskId}/copy?returnUrl=/tasks`;
-		},
-		isTeacher() {
-			return this.userRole === "teacher";
-		},
-		copyServiceEnabled() {
-			return useEnvConfig().value.FEATURE_COPY_SERVICE_ENABLED;
-		},
-		shareTaskEnabled() {
-			return useEnvConfig().value.FEATURE_TASK_SHARE;
-		},
-		ariaLabel() {
-			// VUE3_UPGRADE we need a proper label here. was missing before.
-			return `${this.$t("common.words.task")}`;
-		},
-	},
-	methods: {
-		async onDelete() {
-			const confirmed = await askDeletion(
-				"components.molecules.TaskItemMenu.confirmDelete.title",
-				this.$t("components.molecules.TaskItemMenu.confirmDelete.text", { taskTitle: this.taskTitle }),
-				"warning"
-			);
+const props = withDefaults(
+	defineProps<{
+		taskId: string;
+		taskIsFinished: boolean;
+		taskIsPublished?: boolean;
+		taskTitle?: string;
+		courseId?: string;
+		userRole: "student" | "teacher";
+	}>(),
+	{
+		taskTitle: "",
+		courseId: "",
+	}
+);
 
-			if (confirmed) {
-				await this.tasksModule.deleteTask(this.taskId);
-			}
-		},
-		handleFinish() {
-			if (this.taskIsFinished) {
-				finishedTasksModule.restoreTask(this.taskId);
-			} else {
-				this.tasksModule.finishTask(this.taskId);
-			}
-		},
-		handleRevertPublished() {
-			this.tasksModule.revertPublishedTask(this.taskId);
-		},
-		onCopyTask() {
-			if (!this.copyServiceEnabled) {
-				window.location.href = this.copyLink;
-				return;
-			}
+const emit = defineEmits<{
+	"copy-task": [payload: { id: string; courseId: string | undefined; type: CopyParamsTypeEnum }];
+	"share-task": [taskId: string];
+}>();
 
-			const payload = {
-				id: this.taskId,
-				courseId: this.courseId === "" ? undefined : this.courseId,
-				type: CopyParamsTypeEnum.Task,
-			};
+const { t } = useI18n();
+const envConfig = useEnvConfig();
 
-			this.$emit("copy-task", payload);
-		},
-		onShareTask() {
-			if (this.shareTaskEnabled) {
-				this.$emit("share-task", this.taskId);
-			}
-		},
-	},
-});
+const { deleteTask, finishTask, revertPublishedTask } = useTasksOfOverview();
+
+const isTeacher = computed(() => props.userRole === "teacher");
+const editLink = computed(() => `/homework/${props.taskId}/edit`);
+const copyLink = computed(() => `/homework/${props.taskId}/copy?returnUrl=/tasks`);
+const copyServiceEnabled = computed(() => envConfig.value.FEATURE_COPY_SERVICE_ENABLED);
+const shareTaskEnabled = computed(() => envConfig.value.FEATURE_TASK_SHARE);
+
+const onDelete = async () => {
+	const confirmed = await askDeletion(
+		"components.molecules.TaskItemMenu.confirmDelete.title",
+		t("components.molecules.TaskItemMenu.confirmDelete.text", { taskTitle: props.taskTitle }),
+		"warning"
+	);
+
+	if (confirmed) {
+		await deleteTask(props.taskId);
+	}
+};
+
+const onFinish = () => {
+	if (props.taskIsFinished) {
+		finishedTasksModule.restoreTask(props.taskId);
+	} else {
+		finishTask(props.taskId);
+	}
+};
+
+const onRevert = () => revertPublishedTask(props.taskId);
+
+const onCopyTask = () => {
+	if (!copyServiceEnabled.value) {
+		window.location.href = copyLink.value;
+		return;
+	}
+
+	emit("copy-task", {
+		id: props.taskId,
+		courseId: props.courseId === "" ? undefined : props.courseId,
+		type: CopyParamsTypeEnum.Task,
+	});
+};
+
+const onShareTask = () => {
+	if (shareTaskEnabled.value) {
+		emit("share-task", props.taskId);
+	}
+};
 </script>
 
 <style lang="scss" scoped>
-// stylelint-disable sh-waqar/declaration-use-variable
 .task-action {
 	min-height: 25px !important;
 }

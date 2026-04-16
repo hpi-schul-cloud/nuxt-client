@@ -4,8 +4,7 @@ import TasksDashboardTeacher from "@/components/tasks/TasksDashboardTeacher.vue"
 import CopyModule from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
-import TasksModule from "@/store/tasks";
-import { COPY_MODULE_KEY, FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY, FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -25,28 +24,7 @@ const $route = {
 
 const $router = { replace: vi.fn(), resolve: vi.fn() };
 
-const defaultTasksModuleGetters: Partial<TasksModule> = {
-	getStatus: "completed",
-	getOpenTasksForStudent: {
-		overdue: [],
-		noDueDate: [],
-		withDueDate: [],
-	},
-	getCompletedTasksForStudent: {
-		submitted: [],
-		graded: [],
-	},
-	getTasks: [],
-	openTasksForStudentIsEmpty: true,
-	completedTasksForStudentIsEmpty: true,
-	hasTasks: false,
-	getCourseFilters: [],
-	getSelectedCourseFilters: [],
-	getTasksCountPerCourseStudent: { open: {}, completed: {} },
-};
-
 describe("TaskOverviewPage", () => {
-	let tasksModuleMock: TasksModule;
 	let copyModuleMock: CopyModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let shareModuleMock: ShareModule;
@@ -57,7 +35,6 @@ describe("TaskOverviewPage", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[TASKS_MODULE_KEY]: tasksModuleMock,
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[FINISHED_TASKS_MODULE_KEY]: finishedTasksModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
@@ -76,7 +53,6 @@ describe("TaskOverviewPage", () => {
 
 	describe("when user role is student", () => {
 		beforeEach(() => {
-			tasksModuleMock = createModuleMocks(TasksModule, defaultTasksModuleGetters);
 			copyModuleMock = createModuleMocks(CopyModule, {
 				getIsResultModalOpen: false,
 			});
@@ -107,25 +83,7 @@ describe("TaskOverviewPage", () => {
 	});
 
 	describe("when user role is teacher", () => {
-		const tasksModuleGetters: Partial<TasksModule> = {
-			getOpenTasksForTeacher: {
-				overdue: [],
-				noDueDate: [],
-				withDueDate: [],
-			},
-			getDraftTasksForTeacher: [],
-			getStatus: "completed",
-			hasTasks: false,
-			openTasksForTeacherIsEmpty: true,
-			draftsForTeacherIsEmpty: true,
-			isSubstituteFilterEnabled: false,
-			getCourseFilters: [],
-			getSelectedCourseFilters: [],
-			getTasksCountPerCourseForTeacher: { open: {}, drafts: {} },
-		};
-
 		beforeEach(() => {
-			tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
 			copyModuleMock = createModuleMocks(CopyModule, {
 				getIsResultModalOpen: false,
 			});

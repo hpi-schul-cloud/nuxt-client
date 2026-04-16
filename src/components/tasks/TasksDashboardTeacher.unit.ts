@@ -3,11 +3,8 @@ import TasksList from "./TasksList.vue";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
-import TasksModule from "@/store/tasks";
-import { OpenTasksForTeacher } from "@/store/types/tasks";
-import { COPY_MODULE_KEY, FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY, FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
@@ -15,10 +12,7 @@ import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeAll } from "vitest";
 
-const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } = mocks;
-
 describe("TasksDashboardTeacher", () => {
-	let tasksModuleMock: TasksModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let copyModuleMock: CopyModule;
 	let shareModuleMock: ShareModule;
@@ -32,7 +26,6 @@ describe("TasksDashboardTeacher", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[TASKS_MODULE_KEY]: tasksModuleMock,
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[FINISHED_TASKS_MODULE_KEY]: finishedTasksModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
@@ -44,25 +37,7 @@ describe("TasksDashboardTeacher", () => {
 		return wrapper;
 	};
 
-	const tasksModuleGetters: Partial<TasksModule> = {
-		getStatus: "completed",
-		hasTasks: true,
-		openTasksForTeacherIsEmpty: false,
-		draftsForTeacherIsEmpty: true,
-		isSubstituteFilterEnabled: false,
-		getOpenTasksForTeacher: {
-			overdue: overDueTasksTeacher,
-			withDueDate: dueDateTasksTeacher,
-			noDueDate: noDueDateTasksTeacher,
-		} as unknown as OpenTasksForTeacher,
-		getDraftTasksForTeacher: [],
-		getCourseFilters: [],
-		getSelectedCourseFilters: [],
-		getTasksCountPerCourseForTeacher: { open: {}, drafts: {} },
-	};
-
 	beforeEach(() => {
-		tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
 		finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 			getTasks: [],
 			tasksIsEmpty: true,
@@ -87,11 +62,6 @@ describe("TasksDashboardTeacher", () => {
 	});
 
 	it("should render empty state on drafts tab when drafts are empty", () => {
-		tasksModuleMock = createModuleMocks(TasksModule, {
-			...tasksModuleGetters,
-			draftsForTeacherIsEmpty: true,
-		});
-
 		const wrapper = mountComponent();
 
 		const emptyStateComponent = wrapper.findComponent(EmptyState);
@@ -133,31 +103,8 @@ describe("TasksDashboardTeacher", () => {
 		expect(copyModuleMock.copy).toHaveBeenCalledWith(payload);
 	});
 
-	it("should call setCourseFilters when filter selection changes", async () => {
-		const wrapper = mountComponent();
-
-		const autocomplete = wrapper.findComponent({ name: "v-autocomplete" });
-		await autocomplete.vm.$emit("update:modelValue", ["Course 1"]);
-
-		expect(tasksModuleMock.setCourseFilters).toHaveBeenCalledWith(["Course 1"]);
-	});
-
-	it("should call setSubstituteFilter when switch changes", async () => {
-		const wrapper = mountComponent();
-
-		const switchEl = wrapper.findComponent({ name: "v-switch" }).find('input[type="checkbox"]');
-		await switchEl.trigger("input");
-
-		expect(tasksModuleMock.setSubstituteFilter).toHaveBeenCalled();
-	});
-
 	describe("empty states", () => {
 		it("should render empty state with correct title for current tab", () => {
-			tasksModuleMock = createModuleMocks(TasksModule, {
-				...tasksModuleGetters,
-				openTasksForTeacherIsEmpty: true,
-			});
-
 			const wrapper = mountComponent();
 
 			const emptyStateComponent = wrapper.findComponent(EmptyState);

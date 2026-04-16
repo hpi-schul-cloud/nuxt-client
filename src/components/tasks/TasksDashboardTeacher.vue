@@ -46,14 +46,14 @@
 						:panel-two-count="withDueDateTasks.length + overdueTasks.length"
 						:panel-one-title="t('pages.tasks.subtitleNoDue')"
 						:panel-two-title="t('pages.tasks.subtitleWithDue')"
-						:is-loading="isLoadingTasks"
+						:is-loading="isLoading"
 						:is-empty="openForTeacher.length === 0"
 						:expanded-default="1"
 					>
 						<template #panelOne>
 							<TasksList
 								:tasks="noDueDateTasks"
-								:show-skeleton="isLoadingTasks"
+								:show-skeleton="isLoading"
 								user-role="teacher"
 								@copy-task="onCopyTask"
 								@share-task="onShareTask"
@@ -62,7 +62,7 @@
 						<template #panelTwo>
 							<TasksList
 								:tasks="overdueTasks"
-								:show-skeleton="isLoadingTasks"
+								:show-skeleton="isLoading"
 								:title="t('pages.tasks.teacher.subtitleOverDue')"
 								user-role="teacher"
 								@copy-task="onCopyTask"
@@ -70,7 +70,7 @@
 							/>
 							<TasksList
 								:tasks="withDueDateTasks"
-								:show-skeleton="isLoadingTasks"
+								:show-skeleton="isLoading"
 								:title="t('pages.tasks.subtitleOpen')"
 								user-role="teacher"
 								@copy-task="onCopyTask"
@@ -88,7 +88,7 @@
 					<TasksList
 						:tasks="drafts"
 						user-role="teacher"
-						:show-skeleton="isLoadingTasks"
+						:show-skeleton="isLoading"
 						@copy-task="onCopyTask"
 						@share-task="onShareTask"
 					/>
@@ -137,7 +137,7 @@ import ShareModule from "@/store/share";
 import { COPY_MODULE_KEY, FINISHED_TASKS_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { ShareTokenBodyParamsParentType } from "@api-server";
 import { useEnvConfig } from "@data-env";
-import { useTasks } from "@data-tasks";
+import { useTasksOfOverview } from "@data-tasks";
 import { mdiArchiveOutline, mdiCheck, mdiFormatListChecks, mdiMagnify, mdiPlaylistEdit } from "@icons/material";
 import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
 import { useUrlSearchParams } from "@vueuse/core";
@@ -182,12 +182,12 @@ const {
 	drafts,
 	openForTeacher,
 	splitByDueDate,
-	isLoading: isLoadingTasks,
+	isLoading,
 	includeSubstitute,
 	fetch: fetchTasks,
 	sortedCourseFilters,
 	selectedCourseNames,
-} = useTasks({ includeSubstitute: false });
+} = useTasksOfOverview({ includeSubstitute: false });
 
 const openTasks = computed(() => splitByDueDate(openForTeacher.value));
 const overdueTasks = computed(() => openTasks.value.overdue);

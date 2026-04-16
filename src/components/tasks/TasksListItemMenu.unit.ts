@@ -2,7 +2,6 @@ import TasksListItemMenu from "./TasksListItemMenu.vue";
 import { finishedTasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
-import TasksModule from "@/store/tasks";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
@@ -17,7 +16,6 @@ import { VBtn } from "vuetify/components";
 
 const { tasksTeacher } = mocks;
 
-let tasksModuleMock: TasksModule;
 let copyModuleMock: CopyModule;
 
 const getWrapper = (
@@ -34,7 +32,6 @@ const getWrapper = (
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
-				tasksModule: tasksModuleMock,
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 			},
 		},
@@ -59,7 +56,6 @@ describe("TasksListItemMenu", () => {
 		setupStores({
 			finishedTasksModule: FinishedTasksModule,
 		});
-		tasksModuleMock = createModuleMocks(TasksModule);
 		copyModuleMock = createModuleMocks(CopyModule);
 	});
 

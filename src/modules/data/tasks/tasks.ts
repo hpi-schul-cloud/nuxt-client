@@ -1,6 +1,7 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
+import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { nowUtc, parseUtc } from "@/utils/date-time.utils";
 import { TaskApiFactory, TaskResponse } from "@api-server";
 import { ManipulateType } from "dayjs";
@@ -16,6 +17,26 @@ export const toSortedByCreatedDate = (tasks: TaskResponse[]) =>
 
 export const isTaskOverdue = (t: TaskResponse) => t.dueDate && parseUtc(t.dueDate).isBefore(nowUtc());
 
+// === Task Status Predicates ===
+const hasNoDueDate = (t: TaskResponse) => !t.dueDate;
+const hasDueDate = (t: TaskResponse) => t.dueDate && !isTaskOverdue(t);
+const isDraft = (t: TaskResponse) => t.status.isDraft;
+const isPublished = (t: TaskResponse) => !t.status.isDraft;
+const isSubstitution = (t: TaskResponse) => t.status.isSubstitutionTeacher;
+const isVisible = (t: TaskResponse) => !t.lessonHidden;
+const hasSubmissions = (t: TaskResponse) => t.status.submitted > 0;
+const isGraded = (t: TaskResponse) => t.status.graded > 0;
+const isFullyGraded = (t: TaskResponse) => t.status.graded === t.status.submitted;
+
+// === Combined Predicates (Student) ===
+const isOpenForStudent = (t: TaskResponse) => !hasSubmissions(t) && !isGraded(t) && isVisible(t);
+const isSubmittedForStudent = (t: TaskResponse) => hasSubmissions(t) && !isGraded(t);
+const isGradedForStudent = isGraded;
+
+// === Combined Predicates (Teacher) ===
+const isGradedForTeacher = (t: TaskResponse) => hasSubmissions(t) && isFullyGraded(t);
+const isUngradedForTeacher = (t: TaskResponse) => hasSubmissions(t) && !isFullyGraded(t);
+
 type DateRange = {
 	from: { amount: number; unit: ManipulateType };
 	to: { amount: number; unit: ManipulateType };
@@ -28,9 +49,6 @@ const fetchAllTasks = async (skip = 0, limit = 100, accumulated: TaskResponse[] 
 	return skip + limit < data.data.total ? fetchAllTasks(skip + limit, limit, all) : all;
 };
 
-const hasNoDueDate = (t: TaskResponse) => !t.dueDate;
-const hasDueDate = (t: TaskResponse) => t.dueDate && !isTaskOverdue(t);
-
 export const useTasks = (
 	options: {
 		range?: DateRange;
@@ -39,9 +57,9 @@ export const useTasks = (
 		fetchImmediate?: boolean;
 	} = {}
 ) => {
-	const { execute, isRunning, error, status } = useSafeAxiosTask();
 	const { t } = useI18nGlobal();
 	const tasksApi = TaskApiFactory(undefined, "/v3", $axios);
+	const { execute, isRunning, error, status } = useSafeAxiosTask();
 
 	// === Raw Data ===
 	const allTasks = ref<TaskResponse[]>([]);
@@ -54,13 +72,11 @@ export const useTasks = (
 	// === Filter Pipeline ===
 	const tasksFilteredBySubstitute = computed(() => {
 		if (includeSubstitute.value) return allTasks.value;
-		return allTasks.value.filter((t) => !t.status.isSubstitutionTeacher);
+		return allTasks.value.filter((t) => !isSubstitution(t));
 	});
 
-	const draftsUnfiltered = computed(() =>
-		toSortedByCreatedDate(tasksFilteredBySubstitute.value.filter((t) => t.status.isDraft))
-	);
-	const publishedUnfiltered = computed(() => tasksFilteredBySubstitute.value.filter((t) => !t.status.isDraft));
+	const draftsUnfiltered = computed(() => toSortedByCreatedDate(tasksFilteredBySubstitute.value.filter(isDraft)));
+	const publishedUnfiltered = computed(() => tasksFilteredBySubstitute.value.filter(isPublished));
 
 	const tasksFilteredByCourses = computed(() => {
 		if (selectedCourseNames.value.length === 0) return tasksFilteredBySubstitute.value;
@@ -82,8 +98,8 @@ export const useTasks = (
 	});
 
 	// === Base Categories ===
-	const drafts = computed(() => toSortedByCreatedDate(tasks.value.filter((t) => t.status.isDraft)));
-	const published = computed(() => tasks.value.filter((t) => !t.status.isDraft));
+	const drafts = computed(() => toSortedByCreatedDate(tasks.value.filter(isDraft)));
+	const published = computed(() => tasks.value.filter(isPublished));
 
 	// === Due Date Grouping helper util ===
 	const splitByDueDate = <T extends TaskResponse>(list: T[]) => ({
@@ -98,34 +114,19 @@ export const useTasks = (
 	const noDueDate = computed(() => published.value.filter(hasNoDueDate));
 
 	// === Teacher Categories ===
-
-	// All submissions graded
-	const gradedForTeacher = computed(() =>
-		published.value.filter((t) => t.status.submitted > 0 && t.status.graded === t.status.submitted)
-	);
-
-	// Not yet finished
+	const gradedForTeacher = computed(() => published.value.filter(isGradedForTeacher));
 	const openForTeacher = computed(() => published.value);
+	const ungradedForTeacher = computed(() => published.value.filter(isUngradedForTeacher));
 
-	// Has submissions but not all graded
-	const ungradedForTeacher = computed(() =>
-		published.value.filter((t) => t.status.submitted > 0 && t.status.graded < t.status.submitted)
-	);
+	// === Student Categories (filtered) ===
+	const openForStudent = computed(() => published.value.filter(isOpenForStudent));
+	const submittedForStudent = computed(() => published.value.filter(isSubmittedForStudent));
+	const gradedForStudent = computed(() => published.value.filter(isGradedForStudent));
 
-	// === Student Categories ===
-
-	// Not yet submitted, not graded, visible
-	const openForStudent = computed(() =>
-		published.value.filter((t) => t.status.submitted === 0 && t.status.graded === 0 && !t.lessonHidden)
-	);
-
-	// Submitted but not graded
-	const submittedForStudent = computed(() =>
-		published.value.filter((t) => t.status.submitted > 0 && t.status.graded === 0)
-	);
-
-	// Has been graded
-	const gradedForStudent = computed(() => published.value.filter((t) => t.status.graded > 0));
+	// === Student Categories (unfiltered - for counts) ===
+	const openForStudentUnfiltered = computed(() => publishedUnfiltered.value.filter(isOpenForStudent));
+	const submittedForStudentUnfiltered = computed(() => publishedUnfiltered.value.filter(isSubmittedForStudent));
+	const gradedForStudentUnfiltered = computed(() => publishedUnfiltered.value.filter(isGradedForStudent));
 
 	// === Filter Helpers ===
 	const uniqCourseFilters = computed(() =>
@@ -162,12 +163,7 @@ export const useTasks = (
 		range.value = undefined;
 	};
 
-	// === Data Actions (with auto-refetch) ===
-	const fetch = async () => {
-		const { success, result } = await execute(fetchAllTasks);
-		if (success) allTasks.value = result;
-		return result;
-	};
+	const fetch = async () => await execute(fetchAllTasks);
 
 	const deleteTask = async (taskId: string) => {
 		const { success } = await execute(
@@ -197,7 +193,10 @@ export const useTasks = (
 	};
 
 	if (options.fetchImmediate !== false) {
-		onMounted(fetch);
+		onMounted(async () => {
+			const { success, result } = await fetch();
+			if (success && result) allTasks.value = result;
+		});
 	}
 
 	return {
@@ -228,6 +227,11 @@ export const useTasks = (
 		submittedForStudent,
 		gradedForStudent,
 
+		// Unfiltered Student Categories (for counts)
+		openForStudentUnfiltered,
+		submittedForStudentUnfiltered,
+		gradedForStudentUnfiltered,
+
 		// Filter State
 		range,
 		selectedCourseNames,
@@ -235,8 +239,6 @@ export const useTasks = (
 
 		// Filter Helpers
 		sortedCourseFilters,
-		// hasFiltersSelected,
-		// countByCourseName,
 
 		// Filter Actions
 		setRange,
@@ -256,3 +258,5 @@ export const useTasks = (
 		error,
 	};
 };
+
+export const useTasksOfOverview = createTestableSharedComposable(useTasks);
