@@ -2,15 +2,13 @@ import { useBoardStore } from "../Board.store";
 import { useCardStore } from "../Card.store";
 import { useConnectionErrorHandling } from "./socket-error-handler";
 import { Action } from "@/types/board/ActionFactory";
-import { $axios } from "@/utils/api";
-import { BoardErrorReportApiFactory } from "@api-server";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
 import { useTimeoutFn } from "@vueuse/shared";
 import { io, type Socket } from "socket.io-client";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const dispatchHandlers: Array<(action: Action) => void> = [];
@@ -27,15 +25,22 @@ export const resetSocketStateForTesting = () => {
 };
 
 export const useSocketConnection = (dispatch: (action: Action) => void) => {
-	// TODO: move dispatch-function from initial call to method in order to allow status checks without dispatch
 	dispatchHandlers.push(dispatch);
 	const boardStore = useBoardStore();
 	const cardStore = useCardStore();
 	const { t } = useI18n();
 
-	const boardErrorReportApi = BoardErrorReportApiFactory(undefined, "/v3", $axios);
-
 	const { isJwtExpired } = useSessionBroadcast();
+
+	watch(isJwtExpired, (newValue) => {
+		if (newValue) {
+			logger.log("JWT expired - disconnecting socket");
+			disconnectSocket();
+		} else {
+			logger.log("JWT valid - connecting socket");
+			getConnectedSocket();
+		}
+	});
 
 	const getConnectedSocket = () => {
 		if (instance === null && isJwtExpired.value === false) {
