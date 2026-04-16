@@ -45,6 +45,7 @@ const JWT_TIMER_ENDPOINT = "/v1/accounts/jwtTimer";
 
 // these constants are also used inside of the schulcloud-client to communicate logouts between both application parts
 const BROADCAST_CHANNEL_NAME = "user-session-channel";
+const BROADCAST_MESSAGE_LOGIN = "login";
 const BROADCAST_MESSAGE_LOGOUT = "logout";
 const BROADCAST_MESSAGE_EXPIRED = "expired";
 
@@ -75,6 +76,11 @@ export const useSessionBroadcast = (options?: SessionBroadcastOptions) => {
 			// handle incoming broadcast messages to sync session state across tabs
 			broadcastChannel.addEventListener("message", (event) => {
 				const message = event.data;
+
+				if (message === BROADCAST_MESSAGE_LOGIN) {
+					setJwtExpired(false);
+					return;
+				}
 
 				if (message === BROADCAST_MESSAGE_LOGOUT) {
 					setJwtExpired(true);
@@ -115,6 +121,13 @@ export const useSessionBroadcast = (options?: SessionBroadcastOptions) => {
 		const channel = getBroadcastChannel();
 		if (channel) {
 			channel.postMessage(`${state ?? ""}:${time ?? "0"}`);
+		}
+	};
+
+	const sendLogin = () => {
+		const channel = getBroadcastChannel();
+		if (channel) {
+			channel.postMessage(BROADCAST_MESSAGE_LOGIN);
 		}
 	};
 
@@ -160,6 +173,7 @@ export const useSessionBroadcast = (options?: SessionBroadcastOptions) => {
 		isJwtExpired: readonly(isJwtExpired),
 		setJwtExpired,
 		onLogoutEvent,
+		sendLogin,
 		sendLogout,
 		sendStateAndTime,
 		close,
