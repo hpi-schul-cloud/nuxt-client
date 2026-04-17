@@ -1979,6 +1979,7 @@ export default {
 		"Verbindungsfehler: Die Echtzeit-Session konnte nicht hergestellt werden. Bitte Verbindung überprüfen oder Seite neu laden.",
 	"error.4401": "Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
 	"error.ws.connectionLost": "Die Verbindung wurde unterbrochen. Versuche, die Verbindung wiederherzustellen...",
+	"error.ws.connectionLost.back": "Zurück zur Übersicht",
 	"tldraw.error.ws.4400": "Der Raumname fehlt in den URL-Parametern",
 	"tldraw.error.ws.4404": "Whiteboard mit diesem Namen wurde nicht gefunden",
 	"ui-confirmation-dialog.ask-delete": '{itemType} "{itemTitle}" wirklich löschen?',

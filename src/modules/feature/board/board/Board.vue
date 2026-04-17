@@ -126,7 +126,7 @@
 					</div>
 					<VProgressCircular color="primary" indeterminate :size="36" class="my-4" />
 					<div>
-						<VBtn @click="onBackToOverview">{{ t("pages.content.index.backToOverview") }}</VBtn>
+						<VBtn @click="onBackToOverview">{{ t("error.ws.connectionLost.back") }}</VBtn>
 					</div>
 				</VCard-text>
 			</VCard>
