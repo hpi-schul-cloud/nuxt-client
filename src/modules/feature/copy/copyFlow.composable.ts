@@ -1,4 +1,5 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { useAwaitableAction } from "@/composables/awaitable-action.composable";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { $axios } from "@/utils/api";
 import { BoardApiFactory, CourseRoomsApiFactory, TaskApiFactory } from "@api-server";
@@ -7,9 +8,9 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export const useCopyFlow = () => {
-	let resolvePromise: ((confirmed: boolean) => void) | null = null;
+	const confirmAction = useAwaitableAction<boolean>();
 
-	const isDialogOpen = ref(false);
+	const isDialogOpen = confirmAction.isActive;
 	const copyItemType = ref<CopyParamsTypeEnum>(CopyParamsTypeEnum.Course);
 
 	const { t } = useI18n();
@@ -20,25 +21,17 @@ export const useCopyFlow = () => {
 	const taskApi = TaskApiFactory(undefined, "/v3", $axios);
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 
-	const confirm = (type: CopyParamsTypeEnum): Promise<boolean> => {
+	const confirm = (type: CopyParamsTypeEnum) => {
 		copyItemType.value = type;
-		isDialogOpen.value = true;
-
-		return new Promise((resolve) => {
-			resolvePromise = resolve;
-		});
+		return confirmAction.start();
 	};
 
 	const onConfirmed = () => {
-		isDialogOpen.value = false;
-		resolvePromise?.(true);
-		resolvePromise = null;
+		confirmAction.resolve(true);
 	};
 
 	const onCancelled = () => {
-		isDialogOpen.value = false;
-		resolvePromise?.(false);
-		resolvePromise = null;
+		confirmAction.cancel();
 	};
 
 	const withCopyLoading = <T>(fn: () => Promise<T>) =>
@@ -50,20 +43,20 @@ export const useCopyFlow = () => {
 			return { result: undefined, error: undefined };
 		}
 
-		const { result, error } = await withCopyLoading(() =>
+		const { result, error, success } = await withCopyLoading(() =>
 			execute(
 				() => courseRoomApi.courseRoomsControllerCopyCourse(courseId),
 				t("common.notifications.errors.notDuplicated", { type: t("common.labels.course") })
 			)
 		);
 
-		if (!error && result?.data.id !== undefined) {
+		if (success && result?.data.id !== undefined) {
 			notifySuccess(t("components.molecules.copyResult.course.successfullyCopied"));
 			const sanitizedId = result.data.id.replace(/[^a-z\d]/g, "");
 			return { result: { id: sanitizedId }, error: undefined };
 		}
 
-		return { result: undefined, error };
+		return { result: undefined, error, success };
 	};
 
 	const executeCopyTask = async (taskId: string, targetCourseId: string) => {
@@ -72,19 +65,19 @@ export const useCopyFlow = () => {
 			return { result: undefined, error: undefined };
 		}
 
-		const { result, error } = await withCopyLoading(() =>
+		const { result, error, success } = await withCopyLoading(() =>
 			execute(
 				() => taskApi.taskControllerCopyTask(taskId, { courseId: targetCourseId }),
 				t("common.notifications.errors.notDuplicated", { type: t("common.labels.task") })
 			)
 		);
 
-		if (!error && result?.data.id !== undefined) {
+		if (success && result?.data.id !== undefined) {
 			notifySuccess(t("components.molecules.copyResult.task.successfullyCopied"));
 			return { result: { id: result.data.id }, error: undefined };
 		}
 
-		return { result: undefined, error };
+		return { result: undefined, error, success };
 	};
 
 	const executeCopyLesson = async (lessonId: string, targetCourseId: string) => {
@@ -93,19 +86,19 @@ export const useCopyFlow = () => {
 			return { result: undefined, error: undefined };
 		}
 
-		const { result, error } = await withCopyLoading(() =>
+		const { result, error, success } = await withCopyLoading(() =>
 			execute(
 				() => courseRoomApi.courseRoomsControllerCopyLesson(lessonId, { courseId: targetCourseId }),
 				t("common.notifications.errors.notDuplicated", { type: t("common.labels.lesson") })
 			)
 		);
 
-		if (!error && result?.data.id !== undefined) {
+		if (success && result?.data.id !== undefined) {
 			notifySuccess(t("components.molecules.copyResult.lesson.successfullyCopied"));
 			return { result: { id: result.data.id }, error: undefined };
 		}
 
-		return { result: undefined, error };
+		return { result: undefined, error, success };
 	};
 
 	const executeCopyBoard = async (boardId: string) => {
@@ -114,14 +107,14 @@ export const useCopyFlow = () => {
 			return { result: undefined, error: undefined };
 		}
 
-		const { result, error } = await withCopyLoading(() =>
+		const { result, error, success } = await withCopyLoading(() =>
 			execute(
 				() => boardApi.boardControllerCopyBoard(boardId),
 				t("common.notifications.errors.notDuplicated", { type: t("common.labels.board") })
 			)
 		);
 
-		if (!error && result?.data.id !== undefined) {
+		if (success && result?.data.id !== undefined) {
 			notifySuccess(t("components.molecules.copyResult.board.successfullyCopied"));
 			return { result: { id: result.data.id }, error: undefined };
 		}
