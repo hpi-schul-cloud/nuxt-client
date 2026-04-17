@@ -39,11 +39,9 @@ export const useCopyFlow = () => {
 
 	const executeCopyCourse = async (courseId: string) => {
 		const confirmed = await confirm(CopyParamsTypeEnum.Course);
-		if (!confirmed) {
-			return { result: undefined, error: undefined };
-		}
+		if (!confirmed) return;
 
-		const { result, error, success } = await withCopyLoading(() =>
+		const { result, success } = await withCopyLoading(() =>
 			execute(
 				() => courseRoomApi.courseRoomsControllerCopyCourse(courseId),
 				t("common.notifications.errors.notDuplicated", { type: t("common.labels.course") })
@@ -53,19 +51,15 @@ export const useCopyFlow = () => {
 		if (success && result?.data.id !== undefined) {
 			notifySuccess(t("components.molecules.copyResult.course.successfullyCopied"));
 			const sanitizedId = result.data.id.replace(/[^a-z\d]/g, "");
-			return { result: { id: sanitizedId }, error: undefined };
+			return sanitizedId;
 		}
-
-		return { result: undefined, error, success };
 	};
 
 	const executeCopyTask = async (taskId: string, targetCourseId: string) => {
 		const confirmed = await confirm(CopyParamsTypeEnum.Task);
-		if (!confirmed) {
-			return { result: undefined, error: undefined };
-		}
+		if (!confirmed) return;
 
-		const { result, error, success } = await withCopyLoading(() =>
+		const { result, success } = await withCopyLoading(() =>
 			execute(
 				() => taskApi.taskControllerCopyTask(taskId, { courseId: targetCourseId }),
 				t("common.notifications.errors.notDuplicated", { type: t("common.labels.task") })
@@ -74,19 +68,15 @@ export const useCopyFlow = () => {
 
 		if (success && result?.data.id !== undefined) {
 			notifySuccess(t("components.molecules.copyResult.task.successfullyCopied"));
-			return { result: { id: result.data.id }, error: undefined };
+			return result.data.id;
 		}
-
-		return { result: undefined, error, success };
 	};
 
 	const executeCopyLesson = async (lessonId: string, targetCourseId: string) => {
 		const confirmed = await confirm(CopyParamsTypeEnum.Lesson);
-		if (!confirmed) {
-			return { result: undefined, error: undefined };
-		}
+		if (!confirmed) return;
 
-		const { result, error, success } = await withCopyLoading(() =>
+		const { result, success } = await withCopyLoading(() =>
 			execute(
 				() => courseRoomApi.courseRoomsControllerCopyLesson(lessonId, { courseId: targetCourseId }),
 				t("common.notifications.errors.notDuplicated", { type: t("common.labels.lesson") })
@@ -95,19 +85,15 @@ export const useCopyFlow = () => {
 
 		if (success && result?.data.id !== undefined) {
 			notifySuccess(t("components.molecules.copyResult.lesson.successfullyCopied"));
-			return { result: { id: result.data.id }, error: undefined };
+			return result.data.id;
 		}
-
-		return { result: undefined, error, success };
 	};
 
 	const executeCopyBoard = async (boardId: string) => {
 		const confirmed = await confirm(CopyParamsTypeEnum.ColumnBoard);
-		if (!confirmed) {
-			return { result: undefined, error: undefined };
-		}
+		if (!confirmed) return;
 
-		const { result, error, success } = await withCopyLoading(() =>
+		const { result, success } = await withCopyLoading(() =>
 			execute(
 				() => boardApi.boardControllerCopyBoard(boardId),
 				t("common.notifications.errors.notDuplicated", { type: t("common.labels.board") })
@@ -116,10 +102,8 @@ export const useCopyFlow = () => {
 
 		if (success && result?.data.id !== undefined) {
 			notifySuccess(t("components.molecules.copyResult.board.successfullyCopied"));
-			return { result: { id: result.data.id }, error: undefined };
+			return result.data.id;
 		}
-
-		return { result: undefined, error };
 	};
 
 	return {
