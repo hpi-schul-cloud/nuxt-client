@@ -13,6 +13,7 @@
 <script setup lang="ts">
 import NavigationBar from "@/components/legacy/NavigationBar.vue";
 import TheFooter from "@/components/legacy/TheFooter.vue";
+import { imgLogoMonoAssets } from "@/utils/image.utils";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { computed, watch } from "vue";
@@ -27,14 +28,7 @@ const router = useRouter();
 
 const ghostBaseUrl = computed(() => useEnvConfig().value.GHOST_BASE_URL);
 
-const themeAssets = {
-	brb: { logo: new URL("/src/assets/img/logo/brb/logo-image-mono.svg", import.meta.url).href },
-	n21: { logo: new URL("/src/assets/img/logo/n21/logo-image-mono.svg", import.meta.url).href },
-	thr: { logo: new URL("/src/assets/img/logo/thr/logo-image-mono.svg", import.meta.url).href },
-	default: { logo: new URL("/src/assets/img/logo/default/logo-image-mono.svg", import.meta.url).href },
-};
-
-const logo = computed(() => themeAssets[useEnvConfig().value.SC_THEME]?.logo);
+const logo = computed(() => imgLogoMonoAssets[useEnvConfig().value.SC_THEME]?.logo);
 
 const navbarItems = computed(() => [
 	{

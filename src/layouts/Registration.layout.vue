@@ -19,6 +19,7 @@
 
 <script setup lang="ts">
 import TheFooter from "@/components/legacy/TheFooter.vue";
+import { imgLogoMonoAssets } from "@/utils/image.utils";
 import { useEnvConfig } from "@data-env";
 import { AlertContainer, ApplicationError } from "@ui-layout";
 import { computed } from "vue";
@@ -27,14 +28,7 @@ import { useDisplay } from "vuetify";
 const { smAndDown } = useDisplay();
 const isSmallDevice = computed(() => smAndDown.value);
 
-const themeAssets = {
-	brb: { logo: new URL("/src/assets/img/logo/brb/logo-image-mono.svg", import.meta.url).href },
-	n21: { logo: new URL("/src/assets/img/logo/n21/logo-image-mono.svg", import.meta.url).href },
-	thr: { logo: new URL("/src/assets/img/logo/thr/logo-image-mono.svg", import.meta.url).href },
-	default: { logo: new URL("/src/assets/img/logo/default/logo-image-mono.svg", import.meta.url).href },
-};
-
-const logo = computed(() => themeAssets[useEnvConfig().value.SC_THEME]?.logo);
+const logo = computed(() => imgLogoMonoAssets[useEnvConfig().value.SC_THEME]?.logo);
 </script>
 
 <style lang="scss" scoped>
