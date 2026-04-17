@@ -97,6 +97,14 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 			});
 	};
 
+	socket.on("connect", () => {
+		connectionState = ConnectionState.CONNECTED;
+	});
+
+	socket.on("disconnect", () => {
+		connectionState = ConnectionState.DISCONNECTED;
+	});
+
 	const manager = socket.io;
 
 	manager.on("reconnect_attempt", (attempt) => {

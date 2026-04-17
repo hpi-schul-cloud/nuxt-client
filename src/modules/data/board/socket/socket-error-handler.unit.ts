@@ -102,6 +102,7 @@ vi.mock("@util-logger", () => ({
 
 describe("socket-error-handler", () => {
 	beforeEach(() => {
+		vi.resetModules();
 		vi.useFakeTimers();
 		vi.clearAllMocks();
 		// Default URL and userAgent
@@ -251,5 +252,39 @@ describe("socket-error-handler", () => {
 
 		// expect it to have been invoked at least twice (initial + retry)
 		expect(boardErrorReportApiMock.boardErrorReportControllerReportError.mock.calls.length).toBeGreaterThanOrEqual(2);
+	});
+
+	it("sets connectionState to CONNECTED when socket connect event is emitted", async () => {
+		const useConnectionErrorHandling = await importHandler();
+		useConnectionErrorHandling(socket);
+
+		// Get the registered connect listeners and call them directly
+		const connectListeners = socket.listeners("connect");
+		expect(connectListeners.length).toBeGreaterThan(0);
+
+		// Call the last registered listener (from useConnectionErrorHandling)
+		const handler = connectListeners.at(-1) as () => void;
+		handler();
+
+		// Get fresh state by calling the composable again on the same module
+		const { getState } = useConnectionErrorHandling(socket);
+		expect(getState.value.connectionState).toBe("connected");
+	});
+
+	it("sets connectionState to DISCONNECTED when socket disconnect event is emitted", async () => {
+		const useConnectionErrorHandling = await importHandler();
+		useConnectionErrorHandling(socket);
+
+		// Get the registered disconnect listeners and call the handler directly
+		const disconnectListeners = socket.listeners("disconnect");
+		expect(disconnectListeners.length).toBeGreaterThan(0);
+
+		// Call the handler
+		const handler = disconnectListeners.at(-1) as () => void;
+		handler();
+
+		// Get fresh state by calling the composable again on the same module
+		const { getState } = useConnectionErrorHandling(socket);
+		expect(getState.value.connectionState).toBe("disconnected");
 	});
 });
