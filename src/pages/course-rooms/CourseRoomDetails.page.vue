@@ -444,30 +444,30 @@ const copyFlow = useCopyFlow();
 const onCopyRequested = async ({ id, type }: { id: string; type: CopyParamsTypeEnum }) => {
 	switch (type) {
 		case CopyParamsTypeEnum.Course: {
-			const { result } = await copyFlow.executeCopyCourse(id);
-			if (result?.id) {
-				await router.replace(`/rooms/${result.id}`);
-				await initialize(result.id);
+			const copyId = await copyFlow.executeCopyCourse(id);
+			if (copyId) {
+				await router.replace(`/rooms/${copyId}`);
+				await initialize(copyId);
 			}
 			break;
 		}
 		case CopyParamsTypeEnum.Task: {
-			const { error } = await copyFlow.executeCopyTask(id, courseId.value);
-			if (!error) {
+			const copyId = await copyFlow.executeCopyTask(id, courseId.value);
+			if (copyId) {
 				await courseRoomDetailsModule.fetchContent(courseId.value);
 			}
 			break;
 		}
 		case CopyParamsTypeEnum.Lesson: {
-			const { error } = await copyFlow.executeCopyLesson(id, courseId.value);
-			if (!error) {
+			const copyId = await copyFlow.executeCopyLesson(id, courseId.value);
+			if (copyId) {
 				await courseRoomDetailsModule.fetchContent(courseId.value);
 			}
 			break;
 		}
 		case CopyParamsTypeEnum.ColumnBoard: {
-			const { error } = await copyFlow.executeCopyBoard(id);
-			if (!error) {
+			const copyId = await copyFlow.executeCopyBoard(id);
+			if (copyId) {
 				await courseRoomDetailsModule.fetchContent(courseId.value);
 			}
 			break;
