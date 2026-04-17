@@ -172,7 +172,7 @@ const {
 	openForStudentUnfiltered,
 	submittedForStudentUnfiltered,
 	gradedForStudentUnfiltered,
-} = useTasks({ includeSubstitute: false });
+} = useTasks();
 
 onMounted(async () => {
 	await fetchFinishedTasks();

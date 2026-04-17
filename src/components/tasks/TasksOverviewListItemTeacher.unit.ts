@@ -286,7 +286,7 @@ describe("TasksOverviewListItemTeacher", () => {
 			const lessonChipSmall = wrapper.find("[data-testid='task-lesson-chip-small']");
 			const taskStatus = wrapper.find("[data-testid='task-status']");
 			const taskStatusSmall = wrapper.find("[data-testid='task-status-small']");
-			const hasUnpublished = wrapper.vm.hasUnpublishedLesson;
+			const hasUnpublished = wrapper.vm.isUnpublishedLesson;
 
 			expect(hasUnpublished).toBe(true);
 			expect(lessonChipLarge.exists()).toBe(true);

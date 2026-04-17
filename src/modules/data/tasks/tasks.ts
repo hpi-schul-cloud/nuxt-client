@@ -44,29 +44,13 @@ type DateRange = {
 	to: { amount: number; unit: ManipulateType };
 };
 
-const FINISHED_TASKS_LIMIT = 1;
+const PAGE_SIZE = 5;
 
 const fetchAllTasks = async (skip = 0, limit = 100, accumulated: TaskResponse[] = []): Promise<TaskResponse[]> => {
 	const tasksApi = TaskApiFactory(undefined, "/v3", $axios);
 	const data = await tasksApi.taskControllerFindAll(skip, limit);
 	const all = [...accumulated, ...data.data.data];
 	return skip + limit < data.data.total ? fetchAllTasks(skip + limit, limit, all) : all;
-};
-
-const fetchFinishedTasksSkip = async (
-	skip: number,
-	targetSkip: number,
-	accumulated: TaskResponse[] = []
-): Promise<{ tasks: TaskResponse[]; total: number }> => {
-	const tasksApi = TaskApiFactory(undefined, "/v3", $axios);
-
-	const response = await tasksApi.taskControllerFindAllFinished(skip, FINISHED_TASKS_LIMIT);
-	const all = [...accumulated, ...response.data.data];
-	const nextSkip = skip + FINISHED_TASKS_LIMIT;
-
-	return nextSkip < targetSkip && nextSkip < response.data.total
-		? fetchFinishedTasksSkip(nextSkip, targetSkip, all)
-		: { tasks: all, total: response.data.total };
 };
 
 export const useTasks = (
@@ -77,25 +61,27 @@ export const useTasks = (
 		fetchImmediate?: boolean;
 	} = {}
 ) => {
+	const tasksApi = TaskApiFactory(undefined, "/v3", $axios);
 	const { t } = useI18nGlobal();
-	const { execute, isRunning, error, status } = useSafeAxiosTask();
-	const { execute: executeFinished, isRunning: isLoadingFinished, error: errorFinished } = useSafeAxiosTask();
+	const { execute: executeTasks, isRunning: isLoadingTasks, error, status } = useSafeAxiosTask();
+	const { execute: executeFinished, isRunning: isLoadingFinishedTasks, error: errorFinished } = useSafeAxiosTask();
 
 	// === Raw Data ===
 	const allTasks = ref<TaskResponse[]>([]);
 
-	// === Finished Tasks Data ===
+	// === Finished Tasks State ===
 	const finishedTasks = ref<TaskResponse[]>([]);
-	const finishedSkip = ref(0);
-	const finishedTotal = ref(0);
+	const finishedPage = ref(0);
+	const finishedTotal = ref<number | undefined>(undefined);
+
+	const hasMoreFinishedTasks = computed(
+		() => finishedTotal.value !== undefined && finishedTasks.value.length < finishedTotal.value
+	);
 
 	// === Filter State ===
 	const range = ref(options.range);
 	const selectedCourseNames = ref(options.courseNames ?? []);
 	const includeSubstitute = ref(options.includeSubstitute ?? false);
-
-	// === Finished Tasks Computed ===
-	const hasMoreFinishedTasks = computed(() => finishedSkip.value < finishedTotal.value);
 
 	// === Filter Pipeline ===
 	const tasksFilteredBySubstitute = computed(() => {
@@ -192,37 +178,47 @@ export const useTasks = (
 	};
 
 	const fetchTasks = async () => {
-		const { success, result } = await execute(fetchAllTasks);
+		const { success, result } = await executeTasks(fetchAllTasks);
 		if (success) allTasks.value = result;
 	};
 
-	// === Finished Tasks Actions ===
-	const fetchFinishedTasks = async (reset = false) => {
-		const previousSkip = finishedSkip.value;
-
-		if (reset) {
-			finishedSkip.value = 0;
-			finishedTasks.value = [];
-		}
-
-		if (!reset && finishedSkip.value > 0 && finishedSkip.value >= finishedTotal.value) {
-			return { success: true, result: finishedTasks.value };
-		}
-
-		const targetSkip = reset ? Math.max(previousSkip, FINISHED_TASKS_LIMIT) : finishedSkip.value + FINISHED_TASKS_LIMIT;
+	const fetchFinishedTasks = async () => {
+		const limit = PAGE_SIZE * Math.max(finishedPage.value, 1);
 
 		const { success, result } = await executeFinished(
-			() => fetchFinishedTasksSkip(finishedSkip.value, targetSkip),
+			() => tasksApi.taskControllerFindAllFinished(0, limit),
+			t("common.notifications.errors.notLoaded", {
+				type: t("common.words.tasks"),
+			})
+		);
+
+		if (success && result) {
+			finishedTasks.value = result.data.data;
+			finishedTotal.value = result.data.total;
+		}
+	};
+
+	const loadMoreFinishedTasks = async () => {
+		const isUninitialized = finishedTotal.value === undefined;
+
+		if (!isUninitialized && !hasMoreFinishedTasks.value) return;
+
+		const nextPage = isUninitialized ? 0 : finishedPage.value + 1;
+		const skip = nextPage * PAGE_SIZE;
+
+		const { success, result } = await executeFinished(
+			() => {
+				const tasksApi = TaskApiFactory(undefined, "/v3", $axios);
+				return tasksApi.taskControllerFindAllFinished(skip, PAGE_SIZE);
+			},
 			t("common.notifications.errors.notLoaded", { type: t("common.words.tasks") })
 		);
 
 		if (success && result) {
-			finishedTasks.value = [...finishedTasks.value, ...result.tasks];
-			finishedSkip.value = targetSkip;
-			finishedTotal.value = result.total;
+			finishedTasks.value = isUninitialized ? result.data.data : [...finishedTasks.value, ...result.data.data];
+			finishedTotal.value = result.data.total;
+			finishedPage.value = nextPage;
 		}
-
-		return { success, result: finishedTasks.value };
 	};
 
 	if (options.fetchImmediate !== false) {
@@ -283,10 +279,11 @@ export const useTasks = (
 		// Data Actions
 		fetchTasks,
 		fetchFinishedTasks,
+		loadMoreFinishedTasks,
 
 		// Status
-		isLoading: isRunning,
-		isLoadingFinished,
+		isLoadingTasks,
+		isLoadingFinishedTasks,
 		status,
 		error,
 		errorFinished,
@@ -334,4 +331,4 @@ export const useTaskActions = () => {
 	};
 };
 
-export const useTasksOfOverview = createTestableSharedComposable(useTasks);
+export const useTasksOfOverview = createTestableSharedComposable(() => useTasks({ includeSubstitute: false }));

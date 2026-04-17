@@ -39,7 +39,7 @@
 		</div>
 
 		<div class="mx-auto mt-5">
-			<VWindow class="padding-bottom" :model-value="activeTab">
+			<VWindow :model-value="activeTab">
 				<VWindowItem :value="TaskTab.OPEN">
 					<TasksOverviewPanels
 						:panel-one-count="noDueDateTasks.length"
@@ -89,9 +89,9 @@
 				<VWindowItem :value="TaskTab.FINISHED">
 					<TasksOverviewList
 						:tasks="finishedTasks"
-						:is-loading-more-items="isLoadingFinished"
+						:is-loading-more-items="isLoadingFinishedTasks"
 						has-pagination
-						@load-more-tasks="fetchFinishedTasks"
+						@load-more-tasks="loadMoreFinishedTasks"
 					>
 						<template #default="{ task }">
 							<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
@@ -133,7 +133,7 @@ import { mdiArchiveOutline, mdiCheck, mdiFormatListChecks, mdiMagnify, mdiPlayli
 import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
 import { useUrlSearchParams } from "@vueuse/core";
 import { countBy } from "lodash-es";
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const shareModule: ShareModule = injectStrict(SHARE_MODULE_KEY);
@@ -168,18 +168,14 @@ const {
 	drafts,
 	openForTeacher,
 	splitByDueDate,
-	isLoadingFinished,
+	isLoadingFinishedTasks,
 	includeSubstitute,
 	fetchTasks,
-	fetchFinishedTasks,
+	loadMoreFinishedTasks,
 	finishedTasks,
 	sortedCourseFilters,
 	selectedCourseNames,
-} = useTasksOfOverview({ includeSubstitute: false });
-
-onMounted(async () => {
-	await fetchFinishedTasks();
-});
+} = useTasksOfOverview();
 
 const openTasks = computed(() => splitByDueDate(openForTeacher.value));
 const overdueTasks = computed(() => openTasks.value.overdue);
@@ -228,10 +224,6 @@ const onShareTask = (taskId: string) => {
 <style lang="scss" scoped>
 @use "sass:map";
 @use "@/styles/settings" as *;
-
-.padding-bottom {
-	padding-bottom: 140px;
-}
 
 .filter-section {
 	gap: 16px;

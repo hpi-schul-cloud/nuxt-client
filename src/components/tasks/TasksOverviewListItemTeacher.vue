@@ -40,7 +40,7 @@
 
 			<!-- item additional info -->
 			<section
-				v-if="hasUnpublishedLesson"
+				v-if="isUnpublishedLesson"
 				data-testid="task-lesson-chip-large"
 				class="hidden-xs mr-8 pl-4 align-self-center"
 			>
@@ -79,7 +79,7 @@
 					@revert-task="onRevertPublishedTask"
 				/>
 			</VListItemAction>
-			<VProgressCircular v-if="isMutatingOrLoadingTasks" class="position-absolute right-0" indeterminate size="16" />
+			<VProgressCircular v-if="isMutating" class="position-absolute right-0" indeterminate size="16" />
 		</div>
 	</VListItem>
 </template>
@@ -121,8 +121,6 @@ const onDelete = async (taskId: string) => {
 		await fetchTasks();
 	}
 };
-
-const isMutatingOrLoadingTasks = computed(() => isMutating.value || isLoading.value);
 
 const emit = defineEmits<{
 	"copy-task": [payload: CopyParams];
