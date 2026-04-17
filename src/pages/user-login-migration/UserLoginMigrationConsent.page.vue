@@ -52,56 +52,41 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import { injectStrict, SYSTEMS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useUserLoginMigration } from "@data-user-login-migration";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, defineComponent, onMounted, Ref, ref } from "vue";
+import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "UserLoginMigrationConsent",
-	setup() {
-		const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
-		const { userLoginMigration, fetchLatestUserLoginMigrationForSchool } = useUserLoginMigration();
-		const { t } = useI18n();
+const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
+const { userLoginMigration, fetchLatestUserLoginMigrationForSchool } = useUserLoginMigration();
+const { t } = useI18n();
 
-		const pageTitle = buildPageTitle(t("pages.userMigration.title"));
-		useTitle(pageTitle);
+const pageTitle = buildPageTitle(t("pages.userMigration.title"));
+useTitle(pageTitle);
 
-		const getSystemName = (): string =>
-			systemsModule?.getSystems.find(
-				(system: System): boolean => system.id === userLoginMigration.value?.targetSystemId
-			)?.name ?? "";
+const getSystemName = (): string =>
+	systemsModule?.getSystems.find((system: System): boolean => system.id === userLoginMigration.value?.targetSystemId)
+		?.name ?? "";
 
-		const migrationDescription: ComputedRef<string> = computed(() =>
-			userLoginMigration.value?.mandatorySince
-				? "pages.userMigration.description.firstParagraph.fromSourceMandatory"
-				: "pages.userMigration.description.firstParagraph.fromSource"
-		);
+const migrationDescription: ComputedRef<string> = computed(() =>
+	userLoginMigration.value?.mandatorySince
+		? "pages.userMigration.description.firstParagraph.fromSourceMandatory"
+		: "pages.userMigration.description.firstParagraph.fromSource"
+);
 
-		const canSkipMigration: ComputedRef<boolean> = computed(() => !userLoginMigration.value?.mandatorySince);
+const canSkipMigration: ComputedRef<boolean> = computed(() => !userLoginMigration.value?.mandatorySince);
 
-		const isLoading: Ref<boolean> = ref(true);
+const isLoading: Ref<boolean> = ref(true);
 
-		onMounted(async () => {
-			await fetchLatestUserLoginMigrationForSchool();
-			await systemsModule.fetchSystems();
-			isLoading.value = false;
-		});
-
-		return {
-			isLoading,
-			migrationDescription,
-			canSkipMigration,
-			getSystemName,
-			userLoginMigration,
-			t,
-		};
-	},
+onMounted(async () => {
+	await fetchLatestUserLoginMigrationForSchool();
+	await systemsModule.fetchSystems();
+	isLoading.value = false;
 });
 </script>
 
