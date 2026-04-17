@@ -99,12 +99,14 @@
 		tabindex="0"
 		@drag-from-group="dragFromGroup"
 	/>
-	<ImportFlow
-		:is-active="isImportMode"
-		:token="importToken"
-		:destinations="courses.filter((course) => !course.isLocked)"
-		:destination-type="BoardExternalReferenceType.COURSE"
-		@success="onImportSuccess"
+	<ImportDialog
+		:is-open="importFlow.isDialogOpen.value"
+		:active-step="importFlow.activeStep.value"
+		:import-item-type="importFlow.importItemType.value"
+		@cancel="importFlow.onCancel"
+		@next="importFlow.selectDestinationStep.resolve"
+		@confirm="importFlow.importStep.resolve"
+		@confirm-card="importFlow.importCardStep.resolve"
 	/>
 </template>
 
@@ -114,17 +116,17 @@ import CourseRoomEmptyAvatar from "@/components/course-rooms/CourseRoomEmptyAvat
 import CourseRoomGroupAvatar from "@/components/course-rooms/CourseRoomGroupAvatar.vue";
 import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
 import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
-import ImportFlow from "@/components/share/ImportFlow.vue";
 import { DroppedObject } from "@/store/types/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { BoardExternalReferenceType, DashboardGridElementResponse } from "@api-server";
+import { DashboardGridElementResponse } from "@api-server";
 import { notifySuccess } from "@data-app";
 import { GroupDataType, useCourseRoomListStore } from "@data-course-rooms";
+import { ImportDialog, useImportFlow } from "@feature-import";
 import { mdiCheck } from "@icons/material";
 import { SvsSearchField } from "@ui-controls";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
@@ -185,21 +187,34 @@ const rooms = computed(() =>
 	})
 );
 
-const courses = computed(() =>
-	allElements.value.map((item: { id: string; title: string; isLocked: boolean }) => ({
-		id: item.id,
-		name: item.title,
-		isLocked: item.isLocked,
-	}))
-);
+// const courses = computed(() =>
+// 	allElements.value.map((item: { id: string; title: string; isLocked: boolean }) => ({
+// 		id: item.id,
+// 		name: item.title,
+// 		isLocked: item.isLocked,
+// 	}))
+// );
 
 const hasRoomsBeingCopied = computed(() =>
 	rooms.value.some((item: { copyingSince?: unknown }) => item.copyingSince !== undefined)
 );
 
+const importFlow = useImportFlow();
+
 const isTouchDevice = computed(() => window.ontouchstart !== undefined);
-const isImportMode = computed(() => route.query.import !== undefined);
-const importToken = computed(() => route.query.import as string | undefined);
+const importToken = ref<string>();
+
+watch(
+	() => route.query.import,
+	() => {
+		if (route.query.import) {
+			const token = route.query.import as string;
+			importToken.value = token; // for wrapper.hasImportToken TODO: remove?
+			importFlow.executeImport(token);
+		}
+	},
+	{ immediate: true }
+);
 
 const getDeviceDims = () => {
 	const { xs, sm, mdAndUp } = display;
@@ -347,23 +362,23 @@ const dragFromGroup = (element: { id: string }) => {
 	dragging.value = true;
 };
 
-const showImportSuccess = (name: string) => {
-	notifySuccess(
-		t("components.molecules.import.options.success", {
-			name,
-		})
-	);
-};
+// const showImportSuccess = (name: string) => {
+// 	notifySuccess(
+// 		t("components.molecules.import.options.success", {
+// 			name,
+// 		})
+// 	);
+// };
 
-const onImportSuccess = (name: string, id?: string) => {
-	showImportSuccess(name);
-	if (id) {
-		router.replace({ name: "room-details", params: { id } });
-	} else {
-		router.replace({ name: "course-room-overview" });
-		fetchCourses();
-	}
-};
+// const onImportSuccess = (name: string, id?: string) => {
+// 	showImportSuccess(name);
+// 	if (id) {
+// 		router.replace({ name: "room-details", params: { id } });
+// 	} else {
+// 		router.replace({ name: "course-room-overview" });
+// 		fetchCourses();
+// 	}
+// };
 
 const initCoursePolling = (started: Date, count = 0) => {
 	const nextTimeout = count * count * 1000 + 5000;

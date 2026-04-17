@@ -74,6 +74,7 @@
       "@feature-folder": ["src/modules/feature/folder"],
       "@feature-collabora": ["src/modules/feature/collabora"],
       "@feature-copy": ["src/modules/feature/copy"],
+      "@feature-import": ["src/modules/feature/import"],
       "@icons/*": ["src/components/icons/*"],
       "@ui-alert": ["src/modules/ui/alert"],
       "@ui-audio-player": ["src/modules/ui/audio-player"],
