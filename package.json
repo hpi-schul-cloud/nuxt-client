@@ -32,7 +32,6 @@
 		"@vueuse/core": "^14.2.1",
 		"@vueuse/integrations": "^14.2.1",
 		"axios": "^1.13.5",
-		"bowser": "^2.14.1",
 		"dayjs": "^1.11.19",
 		"focus-trap": "^8.0.0",
 		"katex": "^0.16.28",

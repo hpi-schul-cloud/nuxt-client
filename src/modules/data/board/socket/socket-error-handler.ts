@@ -2,7 +2,6 @@ import { $axios } from "@/utils/api";
 import { BoardErrorReportApiFactory } from "@api-server";
 import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
-import Bowser from "bowser";
 import { type Socket } from "socket.io-client";
 import { computed } from "vue";
 
@@ -69,16 +68,12 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 	const apiCall = (type: string, message: string, retryCount: number) => {
 		const url = globalThis.location.href;
 		const boardId = /boards\/([0-9a-fA-F]{24})/.exec(url)?.[1] ?? "unknown";
-		const { browser, os, platform } = Bowser.parse(globalThis.navigator.userAgent);
 		const dataSubset = {
 			type,
 			message,
 			url,
 			boardId,
 			retryCount,
-			browser: `${browser.name} ${browser.version}`,
-			os: `${os.name} ${os.version}`,
-			deviceType: `${platform.type ?? "unknown"}`,
 		};
 
 		boardErrorReportApi
