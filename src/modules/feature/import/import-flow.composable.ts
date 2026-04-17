@@ -3,6 +3,7 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useAwaitableAction } from "@/composables/awaitable-action.composable";
 import { $axios } from "@/utils/api";
 import { CoursesApiFactory, RoomApiFactory, ShareTokenApiFactory, ShareTokenInfoResponseParentType } from "@api-server";
+import { notifySuccess, useLoadingStore } from "@data-app";
 import { logger } from "@util-logger";
 import { sortBy } from "lodash-es";
 import { computed, ref } from "vue";
@@ -35,20 +36,47 @@ export const useImportFlow = () => {
 	const coursesApi = CoursesApiFactory(undefined, "/v3", $axios);
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const lookupShareTokenCall = useSafeAxiosTask();
+	const importShareTokenCall = useSafeAxiosTask();
 	const fetchCoursesCall = useSafeAxiosTask();
 	const fetchRoomsCall = useSafeAxiosTask();
 
 	const PLURAL_COUNT = 2;
 	const { t } = useI18n();
+	const { withLoadingState } = useLoadingStore();
+
+	const withImportLoading = <T>(fn: () => Promise<T>) =>
+		withLoadingState(fn, t("components.molecules.import.options.loadingMessage"));
+
+	const executeImportCourse = async (token: string) => {
+		const userInput = await startStep("import", importStep);
+		if (!userInput) return;
+
+		const { result, success } = await withImportLoading(() =>
+			importShareTokenCall.execute(
+				() => shareApi.shareTokenControllerImportShareToken(token, { newName: userInput.newName }),
+				t("common.notifications.errors.notImported", { type: t("common.labels.course") })
+			)
+		);
+
+		if (success && result?.data.id !== undefined) {
+			notifySuccess(
+				t("components.molecules.import.options.success", {
+					name: userInput.newName,
+				})
+			);
+			const sanitizedId = result.data.id.replace(/[^a-z\d]/g, "");
+			return sanitizedId;
+		}
+	};
 
 	// const executeImport = async (token: string, destinationType?: DestinationType) => {
 	const executeImport = async (token: string) => {
-		const { result, error } = await validateShareToken(token);
-		if (error || !result?.data) {
-			return;
-		}
+		await validateShareToken(token);
 
-		importItemType.value = result.data.parentType;
+		if (!importItemType.value) {
+			logger.error("Failed to validate share token");
+			return { cancelled: true };
+		}
 
 		if (
 			importItemType.value === ShareTokenInfoResponseParentType.COURSES ||
@@ -72,8 +100,16 @@ export const useImportFlow = () => {
 		}
 	};
 
-	const validateShareToken = (token: string) =>
-		lookupShareTokenCall.execute(() => shareApi.shareTokenControllerLookupShareToken(token));
+	const validateShareToken = async (token: string) => {
+		const { result, success } = await lookupShareTokenCall.execute(() =>
+			shareApi.shareTokenControllerLookupShareToken(token)
+		);
+
+		if (success) {
+			importItemType.value = result.data.parentType;
+			return result.data.parentType;
+		}
+	};
 
 	const fetchCourseDestinations = async () => {
 		const { result, error, success } = await fetchCoursesCall.execute(() =>
@@ -121,6 +157,7 @@ export const useImportFlow = () => {
 		selectDestinationStep,
 		importStep,
 		importCardStep,
+		executeImportCourse,
 		executeImport,
 		onCancel,
 		validateShareToken,

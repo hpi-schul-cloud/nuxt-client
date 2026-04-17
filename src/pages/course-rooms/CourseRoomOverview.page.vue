@@ -116,9 +116,10 @@ import CourseRoomEmptyAvatar from "@/components/course-rooms/CourseRoomEmptyAvat
 import CourseRoomGroupAvatar from "@/components/course-rooms/CourseRoomGroupAvatar.vue";
 import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
 import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
+import router from "@/router";
 import { DroppedObject } from "@/store/types/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { DashboardGridElementResponse } from "@api-server";
+import { DashboardGridElementResponse, ShareTokenInfoResponseParentType } from "@api-server";
 import { notifySuccess } from "@data-app";
 import { GroupDataType, useCourseRoomListStore } from "@data-course-rooms";
 import { ImportDialog, useImportFlow } from "@feature-import";
@@ -128,12 +129,11 @@ import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { useDisplay } from "vuetify";
 
 const { t } = useI18n();
 const route = useRoute();
-const router = useRouter();
 const display = useDisplay();
 
 const refs = reactive<Record<string, unknown>>({});
@@ -204,13 +204,23 @@ const importFlow = useImportFlow();
 const isTouchDevice = computed(() => window.ontouchstart !== undefined);
 const importToken = ref<string>();
 
+const importShareToken = async (token: string) => {
+	const importItemType = await importFlow.validateShareToken(token);
+
+	if (importItemType === ShareTokenInfoResponseParentType.COURSES) {
+		await importFlow.executeImportCourse(token);
+		router.replace({ name: "course-room-overview" });
+		fetchCourses();
+	}
+};
+
 watch(
 	() => route.query.import,
 	() => {
 		if (route.query.import) {
 			const token = route.query.import as string;
 			importToken.value = token; // for wrapper.hasImportToken TODO: remove?
-			importFlow.executeImport(token);
+			importShareToken(token);
 		}
 	},
 	{ immediate: true }
@@ -362,23 +372,23 @@ const dragFromGroup = (element: { id: string }) => {
 	dragging.value = true;
 };
 
-// const showImportSuccess = (name: string) => {
-// 	notifySuccess(
-// 		t("components.molecules.import.options.success", {
-// 			name,
-// 		})
-// 	);
-// };
+const showImportSuccess = (name: string) => {
+	notifySuccess(
+		t("components.molecules.import.options.success", {
+			name,
+		})
+	);
+};
 
-// const onImportSuccess = (name: string, id?: string) => {
-// 	showImportSuccess(name);
-// 	if (id) {
-// 		router.replace({ name: "room-details", params: { id } });
-// 	} else {
-// 		router.replace({ name: "course-room-overview" });
-// 		fetchCourses();
-// 	}
-// };
+const onImportSuccess = (name: string, id?: string) => {
+	showImportSuccess(name);
+	if (id) {
+		router.replace({ name: "room-details", params: { id } });
+	} else {
+		router.replace({ name: "course-room-overview" });
+		fetchCourses();
+	}
+};
 
 const initCoursePolling = (started: Date, count = 0) => {
 	const nextTimeout = count * count * 1000 + 5000;
