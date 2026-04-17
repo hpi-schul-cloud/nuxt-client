@@ -1,21 +1,17 @@
 <template>
-	<v-list-item
-		:key="task.id"
-		v-outside-click="() => handleFocus(false)"
+	<VListItem
 		class="px-xxl-4 px-xl-4 px-lg-4 px-md-4 px-sm-4 px-0"
 		v-bind="$attrs"
 		:aria-label="ariaLabel"
 		role="article"
 		:ripple="false"
 		@click="handleClick"
-		@focus="handleFocus(true)"
-		@keydown.tab.shift="handleFocus(false)"
 	>
 		<!-- item avatar -->
 		<template #prepend>
-			<v-avatar>
-				<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
-			</v-avatar>
+			<VAvatar>
+				<VIcon class="fill" :color="iconColor">{{ taskIcon }}</VIcon>
+			</VAvatar>
 		</template>
 		<!-- item main info -->
 		<div class="d-flex align-center justify-space-between flex-wrap flex-sm-nowrap">
@@ -44,28 +40,24 @@
 		</div>
 		<template #append>
 			<div :id="`task-menu-${task.id}`" class="context-menu-btn">
-				<TasksListItemMenu :task-id="task.id" :task-is-finished="task.status.isFinished" user-role="student" />
+				<TasksOverviewListItemMenu :task-id="task.id" :task-is-finished="task.status.isFinished" user-role="student" />
 			</div>
 		</template>
-	</v-list-item>
+	</VListItem>
 </template>
 
 <script>
-import TasksListItemMenu from "./TasksListItemMenu.vue";
+import TasksOverviewListItemMenu from "./TasksOverviewListItemMenu.vue";
 import { formatUtc, isDueWithin24h } from "@/utils/date-time.utils.ts";
 import { mdiCheckCircleOutline } from "@icons/material";
 import { ChipTimeRemaining } from "@ui-chip";
-import { vOnClickOutside } from "@vueuse/components";
 
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name"];
 
 export default {
 	components: {
 		ChipTimeRemaining,
-		TasksListItemMenu,
-	},
-	directives: {
-		outsideClick: vOnClickOutside,
+		TasksOverviewListItemMenu,
 	},
 	props: {
 		task: {
@@ -73,11 +65,6 @@ export default {
 			required: true,
 			validator: (task) => taskRequiredKeys.every((key) => key in task),
 		},
-	},
-	data() {
-		return {
-			isActive: false,
-		};
 	},
 	computed: {
 		iconColor() {
@@ -143,9 +130,6 @@ export default {
 	methods: {
 		handleClick() {
 			this.redirectAction(`/homework/${this.task.id}`);
-		},
-		handleFocus(value) {
-			this.isActive = value;
 		},
 		redirectAction(value) {
 			window.location = value;

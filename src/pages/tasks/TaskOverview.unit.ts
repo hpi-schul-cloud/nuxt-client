@@ -1,6 +1,6 @@
 import TaskOverviewPage from "./TaskOverview.page.vue";
-import TasksDashboardStudent from "@/components/tasks/TasksDashboardStudent.vue";
-import TasksDashboardTeacher from "@/components/tasks/TasksDashboardTeacher.vue";
+import TasksOverviewStudent from "@/components/tasks/TasksOverviewStudent.vue";
+import TasksOverviewTeacher from "@/components/tasks/TasksOverviewTeacher.vue";
 import CopyModule from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
@@ -70,9 +70,9 @@ describe("TaskOverviewPage", () => {
 		});
 
 		it("should render student's tasks dashboard", () => {
-			const studentDashboard = wrapper.findComponent(TasksDashboardStudent);
+			const studentDashboard = wrapper.findComponent(TasksOverviewStudent);
 			expect(studentDashboard.exists()).toBe(true);
-			const teacherDashboard = wrapper.findComponent(TasksDashboardTeacher);
+			const teacherDashboard = wrapper.findComponent(TasksOverviewTeacher);
 			expect(teacherDashboard.exists()).toBe(false);
 		});
 
@@ -109,9 +109,9 @@ describe("TaskOverviewPage", () => {
 		});
 
 		it("should render teacher's tasks dashboard", () => {
-			const teacherDashboard = wrapper.findComponent(TasksDashboardTeacher);
+			const teacherDashboard = wrapper.findComponent(TasksOverviewTeacher);
 			expect(teacherDashboard.exists()).toBe(true);
-			const studentDashboard = wrapper.findComponent(TasksDashboardStudent);
+			const studentDashboard = wrapper.findComponent(TasksOverviewStudent);
 			expect(studentDashboard.exists()).toBe(false);
 		});
 

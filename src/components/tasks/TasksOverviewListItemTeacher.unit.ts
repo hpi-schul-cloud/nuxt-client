@@ -1,5 +1,5 @@
-import TasksListItemMenu from "./TasksListItemMenu.vue";
-import TasksListItemTeacher from "./TasksListItemTeacher.vue";
+import TasksOverviewListItemMenu from "./TasksOverviewListItemMenu.vue";
+import TasksOverviewListItemTeacher from "./TasksOverviewListItemTeacher.vue";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStore } from "@@/tests/test-utils";
@@ -21,7 +21,7 @@ const mockRouter = {
 };
 
 const getWrapper = (props: { task: object }) =>
-	mount(TasksListItemTeacher, {
+	mount(TasksOverviewListItemTeacher, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -34,7 +34,7 @@ const getWrapper = (props: { task: object }) =>
 		},
 	});
 
-describe("TasksListItemTeacher", () => {
+describe("TasksOverviewListItemTeacher", () => {
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
 		createTestAppStore();
@@ -56,7 +56,7 @@ describe("TasksListItemTeacher", () => {
 	});
 
 	it("accepts valid task props", () => {
-		const { validator } = TasksListItemTeacher.props.task;
+		const { validator } = TasksOverviewListItemTeacher.props.task;
 		const validTasks = tasksTeacher;
 
 		validTasks.forEach((task) => {
@@ -89,7 +89,7 @@ describe("TasksListItemTeacher", () => {
 			type: CopyParamsTypeEnum.Task,
 		};
 
-		const oneTaskItemMenu = wrapper.findComponent(TasksListItemMenu);
+		const oneTaskItemMenu = wrapper.findComponent(TasksOverviewListItemMenu);
 		oneTaskItemMenu.vm.$emit("copy-task", payload);
 
 		expect(wrapper.emitted()["copy-task"]?.[0]).toStrictEqual(expect.arrayContaining([payload]));

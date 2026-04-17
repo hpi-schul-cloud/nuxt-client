@@ -1,4 +1,4 @@
-import TasksListItemStudent from "./TasksListItemStudent.vue";
+import TasksOverviewListItemStudent from "./TasksOverviewListItemStudent.vue";
 import CopyModule from "@/store/copy";
 import { formatUtc } from "@/utils/date-time.utils";
 import { COPY_MODULE_KEY } from "@/utils/inject";
@@ -20,8 +20,8 @@ const mockRouter = {
 	push: vi.fn(),
 };
 
-const getWrapper = (props: ComponentProps<typeof TasksListItemStudent>) =>
-	mount(TasksListItemStudent, {
+const getWrapper = (props: ComponentProps<typeof TasksOverviewListItemStudent>) =>
+	mount(TasksOverviewListItemStudent, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -34,7 +34,7 @@ const getWrapper = (props: ComponentProps<typeof TasksListItemStudent>) =>
 		},
 	});
 
-describe("TasksListItemStudent", () => {
+describe("TasksOverviewListItemStudent", () => {
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
 		createTestAppStore();
@@ -139,7 +139,7 @@ describe("TasksListItemStudent", () => {
 	});
 
 	it("accepts valid task props", () => {
-		const { validator } = TasksListItemStudent.props.task;
+		const { validator } = TasksOverviewListItemStudent.props.task;
 		const validTasks = tasks;
 
 		validTasks.forEach((task) => {

@@ -1,70 +1,73 @@
 <template>
 	<KebabMenu :aria-label="t('common.words.task')" data-testid="task-menu">
-		<VListItem
-			v-if="isTeacher"
-			id="task-action-edit"
-			:href="editLink"
-			class="task-action"
-			data-testId="task-edit"
-			role="menuitem"
-			:draggable="false"
-		>
-			<VListItemTitle>
-				<VIcon :icon="mdiPencilOutline" class="task-action-icon" />
-				{{ $t("common.actions.edit") }}
-			</VListItemTitle>
-		</VListItem>
-		<VListItem
-			v-if="isTeacher && copyServiceEnabled"
-			id="task-action-copy"
-			class="task-action"
-			data-testId="task-copy"
-			role="menuitem"
-			@click="onCopyTask"
-		>
-			<VListItemTitle>
-				<VIcon :icon="mdiContentCopy" class="task-action-icon" />
-				{{ $t("common.actions.duplicate") }}
-			</VListItemTitle>
-		</VListItem>
-		<VListItem
-			v-if="isTeacher && shareTaskEnabled"
-			id="task-action-share"
-			class="task-action"
-			data-testId="task-share"
-			role="menuitem"
-			@click="onShareTask"
-		>
-			<VListItemTitle>
-				<VIcon :icon="mdiShareVariantOutline" class="task-action-icon" />
-				{{ $t("common.actions.shareCopy") }}
-			</VListItemTitle>
-		</VListItem>
-		<VListItem
-			v-if="isTeacher && taskIsPublished"
-			id="task-action-revert"
-			class="task-action"
-			data-testId="task-revert"
-			role="menuitem"
-			@click="onRevert"
-		>
+		<template v-if="isTeacher">
+			<VListItem
+				id="task-action-edit"
+				:href="editLink"
+				class="task-action"
+				data-testId="task-edit"
+				role="menuitem"
+				:draggable="false"
+			>
+				<VListItemTitle>
+					<VIcon :icon="mdiPencilOutline" class="task-action-icon" />
+					{{ t("common.actions.edit") }}
+				</VListItemTitle>
+			</VListItem>
+			<VListItem
+				v-if="copyServiceEnabled"
+				id="task-action-copy"
+				class="task-action"
+				data-testId="task-copy"
+				role="menuitem"
+				@click="onCopyTask"
+			>
+				<VListItemTitle>
+					<VIcon :icon="mdiContentCopy" class="task-action-icon" />
+					{{ t("common.actions.duplicate") }}
+				</VListItemTitle>
+			</VListItem>
+			<VListItem
+				v-if="shareTaskEnabled"
+				id="task-action-share"
+				class="task-action"
+				data-testId="task-share"
+				role="menuitem"
+				@click="onShareTask"
+			>
+				<VListItemTitle>
+					<VIcon :icon="mdiShareVariantOutline" class="task-action-icon" />
+					{{ t("common.actions.shareCopy") }}
+				</VListItemTitle>
+			</VListItem>
+			<VListItem
+				v-if="taskIsPublished"
+				id="task-action-revert"
+				class="task-action"
+				data-testId="task-revert"
+				role="menuitem"
+				@click="emit('revert-task', taskId)"
+			>
+				<VListItemTitle>
+					<VIcon :icon="mdiUndoVariant" class="task-action-icon" />
+					{{ t("pages.room.cards.label.revert") }}
+				</VListItemTitle>
+			</VListItem>
+		</template>
+
+		<VListItem v-if="taskIsFinished" data-testId="task-finish" @click="emit('restore-task', taskId)">
 			<VListItemTitle>
 				<VIcon :icon="mdiUndoVariant" class="task-action-icon" />
-				{{ $t("pages.room.cards.label.revert") }}
+				{{ t("common.labels.restore") }}
 			</VListItemTitle>
 		</VListItem>
-		<VListItem id="task-action-finish" class="task-action" data-testId="task-finish" role="menuitem" @click="onFinish">
+		<VListItem v-else data-testId="task-finish" @click="emit('finish-task', taskId)">
 			<VListItemTitle>
-				<template v-if="taskIsFinished">
-					<VIcon :icon="mdiUndoVariant" class="task-action-icon" />
-					{{ $t("common.labels.restore") }}
-				</template>
-				<template v-else>
-					<VIcon :icon="mdiArchiveOutline" class="task-action-icon" />
-					{{ $t("components.molecules.TaskItemMenu.finish") }}
-				</template>
+				<VIcon :icon="mdiArchiveOutline" class="task-action-icon" />
+				{{ t("components.molecules.TaskItemMenu.finish") }}
 			</VListItemTitle>
 		</VListItem>
+
 		<VListItem
 			v-if="isTeacher"
 			id="task-action-delete"
@@ -75,17 +78,16 @@
 		>
 			<VListItemTitle>
 				<VIcon :icon="mdiTrashCanOutline" class="task-action-icon" />
-				{{ $t("common.actions.delete") }}
+				{{ t("common.actions.delete") }}
 			</VListItemTitle>
 		</VListItem>
 	</KebabMenu>
 </template>
 
 <script setup lang="ts">
-import { CopyParamsTypeEnum } from "@/store/copy";
+import { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { useEnvConfig } from "@data-env";
-import { useTasksOfOverview } from "@data-tasks";
 import {
 	mdiArchiveOutline,
 	mdiContentCopy,
@@ -114,14 +116,16 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-	"copy-task": [payload: { id: string; courseId: string | undefined; type: CopyParamsTypeEnum }];
+	"copy-task": [payload: CopyParams];
 	"share-task": [taskId: string];
+	"delete-task": [taskId: string];
+	"finish-task": [taskId: string];
+	"revert-task": [taskId: string];
+	"restore-task": [taskId: string];
 }>();
 
 const { t } = useI18n();
 const envConfig = useEnvConfig();
-
-const { deleteTask, finishTask, restoreFinishedTask, revertPublishedTask } = useTasksOfOverview();
 
 const isTeacher = computed(() => props.userRole === "teacher");
 const editLink = computed(() => `/homework/${props.taskId}/edit`);
@@ -137,7 +141,7 @@ const onDelete = async () => {
 	);
 
 	if (confirmed) {
-		await deleteTask(props.taskId);
+		emit("delete-task", props.taskId);
 	}
 };
 

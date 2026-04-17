@@ -1,4 +1,4 @@
-import TasksListItemMenu from "./TasksListItemMenu.vue";
+import TasksOverviewListItemMenu from "./TasksOverviewListItemMenu.vue";
 import { finishedTasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
@@ -28,7 +28,7 @@ const getWrapper = (
 	},
 	options = {}
 ) =>
-	mount(TasksListItemMenu, {
+	mount(TasksOverviewListItemMenu, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -63,7 +63,7 @@ describe("TasksListItemMenu", () => {
 
 	describe("props", () => {
 		it("should accept valid userRole prop", () => {
-			const { validator } = TasksListItemMenu.props.userRole;
+			const { validator } = TasksOverviewListItemMenu.props.userRole;
 			const validRoles = ["student", "teacher"];
 
 			validRoles.forEach((task) => {
@@ -72,7 +72,7 @@ describe("TasksListItemMenu", () => {
 		});
 
 		it("should reject invalid userRole prop", () => {
-			const { validator } = TasksListItemMenu.props.userRole;
+			const { validator } = TasksOverviewListItemMenu.props.userRole;
 			const invalidRoles = ["admin", "tomato"];
 
 			invalidRoles.forEach((task) => {

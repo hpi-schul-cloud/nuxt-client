@@ -1,5 +1,5 @@
-import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
-import TasksList from "./TasksList.vue";
+import TasksOverviewTeacher from "./TasksOverviewTeacher.vue";
+import TasksOverviewList from "./TasksOverviewList.vue";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
@@ -12,7 +12,7 @@ import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeAll } from "vitest";
 
-describe("TasksDashboardTeacher", () => {
+describe("TasksOverviewTeacher", () => {
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let copyModuleMock: CopyModule;
 	let shareModuleMock: ShareModule;
@@ -22,7 +22,7 @@ describe("TasksDashboardTeacher", () => {
 	});
 
 	const mountComponent = (attrs = {}) => {
-		const wrapper = mount(TasksDashboardTeacher, {
+		const wrapper = mount(TasksOverviewTeacher, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -55,7 +55,7 @@ describe("TasksDashboardTeacher", () => {
 
 		const expansionPanels = wrapper.findAll(".v-expansion-panel");
 
-		expect(wrapper.findComponent(TasksList).exists()).toBe(true);
+		expect(wrapper.findComponent(TasksOverviewList).exists()).toBe(true);
 		expect(expansionPanels.length).toBeGreaterThan(0);
 		expect(expansionPanels.at(0)?.classes()).not.toContain("v-expansion-panel--active");
 		expect(expansionPanels.at(1)?.classes()).toContain("v-expansion-panel--active");
@@ -92,7 +92,7 @@ describe("TasksDashboardTeacher", () => {
 	it("should handle copy-task event", () => {
 		const wrapper = mountComponent();
 
-		const oneTasksList = wrapper.findComponent(TasksList);
+		const oneTasksList = wrapper.findComponent(TasksOverviewList);
 		const payload = {
 			id: "123",
 			courseId: "c789",

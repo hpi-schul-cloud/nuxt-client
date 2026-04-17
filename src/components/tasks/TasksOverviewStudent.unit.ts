@@ -1,5 +1,5 @@
-import TasksDashboardStudent from "./TasksDashboardStudent.vue";
-import TasksList from "./TasksList.vue";
+import TasksOverviewStudent from "./TasksOverviewStudent.vue";
+import TasksOverviewList from "./TasksOverviewList.vue";
 import FinishedTasksModule from "@/store/finished-tasks";
 import { FINISHED_TASKS_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -7,11 +7,11 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { EmptyState } from "@ui-empty-state";
 import { shallowMount } from "@vue/test-utils";
 
-describe("TasksDashboardStudent", () => {
+describe("TasksOverviewStudent", () => {
 	let finishedTasksModuleMock: FinishedTasksModule;
 
 	const mountComponent = (options = {}) => {
-		const wrapper = shallowMount(TasksDashboardStudent, {
+		const wrapper = shallowMount(TasksOverviewStudent, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -34,7 +34,7 @@ describe("TasksDashboardStudent", () => {
 	it("Should render tasks list component", () => {
 		const wrapper = mountComponent();
 
-		expect(wrapper.findComponent(TasksList).exists()).toBe(true);
+		expect(wrapper.findComponent(TasksOverviewList).exists()).toBe(true);
 	});
 
 	it("Should render empty state on completed tab when completed tasks are empty", async () => {

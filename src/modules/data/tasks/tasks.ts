@@ -17,11 +17,11 @@ export const toSortedByCreatedDate = (tasks: TaskResponse[]) =>
 
 export const isTaskOverdue = (t: TaskResponse) => t.dueDate && parseUtc(t.dueDate).isBefore(nowUtc());
 export const isTaskUnpublished = (t: TaskResponse) => isPublished(t) && !isVisible(t);
+export const isTaskDraft = (t: TaskResponse) => t.status.isDraft;
 
 // === Task Status Predicates ===
 const hasNoDueDate = (t: TaskResponse) => !t.dueDate;
 const hasDueDate = (t: TaskResponse) => t.dueDate && !isTaskOverdue(t);
-const isDraft = (t: TaskResponse) => t.status.isDraft;
 const isPublished = (t: TaskResponse) => !t.status.isDraft;
 const isSubstitution = (t: TaskResponse) => t.status.isSubstitutionTeacher;
 const isVisible = (t: TaskResponse) => !t.lessonHidden;
@@ -78,7 +78,6 @@ export const useTasks = (
 	} = {}
 ) => {
 	const { t } = useI18nGlobal();
-	const tasksApi = TaskApiFactory(undefined, "/v3", $axios);
 	const { execute, isRunning, error, status } = useSafeAxiosTask();
 	const { execute: executeFinished, isRunning: isLoadingFinished, error: errorFinished } = useSafeAxiosTask();
 
@@ -104,7 +103,7 @@ export const useTasks = (
 		return allTasks.value.filter((t) => !isSubstitution(t));
 	});
 
-	const draftsUnfiltered = computed(() => toSortedByCreatedDate(tasksFilteredBySubstitute.value.filter(isDraft)));
+	const draftsUnfiltered = computed(() => toSortedByCreatedDate(tasksFilteredBySubstitute.value.filter(isTaskDraft)));
 	const publishedUnfiltered = computed(() => tasksFilteredBySubstitute.value.filter(isPublished));
 
 	const tasksFilteredByCourses = computed(() => {
@@ -127,7 +126,7 @@ export const useTasks = (
 	});
 
 	// === Base Categories ===
-	const drafts = computed(() => toSortedByCreatedDate(tasks.value.filter(isDraft)));
+	const drafts = computed(() => toSortedByCreatedDate(tasks.value.filter(isTaskDraft)));
 	const published = computed(() => tasks.value.filter(isPublished));
 
 	// === Due Date Grouping helper util ===
@@ -226,50 +225,6 @@ export const useTasks = (
 		return { success, result: finishedTasks.value };
 	};
 
-	const deleteTask = async (taskId: string) => {
-		const { success } = await execute(
-			() => tasksApi.taskControllerDelete(taskId),
-			t("common.notifications.errors.notDeleted", { type: t("common.words.task") })
-		);
-		if (success) await fetchTasks();
-		return success;
-	};
-
-	const revertPublishedTask = async (taskId: string) => {
-		const { success } = await execute(
-			() => tasksApi.taskControllerRevertPublished(taskId),
-			t("common.notifications.errors.notReverted", { type: t("common.words.task") })
-		);
-		if (success) await fetchTasks();
-		return success;
-	};
-
-	const restoreFinishedTask = async (taskId: string) => {
-		const { success } = await executeFinished(
-			() => tasksApi.taskControllerRestore(taskId),
-			t("common.notifications.errors.notRestored", { type: t("common.words.task") })
-		);
-
-		if (success) {
-			await fetchFinishedTasks(true);
-			await fetchTasks();
-		}
-
-		return success;
-	};
-
-	const finishTask = async (taskId: string) => {
-		const { success } = await execute(
-			() => tasksApi.taskControllerFinish(taskId),
-			t("common.notifications.errors.notFinished", { type: t("common.words.task") })
-		);
-		if (success) {
-			await fetchTasks();
-			await fetchFinishedTasks(true);
-		}
-		return success;
-	};
-
 	if (options.fetchImmediate !== false) {
 		onMounted(fetchTasks);
 	}
@@ -328,10 +283,6 @@ export const useTasks = (
 		// Data Actions
 		fetchTasks,
 		fetchFinishedTasks,
-		deleteTask,
-		finishTask,
-		restoreFinishedTask,
-		revertPublishedTask,
 
 		// Status
 		isLoading: isRunning,
@@ -339,6 +290,47 @@ export const useTasks = (
 		status,
 		error,
 		errorFinished,
+	};
+};
+
+export const useTaskActions = () => {
+	const { t } = useI18nGlobal();
+	const tasksApi = TaskApiFactory(undefined, "/v3", $axios);
+	const { execute, isRunning: isMutating, error, status } = useSafeAxiosTask();
+
+	const deleteTask = async (taskId: string) =>
+		await execute(
+			() => tasksApi.taskControllerDelete(taskId),
+			t("common.notifications.errors.notDeleted", { type: t("common.words.task") })
+		);
+
+	const revertPublishedTask = async (taskId: string) =>
+		await execute(
+			() => tasksApi.taskControllerRevertPublished(taskId),
+			t("common.notifications.errors.notReverted", { type: t("common.words.task") })
+		);
+
+	// For these two, i need to fetch "normal" and "finished" tasks
+	const restoreFinishedTask = async (taskId: string) =>
+		await execute(
+			() => tasksApi.taskControllerRestore(taskId),
+			t("common.notifications.errors.notRestored", { type: t("common.words.task") })
+		);
+
+	const finishTask = async (taskId: string) =>
+		await execute(
+			() => tasksApi.taskControllerFinish(taskId),
+			t("common.notifications.errors.notFinished", { type: t("common.words.task") })
+		);
+
+	return {
+		deleteTask,
+		revertPublishedTask,
+		finishTask,
+		restoreFinishedTask,
+		isMutating,
+		error,
+		status,
 	};
 };
 

@@ -1,13 +1,13 @@
 <template>
 	<DefaultWireframe :headline="$t('common.words.tasks')" max-width="native" :fab-items="fabItems">
-		<TasksDashboardStudent v-if="isStudent" />
-		<TasksDashboardTeacher v-else-if="isTeacher" />
+		<TasksOverviewStudent v-if="isStudent" />
+		<TasksOverviewTeacher v-else-if="isTeacher" />
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
-import TasksDashboardStudent from "@/components/tasks/TasksDashboardStudent.vue";
-import TasksDashboardTeacher from "@/components/tasks/TasksDashboardTeacher.vue";
+import TasksOverviewStudent from "@/components/tasks/TasksOverviewStudent.vue";
+import TasksOverviewTeacher from "@/components/tasks/TasksOverviewTeacher.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { Permission } from "@api-server";
 import { useAppStore, useAppStoreRefs } from "@data-app";

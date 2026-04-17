@@ -41,43 +41,33 @@
 		<div class="mx-auto mt-5">
 			<VWindow class="padding-bottom" :model-value="activeTab">
 				<VWindowItem :value="TaskTab.OPEN">
-					<TasksDashBoardPanels
+					<TasksOverviewPanels
 						:panel-one-count="noDueDateTasks.length"
 						:panel-two-count="withDueDateTasks.length + overdueTasks.length"
 						:panel-one-title="t('pages.tasks.subtitleNoDue')"
 						:panel-two-title="t('pages.tasks.subtitleWithDue')"
-						:is-loading="isLoading"
-						:is-empty="openForTeacher.length === 0"
 						:expanded-default="1"
 					>
 						<template #panelOne>
-							<TasksList
-								:tasks="noDueDateTasks"
-								:show-skeleton="isLoading"
-								user-role="teacher"
-								@copy-task="onCopyTask"
-								@share-task="onShareTask"
-							/>
+							<TasksOverviewList :tasks="noDueDateTasks">
+								<template #default="{ task }">
+									<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
+								</template>
+							</TasksOverviewList>
 						</template>
 						<template #panelTwo>
-							<TasksList
-								:tasks="overdueTasks"
-								:show-skeleton="isLoading"
-								:title="t('pages.tasks.teacher.subtitleOverDue')"
-								user-role="teacher"
-								@copy-task="onCopyTask"
-								@share-task="onShareTask"
-							/>
-							<TasksList
-								:tasks="withDueDateTasks"
-								:show-skeleton="isLoading"
-								:title="t('pages.tasks.subtitleOpen')"
-								user-role="teacher"
-								@copy-task="onCopyTask"
-								@share-task="onShareTask"
-							/>
+							<TasksOverviewList :tasks="overdueTasks" :title="t('pages.tasks.teacher.subtitleOverDue')">
+								<template #default="{ task }">
+									<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
+								</template>
+							</TasksOverviewList>
+							<TasksOverviewList :tasks="withDueDateTasks" :title="t('pages.tasks.subtitleOpen')">
+								<template #default="{ task }">
+									<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
+								</template>
+							</TasksOverviewList>
 						</template>
-					</TasksDashBoardPanels>
+					</TasksOverviewPanels>
 					<VContainer>
 						<EmptyState v-if="openForTeacher.length === 0" :title="t('pages.tasks.open.emptyState.title')">
 							<template #media> <TasksEmptyStateSvg /></template>
@@ -85,13 +75,11 @@
 					</VContainer>
 				</VWindowItem>
 				<VWindowItem :value="TaskTab.DRAFTS">
-					<TasksList
-						:tasks="drafts"
-						user-role="teacher"
-						:show-skeleton="isLoading"
-						@copy-task="onCopyTask"
-						@share-task="onShareTask"
-					/>
+					<TasksOverviewList :tasks="drafts">
+						<template #default="{ task }">
+							<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
+						</template>
+					</TasksOverviewList>
 					<VContainer>
 						<EmptyState v-if="drafts.length === 0" :title="t('pages.tasks.teacher.drafts.emptyState.title')">
 							<template #media> <TasksEmptyStateSvg /></template>
@@ -99,15 +87,16 @@
 					</VContainer>
 				</VWindowItem>
 				<VWindowItem :value="TaskTab.FINISHED">
-					<TasksList
+					<TasksOverviewList
 						:tasks="finishedTasks"
-						user-role="teacher"
-						has-pagination
 						:is-loading-more-items="isLoadingFinished"
-						@copy-task="onCopyTask"
-						@share-task="onShareTask"
+						has-pagination
 						@load-more-tasks="fetchFinishedTasks"
-					/>
+					>
+						<template #default="{ task }">
+							<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
+						</template>
+					</TasksOverviewList>
 					<VContainer>
 						<EmptyState v-if="finishedTasks.length === 0" :title="t('pages.tasks.finished.emptyState.title')">
 							<template #media> <TasksEmptyStateSvg /></template>
@@ -128,10 +117,11 @@
 </template>
 
 <script setup lang="ts">
-import TasksDashBoardPanels from "./TasksDashBoardPanels.vue";
-import TasksList from "./TasksList.vue";
+import TasksOverviewList from "./TasksOverviewList.vue";
+import TasksOverviewPanels from "./TasksOverviewPanels.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
+import TasksOverviewListItemTeacher from "@/components/tasks/TasksOverviewListItemTeacher.vue";
 import { useCopy } from "@/composables/copy";
 import { CopyParams } from "@/store/copy";
 import ShareModule from "@/store/share";
@@ -178,7 +168,6 @@ const {
 	drafts,
 	openForTeacher,
 	splitByDueDate,
-	isLoading,
 	isLoadingFinished,
 	includeSubstitute,
 	fetchTasks,

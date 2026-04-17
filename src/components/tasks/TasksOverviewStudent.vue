@@ -29,26 +29,37 @@
 			</VTabs>
 		</div>
 
-		<div class="mx-auto mt-5 mb-14">
+		<div class="mx-auto mt-5">
 			<VWindow v-model="activeTab">
 				<VWindowItem :value="TaskTab.OPEN">
-					<TasksDashBoardPanels
+					<TasksOverviewPanels
 						:panel-one-count="noDueDateTasks.length"
 						:panel-two-count="withDueDateTasks.length + overdueTasks.length"
 						:panel-one-title="t('pages.tasks.subtitleNoDue')"
 						:panel-two-title="t('pages.tasks.subtitleWithDue')"
-						:is-loading="isLoadingTasks"
-						:is-empty="openForStudent.length === 0"
 						:expanded-default="1"
 					>
 						<template #panelOne>
-							<TasksList :tasks="noDueDateTasks" user-role="student" />
+							<TasksOverviewList :tasks="noDueDateTasks">
+								<template #default="{ task }">
+									<TasksOverviewListItemStudent :task />
+								</template>
+							</TasksOverviewList>
 						</template>
 						<template #panelTwo>
-							<TasksList :tasks="withDueDateTasks" :title="t('pages.tasks.subtitleOpen')" user-role="student" />
-							<TasksList :tasks="overdueTasks" :title="t('pages.tasks.student.subtitleOverDue')" user-role="student" />
+							<TasksOverviewList :title="t('pages.tasks.subtitleOpen')" :tasks="withDueDateTasks">
+								<template #default="{ task }">
+									<TasksOverviewListItemStudent :task />
+								</template>
+							</TasksOverviewList>
+
+							<TasksOverviewList :title="t('pages.tasks.student.subtitleOverDue')" :tasks="overdueTasks">
+								<template #default="{ task }">
+									<TasksOverviewListItemStudent :task />
+								</template>
+							</TasksOverviewList>
 						</template>
-					</TasksDashBoardPanels>
+					</TasksOverviewPanels>
 					<VContainer>
 						<EmptyState v-if="openForStudent.length === 0" :title="t('pages.tasks.student.open.emptyState.title')">
 							<template #media>
@@ -58,22 +69,28 @@
 					</VContainer>
 				</VWindowItem>
 				<VWindowItem :value="TaskTab.COMPLETED">
-					<TasksDashBoardPanels
+					<TasksOverviewPanels
 						:panel-one-count="gradedForStudent.length"
 						:panel-two-count="submittedForStudent.length"
 						:panel-one-title="t('pages.tasks.subtitleGraded')"
 						:panel-two-title="t('pages.tasks.subtitleNotGraded')"
-						:is-empty="gradedForStudent.length === 0"
-						:is-loading="isLoadingTasks"
 						:expanded-default="0"
 					>
 						<template #panelOne>
-							<TasksList :tasks="gradedForStudent" user-role="student" />
+							<TasksOverviewList :title="t('pages.tasks.student.subtitleOverDue')" :tasks="gradedForStudent">
+								<template #default="{ task }">
+									<TasksOverviewListItemStudent :task />
+								</template>
+							</TasksOverviewList>
 						</template>
 						<template #panelTwo>
-							<TasksList :tasks="submittedForStudent" user-role="student" />
+							<TasksOverviewList :title="t('pages.tasks.student.subtitleOverDue')" :tasks="submittedForStudent">
+								<template #default="{ task }">
+									<TasksOverviewListItemStudent :task />
+								</template>
+							</TasksOverviewList>
 						</template>
-					</TasksDashBoardPanels>
+					</TasksOverviewPanels>
 					<VContainer>
 						<EmptyState
 							v-if="gradedForStudent.length === 0"
@@ -86,9 +103,13 @@
 					</VContainer>
 				</VWindowItem>
 				<VWindowItem :value="TaskTab.COMPLETED">
-					<TasksList :tasks="finishedTasks" user-role="student" type="finished" has-pagination />
+					<TasksOverviewList has-pagination :title="t('pages.tasks.student.subtitleOverDue')" :tasks="finishedTasks">
+						<template #default="{ task }">
+							<TasksOverviewListItemStudent :task />
+						</template>
+					</TasksOverviewList>
 					<VContainer>
-						<EmptyState v-if="finishedTasksIsEmpty" :title="t('pages.tasks.finished.emptyState.title')">
+						<EmptyState v-if="finishedTasks.length === 0" :title="t('pages.tasks.finished.emptyState.title')">
 							<template #media>
 								<TasksEmptyStateSvg />
 							</template>
@@ -101,10 +122,9 @@
 </template>
 
 <script setup lang="ts">
-import TasksDashBoardPanels from "./TasksDashBoardPanels.vue";
-import TasksList from "./TasksList.vue";
-import FinishedTasksModule from "@/store/finished-tasks";
-import { FINISHED_TASKS_MODULE_KEY, injectStrict } from "@/utils/inject";
+import TasksOverviewList from "./TasksOverviewList.vue";
+import TasksOverviewPanels from "./TasksOverviewPanels.vue";
+import TasksOverviewListItemStudent from "@/components/tasks/TasksOverviewListItemStudent.vue";
 import { useTasks } from "@data-tasks";
 import { mdiArchiveOutline, mdiCheckCircleOutline, mdiFormatListChecks } from "@icons/material";
 import { mdiMagnify } from "@icons/material";
@@ -119,8 +139,6 @@ enum TaskTab {
 	COMPLETED = "completed",
 	FINISHED = "finished",
 }
-
-const finishedTasksModule: FinishedTasksModule = injectStrict(FINISHED_TASKS_MODULE_KEY);
 
 const { t } = useI18n();
 const params = useUrlSearchParams("history");
@@ -142,18 +160,12 @@ const activeTab = computed({
 	},
 });
 
-onMounted(() => {
-	finishedTasksModule.fetchFinishedTasks();
-});
-
-const finishedTasksIsEmpty = computed(() => finishedTasksModule.tasksIsEmpty);
-const finishedTasks = computed(() => finishedTasksModule.getTasks);
-
 const {
 	openForStudent,
 	splitByDueDate,
-	isLoading: isLoadingTasks,
 	sortedCourseFilters,
+	finishedTasks,
+	fetchFinishedTasks,
 	selectedCourseNames,
 	submittedForStudent,
 	gradedForStudent,
@@ -161,6 +173,10 @@ const {
 	submittedForStudentUnfiltered,
 	gradedForStudentUnfiltered,
 } = useTasks({ includeSubstitute: false });
+
+onMounted(async () => {
+	await fetchFinishedTasks();
+});
 
 const openTasks = computed(() => splitByDueDate(openForStudent.value));
 

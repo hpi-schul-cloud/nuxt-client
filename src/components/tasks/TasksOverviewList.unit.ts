@@ -1,5 +1,5 @@
-import TasksList from "./TasksList.vue";
-import TasksListItemTeacher from "./TasksListItemTeacher.vue";
+import TasksOverviewList from "./TasksOverviewList.vue";
+import TasksOverviewListItemTeacher from "./TasksOverviewListItemTeacher.vue";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
@@ -15,13 +15,13 @@ import { beforeAll } from "vitest";
 
 const { tasks } = mocks;
 
-describe("TasksList", () => {
+describe("TasksOverviewList", () => {
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let copyModuleMock: CopyModule;
 	let shareModuleMock: ShareModule;
 
 	const mountComponent = (options = {}) => {
-		const wrapper = mount(TasksList, {
+		const wrapper = mount(TasksOverviewList, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -51,8 +51,8 @@ describe("TasksList", () => {
 
 	describe("props", () => {
 		it("should accept valid type & role props", () => {
-			const typeValidator = TasksList.props.type.validator;
-			const roleValidator = TasksList.props.userRole.validator;
+			const typeValidator = TasksOverviewList.props.type.validator;
+			const roleValidator = TasksOverviewList.props.userRole.validator;
 			const validTypes = ["current", "finished"];
 			const validRoles = ["student", "teacher"];
 			const invalidValues = ["invalid", "type"];
@@ -195,7 +195,7 @@ describe("TasksList", () => {
 			type: CopyParamsTypeEnum.Task,
 		};
 
-		const oneTaskItemTeacher = wrapper.findComponent(TasksListItemTeacher);
+		const oneTaskItemTeacher = wrapper.findComponent(TasksOverviewListItemTeacher);
 		oneTaskItemTeacher.vm.$emit("copy-task", payload);
 
 		expect(wrapper.emitted()["copy-task"]?.[0]).toEqual(expect.arrayContaining([payload]));
