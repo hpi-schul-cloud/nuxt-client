@@ -83,16 +83,6 @@ vi.mock("@api-server");
 
 vi.mock("@/serverApi/v3");
 
-vi.mock("bowser", () => ({
-	default: {
-		parse: vi.fn(() => ({
-			browser: { name: "Chrome", version: "120" },
-			os: { name: "macOS", version: "14" },
-			platform: { type: "desktop" },
-		})),
-	},
-}));
-
 vi.mock("@util-logger", () => ({
 	logger: {
 		log: vi.fn(),
@@ -109,12 +99,6 @@ describe("socket-error-handler", () => {
 		Object.defineProperty(globalThis, "location", {
 			value: { href: "http://localhost/boards/69121555fd38bab102439ff8" },
 			writable: true,
-		});
-		Object.defineProperty(globalThis.navigator, "userAgent", {
-			value:
-				"Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
-			configurable: true,
-			writable: false,
 		});
 		vi.mocked(BoardErrorReportApiFactory).mockReturnValue(boardErrorReportApiMock);
 	});
@@ -159,8 +143,8 @@ describe("socket-error-handler", () => {
 
 		expect(boardErrorReportApiMock.boardErrorReportControllerReportError).toHaveBeenCalledWith(
 			expect.objectContaining({
-				type: "reconnect",
-				message: "Connection restored after retry (3 attempts)",
+				type: "socketio_connection",
+				message: "reconnect_succeeded",
 				retryCount: 3,
 				boardId: "69121555fd38bab102439ff8",
 			})
@@ -182,8 +166,8 @@ describe("socket-error-handler", () => {
 
 		expect(boardErrorReportApiMock.boardErrorReportControllerReportError).toHaveBeenCalledWith(
 			expect.objectContaining({
-				type: "reconnect_attempt",
-				message: "Multiple reconnect attempts (5)",
+				type: "socketio_connection",
+				message: "reconnect_attempt",
 				retryCount: 5,
 			})
 		);
@@ -235,17 +219,12 @@ describe("socket-error-handler", () => {
 		boardErrorReportApiMock.boardErrorReportControllerReportError.mockRejectedValueOnce(new Error("Network error"));
 		const loggerMock = vi.mocked(logger);
 
-		// trigger a report that will fail
 		emitManagerEvent("reconnect_attempt", 7);
 
 		// Advance past the 6000ms delay for reconnect_attempt to trigger the API call
 		await vi.advanceTimersByTimeAsync(6100);
 
-		// Check error was logged
-		expect(loggerMock.error).toHaveBeenCalledWith(
-			"Failed to report error - will retry in 5 seconds",
-			expect.any(Error)
-		);
+		expect(loggerMock.error).toHaveBeenCalledWith("Failed to report error (retries left 2)", expect.any(Error));
 
 		// Advance past the 5000ms retry delay
 		await vi.advanceTimersByTimeAsync(5100);

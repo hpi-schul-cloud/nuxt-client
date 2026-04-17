@@ -30,7 +30,6 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 		if (logs.length === 0) {
 			startTime = Date.now();
 		}
-		const transport = socket.io.engine.transport.name;
 		logs.push(`[${Date.now() - startTime}ms]${message}`);
 		logger.log(logs);
 	};
@@ -44,27 +43,34 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 		log(`ERR: ${errorData?.message ?? error.message}`);
 	};
 
-	const reportBoardError = (message: string, retryCount: number, delayMs = 100) => {
+	const reportBoardError = (type: string, message: string, retryCount: number, delayMs = 100) => {
 		const data = {
+			type,
 			message,
 			retryCount,
 			logSteps: logs,
 		};
-		logger.log(JSON.stringify(data, null, 2));
-		delayedReportBoardError(message, retryCount, logs, delayMs);
+		logger.log(JSON.stringify(data, null, 2)); // TODO: delete this logger.log after final tests
+		delayedReportBoardError(type, message, retryCount, logs, delayMs);
 	};
 
 	// whenever this function is called the actual execution is delayed by X ms, if the function is called again within this delay, the previous call is canceled and the timer restarts
-	const delayedReportBoardError = (message: string, retryCount: number, logSteps: string[], delayMs: number) => {
+	const delayedReportBoardError = (
+		type: string,
+		message: string,
+		retryCount: number,
+		logSteps: string[],
+		delayMs: number
+	) => {
 		if (timeoutHandle) {
 			clearTimeout(timeoutHandle);
 		}
 		timeoutHandle = setTimeout(() => {
-			apiCall(message, retryCount, logSteps);
+			apiCall(type, message, retryCount, logSteps);
 		}, delayMs);
 	};
 
-	const apiCall = (message: string, retryCount: number, logSteps: string[], reportRetries = 2) => {
+	const apiCall = (type: string, message: string, retryCount: number, logSteps: string[], reportRetries = 2) => {
 		if (isJwtExpired.value) {
 			log("noSess");
 			return;
@@ -73,12 +79,12 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 		const url = globalThis.location.href;
 		const boardId = /boards\/([0-9a-fA-F]{24})/.exec(url)?.[1] ?? "unknown";
 		const data: BoardErrorReportBodyParams = {
-			type: `${String(connectionState)} ${socket.io.engine.transport.name}`,
+			type,
 			message,
 			url,
 			boardId,
 			retryCount,
-			logSteps,
+			logSteps: [...logSteps, connectionState + " " + socket.io.engine.transport.name],
 		};
 
 		boardErrorReportApi
@@ -95,7 +101,7 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 				}
 				timeoutHandle = setTimeout(() => {
 					// try again in 5 seconds
-					apiCall(message + " Failed => retry", retryCount, logSteps, reportRetries - 1);
+					apiCall(type, message + " Failed => retry", retryCount, logSteps, reportRetries - 1);
 				}, 5000);
 			});
 	};
@@ -117,20 +123,20 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 			return;
 		}
 		connectionState = ConnectionState.RECONNECTING;
-		log(`ra${attempt}`);
-		reportBoardError("reconnect_attempt", `Multiple reconnect attempts (${attempt})`, attempt, 6000);
+		log(`re_att${attempt}`);
+		reportBoardError("socketio_connection", "reconnect_attempt", attempt, 6000);
 	});
 
 	manager.on("reconnect", (attempts: number) => {
 		connectionState = ConnectionState.SUCCESS_AFTER_RETRIES;
 		log(`reconn`);
-		reportBoardError(`Connection restored after retry (${attempts} attempts)`, attempts, 500);
+		reportBoardError("socketio_connection", "reconnect_succeeded", attempts, 500);
 		resetLogs();
 	});
 
 	manager.on("reconnect_failed", () => {
 		connectionState = ConnectionState.FAILED_AFTER_MAX_ATTEMPTS;
-		reportBoardError("Connection failed after maximum attempts", 0);
+		reportBoardError("socketio_connection", "reconnect_failed", 0);
 		log("reconn_failed");
 	});
 
