@@ -41,12 +41,12 @@
 				</VListItemTitle>
 			</VListItem>
 			<VListItem
-				v-if="taskIsPublished"
+				v-if="!task.status.isDraft && !task.status.isFinished"
 				id="task-action-revert"
 				class="task-action"
 				data-testId="task-revert"
 				role="menuitem"
-				@click="emit('revert-task', taskId)"
+				@click="emit('revert-task', task.id)"
 			>
 				<VListItemTitle>
 					<VIcon :icon="mdiUndoVariant" class="task-action-icon" />
@@ -55,13 +55,13 @@
 			</VListItem>
 		</template>
 
-		<VListItem v-if="taskIsFinished" data-testId="task-finish" @click="emit('restore-task', taskId)">
+		<VListItem v-if="task.status.isFinished" data-testId="task-finish" @click="emit('restore-task', task.id)">
 			<VListItemTitle>
 				<VIcon :icon="mdiUndoVariant" class="task-action-icon" />
 				{{ t("common.labels.restore") }}
 			</VListItemTitle>
 		</VListItem>
-		<VListItem v-else data-testId="task-finish" @click="emit('finish-task', taskId)">
+		<VListItem v-else data-testId="task-finish" @click="emit('finish-task', task.id)">
 			<VListItemTitle>
 				<VIcon :icon="mdiArchiveOutline" class="task-action-icon" />
 				{{ t("components.molecules.TaskItemMenu.finish") }}
@@ -87,6 +87,7 @@
 <script setup lang="ts">
 import { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import { askDeletion } from "@/utils/confirmation-dialog.utils";
+import { TaskResponse } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiArchiveOutline,
@@ -102,17 +103,10 @@ import { useI18n } from "vue-i18n";
 
 const props = withDefaults(
 	defineProps<{
-		taskId: string;
-		taskIsFinished: boolean;
-		taskIsPublished?: boolean;
-		taskTitle?: string;
-		courseId?: string;
+		task: TaskResponse;
 		userRole: "student" | "teacher";
 	}>(),
-	{
-		taskTitle: "",
-		courseId: "",
-	}
+	{}
 );
 
 const emit = defineEmits<{
@@ -128,32 +122,22 @@ const { t } = useI18n();
 const envConfig = useEnvConfig();
 
 const isTeacher = computed(() => props.userRole === "teacher");
-const editLink = computed(() => `/homework/${props.taskId}/edit`);
-const copyLink = computed(() => `/homework/${props.taskId}/copy?returnUrl=/tasks`);
+const editLink = computed(() => `/homework/${props.task.id}/edit`);
+const copyLink = computed(() => `/homework/${props.task.id}/copy?returnUrl=/tasks`);
 const copyServiceEnabled = computed(() => envConfig.value.FEATURE_COPY_SERVICE_ENABLED);
 const shareTaskEnabled = computed(() => envConfig.value.FEATURE_TASK_SHARE);
 
 const onDelete = async () => {
 	const confirmed = await askDeletion(
 		"components.molecules.TaskItemMenu.confirmDelete.title",
-		t("components.molecules.TaskItemMenu.confirmDelete.text", { taskTitle: props.taskTitle }),
+		t("components.molecules.TaskItemMenu.confirmDelete.text", { taskTitle: props.task.name }),
 		"warning"
 	);
 
 	if (confirmed) {
-		emit("delete-task", props.taskId);
+		emit("delete-task", props.task.id);
 	}
 };
-
-const onFinish = () => {
-	if (props.taskIsFinished) {
-		restoreFinishedTask(props.taskId);
-	} else {
-		finishTask(props.taskId);
-	}
-};
-
-const onRevert = () => revertPublishedTask(props.taskId);
 
 const onCopyTask = () => {
 	if (!copyServiceEnabled.value) {
@@ -162,15 +146,15 @@ const onCopyTask = () => {
 	}
 
 	emit("copy-task", {
-		id: props.taskId,
-		courseId: props.courseId === "" ? undefined : props.courseId,
+		id: props.task.id,
+		courseId: props.task.courseId,
 		type: CopyParamsTypeEnum.Task,
 	});
 };
 
 const onShareTask = () => {
 	if (shareTaskEnabled.value) {
-		emit("share-task", props.taskId);
+		emit("share-task", props.task.id);
 	}
 };
 </script>

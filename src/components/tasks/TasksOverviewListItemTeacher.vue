@@ -9,10 +9,7 @@
 		</template>
 
 		<div class="d-flex">
-			<div
-				:class="hasUnpublishedLesson ? 'opacity-0-5' : ''"
-				class="task-item__main-info align-self-center flex-grow-1"
-			>
+			<div :class="isUnpublishedLesson ? 'opacity-0-5' : ''" class="task-item__main-info align-self-center flex-grow-1">
 				<VListItemSubtitle data-testId="task-label" class="d-inline-flex">
 					<span class="text-truncate" data-testid="taskSubtitle">
 						{{ taskLabel }}
@@ -25,7 +22,7 @@
 					<span class="text-truncate">{{ topic }}</span>
 				</VListItemSubtitle>
 				<VListItemSubtitle class="hidden-sm-and-up text--primary text-wrap">
-					<VChip v-if="hasUnpublishedLesson" size="x-small" data-testid="task-lesson-chip-small">
+					<VChip v-if="isUnpublishedLesson" size="x-small" data-testid="task-lesson-chip-small">
 						{{ $t("components.molecules.TaskItemTeacher.lessonIsNotPublished") }}
 					</VChip>
 					<i18n-t
@@ -72,11 +69,7 @@
 
 			<VListItemAction :id="`task-menu-${task.id}`" data-testid="three-dot-task-option-menu">
 				<TasksOverviewListItemMenu
-					:task-id="task.id"
-					:task-is-finished="task.status.isFinished"
-					:task-is-published="!task.status.isDraft && !task.status.isFinished"
-					:task-title="task.name"
-					:course-id="task.courseId"
+					:task
 					user-role="teacher"
 					@copy-task="onCopyTask"
 					@share-task="onShareTask"
