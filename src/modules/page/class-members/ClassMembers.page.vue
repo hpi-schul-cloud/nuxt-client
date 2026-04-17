@@ -34,7 +34,7 @@
 				</span>
 			</template>
 		</v-data-table>
-		<ClassMembersInfoBox class="mt-5" :system-id="externalSystemId" />
+		<ClassMembersInfoBox v-if="!isLoading" class="mt-5" :system-id="externalSystemId" />
 	</DefaultWireframe>
 </template>
 
@@ -84,7 +84,7 @@ export default defineComponent({
 			},
 		]);
 
-		const externalSystemId: ComputedRef<string | undefined> = computed(() => group.value?.externalSource?.systemId);
+		const externalSystemId = computed(() => group.value?.externalSource?.systemId);
 
 		const items: ComputedRef<GroupUserTableData[]> = computed(
 			() => group.value?.users.map(mapGroupUserToTableData) ?? []

@@ -27,16 +27,16 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { System, useSystemApi } from "@data-system";
-import { computed, ComputedRef, onMounted, Ref, ref, watch } from "vue";
+import { useSystem } from "@data-system";
+import { computed, ComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { systemId = "" } = defineProps<{ systemId?: string }>();
 
 const { t } = useI18n();
-const { getSystem } = useSystemApi();
-
-const system: Ref<System | undefined> = ref();
+// TODO: How to handle this?
+// eslint-disable-next-line vue/no-setup-props-reactivity-loss
+const { system, systemName } = useSystem(systemId);
 
 const infoBoxTextListItems = [
 	t("pages.classMembers.infoBox.text.listItem.first"),
@@ -45,22 +45,5 @@ const infoBoxTextListItems = [
 	t("pages.classMembers.infoBox.text.listItem.last"),
 ];
 
-onMounted(async () => {
-	if (systemId) {
-		system.value = await getSystem(systemId);
-	}
-});
-
-watch(
-	() => systemId,
-	async (value, oldValue) => {
-		if (value && value !== oldValue) {
-			system.value = await getSystem(systemId);
-		}
-	}
-);
-
 const hasSystem: ComputedRef<boolean> = computed(() => !!system.value);
-
-const systemName: ComputedRef<string> = computed(() => system.value?.displayName ?? "");
 </script>

@@ -41,7 +41,7 @@ import { MeUserResponse } from "@api-server";
 import { useAppStore, useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useOAuthApi } from "@data-oauth";
-import { System, useSystemApi } from "@data-system";
+import { useSystem } from "@data-system";
 import { safariAriaOwnsWorkaround } from "@util-device-detection";
 import { computed, onMounted, PropType, Ref, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
@@ -60,14 +60,13 @@ const props = defineProps({
 const { systemId } = useAppStoreRefs();
 
 const { t } = useI18n();
-const { getSystem } = useSystemApi();
+// TODO: How to handle undefined?
+const { system, systemName } = useSystem(systemId.value!);
 const { getSessionTokenExpiration } = useOAuthApi();
 
 const userRole = computed(() => t(`common.roleName.${toRef(props.roleNames).value[0]}`).toString());
 
 const initials = computed(() => props.user.firstName.slice(0, 1) + props.user.lastName.slice(0, 1));
-
-const system: Ref<System | undefined> = ref();
 
 const isExternalLogoutAllowed = computed(
 	() =>
@@ -75,8 +74,6 @@ const isExternalLogoutAllowed = computed(
 		!!systemId.value &&
 		!!system.value?.hasEndSessionEndpoint
 );
-
-const systemName = computed(() => system.value?.displayName ?? "");
 
 const now = ref(new Date());
 
@@ -87,9 +84,6 @@ const isSessionTokenExpired = computed(
 );
 
 onMounted(async () => {
-	if (systemId.value) {
-		system.value = await getSystem(systemId.value);
-	}
 	if (isExternalLogoutAllowed.value) {
 		sessionTokenExpiration.value = await getSessionTokenExpiration();
 	}

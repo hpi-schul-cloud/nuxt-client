@@ -3,19 +3,19 @@ import { createTestAppStore, createTestEnvStore, mockComposable } from "@@/tests
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { LanguageType } from "@api-server";
 import { useOAuthApi } from "@data-oauth";
-import { System, useSystemApi } from "@data-system";
+import { System, useSystem } from "@data-system";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
-import { nextTick } from "vue";
+import { nextTick, ref } from "vue";
 import { VBtn, VListItem } from "vuetify/lib/components/index";
 
 vi.mock("@data-system");
 vi.mock("@data-oauth");
 
 describe("@ui-layout/UserMenu", () => {
-	let useSystemApiMock: Mocked<ReturnType<typeof useSystemApi>>;
+	let useSystemMock: Mocked<ReturnType<typeof useSystem>>;
 	let useOAuthApiMock: Mocked<ReturnType<typeof useOAuthApi>>;
 
 	const setupWrapper = (isExternalFeatureEnabled = false, mockedSystem?: System, mockedTokenExpiration?: Date) => {
@@ -29,13 +29,15 @@ describe("@ui-layout/UserMenu", () => {
 			I18N__AVAILABLE_LANGUAGES: [LanguageType.DE, LanguageType.EN],
 		});
 
-		useSystemApiMock = mockComposable(useSystemApi);
+		useSystemMock = mockComposable(useSystem, {
+			system: ref(mockedSystem),
+			systemName: ref(mockedSystem?.displayName),
+		});
 		useOAuthApiMock = mockComposable(useOAuthApi);
 
-		vi.mocked(useSystemApi).mockReturnValue(useSystemApiMock);
+		vi.mocked(useSystem).mockReturnValue(useSystemMock);
 		vi.mocked(useOAuthApi).mockReturnValue(useOAuthApiMock);
 
-		useSystemApiMock.getSystem.mockResolvedValue(mockedSystem);
 		useOAuthApiMock.getSessionTokenExpiration.mockResolvedValue(mockedTokenExpiration);
 
 		const wrapper = mount(UserMenu, {
