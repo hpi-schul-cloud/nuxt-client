@@ -2,9 +2,7 @@
 	<VListItem v-bind="$attrs" :aria-label="ariaLabel" :ripple="false" role="article" @click="handleClick">
 		<template #prepend>
 			<VAvatar>
-				<VIcon class="fill" :class="{ 'opacity-0-5': isUnpublishedLesson }" :color="iconColor">
-					{{ avatarIcon }}
-				</VIcon>
+				<VIcon class="fill" :icon="avatarIcon" :class="{ 'opacity-0-5': isUnpublishedLesson }" :color="iconColor" />
 			</VAvatar>
 		</template>
 
@@ -90,13 +88,15 @@ import { CopyParams } from "@/store/copy";
 import { formatUtc, isToday } from "@/utils/date-time.utils";
 import { TaskResponse } from "@api-server";
 import { isTaskDraft, isTaskUnpublished, useTaskActions, useTasksOfOverview } from "@data-tasks";
+import TaskDraft from "@icons/custom/task-draft.vue";
+import TaskOpenFilled from "@icons/custom/task-open-filled.vue";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
 const props = defineProps<{ task: TaskResponse }>();
 const { isMutating, finishTask, restoreFinishedTask, deleteTask, revertPublishedTask } = useTaskActions();
-const { fetchTasks, fetchFinishedTasks, isLoading } = useTasksOfOverview();
+const { fetchTasks, fetchFinishedTasks } = useTasksOfOverview();
 
 const onRestoreTask = async (taskId: string) => {
 	await restoreFinishedTask(taskId);
@@ -134,7 +134,7 @@ const isDraft = computed(() => isTaskDraft(props.task));
 const isPlanned = computed(() => new Date(props.task.availableDate!) > new Date());
 
 const showTaskStatus = computed(() => !isDraft.value && !isPlanned.value);
-const avatarIcon = computed(() => (isDraft.value ? "$taskDraft" : "$taskOpenFilled"));
+const avatarIcon = computed(() => (isDraft.value ? TaskDraft : TaskOpenFilled));
 const iconColor = computed(() => props.task.displayColor ?? "#54616e");
 
 const courseName = computed(() => {

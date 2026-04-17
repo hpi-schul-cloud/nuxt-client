@@ -331,4 +331,6 @@ export const useTaskActions = () => {
 	};
 };
 
-export const useTasksOfOverview = createTestableSharedComposable(() => useTasks({ includeSubstitute: false }));
+export const useTasksOfOverview = createTestableSharedComposable(() =>
+	useTasks({ includeSubstitute: false, fetchImmediate: true })
+);

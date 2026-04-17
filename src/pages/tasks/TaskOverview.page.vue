@@ -1,6 +1,6 @@
 <template>
-	<DefaultWireframe :headline="$t('common.words.tasks')" max-width="native" :fab-items="fabItems">
-		<SvsSuspense :loading="isLoadingTasks">
+	<DefaultWireframe :headline="t('common.words.tasks')" max-width="native" :fab-items="fabItems">
+		<SvsSuspense :loading="isLoadingTasks && tasks.length === 0">
 			<template #loading>
 				<div class="d-flex flex-column w-100">
 					<VSkeletonLoader type="text" :max-width="'15%'" />
@@ -32,7 +32,7 @@ import { useI18n } from "vue-i18n";
 const { isStudent, isTeacher } = useAppStoreRefs();
 const { t } = useI18n();
 
-const { isLoadingTasks } = useTasksOfOverview();
+const { isLoadingTasks, tasks } = useTasksOfOverview();
 
 useTitle(buildPageTitle(t("common.words.tasks")));
 
