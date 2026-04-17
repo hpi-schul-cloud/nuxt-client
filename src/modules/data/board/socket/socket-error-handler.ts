@@ -56,7 +56,7 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 		delayedReportBoardError(type, message, retryCount, delayMs);
 	};
 
-	// whenever this function is called the actual execution is delayed by 100ms, if the function is called again within this delay, the previous call is canceled and the timer restarts
+	// whenever this function is called the actual execution is delayed by X ms, if the function is called again within this delay, the previous call is canceled and the timer restarts
 	const delayedReportBoardError = (type: string, message: string, retryCount: number, delayMs: number) => {
 		if (timeoutHandle) {
 			clearTimeout(timeoutHandle);
