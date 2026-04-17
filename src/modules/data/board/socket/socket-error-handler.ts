@@ -1,5 +1,5 @@
 import { $axios } from "@/utils/api";
-import { BoardErrorReportApiFactory } from "@api-server";
+import { BoardErrorReportApiFactory, BoardErrorReportBodyParams } from "@api-server";
 import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
 import { type Socket } from "socket.io-client";
@@ -52,32 +52,39 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 			logSteps: logs,
 		};
 		logger.log(JSON.stringify(data, null, 2));
-		delayedReportBoardError(type, message, retryCount, delayMs);
+		delayedReportBoardError(type, message, retryCount, [...logs], delayMs);
 	};
 
 	// whenever this function is called the actual execution is delayed by X ms, if the function is called again within this delay, the previous call is canceled and the timer restarts
-	const delayedReportBoardError = (type: string, message: string, retryCount: number, delayMs: number) => {
+	const delayedReportBoardError = (
+		type: string,
+		message: string,
+		retryCount: number,
+		logSteps: string[],
+		delayMs: number
+	) => {
 		if (timeoutHandle) {
 			clearTimeout(timeoutHandle);
 		}
 		timeoutHandle = setTimeout(() => {
-			apiCall(type, message, retryCount);
+			apiCall(type, message, retryCount, logSteps);
 		}, delayMs);
 	};
 
-	const apiCall = (type: string, message: string, retryCount: number) => {
+	const apiCall = (type: string, message: string, retryCount: number, logSteps: string[]) => {
 		const url = globalThis.location.href;
 		const boardId = /boards\/([0-9a-fA-F]{24})/.exec(url)?.[1] ?? "unknown";
-		const dataSubset = {
+		const data: BoardErrorReportBodyParams = {
 			type,
 			message,
 			url,
 			boardId,
 			retryCount,
+			logSteps,
 		};
 
 		boardErrorReportApi
-			.boardErrorReportControllerReportError(dataSubset)
+			.boardErrorReportControllerReportError(data)
 			.then(() => {
 				if (timeoutHandle) {
 					clearTimeout(timeoutHandle);
@@ -87,7 +94,7 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 				logger.error("Failed to report error - will retry in 5 seconds", err);
 				timeoutHandle = setTimeout(() => {
 					// try again in 5 seconds
-					apiCall(type, message + " Failed => retry", retryCount);
+					apiCall(type, message + " Failed => retry", retryCount, logSteps);
 				}, 5000);
 			});
 	};
