@@ -1,5 +1,5 @@
 <template>
-	<VListGroup value="color-picker">
+	<VListGroup data-testid="color-picker-menu" value="color-picker">
 		<template #activator="{ props }">
 			<VListItem v-bind="props" :title="t('common.actions.pickColor')" :prepend-icon="mdiPalette" @click.prevent.stop />
 		</template>
