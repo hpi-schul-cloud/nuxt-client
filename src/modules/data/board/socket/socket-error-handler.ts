@@ -31,7 +31,7 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 			startTime = Date.now();
 		}
 		const transport = socket.io.engine.transport.name;
-		logs.push(`[${Date.now() - startTime}ms] ${transport} | ${message}`);
+		logs.push(`[${Date.now() - startTime}ms]${message}`);
 		logger.log(logs);
 	};
 
@@ -44,43 +44,36 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 		log(`ERR: ${errorData?.message ?? error.message}`);
 	};
 
-	const reportBoardError = (type: string, message: string, retryCount: number, delayMs = 100) => {
+	const reportBoardError = (message: string, retryCount: number, delayMs = 100) => {
 		const data = {
-			type,
 			message,
 			retryCount,
 			logSteps: logs,
 		};
 		logger.log(JSON.stringify(data, null, 2));
-		delayedReportBoardError(type, message, retryCount, [...logs], delayMs);
+		delayedReportBoardError(message, retryCount, logs, delayMs);
 	};
 
 	// whenever this function is called the actual execution is delayed by X ms, if the function is called again within this delay, the previous call is canceled and the timer restarts
-	const delayedReportBoardError = (
-		type: string,
-		message: string,
-		retryCount: number,
-		logSteps: string[],
-		delayMs: number
-	) => {
+	const delayedReportBoardError = (message: string, retryCount: number, logSteps: string[], delayMs: number) => {
 		if (timeoutHandle) {
 			clearTimeout(timeoutHandle);
 		}
 		timeoutHandle = setTimeout(() => {
-			apiCall(type, message, retryCount, logSteps);
+			apiCall(message, retryCount, logSteps);
 		}, delayMs);
 	};
 
-	const apiCall = (type: string, message: string, retryCount: number, logSteps: string[], reportRetries = 2) => {
+	const apiCall = (message: string, retryCount: number, logSteps: string[], reportRetries = 2) => {
 		if (isJwtExpired.value) {
-			log("JWT expired - can not report error");
+			log("noSess");
 			return;
 		}
 
 		const url = globalThis.location.href;
 		const boardId = /boards\/([0-9a-fA-F]{24})/.exec(url)?.[1] ?? "unknown";
 		const data: BoardErrorReportBodyParams = {
-			type,
+			type: `${String(connectionState)} ${socket.io.engine.transport.name}`,
 			message,
 			url,
 			boardId,
@@ -96,14 +89,13 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 				}
 			})
 			.catch((err) => {
-				logger.error("Failed to report error - will retry in 5 seconds", err);
+				logger.error(`Failed to report error (retries left ${reportRetries})`, err);
 				if (reportRetries <= 0) {
-					logger.error("Failed to report error", err);
 					return;
 				}
 				timeoutHandle = setTimeout(() => {
 					// try again in 5 seconds
-					apiCall(type, message + " Failed => retry", retryCount, logSteps, reportRetries - 1);
+					apiCall(message + " Failed => retry", retryCount, logSteps, reportRetries - 1);
 				}, 5000);
 			});
 	};
@@ -120,26 +112,26 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 
 	manager.on("reconnect_attempt", (attempt) => {
 		if (isJwtExpired.value) {
-			log("JWT expired - will not attempt to reconnect");
+			log("noSess");
 			socket.disconnect();
 			return;
 		}
 		connectionState = ConnectionState.RECONNECTING;
-		log("reconnect_attempt");
+		log(`ra${attempt}`);
 		reportBoardError("reconnect_attempt", `Multiple reconnect attempts (${attempt})`, attempt, 6000);
 	});
 
 	manager.on("reconnect", (attempts: number) => {
 		connectionState = ConnectionState.SUCCESS_AFTER_RETRIES;
-		log(`reconnected after ${attempts} attempts`);
-		reportBoardError("reconnect", `Connection restored after retry (${attempts} attempts)`, attempts, 500);
+		log(`reconn`);
+		reportBoardError(`Connection restored after retry (${attempts} attempts)`, attempts, 500);
 		resetLogs();
 	});
 
 	manager.on("reconnect_failed", () => {
 		connectionState = ConnectionState.FAILED_AFTER_MAX_ATTEMPTS;
-		reportBoardError("reconnect_failed", "Connection failed after maximum attempts", 0);
-		log("reconnect_failed");
+		reportBoardError("Connection failed after maximum attempts", 0);
+		log("reconn_failed");
 	});
 
 	const engine = socket.io.engine;
@@ -148,7 +140,7 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 	socket.on("connect_error", handleError);
 
 	socket.io.engine.on("upgrade", (transport) => {
-		log(`upgraded to ${transport.name}`);
+		log(`upgr`);
 	});
 
 	return {
