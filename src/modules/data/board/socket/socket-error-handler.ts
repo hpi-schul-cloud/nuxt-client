@@ -71,7 +71,12 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 		}, delayMs);
 	};
 
-	const apiCall = (type: string, message: string, retryCount: number, logSteps: string[]) => {
+	const apiCall = (type: string, message: string, retryCount: number, logSteps: string[], reportRetries = 2) => {
+		if (isJwtExpired.value) {
+			log("JWT expired - can not report error");
+			return;
+		}
+
 		const url = globalThis.location.href;
 		const boardId = /boards\/([0-9a-fA-F]{24})/.exec(url)?.[1] ?? "unknown";
 		const data: BoardErrorReportBodyParams = {
@@ -92,9 +97,13 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 			})
 			.catch((err) => {
 				logger.error("Failed to report error - will retry in 5 seconds", err);
+				if (reportRetries <= 0) {
+					logger.error("Failed to report error", err);
+					return;
+				}
 				timeoutHandle = setTimeout(() => {
 					// try again in 5 seconds
-					apiCall(type, message + " Failed => retry", retryCount, logSteps);
+					apiCall(type, message + " Failed => retry", retryCount, logSteps, reportRetries - 1);
 				}, 5000);
 			});
 	};
