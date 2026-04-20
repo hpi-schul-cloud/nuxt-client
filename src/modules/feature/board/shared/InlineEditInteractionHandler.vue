@@ -42,11 +42,17 @@ const isListItem = (target: HTMLElement | SVGElement): boolean => {
 	return target.className?.includes("v-list-item");
 };
 
+const isAllowedInteractiveElement = (target: HTMLElement | SVGElement): boolean => {
+	if (target instanceof SVGElement) return false;
+
+	return target.closest("button")?.className?.includes("allowed-interactive-element") || false;
+};
+
 const isAllowedTarget = (event: Event): boolean => {
 	const target = event.target as HTMLElement | SVGElement;
 	if (!(target instanceof HTMLElement) && !(target instanceof SVGElement)) return true;
 
-	const disallowedConditions = [isListItem, isDatePicker, isFileElementLink];
+	const disallowedConditions = [isListItem, isDatePicker, isFileElementLink, isAllowedInteractiveElement];
 
 	return target && disallowedConditions.every((fn) => !fn(target));
 };

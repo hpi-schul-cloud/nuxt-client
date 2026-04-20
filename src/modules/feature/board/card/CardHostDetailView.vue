@@ -11,11 +11,11 @@
 			<v-card>
 				<div class="toolbar-fixed-offset">
 					<v-toolbar class="toolbar-position" color="white">
-						<v-btn icon @click="onDialogClose">
+						<v-btn class="allowed-interactive-element" icon @click="onDialogClose">
 							<v-icon>{{ mdiClose }}</v-icon>
 						</v-btn>
 						<v-spacer />
-						<v-btn class="mr-4" data-testid="toolbar-edit-button" @click="onToggleEdit">
+						<v-btn class="mr-4 allowed-interactive-element" data-testid="toolbar-edit-button" @click="onToggleEdit">
 							{{
 								isEditMode ? $t("common.actions.edit") + " " + $t("common.actions.finish") : $t("common.actions.edit")
 							}}
@@ -24,26 +24,32 @@
 				</div>
 				<v-card-text>
 					<div class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto">
-						<CardTitle
+						<CardHostInteractionHandler
 							:is-edit-mode="isEditMode"
-							:value="card.title"
-							scope="card"
-							:is-focused="true"
-							@update:value="onUpdateCardTitle"
-							@enter="onEnterTitle"
-						/>
-						<ContentElementList
-							:elements="card.elements"
-							:is-edit-mode="isEditMode"
-							:is-detail-view="true"
-							:row-index="rowIndex"
-							:column-index="columnIndex"
-							@delete:element="onDeleteElement"
-							@move-down:element="onMoveElementDown"
-							@move-up:element="onMoveElementUp"
-							@move-keyboard:element="onMoveElementKeyboard"
-						/>
-						<CardAddElementMenu @add-element="onAddElement" />
+							@start-edit-mode="onToggleEdit"
+							@end-edit-mode="onToggleEdit"
+						>
+							<CardTitle
+								:is-edit-mode="isEditMode"
+								:value="card.title"
+								scope="card"
+								:is-focused="true"
+								@update:value="onUpdateCardTitle"
+								@enter="onEnterTitle"
+							/>
+							<ContentElementList
+								:elements="card.elements"
+								:is-edit-mode="isEditMode"
+								:is-detail-view="true"
+								:row-index="rowIndex"
+								:column-index="columnIndex"
+								@delete:element="onDeleteElement"
+								@move-down:element="onMoveElementDown"
+								@move-up:element="onMoveElementUp"
+								@move-keyboard:element="onMoveElementKeyboard"
+							/>
+							<CardAddElementMenu @add-element="onAddElement" />
+						</CardHostInteractionHandler>
 					</div>
 				</v-card-text>
 			</v-card>
@@ -53,6 +59,7 @@
 
 <script setup lang="ts">
 import CardAddElementMenu from "./CardAddElementMenu.vue";
+import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import type { ElementMove } from "@/types/board/DragAndDrop";
