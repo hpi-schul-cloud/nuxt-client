@@ -118,6 +118,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_TEAM_CREATE_ROOM_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_FWU_CONTENT_ENABLED: boolean;
     /**
      * 

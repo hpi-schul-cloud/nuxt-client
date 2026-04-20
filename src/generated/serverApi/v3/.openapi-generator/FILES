@@ -47,6 +47,7 @@ api/shd-api.ts
 api/submission-api.ts
 api/systems-api.ts
 api/task-api.ts
+api/team-api.ts
 api/tool-api.ts
 api/user-api.ts
 api/user-import-api.ts
@@ -385,6 +386,7 @@ models/task-list-response.ts
 models/task-response.ts
 models/task-status-response.ts
 models/teacher-permission-params.ts
+models/team-create-room-response.ts
 models/team-permissions-body.ts
 models/timestamps-response.ts
 models/timezone.ts

@@ -324,6 +324,7 @@ export * from './task-list-response';
 export * from './task-response';
 export * from './task-status-response';
 export * from './teacher-permission-params';
+export * from './team-create-room-response';
 export * from './team-permissions-body';
 export * from './timestamps-response';
 export * from './timezone';

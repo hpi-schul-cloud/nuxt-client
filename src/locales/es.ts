@@ -105,6 +105,7 @@ export default {
 	"common.labels.restore": "Restaurar",
 	"common.labels.role": "Papel",
 	"common.labels.room": "Sala | Salas",
+	"common.labels.runtimeConfig": "Configuración del tiempo de ejecución",
 	"common.labels.search": "Buscar",
 	"common.labels.settings": "Ajustes",
 	"common.labels.size": "Tamaño",

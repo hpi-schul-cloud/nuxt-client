@@ -19,6 +19,7 @@ import {
 	ReleaseApiInterface,
 	ReleaseItemResponse,
 	RoleName,
+	RuntimeConfigApiInterface,
 } from "@api-server";
 import * as serverApi from "@api-server";
 import { DashboardTasks } from "@feature-dashboard";
@@ -31,6 +32,7 @@ import { Mocked } from "vitest";
 describe("DashboardPage", () => {
 	let newsApi: Mocked<NewsApiInterface>;
 	let releasesApi: Mocked<ReleaseApiInterface>;
+	let runtimeConfigApi: Mocked<RuntimeConfigApiInterface>;
 	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
@@ -40,6 +42,7 @@ describe("DashboardPage", () => {
 
 		newsApi = mockApi<NewsApiInterface>();
 		releasesApi = mockApi<ReleaseApiInterface>();
+		runtimeConfigApi = mockApi<RuntimeConfigApiInterface>();
 
 		setupStores({
 			schoolsModule: SchoolsModule,
@@ -48,6 +51,7 @@ describe("DashboardPage", () => {
 
 		vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(newsApi);
 		vi.spyOn(serverApi, "ReleaseApiFactory").mockReturnValue(releasesApi);
+		vi.spyOn(serverApi, "RuntimeConfigApiFactory").mockReturnValue(runtimeConfigApi);
 	});
 
 	const setup = (options?: {

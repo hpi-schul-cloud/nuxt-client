@@ -31,6 +31,7 @@ import {
 import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
+import { useRuntimeConfigStore } from "@data-runtime-config";
 import { htmlConfig } from "@feature-render-html";
 import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
@@ -64,6 +65,7 @@ app.use(VueDOMPurifyHTML, {
 
 	initializeAxios(axios, useSessionBroadcast().handleUnauthorizedError);
 
+	useRuntimeConfigStore().fetchRuntimeConfig();
 	const success = await useEnvStore().loadConfiguration();
 
 	if (success) {
