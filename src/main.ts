@@ -13,7 +13,6 @@ import {
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
-	SYSTEMS_MODULE_KEY,
 	THEME_KEY,
 } from "./utils/inject";
 import {
@@ -26,7 +25,6 @@ import {
 	schoolExternalToolsModule,
 	schoolsModule,
 	shareModule,
-	systemsModule,
 	tasksModule,
 } from "@/store";
 import themeConfig from "@/theme.config";
@@ -102,7 +100,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(), schoolExternalToolsModule);
 	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
 	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
-	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
 	app.provide("tasksModule", tasksModule);
 	app.provide(THEME_KEY.valueOf(), themeConfig);
 
