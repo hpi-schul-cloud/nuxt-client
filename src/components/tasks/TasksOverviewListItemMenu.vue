@@ -88,6 +88,7 @@
 import { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { TaskResponse } from "@api-server";
+import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiArchiveOutline,
@@ -104,10 +105,11 @@ import { useI18n } from "vue-i18n";
 const props = withDefaults(
 	defineProps<{
 		task: TaskResponse;
-		userRole: "student" | "teacher";
 	}>(),
 	{}
 );
+
+const { isTeacher } = useAppStoreRefs();
 
 const emit = defineEmits<{
 	"copy-task": [payload: CopyParams];
@@ -121,7 +123,6 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const envConfig = useEnvConfig();
 
-const isTeacher = computed(() => props.userRole === "teacher");
 const editLink = computed(() => `/homework/${props.task.id}/edit`);
 const copyLink = computed(() => `/homework/${props.task.id}/copy?returnUrl=/tasks`);
 const copyServiceEnabled = computed(() => envConfig.value.FEATURE_COPY_SERVICE_ENABLED);

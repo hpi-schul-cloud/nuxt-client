@@ -1,6 +1,6 @@
 <template>
 	<DefaultWireframe :headline="t('common.words.tasks')" max-width="native" :fab-items="fabItems">
-		<SvsSuspense :loading="isLoadingTasks && tasks.length === 0">
+		<SvsSuspense :loading="isLoadingTasks && !hasLoadedOnce">
 			<template #loading>
 				<div class="d-flex flex-column w-100">
 					<VSkeletonLoader type="text" :max-width="'15%'" />
@@ -26,13 +26,14 @@ import { mdiPlus } from "@icons/material";
 import { SvsSuspense } from "@ui-containers";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { isStudent, isTeacher } = useAppStoreRefs();
+const hasLoadedOnce = ref(false);
 const { t } = useI18n();
 
-const { isLoadingTasks, tasks } = useTasksOfOverview();
+const { isLoadingTasks, status } = useTasksOfOverview();
 
 useTitle(buildPageTitle(t("common.words.tasks")));
 
@@ -51,5 +52,12 @@ const fabItems = computed(() => {
 	}
 
 	return undefined;
+});
+
+const unWatch = watch(status, (status) => {
+	if (status === "completed") {
+		hasLoadedOnce.value = true;
+		unWatch();
+	}
 });
 </script>

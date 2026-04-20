@@ -102,17 +102,20 @@
 						</EmptyState>
 					</VContainer>
 				</VWindowItem>
-				<VWindowItem :value="TaskTab.COMPLETED">
-					<TasksOverviewList has-pagination :title="t('pages.tasks.student.subtitleOverDue')" :tasks="finishedTasks">
+				<VWindowItem :value="TaskTab.FINISHED">
+					<TasksOverviewList
+						:tasks="finishedTasks"
+						:is-loading-more-items="isLoadingFinishedTasks"
+						has-pagination
+						@load-more-tasks="loadMoreFinishedTasks"
+					>
 						<template #default="{ task }">
 							<TasksOverviewListItemStudent :task />
 						</template>
 					</TasksOverviewList>
 					<VContainer>
 						<EmptyState v-if="finishedTasks.length === 0" :title="t('pages.tasks.finished.emptyState.title')">
-							<template #media>
-								<TasksEmptyStateSvg />
-							</template>
+							<template #media> <TasksEmptyStateSvg /></template>
 						</EmptyState>
 					</VContainer>
 				</VWindowItem>
@@ -125,7 +128,7 @@
 import TasksOverviewList from "./TasksOverviewList.vue";
 import TasksOverviewPanels from "./TasksOverviewPanels.vue";
 import TasksOverviewListItemStudent from "@/components/tasks/TasksOverviewListItemStudent.vue";
-import { useTasks } from "@data-tasks";
+import { useTasksOfOverview } from "@data-tasks";
 import { mdiArchiveOutline, mdiCheckCircleOutline, mdiFormatListChecks } from "@icons/material";
 import { mdiMagnify } from "@icons/material";
 import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
@@ -165,6 +168,8 @@ const {
 	splitByDueDate,
 	sortedCourseFilters,
 	finishedTasks,
+	isLoadingFinishedTasks,
+	loadMoreFinishedTasks,
 	fetchFinishedTasks,
 	selectedCourseNames,
 	submittedForStudent,
@@ -172,7 +177,7 @@ const {
 	openForStudentUnfiltered,
 	submittedForStudentUnfiltered,
 	gradedForStudentUnfiltered,
-} = useTasks();
+} = useTasksOfOverview();
 
 onMounted(async () => {
 	await fetchFinishedTasks();

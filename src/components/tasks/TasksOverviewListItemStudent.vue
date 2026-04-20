@@ -1,15 +1,12 @@
 <template>
 	<VListItem v-bind="$attrs" :aria-label="ariaLabel" role="article" :ripple="false" @click="handleClick">
-		<!-- item avatar -->
 		<template #prepend>
 			<VAvatar>
-				<VIcon class="fill" :color="iconColor">{{ taskIcon }}</VIcon>
+				<VIcon class="fill" :icon="taskIcon" :color="iconColor" />
 			</VAvatar>
 		</template>
 
-		<!-- item main info -->
-		<div class="d-flex align-center justify-space-between flex-wrap flex-sm-nowrap">
-			<!-- item title -->
+		<template #default>
 			<div class="task-item__main-info w-65" :style="conditionalWidth">
 				<VListItemSubtitle data-testid="taskSubtitle">
 					{{ taskLabel }}
@@ -24,17 +21,18 @@
 					{{ dueDateLabel }}
 				</div>
 				<ChipTimeRemaining
-					v-if="taskState === 'warning'"
+					v-if="task.dueDate && taskState === 'warning'"
 					class="ml-2 ml-sm-0 float-sm-right"
 					:type="taskState"
 					:due-date="task.dueDate"
 				/>
 			</div>
-		</div>
+		</template>
 
 		<template #append>
-			<div :id="`task-menu-${task.id}`" class="context-menu-btn">
-				<TasksOverviewListItemMenu :task-id="task.id" :task-is-finished="task.status.isFinished" user-role="student" />
+			<div :data-testid="`three-dot-task-option-menu-${task.id}`">
+				<TasksOverviewListItemMenu :task @finish-task="onFinish" @restore-task="onRestoreTask" />
+				<VProgressCircular v-if="isMutating" class="position-absolute right-0" indeterminate size="16" />
 			</div>
 		</template>
 	</VListItem>
@@ -44,6 +42,8 @@
 import TasksOverviewListItemMenu from "./TasksOverviewListItemMenu.vue";
 import { formatUtc, isDueWithin24h } from "@/utils/date-time.utils";
 import { TaskResponse } from "@api-server";
+import { useTaskActions, useTasksOfOverview } from "@data-tasks";
+import { TaskMissed, TaskMissedFilled, TaskOpenFilled } from "@icons/custom";
 import { mdiCheckCircleOutline } from "@icons/material";
 import { ChipTimeRemaining } from "@ui-chip";
 import { computed } from "vue";
@@ -51,6 +51,9 @@ import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
 const props = defineProps<{ task: TaskResponse }>();
+
+const { fetchTasks, fetchFinishedTasks } = useTasksOfOverview();
+const { isMutating, finishTask, restoreFinishedTask } = useTaskActions();
 
 const { t } = useI18n();
 const { xs } = useDisplay();
@@ -66,7 +69,7 @@ const isGradedButMissed = computed(() => {
 	return isOverDue.value && !status.submitted && status.graded;
 });
 
-const taskState = computed<TaskState>(() => {
+const taskState = computed(() => {
 	const { status } = props.task;
 
 	if (isCloseToDueDate.value && !status.submitted) return "warning";
@@ -78,15 +81,19 @@ const taskState = computed<TaskState>(() => {
 });
 
 const taskIcon = computed(() => {
-	const stateIcons: Record<string, string> = {
-		warning: "$taskOpenFilled",
-		overdue: "$taskMissed",
-		submitted: mdiCheckCircleOutline,
-		graded: mdiCheckCircleOutline,
-		gradedOverdue: "$taskMissedFilled",
-		open: "$taskOpenFilled",
-	};
-	return stateIcons[taskState.value ?? "open"] ?? stateIcons["open"];
+	switch (taskState.value) {
+		case "warning":
+			return TaskOpenFilled;
+		case "overdue":
+			return TaskMissed;
+		case "gradedOverdue":
+			return TaskMissedFilled;
+		case "submitted":
+		case "graded":
+			return mdiCheckCircleOutline;
+		default:
+			return TaskOpenFilled;
+	}
 });
 
 const topic = computed(() => (props.task.lessonName ? `${t("common.words.topic")} ${props.task.lessonName}` : ""));
@@ -104,6 +111,15 @@ const taskLabel = computed(() => props.task.courseName);
 const ariaLabel = computed(() => `${t("common.words.task")} ${props.task.name}`);
 
 const conditionalWidth = computed(() => (xs.value ? "width: 96%" : "width: 65%"));
+
+const onFinish = async (taskId: string) => {
+	await finishTask(taskId);
+	await Promise.all([fetchTasks(), fetchFinishedTasks()]);
+};
+const onRestoreTask = async (taskId: string) => {
+	await restoreFinishedTask(taskId);
+	await Promise.all([fetchTasks(), fetchFinishedTasks()]);
+};
 
 const handleClick = () => {
 	window.location.href = `/homework/${props.task.id}`;

@@ -6,69 +6,75 @@
 			</VAvatar>
 		</template>
 
-		<div class="d-flex">
-			<div :class="isUnpublishedLesson ? 'opacity-0-5' : ''" class="task-item__main-info align-self-center flex-grow-1">
-				<VListItemSubtitle data-testId="task-label" class="d-inline-flex">
-					<span class="text-truncate" data-testid="taskSubtitle">
-						{{ taskLabel }}
-					</span>
-				</VListItemSubtitle>
-				<VListItemTitle data-testid="taskTitle">
-					{{ task.name }}
-				</VListItemTitle>
-				<VListItemSubtitle v-if="topic && currentBreakpoint !== 'xs'" data-testid="task-topic" class="d-inline-flex">
-					<span class="text-truncate">{{ topic }}</span>
-				</VListItemSubtitle>
-				<VListItemSubtitle class="hidden-sm-and-up text--primary text-wrap">
-					<VChip v-if="isUnpublishedLesson" size="x-small" data-testid="task-lesson-chip-small">
-						{{ $t("components.molecules.TaskItemTeacher.lessonIsNotPublished") }}
+		<template #default>
+			<div class="d-flex">
+				<div
+					:class="isUnpublishedLesson ? 'opacity-0-5' : ''"
+					class="task-item__main-info align-self-center flex-grow-1"
+				>
+					<VListItemSubtitle data-testId="task-label" class="d-inline-flex">
+						<span class="text-truncate" data-testid="taskSubtitle">
+							{{ taskLabel }}
+						</span>
+					</VListItemSubtitle>
+					<VListItemTitle data-testid="taskTitle">
+						{{ task.name }}
+					</VListItemTitle>
+					<VListItemSubtitle v-if="topic && currentBreakpoint !== 'xs'" data-testid="task-topic" class="d-inline-flex">
+						<span class="text-truncate">{{ topic }}</span>
+					</VListItemSubtitle>
+					<VListItemSubtitle class="hidden-sm-and-up text--primary text-wrap">
+						<VChip v-if="isUnpublishedLesson" size="x-small" data-testid="task-lesson-chip-small">
+							{{ t("components.molecules.TaskItemTeacher.lessonIsNotPublished") }}
+						</VChip>
+						<i18n-t
+							v-else
+							keypath="components.molecules.TaskItemTeacher.status"
+							scope="global"
+							data-testid="task-status-small"
+						>
+							<template #submitted>{{ task.status.submitted }}</template>
+							<template #max>{{ task.status.maxSubmissions }}</template>
+							<template #graded>{{ task.status.graded }}</template>
+						</i18n-t>
+					</VListItemSubtitle>
+				</div>
+
+				<!-- item additional info -->
+				<section
+					v-if="isUnpublishedLesson"
+					data-testid="task-lesson-chip-large"
+					class="hidden-xs mr-8 pl-4 align-self-center"
+				>
+					<VChip size="small">
+						{{ t("components.molecules.TaskItemTeacher.lessonIsNotPublished") }}
 					</VChip>
-					<i18n-t
-						v-else
-						keypath="components.molecules.TaskItemTeacher.status"
-						scope="global"
-						data-testid="task-status-small"
-					>
-						<template #submitted>{{ task.status.submitted }}</template>
-						<template #max>{{ task.status.maxSubmissions }}</template>
-						<template #graded>{{ task.status.graded }}</template>
-					</i18n-t>
-				</VListItemSubtitle>
+				</section>
+				<section v-else-if="showTaskStatus" data-testid="task-status" class="mr-4 d-flex align-self-center">
+					<div class="hidden-xs px-4 mr-4 text-center task-stats">
+						<VListItemSubtitle>
+							{{ t("components.molecules.TaskItemTeacher.submitted") }}
+						</VListItemSubtitle>
+						<VListItemTitle data-testid="taskSubmitted">
+							{{ task.status.submitted }}/{{ task.status.maxSubmissions }}
+						</VListItemTitle>
+					</div>
+					<div class="hidden-xs px-4 text-center task-stats">
+						<VListItemSubtitle>
+							{{ t("components.molecules.TaskItemTeacher.graded") }}
+						</VListItemSubtitle>
+						<VListItemTitle data-testid="taskGraded">
+							{{ task.status.graded }}
+						</VListItemTitle>
+					</div>
+				</section>
 			</div>
+		</template>
 
-			<!-- item additional info -->
-			<section
-				v-if="isUnpublishedLesson"
-				data-testid="task-lesson-chip-large"
-				class="hidden-xs mr-8 pl-4 align-self-center"
-			>
-				<VChip size="small">
-					{{ $t("components.molecules.TaskItemTeacher.lessonIsNotPublished") }}
-				</VChip>
-			</section>
-			<section v-else-if="showTaskStatus" data-testid="task-status" class="mr-4 d-flex align-self-center">
-				<div class="hidden-xs px-4 mr-4 text-center task-stats">
-					<VListItemSubtitle>
-						{{ $t("components.molecules.TaskItemTeacher.submitted") }}
-					</VListItemSubtitle>
-					<VListItemTitle data-testid="taskSubmitted">
-						{{ task.status.submitted }}/{{ task.status.maxSubmissions }}
-					</VListItemTitle>
-				</div>
-				<div class="hidden-xs px-4 text-center task-stats">
-					<VListItemSubtitle>
-						{{ $t("components.molecules.TaskItemTeacher.graded") }}
-					</VListItemSubtitle>
-					<VListItemTitle data-testid="taskGraded">
-						{{ task.status.graded }}
-					</VListItemTitle>
-				</div>
-			</section>
-
-			<VListItemAction :id="`task-menu-${task.id}`" data-testid="three-dot-task-option-menu">
+		<template #append>
+			<div :data-testid="`three-dot-task-option-menu-${task.id}`">
 				<TasksOverviewListItemMenu
 					:task
-					user-role="teacher"
 					@copy-task="onCopyTask"
 					@share-task="onShareTask"
 					@finish-task="onFinish"
@@ -76,9 +82,9 @@
 					@restore-task="onRestoreTask"
 					@revert-task="onRevertPublishedTask"
 				/>
-			</VListItemAction>
-			<VProgressCircular v-if="isMutating" class="position-absolute right-0" indeterminate size="16" />
-		</div>
+				<VProgressCircular v-if="isMutating" class="position-absolute right-0" indeterminate size="16" />
+			</div>
+		</template>
 	</VListItem>
 </template>
 
@@ -88,8 +94,7 @@ import { CopyParams } from "@/store/copy";
 import { formatUtc, isToday } from "@/utils/date-time.utils";
 import { TaskResponse } from "@api-server";
 import { isTaskDraft, isTaskUnpublished, useTaskActions, useTasksOfOverview } from "@data-tasks";
-import TaskDraft from "@icons/custom/task-draft.vue";
-import TaskOpenFilled from "@icons/custom/task-open-filled.vue";
+import { TaskDraft, TaskOpenFilled } from "@icons/custom";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
