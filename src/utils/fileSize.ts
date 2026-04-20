@@ -21,7 +21,7 @@ export const formatBytes = (bytes: number, decimals = 2): string => {
 	const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
 	const i = Math.floor(Math.log(bytes) / Math.log(k));
-	const unitIndex = Math.min(i, sizes.length - 1);
+	const unitIndex = Math.max(0, Math.min(i, sizes.length - 1));
 
 	const value = bytes / Math.pow(k, unitIndex);
 	const formattedValue = value.toFixed(dm);
