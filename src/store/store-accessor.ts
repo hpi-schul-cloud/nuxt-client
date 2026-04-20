@@ -5,7 +5,6 @@
 // In here you import all your modules, call getModule on them to turn them
 // into the actual stores, and then re-export them.
 
-import CommonCartridgeExportModule from "./common-cartridge-export";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import FilePaths from "@/store/filePaths";
@@ -17,7 +16,6 @@ import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
 import SystemsModule from "@/store/systems";
 import TasksModule from "@/store/tasks";
-import VideoConferenceModule from "@/store/video-conference";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 
@@ -35,8 +33,6 @@ export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
 export let systemsModule: SystemsModule;
 export let tasksModule: TasksModule;
-export let videoConferenceModule: VideoConferenceModule;
-export let commonCartridgeExportModule: CommonCartridgeExportModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<unknown>): void {
@@ -51,8 +47,6 @@ export function initializeStores(store: Store<unknown>): void {
 	shareModule = getModule(ShareModule, store);
 	systemsModule = getModule(SystemsModule, store);
 	tasksModule = getModule(TasksModule, store);
-	videoConferenceModule = getModule(VideoConferenceModule, store);
-	commonCartridgeExportModule = getModule(CommonCartridgeExportModule, store);
 }
 
 // for use in 'modules' store init (see store/index.ts), so each module
@@ -70,6 +64,4 @@ export const modules = {
 	shareModule: ShareModule,
 	systemsModule: SystemsModule,
 	tasksModule: TasksModule,
-	videoConferenceModule: VideoConferenceModule,
-	commonCartridgeExportModule: CommonCartridgeExportModule,
 };
