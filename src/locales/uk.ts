@@ -105,6 +105,7 @@ export default {
 	"common.labels.restore": "Відновити",
 	"common.labels.role": "Роль",
 	"common.labels.room": "Кімната | Кімнати",
+	"common.labels.runtimeConfig": "конфігурація терміну дії",
 	"common.labels.search": "Пошук",
 	"common.labels.settings": "Налаштування",
 	"common.labels.size": "Pозмір",

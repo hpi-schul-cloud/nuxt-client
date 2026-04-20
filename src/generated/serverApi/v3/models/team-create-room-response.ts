@@ -17,15 +17,15 @@
 /**
  * 
  * @export
- * @interface MePreferencesResponse
+ * @interface TeamCreateRoomResponse
  */
-export interface MePreferencesResponse {
+export interface TeamCreateRoomResponse {
     /**
-     * 
+     * The id of the exported room.
      * @type {string}
-     * @memberof MePreferencesResponse
+     * @memberof TeamCreateRoomResponse
      */
-    releaseDate?: string | null;
+    roomId: string;
 }
 
 
