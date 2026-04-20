@@ -214,27 +214,25 @@ const showImportDialog = computed(
 );
 
 const onCancelImport = () => {
-	if (importAction.isActive.value) {
-		importAction.cancel();
-	}
+	importAction.cancel();
 	router.push({ name: "course-room-overview" });
 };
 
 const executeImport = async (token: string) => {
-	const { result: validateResult } = await validateShareToken(token);
+	const validationResult = await validateShareToken(token);
 
-	if (!validateResult) {
+	if (!validationResult) {
 		onCancelImport();
 		return;
 	}
 
-	shareTokenInfo.value = validateResult;
+	shareTokenInfo.value = validationResult;
 
 	const { submitted, data } = await importAction.start();
 	if (!submitted) return;
 
-	const { result: importResult } = await withLoadingState(
-		() => importShareToken(validateResult, data),
+	const importResult = await withLoadingState(
+		() => importShareToken(validationResult, data),
 		t("components.molecules.import.options.loadingMessage")
 	);
 
@@ -243,7 +241,7 @@ const executeImport = async (token: string) => {
 		return;
 	}
 
-	if (shareTokenInfo.value.parentType === ShareTokenInfoResponseParentType.COURSES) {
+	if (validationResult.parentType === ShareTokenInfoResponseParentType.COURSES) {
 		router.replace({ name: "course-room-overview" });
 		fetchCourses();
 	} else {

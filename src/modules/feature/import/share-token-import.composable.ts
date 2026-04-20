@@ -23,10 +23,8 @@ export const useShareTokenImport = () => {
 		);
 
 		if (success) {
-			return { result: result.data, success };
+			return result.data;
 		}
-
-		return { result: undefined, success };
 	};
 
 	const importShareToken = async (
@@ -48,15 +46,11 @@ export const useShareTokenImport = () => {
 			);
 			const sanitizedId = result.data.id.replace(/[^a-z\d]/g, "");
 
-			const resultData = {
+			return {
 				...result.data,
 				id: sanitizedId,
 			};
-
-			return { result: resultData, success, error };
 		}
-
-		return { result: undefined, success: false, error: undefined };
 	};
 
 	const getMessageKeyForImportFailure = (parentType: ShareTokenInfoResponse["parentType"]) => {
