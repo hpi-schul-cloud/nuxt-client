@@ -11,7 +11,7 @@
  * formatBytes(1536, 1)        // "1.5 KB"
  * formatBytes(0)              // "0 Bytes"
  */
-export const formatBytes = (bytes: number, decimals: number = 2): string => {
+export const formatBytes = (bytes: number, decimals = 2): string => {
 	if (bytes === 0) return "0 Bytes";
 	if (bytes < 0) return "0 Bytes";
 	if (!Number.isFinite(bytes)) return "0 Bytes";
