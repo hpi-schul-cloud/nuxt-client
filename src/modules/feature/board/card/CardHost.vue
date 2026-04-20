@@ -40,8 +40,23 @@
 					/>
 
 					<div class="board-menu" :class="boardMenuClasses">
+						<VBtn
+							variant="text"
+							data-testid="open-detail-view-btn"
+							:ripple="false"
+							class="bg-white pt-1"
+							icon
+							size="36"
+							@click.stop.prevent="() => onOpenCard()"
+							@dblclick.stop.prevent="() => {}"
+							@keyup.enter.space.stop
+							@keydown.enter.space.stop
+							@keydown.left.right.up.down.stop="() => {}"
+						>
+							<VIcon data-testid="board-menu-icon">{{ mdiFullscreen }}</VIcon>
+							<span data-testid="board-menu-screen-reader-only" class="d-sr-only"> Vollbild öffnen </span>
+						</VBtn>
 						<BoardMenu v-if="hasMenuItem" :scope="BoardMenuScope.CARD" has-background :data-testid="boardMenuTestId">
-							<KebabMenuAction @click="onOpenCard">Open</KebabMenuAction>
 							<KebabMenuActionEdit v-if="allowedOperations?.deleteCard && !isEditMode" @click="onStartEditMode" />
 							<SvsColorPickerMenu
 								v-if="allowedOperations.updateCardColor"
@@ -121,10 +136,10 @@ import { delay } from "@/utils/helpers";
 import { Colors } from "@api-server";
 import { useBoardStore } from "@data-board";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
+import { mdiFullscreen } from "@icons/material";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { SvsColorPickerMenu } from "@ui-controls";
 import {
-	KebabMenuAction,
 	KebabMenuActionDelete,
 	KebabMenuActionDuplicate,
 	KebabMenuActionEdit,
