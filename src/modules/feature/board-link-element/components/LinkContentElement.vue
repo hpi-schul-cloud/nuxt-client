@@ -1,5 +1,5 @@
 <template>
-	<v-card
+	<VCard
 		ref="linkContentElement"
 		class="mb-4"
 		data-testid="board-link-element"
@@ -14,7 +14,7 @@
 		@click="onClick"
 	>
 		<LinkContentElementDisplay
-			v-if="computedElement.content.url"
+			v-if="computedElement.content.url && !isEditing"
 			:url="computedElement.content.url"
 			:title="computedElement.content.title"
 			:image-url="computedElement.content.imageUrl"
@@ -29,14 +29,14 @@
 				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementDisplay>
-		<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
+		<LinkContentElementCreate v-if="isCreating || isEditing" :existing-url="sanitizedUrl" @create:url="onCreateUrl"
 			><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementCreate>
-	</v-card>
+	</VCard>
 </template>
 
 <script setup lang="ts">
@@ -62,8 +62,8 @@ const props = defineProps({
 	},
 	isEditMode: { type: Boolean, required: true },
 	isDetailView: { type: Boolean, required: true },
-	isNotFirstElement: { type: Boolean, requried: false },
-	isNotLastElement: { type: Boolean, requried: false },
+	isNotFirstElement: { type: Boolean, required: false },
+	isNotLastElement: { type: Boolean, required: false },
 	columnIndex: { type: Number, required: true },
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
@@ -105,6 +105,8 @@ const target: ComputedRef<string> = computed(() => {
 });
 
 const isCreating = computed(() => props.isEditMode && !computedElement.value.content.url);
+
+const isEditing = computed(() => props.isEditMode && computedElement.value.content.url);
 
 const isHidden = computed(() => props.isEditMode === false && !computedElement.value.content.url);
 
@@ -159,7 +161,7 @@ const { focusNodeFromHash } = useElementFocus();
 const onClick = () => {
 	if (sanitizedUrl.value === window.location.href) {
 		focusNodeFromHash();
-	} else if (props.isEditMode && !isCreating.value) {
+	} else if (props.isEditMode && !isCreating.value && !isEditing.value) {
 		window.open(sanitizedUrl.value, "_blank", "noopener noreferrer");
 	}
 };

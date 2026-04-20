@@ -559,7 +559,8 @@ export default {
 	"components.cardElement.folderElement.storage.error":
 		"Infos zum Dateiordner sind gerade nicht verfügbar. Lade den Bereich neu.",
 	"components.cardElement.LinkElement": "Link",
-	"components.cardElement.LinkElement.label": "Link-Adresse einfügen",
+	"components.cardElement.LinkElement.create.label": "Link-Adresse einfügen",
+	"components.cardElement.LinkElement.edit.label": "Link-Adresse bearbeiten",
 	"components.cardElement.notification.visibleAndEditable":
 		"Dieses Whiteboard ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
 	"components.cardElement.richTextElement.placeholder": "Text hinzufügen",
