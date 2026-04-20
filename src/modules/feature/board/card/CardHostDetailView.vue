@@ -22,10 +22,6 @@
 								isEditMode ? $t("common.actions.edit") + " " + $t("common.actions.finish") : $t("common.actions.edit")
 							}}
 						</v-btn>
-
-						<v-btn color="primary" @click="onDeleteCard">
-							{{ $t("components.boardCard") }} {{ $t("common.actions.delete") }}
-						</v-btn>
 					</v-toolbar>
 				</div>
 				<v-card-text>
@@ -62,7 +58,6 @@ import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import type { ElementMove } from "@/types/board/DragAndDrop";
-import { askDeletionForItem } from "@/utils/confirmation-dialog.utils";
 import type { CardResponse } from "@api-server";
 import { mdiClose } from "@icons/material";
 import { ref } from "vue";
@@ -74,12 +69,11 @@ type Props = {
 	columnIndex: number;
 };
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const emit = defineEmits<{
 	(e: "update:title", value: string): void;
 	(e: "delete:element", elementId: string): void;
-	(e: "delete:card"): void;
 	(e: "move-down:element", elementMove: ElementMove): void;
 	(e: "move-up:element", elementMove: ElementMove): void;
 	(e: "move-keyboard:element", elementMove: ElementMove, keyCode: string): void;
@@ -118,14 +112,6 @@ const onAddElement = () => {
 
 const onDeleteElement = (elementId: string) => {
 	emit("delete:element", elementId);
-};
-
-const onDeleteCard = async () => {
-	const shouldDelete = await askDeletionForItem(props.card.title!, "components.boardCard");
-
-	if (shouldDelete) {
-		emit("delete:card");
-	}
 };
 
 const onMoveElementDown = (elementMove: ElementMove) => {
