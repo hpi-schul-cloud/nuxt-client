@@ -14,7 +14,7 @@
 		@click="onClick"
 	>
 		<LinkContentElementDisplay
-			v-if="computedElement.content.url && !isEditing"
+			v-if="!isEditMode && computedElement.content.url"
 			:url="computedElement.content.url"
 			:title="computedElement.content.title"
 			:image-url="computedElement.content.imageUrl"
@@ -29,7 +29,7 @@
 				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementDisplay>
-		<LinkContentElementCreate v-if="isCreating || isEditing" :existing-url="sanitizedUrl" @create:url="onCreateUrl"
+		<LinkContentElementCreate v-if="isEditMode" :existing-url="sanitizedUrl" @create:url="onCreateUrl"
 			><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
@@ -104,11 +104,7 @@ const target: ComputedRef<string> = computed(() => {
 	return "_blank";
 });
 
-const isCreating = computed(() => props.isEditMode && !computedElement.value.content.url);
-
-const isEditing = computed(() => props.isEditMode && computedElement.value.content.url);
-
-const isHidden = computed(() => props.isEditMode === false && !computedElement.value.content.url);
+const isHidden = computed(() => !props.isEditMode && !computedElement.value.content.url);
 
 const { getMetaTags } = useMetaTagExtractorApi();
 
@@ -140,7 +136,7 @@ const ariaLabel = computed(() => {
 });
 
 const onKeydownArrow = (event: KeyboardEvent) => {
-	if (isCreating.value === false && props.isEditMode) {
+	if (props.isEditMode && computedElement.value.content.url) {
 		event.preventDefault();
 		emit("move-keyboard:edit", event);
 	}
@@ -161,8 +157,6 @@ const { focusNodeFromHash } = useElementFocus();
 const onClick = () => {
 	if (sanitizedUrl.value === window.location.href) {
 		focusNodeFromHash();
-	} else if (props.isEditMode && !isCreating.value && !isEditing.value) {
-		window.open(sanitizedUrl.value, "_blank", "noopener noreferrer");
 	}
 };
 </script>

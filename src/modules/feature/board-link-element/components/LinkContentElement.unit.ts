@@ -140,198 +140,182 @@ describe("LinkContentElement", () => {
 		};
 	};
 
-	describe("when link element is displayed", () => {
-		describe("when content url is undefined", () => {
-			it("should not render display of link content", () => {
-				const { wrapper } = setupWrapper({
-					isEditMode: true,
-				});
+	describe("when content url is undefined", () => {
+		it("should not render LinkContentElementDisplay", () => {
+			const { wrapper } = setupWrapper({ isEditMode: true });
 
-				const linkElementDisplay = wrapper.findComponent(LinkContentElementDisplay);
-
-				expect(linkElementDisplay.exists()).toBe(false);
-			});
-
-			it("should not render link element menu", () => {
-				const { wrapper } = setupWrapper({
-					isEditMode: false,
-				});
-
-				const linkElementMenu = wrapper.findComponent(BoardMenu);
-
-				expect(linkElementMenu.exists()).toBe(false);
-			});
-
-			it("should not have an aria-label", () => {
-				const { wrapper } = setupWrapper({
-					isEditMode: true,
-				});
-
-				const linkElement = wrapper.find('[data-testid="board-link-element"]');
-
-				expect(linkElement.attributes("aria-label")).toBeUndefined();
-			});
+			expect(wrapper.findComponent(LinkContentElementDisplay).exists()).toBe(false);
 		});
 
-		describe("when content url is defined", () => {
-			it("should render display of link content with correct props", () => {
-				const linkElementContent = linkElementContentFactory.build();
-				const { wrapper, element } = setupWrapper({
-					content: linkElementContent,
-					isEditMode: true,
-				});
+		it("should not have an aria-label", () => {
+			const { wrapper } = setupWrapper({ isEditMode: true });
 
-				const linkElementDisplay = wrapper.findComponent(LinkContentElementDisplay);
+			const linkElement = wrapper.find('[data-testid="board-link-element"]');
 
-				expect(linkElementDisplay.props().url).toEqual(element.content.url);
-				expect(linkElementDisplay.props().title).toEqual(element.content.title);
-				expect(linkElementDisplay.props().isEditMode).toEqual(true);
-			});
+			expect(linkElement.attributes("aria-label")).toBeUndefined();
+		});
 
-			it("should have the correct aria-label", () => {
-				const linkElementContent = linkElementContentFactory.build();
-				const { wrapper, element } = setupWrapper({
-					content: linkElementContent,
-					isEditMode: true,
-				});
+		describe("when element is in view mode", () => {
+			it("should hide the element", () => {
+				const { wrapper } = setupWrapper({ isEditMode: false });
 
 				const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
 
-				expect(linkElement.attributes("aria-label")).toEqual(`${element.content.url}, common.ariaLabel.newTab`);
+				expect(linkElement.attributes("class")).toContain("d-none");
 			});
 
-			describe("when element is in edit mode", () => {
-				it("should not have href and target attributes", () => {
-					// The card should not be a link in edit mode otherwise the three dot menu would not be accessible for screen readers,
-					// because of nested interactive elements
-					const linkElementContent = linkElementContentFactory.build();
-					const { wrapper } = setupWrapper({
-						content: linkElementContent,
-						isEditMode: true,
-					});
-					const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
+			it("should not render the element menu", () => {
+				const { wrapper } = setupWrapper({ isEditMode: false });
 
-					expect(linkElement.attributes("href")).toBeUndefined();
-					expect(linkElement.attributes("target")).toBeUndefined();
+				expect(wrapper.findComponent(BoardMenu).exists()).toBe(false);
+			});
+		});
+
+		describe("when element is in edit mode", () => {
+			it("should render LinkContentElementCreate with an empty existing-url", () => {
+				const { wrapper } = setupWrapper({ isEditMode: true });
+
+				const linkCreate = wrapper.findComponent(LinkContentElementCreate);
+
+				expect(linkCreate.exists()).toBe(true);
+				expect(linkCreate.props().existingUrl).toBe("");
+			});
+
+			it("should render the element menu", () => {
+				const { wrapper } = setupWrapper({ isEditMode: true });
+
+				expect(wrapper.findComponent(BoardMenu).exists()).toBe(true);
+			});
+
+			it.each(["up", "down"])(
+				"should not emit 'move-keyboard:edit' when arrow key %s is pressed and no url exists",
+				async (key) => {
+					const { wrapper } = setupWrapper({ isEditMode: true });
+
+					await wrapper.findComponent('[data-testid="board-link-element"]').trigger(`keydown.${key}`);
+
+					expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
+				}
+			);
+		});
+	});
+
+	describe("when content url is defined", () => {
+		it("should have the correct aria-label", () => {
+			const linkElementContent = linkElementContentFactory.build();
+			const { wrapper, element } = setupWrapper({
+				content: linkElementContent,
+				isEditMode: true,
+			});
+
+			const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
+
+			expect(linkElement.attributes("aria-label")).toEqual(`${element.content.url}, common.ariaLabel.newTab`);
+		});
+
+		describe("when element is in edit mode", () => {
+			it("should render LinkContentElementCreate with the existing url for editing", () => {
+				const linkElementContent = linkElementContentFactory.build();
+				const { wrapper, element } = setupWrapper({
+					content: linkElementContent,
+					isEditMode: true,
 				});
 
-				it("should open element in new tab when clicked", async () => {
-					vi.spyOn(globalThis, "open").mockImplementation(() => null);
+				const linkCreate = wrapper.findComponent(LinkContentElementCreate);
 
-					const linkElementContent = linkElementContentFactory.build();
-					const { wrapper } = setupWrapper({
-						content: linkElementContent,
-						isEditMode: true,
-					});
+				expect(linkCreate.exists()).toBe(true);
+				expect(linkCreate.props().existingUrl).toEqual(element.content.url);
+			});
 
-					const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
-					await linkElement.trigger("click");
-
-					expect(window.open).toHaveBeenCalledTimes(1);
-					expect(window.open).toHaveBeenCalledWith(`${linkElementContent.url}`, "_blank", "noopener noreferrer");
+			it("should not render LinkContentElementDisplay", () => {
+				const linkElementContent = linkElementContentFactory.build();
+				const { wrapper } = setupWrapper({
+					content: linkElementContent,
+					isEditMode: true,
 				});
 
-				it.each(["enter", "space"])("should open element in new tab when %s is pressed", async (key) => {
-					const linkElementContent = linkElementContentFactory.build();
-					const { wrapper } = setupWrapper({
-						content: linkElementContent,
-						isEditMode: true,
-					});
+				expect(wrapper.findComponent(LinkContentElementDisplay).exists()).toBe(false);
+			});
 
-					const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
+			it("should not have href and target attributes", () => {
+				// The card should not be a link in edit mode otherwise the three dot menu would not be accessible for screen readers,
+				// because of nested interactive elements
+				const linkElementContent = linkElementContentFactory.build();
+				const { wrapper } = setupWrapper({
+					content: linkElementContent,
+					isEditMode: true,
+				});
+				const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
 
-					await linkElement.trigger(`keydown.${key}`);
+				expect(linkElement.attributes("href")).toBeUndefined();
+				expect(linkElement.attributes("target")).toBeUndefined();
+			});
 
-					expect(window.open).toHaveBeenCalledTimes(1);
-					expect(window.open).toHaveBeenCalledWith(`${linkElementContent.url}`, "_blank", "noopener noreferrer");
+			it.each(["click", "keydown.enter", "keydown.space"])("should not open a new tab on %s", async (event) => {
+				vi.spyOn(globalThis, "open").mockImplementation(() => null);
+
+				const linkElementContent = linkElementContentFactory.build();
+				const { wrapper } = setupWrapper({
+					content: linkElementContent,
+					isEditMode: true,
 				});
 
-				it.each(["up", "down"])("should 'emit move-keyboard:edit' when arrow key %s is pressed", async (key) => {
+				await wrapper.findComponent('[data-testid="board-link-element"]').trigger(event);
+
+				expect(window.open).not.toHaveBeenCalled();
+			});
+
+			it.each(["up", "down"])(
+				"should emit 'move-keyboard:edit' when arrow key %s is pressed and a url exists",
+				async (key) => {
 					const linkElementContent = linkElementContentFactory.build();
 					const { wrapper } = setupWrapper({
 						content: linkElementContent,
 						isEditMode: true,
 					});
 
-					const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
-
-					await linkElement.trigger(`keydown.${key}`);
+					await wrapper.findComponent('[data-testid="board-link-element"]').trigger(`keydown.${key}`);
 
 					expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
-				});
-			});
+				}
+			);
 
-			describe("when element is in view mode", () => {
-				it("should have href and target attributes", () => {
-					const linkElementContent = linkElementContentFactory.build();
-					const { wrapper } = setupWrapper({
-						content: linkElementContent,
-						isEditMode: false,
-					});
-					const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
-
-					expect(linkElement.attributes("href")).toBe(linkElementContent.url);
-					expect(linkElement.attributes("target")).toBe("_blank");
-				});
-
-				it.each(["up", "down"])(
-					"should not 'emit move-keyboard:edit' when arrow key %s is pressed and element is in view mode",
-					async (key) => {
-						const linkElementContent = linkElementContentFactory.build();
-						const { wrapper } = setupWrapper({
-							content: linkElementContent,
-							isEditMode: false,
-						});
-
-						const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
-
-						await linkElement.trigger(`keydown.${key}`);
-
-						expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
-					}
-				);
-			});
-
-			describe("link element menu", () => {
-				it("should render link element menu", () => {
+			describe("element menu", () => {
+				it("should render the element menu", () => {
 					const linkElementContent = linkElementContentFactory.build();
 					const { wrapper } = setupWrapper({
 						content: linkElementContent,
 						isEditMode: true,
 					});
 
-					const linkElementMenu = wrapper.findComponent(BoardMenu);
-
-					expect(linkElementMenu.exists()).toBe(true);
+					expect(wrapper.findComponent(BoardMenu).exists()).toBe(true);
 				});
 
-				it("should emit 'move-down:edit' event when move down menu item is clicked", async () => {
+				it("should emit 'move-down:edit' when move down is clicked", async () => {
 					const linkElementContent = linkElementContentFactory.build();
 					const { wrapper } = setupWrapper({
 						content: linkElementContent,
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
-					await menuItem.trigger("click");
+					await wrapper.findComponent(KebabMenuActionMoveDown).trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("move-down:edit");
 				});
 
-				it("should emit 'move-up:edit' event when move up menu item is clicked", async () => {
+				it("should emit 'move-up:edit' when move up is clicked", async () => {
 					const linkElementContent = linkElementContentFactory.build();
 					const { wrapper } = setupWrapper({
 						content: linkElementContent,
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
-					await menuItem.trigger("click");
+					await wrapper.findComponent(KebabMenuActionMoveUp).trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("move-up:edit");
 				});
 
-				it("should emit 'delete:element' event when delete menu item is clicked", async () => {
+				it("should emit 'delete:element' when delete is clicked", async () => {
 					vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 					const linkElementContent = linkElementContentFactory.build();
 					const { wrapper } = setupWrapper({
@@ -339,51 +323,83 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(KebabMenuActionDelete);
-					await menuItem.trigger("click");
+					await wrapper.findComponent(KebabMenuActionDelete).trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("delete:element");
 				});
 			});
+		});
 
-			describe("when the link references a different page", () => {
-				const setup = () => {
-					const url = new URL("https://dbildungscloud.test/path");
-					const linkElementContent = linkElementContentFactory.build({
-						url: url.toString(),
-					});
-					Object.defineProperty(window, "location", {
-						get: () => ({
-							host: url.host,
-							pathname: "/otherPath",
-						}),
-					});
+		describe("when element is in view mode", () => {
+			it("should render LinkContentElementDisplay with correct props", () => {
+				const linkElementContent = linkElementContentFactory.build();
+				const { wrapper, element } = setupWrapper({
+					content: linkElementContent,
+					isEditMode: false,
+				});
 
+				const linkDisplay = wrapper.findComponent(LinkContentElementDisplay);
+
+				expect(linkDisplay.props().url).toEqual(element.content.url);
+				expect(linkDisplay.props().title).toEqual(element.content.title);
+				expect(linkDisplay.props().isEditMode).toEqual(false);
+			});
+
+			it("should not render LinkContentElementCreate", () => {
+				const linkElementContent = linkElementContentFactory.build();
+				const { wrapper } = setupWrapper({
+					content: linkElementContent,
+					isEditMode: false,
+				});
+
+				expect(wrapper.findComponent(LinkContentElementCreate).exists()).toBe(false);
+			});
+
+			it("should have href and target attributes for native navigation", () => {
+				const linkElementContent = linkElementContentFactory.build();
+				const { wrapper } = setupWrapper({
+					content: linkElementContent,
+					isEditMode: false,
+				});
+				const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
+
+				expect(linkElement.attributes("href")).toBe(linkElementContent.url);
+				expect(linkElement.attributes("target")).toBe("_blank");
+			});
+
+			it.each(["up", "down"])(
+				"should not emit 'move-keyboard:edit' when arrow key %s is pressed in view mode",
+				async (key) => {
+					const linkElementContent = linkElementContentFactory.build();
 					const { wrapper } = setupWrapper({
 						content: linkElementContent,
 						isEditMode: false,
 					});
 
-					return {
-						wrapper,
-					};
-				};
+					await wrapper.findComponent('[data-testid="board-link-element"]').trigger(`keydown.${key}`);
 
+					expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
+				}
+			);
+
+			describe("when the link references a different page", () => {
 				it("should open in a new tab", () => {
-					const { wrapper } = setup();
+					const url = new URL("https://dbildungscloud.test/path");
+					const linkElementContent = linkElementContentFactory.build({ url: url.toString() });
+					Object.defineProperty(window, "location", {
+						get: () => ({ host: url.host, pathname: "/otherPath" }),
+					});
 
-					const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
+					const { wrapper } = setupWrapper({ content: linkElementContent, isEditMode: false });
 
-					expect(linkElement.attributes("target")).toEqual("_blank");
+					expect(wrapper.findComponent('[data-testid="board-link-element"]').attributes("target")).toEqual("_blank");
 				});
 			});
 
 			describe("when the link references the same page", () => {
 				const setup = () => {
 					const url = new URL("https://dbildungscloud.test/path#card-12345");
-					const linkElementContent = linkElementContentFactory.build({
-						url: url.toString(),
-					});
+					const linkElementContent = linkElementContentFactory.build({ url: url.toString() });
 					Object.defineProperty(window, "location", {
 						get: () => ({
 							host: url.host,
@@ -397,237 +413,96 @@ describe("LinkContentElement", () => {
 						scrollIntoView: vi.fn(),
 						focus: vi.fn(),
 					} as unknown as HTMLElement;
-					const querySelectorSpy = vi.spyOn(document, "querySelector");
-					querySelectorSpy.mockReturnValue(domElementMock);
+					vi.spyOn(document, "querySelector").mockReturnValue(domElementMock);
 
-					const { wrapper } = setupWrapper({
-						content: linkElementContent,
-						isEditMode: false,
-					});
+					const { wrapper } = setupWrapper({ content: linkElementContent, isEditMode: false });
 
-					return {
-						wrapper,
-						domElementMock,
-					};
+					return { wrapper, domElementMock };
 				};
 
 				it("should open in the same tab", () => {
 					const { wrapper } = setup();
 
-					const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
-
-					expect(linkElement.attributes("target")).toEqual("_self");
+					expect(wrapper.findComponent('[data-testid="board-link-element"]').attributes("target")).toEqual("_self");
 				});
 
-				it("should scroll to and focus the element", async () => {
+				it("should scroll to and focus the element when clicked", async () => {
 					const { wrapper, domElementMock } = setup();
 
-					const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
-
-					await linkElement.trigger("click");
+					await wrapper.findComponent('[data-testid="board-link-element"]').trigger("click");
 					vi.runAllTimers();
 
-					expect(domElementMock.scrollIntoView).toHaveBeenCalledWith({
-						block: "center",
-						inline: "center",
-					});
+					expect(domElementMock.scrollIntoView).toHaveBeenCalledWith({ block: "center", inline: "center" });
 					expect(domElementMock.focus).toHaveBeenCalled();
 				});
 			});
 		});
 	});
 
-	describe("when link element is being created", () => {
-		describe("when element is in view mode", () => {
-			it("should hide link element in view mode when no url was entered", () => {
-				const { wrapper } = setupWrapper({
-					isEditMode: false,
-				});
+	describe("onCreateUrl", () => {
+		it("should request meta tags for the given url", () => {
+			const { wrapper } = setupWrapper({ isEditMode: true });
 
-				const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
+			wrapper.getComponent(LinkContentElementCreate).vm.$emit("create:url", "https://abc.de/bravo-fox-delta-ohhh-mega");
 
-				expect(linkElement.attributes("class")).toContain("d-none");
-			});
-
-			it("should not render link element menu in view mode", () => {
-				const { wrapper } = setupWrapper({
-					isEditMode: false,
-				});
-
-				const linkElementMenu = wrapper.findComponent(BoardMenu);
-
-				expect(linkElementMenu.exists()).toBe(false);
-			});
+			expect(useMetaTagExtractorApiMock.getMetaTags).toHaveBeenCalled();
 		});
 
-		describe("when element is in edit mode", () => {
-			it("should render LinkContentElementCreate component when in editmode", () => {
-				const { wrapper } = setupWrapper({ isEditMode: true });
+		it("should add https protocol when none is provided", () => {
+			const { wrapper } = setupWrapper({ isEditMode: true });
+			const url = "abc.de/my-article";
 
-				const linkCreateComponent = wrapper.findComponent(LinkContentElementCreate);
+			wrapper.getComponent(LinkContentElementCreate).vm.$emit("create:url", url);
 
-				expect(linkCreateComponent.exists()).toBe(true);
-			});
-
-			it.each(["up", "down"])(
-				"should not 'emit move-keyboard:edit' when arrow key %s is pressed and element is in edit mode",
-				async (key) => {
-					const { wrapper } = setupWrapper({
-						isEditMode: true,
-					});
-
-					const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
-
-					await linkElement.trigger(`keydown.${key}`);
-
-					expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
-				}
-			);
-
-			describe("link element menu", () => {
-				it("should render link element menu", () => {
-					const { wrapper } = setupWrapper({
-						isEditMode: true,
-					});
-
-					const linkElementMenu = wrapper.findComponent(BoardMenu);
-
-					expect(linkElementMenu.exists()).toBe(true);
-				});
-
-				it("should emit 'move-down:edit' event when move down menu item is clicked", async () => {
-					const { wrapper } = setupWrapper({
-						isEditMode: true,
-					});
-
-					const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
-					await menuItem.trigger("click");
-
-					expect(wrapper.emitted()).toHaveProperty("move-down:edit");
-				});
-
-				it("should emit 'move-up:edit' event when move up menu item is clicked", async () => {
-					const { wrapper } = setupWrapper({
-						isEditMode: true,
-					});
-
-					const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
-					await menuItem.trigger("click");
-
-					expect(wrapper.emitted()).toHaveProperty("move-up:edit");
-				});
-
-				it("should emit 'delete:element' event when delete menu item is clicked", async () => {
-					vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
-					const { wrapper } = setupWrapper({
-						isEditMode: true,
-					});
-
-					const menuItem = wrapper.findComponent(KebabMenuActionDelete);
-					await menuItem.trigger("click");
-
-					expect(wrapper.emitted()).toHaveProperty("delete:element");
-				});
-			});
+			expect(useMetaTagExtractorApiMock.getMetaTags).toHaveBeenCalledWith(`https://${url}`);
 		});
 
-		describe("onCreateUrl", () => {
-			it("should request meta tags for the given url", () => {
-				const { wrapper } = setupWrapper({
-					isEditMode: true,
-					isDetailView: false,
-				});
+		it("should create a preview image when imageUrl is present in meta tags", async () => {
+			const { wrapper } = setupWrapper({ isEditMode: true });
+			const url = "https://abc.de/my-article";
+			const fakeMetaTags: MetaTagResult = {
+				url,
+				title: "my title",
+				description: "",
+				originalImageUrl: "https://abc.de/foto.png",
+				imageUrl: "https://abc.de/foto.png",
+			};
 
-				const component = wrapper.getComponent(LinkContentElementCreate);
-				component.vm.$emit("create:url", "https://abc.de/bravo-fox-delta-ohhh-mega");
+			useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(fakeMetaTags);
 
-				expect(useMetaTagExtractorApiMock.getMetaTags).toHaveBeenCalled();
+			await wrapper.getComponent(LinkContentElementCreate).vm.$emit("create:url", url);
+
+			expect(usePreviewGeneratorMock.createPreviewImage).toHaveBeenCalledWith(fakeMetaTags.imageUrl);
+		});
+
+		it("should sanitize html-encoded urls", () => {
+			const VALID_UNSANITIZED_URL =
+				"&#104;&#116;&#116;&#112;&#115;&#0000058//&#101;&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#109;";
+			const { wrapper } = setupWrapper({
+				content: linkElementContentFactory.build({ url: VALID_UNSANITIZED_URL }),
+				isEditMode: false,
 			});
 
-			describe("when no protocol was provided", () => {
-				it("should add https-protocol", () => {
-					const { wrapper } = setupWrapper({
-						isEditMode: true,
-						isDetailView: false,
-					});
-					const url = "abc.de/my-article";
+			expect(wrapper.html()).toEqual(expect.stringContaining("https://example.com"));
+		});
 
-					const component = wrapper.getComponent(LinkContentElementCreate);
-					component.vm.$emit("create:url", url);
-
-					const expected = `https://${url}`;
-					expect(useMetaTagExtractorApiMock.getMetaTags).toHaveBeenCalledWith(expected);
-				});
+		it("should sanitize javascript urls to about:blank", () => {
+			const INVALID_UNSANITIZED_URL = "javascript" + ":" + "alert(document.domain)";
+			const { wrapper } = setupWrapper({
+				content: linkElementContentFactory.build({ url: INVALID_UNSANITIZED_URL }),
+				isEditMode: false,
 			});
 
-			describe("when url was provided", () => {
-				describe("when imageUrl was in metaTags", () => {
-					it("should create a preview image", async () => {
-						const { wrapper } = setupWrapper({
-							isEditMode: true,
-							isDetailView: false,
-						});
-						const url = "https://abc.de/my-article";
-						const fakeMetaTags: MetaTagResult = {
-							url,
-							title: "my title",
-							description: "",
-							originalImageUrl: "https://abc.de/foto.png",
-							imageUrl: "https://abc.de/foto.png",
-						};
+			expect(wrapper.html()).toEqual(expect.stringContaining("about:blank"));
+		});
 
-						useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(fakeMetaTags);
-
-						const component = wrapper.getComponent(LinkContentElementCreate);
-						await component.vm.$emit("create:url", url);
-
-						expect(usePreviewGeneratorMock.createPreviewImage).toHaveBeenCalledWith(fakeMetaTags.imageUrl);
-					});
-				});
-
-				it("should sanitize the url", () => {
-					const VALID_UNSANITIZED_URL =
-						"&#104;&#116;&#116;&#112;&#115;&#0000058//&#101;&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#109;";
-					const { wrapper } = setupWrapper({
-						content: linkElementContentFactory.build({
-							url: VALID_UNSANITIZED_URL,
-						}),
-						isEditMode: false,
-						isDetailView: false,
-					});
-
-					const expectedUrl = "https://example.com";
-					expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
-				});
-
-				it("should sanitize a javascript-url", () => {
-					const INVALID_UNSANITIZED_URL = "javascript" + ":" + "alert(document.domain)";
-					const { wrapper } = setupWrapper({
-						content: linkElementContentFactory.build({
-							url: INVALID_UNSANITIZED_URL,
-						}),
-						isEditMode: false,
-						isDetailView: false,
-					});
-
-					const expectedUrl = "about:blank";
-					expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
-				});
-
-				it("should display the hostname ", () => {
-					const INVALID_UNSANITIZED_URL = "https://de.wikipedia.org/dachs";
-					const { wrapper } = setupWrapper({
-						content: linkElementContentFactory.build({
-							url: INVALID_UNSANITIZED_URL,
-						}),
-						isEditMode: false,
-						isDetailView: false,
-					});
-
-					const expectedUrl = "de.wikipedia.org";
-					expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
-				});
+		it("should display the hostname", () => {
+			const { wrapper } = setupWrapper({
+				content: linkElementContentFactory.build({ url: "https://de.wikipedia.org/dachs" }),
+				isEditMode: false,
 			});
+
+			expect(wrapper.html()).toEqual(expect.stringContaining("de.wikipedia.org"));
 		});
 	});
 });
