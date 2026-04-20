@@ -1,68 +1,164 @@
 <template>
 	<SvsDialog
-		:model-value="isOpen"
+		v-model="isDialogOpen"
 		:is-open-state-managed-externally="true"
 		:title="currentStepTitle"
+		:confirm-btn-lang-key="confirmBtnLangKey"
+		:confirm-btn-disabled="!isActiveStepValid"
 		data-testid="import-dialog"
-		@cancel="emit('cancel')"
+		@cancel="isDialogOpen = false"
+		@confirm="onConfirm"
 	>
 		<template #content>
-			<template v-if="activeStep === 'selectDestination'">
-				<p>Select Destination</p>
+			<template v-if="activeStep == 'select'">
+				<VSelect
+					v-model="selectedDestinationId"
+					item-value="id"
+					item-title="name"
+					:items="availableDestinations"
+					:placeholder="selectionPlaceholder"
+					:rules="[rules.required]"
+					:error="hasSelectStep && !isSelectedDestinationValid"
+					:hint="selectionHint"
+					persistent-hint
+					data-testId="import-destination-select"
+				/>
 			</template>
 
-			<template v-if="activeStep === 'import'">
-				<p>Import</p>
+			<template v-if="activeStep == 'rename'">
+				<div class="mb-4">
+					{{ t(`components.molecules.import.${props.shareTokenInfo.parentType}.rename`) }}
+				</div>
+				<VTextField
+					v-model="newName"
+					:label="t(`components.molecules.import.${props.shareTokenInfo.parentType}.label`)"
+					:rules="[rules.required, rules.validateOnOpeningTag]"
+					data-testid="import-dialog-name-input"
+				/>
 			</template>
-
-			<template v-if="activeStep === 'importCard'">
-				<p>Import Card</p>
-			</template>
-		</template>
-
-		<template #actions>
-			<SvsDialogBtnCancel @click="emit('cancel')" />
-
-			<SvsDialogBtnConfirm
-				v-if="activeStep === 'selectDestination'"
-				text-lang-key="common.actions.continue"
-				@click="emit('next', { destinationId: 'selectedDestinationId' })"
-			/>
-			<SvsDialogBtnConfirm
-				v-if="activeStep === 'import'"
-				text-lang-key="common.actions.import"
-				@click="emit('confirm', { newName: 'New Name' })"
-			/>
-			<SvsDialogBtnConfirm
-				v-if="activeStep === 'importCard'"
-				text-lang-key="common.actions.import"
-				@click="emit('confirmCard', { destinationId: 'cardDestinationId' })"
-			/>
 		</template>
 	</SvsDialog>
 </template>
 
 <script setup lang="ts">
-import { StepType } from "./types";
-import { ShareTokenInfoResponseParentType } from "@api-server";
-import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
-import { computed } from "vue";
+import { ImportDestinationItem, ImportDestinationType } from "./types";
+import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
+import { SvsDialog } from "@ui-dialog";
+import { useOpeningTagValidator } from "@util-validators";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
+const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const props = defineProps<{
-	isOpen: boolean;
-	activeStep: StepType;
-	importItemType: ShareTokenInfoResponseParentType;
+	shareTokenInfo: ShareTokenInfoResponse;
+	availableDestinations: ImportDestinationItem[];
+	destinationType: ImportDestinationType;
 }>();
 
 const emit = defineEmits<{
-	(e: "cancel"): void;
-	(e: "next", payload: { destinationId: string }): void;
-	(e: "confirm", payload: { newName: string }): void;
-	(e: "confirmCard", payload: { destinationId: string }): void;
+	(e: "confirm", payload: { newName: string; destinationId?: string }): void;
 }>();
 
-const currentStepTitle = computed(() => t(`components.molecules.import.${props.importItemType}.options.title`));
+const isDialogOpen = defineModel("is-dialog-open", {
+	type: Boolean,
+	default: false,
+});
+
+type StepType = "select" | "rename";
+const activeStep = ref<StepType>("select");
+
+const selectedDestinationId = ref<string>();
+
+const nameInput = ref<string | undefined>(undefined);
+
+const newName = computed({
+	get: () => nameInput.value ?? props.shareTokenInfo.parentName ?? "",
+	set: (value) => (nameInput.value = value),
+});
+
+const resetDialog = () => {
+	activeStep.value = hasSelectStep.value ? "select" : "rename";
+	selectedDestinationId.value = undefined;
+	nameInput.value = undefined;
+};
+
+onMounted(() => {
+	resetDialog();
+});
+
+watch(isDialogOpen, (isOpen) => {
+	if (isOpen) {
+		resetDialog();
+	}
+});
+
+const rules = reactive({
+	required: (value: string) => !!value || t("common.validation.required"),
+	validateOnOpeningTag: (value: string) => validateOnOpeningTag(value),
+});
+
+const isSelectedDestinationValid = computed(() => !!selectedDestinationId.value);
+
+const isNewNameValid = computed(
+	() => rules.required(newName.value) === true && rules.validateOnOpeningTag(newName.value) === true
+);
+
+const isActiveStepValid = computed(() => {
+	if (activeStep.value === "select") {
+		return isSelectedDestinationValid.value;
+	}
+
+	if (activeStep.value === "rename") {
+		return isNewNameValid.value;
+	}
+
+	return false;
+});
+
+const onConfirm = () => {
+	// has next step? => goto next step
+	if (activeStep.value === "select") {
+		activeStep.value = "rename";
+		return;
+	}
+
+	emit("confirm", { newName: newName.value, destinationId: selectedDestinationId.value });
+};
+
+const currentStepTitle = computed(() =>
+	t(`components.molecules.import.${props.shareTokenInfo.parentType}.options.title`)
+);
+
+const selectionPlaceholder = computed(
+	() => {
+		if (!hasSelectStep.value) {
+			return "";
+		}
+		return t(
+			props.destinationType === "room"
+				? `components.molecules.import.${props.shareTokenInfo.parentType}.options.selectRoom`
+				: `components.molecules.import.${props.shareTokenInfo.parentType}.options.selectCourse`
+		);
+	}
+	// t(`components.molecules.import.${props.shareTokenInfo.parentType}.options.selectCourse`)
+);
+
+const selectionHint = computed(() => t(`common.labels.${props.destinationType}`));
+
+const hasSelectStep = computed(
+	() =>
+		props.shareTokenInfo.parentType === ShareTokenInfoResponseParentType.LESSONS ||
+		props.shareTokenInfo.parentType === ShareTokenInfoResponseParentType.TASKS ||
+		props.shareTokenInfo.parentType === ShareTokenInfoResponseParentType.COLUMN_BOARD
+);
+
+const confirmBtnLangKey = computed(() => {
+	if (activeStep.value === "select") {
+		return "common.actions.continue";
+	}
+
+	return "common.actions.import";
+});
 </script>

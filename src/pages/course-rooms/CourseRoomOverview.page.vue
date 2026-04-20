@@ -1,5 +1,5 @@
 <template>
-	<CourseRoomWrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
+	<CourseRoomWrapper :has-rooms="hasCurrentRooms" :has-import-token="!!shareTokenInfo">
 		<template #header>
 			<h1 class="py-2">
 				{{ $t("pages.courseRooms.index.courses.active") }}
@@ -100,13 +100,13 @@
 		@drag-from-group="dragFromGroup"
 	/>
 	<ImportDialog
-		:is-open="importFlow.isDialogOpen.value"
-		:active-step="importFlow.activeStep.value"
-		:import-item-type="importFlow.importItemType.value"
-		@cancel="importFlow.onCancel"
-		@next="importFlow.selectDestinationStep.resolve"
-		@confirm="importFlow.importStep.resolve"
-		@confirm-card="importFlow.importCardStep.resolve"
+		v-if="showImportDialog"
+		:is-dialog-open="showImportDialog"
+		:share-token-info="shareTokenInfo!"
+		:available-destinations="availableDestinations"
+		destination-type="course"
+		@confirm="importAction.submit"
+		@cancel="onCancelImport"
 	/>
 </template>
 
@@ -116,16 +116,18 @@ import CourseRoomEmptyAvatar from "@/components/course-rooms/CourseRoomEmptyAvat
 import CourseRoomGroupAvatar from "@/components/course-rooms/CourseRoomGroupAvatar.vue";
 import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
 import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
+import { useAwaitableAction } from "@/composables/awaitable-action.composable";
 import router from "@/router";
 import { DroppedObject } from "@/store/types/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { DashboardGridElementResponse, ShareTokenInfoResponseParentType } from "@api-server";
-import { notifySuccess } from "@data-app";
+import { DashboardGridElementResponse, ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
+import { notifySuccess, useLoadingStore } from "@data-app";
 import { GroupDataType, useCourseRoomListStore } from "@data-course-rooms";
-import { ImportDialog, useImportFlow } from "@feature-import";
+import { ImportDialog, useShareTokenImport } from "@feature-import";
 import { mdiCheck } from "@icons/material";
 import { SvsSearchField } from "@ui-controls";
 import { useTitle } from "@vueuse/core";
+import { sortBy } from "lodash-es";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -135,6 +137,7 @@ import { useDisplay } from "vuetify";
 const { t } = useI18n();
 const route = useRoute();
 const display = useDisplay();
+const { withLoadingState } = useLoadingStore();
 
 const refs = reactive<Record<string, unknown>>({});
 const courseRoomListStore = useCourseRoomListStore();
@@ -187,30 +190,64 @@ const rooms = computed(() =>
 	})
 );
 
-// const courses = computed(() =>
-// 	allElements.value.map((item: { id: string; title: string; isLocked: boolean }) => ({
-// 		id: item.id,
-// 		name: item.title,
-// 		isLocked: item.isLocked,
-// 	}))
-// );
-
 const hasRoomsBeingCopied = computed(() =>
 	rooms.value.some((item: { copyingSince?: unknown }) => item.copyingSince !== undefined)
 );
 
-const importFlow = useImportFlow();
-
 const isTouchDevice = computed(() => window.ontouchstart !== undefined);
-const importToken = ref<string>();
 
-const importShareToken = async (token: string) => {
-	const importItemType = await importFlow.validateShareToken(token);
+const shareTokenInfo = ref<ShareTokenInfoResponse>();
+const availableDestinations = computed(() =>
+	sortBy(
+		allElements.value.filter((course) => !course.isLocked).map((course) => ({ id: course.id, name: course.title }))
+	)
+);
 
-	if (importItemType === ShareTokenInfoResponseParentType.COURSES) {
-		await importFlow.executeImportCourse(token);
+const { validateShareToken, importShareToken } = useShareTokenImport();
+const importAction = useAwaitableAction<{ newName: string; destinationId?: string }>();
+
+const showImportDialog = computed(
+	() =>
+		importAction.isActive.value &&
+		!!shareTokenInfo.value &&
+		!(shareTokenInfo.value?.parentType === ShareTokenInfoResponseParentType.CARD)
+);
+
+const onCancelImport = () => {
+	if (importAction.isActive.value) {
+		importAction.cancel();
+	}
+	router.push({ name: "course-room-overview" });
+};
+
+const executeImport = async (token: string) => {
+	const { result: validateResult } = await validateShareToken(token);
+
+	if (!validateResult) {
+		onCancelImport();
+		return;
+	}
+
+	shareTokenInfo.value = validateResult;
+
+	const { submitted, data } = await importAction.start();
+	if (!submitted) return;
+
+	const { result: importResult } = await withLoadingState(
+		() => importShareToken(validateResult, data),
+		t("components.molecules.import.options.loadingMessage")
+	);
+
+	if (!importResult) {
+		onCancelImport();
+		return;
+	}
+
+	if (shareTokenInfo.value.parentType === ShareTokenInfoResponseParentType.COURSES) {
 		router.replace({ name: "course-room-overview" });
 		fetchCourses();
+	} else {
+		router.replace({ name: "room-details", params: { id: importResult.destinationId } });
 	}
 };
 
@@ -219,8 +256,7 @@ watch(
 	() => {
 		if (route.query.import) {
 			const token = route.query.import as string;
-			importToken.value = token; // for wrapper.hasImportToken TODO: remove?
-			importShareToken(token);
+			executeImport(token);
 		}
 	},
 	{ immediate: true }
@@ -370,24 +406,6 @@ const dragFromGroup = (element: { id: string }) => {
 	}, 0);
 	searchText.value = "";
 	dragging.value = true;
-};
-
-const showImportSuccess = (name: string) => {
-	notifySuccess(
-		t("components.molecules.import.options.success", {
-			name,
-		})
-	);
-};
-
-const onImportSuccess = (name: string, id?: string) => {
-	showImportSuccess(name);
-	if (id) {
-		router.replace({ name: "room-details", params: { id } });
-	} else {
-		router.replace({ name: "course-room-overview" });
-		fetchCourses();
-	}
 };
 
 const initCoursePolling = (started: Date, count = 0) => {

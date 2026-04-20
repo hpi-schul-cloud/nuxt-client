@@ -124,6 +124,7 @@ export default {
 	"common.labels.visible": "Visible",
 	"common.labels.welcome": "Welcome",
 	"common.labels.fileName": "File name",
+	"common.labels.link": "Link",
 	"common.labels.tasks.more": "Other tasks...",
 	"common.loading.text": "Data is loading...",
 	"common.medium.alert.deactivated": "Media is disabled.",
@@ -671,7 +672,7 @@ export default {
 		"Please select the course into which you would like to import the topic.",
 	"components.molecules.import.lessons.options.selectCourse": "Select course",
 	"components.molecules.import.lessons.options.title": "Import topic",
-	"components.molecules.import.options.failure.backendError": "'{name}' could not be imported.",
+	"components.molecules.import.options.failure.backendError": "{name} could not be imported.",
 	"components.molecules.import.options.failure.invalidToken": "The token in the link is unknown or has expired.",
 	"components.molecules.import.options.failure.permissionError":
 		"Unfortunately, the necessary authorization is missing.",

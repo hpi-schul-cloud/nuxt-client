@@ -1,51 +1,51 @@
 import { ref } from "vue";
 
 /**
+ * Result type for awaitable actions.
+ * Uses discriminated union for type-safe completion handling.
+ */
+export type AwaitableResult<T> = { submitted: true; data: T } | { submitted: false; data: undefined };
+
+/**
  * Creates a manually resolvable promise pattern for async user interactions.
- *
- * Useful for awaiting user input from dialogs, confirmations, or any async action
- * where you control when and how the promise resolves.
  *
  * @example
  * ```ts
- * const selectDestination = useAwaitableAction<string>();
+ * // Without data:
+ * const confirmation = useAwaitableAction();
+ * const { submitted } = await confirmation.start();
+ * if (!submitted) return;
  *
- * // In your flow:
- * const destinationId = await selectDestination.start();
- * if (!destinationId) return; // cancelled
- *
- * // In template:
- * <Dialog :is-open="selectDestination.isActive.value" @select="selectDestination.resolve" @cancel="selectDestination.cancel" />
+ * // With data:
+ * const selectDestination = useAwaitableAction<{ destinationId: string }>();
+ * const { submitted, data } = await selectDestination.start();
+ * if (!submitted) return;
+ * console.log(data.destinationId);
  * ```
  */
 export const useAwaitableAction = <T = boolean>() => {
-	let resolvePromise: ((result: T | null) => void) | null = null;
+	let resolvePromise: ((result: AwaitableResult<T>) => void) | undefined;
 
 	const isActive = ref(false);
 
-	const start = (): Promise<T | null> => {
+	const start = (): Promise<AwaitableResult<T>> => {
 		isActive.value = true;
 		return new Promise((resolve) => {
 			resolvePromise = resolve;
 		});
 	};
 
-	const resolve = (result: T) => {
+	const submit = (data: T) => {
 		isActive.value = false;
-		resolvePromise?.(result);
-		resolvePromise = null;
+		resolvePromise?.({ submitted: true, data });
+		resolvePromise = undefined;
 	};
 
 	const cancel = () => {
 		isActive.value = false;
-		resolvePromise?.(null);
-		resolvePromise = null;
+		resolvePromise?.({ submitted: false, data: undefined });
+		resolvePromise = undefined;
 	};
 
-	return {
-		isActive,
-		start,
-		resolve,
-		cancel,
-	};
+	return { isActive, start, submit, cancel };
 };

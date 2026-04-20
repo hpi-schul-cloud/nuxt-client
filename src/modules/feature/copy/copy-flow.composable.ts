@@ -27,7 +27,7 @@ export const useCopyFlow = () => {
 	};
 
 	const onConfirmed = () => {
-		confirmAction.resolve(true);
+		confirmAction.submit(true);
 	};
 
 	const onCancelled = () => {
@@ -38,8 +38,8 @@ export const useCopyFlow = () => {
 		withLoadingState(fn, t("components.molecules.copyResult.title.loading"));
 
 	const executeCopyCourse = async (courseId: string) => {
-		const confirmed = await confirm(CopyParamsTypeEnum.Course);
-		if (!confirmed) return;
+		const { submitted } = await confirm(CopyParamsTypeEnum.Course);
+		if (!submitted) return;
 
 		const { result, success } = await withCopyLoading(() =>
 			execute(
@@ -56,8 +56,8 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyTask = async (taskId: string, targetCourseId: string) => {
-		const confirmed = await confirm(CopyParamsTypeEnum.Task);
-		if (!confirmed) return;
+		const { submitted } = await confirm(CopyParamsTypeEnum.Task);
+		if (!submitted) return;
 
 		const { result, success } = await withCopyLoading(() =>
 			execute(
@@ -73,8 +73,8 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyLesson = async (lessonId: string, targetCourseId: string) => {
-		const confirmed = await confirm(CopyParamsTypeEnum.Lesson);
-		if (!confirmed) return;
+		const { submitted } = await confirm(CopyParamsTypeEnum.Lesson);
+		if (!submitted) return;
 
 		const { result, success } = await withCopyLoading(() =>
 			execute(
@@ -90,8 +90,8 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyBoard = async (boardId: string) => {
-		const confirmed = await confirm(CopyParamsTypeEnum.ColumnBoard);
-		if (!confirmed) return;
+		const { submitted } = await confirm(CopyParamsTypeEnum.ColumnBoard);
+		if (!submitted) return;
 
 		const { result, success } = await withCopyLoading(() =>
 			execute(
