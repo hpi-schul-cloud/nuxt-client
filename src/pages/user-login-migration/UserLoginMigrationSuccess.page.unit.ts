@@ -1,39 +1,14 @@
 import UserLoginMigrationSuccessPage from "./UserLoginMigrationSuccess.page.vue";
-import SystemsModule from "@/store/systems";
-import { System } from "@/store/types/system";
-import { SYSTEMS_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import type { Mocked } from "vitest";
 
 describe("UserLoginMigrationSuccess", () => {
-	let systemsModule: Mocked<SystemsModule>;
-
 	const setup = (props: { targetSystem: string }) => {
-		const systemsMock: System[] = [
-			{
-				id: "sourceSystemId",
-				name: "sourceSystem",
-			},
-			{
-				id: "targetSystemId",
-				name: "targetSystem",
-			},
-		];
-
-		systemsModule = createModuleMocks(SystemsModule, {
-			getSystems: systemsMock,
-		});
-
 		const wrapper = shallowMount(UserLoginMigrationSuccessPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
-				},
 			},
 			props,
 		});
@@ -82,18 +57,6 @@ describe("UserLoginMigrationSuccess", () => {
 
 				expect(button.text()).toEqual("pages.userMigration.success.login");
 				expect(button.attributes().to).toEqual("/logout");
-			});
-		});
-	});
-
-	describe("Api", () => {
-		describe("when mounting the component", () => {
-			it("should fetch the systems", () => {
-				setup({
-					targetSystem: "targetSystemId",
-				});
-
-				expect(systemsModule.fetchSystems).toHaveBeenCalledWith();
 			});
 		});
 	});

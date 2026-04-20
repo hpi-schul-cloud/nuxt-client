@@ -8,7 +8,7 @@
 			<p class="ma-8" data-testid="text-description">
 				{{
 					t("pages.userMigration.success.description", {
-						targetSystem: getSystemName(targetSystem),
+						targetSystem: systemName,
 					})
 				}}
 				<span class="d-block">
@@ -18,7 +18,7 @@
 			<VBtn color="primary" variant="flat" data-testId="btn-proceed" to="/logout">
 				{{
 					t("pages.userMigration.success.login", {
-						targetSystem: getSystemName(targetSystem),
+						targetSystem: systemName,
 					})
 				}}
 			</VBtn>
@@ -26,46 +26,28 @@
 	</div>
 </template>
 
-<script lang="ts">
-import SystemsModule from "@/store/systems";
-import { System } from "@/store/types/system";
-import { injectStrict, SYSTEMS_MODULE_KEY } from "@/utils/inject";
+<script setup lang="ts">
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useSystem } from "@data-system";
 import { useTitle } from "@vueuse/core";
-import { defineComponent, onMounted, Ref, ref } from "vue";
+import { onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "UserLoginMigrationSuccess",
-	props: {
-		targetSystem: {
-			type: String,
-			required: true,
-		},
-	},
-	setup() {
-		const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
-		const { t } = useI18n();
+const { targetSystem } = defineProps<{ targetSystem: string }>();
 
-		const pageTitle = buildPageTitle(t("pages.userMigration.success.title"));
-		useTitle(pageTitle);
+// TODO: How to handle this?
+// eslint-disable-next-line vue/no-setup-props-reactivity-loss
+const { systemName } = useSystem(targetSystem);
 
-		const getSystemName = (id: string): string =>
-			systemsModule?.getSystems.find((system: System): boolean => system.id === id)?.name ?? "";
+const { t } = useI18n();
 
-		const isLoading: Ref<boolean> = ref(true);
+const pageTitle = buildPageTitle(t("pages.userMigration.success.title"));
+useTitle(pageTitle);
 
-		onMounted(async () => {
-			await systemsModule?.fetchSystems();
-			isLoading.value = false;
-		});
+const isLoading: Ref<boolean> = ref(true);
 
-		return {
-			t,
-			isLoading,
-			getSystemName,
-		};
-	},
+onMounted(async () => {
+	isLoading.value = false;
 });
 </script>
 
