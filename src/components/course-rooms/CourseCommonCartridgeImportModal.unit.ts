@@ -8,8 +8,12 @@ import { VFileInput } from "vuetify/components";
 
 // Mock file with size
 const createMockFile = (name: string, sizeInBytes: number): File => {
-	const content = new ArrayBuffer(sizeInBytes);
-	return new File([content], name, { type: "application/octet-stream" });
+	const file = new File([""], name, { type: "application/octet-stream" });
+	Object.defineProperty(file, "size", {
+		value: sizeInBytes,
+		configurable: true,
+	});
+	return file;
 };
 
 describe("CourseCommonCartridgeImportModal", () => {
