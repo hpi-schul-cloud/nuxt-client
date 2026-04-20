@@ -6,7 +6,6 @@
 			:scrim="isFullscreen"
 			:width="700"
 			scrollable
-			transition="dialog-bottom-transition"
 			@keydown.escape="onDialogClose"
 		>
 			<v-card>

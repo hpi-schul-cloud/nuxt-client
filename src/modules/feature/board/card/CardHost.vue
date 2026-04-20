@@ -54,7 +54,9 @@
 							@keydown.left.right.up.down.stop="() => {}"
 						>
 							<VIcon data-testid="board-menu-icon">{{ mdiFullscreen }}</VIcon>
-							<span data-testid="board-menu-screen-reader-only" class="d-sr-only"> Vollbild öffnen </span>
+							<span data-testid="board-menu-screen-reader-only" class="d-sr-only"
+								>{{ t("components.board.action.detail-view") }}
+							</span>
 						</VBtn>
 						<BoardMenu v-if="hasMenuItem" :scope="BoardMenuScope.CARD" has-background :data-testid="boardMenuTestId">
 							<KebabMenuActionEdit v-if="allowedOperations?.deleteCard && !isEditMode" @click="onStartEditMode" />
@@ -150,6 +152,7 @@ import {
 import { useShareBoardLink } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, onMounted, ref, toRef } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 type Props = {
@@ -181,6 +184,7 @@ const isDetailView = computed(() => props.targetCardId === props.cardId);
 const cardStore = useCardStore();
 const router = useRouter();
 const boardStore = useBoardStore();
+const { t } = useI18n();
 
 const card = computed(() => cardStore.getCard(cardId.value));
 const isLoadingCard = computed(() => card.value === undefined);
