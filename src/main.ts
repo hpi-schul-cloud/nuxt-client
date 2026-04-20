@@ -20,7 +20,6 @@ import {
 	copyModule,
 	courseRoomDetailsModule,
 	filePathsModule,
-	finishedTasksModule,
 	groupModule,
 	importUsersModule,
 	schoolExternalToolsModule,
@@ -93,7 +92,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
 	app.provide("filePathsModule", filePathsModule);
 	app.provide(FILE_PATHS_MODULE_KEY, filePathsModule);
-	app.provide("finishedTasksModule", finishedTasksModule);
 	app.provide(GROUP_MODULE_KEY.valueOf(), groupModule);
 	app.provide("importUsersModule", importUsersModule);
 

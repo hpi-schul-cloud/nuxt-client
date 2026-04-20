@@ -1,7 +1,6 @@
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import FilePathsModule from "@/store/filePaths";
-import FinishedTasksModule from "@/store/finished-tasks";
 import GroupModule from "@/store/group";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
@@ -18,9 +17,5 @@ export const GROUP_MODULE_KEY: InjectionKey<GroupModule> = Symbol("groupModule")
 export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> = Symbol("schoolsModule");
 export const COPY_MODULE_KEY: InjectionKey<CopyModule> = Symbol("copyModule");
 export const SHARE_MODULE_KEY: InjectionKey<ShareModule> = Symbol("shareModule");
-
-// injection keys for vuex modules can not be symbols due to @module-decorator restrictions
-export const FINISHED_TASKS_MODULE_KEY: InjectionKey<FinishedTasksModule> =
-	"finishedTasksModule" as unknown as InjectionKey<FinishedTasksModule>;
 
 export const THEME_KEY: InjectionKey<{ name: string }> = Symbol("theme");
