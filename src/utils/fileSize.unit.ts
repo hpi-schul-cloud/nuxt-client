@@ -5,7 +5,7 @@ describe("@/utils/fileSize", () => {
 		describe("when formatting common byte values", () => {
 			it.each([
 				[0, "0 Bytes"],
-				[1, "1 Bytes"],
+				[1, "1 Byte"],
 				[500, "500 Bytes"],
 				[1023, "1023 Bytes"],
 			])("should format %p bytes as %p", (bytes, expected) => {

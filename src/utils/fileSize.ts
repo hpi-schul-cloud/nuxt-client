@@ -29,5 +29,10 @@ export const formatBytes = (bytes: number, decimals = 2): string => {
 	// Remove trailing zeros after decimal point for cleaner output
 	const cleanValue = parseFloat(formattedValue).toString();
 
+	// Handle singular "Byte" for exactly 1 byte
+	if (unitIndex === 0 && cleanValue === "1") {
+		return "1 Byte";
+	}
+
 	return `${cleanValue} ${sizes[unitIndex]}`;
 };
