@@ -1,10 +1,6 @@
 import UserLoginMigrationError from "./UserLoginMigrationError.page.vue";
-import SystemsModule from "@/store/systems";
-import { System } from "@/store/types/system";
-import { SYSTEMS_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { userLoginMigrationFactory } from "@@/tests/test-utils/factory/userLoginMigration.factory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useUserLoginMigration } from "@data-user-login-migration";
 import { createTestingPinia } from "@pinia/testing";
@@ -17,24 +13,9 @@ vi.mock("@data-user-login-migration");
 const useUserLoginMigrationMock = vi.mocked(useUserLoginMigration);
 
 describe("UserLoginMigrationError", () => {
-	let systemsModule: Mocked<SystemsModule>;
 	let useUserLoginMigrationMockReturn: Mocked<ReturnType<typeof useUserLoginMigration>>;
 
 	const setup = (props: { sourceSchoolNumber?: string; targetSchoolNumber?: string; multipleUsersFound?: boolean }) => {
-		const systemsMock: System[] = [
-			{
-				id: "sourceSystemId",
-				name: "sourceSystem",
-			},
-			{
-				id: "targetSystemId",
-				name: "targetSystem",
-			},
-		];
-
-		systemsModule = createModuleMocks(SystemsModule, {
-			getSystems: systemsMock,
-		});
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			ACCESSIBILITY_REPORT_EMAIL: "ticketsystem@niedersachsen.support",
@@ -47,9 +28,6 @@ describe("UserLoginMigrationError", () => {
 		const wrapper = shallowMount(UserLoginMigrationError, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
-				},
 				mocks: {
 					$theme: {
 						name: "Testcloud",
@@ -132,14 +110,6 @@ describe("UserLoginMigrationError", () => {
 
 	describe("Api", () => {
 		describe("when mounting the component", () => {
-			it("should fetch the systems", async () => {
-				setup({});
-
-				await nextTick();
-
-				expect(systemsModule.fetchSystems).toHaveBeenCalledWith();
-			});
-
 			it("should fetch the user login migration", async () => {
 				const { useUserLoginMigrationMockReturn } = setup({});
 

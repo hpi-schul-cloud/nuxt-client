@@ -8,7 +8,7 @@
 			<p v-if="!multipleUsersFound" data-testid="text-description" class="ma-8">
 				{{
 					t("pages.userMigration.error.description.fail", {
-						targetSystem: getSystemName(),
+						targetSystem: systemName,
 					})
 				}}
 				<span class="d-block">
@@ -30,7 +30,7 @@
 				<span class="d-block font-weight-bold">
 					{{
 						t("pages.userMigration.error.schoolNumberMismatch.information.schoolNumber", {
-							targetSystem: getSystemName(),
+							targetSystem: systemName,
 							targetSchoolNumber,
 							sourceSchoolNumber,
 						})
@@ -45,12 +45,10 @@
 </template>
 
 <script setup lang="ts">
-import SystemsModule from "@/store/systems";
-import { System } from "@/store/types/system";
-import { injectStrict, SYSTEMS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useEnvConfig } from "@data-env";
+import { useSystem } from "@data-system";
 import { useUserLoginMigration } from "@data-user-login-migration";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
@@ -58,17 +56,19 @@ import { useI18n } from "vue-i18n";
 
 const props = defineProps<{ targetSchoolNumber?: string; sourceSchoolNumber?: string; multipleUsersFound?: boolean }>();
 
-const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
 const { userLoginMigration, fetchLatestUserLoginMigrationForSchool } = useUserLoginMigration();
+
+// TODO: Is this a good way to handle undefined?
+const systemName = ref();
+if (userLoginMigration.value?.targetSystemId) {
+	const { systemName: name } = useSystem(userLoginMigration.value.targetSystemId);
+	systemName.value = name.value;
+}
 
 const { t } = useI18n();
 
 const pageTitle = buildPageTitle(t("pages.userMigration.error.title"));
 useTitle(pageTitle);
-
-const getSystemName = (): string =>
-	systemsModule?.getSystems.find((system: System): boolean => system.id === userLoginMigration.value?.targetSystemId)
-		?.name ?? "";
 
 const isLoading: Ref<boolean> = ref(true);
 
@@ -85,7 +85,6 @@ const supportLink: ComputedRef<string> = computed(() =>
 );
 
 onMounted(async () => {
-	await systemsModule?.fetchSystems();
 	await fetchLatestUserLoginMigrationForSchool();
 	isLoading.value = false;
 });
