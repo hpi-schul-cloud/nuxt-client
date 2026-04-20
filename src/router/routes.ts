@@ -142,6 +142,15 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		}),
 	},
 	{
+		path: `/boards/:boardId(${REGEX_ID})/cards/:cardId(${REGEX_ID})`,
+		component: async () => (await import("@page-board")).ColumnBoardPage,
+		name: "boards-card-detail",
+		props: (route: RouteLocationNormalized) => ({
+			boardId: route.params.boardId,
+			targetCardId: route.params.cardId,
+		}),
+	},
+	{
 		path: `/collabora/:id(${REGEX_ID})`,
 		component: async () => (await import("@page-collabora")).CollaboraPage,
 		name: "collabora",

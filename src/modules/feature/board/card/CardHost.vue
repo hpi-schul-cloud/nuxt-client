@@ -119,6 +119,7 @@ import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { delay } from "@/utils/helpers";
 import { Colors } from "@api-server";
+import { useBoardStore } from "@data-board";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { SvsColorPickerMenu } from "@ui-controls";
@@ -134,12 +135,14 @@ import {
 import { useShareBoardLink } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, onMounted, ref, toRef } from "vue";
+import { useRouter } from "vue-router";
 
 type Props = {
 	height: number;
 	cardId: string;
 	rowIndex: number;
 	columnIndex: number;
+	targetCardId?: string;
 };
 
 const props = defineProps<Props>();
@@ -158,9 +161,11 @@ const { isFocusContained, isFocusedById } = useBoardFocusHandler(cardId.value, c
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
 
 const isHovered = useElementHover(cardHost);
-const isDetailView = ref(false);
+const isDetailView = computed(() => props.targetCardId === props.cardId);
 
 const cardStore = useCardStore();
+const router = useRouter();
+const boardStore = useBoardStore();
 
 const card = computed(() => cardStore.getCard(cardId.value));
 const isLoadingCard = computed(() => card.value === undefined);
@@ -231,7 +236,9 @@ const onEndEditMode = async () => {
 	});
 };
 
-const onCloseDetailView = () => (isDetailView.value = false);
+const onCloseDetailView = () => {
+	router.push(`/boards/${boardStore.board?.id ?? ""}`);
+};
 
 const onMoveContentElementDown = async ({ payload: elementId, elementIndex }: ElementMove) =>
 	await cardStore.moveElementRequest(props.cardId, elementId, elementIndex, +1);
@@ -269,7 +276,10 @@ const { run: duplicateCard, isRunning: isDuplicating } = useSafeTaskRunner(async
 });
 
 const onOpenCard = () => {
-	isDetailView.value = true;
+	const boardId = boardStore.board?.id;
+	if (boardId) {
+		router.push(`/boards/${boardId}/cards/${props.cardId}`);
+	}
 };
 
 onMounted(async () => {
