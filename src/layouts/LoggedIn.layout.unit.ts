@@ -1,9 +1,8 @@
 import LoggedInLayout from "./LoggedIn.layout.vue";
 import FilePathsModule from "@/store/filePaths";
-import { FILE_PATHS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
+import { FILE_PATHS_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { SchulcloudTheme } from "@api-server";
 import { useStatusAlerts } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { Sidebar, Topbar } from "@ui-layout";
@@ -49,9 +48,6 @@ const setup = () => {
 			plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
 			provide: {
 				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
-				[THEME_KEY.valueOf()]: {
-					name: SchulcloudTheme.N21,
-				},
 			},
 			stubs: {
 				"application-error-wrapper": { template: "<div></div>" },

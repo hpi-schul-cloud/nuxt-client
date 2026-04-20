@@ -25,7 +25,6 @@
 		<div
 			v-if="$slots.title || $slots.element || $slots.subtitle || $slots.description"
 			:class="{
-				'bg-surface-light': props.hasGreyBackground === true,
 				'content-element-bar-texts-list-board': hasRowStyle,
 			}"
 			class="content-element-bar-texts py-4"
@@ -73,11 +72,7 @@ import { hasSlotContent } from "@util-vue";
 import { PropType } from "vue";
 import { IconProps } from "vuetify";
 
-const props = defineProps({
-	hasGreyBackground: {
-		type: Boolean,
-		required: false,
-	},
+defineProps({
 	hasRowStyle: {
 		type: Boolean,
 		default: false,
@@ -104,6 +99,11 @@ const props = defineProps({
 		text-decoration: underline;
 	}
 }
+
+.content-element-bar-texts {
+	background: var(--content-element-bg-overlay);
+}
+
 .content-element-bar-texts > div ~ div {
 	padding-top: 8px;
 }

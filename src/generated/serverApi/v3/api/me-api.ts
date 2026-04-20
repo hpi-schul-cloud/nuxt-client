@@ -22,6 +22,8 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
 import { MeResponse } from '../models';
+// @ts-ignore
+import { UpdatePreferencesBodyParams } from '../models';
 /**
  * MeApi - axios parameter creator
  * @export
@@ -62,6 +64,46 @@ export const MeApiAxiosParamCreator = function (configuration?: Configuration) {
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Update user preferences for the current user.
+         * @param {UpdatePreferencesBodyParams} updatePreferencesBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        meControllerUpdateMePreferences: async (updatePreferencesBodyParams: UpdatePreferencesBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updatePreferencesBodyParams' is not null or undefined
+            assertParamExists('meControllerUpdateMePreferences', 'updatePreferencesBodyParams', updatePreferencesBodyParams)
+            const localVarPath = `/me/preferences`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updatePreferencesBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -80,6 +122,17 @@ export const MeApiFp = function(configuration?: Configuration) {
          */
         async meControllerMe(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MeResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.meControllerMe(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Update user preferences for the current user.
+         * @param {UpdatePreferencesBodyParams} updatePreferencesBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async meControllerUpdateMePreferences(updatePreferencesBodyParams: UpdatePreferencesBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.meControllerUpdateMePreferences(updatePreferencesBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -101,6 +154,16 @@ export const MeApiFactory = function (configuration?: Configuration, basePath?: 
         meControllerMe(options?: any): AxiosPromise<MeResponse> {
             return localVarFp.meControllerMe(options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Update user preferences for the current user.
+         * @param {UpdatePreferencesBodyParams} updatePreferencesBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        meControllerUpdateMePreferences(updatePreferencesBodyParams: UpdatePreferencesBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.meControllerUpdateMePreferences(updatePreferencesBodyParams, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -118,6 +181,16 @@ export interface MeApiInterface {
      * @memberof MeApiInterface
      */
     meControllerMe(options?: any): AxiosPromise<MeResponse>;
+
+    /**
+     * 
+     * @summary Update user preferences for the current user.
+     * @param {UpdatePreferencesBodyParams} updatePreferencesBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MeApiInterface
+     */
+    meControllerUpdateMePreferences(updatePreferencesBodyParams: UpdatePreferencesBodyParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -137,5 +210,17 @@ export class MeApi extends BaseAPI implements MeApiInterface {
      */
     public meControllerMe(options?: any) {
         return MeApiFp(this.configuration).meControllerMe(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update user preferences for the current user.
+     * @param {UpdatePreferencesBodyParams} updatePreferencesBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MeApi
+     */
+    public meControllerUpdateMePreferences(updatePreferencesBodyParams: UpdatePreferencesBodyParams, options?: any) {
+        return MeApiFp(this.configuration).meControllerUpdateMePreferences(updatePreferencesBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }

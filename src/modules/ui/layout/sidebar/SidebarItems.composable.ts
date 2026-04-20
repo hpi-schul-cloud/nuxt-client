@@ -26,7 +26,7 @@ export const useSidebarItems = () => {
 	const pageLinks: ComputedRef<SidebarItems> = computed(() => [
 		{
 			title: "global.sidebar.item.overview",
-			href: "/dashboard",
+			to: "/dashboard",
 			icon: mdiViewGridOutline,
 			testId: "sidebar-dashboard",
 		},
@@ -181,7 +181,7 @@ export const useSidebarItems = () => {
 			theme: [SchulcloudTheme.BRB, SchulcloudTheme.DEFAULT, SchulcloudTheme.THR],
 		},
 		{
-			href: "/security",
+			to: "/system/security",
 			title: "components.legacy.footer.security",
 			testId: "sidebar-system-security",
 			theme: [SchulcloudTheme.DEFAULT],

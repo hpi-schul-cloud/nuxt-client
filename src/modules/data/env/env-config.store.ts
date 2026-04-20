@@ -36,6 +36,7 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_TLDRAW_ENABLED: false,
 	ALERT_STATUS_URL: null,
 	FEATURE_TEAMS_ENABLED: false,
+	FEATURE_TEAM_CREATE_ROOM_ENABLED: false,
 	TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
 	TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT: false,
 	TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: false,
@@ -117,6 +118,19 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		}
 	});
 
+	const instanceName = computed(() => {
+		switch (env.SC_THEME.toLowerCase()) {
+			case SchulcloudTheme.THR:
+				return "Thüringer Schulcloud";
+			case SchulcloudTheme.BRB:
+				return "Schul-Cloud Brandenburg";
+			case SchulcloudTheme.N21:
+				return "Niedersächsische Bildungscloud";
+			default:
+				return "dBildungscloud";
+		}
+	});
+
 	const loadConfiguration = async () => {
 		try {
 			const [serverConfigRes, fileConfigRes] = await Promise.all([
@@ -141,6 +155,7 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		env,
 		envFile,
 		fallBackLanguage,
+		instanceName,
 		instituteTitle,
 	};
 });

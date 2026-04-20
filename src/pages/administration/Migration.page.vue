@@ -19,7 +19,7 @@
 				{{
 					t("pages.administration.migration.title", {
 						source: sourceSystemName,
-						instance: theme.name,
+						instance: instanceName,
 					})
 				}}
 			</h1>
@@ -65,48 +65,6 @@
 						{{ t("pages.administration.migration.step5") }}
 					</VStepperItem>
 				</VStepperHeader>
-
-				<CustomDialog
-					ref="cancelMigrationDialog"
-					v-model:is-open="isCancelDialogOpen"
-					has-buttons
-					:buttons="['cancel', 'confirm']"
-					data-testid="cancel-migration-dialog"
-					@dialog-confirmed="confirmCancelMigration()"
-				>
-					<template #title>
-						{{ t("components.administration.adminMigrationSection.migrationWizardCancelDialog.Title") }}
-					</template>
-					<template #content>
-						{{ t("components.administration.adminMigrationSection.migrationWizardCancelDialog.Description") }}
-					</template>
-				</CustomDialog>
-
-				<CustomDialog
-					ref="clearAutoMatchesDialog"
-					v-model:is-open="isClearAutoMatchesDialogOpen"
-					has-buttons
-					:buttons="['cancel', 'confirm']"
-					data-testid="clear-auto-matches-dialog"
-					@dialog-confirmed="clearAllAutoMatches()"
-				>
-					<template #title>
-						{{ t("components.administration.adminMigrationSection.clearAutoMatchesDialog.title") }}
-					</template>
-					<template #content>
-						<p>
-							{{
-								t("components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph")
-							}}
-						</p>
-						<p>
-							{{
-								t("components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph")
-							}}
-							>
-						</p>
-					</template>
-				</CustomDialog>
 			</VStepper>
 		</template>
 
@@ -195,11 +153,7 @@
 								<VBtn data-testid="import-users-cancel-migration-btn" @click="cancelMigration()">
 									{{ t("common.actions.cancel") }}
 								</VBtn>
-								<VBtn
-									class="ml-2"
-									data-testid="import-users-clear-auto-matches-btn"
-									@click="showClearAutoMatchesDialog()"
-								>
+								<VBtn class="ml-2" data-testid="import-users-clear-auto-matches-btn" @click="doClearAllAutoMatches()">
 									{{ t("pages.administration.migration.clearAutoMatches") }}
 								</VBtn>
 							</div>
@@ -238,7 +192,7 @@
 												</span>
 												{{
 													t(paragraph.text, {
-														instance: theme.name,
+														instance: instanceName,
 														source: sourceSystemName,
 													})
 												}}
@@ -295,7 +249,7 @@
 													{{
 														t("pages.administration.migration.step4.nbc.linkingFinished", {
 															source: sourceSystemName,
-															instance: theme.name,
+															instance: instanceName,
 															totalMatched: totalMatched,
 														})
 													}}
@@ -306,7 +260,7 @@
 													{{
 														t("pages.administration.migration.step4.linkingFinished", {
 															source: sourceSystemName,
-															instance: theme.name,
+															instance: instanceName,
 														})
 													}}
 												</p>
@@ -322,7 +276,7 @@
 														}}
 													</li>
 													<li>
-														{{ t("pages.administration.migration.step4.bullets.newUsers", { instance: theme.name }) }}
+														{{ t("pages.administration.migration.step4.bullets.newUsers", { instance: instanceName }) }}
 													</li>
 													<li>
 														{{
@@ -363,7 +317,7 @@
 											{{
 												t("pages.administration.migration.step5.nbc.linkingFinished", {
 													source: sourceSystemName,
-													instance: theme.name,
+													instance: instanceName,
 												})
 											}}
 										</p>
@@ -388,7 +342,7 @@
 											{{
 												t("pages.administration.migration.step5.syncReady2", {
 													source: sourceSystemName,
-													instance: theme.name,
+													instance: instanceName,
 												})
 											}}
 										</p>
@@ -397,7 +351,7 @@
 											{{
 												t("pages.administration.migration.step5.afterSync", {
 													source: sourceSystemName,
-													instance: theme.name,
+													instance: instanceName,
 												})
 											}}
 										</p>
@@ -433,16 +387,16 @@
 </template>
 <script setup lang="ts">
 import ImportUsers from "@/components/administration/ImportUsers.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { importUsersModule, schoolsModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
-import { injectStrict, THEME_KEY } from "@/utils/inject";
+import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { SchulcloudTheme } from "@api-server";
-import { useEnvConfig } from "@data-env";
+import { useEnvConfig, useEnvStore } from "@data-env";
 import { mdiClose } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, onUnmounted, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -450,8 +404,7 @@ import { useRouter } from "vue-router";
 const { t } = useI18n();
 
 const router = useRouter();
-
-const theme = injectStrict(THEME_KEY);
+const { instanceName } = storeToRefs(useEnvStore());
 
 const migrationStep: Ref<number> = ref(1);
 
@@ -464,10 +417,6 @@ const isLoading: Ref<boolean> = ref(false);
 const matchByPreferredName: Ref<boolean> = ref(false);
 
 const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
-
-const isCancelDialogOpen: Ref<boolean> = ref(false);
-
-const isClearAutoMatchesDialogOpen: Ref<boolean> = ref(false);
 
 const importUsersRef: Ref<InstanceType<typeof ImportUsers> | null> = ref(null);
 
@@ -511,7 +460,7 @@ useTitle(
 	buildPageTitle(
 		t("pages.administration.migration.title", {
 			source: sourceSystemName.value,
-			instance: theme.name,
+			instance: instanceName,
 		})
 	)
 );
@@ -639,22 +588,21 @@ const nextStep = () => {
 	migrationStep.value = nextStep;
 };
 
-const cancelMigration = () => {
-	isCancelDialogOpen.value = true;
-};
-
-const confirmCancelMigration = async () => {
-	isLoading.value = true;
-
-	await importUsersModule.cancelMigration();
-
-	migrationStep.value = 0;
-
-	await schoolsModule.fetchSchool();
-
-	isLoading.value = false;
-
-	await redirectToAdminPage();
+const cancelMigration = async () => {
+	const isCancelConfirmed = await askConfirmation({
+		title: "components.administration.adminMigrationSection.migrationWizardCancelDialog.Title",
+		message: "components.administration.adminMigrationSection.migrationWizardCancelDialog.Description",
+		messageType: "warning",
+		confirmBtnKey: "common.actions.confirm",
+	});
+	if (isCancelConfirmed) {
+		isLoading.value = true;
+		await importUsersModule.cancelMigration();
+		migrationStep.value = 0;
+		await schoolsModule.fetchSchool();
+		isLoading.value = false;
+		await redirectToAdminPage();
+	}
 };
 
 const redirectToAdminPage = async () => {
@@ -664,18 +612,23 @@ const redirectToAdminPage = async () => {
 	});
 };
 
-const showClearAutoMatchesDialog = async () => {
-	isClearAutoMatchesDialogOpen.value = true;
-};
+const doClearAllAutoMatches = async () => {
+	const isClearConfirmed = await askConfirmation({
+		title: "components.administration.adminMigrationSection.clearAutoMatchesDialog.title",
+		message: "components.administration.adminMigrationSection.clearAutoMatchesDialog.description",
+		messageType: "warning",
+		confirmBtnKey: "common.actions.confirm",
+	});
 
-const clearAllAutoMatches = async () => {
-	isLoading.value = true;
+	if (isClearConfirmed) {
+		isLoading.value = true;
 
-	await importUsersModule.clearAllAutoMatches();
+		await importUsersModule.clearAllAutoMatches();
 
-	importUsersRef.value?.reloadData();
+		importUsersRef.value?.reloadData();
 
-	isLoading.value = false;
+		isLoading.value = false;
+	}
 };
 
 const migrationSummaryParagraphItems = computed(() => [

@@ -1,6 +1,5 @@
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { THEME_KEY } from "@/utils/inject";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestEnvStore, mockComposable, provisioningOptionsDataFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ConfigResponse } from "@api-server";
@@ -8,7 +7,7 @@ import { ProvisioningOptions, useProvisioningOptionsState } from "@data-provisio
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import type { Mocked } from "vitest";
+import { Mocked, vi } from "vitest";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { createRouterMock, getRouter, injectRouterMock, RouterMock } from "vue-router-mock";
@@ -40,11 +39,6 @@ describe("ProvisioningOptionsPage", () => {
 		const wrapper = mount(ProvisioningOptionsPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[THEME_KEY.valueOf()]: {
-						name: "instance name",
-					},
-				},
 			},
 			props,
 		});
@@ -280,21 +274,12 @@ describe("ProvisioningOptionsPage", () => {
 				};
 
 				it("should not call the update function", async () => {
+					vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(false);
 					const { saveButton } = await setup();
 
 					await saveButton.trigger("click");
 
 					expect(useProvisioningOptionsStateMock.updateProvisioningOptionsData).not.toHaveBeenCalled();
-				});
-
-				it("should open the warning dialog", async () => {
-					const { saveButton, wrapper } = await setup();
-
-					await saveButton.trigger("click");
-
-					const dialog = wrapper.findComponent(CustomDialog);
-
-					expect(dialog.props("isOpen")).toEqual(true);
 				});
 			});
 
@@ -319,6 +304,7 @@ describe("ProvisioningOptionsPage", () => {
 				};
 
 				it("should call the update function", () => {
+					vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 					const { saveButton } = setup();
 
 					saveButton.trigger("click");

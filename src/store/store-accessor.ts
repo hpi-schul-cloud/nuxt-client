@@ -5,11 +5,8 @@
 // In here you import all your modules, call getModule on them to turn them
 // into the actual stores, and then re-export them.
 
-import CommonCartridgeExportModule from "./common-cartridge-export";
-import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import CourseRoomListModule from "@/store/course-room-list";
 import FilePaths from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
 import GroupModule from "@/store/group";
@@ -19,8 +16,6 @@ import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
 import SystemsModule from "@/store/systems";
 import TasksModule from "@/store/tasks";
-import UserLoginMigrationModule from "@/store/user-login-migrations";
-import VideoConferenceModule from "@/store/video-conference";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 
@@ -33,16 +28,11 @@ export let finishedTasksModule: FinishedTasksModule;
 export let groupModule: GroupModule;
 export let importUsersModule: ImportUsersModule;
 export let courseRoomDetailsModule: CourseRoomDetailsModule;
-export let courseRoomListModule: CourseRoomListModule;
 export let schoolExternalToolsModule: SchoolExternalToolsModule;
 export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
 export let systemsModule: SystemsModule;
 export let tasksModule: TasksModule;
-export let userLoginMigrationModule: UserLoginMigrationModule;
-export let videoConferenceModule: VideoConferenceModule;
-export let commonCartridgeExportModule: CommonCartridgeExportModule;
-export let commonCartridgeImportModule: CommonCartridgeImportModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<unknown>): void {
@@ -52,16 +42,11 @@ export function initializeStores(store: Store<unknown>): void {
 	groupModule = getModule(GroupModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	courseRoomDetailsModule = getModule(CourseRoomDetailsModule, store);
-	courseRoomListModule = getModule(CourseRoomListModule, store);
 	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	shareModule = getModule(ShareModule, store);
 	systemsModule = getModule(SystemsModule, store);
 	tasksModule = getModule(TasksModule, store);
-	userLoginMigrationModule = getModule(UserLoginMigrationModule, store);
-	videoConferenceModule = getModule(VideoConferenceModule, store);
-	commonCartridgeExportModule = getModule(CommonCartridgeExportModule, store);
-	commonCartridgeImportModule = getModule(CommonCartridgeImportModule, store);
 }
 
 // for use in 'modules' store init (see store/index.ts), so each module
@@ -74,14 +59,9 @@ export const modules = {
 	groupModule: GroupModule,
 	importUsersModule: ImportUsersModule,
 	courseRoomDetailsModule: CourseRoomDetailsModule,
-	courseRoomListModule: CourseRoomListModule,
 	schoolExternalToolsModule: SchoolExternalToolsModule,
 	schoolsModule: SchoolsModule,
 	shareModule: ShareModule,
 	systemsModule: SystemsModule,
 	tasksModule: TasksModule,
-	userLoginMigrationModule: UserLoginMigrationModule,
-	videoConferenceModule: VideoConferenceModule,
-	commonCartridgeExportModule: CommonCartridgeExportModule,
-	commonCartridgeImportModule: CommonCartridgeImportModule,
 };

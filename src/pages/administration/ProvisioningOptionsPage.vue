@@ -16,7 +16,7 @@
 					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
 							$t("components.administration.provisioningOptions.class.description", {
-								instance: theme.name,
+								instance: instanceName,
 							})
 						}}
 					</div>
@@ -32,7 +32,7 @@
 					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
 							$t("components.administration.provisioningOptions.course.description", {
-								instance: theme.name,
+								instance: instanceName,
 							})
 						}}
 					</div>
@@ -48,7 +48,7 @@
 					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
 							$t("components.administration.provisioningOptions.otherGroups.description", {
-								instance: theme.name,
+								instance: instanceName,
 							})
 						}}
 					</div>
@@ -64,7 +64,7 @@
 					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
 							$t("components.administration.provisioningOptions.schoolExternalTools.description", {
-								instance: theme.name,
+								instance: instanceName,
 							})
 						}}
 					</div>
@@ -88,57 +88,24 @@
 				{{ t("common.actions.save") }}
 			</v-btn>
 		</v-row>
-
-		<CustomDialog
-			:is-open="isWarningDialogOpen"
-			:has-buttons="true"
-			:buttons="['cancel', 'confirm']"
-			data-testId="warning-dialog"
-			@dialog-closed="isWarningDialogOpen = false"
-			@dialog-confirmed="saveOptions"
-		>
-			<template #title>
-				<h2 class="my-2">
-					{{ t("components.administration.provisioningOptions.warning.title") }}
-				</h2>
-			</template>
-			<template #content>
-				<span class="text-md mt-2">
-					{{
-						t("components.administration.provisioningOptions.warning.question", {
-							groupTypes: newlyTurnedOffOptions.map(translateProvisioningOption).join(", "),
-						})
-					}}
-				</span>
-				<v-alert type="warning" class="mt-4 mb-0">
-					{{
-						t("components.administration.provisioningOptions.warning.consequence", {
-							groupTypes: newlyTurnedOffOptions.map(translateProvisioningOption).join(", "),
-						})
-					}}
-				</v-alert>
-			</template>
-		</CustomDialog>
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { injectStrict, THEME_KEY } from "@/utils/inject";
+import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useEnvConfig } from "@data-env";
-import { ProvisioningOptions, ProvisioningOptionsEnum, useProvisioningOptionsState } from "@data-provisioning-options";
+import { useEnvConfig, useEnvStore } from "@data-env";
+import { ProvisioningOptionsEnum, useProvisioningOptionsState } from "@data-provisioning-options";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { computed, ComputedRef, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-type Props = {
+const props = defineProps<{
 	systemId: string;
-};
-
-const props = defineProps<Props>();
+}>();
 
 const provisioningOptionTranslations = {
 	[ProvisioningOptionsEnum.COURSE]: "common.words.courses",
@@ -151,8 +118,8 @@ const { t } = useI18n();
 const { fetchProvisioningOptionsData, updateProvisioningOptionsData, provisioningOptionsData, isLoading, error } =
 	useProvisioningOptionsState();
 const router = useRouter();
-const theme = injectStrict(THEME_KEY);
 
+const { instanceName } = storeToRefs(useEnvStore());
 const pageTitle = buildPageTitle(t("components.administration.provisioningOptions.page.title"));
 useTitle(pageTitle);
 
@@ -167,25 +134,21 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 	},
 ]);
 
-const provisioningOptions: ComputedRef<ProvisioningOptions> = computed(() => provisioningOptionsData.value);
+const provisioningOptions = computed(() => provisioningOptionsData.value);
 
-const initialProvisioningOptions: Ref<ProvisioningOptions> = ref({
+const initialProvisioningOptions = ref({
 	...provisioningOptionsData.value,
 });
 
 const isMediaLicensingEnabled = useEnvConfig().value.FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED;
 
-const wasOptionTurnedOff = (provisioningOption: ProvisioningOptionsEnum): boolean => {
-	const wasTurnedOff =
-		initialProvisioningOptions.value[provisioningOption] && !provisioningOptions.value[provisioningOption];
+const wasOptionTurnedOff = (provisioningOption: ProvisioningOptionsEnum) =>
+	initialProvisioningOptions.value[provisioningOption] && !provisioningOptions.value[provisioningOption];
 
-	return wasTurnedOff;
-};
+const newlyTurnedOffOptions = computed(() => {
+	const options = Object.values(ProvisioningOptionsEnum);
 
-const newlyTurnedOffOptions: ComputedRef<ProvisioningOptionsEnum[]> = computed(() => {
-	const options: ProvisioningOptionsEnum[] = Object.values(ProvisioningOptionsEnum);
-
-	return options.filter((option: ProvisioningOptionsEnum): boolean => wasOptionTurnedOff(option));
+	return options.filter((option: ProvisioningOptionsEnum) => wasOptionTurnedOff(option));
 });
 
 const translateProvisioningOption = (option: ProvisioningOptionsEnum) => {
@@ -194,8 +157,6 @@ const translateProvisioningOption = (option: ProvisioningOptionsEnum) => {
 	}
 	return t(provisioningOptionTranslations[option]);
 };
-
-const isWarningDialogOpen: Ref<boolean> = ref(false);
 
 onMounted(async () => {
 	window.scrollTo({ top: 0, behavior: "smooth" });
@@ -213,7 +174,16 @@ const onSaveButtonClick = async () => {
 			await saveOptions();
 		}
 
-		isWarningDialogOpen.value = true;
+		const isConfirmed = await askConfirmation({
+			title: "components.administration.provisioningOptions.warning.title",
+			message: t("components.administration.provisioningOptions.warning", {
+				groupTypes: newlyTurnedOffOptions.value.map(translateProvisioningOption).join(", "),
+			}),
+			messageType: "warning",
+		});
+		if (isConfirmed) {
+			await saveOptions();
+		}
 	} else {
 		await saveOptions();
 	}

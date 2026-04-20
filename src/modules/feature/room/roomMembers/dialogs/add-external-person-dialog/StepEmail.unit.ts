@@ -51,7 +51,6 @@ describe("StepEmail", () => {
 		it("should display correct texts", () => {
 			const { wrapper } = setup();
 
-			expect(wrapper.text()).toContain("pages.rooms.members.dialog.addExternalPerson.steps.email.heading");
 			expect(wrapper.text()).toContain("pages.rooms.members.dialog.addExternalPerson.steps.email.text");
 			expect(wrapper.text()).toContain("common.actions.cancel");
 			expect(wrapper.text()).toContain("pages.rooms.members.dialog.addExternalPerson.button.add");

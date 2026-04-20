@@ -3,54 +3,36 @@
 		<RoomVideoConferenceCard
 			:has-permission="hasPermission"
 			:can-start="canStart"
-			:is-running="isRunning"
-			:is-refreshing="isRefreshing"
+			:is-running="isConferenceRunning"
+			:is-refreshing="isLoading"
 			data-testid="video-conference-card"
 			@click="onClick"
 			@refresh="onRefresh"
 		/>
-		<VDialog
-			ref="vDialog"
-			v-model="isErrorDialogOpen"
-			:max-width="480"
+		<SvsDialog
+			:model-value="isErrorDialogOpen"
+			title="error.generic"
 			data-testid="error-dialog"
-			@click:outside="onCloseErrorDialog"
-			@keydown.esc="onCloseErrorDialog"
-		>
-			<VCard :ripple="false">
-				<VCardTitle data-testid="dialog-title" class="dialog-title px-6 pt-4">
-					<h2 class="my-2 text-break-word">
-						{{ t("error.generic") }}
-					</h2>
-				</VCardTitle>
-				<VCardActions class="action-buttons px-6">
-					<div class="button-section button-right">
-						<VBtn data-testid="dialog-close" variant="outlined" @click="onCloseErrorDialog">
-							{{ t("common.labels.close") }}
-						</VBtn>
-					</div>
-				</VCardActions>
-			</VCard>
-		</VDialog>
+			no-confirm
+			cancel-btn-lang-key="common.labels.close"
+			@cancel="errorDismissed = true"
+		/>
 		<VideoConferenceConfigurationDialog
-			:is-open="isConfigurationDialogOpen"
-			:options="videoConferenceOptions"
-			@close="onCloseConfigurationDialog"
-			@start-video-conference="startVideoConference"
+			v-model:is-open="isConfigurationDialogOpen"
+			:options="videoConferenceInfo.options"
+			@start-video-conference="startVideoConferenceAndJoin"
 		/>
 	</div>
 </template>
 
 <script setup lang="ts">
 import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
-import { VideoConferenceState } from "@/store/types/video-conference";
-import VideoConferenceModule from "@/store/video-conference";
-import { injectStrict, VIDEO_CONFERENCE_MODULE_KEY } from "@/utils/inject";
-import { Permission, VideoConferenceJoinResponse, VideoConferenceScope } from "@api-server";
+import { Permission, VideoConferenceScope, VideoConferenceStateResponse } from "@api-server";
+import { useVideoConference } from "@data-access";
 import { useAppStore, useAppStoreRefs } from "@data-app";
+import { SvsDialog } from "@ui-dialog";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
-import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
-import { useI18n } from "vue-i18n";
+import { computed, ref, toRef } from "vue";
 
 const props = defineProps({
 	roomId: {
@@ -59,94 +41,69 @@ const props = defineProps({
 	},
 });
 
-const { t } = useI18n();
 const { hasPermission: hasAuthPermission } = useAppStore();
 const { isExternalPerson, userRoles } = useAppStoreRefs();
+const roomId = toRef(props, "roomId");
 
-const videoConferenceModule: VideoConferenceModule = injectStrict(VIDEO_CONFERENCE_MODULE_KEY);
-
-const videoConferenceInfo = computed(() => videoConferenceModule.getVideoConferenceInfo);
-
-const isWaitingRoomActive = computed(() => videoConferenceInfo.value.options.moderatorMustApproveJoinRequests);
-
-const isRunning = computed(() => videoConferenceInfo.value.state === VideoConferenceState.RUNNING);
-
-const isRefreshing = computed(() => videoConferenceModule.getLoading);
+const {
+	videoConferenceInfo,
+	isLoading,
+	fetchError,
+	startError,
+	joinError,
+	isConferenceRunning,
+	isWaitingRoomActive,
+	fetchVideoConferenceInfo,
+	startVideoConference,
+	joinVideoConference,
+} = useVideoConference(VideoConferenceScope.COURSE, roomId.value);
 
 const canJoinMeeting = hasAuthPermission(Permission.JOIN_MEETING);
 const canStart = hasAuthPermission(Permission.START_MEETING);
 const canJoin = computed(
 	() => canJoinMeeting.value && (!isExternalPerson.value || userRoles.value.length > 1 || isWaitingRoomActive.value)
 );
-
 const hasPermission = computed(() => canJoin.value || canStart.value);
 
-const isConfigurationDialogOpen: Ref<boolean> = ref(false);
+const errorDismissed = ref(false);
 
-const videoConferenceOptions = computed(() => videoConferenceModule.getVideoConferenceInfo.options);
+const isErrorDialogOpen = computed(
+	() => (!!fetchError.value || !!startError.value || !!joinError.value) && !errorDismissed.value
+);
 
-onMounted(async () => {
-	await videoConferenceModule.fetchVideoConferenceInfo({
-		scope: VideoConferenceScope.COURSE,
-		scopeId: props.roomId,
-	});
-});
+const isConfigurationDialogOpen = ref(false);
 
 const onRefresh = async () => {
-	if (isRefreshing.value) {
-		return;
-	}
-
-	await videoConferenceModule.fetchVideoConferenceInfo({
-		scope: VideoConferenceScope.COURSE,
-		scopeId: props.roomId,
-	});
+	if (isLoading.value) return;
+	errorDismissed.value = false;
+	await fetchVideoConferenceInfo();
 };
 
 const onClick = async () => {
-	if (videoConferenceInfo.value.state === VideoConferenceState.NOT_STARTED && canStart.value) {
-		openConfigurationDiaolog();
+	if (videoConferenceInfo.value.state === VideoConferenceStateResponse.NOT_STARTED && canStart.value) {
+		isConfigurationDialogOpen.value = true;
 	}
-
-	if (videoConferenceInfo.value.state === VideoConferenceState.RUNNING && canJoin.value) {
-		await joinVideoConference();
+	if (videoConferenceInfo.value.state === VideoConferenceStateResponse.RUNNING && canJoin.value) {
+		await doJoinVideoConference();
 	}
 };
 
-const openConfigurationDiaolog = () => {
-	isConfigurationDialogOpen.value = true;
-};
-
-const onCloseConfigurationDialog = () => {
+const startVideoConferenceAndJoin = async () => {
 	isConfigurationDialogOpen.value = false;
-};
+	errorDismissed.value = false;
+	await startVideoConference(videoConferenceInfo.value.options);
 
-const startVideoConference = async () => {
-	onCloseConfigurationDialog();
-
-	await videoConferenceModule.startVideoConference({
-		scope: VideoConferenceScope.COURSE,
-		scopeId: props.roomId,
-		videoConferenceOptions: videoConferenceOptions.value,
-	});
-
-	await joinVideoConference();
-};
-
-const joinVideoConference = async () => {
-	const videoConferenceUrl: VideoConferenceJoinResponse | undefined = await videoConferenceModule.joinVideoConference({
-		scope: VideoConferenceScope.COURSE,
-		scopeId: props.roomId,
-	});
-
-	if (videoConferenceUrl) {
-		window.open(videoConferenceUrl.url, "_self");
+	if (!startError.value) {
+		await doJoinVideoConference();
 	}
 };
 
-const isErrorDialogOpen: ComputedRef<boolean> = computed(() => videoConferenceModule.getError !== null);
-
-const onCloseErrorDialog = () => {
-	videoConferenceModule.resetError();
+const doJoinVideoConference = async () => {
+	errorDismissed.value = false;
+	const joinTaskResult = await joinVideoConference();
+	const videoConferenceUrl = joinTaskResult?.result?.data.url;
+	if (videoConferenceUrl) {
+		window.open(videoConferenceUrl, "_self");
+	}
 };
 </script>

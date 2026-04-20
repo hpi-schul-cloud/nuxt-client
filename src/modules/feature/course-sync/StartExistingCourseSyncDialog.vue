@@ -1,53 +1,18 @@
 <template>
 	<GroupSelectionDialog
-		:is-open="isOpen && step === 0"
+		:is-open="isOpen"
 		:description="$t('feature-course-sync.StartExistingCourseSyncDialog.text')"
 		@confirm="onConfirmGroupSelection"
 		@cancel="closeDialog"
 	/>
-	<CustomDialog
-		ref="start-existing-course-sync-dialog"
-		:is-open="isOpen && step === 1"
-		has-buttons
-		:buttons="['cancel', 'confirm']"
-		@dialog-confirmed="onConfirmWarning"
-		@dialog-closed="closeDialog"
-	>
-		<template #title>
-			<div class="text-h2 my-2 text-break">Synchronisation bestätigen</div>
-		</template>
-
-		<template #content>
-			<WarningAlert data-testid="no-teacher-warning">
-				<span data-testid="no-teacher-warning-text">
-					{{
-						$t(
-							isUserInGroup
-								? "feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning"
-								: "feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning"
-						)
-					}}
-				</span>
-			</WarningAlert>
-			<p class="text-md mt-2" data-testid="group-dialog-info-text">
-				{{
-					$t("feature-course-sync.StartExistingCourseSyncDialog.confirmation.text", {
-						groupName: selectedGroup?.name || "",
-						courseName: courseName,
-					})
-				}}
-			</p>
-		</template>
-	</CustomDialog>
 </template>
 
 <script setup lang="ts">
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
+import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { GroupResponse, GroupUserResponse, RoleName } from "@api-server";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { useCourseApi } from "@data-room";
-import { WarningAlert } from "@ui-alert";
 import { computed, ModelRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -77,12 +42,28 @@ const emit = defineEmits<{
 	(e: "success"): void;
 }>();
 
-const step: Ref<number> = ref(0);
 const selectedGroup: Ref<GroupResponse | undefined> = ref();
 
-const onConfirmGroupSelection = (group: GroupResponse) => {
+const onConfirmGroupSelection = async (group: GroupResponse) => {
 	selectedGroup.value = group;
-	step.value = 1;
+	isOpen.value = false;
+
+	const isSelectionConfirmed = await askConfirmation({
+		title: t("feature-course-sync.StartExistingCourseSyncDialog.confirmation.text", {
+			groupName: group?.name || "",
+			courseName: props.courseName,
+		}),
+		message: t(
+			isUserInGroup.value
+				? "feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning"
+				: "feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning"
+		),
+		messageType: "warning",
+	});
+
+	if (isSelectionConfirmed) {
+		await onConfirmWarning();
+	}
 };
 
 const { startSynchronization } = useCourseApi();
@@ -132,6 +113,5 @@ const onConfirmWarning = async () => {
 
 const closeDialog = () => {
 	isOpen.value = false;
-	step.value = 0;
 };
 </script>

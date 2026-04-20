@@ -1,52 +1,44 @@
 <template>
-	<VDialog v-model="isDialogOpen" data-testid="element-type-selection" :width="dialogWidth">
-		<VCard :loading="isDialogLoading">
-			<VCardTitle class="text-h2 text-break px-6 pt-4">
-				{{ t("components.elementTypeSelection.dialog.title") }}
-			</VCardTitle>
-			<VCardText class="d-flex flex-row flex-wrap align-center">
-				<ExtendedIconBtn
-					v-for="(item, key) in elementTypeOptions"
-					:key="key"
+	<SvsDialog
+		v-model="isDialogOpen"
+		title="components.elementTypeSelection.dialog.title"
+		data-testid="element-type-selection"
+		:is-loading="isDialogLoading"
+		no-confirm
+	>
+		<template #content>
+			<div class="elements-grid">
+				<VBtn
+					v-for="item in elementTypeOptions"
+					:key="item.label"
 					:data-testid="item.testId"
-					:icon="item.icon"
-					:label="item.label"
+					height="auto"
+					variant="text"
+					size="large"
 					@click.stop="item.action"
-				/>
-			</VCardText>
-			<VCardActions class="mb-2 px-6">
-				<VBtn data-testid="dialog-close" variant="outlined" @click.stop="closeDialog">
-					{{ t("common.actions.cancel") }}
+				>
+					<div class="d-flex flex-column justify-center">
+						<VIcon size="x-large" class="mx-auto">{{ item.icon }}</VIcon>
+						<span class="mt-1 text-wrap">
+							{{ item.label }}
+						</span>
+					</div>
 				</VBtn>
-			</VCardActions>
-		</VCard>
-	</VDialog>
+			</div>
+		</template>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
-import { ExtendedIconBtn } from "@ui-extended-icon-btn";
-import { computed, ComputedRef } from "vue";
-import { useI18n } from "vue-i18n";
+import { SvsDialog } from "@ui-dialog";
 
-const { isDialogOpen, isDialogLoading, closeDialog, elementTypeOptions } = useSharedElementTypeSelection();
-
-const { t } = useI18n();
-
-const dialogWidth: ComputedRef<number> = computed(() => {
-	const totalOptions = elementTypeOptions.value.length;
-
-	return totalOptions >= 3 ? 426 : 320;
-});
+const { isDialogOpen, isDialogLoading, elementTypeOptions } = useSharedElementTypeSelection();
 </script>
-
 <style scoped>
-.subtitle {
-	overflow-wrap: break-word;
-	white-space: normal;
-}
-
-.button-max-width {
-	max-width: 100px;
+.elements-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+	grid-auto-rows: 85px;
 }
 </style>

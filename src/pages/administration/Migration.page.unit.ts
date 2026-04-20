@@ -1,13 +1,13 @@
 import MigrationWizard from "./Migration.page.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { importUsersModule, schoolsModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
-import { THEME_KEY } from "@/utils/inject";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { SchulcloudTheme } from "@api-server";
+import { useEnvStore } from "@data-env";
 import { createTestingPinia } from "@pinia/testing";
 import { ComponentMountingOptions, flushPromises, mount, shallowMount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -15,10 +15,6 @@ import { ComponentPublicInstance, nextTick } from "vue";
 import { NamedValue } from "vue-i18n";
 import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 import { VBtn, VCardText, VProgressCircular } from "vuetify/components";
-
-const $theme = {
-	name: "instance name",
-};
 
 const importUsersStub = {
 	template: "<div></div>",
@@ -32,7 +28,6 @@ type MigrationPageWrapperType = Partial<{
 	isLoading: boolean;
 	migrationStep: number;
 	isMigrationConfirm: boolean;
-	isCancelDialogOpen: boolean;
 	isClearAutoMatchesDialogOpen: boolean;
 	school: { inUserMigration: boolean; inMaintenance: boolean };
 }>;
@@ -43,9 +38,6 @@ const getWrapper = (
 	mount(MigrationWizard, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				[THEME_KEY.valueOf()]: $theme,
-			},
 			stubs: {
 				ImportUsers: importUsersStub,
 				VSnackbar: true,
@@ -60,9 +52,6 @@ const getWrapperShallow = (
 	shallowMount(MigrationWizard, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				[THEME_KEY.valueOf()]: $theme,
-			},
 		},
 		...options,
 	});
@@ -99,7 +88,7 @@ describe("User Migration / Index", () => {
 		const title =
 			wrapper.vm.t?.("pages.administration.migration.title", {
 				source: "LDAP",
-				instance: $theme.name,
+				instance: useEnvStore().instanceName,
 			}) + " - dBildungscloud";
 		expect(document.title).toBe(title);
 	});
@@ -286,7 +275,7 @@ describe("User Migration / Index", () => {
 			expect(stepperContent.text()).toContain(
 				wrapper.vm.t?.("pages.administration.migration.step4.linkingFinished", {
 					source: "LDAP",
-					instance: $theme.name,
+					instance: useEnvStore().instanceName,
 				})
 			);
 		});
@@ -339,7 +328,7 @@ describe("User Migration / Index", () => {
 				wrapper.vm.migrationStep = 2;
 				wrapper.vm.t?.("pages.administration.migration.title", {
 					source: "LDAP",
-					instance: $theme.name,
+					instance: useEnvStore().instanceName,
 				});
 
 				const redirect = {
@@ -363,34 +352,9 @@ describe("User Migration / Index", () => {
 				expect(button.exists()).toBe(true);
 			});
 
-			it("should show dialog on click", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
-
-				await button.trigger("click");
-
-				expect(wrapper.vm.isCancelDialogOpen).toBe(true);
-			});
-
-			it("should change isCancelDialogOpen on isOpen", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
-
-				await button.trigger("click");
-
-				const dialog = wrapper.findComponent({
-					ref: "cancelMigrationDialog",
-				});
-
-				dialog.vm.$emit("update:isOpen", false);
-				await nextTick();
-
-				expect(wrapper.vm.isCancelDialogOpen).toEqual(false);
-			});
-
 			it("should call stores on dialog-confirm", async () => {
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
+
 				const { wrapper } = await setup();
 
 				const cancelMigrationMock = vi.spyOn(importUsersModule, "cancelMigration");
@@ -406,14 +370,7 @@ describe("User Migration / Index", () => {
 				vi.spyOn(schoolsModule, "fetchSchool").mockResolvedValueOnce(await Promise.resolve());
 
 				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
-
 				await button.trigger("click");
-
-				const dialog = wrapper.findComponent({
-					ref: "cancelMigrationDialog",
-				});
-
-				dialog.vm.$emit("dialog-confirmed");
 
 				await nextTick();
 
@@ -422,6 +379,7 @@ describe("User Migration / Index", () => {
 			});
 
 			it("should redirect to school settings migration section", async () => {
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 				const { wrapper } = await setup();
 
 				const cancelMigrationMock = vi.spyOn(importUsersModule, "cancelMigration");
@@ -435,14 +393,8 @@ describe("User Migration / Index", () => {
 				});
 
 				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
-
 				await button.trigger("click");
 
-				const dialog = wrapper.findComponent({
-					ref: "cancelMigrationDialog",
-				});
-
-				dialog.vm.$emit("dialog-confirmed");
 				await flushPromises();
 
 				expect(getRouter().push).toHaveBeenCalledWith({
@@ -525,7 +477,7 @@ describe("User Migration / Index", () => {
 				wrapper.vm.migrationStep = 2;
 				wrapper.vm.t?.("pages.administration.migration.title", {
 					source: "LDAP",
-					instance: $theme.name,
+					instance: useEnvStore().instanceName,
 				});
 
 				await nextTick();
@@ -544,74 +496,16 @@ describe("User Migration / Index", () => {
 				expect(button.text()).toBe("pages.administration.migration.clearAutoMatches");
 			});
 
-			it("should show the dialog on button click", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.findComponent('[data-testid="import-users-clear-auto-matches-btn"]');
-
-				await button.trigger("click");
-
-				const dialog = wrapper.findComponent({
-					ref: "clearAutoMatchesDialog",
-				});
-
-				expect(wrapper.vm.isClearAutoMatchesDialogOpen).toBe(true);
-				expect(dialog.exists()).toBe(true);
-				expect(dialog.vm.isOpen).toBeTruthy();
-			});
-
-			it("should display the correct dialog content and text", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.findComponent('[data-testid="import-users-clear-auto-matches-btn"]');
-
-				await button.trigger("click");
-
-				expect(document.body.innerHTML).toContain('data-testid="clear-auto-matches-dialog"');
-				expect(document.body.innerHTML).toContain(
-					"components.administration.adminMigrationSection.clearAutoMatchesDialog.title"
-				);
-				expect(document.body.innerHTML).toContain(
-					"components.administration.adminMigrationSection.clearAutoMatchesDialog.description"
-				);
-			});
-
-			it("should close the dialog upon clicking on the cancel button", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.findComponent('[data-testid="import-users-clear-auto-matches-btn"]');
-
-				await button.trigger("click");
-
-				const dialog = wrapper.findComponent<typeof CustomDialog>({
-					ref: "clearAutoMatchesDialog",
-				});
-
-				dialog.vm.cancelDialog?.();
-				await nextTick();
-
-				expect(wrapper.vm.isClearAutoMatchesDialogOpen).toBe(false);
-				expect(dialog.exists()).toBe(true);
-				expect(dialog.vm.isOpen).toBeFalsy();
-			});
-
 			it("should call stores, reload data & close dialog upon clicking on the confirm button", async () => {
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
+
 				const { wrapper } = await setup();
 
 				const button = wrapper.findComponent('[data-testid="import-users-clear-auto-matches-btn"]');
-
 				await button.trigger("click");
-
-				const dialog = wrapper.findComponent<typeof CustomDialog>({
-					ref: "clearAutoMatchesDialog",
-				});
-
-				dialog.vm.confirmDialog?.();
-				await nextTick();
 
 				expect(importUsersModule.clearAllAutoMatches).toHaveBeenCalled();
 				expect(importUsersStub.methods.reloadData).toHaveBeenCalled();
-				expect(dialog.vm.isOpen).toBeFalsy();
 			});
 		});
 	});

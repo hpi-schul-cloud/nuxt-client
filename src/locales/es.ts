@@ -13,13 +13,14 @@ export default {
 	"common.actions.discard": "Descartar",
 	"common.actions.download": "Descargar",
 	"common.actions.export": "Exportar",
+	"common.actions.show.all": "Mostrar todo",
 	"common.actions.edit": "Editar",
 	"common.actions.finish": "Finalizar",
 	"common.actions.import": "Importar",
 	"common.actions.invite": "Enviar el enlace del curso",
 	"common.actions.logout": "Desconectar",
 	"common.actions.ok": "Aceptar",
-	"common.actions.pickColor": "Seleccione el color de fondo",
+	"common.actions.pickColor": "Seleccionar color",
 	"common.actions.leave": "Dejar",
 	"common.actions.remove": "Eliminar",
 	"common.actions.rename": "Renombrar",
@@ -30,6 +31,7 @@ export default {
 	"common.actions.shareLink": "Copiar enlace",
 	"common.actions.update": "Actualizar",
 	"common.actions.moved": "{elementName} se movió a la posición {position}",
+	"common.labels.moreInfo": "Más información",
 	"common.ariaLabel.newTab": "se abre en una nueva pestaña",
 	"common.ariaLabel.openImageInLightBox": "Mostrar imagen en tamaño completo",
 	"common.ariaLabel.sameTab": "se abre en la misma pestaña",
@@ -103,6 +105,7 @@ export default {
 	"common.labels.restore": "Restaurar",
 	"common.labels.role": "Papel",
 	"common.labels.room": "Sala | Salas",
+	"common.labels.runtimeConfig": "Configuración del tiempo de ejecución",
 	"common.labels.search": "Buscar",
 	"common.labels.settings": "Ajustes",
 	"common.labels.size": "Tamaño",
@@ -124,6 +127,7 @@ export default {
 	"common.labels.visible": "Visible",
 	"common.labels.welcome": "Bienvenido",
 	"common.labels.fileName": "Nombre del archivo",
+	"common.labels.tasks.more": "Otras tareas...",
 	"common.loading.text": "Los datos se están cargando...",
 	"common.medium.alert.deactivated": "Los medios están deshabilitados.",
 	"common.medium.alert.notLicensed": "El medio no está autorizado.",
@@ -143,6 +147,9 @@ export default {
 	"common.notifications.errors.notLoaded": "{type} no se ha podido cargar. | {type} no se han podido cargar.",
 	"common.notifications.errors.notMoved": "{type} no se ha podido mover. | {type} no se han podido mover.",
 	"common.notifications.errors.notExited": "{type} no se ha podido salir. | {type} no se han podido salir.",
+	"common.notification.error.videoConference.notFetched": "No se pudo obtener la videoconferencia.",
+	"common.notification.error.videoConference.notJoined": "No se pudo unirse a la videoconferencia.",
+	"common.notification.error.videoConference.notStarted": "No se pudo iniciar la videoconferencia.",
 	"common.notification.connection.restored": "La conexión se ha reestablecido.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.email.confirmation": "Repetir la dirección de correo electrónico",
@@ -247,7 +254,6 @@ export default {
 	"common.words.topic": "Tema",
 	"common.words.topics": "Temas",
 	"common.words.yes": "Sí",
-	"common.words.export": "La exportación del curso se está descargando",
 	"common.alerts.room.not.available": "No hay sala disponible. | No hay salas disponibles.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Durante la migración se cambia el sistema de registro de alumnos y profesores a moin.schule. Los datos pertenecientes a las cuentas afectadas se conservarán.",
@@ -320,10 +326,8 @@ export default {
 		"¿Realmente desea iniciar la migración de la cuenta a moin.schule ahora?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"¿Estás seguro de que quieres restablecer los accesos directos encontrados automáticamente?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
-		"El asistente de migración ha encontrado automáticamente los enlaces de las cuentas basándose en los nombres de usuario.",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
-		"¿Desea restablecer ahora los enlaces encontrados automáticamente?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"El asistente de migración ha encontrado automáticamente los enlaces de las cuentas basándose en los nombres de usuario. ¿Desea restablecer ahora los enlaces encontrados automáticamente?",
 	"components.administration.externalToolsSection.action.add": "Añadir Herramienta Externa",
 	"components.administration.externalToolsSection.action.delete": "Eliminar herramienta",
 	"components.administration.externalToolsSection.action.edit": "Editar herramienta",
@@ -343,13 +347,12 @@ export default {
 		"La actualización de los medios de VIDIS continúa en segundo plano. Por favor, tenga paciencia un momento.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"No se pudo determinar el uso de la herramienta.",
-	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
-		"¿Está seguro de que desea eliminar la herramienta {0}?",
-	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
+	"components.administration.externalToolsSection.dialog.content.header":
 		"Actualmente la herramienta se utiliza de la siguiente manera:",
 	"components.administration.externalToolsSection.dialog.content.warning":
-		"Atención: Si se retira la herramienta, ya no se podrá utilizar para esta escuela.",
-	"components.administration.externalToolsSection.dialog.title": "Quitar Herramienta Externa",
+		"Si se retira la herramienta, ya no se podrá utilizar para esta escuela.",
+	"components.administration.externalToolsSection.dialog.title":
+		"¿Realmente eliminar la herramienta externa {itemName}?",
 	"components.administration.externalToolsSection.header": "Herramientas Externas",
 	"components.administration.externalToolsSection.info":
 		"Esta área permite integrar herramientas de terceros en la nube. Utilizando las funciones proporcionadas, se puede añadir herramientas, actualizar las existentes o eliminar las que ya no sean necesarias. A continuación, los profesores podrán añadir las herramientas a los cursos.",
@@ -377,11 +380,9 @@ export default {
 	"components.administration.provisioningOptions.schoolExternalTools.label": "Activación de herramientas externas",
 
 	"components.administration.provisioningOptions.page.title": "Opciones de sincronización de datos",
-	"components.administration.provisioningOptions.warning.consequence":
+	"components.administration.provisioningOptions.warning":
 		"¡Todos los {groupTypes} previamente sincronizados se eliminarán de tu escuela!",
-	"components.administration.provisioningOptions.warning.question":
-		"¿Está seguro de que desea desactivar la sincronización de {groupTypes}?",
-	"components.administration.provisioningOptions.warning.title": "Deshabilitar la sincronización",
+	"components.administration.provisioningOptions.warning.title": "¿Deshabilitar la sincronización?",
 	"components.administration.schoolYearChangeSection.headers": "Cambio de año escolar",
 	"components.administration.schoolYearChangeSection.info.part.one":
 		"Con la ayuda de la fase de transferencia, la membresía de clase y los datos personales en el LDAP se pueden ajustar en paz. Finalmente, todos los cambios se pueden transferir a la {instance}.",
@@ -513,6 +514,8 @@ export default {
 		"El título de la tarjeta {cardPosition} en la columna {columnPosition} fue cambiado a {newTitle} por otro usuario.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"La tarjeta {cardPosition} de la columna {columnPosition} ha sido actualizada por otro usuario.",
+	"components.board.screenReader.notification.cardColorUpdated.success":
+		"El color de la tarjeta {cardPosition} en la sección {columnPosition} ha sido cambiado.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Otro usuario cambió la vista del panel a {layout}.",
 	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":
@@ -786,9 +789,16 @@ export default {
 	"components.molecules.TextEditor.noLocalFiles": "Actualmente no se admiten archivos locales.",
 	"components.molecules.export.options.info": "El siguiente contenido no se exporta:",
 	"components.molecules.export.options.info.point1": "Archivos subidos dentro del curso.",
-	"components.molecules.export.options.info.point2": "Envíos asignados a una tarea.",
+	"components.molecules.export.options.info.point2": "Envíos",
 	"components.molecules.export.options.info.point3":
 		"Las carpetas de archivos no se exportan con la Common Cartridge versión 1.1",
+	"components.molecules.export.options.info.point4": "Los siguientes elementos del mapa dentro de las áreas:",
+	"components.molecules.export.options.info.point4.sub1": "Pizarra",
+	"components.molecules.export.options.info.point4.sub2": "Etherpad",
+	"components.molecules.export.options.info.point4.sub3": "Herramientas externas",
+	"components.molecules.export.options.info.point4.sub4": "Carpeta de archivos",
+	"components.molecules.export.options.info.point4.sub5": "Merlin biblioteca",
+	"components.molecules.export.options.info.point4.sub6": "H5P",
 	"components.organisms.ContentCard.report.body": "Informar del contenido con el ID",
 	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":
@@ -908,7 +918,7 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectContent": "Seleccionar contenido de {toolName}...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Finalizar sincronización",
-	"feature-course-sync.EndCourseSyncDialog.description":
+	"feature-course-sync.EndCourseSyncDialog":
 		"¿Debería realmente detenerse la sincronización del curso {courseName} con el grupo de usuarios {groupName}?",
 	"feature-course-sync.EndCourseSyncDialog.success": "Sincronización completada exitosamente",
 	"feature-course-sync.GroupSelectionDialog.title": "Seleccionar grupo de usuarios",
@@ -963,7 +973,7 @@ export default {
 	"global.topbar.language.longName.de": "Deutsch",
 	"global.topbar.language.longName.en": "English",
 	"global.topbar.language.longName.es": "Español",
-	"global.topbar.language.longName.uk": "Українська",
+	"global.topbar.language.longName.uk": "Yкраїнська",
 	"global.topbar.language.select": "Selección de idioma",
 	"global.topbar.language.selectedLanguage": "Idioma seleccionado",
 	"global.topbar.loggedOut.actions.blog": "Blog",
@@ -978,6 +988,25 @@ export default {
 	"mixins.typeMeta.types.image": "Imagen",
 	"mixins.typeMeta.types.video": "Vídeo",
 	"mixins.typeMeta.types.webpage": "Página web",
+	"loggedin.text.backupFeatures":
+		"Haga una copia de seguridad de sus contenidos de la nube y utilice también la nueva función para exportar cursos. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "Más información y ayuda disponible aquí",
+	"loggedin.text.schoolInTransferPhaseContactAdmin":
+		"La escuela está en fase de transferencia al nuevo año escolar. No se pueden crear clases ni usuarios. ¡Ponte en contacto con el administrador de la escuela!",
+	"loggedin.text.schoolInTransferPhaseStartNew":
+		'La escuela está en fase de transferencia al nuevo año escolar. No se pueden crear clases ni usuarios. ¡Accede al <a href="/administration/school/">nuevo año escolar aquí!</a>',
+	"loggedin.text.schoolInMigrationModeStarted":
+		'La escuela está en modo de migración de usuarios. Para migrar los usuarios, por favor vaya a <a href="/administration/migration/">esta página</a>.',
+	"loggedin.text.schoolInMigrationMode":
+		'La escuela puede importar cuentas de usuario de Schulportal. Para migrar los usuarios, por favor vaya a <a href="/administration/migration/">esta página</a>.',
+	"pages.dashboard.title": "Panel",
+	"pages.dashboard.empty.news": "Hasta el momento no hay noticias.",
+	"pages.dashboard.new.features": "Hay nuevas funciones en {instanceTitle}.",
+	"pages.dashboard.new.features.available": "Nuevas funciones disponibles",
+	"pages.dashboard.new.features.forward": "Para más información, consulta las notas de la versión.",
+	"pages.dashboard.no.due.date": "No se ha fijado una fecha de envío",
+	"pages.dashboard.welcome": "Hola",
+	"pages.dashboard.schedule": "Programación",
 	"pages.classMembers.infoBox.text.firstParagraph":
 		"No es necesario obtener una declaración de consentimiento al registrar estudiantes. El uso de Niedersächsischen Bildungscloud está regulado por la Ley de escuelas de Baja Sajonia (artículo 31, párrafo 5 de la NSchG).",
 	"pages.classMembers.infoBox.text.firstParagraph.bold": "No",
@@ -1009,9 +1038,9 @@ export default {
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {institute_title}.",
 	"pages.administration.classes.index.add": "Agregar clase",
 	"pages.administration.classes.index.title": "Administrar clases",
-	"pages.administration.classes.thr.hint.title": "Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.title": "¿Por qué no puedo editar las entradas?",
 	"pages.administration.classes.thr.hint.text":
-		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
+		"Tu escuela está sincronizada con el portal escolar de Turingia. Los datos de docentes, alumnado y clases se gestionan centralmente allí y solo pueden modificarse en ese portal. Esto incluye también los cambios de contraseña.",
 	"pages.administration.common.label.archive": "Archivo",
 	"pages.administration.common.label.active": "Actual",
 	"pages.administration.classes.manage": "Administrar clase",
@@ -1192,6 +1221,7 @@ export default {
 	"pages.administration.migration.identical_user_login_migration_system":
 		"¡La migración no puede comenzar porque el sistema de inicio de sesión de destino y el sistema de inicio de sesión actual de su escuela son el mismo!",
 	"pages.administration.migration.moin_schule_system_not_found": "¡No puedo encontrar el sistema moin.schule!",
+	"pages.administration.migration.multipleUsersFound": "Se encontró más de una migración para el usuario.",
 	"pages.administration.or": "o",
 	"pages.administration.printQr.printPageTabTitle": "Compartir códigos QR",
 	"pages.administration.printQr.printPageTitle": "Por favor, escanea el código QR para registrarte.",
@@ -1645,12 +1675,12 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Nombre del curso",
 	"pages.rooms.importCourse.step_3": "El curso importado se puede renombrar en el siguiente paso.",
 	"pages.rooms.ccImportCourse.title": "Importar curso",
-	"pages.rooms.ccImportCourse.confirm": "Importar",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Seleccionar archivo",
 	"pages.rooms.ccImportCourse.loading": "Subida en progreso...",
 	"pages.rooms.ccImportCourse.success":
 		"Su archivo del curso se ha cargado y ahora se está importando en segundo plano.",
 	"pages.rooms.ccImportCourse.error": "Se produjo un error al cargar el archivo del curso.",
+	"pages.rooms.ccExportCourse.started": "La exportación del curso se está descargando.",
 	"pages.rooms.ccExportCourse.error": "Se produjo un error al exportar el curso.",
 	"pages.rooms.roomModal.courseGroupTitle": "Título del grupo del curso",
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",
@@ -1665,7 +1695,7 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Menú de herramienta",
 	"pages.rooms.tools.outdated": "Configuración incompleta",
 	"pages.rooms.tools.outdatedDialog.title": "Herramienta „{toolName}“ obsoleta",
-	"pages.room.modal.course.export.header": "Formato de exportación",
+	"pages.room.modal.course.export.header": "Version de exportación",
 	"pages.room.modal.course.export.options.header": "Exportar configuración",
 	"pages.room.modal.course.export.options.topics": "Temas",
 	"pages.room.modal.course.export.options.tasks": "Tareas sin tema",
@@ -1876,7 +1906,6 @@ export default {
 	"pages.tasks.labels.planned": "Planificada",
 	"pages.tasks.student.completed.emptyState.title": "Actualmente no hay tareas completadas",
 	"pages.tasks.student.open.emptyState.title": "Actualmente no hay tareas abiertas",
-	"pages.tasks.student.openTasks": "Tareas abiertas",
 	"pages.tasks.student.submittedTasks": "Completed Tasks",
 	"pages.tasks.student.subtitleOverDue": "Tareas perdidas",
 	"pages.tasks.subtitleGraded": "Calificado",
@@ -1885,7 +1914,7 @@ export default {
 	"pages.tasks.subtitleOpen": "Tareas abiertas",
 	"pages.tasks.subtitleWithDue": "Con plazo",
 	"pages.tasks.teacher.drafts.emptyState.title": "Actualmente no hay borradores",
-	"pages.tasks.teacher.open.emptyState.title": "Actualmente no hay tareas",
+	"pages.tasks.open.emptyState.title": "Actualmente no hay tareas",
 	"pages.tasks.teacher.subtitleOverDue": "Tareas expiradas",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"pages.tool.apiError.tool_param_duplicate":

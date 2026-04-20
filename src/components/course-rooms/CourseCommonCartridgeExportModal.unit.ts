@@ -1,193 +1,372 @@
 import CourseCommonCartridgeExportModal from "./CourseCommonCartridgeExportModal.vue";
-import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import courseRoomDetailsModule from "@/store/course-room-details";
-import { COMMON_CARTRIDGE_EXPORT_MODULE_KEY, COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject";
+import { COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject";
 import { expectNotification } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardElementResponse, BoardElementResponseType } from "@api-server";
+import { startExport } from "@data-common-cartridge";
 import { createTestingPinia } from "@pinia/testing";
-import { mount } from "@vue/test-utils";
+import { SvsDialog } from "@ui-dialog";
+import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { beforeEach } from "vitest";
-import { VDialog } from "vuetify/components";
+import { nextTick, reactive } from "vue";
+
+vi.mock("@data-common-cartridge");
 
 describe("CourseCommonCartridgeExportModal", () => {
-	let exportModuleMock: CommonCartridgeExportModule;
 	let courseRoomDetailsModuleMock: courseRoomDetailsModule;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 	});
 
-	const setup = (isSuccess = true) => {
-		exportModuleMock = createModuleMocks(CommonCartridgeExportModule, {
-			getIsExportModalOpen: true,
-			getVersion: "1.1.0",
-			getTopics: ["topic"],
-			getTasks: ["task"],
-			getColumnBoards: ["columnBoards"],
-			startExport: vi.fn(),
-			resetExportFlow: vi.fn(),
-		});
-		courseRoomDetailsModuleMock = createModuleMocks(courseRoomDetailsModule, {
-			getRoomData: {
-				roomId: "1",
-				title: "title",
-				displayColor: "color",
-				elements: [],
-				isArchived: false,
-				isSynchronized: false,
-			},
-			getBusinessError: isSuccess
-				? {
-						message: "",
-						statusCode: "",
-					}
-				: {
-						message: "Error",
-						statusCode: "500",
-					},
+	const createRoomData = (elements: BoardElementResponse[] = []) =>
+		reactive({
+			roomId: "room-id-1",
+			title: "title",
+			displayColor: "color",
+			elements,
+			isArchived: false,
+			isSynchronized: false,
 		});
 
-		const wrapper = mount(CourseCommonCartridgeExportModal, {
+	const setup = (options: { elements?: unknown[]; isSuccess?: boolean } = {}): VueWrapper => {
+		const { elements = [], isSuccess = true } = options;
+		const roomData = createRoomData(elements as BoardElementResponse[]);
+
+		courseRoomDetailsModuleMock = createModuleMocks(courseRoomDetailsModule, {
+			getRoomData: roomData,
+			getBusinessError: isSuccess ? { message: "", statusCode: "" } : { message: "Error", statusCode: "500" },
+		});
+
+		return mount(CourseCommonCartridgeExportModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: exportModuleMock,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModuleMock,
 				},
 			},
+			props: {
+				isOpen: true,
+				roomId: "room-id-1",
+			},
 		});
-		return wrapper;
 	};
 
-	it("should render CourseCommonCartridgeExportModal component", () => {
-		const wrapper = setup();
-		expect(wrapper.exists()).toBe(true);
-	});
+	const setupWithReactiveElements = async (elements: BoardElementResponse[]) => {
+		const roomData = createRoomData([]);
+		courseRoomDetailsModuleMock = createModuleMocks(courseRoomDetailsModule, {
+			getRoomData: roomData,
+			getBusinessError: { message: "", statusCode: "" },
+		});
 
-	describe("when getIsExportModalOpen is true", () => {
-		it("should open the Dialog", () => {
+		roomData.elements = elements;
+		await nextTick();
+		await flushPromises();
+
+		return mount(CourseCommonCartridgeExportModal, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModuleMock,
+				},
+			},
+			props: { isOpen: true, roomId: "room-id-1" },
+		});
+	};
+
+	const goToContentSelection = async (wrapper: VueWrapper): Promise<void> => {
+		await wrapper.findComponent('[data-testid="dialog-next-btn"]').trigger("click");
+	};
+
+	describe("dialog", () => {
+		it("should render component", () => {
 			const wrapper = setup();
-			const dialog = wrapper.findComponent(VDialog);
+			expect(wrapper.exists()).toBe(true);
+		});
+
+		it("should open when isOpen is true", () => {
+			const wrapper = setup();
+			const dialog = wrapper.findComponent(SvsDialog);
 			expect(dialog.props("modelValue")).toBe(true);
 		});
 	});
 
-	describe("onCancel / onCloseDialog", () => {
-		it("should close dialog when cancel button clicked", async () => {
-			const wrapper = setup();
-			const closeBtn = wrapper.findComponent('[data-testid="dialog-cancel-btn"]');
-			await closeBtn.trigger("click");
-			const emit = wrapper.emitted();
-			expect(emit).toHaveProperty("dialog-closed");
+	describe("dialog close actions", () => {
+		describe("when cancel button is clicked in version selection step", () => {
+			it("should emit close event", async () => {
+				const wrapper = setup();
+				await wrapper.findComponent('[data-testid="dialog-cancel-btn"]').trigger("click");
+
+				expect(wrapper.emitted("update:isOpen")).toContainEqual([false]);
+			});
+		});
+		describe("when cancel button is clicked in content selection step", () => {
+			it("should emit close event", async () => {
+				const wrapper = setup();
+				await goToContentSelection(wrapper);
+				await wrapper.findComponent('[data-testid="dialog-cancel-btn"]').trigger("click");
+
+				expect(wrapper.emitted("update:isOpen")).toContainEqual([false]);
+			});
 		});
 	});
 
-	describe("onNext", () => {
-		it("should move to step 2 Dialog and have export button", async () => {
+	describe("navigation between steps", () => {
+		it("should show next button in version selection step", () => {
 			const wrapper = setup();
-			const nextBtn = wrapper.findComponent("[data-testid='dialog-next-btn']");
-			await nextBtn.trigger("click");
-			const emit = wrapper.findComponent("[data-testid='dialog-export-btn']");
+			expect(wrapper.findComponent('[data-testid="dialog-next-btn"]').exists()).toBe(true);
+			expect(wrapper.findComponent('[data-testid="dialog-export-btn"]').exists()).toBe(false);
+		});
 
-			expect(emit.exists()).toBe(true);
+		it("should show export and back buttons in content selection step", async () => {
+			const wrapper = setup();
+			await goToContentSelection(wrapper);
+
+			expect(wrapper.findComponent('[data-testid="dialog-export-btn"]').exists()).toBe(true);
+			expect(wrapper.findComponent('[data-testid="dialog-back-btn"]').exists()).toBe(true);
+			expect(wrapper.findComponent('[data-testid="dialog-next-btn"]').exists()).toBe(false);
+		});
+
+		it("should return to version selection when back button is clicked", async () => {
+			const wrapper = setup();
+			await goToContentSelection(wrapper);
+			await wrapper.findComponent('[data-testid="dialog-back-btn"]').trigger("click");
+
+			expect(wrapper.findComponent('[data-testid="dialog-next-btn"]').exists()).toBe(true);
+			expect(wrapper.findComponent('[data-testid="dialog-back-btn"]').exists()).toBe(false);
 		});
 	});
 
-	describe("onBack", () => {
-		it("should move to step 1 and have next button", async () => {
+	describe("version selection", () => {
+		it("should display both version radio buttons", () => {
 			const wrapper = setup();
-			const nextBtn = wrapper.findComponent("[data-testid='dialog-next-btn']");
-			await nextBtn.trigger("click");
-			const backBtn = wrapper.findComponent("[data-testid='dialog-back-btn']");
-			await backBtn.trigger("click");
-			const emit = wrapper.findComponent("[data-testid='dialog-next-btn']");
 
-			expect(emit.exists()).toBe(true);
+			expect(wrapper.findComponent('[data-testid="version-110-radio-button"]').exists()).toBe(true);
+			expect(wrapper.findComponent('[data-testid="version-130-radio-button"]').exists()).toBe(true);
+		});
+
+		it("should show version 1.1.0 specific info in content selection step", async () => {
+			const wrapper = setup();
+			await goToContentSelection(wrapper);
+
+			expect(wrapper.findComponent('[data-testid="dialog-export-btn"]').exists()).toBe(true);
+		});
+
+		it("should hide version 1.1.0 specific info when version 1.3.0 is selected", async () => {
+			const wrapper = setup();
+			const radioGroup = wrapper.findComponent({ name: "VRadioGroup" });
+			await radioGroup.setValue("1.3.0");
+			await goToContentSelection(wrapper);
+
+			expect(wrapper.find('[data-testid="export-options-info-point3"]').exists()).toBe(false);
 		});
 	});
 
-	describe("onExport", () => {
-		it("should call startExport and confirm then close the dialog", async () => {
+	describe("export functionality", () => {
+		it("should call startExport with default version and empty arrays when no elements are selected", async () => {
 			const wrapper = setup();
-			const nextBtn = wrapper.findComponent("[data-testid='dialog-next-btn']");
-			await nextBtn.trigger("click");
-			const exportBtn = wrapper.findComponent('[data-testid="dialog-export-btn"]');
-			await exportBtn.trigger("click");
-			const emit = wrapper.emitted();
-			expect(emit).toHaveProperty("dialog-confirmed");
-			expect(emit).toHaveProperty("dialog-closed");
+			await goToContentSelection(wrapper);
+			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
 
-			exportModuleMock.startExport();
-
-			expect(exportBtn.exists()).toBe(false);
-			expect(exportModuleMock.startExport).toHaveBeenCalled();
+			expect(startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", [], [], []);
 		});
 
-		it("should show error notification on error", async () => {
-			const wrapper = setup(false);
-			const nextBtn = wrapper.findComponent("[data-testid='dialog-next-btn']");
-			await nextBtn.trigger("click");
-			const exportBtn = wrapper.findComponent('[data-testid="dialog-export-btn"]');
-			await exportBtn.trigger("click");
-			const emit = wrapper.emitted();
-			expect(emit).toHaveProperty("dialog-confirmed");
-			expect(emit).toHaveProperty("dialog-closed");
+		it("should close dialog after starting export", async () => {
+			const wrapper = setup();
+			await goToContentSelection(wrapper);
+			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
 
-			exportModuleMock.startExport();
+			expect(wrapper.emitted("update:isOpen")).toContainEqual([false]);
+		});
 
-			expect(exportBtn.exists()).toBe(false);
-			expect(exportModuleMock.startExport).toHaveBeenCalled();
+		it("should show error notification when export fails", async () => {
+			const wrapper = setup({ isSuccess: false });
+			await goToContentSelection(wrapper);
+			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
+
 			expectNotification("error");
 		});
 	});
 
-	describe("toggleAllTopics", () => {
-		it("should start with true and change the value when click", async () => {
+	describe("checkbox states with no elements", () => {
+		it("should disable all checkboxes when no elements are available", async () => {
 			const wrapper = setup();
-			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
-			await nextBtn.trigger("click");
+			await goToContentSelection(wrapper);
 
-			const allTopics = wrapper.findComponent('[data-testid="all-topics-checkbox"]');
+			const topicsCheckbox = wrapper.findComponent('[data-testid="all-topics-checkbox"]');
+			const tasksCheckbox = wrapper.findComponent('[data-testid="all-tasks-checkbox"]');
+			const boardsCheckbox = wrapper.findComponent('[data-testid="all-column-boards-checkbox"]');
 
-			expect(allTopics.findAll("input").some((input) => input.attributes("value") === "true")).toBe(true);
-
-			await allTopics.trigger("click");
-
-			expect(allTopics.findAll("input").some((input) => input.attributes("value") === "false")).toBe(false);
+			expect(topicsCheckbox.find("input").attributes("disabled")).toBeDefined();
+			expect(tasksCheckbox.find("input").attributes("disabled")).toBeDefined();
+			expect(boardsCheckbox.find("input").attributes("disabled")).toBeDefined();
 		});
 	});
 
-	describe("toggleAllTasks", () => {
-		it("should start with true and change the value when click", async () => {
-			const wrapper = setup();
-			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
-			await nextBtn.trigger("click");
+	describe("element processing via watcher", () => {
+		it("should populate topics when lessons are added to room data", async () => {
+			const wrapper = await setupWithReactiveElements([
+				{ type: BoardElementResponseType.LESSON, content: { id: "l1", name: "Lesson 1" } },
+			] as BoardElementResponse[]);
 
-			const allTasks = wrapper.findComponent('[data-testid="all-tasks-checkbox"]');
+			await goToContentSelection(wrapper);
+			const checkbox = wrapper.findComponent('[data-testid="all-topics-checkbox"]');
+			expect(checkbox.find("input").attributes("disabled")).toBeFalsy();
+		});
 
-			expect(allTasks.findAll("input").some((input) => input.attributes("value") === "true")).toBe(true);
+		it("should populate tasks when tasks are added to room data", async () => {
+			const wrapper = await setupWithReactiveElements([
+				{ type: BoardElementResponseType.TASK, content: { id: "t1", name: "Task 1" } },
+			] as BoardElementResponse[]);
 
-			await allTasks.trigger("click");
+			await goToContentSelection(wrapper);
+			const checkbox = wrapper.findComponent('[data-testid="all-tasks-checkbox"]');
+			expect(checkbox.find("input").attributes("disabled")).toBeFalsy();
+		});
 
-			expect(allTasks.findAll("input").some((input) => input.attributes("value") === "false")).toBe(false);
+		it("should populate column boards when boards are added to room data", async () => {
+			const wrapper = await setupWithReactiveElements([
+				{ type: BoardElementResponseType.COLUMN_BOARD, content: { id: "b1", title: "Board 1" } },
+			] as BoardElementResponse[]);
+
+			await goToContentSelection(wrapper);
+			const checkbox = wrapper.findComponent('[data-testid="all-column-boards-checkbox"]');
+			expect(checkbox.find("input").attributes("disabled")).toBeFalsy();
+		});
+
+		it("should call startExport with correct IDs when elements exist", async () => {
+			const wrapper = await setupWithReactiveElements([
+				{ type: BoardElementResponseType.LESSON, content: { id: "lesson1", name: "Lesson 1" } },
+				{ type: BoardElementResponseType.TASK, content: { id: "task1", name: "Task 1" } },
+				{ type: BoardElementResponseType.COLUMN_BOARD, content: { id: "board1", title: "Board 1" } },
+			] as BoardElementResponse[]);
+
+			await goToContentSelection(wrapper);
+			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
+
+			expect(startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", ["lesson1"], ["task1"], ["board1"]);
 		});
 	});
 
-	describe("toggleAllColumnBoards", () => {
-		it("should start with true and change the value when click", async () => {
+	describe("toggle all functionality", () => {
+		const createMixedElements = (): BoardElementResponse[] =>
+			[
+				{ type: BoardElementResponseType.LESSON, content: { id: "l1", name: "Lesson 1" } },
+				{ type: BoardElementResponseType.LESSON, content: { id: "l2", name: "Lesson 2" } },
+				{ type: BoardElementResponseType.TASK, content: { id: "t1", name: "Task 1" } },
+				{ type: BoardElementResponseType.TASK, content: { id: "t2", name: "Task 2" } },
+				{ type: BoardElementResponseType.COLUMN_BOARD, content: { id: "b1", title: "Board 1" } },
+				{ type: BoardElementResponseType.COLUMN_BOARD, content: { id: "b2", title: "Board 2" } },
+			] as BoardElementResponse[];
+
+		it("should deselect all topics when toggle is clicked", async () => {
+			const wrapper = await setupWithReactiveElements(createMixedElements());
+			await goToContentSelection(wrapper);
+
+			await wrapper.findComponent('[data-testid="all-topics-checkbox"]').trigger("click");
+			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
+
+			expect(startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", [], ["t1", "t2"], ["b1", "b2"]);
+		});
+
+		it("should deselect all tasks when toggle is clicked", async () => {
+			const wrapper = await setupWithReactiveElements(createMixedElements());
+			await goToContentSelection(wrapper);
+
+			await wrapper.findComponent('[data-testid="all-tasks-checkbox"]').trigger("click");
+			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
+
+			expect(startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", ["l1", "l2"], [], ["b1", "b2"]);
+		});
+
+		it("should deselect all column boards when toggle is clicked", async () => {
+			const wrapper = await setupWithReactiveElements(createMixedElements());
+			await goToContentSelection(wrapper);
+
+			await wrapper.findComponent('[data-testid="all-column-boards-checkbox"]').trigger("click");
+			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
+
+			expect(startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", ["l1", "l2"], ["t1", "t2"], []);
+		});
+
+		it("should reselect all items when toggle is clicked twice", async () => {
+			const wrapper = await setupWithReactiveElements(createMixedElements());
+			await goToContentSelection(wrapper);
+
+			const checkbox = wrapper.findComponent('[data-testid="all-topics-checkbox"]');
+			await checkbox.trigger("click");
+			await checkbox.trigger("click");
+			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
+
+			expect(startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", ["l1", "l2"], ["t1", "t2"], ["b1", "b2"]);
+		});
+	});
+
+	describe("back button", () => {
+		it("should reset all selections to true when going back", async () => {
+			const wrapper = await setupWithReactiveElements([
+				{ type: BoardElementResponseType.LESSON, content: { id: "l1", name: "Lesson 1" } },
+				{ type: BoardElementResponseType.TASK, content: { id: "t1", name: "Task 1" } },
+				{ type: BoardElementResponseType.COLUMN_BOARD, content: { id: "b1", title: "Board 1" } },
+			] as BoardElementResponse[]);
+
+			await goToContentSelection(wrapper);
+
+			await wrapper.findComponent('[data-testid="all-topics-checkbox"]').trigger("click");
+			await wrapper.findComponent('[data-testid="all-tasks-checkbox"]').trigger("click");
+			await wrapper.findComponent('[data-testid="all-column-boards-checkbox"]').trigger("click");
+
+			await wrapper.findComponent('[data-testid="dialog-back-btn"]').trigger("click");
+			await goToContentSelection(wrapper);
+			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
+
+			expect(startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", ["l1"], ["t1"], ["b1"]);
+		});
+	});
+
+	describe("individual item selection", () => {
+		it("should allow deselecting individual items and export only selected ones", async () => {
+			const wrapper = await setupWithReactiveElements([
+				{ type: BoardElementResponseType.LESSON, content: { id: "l1", name: "Lesson 1" } },
+				{ type: BoardElementResponseType.LESSON, content: { id: "l2", name: "Lesson 2" } },
+				{ type: BoardElementResponseType.TASK, content: { id: "t1", name: "Task 1" } },
+				{ type: BoardElementResponseType.TASK, content: { id: "t2", name: "Task 2" } },
+				{ type: BoardElementResponseType.COLUMN_BOARD, content: { id: "b1", title: "Board 1" } },
+				{ type: BoardElementResponseType.COLUMN_BOARD, content: { id: "b2", title: "Board 2" } },
+			] as BoardElementResponse[]);
+
+			await goToContentSelection(wrapper);
+
+			const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
+			for (const checkbox of checkboxes) {
+				const label = checkbox.props("label");
+				if (label === "Lesson 1" || label === "Task 1" || label === "Board 1") {
+					await checkbox.find("input").setValue(false);
+				}
+			}
+
+			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
+
+			expect(startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", ["l2"], ["t2"], ["b2"]);
+		});
+	});
+
+	describe("dialog close", () => {
+		it("should reset step to version selection", async () => {
 			const wrapper = setup();
-			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
-			await nextBtn.trigger("click");
+			await goToContentSelection(wrapper);
+			await wrapper.findComponent('[data-testid="dialog-cancel-btn"]').trigger("click");
 
-			const allColumnBoards = wrapper.findComponent('[data-testid="all-column-boards-checkbox"]');
+			// resetting the dialog step happens in a function triggerd by the dialog's after-leave event
+			// as CSS transitions are not triggered in testing the after-leave event is called manually
+			const dialog = wrapper.findComponent(SvsDialog);
+			await dialog.vm.$emit("after-leave");
 
-			expect(allColumnBoards.findAll("input").some((input) => input.attributes("value") === "true")).toBe(true);
+			await wrapper.setProps({ isOpen: true });
 
-			await allColumnBoards.trigger("click");
-
-			expect(allColumnBoards.findAll("input").some((input) => input.attributes("value") === "false")).toBe(false);
+			expect(wrapper.findComponent('[data-testid="dialog-next-btn"]').exists()).toBe(true);
 		});
 	});
 });

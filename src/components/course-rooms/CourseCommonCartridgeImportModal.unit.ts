@@ -1,139 +1,77 @@
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
-import CommonCartridgeImportModule from "@/store/common-cartridge-import";
-import CourseRoomListModule from "@/store/course-room-list";
-import { COMMON_CARTRIDGE_IMPORT_MODULE_KEY, COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
-import { expectNotification } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
-import { mount } from "@vue/test-utils";
+import { SvsDialog } from "@ui-dialog";
+import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { beforeEach } from "vitest";
+import { VFileInput } from "vuetify/components";
 
 describe("CourseCommonCartridgeImportModal", () => {
+	const getWrapper = (withTestFile = false) => {
+		const wrapper = mount(CourseCommonCartridgeImportModal, {
+			props: {
+				modelValue: true,
+			},
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+		});
+		const dialog = wrapper.findComponent(SvsDialog);
+
+		const testFile = new File([], "test.imscc");
+
+		if (withTestFile) {
+			const fileInput = wrapper.findComponent(VFileInput);
+			fileInput.vm.$emit("update:modelValue", testFile);
+		}
+
+		return { wrapper, dialog, testFile };
+	};
+
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 	});
 
-	const setupWrapper = (getters: Partial<CommonCartridgeImportModule>) => {
-		const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
-			getAllElements: [],
-		});
-		const commonCartridgeImportModule = createModuleMocks(CommonCartridgeImportModule, getters);
+	it("passes confirmBtnDisabled=true when no file is selected", () => {
+		const { dialog } = getWrapper();
 
-		const wrapper = mount(CourseCommonCartridgeImportModal, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: roomsModuleMock,
-					[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: commonCartridgeImportModule,
-				},
-			},
-		});
-
-		return {
-			wrapper,
-			roomsModuleMock,
-			commonCartridgeImportModule,
-		};
-	};
-
-	describe("when dialog is open", () => {
-		const setup = () => setupWrapper({ isOpen: true });
-
-		it("should contain disabled confirm button", () => {
-			const { wrapper } = setup();
-
-			const confirmBtn = wrapper.findComponent("[data-testId='dialog-confirm-btn']");
-
-			expect(confirmBtn.exists()).toBe(true);
-			expect(confirmBtn.classes()).toContain("v-btn--disabled");
-		});
-
-		it("should contain enabled cancel button", () => {
-			const { wrapper } = setup();
-
-			const cancelBtn = wrapper.findComponent("[data-testid='dialog-cancel-btn']");
-
-			expect(cancelBtn.exists()).toBe(true);
-			expect(cancelBtn.classes()).not.toContain("v-btn--disabled");
-		});
-
-		it("should contain file input", () => {
-			const { wrapper } = setup();
-
-			const fileInput = wrapper.findComponent("[data-testid='dialog-file-input']");
-
-			expect(fileInput.exists()).toBe(true);
-		});
+		expect(dialog.props("confirmBtnDisabled")).toBe(true);
 	});
 
-	describe("when a file is selected", () => {
-		const setup = () =>
-			setupWrapper({
-				isOpen: true,
-				file: new File([], "file"),
-			});
+	it("passes confirmBtnDisabled=false when a file is selected", async () => {
+		const { dialog } = getWrapper(true);
+		await flushPromises();
 
-		it("should enable confirm button", () => {
-			const { wrapper } = setup();
-
-			const confirmBtn = wrapper.findComponent("[data-testId='dialog-confirm-btn']");
-
-			expect(confirmBtn.classes()).not.toContain("v-btn--disabled");
-		});
+		expect(dialog.props("confirmBtnDisabled")).toBe(false);
 	});
 
-	describe("when file upload is successful", () => {
-		const setup = () =>
-			setupWrapper({
-				file: new File([], "file"),
-				isOpen: true,
-				isSuccess: true,
-			});
+	it("emits import event with file on confirm", async () => {
+		const { wrapper, dialog, testFile } = getWrapper(true);
 
-		it("should show success message", async () => {
-			const { wrapper, roomsModuleMock } = setup();
-			const confirmBtn = wrapper.findComponent("[data-testId='dialog-confirm-btn']");
+		dialog.vm.$emit("confirm");
 
-			await confirmBtn.trigger("click");
-
-			expect(roomsModuleMock.fetch).toHaveBeenCalledTimes(1);
-			expect(roomsModuleMock.fetchAllElements).toHaveBeenCalledTimes(1);
-			expectNotification("success");
-		});
+		expect(wrapper.emitted("import")).toBeTruthy();
+		const emittedEvents = wrapper.emitted("import");
+		expect(emittedEvents?.[0]?.[0]).toBe(testFile);
 	});
 
-	describe("when file upload is unsuccessful", () => {
-		const setup = () =>
-			setupWrapper({
-				file: new File([], "file"),
-				isOpen: true,
-				isSuccess: false,
-			});
+	it("clears file after confirm", async () => {
+		const { wrapper, dialog } = getWrapper(true);
 
-		it("should show error message", async () => {
-			const { wrapper, roomsModuleMock } = setup();
-			const confirmBtn = wrapper.findComponent("[data-testId='dialog-confirm-btn']");
+		await dialog.vm.$emit("confirm");
+		await flushPromises();
 
-			await confirmBtn.trigger("click");
-
-			expect(roomsModuleMock.fetch).toHaveBeenCalled();
-			expect(roomsModuleMock.fetchAllElements).toHaveBeenCalled();
-			expectNotification("error");
-		});
+		const fileInput = wrapper.findComponent(VFileInput);
+		expect(fileInput.props("modelValue")).toBe(null);
 	});
 
-	describe("when dialog is closed", () => {
-		const setup = () => setupWrapper({ isOpen: true });
+	it("clears file after cancel", async () => {
+		const { wrapper, dialog } = getWrapper(true);
 
-		it("should reset the state", () => {
-			const { wrapper, commonCartridgeImportModule } = setup();
-			const cancelBtn = wrapper.findComponent("[data-testid='dialog-cancel-btn']");
+		await dialog.vm.$emit("cancel");
+		await flushPromises();
 
-			cancelBtn.trigger("click");
-
-			expect(commonCartridgeImportModule.setIsOpen).toHaveBeenCalledWith(false);
-		});
+		const fileInput = wrapper.findComponent(VFileInput);
+		expect(fileInput.props("modelValue")).toBe(null);
 	});
 });

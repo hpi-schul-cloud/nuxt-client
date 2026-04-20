@@ -13,13 +13,14 @@ export default {
 	"common.actions.discard": "Відкинути",
 	"common.actions.download": "Завантажити",
 	"common.actions.export": "Експорт",
+	"common.actions.show.all": "Показати все",
 	"common.actions.edit": "Редагувати",
 	"common.actions.finish": "Закінчити",
 	"common.actions.import": "Імпорт",
 	"common.actions.invite": "Надіслати посилання на курс",
 	"common.actions.logout": "Вийти з аккаунта",
 	"common.actions.ok": "ОК",
-	"common.actions.pickColor": "Вибрати колір тла",
+	"common.actions.pickColor": "Вибрати колір",
 	"common.actions.leave": "Залиште",
 	"common.actions.remove": "Вилучити",
 	"common.actions.rename": "перейменувати",
@@ -30,6 +31,7 @@ export default {
 	"common.actions.shareLink": "Копіювати посилання",
 	"common.actions.update": "Оновити",
 	"common.actions.moved": "{elementName} було переміщено на позицію {position}",
+	"common.labels.moreInfo": "Більше інформації",
 	"common.ariaLabel.newTab": "відкривається в новій вкладці",
 	"common.ariaLabel.openImageInLightBox": "Показати зображення в повному розмірі",
 	"common.ariaLabel.sameTab": "відкривається в тій же вкладці",
@@ -103,6 +105,7 @@ export default {
 	"common.labels.restore": "Відновити",
 	"common.labels.role": "Роль",
 	"common.labels.room": "Кімната | Кімнати",
+	"common.labels.runtimeConfig": "конфігурація терміну дії",
 	"common.labels.search": "Пошук",
 	"common.labels.settings": "Налаштування",
 	"common.labels.size": "Pозмір",
@@ -124,6 +127,7 @@ export default {
 	"common.labels.visible": "Видимий",
 	"common.labels.welcome": "Ласкаво просимо",
 	"common.labels.fileName": "Ім'я файлу",
+	"common.labels.tasks.more": "Інші завдання...",
 	"common.loading.text": "Дані завантажуються...",
 	"common.medium.alert.deactivated": "Медіа вимкнено.",
 	"common.medium.alert.notLicensed": "Середній не уповноважений.",
@@ -149,6 +153,9 @@ export default {
 		"{type} не вдалося перемістити. | {type} не вдалося перемістити. | {type} не вдалося перемістити.",
 	"common.notifications.errors.notExited":
 		"{type} не вдалося вийти. | {type} не вдалося вийти. | {type} не вдалося вийти.",
+	"common.notification.error.videoConference.notFetched": "Не вдалося отримати відеоконференцію.",
+	"common.notification.error.videoConference.notJoined": "Не вдалося приєднатися до відеоконференції.",
+	"common.notification.error.videoConference.notStarted": "Не вдалося розпочати відеоконференцію.",
 	"common.notification.connection.restored": "Зв'язок відновлено.",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.email.confirmation": "Повторно введіть адресу електронної пошти",
@@ -231,7 +238,7 @@ export default {
 	"common.words.languages.de": "Німецька",
 	"common.words.languages.en": "Англійська",
 	"common.words.languages.es": "Іспанська",
-	"common.words.languages.uk": "Українська",
+	"common.words.languages.uk": "Yкраїнська",
 	"common.words.learnContent": "Зміст навчання",
 	"common.words.mainSchool": "Основна школа",
 	"common.words.no": "Немає",
@@ -253,7 +260,6 @@ export default {
 	"common.words.topic": "Тема",
 	"common.words.topics": "теми",
 	"common.words.yes": "Так",
-	"common.words.export": "Завантажується експорт курсу",
 	"common.alerts.room.not.available": "Нієї кімнати недоступно. | Немає доступних кімнат.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Під час міграції система реєстрації студентів і викладачів змінена на moin.schule. Дані відповідних облікових записів буде збережено.",
@@ -326,10 +332,8 @@ export default {
 		"Ви справді хочете розпочати міграцію облікового запису до moin.schule зараз?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"Ви впевнені, що хочете скинути автоматично знайдені ярлики?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
-		"Асистент міграції автоматично знайшов посилання на акаунти на основі імен користувачів.",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
-		"Ви хочете скинути автоматично знайдені посилання на акаунти зараз?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"Асистент міграції автоматично знайшов посилання на акаунти на основі імен користувачів. Ви хочете скинути автоматично знайдені посилання на акаунти зараз?",
 	"components.administration.externalToolsSection.action.add": "Додати зовнішній інструмент",
 	"components.administration.externalToolsSection.action.delete": "Видалити інструменти",
 	"components.administration.externalToolsSection.action.edit": "інструмент редагування",
@@ -349,13 +353,11 @@ export default {
 		"Оновлення VIDIS Media триває на задньому плані. Будь ласка, будьте терплячі на мить.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Неможливо визначити використання інструменту.",
-	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
-		"Ви впевнені, що хочете видалити інструмент {0}?",
-	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
+	"components.administration.externalToolsSection.dialog.content.header":
 		"Наразі інструмент використовується таким чином:",
 	"components.administration.externalToolsSection.dialog.content.warning":
-		"Увага: якщо інструмент видалено, його більше не можна використовувати для цієї школи.",
-	"components.administration.externalToolsSection.dialog.title": "Видаліть зовнішній інструмент",
+		"якщо інструмент видалено, його більше не можна використовувати для цієї школи.",
+	"components.administration.externalToolsSection.dialog.title": "Чи дійсно видалити зовнішнє інструмент {itemName}?",
 	"components.administration.externalToolsSection.header": "Зовнішні інструменти",
 	"components.administration.externalToolsSection.info":
 		"Ця область дозволяє легко інтегрувати сторонні інструменти в хмару. За допомогою наданих функцій можна додавати інструменти, оновлювати існуючі або видаляти інструменти, які більше не потрібні. Потім викладачі мають додати ці інструменти до курсів.",
@@ -383,11 +385,9 @@ export default {
 	"components.administration.provisioningOptions.schoolExternalTools.label": "Активація зовнішніх інструментів",
 
 	"components.administration.provisioningOptions.page.title": "Параметри синхронізації даних",
-	"components.administration.provisioningOptions.warning.consequence":
+	"components.administration.provisioningOptions.warning":
 		"Усі раніше синхронізовані {groupTypes} буде видалено з вашої школи!",
-	"components.administration.provisioningOptions.warning.question":
-		"Ви впевнені, що бажаєте вимкнути синхронізацію для {groupTypes}?",
-	"components.administration.provisioningOptions.warning.title": "Вимкнути синхронізацію",
+	"components.administration.provisioningOptions.warning.title": "Вимкнути синхронізацію?",
 	"components.administration.schoolYearChangeSection.headers": "Зміна навчального року",
 	"components.administration.schoolYearChangeSection.info.part.one":
 		"За допомогою фази передачі, членство в класі та персональні дані в LDAP можна скорегувати в мирі. Нарешті, всі зміни можна перенести на {instance}",
@@ -513,6 +513,8 @@ export default {
 		"Заголовок картки {cardPosition} у колонці {columnPosition} було змінено на {newTitle} іншим користувачем.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Картку {cardPosition} у стовпчику {columnPosition} було оновлено іншим користувачем.",
+	"components.board.screenReader.notification.cardColorUpdated.success":
+		"Колір картки {cardPosition} у розділі {columnPosition} було змінено.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Інший користувач змінив вигляд панелі на {layout}.",
 	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":
@@ -784,8 +786,15 @@ export default {
 	"components.molecules.TextEditor.noLocalFiles": "Наразі локальні файли не підтримуються.",
 	"components.molecules.export.options.info": "Наступний вміст не експортується:",
 	"components.molecules.export.options.info.point1": "Завантажені файли в межах курсу.",
-	"components.molecules.export.options.info.point2": "Подання, призначені до завдання.",
+	"components.molecules.export.options.info.point2": "Подання",
 	"components.molecules.export.options.info.point3": "Папки файлів не експортуються з Common Cartridge версією 1.1",
+	"components.molecules.export.options.info.point4": "Наступні елементи карти в межах областей:",
+	"components.molecules.export.options.info.point4.sub1": "Біла дошка",
+	"components.molecules.export.options.info.point4.sub2": "Etherpad",
+	"components.molecules.export.options.info.point4.sub3": "Зовнішні інструменти",
+	"components.molecules.export.options.info.point4.sub4": "Папка з файлами",
+	"components.molecules.export.options.info.point4.sub5": "Merlin Бібліотека",
+	"components.molecules.export.options.info.point4.sub6": "H5P",
 	"components.organisms.ContentCard.report.body": "Повідомлення про вміст з ідентифікатором",
 	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":
@@ -904,7 +913,7 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectContent": "Виберіть вміст {toolName}...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Завершити синхронізацію",
-	"feature-course-sync.EndCourseSyncDialog.description":
+	"feature-course-sync.EndCourseSyncDialog":
 		"Чи дійсно слід припинити синхронізацію курсу {courseName} із групою користувачів {groupName}?",
 	"feature-course-sync.EndCourseSyncDialog.success": "Синхронізацію успішно завершено",
 	"feature-course-sync.GroupSelectionDialog.title": "Виберіть групу користувачів",
@@ -959,7 +968,7 @@ export default {
 	"global.topbar.language.longName.de": "Deutsch",
 	"global.topbar.language.longName.en": "English",
 	"global.topbar.language.longName.es": "Español",
-	"global.topbar.language.longName.uk": "Українська",
+	"global.topbar.language.longName.uk": "Yкраїнська",
 	"global.topbar.language.select": "Вибір мови",
 	"global.topbar.language.selectedLanguage": "Вибрана мова",
 	"global.topbar.loggedOut.actions.blog": "Блог",
@@ -974,6 +983,25 @@ export default {
 	"mixins.typeMeta.types.image": "Зображення",
 	"mixins.typeMeta.types.video": "Відео",
 	"mixins.typeMeta.types.webpage": "Веб-сайт",
+	"loggedin.text.backupFeatures":
+		"Зробіть резервну копію вашого контенту в хмарі та використовуйте також нову функцію для експорту курсів. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "Додаткову інформацію та допомогу можна знайти тут.",
+	"loggedin.text.schoolInTransferPhaseContactAdmin":
+		"Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів.",
+	"loggedin.text.schoolInTransferPhaseStartNew":
+		'Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів. Зателефонуйте в <a href="/administration/school/"> новий навчальний рік тут!</a>',
+	"loggedin.text.schoolInMigrationModeStarted":
+		'Школа перебуває в режимі міграції користувачів. Щоб перенести користувачів, перейдіть на <a href="/administration/migration/">цю сторінку</a>.',
+	"loggedin.text.schoolInMigrationMode":
+		'Школа може імпортувати облікові записи користувачів з Schulportal. Для виконання міграції користувачів відвідайте, будь ласка, <a href="/administration/migration/">цю сторінку</a>.',
+	"pages.dashboard.title": "Панель керування",
+	"pages.dashboard.empty.news": "Немає останніх новин. Перегляньте розділ новин, щоб бути в курсі.",
+	"pages.dashboard.new.features": "В {instanceTitle} є нові функції",
+	"pages.dashboard.new.features.available": "Доступні нові функції",
+	"pages.dashboard.new.features.forward": "Дізнайтеся більше про нові функції в розділі новин.",
+	"pages.dashboard.no.due.date": "Дата подання не встановлена",
+	"pages.dashboard.welcome": "Вітаємо",
+	"pages.dashboard.schedule": "Розклад",
 	"pages.classMembers.infoBox.text.firstParagraph":
 		"Заява про згоду {0} потрібна під час реєстрації студентів. Використання Niedersächsischen Bildungscloud регулюється Законом про школи Нижньої Саксонії (розділ 31, параграф 5 NSchG).",
 	"pages.classMembers.infoBox.text.firstParagraph.bold": "не",
@@ -1004,9 +1032,9 @@ export default {
 		"Усі зміни та налаштування в області адміністрування підтверджують, що вони внесені авторизованим адміністратором школи з повноваженнями вносити зміни до школи в хмарі. Коригування, внесені адміністратором школи, вважаються вказівками школи оператору хмари {institute_title}.",
 	"pages.administration.classes.index.add": "Додати клас",
 	"pages.administration.classes.index.title": "Керувати заняттями",
-	"pages.administration.classes.thr.hint.title": "Warum kann ich keine Einträge bearbeiten?",
+	"pages.administration.classes.thr.hint.title": "Чому я не можу редагувати записи?",
 	"pages.administration.classes.thr.hint.text":
-		"Deine Schule ist mit dem Thüringer Schulportal synchronisiert. Die Daten von Lehrkräften, Schüler:innen und Klassen werden dort zentral verwaltet und können nur dort geändert werden. Das schließt auch Passwortänderungen mit ein.",
+		"Твоя школа синхронізована з Тюринзьким шкільним порталом. Дані вчителів, учнів і класів управляються там централізовано та можуть бути змінені лише там. Це також стосується змін паролів.",
 	"pages.administration.common.label.archive": "Архів",
 	"pages.administration.common.label.active": "поточний",
 	"pages.administration.classes.manage": "Керувати класом",
@@ -1185,6 +1213,7 @@ export default {
 	"pages.administration.migration.identical_user_login_migration_system":
 		"Неможливо розпочати міграцію, оскільки цільова система входу та поточна система входу у вашій школі збігаються!",
 	"pages.administration.migration.moin_schule_system_not_found": "Не вдається знайти систему moin.schule!",
+	"pages.administration.migration.multipleUsersFound": "Для цього користувача знайдено більше однієї міграції.",
 	"pages.administration.or": "або",
 	"pages.administration.printQr.printPageTabTitle": "Поділитися QR-кодами",
 	"pages.administration.printQr.printPageTitle": "Будь ласка, відскануйте QR-код для реєстрації.",
@@ -1626,11 +1655,11 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Назва курсу",
 	"pages.rooms.importCourse.step_3": "Імпортований курс можна перейменувати під час наступного кроку.",
 	"pages.rooms.ccImportCourse.title": "Імпортний курс",
-	"pages.rooms.ccImportCourse.confirm": "Імпорт",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Виберіть файл",
 	"pages.rooms.ccImportCourse.loading": "Триває завантаження...",
 	"pages.rooms.ccImportCourse.success": "Файл вашого курсу завантажено та зараз імпортується у фоновому режимі.",
 	"pages.rooms.ccImportCourse.error": "Під час завантаження файлу курсу сталася помилка.",
+	"pages.rooms.ccExportCourse.started": "Завантажується експорт курсу",
 	"pages.rooms.ccExportCourse.error": "Під час експорту курсу сталася помилка.",
 	"pages.rooms.roomModal.courseGroupTitle": "назва групи курсу",
 	"pages.rooms.tools.deactivated": "Інструмент вимкнено",
@@ -1645,7 +1674,7 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Меню інструментів",
 	"pages.rooms.tools.outdated": "Конфігурація не завершена",
 	"pages.rooms.tools.outdatedDialog.title": "Інструмент „{toolName}“ застарів",
-	"pages.room.modal.course.export.header": "Формат експорту",
+	"pages.room.modal.course.export.header": "Версія для експорту",
 	"pages.room.modal.course.export.options.header": "Експорт налаштувань",
 	"pages.room.modal.course.export.options.topics": "Теми",
 	"pages.room.modal.course.export.options.tasks": "Завдання без теми",
@@ -1845,7 +1874,6 @@ export default {
 	"pages.tasks.labels.planned": "Заплановано",
 	"pages.tasks.student.completed.emptyState.title": "Наразі немає жодного виконаного завдання",
 	"pages.tasks.student.open.emptyState.title": "Наразі немає відкритих завдань",
-	"pages.tasks.student.openTasks": "Відкриті завдання",
 	"pages.tasks.student.submittedTasks": "Виконані завдання",
 	"pages.tasks.student.subtitleOverDue": "Пропущені завдання",
 	"pages.tasks.subtitleGraded": "Оцінено",
@@ -1854,7 +1882,7 @@ export default {
 	"pages.tasks.subtitleOpen": "Відкриті завдання",
 	"pages.tasks.subtitleWithDue": "З терміном виконання",
 	"pages.tasks.teacher.drafts.emptyState.title": "Наразі немає чернеток",
-	"pages.tasks.teacher.open.emptyState.title": "Наразі завдань немає",
+	"pages.tasks.open.emptyState.title": "Наразі завдань немає",
 	"pages.tasks.teacher.subtitleOverDue": "Завдання, термін дії яких минув",
 	"pages.termsofuse.title": "Умови використання та політика конфіденційності",
 	"pages.tool.apiError.tool_param_duplicate":

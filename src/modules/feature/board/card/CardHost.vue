@@ -11,6 +11,10 @@
 				ref="cardHost"
 				:height="isLoadingCard ? height : 'auto'"
 				class="card-host"
+				:style="{
+					backgroundColor: cardBackground,
+					borderLeft: cardBorderColor ? `3px solid ${cardBorderColor}` : undefined,
+				}"
 				:class="{ 'drag-disabled': isEditMode }"
 				tabindex="0"
 				min-height="120px"
@@ -39,6 +43,11 @@
 						<BoardMenu v-if="hasMenuItem" :scope="BoardMenuScope.CARD" has-background :data-testid="boardMenuTestId">
 							<KebabMenuAction @click="onOpenCard">Open</KebabMenuAction>
 							<KebabMenuActionEdit v-if="allowedOperations?.deleteCard && !isEditMode" @click="onStartEditMode" />
+							<SvsColorPickerMenu
+								v-if="allowedOperations.updateCardColor"
+								:color="card.backgroundColor"
+								@update:color="onUpdateColor"
+							/>
 							<KebabMenuActionDuplicate
 								v-if="allowedOperations?.copyCard"
 								data-testid="kebab-menu-action-duplicate-card"
@@ -106,10 +115,13 @@ import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
 import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
+import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { delay } from "@/utils/helpers";
+import { Colors } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { SvsColorPickerMenu } from "@ui-controls";
 import {
 	KebabMenuAction,
 	KebabMenuActionDelete,
@@ -167,6 +179,13 @@ const cardElevation = computed(() => {
 		return 4;
 	}
 	return 2;
+});
+
+const cardBackground = computed(() => colorToHexLighten5(card.value?.backgroundColor ?? Colors.TRANSPARENT));
+const cardBorderColor = computed(() => {
+	const color = card.value?.backgroundColor;
+	if (!color || color === Colors.TRANSPARENT) return undefined;
+	return colorToHexLighten3(color);
 });
 
 const { askType } = useAddElementDialog(cardStore.createElementRequest, cardId.value);
@@ -258,6 +277,10 @@ onMounted(async () => {
 		await cardStore.fetchCardRequest({ cardIds: [cardId.value] });
 	}
 });
+
+const onUpdateColor = (backgroundColor: Colors) => {
+	cardStore.updateCardColorRequest({ cardId: props.cardId, backgroundColor });
+};
 </script>
 
 <style scoped>

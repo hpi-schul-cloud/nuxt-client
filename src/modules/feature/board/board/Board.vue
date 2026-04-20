@@ -187,15 +187,6 @@ watch(board, async () => {
 
 const route = useRoute();
 
-watch(
-	() => route.params.id,
-	() => {
-		const boardId = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
-		boardStore.fetchBoardRequest({ boardId });
-	},
-	{ immediate: true }
-);
-
 useBodyScrolling();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
@@ -321,14 +312,20 @@ onMounted(async () => {
 	resetPageInformation();
 	useBoardInactivity();
 
-	if (allowedOperations.value.createExternalToolElement) {
-		await cardStore.loadPreferredTools(ToolContextType.BOARD_ELEMENT);
-	}
-
 	await boardStore.fetchBoardRequest({ boardId: props.boardId });
 
 	focusNodeFromHash();
 });
+
+watch(
+	() => allowedOperations.value.createExternalToolElement,
+	async (hasPermission) => {
+		if (hasPermission) {
+			await cardStore.loadPreferredTools(ToolContextType.BOARD_ELEMENT);
+		}
+	},
+	{ immediate: true }
+);
 
 onUnmounted(() => {
 	boardStore.disconnectSocketRequest();
@@ -411,7 +408,10 @@ const onCopyBoard = async () => {
 
 	await copy({ id: props.boardId, type: CopyParamsTypeEnum.ColumnBoard });
 	const copyId = copyModule.getCopyResult?.id;
-	router.push({ name: "boards-id", params: { id: copyId } });
+	if (copyId) {
+		boardStore.fetchBoardRequest({ boardId: copyId });
+		router.push({ name: "boards-id", params: { id: copyId } });
+	}
 };
 
 const shareModule = injectStrict(SHARE_MODULE_KEY);

@@ -122,10 +122,16 @@ export const useAutoLogout = () => {
 		sessionState.value = SessionState.Expired;
 		setTime(0);
 		stopTimer();
-		showDialog.value = true;
-		notifyError("feature-autoLogout.message.error.401", false);
 		useAppStore().clearUserSession();
-		await logoutUserSilently();
+		showDialog.value = true;
+		logoutUserSilently();
+	};
+
+	const setClosedState = () => {
+		sessionState.value = SessionState.Closed;
+		setTime(0);
+		stopTimer();
+		showDialog.value = false;
 	};
 
 	const setErrorState = () => {
@@ -139,6 +145,7 @@ export const useAutoLogout = () => {
 		[SessionState.AboutToExpire]: setAboutToExpireState,
 		[SessionState.Extended]: setExtendedState,
 		[SessionState.Expired]: setExpiredState,
+		[SessionState.Closed]: setClosedState,
 		[SessionState.Error]: setErrorState,
 	};
 
