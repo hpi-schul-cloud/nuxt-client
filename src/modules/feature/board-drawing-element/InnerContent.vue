@@ -1,5 +1,5 @@
 <template>
-	<ContentElementBar :has-grey-background="true" :icon="mdiPresentation" :has-row-style="isSmallOrLargerListBoard">
+	<ContentElementBar :icon="mdiPresentation" :has-row-style="isSmallOrLargerListBoard">
 		<template #display>
 			<v-img :src="imageSrc" alt="" cover />
 		</template>

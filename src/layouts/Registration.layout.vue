@@ -18,14 +18,17 @@
 </template>
 
 <script setup lang="ts">
-import logo from "@/assets/img/logo/logo-image-mono.svg";
 import TheFooter from "@/components/legacy/TheFooter.vue";
+import { imgLogoMonoAssets } from "@/utils/image.utils";
+import { useEnvConfig } from "@data-env";
 import { AlertContainer, ApplicationError } from "@ui-layout";
 import { computed } from "vue";
 import { useDisplay } from "vuetify";
 
 const { smAndDown } = useDisplay();
 const isSmallDevice = computed(() => smAndDown.value);
+
+const logo = computed(() => imgLogoMonoAssets[useEnvConfig().value.SC_THEME]?.logo);
 </script>
 
 <style lang="scss" scoped>

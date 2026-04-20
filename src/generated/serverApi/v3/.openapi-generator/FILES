@@ -102,6 +102,7 @@ models/collaborative-text-editor-parent-type.ts
 models/collaborative-text-editor-response.ts
 models/collapsable-body-params.ts
 models/color-body-params.ts
+models/colors.ts
 models/column-response.ts
 models/complete-registration-body-params.ts
 models/component-etherpad-props-impl.ts
@@ -244,7 +245,6 @@ models/me-school-response.ts
 models/me-user-response.ts
 models/media-available-line-element-response.ts
 models/media-available-line-response.ts
-models/media-board-colors.ts
 models/media-board-response.ts
 models/media-external-tool-element-content.ts
 models/media-external-tool-element-response.ts

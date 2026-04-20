@@ -27,7 +27,7 @@ describe("NavigationBar", () => {
 	});
 
 	const getWrapper = () => {
-		const img = "@/assets/img/logo/logo-dBildungscloud.svg";
+		const img = "@/assets/img/logo/nav-cloud-logo.svg";
 		const wrapper = mount(NavigationBar, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],

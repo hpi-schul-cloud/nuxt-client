@@ -28,11 +28,6 @@ describe("UserLoginMigrationError", () => {
 		const wrapper = shallowMount(UserLoginMigrationError, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				mocks: {
-					$theme: {
-						name: "Testcloud",
-					},
-				},
 			},
 			props,
 		});

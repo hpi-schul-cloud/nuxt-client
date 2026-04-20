@@ -1,7 +1,7 @@
 import Sidebar from "./Sidebar.vue";
 import { useSidebarSelection } from "./SidebarSelection.composable";
 import FilePathsModule from "@/store/filePaths";
-import { FILE_PATHS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
+import { FILE_PATHS_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -10,7 +10,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { h, ref } from "vue";
-import { VApp } from "vuetify/lib/components/index";
+import { VApp } from "vuetify/components";
 
 vi.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
@@ -52,9 +52,6 @@ const setup = (
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
-				[THEME_KEY.valueOf()]: {
-					name: SchulcloudTheme.DEFAULT,
-				},
 			},
 		},
 		slots: {

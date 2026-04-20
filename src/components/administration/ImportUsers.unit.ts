@@ -103,11 +103,6 @@ const getWrapper = (data?: ImportUsersInstance["$data"], options?: object) => {
 	return mount(ImportUsers, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			mocks: {
-				$theme: {
-					name: "nbc",
-				},
-			},
 		},
 		data() {
 			return {
