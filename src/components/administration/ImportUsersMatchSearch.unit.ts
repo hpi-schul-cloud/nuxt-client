@@ -1,18 +1,21 @@
 import ImportUsersMatchSearch from "./ImportUsersMatchSearch.vue";
 import { importUsersModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
-import { THEME_KEY } from "@/utils/inject";
+import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	ImportUserResponse,
 	ImportUserResponseRoleNames,
+	SchulcloudTheme,
 	UserMatchResponse,
 	UserMatchResponseMatchedBy,
 	UserMatchResponseRoleNames,
 } from "@api-server";
 import { mdiFlag, mdiFlagOutline } from "@icons/material";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { VAutocomplete, VBtn, VListItem } from "vuetify/components";
@@ -37,11 +40,6 @@ const getWrapper = (props: ComponentProps<typeof ImportUsersMatchSearch>, option
 	return mount(ImportUsersMatchSearch, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				[THEME_KEY.valueOf()]: {
-					name: "nbc",
-				},
-			},
 		},
 		props,
 		...options,
@@ -50,6 +48,10 @@ const getWrapper = (props: ComponentProps<typeof ImportUsersMatchSearch>, option
 
 describe("ImportUsersMatchSearch", () => {
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore({
+			SC_THEME: SchulcloudTheme.THR,
+		});
 		setupStores({ importUsersModule: ImportUsersModule });
 	});
 

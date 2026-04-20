@@ -13,8 +13,8 @@
  */
 
 
+import { Colors } from './colors';
 import { MediaAvailableLineElementResponse } from './media-available-line-element-response';
-import { MediaBoardColors } from './media-board-colors';
 
 /**
  * 
@@ -30,10 +30,10 @@ export interface MediaAvailableLineResponse {
     elements: Array<MediaAvailableLineElementResponse>;
     /**
      * Background color of available media line
-     * @type {MediaBoardColors}
+     * @type {Colors}
      * @memberof MediaAvailableLineResponse
      */
-    backgroundColor: MediaBoardColors;
+    backgroundColor: Colors;
     /**
      * Collapse available media line
      * @type {boolean}

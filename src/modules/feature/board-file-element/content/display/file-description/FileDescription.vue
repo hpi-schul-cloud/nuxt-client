@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<ContentElementBar :has-grey-background="true" :icon="mdiFileDocumentOutline">
+		<ContentElementBar :icon="mdiFileDocumentOutline">
 			<template v-if="showTitle" #title>
 				<a v-if="src" :href="src" target="_blank" :aria-label="ariaLabel">
 					{{ name }}

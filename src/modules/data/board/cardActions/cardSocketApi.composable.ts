@@ -9,6 +9,7 @@ import {
 	DuplicateCardRequestPayload,
 	FetchCardRequestPayload,
 	MoveElementRequestPayload,
+	UpdateCardColorRequestPayload,
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
 	UpdateElementRequestPayload,
@@ -33,6 +34,7 @@ export const useCardSocketApi = () => {
 
 	const {
 		notifyUpdateCardTitleSuccess,
+		notifyUpdateCardColorSuccess,
 		notifyCreateElementSuccess,
 		notifyDeleteElementSuccess,
 		notifyDuplicateCardSuccess,
@@ -49,6 +51,7 @@ export const useCardSocketApi = () => {
 			on(CardActions.deleteCardSuccess, cardStore.deleteCardSuccess),
 			on(CardActions.fetchCardSuccess, cardStore.fetchCardSuccess),
 			on(CardActions.updateCardTitleSuccess, cardStore.updateCardTitleSuccess),
+			on(CardActions.updateCardColorSuccess, cardStore.updateCardColorSuccess),
 			on(CardActions.updateCardHeightSuccess, cardStore.updateCardHeightSuccess),
 			on(CardActions.duplicateCardSuccess, cardStore.duplicateCardSuccess),
 		];
@@ -60,12 +63,14 @@ export const useCardSocketApi = () => {
 			on(CardActions.updateElementFailure, () => reloadBoard()),
 			on(CardActions.fetchCardFailure, ({ cardIds }) => reloadBoard(cardIds[0])),
 			on(CardActions.updateCardTitleFailure, ({ cardId }) => reloadBoard(cardId)),
+			on(CardActions.updateCardColorFailure, ({ cardId }) => reloadBoard(cardId)),
 			on(CardActions.deleteCardFailure, ({ cardId }) => reloadBoard(cardId)),
 			on(CardActions.duplicateCardFailure, ({ cardId }) => reloadBoard(cardId)),
 		];
 
 		const ariaLiveNotification = [
 			on(CardActions.updateCardTitleSuccess, notifyUpdateCardTitleSuccess),
+			on(CardActions.updateCardColorSuccess, notifyUpdateCardColorSuccess),
 			on(CardActions.createElementSuccess, notifyCreateElementSuccess),
 			on(CardActions.deleteElementSuccess, notifyDeleteElementSuccess),
 			on(CardActions.moveElementSuccess, notifyMoveElementSuccess),
@@ -140,6 +145,10 @@ export const useCardSocketApi = () => {
 		emitOnSocket("update-card-title-request", payload);
 	};
 
+	const updateCardColorRequest = (payload: UpdateCardColorRequestPayload) => {
+		emitOnSocket("update-card-color-request", payload);
+	};
+
 	const updateCardHeightRequest = (payload: UpdateCardHeightRequestPayload) => {
 		emitOnSocket("update-card-height-request", payload);
 	};
@@ -172,6 +181,7 @@ export const useCardSocketApi = () => {
 		deleteCardRequest,
 		fetchCardRequest,
 		updateCardTitleRequest,
+		updateCardColorRequest,
 		updateCardHeightRequest,
 		duplicateCardRequest,
 	};

@@ -20,7 +20,7 @@ export default {
 	"common.actions.invite": "Enviar el enlace del curso",
 	"common.actions.logout": "Desconectar",
 	"common.actions.ok": "Aceptar",
-	"common.actions.pickColor": "Seleccione el color de fondo",
+	"common.actions.pickColor": "Seleccionar color",
 	"common.actions.leave": "Dejar",
 	"common.actions.remove": "Eliminar",
 	"common.actions.rename": "Renombrar",
@@ -514,6 +514,8 @@ export default {
 		"El título de la tarjeta {cardPosition} en la columna {columnPosition} fue cambiado a {newTitle} por otro usuario.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"La tarjeta {cardPosition} de la columna {columnPosition} ha sido actualizada por otro usuario.",
+	"components.board.screenReader.notification.cardColorUpdated.success":
+		"El color de la tarjeta {cardPosition} en la sección {columnPosition} ha sido cambiado.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Otro usuario cambió la vista del panel a {layout}.",
 	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":
