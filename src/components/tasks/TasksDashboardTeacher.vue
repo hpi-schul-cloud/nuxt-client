@@ -63,10 +63,10 @@
 		</v-window>
 		<share-modal :type="ShareTokenBodyParamsParentType.TASKS" />
 		<CopyInfoDialog
-			:is-open="copyFlow.isDialogOpen.value"
-			:copy-item-type="copyFlow.copyItemType.value"
-			@confirm="copyFlow.onConfirmed"
-			@cancel="copyFlow.onCancelled"
+			:is-open="isCopyDialogOpen"
+			:copy-item-type="copyItemType"
+			@confirm="onConfirmCopy"
+			@cancel="onCancelCopy"
 		/>
 	</section>
 </template>
@@ -121,11 +121,12 @@ const tab = computed({
 });
 
 const copyFlow = useCopyFlow();
+const { isDialogOpen: isCopyDialogOpen, copyItemType, onConfirm: onConfirmCopy, onCancel: onCancelCopy } = copyFlow;
 
 const onCopyTask = async ({ id, courseId }: { id: string; courseId: string }) => {
-	const { error } = await copyFlow.executeCopyTask(id, courseId);
+	const copyId = await copyFlow.executeCopyTask(id, courseId);
 
-	if (!error) {
+	if (copyId) {
 		tasksModule.setActiveTab("drafts");
 		await tasksModule.fetchAllTasks();
 	}

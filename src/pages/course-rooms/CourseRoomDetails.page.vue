@@ -59,10 +59,10 @@
 		/>
 		<ShareModal :type="ShareTokenBodyParamsParentType.COURSES" />
 		<CopyInfoDialog
-			:is-open="copyFlow.isDialogOpen.value"
-			:copy-item-type="copyFlow.copyItemType.value"
-			@confirm="copyFlow.onConfirmed"
-			@cancel="copyFlow.onCancelled"
+			:is-open="isCopyDialogOpen"
+			:copy-item-type="copyItemType"
+			@confirm="onConfirmCopy"
+			@cancel="onCancelCopy"
 		/>
 		<CourseCommonCartridgeExportModal />
 		<end-course-sync-dialog
@@ -440,6 +440,7 @@ const refreshCourseRoom = async () => {
 };
 
 const copyFlow = useCopyFlow();
+const { isDialogOpen: isCopyDialogOpen, copyItemType, onConfirm: onConfirmCopy, onCancel: onCancelCopy } = copyFlow;
 
 const onCopyRequested = async ({ id, type }: { id: string; type: CopyParamsTypeEnum }) => {
 	switch (type) {

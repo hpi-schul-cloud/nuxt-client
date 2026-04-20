@@ -97,10 +97,10 @@
 					:card-id="moveCardOptions.cardId"
 				/>
 				<CopyInfoDialog
-					:is-open="copyFlow.isDialogOpen.value"
-					:copy-item-type="copyFlow.copyItemType.value"
-					@confirm="copyFlow.onConfirmed"
-					@cancel="copyFlow.onCancelled"
+					:is-open="isCopyDialogOpen"
+					:copy-item-type="copyItemType"
+					@confirm="onConfirmCopy"
+					@cancel="onCancelCopy"
 				/>
 				<ShareModal v-if="shareModalContextType" :type="shareModalContextType" />
 				<SelectBoardLayoutDialog
@@ -390,15 +390,16 @@ const boardColumnClass = computed(() => {
 });
 
 const copyFlow = useCopyFlow();
+const { isDialogOpen: isCopyDialogOpen, copyItemType, onConfirm: onConfirmCopy, onCancel: onCancelCopy } = copyFlow;
 
 const onCopyBoard = async () => {
 	if (!allowedOperations.value.copyBoard) return;
 
-	const { result } = await copyFlow.executeCopyBoard(props.boardId);
+	const copyId = await copyFlow.executeCopyBoard(props.boardId);
 
-	if (result?.id) {
-		boardStore.fetchBoardRequest({ boardId: result.id });
-		router.push({ name: "boards-id", params: { id: result.id } });
+	if (copyId) {
+		boardStore.fetchBoardRequest({ boardId: copyId });
+		router.push({ name: "boards-id", params: { id: copyId } });
 	}
 };
 

@@ -26,11 +26,11 @@ export const useCopyFlow = () => {
 		return confirmAction.start();
 	};
 
-	const onConfirmed = () => {
+	const onConfirm = () => {
 		confirmAction.submit(true);
 	};
 
-	const onCancelled = () => {
+	const onCancel = () => {
 		confirmAction.cancel();
 	};
 
@@ -109,8 +109,8 @@ export const useCopyFlow = () => {
 	return {
 		isDialogOpen,
 		copyItemType,
-		onConfirmed,
-		onCancelled,
+		onConfirm,
+		onCancel,
 		executeCopyCourse,
 		executeCopyTask,
 		executeCopyLesson,
