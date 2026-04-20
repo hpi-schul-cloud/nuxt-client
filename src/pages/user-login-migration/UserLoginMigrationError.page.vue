@@ -44,7 +44,7 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import { injectStrict, SYSTEMS_MODULE_KEY } from "@/utils/inject";
@@ -53,69 +53,41 @@ import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useEnvConfig } from "@data-env";
 import { useUserLoginMigration } from "@data-user-login-migration";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, defineComponent, onMounted, Ref, ref } from "vue";
+import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "UserLoginMigrationError",
-	props: {
-		targetSchoolNumber: {
-			type: String,
-			required: false,
-			default: "",
-		},
-		sourceSchoolNumber: {
-			type: String,
-			required: false,
-			default: "",
-		},
-		multipleUsersFound: {
-			type: Boolean,
-			required: false,
-		},
-	},
-	setup(props) {
-		const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
-		const { userLoginMigration, fetchLatestUserLoginMigrationForSchool } = useUserLoginMigration();
+const props = defineProps<{ targetSchoolNumber?: string; sourceSchoolNumber?: string; multipleUsersFound?: boolean }>();
 
-		const { t } = useI18n();
+const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
+const { userLoginMigration, fetchLatestUserLoginMigrationForSchool } = useUserLoginMigration();
 
-		const pageTitle = buildPageTitle(t("pages.userMigration.error.title"));
-		useTitle(pageTitle);
+const { t } = useI18n();
 
-		const getSystemName = (): string =>
-			systemsModule?.getSystems.find(
-				(system: System): boolean => system.id === userLoginMigration.value?.targetSystemId
-			)?.name ?? "";
+const pageTitle = buildPageTitle(t("pages.userMigration.error.title"));
+useTitle(pageTitle);
 
-		const isLoading: Ref<boolean> = ref(true);
+const getSystemName = (): string =>
+	systemsModule?.getSystems.find((system: System): boolean => system.id === userLoginMigration.value?.targetSystemId)
+		?.name ?? "";
 
-		const getSubject = (): string => {
-			let subject: string = encodeURIComponent("Fehler bei der Migration");
-			if (props.sourceSchoolNumber && props.targetSchoolNumber) {
-				subject = encodeURIComponent("Schulnummer nicht korrekt");
-			}
-			return subject;
-		};
+const isLoading: Ref<boolean> = ref(true);
 
-		const supportLink: ComputedRef<string> = computed(() =>
-			sanitizeUrl(`mailto:${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}?subject=${getSubject()}`)
-		);
+const getSubject = (): string => {
+	let subject: string = encodeURIComponent("Fehler bei der Migration");
+	if (props.sourceSchoolNumber && props.targetSchoolNumber) {
+		subject = encodeURIComponent("Schulnummer nicht korrekt");
+	}
+	return subject;
+};
 
-		onMounted(async () => {
-			await systemsModule?.fetchSystems();
-			await fetchLatestUserLoginMigrationForSchool();
-			isLoading.value = false;
-		});
+const supportLink: ComputedRef<string> = computed(() =>
+	sanitizeUrl(`mailto:${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}?subject=${getSubject()}`)
+);
 
-		return {
-			isLoading,
-			supportLink,
-			getSystemName,
-			userLoginMigration,
-			t,
-		};
-	},
+onMounted(async () => {
+	await systemsModule?.fetchSystems();
+	await fetchLatestUserLoginMigrationForSchool();
+	isLoading.value = false;
 });
 </script>
 
