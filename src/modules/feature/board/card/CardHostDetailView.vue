@@ -142,4 +142,22 @@ const onMoveElementKeyboard = (elementMove: ElementMove, keyCode: string) => {
 .toolbar-fixed-offset {
 	margin-bottom: 64px;
 }
+
+.v-dialog {
+	--fullscreen-scale: 1.5;
+
+	/* Override with scaled versions, referencing original root values */
+	--heading-1: calc(2.0625rem * var(--fullscreen-scale));
+	--heading-2: calc(1.75rem * var(--fullscreen-scale));
+	--heading-3: calc(1.4375rem * var(--fullscreen-scale));
+	--heading-4: calc(1.1875rem * var(--fullscreen-scale));
+	--heading-5: calc(1.4375rem * var(--fullscreen-scale));
+	--heading-6: calc(1.1875rem * var(--fullscreen-scale));
+
+	/* text sizes */
+	--text-xs: calc(0.694rem * var(--fullscreen-scale));
+	--text-sm: calc(0.833rem * var(--fullscreen-scale));
+	--text-md: calc(1rem * var(--fullscreen-scale));
+	--text-lg: calc(1.2rem * var(--fullscreen-scale));
+}
 </style>
