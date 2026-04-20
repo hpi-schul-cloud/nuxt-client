@@ -75,13 +75,14 @@ import MediaBoardExternalToolDeletedElement from "./MediaBoardExternalToolDelete
 import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
-import { MediaBoardColorMapper, useCollapsableState } from "./utils";
+import { useCollapsableState } from "./utils";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
+import { colorToHexLighten5 } from "@/utils/color.utils";
 import {
 	BoardLayout,
+	Colors,
 	ContentElementType,
 	DeletedElementResponse,
-	MediaBoardColors,
 	MediaExternalToolElementResponse,
 	MediaLineResponse,
 } from "@api-server";
@@ -110,7 +111,7 @@ const props = defineProps({
 
 const emit = defineEmits<{
 	(e: "update:line-title", newTitle: string): void;
-	(e: "update:line-background-color", color: MediaBoardColors): void;
+	(e: "update:line-background-color", color: Colors): void;
 	(e: "update:line-collapsed", value: boolean): void;
 	(e: "update:element-position", value: ElementMove): void;
 	(e: "delete:line", lineId: string): void;
@@ -142,9 +143,7 @@ const titlePlaceholder: ComputedRef<string> = computed(
 
 const isList: Ref<boolean> = computed(() => props.layout === BoardLayout.LIST);
 
-const lineBackgroundColorHex: Ref<string> = computed(() =>
-	MediaBoardColorMapper.mapColorToHex(props.line.backgroundColor, "lighten5")
-);
+const lineBackgroundColorHex = computed(() => colorToHexLighten5(props.line.backgroundColor));
 
 const onRenameTitle = () => {
 	startEditMode();

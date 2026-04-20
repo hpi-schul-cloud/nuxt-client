@@ -91,18 +91,6 @@ describe("FileDescription", () => {
 				expect(text).not.toContain(caption);
 			});
 
-			it("should pass true to hasGreyBackground prop", () => {
-				const { wrapper } = shallowMountSetup({
-					isEditMode: true,
-					showTitle: true,
-					showMenu: true,
-				});
-
-				const contentElementBar = wrapper.findComponent(ContentElementBar);
-
-				expect(contentElementBar.props("hasGreyBackground")).toBe(true);
-			});
-
 			it("should pass mdiFileDocumentOutline to icon prop", () => {
 				const { wrapper } = shallowMountSetup({
 					isEditMode: true,
@@ -200,18 +188,6 @@ describe("FileDescription", () => {
 				const text = wrapper.text();
 
 				expect(text).toContain(caption);
-			});
-
-			it("should pass true to hasGreyBackground prop", () => {
-				const { wrapper } = shallowMountSetup({
-					isEditMode: false,
-					showTitle: true,
-					showMenu: true,
-				});
-
-				const contentElementBar = wrapper.findComponent(ContentElementBar);
-
-				expect(contentElementBar.props("hasGreyBackground")).toBe(true);
 			});
 
 			describe("when src is defined", () => {

@@ -18,7 +18,7 @@ export default {
 	"common.actions.invite": "Kurslink versenden",
 	"common.actions.logout": "Abmelden",
 	"common.actions.ok": "OK",
-	"common.actions.pickColor": "Hintergrundfarbe auswählen",
+	"common.actions.pickColor": "Farbe auswählen",
 	"common.actions.leave": "Verlassen",
 	"common.actions.remove": "Entfernen",
 	"common.actions.rename": "Umbenennen",
@@ -517,6 +517,8 @@ export default {
 		"Titel von Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
+	"components.board.screenReader.notification.cardColorUpdated.success":
+		"Die Farbe der Karte {cardPosition} in Abschnitt {columnPosition} wurde geändert.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Die Ansicht des Bereichs wurde von einem anderen Benutzer zu {layout} geändert.",
 	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":
