@@ -2,7 +2,7 @@ import { CreateCardSuccessPayload, CreateColumnSuccessPayload } from "../boardAc
 import { SR_I18N_KEYS_MAP, useBoardAriaNotification } from "./ariaLiveNotificationHandler";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { cardResponseFactory, columnResponseFactory } from "@@/tests/test-utils";
-import { BoardLayout, ContentElementType } from "@api-server";
+import { BoardLayout, Colors, ContentElementType } from "@api-server";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
@@ -336,6 +336,20 @@ describe("useBoardAriaNotification", () => {
 
 		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_TITLE_UPDATED_SUCCESS);
+	});
+
+	it("should notify on cardColorUpdate", () => {
+		const { notifyUpdateCardColorSuccess } = useBoardAriaNotification();
+		const element = document.getElementById("notify-screen-reader-polite");
+
+		notifyUpdateCardColorSuccess({
+			cardId: "cardId",
+			backgroundColor: Colors.BLUE,
+			isOwnAction: false,
+		});
+
+		vi.advanceTimersByTime(3000);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_COLOR_UPDATED_SUCCESS);
 	});
 
 	it("should notify on elementUpdate", () => {

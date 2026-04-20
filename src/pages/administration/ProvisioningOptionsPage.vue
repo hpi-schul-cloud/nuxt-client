@@ -16,7 +16,7 @@
 					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
 							$t("components.administration.provisioningOptions.class.description", {
-								instance: theme.name,
+								instance: instanceName,
 							})
 						}}
 					</div>
@@ -32,7 +32,7 @@
 					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
 							$t("components.administration.provisioningOptions.course.description", {
-								instance: theme.name,
+								instance: instanceName,
 							})
 						}}
 					</div>
@@ -48,7 +48,7 @@
 					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
 							$t("components.administration.provisioningOptions.otherGroups.description", {
-								instance: theme.name,
+								instance: instanceName,
 							})
 						}}
 					</div>
@@ -64,7 +64,7 @@
 					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
 							$t("components.administration.provisioningOptions.schoolExternalTools.description", {
-								instance: theme.name,
+								instance: instanceName,
 							})
 						}}
 					</div>
@@ -93,12 +93,12 @@
 
 <script setup lang="ts">
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
-import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useEnvConfig } from "@data-env";
+import { useEnvConfig, useEnvStore } from "@data-env";
 import { ProvisioningOptionsEnum, useProvisioningOptionsState } from "@data-provisioning-options";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -118,8 +118,8 @@ const { t } = useI18n();
 const { fetchProvisioningOptionsData, updateProvisioningOptionsData, provisioningOptionsData, isLoading, error } =
 	useProvisioningOptionsState();
 const router = useRouter();
-const theme = injectStrict(THEME_KEY);
 
+const { instanceName } = storeToRefs(useEnvStore());
 const pageTitle = buildPageTitle(t("components.administration.provisioningOptions.page.title"));
 useTitle(pageTitle);
 

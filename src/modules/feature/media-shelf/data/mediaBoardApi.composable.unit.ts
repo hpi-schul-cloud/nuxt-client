@@ -12,9 +12,9 @@ import {
 	BoardLayout,
 	CollapsableBodyParams,
 	ColorBodyParams,
+	Colors,
 	CreateMediaElementBodyParams,
 	LayoutBodyParams,
-	MediaBoardColors,
 	MoveColumnBodyParams,
 	MoveElementBodyParams,
 	RenameBodyParams,
@@ -190,12 +190,12 @@ describe("mediaBoardApi.composable", () => {
 
 	describe("updateLineColor", () => {
 		it("should call the api to update the line color", async () => {
-			await useMediaBoardApi().updateLineColor("lineId", MediaBoardColors.RED);
+			await useMediaBoardApi().updateLineColor("lineId", Colors.RED);
 
 			expect(mediaLineApi.mediaLineControllerUpdateBackgroundColor).toHaveBeenCalledWith<[string, ColorBodyParams]>(
 				"lineId",
 				{
-					backgroundColor: MediaBoardColors.RED,
+					backgroundColor: Colors.RED,
 				}
 			);
 		});
@@ -203,12 +203,12 @@ describe("mediaBoardApi.composable", () => {
 
 	describe("updateAvailableLineColor", () => {
 		it("should call the api to update the line color", async () => {
-			await useMediaBoardApi().updateAvailableLineColor("boardId", MediaBoardColors.RED);
+			await useMediaBoardApi().updateAvailableLineColor("boardId", Colors.RED);
 
 			expect(mediaBoardApi.mediaBoardControllerUpdateMediaAvailableLineColor).toHaveBeenCalledWith<
 				[string, ColorBodyParams]
 			>("boardId", {
-				backgroundColor: MediaBoardColors.RED,
+				backgroundColor: Colors.RED,
 			});
 		});
 	});

@@ -8,7 +8,7 @@
 		variant="outlined"
 		:ripple="false"
 	>
-		<ContentElementBar :has-grey-background="true" :icon="mdiPuzzleOutline">
+		<ContentElementBar :icon="mdiPuzzleOutline">
 			<template #title>
 				{{ element.content.title }}
 			</template>

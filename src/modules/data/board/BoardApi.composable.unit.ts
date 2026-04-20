@@ -125,6 +125,22 @@ describe("BoardApi.composable", () => {
 		});
 	});
 
+	describe("updateCardColor", () => {
+		it("should call cardControllerUpdateCardColor api", async () => {
+			const { updateCardColor } = useBoardApi();
+			const payload = {
+				id: "update-card-id",
+				backgroundColor: serverApi.Colors.BLUE,
+			};
+
+			await updateCardColor(payload.id, payload.backgroundColor);
+
+			expect(cardApi.cardControllerUpdateCardColor).toHaveBeenCalledWith(payload.id, {
+				backgroundColor: payload.backgroundColor,
+			});
+		});
+	});
+
 	describe("duplicateCardCall", () => {
 		it("should call cardControllerCopyCard api", async () => {
 			const { duplicateCardCall } = useBoardApi();

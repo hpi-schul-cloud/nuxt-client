@@ -18,6 +18,9 @@ import {
 	MoveElementFailurePayload,
 	MoveElementRequestPayload,
 	MoveElementSuccessPayload,
+	UpdateCardColorFailurePayload,
+	UpdateCardColorRequestPayload,
+	UpdateCardColorSuccessPayload,
 	UpdateCardHeightFailurePayload,
 	UpdateCardHeightRequestPayload,
 	UpdateCardHeightSuccessPayload,
@@ -59,6 +62,10 @@ export const fetchCardFailure = createAction("fetch-card-failure", props<FetchCa
 export const updateCardTitleRequest = createAction("update-card-title-request", props<UpdateCardTitleRequestPayload>());
 export const updateCardTitleSuccess = createAction("update-card-title-success", props<UpdateCardTitleSuccessPayload>());
 export const updateCardTitleFailure = createAction("update-card-title-failure", props<UpdateCardTitleFailurePayload>());
+
+export const updateCardColorRequest = createAction("update-card-color-request", props<UpdateCardColorRequestPayload>());
+export const updateCardColorSuccess = createAction("update-card-color-success", props<UpdateCardColorSuccessPayload>());
+export const updateCardColorFailure = createAction("update-card-color-failure", props<UpdateCardColorFailurePayload>());
 
 export const duplicateCardRequest = createAction("duplicate-card-request", props<DuplicateCardRequestPayload>());
 export const duplicateCardSuccess = createAction("duplicate-card-success", props<DuplicateCardSuccessPayload>());

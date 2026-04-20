@@ -21,6 +21,7 @@ import {
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import {
+	Colors,
 	ContentElementType,
 	ExternalToolElementResponse,
 	PreferredToolListResponse,
@@ -899,6 +900,61 @@ describe("useCardRestApi", () => {
 			await updateCardHeightRequest({
 				cardId: card.id,
 				newHeight: 100,
+			});
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
+
+	describe("updateCardColorRequest", () => {
+		it("should not call updateCardColorSuccess action when card is undefined", async () => {
+			const { cardStore } = setup();
+			const { updateCardColorRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(undefined);
+
+			await updateCardColorRequest({
+				cardId: "cardId",
+				backgroundColor: Colors.BLUE,
+			});
+
+			expect(cardStore.updateCardColorSuccess).not.toHaveBeenCalled();
+			expect(mockedBoardApiCalls.updateCardColor).not.toHaveBeenCalled();
+		});
+
+		it("should call updateCardColorSuccess action if the API call is successful", async () => {
+			const { cardStore, card } = setup();
+			const { updateCardColorRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(card);
+
+			const requestPayload = {
+				cardId: card.id,
+				backgroundColor: "blue" as never,
+			};
+
+			await updateCardColorRequest(requestPayload);
+
+			expect(mockedBoardApiCalls.updateCardColor).toHaveBeenCalledWith(
+				requestPayload.cardId,
+				requestPayload.backgroundColor
+			);
+			expect(cardStore.updateCardColorSuccess).toHaveBeenCalledWith({
+				...requestPayload,
+				isOwnAction: true,
+			});
+		});
+
+		it("should call handleError if the API call fails", async () => {
+			const { cardStore, card } = setup();
+			const { updateCardColorRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(card);
+			mockedBoardApiCalls.updateCardColor.mockRejectedValue({});
+
+			await updateCardColorRequest({
+				cardId: card.id,
+				backgroundColor: "blue" as never,
 			});
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();

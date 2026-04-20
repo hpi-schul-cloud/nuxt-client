@@ -19,6 +19,7 @@ import { drawingElementResponseFactory } from "@@/tests/test-utils/factory/drawi
 import { FileRecordResponse } from "@api-file-storage";
 import {
 	CollaborativeTextEditorElementResponse,
+	Colors,
 	ContentElementType,
 	PreferredToolResponse,
 	ToolContextType,
@@ -497,6 +498,35 @@ describe("CardStore", () => {
 			});
 
 			expect(cardStore.cards[cardId].height).toEqual(NEW_HEIGHT);
+		});
+	});
+
+	describe("updateCardColorSuccess", () => {
+		const NEW_COLOR = Colors.BLUE;
+
+		it("should not update card color when card is undefined", () => {
+			const { cardStore } = setup();
+			const colorsBefore = Object.values(cardStore.cards).map((card) => card.backgroundColor);
+
+			cardStore.updateCardColorSuccess({
+				cardId: "unkownId",
+				backgroundColor: NEW_COLOR,
+				isOwnAction: true,
+			});
+
+			expect(Object.values(cardStore.cards).map((card) => card.backgroundColor)).toEqual(colorsBefore);
+		});
+
+		it("should update card color", () => {
+			const { cardStore, cardId } = setup();
+
+			cardStore.updateCardColorSuccess({
+				cardId,
+				backgroundColor: NEW_COLOR,
+				isOwnAction: true,
+			});
+
+			expect(cardStore.cards[cardId].backgroundColor).toEqual(NEW_COLOR);
 		});
 	});
 
