@@ -6,7 +6,7 @@
 			:has-row-style="!!imageUrl && isSmallOrLargerListBoard"
 		>
 			<template v-if="imageUrl" #display>
-				<v-img
+				<VImg
 					:src="imageUrl"
 					alt=""
 					:aspect-ratio="isSmallOrLargerListBoard ? 1.77777 : undefined"
@@ -58,8 +58,6 @@ const hostname: ComputedRef<string> = computed(() => {
 		return "";
 	}
 });
-
-const linkContentElementDisplay = ref(null);
 
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
