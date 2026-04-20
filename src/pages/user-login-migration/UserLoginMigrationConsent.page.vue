@@ -15,7 +15,7 @@
 					<span class="d-block">
 						{{
 							t("pages.userMigration.description.firstParagraph.loginWith", {
-								targetSystem: getSystemName(),
+								targetSystem: systemName,
 							})
 						}}
 					</span>
@@ -23,7 +23,7 @@
 				<p>
 					{{
 						t("pages.userMigration.description.lastParagraph", {
-							targetSystem: getSystemName(),
+							targetSystem: systemName,
 							startMigration: t("pages.userMigration.button.startMigration"),
 						})
 					}}
@@ -52,26 +52,21 @@
 	</div>
 </template>
 
-<script lang="ts" setup>
-import SystemsModule from "@/store/systems";
-import { System } from "@/store/types/system";
-import { injectStrict, SYSTEMS_MODULE_KEY } from "@/utils/inject";
+<script setup lang="ts">
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useSystem } from "@data-system";
 import { useUserLoginMigration } from "@data-user-login-migration";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
 const { userLoginMigration, fetchLatestUserLoginMigrationForSchool } = useUserLoginMigration();
+// TODO: Ho to handle undefined?
+const { systemName } = useSystem(userLoginMigration.value!.targetSystemId);
 const { t } = useI18n();
 
 const pageTitle = buildPageTitle(t("pages.userMigration.title"));
 useTitle(pageTitle);
-
-const getSystemName = (): string =>
-	systemsModule?.getSystems.find((system: System): boolean => system.id === userLoginMigration.value?.targetSystemId)
-		?.name ?? "";
 
 const migrationDescription: ComputedRef<string> = computed(() =>
 	userLoginMigration.value?.mandatorySince
@@ -85,7 +80,6 @@ const isLoading: Ref<boolean> = ref(true);
 
 onMounted(async () => {
 	await fetchLatestUserLoginMigrationForSchool();
-	await systemsModule.fetchSystems();
 	isLoading.value = false;
 });
 </script>
