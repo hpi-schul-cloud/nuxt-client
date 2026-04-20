@@ -82,7 +82,7 @@ const {
 } = useTasks({
 	range: {
 		from: { amount: 1, unit: "month" },
-		to: { amount: 7, unit: "day" },
+		to: { amount: 14, unit: "day" },
 	},
 });
 </script>
