@@ -27,6 +27,11 @@
 			@download-file="downloadFileHandler"
 			@download-files-as-archive="downloadFilesAsArchiveHandler"
 		/>
+		<div v-if="allowedOperations.createFileElement" class="d-flex justify-start mt-2">
+			<RouterLink :to="{ name: 'folder-trash', params: { id: folderId } }" data-testid="trash-link">
+				{{ t("pages.folder.trash.link") }}
+			</RouterLink>
+		</div>
 	</DefaultWireframe>
 	<RenameFolderDialog
 		v-model:is-dialog-open="isRenameDialogOpen"
