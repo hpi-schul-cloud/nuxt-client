@@ -144,7 +144,7 @@ const onMoveElementKeyboard = (elementMove: ElementMove, keyCode: string) => {
 }
 
 .v-dialog {
-	--fullscreen-scale: 1.5;
+	--fullscreen-scale: 1.25;
 
 	/* Override with scaled versions, referencing original root values */
 	--heading-1: calc(2.0625rem * var(--fullscreen-scale));
