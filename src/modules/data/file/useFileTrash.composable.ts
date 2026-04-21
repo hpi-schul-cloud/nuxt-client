@@ -1,8 +1,7 @@
 import { FileRecord, FileRecordParent, StorageLocation } from "@/types/file/File";
 import { $axios } from "@/utils/api";
 import { FileApiFactory, FileApiInterface } from "@api-file-storage";
-import { notifyError } from "@data-app";
-import { useAppStore } from "@data-app";
+import { notifyError, useAppStore } from "@data-app";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 

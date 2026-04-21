@@ -71,8 +71,6 @@
 </template>
 
 <script setup lang="ts">
-import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
-import FilePreview from "./file-table/FilePreview.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { formatFileSize } from "@/utils/fileHelper";
@@ -85,6 +83,8 @@ import { KebabMenu, KebabMenuAction } from "@ui-kebab-menu";
 import { DefaultWireframe } from "@ui-layout";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
+import FilePreview from "./file-table/FilePreview.vue";
 
 const { t, d } = useI18n();
 

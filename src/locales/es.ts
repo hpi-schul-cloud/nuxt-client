@@ -2079,7 +2079,8 @@ export default {
 	"pages.folder.trash.link": "Papelera",
 	"pages.folder.trash.title": "Papelera: {folderName}",
 	"pages.folder.trash.breadcrumb": "Papelera",
-	"pages.folder.trash.infoText": "Los archivos se eliminan automáticamente 7 días después de ser movidos a la papelera.",
+	"pages.folder.trash.infoText":
+		"Los archivos se eliminan automáticamente 7 días después de ser movidos a la papelera.",
 	"pages.folder.trash.emptyState": "La papelera está vacía",
 	"pages.folder.trash.columns.deletedAt": "Eliminado el",
 	"pages.folder.trash.ariaLabels.actionMenu": "Menú de acciones para {name}",
