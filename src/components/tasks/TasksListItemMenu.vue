@@ -89,9 +89,9 @@
 
 <script>
 import { finishedTasksModule } from "@/store";
-import { CopyParamsTypeEnum } from "@/store/copy";
 import { askDeletion } from "@/utils/confirmation-dialog.utils.ts";
 import { useEnvConfig } from "@data-env";
+import { CopyParamsTypeEnum } from "@feature-copy";
 import {
 	mdiArchiveOutline,
 	mdiContentCopy,

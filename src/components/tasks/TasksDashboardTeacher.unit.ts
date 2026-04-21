@@ -1,6 +1,6 @@
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 import TasksList from "./TasksList.vue";
-import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
+import CopyModule from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
@@ -9,6 +9,7 @@ import { COPY_MODULE_KEY, FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY, TASKS_MOD
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { CopyParamsTypeEnum } from "@feature-copy";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
 import { mount } from "@vue/test-utils";

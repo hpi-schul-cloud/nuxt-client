@@ -164,7 +164,6 @@
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { courseRoomDetailsModule } from "@/store";
-import { CopyParamsTypeEnum } from "@/store/copy";
 import { askDeletionForItem } from "@/utils/confirmation-dialog.utils.ts";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import {
@@ -174,6 +173,7 @@ import {
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
 import { useEnvConfig } from "@data-env";
+import { CopyParamsTypeEnum } from "@feature-copy";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import draggable from "vuedraggable";

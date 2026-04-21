@@ -88,7 +88,6 @@ import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCo
 import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.vue";
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import { CopyParamsTypeEnum } from "@/store/copy";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
@@ -106,6 +105,7 @@ import {
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
+import { CopyParamsTypeEnum } from "@feature-copy";
 import { CopyInfoDialog, useCopyFlow } from "@feature-copy";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
 import {

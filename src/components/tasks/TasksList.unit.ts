@@ -1,6 +1,6 @@
 import TasksList from "./TasksList.vue";
 import TasksListItemTeacher from "./TasksListItemTeacher.vue";
-import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
+import CopyModule from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
@@ -9,6 +9,7 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoleName } from "@api-server";
+import { CopyParamsTypeEnum } from "@feature-copy";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";

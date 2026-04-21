@@ -1,6 +1,6 @@
 import CourseRoomDashboard from "./CourseRoomDashboard.vue";
 import { courseRoomDetailsModule } from "@/store";
-import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
+import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
@@ -10,6 +10,7 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { ShareTokenBodyParamsParentType } from "@api-server";
+import { CopyParamsTypeEnum } from "@feature-copy";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
 import { flushPromises, mount } from "@vue/test-utils";

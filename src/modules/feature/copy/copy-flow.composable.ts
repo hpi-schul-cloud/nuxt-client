@@ -1,6 +1,6 @@
+import { CopyParamsTypeEnum } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useAwaitableAction } from "@/composables/awaitable-action.composable";
-import { CopyParamsTypeEnum } from "@/store/copy";
 import { $axios } from "@/utils/api";
 import { BoardApiFactory, CourseRoomsApiFactory, TaskApiFactory } from "@api-server";
 import { notifySuccess, useLoadingStore } from "@data-app";

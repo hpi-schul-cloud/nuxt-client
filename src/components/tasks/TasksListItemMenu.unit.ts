@@ -1,6 +1,6 @@
 import TasksListItemMenu from "./TasksListItemMenu.vue";
 import { finishedTasksModule } from "@/store";
-import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
+import CopyModule from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import TasksModule from "@/store/tasks";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
@@ -10,6 +10,7 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { CopyParamsTypeEnum } from "@feature-copy";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
