@@ -4,13 +4,13 @@
 			<v-card>
 				<div class="toolbar-fixed-offset">
 					<v-toolbar class="toolbar-position" color="white">
-						<v-btn class="allowed-interactive-element" icon @click="onDialogClose">
+						<v-btn class="allowed-button" icon @click="onDialogClose">
 							<v-icon>{{ mdiClose }}</v-icon>
 						</v-btn>
 						<v-spacer />
 						<v-btn
 							v-if="allowedOperations?.deleteCard"
-							class="mr-4 allowed-interactive-element"
+							class="mr-4 allowed-button"
 							data-testid="toolbar-edit-button"
 							s
 							@click="onToggleEdit"

@@ -105,6 +105,27 @@ describe("InlineEditInteractionHandler", () => {
 				const emitted = wrapper.emitted();
 				expect(emitted["end-edit-mode"]).toBeUndefined();
 			});
+
+			it("should not emit 'end-edit-mode' if the target is button with allowed-button class", () => {
+				const event = document.createEvent("MouseEvent");
+				const buttonElement = document.createElement("button");
+				buttonElement.classList.add("allowed-button");
+
+				Object.defineProperty(event, "target", {
+					value: buttonElement,
+					writable: false,
+				});
+
+				const { wrapper } = setup({ isEditMode: true });
+
+				const outsideHandler = wrapper.findComponent({
+					name: "OnClickOutside",
+				});
+				outsideHandler.vm.$emit("trigger", event);
+
+				const emitted = wrapper.emitted();
+				expect(emitted["end-edit-mode"]).toBeUndefined();
+			});
 		});
 
 		describe("when double clicked", () => {
