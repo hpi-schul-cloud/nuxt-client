@@ -5,6 +5,7 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
+		:ripple="false"
 		:variant="isDraft ? 'outlined' : 'elevated'"
 		hover
 		:data-testid="`room-task-card-${taskCardIndex}`"

@@ -36,7 +36,13 @@
 					@restore-task="onRestoreTask"
 					@revert-task="onRevertPublishedTask"
 				/>
-				<VProgressCircular v-if="isMutating" class="position-absolute right-0" indeterminate size="16" />
+				<VProgressCircular
+					v-if="isMutating"
+					class="position-absolute"
+					style="right: 6px; top: 6px"
+					indeterminate
+					size="16"
+				/>
 			</div>
 		</template>
 	</VListItem>
@@ -72,8 +78,8 @@ const onFinish = async (taskId: string) => {
 	await Promise.all([fetchTasks(), fetchFinishedTasks()]);
 };
 
-const onDelete = async (taskId: string) => {
-	await deleteTask(taskId);
+const onDelete = async () => {
+	await deleteTask(props.task.id, props.task.name);
 	if (props.task.status.isFinished) {
 		await fetchFinishedTasks();
 	} else {

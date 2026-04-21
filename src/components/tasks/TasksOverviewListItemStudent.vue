@@ -26,7 +26,13 @@
 		<template #append>
 			<div :data-testid="`three-dot-task-option-menu-${task.id}`">
 				<TasksOverviewListItemMenu :task @finish-task="onFinish" @restore-task="onRestoreTask" />
-				<VProgressCircular v-if="isMutating" class="position-absolute right-0" indeterminate size="16" />
+				<VProgressCircular
+					v-if="isMutating"
+					style="right: 6px; top: 6px"
+					class="position-absolute"
+					indeterminate
+					size="16"
+				/>
 			</div>
 		</template>
 	</VListItem>

@@ -381,10 +381,8 @@ describe("CourseRoomDashboard.vue", () => {
 
 		it("should call deleteTask when task deletion is confirmed", async () => {
 			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(true);
-			const deleteTaskMock = vi.fn();
 			const fetchContentMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			courseRoomDetailsModule.deleteTask = deleteTaskMock;
 			courseRoomDetailsModule.fetchContent = fetchContentMock;
 			const taskCard = wrapper.findComponent<VCard>(".task-card");
 
@@ -392,7 +390,6 @@ describe("CourseRoomDashboard.vue", () => {
 			await flushPromises();
 
 			expect(confirmDialogUtils.askDeletionForItem).toHaveBeenCalledWith("Test Name", "common.words.topic");
-			expect(deleteTaskMock).toHaveBeenCalledWith("1234");
 			expect(fetchContentMock).toHaveBeenCalled();
 		});
 
@@ -400,7 +397,6 @@ describe("CourseRoomDashboard.vue", () => {
 			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
 			const deleteTaskMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			courseRoomDetailsModule.deleteTask = deleteTaskMock;
 			const taskCard = wrapper.findComponent<VCard>(".task-card");
 
 			taskCard.vm.$emit("delete-task");

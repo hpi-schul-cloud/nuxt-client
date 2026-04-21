@@ -74,7 +74,7 @@
 			class="task-action"
 			data-testId="task-delete"
 			role="menuitem"
-			@click="onDelete"
+			@click="$emit('delete-task', task.id)"
 		>
 			<VListItemTitle>
 				<VIcon :icon="mdiTrashCanOutline" class="task-action-icon" />
@@ -86,7 +86,6 @@
 
 <script setup lang="ts">
 import { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
-import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
@@ -129,15 +128,7 @@ const copyServiceEnabled = computed(() => envConfig.value.FEATURE_COPY_SERVICE_E
 const shareTaskEnabled = computed(() => envConfig.value.FEATURE_TASK_SHARE);
 
 const onDelete = async () => {
-	const confirmed = await askDeletion(
-		"components.molecules.TaskItemMenu.confirmDelete.title",
-		t("components.molecules.TaskItemMenu.confirmDelete.text", { taskTitle: props.task.name }),
-		"warning"
-	);
-
-	if (confirmed) {
-		emit("delete-task", props.task.id);
-	}
+	emit("delete-task", props.task.id);
 };
 
 const onCopyTask = () => {

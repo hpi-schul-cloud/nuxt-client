@@ -1,6 +1,7 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
+import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { nowUtc, parseUtc } from "@/utils/date-time.utils";
 import { TaskApiFactory, TaskResponse } from "@api-server";
@@ -291,11 +292,19 @@ export const useTaskActions = () => {
 	const tasksApi = TaskApiFactory(undefined, "/v3", $axios);
 	const { execute, isRunning: isMutating, error, status } = useSafeAxiosTask();
 
-	const deleteTask = async (taskId: string) =>
-		await execute(
-			() => tasksApi.taskControllerDelete(taskId),
-			t("common.notifications.errors.notDeleted", { type: t("common.words.task") })
+	const deleteTask = async (taskId: string, taskName: string) => {
+		const confirmed = await askDeletion(
+			"components.molecules.TaskItemMenu.confirmDelete.title",
+			t("components.molecules.TaskItemMenu.confirmDelete.text", { taskTitle: taskName }),
+			"warning"
 		);
+		if (confirmed) {
+			return await execute(
+				() => tasksApi.taskControllerDelete(taskId),
+				t("common.notifications.errors.notDeleted", { type: t("common.words.task") })
+			);
+		}
+	};
 
 	const revertPublishedTask = async (taskId: string) =>
 		await execute(

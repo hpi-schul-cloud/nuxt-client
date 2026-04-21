@@ -270,43 +270,6 @@ describe("course-room module", () => {
 			});
 		});
 
-		describe("deleteTask", () => {
-			it("should call api to delete a lesson", async () => {
-				const mockApi = {
-					taskControllerDelete: vi.fn(),
-				};
-				const spy = vi
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
-
-				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-
-				await courseRoomDetailsModule.deleteTask("id");
-
-				expect(mockApi.taskControllerDelete).toHaveBeenCalledTimes(1);
-				expect(mockApi.taskControllerDelete).toHaveBeenCalledWith("id");
-
-				spy.mockRestore();
-			});
-
-			it("should catch error in catch block", async () => {
-				const mockApi = {
-					taskControllerDelete: vi.fn(() => Promise.reject(badRequestError)),
-				};
-				const spy = vi
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
-
-				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-
-				await courseRoomDetailsModule.deleteTask("id");
-
-				expect(courseRoomDetailsModule.businessError).toStrictEqual(businessError);
-
-				spy.mockRestore();
-			});
-		});
-
 		describe("createBoard", () => {
 			it("should call api to create a column board", async () => {
 				const mockApi = {

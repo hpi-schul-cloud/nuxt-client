@@ -13,10 +13,9 @@ import {
 	PatchOrderParams,
 	PatchVisibilityParams,
 	SingleColumnBoardResponse,
-	TaskApiFactory,
-	TaskApiInterface,
 } from "@api-server";
 import { useAppStore } from "@data-app";
+import { useTaskActions } from "@data-tasks";
 import { isAxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
@@ -155,22 +154,6 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}
 
 	@Action
-	async deleteTask(taskId: string): Promise<void> {
-		this.resetBusinessError();
-		try {
-			await this.taskApi.taskControllerDelete(taskId);
-		} catch (error: unknown) {
-			const apiError = mapAxiosErrorToResponseError(error);
-
-			this.setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
-		}
-	}
-
-	@Action
 	async deleteBoard(boardId: string): Promise<void> {
 		this.resetBusinessError();
 		try {
@@ -209,9 +192,9 @@ export default class CourseRoomDetailsModule extends VuexModule {
 		this.resetBusinessError();
 		try {
 			if (payload.action === "finish") {
-				await this.taskApi.taskControllerFinish(payload.itemId);
+				await useTaskActions().finishTask(payload.itemId);
 			} else if (payload.action === "restore") {
-				await this.taskApi.taskControllerRestore(payload.itemId);
+				await useTaskActions().restoreFinishedTask(payload.itemId);
 			}
 			await this.fetchContent(this.roomData.roomId);
 		} catch (error: unknown) {
@@ -338,10 +321,6 @@ export default class CourseRoomDetailsModule extends VuexModule {
 
 	private get finishedLoading(): boolean {
 		return this.getLoading === false;
-	}
-
-	private get taskApi(): TaskApiInterface {
-		return TaskApiFactory(undefined, "/v3", $axios);
 	}
 
 	private get boardApi() {
