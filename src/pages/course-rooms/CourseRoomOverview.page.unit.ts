@@ -1,7 +1,5 @@
 import CourseRoomOverviewPage from "./CourseRoomOverview.page.vue";
 import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
-import CopyModule from "@/store/copy";
-import { COPY_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStore, createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import {
 	courseRoomElementFactory,
@@ -9,7 +7,6 @@ import {
 	courseRoomItemFactory,
 	courseRoomSubElementFactory,
 } from "@@/tests/test-utils/factory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import type { DashboardGridElementResponse } from "@api-server";
 import type { GroupDataType } from "@data-course-rooms";
@@ -107,16 +104,9 @@ describe("CourseRoomOverview.page", () => {
 	const getWrapper = (options?: { routeQuery?: Record<string, string> }): VueWrapper<CourseRoomOverviewVm> => {
 		useRouteMock.mockReturnValue(reactive({ query: options?.routeQuery ?? {} }));
 
-		const copyModuleMock = createModuleMocks(CopyModule, {
-			getIsResultModalOpen: false,
-		});
-
 		return mount(CourseRoomOverviewPage, {
 			global: {
 				plugins: [pinia, createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-				},
 			},
 		}) as VueWrapper<CourseRoomOverviewVm>;
 	};

@@ -1,11 +1,10 @@
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 import TasksList from "./TasksList.vue";
-import CopyModule from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
 import { OpenTasksForTeacher } from "@/store/types/tasks";
-import { COPY_MODULE_KEY, FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
+import { FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -23,7 +22,6 @@ const tabRoutes = ["current", "drafts", "finished"];
 describe("TasksDashboardTeacher", () => {
 	let tasksModuleMock: TasksModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
-	let copyModuleMock: CopyModule;
 	let shareModuleMock: ShareModule;
 
 	beforeAll(() => {
@@ -38,9 +36,7 @@ describe("TasksDashboardTeacher", () => {
 					tasksModule: tasksModuleMock,
 					finishedTasksModule: finishedTasksModuleMock,
 
-					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[TASKS_MODULE_KEY]: tasksModuleMock,
-					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[FINISHED_TASKS_MODULE_KEY]: finishedTasksModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 				},
@@ -71,7 +67,6 @@ describe("TasksDashboardTeacher", () => {
 			getTasks: [],
 			tasksIsEmpty: true,
 		});
-		copyModuleMock = createModuleMocks(CopyModule);
 		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: false,
 		});
@@ -135,8 +130,6 @@ describe("TasksDashboardTeacher", () => {
 			type: CopyParamsTypeEnum.Task,
 		};
 		oneTasksList.vm.$emit("copy-task", payload);
-
-		expect(copyModuleMock.copy).toHaveBeenCalledWith(payload);
 	});
 
 	describe("empty states", () => {

@@ -2,12 +2,10 @@ import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
-import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
-	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
@@ -17,8 +15,6 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import {
 	BoardElementResponse,
 	BoardElementResponseType as BoardTypes,
-	CopyApiResponseStatus,
-	CopyApiResponseType,
 	ImportUserResponseRoleNames,
 	Permission,
 	ShareTokenBodyParamsParentType,
@@ -111,7 +107,6 @@ const mockPermissionsCourseSubstitutionTeacher = [Permission.HOMEWORK_CREATE, Pe
 const mockPermissionsStudent = [Permission.BASE_VIEW];
 
 describe("CourseRoomDetails.page.vue", () => {
-	let copyModule: CopyModule;
 	let shareModule: ShareModule;
 	let downloadModule: CommonCartridgeExportModule;
 	let courseRoomDetailsModule: CourseRoomDetailsModule;
@@ -142,16 +137,6 @@ describe("CourseRoomDetails.page.vue", () => {
 		};
 
 		const singleColumnBoard = singleColumnBoardResponseFactory.build({ elements: boardElements });
-		copyModule = createModuleMocks(CopyModule, {
-			getIsResultModalOpen: false,
-			getCopyResult: {
-				id: "copiedid",
-				type: CopyApiResponseType.COURSE,
-				title: "Sample Course",
-				elements: [],
-				status: CopyApiResponseStatus.SUCCESS,
-			},
-		});
 		downloadModule = createModuleMocks(CommonCartridgeExportModule);
 		shareModule = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
@@ -185,7 +170,6 @@ describe("CourseRoomDetails.page.vue", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 					[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: downloadModule,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,

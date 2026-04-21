@@ -1,8 +1,5 @@
 import RoomsPage from "./Rooms.page.vue";
-import ImportFlow from "@/components/share/ImportFlow.vue";
-import CopyModule from "@/store/copy";
 import { RoomItem } from "@/types/room/Room";
-import { COPY_MODULE_KEY } from "@/utils/inject";
 import {
 	createTestAppStoreWithPermissions,
 	createTestRoomStore,
@@ -10,7 +7,6 @@ import {
 	mockApi,
 	roomItemFactory,
 } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
 import { Permission, ShareTokenBodyParamsParentType } from "@api-server";
@@ -40,8 +36,6 @@ describe("RoomsPage", () => {
 		roomItems: RoomItem[] = [roomItemFactory.build({ isLocked: false }), roomItemFactory.build({ isLocked: true })],
 		isLoading = false
 	) => {
-		const copyModule = createModuleMocks(CopyModule);
-
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		const { roomStore } = createTestRoomStore(roomItems);
 		roomStore.isLoading = isLoading;
@@ -52,10 +46,7 @@ describe("RoomsPage", () => {
 		const wrapper = mount(RoomsPage, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
-				provide: {
-					[COPY_MODULE_KEY]: copyModule,
-				},
-				stubs: { ImportFlow: true, ImportCardDialog: true, RouterLink: true },
+				stubs: { ImportDialog: true, ImportCardDialog: true, RouterLink: true },
 			},
 		});
 

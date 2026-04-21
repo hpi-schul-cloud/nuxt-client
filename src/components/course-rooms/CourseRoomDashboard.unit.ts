@@ -1,6 +1,5 @@
 import CourseRoomDashboard from "./CourseRoomDashboard.vue";
 import { courseRoomDetailsModule } from "@/store";
-import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
@@ -142,7 +141,6 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 		setupStores({
 			courseRoomDetailsModule: CourseRoomDetailsModule,
-			copyModule: CopyModule,
 		});
 	});
 	describe("common features", () => {

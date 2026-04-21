@@ -3,18 +3,12 @@ import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import ShareModule from "@/store/share";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import {
-	COPY_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
+import { COURSE_ROOM_DETAILS_MODULE_KEY, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -24,8 +18,6 @@ import {
 	BoardLayout,
 	BoardResponseAllowedOperations,
 	ConfigResponse,
-	CopyApiResponse,
-	CopyApiResponseType,
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
 import { useAppStore, useNotificationStore } from "@data-app";
@@ -133,13 +125,6 @@ describe("Board", () => {
 
 	const setupProvideModules = () => {
 		const copyResultId = "42";
-		const copyModule = createModuleMocks(CopyModule, {
-			getIsResultModalOpen: false,
-			getCopyResult: {
-				id: copyResultId,
-				type: CopyApiResponseType.BOARD,
-			} as CopyApiResponse,
-		});
 
 		const shareModule = createModuleMocks(ShareModule);
 		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
@@ -147,7 +132,6 @@ describe("Board", () => {
 		});
 		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule);
 		return {
-			copyModule,
 			shareModule,
 			courseRoomDetailsModule,
 			copyResultId,
@@ -162,8 +146,7 @@ describe("Board", () => {
 		envs?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
 	}) => {
-		const { copyModule, shareModule, courseRoomDetailsModule, copyResultId, schoolExternalToolsModule } =
-			setupProvideModules();
+		const { shareModule, courseRoomDetailsModule, copyResultId, schoolExternalToolsModule } = setupProvideModules();
 
 		setActivePinia(createTestingPinia());
 
@@ -196,7 +179,6 @@ describe("Board", () => {
 					createTestingVuetify(),
 				],
 				provide: {
-					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
@@ -230,7 +212,6 @@ describe("Board", () => {
 			copyResultId,
 			shareModule,
 			courseRoomDetailsModule,
-			copyModule,
 		};
 	};
 
@@ -422,12 +403,14 @@ describe("Board", () => {
 		});
 
 		it("should reset copy module when copy result modal is closed", async () => {
-			const { wrapper, copyModule } = setup();
+			const { wrapper } = setup();
 
 			const copyResultModal = wrapper.findComponent(CopyResultModal);
 			await copyResultModal.vm.$emit("copy-dialog-closed");
 
-			expect(copyModule.reset).toHaveBeenCalled();
+			// FIX test
+			// expect(copyModule.reset).toHaveBeenCalled();
+			expect(true).toBe(false);
 		});
 	});
 
