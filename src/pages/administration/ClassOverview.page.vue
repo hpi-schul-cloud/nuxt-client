@@ -27,7 +27,7 @@
 			:page="page"
 			:items-per-page-text="footerProps.itemsPerPageText"
 			:items-per-page-options="footerProps.itemsPerPageOptions"
-			:loading="isLoading"
+			:loading="isFetching"
 			data-testid="admin-class-table"
 			class="elevation-1"
 			:no-data-text="t('common.nodata')"
@@ -165,13 +165,12 @@
 
 <script setup lang="ts">
 import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
-import GroupModule from "@/store/group";
+import { useGroup } from "@/store/group.composable";
 import SchoolsModule from "@/store/schools";
 import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
-import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import { askDeletion } from "@/utils/confirmation-dialog.utils";
-import { GROUP_MODULE_KEY, injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { ClassSortQueryType, Permission, SchoolYearQueryType, SchulcloudTheme } from "@api-server";
 import { useAppStore } from "@data-app";
@@ -209,7 +208,7 @@ const props = defineProps({
 });
 
 const { hasPermission } = useAppStore();
-const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
+const { deleteClass, fetchClassesForSchool, classes, isFetching, pagination, page, sortBy, sortOrder } = useGroup();
 const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 const route = useRoute();
@@ -250,11 +249,7 @@ const nextYear = computed(() => schoolsModule.getSchool.years.nextYear.name);
 
 const currentYear = computed(() => schoolsModule.getSchool.years.activeYear.name);
 
-const classes = computed(() => groupModule.getClasses);
-
 const showSourceHeader = computed(() => classes.value.some((classItem) => classItem.externalSourceName !== undefined));
-
-const isLoading = computed(() => groupModule.getLoading);
 
 const hasEditPermission = hasPermission(Permission.CLASS_EDIT);
 const hasCreatePermission = hasPermission(Permission.CLASS_CREATE);
@@ -306,15 +301,11 @@ const onDelete = async (selectedClass: ClassInfo) => {
 	);
 	if (!shouldDelete) return;
 
-	await groupModule.deleteClass({
+	await deleteClass({
 		classId: selectedClass.id,
 		query: schoolYearQueryType.value,
 	});
 };
-
-const pagination: ComputedRef<Pagination> = computed(() => groupModule.getPagination);
-
-const page: ComputedRef<number> = computed(() => groupModule.getPage);
 
 const courseSyncEnabled = computed(() => useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED);
 
@@ -364,7 +355,7 @@ const headers = computed(() => {
 });
 
 const loadClassList = async () => {
-	await groupModule.loadClassesForSchool({
+	await fetchClassesForSchool({
 		schoolYearQuery: schoolYearQueryType.value,
 	});
 };
@@ -376,26 +367,22 @@ const onTabsChange = async (tab: string) => {
 	await loadClassList();
 };
 
-const onUpdateSortBy = async (sortBy: ClassSortItem[]) => {
-	const fieldToSortBy: ClassSortItem = sortBy[0];
-	const key: ClassSortQueryType | undefined = fieldToSortBy ? fieldToSortBy.key : undefined;
-	groupModule.setSortBy(key);
-
-	const sortOrder = fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
-	groupModule.setSortOrder(sortOrder);
+const onUpdateSortBy = async (newSortBy: ClassSortItem[]) => {
+	const fieldToSortBy = newSortBy[0];
+	sortBy.value = fieldToSortBy ? fieldToSortBy.key : undefined;
+	sortOrder.value = fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
 
 	await loadClassList();
 };
 
 const onUpdateCurrentPage = async (currentPage: number) => {
-	groupModule.setPage(currentPage);
-	const skip = (currentPage - 1) * groupModule.getPagination.limit;
-	groupModule.setPagination({ ...pagination.value, skip });
+	page.value = currentPage;
+	pagination.value.skip = (currentPage - 1) * pagination.value.limit;
 
 	await loadClassList();
 };
 const onUpdateItemsPerPage = async (itemsPerPage: number) => {
-	groupModule.setPagination({ ...pagination.value, limit: itemsPerPage });
+	pagination.value.limit = itemsPerPage;
 
 	await loadClassList();
 };
