@@ -8,7 +8,13 @@
 							<v-icon>{{ mdiClose }}</v-icon>
 						</v-btn>
 						<v-spacer />
-						<v-btn class="mr-4 allowed-interactive-element" data-testid="toolbar-edit-button" @click="onToggleEdit">
+						<v-btn
+							v-if="allowedOperations?.deleteCard"
+							class="mr-4 allowed-interactive-element"
+							data-testid="toolbar-edit-button"
+							s
+							@click="onToggleEdit"
+						>
 							{{
 								isEditMode ? $t("common.actions.edit") + " " + $t("common.actions.finish") : $t("common.actions.edit")
 							}}
@@ -19,8 +25,9 @@
 					<div class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto">
 						<CardHostInteractionHandler
 							:is-edit-mode="isEditMode"
-							@start-edit-mode="onToggleEdit"
-							@end-edit-mode="onToggleEdit"
+							@start-edit-mode="startEditMode"
+							@end-edit-mode="stopEditMode"
+							@click.stop
 						>
 							<CardTitle
 								:is-edit-mode="isEditMode"
@@ -58,9 +65,9 @@ import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import type { ElementMove } from "@/types/board/DragAndDrop";
 import type { CardResponse } from "@api-server";
-import { useBoardAllowedOperations } from "@data-board";
+import { useBoardAllowedOperations, useCourseBoardEditMode } from "@data-board";
 import { mdiClose } from "@icons/material";
-import { ref } from "vue";
+import { toRef } from "vue";
 
 type Props = {
 	card: CardResponse;
@@ -69,7 +76,7 @@ type Props = {
 	columnIndex: number;
 };
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 const emit = defineEmits<{
 	(e: "update:title", value: string): void;
@@ -82,11 +89,16 @@ const emit = defineEmits<{
 	(e: "close:detail-view"): void;
 }>();
 
-const isEditMode = ref(false);
+const cardId = toRef(props, "card");
+const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value.id);
 const { allowedOperations } = useBoardAllowedOperations();
 
 const onToggleEdit = () => {
-	isEditMode.value = !isEditMode.value;
+	if (isEditMode.value) {
+		stopEditMode();
+	} else {
+		startEditMode();
+	}
 };
 
 const onDialogClose = () => {
@@ -102,8 +114,8 @@ const onEnterTitle = () => {
 };
 
 const onAddElement = () => {
+	startEditMode();
 	emit("add:element");
-	isEditMode.value = true;
 };
 
 const onDeleteElement = (elementId: string) => {
