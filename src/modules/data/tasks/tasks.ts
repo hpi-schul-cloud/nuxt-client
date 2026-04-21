@@ -37,7 +37,7 @@ const isGradedForStudent = isGraded;
 
 // === Combined Predicates (Teacher) ===
 const isGradedForTeacher = (t: TaskResponse) => hasSubmissions(t) && isFullyGraded(t);
-const isUngradedForTeacher = (t: TaskResponse) => hasSubmissions(t) && !isFullyGraded(t);
+const isUngradedForTeacher = (t: TaskResponse) => !isGradedForTeacher(t);
 
 type DateRange = {
 	from: { amount: number; unit: ManipulateType };

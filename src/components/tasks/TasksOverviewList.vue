@@ -48,7 +48,7 @@ li {
 	&-move,
 	&-enter-active,
 	&-leave-active {
-		transition: all 0.5s ease;
+		transition: all 0.25s ease;
 	}
 
 	&-enter-from,

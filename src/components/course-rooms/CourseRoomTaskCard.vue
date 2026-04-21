@@ -43,21 +43,8 @@
 				class="ma-0 submitted-section"
 				:data-testid="`task-card-info-${taskCardIndex}`"
 			>
-				<div class="chip-items-group">
-					<v-chip
-						v-for="(chip, index) in chipItems[userRole]"
-						:key="index"
-						:class="[chip.class]"
-						size="small"
-						:data-testid="[chip.testid]"
-					>
-						<v-icon v-if="chip.icon" size="small" class="mr-1" color="rgba(0, 0, 0, 0.87)">
-							{{ chip.icon }}
-						</v-icon>
-						{{ chip.name }}
-					</v-chip>
-					<TaskChipsStudent v-if="isStudent" :task="task" />
-				</div>
+				<TaskChipsTeacher v-if="isTeacher" :task />
+				<TaskChipsStudent v-if="isStudent" :task />
 			</div>
 		</v-card-text>
 		<v-card-actions v-if="cardActions[userRole]?.length" class="pt-1" data-testid="content-card-task-actions">
@@ -78,13 +65,13 @@
 
 <script setup lang="ts">
 import TaskChipsStudent from "@/components/tasks/task-chips/TaskChipsStudent.vue";
+import TaskChipsTeacher from "@/components/tasks/task-chips/TaskChipsTeacher.vue";
 import { formatUtc } from "@/utils/date-time.utils";
 import { ImportUserResponseRoleNames as Roles, TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
 import {
-	mdiClockAlertOutline,
 	mdiContentCopy,
 	mdiFormatListChecks,
 	mdiPencilOutline,
@@ -128,14 +115,10 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const { isStudent } = useAppStoreRefs();
+const { isStudent, isTeacher } = useAppStoreRefs();
 
 const canShowDescription = ref(false);
 const isDraft = computed(() => props.task.status.isDraft);
-const isOverDue = computed(() => {
-	const dueDate = props.task.dueDate;
-	return dueDate && new Date(dueDate) < new Date();
-});
 const isFinished = computed(() => props.task.status.isFinished);
 
 const isPlanned = computed(() => {
@@ -178,36 +161,6 @@ const cardActions = computed(() => {
 	}
 
 	return roleBasedActions;
-});
-
-const chipItems = computed(() => {
-	const roleBasedChips: Record<string, Array<{ name: string; class?: string; icon?: string; testid?: string }>> = {
-		[Roles.TEACHER]: [],
-		[Roles.STUDENT]: [],
-	};
-
-	if (props.userRole === Roles.TEACHER) {
-		roleBasedChips[Roles.TEACHER].push({
-			name: `${props.task.status.submitted}/${props.task.status.maxSubmissions} ${t("pages.room.taskCard.teacher.label.submitted")}`,
-			testid: `room-task-card-chip-submitted-${props.taskCardIndex}`,
-		});
-
-		roleBasedChips[Roles.TEACHER].push({
-			name: `${props.task.status.graded}/${props.task.status.maxSubmissions} ${t("pages.room.taskCard.label.graded")}`,
-			testid: `room-task-card-chip-graded-${props.taskCardIndex}`,
-		});
-
-		if (isOverDue.value) {
-			roleBasedChips[Roles.TEACHER].push({
-				icon: mdiClockAlertOutline,
-				name: t(`pages.room.taskCard.teacher.label.overdue`),
-				class: "overdue",
-				testid: `room-task-card-chip-overdue-${props.taskCardIndex}`,
-			});
-		}
-	}
-
-	return roleBasedChips;
 });
 
 const moreActionsMenuItems = computed(() => {
@@ -380,14 +333,6 @@ const getStyleClasses = () => (isPlanned.value || (isDraft.value && !isFinished.
 
 .text-description {
 	font-size: var(--text-md);
-}
-
-.chip-items-group {
-	vertical-align: middle;
-}
-
-.v-chip {
-	margin-right: 8px;
 }
 
 .v-card__text {

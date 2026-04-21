@@ -4,10 +4,6 @@ import langIconDe from "./lang-icon-de.vue";
 import langIconEn from "./lang-icon-en.vue";
 import langIconEs from "./lang-icon-es.vue";
 import langIconUk from "./lang-icon-uk.vue";
-import TaskDraft from "./task-draft.vue";
-import TaskMissed from "./task-missed.vue";
-import TaskMissedFilled from "./task-missed-filled.vue";
-import TaskOpenFilled from "./task-open-filled.vue";
 import { Component } from "vue";
 
 const customAliases: Record<string, Component> = {
@@ -19,4 +15,4 @@ const customAliases: Record<string, Component> = {
 	langIconUk: langIconUk,
 };
 
-export { customAliases, TaskDraft, TaskMissed, TaskMissedFilled, TaskOpenFilled };
+export { customAliases };

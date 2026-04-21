@@ -1,73 +1,27 @@
 <template>
-	<VListItem v-bind="$attrs" :aria-label="ariaLabel" :ripple="false" role="article" @click="handleClick">
-		<template #prepend>
-			<VAvatar>
-				<VIcon class="fill" :icon="avatarIcon" :class="{ 'opacity-0-5': isUnpublishedLesson }" :color="iconColor" />
-			</VAvatar>
-		</template>
-
+	<VListItem
+		:style="`border-left: 4px solid ${task.displayColor};`"
+		v-bind="$attrs"
+		:aria-label="ariaLabel"
+		role="article"
+		:ripple="false"
+		@click="handleClick"
+	>
 		<template #default>
-			<div class="d-flex">
-				<div
-					:class="isUnpublishedLesson ? 'opacity-0-5' : ''"
-					class="task-item__main-info align-self-center flex-grow-1"
-				>
-					<VListItemSubtitle data-testId="task-label" class="d-inline-flex">
-						<span class="text-truncate" data-testid="taskSubtitle">
-							{{ taskLabel }}
-						</span>
-					</VListItemSubtitle>
-					<VListItemTitle data-testid="taskTitle">
-						{{ task.name }}
-					</VListItemTitle>
-					<VListItemSubtitle v-if="topic && currentBreakpoint !== 'xs'" data-testid="task-topic" class="d-inline-flex">
-						<span class="text-truncate">{{ topic }}</span>
-					</VListItemSubtitle>
-					<VListItemSubtitle class="hidden-sm-and-up text--primary text-wrap">
-						<VChip v-if="isUnpublishedLesson" size="x-small" data-testid="task-lesson-chip-small">
-							{{ t("components.molecules.TaskItemTeacher.lessonIsNotPublished") }}
-						</VChip>
-						<i18n-t
-							v-else
-							keypath="components.molecules.TaskItemTeacher.status"
-							scope="global"
-							data-testid="task-status-small"
-						>
-							<template #submitted>{{ task.status.submitted }}</template>
-							<template #max>{{ task.status.maxSubmissions }}</template>
-							<template #graded>{{ task.status.graded }}</template>
-						</i18n-t>
-					</VListItemSubtitle>
-				</div>
+			<div>
+				<VListItemSubtitle data-testId="task-label" class="d-inline-flex">
+					<span class="text-truncate" data-testid="taskSubtitle">
+						{{ taskLabel }}
+					</span>
+				</VListItemSubtitle>
+				<VListItemTitle data-testid="taskTitle">
+					{{ task.name }}
+				</VListItemTitle>
+				<VListItemSubtitle v-if="topic && currentBreakpoint !== 'xs'" data-testid="task-topic" class="d-inline-flex">
+					<span class="text-truncate">{{ topic }}</span>
+				</VListItemSubtitle>
 
-				<!-- item additional info -->
-				<section
-					v-if="isUnpublishedLesson"
-					data-testid="task-lesson-chip-large"
-					class="hidden-xs mr-8 pl-4 align-self-center"
-				>
-					<VChip size="small">
-						{{ t("components.molecules.TaskItemTeacher.lessonIsNotPublished") }}
-					</VChip>
-				</section>
-				<section v-else-if="showTaskStatus" data-testid="task-status" class="mr-4 d-flex align-self-center">
-					<div class="hidden-xs px-4 mr-4 text-center task-stats">
-						<VListItemSubtitle>
-							{{ t("components.molecules.TaskItemTeacher.submitted") }}
-						</VListItemSubtitle>
-						<VListItemTitle data-testid="taskSubmitted">
-							{{ task.status.submitted }}/{{ task.status.maxSubmissions }}
-						</VListItemTitle>
-					</div>
-					<div class="hidden-xs px-4 text-center task-stats">
-						<VListItemSubtitle>
-							{{ t("components.molecules.TaskItemTeacher.graded") }}
-						</VListItemSubtitle>
-						<VListItemTitle data-testid="taskGraded">
-							{{ task.status.graded }}
-						</VListItemTitle>
-					</div>
-				</section>
+				<TaskChipsTeacher class="mt-2" :task />
 			</div>
 		</template>
 
@@ -90,11 +44,11 @@
 
 <script setup lang="ts">
 import TasksOverviewListItemMenu from "./TasksOverviewListItemMenu.vue";
+import TaskChipsTeacher from "@/components/tasks/task-chips/TaskChipsTeacher.vue";
 import { CopyParams } from "@/store/copy";
 import { formatUtc, isToday } from "@/utils/date-time.utils";
 import { TaskResponse } from "@api-server";
 import { isTaskDraft, isTaskUnpublished, useTaskActions, useTasksOfOverview } from "@data-tasks";
-import { TaskDraft, TaskOpenFilled } from "@icons/custom";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
@@ -138,10 +92,6 @@ const { name: currentBreakpoint } = useDisplay();
 const isDraft = computed(() => isTaskDraft(props.task));
 const isPlanned = computed(() => new Date(props.task.availableDate!) > new Date());
 
-const showTaskStatus = computed(() => !isDraft.value && !isPlanned.value);
-const avatarIcon = computed(() => (isDraft.value ? TaskDraft : TaskOpenFilled));
-const iconColor = computed(() => props.task.displayColor ?? "#54616e");
-
 const courseName = computed(() => {
 	const { isSubstitutionTeacher } = props.task.status;
 	const baseName = props.task.courseName || t("pages.tasks.labels.noCourse");
@@ -155,16 +105,16 @@ const taskLabel = computed(() => {
 	if (isDraft.value) {
 		const suffix = isToday(createdAt)
 			? `${t("components.molecules.TaskItemMenu.labels.createdAt")} ${formatUtc(createdAt, "time")}`
-			: `${t("components.molecules.TaskItemMenu.labels.createdAt")} ${formatUtc(createdAt, "dateYY")}`;
+			: `${t("components.molecules.TaskItemMenu.labels.createdAt")} ${formatUtc(createdAt, "dateTimeYY")}`;
 		return `${labelText} - ${suffix}`;
 	}
 
 	if (isPlanned.value) {
-		return `${labelText} - ${t("pages.tasks.labels.planned")} ${formatUtc(availableDate!, "dateYY")}`;
+		return `${labelText} - ${t("pages.tasks.labels.planned")} ${formatUtc(availableDate!, "dateTimeYY")}`;
 	}
 
 	if (dueDate) {
-		return `${labelText} - ${t("pages.tasks.labels.due")} ${formatUtc(dueDate, "dateYY")}`;
+		return `${labelText} - ${t("pages.tasks.labels.due")} ${formatUtc(dueDate, "dateTimeYY")}`;
 	}
 
 	return labelText;

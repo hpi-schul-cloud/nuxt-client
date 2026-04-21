@@ -7,14 +7,8 @@
 		:ripple="false"
 		@click="handleClick"
 	>
-		<template #prepend>
-			<VAvatar>
-				<VIcon class="fill" :icon="taskIcon" :color="iconColor" />
-			</VAvatar>
-		</template>
-
 		<template #default>
-			<div class="task-item__main-info w-65" :style="conditionalWidth">
+			<div>
 				<VListItemSubtitle data-testid="taskSubtitle">
 					{{ taskLabel }}
 				</VListItemSubtitle>
@@ -23,7 +17,7 @@
 				</VListItemTitle>
 				<VListItemSubtitle>{{ topic }}</VListItemSubtitle>
 			</div>
-			<div class="d-sm-block mr-sm-4 d-flex">
+			<div class="d-sm-block mr-sm-4 d-flex mt-2">
 				<div class="text-subtitle-2 due-date-label" data-test-id="dueDateLabel">{{ dueDateLabel }}</div>
 				<TaskChipsStudent :task />
 			</div>
@@ -41,11 +35,9 @@
 <script setup lang="ts">
 import TasksOverviewListItemMenu from "./TasksOverviewListItemMenu.vue";
 import TaskChipsStudent from "@/components/tasks/task-chips/TaskChipsStudent.vue";
-import { formatUtc, isDueWithin24h } from "@/utils/date-time.utils";
+import { formatUtc } from "@/utils/date-time.utils";
 import { TaskResponse } from "@api-server";
 import { useTaskActions, useTasksOfOverview } from "@data-tasks";
-import { TaskMissed, TaskMissedFilled, TaskOpenFilled } from "@icons/custom";
-import { mdiCheckCircleOutline } from "@icons/material";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
@@ -57,44 +49,6 @@ const { isMutating, finishTask, restoreFinishedTask } = useTaskActions();
 
 const { t } = useI18n();
 const { xs } = useDisplay();
-
-const iconColor = computed(() => props.task.displayColor ?? "#54616e");
-
-const isCloseToDueDate = computed(() => !!props.task.dueDate && isDueWithin24h(props.task.dueDate));
-
-const isOverDue = computed(() => !!props.task.dueDate && new Date(props.task.dueDate) < new Date());
-
-const isGradedButMissed = computed(() => {
-	const { status } = props.task;
-	return isOverDue.value && !status.submitted && status.graded;
-});
-
-const taskState = computed(() => {
-	const { status } = props.task;
-
-	if (isCloseToDueDate.value && !status.submitted) return "warning";
-	if (isGradedButMissed.value) return "gradedOverdue";
-	if (isOverDue.value && !status.submitted) return "overdue";
-	if (status.submitted && !status.graded) return "submitted";
-	if (status.graded) return "graded";
-	return undefined;
-});
-
-const taskIcon = computed(() => {
-	switch (taskState.value) {
-		case "warning":
-			return TaskOpenFilled;
-		case "overdue":
-			return TaskMissed;
-		case "gradedOverdue":
-			return TaskMissedFilled;
-		case "submitted":
-		case "graded":
-			return mdiCheckCircleOutline;
-		default:
-			return TaskOpenFilled;
-	}
-});
 
 const topic = computed(() => (props.task.lessonName ? `${t("common.words.topic")} ${props.task.lessonName}` : ""));
 
@@ -109,8 +63,6 @@ const dueDateLabel = computed(() => {
 const taskLabel = computed(() => props.task.courseName);
 
 const ariaLabel = computed(() => `${t("common.words.task")} ${props.task.name}`);
-
-const conditionalWidth = computed(() => (xs.value ? "width: 96%" : "width: 65%"));
 
 const onFinish = async (taskId: string) => {
 	await finishTask(taskId);
