@@ -56,7 +56,7 @@
 						</v-icon>
 						{{ chip.name }}
 					</v-chip>
-					<TaskChipsStudent :task="task" />
+					<TaskChipsStudent v-if="isStudent" :task="task" />
 				</div>
 			</div>
 		</v-card-text>
@@ -78,8 +78,9 @@
 
 <script setup lang="ts">
 import TaskChipsStudent from "@/components/tasks/task-chips/TaskChipsStudent.vue";
-import { formatUtc, isDueWithin24h } from "@/utils/date-time.utils";
+import { formatUtc } from "@/utils/date-time.utils";
 import { ImportUserResponseRoleNames as Roles, TaskResponse } from "@api-server";
+import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
 import {
@@ -99,7 +100,6 @@ const props = defineProps({
 	task: {
 		type: Object as PropType<TaskResponse>,
 		required: true,
-		validator: (task) => ["createdAt", "id", "name"].every((key) => key in (task as Record<string, unknown>)),
 	},
 	room: {
 		type: Object,
@@ -128,8 +128,8 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { isStudent } = useAppStoreRefs();
 
-const roles = ref(Roles);
 const canShowDescription = ref(false);
 const isDraft = computed(() => props.task.status.isDraft);
 const isOverDue = computed(() => {
@@ -138,9 +138,6 @@ const isOverDue = computed(() => {
 });
 const isFinished = computed(() => props.task.status.isFinished);
 
-const isCloseToDueDate = computed(() => props.task.dueDate && isDueWithin24h(props.task.dueDate));
-
-const isSubmitted = computed(() => props.task.status.submitted);
 const isPlanned = computed(() => {
 	const scheduledDate = props.task.availableDate;
 	const delay = 5 * 1000;

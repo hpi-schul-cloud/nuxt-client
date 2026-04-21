@@ -4,7 +4,7 @@
 
 		<InfoChip
 			v-if="task.status?.submitted"
-			:prepend-icon="mdiCheckCircleOutline"
+			:icon="mdiCheckCircleOutline"
 			size="small"
 			variant="tonal"
 			data-testid="task-submitted-student"
@@ -13,7 +13,7 @@
 		</InfoChip>
 		<InfoChip
 			v-if="task.status?.graded"
-			:prepend-icon="mdiTextBoxCheckOutline"
+			:icon="mdiTextBoxCheckOutline"
 			size="small"
 			variant="tonal"
 			data-testid="task-graded-student"
@@ -47,9 +47,7 @@ const props = defineProps<{ task: TaskResponse }>();
 const { t } = useI18n();
 
 const isSubmitted = computed(() => props.task.status?.submitted);
-
 const isDueSoon = computed(() => props.task.dueDate && !isSubmitted.value && isDueWithin24h(props.task.dueDate));
-
 const isMissingSubmission = computed(() => isTaskOverdue(props.task) && !isSubmitted.value);
 </script>
 
