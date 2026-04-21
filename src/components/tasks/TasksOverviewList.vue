@@ -1,5 +1,5 @@
 <template>
-	<VList role="feed" lines="two">
+	<VList role="feed" lines="two" class="overflow-hidden">
 		<TransitionGroup class="overflow-hidden" name="anim-tasks" tag="ul">
 			<li v-for="task in tasks" :key="task.id" class="tasks-list-item">
 				<slot :task="task" />
@@ -11,15 +11,22 @@
 			<VProgressCircular indeterminate />
 		</div>
 	</VList>
+	<VContainer v-if="tasks.length === 0">
+		<EmptyState :title="emptyTitle">
+			<template #media> <TasksEmptyStateSvg /></template>
+		</EmptyState>
+	</VContainer>
 </template>
 
 <script setup lang="ts">
 import { TaskResponse } from "@api-server";
+import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
 import { computed } from "vue";
 
 const props = withDefaults(
 	defineProps<{
 		tasks: TaskResponse[];
+		emptyTitle: string;
 		hasPagination?: boolean;
 		isLoadingMoreItems?: boolean;
 	}>(),

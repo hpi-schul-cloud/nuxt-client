@@ -1,35 +1,6 @@
 <template>
 	<section class="task-dashboard-teacher">
 		<div class="header-section">
-			<div class="filter-section d-flex flex-wrap align-center mb-4">
-				<VAutocomplete
-					v-model="selectedCourseNames"
-					closable-chips
-					multiple
-					clearable
-					hide-details="auto"
-					variant="solo-filled"
-					style="min-width: 200px"
-					flat
-					chips
-					data-testid="courseFilter"
-					item-title="text"
-					item-value="value"
-					:prepend-inner-icon="mdiMagnify"
-					:menu-props="{ closeOnContentClick: false, zIndex: 30 }"
-					:items="countedCourseFilters"
-					:label="t('pages.tasks.labels.filter')"
-					:aria-label="t('pages.tasks.labels.filter')"
-					class="flex-grow-1"
-				/>
-				<VSwitch
-					v-model="includeSubstitute"
-					:label="t('components.organisms.TasksDashboardMain.filter.substitute')"
-					:true-icon="mdiCheck"
-					class="flex-shrink-0"
-					hide-details
-				/>
-			</div>
 			<VTabs v-model="activeTab" align-tabs="center">
 				<VTab v-for="tab in tabRoutes" :key="tab.value" :value="tab.value" class="tab-item">
 					<VIcon size="large" :icon="tab.icon" class="tab-icon mr-sm-3" />
@@ -40,33 +11,31 @@
 
 		<div class="mx-auto mt-5">
 			<VWindow :model-value="activeTab">
-				<VWindowItem :value="TaskTab.OPEN">
-					<TasksOverviewList :tasks="openForTeacher">
+				<VWindowItem class="content-grid" :value="TaskTab.OPEN">
+					<TasksOverviewList :tasks="openForTeacher" :empty-title="t('pages.tasks.open.emptyState.title')">
 						<template #default="{ task }">
 							<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
 						</template>
 					</TasksOverviewList>
-					<VContainer>
-						<EmptyState v-if="openForTeacher.length === 0" :title="t('pages.tasks.open.emptyState.title')">
-							<template #media> <TasksEmptyStateSvg /></template>
-						</EmptyState>
-					</VContainer>
+					<aside class="filter-sidebar">
+						<TasksFilterOptions
+							v-model:course-names="selectedCourseNames"
+							v-model:substitute="includeSubstitute"
+							:course-filters="countedCourseFilters"
+						/>
+					</aside>
 				</VWindowItem>
 				<VWindowItem :value="TaskTab.DRAFTS">
-					<TasksOverviewList :tasks="drafts">
+					<TasksOverviewList :tasks="drafts" :empty-title="t('pages.tasks.teacher.drafts.emptyState.title')">
 						<template #default="{ task }">
 							<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
 						</template>
 					</TasksOverviewList>
-					<VContainer>
-						<EmptyState v-if="drafts.length === 0" :title="t('pages.tasks.teacher.drafts.emptyState.title')">
-							<template #media> <TasksEmptyStateSvg /></template>
-						</EmptyState>
-					</VContainer>
 				</VWindowItem>
 				<VWindowItem :value="TaskTab.FINISHED">
 					<TasksOverviewList
 						:tasks="finishedTasks"
+						:empty-title="t('pages.tasks.finished.emptyState.title')"
 						:is-loading-more-items="isLoadingFinishedTasks"
 						has-pagination
 						@load-more-tasks="loadMoreFinishedTasks"
@@ -75,11 +44,6 @@
 							<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
 						</template>
 					</TasksOverviewList>
-					<VContainer>
-						<EmptyState v-if="finishedTasks.length === 0" :title="t('pages.tasks.finished.emptyState.title')">
-							<template #media> <TasksEmptyStateSvg /></template>
-						</EmptyState>
-					</VContainer>
 				</VWindowItem>
 			</VWindow>
 		</div>
@@ -98,6 +62,7 @@
 import TasksOverviewList from "./TasksOverviewList.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
+import TasksFilterOptions from "@/components/tasks/task-controls/TasksFilterOptions.vue";
 import TasksOverviewListItemTeacher from "@/components/tasks/TasksOverviewListItemTeacher.vue";
 import { useCopy } from "@/composables/copy";
 import { CopyParams } from "@/store/copy";
@@ -106,8 +71,7 @@ import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject"
 import { ShareTokenBodyParamsParentType } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { useTasksOfOverview } from "@data-tasks";
-import { mdiArchiveOutline, mdiCheck, mdiFormatListChecks, mdiMagnify, mdiPlaylistEdit } from "@icons/material";
-import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
+import { mdiArchiveOutline, mdiFormatListChecks, mdiPlaylistEdit } from "@icons/material";
 import { useUrlSearchParams } from "@vueuse/core";
 import { countBy } from "lodash-es";
 import { computed } from "vue";
@@ -196,12 +160,40 @@ const onShareTask = (taskId: string) => {
 @use "sass:map";
 @use "@/styles/settings" as *;
 
-.filter-section {
-	gap: 16px;
-}
-
 .tab-item {
 	min-width: 0 !important;
 	width: clamp(90px, 20vw, 160px);
+}
+
+.content-grid {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	grid-template-areas: "list sidebar";
+	gap: 12px;
+	align-items: start;
+
+	@media #{map.get($display-breakpoints, 'sm-and-down')} {
+		grid-template-columns: 1fr;
+		grid-template-areas:
+			"sidebar"
+			"list";
+	}
+}
+
+.task-list {
+	grid-area: list;
+}
+
+.filter-sidebar {
+	grid-area: sidebar;
+	position: sticky;
+	top: 80px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 16px;
+	border-radius: 8px;
+	background: rgb(var(--v-theme-surface));
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 </style>

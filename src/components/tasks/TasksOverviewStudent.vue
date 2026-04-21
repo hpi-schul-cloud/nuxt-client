@@ -32,52 +32,34 @@
 		<div class="mx-auto mt-5">
 			<VWindow v-model="activeTab">
 				<VWindowItem :value="TaskTab.OPEN">
-					<TasksOverviewList :tasks="openForStudent">
+					<TasksOverviewList :tasks="openForStudent" :empty-title="t('pages.tasks.student.open.emptyState.title')">
 						<template #default="{ task }">
 							<TasksOverviewListItemStudent :task />
 						</template>
 					</TasksOverviewList>
-					<VContainer>
-						<EmptyState v-if="openForStudent.length === 0" :title="t('pages.tasks.student.open.emptyState.title')">
-							<template #media>
-								<TasksEmptyStateSvg />
-							</template>
-						</EmptyState>
-					</VContainer>
 				</VWindowItem>
 				<VWindowItem :value="TaskTab.COMPLETED">
-					<TasksOverviewList :tasks="submittedForStudent">
+					<TasksOverviewList
+						:tasks="submittedForStudent"
+						:empty-title="t('pages.tasks.student.completed.emptyState.title')"
+					>
 						<template #default="{ task }">
 							<TasksOverviewListItemStudent :task />
 						</template>
 					</TasksOverviewList>
-					<VContainer>
-						<EmptyState
-							v-if="submittedForStudent.length === 0"
-							:title="t('pages.tasks.student.completed.emptyState.title')"
-						>
-							<template #media>
-								<TasksEmptyStateSvg />
-							</template>
-						</EmptyState>
-					</VContainer>
 				</VWindowItem>
 				<VWindowItem :value="TaskTab.FINISHED">
 					<TasksOverviewList
 						:tasks="finishedTasks"
 						:is-loading-more-items="isLoadingFinishedTasks"
 						has-pagination
+						:empty-title="t('pages.tasks.finished.emptyState.title')"
 						@load-more-tasks="loadMoreFinishedTasks"
 					>
 						<template #default="{ task }">
 							<TasksOverviewListItemStudent :task />
 						</template>
 					</TasksOverviewList>
-					<VContainer>
-						<EmptyState v-if="finishedTasks.length === 0" :title="t('pages.tasks.finished.emptyState.title')">
-							<template #media> <TasksEmptyStateSvg /></template>
-						</EmptyState>
-					</VContainer>
 				</VWindowItem>
 			</VWindow>
 		</div>
@@ -90,7 +72,6 @@ import TasksOverviewListItemStudent from "@/components/tasks/TasksOverviewListIt
 import { useTasksOfOverview } from "@data-tasks";
 import { mdiArchiveOutline, mdiCheckCircleOutline, mdiFormatListChecks } from "@icons/material";
 import { mdiMagnify } from "@icons/material";
-import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
 import { useUrlSearchParams } from "@vueuse/core";
 import { countBy } from "lodash-es";
 import { computed, onMounted } from "vue";
