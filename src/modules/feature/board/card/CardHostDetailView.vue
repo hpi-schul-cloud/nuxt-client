@@ -4,7 +4,7 @@
 			<v-card>
 				<div class="toolbar-fixed-offset">
 					<v-toolbar class="toolbar-position" color="white">
-						<v-btn class="keep-inline-edit-mode" icon @click="onDialogClose">
+						<v-btn icon @click="onDialogClose">
 							<v-icon>{{ mdiClose }}</v-icon>
 						</v-btn>
 						<v-spacer />
