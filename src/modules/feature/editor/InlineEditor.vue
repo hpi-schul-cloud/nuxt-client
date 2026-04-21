@@ -109,6 +109,10 @@ const handleReady = (editor: Editor) => {
 	box-shadow: none !important;
 }
 
+.ck.ck-toolbar-container {
+	z-index: 3000;
+}
+
 @media #{map.get($display-breakpoints, "sm-and-up")} {
 	.ck.ck-toolbar_floating {
 		min-width: 460px;
