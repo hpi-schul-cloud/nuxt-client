@@ -129,7 +129,7 @@ const onMoveElementKeyboard = (elementMove: ElementMove, keyCode: string) => {
 
 <style scoped>
 .detail-view-size {
-	max-width: 30vw;
+	max-width: 768px;
 	min-width: 400px;
 }
 
