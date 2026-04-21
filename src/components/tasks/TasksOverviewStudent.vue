@@ -32,34 +32,11 @@
 		<div class="mx-auto mt-5">
 			<VWindow v-model="activeTab">
 				<VWindowItem :value="TaskTab.OPEN">
-					<TasksOverviewPanels
-						:panel-one-count="noDueDateTasks.length"
-						:panel-two-count="withDueDateTasks.length + overdueTasks.length"
-						:panel-one-title="t('pages.tasks.subtitleNoDue')"
-						:panel-two-title="t('pages.tasks.subtitleWithDue')"
-						:expanded-default="1"
-					>
-						<template #panelOne>
-							<TasksOverviewList :tasks="noDueDateTasks">
-								<template #default="{ task }">
-									<TasksOverviewListItemStudent :task />
-								</template>
-							</TasksOverviewList>
+					<TasksOverviewList :tasks="openForStudent">
+						<template #default="{ task }">
+							<TasksOverviewListItemStudent :task />
 						</template>
-						<template #panelTwo>
-							<TasksOverviewList :title="t('pages.tasks.subtitleOpen')" :tasks="withDueDateTasks">
-								<template #default="{ task }">
-									<TasksOverviewListItemStudent :task />
-								</template>
-							</TasksOverviewList>
-
-							<TasksOverviewList :title="t('pages.tasks.student.subtitleOverDue')" :tasks="overdueTasks">
-								<template #default="{ task }">
-									<TasksOverviewListItemStudent :task />
-								</template>
-							</TasksOverviewList>
-						</template>
-					</TasksOverviewPanels>
+					</TasksOverviewList>
 					<VContainer>
 						<EmptyState v-if="openForStudent.length === 0" :title="t('pages.tasks.student.open.emptyState.title')">
 							<template #media>
@@ -69,31 +46,14 @@
 					</VContainer>
 				</VWindowItem>
 				<VWindowItem :value="TaskTab.COMPLETED">
-					<TasksOverviewPanels
-						:panel-one-count="gradedForStudent.length"
-						:panel-two-count="submittedForStudent.length"
-						:panel-one-title="t('pages.tasks.subtitleGraded')"
-						:panel-two-title="t('pages.tasks.subtitleNotGraded')"
-						:expanded-default="0"
-					>
-						<template #panelOne>
-							<TasksOverviewList :title="t('pages.tasks.student.subtitleOverDue')" :tasks="gradedForStudent">
-								<template #default="{ task }">
-									<TasksOverviewListItemStudent :task />
-								</template>
-							</TasksOverviewList>
+					<TasksOverviewList :tasks="submittedForStudent">
+						<template #default="{ task }">
+							<TasksOverviewListItemStudent :task />
 						</template>
-						<template #panelTwo>
-							<TasksOverviewList :title="t('pages.tasks.student.subtitleOverDue')" :tasks="submittedForStudent">
-								<template #default="{ task }">
-									<TasksOverviewListItemStudent :task />
-								</template>
-							</TasksOverviewList>
-						</template>
-					</TasksOverviewPanels>
+					</TasksOverviewList>
 					<VContainer>
 						<EmptyState
-							v-if="gradedForStudent.length === 0"
+							v-if="submittedForStudent.length === 0"
 							:title="t('pages.tasks.student.completed.emptyState.title')"
 						>
 							<template #media>
@@ -126,7 +86,6 @@
 
 <script setup lang="ts">
 import TasksOverviewList from "./TasksOverviewList.vue";
-import TasksOverviewPanels from "./TasksOverviewPanels.vue";
 import TasksOverviewListItemStudent from "@/components/tasks/TasksOverviewListItemStudent.vue";
 import { useTasksOfOverview } from "@data-tasks";
 import { mdiArchiveOutline, mdiCheckCircleOutline, mdiFormatListChecks } from "@icons/material";
@@ -165,7 +124,6 @@ const activeTab = computed({
 
 const {
 	openForStudent,
-	splitByDueDate,
 	sortedCourseFilters,
 	finishedTasks,
 	isLoadingFinishedTasks,
@@ -173,7 +131,6 @@ const {
 	fetchFinishedTasks,
 	selectedCourseNames,
 	submittedForStudent,
-	gradedForStudent,
 	openForStudentUnfiltered,
 	submittedForStudentUnfiltered,
 	gradedForStudentUnfiltered,
@@ -182,8 +139,6 @@ const {
 onMounted(async () => {
 	await fetchFinishedTasks();
 });
-
-const openTasks = computed(() => splitByDueDate(openForStudent.value));
 
 const completedForStudentUnfiltered = computed(() => [
 	...submittedForStudentUnfiltered.value,
@@ -201,10 +156,6 @@ const countedCourseFilters = computed(() => {
 		text: `${filter.text} (${count[filter.value] ?? 0})`,
 	}));
 });
-
-const overdueTasks = computed(() => openTasks.value.overdue);
-const noDueDateTasks = computed(() => openTasks.value.noDueDate);
-const withDueDateTasks = computed(() => openTasks.value.withDueDate);
 </script>
 
 <style lang="scss" scoped>

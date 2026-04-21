@@ -1,5 +1,12 @@
 <template>
-	<VListItem v-bind="$attrs" :aria-label="ariaLabel" role="article" :ripple="false" @click="handleClick">
+	<VListItem
+		:style="`border-left: 4px solid ${task.displayColor};`"
+		v-bind="$attrs"
+		:aria-label="ariaLabel"
+		role="article"
+		:ripple="false"
+		@click="handleClick"
+	>
 		<template #prepend>
 			<VAvatar>
 				<VIcon class="fill" :icon="taskIcon" :color="iconColor" />
@@ -17,15 +24,8 @@
 				<VListItemSubtitle>{{ topic }}</VListItemSubtitle>
 			</div>
 			<div class="d-sm-block mr-sm-4 d-flex">
-				<div class="text-subtitle-2 due-date-label" data-test-id="dueDateLabel">
-					{{ dueDateLabel }}
-				</div>
-				<ChipTimeRemaining
-					v-if="task.dueDate && taskState === 'warning'"
-					class="ml-2 ml-sm-0 float-sm-right"
-					:type="taskState"
-					:due-date="task.dueDate"
-				/>
+				<div class="text-subtitle-2 due-date-label" data-test-id="dueDateLabel">{{ dueDateLabel }}</div>
+				<TaskChipsStudent :task />
 			</div>
 		</template>
 
@@ -40,12 +40,12 @@
 
 <script setup lang="ts">
 import TasksOverviewListItemMenu from "./TasksOverviewListItemMenu.vue";
+import TaskChipsStudent from "@/components/tasks/task-chips/TaskChipsStudent.vue";
 import { formatUtc, isDueWithin24h } from "@/utils/date-time.utils";
 import { TaskResponse } from "@api-server";
 import { useTaskActions, useTasksOfOverview } from "@data-tasks";
 import { TaskMissed, TaskMissedFilled, TaskOpenFilled } from "@icons/custom";
 import { mdiCheckCircleOutline } from "@icons/material";
-import { ChipTimeRemaining } from "@ui-chip";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";

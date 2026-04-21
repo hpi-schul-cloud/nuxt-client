@@ -32,7 +32,7 @@ const isFullyGraded = (t: TaskResponse) => t.status.graded === t.status.submitte
 
 // === Combined Predicates (Student) ===
 const isOpenForStudent = (t: TaskResponse) => !hasSubmissions(t) && !isGraded(t) && isVisible(t);
-const isSubmittedForStudent = (t: TaskResponse) => hasSubmissions(t) && !isGraded(t);
+const isSubmittedForStudent = (t: TaskResponse) => hasSubmissions(t);
 const isGradedForStudent = isGraded;
 
 // === Combined Predicates (Teacher) ===
@@ -44,7 +44,7 @@ type DateRange = {
 	to: { amount: number; unit: ManipulateType };
 };
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 10;
 
 const fetchAllTasks = async (skip = 0, limit = 100, accumulated: TaskResponse[] = []): Promise<TaskResponse[]> => {
 	const tasksApi = TaskApiFactory(undefined, "/v3", $axios);
@@ -85,8 +85,8 @@ export const useTasks = (
 
 	// === Filter Pipeline ===
 	const tasksFilteredBySubstitute = computed(() => {
-		if (includeSubstitute.value) return allTasks.value;
-		return allTasks.value.filter((t) => !isSubstitution(t));
+		if (includeSubstitute.value) return toSortedByDueDate(allTasks.value);
+		return toSortedByDueDate(allTasks.value.filter((t) => !isSubstitution(t)));
 	});
 
 	const draftsUnfiltered = computed(() => toSortedByCreatedDate(tasksFilteredBySubstitute.value.filter(isTaskDraft)));
@@ -115,13 +115,6 @@ export const useTasks = (
 	const drafts = computed(() => toSortedByCreatedDate(tasks.value.filter(isTaskDraft)));
 	const published = computed(() => tasks.value.filter(isPublished));
 
-	// === Due Date Grouping helper util ===
-	const splitByDueDate = <T extends TaskResponse>(list: T[]) => ({
-		overdue: toSortedByDueDate(list.filter(isTaskOverdue)),
-		withDueDate: toSortedByDueDate(list.filter(hasDueDate)),
-		noDueDate: list.filter(hasNoDueDate),
-	});
-
 	// Convenience computed for published tasks
 	const overdue = computed(() => toSortedByDueDate(published.value.filter(isTaskOverdue)));
 	const withDueDate = computed(() => toSortedByDueDate(published.value.filter(hasDueDate)));
@@ -135,6 +128,9 @@ export const useTasks = (
 	// === Student Categories (filtered) ===
 	const openForStudent = computed(() => published.value.filter(isOpenForStudent));
 	const submittedForStudent = computed(() => published.value.filter(isSubmittedForStudent));
+	const ungradedForStudent = computed(() =>
+		published.value.filter((t) => isSubmittedForStudent(t) && !isGradedForStudent(t))
+	);
 	const gradedForStudent = computed(() => published.value.filter(isGradedForStudent));
 
 	// === Student Categories (unfiltered - for counts) ===
@@ -241,7 +237,6 @@ export const useTasks = (
 		overdue,
 		withDueDate,
 		noDueDate,
-		splitByDueDate,
 
 		// Teacher Categories
 		openForTeacher,
@@ -251,6 +246,7 @@ export const useTasks = (
 		// Student Categories
 		openForStudent,
 		submittedForStudent,
+		ungradedForStudent,
 		gradedForStudent,
 
 		// Unfiltered Student Categories (for counts)

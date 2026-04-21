@@ -41,33 +41,11 @@
 		<div class="mx-auto mt-5">
 			<VWindow :model-value="activeTab">
 				<VWindowItem :value="TaskTab.OPEN">
-					<TasksOverviewPanels
-						:panel-one-count="noDueDateTasks.length"
-						:panel-two-count="withDueDateTasks.length + overdueTasks.length"
-						:panel-one-title="t('pages.tasks.subtitleNoDue')"
-						:panel-two-title="t('pages.tasks.subtitleWithDue')"
-						:expanded-default="1"
-					>
-						<template #panelOne>
-							<TasksOverviewList :tasks="noDueDateTasks">
-								<template #default="{ task }">
-									<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
-								</template>
-							</TasksOverviewList>
+					<TasksOverviewList :tasks="openForTeacher">
+						<template #default="{ task }">
+							<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
 						</template>
-						<template #panelTwo>
-							<TasksOverviewList :tasks="overdueTasks" :title="t('pages.tasks.teacher.subtitleOverDue')">
-								<template #default="{ task }">
-									<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
-								</template>
-							</TasksOverviewList>
-							<TasksOverviewList :tasks="withDueDateTasks" :title="t('pages.tasks.subtitleOpen')">
-								<template #default="{ task }">
-									<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
-								</template>
-							</TasksOverviewList>
-						</template>
-					</TasksOverviewPanels>
+					</TasksOverviewList>
 					<VContainer>
 						<EmptyState v-if="openForTeacher.length === 0" :title="t('pages.tasks.open.emptyState.title')">
 							<template #media> <TasksEmptyStateSvg /></template>
@@ -118,7 +96,6 @@
 
 <script setup lang="ts">
 import TasksOverviewList from "./TasksOverviewList.vue";
-import TasksOverviewPanels from "./TasksOverviewPanels.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import TasksOverviewListItemTeacher from "@/components/tasks/TasksOverviewListItemTeacher.vue";
@@ -167,7 +144,6 @@ const {
 	publishedUnfiltered,
 	drafts,
 	openForTeacher,
-	splitByDueDate,
 	isLoadingFinishedTasks,
 	includeSubstitute,
 	fetchTasks,
@@ -176,11 +152,6 @@ const {
 	sortedCourseFilters,
 	selectedCourseNames,
 } = useTasksOfOverview();
-
-const openTasks = computed(() => splitByDueDate(openForTeacher.value));
-const overdueTasks = computed(() => openTasks.value.overdue);
-const noDueDateTasks = computed(() => openTasks.value.noDueDate);
-const withDueDateTasks = computed(() => openTasks.value.withDueDate);
 
 const countedCourseFilters = computed(() => {
 	const count = countBy(

@@ -57,26 +57,7 @@
 									{{ t("components.molecules.TaskItemTeacher.lessonIsNotPublished") }}
 								</VChip>
 							</template>
-							<template v-if="isStudent">
-								<VChip
-									v-if="task.status?.submitted"
-									:prepend-icon="mdiCheckCircleOutline"
-									size="small"
-									variant="tonal"
-									data-testid="task-submitted-student"
-								>
-									{{ t("pages.room.taskCard.student.label.submitted") }}
-								</VChip>
-								<VChip
-									v-if="isTaskOverdue(task) && !task.status?.submitted"
-									:prepend-icon="mdiClockAlertOutline"
-									size="small"
-									variant="tonal"
-									data-testid="task-overdue-student"
-								>
-									{{ t("pages.room.taskCard.student.label.overdue") }}
-								</VChip>
-							</template>
+							<TaskChipsStudent v-if="isStudent" :task />
 						</div>
 					</div>
 				</VCardText>
@@ -86,11 +67,12 @@
 </template>
 
 <script setup lang="ts">
+import TaskChipsStudent from "@/components/tasks/task-chips/TaskChipsStudent.vue";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { isTaskOverdue, isTaskUnpublished } from "@data-tasks";
-import { mdiCheckCircleOutline, mdiClockAlertOutline, mdiFormatListChecks } from "@icons/material";
+import { mdiClockAlertOutline, mdiFormatListChecks } from "@icons/material";
 import { useI18n } from "vue-i18n";
 
 const { isTeacher, isStudent } = useAppStoreRefs();

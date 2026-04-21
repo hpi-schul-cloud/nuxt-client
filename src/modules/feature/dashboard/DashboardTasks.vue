@@ -1,5 +1,5 @@
 <template>
-	<SvsSuspense :loading="isLoading">
+	<SvsSuspense :loading="isLoadingTasks">
 		<h2 class="mb-0 mt-16">{{ t("common.words.tasks") }}</h2>
 		<template v-if="isTeacher">
 			<DashboardTasksOpen
@@ -39,10 +39,10 @@
 			/>
 
 			<DashboardTasksSection
-				v-if="submittedForStudent.length > 0"
+				v-if="ungradedForStudent.length > 0"
 				data-testid="student-tasks-not-graded"
 				:title="t('pages.tasks.subtitleNotGraded')"
-				:tasks="submittedForStudent"
+				:tasks="ungradedForStudent"
 			/>
 
 			<DashboardTasksSection
@@ -77,9 +77,9 @@ const {
 	gradedForTeacher,
 	ungradedForTeacher,
 	openForStudent,
-	submittedForStudent,
+	ungradedForStudent,
 	gradedForStudent,
-	isLoading,
+	isLoadingTasks,
 } = useTasks({
 	range: {
 		from: { amount: 1, unit: "month" },

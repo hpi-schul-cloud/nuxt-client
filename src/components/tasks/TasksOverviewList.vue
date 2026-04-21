@@ -1,9 +1,5 @@
 <template>
 	<VList role="feed" lines="two">
-		<VListSubheader v-if="title && isListFilled" class="text-subtitle-1 ml-n4 mx-sm-0">
-			{{ title }}
-		</VListSubheader>
-
 		<TransitionGroup class="overflow-hidden" name="anim-tasks" tag="ul">
 			<li v-for="task in tasks" :key="task.id" class="tasks-list-item">
 				<slot :task="task" />
@@ -24,16 +20,14 @@ import { computed } from "vue";
 const props = withDefaults(
 	defineProps<{
 		tasks: TaskResponse[];
-		title?: string;
 		hasPagination?: boolean;
 		isLoadingMoreItems?: boolean;
 	}>(),
-	{ title: undefined, hasPagination: false, isLoadingMoreItems: false }
+	{ hasPagination: false, isLoadingMoreItems: false }
 );
 
 const emit = defineEmits<{ "load-more-tasks": [] }>();
 
-const isListFilled = computed(() => props.tasks.length > 0);
 const showSpinner = computed(() => props.hasPagination && props.isLoadingMoreItems);
 const loadMore = (isIntersecting: boolean) => {
 	if (isIntersecting) emit("load-more-tasks");

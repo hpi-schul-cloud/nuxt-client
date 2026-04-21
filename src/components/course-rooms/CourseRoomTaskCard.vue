@@ -56,12 +56,7 @@
 						</v-icon>
 						{{ chip.name }}
 					</v-chip>
-					<ChipTimeRemaining
-						v-if="roles.STUDENT === userRole && isCloseToDueDate && !isSubmitted"
-						type="warning"
-						:due-date="task.dueDate"
-						:shorten-unit="$vuetify.display.xs"
-					/>
+					<TaskChipsStudent :task="task" />
 				</div>
 			</div>
 		</v-card-text>
@@ -82,29 +77,27 @@
 </template>
 
 <script setup lang="ts">
+import TaskChipsStudent from "@/components/tasks/task-chips/TaskChipsStudent.vue";
 import { formatUtc, isDueWithin24h } from "@/utils/date-time.utils";
-import { ImportUserResponseRoleNames as Roles } from "@api-server";
+import { ImportUserResponseRoleNames as Roles, TaskResponse } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
 import {
-	mdiCheckCircleOutline,
 	mdiClockAlertOutline,
 	mdiContentCopy,
 	mdiFormatListChecks,
 	mdiPencilOutline,
 	mdiShareVariantOutline,
-	mdiTextBoxCheckOutline,
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 } from "@icons/material";
-import { ChipTimeRemaining } from "@ui-chip";
 import { RoomDotMenu } from "@ui-room-details";
-import { computed, ref } from "vue";
+import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	task: {
-		type: Object,
+		type: Object as PropType<TaskResponse>,
 		required: true,
 		validator: (task) => ["createdAt", "id", "name"].every((key) => key in (task as Record<string, unknown>)),
 	},
@@ -147,9 +140,7 @@ const isFinished = computed(() => props.task.status.isFinished);
 
 const isCloseToDueDate = computed(() => props.task.dueDate && isDueWithin24h(props.task.dueDate));
 
-const isGraded = computed(() => props.task.status.graded);
 const isSubmitted = computed(() => props.task.status.submitted);
-const isSubmittedNotGraded = computed(() => props.task.status.submitted && !props.task.status.graded);
 const isPlanned = computed(() => {
 	const scheduledDate = props.task.availableDate;
 	const delay = 5 * 1000;
@@ -215,40 +206,6 @@ const chipItems = computed(() => {
 				name: t(`pages.room.taskCard.teacher.label.overdue`),
 				class: "overdue",
 				testid: `room-task-card-chip-overdue-${props.taskCardIndex}`,
-			});
-		}
-	}
-
-	if (props.userRole === Roles.STUDENT) {
-		if (isSubmittedNotGraded.value) {
-			roleBasedChips[Roles.STUDENT].push({
-				icon: mdiCheckCircleOutline,
-				name: t(`pages.room.taskCard.student.label.submitted`),
-				class: "submitted",
-				testid: `room-task-card-chip-submitted-${props.taskCardIndex}`,
-			});
-		}
-
-		if (isGraded.value) {
-			roleBasedChips[Roles.STUDENT].push({
-				icon: mdiCheckCircleOutline,
-				name: t(`pages.room.taskCard.student.label.submitted`),
-				class: "submitted",
-				testid: `room-task-card-chip-submitted-${props.taskCardIndex}`,
-			});
-			roleBasedChips[Roles.STUDENT].push({
-				icon: mdiTextBoxCheckOutline,
-				name: t(`pages.room.taskCard.label.graded`),
-				class: "graded",
-				testid: `room-task-card-chip-graded-${props.taskCardIndex}`,
-			});
-		}
-
-		if (isOverDue.value && !isSubmitted.value) {
-			roleBasedChips[Roles.STUDENT].push({
-				icon: mdiClockAlertOutline,
-				name: t(`pages.room.taskCard.student.label.overdue`),
-				class: "overdue",
 			});
 		}
 	}
