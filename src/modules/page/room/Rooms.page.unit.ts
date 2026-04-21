@@ -10,7 +10,7 @@ import {
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
 import { Permission, ShareTokenBodyParamsParentType } from "@api-server";
-import { ImportCardDialog } from "@feature-board";
+import { ImportCardDialog } from "@feature-import";
 import { RoomGrid } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";

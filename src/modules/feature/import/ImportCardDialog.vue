@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { useCardDialogData } from "./card-dialog-composable";
+import { useCardDialogData } from "../board/card/card-dialog-composable";
 import { RoomItem } from "@/types/room/Room";
 import { ShareTokenInfoResponse } from "@api-server";
 import { useRoomStore } from "@data-room";
