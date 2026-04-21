@@ -1,17 +1,35 @@
 import CardHostDetailView from "./CardHostDetailView.vue";
 import CardTitle from "./CardTitle.vue";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils";
+import { mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { CardResponse } from "@api-server";
+import { BoardResponseAllowedOperations, CardResponse } from "@api-server";
+import { useCourseBoardEditMode, useSharedEditMode } from "@data-board";
+import { createTestingPinia } from "@pinia/testing";
+import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { shallowMount, type VueWrapper } from "@vue/test-utils";
-import { nextTick } from "vue";
+import { Mocked } from "vitest";
+import { computed, nextTick, ref } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
 
 const CARD_WITH_ELEMENTS: CardResponse = cardResponseFactory.build({
 	elements: [fileElementResponseFactory.build()],
 });
 
+vi.mock("@util-board");
 vi.mock("@data-board/BoardPermissions.composable");
+vi.mock("@data-board/edit-mode.composable");
+vi.mock("@data-board/cardActions/cardRestApi.composable");
+
+vi.mock("@data-board/cardActions/cardRestApi.composable");
+vi.mocked(useCardRestApi).mockReturnValue(mockComposable(useCardRestApi));
+
+vi.mock("@data-board/cardActions/cardSocketApi.composable");
+vi.mocked(useCardSocketApi).mockReturnValue(mockComposable(useCardSocketApi));
 
 interface CardHostDetailViewExposed {
 	isEditMode: { value: boolean };
@@ -23,10 +41,30 @@ interface CardHostDetailViewExposed {
 const getVm = (wrapper: VueWrapper): CardHostDetailViewExposed => wrapper.vm as unknown as CardHostDetailViewExposed;
 
 describe("CardHostDetailView", () => {
-	const setup = (props: ComponentProps<typeof CardHostDetailView>) => {
+	const setup = (
+		props: ComponentProps<typeof CardHostDetailView>,
+
+		allowedOperations?: Partial<BoardResponseAllowedOperations>
+	) => {
 		const wrapper = shallowMount(CardHostDetailView, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [
+					createTestingPinia({
+						initialState: {
+							cardStore: {
+								cards: {},
+							},
+							boardStore: {
+								board: {
+									allowedOperations: allowedOperations,
+								},
+							},
+						},
+						stubActions: false,
+					}),
+					createTestingVuetify(),
+					createTestingI18n(),
+				],
 			},
 			propsData: props,
 		});
@@ -35,6 +73,28 @@ describe("CardHostDetailView", () => {
 			wrapper,
 		};
 	};
+
+	let useSharedFileSelectMock: Mocked<ReturnType<typeof useSharedFileSelect>>;
+
+	beforeEach(() => {
+		vi.mocked(useSharedEditMode).mockReturnValue(
+			mockComposable(useSharedEditMode, {
+				editModeId: ref(undefined),
+				isInEditMode: computed(() => true),
+			})
+		);
+		vi.mocked(useCourseBoardEditMode).mockReturnValue(
+			mockComposable(useCourseBoardEditMode, {
+				isEditMode: computed(() => true),
+			})
+		);
+		vi.mocked(useSharedLastCreatedElement).mockReturnValue(mockComposable(useSharedLastCreatedElement));
+
+		useSharedFileSelectMock = mockComposable(useSharedFileSelect, {
+			isFileSelectOnMountEnabled: ref(true),
+		});
+		vi.mocked(useSharedFileSelect).mockReturnValue(useSharedFileSelectMock);
+	});
 
 	afterEach(() => {
 		vi.clearAllMocks();
@@ -54,12 +114,15 @@ describe("CardHostDetailView", () => {
 
 	describe("when edit button is clicked", () => {
 		it("should toggle edit mode", async () => {
-			const { wrapper } = setup({
-				card: CARD_WITH_ELEMENTS,
-				isOpen: true,
-				columnIndex: 0,
-				rowIndex: 1,
-			});
+			const { wrapper } = setup(
+				{
+					card: CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				},
+				{ deleteCard: true }
+			);
 
 			const button = wrapper.get("[data-testid='toolbar-edit-button']");
 			await button.trigger("click");
