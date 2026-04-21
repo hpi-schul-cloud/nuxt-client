@@ -47,7 +47,7 @@
 							class="bg-white pt-1"
 							icon
 							size="36"
-							@click.stop.prevent="() => onOpenCard()"
+							@click.stop.prevent="() => onOpenDetailView()"
 							@dblclick.stop.prevent="() => {}"
 							@keyup.enter.space.stop
 							@keydown.enter.space.stop
@@ -255,10 +255,6 @@ const onEndEditMode = async () => {
 	});
 };
 
-const onCloseDetailView = () => {
-	router.push(`/boards/${boardStore.board?.id ?? ""}`);
-};
-
 const onMoveContentElementDown = async ({ payload: elementId, elementIndex }: ElementMove) =>
 	await cardStore.moveElementRequest(props.cardId, elementId, elementIndex, +1);
 
@@ -294,7 +290,14 @@ const { run: duplicateCard, isRunning: isDuplicating } = useSafeTaskRunner(async
 	await cardStore.duplicateCard({ cardId: props.cardId });
 });
 
-const onOpenCard = () => {
+const onCloseDetailView = () => {
+	const boardId = boardStore.board?.id;
+	if (boardId) {
+		router.replace(`/boards/${boardId}`);
+	}
+};
+
+const onOpenDetailView = () => {
 	const boardId = boardStore.board?.id;
 	if (boardId) {
 		router.push(`/boards/${boardId}/cards/${props.cardId}`);
