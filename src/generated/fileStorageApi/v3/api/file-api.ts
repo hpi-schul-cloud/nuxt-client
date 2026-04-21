@@ -583,6 +583,66 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Get a list of deleted file meta data by parent entityId.
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
+         * @param {string} parentId 
+         * @param {FileRecordParentType} parentType 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listDeleted: async (storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'storageLocationId' is not null or undefined
+            assertParamExists('listDeleted', 'storageLocationId', storageLocationId)
+            // verify required parameter 'storageLocation' is not null or undefined
+            assertParamExists('listDeleted', 'storageLocation', storageLocation)
+            // verify required parameter 'parentId' is not null or undefined
+            assertParamExists('listDeleted', 'parentId', parentId)
+            // verify required parameter 'parentType' is not null or undefined
+            assertParamExists('listDeleted', 'parentType', parentType)
+            const localVarPath = `/file/list-deleted/{storageLocation}/{storageLocationId}/{parentType}/{parentId}`
+                .replace(`{${"storageLocationId"}}`, encodeURIComponent(String(storageLocationId)))
+                .replace(`{${"storageLocation"}}`, encodeURIComponent(String(storageLocation)))
+                .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)))
+                .replace(`{${"parentType"}}`, encodeURIComponent(String(parentType)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Rename a single file.
          * @param {string} fileRecordId 
          * @param {RenameFileParams} renameFileParams 
@@ -707,6 +767,46 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Restore several files that are marked for deletion.
+         * @param {MultiFileParams} multiFileParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        restoreFiles: async (multiFileParams: MultiFileParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'multiFileParams' is not null or undefined
+            assertParamExists('restoreFiles', 'multiFileParams', multiFileParams)
+            const localVarPath = `/file/restore`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(multiFileParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1047,6 +1147,22 @@ export const FileApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get a list of deleted file meta data by parent entityId.
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
+         * @param {string} parentId 
+         * @param {FileRecordParentType} parentType 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listDeleted(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listDeleted(storageLocationId, storageLocation, parentId, parentType, skip, limit, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Rename a single file.
          * @param {string} fileRecordId 
          * @param {RenameFileParams} renameFileParams 
@@ -1080,6 +1196,17 @@ export const FileApiFp = function(configuration?: Configuration) {
          */
         async restoreFile(fileRecordId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.restoreFile(fileRecordId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Restore several files that are marked for deletion.
+         * @param {MultiFileParams} multiFileParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async restoreFiles(multiFileParams: MultiFileParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.restoreFiles(multiFileParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1272,6 +1399,21 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Get a list of deleted file meta data by parent entityId.
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
+         * @param {string} parentId 
+         * @param {FileRecordParentType} parentType 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listDeleted(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, skip?: number, limit?: number, options?: any): AxiosPromise<FileRecordListResponse> {
+            return localVarFp.listDeleted(storageLocationId, storageLocation, parentId, parentType, skip, limit, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Rename a single file.
          * @param {string} fileRecordId 
          * @param {RenameFileParams} renameFileParams 
@@ -1303,6 +1445,16 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
          */
         restoreFile(fileRecordId: string, options?: any): AxiosPromise<FileRecordResponse> {
             return localVarFp.restoreFile(fileRecordId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Restore several files that are marked for deletion.
+         * @param {MultiFileParams} multiFileParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        restoreFiles(multiFileParams: MultiFileParams, options?: any): AxiosPromise<FileRecordListResponse> {
+            return localVarFp.restoreFiles(multiFileParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1490,6 +1642,21 @@ export interface FileApiInterface {
 
     /**
      * 
+     * @summary Get a list of deleted file meta data by parent entityId.
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
+     * @param {string} parentId 
+     * @param {FileRecordParentType} parentType 
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApiInterface
+     */
+    listDeleted(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, skip?: number, limit?: number, options?: any): AxiosPromise<FileRecordListResponse>;
+
+    /**
+     * 
      * @summary Rename a single file.
      * @param {string} fileRecordId 
      * @param {RenameFileParams} renameFileParams 
@@ -1521,6 +1688,16 @@ export interface FileApiInterface {
      * @memberof FileApiInterface
      */
     restoreFile(fileRecordId: string, options?: any): AxiosPromise<FileRecordResponse>;
+
+    /**
+     * 
+     * @summary Restore several files that are marked for deletion.
+     * @param {MultiFileParams} multiFileParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApiInterface
+     */
+    restoreFiles(multiFileParams: MultiFileParams, options?: any): AxiosPromise<FileRecordListResponse>;
 
     /**
      * 
@@ -1730,6 +1907,23 @@ export class FileApi extends BaseAPI implements FileApiInterface {
 
     /**
      * 
+     * @summary Get a list of deleted file meta data by parent entityId.
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
+     * @param {string} parentId 
+     * @param {FileRecordParentType} parentType 
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApi
+     */
+    public listDeleted(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, skip?: number, limit?: number, options?: any) {
+        return FileApiFp(this.configuration).listDeleted(storageLocationId, storageLocation, parentId, parentType, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Rename a single file.
      * @param {string} fileRecordId 
      * @param {RenameFileParams} renameFileParams 
@@ -1766,6 +1960,18 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      */
     public restoreFile(fileRecordId: string, options?: any) {
         return FileApiFp(this.configuration).restoreFile(fileRecordId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Restore several files that are marked for deletion.
+     * @param {MultiFileParams} multiFileParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApi
+     */
+    public restoreFiles(multiFileParams: MultiFileParams, options?: any) {
+        return FileApiFp(this.configuration).restoreFiles(multiFileParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
