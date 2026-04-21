@@ -57,7 +57,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useSystem } from "@data-system";
 import { useUserLoginMigration } from "@data-user-login-migration";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { userLoginMigration, fetchLatestUserLoginMigrationForSchool } = useUserLoginMigration();
@@ -68,15 +68,15 @@ const { t } = useI18n();
 const pageTitle = buildPageTitle(t("pages.userMigration.title"));
 useTitle(pageTitle);
 
-const migrationDescription: ComputedRef<string> = computed(() =>
+const migrationDescription = computed(() =>
 	userLoginMigration.value?.mandatorySince
 		? "pages.userMigration.description.firstParagraph.fromSourceMandatory"
 		: "pages.userMigration.description.firstParagraph.fromSource"
 );
 
-const canSkipMigration: ComputedRef<boolean> = computed(() => !userLoginMigration.value?.mandatorySince);
+const canSkipMigration = computed(() => !userLoginMigration.value?.mandatorySince);
 
-const isLoading: Ref<boolean> = ref(true);
+const isLoading = ref(true);
 
 onMounted(async () => {
 	await fetchLatestUserLoginMigrationForSchool();

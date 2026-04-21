@@ -28,7 +28,7 @@
 </template>
 <script setup lang="ts">
 import { useSystem } from "@data-system";
-import { computed, ComputedRef } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { systemId = "" } = defineProps<{ systemId?: string }>();
@@ -45,5 +45,5 @@ const infoBoxTextListItems = [
 	t("pages.classMembers.infoBox.text.listItem.last"),
 ];
 
-const hasSystem: ComputedRef<boolean> = computed(() => !!system.value);
+const hasSystem = computed(() => !!system.value);
 </script>
