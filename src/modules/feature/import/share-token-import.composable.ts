@@ -9,48 +9,35 @@ export type DestinationItem = { id: string; name: string };
 
 export const useShareTokenImport = () => {
 	const shareApi = ShareTokenApiFactory(undefined, "/v3", $axios);
-	const lookupShareTokenCall = useSafeAxiosTask();
-	const importShareTokenCall = useSafeAxiosTask();
+
+	const { execute, isRunning } = useSafeAxiosTask();
 
 	const { t } = useI18n();
 
 	const validateShareToken = async (token: string) => {
-		const { result, success } = await lookupShareTokenCall.execute(
+		const outcome = await execute(
 			() => shareApi.shareTokenControllerLookupShareToken(token),
-			t("components.molecules.import.options.failure.backendError", {
-				name: t("common.labels.link"),
-			})
+			t("components.molecules.import.options.failure.backendError", { name: t("common.labels.link") })
 		);
-
-		if (success) {
-			return result.data;
-		}
+		return { ...outcome, validationResult: outcome.result?.data };
 	};
 
 	const importShareToken = async (
 		shareTokenInfo: ShareTokenInfoResponse,
 		params: { newName: string; destinationId?: string }
 	) => {
-		const { result, success, error } = await importShareTokenCall.execute(
+		const outcome = await execute(
 			() => shareApi.shareTokenControllerImportShareToken(shareTokenInfo.token, params),
 			t("common.notifications.errors.notImported", {
 				type: t(getMessageKeyForImportFailure(shareTokenInfo.parentType)),
 			})
 		);
 
-		if (success && result?.data.id !== undefined) {
-			notifySuccess(
-				t("components.molecules.import.options.success", {
-					name: params.newName,
-				})
-			);
-			const sanitizedId = result.data.id.replace(/[^a-z\d]/g, "");
-
-			return {
-				...result.data,
-				id: sanitizedId,
-			};
+		if (outcome.success) {
+			notifySuccess(t("components.molecules.import.options.success", { name: params.newName }));
 		}
+
+		return { ...outcome, importResult: outcome.result?.data };
 	};
 
 	const getMessageKeyForImportFailure = (parentType: ShareTokenInfoResponse["parentType"]) => {
@@ -75,5 +62,6 @@ export const useShareTokenImport = () => {
 	return {
 		validateShareToken,
 		importShareToken,
+		isRunning,
 	};
 };

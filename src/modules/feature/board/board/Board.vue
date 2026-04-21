@@ -96,7 +96,7 @@
 					:has-relocate-board-content-permission="allowedOperations?.relocateContent ?? false"
 					:card-id="moveCardOptions.cardId"
 				/>
-				<CopyInfoDialog
+				<CopyDialog
 					:is-open="isCopyDialogOpen"
 					:copy-item-type="copyItemType"
 					@confirm="onConfirmCopy"
@@ -151,7 +151,7 @@ import {
 import { useEnvConfig } from "@data-env";
 import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog } from "@feature-collabora";
-import { CopyInfoDialog, useCopyFlow } from "@feature-copy";
+import { CopyDialog, useCopyFlow } from "@feature-copy";
 import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";

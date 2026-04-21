@@ -100,8 +100,8 @@
 		@drag-from-group="dragFromGroup"
 	/>
 	<ImportDialog
-		v-if="showImportDialog"
-		:is-dialog-open="showImportDialog"
+		v-if="isImportDialogOpen"
+		:is-dialog-open="isImportDialogOpen"
 		:share-token-info="shareTokenInfo!"
 		:available-destinations="availableDestinations"
 		destination-type="course"
@@ -206,7 +206,7 @@ const availableDestinations = computed(() =>
 const { validateShareToken, importShareToken } = useShareTokenImport();
 const importAction = useAwaitableAction<{ newName: string; destinationId?: string }>();
 
-const showImportDialog = computed(
+const isImportDialogOpen = computed(
 	() =>
 		importAction.isActive.value &&
 		!!shareTokenInfo.value &&
@@ -219,7 +219,7 @@ const onCancelImport = () => {
 };
 
 const executeImport = async (token: string) => {
-	const validationResult = await validateShareToken(token);
+	const { validationResult } = await validateShareToken(token);
 
 	if (!validationResult) {
 		onCancelImport();
@@ -231,7 +231,7 @@ const executeImport = async (token: string) => {
 	const { submitted, data } = await importAction.start();
 	if (!submitted) return;
 
-	const importResult = await withLoadingState(
+	const { importResult } = await withLoadingState(
 		() => importShareToken(validationResult, data),
 		t("components.molecules.import.options.loadingMessage")
 	);

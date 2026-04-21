@@ -2,7 +2,7 @@ import { CopyParamsTypeEnum } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useAwaitableAction } from "@/composables/awaitable-action.composable";
 import { $axios } from "@/utils/api";
-import { BoardApiFactory, CourseRoomsApiFactory, TaskApiFactory } from "@api-server";
+import { BoardApiFactory, CourseRoomsApiFactory, RoomApiFactory, TaskApiFactory } from "@api-server";
 import { notifySuccess, useLoadingStore } from "@data-app";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -20,6 +20,7 @@ export const useCopyFlow = () => {
 	const courseRoomApi = CourseRoomsApiFactory(undefined, "/v3", $axios);
 	const taskApi = TaskApiFactory(undefined, "/v3", $axios);
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
+	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 
 	const confirm = (type: CopyParamsTypeEnum) => {
 		copyItemType.value = type;
@@ -106,6 +107,23 @@ export const useCopyFlow = () => {
 		}
 	};
 
+	const executeCopyRoom = async (roomId: string) => {
+		const { submitted } = await confirm(CopyParamsTypeEnum.Room);
+		if (!submitted) return;
+
+		const { result, success } = await withCopyLoading(() =>
+			execute(
+				() => roomApi.roomControllerCopyRoom(roomId),
+				t("common.notifications.errors.notDuplicated", { type: t("common.labels.room") })
+			)
+		);
+
+		if (success && result?.data.id !== undefined) {
+			notifySuccess(t("components.molecules.copyResult.board.successfullyCopied"));
+			return result.data.id;
+		}
+	};
+
 	return {
 		isDialogOpen,
 		copyItemType,
@@ -115,5 +133,6 @@ export const useCopyFlow = () => {
 		executeCopyTask,
 		executeCopyLesson,
 		executeCopyBoard,
+		executeCopyRoom,
 	};
 };

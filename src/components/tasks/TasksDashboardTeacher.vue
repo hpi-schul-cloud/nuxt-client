@@ -62,7 +62,7 @@
 			</v-window-item>
 		</v-window>
 		<share-modal :type="ShareTokenBodyParamsParentType.TASKS" />
-		<CopyInfoDialog
+		<CopyDialog
 			:is-open="isCopyDialogOpen"
 			:copy-item-type="copyItemType"
 			@confirm="onConfirmCopy"
@@ -81,7 +81,7 @@ import TasksModule from "@/store/tasks";
 import { FINISHED_TASKS_MODULE_KEY, injectStrict, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
 import { ShareTokenBodyParamsParentType } from "@api-server";
 import { useEnvConfig } from "@data-env";
-import { CopyInfoDialog, useCopyFlow } from "@feature-copy";
+import { CopyDialog, useCopyFlow } from "@feature-copy";
 import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";

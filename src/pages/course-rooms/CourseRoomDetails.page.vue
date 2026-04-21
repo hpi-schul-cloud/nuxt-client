@@ -58,7 +58,7 @@
 			@copy-board-element="onCopyRequested"
 		/>
 		<ShareModal :type="ShareTokenBodyParamsParentType.COURSES" />
-		<CopyInfoDialog
+		<CopyDialog
 			:is-open="isCopyDialogOpen"
 			:copy-item-type="copyItemType"
 			@confirm="onConfirmCopy"
@@ -106,7 +106,7 @@ import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { CopyParamsTypeEnum } from "@feature-copy";
-import { CopyInfoDialog, useCopyFlow } from "@feature-copy";
+import { CopyDialog, useCopyFlow } from "@feature-copy";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
 import {
 	mdiAccountGroupOutline,

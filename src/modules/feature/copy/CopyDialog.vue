@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { CopyParamsTypeEnum } from "@/store/copy";
+import { CopyParamsTypeEnum } from "./types";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { computed } from "vue";
@@ -59,6 +59,7 @@ const typeLabels: Partial<Record<CopyParamsTypeEnum, string>> = {
 	[CopyParamsTypeEnum.ColumnBoard]: "feature-copy.copyInfo.type.board",
 	[CopyParamsTypeEnum.Lesson]: "feature-copy.copyInfo.type.lesson",
 	[CopyParamsTypeEnum.Task]: "feature-copy.copyInfo.type.task",
+	[CopyParamsTypeEnum.Room]: "feature-copy.copyInfo.type.room",
 };
 
 const ofTypeLabels: Partial<Record<CopyParamsTypeEnum, string>> = {
@@ -66,6 +67,7 @@ const ofTypeLabels: Partial<Record<CopyParamsTypeEnum, string>> = {
 	[CopyParamsTypeEnum.ColumnBoard]: "feature-copy.copyInfo.type.ofBoard",
 	[CopyParamsTypeEnum.Lesson]: "feature-copy.copyInfo.type.ofLesson",
 	[CopyParamsTypeEnum.Task]: "feature-copy.copyInfo.type.ofTask",
+	[CopyParamsTypeEnum.Room]: "feature-copy.copyInfo.type.ofRoom",
 };
 
 const messagesWithType = new Set(["membersPermissions"]);
@@ -83,6 +85,7 @@ const messageMappings: Record<CopyParamsTypeEnum, (keyof typeof messageKeys)[]> 
 	[CopyParamsTypeEnum.ColumnBoard]: ["etherpad", "whiteboard", "protectedExternalTool"],
 	[CopyParamsTypeEnum.Lesson]: ["etherpad", "geogebra"],
 	[CopyParamsTypeEnum.Task]: [],
+	[CopyParamsTypeEnum.Room]: ["membersPermissions", "etherpad", "whiteboard", "protectedExternalTool"],
 };
 
 const toKebabCase = (str: string): string => str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();

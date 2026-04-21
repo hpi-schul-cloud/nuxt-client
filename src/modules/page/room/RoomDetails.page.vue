@@ -31,7 +31,12 @@
 			@select="onCreateBoard"
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
-		<RoomCopyFlow v-model="hasRoomCopyStarted" :room="room" @copy:success="onCopySuccess" @copy:ended="onCopyEnded" />
+		<CopyDialog
+			:is-open="isCopyDialogOpen"
+			:copy-item-type="copyItemType"
+			@confirm="onConfirmCopy"
+			@cancel="onCancelCopy"
+		/>
 		<ShareModal :type="ShareTokenParentType.ROOM" />
 	</DefaultWireframe>
 </template>
@@ -46,7 +51,9 @@ import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
 import { useRoomAllowedOperations, useRoomDetailsStore, useRoomStore } from "@data-room";
-import { RoomContentGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
+import { useCopyFlow } from "@feature-copy";
+import { CopyDialog } from "@feature-copy";
+import { RoomContentGrid, RoomMenu } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
@@ -132,25 +139,18 @@ const onManageMembers = () => {
 	});
 };
 
-const hasRoomCopyStarted = ref(false);
+const copyFlow = useCopyFlow();
+const { isDialogOpen: isCopyDialogOpen, copyItemType, onConfirm: onConfirmCopy, onCancel: onCancelCopy } = copyFlow;
 
-const onCopy = () => {
-	if (allowedOperations.value.copyRoom) {
-		hasRoomCopyStarted.value = true;
+const onCopy = async () => {
+	if (!allowedOperations.value.copyRoom) {
+		return;
 	}
-};
 
-const onCopySuccess = (copyId: string) => {
-	router.push({
-		name: "room-details",
-		params: {
-			id: copyId,
-		},
-	});
-};
-
-const onCopyEnded = () => {
-	hasRoomCopyStarted.value = false;
+	const copyId = await copyFlow.executeCopyRoom(room.value.id);
+	if (copyId) {
+		await router.replace({ name: "room-details", params: { id: copyId } });
+	}
 };
 
 const onShare = () => {
