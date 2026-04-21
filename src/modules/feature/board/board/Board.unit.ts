@@ -3,7 +3,6 @@ import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import { useCopy } from "@/composables/copy";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -63,23 +62,16 @@ const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
 vi.mock("@data-board/BoardPageInformation.composable");
 const mockedUseSharedBoardPageInformation = vi.mocked(useSharedBoardPageInformation);
 
-vi.mock("@/composables/copy");
-const mockUseCopy = vi.mocked(useCopy);
-
 vi.mock("@data-board/boardInactivity.composable");
 const mockUseBoardInactivity = <Mock>useBoardInactivity;
 
 describe("Board", () => {
-	let mockedCopyCalls: Mocked<ReturnType<typeof useCopy>>;
 	let router: RouterMock;
 	let mockedUsePageInactivity: Mocked<ReturnType<typeof useBoardInactivity>>;
 
 	beforeEach(() => {
 		vi.useFakeTimers();
 		vi.clearAllMocks();
-
-		mockedCopyCalls = mockComposable(useCopy);
-		mockUseCopy.mockReturnValue(mockedCopyCalls);
 
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
@@ -881,7 +873,9 @@ describe("Board", () => {
 				});
 				await boardHeader.vm.$emit("copy:board");
 
-				expect(mockedCopyCalls.copy).toHaveBeenCalled();
+				// FIX test
+				// expect(mockedCopyCalls.copy).toHaveBeenCalled();
+				expect(false).toBe(true);
 			});
 
 			it("should redirect to the board copy", async () => {

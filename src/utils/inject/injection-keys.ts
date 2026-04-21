@@ -1,5 +1,4 @@
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
-import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import FilePathsModule from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
@@ -22,7 +21,6 @@ export const GROUP_MODULE_KEY: InjectionKey<GroupModule> = Symbol("groupModule")
 export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> = Symbol("schoolsModule");
 export const COMMON_CARTRIDGE_EXPORT_MODULE_KEY: InjectionKey<CommonCartridgeExportModule> =
 	Symbol("commonCartridgeExportModule");
-export const COPY_MODULE_KEY: InjectionKey<CopyModule> = Symbol("copyModule");
 export const SHARE_MODULE_KEY: InjectionKey<ShareModule> = Symbol("shareModule");
 
 // injection keys for vuex modules can not be symbols due to @module-decorator restrictions
