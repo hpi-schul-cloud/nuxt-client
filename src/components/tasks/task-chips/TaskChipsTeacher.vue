@@ -2,7 +2,7 @@
 	<div class="d-flex flex-row flex-wrap" style="gap: 6px">
 		<template v-if="!isTaskDraft(task)">
 			<InfoChip
-				v-if="task.status?.graded === task.status?.maxSubmissions"
+				v-if="task.status?.graded > 0 && task.status?.submitted > 0 && task.status?.graded === task.status?.submitted"
 				:icon="mdiCheckCircleOutline"
 				size="small"
 				variant="tonal"
@@ -16,12 +16,7 @@
 				{{ t("pages.room.taskCard.teacher.label.submitted") }}
 			</InfoChip>
 
-			<InfoChip
-				v-if="task.status?.maxSubmissions && task.status.submitted > 0"
-				size="small"
-				variant="tonal"
-				data-testid="task-graded-teacher"
-			>
+			<InfoChip v-if="task.status.submitted > 0" size="small" variant="tonal" data-testid="task-graded-teacher">
 				{{ task.status.graded }}/{{ task.status.submitted }}
 				{{ t("pages.room.taskCard.label.graded") }}
 			</InfoChip>
