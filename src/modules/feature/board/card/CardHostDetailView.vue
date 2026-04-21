@@ -49,7 +49,7 @@
 								@move-up:element="onMoveElementUp"
 								@move-keyboard:element="onMoveElementKeyboard"
 							/>
-							<CardAddElementMenu @add-element="onAddElement" />
+							<CardAddElementMenu v-if="allowedOperations?.deleteCard" @add-element="onAddElement" />
 						</CardHostInteractionHandler>
 					</div>
 				</v-card-text>
