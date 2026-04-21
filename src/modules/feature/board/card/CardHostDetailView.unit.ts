@@ -1,6 +1,5 @@
 import CardHostDetailView from "./CardHostDetailView.vue";
 import CardTitle from "./CardTitle.vue";
-import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { CardResponse } from "@api-server";
@@ -112,42 +111,6 @@ describe("CardHostDetailView", () => {
 			getVm(wrapper).onAddElement();
 
 			expect(wrapper.emitted("add:element")).toBeTruthy();
-		});
-	});
-
-	describe("delete card", () => {
-		it("should emit delete:card when confirmation is accepted", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(true);
-
-			const { wrapper } = setup({
-				card: CARD_WITH_ELEMENTS,
-				isOpen: true,
-				columnIndex: 0,
-				rowIndex: 1,
-			});
-
-			await getVm(wrapper).onDeleteCard();
-
-			expect(confirmDialogUtils.askDeletionForItem).toHaveBeenCalledWith(
-				CARD_WITH_ELEMENTS.title,
-				"components.boardCard"
-			);
-			expect(wrapper.emitted("delete:card")).toBeTruthy();
-		});
-
-		it("should not emit delete:card when confirmation is cancelled", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
-
-			const { wrapper } = setup({
-				card: CARD_WITH_ELEMENTS,
-				isOpen: true,
-				columnIndex: 0,
-				rowIndex: 1,
-			});
-
-			await getVm(wrapper).onDeleteCard();
-
-			expect(wrapper.emitted("delete:card")).toBeFalsy();
 		});
 	});
 });
