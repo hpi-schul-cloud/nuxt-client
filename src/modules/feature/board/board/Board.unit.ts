@@ -169,6 +169,7 @@ describe("Board", () => {
 		isReadersCanEdit?: boolean;
 		envs?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
+		targetCardId?: string;
 	}) => {
 		const { copyModule, shareModule, courseRoomDetailsModule, copyResultId, schoolExternalToolsModule } =
 			setupProvideModules();
@@ -216,7 +217,7 @@ describe("Board", () => {
 				},
 				renderStubDefaultSlot: true,
 			},
-			propsData: { boardId: board.id },
+			propsData: { boardId: board.id, targetCardId: options?.targetCardId },
 		});
 
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
@@ -375,6 +376,17 @@ describe("Board", () => {
 
 			expect(boardColumnComponents[0].props("columnCount")).toBe(2);
 			expect(boardColumnComponents[1].props("columnCount")).toBe(2);
+		});
+
+		it("should propagate targetCard to BoardColumn components", () => {
+			const { wrapper } = setup({ targetCardId: "card-12345", numberOfColumns: 2 });
+
+			const boardColumnComponents = wrapper.findAllComponents({
+				name: "BoardColumn",
+			});
+
+			expect(boardColumnComponents[0].props("targetCardId")).toBe("card-12345");
+			expect(boardColumnComponents[1].props("targetCardId")).toBe("card-12345");
 		});
 	});
 
