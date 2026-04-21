@@ -1,13 +1,6 @@
 <template>
 	<div>
-		<VDialog
-			:model-value="isOpen"
-			:fullscreen="true"
-			:scrim="true"
-			:width="700"
-			scrollable
-			@keydown.escape="onDialogClose"
-		>
+		<VDialog :model-value="isOpen" fullscreen scrollable @keydown.escape="onDialogClose">
 			<v-card>
 				<div class="toolbar-fixed-offset">
 					<v-toolbar class="toolbar-position" color="white">
