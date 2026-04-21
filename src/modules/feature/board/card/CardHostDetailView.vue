@@ -27,6 +27,7 @@
 								:value="card.title"
 								scope="card"
 								:is-focused="true"
+								:has-edit-permission="allowedOperations?.updateCardTitle"
 								@update:value="onUpdateCardTitle"
 								@enter="onEnterTitle"
 							/>
@@ -57,6 +58,7 @@ import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import type { ElementMove } from "@/types/board/DragAndDrop";
 import type { CardResponse } from "@api-server";
+import { useBoardAllowedOperations } from "@data-board";
 import { mdiClose } from "@icons/material";
 import { ref } from "vue";
 
@@ -81,6 +83,7 @@ const emit = defineEmits<{
 }>();
 
 const isEditMode = ref(false);
+const { allowedOperations } = useBoardAllowedOperations();
 
 const onToggleEdit = () => {
 	isEditMode.value = !isEditMode.value;
