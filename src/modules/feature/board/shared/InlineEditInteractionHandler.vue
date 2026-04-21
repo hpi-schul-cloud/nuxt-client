@@ -44,8 +44,10 @@ const isListItem = (target: HTMLElement | SVGElement): boolean => {
 
 const isAllowedButton = (target: HTMLElement | SVGElement): boolean => {
 	if (target instanceof SVGElement) return false;
+	const button = target.closest("button");
+	if (!button) return false;
 
-	return target.closest("button")?.className?.includes("allowed-button") || false;
+	return button.className?.includes("keep-inline-edit-mode");
 };
 
 const isAllowedTarget = (event: Event): boolean => {

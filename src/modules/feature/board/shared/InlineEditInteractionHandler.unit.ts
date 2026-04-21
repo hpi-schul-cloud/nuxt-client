@@ -106,10 +106,10 @@ describe("InlineEditInteractionHandler", () => {
 				expect(emitted["end-edit-mode"]).toBeUndefined();
 			});
 
-			it("should not emit 'end-edit-mode' if the target is button with allowed-button class", () => {
+			it("should not emit 'end-edit-mode' if the target is button with keep-inline-edit-mode class", () => {
 				const event = document.createEvent("MouseEvent");
 				const buttonElement = document.createElement("button");
-				buttonElement.classList.add("allowed-button");
+				buttonElement.classList.add("keep-inline-edit-mode");
 
 				Object.defineProperty(event, "target", {
 					value: buttonElement,
