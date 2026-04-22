@@ -56,8 +56,7 @@ describe("FolderTrash.vue", () => {
 		it("should show the loading skeleton", () => {
 			const { wrapper, fileTrashMock } = setupWrapper();
 
-			// fetchDeletedFiles never resolves → isLoading stays true
-			fileTrashMock.fetchDeletedFiles.mockReturnValueOnce(new Promise(() => {}));
+			fileTrashMock.fetchDeletedFiles.mockReturnValueOnce(new Promise(vi.fn()));
 
 			const loadingSpinner = wrapper.findComponent(VSkeletonLoader);
 			expect(loadingSpinner.exists()).toBe(true);
