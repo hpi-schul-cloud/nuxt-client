@@ -1,11 +1,9 @@
-import GroupModule from "./group";
-import { ClassInfo, ClassRootType } from "./types/class-info";
-import { BusinessError, Pagination } from "./types/commons";
-import { SortOrder } from "./types/sort-order.enum";
+import { BusinessError, Pagination } from "../../../store/types/commons";
+import { SortOrder } from "../../../store/types/sort-order.enum";
+import { ClassInfo } from "./types/class-info";
 import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	axiosErrorFactory,
-	businessErrorFactory,
 	classInfoResponseFactory,
 	classInfoSearchListResponseFactory,
 	mockApi,
@@ -13,26 +11,16 @@ import {
 } from "@@/tests/test-utils";
 import { classInfoFactory } from "@@/tests/test-utils/factory/classInfoFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
-import {
-	ClassInfoResponse,
-	ClassInfoSearchListResponse,
-	ClassSortQueryType,
-	GroupApiInterface,
-	SchoolYearQueryType,
-} from "@api-server";
+import { ClassInfoResponse, ClassInfoSearchListResponse, GroupApiInterface, SchoolYearQueryType } from "@api-server";
 import * as serverApi from "@api-server";
 import { AxiosInstance } from "axios";
 import { Mocked } from "vitest";
 
 describe("GroupModule", () => {
-	let module: GroupModule;
-
 	let apiMock: Mocked<GroupApiInterface>;
 	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
-		module = new GroupModule({});
-
 		apiMock = mockApi<GroupApiInterface>();
 		axiosMock = mockAxiosInstance();
 
@@ -42,144 +30,6 @@ describe("GroupModule", () => {
 
 	afterEach(() => {
 		vi.restoreAllMocks();
-	});
-
-	describe("getter/setter", () => {
-		describe("Loading", () => {
-			it("should return the default state", () => {
-				const result = module.getLoading;
-
-				expect(result).toEqual(false);
-			});
-
-			it("should return the changed state", () => {
-				module.setLoading(true);
-
-				expect(module.getLoading).toEqual(true);
-			});
-		});
-
-		describe("Error", () => {
-			it("should return the default state", () => {
-				const result = module.getBusinessError;
-
-				expect(result).toBeNull();
-			});
-
-			it("should return the changed state", () => {
-				const businessError = businessErrorFactory.build({
-					message: "error message",
-				});
-
-				module.setBusinessError(businessError);
-
-				expect(module.getBusinessError).toEqual(businessError);
-			});
-
-			it("should reset the error", () => {
-				const businessError = businessErrorFactory.build();
-
-				module.setBusinessError(businessError);
-				module.resetBusinessError();
-
-				expect(module.getBusinessError).toBeNull();
-			});
-		});
-
-		describe("Classes", () => {
-			it("should return the default state", () => {
-				const classes: ClassInfo[] = module.getClasses;
-
-				expect(classes).toEqual([]);
-			});
-
-			it("should return the changed state", () => {
-				const classes: ClassInfo[] = classInfoFactory.buildList(1, {
-					name: "3a",
-					externalSourceName: "Klasse",
-					teacherNames: ["Carlie"],
-					type: ClassRootType.CLASS,
-					id: "id",
-					studentCount: 0,
-				});
-
-				module.setClasses(classes);
-
-				expect(module.getClasses).toEqual(classes);
-			});
-		});
-
-		describe("Pagination", () => {
-			it("should return the default state", () => {
-				const pagination: Pagination = module.getPagination;
-
-				expect(pagination).toEqual<Pagination>({
-					limit: 10,
-					skip: 0,
-					total: 0,
-				});
-			});
-
-			it("should return the changed state", () => {
-				const pagination: Pagination = {
-					limit: 20,
-					skip: 10,
-					total: 30,
-				};
-
-				module.setPagination(pagination);
-
-				expect(module.getPagination).toEqual(pagination);
-			});
-		});
-
-		describe("SortBy", () => {
-			it("should return the default state", () => {
-				const sortBy = module.getSortBy;
-
-				expect(sortBy).toEqual("name");
-			});
-
-			it("should return the changed state", () => {
-				const sortBy = ClassSortQueryType.EXTERNAL_SOURCE_NAME;
-
-				module.setSortBy(sortBy);
-
-				expect(module.getSortBy).toEqual(sortBy);
-			});
-		});
-
-		describe("SortOrder", () => {
-			it("should return the default state", () => {
-				const sortOrder: SortOrder = module.getSortOrder;
-
-				expect(sortOrder).toEqual(SortOrder.ASC);
-			});
-
-			it("should return the changed state", () => {
-				const sortOrder: SortOrder = SortOrder.DESC;
-
-				module.setSortOrder(sortOrder);
-
-				expect(module.getSortOrder).toEqual<SortOrder>(sortOrder);
-			});
-		});
-
-		describe("Page", () => {
-			it("should return the default state", () => {
-				const page = module.getPage;
-
-				expect(page).toEqual(1);
-			});
-
-			it("should return the changed state", () => {
-				const page = 2;
-
-				module.setPage(page);
-
-				expect(module.getPage).toEqual(page);
-			});
-		});
 	});
 
 	describe("loadClassesForSchool", () => {

@@ -1,4 +1,4 @@
-import { ClassInfo, ClassRootType } from "@/store/types/class-info";
+import { ClassInfo, ClassRootType } from "@/modules/data/group/types/class-info";
 import { Factory } from "fishery";
 
 export const classInfoFactory = Factory.define<ClassInfo>(

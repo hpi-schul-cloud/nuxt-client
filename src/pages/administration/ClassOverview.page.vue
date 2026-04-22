@@ -165,9 +165,7 @@
 
 <script setup lang="ts">
 import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
-import { useGroup } from "@/store/group.composable";
 import SchoolsModule from "@/store/schools";
-import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
@@ -175,6 +173,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { ClassSortQueryType, Permission, SchoolYearQueryType, SchulcloudTheme } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
+import { ClassInfo, ClassRootType, CourseInfo, useGroupClasses } from "@data-group";
 import { EndCourseSyncDialog } from "@feature-course-sync";
 import {
 	mdiAccountGroupOutline,
@@ -208,7 +207,8 @@ const props = defineProps({
 });
 
 const { hasPermission } = useAppStore();
-const { deleteClass, fetchClassesForSchool, classes, isFetching, pagination, page, sortBy, sortOrder } = useGroup();
+const { deleteClass, fetchClassesForSchool, classes, isFetching, pagination, page, sortBy, sortOrder } =
+	useGroupClasses();
 const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 const route = useRoute();

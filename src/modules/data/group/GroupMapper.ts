@@ -1,5 +1,4 @@
-import { Group, GroupType, GroupUser, GroupUserRole } from "./types";
-import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
+import { ClassInfo, ClassRootType, CourseInfo, Group, GroupType, GroupUser, GroupUserRole } from "./types";
 import {
 	ClassInfoResponse,
 	ClassInfoResponseType,
