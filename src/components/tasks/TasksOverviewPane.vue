@@ -40,7 +40,7 @@
 					flat
 					data-testid="grade-status-filter"
 					:items="gradeStatusOptions"
-					label="Status"
+					:label="t('common.labels.status')"
 				/>
 
 				<VAutocomplete
@@ -49,7 +49,7 @@
 					flat
 					data-testid="due-status-filter"
 					:items="dueStatusOptions"
-					label="Due status"
+					:label="t('pages.tasks.rating')"
 				/>
 
 				<VSwitch

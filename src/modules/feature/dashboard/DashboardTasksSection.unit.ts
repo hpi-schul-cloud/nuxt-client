@@ -1,5 +1,6 @@
 import DashboardTasksSection from "./DashboardTasksSection.vue";
-import { dateFromToday } from "@/utils/date-time.utils";
+import TaskChipsStudent from "@/components/tasks/task-chips/TaskChipsStudent.vue";
+import TaskChipsTeacher from "@/components/tasks/task-chips/TaskChipsTeacher.vue";
 import { createTestAppStoreWithRole, taskResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoleName } from "@api-server";
@@ -40,61 +41,17 @@ describe("DashboardTasksSection", () => {
 		expect(taskNames[1].text()).toBe("Task 2");
 	});
 
-	it("shows overdue chip for overdue tasks when teacher", () => {
-		const overdueTask = taskResponseFactory.build({
-			dueDate: dateFromToday(-1, "day"),
-		});
-		const { wrapper } = setup([overdueTask], RoleName.TEACHER);
+	it("renders TaskChipsTeacher for teacher role", () => {
+		const { wrapper } = setup([taskResponseFactory.build()], RoleName.TEACHER);
 
-		expect(wrapper.find("[data-testid='task-overdue-teacher']").exists()).toBe(true);
+		expect(wrapper.findComponent(TaskChipsTeacher).exists()).toBe(true);
+		expect(wrapper.findComponent(TaskChipsStudent).exists()).toBe(false);
 	});
 
-	it("does not show overdue chip for future tasks", () => {
-		const futureTask = taskResponseFactory.build({
-			dueDate: dateFromToday(5, "day"),
-		});
-		const { wrapper } = setup([futureTask], RoleName.TEACHER);
+	it("renders TaskChipsStudent for student role", () => {
+		const { wrapper } = setup([taskResponseFactory.build()], RoleName.STUDENT);
 
-		expect(wrapper.find("[data-testid='task-overdue-teacher']").exists()).toBe(false);
-	});
-
-	it("shows submitted and graded chips when maxSubmissions exists and role is teacher", () => {
-		const taskWithSubmissions = taskResponseFactory.build({
-			status: { maxSubmissions: 10, submitted: 5, graded: 2 },
-		});
-		const { wrapper } = setup([taskWithSubmissions], RoleName.TEACHER);
-
-		expect(wrapper.find("[data-testid='task-submitted-teacher']").exists()).toBe(true);
-		expect(wrapper.find("[data-testid='task-graded']").exists()).toBe(true);
-	});
-
-	it("does not show submission chips when maxSubmissions is 0", () => {
-		const taskWithoutSubmissions = taskResponseFactory.build({
-			status: { maxSubmissions: 0 },
-		});
-		const { wrapper } = setup([taskWithoutSubmissions], RoleName.TEACHER);
-
-		expect(wrapper.find("[data-testid='task-submitted-teacher']").exists()).toBe(false);
-		expect(wrapper.find("[data-testid='task-graded']").exists()).toBe(false);
-	});
-
-	it("shows submitted chip when task is submitted for student", () => {
-		const submittedTask = taskResponseFactory.build({
-			dueDate: dateFromToday(5, "day"),
-			status: { submitted: 1 },
-		});
-		const { wrapper } = setup([submittedTask], RoleName.STUDENT);
-
-		expect(wrapper.find("[data-testid='task-submitted-student']").exists()).toBe(true);
-	});
-
-	it("shows overdue chip for overdue tasks when student has not submitted", () => {
-		const overdueTask = taskResponseFactory.build({
-			dueDate: dateFromToday(-1, "day"),
-			status: { submitted: 0 },
-		});
-		const { wrapper } = setup([overdueTask], RoleName.STUDENT);
-
-		expect(wrapper.find("[data-testid='task-overdue-student']").exists()).toBe(true);
+		expect(wrapper.findComponent(TaskChipsStudent).exists()).toBe(true);
+		expect(wrapper.findComponent(TaskChipsTeacher).exists()).toBe(false);
 	});
 });

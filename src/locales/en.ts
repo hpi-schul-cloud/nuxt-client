@@ -1563,6 +1563,7 @@ export default {
 	"pages.tasks.overdue": "Expired",
 	"pages.tasks.not.overdue": "Not expired",
 	"pages.tasks.no.due": "Without Due Date",
+	"pages.tasks.rating": "Rating",
 	"pages.room.taskCard.teacher.label.submitted": "Submitted",
 	"pages.room.learningContent.emptyState": "Currently there is no learning content in this course",
 	"pages.rooms.a11y.group.text": "{title}, folder, {itemCount} courses",

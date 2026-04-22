@@ -1594,6 +1594,7 @@ export default {
 	"pages.tasks.overdue": "Expirado",
 	"pages.tasks.not.overdue": "No expirado",
 	"pages.tasks.no.due": "Sin plazo",
+	"pages.tasks.rating": "Valoración",
 	"pages.room.taskCard.teacher.label.submitted": "Entregado",
 	"pages.room.learningContent.emptyState": "Actualmente no hay contenidos de aprendizaje en este curso",
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",

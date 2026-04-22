@@ -1575,6 +1575,7 @@ export default {
 	"pages.tasks.overdue": "Термін дії минув",
 	"pages.tasks.not.overdue": "Термін дії не минув",
 	"pages.tasks.no.due": "Без терміну виконання",
+	"pages.tasks.rating": "Оцінка",
 	"pages.room.taskCard.teacher.label.submitted": "Надіслано",
 	"pages.room.learningContent.emptyState": "Наразі в цьому курсі немає навчальних матеріалів",
 	"pages.rooms.a11y.group.text": "{title}, папка, {itemCount} курси(-ів)",
