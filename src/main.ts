@@ -4,7 +4,6 @@ import { createI18n } from "./plugins/i18n";
 import store from "./plugins/store";
 import { createVuetifyPlugin } from "./plugins/vuetify";
 import router from "./router";
-import { getLoginUrlWithRedirect } from "./router/login-redirect-url";
 import { initializeAxios } from "./utils/api";
 import {
 	COPY_MODULE_KEY,
@@ -36,7 +35,7 @@ import { useRuntimeConfigStore } from "@data-runtime-config";
 import { htmlConfig } from "@feature-render-html";
 import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
-import axios, { isAxiosError } from "axios";
+import axios from "axios";
 import { createPinia } from "pinia";
 import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
@@ -77,10 +76,6 @@ app.use(VueDOMPurifyHTML, {
 		await useAppStore().login();
 		await schoolsModule.fetchSchool(); // fetch school relies on successful login to know the school id
 	} catch (error) {
-		if (isAxiosError(error) && error.response?.status === 401) {
-			const redirectUrl = getLoginUrlWithRedirect(window.location.pathname);
-			window.location.assign(redirectUrl);
-		}
 		logger.info("Unhandled error during login", error);
 	}
 

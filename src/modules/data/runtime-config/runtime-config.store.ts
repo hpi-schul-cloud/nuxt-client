@@ -28,7 +28,8 @@ export const useRuntimeConfigStore = defineStore("runtimeConfigStore", () => {
 			return true;
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
-			if (responseError.code !== 401) {
+			if (responseError.code === 401) {
+				setRuntimeConfig({ data: [] }); // unauthenticated users will not receive the runtime config, applying an empty config
 				return false;
 			}
 
