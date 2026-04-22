@@ -5,6 +5,7 @@
 		:aria-label="ariaLabel"
 		role="article"
 		:ripple="false"
+		tabindex="0"
 		@click="handleClick"
 	>
 		<template #default>
