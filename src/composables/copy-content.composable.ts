@@ -121,15 +121,14 @@ export const useCopyContent = (copyItemType: MaybeRef<ContentItemTypeEnum>) => {
 					},
 				],
 			},
-		};
-
-		return (
-			templates[unref(copyItemType)] || {
+			[ContentItemTypeEnum.Unknown]: {
 				text: "",
 				info: "",
 				warnings: [],
-			}
-		);
+			},
+		};
+
+		return templates[unref(copyItemType) || ContentItemTypeEnum.Unknown];
 	});
 
 	// Return individual reactive properties for better ergonomics

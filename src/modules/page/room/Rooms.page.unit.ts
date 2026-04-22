@@ -1,4 +1,5 @@
 import RoomsPage from "./Rooms.page.vue";
+import ImportDialog from "@/modules/feature/import/ImportDialog.vue";
 import { RoomItem } from "@/types/room/Room";
 import {
 	createTestAppStoreWithPermissions,
@@ -108,7 +109,7 @@ describe("RoomsPage", () => {
 			const importFLow = wrapper.findComponent(ImportCardDialog);
 
 			expect(importFLow.exists()).toBe(true);
-			expect(importFLow.props().token).toBe(token);
+			expect(importFLow.props().shareTokenInfo.token).toBe(token);
 		});
 
 		it("should not render import card dialog with room type", () => {
@@ -120,18 +121,18 @@ describe("RoomsPage", () => {
 
 		it("should render import flow and be passed data", () => {
 			const { wrapper } = setupImportMode();
-			const importFLow = wrapper.findComponent(ImportFlow);
+			const importFLow = wrapper.findComponent(ImportDialog);
 
 			expect(importFLow.exists()).toBe(true);
-			expect(importFLow.props().isActive).toBe(true);
-			expect(importFLow.props().token).toBe(token);
+			expect(importFLow.props().isDialogOpen).toBe(true);
+			expect(importFLow.props().shareTokenInfo.token).toBe(token);
 		});
 
 		it("should filter out locked rooms for the import flow", () => {
 			const { wrapper } = setupImportMode();
-			const importFLow = wrapper.getComponent(ImportFlow);
+			const importFLow = wrapper.getComponent(ImportDialog);
 
-			const destinations = importFLow.props().destinations as RoomItem[];
+			const destinations = importFLow.props().availableDestinations as RoomItem[];
 
 			expect(destinations).toHaveLength(1);
 			expect(destinations.every((room) => !room.isLocked)).toBe(true);
@@ -140,7 +141,7 @@ describe("RoomsPage", () => {
 		describe("when the import flow succeeded", () => {
 			it("should notify about successful import", () => {
 				const { wrapper } = setupImportMode();
-				const importFlow = wrapper.getComponent(ImportFlow);
+				const importFlow = wrapper.getComponent(ImportDialog);
 
 				importFlow.vm.$emit("success", "newName", "newId");
 
@@ -149,7 +150,7 @@ describe("RoomsPage", () => {
 
 			it("should go to the room details page", () => {
 				const { wrapper } = setupImportMode();
-				const importFlow = wrapper.getComponent(ImportFlow);
+				const importFlow = wrapper.getComponent(ImportDialog);
 
 				importFlow.vm.$emit("success", "newName", "newId");
 

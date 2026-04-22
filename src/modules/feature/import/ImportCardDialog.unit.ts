@@ -1,6 +1,7 @@
 import ImportCardDialog from "./ImportCardDialog.vue";
 import { mockApiResponse, mockedPiniaStoreTyping, roomItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { useRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
@@ -27,12 +28,16 @@ describe("ImportCardDialog", () => {
 
 	const setup = (rooms = mockRooms) => {
 		const roomStore = mockedPiniaStoreTyping(useRoomStore);
-		const token = "abcde";
+		const shareTokenInfo: ShareTokenInfoResponse = {
+			token: "token-123",
+			parentType: ShareTokenInfoResponseParentType.ROOM,
+			parentName: "Room 1",
+		};
 		roomStore.fetchRoomsPlain.mockResolvedValue(mockApiResponse({ data: { data: rooms } }));
 
 		const wrapper = mount(ImportCardDialog, {
 			props: {
-				token,
+				shareTokenInfo,
 				isDialogOpen: true,
 			},
 			global: {
