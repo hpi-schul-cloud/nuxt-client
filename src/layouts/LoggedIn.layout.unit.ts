@@ -1,7 +1,7 @@
 import LoggedInLayout from "./LoggedIn.layout.vue";
+import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useStatusAlerts } from "@data-app";
-import { useFilePathsStore } from "@data-file";
 import { createTestingPinia } from "@pinia/testing";
 import { Sidebar, Topbar } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
@@ -30,15 +30,8 @@ vi.mocked(useStatusAlerts).mockReturnValue({
 
 const setup = () => {
 	const pinia = createTestingPinia();
-
-	const filePathsStore = useFilePathsStore(pinia);
-	filePathsStore.$patch({
-		specificFiles: {
-			accessibilityStatement: "statement",
-			privacy: "",
-			termsOfUse: "",
-			analogConsent: "",
-		},
+	createTestEnvStore({
+		DOCUMENT_BASE_DIR: "https://example.com/documents/",
 	});
 
 	const wrapper = mount(VApp, {

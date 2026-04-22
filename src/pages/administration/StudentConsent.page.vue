@@ -242,7 +242,7 @@ import { dateFromToday, fromGermanDate, germanDateToIso, toGermanDate } from "@/
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { useFilePathsStore } from "@data-file";
+import { useFilePaths } from "@data-file";
 import { useBulkConsent } from "@data-users";
 import { mdiAlert } from "@icons/material";
 import { ErrorAlert } from "@ui-alert";
@@ -256,15 +256,15 @@ import { useRouter } from "vue-router";
 const { t } = useI18n();
 const router = useRouter();
 const { selectedStudentsData, findConsentUsers, updateStudent, register: registerStudents } = useBulkConsent();
-const filePathsStore = useFilePathsStore();
+const { specificFiles } = useFilePaths();
 
 const image = SafelyConnectedImage;
 
-const fileLinks = {
-	analogConsent: String(filePathsStore.specificFiles.analogConsent), // static
+const fileLinks = computed(() => ({
+	analogConsent: specificFiles.value.analogConsent,
 	termsOfUse: "/termsofuse",
 	dataProtection: "/privacypolicy",
-};
+}));
 
 const tableColumns = [
 	{

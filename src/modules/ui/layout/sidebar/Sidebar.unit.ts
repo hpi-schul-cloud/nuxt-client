@@ -3,7 +3,6 @@ import { useSidebarSelection } from "./SidebarSelection.composable";
 import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Permission, SchulcloudTheme } from "@api-server";
-import { useFilePathsStore } from "@data-file";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -33,17 +32,9 @@ const setup = (
 	createTestEnvStore({
 		SC_THEME: SchulcloudTheme.BRB,
 		FEATURE_TEAMS_ENABLED: isTeamsEnabled,
+		DOCUMENT_BASE_DIR: "https://example.com/documents/",
 	});
 
-	const filePathsStore = useFilePathsStore();
-	filePathsStore.$patch({
-		specificFiles: {
-			accessibilityStatement: "statement",
-			privacy: "",
-			termsOfUse: "",
-			analogConsent: "",
-		},
-	});
 	mockedUseSidebarSelection.mockReturnValue({ isActive: ref(false) });
 
 	const wrapper = mount(VApp, {
