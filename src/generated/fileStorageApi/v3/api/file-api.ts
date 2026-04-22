@@ -56,7 +56,7 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
-         * @summary Copy all files of a parent entityId to a target entitId
+         * @summary Copy all files of a parent entityId to a target entityId
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
@@ -481,7 +481,7 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @summary Get stats (count and total size) of all files for a parent entityId.
+         * @summary Get stats (count and total size) of files for a parent entityId. Excludes temporary and deleted files.
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {*} [options] Override http request option.
@@ -523,7 +523,7 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @summary Get a list of file meta data of a parent entityId.
+         * @summary Get a list of file meta data by parent entityId. Excludes temporary and deleted files.
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
@@ -715,6 +715,67 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Temporary upload of a file.
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
+         * @param {string} parentId 
+         * @param {FileRecordParentType} parentType 
+         * @param {any} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tempUpload: async (storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, file: any, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'storageLocationId' is not null or undefined
+            assertParamExists('tempUpload', 'storageLocationId', storageLocationId)
+            // verify required parameter 'storageLocation' is not null or undefined
+            assertParamExists('tempUpload', 'storageLocation', storageLocation)
+            // verify required parameter 'parentId' is not null or undefined
+            assertParamExists('tempUpload', 'parentId', parentId)
+            // verify required parameter 'parentType' is not null or undefined
+            assertParamExists('tempUpload', 'parentType', parentType)
+            // verify required parameter 'file' is not null or undefined
+            assertParamExists('tempUpload', 'file', file)
+            const localVarPath = `/file/temp/upload/{storageLocation}/{storageLocationId}/{parentType}/{parentId}`
+                .replace(`{${"storageLocationId"}}`, encodeURIComponent(String(storageLocationId)))
+                .replace(`{${"storageLocation"}}`, encodeURIComponent(String(storageLocation)))
+                .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)))
+                .replace(`{${"parentType"}}`, encodeURIComponent(String(parentType)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+            if (file !== undefined) { 
+                localVarFormParams.append('file', file as any);
+            }
+    
+    
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = localVarFormParams;
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Streamable upload of a binary file.
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
@@ -842,7 +903,7 @@ export const FileApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Copy all files of a parent entityId to a target entitId
+         * @summary Copy all files of a parent entityId to a target entityId
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
@@ -958,7 +1019,7 @@ export const FileApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get stats (count and total size) of all files for a parent entityId.
+         * @summary Get stats (count and total size) of files for a parent entityId. Excludes temporary and deleted files.
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {*} [options] Override http request option.
@@ -970,7 +1031,7 @@ export const FileApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get a list of file meta data of a parent entityId.
+         * @summary Get a list of file meta data by parent entityId. Excludes temporary and deleted files.
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
@@ -1023,6 +1084,21 @@ export const FileApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Temporary upload of a file.
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
+         * @param {string} parentId 
+         * @param {FileRecordParentType} parentType 
+         * @param {any} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async tempUpload(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, file: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.tempUpload(storageLocationId, storageLocation, parentId, parentType, file, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Streamable upload of a binary file.
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
@@ -1063,7 +1139,7 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
-         * @summary Copy all files of a parent entityId to a target entitId
+         * @summary Copy all files of a parent entityId to a target entityId
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
@@ -1170,7 +1246,7 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @summary Get stats (count and total size) of all files for a parent entityId.
+         * @summary Get stats (count and total size) of files for a parent entityId. Excludes temporary and deleted files.
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {*} [options] Override http request option.
@@ -1181,7 +1257,7 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @summary Get a list of file meta data of a parent entityId.
+         * @summary Get a list of file meta data by parent entityId. Excludes temporary and deleted files.
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
@@ -1230,6 +1306,20 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Temporary upload of a file.
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
+         * @param {string} parentId 
+         * @param {FileRecordParentType} parentType 
+         * @param {any} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tempUpload(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, file: any, options?: any): AxiosPromise<FileRecordResponse> {
+            return localVarFp.tempUpload(storageLocationId, storageLocation, parentId, parentType, file, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Streamable upload of a binary file.
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
@@ -1267,7 +1357,7 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
 export interface FileApiInterface {
     /**
      * 
-     * @summary Copy all files of a parent entityId to a target entitId
+     * @summary Copy all files of a parent entityId to a target entityId
      * @param {string} storageLocationId 
      * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
@@ -1374,7 +1464,7 @@ export interface FileApiInterface {
 
     /**
      * 
-     * @summary Get stats (count and total size) of all files for a parent entityId.
+     * @summary Get stats (count and total size) of files for a parent entityId. Excludes temporary and deleted files.
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
      * @param {*} [options] Override http request option.
@@ -1385,7 +1475,7 @@ export interface FileApiInterface {
 
     /**
      * 
-     * @summary Get a list of file meta data of a parent entityId.
+     * @summary Get a list of file meta data by parent entityId. Excludes temporary and deleted files.
      * @param {string} storageLocationId 
      * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
@@ -1434,6 +1524,20 @@ export interface FileApiInterface {
 
     /**
      * 
+     * @summary Temporary upload of a file.
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
+     * @param {string} parentId 
+     * @param {FileRecordParentType} parentType 
+     * @param {any} file 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApiInterface
+     */
+    tempUpload(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, file: any, options?: any): AxiosPromise<FileRecordResponse>;
+
+    /**
+     * 
      * @summary Streamable upload of a binary file.
      * @param {string} storageLocationId 
      * @param {StorageLocation} storageLocation 
@@ -1471,7 +1575,7 @@ export interface FileApiInterface {
 export class FileApi extends BaseAPI implements FileApiInterface {
     /**
      * 
-     * @summary Copy all files of a parent entityId to a target entitId
+     * @summary Copy all files of a parent entityId to a target entityId
      * @param {string} storageLocationId 
      * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
@@ -1596,7 +1700,7 @@ export class FileApi extends BaseAPI implements FileApiInterface {
 
     /**
      * 
-     * @summary Get stats (count and total size) of all files for a parent entityId.
+     * @summary Get stats (count and total size) of files for a parent entityId. Excludes temporary and deleted files.
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
      * @param {*} [options] Override http request option.
@@ -1609,7 +1713,7 @@ export class FileApi extends BaseAPI implements FileApiInterface {
 
     /**
      * 
-     * @summary Get a list of file meta data of a parent entityId.
+     * @summary Get a list of file meta data by parent entityId. Excludes temporary and deleted files.
      * @param {string} storageLocationId 
      * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
@@ -1662,6 +1766,22 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      */
     public restoreFile(fileRecordId: string, options?: any) {
         return FileApiFp(this.configuration).restoreFile(fileRecordId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Temporary upload of a file.
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
+     * @param {string} parentId 
+     * @param {FileRecordParentType} parentType 
+     * @param {any} file 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApi
+     */
+    public tempUpload(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, file: any, options?: any) {
+        return FileApiFp(this.configuration).tempUpload(storageLocationId, storageLocation, parentId, parentType, file, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
