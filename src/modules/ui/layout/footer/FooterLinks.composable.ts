@@ -63,7 +63,7 @@ export const useFooterLinks = (options: FooterLinksOptions): { links: ComputedRe
 
 		if (env.value.ALERT_STATUS_URL) {
 			baseLinks.push({
-				href: env.value.ALERT_STATUS_URL as string,
+				href: env.value.ALERT_STATUS_URL,
 				text: t("components.legacy.footer.status"),
 				target: "_blank",
 			});
