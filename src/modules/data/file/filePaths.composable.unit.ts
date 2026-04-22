@@ -11,7 +11,7 @@ describe("useFilePaths", () => {
 
 	describe("documentBaseDir", () => {
 		it("should return themed base directory URL", () => {
-			const mockURL = "http://mock.url/";
+			const mockURL = "https://dbildungscloud.de/";
 			createTestEnvStore({ DOCUMENT_BASE_DIR: mockURL, SC_THEME: SchulcloudTheme.DEFAULT });
 
 			const { documentBaseDir } = mountComposable(() => useFilePaths());
@@ -22,7 +22,7 @@ describe("useFilePaths", () => {
 
 	describe("specificFiles", () => {
 		it("should return resolved URLs for specific files", () => {
-			const mockURL = "http://mock.url/";
+			const mockURL = "https://dbildungscloud.de/";
 			createTestEnvStore({ DOCUMENT_BASE_DIR: mockURL, SC_THEME: SchulcloudTheme.DEFAULT });
 
 			const { specificFiles } = mountComposable(() => useFilePaths());
@@ -32,7 +32,7 @@ describe("useFilePaths", () => {
 		});
 
 		it("should use THR-specific files when theme is THR", () => {
-			const mockURL = "http://mock.url/";
+			const mockURL = "https://dbildungscloud.de/";
 			createTestEnvStore({ DOCUMENT_BASE_DIR: mockURL, SC_THEME: SchulcloudTheme.THR });
 
 			const { specificFiles } = mountComposable(() => useFilePaths());
@@ -43,7 +43,7 @@ describe("useFilePaths", () => {
 		});
 
 		it("should use default files when theme is not THR", () => {
-			const mockURL = "http://mock.url/";
+			const mockURL = "https://dbildungscloud.de/";
 			createTestEnvStore({ DOCUMENT_BASE_DIR: mockURL, SC_THEME: SchulcloudTheme.BRB });
 
 			const { specificFiles } = mountComposable(() => useFilePaths());
@@ -55,7 +55,7 @@ describe("useFilePaths", () => {
 
 	describe("globalFiles", () => {
 		it("should return resolved URLs for global files", () => {
-			const mockURL = "http://mock.url/";
+			const mockURL = "https://dbildungscloud.de/";
 			createTestEnvStore({ DOCUMENT_BASE_DIR: mockURL, SC_THEME: SchulcloudTheme.DEFAULT });
 
 			const { globalFiles } = mountComposable(() => useFilePaths());
