@@ -8,7 +8,12 @@
 			@load-more-tasks="$emit('load-more-tasks')"
 		>
 			<template #default="{ task }">
-				<TasksOverviewListItemTeacher v-if="isTeacher" :task="task" />
+				<TasksOverviewListItemTeacher
+					v-if="isTeacher"
+					:task="task"
+					@share-task="$emit('share-task', task.id)"
+					@copy-task="$emit('copy-task', $event)"
+				/>
 				<TasksOverviewListItemStudent v-if="isStudent" :task="task" />
 			</template>
 		</TasksOverviewList>
@@ -20,29 +25,18 @@
 					closable-chips
 					multiple
 					clearable
-					hide-details="auto"
-					variant="solo-filled"
 					flat
 					chips
-					data-testid="courseFilter"
-					item-title="text"
-					item-value="value"
-					:menu-props="{ closeOnContentClick: false, zIndex: 30 }"
+					data-testid="course-filter"
 					:items="courseFilterOptionsWithCount"
 					:label="t('pages.tasks.labels.filter')"
 				/>
 
 				<VAutocomplete
 					v-model="gradeStatus"
-					class="mt-2"
 					clearable
-					hide-details="auto"
-					variant="solo-filled"
 					flat
-					data-testid="gradeStatusFilter"
-					item-title="text"
-					item-value="value"
-					:menu-props="{ closeOnContentClick: false, zIndex: 30 }"
+					data-testid="grade-status-filter"
 					:items="gradeStatusOptions"
 					label="Status"
 				/>
@@ -50,14 +44,8 @@
 				<VAutocomplete
 					v-model="dueStatus"
 					clearable
-					class="mt-2"
-					hide-details="auto"
-					variant="solo-filled"
 					flat
-					data-testid="dueStatusFilter"
-					item-title="text"
-					item-value="value"
-					:menu-props="{ closeOnContentClick: false, zIndex: 30 }"
+					data-testid="due-status-filter"
 					:items="dueStatusOptions"
 					label="Due status"
 				/>
@@ -77,6 +65,7 @@
 import TasksOverviewList from "./TasksOverviewList.vue";
 import TasksOverviewListItemStudent from "@/components/tasks/TasksOverviewListItemStudent.vue";
 import TasksOverviewListItemTeacher from "@/components/tasks/TasksOverviewListItemTeacher.vue";
+import { CopyParams } from "@/store/copy";
 import { TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useTasksFilter } from "@data-tasks";
@@ -109,11 +98,15 @@ const {
 const courseFilterOptionsWithCount = computed(() =>
 	courseFilterOptions.value.map((opt) => ({
 		...opt,
-		text: `${opt.text} (${opt.count})`,
+		title: `${opt.title} (${opt.count})`,
 	}))
 );
 
-defineEmits<{ "load-more-tasks": [] }>();
+defineEmits<{
+	"load-more-tasks": [];
+	"copy-task": [payload: CopyParams];
+	"share-task": [taskId: string];
+}>();
 
 const { t } = useI18n();
 </script>

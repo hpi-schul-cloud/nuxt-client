@@ -54,7 +54,7 @@ import TaskChipsTeacher from "@/components/tasks/task-chips/TaskChipsTeacher.vue
 import { CopyParams } from "@/store/copy";
 import { formatUtc, isToday } from "@/utils/date-time.utils";
 import { TaskResponse } from "@api-server";
-import { isTaskDraft, isTaskUnpublished, useTaskActions, useTasksOfOverview } from "@data-tasks";
+import { isTaskDraft, useTaskActions, useTasksOfOverview } from "@data-tasks";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
@@ -127,8 +127,6 @@ const taskLabel = computed(() => {
 });
 
 const topic = computed(() => (props.task.lessonName ? `${t("common.words.topic")} ${props.task.lessonName}` : ""));
-
-const isUnpublishedLesson = computed(() => isTaskUnpublished(props.task));
 
 const ariaLabel = computed(() => `${t("common.words.task")} ${props.task.name}`);
 

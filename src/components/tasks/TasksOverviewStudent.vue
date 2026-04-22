@@ -15,20 +15,12 @@
 					:value="TaskTab.OPEN"
 					:tasks="openForStudent"
 					:empty-title="t('pages.tasks.student.open.emptyState.title')"
-				>
-					<template #default="{ task }">
-						<TasksOverviewListItemStudent :task />
-					</template>
-				</TasksOverviewPane>
+				/>
 				<TasksOverviewPane
 					:value="TaskTab.COMPLETED"
 					:tasks="submittedForStudent"
 					:empty-title="t('pages.tasks.student.completed.emptyState.title')"
-				>
-					<template #default="{ task }">
-						<TasksOverviewListItemStudent :task />
-					</template>
-				</TasksOverviewPane>
+				/>
 				<TasksOverviewPane
 					:value="TaskTab.FINISHED"
 					:tasks="finishedTasks"
@@ -36,11 +28,7 @@
 					:is-loading-more-items="isLoadingFinishedTasks"
 					has-pagination
 					@load-more-tasks="loadMoreFinishedTasks"
-				>
-					<template #default="{ task }">
-						<TasksOverviewListItemStudent :task />
-					</template>
-				</TasksOverviewPane>
+				/>
 			</VWindow>
 		</div>
 	</section>
@@ -48,10 +36,8 @@
 
 <script setup lang="ts">
 import TasksOverviewPane from "./TasksOverviewPane.vue";
-import TasksOverviewListItemStudent from "@/components/tasks/TasksOverviewListItemStudent.vue";
 import { useTasksOfOverview } from "@data-tasks";
 import { mdiArchiveOutline, mdiCheckCircleOutline, mdiFormatListChecks } from "@icons/material";
-import { mdiMagnify } from "@icons/material";
 import { useUrlSearchParams } from "@vueuse/core";
 import { countBy } from "lodash-es";
 import { computed, onMounted } from "vue";

@@ -262,8 +262,8 @@ export const useTasksOfOverview = createTestableSharedComposable(() => useTasks(
 
 export type FilterOption<T extends string> = {
 	value: T;
-	text: string;
-	count: number;
+	title: string;
+	count?: number;
 };
 
 // === Task Filter Composable ===
@@ -314,18 +314,18 @@ export const useTasksFilter = (
 	const uniqCourseFilters = computed(() =>
 		uniqBy(tasksFilteredBySubstitute.value, (task) => task.courseName).map((task) => ({
 			value: task.courseName,
-			text: task.courseName || t("pages.tasks.labels.noCourse"),
+			title: task.courseName || t("pages.tasks.labels.noCourse"),
 			isSubstitution: task.status.isSubstitutionTeacher,
 		}))
 	);
 
-	const sortedCourseFilters = computed(() => orderBy(uniqCourseFilters.value, [(f) => f.text], ["asc"]));
+	const sortedCourseFilters = computed(() => orderBy(uniqCourseFilters.value, [(f) => f.title], ["asc"]));
 
 	const courseFilterOptions = computed<FilterOption<string>[]>(() => {
 		const baseTasks = tasksFilteredBySubstitute.value;
 		return sortedCourseFilters.value.map((filter) => ({
 			value: filter.value,
-			text: filter.text,
+			title: filter.title,
 			count: baseTasks.filter((t) => t.courseName === filter.value).length,
 		}));
 	});
@@ -333,28 +333,28 @@ export const useTasksFilter = (
 	// === Grade Status Options ===
 	const gradeStatusOptions = computed(() => [
 		{
-			value: "graded" as const,
-			text: t("pages.tasks.filter.gradeStatus.graded"),
+			value: "graded",
+			title: t("pages.tasks.filter.gradeStatus.graded"),
 		},
 		{
-			value: "not-graded" as const,
-			text: t("pages.tasks.filter.gradeStatus.notGraded"),
+			value: "not-graded",
+			title: t("pages.tasks.filter.gradeStatus.notGraded"),
 		},
 	]);
 
 	// === Due Status Options ===
 	const dueStatusOptions = computed(() => [
 		{
-			value: "overdue" as const,
-			text: t("pages.tasks.filter.dueStatus.overdue"),
+			value: "overdue",
+			title: t("pages.tasks.filter.dueStatus.overdue"),
 		},
 		{
-			value: "not-overdue" as const,
-			text: t("pages.tasks.filter.dueStatus.notOverdue"),
+			value: "not-overdue",
+			title: t("pages.tasks.filter.dueStatus.notOverdue"),
 		},
 		{
-			value: "no-due-date" as const,
-			text: t("pages.tasks.filter.dueStatus.noDueDate"),
+			value: "no-due-date",
+			title: t("pages.tasks.filter.dueStatus.noDueDate"),
 		},
 	]);
 

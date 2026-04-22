@@ -127,10 +127,6 @@ const copyLink = computed(() => `/homework/${props.task.id}/copy?returnUrl=/task
 const copyServiceEnabled = computed(() => envConfig.value.FEATURE_COPY_SERVICE_ENABLED);
 const shareTaskEnabled = computed(() => envConfig.value.FEATURE_TASK_SHARE);
 
-const onDelete = async () => {
-	emit("delete-task", props.task.id);
-};
-
 const onCopyTask = () => {
 	if (!copyServiceEnabled.value) {
 		window.location.href = copyLink.value;

@@ -15,16 +15,16 @@
 					:value="TaskTab.OPEN"
 					:tasks="openForTeacher"
 					:empty-title="t('pages.tasks.open.emptyState.title')"
+					@copy-task="onCopyTask"
+					@share-task="onShareTask"
 				/>
 				<TasksOverviewPane
 					:value="TaskTab.DRAFTS"
 					:tasks="drafts"
 					:empty-title="t('pages.tasks.teacher.drafts.emptyState.title')"
-				>
-					<template #default="{ task }">
-						<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
-					</template>
-				</TasksOverviewPane>
+					@copy-task="onCopyTask"
+					@share-task="onShareTask"
+				/>
 				<TasksOverviewPane
 					:value="TaskTab.FINISHED"
 					:tasks="finishedTasks"
@@ -32,11 +32,9 @@
 					:is-loading-more-items="isLoadingFinishedTasks"
 					has-pagination
 					@load-more-tasks="loadMoreFinishedTasks"
-				>
-					<template #default="{ task }">
-						<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
-					</template>
-				</TasksOverviewPane>
+					@copy-task="onCopyTask"
+					@share-task="onShareTask"
+				/>
 			</VWindow>
 		</div>
 
@@ -54,7 +52,6 @@
 import TasksOverviewPane from "./TasksOverviewPane.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import TasksOverviewListItemTeacher from "@/components/tasks/TasksOverviewListItemTeacher.vue";
 import { useCopy } from "@/composables/copy";
 import { CopyParams } from "@/store/copy";
 import ShareModule from "@/store/share";
