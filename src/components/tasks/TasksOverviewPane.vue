@@ -19,7 +19,7 @@
 			</TasksOverviewList>
 		</div>
 
-		<aside class="filter-sidebar pa-4 pl-6 pb-6 mt-2">
+		<aside class="filter-sidebar mt-2 pa-6">
 			<div class="filter-controls">
 				<VAutocomplete
 					v-model="selectedCourseNames"
