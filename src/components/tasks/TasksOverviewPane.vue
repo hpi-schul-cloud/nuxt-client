@@ -1,24 +1,5 @@
 <template>
 	<VWindowItem :value class="content-grid">
-		<div class="list-container">
-			<TasksOverviewList
-				:tasks="filteredTasks"
-				:is-loading-more-items="isLoadingMoreItems"
-				:has-pagination="hasPagination"
-				@load-more-tasks="$emit('load-more-tasks')"
-			>
-				<template #default="{ task }">
-					<TasksOverviewListItemTeacher
-						v-if="isTeacher"
-						:task="task"
-						@share-task="$emit('share-task', task.id)"
-						@copy-task="$emit('copy-task', $event)"
-					/>
-					<TasksOverviewListItemStudent v-if="isStudent" :task="task" />
-				</template>
-			</TasksOverviewList>
-		</div>
-
 		<aside class="filter-sidebar mt-2 pa-6">
 			<div class="filter-controls">
 				<VAutocomplete
@@ -71,6 +52,25 @@
 				/>
 			</div>
 		</aside>
+
+		<div class="list-container">
+			<TasksOverviewList
+				:tasks="filteredTasks"
+				:is-loading-more-items="isLoadingMoreItems"
+				:has-pagination="hasPagination"
+				@load-more-tasks="$emit('load-more-tasks')"
+			>
+				<template #default="{ task }">
+					<TasksOverviewListItemTeacher
+						v-if="isTeacher"
+						:task="task"
+						@share-task="$emit('share-task', task.id)"
+						@copy-task="$emit('copy-task', $event)"
+					/>
+					<TasksOverviewListItemStudent v-if="isStudent" :task="task" />
+				</template>
+			</TasksOverviewList>
+		</div>
 	</VWindowItem>
 </template>
 
