@@ -161,6 +161,6 @@ const hasActiveFilters = computed(
 
 .filter-sidebar {
 	grid-area: sidebar;
-	background-color: rgba(var(--v-theme-on-surface), 0.04);
+	background-color: rgb(var(--v-theme-surface-light));
 }
 </style>
