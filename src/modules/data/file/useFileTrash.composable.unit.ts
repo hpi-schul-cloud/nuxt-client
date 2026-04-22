@@ -124,7 +124,7 @@ describe("useFileTrash", () => {
 				const { fileRecord } = setup();
 				const { restoreFiles } = useFileTrash();
 
-				await restoreFiles([fileRecord]);
+				await expect(restoreFiles([fileRecord])).rejects.toThrow("network error");
 
 				expect(notifyError).toHaveBeenCalledWith("components.board.notifications.errors.fileServiceNotAvailable");
 			});
@@ -134,7 +134,7 @@ describe("useFileTrash", () => {
 				const { restoreFiles, deletedFileRecords } = useFileTrash();
 
 				deletedFileRecords.value = [fileRecord];
-				await restoreFiles([fileRecord]);
+				await expect(restoreFiles([fileRecord])).rejects.toThrow("network error");
 
 				expect(deletedFileRecords.value).toStrictEqual([fileRecord]);
 			});

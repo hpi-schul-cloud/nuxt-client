@@ -27,8 +27,9 @@ export const useFileTrash = () => {
 			const restoredIds = new Set(fileRecordIds);
 
 			deletedFileRecords.value = deletedFileRecords.value.filter((r) => !restoredIds.has(r.id));
-		} catch {
+		} catch (error) {
 			notifyError(t("components.board.notifications.errors.fileServiceNotAvailable"));
+			throw error;
 		}
 	};
 
