@@ -7,10 +7,9 @@ import { mockComposable } from "@@/tests/test-utils";
 import { boardResponseFactory, cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardResponseAllowedOperations, CardResponse } from "@api-server";
-import { useBoardAllowedOperations } from "@data-board";
+import { useBoardAllowedOperations, useCourseBoardEditMode } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
-import { flushPromises, mount } from "@vue/test-utils";
 import { computed } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
 import { VDialog } from "vuetify/components";
@@ -34,16 +33,17 @@ vi.mock("@util-board/file-select.composable");
 vi.mocked(useSharedFileSelect).mockReturnValue(mockComposable(useSharedFileSelect));
 
 vi.mock("@data-board/board-allowed-operations.composable");
+vi.mock("@data-board/edit-mode.composable");
 
 describe("CardHostDetailView", () => {
 	afterEach(() => {
 		vi.clearAllMocks();
-		document.body.innerHTML = "";
 	});
 
 	const setup = (
 		props: ComponentProps<typeof CardHostDetailView>,
-		allowedOperations?: Partial<BoardResponseAllowedOperations>
+		allowedOperations?: Partial<BoardResponseAllowedOperations>,
+		editMode?: boolean
 	) => {
 		const testBoard = allowedOperations
 			? boardResponseFactory.build({ allowedOperations })
@@ -53,7 +53,13 @@ describe("CardHostDetailView", () => {
 			allowedOperations: computed(() => testBoard.allowedOperations as BoardResponseAllowedOperations),
 		});
 
-		const wrapper = mount(CardHostDetailView, {
+		vi.mocked(useCourseBoardEditMode).mockReturnValue({
+			isEditMode: computed(() => editMode ?? false),
+			startEditMode: vi.fn(),
+			stopEditMode: vi.fn(),
+		});
+
+		const wrapper = shallowMount(CardHostDetailView, {
 			global: {
 				plugins: [
 					createTestingPinia({
@@ -130,14 +136,44 @@ describe("CardHostDetailView", () => {
 				{ deleteCard: true }
 			);
 
-			// Wait for Vue's nextTick to complete teleport
-			await wrapper.vm.$nextTick();
-			await flushPromises();
+			const editButton = wrapper.find("[data-testid='toolbar-edit-button']");
+			expect(editButton.exists()).toBe(true);
+		});
 
-			// Search in document.body since VDialog teleports there
-			const editButton = document.querySelector("[data-testid='toolbar-edit-button']");
+		describe("when edit mode is active", () => {
+			it("should show view button", async () => {
+				const { wrapper } = setup(
+					{
+						card: CARD_WITH_ELEMENTS,
+						isOpen: true,
+						columnIndex: 0,
+						rowIndex: 1,
+					},
+					{ deleteCard: true },
+					true
+				);
 
-			expect(editButton).toBeTruthy();
+				const viewButton = wrapper.find("[data-testid='toolbar-view-button']");
+				const editButton = wrapper.find("[data-testid='toolbar-edit-button']");
+				expect(viewButton.exists()).toBe(true);
+				expect(editButton.exists()).toBe(false);
+			});
+
+			it("should show addElementbutton", async () => {
+				const { wrapper } = setup(
+					{
+						card: CARD_WITH_ELEMENTS,
+						isOpen: true,
+						columnIndex: 0,
+						rowIndex: 1,
+					},
+					{ deleteCard: true },
+					true
+				);
+
+				const addElementButton = wrapper.find("[data-testid='add-element-button']");
+				expect(addElementButton.exists()).toBe(true);
+			});
 		});
 	});
 
@@ -155,9 +191,6 @@ describe("CardHostDetailView", () => {
 
 			const editButton = wrapper.find("[data-testid='toolbar-edit-button']");
 			expect(editButton.exists()).toBe(false);
-
-			const addElementButton = wrapper.find("[data-testid='add-element-button']");
-			expect(addElementButton.exists()).toBe(false);
 		});
 	});
 
