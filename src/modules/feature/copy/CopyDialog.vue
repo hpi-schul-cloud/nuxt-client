@@ -2,7 +2,7 @@
 	<SvsDialog
 		:model-value="isOpen"
 		:is-open-state-managed-externally="true"
-		title="feature-copy.copyInfo.title"
+		:title="title"
 		confirm-btn-lang-key="common.actions.duplicate"
 		cancel-btn-lang-key="common.actions.cancel"
 		data-testid="copy-info-dialog"
@@ -35,7 +35,7 @@ import { useCopyContent } from "@/composables/copy-content.composable";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { toRef } from "vue";
+import { computed, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -54,6 +54,10 @@ const emit = defineEmits<{
 	(e: "cancel"): void;
 	(e: "confirm"): void;
 }>();
+
+const title = computed(() =>
+	t("feature-copy.copyInfo.title", { type: t(`feature-copy.copyInfo.type.${props.copyItemType}`) })
+);
 
 const { text, info, warnings } = useCopyContent(toRef(props, "copyItemType"));
 </script>

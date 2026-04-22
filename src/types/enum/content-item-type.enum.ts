@@ -2,7 +2,7 @@ export enum ContentItemTypeEnum {
 	Task = "task",
 	Lesson = "lesson",
 	Course = "course",
-	ColumnBoard = "columnBoard",
+	ColumnBoard = "board",
 	Room = "room",
 	Card = "card",
 	Unknown = "unknown",
