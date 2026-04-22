@@ -4,16 +4,15 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { shallowMount } from "@vue/test-utils";
 
 describe("TasksOverviewStudent", () => {
-	const mountComponent = (options = {}) => {
-		const wrapper = shallowMount(TasksOverviewStudent, {
+	// TODO: WRITE TASK TESTS
+
+	const mountComponent = (options = {}) =>
+		shallowMount(TasksOverviewStudent, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			...options,
 		});
-
-		return wrapper;
-	};
 
 	it("Should render tasks list component", () => {
 		const wrapper = mountComponent();

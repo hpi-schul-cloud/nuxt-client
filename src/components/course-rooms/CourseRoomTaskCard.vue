@@ -34,10 +34,10 @@
 				{{ task.name }}
 			</h2>
 			<RenderHTML
-				v-if="canShowDescription"
+				v-if="canShowDescription && task.description"
 				class="text--primary mt-1 mb-0 pb-0 text-description"
 				tabindex="0"
-				:html="task.description"
+				:html="task.description as unknown as string"
 			/>
 			<div
 				v-if="!isPlanned && !isDraft && !isFinished"

@@ -11,6 +11,8 @@ import { setActivePinia } from "pinia";
 import { beforeAll } from "vitest";
 
 describe("TasksOverviewTeacher", () => {
+	// TODO: WRITE TASK TESTS
+
 	let copyModuleMock: CopyModule;
 	let shareModuleMock: ShareModule;
 
