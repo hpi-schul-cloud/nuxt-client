@@ -19,7 +19,7 @@
 				</v-tab>
 			</v-tabs>
 		</div>
-		<v-data-table-server
+		<VDataTableServer
 			v-model:items-per-page="pagination.limit"
 			:headers="headers"
 			:items="classes"
@@ -143,8 +143,8 @@
 					</v-btn>
 				</template>
 			</template>
-		</v-data-table-server>
-		<end-course-sync-dialog
+		</VDataTableServer>
+		<EndCourseSyncDialog
 			v-model:is-open="isEndSyncDialogOpen"
 			data-testid="end-course-sync-dialog"
 			:course-name="selectedItemForSync.courseName"
