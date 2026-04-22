@@ -8,6 +8,7 @@ export default {
 	"common.actions.copy": "Copiar",
 	"common.actions.duplicate": "Duplicar",
 	"common.actions.move": "Mover",
+	"common.actions.view": "Mostrar",
 	"common.actions.create": "Crear",
 	"common.actions.delete": "Borrar",
 	"common.actions.discard": "Descartar",
