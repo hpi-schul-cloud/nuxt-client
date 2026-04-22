@@ -44,8 +44,15 @@ type DateRange = {
 	to: { amount: number; unit: ManipulateType };
 };
 
-export type DueStatus = "overdue" | "no-due-date" | "not-overdue";
-export type GradeStatus = "graded" | "not-graded";
+export enum DueStatus {
+	Overdue = "overdue",
+	NotOverdue = "not-overdue",
+	NoDueDate = "no-due-date",
+}
+export enum GradeStatus {
+	Graded = "graded",
+	NotGraded = "not-graded",
+}
 
 const PAGE_SIZE = 10;
 
@@ -121,7 +128,7 @@ export const useTasks = (
 
 	const fetchTasks = async () => {
 		const { success, result } = await executeTasks(fetchAllTasks);
-		if (success) allTasks.value = result;
+		if (success) allTasks.value = toSortedByDueDate(result);
 	};
 
 	const fetchFinishedTasks = async () => {
@@ -297,16 +304,16 @@ export const useTasksFilter = (
 
 	const tasksFilteredByDueStatus = computed(() => {
 		if (!dueStatus.value) return tasksFilteredByCourses.value;
-		if (dueStatus.value === "overdue") return tasksFilteredByCourses.value.filter(isTaskOverdue);
-		if (dueStatus.value === "no-due-date") return tasksFilteredByCourses.value.filter(hasNoDueDate);
-		if (dueStatus.value === "not-overdue") return tasksFilteredByCourses.value.filter((t) => !isTaskOverdue(t));
+		if (dueStatus.value === DueStatus.Overdue) return tasksFilteredByCourses.value.filter(isTaskOverdue);
+		if (dueStatus.value === DueStatus.NoDueDate) return tasksFilteredByCourses.value.filter(hasNoDueDate);
+		if (dueStatus.value === DueStatus.NotOverdue) return tasksFilteredByCourses.value.filter((t) => !isTaskOverdue(t));
 		return tasksFilteredByCourses.value;
 	});
 
 	const filteredTasks = computed(() => {
 		if (!gradeStatus.value) return tasksFilteredByDueStatus.value;
-		if (gradeStatus.value === "graded") return tasksFilteredByDueStatus.value.filter(isGraded);
-		if (gradeStatus.value === "not-graded") return tasksFilteredByDueStatus.value.filter((t) => !isGraded(t));
+		if (gradeStatus.value === GradeStatus.Graded) return tasksFilteredByDueStatus.value.filter(isGraded);
+		if (gradeStatus.value === GradeStatus.NotGraded) return tasksFilteredByDueStatus.value.filter((t) => !isGraded(t));
 		return tasksFilteredByDueStatus.value;
 	});
 
@@ -330,33 +337,31 @@ export const useTasksFilter = (
 		}));
 	});
 
-	// === Grade Status Options ===
-	const gradeStatusOptions = computed(() => [
+	const gradeStatusOptions = [
 		{
-			value: "graded",
-			title: t("pages.tasks.filter.gradeStatus.graded"),
+			value: GradeStatus.Graded,
+			title: t("pages.tasks.graded"),
 		},
 		{
-			value: "not-graded",
-			title: t("pages.tasks.filter.gradeStatus.notGraded"),
+			value: GradeStatus.NotGraded,
+			title: t("pages.tasks.notGraded"),
 		},
-	]);
+	];
 
-	// === Due Status Options ===
-	const dueStatusOptions = computed(() => [
+	const dueStatusOptions = [
 		{
-			value: "overdue",
-			title: t("pages.tasks.filter.dueStatus.overdue"),
+			value: DueStatus.Overdue,
+			title: t("pages.tasks.overdue"),
 		},
 		{
-			value: "not-overdue",
-			title: t("pages.tasks.filter.dueStatus.notOverdue"),
+			value: DueStatus.NotOverdue,
+			title: t("pages.tasks.not.overdue"),
 		},
 		{
-			value: "no-due-date",
-			title: t("pages.tasks.filter.dueStatus.noDueDate"),
+			value: DueStatus.NoDueDate,
+			title: t("pages.tasks.no.due"),
 		},
-	]);
+	];
 
 	const clearFilters = () => {
 		selectedCourseNames.value = [];
@@ -375,13 +380,9 @@ export const useTasksFilter = (
 		dueStatus,
 		gradeStatus,
 
-		// Filter Options with Counts
 		courseFilterOptions,
 		gradeStatusOptions,
 		dueStatusOptions,
-
-		// Legacy (for backward compatibility)
-		sortedCourseFilters,
 
 		// Filter Actions
 		clearFilters,

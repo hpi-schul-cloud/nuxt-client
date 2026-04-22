@@ -2,85 +2,61 @@
 	<KebabMenu :aria-label="t('common.words.task')" data-testid="task-menu">
 		<template v-if="isTeacher">
 			<VListItem
-				id="task-action-edit"
+				:prepend-icon="mdiPencilOutline"
+				:title="t('common.actions.edit')"
 				:href="editLink"
-				class="task-action"
 				data-testId="task-edit"
 				role="menuitem"
-				:draggable="false"
-			>
-				<VListItemTitle>
-					<VIcon :icon="mdiPencilOutline" class="task-action-icon" />
-					{{ t("common.actions.edit") }}
-				</VListItemTitle>
-			</VListItem>
+			/>
 			<VListItem
 				v-if="copyServiceEnabled"
-				id="task-action-copy"
-				class="task-action"
+				:prepend-icon="mdiContentCopy"
+				:title="t('common.actions.duplicate')"
 				data-testId="task-copy"
 				role="menuitem"
 				@click="onCopyTask"
-			>
-				<VListItemTitle>
-					<VIcon :icon="mdiContentCopy" class="task-action-icon" />
-					{{ t("common.actions.duplicate") }}
-				</VListItemTitle>
-			</VListItem>
+			/>
 			<VListItem
 				v-if="shareTaskEnabled"
-				id="task-action-share"
-				class="task-action"
+				:prepend-icon="mdiShareVariantOutline"
+				:title="t('common.actions.shareCopy')"
 				data-testId="task-share"
 				role="menuitem"
 				@click="onShareTask"
-			>
-				<VListItemTitle>
-					<VIcon :icon="mdiShareVariantOutline" class="task-action-icon" />
-					{{ t("common.actions.shareCopy") }}
-				</VListItemTitle>
-			</VListItem>
+			/>
 			<VListItem
 				v-if="!task.status.isDraft && !task.status.isFinished"
-				id="task-action-revert"
-				class="task-action"
+				:prepend-icon="mdiUndoVariant"
+				:title="t('pages.room.cards.label.revert')"
 				data-testId="task-revert"
 				role="menuitem"
 				@click="emit('revert-task', task.id)"
-			>
-				<VListItemTitle>
-					<VIcon :icon="mdiUndoVariant" class="task-action-icon" />
-					{{ t("pages.room.cards.label.revert") }}
-				</VListItemTitle>
-			</VListItem>
+			/>
 		</template>
 
-		<VListItem v-if="task.status.isFinished" data-testId="task-finish" @click="emit('restore-task', task.id)">
-			<VListItemTitle>
-				<VIcon :icon="mdiUndoVariant" class="task-action-icon" />
-				{{ t("common.labels.restore") }}
-			</VListItemTitle>
-		</VListItem>
-		<VListItem v-else data-testId="task-finish" @click="emit('finish-task', task.id)">
-			<VListItemTitle>
-				<VIcon :icon="mdiArchiveOutline" class="task-action-icon" />
-				{{ t("components.molecules.TaskItemMenu.finish") }}
-			</VListItemTitle>
-		</VListItem>
+		<VListItem
+			v-if="task.status.isFinished"
+			:prepend-icon="mdiUndoVariant"
+			:title="t('common.labels.restore')"
+			data-testId="task-finish"
+			@click="emit('restore-task', task.id)"
+		/>
+		<VListItem
+			v-else
+			:prepend-icon="mdiArchiveOutline"
+			:title="t('components.molecules.TaskItemMenu.finish')"
+			data-testId="task-finish"
+			@click="emit('finish-task', task.id)"
+		/>
 
 		<VListItem
 			v-if="isTeacher"
-			id="task-action-delete"
-			class="task-action"
+			:prepend-icon="mdiTrashCanOutline"
+			:title="t('common.actions.delete')"
 			data-testId="task-delete"
 			role="menuitem"
 			@click="$emit('delete-task', task.id)"
-		>
-			<VListItemTitle>
-				<VIcon :icon="mdiTrashCanOutline" class="task-action-icon" />
-				{{ t("common.actions.delete") }}
-			</VListItemTitle>
-		</VListItem>
+		/>
 	</KebabMenu>
 </template>
 
@@ -148,10 +124,6 @@ const onShareTask = () => {
 </script>
 
 <style lang="scss" scoped>
-.task-action {
-	min-height: 25px !important;
-}
-
 .task-action-icon {
 	width: 1rem;
 	height: 1rem;

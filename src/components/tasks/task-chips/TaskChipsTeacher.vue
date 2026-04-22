@@ -29,7 +29,7 @@
 			variant="tonal"
 			data-testid="task-overdue-teacher"
 		>
-			{{ t("pages.room.taskCard.teacher.label.overdue") }}
+			{{ t("pages.tasks.overdue") }}
 		</WarningChip>
 
 		<WarningChip v-if="isUnpublishedLesson" data-testid="task-lesson-chip-large">

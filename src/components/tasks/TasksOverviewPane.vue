@@ -1,22 +1,24 @@
 <template>
 	<VWindowItem :value class="content-grid">
-		<TasksOverviewList
-			:tasks="filteredTasks"
-			:empty-title="emptyTitle"
-			:is-loading-more-items="isLoadingMoreItems"
-			:has-pagination="hasPagination"
-			@load-more-tasks="$emit('load-more-tasks')"
-		>
-			<template #default="{ task }">
-				<TasksOverviewListItemTeacher
-					v-if="isTeacher"
-					:task="task"
-					@share-task="$emit('share-task', task.id)"
-					@copy-task="$emit('copy-task', $event)"
-				/>
-				<TasksOverviewListItemStudent v-if="isStudent" :task="task" />
-			</template>
-		</TasksOverviewList>
+		<div class="list-container">
+			<TasksOverviewList
+				:tasks="filteredTasks"
+				:empty-title="emptyTitle"
+				:is-loading-more-items="isLoadingMoreItems"
+				:has-pagination="hasPagination"
+				@load-more-tasks="$emit('load-more-tasks')"
+			>
+				<template #default="{ task }">
+					<TasksOverviewListItemTeacher
+						v-if="isTeacher"
+						:task="task"
+						@share-task="$emit('share-task', task.id)"
+						@copy-task="$emit('copy-task', $event)"
+					/>
+					<TasksOverviewListItemStudent v-if="isStudent" :task="task" />
+				</template>
+			</TasksOverviewList>
+		</div>
 
 		<aside class="filter-sidebar h-100 pa-4">
 			<div class="filter-controls">
@@ -29,7 +31,7 @@
 					chips
 					data-testid="course-filter"
 					:items="courseFilterOptionsWithCount"
-					:label="t('pages.tasks.labels.filter')"
+					:label="t('common.labels.course')"
 				/>
 
 				<VAutocomplete
@@ -94,7 +96,6 @@ const {
 	selectedCourseNames,
 } = useTasksFilter(toRef(props, "tasks"));
 
-// Format course options to show count in text
 const courseFilterOptionsWithCount = computed(() =>
 	courseFilterOptions.value.map((opt) => ({
 		...opt,
@@ -129,6 +130,10 @@ const { t } = useI18n();
 			"sidebar"
 			"list";
 	}
+}
+
+.list-container {
+	grid-area: list;
 }
 
 .filter-sidebar {

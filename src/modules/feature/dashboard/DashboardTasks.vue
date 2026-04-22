@@ -12,14 +12,14 @@
 			<DashboardTasksSection
 				v-if="ungradedForTeacherOverdue.length > 0"
 				data-testid="teacher-tasks-not-graded"
-				:title="t('pages.tasks.subtitleNotGraded')"
+				:title="t('pages.tasks.notGraded')"
 				:tasks="ungradedForTeacherOverdue"
 			/>
 
 			<DashboardTasksSection
 				v-if="gradedForTeacherOverdue.length > 0"
 				data-testid="teacher-tasks-graded"
-				:title="t('pages.tasks.subtitleGraded')"
+				:title="t('pages.tasks.graded')"
 				:tasks="gradedForTeacherOverdue"
 			/>
 
@@ -41,14 +41,14 @@
 			<DashboardTasksSection
 				v-if="ungradedForStudent.length > 0"
 				data-testid="student-tasks-not-graded"
-				:title="t('pages.tasks.subtitleNotGraded')"
+				:title="t('pages.tasks.notGraded')"
 				:tasks="ungradedForStudent"
 			/>
 
 			<DashboardTasksSection
 				v-if="gradedForStudent.length > 0"
 				data-testid="student-tasks-graded"
-				:title="t('pages.tasks.subtitleGraded')"
+				:title="t('pages.tasks.graded')"
 				:tasks="gradedForStudent"
 			/>
 		</template>

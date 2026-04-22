@@ -483,7 +483,7 @@ describe("CourseRoomTaskCard", () => {
 			it("should overdue chip is visible if the task overdued", async () => {
 				const wrapper = getWrapper({ task: overdueTestTask, userRole });
 				const overrdueElement = wrapper.find(".overdue");
-				expect(overrdueElement.element.innerHTML).toContain("pages.room.taskCard.teacher.label.overdue");
+				expect(overrdueElement.element.innerHTML).toContain("pages.tasks.overdue");
 			});
 
 			it("should return false value after calculated isPlanned() method", () => {
