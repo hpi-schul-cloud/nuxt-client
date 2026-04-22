@@ -1,6 +1,6 @@
 <template>
 	<section class="task-dashboard-student">
-		<div class="header-section mt-4">
+		<div class="header-section mt-6">
 			<VTabs v-model="activeTab" align-tabs="center">
 				<VTab v-for="tab in tabRoutes" :key="tab.value" class="tab-item" :value="tab.value">
 					<VIcon size="large" :icon="tab.icon" class="tab-icon mr-sm-3" />
