@@ -67,6 +67,7 @@
 import { useCardDialogData } from "../board/card/card-dialog-composable";
 import { RoomItem } from "@/types/room/Room";
 import { ShareTokenInfoResponse } from "@api-server";
+import { useCardDialogData } from "@data-board";
 import { useRoomStore } from "@data-room";
 import { useShareTokenImport } from "@feature-import";
 import { InfoAlert, WarningAlert } from "@ui-alert";
