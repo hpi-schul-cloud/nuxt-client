@@ -63,7 +63,6 @@ const fetchAllTasks = async (skip = 0, limit = 100, accumulated: TaskResponse[] 
 	return skip + limit < data.data.total ? fetchAllTasks(skip + limit, limit, all) : all;
 };
 
-// === Main Tasks Composable ===
 export const useTasks = (
 	options: {
 		range?: DateRange;
@@ -87,7 +86,6 @@ export const useTasks = (
 		() => finishedTotal.value !== undefined && finishedTasks.value.length < finishedTotal.value
 	);
 
-	// === Range Filter (stays here) ===
 	const range = ref(options.range);
 
 	const tasksFilteredByRange = computed(() => {
@@ -120,11 +118,6 @@ export const useTasks = (
 		published.value.filter((t) => isSubmittedForStudent(t) && !isGradedForStudent(t))
 	);
 	const gradedForStudent = computed(() => published.value.filter(isGradedForStudent));
-
-	// === Range Setter ===
-	const setRange = (newRange: DateRange) => {
-		range.value = newRange;
-	};
 
 	const fetchTasks = async () => {
 		const { success, result } = await executeTasks(fetchAllTasks);
@@ -200,7 +193,6 @@ export const useTasks = (
 
 		// Range Filter
 		range,
-		setRange,
 
 		// Data Actions
 		fetchTasks,
@@ -266,13 +258,6 @@ export const useTaskActions = () => {
 
 export const useTasksOfOverview = createTestableSharedComposable(() => useTasks({ fetchImmediate: true }));
 
-export type FilterOption<T extends string> = {
-	value: T;
-	title: string;
-	count?: number;
-};
-
-// === Task Filter Composable ===
 export const useTasksFilter = (
 	tasks: Ref<TaskResponse[]>,
 	options: {
@@ -327,7 +312,7 @@ export const useTasksFilter = (
 
 	const sortedCourseFilters = computed(() => orderBy(uniqCourseFilters.value, [(f) => f.title], ["asc"]));
 
-	const courseFilterOptions = computed<FilterOption<string>[]>(() => {
+	const courseFilterOptions = computed(() => {
 		const baseTasks = tasksFilteredBySubstitute.value;
 		return sortedCourseFilters.value.map((filter) => ({
 			value: filter.value,
@@ -337,29 +322,14 @@ export const useTasksFilter = (
 	});
 
 	const gradeStatusOptions = [
-		{
-			value: GradeStatus.Graded,
-			title: t("pages.tasks.graded"),
-		},
-		{
-			value: GradeStatus.NotGraded,
-			title: t("pages.tasks.notGraded"),
-		},
+		{ value: GradeStatus.Graded, title: t("pages.tasks.graded") },
+		{ value: GradeStatus.NotGraded, title: t("pages.tasks.notGraded") },
 	];
 
 	const dueStatusOptions = [
-		{
-			value: DueStatus.Overdue,
-			title: t("pages.tasks.overdue"),
-		},
-		{
-			value: DueStatus.NotOverdue,
-			title: t("pages.tasks.not.overdue"),
-		},
-		{
-			value: DueStatus.NoDueDate,
-			title: t("pages.tasks.no.due"),
-		},
+		{ value: DueStatus.Overdue, title: t("pages.tasks.overdue") },
+		{ value: DueStatus.NotOverdue, title: t("pages.tasks.not.overdue") },
+		{ value: DueStatus.NoDueDate, title: t("pages.tasks.no.due") },
 	];
 
 	const clearFilters = () => {
