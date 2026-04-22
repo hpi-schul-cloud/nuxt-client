@@ -460,7 +460,7 @@ describe("useTaskActions", () => {
 
 	describe("revertPublishedTask", () => {
 		it("should call API to revert task", async () => {
-			taskApiMock.taskControllerRevertPublished.mockResolvedValue(mockApiResponse({ data: {} }));
+			taskApiMock.taskControllerRevertPublished.mockResolvedValue(mockApiResponse({ data: tasks.published }));
 
 			const { revertPublishedTask } = useTaskActions();
 			await revertPublishedTask("task-123");
@@ -471,7 +471,7 @@ describe("useTaskActions", () => {
 
 	describe("finishTask", () => {
 		it("should call API to finish task", async () => {
-			taskApiMock.taskControllerFinish.mockResolvedValue(mockApiResponse({ data: {} }));
+			taskApiMock.taskControllerFinish.mockResolvedValue(mockApiResponse({ data: tasks.fullyGraded }));
 
 			const { finishTask } = useTaskActions();
 			await finishTask("task-123");
@@ -482,7 +482,7 @@ describe("useTaskActions", () => {
 
 	describe("restoreFinishedTask", () => {
 		it("should call API to restore task", async () => {
-			taskApiMock.taskControllerRestore.mockResolvedValue(mockApiResponse({ data: {} }));
+			taskApiMock.taskControllerRestore.mockResolvedValue(mockApiResponse({ data: tasks.fullyGraded }));
 
 			const { restoreFinishedTask } = useTaskActions();
 			await restoreFinishedTask("task-123");
