@@ -653,7 +653,7 @@ export default {
 	"components.molecules.import.columnBoard.options.selectRoom.infoText":
 		"Der Raum, in den der Bereich importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.import.courses.rename": "Bei Bedarf kann der Name des Kurses umbenannt werden: ",
-	"components.molecules.import.courses.options.title": "Kurs-Kopie importieren",
+	"components.molecules.import.courses.options.title": "Kurs importieren",
 	"components.molecules.import.lessons.label": "Thema",
 	"components.molecules.import.lessons.rename": "Bei Bedarf kann der Name des Themas umbenannt werden: ",
 	"components.molecules.import.lessons.options.selectCourse.infoText":

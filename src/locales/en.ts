@@ -636,7 +636,7 @@ export default {
 	"components.molecules.import.columnBoard.options.selectRoom.infoText":
 		"Please select the room into which you would like to import the board.",
 	"components.molecules.import.courses.rename": "If necessary, the name of the course can be renamed: ",
-	"components.molecules.import.courses.options.title": "Import course copy",
+	"components.molecules.import.courses.options.title": "Import course",
 	"components.molecules.import.lessons.label": "Topic",
 	"components.molecules.import.lessons.rename": "If necessary, the name of the topic can be renamed: ",
 	"components.molecules.import.lessons.options.selectCourse.infoText":

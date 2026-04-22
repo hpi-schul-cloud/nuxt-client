@@ -648,7 +648,7 @@ export default {
 	"components.molecules.import.columnBoard.options.selectRoom.infoText":
 		"Виберіть кімнату, до якого ви бажаєте імпортувати дошку.",
 	"components.molecules.import.courses.rename": "При необхідності назву курсу можна перейменувати: ",
-	"components.molecules.import.courses.options.title": "Імпортувати копію курсу",
+	"components.molecules.import.courses.options.title": "Імпортувати курсу",
 	"components.molecules.import.lessons.label": "Тема",
 	"components.molecules.import.lessons.rename": "При необхідності назву теми можна перейменувати: ",
 	"components.molecules.import.lessons.options.selectCourse.infoText":
