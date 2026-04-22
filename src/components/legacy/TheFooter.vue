@@ -15,49 +15,15 @@
 </template>
 
 <script setup lang="ts">
-import { useEnvConfig } from "@data-env";
-import { computed } from "vue";
-import { useI18n } from "vue-i18n";
+import { useFooterLinks } from "@ui-layout";
 import { VFooter } from "vuetify/components";
 
-const { t } = useI18n();
-
-const links = computed(() => {
-	const baseLinks: Array<{ text: string; to?: string; href?: string; target?: string }> = [
-		{
-			to: "/imprint",
-			text: t("components.legacy.footer.imprint"),
-		},
-		{
-			href: "/termsofuse",
-			text: t("components.legacy.footer.terms"),
-			target: "_blank",
-		},
-		{
-			to: "/privacypolicy",
-			text: t("components.legacy.footer.privacy_policy"),
-			target: "_blank",
-		},
-		{
-			href: "mailto:support@dbildungscloud.de?subject=dBildungscloud%20Anfrage",
-			text: t("components.legacy.footer.contact"),
-		},
-		{
-			to: "/system/security",
-			text: t("components.legacy.footer.security"),
-		},
-	];
-
-	return useEnvConfig().value.ALERT_STATUS_URL
-		? [
-				...baseLinks,
-				{
-					href: useEnvConfig().value.ALERT_STATUS_URL as string,
-					text: t("components.legacy.footer.status"),
-					target: "_blank",
-				},
-			]
-		: baseLinks;
+const { links } = useFooterLinks({
+	contactEmail: "support@dbildungscloud.de",
+	contactSubject: "dBildungscloud Anfrage",
+	privacyPolicyAsRoute: true,
+	includeSecurityLink: true,
+	includeAccessibilityStatement: false,
 });
 </script>
 
