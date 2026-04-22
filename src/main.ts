@@ -14,7 +14,6 @@ import {
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
-	THEME_KEY,
 } from "./utils/inject";
 import {
 	copyModule,
@@ -27,7 +26,6 @@ import {
 	shareModule,
 	systemsModule,
 } from "@/store";
-import themeConfig from "@/theme.config";
 import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
@@ -55,8 +53,6 @@ app.config.errorHandler = (err: unknown) => {
 	useAppStore().handleUnknownError(err);
 };
 
-app.config.globalProperties.$theme = themeConfig;
-
 app.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
 });
@@ -78,14 +74,12 @@ app.use(VueDOMPurifyHTML, {
 		await useAppStore().login();
 		await schoolsModule.fetchSchool(); // fetch school relies on successful login to know the school id
 	} catch (error) {
-		// this is handled by the axios response interceptor
-		logger.info("probably not logged in", error);
+		logger.info("Unhandled error during login", error);
 	}
 
 	// creation of i18n relies on App.store
 	const i18n = createI18n();
 	const vuetify = createVuetifyPlugin(i18n);
-
 	app.use(router).use(store).use(vuetify).use(i18n);
 
 	// NUXT_REMOVAL get rid of store DI
@@ -100,7 +94,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
 	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
 	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
-	app.provide(THEME_KEY.valueOf(), themeConfig);
 
 	app.mount("#app");
 })();

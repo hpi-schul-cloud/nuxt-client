@@ -17,5 +17,3 @@ export const GROUP_MODULE_KEY: InjectionKey<GroupModule> = Symbol("groupModule")
 export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> = Symbol("schoolsModule");
 export const COPY_MODULE_KEY: InjectionKey<CopyModule> = Symbol("copyModule");
 export const SHARE_MODULE_KEY: InjectionKey<ShareModule> = Symbol("shareModule");
-
-export const THEME_KEY: InjectionKey<{ name: string }> = Symbol("theme");

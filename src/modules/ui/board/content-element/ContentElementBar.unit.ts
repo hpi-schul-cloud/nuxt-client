@@ -2,7 +2,7 @@ import ContentElementBar from "./ContentElementBar.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 
-type Props = { icon?: string; hasGreyBackground?: boolean };
+type Props = { icon?: string };
 
 type Slots = {
 	description?: string;
@@ -17,7 +17,7 @@ type Slots = {
 
 describe("ContentElementBar", () => {
 	const setup = (props: Props, slots?: Slots) => {
-		const { icon, hasGreyBackground } = props;
+		const { icon } = props;
 
 		const wrapper = mount(ContentElementBar, {
 			global: {
@@ -30,7 +30,6 @@ describe("ContentElementBar", () => {
 		return {
 			wrapper,
 			icon,
-			hasGreyBackground,
 		};
 	};
 
@@ -145,30 +144,18 @@ describe("ContentElementBar", () => {
 		});
 	});
 
-	describe("when hasGreyBackground prop is true", () => {
-		it("should render surface-light background", () => {
+	describe("background styling", () => {
+		it("should render content-element-bar-texts with background", () => {
 			const { wrapper } = setup(
-				{
-					hasGreyBackground: true,
-				},
+				{},
 				{
 					title: "i have a dream",
 				}
 			);
 
-			const divWithBackgroundClass = wrapper.find("div.bg-surface-light");
+			const textsDiv = wrapper.find("div.content-element-bar-texts");
 
-			expect(divWithBackgroundClass.exists()).toBe(true);
-		});
-	});
-
-	describe("when hasGreyBackground prop is false", () => {
-		it("should not render surface-light background", () => {
-			const { wrapper } = setup({});
-
-			const divWithBackgroundClass = wrapper.find("div.bg-surface-light");
-
-			expect(divWithBackgroundClass.exists()).toBe(false);
+			expect(textsDiv.exists()).toBe(true);
 		});
 	});
 

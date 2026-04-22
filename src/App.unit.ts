@@ -1,10 +1,9 @@
 import App from "./App.vue";
-import { SchulcloudTheme } from "./generated/serverApi/v3";
 import LoggedInLayout from "./layouts/LoggedIn.layout.vue";
 import LoggedOutLayout from "./layouts/LoggedOut.layout.vue";
 import { Layouts } from "./layouts/types";
 import FilePathsModule from "./store/filePaths";
-import { FILE_PATHS_MODULE_KEY, THEME_KEY } from "./utils/inject";
+import { FILE_PATHS_MODULE_KEY } from "./utils/inject";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -46,9 +45,6 @@ describe("App.vue", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
-					[THEME_KEY.valueOf()]: {
-						name: SchulcloudTheme.DEFAULT,
-					},
 				},
 				stubs: {
 					RouterView: true,

@@ -20,7 +20,7 @@ export default {
 	"common.actions.invite": "Надіслати посилання на курс",
 	"common.actions.logout": "Вийти з аккаунта",
 	"common.actions.ok": "ОК",
-	"common.actions.pickColor": "Вибрати колір тла",
+	"common.actions.pickColor": "Вибрати колір",
 	"common.actions.leave": "Залиште",
 	"common.actions.remove": "Вилучити",
 	"common.actions.rename": "перейменувати",
@@ -510,6 +510,8 @@ export default {
 		"Заголовок картки {cardPosition} у колонці {columnPosition} було змінено на {newTitle} іншим користувачем.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Картку {cardPosition} у стовпчику {columnPosition} було оновлено іншим користувачем.",
+	"components.board.screenReader.notification.cardColorUpdated.success":
+		"Колір картки {cardPosition} у розділі {columnPosition} було змінено.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Інший користувач змінив вигляд панелі на {layout}.",
 	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":

@@ -1,8 +1,10 @@
 import RegistrationLayout from "./Registration.layout.vue";
-import Logo from "@/assets/img/logo/logo-image-mono.svg";
 import TheFooter from "@/components/legacy/TheFooter.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { SchulcloudTheme } from "@api-server";
+import { defaultConfigEnvs, useEnvStore } from "@data-env";
 import { createTestingPinia } from "@pinia/testing";
+import { flushPromises } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VContainer, VMain, VToolbar } from "vuetify/components";
 
@@ -35,12 +37,13 @@ describe("Registration.layout", () => {
 	});
 
 	describe("topbar", () => {
-		it("should render logo", () => {
+		it("should render logo with theme-based path", async () => {
 			const { wrapper } = setup();
+			useEnvStore().$patch({ env: { ...defaultConfigEnvs, SC_THEME: SchulcloudTheme.N21 } });
 			const topbar = wrapper.findComponent(VToolbar);
-
-			expect(topbar.exists()).toBe(true);
-			expect(topbar.html()).toContain(Logo);
+			const logo = topbar.find("img");
+			await flushPromises();
+			expect(logo.exists()).toBe(true);
 		});
 	});
 

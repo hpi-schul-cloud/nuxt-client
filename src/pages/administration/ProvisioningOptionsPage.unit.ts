@@ -1,6 +1,5 @@
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable, provisioningOptionsDataFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ConfigResponse } from "@api-server";
@@ -40,11 +39,6 @@ describe("ProvisioningOptionsPage", () => {
 		const wrapper = mount(ProvisioningOptionsPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[THEME_KEY.valueOf()]: {
-						name: "instance name",
-					},
-				},
 			},
 			props,
 		});
