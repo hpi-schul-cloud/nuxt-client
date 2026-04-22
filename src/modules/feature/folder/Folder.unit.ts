@@ -1327,6 +1327,45 @@ describe("Folder.vue", () => {
 				});
 			});
 		});
+
+		describe("trash link", () => {
+			const setupWithPermission = async (createFileElement: boolean) => {
+				const { fileStorageApiMock } = setupMocks({ allowedOperations: { createFileElement } });
+
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
+
+				const addCollaboraFileMock = createAddCollaboraFileMock({
+					isCollaboraFileDialogOpen: ref(false),
+				});
+				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
+
+				const { wrapper } = setupWrapper();
+
+				await flushPromises();
+
+				return { wrapper };
+			};
+
+			describe("when createFileElement is true", () => {
+				it("should show the trash link", async () => {
+					const { wrapper } = await setupWithPermission(true);
+
+					const trashLink = wrapper.find("[data-testid='trash-link']");
+
+					expect(trashLink.exists()).toBe(true);
+				});
+			});
+
+			describe("when createFileElement is false", () => {
+				it("should not show the trash link", async () => {
+					const { wrapper } = await setupWithPermission(false);
+
+					const trashLink = wrapper.find("[data-testid='trash-link']");
+
+					expect(trashLink.exists()).toBe(false);
+				});
+			});
+		});
 	});
 
 	describe("when user has not board edit permission", () => {
