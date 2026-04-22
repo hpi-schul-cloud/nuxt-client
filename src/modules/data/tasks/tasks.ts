@@ -22,7 +22,6 @@ export const isTaskDraft = (t: TaskResponse) => t.status.isDraft;
 
 // === Task Status Predicates ===
 const hasNoDueDate = (t: TaskResponse) => !t.dueDate;
-const hasDueDate = (t: TaskResponse) => t.dueDate && !isTaskOverdue(t);
 const isPublished = (t: TaskResponse) => !t.status.isDraft;
 const isSubstitution = (t: TaskResponse) => t.status.isSubstitutionTeacher;
 const isVisible = (t: TaskResponse) => !t.lessonHidden;
@@ -261,6 +260,12 @@ export const useTaskActions = () => {
 
 export const useTasksOfOverview = createTestableSharedComposable(() => useTasks({ fetchImmediate: true }));
 
+export type FilterOption<T extends string> = {
+	value: T;
+	text: string;
+	count: number;
+};
+
 // === Task Filter Composable ===
 export const useTasksFilter = (
 	tasks: Ref<TaskResponse[]>,
@@ -305,9 +310,9 @@ export const useTasksFilter = (
 		return tasksFilteredByDueStatus.value;
 	});
 
-	// === Filter Helpers ===
+	// === Course Filter Options with Counts ===
 	const uniqCourseFilters = computed(() =>
-		uniqBy(tasks.value, (task) => task.courseName).map((task) => ({
+		uniqBy(tasksFilteredBySubstitute.value, (task) => task.courseName).map((task) => ({
 			value: task.courseName,
 			text: task.courseName || t("pages.tasks.labels.noCourse"),
 			isSubstitution: task.status.isSubstitutionTeacher,
@@ -315,6 +320,43 @@ export const useTasksFilter = (
 	);
 
 	const sortedCourseFilters = computed(() => orderBy(uniqCourseFilters.value, [(f) => f.text], ["asc"]));
+
+	const courseFilterOptions = computed<FilterOption<string>[]>(() => {
+		const baseTasks = tasksFilteredBySubstitute.value;
+		return sortedCourseFilters.value.map((filter) => ({
+			value: filter.value,
+			text: filter.text,
+			count: baseTasks.filter((t) => t.courseName === filter.value).length,
+		}));
+	});
+
+	// === Grade Status Options ===
+	const gradeStatusOptions = computed(() => [
+		{
+			value: "graded" as const,
+			text: t("pages.tasks.filter.gradeStatus.graded"),
+		},
+		{
+			value: "not-graded" as const,
+			text: t("pages.tasks.filter.gradeStatus.notGraded"),
+		},
+	]);
+
+	// === Due Status Options ===
+	const dueStatusOptions = computed(() => [
+		{
+			value: "overdue" as const,
+			text: t("pages.tasks.filter.dueStatus.overdue"),
+		},
+		{
+			value: "not-overdue" as const,
+			text: t("pages.tasks.filter.dueStatus.notOverdue"),
+		},
+		{
+			value: "no-due-date" as const,
+			text: t("pages.tasks.filter.dueStatus.noDueDate"),
+		},
+	]);
 
 	const clearFilters = () => {
 		selectedCourseNames.value = [];
@@ -333,7 +375,12 @@ export const useTasksFilter = (
 		dueStatus,
 		gradeStatus,
 
-		// Filter Helpers
+		// Filter Options with Counts
+		courseFilterOptions,
+		gradeStatusOptions,
+		dueStatusOptions,
+
+		// Legacy (for backward compatibility)
 		sortedCourseFilters,
 
 		// Filter Actions

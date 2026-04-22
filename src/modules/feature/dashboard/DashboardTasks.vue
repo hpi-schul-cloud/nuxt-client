@@ -24,10 +24,10 @@
 			/>
 
 			<DashboardTasksSection
-				v-if="drafts.length > 0"
+				v-if="draftsSortedByDueDate.length > 0"
 				data-testid="teacher-tasks-drafts"
 				:title="t('common.words.drafts')"
-				:tasks="drafts"
+				:tasks="draftsSortedByDueDate"
 			/>
 		</template>
 		<template v-else-if="isStudent">
@@ -63,7 +63,7 @@
 import DashboardTasksOpen from "./DashboardTasksOpen.vue";
 import DashboardTasksSection from "./DashboardTasksSection.vue";
 import { useAppStoreRefs } from "@data-app";
-import { isTaskOverdue, useTasks } from "@data-tasks";
+import { isTaskOverdue, toSortedByDueDate, useTasks } from "@data-tasks";
 import { SvsSuspense } from "@ui-containers";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -90,4 +90,5 @@ const {
 const openForTeacherNotOverdue = computed(() => openForTeacher.value.filter((task) => !isTaskOverdue(task)));
 const gradedForTeacherOverdue = computed(() => gradedForTeacher.value.filter(isTaskOverdue));
 const ungradedForTeacherOverdue = computed(() => ungradedForTeacher.value.filter(isTaskOverdue));
+const draftsSortedByDueDate = computed(() => toSortedByDueDate(drafts.value));
 </script>

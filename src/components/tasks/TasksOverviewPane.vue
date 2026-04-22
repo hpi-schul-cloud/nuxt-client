@@ -28,37 +28,37 @@
 					item-title="text"
 					item-value="value"
 					:menu-props="{ closeOnContentClick: false, zIndex: 30 }"
-					:items="sortedCourseFilters"
+					:items="courseFilterOptionsWithCount"
 					:label="t('pages.tasks.labels.filter')"
 				/>
 
 				<VAutocomplete
 					v-model="gradeStatus"
+					class="mt-2"
 					clearable
 					hide-details="auto"
 					variant="solo-filled"
 					flat
-					data-testid="courseFilter"
+					data-testid="gradeStatusFilter"
 					item-title="text"
 					item-value="value"
 					:menu-props="{ closeOnContentClick: false, zIndex: 30 }"
-					:items="gradeOptions"
+					:items="gradeStatusOptions"
 					label="Status"
 				/>
-
-				{{ gradeStatus }}
 
 				<VAutocomplete
 					v-model="dueStatus"
 					clearable
+					class="mt-2"
 					hide-details="auto"
 					variant="solo-filled"
 					flat
-					data-testid="courseFilter"
+					data-testid="dueStatusFilter"
 					item-title="text"
 					item-value="value"
 					:menu-props="{ closeOnContentClick: false, zIndex: 30 }"
-					:items="dueOptions"
+					:items="dueStatusOptions"
 					label="Due status"
 				/>
 
@@ -79,9 +79,9 @@ import TasksOverviewListItemStudent from "@/components/tasks/TasksOverviewListIt
 import TasksOverviewListItemTeacher from "@/components/tasks/TasksOverviewListItemTeacher.vue";
 import { TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
-import { DueStatus, GradeStatus, useTasksFilter } from "@data-tasks";
+import { useTasksFilter } from "@data-tasks";
 import { mdiCheck } from "@icons/material";
-import { toRef } from "vue";
+import { computed, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps<{
@@ -94,11 +94,24 @@ const props = defineProps<{
 
 const { isTeacher, isStudent } = useAppStoreRefs();
 
-const gradeOptions: GradeStatus[] = ["graded", "not-graded"];
-const dueOptions: DueStatus[] = ["no-due-date", "overdue", "not-overdue"];
+const {
+	gradeStatus,
+	dueStatus,
+	courseFilterOptions,
+	gradeStatusOptions,
+	dueStatusOptions,
+	includeSubstitute,
+	filteredTasks,
+	selectedCourseNames,
+} = useTasksFilter(toRef(props, "tasks"));
 
-const { gradeStatus, dueStatus, sortedCourseFilters, includeSubstitute, filteredTasks, selectedCourseNames } =
-	useTasksFilter(toRef(props, "tasks"));
+// Format course options to show count in text
+const courseFilterOptionsWithCount = computed(() =>
+	courseFilterOptions.value.map((opt) => ({
+		...opt,
+		text: `${opt.text} (${opt.count})`,
+	}))
+);
 
 defineEmits<{ "load-more-tasks": [] }>();
 
