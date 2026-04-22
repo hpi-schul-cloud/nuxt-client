@@ -10,6 +10,19 @@
 		@confirm="onConfirm"
 	>
 		<template #content>
+			<p>
+				{{ text }}
+			</p>
+			<WarningAlert v-if="warnings.length > 0" class="mb-4">
+				<p class="mb-1">
+					{{ t("feature-copy.copyInfo.text.alert.followingContent") }}
+				</p>
+				<ul class="ml-6">
+					<li v-for="warning in warnings" :key="warning.testId" :data-testid="warning.testId">
+						{{ warning.text }}
+					</li>
+				</ul>
+			</WarningAlert>
 			<template v-if="activeStep == 'select'">
 				<VSelect
 					v-model="selectedDestinationId"
@@ -24,7 +37,6 @@
 					data-testId="import-destination-select"
 				/>
 			</template>
-
 			<template v-if="activeStep == 'rename'">
 				<div class="mb-4">
 					{{ t(`components.molecules.import.${props.shareTokenInfo.parentType}.rename`) }}
@@ -42,7 +54,10 @@
 
 <script setup lang="ts">
 import { ImportDestinationItem, ImportDestinationType } from "./types";
+import { useCopyContent } from "@/composables/copy-content.composable";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
+import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { useOpeningTagValidator } from "@util-validators";
 import { computed, onMounted, reactive, ref, watch } from "vue";
@@ -131,19 +146,16 @@ const currentStepTitle = computed(() =>
 	t(`components.molecules.import.${props.shareTokenInfo.parentType}.options.title`)
 );
 
-const selectionPlaceholder = computed(
-	() => {
-		if (!hasSelectStep.value) {
-			return "";
-		}
-		return t(
-			props.destinationType === "room"
-				? `components.molecules.import.${props.shareTokenInfo.parentType}.options.selectRoom`
-				: `components.molecules.import.${props.shareTokenInfo.parentType}.options.selectCourse`
-		);
+const selectionPlaceholder = computed(() => {
+	if (!hasSelectStep.value) {
+		return "";
 	}
-	// t(`components.molecules.import.${props.shareTokenInfo.parentType}.options.selectCourse`)
-);
+	return t(
+		props.destinationType === "room"
+			? `components.molecules.import.${props.shareTokenInfo.parentType}.options.selectRoom`
+			: `components.molecules.import.${props.shareTokenInfo.parentType}.options.selectCourse`
+	);
+});
 
 const selectionHint = computed(() => t(`common.labels.${props.destinationType}`));
 
@@ -161,4 +173,23 @@ const confirmBtnLangKey = computed(() => {
 
 	return "common.actions.import";
 });
+
+const contentItemType = computed<ContentItemTypeEnum>(() => {
+	switch (props.shareTokenInfo.parentType) {
+		case ShareTokenInfoResponseParentType.COURSES:
+			return ContentItemTypeEnum.Course;
+		case ShareTokenInfoResponseParentType.LESSONS:
+			return ContentItemTypeEnum.Lesson;
+		case ShareTokenInfoResponseParentType.TASKS:
+			return ContentItemTypeEnum.Task;
+		case ShareTokenInfoResponseParentType.COLUMN_BOARD:
+			return ContentItemTypeEnum.ColumnBoard;
+		case ShareTokenInfoResponseParentType.ROOM:
+			return ContentItemTypeEnum.Room;
+		default:
+			return ContentItemTypeEnum.Unknown;
+	}
+});
+
+const { text, warnings } = useCopyContent(contentItemType);
 </script>

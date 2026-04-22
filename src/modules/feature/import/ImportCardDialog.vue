@@ -13,14 +13,19 @@
 			<WarningAlert v-if="availableRooms?.length === 0" class="mb-2">
 				{{ t("common.alerts.room.not.available") }}
 			</WarningAlert>
-			<InfoAlert data-testid="import-card-information">
-				{{ t("components.molecules.import.card.hint.restriction") }}
+			<p>
+				{{ text }}
+			</p>
+			<WarningAlert v-if="warnings.length > 0" class="mb-4">
+				<p class="mb-1">
+					{{ t("feature-copy.copyInfo.text.alert.followingContent") }}
+				</p>
 				<ul class="ml-6">
-					<li>{{ t("components.molecules.import.card.hint.etherpad") }}</li>
-					<li>{{ t("components.molecules.import.card.hint.whiteboard") }}</li>
-					<li>{{ t("components.molecules.import.card.hint.ctltools") }}</li>
+					<li v-for="warning in warnings" :key="warning.testId" :data-testid="warning.testId">
+						{{ warning.text }}
+					</li>
 				</ul>
-			</InfoAlert>
+			</WarningAlert>
 			<p class="mt-2" data-testid="import-card-dialog-question">
 				{{ dialogQuestion }}
 			</p>
@@ -64,13 +69,14 @@
 </template>
 
 <script setup lang="ts">
-import { useCardDialogData } from "../board/card/card-dialog-composable";
+import { useCopyContent } from "@/composables/copy-content.composable";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { RoomItem } from "@/types/room/Room";
 import { ShareTokenInfoResponse } from "@api-server";
 import { useCardDialogData } from "@data-board";
 import { useRoomStore } from "@data-room";
 import { useShareTokenImport } from "@feature-import";
-import { InfoAlert, WarningAlert } from "@ui-alert";
+import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { sortBy } from "lodash-es";
 import { computed, onBeforeMount, ref } from "vue";
@@ -123,4 +129,6 @@ const onConfirm = async () => {
 const onCancel = () => {
 	router.push("/rooms");
 };
+
+const { text, warnings } = useCopyContent(ContentItemTypeEnum.Card);
 </script>
