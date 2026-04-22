@@ -118,6 +118,19 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		}
 	});
 
+	const instanceName = computed(() => {
+		switch (env.SC_THEME.toLowerCase()) {
+			case SchulcloudTheme.THR:
+				return "Thüringer Schulcloud";
+			case SchulcloudTheme.BRB:
+				return "Schul-Cloud Brandenburg";
+			case SchulcloudTheme.N21:
+				return "Niedersächsische Bildungscloud";
+			default:
+				return "dBildungscloud";
+		}
+	});
+
 	const loadConfiguration = async () => {
 		try {
 			const [serverConfigRes, fileConfigRes] = await Promise.all([
@@ -142,6 +155,7 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		env,
 		envFile,
 		fallBackLanguage,
+		instanceName,
 		instituteTitle,
 	};
 });

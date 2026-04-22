@@ -125,6 +125,12 @@ export interface FileRecordResponse {
      * @memberof FileRecordResponse
      */
     contentLastModifiedAt?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileRecordResponse
+     */
+    expiresAt?: string;
 }
 
 

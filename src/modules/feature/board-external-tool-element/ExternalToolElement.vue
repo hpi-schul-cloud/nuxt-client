@@ -20,7 +20,7 @@
 			:tool-status="toolConfigurationStatus"
 			data-testid="board-external-tool-element-alert"
 		/>
-		<ContentElementBar :has-grey-background="true" :icon="getIcon">
+		<ContentElementBar :icon="getIcon">
 			<template v-if="displayData && displayData.logoUrl" #logo>
 				<VImg data-testid="board-external-tool-element-logo" height="100%" class="mx-auto" :src="displayData.logoUrl" />
 			</template>

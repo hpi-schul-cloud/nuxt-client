@@ -12,11 +12,7 @@
 		@keydown.enter.space="redirectToEditorUrl"
 		@keydown.stop
 	>
-		<ContentElementBar
-			:has-grey-background="true"
-			:has-row-style="isSmallOrLargerListBoard"
-			:icon="mdiTextBoxEditOutline"
-		>
+		<ContentElementBar :has-row-style="isSmallOrLargerListBoard" :icon="mdiTextBoxEditOutline">
 			<template #display>
 				<v-img :src="image" alt="" cover />
 			</template>

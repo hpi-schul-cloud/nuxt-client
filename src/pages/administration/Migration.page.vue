@@ -19,7 +19,7 @@
 				{{
 					t("pages.administration.migration.title", {
 						source: sourceSystemName,
-						instance: theme.name,
+						instance: instanceName,
 					})
 				}}
 			</h1>
@@ -192,7 +192,7 @@
 												</span>
 												{{
 													t(paragraph.text, {
-														instance: theme.name,
+														instance: instanceName,
 														source: sourceSystemName,
 													})
 												}}
@@ -249,7 +249,7 @@
 													{{
 														t("pages.administration.migration.step4.nbc.linkingFinished", {
 															source: sourceSystemName,
-															instance: theme.name,
+															instance: instanceName,
 															totalMatched: totalMatched,
 														})
 													}}
@@ -260,7 +260,7 @@
 													{{
 														t("pages.administration.migration.step4.linkingFinished", {
 															source: sourceSystemName,
-															instance: theme.name,
+															instance: instanceName,
 														})
 													}}
 												</p>
@@ -276,7 +276,7 @@
 														}}
 													</li>
 													<li>
-														{{ t("pages.administration.migration.step4.bullets.newUsers", { instance: theme.name }) }}
+														{{ t("pages.administration.migration.step4.bullets.newUsers", { instance: instanceName }) }}
 													</li>
 													<li>
 														{{
@@ -317,7 +317,7 @@
 											{{
 												t("pages.administration.migration.step5.nbc.linkingFinished", {
 													source: sourceSystemName,
-													instance: theme.name,
+													instance: instanceName,
 												})
 											}}
 										</p>
@@ -342,7 +342,7 @@
 											{{
 												t("pages.administration.migration.step5.syncReady2", {
 													source: sourceSystemName,
-													instance: theme.name,
+													instance: instanceName,
 												})
 											}}
 										</p>
@@ -351,7 +351,7 @@
 											{{
 												t("pages.administration.migration.step5.afterSync", {
 													source: sourceSystemName,
-													instance: theme.name,
+													instance: instanceName,
 												})
 											}}
 										</p>
@@ -390,13 +390,13 @@ import ImportUsers from "@/components/administration/ImportUsers.vue";
 import { importUsersModule, schoolsModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
-import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { SchulcloudTheme } from "@api-server";
-import { useEnvConfig } from "@data-env";
+import { useEnvConfig, useEnvStore } from "@data-env";
 import { mdiClose } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, onUnmounted, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -404,8 +404,7 @@ import { useRouter } from "vue-router";
 const { t } = useI18n();
 
 const router = useRouter();
-
-const theme = injectStrict(THEME_KEY);
+const { instanceName } = storeToRefs(useEnvStore());
 
 const migrationStep: Ref<number> = ref(1);
 
@@ -461,7 +460,7 @@ useTitle(
 	buildPageTitle(
 		t("pages.administration.migration.title", {
 			source: sourceSystemName.value,
-			instance: theme.name,
+			instance: instanceName,
 		})
 	)
 );

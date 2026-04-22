@@ -13,20 +13,19 @@
  */
 
 
-import { Colors } from './colors';
 
 /**
  * 
  * @export
- * @interface ColorBodyParams
+ * @interface UpdateCardColorBodyParams
  */
-export interface ColorBodyParams {
+export interface UpdateCardColorBodyParams {
     /**
      * 
-     * @type {Colors}
-     * @memberof ColorBodyParams
+     * @type {string}
+     * @memberof UpdateCardColorBodyParams
      */
-    backgroundColor: Colors;
+    color: string;
 }
 
 
