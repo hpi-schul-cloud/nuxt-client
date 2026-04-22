@@ -74,8 +74,7 @@ app.use(VueDOMPurifyHTML, {
 		await useAppStore().login();
 		await schoolsModule.fetchSchool(); // fetch school relies on successful login to know the school id
 	} catch (error) {
-		// this is handled by the axios response interceptor
-		logger.info("probably not logged in", error);
+		logger.info("Unhandled error during login", error);
 	}
 
 	// creation of i18n relies on App.store
