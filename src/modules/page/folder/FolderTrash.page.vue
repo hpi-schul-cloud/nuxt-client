@@ -5,6 +5,7 @@
 <script setup lang="ts">
 import { FolderTrash } from "@feature-folder";
 import { useTitle } from "@vueuse/core";
+import { useI18n } from "vue-i18n";
 
 defineProps({
 	folderId: {
@@ -13,7 +14,9 @@ defineProps({
 	},
 });
 
-const handleFolderNameUpdate = (pageTitle: string) => {
-	useTitle(pageTitle);
+const { t } = useI18n();
+
+const handleFolderNameUpdate = (folderName: string) => {
+	useTitle(t("pages.folder.trash.title", { folderName }));
 };
 </script>
