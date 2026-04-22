@@ -558,6 +558,7 @@ export default {
 	"components.cardElement.LinkElement": "Enlace",
 	"components.cardElement.LinkElement.create.label": "Inserte la dirección del enlace",
 	"components.cardElement.LinkElement.edit.label": "Editar la dirección del enlace",
+	"components.cardElement.LinkElement.validation.success": "XYZ",
 	"components.cardElement.notification.visibleAndEditable":
 		"Esta pizarra es visible y editable para todos los participantes en el curso.",
 	"components.cardElement.richTextElement.placeholder": "Añadir texto",
