@@ -99,9 +99,8 @@ const isDraft = computed(() => isTaskDraft(props.task));
 const isPlanned = computed(() => new Date(props.task.availableDate!) > new Date());
 
 const courseName = computed(() => {
-	const { isSubstitutionTeacher } = props.task.status;
 	const baseName = props.task.courseName || t("pages.tasks.labels.noCourse");
-	return isSubstitutionTeacher ? `${t("common.words.substitute")} ${baseName}` : baseName;
+	return props.task.status.isSubstitutionTeacher ? `${t("common.words.substitute")} ${baseName}` : baseName;
 });
 
 const taskLabel = computed(() => {

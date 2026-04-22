@@ -38,7 +38,7 @@
 			</VWindow>
 		</div>
 
-		<share-modal :type="ShareTokenBodyParamsParentType.TASKS" />
+		<ShareModal :type="ShareTokenBodyParamsParentType.TASKS" />
 		<CopyResultModal
 			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
