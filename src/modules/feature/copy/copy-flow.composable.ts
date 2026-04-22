@@ -42,8 +42,13 @@ export const useCopyFlow = () => {
 		confirmAction.cancel();
 	};
 
-	const withCopyLoading = <T>(fn: () => Promise<T>) =>
-		withLoadingState(fn, t("components.molecules.copyResult.title.loading"));
+	const withCopyLoading = <T>(fn: () => Promise<T>) => withLoadingState(fn, t("feature-copy.inProgress.title.loading"));
+
+	const notifyCopySuccess = (type: ContentItemTypeEnum) => {
+		notifySuccess(
+			t("feature-copy.notifications.success.successfullyCopied", { type: t(`feature-copy.copyInfo.type.${type}`) })
+		);
+	};
 
 	const executeCopyCourse = async (courseId: string) => {
 		const { submitted } = await confirm(ContentItemTypeEnum.Course);
@@ -57,7 +62,7 @@ export const useCopyFlow = () => {
 		);
 
 		if (outcome.success) {
-			notifySuccess(t("components.molecules.copyResult.course.successfullyCopied"));
+			notifyCopySuccess(ContentItemTypeEnum.Course);
 		}
 
 		return { ...outcome, copyResult: outcome.result?.data };
@@ -75,7 +80,7 @@ export const useCopyFlow = () => {
 		);
 
 		if (outcome.success) {
-			notifySuccess(t("components.molecules.copyResult.task.successfullyCopied"));
+			notifyCopySuccess(ContentItemTypeEnum.Task);
 		}
 
 		return { ...outcome, copyResult: outcome.result?.data };
@@ -93,7 +98,7 @@ export const useCopyFlow = () => {
 		);
 
 		if (outcome.success) {
-			notifySuccess(t("components.molecules.copyResult.lesson.successfullyCopied"));
+			notifyCopySuccess(ContentItemTypeEnum.Lesson);
 		}
 
 		return { ...outcome, copyResult: outcome.result?.data };
@@ -111,7 +116,7 @@ export const useCopyFlow = () => {
 		);
 
 		if (outcome.success) {
-			notifySuccess(t("components.molecules.copyResult.board.successfullyCopied"));
+			notifyCopySuccess(ContentItemTypeEnum.ColumnBoard);
 		}
 
 		return { ...outcome, copyResult: outcome.result?.data };
@@ -129,7 +134,7 @@ export const useCopyFlow = () => {
 		);
 
 		if (outcome.success) {
-			notifySuccess(t("components.molecules.copyResult.room.successfullyCopied"));
+			notifyCopySuccess(ContentItemTypeEnum.Room);
 		}
 
 		return { ...outcome, copyResult: outcome.result?.data };

@@ -414,7 +414,7 @@ const initCoursePolling = (started: Date, count = 0) => {
 			if (hasRoomsBeingCopied.value) {
 				initCoursePolling(started ?? new Date(), count + 1);
 			} else {
-				notifySuccess(t("components.molecules.copyResult.timeoutSuccess"));
+				notifySuccess(t("feature-copy.inProgress.timeoutSuccess"));
 			}
 		},
 		Math.min(nextTimeout, 30000)

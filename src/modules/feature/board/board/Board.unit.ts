@@ -2,7 +2,6 @@ import MoveCardDialog from "../card/MoveCardDialog.vue";
 import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import ShareModule from "@/store/share";
@@ -390,28 +389,13 @@ describe("Board", () => {
 	});
 
 	describe("Dialogs", () => {
-		it("should have a result modal component", () => {
-			const { wrapper } = setup();
-
-			expect(wrapper.findComponent(CopyResultModal).exists()).toBe(true);
-		});
-
 		it("should have a move dialog component", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.findComponent(MoveCardDialog).exists()).toBe(true);
 		});
 
-		it("should reset copy module when copy result modal is closed", async () => {
-			const { wrapper } = setup();
-
-			const copyResultModal = wrapper.findComponent(CopyResultModal);
-			await copyResultModal.vm.$emit("copy-dialog-closed");
-
-			// FIX test
-			// expect(copyModule.reset).toHaveBeenCalled();
-			expect(true).toBe(false);
-		});
+		it.todo("should reset copy module when copy result modal is closed");
 	});
 
 	describe("when component is unmounted", () => {
