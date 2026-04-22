@@ -423,11 +423,6 @@ export default {
 		"¿Realmente final de la fase de transferencia?",
 	"components.administration.schoolYearChangeSection.dialog.finish.content":
 		"Se inicia la sincronización de los datos LDAP. Se actualizan los datos y clases de los usuarios. El nuevo año escolar se establece automáticamente.",
-	"components.atoms.ChipTimeRemaining.hintDueTime": "en ",
-	"components.atoms.ChipTimeRemaining.hintHours": "hora | horas",
-	"components.atoms.ChipTimeRemaining.hintHoursShort": "h",
-	"components.atoms.ChipTimeRemaining.hintMinShort": "min",
-	"components.atoms.ChipTimeRemaining.hintMinutes": "minuto | minutos",
 	"components.audioPlayer.pause": "Pausa",
 	"components.audioPlayer.play": "Reproducir",
 	"components.audioPlayer.slider": "Control deslizante",

@@ -241,7 +241,6 @@ export const useTaskActions = () => {
 			t("common.notifications.errors.notReverted", { type: t("common.words.task") })
 		);
 
-	// For these two, i need to fetch "normal" and "finished" tasks
 	const restoreFinishedTask = async (taskId: string) =>
 		await execute(
 			() => tasksApi.taskControllerRestore(taskId),

@@ -61,7 +61,6 @@ import { useEnvConfig } from "@data-env";
 import { useTasksOfOverview } from "@data-tasks";
 import { mdiArchiveOutline, mdiFormatListChecks, mdiPlaylistEdit } from "@icons/material";
 import { useUrlSearchParams } from "@vueuse/core";
-import { countBy } from "lodash-es";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -91,34 +90,8 @@ const activeTab = computed({
 	},
 });
 
-const {
-	draftsUnfiltered,
-	publishedUnfiltered,
-	drafts,
-	openForTeacher,
-	isLoadingFinishedTasks,
-	includeSubstitute,
-	fetchTasks,
-	loadMoreFinishedTasks,
-	finishedTasks,
-	sortedCourseFilters,
-	selectedCourseNames,
-} = useTasksOfOverview();
-
-const countedCourseFilters = computed(() => {
-	const count = countBy(
-		activeTab.value === TaskTab.DRAFTS ? draftsUnfiltered.value : publishedUnfiltered.value,
-		(t) => t.courseName
-	);
-
-	return sortedCourseFilters.value.map((filter) => {
-		const substitution = filter.isSubstitution ? `${t("common.words.substitute")} ` : "";
-		return {
-			...filter,
-			text: `${substitution}${filter.text} (${count[filter.value] ?? 0})`,
-		};
-	});
-});
+const { drafts, openForTeacher, isLoadingFinishedTasks, fetchTasks, loadMoreFinishedTasks, finishedTasks } =
+	useTasksOfOverview();
 
 const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
 const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);

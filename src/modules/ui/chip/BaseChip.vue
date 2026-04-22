@@ -1,5 +1,5 @@
 <template>
-	<VChip :color="color" :prepend-icon="icon" size="small" variant="tonal">
+	<VChip :color :prepend-icon="icon" size="small" variant="tonal">
 		<div class="chip-content"><slot /></div>
 	</VChip>
 </template>

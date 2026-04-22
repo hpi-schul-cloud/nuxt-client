@@ -1,6 +1,6 @@
 <template>
 	<div class="d-flex flex-row flex-wrap" style="gap: 6px">
-		<ChipTimeRemaining v-if="isDueSoon" type="warning" :due-date="task.dueDate!" />
+		<ChipTimeRemaining v-if="isDueSoon" :due-date="task.dueDate!" />
 
 		<InfoChip
 			v-if="task.status?.submitted"

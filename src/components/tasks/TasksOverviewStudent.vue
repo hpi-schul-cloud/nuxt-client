@@ -39,7 +39,6 @@ import TasksOverviewPane from "./TasksOverviewPane.vue";
 import { useTasksOfOverview } from "@data-tasks";
 import { mdiArchiveOutline, mdiCheckCircleOutline, mdiFormatListChecks } from "@icons/material";
 import { useUrlSearchParams } from "@vueuse/core";
-import { countBy } from "lodash-es";
 import { computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -71,37 +70,15 @@ const activeTab = computed({
 
 const {
 	openForStudent,
-	sortedCourseFilters,
 	finishedTasks,
 	isLoadingFinishedTasks,
 	loadMoreFinishedTasks,
 	fetchFinishedTasks,
-	selectedCourseNames,
 	submittedForStudent,
-	openForStudentUnfiltered,
-	submittedForStudentUnfiltered,
-	gradedForStudentUnfiltered,
 } = useTasksOfOverview();
 
 onMounted(async () => {
 	await fetchFinishedTasks();
-});
-
-const completedForStudentUnfiltered = computed(() => [
-	...submittedForStudentUnfiltered.value,
-	...gradedForStudentUnfiltered.value,
-]);
-
-const countedCourseFilters = computed(() => {
-	const count = countBy(
-		activeTab.value === TaskTab.OPEN ? openForStudentUnfiltered.value : completedForStudentUnfiltered.value,
-		(t) => t.courseName
-	);
-
-	return sortedCourseFilters.value.map((filter) => ({
-		...filter,
-		text: `${filter.text} (${count[filter.value] ?? 0})`,
-	}));
 });
 </script>
 

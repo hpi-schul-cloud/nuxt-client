@@ -1,49 +1,21 @@
 <template>
-	<VChip v-if="type === 'warning'" color="orange-lighten-3" size="small" variant="flat" data-test-id="dueDateHintLabel">
-		<v-icon start size="small"> {{ mdiTimerSandComplete }} </v-icon>
-		{{ hintDueDate(dueDate, shortenUnit) }}
-	</VChip>
+	<WarningChip :icon="mdiTimerSandComplete" size="small" variant="tonal">
+		{{ dueDateDayjs }}
+	</WarningChip>
 </template>
 
 <script setup lang="ts">
-import { timeUntil } from "@/utils/date-time.utils";
+import WarningChip from "./WarningChip.vue";
+import { fromNowUtc } from "@/utils/date-time.utils";
 import { mdiTimerSandComplete } from "@icons/material";
-import dayjs from "dayjs";
-import { useI18n } from "vue-i18n";
+import { computed } from "vue";
 
-defineProps({
-	type: {
-		type: String,
-		required: true,
-		validator: (value: string) => ["warning"].includes(value),
-	},
+const props = defineProps({
 	dueDate: {
 		type: String,
 		required: true,
-		validator: (value: string) => dayjs(value).isValid(),
-	},
-	shortenUnit: {
-		type: Boolean,
-		default: false,
 	},
 });
 
-const { t } = useI18n();
-const hintDueDate = (dueDate: string, shorten = false) => {
-	const diffHrs = timeUntil(dueDate, "hours");
-	if (diffHrs === 0) {
-		const diffMins = timeUntil(dueDate, "minutes");
-
-		const label = shorten
-			? t("components.atoms.ChipTimeRemaining.hintMinShort")
-			: t("components.atoms.ChipTimeRemaining.hintMinutes", diffMins);
-
-		return `${t("components.atoms.ChipTimeRemaining.hintDueTime")}${diffMins} ${label}`;
-	} else {
-		const label = shorten
-			? t("components.atoms.ChipTimeRemaining.hintHoursShort")
-			: t("components.atoms.ChipTimeRemaining.hintHours", diffHrs);
-		return `${t("components.atoms.ChipTimeRemaining.hintDueTime")}${diffHrs} ${label}`;
-	}
-};
+const dueDateDayjs = computed(() => fromNowUtc(props.dueDate));
 </script>
