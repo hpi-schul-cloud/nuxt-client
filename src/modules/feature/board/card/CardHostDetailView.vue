@@ -4,7 +4,7 @@
 			<VCard>
 				<div class="toolbar-fixed-offset">
 					<VToolbar class="toolbar-position" color="white">
-						<VBtn icon @click="onDialogClose">
+						<VBtn icon data-testid="close-detail-view-button" @click="onDialogClose">
 							<VIcon>{{ mdiClose }}</VIcon>
 						</VBtn>
 						<VSpacer />

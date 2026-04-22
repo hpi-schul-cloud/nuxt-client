@@ -194,85 +194,124 @@ describe("CardHostDetailView", () => {
 		});
 	});
 
-	// describe("when edit button is clicked", () => {
-	// 	it("should show view button after clicking edit", async () => {
-	// 		const { wrapper } = setup(
-	// 			{
-	// 				card: CARD_WITH_ELEMENTS,
-	// 				isOpen: true,
-	// 				columnIndex: 0,
-	// 				rowIndex: 1,
-	// 			},
-	// 			{ deleteCard: true, updateElement: true }
-	// 		);
+	describe("when close button gets clicked", () => {
+		it("should emit close event", () => {
+			const { wrapper } = setup({
+				card: CARD_WITH_ELEMENTS,
+				isOpen: true,
+				columnIndex: 0,
+				rowIndex: 1,
+			});
 
-	// 		// Initially edit button should exist and isEditMode should be false
-	// 		expect(mockIsEditMode.value).toBe(false);
-	// 		const editButton = wrapper.find("[data-testid='toolbar-edit-button']");
-	// 		expect(editButton.exists()).toBe(true);
+			const closeButton = wrapper.find("[data-testid='close-detail-view-button']");
+			closeButton.trigger("click");
 
-	// 		// Click the edit button
-	// 		await editButton.trigger("click");
+			expect(wrapper.emitted("close:detail-view")).toBeTruthy();
+		});
+	});
 
-	// 		// Verify the mock function was called
-	// 		expect(mockStartEditMode).toHaveBeenCalled();
+	describe("card title events", () => {
+		describe("when update gets triggered", () => {
+			it("should emit update:title", () => {
+				const { wrapper } = setup({
+					card: CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
 
-	// 		// Verify state changed
-	// 		expect(mockIsEditMode.value).toBe(true);
+				const cardTitle = wrapper.findComponent({ name: "CardTitle" });
+				cardTitle.vm.$emit("update:value", "new-title");
 
-	// 		// Wait for reactivity
-	// 		await nextTick();
-	// 		await flushPromises();
+				expect(wrapper.emitted("update:title")).toBeTruthy();
+				expect(wrapper.emitted("update:title")?.[0]).toEqual(["new-title"]);
+			});
+		});
 
-	// 		// Now check for the view button
-	// 		const viewButton = wrapper.find("[data-testid='toolbar-view-button']");
-	// 		expect(viewButton.exists()).toBe(true);
+		describe("when enter gets triggered", () => {
+			it("should emit enter:title", () => {
+				const { wrapper } = setup({
+					card: CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
 
-	// 		// Edit button should be gone
-	// 		expect(wrapper.find("[data-testid='toolbar-edit-button']").exists()).toBe(false);
-	// 	});
-	// });
+				const cardTitle = wrapper.findComponent({ name: "CardTitle" });
+				cardTitle.vm.$emit("enter");
 
-	// describe("events", () => {
-	// 	it("should emit close event when dialog is closed", async () => {
-	// 		const { wrapper } = setup({
-	// 			card: CARD_WITH_ELEMENTS,
-	// 			isOpen: true,
-	// 			columnIndex: 0,
-	// 			rowIndex: 1,
-	// 		});
+				expect(wrapper.emitted("enter:title")).toBeTruthy();
+			});
+		});
+	});
 
-	// 		await wrapper.vm.$emit("close:detail-view");
-	// 		await nextTick();
+	describe("content element list events", () => {
+		describe("when delete element gets triggered", () => {
+			it("should emit delete:element", () => {
+				const { wrapper } = setup({
+					card: CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
 
-	// 		expect(wrapper.emitted("close:detail-view")).toBeTruthy();
-	// 	});
+				const contentElementList = wrapper.findComponent({ name: "ContentElementList" });
+				contentElementList.vm.$emit("delete:element", "element-id");
 
-	// it("should emit update:title when title is updated", () => {
-	// 	const { wrapper } = setup({
-	// 		card: CARD_WITH_ELEMENTS,
-	// 		isOpen: true,
-	// 		columnIndex: 0,
-	// 		rowIndex: 1,
-	// 	});
+				expect(wrapper.emitted("delete:element")).toBeTruthy();
+				expect(wrapper.emitted("delete:element")?.[0]).toEqual(["element-id"]);
+			});
+		});
 
-	// 	const newTitle = "New title";
-	// 	getVm(wrapper).onUpdateCardTitle(newTitle);
+		describe("when move down gets triggered", () => {
+			it("should emit move-down:element", () => {
+				const { wrapper } = setup({
+					card: CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
 
-	// 	expect(wrapper.emitted("update:title")?.[0]).toEqual([newTitle]);
-	// });
+				const contentElementList = wrapper.findComponent({ name: "ContentElementList" });
+				contentElementList.vm.$emit("move-down:element", "element-id");
 
-	// it("should emit add:element and enable edit mode when element is added", () => {
-	// 	const { wrapper } = setup({
-	// 		card: CARD_WITH_ELEMENTS,
-	// 		isOpen: true,
-	// 		columnIndex: 0,
-	// 		rowIndex: 1,
-	// 	});
+				expect(wrapper.emitted("move-down:element")).toBeTruthy();
+				expect(wrapper.emitted("move-down:element")?.[0]).toEqual(["element-id"]);
+			});
+		});
 
-	// 	getVm(wrapper).onAddElement();
+		describe("when move up gets triggered", () => {
+			it("should emit move-up:element", () => {
+				const { wrapper } = setup({
+					card: CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
 
-	// 	expect(wrapper.emitted("add:element")).toBeTruthy();
-	// });
-	// });
+				const contentElementList = wrapper.findComponent({ name: "ContentElementList" });
+				contentElementList.vm.$emit("move-up:element", "element-id");
+
+				expect(wrapper.emitted("move-up:element")).toBeTruthy();
+				expect(wrapper.emitted("move-up:element")?.[0]).toEqual(["element-id"]);
+			});
+		});
+
+		describe("when move keyboard gets triggered", () => {
+			it("should emit move-keyboard:element", () => {
+				const { wrapper } = setup({
+					card: CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
+
+				const contentElementList = wrapper.findComponent({ name: "ContentElementList" });
+				contentElementList.vm.$emit("move-keyboard:element", "element-id", "up");
+
+				expect(wrapper.emitted("move-keyboard:element")).toBeTruthy();
+				expect(wrapper.emitted("move-keyboard:element")?.[0]).toEqual(["element-id", "up"]);
+			});
+		});
+	});
 });
