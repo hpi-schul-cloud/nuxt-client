@@ -103,7 +103,7 @@ describe("RoomsPage", () => {
 		};
 
 		it("should render import card dialog with card type", () => {
-			router.setQuery({ import: token, importedType: ShareTokenBodyParamsParentType.CARD });
+			router.setQuery({ import: token });
 			const { wrapper } = setup();
 
 			const importFLow = wrapper.findComponent(ImportCardDialog);
