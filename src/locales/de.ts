@@ -2063,4 +2063,6 @@ export default {
 	"pages.folder.trash.infoText": "Dateien werden 7 Tage nach dem Verschieben in den Papierkorb automatisch gelöscht.",
 	"pages.folder.trash.columns.deletedAt": "Gelöscht am",
 	"pages.folder.trash.ariaLabels.actionMenu": "Aktionsmenü für {name}",
+	"pages.folder.trash.restore.success": "Dateien wurden erfolgreich wiederhergestellt.",
+	"pages.folder.trash.restore.error": "Dateien konnten nicht wiederhergestellt werden.",
 };

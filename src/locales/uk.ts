@@ -2050,4 +2050,6 @@ export default {
 	"pages.folder.trash.emptyState": "Кошик порожній",
 	"pages.folder.trash.columns.deletedAt": "Видалено",
 	"pages.folder.trash.ariaLabels.actionMenu": "Меню дій для {name}",
+	"pages.folder.trash.restore.success": "Файли успішно відновлено.",
+	"pages.folder.trash.restore.error": "Не вдалося відновити файли.",
 };

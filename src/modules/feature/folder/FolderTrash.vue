@@ -5,6 +5,9 @@
 				{{ t("pages.folder.trash.title", { folderName }) }}
 			</h1>
 		</template>
+		<div aria-live="polite" aria-atomic="true" data-testid="restore-status" class="d-sr-only">
+			{{ restoreStatusMessage }}
+		</div>
 		<template v-if="isLoading">
 			<VContainer class="loader" aria-busy="true" aria-live="polite">
 				<VSkeletonLoader type="table-thead, table-tbody" class="mt-6" />
@@ -117,6 +120,16 @@ const { deletedFileRecords, fetchDeletedFiles, restoreFiles } = useFileTrash();
 const isLoading = ref(true);
 const fileStorageError = ref(false);
 const isForbiddenError = ref(false);
+const restoreStatusMessage = ref("");
+
+const announceRestore = (success: boolean): void => {
+	restoreStatusMessage.value = success
+		? t("pages.folder.trash.restore.success")
+		: t("pages.folder.trash.restore.error");
+	setTimeout(() => {
+		restoreStatusMessage.value = "";
+	}, 3000);
+};
 
 const trashBreadcrumbs = computed(() => {
 	const items = folderBreadcrumbs.value.map((crumb, index, arr) => {
@@ -163,13 +176,23 @@ const handleError = (error: unknown): void => {
 };
 
 const onRestoreFiles = async (fileRecords: FileRecord[]): Promise<void> => {
-	await restoreFiles(fileRecords);
+	try {
+		await restoreFiles(fileRecords);
+		announceRestore(true);
+	} catch {
+		announceRestore(false);
+	}
 };
 
 const onRestoreByIds = async (selectedIds: string[]): Promise<void> => {
 	const toRestore = deletedFileRecords.value.filter((r) => selectedIds.includes(r.id));
 
-	await restoreFiles(toRestore);
+	try {
+		await restoreFiles(toRestore);
+		announceRestore(true);
+	} catch {
+		announceRestore(false);
+	}
 };
 
 watch(

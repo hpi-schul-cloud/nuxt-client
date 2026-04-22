@@ -2085,4 +2085,6 @@ export default {
 	"pages.folder.trash.emptyState": "La papelera está vacía",
 	"pages.folder.trash.columns.deletedAt": "Eliminado el",
 	"pages.folder.trash.ariaLabels.actionMenu": "Menú de acciones para {name}",
+	"pages.folder.trash.restore.success": "Archivos restaurados correctamente.",
+	"pages.folder.trash.restore.error": "No se pudieron restaurar los archivos.",
 };

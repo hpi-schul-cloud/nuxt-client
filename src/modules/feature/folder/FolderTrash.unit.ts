@@ -295,5 +295,60 @@ describe("FolderTrash.vue", () => {
 				expect(fileTrashMock.restoreFiles).toHaveBeenCalled();
 			});
 		});
+
+		describe("restore status live region", () => {
+			it("should render a live region with aria-live='polite' and aria-atomic='true'", async () => {
+				const { wrapper } = await setup();
+
+				const statusRegion = wrapper.find("[data-testid='restore-status']");
+				expect(statusRegion.exists()).toBe(true);
+				expect(statusRegion.attributes("aria-live")).toBe("polite");
+				expect(statusRegion.attributes("aria-atomic")).toBe("true");
+			});
+
+			it("should be visually hidden via d-sr-only class", async () => {
+				const { wrapper } = await setup();
+
+				const statusRegion = wrapper.find("[data-testid='restore-status']");
+				expect(statusRegion.classes()).toContain("d-sr-only");
+			});
+
+			it("should be empty by default", async () => {
+				const { wrapper } = await setup();
+
+				const statusRegion = wrapper.find("[data-testid='restore-status']");
+				expect(statusRegion.text()).toBe("");
+			});
+
+			it("should announce success message after successful single restore", async () => {
+				const { wrapper, fileRecord1 } = await setup();
+
+				const kebabMenuButton = wrapper.find(`[data-testid='kebab-menu-${fileRecord1.name}']`);
+				await kebabMenuButton.trigger("click");
+
+				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
+				await kebabMenuAction.trigger("click");
+				await flushPromises();
+
+				const statusRegion = wrapper.find("[data-testid='restore-status']");
+				expect(statusRegion.text()).toBe("pages.folder.trash.restore.success");
+			});
+
+			it("should announce error message after failed restore", async () => {
+				const { wrapper, fileRecord1, fileTrashMock } = await setup();
+
+				fileTrashMock.restoreFiles.mockRejectedValueOnce(new Error("restore failed"));
+
+				const kebabMenuButton = wrapper.find(`[data-testid='kebab-menu-${fileRecord1.name}']`);
+				await kebabMenuButton.trigger("click");
+
+				const kebabMenuAction = wrapper.findComponent(KebabMenuAction);
+				await kebabMenuAction.trigger("click");
+				await flushPromises();
+
+				const statusRegion = wrapper.find("[data-testid='restore-status']");
+				expect(statusRegion.text()).toBe("pages.folder.trash.restore.error");
+			});
+		});
 	});
 });
