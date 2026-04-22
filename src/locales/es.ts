@@ -1900,7 +1900,7 @@ export default {
 	"pages.taskCard.deleteElement.title": "Eliminar elemento",
 	"pages.tasks.finished.emptyState.title": "Actualmente no hay tareas completadas",
 	"pages.tasks.labels.due": "Entrega",
-	"pages.tasks.labels.filter": "Filtrar por curso",
+	"pages.tasks.labels.filter": "Curso",
 	"pages.tasks.labels.noCourse": "Sin asignación de curso",
 	"pages.tasks.labels.noCoursesAvailable": "No hay ningún curso con este nombre.",
 	"pages.tasks.labels.overdue": "Expirada",

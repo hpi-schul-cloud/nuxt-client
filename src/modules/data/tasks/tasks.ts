@@ -7,7 +7,7 @@ import { nowUtc, parseUtc } from "@/utils/date-time.utils";
 import { TaskApiFactory, TaskResponse } from "@api-server";
 import { ManipulateType } from "dayjs";
 import { orderBy, uniqBy } from "lodash-es";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, Ref, ref } from "vue";
 
 // === Utilities ===
 export const toSortedByDueDate = (tasks: TaskResponse[]) =>
@@ -45,6 +45,9 @@ type DateRange = {
 	to: { amount: number; unit: ManipulateType };
 };
 
+export type DueStatus = "overdue" | "no-due-date" | "not-overdue";
+export type GradeStatus = "graded" | "not-graded";
+
 const PAGE_SIZE = 10;
 
 const fetchAllTasks = async (skip = 0, limit = 100, accumulated: TaskResponse[] = []): Promise<TaskResponse[]> => {
@@ -54,11 +57,10 @@ const fetchAllTasks = async (skip = 0, limit = 100, accumulated: TaskResponse[] 
 	return skip + limit < data.data.total ? fetchAllTasks(skip + limit, limit, all) : all;
 };
 
+// === Main Tasks Composable ===
 export const useTasks = (
 	options: {
 		range?: DateRange;
-		courseNames?: string[];
-		includeSubstitute?: boolean;
 		fetchImmediate?: boolean;
 	} = {}
 ) => {
@@ -79,54 +81,33 @@ export const useTasks = (
 		() => finishedTotal.value !== undefined && finishedTasks.value.length < finishedTotal.value
 	);
 
-	// === Filter State ===
+	// === Range Filter (stays here) ===
 	const range = ref(options.range);
-	const selectedCourseNames = ref(options.courseNames ?? []);
-	const includeSubstitute = ref(options.includeSubstitute ?? false);
 
-	// === Filter Pipeline ===
-	const tasksFilteredBySubstitute = computed(() => {
-		if (includeSubstitute.value) return toSortedByDueDate(allTasks.value);
-		return toSortedByDueDate(allTasks.value.filter((t) => !isSubstitution(t)));
-	});
-
-	const draftsUnfiltered = computed(() => toSortedByCreatedDate(tasksFilteredBySubstitute.value.filter(isTaskDraft)));
-	const publishedUnfiltered = computed(() => tasksFilteredBySubstitute.value.filter(isPublished));
-
-	const tasksFilteredByCourses = computed(() => {
-		if (selectedCourseNames.value.length === 0) return tasksFilteredBySubstitute.value;
-		return tasksFilteredBySubstitute.value.filter((t) => selectedCourseNames.value.includes(t.courseName));
-	});
-
-	const tasks = computed(() => {
+	const tasksFilteredByRange = computed(() => {
 		const r = range.value;
-		if (!r) return tasksFilteredByCourses.value;
+		if (!r) return allTasks.value;
 
 		const from = r.from ? nowUtc().subtract(r.from.amount, r.from.unit) : undefined;
 		const to = r.to ? nowUtc().add(r.to.amount, r.to.unit) : undefined;
 
-		return tasksFilteredByCourses.value.filter((t) => {
+		return allTasks.value.filter((t) => {
 			if (!t.dueDate) return true;
 			const due = parseUtc(t.dueDate);
 			return (!from || due.isAfter(from)) && (!to || due.isBefore(to));
 		});
 	});
 
-	// === Base Categories ===
-	const drafts = computed(() => toSortedByCreatedDate(tasks.value.filter(isTaskDraft)));
-	const published = computed(() => tasks.value.filter(isPublished));
-
-	// Convenience computed for published tasks
-	const overdue = computed(() => toSortedByDueDate(published.value.filter(isTaskOverdue)));
-	const withDueDate = computed(() => toSortedByDueDate(published.value.filter(hasDueDate)));
-	const noDueDate = computed(() => published.value.filter(hasNoDueDate));
+	// === Base Categories (computed from range-filtered tasks) ===
+	const drafts = computed(() => toSortedByCreatedDate(tasksFilteredByRange.value.filter(isTaskDraft)));
+	const published = computed(() => tasksFilteredByRange.value.filter(isPublished));
 
 	// === Teacher Categories ===
 	const gradedForTeacher = computed(() => published.value.filter(isGradedForTeacher));
 	const openForTeacher = computed(() => published.value);
 	const ungradedForTeacher = computed(() => published.value.filter(isUngradedForTeacher));
 
-	// === Student Categories (filtered) ===
+	// === Student Categories ===
 	const openForStudent = computed(() => published.value.filter(isOpenForStudent));
 	const submittedForStudent = computed(() => published.value.filter(isSubmittedForStudent));
 	const ungradedForStudent = computed(() =>
@@ -134,44 +115,9 @@ export const useTasks = (
 	);
 	const gradedForStudent = computed(() => published.value.filter(isGradedForStudent));
 
-	// === Student Categories (unfiltered - for counts) ===
-	const openForStudentUnfiltered = computed(() => publishedUnfiltered.value.filter(isOpenForStudent));
-	const submittedForStudentUnfiltered = computed(() => publishedUnfiltered.value.filter(isSubmittedForStudent));
-	const gradedForStudentUnfiltered = computed(() => publishedUnfiltered.value.filter(isGradedForStudent));
-
-	// === Filter Helpers ===
-	const uniqCourseFilters = computed(() =>
-		uniqBy(tasksFilteredBySubstitute.value, (t) => t.courseName).map((task) => ({
-			value: task.courseName,
-			text: task.courseName || t("pages.tasks.labels.noCourse"),
-			isSubstitution: task.status.isSubstitutionTeacher,
-		}))
-	);
-
-	const sortedCourseFilters = computed(() => orderBy(uniqCourseFilters.value, [(f) => f.text], ["asc"]));
-
-	// === Filter Setters ===
-
+	// === Range Setter ===
 	const setRange = (newRange: DateRange) => {
 		range.value = newRange;
-	};
-
-	const setCourseNames = (names: string[]) => {
-		selectedCourseNames.value = names;
-	};
-
-	const setIncludeSubstitute = (value: boolean) => {
-		includeSubstitute.value = value;
-		// if (!value) {
-		//     const validCourses = new Set(tasksFilteredBySubstitute.value.map((t) => t.courseName));
-		//     selectedCourseNames.value = selectedCourseNames.value.filter((name) => validCourses.has(name));
-		// }
-	};
-
-	const clearFilters = () => {
-		selectedCourseNames.value = [];
-		includeSubstitute.value = false;
-		range.value = undefined;
 	};
 
 	const fetchTasks = async () => {
@@ -223,21 +169,13 @@ export const useTasks = (
 	}
 
 	return {
-		// Data
-		tasks,
+		// Raw Data
 		allTasks,
+		tasks: tasksFilteredByRange,
 
 		// Base Categories
 		drafts,
 		published,
-
-		draftsUnfiltered,
-		publishedUnfiltered,
-
-		// Due Date Grouping
-		overdue,
-		withDueDate,
-		noDueDate,
 
 		// Teacher Categories
 		openForTeacher,
@@ -250,28 +188,13 @@ export const useTasks = (
 		ungradedForStudent,
 		gradedForStudent,
 
-		// Unfiltered Student Categories (for counts)
-		openForStudentUnfiltered,
-		submittedForStudentUnfiltered,
-		gradedForStudentUnfiltered,
-
 		// Finished Tasks
 		finishedTasks,
 		hasMoreFinishedTasks,
 
-		// Filter State
+		// Range Filter
 		range,
-		selectedCourseNames,
-		includeSubstitute,
-
-		// Filter Helpers
-		sortedCourseFilters,
-
-		// Filter Actions
 		setRange,
-		setCourseNames,
-		setIncludeSubstitute,
-		clearFilters,
 
 		// Data Actions
 		fetchTasks,
@@ -336,6 +259,84 @@ export const useTaskActions = () => {
 	};
 };
 
-export const useTasksOfOverview = createTestableSharedComposable(() =>
-	useTasks({ includeSubstitute: false, fetchImmediate: true })
-);
+export const useTasksOfOverview = createTestableSharedComposable(() => useTasks({ fetchImmediate: true }));
+
+// === Task Filter Composable ===
+export const useTasksFilter = (
+	tasks: Ref<TaskResponse[]>,
+	options: {
+		courseNames?: string[];
+		includeSubstitute?: boolean;
+		dueStatus?: DueStatus;
+		gradeStatus?: GradeStatus;
+	} = {}
+) => {
+	const { t } = useI18nGlobal();
+
+	// === Filter State ===
+	const selectedCourseNames = ref(options.courseNames ?? []);
+	const includeSubstitute = ref(options.includeSubstitute ?? false);
+	const gradeStatus = ref(options.gradeStatus);
+	const dueStatus = ref(options.dueStatus);
+
+	// === Filter Pipeline ===
+	const tasksFilteredBySubstitute = computed(() => {
+		if (includeSubstitute.value) return tasks.value;
+		return tasks.value.filter((t) => !isSubstitution(t));
+	});
+
+	const tasksFilteredByCourses = computed(() => {
+		if (selectedCourseNames.value.length === 0) return tasksFilteredBySubstitute.value;
+		return tasksFilteredBySubstitute.value.filter((t) => selectedCourseNames.value.includes(t.courseName));
+	});
+
+	const tasksFilteredByDueStatus = computed(() => {
+		if (!dueStatus.value) return tasksFilteredByCourses.value;
+		if (dueStatus.value === "overdue") return tasksFilteredByCourses.value.filter(isTaskOverdue);
+		if (dueStatus.value === "no-due-date") return tasksFilteredByCourses.value.filter(hasNoDueDate);
+		if (dueStatus.value === "not-overdue") return tasksFilteredByCourses.value.filter((t) => !isTaskOverdue(t));
+		return tasksFilteredByCourses.value;
+	});
+
+	const filteredTasks = computed(() => {
+		if (!gradeStatus.value) return tasksFilteredByDueStatus.value;
+		if (gradeStatus.value === "graded") return tasksFilteredByDueStatus.value.filter(isGraded);
+		if (gradeStatus.value === "not-graded") return tasksFilteredByDueStatus.value.filter((t) => !isGraded(t));
+		return tasksFilteredByDueStatus.value;
+	});
+
+	// === Filter Helpers ===
+	const uniqCourseFilters = computed(() =>
+		uniqBy(tasks.value, (task) => task.courseName).map((task) => ({
+			value: task.courseName,
+			text: task.courseName || t("pages.tasks.labels.noCourse"),
+			isSubstitution: task.status.isSubstitutionTeacher,
+		}))
+	);
+
+	const sortedCourseFilters = computed(() => orderBy(uniqCourseFilters.value, [(f) => f.text], ["asc"]));
+
+	const clearFilters = () => {
+		selectedCourseNames.value = [];
+		includeSubstitute.value = false;
+		dueStatus.value = undefined;
+		gradeStatus.value = undefined;
+	};
+
+	return {
+		// Filtered output
+		filteredTasks,
+
+		// Filter State
+		selectedCourseNames,
+		includeSubstitute,
+		dueStatus,
+		gradeStatus,
+
+		// Filter Helpers
+		sortedCourseFilters,
+
+		// Filter Actions
+		clearFilters,
+	};
+};

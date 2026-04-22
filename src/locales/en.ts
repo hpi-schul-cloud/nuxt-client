@@ -1855,7 +1855,7 @@ export default {
 	"pages.taskCard.deleteElement.title": "Remove element",
 	"pages.tasks.finished.emptyState.title": "Currently there are no completed tasks",
 	"pages.tasks.labels.due": "Due",
-	"pages.tasks.labels.filter": "Filter by course",
+	"pages.tasks.labels.filter": "Course",
 	"pages.tasks.labels.noCourse": "No course assigned",
 	"pages.tasks.labels.noCoursesAvailable": "There are no courses with this name.",
 	"pages.tasks.labels.overdue": "Missed",

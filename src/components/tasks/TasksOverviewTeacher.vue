@@ -11,40 +11,32 @@
 
 		<div class="mx-auto mt-5">
 			<VWindow :model-value="activeTab">
-				<VWindowItem class="content-grid" :value="TaskTab.OPEN">
-					<TasksOverviewList :tasks="openForTeacher" :empty-title="t('pages.tasks.open.emptyState.title')">
-						<template #default="{ task }">
-							<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
-						</template>
-					</TasksOverviewList>
-					<aside class="filter-sidebar">
-						<TasksFilterOptions
-							v-model:course-names="selectedCourseNames"
-							v-model:substitute="includeSubstitute"
-							:course-filters="countedCourseFilters"
-						/>
-					</aside>
-				</VWindowItem>
-				<VWindowItem :value="TaskTab.DRAFTS">
-					<TasksOverviewList :tasks="drafts" :empty-title="t('pages.tasks.teacher.drafts.emptyState.title')">
-						<template #default="{ task }">
-							<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
-						</template>
-					</TasksOverviewList>
-				</VWindowItem>
-				<VWindowItem :value="TaskTab.FINISHED">
-					<TasksOverviewList
-						:tasks="finishedTasks"
-						:empty-title="t('pages.tasks.finished.emptyState.title')"
-						:is-loading-more-items="isLoadingFinishedTasks"
-						has-pagination
-						@load-more-tasks="loadMoreFinishedTasks"
-					>
-						<template #default="{ task }">
-							<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
-						</template>
-					</TasksOverviewList>
-				</VWindowItem>
+				<TasksOverviewPane
+					:value="TaskTab.OPEN"
+					:tasks="openForTeacher"
+					:empty-title="t('pages.tasks.open.emptyState.title')"
+				/>
+				<TasksOverviewPane
+					:value="TaskTab.DRAFTS"
+					:tasks="drafts"
+					:empty-title="t('pages.tasks.teacher.drafts.emptyState.title')"
+				>
+					<template #default="{ task }">
+						<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
+					</template>
+				</TasksOverviewPane>
+				<TasksOverviewPane
+					:value="TaskTab.FINISHED"
+					:tasks="finishedTasks"
+					:empty-title="t('pages.tasks.finished.emptyState.title')"
+					:is-loading-more-items="isLoadingFinishedTasks"
+					has-pagination
+					@load-more-tasks="loadMoreFinishedTasks"
+				>
+					<template #default="{ task }">
+						<TasksOverviewListItemTeacher :task @copy-task="onCopyTask" @share-task="onShareTask" />
+					</template>
+				</TasksOverviewPane>
 			</VWindow>
 		</div>
 
@@ -59,10 +51,9 @@
 </template>
 
 <script setup lang="ts">
-import TasksOverviewList from "./TasksOverviewList.vue";
+import TasksOverviewPane from "./TasksOverviewPane.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import TasksFilterOptions from "@/components/tasks/task-controls/TasksFilterOptions.vue";
 import TasksOverviewListItemTeacher from "@/components/tasks/TasksOverviewListItemTeacher.vue";
 import { useCopy } from "@/composables/copy";
 import { CopyParams } from "@/store/copy";
@@ -157,43 +148,8 @@ const onShareTask = (taskId: string) => {
 </script>
 
 <style lang="scss" scoped>
-@use "sass:map";
-@use "@/styles/settings" as *;
-
 .tab-item {
 	min-width: 0 !important;
 	width: clamp(90px, 20vw, 160px);
-}
-
-.content-grid {
-	display: grid;
-	grid-template-columns: 2fr 1fr;
-	grid-template-areas: "list sidebar";
-	gap: 12px;
-	align-items: start;
-
-	@media #{map.get($display-breakpoints, 'sm-and-down')} {
-		grid-template-columns: 1fr;
-		grid-template-areas:
-			"sidebar"
-			"list";
-	}
-}
-
-.task-list {
-	grid-area: list;
-}
-
-.filter-sidebar {
-	grid-area: sidebar;
-	position: sticky;
-	top: 80px;
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
-	padding: 16px;
-	border-radius: 8px;
-	background: rgb(var(--v-theme-surface));
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 </style>

@@ -1883,7 +1883,7 @@ export default {
 	"pages.taskCard.deleteElement.title": "Element löschen",
 	"pages.tasks.finished.emptyState.title": "Aktuell gibt es  keine abgeschlossenen Aufgaben",
 	"pages.tasks.labels.due": "Abgabe",
-	"pages.tasks.labels.filter": "Filtern nach Kursen",
+	"pages.tasks.labels.filter": "Kurs",
 	"pages.tasks.labels.noCourse": "Ohne Kurszuordnung",
 	"pages.tasks.labels.noCoursesAvailable": "Es gibt keinen Kurs mit diesem Namen.",
 	"pages.tasks.labels.overdue": "Verpasst",

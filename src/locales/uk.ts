@@ -1868,7 +1868,7 @@ export default {
 	"pages.taskCard.deleteElement.title": "Видалити елемент",
 	"pages.tasks.finished.emptyState.title": "Наразі немає жодного виконаного завдання",
 	"pages.tasks.labels.due": "Термін",
-	"pages.tasks.labels.filter": "Фільтрувати за курсом",
+	"pages.tasks.labels.filter": "Курс",
 	"pages.tasks.labels.noCourse": "Курс не призначено",
 	"pages.tasks.labels.noCoursesAvailable": "Курсів з такою назвою не існує.",
 	"pages.tasks.labels.overdue": "Пропущені",
