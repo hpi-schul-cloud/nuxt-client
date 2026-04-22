@@ -111,7 +111,6 @@ const onEnterTitle = () => {
 };
 
 const onAddElement = () => {
-	startEditMode();
 	emit("add:element");
 };
 

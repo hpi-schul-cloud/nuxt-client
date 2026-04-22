@@ -14,7 +14,7 @@ import { BoardResponseAllowedOperations, CardResponse } from "@api-server";
 import { useBoardAllowedOperations, useCourseBoardEditMode } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
-import { computed } from "vue";
+import { computed, nextTick } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
 import { VDialog } from "vuetify/components";
 
@@ -177,6 +177,29 @@ describe("CardHostDetailView", () => {
 
 				const addElementButton = wrapper.find("[data-testid='add-element-button']");
 				expect(addElementButton.exists()).toBe(true);
+			});
+
+			describe("when addElement button gets clicked", () => {
+				it("should emit add:element event", async () => {
+					const { wrapper } = setup(
+						{
+							card: CARD_WITH_ELEMENTS,
+							isOpen: true,
+							columnIndex: 0,
+							rowIndex: 1,
+						},
+						{ deleteCard: true },
+						true
+					);
+
+					const addElementMenu = wrapper.findComponent({ name: "CardAddElementMenu" });
+					expect(addElementMenu.exists()).toBe(true);
+
+					addElementMenu.vm.$emit("add-element");
+					await nextTick();
+
+					expect(wrapper.emitted("add:element")).toBeTruthy();
+				});
 			});
 		});
 	});
