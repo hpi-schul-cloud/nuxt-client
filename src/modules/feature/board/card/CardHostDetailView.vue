@@ -1,27 +1,32 @@
 <template>
 	<div>
 		<VDialog :model-value="isOpen" fullscreen scrollable @keydown.escape="onDialogClose">
-			<v-card>
+			<VCard>
 				<div class="toolbar-fixed-offset">
-					<v-toolbar class="toolbar-position" color="white">
-						<v-btn icon @click="onDialogClose">
-							<v-icon>{{ mdiClose }}</v-icon>
-						</v-btn>
-						<v-spacer />
-						<v-btn
-							v-if="allowedOperations?.deleteCard"
+					<VToolbar class="toolbar-position" color="white">
+						<VBtn icon @click="onDialogClose">
+							<VIcon>{{ mdiClose }}</VIcon>
+						</VBtn>
+						<VSpacer />
+						<VBtn
+							v-if="allowedOperations?.deleteCard && !isEditMode"
 							class="mr-4 keep-inline-edit-mode"
 							data-testid="toolbar-edit-button"
-							s
-							@click="onToggleEdit"
+							@click="startEditMode"
 						>
-							{{
-								isEditMode ? $t("common.actions.edit") + " " + $t("common.actions.finish") : $t("common.actions.edit")
-							}}
-						</v-btn>
-					</v-toolbar>
+							{{ $t("common.actions.edit") }}
+						</VBtn>
+						<VBtn
+							v-if="allowedOperations?.deleteCard && isEditMode"
+							class="mr-4 keep-inline-edit-mode"
+							data-testid="toolbar-view-button"
+							@click="stopEditMode"
+						>
+							{{ $t("common.actions.view") }}
+						</VBtn>
+					</VToolbar>
 				</div>
-				<v-card-text>
+				<VCardText>
 					<div class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto">
 						<CardHostInteractionHandler
 							:is-edit-mode="isEditMode"
@@ -49,11 +54,11 @@
 								@move-up:element="onMoveElementUp"
 								@move-keyboard:element="onMoveElementKeyboard"
 							/>
-							<CardAddElementMenu v-if="allowedOperations?.deleteCard" @add-element="onAddElement" />
+							<CardAddElementMenu v-if="isEditMode" data-testid="add-element-button" @add-element="onAddElement" />
 						</CardHostInteractionHandler>
 					</div>
-				</v-card-text>
-			</v-card>
+				</VCardText>
+			</VCard>
 		</VDialog>
 	</div>
 </template>
@@ -92,14 +97,6 @@ const emit = defineEmits<{
 const cardId = toRef(props, "card");
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value.id);
 const { allowedOperations } = useBoardAllowedOperations();
-
-const onToggleEdit = () => {
-	if (isEditMode.value) {
-		stopEditMode();
-	} else {
-		startEditMode();
-	}
-};
 
 const onDialogClose = () => {
 	emit("close:detail-view");
