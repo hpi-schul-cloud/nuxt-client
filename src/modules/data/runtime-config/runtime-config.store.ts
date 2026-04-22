@@ -28,8 +28,11 @@ export const useRuntimeConfigStore = defineStore("runtimeConfigStore", () => {
 			return true;
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
-			useAppStore().handleApplicationError(responseError.code);
+			if (responseError.code !== 401) {
+				return true;
+			}
 
+			useAppStore().handleApplicationError(responseError.code);
 			return false;
 		} finally {
 			isLoading.value = false;
