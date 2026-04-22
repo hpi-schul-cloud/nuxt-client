@@ -26,8 +26,19 @@
 						</VBtn>
 					</VToolbar>
 				</div>
-				<VCardText>
-					<div class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto">
+				<VCardText
+					:style="{
+						backgroundColor: cardBackground,
+					}"
+					class="pt-0"
+				>
+					<div
+						class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto"
+						:style="{
+							backgroundColor: 'white',
+							borderLeft: cardBorderColor ? `3px solid ${cardBorderColor}` : undefined,
+						}"
+					>
 						<CardHostInteractionHandler
 							:is-edit-mode="isEditMode"
 							@start-edit-mode="startEditMode"
@@ -69,10 +80,12 @@ import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import type { ElementMove } from "@/types/board/DragAndDrop";
+import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import type { CardResponse } from "@api-server";
+import { Colors } from "@api-server";
 import { useBoardAllowedOperations, useCourseBoardEditMode } from "@data-board";
 import { mdiClose } from "@icons/material";
-import { toRef } from "vue";
+import { computed, toRef } from "vue";
 
 type Props = {
 	card: CardResponse;
@@ -94,9 +107,16 @@ const emit = defineEmits<{
 	(e: "close:detail-view"): void;
 }>();
 
-const cardId = toRef(props, "card");
-const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value.id);
+const cardRef = toRef(props, "card");
+const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardRef.value.id);
 const { allowedOperations } = useBoardAllowedOperations();
+
+const cardBackground = computed(() => colorToHexLighten5(cardRef.value?.backgroundColor ?? Colors.TRANSPARENT));
+const cardBorderColor = computed(() => {
+	const color = cardRef.value?.backgroundColor;
+	if (!color || color === Colors.TRANSPARENT) return undefined;
+	return colorToHexLighten3(color);
+});
 
 const onDialogClose = () => {
 	emit("close:detail-view");
@@ -133,8 +153,9 @@ const onMoveElementKeyboard = (elementMove: ElementMove, keyCode: string) => {
 
 <style scoped>
 .detail-view-size {
-	max-width: 768px;
+	max-width: 920px;
 	min-width: 400px;
+	padding: 0 4rem;
 }
 
 .toolbar-position {
