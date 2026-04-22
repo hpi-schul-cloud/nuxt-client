@@ -39,7 +39,7 @@ import TasksOverviewPane from "./TasksOverviewPane.vue";
 import { useTasksOfOverview } from "@data-tasks";
 import { mdiArchiveOutline, mdiCheckCircleOutline, mdiFormatListChecks } from "@icons/material";
 import { useUrlSearchParams } from "@vueuse/core";
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 enum TaskTab {
@@ -68,18 +68,8 @@ const activeTab = computed({
 	},
 });
 
-const {
-	openForStudent,
-	finishedTasks,
-	isLoadingFinishedTasks,
-	loadMoreFinishedTasks,
-	fetchFinishedTasks,
-	submittedForStudent,
-} = useTasksOfOverview();
-
-onMounted(async () => {
-	await fetchFinishedTasks();
-});
+const { openForStudent, finishedTasks, isLoadingFinishedTasks, loadMoreFinishedTasks, submittedForStudent } =
+	useTasksOfOverview();
 </script>
 
 <style lang="scss" scoped>
