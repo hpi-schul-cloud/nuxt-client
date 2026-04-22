@@ -1837,15 +1837,12 @@ export default {
 	"pages.security.text":
 		"The dBildungscloud regularly undergoes security checks and penetration tests, as the security of our users' data is very important to us. You still found a security problem? Write to us so that we can close the gap as soon as possible: ",
 
-	"pages.tasks.finished.emptyState.title": "Currently there are no completed tasks",
 	"pages.tasks.labels.due": "Due",
 	"pages.tasks.labels.noCourse": "No course assigned",
 	"pages.tasks.labels.planned": "Planned",
-	"pages.tasks.student.completed.emptyState.title": "Currently there are no completed tasks",
-	"pages.tasks.student.open.emptyState.title": "Currently there are no open tasks",
 	"pages.tasks.graded": "Graded",
 	"pages.tasks.notGraded": "Not graded",
-	"pages.tasks.teacher.drafts.emptyState.title": "Currently there are no drafts",
+	"pages.tasks.state.empty": "No tasks match the selected filters.",
 	"pages.tasks.open.emptyState.title": "There are currently no tasks",
 	"pages.termsofuse.title": "Terms of use and privacy policy",
 	"pages.tool.apiError.tool_param_duplicate": "This Tool has at least one duplicate parameter. Please contact support.",

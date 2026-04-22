@@ -12,7 +12,7 @@
 		</div>
 	</VList>
 	<VContainer v-if="tasks.length === 0">
-		<EmptyState :title="emptyTitle">
+		<EmptyState :title="t('pages.tasks.state.empty')">
 			<template #media> <TasksEmptyStateSvg /></template>
 		</EmptyState>
 	</VContainer>
@@ -22,17 +22,17 @@
 import { TaskResponse } from "@api-server";
 import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = withDefaults(
 	defineProps<{
 		tasks: TaskResponse[];
-		emptyTitle: string;
 		hasPagination?: boolean;
 		isLoadingMoreItems?: boolean;
 	}>(),
 	{ hasPagination: false, isLoadingMoreItems: false }
 );
-
+const { t } = useI18n();
 const emit = defineEmits<{ "load-more-tasks": [] }>();
 
 const showSpinner = computed(() => props.hasPagination && props.isLoadingMoreItems);

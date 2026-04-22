@@ -3,7 +3,6 @@
 		<div class="list-container">
 			<TasksOverviewList
 				:tasks="filteredTasks"
-				:empty-title="emptyTitle"
 				:is-loading-more-items="isLoadingMoreItems"
 				:has-pagination="hasPagination"
 				@load-more-tasks="$emit('load-more-tasks')"
@@ -80,7 +79,6 @@ import { useI18n } from "vue-i18n";
 const props = defineProps<{
 	value: string;
 	tasks: TaskResponse[];
-	emptyTitle: string;
 	hasPagination?: boolean;
 	isLoadingMoreItems?: boolean;
 }>();

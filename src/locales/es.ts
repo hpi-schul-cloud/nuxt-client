@@ -1882,15 +1882,12 @@ export default {
 	"pages.security.text":
 		"dBildungscloud está sometido a controles de seguridad y pruebas de intrusión regularmente, ya que la seguridad de los datos de nuestros usuarios es muy importante para nosotros. ¿Sigues con problemas de seguridad? Escríbenos para que podamos cerrar la incidencia lo antes posible: ",
 
-	"pages.tasks.finished.emptyState.title": "Actualmente no hay tareas completadas",
 	"pages.tasks.labels.due": "Entrega",
 	"pages.tasks.labels.noCourse": "Sin asignación de curso",
 	"pages.tasks.labels.planned": "Planificada",
-	"pages.tasks.student.completed.emptyState.title": "Actualmente no hay tareas completadas",
-	"pages.tasks.student.open.emptyState.title": "Actualmente no hay tareas abiertas",
 	"pages.tasks.graded": "Calificado",
 	"pages.tasks.notGraded": "Sin calificar",
-	"pages.tasks.teacher.drafts.emptyState.title": "Actualmente no hay borradores",
+	"pages.tasks.state.empty": "No hay tareas que coincidan con los filtros seleccionados.",
 	"pages.tasks.open.emptyState.title": "Actualmente no hay tareas",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"pages.tool.apiError.tool_param_duplicate":

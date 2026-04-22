@@ -14,21 +14,13 @@
 				<TasksOverviewPane
 					:value="TaskTab.OPEN"
 					:tasks="openForTeacher"
-					:empty-title="t('pages.tasks.open.emptyState.title')"
 					@copy-task="onCopyTask"
 					@share-task="onShareTask"
 				/>
-				<TasksOverviewPane
-					:value="TaskTab.DRAFTS"
-					:tasks="drafts"
-					:empty-title="t('pages.tasks.teacher.drafts.emptyState.title')"
-					@copy-task="onCopyTask"
-					@share-task="onShareTask"
-				/>
+				<TasksOverviewPane :value="TaskTab.DRAFTS" :tasks="drafts" @copy-task="onCopyTask" @share-task="onShareTask" />
 				<TasksOverviewPane
 					:value="TaskTab.FINISHED"
 					:tasks="finishedTasks"
-					:empty-title="t('pages.tasks.finished.emptyState.title')"
 					:is-loading-more-items="isLoadingFinishedTasks"
 					has-pagination
 					@load-more-tasks="loadMoreFinishedTasks"

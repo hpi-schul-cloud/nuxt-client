@@ -1850,15 +1850,12 @@ export default {
 	"pages.security.text":
 		"dBildungscloud регулярно проходить перевірки безпеки та тести на проникнення, оскільки безпека даних наших користувачів дуже важлива для нас. Ви все ще виявили проблему безпеки? Напишіть нам, щоб ми могли закрити прогалину якомога швидше: ",
 
-	"pages.tasks.finished.emptyState.title": "Наразі немає жодного виконаного завдання",
 	"pages.tasks.labels.due": "Термін",
 	"pages.tasks.labels.noCourse": "Курс не призначено",
 	"pages.tasks.labels.planned": "Заплановано",
-	"pages.tasks.student.completed.emptyState.title": "Наразі немає жодного виконаного завдання",
-	"pages.tasks.student.open.emptyState.title": "Наразі немає відкритих завдань",
 	"pages.tasks.graded": "Оцінено",
 	"pages.tasks.notGraded": "Не оцінено",
-	"pages.tasks.teacher.drafts.emptyState.title": "Наразі немає чернеток",
+	"pages.tasks.state.empty": "Немає завдань, які відповідають вибраним фільтрам.",
 	"pages.tasks.open.emptyState.title": "Наразі завдань немає",
 	"pages.termsofuse.title": "Умови використання та політика конфіденційності",
 	"pages.tool.apiError.tool_param_duplicate":

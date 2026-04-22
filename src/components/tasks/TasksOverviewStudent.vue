@@ -11,20 +11,11 @@
 
 		<div class="mx-auto mt-5">
 			<VWindow v-model="activeTab">
-				<TasksOverviewPane
-					:value="TaskTab.OPEN"
-					:tasks="openForStudent"
-					:empty-title="t('pages.tasks.student.open.emptyState.title')"
-				/>
-				<TasksOverviewPane
-					:value="TaskTab.COMPLETED"
-					:tasks="submittedForStudent"
-					:empty-title="t('pages.tasks.student.completed.emptyState.title')"
-				/>
+				<TasksOverviewPane :value="TaskTab.OPEN" :tasks="openForStudent" />
+				<TasksOverviewPane :value="TaskTab.COMPLETED" :tasks="submittedForStudent" />
 				<TasksOverviewPane
 					:value="TaskTab.FINISHED"
 					:tasks="finishedTasks"
-					:empty-title="t('pages.tasks.finished.emptyState.title')"
 					:is-loading-more-items="isLoadingFinishedTasks"
 					has-pagination
 					@load-more-tasks="loadMoreFinishedTasks"
