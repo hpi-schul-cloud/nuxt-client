@@ -2,7 +2,7 @@
 	<SvsDialog
 		v-model="isDialogOpen"
 		:is-loading="isImporting"
-		title="components.molecules.import.card.options.title"
+		:title="importCardTitle"
 		confirm-btn-lang-key="common.actions.import"
 		:confirm-btn-disabled="!selectedColumnId"
 		data-testid="import-card-dialog"
@@ -129,6 +129,10 @@ const onConfirm = async () => {
 const onCancel = () => {
 	router.push("/rooms");
 };
+
+const importCardTitle = computed(() =>
+	t(`components.molecules.import.${props.shareTokenInfo.parentType}.options.title`)
+);
 
 const { text, warnings } = useCopyContent(ContentItemTypeEnum.Card);
 </script>

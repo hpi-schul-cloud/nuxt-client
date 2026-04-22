@@ -634,10 +634,7 @@ export default {
 	"components.molecules.label.board": "Bereich wählen",
 	"components.molecules.label.section": "Abschnitt wählen",
 	"components.molecules.import.card.question": "Wohin soll die Karte{title} importiert werden?",
-	"components.molecules.import.card.hint.restriction": "Folgende Inhalte werden nicht übernommen:",
-	"components.molecules.import.card.hint.etherpad": "Inhalte aus Etherpads",
-	"components.molecules.import.card.hint.whiteboard": "Inhalte aus Whiteboards",
-	"components.molecules.import.card.hint.ctltools": "Geschützte Einstellungen externer Tools",
+
 	"components.molecules.move.card.title": "Karte verschieben",
 	"components.molecules.move.card.question": "Wohin soll die Karte{title} verschoben werden?",
 	"components.molecules.move.card.hint.restriction":

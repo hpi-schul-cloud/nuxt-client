@@ -15,7 +15,7 @@
 			</p>
 			<WarningAlert v-if="warnings.length > 0" class="mb-4">
 				<p class="mb-1">
-					{{ t("feature-copy.copyInfo.text.alert.followingContent") }}
+					{{ t("components.molecules.import.options.tableHeader.InfoText") }}
 				</p>
 				<ul class="ml-6">
 					<li v-for="warning in warnings" :key="warning.testId" :data-testid="warning.testId">
