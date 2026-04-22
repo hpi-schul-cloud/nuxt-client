@@ -31,7 +31,6 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 			startTime = Date.now();
 		}
 		logs.push(`[${Date.now() - startTime}ms]${message}`);
-		logger.log(logs);
 	};
 
 	const resetLogs = () => {
@@ -40,33 +39,16 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 
 	const handleError = (error: Error & { data?: unknown }) => {
 		const errorData = error.data as { code?: number; message?: string; status?: number } | undefined;
-		log(`ERR: ${errorData?.message ?? error.message}`);
-	};
-
-	const reportBoardError = (type: string, message: string, retryCount: number, delayMs = 100) => {
-		const data = {
-			type,
-			message,
-			retryCount,
-			logSteps: logs,
-		};
-		logger.log(JSON.stringify(data, null, 2)); // TODO: delete this logger.log after final tests
-		delayedReportBoardError(type, message, retryCount, logs, delayMs);
+		log(`ERR:${errorData?.message ?? error.message}`);
 	};
 
 	// whenever this function is called the actual execution is delayed by X ms, if the function is called again within this delay, the previous call is canceled and the timer restarts
-	const delayedReportBoardError = (
-		type: string,
-		message: string,
-		retryCount: number,
-		logSteps: string[],
-		delayMs: number
-	) => {
+	const reportBoardError = (type: string, message: string, retryCount: number, delayMs = 100) => {
 		if (timeoutHandle) {
 			clearTimeout(timeoutHandle);
 		}
 		timeoutHandle = setTimeout(() => {
-			apiCall(type, message, retryCount, logSteps);
+			apiCall(type, message, retryCount, logs);
 		}, delayMs);
 	};
 

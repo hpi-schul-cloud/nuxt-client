@@ -127,8 +127,6 @@ describe("socket-error-handler", () => {
 		const useConnectionErrorHandling = await importHandler();
 		useConnectionErrorHandling(socket);
 
-		const loggerMock = vi.mocked(logger);
-
 		// simulate a connect_error (using EventEmitter.prototype.emit to bypass reserved event check)
 		emitSocketReservedEvent(
 			"connect_error",
@@ -149,9 +147,6 @@ describe("socket-error-handler", () => {
 				boardId: "69121555fd38bab102439ff8",
 			})
 		);
-
-		// Verify logging occurred
-		expect(loggerMock.log).toHaveBeenCalled();
 	});
 
 	it("reports multiple reconnect attempts when attempt > 3", async () => {
@@ -197,8 +192,6 @@ describe("socket-error-handler", () => {
 		const useConnectionErrorHandling = await importHandler();
 		useConnectionErrorHandling(socket);
 
-		const loggerMock = vi.mocked(logger);
-
 		// simulate upgrade event
 		emitEngineEvent("upgrade", { name: "websocket" });
 
@@ -207,9 +200,6 @@ describe("socket-error-handler", () => {
 
 		// Advance timers past the 100ms default delay
 		await vi.advanceTimersByTimeAsync(200);
-
-		// Check that logger was called
-		expect(loggerMock.log.mock.calls.length).toBeGreaterThan(0);
 	});
 
 	it("retries reporting after failure and logs error", async () => {
