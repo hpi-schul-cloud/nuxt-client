@@ -19,7 +19,7 @@
 			</TasksOverviewList>
 		</div>
 
-		<aside class="filter-sidebar h-100 pa-4">
+		<aside class="filter-sidebar pa-4 pl-6 pb-6 mt-2">
 			<div class="filter-controls">
 				<VAutocomplete
 					v-model="selectedCourseNames"
@@ -28,6 +28,7 @@
 					clearable
 					flat
 					chips
+					:density="filterDensity"
 					data-testid="course-filter"
 					:items="courseFilterOptionsWithCount"
 					:label="t('common.labels.course')"
@@ -37,6 +38,7 @@
 					v-model="gradeStatus"
 					clearable
 					flat
+					:density="filterDensity"
 					data-testid="grade-status-filter"
 					:items="gradeStatusOptions"
 					:label="t('pages.tasks.rating')"
@@ -46,6 +48,7 @@
 					v-model="dueStatus"
 					clearable
 					flat
+					:density="filterDensity"
 					data-testid="due-status-filter"
 					:items="dueStatusOptions"
 					:label="t('common.labels.status')"
@@ -56,9 +59,16 @@
 					:label="t('components.organisms.TasksDashboardMain.filter.substitute')"
 					:true-icon="mdiCheck"
 					hide-details
+					:density="filterDensity"
 				/>
 
-				<VBtn class="mt-2" :text="t('common.actions.reset.filter')" @click="clearFilters" />
+				<VBtn
+					v-if="hasActiveFilters"
+					variant="outlined"
+					class="mt-3"
+					:text="t('common.actions.reset.filter')"
+					@click="clearFilters"
+				/>
 			</div>
 		</aside>
 	</VWindowItem>
@@ -75,6 +85,7 @@ import { useTasksFilter } from "@data-tasks";
 import { mdiCheck } from "@icons/material";
 import { computed, toRef } from "vue";
 import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
 
 const props = defineProps<{
 	value: string;
@@ -111,6 +122,17 @@ defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { smAndDown } = useDisplay();
+
+const filterDensity = computed(() => (smAndDown.value ? "compact" : "default"));
+
+const hasActiveFilters = computed(
+	() =>
+		selectedCourseNames.value.length > 0 ||
+		gradeStatus.value !== undefined ||
+		dueStatus.value !== undefined ||
+		includeSubstitute.value
+);
 </script>
 
 <style lang="scss" scoped>
@@ -119,11 +141,11 @@ const { t } = useI18n();
 
 .content-grid {
 	display: grid;
-	grid-template-columns: 2fr 1fr;
+	grid-template-columns: 5fr 2fr;
 	grid-template-areas: "list sidebar";
 	gap: 12px;
 	align-items: start;
-	border-top: 0.5px solid;
+	border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 
 	@media #{map.get($display-breakpoints, 'sm-and-down')} {
 		grid-template-columns: 1fr;
@@ -139,6 +161,6 @@ const { t } = useI18n();
 
 .filter-sidebar {
 	grid-area: sidebar;
-	border-left: 1px solid rgb(var(--v-border-color));
+	background-color: rgba(var(--v-theme-on-surface), 0.04);
 }
 </style>

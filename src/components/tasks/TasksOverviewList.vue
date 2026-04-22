@@ -1,7 +1,7 @@
 <template>
 	<VList role="feed" lines="two" class="overflow-hidden">
 		<TransitionGroup class="overflow-hidden" name="anim-tasks" tag="ul">
-			<li v-for="task in tasks" :key="task.id" class="tasks-list-item">
+			<li v-for="task in tasks" :key="task.id" class="tasks-list-item mb-2" data-testid="task-item">
 				<slot :task="task" />
 			</li>
 		</TransitionGroup>

@@ -1,6 +1,6 @@
 <template>
 	<section class="task-dashboard-student">
-		<div class="header-section">
+		<div class="header-section mt-4">
 			<VTabs v-model="activeTab" align-tabs="center">
 				<VTab v-for="tab in tabRoutes" :key="tab.value" class="tab-item" :value="tab.value">
 					<VIcon size="large" :icon="tab.icon" class="tab-icon mr-sm-3" />
@@ -9,7 +9,7 @@
 			</VTabs>
 		</div>
 
-		<div class="mx-auto mt-5">
+		<div class="mx-auto">
 			<VWindow v-model="activeTab">
 				<TasksOverviewPane :value="TaskTab.OPEN" :tasks="openForStudent" />
 				<TasksOverviewPane :value="TaskTab.COMPLETED" :tasks="submittedForStudent" />
@@ -64,11 +64,8 @@ const { openForStudent, finishedTasks, isLoadingFinishedTasks, loadMoreFinishedT
 </script>
 
 <style lang="scss" scoped>
-@use "sass:map";
-@use "@/styles/settings" as *;
-
 .tab-item {
 	min-width: 0 !important;
-	width: clamp(90px, 20vw, 160px);
+	width: clamp(90px, 30vw, 230px);
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<section class="task-dashboard-teacher">
-		<div class="header-section">
+		<div class="header-section mt-4">
 			<VTabs v-model="activeTab" align-tabs="center">
 				<VTab v-for="tab in tabRoutes" :key="tab.value" :value="tab.value" class="tab-item">
 					<VIcon size="large" :icon="tab.icon" class="tab-icon mr-sm-3" />
@@ -9,7 +9,7 @@
 			</VTabs>
 		</div>
 
-		<div class="mx-auto mt-5">
+		<div class="mx-auto">
 			<VWindow :model-value="activeTab">
 				<TasksOverviewPane
 					:value="TaskTab.OPEN"
@@ -112,6 +112,6 @@ const onShareTask = (taskId: string) => {
 <style lang="scss" scoped>
 .tab-item {
 	min-width: 0 !important;
-	width: clamp(90px, 20vw, 160px);
+	width: clamp(90px, 30vw, 230px);
 }
 </style>
