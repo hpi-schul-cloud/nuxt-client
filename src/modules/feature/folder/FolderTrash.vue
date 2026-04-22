@@ -28,7 +28,7 @@
 			</EmptyState>
 		</template>
 		<template v-else>
-			<p class="mb-4 py-4 px-2" data-testid="trash-info-alert">
+			<p class="mb-4 py-4 px-2" role="note" data-testid="trash-info-alert">
 				{{ t("pages.folder.trash.infoText") }}
 			</p>
 			<template v-if="deletedFileRecords.length === 0">
