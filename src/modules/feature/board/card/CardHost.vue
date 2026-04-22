@@ -165,7 +165,7 @@ type Props = {
 	cardId: string;
 	rowIndex: number;
 	columnIndex: number;
-	targetCardId?: string;
+	detailViewCardId?: string;
 };
 
 const props = defineProps<Props>();
@@ -184,7 +184,7 @@ const { isFocusContained, isFocusedById } = useBoardFocusHandler(cardId.value, c
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
 
 const isHovered = useElementHover(cardHost);
-const isDetailView = computed(() => props.targetCardId === props.cardId);
+const isDetailView = computed(() => props.detailViewCardId === props.cardId);
 
 const cardStore = useCardStore();
 const router = useRouter();

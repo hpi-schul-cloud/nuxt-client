@@ -41,7 +41,7 @@ describe("BoardColumn", () => {
 	const setup = (options?: {
 		cardsCount?: number;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
-		targetCardId?: string;
+		detailViewCardId?: string;
 	}) => {
 		const cards = cardSkeletonResponseFactory.buildList(options?.cardsCount ?? 3);
 		const column = columnResponseFactory.build({
@@ -64,7 +64,7 @@ describe("BoardColumn", () => {
 				index: 1,
 				columnCount: 1,
 				isListBoard: false,
-				targetCardId: options?.targetCardId,
+				detailViewCardId: options?.detailViewCardId,
 			},
 		});
 
@@ -84,15 +84,15 @@ describe("BoardColumn", () => {
 			expect(mockedUseForceRenderHandler.getRenderKey).toHaveBeenCalled();
 		});
 
-		it("should propagate targetCard to CardHost components", () => {
-			const { wrapper } = setup({ cardsCount: 5, targetCardId: "card-12345" });
+		it("should propagate detailViewCardId to CardHost components", () => {
+			const { wrapper } = setup({ cardsCount: 5, detailViewCardId: "card-12345" });
 
 			const cardHostComponents = wrapper.findAllComponents({
 				name: "CardHost",
 			});
 
 			cardHostComponents.forEach((cardHostComponent) => {
-				expect(cardHostComponent.props("targetCardId")).toBe("card-12345");
+				expect(cardHostComponent.props("detailViewCardId")).toBe("card-12345");
 			});
 		});
 	});

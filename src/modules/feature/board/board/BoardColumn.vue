@@ -60,7 +60,7 @@
 						:height="element.height"
 						:row-index="elementIndex"
 						:column-index="reactiveIndex"
-						:target-card-id="targetCardId"
+						:detail-view-card-id="detailViewCardId"
 						@move:card-keyboard="onMoveCardKeyboard(elementIndex, element.cardId, $event)"
 						@delete:card="onDeleteCard"
 						@reload:board="onReloadBoard"
@@ -91,7 +91,7 @@ type Props = {
 	columnCount: number;
 	index: number;
 	isListBoard: boolean;
-	targetCardId?: string;
+	detailViewCardId?: string;
 };
 
 const props = defineProps<Props>();
