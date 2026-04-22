@@ -136,8 +136,13 @@ import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { delay } from "@/utils/helpers";
 import { Colors } from "@api-server";
-import { useBoardStore } from "@data-board";
-import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
+import {
+	useBoardAllowedOperations,
+	useBoardFocusHandler,
+	useBoardStore,
+	useCardStore,
+	useCourseBoardEditMode,
+} from "@data-board";
 import { mdiFullscreen } from "@icons/material";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { SvsColorPickerMenu } from "@ui-controls";

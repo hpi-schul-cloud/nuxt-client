@@ -3,8 +3,12 @@ import CardHostDetailView from "./CardHostDetailView.vue";
 import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
-import { mockComposable } from "@@/tests/test-utils";
-import { boardResponseFactory, cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils";
+import {
+	boardResponseFactory,
+	cardResponseFactory,
+	fileElementResponseFactory,
+	mockComposable,
+} from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardResponseAllowedOperations, CardResponse } from "@api-server";
 import { useBoardAllowedOperations, useCourseBoardEditMode } from "@data-board";
