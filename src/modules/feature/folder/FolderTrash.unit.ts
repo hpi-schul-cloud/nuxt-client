@@ -1,13 +1,15 @@
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import FolderTrash from "./FolderTrash.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
-import { fileRecordFactory, mockComposable } from "@@/tests/test-utils";
+import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
+import { axiosErrorFactory, fileRecordFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as FileTrashApi from "@data-file";
 import * as FolderState from "@data-folder";
 import { DataTable } from "@ui-data-table";
 import { KebabMenuAction } from "@ui-kebab-menu";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
+import { HttpStatusCode } from "axios";
 import { computed, ref } from "vue";
 import { VSkeletonLoader } from "vuetify/lib/components/index";
 
@@ -104,6 +106,60 @@ describe("FolderTrash.vue", () => {
 
 			const errorState = wrapper.findComponent(BrokenPencilSvg);
 			expect(errorState.exists()).toBe(true);
+		});
+
+		it("should not show the loading skeleton", async () => {
+			const { wrapper } = await setup();
+
+			const loadingSpinner = wrapper.findComponent(VSkeletonLoader);
+			expect(loadingSpinner.exists()).toBe(false);
+		});
+
+		it("should not show the data table", async () => {
+			const { wrapper } = await setup();
+
+			const dataTable = wrapper.findComponent(DataTable);
+			expect(dataTable.exists()).toBe(false);
+		});
+	});
+
+	describe("when file storage returns a forbidden error", () => {
+		const setup = async () => {
+			const folderStateMock = createFolderStateMock();
+			vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
+
+			const fileTrashMock = createFileTrashMock();
+			fileTrashMock.fetchDeletedFiles.mockRejectedValueOnce(
+				axiosErrorFactory.withStatusCode(HttpStatusCode.Forbidden).build()
+			);
+			vi.spyOn(FileTrashApi, "useFileTrash").mockReturnValueOnce(fileTrashMock);
+
+			const wrapper = mount(FolderTrash, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				props: {
+					folderId: "test-folder-id",
+				},
+			});
+
+			await flushPromises();
+
+			return { wrapper };
+		};
+
+		it("should show the forbidden error state", async () => {
+			const { wrapper } = await setup();
+
+			const forbiddenState = wrapper.findComponent(PermissionErrorSvg);
+			expect(forbiddenState.exists()).toBe(true);
+		});
+
+		it("should not show the file storage error state", async () => {
+			const { wrapper } = await setup();
+
+			const errorState = wrapper.findComponent(BrokenPencilSvg);
+			expect(errorState.exists()).toBe(false);
 		});
 
 		it("should not show the loading skeleton", async () => {

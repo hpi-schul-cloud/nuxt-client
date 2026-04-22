@@ -10,6 +10,13 @@
 				<VSkeletonLoader type="table-thead, table-tbody" class="mt-6" />
 			</VContainer>
 		</template>
+		<template v-else-if="isForbiddenError">
+			<EmptyState :title="t('error.403')" data-testid="trash-forbidden-state">
+				<template #media>
+					<PermissionErrorSvg />
+				</template>
+			</EmptyState>
+		</template>
 		<template v-else-if="fileStorageError">
 			<EmptyState :title="t('components.board.notifications.errors.fileServiceNotAvailable')">
 				<template #media>
@@ -71,8 +78,12 @@
 </template>
 
 <script setup lang="ts">
+import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
+import FilePreview from "./file-table/FilePreview.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
+import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { formatFileSize } from "@/utils/fileHelper";
 import { useFileTrash } from "@data-file";
 import { useFolderState } from "@data-folder";
@@ -81,10 +92,9 @@ import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu, KebabMenuAction } from "@ui-kebab-menu";
 import { DefaultWireframe } from "@ui-layout";
+import { HttpStatusCode } from "axios";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
-import FilePreview from "./file-table/FilePreview.vue";
 
 const { t, d } = useI18n();
 
@@ -106,6 +116,7 @@ const { deletedFileRecords, fetchDeletedFiles, restoreFiles } = useFileTrash();
 
 const isLoading = ref(true);
 const fileStorageError = ref(false);
+const isForbiddenError = ref(false);
 
 const trashBreadcrumbs = computed(() => {
 	const items = folderBreadcrumbs.value.map((crumb, index, arr) => {
@@ -142,6 +153,15 @@ const fileRecordItems = computed(() =>
 	}))
 );
 
+const handleError = (error: unknown): void => {
+	const responseError = mapAxiosErrorToResponseError(error);
+	if (responseError.code === HttpStatusCode.Forbidden) {
+		isForbiddenError.value = true;
+	} else {
+		fileStorageError.value = true;
+	}
+};
+
 const onRestoreFiles = async (fileRecords: FileRecord[]): Promise<void> => {
 	await restoreFiles(fileRecords);
 };
@@ -165,8 +185,8 @@ onMounted(async () => {
 
 	try {
 		await fetchDeletedFiles(folderId.value, FileRecordParent.BOARDNODES);
-	} catch {
-		fileStorageError.value = true;
+	} catch (error) {
+		handleError(error);
 	}
 
 	isLoading.value = false;
