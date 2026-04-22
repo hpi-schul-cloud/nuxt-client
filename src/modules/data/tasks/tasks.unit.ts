@@ -37,8 +37,8 @@ describe("useTasks", () => {
 			});
 			setupApiResponse([openTask]);
 
-			const { fetchTasks, tasks, isLoading } = useTasks({}, false);
-			expect(isLoading.value).toBe(false);
+			const { fetchTasks, tasks, isLoadingTasks } = useTasks({ fetchImmediate: false });
+			expect(isLoadingTasks.value).toBe(false);
 
 			await fetchTasks();
 			await flushPromises();
@@ -60,34 +60,16 @@ describe("useTasks", () => {
 			});
 			setupApiResponse([draftTask, publishedTask]);
 
-			const { fetchTasks, draftTasks, publishedTasks } = useTasks({}, false);
+			const { fetchTasks, drafts, published } = useTasks({ fetchImmediate: false });
 			await fetchTasks();
 
-			expect(draftTasks.value).toHaveLength(1);
-			expect(draftTasks.value[0].id).toBe("draft");
-			expect(publishedTasks.value).toHaveLength(1);
-			expect(publishedTasks.value[0].id).toBe("published");
+			expect(drafts.value).toHaveLength(1);
+			expect(drafts.value[0].id).toBe("draft");
+			expect(published.value).toHaveLength(1);
+			expect(published.value[0].id).toBe("published");
 		});
 
-		it("should identify overdue tasks", async () => {
-			const overdueTask = taskResponseFactory.build({
-				id: "overdue",
-				dueDate: dateFromToday(-2, "day"),
-			});
-			const futureTask = taskResponseFactory.build({
-				id: "future",
-				dueDate: dateFromToday(2, "day"),
-			});
-			setupApiResponse([overdueTask, futureTask]);
-
-			const { fetchTasks, overdueTasks } = useTasks({}, false);
-			await fetchTasks();
-
-			expect(overdueTasks.value).toHaveLength(1);
-			expect(overdueTasks.value[0].id).toBe("overdue");
-		});
-
-		it("should filter openTasksForTeacher (published and not overdue)", async () => {
+		it("should filter openForTeacher (published and not overdue)", async () => {
 			const open = taskResponseFactory.build({
 				id: "open",
 				dueDate: dateFromToday(5, "day"),
@@ -100,11 +82,11 @@ describe("useTasks", () => {
 			});
 			setupApiResponse([open, overdueTask]);
 
-			const { fetchTasks, openTasksForTeacher } = useTasks({}, false);
+			const { fetchTasks, openForTeacher } = useTasks({ fetchImmediate: false });
 			await fetchTasks();
 
-			expect(openTasksForTeacher.value).toHaveLength(1);
-			expect(openTasksForTeacher.value[0].id).toBe("open");
+			expect(openForTeacher.value).toHaveLength(1);
+			expect(openForTeacher.value[0].id).toBe("open");
 		});
 
 		it("should filter openTasksForStudents (published, not hidden, not submitted)", async () => {
@@ -124,11 +106,11 @@ describe("useTasks", () => {
 			});
 			setupApiResponse([validTask, alreadySubmitted, hiddenLesson]);
 
-			const { fetchTasks, openTasksForStudents } = useTasks({}, false);
+			const { fetchTasks, openForStudent } = useTasks({ fetchImmediate: false });
 			await fetchTasks();
 
-			expect(openTasksForStudents.value).toHaveLength(1);
-			expect(openTasksForStudents.value[0].id).toBe("valid");
+			expect(openForStudent.value).toHaveLength(1);
+			expect(openForStudent.value[0].id).toBe("valid");
 		});
 
 		it("should filter gradedForStudent (published with graded > 0)", async () => {
@@ -142,11 +124,11 @@ describe("useTasks", () => {
 			});
 			setupApiResponse([gradedTask, notGradedTask]);
 
-			const { fetchTasks, gradedTasksForStudent } = useTasks({}, false);
+			const { fetchTasks, gradedForStudent } = useTasks({ fetchImmediate: false });
 			await fetchTasks();
 
-			expect(gradedTasksForStudent.value).toHaveLength(1);
-			expect(gradedTasksForStudent.value[0].id).toBe("graded");
+			expect(gradedForStudent.value).toHaveLength(1);
+			expect(gradedForStudent.value[0].id).toBe("graded");
 		});
 
 		it("should filter ungradedForTeacher and gradedForTeacher based on overdue and graded==submitted", async () => {
@@ -162,14 +144,14 @@ describe("useTasks", () => {
 			});
 			setupApiResponse([needsGrading, alreadyGraded]);
 
-			const { fetchTasks, ungradedTasksForTeacher, gradedTasksForTeacher } = useTasks({}, false);
+			const { fetchTasks, ungradedForTeacher, gradedForTeacher } = useTasks({ fetchImmediate: false });
 			await fetchTasks();
 
-			expect(ungradedTasksForTeacher.value).toHaveLength(1);
-			expect(ungradedTasksForTeacher.value[0].id).toBe("needs-grading");
+			expect(ungradedForTeacher.value).toHaveLength(1);
+			expect(ungradedForTeacher.value[0].id).toBe("needs-grading");
 
-			expect(gradedTasksForTeacher.value).toHaveLength(1);
-			expect(gradedTasksForTeacher.value[0].id).toBe("already-graded");
+			expect(gradedForTeacher.value).toHaveLength(1);
+			expect(gradedForTeacher.value[0].id).toBe("already-graded");
 		});
 
 		it("should filter ungradedForStudent (published, submitted > 0, not graded)", async () => {
@@ -187,11 +169,11 @@ describe("useTasks", () => {
 			});
 			setupApiResponse([submittedNotGraded, notSubmitted, graded]);
 
-			const { fetchTasks, ungradedTasksForStudent } = useTasks({}, false);
+			const { fetchTasks, ungradedForStudent } = useTasks({ fetchImmediate: false });
 			await fetchTasks();
 
-			expect(ungradedTasksForStudent.value).toHaveLength(1);
-			expect(ungradedTasksForStudent.value[0].id).toBe("submitted-not-graded");
+			expect(ungradedForStudent.value).toHaveLength(1);
+			expect(ungradedForStudent.value[0].id).toBe("submitted-not-graded");
 		});
 	});
 });

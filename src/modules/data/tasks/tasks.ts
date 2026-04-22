@@ -16,7 +16,7 @@ export const toSortedByDueDate = (tasks: TaskResponse[]) =>
 export const toSortedByCreatedDate = (tasks: TaskResponse[]) =>
 	orderBy(tasks, (t) => parseUtc(t.createdAt).valueOf(), "desc");
 
-export const isTaskOverdue = (t: TaskResponse) => t.dueDate && parseUtc(t.dueDate).isBefore(nowUtc());
+export const isTaskOverdue = (t: TaskResponse) => t.dueDate !== undefined && parseUtc(t.dueDate).isBefore(nowUtc());
 export const isTaskUnpublished = (t: TaskResponse) => isPublished(t) && !isVisible(t);
 export const isTaskDraft = (t: TaskResponse) => t.status.isDraft;
 
