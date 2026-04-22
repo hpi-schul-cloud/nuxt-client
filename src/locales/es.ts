@@ -20,6 +20,7 @@ export default {
 	"common.actions.invite": "Enviar el enlace del curso",
 	"common.actions.logout": "Desconectar",
 	"common.actions.ok": "Aceptar",
+	"common.actions.reset.filter": "Restablecer filtro",
 	"common.actions.pickColor": "Seleccionar color",
 	"common.actions.leave": "Dejar",
 	"common.actions.remove": "Eliminar",

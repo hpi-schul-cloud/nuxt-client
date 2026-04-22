@@ -20,6 +20,7 @@ export default {
 	"common.actions.invite": "Send course link",
 	"common.actions.logout": "Logout",
 	"common.actions.ok": "OK",
+	"common.actions.reset.filter": "Reset filter",
 	"common.actions.pickColor": "Select color",
 	"common.actions.leave": "Leave",
 	"common.actions.remove": "Remove",

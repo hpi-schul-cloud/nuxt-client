@@ -58,6 +58,8 @@
 					:true-icon="mdiCheck"
 					hide-details
 				/>
+
+				<VBtn class="mt-2" :text="t('common.actions.reset.filter')" @click="clearFilters" />
 			</div>
 		</aside>
 	</VWindowItem>
@@ -94,6 +96,7 @@ const {
 	includeSubstitute,
 	filteredTasks,
 	selectedCourseNames,
+	clearFilters,
 } = useTasksFilter(toRef(props, "tasks"));
 
 const courseFilterOptionsWithCount = computed(() =>
