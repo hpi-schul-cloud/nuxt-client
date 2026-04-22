@@ -1,6 +1,6 @@
-import { CopyParamsTypeEnum } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useAwaitableAction } from "@/composables/awaitable-action.composable";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { $axios } from "@/utils/api";
 import { BoardApiFactory, CourseRoomsApiFactory, RoomApiFactory, TaskApiFactory } from "@api-server";
 import { notifySuccess, useLoadingStore } from "@data-app";
@@ -11,7 +11,7 @@ export const useCopyFlow = () => {
 	const confirmAction = useAwaitableAction<boolean>();
 
 	const isDialogOpen = confirmAction.isActive;
-	const copyItemType = ref<CopyParamsTypeEnum>(CopyParamsTypeEnum.Course);
+	const copyItemType = ref<ContentItemTypeEnum>(ContentItemTypeEnum.Course);
 
 	const CANCELLED_RESULT = {
 		success: false,
@@ -29,7 +29,7 @@ export const useCopyFlow = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 
-	const confirm = (type: CopyParamsTypeEnum) => {
+	const confirm = (type: ContentItemTypeEnum) => {
 		copyItemType.value = type;
 		return confirmAction.start();
 	};
@@ -46,7 +46,7 @@ export const useCopyFlow = () => {
 		withLoadingState(fn, t("components.molecules.copyResult.title.loading"));
 
 	const executeCopyCourse = async (courseId: string) => {
-		const { submitted } = await confirm(CopyParamsTypeEnum.Course);
+		const { submitted } = await confirm(ContentItemTypeEnum.Course);
 		if (!submitted) return CANCELLED_RESULT;
 
 		const outcome = await withCopyLoading(() =>
@@ -64,7 +64,7 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyTask = async (taskId: string, targetCourseId: string) => {
-		const { submitted } = await confirm(CopyParamsTypeEnum.Task);
+		const { submitted } = await confirm(ContentItemTypeEnum.Task);
 		if (!submitted) return CANCELLED_RESULT;
 
 		const outcome = await withCopyLoading(() =>
@@ -82,7 +82,7 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyLesson = async (lessonId: string, targetCourseId: string) => {
-		const { submitted } = await confirm(CopyParamsTypeEnum.Lesson);
+		const { submitted } = await confirm(ContentItemTypeEnum.Lesson);
 		if (!submitted) return CANCELLED_RESULT;
 
 		const outcome = await withCopyLoading(() =>
@@ -100,7 +100,7 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyBoard = async (boardId: string) => {
-		const { submitted } = await confirm(CopyParamsTypeEnum.ColumnBoard);
+		const { submitted } = await confirm(ContentItemTypeEnum.ColumnBoard);
 		if (!submitted) return CANCELLED_RESULT;
 
 		const outcome = await withCopyLoading(() =>
@@ -118,7 +118,7 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyRoom = async (roomId: string) => {
-		const { submitted } = await confirm(CopyParamsTypeEnum.Room);
+		const { submitted } = await confirm(ContentItemTypeEnum.Room);
 		if (!submitted) return CANCELLED_RESULT;
 
 		const outcome = await withCopyLoading(() =>

@@ -88,6 +88,7 @@ import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCo
 import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.vue";
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
@@ -105,7 +106,6 @@ import {
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
-import { CopyParamsTypeEnum } from "@feature-copy";
 import { CopyDialog, useCopyFlow } from "@feature-copy";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
 import {
@@ -322,7 +322,7 @@ const headlineMenuItems = computed((): MenuItem[] => {
 		items.push({
 			icon: icons.mdiContentCopy,
 			action: () => {
-				onCopyRequested({ id: courseId.value, type: CopyParamsTypeEnum.Course });
+				onCopyRequested({ id: courseId.value, type: ContentItemTypeEnum.Course });
 			},
 			name: t("common.actions.duplicate"),
 			dataTestId: "room-menu-copy",
@@ -442,9 +442,9 @@ const refreshCourseRoom = async () => {
 const copyFlow = useCopyFlow();
 const { isDialogOpen: isCopyDialogOpen, copyItemType, onConfirm: onConfirmCopy, onCancel: onCancelCopy } = copyFlow;
 
-const onCopyRequested = async ({ id, type }: { id: string; type: CopyParamsTypeEnum }) => {
+const onCopyRequested = async ({ id, type }: { id: string; type: ContentItemTypeEnum }) => {
 	switch (type) {
-		case CopyParamsTypeEnum.Course: {
+		case ContentItemTypeEnum.Course: {
 			const { copyResult } = await copyFlow.executeCopyCourse(id);
 			if (copyResult?.id) {
 				await router.replace(`/rooms/${copyResult.id}`);
@@ -452,21 +452,21 @@ const onCopyRequested = async ({ id, type }: { id: string; type: CopyParamsTypeE
 			}
 			break;
 		}
-		case CopyParamsTypeEnum.Task: {
+		case ContentItemTypeEnum.Task: {
 			const { copyResult } = await copyFlow.executeCopyTask(id, courseId.value);
 			if (copyResult?.id) {
 				await courseRoomDetailsModule.fetchContent(courseId.value);
 			}
 			break;
 		}
-		case CopyParamsTypeEnum.Lesson: {
+		case ContentItemTypeEnum.Lesson: {
 			const { copyResult } = await copyFlow.executeCopyLesson(id, courseId.value);
 			if (copyResult?.id) {
 				await courseRoomDetailsModule.fetchContent(courseId.value);
 			}
 			break;
 		}
-		case CopyParamsTypeEnum.ColumnBoard: {
+		case ContentItemTypeEnum.ColumnBoard: {
 			const { copyResult } = await copyFlow.executeCopyBoard(id);
 			if (copyResult?.id) {
 				await courseRoomDetailsModule.fetchContent(courseId.value);

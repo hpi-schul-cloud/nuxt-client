@@ -2,13 +2,13 @@ import TasksListItemMenu from "./TasksListItemMenu.vue";
 import { finishedTasksModule } from "@/store";
 import FinishedTasksModule from "@/store/finished-tasks";
 import TasksModule from "@/store/tasks";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { CopyParamsTypeEnum } from "@feature-copy";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -226,7 +226,7 @@ describe("TasksListItemMenu", () => {
 						{
 							id: "59cce2c61113d1132c98dc06",
 							courseId: "18",
-							type: CopyParamsTypeEnum.Task,
+							type: ContentItemTypeEnum.Task,
 						},
 					],
 				]);
@@ -253,7 +253,7 @@ describe("TasksListItemMenu", () => {
 						{
 							courseId: undefined,
 							id: "59cce2c61113d1132c98dc06",
-							type: CopyParamsTypeEnum.Task,
+							type: ContentItemTypeEnum.Task,
 						},
 					],
 				]);

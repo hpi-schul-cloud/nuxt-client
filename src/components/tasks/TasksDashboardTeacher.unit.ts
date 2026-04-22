@@ -4,11 +4,11 @@ import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
 import { OpenTasksForTeacher } from "@/store/types/tasks";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { CopyParamsTypeEnum } from "@feature-copy";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
 import { mount } from "@vue/test-utils";
@@ -127,7 +127,7 @@ describe("TasksDashboardTeacher", () => {
 		const payload = {
 			id: "123",
 			courseId: "c789",
-			type: CopyParamsTypeEnum.Task,
+			type: ContentItemTypeEnum.Task,
 		};
 		oneTasksList.vm.$emit("copy-task", payload);
 	});

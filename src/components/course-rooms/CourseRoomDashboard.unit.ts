@@ -2,6 +2,7 @@ import CourseRoomDashboard from "./CourseRoomDashboard.vue";
 import { courseRoomDetailsModule } from "@/store";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
@@ -9,7 +10,6 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { ShareTokenBodyParamsParentType } from "@api-server";
-import { CopyParamsTypeEnum } from "@feature-copy";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
 import { flushPromises, mount } from "@vue/test-utils";
@@ -533,7 +533,7 @@ describe("CourseRoomDashboard.vue", () => {
 				[
 					{
 						id: "1234",
-						type: CopyParamsTypeEnum.Task,
+						type: ContentItemTypeEnum.Task,
 						courseId: "123",
 					},
 				],
@@ -570,7 +570,7 @@ describe("CourseRoomDashboard.vue", () => {
 				[
 					{
 						id: "3456",
-						type: CopyParamsTypeEnum.Lesson,
+						type: ContentItemTypeEnum.Lesson,
 						courseId: "123",
 					},
 				],
@@ -607,7 +607,7 @@ describe("CourseRoomDashboard.vue", () => {
 				[
 					{
 						id: "9876",
-						type: CopyParamsTypeEnum.ColumnBoard,
+						type: ContentItemTypeEnum.ColumnBoard,
 						courseId: "123",
 					},
 				],

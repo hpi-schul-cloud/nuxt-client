@@ -89,9 +89,9 @@
 
 <script>
 import { finishedTasksModule } from "@/store";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { askDeletion } from "@/utils/confirmation-dialog.utils.ts";
 import { useEnvConfig } from "@data-env";
-import { CopyParamsTypeEnum } from "@feature-copy";
 import {
 	mdiArchiveOutline,
 	mdiContentCopy,
@@ -196,7 +196,7 @@ export default defineComponent({
 			const payload = {
 				id: this.taskId,
 				courseId: this.courseId === "" ? undefined : this.courseId,
-				type: CopyParamsTypeEnum.Task,
+				type: ContentItemTypeEnum.Task,
 			};
 
 			this.$emit("copy-task", payload);
