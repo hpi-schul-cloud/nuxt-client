@@ -6,7 +6,7 @@
 			</h1>
 		</template>
 		<template v-if="isLoading">
-			<VContainer class="loader">
+			<VContainer class="loader" aria-busy="true" aria-live="polite">
 				<VSkeletonLoader type="table-thead, table-tbody" class="mt-6" />
 			</VContainer>
 		</template>
