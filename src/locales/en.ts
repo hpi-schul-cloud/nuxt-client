@@ -2008,6 +2008,7 @@ export default {
 	"pages.folder.fab.title": "Add file",
 	"pages.folder.untitled": "Untitled folder",
 	"pages.folder.title": "Folder",
+	"pages.folder.columns.preview": "Preview",
 	"pages.folder.columns.name": "Name",
 	"pages.folder.columns.createdat": "Created on",
 	"pages.folder.columns.lastModifiedAt": "Last updated",

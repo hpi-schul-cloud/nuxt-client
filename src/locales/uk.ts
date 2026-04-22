@@ -2029,6 +2029,7 @@ export default {
 	"pages.folder.columns.name": "Ім'я",
 	"pages.folder.columns.createdat": "Створено на",
 	"pages.folder.columns.lastModifiedAt": "Останнє оновлення",
+	"pages.folder.columns.preview": "Попередній перегляд",
 	"pages.folder.columns.size": "Розмір",
 	"pages.folder.ariaLabels.menu": "Меню Папки",
 	"pages.folder.ariaLabels.menu.action.edit": "Перейменувати папку",

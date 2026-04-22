@@ -177,7 +177,7 @@ const emit = defineEmits([
 ]);
 
 const headers = [
-	{ title: "", key: "preview", sortable: false },
+	{ title: t("pages.folder.columns.preview"), key: "preview", sortable: false },
 	{ title: t("pages.folder.columns.name"), key: "name" },
 	{ title: t("pages.folder.columns.lastModifiedAt"), key: "contentLastModifiedAt" },
 	{ title: t("pages.folder.columns.size"), key: "size" },

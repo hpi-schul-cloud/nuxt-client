@@ -2042,6 +2042,7 @@ export default {
 	"pages.folder.columns.name": "Name",
 	"pages.folder.columns.createdat": "Erstellt am",
 	"pages.folder.columns.lastModifiedAt": "Zuletzt geändert",
+	"pages.folder.columns.preview": "Vorschau",
 	"pages.folder.columns.size": "Größe",
 	"pages.folder.ariaLabels.menu": "Ordner Menü",
 	"pages.folder.ariaLabels.menu.action.edit": "Ordner umbenennen",

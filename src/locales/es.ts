@@ -2062,6 +2062,7 @@ export default {
 	"pages.folder.columns.name": "Nombre",
 	"pages.folder.columns.createdat": "Creado el",
 	"pages.folder.columns.lastModifiedAt": "Última actualización",
+	"pages.folder.columns.preview": "Vista previa",
 	"pages.folder.columns.size": "Talla",
 	"pages.folder.ariaLabels.menu": "Menú carpeta",
 	"pages.folder.ariaLabels.menu.action.edit": "Renombrar carpeta",
