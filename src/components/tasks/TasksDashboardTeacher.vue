@@ -124,9 +124,9 @@ const copyFlow = useCopyFlow();
 const { isDialogOpen: isCopyDialogOpen, copyItemType, onConfirm: onConfirmCopy, onCancel: onCancelCopy } = copyFlow;
 
 const onCopyTask = async ({ id, courseId }: { id: string; courseId: string }) => {
-	const copyId = await copyFlow.executeCopyTask(id, courseId);
+	const { success } = await copyFlow.executeCopyTask(id, courseId);
 
-	if (copyId) {
+	if (success) {
 		tasksModule.setActiveTab("drafts");
 		await tasksModule.fetchAllTasks();
 	}

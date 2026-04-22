@@ -395,11 +395,11 @@ const { isDialogOpen: isCopyDialogOpen, copyItemType, onConfirm: onConfirmCopy, 
 const onCopyBoard = async () => {
 	if (!allowedOperations.value.copyBoard) return;
 
-	const copyId = await copyFlow.executeCopyBoard(props.boardId);
+	const { copyResult } = await copyFlow.executeCopyBoard(props.boardId);
 
-	if (copyId) {
-		boardStore.fetchBoardRequest({ boardId: copyId });
-		router.push({ name: "boards-id", params: { id: copyId } });
+	if (copyResult?.id) {
+		boardStore.fetchBoardRequest({ boardId: copyResult.id });
+		router.push({ name: "boards-id", params: { id: copyResult.id } });
 	}
 };
 
