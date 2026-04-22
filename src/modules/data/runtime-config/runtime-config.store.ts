@@ -29,7 +29,7 @@ export const useRuntimeConfigStore = defineStore("runtimeConfigStore", () => {
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
 			if (responseError.code !== 401) {
-				return true;
+				return false;
 			}
 
 			useAppStore().handleApplicationError(responseError.code);
