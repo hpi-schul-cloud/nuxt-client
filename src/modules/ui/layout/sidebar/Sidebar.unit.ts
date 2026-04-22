@@ -1,11 +1,9 @@
 import Sidebar from "./Sidebar.vue";
 import { useSidebarSelection } from "./SidebarSelection.composable";
-import FilePathsModule from "@/store/filePaths";
-import { FILE_PATHS_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Permission, SchulcloudTheme } from "@api-server";
+import { useFilePathsStore } from "@data-file";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -37,8 +35,9 @@ const setup = (
 		FEATURE_TEAMS_ENABLED: isTeamsEnabled,
 	});
 
-	const filePathsModule = createModuleMocks(FilePathsModule, {
-		getSpecificFiles: {
+	const filePathsStore = useFilePathsStore();
+	filePathsStore.$patch({
+		specificFiles: {
 			accessibilityStatement: "statement",
 			privacy: "",
 			termsOfUse: "",
@@ -50,9 +49,6 @@ const setup = (
 	const wrapper = mount(VApp, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
-			},
 		},
 		slots: {
 			default: h(Sidebar, { modelValue: sidebarExpanded ?? true }),

@@ -15,12 +15,13 @@
 </template>
 
 <script setup lang="ts">
-import { filePathsModule } from "@/store";
 import { useEnvConfig } from "@data-env";
+import { useFilePathsStore } from "@data-file";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
+const filePathsStore = useFilePathsStore();
 
 const links = computed(() => {
 	const baseLinks: Array<{ text: string; to?: string; href?: string; target?: string }> = [
@@ -65,7 +66,7 @@ const links = computed(() => {
 	}
 
 	baseLinks.push({
-		href: filePathsModule.getSpecificFiles.accessibilityStatement.toString(),
+		href: filePathsStore.specificFiles.accessibilityStatement.toString(),
 		text: t("components.legacy.footer.accessibility.statement"),
 		target: "_blank",
 	});

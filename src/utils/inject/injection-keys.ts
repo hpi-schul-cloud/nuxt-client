@@ -1,6 +1,5 @@
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import FilePathsModule from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
 import GroupModule from "@/store/group";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -10,7 +9,6 @@ import SystemsModule from "@/store/systems";
 import TasksModule from "@/store/tasks";
 import { InjectionKey } from "vue";
 
-export const FILE_PATHS_MODULE_KEY: InjectionKey<FilePathsModule> = Symbol("filePathsModule");
 export const SCHOOL_EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<SchoolExternalToolsModule> =
 	Symbol("schoolExternalToolsModule");
 export const COURSE_ROOM_DETAILS_MODULE_KEY: InjectionKey<CourseRoomDetailsModule> = Symbol("courseRoomDetailsModule");

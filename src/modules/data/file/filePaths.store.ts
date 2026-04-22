@@ -1,10 +1,26 @@
-import { BusinessError } from "./types/commons";
-import { GlobalFiles, SpecificFiles } from "./types/filePaths";
 import { SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { defineStore } from "pinia";
+import { ref } from "vue";
 
-const specificFiles: SpecificFiles = {
+export type SpecificFiles = {
+	accessibilityStatement: string;
+	privacy: string;
+	termsOfUse: string;
+	analogConsent: string;
+};
+
+export type GlobalFiles = {
+	BeschreibungDerSchulCloud: string;
+	TechnischerBericht2019: string;
+	BroschuereSCimUnterricht1: string;
+	BroschuereSCimUnterricht2: string;
+	BroschuereSCundLernen4: string;
+	SchulrechnerInDieSC2017: string;
+	SCKonzeptPilotierung2017: string;
+};
+
+const specificFilesDefaults: SpecificFiles = {
 	accessibilityStatement: "Willkommensordner/Barrierefreiheit/Barrierefreiheitserklaerung.pdf",
 	privacy: "Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
 	termsOfUse: "Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf",
@@ -14,7 +30,7 @@ const specificFiles: SpecificFiles = {
 const termsOfUseThr = "Willkommensordner/Datenschutz/Nutzungsordnung.pdf";
 const privacyThr = "Onlineeinwilligung/Datenschutzhinweise.pdf";
 
-const globalFiles: GlobalFiles = {
+const globalFilesDefaults: GlobalFiles = {
 	BeschreibungDerSchulCloud: "Dokumente/Beschreibung-der-HPI-Schul-Cloud.pdf",
 	TechnischerBericht2019:
 		"Dokumente/Die-HPI-Schul-Cloud_Roll-Out-einer-Cloud-Architektur-für-Schulen-in-Deutschland.pdf",
@@ -27,20 +43,15 @@ const globalFiles: GlobalFiles = {
 	SCKonzeptPilotierung2017: "Dokumente/Konzept-und-Pilotierung-der-Schul-Cloud-2017.pdf",
 };
 
-@Module({
-	name: "filePathsModule",
-	namespaced: true,
-	stateFactory: true,
-})
-export default class FilePathsModule extends VuexModule {
-	documentBaseDir = "";
-	specificFiles: SpecificFiles = {
+export const useFilePathsStore = defineStore("filePathsStore", () => {
+	const documentBaseDir = ref("");
+	const specificFiles = ref<SpecificFiles>({
 		accessibilityStatement: "",
 		privacy: "",
 		termsOfUse: "",
 		analogConsent: "",
-	};
-	globalFiles: GlobalFiles = {
+	});
+	const globalFiles = ref<GlobalFiles>({
 		BeschreibungDerSchulCloud: "",
 		TechnischerBericht2019: "",
 		BroschuereSCimUnterricht1: "",
@@ -48,61 +59,41 @@ export default class FilePathsModule extends VuexModule {
 		BroschuereSCundLernen4: "",
 		SchulrechnerInDieSC2017: "",
 		SCKonzeptPilotierung2017: "",
-	};
-	error: object = {};
+	});
+	const error = ref<unknown>(null);
 
-	@Mutation
-	setDocumentBaseDir(payload: { baseDir: string; theme: string }) {
-		this.documentBaseDir = String(new URL(`${payload.theme}/`, payload.baseDir));
-	}
-
-	@Mutation
-	setSpecificFiles(payload: string) {
-		this.specificFiles = Object.fromEntries(
-			Object.entries(specificFiles).map(([key, value]) => [key, String(new URL(value, payload))])
-		) as SpecificFiles;
-	}
-
-	@Mutation
-	setGlobalFiles(payload: string) {
-		this.globalFiles = Object.fromEntries(
-			Object.entries(globalFiles).map(([key, value]) => [key, String(new URL(`global/${value}`, payload))])
-		) as GlobalFiles;
-	}
-
-	@Mutation
-	setError(payload: object): void {
-		this.error = payload;
-	}
-
-	get getDocumentBaseDir(): string {
-		return this.documentBaseDir;
-	}
-
-	get getSpecificFiles(): SpecificFiles {
-		return this.specificFiles;
-	}
-
-	get getGlobalFiles(): GlobalFiles {
-		return this.globalFiles;
-	}
-
-	@Action
-	init() {
+	const init = (): void => {
 		try {
 			const theme = useEnvConfig().value.SC_THEME;
-			if (theme === SchulcloudTheme.THR) {
-				specificFiles.termsOfUse = termsOfUseThr;
-				specificFiles.privacy = privacyThr;
-			}
 			const baseDir = useEnvConfig().value.DOCUMENT_BASE_DIR;
+
+			const specificFilesToUse = { ...specificFilesDefaults };
+			if (theme === SchulcloudTheme.THR) {
+				specificFilesToUse.termsOfUse = termsOfUseThr;
+				specificFilesToUse.privacy = privacyThr;
+			}
+
 			const documentBaseDirThemed = String(new URL(`${theme}/`, baseDir));
 
-			this.setDocumentBaseDir({ baseDir, theme });
-			this.setSpecificFiles(documentBaseDirThemed);
-			this.setGlobalFiles(baseDir);
-		} catch (error) {
-			this.setError(error as BusinessError);
+			documentBaseDir.value = documentBaseDirThemed;
+
+			specificFiles.value = Object.fromEntries(
+				Object.entries(specificFilesToUse).map(([key, value]) => [key, String(new URL(value, documentBaseDirThemed))])
+			) as SpecificFiles;
+
+			globalFiles.value = Object.fromEntries(
+				Object.entries(globalFilesDefaults).map(([key, value]) => [key, String(new URL(`global/${value}`, baseDir))])
+			) as GlobalFiles;
+		} catch (err: unknown) {
+			error.value = err;
 		}
-	}
-}
+	};
+
+	return {
+		documentBaseDir,
+		specificFiles,
+		globalFiles,
+		error,
+		init,
+	};
+});

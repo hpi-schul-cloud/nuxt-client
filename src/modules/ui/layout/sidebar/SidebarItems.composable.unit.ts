@@ -1,10 +1,8 @@
 import { useSidebarItems } from "./SidebarItems.composable";
-import FilePathsModule from "@/store/filePaths";
-import { FILE_PATHS_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { ConfigResponse, SchulcloudTheme } from "@api-server";
+import { useFilePathsStore } from "@data-file";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 
@@ -19,8 +17,9 @@ const setup = (envs?: Partial<ConfigResponse>, theme = SchulcloudTheme.BRB) => {
 		...envs,
 	});
 
-	const filePathsModule = createModuleMocks(FilePathsModule, {
-		getSpecificFiles: {
+	const filePathsStore = useFilePathsStore();
+	filePathsStore.$patch({
+		specificFiles: {
 			accessibilityStatement: "statement",
 			privacy: "",
 			termsOfUse: "",
@@ -31,9 +30,6 @@ const setup = (envs?: Partial<ConfigResponse>, theme = SchulcloudTheme.BRB) => {
 	return mountComposable(() => useSidebarItems(), {
 		global: {
 			plugins: [createTestingI18n()],
-			provide: {
-				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
-			},
 		},
 	});
 };

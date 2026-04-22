@@ -1,9 +1,7 @@
 import LoggedInLayout from "./LoggedIn.layout.vue";
-import FilePathsModule from "@/store/filePaths";
-import { FILE_PATHS_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useStatusAlerts } from "@data-app";
+import { useFilePathsStore } from "@data-file";
 import { createTestingPinia } from "@pinia/testing";
 import { Sidebar, Topbar } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
@@ -31,8 +29,11 @@ vi.mocked(useStatusAlerts).mockReturnValue({
 });
 
 const setup = () => {
-	const filePathsModule = createModuleMocks(FilePathsModule, {
-		getSpecificFiles: {
+	const pinia = createTestingPinia();
+
+	const filePathsStore = useFilePathsStore(pinia);
+	filePathsStore.$patch({
+		specificFiles: {
 			accessibilityStatement: "statement",
 			privacy: "",
 			termsOfUse: "",
@@ -45,10 +46,7 @@ const setup = () => {
 			default: h(LoggedInLayout),
 		},
 		global: {
-			plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
-			provide: {
-				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
-			},
+			plugins: [createTestingVuetify(), createTestingI18n(), pinia],
 			stubs: {
 				"application-error-wrapper": { template: "<div></div>" },
 				snackbar: { template: "<div></div>" },
