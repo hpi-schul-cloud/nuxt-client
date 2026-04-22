@@ -3,9 +3,9 @@ import { ElementCreate, ElementMove, LineMove } from "./types";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import {
 	BoardLayout,
+	Colors,
 	DeletedElementResponse,
 	MediaAvailableLineResponse,
-	MediaBoardColors,
 	MediaBoardResponse,
 	MediaExternalToolElementResponse,
 	MediaLineResponse,
@@ -196,7 +196,7 @@ const useMediaBoardState = () => {
 		}
 	};
 
-	const updateLineBackgroundColor = async (lineId: string, color: MediaBoardColors): Promise<void> => {
+	const updateLineBackgroundColor = async (lineId: string, color: Colors): Promise<void> => {
 		if (mediaBoard.value === undefined) {
 			return;
 		}
@@ -216,7 +216,7 @@ const useMediaBoardState = () => {
 		}
 	};
 
-	const updateAvailableLineBackgroundColor = async (color: MediaBoardColors): Promise<void> => {
+	const updateAvailableLineBackgroundColor = async (color: Colors): Promise<void> => {
 		if (mediaBoard.value === undefined || availableMediaLine.value === undefined) {
 			return;
 		}

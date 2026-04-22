@@ -20,7 +20,7 @@ export default {
 	"common.actions.invite": "Send course link",
 	"common.actions.logout": "Logout",
 	"common.actions.ok": "OK",
-	"common.actions.pickColor": "Select background colour",
+	"common.actions.pickColor": "Select color",
 	"common.actions.leave": "Leave",
 	"common.actions.remove": "Remove",
 	"common.actions.rename": "Rename",
@@ -503,6 +503,8 @@ export default {
 		"Title of card {cardPosition} in column {columnPosition} was changed to {newTitle} by another user.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Card {cardPosition} in column {columnPosition} was updated by another user.",
+	"components.board.screenReader.notification.cardColorUpdated.success":
+		"The color of the card {cardPosition} in section {columnPosition} has been changed.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"The board's view was changed to {layout} by another user.",
 	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":

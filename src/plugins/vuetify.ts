@@ -1,13 +1,15 @@
 import "@/styles/global.scss";
 import { createI18n } from "@/plugins/i18n";
-import theme from "@/vuetify.options";
+import { dbcThemeOptions, federalStateThemeOptions } from "@/themes/vuetify-theme.options";
+import { SchulcloudTheme } from "@api-server";
+import { useEnvConfig } from "@data-env";
 import { useI18n } from "vue-i18n";
 import { createVuetify } from "vuetify";
 import { createVueI18nAdapter } from "vuetify/locale/adapters/vue-i18n";
 
 export const createVuetifyPlugin = (i18n: ReturnType<typeof createI18n>) =>
 	createVuetify({
-		...theme,
+		...(useEnvConfig().value.SC_THEME === SchulcloudTheme.DEFAULT ? dbcThemeOptions : federalStateThemeOptions),
 		locale: {
 			adapter: createVueI18nAdapter({ i18n, useI18n }),
 		},

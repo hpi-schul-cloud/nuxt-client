@@ -3,11 +3,11 @@ import { importUsersModule, schoolsModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { SchulcloudTheme } from "@api-server";
+import { useEnvStore } from "@data-env";
 import { createTestingPinia } from "@pinia/testing";
 import { ComponentMountingOptions, flushPromises, mount, shallowMount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -15,10 +15,6 @@ import { ComponentPublicInstance, nextTick } from "vue";
 import { NamedValue } from "vue-i18n";
 import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 import { VBtn, VCardText, VProgressCircular } from "vuetify/components";
-
-const $theme = {
-	name: "instance name",
-};
 
 const importUsersStub = {
 	template: "<div></div>",
@@ -42,9 +38,6 @@ const getWrapper = (
 	mount(MigrationWizard, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				[THEME_KEY.valueOf()]: $theme,
-			},
 			stubs: {
 				ImportUsers: importUsersStub,
 				VSnackbar: true,
@@ -59,9 +52,6 @@ const getWrapperShallow = (
 	shallowMount(MigrationWizard, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				[THEME_KEY.valueOf()]: $theme,
-			},
 		},
 		...options,
 	});
@@ -98,7 +88,7 @@ describe("User Migration / Index", () => {
 		const title =
 			wrapper.vm.t?.("pages.administration.migration.title", {
 				source: "LDAP",
-				instance: $theme.name,
+				instance: useEnvStore().instanceName,
 			}) + " - dBildungscloud";
 		expect(document.title).toBe(title);
 	});
@@ -285,7 +275,7 @@ describe("User Migration / Index", () => {
 			expect(stepperContent.text()).toContain(
 				wrapper.vm.t?.("pages.administration.migration.step4.linkingFinished", {
 					source: "LDAP",
-					instance: $theme.name,
+					instance: useEnvStore().instanceName,
 				})
 			);
 		});
@@ -338,7 +328,7 @@ describe("User Migration / Index", () => {
 				wrapper.vm.migrationStep = 2;
 				wrapper.vm.t?.("pages.administration.migration.title", {
 					source: "LDAP",
-					instance: $theme.name,
+					instance: useEnvStore().instanceName,
 				});
 
 				const redirect = {
@@ -487,7 +477,7 @@ describe("User Migration / Index", () => {
 				wrapper.vm.migrationStep = 2;
 				wrapper.vm.t?.("pages.administration.migration.title", {
 					source: "LDAP",
-					instance: $theme.name,
+					instance: useEnvStore().instanceName,
 				});
 
 				await nextTick();

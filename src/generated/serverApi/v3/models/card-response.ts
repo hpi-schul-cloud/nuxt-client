@@ -14,6 +14,7 @@
 
 
 import { CollaborativeTextEditorElementResponse } from './collaborative-text-editor-element-response';
+import { Colors } from './colors';
 import { DeletedElementResponse } from './deleted-element-response';
 import { DrawingElementResponse } from './drawing-element-response';
 import { ExternalToolElementResponse } from './external-tool-element-response';
@@ -44,6 +45,12 @@ export interface CardResponse {
      * @memberof CardResponse
      */
     title?: string;
+    /**
+     * 
+     * @type {Colors}
+     * @memberof CardResponse
+     */
+    backgroundColor: Colors;
     /**
      * 
      * @type {number}

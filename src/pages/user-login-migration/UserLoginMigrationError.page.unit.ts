@@ -50,11 +50,6 @@ describe("UserLoginMigrationError", () => {
 				provide: {
 					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
 				},
-				mocks: {
-					$theme: {
-						name: "Testcloud",
-					},
-				},
 			},
 			props,
 		});
