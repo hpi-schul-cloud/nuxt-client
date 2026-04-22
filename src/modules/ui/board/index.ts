@@ -2,5 +2,6 @@ import { BoardMenuScope } from "./board-menu-scope";
 import BoardMenu from "./BoardMenu.vue";
 import BoardSectionCreationHeader from "./BoardSectionCreationHeader.vue";
 import ContentElementBar from "./content-element/ContentElementBar.vue";
+import DetailViewButton from "./DetailViewButton.vue";
 
-export { BoardMenu, BoardMenuScope, BoardSectionCreationHeader, ContentElementBar };
+export { BoardMenu, BoardMenuScope, BoardSectionCreationHeader, ContentElementBar, DetailViewButton };
