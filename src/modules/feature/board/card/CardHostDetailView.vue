@@ -7,6 +7,7 @@
 						<VBtn icon data-testid="close-detail-view-button" @click="onDialogClose">
 							<VIcon>{{ mdiClose }}</VIcon>
 						</VBtn>
+						<VToolbarTitle>{{ $t("components.board.dialog.detail-view.title") }}</VToolbarTitle>
 						<VSpacer />
 						<VBtn
 							v-if="allowedOperations?.deleteCard && !isEditMode"

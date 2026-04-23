@@ -440,7 +440,7 @@ export default {
 	"components.board.action.addCard": "Додати картка",
 	"components.board.action.delete": "Видалити",
 	"components.board.action.deleteFromSection": "Видалити з розділу",
-	"components.board.action.detail-view": "Детальний вигляд",
+	"components.board.action.detail-view": "Відкрити детальний вигляд",
 	"components.board.action.download": "Завантажити",
 	"components.board.action.moveDown": "Рухатися вниз",
 	"components.board.action.moveLeft": "Перемістіться вліво",
@@ -463,6 +463,7 @@ export default {
 	"components.board.dialog.readerCanEdit.options.defaultSetting": "Стандартна настройка",
 	"components.board.dialog.readerCanEdit.alert.text":
 		"Дошка спочатку повинна бути опублікована, перш ніж можна буде налаштувати параметри редагування.",
+	"components.board.dialog.detail-view.title": "Детальний вигляд",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
 	"components.board.menu.collaborativeTextEditorElement": "Налаштування спільного текстового редактора",

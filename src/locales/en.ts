@@ -429,7 +429,7 @@ export default {
 	"components.board.action.addCard": "Add card",
 	"components.board.action.delete": "Delete",
 	"components.board.action.deleteFromSection": "Remove from section",
-	"components.board.action.detail-view": "Detail view",
+	"components.board.action.detail-view": "Open detail view",
 	"components.board.action.download": "Download",
 	"components.board.action.moveDown": "Move down",
 	"components.board.action.moveLeft": "Move left",
@@ -452,6 +452,7 @@ export default {
 	"components.board.dialog.readerCanEdit.options.defaultSetting": "Default setting",
 	"components.board.dialog.readerCanEdit.alert.text":
 		"The board must first be published before the editing settings can be adjusted.",
+	"components.board.dialog.detail-view.title": "Detail view",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",
 	"components.board.menu.collaborativeTextEditorElement": "Etherpad settings",
