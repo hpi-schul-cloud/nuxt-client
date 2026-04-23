@@ -6,7 +6,7 @@
 		data-testid="admin-class-title"
 	>
 		<ThrInfoBanner />
-		<VTabs v-model="activeTab" class="mt-8 d-flex" grow>
+		<VTabs v-model="activeTab" class="mt-8 mb-4 d-flex" grow>
 			<VTab value="next" data-testid="admin-class-next-year-tab" :text="nextYear" />
 			<VTab value="current" data-testid="admin-class-current-year-tab" :text="currentYear" />
 			<VTab
@@ -24,7 +24,7 @@
 			:items-per-page-options="[5, 10, 25, 50, 100]"
 			:loading="isFetching"
 			data-testid="admin-class-table"
-			class="elevation-1"
+			mobile-breakpoint="sm"
 			@update:sort-by="onUpdateSortBy"
 			@update:items-per-page="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
@@ -56,7 +56,7 @@
 			</template>
 			<template #[`item.actions`]="{ item }">
 				<template v-if="showClassAction(item)">
-					<v-btn
+					<VBtn
 						:title="t('pages.administration.classes.manage')"
 						:aria-label="t('pages.administration.classes.manage')"
 						data-testid="legacy-class-table-manage-btn"
@@ -66,9 +66,9 @@
 						class="mx-1 px-1"
 						min-width="0"
 					>
-						<v-icon>{{ mdiAccountGroupOutline }}</v-icon>
-					</v-btn>
-					<v-btn
+						<VIcon :icon="mdiAccountGroupOutline" />
+					</VBtn>
+					<VBtn
 						:title="t('pages.administration.classes.edit')"
 						:aria-label="t('pages.administration.classes.edit')"
 						data-testid="class-table-edit-btn"
@@ -78,9 +78,9 @@
 						class="mx-1 px-1"
 						min-width="0"
 					>
-						<v-icon>{{ mdiPencilOutline }}</v-icon>
-					</v-btn>
-					<v-btn
+						<VIcon :icon="mdiPencilOutline" />
+					</VBtn>
+					<VBtn
 						:title="t('pages.administration.classes.delete')"
 						:aria-label="t('pages.administration.classes.delete')"
 						data-testid="class-table-delete-btn"
@@ -90,9 +90,9 @@
 						min-width="0"
 						@click="onDelete(item)"
 					>
-						<v-icon>{{ mdiTrashCanOutline }}</v-icon>
-					</v-btn>
-					<v-btn
+						<VIcon :icon="mdiTrashCanOutline" />
+					</VBtn>
+					<VBtn
 						:disabled="!item.isUpgradable"
 						:aria-label="t('pages.administration.classes.createSuccessor')"
 						:title="t('pages.administration.classes.createSuccessor')"
@@ -103,11 +103,11 @@
 						class="mx-1 px-1"
 						min-width="0"
 					>
-						<v-icon>{{ mdiArrowUp }}</v-icon>
-					</v-btn>
+						<VIcon :icon="mdiArrowUp" />
+					</VBtn>
 				</template>
 				<template v-else-if="showGroupAction(item)">
-					<v-btn
+					<VBtn
 						:title="t('pages.administration.classes.manage')"
 						:aria-label="t('pages.administration.classes.manage')"
 						data-testid="class-table-members-manage-btn"
@@ -120,9 +120,9 @@
 						class="mx-1 px-1"
 						min-width="0"
 					>
-						<v-icon>{{ mdiAccountGroupOutline }}</v-icon>
-					</v-btn>
-					<v-btn
+						<VIcon :icon="mdiAccountGroupOutline" />
+					</VBtn>
+					<VBtn
 						v-if="item.synchronizedCourses && item.synchronizedCourses.length"
 						:title="t('feature-course-sync.EndCourseSyncDialog.title')"
 						:aria-label="t('feature-course-sync.EndCourseSyncDialog.title')"
@@ -133,8 +133,8 @@
 						min-width="0"
 						@click="onClickEndSyncIcon(item)"
 					>
-						<v-icon>{{ mdiSyncOff }}</v-icon>
-					</v-btn>
+						<VIcon :icon="mdiSyncOff" />
+					</VBtn>
 				</template>
 			</template>
 		</VDataTableServer>
@@ -335,7 +335,7 @@ const headers = computed(() => {
 		},
 		{
 			value: "actions",
-			title: "",
+			title: t("pages.administration.actions"),
 			sortable: false,
 		}
 	);
@@ -382,3 +382,13 @@ onMounted(() => {
 
 const { instituteTitle } = storeToRefs(useEnvStore());
 </script>
+<style lang="scss" scoped>
+:deep(.v-data-table-header__content) {
+	font-weight: bold;
+}
+
+/* table header for mobile view */
+:deep(.v-data-table__td-title) {
+	font-weight: bold;
+}
+</style>
