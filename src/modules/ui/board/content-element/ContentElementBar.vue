@@ -135,7 +135,7 @@ defineProps({
 	position: absolute;
 	right: 0.75rem;
 	top: 0.75rem;
-	z-index: var(--z-sticky);
+	z-index: var(--z-three-dot-menu);
 }
 
 .logo-container {
