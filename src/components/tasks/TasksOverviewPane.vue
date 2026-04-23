@@ -43,13 +43,15 @@
 					:density="filterDensity"
 				/>
 
-				<VBtn
-					v-if="hasActiveFilters"
-					variant="outlined"
-					class="mt-3"
-					:text="t('common.actions.reset.filter')"
-					@click="clearFilters"
-				/>
+				<SvsTransition variant="expand">
+					<VBtn
+						v-if="hasActiveFilters"
+						variant="outlined"
+						class="mt-3"
+						:text="t('common.actions.reset.filter')"
+						@click="clearFilters"
+					/>
+				</SvsTransition>
 			</div>
 		</aside>
 
@@ -78,6 +80,7 @@
 import TasksOverviewList from "./TasksOverviewList.vue";
 import TasksOverviewListItemStudent from "@/components/tasks/TasksOverviewListItemStudent.vue";
 import TasksOverviewListItemTeacher from "@/components/tasks/TasksOverviewListItemTeacher.vue";
+import SvsTransition from "@/modules/ui/appearance/SvsTransition.vue";
 import { CopyParams } from "@/store/copy";
 import { TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
