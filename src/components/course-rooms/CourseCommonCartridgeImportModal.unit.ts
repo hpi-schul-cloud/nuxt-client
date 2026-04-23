@@ -5,8 +5,6 @@ import { SvsDialog } from "@ui-dialog";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { VFileInput } from "vuetify/components";
-// Type alias for file input validation rule
-type FileInputRule = (value: File | File[] | undefined) => string | boolean;
 
 // Mock file with size
 const createMockFile = (name: string, sizeInBytes: number): File => {
@@ -35,7 +33,10 @@ describe("CourseCommonCartridgeImportModal", () => {
 			fileInput.vm.$emit("update:modelValue", testFile);
 		}
 
-		return { wrapper, dialog };
+		const fileInput = wrapper.findComponent(VFileInput);
+		const rules = fileInput.props("rules") as ((value: File | undefined) => string | boolean)[];
+
+		return { wrapper, dialog, rules };
 	};
 
 	beforeEach(() => {
@@ -100,10 +101,7 @@ describe("CourseCommonCartridgeImportModal", () => {
 		});
 
 		it("passes validation rules to file input", () => {
-			const { wrapper } = getWrapper();
-
-			const fileInput = wrapper.findComponent(VFileInput);
-			const rules = fileInput.props("rules") as FileInputRule[];
+			const { rules } = getWrapper();
 
 			expect(rules).toBeDefined();
 			expect(Array.isArray(rules)).toBe(true);
@@ -111,9 +109,7 @@ describe("CourseCommonCartridgeImportModal", () => {
 		});
 
 		it("validation rule returns true for valid file size", () => {
-			const { wrapper } = getWrapper();
-			const fileInput = wrapper.findComponent(VFileInput);
-			const rules = fileInput.props("rules") as FileInputRule[];
+			const { rules } = getWrapper();
 
 			const validFile = createMockFile("test.imscc", 500 * 1024 * 1024); // 500 MB
 			const result = rules[0](validFile);
@@ -122,41 +118,10 @@ describe("CourseCommonCartridgeImportModal", () => {
 		});
 
 		it("validation rule returns error message for file exceeding size limit", () => {
-			const { wrapper } = getWrapper();
-			const fileInput = wrapper.findComponent(VFileInput);
-			const rules = fileInput.props("rules") as FileInputRule[];
+			const { rules } = getWrapper();
 
 			const largeFile = createMockFile("large.imscc", 1.5 * 1024 * 1024 * 1024); // 1.5 GB
 			const result = rules[0](largeFile);
-
-			expect(typeof result).toBe("string");
-			expect(result).toContain("pages.rooms.ccImportCourse.fileSizeExceeded");
-		});
-
-		it("validation rule returns true for array of files with total size under limit", () => {
-			const { wrapper } = getWrapper();
-			const fileInput = wrapper.findComponent(VFileInput);
-			const rules = fileInput.props("rules") as FileInputRule[];
-
-			const files = [
-				createMockFile("file1.imscc", 300 * 1024 * 1024), // 300 MB
-				createMockFile("file2.imscc", 400 * 1024 * 1024), // 400 MB
-			];
-			const result = rules[0](files);
-
-			expect(result).toBe(true);
-		});
-
-		it("validation rule returns error message for array of files with total size exceeding limit", () => {
-			const { wrapper } = getWrapper();
-			const fileInput = wrapper.findComponent(VFileInput);
-			const rules = fileInput.props("rules") as FileInputRule[];
-
-			const files = [
-				createMockFile("file1.imscc", 600 * 1024 * 1024), // 600 MB
-				createMockFile("file2.imscc", 600 * 1024 * 1024), // 600 MB (total 1.2 GB, exceeds 1 GB limit)
-			];
-			const result = rules[0](files);
 
 			expect(typeof result).toBe("string");
 			expect(result).toContain("pages.rooms.ccImportCourse.fileSizeExceeded");

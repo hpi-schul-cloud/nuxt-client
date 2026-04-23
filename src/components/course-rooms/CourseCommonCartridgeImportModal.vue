@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { formatBytes } from "@/utils/fileSize";
-import { useEnvConfig } from "@data-env";
+import { useRuntimeConfigStore } from "@data-runtime-config";
 import { mdiTrayArrowUp } from "@icons/material";
 import { SvsDialog } from "@ui-dialog";
 import { computed, ref } from "vue";
@@ -38,17 +38,14 @@ import { VFileInput } from "vuetify/components";
 
 const { t } = useI18n();
 
-// Default max file size: 1 GB in bytes
-const DEFAULT_MAX_FILE_SIZE_BYTES = 1073741824;
+const oneGigabyteInBytes = 1024 ** 3; // 1 GB
+const defaultMaxFileSizeBytes = oneGigabyteInBytes;
 
-const envConfig = useEnvConfig();
-
-const maxFileSizeBytes = computed(
-	() =>
-		((envConfig.value as Record<string, unknown>).FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_MAX_FILE_SIZE as
-			| number
-			| undefined) ?? DEFAULT_MAX_FILE_SIZE_BYTES
-);
+const { runtimeConfig } = useRuntimeConfigStore();
+const maxFileSizeBytes = computed(() => {
+	const configValue = runtimeConfig["FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_MAX_FILE_SIZE"];
+	return typeof configValue === "number" ? configValue : defaultMaxFileSizeBytes;
+});
 
 const formattedMaxFileSize = computed(() => formatBytes(maxFileSizeBytes.value));
 
@@ -68,26 +65,16 @@ const isFileSizeValid = computed(() => {
 	return file.value.size <= maxFileSizeBytes.value;
 });
 
-const fileSizeRules = [
-	(value: File | File[] | undefined) => {
+const fileSizeRules = computed(() => [
+	(value: File | undefined) => {
 		if (!value) return true;
 
-		// Handle array of files
-		if (Array.isArray(value)) {
-			const totalSize = value.reduce((acc, current) => acc + current.size, 0);
-			return (
-				totalSize <= maxFileSizeBytes.value ||
-				t("pages.rooms.ccImportCourse.fileSizeExceeded", { maxSize: formattedMaxFileSize.value })
-			);
-		}
-
-		// Handle single file
 		return (
 			value.size <= maxFileSizeBytes.value ||
 			t("pages.rooms.ccImportCourse.fileSizeExceeded", { maxSize: formattedMaxFileSize.value })
 		);
 	},
-];
+]);
 
 const importButtonDisabled = computed(() => !file.value || !isFileSizeValid.value);
 
