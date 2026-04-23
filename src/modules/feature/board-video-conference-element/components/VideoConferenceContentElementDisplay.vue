@@ -11,7 +11,6 @@
 			{{ noPermissionMessage }}
 		</InfoAlert>
 		<ContentElementBar
-			:has-grey-background="true"
 			:icon="mdiVideoOutline"
 			:has-row-style="isSmallOrLargerListBoard"
 			data-testid="board-video-conference-element"

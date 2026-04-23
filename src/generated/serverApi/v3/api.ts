@@ -60,6 +60,7 @@ export * from './api/shd-api';
 export * from './api/submission-api';
 export * from './api/systems-api';
 export * from './api/task-api';
+export * from './api/team-api';
 export * from './api/tool-api';
 export * from './api/user-api';
 export * from './api/user-import-api';

@@ -1,5 +1,4 @@
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { $axios } from "@/utils/api";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { RuntimeConfigApiFactory, RuntimeConfigListItemResponse, RuntimeConfigListResponse } from "@api-server";
 import { useAppStore } from "@data-app";
 import { defineStore } from "pinia";
@@ -22,12 +21,17 @@ export const useRuntimeConfigStore = defineStore("runtimeConfigStore", () => {
 		isLoading.value = true;
 		try {
 			const result = await runtimeConfigApi.runtimeConfigControllerGetRuntimeConfig();
-			if (result) {
+			if (result.data) {
 				setRuntimeConfig(result.data);
 			}
+
 			return true;
-		} catch {
-			useAppStore().handleApplicationError(HttpStatusCode.GatewayTimeout);
+		} catch (error) {
+			const responseError = mapAxiosErrorToResponseError(error);
+			if (responseError.code !== 401) {
+				useAppStore().handleApplicationError(responseError.code);
+			}
+
 			return false;
 		} finally {
 			isLoading.value = false;

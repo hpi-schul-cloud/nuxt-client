@@ -10,7 +10,7 @@ import {
 	mockComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { MediaBoardColors } from "@api-server";
+import { Colors } from "@api-server";
 import { shallowMount, VueWrapper } from "@vue/test-utils";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
@@ -90,12 +90,10 @@ describe("MediaBoard", () => {
 
 			const availableLine = wrapper.findComponent(MediaBoardAvailableLine);
 
-			availableLine.vm.$emit("update:line-background-color", MediaBoardColors.RED);
+			availableLine.vm.$emit("update:line-background-color", Colors.RED);
 			await nextTick();
 
-			expect(useSharedMediaBoardStateMock.updateAvailableLineBackgroundColor).toHaveBeenCalledWith(
-				MediaBoardColors.RED
-			);
+			expect(useSharedMediaBoardStateMock.updateAvailableLineBackgroundColor).toHaveBeenCalledWith(Colors.RED);
 		});
 	});
 
@@ -160,12 +158,12 @@ describe("MediaBoard", () => {
 
 			const mediaLine = wrapper.findComponent(MediaBoardLine);
 
-			mediaLine.vm.$emit("update:line-background-color", MediaBoardColors.RED);
+			mediaLine.vm.$emit("update:line-background-color", Colors.RED);
 			await nextTick();
 
 			expect(useSharedMediaBoardStateMock.updateLineBackgroundColor).toHaveBeenCalledWith(
 				expect.any(String),
-				MediaBoardColors.RED
+				Colors.RED
 			);
 		});
 	});

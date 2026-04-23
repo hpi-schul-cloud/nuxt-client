@@ -5,7 +5,7 @@
 				<VToolbarTitle>
 					{{
 						$t("components.molecules.importUsersMatch.title", {
-							instance: theme.name,
+							instance: instanceName,
 							source: ldapSource,
 						})
 					}}
@@ -22,7 +22,7 @@
 							? "components.molecules.importUsersMatch.subtitle.nbc"
 							: "components.molecules.importUsersMatch.subtitle",
 						{
-							instance: theme.name,
+							instance: instanceName,
 							source: ldapSource,
 						}
 					)
@@ -51,7 +51,7 @@
 						</VListItem>
 					</VCol>
 					<VCol class="md-6">
-						<VCardTitle>{{ theme.name }}</VCardTitle>
+						<VCardTitle>{{ instanceName }}</VCardTitle>
 						<VListItem>
 							<div v-if="selectedItem">
 								<VListItemTitle>
@@ -162,10 +162,11 @@
 
 <script setup lang="ts">
 import { importUsersModule } from "@/store";
-import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { ImportUserResponse, UserMatchResponse } from "@api-server";
+import { useEnvStore } from "@data-env";
 import { mdiAccountSearch, mdiClose, mdiContentSave, mdiDelete, mdiFlag, mdiFlagOutline } from "@icons/material";
 import { useDebounceFn } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, PropType, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -226,8 +227,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-
-const theme = injectStrict(THEME_KEY);
+const { instanceName } = storeToRefs(useEnvStore());
 
 const entries: Ref<UserMatchResponse[]> = ref([]);
 const loading: Ref<boolean> = ref(false);

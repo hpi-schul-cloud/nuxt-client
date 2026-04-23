@@ -20,32 +20,7 @@
 				<span>{{ $t("common.actions.rename") }}</span>
 			</VListItemTitle>
 		</VListItem>
-		<VListGroup>
-			<template #activator="{ props }">
-				<VListItem
-					v-bind="props"
-					:prepend-icon="mdiPalette"
-					data-testid="color-picker-btn"
-					@click.stop.prevent="() => {}"
-				>
-					<VListItemTitle>
-						<span>{{ $t("common.actions.pickColor") }}</span>
-					</VListItemTitle>
-				</VListItem>
-			</template>
-			<VColorPicker
-				hide-sliders
-				hide-inputs
-				hide-canvas
-				elevation="0"
-				:model-value="colorValue"
-				:swatches="swatches"
-				class="ma-2"
-				show-swatches
-				data-testid="line-color-picker"
-				@update:model-value="onUpdateColor"
-			/>
-		</VListGroup>
+		<SvsColorPickerMenu v-model:color="color" />
 		<VListItem
 			v-if="lineId"
 			:prepend-icon="mdiTrashCanOutline"
@@ -60,11 +35,11 @@
 </template>
 
 <script setup lang="ts">
-import { ColorShade, MediaBoardColorMapper } from "./utils";
-import { MediaBoardColors } from "@api-server";
-import { mdiChevronDown, mdiChevronUp, mdiPalette, mdiRenameOutline, mdiTrashCanOutline } from "@icons/material";
+import { Colors } from "@api-server";
+import { mdiChevronDown, mdiChevronUp, mdiRenameOutline, mdiTrashCanOutline } from "@icons/material";
+import { SvsColorPickerMenu } from "@ui-controls";
 import { KebabMenu } from "@ui-kebab-menu";
-import { computed, ComputedRef, ModelRef, PropType } from "vue";
+import { ModelRef, PropType } from "vue";
 
 defineProps({
 	lineId: {
@@ -79,32 +54,9 @@ const collapsed: ModelRef<boolean> = defineModel("collapsed", {
 	default: false,
 });
 
-const color: ModelRef<MediaBoardColors> = defineModel("color", {
-	type: String as PropType<MediaBoardColors>,
-	default: MediaBoardColors.TRANSPARENT,
-});
-
-const swatchShade: ColorShade = "lighten4";
-
-const colorValue: ComputedRef<string> = computed(() => MediaBoardColorMapper.mapColorToHex(color.value, swatchShade));
-
-const onUpdateColor = (value: string) => {
-	color.value = MediaBoardColorMapper.mapHexToColor(value) ?? MediaBoardColors.TRANSPARENT;
-};
-
-const swatchColors = Object.values(MediaBoardColors).map((colorName: MediaBoardColors) =>
-	MediaBoardColorMapper.mapColorToHex(colorName, swatchShade)
-);
-
-const swatches: ComputedRef<string[][]> = computed(() => {
-	const swatchesPerLine = 4;
-	const swatchRows = [];
-
-	for (let i = 0; i < swatchColors.length; i += swatchesPerLine) {
-		swatchRows.push(swatchColors.slice(i, i + swatchesPerLine));
-	}
-
-	return swatchRows;
+const color: ModelRef<Colors> = defineModel("color", {
+	type: String as PropType<Colors>,
+	default: Colors.TRANSPARENT,
 });
 
 defineEmits<{

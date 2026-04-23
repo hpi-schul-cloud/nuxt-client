@@ -1,6 +1,5 @@
 import LoggedOutLayout from "./LoggedOut.layout.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { SchulcloudTheme } from "@api-server";
@@ -27,11 +26,6 @@ describe("loggedOutLayout", () => {
 		const wrapper = mount(LoggedOutLayout, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[THEME_KEY.valueOf()]: {
-						name: "instance name",
-					},
-				},
 			},
 		});
 

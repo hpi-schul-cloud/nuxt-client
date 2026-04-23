@@ -8,15 +8,13 @@
 			</div>
 			<div v-if="linksToDisplay.length || hasButtons" class="link-container">
 				<v-btn
-					v-for="(route, idx) in linksToDisplay"
+					v-for="route in linksToDisplay"
 					:key="route.href"
 					variant="text"
-					class="font-weight-regular mx-0"
-					:class="{ li: true, active: activeLink === route.href }"
+					class="nav-item font-weight-regular mx-0"
 					:to="route.to"
 					:href="route.href"
 					:target="route.target"
-					@click="setActive(idx)"
 				>
 					{{ route.title }}
 				</v-btn>
@@ -38,7 +36,7 @@
 import { SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { mdiLogin } from "@icons/material";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 
 type Props = {
 	logoLink?: string;
@@ -58,17 +56,11 @@ const props = withDefaults(defineProps<Props>(), {
 	hideButtons: false,
 });
 
-const activeLink = ref(window.location.pathname);
-
 const isDefaultTheme = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.DEFAULT);
 
 const hasButtons = computed(() => !props.hideButtons && isDefaultTheme.value);
 
 const linksToDisplay = computed(() => (isDefaultTheme.value ? props.links : []));
-
-const setActive = (idx: number) => {
-	activeLink.value = props.links[idx].href;
-};
 </script>
 
 <style lang="scss" scoped>
@@ -195,7 +187,7 @@ const setActive = (idx: number) => {
 	}
 }
 
-.li {
+.nav-item {
 	align-items: center;
 	justify-content: center;
 	padding: 8px 16px;
@@ -212,19 +204,6 @@ const setActive = (idx: number) => {
 
 	&:hover {
 		background-color: map.get($grey, lighten-3);
-		border-radius: 4px;
-	}
-}
-
-a.active {
-	font-weight: bold;
-	color: rgba(var(--v-theme-white));
-	background-color: rgba(var(--v-theme-accent));
-	border-radius: 4px;
-
-	&:hover {
-		color: rgba(var(--v-theme-white));
-		background-color: rgba(var(--v-theme-accent));
 		border-radius: 4px;
 	}
 }
