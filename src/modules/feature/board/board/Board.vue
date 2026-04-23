@@ -26,7 +26,7 @@
 						@edit:settings="onEditBoardSettings"
 					/>
 				</template>
-				<div id="main" :class="boardClasses" :style="boardStyle">
+				<div :class="boardClasses" :style="boardStyle">
 					<Sortable
 						:list="columns"
 						item-key="id"
