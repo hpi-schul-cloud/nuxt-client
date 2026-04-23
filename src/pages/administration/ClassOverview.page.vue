@@ -6,31 +6,25 @@
 		data-testid="admin-class-title"
 	>
 		<ThrInfoBanner />
-		<div class="mt-6 mx-n6 mx-md-0 pb-0 d-flex justify-center">
-			<v-tabs v-model="activeTab" class="tabs-max-width" grow>
-				<v-tab value="next" data-testid="admin-class-next-year-tab">
-					<span>{{ nextYear }}</span>
-				</v-tab>
-				<v-tab value="current" data-testid="admin-class-current-year-tab">
-					<span>{{ currentYear }}</span>
-				</v-tab>
-				<v-tab value="archive" data-testid="admin-class-previous-years-tab">
-					<span>{{ t("pages.administration.common.label.archive") }}</span>
-				</v-tab>
-			</v-tabs>
-		</div>
+		<VTabs v-model="activeTab" class="mt-8 d-flex" grow>
+			<VTab value="next" data-testid="admin-class-next-year-tab" :text="nextYear" />
+			<VTab value="current" data-testid="admin-class-current-year-tab" :text="currentYear" />
+			<VTab
+				value="archive"
+				data-testid="admin-class-previous-years-tab"
+				:text="t('pages.administration.common.label.archive')"
+			/>
+		</VTabs>
 		<VDataTableServer
 			v-model:items-per-page="pagination.limit"
 			:headers="headers"
 			:items="classes"
 			:items-length="pagination.total"
 			:page="page"
-			:items-per-page-text="footerProps.itemsPerPageText"
-			:items-per-page-options="footerProps.itemsPerPageOptions"
+			:items-per-page-options="[5, 10, 25, 50, 100]"
 			:loading="isFetching"
 			data-testid="admin-class-table"
 			class="elevation-1"
-			:no-data-text="t('common.nodata')"
 			@update:sort-by="onUpdateSortBy"
 			@update:items-per-page="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
@@ -225,11 +219,6 @@ const activeTab = computed({
 	},
 });
 
-const footerProps = {
-	itemsPerPageText: t("components.organisms.Pagination.recordsPerPage"),
-	itemsPerPageOptions: [5, 10, 25, 50, 100],
-};
-
 useTitle(buildPageTitle(t("pages.administration.classes.index.title")));
 
 const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(() => {
@@ -393,9 +382,3 @@ onMounted(() => {
 
 const { instituteTitle } = storeToRefs(useEnvStore());
 </script>
-
-<style scoped>
-.v-tabs {
-	margin-bottom: -2px;
-}
-</style>
