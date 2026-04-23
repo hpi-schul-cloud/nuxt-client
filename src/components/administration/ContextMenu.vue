@@ -212,7 +212,7 @@ export default {
 	--transition-duration: 0.15s;
 
 	position: absolute;
-	z-index: var(--z-dropdown);
+	z-index: var(--z-overlay);
 	display: flex;
 	flex-direction: column;
 	min-width: 150px;

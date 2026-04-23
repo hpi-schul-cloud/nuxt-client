@@ -104,7 +104,7 @@ const appBarHeight = computed(() => {
 	position: sticky;
 	background-color: #fff !important;
 	top: 0;
-	z-index: var(--z-topbar);
+	z-index: var(--z-floating);
 	transition: top 0.2s ease-in-out;
 }
 

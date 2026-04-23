@@ -1,49 +1,10 @@
 :root {
-	--z-elevated: 1;
-	--z-editor: 10;
+	--z-elevated: 1; // Leicht erhöhte Content-Elemente
+	--z-interface: 10; // Editor, grundlegende UI
 	--z-header: 20;
-	--z-dropdown: 30;
-	--z-three-dot-menu: 30;
-	--z-pinned: 40;
-	--z-topbar: 50;
-	--z-toolbar: 50;
+	--z-overlay: 30; // Dropdowns, Menüs
+	--z-pinned: 40; // Angepinnte/fixierte Elemente
+	--z-floating: 50; // Topbar, Toolbars
 	--z-skip-link: 60;
-	--z-floating-menu: 70;
-	--z-alert: 80;
 	--z-above-vuetify: 10100;
 }
-
-//:root {
-//	/* Level 0: Hintergrund */
-//	--z-base: -1; // Hintergrund-Elemente
-
-//	/* Level 1: Content */
-//	--z-content: 1; // Leicht erhöhte Content-Elemente
-
-//	/* Level 2: Interface */
-//	--z-interface: 10; // Editor, grundlegende UI
-
-//	/* Level 3: Navigation */
-//	--z-navigation: 20; // Header, Navigation
-
-//	/* Level 4: Overlay */
-//	--z-overlay: 30; // Dropdowns, Menüs
-
-//	/* Level 5: Fixed */
-//	--z-fixed: 40; // Angepinnte/fixierte Elemente
-
-//	/* Level 6: Floating */
-//	--z-floating: 50; // Topbar, Toolbars
-
-//	/* Level 7: Priority */
-//	--z-priority: 60; // Skip-Links, wichtige UX-Elemente
-
-//	/* Level 8: Temporary */
-//	--z-temporary: 70; // Schwebende Menüs, temporäre UI
-
-//	/* Level 9: Notification */
-//	--z-notification: 80; // Alerts, Benachrichtigungen
-
-//	/* Level 10: System */
-//	--z-system: 10100; // Framework-Überschreibungen
-//}

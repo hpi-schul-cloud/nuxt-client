@@ -163,7 +163,7 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 	min-height: 56px;
 	margin-top: -30px;
 	margin-bottom: -30px;
-	z-index: var(--z-floating-menu);
+	z-index: var(--z-above-vuetify);
 	top: calc(var(--topbar-height) + 16px);
 
 	&.positioning-sm-to-md {
