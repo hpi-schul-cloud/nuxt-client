@@ -34,6 +34,16 @@ export type FetchBoardRequestPayload = {
 export type FetchBoardSuccessPayload = BoardResponse;
 export type FetchBoardFailurePayload = FetchBoardRequestPayload;
 
+export type DuplicateColumnRequestPayload = {
+	columnId: string;
+};
+export type DuplicateColumnSuccessPayload = {
+	columnId: string;
+	duplicatedColumn: ColumnResponse;
+	isOwnAction: boolean;
+};
+export type DuplicateColumnFailurePayload = DuplicateColumnRequestPayload;
+
 export type DeleteColumnRequestPayload = {
 	columnId: string;
 };

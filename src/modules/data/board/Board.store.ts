@@ -7,6 +7,7 @@ import {
 	DeleteBoardSuccessPayload,
 	DeleteColumnRequestPayload,
 	DeleteColumnSuccessPayload,
+	DuplicateColumnSuccessPayload,
 	FetchBoardRequestPayload,
 	FetchBoardSuccessPayload,
 	MoveCardRequestPayload,
@@ -35,7 +36,7 @@ import { useSharedEditMode } from "./edit-mode.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
 import { ColumnResponse } from "@api-server";
-import { useAppStore, useNotificationStore } from "@data-app";
+import { notifyInfo, useAppStore, useNotificationStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { defineStore } from "pinia";
 import { computed, nextTick, ref } from "vue";
@@ -146,6 +147,21 @@ export const useBoardStore = defineStore("boardStore", () => {
 			cardId: duplicatedCard.id,
 			height: duplicatedCard.height,
 		});
+	};
+
+	const duplicateColumn = socketOrRest.duplicateColumnRequest;
+
+	const duplicateColumnSuccess = (payload: DuplicateColumnSuccessPayload) => {
+		if (!board.value) return;
+
+		const { columnId, duplicatedColumn } = payload;
+		const columnIndex = getColumnIndex(columnId) ?? 0;
+		if (duplicatedColumn.id) {
+			board.value.columns?.splice(columnIndex + 1, 0, duplicatedColumn);
+			if (payload.isOwnAction === true /* TODO && hasRelevantContentForDuplicationWarning(duplicatedColumn)*/) {
+				notifyInfo("components.board.notifications.info.columnDuplicated");
+			}
+		}
 	};
 
 	const deleteCardSuccess = (payload: DeleteCardSuccessPayload) => {
@@ -430,6 +446,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 		deleteBoardSuccess,
 		duplicateCardSuccess,
 		deleteCardSuccess,
+		duplicateColumn,
+		duplicateColumnSuccess,
 		deleteColumnRequest,
 		deleteColumnSuccess,
 		disconnectSocketRequest,
