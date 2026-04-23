@@ -76,7 +76,7 @@ const getNotificationText = (text: string) => (i18nKeyExists(text) ? t(text) : t
 .alert-wrapper {
 	position: fixed;
 	right: 0;
-	z-index: var(--z-above-vuetify);
+	z-index: var(--z-notification);
 	overflow: visible;
 }
 
@@ -85,7 +85,7 @@ const getNotificationText = (text: string) => (i18nKeyExists(text) ? t(text) : t
 	right: 0;
 	bottom: 5vh;
 	left: 0;
-	z-index: var(--z-above-vuetify);
+	z-index: var(--z-notification);
 	overflow: visible;
 }
 
