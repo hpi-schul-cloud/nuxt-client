@@ -10,7 +10,6 @@ import { setActivePinia } from "pinia";
 import { beforeAll } from "vitest";
 
 describe("TasksOverviewListItemTeacher", () => {
-	// TODO: WRITE TASK TESTS
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
 		createTestAppStore();
@@ -41,16 +40,37 @@ describe("TasksOverviewListItemTeacher", () => {
 	describe("when task is a draft task", () => {
 		describe("when task has no course", () => {
 			it("should set course name to 'no course assigned'", () => {
-				// test tasklabel includes pages.tasks.labels.noCourse
+				const task = taskResponseFactory.build({ courseName: undefined });
+				const wrapper = setup({ task });
+
+				const taskLabel = wrapper.find("[data-testid='task-label']");
+				expect(taskLabel.text()).toContain("pages.tasks.labels.noCourse");
 			});
 
 			it("should show createdAt date in label", () => {
-				// test tasklabel includes createAt date
+				const task = taskResponseFactory.build({
+					createdAt: "2024-03-15T10:30:00.000Z",
+					status: {
+						isDraft: true,
+					},
+				});
+				const wrapper = setup({ task });
+
+				const taskLabel = wrapper.find("[data-testid='task-label']");
+				expect(taskLabel.text()).toContain("components.molecules.TaskItemMenu.labels.createdAt");
 			});
 
-			describe("when teacher is a subtitution teacher", () => {
+			describe("when teacher is a substitution teacher", () => {
 				it("should add 'substitution' to the course label", () => {
-					// test tasklabel includes substituion
+					const task = taskResponseFactory.build({
+						courseName: undefined,
+						status: { isSubstitutionTeacher: true },
+					});
+					const wrapper = setup({ task });
+
+					const taskLabel = wrapper.find("[data-testid='task-label']");
+					expect(taskLabel.text()).toContain("common.words.substitute");
+					expect(taskLabel.text()).toContain("pages.tasks.labels.noCourse");
 				});
 			});
 		});
@@ -58,41 +78,85 @@ describe("TasksOverviewListItemTeacher", () => {
 
 	describe("when task is not a draft task", () => {
 		it("should set course name correctly", () => {
-			// test course name is correct when its not a draft
+			const courseName = "Mathematik Grundkurs";
+			const task = taskResponseFactory.build({
+				courseName,
+				status: { isDraft: false },
+			});
+			const wrapper = setup({ task });
+
+			const taskLabel = wrapper.find("[data-testid='task-label']");
+			expect(taskLabel.text()).toContain(courseName);
 		});
 	});
 
 	describe("when a task is planned", () => {
-		it("should set isPlanned to true", () => {
-			// test course name is correct when its planned
-		});
+		const futureDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
 
 		it("should show planned label", () => {
-			// test task label is correct when  its planned
+			const task = taskResponseFactory.build({
+				availableDate: futureDate,
+				status: { isDraft: false },
+			});
+			const wrapper = setup({ task });
+
+			const taskLabel = wrapper.find("[data-testid='task-label']");
+			expect(taskLabel.text()).toContain("pages.tasks.labels.planned");
 		});
 	});
 
 	describe("when a task is without due date", () => {
 		it("should show correct due date label", () => {
-			// test task label is correct when there is no due date
+			const task = taskResponseFactory.build({
+				dueDate: undefined,
+				availableDate: undefined,
+				status: { isDraft: false },
+			});
+			const wrapper = setup({ task });
+
+			const taskLabel = wrapper.find("[data-testid='task-label']");
+			// Without due date and not planned, label only contains course name
+			expect(taskLabel.text()).not.toContain("pages.tasks.labels.due");
+			expect(taskLabel.text()).not.toContain("pages.tasks.labels.planned");
 		});
 	});
 
 	describe("when a task has a due date", () => {
 		it("should show correct due date label", () => {
-			// test task label is correct when there is a due date
+			const dueDate = "2024-04-20T14:00:00.000Z";
+			const task = taskResponseFactory.build({
+				dueDate,
+				status: { isDraft: false },
+			});
+			const wrapper = setup({ task });
+
+			const taskLabel = wrapper.find("[data-testid='task-label']");
+			expect(taskLabel.text()).toContain("pages.tasks.labels.due");
 		});
 	});
 
 	describe("when a task has a topic", () => {
 		it("should show correct topic label", () => {
-			// test topic label when task has a topic
+			const lessonName = "Algebra Basics";
+			const task = taskResponseFactory.build({ lessonName });
+			const wrapper = setup({ task });
+
+			const topicLabel = wrapper.find("[data-testid='task-topic']");
+			expect(topicLabel.exists()).toBe(true);
+			expect(topicLabel.text()).toContain("common.words.topic");
+			expect(topicLabel.text()).toContain(lessonName);
 		});
 	});
 
 	describe("when a task has no topic", () => {
-		it("should show correct topic label", () => {
-			// test topic label when task has no topic
+		it("should not show topic label", () => {
+			const task = taskResponseFactory.build({
+				lessonName: undefined,
+			});
+			const wrapper = setup({ task });
+
+			const topicLabel = wrapper.find("[data-testid='task-topic']");
+			expect(topicLabel.exists()).toBe(false);
 		});
 	});
 });

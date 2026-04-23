@@ -66,7 +66,7 @@
 					<TasksOverviewListItemTeacher
 						v-if="isTeacher"
 						:task="task"
-						@share-task="$emit('share-task', task.id)"
+						@share-task="$emit('share-task', $event)"
 						@copy-task="$emit('copy-task', $event)"
 					/>
 					<TasksOverviewListItemStudent v-if="isStudent" :task="task" />
@@ -80,12 +80,12 @@
 import TasksOverviewList from "./TasksOverviewList.vue";
 import TasksOverviewListItemStudent from "@/components/tasks/TasksOverviewListItemStudent.vue";
 import TasksOverviewListItemTeacher from "@/components/tasks/TasksOverviewListItemTeacher.vue";
-import SvsTransition from "@/modules/ui/appearance/SvsTransition.vue";
 import { CopyParams } from "@/store/copy";
 import { TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useTasksFilter } from "@data-tasks";
 import { mdiCheck } from "@icons/material";
+import { SvsTransition } from "@ui-appearance";
 import { computed, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";

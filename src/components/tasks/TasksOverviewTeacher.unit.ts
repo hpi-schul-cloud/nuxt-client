@@ -13,7 +13,6 @@ import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { computed, ref } from "vue";
-import {VTab} from "vuetify/components";
 
 vi.mock("@data-tasks");
 
