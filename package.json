@@ -31,7 +31,7 @@
 		"@vueuse/components": "^14.2.1",
 		"@vueuse/core": "^14.2.1",
 		"@vueuse/integrations": "^14.2.1",
-		"axios": "^1.13.5",
+		"axios": "^1.15.0",
 		"dayjs": "^1.11.19",
 		"focus-trap": "^8.0.0",
 		"katex": "^0.16.28",
