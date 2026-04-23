@@ -87,6 +87,7 @@ const onKeydown = (e: KeyboardEvent) => {
 };
 
 onBeforeUnmount(() => {
+	if (isUrlValidated.value) return;
 	const isValid = rules.every((rule) => rule(url.value) === true);
 	if (isValid) {
 		emit("create:url", url.value);
