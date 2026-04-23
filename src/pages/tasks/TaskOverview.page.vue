@@ -1,5 +1,5 @@
 <template>
-	<DefaultWireframe :headline="t('common.words.tasks')" max-width="full" :fab-items="fabItems">
+	<DefaultWireframe :headline="t('common.words.tasks')" max-width="native" :fab-items="fabItems">
 		<SvsSuspense :loading="isLoadingTasks && !hasLoadedOnce">
 			<template #loading>
 				<div class="d-flex flex-column w-100">

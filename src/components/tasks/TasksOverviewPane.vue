@@ -32,7 +32,7 @@
 					:density="filterDensity"
 					data-testid="due-status-filter"
 					:items="dueStatusOptions"
-					:label="t('common.labels.status')"
+					:label="t('pages.tasks.due')"
 				/>
 
 				<VSwitch

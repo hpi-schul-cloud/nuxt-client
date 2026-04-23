@@ -343,7 +343,7 @@ describe("useTasksFilter", () => {
 			const tasksRef = ref([tasks.overdue, tasks.dueSoon, tasks.noDueDate]);
 
 			const { filteredTasks, dueStatus } = useTasksFilter(tasksRef);
-			dueStatus.value = DueStatus.NotOverdue;
+			dueStatus.value = DueStatus.WithDue;
 
 			expect(filteredTasks.value).toHaveLength(2);
 		});

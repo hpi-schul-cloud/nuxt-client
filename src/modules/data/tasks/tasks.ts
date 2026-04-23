@@ -22,6 +22,7 @@ export const isTaskDraft = (t: TaskResponse) => t.status.isDraft;
 
 // === Task Status Predicates ===
 const hasNoDueDate = (t: TaskResponse) => !t.dueDate;
+const hasDueDate = (t: TaskResponse) => t.dueDate !== undefined;
 const isPublished = (t: TaskResponse) => !t.status.isDraft;
 const isSubstitution = (t: TaskResponse) => t.status.isSubstitutionTeacher;
 const isVisible = (t: TaskResponse) => !t.lessonHidden;
@@ -46,7 +47,7 @@ type DateRange = {
 
 export enum DueStatus {
 	Overdue = "overdue",
-	NotOverdue = "not-overdue",
+	WithDue = "with-due-date",
 	NoDueDate = "no-due-date",
 }
 export enum GradeStatus {
@@ -290,7 +291,7 @@ export const useTasksFilter = (
 		if (!dueStatus.value) return tasksFilteredByCourses.value;
 		if (dueStatus.value === DueStatus.Overdue) return tasksFilteredByCourses.value.filter(isTaskOverdue);
 		if (dueStatus.value === DueStatus.NoDueDate) return tasksFilteredByCourses.value.filter(hasNoDueDate);
-		if (dueStatus.value === DueStatus.NotOverdue) return tasksFilteredByCourses.value.filter((t) => !isTaskOverdue(t));
+		if (dueStatus.value === DueStatus.WithDue) return tasksFilteredByCourses.value.filter(hasDueDate);
 		return tasksFilteredByCourses.value;
 	});
 
@@ -327,9 +328,9 @@ export const useTasksFilter = (
 	];
 
 	const dueStatusOptions = [
-		{ value: DueStatus.Overdue, title: t("pages.tasks.overdue") },
-		{ value: DueStatus.NotOverdue, title: t("pages.tasks.not.overdue") },
+		{ value: DueStatus.WithDue, title: t("pages.tasks.with.due") },
 		{ value: DueStatus.NoDueDate, title: t("pages.tasks.no.due") },
+		{ value: DueStatus.Overdue, title: t("pages.tasks.overdue") },
 	];
 
 	const clearFilters = () => {
