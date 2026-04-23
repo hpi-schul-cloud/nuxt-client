@@ -1,5 +1,5 @@
 <template>
-	<VDialog :model-value="isOpen" fullscreen scrollable @keydown.escape="onDialogClose">
+	<VDialog :model-value="isOpen" fullscreen scrollable z-index="2000" @keydown.escape="onDialogClose">
 		<VToolbar class="toolbar-position">
 			<VBtn
 				:icon="mdiClose"
@@ -169,7 +169,7 @@ const onMoveElementKeyboard = (elementMove: ElementMove, keyCode: string) => {
 .toolbar-position {
 	position: absolute;
 	width: 100%;
-	z-index: 1000;
+	z-index: 2001;
 }
 
 .v-card {
