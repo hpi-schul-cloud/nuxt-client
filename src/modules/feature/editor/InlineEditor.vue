@@ -109,6 +109,7 @@ const handleReady = (editor: Editor) => {
 	box-shadow: none !important;
 }
 
+// ensure that the toolbar is above vuetify overlays (used in CardHostDetailView)
 .ck.ck-toolbar-container {
 	z-index: 3000;
 }
