@@ -1,4 +1,4 @@
-import { useFilePaths } from "./filePaths.composable";
+import { useFilePaths } from "./file-paths.composable";
 import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
 import { SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
