@@ -1,9 +1,12 @@
 <template>
 	<DefaultWireframe max-width="full" :breadcrumbs="trashBreadcrumbs">
 		<template #header>
-			<h1 data-testid="folder-trash-title">
-				{{ t("pages.folder.trash.title", { folderName }) }}
-			</h1>
+			<div class="d-flex align-center">
+				<h1 data-testid="folder-trash-title">
+					{{ t("pages.folder.trash.title", { folderName }) }}
+				</h1>
+				<FolderTrashMenu v-if="deletedFileRecords.length > 0" @empty-trash="onEmptyTrash" />
+			</div>
 		</template>
 		<div aria-live="polite" aria-atomic="true" data-testid="restore-status" class="d-sr-only">
 			{{ restoreStatusMessage }}
@@ -99,6 +102,7 @@
 <script setup lang="ts">
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import FilePreview from "./file-table/FilePreview.vue";
+import FolderTrashMenu from "./FolderTrashMenu.vue";
 import PurgeFilesDialog from "./PurgeFilesDialog.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
 import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
@@ -165,6 +169,11 @@ const onPurgeFiles = (fileRecords: FileRecord[]): void => {
 
 const onPurgeByIds = (selectedIds: string[]): void => {
 	filesToPurge.value = deletedFileRecords.value.filter((r) => selectedIds.includes(r.id));
+	isPurgeDialogOpen.value = true;
+};
+
+const onEmptyTrash = (): void => {
+	filesToPurge.value = [...deletedFileRecords.value];
 	isPurgeDialogOpen.value = true;
 };
 

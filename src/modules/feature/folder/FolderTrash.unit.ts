@@ -1,3 +1,7 @@
+import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
+import FolderTrash from "./FolderTrash.vue";
+import FolderTrashMenu from "./FolderTrashMenu.vue";
+import PurgeFilesDialog from "./PurgeFilesDialog.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
 import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
 import { axiosErrorFactory, fileRecordFactory, mockComposable } from "@@/tests/test-utils";
@@ -11,9 +15,6 @@ import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { HttpStatusCode } from "axios";
 import { computed, ref } from "vue";
 import { VSkeletonLoader } from "vuetify/lib/components/index";
-import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
-import FolderTrash from "./FolderTrash.vue";
-import PurgeFilesDialog from "./PurgeFilesDialog.vue";
 
 const createFolderStateMock = () =>
 	mockComposable(FolderState.useFolderState, {
@@ -481,6 +482,43 @@ describe("FolderTrash.vue", () => {
 
 				const statusRegion = wrapper.find("[data-testid='purge-status']");
 				expect(statusRegion.text()).toBe("pages.folder.trash.purge.error");
+			});
+		});
+
+		describe("when the empty trash menu item is clicked", () => {
+			it("should show the folder trash menu", async () => {
+				const { wrapper } = await setup();
+
+				const trashMenu = wrapper.findComponent(FolderTrashMenu);
+				expect(trashMenu.exists()).toBe(true);
+			});
+
+			it("should open the purge dialog with all deleted files", async () => {
+				const { wrapper } = await setup();
+
+				wrapper.findComponent(FolderTrashMenu).vm.$emit("empty-trash");
+				await flushPromises();
+
+				const purgeDialog = wrapper.findComponent(PurgeFilesDialog);
+				expect(purgeDialog.props("modelValue")).toBe(true);
+				expect(purgeDialog.props("fileCount")).toBe(2);
+			});
+
+			it("should call purgeFiles with all deleted files when dialog is confirmed", async () => {
+				const { wrapper, fileRecord1, fileRecord2, fileTrashMock } = await setup();
+
+				wrapper.findComponent(FolderTrashMenu).vm.$emit("empty-trash");
+				await flushPromises();
+
+				wrapper.findComponent(PurgeFilesDialog).vm.$emit("confirm");
+				await flushPromises();
+
+				expect(fileTrashMock.purgeFiles).toHaveBeenCalledWith(
+					expect.arrayContaining([
+						expect.objectContaining({ id: fileRecord1.id }),
+						expect.objectContaining({ id: fileRecord2.id }),
+					])
+				);
 			});
 		});
 	});
