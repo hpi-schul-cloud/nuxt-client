@@ -11,8 +11,7 @@ import {
 	mockComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { BoardResponseAllowedOperations, CardResponse } from "@api-server";
-import { Colors } from "@api-server";
+import { BoardResponseAllowedOperations, CardResponse, Colors } from "@api-server";
 import { useBoardAllowedOperations, useCourseBoardEditMode } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
