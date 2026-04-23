@@ -1,34 +1,34 @@
 <template>
 	<VDialog :model-value="isOpen" fullscreen scrollable @keydown.escape="onDialogClose">
+		<div class="toolbar-fixed-offset">
+			<VToolbar class="toolbar-position">
+				<VBtn
+					:icon="mdiClose"
+					data-testid="close-detail-view-button"
+					:aria-label="t('common.labels.close')"
+					@click="onDialogClose"
+				/>
+				<VToolbarTitle>{{ $t("components.board.dialog.detail-view.title") }}</VToolbarTitle>
+				<VSpacer />
+				<VBtn
+					v-if="allowedOperations?.deleteCard && !isEditMode"
+					class="mr-4 keep-inline-edit-mode"
+					data-testid="toolbar-edit-button"
+					@click="startEditMode"
+				>
+					{{ $t("common.actions.edit") }}
+				</VBtn>
+				<VBtn
+					v-if="allowedOperations?.deleteCard && isEditMode"
+					class="mr-4 keep-inline-edit-mode"
+					data-testid="toolbar-view-button"
+					@click="stopEditMode"
+				>
+					{{ $t("common.actions.view") }}
+				</VBtn>
+			</VToolbar>
+		</div>
 		<VCard>
-			<div class="toolbar-fixed-offset">
-				<VToolbar class="toolbar-position">
-					<VBtn
-						:icon="mdiClose"
-						data-testid="close-detail-view-button"
-						:aria-label="t('common.labels.close')"
-						@click="onDialogClose"
-					/>
-					<VToolbarTitle>{{ $t("components.board.dialog.detail-view.title") }}</VToolbarTitle>
-					<VSpacer />
-					<VBtn
-						v-if="allowedOperations?.deleteCard && !isEditMode"
-						class="mr-4 keep-inline-edit-mode"
-						data-testid="toolbar-edit-button"
-						@click="startEditMode"
-					>
-						{{ $t("common.actions.edit") }}
-					</VBtn>
-					<VBtn
-						v-if="allowedOperations?.deleteCard && isEditMode"
-						class="mr-4 keep-inline-edit-mode"
-						data-testid="toolbar-view-button"
-						@click="stopEditMode"
-					>
-						{{ $t("common.actions.view") }}
-					</VBtn>
-				</VToolbar>
-			</div>
 			<VCardText
 				:style="{
 					backgroundColor: cardBackground,
@@ -176,6 +176,10 @@ const onMoveElementKeyboard = (elementMove: ElementMove, keyCode: string) => {
 
 .toolbar-fixed-offset {
 	margin-bottom: 64px;
+}
+
+.v-card {
+	padding-bottom: 64px;
 }
 
 .v-dialog {
