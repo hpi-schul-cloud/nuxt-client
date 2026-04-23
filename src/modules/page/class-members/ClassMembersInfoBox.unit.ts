@@ -4,7 +4,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { useSystem } from "@data-system";
 import { flushPromises, mount } from "@vue/test-utils";
 import { Mocked } from "vitest";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 vi.mock("@data-system");
 
@@ -27,14 +27,16 @@ describe("ClassMembersInfoBox", () => {
 		};
 	};
 
+	const mockSystem = {
+		id: "systemId",
+		displayName: "asdf",
+		hasEndSessionEndpoint: false,
+	};
+
 	beforeEach(() => {
 		useSystemMock = mockComposable(useSystem, {
-			system: ref({
-				id: "systemId",
-				displayName: "asdf",
-				hasEndSessionEndpoint: false,
-			}),
-			systemName: ref("asdf"),
+			system: ref(mockSystem),
+			systemName: computed(() => mockSystem.displayName),
 		});
 
 		vi.mocked(useSystem).mockReturnValue(useSystemMock);

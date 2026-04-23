@@ -60,8 +60,7 @@ const props = defineProps({
 const { systemId } = useAppStoreRefs();
 
 const { t } = useI18n();
-// TODO: How to handle undefined?
-const { system, systemName } = useSystem(systemId.value!);
+const { system, systemName } = useSystem(systemId);
 const { getSessionTokenExpiration } = useOAuthApi();
 
 const userRole = computed(() => t(`common.roleName.${toRef(props.roleNames).value[0]}`).toString());

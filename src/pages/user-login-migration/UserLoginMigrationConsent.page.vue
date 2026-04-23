@@ -61,8 +61,9 @@ import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { userLoginMigration, fetchLatestUserLoginMigrationForSchool } = useUserLoginMigration();
-// TODO: Ho to handle undefined?
-const { systemName } = useSystem(userLoginMigration.value!.targetSystemId);
+
+const targetSystemId = computed(() => userLoginMigration.value?.targetSystemId);
+const { systemName } = useSystem(targetSystemId);
 const { t } = useI18n();
 
 const pageTitle = buildPageTitle(t("pages.userMigration.title"));

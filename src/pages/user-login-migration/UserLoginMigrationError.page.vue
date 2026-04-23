@@ -58,12 +58,8 @@ const props = defineProps<{ targetSchoolNumber?: string; sourceSchoolNumber?: st
 
 const { userLoginMigration, fetchLatestUserLoginMigrationForSchool } = useUserLoginMigration();
 
-// TODO: Is this a good way to handle undefined?
-const systemName = ref();
-if (userLoginMigration.value?.targetSystemId) {
-	const { systemName: name } = useSystem(userLoginMigration.value.targetSystemId);
-	systemName.value = name.value;
-}
+const targetSystemId = computed(() => userLoginMigration.value?.targetSystemId);
+const { systemName } = useSystem(targetSystemId);
 
 const { t } = useI18n();
 

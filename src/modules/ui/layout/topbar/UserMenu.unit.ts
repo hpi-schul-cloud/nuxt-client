@@ -8,7 +8,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
-import { nextTick, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { VBtn, VListItem } from "vuetify/lib/components/index";
 
 vi.mock("@data-system");
@@ -31,7 +31,7 @@ describe("@ui-layout/UserMenu", () => {
 
 		useSystemMock = mockComposable(useSystem, {
 			system: ref(mockedSystem),
-			systemName: ref(mockedSystem?.displayName),
+			systemName: computed(() => mockedSystem?.displayName),
 		});
 		useOAuthApiMock = mockComposable(useOAuthApi);
 

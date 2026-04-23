@@ -28,15 +28,13 @@
 </template>
 <script setup lang="ts">
 import { useSystem } from "@data-system";
-import { computed } from "vue";
+import { computed, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { systemId = "" } = defineProps<{ systemId?: string }>();
+const props = defineProps<{ systemId?: string }>();
 
 const { t } = useI18n();
-// TODO: How to handle this?
-// eslint-disable-next-line vue/no-setup-props-reactivity-loss
-const { system, systemName } = useSystem(systemId);
+const { system, systemName } = useSystem(toRef(props, "systemId"));
 
 const infoBoxTextListItems = [
 	t("pages.classMembers.infoBox.text.listItem.first"),
