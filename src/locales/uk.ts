@@ -558,7 +558,7 @@ export default {
 	"components.cardElement.LinkElement": "Посилання",
 	"components.cardElement.LinkElement.create.label": "Вставити адресу посилання",
 	"components.cardElement.LinkElement.edit.label": "Редагувати адресу посилання",
-	"components.cardElement.LinkElement.validation.success": "XYZ",
+	"components.cardElement.LinkElement.validation.success": "Будь ласка, введіть дійсну URL-адресу",
 	"components.cardElement.notification.visibleAndEditable":
 		"Ця дошка є видимою і доступною для редагування для всіх учасників курсу.",
 	"components.cardElement.richTextElement.placeholder": "додати текст",
