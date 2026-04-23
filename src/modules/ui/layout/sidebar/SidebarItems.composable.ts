@@ -1,7 +1,7 @@
 import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";
-import { FILE_PATHS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { Permission, SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
+import { useFilePaths } from "@data-file";
 import {
 	mdiAccountGroupOutline,
 	mdiAccountSupervisorCircleOutline,
@@ -20,7 +20,7 @@ import { computed, ComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 export const useSidebarItems = () => {
-	const filePathsModule = injectStrict(FILE_PATHS_MODULE_KEY);
+	const { specificFiles } = useFilePaths();
 	const { t } = useI18n();
 
 	const pageLinks: ComputedRef<SidebarItems> = computed(() => [
@@ -122,7 +122,7 @@ export const useSidebarItems = () => {
 			theme: [SchulcloudTheme.BRB, SchulcloudTheme.N21, SchulcloudTheme.THR],
 		},
 		{
-			href: filePathsModule.getSpecificFiles.accessibilityStatement as string,
+			href: specificFiles.value.accessibilityStatement,
 			title: "components.legacy.footer.accessibility.statement",
 			testId: "sidebar-system-accessibilitystatement",
 			target: "_blank",

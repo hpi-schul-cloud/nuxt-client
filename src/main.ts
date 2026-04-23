@@ -8,7 +8,6 @@ import { initializeAxios } from "./utils/api";
 import {
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
-	FILE_PATHS_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
@@ -18,7 +17,6 @@ import {
 import {
 	copyModule,
 	courseRoomDetailsModule,
-	filePathsModule,
 	finishedTasksModule,
 	groupModule,
 	importUsersModule,
@@ -66,11 +64,7 @@ app.use(VueDOMPurifyHTML, {
 	initializeAxios(axios, useSessionBroadcast().handleUnauthorizedError);
 
 	useRuntimeConfigStore().fetchRuntimeConfig();
-	const success = await useEnvStore().loadConfiguration();
-
-	if (success) {
-		filePathsModule.init();
-	}
+	await useEnvStore().loadConfiguration();
 
 	try {
 		await useAppStore().login();
@@ -86,8 +80,6 @@ app.use(VueDOMPurifyHTML, {
 
 	// NUXT_REMOVAL get rid of store DI
 	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
-	app.provide("filePathsModule", filePathsModule);
-	app.provide(FILE_PATHS_MODULE_KEY, filePathsModule);
 	app.provide("finishedTasksModule", finishedTasksModule);
 	app.provide(GROUP_MODULE_KEY.valueOf(), groupModule);
 	app.provide("importUsersModule", importUsersModule);

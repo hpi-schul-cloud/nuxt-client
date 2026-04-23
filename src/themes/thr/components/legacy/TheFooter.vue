@@ -15,62 +15,12 @@
 </template>
 
 <script setup lang="ts">
-import { filePathsModule } from "@/store";
-import { useEnvConfig } from "@data-env";
-import { computed } from "vue";
-import { useI18n } from "vue-i18n";
+import { useFooterLinks } from "@ui-layout";
 
-const { t } = useI18n();
-
-const links = computed(() => {
-	const baseLinks: Array<{ text: string; to?: string; href?: string; target?: string }> = [
-		{
-			to: "/imprint",
-			text: t("components.legacy.footer.imprint"),
-		},
-		{
-			href: "/termsofuse",
-			text: t("components.legacy.footer.terms"),
-			target: "_blank",
-		},
-		{
-			href: "/privacypolicy",
-			text: t("components.legacy.footer.privacy_policy_thr"),
-			target: "_blank",
-		},
-		{
-			href: "mailto:schulcloud-support@thillm.de?subject=THR%20Schul-Cloud%20Anfrage",
-			text: t("components.legacy.footer.contact"),
-		},
-	];
-
-	if (useEnvConfig().value.ALERT_STATUS_URL) {
-		baseLinks.push({
-			href: useEnvConfig().value.ALERT_STATUS_URL as string,
-			text: t("components.legacy.footer.status"),
-			target: "_blank",
-		});
-	}
-
-	if (useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL) {
-		baseLinks.push({
-			href:
-				"mailto:" +
-				useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL +
-				"?subject=" +
-				t("components.legacy.footer.accessibility.report"),
-			text: t("components.legacy.footer.accessibility.report"),
-			target: "_blank",
-		});
-	}
-
-	baseLinks.push({
-		href: filePathsModule.getSpecificFiles.accessibilityStatement.toString(),
-		text: t("components.legacy.footer.accessibility.statement"),
-		target: "_blank",
-	});
-
-	return baseLinks;
+const { links } = useFooterLinks({
+	contactEmail: "schulcloud-support@thillm.de",
+	contactSubject: "THR Schul-Cloud Anfrage",
+	privacyPolicyKey: "components.legacy.footer.privacy_policy_thr",
 });
 </script>
 
