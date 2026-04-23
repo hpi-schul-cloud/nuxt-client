@@ -63,8 +63,8 @@ describe("TasksOverviewListItemStudent", () => {
 			const task = taskResponseFactory.build({ courseName });
 			const wrapper = setup({ task });
 
-			const task-subtitle = wrapper.find("[data-testid='task-subtitle']");
-			expect(task-subtitle.text()).toBe(courseName);
+			const taskSubtitle = wrapper.find("[data-testid='task-subtitle']");
+			expect(taskSubtitle.text()).toBe(courseName);
 		});
 	});
 
