@@ -40,7 +40,7 @@
 					/>
 
 					<div class="board-menu" :class="boardMenuClasses">
-						<DetailViewButton @open-detail-view="onOpenDetailView" />
+						<DetailViewButton class="mr-1" @open-detail-view="onOpenDetailView" />
 						<BoardMenu v-if="hasMenuItem" :scope="BoardMenuScope.CARD" has-background :data-testid="boardMenuTestId">
 							<KebabMenuActionEdit v-if="allowedOperations?.deleteCard && !isEditMode" @click="onStartEditMode" />
 							<SvsColorPickerMenu
