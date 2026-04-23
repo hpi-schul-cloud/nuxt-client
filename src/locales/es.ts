@@ -2087,4 +2087,11 @@ export default {
 	"pages.folder.trash.ariaLabels.actionMenu": "Menú de acciones para {name}",
 	"pages.folder.trash.restore.success": "Archivos restaurados correctamente.",
 	"pages.folder.trash.restore.error": "No se pudieron restaurar los archivos.",
+	"pages.folder.trash.purge.action": "Eliminar permanentemente",
+	"pages.folder.trash.purge.success": "Los archivos se han eliminado permanentemente.",
+	"pages.folder.trash.purge.error": "No se pudieron eliminar permanentemente los archivos.",
+	"pages.folder.trash.purge.dialog.title": "¿Eliminar archivos permanentemente?",
+	"pages.folder.trash.purge.dialog.description": "Está a punto de eliminar permanentemente {count} archivo(s). Esta acción no se puede deshacer.",
+	"pages.folder.trash.purge.dialog.confirmationWord": "delete",
+	"pages.folder.trash.purge.dialog.inputLabel": "Por favor, escribe \"{word}\" para confirmar",
 };

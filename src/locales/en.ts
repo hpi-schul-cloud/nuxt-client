@@ -2034,4 +2034,11 @@ export default {
 	"pages.folder.trash.ariaLabels.actionMenu": "Action menu for {name}",
 	"pages.folder.trash.restore.success": "Files successfully restored.",
 	"pages.folder.trash.restore.error": "Files could not be restored.",
+	"pages.folder.trash.purge.action": "Delete permanently",
+	"pages.folder.trash.purge.success": "Files have been permanently deleted.",
+	"pages.folder.trash.purge.error": "Files could not be permanently deleted.",
+	"pages.folder.trash.purge.dialog.title": "Permanently delete files?",
+	"pages.folder.trash.purge.dialog.description": "You are about to permanently delete {count} file(s). This action cannot be undone.",
+	"pages.folder.trash.purge.dialog.confirmationWord": "delete",
+	"pages.folder.trash.purge.dialog.inputLabel": "Please type \"{word}\" to confirm",
 };
