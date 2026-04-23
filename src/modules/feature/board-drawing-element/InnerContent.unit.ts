@@ -4,11 +4,7 @@ import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { mount } from "@vue/test-utils";
 
 describe("InnerContent", () => {
-	const propsData = {
-		isFirstElement: false,
-		isLastElement: false,
-		hasMultipleElements: false,
-	};
+	const propsData = {};
 
 	const setup = (options?: { isListBoard?: boolean; windowWidth?: number }) => {
 		const { isListBoard, windowWidth } = {
