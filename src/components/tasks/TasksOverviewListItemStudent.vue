@@ -1,6 +1,6 @@
 <template>
 	<VListItem
-		:style="`border-left: 4px solid ${task.displayColor};`"
+		:style="`border-left: 4px solid ${task.displayColor ?? 'transparent'};`"
 		v-bind="$attrs"
 		:aria-label="ariaLabel"
 		role="article"
@@ -10,7 +10,7 @@
 	>
 		<template #default>
 			<div>
-				<VListItemSubtitle data-testid="taskSubtitle">
+				<VListItemSubtitle data-testid="task-subtitle">
 					{{ taskLabel }}
 				</VListItemSubtitle>
 				<VListItemTitle data-testid="taskTitle" class="text-truncate">

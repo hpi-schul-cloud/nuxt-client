@@ -24,7 +24,7 @@
 
 		<WarningChip
 			v-if="isTaskOverdue(task)"
-			:prepend-icon="mdiClockAlertOutline"
+			:icon="mdiClockAlertOutline"
 			size="small"
 			variant="tonal"
 			data-testid="task-overdue-teacher"
