@@ -1,5 +1,5 @@
 <template>
-	<div class="d-flex flex-row flex-wrap" style="gap: 6px">
+	<div class="d-flex flex-row flex-wrap" data-testid="teacher-task-chips" style="gap: 6px">
 		<template v-if="!isTaskDraft(task)">
 			<InfoChip
 				v-if="task.status?.graded > 0 && task.status?.submitted > 0 && task.status?.graded === task.status?.submitted"

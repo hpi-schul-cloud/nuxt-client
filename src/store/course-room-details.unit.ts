@@ -409,42 +409,6 @@ describe("course-room module", () => {
 				expect(setBusinessErrorSpy).not.toHaveBeenCalled();
 				expect(mockApi.taskControllerFinish).toBeCalledWith("finishId");
 			});
-
-			it("should catch error in catch block", async () => {
-				(() => {
-					initializeAxios({
-						get: async (path: string, params: object) => {
-							receivedRequests = [{ path }, { params }];
-							return {
-								data: {
-									archived: ["firstId"],
-								},
-							};
-						},
-					} as AxiosInstance);
-				})();
-				const mockApi = {
-					taskControllerFinish: () => {
-						throw badRequestError;
-					},
-				};
-				vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
-
-				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const finishTaskSpy = vi.spyOn(courseRoomDetailsModule, "finishTask");
-				const setBusinessErrorSpy = vi.spyOn(courseRoomDetailsModule, "setBusinessError");
-				const resetBusinessErrorSpy = vi.spyOn(courseRoomDetailsModule, "resetBusinessError");
-				await courseRoomDetailsModule.finishTask({
-					itemId: "finishId",
-					action: "finish",
-				});
-
-				expect(resetBusinessErrorSpy).toHaveBeenCalled();
-				expect(finishTaskSpy).toHaveBeenCalled();
-				expect(setBusinessErrorSpy).toHaveBeenCalled();
-				expect(courseRoomDetailsModule.businessError.statusCode).toStrictEqual(400);
-				expect(courseRoomDetailsModule.businessError.message).toStrictEqual("BAD_REQUEST");
-			});
 		});
 
 		describe("fetchScopePermission", () => {

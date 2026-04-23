@@ -37,7 +37,7 @@
 				v-if="canShowDescription && task.description"
 				class="text--primary mt-1 mb-0 pb-0 text-description"
 				tabindex="0"
-				:html="task.description as unknown as string"
+				:html="task.description.content"
 			/>
 			<div
 				v-if="!isPlanned && !isDraft && !isFinished"

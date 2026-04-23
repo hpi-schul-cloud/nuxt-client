@@ -1,5 +1,5 @@
 <template>
-	<div class="d-flex flex-row flex-wrap" style="gap: 6px">
+	<div class="d-flex flex-row flex-wrap" data-testid="student-task-chips" style="gap: 6px">
 		<ChipTimeRemaining v-if="isDueSoon" :due-date="task.dueDate!" />
 
 		<InfoChip

@@ -1,5 +1,5 @@
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
-import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
+import { createTestAppStore, createTestEnvStore, taskResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ImportUserResponseRoleNames as Roles, TaskResponse } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
@@ -7,7 +7,7 @@ import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 
-const testTask = {
+const testTask = taskResponseFactory.build({
 	id: "123",
 	name: "Test Name",
 	createdAt: "2017-09-28T11:58:46.601Z",
@@ -25,138 +25,24 @@ const testTask = {
 	availableDate: "2017-09-28T08:00:00.000Z",
 	dueDate: "2300-09-28T15:00:00.000Z",
 	displayColor: "#54616e",
-	description: "some description here",
-};
+	description: { content: "some description here" },
+});
 
-const draftTestTask = {
-	id: "123",
-	name: "Test Name",
-	createdAt: "2017-09-28T11:58:46.601Z",
+const draftTestTask = taskResponseFactory.build({ status: { isDraft: true } });
+const finishedTestTask = taskResponseFactory.build({ status: { isFinished: true } });
+const noDueTestTask = taskResponseFactory.build({ dueDate: undefined });
+
+const plannedTestTask = taskResponseFactory.build({
 	updatedAt: "2017-09-28T11:58:46.601Z",
 	status: {
-		submitted: 0,
-		maxSubmissions: 1,
-		graded: 0,
-		isDraft: true,
-		isFinished: false,
-		isSubstitutionTeacher: false,
-	},
-	courseId: "789",
-	courseName: "Mathe",
-	availableDate: "2017-09-28T08:00:00.000Z",
-	dueDate: "2300-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
-	description: "some description here",
-};
-
-const finishedTestTask = {
-	id: "123",
-	name: "Test Name",
-	createdAt: "2017-09-28T11:58:46.601Z",
-	updatedAt: "2017-09-28T11:58:46.601Z",
-	status: {
-		submitted: 0,
-		maxSubmissions: 1,
-		graded: 0,
 		isDraft: false,
-		isSubstitutionTeacher: false,
-		isFinished: true,
 	},
-	courseId: "789",
-	courseName: "Mathe",
-	availableDate: "2017-09-28T08:00:00.000Z",
-	dueDate: "2300-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
-	description: "some description here",
-};
-
-const noDueTestTask = {
-	id: "123",
-	name: "Test Name",
-	createdAt: "2017-09-28T11:58:46.601Z",
-	updatedAt: "2017-09-28T11:58:46.601Z",
-	status: {
-		submitted: 0,
-		maxSubmissions: 1,
-		graded: 0,
-		isDraft: false,
-		isFinished: false,
-		isSubstitutionTeacher: false,
-	},
-	courseId: "789",
-	courseName: "Mathe",
-	availableDate: "2017-09-28T08:00:00.000Z",
-	dueDate: undefined,
-	displayColor: "#54616e",
-	description: "some description here",
-};
-
-const plannedTestTask = {
-	id: "123",
-	name: "Test Name",
-	createdAt: "2017-09-28T11:58:46.601Z",
-	updatedAt: "2017-09-28T11:58:46.601Z",
-	status: {
-		submitted: 0,
-		maxSubmissions: 1,
-		graded: 0,
-		isDraft: false,
-		isFinished: false,
-		isSubstitutionTeacher: false,
-	},
-	courseId: "789",
-	courseName: "Mathe",
 	availableDate: "2300-09-01T08:00:00.000Z",
 	dueDate: "2300-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
-	description: "some description here",
-};
+});
 
-const studentFinishedTestTask = {
-	id: "123",
-	name: "Test Name",
-	createdAt: "2017-09-28T11:58:46.601Z",
-	updatedAt: "2017-09-28T11:58:46.601Z",
-	status: {
-		submitted: 0,
-		maxSubmissions: 1,
-		graded: 0,
-		isDraft: false,
-		isFinished: true,
-		isSubstitutionTeacher: false,
-	},
-	courseId: "789",
-	courseName: "Mathe",
-	availableDate: "2017-09-28T08:00:00.000Z",
-	dueDate: "2300-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
-	description: "some description here",
-};
-
-const studentTestTask = {
-	id: "123",
-	name: "Test Name",
-	createdAt: "2017-09-28T11:58:46.601Z",
-	updatedAt: "2017-09-28T11:58:46.601Z",
-	status: {
-		submitted: 0,
-		maxSubmissions: 1,
-		graded: 0,
-		isDraft: false,
-		isFinished: false,
-		isSubstitutionTeacher: false,
-	},
-	courseId: "789",
-	courseName: "Mathe",
-	availableDate: "2017-09-28T08:00:00.000Z",
-	dueDate: "2300-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
-	description: "some description here",
-};
-
-const mockRouter = {
-	push: vi.fn(),
-};
+const studentFinishedTestTask = taskResponseFactory.build({ status: { isFinished: true } });
+const studentTestTask = taskResponseFactory.build();
 
 const getWrapper = (
 	props: {
@@ -175,9 +61,6 @@ const getWrapper = (
 	return mount(CourseRoomTaskCard, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			mocks: {
-				$router: mockRouter,
-			},
 		},
 		props: {
 			room: {
@@ -424,60 +307,18 @@ describe("CourseRoomTaskCard", () => {
 			});
 
 			it("should return false value after calculated isPlanned() method", () => {
-				const availableDate = new Date();
-				const localProps = {
-					...testTask,
-					task: {
-						id: "123",
-						name: "Test Name",
-						createdAt: "2017-09-28T11:58:46.601Z",
-						updatedAt: "2017-09-28T11:58:46.601Z",
-						status: {
-							submitted: 0,
-							maxSubmissions: 1,
-							graded: 0,
-							isDraft: false,
-							isFinished: false,
-							isSubstitutionTeacher: false,
-						},
-						courseName: "Mathe",
-						availableDate: availableDate.toISOString(),
-						dueDate: "2300-09-28T15:00:00.000Z",
-						displayColor: "#54616e",
-						description: "some description here",
-					},
-				};
-				const wrapper = getWrapper({ ...localProps, userRole });
-
+				const wrapper = getWrapper({ task: testTask, userRole });
 				expect((wrapper.vm as unknown as typeof CourseRoomTaskCard).isPlanned).toBe(false);
 			});
 
 			it("should return true value after calculated isPlanned() method", () => {
 				vi.useFakeTimers().setSystemTime(new Date()); // this line sets a permanent fake time
 				const inFutureDate = new Date(Date.now() + 5001);
-				const localProps = {
+				const task = {
 					...testTask,
-					task: {
-						id: "123",
-						name: "Test Name",
-						createdAt: "2017-09-28T11:58:46.601Z",
-						updatedAt: "2017-09-28T11:58:46.601Z",
-						status: {
-							submitted: 0,
-							maxSubmissions: 1,
-							graded: 0,
-							isDraft: false,
-							isFinished: false,
-							isSubstitutionTeacher: false,
-						},
-						courseName: "Mathe",
-						availableDate: inFutureDate.toISOString(),
-						dueDate: "2300-09-28T15:00:00.000Z",
-						displayColor: "#54616e",
-						description: "some description here",
-					},
+					availableDate: inFutureDate.toISOString(),
 				};
-				const wrapper = getWrapper({ ...localProps, userRole });
+				const wrapper = getWrapper({ task, userRole });
 
 				expect((wrapper.vm as unknown as typeof CourseRoomTaskCard).isPlanned).toBe(true);
 			});

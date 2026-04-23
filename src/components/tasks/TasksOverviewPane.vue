@@ -97,7 +97,15 @@ const props = defineProps<{
 	isLoadingMoreItems?: boolean;
 }>();
 
+const { t } = useI18n();
+const { smAndDown } = useDisplay();
 const { isTeacher, isStudent } = useAppStoreRefs();
+
+defineEmits<{
+	"load-more-tasks": [];
+	"copy-task": [payload: CopyParams];
+	"share-task": [taskId: string];
+}>();
 
 const {
 	gradeStatus,
@@ -117,15 +125,6 @@ const courseFilterOptionsWithCount = computed(() =>
 		title: `${opt.title} (${opt.count})`,
 	}))
 );
-
-defineEmits<{
-	"load-more-tasks": [];
-	"copy-task": [payload: CopyParams];
-	"share-task": [taskId: string];
-}>();
-
-const { t } = useI18n();
-const { smAndDown } = useDisplay();
 
 const filterDensity = computed(() => (smAndDown.value ? "compact" : "default"));
 
