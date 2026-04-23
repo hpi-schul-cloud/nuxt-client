@@ -454,6 +454,76 @@ describe("BoardStore", () => {
 		});
 	});
 
+	describe("duplicateColumnSuccess", () => {
+		it("should not duplicate column when board is undefined", () => {
+			const { boardStore, firstColumn } = setup({ createBoard: false });
+			const duplicatedColumn = columnResponseFactory.build();
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+
+			expect(boardStore.board).toBe(undefined);
+		});
+
+		it("should duplicate a column and insert it after the original", () => {
+			const { boardStore, firstColumn, secondColumn } = setup();
+			const duplicatedColumn = columnResponseFactory.build();
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+
+			expect(boardStore.board?.columns.length).toBe(3);
+			expect(boardStore.board?.columns[0]).toEqual(firstColumn);
+			expect(boardStore.board?.columns[1]).toEqual(duplicatedColumn);
+			expect(boardStore.board?.columns[2]).toEqual(secondColumn);
+		});
+
+		it("should show info notification when isOwnAction is true", () => {
+			const { boardStore, firstColumn } = setup();
+			const duplicatedColumn = columnResponseFactory.build();
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+
+			expectNotification("info");
+		});
+
+		it("should not show notification when isOwnAction is false", () => {
+			const { boardStore, firstColumn } = setup();
+			const duplicatedColumn = columnResponseFactory.build();
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: false,
+			});
+
+			expect(boardStore.board?.columns.length).toBe(3);
+		});
+
+		it("should not duplicate column when duplicatedColumn.id is undefined", () => {
+			const { boardStore, firstColumn } = setup();
+			const duplicatedColumn = columnResponseFactory.build({ id: undefined });
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+
+			expect(boardStore.board?.columns.length).toBe(2);
+		});
+	});
+
 	describe("deleteColumnSuccess", () => {
 		it("should not delete a column when board value is undefined", () => {
 			const { boardStore, firstColumn } = setup({ createBoard: false });
@@ -1032,6 +1102,26 @@ describe("BoardStore", () => {
 				await boardStore.deleteColumnRequest(payload);
 
 				expect(mockedBoardRestApi.deleteColumnRequest).toHaveBeenCalledWith(payload);
+			});
+		});
+
+		describe("@duplicateColumn", () => {
+			const payload = { columnId: "testColumnId" };
+
+			it("should call socketApi.duplicateColumnRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
+
+				await boardStore.duplicateColumn(payload);
+
+				expect(mockedBoardSocketApi.duplicateColumnRequest).toHaveBeenCalledWith(payload);
+			});
+
+			it("should call restApi.duplicateColumnRequest when feature flag is set false", async () => {
+				const { boardStore } = setup();
+
+				await boardStore.duplicateColumn(payload);
+
+				expect(mockedBoardRestApi.duplicateColumnRequest).toHaveBeenCalledWith(payload);
 			});
 		});
 

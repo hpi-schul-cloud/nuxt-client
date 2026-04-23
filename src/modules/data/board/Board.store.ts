@@ -150,6 +150,18 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const duplicateColumn = socketOrRest.duplicateColumnRequest;
+	/*
+  const hasRelevantContentForDuplicationWarning = (column: ColumnResponse): boolean =>
+		column.cards.some((card) =>
+			card.elements.some((element) =>
+				[
+					ContentElementType.COLLABORATIVE_TEXT_EDITOR,
+					ContentElementType.DRAWING,
+					ContentElementType.EXTERNAL_TOOL,
+				].includes(element.type)
+			)
+		);
+	 */
 
 	const duplicateColumnSuccess = (payload: DuplicateColumnSuccessPayload) => {
 		if (!board.value) return;
@@ -158,7 +170,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		const columnIndex = getColumnIndex(columnId) ?? 0;
 		if (duplicatedColumn.id) {
 			board.value.columns?.splice(columnIndex + 1, 0, duplicatedColumn);
-			if (payload.isOwnAction === true /* TODO && hasRelevantContentForDuplicationWarning(duplicatedColumn)*/) {
+			if (payload.isOwnAction === true /*&& hasRelevantContentForDuplicationWarning(duplicatedColumn)*/) {
 				notifyInfo("components.board.notifications.info.columnDuplicated");
 			}
 		}
