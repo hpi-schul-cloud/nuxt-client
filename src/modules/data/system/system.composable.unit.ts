@@ -1,73 +1,63 @@
-import * as asyncTasks from "@/composables/async-tasks.composable";
-import { mountComposable } from "@@/tests/test-utils";
-import * as apiServer from "@api-server";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { nextTick } from "vue";
-
-const SYSTEM_ID = "system-1";
-const SYSTEM_RESPONSE = {
-	data: {
-		id: SYSTEM_ID,
-		displayName: "Test System",
-		oauthConfig: { endSessionEndpoint: "some-endpoint" },
-	},
-};
+import { useSystem } from "./system.composable";
+import { mockApi, mockApiResponse } from "@@/tests/test-utils";
+import { publicSystemResponseFactory } from "@@/tests/test-utils/factory/publicSystemResponseFactory";
+import * as serverApi from "@api-server";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { beforeEach, describe, expect, it, Mocked, vi } from "vitest";
+import { nextTick, ref } from "vue";
 
 describe("useSystem", () => {
-	let systemApi: { systemControllerGetSystem: ReturnType<typeof vi.fn> };
-	let execute: ReturnType<typeof vi.fn>;
+	let systemApiMock: Mocked<serverApi.SystemsApiInterface>;
 
 	beforeEach(() => {
-		systemApi = { systemControllerGetSystem: vi.fn() };
-		vi.spyOn(apiServer, "SystemsApiFactory").mockReturnValue(
-			systemApi as unknown as ReturnType<typeof apiServer.SystemsApiFactory>
-		);
-		execute = vi.fn();
-		vi.spyOn(asyncTasks, "useSafeAxiosTask").mockReturnValue({ execute } as unknown as ReturnType<
-			typeof asyncTasks.useSafeAxiosTask
-		>);
+		setActivePinia(createTestingPinia());
+		systemApiMock = mockApi<serverApi.SystemsApiInterface>();
+		vi.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemApiMock);
 	});
 
-	afterEach(() => {
-		vi.clearAllMocks();
-	});
+	it("fetches and sets system data when systemId is provided", async () => {
+		const systemId = ref("abc");
+		const mockSystem = publicSystemResponseFactory.build();
+		systemApiMock.systemControllerGetSystem.mockResolvedValueOnce(mockApiResponse({ data: mockSystem }));
 
-	it("fetches system data and sets refs on success", async () => {
-		execute.mockResolvedValueOnce({ result: SYSTEM_RESPONSE });
-		const { useSystem } = await import("./system.composable");
-		const { system, systemName, fetchSystem } = mountComposable(() => useSystem(SYSTEM_ID, false));
-
-		await fetchSystem();
+		const { system, systemName } = useSystem(systemId);
+		// TODO: Is it okay to wait for 4 ticks? Seems a little random
+		await nextTick();
+		await nextTick();
+		await nextTick();
 		await nextTick();
 
 		expect(system.value).toEqual({
-			id: SYSTEM_ID,
-			displayName: "Test System",
-			hasEndSessionEndpoint: true,
+			id: mockSystem.id,
+			displayName: mockSystem.displayName,
+			hasEndSessionEndpoint: !!mockSystem.oauthConfig?.endSessionEndpoint,
 		});
-		expect(systemName.value).toBe("Test System");
-		expect(execute).toHaveBeenCalledWith(expect.any(Function));
+		expect(systemName.value).toEqual(mockSystem.displayName);
 	});
 
-	it("does not set refs if result is undefined", async () => {
-		execute.mockResolvedValueOnce({ result: undefined });
-		const { useSystem } = await import("./system.composable");
-		const { system, systemName, fetchSystem } = mountComposable(() => useSystem(SYSTEM_ID, false));
+	it("does not fetch system if systemId is undefined", async () => {
+		const systemId = ref<string | undefined>(undefined);
 
-		await fetchSystem();
+		useSystem(systemId);
+		await nextTick();
+		await nextTick();
+		await nextTick();
+		await nextTick();
+
+		expect(systemApiMock.systemControllerGetSystem).not.toHaveBeenCalled();
+	});
+
+	it("does not set system if fetch fails", async () => {
+		const systemId = ref("fail");
+		systemApiMock.systemControllerGetSystem.mockRejectedValueOnce({});
+
+		const { system } = useSystem(systemId);
+		await nextTick();
+		await nextTick();
+		await nextTick();
 		await nextTick();
 
 		expect(system.value).toBeUndefined();
-		expect(systemName.value).toBeUndefined();
-	});
-
-	it("fetches immediately if fetchImmediate is true", async () => {
-		execute.mockResolvedValueOnce({ result: SYSTEM_RESPONSE });
-		const { useSystem } = await import("./system.composable");
-		mountComposable(() => useSystem(SYSTEM_ID, true));
-
-		await nextTick();
-
-		expect(execute).toHaveBeenCalledWith(expect.any(Function));
 	});
 });
