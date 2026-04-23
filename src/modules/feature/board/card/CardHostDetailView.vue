@@ -27,18 +27,14 @@
 			</VBtn>
 		</VToolbar>
 		<VCard>
-			<VCardText
-				:style="{
-					backgroundColor: cardBackground,
-				}"
-				class="pt-0"
-			>
+			<VCardText :style="{ backgroundColor: cardBackground }" class="pt-0">
 				<div
 					class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto"
 					:style="{
 						backgroundColor: 'white',
 						borderLeft: cardBorderColor ? `3px solid ${cardBorderColor}` : undefined,
 					}"
+					data-testid="detail-view-content-wrapper"
 				>
 					<CardHostInteractionHandler
 						:is-edit-mode="isEditMode"

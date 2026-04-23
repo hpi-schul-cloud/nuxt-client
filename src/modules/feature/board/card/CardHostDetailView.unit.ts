@@ -3,6 +3,7 @@ import CardHostDetailView from "./CardHostDetailView.vue";
 import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
+import { colorToHexLighten5 } from "@/utils/color.utils";
 import {
 	boardResponseFactory,
 	cardResponseFactory,
@@ -11,15 +12,19 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardResponseAllowedOperations, CardResponse } from "@api-server";
+import { Colors } from "@api-server";
 import { useBoardAllowedOperations, useCourseBoardEditMode } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { computed, nextTick } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
-import { VDialog } from "vuetify/components";
+import { VCardText, VDialog } from "vuetify/components";
+
+const backgroundColor = Colors.BLUE;
 
 const CARD_WITH_ELEMENTS: CardResponse = cardResponseFactory.build({
 	elements: [fileElementResponseFactory.build()],
+	backgroundColor: backgroundColor,
 });
 
 vi.mock("@data-board/BoardPermissions.composable");
@@ -339,6 +344,37 @@ describe("CardHostDetailView", () => {
 				expect(wrapper.emitted("move-keyboard:element")).toBeTruthy();
 				expect(wrapper.emitted("move-keyboard:element")?.[0]).toEqual(["element-id", "up"]);
 			});
+		});
+	});
+
+	describe("colors", () => {
+		it("should apply background color", () => {
+			const { wrapper } = setup({
+				card: CARD_WITH_ELEMENTS,
+				isOpen: true,
+				columnIndex: 0,
+				rowIndex: 1,
+			});
+
+			const cardText = wrapper.findComponent(VCardText);
+			const expectedBackgroundColor = colorToHexLighten5(backgroundColor);
+
+			expect(cardText.props("style")).toEqual({ backgroundColor: expectedBackgroundColor });
+		});
+
+		it("should apply border color", () => {
+			const { wrapper } = setup({
+				card: CARD_WITH_ELEMENTS,
+				isOpen: true,
+				columnIndex: 0,
+				rowIndex: 1,
+			});
+
+			const contentWrapper = wrapper.find("[data-testid='detail-view-content-wrapper']");
+			const styleAttribute = contentWrapper.attributes("style");
+
+			expect(styleAttribute).toContain("background-color: white");
+			expect(styleAttribute).toContain("border-left: 3px solid rgb(144, 202, 249)");
 		});
 	});
 });
