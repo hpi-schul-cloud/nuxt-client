@@ -1,78 +1,79 @@
 <template>
-	<div>
-		<VDialog :model-value="isOpen" fullscreen scrollable @keydown.escape="onDialogClose">
-			<VCard>
-				<div class="toolbar-fixed-offset">
-					<VToolbar class="toolbar-position">
-						<VBtn icon data-testid="close-detail-view-button" @click="onDialogClose">
-							<VIcon>{{ mdiClose }}</VIcon>
-						</VBtn>
-						<VToolbarTitle>{{ $t("components.board.dialog.detail-view.title") }}</VToolbarTitle>
-						<VSpacer />
-						<VBtn
-							v-if="allowedOperations?.deleteCard && !isEditMode"
-							class="mr-4 keep-inline-edit-mode"
-							data-testid="toolbar-edit-button"
-							@click="startEditMode"
-						>
-							{{ $t("common.actions.edit") }}
-						</VBtn>
-						<VBtn
-							v-if="allowedOperations?.deleteCard && isEditMode"
-							class="mr-4 keep-inline-edit-mode"
-							data-testid="toolbar-view-button"
-							@click="stopEditMode"
-						>
-							{{ $t("common.actions.view") }}
-						</VBtn>
-					</VToolbar>
-				</div>
-				<VCardText
-					:style="{
-						backgroundColor: cardBackground,
-					}"
-					class="pt-0"
-				>
-					<div
-						class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto"
-						:style="{
-							backgroundColor: 'white',
-							borderLeft: cardBorderColor ? `3px solid ${cardBorderColor}` : undefined,
-						}"
+	<VDialog :model-value="isOpen" fullscreen scrollable @keydown.escape="onDialogClose">
+		<VCard>
+			<div class="toolbar-fixed-offset">
+				<VToolbar class="toolbar-position">
+					<VBtn
+						:icon="mdiClose"
+						data-testid="close-detail-view-button"
+						:aria-label="t('common.labels.close')"
+						@click="onDialogClose"
+					/>
+					<VToolbarTitle>{{ $t("components.board.dialog.detail-view.title") }}</VToolbarTitle>
+					<VSpacer />
+					<VBtn
+						v-if="allowedOperations?.deleteCard && !isEditMode"
+						class="mr-4 keep-inline-edit-mode"
+						data-testid="toolbar-edit-button"
+						@click="startEditMode"
 					>
-						<CardHostInteractionHandler
+						{{ $t("common.actions.edit") }}
+					</VBtn>
+					<VBtn
+						v-if="allowedOperations?.deleteCard && isEditMode"
+						class="mr-4 keep-inline-edit-mode"
+						data-testid="toolbar-view-button"
+						@click="stopEditMode"
+					>
+						{{ $t("common.actions.view") }}
+					</VBtn>
+				</VToolbar>
+			</div>
+			<VCardText
+				:style="{
+					backgroundColor: cardBackground,
+				}"
+				class="pt-0"
+			>
+				<div
+					class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto"
+					:style="{
+						backgroundColor: 'white',
+						borderLeft: cardBorderColor ? `3px solid ${cardBorderColor}` : undefined,
+					}"
+				>
+					<CardHostInteractionHandler
+						:is-edit-mode="isEditMode"
+						@start-edit-mode="startEditMode"
+						@end-edit-mode="stopEditMode"
+						@click.stop
+					>
+						<CardTitle
 							:is-edit-mode="isEditMode"
-							@start-edit-mode="startEditMode"
-							@end-edit-mode="stopEditMode"
-							@click.stop
-						>
-							<CardTitle
-								:is-edit-mode="isEditMode"
-								:value="card.title"
-								scope="card"
-								:is-focused="true"
-								:has-edit-permission="allowedOperations?.updateCardTitle"
-								@update:value="onUpdateCardTitle"
-								@enter="onEnterTitle"
-							/>
-							<ContentElementList
-								:elements="card.elements"
-								:is-edit-mode="isEditMode"
-								:is-detail-view="true"
-								:row-index="rowIndex"
-								:column-index="columnIndex"
-								@delete:element="onDeleteElement"
-								@move-down:element="onMoveElementDown"
-								@move-up:element="onMoveElementUp"
-								@move-keyboard:element="onMoveElementKeyboard"
-							/>
-							<CardAddElementMenu v-if="isEditMode" data-testid="add-element-button" @add-element="onAddElement" />
-						</CardHostInteractionHandler>
-					</div>
-				</VCardText>
-			</VCard>
-		</VDialog>
-	</div>
+							:value="card.title"
+							scope="card"
+							:is-focused="true"
+							:has-edit-permission="allowedOperations?.updateCardTitle"
+							@update:value="onUpdateCardTitle"
+							@enter="onEnterTitle"
+						/>
+						<ContentElementList
+							:elements="card.elements"
+							:is-edit-mode="isEditMode"
+							:is-detail-view="true"
+							:row-index="rowIndex"
+							:column-index="columnIndex"
+							@delete:element="onDeleteElement"
+							@move-down:element="onMoveElementDown"
+							@move-up:element="onMoveElementUp"
+							@move-keyboard:element="onMoveElementKeyboard"
+						/>
+						<CardAddElementMenu v-if="isEditMode" data-testid="add-element-button" @add-element="onAddElement" />
+					</CardHostInteractionHandler>
+				</div>
+			</VCardText>
+		</VCard>
+	</VDialog>
 </template>
 
 <script setup lang="ts">
@@ -87,6 +88,7 @@ import { Colors } from "@api-server";
 import { useBoardAllowedOperations, useCourseBoardEditMode } from "@data-board";
 import { mdiClose } from "@icons/material";
 import { computed, toRef } from "vue";
+import { useI18n } from "vue-i18n";
 
 type Props = {
 	card: CardResponse;
@@ -111,6 +113,7 @@ const emit = defineEmits<{
 const cardRef = toRef(props, "card");
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardRef.value.id);
 const { allowedOperations } = useBoardAllowedOperations();
+const { t } = useI18n();
 
 const cardBackground = computed(() => colorToHexLighten5(cardRef.value?.backgroundColor ?? Colors.TRANSPARENT));
 const cardBorderColor = computed(() => {
