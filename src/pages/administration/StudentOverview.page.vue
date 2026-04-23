@@ -459,7 +459,7 @@ const getClassNameList = async () => {
 }
 
 button:not(.is-none):focus {
-	z-index: var(--z-sticky);
+	z-index: var(--z-pinned);
 	outline: none;
 	box-shadow:
 		0 0 0 0 rgba(var(--v-theme-white)),
