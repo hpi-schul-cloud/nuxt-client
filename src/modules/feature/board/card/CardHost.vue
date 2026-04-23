@@ -282,7 +282,7 @@ const onUpdateColor = (backgroundColor: Colors) => {
 	position: absolute;
 	top: 0.25rem;
 	right: 0.25rem;
-	z-index: var(--z-raised);
+	z-index: var(--z-elevated);
 }
 .hidden {
 	transition: opacity 200ms;

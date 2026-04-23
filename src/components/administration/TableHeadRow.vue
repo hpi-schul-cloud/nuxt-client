@@ -204,7 +204,7 @@ export default {
 	border-radius: 6px;
 	padding: 5px 10px;
 	position: absolute;
-	z-index: var(--z-raised);
+	z-index: var(--z-elevated);
 	top: 140%;
 	right: 0;
 	white-space: nowrap;
