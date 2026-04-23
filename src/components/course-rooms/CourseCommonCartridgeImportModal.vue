@@ -43,7 +43,7 @@ const defaultMaxFileSizeBytes = oneGigabyteInBytes;
 
 const { runtimeConfig } = useRuntimeConfigStore();
 const maxFileSizeBytes = computed(() => {
-	const configValue = runtimeConfig["FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_MAX_FILE_SIZE"];
+	const configValue = runtimeConfig["FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_MAX_FILE_SIZE_IN_BYTES"];
 	return typeof configValue === "number" ? configValue : defaultMaxFileSizeBytes;
 });
 
