@@ -3,7 +3,7 @@
 		<VDialog :model-value="isOpen" fullscreen scrollable @keydown.escape="onDialogClose">
 			<VCard>
 				<div class="toolbar-fixed-offset">
-					<VToolbar class="toolbar-position" color="white">
+					<VToolbar class="toolbar-position">
 						<VBtn icon data-testid="close-detail-view-button" @click="onDialogClose">
 							<VIcon>{{ mdiClose }}</VIcon>
 						</VBtn>
@@ -151,11 +151,17 @@ const onMoveElementKeyboard = (elementMove: ElementMove, keyCode: string) => {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@use "sass:map";
+@use "@/styles/settings" as *;
+
 .detail-view-size {
 	max-width: 920px;
-	min-width: 400px;
 	padding: 0 4rem;
+
+	@media #{map.get($display-breakpoints, 'sm-and-down')} {
+		padding: 0 0.5rem;
+	}
 }
 
 .toolbar-position {
