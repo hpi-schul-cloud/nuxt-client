@@ -42,6 +42,20 @@
 				/>
 			</template>
 		</ContentElementBar>
+		<VCardActions class="py-2 pl-4">
+			<v-spacer />
+			<VBtn
+				:aria-label="t('components.board.action.download')"
+				:disabled="false"
+				data-testid="h5p-folder-element-download-button"
+				class="float-right download-button"
+				:icon="mdiTrayArrowDown"
+				size="small"
+				variant="text"
+				@click="onDownload"
+				@keydown.enter="onDownload"
+			/>
+		</VCardActions>
 	</VCard>
 </template>
 
@@ -54,6 +68,7 @@ import { H5PContentParentType } from "@api-h5p";
 import { H5pElementResponse } from "@api-server";
 import { useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
+import { mdiTrayArrowDown } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { computed, onMounted, Ref, ref, toRef, watch } from "vue";
@@ -158,6 +173,21 @@ const onClickElement = () => {
 	} else {
 		openEditorWindow();
 	}
+};
+
+const onDownload = () => {
+	if (!element.value.content.contentId) {
+		return;
+	}
+
+	const route = router.resolve({
+		name: "h5pContentDownload",
+		params: {
+			contentId: element.value.content.contentId,
+		},
+	});
+
+	window.open(route.href, "_blank");
 };
 
 const fetchAndSetContentTitle = async (h5pElement: H5pElementResponse) => {
