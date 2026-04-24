@@ -21,7 +21,7 @@
 		<ExternalToolConfigurator
 			:templates="schoolExternalToolConfigurationTemplates"
 			:configuration="configuration"
-			:error="createOrUpdateToolError"
+			:error="apiError"
 			:loading="loading"
 			@cancel="onCancel"
 			@save="onSave"
@@ -49,6 +49,8 @@ import ExternalToolConfigurator from "@/components/administration/external-tools
 import ExternalToolMediumDetails from "@/components/administration/external-tools-configuration/ExternalToolMediumDetails.vue";
 import { SchoolExternalTool, SchoolExternalToolSave, ToolParameterEntry } from "@/store/external-tool";
 import { SchoolExternalToolMapper } from "@/store/external-tool/mapper";
+import { BusinessError } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess, useAppStoreRefs } from "@data-app";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
@@ -98,6 +100,18 @@ const hasData = ref(false);
 const loading = computed(() => !hasData.value || isLoadingAvailableTools.value || isLoadingConfigurationTemplate.value);
 
 const configuration: Ref<SchoolExternalTool | undefined> = ref();
+
+const apiError = computed<BusinessError | undefined>(() => {
+	if (!createOrUpdateToolError.value) return undefined;
+
+	const apiError = mapAxiosErrorToResponseError(createOrUpdateToolError.value);
+
+	return {
+		error: apiError,
+		statusCode: apiError.code,
+		message: apiError.message,
+	};
+});
 
 const router = useRouter();
 const onCancel = () => {
