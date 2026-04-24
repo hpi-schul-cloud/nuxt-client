@@ -26,7 +26,7 @@ import { useShareBoardLink, useSharedFileSelect, useSharedLastCreatedElement } f
 import { shallowMount } from "@vue/test-utils";
 import { Mocked } from "vitest";
 import { computed, ref } from "vue";
-import { createRouterMock, injectRouterMock } from "vue-router-mock";
+import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 
 vi.mock("@util-board");
 
@@ -44,6 +44,7 @@ vi.mocked(useCardSocketApi).mockReturnValue(mockComposable(useCardSocketApi));
 describe("CardHost", () => {
 	let useShareBoardLinkMock: Mocked<ReturnType<typeof useShareBoardLink>>;
 	let useSharedFileSelectMock: Mocked<ReturnType<typeof useSharedFileSelect>>;
+	let router: RouterMock;
 
 	beforeEach(() => {
 		vi.mocked(useSharedEditMode).mockReturnValue(
@@ -80,7 +81,8 @@ describe("CardHost", () => {
 		});
 		vi.mocked(useSharedFileSelect).mockReturnValue(useSharedFileSelectMock);
 
-		injectRouterMock(createRouterMock());
+		router = createRouterMock();
+		injectRouterMock(router);
 	});
 
 	afterEach(() => {
@@ -91,8 +93,9 @@ describe("CardHost", () => {
 		hasCard?: boolean;
 		hasElement?: boolean;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
+		openDetailView?: boolean;
 	}) => {
-		const { hasElement = false, hasCard = true, allowedOperations = {} } = options ?? {};
+		const { hasElement = false, hasCard = true, allowedOperations = {}, openDetailView = false } = options ?? {};
 
 		let card: CardResponse | null = null;
 		if (hasCard) {
@@ -114,6 +117,7 @@ describe("CardHost", () => {
 							boardStore: {
 								board: {
 									allowedOperations: allowedOperations,
+									id: "boardId",
 								},
 							},
 						},
@@ -128,6 +132,7 @@ describe("CardHost", () => {
 				height: card?.height ?? 0,
 				columnIndex: 0,
 				rowIndex: 1,
+				detailViewCardId: openDetailView ? cardId : undefined,
 			},
 		});
 
@@ -293,6 +298,50 @@ describe("CardHost", () => {
 
 				expect(confirmDialogUtils.askDeletionForType).toHaveBeenCalledWith("components.boardCard");
 				expect(wrapper.emitted("delete:card")).toHaveLength(1);
+			});
+		});
+	});
+
+	describe("card detail view", async () => {
+		describe("when prop detailViewCardId equals to cardId", () => {
+			it("should open detail view", () => {
+				const { wrapper } = setup({ openDetailView: true });
+
+				const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
+
+				expect(cardHostDetailView.props("isOpen")).toBe(true);
+			});
+		});
+
+		describe("when prop detailViewCardId not equals to cardId", () => {
+			it("should not open detail view", () => {
+				const { wrapper } = setup({ openDetailView: false });
+
+				const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
+
+				expect(cardHostDetailView.props("isOpen")).toBe(false);
+			});
+		});
+
+		describe("when detail view button is clicked", () => {
+			it("navigate to detail view route", async () => {
+				const { wrapper } = setup();
+
+				const detailViewButton = wrapper.findComponent({ name: "DetailViewButton" });
+				await detailViewButton.vm.$emit("open-detail-view");
+
+				expect(router.push).toHaveBeenCalled();
+			});
+		});
+
+		describe("when detail view is closed", () => {
+			it("navigate to board route", async () => {
+				const { wrapper } = setup();
+
+				const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
+				await cardHostDetailView.vm.$emit("close:detail-view");
+
+				expect(router.replace).toHaveBeenCalled();
 			});
 		});
 	});
