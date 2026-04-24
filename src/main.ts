@@ -8,7 +8,6 @@ import { initializeAxios } from "./utils/api";
 import {
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
-	GROUP_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
@@ -18,7 +17,6 @@ import {
 	copyModule,
 	courseRoomDetailsModule,
 	finishedTasksModule,
-	groupModule,
 	importUsersModule,
 	schoolExternalToolsModule,
 	schoolsModule,
@@ -81,7 +79,6 @@ app.use(VueDOMPurifyHTML, {
 	// NUXT_REMOVAL get rid of store DI
 	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
 	app.provide("finishedTasksModule", finishedTasksModule);
-	app.provide(GROUP_MODULE_KEY.valueOf(), groupModule);
 	app.provide("importUsersModule", importUsersModule);
 
 	app.provide(COURSE_ROOM_DETAILS_MODULE_KEY.valueOf(), courseRoomDetailsModule);
