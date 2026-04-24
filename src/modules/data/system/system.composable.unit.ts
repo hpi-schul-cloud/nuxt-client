@@ -3,9 +3,10 @@ import { mockApi, mockApiResponse } from "@@/tests/test-utils";
 import { publicSystemResponseFactory } from "@@/tests/test-utils/factory/publicSystemResponseFactory";
 import * as serverApi from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
+import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, Mocked, vi } from "vitest";
-import { nextTick, ref } from "vue";
+import { ref } from "vue";
 
 describe("useSystem", () => {
 	let systemApiMock: Mocked<serverApi.SystemsApiInterface>;
@@ -22,11 +23,7 @@ describe("useSystem", () => {
 		systemApiMock.systemControllerGetSystem.mockResolvedValueOnce(mockApiResponse({ data: mockSystem }));
 
 		const { system, systemName } = useSystem(systemId);
-		// TODO: Is it okay to wait for 4 ticks? Seems a little random
-		await nextTick();
-		await nextTick();
-		await nextTick();
-		await nextTick();
+		await flushPromises();
 
 		expect(system.value).toEqual({
 			id: mockSystem.id,
@@ -40,11 +37,7 @@ describe("useSystem", () => {
 		const systemId = ref<string | undefined>(undefined);
 
 		useSystem(systemId);
-		await nextTick();
-		await nextTick();
-		await nextTick();
-		await nextTick();
-
+		await flushPromises();
 		expect(systemApiMock.systemControllerGetSystem).not.toHaveBeenCalled();
 	});
 
@@ -53,10 +46,7 @@ describe("useSystem", () => {
 		systemApiMock.systemControllerGetSystem.mockRejectedValueOnce({});
 
 		const { system } = useSystem(systemId);
-		await nextTick();
-		await nextTick();
-		await nextTick();
-		await nextTick();
+		await flushPromises();
 
 		expect(system.value).toBeUndefined();
 	});
