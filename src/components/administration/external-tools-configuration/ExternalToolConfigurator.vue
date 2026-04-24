@@ -82,7 +82,6 @@ import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 import ExternalToolConfigSettings from "@/components/administration/external-tools-configuration/ExternalToolConfigSettings.vue";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import { SchoolExternalTool, ToolParameter, ToolParameterEntry } from "@/store/external-tool";
-import { BusinessError } from "@/store/types/commons";
 import { notifyError } from "@data-app";
 import { ContextExternalTool, ExternalToolConfigurationTemplate } from "@data-external-tool";
 import { mdiAlertCircle, mdiContentPaste } from "@icons/material";
@@ -99,7 +98,7 @@ const { displaySettingsTitle = true, ...props } = defineProps<{
 	templates: T[];
 	configuration: ConfigurationTypes | undefined;
 	isPreferredTool?: boolean;
-	error: BusinessError | undefined;
+	error: Error | undefined;
 	loading?: boolean;
 	displaySettingsTitle?: boolean;
 }>();

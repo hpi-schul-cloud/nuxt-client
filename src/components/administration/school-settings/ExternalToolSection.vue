@@ -122,13 +122,12 @@ import { useExternalToolsSectionUtils } from "./external-tool-section-utils.comp
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { injectStrict, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
 import { MediaSourceLicenseType, ToolApiAxiosParamCreator } from "@api-server";
-import { notifyError, notifySuccess, useAppStore } from "@data-app";
+import { notifyError, useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
+import { useSchoolExternalTools } from "@data-school";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
@@ -136,7 +135,8 @@ import { computed, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY);
+const { loadSchoolExternalTools, schoolExternalTools, isLoadingExternalTools, deleteSchoolExternalTool } =
+	useSchoolExternalTools();
 const router = useRouter();
 
 const schoolLicenseStore = useSchoolLicenseStore();
@@ -144,7 +144,7 @@ const schoolLicenseStore = useSchoolLicenseStore();
 onMounted(() => {
 	const school = useAppStore().school;
 	if (school) {
-		schoolExternalToolsModule.loadSchoolExternalTools(school.id);
+		loadSchoolExternalTools(school.id);
 		schoolLicenseStore.fetchMediaSchoolLicenses();
 	}
 });
@@ -158,9 +158,9 @@ const { getHeaders, getItems } = useExternalToolsSectionUtils(
 
 const { fetchSchoolExternalToolUsage, metadata } = useSchoolExternalToolUsage();
 
-const items = computed(() => getItems(schoolExternalToolsModule));
+const items = computed(() => getItems(schoolExternalTools.value));
 
-const isLoading = computed(() => schoolExternalToolsModule.getLoading);
+const isLoading = computed(() => isLoadingExternalTools.value);
 
 const editTool = (item: SchoolExternalToolItem) => {
 	router.push({
@@ -177,10 +177,8 @@ const showDatasheet = async (item: SchoolExternalToolItem) => {
 
 const onDeleteTool = async () => {
 	if (itemToDelete.value) {
-		await schoolExternalToolsModule.deleteSchoolExternalTool(itemToDelete.value.id);
+		await deleteSchoolExternalTool(itemToDelete.value.id);
 	}
-
-	notifySuccess(t("components.administration.externalToolsSection.notification.deleted"));
 
 	onCloseDeleteDialog();
 };
@@ -225,9 +223,5 @@ $arrow-offset: 8px;
 
 .v-data-table :deep(th i) {
 	margin-left: $arrow-offset;
-}
-
-.v-data-table :deep(td) {
-	cursor: pointer;
 }
 </style>

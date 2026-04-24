@@ -1,4 +1,4 @@
-import { BusinessError } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 
 const ErrorTypeTranslationKeyMap = new Map<string, string>([
 	["TOOL_PARAMETER_DUPLICATE", "pages.tool.apiError.tool_param_duplicate"],
@@ -11,20 +11,22 @@ const ErrorTypeTranslationKeyMap = new Map<string, string>([
 ]);
 
 export function useExternalToolMappings() {
-	const getBusinessErrorTranslationKey = (businessError: BusinessError | undefined): undefined | string => {
+	const getBusinessErrorTranslationKey = (businessError: Error | undefined): undefined | string => {
 		if (!businessError) {
 			return undefined;
 		}
 
-		if (businessError.error && "type" in businessError.error) {
-			const translationKey = ErrorTypeTranslationKeyMap.get(businessError.error.type);
+		const apiError = mapAxiosErrorToResponseError(businessError);
+
+		if (apiError.type) {
+			const translationKey = ErrorTypeTranslationKeyMap.get(apiError.type);
 
 			if (translationKey) {
 				return translationKey;
 			}
 		}
 
-		return businessError.message;
+		return apiError.message;
 	};
 
 	return {
