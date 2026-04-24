@@ -27,14 +27,6 @@ export const useCopyFlow = () => {
 		return confirmAction.start();
 	};
 
-	const onConfirm = () => {
-		confirmAction.submit(true);
-	};
-
-	const onCancel = () => {
-		confirmAction.cancel();
-	};
-
 	const copyCancelledError = () => new Error("Copy cancelled");
 
 	const withCopyLoading = <T>(fn: () => Promise<T>) => withLoadingState(fn, t("feature-copy.inProgress.title.loading"));
@@ -46,8 +38,8 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyCourse = async (courseId: string) => {
-		const { submitted } = await confirm(ContentItemTypeEnum.Course);
-		if (!submitted) return { success: false, error: copyCancelledError() };
+		const { completed } = await confirm(ContentItemTypeEnum.Course);
+		if (!completed) return { success: false, error: copyCancelledError() };
 
 		const { result, success, error } = await withCopyLoading(() =>
 			execute(
@@ -64,8 +56,8 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyTask = async (taskId: string, targetCourseId: string) => {
-		const { submitted } = await confirm(ContentItemTypeEnum.Task);
-		if (!submitted) return { success: false, error: copyCancelledError() };
+		const { completed } = await confirm(ContentItemTypeEnum.Task);
+		if (!completed) return { success: false, error: copyCancelledError() };
 
 		const { result, success, error } = await withCopyLoading(() =>
 			execute(
@@ -82,8 +74,8 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyLesson = async (lessonId: string, targetCourseId: string) => {
-		const { submitted } = await confirm(ContentItemTypeEnum.Lesson);
-		if (!submitted) return { success: false, error: copyCancelledError() };
+		const { completed } = await confirm(ContentItemTypeEnum.Lesson);
+		if (!completed) return { success: false, error: copyCancelledError() };
 
 		const { result, success, error } = await withCopyLoading(() =>
 			execute(
@@ -100,8 +92,8 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyBoard = async (boardId: string) => {
-		const { submitted } = await confirm(ContentItemTypeEnum.ColumnBoard);
-		if (!submitted) return { success: false, error: copyCancelledError() };
+		const { completed } = await confirm(ContentItemTypeEnum.ColumnBoard);
+		if (!completed) return { success: false, error: copyCancelledError() };
 
 		const { result, success, error } = await withCopyLoading(() =>
 			execute(
@@ -118,8 +110,8 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyRoom = async (roomId: string) => {
-		const { submitted } = await confirm(ContentItemTypeEnum.Room);
-		if (!submitted) return { success: false, error: copyCancelledError() };
+		const { completed } = await confirm(ContentItemTypeEnum.Room);
+		if (!completed) return { success: false, error: copyCancelledError() };
 
 		const { result, success, error } = await withCopyLoading(() =>
 			execute(
@@ -138,8 +130,8 @@ export const useCopyFlow = () => {
 	return {
 		isDialogOpen,
 		copyItemType,
-		onConfirm,
-		onCancel,
+		onConfirm: confirmAction.complete,
+		onCancel: confirmAction.cancel,
 		executeCopyCourse,
 		executeCopyTask,
 		executeCopyLesson,

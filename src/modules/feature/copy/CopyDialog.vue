@@ -6,7 +6,7 @@
 		confirm-btn-lang-key="common.actions.duplicate"
 		cancel-btn-lang-key="common.actions.cancel"
 		data-testid="copy-info-dialog"
-		@confirm="emit('confirm')"
+		@confirm="emit('confirm', true)"
 		@cancel="emit('cancel')"
 	>
 		<template #content>
@@ -52,7 +52,7 @@ const props = withDefaults(
 
 const emit = defineEmits<{
 	(e: "cancel"): void;
-	(e: "confirm"): void;
+	(e: "confirm", payload: boolean): void;
 }>();
 
 const title = computed(() =>

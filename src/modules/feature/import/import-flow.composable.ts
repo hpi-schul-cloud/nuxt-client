@@ -2,6 +2,7 @@ import { ImportDestination } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useAwaitableAction } from "@/composables/awaitable-action.composable";
 import { $axios } from "@/utils/api";
+import { getTranslationKeyForContentItem, mapShareTokenParentTypeToContentItemType } from "@/utils/content-item.utils";
 import { ShareTokenApiFactory, ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
 import { notifySuccess, useLoadingStore } from "@data-app";
 import { computed, ref } from "vue";
@@ -52,9 +53,6 @@ export const useImportFlow = () => {
 		return { result: result?.data, success, error };
 	};
 
-	const onConfirmImport = importAction.submit;
-	const onCancelImport = importAction.cancel;
-
 	const executeImport = async (token: string) => {
 		const { result: validationResult } = await validateShareToken(token);
 
@@ -63,8 +61,8 @@ export const useImportFlow = () => {
 		}
 		shareTokenInfo.value = validationResult;
 
-		const { submitted, data } = await importAction.start();
-		if (!submitted) return { success: false, error: new Error("Import cancelled") };
+		const { completed, data } = await importAction.start();
+		if (!completed) return { success: false, error: new Error("Import cancelled") };
 
 		const { result, success, error } = await withLoadingState(
 			() => importShareToken(validationResult, { newName: data.newName, destinationId: data.destination?.id }),
@@ -83,22 +81,9 @@ export const useImportFlow = () => {
 	};
 
 	const getMessageKeyForImportFailure = (parentType: ShareTokenInfoResponse["parentType"]) => {
-		switch (parentType) {
-			case "courses":
-				return "common.labels.course";
-			case "tasks":
-				return "common.words.task";
-			case "lessons":
-				return "common.words.topic";
-			case "columnBoard":
-				return "components.board";
-			case "room":
-				return "common.labels.room";
-			case "card":
-				return "components.boardCard";
-			default:
-				return "common.labels.link";
-		}
+		const key = getTranslationKeyForContentItem(mapShareTokenParentTypeToContentItemType(parentType));
+
+		return key ?? "common.labels.link";
 	};
 
 	return {
@@ -108,7 +93,7 @@ export const useImportFlow = () => {
 		validateShareToken,
 		importShareToken,
 		executeImport,
-		onConfirmImport,
-		onCancelImport,
+		onConfirmImport: importAction.complete,
+		onCancelImport: importAction.cancel,
 	};
 };

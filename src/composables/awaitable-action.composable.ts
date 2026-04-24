@@ -4,7 +4,7 @@ import { ref } from "vue";
  * Result type for awaitable actions.
  * Uses discriminated union for type-safe completion handling.
  */
-export type AwaitableResult<T> = { submitted: true; data: T } | { submitted: false; data: undefined };
+export type AwaitableResult<T> = { completed: true; data: T } | { completed: false; data: undefined };
 
 /**
  * Creates a manually resolvable promise pattern for async user interactions.
@@ -13,13 +13,13 @@ export type AwaitableResult<T> = { submitted: true; data: T } | { submitted: fal
  * ```ts
  * // Without data:
  * const confirmation = useAwaitableAction();
- * const { submitted } = await confirmation.start();
- * if (!submitted) return;
+ * const { completed } = await confirmation.start();
+ * if (!completed) return;
  *
  * // With data:
  * const selectDestination = useAwaitableAction<{ destinationId: string }>();
- * const { submitted, data } = await selectDestination.start();
- * if (!submitted) return;
+ * const { completed, data } = await selectDestination.start();
+ * if (!completed) return;
  * console.log(data.destinationId);
  * ```
  */
@@ -35,17 +35,17 @@ export const useAwaitableAction = <T = boolean>() => {
 		});
 	};
 
-	const submit = (data: T) => {
+	const complete = (data: T) => {
 		isActive.value = false;
-		resolvePromise?.({ submitted: true, data });
+		resolvePromise?.({ completed: true, data });
 		resolvePromise = undefined;
 	};
 
 	const cancel = () => {
 		isActive.value = false;
-		resolvePromise?.({ submitted: false, data: undefined });
+		resolvePromise?.({ completed: false, data: undefined });
 		resolvePromise = undefined;
 	};
 
-	return { isActive, start, submit, cancel };
+	return { isActive, start, complete, cancel };
 };

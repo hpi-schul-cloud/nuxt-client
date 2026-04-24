@@ -59,7 +59,7 @@
 <script setup lang="ts">
 import { ImportDestination, ImportDestinationItem, ImportDestinationType } from "./types";
 import { useCopyContent } from "@/composables/copy-content.composable";
-import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
+import { mapShareTokenParentTypeToContentItemType } from "@/utils/content-item.utils";
 import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
@@ -189,22 +189,7 @@ const confirmBtnLangKey = computed(() => {
 	return "common.actions.import";
 });
 
-const contentItemType = computed<ContentItemTypeEnum>(() => {
-	switch (props.shareTokenInfo.parentType) {
-		case ShareTokenInfoResponseParentType.COURSES:
-			return ContentItemTypeEnum.Course;
-		case ShareTokenInfoResponseParentType.LESSONS:
-			return ContentItemTypeEnum.Lesson;
-		case ShareTokenInfoResponseParentType.TASKS:
-			return ContentItemTypeEnum.Task;
-		case ShareTokenInfoResponseParentType.COLUMN_BOARD:
-			return ContentItemTypeEnum.ColumnBoard;
-		case ShareTokenInfoResponseParentType.ROOM:
-			return ContentItemTypeEnum.Room;
-		default:
-			return ContentItemTypeEnum.Unknown;
-	}
-});
+const contentItemType = computed(() => mapShareTokenParentTypeToContentItemType(props.shareTokenInfo.parentType));
 
 const { text, warnings } = useCopyContent(contentItemType);
 

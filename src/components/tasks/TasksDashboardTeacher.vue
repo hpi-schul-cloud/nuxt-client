@@ -120,11 +120,16 @@ const tab = computed({
 	},
 });
 
-const copyFlow = useCopyFlow();
-const { isDialogOpen: isCopyDialogOpen, copyItemType, onConfirm: onConfirmCopy, onCancel: onCancelCopy } = copyFlow;
+const {
+	isDialogOpen: isCopyDialogOpen,
+	copyItemType,
+	onConfirm: onConfirmCopy,
+	onCancel: onCancelCopy,
+	executeCopyTask,
+} = useCopyFlow();
 
 const onCopyTask = async ({ id, courseId }: { id: string; courseId: string }) => {
-	const { success } = await copyFlow.executeCopyTask(id, courseId);
+	const { success } = await executeCopyTask(id, courseId);
 
 	if (success) {
 		tasksModule.setActiveTab("drafts");
