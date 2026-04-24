@@ -13,6 +13,8 @@
 				v-if="allowedOperations?.deleteCard && !isEditMode"
 				class="mr-4 keep-inline-edit-mode"
 				data-testid="toolbar-edit-button"
+				variant="flat"
+				color="primary"
 				@click="startEditMode"
 			>
 				{{ $t("common.actions.edit") }}
@@ -21,6 +23,8 @@
 				v-if="allowedOperations?.deleteCard && isEditMode"
 				class="mr-4 keep-inline-edit-mode"
 				data-testid="toolbar-view-button"
+				variant="flat"
+				color="primary"
 				@click="stopEditMode"
 			>
 				{{ $t("common.actions.view") }}
