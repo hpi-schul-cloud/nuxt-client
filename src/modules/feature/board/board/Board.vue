@@ -159,7 +159,6 @@ import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@ut
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, ComputedRef, onMounted, onUnmounted, provide, ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 const props = defineProps({
@@ -179,7 +178,6 @@ const isDragging = ref(false);
 const isEditSettingsDialogOpen = ref(false);
 const shareModalContextType = ref();
 const router = useRouter();
-const { t } = useI18n();
 
 watch(board, async () => {
 	await createPageInformation(props.boardId);
@@ -395,7 +393,7 @@ const { isDialogOpen: isCopyDialogOpen, copyItemType, onConfirm: onConfirmCopy, 
 const onCopyBoard = async () => {
 	if (!allowedOperations.value.copyBoard) return;
 
-	const { copyResult } = await copyFlow.executeCopyBoard(props.boardId);
+	const { result: copyResult } = await copyFlow.executeCopyBoard(props.boardId);
 
 	if (copyResult?.id) {
 		boardStore.fetchBoardRequest({ boardId: copyResult.id });

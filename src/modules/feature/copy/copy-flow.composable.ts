@@ -13,13 +13,6 @@ export const useCopyFlow = () => {
 	const isDialogOpen = confirmAction.isActive;
 	const copyItemType = ref<ContentItemTypeEnum>(ContentItemTypeEnum.Course);
 
-	const CANCELLED_RESULT = {
-		success: false,
-		result: undefined,
-		error: undefined,
-		copyResult: undefined,
-	} as const;
-
 	const { t } = useI18n();
 	const { withLoadingState } = useLoadingStore();
 	const { execute, isRunning } = useSafeAxiosTask();
@@ -42,6 +35,8 @@ export const useCopyFlow = () => {
 		confirmAction.cancel();
 	};
 
+	const copyCancelledError = () => new Error("Copy cancelled");
+
 	const withCopyLoading = <T>(fn: () => Promise<T>) => withLoadingState(fn, t("feature-copy.inProgress.title.loading"));
 
 	const notifyCopySuccess = (type: ContentItemTypeEnum) => {
@@ -52,92 +47,92 @@ export const useCopyFlow = () => {
 
 	const executeCopyCourse = async (courseId: string) => {
 		const { submitted } = await confirm(ContentItemTypeEnum.Course);
-		if (!submitted) return CANCELLED_RESULT;
+		if (!submitted) return { success: false, error: copyCancelledError() };
 
-		const outcome = await withCopyLoading(() =>
+		const { result, success, error } = await withCopyLoading(() =>
 			execute(
 				() => courseRoomApi.courseRoomsControllerCopyCourse(courseId),
 				t("common.notifications.errors.notDuplicated", { type: t("common.labels.course") })
 			)
 		);
 
-		if (outcome.success) {
+		if (success) {
 			notifyCopySuccess(ContentItemTypeEnum.Course);
 		}
 
-		return { ...outcome, copyResult: outcome.result?.data };
+		return { result: result?.data, success, error };
 	};
 
 	const executeCopyTask = async (taskId: string, targetCourseId: string) => {
 		const { submitted } = await confirm(ContentItemTypeEnum.Task);
-		if (!submitted) return CANCELLED_RESULT;
+		if (!submitted) return { success: false, error: copyCancelledError() };
 
-		const outcome = await withCopyLoading(() =>
+		const { result, success, error } = await withCopyLoading(() =>
 			execute(
 				() => taskApi.taskControllerCopyTask(taskId, { courseId: targetCourseId }),
 				t("common.notifications.errors.notDuplicated", { type: t("common.labels.task") })
 			)
 		);
 
-		if (outcome.success) {
+		if (success) {
 			notifyCopySuccess(ContentItemTypeEnum.Task);
 		}
 
-		return { ...outcome, copyResult: outcome.result?.data };
+		return { result: result?.data, success, error };
 	};
 
 	const executeCopyLesson = async (lessonId: string, targetCourseId: string) => {
 		const { submitted } = await confirm(ContentItemTypeEnum.Lesson);
-		if (!submitted) return CANCELLED_RESULT;
+		if (!submitted) return { success: false, error: copyCancelledError() };
 
-		const outcome = await withCopyLoading(() =>
+		const { result, success, error } = await withCopyLoading(() =>
 			execute(
 				() => courseRoomApi.courseRoomsControllerCopyLesson(lessonId, { courseId: targetCourseId }),
 				t("common.notifications.errors.notDuplicated", { type: t("common.labels.lesson") })
 			)
 		);
 
-		if (outcome.success) {
+		if (success) {
 			notifyCopySuccess(ContentItemTypeEnum.Lesson);
 		}
 
-		return { ...outcome, copyResult: outcome.result?.data };
+		return { result: result?.data, success, error };
 	};
 
 	const executeCopyBoard = async (boardId: string) => {
 		const { submitted } = await confirm(ContentItemTypeEnum.ColumnBoard);
-		if (!submitted) return CANCELLED_RESULT;
+		if (!submitted) return { success: false, error: copyCancelledError() };
 
-		const outcome = await withCopyLoading(() =>
+		const { result, success, error } = await withCopyLoading(() =>
 			execute(
 				() => boardApi.boardControllerCopyBoard(boardId),
 				t("common.notifications.errors.notDuplicated", { type: t("common.labels.board") })
 			)
 		);
 
-		if (outcome.success) {
+		if (success) {
 			notifyCopySuccess(ContentItemTypeEnum.ColumnBoard);
 		}
 
-		return { ...outcome, copyResult: outcome.result?.data };
+		return { result: result?.data, success, error };
 	};
 
 	const executeCopyRoom = async (roomId: string) => {
 		const { submitted } = await confirm(ContentItemTypeEnum.Room);
-		if (!submitted) return CANCELLED_RESULT;
+		if (!submitted) return { success: false, error: copyCancelledError() };
 
-		const outcome = await withCopyLoading(() =>
+		const { result, success, error } = await withCopyLoading(() =>
 			execute(
 				() => roomApi.roomControllerCopyRoom(roomId),
 				t("common.notifications.errors.notDuplicated", { type: t("common.labels.room") })
 			)
 		);
 
-		if (outcome.success) {
+		if (success) {
 			notifyCopySuccess(ContentItemTypeEnum.Room);
 		}
 
-		return { ...outcome, copyResult: outcome.result?.data };
+		return { result: result?.data, success, error };
 	};
 
 	return {

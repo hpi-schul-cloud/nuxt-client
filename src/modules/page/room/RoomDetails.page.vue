@@ -147,7 +147,7 @@ const onCopy = async () => {
 		return;
 	}
 
-	const { copyResult } = await copyFlow.executeCopyRoom(room.value.id);
+	const { result: copyResult } = await copyFlow.executeCopyRoom(room.value.id);
 	if (copyResult?.id) {
 		await router.replace({ name: "room-details", params: { id: copyResult.id } });
 	}
