@@ -176,7 +176,7 @@ describe("CardHostDetailView", () => {
 				expect(editButton.exists()).toBe(false);
 			});
 
-			it("should show addElementbutton", async () => {
+			it("should show addElement button", async () => {
 				const { wrapper } = setup(
 					{
 						card: CARD_WITH_ELEMENTS,
