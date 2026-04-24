@@ -17,6 +17,5 @@
 		"prettier.useTabs": true
 	},
 	"editor.formatOnSave": true,
-	"eslint.format.enable": true,
-	"typescript.tsdk": "node_modules/typescript/lib"
+	"eslint.format.enable": true
 }
