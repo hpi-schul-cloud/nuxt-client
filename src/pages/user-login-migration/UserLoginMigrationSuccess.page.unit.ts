@@ -5,7 +5,7 @@ import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 
 describe("UserLoginMigrationSuccess", () => {
-	const setup = (props: { targetSystem: string }) => {
+	const setup = (props: { targetSystemId: string }) => {
 		const wrapper = shallowMount(UserLoginMigrationSuccessPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -26,7 +26,7 @@ describe("UserLoginMigrationSuccess", () => {
 		describe("when all mandatory props are defined", () => {
 			it("should render the component", () => {
 				const { wrapper } = setup({
-					targetSystem: "targetSystemId",
+					targetSystemId: "targetSystemId",
 				});
 
 				const result: boolean = wrapper.findComponent(UserLoginMigrationSuccessPage).exists();
@@ -38,7 +38,7 @@ describe("UserLoginMigrationSuccess", () => {
 		describe("when the systems are loaded", () => {
 			it("should show the description text", () => {
 				const { wrapper } = setup({
-					targetSystem: "targetSystemId",
+					targetSystemId: "targetSystemId",
 				});
 
 				const descriptionText = wrapper.get('[data-testid="text-description"]');
@@ -50,7 +50,7 @@ describe("UserLoginMigrationSuccess", () => {
 
 			it("should show the 'back to login' button", () => {
 				const { wrapper } = setup({
-					targetSystem: "targetSystemId",
+					targetSystemId: "targetSystemId",
 				});
 
 				const button = wrapper.find("[data-testId=btn-proceed]");
