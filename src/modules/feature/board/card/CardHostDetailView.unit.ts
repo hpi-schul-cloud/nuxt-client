@@ -26,6 +26,11 @@ const CARD_WITH_ELEMENTS: CardResponse = cardResponseFactory.build({
 	backgroundColor: backgroundColor,
 });
 
+const TRANSPARENT_CARD_WITH_ELEMENTS: CardResponse = cardResponseFactory.build({
+	elements: [fileElementResponseFactory.build()],
+	backgroundColor: Colors.TRANSPARENT,
+});
+
 vi.mock("@data-board/BoardPermissions.composable");
 
 vi.mock("@data-board/cardActions/cardRestApi.composable");
@@ -374,6 +379,37 @@ describe("CardHostDetailView", () => {
 
 			expect(styleAttribute).toContain("background-color: white");
 			expect(styleAttribute).toContain("border-left: 3px solid rgb(144, 202, 249)");
+		});
+
+		describe("when card is transparent", () => {
+			it("should apply transparent background color", () => {
+				const { wrapper } = setup({
+					card: TRANSPARENT_CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
+
+				const cardText = wrapper.findComponent(VCardText);
+				const expectedBackgroundColor = colorToHexLighten5(Colors.TRANSPARENT);
+
+				expect(cardText.props("style")).toEqual({ backgroundColor: expectedBackgroundColor });
+			});
+
+			it("should not apply border color", () => {
+				const { wrapper } = setup({
+					card: TRANSPARENT_CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
+
+				const contentWrapper = wrapper.find("[data-testid='detail-view-content-wrapper']");
+				const styleAttribute = contentWrapper.attributes("style");
+
+				expect(styleAttribute).toContain("background-color: white");
+				expect(styleAttribute).not.toContain("border-left: 3px solid");
+			});
 		});
 	});
 });
