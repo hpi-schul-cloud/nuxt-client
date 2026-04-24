@@ -175,7 +175,9 @@ const onClickElement = () => {
 	}
 };
 
-const onDownload = () => {
+const onDownload = (event: Event) => {
+	event.stopPropagation();
+
 	if (!element.value.content.contentId) {
 		return;
 	}
