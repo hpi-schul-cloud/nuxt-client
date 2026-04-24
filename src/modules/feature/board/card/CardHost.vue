@@ -285,7 +285,13 @@ const onCloseDetailView = () => {
 const onOpenDetailView = () => {
 	const boardId = boardStore.board?.id;
 	if (boardId) {
-		router.push(`/boards/${boardId}/cards/${props.cardId}`);
+		router.push({
+			name: "boards-card-detail",
+			params: {
+				boardId,
+				cardId: props.cardId,
+			},
+		});
 	}
 };
 
