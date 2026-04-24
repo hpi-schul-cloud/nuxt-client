@@ -268,7 +268,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 			targetSystem: isMongoId,
 		}),
 		props: (to: RouteLocationNormalized) => ({
-			targetSystem: to.query.targetSystem,
+			targetSystemId: to.query.targetSystem,
 		}),
 		meta: {
 			isPublic: true,

@@ -33,9 +33,9 @@ import { useTitle } from "@vueuse/core";
 import { toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
-const props = defineProps<{ targetSystem: string }>();
+const props = defineProps<{ targetSystemId: string }>();
 
-const { systemName } = useSystem(toRef(props, "targetSystem"));
+const { systemName } = useSystem(toRef(props, "targetSystemId"));
 
 const { t } = useI18n();
 
