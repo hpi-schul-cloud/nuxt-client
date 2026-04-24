@@ -9,7 +9,15 @@ import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
-import { createTestEnvStore, expectNotification, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import {
+	collaborativeTextEditorElementResponseFactory,
+	createTestEnvStore,
+	drawingElementResponseFactory,
+	expectNotification,
+	externalToolElementResponseFactory,
+	mockComposable,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
@@ -489,9 +497,54 @@ describe("BoardStore", () => {
 			expect(boardStore.board?.columns[2]).toEqual(secondColumn);
 		});
 
-		it("should show info notification when isOwnAction is true", () => {
+		it("should show success notification when isOwnAction is true", () => {
 			const { boardStore, firstColumn } = setup();
 			const duplicatedColumn = columnFullResponseFactory.build();
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+
+			expectNotification("success");
+		});
+
+		it("should show info notification when column contains external tool element", () => {
+			const { boardStore, firstColumn } = setup();
+			const element = externalToolElementResponseFactory.build();
+			const card = cardResponseFactory.build({ elements: [element] });
+			const duplicatedColumn = columnFullResponseFactory.build({ cards: [card] });
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+
+			expectNotification("info");
+		});
+
+		it("should show info notification when column contains collaborative editor element", () => {
+			const { boardStore, firstColumn } = setup();
+			const element = collaborativeTextEditorElementResponseFactory.build();
+			const card = cardResponseFactory.build({ elements: [element] });
+			const duplicatedColumn = columnFullResponseFactory.build({ cards: [card] });
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+
+			expectNotification("info");
+		});
+
+		it("should show info notification when column contains drawing element", () => {
+			const { boardStore, firstColumn } = setup();
+			const element = drawingElementResponseFactory.build();
+			const card = cardResponseFactory.build({ elements: [element] });
+			const duplicatedColumn = columnFullResponseFactory.build({ cards: [card] });
 
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,

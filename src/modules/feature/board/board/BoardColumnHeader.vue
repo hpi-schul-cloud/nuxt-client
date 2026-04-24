@@ -150,6 +150,7 @@ const onMoveColumnUp = () => emit("move:column-up");
 
 const onUpdateTitle = (newTitle: string) => (updatedTitle.value = newTitle);
 
+// TODO isDuplicating?
 const { run: duplicateColumn, isRunning: isDuplicating } = useSafeTaskRunner(async () => {
 	await boardStore.duplicateColumn({ columnId: props.columnId });
 });
