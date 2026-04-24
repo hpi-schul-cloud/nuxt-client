@@ -89,7 +89,13 @@ const handleReady = (editor: Editor) => {
 @use "@/styles/settings.scss" as *;
 
 :root {
+	// todo: we need to figure out, what this comment was for:
 	// z-index must be less than z-index of the headers to prevent that the toolbar is shown in front of the headers when scrolling.
+
+	// actually it was useless until now as the name of the css variable changed in release 41
+	// https://ckeditor.com/docs/ckeditor5/latest/updating/guides/update-to-41.html#minor-breaking-changes-in-this-release-4
+	// so maybe the ck was buggy somewhere or we can simply ignore the value "15" before and get high here
+	// to always be on top of any vuetify components, e.g. dialogs/overlays/modals
 	--ck-z-panel: 10100;
 }
 
