@@ -9,7 +9,7 @@ export const useSystem = (systemId: Ref<string | undefined>) => {
 
 	const { t } = useI18nGlobal();
 
-	const { execute } = useSafeAxiosTask();
+	const { execute, status, error, isRunning: isLoading } = useSafeAxiosTask();
 
 	const system = ref();
 	const systemName = computed(() => system.value?.displayName);
@@ -40,5 +40,8 @@ export const useSystem = (systemId: Ref<string | undefined>) => {
 	return {
 		system,
 		systemName,
+		status,
+		error,
+		isLoading,
 	};
 };
