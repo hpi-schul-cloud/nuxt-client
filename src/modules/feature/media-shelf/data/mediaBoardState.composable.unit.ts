@@ -7,7 +7,7 @@ import {
 	mediaLineResponseFactory,
 	mockComposable,
 } from "@@/tests/test-utils";
-import { BoardLayout, MediaBoardColors } from "@api-server";
+import { BoardLayout, Colors } from "@api-server";
 import { ApiErrorHandler, useErrorHandler } from "@util-error-handling";
 import { Mocked } from "vitest";
 
@@ -958,7 +958,7 @@ describe("mediaBoardState.composable", () => {
 			it("should not call the api", async () => {
 				const { composable } = setup();
 
-				await composable.updateLineBackgroundColor("lineId", MediaBoardColors.BLUE);
+				await composable.updateLineBackgroundColor("lineId", Colors.BLUE);
 
 				expect(mediaBoardApiMock.updateLineColor).not.toHaveBeenCalled();
 			});
@@ -978,7 +978,7 @@ describe("mediaBoardState.composable", () => {
 				it("should not call the api", async () => {
 					const { composable } = setup();
 
-					await composable.updateLineBackgroundColor("lineId", MediaBoardColors.BLUE);
+					await composable.updateLineBackgroundColor("lineId", Colors.BLUE);
 
 					expect(mediaBoardApiMock.updateLineColor).not.toHaveBeenCalled();
 				});
@@ -989,7 +989,7 @@ describe("mediaBoardState.composable", () => {
 					const composable = useMediaBoardState();
 
 					const line = mediaLineResponseFactory.build({
-						backgroundColor: MediaBoardColors.RED,
+						backgroundColor: Colors.RED,
 					});
 					composable.mediaBoard.value = mediaBoardResponseFactory.build({
 						lines: [line],
@@ -1004,12 +1004,12 @@ describe("mediaBoardState.composable", () => {
 				it("should update the color of the line", async () => {
 					const { composable, line } = setup();
 
-					await composable.updateLineBackgroundColor(line.id, MediaBoardColors.BLUE);
+					await composable.updateLineBackgroundColor(line.id, Colors.BLUE);
 
 					expect(composable.mediaBoard.value?.lines).toContainEqual(
 						expect.objectContaining({
 							id: line.id,
-							backgroundColor: MediaBoardColors.BLUE,
+							backgroundColor: Colors.BLUE,
 						})
 					);
 				});
@@ -1017,9 +1017,9 @@ describe("mediaBoardState.composable", () => {
 				it("should call the api to update the color of the line", async () => {
 					const { composable, line } = setup();
 
-					await composable.updateLineBackgroundColor(line.id, MediaBoardColors.BLUE);
+					await composable.updateLineBackgroundColor(line.id, Colors.BLUE);
 
-					expect(mediaBoardApiMock.updateLineColor).toHaveBeenCalledWith(line.id, MediaBoardColors.BLUE);
+					expect(mediaBoardApiMock.updateLineColor).toHaveBeenCalledWith(line.id, Colors.BLUE);
 				});
 			});
 		});
@@ -1029,7 +1029,7 @@ describe("mediaBoardState.composable", () => {
 				const composable = useMediaBoardState();
 
 				const line = mediaLineResponseFactory.build({
-					backgroundColor: MediaBoardColors.RED,
+					backgroundColor: Colors.RED,
 				});
 				composable.mediaBoard.value = mediaBoardResponseFactory.build({
 					lines: [line],
@@ -1052,7 +1052,7 @@ describe("mediaBoardState.composable", () => {
 			it("should call handleAnyError", async () => {
 				const { composable, lineId } = setup();
 
-				await composable.updateLineBackgroundColor(lineId, MediaBoardColors.BLUE);
+				await composable.updateLineBackgroundColor(lineId, Colors.BLUE);
 
 				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalled();
 			});
@@ -1060,7 +1060,7 @@ describe("mediaBoardState.composable", () => {
 			it("should reload board", async () => {
 				const { composable, lineId } = setup();
 
-				await composable.updateLineBackgroundColor(lineId, MediaBoardColors.BLUE);
+				await composable.updateLineBackgroundColor(lineId, Colors.BLUE);
 
 				expect(mediaBoardApiMock.getMediaBoardForUser).toHaveBeenCalled();
 			});
@@ -1082,7 +1082,7 @@ describe("mediaBoardState.composable", () => {
 			it("should not call the api", async () => {
 				const { composable } = setup();
 
-				await composable.updateAvailableLineBackgroundColor(MediaBoardColors.BLUE);
+				await composable.updateAvailableLineBackgroundColor(Colors.BLUE);
 
 				expect(mediaBoardApiMock.updateAvailableLineColor).not.toHaveBeenCalled();
 			});
@@ -1102,7 +1102,7 @@ describe("mediaBoardState.composable", () => {
 			it("should not call the api", async () => {
 				const { composable } = setup();
 
-				await composable.updateAvailableLineBackgroundColor(MediaBoardColors.BLUE);
+				await composable.updateAvailableLineBackgroundColor(Colors.BLUE);
 
 				expect(mediaBoardApiMock.updateAvailableLineColor).not.toHaveBeenCalled();
 			});
@@ -1113,7 +1113,7 @@ describe("mediaBoardState.composable", () => {
 				const composable = useMediaBoardState();
 
 				const availableLine = mediaAvailableLineResponseFactory.build({
-					backgroundColor: MediaBoardColors.RED,
+					backgroundColor: Colors.RED,
 				});
 				const mediaBoard = mediaBoardResponseFactory.build();
 				composable.availableMediaLine.value = availableLine;
@@ -1129,17 +1129,17 @@ describe("mediaBoardState.composable", () => {
 			it("should update the color of the line", async () => {
 				const { composable } = setup();
 
-				await composable.updateAvailableLineBackgroundColor(MediaBoardColors.BLUE);
+				await composable.updateAvailableLineBackgroundColor(Colors.BLUE);
 
-				expect(composable.availableMediaLine.value?.backgroundColor).toEqual(MediaBoardColors.BLUE);
+				expect(composable.availableMediaLine.value?.backgroundColor).toEqual(Colors.BLUE);
 			});
 
 			it("should call the api to update the color of the line", async () => {
 				const { composable, mediaBoard } = setup();
 
-				await composable.updateAvailableLineBackgroundColor(MediaBoardColors.BLUE);
+				await composable.updateAvailableLineBackgroundColor(Colors.BLUE);
 
-				expect(mediaBoardApiMock.updateAvailableLineColor).toHaveBeenCalledWith(mediaBoard.id, MediaBoardColors.BLUE);
+				expect(mediaBoardApiMock.updateAvailableLineColor).toHaveBeenCalledWith(mediaBoard.id, Colors.BLUE);
 			});
 		});
 
@@ -1148,7 +1148,7 @@ describe("mediaBoardState.composable", () => {
 				const composable = useMediaBoardState();
 
 				const availableLine = mediaAvailableLineResponseFactory.build({
-					backgroundColor: MediaBoardColors.RED,
+					backgroundColor: Colors.RED,
 				});
 				const mediaBoard = mediaBoardResponseFactory.build();
 				composable.availableMediaLine.value = availableLine;
@@ -1170,7 +1170,7 @@ describe("mediaBoardState.composable", () => {
 			it("should call handleAnyError", async () => {
 				const { composable } = setup();
 
-				await composable.updateAvailableLineBackgroundColor(MediaBoardColors.BLUE);
+				await composable.updateAvailableLineBackgroundColor(Colors.BLUE);
 
 				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalled();
 			});
@@ -1178,7 +1178,7 @@ describe("mediaBoardState.composable", () => {
 			it("should reload board", async () => {
 				const { composable } = setup();
 
-				await composable.updateAvailableLineBackgroundColor(MediaBoardColors.BLUE);
+				await composable.updateAvailableLineBackgroundColor(Colors.BLUE);
 
 				expect(mediaBoardApiMock.getMediaBoardForUser).toHaveBeenCalled();
 			});

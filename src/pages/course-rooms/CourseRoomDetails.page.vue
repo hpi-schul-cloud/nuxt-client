@@ -1,56 +1,56 @@
 <template>
 	<CourseRoomLockedPage v-if="isLocked" :title="roomData.title" />
-	<DefaultWireframe v-else ref="main" :fab-items="getCurrentFabItems" :breadcrumbs="breadcrumbs" max-width="short">
+	<DefaultWireframe v-else :fab-items="currentFabItems" :breadcrumbs="breadcrumbs" max-width="short">
 		<template #header>
 			<div class="d-flex mt-3">
 				<h1 class="pb-2 ma-0 course-title" :class="{ 'pr-5': roomData.isArchived }" data-testid="courses-course-title">
 					{{ roomData.title }}
 				</h1>
 				<VChip v-if="roomData.isSynchronized" size="small" class="mt-1 ml-2" data-testid="synced-course-chip">
-					{{ $t("pages.courseRooms.headerSection.synchronized") }}
+					{{ t("pages.courseRooms.headerSection.synchronized") }}
 				</VChip>
 				<VChip v-if="roomData.isArchived" size="small" class="mt-1 ml-2">
-					{{ $t("pages.courseRooms.headerSection.archived") }}
+					{{ t("pages.courseRooms.headerSection.archived") }}
 				</VChip>
 				<div class="mx-2">
-					<room-dot-menu
+					<RoomDotMenu
 						:menu-items="headlineMenuItems"
 						data-testid="room-menu"
-						:aria-label="$t('pages.courseRooms.headerSection.menu.ariaLabel')"
+						:aria-label="t('pages.courseRooms.headerSection.menu.ariaLabel')"
 					/>
 				</div>
 			</div>
 			<div class="mb-5 header-div">
 				<div class="btn">
-					<v-btn
+					<VBtn
 						class="back-button"
 						variant="outlined"
 						size="small"
 						:href="`/files/courses/${roomData.roomId}`"
 						:data-testid="`room-${roomData.roomId}-files`"
 					>
-						{{ $t("pages.courseRooms.headerSection.toCourseFiles") }}
-					</v-btn>
+						{{ t("pages.courseRooms.headerSection.toCourseFiles") }}
+					</VBtn>
 				</div>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs v-model="tabIndex" :class="{ 'tabs-max-width': mdAndUp }" grow mandatory>
+				<VTabs v-model="tabIndex" :class="{ 'tabs-max-width': mdAndUp }" grow mandatory>
 					<template v-for="tabItem in tabItems" :key="tabItem.name">
-						<v-tab :data-testid="tabItem.dataTestId" :href="tabItem.href" class="no-active">
+						<VTab :data-testid="tabItem.dataTestId" :href="tabItem.href" class="no-active">
 							<template #default>
-								<v-icon size="large" class="mr-sm-3"> {{ tabItem.icon }}</v-icon>
+								<VIcon size="large" class="mr-sm-3"> {{ tabItem.icon }}</VIcon>
 								<span class="d-none d-sm-inline">
 									{{ tabItem.label }}
 								</span>
 							</template>
-						</v-tab>
+						</VTab>
 					</template>
-				</v-tabs>
+				</VTabs>
 			</div>
 		</template>
 		<component
-			:is="getCurrentComponent"
-			v-if="getCurrentComponent"
+			:is="currentTabComponent"
+			v-if="!!currentTabComponent"
 			:room-data-object="roomData"
 			:role="dashBoardRole"
 			:room-id="courseId"
@@ -64,21 +64,21 @@
 			@confirm="onConfirmCopy"
 			@cancel="onCancelCopy"
 		/>
-		<CourseCommonCartridgeExportModal />
-		<end-course-sync-dialog
+		<CourseCommonCartridgeExportModal v-model:is-open="isExportDialogOpen" :room-id="roomData.roomId" />
+		<EndCourseSyncDialog
 			v-model:is-open="isEndSyncDialogOpen"
 			group-name=""
 			:course-name="roomData.title"
 			:course-id="roomData.roomId"
 			@success="refreshCourseRoom"
 		/>
-		<start-existing-course-sync-dialog
+		<StartExistingCourseSyncDialog
 			v-model:is-open="isStartSyncDialogOpen"
 			:course-name="roomData.title"
 			:course-id="roomData.roomId"
 			@success="refreshCourseRoom"
 		/>
-		<SelectBoardLayoutDialog v-model="boardLayoutDialogIsOpen" @select="onLayoutSelected" />
+		<SelectBoardLayoutDialog v-model="isBoardLayoutDialogOpen" @select="onLayoutSelected" />
 	</DefaultWireframe>
 </template>
 
@@ -88,13 +88,10 @@ import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCo
 import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.vue";
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
+import CourseRoomDetailsModule from "@/store/course-room-details";
+import ShareModule from "@/store/share";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
-import {
-	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-	injectStrict,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
+import { COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	BoardLayout,
@@ -111,7 +108,6 @@ import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-cou
 import {
 	mdiAccountGroupOutline,
 	mdiContentCopy,
-	mdiEmailPlusOutline,
 	mdiExport,
 	mdiFileDocumentOutline,
 	mdiFormatListChecks,
@@ -124,70 +120,56 @@ import {
 	mdiViewGridPlusOutline,
 	mdiViewListOutline,
 } from "@icons/material";
-import { DefaultWireframe } from "@ui-layout";
-import { type MenuItem, RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
-import { type FabAction } from "@ui-speed-dial-menu";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
+import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
+import { FabAction } from "@ui-speed-dial-menu";
+import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { type Component, computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
+import { LocationQueryValue, useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 
-interface FabItem {
-	icon: string;
-	label: string;
-	href?: string;
-	dataTestId: string;
-	clickHandler?: () => void;
-}
-
-interface TabItem {
+type TabItem = {
 	name: string;
 	label: string;
 	icon: string;
 	dataTestId: string;
 	component?: Component;
-	fabItems?: FabItem[] | null;
+	fabItems?: FabAction[];
 	href?: string;
-}
+};
 
-// Composables
-const { t } = useI18n();
+type MenuItem = {
+	icon: string;
+	action: () => void;
+	name: string;
+	dataTestId: string;
+};
+
 const route = useRoute();
 const router = useRouter();
+
+const shareModule: ShareModule = injectStrict(SHARE_MODULE_KEY);
+const courseRoomDetailsModule: CourseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
+
+const { t } = useI18n();
 const { mdAndUp } = useDisplay();
 const { roomVariant } = storeToRefs(useRoomDetailsStore());
 
-// Injections
-const shareModule = injectStrict(SHARE_MODULE_KEY);
-const commonCartridgeExportModule = injectStrict(COMMON_CARTRIDGE_EXPORT_MODULE_KEY);
-const courseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
-
-// Icons
-const icons = {
-	mdiPencilOutline,
-	mdiEmailPlusOutline,
-	mdiShareVariantOutline,
-	mdiContentCopy,
-	mdiExport,
-	mdiSyncOff,
-	mdiSync,
-	mdiViewGridPlusOutline,
-};
-
-// Reactive state
-const courseId = ref(route.params.id as string);
+const courseId = ref(Array.isArray(route.params.id) ? route.params.id[0] : route.params.id);
+const tabIndex = ref(0);
+const isExportDialogOpen = ref(false);
 const isEndSyncDialogOpen = ref(false);
 const isStartSyncDialogOpen = ref(false);
-const tabIndex = ref(0);
-const boardLayoutDialogIsOpen = ref(false);
+const isBoardLayoutDialogOpen = ref(false);
 
-// Computed
 const roomData = computed(() => courseRoomDetailsModule.getRoomData);
-
 const scopedPermissions = computed(() => courseRoomDetailsModule.getPermissionData || []);
+const isLocked = computed(() => courseRoomDetailsModule.getIsLocked);
+const canEditTools = computed(() => !!useAppStore().userPermissions?.includes(Permission.CONTEXT_TOOL_ADMIN));
 
-const breadcrumbs = computed(() => [
+const breadcrumbs = computed<Breadcrumb[]>(() => [
 	{
 		title: t("common.words.courses"),
 		to: "/rooms/courses-overview",
@@ -205,10 +187,8 @@ const dashBoardRole = computed(() => {
 	return undefined;
 });
 
-const canEditTools = computed(() => useAppStore().hasPermission(Permission.CONTEXT_TOOL_ADMIN));
-
-const learnContentFabItems = computed((): FabItem[] | null => {
-	const actions: FabItem[] = [];
+const learnContentFabItems = computed<FabAction[] | undefined>(() => {
+	const actions: FabAction[] = [];
 
 	if (useAppStore().hasPermission(Permission.HOMEWORK_CREATE)) {
 		actions.push({
@@ -233,12 +213,12 @@ const learnContentFabItems = computed((): FabItem[] | null => {
 			label: t("pages.courseRoomDetails.fab.add.board"),
 			icon: mdiViewGridPlusOutline,
 			dataTestId: "fab_button_add_board",
-			clickHandler: fabItemClickHandler,
+			clickHandler: onOpenBoardLayoutDialog,
 		});
 	}
 
 	if (actions.length === 0) {
-		return null;
+		return;
 	}
 
 	return [
@@ -263,7 +243,7 @@ const tabItems = computed<TabItem[]>(() => {
 		},
 	];
 
-	const ctlToolFabItems: FabItem[] = [
+	const ctlToolFabItems: FabAction[] = [
 		{
 			icon: mdiPlus,
 			label: t("pages.courseRoomDetails.fab.add.tool"),
@@ -278,7 +258,7 @@ const tabItems = computed<TabItem[]>(() => {
 		icon: mdiPuzzleOutline,
 		dataTestId: "tools-tab",
 		component: RoomExternalToolsOverview,
-		fabItems: canEditTools.value ? ctlToolFabItems : null,
+		fabItems: canEditTools.value ? ctlToolFabItems : undefined,
 	});
 
 	tabs.push({
@@ -300,30 +280,25 @@ const currentTab = computed(() => {
 	return tabItems.value[index];
 });
 
-const getCurrentFabItems = computed((): FabAction[] | undefined => currentTab.value?.fabItems ?? undefined);
+const currentFabItems = computed(() => currentTab.value?.fabItems);
+const currentTabComponent = computed(() => currentTab.value?.component);
 
-const getCurrentComponent = computed(() => currentTab.value?.component);
-
-const headlineMenuItems = computed((): MenuItem[] => {
+const headlineMenuItems = computed<MenuItem[]>(() => {
 	if (!scopedPermissions.value.includes("COURSE_EDIT")) return [];
 
 	const items: MenuItem[] = [
 		{
-			icon: icons.mdiPencilOutline,
-			action: () => {
-				window.location.href = `/courses/${courseId.value}/edit`;
-			},
-			name: t("common.actions.edit") + "/" + t("common.actions.delete"),
+			icon: mdiPencilOutline,
+			action: () => onEditCourse(),
+			name: `${t("common.actions.edit")}/${t("common.actions.delete")}`,
 			dataTestId: "room-menu-edit-delete",
 		},
 	];
 
 	if (useEnvConfig().value.FEATURE_COPY_SERVICE_ENABLED) {
 		items.push({
-			icon: icons.mdiContentCopy,
-			action: () => {
-				onCopyRequested({ id: courseId.value, type: ContentItemTypeEnum.Course });
-			},
+			icon: mdiContentCopy,
+			action: () => onCopyRequested({ id: courseId.value, type: ContentItemTypeEnum.Course }),
 			name: t("common.actions.duplicate"),
 			dataTestId: "room-menu-copy",
 		});
@@ -331,10 +306,8 @@ const headlineMenuItems = computed((): MenuItem[] => {
 
 	if (useEnvConfig().value.FEATURE_COURSE_SHARE) {
 		items.push({
-			icon: icons.mdiShareVariantOutline,
-			action: () => {
-				shareCourse();
-			},
+			icon: mdiShareVariantOutline,
+			action: () => onShareCourse(),
 			name: t("common.actions.shareCopy"),
 			dataTestId: "room-menu-share",
 		});
@@ -342,10 +315,8 @@ const headlineMenuItems = computed((): MenuItem[] => {
 
 	if (useEnvConfig().value.FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED) {
 		items.push({
-			icon: icons.mdiExport,
-			action: () => {
-				onExport();
-			},
+			icon: mdiExport,
+			action: () => onOpenExportDialog(),
 			name: t("common.actions.export"),
 			dataTestId: "room-menu-common-cartridge-download",
 		});
@@ -353,21 +324,15 @@ const headlineMenuItems = computed((): MenuItem[] => {
 
 	if (roomData.value.isSynchronized) {
 		items.push({
-			icon: icons.mdiSyncOff,
-			action: () => {
-				isEndSyncDialogOpen.value = true;
-			},
+			icon: mdiSyncOff,
+			action: () => onOpenEndSyncDialog(),
 			name: t("pages.courseRooms.menuItems.endSync"),
 			dataTestId: "title-menu-end-sync",
 		});
-	}
-
-	if (useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED && !roomData.value.isSynchronized) {
+	} else if (useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED) {
 		items.push({
-			icon: icons.mdiSync,
-			action: () => {
-				isStartSyncDialogOpen.value = true;
-			},
+			icon: mdiSync,
+			action: () => onOpenStartSyncDialog(),
 			name: t("pages.rooms.menuItems.startSync"),
 			dataTestId: "title-menu-start-sync",
 		});
@@ -376,10 +341,14 @@ const headlineMenuItems = computed((): MenuItem[] => {
 	return items;
 });
 
-const isLocked = computed(() => courseRoomDetailsModule.getIsLocked);
+const setActiveTab = (tabName: string) => {
+	const index = tabItems.value.findIndex((tabItem) => tabItem.name === tabName);
+	tabIndex.value = index >= 0 ? index : 0;
+};
 
-const initialize = async (id: string, activeTab: string | number = 0) => {
-	setActiveTab(activeTab);
+const initialize = async (id: string, activeTab?: LocationQueryValue | LocationQueryValue[]) => {
+	const tabName = Array.isArray(activeTab) ? activeTab[0] : activeTab;
+	setActiveTab(tabName ?? "learn-content");
 	courseId.value = id;
 
 	await courseRoomDetailsModule.fetchContent(id);
@@ -396,33 +365,17 @@ const initialize = async (id: string, activeTab: string | number = 0) => {
 		});
 	}
 
-	document.title = buildPageTitle(roomData.value.title, t("common.words.courses"));
-};
-
-const setActiveTab = (tabName: string | number) => {
-	const index = tabItems.value.findIndex((tabItem) => tabItem.name === tabName);
-	tabIndex.value = index >= 0 ? index : 0;
+	useTitle(buildPageTitle(roomData.value.title, t("common.words.courses")));
 };
 
 const setActiveTabIfPageCached = (event: PageTransitionEvent) => {
 	if (event.persisted) {
-		if (route.query?.tab) {
-			setActiveTab(route.query.tab as string);
-		} else {
-			setActiveTab("learn-content");
-		}
+		const activeTab = Array.isArray(route.query.tab) ? route.query.tab[0] : route.query.tab;
+		setActiveTab(activeTab ?? "learn-content");
 	}
 };
 
-const fabItemClickHandler = () => {
-	boardLayoutDialogIsOpen.value = true;
-};
-
-const onLayoutSelected = (layout: BoardLayout) => {
-	onCreateBoard(roomData.value.roomId, layout);
-};
-
-const shareCourse = async () => {
+const onShareCourse = () => {
 	if (useEnvConfig().value.FEATURE_COURSE_SHARE) {
 		shareModule.startShareFlow({
 			id: courseId.value,
@@ -431,21 +384,25 @@ const shareCourse = async () => {
 	}
 };
 
-const onExport = () => {
-	commonCartridgeExportModule.startExportFlow();
-};
-
 const refreshCourseRoom = async () => {
 	await courseRoomDetailsModule.fetchContent(courseId.value);
 };
 
-const copyFlow = useCopyFlow();
-const { isDialogOpen: isCopyDialogOpen, copyItemType, onConfirm: onConfirmCopy, onCancel: onCancelCopy } = copyFlow;
+const {
+	isDialogOpen: isCopyDialogOpen,
+	copyItemType,
+	executeCopyCourse,
+	executeCopyTask,
+	executeCopyLesson,
+	executeCopyBoard,
+	onConfirm: onConfirmCopy,
+	onCancel: onCancelCopy,
+} = useCopyFlow();
 
 const onCopyRequested = async ({ id, type }: { id: string; type: ContentItemTypeEnum }) => {
 	switch (type) {
 		case ContentItemTypeEnum.Course: {
-			const { result: copyResult } = await copyFlow.executeCopyCourse(id);
+			const { result: copyResult } = await executeCopyCourse(id);
 			if (copyResult?.id) {
 				await router.replace(`/rooms/${copyResult.id}`);
 				await initialize(copyResult.id);
@@ -453,21 +410,21 @@ const onCopyRequested = async ({ id, type }: { id: string; type: ContentItemType
 			break;
 		}
 		case ContentItemTypeEnum.Task: {
-			const { result: copyResult } = await copyFlow.executeCopyTask(id, courseId.value);
+			const { result: copyResult } = await executeCopyTask(id, courseId.value);
 			if (copyResult?.id) {
 				await courseRoomDetailsModule.fetchContent(courseId.value);
 			}
 			break;
 		}
 		case ContentItemTypeEnum.Lesson: {
-			const { result: copyResult } = await copyFlow.executeCopyLesson(id, courseId.value);
+			const { result: copyResult } = await executeCopyLesson(id, courseId.value);
 			if (copyResult?.id) {
 				await courseRoomDetailsModule.fetchContent(courseId.value);
 			}
 			break;
 		}
 		case ContentItemTypeEnum.ColumnBoard: {
-			const { result: copyResult } = await copyFlow.executeCopyBoard(id);
+			const { result: copyResult } = await executeCopyBoard(id);
 			if (copyResult?.id) {
 				await courseRoomDetailsModule.fetchContent(courseId.value);
 			}
@@ -476,20 +433,43 @@ const onCopyRequested = async ({ id, type }: { id: string; type: ContentItemType
 	}
 };
 
-const onCreateBoard = async (id: string, layout: BoardLayout) => {
+const onCreateBoard = async (roomId: string, layout: BoardLayout) => {
 	const params = {
 		title: t("pages.room.boardCard.label.courseBoard").toString(),
 		parentType: BoardParentType.COURSE,
-		parentId: id,
+		parentId: roomId,
 		layout,
 	};
 	const board = await courseRoomDetailsModule.createBoard(params);
-	if (board) {
+	if (board?.id) {
 		await router.push(`/boards/${board.id}`);
 	}
 };
 
-// Watchers
+const onEditCourse = () => {
+	router.push(`/courses/${courseId.value}/edit`);
+};
+
+const onLayoutSelected = (layout: BoardLayout) => {
+	onCreateBoard(roomData.value.roomId, layout);
+};
+
+const onOpenBoardLayoutDialog = () => {
+	isBoardLayoutDialogOpen.value = true;
+};
+
+const onOpenStartSyncDialog = () => {
+	isStartSyncDialogOpen.value = true;
+};
+
+const onOpenEndSyncDialog = () => {
+	isEndSyncDialogOpen.value = true;
+};
+
+const onOpenExportDialog = () => {
+	isExportDialogOpen.value = true;
+};
+
 watch(tabIndex, (newIndex) => {
 	if (newIndex >= 0 && newIndex < tabItems.value.length) {
 		router.push({
@@ -498,7 +478,6 @@ watch(tabIndex, (newIndex) => {
 	}
 });
 
-// Lifecycle hooks
 onMounted(() => {
 	window.addEventListener("pageshow", setActiveTabIfPageCached);
 });
@@ -507,8 +486,7 @@ onBeforeUnmount(() => {
 	window.removeEventListener("pageshow", setActiveTabIfPageCached);
 });
 
-// Initialize on component creation
-initialize(courseId.value, route.query?.tab as string);
+initialize(courseId.value, route.query?.tab);
 </script>
 
 <style lang="scss" scoped>

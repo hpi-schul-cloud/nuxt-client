@@ -5,18 +5,15 @@
 // In here you import all your modules, call getModule on them to turn them
 // into the actual stores, and then re-export them.
 
-import CommonCartridgeExportModule from "./common-cartridge-export";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import FilePaths from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
-import GroupModule from "@/store/group";
 import ImportUsersModule from "@/store/import-users";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
 import SystemsModule from "@/store/systems";
 import TasksModule from "@/store/tasks";
-import VideoConferenceModule from "@/store/video-conference";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 
@@ -25,7 +22,6 @@ import { getModule } from "vuex-module-decorators";
 // (result from getModule(...))
 export let filePathsModule: FilePaths;
 export let finishedTasksModule: FinishedTasksModule;
-export let groupModule: GroupModule;
 export let importUsersModule: ImportUsersModule;
 export let courseRoomDetailsModule: CourseRoomDetailsModule;
 export let schoolExternalToolsModule: SchoolExternalToolsModule;
@@ -33,14 +29,11 @@ export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
 export let systemsModule: SystemsModule;
 export let tasksModule: TasksModule;
-export let videoConferenceModule: VideoConferenceModule;
-export let commonCartridgeExportModule: CommonCartridgeExportModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<unknown>): void {
 	filePathsModule = getModule(FilePaths, store);
 	finishedTasksModule = getModule(FinishedTasksModule, store);
-	groupModule = getModule(GroupModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	courseRoomDetailsModule = getModule(CourseRoomDetailsModule, store);
 	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
@@ -48,8 +41,6 @@ export function initializeStores(store: Store<unknown>): void {
 	shareModule = getModule(ShareModule, store);
 	systemsModule = getModule(SystemsModule, store);
 	tasksModule = getModule(TasksModule, store);
-	videoConferenceModule = getModule(VideoConferenceModule, store);
-	commonCartridgeExportModule = getModule(CommonCartridgeExportModule, store);
 }
 
 // for use in 'modules' store init (see store/index.ts), so each module
@@ -58,7 +49,6 @@ export function initializeStores(store: Store<unknown>): void {
 export const modules = {
 	filePathsModule: FilePaths,
 	finishedTasksModule: FinishedTasksModule,
-	groupModule: GroupModule,
 	importUsersModule: ImportUsersModule,
 	courseRoomDetailsModule: CourseRoomDetailsModule,
 	schoolExternalToolsModule: SchoolExternalToolsModule,
@@ -66,6 +56,4 @@ export const modules = {
 	shareModule: ShareModule,
 	systemsModule: SystemsModule,
 	tasksModule: TasksModule,
-	videoConferenceModule: VideoConferenceModule,
-	commonCartridgeExportModule: CommonCartridgeExportModule,
 };

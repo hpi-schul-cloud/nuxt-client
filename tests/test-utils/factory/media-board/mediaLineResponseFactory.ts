@@ -1,6 +1,6 @@
 import { timestampsResponseFactory } from "../timestampsResponseFactory";
 import { mediaExternalToolElementResponseFactory } from "./mediaExternalToolElementResponseFactory";
-import { MediaBoardColors, MediaLineResponse } from "@api-server";
+import { Colors, MediaLineResponse } from "@api-server";
 import { Factory } from "fishery";
 
 export const mediaLineResponseFactory = Factory.define<MediaLineResponse>(({ sequence }) => ({
@@ -8,6 +8,6 @@ export const mediaLineResponseFactory = Factory.define<MediaLineResponse>(({ seq
 	timestamps: timestampsResponseFactory.build(),
 	title: `line ${sequence}`,
 	elements: mediaExternalToolElementResponseFactory.buildList(1),
-	backgroundColor: MediaBoardColors.TRANSPARENT,
+	backgroundColor: Colors.TRANSPARENT,
 	collapsed: false,
 }));

@@ -20,7 +20,7 @@ export default {
 	"common.actions.invite": "Enviar el enlace del curso",
 	"common.actions.logout": "Desconectar",
 	"common.actions.ok": "Aceptar",
-	"common.actions.pickColor": "Seleccione el color de fondo",
+	"common.actions.pickColor": "Seleccionar color",
 	"common.actions.leave": "Dejar",
 	"common.actions.remove": "Eliminar",
 	"common.actions.rename": "Renombrar",
@@ -105,6 +105,7 @@ export default {
 	"common.labels.restore": "Restaurar",
 	"common.labels.role": "Papel",
 	"common.labels.room": "Sala | Salas",
+	"common.labels.runtimeConfig": "Configuración del tiempo de ejecución",
 	"common.labels.search": "Buscar",
 	"common.labels.settings": "Ajustes",
 	"common.labels.size": "Tamaño",
@@ -148,6 +149,9 @@ export default {
 	"common.notifications.errors.notMoved": "{type} no se ha podido mover. | {type} no se han podido mover.",
 	"common.notifications.errors.notExited": "{type} no se ha podido salir. | {type} no se han podido salir.",
 	"common.notifications.errors.notImported": "{type} no se ha podido importar. | {type} no se han podido importar.",
+	"common.notification.error.videoConference.notFetched": "No se pudo obtener la videoconferencia.",
+	"common.notification.error.videoConference.notJoined": "No se pudo unirse a la videoconferencia.",
+	"common.notification.error.videoConference.notStarted": "No se pudo iniciar la videoconferencia.",
 	"common.notification.connection.restored": "La conexión se ha reestablecido.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.email.confirmation": "Repetir la dirección de correo electrónico",
@@ -252,7 +256,6 @@ export default {
 	"common.words.topic": "Tema",
 	"common.words.topics": "Temas",
 	"common.words.yes": "Sí",
-	"common.words.export": "La exportación del curso se está descargando",
 	"common.alerts.room.not.available": "No hay sala disponible. | No hay salas disponibles.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Durante la migración se cambia el sistema de registro de alumnos y profesores a moin.schule. Los datos pertenecientes a las cuentas afectadas se conservarán.",
@@ -513,6 +516,8 @@ export default {
 		"El título de la tarjeta {cardPosition} en la columna {columnPosition} fue cambiado a {newTitle} por otro usuario.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"La tarjeta {cardPosition} de la columna {columnPosition} ha sido actualizada por otro usuario.",
+	"components.board.screenReader.notification.cardColorUpdated.success":
+		"El color de la tarjeta {cardPosition} en la sección {columnPosition} ha sido cambiado.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Otro usuario cambió la vista del panel a {layout}.",
 	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":
@@ -1676,6 +1681,7 @@ export default {
 	"pages.rooms.ccImportCourse.success":
 		"Su archivo del curso se ha cargado y ahora se está importando en segundo plano.",
 	"pages.rooms.ccImportCourse.error": "Se produjo un error al cargar el archivo del curso.",
+	"pages.rooms.ccExportCourse.started": "La exportación del curso se está descargando.",
 	"pages.rooms.ccExportCourse.error": "Se produjo un error al exportar el curso.",
 	"pages.rooms.roomModal.courseGroupTitle": "Título del grupo del curso",
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",

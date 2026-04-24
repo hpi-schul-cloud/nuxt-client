@@ -13,7 +13,7 @@
  */
 
 
-import { MediaBoardColors } from './media-board-colors';
+import { Colors } from './colors';
 
 /**
  * 
@@ -23,10 +23,10 @@ import { MediaBoardColors } from './media-board-colors';
 export interface ColorBodyParams {
     /**
      * 
-     * @type {MediaBoardColors}
+     * @type {Colors}
      * @memberof ColorBodyParams
      */
-    backgroundColor: MediaBoardColors;
+    backgroundColor: Colors;
 }
 
 

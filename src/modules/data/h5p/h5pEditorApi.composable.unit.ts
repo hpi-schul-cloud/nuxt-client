@@ -7,8 +7,8 @@ import {
 	mountComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { H5pEditorApiInterface } from "@api-h5p";
 import * as h5pApi from "@api-h5p";
+import { H5pEditorApiInterface } from "@api-h5p";
 import { useH5PEditorApi } from "@data-h5p";
 import { createTestingPinia } from "@pinia/testing";
 import { HttpStatusCode } from "axios";
@@ -50,15 +50,7 @@ describe("h5pEditorApi.composable", () => {
 				const contentId = "test-id";
 				const title = "test-title";
 
-				h5pEditorApi.h5PEditorControllerGetContentParameters.mockResolvedValueOnce(
-					mockApiResponse({
-						data: {
-							h5p: {
-								title,
-							},
-						},
-					})
-				);
+				h5pEditorApi.getContentParameters.mockResolvedValueOnce(mockApiResponse({}));
 
 				return { composable, contentId, title };
 			};
@@ -78,11 +70,7 @@ describe("h5pEditorApi.composable", () => {
 
 				const contentId = "test-id";
 
-				h5pEditorApi.h5PEditorControllerGetContentParameters.mockResolvedValueOnce(
-					mockApiResponse({
-						data: { h5p: {} },
-					})
-				);
+				h5pEditorApi.getContentParameters.mockResolvedValueOnce(mockApiResponse({}));
 
 				return { composable, contentId };
 			};
@@ -104,7 +92,7 @@ describe("h5pEditorApi.composable", () => {
 
 				const error = axiosErrorFactory.withStatusCode(HttpStatusCode.NotFound).build();
 
-				h5pEditorApi.h5PEditorControllerGetContentParameters.mockRejectedValueOnce(error);
+				h5pEditorApi.getContentParameters.mockRejectedValueOnce(error);
 
 				return { composable, contentId };
 			};

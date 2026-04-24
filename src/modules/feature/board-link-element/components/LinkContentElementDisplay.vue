@@ -1,10 +1,6 @@
 <template>
 	<div ref="linkContentElementDisplay" data-testid="board-link-element" tabindex="-1">
-		<ContentElementBar
-			:has-grey-background="true"
-			:icon="mdiLink"
-			:has-row-style="!!imageUrl && isSmallOrLargerListBoard"
-		>
+		<ContentElementBar :icon="mdiLink" :has-row-style="!!imageUrl && isSmallOrLargerListBoard">
 			<template v-if="imageUrl" #display>
 				<v-img
 					:src="imageUrl"
@@ -67,11 +63,4 @@ const { smAndUp } = useDisplay();
 const isSmallOrLargerListBoard = computed(() => smAndUp.value && isListLayout.value);
 </script>
 
-<style scoped>
-.menu {
-	position: absolute;
-	right: 10px;
-	top: 10px;
-	z-index: 100;
-}
-</style>
+<style scoped></style>

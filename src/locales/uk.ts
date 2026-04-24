@@ -20,7 +20,7 @@ export default {
 	"common.actions.invite": "Надіслати посилання на курс",
 	"common.actions.logout": "Вийти з аккаунта",
 	"common.actions.ok": "ОК",
-	"common.actions.pickColor": "Вибрати колір тла",
+	"common.actions.pickColor": "Вибрати колір",
 	"common.actions.leave": "Залиште",
 	"common.actions.remove": "Вилучити",
 	"common.actions.rename": "перейменувати",
@@ -105,6 +105,7 @@ export default {
 	"common.labels.restore": "Відновити",
 	"common.labels.role": "Роль",
 	"common.labels.room": "Кімната | Кімнати",
+	"common.labels.runtimeConfig": "конфігурація терміну дії",
 	"common.labels.search": "Пошук",
 	"common.labels.settings": "Налаштування",
 	"common.labels.size": "Pозмір",
@@ -155,6 +156,9 @@ export default {
 		"{type} не вдалося вийти. | {type} не вдалося вийти. | {type} не вдалося вийти.",
 	"common.notifications.errors.notImported":
 		"{type} не вдалося імпортувати. | {type} не вдалося імпортувати. | {type} не вдалося імпортувати.",
+	"common.notification.error.videoConference.notFetched": "Не вдалося отримати відеоконференцію.",
+	"common.notification.error.videoConference.notJoined": "Не вдалося приєднатися до відеоконференції.",
+	"common.notification.error.videoConference.notStarted": "Не вдалося розпочати відеоконференцію.",
 	"common.notification.connection.restored": "Зв'язок відновлено.",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.email.confirmation": "Повторно введіть адресу електронної пошти",
@@ -259,7 +263,6 @@ export default {
 	"common.words.topic": "Тема",
 	"common.words.topics": "теми",
 	"common.words.yes": "Так",
-	"common.words.export": "Завантажується експорт курсу",
 	"common.alerts.room.not.available": "Нієї кімнати недоступно. | Немає доступних кімнат.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Під час міграції система реєстрації студентів і викладачів змінена на moin.schule. Дані відповідних облікових записів буде збережено.",
@@ -513,6 +516,8 @@ export default {
 		"Заголовок картки {cardPosition} у колонці {columnPosition} було змінено на {newTitle} іншим користувачем.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Картку {cardPosition} у стовпчику {columnPosition} було оновлено іншим користувачем.",
+	"components.board.screenReader.notification.cardColorUpdated.success":
+		"Колір картки {cardPosition} у розділі {columnPosition} було змінено.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Інший користувач змінив вигляд панелі на {layout}.",
 	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":
@@ -1654,6 +1659,7 @@ export default {
 	"pages.rooms.ccImportCourse.loading": "Триває завантаження...",
 	"pages.rooms.ccImportCourse.success": "Файл вашого курсу завантажено та зараз імпортується у фоновому режимі.",
 	"pages.rooms.ccImportCourse.error": "Під час завантаження файлу курсу сталася помилка.",
+	"pages.rooms.ccExportCourse.started": "Завантажується експорт курсу",
 	"pages.rooms.ccExportCourse.error": "Під час експорту курсу сталася помилка.",
 	"pages.rooms.roomModal.courseGroupTitle": "назва групи курсу",
 	"pages.rooms.tools.deactivated": "Інструмент вимкнено",

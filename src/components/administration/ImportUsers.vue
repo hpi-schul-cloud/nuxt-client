@@ -197,7 +197,7 @@
 				<VIcon>{{ mdiAccountPlus }}</VIcon>
 				{{
 					$t("components.organisms.importUsers.legendUnMatched", {
-						instance: $theme.name,
+						instance: instanceName,
 						source: sourceSystemName,
 					})
 				}}
@@ -206,7 +206,7 @@
 				<VIcon>{{ mdiAccountSwitch }}</VIcon>
 				{{
 					$t("components.organisms.importUsers.legendAdminMatched", {
-						instance: $theme.name,
+						instance: instanceName,
 						source: sourceSystemName,
 					})
 				}}
@@ -214,7 +214,7 @@
 				<VIcon>{{ mdiAccountSwitchOutline }}</VIcon>
 				{{
 					$t("components.organisms.importUsers.legendAutoMatched", {
-						instance: $theme.name,
+						instance: instanceName,
 						source: sourceSystemName,
 					})
 				}}
@@ -222,7 +222,7 @@
 				<VIcon>{{ mdiFlagOutline }}</VIcon>
 				{{
 					$t("components.organisms.importUsers.legendFlag", {
-						instance: $theme.name,
+						instance: instanceName,
 						source: sourceSystemName,
 					})
 				}}
@@ -238,7 +238,7 @@ import ImportUsersMatchSearch from "./ImportUsersMatchSearch.vue";
 import { importUsersModule, schoolsModule } from "@/store";
 import { MatchedBy } from "@/store/import-users";
 import { ImportUserResponseRoleNames, SchulcloudTheme } from "@api-server";
-import { useEnvConfig } from "@data-env";
+import { useEnvConfig, useEnvStore } from "@data-env";
 import {
 	mdiAccountPlus,
 	mdiAccountSwitch,
@@ -338,7 +338,7 @@ export default {
 				},
 				{
 					title: this.$t("components.organisms.importUsers.tableMatch", {
-						instance: this.$theme.name,
+						instance: this.instanceName,
 					}),
 					value: "match",
 					sortable: false,
@@ -368,6 +368,9 @@ export default {
 			} else {
 				return this.$t("pages.administration.migration.ldapSource");
 			}
+		},
+		instanceName() {
+			return useEnvStore().instanceName;
 		},
 		editedItem() {
 			if (this.editedIndex < 0) {

@@ -34,6 +34,7 @@ api/oauth-api.ts
 api/oauth2-api.ts
 api/pseudonym-api.ts
 api/registration-api.ts
+api/release-api.ts
 api/room-api.ts
 api/room-invitation-link-api.ts
 api/runtime-config-api.ts
@@ -41,12 +42,12 @@ api/school-api.ts
 api/school-license-api.ts
 api/server-api.ts
 api/server-config-api.ts
-api/server-release-api.ts
 api/share-token-api.ts
 api/shd-api.ts
 api/submission-api.ts
 api/systems-api.ts
 api/task-api.ts
+api/team-api.ts
 api/tool-api.ts
 api/user-api.ts
 api/user-import-api.ts
@@ -101,6 +102,7 @@ models/collaborative-text-editor-parent-type.ts
 models/collaborative-text-editor-response.ts
 models/collapsable-body-params.ts
 models/color-body-params.ts
+models/colors.ts
 models/column-response.ts
 models/complete-registration-body-params.ts
 models/component-etherpad-props-impl.ts
@@ -243,7 +245,6 @@ models/me-school-response.ts
 models/me-user-response.ts
 models/media-available-line-element-response.ts
 models/media-available-line-response.ts
-models/media-board-colors.ts
 models/media-board-response.ts
 models/media-external-tool-element-content.ts
 models/media-external-tool-element-response.ts
@@ -385,6 +386,7 @@ models/task-list-response.ts
 models/task-response.ts
 models/task-status-response.ts
 models/teacher-permission-params.ts
+models/team-create-room-response.ts
 models/team-permissions-body.ts
 models/timestamps-response.ts
 models/timezone.ts

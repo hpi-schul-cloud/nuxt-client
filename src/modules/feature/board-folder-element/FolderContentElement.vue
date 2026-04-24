@@ -10,7 +10,7 @@
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
-		<ContentElementBar :has-grey-background="true" :icon="mdiFolderOpenOutline" @click="onTitleClick">
+		<ContentElementBar :icon="mdiFolderOpenOutline" @click="onTitleClick">
 			<template #title>
 				<RouterLink
 					class="folder-title"
