@@ -54,7 +54,7 @@ import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess, useAppStoreRefs } from "@data-app";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
-import { useSchoolExternalTools } from "@data-school";
+import { useSchoolExternalToolConfigurator } from "@data-school";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
@@ -76,7 +76,7 @@ const {
 	createOrUpdateToolError,
 	isLoadingAvailableTools,
 	isLoadingConfigurationTemplate,
-} = useSchoolExternalTools();
+} = useSchoolExternalToolConfigurator();
 
 const { t } = useI18n();
 

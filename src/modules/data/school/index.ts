@@ -1,3 +1,4 @@
+export { useSchoolExternalToolConfigurator } from "./school-external-tool-configurator.composable";
 export { useSchoolExternalTools } from "./school-external-tools.composable";
 export { useSchoolApi } from "./schoolApi.composable";
 export { useSchoolPrivacyPolicy } from "./schoolPrivacyPolicy.composable";
