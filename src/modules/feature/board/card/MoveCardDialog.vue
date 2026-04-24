@@ -44,7 +44,7 @@
 				<VSelect
 					v-model="selectedColumnId"
 					:disabled="!selectedBoardId || isMoving"
-					:label="t('components.molecules.label.section')"
+					:label="t('components.molecules.label.column')"
 					:items="columns"
 					item-value="id"
 					:placeholder="t('components.boardSection')"

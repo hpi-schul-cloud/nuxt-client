@@ -619,7 +619,8 @@ export default {
 	"components.molecules.import.columnBoard.label": "Board title",
 	"components.molecules.label.room": "Select room",
 	"components.molecules.label.board": "Select board",
-	"components.molecules.label.section": "Select section",
+	"components.molecules.label.column": "Select section",
+	"components.molecules.label.course": "Select course",
 	"components.molecules.import.card.question": "Where should the card{title} be imported?",
 	"components.molecules.move.card.title": "Move card",
 	"components.molecules.move.card.question": "Where should the card{title} be moved to?",
@@ -635,6 +636,7 @@ export default {
 	"components.molecules.import.columnBoard.options.selectRoom": "Select room",
 	"components.molecules.import.columnBoard.options.selectRoom.infoText":
 		"Please select the room into which you would like to import the board.",
+	"components.molecules.import.columnBoard.question": "Please select a board.",
 	"components.molecules.import.courses.rename": "If necessary, the name of the course can be renamed: ",
 	"components.molecules.import.courses.options.title": "Import course",
 	"components.molecules.import.lessons.label": "Topic",
@@ -643,6 +645,7 @@ export default {
 		"Please select the course into which you would like to import the topic.",
 	"components.molecules.import.lessons.options.selectCourse": "Select course",
 	"components.molecules.import.lessons.options.title": "Import topic",
+	"components.molecules.import.lessons.question": "Where should the topic{title} be imported?",
 	"components.molecules.import.options.failure.backendError": "{name} could not be imported.",
 	"components.molecules.import.options.failure.invalidToken": "The token in the link is unknown or has expired.",
 	"components.molecules.import.options.failure.permissionError":
@@ -659,6 +662,7 @@ export default {
 		"Please select the course into which you would like to import the task.",
 	"components.molecules.import.tasks.options.selectCourse": "Select course",
 	"components.molecules.import.tasks.options.title": "Import task",
+	"components.molecules.import.tasks.question": "Where should the task{title} be imported?",
 	"components.molecules.importUsersMatch.deleteMatch": "Delete relation",
 	"components.molecules.importUsersMatch.flag": "Flag account",
 	"components.molecules.importUsersMatch.notFound": "no accounts found",
@@ -1348,8 +1352,10 @@ export default {
 	"pages.administration.students.consent.steps.success.image.alt": "Securely connect graphic",
 	"pages.administration.students.consent.steps.success":
 		"Congratulations, you have successfully completed the analog registration!",
-	"pages.administration.students.consent.table.empty": "All users you have chosen have already been consented.",
-	"pages.administration.students.consent.title": "Register analogously",
+	"pages.administration.students.consent.table.empty": "All students have already given their consent.",
+	"pages.administration.students.consent.title": "Analog Registration",
+	"pages.administration.students.table.empty": "All users you have chosen have already been consented.",
+	"pages.administration.students.title": "Register analogously",
 	"pages.administration.students.fab.add": "Create student",
 	"pages.administration.students.fab.import": "Import student",
 	"pages.administration.students.index.remove.confirm.message":

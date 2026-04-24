@@ -1,7 +1,6 @@
 <template>
 	<SvsDialog
 		v-model="isDialogOpen"
-		:is-loading="isImporting"
 		:title="importCardTitle"
 		confirm-btn-lang-key="common.actions.import"
 		:confirm-btn-disabled="!selectedColumnId"
@@ -10,7 +9,7 @@
 		@cancel="onCancel"
 	>
 		<template #content>
-			<WarningAlert v-if="availableRooms?.length === 0" class="mb-2">
+			<WarningAlert v-if="availableDestinations.length === 0" class="mb-2">
 				{{ t("common.alerts.room.not.available") }}
 			</WarningAlert>
 			<p>
@@ -32,8 +31,7 @@
 			<VForm id="importCardForm" data-testid="import-card-form">
 				<VSelect
 					v-model="selectedRoomId"
-					:items="availableRooms"
-					:disabled="isImporting"
+					:items="availableDestinations"
 					item-value="id"
 					item-title="name"
 					:label="t('components.molecules.label.room')"
@@ -44,7 +42,7 @@
 				/>
 				<VSelect
 					v-model="selectedBoardId"
-					:disabled="!selectedRoomId || isImporting"
+					:disabled="!selectedRoomId"
 					:items="boards"
 					item-value="id"
 					:label="t('components.molecules.label.board')"
@@ -55,10 +53,10 @@
 				/>
 				<VSelect
 					v-model="selectedColumnId"
-					:disabled="!selectedBoardId || isImporting"
+					:disabled="!selectedBoardId"
 					:items="columns"
 					item-value="id"
-					:label="t('components.molecules.label.section')"
+					:label="t('components.molecules.label.column')"
 					:placeholder="t('components.boardSection')"
 					:menu-props="{ attach: '#importCardForm' }"
 					data-testid="import-card-select-column"
@@ -69,44 +67,51 @@
 </template>
 
 <script setup lang="ts">
+import { ImportDestination, ImportDestinationItem, ImportDestinationType } from "./types";
 import { useCopyContent } from "@/composables/copy-content.composable";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
-import { RoomItem } from "@/types/room/Room";
 import { ShareTokenInfoResponse } from "@api-server";
 import { useCardDialogData } from "@data-board";
-import { useRoomStore } from "@data-room";
-import { useShareTokenImport } from "@feature-import";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { sortBy } from "lodash-es";
-import { computed, onBeforeMount, ref } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
 
-const router = useRouter();
 const { t } = useI18n();
 
-const props = defineProps<{ shareTokenInfo: ShareTokenInfoResponse }>();
-const rooms = ref<RoomItem[]>();
+const props = defineProps<{
+	shareTokenInfo: ShareTokenInfoResponse;
+	availableDestinations: ImportDestinationItem[];
+	destinationType: Extract<ImportDestinationType, "column">;
+}>();
+
+const emit = defineEmits<{
+	(e: "confirm", payload: { newName: string; destination?: ImportDestination }): void;
+	(e: "cancel"): void;
+}>();
 
 const isDialogOpen = defineModel("is-dialog-open", {
 	type: Boolean,
 	default: false,
 });
 
-const availableRooms = computed(() =>
-	sortBy(rooms.value?.filter((room) => room.allowedOperations?.editContent ?? false) ?? [], (r) => r.name)
-);
-
-onBeforeMount(async () => {
-	const result = await useRoomStore().fetchRoomsPlain();
-	rooms.value = result?.data?.data;
-});
-
 const { selectedBoardId, selectedColumnId, selectedRoomId, resetBoardSelection, columns, boards } =
 	useCardDialogData(isDialogOpen);
 
-const { importShareToken, isRunning: isImporting } = useShareTokenImport();
+const onConfirm = () => {
+	emit("confirm", {
+		newName: props.shareTokenInfo.parentName,
+		destination: { type: props.destinationType, id: selectedColumnId.value!, boardId: selectedBoardId.value! },
+	});
+};
+
+const onCancel = () => {
+	emit("cancel");
+};
+
+const importCardTitle = computed(() =>
+	t(`components.molecules.import.${props.shareTokenInfo.parentType}.options.title`)
+);
 
 const dialogQuestion = computed(() => {
 	const cardName = props.shareTokenInfo.parentName;
@@ -114,25 +119,6 @@ const dialogQuestion = computed(() => {
 		title: cardName ? ` "${cardName}"` : "",
 	});
 });
-
-const onConfirm = async () => {
-	const { success } = await importShareToken(props.shareTokenInfo, {
-		newName: props.shareTokenInfo.parentName,
-		destinationId: selectedColumnId.value,
-	});
-
-	if (success) {
-		router.push("/boards/" + selectedBoardId.value);
-	}
-};
-
-const onCancel = () => {
-	router.push("/rooms");
-};
-
-const importCardTitle = computed(() =>
-	t(`components.molecules.import.${props.shareTokenInfo.parentType}.options.title`)
-);
 
 const { text, warnings } = useCopyContent(ContentItemTypeEnum.Card);
 </script>

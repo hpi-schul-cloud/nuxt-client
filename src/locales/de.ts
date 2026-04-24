@@ -632,7 +632,8 @@ export default {
 	"components.molecules.ContextMenu.action.close": "Kontextmenü schließen",
 	"components.molecules.label.room": "Raum wählen",
 	"components.molecules.label.board": "Bereich wählen",
-	"components.molecules.label.section": "Abschnitt wählen",
+	"components.molecules.label.column": "Abschnitt wählen",
+	"components.molecules.label.course": "Kurs wählen",
 	"components.molecules.import.card.question": "Wohin soll die Karte{title} importiert werden?",
 
 	"components.molecules.move.card.title": "Karte verschieben",
@@ -652,6 +653,7 @@ export default {
 	"components.molecules.import.columnBoard.options.selectRoom": "Raum wählen",
 	"components.molecules.import.columnBoard.options.selectRoom.infoText":
 		"Der Raum, in den der Bereich importiert werden soll, muss im Folgenden ausgewählt werden.",
+	"components.molecules.import.columnBoard.question": "Wohin soll der Bereich{title} importiert werden?",
 	"components.molecules.import.courses.rename": "Bei Bedarf kann der Name des Kurses umbenannt werden: ",
 	"components.molecules.import.courses.options.title": "Kurs importieren",
 	"components.molecules.import.lessons.label": "Thema",
@@ -660,6 +662,7 @@ export default {
 		"Der Kurs, in den das Thema importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.import.lessons.options.selectCourse": "Kurs wählen",
 	"components.molecules.import.lessons.options.title": "Thema importieren",
+	"components.molecules.import.lessons.question": "Wohin soll das Thema{title} importiert werden?",
 	"components.molecules.import.options.failure.backendError": "{name} konnte nicht importiert werden.",
 	"components.molecules.import.options.failure.invalidToken": "Das Token im Link ist unbekannt oder abgelaufen.",
 	"components.molecules.import.options.failure.permissionError": "Leider fehlt die notwendige Berechtigung.",
@@ -673,6 +676,7 @@ export default {
 	"components.molecules.import.tasks.rename": "Bei Bedarf kann der Name der Aufgabe umbenannt werden: ",
 	"components.molecules.import.tasks.options.selectCourse.infoText":
 		"Der Kurs, in den die Aufgabe importiert werden soll, muss im Folgenden ausgewählt werden.",
+	"components.molecules.import.tasks.question": "Wohin soll die Aufgabe{title} importiert werden?",
 	"components.molecules.export.options.info": "Folgende Inhalte werden nicht exportiert:",
 	"components.molecules.export.options.info.point1": "Hochgeladene Dateien innerhalb des Kurses.",
 	"components.molecules.export.options.info.point2": "Abgaben",

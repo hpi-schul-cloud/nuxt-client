@@ -631,7 +631,8 @@ export default {
 	"components.molecules.import.columnBoard.label": "Título del tablero",
 	"components.molecules.label.room": "Seleccionar sala",
 	"components.molecules.label.board": "Seleccionar tablero",
-	"components.molecules.label.section": "Seleccionar sección",
+	"components.molecules.label.column": "Seleccionar sección",
+	"components.molecules.label.course": "Seleccionar curso",
 	"components.molecules.import.card.question": "¿A dónde se debe importar la tarjeta{title}?",
 	"components.molecules.move.card.title": "Mover tarjeta",
 	"components.molecules.move.card.question": "¿A dónde se debe mover la tarjeta{title}?",
@@ -648,6 +649,7 @@ export default {
 	"components.molecules.import.columnBoard.options.selectRoom": "Seleccionar sala",
 	"components.molecules.import.columnBoard.options.selectRoom.infoText":
 		"Seleccione la sala en la que desea importar el tablero.",
+	"components.molecules.import.columnBoard.question": "Seleccione un tablero.",
 	"components.molecules.import.courses.rename": "Si es necesario, se puede cambiar el nombre del curso: ",
 	"components.molecules.import.courses.options.title": "Importar curso",
 	"components.molecules.import.lessons.label": "Tema",
@@ -656,6 +658,7 @@ export default {
 		"Seleccione el curso al que desea importar el tema.",
 	"components.molecules.import.lessons.options.selectCourse": "Elija el curso",
 	"components.molecules.import.lessons.options.title": "Importar tema",
+	"components.molecules.import.lessons.question": "¿Dónde se debe importar el tema{title}?",
 	"components.molecules.import.options.failure.backendError": "{name} no se pudo importar.",
 	"components.molecules.import.options.failure.invalidToken": "El token en el enlace es desconocido o ha caducado.",
 	"components.molecules.import.options.failure.permissionError": "Desafortunadamente, falta la autorización necesaria.",
@@ -671,6 +674,7 @@ export default {
 		"Seleccione el curso al que desea importar la tarea.",
 	"components.molecules.import.tasks.options.selectCourse": "Elija el curso",
 	"components.molecules.import.tasks.options.title": "Importar tarea",
+	"components.molecules.import.tasks.question": "¿Dónde se debe importar la tarea{title}?",
 	"components.molecules.importUsersMatch.deleteMatch": "Eliminar enlace",
 	"components.molecules.importUsersMatch.flag": "Marcar cuenta",
 	"components.molecules.importUsersMatch.notFound": "No se encontraron cuentas",
@@ -1378,9 +1382,11 @@ export default {
 	"pages.administration.students.consent.steps.success.image.alt": "Conecta el gráfico de forma segura",
 	"pages.administration.students.consent.steps.success":
 		"¡Enhorabuena, has completado el registro analógico correctamente!",
-	"pages.administration.students.consent.table.empty":
+	"pages.administration.students.consent.table.empty": "Todos los estudiantes ya han dado su consentimiento.",
+	"pages.administration.students.consent.title": "Registro analógico",
+	"pages.administration.students.table.empty":
 		"Todos l{'@'}s usuari{'@'}s que has elegido ya han recibido su consentimiento.",
-	"pages.administration.students.consent.title": "Registrarse de forma analógica",
+	"pages.administration.students.title": "Registrarse de forma analógica",
 	"pages.administration.students.fab.add": "Crear estudiante",
 	"pages.administration.students.fab.import": "Importar estudiante",
 	"pages.administration.students.index.remove.confirm.message":

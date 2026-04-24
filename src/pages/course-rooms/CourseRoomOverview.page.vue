@@ -100,12 +100,12 @@
 		@drag-from-group="dragFromGroup"
 	/>
 	<ImportDialog
-		v-if="isImportDialogOpen"
-		:is-dialog-open="isImportDialogOpen"
+		v-if="isGenericImportDialogOpen"
+		:is-dialog-open="isGenericImportDialogOpen"
 		:share-token-info="shareTokenInfo!"
 		:available-destinations="availableDestinations"
 		destination-type="course"
-		@confirm="importAction.submit"
+		@confirm="onConfirmImport"
 		@cancel="onCancelImport"
 	/>
 </template>
@@ -116,14 +116,13 @@ import CourseRoomEmptyAvatar from "@/components/course-rooms/CourseRoomEmptyAvat
 import CourseRoomGroupAvatar from "@/components/course-rooms/CourseRoomGroupAvatar.vue";
 import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
 import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
-import { useAwaitableAction } from "@/composables/awaitable-action.composable";
 import router from "@/router";
 import { DroppedObject } from "@/store/types/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { DashboardGridElementResponse, ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
-import { notifySuccess, useLoadingStore } from "@data-app";
+import { DashboardGridElementResponse } from "@api-server";
+import { notifySuccess } from "@data-app";
 import { GroupDataType, useCourseRoomListStore } from "@data-course-rooms";
-import { ImportDialog, useShareTokenImport } from "@feature-import";
+import { ImportDialog, useImportFlow } from "@feature-import";
 import { mdiCheck } from "@icons/material";
 import { SvsSearchField } from "@ui-controls";
 import { useTitle } from "@vueuse/core";
@@ -137,7 +136,6 @@ import { useDisplay } from "vuetify";
 const { t } = useI18n();
 const route = useRoute();
 const display = useDisplay();
-const { withLoadingState } = useLoadingStore();
 
 const refs = reactive<Record<string, unknown>>({});
 const courseRoomListStore = useCourseRoomListStore();
@@ -196,56 +194,27 @@ const hasRoomsBeingCopied = computed(() =>
 
 const isTouchDevice = computed(() => window.ontouchstart !== undefined);
 
-const shareTokenInfo = ref<ShareTokenInfoResponse>();
 const availableDestinations = computed(() =>
 	sortBy(
 		allElements.value.filter((course) => !course.isLocked).map((course) => ({ id: course.id, name: course.title }))
 	)
 );
 
-const { validateShareToken, importShareToken } = useShareTokenImport();
-const importAction = useAwaitableAction<{ newName: string; destinationId?: string }>();
+const { executeImport, isGenericImportDialogOpen, shareTokenInfo, onConfirmImport, onCancelImport } = useImportFlow();
 
-const isImportDialogOpen = computed(
-	() =>
-		importAction.isActive.value &&
-		!!shareTokenInfo.value &&
-		!(shareTokenInfo.value?.parentType === ShareTokenInfoResponseParentType.CARD)
-);
-
-const onCancelImport = () => {
-	importAction.cancel();
-	router.push({ name: "course-room-overview" });
-};
-
-const executeImport = async (token: string) => {
-	const { validationResult } = await validateShareToken(token);
-
-	if (!validationResult) {
-		onCancelImport();
-		return;
-	}
-
-	shareTokenInfo.value = validationResult;
-
-	const { submitted, data } = await importAction.start();
-	if (!submitted) return;
-
-	const { importResult } = await withLoadingState(
-		() => importShareToken(validationResult, data),
-		t("components.molecules.import.options.loadingMessage")
-	);
+const importShareToken = async (token: string) => {
+	const { result: importResult } = await executeImport(token);
 
 	if (!importResult) {
-		onCancelImport();
+		router.push({ name: "course-room-overview" });
 		return;
 	}
 
-	if (validationResult.parentType === ShareTokenInfoResponseParentType.COURSES) {
+	if (importResult.destination && importResult.destination.type === "course") {
+		router.replace({ name: "room-details", params: { id: importResult.destination.id } });
+	} else {
 		router.replace({ name: "course-room-overview" });
 		fetchCourses();
-	} else {
-		router.replace({ name: "room-details", params: { id: importResult.destinationId } });
 	}
 };
 
@@ -254,7 +223,7 @@ watch(
 	() => {
 		if (route.query.import) {
 			const token = route.query.import as string;
-			executeImport(token);
+			importShareToken(token);
 		}
 	},
 	{ immediate: true }

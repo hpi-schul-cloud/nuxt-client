@@ -14,29 +14,32 @@
 		</EmptyState>
 		<RoomGrid v-else :rooms />
 		<ImportCardDialog
-			v-if="showImportCardDialog"
-			:is-dialog-open="showImportCardDialog"
+			v-if="isCardImportDialogOpen"
+			:is-dialog-open="isCardImportDialogOpen"
 			:share-token-info="shareTokenInfo!"
+			:available-destinations="availableDestinations"
+			destination-type="column"
+			@confirm="onConfirmImport"
+			@cancel="onCancelImport"
 		/>
 		<ImportDialog
-			v-if="showGenericImportDialog"
-			:is-dialog-open="showGenericImportDialog"
+			v-if="isGenericImportDialogOpen"
+			:is-dialog-open="isGenericImportDialogOpen"
 			:share-token-info="shareTokenInfo!"
 			:available-destinations="availableDestinations"
 			destination-type="room"
-			@confirm="importAction.submit"
+			@confirm="onConfirmImport"
 			@cancel="onCancelImport"
 		/>
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
-import { useAwaitableAction } from "@/composables/awaitable-action.composable";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { Permission, ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
-import { useAppStore, useLoadingStore } from "@data-app";
+import { Permission } from "@api-server";
+import { useAppStore } from "@data-app";
 import { useRoomStore } from "@data-room";
-import { ImportCardDialog, useShareTokenImport } from "@feature-import";
+import { ImportCardDialog, useImportFlow } from "@feature-import";
 import { ImportDialog } from "@feature-import";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
@@ -44,7 +47,7 @@ import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
-import { computed, onMounted, ref, toValue, watch } from "vue";
+import { computed, onMounted, toValue, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
@@ -52,7 +55,6 @@ const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const { rooms, isLoading, isEmpty } = storeToRefs(useRoomStore());
-const { withLoadingState } = useLoadingStore();
 
 const { fetchRooms } = useRoomStore();
 
@@ -73,52 +75,29 @@ const fabAction = computed(() => {
 	];
 });
 
-const shareTokenInfo = ref<ShareTokenInfoResponse>();
 const availableDestinations = computed(() => rooms.value.filter((room) => !room.isLocked));
 
-const { validateShareToken, importShareToken } = useShareTokenImport();
-const importAction = useAwaitableAction<{ newName: string; destinationId?: string }>();
+const {
+	executeImport,
+	isGenericImportDialogOpen,
+	isCardImportDialogOpen,
+	shareTokenInfo,
+	onConfirmImport,
+	onCancelImport,
+} = useImportFlow();
 
-const showImportCardDialog = computed(
-	() => !!shareTokenInfo.value && shareTokenInfo.value?.parentType === ShareTokenInfoResponseParentType.CARD
-);
-
-const showGenericImportDialog = computed(
-	() =>
-		importAction.isActive.value &&
-		!!shareTokenInfo.value &&
-		shareTokenInfo.value?.parentType !== ShareTokenInfoResponseParentType.CARD
-);
-
-const onCancelImport = () => {
-	importAction.cancel();
-};
-
-const executeImport = async (token: string) => {
-	const { validationResult } = await validateShareToken(token);
-
-	if (!validationResult) {
-		onCancelImport();
-		return;
-	}
-
-	shareTokenInfo.value = validationResult;
-
-	const { submitted, data } = await importAction.start();
-	if (!submitted) return;
-
-	const { importResult } = await withLoadingState(
-		() => importShareToken(validationResult, data),
-		t("components.molecules.import.options.loadingMessage")
-	);
+const executeImportFlow = async (token: string) => {
+	const { result: importResult } = await executeImport(token);
 
 	if (!importResult) {
-		onCancelImport();
+		router.push({ name: "rooms" });
 		return;
 	}
 
-	if (importResult.destinationId) {
-		router.replace({ name: "room-details", params: { id: importResult.destinationId } });
+	if (importResult.destination && importResult.destination.type === "room") {
+		router.replace({ name: "room-details", params: { id: importResult.destination.id } });
+	} else if (importResult.destination && importResult.destination.type === "column") {
+		router.replace({ name: "boards-id", params: { id: importResult.destination.boardId } });
 	} else {
 		router.replace({ name: "rooms" });
 		fetchRooms();
@@ -130,7 +109,7 @@ watch(
 	() => {
 		if (route.query.import) {
 			const token = route.query.import as string;
-			executeImport(token);
+			executeImportFlow(token);
 		}
 	},
 	{ immediate: true }

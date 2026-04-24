@@ -6,8 +6,8 @@
 		:confirm-btn-lang-key="confirmBtnLangKey"
 		:confirm-btn-disabled="!isActiveStepValid"
 		data-testid="import-dialog"
-		@cancel="isDialogOpen = false"
 		@confirm="onConfirm"
+		@cancel="onCancel"
 	>
 		<template #content>
 			<p>
@@ -24,11 +24,15 @@
 				</ul>
 			</WarningAlert>
 			<template v-if="activeStep == 'select'">
+				<p data-testid="import-dialog-destination-question">
+					{{ destinationQuestion }}
+				</p>
 				<VSelect
 					v-model="selectedDestinationId"
+					:items="availableDestinations"
 					item-value="id"
 					item-title="name"
-					:items="availableDestinations"
+					:label="selectionLabel"
 					:placeholder="selectionPlaceholder"
 					:rules="[rules.required]"
 					:error="hasSelectStep && !isSelectedDestinationValid"
@@ -53,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { ImportDestinationItem, ImportDestinationType } from "./types";
+import { ImportDestination, ImportDestinationItem, ImportDestinationType } from "./types";
 import { useCopyContent } from "@/composables/copy-content.composable";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
@@ -69,11 +73,12 @@ const { validateOnOpeningTag } = useOpeningTagValidator();
 const props = defineProps<{
 	shareTokenInfo: ShareTokenInfoResponse;
 	availableDestinations: ImportDestinationItem[];
-	destinationType: ImportDestinationType;
+	destinationType: Extract<ImportDestinationType, "room" | "course">;
 }>();
 
 const emit = defineEmits<{
-	(e: "confirm", payload: { newName: string; destinationId?: string }): void;
+	(e: "confirm", payload: { newName: string; destination?: ImportDestination }): void;
+	(e: "cancel"): void;
 }>();
 
 const isDialogOpen = defineModel("is-dialog-open", {
@@ -139,22 +144,32 @@ const onConfirm = () => {
 		return;
 	}
 
-	emit("confirm", { newName: newName.value, destinationId: selectedDestinationId.value });
+	emit("confirm", {
+		newName: newName.value,
+		destination: selectedDestinationId.value
+			? { type: props.destinationType, id: selectedDestinationId.value }
+			: undefined,
+	});
+};
+
+const onCancel = () => {
+	emit("cancel");
 };
 
 const currentStepTitle = computed(() =>
 	t(`components.molecules.import.${props.shareTokenInfo.parentType}.options.title`)
 );
 
+const selectionLabel = computed(() => {
+	if (!hasSelectStep.value) return "";
+
+	return t(props.destinationType === "room" ? "components.molecules.label.room" : "components.molecules.label.course");
+});
+
 const selectionPlaceholder = computed(() => {
-	if (!hasSelectStep.value) {
-		return "";
-	}
-	return t(
-		props.destinationType === "room"
-			? `components.molecules.import.${props.shareTokenInfo.parentType}.options.selectRoom`
-			: `components.molecules.import.${props.shareTokenInfo.parentType}.options.selectCourse`
-	);
+	if (!hasSelectStep.value) return "";
+
+	return t(props.destinationType === "room" ? "common.labels.room" : "common.labels.course");
 });
 
 const selectionHint = computed(() => t(`common.labels.${props.destinationType}`));
@@ -192,4 +207,11 @@ const contentItemType = computed<ContentItemTypeEnum>(() => {
 });
 
 const { text, warnings } = useCopyContent(contentItemType);
+
+const destinationQuestion = computed(() => {
+	const originalName = props.shareTokenInfo.parentName;
+	return t(`components.molecules.import.${props.shareTokenInfo.parentType}.question`, {
+		title: originalName ? ` "${originalName}"` : "",
+	});
+});
 </script>

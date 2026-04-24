@@ -38,6 +38,8 @@ describe("ImportCardDialog", () => {
 		const wrapper = mount(ImportCardDialog, {
 			props: {
 				shareTokenInfo,
+				availableDestinations: rooms.map((room) => ({ id: room.id, name: room.name })),
+				destinationType: "column",
 				isDialogOpen: true,
 			},
 			global: {
