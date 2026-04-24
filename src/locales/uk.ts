@@ -8,7 +8,7 @@ export default {
 	"common.actions.copy": "Копіювати",
 	"common.actions.duplicate": "Дублювати",
 	"common.actions.move": "Перемістити",
-	"common.actions.view": "Показать",
+	"common.actions.view": "Показати",
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Відкинути",
