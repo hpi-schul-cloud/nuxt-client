@@ -302,7 +302,7 @@ describe("CardHost", () => {
 		});
 	});
 
-	describe("card detail view", async () => {
+	describe("card detail view", () => {
 		describe("when prop detailViewCardId equals to cardId", () => {
 			it("should open detail view", () => {
 				const { wrapper } = setup({ openDetailView: true });
