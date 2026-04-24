@@ -63,6 +63,7 @@
 <script setup lang="ts">
 import H5pElementMenu from "./H5pElementMenu.vue";
 import H5PImage from "@/assets/img/h5p/default_h5p_display.svg";
+import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict } from "@/utils/inject";
 import { decodeHtmlEntities } from "@/utils/textFormatting";
 import { H5PContentParentType } from "@api-h5p";
@@ -96,7 +97,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const { smAndUp } = useDisplay();
-const { downloadContentFile, getContentTitle } = useH5PEditorApi();
+const { getContentTitle } = useH5PEditorApi();
 
 const element: Ref<H5pElementResponse> = toRef(props, "element");
 
@@ -185,7 +186,8 @@ const onDownload = (event?: Event) => {
 		return;
 	}
 
-	downloadContentFile(element.value.content.contentId);
+	const url = `/api/v3/h5p-editor/download/${element.value.content.contentId}`;
+	downloadFile(url, `${contentTitle.value}.h5p`);
 };
 
 const fetchAndSetContentTitle = async (h5pElement: H5pElementResponse) => {
