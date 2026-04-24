@@ -1,5 +1,6 @@
 import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
 import { mockComposable } from "@@/tests/test-utils";
+import { publicSystemResponseFactory } from "@@/tests/test-utils/factory/publicSystemResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useSystem } from "@data-system";
 import { flushPromises, mount } from "@vue/test-utils";
@@ -27,11 +28,7 @@ describe("ClassMembersInfoBox", () => {
 		};
 	};
 
-	const mockSystem = {
-		id: "systemId",
-		displayName: "asdf",
-		hasEndSessionEndpoint: false,
-	};
+	const mockSystem = publicSystemResponseFactory.build();
 
 	beforeEach(() => {
 		useSystemMock = mockComposable(useSystem, {
@@ -56,7 +53,7 @@ describe("ClassMembersInfoBox", () => {
 
 			const alert = wrapper.findComponent({ name: "v-alert" });
 
-			expect(alert.text()).toEqual('page-class-members.systemInfoText {"systemName":"asdf"}');
+			expect(alert.text()).toEqual('page-class-members.systemInfoText {"systemName":"soundsystem-1"}');
 		});
 	});
 
