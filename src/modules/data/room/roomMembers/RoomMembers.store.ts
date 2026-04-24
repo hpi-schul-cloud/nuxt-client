@@ -1,7 +1,6 @@
 import { useRoomDetailsStore } from "../RoomDetails.store";
 import { ExternalMemberCheckStatus, RoomMember } from "./types";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { schoolsModule } from "@/store";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	ChangeRoomRoleBodyParamsRoleName,
@@ -13,7 +12,7 @@ import {
 	SchoolApiFactory,
 	SchoolForExternalInviteResponse,
 } from "@api-server";
-import { notifyError, notifySuccess, useAppStore } from "@data-app";
+import { notifyError, notifySuccess, useAppStoreRefs } from "@data-app";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";
@@ -23,6 +22,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	let _asAdmin = false;
 
 	const { room } = storeToRefs(useRoomDetailsStore());
+	const { user, schoolDetails } = useAppStoreRefs();
 	const roomId = computed(() => room.value?.id);
 
 	const roomMembers: Ref<RoomMember[]> = ref([]);
@@ -56,13 +56,15 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		};
 	};
 
-	const isLoading = ref<boolean>(false);
+	const isLoading = ref(false);
+	// Derived values from school are not written in reactive style. This leads to inconsistent typings/code.
+	// Instead, as much as possible should be computed.
 	const ownSchool = {
-		id: schoolsModule.getSchool.id,
-		name: schoolsModule.getSchool.name,
+		id: schoolDetails.value.id,
+		name: schoolDetails.value.name,
 	};
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([ownSchool]);
-	const currentUserId = computed(() => useAppStore().user?.id);
+	const currentUserId = computed(() => user.value?.id);
 
 	const selectedIds = ref<string[]>([]);
 	const confirmationSelectedIds = ref<string[]>([]);

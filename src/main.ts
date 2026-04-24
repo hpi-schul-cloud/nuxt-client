@@ -74,7 +74,6 @@ app.use(VueDOMPurifyHTML, {
 
 	try {
 		await useAppStore().login();
-		await schoolsModule.fetchSchool(); // fetch school relies on successful login to know the school id
 	} catch (error) {
 		logger.info("Unhandled error during login", error);
 	}

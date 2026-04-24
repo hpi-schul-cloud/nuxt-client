@@ -1,8 +1,7 @@
 import ImportUsers from "./ImportUsers.vue";
-import { importUsersModule, schoolsModule } from "@/store";
+import { importUsersModule } from "@/store";
 import ImportUsersModule, { MatchedBy } from "@/store/import-users";
-import SchoolsModule from "@/store/schools";
-import { createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
+import { createTestAppStore, createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { ImportUserListResponse, ImportUserResponseRoleNames, SchulcloudTheme } from "@api-server";
@@ -98,21 +97,6 @@ const mockData: ImportUsersInstance["$data"] = {
 
 type ImportUsersInstance = InstanceType<typeof ImportUsers>;
 
-const getWrapper = (data?: ImportUsersInstance["$data"], options?: object) => {
-	vi.spyOn(importUsersModule, "fetchAllImportUsers").mockResolvedValue();
-	return mount(ImportUsers, {
-		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
-		},
-		data() {
-			return {
-				...data,
-			};
-		},
-		...options,
-	});
-};
-
 describe("ImportUsers", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -121,17 +105,35 @@ describe("ImportUsers", () => {
 
 	beforeEach(() => {
 		setupStores({
-			schoolsModule: SchoolsModule,
 			importUsersModule: ImportUsersModule,
 		});
 		importUsersModule.setImportUsersList(mockImportUsers);
-		schoolsModule.setSchool(
-			schoolFactory.build({
-				inUserMigration: true,
-				inMaintenance: true,
-			})
-		);
 	});
+
+	const setupSchool = (inUserMigration = true, inMaintenance = true) => {
+		createTestAppStore({
+			schoolDetails: schoolFactory.build({
+				inUserMigration,
+				inMaintenance,
+			}),
+		});
+	};
+
+	const getWrapper = (data?: ImportUsersInstance["$data"], options?: object) => {
+		vi.spyOn(importUsersModule, "fetchAllImportUsers").mockResolvedValue();
+		setupSchool();
+		return mount(ImportUsers, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			data() {
+				return {
+					...data,
+				};
+			},
+			...options,
+		});
+	};
 
 	it("should have correct props", () => {
 		const wrapper = getWrapper(mockData);
@@ -141,25 +143,16 @@ describe("ImportUsers", () => {
 	});
 
 	it("alert section should visible/invisible according to 'canStartMigration' value", async () => {
-		schoolsModule.setSchool(
-			schoolFactory.build({
-				inUserMigration: false,
-				inMaintenance: false,
-			})
-		);
-
 		const wrapper = getWrapper(mockData);
+		setupSchool(false, false);
+		await nextTick();
 
 		const alertElement = wrapper.findAll(".v-alert");
 		expect(alertElement).toHaveLength(1);
 		expect(alertElement[0].element.textContent).toContain(wrapper.vm.$t("pages.administration.migration.cannotStart"));
 
-		schoolsModule.setSchool(
-			schoolFactory.build({
-				inUserMigration: true,
-				inMaintenance: true,
-			})
-		);
+		setupSchool(true, true);
+
 		await nextTick();
 
 		const invisibleAlertElement = wrapper.findAll(".v-alert");
@@ -167,26 +160,17 @@ describe("ImportUsers", () => {
 	});
 
 	it("alert section should be visible/invisible according to 'canStartMigration' value", async () => {
-		schoolsModule.setSchool(
-			schoolFactory.build({
-				inUserMigration: false,
-				inMaintenance: true,
-			})
-		);
-
 		const wrapper = getWrapper({
 			...mockData,
 		});
+		setupSchool(false, true);
+		await nextTick();
 
 		const visibleAlertElement = wrapper.findAll(".v-alert");
 		expect(visibleAlertElement).toHaveLength(1);
 
-		schoolsModule.setSchool(
-			schoolFactory.build({
-				inUserMigration: true,
-				inMaintenance: true,
-			})
-		);
+		setupSchool(true, true);
+
 		await nextTick();
 
 		const invisibleAlertElement = wrapper.findAll(".v-alert");

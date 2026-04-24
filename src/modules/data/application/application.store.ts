@@ -1,7 +1,19 @@
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
-import { LanguageType, MeApiFactory, MeResponse, Permission, RoleName, UserApiFactory } from "@api-server";
+import {
+	LanguageType,
+	MeApiFactory,
+	MeResponse,
+	Permission,
+	RoleName,
+	SchoolApiFactory,
+	SchoolFeature,
+	SchoolResponse,
+	SchoolSystemResponse,
+	UserApiFactory,
+} from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
@@ -19,6 +31,9 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 export const useAppStore = defineStore("applicationStore", () => {
 	const meApi = MeApiFactory(undefined, "/v3", $axios);
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
+	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
+
+	const { execute: executeSchoolApi } = useSafeAxiosTask();
 	const { sendLogout, close } = useSessionBroadcast();
 
 	const isLoggedIn = ref(false);
@@ -26,9 +41,15 @@ export const useAppStore = defineStore("applicationStore", () => {
 
 	const userLocale = ref<LanguageType>();
 	const meResponse = ref<MeResponse>();
+	// Treated as never undefined. Currently secured by order execution in main.ts. Should be treated differently tho.
+	// Affects more than just schoolDetails. Almost all data in here should be treated as never undefined, as the app does not work without them.
+	const schoolDetails = ref<SchoolResponse>(undefined!);
 
 	// Computed store properties
 	const school = computed(() => meResponse.value?.school);
+	const schoolFeatures = computed(() => new Set(schoolDetails.value?.features));
+	const schoolSystems = ref<SchoolSystemResponse[]>([]);
+
 	const user = computed(() => meResponse.value?.user);
 
 	const userRoles = computed(() => meResponse.value?.roles.map((r) => r.name) ?? []);
@@ -51,7 +72,41 @@ export const useAppStore = defineStore("applicationStore", () => {
 	const hasPermission = (permission: Permission) =>
 		computed(() => userPermissions.value?.includes(permission) ?? false);
 
+	const hasFeature = (feature: SchoolFeature) => schoolFeatures.value.has(feature);
+
 	// Actions
+	const fetchSchoolDetails = async (schoolId: string) => {
+		const { result, success, error } = await executeSchoolApi(
+			() => schoolApi.schoolControllerGetSchoolById(schoolId),
+			"pages.administration.school.index.error"
+		);
+		if (success) {
+			schoolDetails.value = result?.data;
+		}
+		return { result, success, error };
+	};
+
+	const fetchSchoolSystems = async (schoolId: string) => {
+		const { result, success, error } = await executeSchoolApi(
+			() => schoolApi.schoolControllerGetSchoolSystems(schoolId),
+			"pages.administration.school.index.error"
+		);
+		if (success) {
+			schoolSystems.value = result.data;
+		}
+		return { result, success, error };
+	};
+
+	const deleteSchoolSystem = async (systemId: string) => {
+		const { success } = await executeSchoolApi(
+			() => schoolApi.schoolControllerRemoveSystemFromSchool(schoolDetails.value.id, systemId),
+			"pages.administration.school.index.error"
+		);
+
+		if (success && school.value) {
+			await Promise.all([fetchSchoolDetails(school.value.id), fetchSchoolSystems(school.value.id)]);
+		}
+	};
 
 	const login = async () => {
 		const { data } = await meApi.meControllerMe();
@@ -59,6 +114,8 @@ export const useAppStore = defineStore("applicationStore", () => {
 		userLocale.value = data.language;
 		meResponse.value = data;
 		isLoggedIn.value = true;
+
+		await fetchSchoolDetails(meResponse.value.school.id);
 	};
 
 	const logout = (redirectUrl = "/logout") => {
@@ -143,8 +200,12 @@ export const useAppStore = defineStore("applicationStore", () => {
 		isAdmin,
 		isExternalPerson,
 		school,
+		schoolDetails,
+		schoolFeatures,
+		hasFeature,
 		userRoles,
 		systemId,
+		deleteSchoolSystem,
 		login,
 		logout,
 		clearUserSession,

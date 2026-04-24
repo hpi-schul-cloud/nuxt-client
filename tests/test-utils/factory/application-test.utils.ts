@@ -1,6 +1,6 @@
 import { createDayJs } from "@/utils/date-time.utils";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import { LanguageType, MeResponse, Permission, RoleName } from "@api-server";
+import { LanguageType, MeResponse, Permission, RoleName, SchoolResponse } from "@api-server";
 import { AlertStatus, useAppStore, useNotificationStore } from "@data-app";
 import { DeepPartial, Factory } from "fishery";
 import { Pinia } from "pinia";
@@ -33,15 +33,17 @@ export const meResponseFactory = Factory.define<MeResponse>(({ sequence }) => ({
 
 export const createTestAppStore = ({
 	me,
+	schoolDetails,
 	pinia,
 }: {
 	me?: DeepPartial<MeResponse>;
+	schoolDetails?: DeepPartial<SchoolResponse>;
 	pinia?: Pinia;
 } = {}) => {
 	const mockedMe = meResponseFactory.build(me);
 	const store = useAppStore(pinia);
 
-	store.$patch({ meResponse: mockedMe, userLocale: mockedMe.language });
+	store.$patch({ meResponse: mockedMe, userLocale: mockedMe.language, schoolDetails });
 	const appStore = mockedPiniaStoreTyping(useAppStore);
 	createDayJs();
 

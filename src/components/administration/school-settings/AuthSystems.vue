@@ -103,7 +103,6 @@
 </template>
 
 <script>
-import { schoolsModule } from "@/store";
 import { askDeletion } from "@/utils/confirmation-dialog.utils.ts";
 import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
@@ -133,6 +132,7 @@ export default {
 		customLoginLinkEnabled: () => useEnvConfig().value.FEATURE_LOGIN_LINK_ENABLED,
 		hasSystemCreatePermission: () => useAppStore().hasPermission(Permission.SYSTEM_CREATE),
 		hasSystemEditPermission: () => useAppStore().hasPermission(Permission.SYSTEM_EDIT),
+		schoolId: () => useAppStore().schoolDetails.id,
 	},
 	methods: {
 		ariaLabels(system) {
@@ -171,8 +171,7 @@ export default {
 			return system.oauthConfig || system.ldapConfig;
 		},
 		removeSystem(systemId) {
-			schoolsModule.deleteSystem(systemId);
-			// TODO show error
+			useAppStore().deleteSchoolSystem(systemId);
 		},
 		generateLoginLink(system) {
 			let params = "";
@@ -182,7 +181,7 @@ export default {
 			} else if (system.oauthConfig) {
 				params = `?strategy=${system.oauthConfig.provider}`;
 			} else if (system.ldapConfig) {
-				params = `?strategy=ldap&schoolId=${schoolsModule.getSchool.id}`;
+				params = `?strategy=ldap&schoolId=${this.schoolId}`;
 			}
 
 			return `${window.location.origin}/login${params}`;

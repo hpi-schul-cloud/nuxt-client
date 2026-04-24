@@ -16,8 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { AddMembersDialog, RoomAdminMembersTable } from "@feature-room";
@@ -28,6 +28,7 @@ import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+const { schoolDetails } = useAppStoreRefs();
 const { fetchRoom } = useRoomDetailsStore();
 const { room } = storeToRefs(useRoomDetailsStore());
 
@@ -87,7 +88,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 	},
 ]);
 
-const adminSchoolId = computed(() => schoolsModule.getSchool.id);
+const adminSchoolId = computed(() => schoolDetails.value?.id);
 const isOwnSchool = computed(() => room.value?.schoolId === adminSchoolId.value);
 
 const fabAction = computed(() =>

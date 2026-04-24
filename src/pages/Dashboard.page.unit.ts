@@ -1,6 +1,4 @@
 import DashboardPage from "./Dashboard.page.vue";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import {
 	createTestAppStore,
@@ -8,10 +6,8 @@ import {
 	mockApiResponse,
 	mockAxiosInstance,
 	newsResponseFactory,
-	schoolFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	NewsApiInterface,
 	NewsResponse,
@@ -44,11 +40,6 @@ describe("DashboardPage", () => {
 		releasesApi = mockApi<ReleaseApiInterface>();
 		runtimeConfigApi = mockApi<RuntimeConfigApiInterface>();
 
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-		schoolsModule.setSchool(schoolFactory.build());
-
 		vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(newsApi);
 		vi.spyOn(serverApi, "ReleaseApiFactory").mockReturnValue(releasesApi);
 		vi.spyOn(serverApi, "RuntimeConfigApiFactory").mockReturnValue(runtimeConfigApi);
@@ -69,14 +60,11 @@ describe("DashboardPage", () => {
 				preferences: options?.releaseDate ? { releaseDate: options.releaseDate } : undefined,
 				permissions: options?.permissions ?? [],
 			},
-		});
-
-		schoolsModule.setSchool(
-			schoolFactory.build({
+			schoolDetails: {
 				inMaintenance: options?.schoolInMaintenance ?? false,
 				inUserMigration: options?.schoolInMigration ?? false,
-			})
-		);
+			},
+		});
 
 		newsApi.newsControllerFindAll.mockResolvedValue(
 			mockApiResponse({
