@@ -28,5 +28,24 @@ export const useH5PEditorApi = () => {
 		return title;
 	};
 
-	return { getContentTitle };
+	const downloadContentFile = async (contentId: string, filename?: string): Promise<void> => {
+		try {
+			const response = (await h5pEditorApi.downloadH5pContent(contentId, {
+				responseType: "blob",
+			})) as unknown as AxiosResponse<Blob>;
+
+			const url = window.URL.createObjectURL(response.data);
+			const link = document.createElement("a");
+			link.href = url;
+			link.download = filename ?? `h5p-content-${contentId}.h5p`;
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+			window.URL.revokeObjectURL(url);
+		} catch {
+			notifyError(t("components.cardElement.h5pElement.download.error"));
+		}
+	};
+
+	return { getContentTitle, downloadContentFile };
 };

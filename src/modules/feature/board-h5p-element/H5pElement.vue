@@ -95,7 +95,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const { smAndUp } = useDisplay();
-const { getContentTitle } = useH5PEditorApi();
+const { downloadContentFile, getContentTitle } = useH5PEditorApi();
 
 const element: Ref<H5pElementResponse> = toRef(props, "element");
 
@@ -180,14 +180,7 @@ const onDownload = () => {
 		return;
 	}
 
-	const route = router.resolve({
-		name: "h5pContentDownload",
-		params: {
-			contentId: element.value.content.contentId,
-		},
-	});
-
-	window.open(route.href, "_blank");
+	downloadContentFile(element.value.content.contentId);
 };
 
 const fetchAndSetContentTitle = async (h5pElement: H5pElementResponse) => {
