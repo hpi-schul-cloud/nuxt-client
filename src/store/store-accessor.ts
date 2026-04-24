@@ -8,7 +8,6 @@
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import FilePaths from "@/store/filePaths";
-import GroupModule from "@/store/group";
 import ImportUsersModule from "@/store/import-users";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
@@ -22,7 +21,6 @@ import { getModule } from "vuex-module-decorators";
 // (result from getModule(...))
 export let copyModule: CopyModule;
 export let filePathsModule: FilePaths;
-export let groupModule: GroupModule;
 export let importUsersModule: ImportUsersModule;
 export let courseRoomDetailsModule: CourseRoomDetailsModule;
 export let schoolExternalToolsModule: SchoolExternalToolsModule;
@@ -34,7 +32,6 @@ export let systemsModule: SystemsModule;
 export function initializeStores(store: Store<unknown>): void {
 	copyModule = getModule(CopyModule, store);
 	filePathsModule = getModule(FilePaths, store);
-	groupModule = getModule(GroupModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	courseRoomDetailsModule = getModule(CourseRoomDetailsModule, store);
 	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
@@ -49,7 +46,6 @@ export function initializeStores(store: Store<unknown>): void {
 export const modules = {
 	copyModule: CopyModule,
 	filePathsModule: FilePaths,
-	groupModule: GroupModule,
 	importUsersModule: ImportUsersModule,
 	courseRoomDetailsModule: CourseRoomDetailsModule,
 	schoolExternalToolsModule: SchoolExternalToolsModule,
