@@ -253,6 +253,7 @@ export default {
 	"common.words.schoolYear": "Навчальний рік",
 	"common.words.schoolYearChange": "Зміна навчального року",
 	"common.words.substitute": "Викладач на заміну",
+	"common.words.system": "система реєстрації",
 	"common.words.task": "Завдання",
 	"common.words.tasks": "Завдання",
 	"common.words.termsOfUse": "Умови використання",

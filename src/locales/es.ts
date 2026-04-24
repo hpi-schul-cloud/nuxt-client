@@ -247,6 +247,7 @@ export default {
 	"common.words.schoolYear": "Año escolar",
 	"common.words.schoolYearChange": "Cambio de año escolar",
 	"common.words.substitute": "Sustituir",
+	"common.words.system": "Sistema de registro",
 	"common.words.task": "Tarea",
 	"common.words.tasks": "Tareas",
 	"common.words.termsOfUse": "Condiciones de Uso",

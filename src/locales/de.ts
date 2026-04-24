@@ -253,6 +253,7 @@ export default {
 	"common.words.schoolYear": "Schuljahr",
 	"common.words.schoolYearChange": "Schuljahreswechsel",
 	"common.words.substitute": "Vertretung",
+	"common.words.system": "Anmeldesystem",
 	"common.words.task": "Aufgabe",
 	"common.words.tasks": "Aufgaben",
 	"common.words.termsOfUse": "Nutzungsordnung",
@@ -1939,7 +1940,7 @@ export default {
 	"pages.userMigration.button.skip": "Nicht jetzt",
 	"pages.userMigration.button.startMigration": "Umzug starten",
 	"pages.userMigration.description.firstParagraph.hello": "Hallo!",
-	"pages.userMigration.description.firstParagraph.changeSource": "Deine Schule wechselt gerade das Anmeldesystem",
+	"pages.userMigration.description.firstParagraph.changeSource": "Deine Schule wechselt gerade das Anmeldesystem.",
 	"pages.userMigration.description.firstParagraph.fromSource":
 		"Du kannst Deinen Account jetzt zu {targetSystem} umziehen.",
 	"pages.userMigration.description.firstParagraph.fromSourceMandatory":

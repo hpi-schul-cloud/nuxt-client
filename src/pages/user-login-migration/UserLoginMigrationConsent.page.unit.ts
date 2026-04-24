@@ -1,10 +1,6 @@
 import UserLoginMigrationConsent from "./UserLoginMigrationConsent.page.vue";
-import SystemsModule from "@/store/systems";
-import { System } from "@/store/types/system";
-import { SYSTEMS_MODULE_KEY } from "@/utils/inject";
 import { mockComposable } from "@@/tests/test-utils";
 import { userLoginMigrationFactory } from "@@/tests/test-utils/factory/userLoginMigration.factory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { UserLoginMigration, useUserLoginMigration } from "@data-user-login-migration";
 import { createTestingPinia } from "@pinia/testing";
@@ -17,26 +13,10 @@ vi.mock("@data-user-login-migration");
 const useUserLoginMigrationMock = vi.mocked(useUserLoginMigration);
 
 describe("UserLoginMigrationConsent", () => {
-	let systemsModule: Mocked<SystemsModule>;
 	let useUserLoginMigrationMockReturn: Mocked<ReturnType<typeof useUserLoginMigration>>;
 
 	const setup = async (userLoginMigration?: Partial<UserLoginMigration>) => {
-		const systemsMock: System[] = [
-			{
-				id: "sourceSystemId",
-				name: "sourceSystem",
-			},
-			{
-				id: "targetSystemId",
-				name: "targetSystem",
-			},
-		];
-
-		systemsModule = createModuleMocks(SystemsModule, {
-			getSystems: systemsMock,
-		});
-		const userLoginMigrationMock: UserLoginMigration = userLoginMigrationFactory.build({ ...userLoginMigration });
-
+		const userLoginMigrationMock = userLoginMigrationFactory.build({ ...userLoginMigration });
 		useUserLoginMigrationMockReturn = mockComposable(useUserLoginMigration);
 		useUserLoginMigrationMock.mockReturnValue(useUserLoginMigrationMockReturn);
 		useUserLoginMigrationMockReturn.userLoginMigration = ref(userLoginMigrationMock);
@@ -44,9 +24,6 @@ describe("UserLoginMigrationConsent", () => {
 		const wrapper = shallowMount(UserLoginMigrationConsent, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
-				},
 				mocks: {
 					$t: (key: string, dynamic?: object): string => key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
 				},

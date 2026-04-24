@@ -1,72 +1,49 @@
 <template>
-	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
-		<img src="@/assets/img/migration/migration_successful.svg" alt="" />
-		<h1 class="px-4">
-			{{ t("pages.userMigration.success.title") }}
-		</h1>
-		<div>
-			<p class="ma-8" data-testid="text-description">
-				{{
-					t("pages.userMigration.success.description", {
-						targetSystem: getSystemName(targetSystem),
-					})
-				}}
-				<span class="d-block">
-					{{ t("pages.userMigration.success.description.loginAgain") }}
-				</span>
-			</p>
-			<VBtn color="primary" variant="flat" data-testId="btn-proceed" to="/logout">
-				{{
-					t("pages.userMigration.success.login", {
-						targetSystem: getSystemName(targetSystem),
-					})
-				}}
-			</VBtn>
+	<SvsSuspense :loading="isLoading">
+		<div class="text-center mx-auto container-max-width">
+			<img src="@/assets/img/migration/migration_successful.svg" alt="" />
+			<h1 class="px-4">
+				{{ t("pages.userMigration.success.title") }}
+			</h1>
+			<div>
+				<p class="ma-8" data-testid="text-description">
+					{{
+						t("pages.userMigration.success.description", {
+							targetSystem: systemName,
+						})
+					}}
+					<span class="d-block">
+						{{ t("pages.userMigration.success.description.loginAgain") }}
+					</span>
+				</p>
+				<VBtn color="primary" variant="flat" data-testId="btn-proceed" to="/logout">
+					{{
+						t("pages.userMigration.success.login", {
+							targetSystem: systemName,
+						})
+					}}
+				</VBtn>
+			</div>
 		</div>
-	</div>
+	</SvsSuspense>
 </template>
 
-<script lang="ts">
-import SystemsModule from "@/store/systems";
-import { System } from "@/store/types/system";
-import { injectStrict, SYSTEMS_MODULE_KEY } from "@/utils/inject";
+<script setup lang="ts">
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useSystem } from "@data-access";
+import { SvsSuspense } from "@ui-containers";
 import { useTitle } from "@vueuse/core";
-import { defineComponent, onMounted, Ref, ref } from "vue";
+import { toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "UserLoginMigrationSuccess",
-	props: {
-		targetSystem: {
-			type: String,
-			required: true,
-		},
-	},
-	setup() {
-		const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
-		const { t } = useI18n();
+const props = defineProps<{ targetSystemId: string }>();
 
-		const pageTitle = buildPageTitle(t("pages.userMigration.success.title"));
-		useTitle(pageTitle);
+const { systemName, isLoading } = useSystem(toRef(props, "targetSystemId"));
 
-		const getSystemName = (id: string): string =>
-			systemsModule?.getSystems.find((system: System): boolean => system.id === id)?.name ?? "";
+const { t } = useI18n();
 
-		const isLoading: Ref<boolean> = ref(true);
-
-		onMounted(async () => {
-			await systemsModule?.fetchSystems();
-			isLoading.value = false;
-		});
-
-		return {
-			t,
-			isLoading,
-			getSystemName,
-		};
-	},
-});
+const pageTitle = buildPageTitle(t("pages.userMigration.success.title"));
+useTitle(pageTitle);
 </script>
 
 <style lang="scss" scoped>
