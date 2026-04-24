@@ -39,6 +39,7 @@
 					@move-up:element="onMoveElementUp"
 					@delete:element="onDeleteElement"
 					@edit:element="onEdit"
+					@download:content="onDownload"
 				/>
 			</template>
 		</ContentElementBar>
@@ -175,8 +176,10 @@ const onClickElement = () => {
 	}
 };
 
-const onDownload = (event: Event) => {
-	event.stopPropagation();
+const onDownload = (event?: Event) => {
+	if (event) {
+		event.stopPropagation();
+	}
 
 	if (!element.value.content.contentId) {
 		return;
