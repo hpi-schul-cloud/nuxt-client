@@ -5,35 +5,22 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
 import { ToolApiFactory } from "@api-server";
-import { ContextExternalToolConfigurationTemplate, SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
+import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import { ref } from "vue";
 
 export const useSchoolExternalTools = () => {
 	const { t } = useI18nGlobal();
-	const schoolExternalTools = ref<SchoolExternalTool[]>([]);
-	const schoolExternalToolConfigurationTemplates = ref<SchoolExternalToolConfigurationTemplate[]>([]);
-	const contextExternalToolConfigurationTemplate = ref<ContextExternalToolConfigurationTemplate | undefined>(undefined);
-
 	const toolApi = ToolApiFactory(undefined, "v3", $axios);
 
-	const { execute: execLoadTools, isRunning: isLoadingExternalTools, error: loadToolsError } = useSafeAxiosTask();
-	const { execute: execLoadTool, isRunning: isLoadingExternalTool, error: loadToolError } = useSafeAxiosTask();
-	const { execute: execDeleteTool, isRunning: isDeletingTool, error: deleteToolError } = useSafeAxiosTask();
-	const {
-		execute: execLoadAvailableTools,
-		isRunning: isLoadingAvailableTools,
-		error: loadAvailableToolsError,
-	} = useSafeAxiosTask();
-	const {
-		execute: execLoadConfigurationTemplate,
-		isRunning: isLoadingConfigurationTemplate,
-		error: loadConfigurationTemplateError,
-	} = useSafeAxiosTask();
-	const {
-		execute: execCreateOrUpdateTool,
-		isRunning: isCreatingOrUpdatingTool,
-		error: createOrUpdateToolError,
-	} = useSafeAxiosTask();
+	const schoolExternalTools = ref<SchoolExternalTool[]>([]);
+	const schoolExternalToolConfigurationTemplates = ref<SchoolExternalToolConfigurationTemplate[]>([]);
+
+	const { execute: execLoadTools, isRunning: isLoadingExternalTools } = useSafeAxiosTask();
+	const { execute: execLoadTool } = useSafeAxiosTask();
+	const { execute: execDeleteTool } = useSafeAxiosTask();
+	const { execute: execLoadAvailableTools, isRunning: isLoadingAvailableTools } = useSafeAxiosTask();
+	const { execute: execLoadConfigurationTemplate, isRunning: isLoadingConfigurationTemplate } = useSafeAxiosTask();
+	const { execute: execCreateOrUpdateTool, error: createOrUpdateToolError } = useSafeAxiosTask();
 
 	const loadSchoolExternalTools = async (schoolId: string) => {
 		// maybe add error message here

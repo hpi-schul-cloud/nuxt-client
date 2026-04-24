@@ -7,6 +7,7 @@ export * from "./externalToolDisplayListState.composable";
 export * from "./externalToolDisplayState.composable";
 export * from "./ExternalToolLaunchState.composable";
 export * from "./externalToolReferenceApi.composable";
+export * from "./preferred-external-tool.store";
 export * from "./SchoolExternalToolApi.composable";
 export * from "./SchoolExternalToolUsage.composable";
 export * from "./types";
