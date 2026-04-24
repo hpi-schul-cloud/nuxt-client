@@ -1,6 +1,6 @@
 <template>
 	<div data-testid="class-members-info-box">
-		<v-alert v-show="hasSystem" type="info" class="mb-0">
+		<v-alert v-if="hasSystem" type="info" class="mb-0">
 			<div class="alert-text">
 				{{
 					$t("page-class-members.systemInfoText", {
