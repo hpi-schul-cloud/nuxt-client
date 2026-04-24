@@ -25,11 +25,7 @@ describe("useSystem", () => {
 		const { system, systemName } = useSystem(systemId);
 		await flushPromises();
 
-		expect(system.value).toEqual({
-			id: mockSystem.id,
-			displayName: mockSystem.displayName,
-			hasEndSessionEndpoint: !!mockSystem.oauthConfig?.endSessionEndpoint,
-		});
+		expect(system.value).toEqual(mockSystem);
 		expect(systemName.value).toEqual(mockSystem.displayName);
 	});
 
