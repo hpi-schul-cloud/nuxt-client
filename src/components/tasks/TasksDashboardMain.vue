@@ -67,21 +67,12 @@
 			<tasks-dashboard-student v-if="isStudent" :tab-routes="tabRoutes" />
 			<tasks-dashboard-teacher v-else :tab-routes="tabRoutes" />
 		</div>
-		<copy-result-modal
-			v-if="isTeacher"
-			:is-open="isCopyModalOpen"
-			:copy-result-items="copyResultModalItems"
-			:copy-result-root-item-type="copyResultRootItemType"
-			@copy-dialog-closed="onCopyResultModalClosed"
-		/>
 	</DefaultWireframe>
 </template>
 
 <script>
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import { COPY_MODULE_KEY } from "@/utils/inject";
 import { Permission, RoleName } from "@api-server";
 import { useAppStore } from "@data-app";
 import {
@@ -105,11 +96,9 @@ export default {
 		DefaultWireframe,
 		TasksDashboardStudent,
 		TasksDashboardTeacher,
-		CopyResultModal,
 	},
 	inject: {
 		tasksModule: "tasksModule",
-		copyModule: { from: COPY_MODULE_KEY },
 		finishedTasksModule: "finishedTasksModule",
 	},
 	props: {
@@ -261,15 +250,6 @@ export default {
 
 			return undefined;
 		},
-		copyResultModalItems() {
-			return this.copyModule.getCopyResultFailedItems;
-		},
-		copyResultRootItemType() {
-			return this.copyModule.getCopyResult?.type;
-		},
-		isCopyModalOpen() {
-			return this.copyModule.getIsResultModalOpen;
-		},
 	},
 	watch: {
 		tab(tab, oldTab) {
@@ -305,9 +285,6 @@ export default {
 		},
 		setActiveTab(tab) {
 			this.tasksModule.setActiveTab(tab);
-		},
-		onCopyResultModalClosed() {
-			this.copyModule.reset();
 		},
 	},
 };

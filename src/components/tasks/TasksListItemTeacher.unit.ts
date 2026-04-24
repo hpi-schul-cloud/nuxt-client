@@ -1,8 +1,7 @@
 import TasksListItemMenu from "./TasksListItemMenu.vue";
 import TasksListItemTeacher from "./TasksListItemTeacher.vue";
-import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import TasksModule from "@/store/tasks";
-import { COPY_MODULE_KEY } from "@/utils/inject";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { createTestAppStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
@@ -16,7 +15,6 @@ import { VBtn, VListItem } from "vuetify/components";
 const { tasksTeacher, drafts, plannedTask, dueDateTasksTeacher, noDueDateTasksTeacher } = mocks;
 
 let tasksModuleMock: TasksModule;
-let copyModuleMock: CopyModule;
 
 const mockRouter = {
 	push: vi.fn(),
@@ -28,7 +26,6 @@ const getWrapper = (props: { task: object }) =>
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				tasksModule: tasksModuleMock,
-				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 			},
 		},
 		props: props,
@@ -56,7 +53,6 @@ describe("TasksListItemTeacher", () => {
 
 	beforeEach(() => {
 		tasksModuleMock = createModuleMocks(TasksModule);
-		copyModuleMock = createModuleMocks(CopyModule);
 	});
 
 	it("accepts valid task props", () => {
@@ -90,7 +86,7 @@ describe("TasksListItemTeacher", () => {
 		const payload = {
 			id: "123",
 			courseId: "c789",
-			type: CopyParamsTypeEnum.Task,
+			type: ContentItemTypeEnum.Task,
 		};
 
 		const oneTaskItemMenu = wrapper.findComponent(TasksListItemMenu);

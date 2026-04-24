@@ -1,10 +1,10 @@
 import TasksList from "./TasksList.vue";
 import TasksListItemTeacher from "./TasksListItemTeacher.vue";
-import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
-import { COPY_MODULE_KEY, FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
+import { FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -19,7 +19,6 @@ const { tasks } = mocks;
 describe("TasksList", () => {
 	let tasksModuleMock: TasksModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
-	let copyModuleMock: CopyModule;
 	let shareModuleMock: ShareModule;
 
 	const mountComponent = (options = {}) => {
@@ -27,7 +26,6 @@ describe("TasksList", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[TASKS_MODULE_KEY.valueOf()]: tasksModuleMock,
 					[FINISHED_TASKS_MODULE_KEY.valueOf()]: finishedTasksModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
@@ -50,7 +48,6 @@ describe("TasksList", () => {
 	});
 
 	beforeEach(() => {
-		copyModuleMock = createModuleMocks(CopyModule);
 		shareModuleMock = createModuleMocks(ShareModule);
 		tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
 		finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
@@ -239,7 +236,7 @@ describe("TasksList", () => {
 		const payload = {
 			id: "123",
 			courseId: "c789",
-			type: CopyParamsTypeEnum.Task,
+			type: ContentItemTypeEnum.Task,
 		};
 
 		const oneTaskItemTeacher = wrapper.findComponent(TasksListItemTeacher);

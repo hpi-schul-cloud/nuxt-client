@@ -1,10 +1,9 @@
 import TasksListItemMenu from "./TasksListItemMenu.vue";
 import { finishedTasksModule } from "@/store";
-import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import TasksModule from "@/store/tasks";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { COPY_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
@@ -18,7 +17,6 @@ import { VBtn } from "vuetify/components";
 const { tasksTeacher } = mocks;
 
 let tasksModuleMock: TasksModule;
-let copyModuleMock: CopyModule;
 
 const getWrapper = (
 	props: {
@@ -35,7 +33,6 @@ const getWrapper = (
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				tasksModule: tasksModuleMock,
-				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 			},
 		},
 		props,
@@ -60,7 +57,6 @@ describe("TasksListItemMenu", () => {
 			finishedTasksModule: FinishedTasksModule,
 		});
 		tasksModuleMock = createModuleMocks(TasksModule);
-		copyModuleMock = createModuleMocks(CopyModule);
 	});
 
 	defineWindowWidth(1264);
@@ -230,7 +226,7 @@ describe("TasksListItemMenu", () => {
 						{
 							id: "59cce2c61113d1132c98dc06",
 							courseId: "18",
-							type: CopyParamsTypeEnum.Task,
+							type: ContentItemTypeEnum.Task,
 						},
 					],
 				]);
@@ -257,7 +253,7 @@ describe("TasksListItemMenu", () => {
 						{
 							courseId: undefined,
 							id: "59cce2c61113d1132c98dc06",
-							type: CopyParamsTypeEnum.Task,
+							type: ContentItemTypeEnum.Task,
 						},
 					],
 				]);

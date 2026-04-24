@@ -1,3 +1,4 @@
+import CopyDialog from "@/modules/feature/copy/CopyDialog.vue";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
@@ -10,7 +11,7 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
-import { RoomContentGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
+import { RoomContentGrid, RoomMenu } from "@feature-room";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
@@ -267,7 +268,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					const menu = wrapper.getComponent({ name: "RoomMenu" });
 					await menu.vm.$emit("room:copy");
 
-					const copyFlow = wrapper.findComponent(RoomCopyFlow);
+					const copyFlow = wrapper.findComponent(CopyDialog);
 					expect(copyFlow.exists()).toBe(true);
 				});
 			});
@@ -281,7 +282,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					const menu = wrapper.getComponent(RoomMenu);
 					await menu.vm.$emit("room:copy");
 
-					const copyFlow = wrapper.findComponent(RoomCopyFlow);
+					const copyFlow = wrapper.findComponent(CopyDialog);
 					expect(copyFlow.emitted()["update:modelValue"]).toBeFalsy();
 				});
 			});
@@ -305,7 +306,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const menu = wrapper.getComponent({ name: "RoomMenu" });
 				await menu.vm.$emit("room:copy");
 
-				const copyFlow = wrapper.getComponent(RoomCopyFlow);
+				const copyFlow = wrapper.getComponent(CopyDialog);
 				const copiedRoomId = "copied-room-id";
 				await copyFlow.vm.$emit("copy:success", copiedRoomId);
 
@@ -323,7 +324,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const menu = wrapper.getComponent(RoomMenu);
 				await menu.vm.$emit("room:copy");
 
-				const copyFlow = wrapper.getComponent(RoomCopyFlow);
+				const copyFlow = wrapper.getComponent(CopyDialog);
 				await copyFlow.vm.$emit("copy:ended");
 				await wrapper.vm.$nextTick();
 

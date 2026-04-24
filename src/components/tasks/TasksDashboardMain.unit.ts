@@ -1,15 +1,13 @@
 import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
-import CopyModule from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
-import { COPY_MODULE_KEY, FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
+import { FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { Permission } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
@@ -46,7 +44,6 @@ const defaultTasksModuleGetters: Partial<TasksModule> = {
 
 describe("TasksDashboardMain", () => {
 	let tasksModuleMock: TasksModule;
-	let copyModuleMock: CopyModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let shareModuleMock: ShareModule;
 	let wrapper: VueWrapper;
@@ -59,7 +56,6 @@ describe("TasksDashboardMain", () => {
 					tasksModule: tasksModuleMock,
 					finishedTasksModule: finishedTasksModuleMock,
 					[TASKS_MODULE_KEY]: tasksModuleMock,
-					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[FINISHED_TASKS_MODULE_KEY]: finishedTasksModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 				},
@@ -94,9 +90,6 @@ describe("TasksDashboardMain", () => {
 	describe("when user role is student", () => {
 		beforeEach(() => {
 			tasksModuleMock = createModuleMocks(TasksModule, defaultTasksModuleGetters);
-			copyModuleMock = createModuleMocks(CopyModule, {
-				getIsResultModalOpen: false,
-			});
 
 			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 				getTasks: [],
@@ -169,9 +162,7 @@ describe("TasksDashboardMain", () => {
 
 		beforeEach(() => {
 			tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
-			copyModuleMock = createModuleMocks(CopyModule, {
-				getIsResultModalOpen: false,
-			});
+
 			shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: false,
 			});
@@ -181,9 +172,6 @@ describe("TasksDashboardMain", () => {
 				tasksIsEmpty: false,
 			});
 
-			setupStores({
-				copyModule: CopyModule,
-			});
 			createTestAppStoreWithPermissions([Permission.HOMEWORK_CREATE]);
 
 			wrapper = mountComponent({

@@ -18,7 +18,11 @@
 									{{ t("components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData") }}
 								</li>
 								<li v-if="showCourseInfo" data-testid="share-modal-course-member-permission">
-									{{ t("components.molecules.copyResult.membersAndPermissions") }}
+									{{
+										t("feature-copy.copyInfo.text.alert.membersPermissions", {
+											type: "feature-copy.copyInfo.type.course",
+										})
+									}}
 								</li>
 								<li v-if="showCourseInfo || showLessonInfo" data-testid="share-modal-geogebra">
 									{{ t("components.molecules.shareImport.options.restrictions.infoText.geogebra") }}

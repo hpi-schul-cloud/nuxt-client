@@ -50,15 +50,7 @@ describe("h5pEditorApi.composable", () => {
 				const contentId = "test-id";
 				const title = "test-title";
 
-				h5pEditorApi.getContentParameters.mockResolvedValueOnce(
-					mockApiResponse({
-						data: {
-							h5p: {
-								title,
-							},
-						},
-					})
-				);
+				h5pEditorApi.getContentParameters.mockResolvedValueOnce(mockApiResponse({}));
 
 				return { composable, contentId, title };
 			};
@@ -78,11 +70,7 @@ describe("h5pEditorApi.composable", () => {
 
 				const contentId = "test-id";
 
-				h5pEditorApi.getContentParameters.mockResolvedValueOnce(
-					mockApiResponse({
-						data: { h5p: {} },
-					})
-				);
+				h5pEditorApi.getContentParameters.mockResolvedValueOnce(mockApiResponse({}));
 
 				return { composable, contentId };
 			};

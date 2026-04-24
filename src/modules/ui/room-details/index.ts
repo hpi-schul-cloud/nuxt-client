@@ -4,4 +4,5 @@ import RoomDotMenu from "./RoomDotMenu.vue";
 import RoomLessonCard from "./RoomLessonCard.vue";
 import SelectBoardLayoutDialog from "./SelectBoardLayoutDialog.vue";
 
+export * from "./types";
 export { LeaveRoomProhibitedDialog, RoomBoardCard, RoomDotMenu, RoomLessonCard, SelectBoardLayoutDialog };

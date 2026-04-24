@@ -13,31 +13,41 @@
 			</template>
 		</EmptyState>
 		<RoomGrid v-else :rooms />
-		<ImportCardDialog v-if="showImportCardDialog" :is-dialog-open="showImportCardDialog" :token="importToken!" />
-		<ImportFlow
-			:is-active="showGenericImportDialog"
-			:token="importToken"
-			:destinations="importFlowDestinations"
-			:destination-type="BoardExternalReferenceType.ROOM"
-			@success="onImportSuccess"
+		<ImportCardDialog
+			v-if="isCardImportDialogOpen"
+			:is-dialog-open="isCardImportDialogOpen"
+			:share-token-info="shareTokenInfo!"
+			:available-destinations="availableDestinations"
+			destination-type="column"
+			@confirm="onConfirmImport"
+			@cancel="onCancelImport"
+		/>
+		<ImportDialog
+			v-if="isGenericImportDialogOpen"
+			:is-dialog-open="isGenericImportDialogOpen"
+			:share-token-info="shareTokenInfo!"
+			:available-destinations="availableDestinations"
+			destination-type="room"
+			@confirm="onConfirmImport"
+			@cancel="onCancelImport"
 		/>
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
-import ImportFlow from "@/components/share/ImportFlow.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { BoardExternalReferenceType, Permission, ShareTokenBodyParamsParentType } from "@api-server";
-import { notifySuccess, useAppStore } from "@data-app";
+import { Permission } from "@api-server";
+import { useAppStore } from "@data-app";
 import { useRoomStore } from "@data-room";
-import { ImportCardDialog } from "@feature-board";
+import { ImportCardDialog, useImportFlow } from "@feature-import";
+import { ImportDialog } from "@feature-import";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
-import { computed, onMounted, ref, toValue, watch } from "vue";
+import { computed, onMounted, toValue, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
@@ -65,48 +75,47 @@ const fabAction = computed(() => {
 	];
 });
 
-const importedType = ref<string>();
-const importToken = ref<string>();
+const availableDestinations = computed(() => rooms.value.filter((room) => !room.isLocked));
+
+const {
+	executeImport,
+	isGenericImportDialogOpen,
+	isCardImportDialogOpen,
+	shareTokenInfo,
+	onConfirmImport,
+	onCancelImport,
+} = useImportFlow();
+
+const executeImportFlow = async (token: string) => {
+	const { result: importResult } = await executeImport(token);
+
+	if (!importResult) {
+		router.push({ name: "rooms" });
+		return;
+	}
+
+	if (importResult.destination && importResult.destination.type === "room") {
+		router.replace({ name: "room-details", params: { id: importResult.destination.id } });
+	} else if (importResult.destination && importResult.destination.type === "column") {
+		router.replace({ name: "boards-id", params: { id: importResult.destination.boardId } });
+	} else {
+		router.replace({ name: "rooms" });
+		fetchRooms();
+	}
+};
 
 watch(
 	() => route.query.import,
 	() => {
 		if (route.query.import) {
-			importedType.value = route.query.importedType as string;
-			importToken.value = route.query.import as string;
-		} else {
-			importToken.value = undefined;
+			const token = route.query.import as string;
+			executeImportFlow(token);
 		}
 	},
 	{ immediate: true }
 );
 
-const showImportCardDialog = computed(
-	() => importToken.value && importedType.value === ShareTokenBodyParamsParentType.CARD
-);
-const showGenericImportDialog = computed(
-	() => !!importToken.value && importedType.value !== ShareTokenBodyParamsParentType.CARD
-);
-
 onMounted(() => {
 	fetchRooms();
 });
-
-const importFlowDestinations = computed(() => rooms.value.filter((room) => !room.isLocked));
-
-const onImportSuccess = (newName: string, destinationId?: string) => {
-	notifySuccess(
-		t("components.molecules.import.options.success", {
-			name: newName,
-		})
-	);
-
-	if (destinationId) {
-		router.replace({ name: "room-details", params: { id: destinationId } });
-	} else {
-		router.replace({ name: "rooms" });
-		fetchRooms();
-		importToken.value = undefined;
-	}
-};
 </script>

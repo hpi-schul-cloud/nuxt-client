@@ -1,8 +1,6 @@
 import RoomsPage from "./Rooms.page.vue";
-import ImportFlow from "@/components/share/ImportFlow.vue";
-import CopyModule from "@/store/copy";
+import ImportDialog from "@/modules/feature/import/ImportDialog.vue";
 import { RoomItem } from "@/types/room/Room";
-import { COPY_MODULE_KEY } from "@/utils/inject";
 import {
 	createTestAppStoreWithPermissions,
 	createTestRoomStore,
@@ -10,11 +8,10 @@ import {
 	mockApi,
 	roomItemFactory,
 } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
 import { Permission, ShareTokenBodyParamsParentType } from "@api-server";
-import { ImportCardDialog } from "@feature-board";
+import { ImportCardDialog } from "@feature-import";
 import { RoomGrid } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";
@@ -40,8 +37,6 @@ describe("RoomsPage", () => {
 		roomItems: RoomItem[] = [roomItemFactory.build({ isLocked: false }), roomItemFactory.build({ isLocked: true })],
 		isLoading = false
 	) => {
-		const copyModule = createModuleMocks(CopyModule);
-
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		const { roomStore } = createTestRoomStore(roomItems);
 		roomStore.isLoading = isLoading;
@@ -52,10 +47,7 @@ describe("RoomsPage", () => {
 		const wrapper = mount(RoomsPage, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
-				provide: {
-					[COPY_MODULE_KEY]: copyModule,
-				},
-				stubs: { ImportFlow: true, ImportCardDialog: true, RouterLink: true },
+				stubs: { ImportDialog: true, ImportCardDialog: true, RouterLink: true },
 			},
 		});
 
@@ -111,13 +103,13 @@ describe("RoomsPage", () => {
 		};
 
 		it("should render import card dialog with card type", () => {
-			router.setQuery({ import: token, importedType: ShareTokenBodyParamsParentType.CARD });
+			router.setQuery({ import: token });
 			const { wrapper } = setup();
 
 			const importFLow = wrapper.findComponent(ImportCardDialog);
 
 			expect(importFLow.exists()).toBe(true);
-			expect(importFLow.props().token).toBe(token);
+			expect(importFLow.props().shareTokenInfo.token).toBe(token);
 		});
 
 		it("should not render import card dialog with room type", () => {
@@ -129,18 +121,18 @@ describe("RoomsPage", () => {
 
 		it("should render import flow and be passed data", () => {
 			const { wrapper } = setupImportMode();
-			const importFLow = wrapper.findComponent(ImportFlow);
+			const importFLow = wrapper.findComponent(ImportDialog);
 
 			expect(importFLow.exists()).toBe(true);
-			expect(importFLow.props().isActive).toBe(true);
-			expect(importFLow.props().token).toBe(token);
+			expect(importFLow.props().isDialogOpen).toBe(true);
+			expect(importFLow.props().shareTokenInfo.token).toBe(token);
 		});
 
 		it("should filter out locked rooms for the import flow", () => {
 			const { wrapper } = setupImportMode();
-			const importFLow = wrapper.getComponent(ImportFlow);
+			const importFLow = wrapper.getComponent(ImportDialog);
 
-			const destinations = importFLow.props().destinations as RoomItem[];
+			const destinations = importFLow.props().availableDestinations as RoomItem[];
 
 			expect(destinations).toHaveLength(1);
 			expect(destinations.every((room) => !room.isLocked)).toBe(true);
@@ -149,7 +141,7 @@ describe("RoomsPage", () => {
 		describe("when the import flow succeeded", () => {
 			it("should notify about successful import", () => {
 				const { wrapper } = setupImportMode();
-				const importFlow = wrapper.getComponent(ImportFlow);
+				const importFlow = wrapper.getComponent(ImportDialog);
 
 				importFlow.vm.$emit("success", "newName", "newId");
 
@@ -158,7 +150,7 @@ describe("RoomsPage", () => {
 
 			it("should go to the room details page", () => {
 				const { wrapper } = setupImportMode();
-				const importFlow = wrapper.getComponent(ImportFlow);
+				const importFlow = wrapper.getComponent(ImportDialog);
 
 				importFlow.vm.$emit("success", "newName", "newId");
 

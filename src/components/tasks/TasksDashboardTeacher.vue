@@ -62,6 +62,12 @@
 			</v-window-item>
 		</v-window>
 		<share-modal :type="ShareTokenBodyParamsParentType.TASKS" />
+		<CopyDialog
+			:is-open="isCopyDialogOpen"
+			:copy-item-type="copyItemType"
+			@confirm="onConfirmCopy"
+			@cancel="onCancelCopy"
+		/>
 	</section>
 </template>
 
@@ -69,14 +75,13 @@
 import TasksDashBoardPanels from "./TasksDashBoardPanels.vue";
 import TasksList from "./TasksList.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import { useCopy } from "@/composables/copy";
-import { CopyParams } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
 import { FINISHED_TASKS_MODULE_KEY, injectStrict, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
 import { ShareTokenBodyParamsParentType } from "@api-server";
 import { useEnvConfig } from "@data-env";
+import { CopyDialog, useCopyFlow } from "@feature-copy";
 import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -92,7 +97,6 @@ defineProps({
 });
 
 const { t } = useI18n();
-const { copy } = useCopy();
 
 const openTasks = computed(() => tasksModule.getOpenTasksForTeacher);
 const draftTasks = computed(() => tasksModule.getDraftTasksForTeacher);
@@ -116,11 +120,21 @@ const tab = computed({
 	},
 });
 
-const onCopyTask = async (payload: CopyParams) => {
-	await copy(payload);
+const {
+	isDialogOpen: isCopyDialogOpen,
+	copyItemType,
+	onConfirm: onConfirmCopy,
+	onCancel: onCancelCopy,
+	executeCopyTask,
+} = useCopyFlow();
 
-	tasksModule.setActiveTab("drafts");
-	await tasksModule.fetchAllTasks();
+const onCopyTask = async ({ id, courseId }: { id: string; courseId: string }) => {
+	const { success } = await executeCopyTask(id, courseId);
+
+	if (success) {
+		tasksModule.setActiveTab("drafts");
+		await tasksModule.fetchAllTasks();
+	}
 };
 
 const onShareTask = (taskId: string) => {

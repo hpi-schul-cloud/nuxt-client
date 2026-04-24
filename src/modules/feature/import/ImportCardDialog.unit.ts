@@ -1,10 +1,7 @@
 import ImportCardDialog from "./ImportCardDialog.vue";
-import CopyModule from "@/store/copy";
-import { COPY_MODULE_KEY } from "@/utils/inject";
 import { mockApiResponse, mockedPiniaStoreTyping, roomItemFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { ShareTokenInfoResponseParentType } from "@api-server";
+import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { useRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
@@ -23,8 +20,6 @@ const mockRooms = [
 	roomItemFactory.build({ allowedOperations: { editContent: false } }),
 ];
 
-let copyModuleMock: CopyModule;
-
 describe("ImportCardDialog", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -33,27 +28,23 @@ describe("ImportCardDialog", () => {
 
 	const setup = (rooms = mockRooms) => {
 		const roomStore = mockedPiniaStoreTyping(useRoomStore);
-		const token = "abcde";
+		const shareTokenInfo: ShareTokenInfoResponse = {
+			token: "token-123",
+			parentType: ShareTokenInfoResponseParentType.ROOM,
+			parentName: "Room 1",
+		};
 		roomStore.fetchRoomsPlain.mockResolvedValue(mockApiResponse({ data: { data: rooms } }));
-
-		copyModuleMock = createModuleMocks(CopyModule);
-		copyModuleMock.validateShareToken = () =>
-			Promise.resolve({
-				token,
-				parentName: "parentName",
-				parentType: ShareTokenInfoResponseParentType.CARD,
-			});
 
 		const wrapper = mount(ImportCardDialog, {
 			props: {
-				token,
+				shareTokenInfo,
+				availableDestinations: rooms.map((room) => ({ id: room.id, name: room.name })),
+				destinationType: "column",
 				isDialogOpen: true,
 			},
 			global: {
 				stubs: { UseFocusTrap: true },
-				provide: {
-					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-				},
+				provide: {},
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 		});

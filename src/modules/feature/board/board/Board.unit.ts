@@ -2,20 +2,12 @@ import MoveCardDialog from "../card/MoveCardDialog.vue";
 import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import { useCopy } from "@/composables/copy";
-import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import ShareModule from "@/store/share";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import {
-	COPY_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
+import { COURSE_ROOM_DETAILS_MODULE_KEY, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -25,8 +17,6 @@ import {
 	BoardLayout,
 	BoardResponseAllowedOperations,
 	ConfigResponse,
-	CopyApiResponse,
-	CopyApiResponseType,
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
 import { useAppStore, useNotificationStore } from "@data-app";
@@ -63,23 +53,16 @@ const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
 vi.mock("@data-board/BoardPageInformation.composable");
 const mockedUseSharedBoardPageInformation = vi.mocked(useSharedBoardPageInformation);
 
-vi.mock("@/composables/copy");
-const mockUseCopy = vi.mocked(useCopy);
-
 vi.mock("@data-board/boardInactivity.composable");
 const mockUseBoardInactivity = <Mock>useBoardInactivity;
 
 describe("Board", () => {
-	let mockedCopyCalls: Mocked<ReturnType<typeof useCopy>>;
 	let router: RouterMock;
 	let mockedUsePageInactivity: Mocked<ReturnType<typeof useBoardInactivity>>;
 
 	beforeEach(() => {
 		vi.useFakeTimers();
 		vi.clearAllMocks();
-
-		mockedCopyCalls = mockComposable(useCopy);
-		mockUseCopy.mockReturnValue(mockedCopyCalls);
 
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
@@ -141,13 +124,6 @@ describe("Board", () => {
 
 	const setupProvideModules = () => {
 		const copyResultId = "42";
-		const copyModule = createModuleMocks(CopyModule, {
-			getIsResultModalOpen: false,
-			getCopyResult: {
-				id: copyResultId,
-				type: CopyApiResponseType.BOARD,
-			} as CopyApiResponse,
-		});
 
 		const shareModule = createModuleMocks(ShareModule);
 		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
@@ -155,7 +131,6 @@ describe("Board", () => {
 		});
 		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule);
 		return {
-			copyModule,
 			shareModule,
 			courseRoomDetailsModule,
 			copyResultId,
@@ -170,8 +145,7 @@ describe("Board", () => {
 		envs?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
 	}) => {
-		const { copyModule, shareModule, courseRoomDetailsModule, copyResultId, schoolExternalToolsModule } =
-			setupProvideModules();
+		const { shareModule, courseRoomDetailsModule, copyResultId, schoolExternalToolsModule } = setupProvideModules();
 
 		setActivePinia(createTestingPinia());
 
@@ -204,7 +178,6 @@ describe("Board", () => {
 					createTestingVuetify(),
 				],
 				provide: {
-					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
@@ -238,7 +211,6 @@ describe("Board", () => {
 			copyResultId,
 			shareModule,
 			courseRoomDetailsModule,
-			copyModule,
 		};
 	};
 
@@ -417,26 +389,13 @@ describe("Board", () => {
 	});
 
 	describe("Dialogs", () => {
-		it("should have a result modal component", () => {
-			const { wrapper } = setup();
-
-			expect(wrapper.findComponent(CopyResultModal).exists()).toBe(true);
-		});
-
 		it("should have a move dialog component", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.findComponent(MoveCardDialog).exists()).toBe(true);
 		});
 
-		it("should reset copy module when copy result modal is closed", async () => {
-			const { wrapper, copyModule } = setup();
-
-			const copyResultModal = wrapper.findComponent(CopyResultModal);
-			await copyResultModal.vm.$emit("copy-dialog-closed");
-
-			expect(copyModule.reset).toHaveBeenCalled();
-		});
+		it.todo("should reset copy module when copy result modal is closed");
 	});
 
 	describe("when component is unmounted", () => {
@@ -881,7 +840,9 @@ describe("Board", () => {
 				});
 				await boardHeader.vm.$emit("copy:board");
 
-				expect(mockedCopyCalls.copy).toHaveBeenCalled();
+				// FIX test
+				// expect(mockedCopyCalls.copy).toHaveBeenCalled();
+				expect(false).toBe(true);
 			});
 
 			it("should redirect to the board copy", async () => {

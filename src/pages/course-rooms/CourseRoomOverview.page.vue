@@ -1,5 +1,5 @@
 <template>
-	<CourseRoomWrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
+	<CourseRoomWrapper :has-rooms="hasCurrentRooms" :has-import-token="!!shareTokenInfo">
 		<template #header>
 			<h1 class="py-2">
 				{{ $t("pages.courseRooms.index.courses.active") }}
@@ -99,12 +99,14 @@
 		tabindex="0"
 		@drag-from-group="dragFromGroup"
 	/>
-	<ImportFlow
-		:is-active="isImportMode"
-		:token="importToken"
-		:destinations="courses.filter((course) => !course.isLocked)"
-		:destination-type="BoardExternalReferenceType.COURSE"
-		@success="onImportSuccess"
+	<ImportDialog
+		v-if="isGenericImportDialogOpen"
+		:is-dialog-open="isGenericImportDialogOpen"
+		:share-token-info="shareTokenInfo!"
+		:available-destinations="availableDestinations"
+		destination-type="course"
+		@confirm="onConfirmImport"
+		@cancel="onCancelImport"
 	/>
 </template>
 
@@ -114,24 +116,25 @@ import CourseRoomEmptyAvatar from "@/components/course-rooms/CourseRoomEmptyAvat
 import CourseRoomGroupAvatar from "@/components/course-rooms/CourseRoomGroupAvatar.vue";
 import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
 import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
-import ImportFlow from "@/components/share/ImportFlow.vue";
+import router from "@/router";
 import { DroppedObject } from "@/store/types/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { BoardExternalReferenceType, DashboardGridElementResponse } from "@api-server";
+import { DashboardGridElementResponse } from "@api-server";
 import { notifySuccess } from "@data-app";
 import { GroupDataType, useCourseRoomListStore } from "@data-course-rooms";
+import { ImportDialog, useImportFlow } from "@feature-import";
 import { mdiCheck } from "@icons/material";
 import { SvsSearchField } from "@ui-controls";
 import { useTitle } from "@vueuse/core";
+import { sortBy } from "lodash-es";
 import { storeToRefs } from "pinia";
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { useDisplay } from "vuetify";
 
 const { t } = useI18n();
 const route = useRoute();
-const router = useRouter();
 const display = useDisplay();
 
 const refs = reactive<Record<string, unknown>>({});
@@ -185,21 +188,46 @@ const rooms = computed(() =>
 	})
 );
 
-const courses = computed(() =>
-	allElements.value.map((item: { id: string; title: string; isLocked: boolean }) => ({
-		id: item.id,
-		name: item.title,
-		isLocked: item.isLocked,
-	}))
-);
-
 const hasRoomsBeingCopied = computed(() =>
 	rooms.value.some((item: { copyingSince?: unknown }) => item.copyingSince !== undefined)
 );
 
 const isTouchDevice = computed(() => window.ontouchstart !== undefined);
-const isImportMode = computed(() => route.query.import !== undefined);
-const importToken = computed(() => route.query.import as string | undefined);
+
+const availableDestinations = computed(() =>
+	sortBy(
+		allElements.value.filter((course) => !course.isLocked).map((course) => ({ id: course.id, name: course.title }))
+	)
+);
+
+const { executeImport, isGenericImportDialogOpen, shareTokenInfo, onConfirmImport, onCancelImport } = useImportFlow();
+
+const importShareToken = async (token: string) => {
+	const { result: importResult } = await executeImport(token);
+
+	if (!importResult) {
+		router.push({ name: "course-room-overview" });
+		return;
+	}
+
+	if (importResult.destination && importResult.destination.type === "course") {
+		router.replace({ name: "room-details", params: { id: importResult.destination.id } });
+	} else {
+		router.replace({ name: "course-room-overview" });
+		fetchCourses();
+	}
+};
+
+watch(
+	() => route.query.import,
+	() => {
+		if (route.query.import) {
+			const token = route.query.import as string;
+			importShareToken(token);
+		}
+	},
+	{ immediate: true }
+);
 
 const getDeviceDims = () => {
 	const { xs, sm, mdAndUp } = display;
@@ -347,24 +375,6 @@ const dragFromGroup = (element: { id: string }) => {
 	dragging.value = true;
 };
 
-const showImportSuccess = (name: string) => {
-	notifySuccess(
-		t("components.molecules.import.options.success", {
-			name,
-		})
-	);
-};
-
-const onImportSuccess = (name: string, id?: string) => {
-	showImportSuccess(name);
-	if (id) {
-		router.replace({ name: "room-details", params: { id } });
-	} else {
-		router.replace({ name: "course-room-overview" });
-		fetchCourses();
-	}
-};
-
 const initCoursePolling = (started: Date, count = 0) => {
 	const nextTimeout = count * count * 1000 + 5000;
 	setTimeout(
@@ -373,7 +383,7 @@ const initCoursePolling = (started: Date, count = 0) => {
 			if (hasRoomsBeingCopied.value) {
 				initCoursePolling(started ?? new Date(), count + 1);
 			} else {
-				notifySuccess(t("components.molecules.copyResult.timeoutSuccess"));
+				notifySuccess(t("feature-copy.inProgress.timeoutSuccess"));
 			}
 		},
 		Math.min(nextTimeout, 30000)
