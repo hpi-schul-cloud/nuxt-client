@@ -4,6 +4,7 @@ import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
 import { type Socket } from "socket.io-client";
 import { computed } from "vue";
+import { onBeforeRouteLeave } from "vue-router";
 
 const logs: string[] = [];
 const boardErrorReportApi = BoardErrorReportApiFactory(undefined, "/v3", $axios);
@@ -33,6 +34,10 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 	const resetLogs = () => {
 		startTime = Date.now();
 		logs.splice(0, logs.length);
+		if (timeoutHandle) {
+			clearTimeout(timeoutHandle);
+			timeoutHandle = null;
+		}
 	};
 
 	const handleError = (error: Error & { data?: unknown }) => {
@@ -41,14 +46,17 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 	};
 
 	// whenever this function is called the actual execution is delayed by X ms, if the function is called again within this delay, the previous call is canceled and the timer restarts
-	const reportBoardError = (type: string, message: string, retryCount: number, delayMs = 100) => {
+	const reportBoardError = (type: string, message: string, retryCount: number, logSteps: string[]) => {
 		if (timeoutHandle) {
 			clearTimeout(timeoutHandle);
 		}
-		const logSteps = [...logs];
 		timeoutHandle = setTimeout(() => {
 			apiCall(type, message, retryCount, logSteps);
-		}, delayMs);
+		}, 7000);
+
+		if (logs.length > 30) {
+			reportLogs("log_limit_reached");
+		}
 	};
 
 	const apiCall = (type: string, message: string, retryCount: number, logSteps: string[], reportRetries = 3) => {
@@ -88,6 +96,8 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 			});
 	};
 
+	// attach socket- and manager-eventhandlers
+
 	socket.on("connect", () => {
 		connectionState = ConnectionState.CONNECTED;
 	});
@@ -106,30 +116,55 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 		}
 		connectionState = ConnectionState.RECONNECTING;
 		log(`re_att${attempt}`);
-		reportBoardError("socketio_connection", "reconnect_attempt", attempt, 7000);
+		reportBoardError("socketio_connection", "reconnect_attempt", attempt, [...logs]);
 	});
 
 	manager.on("reconnect", (attempts: number) => {
 		connectionState = ConnectionState.SUCCESS_AFTER_RETRIES;
 		log(`reconn`);
-		reportBoardError("socketio_connection", "reconnect_succeeded", attempts, 500);
+		apiCall("socketio_connection", "reconnect_succeeded", attempts, [...logs]);
 		resetLogs();
 	});
 
 	manager.on("reconnect_failed", () => {
 		connectionState = ConnectionState.FAILED_AFTER_MAX_ATTEMPTS;
-		reportBoardError("socketio_connection", "reconnect_failed", 0);
+		apiCall("socketio_connection", "reconnect_failed", 0, [...logs]);
 		log("reconn_failed");
 	});
 
-	const engine = socket.io.engine;
-	const getState = computed(() => ({ startTime, transport: engine.transport.name, connectionState, logs }));
-
 	socket.on("connect_error", handleError);
 
-	socket.io.engine.on("upgrade", (transport) => {
+	socket.io.engine.on("upgrade", () => {
 		log(`upgr`);
 	});
+
+	// send logs when the user leaves the page or changes the tab to hidden
+
+	document.addEventListener("visibilitychange", async () => {
+		if (document.visibilityState === "hidden") {
+			await reportLogs("tab_hidden");
+		}
+	});
+
+	window.addEventListener("beforeunload", async () => {
+		await reportLogs("page_unload");
+	});
+
+	onBeforeRouteLeave(async () => {
+		await reportLogs("new_route");
+	});
+
+	const reportLogs = async (cause: string) => {
+		if (logs.length > 0) {
+			await apiCall("socketio_connection", cause, 0, [...logs]);
+			resetLogs();
+		}
+	};
+
+	// make state accessible for testing
+
+	const engine = socket.io.engine;
+	const getState = computed(() => ({ startTime, transport: engine.transport.name, connectionState, logs }));
 
 	return {
 		getState,

@@ -46,6 +46,8 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 		if (instance === null && isJwtExpired.value === false) {
 			instance = io(useEnvConfig().value.BOARD_COLLABORATION_URI, {
 				path: "/board-collaboration",
+				reconnection: true,
+				reconnectionAttempts: 10,
 				withCredentials: true,
 				closeOnBeforeunload: true,
 			});
@@ -91,6 +93,13 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 		return instance;
 	};
+
+	document.addEventListener("visibilitychange", async () => {
+		if (document.visibilityState === "visible") {
+			// tab got visible again, ensure socket is connected and up to date
+			getConnectedSocket();
+		}
+	});
 
 	const emitOnSocket = (action: string, data: unknown) => {
 		const socket = getConnectedSocket();
