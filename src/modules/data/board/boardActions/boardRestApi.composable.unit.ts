@@ -7,6 +7,7 @@ import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
+	columnFullResponseFactory,
 	columnResponseFactory,
 	mockComposable,
 	mockedPiniaStoreTyping,
@@ -269,6 +270,64 @@ describe("boardRestApi", () => {
 			mockedBoardApiCalls.deleteColumnCall.mockRejectedValue({});
 
 			await deleteColumnRequest({ columnId });
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
+
+	describe("duplicateColumnRequest", () => {
+		it("should not call duplicateColumnSuccess action when column index is less than 0", async () => {
+			const { boardStore } = setup();
+			const { duplicateColumnRequest } = useBoardRestApi();
+
+			boardStore.getColumnIndex.mockReturnValue(-1);
+
+			await duplicateColumnRequest({ columnId: "nonExistentColumnId" });
+
+			expect(boardStore.duplicateColumnSuccess).not.toHaveBeenCalled();
+		});
+
+		it("should call duplicateColumnSuccess action if the API call is successful", async () => {
+			const { boardStore } = setup();
+			const { duplicateColumnRequest } = useBoardRestApi();
+			const columnId = boardStore.board!.columns[0].id;
+
+			const duplicatedColumn = columnFullResponseFactory.build();
+			mockedBoardApiCalls.duplicateColumnCall.mockResolvedValue(duplicatedColumn);
+			boardStore.getColumnIndex.mockReturnValue(0);
+
+			await duplicateColumnRequest({ columnId });
+
+			expect(boardStore.duplicateColumnSuccess).toHaveBeenCalledWith({
+				columnId,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+		});
+
+		it("should not call duplicateColumnSuccess action if duplicated column has no id", async () => {
+			const { boardStore } = setup();
+			const { duplicateColumnRequest } = useBoardRestApi();
+			const columnId = boardStore.board!.columns[0].id;
+
+			const duplicatedColumn = columnFullResponseFactory.build({ id: "" });
+			mockedBoardApiCalls.duplicateColumnCall.mockResolvedValue(duplicatedColumn);
+			boardStore.getColumnIndex.mockReturnValue(0);
+
+			await duplicateColumnRequest({ columnId });
+
+			expect(boardStore.duplicateColumnSuccess).not.toHaveBeenCalled();
+		});
+
+		it("should call handleError if the API call fails", async () => {
+			const { boardStore } = setup();
+			const { duplicateColumnRequest } = useBoardRestApi();
+			const columnId = boardStore.board!.columns[0].id;
+
+			mockedBoardApiCalls.duplicateColumnCall.mockRejectedValue({});
+			boardStore.getColumnIndex.mockReturnValue(0);
+
+			await duplicateColumnRequest({ columnId });
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});

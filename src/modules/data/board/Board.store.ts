@@ -167,25 +167,25 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 		const { columnId, duplicatedColumn } = payload;
 		const columnIndex = getColumnIndex(columnId) ?? 0;
-		if (duplicatedColumn.id) {
-			const duplicatedColumnSkeleton: ColumnResponse = {
-				...duplicatedColumn,
-				cards: duplicatedColumn.cards.map(
-					(card): CardSkeletonResponse => ({
-						cardId: card.id,
-						height: card.height,
-					})
-				),
-			};
+		if (columnIndex < 0) return;
 
-			board.value.columns?.splice(columnIndex + 1, 0, duplicatedColumnSkeleton);
+		const duplicatedColumnSkeleton: ColumnResponse = {
+			...duplicatedColumn,
+			cards: duplicatedColumn.cards.map(
+				(card): CardSkeletonResponse => ({
+					cardId: card.id,
+					height: card.height,
+				})
+			),
+		};
 
-			if (payload.isOwnAction === true) {
-				if (hasRelevantContentForDuplicationWarning(duplicatedColumn)) {
-					notifyInfo("components.board.notifications.info.columnDuplicated");
-				} else {
-					notifySuccess("components.board.notifications.success.columnDuplicated");
-				}
+		board.value.columns?.splice(columnIndex + 1, 0, duplicatedColumnSkeleton);
+
+		if (payload.isOwnAction === true) {
+			if (hasRelevantContentForDuplicationWarning(duplicatedColumn)) {
+				notifyInfo("components.board.notifications.info.columnDuplicated");
+			} else {
+				notifySuccess("components.board.notifications.success.columnDuplicated");
 			}
 		}
 	};
