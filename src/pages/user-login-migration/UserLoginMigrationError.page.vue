@@ -51,7 +51,7 @@ import { useEnvConfig } from "@data-env";
 import { useSystem } from "@data-system";
 import { useUserLoginMigration } from "@data-user-login-migration";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps<{ targetSchoolNumber?: string; sourceSchoolNumber?: string; multipleUsersFound?: boolean }>();
@@ -66,9 +66,9 @@ const { t } = useI18n();
 const pageTitle = buildPageTitle(t("pages.userMigration.error.title"));
 useTitle(pageTitle);
 
-const isLoading: Ref<boolean> = ref(true);
+const isLoading = ref(true);
 
-const getSubject = (): string => {
+const getSubject = () => {
 	let subject: string = encodeURIComponent("Fehler bei der Migration");
 	if (props.sourceSchoolNumber && props.targetSchoolNumber) {
 		subject = encodeURIComponent("Schulnummer nicht korrekt");
@@ -76,7 +76,7 @@ const getSubject = (): string => {
 	return subject;
 };
 
-const supportLink: ComputedRef<string> = computed(() =>
+const supportLink = computed(() =>
 	sanitizeUrl(`mailto:${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}?subject=${getSubject()}`)
 );
 
