@@ -10,7 +10,12 @@ import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import { createTestEnvStore, expectNotification, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
+import {
+	boardResponseFactory,
+	cardSkeletonResponseFactory,
+	columnFullResponseFactory,
+	columnResponseFactory,
+} from "@@/tests/test-utils/factory";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { BoardLayout } from "@api-server";
 import { useAppStore } from "@data-app";
@@ -457,7 +462,7 @@ describe("BoardStore", () => {
 	describe("duplicateColumnSuccess", () => {
 		it("should not duplicate column when board is undefined", () => {
 			const { boardStore, firstColumn } = setup({ createBoard: false });
-			const duplicatedColumn = columnResponseFactory.build();
+			const duplicatedColumn = columnFullResponseFactory.build();
 
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
@@ -470,7 +475,7 @@ describe("BoardStore", () => {
 
 		it("should duplicate a column and insert it after the original", () => {
 			const { boardStore, firstColumn, secondColumn } = setup();
-			const duplicatedColumn = columnResponseFactory.build();
+			const duplicatedColumn = columnFullResponseFactory.build();
 
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
@@ -486,7 +491,7 @@ describe("BoardStore", () => {
 
 		it("should show info notification when isOwnAction is true", () => {
 			const { boardStore, firstColumn } = setup();
-			const duplicatedColumn = columnResponseFactory.build();
+			const duplicatedColumn = columnFullResponseFactory.build();
 
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
@@ -499,7 +504,7 @@ describe("BoardStore", () => {
 
 		it("should not show notification when isOwnAction is false", () => {
 			const { boardStore, firstColumn } = setup();
-			const duplicatedColumn = columnResponseFactory.build();
+			const duplicatedColumn = columnFullResponseFactory.build();
 
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
@@ -512,7 +517,7 @@ describe("BoardStore", () => {
 
 		it("should not duplicate column when duplicatedColumn.id is undefined", () => {
 			const { boardStore, firstColumn } = setup();
-			const duplicatedColumn = columnResponseFactory.build({ id: undefined });
+			const duplicatedColumn = columnFullResponseFactory.build({ id: undefined });
 
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,

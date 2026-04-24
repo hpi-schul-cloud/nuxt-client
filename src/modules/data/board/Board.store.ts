@@ -36,7 +36,7 @@ import { useSharedEditMode } from "./edit-mode.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
 import { CardSkeletonResponse, ColumnFullResponse, ColumnResponse, ContentElementType } from "@api-server";
-import { notifyInfo, useAppStore, useNotificationStore } from "@data-app";
+import { notifyInfo, notifySuccess, useAppStore, useNotificationStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { defineStore } from "pinia";
 import { computed, nextTick, ref } from "vue";
@@ -180,8 +180,12 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 			board.value.columns?.splice(columnIndex + 1, 0, duplicatedColumnSkeleton);
 
-			if (payload.isOwnAction === true && hasRelevantContentForDuplicationWarning(duplicatedColumn)) {
-				notifyInfo("components.board.notifications.info.columnDuplicated");
+			if (payload.isOwnAction === true) {
+				if (hasRelevantContentForDuplicationWarning(duplicatedColumn)) {
+					notifyInfo("components.board.notifications.info.columnDuplicated");
+				} else {
+					notifySuccess("components.board.notifications.success.columnDuplicated");
+				}
 			}
 		}
 	};

@@ -480,6 +480,7 @@ export default {
 		"Content from Etherpads and whiteboards as well as protected settings from external tools will not be transferred.",
 	"components.board.notifications.info.columnDuplicated":
 		"Content from Etherpads and whiteboards as well as protected settings from external tools will not be transferred.",
+	"components.board.notifications.success.columnDuplicated": "The column was successfully duplicated.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"A card was created by another user in column {columnPosition}.",
 	"components.board.screenReader.notification.columnCreated.success": "A column was created by another user.",
