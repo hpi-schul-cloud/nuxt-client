@@ -1,9 +1,10 @@
 import UserMenu from "./UserMenu.vue";
 import { createTestAppStore, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
+import { publicSystemResponseFactory } from "@@/tests/test-utils/factory/publicSystemResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { LanguageType } from "@api-server";
+import { LanguageType, PublicSystemResponse } from "@api-server";
 import { useOAuthApi } from "@data-oauth";
-import { System, useSystem } from "@data-system";
+import { useSystem } from "@data-system";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -18,7 +19,11 @@ describe("@ui-layout/UserMenu", () => {
 	let useSystemMock: Mocked<ReturnType<typeof useSystem>>;
 	let useOAuthApiMock: Mocked<ReturnType<typeof useOAuthApi>>;
 
-	const setupWrapper = (isExternalFeatureEnabled = false, mockedSystem?: System, mockedTokenExpiration?: Date) => {
+	const setupWrapper = (
+		isExternalFeatureEnabled = false,
+		mockedSystem?: PublicSystemResponse,
+		mockedTokenExpiration?: Date
+	) => {
 		setActivePinia(createTestingPinia());
 		const { appStore } = createTestAppStore({
 			me: { systemId: mockedSystem?.id },
@@ -94,11 +99,7 @@ describe("@ui-layout/UserMenu", () => {
 	describe("external logout", () => {
 		describe("when feature flag is enabled and end session endpoint is available for the system", () => {
 			const setup = () => {
-				const mockedSystem: System = {
-					id: "testId",
-					displayName: "Test System",
-					hasEndSessionEndpoint: true,
-				};
+				const mockedSystem = publicSystemResponseFactory.build({ oauthConfig: { endSessionEndpoint: "blub" } });
 
 				const { wrapper, appStore } = setupWrapper(true, mockedSystem);
 
@@ -146,11 +147,7 @@ describe("@ui-layout/UserMenu", () => {
 
 		describe("when feature flag is disabled", () => {
 			const setup = () => {
-				const mockedSystem: System = {
-					id: "testId",
-					displayName: "Test System",
-					hasEndSessionEndpoint: true,
-				};
+				const mockedSystem = publicSystemResponseFactory.build();
 
 				const { wrapper } = setupWrapper(false, mockedSystem);
 
@@ -183,11 +180,7 @@ describe("@ui-layout/UserMenu", () => {
 
 		describe("when end session endpoint is not available for the system", () => {
 			const setup = () => {
-				const mockedSystem: System = {
-					id: "testId",
-					displayName: "Test System",
-					hasEndSessionEndpoint: false,
-				};
+				const mockedSystem = publicSystemResponseFactory.build();
 
 				const { wrapper } = setupWrapper(true, mockedSystem);
 
@@ -220,11 +213,7 @@ describe("@ui-layout/UserMenu", () => {
 
 		describe("when the oauth session token is valid", () => {
 			const setup = () => {
-				const mockedSystem: System = {
-					id: "testId",
-					displayName: "Test System",
-					hasEndSessionEndpoint: true,
-				};
+				const mockedSystem = publicSystemResponseFactory.build({ oauthConfig: { endSessionEndpoint: "blub" } });
 				const mockedTokenExpiration = new Date(Date.now() + 3 * 3600 * 1000);
 
 				const { wrapper } = setupWrapper(true, mockedSystem, mockedTokenExpiration);
@@ -249,11 +238,7 @@ describe("@ui-layout/UserMenu", () => {
 
 		describe("when the oauth session token is expired", () => {
 			const setup = () => {
-				const mockedSystem: System = {
-					id: "testId",
-					displayName: "Test System",
-					hasEndSessionEndpoint: true,
-				};
+				const mockedSystem = publicSystemResponseFactory.build({ oauthConfig: { endSessionEndpoint: "blub" } });
 				const mockedTokenExpiration = new Date(Date.now() - 3 * 3600 * 1000);
 
 				const { wrapper } = setupWrapper(true, mockedSystem, mockedTokenExpiration);
@@ -278,11 +263,7 @@ describe("@ui-layout/UserMenu", () => {
 
 		describe("when the oauth session token could not be found", () => {
 			const setup = () => {
-				const mockedSystem: System = {
-					id: "testId",
-					displayName: "Test System",
-					hasEndSessionEndpoint: true,
-				};
+				const mockedSystem = publicSystemResponseFactory.build({ oauthConfig: { endSessionEndpoint: "blub" } });
 
 				const { wrapper } = setupWrapper(true, mockedSystem);
 

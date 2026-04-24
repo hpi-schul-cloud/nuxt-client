@@ -1,7 +1,7 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
-import { SystemsApiFactory } from "@api-server";
+import { PublicSystemResponse, SystemsApiFactory } from "@api-server";
 import { computed, Ref, ref, watch } from "vue";
 
 export const useSystem = (systemId: Ref<string | undefined>) => {
@@ -11,7 +11,7 @@ export const useSystem = (systemId: Ref<string | undefined>) => {
 
 	const { execute, status, error, isRunning: isLoading } = useSafeAxiosTask();
 
-	const system = ref();
+	const system: Ref<PublicSystemResponse | undefined> = ref();
 	const systemName = computed(() => system.value?.displayName);
 
 	const fetchSystem = async (id: string) => {
@@ -19,11 +19,7 @@ export const useSystem = (systemId: Ref<string | undefined>) => {
 		const { result, success } = await execute(() => systemApi.systemControllerGetSystem(id), onErrorNotifyMessage);
 
 		if (success) {
-			system.value = {
-				id: result.data.id,
-				displayName: result.data.displayName,
-				hasEndSessionEndpoint: !!result.data.oauthConfig?.endSessionEndpoint,
-			};
+			system.value = result.data;
 		}
 	};
 

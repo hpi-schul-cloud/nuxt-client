@@ -68,10 +68,7 @@ const userRole = computed(() => t(`common.roleName.${toRef(props.roleNames).valu
 const initials = computed(() => props.user.firstName.slice(0, 1) + props.user.lastName.slice(0, 1));
 
 const isExternalLogoutAllowed = computed(
-	() =>
-		useEnvConfig().value.FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED &&
-		!!systemId.value &&
-		!!system.value?.hasEndSessionEndpoint
+	() => useEnvConfig().value.FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED && !!system.value?.oauthConfig?.endSessionEndpoint
 );
 
 const now = ref(new Date());
