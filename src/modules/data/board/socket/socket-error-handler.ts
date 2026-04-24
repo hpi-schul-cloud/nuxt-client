@@ -47,12 +47,13 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 		if (timeoutHandle) {
 			clearTimeout(timeoutHandle);
 		}
+		const logSteps = [...logs];
 		timeoutHandle = setTimeout(() => {
-			apiCall(type, message, retryCount, logs);
+			apiCall(type, message, retryCount, logSteps);
 		}, delayMs);
 	};
 
-	const apiCall = (type: string, message: string, retryCount: number, logSteps: string[], reportRetries = 2) => {
+	const apiCall = (type: string, message: string, retryCount: number, logSteps: string[], reportRetries = 3) => {
 		if (isJwtExpired.value) {
 			log("noSess");
 			return;
@@ -107,7 +108,7 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 		}
 		connectionState = ConnectionState.RECONNECTING;
 		log(`re_att${attempt}`);
-		reportBoardError("socketio_connection", "reconnect_attempt", attempt, 6000);
+		reportBoardError("socketio_connection", "reconnect_attempt", attempt, 7000);
 	});
 
 	manager.on("reconnect", (attempts: number) => {
