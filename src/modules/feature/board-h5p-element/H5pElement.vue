@@ -35,6 +35,7 @@
 					:element-index="elementIndex"
 					:is-not-first-element="isNotFirstElement"
 					:is-not-last-element="isNotLastElement"
+					:has-linked-content="hasLinkedContent"
 					@move-down:element="onMoveElementDown"
 					@move-up:element="onMoveElementUp"
 					@delete:element="onDeleteElement"

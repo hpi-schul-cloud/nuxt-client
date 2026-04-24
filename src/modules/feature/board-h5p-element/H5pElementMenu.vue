@@ -9,7 +9,7 @@
 		<KebabMenuAction :icon="mdiCogOutline" @click="onEdit">
 			{{ t("common.labels.settings") }}
 		</KebabMenuAction>
-		<KebabMenuAction :icon="mdiTrayArrowDown" @click="onDownload">
+		<KebabMenuAction v-if="hasLinkedContent" :icon="mdiTrayArrowDown" @click="onDownload">
 			{{ t("components.board.action.download") }}
 		</KebabMenuAction>
 		<KebabMenuActionDelete :name="displayName" @click="onDelete" />
@@ -32,6 +32,7 @@ defineProps<{
 	columnIndex: number;
 	rowIndex: number;
 	elementIndex: number;
+	hasLinkedContent: boolean;
 }>();
 
 const emit = defineEmits([
