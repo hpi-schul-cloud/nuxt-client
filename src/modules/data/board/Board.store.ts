@@ -35,7 +35,7 @@ import { DeleteCardSuccessPayload, DuplicateCardSuccessPayload } from "./cardAct
 import { useSharedEditMode } from "./edit-mode.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import { ColumnResponse } from "@api-server";
+import { CardSkeletonResponse, ColumnFullResponse, ColumnResponse, ContentElementType } from "@api-server";
 import { notifyInfo, useAppStore, useNotificationStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { defineStore } from "pinia";
@@ -150,8 +150,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const duplicateColumn = socketOrRest.duplicateColumnRequest;
-	/*
-  const hasRelevantContentForDuplicationWarning = (column: ColumnResponse): boolean =>
+
+	const hasRelevantContentForDuplicationWarning = (column: ColumnFullResponse): boolean =>
 		column.cards.some((card) =>
 			card.elements.some((element) =>
 				[
@@ -161,7 +161,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 				].includes(element.type)
 			)
 		);
-	 */
 
 	const duplicateColumnSuccess = (payload: DuplicateColumnSuccessPayload) => {
 		if (!board.value) return;
@@ -169,8 +168,19 @@ export const useBoardStore = defineStore("boardStore", () => {
 		const { columnId, duplicatedColumn } = payload;
 		const columnIndex = getColumnIndex(columnId) ?? 0;
 		if (duplicatedColumn.id) {
-			board.value.columns?.splice(columnIndex + 1, 0, duplicatedColumn);
-			if (payload.isOwnAction === true /*&& hasRelevantContentForDuplicationWarning(duplicatedColumn)*/) {
+			const duplicatedColumnSkeleton: ColumnResponse = {
+				...duplicatedColumn,
+				cards: duplicatedColumn.cards.map(
+					(card): CardSkeletonResponse => ({
+						cardId: card.id,
+						height: card.height,
+					})
+				),
+			};
+
+			board.value.columns?.splice(columnIndex + 1, 0, duplicatedColumnSkeleton);
+
+			if (payload.isOwnAction === true && hasRelevantContentForDuplicationWarning(duplicatedColumn)) {
 				notifyInfo("components.board.notifications.info.columnDuplicated");
 			}
 		}

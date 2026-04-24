@@ -103,6 +103,7 @@ models/collaborative-text-editor-response.ts
 models/collapsable-body-params.ts
 models/color-body-params.ts
 models/colors.ts
+models/column-full-response.ts
 models/column-response.ts
 models/complete-registration-body-params.ts
 models/component-etherpad-props-impl.ts

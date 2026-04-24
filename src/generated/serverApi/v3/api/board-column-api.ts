@@ -25,7 +25,7 @@ import { ApiValidationError } from '../models';
 // @ts-ignore
 import { CardResponse } from '../models';
 // @ts-ignore
-import { ColumnResponse } from '../models';
+import { ColumnFullResponse } from '../models';
 // @ts-ignore
 import { CreateCardBodyParams } from '../models';
 // @ts-ignore
@@ -40,7 +40,7 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
     return {
         /**
          * 
-         * @summary Copy a single card.
+         * @summary Copy a single column.
          * @param {string} columnId The id of the column.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -256,12 +256,12 @@ export const BoardColumnApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Copy a single card.
+         * @summary Copy a single column.
          * @param {string} columnId The id of the column.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async columnControllerCopyColumn(columnId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ColumnResponse>> {
+        async columnControllerCopyColumn(columnId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ColumnFullResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.columnControllerCopyColumn(columnId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -324,12 +324,12 @@ export const BoardColumnApiFactory = function (configuration?: Configuration, ba
     return {
         /**
          * 
-         * @summary Copy a single card.
+         * @summary Copy a single column.
          * @param {string} columnId The id of the column.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        columnControllerCopyColumn(columnId: string, options?: any): AxiosPromise<ColumnResponse> {
+        columnControllerCopyColumn(columnId: string, options?: any): AxiosPromise<ColumnFullResponse> {
             return localVarFp.columnControllerCopyColumn(columnId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -386,13 +386,13 @@ export const BoardColumnApiFactory = function (configuration?: Configuration, ba
 export interface BoardColumnApiInterface {
     /**
      * 
-     * @summary Copy a single card.
+     * @summary Copy a single column.
      * @param {string} columnId The id of the column.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardColumnApiInterface
      */
-    columnControllerCopyColumn(columnId: string, options?: any): AxiosPromise<ColumnResponse>;
+    columnControllerCopyColumn(columnId: string, options?: any): AxiosPromise<ColumnFullResponse>;
 
     /**
      * 
@@ -448,7 +448,7 @@ export interface BoardColumnApiInterface {
 export class BoardColumnApi extends BaseAPI implements BoardColumnApiInterface {
     /**
      * 
-     * @summary Copy a single card.
+     * @summary Copy a single column.
      * @param {string} columnId The id of the column.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
