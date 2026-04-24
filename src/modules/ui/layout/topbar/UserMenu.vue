@@ -38,10 +38,10 @@
 <script setup lang="ts">
 import LanguageMenu from "./LanguageMenu.vue";
 import { MeUserResponse } from "@api-server";
+import { useSystem } from "@data-access";
 import { useAppStore, useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useOAuthApi } from "@data-oauth";
-import { useSystem } from "@data-system";
 import { safariAriaOwnsWorkaround } from "@util-device-detection";
 import { computed, onMounted, PropType, Ref, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";

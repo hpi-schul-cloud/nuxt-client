@@ -27,7 +27,7 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { useSystem } from "@data-system";
+import { useSystem } from "@data-access";
 import { computed, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 

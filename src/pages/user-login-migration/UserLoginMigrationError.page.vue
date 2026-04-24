@@ -49,8 +49,8 @@
 <script setup lang="ts">
 import { buildPageTitle } from "@/utils/pageTitle";
 import { sanitizeUrl } from "@braintree/sanitize-url";
+import { useSystem } from "@data-access";
 import { useEnvConfig } from "@data-env";
-import { useSystem } from "@data-system";
 import { useUserLoginMigration } from "@data-user-login-migration";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";

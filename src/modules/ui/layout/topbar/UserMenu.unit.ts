@@ -3,8 +3,8 @@ import { createTestAppStore, createTestEnvStore, mockComposable } from "@@/tests
 import { publicSystemResponseFactory } from "@@/tests/test-utils/factory/publicSystemResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { LanguageType, PublicSystemResponse } from "@api-server";
+import { useSystem } from "@data-access";
 import { useOAuthApi } from "@data-oauth";
-import { useSystem } from "@data-system";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -12,7 +12,7 @@ import { Mocked } from "vitest";
 import { computed, nextTick, ref } from "vue";
 import { VBtn, VListItem } from "vuetify/lib/components/index";
 
-vi.mock("@data-system");
+vi.mock("@data-access");
 vi.mock("@data-oauth");
 
 describe("@ui-layout/UserMenu", () => {

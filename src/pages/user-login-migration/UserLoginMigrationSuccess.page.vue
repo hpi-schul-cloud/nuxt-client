@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useSystem } from "@data-system";
+import { useSystem } from "@data-access";
 import { SvsSuspense } from "@ui-containers";
 import { useTitle } from "@vueuse/core";
 import { toRef } from "vue";
