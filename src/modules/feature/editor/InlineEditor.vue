@@ -90,7 +90,7 @@ const handleReady = (editor: Editor) => {
 
 :root {
 	// z-index must be less than z-index of the headers to prevent that the toolbar is shown in front of the headers when scrolling.
-	--ck-z-modal: 15;
+	--ck-z-panel: 10100;
 }
 
 .ck-content {
@@ -107,11 +107,6 @@ const handleReady = (editor: Editor) => {
 .ck-focused {
 	border: none !important;
 	box-shadow: none !important;
-}
-
-// ensure that the toolbar is above vuetify overlays (used in CardHostDetailView)
-.ck.ck-toolbar-container {
-	z-index: 3000;
 }
 
 @media #{map.get($display-breakpoints, "sm-and-up")} {
