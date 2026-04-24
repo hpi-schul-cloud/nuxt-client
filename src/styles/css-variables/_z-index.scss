@@ -1,0 +1,10 @@
+:root {
+	--z-elevated: 1; // Slightly elevated content elements
+	--z-interface: 10; // Editor, basic UI
+	--z-header: 20;
+	--z-overlay: 30; // Dropdowns, menus
+	--z-pinned: 40; // Pinned/fixed elements
+	--z-floating: 50; // Topbar, toolbars
+	--z-skip-link: 60;
+	--z-notification: 10100; // 10000 = highest Vuetify z-index + 100
+}

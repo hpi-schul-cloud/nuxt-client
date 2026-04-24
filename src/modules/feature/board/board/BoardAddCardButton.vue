@@ -35,7 +35,7 @@ const onAddCard = () => emit("add-card");
 .sticky {
 	position: -webkit-sticky;
 	position: sticky;
-	z-index: 1;
+	z-index: var(--z-elevated);
 	bottom: 0;
 }
 .button-background {

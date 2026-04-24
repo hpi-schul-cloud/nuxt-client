@@ -2,7 +2,7 @@
 <template>
 	<div class="d-flex justify-end align-center pr-5">
 		<VBtn
-			class="mr-2 bg-surface z-index-100"
+			class="mr-2 bg-surface pinned"
 			elevation="4"
 			:data-testid="action.dataTestId"
 			:href="action.href"
@@ -15,7 +15,7 @@
 		</VBtn>
 		<VBtn
 			color="primary"
-			class="z-index-100"
+			class="pinned"
 			elevation="4"
 			:data-testid="`${action.dataTestId}-icon-btn`"
 			:icon="action.icon"
@@ -36,7 +36,7 @@ defineProps<{
 </script>
 
 <style scoped>
-.z-index-100 {
-	z-index: 100;
+.pinned {
+	z-index: var(--z-pinned);
 }
 </style>

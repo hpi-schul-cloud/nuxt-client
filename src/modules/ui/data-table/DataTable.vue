@@ -189,7 +189,7 @@ watch(
 
 .sticky {
 	position: sticky;
-	z-index: 1;
+	z-index: var(--z-elevated);
 	background: rgb(var(--v-theme-white));
 	$space-left-right: 24px;
 	right: $space-left-right;
