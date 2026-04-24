@@ -42,7 +42,7 @@
 				/>
 			</template>
 		</ContentElementBar>
-		<VCardActions class="py-2 pl-4">
+		<VCardActions v-if="hasLinkedContent" class="py-2 pl-4">
 			<v-spacer />
 			<VBtn
 				:aria-label="t('components.board.action.download')"

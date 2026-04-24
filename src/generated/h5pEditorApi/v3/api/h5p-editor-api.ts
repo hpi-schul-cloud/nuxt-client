@@ -120,6 +120,43 @@ export const H5pEditorApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
+         * @param {string} contentId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        downloadH5pContent: async (contentId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'contentId' is not null or undefined
+            assertParamExists('downloadH5pContent', 'contentId', contentId)
+            const localVarPath = `/h5p-editor/download/{contentId}`
+                .replace(`{${"contentId"}}`, encodeURIComponent(String(contentId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -622,6 +659,16 @@ export const H5pEditorApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} contentId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async downloadH5pContent(contentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.downloadH5pContent(contentId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -778,6 +825,15 @@ export const H5pEditorApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
+         * @param {string} contentId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        downloadH5pContent(contentId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.downloadH5pContent(contentId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -918,6 +974,15 @@ export interface H5pEditorApiInterface {
      * @memberof H5pEditorApiInterface
      */
     deleteH5pContent(language: LanguageType, contentId: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} contentId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApiInterface
+     */
+    downloadH5pContent(contentId: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -1064,6 +1129,17 @@ export class H5pEditorApi extends BaseAPI implements H5pEditorApiInterface {
      */
     public deleteH5pContent(language: LanguageType, contentId: string, options?: any) {
         return H5pEditorApiFp(this.configuration).deleteH5pContent(language, contentId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} contentId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof H5pEditorApi
+     */
+    public downloadH5pContent(contentId: string, options?: any) {
+        return H5pEditorApiFp(this.configuration).downloadH5pContent(contentId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
