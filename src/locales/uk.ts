@@ -488,10 +488,10 @@ export default {
 	"components.board.notifications.errors.notMoved": "{type} не вдалося позицію.",
 	"components.board.notifications.errors.notUpdated": "Зберегти зміни не вдалося.",
 	"components.board.notifications.info.cardDuplicated":
-		"IВміст з Etherpads і Whiteboards, а також захищені налаштування зовнішніх інструментів не переносяться.",
+		"Вміст з Etherpads і Whiteboards, а також захищені налаштування зовнішніх інструментів не переносяться.",
 	"components.board.notifications.info.columnDuplicated":
-		"IВміст з Etherpads і Whiteboards, а також захищені налаштування зовнішніх інструментів не переносяться.",
-	"components.board.notifications.success.columnDuplicated": "колонка була успішно скопійована.",
+		"Вміст з Etherpads і Whiteboards, а також захищені налаштування зовнішніх інструментів не переносяться.",
+	"components.board.notifications.success.columnDuplicated": "Колонка була успішно скопійована.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"Картку було створено іншим користувачем у колонці {columnPosition}.",
 	"components.board.screenReader.notification.columnCreated.success": "Колонку створив інший користувач.",
@@ -499,7 +499,7 @@ export default {
 	"components.board.screenReader.notification.cardDuplicated.success": "Картка була дуплікована іншим користувачем.",
 	"components.board.screenReader.notification.columnDeleted.success": "Стовпець був видалений іншим користувачем.",
 	"components.board.screenReader.notification.columnDuplicated.success":
-		"Стовпець була дуплікована іншим користувачем.",
+		"Стовпець був дуплікований іншим користувачем.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
 		"У колонці {columnPosition} картку було переміщено на позицію {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
