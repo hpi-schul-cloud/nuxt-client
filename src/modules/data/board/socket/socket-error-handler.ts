@@ -27,13 +27,11 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 	let timeoutHandle: NodeJS.Timeout | null = null;
 
 	const log = (message: string) => {
-		if (logs.length === 0) {
-			startTime = Date.now();
-		}
 		logs.push(`[${Date.now() - startTime}ms]${message}`);
 	};
 
 	const resetLogs = () => {
+		startTime = Date.now();
 		logs.splice(0, logs.length);
 	};
 

@@ -156,8 +156,8 @@ describe("socket-error-handler", () => {
 		// simulate reconnect_attempt
 		emitManagerEvent("reconnect_attempt", 5);
 
-		// Advance timers past the 6000ms delay for reconnect_attempt events
-		await vi.advanceTimersByTimeAsync(6100);
+		// Advance timers past the 7000ms delay for reconnect_attempt events
+		await vi.advanceTimersByTimeAsync(7100);
 
 		expect(boardErrorReportApiMock.boardErrorReportControllerReportError).toHaveBeenCalledWith(
 			expect.objectContaining({
@@ -180,8 +180,8 @@ describe("socket-error-handler", () => {
 		// simulate reconnect_attempt
 		emitManagerEvent("reconnect_attempt", 6);
 
-		// Advance timers past the 6000ms delay for reconnect_attempt events
-		await vi.advanceTimersByTimeAsync(6100);
+		// Advance timers past the 7000ms delay for reconnect_attempt events
+		await vi.advanceTimersByTimeAsync(7100);
 
 		expect(boardErrorReportApiMock.boardErrorReportControllerReportError).toHaveBeenCalledWith(
 			expect.objectContaining({ boardId: "unknown" })
@@ -211,10 +211,10 @@ describe("socket-error-handler", () => {
 
 		emitManagerEvent("reconnect_attempt", 7);
 
-		// Advance past the 6000ms delay for reconnect_attempt to trigger the API call
-		await vi.advanceTimersByTimeAsync(6100);
+		// Advance past the 7000ms delay for reconnect_attempt to trigger the API call
+		await vi.advanceTimersByTimeAsync(7100);
 
-		expect(loggerMock.error).toHaveBeenCalledWith("Failed to report error (retries left 2)", expect.any(Error));
+		expect(loggerMock.error).toHaveBeenCalledWith("Failed to report error (retries left 3)", expect.any(Error));
 
 		// Advance past the 5000ms retry delay
 		await vi.advanceTimersByTimeAsync(5100);
