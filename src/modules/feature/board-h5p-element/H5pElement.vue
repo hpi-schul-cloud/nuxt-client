@@ -56,6 +56,7 @@
 				variant="text"
 				@click="onDownload"
 				@keydown.enter="onDownload"
+				@keyup.enter.space.stop
 			/>
 		</VCardActions>
 	</VCard>
