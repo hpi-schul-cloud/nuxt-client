@@ -1671,6 +1671,8 @@ export default {
 	"pages.rooms.ccImportCourse.loading": "Upload läuft...",
 	"pages.rooms.ccImportCourse.success": "Deine Kursdatei wurde hochgeladen und wird nun im Hintergrund importiert.",
 	"pages.rooms.ccImportCourse.error": "Beim Hochladen der Kursdatei ist ein Fehler aufgetreten.",
+	"pages.rooms.ccImportCourse.error.fileSizeExceeded":
+		"Die Datei überschreitet die maximal zulässige Größe von {maxFileSize}. Bitte wählen Sie eine kleinere Datei.",
 	"pages.rooms.ccExportCourse.started": "Kurs-Export wird heruntergeladen.",
 	"pages.rooms.ccExportCourse.error": "Beim Exportieren des Kurses ist ein Fehler aufgetreten.",
 	"pages.rooms.roomModal.courseGroupTitle": "Kursgruppentitel",

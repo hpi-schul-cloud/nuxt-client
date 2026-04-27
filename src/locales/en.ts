@@ -1650,6 +1650,8 @@ export default {
 	"pages.rooms.ccImportCourse.success":
 		"Your course file has been uploaded and is now being imported in the background.",
 	"pages.rooms.ccImportCourse.error": "An error occurred while uploading the course.",
+	"pages.rooms.ccImportCourse.error.fileSizeExceeded":
+		"The file exceeds the maximum allowed size of {maxFileSize}. Please select a smaller file.",
 	"pages.rooms.ccExportCourse.started": "Course export is downloading.",
 	"pages.rooms.ccExportCourse.error": "An error occurred while exporting the course.",
 	"pages.rooms.roomModal.courseGroupTitle": "Course group title",

@@ -1661,6 +1661,8 @@ export default {
 	"pages.rooms.ccImportCourse.loading": "Триває завантаження...",
 	"pages.rooms.ccImportCourse.success": "Файл вашого курсу завантажено та зараз імпортується у фоновому режимі.",
 	"pages.rooms.ccImportCourse.error": "Під час завантаження файлу курсу сталася помилка.",
+	"pages.rooms.ccImportCourse.error.fileSizeExceeded":
+		"Файл перевищує максимально допустимий розмір {maxFileSize}. Будь ласка, виберіть файл меншого розміру.",
 	"pages.rooms.ccExportCourse.started": "Завантажується експорт курсу",
 	"pages.rooms.ccExportCourse.error": "Під час експорту курсу сталася помилка.",
 	"pages.rooms.roomModal.courseGroupTitle": "назва групи курсу",

@@ -1682,6 +1682,8 @@ export default {
 	"pages.rooms.ccImportCourse.success":
 		"Su archivo del curso se ha cargado y ahora se está importando en segundo plano.",
 	"pages.rooms.ccImportCourse.error": "Se produjo un error al cargar el archivo del curso.",
+	"pages.rooms.ccImportCourse.error.fileSizeExceeded":
+		"El archivo supera el tamaño máximo permitido de {maxFileSize}. Por favor, seleccione un archivo más pequeño.",
 	"pages.rooms.ccExportCourse.started": "La exportación del curso se está descargando.",
 	"pages.rooms.ccExportCourse.error": "Se produjo un error al exportar el curso.",
 	"pages.rooms.roomModal.courseGroupTitle": "Título del grupo del curso",

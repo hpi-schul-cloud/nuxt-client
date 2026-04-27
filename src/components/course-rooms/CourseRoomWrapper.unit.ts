@@ -8,7 +8,7 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Permission } from "@api-server";
-import { useCommonCartridgeImport } from "@data-common-cartridge";
+import { CommonCartridgeImportErrorType, useCommonCartridgeImport } from "@data-common-cartridge";
 import { useCourseRoomListStore } from "@data-course-rooms";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
@@ -19,7 +19,17 @@ import { Mocked } from "vitest";
 import { ref } from "vue";
 import { VBtn, VFab } from "vuetify/components";
 
-vi.mock("@data-common-cartridge");
+vi.mock("@/utils/fileHelper", () => ({
+	formatFileSize: vi.fn((size: number) => `${size / 1024 / 1024 / 1024} GB`),
+}));
+
+vi.mock("@data-common-cartridge", async () => {
+	const actual = await vi.importActual("@data-common-cartridge");
+	return {
+		...actual,
+		useCommonCartridgeImport: vi.fn(),
+	};
+});
 
 const useCommonCartridgeImportMock = vi.mocked(useCommonCartridgeImport);
 
@@ -42,6 +52,8 @@ describe("CourseRoomWrapper.vue", () => {
 		useCommonCartridgeImportMockReturn = mockComposable(useCommonCartridgeImport, {
 			isOpen: ref(false),
 			isSuccess: ref(false),
+			errorType: ref(undefined),
+			maxFileSize: ref(undefined),
 			file: ref(undefined),
 			importCommonCartridgeFile: vi.fn(),
 		});
@@ -52,6 +64,8 @@ describe("CourseRoomWrapper.vue", () => {
 		options: {
 			hasRooms?: boolean;
 			isSuccess?: boolean;
+			errorType?: CommonCartridgeImportErrorType;
+			maxFileSize?: number;
 			stubImportModal?: boolean;
 			stubSyncDialog?: boolean;
 			isOpenInitialValue?: boolean;
@@ -62,6 +76,8 @@ describe("CourseRoomWrapper.vue", () => {
 		const {
 			hasRooms = true,
 			isSuccess = false,
+			errorType = undefined,
+			maxFileSize = undefined,
 			stubImportModal = true,
 			stubSyncDialog = true,
 			isOpenInitialValue = false,
@@ -73,8 +89,12 @@ describe("CourseRoomWrapper.vue", () => {
 			useCommonCartridgeImportMockReturn.isOpen = ref(true);
 		}
 		useCommonCartridgeImportMockReturn.isSuccess = ref(isSuccess);
+		useCommonCartridgeImportMockReturn.errorType = ref(errorType);
+		useCommonCartridgeImportMockReturn.maxFileSize = ref(maxFileSize);
 		useCommonCartridgeImportMockReturn.importCommonCartridgeFile.mockImplementation(async () => {
 			useCommonCartridgeImportMockReturn.isSuccess = ref(isSuccess);
+			useCommonCartridgeImportMockReturn.errorType = ref(errorType);
+			useCommonCartridgeImportMockReturn.maxFileSize = ref(maxFileSize);
 		});
 
 		Object.defineProperty(courseRoomListStore, "loading", {
@@ -265,6 +285,25 @@ describe("CourseRoomWrapper.vue", () => {
 
 			it("should show error notification", async () => {
 				const wrapper = setup({ isSuccess: false, stubImportModal: false });
+
+				const testFile = new File([], "test.imscc");
+
+				const modal = wrapper.findComponent(CourseCommonCartridgeImportModal);
+				modal.vm.$emit("import", testFile);
+				await flushPromises();
+
+				expectNotification("error");
+			});
+		});
+
+		describe("when import fails due to file size exceeded", () => {
+			it("should show file size exceeded error notification with max file size", async () => {
+				const wrapper = setup({
+					isSuccess: false,
+					errorType: CommonCartridgeImportErrorType.FILE_SIZE_EXCEEDED,
+					maxFileSize: 1073741824, // 1 GB
+					stubImportModal: false,
+				});
 
 				const testFile = new File([], "test.imscc");
 

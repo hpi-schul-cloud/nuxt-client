@@ -25,9 +25,10 @@
 
 <script setup lang="ts">
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
+import { formatFileSize } from "@/utils/fileHelper";
 import { Permission } from "@api-server";
 import { notifyError, notifySuccess, useAppStore, useLoadingStore } from "@data-app";
-import { useCommonCartridgeImport } from "@data-common-cartridge";
+import { CommonCartridgeImportErrorType, useCommonCartridgeImport } from "@data-common-cartridge";
 import { useCourseRoomListStore } from "@data-course-rooms";
 import { useEnvConfig } from "@data-env";
 import { StartNewCourseSyncDialog } from "@feature-course-sync";
@@ -125,6 +126,11 @@ const handleImport = async (file: File): Promise<void> => {
 
 	if (commonCartridgeImport.isSuccess.value) {
 		notifySuccess(t("pages.rooms.ccImportCourse.success"));
+	} else if (commonCartridgeImport.errorType.value === CommonCartridgeImportErrorType.FILE_SIZE_EXCEEDED) {
+		const maxFileSizeFormatted = commonCartridgeImport.maxFileSize.value
+			? formatFileSize(commonCartridgeImport.maxFileSize.value)
+			: undefined;
+		notifyError(t("pages.rooms.ccImportCourse.error.fileSizeExceeded", { maxFileSize: maxFileSizeFormatted }));
 	} else {
 		notifyError(t("pages.rooms.ccImportCourse.error"));
 	}
