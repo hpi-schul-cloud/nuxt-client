@@ -3,7 +3,7 @@
 		<p class="mb-6">
 			{{ t("components.administration.externalToolsSection.info") }}
 		</p>
-		<v-data-table
+		<VDataTable
 			data-testid="external-tool-section-table"
 			:items="items"
 			:headers="getHeaders"
@@ -18,12 +18,8 @@
 			</template>
 			<template #[`item.statusText`]="{ item }">
 				<div class="text-no-wrap" data-testid="external-tool-status">
-					<v-icon v-if="item.isOutdated || item.isDeactivated" color="warning" start>
-						{{ mdiAlert }}
-					</v-icon>
-					<v-icon v-else color="success" start>
-						{{ mdiCheckCircle }}
-					</v-icon>
+					<VIcon v-if="item.isOutdated || item.isDeactivated" color="warning" start :icon="mdiAlert" />
+					<VIcon v-else color="success" start :icon="mdiCheckCircle" />
 					<span>
 						{{ item.statusText }}
 					</span>
@@ -41,20 +37,18 @@
 						color="success"
 						aria-hidden="false"
 						:aria-label="t('components.administration.externalToolsSection.table.ariaLabel.mediumAvailable')"
-					>
-						{{ mdiCheckCircle }}
-					</VIcon>
+						:icon="mdiCheckCircle"
+					/>
 					<VIcon
 						v-else
 						start
 						color="warning"
 						aria-hidden="false"
 						:aria-label="t('components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable')"
-					>
-						{{ mdiAlert }}
-					</VIcon>
+						:icon="mdiAlert"
+					/>
 					<span>
-						{{ item.medium.mediaSourceName || $t("pages.tool.medium.noMediaSource") }}
+						{{ item.medium.mediaSourceName || t("pages.tool.medium.noMediaSource") }}
 					</span>
 				</div>
 				<span v-else data-testid="external-tool-medium"> - </span>
@@ -65,7 +59,7 @@
 				</span>
 			</template>
 			<template #[`item.actions`]="{ item }">
-				<external-tool-toolbar
+				<ExternalToolToolbar
 					class="text-no-wrap"
 					data-testid="external-tool-actions"
 					@edit="editTool(item)"
@@ -73,7 +67,7 @@
 					@delete="openDeleteDialog(item)"
 				/>
 			</template>
-		</v-data-table>
+		</VDataTable>
 		<div class="d-flex mt-8" data-testid="external-tool-section-table-actions">
 			<VSpacer />
 			<VBtn
@@ -81,9 +75,8 @@
 				variant="flat"
 				data-testid="add-external-tool-button"
 				:to="{ name: 'administration-tool-config-overview' }"
-			>
-				{{ t("components.administration.externalToolsSection.action.add") }}
-			</VBtn>
+				:text="t('components.administration.externalToolsSection.action.add')"
+			/>
 		</div>
 
 		<SvsDialog
@@ -125,9 +118,8 @@ import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
 import { MediaSourceLicenseType, ToolApiAxiosParamCreator } from "@api-server";
 import { notifyError, useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { useSchoolExternalToolUsage } from "@data-external-tool";
+import { useSchoolExternalTools, useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
-import { useSchoolExternalTools } from "@data-school";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";

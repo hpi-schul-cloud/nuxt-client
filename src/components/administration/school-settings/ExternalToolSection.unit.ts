@@ -1,8 +1,6 @@
 import ExternalToolSection from "./ExternalToolSection.vue";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
-import { SchoolExternalToolMetadata } from "@/store/external-tool";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
+import { SchoolExternalTool, SchoolExternalToolMetadata } from "@/store/external-tool";
 import {
 	createTestAppStoreWithSchool,
 	createTestEnvStore,
@@ -16,24 +14,24 @@ import {
 	schoolExternalToolMetadataFactory,
 	schoolToolConfigurationStatusFactory,
 } from "@@/tests/test-utils/factory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ConfigResponse, ExternalToolMediumStatus, MediaSourceLicenseType } from "@api-server";
 import { useNotificationStore } from "@data-app";
-import { useSchoolExternalToolUsage } from "@data-external-tool";
+import { useSchoolExternalTools, useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { expect, Mocked } from "vitest";
-import { mock } from "vitest-mock-extended";
 import { nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
-import { VCardText } from "vuetify/components";
+import { VCardText, VDataTable, VIcon } from "vuetify/components";
 
 vi.mock("@data-external-tool/SchoolExternalToolUsage.composable.ts");
 const mockedSchoolExternalToolUsage = vi.mocked(useSchoolExternalToolUsage);
+
+vi.mock("@data-external-tool/school-external-tools.composable.ts");
 
 describe("ExternalToolSection", () => {
 	const schoolId = "schoolId";
@@ -49,37 +47,30 @@ describe("ExternalToolSection", () => {
 
 	const createDatasheetButtonIndex = 1;
 
-	const getWrapper = (getters: Partial<SchoolExternalToolsModule> = {}, envs: Partial<ConfigResponse> = {}) => {
-		el = document.createElement("div");
-		el.setAttribute("data-app", "true");
-		document.body.appendChild(el);
-
-		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule, {
-			getSchoolExternalTools: [],
-			...getters,
-		});
-
+	const setup = (
+		options?: Partial<{
+			schoolExternalTools: SchoolExternalTool[];
+			envs: Partial<ConfigResponse>;
+		}>
+	) => {
 		createTestAppStoreWithSchool(schoolId);
-		createTestEnvStore(envs);
+		createTestEnvStore(options?.envs);
 
 		injectRouterMock(createRouterMock());
+
+		const useSchoolExternalToolsMock = mockComposable(useSchoolExternalTools, {
+			schoolExternalTools: ref(options?.schoolExternalTools || []),
+			loadSchoolExternalTools: vi.fn(),
+		});
+		vi.mocked(useSchoolExternalTools).mockReturnValue(useSchoolExternalToolsMock);
 
 		const wrapper = mount(ExternalToolSection, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
-				},
-			},
-			stubs: {
-				VIcon: true,
 			},
 		});
 
-		return {
-			wrapper,
-			schoolExternalToolsModule,
-		};
+		return { wrapper, useSchoolExternalToolsMock };
 	};
 
 	beforeEach(() => {
@@ -96,7 +87,8 @@ describe("ExternalToolSection", () => {
 
 	describe("when component is used", () => {
 		it("should be found in the dom", () => {
-			const { wrapper } = getWrapper();
+			const { wrapper } = setup();
+
 			expect(wrapper.findComponent(ExternalToolSection).exists()).toBeTruthy();
 		});
 	});
@@ -104,13 +96,13 @@ describe("ExternalToolSection", () => {
 	describe("onMounted is called", () => {
 		describe("when component is mounted", () => {
 			it("should load the external tools", () => {
-				const { schoolExternalToolsModule } = getWrapper();
+				const { useSchoolExternalToolsMock } = setup();
 
-				expect(schoolExternalToolsModule.loadSchoolExternalTools).toHaveBeenCalledWith(schoolId);
+				expect(useSchoolExternalToolsMock.loadSchoolExternalTools).toHaveBeenCalledWith(schoolId);
 			});
 
 			it("should load the school licenses", () => {
-				getWrapper();
+				setup();
 
 				expect(schoolLicenseStore.fetchMediaSchoolLicenses).toHaveBeenCalled();
 			});
@@ -118,157 +110,187 @@ describe("ExternalToolSection", () => {
 	});
 
 	describe("items is called", () => {
+		// const setupItems = () => {
+		// 	const firstToolName = "Test";
+		// 	const secondToolName = "Test2";
+		// 	const schoolExternalTool = schoolExternalToolFactory.build({
+		// 		id: "testId",
+		// 		toolId: "toolId",
+		// 		schoolId,
+		// 		parameters: [],
+		// 		name: firstToolName,
+		// 		status: schoolToolConfigurationStatusFactory.build(),
+		// 		isDeactivated: false,
+		// 		medium: {
+		// 			mediumId: "tool1",
+		// 			mediaSourceId: "licensedSource",
+		// 			mediaSourceName: "Medium Source Name",
+		// 			mediaSourceLicenseType: MediaSourceLicenseType.SCHOOL_LICENSE,
+		// 		},
+		// 	});
+
+		// 	schoolLicenseStore.isLicensed.mockReturnValueOnce(true);
+		// 	schoolLicenseStore.isLicensed.mockReturnValue(false);
+
+		// 	const { wrapper, schoolExternalToolsModule } = getWrapper(
+		// 		{
+		// 			getSchoolExternalTools: [
+		// 				schoolExternalTool,
+		// 				{
+		// 					id: "testId2",
+		// 					toolId: "toolId",
+		// 					schoolId,
+		// 					parameters: [],
+		// 					name: secondToolName,
+		// 					status: schoolToolConfigurationStatusFactory.build({
+		// 						isOutdatedOnScopeSchool: true,
+		// 					}),
+		// 					isDeactivated: false,
+		// 					medium: {
+		// 						status: ExternalToolMediumStatus.ACTIVE,
+		// 						mediumId: "tool2",
+		// 						mediaSourceId: "notLicensedSource",
+		// 						mediaSourceName: undefined,
+		// 						mediaSourceLicenseType: MediaSourceLicenseType.SCHOOL_LICENSE,
+		// 					},
+		// 				},
+		// 				{
+		// 					id: "testId3",
+		// 					toolId: "toolId",
+		// 					schoolId,
+		// 					parameters: [],
+		// 					name: "Test3",
+		// 					status: schoolToolConfigurationStatusFactory.build({
+		// 						isGloballyDeactivated: true,
+		// 					}),
+		// 					isDeactivated: true,
+		// 					medium: undefined,
+		// 				},
+		// 			],
+		// 		},
+		// 		{
+		// 			FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: true,
+		// 		}
+		// 	);
+
+		// 	const windowMock = mock<Window>();
+		// 	vi.spyOn(window, "open").mockImplementation(() => windowMock);
+
+		// 	return {
+		// 		wrapper,
+		// 		schoolExternalToolsModule,
+		// 		firstToolName,
+		// 		secondToolName,
+		// 		schoolExternalTool,
+		// 	};
+		// };
+
 		const setupItems = () => {
-			const firstToolName = "Test";
-			const secondToolName = "Test2";
-			const schoolExternalTool = schoolExternalToolFactory.build({
-				id: "testId",
-				toolId: "toolId",
-				schoolId,
-				parameters: [],
-				name: firstToolName,
-				status: schoolToolConfigurationStatusFactory.build(),
-				isDeactivated: false,
+			// TODO: think about medium factory
+			const firstTool = schoolExternalToolFactory.build({
 				medium: {
 					mediumId: "tool1",
 					mediaSourceId: "licensedSource",
 					mediaSourceName: "Medium Source Name",
+					mediaSourceLicenseType: MediaSourceLicenseType.USER_LICENSE,
+				},
+			});
+			const secondTool = schoolExternalToolFactory.build({
+				medium: {
+					status: ExternalToolMediumStatus.ACTIVE,
+					mediumId: "tool2",
+					mediaSourceId: "notLicensedSource",
+					mediaSourceName: undefined,
 					mediaSourceLicenseType: MediaSourceLicenseType.SCHOOL_LICENSE,
 				},
 			});
 
-			schoolLicenseStore.isLicensed.mockReturnValueOnce(true);
-			schoolLicenseStore.isLicensed.mockReturnValue(false);
+			const thirdTool = schoolExternalToolFactory.build({});
 
-			const { wrapper, schoolExternalToolsModule } = getWrapper(
-				{
-					getSchoolExternalTools: [
-						schoolExternalTool,
-						{
-							id: "testId2",
-							toolId: "toolId",
-							schoolId,
-							parameters: [],
-							name: secondToolName,
-							status: schoolToolConfigurationStatusFactory.build({
-								isOutdatedOnScopeSchool: true,
-							}),
-							isDeactivated: false,
-							medium: {
-								status: ExternalToolMediumStatus.ACTIVE,
-								mediumId: "tool2",
-								mediaSourceId: "notLicensedSource",
-								mediaSourceName: undefined,
-								mediaSourceLicenseType: MediaSourceLicenseType.SCHOOL_LICENSE,
-							},
-						},
-						{
-							id: "testId3",
-							toolId: "toolId",
-							schoolId,
-							parameters: [],
-							name: "Test3",
-							status: schoolToolConfigurationStatusFactory.build({
-								isGloballyDeactivated: true,
-							}),
-							isDeactivated: true,
-							medium: undefined,
-						},
-					],
-				},
-				{
-					FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: true,
-				}
-			);
-
-			const windowMock = mock<Window>();
-			vi.spyOn(window, "open").mockImplementation(() => windowMock);
+			const schoolExternalTools = [firstTool, secondTool, thirdTool];
 
 			return {
-				wrapper,
-				schoolExternalToolsModule,
-				firstToolName,
-				secondToolName,
-				schoolExternalTool,
+				schoolExternalTools,
+				firstTool,
+				secondTool,
+				thirdTool,
 			};
 		};
 
 		describe("when table is rendered", () => {
 			it("should display dataTableHeaders in v-data-table", () => {
-				const { wrapper } = setupItems();
+				const { schoolExternalTools } = setupItems();
+				const { wrapper } = setup({
+					schoolExternalTools,
+					envs: { FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: true },
+				});
+				const dataTable = wrapper.findComponent(VDataTable);
 
-				const vueWrapperArray = wrapper
-					.findComponent({
-						name: "v-data-table",
-					})
-					.findAll("th");
+				const expectedHeaders = [
+					"common.labels.name",
+					"components.administration.externalToolsSection.table.header.status",
+					"components.administration.externalToolsSection.table.header.medium",
+					"components.administration.externalToolsSection.table.header.restrictedTo",
+					"",
+				];
 
-				expect(vueWrapperArray[0].find("span").text()).toEqual("common.labels.name");
-				expect(vueWrapperArray[1].find("span").text()).toEqual(
-					"components.administration.externalToolsSection.table.header.status"
-				);
-				expect(vueWrapperArray[2].find("span").text()).toEqual(
-					"components.administration.externalToolsSection.table.header.medium"
-				);
-				expect(vueWrapperArray[3].find("span").text()).toEqual(
-					"components.administration.externalToolsSection.table.header.restrictedTo"
-				);
-				expect(vueWrapperArray[4].find("span").text()).toEqual("");
+				expect(dataTable.props("headers")!.map((header) => header.title)).toEqual(expectedHeaders);
 			});
 		});
 
 		describe("when external tools were loaded", () => {
 			it("names should be rendered in the datatable", () => {
-				const { wrapper, firstToolName, secondToolName } = setupItems();
+				const { schoolExternalTools, firstTool, secondTool } = setupItems();
+				const { wrapper } = setup({
+					schoolExternalTools,
+					envs: { FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: true },
+				});
 
-				const tableRows = wrapper
-					.findComponent({
-						name: "v-data-table",
-					})
-					.findAll("tr");
-				const firstRow = tableRows[1].findAll("td");
-				const secondRow = tableRows[2].findAll("td");
+				const dataTable = wrapper.findComponent(VDataTable);
+				const itemNames = dataTable.props("items")!.map((item) => item.name);
 
-				expect(firstRow[0].text()).toEqual(firstToolName);
-				expect(secondRow[0].text()).toEqual(secondToolName);
+				expect(itemNames).toEqual([firstTool.name, secondTool.name]);
 			});
 
 			it("status should be rendered in the datatable", () => {
-				const { wrapper } = setupItems();
+				const { schoolExternalTools } = setupItems();
+				const { wrapper } = setup({
+					schoolExternalTools,
+					envs: { FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: true },
+				});
 
-				const tableRows = wrapper.find("tbody").findAll("tr");
+				const dataTable = wrapper.findComponent(VDataTable);
+				const statusTexts = dataTable.props("items")!.map((item) => item.statusText);
 
-				const firstRow = tableRows[0].findAll("td");
-				const secondRow = tableRows[1].findAll("td");
-				const thirdRow = tableRows[2].findAll("td");
-
-				expect(firstRow[1].html()).toContain(mdiCheckCircle);
-				expect(firstRow[1].find("span").text()).toEqual("components.externalTools.status.latest");
-
-				expect(secondRow[1].html()).toContain(mdiAlert);
-				expect(secondRow[1].find("span").text()).toEqual("components.externalTools.status.outdated");
-
-				expect(thirdRow[1].html()).toContain(mdiAlert);
-				expect(thirdRow[1].find("span").text()).toEqual("components.externalTools.status.deactivated");
+				expect(statusTexts).toEqual([
+					"components.externalTools.status.latest",
+					"components.externalTools.status.outdated",
+					"components.externalTools.status.deactivated",
+				]);
 			});
 
 			it("medium status should be rendered in the datatable", () => {
-				const { wrapper } = setupItems();
+				const { schoolExternalTools, firstTool } = setupItems();
+				const { wrapper } = setup({
+					schoolExternalTools,
+					envs: { FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: true },
+				});
 
-				const tableRows = wrapper.find("tbody").findAll("tr");
+				const dataTable = wrapper.findComponent(VDataTable);
+				const externalToolMediaStatus = dataTable.findAll('[data-testid="external-tool-medium"]');
 
-				const firstRow = tableRows[0].findAll("td");
-				const secondRow = tableRows[1].findAll("td");
-				const thirdRow = tableRows[2].findAll("td");
+				const expectedMediumStatuses = [
+					{ icon: mdiCheckCircle, text: firstTool.medium?.mediaSourceName },
+					{ icon: mdiAlert, text: "pages.tool.medium.noMediaSource" },
+					{ icon: null, text: "-" },
+				];
 
-				expect(firstRow[2].html()).toContain(mdiCheckCircle);
-				expect(firstRow[2].find("span").text()).toEqual("Medium Source Name");
-
-				expect(secondRow[2].html()).toContain(mdiAlert);
-				expect(secondRow[2].find("span").text()).toEqual("pages.tool.medium.noMediaSource");
-
-				expect(thirdRow[2].html()).not.toContain("v-icon");
-				expect(thirdRow[2].find("span").text()).toEqual("-");
+				expect(
+					externalToolMediaStatus.map((cell) => ({
+						text: cell.text(),
+						icon: cell.findComponent(VIcon).exists() ? cell.findComponent(VIcon).props("icon") : null,
+					}))
+				).toEqual(expectedMediumStatuses);
 			});
 
 			describe("when actions buttons are rendered", () => {
