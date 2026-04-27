@@ -115,7 +115,6 @@ describe("TasksOverviewListItemTeacher", () => {
 			const wrapper = setup({ task });
 
 			const taskLabel = wrapper.find("[data-testid='task-label']");
-			// Without due date and not planned, label only contains course name
 			expect(taskLabel.text()).not.toContain("pages.tasks.labels.due");
 			expect(taskLabel.text()).not.toContain("pages.tasks.labels.planned");
 		});

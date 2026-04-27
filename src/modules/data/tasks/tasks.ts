@@ -47,7 +47,7 @@ type DateRange = {
 
 export enum DueStatus {
 	Overdue = "overdue",
-	WithDue = "with-due-date",
+	WithDueDate = "with-due-date",
 	NoDueDate = "no-due-date",
 }
 export enum GradeStatus {
@@ -291,7 +291,7 @@ export const useTasksFilter = (
 		if (!dueStatus.value) return tasksFilteredByCourses.value;
 		if (dueStatus.value === DueStatus.Overdue) return tasksFilteredByCourses.value.filter(isTaskOverdue);
 		if (dueStatus.value === DueStatus.NoDueDate) return tasksFilteredByCourses.value.filter(hasNoDueDate);
-		if (dueStatus.value === DueStatus.WithDue) return tasksFilteredByCourses.value.filter(hasDueDate);
+		if (dueStatus.value === DueStatus.WithDueDate) return tasksFilteredByCourses.value.filter(hasDueDate);
 		return tasksFilteredByCourses.value;
 	});
 
@@ -328,7 +328,7 @@ export const useTasksFilter = (
 	];
 
 	const dueStatusOptions = [
-		{ value: DueStatus.WithDue, title: t("pages.tasks.with.due") },
+		{ value: DueStatus.WithDueDate, title: t("pages.tasks.with.due") },
 		{ value: DueStatus.NoDueDate, title: t("pages.tasks.no.due") },
 		{ value: DueStatus.Overdue, title: t("pages.tasks.overdue") },
 	];

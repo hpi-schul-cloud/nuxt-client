@@ -52,5 +52,3 @@ const { t } = useI18n();
 
 const isUnpublishedLesson = computed(() => isTaskUnpublished(props.task));
 </script>
-
-<style scoped lang="scss"></style>

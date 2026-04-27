@@ -50,5 +50,3 @@ const isSubmitted = computed(() => props.task.status?.submitted);
 const isDueSoon = computed(() => props.task.dueDate && !isSubmitted.value && isDueWithin24h(props.task.dueDate));
 const isMissingSubmission = computed(() => isTaskOverdue(props.task) && !isSubmitted.value);
 </script>
-
-<style scoped lang="scss"></style>

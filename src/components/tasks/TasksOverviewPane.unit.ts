@@ -42,7 +42,8 @@ describe("TasksOverviewPane", () => {
 			],
 			dueStatusOptions: [
 				{ value: DueStatus.Overdue, title: "Überfällig" },
-				{ value: DueStatus.WithDue, title: "Nicht überfällig" },
+				{ value: DueStatus.WithDueDate, title: "Mit Frist" },
+				{ value: DueStatus.NoDueDate, title: "Ohne Frist" },
 			],
 		});
 		vi.mocked(useTasksFilter).mockReturnValue(useTasksFilterMock);
