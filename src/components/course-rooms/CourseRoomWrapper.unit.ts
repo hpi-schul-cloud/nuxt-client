@@ -19,10 +19,6 @@ import { Mocked } from "vitest";
 import { ref } from "vue";
 import { VBtn, VFab } from "vuetify/components";
 
-vi.mock("@/utils/fileHelper", () => ({
-	formatFileSize: vi.fn((size: number) => `${size / 1024 / 1024 / 1024} GB`),
-}));
-
 vi.mock("@data-common-cartridge", async () => {
 	const actual = await vi.importActual("@data-common-cartridge");
 	return {
@@ -302,6 +298,22 @@ describe("CourseRoomWrapper.vue", () => {
 					isSuccess: false,
 					errorType: CommonCartridgeImportErrorType.FILE_SIZE_EXCEEDED,
 					maxFileSize: 1073741824, // 1 GB
+					stubImportModal: false,
+				});
+
+				const testFile = new File([], "test.imscc");
+
+				const modal = wrapper.findComponent(CourseCommonCartridgeImportModal);
+				modal.vm.$emit("import", testFile);
+				await flushPromises();
+
+				expectNotification("error");
+			});
+
+			it("should show file size exceeded error notification when max file size is undefined", async () => {
+				const wrapper = setup({
+					isSuccess: false,
+					errorType: CommonCartridgeImportErrorType.FILE_SIZE_EXCEEDED,
 					stubImportModal: false,
 				});
 
