@@ -112,9 +112,12 @@ export function convertFileSize(fileSize: number): {
 
 export function formatFileSize(sizeInBytes: number) {
 	const { n } = useI18n();
+	return formatFileSizeWithN(sizeInBytes, n);
+}
+
+export function formatFileSizeWithN(sizeInBytes: number, n: (value: number, key: string) => string) {
 	const { convertedSize, unit } = convertFileSize(sizeInBytes);
 	const localizedFileSize = n(convertedSize, "fileSize");
-
 	return `${localizedFileSize} ${unit}`;
 }
 
