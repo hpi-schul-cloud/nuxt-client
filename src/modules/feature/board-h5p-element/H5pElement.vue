@@ -48,8 +48,7 @@
 			<v-spacer />
 			<VBtn
 				:aria-label="t('components.board.action.download')"
-				:disabled="false"
-				data-testid="h5p-folder-element-download-button"
+				data-testid="h5p-element-download-button"
 				class="float-right download-button"
 				:icon="mdiTrayArrowDown"
 				size="small"
