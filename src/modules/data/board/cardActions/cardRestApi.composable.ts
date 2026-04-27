@@ -1,3 +1,4 @@
+import { usePreferredExternalToolStore } from "../../external-tool/preferred-external-tool.store";
 import { useBoardStore } from "../Board.store";
 import { useBoardApi } from "../BoardApi.composable";
 import { useCardStore } from "../Card.store";
@@ -15,7 +16,6 @@ import {
 	UpdateCardTitleRequestPayload,
 	UpdateElementRequestPayload,
 } from "./cardActionPayload.types";
-import { schoolExternalToolsModule } from "@/store";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { delay } from "@/utils/helpers";
 import {
@@ -34,11 +34,13 @@ import {
 } from "@data-external-tool";
 import { ApiErrorHandlerFactory, BoardObjectType, ErrorType, useErrorHandler } from "@util-error-handling";
 import { AxiosResponse } from "axios";
+import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 
 export const useCardRestApi = () => {
 	const boardStore = useBoardStore();
 	const cardStore = useCardStore();
+	const { preferredExternalTool } = storeToRefs(usePreferredExternalToolStore());
 
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
 	const { handleError, notifyWithTemplate } = useErrorHandler();
@@ -55,9 +57,8 @@ export const useCardRestApi = () => {
 		duplicateCardCall,
 	} = useBoardApi();
 
-	const { fetchPreferredTools } = useContextExternalToolApi();
-
-	const { createContextExternalToolCall, fetchAvailableToolsForContextCall } = useContextExternalToolApi();
+	const { fetchPreferredTools, createContextExternalToolCall, fetchAvailableToolsForContextCall } =
+		useContextExternalToolApi();
 
 	const { setEditModeId } = useSharedEditMode();
 
@@ -128,7 +129,7 @@ export const useCardRestApi = () => {
 
 					await updateElementCall(newElement.data);
 				} else {
-					schoolExternalToolsModule.setContextExternalToolConfigurationTemplate(preferredTool);
+					preferredExternalTool.value = preferredTool;
 				}
 			}
 

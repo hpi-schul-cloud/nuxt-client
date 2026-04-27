@@ -1,6 +1,11 @@
-import { SchoolExternalTool, ToolParameterLocation, ToolParameterScope, ToolParameterType } from "./external-tool";
+import {
+	SchoolExternalTool,
+	ToolParameterLocation,
+	ToolParameterScope,
+	ToolParameterType,
+} from "../../../store/external-tool";
+import { BusinessError } from "../../../store/types/commons";
 import SchoolExternalToolsModule from "./school-external-tools";
-import { BusinessError } from "./types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	axiosErrorFactory,
