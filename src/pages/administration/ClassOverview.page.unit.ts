@@ -1,119 +1,31 @@
 import ClassOverview from "./ClassOverview.page.vue";
-import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
-import { ClassRootType } from "@/store/types/class-info";
-import { Pagination } from "@/store/types/commons";
 import { School, Year } from "@/store/types/schools";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { GROUP_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import {
 	classInfoFactory,
 	courseFactory,
 	createTestAppStoreWithPermissions,
 	createTestEnvStore,
+	mockComposable,
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ConfigResponse, Permission, SchulcloudTheme } from "@api-server";
+import { ClassInfo, ClassRootType, useGroupClasses } from "@data-group";
 import { createTestingPinia } from "@pinia/testing";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { nextTick } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VBtn, VDataTableServer } from "vuetify/components";
 
+vi.mock("@data-group/group-classes.composable");
+
 type Tab = "current" | "next" | "archive";
-
-type CreateWrapperOptions = {
-	groupModuleGetters?: Partial<GroupModule>;
-	schoolsModuleGetters?: Partial<SchoolsModule>;
-	props?: { tab: Tab };
-	userPermissions?: Permission[];
-	envs?: Partial<ConfigResponse>;
-};
-
-const createWrapper = ({
-	groupModuleGetters = {},
-	schoolsModuleGetters = {},
-	props = { tab: "current" as Tab },
-	userPermissions,
-	envs = {},
-}: CreateWrapperOptions) => {
-	const { router } = injectRouterMock(createRouterMock());
-	const route = router.currentRoute.value;
-
-	const defaultPermissions = [Permission.CLASS_EDIT, Permission.CLASS_CREATE];
-
-	const groupModule = createModuleMocks(GroupModule, {
-		getClasses: [
-			classInfoFactory.build(),
-			classInfoFactory.build({
-				externalSourceName: undefined,
-				type: ClassRootType.CLASS,
-				teacherNames: ["Test Teacher"],
-				isUpgradable: true,
-			}),
-		],
-		getPagination: {
-			limit: 10,
-			skip: 0,
-			total: 30,
-		},
-		...groupModuleGetters,
-	});
-
-	setActivePinia(createTestingPinia({ stubActions: false }));
-	createTestAppStoreWithPermissions(userPermissions ?? defaultPermissions);
-
-	const schoolModule = createModuleMocks(SchoolsModule, {
-		getSchool: {
-			years: {
-				schoolYears: [],
-				nextYear: {
-					name: "2024/25",
-				} as Year,
-				activeYear: {
-					name: "2023/24",
-				} as Year,
-				lastYear: {} as Year,
-			},
-		} as unknown as School,
-		...schoolsModuleGetters,
-	});
-
-	createTestEnvStore({
-		FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
-		...envs,
-	});
-
-	const wrapper = mount(ClassOverview, {
-		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				[GROUP_MODULE_KEY.valueOf()]: groupModule,
-				[SCHOOLS_MODULE_KEY.valueOf()]: schoolModule,
-			},
-			stubs: {
-				EndCourseSyncDialog: true,
-			},
-			mocks: {
-				t: (key: string, placeholders: Record<string, string> = {}) =>
-					`${key}|${Object.values(placeholders || {}).join("|")}`,
-			},
-		},
-		props,
-	});
-
-	return {
-		wrapper,
-		route,
-		router,
-		groupModule,
-		schoolModule,
-	};
-};
 
 const findTableComponent = (wrapper: VueWrapper) =>
 	wrapper.findComponent<typeof VDataTableServer>('[data-testid="admin-class-table"]');
@@ -123,245 +35,203 @@ describe("ClassOverview", () => {
 		vi.clearAllMocks();
 	});
 
-	describe("general", () => {
-		const setup = () => createWrapper({});
+	const setup = (
+		options?: Partial<{
+			userPermissions: Permission[];
+			classes: ClassInfo[];
+			tab: Tab;
+			envs: Partial<ConfigResponse>;
+		}>
+	) => {
+		const defaultPermissions = [Permission.CLASS_EDIT, Permission.CLASS_CREATE];
+		const { userPermissions, tab, classes } = {
+			userPermissions: defaultPermissions,
+			tab: "current" as Tab,
+			classes: [
+				classInfoFactory.build(),
+				classInfoFactory.build({
+					externalSourceName: undefined,
+					type: ClassRootType.CLASS,
+					teacherNames: ["Test Teacher"],
+					isUpgradable: true,
+				}),
+			],
+			...options,
+		};
+		const { router } = injectRouterMock(createRouterMock());
+		const route = router.currentRoute.value;
 
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		createTestAppStoreWithPermissions(userPermissions);
+
+		const schoolModule = createModuleMocks(SchoolsModule, {
+			getSchool: {
+				years: {
+					schoolYears: [],
+					nextYear: {
+						name: "2024/25",
+					} as Year,
+					activeYear: {
+						name: "2023/24",
+					} as Year,
+					lastYear: {} as Year,
+				},
+			} as unknown as School,
+		});
+
+		createTestEnvStore({
+			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+			...options?.envs,
+		});
+
+		const useGroupClassMock = mockComposable(useGroupClasses, {
+			classes: ref(classes),
+			pagination: ref({
+				limit: 10,
+				skip: 0,
+				total: 30,
+			}),
+			page: ref(1),
+			isFetching: computed(() => false),
+		});
+
+		vi.mocked(useGroupClasses).mockReturnValue(useGroupClassMock);
+
+		const wrapper = mount(ClassOverview, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[SCHOOLS_MODULE_KEY.valueOf()]: schoolModule,
+				},
+				stubs: {
+					EndCourseSyncDialog: true,
+				},
+				mocks: {
+					t: (key: string, placeholders: Record<string, string> = {}) =>
+						`${key}|${Object.values(placeholders || {}).join("|")}`,
+				},
+			},
+			props: {
+				tab,
+			},
+		});
+
+		return {
+			useGroupClassMock,
+			wrapper,
+			route,
+			router,
+		};
+	};
+
+	describe("general", () => {
 		it("should mount", () => {
 			const { wrapper } = setup();
 			expect(wrapper.exists()).toBe(true);
 		});
 
 		describe("onMounted", () => {
-			describe("when loading the page", () => {
-				it("should load the classes", async () => {
-					const { groupModule } = setup();
+			it("should load the classes", async () => {
+				const { useGroupClassMock } = setup();
+				await nextTick();
 
-					await nextTick();
-
-					expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
-				});
+				expect(useGroupClassMock.fetchClassesForSchool).toHaveBeenCalled();
 			});
 		});
 	});
 
 	describe("when there are classes or groups to display", () => {
-		describe("classes", () => {
-			const setup = () => {
-				const classes = [
+		it("should display the entries in the table", () => {
+			const { wrapper, useGroupClassMock } = setup({
+				classes: [
 					classInfoFactory.build(),
 					classInfoFactory.build({
 						externalSourceName: undefined,
 						type: ClassRootType.CLASS,
 						isUpgradable: true,
 					}),
-				];
-
-				const { wrapper } = createWrapper({
-					groupModuleGetters: {
-						getClasses: classes,
-					},
-				});
-
-				return { wrapper, classes };
-			};
-
-			it("should display the entries in the table", () => {
-				const { classes, wrapper } = setup();
-
-				const table = wrapper.findComponent<typeof VDataTableServer>('[data-testid="admin-class-table"]');
-
-				expect(table.props("items")).toEqual(classes);
+				],
 			});
+
+			const table = wrapper.findComponent<typeof VDataTableServer>('[data-testid="admin-class-table"]');
+			expect(table.props("items")).toEqual(useGroupClassMock.classes.value);
 		});
 
 		describe("onUpdateSortBy", () => {
-			describe("when changing the sortBy", () => {
-				const setup = () => {
-					const sortBy = { key: "externalSourceName" };
+			it("should set sortBy, sortOrder and fetch classes again", async () => {
+				const sortBy = { key: "externalSourceName", order: "desc" };
+				const { useGroupClassMock, wrapper } = setup();
 
-					const { wrapper, groupModule } = createWrapper({});
+				findTableComponent(wrapper).vm.$emit("update:sortBy", [sortBy]);
+				await nextTick();
 
-					return {
-						sortBy,
-						wrapper,
-						groupModule,
-					};
-				};
-
-				it("should call store to change sort by", async () => {
-					const { sortBy, wrapper, groupModule } = setup();
-
-					findTableComponent(wrapper).vm.$emit("update:sortBy", [sortBy]);
-					await nextTick();
-
-					expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
-					expect(groupModule.setSortBy).toHaveBeenCalledWith(sortBy.key);
-				});
-			});
-		});
-
-		describe("updateSortOrder", () => {
-			describe("when changing the sort order", () => {
-				const setup = () => {
-					const sortBy = { key: "externalSourceName", order: "desc" };
-
-					const { wrapper, groupModule } = createWrapper({});
-
-					return {
-						sortBy,
-						wrapper,
-						groupModule,
-					};
-				};
-
-				it("should call store to change sort order", async () => {
-					const { sortBy, wrapper, groupModule } = setup();
-
-					findTableComponent(wrapper).vm.$emit("update:sortBy", [sortBy]);
-					await nextTick();
-
-					expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
-					expect(groupModule.setSortOrder).toHaveBeenCalledWith(SortOrder.DESC);
-				});
+				expect(useGroupClassMock.sortBy.value).toBe(sortBy.key);
+				expect(useGroupClassMock.sortOrder.value).toBe(SortOrder.DESC);
+				expect(useGroupClassMock.fetchClassesForSchool).toHaveBeenCalled();
 			});
 		});
 
 		describe("onUpdateItemsPerPage", () => {
-			describe("when changing the number of items per page", () => {
-				const setup = () => {
-					const itemsPerPage = 20;
+			it("should set new limit and fetch classes again", async () => {
+				const itemsPerPage = 20;
+				const { wrapper, useGroupClassMock } = setup();
 
-					const pagination: Pagination = {
-						limit: 10,
-						skip: 0,
-						total: 30,
-					};
+				findTableComponent(wrapper).vm.$emit("update:itemsPerPage", itemsPerPage);
+				await nextTick();
 
-					const { wrapper, groupModule } = createWrapper({
-						groupModuleGetters: {
-							getPagination: {
-								limit: 10,
-								skip: 0,
-								total: 30,
-							},
-						},
-					});
-
-					return {
-						itemsPerPage,
-						pagination,
-						wrapper,
-						groupModule,
-					};
-				};
-
-				it("should call store to change the limit in pagination", async () => {
-					const { itemsPerPage, wrapper, groupModule, pagination } = setup();
-
-					findTableComponent(wrapper).vm.$emit("update:itemsPerPage", itemsPerPage);
-					await nextTick();
-
-					expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
-					expect(groupModule.setPagination).toHaveBeenCalledWith({
-						...pagination,
-						limit: itemsPerPage,
-					});
-				});
+				expect(useGroupClassMock.pagination.value.limit).toBe(itemsPerPage);
+				expect(useGroupClassMock.fetchClassesForSchool).toHaveBeenCalled();
 			});
 		});
 
 		describe("onUpdateCurrentPage", () => {
-			describe("when changing the table page", () => {
-				const setup = () => {
-					const page = 2;
-					const pagination: Pagination = {
-						limit: 10,
-						skip: 0,
-						total: 30,
-					};
+			it("should set current page and fetch classes again", async () => {
+				const page = 2;
 
-					pagination.skip = (page - 1) * pagination.limit;
+				const { wrapper, useGroupClassMock } = setup();
+				const skip = (page - 1) * useGroupClassMock.pagination.value.limit;
 
-					const { wrapper, groupModule } = createWrapper({});
+				findTableComponent(wrapper).vm.$emit("update:page", page);
+				await nextTick();
 
-					return {
-						page,
-						pagination,
-						wrapper,
-						groupModule,
-					};
-				};
-
-				it("should call store to update current page", async () => {
-					const { page, wrapper, groupModule, pagination } = setup();
-
-					findTableComponent(wrapper).vm.$emit("update:page", page);
-					await nextTick();
-
-					expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
-					expect(groupModule.setPage).toHaveBeenCalledWith(page);
-					expect(groupModule.setPagination).toHaveBeenCalledWith(pagination);
-				});
+				expect(useGroupClassMock.fetchClassesForSchool).toHaveBeenCalled();
+				expect(useGroupClassMock.page.value).toBe(page);
+				expect(useGroupClassMock.pagination.value.skip).toEqual(skip);
 			});
 		});
 	});
 
 	describe("action buttons", () => {
 		describe("when user has no edit permission", () => {
-			const setup = () => {
-				const { wrapper } = createWrapper({
-					props: { tab: "current" },
-					userPermissions: [],
-				});
-
-				return {
-					wrapper,
-				};
-			};
-
 			it("should not render any button", () => {
-				const { wrapper } = setup();
+				const { wrapper } = setup({ userPermissions: [] });
 
 				expect(wrapper.find('[data-testid="legacy-class-table-manage-btn"]').exists()).toEqual(false);
 				expect(wrapper.find('[data-testid="class-table-edit-btn"]').exists()).toEqual(false);
 				expect(wrapper.find('[data-testid="class-table-delete-btn"]').exists()).toEqual(false);
 				expect(wrapper.find('[data-testid="class-table-successor-btn"]').exists()).toEqual(false);
-
-				return {
-					wrapper,
-				};
 			});
 		});
 
 		describe("when legacy classes are available", () => {
-			const setup = () => createWrapper({});
-
 			it("should render 4 buttons", () => {
-				const { wrapper } = setup();
+				const { wrapper } = setup({ classes: [classInfoFactory.build({ type: ClassRootType.CLASS })] });
 
 				const manageBtn = wrapper.find('[data-testid="legacy-class-table-manage-btn"]');
-
 				const editBtn = wrapper.find('[data-testid="class-table-edit-btn"]');
-
 				const deleteBtn = wrapper.find('[data-testid="class-table-delete-btn"]');
-
 				const successorBtn = wrapper.find('[data-testid="class-table-successor-btn"]');
 
-				expect(manageBtn.exists()).toBeTruthy();
-				expect(editBtn.exists()).toBeTruthy();
-				expect(deleteBtn.exists()).toBeTruthy();
-				expect(successorBtn.exists()).toBeTruthy();
+				expect(manageBtn.exists()).toBe(true);
+				expect(editBtn.exists()).toBe(true);
+				expect(deleteBtn.exists()).toBe(true);
+				expect(successorBtn.exists()).toBe(true);
 			});
 		});
 
 		describe("when no classes are available", () => {
-			const setup = () =>
-				createWrapper({
-					groupModuleGetters: { getClasses: [classInfoFactory.build()] },
-				});
-
 			it("should render only manage button which refers to members page", () => {
-				const { wrapper } = setup();
+				const { wrapper } = setup({ classes: [classInfoFactory.build({ type: ClassRootType.GROUP })] });
 
 				const manageBtn = wrapper.find('[data-testid="class-table-members-manage-btn"]');
 
@@ -371,144 +241,85 @@ describe("ClassOverview", () => {
 
 				const successorBtn = wrapper.find('[data-testid="class-table-successor-btn"]');
 
-				expect(manageBtn.exists()).toBeTruthy();
-				expect(editBtn.exists()).toBeFalsy();
-				expect(deleteBtn.exists()).toBeFalsy();
-				expect(successorBtn.exists()).toBeFalsy();
+				expect(manageBtn.exists()).toBe(true);
+				expect(editBtn.exists()).toBe(false);
+				expect(deleteBtn.exists()).toBe(false);
+				expect(successorBtn.exists()).toBe(false);
 			});
 		});
 
 		describe("when clicking on the manage class button", () => {
 			describe("when group class root type is class", () => {
-				const setup = () => {
-					const { wrapper, groupModule } = createWrapper({});
-
-					const classId: string = groupModule.getClasses[1].id;
-
-					return {
-						wrapper,
-						classId,
-					};
-				};
-
 				it("should redirect to legacy class manage page", () => {
-					const { wrapper, classId } = setup();
+					const { wrapper, useGroupClassMock } = setup();
+					const classId = useGroupClassMock.classes.value[1].id;
 
 					const manageBtn = wrapper.find('[data-testid="legacy-class-table-manage-btn"]');
 
 					expect(manageBtn.attributes().href).toStrictEqual(`/administration/classes/${classId}/manage`);
-					expect(manageBtn.findComponent({ name: "router-link" }).exists()).toBeFalsy();
+					expect(manageBtn.findComponent({ name: "router-link" }).exists()).toBe(false);
 				});
 			});
 
 			describe("when class root type is group", () => {
-				const setup = () => {
-					const { wrapper, groupModule } = createWrapper({});
-
-					const classId: string = groupModule.getClasses[0].id;
-
-					return {
-						wrapper,
-						classId,
-					};
-				};
-
 				it("should redirect to group class members page", () => {
-					const { wrapper } = setup();
+					const { wrapper, useGroupClassMock } = setup();
+					const classId = useGroupClassMock.classes.value[0].id;
 
 					const manageBtn = wrapper.findComponent<typeof VBtn>('[data-testid="class-table-members-manage-btn"]');
 
 					expect(manageBtn.attributes().href).toBeUndefined();
-					expect(manageBtn.props("to")).toBeDefined();
+					expect(manageBtn.props("to")).toStrictEqual({
+						name: "administration-groups-classes-members",
+						params: { groupId: classId },
+					});
 				});
 			});
 		});
 
 		describe("when clicking on the edit class button", () => {
-			const setup = () => {
-				const { wrapper, groupModule } = createWrapper({});
-
-				const classId: string = groupModule.getClasses[1].id;
-
-				return {
-					wrapper,
-					classId,
-				};
-			};
-
 			it("should redirect to legacy class edit page", () => {
-				const { wrapper, classId } = setup();
+				const { wrapper, useGroupClassMock } = setup();
+				const classId = useGroupClassMock.classes.value[1].id;
 
 				const editBtn = wrapper.find('[data-testid="class-table-edit-btn"]');
-
 				expect(editBtn.attributes().href).toStrictEqual(`/administration/classes/${classId}/edit`);
 			});
 		});
 
 		describe("when class is upgradable", () => {
 			describe("when clicking on the upgrade class button", () => {
-				const setup = () => {
-					const { wrapper, groupModule } = createWrapper({});
-
-					const classId: string = groupModule.getClasses[1].id;
-
-					return {
-						wrapper,
-						classId,
-					};
-				};
-
 				it("should redirect to legacy class upgrade page", () => {
-					const { wrapper, classId } = setup();
+					const { wrapper, useGroupClassMock } = setup();
+					const classId = useGroupClassMock.classes.value[1].id;
 
 					const successorBtn = wrapper.find('[data-testid="class-table-successor-btn"]');
-
 					expect(successorBtn.attributes().href).toStrictEqual(`/administration/classes/${classId}/createSuccessor`);
 				});
 			});
 		});
 
 		describe("when class is not upgradable", () => {
-			const setup = () => {
-				const { wrapper } = createWrapper({
-					groupModuleGetters: {
-						getClasses: [
-							classInfoFactory.build({
-								externalSourceName: undefined,
-								type: ClassRootType.CLASS,
-								isUpgradable: false,
-							}),
-						],
-					},
+			it("should display the upgrade button as disabled", () => {
+				const { wrapper } = setup({
+					classes: [
+						classInfoFactory.build({
+							externalSourceName: undefined,
+							type: ClassRootType.CLASS,
+							isUpgradable: false,
+						}),
+					],
 				});
 
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display the upgrade button as disabled", () => {
-				const { wrapper } = setup();
-
 				const successorBtn = wrapper.findComponent<typeof VBtn>('[data-testid="class-table-successor-btn"]');
-
 				expect(successorBtn.props("disabled")).toEqual(true);
 			});
 		});
 
 		describe("when clicking on the delete class button", () => {
-			const setup = () => {
-				const { wrapper, groupModule } = createWrapper({});
-
-				return {
-					wrapper,
-					groupModule,
-				};
-			};
-
 			it("should call deleteClass when confirmed", async () => {
 				vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(true);
-				const { wrapper, groupModule } = setup();
+				const { wrapper, useGroupClassMock } = setup();
 
 				await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
 
@@ -516,37 +327,27 @@ describe("ClassOverview", () => {
 					"pages.administration.classes.deleteDialog.title",
 					"pages.administration.classes.deleteDialog.content"
 				);
-				expect(groupModule.deleteClass).toHaveBeenCalled();
+				expect(useGroupClassMock.deleteClass).toHaveBeenCalled();
 			});
 
 			it("should not call deleteClass when cancelled", async () => {
 				vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(false);
-				const { wrapper, groupModule } = setup();
+				const { wrapper, useGroupClassMock } = setup();
 
 				await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
 
-				expect(groupModule.deleteClass).not.toHaveBeenCalled();
+				expect(useGroupClassMock.deleteClass).not.toHaveBeenCalled();
 			});
 		});
 	});
 
 	describe("tabs", () => {
 		describe("when loading page", () => {
-			const setup = () => {
-				const { wrapper } = createWrapper({});
-
-				return {
-					wrapper,
-				};
-			};
-
 			it("should show 3 tabs", () => {
 				const { wrapper } = setup();
 
 				const nextYearTab = wrapper.find('[data-testid="admin-class-next-year-tab"]');
-
 				const currentYearTab = wrapper.find('[data-testid="admin-class-current-year-tab"]');
-
 				const previousYearTab = wrapper.find('[data-testid="admin-class-previous-years-tab"]');
 
 				expect(nextYearTab.exists()).toBeTruthy();
@@ -564,17 +365,6 @@ describe("ClassOverview", () => {
 		});
 
 		describe("when clicking on a tab", () => {
-			const setup = () => {
-				const { wrapper, route, router, groupModule } = createWrapper({});
-
-				return {
-					wrapper,
-					route,
-					router,
-					groupModule,
-				};
-			};
-
 			it("should replace the route to the given tab ", async () => {
 				const { wrapper, router } = setup();
 
@@ -587,69 +377,38 @@ describe("ClassOverview", () => {
 		});
 
 		describe("when clicking on next year tab", () => {
-			const setup = () => {
-				const { wrapper, groupModule } = createWrapper({
-					props: { tab: "next" },
-				});
-
-				return {
-					wrapper,
-					groupModule,
-				};
-			};
-
 			it("should call store to load classes of next year", async () => {
-				const { wrapper, groupModule } = setup();
+				const { wrapper, useGroupClassMock } = setup({ tab: "next" });
 
 				await wrapper.find('[data-testid="admin-class-next-year-tab"]').trigger("click");
 
-				expect(groupModule.loadClassesForSchool).toHaveBeenCalledWith({
+				expect(useGroupClassMock.fetchClassesForSchool).toHaveBeenCalledWith({
 					schoolYearQuery: "nextYear",
 				});
 			});
 		});
 
 		describe("when clicking on previous years tab", () => {
-			const setup = () => {
-				const { wrapper, groupModule } = createWrapper({
-					props: { tab: "archive" },
-				});
-
-				return {
-					wrapper,
-					groupModule,
-				};
-			};
-
 			it("should call store to load classes of previous years", async () => {
-				const { wrapper, groupModule } = setup();
+				const { wrapper, useGroupClassMock } = setup({ tab: "archive" });
 
 				await wrapper.find('[data-testid="admin-class-previous-years-tab"]').trigger("click");
 
-				expect(groupModule.loadClassesForSchool).toHaveBeenCalledWith({
+				expect(useGroupClassMock.fetchClassesForSchool).toHaveBeenCalledWith({
 					schoolYearQuery: "previousYears",
 				});
 			});
 		});
 
 		describe("when clicking on current year tab", () => {
-			const setup = () => {
-				const { wrapper, groupModule } = createWrapper({});
-
-				return {
-					wrapper,
-					groupModule,
-				};
-			};
-
 			it("should call store to load groups and classes of current year", async () => {
-				const { wrapper, groupModule } = setup();
+				const { wrapper, useGroupClassMock } = setup();
 
 				await wrapper.find('[data-testid="admin-class-next-year-tab"]').trigger("click");
 
 				await wrapper.find('[data-testid="admin-class-current-year-tab"]').trigger("click");
 
-				expect(groupModule.loadClassesForSchool).toHaveBeenCalledWith({
+				expect(useGroupClassMock.fetchClassesForSchool).toHaveBeenCalledWith({
 					schoolYearQuery: "currentYear",
 				});
 			});
@@ -658,36 +417,15 @@ describe("ClassOverview", () => {
 
 	describe("addClass", () => {
 		describe("when create permission is present", () => {
-			const setup = () => {
-				const { wrapper } = createWrapper({
-					props: {
-						tab: "current",
-					},
-					userPermissions: [Permission.CLASS_CREATE],
-				});
-
-				return {
-					wrapper,
-				};
-			};
-
 			it("should render add class fab button", () => {
-				const { wrapper } = setup();
+				const { wrapper } = setup({ tab: "current", userPermissions: [Permission.CLASS_CREATE] });
 				const fabComponent = wrapper.find(`[data-testid="fab_button_add_class"]`);
 				expect(fabComponent.exists()).toBe(true);
 			});
 
 			describe("when clicking on add class fab", () => {
-				const setup = () => {
-					const { wrapper } = createWrapper({});
-
-					return {
-						wrapper,
-					};
-				};
-
 				it("should have link to legacy create class page", () => {
-					const { wrapper } = setup();
+					const { wrapper } = setup({ tab: "current", userPermissions: [Permission.CLASS_CREATE] });
 					const fabComponent = wrapper.findComponent(SpeedDialMenu);
 					expect(fabComponent.vm.actions[0].href).toStrictEqual("/administration/classes/create");
 				});
@@ -695,21 +433,8 @@ describe("ClassOverview", () => {
 		});
 
 		describe("when create permission is not present", () => {
-			const setup = () => {
-				const { wrapper } = createWrapper({
-					props: {
-						tab: "current",
-					},
-					userPermissions: [],
-				});
-
-				return {
-					wrapper,
-				};
-			};
-
 			it("should not render add class fab button", () => {
-				const { wrapper } = setup();
+				const { wrapper } = setup({ tab: "current", userPermissions: [] });
 
 				expect(wrapper.find('[data-testid="fab_button_add_class"]').exists()).toEqual(false);
 			});
@@ -717,24 +442,14 @@ describe("ClassOverview", () => {
 	});
 
 	describe("onClickEndSyncIcon", () => {
-		const setup = () => {
-			const classes = [
-				classInfoFactory.build({
-					synchronizedCourses: [courseFactory.build()],
-				}),
-			];
-
-			const { wrapper } = createWrapper({
-				groupModuleGetters: {
-					getClasses: classes,
-				},
-			});
-
-			return { wrapper, classes };
-		};
-
 		it("should open end course sync dialog", async () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({
+				classes: [
+					classInfoFactory.build({
+						synchronizedCourses: [courseFactory.build()],
+					}),
+				],
+			});
 
 			await wrapper.find('[data-testid="class-table-end-course-sync-btn"]').trigger("click");
 
@@ -744,30 +459,20 @@ describe("ClassOverview", () => {
 	});
 
 	describe("when hint text is shown", () => {
-		const setup = (envs: Partial<ConfigResponse>) => {
-			const classes = [
-				classInfoFactory.build({
-					synchronizedCourses: [courseFactory.build()],
-				}),
-			];
-
-			const { wrapper } = createWrapper({
-				groupModuleGetters: {
-					getClasses: classes,
-				},
-				props: { tab: "current" },
-				envs,
-			});
-
-			return { wrapper, classes };
-		};
-
 		it.each([
 			[SchulcloudTheme.DEFAULT, "Dataport"],
 			[SchulcloudTheme.BRB, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
 			[SchulcloudTheme.N21, "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)"],
 		])("uses %s-instance specific text placeholders", async (theme, expected) => {
-			const { wrapper } = setup({ SC_THEME: theme });
+			const { wrapper } = setup({
+				classes: [
+					classInfoFactory.build({
+						synchronizedCourses: [courseFactory.build()],
+					}),
+				],
+				tab: "current",
+				envs: { SC_THEME: theme },
+			});
 
 			await nextTick();
 
