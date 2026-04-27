@@ -66,7 +66,7 @@ describe("LinkContentElementCreate", () => {
 				expect(wrapper.findComponent({ name: "v-textarea" }).classes()).toContain("input-success");
 			});
 
-			it("should clear success state when user starts typing again", async () => {
+			it("should clear success state when user modifies the input", async () => {
 				const { wrapper } = setup();
 				const textarea = wrapper.findComponent({ name: "v-textarea" });
 
@@ -76,7 +76,7 @@ describe("LinkContentElementCreate", () => {
 
 				expect(textarea.classes()).toContain("input-success");
 
-				await textarea.trigger("keydown", { key: "a" });
+				await textarea.trigger("input");
 
 				expect(textarea.classes()).not.toContain("input-success");
 				expect(textarea.props("hint")).toBeFalsy();
@@ -123,6 +123,21 @@ describe("LinkContentElementCreate", () => {
 				await flushPromises();
 
 				expect(textarea.classes()).not.toContain("input-success");
+			});
+		});
+
+		describe("when user modifies the input after failed validation", () => {
+			it("should clear the error message", async () => {
+				const { wrapper } = setup();
+				const textarea = wrapper.findComponent({ name: "v-textarea" });
+
+				await textarea.setValue(INVALID_URL);
+				await textarea.trigger("keydown.enter");
+				expect(wrapper.find('[role="alert"]').text()).toEqual("Dies ist keine gültige URL.");
+
+				await textarea.trigger("input");
+
+				expect(wrapper.find('[role="alert"]').text()).toBe("");
 			});
 		});
 	});

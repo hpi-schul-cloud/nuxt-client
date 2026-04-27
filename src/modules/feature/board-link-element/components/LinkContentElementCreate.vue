@@ -16,7 +16,8 @@
 						:auto-grow="true"
 						rows="1"
 						class="text"
-						@keydown="onKeydown"
+						@input="onInput"
+						@keydown.enter.prevent="onSubmit"
 					/>
 					<div class="align-self-center pl-2">
 						<button ref="submit" type="submit" data-testid="save-link-in-card">
@@ -36,13 +37,8 @@
 <script setup lang="ts">
 import { mdiCheck } from "@icons/material";
 import { isRequired, isValidUrl } from "@util-validators";
-import { onBeforeUnmount, ref, toRaw } from "vue";
+import { onBeforeUnmount, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
-
-type VuetifyFormApi = {
-	validate: () => { valid: boolean };
-	resetValidation: () => void;
-};
 
 const props = defineProps({
 	existingUrl: {
@@ -63,7 +59,7 @@ const label = existingUrl
 	? t("components.cardElement.LinkElement.edit.label")
 	: t("components.cardElement.LinkElement.create.label");
 
-const form = ref<VuetifyFormApi | null>(null);
+const form = useTemplateRef("form");
 const rules = [isRequired(t("common.validation.required2")), isValidUrl()];
 
 const onSubmit = async () => {
@@ -76,14 +72,9 @@ const onSubmit = async () => {
 	}
 };
 
-const onKeydown = (e: KeyboardEvent) => {
-	if (e.key === "enter" || e.key === "Enter") {
-		e.preventDefault();
-		onSubmit();
-	} else if (form?.value) {
-		isUrlValidated.value = false;
-		form.value.resetValidation();
-	}
+const onInput = () => {
+	isUrlValidated.value = false;
+	form.value?.resetValidation();
 };
 
 onBeforeUnmount(() => {
