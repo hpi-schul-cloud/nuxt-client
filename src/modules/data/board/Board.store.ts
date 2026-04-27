@@ -166,8 +166,10 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (!board.value) return;
 
 		const { columnId, duplicatedColumn } = payload;
-		const columnIndex = getColumnIndex(columnId) ?? 0;
+		const columnIndex = getColumnIndex(columnId);
 		if (columnIndex < 0) return;
+
+		if (!duplicatedColumn.id) return;
 
 		const duplicatedColumnSkeleton: ColumnResponse = {
 			...duplicatedColumn,
