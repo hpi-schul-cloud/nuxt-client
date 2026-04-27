@@ -1,10 +1,10 @@
+import { useFileTrash } from "./useFileTrash.composable";
 import { FileRecord, FileRecordListResponse, FileRecordParent, StorageLocation } from "@/types/file/File";
 import { mockApi, mockApiResponse } from "@@/tests/test-utils";
 import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import * as serverApi from "@api-file-storage";
 import { notifyError } from "@data-app";
-import { useFileTrash } from "./useFileTrash.composable";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: vi.fn(() => ({

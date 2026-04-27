@@ -6,8 +6,7 @@ import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
 import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
 import { axiosErrorFactory, fileRecordFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import * as FileTrashApi from "@data-file";
-import * as FolderState from "@data-folder";
+import { FileRecordScanStatus } from "@api-file-storage";
 import { createTestingPinia } from "@pinia/testing";
 import { DataTable } from "@ui-data-table";
 import { KebabMenuAction } from "@ui-kebab-menu";
@@ -265,6 +264,37 @@ describe("FolderTrash.vue", () => {
 
 			expect(wrapper.html()).toContain(fileRecord1.name);
 			expect(wrapper.html()).toContain(fileRecord2.name);
+		});
+
+		describe("when a file has virus detected status", () => {
+			it("should show the virus detected error chip", async () => {
+				const folderStateMock = createFolderStateMock();
+				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
+
+				const virusFile = fileRecordFactory.build({
+					securityCheckStatus: FileRecordScanStatus.BLOCKED,
+				});
+
+				const fileTrashMock = createFileTrashMock();
+				fileTrashMock.deletedFileRecords = ref([virusFile]);
+				vi.spyOn(FileTrashApi, "useFileTrash").mockReturnValueOnce(fileTrashMock);
+
+				const wrapper = mount(FolderTrash, {
+					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+					props: { folderId: "test-folder-id" },
+				});
+				await flushPromises();
+
+				expect(wrapper.html()).toContain("common.file.virusDetected.short");
+			});
+		});
+
+		describe("when a file does not have virus detected status", () => {
+			it("should not show the virus detected error chip", async () => {
+				const { wrapper } = await setup();
+
+				expect(wrapper.html()).not.toContain("common.file.virusDetected.short");
+			});
 		});
 
 		describe("when the kebab menu restore button is clicked for a single file", () => {
