@@ -546,7 +546,9 @@ export default {
 	"components.cardElement.folderElement.storage.error":
 		"Information about the file folder is currently not available. Please reload the board.",
 	"components.cardElement.LinkElement": "Link",
-	"components.cardElement.LinkElement.label": "Insert link address",
+	"components.cardElement.LinkElement.create.label": "Insert link address",
+	"components.cardElement.LinkElement.edit.label": "Edit link address",
+	"components.cardElement.LinkElement.validation.success": "The link address is valid",
 	"components.cardElement.notification.visibleAndEditable":
 		"This whiteboard is visible and editable for all course participants.",
 	"components.cardElement.richTextElement.placeholder": "Add text",

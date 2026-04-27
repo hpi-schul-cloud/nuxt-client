@@ -558,7 +558,9 @@ export default {
 	"components.cardElement.folderElement.storage.error":
 		"La información sobre la carpeta de archivos no está disponible actualmente. Por favor, recargue el tablero.",
 	"components.cardElement.LinkElement": "Enlace",
-	"components.cardElement.LinkElement.label": "Inserte la dirección del enlace",
+	"components.cardElement.LinkElement.create.label": "Inserte la dirección del enlace",
+	"components.cardElement.LinkElement.edit.label": "Editar la dirección del enlace",
+	"components.cardElement.LinkElement.validation.success": "La dirección del enlace es válida",
 	"components.cardElement.notification.visibleAndEditable":
 		"Esta pizarra es visible y editable para todos los participantes en el curso.",
 	"components.cardElement.richTextElement.placeholder": "Añadir texto",
