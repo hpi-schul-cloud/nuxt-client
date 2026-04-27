@@ -2070,8 +2070,9 @@ export default {
 	"pages.folder.ariaLabels.filter": "Tabla de búsqueda/filtro",
 	"pages.folder.ariaLabels.actionMenu": "Menú de acciones para {name}",
 	"pages.folder.uploadstats": "{uploaded} de {total} archivos cargados",
-	"pages.folder.delete-multiple-confirmation": "¿Borrar realmente todos los archivos {total}?",
-	"pages.folder.delete-confirmation": "¿Borrar realmente el archivo {name}?",
+	"pages.folder.delete-multiple-confirmation":
+		"¿Desea mover realmente todos los {total} archivos a la papelera de reciclaje?",
+	"pages.folder.delete-confirmation": "¿De verdad quieres mover el archivo {name} a la papelera?",
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "El nombre del archivo ya existe.",
 	"pages.folder.rename-file-dialog.validation.invalid-characters":
 		"El nombre del archivo contiene caracteres no válidos.",
