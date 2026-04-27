@@ -21,7 +21,7 @@ export const useSchoolExternalToolConfigurator = () => {
 	const loadSchoolExternalTool = async (schoolExternalToolId: string) => {
 		const { result } = await execLoadTool(
 			() => toolApi.toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId),
-			"Fehler beim Laden des externen Tools" // TODO: CHANGE
+			t("error.load")
 		);
 		return result?.data;
 	};
@@ -29,7 +29,7 @@ export const useSchoolExternalToolConfigurator = () => {
 	const loadAvailableToolsForSchool = async (schoolId: string) => {
 		const { result, success } = await execLoadAvailableTools(
 			() => toolApi.toolConfigurationControllerGetAvailableToolsForSchool(schoolId),
-			"Fehler beim Laden der verfügbaren Tools für die Schule" // TODO: CHANGE
+			t("error.load")
 		);
 		if (success && result) {
 			schoolExternalToolConfigurationTemplates.value =
@@ -40,7 +40,7 @@ export const useSchoolExternalToolConfigurator = () => {
 	const loadConfigurationTemplateForSchoolExternalTool = async (schoolExternalToolId: string) => {
 		const { result, success } = await execLoadConfigurationTemplate(
 			() => toolApi.toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId),
-			"Fehler beim Laden der Konfiguration für das externe Tool" // TODO: CHANGE
+			t("error.load")
 		);
 
 		if (success && result) {

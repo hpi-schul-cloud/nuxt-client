@@ -24,8 +24,9 @@ export const useSchoolExternalTools = () => {
 	};
 
 	const deleteSchoolExternalTool = async (schoolExternalToolId: string) => {
-		const { success } = await execDeleteTool(() =>
-			toolApi.toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId)
+		const { success } = await execDeleteTool(
+			() => toolApi.toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId),
+			t("common.notifications.errors.notDeleted", { type: t("components.cardElement.externalToolElement") })
 		);
 
 		if (success) {
