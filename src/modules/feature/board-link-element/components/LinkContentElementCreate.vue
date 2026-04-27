@@ -102,16 +102,13 @@ onBeforeUnmount(() => {
 }
 
 /* simulating success on validation, similar to error case */
-:deep(.input-success .v-field__outline) {
-	--v-field-border-opacity: 1;
-	color: rgb(var(--v-theme-success));
-}
-
-:deep(.input-success .v-label) {
-	color: rgb(var(--v-theme-success));
-}
-
+:deep(.input-success .v-field__outline),
+:deep(.input-success .v-label),
 :deep(.input-success .v-messages) {
 	color: rgb(var(--v-theme-success));
+}
+
+:deep(.input-success .v-field__outline) {
+	--v-field-border-opacity: 1;
 }
 </style>
