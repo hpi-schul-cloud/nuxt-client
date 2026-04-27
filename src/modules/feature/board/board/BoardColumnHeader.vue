@@ -27,6 +27,11 @@
 			<div class="mt-2 mr-3">
 				<BoardMenu v-if="canDeleteColumn" :scope="BoardMenuScope.COLUMN" :data-testid="`column-menu-btn-${index}`">
 					<KebabMenuActionRename v-if="!isEditMode" @click="onStartEditMode" />
+					<KebabMenuActionDuplicate
+						v-if="allowedOperations?.copyColumn"
+						data-testid="kebab-menu-action-duplicate-column"
+						@click="duplicateColumn"
+					/>
 					<template v-if="isListBoard">
 						<KebabMenuActionMoveUp v-if="isNotFirstColumn" @click="onMoveColumnUp" />
 						<KebabMenuActionMoveDown v-if="isNotLastColumn" @click="onMoveColumnDown" />
@@ -44,13 +49,15 @@
 </template>
 
 <script setup lang="ts">
+import { useSafeTaskRunner } from "../../../../composables/async-tasks.composable";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
-import { useBoardFocusHandler, useCourseBoardEditMode } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler, useBoardStore, useCourseBoardEditMode } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
 	KebabMenuActionDelete,
+	KebabMenuActionDuplicate,
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveLeft,
 	KebabMenuActionMoveRight,
@@ -82,6 +89,8 @@ const emit = defineEmits([
 ]);
 const { t } = useI18n();
 
+const { allowedOperations } = useBoardAllowedOperations();
+
 const columnId = toRef(props, "columnId");
 const columnTitle = toRef(props, "title");
 const canEditColumn = toRef(props, "canEditColumn");
@@ -89,6 +98,8 @@ const canDeleteColumn = toRef(props, "canDeleteColumn");
 const updatedTitle = ref(columnTitle.value);
 const lastEmittedTitle = ref(columnTitle.value);
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(columnId.value);
+
+const boardStore = useBoardStore();
 
 const columnHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(columnId.value, columnHeader);
@@ -138,6 +149,10 @@ const onMoveColumnDown = () => emit("move:column-down");
 const onMoveColumnUp = () => emit("move:column-up");
 
 const onUpdateTitle = (newTitle: string) => (updatedTitle.value = newTitle);
+
+const { run: duplicateColumn } = useSafeTaskRunner(async () => {
+	await boardStore.duplicateColumn({ columnId: props.columnId });
+});
 
 const emitTitleUpdate = () => {
 	if (lastEmittedTitle.value !== updatedTitle.value) {

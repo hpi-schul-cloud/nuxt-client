@@ -487,6 +487,9 @@ export default {
 	"components.board.notifications.errors.notUpdated": "Die Änderungen konnten nicht gespeichert werden.",
 	"components.board.notifications.info.cardDuplicated":
 		"Inhalte aus Etherpads und Whiteboards sowie geschützte Einstellungen externer Tools werden nicht übernommen.",
+	"components.board.notifications.info.columnDuplicated":
+		"Inhalte aus Etherpads und Whiteboards sowie geschützte Einstellungen externer Tools werden nicht übernommen.",
+	"components.board.notifications.success.columnDuplicated": "Der Abschnitt wurde erfolgreich dupliziert.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"Eine Karte wurde von einem anderen Benutzer in Abschnitt {columnPosition} erstellt.",
 	"components.board.screenReader.notification.columnCreated.success":
@@ -497,6 +500,8 @@ export default {
 		"Eine Karte wurde von einem anderen Benutzer dupliziert.",
 	"components.board.screenReader.notification.columnDeleted.success":
 		"Ein Abschnitt wurde von einem anderen Benutzer gelöscht.",
+	"components.board.screenReader.notification.columnDuplicated.success":
+		"Ein Abschnitt wurde von einem anderen Benutzer dupliziert.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
 		"In Abschnitt {columnPosition} wurde eine Karte an Position {newPosition} verschoben.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":

@@ -9,8 +9,21 @@ import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
-import { createTestEnvStore, expectNotification, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
+import {
+	collaborativeTextEditorElementResponseFactory,
+	createTestEnvStore,
+	drawingElementResponseFactory,
+	expectNotification,
+	externalToolElementResponseFactory,
+	mockComposable,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
+import {
+	boardResponseFactory,
+	cardSkeletonResponseFactory,
+	columnFullResponseFactory,
+	columnResponseFactory,
+} from "@@/tests/test-utils/factory";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { BoardLayout } from "@api-server";
 import { useAppStore } from "@data-app";
@@ -451,6 +464,121 @@ describe("BoardStore", () => {
 				cardId: duplicatedCard.id,
 				height: duplicatedCard.height,
 			});
+		});
+	});
+
+	describe("duplicateColumnSuccess", () => {
+		it("should not duplicate column when board is undefined", () => {
+			const { boardStore, firstColumn } = setup({ createBoard: false });
+			const duplicatedColumn = columnFullResponseFactory.build();
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+
+			expect(boardStore.board).toBe(undefined);
+		});
+
+		it("should duplicate a column and insert it after the original", () => {
+			const { boardStore, firstColumn, secondColumn } = setup();
+			const duplicatedColumn = columnFullResponseFactory.build();
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+
+			expect(boardStore.board?.columns.length).toBe(3);
+			expect(boardStore.board?.columns[0]).toEqual(firstColumn);
+			expect(boardStore.board?.columns[1]).toEqual(duplicatedColumn);
+			expect(boardStore.board?.columns[2]).toEqual(secondColumn);
+		});
+
+		it("should show success notification when isOwnAction is true", () => {
+			const { boardStore, firstColumn } = setup();
+			const duplicatedColumn = columnFullResponseFactory.build();
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+
+			expectNotification("success");
+		});
+
+		it("should show info notification when column contains external tool element", () => {
+			const { boardStore, firstColumn } = setup();
+			const element = externalToolElementResponseFactory.build();
+			const card = cardResponseFactory.build({ elements: [element] });
+			const duplicatedColumn = columnFullResponseFactory.build({ cards: [card] });
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+
+			expectNotification("info");
+		});
+
+		it("should show info notification when column contains collaborative editor element", () => {
+			const { boardStore, firstColumn } = setup();
+			const element = collaborativeTextEditorElementResponseFactory.build();
+			const card = cardResponseFactory.build({ elements: [element] });
+			const duplicatedColumn = columnFullResponseFactory.build({ cards: [card] });
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+
+			expectNotification("info");
+		});
+
+		it("should show info notification when column contains drawing element", () => {
+			const { boardStore, firstColumn } = setup();
+			const element = drawingElementResponseFactory.build();
+			const card = cardResponseFactory.build({ elements: [element] });
+			const duplicatedColumn = columnFullResponseFactory.build({ cards: [card] });
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+
+			expectNotification("info");
+		});
+
+		it("should not show notification when isOwnAction is false", () => {
+			const { boardStore, firstColumn } = setup();
+			const duplicatedColumn = columnFullResponseFactory.build();
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: false,
+			});
+
+			expect(boardStore.board?.columns.length).toBe(3);
+		});
+
+		it("should not duplicate column when duplicatedColumn.id is undefined", () => {
+			const { boardStore, firstColumn } = setup();
+			const duplicatedColumn = columnFullResponseFactory.build({ id: undefined });
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+
+			expect(boardStore.board?.columns.length).toBe(2);
 		});
 	});
 
@@ -1032,6 +1160,26 @@ describe("BoardStore", () => {
 				await boardStore.deleteColumnRequest(payload);
 
 				expect(mockedBoardRestApi.deleteColumnRequest).toHaveBeenCalledWith(payload);
+			});
+		});
+
+		describe("@duplicateColumn", () => {
+			const payload = { columnId: "testColumnId" };
+
+			it("should call socketApi.duplicateColumnRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
+
+				await boardStore.duplicateColumn(payload);
+
+				expect(mockedBoardSocketApi.duplicateColumnRequest).toHaveBeenCalledWith(payload);
+			});
+
+			it("should call restApi.duplicateColumnRequest when feature flag is set false", async () => {
+				const { boardStore } = setup();
+
+				await boardStore.duplicateColumn(payload);
+
+				expect(mockedBoardRestApi.duplicateColumnRequest).toHaveBeenCalledWith(payload);
 			});
 		});
 
