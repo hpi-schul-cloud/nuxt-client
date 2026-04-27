@@ -1,5 +1,6 @@
 import H5pElement from "./H5pElement.vue";
 import H5pElementMenu from "./H5pElementMenu.vue";
+import * as fileHelper from "@/utils/fileHelper";
 import { h5pElementResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { H5PContentParentType } from "@api-h5p";
@@ -9,8 +10,7 @@ import { useH5PEditorApi } from "@data-h5p";
 import { ContentElementBar } from "@ui-board";
 import { LineClamp } from "@ui-line-clamp";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { flushPromises } from "@vue/test-utils";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { Mocked } from "vitest";
 import { mock } from "vitest-mock-extended";
 import { nextTick } from "vue";
@@ -267,6 +267,115 @@ describe("H5pElement", () => {
 				await nextTick();
 
 				expect(wrapper.emitted("delete:element")).toBeDefined();
+			});
+		});
+
+		describe("when the download option is clicked in the menu", () => {
+			const setup = () => {
+				const contentId = "test-content-id";
+				const element = h5pElementResponseFactory.build({
+					content: { contentId },
+				});
+
+				const { wrapper } = getWrapper({
+					element,
+					isEditMode: true,
+				});
+
+				// eslint-disable-next-line @typescript-eslint/no-empty-function
+				vi.spyOn(fileHelper, "downloadFile").mockImplementation(() => {});
+
+				return {
+					wrapper,
+					contentId,
+				};
+			};
+
+			it("should call downloadFile with the correct URL", async () => {
+				const { wrapper, contentId } = setup();
+
+				const menu = wrapper.getComponent(H5pElementMenu);
+				menu.vm.$emit("download:content");
+				await nextTick();
+
+				expect(fileHelper.downloadFile).toHaveBeenCalledWith(`/api/v3/h5p-editor/download/${contentId}`, "content.h5p");
+			});
+		});
+	});
+
+	describe("Download Button", () => {
+		describe("when content is linked", () => {
+			const setup = () => {
+				const contentId = "test-content-id";
+				const element = h5pElementResponseFactory.build({
+					content: { contentId },
+				});
+
+				const { wrapper } = getWrapper({
+					element,
+					isEditMode: false,
+				});
+
+				// eslint-disable-next-line @typescript-eslint/no-empty-function
+				vi.spyOn(fileHelper, "downloadFile").mockImplementation(() => {});
+
+				return {
+					wrapper,
+					contentId,
+				};
+			};
+
+			it("should render the download button", () => {
+				const { wrapper } = setup();
+
+				const downloadButton = wrapper.find('[data-testid="h5p-element-download-button"]');
+
+				expect(downloadButton.exists()).toBe(true);
+			});
+
+			it("should call downloadFile with the correct URL when clicked", async () => {
+				const { wrapper, contentId } = setup();
+
+				const downloadButton = wrapper.find('[data-testid="h5p-element-download-button"]');
+				await downloadButton.trigger("click");
+
+				expect(fileHelper.downloadFile).toHaveBeenCalledWith(`/api/v3/h5p-editor/download/${contentId}`, "content.h5p");
+			});
+
+			it("should stop event propagation when clicked", async () => {
+				const { wrapper } = setup();
+
+				const downloadButton = wrapper.find('[data-testid="h5p-element-download-button"]');
+				const stopPropagationSpy = vi.fn();
+				const clickEvent = new Event("click");
+				clickEvent.stopPropagation = stopPropagationSpy;
+
+				await downloadButton.element.dispatchEvent(clickEvent);
+
+				expect(stopPropagationSpy).toHaveBeenCalled();
+			});
+		});
+
+		describe("when no content is linked", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					element: h5pElementResponseFactory.build({
+						content: { contentId: null },
+					}),
+					isEditMode: true,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should not render the download button", () => {
+				const { wrapper } = setup();
+
+				const downloadButton = wrapper.find('[data-testid="h5p-element-download-button"]');
+
+				expect(downloadButton.exists()).toBe(false);
 			});
 		});
 	});
