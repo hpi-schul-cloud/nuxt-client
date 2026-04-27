@@ -1,4 +1,4 @@
-import { useCourseRoomListStore } from "./courseRoomList.store";
+import { useCourseRoomListStore } from "./course-room-list.store";
 import { courseMetadataResponseFactory, courseRoomElementFactory, mockApi, mockApiResponse } from "@@/tests/test-utils";
 import {
 	CourseMetadataListResponse,

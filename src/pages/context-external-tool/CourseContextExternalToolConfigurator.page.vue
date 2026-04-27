@@ -30,11 +30,11 @@
 
 <script setup lang="ts">
 import ContextExternalToolConfigurator from "@/components/administration/external-tools-configuration/ContextExternalToolConfigurator.vue";
-import CourseRoomDetailsModule from "@/store/course-room-details";
-import { COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { ToolContextType } from "@api-server";
 import { notifySuccess } from "@data-app";
+import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
+import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
@@ -48,9 +48,10 @@ const props = defineProps({
 	contextType: { type: String as PropType<ToolContextType>, required: true },
 });
 
-const courseRoomDetailsModule: CourseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
-
 const { t } = useI18n();
+const courseRoomDetailsStore = useCourseRoomDetailsStore();
+
+const { roomData } = storeToRefs(courseRoomDetailsStore);
 
 const contextRoute = computed(() => `/rooms/${props.contextId}`);
 
@@ -65,7 +66,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	return crumbs;
 });
 
-const courseTitle: ComputedRef<string> = computed(() => courseRoomDetailsModule.getRoomData.title);
+const courseTitle: ComputedRef<string> = computed(() => roomData.value.title);
 
 const router: Router = useRouter();
 
@@ -87,6 +88,6 @@ const contextExternalToolConfigurator: Ref<InstanceType<typeof ContextExternalTo
 onMounted(async () => {
 	await contextExternalToolConfigurator.value?.fetchData();
 
-	await courseRoomDetailsModule.fetchContent(props.contextId);
+	await courseRoomDetailsStore.fetchContent(props.contextId);
 });
 </script>

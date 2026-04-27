@@ -127,9 +127,9 @@ import {
 	BoardLesson,
 	BoardTask,
 } from "@/types/course-room/CourseRoom";
-import { COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifyError, notifySuccess } from "@data-app";
 import { type CommonCartridgeVersion, startExport } from "@data-common-cartridge";
+import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { InfoAlert } from "@ui-alert";
 import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { computed, ref, watch } from "vue";
@@ -144,7 +144,8 @@ type Selection = {
 type Steps = "VersionSelection" | "ContentSelection";
 
 const { t } = useI18n();
-const courseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
+
+const { roomData, businessError } = useCourseRoomDetailsStore();
 
 const props = defineProps<{
 	isOpen: boolean;
@@ -183,7 +184,7 @@ const toSelectionItem = (element: BoardElement): Selection => ({
 });
 
 watch(
-	() => courseRoomDetailsModule.getRoomData.elements,
+	() => roomData.elements,
 	(newValue) => {
 		allTopics.value = [];
 		allTasks.value = [];
@@ -243,7 +244,7 @@ const onExport = async (): Promise<void> => {
 	await startExport(version.value, props.roomId, topicIds, taskIds, columnBoardIds);
 	notifySuccess(t("pages.rooms.ccExportCourse.started"));
 
-	if (courseRoomDetailsModule.getBusinessError.statusCode !== "") {
+	if (businessError.statusCode !== "") {
 		notifyError(t("pages.rooms.ccExportCourse.error"));
 	}
 

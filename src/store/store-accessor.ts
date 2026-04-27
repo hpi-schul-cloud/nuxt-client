@@ -6,7 +6,6 @@
 // into the actual stores, and then re-export them.
 
 import CopyModule from "@/store/copy";
-import CourseRoomDetailsModule from "@/store/course-room-details";
 import FilePaths from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ImportUsersModule from "@/store/import-users";
@@ -25,7 +24,6 @@ export let copyModule: CopyModule;
 export let filePathsModule: FilePaths;
 export let finishedTasksModule: FinishedTasksModule;
 export let importUsersModule: ImportUsersModule;
-export let courseRoomDetailsModule: CourseRoomDetailsModule;
 export let schoolExternalToolsModule: SchoolExternalToolsModule;
 export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
@@ -38,7 +36,6 @@ export function initializeStores(store: Store<unknown>): void {
 	filePathsModule = getModule(FilePaths, store);
 	finishedTasksModule = getModule(FinishedTasksModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
-	courseRoomDetailsModule = getModule(CourseRoomDetailsModule, store);
 	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	shareModule = getModule(ShareModule, store);
@@ -54,7 +51,6 @@ export const modules = {
 	filePathsModule: FilePaths,
 	finishedTasksModule: FinishedTasksModule,
 	importUsersModule: ImportUsersModule,
-	courseRoomDetailsModule: CourseRoomDetailsModule,
 	schoolExternalToolsModule: SchoolExternalToolsModule,
 	schoolsModule: SchoolsModule,
 	shareModule: ShareModule,
