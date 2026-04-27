@@ -26,21 +26,48 @@ export const isNonEmptyString: FormValidatorFn<unknown> =
 /**
  * Checks if given value is a valid URL
  */
+const isValidHostname = (hostname: string): boolean => {
+	const isLocalhost = hostname === "localhost";
+	if (isLocalhost) return true;
+
+	// Reject IPv4 addresses
+	if (/^\d+(\.\d+){3}$/.test(hostname)) {
+		return false;
+	}
+
+	// DNS compliance: max 253 chars per hostname
+	if (hostname.length > 253) {
+		return false;
+	}
+
+	// Must have at least one dot (TLD)
+	const labels = hostname.split(".");
+	if (labels.length < 2) {
+		return false;
+	}
+
+	// Validate each label (max 63 chars, no leading/trailing hyphen)
+	return labels.every(
+		(label) => label.length > 0 && label.length <= 63 && !label.startsWith("-") && !label.endsWith("-")
+	);
+};
+
 export const isValidUrl: FormValidatorFn<string> =
 	(errMsg = useI18nGlobal().t("util-validators-invalid-url")) =>
 	(value) => {
+		if (!value) return errMsg;
+
 		try {
-			const urlWithProtocol = value.match(/:\/\//) ? value : `https://${value}`;
+			const trimmed = value.trim();
+			const urlWithProtocol = trimmed.match(/:\/\//) ? trimmed : `https://${trimmed}`;
 			const urlObject = new URL(urlWithProtocol);
 
 			if (!["http:", "https:"].includes(urlObject.protocol)) {
-				throw new Error("Wrong protocol");
+				throw new Error();
 			}
-			if (!(urlObject.hostname.includes(".") || urlObject.hostname === "localhost")) {
-				throw new Error("TopLevelDomain missing");
-			}
-			if (/(^-)|(--)|(-$)/.test(urlObject.hostname)) {
-				throw new Error("IDN hyphen rules violated");
+
+			if (!isValidHostname(urlObject.hostname)) {
+				throw new Error();
 			}
 		} catch {
 			return errMsg;

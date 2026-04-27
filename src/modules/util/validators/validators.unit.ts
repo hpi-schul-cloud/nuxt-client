@@ -98,23 +98,85 @@ describe("util-validators", () => {
 			});
 		});
 
-		describe("when url is valid IDN (internationalized domain name)", () => {
-			test.each(["xn--huser-gra.tld", "xn--grsse-lva.tld", "xn--5eyx16c.tld", "xn--90aqfi­dwgh3ei­.tld"])(
-				"should return ERROR for %s",
+		describe("when hostname has empty labels", () => {
+			it("should return ERROR for leading dot (.com)", () => {
+				expect(isValid(".com")).toBe(ERROR);
+				expect(isValid("https://.com/")).toBe(ERROR);
+			});
+
+			it("should return ERROR for trailing dot (foo.)", () => {
+				expect(isValid("foo.")).toBe(ERROR);
+			});
+
+			it("should return ERROR for consecutive dots (foo..bar)", () => {
+				expect(isValid("foo..bar.com")).toBe(ERROR);
+			});
+		});
+
+		describe("when hostname has labels with invalid hyphens", () => {
+			it("should return ERROR for leading hyphen (-medium.com)", () => {
+				expect(isValid("-medium.com")).toBe(ERROR);
+				expect(isValid("https://-medium.com/test")).toBe(ERROR);
+			});
+
+			it("should return ERROR for trailing hyphen (medium.com-)", () => {
+				expect(isValid("medium.com-/test")).toBe(ERROR);
+				expect(isValid("https://medium.com-/")).toBe(ERROR);
+			});
+		});
+
+		describe("when url is IPv4", () => {
+			it("should return ERROR for IPv4 addresses", () => {
+				expect(isValid("192.168.1.1")).toBe(ERROR);
+				expect(isValid("https://192.168.1.1/")).toBe(ERROR);
+				expect(isValid("127.0.0.1")).toBe(ERROR);
+			});
+		});
+
+		describe("when url has label length issues", () => {
+			it("should return ERROR when label exceeds 63 characters", () => {
+				const tooLongLabel = "a".repeat(64);
+				expect(isValid(`https://${tooLongLabel}.com/`)).toBe(ERROR);
+			});
+
+			it("should accept label with exactly 63 characters", () => {
+				const maxLabel = "a".repeat(63);
+				expect(isValid(`https://${maxLabel}.com/`)).toBe(true);
+			});
+		});
+
+		describe("when url has hostname length issues", () => {
+			it("should return ERROR when hostname exceeds 253 characters", () => {
+				const tooLongHostname = "a".repeat(250) + ".com";
+				expect(isValid(`https://${tooLongHostname}/`)).toBe(ERROR);
+			});
+		});
+
+		describe("when url is a valid IDN (internationalized domain name)", () => {
+			test.each(["xn--huser-gra.tld", "xn--grsse-lva.tld", "xn--5eyx16c.tld"])(
+				"should accept valid punycode domain %s",
 				(url) => {
-					expect(isValid(url)).toBe(ERROR);
+					expect(isValid(url)).toBe(true);
 				}
 			);
 		});
 
-		describe("when url is invalid IDN (internationalized domain name)", () => {
-			test.each([
-				"-medium.com/how-to-write-test",
-				"me--dium.com/how-to--write-test",
-				"medium.com-/how-to--write-test",
-				"abc die katze liegt im schnee",
-			])("should return ERROR for %s", (url) => {
-				expect(isValid(url)).toBe(ERROR);
+		describe("when url has special characters", () => {
+			it("should return ERROR for spaces in hostname", () => {
+				expect(isValid("abc die katze liegt im schnee")).toBe(ERROR);
+			});
+		});
+
+		describe("when url is localhost", () => {
+			it("should accept localhost without TLD", () => {
+				expect(isValid("localhost")).toBe(true);
+				expect(isValid("http://localhost:3000")).toBe(true);
+			});
+		});
+
+		describe("when url has whitespace", () => {
+			it("should accept url with leading/trailing whitespace", () => {
+				expect(isValid("  https://medium.com/  ")).toBe(true);
 			});
 		});
 	});
