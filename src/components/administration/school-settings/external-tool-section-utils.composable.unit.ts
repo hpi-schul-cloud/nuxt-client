@@ -1,9 +1,6 @@
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { SchoolExternalTool } from "@/store/external-tool";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { schoolExternalToolFactory, schoolExternalToolResponseFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	ExternalToolMediumStatus,
 	SchoolExternalToolMediumResponse,
@@ -13,15 +10,11 @@ import {
 } from "@api-server";
 
 describe("useSchoolExternalToolUtils", () => {
-	const setup = (schoolExternalTool: SchoolExternalTool) => {
+	const setup = () => {
 		const expectedTranslation = "translated";
 		const tMock = vi.fn().mockReturnValue(expectedTranslation);
 
 		const { getHeaders, getItems } = useExternalToolsSectionUtils(tMock, true);
-
-		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule, {
-			getSchoolExternalTools: [schoolExternalTool],
-		});
 
 		const toolResponse: SchoolExternalToolResponse = schoolExternalToolResponseFactory.build();
 		const listResponse: SchoolExternalToolSearchListResponse = {
@@ -35,8 +28,6 @@ describe("useSchoolExternalToolUtils", () => {
 			toolResponse,
 			tMock,
 			expectedTranslation,
-			schoolExternalToolsModule,
-			schoolExternalTool,
 		};
 	};
 
@@ -45,44 +36,34 @@ describe("useSchoolExternalToolUtils", () => {
 	});
 
 	describe("getHeaders is called", () => {
-		const setupTool = () => {
-			const tool = schoolExternalToolFactory.build();
-			return { tool };
-		};
-
 		it("should return a dataTableHeader array", () => {
-			const { tool } = setupTool();
-			const { getHeaders } = setup(tool);
+			const { getHeaders } = setup();
 
 			expect(Array.isArray(getHeaders)).toBeTruthy();
 		});
 
 		describe("when translate the headers", () => {
 			it("should call the translation function for name", () => {
-				const { tool } = setupTool();
-				const { tMock } = setup(tool);
+				const { tMock } = setup();
 
 				expect(tMock).toHaveBeenCalledWith("common.labels.name");
 			});
 
 			it("should call the translation function for value", () => {
-				const { tool } = setupTool();
-				const { tMock } = setup(tool);
+				const { tMock } = setup();
 
 				expect(tMock).toHaveBeenCalledWith("components.administration.externalToolsSection.table.header.status");
 			});
 
 			it("should call the translation function for restrictToContexts", () => {
-				const { tool } = setupTool();
-				const { tMock } = setup(tool);
+				const { tMock } = setup();
 
 				expect(tMock).toHaveBeenCalledWith("components.administration.externalToolsSection.table.header.restrictedTo");
 			});
 		});
 
 		it("should return the correct headers", () => {
-			const { tool } = setupTool();
-			const { getHeaders, expectedTranslation } = setup(tool);
+			const { getHeaders, expectedTranslation } = setup();
 
 			expect(getHeaders[0].title).toEqual(expectedTranslation);
 			expect(getHeaders[0].value).toEqual("name");
@@ -246,26 +227,19 @@ describe("useSchoolExternalToolUtils", () => {
 
 	describe("getItems is called", () => {
 		describe("when receiving tools", () => {
-			const setupTool = () => {
-				const tool = schoolExternalToolFactory.build();
-
-				return { tool };
-			};
-
 			it("should return schoolExternalToolItems", () => {
-				const { tool } = setupTool();
+				const tool = schoolExternalToolFactory.build();
+				const { getItems, expectedTranslation } = setup();
 
-				const { getItems, expectedTranslation, schoolExternalToolsModule, schoolExternalTool } = setup(tool);
-
-				const items: SchoolExternalToolItem[] = getItems(schoolExternalToolsModule);
+				const items = getItems([tool]);
 
 				expect(items).toEqual<SchoolExternalToolItem[]>([
 					{
-						id: schoolExternalTool.id,
-						externalToolId: schoolExternalTool.toolId,
-						name: schoolExternalTool.name,
+						id: tool.id,
+						externalToolId: tool.toolId,
+						name: tool.name,
 						statusText: expectedTranslation,
-						isOutdated: schoolExternalTool.status.isOutdatedOnScopeSchool,
+						isOutdated: tool.status.isOutdatedOnScopeSchool,
 						isDeactivated: false,
 						restrictToContexts: "",
 					},
@@ -284,27 +258,27 @@ describe("useSchoolExternalToolUtils", () => {
 
 			it("should call the translation function for tool context type mediaShelves", () => {
 				const { tool } = setupTool();
-				const { getItems, tMock, schoolExternalToolsModule } = setup(tool);
+				const { getItems, tMock } = setup();
 
-				getItems(schoolExternalToolsModule);
+				getItems([tool]);
 
 				expect(tMock).toHaveBeenCalledWith("common.tool.context.type.mediaShelves");
 			});
 
 			it("should call the translation function for tool context type course", () => {
 				const { tool } = setupTool();
-				const { getItems, tMock, schoolExternalToolsModule } = setup(tool);
+				const { getItems, tMock } = setup();
 
-				getItems(schoolExternalToolsModule);
+				getItems([tool]);
 
 				expect(tMock).toHaveBeenCalledWith("common.tool.context.type.courses");
 			});
 
 			it("should call the translation function for tool context type boardElements", () => {
 				const { tool } = setupTool();
-				const { getItems, tMock, schoolExternalToolsModule } = setup(tool);
+				const { getItems, tMock } = setup();
 
-				getItems(schoolExternalToolsModule);
+				getItems([tool]);
 
 				expect(tMock).toHaveBeenCalledWith("common.tool.context.type.boardElements");
 			});
@@ -319,9 +293,9 @@ describe("useSchoolExternalToolUtils", () => {
 
 			it("should call the translation function for status latest", () => {
 				const { tool } = setupTools();
-				const { getItems, tMock, schoolExternalToolsModule } = setup(tool);
+				const { getItems, tMock } = setup();
 
-				getItems(schoolExternalToolsModule);
+				getItems([tool]);
 
 				expect(tMock).toHaveBeenCalledWith("components.externalTools.status.latest");
 			});
@@ -338,9 +312,9 @@ describe("useSchoolExternalToolUtils", () => {
 
 			it("should call the translation function for status deactivated", () => {
 				const { tool } = setupTools();
-				const { getItems, tMock, schoolExternalToolsModule } = setup(tool);
+				const { getItems, tMock } = setup();
 
-				getItems(schoolExternalToolsModule);
+				getItems([tool]);
 
 				expect(tMock).toHaveBeenCalledWith("components.externalTools.status.deactivated");
 			});
@@ -360,9 +334,9 @@ describe("useSchoolExternalToolUtils", () => {
 
 			it("should call the translation function for status outdated", () => {
 				const { tool } = setupTools();
-				const { getItems, tMock, schoolExternalToolsModule } = setup(tool);
+				const { getItems, tMock } = setup();
 
-				getItems(schoolExternalToolsModule);
+				getItems([tool]);
 
 				expect(tMock).toHaveBeenCalledWith("components.externalTools.status.outdated");
 			});
