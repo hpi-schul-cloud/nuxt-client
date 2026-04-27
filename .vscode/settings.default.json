@@ -3,8 +3,7 @@
 		"editor.defaultFormatter": "dbaeumer.vscode-eslint"
 	},
 	"[html]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode",
-		"prettier.useTabs": true
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"[javascript]": {
 		"editor.defaultFormatter": "dbaeumer.vscode-eslint"
@@ -13,8 +12,7 @@
 		"editor.defaultFormatter": "dbaeumer.vscode-eslint"
 	},
 	"[json]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode",
-		"prettier.useTabs": true
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"editor.formatOnSave": true,
 	"eslint.format.enable": true
