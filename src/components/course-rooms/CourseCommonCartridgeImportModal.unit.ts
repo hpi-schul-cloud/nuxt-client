@@ -6,7 +6,6 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { VFileInput } from "vuetify/components";
 
-// Mock file with size
 const createMockFile = (name: string, sizeInBytes: number): File => {
 	const file = new File([""], name, { type: "application/octet-stream" });
 	Object.defineProperty(file, "size", {
@@ -92,8 +91,7 @@ describe("CourseCommonCartridgeImportModal", () => {
 
 	describe("file size validation", () => {
 		it("passes confirmBtnDisabled=true when file exceeds size limit", async () => {
-			// 1.5 GB file (exceeds default 1 GB limit)
-			const largeFile = createMockFile("large.imscc", 1610612736);
+			const largeFile = createMockFile("large.imscc", 1024 ** 3 + 1);
 			const { dialog } = getWrapper(largeFile);
 			await flushPromises();
 
@@ -111,7 +109,7 @@ describe("CourseCommonCartridgeImportModal", () => {
 		it("validation rule returns true for valid file size", () => {
 			const { rules } = getWrapper();
 
-			const validFile = createMockFile("test.imscc", 500 * 1024 * 1024); // 500 MB
+			const validFile = createMockFile("test.imscc", 500 * 1024 * 1024);
 			const result = rules[0](validFile);
 
 			expect(result).toBe(true);
@@ -120,7 +118,7 @@ describe("CourseCommonCartridgeImportModal", () => {
 		it("validation rule returns error message for file exceeding size limit", () => {
 			const { rules } = getWrapper();
 
-			const largeFile = createMockFile("large.imscc", 1.5 * 1024 * 1024 * 1024); // 1.5 GB
+			const largeFile = createMockFile("large.imscc", 1.5 * 1024 * 1024 * 1024);
 			const result = rules[0](largeFile);
 
 			expect(typeof result).toBe("string");
@@ -128,7 +126,7 @@ describe("CourseCommonCartridgeImportModal", () => {
 		});
 
 		it("does not emit import event when file exceeds size limit", async () => {
-			const largeFile = createMockFile("large.imscc", 1610612736); // 1.5 GB
+			const largeFile = createMockFile("large.imscc", 1024 ** 3 + 1);
 			const { wrapper, dialog } = getWrapper(largeFile);
 			await flushPromises();
 
