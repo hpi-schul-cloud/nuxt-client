@@ -41,7 +41,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 
 	const userLocale = ref<LanguageType>();
 	const meResponse = ref<MeResponse>();
-	// Treated as never undefined. Currently secured by order execution in main.ts. Should be treated differently tho.
+	// Treated as never undefined. Currently secured by order execution in login() function. Should be treated differently tho.
 	// Affects more than just schoolDetails. Almost all data in here should be treated as never undefined, as the app does not work without them.
 	const schoolDetails = ref<SchoolResponse>(undefined!);
 

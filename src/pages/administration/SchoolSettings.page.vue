@@ -1,138 +1,138 @@
 <template>
 	<DefaultWireframe :headline="headline" max-width="native">
-		<v-alert v-if="error" type="error" :icon="mdiAlertCircle" data-testid="error-alert">
+		<VAlert v-if="error" type="error" :icon="mdiAlertCircle" data-testid="error-alert">
 			<div class="alert-text">
-				{{ $t(error.translationKey) }}
+				{{ t(error.translationKey) }}
 			</div>
-		</v-alert>
+		</VAlert>
 		<div data-testid="no-error">
-			<v-alert type="info" class="mb-12">
+			<VAlert type="info" class="mb-12">
 				<div class="alert-text" data-testid="institute-title">
-					{{ $t("pages.administration.school.index.info", { instituteTitle }) }}
+					{{ t("pages.administration.school.index.info", { instituteTitle }) }}
 				</div>
-			</v-alert>
+			</VAlert>
 
-			<v-expansion-panels multiple class="pb-9" :model-value="openedPanels">
-				<v-expansion-panel data-testid="general-settings-panel" value="general">
-					<v-expansion-panel-title>
+			<VExpansionPanels multiple class="pb-9" :model-value="openedPanels">
+				<VExpansionPanel data-testid="general-settings-panel" value="general">
+					<VExpansionPanelTitle>
 						<h2 class="ma-0">
-							{{ $t("pages.administration.school.index.generalSettings") }}
+							{{ t("pages.administration.school.index.generalSettings") }}
 						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
-								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
+								<VIcon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
 						</template>
-					</v-expansion-panel-title>
-					<v-expansion-panel-text eager>
-						<general-settings class="mt-4" />
-					</v-expansion-panel-text>
-				</v-expansion-panel>
+					</VExpansionPanelTitle>
+					<VExpansionPanelText eager>
+						<GeneralSettings class="mt-4" />
+					</VExpansionPanelText>
+				</VExpansionPanel>
 
-				<v-expansion-panel v-if="isFeatureSchoolPolicyEnabled" data-testid="policy-panel" value="privacy">
-					<v-expansion-panel-title>
+				<VExpansionPanel v-if="isFeatureSchoolPolicyEnabled" data-testid="policy-panel" value="privacy">
+					<VExpansionPanelTitle>
 						<h2 class="ma-0">
-							{{ $t("common.words.privacyPolicy") }}
+							{{ t("common.words.privacyPolicy") }}
 						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
-								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
+								<VIcon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
 						</template>
-					</v-expansion-panel-title>
-					<v-expansion-panel-text eager>
-						<school-policy />
-					</v-expansion-panel-text>
-				</v-expansion-panel>
+					</VExpansionPanelTitle>
+					<VExpansionPanelText eager>
+						<SchoolPolicy />
+					</VExpansionPanelText>
+				</VExpansionPanel>
 
-				<v-expansion-panel v-if="isFeatureSchoolTermsOfUseEnabled" data-testid="terms-panel" value="terms">
-					<v-expansion-panel-title>
+				<VExpansionPanel v-if="isFeatureSchoolTermsOfUseEnabled" data-testid="terms-panel" value="terms">
+					<VExpansionPanelTitle>
 						<h2 class="ma-0">
-							{{ $t("common.words.termsOfUse") }}
+							{{ t("common.words.termsOfUse") }}
 						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
-								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
+								<VIcon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
 						</template>
-					</v-expansion-panel-title>
-					<v-expansion-panel-text eager>
-						<school-terms-of-use />
-					</v-expansion-panel-text>
-				</v-expansion-panel>
+					</VExpansionPanelTitle>
+					<VExpansionPanelText eager>
+						<SchoolTermsOfUse />
+					</VExpansionPanelText>
+				</VExpansionPanel>
 
-				<v-expansion-panel v-if="schoolUsesLdap" data-testid="school-year-change-panel">
-					<v-expansion-panel-title>
+				<VExpansionPanel v-if="schoolUsesLdap" data-testid="school-year-change-panel">
+					<VExpansionPanelTitle>
 						<h2 class="ma-0">
-							{{ $t("components.administration.schoolYearChangeSection.headers") }}
+							{{ t("components.administration.schoolYearChangeSection.headers") }}
 						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
-								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
+								<VIcon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
 						</template>
-					</v-expansion-panel-title>
-					<v-expansion-panel-text eager>
-						<school-year-change-section />
-					</v-expansion-panel-text>
-				</v-expansion-panel>
+					</VExpansionPanelTitle>
+					<VExpansionPanelText eager>
+						<SchoolYearChangeSection />
+					</VExpansionPanelText>
+				</VExpansionPanel>
 
-				<v-expansion-panel v-if="isFeatureOauthMigrationEnabled" data-testid="migration-panel" value="migration">
-					<v-expansion-panel-title>
+				<VExpansionPanel v-if="isFeatureOauthMigrationEnabled" data-testid="migration-panel" value="migration">
+					<VExpansionPanelTitle>
 						<h2 class="ma-0">
-							{{ $t("components.administration.adminMigrationSection.headers") }}
+							{{ t("components.administration.adminMigrationSection.headers") }}
 						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
-								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
+								<VIcon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
 						</template>
-					</v-expansion-panel-title>
-					<v-expansion-panel-text eager>
+					</VExpansionPanelTitle>
+					<VExpansionPanelText eager>
 						<SchoolAdminMigrationSection />
-					</v-expansion-panel-text>
-				</v-expansion-panel>
+					</VExpansionPanelText>
+				</VExpansionPanel>
 
-				<v-expansion-panel data-testid="systems-panel" value="authentication">
-					<v-expansion-panel-title>
+				<VExpansionPanel data-testid="systems-panel" value="authentication">
+					<VExpansionPanelTitle>
 						<h2 class="ma-0">
-							{{ $t("pages.administration.school.index.authSystems.title") }}
+							{{ t("pages.administration.school.index.authSystems.title") }}
 						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
-								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
+								<VIcon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
 						</template>
-					</v-expansion-panel-title>
-					<v-expansion-panel-text eager>
+					</VExpansionPanelTitle>
+					<VExpansionPanelText eager>
 						<template v-if="isLoading">
-							<v-skeleton-loader type="table-thead, table-row, table-row" data-testid="systems-panel-skeleton" />
+							<VSkeletonLoader type="table-thead, table-row, table-row" data-testid="systems-panel-skeleton" />
 						</template>
-						<auth-systems v-else :systems="systems" />
-					</v-expansion-panel-text>
-				</v-expansion-panel>
+						<AuthSystems v-else :systems="systems" />
+					</VExpansionPanelText>
+				</VExpansionPanel>
 
-				<v-expansion-panel data-testid="tools-panel" value="tools">
-					<v-expansion-panel-title>
+				<VExpansionPanel data-testid="tools-panel" value="tools">
+					<VExpansionPanelTitle>
 						<h2 class="ma-0">
-							{{ $t("components.administration.externalToolsSection.header") }}
+							{{ t("components.administration.externalToolsSection.header") }}
 						</h2>
 						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
-								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
+								<VIcon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
 						</template>
-					</v-expansion-panel-title>
-					<v-expansion-panel-text eager>
-						<external-tools-section />
-					</v-expansion-panel-text>
-				</v-expansion-panel>
-			</v-expansion-panels>
+					</VExpansionPanelTitle>
+					<VExpansionPanelText eager>
+						<ExternalToolsSection />
+					</VExpansionPanelText>
+				</VExpansionPanel>
+			</VExpansionPanels>
 		</div>
 	</DefaultWireframe>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import AuthSystems from "@/components/administration/school-settings/AuthSystems.vue";
 import ExternalToolsSection from "@/components/administration/school-settings/ExternalToolSection.vue";
 import GeneralSettings from "@/components/administration/school-settings/GeneralSettings.vue";
@@ -140,7 +140,6 @@ import SchoolAdminMigrationSection from "@/components/administration/school-sett
 import SchoolPolicy from "@/components/administration/school-settings/SchoolPolicy.vue";
 import SchoolTermsOfUse from "@/components/administration/school-settings/SchoolTerms.vue";
 import SchoolYearChangeSection from "@/components/administration/school-settings/SchoolYearChangeSection.vue";
-import { School } from "@/store/types/schools";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig, useEnvStore } from "@data-env";
@@ -149,87 +148,51 @@ import { mdiAlertCircle, mdiMinus, mdiPlus } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
-import { computed, ComputedRef, defineComponent, onMounted, Ref, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 
-export default defineComponent({
-	name: "SchoolSettings",
-	components: {
-		DefaultWireframe,
-		ExternalToolsSection,
-		SchoolYearChangeSection,
-		SchoolAdminMigrationSection,
-		GeneralSettings,
-		SchoolPolicy,
-		SchoolTermsOfUse,
-		AuthSystems,
+const { t } = useI18n();
+const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+const route = useRoute();
+
+const headline = ref(t("pages.administration.school.index.title"));
+const pageTitle = buildPageTitle(headline.value);
+useTitle(pageTitle);
+
+const { fetchSchoolYearStatus, maintenanceStatus } = useSharedSchoolYearChange();
+const { instituteTitle } = storeToRefs(useEnvStore());
+
+const school = computed(() => schoolsModule.getSchool);
+const openedPanels = computed(() => (route.query.openPanels ? route.query.openPanels.toString().split(",") : []));
+const systems = computed(() => schoolsModule.getSystems);
+const isLoading = computed(() => schoolsModule.getLoading);
+const error = computed(() => schoolsModule.getError);
+const isFeatureOauthMigrationEnabled = computed(() => useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED);
+const isFeatureSchoolPolicyEnabled = computed(() => useEnvConfig().value.FEATURE_SCHOOL_POLICY_ENABLED_NEW);
+const isFeatureSchoolTermsOfUseEnabled = computed(() => useEnvConfig().value.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED);
+const schoolUsesLdap = computed(() => !!maintenanceStatus.value?.schoolUsesLdap);
+
+watch(
+	school,
+	(newSchool, oldSchool) => {
+		// fetch systems when the school is loaded
+		// if the school object gets a new reference (e.g. after updating it) do not reload the year or systems
+		if (
+			!schoolsModule.systems ||
+			!schoolsModule.systems.length ||
+			(newSchool && newSchool.id && (!oldSchool || !oldSchool.id))
+		) {
+			schoolsModule.fetchSystems();
+		}
 	},
-	setup() {
-		const { t } = useI18n();
-		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
-		const route = useRoute();
+	{ immediate: true }
+);
 
-		const headline: Ref<string> = ref(t("pages.administration.school.index.title"));
-		const pageTitle = buildPageTitle(headline.value);
-		useTitle(pageTitle);
-		const { fetchSchoolYearStatus, maintenanceStatus } = useSharedSchoolYearChange();
-
-		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
-
-		watch(
-			school,
-			(newSchool, oldSchool) => {
-				// fetch systems when the school is loaded
-				// if the school object gets a new reference (e.g. after updating it) do not reload the year or systems
-				if (
-					!schoolsModule.systems ||
-					!schoolsModule.systems.length ||
-					(newSchool && newSchool.id && (!oldSchool || !oldSchool.id))
-				) {
-					schoolsModule.fetchSystems();
-				}
-			},
-			{ immediate: true }
-		);
-
-		const openedPanels: ComputedRef<string[]> = computed(() =>
-			route.query.openPanels ? route.query.openPanels.toString().split(",") : []
-		);
-		const systems = computed(() => schoolsModule.getSystems);
-		const isLoading = computed(() => schoolsModule.getLoading);
-		const error = computed(() => schoolsModule.getError);
-		const isFeatureOauthMigrationEnabled = computed(() => useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED);
-		const isFeatureSchoolPolicyEnabled = computed(() => useEnvConfig().value.FEATURE_SCHOOL_POLICY_ENABLED_NEW);
-		const isFeatureSchoolTermsOfUseEnabled = computed(() => useEnvConfig().value.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED);
-
-		const { instituteTitle } = storeToRefs(useEnvStore());
-
-		onMounted(async () => {
-			if (school.value?.id) {
-				await fetchSchoolYearStatus(school.value.id);
-			}
-		});
-
-		const schoolUsesLdap: ComputedRef<boolean> = computed(() => !!maintenanceStatus.value?.schoolUsesLdap);
-
-		return {
-			headline,
-			openedPanels,
-			school,
-			systems,
-			isLoading,
-			error,
-			isFeatureOauthMigrationEnabled,
-			isFeatureSchoolPolicyEnabled,
-			isFeatureSchoolTermsOfUseEnabled,
-			instituteTitle,
-			schoolUsesLdap,
-			mdiAlertCircle,
-			mdiPlus,
-			mdiMinus,
-		};
-	},
+onMounted(async () => {
+	if (school.value?.id) {
+		await fetchSchoolYearStatus(school.value.id);
+	}
 });
 </script>
 
