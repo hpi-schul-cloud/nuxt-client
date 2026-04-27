@@ -35,10 +35,12 @@
 					:element-index="elementIndex"
 					:is-not-first-element="isNotFirstElement"
 					:is-not-last-element="isNotLastElement"
+					:has-linked-content="hasLinkedContent"
 					@move-down:element="onMoveElementDown"
 					@move-up:element="onMoveElementUp"
 					@delete:element="onDeleteElement"
 					@edit:element="onEdit"
+					@download:content="onDownloadContent"
 				/>
 			</template>
 		</ContentElementBar>
@@ -48,6 +50,7 @@
 <script setup lang="ts">
 import H5pElementMenu from "./H5pElementMenu.vue";
 import H5PImage from "@/assets/img/h5p/default_h5p_display.svg";
+import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict } from "@/utils/inject";
 import { decodeHtmlEntities } from "@/utils/textFormatting";
 import { H5PContentParentType } from "@api-h5p";
@@ -158,6 +161,16 @@ const onClickElement = () => {
 	} else {
 		openEditorWindow();
 	}
+};
+
+const onDownloadContent = () => {
+	if (!element.value.content.contentId) {
+		return;
+	}
+
+	const url = `/api/v3/h5p-editor/download/${element.value.content.contentId}`;
+	// The filename is only a fallback. The server should provide a Content-Disposition header with the correct filename.
+	downloadFile(url, "content.h5p");
 };
 
 const fetchAndSetContentTitle = async (h5pElement: H5pElementResponse) => {

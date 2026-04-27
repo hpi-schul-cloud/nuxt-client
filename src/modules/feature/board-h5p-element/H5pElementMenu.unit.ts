@@ -1,9 +1,9 @@
-import H5pElementMenu from "./H5pElementMenu.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { KebabMenuAction, KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
+import H5pElementMenu from "./H5pElementMenu.vue";
 
 describe("H5pElementMenu", () => {
 	const getWrapper = (propsData: ComponentProps<typeof H5pElementMenu>) => {
@@ -31,6 +31,7 @@ describe("H5pElementMenu", () => {
 				columnIndex: 0,
 				rowIndex: 1,
 				elementIndex: 2,
+				hasLinkedContent: false,
 			});
 
 			return {
@@ -65,6 +66,7 @@ describe("H5pElementMenu", () => {
 				columnIndex: 0,
 				rowIndex: 1,
 				elementIndex: 2,
+				hasLinkedContent: false,
 			});
 
 			return {
@@ -99,6 +101,7 @@ describe("H5pElementMenu", () => {
 				columnIndex: 0,
 				rowIndex: 1,
 				elementIndex: 2,
+				hasLinkedContent: false,
 			});
 
 			return {
@@ -132,6 +135,7 @@ describe("H5pElementMenu", () => {
 				columnIndex: 0,
 				rowIndex: 1,
 				elementIndex: 2,
+				hasLinkedContent: false,
 			});
 
 			return {
@@ -157,6 +161,71 @@ describe("H5pElementMenu", () => {
 		});
 	});
 
+	describe("Download Button", () => {
+		describe("when hasLinkedContent is true", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					isNotFirstElement: true,
+					isNotLastElement: true,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
+					hasLinkedContent: true,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should have a menu option to download", () => {
+				const { wrapper } = setup();
+
+				const menuItems = wrapper.findAllComponents(KebabMenuAction);
+				const downloadItem = menuItems.find((item) => item.text().includes("download"));
+
+				expect(downloadItem?.exists()).toEqual(true);
+			});
+
+			it("should emit the download event on click", async () => {
+				const { wrapper } = setup();
+
+				const menuItems = wrapper.findAllComponents(KebabMenuAction);
+				const downloadItem = menuItems.find((item) => item.text().includes("download"));
+
+				await downloadItem?.trigger("click");
+
+				expect(wrapper.emitted("download:content")).toBeDefined();
+			});
+		});
+
+		describe("when hasLinkedContent is false", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					isNotFirstElement: true,
+					isNotLastElement: true,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
+					hasLinkedContent: false,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should not have a menu option to download", () => {
+				const { wrapper } = setup();
+
+				const menuItems = wrapper.findAllComponents(KebabMenuAction);
+				const downloadItem = menuItems.find((item) => item.text().includes("download"));
+
+				expect(downloadItem).toBeUndefined();
+			});
+		});
+	});
+
 	describe("Delete Button", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({
@@ -165,6 +234,7 @@ describe("H5pElementMenu", () => {
 				columnIndex: 0,
 				rowIndex: 1,
 				elementIndex: 2,
+				hasLinkedContent: false,
 			});
 
 			return {
