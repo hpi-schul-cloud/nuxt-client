@@ -179,6 +179,16 @@ describe("util-validators", () => {
 				expect(isValid("  https://medium.com/  ")).toBe(true);
 			});
 		});
+
+		describe("when url is empty or only whitespace", () => {
+			it("should return ERROR for empty string", () => {
+				expect(isValid("")).toBe(ERROR);
+			});
+
+			it("should return ERROR for string with only whitespace", () => {
+				expect(isValid("   ")).toBe(ERROR);
+			});
+		});
 	});
 
 	describe("isValidTime", () => {
