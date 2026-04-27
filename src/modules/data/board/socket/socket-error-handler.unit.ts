@@ -452,15 +452,11 @@ describe("socket-error-handler", () => {
 	describe("when logs exceed 30 entries", () => {
 		it("should trigger reportLogs immediately", async () => {
 			const useConnectionErrorHandling = await importHandler();
-			const { getState } = useConnectionErrorHandling(socket);
-
-			// Get the connect_error handler to generate log entries
-			const connectErrorListeners = socket.listeners("connect_error");
-			const errorHandler = connectErrorListeners.at(-1) as (error: Error) => void;
+			useConnectionErrorHandling(socket);
 
 			// Generate more than 30 log entries
 			for (let i = 0; i < 31; i++) {
-				errorHandler(new Error(`Error ${i}`));
+				emitManagerEvent("reconnect_attempt", 1);
 			}
 
 			// Now trigger reportBoardError which checks logs.length > 30
