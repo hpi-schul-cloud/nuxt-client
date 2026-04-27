@@ -1,3 +1,4 @@
 import Folder from "./Folder.vue";
+import FolderTrash from "./FolderTrash.vue";
 
-export { Folder };
+export { Folder, FolderTrash };
