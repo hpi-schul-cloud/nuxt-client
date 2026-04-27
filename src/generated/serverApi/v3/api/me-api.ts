@@ -66,7 +66,7 @@ export const MeApiAxiosParamCreator = function (configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Resolve jwt and response informations about the owner of the jwt.
+         * @summary Update user preferences for the current user.
          * @param {UpdatePreferencesBodyParams} updatePreferencesBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -126,7 +126,7 @@ export const MeApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Resolve jwt and response informations about the owner of the jwt.
+         * @summary Update user preferences for the current user.
          * @param {UpdatePreferencesBodyParams} updatePreferencesBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -156,7 +156,7 @@ export const MeApiFactory = function (configuration?: Configuration, basePath?: 
         },
         /**
          * 
-         * @summary Resolve jwt and response informations about the owner of the jwt.
+         * @summary Update user preferences for the current user.
          * @param {UpdatePreferencesBodyParams} updatePreferencesBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -184,7 +184,7 @@ export interface MeApiInterface {
 
     /**
      * 
-     * @summary Resolve jwt and response informations about the owner of the jwt.
+     * @summary Update user preferences for the current user.
      * @param {UpdatePreferencesBodyParams} updatePreferencesBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -214,7 +214,7 @@ export class MeApi extends BaseAPI implements MeApiInterface {
 
     /**
      * 
-     * @summary Resolve jwt and response informations about the owner of the jwt.
+     * @summary Update user preferences for the current user.
      * @param {UpdatePreferencesBodyParams} updatePreferencesBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

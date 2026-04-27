@@ -22,7 +22,7 @@ import {
 	richTextElementContentFactory,
 } from "@@/tests/test-utils";
 import { richTextElementResponseFactory } from "@@/tests/test-utils/factory/richTextElementResponseFactory";
-import { BoardLayout, ContentElementType } from "@api-server";
+import { BoardLayout, Colors, ContentElementType } from "@api-server";
 import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
@@ -453,6 +453,21 @@ describe("useCardSocketApi", () => {
 			updateCardTitleRequest(payload);
 
 			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("update-card-title-request", payload);
+		});
+	});
+
+	describe("updateCardColorRequest", () => {
+		const payload = {
+			cardId: "cardId",
+			backgroundColor: Colors.BLUE,
+		};
+
+		it("should call emitOnSocket with correct parameters", () => {
+			const { updateCardColorRequest } = useCardSocketApi();
+
+			updateCardColorRequest(payload);
+
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("update-card-color-request", payload);
 		});
 	});
 

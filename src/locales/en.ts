@@ -20,7 +20,7 @@ export default {
 	"common.actions.invite": "Send course link",
 	"common.actions.logout": "Logout",
 	"common.actions.ok": "OK",
-	"common.actions.pickColor": "Select background colour",
+	"common.actions.pickColor": "Select color",
 	"common.actions.leave": "Leave",
 	"common.actions.remove": "Remove",
 	"common.actions.rename": "Rename",
@@ -103,6 +103,7 @@ export default {
 	"common.labels.restore": "Restore",
 	"common.labels.role": "Role",
 	"common.labels.room": "Room | Rooms",
+	"common.labels.runtimeConfig": "runtime configuration",
 	"common.labels.search": "Search",
 	"common.labels.settings": "Setting",
 	"common.labels.size": "Size",
@@ -144,6 +145,9 @@ export default {
 	"common.notifications.errors.notLoaded": "{type} could not be loaded.",
 	"common.notifications.errors.notMoved": "{type} could not be moved.",
 	"common.notifications.errors.notExited": "{type} could not be exited.",
+	"common.notification.error.videoConference.notFetched": "The video conference could not be fetched.",
+	"common.notification.error.videoConference.notJoined": "The video conference could not be joined.",
+	"common.notification.error.videoConference.notStarted": "The video conference could not be started.",
 	"common.notification.connection.restored": "The connection has been restored.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.email.confirmation": "Repeat e-mail address",
@@ -248,7 +252,6 @@ export default {
 	"common.words.topic": "Topic",
 	"common.words.topics": "Topics",
 	"common.words.yes": "Yes",
-	"common.words.export": "Course export is downloading",
 	"common.alerts.room.not.available": "No room available. | No rooms available.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"During the migration, the registration system for students and teachers is changed to moin.schule. The data belonging to the affected accounts will be preserved.",
@@ -500,6 +503,8 @@ export default {
 		"Title of card {cardPosition} in column {columnPosition} was changed to {newTitle} by another user.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Card {cardPosition} in column {columnPosition} was updated by another user.",
+	"components.board.screenReader.notification.cardColorUpdated.success":
+		"The color of the card {cardPosition} in section {columnPosition} has been changed.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"The board's view was changed to {layout} by another user.",
 	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":
@@ -1643,6 +1648,7 @@ export default {
 	"pages.rooms.ccImportCourse.success":
 		"Your course file has been uploaded and is now being imported in the background.",
 	"pages.rooms.ccImportCourse.error": "An error occurred while uploading the course.",
+	"pages.rooms.ccExportCourse.started": "Course export is downloading.",
 	"pages.rooms.ccExportCourse.error": "An error occurred while exporting the course.",
 	"pages.rooms.roomModal.courseGroupTitle": "Course group title",
 	"pages.rooms.tools.deactivated": "Tool deactivated",

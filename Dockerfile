@@ -1,5 +1,5 @@
 # build stage
-FROM docker.io/node:22 AS build-stage
+FROM docker.io/node:24 AS build-stage
 
 WORKDIR /app
 

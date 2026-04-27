@@ -18,7 +18,7 @@ export default {
 	"common.actions.invite": "Kurslink versenden",
 	"common.actions.logout": "Abmelden",
 	"common.actions.ok": "OK",
-	"common.actions.pickColor": "Hintergrundfarbe auswählen",
+	"common.actions.pickColor": "Farbe auswählen",
 	"common.actions.leave": "Verlassen",
 	"common.actions.remove": "Entfernen",
 	"common.actions.rename": "Umbenennen",
@@ -105,6 +105,7 @@ export default {
 	"common.labels.restore": "Wiederherstellen",
 	"common.labels.role": "Rolle",
 	"common.labels.room": "Raum | Räume",
+	"common.labels.runtimeConfig": "Laufzeitkonfiguration",
 	"common.labels.search": "Suche",
 	"common.labels.settings": "Einstellungen",
 	"common.labels.size": "Größe",
@@ -140,6 +141,9 @@ export default {
 	"common.medium.information.teacher": "Bitte an Schuladministrator:in wenden.",
 	"common.nodata": "Keine Daten vorhanden",
 	"common.notification.error": "Es ist ein Fehler aufgetreten.",
+	"common.notification.error.videoConference.notFetched": "Die Videokonferenz konnte nicht abgerufen werden.",
+	"common.notification.error.videoConference.notJoined": "Der Videokonferenz konnte nicht beigetreten werden.",
+	"common.notification.error.videoConference.notStarted": "Die Videokonferenz konnte nicht gestartet werden.",
 	"common.notification.connection.restored": "Die Verbindung wurde wieder hergestellt.",
 	"common.notifications.errors.notCreated":
 		"{type} konnte nicht erstellt werden. | {type} konnten nicht erstellt werden.",
@@ -236,7 +240,6 @@ export default {
 	"common.words.languages.es": "Spanisch",
 	"common.words.languages.uk": "Ukrainisch",
 	"common.words.learnContent": "Lerninhalte",
-	"common.words.export": "Kurs-Export wird heruntergeladen",
 	"common.words.mainSchool": "Stammschule",
 	"common.words.no": "Nein",
 	"common.words.not": "nicht",
@@ -514,6 +517,8 @@ export default {
 		"Titel von Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
+	"components.board.screenReader.notification.cardColorUpdated.success":
+		"Die Farbe der Karte {cardPosition} in Abschnitt {columnPosition} wurde geändert.",
 	"components.board.screenReader.notification.boardLayoutUpdated.success":
 		"Die Ansicht des Bereichs wurde von einem anderen Benutzer zu {layout} geändert.",
 	"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success":
@@ -1664,6 +1669,7 @@ export default {
 	"pages.rooms.ccImportCourse.loading": "Upload läuft...",
 	"pages.rooms.ccImportCourse.success": "Deine Kursdatei wurde hochgeladen und wird nun im Hintergrund importiert.",
 	"pages.rooms.ccImportCourse.error": "Beim Hochladen der Kursdatei ist ein Fehler aufgetreten.",
+	"pages.rooms.ccExportCourse.started": "Kurs-Export wird heruntergeladen.",
 	"pages.rooms.ccExportCourse.error": "Beim Exportieren des Kurses ist ein Fehler aufgetreten.",
 	"pages.rooms.roomModal.courseGroupTitle": "Kursgruppentitel",
 	"pages.rooms.tools.deactivated": "Deaktiviert",

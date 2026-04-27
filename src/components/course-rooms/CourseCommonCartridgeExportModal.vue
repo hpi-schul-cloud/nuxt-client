@@ -1,11 +1,11 @@
 <template>
-	<SvsDialog v-model="isExportModalOpen" :title="title" data-testid="export-dialog" @after-leave="resetDialog">
+	<SvsDialog :model-value="props.isOpen" :title="title" data-testid="export-dialog" @after-leave="resetDialog">
 		<template #content>
-			<template v-if="step === 0">
+			<template v-if="step === 'VersionSelection'">
 				<InfoAlert data-testid="cartridge-export-folder-info" class="mb-4">
 					{{ t(`components.molecules.export.options.info.point3`) }}
 				</InfoAlert>
-				<VRadioGroup v-model="radios" data-testid="version-radio-group">
+				<VRadioGroup v-model="version" data-testid="version-radio-group">
 					<VRadio
 						id="1.1.0"
 						data-testid="version-110-radio-button"
@@ -20,20 +20,20 @@
 					/>
 				</VRadioGroup>
 			</template>
-			<template v-if="step === 1">
+			<template v-if="step === 'ContentSelection'">
 				<InfoAlert data-testid="cartridge-export-content-info" class="mb-4">
 					{{ t(`components.molecules.export.options.info`) }}
 
 					<ul class="ml-6">
 						<li>{{ t(`components.molecules.export.options.info.point2`) }}</li>
-						<li v-if="radios && radios == '1.1.0'">{{ t(`components.molecules.export.options.info.point3`) }}</li>
+						<li v-if="version === '1.1.0'">{{ t(`components.molecules.export.options.info.point3`) }}</li>
 						<li>
 							{{ t(`components.molecules.export.options.info.point4`) }}
 							<ul class="ml-6">
 								<li>{{ t(`components.molecules.export.options.info.point4.sub1`) }}</li>
 								<li>{{ t(`components.molecules.export.options.info.point4.sub2`) }}</li>
 								<li>{{ t(`components.molecules.export.options.info.point4.sub3`) }}</li>
-								<li v-if="radios && radios == '1.1.0'" data-testid="export-options-info-point4-sub4">
+								<li v-if="version === '1.1.0'" data-testid="export-options-info-point4-sub4">
 									{{ t(`components.molecules.export.options.info.point4.sub4`) }}
 								</li>
 								<li>{{ t(`components.molecules.export.options.info.point4.sub5`) }}</li>
@@ -99,18 +99,18 @@
 			</template>
 		</template>
 		<template #actions>
-			<VBtn v-if="step === 1" data-testid="dialog-back-btn" class="mr-auto" @click="onBack">
+			<VBtn v-if="step === 'ContentSelection'" data-testid="dialog-back-btn" class="mr-auto" @click="onPreviousStep">
 				{{ t("common.actions.back") }}
 			</VBtn>
-			<SvsDialogBtnCancel data-testid="dialog-cancel-btn" @click="onCloseDialog" />
+			<SvsDialogBtnCancel data-testid="dialog-cancel-btn" @click="closeDialog" />
 			<SvsDialogBtnConfirm
-				v-if="step === 0"
+				v-if="step === 'VersionSelection'"
 				data-testid="dialog-next-btn"
 				text-lang-key="common.actions.continue"
-				@click="onNext"
+				@click="onNextStep"
 			/>
 			<SvsDialogBtnConfirm
-				v-if="step === 1"
+				v-if="step === 'ContentSelection'"
 				data-testid="dialog-export-btn"
 				text-lang-key="common.actions.export"
 				@click="onExport"
@@ -127,8 +127,8 @@ import {
 	BoardLesson,
 	BoardTask,
 } from "@/types/course-room/CourseRoom";
-import { COMMON_CARTRIDGE_EXPORT_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifyError, notifySuccess } from "@data-app";
+import { type CommonCartridgeVersion, startExport } from "@data-common-cartridge";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { InfoAlert } from "@ui-alert";
 import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
@@ -141,30 +141,47 @@ type Selection = {
 	id: string;
 };
 
+type Steps = "VersionSelection" | "ContentSelection";
+
 const { t } = useI18n();
-const commonCartridgeExportModule = injectStrict(COMMON_CARTRIDGE_EXPORT_MODULE_KEY);
+
 const { roomData, businessError } = useCourseRoomDetailsStore();
 
-const emit = defineEmits(["update:isExportModalOpen"]);
+const props = defineProps<{
+	isOpen: boolean;
+	roomId: string;
+}>();
 
-const isExportModalOpen = computed({
-	get: () => commonCartridgeExportModule.getIsExportModalOpen,
-	set: (value: boolean) => {
-		emit("update:isExportModalOpen", commonCartridgeExportModule.setIsExportModalOpen(value));
-	},
-});
+const emit = defineEmits<{
+	"update:isOpen": [value: boolean];
+}>();
 
-const radios = ref("1.1.0");
-const step = ref(0);
+const version = ref<CommonCartridgeVersion>("1.1.0");
+const step = ref<Steps>("VersionSelection");
 
-const allTopics = ref<Array<Selection>>([]);
+const allTopics = ref<Selection[]>([]);
 const allTopicsSelected = computed(() => allTopics.value.every((topic) => topic.isSelected));
 
-const allTasks = ref<Array<Selection>>([]);
+const allTasks = ref<Selection[]>([]);
 const allTasksSelected = computed(() => allTasks.value.every((task) => task.isSelected));
 
-const allColumnBoards = ref<Array<Selection>>([]);
+const allColumnBoards = ref<Selection[]>([]);
 const allColumnBoardsSelected = computed(() => allColumnBoards.value.every((columnBoard) => columnBoard.isSelected));
+
+const isColumnBoard = (element: BoardElement): element is BoardElement & { content: BoardColumnBoard } =>
+	element.type === BoardElementType.COLUMN_BOARD;
+
+const isLesson = (element: BoardElement): element is BoardElement & { content: BoardLesson } =>
+	element.type === BoardElementType.LESSON;
+
+const isTask = (element: BoardElement): element is BoardElement & { content: BoardTask } =>
+	element.type === BoardElementType.TASK;
+
+const toSelectionItem = (element: BoardElement): Selection => ({
+	isSelected: true,
+	title: "name" in element.content ? element.content.name : element.content.title,
+	id: element.content.id,
+});
 
 watch(
 	() => roomData.elements,
@@ -173,36 +190,17 @@ watch(
 		allTasks.value = [];
 		allColumnBoards.value = [];
 
-		newValue.forEach((element: BoardElement) => {
-			if (element.type === BoardElementType.LESSON) {
-				allTopics.value.push({
-					isSelected: true,
-					title: (element.content as BoardLesson).name,
-					id: element.content.id,
-				});
-			}
-
-			if (element.type === BoardElementType.TASK) {
-				allTasks.value.push({
-					isSelected: true,
-					title: (element.content as BoardTask).name,
-					id: element.content.id,
-				});
-			}
-
-			if (element.type === BoardElementType.COLUMN_BOARD) {
-				allColumnBoards.value.push({
-					isSelected: true,
-					title: (element.content as BoardColumnBoard).title,
-					id: element.content.id,
-				});
-			}
-		});
-	}
+		allTopics.value = newValue.filter(isLesson).map(toSelectionItem);
+		allTasks.value = newValue.filter(isTask).map(toSelectionItem);
+		allColumnBoards.value = newValue.filter(isColumnBoard).map(toSelectionItem);
+	},
+	{ immediate: true }
 );
 
 const title = computed(() =>
-	step.value === 0 ? t("pages.room.modal.course.export.header") : t("pages.room.modal.course.export.options.header")
+	step.value === "VersionSelection"
+		? t("pages.room.modal.course.export.header")
+		: t("pages.room.modal.course.export.options.header")
 );
 
 const someTopicsSelected = computed(
@@ -215,90 +213,56 @@ const someColumnBoardsSelected = computed(
 	() => allColumnBoards.value.some((columnBoard) => columnBoard.isSelected) && !allColumnBoardsSelected.value
 );
 
-const onCloseDialog = () => {
-	isExportModalOpen.value = false;
+const setSelectedOnAllItems = (items: Selection[], newValue: boolean): void => {
+	items.forEach((item) => {
+		item.isSelected = newValue;
+	});
 };
 
-function resetDialog(): void {
-	radios.value = "1.1.0";
-	commonCartridgeExportModule.resetExportFlow();
-	step.value = 0;
-	allTasks.value.forEach((task) => {
-		task.isSelected = true;
-	});
-	allTopics.value.forEach((topic) => {
-		topic.isSelected = true;
-	});
-	allColumnBoards.value.forEach((columnBoard) => {
-		columnBoard.isSelected = true;
-	});
-}
+const closeDialog = (): void => {
+	emit("update:isOpen", false);
+};
 
-function onNext(): void {
-	commonCartridgeExportModule.setVersion(radios.value);
-	step.value++;
-}
+const resetDialog = (): void => {
+	step.value = "VersionSelection";
+	setSelectedOnAllItems(allTasks.value, true);
+	setSelectedOnAllItems(allTopics.value, true);
+	setSelectedOnAllItems(allColumnBoards.value, true);
+};
 
-async function onExport() {
-	notifySuccess(t("common.words.export"));
+const onPreviousStep = (): void => resetDialog();
 
-	const topicIds: string[] = allTopics.value.filter((topic) => topic.isSelected).map((topic) => topic.id);
+const onNextStep = (): void => {
+	step.value = "ContentSelection";
+};
+
+const onExport = async (): Promise<void> => {
+	const topicIds = allTopics.value.filter((topic) => topic.isSelected).map((topic) => topic.id);
 	const taskIds = allTasks.value.filter((task) => task.isSelected).map((task) => task.id);
-	const columnBoardIds = allColumnBoards.value
-		.filter((columnBoard) => columnBoard.isSelected)
-		.map((columnBoard) => columnBoard.id);
+	const columnBoardIds = allColumnBoards.value.filter((board) => board.isSelected).map((board) => board.id);
 
-	commonCartridgeExportModule.setTopics(topicIds);
-	commonCartridgeExportModule.setTasks(taskIds);
-	commonCartridgeExportModule.setColumnBoards(columnBoardIds);
+	await startExport(version.value, props.roomId, topicIds, taskIds, columnBoardIds);
+	notifySuccess(t("pages.rooms.ccExportCourse.started"));
 
-	onCloseDialog();
-	await commonCartridgeExportModule.startExport();
-
-	if (businessError?.statusCode !== "") {
+	if (businessError.statusCode !== "") {
 		notifyError(t("pages.rooms.ccExportCourse.error"));
 	}
 
-	resetDialog();
-}
+	closeDialog();
+};
 
-function onBack(): void {
-	step.value = 0;
-	allTasks.value.forEach((task) => {
-		task.isSelected = true;
-	});
-	allTopics.value.forEach((topic) => {
-		topic.isSelected = true;
-	});
-	// AI next 3 lines
-	allColumnBoards.value.forEach((columnBoard) => {
-		columnBoard.isSelected = true;
-	});
-	commonCartridgeExportModule.setIsExportModalOpen(true);
-}
-
-function toggleAllTopics(): void {
+const toggleAllTopics = (): void => {
 	const newValue = !allTopicsSelected.value;
+	setSelectedOnAllItems(allTopics.value, newValue);
+};
 
-	allTopics.value.forEach((topic) => {
-		topic.isSelected = newValue;
-	});
-}
-
-function toggleAllTasks(): void {
+const toggleAllTasks = (): void => {
 	const newValue = !allTasksSelected.value;
+	setSelectedOnAllItems(allTasks.value, newValue);
+};
 
-	allTasks.value.forEach((task) => {
-		task.isSelected = newValue;
-	});
-}
-
-function toggleAllColumnBoards(): void {
-	// AI next 5 lines
+const toggleAllColumnBoards = (): void => {
 	const newValue = !allColumnBoardsSelected.value;
-
-	allColumnBoards.value.forEach((columnBoard) => {
-		columnBoard.isSelected = newValue;
-	});
-}
+	setSelectedOnAllItems(allColumnBoards.value, newValue);
+};
 </script>
