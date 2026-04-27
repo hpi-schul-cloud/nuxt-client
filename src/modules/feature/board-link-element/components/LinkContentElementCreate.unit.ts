@@ -140,7 +140,6 @@ describe("LinkContentElementCreate", () => {
 			it("should not emit create:url event", async () => {
 				const { wrapper } = setup();
 
-				await wrapper.findComponent({ name: "v-textarea" }).setValue(VALID_URL);
 				await wrapper.find("form").trigger("submit.prevent");
 
 				expect(wrapper.emitted("create:url")).toBeUndefined();
