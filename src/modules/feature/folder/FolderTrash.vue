@@ -1,13 +1,26 @@
 <template>
 	<DefaultWireframe max-width="full" :breadcrumbs="trashBreadcrumbs">
 		<template #header>
-			<h1 data-testid="folder-trash-title">
-				{{ t("pages.folder.trash.title", { folderName }) }}
-			</h1>
+			<div class="d-flex align-center">
+				<h1 data-testid="folder-trash-title">
+					{{ t("pages.folder.trash.title", { folderName }) }}
+				</h1>
+				<FolderTrashMenu v-if="deletedFileRecords.length > 0" @empty-trash="onEmptyTrash" />
+			</div>
 		</template>
 		<div aria-live="polite" aria-atomic="true" data-testid="restore-status" class="d-sr-only">
 			{{ restoreStatusMessage }}
 		</div>
+		<div aria-live="polite" aria-atomic="true" data-testid="purge-status" class="d-sr-only">
+			{{ purgeStatusMessage }}
+		</div>
+		<PurgeFilesDialog
+			v-model="isPurgeDialogOpen"
+			:file-count="filesToPurge.length"
+			data-testid="purge-files-dialog"
+			@confirm="onPurgeConfirmed"
+			@cancel="isPurgeDialogOpen = false"
+		/>
 		<template v-if="isLoading">
 			<VContainer class="loader" aria-busy="true" aria-live="polite">
 				<VSkeletonLoader type="table-thead, table-tbody" class="mt-6" />
@@ -69,12 +82,18 @@
 							>
 								{{ t("common.actions.restore") }}
 							</KebabMenuAction>
+							<KebabMenuAction :icon="mdiDelete" data-testid="kebab-menu-action-purge" @click="onPurgeFiles([item])">
+								{{ t("pages.folder.trash.purge.action") }}
+							</KebabMenuAction>
 						</KebabMenu>
 					</template>
 
 					<template #action-menu-items="{ selectedIds }">
 						<KebabMenuAction :icon="mdiRestore" data-testid="action-menu-restore" @click="onRestoreByIds(selectedIds)">
 							{{ t("common.actions.restore") }}
+						</KebabMenuAction>
+						<KebabMenuAction :icon="mdiDelete" data-testid="action-menu-purge" @click="onPurgeByIds(selectedIds)">
+							{{ t("pages.folder.trash.purge.action") }}
 						</KebabMenuAction>
 					</template>
 				</DataTable>
@@ -87,6 +106,8 @@
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import FilePreview from "./file-table/FilePreview.vue";
 import FileStatus from "./file-table/FileStatus.vue";
+import FolderTrashMenu from "./FolderTrashMenu.vue";
+import PurgeFilesDialog from "./PurgeFilesDialog.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
 import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
@@ -94,7 +115,7 @@ import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { formatFileSize } from "@/utils/fileHelper";
 import { useFileTrash } from "@data-file";
 import { useFolderState } from "@data-folder";
-import { mdiRestore } from "@icons/material";
+import { mdiDelete, mdiRestore } from "@icons/material";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu, KebabMenuAction } from "@ui-kebab-menu";
@@ -119,12 +140,15 @@ const emit = defineEmits<{
 const folderId = toRef(props, "folderId");
 
 const { breadcrumbs: folderBreadcrumbs, folderName, fetchFileFolderElement } = useFolderState();
-const { deletedFileRecords, fetchDeletedFiles, restoreFiles } = useFileTrash();
+const { deletedFileRecords, fetchDeletedFiles, restoreFiles, purgeFiles } = useFileTrash();
 
 const isLoading = ref(true);
 const fileStorageError = ref(false);
 const isForbiddenError = ref(false);
 const restoreStatusMessage = ref("");
+const purgeStatusMessage = ref("");
+const isPurgeDialogOpen = ref(false);
+const filesToPurge = ref<FileRecord[]>([]);
 
 const announceRestore = (success: boolean): void => {
 	restoreStatusMessage.value = success
@@ -133,6 +157,40 @@ const announceRestore = (success: boolean): void => {
 	setTimeout(() => {
 		restoreStatusMessage.value = "";
 	}, 3000);
+};
+
+const announcePurge = (success: boolean): void => {
+	purgeStatusMessage.value = success ? t("pages.folder.trash.purge.success") : t("pages.folder.trash.purge.error");
+	setTimeout(() => {
+		purgeStatusMessage.value = "";
+	}, 3000);
+};
+
+const onPurgeFiles = (fileRecords: FileRecord[]): void => {
+	filesToPurge.value = fileRecords;
+	isPurgeDialogOpen.value = true;
+};
+
+const onPurgeByIds = (selectedIds: string[]): void => {
+	filesToPurge.value = deletedFileRecords.value.filter((r) => selectedIds.includes(r.id));
+	isPurgeDialogOpen.value = true;
+};
+
+const onEmptyTrash = (): void => {
+	filesToPurge.value = [...deletedFileRecords.value];
+	isPurgeDialogOpen.value = true;
+};
+
+const onPurgeConfirmed = async (): Promise<void> => {
+	isPurgeDialogOpen.value = false;
+	try {
+		await purgeFiles(filesToPurge.value);
+		announcePurge(true);
+	} catch {
+		announcePurge(false);
+	} finally {
+		filesToPurge.value = [];
+	}
 };
 
 const trashBreadcrumbs = computed(() => {

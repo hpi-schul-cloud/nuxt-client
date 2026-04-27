@@ -687,6 +687,46 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Permanently delete files that are already marked for deletion (in trash). Files must be soft-deleted before calling this endpoint.
+         * @param {MultiFileParams} multiFileParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        purgeFiles: async (multiFileParams: MultiFileParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'multiFileParams' is not null or undefined
+            assertParamExists('purgeFiles', 'multiFileParams', multiFileParams)
+            const localVarPath = `/file/purge`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(multiFileParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Restore all files of a parent entityId that are marked for deletion.
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
@@ -1175,6 +1215,17 @@ export const FileApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Permanently delete files that are already marked for deletion (in trash). Files must be soft-deleted before calling this endpoint.
+         * @param {MultiFileParams} multiFileParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async purgeFiles(multiFileParams: MultiFileParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.purgeFiles(multiFileParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Restore all files of a parent entityId that are marked for deletion.
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
@@ -1425,6 +1476,16 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Permanently delete files that are already marked for deletion (in trash). Files must be soft-deleted before calling this endpoint.
+         * @param {MultiFileParams} multiFileParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        purgeFiles(multiFileParams: MultiFileParams, options?: any): AxiosPromise<FileRecordListResponse> {
+            return localVarFp.purgeFiles(multiFileParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Restore all files of a parent entityId that are marked for deletion.
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
@@ -1665,6 +1726,16 @@ export interface FileApiInterface {
      * @memberof FileApiInterface
      */
     patchFilename(fileRecordId: string, renameFileParams: RenameFileParams, options?: any): AxiosPromise<FileRecordResponse>;
+
+    /**
+     * 
+     * @summary Permanently delete files that are already marked for deletion (in trash). Files must be soft-deleted before calling this endpoint.
+     * @param {MultiFileParams} multiFileParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApiInterface
+     */
+    purgeFiles(multiFileParams: MultiFileParams, options?: any): AxiosPromise<FileRecordListResponse>;
 
     /**
      * 
@@ -1933,6 +2004,18 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      */
     public patchFilename(fileRecordId: string, renameFileParams: RenameFileParams, options?: any) {
         return FileApiFp(this.configuration).patchFilename(fileRecordId, renameFileParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Permanently delete files that are already marked for deletion (in trash). Files must be soft-deleted before calling this endpoint.
+     * @param {MultiFileParams} multiFileParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApi
+     */
+    public purgeFiles(multiFileParams: MultiFileParams, options?: any) {
+        return FileApiFp(this.configuration).purgeFiles(multiFileParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

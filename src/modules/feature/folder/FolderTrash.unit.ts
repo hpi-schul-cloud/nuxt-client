@@ -1,12 +1,13 @@
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import FolderTrash from "./FolderTrash.vue";
+import FolderTrashMenu from "./FolderTrashMenu.vue";
+import PurgeFilesDialog from "./PurgeFilesDialog.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
 import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
 import { axiosErrorFactory, fileRecordFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { FileRecordScanStatus } from "@api-file-storage";
-import * as FileTrashApi from "@data-file";
-import * as FolderState from "@data-folder";
+import { createTestingPinia } from "@pinia/testing";
 import { DataTable } from "@ui-data-table";
 import { KebabMenuAction } from "@ui-kebab-menu";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
@@ -25,6 +26,7 @@ const createFileTrashMock = () =>
 		deletedFileRecords: ref([]),
 		fetchDeletedFiles: vi.fn().mockResolvedValue(undefined),
 		restoreFiles: vi.fn().mockResolvedValue(undefined),
+		purgeFiles: vi.fn().mockResolvedValue(undefined),
 	});
 
 describe("FolderTrash.vue", () => {
@@ -224,7 +226,7 @@ describe("FolderTrash.vue", () => {
 
 			const wrapper = mount(FolderTrash, {
 				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
+					plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
 				},
 				props: {
 					folderId: "test-folder-id",
@@ -379,6 +381,174 @@ describe("FolderTrash.vue", () => {
 
 				const statusRegion = wrapper.find("[data-testid='restore-status']");
 				expect(statusRegion.text()).toBe("pages.folder.trash.restore.error");
+			});
+		});
+
+		describe("when the kebab menu purge button is clicked for a single file", () => {
+			it("should open the purge dialog", async () => {
+				const { wrapper, fileRecord1 } = await setup();
+
+				const kebabMenuButton = wrapper.find(`[data-testid='kebab-menu-${fileRecord1.name}']`);
+				await kebabMenuButton.trigger("click");
+
+				const kebabMenuActions = wrapper.findAllComponents(KebabMenuAction);
+				const purgeAction = kebabMenuActions.find((a) => a.attributes("data-testid") === "kebab-menu-action-purge");
+				await purgeAction?.trigger("click");
+
+				const purgeDialog = wrapper.findComponent(PurgeFilesDialog);
+				expect(purgeDialog.props("modelValue")).toBe(true);
+			});
+
+			it("should call purgeFiles with the file record when dialog is confirmed", async () => {
+				const { wrapper, fileRecord1, fileTrashMock } = await setup();
+
+				const kebabMenuButton = wrapper.find(`[data-testid='kebab-menu-${fileRecord1.name}']`);
+				await kebabMenuButton.trigger("click");
+
+				const kebabMenuActions = wrapper.findAllComponents(KebabMenuAction);
+				const purgeAction = kebabMenuActions.find((a) => a.attributes("data-testid") === "kebab-menu-action-purge");
+				await purgeAction?.trigger("click");
+
+				wrapper.findComponent(PurgeFilesDialog).vm.$emit("confirm");
+				await flushPromises();
+
+				expect(fileTrashMock.purgeFiles).toHaveBeenCalledWith([expect.objectContaining({ id: fileRecord1.id })]);
+			});
+		});
+
+		describe("when the batch action menu purge button is clicked", () => {
+			it("should open the purge dialog", async () => {
+				const { wrapper, fileRecord1 } = await setup();
+
+				const checkbox = wrapper.find(`[data-testid='select-checkbox-${fileRecord1.name}']`);
+				await checkbox.trigger("click");
+
+				const actionMenuButton = wrapper.find("[data-testid='action-menu-button']");
+				await actionMenuButton.trigger("click");
+
+				const actionMenuItems = wrapper.findAllComponents(KebabMenuAction);
+				const purgeAction = actionMenuItems.find((a) => a.attributes("data-testid") === "action-menu-purge");
+				await purgeAction?.trigger("click");
+
+				const purgeDialog = wrapper.findComponent(PurgeFilesDialog);
+				expect(purgeDialog.props("modelValue")).toBe(true);
+			});
+
+			it("should call purgeFiles when dialog is confirmed", async () => {
+				const { wrapper, fileRecord1, fileTrashMock } = await setup();
+
+				const checkbox = wrapper.find(`[data-testid='select-checkbox-${fileRecord1.name}']`);
+				await checkbox.trigger("click");
+
+				const actionMenuButton = wrapper.find("[data-testid='action-menu-button']");
+				await actionMenuButton.trigger("click");
+
+				const actionMenuItems = wrapper.findAllComponents(KebabMenuAction);
+				const purgeAction = actionMenuItems.find((a) => a.attributes("data-testid") === "action-menu-purge");
+				await purgeAction?.trigger("click");
+
+				wrapper.findComponent(PurgeFilesDialog).vm.$emit("confirm");
+				await flushPromises();
+
+				expect(fileTrashMock.purgeFiles).toHaveBeenCalled();
+			});
+		});
+
+		describe("purge status live region", () => {
+			it("should render a live region with aria-live='polite' and aria-atomic='true'", async () => {
+				const { wrapper } = await setup();
+
+				const statusRegion = wrapper.find("[data-testid='purge-status']");
+				expect(statusRegion.exists()).toBe(true);
+				expect(statusRegion.attributes("aria-live")).toBe("polite");
+				expect(statusRegion.attributes("aria-atomic")).toBe("true");
+			});
+
+			it("should be visually hidden via d-sr-only class", async () => {
+				const { wrapper } = await setup();
+
+				const statusRegion = wrapper.find("[data-testid='purge-status']");
+				expect(statusRegion.classes()).toContain("d-sr-only");
+			});
+
+			it("should be empty by default", async () => {
+				const { wrapper } = await setup();
+
+				const statusRegion = wrapper.find("[data-testid='purge-status']");
+				expect(statusRegion.text()).toBe("");
+			});
+
+			it("should announce success message after successful purge", async () => {
+				const { wrapper, fileRecord1 } = await setup();
+
+				const kebabMenuButton = wrapper.find(`[data-testid='kebab-menu-${fileRecord1.name}']`);
+				await kebabMenuButton.trigger("click");
+
+				const kebabMenuActions = wrapper.findAllComponents(KebabMenuAction);
+				const purgeAction = kebabMenuActions.find((a) => a.attributes("data-testid") === "kebab-menu-action-purge");
+				await purgeAction?.trigger("click");
+
+				wrapper.findComponent(PurgeFilesDialog).vm.$emit("confirm");
+				await flushPromises();
+
+				const statusRegion = wrapper.find("[data-testid='purge-status']");
+				expect(statusRegion.text()).toBe("pages.folder.trash.purge.success");
+			});
+
+			it("should announce error message after failed purge", async () => {
+				const { wrapper, fileRecord1, fileTrashMock } = await setup();
+
+				fileTrashMock.purgeFiles.mockRejectedValueOnce(new Error("purge failed"));
+
+				const kebabMenuButton = wrapper.find(`[data-testid='kebab-menu-${fileRecord1.name}']`);
+				await kebabMenuButton.trigger("click");
+
+				const kebabMenuActions = wrapper.findAllComponents(KebabMenuAction);
+				const purgeAction = kebabMenuActions.find((a) => a.attributes("data-testid") === "kebab-menu-action-purge");
+				await purgeAction?.trigger("click");
+
+				wrapper.findComponent(PurgeFilesDialog).vm.$emit("confirm");
+				await flushPromises();
+
+				const statusRegion = wrapper.find("[data-testid='purge-status']");
+				expect(statusRegion.text()).toBe("pages.folder.trash.purge.error");
+			});
+		});
+
+		describe("when the empty trash menu item is clicked", () => {
+			it("should show the folder trash menu", async () => {
+				const { wrapper } = await setup();
+
+				const trashMenu = wrapper.findComponent(FolderTrashMenu);
+				expect(trashMenu.exists()).toBe(true);
+			});
+
+			it("should open the purge dialog with all deleted files", async () => {
+				const { wrapper } = await setup();
+
+				wrapper.findComponent(FolderTrashMenu).vm.$emit("empty-trash");
+				await flushPromises();
+
+				const purgeDialog = wrapper.findComponent(PurgeFilesDialog);
+				expect(purgeDialog.props("modelValue")).toBe(true);
+				expect(purgeDialog.props("fileCount")).toBe(2);
+			});
+
+			it("should call purgeFiles with all deleted files when dialog is confirmed", async () => {
+				const { wrapper, fileRecord1, fileRecord2, fileTrashMock } = await setup();
+
+				wrapper.findComponent(FolderTrashMenu).vm.$emit("empty-trash");
+				await flushPromises();
+
+				wrapper.findComponent(PurgeFilesDialog).vm.$emit("confirm");
+				await flushPromises();
+
+				expect(fileTrashMock.purgeFiles).toHaveBeenCalledWith(
+					expect.arrayContaining([
+						expect.objectContaining({ id: fileRecord1.id }),
+						expect.objectContaining({ id: fileRecord2.id }),
+					])
+				);
 			});
 		});
 	});
