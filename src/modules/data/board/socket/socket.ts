@@ -6,6 +6,7 @@ import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
+import { useEventListener } from "@vueuse/core";
 import { useTimeoutFn } from "@vueuse/shared";
 import { io, type Socket } from "socket.io-client";
 import { ref, watch } from "vue";
@@ -94,7 +95,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 		return instance;
 	};
 
-	document.addEventListener("visibilitychange", async () => {
+	useEventListener(document, "visibilitychange", (evt) => {
 		if (document.visibilityState === "visible") {
 			// tab got visible again, ensure socket is connected and up to date
 			getConnectedSocket();

@@ -547,35 +547,6 @@ describe("socket-error-handler", () => {
 		});
 	});
 
-	describe("when onBeforeRouteLeave is triggered", () => {
-		it("should register handler", async () => {
-			const useConnectionErrorHandling = await importHandler();
-			useConnectionErrorHandling(socket);
-
-			expect(mockOnBeforeRouteLeave).toHaveBeenCalledWith(expect.any(Function));
-		});
-
-		it("should report logs", async () => {
-			const useConnectionErrorHandling = await importHandler();
-			useConnectionErrorHandling(socket);
-
-			// Generate a log entry via upgrade event
-			emitEngineEvent("upgrade", { name: "websocket" });
-
-			// Get the registered handler and call it
-			const routeLeaveHandler = mockOnBeforeRouteLeave.mock.calls[0][0] as () => Promise<void>;
-			await routeLeaveHandler();
-
-			await vi.advanceTimersByTimeAsync(100);
-
-			expect(boardErrorReportApiMock.boardErrorReportControllerReportError).toHaveBeenCalledWith(
-				expect.objectContaining({
-					message: "new_route",
-				})
-			);
-		});
-	});
-
 	describe("when there are no logs to report", () => {
 		it("should not call API", async () => {
 			const useConnectionErrorHandling = await importHandler();

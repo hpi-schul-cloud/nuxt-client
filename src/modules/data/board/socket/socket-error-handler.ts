@@ -2,6 +2,7 @@ import { $axios } from "@/utils/api";
 import { BoardErrorReportApiFactory, BoardErrorReportBodyParams } from "@api-server";
 import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
+import { useEventListener } from "@vueuse/core";
 import { type Socket } from "socket.io-client";
 import { computed } from "vue";
 
@@ -139,13 +140,13 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 
 	// send logs when the user leaves the page or changes the tab to hidden
 
-	document.addEventListener("visibilitychange", async () => {
+	useEventListener(document, "visibilitychange", async () => {
 		if (document.visibilityState === "hidden") {
 			await reportLogs("tab_hidden");
 		}
 	});
 
-	window.addEventListener("beforeunload", async () => {
+	useEventListener(window, "beforeunload", async () => {
 		await reportLogs("page_unload");
 	});
 
