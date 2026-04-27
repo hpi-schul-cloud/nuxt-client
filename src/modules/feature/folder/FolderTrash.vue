@@ -44,7 +44,10 @@
 						<FilePreview :file-record="item" :data-testid="`file-preview-${item.name}`" />
 					</template>
 					<template #[`item.name`]="{ item }">
-						<span :data-testid="`name-${item.name}`">{{ item.name }}</span>
+						<span :data-testid="`name-${item.name}`">
+							{{ item.name }}
+							<FileStatus :file-record="item" />
+						</span>
 					</template>
 					<template #[`item.deletedSince`]="{ item }">
 						<span :data-testid="`deleted-since-${item.name}`">
@@ -83,6 +86,7 @@
 <script setup lang="ts">
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import FilePreview from "./file-table/FilePreview.vue";
+import FileStatus from "./file-table/FileStatus.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
 import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
