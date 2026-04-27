@@ -153,7 +153,6 @@ const router = useRouter();
 
 const copyModule: CopyModule = injectStrict(COPY_MODULE_KEY);
 const shareModule: ShareModule = injectStrict(SHARE_MODULE_KEY);
-// const courseRoomDetailsModule: CourseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
 const courseRoomDetailsStore = useCourseRoomDetailsStore();
 
 const { roomData, scopePermissions, isLocked } = storeToRefs(courseRoomDetailsStore);
