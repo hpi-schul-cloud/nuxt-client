@@ -33,12 +33,6 @@
 			<h2 class="text-h4 mt-1 mb-1 task-name" tabindex="-1" :data-testid="`task-title-${taskCardIndex}`">
 				{{ task.name }}
 			</h2>
-			<RenderHTML
-				v-if="canShowDescription && task.description"
-				class="text--primary mt-1 mb-0 pb-0 text-description"
-				tabindex="0"
-				:html="task.description.content"
-			/>
 			<div
 				v-if="!isPlanned && !isDraft && !isFinished"
 				class="ma-0 submitted-section"
@@ -71,7 +65,6 @@ import { formatUtc } from "@/utils/date-time.utils";
 import { ImportUserResponseRoleNames as Roles, TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { RenderHTML } from "@feature-render-html";
 import {
 	mdiContentCopy,
 	mdiFormatListChecks,
@@ -81,7 +74,7 @@ import {
 	mdiUndoVariant,
 } from "@icons/material";
 import { RoomDotMenu } from "@ui-room-details";
-import { computed, PropType, ref } from "vue";
+import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -118,7 +111,6 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const { isStudent, isTeacher } = useAppStoreRefs();
 
-const canShowDescription = ref(false);
 const isDraft = computed(() => props.task.status.isDraft);
 const isFinished = computed(() => props.task.status.isFinished);
 

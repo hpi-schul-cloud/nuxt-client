@@ -146,19 +146,6 @@ describe("CourseRoomTaskCard", () => {
 			expect(tagline.element.textContent).toContain("common.words.task – common.words.draft");
 		});
 
-		it("should show or hide description area", async () => {
-			const wrapper = getWrapper({ task: testTask, userRole });
-			(wrapper.vm as unknown as typeof CourseRoomTaskCard).canShowDescription = true;
-			const descElement = wrapper.findAll(".text-description");
-
-			expect(descElement.length).toStrictEqual(0);
-
-			await nextTick();
-
-			const descElementAfter = wrapper.findAll(".text-description");
-			expect(descElementAfter.length).toStrictEqual(1);
-		});
-
 		it("should use hidden UI only for unfinished task draft cards and task planned cards", async () => {
 			const taskDraftWrapper = getWrapper({
 				task: draftTestTask,
