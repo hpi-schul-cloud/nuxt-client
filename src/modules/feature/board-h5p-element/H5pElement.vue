@@ -197,9 +197,3 @@ watch(element, async (newValue: H5pElementResponse) => {
 	await fetchAndSetContentTitle(newValue);
 });
 </script>
-
-<style scoped lang="scss">
-.download-button {
-	padding-right: 10px;
-}
-</style>
