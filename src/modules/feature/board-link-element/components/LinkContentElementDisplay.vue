@@ -1,5 +1,5 @@
 <template>
-	<div ref="linkContentElementDisplay" data-testid="board-link-element" tabindex="-1">
+	<div data-testid="board-link-element" tabindex="-1">
 		<ContentElementBar :icon="mdiLink" :has-row-style="!!imageUrl && isSmallOrLargerListBoard">
 			<template v-if="imageUrl" #display>
 				<VImg
