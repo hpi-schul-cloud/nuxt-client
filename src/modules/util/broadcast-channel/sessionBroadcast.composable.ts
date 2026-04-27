@@ -45,6 +45,7 @@ const JWT_TIMER_ENDPOINT = "/v1/accounts/jwtTimer";
 
 // these constants are also used inside of the schulcloud-client to communicate logouts between both application parts
 const BROADCAST_CHANNEL_NAME = "user-session-channel";
+const BROADCAST_MESSAGE_LOGIN = "login";
 const BROADCAST_MESSAGE_LOGOUT = "logout";
 const BROADCAST_MESSAGE_EXPIRED = "expired";
 
@@ -76,45 +77,67 @@ export const useSessionBroadcast = (options?: SessionBroadcastOptions) => {
 			broadcastChannel.addEventListener("message", (event) => {
 				const message = event.data;
 
-				if (message === BROADCAST_MESSAGE_LOGOUT) {
-					setJwtExpired(true);
-					logoutHandlers.forEach((handler) => handler());
-
-					if (onLogoutReceived) {
-						onLogoutReceived();
-					} else if (setState) {
-						setState(SessionState.Closed);
-					}
-					return;
-				}
-
-				if (message === BROADCAST_MESSAGE_EXPIRED) {
-					setJwtExpired(true);
-					if (setState) {
-						setState(SessionState.Expired);
-					}
-				}
-
-				if (typeof message === "string" && message.includes(":")) {
-					const [state, time] = message.split(":");
-					const timeInSeconds = Number.parseInt(time, 10);
-					if (!Number.isNaN(timeInSeconds) && setTime) {
-						setTime(timeInSeconds);
-					}
-					if (setState && Object.values(SessionState).includes(state as SessionState)) {
-						setState(state as SessionState);
-					}
+				switch (message) {
+					case BROADCAST_MESSAGE_LOGIN:
+						onLoginMessage();
+						return;
+					case BROADCAST_MESSAGE_LOGOUT:
+						onLogoutMessage();
+						return;
+					case BROADCAST_MESSAGE_EXPIRED:
+						onExpiredMessage();
+						return;
+					default:
+						if (typeof message === "string" && message.includes(":")) {
+							onStateAndTimeMessage(message);
+						}
 				}
 			});
 		}
 		return broadcastChannel;
 	};
 
-	// share current state and timing
-	const sendStateAndTime = (state: SessionState | null, time: number | null) => {
+	// --- Broadcast Message Handlers ---
+
+	function onLoginMessage() {
+		setJwtExpired(false);
+	}
+
+	function onLogoutMessage() {
+		setJwtExpired(true);
+		logoutHandlers.forEach((handler) => handler());
+
+		if (onLogoutReceived) {
+			onLogoutReceived();
+		} else if (setState) {
+			setState(SessionState.Closed);
+		}
+	}
+
+	function onExpiredMessage() {
+		setJwtExpired(true);
+		if (setState) {
+			setState(SessionState.Expired);
+		}
+	}
+
+	function onStateAndTimeMessage(message: string) {
+		const [state, time] = message.split(":");
+		const timeInSeconds = Number.parseInt(time, 10);
+		if (!Number.isNaN(timeInSeconds) && setTime) {
+			setTime(timeInSeconds);
+		}
+		if (setState && Object.values(SessionState).includes(state as SessionState)) {
+			setState(state as SessionState);
+		}
+	}
+
+	// --- Broadcast Message Senders ---
+
+	const sendLogin = () => {
 		const channel = getBroadcastChannel();
 		if (channel) {
-			channel.postMessage(`${state ?? ""}:${time ?? "0"}`);
+			channel.postMessage(BROADCAST_MESSAGE_LOGIN);
 		}
 	};
 
@@ -124,6 +147,15 @@ export const useSessionBroadcast = (options?: SessionBroadcastOptions) => {
 			channel.postMessage(BROADCAST_MESSAGE_LOGOUT);
 		}
 	};
+
+	const sendStateAndTime = (state: SessionState | null, time: number | null) => {
+		const channel = getBroadcastChannel();
+		if (channel) {
+			channel.postMessage(`${state ?? ""}:${time ?? "0"}`);
+		}
+	};
+
+	// --- Register handlers ---
 
 	const onLogoutEvent = (handler: LogoutHandler) => {
 		logoutHandlers.push(handler);
@@ -160,6 +192,7 @@ export const useSessionBroadcast = (options?: SessionBroadcastOptions) => {
 		isJwtExpired: readonly(isJwtExpired),
 		setJwtExpired,
 		onLogoutEvent,
+		sendLogin,
 		sendLogout,
 		sendStateAndTime,
 		close,

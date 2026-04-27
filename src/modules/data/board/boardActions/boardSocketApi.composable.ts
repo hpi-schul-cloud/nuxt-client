@@ -104,7 +104,7 @@ export const useBoardSocketApi = () => {
 		);
 	};
 
-	const { emitOnSocket, emitWithAck, disconnectSocket } = useSocketConnection(dispatch);
+	const { emitOnSocket, emitWithAck, disconnectSocket, connected } = useSocketConnection(dispatch);
 
 	const createCardRequest = (payload: CreateCardRequestPayload) => {
 		emitOnSocket("create-card-request", {
@@ -210,6 +210,7 @@ export const useBoardSocketApi = () => {
 	};
 
 	return {
+		connected,
 		dispatch,
 		createCardRequest,
 		createColumnRequest,

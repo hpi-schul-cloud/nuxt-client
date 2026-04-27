@@ -1,28 +1,28 @@
 import { useBoardStore } from "../Board.store";
 import { useCardStore } from "../Card.store";
+import { useConnectionErrorHandling } from "./socket-error-handler";
 import { Action } from "@/types/board/ActionFactory";
-import { $axios } from "@/utils/api";
-import { BoardErrorReportApiFactory } from "@api-server";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
+import { useEventListener } from "@vueuse/core";
 import { useTimeoutFn } from "@vueuse/shared";
 import { io, type Socket } from "socket.io-client";
-import { computed } from "vue";
+import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const dispatchHandlers: Array<(action: Action) => void> = [];
 let isInitialConnection = true;
 let instance: Socket | null = null;
 let timeoutFn: ReturnType<typeof useTimeoutFn>;
-let retryCount = 0;
+const connected = ref(false);
 
-export const resetSocketStateForTesting = (initialRetryCount = 0) => {
+export const resetSocketStateForTesting = () => {
 	instance = null;
 	dispatchHandlers.length = 0;
-	retryCount = initialRetryCount;
 	isInitialConnection = true;
+	connected.value = false;
 };
 
 export const useSocketConnection = (dispatch: (action: Action) => void) => {
@@ -31,14 +31,24 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 	const cardStore = useCardStore();
 	const { t } = useI18n();
 
-	const boardErrorReportApi = BoardErrorReportApiFactory(undefined, "/v3", $axios);
-
 	const { isJwtExpired } = useSessionBroadcast();
+
+	watch(isJwtExpired, (newValue) => {
+		if (newValue) {
+			logger.log("JWT expired - disconnecting socket");
+			disconnectSocket();
+		} else {
+			logger.log("JWT valid - connecting socket");
+			getConnectedSocket();
+		}
+	});
 
 	const getConnectedSocket = () => {
 		if (instance === null && isJwtExpired.value === false) {
 			instance = io(useEnvConfig().value.BOARD_COLLABORATION_URI, {
 				path: "/board-collaboration",
+				reconnection: true,
+				reconnectionAttempts: 10,
 				withCredentials: true,
 				closeOnBeforeunload: true,
 			});
@@ -48,6 +58,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 			});
 
 			instance.on("connect", async function () {
+				connected.value = true;
 				logger.log("connected");
 				if (isInitialConnection) return;
 				if (timeoutFn.isPending?.value) {
@@ -63,6 +74,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 			});
 
 			instance.on("disconnect", (reason, details) => {
+				connected.value = false;
 				logger.log("disconnected");
 				logger.log(reason, details);
 				isInitialConnection = false;
@@ -71,14 +83,24 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 				}, 1000);
 			});
 
-			addErrorHandling(instance);
+			const { getState } = useConnectionErrorHandling(instance);
+			logger.log("Connection state:", getState.value);
 		}
+
+		connected.value = instance?.connected ?? false;
 		if (instance?.connected === false) {
 			instance.connect();
 		}
 
 		return instance;
 	};
+
+	useEventListener(document, "visibilitychange", () => {
+		if (document.visibilityState === "visible") {
+			// tab got visible again, ensure socket is connected and up to date
+			getConnectedSocket();
+		}
+	});
 
 	const emitOnSocket = (action: string, data: unknown) => {
 		const socket = getConnectedSocket();
@@ -91,7 +113,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 	};
 
 	const disconnectSocket = () => {
-		if (instance && instance.connected) {
+		if (instance?.connected) {
 			instance.disconnect();
 		}
 		instance = null;
@@ -99,60 +121,11 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 		if (timeoutFn?.isPending.value) timeoutFn.stop();
 	};
 
-	const addErrorHandling = (instance: Socket) => {
-		instance.on("connect_error", errorHandler);
-		instance.on("connect", async function () {
-			if (retryCount > 0) {
-				reportBoardError("connect_after_retry", "Connection restored after retry");
-				retryCount = 0;
-			}
-		});
-	};
-
-	const errorHandler = (error: Error & { data?: unknown }) => {
-		const errorData = error.data as { code?: number; message?: string; status?: number } | undefined;
-		if (errorData?.message === "Session ID unknown") {
-			reportBoardError("session_id_unknown", "Session ID unknown - automatically reset connection.");
-			// disconnect the socket - it will reconnect automatically on next emit
-			disconnectSocket();
-			return;
-		}
-
-		if (retryCount >= 2) {
-			// report only after 2 retries = 3 connect attempts (=> "regular" initial hiccups don't need reporting)
-			reportBoardError("connect_error", errorData?.message ?? error.message);
-			notifyError(t("error.4500"));
-		}
-		retryCount++;
-	};
-
-	const reportBoardError = (type: string, message: string) => {
-		const url = window.location.href;
-		const boardId = url.match(/boards\/([0-9a-fA-F]{24})/)?.[1] ?? "unknown";
-		const dataWithBoardId = {
-			type,
-			message,
-			url,
-			boardId,
-			retryCount,
-		};
-
-		boardErrorReportApi.boardErrorReportControllerReportError(dataWithBoardId).catch((err) => {
-			logger.error("Failed to report error - will retry in 5 seconds", err);
-			setTimeout(() => {
-				// try again in 5 seconds
-				reportBoardError(type, message);
-			}, 5000);
-		});
-	};
-
-	const connected = computed(() => instance?.connected ?? false);
-
 	return {
-		connected,
 		getConnectedSocket,
 		emitOnSocket,
 		emitWithAck,
 		disconnectSocket,
+		connected,
 	};
 };

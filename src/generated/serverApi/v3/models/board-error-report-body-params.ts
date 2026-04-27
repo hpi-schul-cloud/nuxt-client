@@ -50,6 +50,12 @@ export interface BoardErrorReportBodyParams {
      * @memberof BoardErrorReportBodyParams
      */
     retryCount: number;
+    /**
+     * Logged steps
+     * @type {string}
+     * @memberof BoardErrorReportBodyParams
+     */
+    logSteps: string;
 }
 
 

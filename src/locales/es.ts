@@ -2002,6 +2002,8 @@ export default {
 	"error.4500":
 		"Error de conexión: No se ha podido establecer la sesión en tiempo real. Compruebe la conexión o vuelva a cargar la página.",
 	"error.4401": "Lamentablemente, falta la autorización para ver este contenido.",
+	"error.ws.connectionLost": "La conexión se ha interrumpido. Intenta restablecer la conexión...",
+	"error.ws.connectionLost.back": "Volver a la vista general",
 	"tldraw.error.ws.4400": "Falta el nombre de la sala en los parámetros de la URL",
 	"tldraw.error.ws.4404": "No se ha encontrado la pizarra con este nombre",
 	"ui-confirmation-dialog.ask-delete": '¿Eliminar {itemType} "{itemTitle}"?',
