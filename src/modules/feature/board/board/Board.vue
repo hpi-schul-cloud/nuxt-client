@@ -118,7 +118,7 @@
 			</DefaultWireframe>
 		</template>
 
-		<VDialog v-model="showLoadingDialog" class="w-33" :persistent="true">
+		<VDialog :model-value="showLoadingDialog" class="w-33" :persistent="true">
 			<VCard class="pa-4">
 				<VCard-text class="text-center">
 					<div v-if="boardStore.isConnected === false && board" class="text-center" data-testid="dialog-text">
