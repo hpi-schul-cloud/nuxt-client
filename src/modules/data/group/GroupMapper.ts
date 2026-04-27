@@ -1,5 +1,13 @@
-import { Group, GroupType, GroupUser, GroupUserRole } from "./types";
-import { GroupResponse, GroupResponseType, GroupUserResponse, RoleName } from "@api-server";
+import { ClassInfo, ClassRootType, CourseInfo, Group, GroupType, GroupUser, GroupUserRole } from "./types";
+import {
+	ClassInfoResponse,
+	ClassInfoResponseType,
+	CourseInfoResponse,
+	GroupResponse,
+	GroupResponseType,
+	GroupUserResponse,
+	RoleName,
+} from "@api-server";
 
 export const GroupTypeMapping: Record<GroupResponseType, GroupType> = {
 	[GroupResponseType.CLASS]: GroupType.Class,
@@ -23,6 +31,11 @@ export const GroupUserRoleNameTranslationMapping: Record<GroupUserRole, string> 
 	[GroupUserRole.Unknown]: "common.labels.unknown",
 };
 
+export const ClassRootTypeMapping: Record<ClassInfoResponseType, ClassRootType> = {
+	[ClassInfoResponseType.CLASS]: ClassRootType.CLASS,
+	[ClassInfoResponseType.GROUP]: ClassRootType.GROUP,
+};
+
 export class GroupMapper {
 	static mapToGroup(groupResponse: GroupResponse): Group {
 		return {
@@ -42,6 +55,29 @@ export class GroupMapper {
 			lastName: groupUserResponse.lastName,
 			role: GroupUserRoleMapping[groupUserResponse.role] ?? GroupUserRole.Unknown,
 		};
+	}
+
+	static mapToClassInfo(response: ClassInfoResponse[]): ClassInfo[] {
+		const mapped: ClassInfo[] = response.map(
+			(classInfoResponse: ClassInfoResponse): ClassInfo =>
+				new ClassInfo({
+					name: classInfoResponse.name,
+					externalSourceName: classInfoResponse.externalSourceName,
+					teacherNames: classInfoResponse.teacherNames,
+					type: ClassRootTypeMapping[classInfoResponse.type],
+					id: classInfoResponse.id,
+					isUpgradable: classInfoResponse.isUpgradable,
+					studentCount: classInfoResponse.studentCount,
+					synchronizedCourses: classInfoResponse.synchronizedCourses?.map(
+						(course: CourseInfoResponse): CourseInfo => ({
+							id: course.id,
+							name: course.name,
+						})
+					),
+				})
+		);
+
+		return mapped;
 	}
 
 	static getTranslationKey(role: GroupUserRole): string {
