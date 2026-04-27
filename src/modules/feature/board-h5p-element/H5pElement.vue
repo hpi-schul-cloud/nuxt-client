@@ -189,7 +189,8 @@ const onDownload = (event?: Event) => {
 	}
 
 	const url = `/api/v3/h5p-editor/download/${element.value.content.contentId}`;
-	downloadFile(url, `${contentTitle.value}.h5p`);
+	// The filename is only a fallback. The server should provide a Content-Disposition header with the correct filename.
+	downloadFile(url, "content.h5p");
 };
 
 const fetchAndSetContentTitle = async (h5pElement: H5pElementResponse) => {
