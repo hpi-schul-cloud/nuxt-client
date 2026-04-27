@@ -95,7 +95,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 		return instance;
 	};
 
-	useEventListener(document, "visibilitychange", (evt) => {
+	useEventListener(document, "visibilitychange", () => {
 		if (document.visibilityState === "visible") {
 			// tab got visible again, ensure socket is connected and up to date
 			getConnectedSocket();
