@@ -4,7 +4,6 @@ import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
 import { type Socket } from "socket.io-client";
 import { computed } from "vue";
-import { onBeforeRouteLeave } from "vue-router";
 
 const logs: string[] = [];
 const boardErrorReportApi = BoardErrorReportApiFactory(undefined, "/v3", $axios);
@@ -148,10 +147,6 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 
 	window.addEventListener("beforeunload", async () => {
 		await reportLogs("page_unload");
-	});
-
-	onBeforeRouteLeave(async () => {
-		await reportLogs("new_route");
 	});
 
 	const reportLogs = async (cause: string) => {
