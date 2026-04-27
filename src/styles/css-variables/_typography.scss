@@ -7,12 +7,12 @@ $system-fonts:
 	--font-accent: "PT Sans Narrow", #{$system-fonts};
 
 	/* heading sizes */
-	--heading-1: 33px;
-	--heading-2: 28px;
-	--heading-3: 23px;
-	--heading-4: 19px;
-	--heading-5: 23px; // currently the same as heading-3
-	--heading-6: 19px; // currently the same as heading-4
+	--heading-1: 2.0625rem; // 33px
+	--heading-2: 1.75rem; // 28px
+	--heading-3: 1.4375rem; // 23px
+	--heading-4: 1.1875rem; // 19px
+	--heading-5: 1.4375rem; // currently the same as heading-3
+	--heading-6: 1.1875rem; // currently the same as heading-4
 
 	/* text sizes */
 	--text-xs: 0.694rem; // 11.11px

@@ -1,45 +1,107 @@
 import CardHostDetailView from "./CardHostDetailView.vue";
-import CardTitle from "./CardTitle.vue";
-import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
+import { colorToHexLighten5 } from "@/utils/color.utils";
+import {
+	boardResponseFactory,
+	cardResponseFactory,
+	fileElementResponseFactory,
+	mockComposable,
+} from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { CardResponse } from "@api-server";
-import { shallowMount, type VueWrapper } from "@vue/test-utils";
-import { nextTick } from "vue";
+import { BoardResponseAllowedOperations, CardResponse, Colors } from "@api-server";
+import { useBoardAllowedOperations, useCourseBoardEditMode } from "@data-board";
+import { createTestingPinia } from "@pinia/testing";
+import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
+import { computed, nextTick } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
+import { VCardText, VDialog } from "vuetify/components";
+
+const backgroundColor = Colors.BLUE;
 
 const CARD_WITH_ELEMENTS: CardResponse = cardResponseFactory.build({
+	elements: [fileElementResponseFactory.build()],
+	backgroundColor: backgroundColor,
+});
+
+const TRANSPARENT_CARD_WITH_ELEMENTS: CardResponse = cardResponseFactory.build({
+	elements: [fileElementResponseFactory.build()],
+	backgroundColor: Colors.TRANSPARENT,
+});
+
+const CARD_WITH_ELEMENTS_AND_NO_COLOR: CardResponse = cardResponseFactory.build({
 	elements: [fileElementResponseFactory.build()],
 });
 
 vi.mock("@data-board/BoardPermissions.composable");
 
-interface CardHostDetailViewExposed {
-	isEditMode: { value: boolean };
-	onUpdateCardTitle: (value: string) => void;
-	onAddElement: () => void;
-	onDeleteCard: () => Promise<void> | void;
-}
+vi.mock("@data-board/cardActions/cardRestApi.composable");
+vi.mocked(useCardRestApi).mockReturnValue(mockComposable(useCardRestApi));
 
-const getVm = (wrapper: VueWrapper): CardHostDetailViewExposed => wrapper.vm as unknown as CardHostDetailViewExposed;
+vi.mock("@data-board/cardActions/cardSocketApi.composable");
+vi.mocked(useCardSocketApi).mockReturnValue(mockComposable(useCardSocketApi));
+
+vi.mock("@util-board/LastCreatedElement.composable");
+vi.mocked(useSharedLastCreatedElement).mockReturnValue(mockComposable(useSharedLastCreatedElement));
+
+vi.mock("@util-board/file-select.composable");
+vi.mocked(useSharedFileSelect).mockReturnValue(mockComposable(useSharedFileSelect));
+
+vi.mock("@data-board/board-allowed-operations.composable");
+vi.mock("@data-board/edit-mode.composable");
 
 describe("CardHostDetailView", () => {
-	const setup = (props: ComponentProps<typeof CardHostDetailView>) => {
+	afterEach(() => {
+		vi.clearAllMocks();
+	});
+
+	const setup = (
+		props: ComponentProps<typeof CardHostDetailView>,
+		allowedOperations?: Partial<BoardResponseAllowedOperations>,
+		editMode?: boolean
+	) => {
+		const testBoard = allowedOperations
+			? boardResponseFactory.build({ allowedOperations })
+			: boardResponseFactory.build();
+
+		vi.mocked(useBoardAllowedOperations).mockReturnValue({
+			allowedOperations: computed(() => testBoard.allowedOperations as BoardResponseAllowedOperations),
+		});
+
+		vi.mocked(useCourseBoardEditMode).mockReturnValue({
+			isEditMode: computed(() => editMode ?? false),
+			startEditMode: vi.fn(),
+			stopEditMode: vi.fn(),
+		});
+
 		const wrapper = shallowMount(CardHostDetailView, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [
+					createTestingPinia({
+						initialState: {
+							cardStore: {
+								cards: CARD_WITH_ELEMENTS,
+							},
+							boardStore: {
+								board: testBoard,
+							},
+						},
+						stubActions: false,
+					}),
+					createTestingVuetify(),
+					createTestingI18n(),
+				],
 			},
 			propsData: props,
+			attachTo: document.body,
 		});
 
 		return {
 			wrapper,
 		};
 	};
-
-	afterEach(() => {
-		vi.clearAllMocks();
-	});
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
@@ -53,8 +115,8 @@ describe("CardHostDetailView", () => {
 		});
 	});
 
-	describe("when edit button is clicked", () => {
-		it("should toggle edit mode", async () => {
+	describe("when detail view is open", () => {
+		it("should display the dialog", () => {
 			const { wrapper } = setup({
 				card: CARD_WITH_ELEMENTS,
 				isOpen: true,
@@ -62,18 +124,118 @@ describe("CardHostDetailView", () => {
 				rowIndex: 1,
 			});
 
-			const button = wrapper.get("[data-testid='toolbar-edit-button']");
-			await button.trigger("click");
-
-			await nextTick();
-
-			const cardTitleWrapper = wrapper.getComponent(CardTitle);
-			expect(cardTitleWrapper.props("isEditMode")).toBe(true);
+			expect(wrapper.findComponent(VDialog).exists()).toBe(true);
 		});
 	});
 
-	describe("events", () => {
-		it("should emit close event when dialog is closed", async () => {
+	describe("when detail view is not open", () => {
+		it("should not display the dialog", () => {
+			const { wrapper } = setup({
+				card: CARD_WITH_ELEMENTS,
+				isOpen: false,
+				columnIndex: 0,
+				rowIndex: 1,
+			});
+
+			expect(wrapper.findComponent(VDialog).props("modelValue")).toBe(false);
+		});
+	});
+
+	describe("user with edit permissions", () => {
+		it("should show edit button", async () => {
+			const { wrapper } = setup(
+				{
+					card: CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				},
+				{ deleteCard: true }
+			);
+
+			const editButton = wrapper.find("[data-testid='toolbar-edit-button']");
+			expect(editButton.exists()).toBe(true);
+		});
+
+		describe("when edit mode is active", () => {
+			it("should show view button", async () => {
+				const { wrapper } = setup(
+					{
+						card: CARD_WITH_ELEMENTS,
+						isOpen: true,
+						columnIndex: 0,
+						rowIndex: 1,
+					},
+					{ deleteCard: true },
+					true
+				);
+
+				const viewButton = wrapper.find("[data-testid='toolbar-view-button']");
+				const editButton = wrapper.find("[data-testid='toolbar-edit-button']");
+				expect(viewButton.exists()).toBe(true);
+				expect(editButton.exists()).toBe(false);
+			});
+
+			it("should show addElement button", async () => {
+				const { wrapper } = setup(
+					{
+						card: CARD_WITH_ELEMENTS,
+						isOpen: true,
+						columnIndex: 0,
+						rowIndex: 1,
+					},
+					{ deleteCard: true },
+					true
+				);
+
+				const addElementButton = wrapper.find("[data-testid='add-element-button']");
+				expect(addElementButton.exists()).toBe(true);
+			});
+
+			describe("when addElement button gets clicked", () => {
+				it("should emit add:element event", async () => {
+					const { wrapper } = setup(
+						{
+							card: CARD_WITH_ELEMENTS,
+							isOpen: true,
+							columnIndex: 0,
+							rowIndex: 1,
+						},
+						{ deleteCard: true },
+						true
+					);
+
+					const addElementMenu = wrapper.findComponent({ name: "CardAddElementMenu" });
+					expect(addElementMenu.exists()).toBe(true);
+
+					addElementMenu.vm.$emit("add-element");
+					await nextTick();
+
+					expect(wrapper.emitted("add:element")).toBeTruthy();
+				});
+			});
+		});
+	});
+
+	describe("user without edit permissions", () => {
+		it("should not show edit button", () => {
+			const { wrapper } = setup(
+				{
+					card: CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				},
+				{ deleteCard: false }
+			);
+
+			const editButton = wrapper.find("[data-testid='toolbar-edit-button']");
+			expect(editButton.exists()).toBe(false);
+		});
+	});
+
+	describe("when close button gets clicked", () => {
+		it("should emit close event", () => {
 			const { wrapper } = setup({
 				card: CARD_WITH_ELEMENTS,
 				isOpen: true,
@@ -81,63 +243,120 @@ describe("CardHostDetailView", () => {
 				rowIndex: 1,
 			});
 
-			await wrapper.vm.$emit("close:detail-view");
-			await nextTick();
+			const closeButton = wrapper.find("[data-testid='close-detail-view-button']");
+			closeButton.trigger("click");
 
 			expect(wrapper.emitted("close:detail-view")).toBeTruthy();
 		});
+	});
 
-		it("should emit update:title when title is updated", () => {
-			const { wrapper } = setup({
-				card: CARD_WITH_ELEMENTS,
-				isOpen: true,
-				columnIndex: 0,
-				rowIndex: 1,
+	describe("card title events", () => {
+		describe("when update gets triggered", () => {
+			it("should emit update:title", () => {
+				const { wrapper } = setup({
+					card: CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
+
+				const cardTitle = wrapper.findComponent({ name: "CardTitle" });
+				cardTitle.vm.$emit("update:value", "new-title");
+
+				expect(wrapper.emitted("update:title")).toBeTruthy();
+				expect(wrapper.emitted("update:title")?.[0]).toEqual(["new-title"]);
 			});
-
-			const newTitle = "New title";
-			getVm(wrapper).onUpdateCardTitle(newTitle);
-
-			expect(wrapper.emitted("update:title")?.[0]).toEqual([newTitle]);
 		});
 
-		it("should emit add:element and enable edit mode when element is added", () => {
-			const { wrapper } = setup({
-				card: CARD_WITH_ELEMENTS,
-				isOpen: true,
-				columnIndex: 0,
-				rowIndex: 1,
+		describe("when enter gets triggered", () => {
+			it("should emit enter:title", () => {
+				const { wrapper } = setup({
+					card: CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
+
+				const cardTitle = wrapper.findComponent({ name: "CardTitle" });
+				cardTitle.vm.$emit("enter");
+
+				expect(wrapper.emitted("enter:title")).toBeTruthy();
 			});
-
-			getVm(wrapper).onAddElement();
-
-			expect(wrapper.emitted("add:element")).toBeTruthy();
 		});
 	});
 
-	describe("delete card", () => {
-		it("should emit delete:card when confirmation is accepted", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(true);
+	describe("content element list events", () => {
+		describe("when delete element gets triggered", () => {
+			it("should emit delete:element", () => {
+				const { wrapper } = setup({
+					card: CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
 
-			const { wrapper } = setup({
-				card: CARD_WITH_ELEMENTS,
-				isOpen: true,
-				columnIndex: 0,
-				rowIndex: 1,
+				const contentElementList = wrapper.findComponent({ name: "ContentElementList" });
+				contentElementList.vm.$emit("delete:element", "element-id");
+
+				expect(wrapper.emitted("delete:element")).toBeTruthy();
+				expect(wrapper.emitted("delete:element")?.[0]).toEqual(["element-id"]);
 			});
-
-			await getVm(wrapper).onDeleteCard();
-
-			expect(confirmDialogUtils.askDeletionForItem).toHaveBeenCalledWith(
-				CARD_WITH_ELEMENTS.title,
-				"components.boardCard"
-			);
-			expect(wrapper.emitted("delete:card")).toBeTruthy();
 		});
 
-		it("should not emit delete:card when confirmation is cancelled", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
+		describe("when move down gets triggered", () => {
+			it("should emit move-down:element", () => {
+				const { wrapper } = setup({
+					card: CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
 
+				const contentElementList = wrapper.findComponent({ name: "ContentElementList" });
+				contentElementList.vm.$emit("move-down:element", "element-id");
+
+				expect(wrapper.emitted("move-down:element")).toBeTruthy();
+				expect(wrapper.emitted("move-down:element")?.[0]).toEqual(["element-id"]);
+			});
+		});
+
+		describe("when move up gets triggered", () => {
+			it("should emit move-up:element", () => {
+				const { wrapper } = setup({
+					card: CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
+
+				const contentElementList = wrapper.findComponent({ name: "ContentElementList" });
+				contentElementList.vm.$emit("move-up:element", "element-id");
+
+				expect(wrapper.emitted("move-up:element")).toBeTruthy();
+				expect(wrapper.emitted("move-up:element")?.[0]).toEqual(["element-id"]);
+			});
+		});
+
+		describe("when move keyboard gets triggered", () => {
+			it("should emit move-keyboard:element", () => {
+				const { wrapper } = setup({
+					card: CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
+
+				const contentElementList = wrapper.findComponent({ name: "ContentElementList" });
+				contentElementList.vm.$emit("move-keyboard:element", "element-id", "up");
+
+				expect(wrapper.emitted("move-keyboard:element")).toBeTruthy();
+				expect(wrapper.emitted("move-keyboard:element")?.[0]).toEqual(["element-id", "up"]);
+			});
+		});
+	});
+
+	describe("colors", () => {
+		it("should apply background color", () => {
 			const { wrapper } = setup({
 				card: CARD_WITH_ELEMENTS,
 				isOpen: true,
@@ -145,9 +364,87 @@ describe("CardHostDetailView", () => {
 				rowIndex: 1,
 			});
 
-			await getVm(wrapper).onDeleteCard();
+			const cardText = wrapper.findComponent(VCardText);
+			const expectedBackgroundColor = colorToHexLighten5(backgroundColor);
 
-			expect(wrapper.emitted("delete:card")).toBeFalsy();
+			expect(cardText.props("style")).toEqual({ backgroundColor: expectedBackgroundColor });
+		});
+
+		it("should apply border color", () => {
+			const { wrapper } = setup({
+				card: CARD_WITH_ELEMENTS,
+				isOpen: true,
+				columnIndex: 0,
+				rowIndex: 1,
+			});
+
+			const contentWrapper = wrapper.find("[data-testid='detail-view-content-wrapper']");
+			const styleAttribute = contentWrapper.attributes("style");
+
+			expect(styleAttribute).toContain("background-color: white");
+			expect(styleAttribute).toContain("border-left: 3px solid rgb(144, 202, 249)");
+		});
+
+		describe("when card is transparent", () => {
+			it("should apply transparent background color", () => {
+				const { wrapper } = setup({
+					card: TRANSPARENT_CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
+
+				const cardText = wrapper.findComponent(VCardText);
+				const expectedBackgroundColor = colorToHexLighten5(Colors.TRANSPARENT);
+
+				expect(cardText.props("style")).toEqual({ backgroundColor: expectedBackgroundColor });
+			});
+
+			it("should not apply border color", () => {
+				const { wrapper } = setup({
+					card: TRANSPARENT_CARD_WITH_ELEMENTS,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
+
+				const contentWrapper = wrapper.find("[data-testid='detail-view-content-wrapper']");
+				const styleAttribute = contentWrapper.attributes("style");
+
+				expect(styleAttribute).toContain("background-color: white");
+				expect(styleAttribute).not.toContain("border-left: 3px solid");
+			});
+		});
+
+		describe("when card has no background color", () => {
+			it("should apply transparent background color", () => {
+				const { wrapper } = setup({
+					card: CARD_WITH_ELEMENTS_AND_NO_COLOR,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
+
+				const cardText = wrapper.findComponent(VCardText);
+				const expectedBackgroundColor = colorToHexLighten5(Colors.TRANSPARENT);
+
+				expect(cardText.props("style")).toEqual({ backgroundColor: expectedBackgroundColor });
+			});
+
+			it("should not apply border color", () => {
+				const { wrapper } = setup({
+					card: CARD_WITH_ELEMENTS_AND_NO_COLOR,
+					isOpen: true,
+					columnIndex: 0,
+					rowIndex: 1,
+				});
+
+				const contentWrapper = wrapper.find("[data-testid='detail-view-content-wrapper']");
+				const styleAttribute = contentWrapper.attributes("style");
+
+				expect(styleAttribute).toContain("background-color: white");
+				expect(styleAttribute).not.toContain("border-left: 3px solid");
+			});
 		});
 	});
 });

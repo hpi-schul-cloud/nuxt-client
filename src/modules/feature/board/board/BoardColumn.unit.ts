@@ -38,7 +38,11 @@ describe("BoardColumn", () => {
 		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
 	});
 
-	const setup = (options?: { cardsCount?: number; allowedOperations?: Partial<BoardResponseAllowedOperations> }) => {
+	const setup = (options?: {
+		cardsCount?: number;
+		allowedOperations?: Partial<BoardResponseAllowedOperations>;
+		detailViewCardId?: string;
+	}) => {
 		const cards = cardSkeletonResponseFactory.buildList(options?.cardsCount ?? 3);
 		const column = columnResponseFactory.build({
 			cards,
@@ -60,6 +64,7 @@ describe("BoardColumn", () => {
 				index: 1,
 				columnCount: 1,
 				isListBoard: false,
+				detailViewCardId: options?.detailViewCardId,
 			},
 		});
 
@@ -77,6 +82,18 @@ describe("BoardColumn", () => {
 		it("should trigger 'getRenderKey' method", () => {
 			setup();
 			expect(mockedUseForceRenderHandler.getRenderKey).toHaveBeenCalled();
+		});
+
+		it("should propagate detailViewCardId to CardHost components", () => {
+			const { wrapper } = setup({ cardsCount: 5, detailViewCardId: "card-12345" });
+
+			const cardHostComponents = wrapper.findAllComponents({
+				name: "CardHost",
+			});
+
+			cardHostComponents.forEach((cardHostComponent) => {
+				expect(cardHostComponent.props("detailViewCardId")).toBe("card-12345");
+			});
 		});
 	});
 

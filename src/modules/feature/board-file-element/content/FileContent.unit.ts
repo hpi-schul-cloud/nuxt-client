@@ -29,13 +29,15 @@ describe("FileContent", () => {
 		windowWidth?: number;
 		isCollaboraEditable?: boolean;
 		isCollaboraEnabled?: boolean;
+		isDetailView?: boolean;
 	}) => {
-		const { isListBoard, mimeType, previewUrl, windowWidth, isCollaboraEditable } = {
+		const { isListBoard, mimeType, previewUrl, windowWidth, isCollaboraEditable, isDetailView } = {
 			isListBoard: false,
 			mimeType: "testMimeType",
 			previewUrl: "testPreviewUrl",
 			windowWidth: 1280,
 			isCollaboraEditable: false,
+			isDetailView: false,
 			...options,
 		};
 
@@ -69,6 +71,7 @@ describe("FileContent", () => {
 			props: {
 				fileProperties,
 				isEditMode: true,
+				isDetailView: isDetailView ?? false,
 				alerts,
 			},
 			global: {
@@ -279,6 +282,17 @@ describe("FileContent", () => {
 			const fileDisplayContainer = wrapper.getComponent(FileDescription).element.parentElement;
 
 			expect(fileDisplayContainer.classList).not.toContain("file-information");
+		});
+	});
+
+	describe("when detail view is enabled", () => {
+		it("should have list style for specific file types", () => {
+			const { wrapper } = setup({
+				mimeType: "application/pdf",
+				isDetailView: true,
+			});
+
+			expect(wrapper.classes()).toContain("flex-row");
 		});
 	});
 

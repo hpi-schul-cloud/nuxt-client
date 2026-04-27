@@ -40,6 +40,7 @@
 					/>
 
 					<div class="board-menu" :class="boardMenuClasses">
+						<DetailViewButton class="mr-1" @open-detail-view="onOpenDetailView" />
 						<BoardMenu v-if="hasMenuItem" :scope="BoardMenuScope.CARD" has-background :data-testid="boardMenuTestId">
 							<KebabMenuActionEdit v-if="allowedOperations?.deleteCard && !isEditMode" @click="onStartEditMode" />
 							<SvsColorPickerMenu
@@ -118,8 +119,14 @@ import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { delay } from "@/utils/helpers";
 import { Colors } from "@api-server";
-import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
-import { BoardMenu, BoardMenuScope } from "@ui-board";
+import {
+	useBoardAllowedOperations,
+	useBoardFocusHandler,
+	useBoardStore,
+	useCardStore,
+	useCourseBoardEditMode,
+} from "@data-board";
+import { BoardMenu, BoardMenuScope, DetailViewButton } from "@ui-board";
 import { SvsColorPickerMenu } from "@ui-controls";
 import {
 	KebabMenuActionDelete,
@@ -132,12 +139,14 @@ import {
 import { useShareBoardLink } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, onMounted, ref, toRef } from "vue";
+import { useRouter } from "vue-router";
 
 type Props = {
 	height: number;
 	cardId: string;
 	rowIndex: number;
 	columnIndex: number;
+	detailViewCardId?: string;
 };
 
 const props = defineProps<Props>();
@@ -156,9 +165,11 @@ const { isFocusContained, isFocusedById } = useBoardFocusHandler(cardId.value, c
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
 
 const isHovered = useElementHover(cardHost);
-const isDetailView = ref(false);
+const isDetailView = computed(() => props.detailViewCardId === props.cardId);
 
 const cardStore = useCardStore();
+const router = useRouter();
+const boardStore = useBoardStore();
 
 const card = computed(() => cardStore.getCard(cardId.value));
 const isLoadingCard = computed(() => card.value === undefined);
@@ -229,8 +240,6 @@ const onEndEditMode = async () => {
 	});
 };
 
-const onCloseDetailView = () => (isDetailView.value = false);
-
 const onMoveContentElementDown = async ({ payload: elementId, elementIndex }: ElementMove) =>
 	await cardStore.moveElementRequest(props.cardId, elementId, elementIndex, +1);
 
@@ -265,6 +274,26 @@ const boardMenuClasses = computed(() => {
 const { run: duplicateCard, isRunning: isDuplicating } = useSafeTaskRunner(async () => {
 	await cardStore.duplicateCard({ cardId: props.cardId });
 });
+
+const onCloseDetailView = () => {
+	const boardId = boardStore.board?.id;
+	if (boardId) {
+		router.replace(`/boards/${boardId}`);
+	}
+};
+
+const onOpenDetailView = () => {
+	const boardId = boardStore.board?.id;
+	if (boardId) {
+		router.push({
+			name: "boards-card-detail",
+			params: {
+				boardId,
+				cardId: props.cardId,
+			},
+		});
+	}
+};
 
 onMounted(async () => {
 	if (card.value === undefined) {

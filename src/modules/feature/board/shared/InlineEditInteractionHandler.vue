@@ -42,11 +42,19 @@ const isListItem = (target: HTMLElement | SVGElement): boolean => {
 	return target.className?.includes("v-list-item");
 };
 
+const isKeepInlineEditModeButton = (target: HTMLElement | SVGElement): boolean => {
+	if (target instanceof SVGElement) return false;
+	const button = target.closest("button");
+	if (!button) return false;
+
+	return button.className?.includes("keep-inline-edit-mode");
+};
+
 const isAllowedTarget = (event: Event): boolean => {
 	const target = event.target as HTMLElement | SVGElement;
 	if (!(target instanceof HTMLElement) && !(target instanceof SVGElement)) return true;
 
-	const disallowedConditions = [isListItem, isDatePicker, isFileElementLink];
+	const disallowedConditions = [isListItem, isDatePicker, isFileElementLink, isKeepInlineEditModeButton];
 
 	return target && disallowedConditions.every((fn) => !fn(target));
 };

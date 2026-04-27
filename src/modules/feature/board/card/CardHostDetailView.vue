@@ -1,40 +1,57 @@
 <template>
-	<div>
-		<VDialog
-			:model-value="isOpen"
-			:fullscreen="isFullscreen"
-			:scrim="isFullscreen"
-			:width="700"
-			scrollable
-			transition="dialog-bottom-transition"
-			@keydown.escape="onDialogClose"
-		>
-			<v-card>
-				<div class="toolbar-fixed-offset">
-					<v-toolbar class="toolbar-position" color="white">
-						<v-btn icon @click="onDialogClose">
-							<v-icon>{{ mdiClose }}</v-icon>
-						</v-btn>
-						<v-spacer />
-						<v-btn class="mr-4" @click="onToggleFullscreen"> toggle fullscreen (debug) </v-btn>
-						<v-btn class="mr-4" data-testid="toolbar-edit-button" @click="onToggleEdit">
-							{{
-								isEditMode ? $t("common.actions.edit") + " " + $t("common.actions.finish") : $t("common.actions.edit")
-							}}
-						</v-btn>
-
-						<v-btn color="primary" @click="onDeleteCard">
-							{{ $t("components.boardCard") }} {{ $t("common.actions.delete") }}
-						</v-btn>
-					</v-toolbar>
-				</div>
-				<v-card-text>
-					<div class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto">
+	<VDialog :model-value="isOpen" fullscreen scrollable z-index="2000" @keydown.escape="onDialogClose">
+		<VToolbar class="toolbar-position">
+			<VBtn
+				:icon="mdiClose"
+				data-testid="close-detail-view-button"
+				:aria-label="t('common.labels.close')"
+				@click="onDialogClose"
+			/>
+			<VToolbarTitle>{{ $t("components.board.dialog.detail-view.title") }}</VToolbarTitle>
+			<VSpacer />
+			<VBtn
+				v-if="allowedOperations?.deleteCard && !isEditMode"
+				class="mr-4 keep-inline-edit-mode"
+				data-testid="toolbar-edit-button"
+				variant="flat"
+				color="primary"
+				@click="startEditMode"
+			>
+				{{ $t("common.actions.edit") }}
+			</VBtn>
+			<VBtn
+				v-if="allowedOperations?.deleteCard && isEditMode"
+				class="mr-4 keep-inline-edit-mode"
+				data-testid="toolbar-view-button"
+				variant="flat"
+				color="primary"
+				@click="stopEditMode"
+			>
+				{{ $t("common.actions.view") }}
+			</VBtn>
+		</VToolbar>
+		<VCard>
+			<VCardText :style="{ backgroundColor: cardBackground }" class="pt-0">
+				<div
+					class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto"
+					:style="{
+						backgroundColor: 'white',
+						borderLeft: cardBorderColor ? `3px solid ${cardBorderColor}` : undefined,
+					}"
+					data-testid="detail-view-content-wrapper"
+				>
+					<CardHostInteractionHandler
+						:is-edit-mode="isEditMode"
+						@start-edit-mode="startEditMode"
+						@end-edit-mode="stopEditMode"
+						@click.stop
+					>
 						<CardTitle
 							:is-edit-mode="isEditMode"
 							:value="card.title"
 							scope="card"
 							:is-focused="true"
+							:has-edit-permission="allowedOperations?.updateCardTitle"
 							@update:value="onUpdateCardTitle"
 							@enter="onEnterTitle"
 						/>
@@ -49,23 +66,27 @@
 							@move-up:element="onMoveElementUp"
 							@move-keyboard:element="onMoveElementKeyboard"
 						/>
-						<CardAddElementMenu @add-element="onAddElement" />
-					</div>
-				</v-card-text>
-			</v-card>
-		</VDialog>
-	</div>
+						<CardAddElementMenu v-if="isEditMode" data-testid="add-element-button" @add-element="onAddElement" />
+					</CardHostInteractionHandler>
+				</div>
+			</VCardText>
+		</VCard>
+	</VDialog>
 </template>
 
 <script setup lang="ts">
 import CardAddElementMenu from "./CardAddElementMenu.vue";
+import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import type { ElementMove } from "@/types/board/DragAndDrop";
-import { askDeletionForItem } from "@/utils/confirmation-dialog.utils";
+import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import type { CardResponse } from "@api-server";
+import { Colors } from "@api-server";
+import { useBoardAllowedOperations, useCourseBoardEditMode } from "@data-board";
 import { mdiClose } from "@icons/material";
-import { ref } from "vue";
+import { computed, toRef } from "vue";
+import { useI18n } from "vue-i18n";
 
 type Props = {
 	card: CardResponse;
@@ -79,7 +100,6 @@ const props = defineProps<Props>();
 const emit = defineEmits<{
 	(e: "update:title", value: string): void;
 	(e: "delete:element", elementId: string): void;
-	(e: "delete:card"): void;
 	(e: "move-down:element", elementMove: ElementMove): void;
 	(e: "move-up:element", elementMove: ElementMove): void;
 	(e: "move-keyboard:element", elementMove: ElementMove, keyCode: string): void;
@@ -88,16 +108,17 @@ const emit = defineEmits<{
 	(e: "close:detail-view"): void;
 }>();
 
-const isEditMode = ref(false);
-const isFullscreen = ref(true);
+const cardRef = toRef(props, "card");
+const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardRef.value.id);
+const { allowedOperations } = useBoardAllowedOperations();
+const { t } = useI18n();
 
-const onToggleEdit = () => {
-	isEditMode.value = !isEditMode.value;
-};
-
-const onToggleFullscreen = () => {
-	isFullscreen.value = !isFullscreen.value;
-};
+const cardBackground = computed(() => colorToHexLighten5(cardRef.value?.backgroundColor ?? Colors.TRANSPARENT));
+const cardBorderColor = computed(() => {
+	const color = cardRef.value?.backgroundColor;
+	if (!color || color === Colors.TRANSPARENT) return undefined;
+	return colorToHexLighten3(color);
+});
 
 const onDialogClose = () => {
 	emit("close:detail-view");
@@ -113,19 +134,10 @@ const onEnterTitle = () => {
 
 const onAddElement = () => {
 	emit("add:element");
-	isEditMode.value = true;
 };
 
 const onDeleteElement = (elementId: string) => {
 	emit("delete:element", elementId);
-};
-
-const onDeleteCard = async () => {
-	const shouldDelete = await askDeletionForItem(props.card.title!, "components.boardCard");
-
-	if (shouldDelete) {
-		emit("delete:card");
-	}
 };
 
 const onMoveElementDown = (elementMove: ElementMove) => {
@@ -141,19 +153,44 @@ const onMoveElementKeyboard = (elementMove: ElementMove, keyCode: string) => {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@use "sass:map";
+@use "@/styles/settings" as *;
+
 .detail-view-size {
-	max-width: 30vw;
-	min-width: 400px;
+	max-width: 920px;
+	padding: 0 4rem;
+
+	@media #{map.get($display-breakpoints, 'sm-and-down')} {
+		padding: 0 0.5rem;
+	}
 }
 
 .toolbar-position {
 	position: absolute;
 	width: 100%;
-	z-index: 1000;
+	z-index: 2001;
 }
 
-.toolbar-fixed-offset {
-	margin-bottom: 64px;
+.v-card {
+	padding-top: 64px;
+}
+
+.v-dialog {
+	--fullscreen-scale: 1.25;
+
+	/* Override with scaled versions, referencing original root values */
+	--heading-1: calc(2.0625rem * var(--fullscreen-scale));
+	--heading-2: calc(1.75rem * var(--fullscreen-scale));
+	--heading-3: calc(1.4375rem * var(--fullscreen-scale));
+	--heading-4: calc(1.1875rem * var(--fullscreen-scale));
+	--heading-5: calc(1.4375rem * var(--fullscreen-scale));
+	--heading-6: calc(1.1875rem * var(--fullscreen-scale));
+
+	/* text sizes */
+	--text-xs: calc(0.694rem * var(--fullscreen-scale));
+	--text-sm: calc(0.833rem * var(--fullscreen-scale));
+	--text-md: calc(1rem * var(--fullscreen-scale));
+	--text-lg: calc(1.2rem * var(--fullscreen-scale));
 }
 </style>

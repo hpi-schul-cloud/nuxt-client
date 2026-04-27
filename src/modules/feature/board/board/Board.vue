@@ -63,6 +63,7 @@
 								:column-count="board.columns.length"
 								:class="{ 'my-0': isListBoard, 'user-select-none': isDragging }"
 								:is-list-board="isListBoard"
+								:detail-view-card-id="detailViewCardId"
 								:data-testid="`board-column-${index}`"
 								@reload:board="onReloadBoard"
 								@create:card="onCreateCard"
@@ -165,6 +166,7 @@ import { useRoute, useRouter } from "vue-router";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
+	detailViewCardId: { type: String, required: false, default: undefined },
 });
 
 const { editModeId } = useSharedEditMode();

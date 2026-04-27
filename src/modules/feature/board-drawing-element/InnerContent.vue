@@ -21,10 +21,14 @@ import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { computed, ref } from "vue";
 import { useDisplay } from "vuetify";
 
+const props = defineProps({
+	isDetailView: { type: Boolean, required: false, default: false },
+});
+
 const imageSrc = image;
 
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
-const isSmallOrLargerListBoard = computed(() => smAndUp.value && isListLayout.value);
+const isSmallOrLargerListBoard = computed(() => smAndUp.value && (isListLayout.value || props.isDetailView));
 </script>

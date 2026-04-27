@@ -16,6 +16,7 @@
 			v-if="fileProperties && isUploading !== true"
 			:file-properties="fileProperties"
 			:is-edit-mode="isEditMode"
+			:is-detail-view="isDetailView"
 			@fetch:file="onFetchFile"
 			@update:alternative-text="onUpdateAlternativeText"
 			@update:caption="onUpdateCaption"
@@ -78,6 +79,7 @@ type Props = {
 	columnIndex: number;
 	rowIndex: number;
 	elementIndex: number;
+	isDetailView?: boolean;
 };
 
 const props = defineProps<Props>();
