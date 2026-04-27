@@ -174,6 +174,7 @@ import {
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
 import { useEnvConfig } from "@data-env";
+import { useTaskActions } from "@data-tasks";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import draggable from "vuedraggable";
@@ -321,12 +322,13 @@ export default {
 					return;
 			}
 
-			const confirmed = await askDeletionForItem(itemContent.name || itemContent.title, typeKey);
-
-			if (!confirmed) return;
+			if (itemType === this.cardTypes.LESSON || itemType === this.cardTypes.COLUMN_BOARD) {
+				const confirmed = await askDeletionForItem(itemContent.name || itemContent.title, typeKey);
+				if (!confirmed) return;
+			}
 
 			if (itemType === this.cardTypes.TASK) {
-				await courseRoomDetailsModule.deleteTask(itemContent.id);
+				await useTaskActions().deleteTask(itemContent.id, itemContent.name);
 			} else if (itemType === this.cardTypes.LESSON) {
 				await courseRoomDetailsModule.deleteLesson(itemContent.id);
 			} else if (itemType === this.cardTypes.COLUMN_BOARD) {

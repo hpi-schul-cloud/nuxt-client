@@ -8,13 +8,11 @@
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import FilePaths from "@/store/filePaths";
-import FinishedTasksModule from "@/store/finished-tasks";
 import ImportUsersModule from "@/store/import-users";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
 import SystemsModule from "@/store/systems";
-import TasksModule from "@/store/tasks";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 
@@ -23,27 +21,23 @@ import { getModule } from "vuex-module-decorators";
 // (result from getModule(...))
 export let copyModule: CopyModule;
 export let filePathsModule: FilePaths;
-export let finishedTasksModule: FinishedTasksModule;
 export let importUsersModule: ImportUsersModule;
 export let courseRoomDetailsModule: CourseRoomDetailsModule;
 export let schoolExternalToolsModule: SchoolExternalToolsModule;
 export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
 export let systemsModule: SystemsModule;
-export let tasksModule: TasksModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<unknown>): void {
 	copyModule = getModule(CopyModule, store);
 	filePathsModule = getModule(FilePaths, store);
-	finishedTasksModule = getModule(FinishedTasksModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	courseRoomDetailsModule = getModule(CourseRoomDetailsModule, store);
 	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	shareModule = getModule(ShareModule, store);
 	systemsModule = getModule(SystemsModule, store);
-	tasksModule = getModule(TasksModule, store);
 }
 
 // for use in 'modules' store init (see store/index.ts), so each module
@@ -52,12 +46,10 @@ export function initializeStores(store: Store<unknown>): void {
 export const modules = {
 	copyModule: CopyModule,
 	filePathsModule: FilePaths,
-	finishedTasksModule: FinishedTasksModule,
 	importUsersModule: ImportUsersModule,
 	courseRoomDetailsModule: CourseRoomDetailsModule,
 	schoolExternalToolsModule: SchoolExternalToolsModule,
 	schoolsModule: SchoolsModule,
 	shareModule: ShareModule,
 	systemsModule: SystemsModule,
-	tasksModule: TasksModule,
 };

@@ -77,6 +77,7 @@
       "@feature-collabora": ["src/modules/feature/collabora"],
       "@icons/*": ["src/components/icons/*"],
       "@ui-alert": ["src/modules/ui/alert"],
+      "@ui-appearance": ["src/modules/ui/appearance"],
       "@ui-audio-player": ["src/modules/ui/audio-player"],
       "@ui-board": ["src/modules/ui/board"],
       "@ui-chip": ["src/modules/ui/chip"],

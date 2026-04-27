@@ -18,63 +18,13 @@
 							? `${t("pages.room.taskCard.label.due")} ${fromNowUtc(task.dueDate)}`
 							: t("pages.dashboard.no.due.date")
 					}}</span>
-
+					<h4 class="text-h4 my-1" data-testid="task-name">
+						{{ task.name }}
+					</h4>
 					<div class="d-flex flex-wrap gc-4 gr-0">
-						<h4 class="text-h4 my-1" data-testid="task-name">
-							{{ task.name }}
-						</h4>
 						<div class="d-flex ga-2 mt-2">
-							<template v-if="isTeacher">
-								<VChip
-									v-if="task.status?.maxSubmissions"
-									size="small"
-									variant="tonal"
-									data-testid="task-submitted-teacher"
-								>
-									{{ t("pages.room.taskCard.teacher.label.submitted") }} {{ task.status.submitted }}/{{
-										task.status?.maxSubmissions
-									}}
-								</VChip>
-								<VChip
-									v-if="task.status?.maxSubmissions && task.status.submitted"
-									size="small"
-									variant="tonal"
-									data-testid="task-graded"
-								>
-									{{ t("pages.room.taskCard.label.graded") }}
-									{{ task.status.graded }}/{{ task.status.submitted }}
-								</VChip>
-
-								<VChip
-									v-if="isTaskOverdue(task)"
-									:prepend-icon="mdiClockAlertOutline"
-									size="small"
-									variant="tonal"
-									data-testid="task-overdue-teacher"
-								>
-									{{ t("pages.room.taskCard.teacher.label.overdue") }}
-								</VChip>
-							</template>
-							<template v-if="isStudent">
-								<VChip
-									v-if="task.status?.submitted"
-									:prepend-icon="mdiCheckCircleOutline"
-									size="small"
-									variant="tonal"
-									data-testid="task-submitted-student"
-								>
-									{{ t("pages.room.taskCard.student.label.submitted") }}
-								</VChip>
-								<VChip
-									v-if="isTaskOverdue(task) && !task.status?.submitted"
-									:prepend-icon="mdiClockAlertOutline"
-									size="small"
-									variant="tonal"
-									data-testid="task-overdue-student"
-								>
-									{{ t("pages.room.taskCard.student.label.overdue") }}
-								</VChip>
-							</template>
+							<TaskChipsTeacher v-if="isTeacher" :task />
+							<TaskChipsStudent v-if="isStudent" :task />
 						</div>
 					</div>
 				</VCardText>
@@ -84,11 +34,12 @@
 </template>
 
 <script setup lang="ts">
+import TaskChipsStudent from "@/components/tasks/task-chips/TaskChipsStudent.vue";
+import TaskChipsTeacher from "@/components/tasks/task-chips/TaskChipsTeacher.vue";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
-import { isTaskOverdue } from "@data-tasks";
-import { mdiCheckCircleOutline, mdiClockAlertOutline, mdiFormatListChecks } from "@icons/material";
+import { mdiFormatListChecks } from "@icons/material";
 import { useI18n } from "vue-i18n";
 
 const { isTeacher, isStudent } = useAppStoreRefs();

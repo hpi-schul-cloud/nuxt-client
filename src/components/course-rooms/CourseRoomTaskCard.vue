@@ -5,6 +5,7 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
+		:ripple="false"
 		:variant="isDraft ? 'outlined' : 'elevated'"
 		hover
 		:data-testid="`room-task-card-${taskCardIndex}`"
@@ -32,37 +33,13 @@
 			<h2 class="text-h4 mt-1 mb-1 task-name" tabindex="-1" :data-testid="`task-title-${taskCardIndex}`">
 				{{ task.name }}
 			</h2>
-			<RenderHTML
-				v-if="canShowDescription"
-				class="text--primary mt-1 mb-0 pb-0 text-description"
-				tabindex="0"
-				:html="task.description"
-			/>
 			<div
 				v-if="!isPlanned && !isDraft && !isFinished"
 				class="ma-0 submitted-section"
 				:data-testid="`task-card-info-${taskCardIndex}`"
 			>
-				<div class="chip-items-group">
-					<v-chip
-						v-for="(chip, index) in chipItems[userRole]"
-						:key="index"
-						:class="[chip.class]"
-						size="small"
-						:data-testid="[chip.testid]"
-					>
-						<v-icon v-if="chip.icon" size="small" class="mr-1" color="rgba(0, 0, 0, 0.87)">
-							{{ chip.icon }}
-						</v-icon>
-						{{ chip.name }}
-					</v-chip>
-					<ChipTimeRemaining
-						v-if="roles.STUDENT === userRole && isCloseToDueDate && !isSubmitted"
-						type="warning"
-						:due-date="task.dueDate"
-						:shorten-unit="$vuetify.display.xs"
-					/>
-				</div>
+				<TaskChipsTeacher v-if="isTeacher" :task />
+				<TaskChipsStudent v-if="isStudent" :task />
 			</div>
 		</v-card-text>
 		<v-card-actions v-if="cardActions[userRole]?.length" class="pt-1" data-testid="content-card-task-actions">
@@ -82,31 +59,28 @@
 </template>
 
 <script setup lang="ts">
-import { formatUtc, isDueWithin24h } from "@/utils/date-time.utils";
-import { ImportUserResponseRoleNames as Roles } from "@api-server";
+import TaskChipsStudent from "@/components/tasks/task-chips/TaskChipsStudent.vue";
+import TaskChipsTeacher from "@/components/tasks/task-chips/TaskChipsTeacher.vue";
+import { formatUtc } from "@/utils/date-time.utils";
+import { ImportUserResponseRoleNames as Roles, TaskResponse } from "@api-server";
+import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { RenderHTML } from "@feature-render-html";
 import {
-	mdiCheckCircleOutline,
-	mdiClockAlertOutline,
 	mdiContentCopy,
 	mdiFormatListChecks,
 	mdiPencilOutline,
 	mdiShareVariantOutline,
-	mdiTextBoxCheckOutline,
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 } from "@icons/material";
-import { ChipTimeRemaining } from "@ui-chip";
 import { RoomDotMenu } from "@ui-room-details";
-import { computed, ref } from "vue";
+import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	task: {
-		type: Object,
+		type: Object as PropType<TaskResponse>,
 		required: true,
-		validator: (task) => ["createdAt", "id", "name"].every((key) => key in (task as Record<string, unknown>)),
 	},
 	room: {
 		type: Object,
@@ -135,21 +109,11 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { isStudent, isTeacher } = useAppStoreRefs();
 
-const roles = ref(Roles);
-const canShowDescription = ref(false);
 const isDraft = computed(() => props.task.status.isDraft);
-const isOverDue = computed(() => {
-	const dueDate = props.task.dueDate;
-	return dueDate && new Date(dueDate) < new Date();
-});
 const isFinished = computed(() => props.task.status.isFinished);
 
-const isCloseToDueDate = computed(() => props.task.dueDate && isDueWithin24h(props.task.dueDate));
-
-const isGraded = computed(() => props.task.status.graded);
-const isSubmitted = computed(() => props.task.status.submitted);
-const isSubmittedNotGraded = computed(() => props.task.status.submitted && !props.task.status.graded);
 const isPlanned = computed(() => {
 	const scheduledDate = props.task.availableDate;
 	const delay = 5 * 1000;
@@ -190,70 +154,6 @@ const cardActions = computed(() => {
 	}
 
 	return roleBasedActions;
-});
-
-const chipItems = computed(() => {
-	const roleBasedChips: Record<string, Array<{ name: string; class?: string; icon?: string; testid?: string }>> = {
-		[Roles.TEACHER]: [],
-		[Roles.STUDENT]: [],
-	};
-
-	if (props.userRole === Roles.TEACHER) {
-		roleBasedChips[Roles.TEACHER].push({
-			name: `${props.task.status.submitted}/${props.task.status.maxSubmissions} ${t("pages.room.taskCard.teacher.label.submitted")}`,
-			testid: `room-task-card-chip-submitted-${props.taskCardIndex}`,
-		});
-
-		roleBasedChips[Roles.TEACHER].push({
-			name: `${props.task.status.graded}/${props.task.status.maxSubmissions} ${t("pages.room.taskCard.label.graded")}`,
-			testid: `room-task-card-chip-graded-${props.taskCardIndex}`,
-		});
-
-		if (isOverDue.value) {
-			roleBasedChips[Roles.TEACHER].push({
-				icon: mdiClockAlertOutline,
-				name: t(`pages.room.taskCard.teacher.label.overdue`),
-				class: "overdue",
-				testid: `room-task-card-chip-overdue-${props.taskCardIndex}`,
-			});
-		}
-	}
-
-	if (props.userRole === Roles.STUDENT) {
-		if (isSubmittedNotGraded.value) {
-			roleBasedChips[Roles.STUDENT].push({
-				icon: mdiCheckCircleOutline,
-				name: t(`pages.room.taskCard.student.label.submitted`),
-				class: "submitted",
-				testid: `room-task-card-chip-submitted-${props.taskCardIndex}`,
-			});
-		}
-
-		if (isGraded.value) {
-			roleBasedChips[Roles.STUDENT].push({
-				icon: mdiCheckCircleOutline,
-				name: t(`pages.room.taskCard.student.label.submitted`),
-				class: "submitted",
-				testid: `room-task-card-chip-submitted-${props.taskCardIndex}`,
-			});
-			roleBasedChips[Roles.STUDENT].push({
-				icon: mdiTextBoxCheckOutline,
-				name: t(`pages.room.taskCard.label.graded`),
-				class: "graded",
-				testid: `room-task-card-chip-graded-${props.taskCardIndex}`,
-			});
-		}
-
-		if (isOverDue.value && !isSubmitted.value) {
-			roleBasedChips[Roles.STUDENT].push({
-				icon: mdiClockAlertOutline,
-				name: t(`pages.room.taskCard.student.label.overdue`),
-				class: "overdue",
-			});
-		}
-	}
-
-	return roleBasedChips;
 });
 
 const moreActionsMenuItems = computed(() => {
@@ -426,14 +326,6 @@ const getStyleClasses = () => (isPlanned.value || (isDraft.value && !isFinished.
 
 .text-description {
 	font-size: var(--text-md);
-}
-
-.chip-items-group {
-	vertical-align: middle;
-}
-
-.v-chip {
-	margin-right: 8px;
 }
 
 .v-card__text {

@@ -1,33 +1,33 @@
 <template>
-	<SvsSuspense :loading="isRunning">
+	<SvsSuspense :loading="isLoadingTasks">
 		<h2 class="mb-0 mt-16">{{ t("common.words.tasks") }}</h2>
 		<template v-if="isTeacher">
 			<DashboardTasksOpen
 				:title="t('components.organisms.TasksDashboardMain.tab.current')"
 				data-testid="teacher-tasks-open"
 				:empty-msg="t('pages.tasks.open.emptyState.title')"
-				:tasks="openTasksForTeacher"
+				:tasks="openForTeacherNotOverdue"
 			/>
 
 			<DashboardTasksSection
-				v-if="ungradedTasksForTeacher.length > 0"
+				v-if="ungradedForTeacherOverdue.length > 0"
 				data-testid="teacher-tasks-not-graded"
-				:title="t('pages.tasks.subtitleNotGraded')"
-				:tasks="ungradedTasksForTeacher"
+				:title="t('pages.tasks.notGraded')"
+				:tasks="ungradedForTeacherOverdue"
 			/>
 
 			<DashboardTasksSection
-				v-if="gradedTasksForTeacher.length > 0"
+				v-if="gradedForTeacherOverdue.length > 0"
 				data-testid="teacher-tasks-graded"
-				:title="t('pages.tasks.subtitleGraded')"
-				:tasks="gradedTasksForTeacher"
+				:title="t('pages.tasks.graded')"
+				:tasks="gradedForTeacherOverdue"
 			/>
 
 			<DashboardTasksSection
-				v-if="draftTasks.length > 0"
+				v-if="draftsSortedByDueDate.length > 0"
 				data-testid="teacher-tasks-drafts"
 				:title="t('common.words.drafts')"
-				:tasks="draftTasks"
+				:tasks="draftsSortedByDueDate"
 			/>
 		</template>
 		<template v-else-if="isStudent">
@@ -35,21 +35,21 @@
 				:title="t('components.organisms.TasksDashboardMain.tab.open')"
 				data-testid="student-tasks-open"
 				:empty-msg="t('pages.tasks.open.emptyState.title')"
-				:tasks="openTasksForStudents"
+				:tasks="openForStudent"
 			/>
 
 			<DashboardTasksSection
-				v-if="ungradedTasksForStudent.length > 0"
+				v-if="ungradedForStudent.length > 0"
 				data-testid="student-tasks-not-graded"
-				:title="t('pages.tasks.subtitleNotGraded')"
-				:tasks="ungradedTasksForStudent"
+				:title="t('pages.tasks.notGraded')"
+				:tasks="ungradedForStudent"
 			/>
 
 			<DashboardTasksSection
-				v-if="gradedTasksForStudent.length > 0"
+				v-if="gradedForStudent.length > 0"
 				data-testid="student-tasks-graded"
-				:title="t('pages.tasks.subtitleGraded')"
-				:tasks="gradedTasksForStudent"
+				:title="t('pages.tasks.graded')"
+				:tasks="gradedForStudent"
 			/>
 		</template>
 
@@ -63,26 +63,32 @@
 import DashboardTasksOpen from "./DashboardTasksOpen.vue";
 import DashboardTasksSection from "./DashboardTasksSection.vue";
 import { useAppStoreRefs } from "@data-app";
-import { useTasks } from "@data-tasks";
+import { isTaskOverdue, toSortedByDueDate, useTasks } from "@data-tasks";
 import { SvsSuspense } from "@ui-containers";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const { isTeacher, isStudent } = useAppStoreRefs();
 
 const {
-	draftTasks,
-	gradedTasksForTeacher,
-	gradedTasksForStudent,
-	ungradedTasksForTeacher,
-	ungradedTasksForStudent,
-	openTasksForTeacher,
-	openTasksForStudents,
-	isRunning,
+	drafts,
+	openForTeacher,
+	gradedForTeacher,
+	ungradedForTeacher,
+	openForStudent,
+	ungradedForStudent,
+	gradedForStudent,
+	isLoadingTasks,
 } = useTasks({
 	range: {
 		from: { amount: 1, unit: "month" },
 		to: { amount: 14, unit: "day" },
 	},
 });
+
+const openForTeacherNotOverdue = computed(() => openForTeacher.value.filter((task) => !isTaskOverdue(task)));
+const gradedForTeacherOverdue = computed(() => gradedForTeacher.value.filter(isTaskOverdue));
+const ungradedForTeacherOverdue = computed(() => ungradedForTeacher.value.filter(isTaskOverdue));
+const draftsSortedByDueDate = computed(() => toSortedByDueDate(drafts.value));
 </script>

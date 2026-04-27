@@ -1,6 +1,8 @@
 <template>
-	<div v-if="displaySpinner" class="d-flex my-10 justify-center align-center">
-		<VProgressCircular indeterminate :size />
+	<div v-if="displayLoader" class="d-flex my-10 justify-center align-center">
+		<slot name="loading">
+			<VProgressCircular indeterminate :size />
+		</slot>
 	</div>
 	<slot v-else-if="!loading" />
 </template>
@@ -27,7 +29,7 @@ const props = withDefaults(
 
 const loadingRef = toRef(props, "loading");
 
-const displaySpinner = ref(false);
+const displayLoader = ref(false);
 let timeout: ReturnType<typeof setTimeout> | undefined;
 
 onBeforeUnmount(() => clearTimeout(timeout));
@@ -38,7 +40,7 @@ watch(
 		if (val) {
 			timeout = setTimeout(() => {
 				if (loadingRef.value) {
-					displaySpinner.value = true;
+					displayLoader.value = true;
 				}
 			}, 200);
 		} else {
@@ -46,7 +48,7 @@ watch(
 				clearTimeout(timeout);
 				timeout = undefined;
 			}
-			displaySpinner.value = false;
+			displayLoader.value = false;
 		}
 	},
 	{ immediate: true }

@@ -1,3 +1,5 @@
+import { TaskResponse } from "@api-server";
+
 export type Lesson = {
 	id: string;
 	name: string;
@@ -5,26 +7,6 @@ export type Lesson = {
 	createdAt: string;
 	updatedAt: string;
 	hidden: boolean;
-};
-
-export type Task = {
-	id: string;
-	name: string;
-	description?: string;
-	availableDate?: string;
-	dueDate?: string;
-	courseName: string;
-	displayColor?: string;
-	status?: {
-		submitted: number;
-		maxSubmissions: number;
-		graded: number;
-		isDraft: boolean;
-		isSubstitutionTeacher: boolean;
-		isFinished: boolean;
-	};
-	createdAt: string;
-	updatedAt: string;
 };
 
 export type Course = {
@@ -50,7 +32,7 @@ export type RoomData = {
 	elements: [
 		{
 			type: string;
-			content: Task | Lesson | object;
+			content: TaskResponse | Lesson | object;
 		},
 	];
 };
