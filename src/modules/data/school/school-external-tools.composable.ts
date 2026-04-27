@@ -10,14 +10,12 @@ export const useSchoolExternalTools = () => {
 	const { t } = useI18nGlobal();
 	const toolApi = ToolApiFactory(undefined, "v3", $axios);
 
-	const schoolExternalTools = ref<SchoolExternalTool[]>([]); // Section
+	const schoolExternalTools = ref<SchoolExternalTool[]>([]);
 
-	const { execute: execLoadTools, isRunning: isLoadingExternalTools } = useSafeAxiosTask(); // Section
-	const { execute: execDeleteTool } = useSafeAxiosTask(); // Section
+	const { execute: execLoadTools, isRunning: isLoadingExternalTools } = useSafeAxiosTask();
+	const { execute: execDeleteTool } = useSafeAxiosTask();
 
-	// Section
 	const loadSchoolExternalTools = async (schoolId: string) => {
-		// maybe add error message here
 		const { result, success } = await execLoadTools(() => toolApi.toolSchoolControllerGetSchoolExternalTools(schoolId));
 
 		if (success && result) {
@@ -25,7 +23,6 @@ export const useSchoolExternalTools = () => {
 		}
 	};
 
-	// Section
 	const deleteSchoolExternalTool = async (schoolExternalToolId: string) => {
 		const { success } = await execDeleteTool(() =>
 			toolApi.toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId)

@@ -11,14 +11,13 @@ export const useSchoolExternalToolConfigurator = () => {
 	const { t } = useI18nGlobal();
 	const toolApi = ToolApiFactory(undefined, "v3", $axios);
 
-	const schoolExternalToolConfigurationTemplates = ref<SchoolExternalToolConfigurationTemplate[]>([]); // Page
+	const schoolExternalToolConfigurationTemplates = ref<SchoolExternalToolConfigurationTemplate[]>([]);
 
-	const { execute: execLoadTool } = useSafeAxiosTask(); // Page
-	const { execute: execLoadAvailableTools, isRunning: isLoadingAvailableTools } = useSafeAxiosTask(); // Page
-	const { execute: execLoadConfigurationTemplate, isRunning: isLoadingConfigurationTemplate } = useSafeAxiosTask(); // Page
-	const { execute: execCreateOrUpdateTool, error: createOrUpdateToolError } = useSafeAxiosTask(); // Page
+	const { execute: execLoadTool } = useSafeAxiosTask();
+	const { execute: execLoadAvailableTools, isRunning: isLoadingAvailableTools } = useSafeAxiosTask();
+	const { execute: execLoadConfigurationTemplate, isRunning: isLoadingConfigurationTemplate } = useSafeAxiosTask();
+	const { execute: execCreateOrUpdateTool, error: createOrUpdateToolError } = useSafeAxiosTask();
 
-	// Page
 	const loadSchoolExternalTool = async (schoolExternalToolId: string) => {
 		const { result } = await execLoadTool(
 			() => toolApi.toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId),
@@ -27,7 +26,6 @@ export const useSchoolExternalToolConfigurator = () => {
 		return result?.data;
 	};
 
-	// Page
 	const loadAvailableToolsForSchool = async (schoolId: string) => {
 		const { result, success } = await execLoadAvailableTools(
 			() => toolApi.toolConfigurationControllerGetAvailableToolsForSchool(schoolId),
@@ -39,7 +37,6 @@ export const useSchoolExternalToolConfigurator = () => {
 		}
 	};
 
-	// Page
 	const loadConfigurationTemplateForSchoolExternalTool = async (schoolExternalToolId: string) => {
 		const { result, success } = await execLoadConfigurationTemplate(
 			() => toolApi.toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId),
@@ -53,12 +50,10 @@ export const useSchoolExternalToolConfigurator = () => {
 		}
 	};
 
-	// Page
 	const createSchoolExternalTool = async (schoolExternalTool: SchoolExternalToolSave) => {
 		await execCreateOrUpdateTool(() => toolApi.toolSchoolControllerCreateSchoolExternalTool(schoolExternalTool));
 	};
 
-	// Page
 	const updateSchoolExternalTool = async (params: {
 		schoolExternalToolId: string;
 		schoolExternalTool: SchoolExternalToolSave;
