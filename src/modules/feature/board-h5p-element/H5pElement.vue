@@ -40,24 +40,10 @@
 					@move-up:element="onMoveElementUp"
 					@delete:element="onDeleteElement"
 					@edit:element="onEdit"
-					@download:content="onDownload"
+					@download:content="onDownloadContent"
 				/>
 			</template>
 		</ContentElementBar>
-		<VCardActions v-if="hasLinkedContent" class="py-2 pl-4">
-			<v-spacer />
-			<VBtn
-				:aria-label="t('components.board.action.download')"
-				data-testid="h5p-element-download-button"
-				class="float-right download-button"
-				:icon="mdiTrayArrowDown"
-				size="small"
-				variant="text"
-				@click="onDownload"
-				@keydown.enter="onDownload"
-				@keyup.enter.space.stop
-			/>
-		</VCardActions>
 	</VCard>
 </template>
 
@@ -71,7 +57,6 @@ import { H5PContentParentType } from "@api-h5p";
 import { H5pElementResponse } from "@api-server";
 import { useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
-import { mdiTrayArrowDown } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { computed, onMounted, Ref, ref, toRef, watch } from "vue";
@@ -178,11 +163,7 @@ const onClickElement = () => {
 	}
 };
 
-const onDownload = (event?: Event) => {
-	if (event) {
-		event.stopPropagation();
-	}
-
+const onDownloadContent = () => {
 	if (!element.value.content.contentId) {
 		return;
 	}
