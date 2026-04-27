@@ -1,6 +1,6 @@
 <template>
 	<KebabMenuAction :icon="mdiTrashCanOutline" data-testid="kebab-menu-action-delete" @click="onClick">
-		{{ t("common.actions.delete") }}
+		{{ t("common.actions.moveToTrash") }}
 	</KebabMenuAction>
 </template>
 
