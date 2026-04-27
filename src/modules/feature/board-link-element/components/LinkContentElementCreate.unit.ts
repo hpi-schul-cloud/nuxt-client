@@ -183,6 +183,14 @@ describe("LinkContentElementCreate", () => {
 			expect(wrapper.emitted("create:url")).toEqual([[VALID_URL]]);
 		});
 
+		it("should not emit create:url if the current url is the same as existingUrl prop", async () => {
+			const { wrapper } = setup({ existingUrl: VALID_URL });
+
+			wrapper.unmount();
+
+			expect(wrapper.emitted("create:url")).toBeUndefined();
+		});
+
 		it("should not emit create:url if the current url is invalid", async () => {
 			const { wrapper } = setup();
 
