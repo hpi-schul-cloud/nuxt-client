@@ -40,7 +40,7 @@ import { storeToRefs } from "pinia";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { t } = useI18n();
+const { t, n } = useI18n();
 
 const { setLoadingState } = useLoadingStore();
 
@@ -128,7 +128,7 @@ const handleImport = async (file: File): Promise<void> => {
 		notifySuccess(t("pages.rooms.ccImportCourse.success"));
 	} else if (commonCartridgeImport.errorType.value === CommonCartridgeImportErrorType.FILE_SIZE_EXCEEDED) {
 		const maxFileSizeFormatted = commonCartridgeImport.maxFileSize.value
-			? formatFileSizeWithN(commonCartridgeImport.maxFileSize.value, t)
+			? formatFileSizeWithN(commonCartridgeImport.maxFileSize.value, n)
 			: undefined;
 		notifyError(t("pages.rooms.ccImportCourse.error.fileSizeExceeded", { maxFileSize: maxFileSizeFormatted }));
 	} else {
