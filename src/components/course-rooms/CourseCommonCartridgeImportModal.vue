@@ -38,7 +38,7 @@ import { VFileInput } from "vuetify/components";
 
 const { t } = useI18n();
 
-const oneGigabyteInBytes = 1024 ** 3; // 1 GB
+const oneGigabyteInBytes = 1024 ** 3;
 const defaultMaxFileSizeBytes = oneGigabyteInBytes;
 
 const { runtimeConfig } = useRuntimeConfigStore();
