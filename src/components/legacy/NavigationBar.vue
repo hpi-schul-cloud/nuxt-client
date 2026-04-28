@@ -72,7 +72,7 @@ const linksToDisplay = computed(() => (isDefaultTheme.value ? props.links : []))
 	position: -webkit-sticky;
 	top: 0;
 	left: 0;
-	z-index: 100;
+	z-index: var(--z-pinned);
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
