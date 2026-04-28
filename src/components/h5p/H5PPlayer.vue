@@ -9,8 +9,7 @@
 
 <script setup lang="ts">
 import { $axios } from "@/utils/api";
-import { H5pEditorApiFactory } from "@api-h5p";
-import { LanguageType } from "@api-h5p";
+import { H5pEditorApiFactory, LanguageType } from "@api-h5p";
 import { defineElements, H5PPlayerComponent } from "@lumieducation/h5p-webcomponents";
 import { ref, watch } from "vue";
 
@@ -34,7 +33,7 @@ const h5pEditorApi = H5pEditorApiFactory(undefined, "v3", $axios);
 
 const loadContent = async (id: string) => {
 	try {
-		const { data } = await h5pEditorApi.h5PEditorControllerGetPlayer(LanguageType.DE, id);
+		const { data } = await h5pEditorApi.getPlayer(LanguageType.DE, id);
 		return data;
 	} catch (err) {
 		emit("load-error", err as Error);
