@@ -51,7 +51,7 @@ const BROADCAST_MESSAGE_EXPIRED = "expired";
 
 const isJwtExpired = ref(false);
 
-const setJwtExpired = (value = true) => {
+const setJwtExpired = (value: boolean) => {
 	isJwtExpired.value = value;
 };
 
