@@ -1,5 +1,5 @@
 <template>
-	<VDialog :model-value="isOpen" fullscreen scrollable z-index="2000" @keydown.escape="onDialogClose">
+	<VDialog :model-value="isOpen" fullscreen scrollable @keydown.escape="onDialogClose">
 		<VToolbar class="toolbar border-b-thin">
 			<VBtn
 				:icon="mdiClose"
