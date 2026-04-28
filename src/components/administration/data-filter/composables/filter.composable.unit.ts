@@ -1,8 +1,7 @@
 import { FilterOption, Registration, UpdateFilterParamType, User } from "../types";
 import { useDataTableFilter } from "./filter.composable";
-import SchoolsModule from "@/store/schools";
-import { createTestAppStore, mountComposable } from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestAppStore, mockSchool, mountComposable } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 
@@ -28,19 +27,7 @@ vi.mock("@vueuse/core", async (importOriginal) => {
 	};
 });
 
-vi.mock("vue-i18n", () => ({
-	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
-}));
-
-const setup = (userType: User) =>
-	mountComposable(() => {
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-		const dataTableFilter = useDataTableFilter(userType);
-
-		return dataTableFilter;
-	});
+const setup = (userType: User) => mountComposable(() => useDataTableFilter(userType));
 
 const removeAllFilters = () => {
 	const { removeFilter, selectedFilterType, filterQuery } = setup(User.STUDENT);
@@ -61,6 +48,7 @@ describe("filter composable", () => {
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
 		createTestAppStore();
+		createTestSchoolStore({ schoolDetails: mockSchool });
 	});
 
 	it("should return filterQuery", () => {
@@ -207,24 +195,18 @@ describe("filter composable", () => {
 
 			expect(filterChipTitles.value.length).toEqual(5);
 			expect(filterChipTitles.value[0].item).toEqual(FilterOption.CREATION_DATE);
-			expect(filterChipTitles.value[0].title).toEqual(
-				"utils.adminFilter.date.created 09.01.2024 common.words.and 30.01.2024"
-			);
+			expect(filterChipTitles.value[0].title).toEqual("Erstellt zwischen 09.01.2024 und 30.01.2024");
 
 			expect(filterChipTitles.value[1].item).toEqual(FilterOption.CLASSES);
-			expect(filterChipTitles.value[1].title).toEqual("utils.adminFilter.class.title = 1A");
+			expect(filterChipTitles.value[1].title).toEqual("Klasse(n) = 1A");
 			expect(filterChipTitles.value[2].item).toEqual(FilterOption.REGISTRATION);
-			expect(filterChipTitles.value[2].title).toEqual("pages.administration.students.legend.icon.success");
+			expect(filterChipTitles.value[2].title).toEqual("Registrierung abgeschlossen");
 
 			expect(filterChipTitles.value[3].item).toEqual(FilterOption.LAST_MIGRATION_ON);
-			expect(filterChipTitles.value[3].title).toEqual(
-				"utils.adminFilter.lastMigration.title 09.01.2024 common.words.and 29.01.2024"
-			);
+			expect(filterChipTitles.value[3].title).toEqual("Zuletzt migriert am 09.01.2024 und 29.01.2024");
 
 			expect(filterChipTitles.value[4].item).toEqual(FilterOption.OBSOLOTE_SINCE);
-			expect(filterChipTitles.value[4].title).toEqual(
-				"utils.adminFilter.outdatedSince.title 09.01.2024 common.words.and 21.01.2024"
-			);
+			expect(filterChipTitles.value[4].title).toEqual("Veraltet seit 09.01.2024 und 21.01.2024");
 		});
 
 		it("should return an empty array when no filter is set ", () => {

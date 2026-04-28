@@ -127,7 +127,7 @@
 <script setup lang="ts">
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
-import { notifyError, notifySuccess, useAppStoreRefs, useSchoolStore, useSchoolStoreRefs } from "@data-app";
+import { notifyError, notifySuccess, useSchoolStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { SchoolYearModeEnum } from "@data-school";
 import { mdiNumeric1Circle, mdiNumeric2Circle, mdiNumeric3Circle } from "@icons/material";
@@ -136,9 +136,7 @@ import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { setMaintenanceStatus } = useSchoolStore();
-const { schoolMaintenanceStatus, isLoadingMaintenanceData } = useSchoolStoreRefs();
-
-const { school } = useAppStoreRefs();
+const { schoolMaintenanceStatus, isLoadingMaintenanceData, schoolDetails } = useSchoolStoreRefs();
 
 const isCheckboxEnabled = ref(false);
 const isCheckboxConfirmed = ref(false);
@@ -203,8 +201,8 @@ const startTransfer = async () => {
 		messageType: "info",
 	});
 
-	if (isConfirmed && school.value) {
-		await updateMaintenanceStatus(school.value.id, true);
+	if (isConfirmed && schoolDetails.value) {
+		await updateMaintenanceStatus(schoolDetails.value.id, true);
 	}
 };
 
@@ -214,8 +212,8 @@ const finishTransfer = async () => {
 		message: "components.administration.schoolYearChangeSection.dialog.finish.content",
 		messageType: "info",
 	});
-	if (isConfirmed && school.value) {
-		await updateMaintenanceStatus(school.value.id, false);
+	if (isConfirmed && schoolDetails.value) {
+		await updateMaintenanceStatus(schoolDetails.value.id, false);
 	}
 };
 

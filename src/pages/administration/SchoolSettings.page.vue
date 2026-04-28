@@ -55,7 +55,7 @@
 					</VExpansionPanelText>
 				</VExpansionPanel>
 
-				<VExpansionPanel v-if="!schoolUsesLdap" data-testid="school-year-change-panel">
+				<VExpansionPanel v-if="schoolUsesLdap" data-testid="school-year-change-panel">
 					<VExpansionPanelTitle>
 						<h2 class="ma-0">
 							{{ t("components.administration.schoolYearChangeSection.headers") }}

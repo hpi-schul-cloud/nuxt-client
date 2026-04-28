@@ -5,8 +5,6 @@ import { useFilterLocalStorage } from "@/components/administration/data-filter/c
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
 import store from "@/plugins/store";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
 import {
 	createTestAppStore,
 	createTestEnvStore,
@@ -14,10 +12,11 @@ import {
 	mockedPiniaStoreTyping,
 	userResponseFactory,
 } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { Permission, RoleName } from "@api-server";
+import { useSchoolStore } from "@data-app";
 import { useClasses } from "@data-classes";
 import { useUsersStore } from "@data-users";
 import { mdiCheck, mdiCheckAll, mdiClose } from "@icons/material";
@@ -63,11 +62,7 @@ describe("student overview page", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore();
-
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
+		createTestSchoolStore({ schoolDetails: { ...mockSchool, isExternal: false } });
 
 		window.open = vi.fn();
 		window.scrollTo = vi.fn();
@@ -163,7 +158,7 @@ describe("student overview page", () => {
 
 			expect(useClassesMockReturn.fetchClasses).toHaveBeenCalledWith({
 				$limit: 1000,
-				year: schoolsModule.getCurrentYear?.id,
+				year: useSchoolStore().currentYear?.id,
 			});
 		});
 	});
@@ -321,7 +316,7 @@ describe("student overview page", () => {
 
 	describe("when school is external", () => {
 		it("should render the adminTableLegend component", () => {
-			schoolsModule.setSchool({ ...mockSchool, isExternal: true });
+			createTestSchoolStore({ schoolDetails: { ...mockSchool, isExternal: true } });
 
 			const { wrapper } = setup();
 
@@ -330,7 +325,7 @@ describe("student overview page", () => {
 		});
 
 		it("should not render the fab-floating component", () => {
-			schoolsModule.setSchool({ ...mockSchool, isExternal: true });
+			createTestSchoolStore({ schoolDetails: { ...mockSchool, isExternal: true } });
 
 			const { wrapper } = setup();
 
@@ -339,7 +334,7 @@ describe("student overview page", () => {
 		});
 
 		it("should not display the edit button", () => {
-			schoolsModule.setSchool({ ...mockSchool, isExternal: true });
+			createTestSchoolStore({ schoolDetails: { ...mockSchool, isExternal: true } });
 			const { wrapper } = setup();
 
 			const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);

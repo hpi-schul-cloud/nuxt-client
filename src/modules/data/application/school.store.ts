@@ -6,8 +6,10 @@ import {
 	SchoolFeature,
 	SchoolResponse,
 	SchoolSystemResponse,
+	SchulcloudTheme,
 	SchulConneXProvisioningOptionsParams,
 } from "@api-server";
+import { useEnvConfig } from "@data-env";
 import { MaintenanceStatus } from "@data-school";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";
@@ -30,6 +32,11 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 
 	// Getters
 	const schoolFeatures = computed(() => new Set(schoolDetails.value?.features));
+	const currentYear = computed(() => schoolDetails.value.currentYear);
+	const isSchoolExternallyManaged = computed(() => {
+		const isThr = useEnvConfig().value.SC_THEME === SchulcloudTheme.THR;
+		return schoolDetails.value.isExternal || isThr;
+	});
 
 	// Helpers/Utils
 	const hasFeature = (feature: SchoolFeature) => schoolFeatures.value.has(feature);
@@ -99,6 +106,8 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 		schoolFeatures,
 		schoolSystems,
 		schoolMaintenanceStatus,
+		currentYear,
+		isSchoolExternallyManaged,
 		isLoadingSchoolData,
 		isLoadingMaintenanceData,
 		schoolApiError,
