@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<template v-if="board">
-			<CardHostDetailView v-if="cardId" :card-id="cardId" @close:detail-view="onCloseDetailView" />
+			<CardHostDetailView v-if="cardId" :key="cardId" :card-id="cardId" @close:detail-view="onCloseDetailView" />
 			<DefaultWireframe
 				ref="main"
 				:breadcrumbs="breadcrumbs"
