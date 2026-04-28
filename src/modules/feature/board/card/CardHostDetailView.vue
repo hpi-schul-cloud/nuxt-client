@@ -31,7 +31,7 @@
 			</VBtn>
 		</VToolbar>
 		<VCard :style="{ backgroundColor: cardBackground }">
-			<VCardText class="pt-0">
+			<VCardText class="pt-0 pb-0">
 				<div
 					class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto"
 					:style="{

@@ -3,7 +3,7 @@
 		variant="text"
 		data-testid="open-detail-view-btn"
 		:ripple="false"
-		class="bg-white pt-1"
+		class="bg-white"
 		icon
 		size="36"
 		@click.stop.prevent="() => onOpenDetailView()"
