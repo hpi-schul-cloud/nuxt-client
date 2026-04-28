@@ -132,6 +132,24 @@ describe("CardHostDetailView", () => {
 			const editButton = wrapper.find("[data-testid='toolbar-edit-button']");
 			expect(editButton.exists()).toBe(true);
 		});
+
+		describe("when edit mode is activated", () => {
+			it("should show view button", () => {
+				const { wrapper } = setup(
+					{
+						cardId: CARD_WITH_ELEMENTS.id,
+					},
+					{ deleteCard: true },
+					true
+				);
+
+				const editButton = wrapper.find("[data-testid='toolbar-edit-button']");
+				expect(editButton.exists()).toBe(false);
+
+				const viewButton = wrapper.find("[data-testid='toolbar-view-button']");
+				expect(viewButton.exists()).toBe(true);
+			});
+		});
 	});
 
 	describe("user without edit permissions", () => {
