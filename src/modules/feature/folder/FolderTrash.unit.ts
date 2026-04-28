@@ -7,6 +7,8 @@ import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
 import { axiosErrorFactory, fileRecordFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { FileRecordScanStatus } from "@api-file-storage";
+import * as FileTrashApi from "@data-file";
+import * as FolderState from "@data-folder";
 import { createTestingPinia } from "@pinia/testing";
 import { DataTable } from "@ui-data-table";
 import { KebabMenuAction } from "@ui-kebab-menu";
