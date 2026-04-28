@@ -484,7 +484,10 @@ const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
 };
 
 const onCloseDetailView = () => {
-	router.replace(`/boards/${props.boardId}`);
+	router.replace({
+		name: "boards-id",
+		params: { id: props.boardId },
+	});
 };
 </script>
 
