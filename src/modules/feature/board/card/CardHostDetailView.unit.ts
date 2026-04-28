@@ -80,7 +80,9 @@ describe("CardHostDetailView", () => {
 					createTestingPinia({
 						initialState: {
 							cardStore: {
-								cards: CARD_WITH_ELEMENTS,
+								cards: {
+									[CARD_WITH_ELEMENTS.id]: CARD_WITH_ELEMENTS,
+								},
 							},
 							boardStore: {
 								board: testBoard,
