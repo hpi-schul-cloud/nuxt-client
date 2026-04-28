@@ -1184,7 +1184,7 @@ describe("Board", () => {
 		});
 
 		describe("when detail view is closed", () => {
-			it("navigate to board route", async () => {
+			it("should navigate to board route", async () => {
 				router.currentRoute.value = {
 					...router.currentRoute.value,
 					params: { cardId: "test-card-id-123" },
