@@ -144,28 +144,28 @@ describe("ExternalToolSection", () => {
 			});
 
 			it("status should be rendered in the datatable", () => {
-				const deactivedTool = schoolExternalToolFactory.build({ status: { isGloballyDeactivated: true } });
+				const deactivatedTool = schoolExternalToolFactory.build({ status: { isGloballyDeactivated: true } });
 				const outdatedTool = schoolExternalToolFactory.build({ status: { isOutdatedOnScopeSchool: true } });
 
 				const { wrapper } = setup({
-					schoolExternalTools: [schoolExternalToolFactory.build(), outdatedTool, deactivedTool],
+					schoolExternalTools: [schoolExternalToolFactory.build(), outdatedTool, deactivatedTool],
 					envs: { FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: true },
 				});
 				const dataTable = wrapper.findComponent(VDataTable);
-				const externalToolMediaStatus = dataTable.findAll('[data-testid="external-tool-status"]');
+				const externalToolMediaStatuses = dataTable.findAll('[data-testid="external-tool-status"]');
 
-				const expectedMediumStatuses = [
+				const expectedMediaStatuses = [
 					{ icon: mdiCheckCircle, text: "components.externalTools.status.latest" },
 					{ icon: mdiAlert, text: "components.externalTools.status.outdated" },
 					{ icon: mdiAlert, text: "components.externalTools.status.deactivated" },
 				];
 
 				expect(
-					externalToolMediaStatus.map((cell) => ({
+					externalToolMediaStatuses.map((cell) => ({
 						icon: cell.findComponent(VIcon).props("icon"),
 						text: cell.text(),
 					}))
-				).toEqual(expectedMediumStatuses);
+				).toEqual(expectedMediaStatuses);
 			});
 
 			it("medium status should be rendered in the datatable", () => {
@@ -195,7 +195,7 @@ describe("ExternalToolSection", () => {
 				});
 
 				const dataTable = wrapper.findComponent(VDataTable);
-				const externalToolMediaStatus = dataTable.findAll('[data-testid="external-tool-medium"]');
+				const externalToolMediumStatuses = dataTable.findAll('[data-testid="external-tool-medium"]');
 
 				const expectedMediumStatuses = [
 					{ icon: mdiCheckCircle, text: toolWithMediaSourceName.medium?.mediaSourceName },
@@ -204,7 +204,7 @@ describe("ExternalToolSection", () => {
 				];
 
 				expect(
-					externalToolMediaStatus.map((cell) => ({
+					externalToolMediumStatuses.map((cell) => ({
 						text: cell.text(),
 						icon: cell.findComponent(VIcon).exists() ? cell.findComponent(VIcon).props("icon") : null,
 					}))
