@@ -38,7 +38,6 @@
 						backgroundColor: 'white',
 						borderLeft: cardBorderColor ? `3px solid ${cardBorderColor}` : undefined,
 					}"
-					data-testid="detail-view-content-wrapper"
 				>
 					<CardHost :height="100" :card-id="cardId" :row-index="1" :column-index="1" @click.stop />
 				</div>
