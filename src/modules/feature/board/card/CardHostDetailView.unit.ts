@@ -3,7 +3,6 @@ import CardHostDetailView from "./CardHostDetailView.vue";
 import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
-// import { colorToHexLighten5 } from "@/utils/color.utils";
 import {
 	boardResponseFactory,
 	cardResponseFactory,
@@ -25,15 +24,6 @@ const CARD_WITH_ELEMENTS: CardResponse = cardResponseFactory.build({
 	elements: [fileElementResponseFactory.build()],
 	backgroundColor: backgroundColor,
 });
-
-// const TRANSPARENT_CARD_WITH_ELEMENTS: CardResponse = cardResponseFactory.build({
-// 	elements: [fileElementResponseFactory.build()],
-// 	backgroundColor: Colors.TRANSPARENT,
-// });
-
-// const CARD_WITH_ELEMENTS_AND_NO_COLOR: CardResponse = cardResponseFactory.build({
-// 	elements: [fileElementResponseFactory.build()],
-// });
 
 vi.mock("@data-board/BoardPermissions.composable");
 
