@@ -312,7 +312,7 @@ describe("CardHost", () => {
 
 	describe("card detail view", () => {
 		describe("when detail view button is clicked", () => {
-			it("navigate to detail view route", async () => {
+			it("should navigate to detail view route", async () => {
 				const { wrapper } = setup();
 
 				const detailViewButton = wrapper.findComponent({ name: "DetailViewButton" });
@@ -323,6 +323,18 @@ describe("CardHost", () => {
 		});
 
 		describe("when detail view is active", () => {
+			it("should propagate state to content element list", async () => {
+				router.currentRoute.value = {
+					...router.currentRoute.value,
+					params: { cardId: "cardId" },
+				};
+				const { wrapper } = setup();
+
+				const contentElementList = wrapper.findComponent({ name: "ContentElementList" });
+
+				expect(contentElementList.props("isDetailView")).toBe(true);
+			});
+
 			it("should render card with transparent background", async () => {
 				const backgroundColor = Colors.BLUE;
 				router.currentRoute.value = {
