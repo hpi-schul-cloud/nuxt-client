@@ -1,5 +1,6 @@
 import { useLocalizedDateTime } from "@/composables/date-time.composables";
 import { useI18nGlobal } from "@/plugins/i18n";
+import { useTryCatchSync } from "@/utils/try-catch.utils";
 
 export type FormValidatorFn<T> = (errMsg?: string) => (value: T) => string | true;
 
@@ -55,23 +56,16 @@ const isValidHostname = (hostname: string): boolean => {
 export const isValidUrl: FormValidatorFn<string> =
 	(errMsg = useI18nGlobal().t("util-validators-invalid-url")) =>
 	(value) => {
-		if (!value) return errMsg;
+		const trimmed = value.trim();
+		const urlWithProtocol = trimmed.match(/:\/\//) ? trimmed : `https://${trimmed}`;
 
-		try {
-			const trimmed = value.trim();
-			const urlWithProtocol = trimmed.match(/:\/\//) ? trimmed : `https://${trimmed}`;
-			const urlObject = new URL(urlWithProtocol);
+		const [error, urlObject] = useTryCatchSync(() => new URL(urlWithProtocol));
+		if (error) return errMsg;
 
-			if (!["http:", "https:"].includes(urlObject.protocol)) {
-				throw new Error();
-			}
+		if (!["http:", "https:"].includes(urlObject!.protocol)) return errMsg;
 
-			if (!isValidHostname(urlObject.hostname)) {
-				throw new Error();
-			}
-		} catch {
-			return errMsg;
-		}
+		if (!isValidHostname(urlObject!.hostname)) return errMsg;
+
 		return true;
 	};
 
