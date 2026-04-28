@@ -29,7 +29,7 @@ import { SvsDialog } from "@ui-dialog";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
-const props = defineProps({
+defineProps({
 	fileCount: {
 		type: Number,
 		required: true,
