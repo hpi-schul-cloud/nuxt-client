@@ -1,5 +1,5 @@
 <template>
-	<external-tool-configurator
+	<ExternalToolConfigurator
 		:templates="availableTools"
 		:configuration="configuration"
 		:is-preferred-tool="isPreferredTool"
@@ -11,7 +11,7 @@
 		@change="onSelectionChange"
 	>
 		<template #aboveParameters="{ selectedTemplate }">
-			<v-text-field
+			<VTextField
 				v-if="selectedTemplate"
 				v-model="displayName"
 				:label="$t('pages.tool.context.displayName')"
@@ -21,7 +21,7 @@
 				data-testId="parameter-display-name"
 			/>
 		</template>
-	</external-tool-configurator>
+	</ExternalToolConfigurator>
 </template>
 
 <script setup lang="ts">
