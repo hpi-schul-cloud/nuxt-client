@@ -10,7 +10,7 @@ import {
 } from "@api-server";
 import { MaintenanceStatus } from "@data-school";
 import { defineStore, storeToRefs } from "pinia";
-import { computed, ref } from "vue";
+import { computed, Ref, ref } from "vue";
 
 export const useSchoolStore = defineStore("schoolStore", () => {
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
@@ -26,7 +26,7 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 	// Should be treated differently tho. The app does not work without school details.
 	const schoolDetails = ref<SchoolResponse>(undefined!);
 	const schoolSystems = ref<SchoolSystemResponse[]>([]);
-	const maintenanceStatus = ref<MaintenanceStatus | undefined>();
+	const schoolMaintenanceStatus: Ref<MaintenanceStatus | undefined> = ref();
 
 	// Getters
 	const schoolFeatures = computed(() => new Set(schoolDetails.value?.features));
@@ -80,8 +80,13 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 			t("error.generic")
 		);
 
-	const fetchMaintenanceStatus = (schoolId: string) =>
-		executeMaintenanceApi(() => schoolApi.schoolControllerGetMaintenanceStatus(schoolId), t("error.generic"));
+	const fetchMaintenanceStatus = async (schoolId: string) => {
+		const { success, result } = await executeMaintenanceApi(
+			() => schoolApi.schoolControllerGetMaintenanceStatus(schoolId),
+			t("error.generic")
+		);
+		if (success) schoolMaintenanceStatus.value = result?.data;
+	};
 
 	const setMaintenanceStatus = async (schoolId: string, maintenance: boolean) =>
 		await executeMaintenanceApi(
@@ -93,11 +98,12 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 		schoolDetails,
 		schoolFeatures,
 		schoolSystems,
-		hasFeature,
+		schoolMaintenanceStatus,
 		isLoadingSchoolData,
 		isLoadingMaintenanceData,
 		schoolApiError,
 		maintenanceError,
+		hasFeature,
 		fetchSchoolDetails,
 		fetchSchoolSystems,
 		fetchMaintenanceStatus,

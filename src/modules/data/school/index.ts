@@ -1,4 +1,3 @@
-export { useSharedSchoolYearChange } from "./school-year-change.composable";
 export { useSchoolPrivacyPolicy } from "./schoolPrivacyPolicy.composable";
 export { useSchoolTermsOfUse } from "./schoolTermsOfUse.composable";
 export {

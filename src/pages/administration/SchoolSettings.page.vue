@@ -137,7 +137,6 @@ import SchoolYearChangeSection from "@/components/administration/school-settings
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useSchoolStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
-import { useSharedSchoolYearChange } from "@data-school";
 import { mdiMinus, mdiPlus } from "@icons/material";
 import { ErrorAlert, InfoAlert } from "@ui-alert";
 import { DefaultWireframe } from "@ui-layout";
@@ -150,21 +149,21 @@ import { useRoute } from "vue-router";
 const { t } = useI18n();
 const route = useRoute();
 
-const { fetchSchoolSystems } = useSchoolStore();
-const { schoolDetails, schoolSystems, isLoadingSchoolData, schoolApiError } = useSchoolStoreRefs();
+const { fetchSchoolSystems, fetchMaintenanceStatus } = useSchoolStore();
+const { schoolDetails, schoolSystems, isLoadingSchoolData, schoolApiError, schoolMaintenanceStatus } =
+	useSchoolStoreRefs();
 
 const headline = ref(t("pages.administration.school.index.title"));
 const pageTitle = buildPageTitle(headline.value);
 useTitle(pageTitle);
 
-const { fetchSchoolYearStatus, maintenanceStatus } = useSharedSchoolYearChange();
 const { instituteTitle } = storeToRefs(useEnvStore());
 
 const openedPanels = computed(() => (route.query.openPanels ? route.query.openPanels.toString().split(",") : []));
 const isFeatureOauthMigrationEnabled = computed(() => useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED);
 const isFeatureSchoolPolicyEnabled = computed(() => useEnvConfig().value.FEATURE_SCHOOL_POLICY_ENABLED_NEW);
 const isFeatureSchoolTermsOfUseEnabled = computed(() => useEnvConfig().value.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED);
-const schoolUsesLdap = computed(() => maintenanceStatus.value?.schoolUsesLdap === true);
+const schoolUsesLdap = computed(() => schoolMaintenanceStatus.value?.schoolUsesLdap === true);
 
 watch(
 	schoolDetails,
@@ -183,6 +182,6 @@ watch(
 );
 
 onMounted(async () => {
-	await fetchSchoolYearStatus(schoolDetails.value.id);
+	await fetchMaintenanceStatus(schoolDetails.value.id);
 });
 </script>

@@ -56,7 +56,7 @@
 		</div>
 		<div>
 			<div class="step-title">
-				<v-icon :icon="mdiNumeric2Circle" size="24px" />
+				<VIcon :icon="mdiNumeric2Circle" size="24px" />
 				{{ t("components.administration.schoolYearChangeSection.title.step.two") }}
 			</div>
 			<div>
@@ -125,37 +125,39 @@
 </template>
 
 <script setup lang="ts">
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
-import { useAppStoreRefs } from "@data-app";
+import { notifyError, notifySuccess, useAppStoreRefs, useSchoolStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { SchoolYearModeEnum, useSharedSchoolYearChange } from "@data-school";
+import { SchoolYearModeEnum } from "@data-school";
 import { mdiNumeric1Circle, mdiNumeric2Circle, mdiNumeric3Circle } from "@icons/material";
 import { InfoAlert } from "@ui-alert";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { setMaintenanceMode, maintenanceStatus, isLoadingMaintenanceData } = useSharedSchoolYearChange();
+const { setMaintenanceStatus } = useSchoolStore();
+const { schoolMaintenanceStatus, isLoadingMaintenanceData } = useSchoolStoreRefs();
 
 const { school } = useAppStoreRefs();
 
 const isCheckboxEnabled = ref(false);
-
 const isCheckboxConfirmed = ref(false);
 
 const { t } = useI18n();
+const instance = computed(() => useEnvConfig().value.SC_TITLE);
 
 const schoolYearMode = computed(() => {
 	const currentTime = new Date();
 
 	let schoolMaintenanceMode = SchoolYearModeEnum.IDLE;
 
-	if (maintenanceStatus.value) {
-		const maintenanceModeStarts = new Date(maintenanceStatus.value?.currentYear.endDate);
+	if (schoolMaintenanceStatus.value) {
+		const maintenanceModeStarts = new Date(schoolMaintenanceStatus.value?.currentYear.endDate);
 
 		const twoWeeksFromStart = new Date(maintenanceModeStarts.valueOf());
 		twoWeeksFromStart.setDate(twoWeeksFromStart.getDate() - 14);
 
-		if (maintenanceStatus.value.maintenance.active) {
+		if (schoolMaintenanceStatus.value.maintenance.active) {
 			schoolMaintenanceMode = SchoolYearModeEnum.ACTIVE;
 		} else if (maintenanceModeStarts && twoWeeksFromStart < currentTime) {
 			schoolMaintenanceMode = SchoolYearModeEnum.STANDBY;
@@ -167,6 +169,33 @@ const schoolYearMode = computed(() => {
 	return schoolMaintenanceMode;
 });
 
+const updateMaintenanceStatus = async (schoolId: string, isInMaintenance: boolean) => {
+	const { success, result, error } = await setMaintenanceStatus(schoolId, isInMaintenance);
+
+	if (success) {
+		schoolMaintenanceStatus.value = result?.data;
+		if (isInMaintenance) {
+			notifySuccess(t("components.administration.schoolYearChangeSection.notification.start.success"));
+		} else {
+			notifySuccess(t("components.administration.schoolYearChangeSection.notification.finish.success"));
+		}
+	} else {
+		const apiError = mapAxiosErrorToResponseError(error);
+		if (apiError.type === "MISSING_YEARS") {
+			notifyError(t("components.administration.schoolYearChangeSection.notification.finish.error.missingYears"), false); // TODO: PR: why is that one not auto closing?
+		} else if (apiError.type === "SCHOOL_ALREADY_IN_NEXT_YEAR") {
+			notifyError(t("components.administration.schoolYearChangeSection.notification.finish.error.alreadyInNextYear"));
+			if (schoolMaintenanceStatus.value) {
+				schoolMaintenanceStatus.value.maintenance.active = false;
+				schoolMaintenanceStatus.value.maintenance.startDate = undefined;
+				schoolMaintenanceStatus.value.currentYear = schoolMaintenanceStatus.value.nextYear;
+			}
+		} else {
+			notifyError(t("error.generic"));
+		}
+	}
+};
+
 const startTransfer = async () => {
 	const isConfirmed = await askConfirmation({
 		title: "components.administration.schoolYearChangeSection.dialog.start.title",
@@ -175,7 +204,7 @@ const startTransfer = async () => {
 	});
 
 	if (isConfirmed && school.value) {
-		await setMaintenanceMode(school.value.id, true);
+		await updateMaintenanceStatus(school.value.id, true);
 	}
 };
 
@@ -186,15 +215,13 @@ const finishTransfer = async () => {
 		messageType: "info",
 	});
 	if (isConfirmed && school.value) {
-		await setMaintenanceMode(school.value.id, false);
+		await updateMaintenanceStatus(school.value.id, false);
 	}
 };
 
 const enableCheckbox = () => {
 	isCheckboxEnabled.value = true;
 };
-
-const instance = computed(() => useEnvConfig().value.SC_TITLE);
 </script>
 
 <style lang="scss" scoped>
