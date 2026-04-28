@@ -3,19 +3,18 @@
 		v-if="isPreviewPossible(fileRecord.previewStatus) && !imgError"
 		:src="convertDownloadToPreviewUrl(fileRecord.url, srcWidth)"
 		:alt="fileRecord.name"
-		:aria-label="fileRecord.name"
 		:aspect-ratio="aspectRatio"
 		cover
 		:width="previewWidth"
 		@error="imgError = true"
 	/>
-	<v-icon v-else-if="isAudioMimeType(fileRecord.mimeType)">
+	<v-icon v-else-if="isAudioMimeType(fileRecord.mimeType)" aria-hidden="true">
 		{{ mdiFileMusicOutline }}
 	</v-icon>
-	<v-icon v-else-if="isVideoMimeType(fileRecord.mimeType)">
+	<v-icon v-else-if="isVideoMimeType(fileRecord.mimeType)" aria-hidden="true">
 		{{ mdiFileVideoOutline }}
 	</v-icon>
-	<v-icon v-else>{{ mdiFileDocumentOutline }}</v-icon>
+	<v-icon v-else aria-hidden="true">{{ mdiFileDocumentOutline }}</v-icon>
 </template>
 
 <script setup lang="ts">
