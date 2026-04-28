@@ -192,7 +192,12 @@ const route = useRoute();
 useBodyScrolling();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
-const cardId = computed(() => route.params.cardId as string | undefined);
+const cardId = computed(() => {
+	if (route.params.cardId) {
+		return route.params.cardId as string;
+	}
+	return undefined;
+});
 
 const isEditableChipVisible = computed(() => board.value?.readersCanEdit ?? false);
 const hasReadersEditPermission = ref(false);
@@ -479,10 +484,7 @@ const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
 };
 
 const onCloseDetailView = () => {
-	const boardId = boardStore.board?.id;
-	if (boardId) {
-		router.replace(`/boards/${boardId}`);
-	}
+	router.replace(`/boards/${props.boardId}`);
 };
 </script>
 
