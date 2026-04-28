@@ -39,7 +39,7 @@
 						borderLeft: cardBorderColor ? `3px solid ${cardBorderColor}` : undefined,
 					}"
 				>
-					<CardHost :height="100" :card-id="cardId" :row-index="1" :column-index="1" @click.stop />
+					<CardHost :height="100" :card-id="cardId" :row-index="-1" :column-index="-1" @click.stop />
 				</div>
 			</VCardText>
 		</VCard>
