@@ -90,8 +90,6 @@ export const useImportFlow = () => {
 		isCardImportDialogOpen,
 		isGenericImportDialogOpen,
 		shareTokenInfo,
-		validateShareToken,
-		importShareToken,
 		executeImport,
 		onConfirmImport: importAction.complete,
 		onCancelImport: importAction.cancel,
