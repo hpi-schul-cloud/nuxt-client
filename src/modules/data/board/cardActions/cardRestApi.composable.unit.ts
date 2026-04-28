@@ -2,9 +2,7 @@ import { useBoardApi } from "../BoardApi.composable";
 import { useSharedCardRequestPool } from "../CardRequestPool.composable";
 import { UpdateCardHeightRequestPayload, UpdateCardTitleRequestPayload } from "./cardActionPayload.types";
 import { useCardRestApi } from "./cardRestApi.composable";
-import { schoolExternalToolsModule } from "@/store";
 import { ToolParameterScope } from "@/store/external-tool";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
 	contextExternalToolConfigurationTemplateFactory,
 	contextExternalToolFactory,
@@ -19,7 +17,6 @@ import {
 	toolParameterFactory,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	Colors,
 	ContentElementType,
@@ -34,6 +31,7 @@ import {
 	ContextExternalToolConfigurationTemplate,
 	ContextExternalToolSave,
 	useContextExternalToolApi,
+	usePreferredExternalToolStore,
 } from "@data-external-tool";
 import { createTestingPinia } from "@pinia/testing";
 import { useErrorHandler } from "@util-error-handling";
@@ -74,9 +72,6 @@ describe("useCardRestApi", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({}));
-		setupStores({
-			schoolExternalToolsModule: SchoolExternalToolsModule,
-		});
 
 		mockedSocketConnectionHandler = mockComposable(useSocketConnection);
 		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
@@ -107,9 +102,10 @@ describe("useCardRestApi", () => {
 	const setup = () => {
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		const cardStore = mockedPiniaStoreTyping(useCardStore);
+		const preferredExternalToolStore = mockedPiniaStoreTyping(usePreferredExternalToolStore);
 		const card = cardResponseFactory.build();
 
-		return { boardStore, cardStore, card };
+		return { boardStore, cardStore, card, preferredExternalToolStore };
 	};
 
 	describe("createElementRequest", () => {
@@ -286,7 +282,7 @@ describe("useCardRestApi", () => {
 
 		describe("when preferred tool has a custom parameter on scope context", () => {
 			const setupPreferredElementCall = () => {
-				const { cardStore, card } = setup();
+				const { cardStore, card, preferredExternalToolStore } = setup();
 				const { createPreferredElement } = useCardRestApi();
 				const { updateElementCall } = useBoardApi();
 
@@ -321,26 +317,23 @@ describe("useCardRestApi", () => {
 
 				mockedContextExternalToolApiCalls.fetchAvailableToolsForContextCall.mockResolvedValue([availableTool]);
 
-				const setTemplateSpy = vi.spyOn(schoolExternalToolsModule, "setContextExternalToolConfigurationTemplate");
-
 				return {
 					createPreferredElement,
 					preferredTool,
 					updateElementCall,
 					payload,
-					setTemplateSpy,
+					preferredExternalToolStore,
 				};
 			};
 
 			it("should set the ContextExternalToolConfigurationTemplate in schoolToolModule", async () => {
-				const { createPreferredElement, preferredTool, payload, setTemplateSpy } = setupPreferredElementCall();
+				const { createPreferredElement, preferredTool, payload, preferredExternalToolStore } =
+					setupPreferredElementCall();
 
 				await createPreferredElement(payload, preferredTool);
 
-				expect(setTemplateSpy).toHaveBeenCalledWith(
-					expect.objectContaining({
-						schoolExternalToolId: preferredTool.schoolExternalToolId,
-					})
+				expect(preferredExternalToolStore.preferredExternalTool).toEqual(
+					expect.objectContaining({ schoolExternalToolId: preferredTool.schoolExternalToolId })
 				);
 			});
 
