@@ -185,69 +185,50 @@ import { computed, inject, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import draggable from "vuedraggable";
 
-// Props
 const props = defineProps<{
 	roomDataObject: SingleColumnBoardResponse;
 	role: string;
 }>();
 
-// Emits
 const emit = defineEmits<{
 	"copy-board-element": [payload: { id: string; type: CopyParamsTypeEnum; courseId: string }];
 }>();
 
-// Inject
 const shareModule = inject(SHARE_MODULE_KEY)!;
-
-// i18n
 const { t } = useI18n();
 
-// Store
 const courseRoomDetailsStore = useCourseRoomDetailsStore();
 const { roomIsEmpty } = storeToRefs(courseRoomDetailsStore);
 
-// Constants
 const cardTypes = BoardElementResponseType;
 const Roles = ImportUserResponseRoleNames;
 const dragInProgressDelay = 100;
 
-// Reactive state
 const isDragging = ref(false);
 const dragInProgress = ref(false);
-
-// Template refs - dynamic refs for items
 const itemRefs = ref<Record<string, { $el?: HTMLElement } | null>>({});
 
-// Computed
 const roomData = computed(() => ({ ...props.roomDataObject }));
-
 const lessonData = computed(() => ({
 	roomId: roomData.value.roomId,
 	displayColor: roomData.value.displayColor,
 }));
-
 const taskData = computed(() => ({
 	roomId: roomData.value.roomId,
 }));
-
 const isTouchDevice = computed(() => window.ontouchstart !== undefined);
-
 const sortable = computed(() => props.role === Roles.TEACHER || false);
-
 const touchDelay = computed(() => (isTouchDevice.value ? 200 : 20));
 
-// Type guards and helpers
 const getContentName = (content: BoardTaskResponse | BoardLessonResponse | BoardColumnBoardResponse): string =>
 	"name" in content ? content.name : content.title;
 
-// Lifecycle
 onMounted(() => {
 	if (isTouchDevice.value) {
 		window.addEventListener("contextmenu", (e) => e.preventDefault());
 	}
 });
 
-// Methods
 const updateCardVisibility = async (elementId: string, visibility: boolean) => {
 	await courseRoomDetailsStore.publishCard(elementId, visibility);
 };

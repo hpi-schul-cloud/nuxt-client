@@ -53,8 +53,8 @@ const props = defineProps({
 
 const { t } = useI18n();
 
-const { fetchCourse } = useCourseRoomDetailsStore();
-const { loading } = storeToRefs(useCourseRoomDetailsStore());
+const courseRoomDetailsStore = useCourseRoomDetailsStore();
+const { loading } = storeToRefs(courseRoomDetailsStore);
 
 const {
 	fetchDisplayData,
@@ -73,7 +73,7 @@ const isVideoConferenceAvailable: ComputedRef<boolean> = computed(
 onMounted(async () => {
 	await fetchDisplayData(props.roomId, ToolContextType.COURSE);
 
-	course.value = await fetchCourse(props.roomId);
+	course.value = await courseRoomDetailsStore.fetchCourse(props.roomId);
 });
 
 const refreshTimeInMs = useEnvConfig().value.CTL_TOOLS_RELOAD_TIME_MS;

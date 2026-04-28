@@ -1,5 +1,5 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { BusinessError } from "@/store/types/commons";
+import { ApiResponseError, BusinessError } from "@/store/types/commons";
 import { Course } from "@/store/types/room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
@@ -17,7 +17,6 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", () => {
-	// State
 	const roomData = ref<SingleColumnBoardResponse>({
 		roomId: "",
 		title: "",
@@ -38,12 +37,10 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 	});
 	const courseShareToken = ref("");
 
-	// API getters (to allow for proper mocking in tests)
 	const getRoomsApi = () => CourseRoomsApiFactory(undefined, "/v3", $axios);
 	const getLessonApi = () => LessonApiFactory(undefined, "/v3", $axios);
 	const getTaskApi = () => TaskApiFactory(undefined, "/v3", $axios);
 	const getBoardApi = () => BoardApiFactory(undefined, "/v3", $axios);
-
 	const { execute } = useSafeAxiosTask();
 
 	const finishedLoading = computed(() => loading.value === false);
@@ -118,12 +115,7 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 			await getRoomsApi().courseRoomsControllerPatchOrderingOfElements(roomData.value.roomId, params);
 			await fetchContent(roomData.value.roomId);
 		} catch (taskError: unknown) {
-			const apiError = mapAxiosErrorToResponseError(taskError);
-			setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
+			setBusinessError(mapAxiosErrorToResponseError(taskError));
 		}
 
 		loading.value = false;
@@ -135,12 +127,7 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 		try {
 			await getLessonApi().lessonControllerDelete(lessonId);
 		} catch (taskError: unknown) {
-			const apiError = mapAxiosErrorToResponseError(taskError);
-			setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
+			setBusinessError(mapAxiosErrorToResponseError(taskError));
 		}
 	};
 
@@ -150,12 +137,7 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 		try {
 			await getTaskApi().taskControllerDelete(taskId);
 		} catch (taskError: unknown) {
-			const apiError = mapAxiosErrorToResponseError(taskError);
-			setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
+			setBusinessError(mapAxiosErrorToResponseError(taskError));
 		}
 	};
 
@@ -165,12 +147,7 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 		try {
 			await getBoardApi().boardControllerDeleteBoard(boardId);
 		} catch (taskError: unknown) {
-			const apiError = mapAxiosErrorToResponseError(taskError);
-			setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
+			setBusinessError(mapAxiosErrorToResponseError(taskError));
 		}
 	};
 
@@ -181,50 +158,10 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 			const response = await getBoardApi().boardControllerCreateBoard(params);
 			return response.data;
 		} catch (taskError: unknown) {
-			const apiError = mapAxiosErrorToResponseError(taskError);
-			setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
+			setBusinessError(mapAxiosErrorToResponseError(taskError));
 		}
 
 		return undefined;
-	};
-
-	const downloadCommonCartridgeCourse = async (exportSettings: {
-		version: "1.1.0" | "1.3.0";
-		topics: string[];
-		tasks: string[];
-		columnBoards: string[];
-	}): Promise<void> => {
-		const form = document.createElement("form");
-		form.method = "POST";
-		form.action = `/api/v3/common-cartridge/export/${roomData.value.roomId}?version=${exportSettings.version}`;
-		form.enctype = "application/json";
-		form.target = "_blank";
-
-		const topicIdsInput = document.createElement("input");
-		topicIdsInput.type = "hidden";
-		topicIdsInput.name = "topics";
-		topicIdsInput.value = JSON.stringify(exportSettings.topics);
-		form.appendChild(topicIdsInput);
-
-		const taskIdsInput = document.createElement("input");
-		taskIdsInput.type = "hidden";
-		taskIdsInput.name = "tasks";
-		taskIdsInput.value = JSON.stringify(exportSettings.tasks);
-		form.appendChild(taskIdsInput);
-
-		const columnBoardIdsInput = document.createElement("input");
-		columnBoardIdsInput.type = "hidden";
-		columnBoardIdsInput.name = "columnBoards";
-		columnBoardIdsInput.value = JSON.stringify(exportSettings.columnBoards);
-		form.appendChild(columnBoardIdsInput);
-
-		document.body.appendChild(form);
-		form.submit();
-		document.body.removeChild(form);
 	};
 
 	const finishTask = async (itemId: string, action: "finish" | "restore"): Promise<void> => {
@@ -238,12 +175,7 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 			}
 			await fetchContent(roomData.value.roomId);
 		} catch (taskError: unknown) {
-			const apiError = mapAxiosErrorToResponseError(taskError);
-			setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
+			setBusinessError(mapAxiosErrorToResponseError(taskError));
 		}
 	};
 
@@ -255,28 +187,12 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 		}
 	};
 
-	const setRoomData = (payload: SingleColumnBoardResponse) => {
-		roomData.value = payload;
-	};
-
-	const setLocked = (locked: boolean) => {
-		isLocked.value = locked;
-	};
-
-	const setPermissionData = (payload: string[]) => {
-		scopePermissions.value = payload;
-	};
-
-	const setLoading = (loadingState: boolean) => {
-		loading.value = loadingState;
-	};
-
-	const setError = (errorValue: unknown) => {
-		error.value = errorValue;
-	};
-
-	const setBusinessError = (businessErrorValue: BusinessError) => {
-		businessError.value = businessErrorValue;
+	const setBusinessError = (apiError: ApiResponseError) => {
+		businessError.value = {
+			error: apiError,
+			statusCode: apiError.code,
+			message: apiError.message,
+		};
 	};
 
 	const resetBusinessError = () => {
@@ -287,64 +203,26 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 		};
 	};
 
-	const setCourseShareToken = (token: string) => {
-		courseShareToken.value = token;
-	};
-
-	const resetState = () => {
-		roomData.value = {
-			roomId: "",
-			title: "",
-			displayColor: "",
-			elements: [],
-			isArchived: false,
-			isSynchronized: false,
-		};
-		isLocked.value = false;
-		scopePermissions.value = [];
-		loading.value = false;
-		error.value = null;
-		resetBusinessError();
-		courseShareToken.value = "";
-	};
-
 	return {
-		// State
-		roomData,
-		isLocked,
-		scopePermissions,
-		loading,
-		error,
 		businessError,
 		courseShareToken,
-
-		// Computed
-		finishedLoading,
-		roomIsEmpty,
-		roomId,
-
-		// Actions
-		fetchCourse,
-		fetchContent,
-		publishCard,
-		sortElements,
+		createBoard,
+		deleteBoard,
 		deleteLesson,
 		deleteTask,
-		deleteBoard,
-		createBoard,
-		downloadCommonCartridgeCourse,
-		finishTask,
+		error,
+		fetchContent,
+		fetchCourse,
 		fetchScopePermission,
-
-		// Mutations/Helpers
-		setRoomData,
-		setLocked,
-		setPermissionData,
-		setLoading,
-		setError,
-		setBusinessError,
-		resetBusinessError,
-		setCourseShareToken,
-		resetState,
+		finishTask,
+		finishedLoading,
+		isLocked,
+		loading,
+		publishCard,
+		roomData,
+		roomId,
+		roomIsEmpty,
+		scopePermissions,
+		sortElements,
 	};
 });
