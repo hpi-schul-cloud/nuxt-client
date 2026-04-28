@@ -279,8 +279,28 @@ describe("CourseRoomWrapper.vue", () => {
 				expect(useCommonCartridgeImportMockReturn.isOpen.value).toBe(false);
 			});
 
-			it("should show error notification", async () => {
-				const wrapper = setup({ isSuccess: false, stubImportModal: false });
+			it("should show generic error notification when errorType is undefined", async () => {
+				const wrapper = setup({
+					isSuccess: false,
+					errorType: undefined,
+					stubImportModal: false,
+				});
+
+				const testFile = new File([], "test.imscc");
+
+				const modal = wrapper.findComponent(CourseCommonCartridgeImportModal);
+				modal.vm.$emit("import", testFile);
+				await flushPromises();
+
+				expectNotification("error");
+			});
+
+			it("should show generic error notification when errorType is UNKNOWN", async () => {
+				const wrapper = setup({
+					isSuccess: false,
+					errorType: CommonCartridgeImportErrorType.UNKNOWN,
+					stubImportModal: false,
+				});
 
 				const testFile = new File([], "test.imscc");
 
@@ -293,7 +313,7 @@ describe("CourseRoomWrapper.vue", () => {
 		});
 
 		describe("when import fails due to file size exceeded", () => {
-			it("should show file size exceeded error notification with max file size", async () => {
+			it("should show file size exceeded error with formatted max size when maxFileSize is provided", async () => {
 				const wrapper = setup({
 					isSuccess: false,
 					errorType: CommonCartridgeImportErrorType.FILE_SIZE_EXCEEDED,
@@ -310,10 +330,11 @@ describe("CourseRoomWrapper.vue", () => {
 				expectNotification("error");
 			});
 
-			it("should show file size exceeded error notification when max file size is undefined", async () => {
+			it("should show generic error when FILE_SIZE_EXCEEDED but maxFileSize is undefined", async () => {
 				const wrapper = setup({
 					isSuccess: false,
 					errorType: CommonCartridgeImportErrorType.FILE_SIZE_EXCEEDED,
+					maxFileSize: undefined,
 					stubImportModal: false,
 				});
 

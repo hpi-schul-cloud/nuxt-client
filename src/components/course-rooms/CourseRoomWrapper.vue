@@ -115,6 +115,21 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 	}
 });
 
+const getImportErrorMessage = (
+	errorType: CommonCartridgeImportErrorType | undefined,
+	maxFileSize: number | undefined
+): string => {
+	const isFileSizeExceeded = errorType === CommonCartridgeImportErrorType.FILE_SIZE_EXCEEDED;
+
+	if (isFileSizeExceeded && maxFileSize) {
+		return t("pages.rooms.ccImportCourse.error.fileSizeExceeded", {
+			maxFileSize: formatFileSizeWithN(maxFileSize, n),
+		});
+	}
+
+	return t("pages.rooms.ccImportCourse.error");
+};
+
 const handleImport = async (file: File): Promise<void> => {
 	commonCartridgeImport.isOpen.value = false;
 	setLoadingState(true, t("pages.rooms.ccImportCourse.loading"));
@@ -126,14 +141,10 @@ const handleImport = async (file: File): Promise<void> => {
 
 	if (commonCartridgeImport.isSuccess.value) {
 		notifySuccess(t("pages.rooms.ccImportCourse.success"));
-	} else if (commonCartridgeImport.errorType.value === CommonCartridgeImportErrorType.FILE_SIZE_EXCEEDED) {
-		const maxFileSizeFormatted = commonCartridgeImport.maxFileSize.value
-			? formatFileSizeWithN(commonCartridgeImport.maxFileSize.value, n)
-			: undefined;
-		notifyError(t("pages.rooms.ccImportCourse.error.fileSizeExceeded", { maxFileSize: maxFileSizeFormatted }));
-	} else {
-		notifyError(t("pages.rooms.ccImportCourse.error"));
+		return;
 	}
+
+	notifyError(getImportErrorMessage(commonCartridgeImport.errorType.value, commonCartridgeImport.maxFileSize.value));
 };
 
 const isEmptyState = computed(() => !loading.value && !props.hasRooms && !props.hasImportToken);
