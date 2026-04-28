@@ -19,7 +19,7 @@
 				<VListItemSubtitle>{{ topic }}</VListItemSubtitle>
 			</div>
 			<div class="d-sm-block mr-sm-4 d-flex mt-2">
-				<div class="text-subtitle-2 due-date-label" data-test-id="dueDateLabel">{{ dueDateLabel }}</div>
+				<div class="text-subtitle-2 due-date-label" data-testid="due-date-label">{{ dueDateLabel }}</div>
 				<TaskChipsStudent :task />
 			</div>
 		</template>

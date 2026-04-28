@@ -26,7 +26,7 @@ describe("TasksOverviewListItemStudent", () => {
 			const task = taskResponseFactory.build({ dueDate: undefined });
 			const wrapper = setup({ task });
 
-			const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
+			const dueDateLabel = wrapper.find("[data-testid='due-date-label']");
 			expect(dueDateLabel.text()).toBe("");
 		});
 
@@ -34,7 +34,7 @@ describe("TasksOverviewListItemStudent", () => {
 			const task = taskResponseFactory.build({ dueDate: "2024-04-20T14:00:00.000Z" });
 			const wrapper = setup({ task });
 
-			const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
+			const dueDateLabel = wrapper.find("[data-testid='due-date-label']");
 			expect(dueDateLabel.text()).toContain("pages.tasks.labels.due");
 		});
 	});
