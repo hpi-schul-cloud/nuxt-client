@@ -39,6 +39,7 @@
 					v-model="includeSubstitute"
 					:label="t('components.organisms.TasksDashboardMain.filter.substitute')"
 					:true-icon="mdiCheck"
+					data-testid="include-substitute-filter"
 					hide-details
 					:density="filterDensity"
 				/>
@@ -46,6 +47,7 @@
 				<SvsTransition variant="expand">
 					<VBtn
 						v-if="hasActiveFilters"
+						data-testid="reset-filters-btn"
 						variant="outlined"
 						class="mt-3"
 						:text="t('common.actions.reset.filter')"
