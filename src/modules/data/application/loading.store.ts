@@ -20,10 +20,13 @@ export const useLoadingStore = defineStore("loadingStore", () => {
 		minDisplayTime = 300
 	): Promise<T> => {
 		setLoadingState(true, loadingMessage);
-		const result = await fn();
-		await new Promise((resolve) => setTimeout(resolve, minDisplayTime));
-		setLoadingState(false);
-		return result;
+		try {
+			const result = await fn();
+			return result;
+		} finally {
+			await new Promise((resolve) => setTimeout(resolve, minDisplayTime));
+			setLoadingState(false);
+		}
 	};
 
 	return {
