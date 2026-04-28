@@ -1,5 +1,5 @@
 <template>
-	<WarningChip :icon="mdiTimerSandComplete" size="small" variant="tonal">
+	<WarningChip :icon="mdiTimerSandComplete" size="small" variant="tonal" data-testid="time-remaining-chip">
 		{{ dueDateDayjs }}
 	</WarningChip>
 </template>

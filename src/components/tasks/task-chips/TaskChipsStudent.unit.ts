@@ -41,9 +41,9 @@ describe("TaskChipsStudent", () => {
 		});
 
 		it("should not show due soon chip when task is due in more than 24 hours", () => {
-			const laterDate = new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(); // 48 hours
+			const moreThan24Hours = new Date(Date.now() + 25 * 60 * 60 * 1000).toISOString(); // 25 hours
 			const task = taskResponseFactory.build({
-				dueDate: laterDate,
+				dueDate: moreThan24Hours,
 				status: { isDraft: false },
 			});
 			const wrapper = setup(task);
