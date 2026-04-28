@@ -19,6 +19,8 @@ export const toSortedByCreatedDate = (tasks: TaskResponse[]) =>
 export const isTaskOverdue = (t: TaskResponse) => t.dueDate !== undefined && parseUtc(t.dueDate).isBefore(nowUtc());
 export const isTaskUnpublished = (t: TaskResponse) => isPublished(t) && !isVisible(t);
 export const isTaskDraft = (t: TaskResponse) => t.status.isDraft;
+export const isTaskDoneForTeacher = (t: TaskResponse) =>
+	isTaskOverdue(t) && isGraded(t) && hasSubmissions(t) && isFullyGraded(t);
 
 // === Task Status Predicates ===
 const hasNoDueDate = (t: TaskResponse) => !t.dueDate;

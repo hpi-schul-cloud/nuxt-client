@@ -3,7 +3,7 @@
 		<ChipTimeRemaining v-if="isDueSoon" :due-date="task.dueDate!" />
 
 		<InfoChip
-			v-if="task.status?.submitted"
+			v-if="task.status?.submitted && withDone"
 			:icon="mdiCheckCircleOutline"
 			size="small"
 			variant="tonal"
@@ -42,7 +42,7 @@ import { ChipTimeRemaining, InfoChip, WarningChip } from "@ui-chip";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-const props = defineProps<{ task: TaskResponse }>();
+const props = defineProps<{ task: TaskResponse; withDone?: boolean }>();
 
 const { t } = useI18n();
 

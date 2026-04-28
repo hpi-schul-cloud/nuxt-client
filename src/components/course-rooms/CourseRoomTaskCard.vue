@@ -39,7 +39,7 @@
 				:data-testid="`task-card-info-${taskCardIndex}`"
 			>
 				<TaskChipsTeacher v-if="isTeacher" :task />
-				<TaskChipsStudent v-if="isStudent" :task />
+				<TaskChipsStudent v-if="isStudent" :task with-done />
 			</div>
 		</v-card-text>
 		<v-card-actions v-if="cardActions[userRole]?.length" class="pt-1" data-testid="content-card-task-actions">

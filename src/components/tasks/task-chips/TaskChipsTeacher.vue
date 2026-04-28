@@ -2,7 +2,7 @@
 	<div class="d-flex flex-row flex-wrap" data-testid="teacher-task-chips" style="gap: 6px">
 		<template v-if="!isTaskDraft(task)">
 			<InfoChip
-				v-if="task.status?.graded > 0 && task.status?.submitted > 0 && task.status?.graded === task.status?.submitted"
+				v-if="isTaskDone"
 				:icon="mdiCheckCircleOutline"
 				size="small"
 				variant="tonal"
@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { TaskResponse } from "@api-server";
-import { isTaskDraft, isTaskOverdue, isTaskUnpublished } from "@data-tasks";
+import { isTaskDoneForTeacher, isTaskDraft, isTaskOverdue, isTaskUnpublished } from "@data-tasks";
 import { mdiCheckCircleOutline, mdiClockAlertOutline } from "@icons/material";
 import { InfoChip, WarningChip } from "@ui-chip";
 import { computed } from "vue";
@@ -51,4 +51,5 @@ const props = defineProps<{ task: TaskResponse }>();
 const { t } = useI18n();
 
 const isUnpublishedLesson = computed(() => isTaskUnpublished(props.task));
+const isTaskDone = computed(() => isTaskDoneForTeacher(props.task));
 </script>

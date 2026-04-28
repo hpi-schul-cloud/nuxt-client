@@ -24,7 +24,7 @@
 					<div class="d-flex flex-wrap gc-4 gr-0">
 						<div class="d-flex ga-2 mt-2">
 							<TaskChipsTeacher v-if="isTeacher" :task />
-							<TaskChipsStudent v-if="isStudent" :task />
+							<TaskChipsStudent v-if="isStudent" with-done :task />
 						</div>
 					</div>
 				</VCardText>
