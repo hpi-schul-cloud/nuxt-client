@@ -130,13 +130,13 @@ export const useCopyFlow = () => {
 	return {
 		isDialogOpen,
 		copyItemType,
-		onConfirm: confirmAction.complete,
-		onCancel: confirmAction.cancel,
+		isRunning,
 		executeCopyCourse,
 		executeCopyTask,
 		executeCopyLesson,
 		executeCopyBoard,
 		executeCopyRoom,
-		isRunning,
+		onConfirm: confirmAction.complete,
+		onCancel: confirmAction.cancel,
 	};
 };
