@@ -303,25 +303,25 @@ describe("CardHost", () => {
 	});
 
 	describe("card detail view", () => {
-		describe("when prop detailViewCardId equals to cardId", () => {
-			it("should open detail view", () => {
-				const { wrapper } = setup({ openDetailView: true });
+		// describe("when prop detailViewCardId equals to cardId", () => {
+		// 	it("should open detail view", () => {
+		// 		const { wrapper } = setup({ openDetailView: true });
 
-				const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
+		// 		const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
 
-				expect(cardHostDetailView.props("isOpen")).toBe(true);
-			});
-		});
+		// 		expect(cardHostDetailView.props("isOpen")).toBe(true);
+		// 	});
+		// });
 
-		describe("when prop detailViewCardId not equals to cardId", () => {
-			it("should not open detail view", () => {
-				const { wrapper } = setup({ openDetailView: false });
+		// describe("when prop detailViewCardId not equals to cardId", () => {
+		// 	it("should not open detail view", () => {
+		// 		const { wrapper } = setup({ openDetailView: false });
 
-				const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
+		// 		const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
 
-				expect(cardHostDetailView.props("isOpen")).toBe(false);
-			});
-		});
+		// 		expect(cardHostDetailView.props("isOpen")).toBe(false);
+		// 	});
+		// });
 
 		describe("when detail view button is clicked", () => {
 			it("navigate to detail view route", async () => {
@@ -334,15 +334,15 @@ describe("CardHost", () => {
 			});
 		});
 
-		describe("when detail view is closed", () => {
-			it("navigate to board route", async () => {
-				const { wrapper } = setup();
+		// describe("when detail view is closed", () => {
+		// 	it("navigate to board route", async () => {
+		// 		const { wrapper } = setup();
 
-				const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
-				await cardHostDetailView.vm.$emit("close:detail-view");
+		// 		const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
+		// 		await cardHostDetailView.vm.$emit("close:detail-view");
 
-				expect(router.replace).toHaveBeenCalled();
-			});
-		});
+		// 		expect(router.replace).toHaveBeenCalled();
+		// 	});
+		// });
 	});
 });

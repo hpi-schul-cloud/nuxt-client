@@ -1,6 +1,6 @@
 <template>
 	<VDialog :model-value="isOpen" fullscreen scrollable z-index="2000" @keydown.escape="onDialogClose">
-		<VToolbar class="toolbar-position">
+		<VToolbar class="toolbar border-b-thin">
 			<VBtn
 				:icon="mdiClose"
 				data-testid="close-detail-view-button"
@@ -30,8 +30,8 @@
 				{{ $t("common.actions.view") }}
 			</VBtn>
 		</VToolbar>
-		<VCard>
-			<VCardText :style="{ backgroundColor: cardBackground }" class="pt-0">
+		<VCard :style="{ backgroundColor: cardBackground }">
+			<VCardText class="pt-0">
 				<div
 					class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto"
 					:style="{
@@ -40,34 +40,7 @@
 					}"
 					data-testid="detail-view-content-wrapper"
 				>
-					<CardHostInteractionHandler
-						:is-edit-mode="isEditMode"
-						@start-edit-mode="startEditMode"
-						@end-edit-mode="stopEditMode"
-						@click.stop
-					>
-						<CardTitle
-							:is-edit-mode="isEditMode"
-							:value="card.title"
-							scope="card"
-							:is-focused="true"
-							:has-edit-permission="allowedOperations?.updateCardTitle"
-							@update:value="onUpdateCardTitle"
-							@enter="onEnterTitle"
-						/>
-						<ContentElementList
-							:elements="card.elements"
-							:is-edit-mode="isEditMode"
-							:is-detail-view="true"
-							:row-index="rowIndex"
-							:column-index="columnIndex"
-							@delete:element="onDeleteElement"
-							@move-down:element="onMoveElementDown"
-							@move-up:element="onMoveElementUp"
-							@move-keyboard:element="onMoveElementKeyboard"
-						/>
-						<CardAddElementMenu v-if="isEditMode" data-testid="add-element-button" @add-element="onAddElement" />
-					</CardHostInteractionHandler>
+					<CardHost :height="100" :card-id="cardId" :row-index="1" :column-index="1" @click.stop />
 				</div>
 			</VCardText>
 		</VCard>
@@ -75,81 +48,43 @@
 </template>
 
 <script setup lang="ts">
-import CardAddElementMenu from "./CardAddElementMenu.vue";
-import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
-import CardTitle from "./CardTitle.vue";
-import ContentElementList from "./ContentElementList.vue";
-import type { ElementMove } from "@/types/board/DragAndDrop";
+import CardHost from "./CardHost.vue";
 import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
-import type { CardResponse } from "@api-server";
 import { Colors } from "@api-server";
-import { useBoardAllowedOperations, useCourseBoardEditMode } from "@data-board";
+import { useBoardAllowedOperations, useCardStore, useCourseBoardEditMode } from "@data-board";
 import { mdiClose } from "@icons/material";
-import { computed, toRef } from "vue";
+import { computed, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 type Props = {
-	card: CardResponse;
-	isOpen: boolean;
-	rowIndex: number;
-	columnIndex: number;
+	cardId: string;
 };
 
 const props = defineProps<Props>();
+const cardRef = toRef(props, "cardId");
 
 const emit = defineEmits<{
-	(e: "update:title", value: string): void;
-	(e: "delete:element", elementId: string): void;
-	(e: "move-down:element", elementMove: ElementMove): void;
-	(e: "move-up:element", elementMove: ElementMove): void;
-	(e: "move-keyboard:element", elementMove: ElementMove, keyCode: string): void;
-	(e: "add:element"): void;
-	(e: "enter:title"): void;
 	(e: "close:detail-view"): void;
 }>();
 
-const cardRef = toRef(props, "card");
-const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardRef.value.id);
+const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardRef.value);
 const { allowedOperations } = useBoardAllowedOperations();
 const { t } = useI18n();
+const cardStore = useCardStore();
 
-const cardBackground = computed(() => colorToHexLighten5(cardRef.value?.backgroundColor ?? Colors.TRANSPARENT));
+const isOpen = ref(true);
+const card = computed(() => cardStore.getCard(cardRef.value));
+
+const cardBackground = computed(() => colorToHexLighten5(card.value?.backgroundColor ?? Colors.TRANSPARENT));
 const cardBorderColor = computed(() => {
-	const color = cardRef.value?.backgroundColor;
+	const color = card.value?.backgroundColor;
 	if (!color || color === Colors.TRANSPARENT) return undefined;
 	return colorToHexLighten3(color);
 });
 
 const onDialogClose = () => {
+	isOpen.value = false;
 	emit("close:detail-view");
-};
-
-const onUpdateCardTitle = (value: string) => {
-	emit("update:title", value);
-};
-
-const onEnterTitle = () => {
-	emit("enter:title");
-};
-
-const onAddElement = () => {
-	emit("add:element");
-};
-
-const onDeleteElement = (elementId: string) => {
-	emit("delete:element", elementId);
-};
-
-const onMoveElementDown = (elementMove: ElementMove) => {
-	emit("move-down:element", elementMove);
-};
-
-const onMoveElementUp = (elementMove: ElementMove) => {
-	emit("move-up:element", elementMove);
-};
-
-const onMoveElementKeyboard = (elementMove: ElementMove, keyCode: string) => {
-	emit("move-keyboard:element", elementMove, keyCode);
 };
 </script>
 
@@ -166,7 +101,7 @@ const onMoveElementKeyboard = (elementMove: ElementMove, keyCode: string) => {
 	}
 }
 
-.toolbar-position {
+.toolbar {
 	position: absolute;
 	width: 100%;
 	z-index: 2001;

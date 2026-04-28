@@ -10,10 +10,9 @@ import { useDragAndDrop, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { computed, nextTick } from "vue";
+import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 
 const { isDragging, dragStart, dragEnd } = useDragAndDrop();
-
-vi.mock("vue-router");
 
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
@@ -28,6 +27,7 @@ mockUseSharedLastCreatedElement.mockReturnValue({
 
 describe("BoardColumn", () => {
 	let mockedUseForceRenderHandler: Mocked<ReturnType<typeof useForceRender>>;
+	let router: RouterMock;
 
 	beforeEach(() => {
 		setupStores({});
@@ -36,13 +36,12 @@ describe("BoardColumn", () => {
 
 		mockedUseForceRenderHandler = mockComposable(useForceRender);
 		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
+
+		router = createRouterMock();
+		injectRouterMock(router);
 	});
 
-	const setup = (options?: {
-		cardsCount?: number;
-		allowedOperations?: Partial<BoardResponseAllowedOperations>;
-		detailViewCardId?: string;
-	}) => {
+	const setup = (options?: { cardsCount?: number; allowedOperations?: Partial<BoardResponseAllowedOperations> }) => {
 		const cards = cardSkeletonResponseFactory.buildList(options?.cardsCount ?? 3);
 		const column = columnResponseFactory.build({
 			cards,
@@ -64,7 +63,6 @@ describe("BoardColumn", () => {
 				index: 1,
 				columnCount: 1,
 				isListBoard: false,
-				detailViewCardId: options?.detailViewCardId,
 			},
 		});
 
@@ -82,18 +80,6 @@ describe("BoardColumn", () => {
 		it("should trigger 'getRenderKey' method", () => {
 			setup();
 			expect(mockedUseForceRenderHandler.getRenderKey).toHaveBeenCalled();
-		});
-
-		it("should propagate detailViewCardId to CardHost components", () => {
-			const { wrapper } = setup({ cardsCount: 5, detailViewCardId: "card-12345" });
-
-			const cardHostComponents = wrapper.findAllComponents({
-				name: "CardHost",
-			});
-
-			cardHostComponents.forEach((cardHostComponent) => {
-				expect(cardHostComponent.props("detailViewCardId")).toBe("card-12345");
-			});
 		});
 	});
 

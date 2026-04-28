@@ -1,5 +1,5 @@
 <template>
-	<Board :board-id="boardId" :detail-view-card-id="detailViewCardId" />
+	<Board :board-id="boardId" />
 </template>
 
 <script setup lang="ts">
@@ -11,11 +11,6 @@ defineProps({
 	boardId: {
 		type: String,
 		required: true,
-	},
-	detailViewCardId: {
-		type: String,
-		required: false,
-		default: undefined,
 	},
 });
 

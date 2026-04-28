@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<template v-if="board">
+			<CardHostDetailView v-if="cardId" :card-id="cardId" @close:detail-view="onCloseDetailView" />
 			<DefaultWireframe
 				ref="main"
 				:breadcrumbs="breadcrumbs"
@@ -63,7 +64,6 @@
 								:column-count="board.columns.length"
 								:class="{ 'my-0': isListBoard, 'user-select-none': isDragging }"
 								:is-list-board="isListBoard"
-								:detail-view-card-id="detailViewCardId"
 								:data-testid="`board-column-${index}`"
 								@reload:board="onReloadBoard"
 								@create:card="onCreateCard"
@@ -122,6 +122,7 @@
 </template>
 
 <script setup lang="ts">
+import CardHostDetailView from "../card/CardHostDetailView.vue";
 import MoveCardDialog from "../card/MoveCardDialog.vue";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
@@ -166,7 +167,6 @@ import { useRoute, useRouter } from "vue-router";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
-	detailViewCardId: { type: String, required: false, default: undefined },
 });
 
 const { editModeId } = useSharedEditMode();
@@ -192,6 +192,8 @@ const route = useRoute();
 useBodyScrolling();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
+const cardId = computed(() => route.params.cardId as string | undefined);
+
 const isEditableChipVisible = computed(() => board.value?.readersCanEdit ?? false);
 const hasReadersEditPermission = ref(false);
 const moveCardOptions = ref<{ isDialogOpen: boolean; cardId: string }>({
@@ -474,6 +476,13 @@ const onSaveEditBoardSettings = async (isEditableForEveryone: boolean) => {
 
 const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
 	cardStore.createFileElementWithCollabora(payload.type, payload.fileName);
+};
+
+const onCloseDetailView = () => {
+	const boardId = boardStore.board?.id;
+	if (boardId) {
+		router.replace(`/boards/${boardId}`);
+	}
 };
 </script>
 

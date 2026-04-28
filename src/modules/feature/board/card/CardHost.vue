@@ -39,7 +39,7 @@
 						@enter="onEnter"
 					/>
 
-					<div class="board-menu" :class="boardMenuClasses">
+					<div v-if="!isDetailView" class="board-menu" :class="boardMenuClasses">
 						<DetailViewButton class="mr-1" @open-detail-view="onOpenDetailView" />
 						<BoardMenu v-if="hasMenuItem" :scope="BoardMenuScope.CARD" has-background :data-testid="boardMenuTestId">
 							<KebabMenuActionEdit v-if="allowedOperations?.deleteCard && !isEditMode" @click="onStartEditMode" />
@@ -85,30 +85,12 @@
 		<VCard v-if="isDuplicating" class="mt-3">
 			<CardSkeleton :height />
 		</VCard>
-
-		<!-- Detail View -->
-		<CardHostDetailView
-			v-if="card"
-			:card="card"
-			:is-open="isDetailView"
-			:row-index="rowIndex"
-			:column-index="columnIndex"
-			@delete:element="onDeleteElement"
-			@move-down:element="onMoveContentElementDown"
-			@move-up:element="onMoveContentElementUp"
-			@move-keyboard:element="onMoveContentElementKeyboard"
-			@add:element="onAddElement"
-			@enter:title="onEnter"
-			@update:title="onUpdateCardTitle"
-			@close:detail-view="onCloseDetailView"
-		/>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
-import CardHostDetailView from "./CardHostDetailView.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
@@ -139,14 +121,13 @@ import {
 import { useShareBoardLink } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, onMounted, ref, toRef } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 type Props = {
 	height: number;
 	cardId: string;
 	rowIndex: number;
 	columnIndex: number;
-	detailViewCardId?: string;
 };
 
 const props = defineProps<Props>();
@@ -165,7 +146,8 @@ const { isFocusContained, isFocusedById } = useBoardFocusHandler(cardId.value, c
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
 
 const isHovered = useElementHover(cardHost);
-const isDetailView = computed(() => props.detailViewCardId === props.cardId);
+const route = useRoute();
+const isDetailView = computed(() => route.params.cardId === props.cardId);
 
 const cardStore = useCardStore();
 const router = useRouter();
@@ -181,6 +163,9 @@ const cardTestId = computed(() => `board-card-${props.columnIndex}-${props.rowIn
 
 const { height: cardHostHeight } = useElementSize(cardHost);
 const cardElevation = computed(() => {
+	if (isDetailView.value) {
+		return 0;
+	}
 	if (isEditMode.value) {
 		return 6;
 	}
@@ -190,10 +175,15 @@ const cardElevation = computed(() => {
 	return 2;
 });
 
-const cardBackground = computed(() => colorToHexLighten5(card.value?.backgroundColor ?? Colors.TRANSPARENT));
+const cardBackground = computed(() => {
+	if (isDetailView.value) {
+		return Colors.TRANSPARENT;
+	}
+	return colorToHexLighten5(card.value?.backgroundColor ?? Colors.TRANSPARENT);
+});
 const cardBorderColor = computed(() => {
 	const color = card.value?.backgroundColor;
-	if (!color || color === Colors.TRANSPARENT) return undefined;
+	if (!color || color === Colors.TRANSPARENT || isDetailView.value) return undefined;
 	return colorToHexLighten3(color);
 });
 
@@ -274,13 +264,6 @@ const boardMenuClasses = computed(() => {
 const { run: duplicateCard, isRunning: isDuplicating } = useSafeTaskRunner(async () => {
 	await cardStore.duplicateCard({ cardId: props.cardId });
 });
-
-const onCloseDetailView = () => {
-	const boardId = boardStore.board?.id;
-	if (boardId) {
-		router.replace(`/boards/${boardId}`);
-	}
-};
 
 const onOpenDetailView = () => {
 	const boardId = boardStore.board?.id;

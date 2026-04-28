@@ -147,7 +147,6 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "boards-card-detail",
 		props: (route: RouteLocationNormalized) => ({
 			boardId: route.params.boardId,
-			detailViewCardId: route.params.cardId,
 		}),
 	},
 	{
