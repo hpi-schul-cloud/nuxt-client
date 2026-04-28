@@ -6,7 +6,7 @@ export const schoolExternalToolFactory = Factory.define<SchoolExternalTool>(({ s
 	id: `schoolExternalTool${sequence}`,
 	schoolId: "schoolId",
 	toolId: "toolId",
-	name: "name",
+	name: `name${sequence}`,
 	parameters: [],
 	status: schoolToolConfigurationStatusFactory.build(),
 	isDeactivated: false,
