@@ -17,7 +17,7 @@
 				</i18n-t>
 			</p>
 		</div>
-		<v-spacer class="mt-10" />
+		<VSpacer class="mt-10" />
 		<ExternalToolConfigurator
 			:templates="schoolExternalToolConfigurationTemplates"
 			:configuration="configuration"
@@ -27,13 +27,13 @@
 			@save="onSave"
 		>
 			<template #aboveSettings="{ selectedTemplate }">
-				<external-tool-medium-details
+				<ExternalToolMediumDetails
 					v-if="selectedTemplate && selectedTemplate.medium"
 					:selected-template-medium="selectedTemplate.medium"
 				/>
 			</template>
 			<template #aboveParameters="{ selectedTemplate }">
-				<v-checkbox
+				<VCheckbox
 					v-if="selectedTemplate"
 					v-model="isDeactivated"
 					:label="$t('pages.tool.deactivate.label')"
