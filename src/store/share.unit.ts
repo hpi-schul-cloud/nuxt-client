@@ -5,8 +5,6 @@ import {
 	ShareTokenBodyParamsParentType,
 } from "../generated/serverApi/v3";
 import ShareModule, { ShareOptions } from "./share";
-import courseRoomDetailsModule from "@/store/course-room-details";
-import setupStores from "@@/tests/test-utils/setupStores";
 
 const shareOptions: ShareOptions = {
 	hasExpiryDate: true,
@@ -21,10 +19,6 @@ const expectedServerPayload = {
 
 describe("share module", () => {
 	describe("actions", () => {
-		beforeEach(() => {
-			setupStores({ courseRoomDetailsModule: courseRoomDetailsModule });
-		});
-
 		describe("createShareUrl", () => {
 			describe("should make a 'POST' request to the backend", () => {
 				const shareTokenMockApi = {

@@ -5,17 +5,11 @@ import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import { useCopy } from "@/composables/copy";
 import CopyModule from "@/store/copy";
-import CourseRoomDetailsModule from "@/store/course-room-details";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import ShareModule from "@/store/share";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import {
-	COPY_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
+import { COPY_MODULE_KEY, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -150,14 +144,12 @@ describe("Board", () => {
 		});
 
 		const shareModule = createModuleMocks(ShareModule);
-		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
-			getRoomId: "room1",
-		});
+
 		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule);
 		return {
 			copyModule,
 			shareModule,
-			courseRoomDetailsModule,
+
 			copyResultId,
 			schoolExternalToolsModule,
 		};
@@ -170,8 +162,7 @@ describe("Board", () => {
 		envs?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
 	}) => {
-		const { copyModule, shareModule, courseRoomDetailsModule, copyResultId, schoolExternalToolsModule } =
-			setupProvideModules();
+		const { copyModule, shareModule, copyResultId, schoolExternalToolsModule } = setupProvideModules();
 
 		setActivePinia(createTestingPinia());
 
@@ -206,7 +197,7 @@ describe("Board", () => {
 				provide: {
 					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
-					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
+
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
 				},
 				stubs: {
@@ -237,7 +228,6 @@ describe("Board", () => {
 			board,
 			copyResultId,
 			shareModule,
-			courseRoomDetailsModule,
 			copyModule,
 		};
 	};
