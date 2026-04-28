@@ -1,4 +1,5 @@
-import { createTestAppStore, mockedPiniaStoreTyping } from "../../../../tests/test-utils/index.ts";
+import { createTestSchoolStore } from "../../../../tests/test-utils/factory/school-test.utils.ts";
+import { mockedPiniaStoreTyping } from "../../../../tests/test-utils/index.ts";
 import AuthSystems from "./AuthSystems.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils.ts";
 import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
@@ -6,7 +7,7 @@ import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolS
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Permission } from "@api-server";
-import { useAppStore } from "@data-app";
+import { useSchoolStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, RouterLinkStub } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -64,7 +65,7 @@ describe("AuthSystems", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		createTestAppStore({ schoolDetails: mockSchool });
+		createTestSchoolStore({ schoolDetails: mockSchool });
 	});
 
 	describe("login link", () => {
@@ -112,7 +113,6 @@ describe("AuthSystems", () => {
 		});
 
 		it("login link copy button should copy login link", () => {
-			({ schoolDetails: mockSchool });
 			const mockElem = {
 				value: "example_value",
 				select: () => ({}),
@@ -235,8 +235,8 @@ describe("AuthSystems", () => {
 				"pages.administration.school.index.authSystems.deleteAuthSystem",
 				"pages.administration.school.index.authSystems.confirmDeleteText"
 			);
-			const appStore = mockedPiniaStoreTyping(useAppStore);
-			expect(appStore.deleteSchoolSystem).toHaveBeenCalledWith("3");
+			const schoolStore = mockedPiniaStoreTyping(useSchoolStore);
+			expect(schoolStore.deleteSchoolSystem).toHaveBeenCalledWith("3");
 		});
 
 		it("should not call deleteSystem when deletion is cancelled", async () => {
@@ -248,8 +248,8 @@ describe("AuthSystems", () => {
 			await deleteBtn.trigger("click");
 			await flushPromises();
 
-			const appStore = mockedPiniaStoreTyping(useAppStore);
-			expect(appStore.deleteSchoolSystem).not.toHaveBeenCalled();
+			const schoolStore = mockedPiniaStoreTyping(useSchoolStore);
+			expect(schoolStore.deleteSchoolSystem).not.toHaveBeenCalled();
 		});
 	});
 	describe("display system buttons", () => {

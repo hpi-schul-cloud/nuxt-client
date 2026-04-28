@@ -74,6 +74,7 @@ app.use(VueDOMPurifyHTML, {
 
 	try {
 		await useAppStore().login();
+		await schoolsModule.fetchSchool();
 	} catch (error) {
 		logger.info("Unhandled error during login", error);
 	}

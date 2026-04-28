@@ -1,30 +1,25 @@
 import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
-import SchoolsModule from "@/store/schools";
-import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
-import type { Mocked } from "vitest";
+import { setActivePinia } from "pinia";
 import { VFileInput } from "vuetify/components";
 
 vi.mock("@/utils/fileHelper", () => ({ toBase64: vi.fn().mockResolvedValue("data:application/pdf;base64,AAA") }));
+
 describe("SchoolTermsFormDialog", () => {
-	let schoolsModule: Mocked<SchoolsModule>;
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestSchoolStore({ schoolDetails: mockSchool });
+	});
 
 	const setup = () => {
-		schoolsModule = createModuleMocks(SchoolsModule, {
-			getSchool: mockSchool,
-		});
-
 		const wrapper = mount(SchoolTermsFormDialog, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
-				provide: {
-					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
-				},
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: { isOpen: true },
 		});

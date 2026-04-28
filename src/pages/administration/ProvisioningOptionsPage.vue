@@ -1,21 +1,21 @@
 <template>
 	<DefaultWireframe
-		:headline="$t('components.administration.provisioningOptions.page.title')"
+		:headline="t('components.administration.provisioningOptions.page.title')"
 		:breadcrumbs="breadcrumbs"
 		max-width="short"
 	>
-		<VSkeletonLoader :loading="isLoading" type="list-item-two-line@4">
-			<div class="d-flex flex-column ga-9">
+		<VSkeletonLoader :loading="isLoadingSchoolData" type="list-item-two-line@4">
+			<div v-if="targetOptions" class="d-flex flex-column ga-9">
 				<div>
 					<VCheckboxBtn
-						v-model="provisioningOptions.class"
+						v-model="targetOptions.groupProvisioningClassesEnabled"
 						color="primary"
-						:label="$t('components.administration.provisioningOptions.class.label')"
+						:label="t('components.administration.provisioningOptions.class.label')"
 						data-testid="checkbox-option-class"
 					/>
 					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
-							$t("components.administration.provisioningOptions.class.description", {
+							t("components.administration.provisioningOptions.class.description", {
 								instance: instanceName,
 							})
 						}}
@@ -24,14 +24,14 @@
 
 				<div>
 					<VCheckboxBtn
-						v-model="provisioningOptions.course"
+						v-model="targetOptions.groupProvisioningCoursesEnabled"
 						color="primary"
-						:label="$t('components.administration.provisioningOptions.course.label')"
+						:label="t('components.administration.provisioningOptions.course.label')"
 						data-testid="checkbox-option-course"
 					/>
 					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
-							$t("components.administration.provisioningOptions.course.description", {
+							t("components.administration.provisioningOptions.course.description", {
 								instance: instanceName,
 							})
 						}}
@@ -40,14 +40,14 @@
 
 				<div>
 					<VCheckboxBtn
-						v-model="provisioningOptions.others"
+						v-model="targetOptions.groupProvisioningOtherEnabled"
 						color="primary"
-						:label="$t('components.administration.provisioningOptions.otherGroups.label')"
+						:label="t('components.administration.provisioningOptions.otherGroups.label')"
 						data-testid="checkbox-option-others"
 					/>
 					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
-							$t("components.administration.provisioningOptions.otherGroups.description", {
+							t("components.administration.provisioningOptions.otherGroups.description", {
 								instance: instanceName,
 							})
 						}}
@@ -56,14 +56,14 @@
 
 				<div v-if="isMediaLicensingEnabled">
 					<VCheckboxBtn
-						v-model="provisioningOptions.schoolExternalTools"
+						v-model="targetOptions.schoolExternalToolProvisioningEnabled"
 						color="primary"
-						:label="$t('components.administration.provisioningOptions.schoolExternalTools.label')"
+						:label="t('components.administration.provisioningOptions.schoolExternalTools.label')"
 						data-testid="checkbox-option-school-external-tools"
 					/>
 					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
-							$t("components.administration.provisioningOptions.schoolExternalTools.description", {
+							t("components.administration.provisioningOptions.schoolExternalTools.description", {
 								instance: instanceName,
 							})
 						}}
@@ -72,34 +72,35 @@
 			</div>
 		</VSkeletonLoader>
 
-		<v-row class="justify-end mt-10">
-			<v-btn class="mr-2" data-testid="provisioning-options-cancel-button" variant="outlined" @click="onCancel">
+		<VRow class="justify-end mt-10">
+			<VBtn class="mr-2" data-testid="provisioning-options-cancel-button" variant="outlined" @click="onCancel">
 				{{ t("common.actions.cancel") }}
-			</v-btn>
+			</VBtn>
 
-			<v-btn
+			<VBtn
 				class="mr-2"
 				data-testid="provisioning-options-save-button"
 				color="primary"
 				variant="flat"
-				:disabled="isLoading"
+				:disabled="isLoadingSchoolData"
 				@click="onSaveButtonClick"
 			>
 				{{ t("common.actions.save") }}
-			</v-btn>
-		</v-row>
+			</VBtn>
+		</VRow>
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { SchulConneXProvisioningOptionsResponse } from "@api-server";
+import { useSchoolStore } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
-import { ProvisioningOptionsEnum, useProvisioningOptionsState } from "@data-provisioning-options";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
-import { computed, ComputedRef, onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -107,23 +108,17 @@ const props = defineProps<{
 	systemId: string;
 }>();
 
-const provisioningOptionTranslations = {
-	[ProvisioningOptionsEnum.COURSE]: "common.words.courses",
-	[ProvisioningOptionsEnum.CLASS]: "common.words.classes",
-	[ProvisioningOptionsEnum.OTHERS]: "common.words.otherGroups",
-	[ProvisioningOptionsEnum.SCHOOL_EXTERNAL_TOOLS]: "common.words.externalTools",
-};
+const currentOptions = ref<SchulConneXProvisioningOptionsResponse>();
+const targetOptions = ref<SchulConneXProvisioningOptionsResponse>();
 
 const { t } = useI18n();
-const { fetchProvisioningOptionsData, updateProvisioningOptionsData, provisioningOptionsData, isLoading, error } =
-	useProvisioningOptionsState();
+const { isLoadingSchoolData, fetchProvisioningOptions, setProvisioningOptions } = useSchoolStore();
 const router = useRouter();
-
 const { instanceName } = storeToRefs(useEnvStore());
+
 const pageTitle = buildPageTitle(t("components.administration.provisioningOptions.page.title"));
 useTitle(pageTitle);
-
-const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
+const breadcrumbs = computed<Breadcrumb[]>(() => [
 	{
 		title: t("pages.administration.school.index.title"),
 		to: "/administration/school-settings",
@@ -134,66 +129,67 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 	},
 ]);
 
-const provisioningOptions = computed(() => provisioningOptionsData.value);
+const isMediaLicensingEnabled = computed(() => useEnvConfig().value.FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED);
 
-const initialProvisioningOptions = ref({
-	...provisioningOptionsData.value,
-});
+type ProvisioningOptionKey = keyof SchulConneXProvisioningOptionsResponse;
 
-const isMediaLicensingEnabled = useEnvConfig().value.FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED;
-
-const wasOptionTurnedOff = (provisioningOption: ProvisioningOptionsEnum) =>
-	initialProvisioningOptions.value[provisioningOption] && !provisioningOptions.value[provisioningOption];
-
-const newlyTurnedOffOptions = computed(() => {
-	const options = Object.values(ProvisioningOptionsEnum);
-
-	return options.filter((option: ProvisioningOptionsEnum) => wasOptionTurnedOff(option));
-});
-
-const translateProvisioningOption = (option: ProvisioningOptionsEnum) => {
-	if (option === ProvisioningOptionsEnum.SCHOOL_EXTERNAL_TOOLS) {
-		return;
-	}
-	return t(provisioningOptionTranslations[option]);
+const GROUP_OPTION_LABELS: Partial<Record<ProvisioningOptionKey, string>> = {
+	groupProvisioningClassesEnabled: t("common.words.classes"),
+	groupProvisioningCoursesEnabled: t("common.words.courses"),
+	groupProvisioningOtherEnabled: t("common.words.otherGroups"),
 };
 
-onMounted(async () => {
-	window.scrollTo({ top: 0, behavior: "smooth" });
-	await fetchProvisioningOptionsData(props.systemId);
+const newlyTurnedOffGroupOptions = computed(() => {
+	if (!currentOptions.value || !targetOptions.value) return [];
 
-	initialProvisioningOptions.value = { ...provisioningOptionsData.value };
+	return (Object.keys(currentOptions.value) as ProvisioningOptionKey[])
+		.filter((key) => currentOptions.value![key] && !targetOptions.value![key])
+		.flatMap((key) => GROUP_OPTION_LABELS[key] ?? []);
+});
+
+onMounted(async () => {
+	const { result, success } = await fetchProvisioningOptions(props.systemId);
+	if (success && result?.data) {
+		currentOptions.value = { ...result.data };
+		targetOptions.value = { ...result.data };
+	} else {
+		targetOptions.value = {
+			groupProvisioningClassesEnabled: true,
+			groupProvisioningCoursesEnabled: false,
+			groupProvisioningOtherEnabled: false,
+			schoolExternalToolProvisioningEnabled: false,
+		};
+	}
 });
 
 const onSaveButtonClick = async () => {
-	if (newlyTurnedOffOptions.value.length) {
-		if (
-			newlyTurnedOffOptions.value.length === 1 &&
-			newlyTurnedOffOptions.value[0] === ProvisioningOptionsEnum.SCHOOL_EXTERNAL_TOOLS
-		) {
-			await saveOptions();
-		}
+	const turnedOffLabels = newlyTurnedOffGroupOptions.value;
 
-		const isConfirmed = await askConfirmation({
-			title: "components.administration.provisioningOptions.warning.title",
-			message: t("components.administration.provisioningOptions.warning", {
-				groupTypes: newlyTurnedOffOptions.value.map(translateProvisioningOption).join(", "),
-			}),
-			messageType: "warning",
-		});
-		if (isConfirmed) {
-			await saveOptions();
-		}
-	} else {
+	if (!turnedOffLabels.length) {
+		await saveOptions();
+		return;
+	}
+
+	const isConfirmed = await askConfirmation({
+		title: "components.administration.provisioningOptions.warning.title",
+		message: t("components.administration.provisioningOptions.warning", {
+			groupTypes: turnedOffLabels.join(", "),
+		}),
+		messageType: "warning",
+	});
+
+	if (isConfirmed) {
 		await saveOptions();
 	}
 };
 
 const saveOptions = async () => {
-	await updateProvisioningOptionsData(props.systemId, provisioningOptions.value);
+	if (targetOptions.value) {
+		const { success } = await setProvisioningOptions(props.systemId, targetOptions.value);
 
-	if (!error.value) {
-		await redirectToAdminPage();
+		if (success) {
+			await redirectToAdminPage();
+		}
 	}
 };
 

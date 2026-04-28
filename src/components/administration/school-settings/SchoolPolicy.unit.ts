@@ -1,12 +1,10 @@
 import SchoolPolicy from "./SchoolPolicy.vue";
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
-import SchoolsModule from "@/store/schools";
 import { Status } from "@/store/types/commons";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { downloadFile } from "@/utils/fileHelper";
-import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStoreWithPermissions, mockComposable, privacyPolicyFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Permission } from "@api-server";
@@ -23,15 +21,14 @@ vi.mock("@data-school/schoolPrivacyPolicy.composable");
 const useSchoolPrivacyMock = vi.mocked(useSchoolPrivacyPolicy);
 
 describe("SchoolPolicy", () => {
-	let schoolsModule: Mocked<SchoolsModule>;
 	let useSchoolPrivacyPolicyMockReturn: Mocked<ReturnType<typeof useSchoolPrivacyPolicy>>;
 
 	const setup = (
 		options?: Partial<{ status: Status; permissions: Permission[]; privacyPolicy: ConsentVersion | null }>
 	) => {
-		const existitngPrivacyPolicy = privacyPolicyFactory.build({ schoolId: mockSchool.id });
+		const existingPrivacyPolicy = privacyPolicyFactory.build({ schoolId: mockSchool.id });
 		const { privacyPolicy, permissions, status } = {
-			privacyPolicy: existitngPrivacyPolicy,
+			privacyPolicy: existingPrivacyPolicy,
 			permissions: [Permission.SCHOOL_EDIT],
 			status: "completed" as Status,
 			...options,
@@ -39,10 +36,7 @@ describe("SchoolPolicy", () => {
 
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStoreWithPermissions(permissions);
-
-		schoolsModule = createModuleMocks(SchoolsModule, {
-			getSchool: mockSchool,
-		});
+		createTestSchoolStore({ schoolDetails: mockSchool });
 
 		useSchoolPrivacyPolicyMockReturn = mockComposable(useSchoolPrivacyPolicy);
 		useSchoolPrivacyMock.mockReturnValue(useSchoolPrivacyPolicyMockReturn);
@@ -53,10 +47,6 @@ describe("SchoolPolicy", () => {
 		const wrapper = mount(SchoolPolicy, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
-				},
-				stubs: { SvsDialog: true },
 			},
 		});
 

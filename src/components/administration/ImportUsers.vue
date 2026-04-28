@@ -238,7 +238,7 @@ import ImportUsersMatchSearch from "./ImportUsersMatchSearch.vue";
 import { importUsersModule } from "@/store";
 import { MatchedBy } from "@/store/import-users";
 import { ImportUserResponseRoleNames, SchulcloudTheme } from "@api-server";
-import { useAppStore } from "@data-app";
+import { useSchoolStore } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import {
 	mdiAccountPlus,
@@ -386,7 +386,7 @@ export default {
 			return [];
 		},
 		school() {
-			return useAppStore().schoolDetails;
+			return useSchoolStore().schoolDetails;
 		},
 		total() {
 			return importUsersModule.getTotal;

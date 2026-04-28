@@ -15,6 +15,7 @@ import {
 	roomMemberSchoolResponseFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import * as serverApi from "@api-server";
 import {
 	ChangeRoomRoleBodyParamsRoleName,
@@ -49,8 +50,8 @@ describe("useRoomMembers", () => {
 				roles: [{ id: userId, name: roleName }],
 				user: { id: userId },
 			},
-			schoolDetails: schoolFactory.build(ownSchool),
 		});
+		createTestSchoolStore({ schoolDetails: schoolFactory.build(ownSchool) });
 	};
 
 	beforeEach(() => {

@@ -36,7 +36,7 @@
 					color="primary"
 					variant="flat"
 					data-testid="start-transfer-button"
-					:loading="isLoading"
+					:loading="isLoadingMaintenanceData"
 					@click="startTransfer"
 				>
 					{{ t("components.administration.schoolYearChangeSection.step.one.button.startTransfer") }}
@@ -77,7 +77,7 @@
 					color="primary"
 					variant="outlined"
 					data-testid="ldap-data-button"
-					:loading="isLoading"
+					:loading="isLoadingMaintenanceData"
 					@click="enableCheckbox()"
 				>
 					{{ t("components.administration.schoolYearChangeSection.step.two.button") }}
@@ -114,7 +114,7 @@
 					color="primary"
 					variant="flat"
 					data-testid="finish-transfer-button"
-					:loading="isLoading"
+					:loading="isLoadingMaintenanceData"
 					@click="finishTransfer"
 				>
 					{{ t("components.administration.schoolYearChangeSection.step.three.button") }}
@@ -131,10 +131,10 @@ import { useEnvConfig } from "@data-env";
 import { SchoolYearModeEnum, useSharedSchoolYearChange } from "@data-school";
 import { mdiNumeric1Circle, mdiNumeric2Circle, mdiNumeric3Circle } from "@icons/material";
 import { InfoAlert } from "@ui-alert";
-import { computed, ComputedRef, ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { setMaintenanceMode, maintenanceStatus } = useSharedSchoolYearChange();
+const { setMaintenanceMode, maintenanceStatus, isLoadingMaintenanceData } = useSharedSchoolYearChange();
 
 const { school } = useAppStoreRefs();
 
@@ -144,12 +144,10 @@ const isCheckboxConfirmed = ref(false);
 
 const { t } = useI18n();
 
-const isLoading = ref(false);
-
-const schoolYearMode: ComputedRef<string> = computed(() => {
+const schoolYearMode = computed(() => {
 	const currentTime = new Date();
 
-	let schoolMaintenanceMode = SchoolYearModeEnum.IDLE.valueOf();
+	let schoolMaintenanceMode = SchoolYearModeEnum.IDLE;
 
 	if (maintenanceStatus.value) {
 		const maintenanceModeStarts = new Date(maintenanceStatus.value?.currentYear.endDate);
@@ -158,9 +156,9 @@ const schoolYearMode: ComputedRef<string> = computed(() => {
 		twoWeeksFromStart.setDate(twoWeeksFromStart.getDate() - 14);
 
 		if (maintenanceStatus.value.maintenance.active) {
-			schoolMaintenanceMode = SchoolYearModeEnum.ACTIVE.valueOf();
+			schoolMaintenanceMode = SchoolYearModeEnum.ACTIVE;
 		} else if (maintenanceModeStarts && twoWeeksFromStart < currentTime) {
-			schoolMaintenanceMode = SchoolYearModeEnum.STANDBY.valueOf();
+			schoolMaintenanceMode = SchoolYearModeEnum.STANDBY;
 		}
 
 		return schoolMaintenanceMode;

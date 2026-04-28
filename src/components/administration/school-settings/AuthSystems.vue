@@ -105,7 +105,7 @@
 <script>
 import { askDeletion } from "@/utils/confirmation-dialog.utils.ts";
 import { Permission } from "@api-server";
-import { useAppStore } from "@data-app";
+import { useAppStore, useSchoolStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { mdiCheckCircle, mdiContentCopy, mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
 
@@ -132,7 +132,7 @@ export default {
 		customLoginLinkEnabled: () => useEnvConfig().value.FEATURE_LOGIN_LINK_ENABLED,
 		hasSystemCreatePermission: () => useAppStore().hasPermission(Permission.SYSTEM_CREATE),
 		hasSystemEditPermission: () => useAppStore().hasPermission(Permission.SYSTEM_EDIT),
-		schoolId: () => useAppStore().schoolDetails.id,
+		schoolId: () => useSchoolStore().schoolDetails.id,
 	},
 	methods: {
 		ariaLabels(system) {
@@ -171,7 +171,7 @@ export default {
 			return system.oauthConfig || system.ldapConfig;
 		},
 		removeSystem(systemId) {
-			useAppStore().deleteSchoolSystem(systemId);
+			useSchoolStore().deleteSchoolSystem(systemId);
 		},
 		generateLoginLink(system) {
 			let params = "";

@@ -12,7 +12,7 @@ import {
 	SchoolApiFactory,
 	SchoolForExternalInviteResponse,
 } from "@api-server";
-import { notifyError, notifySuccess, useAppStoreRefs } from "@data-app";
+import { notifyError, notifySuccess, useAppStoreRefs, useSchoolStoreRefs } from "@data-app";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";
@@ -22,7 +22,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	let _asAdmin = false;
 
 	const { room } = storeToRefs(useRoomDetailsStore());
-	const { user, schoolDetails } = useAppStoreRefs();
+	const { user } = useAppStoreRefs();
+	const { schoolDetails } = useSchoolStoreRefs();
 	const roomId = computed(() => room.value?.id);
 
 	const roomMembers: Ref<RoomMember[]> = ref([]);

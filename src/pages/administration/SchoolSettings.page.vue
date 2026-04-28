@@ -1,16 +1,10 @@
 <template>
 	<DefaultWireframe :headline="headline" max-width="native">
-		<VAlert v-if="error" type="error" :icon="mdiAlertCircle" data-testid="error-alert">
-			<div class="alert-text">
-				{{ t(error.translationKey) }}
-			</div>
-		</VAlert>
+		<ErrorAlert v-if="schoolApiError">{{ t("pages.administration.school.index.error") }}</ErrorAlert>
 		<div data-testid="no-error">
-			<VAlert type="info" class="mb-12">
-				<div class="alert-text" data-testid="institute-title">
-					{{ t("pages.administration.school.index.info", { instituteTitle }) }}
-				</div>
-			</VAlert>
+			<InfoAlert class="mb-12" data-testid="institute-title">
+				{{ t("pages.administration.school.index.info", { instituteTitle }) }}
+			</InfoAlert>
 
 			<VExpansionPanels multiple class="pb-9" :model-value="openedPanels">
 				<VExpansionPanel data-testid="general-settings-panel" value="general">
@@ -61,7 +55,7 @@
 					</VExpansionPanelText>
 				</VExpansionPanel>
 
-				<VExpansionPanel v-if="schoolUsesLdap" data-testid="school-year-change-panel">
+				<VExpansionPanel v-if="!schoolUsesLdap" data-testid="school-year-change-panel">
 					<VExpansionPanelTitle>
 						<h2 class="ma-0">
 							{{ t("components.administration.schoolYearChangeSection.headers") }}
@@ -105,10 +99,10 @@
 						</template>
 					</VExpansionPanelTitle>
 					<VExpansionPanelText eager>
-						<template v-if="isLoading">
+						<template v-if="isLoadingSchoolData">
 							<VSkeletonLoader type="table-thead, table-row, table-row" data-testid="systems-panel-skeleton" />
 						</template>
-						<AuthSystems v-else :systems="systems" />
+						<AuthSystems v-else :systems="schoolSystems" />
 					</VExpansionPanelText>
 				</VExpansionPanel>
 
@@ -140,11 +134,12 @@ import SchoolAdminMigrationSection from "@/components/administration/school-sett
 import SchoolPolicy from "@/components/administration/school-settings/SchoolPolicy.vue";
 import SchoolTermsOfUse from "@/components/administration/school-settings/SchoolTerms.vue";
 import SchoolYearChangeSection from "@/components/administration/school-settings/SchoolYearChangeSection.vue";
-import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useSchoolStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { useSharedSchoolYearChange } from "@data-school";
-import { mdiAlertCircle, mdiMinus, mdiPlus } from "@icons/material";
+import { mdiMinus, mdiPlus } from "@icons/material";
+import { ErrorAlert, InfoAlert } from "@ui-alert";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
@@ -153,8 +148,10 @@ import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 
 const { t } = useI18n();
-const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 const route = useRoute();
+
+const { fetchSchoolSystems } = useSchoolStore();
+const { schoolDetails, schoolSystems, isLoadingSchoolData, schoolApiError } = useSchoolStoreRefs();
 
 const headline = ref(t("pages.administration.school.index.title"));
 const pageTitle = buildPageTitle(headline.value);
@@ -163,42 +160,29 @@ useTitle(pageTitle);
 const { fetchSchoolYearStatus, maintenanceStatus } = useSharedSchoolYearChange();
 const { instituteTitle } = storeToRefs(useEnvStore());
 
-const school = computed(() => schoolsModule.getSchool);
 const openedPanels = computed(() => (route.query.openPanels ? route.query.openPanels.toString().split(",") : []));
-const systems = computed(() => schoolsModule.getSystems);
-const isLoading = computed(() => schoolsModule.getLoading);
-const error = computed(() => schoolsModule.getError);
 const isFeatureOauthMigrationEnabled = computed(() => useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED);
 const isFeatureSchoolPolicyEnabled = computed(() => useEnvConfig().value.FEATURE_SCHOOL_POLICY_ENABLED_NEW);
 const isFeatureSchoolTermsOfUseEnabled = computed(() => useEnvConfig().value.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED);
-const schoolUsesLdap = computed(() => !!maintenanceStatus.value?.schoolUsesLdap);
+const schoolUsesLdap = computed(() => maintenanceStatus.value?.schoolUsesLdap === true);
 
 watch(
-	school,
+	schoolDetails,
 	(newSchool, oldSchool) => {
 		// fetch systems when the school is loaded
 		// if the school object gets a new reference (e.g. after updating it) do not reload the year or systems
 		if (
-			!schoolsModule.systems ||
-			!schoolsModule.systems.length ||
+			!schoolSystems.value ||
+			!schoolSystems.value.length ||
 			(newSchool && newSchool.id && (!oldSchool || !oldSchool.id))
 		) {
-			schoolsModule.fetchSystems();
+			fetchSchoolSystems(newSchool.id);
 		}
 	},
 	{ immediate: true }
 );
 
 onMounted(async () => {
-	if (school.value?.id) {
-		await fetchSchoolYearStatus(school.value.id);
-	}
+	await fetchSchoolYearStatus(schoolDetails.value.id);
 });
 </script>
-
-<style lang="scss" scoped>
-.alert-text {
-	color: rgba(var(--v-theme-on-background)) !important;
-	line-height: var(--line-height-lg) !important;
-}
-</style>

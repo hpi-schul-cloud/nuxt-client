@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useAppStoreRefs } from "@data-app";
+import { useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { AddMembersDialog, RoomAdminMembersTable } from "@feature-room";
@@ -28,7 +28,7 @@ import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-const { schoolDetails } = useAppStoreRefs();
+const { schoolDetails } = useSchoolStoreRefs();
 const { fetchRoom } = useRoomDetailsStore();
 const { room } = storeToRefs(useRoomDetailsStore());
 

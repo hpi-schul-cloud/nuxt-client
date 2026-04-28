@@ -1,7 +1,8 @@
 import ImportUsers from "./ImportUsers.vue";
 import { importUsersModule } from "@/store";
 import ImportUsersModule, { MatchedBy } from "@/store/import-users";
-import { createTestAppStore, createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
+import { createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { ImportUserListResponse, ImportUserResponseRoleNames, SchulcloudTheme } from "@api-server";
@@ -111,7 +112,7 @@ describe("ImportUsers", () => {
 	});
 
 	const setupSchool = (inUserMigration = true, inMaintenance = true) => {
-		createTestAppStore({
+		createTestSchoolStore({
 			schoolDetails: schoolFactory.build({
 				inUserMigration,
 				inMaintenance,

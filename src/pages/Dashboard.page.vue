@@ -78,6 +78,7 @@ import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { NewsApiFactory, NewsTargetModel, Permission, SchulcloudTheme } from "@api-server";
 import { useAppStore, useAppStoreRefs } from "@data-app";
+import { useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { DashboardReleaseDialog, DashboardTasks } from "@feature-dashboard";
 import { RenderHTML } from "@feature-render-html";
@@ -97,7 +98,7 @@ const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 
 useTitle(buildPageTitle(t("pages.dashboard.title")));
 
-const { schoolDetails } = useAppStoreRefs();
+const { schoolDetails } = useSchoolStoreRefs();
 
 const isSchoolInMaintenance = computed(() => schoolDetails.value.inMaintenance);
 const isSchoolInMigration = computed(() => schoolDetails.value.inUserMigration);

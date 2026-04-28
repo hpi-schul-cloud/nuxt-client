@@ -1,44 +1,33 @@
-import { useSchoolApi } from "./schoolApi.composable";
 import { MaintenanceStatus } from "./types";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { notifyError, notifySuccess } from "@data-app";
+import { notifyError, notifySuccess, useSchoolStore } from "@data-app";
 import { createSharedComposable } from "@vueuse/core";
 import { Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export const useSchoolYearChange = () => {
-	const { fetchMaintenanceStatus, setMaintenance } = useSchoolApi();
+	const { fetchMaintenanceStatus, setMaintenanceStatus, isLoadingMaintenanceData } = useSchoolStore();
 
 	const { t } = useI18n();
 	const maintenanceStatus: Ref<MaintenanceStatus | undefined> = ref();
-	const isLoading: Ref<boolean> = ref(false);
 
-	const fetchSchoolYearStatus = async (schoolId: string): Promise<void> => {
-		isLoading.value = true;
-
-		try {
-			maintenanceStatus.value = await fetchMaintenanceStatus(schoolId);
-		} catch {
-			notifyError(t("error.generic"));
-		}
-
-		isLoading.value = false;
+	const fetchSchoolYearStatus = async (schoolId: string) => {
+		const { success, result } = await fetchMaintenanceStatus(schoolId);
+		if (success) maintenanceStatus.value = result?.data;
 	};
 
-	const setMaintenanceMode = async (schoolId: string, maintenance: boolean): Promise<void> => {
-		isLoading.value = true;
+	const setMaintenanceMode = async (schoolId: string, isInMaintenance: boolean) => {
+		const { success, result, error } = await setMaintenanceStatus(schoolId, isInMaintenance);
 
-		try {
-			maintenanceStatus.value = await setMaintenance(schoolId, maintenance);
-
-			if (maintenance) {
+		if (success) {
+			maintenanceStatus.value = result?.data;
+			if (isInMaintenance) {
 				notifySuccess(t("components.administration.schoolYearChangeSection.notification.start.success"));
 			} else {
 				notifySuccess(t("components.administration.schoolYearChangeSection.notification.finish.success"));
 			}
-		} catch (axiosError: unknown) {
-			const apiError = mapAxiosErrorToResponseError(axiosError);
-
+		} else {
+			const apiError = mapAxiosErrorToResponseError(error);
 			if (apiError.type === "MISSING_YEARS") {
 				notifyError(
 					t("components.administration.schoolYearChangeSection.notification.finish.error.missingYears"),
@@ -55,12 +44,10 @@ export const useSchoolYearChange = () => {
 				notifyError(t("error.generic"));
 			}
 		}
-
-		isLoading.value = false;
 	};
 
 	return {
-		isLoading,
+		isLoadingMaintenanceData,
 		fetchSchoolYearStatus,
 		setMaintenanceMode,
 		maintenanceStatus,
