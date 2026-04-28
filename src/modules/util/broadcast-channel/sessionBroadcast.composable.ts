@@ -176,10 +176,10 @@ export const useSessionBroadcast = (options?: SessionBroadcastOptions) => {
 				const response = await pristineAxios.get(JWT_TIMER_ENDPOINT);
 				const ttl = response?.data?.ttl ?? 0;
 				if (ttl <= 0) {
-					setJwtExpired();
+					setJwtExpired(true);
 				}
 			} catch {
-				setJwtExpired();
+				setJwtExpired(true);
 			}
 		}
 	};
