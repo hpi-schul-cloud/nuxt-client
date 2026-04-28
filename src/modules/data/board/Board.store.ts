@@ -169,8 +169,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		const columnIndex = getColumnIndex(columnId);
 		if (columnIndex < 0) return;
 
-		if (!duplicatedColumn.id) return;
-
 		const duplicatedColumnSkeleton: ColumnResponse = {
 			...duplicatedColumn,
 			cards: duplicatedColumn.cards.map(

@@ -567,19 +567,6 @@ describe("BoardStore", () => {
 
 			expect(boardStore.board?.columns.length).toBe(3);
 		});
-
-		it("should not duplicate column when duplicatedColumn.id is undefined", () => {
-			const { boardStore, firstColumn } = setup();
-			const duplicatedColumn = columnFullResponseFactory.build({ id: undefined });
-
-			boardStore.duplicateColumnSuccess({
-				columnId: firstColumn.id,
-				duplicatedColumn,
-				isOwnAction: true,
-			});
-
-			expect(boardStore.board?.columns.length).toBe(2);
-		});
 	});
 
 	describe("deleteColumnSuccess", () => {
