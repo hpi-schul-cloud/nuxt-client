@@ -4,7 +4,6 @@ import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
-import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
 	createTestAppStore,
@@ -14,6 +13,7 @@ import {
 	mockedPiniaStoreTyping,
 	userResponseFactory,
 } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -27,6 +27,7 @@ import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
 import { VCheckbox } from "vuetify/components";
+import { useSchoolStore } from "@data-app";
 
 vi.mock("@/components/administration/data-filter/composables/filterLocalStorage.composable");
 const mockedUseFilterLocalStorage = vi.mocked(useFilterLocalStorage);
@@ -63,7 +64,6 @@ describe("teacher overview page", () => {
 			schoolsModule: SchoolsModule,
 		});
 
-		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
 		createTestAppStore({
 			me: {
 				school: mockSchool,
@@ -71,6 +71,7 @@ describe("teacher overview page", () => {
 				permissions: [Permission.TEACHER_CREATE, Permission.TEACHER_DELETE],
 			},
 		});
+		createTestSchoolStore({ schoolDetails: { ...mockSchool, isExternal: false } });
 
 		window.open = vi.fn();
 		window.scrollTo = vi.fn();
@@ -141,7 +142,7 @@ describe("teacher overview page", () => {
 
 			expect(useClassesMockReturn.fetchClasses).toHaveBeenCalledWith({
 				$limit: 1000,
-				year: schoolsModule.getCurrentYear?.id,
+				year: useSchoolStore().currentYear?.id,
 			});
 		});
 	});
@@ -308,14 +309,14 @@ describe("teacher overview page", () => {
 
 	describe("when school is external", () => {
 		it("should render the adminTableLegend component", () => {
-			schoolsModule.setSchool({ ...mockSchool, isExternal: true });
+			createTestSchoolStore({ schoolDetails: { ...mockSchool, isExternal: true } });
 			const { wrapper } = setup();
 
 			const adminTableLegend = wrapper.findComponent(AdminTableLegend);
 			expect(adminTableLegend.props().showExternalSyncHint).toBe(true);
 		});
 		it("should not render the fab component", () => {
-			schoolsModule.setSchool({ ...mockSchool, isExternal: true });
+			createTestSchoolStore({ schoolDetails: { ...mockSchool, isExternal: true } });
 			const { wrapper } = setup();
 
 			const fabComponent = wrapper.find(`[data-testid="fab_button_teachers_table"]`);
@@ -323,7 +324,7 @@ describe("teacher overview page", () => {
 		});
 
 		it("should not display the edit button", () => {
-			schoolsModule.setSchool({ ...mockSchool, isExternal: true });
+			createTestSchoolStore({ schoolDetails: { ...mockSchool, isExternal: true } });
 			const { wrapper } = setup();
 
 			const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
