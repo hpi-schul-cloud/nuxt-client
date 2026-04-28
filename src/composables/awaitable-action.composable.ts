@@ -8,6 +8,7 @@ export type AwaitableResult<T> = { completed: true; data: T } | { completed: fal
 
 /**
  * Creates a manually resolvable promise pattern for async user interactions.
+ * Calling start() multiple times while active returns the same promise.
  *
  * @example
  * ```ts
@@ -25,26 +26,35 @@ export type AwaitableResult<T> = { completed: true; data: T } | { completed: fal
  */
 export const useAwaitableAction = <T = boolean>() => {
 	let resolvePromise: ((result: AwaitableResult<T>) => void) | undefined;
+	let currentPromise: Promise<AwaitableResult<T>> | undefined;
 
 	const isActive = ref(false);
 
 	const start = (): Promise<AwaitableResult<T>> => {
+		// If already active, return the existing promise
+		if (isActive.value && currentPromise) {
+			return currentPromise;
+		}
+
 		isActive.value = true;
-		return new Promise((resolve) => {
+		currentPromise = new Promise((resolve) => {
 			resolvePromise = resolve;
 		});
+		return currentPromise;
 	};
 
 	const complete = (data: T) => {
 		isActive.value = false;
 		resolvePromise?.({ completed: true, data });
 		resolvePromise = undefined;
+		currentPromise = undefined;
 	};
 
 	const cancel = () => {
 		isActive.value = false;
 		resolvePromise?.({ completed: false, data: undefined });
 		resolvePromise = undefined;
+		currentPromise = undefined;
 	};
 
 	return { isActive, start, complete, cancel };
