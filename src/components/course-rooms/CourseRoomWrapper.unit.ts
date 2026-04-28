@@ -297,7 +297,7 @@ describe("CourseRoomWrapper.vue", () => {
 				const wrapper = setup({
 					isSuccess: false,
 					errorType: CommonCartridgeImportErrorType.FILE_SIZE_EXCEEDED,
-					maxFileSize: 1073741824, // 1 GB
+					maxFileSize: 1024 ** 3,
 					stubImportModal: false,
 				});
 

@@ -139,8 +139,8 @@ describe("useCommonCartridgeImport composable", () => {
 							type: "FILE_SIZE_EXCEEDED",
 							message: "File size exceeds the maximum allowed size",
 							details: {
-								fileSize: 2147483648,
-								maxFileSize: 1073741824,
+								fileSize: 1024 ** 3 + 1,
+								maxFileSize: 1024 ** 3,
 							},
 						},
 					},
@@ -151,7 +151,7 @@ describe("useCommonCartridgeImport composable", () => {
 
 				expect(isSuccess.value).toBe(false);
 				expect(errorType.value).toBe(CommonCartridgeImportErrorType.FILE_SIZE_EXCEEDED);
-				expect(maxFileSize.value).toBe(1073741824);
+				expect(maxFileSize.value).toBe(1024 ** 3);
 			});
 
 			it("should not call fileStorageApi.upload if the file is undefined", async () => {
