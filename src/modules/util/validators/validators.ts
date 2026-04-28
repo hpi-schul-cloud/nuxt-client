@@ -62,9 +62,9 @@ export const isValidUrl: FormValidatorFn<string> =
 		const [error, urlObject] = useTryCatchSync(() => new URL(urlWithProtocol));
 		if (error) return errMsg;
 
-		if (!["http:", "https:"].includes(urlObject!.protocol)) return errMsg;
+		if (!["http:", "https:"].includes(urlObject.protocol)) return errMsg;
 
-		if (!isValidHostname(urlObject!.hostname)) return errMsg;
+		if (!isValidHostname(urlObject.hostname)) return errMsg;
 
 		return true;
 	};
