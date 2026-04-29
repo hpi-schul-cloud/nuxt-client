@@ -4,7 +4,6 @@ import FinishedTasksModule from "@/store/finished-tasks";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
-import SystemsModule from "@/store/systems";
 import TasksModule from "@/store/tasks";
 import { InjectionKey } from "vue";
 

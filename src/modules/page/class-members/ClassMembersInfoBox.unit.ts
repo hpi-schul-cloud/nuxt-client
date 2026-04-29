@@ -1,15 +1,16 @@
 import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
 import { mockComposable } from "@@/tests/test-utils";
+import { publicSystemResponseFactory } from "@@/tests/test-utils/factory/publicSystemResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useSystemApi } from "@data-system";
+import { useSystem } from "@data-access";
 import { flushPromises, mount } from "@vue/test-utils";
 import { Mocked } from "vitest";
-import { nextTick } from "vue";
+import { computed, ref } from "vue";
 
-vi.mock("@data-system");
+vi.mock("@data-access");
 
 describe("ClassMembersInfoBox", () => {
-	let useSystemApiMock: Mocked<ReturnType<typeof useSystemApi>>;
+	let useSystemMock: Mocked<ReturnType<typeof useSystem>>;
 
 	const setup = (props = {}) => {
 		const wrapper = mount(ClassMembersInfoBox, {
@@ -27,16 +28,15 @@ describe("ClassMembersInfoBox", () => {
 		};
 	};
 
+	const mockSystem = publicSystemResponseFactory.build();
+
 	beforeEach(() => {
-		useSystemApiMock = mockComposable(useSystemApi);
-
-		vi.mocked(useSystemApi).mockReturnValue(useSystemApiMock);
-
-		useSystemApiMock.getSystem.mockResolvedValue({
-			id: "systemId",
-			displayName: "asdf",
-			hasEndSessionEndpoint: false,
+		useSystemMock = mockComposable(useSystem, {
+			system: ref(mockSystem),
+			systemName: computed(() => mockSystem.displayName),
 		});
+
+		vi.mocked(useSystem).mockReturnValue(useSystemMock);
 	});
 
 	afterEach(() => {
@@ -53,7 +53,7 @@ describe("ClassMembersInfoBox", () => {
 
 			const alert = wrapper.findComponent({ name: "v-alert" });
 
-			expect(alert.text()).toEqual('page-class-members.systemInfoText {"systemName":"asdf"}');
+			expect(alert.text()).toEqual('page-class-members.systemInfoText {"systemName":"soundsystem-1"}');
 		});
 	});
 
@@ -74,31 +74,6 @@ describe("ClassMembersInfoBox", () => {
 				.join("");
 
 			expect(text.text()).toEqual(expectedTextParagraphes + expectedTextListItems);
-		});
-	});
-
-	describe("onMounted", () => {
-		it("should load the system", () => {
-			setup({
-				systemId: "systemId",
-			});
-
-			expect(useSystemApiMock.getSystem).toHaveBeenCalledWith("systemId");
-		});
-	});
-
-	describe("watch", () => {
-		it("should load the system when systemId changes", async () => {
-			const { wrapper } = setup({
-				systemId: "systemId",
-			});
-
-			wrapper.setProps({ systemId: "systemId2" });
-
-			await nextTick();
-
-			expect(useSystemApiMock.getSystem).toHaveBeenCalledWith("systemId");
-			expect(useSystemApiMock.getSystem).toHaveBeenCalledWith("systemId2");
 		});
 	});
 });
