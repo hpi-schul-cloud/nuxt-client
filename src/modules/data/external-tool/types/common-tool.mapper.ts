@@ -1,6 +1,4 @@
-import { ToolParameterType } from "../tool-parameter.enum";
-import { ToolParameterLocation } from "../tool-parameter-location.enum";
-import { ToolParameterScope } from "../tool-parameter-scope.enum";
+import { ToolParameterLocation, ToolParameterScope, ToolParameterType } from "./tool-parameter";
 import { CustomParameterLocationParams, CustomParameterScopeTypeParams, CustomParameterTypeParams } from "@api-server";
 
 export const ToolParamLocationMapping: Record<CustomParameterLocationParams, ToolParameterLocation> = {

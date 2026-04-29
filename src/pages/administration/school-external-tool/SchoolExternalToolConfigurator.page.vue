@@ -47,13 +47,18 @@
 <script setup lang="ts">
 import ExternalToolConfigurator from "@/components/administration/external-tools-configuration/ExternalToolConfigurator.vue";
 import ExternalToolMediumDetails from "@/components/administration/external-tools-configuration/ExternalToolMediumDetails.vue";
-import { SchoolExternalTool, SchoolExternalToolSave, ToolParameterEntry } from "@/store/external-tool";
-import { SchoolExternalToolMapper } from "@/store/external-tool/mapper";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess, useAppStoreRefs } from "@data-app";
-import { SchoolExternalToolConfigurationTemplate, useSchoolExternalToolConfigurator } from "@data-external-tool";
+import {
+	SchoolExternalTool,
+	SchoolExternalToolConfigurationTemplate,
+	SchoolExternalToolMapper,
+	SchoolExternalToolSave,
+	ToolParameterEntry,
+	useSchoolExternalToolConfigurator,
+} from "@data-external-tool";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";

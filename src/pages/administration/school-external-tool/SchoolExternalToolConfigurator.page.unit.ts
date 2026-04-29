@@ -1,7 +1,6 @@
 import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
 import ExternalToolConfigurator from "@/components/administration/external-tools-configuration/ExternalToolConfigurator.vue";
 import ExternalToolMediumDetails from "@/components/administration/external-tools-configuration/ExternalToolMediumDetails.vue";
-import { SchoolExternalToolSave } from "@/store/external-tool";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { createTestAppStoreWithSchool, expectNotification, mockComposable } from "@@/tests/test-utils";
 import {
@@ -11,7 +10,11 @@ import {
 } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ExternalToolMediumStatus } from "@api-server";
-import { SchoolExternalToolConfigurationTemplate, useSchoolExternalToolConfigurator } from "@data-external-tool";
+import {
+	SchoolExternalToolConfigurationTemplate,
+	SchoolExternalToolSave,
+	useSchoolExternalToolConfigurator,
+} from "@data-external-tool";
 import { createTestingPinia } from "@pinia/testing";
 import { DefaultWireframe } from "@ui-layout";
 import { mount, VueWrapper } from "@vue/test-utils";

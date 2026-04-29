@@ -26,7 +26,6 @@
 
 <script setup lang="ts">
 import ExternalToolConfigurator from "@/components/administration/external-tools-configuration/ExternalToolConfigurator.vue";
-import { ToolParameterEntry } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
 import { ToolContextType } from "@api-server";
 import {
@@ -34,6 +33,7 @@ import {
 	ContextExternalToolConfigurationTemplate,
 	ContextExternalToolMapper,
 	ContextExternalToolSave,
+	ToolParameterEntry,
 	useContextExternalToolConfigurationState,
 	useContextExternalToolState,
 	usePreferredExternalToolStore,

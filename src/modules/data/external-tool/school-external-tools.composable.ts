@@ -1,5 +1,5 @@
-import { SchoolExternalTool } from "../../../store/external-tool";
 import { notifySuccess } from "../application/notification-store";
+import { SchoolExternalTool } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";

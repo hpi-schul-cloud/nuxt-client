@@ -1,7 +1,6 @@
 import ExternalToolSection from "./ExternalToolSection.vue";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
-import { SchoolExternalTool } from "@/store/external-tool";
 import {
 	createTestAppStoreWithSchool,
 	createTestEnvStore,
@@ -13,7 +12,7 @@ import {
 import { schoolExternalToolFactory, schoolExternalToolMetadataFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ConfigResponse, ExternalToolMediumStatus, MediaSourceLicenseType } from "@api-server";
-import { useSchoolExternalTools, useSchoolExternalToolUsage } from "@data-external-tool";
+import { SchoolExternalTool, useSchoolExternalTools, useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";

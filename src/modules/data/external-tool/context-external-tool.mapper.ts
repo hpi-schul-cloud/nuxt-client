@@ -1,6 +1,11 @@
-import { ContextExternalTool, ContextExternalToolConfigurationTemplate, ContextExternalToolSave } from "./types";
-import { ToolParameter, ToolParameterEntry } from "@/store/external-tool";
-import { ExternalToolMapper } from "@/store/external-tool/mapper";
+import {
+	ContextExternalTool,
+	ContextExternalToolConfigurationTemplate,
+	ContextExternalToolSave,
+	ExternalToolMapper,
+	ToolParameter,
+	ToolParameterEntry,
+} from "./types";
 import {
 	ContextExternalToolConfigurationTemplateListResponse,
 	ContextExternalToolConfigurationTemplateResponse,

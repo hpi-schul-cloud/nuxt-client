@@ -1,9 +1,4 @@
-import {
-	SchoolExternalTool,
-	ToolParameterLocation,
-	ToolParameterScope,
-	ToolParameterType,
-} from "../../../store/external-tool";
+import { SchoolExternalTool, ToolParameterLocation, ToolParameterScope, ToolParameterType } from "./types";
 import {
 	customParameterResponseFactory,
 	expectNotification,

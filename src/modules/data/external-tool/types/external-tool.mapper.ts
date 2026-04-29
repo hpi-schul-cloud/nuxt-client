@@ -1,5 +1,5 @@
-import { ToolParameter } from "../tool-parameter";
 import { ToolParamLocationMapping, ToolParamScopeMapping, ToolParamTypeMapping } from "./common-tool.mapper";
+import { ToolParameter } from "./tool-parameter";
 import { CustomParameterResponse } from "@api-server";
 
 export class ExternalToolMapper {

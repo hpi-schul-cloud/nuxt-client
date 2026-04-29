@@ -1,6 +1,6 @@
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { SchoolExternalTool } from "@/store/external-tool";
 import { SchoolExternalToolMediumResponse, ToolContextType } from "@api-server";
+import { SchoolExternalTool } from "@data-external-tool";
 import { DataTableHeader } from "vuetify";
 
 export function useExternalToolsSectionUtils(t: (key: string) => string = () => "", mediaLicenseEnabled = false) {

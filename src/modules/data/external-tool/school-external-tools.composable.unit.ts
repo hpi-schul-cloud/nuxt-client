@@ -1,4 +1,4 @@
-import { SchoolExternalTool } from "../../../store/external-tool";
+import { SchoolExternalTool } from "./types";
 import {
 	expectNotification,
 	mockApi,

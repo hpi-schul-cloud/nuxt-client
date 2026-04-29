@@ -2,7 +2,6 @@ import { useBoardApi } from "../BoardApi.composable";
 import { useSharedCardRequestPool } from "../CardRequestPool.composable";
 import { UpdateCardHeightRequestPayload, UpdateCardTitleRequestPayload } from "./cardActionPayload.types";
 import { useCardRestApi } from "./cardRestApi.composable";
-import { ToolParameterScope } from "@/store/external-tool";
 import {
 	contextExternalToolConfigurationTemplateFactory,
 	contextExternalToolFactory,
@@ -30,6 +29,7 @@ import { useBoardStore, useCardStore, useSharedEditMode, useSocketConnection } f
 import {
 	ContextExternalToolConfigurationTemplate,
 	ContextExternalToolSave,
+	ToolParameterScope,
 	useContextExternalToolApi,
 	usePreferredExternalToolStore,
 } from "@data-external-tool";

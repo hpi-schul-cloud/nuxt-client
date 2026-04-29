@@ -1,10 +1,8 @@
-import { SchoolExternalToolSave } from "../../../store/external-tool";
-import { SchoolExternalToolMapper } from "../../../store/external-tool/mapper";
+import { SchoolExternalToolConfigurationTemplate, SchoolExternalToolMapper, SchoolExternalToolSave } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
 import { ToolApiFactory } from "@api-server";
-import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import { ref } from "vue";
 
 export const useSchoolExternalToolConfigurator = () => {
