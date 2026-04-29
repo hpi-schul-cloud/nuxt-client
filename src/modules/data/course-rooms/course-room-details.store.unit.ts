@@ -17,6 +17,17 @@ import { Mocked } from "vitest";
 
 vi.mock("@api-server");
 
+vi.mock("vue-i18n", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("vue-i18n")>();
+
+	return {
+		...actual,
+		useI18n: () => ({
+			t: (key: string) => key,
+		}),
+	};
+});
+
 vi.mock("@/utils/api", () => ({
 	$axios: {
 		get: vi.fn(),
@@ -57,6 +68,7 @@ describe("useCourseRoomDetailsStore", () => {
 		vi.mocked(LessonApiFactory).mockReturnValue(lessonApiMock);
 		vi.mocked(TaskApiFactory).mockReturnValue(taskApiMock);
 		vi.mocked(BoardApiFactory).mockReturnValue(boardApiMock);
+		mockedMapAxiosErrorToResponseError.mockReturnValue({} as never);
 	});
 
 	afterEach(() => {
@@ -77,9 +89,6 @@ describe("useCourseRoomDetailsStore", () => {
 			expect(store.isLocked).toBe(false);
 			expect(store.scopePermissions).toEqual([]);
 			expect(store.loading).toBe(false);
-			expect(store.error).toBeNull();
-			expect(store.businessError.statusCode).toBe("");
-			expect(store.businessError.message).toBe("");
 			expect(store.courseShareToken).toBe("");
 		});
 	});
@@ -205,15 +214,15 @@ describe("useCourseRoomDetailsStore", () => {
 		});
 
 		describe("when the fetch fails with a non-locked error", () => {
-			it("should set the error state", async () => {
+			it("should leave the room unlocked", async () => {
 				const error = new Error("Unexpected error");
 				courseRoomsApiMock.courseRoomsControllerGetRoomBoard.mockRejectedValue(error);
 
 				const { store } = setup();
 				await store.fetchContent("room-1");
 
-				expect(store.error).toBe(error);
 				expect(store.isLocked).toBe(false);
+				expect(store.roomData.title).toBe("");
 			});
 		});
 	});
@@ -279,7 +288,7 @@ describe("useCourseRoomDetailsStore", () => {
 			expect(courseRoomsApiMock.courseRoomsControllerPatchOrderingOfElements).toHaveBeenCalledWith("room-1", params);
 		});
 
-		it("should call fetchContent after successful sort", async () => {
+		it("should not refetch room content after successful sort", async () => {
 			const roomData = buildRoomData({ roomId: "room-1" });
 			courseRoomsApiMock.courseRoomsControllerGetRoomBoard.mockResolvedValue(
 				mockApiResponse<SingleColumnBoardResponse>({ data: roomData })
@@ -289,11 +298,11 @@ describe("useCourseRoomDetailsStore", () => {
 			store.roomData.roomId = "room-1";
 			await store.sortElements(params);
 
-			expect(courseRoomsApiMock.courseRoomsControllerGetRoomBoard).toHaveBeenCalledWith("room-1");
+			expect(courseRoomsApiMock.courseRoomsControllerGetRoomBoard).not.toHaveBeenCalled();
 		});
 
 		describe("when the sort fails", () => {
-			it("should set businessError", async () => {
+			it("should map the axios error", async () => {
 				const apiError = apiResponseErrorFactory.build({ code: 500, message: "Sort failed" });
 				mockedMapAxiosErrorToResponseError.mockReturnValue(apiError);
 				courseRoomsApiMock.courseRoomsControllerPatchOrderingOfElements.mockRejectedValue(new Error("Sort failed"));
@@ -301,24 +310,7 @@ describe("useCourseRoomDetailsStore", () => {
 				const { store } = setup();
 				await store.sortElements(params);
 
-				expect(store.businessError.message).toBe("Sort failed");
-				expect(store.businessError.statusCode).toBe(500);
-			});
-
-			it("should reset businessError before calling the API", async () => {
-				const { store } = setup();
-				store.businessError.message = "previous error";
-
-				courseRoomsApiMock.courseRoomsControllerPatchOrderingOfElements.mockResolvedValue(
-					mockApiResponse<void>({ data: undefined })
-				);
-				courseRoomsApiMock.courseRoomsControllerGetRoomBoard.mockResolvedValue(
-					mockApiResponse<SingleColumnBoardResponse>({ data: buildRoomData() })
-				);
-
-				await store.sortElements(params);
-
-				expect(store.businessError.message).toBe("");
+				expect(mockedMapAxiosErrorToResponseError).toHaveBeenCalled();
 			});
 		});
 	});
@@ -332,7 +324,7 @@ describe("useCourseRoomDetailsStore", () => {
 		});
 
 		describe("when the deletion fails", () => {
-			it("should set businessError", async () => {
+			it("should map the axios error", async () => {
 				const apiError = apiResponseErrorFactory.build({ code: 404, message: "Lesson not found" });
 				mockedMapAxiosErrorToResponseError.mockReturnValue(apiError);
 				lessonApiMock.lessonControllerDelete.mockRejectedValue(new Error("Not found"));
@@ -340,8 +332,7 @@ describe("useCourseRoomDetailsStore", () => {
 				const { store } = setup();
 				await store.deleteLesson("lesson-1");
 
-				expect(store.businessError.message).toBe("Lesson not found");
-				expect(store.businessError.statusCode).toBe(404);
+				expect(mockedMapAxiosErrorToResponseError).toHaveBeenCalled();
 			});
 		});
 	});
@@ -355,7 +346,7 @@ describe("useCourseRoomDetailsStore", () => {
 		});
 
 		describe("when the deletion fails", () => {
-			it("should set businessError", async () => {
+			it("should map the axios error", async () => {
 				const apiError = apiResponseErrorFactory.build({ code: 404, message: "Task not found" });
 				mockedMapAxiosErrorToResponseError.mockReturnValue(apiError);
 				taskApiMock.taskControllerDelete.mockRejectedValue(new Error("Not found"));
@@ -363,7 +354,7 @@ describe("useCourseRoomDetailsStore", () => {
 				const { store } = setup();
 				await store.deleteTask("task-1");
 
-				expect(store.businessError.message).toBe("Task not found");
+				expect(mockedMapAxiosErrorToResponseError).toHaveBeenCalled();
 			});
 		});
 	});
@@ -377,7 +368,7 @@ describe("useCourseRoomDetailsStore", () => {
 		});
 
 		describe("when the deletion fails", () => {
-			it("should set businessError", async () => {
+			it("should map the axios error", async () => {
 				const apiError = apiResponseErrorFactory.build({ code: 404, message: "Board not found" });
 				mockedMapAxiosErrorToResponseError.mockReturnValue(apiError);
 				boardApiMock.boardControllerDeleteBoard.mockRejectedValue(new Error("Not found"));
@@ -385,7 +376,7 @@ describe("useCourseRoomDetailsStore", () => {
 				const { store } = setup();
 				await store.deleteBoard("board-1");
 
-				expect(store.businessError.message).toBe("Board not found");
+				expect(mockedMapAxiosErrorToResponseError).toHaveBeenCalled();
 			});
 		});
 	});
@@ -416,7 +407,7 @@ describe("useCourseRoomDetailsStore", () => {
 		});
 
 		describe("when creation fails", () => {
-			it("should set businessError and return undefined", async () => {
+			it("should return undefined and map the axios error", async () => {
 				const apiError = apiResponseErrorFactory.build({ code: 500, message: "Creation failed" });
 				mockedMapAxiosErrorToResponseError.mockReturnValue(apiError);
 				boardApiMock.boardControllerCreateBoard.mockRejectedValue(new Error("Creation failed"));
@@ -425,7 +416,7 @@ describe("useCourseRoomDetailsStore", () => {
 				const result = await store.createBoard(params);
 
 				expect(result).toBeUndefined();
-				expect(store.businessError.message).toBe("Creation failed");
+				expect(mockedMapAxiosErrorToResponseError).toHaveBeenCalled();
 			});
 		});
 	});
@@ -469,7 +460,7 @@ describe("useCourseRoomDetailsStore", () => {
 		});
 
 		describe("when the action fails", () => {
-			it("should set businessError", async () => {
+			it("should map the axios error", async () => {
 				const apiError = apiResponseErrorFactory.build({ code: 500, message: "Finish failed" });
 				mockedMapAxiosErrorToResponseError.mockReturnValue(apiError);
 				taskApiMock.taskControllerFinish.mockRejectedValue(new Error("Finish failed"));
@@ -477,7 +468,7 @@ describe("useCourseRoomDetailsStore", () => {
 				const { store } = setup();
 				await store.finishTask("task-1", "finish");
 
-				expect(store.businessError.message).toBe("Finish failed");
+				expect(mockedMapAxiosErrorToResponseError).toHaveBeenCalled();
 			});
 		});
 	});

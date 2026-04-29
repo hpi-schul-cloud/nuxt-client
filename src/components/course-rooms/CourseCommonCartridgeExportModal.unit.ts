@@ -27,14 +27,13 @@ describe("CourseCommonCartridgeExportModal", () => {
 			isSynchronized: false,
 		});
 
-	const setup = (options: { elements?: unknown[]; isSuccess?: boolean } = {}): VueWrapper => {
-		const { elements = [], isSuccess = true } = options;
+	const setup = (options: { elements?: unknown[] } = {}): VueWrapper => {
+		const { elements = [] } = options;
 		const roomData = createRoomData(elements as BoardElementResponse[]);
 
 		const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
 		courseRoomDetailsStore.$patch({
 			roomData: roomData,
-			businessError: isSuccess ? { message: "", statusCode: "" } : { message: "Error", statusCode: "500" },
 		});
 
 		return mount(CourseCommonCartridgeExportModal, {
@@ -53,7 +52,6 @@ describe("CourseCommonCartridgeExportModal", () => {
 		const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
 		courseRoomDetailsStore.$patch({
 			roomData: roomData,
-			businessError: { message: "", statusCode: "" },
 		});
 
 		roomData.elements = elements;
@@ -173,12 +171,12 @@ describe("CourseCommonCartridgeExportModal", () => {
 			expect(wrapper.emitted("update:isOpen")).toContainEqual([false]);
 		});
 
-		it("should show error notification when export fails", async () => {
-			const wrapper = setup({ isSuccess: false });
+		it("should show success notification when export starts", async () => {
+			const wrapper = setup();
 			await goToContentSelection(wrapper);
 			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
 
-			expectNotification("error");
+			expectNotification("success");
 		});
 	});
 

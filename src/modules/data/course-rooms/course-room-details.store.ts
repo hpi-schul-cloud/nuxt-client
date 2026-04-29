@@ -1,4 +1,5 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { Course } from "@/store/types/room";
 import { $axios } from "@/utils/api";
 import {
@@ -14,10 +15,9 @@ import {
 } from "@api-server";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", () => {
-	const { t } = useI18n();
+	const { t } = useI18nGlobal();
 
 	const roomData = ref<SingleColumnBoardResponse>({
 		roomId: "",
