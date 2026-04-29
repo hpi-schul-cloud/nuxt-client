@@ -264,7 +264,6 @@ describe("CourseRoomDashboard.vue", () => {
 
 		it("should call sortElements when drag and drop occurs", async () => {
 			const { wrapper, courseRoomDetailsStore } = setup({ roomDataObject: mockData, role: "teacher" });
-			// courseRoomDetailsStore.sortElements.mockImplementation(vi.fn());
 
 			const reorderedItems = JSON.parse(JSON.stringify(mockData.elements));
 			reorderedItems.splice(1, 0, reorderedItems.splice(0, 1)[0]);
@@ -276,7 +275,6 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 
 		it("should handle keyboard sorting for teachers", async () => {
-			// const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
 			const { wrapper, courseRoomDetailsStore } = setup({ roomDataObject: mockData, role: "teacher" });
 
 			const cardElement = wrapper.findComponent({ ref: "item_1" });
@@ -291,7 +289,6 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 
 		it("should not allow keyboard sorting for students", async () => {
-			// const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
 			const { wrapper, courseRoomDetailsStore } = setup({ roomDataObject: mockData, role: "student" });
 
 			const cardElement = wrapper.findComponent({ ref: "item_1" });
@@ -385,7 +382,6 @@ describe("CourseRoomDashboard.vue", () => {
 		it("should not call deleteTask when task deletion is cancelled", async () => {
 			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
 			const deleteTaskMock = vi.fn();
-			// const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
 			const { wrapper, courseRoomDetailsStore } = setup({ roomDataObject: mockData, role: "teacher" });
 			courseRoomDetailsStore.deleteTask = deleteTaskMock;
 			const taskCard = wrapper.findComponent<VCard>(".task-card");
@@ -399,7 +395,6 @@ describe("CourseRoomDashboard.vue", () => {
 		it("should not call deleteLesson when lesson deletion is cancelled", async () => {
 			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
 			const deleteLessonMock = vi.fn();
-			// const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
 			const { wrapper, courseRoomDetailsStore } = setup({ roomDataObject: mockData, role: "teacher" });
 			courseRoomDetailsStore.deleteLesson = deleteLessonMock;
 			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
@@ -415,7 +410,6 @@ describe("CourseRoomDashboard.vue", () => {
 		describe("For teachers", () => {
 			it("should call finishTask action", async () => {
 				const finishTaskMock = vi.fn();
-				// const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
 				const { wrapper, courseRoomDetailsStore } = setup({
 					roomDataObject: mockData,
 					role: "teacher",
@@ -432,7 +426,6 @@ describe("CourseRoomDashboard.vue", () => {
 
 			it("should call restoreTask action", async () => {
 				const finishTaskMock = vi.fn();
-				// const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
 				const { wrapper, courseRoomDetailsStore } = setup({
 					roomDataObject: mockData,
 					role: "teacher",
@@ -451,7 +444,6 @@ describe("CourseRoomDashboard.vue", () => {
 		describe("For students", () => {
 			it("should call finishTask action", async () => {
 				const finishTaskMock = vi.fn();
-				// const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
 				const { wrapper, courseRoomDetailsStore } = setup({
 					roomDataObject: mockData,
 					role: "student",
@@ -468,7 +460,6 @@ describe("CourseRoomDashboard.vue", () => {
 
 			it("should call restoreTask action", async () => {
 				const finishTaskMock = vi.fn();
-				// const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
 				const { wrapper, courseRoomDetailsStore } = setup({
 					roomDataObject: mockData,
 					role: "student",
@@ -488,7 +479,6 @@ describe("CourseRoomDashboard.vue", () => {
 	describe("Publishing and unpublishing a board", () => {
 		it("should call publishBoard action", async () => {
 			const publishCardMock = vi.fn();
-			// const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
 			const { wrapper, courseRoomDetailsStore } = setup({
 				roomDataObject: mockData,
 				role: "teacher",
