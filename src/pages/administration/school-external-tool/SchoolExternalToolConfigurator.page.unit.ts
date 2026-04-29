@@ -263,9 +263,7 @@ describe("SchoolExternalToolConfigurator", () => {
 					createOrUpdateToolError: error,
 				});
 
-				const externalToolConfigurator = wrapper.findComponent(
-					ExternalToolConfigurator as unknown as SchoolExternalToolConfigurationTemplate
-				);
+				const externalToolConfigurator = wrapper.findComponent({ name: "ExternalToolConfigurator" });
 
 				const apiError = mapAxiosErrorToResponseError(error);
 				expect(externalToolConfigurator.props("error")).toEqual({
@@ -304,9 +302,7 @@ describe("SchoolExternalToolConfigurator", () => {
 			wrapper: VueWrapper,
 			selectedTemplate: SchoolExternalToolConfigurationTemplate
 		) => {
-			const externalToolConfigurator = wrapper.findComponent(
-				ExternalToolConfigurator as unknown as SchoolExternalToolConfigurationTemplate
-			);
+			const externalToolConfigurator = wrapper.findComponent({ name: "ExternalToolConfigurator" });
 			externalToolConfigurator.vm.selectedTemplate = selectedTemplate;
 
 			await nextTick();
