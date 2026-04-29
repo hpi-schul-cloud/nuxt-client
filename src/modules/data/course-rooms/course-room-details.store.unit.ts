@@ -286,19 +286,7 @@ describe("useCourseRoomDetailsStore", () => {
 			await store.sortElements(params);
 
 			expect(courseRoomsApiMock.courseRoomsControllerPatchOrderingOfElements).toHaveBeenCalledWith("room-1", params);
-		});
-
-		it("should not refetch room content after successful sort", async () => {
-			const roomData = buildRoomData({ roomId: "room-1" });
-			courseRoomsApiMock.courseRoomsControllerGetRoomBoard.mockResolvedValue(
-				mockApiResponse<SingleColumnBoardResponse>({ data: roomData })
-			);
-
-			const { store } = setup();
-			store.roomData.roomId = "room-1";
-			await store.sortElements(params);
-
-			expect(courseRoomsApiMock.courseRoomsControllerGetRoomBoard).not.toHaveBeenCalled();
+			expect(courseRoomsApiMock.courseRoomsControllerGetRoomBoard).toHaveBeenCalled();
 		});
 
 		describe("when the sort fails", () => {

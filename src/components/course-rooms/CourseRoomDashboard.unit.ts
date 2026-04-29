@@ -6,14 +6,18 @@ import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { BoardElementResponseType, BoardLayout, ShareTokenBodyParamsParentType } from "@api-server";
+import {
+	BoardElementResponseType,
+	BoardLayout,
+	ShareTokenBodyParamsParentType,
+	SingleColumnBoardResponse,
+} from "@api-server";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
-import { ComponentProps } from "vue-component-type-helpers";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import draggable from "vuedraggable";
 import { VCard } from "vuetify/components";
@@ -125,9 +129,12 @@ const shareModuleMock = createModuleMocks(ShareModule, {
 	getIsShareModalOpen: false,
 });
 
-const setup = (props: ComponentProps<typeof CourseRoomDashboard>, options?: object) => {
+const setup = (options?: { roomData?: SingleColumnBoardResponse; role?: string }) => {
 	injectRouterMock(createRouterMock());
 	const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
+	courseRoomDetailsStore.roomData = structuredClone(options?.roomData ?? mockData);
+	courseRoomDetailsStore.fetchContent = vi.fn();
+	courseRoomDetailsStore.sortElements = vi.fn();
 
 	const wrapper = mount(CourseRoomDashboard, {
 		global: {
@@ -136,8 +143,9 @@ const setup = (props: ComponentProps<typeof CourseRoomDashboard>, options?: obje
 				[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 			},
 		},
-		props,
-		...options,
+		props: {
+			role: options?.role || "teacher",
+		},
 	});
 
 	return { wrapper, courseRoomDetailsStore };
@@ -153,42 +161,41 @@ describe("CourseRoomDashboard.vue", () => {
 	});
 	describe("common features", () => {
 		it("should have props", () => {
-			const { wrapper } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper } = setup();
 
-			expect(wrapper.props("roomDataObject")).toStrictEqual(mockData);
 			expect(wrapper.props("role")).toStrictEqual("teacher");
 		});
 
 		it("should list board card", () => {
-			const { wrapper } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper } = setup();
 
 			const boardCard = wrapper.findAllComponents({ name: "RoomBoardCard" });
 			expect(boardCard).toHaveLength(1);
 		});
 
 		it("should list task cards", () => {
-			const { wrapper } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper } = setup();
 
 			const taskCards = wrapper.findAll(".task-card");
 			expect(taskCards).toHaveLength(2);
 		});
 
 		it("should list lesson cards", () => {
-			const { wrapper } = setup({ roomDataObject: mockData, role: "student" });
+			const { wrapper } = setup();
 
 			const lessonCards = wrapper.findAll(".lesson-card");
 			expect(lessonCards).toHaveLength(2);
 		});
 
 		it("should have lessonData object", () => {
-			const { wrapper } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper } = setup();
 
 			const lessonCards = wrapper.findAll(".lesson-card");
 			expect(lessonCards).toHaveLength(2);
 		});
 
 		it("should have taskData object", () => {
-			const { wrapper } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper } = setup();
 
 			const taskCards = wrapper.findAll(".task-card");
 			expect(taskCards).toHaveLength(2);
@@ -196,8 +203,7 @@ describe("CourseRoomDashboard.vue", () => {
 
 		it("Should render empty state for teacher", () => {
 			const { wrapper } = setup({
-				roomDataObject: emptyMockData,
-				role: "teacher",
+				roomData: emptyMockData,
 			});
 
 			const emptyStateComponent = wrapper.findComponent(EmptyState);
@@ -207,7 +213,7 @@ describe("CourseRoomDashboard.vue", () => {
 
 		it("Should render empty state for students", () => {
 			const { wrapper } = setup({
-				roomDataObject: emptyMockData,
+				roomData: emptyMockData,
 				role: "student",
 			});
 
@@ -218,7 +224,7 @@ describe("CourseRoomDashboard.vue", () => {
 
 	describe("Drag & Drop operations", () => {
 		it("should enable sorting if user is a 'teacher'", async () => {
-			const { wrapper } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper } = setup();
 
 			await flushPromises();
 			const draggableComponent = wrapper.findComponent(draggable);
@@ -226,7 +232,7 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 
 		it("should not render draggable for students", () => {
-			const { wrapper } = setup({ roomDataObject: mockData, role: "student" });
+			const { wrapper } = setup({ role: "student" });
 
 			const draggableComponent = wrapper.findComponent(draggable);
 			expect(draggableComponent.exists()).toBe(false);
@@ -235,7 +241,7 @@ describe("CourseRoomDashboard.vue", () => {
 		it("should use non-touch delay for desktop devices", () => {
 			const tempOntouchstart = window.ontouchstart;
 			window.ontouchstart = undefined;
-			const { wrapper } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper } = setup();
 
 			const draggableComponent = wrapper.findComponent(draggable);
 			expect(draggableComponent.exists()).toBe(true);
@@ -245,7 +251,7 @@ describe("CourseRoomDashboard.vue", () => {
 		it("should use touch delay for mobile devices", () => {
 			const tempOntouchstart = window.ontouchstart;
 			window.ontouchstart = () => null;
-			const { wrapper } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper } = setup();
 
 			const draggableComponent = wrapper.findComponent(draggable);
 			expect(draggableComponent.exists()).toBe(true);
@@ -253,7 +259,7 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 
 		it("should handle drag events correctly", async () => {
-			const { wrapper } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper } = setup();
 
 			const element = wrapper.findComponent({ name: "draggable" });
 			await element.vm.$emit("start");
@@ -263,7 +269,7 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 
 		it("should call sortElements when drag and drop occurs", async () => {
-			const { wrapper, courseRoomDetailsStore } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper, courseRoomDetailsStore } = setup();
 
 			const reorderedItems = JSON.parse(JSON.stringify(mockData.elements));
 			reorderedItems.splice(1, 0, reorderedItems.splice(0, 1)[0]);
@@ -275,7 +281,7 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 
 		it("should handle keyboard sorting for teachers", async () => {
-			const { wrapper, courseRoomDetailsStore } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper, courseRoomDetailsStore } = setup();
 
 			const cardElement = wrapper.findComponent({ ref: "item_1" });
 			if (cardElement.exists()) {
@@ -289,7 +295,7 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 
 		it("should not allow keyboard sorting for students", async () => {
-			const { wrapper, courseRoomDetailsStore } = setup({ roomDataObject: mockData, role: "student" });
+			const { wrapper, courseRoomDetailsStore } = setup({ role: "student" });
 
 			const cardElement = wrapper.findComponent({ ref: "item_1" });
 			if (cardElement.exists()) {
@@ -303,7 +309,7 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 
 		it("should handle tab-pressed event", async () => {
-			const { wrapper } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper } = setup();
 
 			const cardElement = wrapper.findComponent({ ref: "item_1" });
 			if (cardElement.exists()) {
@@ -315,10 +321,7 @@ describe("CourseRoomDashboard.vue", () => {
 
 	describe("Sharing Lesson", () => {
 		it("should call startShareFlow when share lesson item clicked", () => {
-			const { wrapper } = setup({
-				roomDataObject: mockData,
-				role: "teacher",
-			});
+			const { wrapper } = setup();
 
 			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
 			lessonCard.vm.$emit("open-modal", "12345");
@@ -332,10 +335,7 @@ describe("CourseRoomDashboard.vue", () => {
 
 	describe("Sharing Task", () => {
 		it("should call startShareFlow when share task item clicked", () => {
-			const { wrapper } = setup({
-				roomDataObject: mockData,
-				role: "teacher",
-			});
+			const { wrapper } = setup();
 			const taskCard = wrapper.findComponent<VCard>(".task-card");
 
 			taskCard.vm.$emit("share-task", "1234");
@@ -351,7 +351,7 @@ describe("CourseRoomDashboard.vue", () => {
 		it("should call deleteLesson when lesson deletion is confirmed", async () => {
 			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(true);
 
-			const { wrapper, courseRoomDetailsStore } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper, courseRoomDetailsStore } = setup();
 			courseRoomDetailsStore.deleteLesson = vi.fn();
 			courseRoomDetailsStore.fetchContent = vi.fn();
 
@@ -367,7 +367,7 @@ describe("CourseRoomDashboard.vue", () => {
 
 		it("should call deleteTask when task deletion is confirmed", async () => {
 			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(true);
-			const { wrapper, courseRoomDetailsStore } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper, courseRoomDetailsStore } = setup();
 			courseRoomDetailsStore.deleteTask = vi.fn();
 			courseRoomDetailsStore.fetchContent = vi.fn();
 			const taskCard = wrapper.findComponent<VCard>(".task-card");
@@ -382,7 +382,7 @@ describe("CourseRoomDashboard.vue", () => {
 		it("should not call deleteTask when task deletion is cancelled", async () => {
 			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
 			const deleteTaskMock = vi.fn();
-			const { wrapper, courseRoomDetailsStore } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper, courseRoomDetailsStore } = setup();
 			courseRoomDetailsStore.deleteTask = deleteTaskMock;
 			const taskCard = wrapper.findComponent<VCard>(".task-card");
 
@@ -395,7 +395,7 @@ describe("CourseRoomDashboard.vue", () => {
 		it("should not call deleteLesson when lesson deletion is cancelled", async () => {
 			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
 			const deleteLessonMock = vi.fn();
-			const { wrapper, courseRoomDetailsStore } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper, courseRoomDetailsStore } = setup();
 			courseRoomDetailsStore.deleteLesson = deleteLessonMock;
 			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
 
@@ -410,10 +410,7 @@ describe("CourseRoomDashboard.vue", () => {
 		describe("For teachers", () => {
 			it("should call finishTask action", async () => {
 				const finishTaskMock = vi.fn();
-				const { wrapper, courseRoomDetailsStore } = setup({
-					roomDataObject: mockData,
-					role: "teacher",
-				});
+				const { wrapper, courseRoomDetailsStore } = setup();
 				courseRoomDetailsStore.finishTask = finishTaskMock;
 				const taskCard = wrapper.findComponent<VCard>(".task-card");
 
@@ -426,10 +423,7 @@ describe("CourseRoomDashboard.vue", () => {
 
 			it("should call restoreTask action", async () => {
 				const finishTaskMock = vi.fn();
-				const { wrapper, courseRoomDetailsStore } = setup({
-					roomDataObject: mockData,
-					role: "teacher",
-				});
+				const { wrapper, courseRoomDetailsStore } = setup();
 				courseRoomDetailsStore.finishTask = finishTaskMock;
 				const taskCard = wrapper.findComponent<VCard>(".task-card");
 
@@ -445,7 +439,6 @@ describe("CourseRoomDashboard.vue", () => {
 			it("should call finishTask action", async () => {
 				const finishTaskMock = vi.fn();
 				const { wrapper, courseRoomDetailsStore } = setup({
-					roomDataObject: mockData,
 					role: "student",
 				});
 				courseRoomDetailsStore.finishTask = finishTaskMock;
@@ -461,7 +454,6 @@ describe("CourseRoomDashboard.vue", () => {
 			it("should call restoreTask action", async () => {
 				const finishTaskMock = vi.fn();
 				const { wrapper, courseRoomDetailsStore } = setup({
-					roomDataObject: mockData,
 					role: "student",
 				});
 				courseRoomDetailsStore.finishTask = finishTaskMock;
@@ -479,10 +471,7 @@ describe("CourseRoomDashboard.vue", () => {
 	describe("Publishing and unpublishing a board", () => {
 		it("should call publishBoard action", async () => {
 			const publishCardMock = vi.fn();
-			const { wrapper, courseRoomDetailsStore } = setup({
-				roomDataObject: mockData,
-				role: "teacher",
-			});
+			const { wrapper, courseRoomDetailsStore } = setup();
 			courseRoomDetailsStore.publishCard = publishCardMock;
 			const boardCard = wrapper.findComponent({ name: "RoomBoardCard" });
 
@@ -501,7 +490,7 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 
 		it("should emit 'copy-board-element' event when a task component emits 'copy-task' custom event", () => {
-			const { wrapper } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper } = setup();
 
 			const taskCard = wrapper.findComponent<VCard>(".task-card");
 			taskCard.vm.$emit("copy-task");
@@ -518,7 +507,7 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 
 		it("should emit 'copy-board-element' with correct task-related payload", () => {
-			const { wrapper } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper } = setup();
 
 			const taskCard = wrapper.findComponent<VCard>(".task-card");
 			taskCard.vm.$emit("copy-task");
@@ -544,7 +533,7 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 
 		it("should emit 'copy-board-element' event when a lesson component emits 'copy-lesson' custom event", () => {
-			const { wrapper } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper } = setup();
 
 			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
 			lessonCard.vm.$emit("copy-lesson");
@@ -561,7 +550,7 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 
 		it("should emit 'copy-board-element' with correct lesson-related payload", () => {
-			const { wrapper } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper } = setup();
 
 			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
 			lessonCard.vm.$emit("copy-lesson");
@@ -587,7 +576,7 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 
 		it("should emit 'copy-board-element' event when a board component emits 'copy-board' custom event", () => {
-			const { wrapper } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper } = setup();
 
 			const boardCard = wrapper.findComponent<VCard>({ name: "RoomBoardCard" });
 			boardCard.vm.$emit("copy-board");
@@ -604,7 +593,7 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 
 		it("should emit 'copy-board-element' with correct board-related payload", () => {
-			const { wrapper } = setup({ roomDataObject: mockData, role: "teacher" });
+			const { wrapper } = setup();
 
 			const boardCard = wrapper.findComponent<VCard>({ name: "RoomBoardCard" });
 			boardCard.vm.$emit("copy-board");

@@ -18,7 +18,7 @@
 					<div>
 						<RoomBoardCard
 							v-if="item.type === cardTypes.COLUMN_BOARD"
-							:ref="`item_${index}`"
+							:ref="(el) => setItemRef(el, index)"
 							:board-card-index="index"
 							:user-role="role"
 							:key-drag="isDragging"
@@ -39,7 +39,7 @@
 						/>
 						<CourseRoomTaskCard
 							v-if="item.type === cardTypes.TASK"
-							:ref="`item_${index}`"
+							:ref="(el) => setItemRef(el, index)"
 							:task-card-index="index"
 							:user-role="role"
 							:room="taskData"
@@ -65,7 +65,7 @@
 						/>
 						<RoomLessonCard
 							v-if="item.type === cardTypes.LESSON"
-							:ref="`item_${index}`"
+							:ref="(el) => setItemRef(el, index)"
 							:lesson-card-index="index"
 							:user-role="role"
 							:lesson="item.content as BoardLessonResponse"
@@ -95,7 +95,7 @@
 			<div v-for="(item, index) of roomData.elements" :key="index">
 				<RoomBoardCard
 					v-if="boardCardIsVisibleToStudent(item)"
-					:ref="`item_${index}`"
+					:ref="(el) => setItemRef(el, index)"
 					:board-card-index="index"
 					:user-role="role"
 					:key-drag="isDragging"
@@ -114,7 +114,7 @@
 				/>
 				<CourseRoomTaskCard
 					v-if="item.type === cardTypes.TASK"
-					:ref="`item_${index}`"
+					:ref="(el) => setItemRef(el, index)"
 					:task-card-index="index"
 					:user-role="role"
 					:task="item.content"
@@ -132,7 +132,7 @@
 				/>
 				<RoomLessonCard
 					v-if="item.type === cardTypes.LESSON"
-					:ref="`item_${index}`"
+					:ref="(el) => setItemRef(el, index)"
 					:lesson-card-index="index"
 					:user-role="role"
 					:lesson="item.content as BoardLessonResponse"
@@ -186,7 +186,6 @@ import { useI18n } from "vue-i18n";
 import draggable from "vuedraggable";
 
 const props = defineProps<{
-	roomDataObject: SingleColumnBoardResponse;
 	role: string;
 }>();
 
@@ -198,7 +197,7 @@ const shareModule = inject(SHARE_MODULE_KEY)!;
 const { t } = useI18n();
 
 const courseRoomDetailsStore = useCourseRoomDetailsStore();
-const { roomIsEmpty } = storeToRefs(courseRoomDetailsStore);
+const { roomIsEmpty, roomData } = storeToRefs(courseRoomDetailsStore);
 
 const cardTypes = BoardElementResponseType;
 const Roles = ImportUserResponseRoleNames;
@@ -208,7 +207,14 @@ const isDragging = ref(false);
 const dragInProgress = ref(false);
 const itemRefs = ref<Record<string, { $el?: HTMLElement } | null>>({});
 
-const roomData = computed(() => ({ ...props.roomDataObject }));
+const setItemRef = (el: unknown, index: number) => {
+	if (el) {
+		itemRefs.value[`item_${index}`] = el as { $el?: HTMLElement };
+	} else {
+		delete itemRefs.value[`item_${index}`];
+	}
+};
+
 const lessonData = computed(() => ({
 	roomId: roomData.value.roomId,
 	displayColor: roomData.value.displayColor,

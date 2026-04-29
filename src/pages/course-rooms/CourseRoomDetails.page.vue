@@ -51,7 +51,6 @@
 		<component
 			:is="currentTabComponent"
 			v-if="!!currentTabComponent"
-			:room-data-object="roomData"
 			:role="dashBoardRole"
 			:room-id="courseId"
 			data-testid="room-content"

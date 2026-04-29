@@ -120,6 +120,7 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 			() => getRoomsApi().courseRoomsControllerPatchOrderingOfElements(roomData.value.roomId, params),
 			t("pages.courseRooms.sortElements.error")
 		);
+		await fetchContent(roomData.value.roomId);
 	};
 
 	const deleteLesson = async (lessonId: string): Promise<void> => {
