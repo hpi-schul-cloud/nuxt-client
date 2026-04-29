@@ -71,7 +71,7 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 		const { result } = await fetchCourseCall.execute(async () => {
 			const response = await $axios.get(`/v1/courses/${courseId}`);
 			return response.data;
-		}, t("pages.courses.fetchCourseContent.error"));
+		}, t("pages.courseRooms.fetchCourseContent.error"));
 
 		return result || null;
 	};
@@ -86,7 +86,7 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 		} = await fetchContentCall.execute(async () => {
 			const response = await getRoomsApi().courseRoomsControllerGetRoomBoard(id);
 			return response.data;
-		}, t("pages.courses.fetchCourseContent.error"));
+		}, t("pages.courseRooms.fetchCourseContent.error"));
 
 		if (success && result) {
 			roomData.value = result;
@@ -172,7 +172,7 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 	const fetchScopePermission = async (courseId: string, userId: string): Promise<void> => {
 		const { result } = await fetchScopePermissionCall.execute(
 			() => $axios.get(`/v3/courses/${courseId}/user-permissions`),
-			t("pages.courses.fetchCourseContent.error")
+			t("pages.courseRooms.fetchCourseContent.error")
 		);
 
 		if (result?.data[userId]) {

@@ -1499,7 +1499,7 @@ export default {
 	"pages.courseRooms.tabLabel.toolsOld": "Tools",
 	"pages.courseRooms.course-locked":
 		"Der Kurs ist gesperrt, weil keine unterrichtende Lehrkraft zugeordnet ist. Bitte an den Schul-Admin wenden.",
-	"pages.courses.fetchCourseContent.error": "Beim Abrufen der Kursinhalte ist ein Fehler aufgetreten.",
+	"pages.courseRooms.fetchCourseContent.error": "Beim Abrufen der Kursinhalte ist ein Fehler aufgetreten.",
 	"pages.courseRooms.createBoard.error": "Beim Erstellen des Boards ist ein Fehler aufgetreten.",
 	"pages.courseRooms.deleteLesson.error": "Beim Lschen des Themas ist ein Fehler aufgetreten.",
 	"pages.courseRooms.deleteTask.error": "Beim Lschen der Aufgabe ist ein Fehler aufgetreten.",

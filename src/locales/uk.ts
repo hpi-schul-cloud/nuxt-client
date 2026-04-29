@@ -1490,7 +1490,7 @@ export default {
 	"pages.courseRooms.tabLabel.toolsOld": "Інструмент",
 	"pages.courseRooms.course-locked":
 		"Курс заблоковано, оскільки на нього не призначено викладача. Будь ласка, зверніться до адміністратора школи.",
-	"pages.courses.fetchCourseContent.error": "Під час отримання вмісту курсу виникла помилка.",
+	"pages.courseRooms.fetchCourseContent.error": "Під час отримання вмісту курсу виникла помилка.",
 	"pages.courseRooms.createBoard.error": "Під час створення дошки виникла помилка.",
 	"pages.courseRooms.deleteLesson.error": "Під час видалення теми виникла помилка.",
 	"pages.courseRooms.deleteTask.error": "Під час видалення завдання виникла помилка.",

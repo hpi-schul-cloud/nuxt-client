@@ -1508,7 +1508,7 @@ export default {
 	"pages.courseRooms.tabLabel.toolsOld": "Herramientas",
 	"pages.courseRooms.course-locked":
 		"El curso está bloqueado porque no hay ningún profesor asignado para impartirlo. Póngase en contacto con la administración de la escuela.",
-	"pages.courses.fetchCourseContent.error": "Se ha producido un error al obtener el contenido del curso.",
+	"pages.courseRooms.fetchCourseContent.error": "Se ha producido un error al obtener el contenido del curso.",
 	"pages.courseRooms.createBoard.error": "Se ha producido un error al crear el tablero.",
 	"pages.courseRooms.deleteLesson.error": "Se ha producido un error al eliminar el tema.",
 	"pages.courseRooms.deleteTask.error": "Se ha producido un error al eliminar la tarea.",
