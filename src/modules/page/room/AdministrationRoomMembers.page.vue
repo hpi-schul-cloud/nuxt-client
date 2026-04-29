@@ -28,6 +28,7 @@ import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+
 const { schoolDetails } = useSchoolStoreRefs();
 const { fetchRoom } = useRoomDetailsStore();
 const { room } = storeToRefs(useRoomDetailsStore());

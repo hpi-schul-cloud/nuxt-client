@@ -166,15 +166,14 @@
 <script setup lang="ts">
 import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
 import GroupModule from "@/store/group";
-import SchoolsModule from "@/store/schools";
 import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import { askDeletion } from "@/utils/confirmation-dialog.utils";
-import { GROUP_MODULE_KEY, injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { GROUP_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { ClassSortQueryType, Permission, SchoolYearQueryType, SchulcloudTheme } from "@api-server";
-import { useAppStore } from "@data-app";
+import { useAppStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { EndCourseSyncDialog } from "@feature-course-sync";
 import {
@@ -210,12 +209,12 @@ const props = defineProps({
 
 const { hasPermission } = useAppStore();
 const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
-const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 const route = useRoute();
 const router = useRouter();
 
 const { t } = useI18n();
+const { schoolDetails } = useSchoolStoreRefs();
 
 const activeTab = computed({
 	get() {
@@ -233,7 +232,7 @@ const footerProps = {
 
 useTitle(buildPageTitle(t("pages.administration.classes.index.title")));
 
-const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(() => {
+const schoolYearQueryType = computed(() => {
 	switch (props.tab) {
 		case "next":
 			return SchoolYearQueryType.NEXT_YEAR;
@@ -246,9 +245,8 @@ const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(() => {
 	}
 });
 
-const nextYear = computed(() => schoolsModule.getSchool.years.nextYear.name);
-
-const currentYear = computed(() => schoolsModule.getSchool.years.activeYear.name);
+const nextYear = computed(() => schoolDetails.value.years.nextYear.name);
+const currentYear = computed(() => schoolDetails.value.years.activeYear.name);
 
 const classes = computed(() => groupModule.getClasses);
 
@@ -406,9 +404,3 @@ onMounted(() => {
 
 const { instituteTitle } = storeToRefs(useEnvStore());
 </script>
-
-<style scoped>
-.v-tabs {
-	margin-bottom: -2px;
-}
-</style>

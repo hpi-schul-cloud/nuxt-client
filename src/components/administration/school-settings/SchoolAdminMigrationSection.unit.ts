@@ -1,13 +1,11 @@
 import SchoolAdminMigrationSection from "./SchoolAdminMigrationSection.vue";
 import SchoolMigrationWarningCard from "./SchoolMigrationWarningCard.vue";
-import SchoolsModule from "@/store/schools";
 import { BusinessError } from "@/store/types/commons";
-import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { businessErrorFactory, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { ConfigResponse } from "@api-server";
+import { ConfigResponse, SchoolResponse } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { UserLoginMigration, useUserLoginMigration } from "@data-user-login-migration";
 import { createTestingPinia } from "@pinia/testing";
@@ -20,11 +18,10 @@ vi.mock("@data-user-login-migration");
 const useUserLoginMigrationMock = vi.mocked(useUserLoginMigration);
 
 describe("SchoolAdminMigrationSection", () => {
-	let schoolsModule: Mocked<SchoolsModule>;
 	let useUserLoginMigrationMockReturn: Mocked<ReturnType<typeof useUserLoginMigration>>;
 
 	const setup = (
-		schoolGetters: Partial<SchoolsModule> = {},
+		schoolDetails: Partial<SchoolResponse> = {},
 		userLoginMigrationConfig: {
 			userLoginMigration?: UserLoginMigration;
 			businessError?: BusinessError;
@@ -52,11 +49,6 @@ describe("SchoolAdminMigrationSection", () => {
 			userLoginMigrationConfig.businessError ?? businessErrorFactory.build({ message: undefined })
 		);
 
-		schoolsModule = createModuleMocks(SchoolsModule, {
-			getSchool: { ...mockSchool, officialSchoolNumber: undefined },
-			...schoolGetters,
-		});
-
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			ACCESSIBILITY_REPORT_EMAIL: "ticketsystem@niedersachsen.support",
@@ -64,12 +56,11 @@ describe("SchoolAdminMigrationSection", () => {
 			...envConfig,
 		});
 
+		const { schoolStore } = createTestSchoolStore({ schoolDetails: { ...mockSchool, ...schoolDetails } });
+
 		const wrapper = mount(SchoolAdminMigrationSection, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
-				},
 				stubs: {
 					"i18n-t": {
 						template: "<span><slot /></span>",
@@ -80,7 +71,7 @@ describe("SchoolAdminMigrationSection", () => {
 
 		return {
 			wrapper,
-			schoolsModule,
+			schoolStore,
 			useUserLoginMigrationMockReturn,
 		};
 	};
@@ -120,9 +111,7 @@ describe("SchoolAdminMigrationSection", () => {
 
 		it("should return support link with schoolnumber in subject", () => {
 			const { wrapper } = setup(
-				{
-					getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-				},
+				{ officialSchoolNumber: "12345" },
 				{
 					userLoginMigration: {
 						sourceSystemId: "sourceSystemId",
@@ -306,9 +295,7 @@ describe("SchoolAdminMigrationSection", () => {
 	describe("Migration start button", () => {
 		it("should be enabled when migration is enabled", () => {
 			const { wrapper } = setup(
-				{
-					getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-				},
+				{ officialSchoolNumber: "12345" },
 				{
 					userLoginMigration: undefined,
 				}
@@ -365,14 +352,7 @@ describe("SchoolAdminMigrationSection", () => {
 		});
 
 		it("should not render migration start button and migration mandatory switch, when click has been triggered", async () => {
-			const { wrapper } = setup(
-				{
-					getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-				},
-				{
-					userLoginMigration: undefined,
-				}
-			);
+			const { wrapper } = setup({ officialSchoolNumber: "12345" }, { userLoginMigration: undefined });
 
 			const buttonComponent = wrapper.findComponent({ name: "v-btn" });
 			const switchComponent = wrapper.findComponent({ name: "v-switch" });
@@ -385,9 +365,7 @@ describe("SchoolAdminMigrationSection", () => {
 		describe("when an error occurs during migration start", () => {
 			it("should display an alert", () => {
 				const { wrapper } = setup(
-					{
-						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-					},
+					{ officialSchoolNumber: "12345" },
 					{
 						userLoginMigration: undefined,
 						businessError: businessErrorFactory.build({
@@ -431,9 +409,7 @@ describe("SchoolAdminMigrationSection", () => {
 
 		it("should should not render migration end button and migration mandatory switch, when click has been triggered", async () => {
 			const { wrapper } = setup(
-				{
-					getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-				},
+				{ officialSchoolNumber: "12345" },
 				{
 					userLoginMigration: {
 						sourceSystemId: "sourceSystemId",
@@ -459,9 +435,7 @@ describe("SchoolAdminMigrationSection", () => {
 		describe("when migration start button is clicked", () => {
 			it("should be rendered", async () => {
 				const { wrapper } = setup(
-					{
-						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-					},
+					{ officialSchoolNumber: "12345" },
 					{
 						userLoginMigration: undefined,
 					}
@@ -478,9 +452,7 @@ describe("SchoolAdminMigrationSection", () => {
 			describe("when agree button of start warning card is clicked", () => {
 				it("should not render the card and start migration", async () => {
 					const { wrapper, useUserLoginMigrationMockReturn } = setup(
-						{
-							getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-						},
+						{ officialSchoolNumber: "12345" },
 						{
 							userLoginMigration: undefined,
 						}
@@ -501,9 +473,7 @@ describe("SchoolAdminMigrationSection", () => {
 		describe("when disagree button of card is clicked", () => {
 			it("should not render the card and not start migration", async () => {
 				const { wrapper, useUserLoginMigrationMockReturn } = setup(
-					{
-						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-					},
+					{ officialSchoolNumber: "12345" },
 					{
 						userLoginMigration: undefined,
 					}
@@ -523,9 +493,7 @@ describe("SchoolAdminMigrationSection", () => {
 		describe("when migration end button is clicked", () => {
 			it("should be rendered", async () => {
 				const { wrapper } = setup(
-					{
-						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-					},
+					{ officialSchoolNumber: "12345" },
 					{
 						userLoginMigration: {
 							sourceSystemId: "sourceSystemId",
@@ -550,9 +518,7 @@ describe("SchoolAdminMigrationSection", () => {
 		describe("when agree button of end warning card is clicked", () => {
 			it("should not render the card and complete migration", async () => {
 				const { wrapper, useUserLoginMigrationMockReturn } = setup(
-					{
-						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-					},
+					{ officialSchoolNumber: "12345" },
 					{
 						userLoginMigration: {
 							sourceSystemId: "sourceSystemId",
@@ -579,9 +545,7 @@ describe("SchoolAdminMigrationSection", () => {
 		describe("when disagree button of card is clicked", () => {
 			it("should not render the card and not complete migration", async () => {
 				const { wrapper, useUserLoginMigrationMockReturn } = setup(
-					{
-						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-					},
+					{ officialSchoolNumber: "12345" },
 					{
 						userLoginMigration: {
 							sourceSystemId: "sourceSystemId",
@@ -611,9 +575,7 @@ describe("SchoolAdminMigrationSection", () => {
 			vi.useFakeTimers();
 			vi.setSystemTime(new Date(2023, 1, 2));
 			const { wrapper } = setup(
-				{
-					getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-				},
+				{ officialSchoolNumber: "12345" },
 				{
 					userLoginMigration: {
 						sourceSystemId: "sourceSystemId",
@@ -639,9 +601,7 @@ describe("SchoolAdminMigrationSection", () => {
 			vi.useFakeTimers();
 			vi.setSystemTime(new Date(2023, 1, 4));
 			const { wrapper } = setup(
-				{
-					getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-				},
+				{ officialSchoolNumber: "12345" },
 				{
 					userLoginMigration: {
 						sourceSystemId: "sourceSystemId",
@@ -666,9 +626,7 @@ describe("SchoolAdminMigrationSection", () => {
 
 		it("should not exist when migration has not been completed", () => {
 			const { wrapper } = setup(
-				{
-					getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-				},
+				{ officialSchoolNumber: "12345" },
 				{
 					userLoginMigration: {
 						sourceSystemId: "sourceSystemId",
@@ -727,14 +685,8 @@ describe("SchoolAdminMigrationSection", () => {
 		});
 
 		describe("when clicking switch button", () => {
-			it("should call update in schoolsModule", async () => {
-				const { wrapper, schoolsModule } = setup(
-					{},
-					{},
-					{
-						FEATURE_SHOW_OUTDATED_USERS: true,
-					}
-				);
+			it("should call update in schoolStore", async () => {
+				const { wrapper, schoolStore } = setup({}, {}, { FEATURE_SHOW_OUTDATED_USERS: true });
 
 				const switchComponents = wrapper.findAllComponents({
 					name: "v-switch",
@@ -742,14 +694,7 @@ describe("SchoolAdminMigrationSection", () => {
 
 				await switchComponents[0].vm.$emit("update:modelValue", true);
 
-				const expectedProps = { features: ["showOutdatedUsers"] };
-
-				expect(schoolsModule.update).toHaveBeenCalledWith({
-					id: mockSchool.id,
-					props: {
-						...expectedProps,
-					},
-				});
+				expect(schoolStore.updateSchool).toHaveBeenCalledWith(mockSchool.id, { features: ["showOutdatedUsers"] });
 			});
 		});
 	});
@@ -805,9 +750,7 @@ describe("SchoolAdminMigrationSection", () => {
 		describe("when user login migration is finished", () => {
 			it("should hide switch button", () => {
 				const { wrapper } = setup(
-					{
-						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-					},
+					{ officialSchoolNumber: "12345" },
 					{
 						userLoginMigration: {
 							sourceSystemId: "sourceSystemId",
@@ -832,15 +775,9 @@ describe("SchoolAdminMigrationSection", () => {
 		describe("when migration is active", () => {
 			it("should show switch button", () => {
 				const { wrapper } = setup(
-					{
-						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-					},
-					{
-						userLoginMigration: undefined,
-					},
-					{
-						FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: true,
-					}
+					{ officialSchoolNumber: "12345" },
+					{ userLoginMigration: undefined },
+					{ FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: true }
 				);
 
 				const switchComponent = wrapper.find('[data-testid="enable-sync-during-migration-switch"]');
@@ -850,12 +787,7 @@ describe("SchoolAdminMigrationSection", () => {
 
 			it("should enable the switch", () => {
 				const { wrapper } = setup(
-					{
-						getSchool: {
-							...mockSchool,
-							officialSchoolNumber: "12345",
-						},
-					},
+					{ officialSchoolNumber: "12345" },
 					{
 						userLoginMigration: {
 							sourceSystemId: "sourceSystemId",
@@ -880,9 +812,7 @@ describe("SchoolAdminMigrationSection", () => {
 		describe("when migration has not yet closed", () => {
 			it("should disable the switch", () => {
 				const { wrapper } = setup(
-					{
-						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-					},
+					{ officialSchoolNumber: "12345" },
 					{
 						userLoginMigration: {
 							sourceSystemId: "sourceSystemId",
@@ -910,13 +840,8 @@ describe("SchoolAdminMigrationSection", () => {
 
 		describe("when clicking switch button", () => {
 			it("should call update in schoolsModule", () => {
-				const { wrapper, schoolsModule } = setup(
-					{
-						getSchool: {
-							...mockSchool,
-							officialSchoolNumber: "12345",
-						},
-					},
+				const { wrapper, schoolStore } = setup(
+					{ officialSchoolNumber: "12345" },
 					{
 						userLoginMigration: {
 							sourceSystemId: "sourceSystemId",
@@ -938,7 +863,7 @@ describe("SchoolAdminMigrationSection", () => {
 
 				switchComponents[1].vm.$emit("update:modelValue");
 
-				expect(schoolsModule.update).toHaveBeenCalled();
+				expect(schoolStore.updateSchool).toHaveBeenCalled();
 			});
 		});
 	});
@@ -948,12 +873,7 @@ describe("SchoolAdminMigrationSection", () => {
 			describe("when the migration is running and the school is migrated", () => {
 				it("should be enabled", () => {
 					const { wrapper } = setup(
-						{
-							getSchool: {
-								...mockSchool,
-								systemIds: ["targetSystemId"],
-							},
-						},
+						{ systemIds: ["targetSystemId"] },
 						{
 							userLoginMigration: {
 								sourceSystemId: "sourceSystemId",
@@ -964,9 +884,7 @@ describe("SchoolAdminMigrationSection", () => {
 								mandatorySince: undefined,
 							},
 						},
-						{
-							FEATURE_SHOW_MIGRATION_WIZARD: true,
-						}
+						{ FEATURE_SHOW_MIGRATION_WIZARD: true }
 					);
 
 					const buttons = wrapper.findAllComponents({ name: "v-btn" });
@@ -1042,12 +960,7 @@ describe("SchoolAdminMigrationSection", () => {
 			describe("when the school has not been migrated", () => {
 				it("should be disabled", () => {
 					const { wrapper } = setup(
-						{
-							getSchool: {
-								...mockSchool,
-								systemIds: [],
-							},
-						},
+						{ systemIds: [] },
 						{
 							userLoginMigration: {
 								sourceSystemId: "sourceSystemId",
@@ -1058,9 +971,7 @@ describe("SchoolAdminMigrationSection", () => {
 								mandatorySince: undefined,
 							},
 						},
-						{
-							FEATURE_SHOW_MIGRATION_WIZARD: true,
-						}
+						{ FEATURE_SHOW_MIGRATION_WIZARD: true }
 					);
 
 					const buttons = wrapper.findAllComponents({ name: "v-btn" });

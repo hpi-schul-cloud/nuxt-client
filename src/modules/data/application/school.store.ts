@@ -1,11 +1,13 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
+import { mapFeaturesToFeaturesObject } from "@/utils/school-features";
 import {
 	SchoolApiFactory,
 	SchoolFeature,
 	SchoolResponse,
 	SchoolSystemResponse,
+	SchoolUpdateBodyParams,
 	SchulcloudTheme,
 	SchulConneXProvisioningOptionsParams,
 } from "@api-server";
@@ -32,6 +34,7 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 
 	// Getters
 	const schoolFeatures = computed(() => new Set(schoolDetails.value?.features));
+	const schoolFeatureObject = computed(() => mapFeaturesToFeaturesObject(schoolDetails.value.features));
 	const currentYear = computed(() => schoolDetails.value.currentYear);
 	const isSchoolExternallyManaged = computed(() => {
 		const isThr = useEnvConfig().value.SC_THEME === SchulcloudTheme.THR;
@@ -101,9 +104,20 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 			t("error.generic")
 		);
 
+	const updateSchool = async (schoolId: string, schoolProps: SchoolUpdateBodyParams) => {
+		const { result, success } = await executeSchoolApi(
+			() => schoolApi.schoolControllerUpdateSchool(schoolId, schoolProps),
+			"pages.administration.school.index.error"
+		);
+		if (success) {
+			schoolDetails.value = result?.data;
+		}
+	};
+
 	return {
 		schoolDetails,
 		schoolFeatures,
+		schoolFeatureObject,
 		schoolSystems,
 		schoolMaintenanceStatus,
 		currentYear,
@@ -120,6 +134,7 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 		setProvisioningOptions,
 		setMaintenanceStatus,
 		deleteSchoolSystem,
+		updateSchool,
 	};
 });
 

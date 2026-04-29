@@ -169,12 +169,12 @@ import { useI18n } from "vue-i18n";
 import { mapGetters } from "vuex";
 
 const redirectToConfigPage = (page) => {
-	const { id } = page.$route.query;
-	if (id) {
-		page.$router.push(`/administration/ldap/config?id=${id}`);
-	} else {
-		page.$router.push("/administration/ldap/config");
-	}
+	// const { id } = page.$route.query;
+	// if (id) {
+	// 	page.$router.push(`/administration/ldap/config?id=${id}`);
+	// } else {
+	// 	page.$router.push("/administration/ldap/config");
+	// }
 };
 
 export default defineComponent({

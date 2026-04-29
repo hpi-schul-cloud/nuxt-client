@@ -4,7 +4,6 @@ import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
-import SchoolsModule from "@/store/schools";
 import {
 	createTestAppStore,
 	createTestAppStoreWithPermissions,
@@ -16,8 +15,8 @@ import {
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { Permission, RoleName } from "@api-server";
+import { useSchoolStore } from "@data-app";
 import { useClasses } from "@data-classes";
 import { useUsersStore } from "@data-users";
 import { createTestingPinia } from "@pinia/testing";
@@ -27,7 +26,6 @@ import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
 import { VCheckbox } from "vuetify/components";
-import { useSchoolStore } from "@data-app";
 
 vi.mock("@/components/administration/data-filter/composables/filterLocalStorage.composable");
 const mockedUseFilterLocalStorage = vi.mocked(useFilterLocalStorage);
@@ -59,11 +57,6 @@ describe("teacher overview page", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore();
-
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-
 		createTestAppStore({
 			me: {
 				school: mockSchool,

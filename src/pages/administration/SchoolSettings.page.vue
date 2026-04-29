@@ -1,6 +1,8 @@
 <template>
 	<DefaultWireframe :headline="headline" max-width="native">
-		<ErrorAlert v-if="schoolApiError">{{ t("pages.administration.school.index.error") }}</ErrorAlert>
+		<ErrorAlert v-if="schoolApiError" data-testid="error-alert">
+			{{ t("pages.administration.school.index.error") }}
+		</ErrorAlert>
 		<div data-testid="no-error">
 			<InfoAlert class="mb-12" data-testid="institute-title">
 				{{ t("pages.administration.school.index.info", { instituteTitle }) }}

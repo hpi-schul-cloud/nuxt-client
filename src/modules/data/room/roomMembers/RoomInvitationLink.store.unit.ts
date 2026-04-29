@@ -1,6 +1,4 @@
 import { InvitationStep, RoomInvitationLink } from "./types";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import {
 	expectNotification,
@@ -9,10 +7,8 @@ import {
 	mockAxiosInstance,
 	mockedPiniaStoreTyping,
 	roomFactory,
-	schoolFactory,
 } from "@@/tests/test-utils";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
-import setupStores from "@@/tests/test-utils/setupStores";
 import * as serverApi from "@api-server";
 import { RoomIdResponse } from "@api-server";
 import { useRoomDetailsStore, useRoomInvitationLinkStore } from "@data-room";
@@ -40,17 +36,6 @@ describe("useRoomInvitationLinkStore", () => {
 		vi.spyOn(serverApi, "RoomInvitationLinkApiFactory").mockReturnValue(roomInvitationLinkApiMock);
 		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApiMock);
 		initializeAxios(axiosMock);
-
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-
-		schoolsModule.setSchool(
-			schoolFactory.build({
-				id: "school-id",
-				name: "Paul-Gerhardt-Gymnasium",
-			})
-		);
 	});
 
 	const setup = (roomInvitationLinks: RoomInvitationLink[] = []) => {

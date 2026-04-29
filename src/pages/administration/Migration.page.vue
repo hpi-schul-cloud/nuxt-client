@@ -387,11 +387,12 @@
 </template>
 <script setup lang="ts">
 import ImportUsers from "@/components/administration/ImportUsers.vue";
-import { importUsersModule, schoolsModule } from "@/store";
+import { importUsersModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { SchulcloudTheme } from "@api-server";
+import { SchoolFeature, SchulcloudTheme } from "@api-server";
+import { useAppStore, useSchoolStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { mdiClose } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
@@ -405,32 +406,32 @@ const { t } = useI18n();
 
 const router = useRouter();
 const { instanceName } = storeToRefs(useEnvStore());
+const { fetchSchoolDetails, hasFeature } = useSchoolStore();
+const { schoolDetails, schoolFeatures } = useSchoolStoreRefs();
 
-const migrationStep: Ref<number> = ref(1);
+const migrationStep = ref(1);
 
-const isMigrationConfirm: Ref<boolean> = ref(false);
+const isMigrationConfirm = ref(false);
 
 const errorTimeout: Ref<number> = ref(7500);
 
-const isLoading: Ref<boolean> = ref(false);
+const isLoading = ref(false);
 
-const matchByPreferredName: Ref<boolean> = ref(false);
+const matchByPreferredName = ref(false);
 
 const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
 
 const importUsersRef: Ref<InstanceType<typeof ImportUsers> | null> = ref(null);
 
-const isMigrationNotStarted = computed(() => school.value.inUserMigration === undefined);
+const isMigrationNotStarted = computed(() => schoolDetails.value.inUserMigration === undefined);
 
-const canPerformMigration = computed(() => school.value.inUserMigration && school.value.inMaintenance);
+const canPerformMigration = computed(() => schoolDetails.value.inUserMigration && schoolDetails.value.inMaintenance);
 
-const isMigrationFinished = computed(() => school.value.inUserMigration === false);
+const isMigrationFinished = computed(() => schoolDetails.value.inUserMigration === false);
 
 const canFinishMaintenance = computed(() => isMigrationConfirm.value || isMigrationFinished.value);
 
-const isMaintenanceFinished = computed(() => !school.value.inMaintenance);
-
-const school = computed(() => schoolsModule.getSchool);
+const isMaintenanceFinished = computed(() => !schoolDetails.value.inMaintenance);
 
 const businessError: ComputedRef<BusinessError | null> = computed(() => importUsersModule.getBusinessError);
 
@@ -469,15 +470,21 @@ const isAllowed = async () => {
 	if (useEnvConfig().value.FEATURE_USER_MIGRATION_ENABLED) {
 		return true;
 	}
-	if (school.value.id === "") {
-		await schoolsModule.fetchSchool();
+	if (!schoolDetails.value.id) {
+		const schoolId = useAppStore().school?.id;
+		if (!schoolId) {
+			await fetchSchoolDetails(schoolId);
+		}
 	}
-	return school.value.featureObject.ldapUniventionMigrationSchool;
+	return hasFeature(SchoolFeature.LDAP_UNIVENTION_MIGRATION_SCHOOL);
 };
 
 const summary = async () => {
-	if (school.value.id === "") {
-		await schoolsModule.fetchSchool();
+	if (!schoolDetails.value.id) {
+		const schoolId = useAppStore().school?.id;
+		if (!schoolId) {
+			await fetchSchoolDetails(schoolId);
+		}
 	}
 	if (!canPerformMigration.value) {
 		return;
@@ -493,7 +500,7 @@ const summary = async () => {
 };
 
 const checkTotalInterval = () => {
-	if (school.value.inUserMigration && totalImportUsers.value === 0) {
+	if (schoolDetails.value.inUserMigration && totalImportUsers.value === 0) {
 		checkTotal.value = setInterval(() => {
 			importUsersModule.fetchTotal();
 		}, 5000);
@@ -504,7 +511,7 @@ const checkTotalInterval = () => {
 };
 
 const setSchoolInUserMigration = async () => {
-	if (school.value.inUserMigration) {
+	if (schoolDetails.value.inUserMigration) {
 		return;
 	}
 

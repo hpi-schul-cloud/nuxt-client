@@ -1,31 +1,14 @@
 import { FilterOption, Registration, UpdateFilterParamType, User } from "../types";
 import { useDataTableFilter } from "./filter.composable";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { createTestAppStore, mockSchool, mountComposable } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
+import { Mock, vi } from "vitest";
 
-vi.mock("@vueuse/core", async (importOriginal) => {
-	const defaultState = {
-		pagination: {},
-		filter: {
-			studentsManagementPage: {
-				query: {},
-			},
-			teachersManagementPage: {
-				query: {},
-			},
-		},
-		sorting: {},
-		version: 1,
-	};
-
-	const actual = await importOriginal<typeof import("@vueuse/core")>();
-	return {
-		...actual,
-		useStorage: vi.fn().mockReturnValue({ value: defaultState }),
-	};
-});
+vi.mock("@/plugins/i18n");
+(useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 const setup = (userType: User) => mountComposable(() => useDataTableFilter(userType));
 
@@ -195,18 +178,24 @@ describe("filter composable", () => {
 
 			expect(filterChipTitles.value.length).toEqual(5);
 			expect(filterChipTitles.value[0].item).toEqual(FilterOption.CREATION_DATE);
-			expect(filterChipTitles.value[0].title).toEqual("Erstellt zwischen 09.01.2024 und 30.01.2024");
+			expect(filterChipTitles.value[0].title).toEqual(
+				"utils.adminFilter.date.created 09.01.2024 common.words.and 30.01.2024"
+			);
 
 			expect(filterChipTitles.value[1].item).toEqual(FilterOption.CLASSES);
-			expect(filterChipTitles.value[1].title).toEqual("Klasse(n) = 1A");
+			expect(filterChipTitles.value[1].title).toEqual("utils.adminFilter.class.title = 1A");
 			expect(filterChipTitles.value[2].item).toEqual(FilterOption.REGISTRATION);
-			expect(filterChipTitles.value[2].title).toEqual("Registrierung abgeschlossen");
+			expect(filterChipTitles.value[2].title).toEqual("pages.administration.students.legend.icon.success");
 
 			expect(filterChipTitles.value[3].item).toEqual(FilterOption.LAST_MIGRATION_ON);
-			expect(filterChipTitles.value[3].title).toEqual("Zuletzt migriert am 09.01.2024 und 29.01.2024");
+			expect(filterChipTitles.value[3].title).toEqual(
+				"utils.adminFilter.lastMigration.title 09.01.2024 common.words.and 29.01.2024"
+			);
 
 			expect(filterChipTitles.value[4].item).toEqual(FilterOption.OBSOLOTE_SINCE);
-			expect(filterChipTitles.value[4].title).toEqual("Veraltet seit 09.01.2024 und 21.01.2024");
+			expect(filterChipTitles.value[4].title).toEqual(
+				"utils.adminFilter.outdatedSince.title 09.01.2024 common.words.and 21.01.2024"
+			);
 		});
 
 		it("should return an empty array when no filter is set ", () => {

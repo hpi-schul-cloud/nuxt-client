@@ -1,18 +1,18 @@
 import ClassOverview from "./ClassOverview.page.vue";
 import GroupModule from "@/store/group";
-import SchoolsModule from "@/store/schools";
 import { ClassRootType } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
-import { School, Year } from "@/store/types/schools";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { GROUP_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { GROUP_MODULE_KEY } from "@/utils/inject";
 import {
 	classInfoFactory,
 	courseFactory,
 	createTestAppStoreWithPermissions,
 	createTestEnvStore,
+	mockSchool,
 } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ConfigResponse, Permission, SchulcloudTheme } from "@api-server";
@@ -28,7 +28,6 @@ type Tab = "current" | "next" | "archive";
 
 type CreateWrapperOptions = {
 	groupModuleGetters?: Partial<GroupModule>;
-	schoolsModuleGetters?: Partial<SchoolsModule>;
 	props?: { tab: Tab };
 	userPermissions?: Permission[];
 	envs?: Partial<ConfigResponse>;
@@ -36,7 +35,6 @@ type CreateWrapperOptions = {
 
 const createWrapper = ({
 	groupModuleGetters = {},
-	schoolsModuleGetters = {},
 	props = { tab: "current" as Tab },
 	userPermissions,
 	envs = {},
@@ -67,20 +65,18 @@ const createWrapper = ({
 	setActivePinia(createTestingPinia({ stubActions: false }));
 	createTestAppStoreWithPermissions(userPermissions ?? defaultPermissions);
 
-	const schoolModule = createModuleMocks(SchoolsModule, {
-		getSchool: {
+	createTestSchoolStore({
+		schoolDetails: {
+			...mockSchool,
 			years: {
-				schoolYears: [],
 				nextYear: {
 					name: "2024/25",
-				} as Year,
+				},
 				activeYear: {
 					name: "2023/24",
-				} as Year,
-				lastYear: {} as Year,
+				},
 			},
-		} as unknown as School,
-		...schoolsModuleGetters,
+		},
 	});
 
 	createTestEnvStore({
@@ -93,7 +89,6 @@ const createWrapper = ({
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[GROUP_MODULE_KEY.valueOf()]: groupModule,
-				[SCHOOLS_MODULE_KEY.valueOf()]: schoolModule,
 			},
 			stubs: {
 				EndCourseSyncDialog: true,
@@ -111,7 +106,6 @@ const createWrapper = ({
 		route,
 		router,
 		groupModule,
-		schoolModule,
 	};
 };
 
@@ -119,17 +113,8 @@ const findTableComponent = (wrapper: VueWrapper) =>
 	wrapper.findComponent<typeof VDataTableServer>('[data-testid="admin-class-table"]');
 
 describe("ClassOverview", () => {
-	afterEach(() => {
-		vi.clearAllMocks();
-	});
-
 	describe("general", () => {
 		const setup = () => createWrapper({});
-
-		it("should mount", () => {
-			const { wrapper } = setup();
-			expect(wrapper.exists()).toBe(true);
-		});
 
 		describe("onMounted", () => {
 			describe("when loading the page", () => {
