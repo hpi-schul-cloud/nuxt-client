@@ -12,20 +12,21 @@ export type FooterLink = {
 
 export type FooterLinksOptions = {
 	contactEmail?: string;
-	contactSubject: string;
+	contactSubject?: string;
 	privacyPolicyKey?: string;
 	privacyPolicyAsRoute?: boolean;
 	includeSecurityLink?: boolean;
 	includeAccessibilityStatement?: boolean;
 };
 
-export const useFooterLinks = (options: FooterLinksOptions): { links: ComputedRef<FooterLink[]> } => {
+export const useFooterLinks = (options: FooterLinksOptions = {}): { links: ComputedRef<FooterLink[]> } => {
 	const { t } = useI18n();
 	const { specificFiles } = useFilePaths();
 	const env = useEnvConfig();
 
 	const links = computed<FooterLink[]>(() => {
 		const contactEmail = options.contactEmail ?? env.value.SC_CONTACT_EMAIL ?? "";
+		const contactSubject = options.contactSubject ?? `${env.value.SC_TITLE} Anfrage`;
 
 		const baseLinks: FooterLink[] = [
 			{
@@ -49,7 +50,7 @@ export const useFooterLinks = (options: FooterLinksOptions): { links: ComputedRe
 						target: "_blank",
 					},
 			{
-				href: `mailto:${contactEmail}?subject=${encodeURIComponent(options.contactSubject)}`,
+				href: `mailto:${contactEmail}?subject=${encodeURIComponent(contactSubject)}`,
 				text: t("components.legacy.footer.contact"),
 			},
 		];

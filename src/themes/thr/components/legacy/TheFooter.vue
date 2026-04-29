@@ -18,8 +18,6 @@
 import { useFooterLinks } from "@ui-layout";
 
 const { links } = useFooterLinks({
-	contactEmail: "schulcloud-support@thillm.de",
-	contactSubject: "THR Schul-Cloud Anfrage",
 	privacyPolicyKey: "components.legacy.footer.privacy_policy_thr",
 });
 </script>

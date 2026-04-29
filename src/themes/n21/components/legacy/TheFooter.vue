@@ -17,9 +17,7 @@
 <script setup lang="ts">
 import { useFooterLinks } from "@ui-layout";
 
-const { links } = useFooterLinks({
-	contactSubject: "Niedersächsische Bildungscloud Anfrage",
-});
+const { links } = useFooterLinks();
 </script>
 
 <style lang="scss" scoped>

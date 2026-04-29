@@ -17,10 +17,7 @@
 <script setup lang="ts">
 import { useFooterLinks } from "@ui-layout";
 
-const { links } = useFooterLinks({
-	contactEmail: "support.scbb@meinlibra.de",
-	contactSubject: "Schul-Cloud Brandenburg Anfrage",
-});
+const { links } = useFooterLinks();
 </script>
 
 <style lang="scss" scoped>

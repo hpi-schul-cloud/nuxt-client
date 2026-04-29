@@ -19,8 +19,6 @@ import { useFooterLinks } from "@ui-layout";
 import { VFooter } from "vuetify/components";
 
 const { links } = useFooterLinks({
-	contactEmail: "support@dbildungscloud.de",
-	contactSubject: "dBildungscloud Anfrage",
 	privacyPolicyAsRoute: true,
 	includeSecurityLink: true,
 	includeAccessibilityStatement: false,

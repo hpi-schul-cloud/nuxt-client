@@ -6,6 +6,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { Sidebar, Topbar } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { h, nextTick, ref } from "vue";
 import { VApp } from "vuetify/components";
 
@@ -29,7 +30,7 @@ vi.mocked(useStatusAlerts).mockReturnValue({
 });
 
 const setup = () => {
-	const pinia = createTestingPinia();
+	setActivePinia(createTestingPinia());
 	createTestEnvStore({
 		DOCUMENT_BASE_DIR: "https://example.com/documents/",
 	});
@@ -39,7 +40,7 @@ const setup = () => {
 			default: h(LoggedInLayout),
 		},
 		global: {
-			plugins: [createTestingVuetify(), createTestingI18n(), pinia],
+			plugins: [createTestingVuetify(), createTestingI18n()],
 			stubs: {
 				"application-error-wrapper": { template: "<div></div>" },
 				snackbar: { template: "<div></div>" },

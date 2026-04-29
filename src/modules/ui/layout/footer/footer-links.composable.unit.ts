@@ -11,10 +11,12 @@ describe("useFooterLinks", () => {
 		createTestEnvStore({
 			DOCUMENT_BASE_DIR: "https://dbildungscloud.de/documents/",
 			SC_THEME: SchulcloudTheme.DEFAULT,
+			SC_TITLE: "Test Cloud",
+			SC_CONTACT_EMAIL: "default@dbildungscloud.de",
 		});
 	});
 
-	const setup = (options: Parameters<typeof useFooterLinks>[0]) =>
+	const setup = (options?: Parameters<typeof useFooterLinks>[0]) =>
 		mountComposable(() => useFooterLinks(options), {
 			global: {
 				plugins: [createTestingI18n()],
@@ -35,24 +37,15 @@ describe("useFooterLinks", () => {
 		expect(links.value[3].href).toContain("Test%20Subject");
 	});
 
-	it("should use SC_CONTACT_EMAIL from env when contactEmail is not provided", () => {
-		createTestEnvStore({
-			DOCUMENT_BASE_DIR: "https://dbildungscloud.de/documents/",
-			SC_THEME: SchulcloudTheme.DEFAULT,
-			SC_CONTACT_EMAIL: "env@dbildungscloud.de",
-		});
+	it("should use SC_CONTACT_EMAIL and SC_TITLE from env when not provided", () => {
+		const { links } = setup();
 
-		const { links } = setup({
-			contactSubject: "Test Subject",
-		});
-
-		expect(links.value[3].href).toContain("mailto:env@dbildungscloud.de");
+		expect(links.value[3].href).toContain("mailto:default@dbildungscloud.de");
+		expect(links.value[3].href).toContain("Test%20Cloud%20Anfrage");
 	});
 
 	it("should use custom privacy policy key", () => {
 		const { links } = setup({
-			contactEmail: "test@example.com",
-			contactSubject: "Test Subject",
 			privacyPolicyKey: "components.legacy.footer.privacy_policy_thr",
 		});
 
@@ -61,8 +54,6 @@ describe("useFooterLinks", () => {
 
 	it("should use router link for privacy policy", () => {
 		const { links } = setup({
-			contactEmail: "test@dbildungscloud.de",
-			contactSubject: "Test Subject",
 			privacyPolicyAsRoute: true,
 		});
 
@@ -72,8 +63,6 @@ describe("useFooterLinks", () => {
 
 	it("should use href for privacy policy", () => {
 		const { links } = setup({
-			contactEmail: "test@dbildungscloud.de",
-			contactSubject: "Test Subject",
 			privacyPolicyAsRoute: false,
 		});
 
@@ -83,8 +72,6 @@ describe("useFooterLinks", () => {
 
 	it("should include security link", () => {
 		const { links } = setup({
-			contactEmail: "test@dbildungscloud.de",
-			contactSubject: "Test Subject",
 			includeSecurityLink: true,
 		});
 
@@ -93,10 +80,7 @@ describe("useFooterLinks", () => {
 	});
 
 	it("should not include security link by default", () => {
-		const { links } = setup({
-			contactEmail: "test@dbildungscloud.de",
-			contactSubject: "Test Subject",
-		});
+		const { links } = setup();
 
 		const securityLink = links.value.find((link) => link.to === "/system/security");
 		expect(securityLink).toBeUndefined();
@@ -106,13 +90,11 @@ describe("useFooterLinks", () => {
 		createTestEnvStore({
 			DOCUMENT_BASE_DIR: "https://dbildungscloud.de/documents/",
 			SC_THEME: SchulcloudTheme.DEFAULT,
+			SC_TITLE: "Test Cloud",
 			ALERT_STATUS_URL: "https://status.dbildungscloud.de",
 		});
 
-		const { links } = setup({
-			contactEmail: "test@dbildungscloud.de",
-			contactSubject: "Test Subject",
-		});
+		const { links } = setup();
 
 		const statusLink = links.value.find((link) => link.href === "https://status.dbildungscloud.de");
 		expect(statusLink).toBeDefined();
@@ -122,23 +104,18 @@ describe("useFooterLinks", () => {
 		createTestEnvStore({
 			DOCUMENT_BASE_DIR: "https://dbildungscloud.de/documents/",
 			SC_THEME: SchulcloudTheme.DEFAULT,
+			SC_TITLE: "Test Cloud",
 			ACCESSIBILITY_REPORT_EMAIL: "a11y@dbildungscloud.de",
 		});
 
-		const { links } = setup({
-			contactEmail: "test@dbildungscloud.de",
-			contactSubject: "Test Subject",
-		});
+		const { links } = setup();
 
 		const a11yReportLink = links.value.find((link) => link.href?.includes("a11y@dbildungscloud.de"));
 		expect(a11yReportLink).toBeDefined();
 	});
 
 	it("should include accessibility statement link by default", () => {
-		const { links } = setup({
-			contactEmail: "test@dbildungscloud.de",
-			contactSubject: "Test Subject",
-		});
+		const { links } = setup();
 
 		const lastLink = links.value[links.value.length - 1];
 		expect(lastLink.href).toContain("Barrierefreiheitserklaerung.pdf");
@@ -146,8 +123,6 @@ describe("useFooterLinks", () => {
 
 	it("should not include accessibility statement link", () => {
 		const { links } = setup({
-			contactEmail: "test@dbildungscloud.de",
-			contactSubject: "Test Subject",
 			includeAccessibilityStatement: false,
 		});
 
