@@ -19,8 +19,8 @@ defineProps({
 	columnIndex: { type: Number, required: true },
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
-	isNotFirstElement: { type: Boolean, requried: false },
-	isNotLastElement: { type: Boolean, requried: false },
+	isNotFirstElement: { type: Boolean, required: false },
+	isNotLastElement: { type: Boolean, required: false },
 });
 
 const emit = defineEmits<{
