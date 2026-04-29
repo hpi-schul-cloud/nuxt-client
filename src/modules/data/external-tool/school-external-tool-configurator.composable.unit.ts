@@ -4,9 +4,7 @@ import {
 	ToolParameterScope,
 	ToolParameterType,
 } from "../../../store/external-tool";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
-	axiosErrorFactory,
 	customParameterResponseFactory,
 	expectNotification,
 	mockApi,
@@ -81,17 +79,6 @@ describe("SchoolExternalToolsModule", () => {
 			});
 
 			describe("when an error occurs", () => {
-				const setup = () => {
-					const error = axiosErrorFactory.build();
-					const apiError = mapAxiosErrorToResponseError(error);
-
-					apiMock.toolSchoolControllerGetSchoolExternalTool.mockRejectedValue(error);
-
-					return {
-						apiError,
-					};
-				};
-
 				it("should notify error", async () => {
 					const consoleSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
 					apiMock.toolSchoolControllerGetSchoolExternalTool.mockRejectedValue(new Error("error"));
