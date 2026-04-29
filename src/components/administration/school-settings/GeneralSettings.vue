@@ -8,7 +8,7 @@
 					:label="t('pages.administration.school.index.generalSettings.labels.nameOfSchool')"
 					density="compact"
 					:readonly="!hasSchoolEditPermission"
-					:disabled="isSyncedSchool"
+					:disabled="isSchoolSynced"
 					data-testid="school-name"
 					:rules="[validateOnOpeningTag]"
 				/>
@@ -36,7 +36,7 @@
 					data-testid="school-number"
 					:label="t('pages.administration.school.index.generalSettings.labels.schoolNumber')"
 					density="compact"
-					:disabled="!!school.officialSchoolNumber"
+					:disabled="!!schoolDetails.officialSchoolNumber"
 					:hint="t('pages.administration.school.index.generalSettings.changeSchoolValueWarning')"
 					persistent-hint
 					:readonly="!hasSchoolEditPermission"
@@ -108,9 +108,9 @@
 				</v-select>
 			</v-col>
 		</v-row>
-		<privacy-settings
+		<PrivacySettings
 			:permissions="localSchool?.permissions ?? {}"
-			:features="localSchool?.featureObject ?? {}"
+			:features="localSchoolFeatures ?? {}"
 			@update-privacy-settings="onUpdatePrivacySettings"
 			@update-feature-settings="onUpdateFeatureSettings"
 		/>
@@ -119,7 +119,7 @@
 			data-testid="save-general-setting"
 			color="primary"
 			variant="flat"
-			:disabled="loading"
+			:disabled="isLoadingSchoolData"
 			@click="save"
 		>
 			{{ $t("pages.administration.school.index.generalSettings.save") }}
@@ -129,12 +129,10 @@
 
 <script setup lang="ts">
 import PrivacySettings from "./PrivacySettings.vue";
-import { schoolsModule } from "@/store";
-import { School } from "@/store/types/schools";
 import { toBase64 } from "@/utils/fileHelper";
-import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
-import { LanguageType, Permission, SchoolFeature, SchoolUpdateBodyParams } from "@api-server";
-import { notifySuccess, useAppStore } from "@data-app";
+import { mapSchoolFeatureObjectToArray, SchoolFeatureObject } from "@/utils/school-features";
+import { LanguageType, Permission, SchoolFeature, SchoolResponse, SchoolUpdateBodyParams } from "@api-server";
+import { notifySuccess, useAppStore, useSchoolStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useOpeningTagValidator } from "@util-validators";
 import { computed, onMounted, ref, watch } from "vue";
@@ -143,15 +141,16 @@ import { useI18n } from "vue-i18n";
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const { t } = useI18n();
 
-const localSchool = ref<School>();
+const localSchool = ref<SchoolResponse>();
+const localSchoolFeatures = ref<SchoolFeatureObject>();
 
 const logoFile = ref<File | null>(null);
 
+const { updateSchool } = useSchoolStore();
+const { schoolDetails, schoolFeatureObject, isSchoolSynced, isLoadingSchoolData } = useSchoolStoreRefs();
+
 const availableLanguages = computed(() => useEnvConfig().value.I18N__AVAILABLE_LANGUAGES);
-const federalState = computed(() => schoolsModule.getFederalState);
-const isSyncedSchool = computed(() => schoolsModule.schoolIsSynced);
-const school = computed(() => schoolsModule.getSchool);
-const loading = computed(() => schoolsModule.getLoading);
+const federalState = computed(() => schoolDetails.value.federalState);
 const languages = computed(() =>
 	availableLanguages.value.map((lang: string) => {
 		const name = t(`common.words.languages.${lang}`);
@@ -178,22 +177,20 @@ const convertDataUrlToFile = (dataURL: string, fileName: string) => {
 };
 
 const copyToLocalSchool = async () => {
-	if (!school.value) {
+	if (!schoolDetails.value) {
 		return;
 	}
-	const schoolCopy = JSON.parse(JSON.stringify(school.value)); // create a deep copy
-	if (school.value.logo?.dataUrl) {
-		schoolCopy.logo = school.value.logo?.dataUrl;
-	}
-	localSchool.value = schoolCopy;
+	localSchool.value = JSON.parse(JSON.stringify(schoolDetails.value));
 
 	if (localSchool.value && !localSchool.value.language) {
 		localSchool.value.language = LanguageType.DE;
 	}
+
+	localSchoolFeatures.value = JSON.parse(JSON.stringify(schoolFeatureObject.value));
 };
 
 watch(
-	school,
+	schoolDetails,
 	async (newSchool) => {
 		if (newSchool?.id) {
 			logoFile.value =
@@ -211,10 +208,10 @@ onMounted(async () => {
 });
 
 const onUpdateFeatureSettings = (value: boolean, settingName: SchoolFeature) => {
-	if (!localSchool.value) {
+	if (!localSchoolFeatures.value) {
 		return;
 	}
-	localSchool.value.featureObject[settingName] = value;
+	localSchoolFeatures.value[settingName] = value;
 };
 
 const onUpdatePrivacySettings = (value: boolean, settingName: string) => {
@@ -222,17 +219,16 @@ const onUpdatePrivacySettings = (value: boolean, settingName: string) => {
 		return;
 	}
 	const keys = settingName.split(".");
-	const newPermissions = {
+	localSchool.value.permissions = {
 		...localSchool.value.permissions,
 		[keys[0]]: {
 			[keys[1]]: value,
 		},
 	};
-	localSchool.value.permissions = newPermissions;
 };
 
 const save = async () => {
-	if (!localSchool.value) {
+	if (!localSchool.value || !localSchoolFeatures.value) {
 		return;
 	}
 
@@ -242,34 +238,22 @@ const save = async () => {
 		name: localSchool.value.name,
 		language: localLanguage,
 		permissions: localSchool.value.permissions,
-		features: mapSchoolFeatureObjectToArray(localSchool.value.featureObject),
+		features: mapSchoolFeatureObjectToArray(localSchoolFeatures.value),
 		logo: {
 			dataUrl: logoFile.value ? ((await toBase64(logoFile.value)) as string) : "",
 			name: logoFile.value ? logoFile.value.name : "",
 		},
 	};
 
-	if (!school.value.officialSchoolNumber && localSchool.value.officialSchoolNumber) {
+	if (!schoolDetails.value.officialSchoolNumber && localSchool.value.officialSchoolNumber) {
 		updatedSchool.officialSchoolNumber = localSchool.value.officialSchoolNumber;
 	}
-	if (!school.value.county && localSchool.value.county?.id) {
+	if (!schoolDetails.value.county && localSchool.value.county?.id) {
 		updatedSchool.countyId = localSchool.value.county.id;
 	}
 
-	await schoolsModule.update({
-		id: localSchool.value.id,
-		props: updatedSchool,
-	});
-
+	await updateSchool(localSchool.value.id, updatedSchool);
 	notifySuccess(t("pages.administration.school.index.generalSettings.save.success"));
-
-	if (updatedSchool.logo) {
-		schoolsModule.setSchoolLogo({
-			dataUrl: updatedSchool.logo.dataUrl ?? "",
-			name: updatedSchool.logo.name ?? "",
-		});
-	}
-
 	await copyToLocalSchool();
 };
 </script>

@@ -13,11 +13,11 @@ export const createTestSchoolStore = (
 		schoolDetails?: DeepPartial<SchoolResponse>;
 		schoolSystems?: DeepPartial<SchoolSystemResponse[]>;
 		pinia?: Pinia;
-	} = { schoolDetails: mockSchool }
+	} = { schoolDetails: mockSchool, schoolSystems: [] }
 ) => {
 	const store = useSchoolStore(pinia);
 
-	store.$patch({ schoolDetails, schoolSystems });
+	store.$patch({ schoolDetails, schoolSystems: schoolSystems ?? [] });
 
 	const schoolStore = mockedPiniaStoreTyping(useSchoolStore);
 

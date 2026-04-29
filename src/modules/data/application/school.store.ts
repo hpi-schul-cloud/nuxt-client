@@ -40,6 +40,17 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 		const isThr = useEnvConfig().value.SC_THEME === SchulcloudTheme.THR;
 		return schoolDetails.value.isExternal || isThr;
 	});
+	const isSchoolSynced = computed(() =>
+		schoolSystems.value.some(
+			(system) =>
+				system.type === "tsp-school" ||
+				system.type === "oauth" ||
+				(system.type === "ldap" &&
+					(system.ldapConfig?.provider === "iserv-idm" ||
+						system.ldapConfig?.provider === "univention" ||
+						system.ldapConfig?.provider === "general"))
+		)
+	);
 
 	// Helpers/Utils
 	const hasFeature = (feature: SchoolFeature) => schoolFeatures.value.has(feature);
@@ -122,6 +133,7 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 		schoolMaintenanceStatus,
 		currentYear,
 		isSchoolExternallyManaged,
+		isSchoolSynced,
 		isLoadingSchoolData,
 		isLoadingMaintenanceData,
 		schoolApiError,

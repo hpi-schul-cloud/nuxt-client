@@ -6,7 +6,7 @@ export const mockSchool: School = {
 	name: "",
 	logo: {
 		name: "",
-		dataUrl: "",
+		dataUrl: "//somelogourl",
 	},
 	fileStorageType: undefined,
 	federalState: {

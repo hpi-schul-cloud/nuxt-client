@@ -1,12 +1,10 @@
 import GeneralSettings from "./GeneralSettings.vue";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
 import { toBase64 } from "@/utils/fileHelper";
 import { createTestEnvStore, expectNotification, schoolFactory } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { schoolYearResponseFactory } from "@@/tests/test-utils/factory/schoolYearResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { CountyResponse, FederalStateResponse, LanguageType, SchoolSystemResponse } from "@api-server";
+import { LanguageType, SchoolResponse, SchoolSystemResponse } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -28,61 +26,37 @@ describe("GeneralSettings", () => {
 		createTestEnvStore({
 			I18N__AVAILABLE_LANGUAGES: [LanguageType.DE, LanguageType.EN, LanguageType.ES, LanguageType.UK],
 		});
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
 	});
 
-	const setup = (
-		options?: Partial<{
-			officialSchoolNumber: string;
-			county: CountyResponse;
-			federalState: FederalStateResponse;
-		}>
-	) => {
-		const { officialSchoolNumber, county, federalState } = {
+	const setup = (options?: { schoolDetails?: Partial<SchoolResponse>; schoolSystems?: SchoolSystemResponse[] }) => {
+		const schoolDetails = schoolFactory.build({
+			currentYear: schoolYearResponseFactory.build(),
 			officialSchoolNumber: undefined,
 			county: undefined,
 			federalState: undefined,
-			...options,
-		};
-
-		const logoDataUrl = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA";
-		const logoName = "logo.png";
-
-		const school = schoolFactory.build({
-			currentYear: schoolYearResponseFactory.build(),
-			officialSchoolNumber,
-			county,
-			federalState,
-			logo: { dataUrl: logoDataUrl, name: logoName },
+			logo: { dataUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA", name: "logo.png" },
+			...options?.schoolDetails,
 		});
 
-		schoolsModule.setSchool(school);
+		const { schoolStore } = createTestSchoolStore({ schoolDetails, schoolSystems: options?.schoolSystems });
 
 		const wrapper = mount(GeneralSettings, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 		});
-		return { wrapper, school };
+		return { wrapper, schoolDetails, schoolStore };
 	};
 
-	it("renders correctly", () => {
-		const { wrapper } = setup();
-
-		expect(wrapper.exists()).toBe(true);
-	});
-
 	describe("displaying correct data", () => {
-		describe("school name ", () => {
+		describe("school name", () => {
 			it("should display the school name", () => {
-				const { wrapper, school } = setup();
+				const { wrapper, schoolDetails } = setup();
 
 				const textField = wrapper.findComponent("[data-testid='school-name']");
 
 				expect(textField.exists()).toBe(true);
-				expect(textField.text()).toContain(school.name);
+				expect(textField.text()).toContain(schoolDetails.name);
 			});
 
 			it("should not be possible to edit the school name if the school is synced", () => {
@@ -95,8 +69,7 @@ describe("GeneralSettings", () => {
 						},
 					},
 				];
-				schoolsModule.setSystems(syncedSystem);
-				const { wrapper } = setup();
+				const { wrapper } = setup({ schoolSystems: syncedSystem });
 
 				const textField = wrapper.findComponent<typeof VTextField>("[data-testid='school-name']");
 				expect(textField.props("disabled")).toBe(true);
@@ -110,16 +83,14 @@ describe("GeneralSettings", () => {
 					},
 				];
 
-				schoolsModule.setSystems(unsyncedSystem);
-				const { wrapper } = setup();
+				const { wrapper } = setup({ schoolSystems: unsyncedSystem });
 
 				const textField = wrapper.findComponent<typeof VTextField>("[data-testid='school-name']");
 				expect(textField.props("disabled")).toBe(false);
 			});
 
 			it("should be possible to edit the school name if the school is not attached to a system", () => {
-				schoolsModule.setSystems([]);
-				const { wrapper } = setup();
+				const { wrapper } = setup({ schoolSystems: [] });
 
 				const textField = wrapper.findComponent<typeof VTextField>("[data-testid='school-name']");
 				expect(textField.props("disabled")).toBe(false);
@@ -128,12 +99,12 @@ describe("GeneralSettings", () => {
 
 		describe("school year", () => {
 			it("should display current year", () => {
-				const { wrapper, school } = setup();
+				const { wrapper, schoolDetails } = setup();
 
 				const textField = wrapper.findComponent<typeof VTextField>("[data-testid='school-year']");
 
 				expect(textField.exists()).toBe(true);
-				expect(textField.props("modelValue")).toBe(school.currentYear?.name);
+				expect(textField.props("modelValue")).toBe(schoolDetails.currentYear?.name);
 			});
 
 			it("should show current school year as readonly", () => {
@@ -148,17 +119,17 @@ describe("GeneralSettings", () => {
 
 		describe("school number", () => {
 			it("school number text should be disabled if the number is set", () => {
-				const { wrapper, school } = setup({ officialSchoolNumber: "12345" });
+				const { wrapper, schoolDetails } = setup({ schoolDetails: { officialSchoolNumber: "12345" } });
 
 				const textField = wrapper.findComponent<typeof VTextField>("[data-testid='school-number']");
 
 				expect(textField.exists()).toBe(true);
-				expect(textField.props("modelValue")).toBe(school.officialSchoolNumber);
+				expect(textField.props("modelValue")).toBe(schoolDetails.officialSchoolNumber);
 				expect(textField.props("disabled")).toBe(true);
 			});
 
 			it("school number text should not be disabled if the number is not set", () => {
-				const { wrapper } = setup({ officialSchoolNumber: undefined });
+				const { wrapper } = setup();
 
 				const textField = wrapper.findComponent<typeof VTextField>("[data-testid='school-number']");
 
@@ -176,42 +147,46 @@ describe("GeneralSettings", () => {
 			});
 
 			it("should render items in the county selection", () => {
-				const { wrapper, school } = setup({
-					federalState: {
-						id: "0000b186816abba584714c53",
-						counties: [
-							{
-								id: "5fa55eb53f472a2d986c8812",
-								antaresKey: "BRB",
-								countyId: 12051,
-								name: "Brandenburg an der Havel",
-							},
-							{
-								id: "5fa55eb53f472a2d986c8813",
-								antaresKey: "CB",
-								countyId: 12052,
-								name: "Cottbus",
-							},
-						],
-						name: "Brandenburg",
-						abbreviation: "BB",
-						logoUrl: "https://example.com/logo.png",
+				const { wrapper, schoolDetails } = setup({
+					schoolDetails: {
+						federalState: {
+							id: "0000b186816abba584714c53",
+							counties: [
+								{
+									id: "5fa55eb53f472a2d986c8812",
+									antaresKey: "BRB",
+									countyId: 12051,
+									name: "Brandenburg an der Havel",
+								},
+								{
+									id: "5fa55eb53f472a2d986c8813",
+									antaresKey: "CB",
+									countyId: 12052,
+									name: "Cottbus",
+								},
+							],
+							name: "Brandenburg",
+							abbreviation: "BB",
+							logoUrl: "https://example.com/logo.png",
+						},
 					},
 				});
 
 				const select = wrapper.findComponent<typeof VSelect>("[data-testid='school-counties']");
 
-				expect(select.props("items")).toEqual(school.federalState?.counties);
+				expect(select.props("items")).toEqual(schoolDetails.federalState?.counties);
 				expect(select.props("items")).toHaveLength(2);
 			});
 
 			it("should be disabled if county value is set", () => {
 				const { wrapper } = setup({
-					county: {
-						id: "5fa55eb53f472a2d986c8812",
-						antaresKey: "BRB",
-						countyId: 12051,
-						name: "Brandenburg an der Havel",
+					schoolDetails: {
+						county: {
+							id: "5fa55eb53f472a2d986c8812",
+							antaresKey: "BRB",
+							countyId: 12051,
+							name: "Brandenburg an der Havel",
+						},
 					},
 				});
 
@@ -222,7 +197,7 @@ describe("GeneralSettings", () => {
 
 			it("should not be disabled if the value is not set", () => {
 				const { wrapper } = setup({
-					county: undefined,
+					schoolDetails: { county: undefined },
 				});
 
 				const select = wrapper.findComponent<typeof VSelect>("[data-testid='school-counties']");
@@ -231,18 +206,20 @@ describe("GeneralSettings", () => {
 			});
 
 			it("should display the correct county", () => {
-				const { wrapper, school } = setup({
-					county: {
-						id: "5fa55eb53f472a2d986c8812",
-						antaresKey: "BRB",
-						countyId: 12051,
-						name: "Brandenburg an der Havel",
+				const { wrapper, schoolDetails } = setup({
+					schoolDetails: {
+						county: {
+							id: "5fa55eb53f472a2d986c8812",
+							antaresKey: "BRB",
+							countyId: 12051,
+							name: "Brandenburg an der Havel",
+						},
 					},
 				});
 
 				const select = wrapper.findComponent<typeof VSelect>("[data-testid='school-counties']");
 
-				expect(select.props("modelValue")).toEqual(school.county);
+				expect(select.props("modelValue")).toEqual(schoolDetails.county);
 			});
 		});
 
@@ -257,12 +234,12 @@ describe("GeneralSettings", () => {
 
 		describe("timezone input", () => {
 			it("timezone input should display the correct data", () => {
-				const { wrapper, school } = setup();
+				const { wrapper, schoolDetails } = setup();
 
 				const timezoneInput = wrapper.findComponent<typeof VTextField>("[data-testid='timezone-input']");
 
 				expect(timezoneInput.exists()).toBe(true);
-				expect(timezoneInput.props("modelValue")).toBe(school.timezone);
+				expect(timezoneInput.props("modelValue")).toBe(schoolDetails.timezone);
 				expect(timezoneInput.props("disabled")).toBe(true);
 				expect(timezoneInput.props().label).toStrictEqual(
 					"pages.administration.school.index.generalSettings.labels.timezone"
@@ -299,21 +276,19 @@ describe("GeneralSettings", () => {
 
 	describe("logo handling", () => {
 		it("should initialize logoFile when school has a logo", async () => {
-			const { wrapper, school } = setup();
+			const { wrapper, schoolDetails } = setup();
 			await nextTick();
 
 			const fileInput = wrapper.findComponent<typeof VFileInput>('[data-testid="school-logo-input"]');
 			expect(fileInput.props("modelValue")).toBeInstanceOf(File);
 			const modelValue = fileInput.props("modelValue");
 			const file = Array.isArray(modelValue) ? modelValue[0] : modelValue;
-			expect(file?.name).toBe(school.logo?.name);
+			expect(file?.name).toBe(schoolDetails.logo?.name);
 		});
 
 		describe("when uploading a new logo", () => {
 			it("should include logo in the update payload", async () => {
-				const updateSpy = vi.spyOn(schoolsModule, "update").mockResolvedValue();
-				const logoSpy = vi.spyOn(schoolsModule, "setSchoolLogo").mockResolvedValue();
-				const { wrapper } = setup();
+				const { wrapper, schoolStore, schoolDetails } = setup();
 
 				const file = new File(["dummy-content"], "school-logo.png", {
 					type: "image/png",
@@ -326,28 +301,21 @@ describe("GeneralSettings", () => {
 				await buttonElement.trigger("click");
 
 				expect(toBase64).toHaveBeenCalledWith(file);
-				expect(updateSpy).toHaveBeenCalledWith(
+				expect(schoolStore.updateSchool).toHaveBeenCalledWith(
+					schoolDetails.id,
 					expect.objectContaining({
-						props: expect.objectContaining({
-							logo: {
-								dataUrl: "mock-base64-data",
-								name: "school-logo.png",
-							},
-						}),
+						logo: {
+							dataUrl: "mock-base64-data",
+							name: "school-logo.png",
+						},
 					})
 				);
-				expect(logoSpy).toHaveBeenCalledWith({
-					dataUrl: "mock-base64-data",
-					name: "school-logo.png",
-				});
 			});
 		});
 
 		describe("when saving without provided logo", () => {
 			it("should call setSchoolLogo with empty values", async () => {
-				const updateSpy = vi.spyOn(schoolsModule, "update").mockResolvedValue();
-				const logoSpy = vi.spyOn(schoolsModule, "setSchoolLogo").mockResolvedValue();
-				const { wrapper } = setup();
+				const { wrapper, schoolStore } = setup();
 
 				const fileInput = wrapper.findComponent<typeof VFileInput>('[data-testid="school-logo-input"]');
 				fileInput.setValue(null);
@@ -355,43 +323,41 @@ describe("GeneralSettings", () => {
 				const buttonElement = wrapper.findComponent("[data-testid='save-general-setting']");
 				await buttonElement.trigger("click");
 
-				expect(logoSpy).toHaveBeenCalledWith({ dataUrl: "", name: "" });
-				expect(updateSpy).toHaveBeenCalled();
+				expect(schoolStore.updateSchool).toHaveBeenCalled();
 			});
 		});
 	});
 
 	describe("events", () => {
 		it("update button should trigger save method", async () => {
-			const updateSpy = vi.spyOn(schoolsModule, "update").mockResolvedValue();
-			const { wrapper } = setup({
-				county: {
-					id: "5fa55eb53f472a2d986c8812",
-					antaresKey: "BRB",
-					countyId: 12051,
-					name: "Brandenburg an der Havel",
+			const { wrapper, schoolStore } = setup({
+				schoolDetails: {
+					county: {
+						id: "5fa55eb53f472a2d986c8812",
+						antaresKey: "BRB",
+						countyId: 12051,
+						name: "Brandenburg an der Havel",
+					},
 				},
 			});
 
 			const buttonElement = wrapper.findComponent("[data-testid='save-general-setting']");
 			await buttonElement.trigger("click");
 
-			expect(updateSpy).toHaveBeenCalled();
+			expect(schoolStore.updateSchool).toHaveBeenCalled();
 		});
 
 		it("update works without county", async () => {
-			const updateSpy = vi.spyOn(schoolsModule, "update").mockResolvedValue();
-			const { wrapper } = setup({ county: undefined });
+			const { wrapper, schoolStore } = setup({ schoolDetails: { county: undefined } });
 
 			const buttonElement = wrapper.findComponent("[data-testid='save-general-setting']");
 			await buttonElement.trigger("click");
 
-			expect(updateSpy).toHaveBeenCalled();
+			expect(schoolStore.updateSchool).toHaveBeenCalled();
 		});
 
 		it("show success notification on save", async () => {
-			vi.spyOn(schoolsModule, "update").mockResolvedValue();
-			const { wrapper } = setup({ county: undefined });
+			const { wrapper } = setup({ schoolDetails: { county: undefined } });
 
 			const buttonElement = wrapper.findComponent("[data-testid='save-general-setting']");
 			await buttonElement.trigger("click");
@@ -402,7 +368,7 @@ describe("GeneralSettings", () => {
 
 	describe("when title contains < sign directly followed by a string", () => {
 		it("should contain validation error", async () => {
-			const { wrapper } = setup({ county: undefined });
+			const { wrapper } = setup({ schoolDetails: { county: undefined } });
 
 			const title = wrapper.find('[data-testid="school-name"]').find("input");
 			await title.setValue("<abc123");
