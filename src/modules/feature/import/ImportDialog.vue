@@ -13,7 +13,7 @@
 			<p>
 				{{ text }}
 			</p>
-			<WarningAlert v-if="warnings.length > 0" class="mb-4">
+			<WarningAlert v-if="warnings.length > 0 && activeStep == 'rename'" class="mb-4">
 				<p class="mb-1">
 					{{ t("components.molecules.import.options.tableHeader.InfoText") }}
 				</p>
