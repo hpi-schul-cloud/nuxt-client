@@ -10,10 +10,14 @@
 		@cancel="onCancel"
 	>
 		<template #content>
-			<p>
+			<p data-testid="import-dialog-info-text">
 				{{ text }}
 			</p>
-			<WarningAlert v-if="warnings.length > 0 && activeStep == 'rename'" class="mb-4">
+			<WarningAlert
+				v-if="warnings.length > 0 && activeStep == 'rename'"
+				class="mb-4"
+				data-testid="import-dialog-warnings"
+			>
 				<p class="mb-1">
 					{{ t("components.molecules.import.options.tableHeader.InfoText") }}
 				</p>

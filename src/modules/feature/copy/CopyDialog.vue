@@ -10,13 +10,13 @@
 		@cancel="emit('cancel')"
 	>
 		<template #content>
-			<p>
+			<p data-testid="copy-info-text">
 				{{ text }}
 			</p>
 			<InfoAlert class="mb-4" data-testid="copy-info-copyright-data-protection">
 				{{ info }}
 			</InfoAlert>
-			<WarningAlert v-if="warnings.length > 0">
+			<WarningAlert v-if="warnings.length > 0" data-testid="copy-info-warnings">
 				<p class="mb-1">
 					{{ t("feature-copy.copyInfo.text.alert.followingContent") }}
 				</p>
