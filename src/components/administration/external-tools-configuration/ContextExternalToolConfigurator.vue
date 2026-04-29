@@ -14,8 +14,8 @@
 			<VTextField
 				v-if="selectedTemplate"
 				v-model="displayName"
-				:label="$t('pages.tool.context.displayName')"
-				:hint="$t('pages.tool.context.displayNameDescription')"
+				:label="t('pages.tool.context.displayName')"
+				:hint="t('pages.tool.context.displayNameDescription')"
 				persistent-hint
 				validate-on="blur"
 				data-testId="parameter-display-name"
@@ -40,6 +40,7 @@ import {
 } from "@data-external-tool";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, PropType, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	configId: {
@@ -64,6 +65,8 @@ const emit = defineEmits<{
 	(e: "success", value: ContextExternalTool): void;
 	(e: "cancel"): void;
 }>();
+
+const { t } = useI18n();
 
 const {
 	availableTools,
