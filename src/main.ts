@@ -11,7 +11,6 @@ import {
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
-	SYSTEMS_MODULE_KEY,
 } from "./utils/inject";
 import {
 	copyModule,
@@ -21,7 +20,6 @@ import {
 	schoolExternalToolsModule,
 	schoolsModule,
 	shareModule,
-	systemsModule,
 	tasksModule,
 } from "@/store";
 import { createDayJs } from "@/utils/date-time.utils";
@@ -85,7 +83,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(), schoolExternalToolsModule);
 	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
 	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
-	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
 	app.provide("tasksModule", tasksModule);
 
 	app.mount("#app");
