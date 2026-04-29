@@ -20,7 +20,7 @@
 								<li v-if="showCourseInfo" data-testid="share-modal-course-member-permission">
 									{{
 										t("feature-copy.copyInfo.text.alert.membersPermissions", {
-											type: "feature-copy.copyInfo.type.course",
+											type: t("feature-copy.copyInfo.type.course"),
 										})
 									}}
 								</li>
