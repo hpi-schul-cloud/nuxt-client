@@ -3,59 +3,43 @@ import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCommonCartridgeExportModal.vue";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { COURSE_ROOM_DETAILS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject/injection-keys";
-
-vi.mock("@data-common-cartridge");
-
-import { createTestAppStore, createTestEnvStore, singleColumnBoardResponseFactory } from "@@/tests/test-utils";
+import {
+	createTestAppStore,
+	createTestEnvStore,
+	mockComposable,
+	singleColumnBoardResponseFactory,
+} from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import {
 	BoardElementResponse,
 	BoardElementResponseType as BoardTypes,
 	BoardLayout,
+	CopyApiResponseStatus,
 	CopyApiResponseType,
 	ImportUserResponseRoleNames,
 	Permission,
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
+import { useCopyFlow } from "@feature-copy";
 import { createTestingPinia } from "@pinia/testing";
 import { DefaultWireframe } from "@ui-layout";
 import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
-import { flushPromises } from "@vue/test-utils";
+import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { mock } from "vitest-mock-extended";
-import { nextTick, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VBtn, VListItem } from "vuetify/components";
+import { TabItem } from "vuetify/lib/components/VTabs/VTabs.mjs";
 
-const mockExecuteCopyCourse = vi.fn().mockResolvedValue({ result: { id: "copied-id" }, error: undefined });
-const mockExecuteCopyTask = vi.fn().mockResolvedValue({ result: { id: "copied-task-id" }, error: undefined });
-const mockExecuteCopyLesson = vi.fn().mockResolvedValue({ result: { id: "copied-lesson-id" }, error: undefined });
-const mockExecuteCopyBoard = vi.fn().mockResolvedValue({ result: { id: "copied-board-id" }, error: undefined });
+vi.mock("@data-common-cartridge");
+vi.mock("@feature-copy/copy-flow.composable");
 
-vi.mock("@feature-copy", () => ({
-	CopyInfoDialog: { template: "<div></div>" },
-	useCopyFlow: () => ({
-		isDialogOpen: ref(false),
-		copyItemType: ref("course"),
-		onConfirmed: vi.fn(),
-		onCancelled: vi.fn(),
-		executeCopyCourse: mockExecuteCopyCourse,
-		executeCopyTask: mockExecuteCopyTask,
-		executeCopyLesson: mockExecuteCopyLesson,
-		executeCopyBoard: mockExecuteCopyBoard,
-	}),
-}));
-
-vi.mock("@/components/course-rooms/CourseRoomDashboard.vue", () => ({
-	default: { template: "<div data-testid='course-room-dashboard-stub'></div>" },
-}));
-
-vi.mock("@/components/course-rooms/tools/RoomExternalToolsOverview.vue", () => ({
-	default: { template: "<div data-testid='room-external-tools-stub'></div>" },
-}));
 const boardElements: Array<BoardElementResponse> = [
 	{
 		type: BoardTypes.TASK,
@@ -89,11 +73,19 @@ describe("CourseRoomDetails.page.vue", () => {
 	let shareModule: ShareModule;
 	let courseRoomDetailsModule: CourseRoomDetailsModule;
 	let router: RouterMock;
+	let useCopyFlowMock: Mocked<ReturnType<typeof useCopyFlow>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		router = createRouterMock();
 		injectRouterMock(router);
+
+		useCopyFlowMock = mockComposable(useCopyFlow, {
+			isDialogOpen: ref(false),
+			copyItemType: ref(ContentItemTypeEnum.Course),
+			isRunning: computed(() => false),
+		});
+		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
 	});
 
 	afterEach(() => {
@@ -107,7 +99,6 @@ describe("CourseRoomDetails.page.vue", () => {
 			isLocked: boolean;
 			isSynchronized: boolean;
 			isArchived: boolean;
-			copyResultId?: string;
 		}>
 	) => {
 		const { permissionData, roleName, isLocked, isSynchronized, isArchived } = {
@@ -412,21 +403,22 @@ describe("CourseRoomDetails.page.vue", () => {
 						const { wrapper } = setup();
 						await flushPromises();
 
+						useCopyFlowMock.executeCopyCourse.mockResolvedValue({
+							success: true,
+							result: { id: "copied-id", type: CopyApiResponseType.COURSE, status: CopyApiResponseStatus.SUCCESS },
+							error: undefined,
+						});
+
 						const menuButton = wrapper.findComponent(RoomDotMenu);
 						const menuItems = menuButton.props("menuItems") as Array<{
 							dataTestId: string;
 							action: () => void;
 						}>;
 						const copyAction = menuItems.find((item) => item.dataTestId === "room-menu-copy");
-						await copyAction?.action();
+						copyAction?.action();
 						await flushPromises();
 
-						// FIX TEST
-						// expect(copyModule.copy).toHaveBeenCalled();
-						expect(router.push).toHaveBeenCalledWith({
-							path: "/rooms/copiedid",
-							replace: true,
-						});
+						expect(router.replace).toHaveBeenCalledWith("/rooms/copied-id");
 					});
 				});
 			});
@@ -504,6 +496,14 @@ describe("CourseRoomDetails.page.vue", () => {
 			const modalView = wrapper.findComponent({ name: "ShareModal" });
 			expect(modalView.exists()).toBe(true);
 		});
+
+		it("should render CopyDialog component", async () => {
+			const { wrapper } = setup();
+			await flushPromises();
+
+			const modalView = wrapper.findComponent({ name: "CopyDialog" });
+			expect(modalView.exists()).toBe(true);
+		});
 	});
 
 	describe("board creation functionality", () => {
@@ -556,28 +556,14 @@ describe("CourseRoomDetails.page.vue", () => {
 	describe("copy functionality", () => {
 		it("should redirect to copied room on successful course copy", async () => {
 			createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
-			const { wrapper, router } = setup({ copyResultId: "copiedid" });
+			const { wrapper, router } = setup();
 			await flushPromises();
 
-			const menuButton = wrapper.findComponent(RoomDotMenu);
-			const menuItems = menuButton.props("menuItems") as Array<{
-				dataTestId: string;
-				action: () => void;
-			}>;
-			const copyAction = menuItems.find((item) => item.dataTestId === "room-menu-copy");
-			await copyAction?.action();
-			await flushPromises();
-
-			expect(router.push).toHaveBeenCalledWith({
-				path: "/rooms/copiedid",
-				replace: true,
+			useCopyFlowMock.executeCopyCourse.mockResolvedValue({
+				result: { id: "copied-id", type: CopyApiResponseType.COURSE, status: CopyApiResponseStatus.SUCCESS },
+				success: true,
+				error: undefined,
 			});
-		});
-
-		it("should redirect to courses overview on failed course copy", async () => {
-			createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
-			const { wrapper, router } = setup({ copyResultId: undefined });
-			await flushPromises();
 
 			const menuButton = wrapper.findComponent(RoomDotMenu);
 			const menuItems = menuButton.props("menuItems") as Array<{
@@ -585,10 +571,10 @@ describe("CourseRoomDetails.page.vue", () => {
 				action: () => void;
 			}>;
 			const copyAction = menuItems.find((item) => item.dataTestId === "room-menu-copy");
-			await copyAction?.action();
+			copyAction?.action();
 			await flushPromises();
 
-			expect(router.push).toHaveBeenCalledWith("/rooms/courses-overview");
+			expect(router.replace).toHaveBeenCalledWith("/rooms/copied-id");
 		});
 	});
 
@@ -792,21 +778,25 @@ describe("CourseRoomDetails.page.vue", () => {
 
 		describe("copy board element functionality", () => {
 			it("should call copy and fetch content when copy-board-element event is emitted", async () => {
-				const { wrapper, singleColumnBoard } = setup();
+				const { wrapper } = setup();
 				await flushPromises();
 
 				// Find the component that emits copy-board-element (rendered as a stub)
-				const roomContent = wrapper.find('[data-testid="room-content"]');
-				const payload = {
+				const roomContent = wrapper.findComponent('[data-testid="room-content"]') as VueWrapper<TabItem>;
+
+				useCopyFlowMock.executeCopyLesson.mockResolvedValue({
+					success: true,
+					result: { id: "copied-lesson-id", type: CopyApiResponseType.LESSON, status: CopyApiResponseStatus.SUCCESS },
+					error: undefined,
+				});
+
+				roomContent.vm.$emit("copy-board-element", {
 					id: "board-element-id",
-					type: CopyApiResponseType.LESSON,
-					courseId: singleColumnBoard.roomId,
-				};
-				await roomContent.trigger("copy-board-element", payload);
+					type: ContentItemTypeEnum.Lesson,
+				});
 				await flushPromises();
 
-				// FIX TEST
-				// expect(copyModule.copy).toHaveBeenCalled();
+				expect(useCopyFlowMock.executeCopyLesson).toHaveBeenCalled();
 			});
 		});
 

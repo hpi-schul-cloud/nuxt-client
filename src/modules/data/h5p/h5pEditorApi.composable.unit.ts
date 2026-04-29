@@ -50,7 +50,8 @@ describe("h5pEditorApi.composable", () => {
 				const contentId = "test-id";
 				const title = "test-title";
 
-				h5pEditorApi.getContentParameters.mockResolvedValueOnce(mockApiResponse({}));
+				// @ts-expect-error - Partial mock of the api response - api return type is actually void but we need to mock the data property for the test
+				h5pEditorApi.getContentParameters.mockResolvedValueOnce(mockApiResponse({ data: { h5p: { title } } }));
 
 				return { composable, contentId, title };
 			};

@@ -1,3 +1,4 @@
+import { useCopyFlow } from "../../copy/copy-flow.composable";
 import MoveCardDialog from "../card/MoveCardDialog.vue";
 import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
@@ -7,6 +8,7 @@ import SchoolExternalToolsModule from "@/store/school-external-tools";
 import ShareModule from "@/store/share";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { COURSE_ROOM_DETAILS_MODULE_KEY, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
@@ -17,6 +19,8 @@ import {
 	BoardLayout,
 	BoardResponseAllowedOperations,
 	ConfigResponse,
+	CopyApiResponseStatus,
+	CopyApiResponseType,
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
 import { useAppStore, useNotificationStore } from "@data-app";
@@ -56,9 +60,12 @@ const mockedUseSharedBoardPageInformation = vi.mocked(useSharedBoardPageInformat
 vi.mock("@data-board/boardInactivity.composable");
 const mockUseBoardInactivity = <Mock>useBoardInactivity;
 
+vi.mock("@feature-copy/copy-flow.composable");
+
 describe("Board", () => {
 	let router: RouterMock;
 	let mockedUsePageInactivity: Mocked<ReturnType<typeof useBoardInactivity>>;
+	let useCopyFlowMock: Mocked<ReturnType<typeof useCopyFlow>>;
 
 	beforeEach(() => {
 		vi.useFakeTimers();
@@ -96,6 +103,13 @@ describe("Board", () => {
 
 		mockedUsePageInactivity = mockComposable(useBoardInactivity);
 		mockUseBoardInactivity.mockReturnValue(mockedUsePageInactivity);
+
+		useCopyFlowMock = mockComposable(useCopyFlow, {
+			isDialogOpen: ref(false),
+			copyItemType: ref(ContentItemTypeEnum.ColumnBoard),
+			isRunning: computed(() => false),
+		});
+		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
 	});
 
 	afterEach(() => {
@@ -123,8 +137,6 @@ describe("Board", () => {
 	};
 
 	const setupProvideModules = () => {
-		const copyResultId = "42";
-
 		const shareModule = createModuleMocks(ShareModule);
 		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getRoomId: "room1",
@@ -133,7 +145,6 @@ describe("Board", () => {
 		return {
 			shareModule,
 			courseRoomDetailsModule,
-			copyResultId,
 			schoolExternalToolsModule,
 		};
 	};
@@ -145,7 +156,7 @@ describe("Board", () => {
 		envs?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
 	}) => {
-		const { shareModule, courseRoomDetailsModule, copyResultId, schoolExternalToolsModule } = setupProvideModules();
+		const { shareModule, courseRoomDetailsModule, schoolExternalToolsModule } = setupProvideModules();
 
 		setActivePinia(createTestingPinia());
 
@@ -208,7 +219,6 @@ describe("Board", () => {
 			boardStore,
 			cardStore,
 			board,
-			copyResultId,
 			shareModule,
 			courseRoomDetailsModule,
 		};
@@ -832,6 +842,14 @@ describe("Board", () => {
 		});
 
 		describe("@copy:board", () => {
+			beforeEach(() => {
+				useCopyFlowMock.executeCopyBoard.mockResolvedValue({
+					success: true,
+					result: { id: "copied-id", type: CopyApiResponseType.COLUMNBOARD, status: CopyApiResponseStatus.SUCCESS },
+					error: undefined,
+				});
+			});
+
 			it("should call the copy function", async () => {
 				const { wrapper } = setup({ allowedOperations: { copyBoard: true } });
 
@@ -840,13 +858,11 @@ describe("Board", () => {
 				});
 				await boardHeader.vm.$emit("copy:board");
 
-				// FIX test
-				// expect(mockedCopyCalls.copy).toHaveBeenCalled();
-				expect(false).toBe(true);
+				expect(useCopyFlowMock.executeCopyBoard).toHaveBeenCalled();
 			});
 
 			it("should redirect to the board copy", async () => {
-				const { wrapper, copyResultId } = setup({ allowedOperations: { copyBoard: true } });
+				const { wrapper } = setup({ allowedOperations: { copyBoard: true } });
 
 				const boardHeader = wrapper.findComponent({
 					name: "BoardHeader",
@@ -855,7 +871,7 @@ describe("Board", () => {
 
 				expect(router.push).toHaveBeenCalledWith({
 					name: "boards-id",
-					params: { id: copyResultId },
+					params: { id: "copied-id" },
 				});
 			});
 		});

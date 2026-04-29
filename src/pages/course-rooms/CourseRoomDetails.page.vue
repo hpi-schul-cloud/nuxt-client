@@ -190,7 +190,7 @@ const dashBoardRole = computed(() => {
 const learnContentFabItems = computed<FabAction[] | undefined>(() => {
 	const actions: FabAction[] = [];
 
-	if (useAppStore().hasPermission(Permission.HOMEWORK_CREATE)) {
+	if (useAppStore().userPermissions.includes(Permission.HOMEWORK_CREATE)) {
 		actions.push({
 			label: t("pages.courseRoomDetails.fab.add.task"),
 			icon: mdiFormatListChecks,
@@ -199,7 +199,7 @@ const learnContentFabItems = computed<FabAction[] | undefined>(() => {
 		});
 	}
 
-	if (useAppStore().hasPermission(Permission.TOPIC_CREATE)) {
+	if (useAppStore().userPermissions.includes(Permission.TOPIC_CREATE)) {
 		actions.push({
 			label: t("pages.courseRoomDetails.fab.add.lesson"),
 			icon: mdiViewListOutline,
@@ -208,7 +208,7 @@ const learnContentFabItems = computed<FabAction[] | undefined>(() => {
 		});
 	}
 
-	if (useAppStore().hasPermission(Permission.COURSE_EDIT) && useAppStore().isTeacher) {
+	if (useAppStore().userPermissions.includes(Permission.COURSE_EDIT) && useAppStore().isTeacher) {
 		actions.push({
 			label: t("pages.courseRoomDetails.fab.add.board"),
 			icon: mdiViewGridPlusOutline,

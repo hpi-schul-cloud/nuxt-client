@@ -116,7 +116,6 @@ import CourseRoomEmptyAvatar from "@/components/course-rooms/CourseRoomEmptyAvat
 import CourseRoomGroupAvatar from "@/components/course-rooms/CourseRoomGroupAvatar.vue";
 import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
 import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
-import router from "@/router";
 import { DroppedObject } from "@/store/types/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { DashboardGridElementResponse } from "@api-server";
@@ -130,11 +129,12 @@ import { sortBy } from "lodash-es";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 
 const { t } = useI18n();
 const route = useRoute();
+const router = useRouter();
 const display = useDisplay();
 
 const refs = reactive<Record<string, unknown>>({});

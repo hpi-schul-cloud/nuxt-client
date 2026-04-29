@@ -1,6 +1,6 @@
 import CourseRoomOverviewPage from "./CourseRoomOverview.page.vue";
 import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
-import { createTestAppStore, createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createTestAppStore, createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import {
 	courseRoomElementFactory,
 	courseRoomGroupFactory,
@@ -8,17 +8,24 @@ import {
 	courseRoomSubElementFactory,
 } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import type { DashboardGridElementResponse } from "@api-server";
+import {
+	CopyApiResponse,
+	CopyApiResponseStatus,
+	CopyApiResponseType,
+	type DashboardGridElementResponse,
+} from "@api-server";
 import type { GroupDataType } from "@data-course-rooms";
 import { useCourseRoomListStore } from "@data-course-rooms";
+import { useImportFlow } from "@feature-import";
 import { createTestingPinia } from "@pinia/testing";
-import { mount, VueWrapper } from "@vue/test-utils";
+import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import type { Mock } from "vitest";
-import { ComponentPublicInstance, nextTick, reactive, ref } from "vue";
-import { useRoute } from "vue-router";
+import type { Mocked } from "vitest";
+import { ComponentPublicInstance, computed, nextTick, ref } from "vue";
+import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 
-vi.mock("vue-router");
+vi.mock("@feature-import/import-flow.composable");
+
 vi.mock("@data-common-cartridge", () => ({
 	useCommonCartridgeImport: () => ({
 		isOpen: { value: false },
@@ -42,21 +49,6 @@ vi.mock("vuetify", async () => {
 	};
 });
 
-const mockRouter = {
-	replace: vi.fn(),
-};
-
-vi.mock("vue-router", async () => {
-	const actual = await vi.importActual("vue-router");
-	return {
-		...actual,
-		useRoute: vi.fn(),
-		useRouter: () => mockRouter,
-	};
-});
-
-const useRouteMock = useRoute as Mock;
-
 interface GroupDialogData {
 	isOpen: boolean;
 	groupData: GroupDataType;
@@ -64,11 +56,11 @@ interface GroupDialogData {
 
 type CourseRoomOverviewVm = ComponentPublicInstance & {
 	rooms: DashboardGridElementResponse[];
-	courses: { id: string; name: string; isLocked: boolean }[];
 	dimensions: { colCount: number; rowCount: number; cellWidth: string };
 	groupDialog: GroupDialogData;
 	searchText: string;
 	allowDragging: boolean;
+	availableDestinations: { id: string; name: string }[];
 };
 
 const mockRoomStoreData = [
@@ -100,9 +92,11 @@ const mockCourseData = courseRoomItemFactory.buildList(2);
 describe("CourseRoomOverview.page", () => {
 	let courseRoomListStore: ReturnType<typeof mockedPiniaStoreTyping<typeof useCourseRoomListStore>>;
 	let pinia: ReturnType<typeof createTestingPinia>;
+	let useImportFlowMock: Mocked<ReturnType<typeof useImportFlow>>;
+	let router: RouterMock;
 
 	const getWrapper = (options?: { routeQuery?: Record<string, string> }): VueWrapper<CourseRoomOverviewVm> => {
-		useRouteMock.mockReturnValue(reactive({ query: options?.routeQuery ?? {} }));
+		router.setQuery(options?.routeQuery ?? {});
 
 		return mount(CourseRoomOverviewPage, {
 			global: {
@@ -116,6 +110,8 @@ describe("CourseRoomOverview.page", () => {
 		setActivePinia(pinia);
 		createTestAppStore();
 		createTestEnvStore();
+		router = createRouterMock();
+		injectRouterMock(router);
 
 		courseRoomListStore = mockedPiniaStoreTyping(useCourseRoomListStore);
 		courseRoomListStore.$patch({
@@ -126,6 +122,14 @@ describe("CourseRoomOverview.page", () => {
 		courseRoomListStore.fetchAllElements.mockResolvedValue();
 		courseRoomListStore.alignCourse.mockResolvedValue();
 		courseRoomListStore.updateCourse.mockResolvedValue();
+
+		useImportFlowMock = mockComposable(useImportFlow, {
+			isCardImportDialogOpen: computed(() => false),
+			isGenericImportDialogOpen: computed(() => false),
+			shareTokenInfo: computed(() => undefined),
+		});
+
+		vi.mocked(useImportFlow).mockReturnValue(useImportFlowMock);
 	});
 
 	afterEach(() => {
@@ -428,31 +432,46 @@ describe("CourseRoomOverview.page", () => {
 	});
 
 	describe("import flow", () => {
-		it("should show import mode when query has import token", async () => {
-			const wrapper = getWrapper({ routeQuery: { import: "test-token" } });
-			const importFlow = wrapper.findComponent({ name: "ImportFlow" });
+		beforeEach(() => {
+			const copyResult: CopyApiResponse = {
+				id: "task-copy-id",
+				type: CopyApiResponseType.TASK,
+				status: CopyApiResponseStatus.SUCCESS,
+			};
 
-			expect(importFlow.props("isActive")).toBe(true);
-			expect(importFlow.props("token")).toBe("test-token");
+			useImportFlowMock.executeImport.mockResolvedValue({
+				result: { ...copyResult, destination: { id: "room-123", type: "course" } },
+				success: true,
+				error: undefined,
+			});
+		});
+
+		it("should show import mode when query has import token", async () => {
+			getWrapper({ routeQuery: { import: "test-token" } });
+			expect(useImportFlowMock.executeImport).toHaveBeenCalledWith("test-token");
 		});
 
 		it("should navigate to room-details on import success with id", async () => {
-			const wrapper = getWrapper({ routeQuery: { import: "test-token" } });
-			const importFlow = wrapper.findComponent({ name: "ImportFlow" });
-			await importFlow.vm.$emit("success", "Test Room", "room-123");
+			getWrapper({ routeQuery: { import: "test-token" } });
+			await flushPromises();
 
-			expect(mockRouter.replace).toHaveBeenCalledWith({
+			expect(router.replace).toHaveBeenCalledWith({
 				name: "room-details",
 				params: { id: "room-123" },
 			});
 		});
 
 		it("should navigate to course-room-overview on import success without id", async () => {
-			const wrapper = getWrapper({ routeQuery: { import: "test-token" } });
-			const importFlow = wrapper.findComponent({ name: "ImportFlow" });
-			await importFlow.vm.$emit("success", "Test Room");
+			useImportFlowMock.executeImport.mockResolvedValue({
+				result: undefined,
+				success: false,
+				error: new Error("Import failed"),
+			});
 
-			expect(mockRouter.replace).toHaveBeenCalledWith({
+			getWrapper({ routeQuery: { import: "test-token" } });
+			await flushPromises();
+
+			expect(router.push).toHaveBeenCalledWith({
 				name: "course-room-overview",
 			});
 			expect(courseRoomListStore.fetchCourses).toHaveBeenCalled();
@@ -518,7 +537,7 @@ describe("CourseRoomOverview.page", () => {
 		expect(groupAvatar).toHaveLength(1);
 	});
 
-	it("should provide courses list without locked courses for import", async () => {
+	it("should provide 'availableDestinations' without locked courses for import", async () => {
 		const courseDataWithLocked = [
 			courseRoomItemFactory.build({ id: "1", title: "Open Course", isLocked: false }),
 			courseRoomItemFactory.build({ id: "2", title: "Locked Course", isLocked: true }),
@@ -528,9 +547,8 @@ describe("CourseRoomOverview.page", () => {
 		});
 		const wrapper = getWrapper();
 
-		expect(wrapper.vm.courses).toHaveLength(2);
-		expect(wrapper.vm.courses[0]).toMatchObject({ id: "1", name: "Open Course", isLocked: false });
-		expect(wrapper.vm.courses[1]).toMatchObject({ id: "2", name: "Locked Course", isLocked: true });
+		expect(wrapper.vm.availableDestinations).toHaveLength(1);
+		expect(wrapper.vm.availableDestinations[0]).toMatchObject({ id: "1", name: "Open Course" });
 	});
 
 	it("should not call alignCourse when dragging group avatar to same position", async () => {

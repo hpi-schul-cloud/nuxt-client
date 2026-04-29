@@ -1,16 +1,18 @@
-import CopyDialog from "@/modules/feature/copy/CopyDialog.vue";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { RoomBoardItem } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
-import { createTestAppStore, createTestRoomStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createTestAppStore, createTestRoomStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/factory/room";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
+import { CopyApiResponseStatus, CopyApiResponseType } from "@api-server";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
+import { CopyDialog, useCopyFlow } from "@feature-copy";
 import { RoomContentGrid, RoomMenu } from "@feature-room";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
@@ -19,20 +21,26 @@ import { DefaultWireframe } from "@ui-layout";
 import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { useRouter } from "vue-router";
+import { Mocked } from "vitest";
+import { computed, ref } from "vue";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VBreadcrumbsItem, VBtn, VCard, VFab } from "vuetify/components";
 
-vi.mock("vue-router", () => ({
-	useRouter: vi.fn().mockReturnValue({
-		push: vi.fn(),
-	}),
-}));
-
+vi.mock("@feature-copy/copy-flow.composable");
 vi.mock("@data-room/Rooms.state");
 
 describe("@pages/RoomsDetails.page.vue", () => {
+	let useCopyFlowMock: Mocked<ReturnType<typeof useCopyFlow>>;
+
 	beforeEach(() => {
 		vi.useFakeTimers();
+
+		useCopyFlowMock = mockComposable(useCopyFlow, {
+			isDialogOpen: ref(false),
+			copyItemType: ref(ContentItemTypeEnum.Course),
+			isRunning: computed(() => false),
+		});
+		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
 	});
 
 	afterEach(() => {
@@ -69,6 +77,9 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		createTestAppStore({ me: { user: { id: "user-id" }, roles: [{ id: "teacher", name: "teacher" }] } });
 
+		const router = createRouterMock();
+		injectRouterMock(router);
+
 		const wrapper = mount(RoomDetailsPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -88,7 +99,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			wrapper,
 			roomDetailsStore,
 			room,
-			router: useRouter(),
+			router,
 			roomStore,
 			shareModule,
 		};
@@ -195,7 +206,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					});
 
 					const menu = wrapper.getComponent(RoomMenu);
-					await menu.vm.$emit("room:leave");
+					menu.vm.$emit("room:leave");
 					await flushPromises();
 
 					expect(roomStore.leaveRoom).toHaveBeenCalled();
@@ -259,6 +270,14 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		describe("when user clicks on copy room", () => {
+			beforeEach(() => {
+				useCopyFlowMock.executeCopyRoom.mockResolvedValue({
+					success: true,
+					result: { id: "copied-room-id", type: CopyApiResponseType.ROOM, status: CopyApiResponseStatus.SUCCESS },
+					error: undefined,
+				});
+			});
+
 			describe("when user has permission to copy room", () => {
 				it("should open the copy flow", async () => {
 					const { wrapper } = setup({
@@ -299,6 +318,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			});
 
 			it("should navigate to copied room on successful copy", async () => {
+				useCopyFlowMock.executeCopyRoom.mockResolvedValue({
+					success: true,
+					result: { id: "copied-room-id", type: CopyApiResponseType.ROOM, status: CopyApiResponseStatus.SUCCESS },
+					error: undefined,
+				});
+
 				const { wrapper, router } = setup({
 					allowedOperations: { accessRoom: true, copyRoom: true },
 				});
@@ -306,29 +331,10 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const menu = wrapper.getComponent({ name: "RoomMenu" });
 				await menu.vm.$emit("room:copy");
 
-				const copyFlow = wrapper.getComponent(CopyDialog);
-				const copiedRoomId = "copied-room-id";
-				await copyFlow.vm.$emit("copy:success", copiedRoomId);
-
-				expect(router.push).toHaveBeenCalledWith({
+				expect(router.replace).toHaveBeenCalledWith({
 					name: "room-details",
-					params: { id: copiedRoomId },
+					params: { id: "copied-room-id" },
 				});
-			});
-
-			it("should close the copy flow when copy ends", async () => {
-				const { wrapper } = setup({
-					allowedOperations: { accessRoom: true, copyRoom: true },
-				});
-
-				const menu = wrapper.getComponent(RoomMenu);
-				await menu.vm.$emit("room:copy");
-
-				const copyFlow = wrapper.getComponent(CopyDialog);
-				await copyFlow.vm.$emit("copy:ended");
-				await wrapper.vm.$nextTick();
-
-				expect(copyFlow.emitted()["update:modelValue"]).toBeFalsy();
 			});
 		});
 
