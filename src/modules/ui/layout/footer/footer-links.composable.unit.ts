@@ -1,4 +1,4 @@
-import { useFooterLinks } from "./FooterLinks.composable";
+import { useFooterLinks } from "./footer-links.composable";
 import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { SchulcloudTheme } from "@api-server";

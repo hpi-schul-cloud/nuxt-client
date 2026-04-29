@@ -1,2 +1,2 @@
-export * from "./SystemApi.composable";
+export * from "./system-api.composable";
 export * from "./types";
