@@ -295,9 +295,7 @@ const onFileSelection = async (event: Event) => {
 	const fileArray = Array.from(files);
 	incrementUploadProgressTotal(fileArray.length);
 
-	incrementRunningUploads(fileArray.length);
 	await uploadFiles(fileArray);
-	decrementRunningUploads(fileArray.length);
 };
 
 watch(
@@ -314,8 +312,13 @@ watch(
 const uploadFiles = async (files: File[]) => {
 	await Promise.allSettled(
 		files.map(async (file) => {
-			await upload(file, props.folderId, FileRecordParent.BOARDNODES);
-			incrementUploadProgressUploaded(1);
+			incrementRunningUploads(1);
+			try {
+				await upload(file, props.folderId, FileRecordParent.BOARDNODES);
+				incrementUploadProgressUploaded(1);
+			} finally {
+				decrementRunningUploads(1);
+			}
 		})
 	);
 };
