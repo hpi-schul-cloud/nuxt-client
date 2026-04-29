@@ -171,6 +171,15 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		}),
 	},
 	{
+		path: `/folder/:id(${REGEX_ID})/trash`,
+		component: async () => (await import("@page-folder")).FolderTrashPage,
+		beforeEnter: [checkFolderFeature],
+		name: "folder-trash",
+		props: (route: RouteLocationNormalized) => ({
+			folderId: route.params.id,
+		}),
+	},
+	{
 		path: `/h5p/player/:contentId(${REGEX_ID})`,
 		component: () => import("@/pages/h5p/H5PPlayer.page.vue"),
 		name: "h5pPlayer",
@@ -268,7 +277,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 			targetSystem: isMongoId,
 		}),
 		props: (to: RouteLocationNormalized) => ({
-			targetSystem: to.query.targetSystem,
+			targetSystemId: to.query.targetSystem,
 		}),
 		meta: {
 			isPublic: true,
