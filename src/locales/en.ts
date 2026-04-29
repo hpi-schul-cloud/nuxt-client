@@ -1474,6 +1474,7 @@ export default {
 	"pages.courseRooms.tabLabel.toolsOld": "Tools",
 	"pages.courseRooms.course-locked":
 		"The course is locked because there is no teacher assigned. Please refer to the school administrator.",
+	"pages.courseRooms.fetchCourseContent.error": "An error occurred while fetching the course content.",
 	"pages.files.overview.courseFiles": "Course files",
 	"pages.files.overview.favorites": "Favourites",
 	"pages.files.overview.personalFiles": "My personal files",

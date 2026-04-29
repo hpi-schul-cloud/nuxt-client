@@ -1505,6 +1505,7 @@ export default {
 	"pages.courseRooms.tabLabel.toolsOld": "Herramientas",
 	"pages.courseRooms.course-locked":
 		"El curso está bloqueado porque no hay ningún profesor asignado para impartirlo. Póngase en contacto con la administración de la escuela.",
+	"pages.courses.fetchCourseContent.error": "Se ha producido un error al obtener el contenido del curso.",
 	"pages.files.overview.courseFiles": "Archivos del curso",
 	"pages.files.overview.favorites": "Favoritos",
 	"pages.files.overview.personalFiles": "Archivos personales",

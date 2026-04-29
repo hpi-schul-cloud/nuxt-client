@@ -1496,6 +1496,7 @@ export default {
 	"pages.courseRooms.tabLabel.toolsOld": "Tools",
 	"pages.courseRooms.course-locked":
 		"Der Kurs ist gesperrt, weil keine unterrichtende Lehrkraft zugeordnet ist. Bitte an den Schul-Admin wenden.",
+	"pages.courses.fetchCourseContent.error": "Beim Abrufen der Kursinhalte ist ein Fehler aufgetreten.",
 	"pages.files.overview.courseFiles": "Kurs-Dateien",
 	"pages.files.overview.favorites": "Favoriten",
 	"pages.files.overview.personalFiles": "Meine persönlichen Dateien",
