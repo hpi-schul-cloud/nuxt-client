@@ -81,20 +81,25 @@ describe("SchoolExternalToolsModule", () => {
 					]);
 				});
 			});
+
+			describe("when the api call fails", () => {
+				it("should not update the state", async () => {
+					const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
+					apiMock.toolSchoolControllerGetSchoolExternalTools.mockRejectedValue(new Error("API error"));
+					const { loadSchoolExternalTools, schoolExternalTools } = useSchoolExternalTools();
+
+					await loadSchoolExternalTools("schoolId");
+
+					expect(schoolExternalTools.value).toEqual([]);
+					consoleErrorSpy.mockRestore();
+				});
+			});
 		});
 
 		describe("deleteSchoolExternalTool is called", () => {
 			describe("when it successfully calls the api", () => {
-				const setup = () => {
-					const schoolExternalTool = schoolExternalToolFactory.build();
-
-					return {
-						schoolExternalTool,
-					};
-				};
-
 				it("should call the toolApi.toolSchoolControllerDeleteSchoolExternalTool", async () => {
-					const { schoolExternalTool } = setup();
+					const schoolExternalTool = schoolExternalToolFactory.build();
 					const { deleteSchoolExternalTool } = useSchoolExternalTools();
 
 					await deleteSchoolExternalTool(schoolExternalTool.id);
@@ -103,16 +108,19 @@ describe("SchoolExternalToolsModule", () => {
 				});
 
 				it("should remove the tool from the state", async () => {
-					const { schoolExternalTool } = setup();
+					const toolToDelete = schoolExternalToolFactory.build();
+					const otherTool = schoolExternalToolFactory.build();
 					const { deleteSchoolExternalTool, schoolExternalTools } = useSchoolExternalTools();
 
-					await deleteSchoolExternalTool(schoolExternalTool.id);
+					schoolExternalTools.value = [toolToDelete, otherTool];
 
-					expect(schoolExternalTools.value).not.toContain(schoolExternalTool);
+					await deleteSchoolExternalTool(toolToDelete.id);
+
+					expect(schoolExternalTools.value).toEqual([otherTool]);
 				});
 
 				it("should notify success", async () => {
-					const { schoolExternalTool } = setup();
+					const schoolExternalTool = schoolExternalToolFactory.build();
 					const { deleteSchoolExternalTool } = useSchoolExternalTools();
 
 					await deleteSchoolExternalTool(schoolExternalTool.id);
