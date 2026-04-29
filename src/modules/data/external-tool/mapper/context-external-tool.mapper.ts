@@ -2,10 +2,10 @@ import {
 	ContextExternalTool,
 	ContextExternalToolConfigurationTemplate,
 	ContextExternalToolSave,
-	ExternalToolMapper,
 	ToolParameter,
 	ToolParameterEntry,
-} from "./types";
+} from "../types";
+import { ExternalToolMapper } from ".";
 import {
 	ContextExternalToolConfigurationTemplateListResponse,
 	ContextExternalToolConfigurationTemplateResponse,

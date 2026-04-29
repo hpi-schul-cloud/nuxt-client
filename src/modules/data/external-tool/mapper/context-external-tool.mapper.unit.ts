@@ -1,5 +1,5 @@
+import { ContextExternalToolSave } from "../types";
 import { ContextExternalToolMapper } from "./context-external-tool.mapper";
-import { ContextExternalToolSave } from "./types";
 import { contextExternalToolConfigurationTemplateFactory } from "@@/tests/test-utils";
 import { ToolContextType } from "@api-server";
 

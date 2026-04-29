@@ -1,4 +1,5 @@
-import { SchoolExternalToolConfigurationTemplate, SchoolExternalToolMapper, SchoolExternalToolSave } from "./types";
+import { SchoolExternalToolMapper } from "./mapper";
+import { SchoolExternalToolConfigurationTemplate, SchoolExternalToolSave } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
