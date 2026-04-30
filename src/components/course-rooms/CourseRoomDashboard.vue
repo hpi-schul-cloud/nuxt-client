@@ -181,7 +181,7 @@ import { useEnvConfig } from "@data-env";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import { storeToRefs } from "pinia";
-import { computed, inject, onMounted, onUnmounted, ref } from "vue";
+import { computed, inject, nextTick, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import draggable from "vuedraggable";
 
@@ -229,18 +229,6 @@ const touchDelay = computed(() => (isTouchDevice.value ? 200 : 20));
 const getContentName = (content: BoardTaskResponse | BoardLessonResponse | BoardColumnBoardResponse): string =>
 	"name" in content ? content.name : content.title;
 
-onMounted(() => {
-	if (isTouchDevice.value) {
-		window.addEventListener("contextmenu", (e) => e.preventDefault());
-	}
-});
-
-onUnmounted(() => {
-	if (isTouchDevice.value) {
-		window.removeEventListener("contextmenu", (e) => e.preventDefault());
-	}
-});
-
 const updateCardVisibility = async (elementId: string, visibility: boolean) => {
 	await courseRoomDetailsStore.publishCard(elementId, visibility);
 };
@@ -264,7 +252,11 @@ const moveByKeyboard = async (e: { id: string; moveIndex: number }) => {
 	[items[itemIndex], items[itemIndex + e.moveIndex]] = [items[itemIndex + e.moveIndex], items[itemIndex]];
 
 	await courseRoomDetailsStore.sortElements({ elements: items });
-	itemRefs.value[`item_${position}`]?.$el?.focus();
+	await nextTick();
+	const element = itemRefs.value[`item_${position}`]?.$el;
+	if (element instanceof HTMLElement) {
+		element.focus();
+	}
 };
 
 const boardLayoutAriaLabel = (itemLayout: BoardLayout) => {
@@ -384,4 +376,16 @@ const boardCardIsVisibleToStudent = (card: SingleColumnBoardResponse["elements"]
 	if (!isBoardCard) return false;
 	return (card.content as BoardColumnBoardResponse).published;
 };
+
+onMounted(() => {
+	if (isTouchDevice.value) {
+		window.addEventListener("contextmenu", (e) => e.preventDefault());
+	}
+});
+
+onUnmounted(() => {
+	if (isTouchDevice.value) {
+		window.removeEventListener("contextmenu", (e) => e.preventDefault());
+	}
+});
 </script>
