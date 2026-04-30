@@ -6,6 +6,9 @@ const DevServerProxy = (): Plugin => ({
 	configureServer: (server) => {
 		server.middlewares.use(createProxyMiddleware());
 	},
+	configurePreviewServer: (server) => {
+		server.middlewares.use(createProxyMiddleware());
+	},
 });
 
 export { DevServerProxy };
