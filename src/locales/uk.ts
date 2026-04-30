@@ -258,6 +258,7 @@ export default {
 	"common.words.schoolYear": "Навчальний рік",
 	"common.words.schoolYearChange": "Зміна навчального року",
 	"common.words.substitute": "Викладач на заміну",
+	"common.words.system": "система реєстрації",
 	"common.words.task": "Завдання",
 	"common.words.tasks": "Завдання",
 	"common.words.termsOfUse": "Умови використання",
@@ -556,7 +557,9 @@ export default {
 	"components.cardElement.folderElement.storage.error":
 		"Підключення до файлового сховища не вдалося. Будь ласка, спробуйте ще раз пізніше.",
 	"components.cardElement.LinkElement": "Посилання",
-	"components.cardElement.LinkElement.label": "Вставити адресу посилання",
+	"components.cardElement.LinkElement.create.label": "Вставити адресу посилання",
+	"components.cardElement.LinkElement.edit.label": "Редагувати адресу посилання",
+	"components.cardElement.LinkElement.validation.success": "URL-адреса дійсна",
 	"components.cardElement.notification.visibleAndEditable":
 		"Ця дошка є видимою і доступною для редагування для всіх учасників курсу.",
 	"components.cardElement.richTextElement.placeholder": "додати текст",
@@ -1647,6 +1650,8 @@ export default {
 	"pages.rooms.importCourse.step_3": "Імпортований курс можна перейменувати під час наступного кроку.",
 	"pages.rooms.ccImportCourse.title": "Імпортний курс",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Виберіть файл",
+	"pages.rooms.ccImportCourse.maxFileSize": "Максимальний розмір файлу: {maxSize}",
+	"pages.rooms.ccImportCourse.fileSizeExceeded": "Файл перевищує максимальний розмір {maxSize}.",
 	"pages.rooms.ccImportCourse.loading": "Триває завантаження...",
 	"pages.rooms.ccImportCourse.success": "Файл вашого курсу завантажено та зараз імпортується у фоновому режимі.",
 	"pages.rooms.ccImportCourse.error": "Під час завантаження файлу курсу сталася помилка.",

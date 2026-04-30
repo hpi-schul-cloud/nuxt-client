@@ -261,6 +261,7 @@ export default {
 	"common.words.schoolYear": "Schuljahr",
 	"common.words.schoolYearChange": "Schuljahreswechsel",
 	"common.words.substitute": "Vertretung",
+	"common.words.system": "Anmeldesystem",
 	"common.words.task": "Aufgabe",
 	"common.words.tasks": "Aufgaben",
 	"common.words.termsOfUse": "Nutzungsordnung",
@@ -564,7 +565,9 @@ export default {
 	"components.cardElement.folderElement.storage.error":
 		"Infos zum Dateiordner sind gerade nicht verfügbar. Lade den Bereich neu.",
 	"components.cardElement.LinkElement": "Link",
-	"components.cardElement.LinkElement.label": "Link-Adresse einfügen",
+	"components.cardElement.LinkElement.create.label": "Link-Adresse einfügen",
+	"components.cardElement.LinkElement.edit.label": "Link-Adresse bearbeiten",
+	"components.cardElement.LinkElement.validation.success": "Link-Adresse gültig",
 	"components.cardElement.notification.visibleAndEditable":
 		"Dieses Whiteboard ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
 	"components.cardElement.richTextElement.placeholder": "Text hinzufügen",
@@ -1660,6 +1663,8 @@ export default {
 	"pages.rooms.importCourse.step_3": "Der importierte Kurs kann im nächsten Schritt umbenannt werden.",
 	"pages.rooms.ccImportCourse.title": "Kurs importieren",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Datei auswählen",
+	"pages.rooms.ccImportCourse.maxFileSize": "Maximale Dateigröße: {maxSize}",
+	"pages.rooms.ccImportCourse.fileSizeExceeded": "Die Datei überschreitet die maximale Größe von {maxSize}.",
 	"pages.rooms.ccImportCourse.loading": "Upload läuft...",
 	"pages.rooms.ccImportCourse.success": "Deine Kursdatei wurde hochgeladen und wird nun im Hintergrund importiert.",
 	"pages.rooms.ccImportCourse.error": "Beim Hochladen der Kursdatei ist ein Fehler aufgetreten.",
@@ -1918,7 +1923,7 @@ export default {
 	"pages.userMigration.button.skip": "Nicht jetzt",
 	"pages.userMigration.button.startMigration": "Umzug starten",
 	"pages.userMigration.description.firstParagraph.hello": "Hallo!",
-	"pages.userMigration.description.firstParagraph.changeSource": "Deine Schule wechselt gerade das Anmeldesystem",
+	"pages.userMigration.description.firstParagraph.changeSource": "Deine Schule wechselt gerade das Anmeldesystem.",
 	"pages.userMigration.description.firstParagraph.fromSource":
 		"Du kannst Deinen Account jetzt zu {targetSystem} umziehen.",
 	"pages.userMigration.description.firstParagraph.fromSourceMandatory":

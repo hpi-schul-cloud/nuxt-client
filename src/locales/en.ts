@@ -250,6 +250,7 @@ export default {
 	"common.words.schoolYear": "School year",
 	"common.words.schoolYearChange": "Change of school year",
 	"common.words.substitute": "Substitute",
+	"common.words.system": "Registration system",
 	"common.words.task": "Task",
 	"common.words.tasks": "Tasks",
 	"common.words.termsOfUse": "Terms of Use",
@@ -546,7 +547,9 @@ export default {
 	"components.cardElement.folderElement.storage.error":
 		"Information about the file folder is currently not available. Please reload the board.",
 	"components.cardElement.LinkElement": "Link",
-	"components.cardElement.LinkElement.label": "Insert link address",
+	"components.cardElement.LinkElement.create.label": "Insert link address",
+	"components.cardElement.LinkElement.edit.label": "Edit link address",
+	"components.cardElement.LinkElement.validation.success": "The link address is valid",
 	"components.cardElement.notification.visibleAndEditable":
 		"This whiteboard is visible and editable for all course participants.",
 	"components.cardElement.richTextElement.placeholder": "Add text",
@@ -1635,6 +1638,8 @@ export default {
 	"pages.rooms.importCourse.step_3": "The imported course can be renamed in the next step.",
 	"pages.rooms.ccImportCourse.title": "Import course",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Select file",
+	"pages.rooms.ccImportCourse.maxFileSize": "Maximum file size: {maxSize}",
+	"pages.rooms.ccImportCourse.fileSizeExceeded": "The file exceeds the maximum size of {maxSize}.",
 	"pages.rooms.ccImportCourse.loading": "Upload in progress...",
 	"pages.rooms.ccImportCourse.success":
 		"Your course file has been uploaded and is now being imported in the background.",
