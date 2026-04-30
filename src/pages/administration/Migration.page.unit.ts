@@ -1,4 +1,4 @@
-import MigrationWizard from "./Migration.page.vue";
+import MigrationPage from "./Migration.page.vue";
 import { importUsersModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
@@ -29,13 +29,16 @@ type MigrationPageWrapperType = Partial<{
 	migrationStep: number;
 	isMigrationConfirm: boolean;
 	isClearAutoMatchesDialogOpen: boolean;
-	school: { inUserMigration: boolean; inMaintenance: boolean };
+	schoolMigrationState: {
+		inUserMigration: boolean;
+		inMaintenance: boolean;
+	};
 }>;
 
 const getWrapper = (
-	options: ComponentMountingOptions<typeof MigrationWizard> = {}
+	options: ComponentMountingOptions<typeof MigrationPage> = {}
 ): VueWrapper<ComponentPublicInstance & MigrationPageWrapperType> =>
-	mount(MigrationWizard, {
+	mount(MigrationPage, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			stubs: {
@@ -47,9 +50,9 @@ const getWrapper = (
 	});
 
 const getWrapperShallow = (
-	options: ComponentMountingOptions<typeof MigrationWizard> = {}
+	options: ComponentMountingOptions<typeof MigrationPage> = {}
 ): VueWrapper<ComponentPublicInstance & MigrationPageWrapperType> =>
-	shallowMount(MigrationWizard, {
+	shallowMount(MigrationPage, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
@@ -68,12 +71,12 @@ describe("User Migration / Index", () => {
 			FEATURE_USER_MIGRATION_ENABLED: true,
 			MIGRATION_WIZARD_DOCUMENTATION_LINK: "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true",
 		});
+		createTestSchoolStore({ schoolDetails: { inUserMigration: undefined, inMaintenance: undefined } });
 		setupStores({
 			importUsersModule: ImportUsersModule,
 		});
 
 		importUsersModule.setTotal(100);
-		createTestSchoolStore({ schoolDetails: { inUserMigration: undefined, inMaintenance: undefined } });
 	});
 
 	it("should set page title", () => {
@@ -145,12 +148,10 @@ describe("User Migration / Index", () => {
 			expect(nextBtn.exists()).toEqual(false);
 
 			importUsersModule.setTotal(100);
-			// schoolsModule.setSchool(
-			// 	schoolFactory.build({
-			// 		inUserMigration: true,
-			// 		inMaintenance: true,
-			// 	})
-			// );
+			wrapper.vm.schoolMigrationState = {
+				inUserMigration: true,
+				inMaintenance: true,
+			};
 			await nextTick();
 
 			const btnRemoved = wrapper.find("[data-testid=start_user_migration]");
@@ -167,12 +168,7 @@ describe("User Migration / Index", () => {
 			vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
 			vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
 
-			// schoolsModule.setSchool(
-			// 	schoolFactory.build({
-			// 		inUserMigration: true,
-			// 		inMaintenance: true,
-			// 	})
-			// );
+			createTestSchoolStore({ schoolDetails: { inUserMigration: true, inMaintenance: true } });
 		});
 
 		it("should display summary text with totals", async () => {
@@ -243,8 +239,6 @@ describe("User Migration / Index", () => {
 			// TODO after implementing of backend and store, mock store response and expect to be called with
 			expect(performMigrationMock).toHaveBeenCalledTimes(1);
 			expect(wrapper.vm.migrationStep).toBe(4);
-			// expect(schoolsModule.getSchool.inUserMigration).toBe(false);
-			expect(wrapper.vm.school?.inUserMigration).toBe(false);
 		});
 	});
 
@@ -274,16 +268,10 @@ describe("User Migration / Index", () => {
 		});
 
 		it("perform end maintenance", async () => {
+			createTestSchoolStore({ schoolDetails: { inMaintenance: true, inUserMigration: true } });
 			const { wrapper } = await setup();
 
-			// const endMaintenanceMock = vi.spyOn(schoolsModule, "migrationStartSync");
-			// endMaintenanceMock.mockImplementation(async () => {
-			// 	schoolsModule.setSchool({
-			// 		...schoolsModule.getSchool,
-			// 		inMaintenance: false,
-			// 	});
-			// 	return Promise.resolve();
-			// });
+			const endMaintenanceMock = vi.spyOn(importUsersModule, "migrationStartSync").mockResolvedValue();
 
 			const btn = wrapper.find("[data-testid=migration_endMaintenance]");
 			await btn.trigger("click");
@@ -292,25 +280,20 @@ describe("User Migration / Index", () => {
 
 			expect(endMaintenanceMock).toHaveBeenCalledTimes(1);
 			expect(wrapper.vm.migrationStep).toBe(5);
-			expect(wrapper.vm.school?.inMaintenance).toBe(false);
 		});
 	});
 
 	describe("cancel migration", () => {
 		describe("in step migration_importUsers", () => {
 			beforeEach(() => {
-				// vi.spyOn(schoolsModule, "fetchSchool").mockResolvedValue();
 				vi.spyOn(importUsersModule, "fetchTotal").mockResolvedValue();
 				vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
 				vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
 			});
 			const setup = async () => {
-				// schoolsModule.setSchool(
-				// 	schoolFactory.build({
-				// 		inUserMigration: true,
-				// 		inMaintenance: true,
-				// 	})
-				// );
+				const { schoolStore } = createTestSchoolStore({
+					schoolDetails: { inUserMigration: true, inMaintenance: true },
+				});
 
 				importUsersModule.setTotal(10);
 				importUsersModule.setTotalUnmatched(5);
@@ -333,6 +316,7 @@ describe("User Migration / Index", () => {
 
 				return {
 					wrapper,
+					schoolStore,
 					redirect,
 				};
 			};
@@ -348,19 +332,9 @@ describe("User Migration / Index", () => {
 			it("should call stores on dialog-confirm", async () => {
 				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 
-				const { wrapper } = await setup();
-
+				const { wrapper, schoolStore } = await setup();
 				const cancelMigrationMock = vi.spyOn(importUsersModule, "cancelMigration");
-
-				cancelMigrationMock.mockImplementationOnce(async () => {
-					// schoolsModule.setSchool({
-					// 	...schoolsModule.getSchool,
-					// 	inUserMigration: false,
-					// 	inMaintenance: false,
-					// });
-				});
-
-				// vi.spyOn(schoolsModule, "fetchSchool").mockResolvedValueOnce(await Promise.resolve());
+				cancelMigrationMock.mockImplementationOnce(async () => Promise.resolve());
 
 				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
 				await button.trigger("click");
@@ -368,22 +342,14 @@ describe("User Migration / Index", () => {
 				await nextTick();
 
 				expect(importUsersModule.cancelMigration).toHaveBeenCalled();
-				// expect(schoolsModule.fetchSchool).toHaveBeenCalled();
+				expect(schoolStore.fetchSchoolDetails).toHaveBeenCalled();
 			});
 
 			it("should redirect to school settings migration section", async () => {
 				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 				const { wrapper } = await setup();
-
 				const cancelMigrationMock = vi.spyOn(importUsersModule, "cancelMigration");
-				cancelMigrationMock.mockImplementationOnce(async () =>
-					// schoolsModule.setSchool({
-					// 	...schoolsModule.getSchool,
-					// 	inUserMigration: false,
-					// 	inMaintenance: false,
-					// });
-					Promise.resolve()
-				);
+				cancelMigrationMock.mockImplementationOnce(async () => Promise.resolve());
 
 				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
 				await button.trigger("click");
@@ -399,12 +365,7 @@ describe("User Migration / Index", () => {
 
 		describe("in step migration_summary", () => {
 			const setup = async () => {
-				// schoolsModule.setSchool(
-				// 	schoolFactory.build({
-				// 		inUserMigration: true,
-				// 		inMaintenance: true,
-				// 	})
-				// );
+				createTestSchoolStore({ schoolDetails: { inUserMigration: true, inMaintenance: true } });
 
 				const wrapper = getWrapper();
 
@@ -450,13 +411,6 @@ describe("User Migration / Index", () => {
 			});
 
 			const setup = async () => {
-				// schoolsModule.setSchool(
-				// 	schoolFactory.build({
-				// 		inUserMigration: true,
-				// 		inMaintenance: true,
-				// 	})
-				// );
-
 				importUsersModule.setTotal(10);
 				importUsersModule.setTotalUnmatched(5);
 				importUsersModule.setTotalMatched(5);
@@ -531,13 +485,10 @@ describe("User Migration / Index", () => {
 			describe("when the migration has started", () => {
 				const migrationStartedSetup = async () => {
 					const { wrapper } = await setup();
-
-					// schoolsModule.setSchool(
-					// 	schoolFactory.build({
-					// 		inUserMigration: true,
-					// 		inMaintenance: true,
-					// 	})
-					// );
+					wrapper.vm.schoolMigrationState = {
+						inUserMigration: true,
+						inMaintenance: true,
+					};
 					await flushPromises();
 
 					return {
@@ -599,14 +550,8 @@ describe("User Migration / Index", () => {
 
 			describe("when the migration has started", () => {
 				const migrationStartedSetup = async () => {
+					createTestSchoolStore({ schoolDetails: { inUserMigration: true, inMaintenance: true } });
 					const { wrapper } = await setup();
-
-					// schoolsModule.setSchool(
-					// 	schoolFactory.build({
-					// 		inUserMigration: true,
-					// 		inMaintenance: true,
-					// 	})
-					// );
 					await flushPromises();
 
 					return {

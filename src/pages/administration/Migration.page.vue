@@ -74,11 +74,11 @@
 					<VStepperWindowItem :value="1" data-testid="migration_tutorial">
 						<VContainer>
 							<VCard :ripple="false" elevation="2" class="pa-5 mb-10" color="grey-lighten-5">
-								<VProgressLinear v-if="schoolDetails.inUserMigration && isLoading" indeterminate />
+								<VProgressLinear v-if="schoolMigrationState.inUserMigration && isLoading" indeterminate />
 								<VCardText>
 									<iframe class="full" :src="helpPageUri" />
 									<VAlert
-										v-if="(!schoolDetails.inUserMigration || isLoading) && !isNbc"
+										v-if="(!schoolMigrationState.inUserMigration || isLoading) && !isNbc"
 										density="compact"
 										variant="outlined"
 										type="info"
@@ -119,13 +119,13 @@
 												@click="nextStep"
 											>
 												<VProgressCircular
-													v-if="isLoading && schoolDetails.inUserMigration"
+													v-if="isLoading && schoolMigrationState.inUserMigration"
 													:size="20"
 													indeterminate
 													class="mr-1"
 												/>
 												{{
-													!isLoading || schoolDetails.inUserMigration === false
+													!isLoading || schoolMigrationState.inUserMigration === false
 														? t("pages.administration.migration.next")
 														: t("pages.administration.migration.waiting")
 												}}
@@ -427,15 +427,17 @@ const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined
 
 const importUsersRef: Ref<InstanceType<typeof ImportUsers> | null> = ref(null);
 
-const isMigrationNotStarted = computed(() => schoolDetails.value.inUserMigration === undefined);
+const isMigrationNotStarted = computed(() => schoolMigrationState.value.inUserMigration === undefined);
 
-const canPerformMigration = computed(() => schoolDetails.value.inUserMigration && schoolDetails.value.inMaintenance);
+const canPerformMigration = computed(
+	() => schoolMigrationState.value.inUserMigration && schoolMigrationState.value.inMaintenance
+);
 
-const isMigrationFinished = computed(() => schoolDetails.value.inUserMigration === false);
+const isMigrationFinished = computed(() => schoolMigrationState.value.inUserMigration === false);
 
 const canFinishMaintenance = computed(() => isMigrationConfirm.value || isMigrationFinished.value);
 
-const isMaintenanceFinished = computed(() => !schoolDetails.value.inMaintenance);
+const isMaintenanceFinished = computed(() => !schoolMigrationState.value.inMaintenance);
 
 const businessError: ComputedRef<BusinessError | null> = computed(() => importUsersModule.getBusinessError);
 
@@ -478,10 +480,14 @@ const isAllowed = async () => {
 };
 
 const summary = async () => {
-	await fetchSchoolDetails();
 	if (!canPerformMigration.value) {
 		return;
 	}
+	await fetchSchoolDetails();
+	schoolMigrationState.value = {
+		inUserMigration: schoolDetails.value.inUserMigration,
+		inMaintenance: schoolDetails.value.inMaintenance,
+	};
 
 	isLoading.value = true;
 
@@ -493,7 +499,7 @@ const summary = async () => {
 };
 
 const checkTotalInterval = () => {
-	if (schoolDetails.value.inUserMigration && totalImportUsers.value === 0) {
+	if (schoolMigrationState.value.inUserMigration && totalImportUsers.value === 0) {
 		checkTotal.value = setInterval(() => {
 			importUsersModule.fetchTotal();
 		}, 5000);
@@ -504,7 +510,7 @@ const checkTotalInterval = () => {
 };
 
 const setSchoolInUserMigration = async () => {
-	if (schoolDetails.value.inUserMigration) {
+	if (schoolMigrationState.value.inUserMigration) {
 		return;
 	}
 
