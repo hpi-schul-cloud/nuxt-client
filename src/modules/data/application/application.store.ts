@@ -1,5 +1,4 @@
 import { notifySuccess } from "./notification-store";
-import router from "@/router";
 import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
@@ -8,7 +7,7 @@ import { useEnvConfig } from "@data-env";
 import { logger } from "@util-logger";
 import { watchOnce } from "@vueuse/core";
 import { defineStore, storeToRefs } from "pinia";
-import { computed, readonly, ref, watch } from "vue";
+import { computed, readonly, ref } from "vue";
 
 // use of vueuse "useCookies" ?
 const setCookie = (cname: string, cvalue: string, exdays: number) => {
@@ -102,15 +101,6 @@ export const useAppStore = defineStore("applicationStore", () => {
 	const postTimerSeconds = (seconds: number) => {
 		post(`${BROADCAST_MESSAGE_TIME_UPDATED}:${seconds}`);
 	};
-
-	// reset the timer whenever the route changes, if the user is logged in
-	watch(
-		() => router.currentRoute.value,
-		() => {
-			if (isLoggedIn.value) startTimer();
-		},
-		{ immediate: true }
-	);
 
 	// startTimer when config was loaded
 	watchOnce(() => useEnvConfig().value.JWT_TIMEOUT_SECONDS, startTimer);
@@ -275,6 +265,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 		clearApplicationError,
 		handleUnknownError,
 		handleApplicationError,
+		startTimer,
 		stopTimer,
 		shortenSession,
 		sessionTimeoutTimestamp: readonly(sessionTimeoutTimestamp),

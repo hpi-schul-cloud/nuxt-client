@@ -31,8 +31,9 @@ import { useEnvConfig } from "@data-env";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { logger } from "@util-logger";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 const DEFAULT_WARNING_SECONDS = 1 * 60 * 60; // 1 hour
 const { JWT_SHOW_TIMEOUT_WARNING_SECONDS } = useEnvConfig().value;
@@ -43,9 +44,10 @@ const remainingTimeInMinutes = computed(() => Math.ceil(remainingTimeInSeconds.v
 
 const { t } = useI18n();
 
+const router = useRouter();
 const showDialog = ref(false);
 
-const { autoLogout, stopTimer, extendSession } = useAppStore();
+const { autoLogout, extendSession, startTimer, stopTimer } = useAppStore();
 const { sessionTimeoutTimestamp } = useAppStoreRefs();
 
 const regularChecks = () => {
@@ -66,6 +68,9 @@ const regularChecks = () => {
 
 	showDialog.value = remainingTimeInSeconds.value <= WARNING_THRESHOLD;
 };
+
+// reset the timer whenever the route changes, if the user is logged in
+watch(() => router.currentRoute.value, startTimer, { immediate: true });
 
 setInterval(regularChecks, 1000);
 </script>

@@ -1,6 +1,5 @@
 import { $axios } from "@/utils/api";
 import { BoardErrorReportApiFactory, BoardErrorReportBodyParams } from "@api-server";
-import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
 import { useEventListener } from "@vueuse/core";
 import { type Socket } from "socket.io-client";
@@ -20,8 +19,6 @@ enum ConnectionState {
 }
 
 let connectionState: ConnectionState = ConnectionState.STARTING;
-
-const { isJwtExpired } = useSessionBroadcast();
 
 export const useConnectionErrorHandling = (socket: Socket) => {
 	let startTime = Date.now();
@@ -60,11 +57,6 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 	};
 
 	const apiCall = (type: string, message: string, retryCount: number, logSteps: string[], reportRetries = 3) => {
-		if (isJwtExpired.value) {
-			log("noSess");
-			return;
-		}
-
 		const url = globalThis.location.href;
 		const boardId = /boards\/([0-9a-fA-F]{24})/.exec(url)?.[1] ?? "unknown";
 		const steps = [...logSteps, connectionState + " " + socket.io.engine.transport.name].join("|");
