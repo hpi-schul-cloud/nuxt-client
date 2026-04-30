@@ -100,6 +100,25 @@ describe("useCourseRoomDetailsStore", () => {
 
 				expect(store.finishedLoading).toBe(true);
 			});
+
+			it("should return false when loading is true", async () => {
+				let resolvePromise: (value: unknown) => void;
+				const pendingPromise = new Promise((resolve) => {
+					resolvePromise = resolve;
+				});
+				courseRoomsApiMock.courseRoomsControllerGetRoomBoard.mockReturnValue(pendingPromise as never);
+
+				const { store } = setup();
+				const fetchPromise = store.fetchContent("room-1");
+
+				expect(store.loading).toBe(true);
+				expect(store.finishedLoading).toBe(false);
+
+				resolvePromise!(mockApiResponse<SingleColumnBoardResponse>({ data: buildRoomData() }));
+				await fetchPromise;
+
+				expect(store.finishedLoading).toBe(true);
+			});
 		});
 
 		describe("roomIsEmpty", () => {
@@ -214,7 +233,7 @@ describe("useCourseRoomDetailsStore", () => {
 		});
 
 		describe("when the fetch fails with a non-locked error", () => {
-			it("should leave the room unlocked", async () => {
+			it("should leave the room unlocked when error message does not contain LOCKED_COURSE", async () => {
 				const error = new Error("Unexpected error");
 				courseRoomsApiMock.courseRoomsControllerGetRoomBoard.mockRejectedValue(error);
 
@@ -223,6 +242,32 @@ describe("useCourseRoomDetailsStore", () => {
 
 				expect(store.isLocked).toBe(false);
 				expect(store.roomData.title).toBe("");
+			});
+
+			it("should leave the room unlocked when error has no message property", async () => {
+				const error = { code: 500 };
+				courseRoomsApiMock.courseRoomsControllerGetRoomBoard.mockRejectedValue(error);
+
+				const { store } = setup();
+				await store.fetchContent("room-1");
+
+				expect(store.isLocked).toBe(false);
+				expect(store.roomData.title).toBe("");
+			});
+
+			it("should not modify roomData elements when fetch fails", async () => {
+				const existingElements = [{ type: BoardElementResponseType.TASK, content: {} as never }];
+				const initialRoomData = buildRoomData({ elements: existingElements });
+				courseRoomsApiMock.courseRoomsControllerGetRoomBoard
+					.mockResolvedValueOnce(mockApiResponse<SingleColumnBoardResponse>({ data: initialRoomData }))
+					.mockRejectedValueOnce(new Error("Network error"));
+
+				const { store } = setup();
+				await store.fetchContent("room-1");
+				expect(store.roomData.elements).toHaveLength(1);
+
+				await store.fetchContent("room-1");
+				expect(store.roomData.elements).toHaveLength(1);
 			});
 		});
 	});

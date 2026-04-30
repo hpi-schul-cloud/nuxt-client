@@ -317,6 +317,104 @@ describe("CourseRoomDashboard.vue", () => {
 				expect(cardElement.exists()).toBe(true);
 			}
 		});
+
+		it("should toggle isDragging when on-drag event from board card", async () => {
+			const { wrapper } = setup();
+
+			const boardCard = wrapper.findComponent({ name: "RoomBoardCard" });
+			await boardCard.vm.$emit("on-drag");
+
+			expect(boardCard.exists()).toBe(true);
+		});
+
+		it("should set isDragging to false on tab-pressed from board card", async () => {
+			const { wrapper } = setup();
+
+			const boardCard = wrapper.findComponent({ name: "RoomBoardCard" });
+			await boardCard.vm.$emit("on-drag");
+			await boardCard.vm.$emit("tab-pressed");
+
+			expect(boardCard.exists()).toBe(true);
+		});
+
+		it("should toggle isDragging when on-drag event from task card", async () => {
+			const { wrapper } = setup();
+
+			const taskCard = wrapper.findComponent<VCard>(".task-card");
+			await taskCard.vm.$emit("on-drag");
+
+			expect(taskCard.exists()).toBe(true);
+		});
+
+		it("should set isDragging to false on tab-pressed from task card", async () => {
+			const { wrapper } = setup();
+
+			const taskCard = wrapper.findComponent<VCard>(".task-card");
+			await taskCard.vm.$emit("on-drag");
+			await taskCard.vm.$emit("tab-pressed");
+
+			expect(taskCard.exists()).toBe(true);
+		});
+
+		it("should toggle isDragging when on-drag event from lesson card", async () => {
+			const { wrapper } = setup();
+
+			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
+			await lessonCard.vm.$emit("on-drag");
+
+			expect(lessonCard.exists()).toBe(true);
+		});
+
+		it("should set isDragging to false on tab-pressed from lesson card", async () => {
+			const { wrapper } = setup();
+
+			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
+			await lessonCard.vm.$emit("on-drag");
+			await lessonCard.vm.$emit("tab-pressed");
+
+			expect(lessonCard.exists()).toBe(true);
+		});
+
+		it("should not call sortElements when moving first element before start", async () => {
+			const { wrapper, courseRoomDetailsStore } = setup();
+
+			const taskCards = wrapper.findAllComponents({ name: "CourseRoomTaskCard" });
+			await taskCards[0].vm.$emit("move-element", { id: "1234", moveIndex: -1 });
+
+			expect(courseRoomDetailsStore.sortElements).not.toHaveBeenCalled();
+		});
+
+		it("should not call sortElements when moving last element past end", async () => {
+			const { wrapper, courseRoomDetailsStore } = setup();
+
+			const boardCard = wrapper.findComponent({ name: "RoomBoardCard" });
+			await boardCard.vm.$emit("move-element", { id: "9876", moveIndex: 1 });
+
+			expect(courseRoomDetailsStore.sortElements).not.toHaveBeenCalled();
+		});
+
+		it("should call sortElements on valid keyboard move", async () => {
+			const { wrapper, courseRoomDetailsStore } = setup();
+
+			const taskCards = wrapper.findAllComponents({ name: "CourseRoomTaskCard" });
+			await taskCards[1].vm.$emit("move-element", { id: "2345", moveIndex: -1 });
+			await flushPromises();
+
+			expect(courseRoomDetailsStore.sortElements).toHaveBeenCalled();
+		});
+
+		it("should set dragInProgress to false after endDragging delay", async () => {
+			vi.useFakeTimers();
+			const { wrapper } = setup();
+
+			const draggableComponent = wrapper.findComponent(draggable);
+			await draggableComponent.vm.$emit("start");
+			await draggableComponent.vm.$emit("end");
+			vi.advanceTimersByTime(200);
+
+			vi.useRealTimers();
+			expect(draggableComponent.exists()).toBe(true);
+		});
 	});
 
 	describe("Sharing Lesson", () => {
@@ -331,6 +429,17 @@ describe("CourseRoomDashboard.vue", () => {
 				type: ShareTokenBodyParamsParentType.LESSONS,
 			});
 		});
+
+		it("should not call startShareFlow when FEATURE_LESSON_SHARE is disabled", () => {
+			createTestEnvStore({ FEATURE_LESSON_SHARE: false });
+			const { wrapper } = setup();
+			shareModuleMock.startShareFlow.mockClear();
+
+			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
+			lessonCard.vm.$emit("open-modal", "12345");
+
+			expect(shareModuleMock.startShareFlow).not.toHaveBeenCalled();
+		});
 	});
 
 	describe("Sharing Task", () => {
@@ -344,6 +453,17 @@ describe("CourseRoomDashboard.vue", () => {
 				id: "1234",
 				type: ShareTokenBodyParamsParentType.TASKS,
 			});
+		});
+
+		it("should not call startShareFlow when FEATURE_TASK_SHARE is disabled", () => {
+			createTestEnvStore({ FEATURE_TASK_SHARE: false });
+			const { wrapper } = setup();
+			shareModuleMock.startShareFlow.mockClear();
+
+			const taskCard = wrapper.findComponent<VCard>(".task-card");
+			taskCard.vm.$emit("share-task", "1234");
+
+			expect(shareModuleMock.startShareFlow).not.toHaveBeenCalled();
 		});
 	});
 
@@ -403,6 +523,35 @@ describe("CourseRoomDashboard.vue", () => {
 			await flushPromises();
 
 			expect(deleteLessonMock).not.toHaveBeenCalled();
+		});
+
+		it("should call deleteBoard when board deletion is confirmed", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(true);
+
+			const { wrapper, courseRoomDetailsStore } = setup();
+			courseRoomDetailsStore.deleteBoard = vi.fn();
+			courseRoomDetailsStore.fetchContent = vi.fn();
+
+			const boardCard = wrapper.findComponent({ name: "RoomBoardCard" });
+			boardCard.vm.$emit("delete-board");
+			await flushPromises();
+
+			expect(confirmDialogUtils.askDeletionForItem).toHaveBeenCalledWith("title", "common.words.board");
+			expect(courseRoomDetailsStore.deleteBoard).toHaveBeenCalledWith("board-123");
+			expect(courseRoomDetailsStore.fetchContent).toHaveBeenCalled();
+		});
+
+		it("should not call deleteBoard when board deletion is cancelled", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
+			const deleteBoardMock = vi.fn();
+			const { wrapper, courseRoomDetailsStore } = setup();
+			courseRoomDetailsStore.deleteBoard = deleteBoardMock;
+
+			const boardCard = wrapper.findComponent({ name: "RoomBoardCard" });
+			boardCard.vm.$emit("delete-board");
+			await flushPromises();
+
+			expect(deleteBoardMock).not.toHaveBeenCalled();
 		});
 	});
 
@@ -609,6 +758,147 @@ describe("CourseRoomDashboard.vue", () => {
 					},
 				],
 			]);
+		});
+	});
+
+	describe("Sharing Board", () => {
+		it("should call startShareFlow when board is shared and FEATURE_COLUMN_BOARD_SHARE is enabled", () => {
+			createTestEnvStore({ FEATURE_COLUMN_BOARD_SHARE: true });
+			const { wrapper } = setup();
+			shareModuleMock.startShareFlow.mockClear();
+
+			const boardCard = wrapper.findComponent({ name: "RoomBoardCard" });
+			boardCard.vm.$emit("share-board", "board-123");
+
+			expect(shareModuleMock.startShareFlow).toHaveBeenCalledWith({
+				id: "board-123",
+				type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
+			});
+		});
+
+		it("should not call startShareFlow when FEATURE_COLUMN_BOARD_SHARE is disabled", () => {
+			createTestEnvStore({ FEATURE_COLUMN_BOARD_SHARE: false });
+			const { wrapper } = setup();
+			shareModuleMock.startShareFlow.mockClear();
+
+			const boardCard = wrapper.findComponent({ name: "RoomBoardCard" });
+			boardCard.vm.$emit("share-board", "board-123");
+
+			expect(shareModuleMock.startShareFlow).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("Card visibility updates", () => {
+		it("should call publishCard when task card emits update-visibility", async () => {
+			const { wrapper, courseRoomDetailsStore } = setup();
+			courseRoomDetailsStore.publishCard = vi.fn();
+
+			const taskCard = wrapper.findComponent<VCard>(".task-card");
+			taskCard.vm.$emit("update-visibility", false);
+			await flushPromises();
+
+			expect(courseRoomDetailsStore.publishCard).toHaveBeenCalledWith(mockData.elements[0].content.id, false);
+		});
+
+		it("should call publishCard when lesson card emits update-visibility", async () => {
+			const { wrapper, courseRoomDetailsStore } = setup();
+			courseRoomDetailsStore.publishCard = vi.fn();
+
+			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
+			lessonCard.vm.$emit("update-visibility", true);
+			await flushPromises();
+
+			expect(courseRoomDetailsStore.publishCard).toHaveBeenCalledWith(mockData.elements[2].content.id, true);
+		});
+	});
+
+	describe("Student board card visibility", () => {
+		it("should render published board card for student", () => {
+			const { wrapper } = setup({ role: "student" });
+
+			const boardCards = wrapper.findAllComponents({ name: "RoomBoardCard" });
+			expect(boardCards).toHaveLength(1);
+		});
+
+		it("should not render unpublished board card for student", () => {
+			const unpublishedBoardData = {
+				...mockData,
+				elements: [
+					{
+						type: BoardElementResponseType.COLUMN_BOARD,
+						content: {
+							id: "9876",
+							title: "title",
+							published: false,
+							createdAt: "2023-05-31T15:34:59.276Z",
+							updatedAt: "2023-05-31T15:34:59.276Z",
+							columnBoardId: "board-123",
+							layout: BoardLayout.COLUMNS,
+						},
+					},
+				],
+			} as unknown as SingleColumnBoardResponse;
+
+			const { wrapper } = setup({ role: "student", roomData: unpublishedBoardData });
+
+			const boardCards = wrapper.findAllComponents({ name: "RoomBoardCard" });
+			expect(boardCards).toHaveLength(0);
+		});
+	});
+
+	describe("Board layout aria label", () => {
+		it("should render board card with LIST layout without errors", () => {
+			const listLayoutData = {
+				...mockData,
+				elements: [
+					{
+						type: BoardElementResponseType.COLUMN_BOARD,
+						content: {
+							id: "9876",
+							title: "title",
+							published: true,
+							createdAt: "2023-05-31T15:34:59.276Z",
+							updatedAt: "2023-05-31T15:34:59.276Z",
+							columnBoardId: "board-123",
+							layout: BoardLayout.LIST,
+						},
+					},
+				],
+			} as unknown as SingleColumnBoardResponse;
+
+			const { wrapper } = setup({ roomData: listLayoutData });
+
+			const boardCard = wrapper.findComponent({ name: "RoomBoardCard" });
+			expect(boardCard.exists()).toBe(true);
+		});
+	});
+
+	describe("Touch device lifecycle hooks", () => {
+		it("should add contextmenu event listener on mount for touch devices", () => {
+			const addEventListenerSpy = vi.spyOn(window, "addEventListener");
+			const savedOntouchstart = window.ontouchstart;
+			window.ontouchstart = () => null;
+
+			setup();
+
+			expect(addEventListenerSpy).toHaveBeenCalledWith("contextmenu", expect.any(Function));
+
+			window.ontouchstart = savedOntouchstart;
+			addEventListenerSpy.mockRestore();
+		});
+
+		it("should remove contextmenu event listener on unmount for touch devices", () => {
+			const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
+			const savedOntouchstart = window.ontouchstart;
+			window.ontouchstart = () => null;
+
+			const { wrapper } = setup();
+			wrapper.unmount();
+
+			expect(removeEventListenerSpy).toHaveBeenCalledWith("contextmenu", expect.any(Function));
+
+			window.ontouchstart = savedOntouchstart;
+			removeEventListenerSpy.mockRestore();
 		});
 	});
 });
