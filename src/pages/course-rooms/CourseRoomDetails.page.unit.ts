@@ -154,7 +154,7 @@ describe("CourseRoomDetails.page.vue", () => {
 					DefaultWireframe: false,
 					RoomDotMenu: false,
 					SelectBoardLayoutDialog: false,
-					CopyResultModal: false,
+					CopyDialog: false,
 					CourseCommonCartridgeExportModal: false,
 					ShareModal: false,
 					VTabs: false,

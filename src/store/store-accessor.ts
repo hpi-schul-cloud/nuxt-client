@@ -7,12 +7,10 @@
 
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import FilePaths from "@/store/filePaths";
-import FinishedTasksModule from "@/store/finished-tasks";
 import ImportUsersModule from "@/store/import-users";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
-import TasksModule from "@/store/tasks";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 
@@ -20,24 +18,20 @@ import { getModule } from "vuex-module-decorators";
 // Use these -- they have methods for state/getters/mutations/actions
 // (result from getModule(...))
 export let filePathsModule: FilePaths;
-export let finishedTasksModule: FinishedTasksModule;
 export let importUsersModule: ImportUsersModule;
 export let courseRoomDetailsModule: CourseRoomDetailsModule;
 export let schoolExternalToolsModule: SchoolExternalToolsModule;
 export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
-export let tasksModule: TasksModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<unknown>): void {
 	filePathsModule = getModule(FilePaths, store);
-	finishedTasksModule = getModule(FinishedTasksModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	courseRoomDetailsModule = getModule(CourseRoomDetailsModule, store);
 	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	shareModule = getModule(ShareModule, store);
-	tasksModule = getModule(TasksModule, store);
 }
 
 // for use in 'modules' store init (see store/index.ts), so each module
@@ -45,11 +39,9 @@ export function initializeStores(store: Store<unknown>): void {
 // (This is required!)
 export const modules = {
 	filePathsModule: FilePaths,
-	finishedTasksModule: FinishedTasksModule,
 	importUsersModule: ImportUsersModule,
 	courseRoomDetailsModule: CourseRoomDetailsModule,
 	schoolExternalToolsModule: SchoolExternalToolsModule,
 	schoolsModule: SchoolsModule,
 	shareModule: ShareModule,
-	tasksModule: TasksModule,
 };

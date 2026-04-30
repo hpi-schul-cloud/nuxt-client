@@ -44,7 +44,7 @@ export const useCopyFlow = () => {
 		const { result, success, error } = await withCopyLoading(() =>
 			execute(
 				() => courseRoomApi.courseRoomsControllerCopyCourse(courseId),
-				t("common.notifications.errors.notDuplicated", { type: t("common.labels.course") })
+				t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.course") })
 			)
 		);
 
@@ -62,7 +62,7 @@ export const useCopyFlow = () => {
 		const { result, success, error } = await withCopyLoading(() =>
 			execute(
 				() => taskApi.taskControllerCopyTask(taskId, { courseId: targetCourseId }),
-				t("common.notifications.errors.notDuplicated", { type: t("common.labels.task") })
+				t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.task") })
 			)
 		);
 
@@ -80,7 +80,7 @@ export const useCopyFlow = () => {
 		const { result, success, error } = await withCopyLoading(() =>
 			execute(
 				() => courseRoomApi.courseRoomsControllerCopyLesson(lessonId, { courseId: targetCourseId }),
-				t("common.notifications.errors.notDuplicated", { type: t("common.labels.lesson") })
+				t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.lesson") })
 			)
 		);
 
@@ -98,7 +98,7 @@ export const useCopyFlow = () => {
 		const { result, success, error } = await withCopyLoading(() =>
 			execute(
 				() => boardApi.boardControllerCopyBoard(boardId),
-				t("common.notifications.errors.notDuplicated", { type: t("common.labels.board") })
+				t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.board") })
 			)
 		);
 
@@ -116,7 +116,7 @@ export const useCopyFlow = () => {
 		const { result, success, error } = await withCopyLoading(() =>
 			execute(
 				() => roomApi.roomControllerCopyRoom(roomId),
-				t("common.notifications.errors.notDuplicated", { type: t("common.labels.room") })
+				t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.room") })
 			)
 		);
 

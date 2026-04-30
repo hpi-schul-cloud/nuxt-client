@@ -5,7 +5,6 @@ export * from "./mockApiResponse";
 export * from "./mockAxiosInstance";
 export * from "./mockBroadcastChannel";
 export * from "./mockComposable";
-export * from "./mockDataTasks";
 export * from "./mockedPiniaStoreTyping";
 export * from "./mockObjects";
 export * from "./mockStatusAlerts";
