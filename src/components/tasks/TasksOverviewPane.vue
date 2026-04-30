@@ -36,6 +36,7 @@
 				/>
 
 				<VSwitch
+					v-if="isTeacher"
 					v-model="includeSubstitute"
 					:label="t('components.organisms.TasksDashboardMain.filter.substitute')"
 					:true-icon="mdiCheck"
