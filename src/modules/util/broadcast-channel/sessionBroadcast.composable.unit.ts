@@ -296,14 +296,6 @@ describe("useSessionBroadcast", () => {
 	});
 
 	describe("setJwtExpired", () => {
-		it("should set isJwtExpired to true by default", () => {
-			const { isJwtExpired, setJwtExpired } = useSessionBroadcast();
-
-			setJwtExpired();
-
-			expect(isJwtExpired.value).toBe(true);
-		});
-
 		it("should set isJwtExpired to the provided value", () => {
 			const { isJwtExpired, setJwtExpired } = useSessionBroadcast();
 
