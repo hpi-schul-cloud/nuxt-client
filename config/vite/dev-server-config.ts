@@ -6,17 +6,18 @@ import {
 	isH5pEditor,
 	isH5pStaticFiles,
 	isServer,
-} from "../../src/router/server-route.mjs";
-import { isVueClient } from "../../src/router/vue-client-route.mjs";
+} from "../../src/router/server-route.js";
+import { isVueClient } from "../../src/router/vue-client-route.js";
 import { createProxyMiddleware } from "http-proxy-middleware";
+import { Connect } from "vite";
 
-const createProxy = (port) => {
+const createProxy = (port: number) => {
 	const target = `http://localhost:${port}`;
 
 	return createProxyMiddleware({ target, changeOrigin: true });
 };
 
-export const proxyMiddleware = (req, res, next) => {
+export const proxyMiddleware: Connect.NextHandleFunction = (req, res, next) => {
 	const url = req.originalUrl || req.url;
 	if (!url) return next();
 

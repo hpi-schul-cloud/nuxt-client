@@ -1,7 +1,7 @@
-import { proxyMiddleware } from "./dev-server-config.mjs";
+import { proxyMiddleware } from "./dev-server-config.js";
 import type { Plugin } from "vite";
 
-const DevServerProxy = (): Plugin => ({
+export const DevServerProxy = (): Plugin => ({
 	name: "dev-server-proxy-middleware",
 	configureServer: (server) => {
 		server.middlewares.use(proxyMiddleware);
@@ -10,5 +10,3 @@ const DevServerProxy = (): Plugin => ({
 		server.middlewares.use(proxyMiddleware);
 	},
 });
-
-export { DevServerProxy };
