@@ -28,8 +28,10 @@ describe("TaskChipsTeacher", () => {
 
 	describe("when task is published", () => {
 		describe("done chip", () => {
-			it("should show done chip when all submitted tasks are graded", () => {
+			it("should show done chip when all submitted tasks are graded and overdue", () => {
+				const pastDate = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 				const task = taskResponseFactory.build({
+					dueDate: pastDate,
 					status: {
 						isDraft: false,
 						submitted: 5,

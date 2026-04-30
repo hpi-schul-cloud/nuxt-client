@@ -6,12 +6,12 @@ import { ChipTimeRemaining } from "@ui-chip";
 import { mount } from "@vue/test-utils";
 
 describe("TaskChipsStudent", () => {
-	const setup = (task: TaskResponse) =>
+	const setup = (task: TaskResponse, withDone = false) =>
 		mount(TaskChipsStudent, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
-			props: { task },
+			props: { task, withDone },
 		});
 
 	describe("due soon chip", () => {
@@ -68,7 +68,7 @@ describe("TaskChipsStudent", () => {
 					graded: 0,
 				},
 			});
-			const wrapper = setup(task);
+			const wrapper = setup(task, true);
 
 			const submittedChip = wrapper.find("[data-testid='task-submitted-student']");
 			expect(submittedChip.exists()).toBe(true);
