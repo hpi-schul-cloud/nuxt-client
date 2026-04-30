@@ -73,7 +73,11 @@
 					</template>
 
 					<template #action-menu-items="{ selectedIds }">
-						<KebabMenuAction :icon="mdiRestore" data-testid="action-menu-restore" @click="onRestoreByIds(selectedIds)">
+						<KebabMenuAction
+							:icon="mdiRestore"
+							data-testid="kebab-menu-action-restore"
+							@click="onRestoreByIds(selectedIds)"
+						>
 							{{ t("common.actions.restore") }}
 						</KebabMenuAction>
 					</template>
