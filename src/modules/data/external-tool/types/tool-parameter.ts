@@ -2,12 +2,12 @@ export enum ToolParameterType {
 	String = "string",
 	Number = "number",
 	Boolean = "boolean",
-	AutoContextid = "auto_contextid",
-	AutoContextname = "auto_contextname",
-	AutoSchoolid = "auto_schoolid",
-	AutoSchoolnumber = "auto_schoolnumber",
-	AutoMediumid = "auto_mediumid",
-	AutoGroupExternaluuid = "auto_group_externaluuid",
+	AutoContextId = "auto_contextid",
+	AutoContextName = "auto_contextname",
+	AutoSchoolId = "auto_schoolid",
+	AutoSchoolNumber = "auto_schoolnumber",
+	AutoMediumId = "auto_mediumid",
+	AutoGroupExternalUuid = "auto_group_externaluuid",
 	AutoPublisher = "auto_publisher",
 }
 

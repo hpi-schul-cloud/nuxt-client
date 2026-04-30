@@ -12,12 +12,12 @@ export const ToolParamTypeMapping: Record<CustomParameterTypeParams, ToolParamet
 	[CustomParameterTypeParams.STRING]: ToolParameterType.String,
 	[CustomParameterTypeParams.BOOLEAN]: ToolParameterType.Boolean,
 	[CustomParameterTypeParams.NUMBER]: ToolParameterType.Number,
-	[CustomParameterTypeParams.AUTO_CONTEXTID]: ToolParameterType.AutoContextid,
-	[CustomParameterTypeParams.AUTO_CONTEXTNAME]: ToolParameterType.AutoContextname,
-	[CustomParameterTypeParams.AUTO_SCHOOLID]: ToolParameterType.AutoSchoolid,
-	[CustomParameterTypeParams.AUTO_SCHOOLNUMBER]: ToolParameterType.AutoSchoolnumber,
-	[CustomParameterTypeParams.AUTO_MEDIUMID]: ToolParameterType.AutoMediumid,
-	[CustomParameterTypeParams.AUTO_GROUP_EXTERNALUUID]: ToolParameterType.AutoGroupExternaluuid,
+	[CustomParameterTypeParams.AUTO_CONTEXTID]: ToolParameterType.AutoContextId,
+	[CustomParameterTypeParams.AUTO_CONTEXTNAME]: ToolParameterType.AutoContextName,
+	[CustomParameterTypeParams.AUTO_SCHOOLID]: ToolParameterType.AutoSchoolId,
+	[CustomParameterTypeParams.AUTO_SCHOOLNUMBER]: ToolParameterType.AutoSchoolNumber,
+	[CustomParameterTypeParams.AUTO_MEDIUMID]: ToolParameterType.AutoMediumId,
+	[CustomParameterTypeParams.AUTO_GROUP_EXTERNALUUID]: ToolParameterType.AutoGroupExternalUuid,
 	[CustomParameterTypeParams.AUTO_PUBLISHER]: ToolParameterType.AutoPublisher,
 };
 
