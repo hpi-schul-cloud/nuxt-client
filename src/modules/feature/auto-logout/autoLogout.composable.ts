@@ -131,6 +131,9 @@ export const useAutoLogout = () => {
 		sessionState.value = SessionState.Closed;
 		setTime(0);
 		stopTimer();
+		setTimeout(() => {
+			setExpiredState();
+		}, 1000);
 		showDialog.value = false;
 	};
 
