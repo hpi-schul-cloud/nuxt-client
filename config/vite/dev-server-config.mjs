@@ -10,121 +10,43 @@ import {
 import { isVueClient } from "../../src/router/vue-client-route.mjs";
 import { createProxyMiddleware } from "http-proxy-middleware";
 
-const createLegacyClientProxy = () => {
-	const legacyClientProxy = createProxyMiddleware({
-		target: "http://localhost:3100",
-		changeOrigin: true,
-	});
-	return legacyClientProxy;
+const createProxy = (port) => {
+	const target = `http://localhost:${port}`;
+
+	return createProxyMiddleware({ target, changeOrigin: true });
 };
 
-const createServerProxy = () => {
-	const serverProxy = createProxyMiddleware({
-		target: "http://localhost:3030",
-		changeOrigin: true,
-	});
-	return serverProxy;
+export const proxyMiddleware = (req, res, next) => {
+	const url = req.originalUrl || req.url;
+	if (!url) return next();
+
+	const path = url.split("?")[0];
+
+	if (isFileStorage(path)) {
+		const fileStorageProxy = createProxy(4444);
+		fileStorageProxy(req, res, next);
+	} else if (isH5pStaticFiles(path)) {
+		const h5pStaticFilesProxy = createProxy(8080);
+		h5pStaticFilesProxy(req, res, next);
+	} else if (isH5pEditor(path)) {
+		const h5pEditorProxy = createProxy(4448);
+		h5pEditorProxy(req, res, next);
+	} else if (isArchiveDownload(path)) {
+		const archiveDownloadProxy = createProxy(3351);
+		archiveDownloadProxy(req, res, next);
+	} else if (isFWUEndpoint(path)) {
+		const fwuEditorProxy = createProxy(4446);
+		fwuEditorProxy(req, res, next);
+	} else if (isCommonCartridge(path)) {
+		const commonCartridgeProxy = createProxy(3350);
+		commonCartridgeProxy(req, res, next);
+	} else if (isServer(path)) {
+		const serverProxy = createProxy(3030);
+		serverProxy(req, res, next);
+	} else if (isVueClient(path)) {
+		next();
+	} else {
+		const legacyClientProxy = createProxy(3100);
+		legacyClientProxy(req, res, next);
+	}
 };
-
-const createVueClientProxy = () => {
-	const vueClientProxy = createProxyMiddleware({
-		target: "http://localhost:4000",
-		changeOrigin: true,
-	});
-	return vueClientProxy;
-};
-
-const createFileStorageProxy = () => {
-	const fileStorageProxy = createProxyMiddleware({
-		target: "http://localhost:4444",
-		changeOrigin: true,
-	});
-	return fileStorageProxy;
-};
-
-const createArchiveDownloadProxy = () => {
-	const fileStorageProxy = createProxyMiddleware({
-		target: "http://localhost:3351",
-		changeOrigin: true,
-	});
-	return fileStorageProxy;
-};
-
-const createH5pEditorProxy = () => {
-	const h5pEditorProxy = createProxyMiddleware({
-		target: "http://localhost:4448",
-		changeOrigin: true,
-	});
-	return h5pEditorProxy;
-};
-
-const createFwuEditorProxy = () => {
-	const fwuEditorProxy = createProxyMiddleware({
-		target: "http://localhost:4446",
-		changeOrigin: true,
-	});
-	return fwuEditorProxy;
-};
-
-const createH5pStaticFilesProxy = () => {
-	const h5pStaticFilesProxy = createProxyMiddleware({
-		target: "http://localhost:8080",
-		changeOrigin: true,
-		pathRewrite: { "^/api/v3/h5p-editor": "" },
-	});
-	return h5pStaticFilesProxy;
-};
-
-const createCommonCartridgeProxy = () => {
-	const commonCartridgeProxy = createProxyMiddleware({
-		target: "http://localhost:3350",
-		changeOrigin: true,
-	});
-	return commonCartridgeProxy;
-};
-
-const proxyDispatcherMiddleware = ({ useVueClientProxy = false } = {}) => {
-	const legacyClientProxy = createLegacyClientProxy();
-	const serverProxy = createServerProxy();
-	const vueClientProxy = createVueClientProxy();
-	const fileStorageProxy = createFileStorageProxy();
-	const h5pEditorProxy = createH5pEditorProxy();
-	const fwuEditorProxy = createFwuEditorProxy();
-	const h5pStaticFilesProxy = createH5pStaticFilesProxy();
-	const commonCartridgeProxy = createCommonCartridgeProxy();
-	const archiveDownloadProxy = createArchiveDownloadProxy();
-
-	return (req, res, next) => {
-		const url = req.originalUrl || req.url;
-		if (!url) return next();
-
-		const path = url.split("?")[0];
-		// console.log('--- Path:', path);
-
-		if (isFileStorage(path)) {
-			fileStorageProxy(req, res, next);
-		} else if (isH5pStaticFiles(path)) {
-			h5pStaticFilesProxy(req, res, next);
-		} else if (isH5pEditor(path)) {
-			h5pEditorProxy(req, res, next);
-		} else if (isArchiveDownload(path)) {
-			archiveDownloadProxy(req, res, next);
-		} else if (isFWUEndpoint(path)) {
-			fwuEditorProxy(req, res, next);
-		} else if (isCommonCartridge(path)) {
-			commonCartridgeProxy(req, res, next);
-		} else if (isServer(path)) {
-			serverProxy(req, res, next);
-		} else if (isVueClient(path)) {
-			if (useVueClientProxy) {
-				vueClientProxy(req, res, next);
-			} else {
-				next();
-			}
-		} else {
-			legacyClientProxy(req, res, next);
-		}
-	};
-};
-
-export { proxyDispatcherMiddleware as createProxyMiddleware };
