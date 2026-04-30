@@ -8,7 +8,6 @@
 		data-testid="import-dialog"
 		@confirm="onConfirm"
 		@cancel="onCancel"
-		@after-leave="resetDialog"
 	>
 		<template #content>
 			<p data-testid="import-dialog-info-text">
@@ -69,7 +68,7 @@ import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-s
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { useOpeningTagValidator } from "@util-validators";
-import { computed, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -108,6 +107,16 @@ const resetDialog = () => {
 	selectedDestinationId.value = undefined;
 	nameInput.value = undefined;
 };
+
+onMounted(() => {
+	resetDialog();
+});
+
+watch(isDialogOpen, (isOpen) => {
+	if (isOpen) {
+		resetDialog();
+	}
+});
 
 const rules = reactive({
 	required: (value: string) => !!value || t("common.validation.required"),
