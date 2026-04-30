@@ -67,7 +67,7 @@ import { mapShareTokenParentTypeToContentItemType } from "@/utils/content-item.u
 import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { useOpeningTagValidator } from "@util-validators";
+import { isRequired, useOpeningTagValidator } from "@util-validators";
 import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -118,10 +118,7 @@ watch(isDialogOpen, (isOpen) => {
 	}
 });
 
-const rules = reactive({
-	required: (value: string) => !!value || t("common.validation.required"),
-	validateOnOpeningTag: (value: string) => validateOnOpeningTag(value),
-});
+const rules = reactive({ required: isRequired(), validateOnOpeningTag });
 
 const isSelectedDestinationValid = computed(() => !!selectedDestinationId.value);
 
