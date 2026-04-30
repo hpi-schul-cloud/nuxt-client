@@ -53,6 +53,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
 	const socketOrRest = isSocketEnabled ? useBoardSocketApi() : restApi;
+	const isConnected = computed(() => socketOrRest.connected.value);
 
 	const { setEditModeId } = useSharedEditMode();
 	const router = useRouter();
@@ -407,6 +408,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const fetchBoardSuccess = (payload: FetchBoardSuccessPayload) => {
 		setBoard(payload);
+		setLoading(false);
 	};
 
 	const deleteBoardRequest = async (payload: DeleteBoardRequestPayload, paramRoomId: string | undefined) => {
@@ -457,6 +459,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	return {
 		board,
 		isLoading,
+		isConnected,
 		getCardLocation,
 		getColumnIndex,
 		getColumnId,
