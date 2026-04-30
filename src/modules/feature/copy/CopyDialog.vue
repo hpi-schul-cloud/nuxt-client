@@ -1,7 +1,7 @@
 <template>
 	<SvsDialog
 		:model-value="isOpen"
-		:is-open-state-managed-externally="true"
+		is-open-state-managed-externally
 		:title="title"
 		confirm-btn-lang-key="common.actions.duplicate"
 		cancel-btn-lang-key="common.actions.cancel"
