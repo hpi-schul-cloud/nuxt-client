@@ -1,8 +1,13 @@
+import { useI18nGlobal } from "@/plugins/i18n";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { CopyDialog } from "@feature-copy";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
+import { Mock } from "vitest";
+
+vi.mock("@/plugins/i18n");
+(useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("CopyDialog", () => {
 	const setup = () => {

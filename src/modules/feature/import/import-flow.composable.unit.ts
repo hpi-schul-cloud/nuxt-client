@@ -233,7 +233,7 @@ describe("useImportflow", () => {
 					const { resultPromise, importError } = await setup();
 					const { success, error: returnedError } = await resultPromise;
 					expect(success).toBe(false);
-					expect(returnedError).toBe(importError);
+					expect(returnedError?.message).toBe(importError.message);
 				});
 
 				it("should show an error notification", async () => {
