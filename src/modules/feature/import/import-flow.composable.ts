@@ -46,10 +46,10 @@ export const useImportFlow = () => {
 	};
 
 	const executeImport = async (token: string) => {
-		const { result: validationResult } = await validateShareToken(token);
+		const { result: validationResult, error: validationError } = await validateShareToken(token);
 
 		if (!validationResult) {
-			return { success: false, error: new Error("Validation failed") };
+			return { success: false, error: new Error("Validation failed", { cause: validationError }) };
 		}
 		shareTokenInfo.value = validationResult;
 
