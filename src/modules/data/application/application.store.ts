@@ -19,7 +19,7 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 export const useAppStore = defineStore("applicationStore", () => {
 	const meApi = MeApiFactory(undefined, "/v3", $axios);
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
-	const { sendLogout, close } = useSessionBroadcast();
+	const { sendLogin, sendLogout, close } = useSessionBroadcast();
 
 	const isLoggedIn = ref(false);
 	const applicationError = ref<{ status: HttpStatusCode; translationKeyOrText: string }>();
@@ -55,7 +55,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 
 	const login = async () => {
 		const { data } = await meApi.meControllerMe();
-
+		sendLogin();
 		userLocale.value = data.language;
 		meResponse.value = data;
 		isLoggedIn.value = true;
