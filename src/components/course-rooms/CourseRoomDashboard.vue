@@ -181,7 +181,7 @@ import { useEnvConfig } from "@data-env";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import { storeToRefs } from "pinia";
-import { computed, inject, onMounted, ref } from "vue";
+import { computed, inject, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import draggable from "vuedraggable";
 
@@ -232,6 +232,12 @@ const getContentName = (content: BoardTaskResponse | BoardLessonResponse | Board
 onMounted(() => {
 	if (isTouchDevice.value) {
 		window.addEventListener("contextmenu", (e) => e.preventDefault());
+	}
+});
+
+onUnmounted(() => {
+	if (isTouchDevice.value) {
+		window.removeEventListener("contextmenu", (e) => e.preventDefault());
 	}
 });
 
