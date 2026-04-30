@@ -7,6 +7,7 @@
 		data-testid="import-card-dialog"
 		@confirm="onConfirm"
 		@cancel="onCancel"
+		@after-leave="resetBoardSelection"
 	>
 		<template #content>
 			<WarningAlert v-if="availableDestinations.length === 0" class="mb-2">
