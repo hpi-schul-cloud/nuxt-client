@@ -203,7 +203,7 @@ describe("boardRestApi", () => {
 			const { boardStore } = setup(false);
 			const { createColumnRequest } = useBoardRestApi();
 
-			await createColumnRequest();
+			await createColumnRequest({ boardId: "some" });
 
 			expect(boardStore.createColumnSuccess).not.toHaveBeenCalled();
 		});
@@ -215,7 +215,7 @@ describe("boardRestApi", () => {
 			const newColumn = columnResponseFactory.build();
 			mockedBoardApiCalls.createColumnCall.mockResolvedValue(newColumn);
 
-			const result = await createColumnRequest();
+			const result = await createColumnRequest({ boardId: "some" });
 
 			expect(boardStore.createColumnSuccess).toHaveBeenCalledWith({
 				newColumn,
@@ -230,7 +230,7 @@ describe("boardRestApi", () => {
 
 			mockedBoardApiCalls.createColumnCall.mockRejectedValue({});
 
-			await createColumnRequest();
+			await createColumnRequest({ boardId: "some" });
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
