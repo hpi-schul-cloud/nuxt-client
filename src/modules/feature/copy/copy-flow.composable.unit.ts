@@ -3,7 +3,7 @@ import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { expectNotification, mockApi, mockApiResponse, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
-import { CopyApiResponseStatus, CopyApiResponseType } from "@api-server";
+import { CopyApiResponse, CopyApiResponseStatus, CopyApiResponseType } from "@api-server";
 import { useLoadingStore, useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
@@ -16,12 +16,121 @@ let roomApi: Mocked<serverApi.RoomApiInterface>;
 
 let withLoadingStateSpy: ReturnType<typeof vi.spyOn>;
 
-const mountCopyFlowComposable = () =>
-	mountComposable(() => useCopyFlow(), {
+type CopyResult =
+	| { success: boolean; error: Error; result?: undefined }
+	| { result: CopyApiResponse | undefined; success: boolean; error: Error | undefined };
+
+const mountCopyFlowComposable = (type: ContentItemTypeEnum = ContentItemTypeEnum.Room) => {
+	const composable = mountComposable(() => useCopyFlow(), {
 		global: {
 			plugins: [createTestingI18n()],
 		},
 	});
+
+	const executeCopyMethod = (): Promise<CopyResult> => {
+		switch (type) {
+			case ContentItemTypeEnum.Course:
+				return composable.executeCopyCourse("course-id");
+			case ContentItemTypeEnum.Task:
+				return composable.executeCopyTask("task-id", "target-course-id");
+			case ContentItemTypeEnum.Lesson:
+				return composable.executeCopyLesson("lesson-id", "target-course-id");
+			case ContentItemTypeEnum.ColumnBoard:
+				return composable.executeCopyBoard("board-id");
+			case ContentItemTypeEnum.Room:
+				return composable.executeCopyRoom("room-id");
+			default:
+				return Promise.reject(new Error("Unknown type"));
+		}
+	};
+
+	return { ...composable, executeCopyMethod };
+};
+
+const mockApiSuccess = (type: ContentItemTypeEnum) => {
+	switch (type) {
+		case ContentItemTypeEnum.Course: {
+			const response = mockApiResponse<CopyApiResponse>({
+				data: {
+					id: "new-course-id",
+					type: CopyApiResponseType.COURSE,
+					status: CopyApiResponseStatus.SUCCESS,
+				},
+			});
+			courseRoomsApi.courseRoomsControllerCopyCourse.mockResolvedValue(response);
+			return response;
+		}
+		case ContentItemTypeEnum.Task: {
+			const response = mockApiResponse<CopyApiResponse>({
+				data: {
+					id: "new-task-id",
+					type: CopyApiResponseType.TASK,
+					status: CopyApiResponseStatus.SUCCESS,
+				},
+			});
+			taskApi.taskControllerCopyTask.mockResolvedValue(response);
+			return response;
+		}
+		case ContentItemTypeEnum.Lesson: {
+			const response = mockApiResponse<CopyApiResponse>({
+				data: {
+					id: "new-lesson-id",
+					type: CopyApiResponseType.LESSON,
+					status: CopyApiResponseStatus.SUCCESS,
+				},
+			});
+			courseRoomsApi.courseRoomsControllerCopyLesson.mockResolvedValue(response);
+			return response;
+		}
+		case ContentItemTypeEnum.ColumnBoard: {
+			const response = mockApiResponse<CopyApiResponse>({
+				data: {
+					id: "new-board-id",
+					type: CopyApiResponseType.BOARD,
+					status: CopyApiResponseStatus.SUCCESS,
+				},
+			});
+			boardApi.boardControllerCopyBoard.mockResolvedValue(response);
+			return response;
+		}
+		case ContentItemTypeEnum.Room: {
+			const response = mockApiResponse<CopyApiResponse>({
+				data: {
+					id: "new-room-id",
+					type: CopyApiResponseType.ROOM,
+					status: CopyApiResponseStatus.SUCCESS,
+				},
+			});
+			roomApi.roomControllerCopyRoom.mockResolvedValue(response);
+			return response;
+		}
+		default:
+			throw new Error("Unknown type");
+	}
+};
+
+function mockApiFailure(type: ContentItemTypeEnum, error: Error = new Error("API Error")) {
+	switch (type) {
+		case ContentItemTypeEnum.Course:
+			courseRoomsApi.courseRoomsControllerCopyCourse.mockRejectedValue(error);
+			break;
+		case ContentItemTypeEnum.Task:
+			taskApi.taskControllerCopyTask.mockRejectedValue(error);
+			break;
+		case ContentItemTypeEnum.Lesson:
+			courseRoomsApi.courseRoomsControllerCopyLesson.mockRejectedValue(error);
+			break;
+		case ContentItemTypeEnum.ColumnBoard:
+			boardApi.boardControllerCopyBoard.mockRejectedValue(error);
+			break;
+		case ContentItemTypeEnum.Room:
+			roomApi.roomControllerCopyRoom.mockRejectedValue(error);
+			break;
+		default:
+			throw new Error("Unknown type");
+	}
+	return error;
+}
 
 describe("useCopyFlow", () => {
 	beforeEach(async () => {
@@ -58,27 +167,33 @@ describe("useCopyFlow", () => {
 		});
 	});
 
-	describe("executeCopyCourse", () => {
+	describe.for([
+		{ name: "executeCopyCourse", type: ContentItemTypeEnum.Course },
+		{ name: "executeCopyTask", type: ContentItemTypeEnum.Task },
+		{ name: "executeCopyLesson", type: ContentItemTypeEnum.Lesson },
+		{ name: "executeCopyBoard", type: ContentItemTypeEnum.ColumnBoard },
+		{ name: "executeCopyRoom", type: ContentItemTypeEnum.Room },
+	])("$name", ({ type }) => {
 		describe("when the method is called", () => {
-			const setup = () => mountCopyFlowComposable();
+			const setup = () => mountCopyFlowComposable(type);
 
 			it("should set the dialog to open", async () => {
-				const { isDialogOpen, executeCopyCourse } = setup();
-				executeCopyCourse("course-id");
+				const { isDialogOpen, executeCopyMethod } = setup();
+				executeCopyMethod();
 				expect(isDialogOpen.value).toBe(true);
 			});
 
 			it("should set copyItemType based on the executed method", () => {
-				const { copyItemType, executeCopyCourse } = setup();
-				executeCopyCourse("course-id");
-				expect(copyItemType.value).toBe(ContentItemTypeEnum.Course);
+				const { copyItemType, executeCopyMethod } = setup();
+				executeCopyMethod();
+				expect(copyItemType.value).toBe(type);
 			});
 		});
 
 		describe("when copy is cancelled", () => {
 			const setup = () => {
-				const composable = mountCopyFlowComposable();
-				const resultPromise = composable.executeCopyCourse("course-id");
+				const composable = mountCopyFlowComposable(type);
+				const resultPromise = composable.executeCopyMethod();
 				composable.onCancel();
 				return { ...composable, resultPromise };
 			};
@@ -99,16 +214,9 @@ describe("useCopyFlow", () => {
 		describe("when copy is confirmed", () => {
 			describe("and the api call is successfull", () => {
 				const setup = () => {
-					const response = mockApiResponse({
-						data: {
-							id: "new-course-id",
-							type: CopyApiResponseType.COURSE,
-							status: CopyApiResponseStatus.SUCCESS,
-						},
-					});
-					courseRoomsApi.courseRoomsControllerCopyCourse.mockResolvedValue(response);
-					const composable = mountCopyFlowComposable();
-					const resultPromise = composable.executeCopyCourse("course-id");
+					const response = mockApiSuccess(type);
+					const composable = mountCopyFlowComposable(type);
+					const resultPromise = composable.executeCopyMethod();
 					composable.onConfirm(true);
 					return { ...composable, resultPromise, response };
 				};
@@ -141,10 +249,9 @@ describe("useCopyFlow", () => {
 
 			describe("and the api call fails", () => {
 				const setup = () => {
-					const error = new Error("API Error");
-					courseRoomsApi.courseRoomsControllerCopyCourse.mockRejectedValue(error);
-					const composable = mountCopyFlowComposable();
-					const resultPromise = composable.executeCopyCourse("course-id");
+					const error = mockApiFailure(type);
+					const composable = mountCopyFlowComposable(type);
+					const resultPromise = composable.executeCopyMethod();
 					composable.onConfirm(true);
 					return { ...composable, resultPromise, error };
 				};
@@ -179,20 +286,4 @@ describe("useCopyFlow", () => {
 			});
 		});
 	});
-
-	// describe("executeCopyTask", () => {
-	// 	// Similar test structure as executeCopyCourse, but for tasks
-	// });
-
-	// describe("executeCopyLesson", () => {
-	// 	// Similar test structure as executeCopyCourse, but for lessons
-	// });
-
-	// describe("executeCopyBoard", () => {
-	// 	// Similar test structure as executeCopyCourse, but for boards
-	// });
-
-	// describe("executeCopyRoom", () => {
-	// 	// Similar test structure as executeCopyCourse, but for rooms
-	// });
 });
