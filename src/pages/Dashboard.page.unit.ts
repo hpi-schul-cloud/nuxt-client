@@ -24,6 +24,7 @@ import {
 import * as serverApi from "@api-server";
 import { DashboardTasks } from "@feature-dashboard";
 import { createTestingPinia } from "@pinia/testing";
+import { WarningAlert } from "@ui-alert";
 import { flushPromises } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
@@ -158,7 +159,7 @@ describe("DashboardPage", () => {
 			});
 			await flushPromises();
 
-			const warningAlert = wrapper.findComponent({ name: "WarningAlert" });
+			const warningAlert = wrapper.findComponent(WarningAlert);
 			expect(warningAlert.exists()).toBe(true);
 		});
 
@@ -169,7 +170,7 @@ describe("DashboardPage", () => {
 			});
 			await flushPromises();
 
-			const warningAlert = wrapper.findComponent({ name: "WarningAlert" });
+			const warningAlert = wrapper.findComponent(WarningAlert);
 			expect(warningAlert.exists()).toBe(true);
 		});
 
@@ -179,7 +180,7 @@ describe("DashboardPage", () => {
 			});
 			await flushPromises();
 
-			const warningAlert = wrapper.findComponent({ name: "WarningAlert" });
+			const warningAlert = wrapper.findComponent(WarningAlert);
 			expect(warningAlert.exists()).toBe(false);
 		});
 	});
