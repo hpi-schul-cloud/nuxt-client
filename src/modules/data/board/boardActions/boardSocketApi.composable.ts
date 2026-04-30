@@ -80,6 +80,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.updateBoardLayoutFailure, reloadBoard),
 			on(BoardActions.updateReaderCanEditFailure, reloadBoard),
 			on(BoardActions.duplicateColumnFailure, reloadBoard),
+			on(BoardActions.duplicateColumnFailure, clearDuplicatingColumnId),
 		];
 
 		const ariaLiveNotifications = [
@@ -196,7 +197,12 @@ export const useBoardSocketApi = () => {
 		useAppStore().handleApplicationError(HttpStatusCode.NotFound, "components.board.error.404");
 	};
 
+	const clearDuplicatingColumnId = (payload: DuplicateColumnRequestPayload) => {
+		boardStore.setDuplicatingColumnId(payload.columnId, false);
+	};
+
 	const duplicateColumnRequest = (payload: DuplicateColumnRequestPayload) => {
+		boardStore.setDuplicatingColumnId(payload.columnId);
 		emitOnSocket("duplicate-column-request", payload);
 	};
 
@@ -225,6 +231,7 @@ export const useBoardSocketApi = () => {
 		disconnectSocketRequest,
 		deleteBoardRequest,
 		deleteColumnRequest,
+		duplicateColumnRequest,
 		fetchBoardRequest,
 		moveCardRequest,
 		moveColumnRequest,
@@ -234,6 +241,5 @@ export const useBoardSocketApi = () => {
 		updateBoardVisibilityRequest,
 		updateBoardLayoutRequest,
 		updateReaderCanEditRequest,
-		duplicateColumnRequest,
 	};
 };

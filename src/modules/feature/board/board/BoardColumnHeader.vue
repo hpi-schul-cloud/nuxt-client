@@ -30,7 +30,7 @@
 					<KebabMenuActionDuplicate
 						v-if="allowedOperations?.copyColumn"
 						data-testid="kebab-menu-action-duplicate-column"
-						@click="duplicateColumn"
+						@click="onDuplicateColumn"
 					/>
 					<template v-if="isListBoard">
 						<KebabMenuActionMoveUp v-if="isNotFirstColumn" @click="onMoveColumnUp" />
@@ -51,9 +51,8 @@
 <script setup lang="ts">
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
-import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
-import { useBoardAllowedOperations, useBoardFocusHandler, useBoardStore, useCourseBoardEditMode } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler, useCourseBoardEditMode } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
 	KebabMenuActionDelete,
@@ -81,6 +80,7 @@ const props = defineProps({
 
 const emit = defineEmits([
 	"delete:column",
+	"duplicate:column",
 	"move:column-down",
 	"move:column-left",
 	"move:column-right",
@@ -98,8 +98,6 @@ const canDeleteColumn = toRef(props, "canDeleteColumn");
 const updatedTitle = ref(columnTitle.value);
 const lastEmittedTitle = ref(columnTitle.value);
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(columnId.value);
-
-const boardStore = useBoardStore();
 
 const columnHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(columnId.value, columnHeader);
@@ -150,9 +148,7 @@ const onMoveColumnUp = () => emit("move:column-up");
 
 const onUpdateTitle = (newTitle: string) => (updatedTitle.value = newTitle);
 
-const { run: duplicateColumn } = useSafeTaskRunner(async () => {
-	await boardStore.duplicateColumn({ columnId: props.columnId });
-});
+const onDuplicateColumn = () => emit("duplicate:column");
 
 const emitTitleUpdate = () => {
 	if (lastEmittedTitle.value !== updatedTitle.value) {

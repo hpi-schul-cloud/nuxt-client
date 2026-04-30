@@ -376,6 +376,25 @@ describe("Board", () => {
 			expect(boardColumnComponents[0].props("columnCount")).toBe(2);
 			expect(boardColumnComponents[1].props("columnCount")).toBe(2);
 		});
+
+		it("should pass isDuplicating prop based on store isColumnDuplicating", async () => {
+			const { wrapper, boardStore, board } = setup({ numberOfColumns: 2 });
+
+			const boardColumnComponents = wrapper.findAllComponents({
+				name: "BoardColumn",
+			});
+
+			// Initially no column is duplicating
+			expect(boardColumnComponents[0].props("isDuplicating")).toBe(false);
+			expect(boardColumnComponents[1].props("isDuplicating")).toBe(false);
+
+			// Set the first column as duplicating
+			boardStore.isColumnDuplicating.mockImplementation((columnId: string) => columnId === board.columns[0].id);
+			await nextTick();
+
+			expect(boardColumnComponents[0].props("isDuplicating")).toBe(true);
+			expect(boardColumnComponents[1].props("isDuplicating")).toBe(false);
+		});
 	});
 
 	describe("BoardColumnGhost component", () => {
@@ -555,6 +574,37 @@ describe("Board", () => {
 					columnComponent.vm.$emit("delete:column");
 
 					expect(boardStore.deleteColumnRequest).not.toHaveBeenCalled();
+				});
+			});
+		});
+
+		describe("@onDuplicateColumn", () => {
+			describe("when user is permitted to copy a column", () => {
+				it("should call duplicateColumn method with correct columnId", () => {
+					const { wrapper, boardStore, board } = setup({ allowedOperations: { copyColumn: true } });
+					const columnId = board.columns[0].id;
+
+					const columnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+
+					columnComponent.vm.$emit("duplicate:column", columnId);
+
+					expect(boardStore.duplicateColumn).toHaveBeenCalledWith({ columnId });
+				});
+			});
+
+			describe("when user is not permitted to copy a column", () => {
+				it("should not call duplicateColumn method", () => {
+					const { wrapper, boardStore, board } = setup({ allowedOperations: { copyColumn: false } });
+					const columnId = board.columns[0].id;
+
+					const columnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					columnComponent.vm.$emit("duplicate:column", columnId);
+
+					expect(boardStore.duplicateColumn).not.toHaveBeenCalled();
 				});
 			});
 		});

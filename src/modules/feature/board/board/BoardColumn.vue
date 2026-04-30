@@ -10,6 +10,7 @@
 			:is-not-first-column="isNotFirstColumn"
 			:is-not-last-column="isNotLastColumn"
 			@delete:column="onColumnDelete"
+			@duplicate:column="onDuplicateColumn"
 			@move:column-down="onMoveColumnDown"
 			@move:column-left="onMoveColumnLeft"
 			@move:column-right="onMoveColumnRight"
@@ -71,6 +72,22 @@
 			<BoardAddCardButton v-if="showAddButton" :data-testid="`column-${index}-add-card-btn`" @add-card="onCreateCard" />
 		</div>
 	</div>
+
+	<div v-if="props.isDuplicating" :key="renderKey" :class="columnClasses" class="d-flex flex-column">
+		<BoardColumnHeader
+			:can-edit-column="false"
+			:can-delete-column="false"
+			:column-id="column.id"
+			:title="column.title"
+			:index="index"
+			:is-list-board="isListBoard"
+			:is-not-first-column="isNotFirstColumn"
+			:is-not-last-column="isNotLastColumn"
+		/>
+		<div class="d-flex justify-center align-center" style="min-height: 200px">
+			<VProgressCircular color="primary" indeterminate :size="36" />
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -89,6 +106,7 @@ type Props = {
 	column: BoardColumn;
 	columnCount: number;
 	index: number;
+	isDuplicating: boolean;
 	isListBoard: boolean;
 };
 
@@ -99,6 +117,7 @@ const emit = defineEmits<{
 	(e: "move:card", cardId: string): void;
 	(e: "delete:card", cardId: string): void;
 	(e: "delete:column", columnId: string): void;
+	(e: "duplicate:column", columnId: string): void;
 	(e: "move:column-down"): void;
 	(e: "move:column-left"): void;
 	(e: "move:column-right"): void;
@@ -250,6 +269,10 @@ const onReloadBoard = () => {
 const onUpdateTitle = useDebounceFn((newTitle: string) => {
 	emit("update:column-title", newTitle);
 }, 1000);
+
+const onDuplicateColumn = () => {
+	emit("duplicate:column", props.column.id);
+};
 
 const scrollableClasses = computed(() => {
 	const classes = [];

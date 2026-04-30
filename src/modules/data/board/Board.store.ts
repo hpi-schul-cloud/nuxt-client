@@ -46,6 +46,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const cardStore = useCardStore();
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
+	const duplicatingColumnIds = ref<Set<string>>(new Set());
 	const { setFocus, forceFocus } = useBoardFocusHandler();
 	const roomId = ref<string | undefined>(undefined);
 
@@ -98,6 +99,19 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const setLoading = (loading: boolean) => {
 		isLoading.value = loading;
+	};
+
+	const setDuplicatingColumnId = (columnId: string | undefined, isDuplicating = true) => {
+		if (columnId === undefined) return;
+		if (isDuplicating) {
+			duplicatingColumnIds.value.add(columnId);
+		} else {
+			duplicatingColumnIds.value.delete(columnId);
+		}
+	};
+
+	const isColumnDuplicating = (columnId: string): boolean => {
+		return duplicatingColumnIds.value.has(columnId);
 	};
 
 	const createCardRequest = (payload: CreateCardRequestPayload) => socketOrRest.createCardRequest(payload);
@@ -163,6 +177,10 @@ export const useBoardStore = defineStore("boardStore", () => {
 		);
 
 	const duplicateColumnSuccess = (payload: DuplicateColumnSuccessPayload) => {
+		if (payload.isOwnAction === true) {
+			duplicatingColumnIds.value.delete(payload.columnId);
+		}
+
 		if (!board.value) return;
 
 		const { columnId, duplicatedColumn } = payload;
@@ -457,6 +475,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 	return {
 		board,
 		isLoading,
+		duplicatingColumnIds,
+		isColumnDuplicating,
 		getCardLocation,
 		getColumnIndex,
 		getColumnId,
@@ -464,6 +484,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		getLastColumnIndex,
 		setBoard,
 		setLoading,
+		setDuplicatingColumnId,
 		createCardRequest,
 		createCardSuccess,
 		createColumnRequest,

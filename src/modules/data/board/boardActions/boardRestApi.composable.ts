@@ -116,6 +116,7 @@ export const useBoardRestApi = () => {
 		const columnIndex = boardStore.getColumnIndex(payload.columnId);
 		if (columnIndex < 0) return;
 
+		boardStore.setDuplicatingColumnId(payload.columnId);
 		try {
 			const duplicatedColumn = await duplicateColumnCall(payload.columnId);
 
@@ -123,6 +124,7 @@ export const useBoardRestApi = () => {
 				boardStore.duplicateColumnSuccess({ columnId: payload.columnId, duplicatedColumn, isOwnAction: true });
 			}
 		} catch (error) {
+			boardStore.setDuplicatingColumnId(payload.columnId, false);
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDuplicated", "boardColumn"),
 			});

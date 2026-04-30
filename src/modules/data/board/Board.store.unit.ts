@@ -276,6 +276,25 @@ describe("BoardStore", () => {
 		});
 	});
 
+	describe("setDuplicatingColumnId", () => {
+		it("should set duplicatingColumnId", () => {
+			const { boardStore } = setup();
+
+			boardStore.setDuplicatingColumnId("columnId");
+
+			expect(boardStore.duplicatingColumnId).toBe("columnId");
+		});
+
+		it("should clear duplicatingColumnId when set to undefined", () => {
+			const { boardStore } = setup();
+
+			boardStore.setDuplicatingColumnId("columnId");
+			boardStore.setDuplicatingColumnId(undefined);
+
+			expect(boardStore.duplicatingColumnId).toBeUndefined();
+		});
+	});
+
 	describe("createCardSuccess", () => {
 		const NEW_CARD = cardResponseFactory.build();
 
@@ -479,6 +498,51 @@ describe("BoardStore", () => {
 			});
 
 			expect(boardStore.board).toBe(undefined);
+		});
+
+		it("should clear duplicatingColumnId if isOwnAction is true", () => {
+			const { boardStore, firstColumn } = setup({ createBoard: false });
+			const duplicatedColumn = columnFullResponseFactory.build();
+
+			boardStore.setDuplicatingColumnId(firstColumn.id);
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+
+			expect(boardStore.duplicatingColumnId).toBeUndefined();
+		});
+
+		it("should clear duplicatingColumnId when isOwnAction is true", () => {
+			const { boardStore, firstColumn } = setup();
+			const duplicatedColumn = columnFullResponseFactory.build();
+
+			boardStore.setDuplicatingColumnId(firstColumn.id);
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+
+			expect(boardStore.duplicatingColumnId).toBeUndefined();
+		});
+
+		it("should not clear duplicatingColumnId when isOwnAction is false", () => {
+			const { boardStore, firstColumn } = setup();
+			const duplicatedColumn = columnFullResponseFactory.build();
+
+			boardStore.setDuplicatingColumnId(firstColumn.id);
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				isOwnAction: false,
+			});
+
+			expect(boardStore.duplicatingColumnId).toBe(firstColumn.id);
 		});
 
 		it("should duplicate a column and insert it after the original", () => {

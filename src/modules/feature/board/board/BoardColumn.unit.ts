@@ -38,7 +38,11 @@ describe("BoardColumn", () => {
 		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
 	});
 
-	const setup = (options?: { cardsCount?: number; allowedOperations?: Partial<BoardResponseAllowedOperations> }) => {
+	const setup = (options?: {
+		cardsCount?: number;
+		allowedOperations?: Partial<BoardResponseAllowedOperations>;
+		isDuplicating?: boolean;
+	}) => {
 		const cards = cardSkeletonResponseFactory.buildList(options?.cardsCount ?? 3);
 		const column = columnResponseFactory.build({
 			cards,
@@ -59,6 +63,7 @@ describe("BoardColumn", () => {
 				column,
 				index: 1,
 				columnCount: 1,
+				isDuplicating: options?.isDuplicating ?? false,
 				isListBoard: false,
 			},
 		});
@@ -377,6 +382,49 @@ describe("BoardColumn", () => {
 				name: "BoardAddCardButton",
 			});
 			expect(addCardButtons).toHaveLength(1);
+		});
+	});
+
+	describe("when duplicate:column is triggered by column header", () => {
+		it("should emit duplicate:column with correct columnId", async () => {
+			const { wrapper, column } = setup();
+
+			const columnHeader = wrapper.findComponent({
+				name: "BoardColumnHeader",
+			});
+			await columnHeader.vm.$emit("duplicate:column");
+
+			const emitted = wrapper.emitted("duplicate:column");
+			expect(emitted).toHaveLength(1);
+			expect(emitted![0]).toEqual([column.id]);
+		});
+	});
+
+	describe("when isDuplicating prop is true", () => {
+		it("should show a loading column", () => {
+			const { wrapper } = setup({ isDuplicating: true });
+
+			const progressCircular = wrapper.findComponent({ name: "VProgressCircular" });
+
+			expect(progressCircular.exists()).toBe(true);
+		});
+
+		it("should render two column containers", () => {
+			const { wrapper } = setup({ isDuplicating: true });
+
+			const columnContainers = wrapper.findAll(".d-flex.flex-column");
+
+			expect(columnContainers.length).toBe(2);
+		});
+	});
+
+	describe("when isDuplicating prop is false", () => {
+		it("should render only one column container", () => {
+			const { wrapper } = setup({ isDuplicating: false });
+
+			const columnContainers = wrapper.findAll(".d-flex.flex-column");
+
+			expect(columnContainers.length).toBe(1);
 		});
 	});
 });

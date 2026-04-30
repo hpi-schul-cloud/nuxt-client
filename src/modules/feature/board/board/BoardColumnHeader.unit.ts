@@ -2,7 +2,7 @@ import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useBoardAllowedOperations, useBoardFocusHandler, useBoardStore, useCourseBoardEditMode } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler, useCourseBoardEditMode } from "@data-board";
 import { BoardColumnInteractionHandler } from "@feature-board";
 import {
 	KebabMenuActionDelete,
@@ -21,7 +21,6 @@ vi.mock("@data-board");
 const mockUseBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
 const mockedUseBoardAllowedOperations = vi.mocked(useBoardAllowedOperations);
-const mockedUseBoardStore = vi.mocked(useBoardStore);
 
 describe("BoardColumnHeader", () => {
 	const mockedStartEditMode = vi.fn();
@@ -51,9 +50,6 @@ describe("BoardColumnHeader", () => {
 				copyColumn: true,
 			})),
 		} as ReturnType<typeof useBoardAllowedOperations>);
-		mockedUseBoardStore.mockReturnValue({
-			duplicateColumn: vi.fn(),
-		} as unknown as ReturnType<typeof useBoardStore>);
 
 		const wrapper = shallowMount(BoardColumnHeader, {
 			global: {
@@ -423,43 +419,16 @@ describe("BoardColumnHeader", () => {
 			});
 
 			describe("when duplicate button is clicked", () => {
-				it("should call boardStore.duplicateColumn with correct columnId", async () => {
-					const mockedDuplicateColumn = vi.fn();
-					mockedUseBoardStore.mockReturnValue({
-						duplicateColumn: mockedDuplicateColumn,
-					} as unknown as ReturnType<typeof useBoardStore>);
-					mockedUseEditMode.mockReturnValue({
-						isEditMode: computed(() => false),
-						startEditMode: mockedStartEditMode,
-						stopEditMode: mockedStopEditMode,
-					});
-					mockUseBoardFocusHandler.mockReturnValue({
-						isFocusContained: undefined,
-					});
-					mockedUseBoardAllowedOperations.mockReturnValue({
-						allowedOperations: computed(() => ({
-							copyColumn: true,
-						})),
-					} as ReturnType<typeof useBoardAllowedOperations>);
-
-					const wrapper = shallowMount(BoardColumnHeader, {
-						global: {
-							plugins: [createTestingI18n(), createTestingVuetify()],
-						},
-						propsData: {
-							title: "title-text",
-							columnId: "abc123",
-							isListBoard: false,
-							index: 0,
-							canEditColumn: true,
-							canDeleteColumn: true,
-						},
+				it("should emit duplicate:column event", async () => {
+					const wrapper = setup({
+						canDeleteColumn: true,
 					});
 
 					const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
 					await duplicateButton.vm.$emit("click");
 
-					expect(mockedDuplicateColumn).toHaveBeenCalledWith({ columnId: "abc123" });
+					const emitted = wrapper.emitted();
+					expect(emitted["duplicate:column"]).toBeDefined();
 				});
 			});
 		});
@@ -479,9 +448,6 @@ describe("BoardColumnHeader", () => {
 						copyColumn: false,
 					})),
 				} as ReturnType<typeof useBoardAllowedOperations>);
-				mockedUseBoardStore.mockReturnValue({
-					duplicateColumn: vi.fn(),
-				} as unknown as ReturnType<typeof useBoardStore>);
 
 				const wrapper = shallowMount(BoardColumnHeader, {
 					global: {
