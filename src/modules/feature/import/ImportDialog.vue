@@ -1,7 +1,7 @@
 <template>
 	<SvsDialog
 		v-model="isDialogOpen"
-		:is-open-state-managed-externally="true"
+		is-open-state-managed-externally
 		:title="currentStepTitle"
 		:confirm-btn-lang-key="confirmBtnLangKey"
 		:confirm-btn-disabled="!isActiveStepValid"

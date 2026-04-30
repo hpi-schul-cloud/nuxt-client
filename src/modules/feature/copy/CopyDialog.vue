@@ -1,6 +1,6 @@
 <template>
 	<SvsDialog
-		:model-value="isOpen"
+		v-model="isOpen"
 		is-open-state-managed-externally
 		:title="title"
 		confirm-btn-lang-key="common.actions.duplicate"
@@ -40,20 +40,19 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const props = withDefaults(
-	defineProps<{
-		isOpen?: boolean;
-		copyItemType: ContentItemTypeEnum;
-	}>(),
-	{
-		isOpen: false,
-	}
-);
+const props = defineProps<{
+	copyItemType: ContentItemTypeEnum;
+}>();
 
 const emit = defineEmits<{
 	(e: "cancel"): void;
 	(e: "confirm", payload: boolean): void;
 }>();
+
+const isOpen = defineModel("is-open", {
+	type: Boolean,
+	default: false,
+});
 
 const title = computed(() =>
 	t("feature-copy.copyInfo.title", { type: t(`feature-copy.copyInfo.type.${props.copyItemType}`) })
