@@ -53,8 +53,8 @@
 			</template>
 			<template v-else>
 				<DataTable :table-headers="headers" :items="fileRecordItems" :show-select="true">
-					<template #[`item.preview`]="{ item }">
-						<FilePreview :file-record="item" :data-testid="`file-preview-${item.name}`" />
+					<template #[`item.preview`]>
+						<v-icon aria-hidden="true">{{ mdiFileDocumentOutline }}</v-icon>
 					</template>
 					<template #[`item.name`]="{ item }">
 						<span :data-testid="`name-${item.name}`">
@@ -73,7 +73,11 @@
 					<template #[`item.actions`]="{ item }">
 						<KebabMenu
 							:data-testid="`kebab-menu-${item.name}`"
-							:aria-label="t('pages.folder.trash.ariaLabels.actionMenu', { name: item.name })"
+							:aria-label="
+								t('pages.folder.trash.ariaLabels.actionMenu', {
+									name: item.name,
+								})
+							"
 						>
 							<KebabMenuAction
 								:icon="mdiRestore"
@@ -89,7 +93,11 @@
 					</template>
 
 					<template #action-menu-items="{ selectedIds }">
-						<KebabMenuAction :icon="mdiRestore" data-testid="action-menu-restore" @click="onRestoreByIds(selectedIds)">
+						<KebabMenuAction
+							:icon="mdiRestore"
+							data-testid="kebab-menu-action-restore"
+							@click="onRestoreByIds(selectedIds)"
+						>
 							{{ t("common.actions.restore") }}
 						</KebabMenuAction>
 						<KebabMenuAction :icon="mdiDelete" data-testid="action-menu-purge" @click="onPurgeByIds(selectedIds)">
@@ -104,7 +112,6 @@
 
 <script setup lang="ts">
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
-import FilePreview from "./file-table/FilePreview.vue";
 import FileStatus from "./file-table/FileStatus.vue";
 import FolderTrashMenu from "./FolderTrashMenu.vue";
 import PurgeFilesDialog from "./PurgeFilesDialog.vue";
@@ -115,7 +122,7 @@ import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { formatFileSize } from "@/utils/fileHelper";
 import { useFileTrash } from "@data-file";
 import { useFolderState } from "@data-folder";
-import { mdiDelete, mdiRestore } from "@icons/material";
+import { mdiDelete, mdiFileDocumentOutline, mdiRestore } from "@icons/material";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu, KebabMenuAction } from "@ui-kebab-menu";

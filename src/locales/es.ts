@@ -561,7 +561,9 @@ export default {
 	"components.cardElement.folderElement.storage.error":
 		"La información sobre la carpeta de archivos no está disponible actualmente. Por favor, recargue el tablero.",
 	"components.cardElement.LinkElement": "Enlace",
-	"components.cardElement.LinkElement.label": "Inserte la dirección del enlace",
+	"components.cardElement.LinkElement.create.label": "Inserte la dirección del enlace",
+	"components.cardElement.LinkElement.edit.label": "Editar la dirección del enlace",
+	"components.cardElement.LinkElement.validation.success": "La dirección del enlace es válida",
 	"components.cardElement.notification.visibleAndEditable":
 		"Esta pizarra es visible y editable para todos los participantes en el curso.",
 	"components.cardElement.richTextElement.placeholder": "Añadir texto",
@@ -2005,6 +2007,8 @@ export default {
 	"error.4500":
 		"Error de conexión: No se ha podido establecer la sesión en tiempo real. Compruebe la conexión o vuelva a cargar la página.",
 	"error.4401": "Lamentablemente, falta la autorización para ver este contenido.",
+	"error.ws.connectionLost": "La conexión se ha interrumpido. Intenta restablecer la conexión...",
+	"error.ws.connectionLost.back": "Volver a la vista general",
 	"tldraw.error.ws.4400": "Falta el nombre de la sala en los parámetros de la URL",
 	"tldraw.error.ws.4404": "No se ha encontrado la pizarra con este nombre",
 	"ui-confirmation-dialog.ask-delete": '¿Eliminar {itemType} "{itemTitle}"?',

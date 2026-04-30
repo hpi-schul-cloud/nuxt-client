@@ -549,7 +549,9 @@ export default {
 	"components.cardElement.folderElement.storage.error":
 		"Information about the file folder is currently not available. Please reload the board.",
 	"components.cardElement.LinkElement": "Link",
-	"components.cardElement.LinkElement.label": "Insert link address",
+	"components.cardElement.LinkElement.create.label": "Insert link address",
+	"components.cardElement.LinkElement.edit.label": "Edit link address",
+	"components.cardElement.LinkElement.validation.success": "The link address is valid",
 	"components.cardElement.notification.visibleAndEditable":
 		"This whiteboard is visible and editable for all course participants.",
 	"components.cardElement.richTextElement.placeholder": "Add text",
@@ -1955,6 +1957,8 @@ export default {
 	"error.4500":
 		"Connection error: The real-time session could not be established. Please check the connection or reload the page.",
 	"error.4401": "Unfortunately, you do not have permission to view this content.",
+	"error.ws.connectionLost": "The connection has been interrupted. Trying to re-establish it...",
+	"error.ws.connectionLost.back": "Back to overview",
 	"tldraw.error.ws.4400": "Room name is missing in URL params",
 	"tldraw.error.ws.4404": "Whiteboard with this name was not found",
 	"ui-confirmation-dialog.ask-delete": 'Delete {itemType} "{itemTitle}"?',
