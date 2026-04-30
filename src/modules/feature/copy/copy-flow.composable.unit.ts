@@ -1,12 +1,6 @@
 import { useCopyFlow } from "./copy-flow.composable";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
-import {
-	expectNotification,
-	mockApi,
-	mockApiResponse,
-	mockedPiniaStoreTyping,
-	mountComposable,
-} from "@@/tests/test-utils";
+import { expectNotification, mockApi, mockApiResponse, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
 import { CopyApiResponseStatus, CopyApiResponseType } from "@api-server";
@@ -20,7 +14,7 @@ let taskApi: Mocked<serverApi.TaskApiInterface>;
 let boardApi: Mocked<serverApi.BoardApiInterface>;
 let roomApi: Mocked<serverApi.RoomApiInterface>;
 
-let mockWithLoadingState: ReturnType<typeof vi.fn>;
+let withLoadingStateSpy: ReturnType<typeof vi.spyOn>;
 
 const mountCopyFlowComposable = () =>
 	mountComposable(() => useCopyFlow(), {
@@ -43,9 +37,7 @@ describe("useCopyFlow", () => {
 		vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApi);
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApi);
 
-		const loadingStore = mockedPiniaStoreTyping(useLoadingStore);
-		mockWithLoadingState = vi.fn().mockImplementation(async (fn) => fn());
-		vi.spyOn(loadingStore, "withLoadingState").mockImplementation(mockWithLoadingState);
+		withLoadingStateSpy = vi.spyOn(useLoadingStore(), "withLoadingState").mockImplementation(async (fn) => fn());
 	});
 
 	afterEach(() => {
@@ -130,7 +122,7 @@ describe("useCopyFlow", () => {
 				it("should activate loading state during execution", async () => {
 					const { resultPromise } = setup();
 					await resultPromise;
-					expect(mockWithLoadingState).toHaveBeenCalledOnce();
+					expect(withLoadingStateSpy).toHaveBeenCalledOnce();
 				});
 
 				it("should return the result", async () => {
@@ -166,7 +158,7 @@ describe("useCopyFlow", () => {
 				it("should activate loading state during execution", async () => {
 					const { resultPromise } = setup();
 					await resultPromise;
-					expect(mockWithLoadingState).toHaveBeenCalledOnce();
+					expect(withLoadingStateSpy).toHaveBeenCalledOnce();
 				});
 
 				it("should return the error", async () => {

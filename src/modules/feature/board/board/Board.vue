@@ -387,13 +387,18 @@ const boardColumnClass = computed(() => {
 	return classes;
 });
 
-const copyFlow = useCopyFlow();
-const { isDialogOpen: isCopyDialogOpen, copyItemType, onConfirm: onConfirmCopy, onCancel: onCancelCopy } = copyFlow;
+const {
+	isDialogOpen: isCopyDialogOpen,
+	copyItemType,
+	executeCopyBoard,
+	onConfirm: onConfirmCopy,
+	onCancel: onCancelCopy,
+} = useCopyFlow();
 
 const onCopyBoard = async () => {
 	if (!allowedOperations.value.copyBoard) return;
 
-	const { result: copyResult } = await copyFlow.executeCopyBoard(props.boardId);
+	const { result: copyResult } = await executeCopyBoard(props.boardId);
 
 	if (copyResult?.id) {
 		boardStore.fetchBoardRequest({ boardId: copyResult.id });

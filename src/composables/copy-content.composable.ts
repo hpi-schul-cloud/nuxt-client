@@ -1,6 +1,6 @@
+import { useI18nGlobal } from "@/plugins/i18n";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { computed, type MaybeRef, unref } from "vue";
-import { useI18n } from "vue-i18n";
 
 export interface CopyWarning {
 	testId: string;
@@ -14,9 +14,9 @@ export interface CopyContentTemplate {
 }
 
 export const useCopyContent = (copyItemType: MaybeRef<ContentItemTypeEnum>) => {
-	const { t } = useI18n();
+	const { t } = useI18nGlobal();
 
-	const copyContent = computed<CopyContentTemplate>(() => {
+	const copyContent = computed(() => {
 		const templates: Record<ContentItemTypeEnum, CopyContentTemplate> = {
 			[ContentItemTypeEnum.Course]: {
 				text: t("feature-copy.copyInfo.text.nextStep", { type: t("feature-copy.copyInfo.type.ofCourse") }),
