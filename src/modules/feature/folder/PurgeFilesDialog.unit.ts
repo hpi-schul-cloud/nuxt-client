@@ -1,10 +1,10 @@
+import PurgeFilesDialog from "./PurgeFilesDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { VCard } from "vuetify/components";
-import PurgeFilesDialog from "./PurgeFilesDialog.vue";
 
 describe("PurgeFilesDialog.vue", () => {
 	enableAutoUnmount(afterEach);
@@ -47,44 +47,39 @@ describe("PurgeFilesDialog.vue", () => {
 		expect(dialog.props("confirmBtnDisabled")).toBe(true);
 	});
 
-	it("should enable the confirm button when the correct confirmation word is typed", async () => {
+	it("should render the confirmation checkbox", () => {
 		const { wrapper } = setupWrapper();
 
-		// In tests, t() returns the i18n key itself
-		const input = wrapper.findComponent(VCard).find("input[type='text']");
-		await input.setValue("pages.folder.trash.purge.dialog.confirmationWord");
+		const checkbox = wrapper.findComponent(VCard).find("[data-testid='purge-files-dialog-checkbox']");
+		expect(checkbox.exists()).toBe(true);
+	});
+
+	it("should enable the confirm button when the checkbox is checked", async () => {
+		const { wrapper } = setupWrapper();
+
+		const checkbox = wrapper.findComponent(VCard).find("input[type='checkbox']");
+		await checkbox.setValue(true);
 
 		const dialog = wrapper.findComponent(SvsDialog);
 		expect(dialog.props("confirmBtnDisabled")).toBe(false);
 	});
 
-	it("should keep the confirm button disabled when wrong text is typed", async () => {
+	it("should disable the confirm button when the checkbox is unchecked", async () => {
 		const { wrapper } = setupWrapper();
 
-		const input = wrapper.findComponent(VCard).find("input[type='text']");
-		await input.setValue("something wrong");
+		const checkbox = wrapper.findComponent(VCard).find("input[type='checkbox']");
+		await checkbox.setValue(true);
+		await checkbox.setValue(false);
 
 		const dialog = wrapper.findComponent(SvsDialog);
 		expect(dialog.props("confirmBtnDisabled")).toBe(true);
 	});
 
-	it("should be case-insensitive for the confirmation word", async () => {
-		const { wrapper } = setupWrapper();
-
-		// In tests, t() returns the i18n key itself
-		const input = wrapper.findComponent(VCard).find("input[type='text']");
-		await input.setValue("PAGES.FOLDER.TRASH.PURGE.DIALOG.CONFIRMATIONWORD");
-
-		const dialog = wrapper.findComponent(SvsDialog);
-		expect(dialog.props("confirmBtnDisabled")).toBe(false);
-	});
-
 	it("should emit confirm when the dialog confirms", async () => {
 		const { wrapper } = setupWrapper();
 
-		// In tests, t() returns the i18n key itself
-		const input = wrapper.findComponent(VCard).find("input[type='text']");
-		await input.setValue("pages.folder.trash.purge.dialog.confirmationWord");
+		const checkbox = wrapper.findComponent(VCard).find("input[type='checkbox']");
+		await checkbox.setValue(true);
 
 		wrapper.findComponent(SvsDialog).vm.$emit("confirm");
 
@@ -99,19 +94,18 @@ describe("PurgeFilesDialog.vue", () => {
 		expect(wrapper.emitted("cancel")).toBeTruthy();
 	});
 
-	it("should clear the input when the dialog closes", async () => {
+	it("should uncheck the checkbox when the dialog closes", async () => {
 		const { wrapper } = setupWrapper(true);
 
-		// In tests, t() returns the i18n key itself
-		const input = wrapper.findComponent(VCard).find("input[type='text']");
-		await input.setValue("pages.folder.trash.purge.dialog.confirmationWord");
+		const checkbox = wrapper.findComponent(VCard).find("input[type='checkbox']");
+		await checkbox.setValue(true);
 
 		await wrapper.setProps({ modelValue: false });
 		await flushPromises();
 
 		await wrapper.setProps({ modelValue: true });
 
-		const inputAfterReopen = wrapper.findComponent(VCard).find("input[type='text']");
-		expect((inputAfterReopen.element as HTMLInputElement).value).toBe("");
+		const checkboxAfterReopen = wrapper.findComponent(VCard).find("input[type='checkbox']");
+		expect((checkboxAfterReopen.element as HTMLInputElement).checked).toBe(false);
 	});
 });

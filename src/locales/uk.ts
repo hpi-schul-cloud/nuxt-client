@@ -2067,6 +2067,5 @@ export default {
 	"pages.folder.trash.purge.dialog.title": "Назавжди видалити файли?",
 	"pages.folder.trash.purge.dialog.description":
 		"Ви збираєтесь остаточно видалити {count} файл(ів). Цю дію неможливо скасувати.",
-	"pages.folder.trash.purge.dialog.confirmationWord": "delete",
-	"pages.folder.trash.purge.dialog.inputLabel": 'Будь ласка, введіть "{word}", щоб підтвердити',
+	"pages.folder.trash.purge.dialog.checkboxLabel": "Я розумію, що ця дія є незворотною та не може бути скасована.",
 };

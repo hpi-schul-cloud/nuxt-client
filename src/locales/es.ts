@@ -2103,6 +2103,5 @@ export default {
 	"pages.folder.trash.purge.dialog.title": "¿Eliminar archivos permanentemente?",
 	"pages.folder.trash.purge.dialog.description":
 		"Está a punto de eliminar permanentemente {count} archivo(s). Esta acción no se puede deshacer.",
-	"pages.folder.trash.purge.dialog.confirmationWord": "delete",
-	"pages.folder.trash.purge.dialog.inputLabel": 'Por favor, escribe "{word}" para confirmar',
+	"pages.folder.trash.purge.dialog.checkboxLabel": "Entiendo que esta acción es permanente y no se puede deshacer.",
 };

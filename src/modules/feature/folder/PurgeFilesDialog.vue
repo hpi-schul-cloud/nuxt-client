@@ -3,7 +3,7 @@
 		v-model="isDialogOpen"
 		title="pages.folder.trash.purge.dialog.title"
 		:confirm-btn-lang-key="'pages.folder.trash.purge.action'"
-		:confirm-btn-disabled="!isConfirmInputValid"
+		:confirm-btn-disabled="!isConfirmed"
 		data-testid="purge-files-dialog"
 		@confirm="emit('confirm')"
 		@cancel="emit('cancel')"
@@ -12,13 +12,12 @@
 			<p data-testid="purge-files-dialog-description">
 				{{ t("pages.folder.trash.purge.dialog.description", { count: fileCount }) }}
 			</p>
-			<VTextField
-				v-model="confirmInput"
-				:label="t('pages.folder.trash.purge.dialog.inputLabel', { word: confirmationWord })"
-				data-testid="purge-files-dialog-input"
+			<VCheckbox
+				v-model="isConfirmed"
+				:label="t('pages.folder.trash.purge.dialog.checkboxLabel')"
+				data-testid="purge-files-dialog-checkbox"
 				density="compact"
-				flat
-				class="mt-2"
+				class="mt-1"
 			/>
 		</template>
 	</SvsDialog>
@@ -26,7 +25,7 @@
 
 <script setup lang="ts">
 import { SvsDialog } from "@ui-dialog";
-import { computed, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 defineProps({
@@ -45,17 +44,11 @@ const emit = defineEmits(["confirm", "cancel"]);
 
 const { t } = useI18n();
 
-const confirmationWord = computed(() => t("pages.folder.trash.purge.dialog.confirmationWord"));
-
-const confirmInput = ref("");
+const isConfirmed = ref(false);
 
 watch(isDialogOpen, (newVal) => {
 	if (!newVal) {
-		confirmInput.value = "";
+		isConfirmed.value = false;
 	}
 });
-
-const isConfirmInputValid = computed(
-	() => confirmInput.value.trim().toLowerCase() === confirmationWord.value.trim().toLowerCase()
-);
 </script>

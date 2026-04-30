@@ -2049,6 +2049,5 @@ export default {
 	"pages.folder.trash.purge.dialog.title": "Permanently delete files?",
 	"pages.folder.trash.purge.dialog.description":
 		"You are about to permanently delete {count} file(s). This action cannot be undone.",
-	"pages.folder.trash.purge.dialog.confirmationWord": "delete",
-	"pages.folder.trash.purge.dialog.inputLabel": 'Please type "{word}" to confirm',
+	"pages.folder.trash.purge.dialog.checkboxLabel": "I understand that this action is permanent and cannot be undone.",
 };

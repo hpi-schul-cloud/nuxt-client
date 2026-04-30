@@ -2080,6 +2080,6 @@ export default {
 	"pages.folder.trash.purge.dialog.title": "Dateien endgültig löschen?",
 	"pages.folder.trash.purge.dialog.description":
 		"Du bist dabei, {count} Datei(en) endgültig zu löschen. Diese Aktion kann nicht rückgängig gemacht werden.",
-	"pages.folder.trash.purge.dialog.confirmationWord": "löschen",
-	"pages.folder.trash.purge.dialog.inputLabel": 'Bitte gib "{word}" ein, um zu bestätigen',
+	"pages.folder.trash.purge.dialog.checkboxLabel":
+		"Ich verstehe, dass diese Aktion dauerhaft ist und nicht rückgängig gemacht werden kann.",
 };
