@@ -1,4 +1,3 @@
-import { usePreferredExternalToolStore } from "../../external-tool/preferred-external-tool.store";
 import { useBoardStore } from "../Board.store";
 import { useBoardApi } from "../BoardApi.composable";
 import { useCardStore } from "../Card.store";
@@ -31,6 +30,7 @@ import {
 	ContextExternalToolConfigurationTemplate,
 	ContextExternalToolSave,
 	useContextExternalToolApi,
+	usePreferredExternalToolStore,
 } from "@data-external-tool";
 import { ApiErrorHandlerFactory, BoardObjectType, ErrorType, useErrorHandler } from "@util-error-handling";
 import { AxiosResponse } from "axios";
