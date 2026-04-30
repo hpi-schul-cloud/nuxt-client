@@ -202,7 +202,7 @@ const availableDestinations = computed(() =>
 
 const { executeImport, isGenericImportDialogOpen, shareTokenInfo, onConfirmImport, onCancelImport } = useImportFlow();
 
-const importShareToken = async (token: string) => {
+const executeImportFlow = async (token: string) => {
 	const { result: importResult } = await executeImport(token);
 
 	if (!importResult) {
@@ -220,10 +220,10 @@ const importShareToken = async (token: string) => {
 
 watch(
 	() => route.query.import,
-	() => {
-		if (route.query.import) {
-			const token = route.query.import as string;
-			importShareToken(token);
+	(newValue) => {
+		if (newValue) {
+			const token = newValue as string;
+			executeImportFlow(token);
 		}
 	},
 	{ immediate: true }

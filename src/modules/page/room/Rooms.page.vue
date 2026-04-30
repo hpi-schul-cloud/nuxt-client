@@ -106,9 +106,9 @@ const executeImportFlow = async (token: string) => {
 
 watch(
 	() => route.query.import,
-	() => {
-		if (route.query.import) {
-			const token = route.query.import as string;
+	(newValue) => {
+		if (newValue) {
+			const token = newValue as string;
 			executeImportFlow(token);
 		}
 	},
