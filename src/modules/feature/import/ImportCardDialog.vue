@@ -74,7 +74,7 @@ import { ShareTokenInfoResponse } from "@api-server";
 import { useCardDialogData } from "@data-board";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -120,5 +120,5 @@ const dialogQuestion = computed(() => {
 	});
 });
 
-const { text, warnings } = useCopyContent(ContentItemTypeEnum.Card);
+const { text, warnings } = useCopyContent(ref(ContentItemTypeEnum.Card));
 </script>

@@ -17,7 +17,7 @@ export const useImportFlow = () => {
 
 	const shareTokenInfo = ref<ShareTokenInfoResponse>();
 
-	const isImportActive = computed(() => importAction.isActive.value && !!shareTokenInfo.value);
+	const isImportActive = computed(() => importAction.isActive.value);
 	const isCardImport = computed(() => shareTokenInfo.value?.parentType === ShareTokenInfoResponseParentType.CARD);
 
 	const isGenericImportDialogOpen = computed(() => isImportActive.value && !isCardImport.value);
@@ -68,7 +68,7 @@ export const useImportFlow = () => {
 		return {
 			result: result ? { ...result, destination: data.destination } : result,
 			success,
-			error,
+			error: error ? new Error("Import failed", { cause: error }) : undefined,
 		};
 	};
 

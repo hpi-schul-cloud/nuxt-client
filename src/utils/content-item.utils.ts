@@ -13,6 +13,8 @@ export const mapShareTokenParentTypeToContentItemType = (shareTokenParentType: S
 			return ContentItemTypeEnum.ColumnBoard;
 		case ShareTokenInfoResponseParentType.ROOM:
 			return ContentItemTypeEnum.Room;
+		case ShareTokenInfoResponseParentType.CARD:
+			return ContentItemTypeEnum.Card;
 		default:
 			return ContentItemTypeEnum.Unknown;
 	}

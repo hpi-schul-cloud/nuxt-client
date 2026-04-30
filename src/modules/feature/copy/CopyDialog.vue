@@ -1,6 +1,6 @@
 <template>
 	<SvsDialog
-		v-model="isOpen"
+		:model-value="isOpen"
 		is-open-state-managed-externally
 		:title="title"
 		confirm-btn-lang-key="common.actions.duplicate"

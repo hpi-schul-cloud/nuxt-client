@@ -14,18 +14,18 @@
 		</EmptyState>
 		<RoomGrid v-else :rooms />
 		<ImportCardDialog
-			v-if="isCardImportDialogOpen"
+			v-if="shareTokenInfo"
 			:is-dialog-open="isCardImportDialogOpen"
-			:share-token-info="shareTokenInfo!"
+			:share-token-info="shareTokenInfo"
 			:available-destinations="availableDestinations"
 			destination-type="column"
 			@confirm="onConfirmImport"
 			@cancel="onCancelImport"
 		/>
 		<ImportDialog
-			v-if="isGenericImportDialogOpen"
+			v-if="shareTokenInfo"
 			:is-dialog-open="isGenericImportDialogOpen"
-			:share-token-info="shareTokenInfo!"
+			:share-token-info="shareTokenInfo"
 			:available-destinations="availableDestinations"
 			destination-type="room"
 			@confirm="onConfirmImport"

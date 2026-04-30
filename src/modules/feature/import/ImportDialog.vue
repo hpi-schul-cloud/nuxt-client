@@ -1,6 +1,6 @@
 <template>
 	<SvsDialog
-		v-model="isDialogOpen"
+		:model-value="isDialogOpen"
 		is-open-state-managed-externally
 		:title="currentStepTitle"
 		:confirm-btn-lang-key="confirmBtnLangKey"
@@ -8,6 +8,7 @@
 		data-testid="import-dialog"
 		@confirm="onConfirm"
 		@cancel="onCancel"
+		@after-leave="resetDialog"
 	>
 		<template #content>
 			<p data-testid="import-dialog-info-text">
@@ -68,7 +69,7 @@ import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-s
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { isRequired, useOpeningTagValidator } from "@util-validators";
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -103,20 +104,9 @@ const newName = computed({
 });
 
 const resetDialog = () => {
-	activeStep.value = hasSelectStep.value ? "select" : "rename";
 	selectedDestinationId.value = undefined;
 	nameInput.value = undefined;
 };
-
-onMounted(() => {
-	resetDialog();
-});
-
-watch(isDialogOpen, (isOpen) => {
-	if (isOpen) {
-		resetDialog();
-	}
-});
 
 const rules = reactive({ required: isRequired(), validateOnOpeningTag });
 
@@ -200,4 +190,14 @@ const destinationQuestion = computed(() => {
 		title: originalName ? ` "${originalName}"` : "",
 	});
 });
+
+watch(
+	isDialogOpen,
+	(isOpen) => {
+		if (isOpen) {
+			activeStep.value = hasSelectStep.value ? "select" : "rename";
+		}
+	},
+	{ immediate: true }
+);
 </script>

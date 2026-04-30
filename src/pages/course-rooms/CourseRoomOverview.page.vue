@@ -100,9 +100,9 @@
 		@drag-from-group="dragFromGroup"
 	/>
 	<ImportDialog
-		v-if="isGenericImportDialogOpen"
+		v-if="shareTokenInfo"
 		:is-dialog-open="isGenericImportDialogOpen"
-		:share-token-info="shareTokenInfo!"
+		:share-token-info="shareTokenInfo"
 		:available-destinations="availableDestinations"
 		destination-type="course"
 		@confirm="onConfirmImport"
@@ -217,17 +217,6 @@ const executeImportFlow = async (token: string) => {
 		fetchCourses();
 	}
 };
-
-watch(
-	() => route.query.import,
-	(newValue) => {
-		if (newValue) {
-			const token = newValue as string;
-			executeImportFlow(token);
-		}
-	},
-	{ immediate: true }
-);
 
 const getDeviceDims = () => {
 	const { xs, sm, mdAndUp } = display;
@@ -404,6 +393,17 @@ const initializeComponent = async () => {
 };
 
 useTitle(buildPageTitle(t("pages.courseRooms.index.courses.active")));
+
+watch(
+	() => route.query.import,
+	(newValue) => {
+		if (newValue) {
+			const token = newValue as string;
+			executeImportFlow(token);
+		}
+	},
+	{ immediate: true }
+);
 
 onMounted(() => {
 	initializeComponent();
