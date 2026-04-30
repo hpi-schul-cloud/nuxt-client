@@ -17,19 +17,11 @@ export const useImportFlow = () => {
 
 	const shareTokenInfo = ref<ShareTokenInfoResponse>();
 
-	const isGenericImportDialogOpen = computed(
-		() =>
-			importAction.isActive.value &&
-			!!shareTokenInfo.value &&
-			!(shareTokenInfo.value?.parentType === ShareTokenInfoResponseParentType.CARD)
-	);
+	const isImportActive = computed(() => importAction.isActive.value && !!shareTokenInfo.value);
+	const isCardImport = computed(() => shareTokenInfo.value?.parentType === ShareTokenInfoResponseParentType.CARD);
 
-	const isCardImportDialogOpen = computed(
-		() =>
-			importAction.isActive.value &&
-			!!shareTokenInfo.value &&
-			shareTokenInfo.value?.parentType === ShareTokenInfoResponseParentType.CARD
-	);
+	const isGenericImportDialogOpen = computed(() => isImportActive.value && !isCardImport.value);
+	const isCardImportDialogOpen = computed(() => isImportActive.value && isCardImport.value);
 
 	const validateShareToken = async (token: string) => {
 		const { result, success, error } = await execute(
