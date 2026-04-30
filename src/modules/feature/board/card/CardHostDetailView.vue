@@ -31,9 +31,9 @@
 			</VBtn>
 		</VToolbar>
 		<VCard :style="{ backgroundColor: cardBackground }">
-			<VCardText class="pt-0 pb-0">
+			<VCardText>
 				<div
-					class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto"
+					class="detail-view-size w-100 mx-auto elevation-3 rounded-lg mt-4"
 					:style="{
 						backgroundColor: 'white',
 						borderLeft: cardBorderColor ? `3px solid ${cardBorderColor}` : undefined,
@@ -50,7 +50,7 @@
 import CardHost from "./CardHost.vue";
 import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { Colors } from "@api-server";
-import { useBoardAllowedOperations, useCardStore, useCourseBoardEditMode } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
 import { mdiClose } from "@icons/material";
 import { computed, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
@@ -68,6 +68,8 @@ const emit = defineEmits<{
 
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardRef.value);
 const { allowedOperations } = useBoardAllowedOperations();
+const { setFocus } = useBoardFocusHandler();
+setFocus("");
 const { t } = useI18n();
 const cardStore = useCardStore();
 
@@ -88,16 +90,12 @@ const onDialogClose = () => {
 </script>
 
 <style lang="scss" scoped>
-@use "sass:map";
 @use "@/styles/settings" as *;
+@use "sass:map";
 
 .detail-view-size {
-	max-width: 920px;
-	padding: 0 4rem;
-
-	@media #{map.get($display-breakpoints, 'sm-and-down')} {
-		padding: 0 0.5rem;
-	}
+	max-width: 900px;
+	min-width: 17rem;
 }
 
 .toolbar {
@@ -111,20 +109,65 @@ const onDialogClose = () => {
 }
 
 .v-dialog {
-	--fullscreen-scale: 1.25;
+	--fullscreen-scale-heading: 1.33;
+	--fullscreen-scale-text: 1.25;
 
 	/* Override with scaled versions, referencing original root values */
-	--heading-1: calc(2.0625rem * var(--fullscreen-scale));
-	--heading-2: calc(1.75rem * var(--fullscreen-scale));
-	--heading-3: calc(1.4375rem * var(--fullscreen-scale));
-	--heading-4: calc(1.1875rem * var(--fullscreen-scale));
-	--heading-5: calc(1.4375rem * var(--fullscreen-scale));
-	--heading-6: calc(1.1875rem * var(--fullscreen-scale));
+	--heading-3: calc(1.4375rem * var(--fullscreen-scale-heading));
+	--heading-4: calc(1.1875rem * var(--fullscreen-scale-heading));
+	--heading-5: calc(1rem * var(--fullscreen-scale-heading));
+	--heading-6: calc(0.875rem * var(--fullscreen-scale-heading));
 
 	/* text sizes */
-	--text-xs: calc(0.694rem * var(--fullscreen-scale));
-	--text-sm: calc(0.833rem * var(--fullscreen-scale));
-	--text-md: calc(1rem * var(--fullscreen-scale));
-	--text-lg: calc(1.2rem * var(--fullscreen-scale));
+	--text-xs: calc(0.694rem * var(--fullscreen-scale-text));
+	--text-sm: calc(0.833rem * var(--fullscreen-scale-text));
+	--text-md: calc(1rem * var(--fullscreen-scale-text));
+	--text-lg: calc(1.2rem * var(--fullscreen-scale-text));
+}
+
+:deep(.v-card-title) {
+	padding: 3rem 4rem 0 4rem !important;
+}
+
+:deep() {
+	@media #{map.get($display-breakpoints, "sm")} {
+		.v-card-title {
+			padding: 1.5rem 2rem 0 2rem !important;
+		}
+	}
+
+	@media #{map.get($display-breakpoints, "xs")} {
+		.v-card-title {
+			padding: 1rem 1.5rem 0 1.5rem !important;
+		}
+	}
+}
+
+:deep(.card-host > div > .v-card-text) {
+	padding: 2rem 4rem 2rem 4rem;
+}
+
+:deep(.card-host > div > .v-card-text:last-child) {
+	padding: 2rem 4rem 5rem 4rem;
+}
+
+@media #{map.get($display-breakpoints, 'sm')} {
+	:deep(.card-host > div > .v-card-text) {
+		padding: 2rem 2rem 1rem 2rem;
+	}
+
+	:deep(.card-host > div > .v-card-text:last-child) {
+		padding: 2rem 2rem 4rem 2rem;
+	}
+}
+
+@media #{map.get($display-breakpoints, 'xs')} {
+	:deep(.card-host > div > .v-card-text) {
+		padding: 2rem 1.5rem 1rem 1.5rem;
+	}
+
+	:deep(.card-host > div > .v-card-text:last-child) {
+		padding: 2rem 1.5rem 3rem 1.5rem;
+	}
 }
 </style>
