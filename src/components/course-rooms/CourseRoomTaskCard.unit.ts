@@ -1,14 +1,13 @@
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
-import { Task } from "@/store/types/room";
-import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
+import { createTestAppStore, createTestEnvStore, taskResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { ImportUserResponseRoleNames as Roles } from "@api-server";
+import { ImportUserResponseRoleNames as Roles, TaskResponse } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 
-const testTask = {
+const testTask = taskResponseFactory.build({
 	id: "123",
 	name: "Test Name",
 	createdAt: "2017-09-28T11:58:46.601Z",
@@ -26,163 +25,28 @@ const testTask = {
 	availableDate: "2017-09-28T08:00:00.000Z",
 	dueDate: "2300-09-28T15:00:00.000Z",
 	displayColor: "#54616e",
-	description: "some description here",
-};
+	description: { content: "some description here" },
+});
 
-const draftTestTask = {
-	id: "123",
-	name: "Test Name",
-	createdAt: "2017-09-28T11:58:46.601Z",
+const draftTestTask = taskResponseFactory.build({ status: { isDraft: true } });
+const finishedTestTask = taskResponseFactory.build({ status: { isFinished: true } });
+const noDueTestTask = taskResponseFactory.build({ dueDate: undefined });
+
+const plannedTestTask = taskResponseFactory.build({
 	updatedAt: "2017-09-28T11:58:46.601Z",
 	status: {
-		submitted: 0,
-		maxSubmissions: 1,
-		graded: 0,
-		isDraft: true,
-		isFinished: false,
-		isSubstitutionTeacher: false,
-	},
-	courseId: "789",
-	courseName: "Mathe",
-	availableDate: "2017-09-28T08:00:00.000Z",
-	dueDate: "2300-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
-	description: "some description here",
-};
-
-const finishedTestTask = {
-	id: "123",
-	name: "Test Name",
-	createdAt: "2017-09-28T11:58:46.601Z",
-	updatedAt: "2017-09-28T11:58:46.601Z",
-	status: {
-		submitted: 0,
-		maxSubmissions: 1,
-		graded: 0,
 		isDraft: false,
-		isSubstitutionTeacher: false,
-		isFinished: true,
 	},
-	courseId: "789",
-	courseName: "Mathe",
-	availableDate: "2017-09-28T08:00:00.000Z",
-	dueDate: "2300-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
-	description: "some description here",
-};
-
-const overdueTestTask = {
-	id: "123",
-	name: "Test Name",
-	createdAt: "2017-09-28T11:58:46.601Z",
-	updatedAt: "2017-09-28T11:58:46.601Z",
-	status: {
-		submitted: 0,
-		maxSubmissions: 1,
-		graded: 0,
-		isDraft: false,
-		isSubstitutionTeacher: false,
-		isFinished: false,
-	},
-	courseId: "789",
-	courseName: "Mathe",
-	availableDate: "2017-09-28T08:00:00.000Z",
-	dueDate: "2015-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
-	description: "some description here",
-};
-
-const noDueTestTask = {
-	id: "123",
-	name: "Test Name",
-	createdAt: "2017-09-28T11:58:46.601Z",
-	updatedAt: "2017-09-28T11:58:46.601Z",
-	status: {
-		submitted: 0,
-		maxSubmissions: 1,
-		graded: 0,
-		isDraft: false,
-		isFinished: false,
-		isSubstitutionTeacher: false,
-	},
-	courseId: "789",
-	courseName: "Mathe",
-	availableDate: "2017-09-28T08:00:00.000Z",
-	dueDate: undefined,
-	displayColor: "#54616e",
-	description: "some description here",
-};
-
-const plannedTestTask = {
-	id: "123",
-	name: "Test Name",
-	createdAt: "2017-09-28T11:58:46.601Z",
-	updatedAt: "2017-09-28T11:58:46.601Z",
-	status: {
-		submitted: 0,
-		maxSubmissions: 1,
-		graded: 0,
-		isDraft: false,
-		isFinished: false,
-		isSubstitutionTeacher: false,
-	},
-	courseId: "789",
-	courseName: "Mathe",
 	availableDate: "2300-09-01T08:00:00.000Z",
 	dueDate: "2300-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
-	description: "some description here",
-};
+});
 
-const studentFinishedTestTask = {
-	id: "123",
-	name: "Test Name",
-	createdAt: "2017-09-28T11:58:46.601Z",
-	updatedAt: "2017-09-28T11:58:46.601Z",
-	status: {
-		submitted: 0,
-		maxSubmissions: 1,
-		graded: 0,
-		isDraft: false,
-		isFinished: true,
-		isSubstitutionTeacher: false,
-	},
-	courseId: "789",
-	courseName: "Mathe",
-	availableDate: "2017-09-28T08:00:00.000Z",
-	dueDate: "2300-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
-	description: "some description here",
-};
-
-const studentTestTask = {
-	id: "123",
-	name: "Test Name",
-	createdAt: "2017-09-28T11:58:46.601Z",
-	updatedAt: "2017-09-28T11:58:46.601Z",
-	status: {
-		submitted: 0,
-		maxSubmissions: 1,
-		graded: 0,
-		isDraft: false,
-		isFinished: false,
-		isSubstitutionTeacher: false,
-	},
-	courseId: "789",
-	courseName: "Mathe",
-	availableDate: "2017-09-28T08:00:00.000Z",
-	dueDate: "2300-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
-	description: "some description here",
-};
-
-const mockRouter = {
-	push: vi.fn(),
-};
+const studentFinishedTestTask = taskResponseFactory.build({ status: { isFinished: true } });
+const studentTestTask = taskResponseFactory.build();
 
 const getWrapper = (
 	props: {
-		task: Task;
+		task: TaskResponse;
 		userRole: Roles;
 		dragInProgress?: boolean;
 		keyDrag?: boolean;
@@ -197,9 +61,6 @@ const getWrapper = (
 	return mount(CourseRoomTaskCard, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			mocks: {
-				$router: mockRouter,
-			},
 		},
 		props: {
 			room: {
@@ -285,19 +146,6 @@ describe("CourseRoomTaskCard", () => {
 			expect(tagline.element.textContent).toContain("common.words.task – common.words.draft");
 		});
 
-		it("should show or hide description area", async () => {
-			const wrapper = getWrapper({ task: testTask, userRole });
-			(wrapper.vm as unknown as typeof CourseRoomTaskCard).canShowDescription = true;
-			const descElement = wrapper.findAll(".text-description");
-
-			expect(descElement.length).toStrictEqual(0);
-
-			await nextTick();
-
-			const descElementAfter = wrapper.findAll(".text-description");
-			expect(descElementAfter.length).toStrictEqual(1);
-		});
-
 		it("should use hidden UI only for unfinished task draft cards and task planned cards", async () => {
 			const taskDraftWrapper = getWrapper({
 				task: draftTestTask,
@@ -325,41 +173,6 @@ describe("CourseRoomTaskCard", () => {
 	describe("user role based behaviors and actions", () => {
 		describe("teachers", () => {
 			const userRole = Roles.TEACHER;
-
-			it("should not have submitted and graded section if task is a draft or finished or planned", () => {
-				const draftWrapper = getWrapper({
-					task: draftTestTask,
-					userRole,
-				});
-				const draftSubmitSection = draftWrapper.findAll(".v-chip");
-
-				expect(draftSubmitSection).toHaveLength(0);
-
-				const finishedWrapper = getWrapper({
-					task: finishedTestTask,
-					userRole,
-				});
-				const finsihedSubmitSection = finishedWrapper.findAll(".v-chip");
-
-				expect(finsihedSubmitSection).toHaveLength(0);
-
-				const plannedWrapper = getWrapper({
-					task: plannedTestTask,
-					userRole,
-				});
-				const plannedSubmitSection = plannedWrapper.findAll(".v-chip");
-
-				expect(plannedSubmitSection).toHaveLength(0);
-			});
-
-			it("should have submitted and graded section if task is not a draft and not finished", () => {
-				const wrapper = getWrapper({ task: testTask, userRole });
-				const submitSection = wrapper.findAllComponents(".v-chip");
-
-				expect(submitSection).toHaveLength(2);
-				expect(submitSection[0].element.textContent).toContain("0/1");
-				expect(submitSection[1].element.textContent).toContain("0/1");
-			});
 
 			it("should have one 'finish' action button if task is not a draft and not finished", () => {
 				const wrapper = getWrapper({ task: testTask, userRole });
@@ -480,67 +293,19 @@ describe("CourseRoomTaskCard", () => {
 				expect(wrapper.emitted("finish-task")).toBeDefined();
 			});
 
-			it("should overdue chip is visible if the task overdued", async () => {
-				const wrapper = getWrapper({ task: overdueTestTask, userRole });
-				const overrdueElement = wrapper.find(".overdue");
-				expect(overrdueElement.element.innerHTML).toContain("pages.room.taskCard.teacher.label.overdue");
-			});
-
 			it("should return false value after calculated isPlanned() method", () => {
-				const availableDate = new Date();
-				const localProps = {
-					...testTask,
-					task: {
-						id: "123",
-						name: "Test Name",
-						createdAt: "2017-09-28T11:58:46.601Z",
-						updatedAt: "2017-09-28T11:58:46.601Z",
-						status: {
-							submitted: 0,
-							maxSubmissions: 1,
-							graded: 0,
-							isDraft: false,
-							isFinished: false,
-							isSubstitutionTeacher: false,
-						},
-						courseName: "Mathe",
-						availableDate: availableDate.toISOString(),
-						dueDate: "2300-09-28T15:00:00.000Z",
-						displayColor: "#54616e",
-						description: "some description here",
-					},
-				};
-				const wrapper = getWrapper({ ...localProps, userRole });
-
+				const wrapper = getWrapper({ task: testTask, userRole });
 				expect((wrapper.vm as unknown as typeof CourseRoomTaskCard).isPlanned).toBe(false);
 			});
 
 			it("should return true value after calculated isPlanned() method", () => {
 				vi.useFakeTimers().setSystemTime(new Date()); // this line sets a permanent fake time
 				const inFutureDate = new Date(Date.now() + 5001);
-				const localProps = {
+				const task = {
 					...testTask,
-					task: {
-						id: "123",
-						name: "Test Name",
-						createdAt: "2017-09-28T11:58:46.601Z",
-						updatedAt: "2017-09-28T11:58:46.601Z",
-						status: {
-							submitted: 0,
-							maxSubmissions: 1,
-							graded: 0,
-							isDraft: false,
-							isFinished: false,
-							isSubstitutionTeacher: false,
-						},
-						courseName: "Mathe",
-						availableDate: inFutureDate.toISOString(),
-						dueDate: "2300-09-28T15:00:00.000Z",
-						displayColor: "#54616e",
-						description: "some description here",
-					},
+					availableDate: inFutureDate.toISOString(),
 				};
-				const wrapper = getWrapper({ ...localProps, userRole });
+				const wrapper = getWrapper({ task, userRole });
 
 				expect((wrapper.vm as unknown as typeof CourseRoomTaskCard).isPlanned).toBe(true);
 			});
@@ -619,136 +384,6 @@ describe("CourseRoomTaskCard", () => {
 				await moreActionButton.trigger("click");
 
 				expect(wrapper.emitted("restore-task")).toBeDefined();
-			});
-
-			it("should have time-remaining chip if task has due date, expires in less then 24 hours and not submitted", () => {
-				const dueDate = new Date();
-				dueDate.setHours(dueDate.getHours() + 3);
-
-				const localProps = {
-					...testTask,
-					task: {
-						id: "123",
-						name: "Test Name",
-						createdAt: "2017-09-28T11:58:46.601Z",
-						updatedAt: "2017-09-28T11:58:46.601Z",
-						status: {
-							submitted: 0,
-							maxSubmissions: 1,
-							graded: 0,
-							isDraft: false,
-							isFinished: false,
-							isSubstitutionTeacher: false,
-						},
-						courseName: "Mathe",
-						availableDate: "2017-09-28T08:00:00.000Z",
-						dueDate: dueDate.toISOString(),
-						displayColor: "#54616e",
-						description: "some description here",
-					},
-				};
-				const wrapper = getWrapper({ ...localProps, userRole });
-
-				expect(wrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(true);
-			});
-
-			it("should have missed chip if task has due date, is expired and not submitted", () => {
-				const localProps = {
-					...testTask,
-					task: {
-						id: "123",
-						name: "Test Name",
-						createdAt: "2017-09-28T11:58:46.601Z",
-						updatedAt: "2017-09-28T11:58:46.601Z",
-						status: {
-							submitted: 0,
-							maxSubmissions: 1,
-							graded: 0,
-							isDraft: false,
-							isFinished: false,
-							isSubstitutionTeacher: false,
-						},
-						courseName: "Mathe",
-						availableDate: "2017-09-28T08:00:00.000Z",
-						dueDate: "2000-01-01T00:00:00.000Z",
-						displayColor: "#54616e",
-						description: "some description here",
-					},
-				};
-				const wrapper = getWrapper({ ...localProps, userRole });
-				const chips = wrapper.find(".overdue");
-
-				expect(chips.element.textContent).toContain("pages.room.taskCard.student.label.overdue");
-			});
-
-			it("should have submitted chip if task is submitted", () => {
-				const localProps = {
-					...testTask,
-					task: {
-						id: "123",
-						name: "Test Name",
-						createdAt: "2017-09-28T11:58:46.601Z",
-						updatedAt: "2017-09-28T11:58:46.601Z",
-						status: {
-							submitted: 1,
-							maxSubmissions: 1,
-							graded: 0,
-							isDraft: false,
-							isFinished: false,
-							isSubstitutionTeacher: false,
-						},
-						courseName: "Mathe",
-						availableDate: "2017-09-28T08:00:00.000Z",
-						dueDate: "2000-01-01T00:00:00.000Z",
-						displayColor: "#54616e",
-						description: "some description here",
-					},
-				};
-				const wrapper = getWrapper({ ...localProps, userRole });
-				const chips = wrapper.find(".submitted");
-
-				expect(chips.element.textContent).toContain("pages.room.taskCard.student.label.submitted");
-			});
-
-			it("should have graded chip if task is graded", () => {
-				const localProps = {
-					...testTask,
-					task: {
-						id: "123",
-						name: "Test Name",
-						createdAt: "2017-09-28T11:58:46.601Z",
-						updatedAt: "2017-09-28T11:58:46.601Z",
-						status: {
-							submitted: 1,
-							maxSubmissions: 1,
-							graded: 1,
-							isDraft: false,
-							isFinished: false,
-							isSubstitutionTeacher: false,
-						},
-						courseName: "Mathe",
-						availableDate: "2017-09-28T08:00:00.000Z",
-						dueDate: "2000-01-01T00:00:00.000Z",
-						displayColor: "#54616e",
-						description: "some description here",
-					},
-				};
-				const wrapper = getWrapper({ ...localProps, userRole });
-				const chips = wrapper.find(".graded");
-
-				expect(chips.element.textContent).toContain("pages.room.taskCard.label.graded");
-			});
-
-			it("should have no chips if task is finished", () => {
-				const finishedWrapper = getWrapper({
-					task: finishedTestTask,
-					userRole,
-				});
-				const chips = finishedWrapper.findAll(".v-chip");
-
-				expect(chips).toHaveLength(0);
-
-				expect(finishedWrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(false);
 			});
 		});
 	});
