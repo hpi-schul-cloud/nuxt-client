@@ -1,10 +1,9 @@
 import SchoolSettings from "./SchoolSettings.page.vue";
-import { FederalState } from "@/store/types/schools";
 import { createTestEnvStore, maintenanceStatusFactory } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { ConfigResponse, SchulcloudTheme } from "@api-server";
+import { ConfigResponse, FederalStateResponse, SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -21,7 +20,7 @@ describe("SchoolSettingsPage", () => {
 		setActivePinia(createTestingPinia());
 	});
 
-	const mockFederalState: FederalState = {
+	const mockFederalState: FederalStateResponse = {
 		id: "00001234597947823",
 		counties: [
 			{

@@ -839,7 +839,7 @@ describe("SchoolAdminMigrationSection", () => {
 		});
 
 		describe("when clicking switch button", () => {
-			it("should call update in schoolsModule", () => {
+			it("should call updateSchool", () => {
 				const { wrapper, schoolStore } = setup(
 					{ officialSchoolNumber: "12345" },
 					{

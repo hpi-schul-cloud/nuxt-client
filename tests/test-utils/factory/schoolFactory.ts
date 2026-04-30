@@ -1,7 +1,7 @@
 import { mockSchool } from "../mockObjects";
-import { School } from "@/store/types/schools";
+import { SchoolResponse } from "@api-server";
 import { Factory } from "fishery";
 
-export const schoolFactory = Factory.define<School>(() => ({
+export const schoolFactory = Factory.define<SchoolResponse>(() => ({
 	...mockSchool,
 }));

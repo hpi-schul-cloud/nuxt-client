@@ -1,4 +1,5 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { useAppStore } from "@/modules/data/application/application.store";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
 import { mapFeaturesToFeaturesObject } from "@/utils/school-features";
@@ -56,9 +57,9 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 	const hasFeature = (feature: SchoolFeature) => schoolFeatures.value.has(feature);
 
 	// Actions
-	const fetchSchoolDetails = async (schoolId: string) => {
+	const fetchSchoolDetails = async () => {
 		const { result, success, error } = await executeSchoolApi(
-			() => schoolApi.schoolControllerGetSchoolById(schoolId),
+			() => schoolApi.schoolControllerGetSchoolById(useAppStore().school?.id as string),
 			"pages.administration.school.index.error"
 		);
 		if (success) {
@@ -85,7 +86,7 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 		);
 
 		if (success) {
-			await Promise.all([fetchSchoolDetails(schoolDetails.value.id), fetchSchoolSystems(schoolDetails.value.id)]);
+			await Promise.all([fetchSchoolDetails(), fetchSchoolSystems(schoolDetails.value.id)]);
 		}
 	};
 

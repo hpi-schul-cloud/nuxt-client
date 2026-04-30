@@ -11,7 +11,6 @@ import {
 	FILE_PATHS_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
 } from "./utils/inject";
@@ -23,7 +22,6 @@ import {
 	groupModule,
 	importUsersModule,
 	schoolExternalToolsModule,
-	schoolsModule,
 	shareModule,
 	systemsModule,
 	tasksModule,
@@ -74,7 +72,6 @@ app.use(VueDOMPurifyHTML, {
 
 	try {
 		await useAppStore().login();
-		await schoolsModule.fetchSchool();
 	} catch (error) {
 		logger.info("Unhandled error during login", error);
 	}
@@ -94,7 +91,6 @@ app.use(VueDOMPurifyHTML, {
 
 	app.provide(COURSE_ROOM_DETAILS_MODULE_KEY.valueOf(), courseRoomDetailsModule);
 	app.provide(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(), schoolExternalToolsModule);
-	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
 	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
 	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
 	app.provide("tasksModule", tasksModule);

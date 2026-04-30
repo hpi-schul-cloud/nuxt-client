@@ -1,7 +1,6 @@
-import { School } from "@/store/types/schools";
-import { SchoolFeature } from "@api-server";
+import { SchoolResponse } from "@api-server";
 
-export const mockSchool: School = {
+export const mockSchool: SchoolResponse = {
 	id: "mockSchoolId",
 	name: "",
 	logo: {
@@ -34,16 +33,6 @@ export const mockSchool: School = {
 	},
 	purpose: undefined,
 	features: [],
-	featureObject: {
-		[SchoolFeature.VIDEOCONFERENCE]: false,
-		[SchoolFeature.STUDENT_VISIBILITY]: false,
-		[SchoolFeature.LDAP_UNIVENTION_MIGRATION_SCHOOL]: false,
-		[SchoolFeature.SHOW_OUTDATED_USERS]: false,
-		[SchoolFeature.ENABLE_LDAP_SYNC_DURING_MIGRATION]: false,
-		[SchoolFeature.OAUTH_PROVISIONING_ENABLED]: false,
-		[SchoolFeature.NEXTCLOUD]: false,
-		[SchoolFeature.AI_TUTOR]: false,
-	},
 	instanceFeatures: [],
 	permissions: {},
 	inMaintenance: false,

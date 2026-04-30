@@ -62,7 +62,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 		meResponse.value = data;
 		isLoggedIn.value = true;
 
-		await useSchoolStore().fetchSchoolDetails(meResponse.value.school.id);
+		await useSchoolStore().fetchSchoolDetails();
 	};
 
 	const logout = (redirectUrl = "/logout") => {

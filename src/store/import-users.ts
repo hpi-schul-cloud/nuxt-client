@@ -1,5 +1,6 @@
 import { ApiResponseError, ApiValidationError, BusinessError } from "@/store/types/commons";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
 	ImportUserListResponse,
 	ImportUserResponse,
@@ -8,6 +9,7 @@ import {
 	UserImportApiInterface,
 	UserMatchListResponse,
 } from "@api-server";
+import { AxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 export enum MatchedBy {
@@ -231,6 +233,40 @@ export default class ImportUsersModule extends VuexModule {
 				statusCode: apiError.code,
 				message: apiError.message,
 			});
+		}
+	}
+
+	@Action
+	async setSchoolInUserMigration(useCentralLdap = true): Promise<void> {
+		try {
+			await this.importUserApi.importUserControllerStartSchoolInUserMigration(useCentralLdap);
+		} catch (error: unknown) {
+			if (error instanceof AxiosError) {
+				this.setBusinessError(
+					createApplicationError(
+						error.response?.status ?? 500,
+						"pages.administration.school.index.error",
+						error.message
+					)
+				);
+			}
+		}
+	}
+
+	@Action
+	async migrationStartSync(): Promise<void> {
+		try {
+			await this.importUserApi.importUserControllerEndSchoolInMaintenance();
+		} catch (error: unknown) {
+			if (error instanceof AxiosError) {
+				this.setBusinessError(
+					createApplicationError(
+						error.response?.status ?? 500,
+						"pages.administration.school.index.error",
+						error.message
+					)
+				);
+			}
 		}
 	}
 

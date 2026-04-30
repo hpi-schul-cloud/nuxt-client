@@ -7,6 +7,7 @@ import {
 	mockAxiosInstance,
 	newsResponseFactory,
 } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import {
 	NewsApiInterface,
@@ -60,6 +61,8 @@ describe("DashboardPage", () => {
 				preferences: options?.releaseDate ? { releaseDate: options.releaseDate } : undefined,
 				permissions: options?.permissions ?? [],
 			},
+		});
+		createTestSchoolStore({
 			schoolDetails: {
 				inMaintenance: options?.schoolInMaintenance ?? false,
 				inUserMigration: options?.schoolInMigration ?? false,
