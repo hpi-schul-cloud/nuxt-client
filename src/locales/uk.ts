@@ -673,8 +673,15 @@ export default {
 	"components.molecules.import.options.loadingMessage": "Виконується імпорту...",
 	"components.molecules.import.options.success": "{name} успішно імпортовано",
 	"components.molecules.import.options.tableHeader.InfoText": "Наступний вміст не буде імпортовано:",
+	"components.molecules.import.room.label": "Назва кімнати",
+	"components.molecules.import.room.options.title": "Імпортувати кімнату",
+	"components.molecules.import.room.rename": "За потреби назву кімнати можна перейменувати: ",
+	"components.molecules.import.tasks.label": "Завдання",
 	"components.molecules.import.tasks.options.selectCourse": "Оберіть курс",
+	"components.molecules.import.tasks.options.selectCourse.infoText":
+		"Нижче необхідно вибрати курс, до якого слід імпортувати завдання.",
 	"components.molecules.import.tasks.options.title": "Завдання імпорту",
+	"components.molecules.import.tasks.rename": "За потреби назву завдання можна перейменувати: ",
 	"components.molecules.import.tasks.question": "Куди слід імпортувати завдання{title}?",
 	"components.molecules.importUsersMatch.deleteMatch": "Видалити зв'язок",
 	"components.molecules.importUsersMatch.flag": "Позначити обліковий запис",
@@ -707,8 +714,6 @@ export default {
 	"components.molecules.share.courses.mail.body": "Посилання на курс:",
 	"components.molecules.share.roomMemberInvitation.mail.subject": "Запрошення в кімнату",
 	"components.molecules.share.roomMemberInvitation.mail.body": "Посилання на кімнату: ",
-	"components.molecules.share.courses.options.ctlTools.infoText":
-		"Зовнішні інструменти, пов’язані з курсом або посадочними картками, не будуть скопійовані.",
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"Зовнішні інструменти недоступні в цільовій школі",
 	"components.molecules.shareImport.options.ctlTools.infoText.protected":
@@ -931,6 +936,7 @@ export default {
 		"Чи справді курс {courseName} потрібно синхронізувати з групою користувачів {groupName}?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success": "Групу користувачів успішно синхронізовано",
 	"feature-course-sync.startRoomSyncDialog.title": "Почніть синхронізацію",
+	"format.time": "HH:mm",
 	"global.cloudLogo": "Логотип",
 	"global.sidebar.item.addons": "Додаткові компоненти",
 	"global.sidebar.item.calendar": "Календар",
@@ -1433,6 +1439,8 @@ export default {
 	"pages.administration.students.new.success": "Учня успішно створено!",
 	"pages.administration.students.new.title": "Додати учня",
 	"pages.administration.students.table.edit.ariaLabel": "Редагувати учня",
+	"pages.administration.students.table.empty": "Усі вибрані користувачі вже надали згоду.",
+	"pages.administration.students.title": "Аналогова реєстрація",
 	"pages.courseRoomDetails.fab.add.tool": "Додати інструмент",
 	"pages.courseRoomDetails.fab.add.learnContent": "Створюйте контент",
 	"pages.administration.teachers.fab.add": "Створити вчителя",

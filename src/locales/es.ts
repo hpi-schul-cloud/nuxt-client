@@ -674,8 +674,15 @@ export default {
 	"components.molecules.import.options.loadingMessage": "Importación en curso...",
 	"components.molecules.import.options.success": "{name} importado con éxito",
 	"components.molecules.import.options.tableHeader.InfoText": "No se importará el siguiente contenido:",
+	"components.molecules.import.room.label": "Nombre de la sala",
+	"components.molecules.import.room.options.title": "Importar sala",
+	"components.molecules.import.room.rename": "Si es necesario, el nombre de la sala puede cambiarse: ",
+	"components.molecules.import.tasks.label": "Tarea",
 	"components.molecules.import.tasks.options.selectCourse": "Elija el curso",
+	"components.molecules.import.tasks.options.selectCourse.infoText":
+		"A continuación, debe seleccionarse el curso al que se debe importar la tarea.",
 	"components.molecules.import.tasks.options.title": "Importar tarea",
+	"components.molecules.import.tasks.rename": "Si es necesario, el nombre de la tarea puede cambiarse: ",
 	"components.molecules.import.tasks.question": "¿Dónde se debe importar la tarea{title}?",
 	"components.molecules.importUsersMatch.deleteMatch": "Eliminar enlace",
 	"components.molecules.importUsersMatch.flag": "Marcar cuenta",
@@ -708,8 +715,6 @@ export default {
 	"components.molecules.share.courses.mail.body": "Enlace al curso:",
 	"components.molecules.share.roomMemberInvitation.mail.subject": "Invitación a la sala",
 	"components.molecules.share.roomMemberInvitation.mail.body": "Enlace a la Sala: ",
-	"components.molecules.share.courses.options.ctlTools.infoText":
-		"No se copiarán herramientas externas asociadas al curso ni tarjetas de embarque.",
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"Herramientas externas no disponibles en la escuela de destino",
 	"components.molecules.shareImport.options.ctlTools.infoText.protected":
@@ -935,6 +940,7 @@ export default {
 		"¿Debería realmente sincronizarse el curso {courseName} con el grupo de usuarios {groupName}?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success": "Grupo de usuarios sincronizado exitosamente",
 	"feature-course-sync.startRoomSyncDialog.title": "Iniciar sincronización",
+	"format.time": "HH:mm",
 	"global.cloudLogo": "Logo",
 	"global.sidebar.item.addons": "Complementos",
 	"global.sidebar.item.calendar": "Calendario",
@@ -1765,8 +1771,6 @@ export default {
 	"pages.rooms.members.multipleRemove.ariaLabel": "Eliminar varios miembros de la sala",
 	"pages.rooms.members.remove.confirmation": "¿Eliminar {memberFullName} de la sala?",
 	"pages.rooms.members.multipleRemove.confirmation": "¿Eliminar miembros seleccionados de la sala?",
-	"pages.rooms.members.roles.editor": "Editor de salas",
-	"pages.rooms.members.roles.viewer": "Visor de salas",
 	"pages.rooms.members.roomPermissions.admin": "Administrar",
 	"pages.rooms.members.roomPermissions.owner": "Propietario",
 	"pages.rooms.members.roomPermissions.editor": "Editar",

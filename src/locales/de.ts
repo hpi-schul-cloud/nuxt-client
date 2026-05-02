@@ -599,6 +599,7 @@ export default {
 	"components.elementTypeSelection.dialog.title": "Element hinzufügen",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle": "Externe Tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Datei",
+	"components.elementTypeSelection.elements.folderElement": "Dateiordner",
 	"components.elementTypeSelection.elements.folderElement.subtitle": "Dateiordner",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle": "Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
@@ -702,6 +703,7 @@ export default {
 	"components.molecules.export.options.info.point4.sub5": "Merlin Bibliothek",
 	"components.molecules.export.options.info.point4.sub6": "H5P",
 	"components.molecules.import.tasks.options.selectCourse": "Kurs wählen",
+	"components.molecules.import.tasks.options.title": "Aufgabe importieren",
 	"components.molecules.importUsersMatch.deleteMatch": "Verknüpfung löschen",
 	"components.molecules.importUsersMatch.flag": "Konto markieren",
 	"components.molecules.importUsersMatch.notFound": "keine Konten gefunden",
@@ -893,6 +895,7 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectTool": "Tool auswählen...",
 	"feature-board-external-tool-element.placeholder.selectContent": "{toolName} Inhalt auswählen...",
 	"feature-board-file-element.placeholder.uploadFile": "Datei hochladen",
+	"feature-copy.copyInfo.success": "Kopiervorgang für {type} '{name}' erfolgreich gestartet.",
 	"feature-copy.copyInfo.title": "{type} duplizieren",
 	"feature-copy.copyInfo.checkPrivacyAndCopyright": "Bitte die Inhalte auf Urheberrecht und Datenschutz prüfen.",
 	"feature-copy.copyInfo.text.nextStep": "Im nächsten Schritt wird eine Kopie {type} erstellt.",
@@ -941,6 +944,7 @@ export default {
 		"Soll der Kurs {courseName} mit der Nutzendengruppe {groupName} wirklich synchronisiert werden?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success": "Nutzendengruppe erfolgreich synchronisiert",
 	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
+	"format.time": "HH:mm",
 	"global.cloudLogo": "Logo",
 	"global.sidebar.item.addons": "Add-ons",
 	"global.sidebar.item.calendar": "Termine",
@@ -1449,6 +1453,9 @@ export default {
 	"pages.administration.students.new.success": "Schüler:in erfolgreich angelegt!",
 	"pages.administration.students.new.title": "Schüler:in hinzufügen",
 	"pages.administration.students.table.edit.ariaLabel": "Schüler:in bearbeiten",
+	"pages.administration.students.table.empty":
+		"Alle ausgewählten Nutzenden haben bereits eine Einverständniserklärung abgegeben.",
+	"pages.administration.students.title": "Analog registrieren",
 	"pages.administration.teachers.fab.add": "Lehrkraft erstellen",
 	"pages.administration.teachers.fab.import": "Lehrkraft importieren",
 	"pages.administration.teachers.index.remove.confirm.message":
@@ -1648,6 +1655,7 @@ export default {
 	"pages.rooms.invitationLinkStatus.invalidLink": "Der Einladungslink existiert leider nicht",
 	"pages.rooms.invitationLinkStatus.notUsableForCurrentRole":
 		"Der Einladungslink ist leider nicht für diese Schulrolle gültig",
+	"pages.rooms.invitationLinkStatus.onlyForTeachers": "Der Einladungslink ist leider nur für Lehrkräfte gültig",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"Der Einladungslink ist leider nur für Nutzende der Schule “{schoolName}” gültig",
 	"pages.rooms.invitationLinkStatus.confirmationPending":
