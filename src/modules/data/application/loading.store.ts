@@ -1,3 +1,4 @@
+import { withLoadingDelay } from "@/utils/loading-utils";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
@@ -17,16 +18,17 @@ export const useLoadingStore = defineStore("loadingStore", () => {
 	const withLoadingState = async <T>(
 		fn: () => Promise<T>,
 		loadingMessage: string,
-		minDisplayTime = 300
+		minDisplayTime?: number,
+		delay?: number
 	): Promise<T> => {
-		setLoadingState(true, loadingMessage);
-		try {
-			const result = await fn();
-			return result;
-		} finally {
-			await new Promise((resolve) => setTimeout(resolve, minDisplayTime));
-			setLoadingState(false);
-		}
+		const wrappedTask = withLoadingDelay(fn, {
+			delay,
+			minDisplayTime,
+			onStart: () => setLoadingState(true, loadingMessage),
+			onEnd: () => setLoadingState(false),
+		});
+
+		return await wrappedTask();
 	};
 
 	return {
