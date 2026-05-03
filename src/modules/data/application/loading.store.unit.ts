@@ -46,7 +46,7 @@ describe("useLoadingStore", () => {
 			const store = useLoadingStore();
 			const mockFn = vi.fn().mockResolvedValue("test-result");
 
-			const resultPromise = store.withLoadingState(mockFn, "Loading...", 0, 0);
+			const resultPromise = store.withLoadingState(mockFn, "Loading...", { minDisplayTime: 0, delay: 0 });
 
 			await vi.runAllTimersAsync();
 			const result = await resultPromise;
@@ -65,7 +65,7 @@ describe("useLoadingStore", () => {
 					})
 			);
 
-			const resultPromise = store.withLoadingState(mockFn, "Loading...", 0, 0);
+			const resultPromise = store.withLoadingState(mockFn, "Loading...", { minDisplayTime: 0, delay: 0 });
 
 			// Advance by 0ms to fire the delay=0 timer (onStart)
 			await vi.advanceTimersByTimeAsync(0);
@@ -80,7 +80,7 @@ describe("useLoadingStore", () => {
 			const store = useLoadingStore();
 			const mockFn = vi.fn().mockResolvedValue("result");
 
-			const resultPromise = store.withLoadingState(mockFn, "Loading...", 0, 0);
+			const resultPromise = store.withLoadingState(mockFn, "Loading...", { minDisplayTime: 0, delay: 0 });
 
 			await vi.runAllTimersAsync();
 			await resultPromise;
@@ -95,7 +95,7 @@ describe("useLoadingStore", () => {
 				.fn()
 				.mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("result"), 100)));
 
-			const resultPromise = store.withLoadingState(mockFn, "Loading...", 500, 0);
+			const resultPromise = store.withLoadingState(mockFn, "Loading...", { minDisplayTime: 500, delay: 0 });
 
 			// Start loading immediately due to delay=0
 			await vi.advanceTimersByTimeAsync(0);
@@ -118,7 +118,7 @@ describe("useLoadingStore", () => {
 				.fn()
 				.mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("result"), 1000)));
 
-			const resultPromise = store.withLoadingState(mockFn, "Loading...", 500, 200);
+			const resultPromise = store.withLoadingState(mockFn, "Loading...", { minDisplayTime: 500, delay: 200 });
 
 			// Before delay, loading should be false
 			await vi.advanceTimersByTimeAsync(199);
@@ -137,7 +137,7 @@ describe("useLoadingStore", () => {
 			const store = useLoadingStore();
 			const mockFn = vi.fn().mockResolvedValue("result");
 
-			const resultPromise = store.withLoadingState(mockFn, "Loading...", 500, 200);
+			const resultPromise = store.withLoadingState(mockFn, "Loading...", { minDisplayTime: 500, delay: 200 });
 
 			// Function completes before delay
 			await vi.advanceTimersByTimeAsync(100);

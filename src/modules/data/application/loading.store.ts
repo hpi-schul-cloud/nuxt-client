@@ -1,3 +1,5 @@
+import { AsyncFunction } from "@/types/async.types";
+import { WithLoadingStateOptions } from "@/types/loading.types";
 import { withLoadingDelay } from "@/utils/loading-utils";
 import { defineStore } from "pinia";
 import { ref } from "vue";
@@ -15,20 +17,19 @@ export const useLoadingStore = defineStore("loadingStore", () => {
 		isLoading.value = value;
 	}
 
-	const withLoadingState = async <T>(
-		fn: () => Promise<T>,
+	const withLoadingState = <T>(
+		fn: AsyncFunction<T>,
 		loadingMessage: string,
-		minDisplayTime?: number,
-		delay?: number
+		params: WithLoadingStateOptions = {}
 	): Promise<T> => {
-		const wrappedTask = withLoadingDelay(fn, {
+		const { delay, minDisplayTime } = params;
+
+		return withLoadingDelay(fn, {
 			delay,
 			minDisplayTime,
 			onStart: () => setLoadingState(true, loadingMessage),
 			onEnd: () => setLoadingState(false),
 		});
-
-		return await wrappedTask();
 	};
 
 	return {
