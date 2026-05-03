@@ -7,7 +7,7 @@ export type LoadingDelayParams = {
 	minDisplayTime?: number;
 };
 
-export const withLoadingDelay = async <T>(fn: AsyncFunction<T>, params: LoadingDelayParams): Promise<T> => {
+export const withDebouncedLoading = async <T>(fn: AsyncFunction<T>, params: LoadingDelayParams): Promise<T> => {
 	const { onStart, onEnd, delay = 200, minDisplayTime = 500 } = params;
 
 	let isShowingLoading = false;

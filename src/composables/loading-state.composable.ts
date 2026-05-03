@@ -1,6 +1,6 @@
 import { AsyncFunction } from "@/types/async.types";
 import { WithLoadingStateOptions } from "@/types/loading.types";
-import { withLoadingDelay } from "@/utils/loading-utils";
+import { withDebouncedLoading } from "@/utils/loading-utils";
 import { readonly, ref } from "vue";
 
 export const useLoadingState = (options: WithLoadingStateOptions = {}) => {
@@ -8,7 +8,7 @@ export const useLoadingState = (options: WithLoadingStateOptions = {}) => {
 	const { delay, minDisplayTime } = options;
 
 	const withLoadingState = <T>(fn: AsyncFunction<T>, overrides?: WithLoadingStateOptions) =>
-		withLoadingDelay(fn, {
+		withDebouncedLoading(fn, {
 			delay: overrides?.delay ?? delay,
 			minDisplayTime: overrides?.minDisplayTime ?? minDisplayTime,
 			onStart: () => (isLoading.value = true),
