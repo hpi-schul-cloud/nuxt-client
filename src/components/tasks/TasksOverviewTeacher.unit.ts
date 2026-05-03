@@ -7,8 +7,9 @@ import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStoreWithRole, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { RoleName, ShareTokenBodyParamsParentType } from "@api-server";
+import { CopyApiResponseStatus, CopyApiResponseType, RoleName, ShareTokenBodyParamsParentType } from "@api-server";
 import { useTasksOfOverview } from "@data-tasks";
+import { useCopyFlow } from "@feature-copy";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -16,10 +17,12 @@ import { Mocked } from "vitest";
 import { computed, ref } from "vue";
 
 vi.mock("@data-tasks");
+vi.mock("@feature-copy/copy-flow.composable");
 
 describe("TasksOverviewTeacher", () => {
 	let shareModuleMock: ShareModule;
 	let useTasksOfOverviewMock: Mocked<ReturnType<typeof useTasksOfOverview>>;
+	let useCopyFlowMock: Mocked<ReturnType<typeof useCopyFlow>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -37,6 +40,13 @@ describe("TasksOverviewTeacher", () => {
 			isLoadingFinishedTasks: computed(() => false),
 		});
 		vi.mocked(useTasksOfOverview).mockReturnValue(useTasksOfOverviewMock);
+
+		useCopyFlowMock = mockComposable(useCopyFlow, {
+			isDialogOpen: ref(false),
+			copyItemType: ref(ContentItemTypeEnum.Task),
+			isRunning: computed(() => false),
+		});
+		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
 	});
 
 	afterEach(() => {
@@ -71,6 +81,14 @@ describe("TasksOverviewTeacher", () => {
 	});
 
 	describe("Copy Task", () => {
+		beforeEach(() => {
+			useCopyFlowMock.executeCopyTask.mockResolvedValue({
+				success: true,
+				result: { id: "copied-id", type: CopyApiResponseType.TASK, status: CopyApiResponseStatus.SUCCESS },
+				error: undefined,
+			});
+		});
+
 		it("should call copy when copy-task event is emitted", async () => {
 			const wrapper = mountComponent();
 			const payload: CopyParams = {
@@ -80,11 +98,10 @@ describe("TasksOverviewTeacher", () => {
 			};
 
 			const pane = wrapper.findComponent(TasksOverviewPane);
-			await pane.vm.$emit("copy-task", payload);
+			pane.vm.$emit("copy-task", payload);
 			await flushPromises();
 
-			// useCopy is used internally, which calls copyModule.copy
-			// expect(copyModuleMock.copy).toHaveBeenCalled();
+			expect(useCopyFlowMock.executeCopyTask).toHaveBeenCalledWith(payload.id, payload.courseId);
 		});
 
 		it("should fetch tasks after copy", async () => {

@@ -6,6 +6,7 @@ import * as serverApi from "@api-server";
 import { CopyApiResponse, CopyApiResponseStatus, CopyApiResponseType } from "@api-server";
 import { useLoadingStore, useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
+import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 
@@ -147,6 +148,7 @@ describe("useCopyFlow", () => {
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApi);
 
 		withLoadingStateSpy = vi.spyOn(useLoadingStore(), "withLoadingState").mockImplementation(async (fn) => fn());
+		vi.spyOn(logger, "error").mockImplementation(vi.fn());
 	});
 
 	afterEach(() => {
@@ -273,6 +275,12 @@ describe("useCopyFlow", () => {
 					const { success, error: returnedError } = await resultPromise;
 					expect(success).toBe(false);
 					expect(returnedError).toBe(error);
+				});
+
+				it("should log the error", async () => {
+					const { resultPromise, error } = setup();
+					await resultPromise;
+					expect(logger.error).toHaveBeenCalledWith(error);
 				});
 
 				it("should show an error notification", async () => {
