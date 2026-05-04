@@ -1,4 +1,4 @@
-import { SchoolExternalToolMetadata } from "@/store/external-tool";
+import { SchoolExternalToolMetadata } from "@data-external-tool";
 import { Factory } from "fishery";
 
 export const schoolExternalToolMetadataFactory: Factory<SchoolExternalToolMetadata> =
