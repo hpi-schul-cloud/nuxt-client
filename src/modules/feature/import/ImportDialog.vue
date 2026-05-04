@@ -40,7 +40,7 @@
 					:label="selectionLabel"
 					:placeholder="selectionPlaceholder"
 					:rules="[rules.required]"
-					:error="hasSelectStep && !isSelectedDestinationValid"
+					eager-validation
 					:hint="selectionHint"
 					persistent-hint
 					data-testId="import-destination-select"
@@ -91,27 +91,34 @@ const isDialogOpen = defineModel("is-dialog-open", {
 	default: false,
 });
 
+const hasSelectStep = computed(
+	() =>
+		props.shareTokenInfo.parentType === ShareTokenInfoResponseParentType.LESSONS ||
+		props.shareTokenInfo.parentType === ShareTokenInfoResponseParentType.TASKS ||
+		props.shareTokenInfo.parentType === ShareTokenInfoResponseParentType.COLUMN_BOARD
+);
 type StepType = "select" | "rename";
-const activeStep = ref<StepType>("select");
+const steps: StepType[] = hasSelectStep.value ? ["select", "rename"] : ["rename"];
+const stepIndex = ref(0);
+const activeStep = computed(() => steps[stepIndex.value]);
+const isLastStep = computed(() => stepIndex.value === steps.length - 1);
 
+// form data
 const selectedDestinationId = ref<string>();
-
 const nameInput = ref<string | undefined>(undefined);
-
 const newName = computed({
 	get: () => nameInput.value ?? props.shareTokenInfo.parentName ?? "",
 	set: (value) => (nameInput.value = value),
 });
 
 const resetDialog = () => {
+	stepIndex.value = 0;
 	selectedDestinationId.value = undefined;
 	nameInput.value = undefined;
 };
 
 const rules = reactive({ required: isRequired(), validateOnOpeningTag });
-
 const isSelectedDestinationValid = computed(() => !!selectedDestinationId.value);
-
 const isNewNameValid = computed(
 	() => rules.required(newName.value) === true && rules.validateOnOpeningTag(newName.value) === true
 );
@@ -129,9 +136,8 @@ const isActiveStepValid = computed(() => {
 });
 
 const onConfirm = () => {
-	// has next step? => goto next step
-	if (activeStep.value === "select") {
-		activeStep.value = "rename";
+	if (!isLastStep.value) {
+		stepIndex.value += 1;
 		return;
 	}
 
@@ -151,26 +157,15 @@ const currentStepTitle = computed(() =>
 	t(`components.molecules.import.${props.shareTokenInfo.parentType}.options.title`)
 );
 
-const selectionLabel = computed(() => {
-	if (!hasSelectStep.value) return "";
+const selectionLabel = computed(() =>
+	t(props.destinationType === "room" ? "components.molecules.label.room" : "components.molecules.label.course")
+);
 
-	return t(props.destinationType === "room" ? "components.molecules.label.room" : "components.molecules.label.course");
-});
-
-const selectionPlaceholder = computed(() => {
-	if (!hasSelectStep.value) return "";
-
-	return t(props.destinationType === "room" ? "common.labels.room" : "common.labels.course");
-});
+const selectionPlaceholder = computed(() =>
+	t(props.destinationType === "room" ? "common.labels.room" : "common.labels.course")
+);
 
 const selectionHint = computed(() => t(`common.labels.${props.destinationType}`));
-
-const hasSelectStep = computed(
-	() =>
-		props.shareTokenInfo.parentType === ShareTokenInfoResponseParentType.LESSONS ||
-		props.shareTokenInfo.parentType === ShareTokenInfoResponseParentType.TASKS ||
-		props.shareTokenInfo.parentType === ShareTokenInfoResponseParentType.COLUMN_BOARD
-);
 
 const confirmBtnLangKey = computed(() => {
 	if (activeStep.value === "select") {
@@ -181,7 +176,6 @@ const confirmBtnLangKey = computed(() => {
 });
 
 const contentItemType = computed(() => mapShareTokenParentTypeToContentItemType(props.shareTokenInfo.parentType));
-
 const { text, warnings } = useCopyContent(contentItemType);
 
 const destinationQuestion = computed(() => {
@@ -195,7 +189,7 @@ watch(
 	isDialogOpen,
 	(isOpen) => {
 		if (isOpen) {
-			activeStep.value = hasSelectStep.value ? "select" : "rename";
+			stepIndex.value = 0;
 		}
 	},
 	{ immediate: true }
