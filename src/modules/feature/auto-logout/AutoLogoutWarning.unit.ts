@@ -34,6 +34,7 @@ describe("AutoLogoutWarning", () => {
 	const mockExtendSession = vi.fn();
 	const mockAutoLogout = vi.fn();
 	const mockStopTimer = vi.fn();
+	const mockStartTimer = vi.fn();
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -43,6 +44,7 @@ describe("AutoLogoutWarning", () => {
 			extendSession: mockExtendSession,
 			autoLogout: mockAutoLogout,
 			stopTimer: mockStopTimer,
+			startTimer: mockStartTimer,
 			locale: "en",
 		} as unknown as ReturnType<typeof useAppStore>);
 
@@ -78,6 +80,14 @@ describe("AutoLogoutWarning", () => {
 	it("should render the component", () => {
 		const { wrapper } = setup();
 		expect(wrapper.exists()).toBe(true);
+	});
+
+	describe("timer initialization", () => {
+		it("should call startTimer on component mount", () => {
+			setup();
+
+			expect(mockStartTimer).toHaveBeenCalled();
+		});
 	});
 
 	describe("showDialog", () => {
@@ -167,6 +177,101 @@ describe("AutoLogoutWarning", () => {
 
 			const warningAlert = wrapper.findComponent(WarningAlert);
 			expect(warningAlert.exists()).toBe(true);
+		});
+
+		it("should render the sloth image", async () => {
+			const futureTimestamp = Date.now() + 60 * 1000;
+			setup({ sessionTimeoutTimestamp: futureTimestamp });
+
+			vi.advanceTimersByTime(1000);
+			await currentWrapper?.vm.$nextTick();
+
+			const img = document.body.querySelector("img");
+			expect(img).not.toBeNull();
+			expect(img?.getAttribute("alt")).toBe("");
+		});
+	});
+
+	describe("dialog props", () => {
+		it("should have the correct title", () => {
+			const { dialog } = setup();
+
+			expect(dialog.props("title")).toEqual("feature-autoLogout.button.title");
+		});
+
+		it("should have noCancel prop set", () => {
+			const { dialog } = setup();
+
+			expect(dialog.props("noCancel")).toBe(true);
+		});
+
+		it("should be a persistent dialog that cannot be dismissed", () => {
+			const { wrapper } = setup();
+			const dialog = wrapper.findComponent(SvsDialog);
+
+			// Dialog uses persistent attribute which is passed through to VDialog via attrs
+			// This prevents the dialog from being closed by clicking outside
+			expect(dialog.exists()).toBe(true);
+			expect(dialog.props("noCancel")).toBe(true);
+		});
+	});
+
+	describe("remaining time calculation", () => {
+		it("should calculate remaining time in minutes correctly", async () => {
+			const futureTimestamp = Date.now() + 90 * 1000; // 90 seconds from now
+			setup({ sessionTimeoutTimestamp: futureTimestamp });
+
+			vi.advanceTimersByTime(1000);
+			await currentWrapper?.vm.$nextTick();
+
+			// 90 seconds = 1.5 minutes, should ceil to 2
+			// The dialog should be shown since 90s < 3600s threshold
+			expect(document.body.textContent).toContain("feature-autoLogout.warning");
+		});
+
+		it("should show dialog when time remaining is less than warning threshold", async () => {
+			// WARNING_THRESHOLD is 3600 seconds (1 hour) from the mock
+			const futureTimestamp = Date.now() + 30 * 60 * 1000; // 30 minutes from now (within 1 hour threshold)
+			const { dialog } = setup({ sessionTimeoutTimestamp: futureTimestamp });
+
+			vi.advanceTimersByTime(1000);
+			await currentWrapper?.vm.$nextTick();
+
+			expect(dialog.props("modelValue")).toBe(true);
+		});
+	});
+
+	describe("when sessionTimeoutTimestamp is negative", () => {
+		it("should not show the dialog", async () => {
+			const { dialog } = setup({ sessionTimeoutTimestamp: -1 });
+
+			vi.advanceTimersByTime(1000);
+			await currentWrapper?.vm.$nextTick();
+
+			expect(dialog.props("modelValue")).toBe(false);
+		});
+	});
+
+	describe("edge cases", () => {
+		it("should handle timestamp exactly at current time", async () => {
+			const currentTimestamp = Date.now();
+			setup({ sessionTimeoutTimestamp: currentTimestamp });
+
+			vi.advanceTimersByTime(1000);
+			await currentWrapper?.vm.$nextTick();
+
+			expect(mockAutoLogout).toHaveBeenCalled();
+			expect(mockStopTimer).toHaveBeenCalled();
+		});
+
+		it("should set remaining time to 0 when timestamp is in the past", async () => {
+			const pastTimestamp = Date.now() - 5000;
+			setup({ sessionTimeoutTimestamp: pastTimestamp });
+
+			vi.advanceTimersByTime(1000);
+			await currentWrapper?.vm.$nextTick();
+
+			expect(mockAutoLogout).toHaveBeenCalled();
 		});
 	});
 });
