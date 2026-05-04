@@ -936,7 +936,6 @@ export default {
 		"Чи справді курс {courseName} потрібно синхронізувати з групою користувачів {groupName}?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success": "Групу користувачів успішно синхронізовано",
 	"feature-course-sync.startRoomSyncDialog.title": "Почніть синхронізацію",
-	"format.time": "HH:mm",
 	"global.cloudLogo": "Логотип",
 	"global.sidebar.item.addons": "Додаткові компоненти",
 	"global.sidebar.item.calendar": "Календар",

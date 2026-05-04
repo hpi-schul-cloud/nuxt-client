@@ -940,7 +940,6 @@ export default {
 		"¿Debería realmente sincronizarse el curso {courseName} con el grupo de usuarios {groupName}?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success": "Grupo de usuarios sincronizado exitosamente",
 	"feature-course-sync.startRoomSyncDialog.title": "Iniciar sincronización",
-	"format.time": "HH:mm",
 	"global.cloudLogo": "Logo",
 	"global.sidebar.item.addons": "Complementos",
 	"global.sidebar.item.calendar": "Calendario",
