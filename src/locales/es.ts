@@ -447,7 +447,7 @@ export default {
 	"components.board.action.moveUp": "Levantar",
 	"components.board.action.changeLayout": "Cambiar vista",
 	"components.board.action.shareLink.card": "Copiar enlace a la tarjeta",
-	"components.board.column.defaultTitle": "Título de la columna",
+	"components.board.column.defaultTitle": "Columna",
 	"components.board.column.ghost.column.placeholder": "Añadir columna",
 	"components.board.column.ghost.list.placeholder": "Añadir sección",
 	"components.board.draftChip.tooltip": "Sólo visible para los profesores",

@@ -438,7 +438,7 @@ export default {
 	"components.board.action.moveUp": "Move up",
 	"components.board.action.changeLayout": "Change layout",
 	"components.board.action.shareLink.card": "Copy link to card",
-	"components.board.column.defaultTitle": "Column title",
+	"components.board.column.defaultTitle": "Column",
 	"components.board.column.ghost.column.placeholder": "Add column",
 	"components.board.column.ghost.list.placeholder": "Add section",
 	"components.board.draftChip.tooltip": "Only visible to teachers",

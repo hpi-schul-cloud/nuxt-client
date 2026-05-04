@@ -449,7 +449,7 @@ export default {
 	"components.board.action.moveUp": "Рухатися вгору",
 	"components.board.action.changeLayout": "Змінити вигляд",
 	"components.board.action.shareLink.card": "Скопіювати посилання на Карту",
-	"components.board.column.defaultTitle": "Назва стовпця",
+	"components.board.column.defaultTitle": "Столбець",
 	"components.board.column.ghost.column.placeholder": "Додати стовпець",
 	"components.board.column.ghost.list.placeholder": "Додати розділ",
 	"components.board.draftChip.tooltip": "Видно лише вчителям",
