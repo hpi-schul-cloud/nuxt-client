@@ -37,7 +37,7 @@
 				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</VideoConferenceContentElementDisplay>
-		<VideoConferenceContentElementCreate v-if="isCreating" @create:title="onCreateTitle">
+		<VideoConferenceContentElementCreate v-if="isCreating" :is-detail-view="isDetailView" @create:title="onCreateTitle">
 			<BoardMenu
 				:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 				has-background
