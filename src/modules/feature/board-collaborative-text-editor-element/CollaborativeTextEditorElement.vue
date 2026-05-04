@@ -61,6 +61,7 @@ const props = defineProps({
 	columnIndex: { type: Number, required: true },
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
+	isDetailView: { type: Boolean, required: false },
 });
 
 const emit = defineEmits(["delete:element", "move-down:edit", "move-up:edit", "move-keyboard:edit"]);
@@ -101,7 +102,7 @@ const onMoveDown = () => emit("move-down:edit");
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
-const isSmallOrLargerListBoard = computed(() => smAndUp.value && isListLayout.value);
+const isSmallOrLargerListBoard = computed(() => smAndUp.value && (isListLayout.value || props.isDetailView));
 </script>
 
 <style scoped lang="scss">

@@ -58,6 +58,13 @@ type VuetifyFormApi = {
 	resetValidation: () => void;
 };
 
+const props = defineProps({
+	isDetailView: {
+		type: Boolean,
+		required: false,
+	},
+});
+
 const emit = defineEmits(["create:title"]);
 
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
@@ -90,7 +97,7 @@ const onKeydown = (e: KeyboardEvent) => {
 	}
 };
 
-const isRenderedAsList = computed(() => smAndUp.value && isListLayout.value);
+const isRenderedAsList = computed(() => smAndUp.value && (isListLayout.value || props.isDetailView));
 </script>
 
 <style scoped>

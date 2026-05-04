@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<template v-if="boardStore.isLoading === false && board">
+			<CardHostDetailView v-if="cardId" :key="cardId" :card-id="cardId" @close:detail-view="onCloseDetailView" />
 			<DefaultWireframe
 				ref="main"
 				:breadcrumbs="breadcrumbs"
@@ -135,6 +136,7 @@
 </template>
 
 <script setup lang="ts">
+import CardHostDetailView from "../card/CardHostDetailView.vue";
 import MoveCardDialog from "../card/MoveCardDialog.vue";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
@@ -206,6 +208,13 @@ const route = useRoute();
 useBodyScrolling();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
+const cardId = computed(() => {
+	if (route.params.cardId) {
+		return route.params.cardId as string;
+	}
+	return undefined;
+});
+
 const isEditableChipVisible = computed(() => board.value?.readersCanEdit ?? false);
 const hasReadersEditPermission = ref(false);
 const moveCardOptions = ref<{ isDialogOpen: boolean; cardId: string }>({
@@ -498,6 +507,13 @@ const onSaveEditBoardSettings = async (isEditableForEveryone: boolean) => {
 
 const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
 	cardStore.createFileElementWithCollabora(payload.type, payload.fileName);
+};
+
+const onCloseDetailView = () => {
+	router.replace({
+		name: "boards-id",
+		params: { id: props.boardId },
+	});
 };
 </script>
 
