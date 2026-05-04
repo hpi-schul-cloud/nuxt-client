@@ -201,10 +201,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board.value.columns?.splice(columnIndex + 1, 0, duplicatedColumnSkeleton);
 
 		if (payload.isOwnAction === true) {
+			notifySuccess("components.board.notifications.success.columnDuplicated");
 			if (hasRelevantContentForDuplicationWarning(duplicatedColumn)) {
-				notifyInfo("components.board.notifications.info.columnDuplicated");
-			} else {
-				notifySuccess("components.board.notifications.success.columnDuplicated");
+				notifyInfo("components.board.notifications.info.cardDuplicated");
 			}
 		}
 	};

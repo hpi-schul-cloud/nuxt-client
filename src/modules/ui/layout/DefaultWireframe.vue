@@ -31,6 +31,7 @@
 				'main-pb-96': mainWithBottomPadding,
 				'pa-0': mainWithoutPadding,
 				'container-short-width': maxWidth === 'short',
+				'container-limited-width': maxWidth === 'limited',
 				'container-full-width': maxWidth === 'full',
 				'main-content-flex': isFlexContainer,
 			}"
@@ -59,7 +60,7 @@ const props = defineProps({
 		default: null,
 	},
 	maxWidth: {
-		type: String as PropType<"full" | "short" | "native">,
+		type: String as PropType<"full" | "short" | "native" | "limited">,
 		required: true,
 	},
 	fabItems: {
@@ -140,6 +141,10 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 
 .container-short-width {
 	max-width: var(--content-max-width);
+}
+
+.container-limited-width {
+	max-width: var(--content-limited-width);
 }
 
 .container-full-width {
