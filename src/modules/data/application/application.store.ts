@@ -83,55 +83,9 @@ export const useAppStore = defineStore("applicationStore", () => {
 		globalThis.location.replace(redirectUrl);
 	};
 
-	const startTimer = () => {
-		const { JWT_TIMEOUT_SECONDS } = useEnvConfig().value;
-		const timeInSeconds = JWT_TIMEOUT_SECONDS ?? DEFAULT_TIMEOUT_SECONDS;
-		postTimerSeconds(timeInSeconds);
-		setTimerSeconds(timeInSeconds);
-	};
+	const externalLogout = () => logout("/logout/external");
 
-	const stopTimer = () => {
-		sessionTimeoutTimestamp.value = null;
-	};
-
-	const setTimerSeconds = (seconds: number) => {
-		sessionTimeoutTimestamp.value = Date.now() + seconds * 1000;
-	};
-
-	const postTimerSeconds = (seconds: number) => {
-		post(`${BROADCAST_MESSAGE_TIME_UPDATED}:${seconds}`);
-	};
-
-	// startTimer when config was loaded
-	watchOnce(() => useEnvConfig().value.JWT_TIMEOUT_SECONDS, startTimer);
-
-	const broadcastChannel = new BroadcastChannel(BROADCAST_CHANNEL_NAME);
-
-	broadcastChannel.onmessage = (event) => {
-		const message = event.data;
-
-		if (message === BROADCAST_MESSAGE_LOGOUT) {
-			logoutWithoutBroadcast("/logout?auto-logout=true");
-			return;
-		}
-
-		if (message.match(new RegExp(`^${BROADCAST_MESSAGE_TIME_UPDATED}`))) {
-			const time = message.split(":").at(1) ?? "";
-			const timeInSeconds = Number.parseInt(time, 10);
-			if (!Number.isNaN(timeInSeconds)) {
-				setTimerSeconds(timeInSeconds);
-			}
-			return;
-		}
-	};
-
-	const post = (message: string) => {
-		broadcastChannel.postMessage(message);
-	};
-
-	const close = () => {
-		broadcastChannel.close();
-	};
+	const autoLogout = () => logout("/logout?auto-logout=true");
 
 	const extendSession = async () => {
 		try {
@@ -157,10 +111,6 @@ export const useAppStore = defineStore("applicationStore", () => {
 		delete $axios.defaults.headers.common["Authorization"];
 	};
 
-	const externalLogout = () => logout("/logout/external");
-
-	const autoLogout = () => logout("/logout?auto-logout=true");
-
 	const updateUserLanguage = (language: LanguageType) =>
 		userApi
 			.userControllerChangeLanguage({ language })
@@ -171,6 +121,59 @@ export const useAppStore = defineStore("applicationStore", () => {
 				}
 			})
 			.catch(logger.error);
+
+	// session-timer
+
+	const startTimer = () => {
+		const { JWT_TIMEOUT_SECONDS } = useEnvConfig().value;
+		const timeInSeconds = JWT_TIMEOUT_SECONDS ?? DEFAULT_TIMEOUT_SECONDS;
+		postTimerSeconds(timeInSeconds);
+		setTimerSeconds(timeInSeconds);
+	};
+
+	const stopTimer = () => {
+		sessionTimeoutTimestamp.value = null;
+	};
+
+	const setTimerSeconds = (seconds: number) => {
+		sessionTimeoutTimestamp.value = Date.now() + seconds * 1000;
+	};
+
+	const postTimerSeconds = (seconds: number) => {
+		post(`${BROADCAST_MESSAGE_TIME_UPDATED}:${seconds}`);
+	};
+
+	// startTimer when config was loaded
+	watchOnce(() => useEnvConfig().value.JWT_TIMEOUT_SECONDS, startTimer);
+
+	// session-state synchronization (across tabs and with schulcloud-client)
+
+	const broadcastChannel = new BroadcastChannel(BROADCAST_CHANNEL_NAME);
+
+	broadcastChannel.onmessage = (event) => {
+		const message = event.data;
+
+		if (message === BROADCAST_MESSAGE_LOGOUT) {
+			logoutWithoutBroadcast("/logout?auto-logout=true");
+			return;
+		}
+
+		if (message.match(new RegExp(`^${BROADCAST_MESSAGE_TIME_UPDATED}`))) {
+			const time = message.split(":").at(1) ?? "";
+			const timeInSeconds = Number.parseInt(time, 10);
+			if (!Number.isNaN(timeInSeconds)) {
+				setTimerSeconds(timeInSeconds);
+			}
+		}
+	};
+
+	const post = (message: string) => {
+		broadcastChannel.postMessage(message);
+	};
+
+	const close = () => {
+		broadcastChannel.close();
+	};
 
 	const handleApplicationError = (status: HttpStatusCode, translationKeyOrText?: string) => {
 		if (translationKeyOrText) {
@@ -211,11 +214,6 @@ export const useAppStore = defineStore("applicationStore", () => {
 					};
 					break;
 				case HttpStatusCode.InternalServerError:
-					applicationError.value = {
-						status,
-						translationKeyOrText: "error.generic",
-					};
-					break;
 				default:
 					applicationError.value = {
 						status,
