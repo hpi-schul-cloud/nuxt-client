@@ -19,6 +19,7 @@
 			:title="computedElement.content.title"
 			:has-participation-permission="hasParticipationPermission"
 			:is-video-conference-enabled="isVideoConferenceEnabled"
+			:is-detail-view="isDetailView"
 			:can-start="canStart"
 			:can-join="canJoin"
 			:is-running="isConferenceRunning"
@@ -36,7 +37,7 @@
 				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</VideoConferenceContentElementDisplay>
-		<VideoConferenceContentElementCreate v-if="isCreating" @create:title="onCreateTitle">
+		<VideoConferenceContentElementCreate v-if="isCreating" :is-detail-view="isDetailView" @create:title="onCreateTitle">
 			<BoardMenu
 				:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 				has-background
@@ -97,6 +98,7 @@ const props = defineProps({
 	columnIndex: { type: Number, required: true },
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
+	isDetailView: { type: Boolean, required: false },
 });
 
 const emit = defineEmits(["delete:element", "move-down:edit", "move-up:edit", "move-keyboard:edit"]);
