@@ -5,11 +5,10 @@ import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import { useCopy } from "@/composables/copy";
 import CopyModule from "@/store/copy";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
 import ShareModule from "@/store/share";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import { COPY_MODULE_KEY, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -144,14 +143,10 @@ describe("Board", () => {
 		});
 
 		const shareModule = createModuleMocks(ShareModule);
-
-		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule);
 		return {
 			copyModule,
 			shareModule,
-
 			copyResultId,
-			schoolExternalToolsModule,
 		};
 	};
 
@@ -162,7 +157,7 @@ describe("Board", () => {
 		envs?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
 	}) => {
-		const { copyModule, shareModule, copyResultId, schoolExternalToolsModule } = setupProvideModules();
+		const { copyModule, shareModule, copyResultId } = setupProvideModules();
 
 		setActivePinia(createTestingPinia());
 
@@ -197,8 +192,6 @@ describe("Board", () => {
 				provide: {
 					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
-
-					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
 				},
 				stubs: {
 					ShareModal: true,

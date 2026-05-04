@@ -5,21 +5,8 @@ import store from "./plugins/store";
 import { createVuetifyPlugin } from "./plugins/vuetify";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
-import {
-	COPY_MODULE_KEY,
-	FILE_PATHS_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-	SCHOOLS_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "./utils/inject";
-import {
-	copyModule,
-	filePathsModule,
-	importUsersModule,
-	schoolExternalToolsModule,
-	schoolsModule,
-	shareModule,
-} from "@/store";
+import { COPY_MODULE_KEY, FILE_PATHS_MODULE_KEY, SCHOOLS_MODULE_KEY, SHARE_MODULE_KEY } from "./utils/inject";
+import { copyModule, filePathsModule, importUsersModule, schoolsModule, shareModule } from "@/store";
 import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
@@ -82,7 +69,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(FILE_PATHS_MODULE_KEY, filePathsModule);
 	app.provide("importUsersModule", importUsersModule);
 
-	app.provide(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(), schoolExternalToolsModule);
 	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
 	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
 
