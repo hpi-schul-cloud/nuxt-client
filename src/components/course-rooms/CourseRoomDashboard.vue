@@ -178,6 +178,7 @@ import {
 } from "@api-server";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { useEnvConfig } from "@data-env";
+import { useTaskActions } from "@data-tasks";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import { storeToRefs } from "pinia";

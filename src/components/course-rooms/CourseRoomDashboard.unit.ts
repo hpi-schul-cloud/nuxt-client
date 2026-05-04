@@ -22,6 +22,8 @@ import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import draggable from "vuedraggable";
 import { VCard } from "vuetify/components";
 
+vi.mock("@data-tasks");
+
 const mockData = {
 	roomId: "123",
 	title: "Sample Course",
@@ -152,6 +154,8 @@ const setup = (options?: { roomData?: SingleColumnBoardResponse; role?: string }
 };
 
 describe("CourseRoomDashboard.vue", () => {
+	let useTaskActionsMock: Mocked<ReturnType<typeof useTaskActions>>;
+
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestEnvStore({
