@@ -42,6 +42,7 @@ export * from './collaborative-text-editor-response';
 export * from './collapsable-body-params';
 export * from './color-body-params';
 export * from './colors';
+export * from './column-full-response';
 export * from './column-response';
 export * from './complete-registration-body-params';
 export * from './component-etherpad-props-impl';
