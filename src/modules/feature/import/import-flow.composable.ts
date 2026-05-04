@@ -11,13 +11,13 @@ import { useI18n } from "vue-i18n";
 export const useImportFlow = () => {
 	const shareApi = ShareTokenApiFactory(undefined, "/v3", $axios);
 	const { execute } = useSafeAxiosTask();
-	const importAction = useAwaitableAction<{ newName: string; destination?: ImportDestination }>();
+	const importDialogAction = useAwaitableAction<{ newName: string; destination?: ImportDestination }>();
 	const { withLoadingState } = useLoadingStore();
 	const { t } = useI18n();
 
 	const shareTokenInfo = ref<ShareTokenInfoResponse>();
 
-	const isImportActive = computed(() => importAction.isActive.value);
+	const isImportActive = computed(() => importDialogAction.isActive.value);
 	const isCardImport = computed(() => shareTokenInfo.value?.parentType === ShareTokenInfoResponseParentType.CARD);
 
 	const isGenericImportDialogOpen = computed(() => isImportActive.value && !isCardImport.value);
@@ -53,7 +53,7 @@ export const useImportFlow = () => {
 		}
 		shareTokenInfo.value = validationResult;
 
-		const { completed, data } = await importAction.start();
+		const { completed, data } = await importDialogAction.start();
 		if (!completed) return { success: false, error: new Error("Import cancelled") };
 
 		const { result, success, error } = await withLoadingState(
@@ -83,7 +83,7 @@ export const useImportFlow = () => {
 		isGenericImportDialogOpen,
 		shareTokenInfo,
 		executeImport,
-		onConfirmImport: importAction.complete,
-		onCancelImport: importAction.cancel,
+		onConfirmImport: importDialogAction.complete,
+		onCancelImport: importDialogAction.cancel,
 	};
 };
