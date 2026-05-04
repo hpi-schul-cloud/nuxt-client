@@ -17,7 +17,7 @@
 				:label="t('pages.folder.trash.purge.dialog.checkboxLabel')"
 				data-testid="purge-files-dialog-checkbox"
 				density="compact"
-				class="mt-1"
+				class="mt-1 align-top-checkbox"
 			/>
 		</template>
 	</SvsDialog>
@@ -52,3 +52,9 @@ watch(isDialogOpen, (newVal) => {
 	}
 });
 </script>
+
+<style scoped>
+.align-top-checkbox :deep(.v-selection-control) {
+	align-items: flex-start;
+}
+</style>
