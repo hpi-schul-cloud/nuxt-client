@@ -28,7 +28,11 @@ const proxyMiddleware: Connect.NextHandleFunction = (req, res, next) => {
 		const fileStorageProxy = createProxy(4444);
 		fileStorageProxy(req, res, next);
 	} else if (isH5pStaticFiles(path)) {
-		const h5pStaticFilesProxy = createProxy(8080);
+		const h5pStaticFilesProxy = createProxyMiddleware({
+			target: "http://localhost:8080",
+			changeOrigin: true,
+			pathRewrite: { "^/api/v3/h5p-editor": "" },
+		});
 		h5pStaticFilesProxy(req, res, next);
 	} else if (isH5pEditor(path)) {
 		const h5pEditorProxy = createProxy(4448);
