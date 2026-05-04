@@ -11,13 +11,7 @@ import {
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "./utils/inject";
-import {
-	courseRoomDetailsModule,
-	filePathsModule,
-	importUsersModule,
-	schoolsModule,
-	shareModule,
-} from "@/store";
+import { courseRoomDetailsModule, filePathsModule, importUsersModule, schoolsModule, shareModule } from "@/store";
 import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
