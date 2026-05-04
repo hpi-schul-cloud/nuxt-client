@@ -1,5 +1,5 @@
 <template>
-	<BaseChip color="info" :icon="icon"> <slot /> </BaseChip>
+	<BaseChip color="info" :icon> <slot /> </BaseChip>
 </template>
 
 <script setup lang="ts">

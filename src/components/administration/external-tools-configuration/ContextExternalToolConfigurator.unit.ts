@@ -1,18 +1,23 @@
 import ContextExternalToolConfigurator from "./ContextExternalToolConfigurator.vue";
 import ExternalToolConfigurator from "@/components/administration/external-tools-configuration/ExternalToolConfigurator.vue";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
-import { businessErrorFactory, contextExternalToolFactory, mockComposable } from "@@/tests/test-utils";
+import {
+	businessErrorFactory,
+	contextExternalToolFactory,
+	mockComposable,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
 import { contextExternalToolConfigurationTemplateFactory, toolParameterFactory } from "@@/tests/test-utils/factory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ToolContextType } from "@api-server";
 import {
 	ContextExternalToolSave,
 	useContextExternalToolConfigurationState,
 	useContextExternalToolState,
+	usePreferredExternalToolStore,
 } from "@data-external-tool";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { Component, nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
@@ -24,31 +29,23 @@ describe("CourseContextExternalToolConfigurator", () => {
 	let useContextExternalToolConfigurationStateMock: Mocked<ReturnType<typeof useContextExternalToolConfigurationState>>;
 	let useContextExternalToolStateMock: Mocked<ReturnType<typeof useContextExternalToolState>>;
 
-	const getWrapper = (
-		props: ComponentProps<typeof ContextExternalToolConfigurator>,
-		getters: Partial<SchoolExternalToolsModule> = {}
-	) => {
-		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule, {
-			getContextExternalToolConfigurationTemplate: undefined,
-			...getters,
-		});
-
+	const getWrapper = (props: ComponentProps<typeof ContextExternalToolConfigurator>) => {
+		const preferredExternalToolStore = mockedPiniaStoreTyping(usePreferredExternalToolStore);
 		const wrapper = mount(ContextExternalToolConfigurator, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
-				},
 			},
 			props,
 		});
 
 		return {
 			wrapper,
+			preferredExternalToolStore,
 		};
 	};
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		useContextExternalToolConfigurationStateMock = mockComposable(useContextExternalToolConfigurationState, {
 			error: ref(),
 			isLoading: ref(false),
@@ -105,7 +102,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 			};
 
 			it("should load the template", async () => {
-				const { wrapper, contextExternalTool } = await setup();
+				const { wrapper, contextExternalTool } = setup();
 
 				await wrapper.vm.fetchData();
 
@@ -115,7 +112,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 			});
 
 			it("should load the configuration", async () => {
-				const { wrapper, contextExternalTool } = await setup();
+				const { wrapper, contextExternalTool } = setup();
 
 				await wrapper.vm.fetchData();
 
@@ -126,15 +123,12 @@ describe("CourseContextExternalToolConfigurator", () => {
 		describe("when a preferred tool with a custom parameter is loaded", () => {
 			const setup = () => {
 				const contextExternalToolConfigurationTemplate = contextExternalToolConfigurationTemplateFactory.build();
-				const { wrapper } = getWrapper(
-					{
-						contextId: "contextId",
-						contextType: ToolContextType.BOARD_ELEMENT,
-					},
-					{
-						getContextExternalToolConfigurationTemplate: contextExternalToolConfigurationTemplate,
-					}
-				);
+				const { wrapper, preferredExternalToolStore } = getWrapper({
+					contextId: "contextId",
+					contextType: ToolContextType.BOARD_ELEMENT,
+				});
+
+				preferredExternalToolStore.preferredExternalTool = contextExternalToolConfigurationTemplate;
 
 				return {
 					wrapper,
@@ -143,7 +137,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 			};
 
 			it("should not fetch available tools", async () => {
-				const { wrapper } = await setup();
+				const { wrapper } = setup();
 
 				await wrapper.vm.fetchData();
 
@@ -153,7 +147,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 			});
 
 			it("should set the preferred tool as an available tool", async () => {
-				const { wrapper, contextExternalToolConfigurationTemplate } = await setup();
+				const { wrapper, contextExternalToolConfigurationTemplate } = setup();
 
 				await wrapper.vm.fetchData();
 

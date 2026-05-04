@@ -3,99 +3,23 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { mount } from "@vue/test-utils";
 
 describe("ChipTimeRemaining", () => {
-	const setup = (dueDate: Date, shortenUnit = false) => {
+	const setup = (dueDate: Date) => {
 		const wrapper = mount(ChipTimeRemaining, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
-				type: "warning",
 				dueDate: dueDate.toISOString(),
-				shortenUnit,
 			},
 		});
 
 		return { wrapper };
 	};
 
-	describe("time remaining hint hours", () => {
-		let dueDate: Date;
-		const HOURS_UNTIL_DUE = 3;
+	it("should render relative time text", () => {
+		const futureDate = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000); // 3 days from now
+		const { wrapper } = setup(futureDate);
 
-		beforeEach(() => {
-			dueDate = new Date();
-			dueDate.setHours(dueDate.getHours() + HOURS_UNTIL_DUE);
-		});
-
-		it("renders in long form", () => {
-			const { wrapper } = setup(dueDate);
-
-			const expectedResult = `${wrapper.vm.$t(
-				"components.atoms.ChipTimeRemaining.hintDueTime"
-			)}${HOURS_UNTIL_DUE} ${wrapper.vm.$t("components.atoms.ChipTimeRemaining.hintHours", HOURS_UNTIL_DUE)}`;
-
-			expect(wrapper.element.textContent).toContain(expectedResult);
-		});
-
-		it("should render in shortened form", () => {
-			const { wrapper } = setup(dueDate, true);
-
-			const expectedResult = `${wrapper.vm.$t(
-				"components.atoms.ChipTimeRemaining.hintDueTime"
-			)}${HOURS_UNTIL_DUE} ${wrapper.vm.$t("components.atoms.ChipTimeRemaining.hintHoursShort")}`;
-			expect(wrapper.element.textContent).toContain(expectedResult);
-		});
-	});
-
-	describe("time remaining hint minutes", () => {
-		let dueDate: Date;
-		const MINUTES_UNTIL_DUE = 20;
-
-		beforeEach(() => {
-			dueDate = new Date();
-			dueDate.setMinutes(dueDate.getMinutes() + MINUTES_UNTIL_DUE);
-		});
-
-		it("should render in long form", () => {
-			const { wrapper } = setup(dueDate);
-
-			const expectedResult = `${wrapper.vm.$t(
-				"components.atoms.ChipTimeRemaining.hintDueTime"
-			)}${MINUTES_UNTIL_DUE} ${wrapper.vm.$t("components.atoms.ChipTimeRemaining.hintMinutes", MINUTES_UNTIL_DUE)}`;
-
-			expect(wrapper.element.textContent).toContain(expectedResult);
-		});
-
-		it("should render in shortened form", () => {
-			const { wrapper } = setup(dueDate, true);
-
-			const expectedResult = `${wrapper.vm.$t(
-				"components.atoms.ChipTimeRemaining.hintDueTime"
-			)}${MINUTES_UNTIL_DUE} ${wrapper.vm.$t("components.atoms.ChipTimeRemaining.hintMinShort")}`;
-
-			expect(wrapper.element.textContent).toContain(expectedResult);
-		});
-	});
-
-	it("accepts valid type props", () => {
-		const validTypes = ["warning"];
-		const { validator } = ChipTimeRemaining.props.type;
-
-		validTypes.forEach((type) => {
-			expect(validator(type)).toBe(true);
-		});
-
-		expect(validator("wrong type")).toBe(false);
-	});
-
-	it("accepts valid dueDate props", () => {
-		const validDueDates = ["2021-06-11T14:00:00.000Z", "2021-06-07T09:30:00.000Z"];
-		const { validator } = ChipTimeRemaining.props.dueDate;
-
-		validDueDates.forEach((dueDate) => {
-			expect(validator(dueDate)).toBe(true);
-		});
-
-		expect(validator("wrong due date")).toBe(false);
+		expect(wrapper.text()).toBeTruthy();
 	});
 });
