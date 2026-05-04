@@ -14,7 +14,7 @@
 			density="compact"
 			rows="1"
 			auto-grow
-			:rules="[validateOnOpeningTag]"
+			:rules="[validateOnOpeningTag, isOfMaxLength(100)()]"
 			:placeholder="t('components.cardElement.titleElement.placeholder')"
 			:autofocus="internalIsFocused"
 			:maxlength="maxLength"
@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { useInlineEditInteractionHandler } from "@util-board";
-import { useOpeningTagValidator } from "@util-validators";
+import { isOfMaxLength, useOpeningTagValidator } from "@util-validators";
 import { computed, nextTick, onMounted, ref, toRef, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { VTextarea } from "vuetify/components";
