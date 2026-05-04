@@ -1,7 +1,7 @@
 import { useExternalToolValidation } from "./external-tool-validation.composable";
-import { ToolParameter, ToolParameterLocation, ToolParameterScope, ToolParameterType } from "@/store/external-tool";
 import { mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { ToolParameter, ToolParameterLocation, ToolParameterScope, ToolParameterType } from "@data-external-tool";
 
 describe("useExternalToolValidation", () => {
 	const setup = () => {

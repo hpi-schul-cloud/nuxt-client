@@ -81,10 +81,15 @@ import { useExternalToolUrlInsertion } from "./external-tool-url-insertion.compo
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 import ExternalToolConfigSettings from "@/components/administration/external-tools-configuration/ExternalToolConfigSettings.vue";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
-import { SchoolExternalTool, ToolParameter, ToolParameterEntry } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
 import { notifyError } from "@data-app";
-import { ContextExternalTool, ExternalToolConfigurationTemplate } from "@data-external-tool";
+import {
+	ContextExternalTool,
+	ExternalToolConfigurationTemplate,
+	SchoolExternalTool,
+	ToolParameter,
+	ToolParameterEntry,
+} from "@data-external-tool";
 import { mdiAlertCircle, mdiContentPaste } from "@icons/material";
 import { computed, ComputedRef, nextTick, Ref, ref, toRef, useSlots, watch } from "vue";
 import { useI18n } from "vue-i18n";

@@ -1,10 +1,10 @@
 import { useExternalToolUrlInsertion } from "./external-tool-url-insertion.composable";
-import { ToolParameterLocation } from "@/store/external-tool";
 import {
 	mountComposable,
 	schoolExternalToolConfigurationTemplateFactory,
 	toolParameterFactory,
 } from "@@/tests/test-utils";
+import { ToolParameterLocation } from "@data-external-tool";
 
 describe("useExternalToolUrlInsertion", () => {
 	const setup = () => {

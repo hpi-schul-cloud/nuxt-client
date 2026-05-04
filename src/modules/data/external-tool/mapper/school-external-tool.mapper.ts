@@ -1,7 +1,5 @@
-import { SchoolExternalToolSave } from "../school-external-tool";
-import { ToolParameter } from "../tool-parameter";
-import { ToolParameterEntry } from "../tool-parameter-entry";
-import { ExternalToolMapper } from "./external-tool.mapper";
+import { ExternalToolMapper } from "../mapper/external-tool.mapper";
+import { SchoolExternalToolSave, ToolParameter, ToolParameterEntry } from "../types";
 import {
 	SchoolExternalToolConfigurationTemplateListResponse,
 	SchoolExternalToolConfigurationTemplateResponse,
