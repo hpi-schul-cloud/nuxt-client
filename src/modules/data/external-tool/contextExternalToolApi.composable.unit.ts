@@ -1,5 +1,5 @@
-import { ContextExternalToolMapper, ToolContextMapping } from "./context-external-tool.mapper";
 import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
+import { ContextExternalToolMapper, ToolContextMapping } from "./mapper";
 import { ContextExternalTool, ContextExternalToolConfigurationTemplate, ContextExternalToolSave } from "./types";
 import {
 	contextExternalToolConfigurationTemplateResponseFactory,
