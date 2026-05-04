@@ -5,20 +5,23 @@ import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { ShareTokenBodyParamsParentType } from "@api-server";
+import { useTaskActions } from "@data-tasks";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { beforeEach } from "vitest";
+import { beforeEach, Mocked } from "vitest";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VCard } from "vuetify/components";
+
+vi.mock("@data-tasks");
 
 const mockData = {
 	roomId: "123",
@@ -133,6 +136,8 @@ const getWrapper = (props: ComponentProps<typeof CourseRoomDashboard>, options?:
 };
 
 describe("CourseRoomDashboard.vue", () => {
+	let useTaskActionsMock: Mocked<ReturnType<typeof useTaskActions>>;
+
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
@@ -143,6 +148,13 @@ describe("CourseRoomDashboard.vue", () => {
 			courseRoomDetailsModule: CourseRoomDetailsModule,
 			copyModule: CopyModule,
 		});
+
+		useTaskActionsMock = mockComposable(useTaskActions, { deleteTask: vi.fn() });
+		vi.mocked(useTaskActions).mockReturnValue(useTaskActionsMock);
+	});
+
+	afterEach(() => {
+		vi.resetAllMocks();
 	});
 	describe("common features", () => {
 		it("should have props", () => {
@@ -379,36 +391,6 @@ describe("CourseRoomDashboard.vue", () => {
 			expect(fetchContentMock).toHaveBeenCalled();
 		});
 
-		it("should call deleteTask when task deletion is confirmed", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(true);
-			const deleteTaskMock = vi.fn();
-			const fetchContentMock = vi.fn();
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			courseRoomDetailsModule.deleteTask = deleteTaskMock;
-			courseRoomDetailsModule.fetchContent = fetchContentMock;
-			const taskCard = wrapper.findComponent<VCard>(".task-card");
-
-			taskCard.vm.$emit("delete-task");
-			await flushPromises();
-
-			expect(confirmDialogUtils.askDeletionForItem).toHaveBeenCalledWith("Test Name", "common.words.topic");
-			expect(deleteTaskMock).toHaveBeenCalledWith("1234");
-			expect(fetchContentMock).toHaveBeenCalled();
-		});
-
-		it("should not call deleteTask when task deletion is cancelled", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
-			const deleteTaskMock = vi.fn();
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			courseRoomDetailsModule.deleteTask = deleteTaskMock;
-			const taskCard = wrapper.findComponent<VCard>(".task-card");
-
-			taskCard.vm.$emit("delete-task");
-			await flushPromises();
-
-			expect(deleteTaskMock).not.toHaveBeenCalled();
-		});
-
 		it("should not call deleteLesson when lesson deletion is cancelled", async () => {
 			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
 			const deleteLessonMock = vi.fn();
@@ -420,6 +402,19 @@ describe("CourseRoomDashboard.vue", () => {
 			await flushPromises();
 
 			expect(deleteLessonMock).not.toHaveBeenCalled();
+		});
+
+		it("should call useTaskActions.deleteTask when delete-task is emitted", async () => {
+			const fetchContentMock = vi.fn();
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			courseRoomDetailsModule.fetchContent = fetchContentMock;
+			const taskCard = wrapper.findComponent<VCard>(".task-card");
+
+			taskCard.vm.$emit("delete-task");
+			await flushPromises();
+
+			expect(useTaskActionsMock.deleteTask).toHaveBeenCalledWith("1234", "Private Aufgabe von Marla - mit Kurs, offen");
+			expect(fetchContentMock).toHaveBeenCalled();
 		});
 	});
 

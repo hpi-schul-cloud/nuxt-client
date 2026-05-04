@@ -1,4 +1,4 @@
-import { ContextExternalToolMapper } from "./context-external-tool.mapper";
+import { ContextExternalToolMapper } from "./mapper";
 import { ContextExternalTool, ContextExternalToolConfigurationTemplate, ContextExternalToolSave } from "./types";
 import { $axios } from "@/utils/api";
 import {

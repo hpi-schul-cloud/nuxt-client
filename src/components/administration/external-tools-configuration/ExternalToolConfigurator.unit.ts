@@ -1,7 +1,6 @@
 import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
 import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
-import { ToolParameterLocation } from "@/store/external-tool";
 import {
 	contextExternalToolConfigurationTemplateFactory,
 	contextExternalToolFactory,
@@ -10,6 +9,7 @@ import {
 	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ToolParameterLocation } from "@data-external-tool";
 import { flushPromises, mount } from "@vue/test-utils";
 import { mock } from "vitest-mock-extended";
 import { ComponentProps } from "vue-component-type-helpers";

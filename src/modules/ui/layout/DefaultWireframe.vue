@@ -31,6 +31,7 @@
 				'main-pb-96': mainWithBottomPadding,
 				'pa-0': mainWithoutPadding,
 				'container-short-width': maxWidth === 'short',
+				'container-limited-width': maxWidth === 'limited',
 				'container-full-width': maxWidth === 'full',
 				'main-content-flex': isFlexContainer,
 			}"
@@ -59,7 +60,7 @@ const props = defineProps({
 		default: null,
 	},
 	maxWidth: {
-		type: String as PropType<"full" | "short" | "native">,
+		type: String as PropType<"full" | "short" | "native" | "limited">,
 		required: true,
 	},
 	fabItems: {
@@ -126,7 +127,7 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 	display: flex;
 	flex-direction: column;
 	background-color: rgb(var(--v-theme-white));
-	z-index: 20;
+	z-index: var(--z-header);
 }
 
 :deep(.v-application__wrap) {
@@ -142,6 +143,10 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 	max-width: var(--content-max-width);
 }
 
+.container-limited-width {
+	max-width: var(--content-limited-width);
+}
+
 .container-full-width {
 	max-width: none;
 	margin: 0;
@@ -153,7 +158,7 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 
 .wireframe-divider {
 	position: sticky;
-	z-index: 100;
+	z-index: var(--z-pinned);
 	top: var(--topbar-height);
 }
 
@@ -163,7 +168,7 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 	min-height: 56px;
 	margin-top: -30px;
 	margin-bottom: -30px;
-	z-index: 2000;
+	z-index: var(--z-floating);
 	top: calc(var(--topbar-height) + 16px);
 
 	&.positioning-sm-to-md {

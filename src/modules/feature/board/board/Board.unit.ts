@@ -6,16 +6,10 @@ import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue"
 import { useCopy } from "@/composables/copy";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
 import ShareModule from "@/store/share";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import {
-	COPY_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
+import { COPY_MODULE_KEY, COURSE_ROOM_DETAILS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -153,13 +147,12 @@ describe("Board", () => {
 		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getRoomId: "room1",
 		});
-		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule);
+
 		return {
 			copyModule,
 			shareModule,
 			courseRoomDetailsModule,
 			copyResultId,
-			schoolExternalToolsModule,
 		};
 	};
 
@@ -170,8 +163,7 @@ describe("Board", () => {
 		envs?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
 	}) => {
-		const { copyModule, shareModule, courseRoomDetailsModule, copyResultId, schoolExternalToolsModule } =
-			setupProvideModules();
+		const { copyModule, shareModule, courseRoomDetailsModule, copyResultId } = setupProvideModules();
 
 		setActivePinia(createTestingPinia());
 
@@ -207,7 +199,6 @@ describe("Board", () => {
 					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
-					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
 				},
 				stubs: {
 					ShareModal: true,
@@ -227,6 +218,8 @@ describe("Board", () => {
 			openDeleteBoardDialog: () => void;
 			isBoardVisible: boolean;
 			isEditSettingsDialogOpen: boolean;
+			showLoadingDialog: boolean;
+			onBackToOverview: () => void;
 		};
 
 		return {
@@ -1156,6 +1149,199 @@ describe("Board", () => {
 
 					expect(boardStore.updateBoardLayoutRequest).not.toHaveBeenCalled();
 				});
+			});
+		});
+	});
+
+	describe("onBackToOverview", () => {
+		it("should have a loading dialog component", () => {
+			const { wrapper } = setup();
+
+			// The VDialog should exist in the component
+			const dialog = wrapper.findComponent({ name: "VDialog" });
+			expect(dialog.exists()).toBe(true);
+		});
+
+		it("should call router.push with dashboard path when invoked", () => {
+			const { wrapperVM } = setup();
+
+			wrapperVM.onBackToOverview();
+
+			expect(router.push).toHaveBeenCalledWith({ path: "/dashboard" });
+		});
+	});
+
+	describe("showLoadingDialog", () => {
+		it("should not show loading dialog when isConnected is true", async () => {
+			const { wrapper, boardStore } = setup();
+
+			boardStore.isConnected = true;
+			boardStore.isLoading = false;
+			vi.advanceTimersByTime(600);
+			await nextTick();
+
+			const dialogText = wrapper.find("[data-testid='dialog-text']");
+			expect(dialogText.exists()).toBe(false);
+		});
+
+		it("should not show loading dialog before 500ms have passed even when disconnected", async () => {
+			const { wrapper, boardStore } = setup();
+
+			boardStore.isConnected = false;
+			vi.advanceTimersByTime(400);
+			await nextTick();
+
+			const dialogText = wrapper.find("[data-testid='dialog-text']");
+			expect(dialogText.exists()).toBe(false);
+		});
+
+		it("should return false when isConnected is true after 500ms", async () => {
+			const { wrapperVM, boardStore } = setup();
+
+			boardStore.isConnected = true;
+			boardStore.isLoading = false;
+			vi.advanceTimersByTime(600);
+			await nextTick();
+
+			expect(wrapperVM.showLoadingDialog).toBe(false);
+		});
+
+		it("should return true when isConnected is false after 500ms", async () => {
+			const { wrapperVM, boardStore } = setup();
+
+			boardStore.isConnected = false;
+			vi.advanceTimersByTime(600);
+			await nextTick();
+
+			expect(wrapperVM.showLoadingDialog).toBe(true);
+		});
+
+		it("should return true when isLoading is true after 500ms", async () => {
+			const { wrapperVM, boardStore } = setup();
+
+			boardStore.isLoading = true;
+			vi.advanceTimersByTime(600);
+			await nextTick();
+
+			expect(wrapperVM.showLoadingDialog).toBe(true);
+		});
+
+		it("should return false before 500ms even when conditions are met", async () => {
+			const { wrapperVM, boardStore } = setup();
+
+			boardStore.isConnected = false;
+			vi.advanceTimersByTime(400);
+			await nextTick();
+
+			expect(wrapperVM.showLoadingDialog).toBe(false);
+		});
+	});
+
+	describe("@onDropColumn", () => {
+		describe("when extractDataAttribute returns undefined", () => {
+			it("should not call moveColumnRequest", () => {
+				mockExtractDataAttribute.mockReturnValue(undefined);
+				const { wrapper, boardStore } = setup({
+					numberOfColumns: 2,
+					allowedOperations: { moveColumn: true },
+				});
+
+				const containerComponent = wrapper.findAllComponents({
+					name: "Sortable",
+				});
+				const payload = {
+					item: document.createElement("div"),
+					newIndex: 1,
+					oldIndex: 0,
+				};
+
+				containerComponent[0].vm.$emit("end", payload);
+
+				expect(boardStore.moveColumnRequest).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when newIndex is undefined", () => {
+			it("should not call moveColumnRequest", () => {
+				mockExtractDataAttribute.mockReturnValue("column-id");
+				const { wrapper, boardStore } = setup({
+					numberOfColumns: 2,
+					allowedOperations: { moveColumn: true },
+				});
+
+				const containerComponent = wrapper.findAllComponents({
+					name: "Sortable",
+				});
+				const payload = {
+					item: document.createElement("div"),
+					newIndex: undefined,
+					oldIndex: 0,
+				};
+
+				containerComponent[0].vm.$emit("end", payload);
+
+				expect(boardStore.moveColumnRequest).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("@onCopyBoard", () => {
+		describe("when user is not permitted to copy board", () => {
+			it("should not call the copy function", async () => {
+				const { wrapper } = setup({ allowedOperations: { copyBoard: false } });
+
+				const boardHeader = wrapper.findComponent({
+					name: "BoardHeader",
+				});
+				await boardHeader.vm.$emit("copy:board");
+
+				expect(mockedCopyCalls.copy).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("@onShareBoard", () => {
+		describe("when user is not permitted to share board", () => {
+			it("should not start the share flow", async () => {
+				const { wrapper, shareModule } = setup({ allowedOperations: { shareBoard: false } });
+
+				const boardHeader = wrapper.findComponent({
+					name: "BoardHeader",
+				});
+				await boardHeader.vm.$emit("share:board");
+
+				expect(shareModule.startShareFlow).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("@onUpdateBoardLayout", () => {
+		describe("when user is not permitted to update board layout", () => {
+			it("should not open the change dialog", async () => {
+				const { wrapper } = setup({ allowedOperations: { updateBoardLayout: false } });
+
+				const boardHeader = wrapper.findComponent(BoardHeader);
+				const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
+
+				boardHeader.vm.$emit("change-layout");
+				await nextTick();
+
+				expect(boardLayoutDialog.props("modelValue")).toEqual(false);
+			});
+		});
+	});
+
+	describe("@onSelectBoardLayout", () => {
+		describe("when user is not permitted to update board layout", () => {
+			it("should not send update request", async () => {
+				const { wrapper, boardStore } = setup({ allowedOperations: { updateBoardLayout: false } });
+
+				const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
+
+				boardLayoutDialog.vm.$emit("select", BoardLayout.LIST);
+				await nextTick();
+
+				expect(boardStore.updateBoardLayoutRequest).not.toHaveBeenCalled();
 			});
 		});
 	});

@@ -1,5 +1,5 @@
 import { useSchoolExternalToolApi } from "./SchoolExternalToolApi.composable";
-import { SchoolExternalToolMetadata } from "@/store/external-tool";
+import { SchoolExternalToolMetadata } from "./types";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { Ref, ref } from "vue";
