@@ -1,4 +1,4 @@
-import "@/plugins/polyfills";
+// import "@/plugins/polyfills";
 import App from "./App.vue";
 import { createI18n } from "./plugins/i18n";
 import store from "./plugins/store";
