@@ -1,6 +1,6 @@
 <template>
 	<VDialog :model-value="isOpen" fullscreen scrollable @keydown.escape="onDialogClose">
-		<VToolbar class="toolbar border-b-thin">
+		<VToolbar id="card-detail-view-toolbar" class="toolbar border-b-thin">
 			<VBtn
 				:icon="mdiClose"
 				data-testid="close-detail-view-button"
@@ -69,7 +69,7 @@ const emit = defineEmits<{
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardRef.value);
 const { allowedOperations } = useBoardAllowedOperations();
 const { setFocus } = useBoardFocusHandler();
-setFocus("");
+setFocus("card-detail-view-toolbar");
 const { t } = useI18n();
 const cardStore = useCardStore();
 
