@@ -143,6 +143,7 @@ export default {
 	"common.medium.information.teacher": "Bitte an Schuladministrator:in wenden.",
 	"common.nodata": "Keine Daten vorhanden",
 	"common.notification.error": "Es ist ein Fehler aufgetreten.",
+	"common.notification.error.preferences": "Nutzereinstellungen konnten nicht abgerufen werden.",
 	"common.notification.error.videoConference.notFetched": "Die Videokonferenz konnte nicht abgerufen werden.",
 	"common.notification.error.videoConference.notJoined": "Der Videokonferenz konnte nicht beigetreten werden.",
 	"common.notification.error.videoConference.notStarted": "Die Videokonferenz konnte nicht gestartet werden.",

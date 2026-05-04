@@ -25,22 +25,20 @@
 </template>
 
 <script lang="ts" setup>
-import { useSafeAxiosRunner, useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { useSafeAxiosRunner } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
-import { MeApiFactory, ReleaseApiFactory } from "@api-server";
-import { useAppStoreRefs } from "@data-app";
+import { ReleaseApiFactory } from "@api-server";
+import { useAppStore, useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { SvsDialog } from "@ui-dialog";
 import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const envConfig = useEnvConfig();
+const { updateUserPreferences } = useAppStore();
 const { userPreferences } = useAppStoreRefs();
 const { t } = useI18n();
 
-const { execute: setPreference } = useSafeAxiosTask();
-
-const meApi = MeApiFactory(undefined, "/v3", $axios);
 const releasesApi = ReleaseApiFactory(undefined, "/v3", $axios);
 
 const { data: releasesResponse } = useSafeAxiosRunner(() => releasesApi.releaseControllerGetReleases(0, 1));
@@ -59,11 +57,7 @@ const hasNewReleaseNotes = computed(() => {
 const setReleasePreferences = () => {
 	if (!latestRelease.value) return;
 
-	setPreference(() =>
-		meApi.meControllerUpdateMePreferences({
-			releaseDate: latestRelease.value!.publishedAt,
-		})
-	);
+	updateUserPreferences({ releaseDate: latestRelease.value!.publishedAt });
 };
 
 watch(

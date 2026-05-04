@@ -1,7 +1,16 @@
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
-import { LanguageType, MeApiFactory, MeResponse, Permission, RoleName, UserApiFactory } from "@api-server";
+import {
+	LanguageType,
+	MeApiFactory,
+	MeResponse,
+	Permission,
+	RoleName,
+	UpdatePreferencesBodyParams,
+	UserApiFactory,
+} from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
@@ -74,6 +83,19 @@ export const useAppStore = defineStore("applicationStore", () => {
 	};
 
 	const externalLogout = () => logout("/logout/external");
+
+	const updateUserPreferences = async (options: UpdatePreferencesBodyParams) => {
+		const { execute: executePreferences } = useSafeAxiosTask();
+
+		const { success, result } = await executePreferences(async () => {
+			await meApi.meControllerUpdateMePreferences(options);
+			return meApi.meControllerMe();
+		}, "common.notification.error.preferences");
+
+		if (success && meResponse.value?.preferences) {
+			meResponse.value.preferences = result?.data.preferences;
+		}
+	};
 
 	const updateUserLanguage = (language: LanguageType) =>
 		userApi
@@ -150,6 +172,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 		clearUserSession,
 		externalLogout,
 		updateUserLanguage,
+		updateUserPreferences,
 		clearApplicationError,
 		handleUnknownError,
 		handleApplicationError,
