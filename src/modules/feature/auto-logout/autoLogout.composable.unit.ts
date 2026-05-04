@@ -501,4 +501,114 @@ describe("useAutoLogout", () => {
 			expect(loggerSpy).toHaveBeenCalledWith("Unexpected error during silent logout:", fetchError);
 		});
 	});
+
+	describe("remainingTimeInMinutes", () => {
+		it("should return a positive value when session is started", () => {
+			const options = { jwtTtl: 120, showWarningTime: 60 };
+			const { remainingTimeInMinutes } = setupAndCreateSession(options);
+
+			// remainingTimeInMinutes should be greater than 0 when session has time left
+			expect(remainingTimeInMinutes.value).toBeGreaterThan(0);
+		});
+	});
+
+	describe("setClosedState", () => {
+		it("should transition to expired state after timeout when receiving closed state", async () => {
+			const { createSession, sessionState } = setup();
+			createSession();
+			await flushPromises();
+
+			simulateIncomingMessage("closed:0");
+			await flushPromises();
+
+			expect(sessionState.value).toBe(SessionState.Closed);
+
+			// Advance timer to trigger the setTimeout callback that sets expired state
+			await advanceTimersBySeconds(1);
+
+			expect(sessionState.value).toBe(SessionState.Expired);
+		});
+
+		it("should call clearUserSession when transitioning from closed to expired", async () => {
+			const { createSession } = setup();
+			const appStore = useAppStore();
+			vi.spyOn(appStore, "clearUserSession");
+			createSession();
+			await flushPromises();
+
+			simulateIncomingMessage("closed:0");
+			await flushPromises();
+
+			await advanceTimersBySeconds(1);
+
+			expect(appStore.clearUserSession).toHaveBeenCalled();
+		});
+	});
+
+	describe("when receiving extended state from another tab", () => {
+		it("should update remainingTimeInSeconds with the received time", async () => {
+			const { createSession, remainingTimeInSeconds } = setup();
+			createSession();
+			await flushPromises();
+
+			const newTime = 300;
+			simulateIncomingMessage(`extended:${newTime}`);
+			await flushPromises();
+
+			expect(remainingTimeInSeconds.value).toBe(newTime);
+		});
+
+		it("should hide the dialog when receiving extended state", async () => {
+			const options = { jwtTtl: 51, showWarningTime: 50 };
+			const { showDialog, axiosMock } = setupAndCreateSession(options);
+			axiosMock.get.mockResolvedValueOnce(createResponse(50));
+
+			// Cross warning threshold to show dialog
+			await advanceTimersBySeconds(2);
+			expect(showDialog.value).toBe(true);
+
+			// Receive extended state from another tab
+			simulateIncomingMessage("extended:200");
+			await flushPromises();
+
+			expect(showDialog.value).toBe(false);
+		});
+	});
+
+	describe("when receiving aboutToExpire state from another tab", () => {
+		it("should show the dialog", async () => {
+			const { createSession, showDialog } = setup();
+			createSession();
+			await flushPromises();
+
+			simulateIncomingMessage("aboutToExpire:50");
+			await flushPromises();
+
+			expect(showDialog.value).toBe(true);
+		});
+	});
+
+	describe("when receiving expired state from another tab", () => {
+		it("should set sessionState to Expired", async () => {
+			const { createSession, sessionState } = setup();
+			createSession();
+			await flushPromises();
+
+			simulateIncomingMessage("expired:0");
+			await flushPromises();
+
+			expect(sessionState.value).toBe(SessionState.Expired);
+		});
+
+		it("should show the dialog", async () => {
+			const { createSession, showDialog } = setup();
+			createSession();
+			await flushPromises();
+
+			simulateIncomingMessage("expired:0");
+			await flushPromises();
+
+			expect(showDialog.value).toBe(true);
+		});
+	});
 });

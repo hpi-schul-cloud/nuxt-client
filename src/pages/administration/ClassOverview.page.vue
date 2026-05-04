@@ -6,31 +6,25 @@
 		data-testid="admin-class-title"
 	>
 		<ThrInfoBanner />
-		<div class="mt-6 mx-n6 mx-md-0 pb-0 d-flex justify-center">
-			<v-tabs v-model="activeTab" class="tabs-max-width" grow>
-				<v-tab value="next" data-testid="admin-class-next-year-tab">
-					<span>{{ nextYear }}</span>
-				</v-tab>
-				<v-tab value="current" data-testid="admin-class-current-year-tab">
-					<span>{{ currentYear }}</span>
-				</v-tab>
-				<v-tab value="archive" data-testid="admin-class-previous-years-tab">
-					<span>{{ t("pages.administration.common.label.archive") }}</span>
-				</v-tab>
-			</v-tabs>
-		</div>
-		<v-data-table-server
+		<VTabs v-model="activeTab" class="mt-8 mb-4 d-flex" grow>
+			<VTab value="next" data-testid="admin-class-next-year-tab" :text="nextYear" />
+			<VTab value="current" data-testid="admin-class-current-year-tab" :text="currentYear" />
+			<VTab
+				value="archive"
+				data-testid="admin-class-previous-years-tab"
+				:text="t('pages.administration.common.label.archive')"
+			/>
+		</VTabs>
+		<VDataTableServer
 			v-model:items-per-page="pagination.limit"
 			:headers="headers"
 			:items="classes"
 			:items-length="pagination.total"
 			:page="page"
-			:items-per-page-text="footerProps.itemsPerPageText"
-			:items-per-page-options="footerProps.itemsPerPageOptions"
-			:loading="isLoading"
+			:items-per-page-options="[5, 10, 25, 50, 100]"
+			:loading="isFetching"
 			data-testid="admin-class-table"
-			class="elevation-1"
-			:no-data-text="t('common.nodata')"
+			mobile-breakpoint="sm"
 			@update:sort-by="onUpdateSortBy"
 			@update:items-per-page="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
@@ -62,7 +56,7 @@
 			</template>
 			<template #[`item.actions`]="{ item }">
 				<template v-if="showClassAction(item)">
-					<v-btn
+					<VBtn
 						:title="t('pages.administration.classes.manage')"
 						:aria-label="t('pages.administration.classes.manage')"
 						data-testid="legacy-class-table-manage-btn"
@@ -72,9 +66,9 @@
 						class="mx-1 px-1"
 						min-width="0"
 					>
-						<v-icon>{{ mdiAccountGroupOutline }}</v-icon>
-					</v-btn>
-					<v-btn
+						<VIcon :icon="mdiAccountGroupOutline" />
+					</VBtn>
+					<VBtn
 						:title="t('pages.administration.classes.edit')"
 						:aria-label="t('pages.administration.classes.edit')"
 						data-testid="class-table-edit-btn"
@@ -84,9 +78,9 @@
 						class="mx-1 px-1"
 						min-width="0"
 					>
-						<v-icon>{{ mdiPencilOutline }}</v-icon>
-					</v-btn>
-					<v-btn
+						<VIcon :icon="mdiPencilOutline" />
+					</VBtn>
+					<VBtn
 						:title="t('pages.administration.classes.delete')"
 						:aria-label="t('pages.administration.classes.delete')"
 						data-testid="class-table-delete-btn"
@@ -96,9 +90,9 @@
 						min-width="0"
 						@click="onDelete(item)"
 					>
-						<v-icon>{{ mdiTrashCanOutline }}</v-icon>
-					</v-btn>
-					<v-btn
+						<VIcon :icon="mdiTrashCanOutline" />
+					</VBtn>
+					<VBtn
 						:disabled="!item.isUpgradable"
 						:aria-label="t('pages.administration.classes.createSuccessor')"
 						:title="t('pages.administration.classes.createSuccessor')"
@@ -109,11 +103,11 @@
 						class="mx-1 px-1"
 						min-width="0"
 					>
-						<v-icon>{{ mdiArrowUp }}</v-icon>
-					</v-btn>
+						<VIcon :icon="mdiArrowUp" />
+					</VBtn>
 				</template>
 				<template v-else-if="showGroupAction(item)">
-					<v-btn
+					<VBtn
 						:title="t('pages.administration.classes.manage')"
 						:aria-label="t('pages.administration.classes.manage')"
 						data-testid="class-table-members-manage-btn"
@@ -126,9 +120,9 @@
 						class="mx-1 px-1"
 						min-width="0"
 					>
-						<v-icon>{{ mdiAccountGroupOutline }}</v-icon>
-					</v-btn>
-					<v-btn
+						<VIcon :icon="mdiAccountGroupOutline" />
+					</VBtn>
+					<VBtn
 						v-if="item.synchronizedCourses && item.synchronizedCourses.length"
 						:title="t('feature-course-sync.EndCourseSyncDialog.title')"
 						:aria-label="t('feature-course-sync.EndCourseSyncDialog.title')"
@@ -139,12 +133,12 @@
 						min-width="0"
 						@click="onClickEndSyncIcon(item)"
 					>
-						<v-icon>{{ mdiSyncOff }}</v-icon>
-					</v-btn>
+						<VIcon :icon="mdiSyncOff" />
+					</VBtn>
 				</template>
 			</template>
-		</v-data-table-server>
-		<end-course-sync-dialog
+		</VDataTableServer>
+		<EndCourseSyncDialog
 			v-model:is-open="isEndSyncDialogOpen"
 			data-testid="end-course-sync-dialog"
 			:course-name="selectedItemForSync.courseName"
@@ -165,16 +159,13 @@
 
 <script setup lang="ts">
 import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
-import GroupModule from "@/store/group";
-import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
-import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import { askDeletion } from "@/utils/confirmation-dialog.utils";
-import { GROUP_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { ClassSortQueryType, Permission, SchoolYearQueryType, SchulcloudTheme } from "@api-server";
 import { useAppStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
+import { ClassInfo, ClassRootType, CourseInfo, useGroupClasses } from "@data-group";
 import { EndCourseSyncDialog } from "@feature-course-sync";
 import {
 	mdiAccountGroupOutline,
@@ -208,13 +199,15 @@ const props = defineProps({
 });
 
 const { hasPermission } = useAppStore();
-const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
+const { deleteClass, fetchClassesForSchool, classes, isFetching, pagination, page, sortBy, sortOrder } =
+	useGroupClasses();
 
 const route = useRoute();
 const router = useRouter();
 
 const { t } = useI18n();
 const { schoolDetails } = useSchoolStoreRefs();
+const { instituteTitle } = storeToRefs(useEnvStore());
 
 const activeTab = computed({
 	get() {
@@ -224,11 +217,6 @@ const activeTab = computed({
 		onTabsChange(newTab);
 	},
 });
-
-const footerProps = {
-	itemsPerPageText: t("components.organisms.Pagination.recordsPerPage"),
-	itemsPerPageOptions: [5, 10, 25, 50, 100],
-};
 
 useTitle(buildPageTitle(t("pages.administration.classes.index.title")));
 
@@ -248,11 +236,7 @@ const schoolYearQueryType = computed(() => {
 const nextYear = computed(() => schoolDetails.value.years.nextYear.name);
 const currentYear = computed(() => schoolDetails.value.years.activeYear.name);
 
-const classes = computed(() => groupModule.getClasses);
-
 const showSourceHeader = computed(() => classes.value.some((classItem) => classItem.externalSourceName !== undefined));
-
-const isLoading = computed(() => groupModule.getLoading);
 
 const hasEditPermission = hasPermission(Permission.CLASS_EDIT);
 const hasCreatePermission = hasPermission(Permission.CLASS_CREATE);
@@ -304,15 +288,11 @@ const onDelete = async (selectedClass: ClassInfo) => {
 	);
 	if (!shouldDelete) return;
 
-	await groupModule.deleteClass({
+	await deleteClass({
 		classId: selectedClass.id,
 		query: schoolYearQueryType.value,
 	});
 };
-
-const pagination: ComputedRef<Pagination> = computed(() => groupModule.getPagination);
-
-const page: ComputedRef<number> = computed(() => groupModule.getPage);
 
 const courseSyncEnabled = computed(() => useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED);
 
@@ -353,7 +333,7 @@ const headers = computed(() => {
 		},
 		{
 			value: "actions",
-			title: "",
+			title: t("pages.administration.actions"),
 			sortable: false,
 		}
 	);
@@ -362,7 +342,7 @@ const headers = computed(() => {
 });
 
 const loadClassList = async () => {
-	await groupModule.loadClassesForSchool({
+	await fetchClassesForSchool({
 		schoolYearQuery: schoolYearQueryType.value,
 	});
 };
@@ -374,26 +354,22 @@ const onTabsChange = async (tab: string) => {
 	await loadClassList();
 };
 
-const onUpdateSortBy = async (sortBy: ClassSortItem[]) => {
-	const fieldToSortBy: ClassSortItem = sortBy[0];
-	const key: ClassSortQueryType | undefined = fieldToSortBy ? fieldToSortBy.key : undefined;
-	groupModule.setSortBy(key);
-
-	const sortOrder = fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
-	groupModule.setSortOrder(sortOrder);
+const onUpdateSortBy = async (newSortBy: ClassSortItem[]) => {
+	const fieldToSortBy = newSortBy[0];
+	sortBy.value = fieldToSortBy ? fieldToSortBy.key : undefined;
+	sortOrder.value = fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
 
 	await loadClassList();
 };
 
 const onUpdateCurrentPage = async (currentPage: number) => {
-	groupModule.setPage(currentPage);
-	const skip = (currentPage - 1) * groupModule.getPagination.limit;
-	groupModule.setPagination({ ...pagination.value, skip });
+	page.value = currentPage;
+	pagination.value.skip = (currentPage - 1) * pagination.value.limit;
 
 	await loadClassList();
 };
 const onUpdateItemsPerPage = async (itemsPerPage: number) => {
-	groupModule.setPagination({ ...pagination.value, limit: itemsPerPage });
+	pagination.value.limit = itemsPerPage;
 
 	await loadClassList();
 };
@@ -401,6 +377,14 @@ const onUpdateItemsPerPage = async (itemsPerPage: number) => {
 onMounted(() => {
 	onTabsChange(activeTab.value);
 });
-
-const { instituteTitle } = storeToRefs(useEnvStore());
 </script>
+<style lang="scss" scoped>
+:deep(.v-data-table-header__content) {
+	font-weight: bold;
+}
+
+/* table header for mobile view */
+:deep(.v-data-table__td-title) {
+	font-weight: bold;
+}
+</style>

@@ -1,3 +1,4 @@
+export * from "./class-info";
 export * from "./externalSource";
 export * from "./group";
 export * from "./groupListFilter";

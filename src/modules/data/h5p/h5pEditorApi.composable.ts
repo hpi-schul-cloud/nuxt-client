@@ -13,7 +13,7 @@ export const useH5PEditorApi = () => {
 		let title: string | undefined;
 
 		await h5pEditorApi
-			.h5PEditorControllerGetContentParameters(contentId)
+			.getContentParameters(contentId)
 			.then((response: AxiosResponse) => {
 				title = response?.data?.h5p?.title;
 			})
