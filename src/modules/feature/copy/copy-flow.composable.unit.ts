@@ -18,7 +18,7 @@ let roomApi: Mocked<serverApi.RoomApiInterface>;
 let withLoadingStateSpy: ReturnType<typeof vi.spyOn>;
 
 type CopyResult =
-	| { success: boolean; error: Error; result?: undefined }
+	| { success: boolean; error: Error; result: undefined }
 	| { result: CopyApiResponse | undefined; success: boolean; error: Error | undefined };
 
 const mountCopyFlowComposable = (type: ContentItemTypeEnum = ContentItemTypeEnum.Room) => {

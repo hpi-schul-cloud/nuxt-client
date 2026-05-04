@@ -59,8 +59,7 @@
 <script setup lang="ts">
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { RoomItem } from "@/types/room/Room";
-import { useCardDialogData } from "@data-board";
-import { useBoardStore, useCardStore } from "@data-board";
+import { useBoardStore, useCardDialogData, useCardStore } from "@data-board";
 import { useRoomStore } from "@data-room";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";

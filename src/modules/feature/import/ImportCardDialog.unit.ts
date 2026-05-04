@@ -35,13 +35,11 @@ describe("ImportCardDialog", () => {
 	});
 
 	const setup = (rooms = mockRooms) => {
-		// const roomStore = mockedPiniaStoreTyping(useRoomStore);
 		const shareTokenInfo: ShareTokenInfoResponse = {
 			token: "token-123",
 			parentType: ShareTokenInfoResponseParentType.ROOM,
 			parentName: "Room 1",
 		};
-		// roomStore.fetchRoomsPlain.mockResolvedValue(mockApiResponse({ data: { data: rooms } }));
 
 		const wrapper = mount(ImportCardDialog, {
 			props: {

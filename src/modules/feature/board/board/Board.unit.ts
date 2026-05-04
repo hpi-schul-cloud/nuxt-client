@@ -1281,7 +1281,7 @@ describe("Board", () => {
 				});
 				await boardHeader.vm.$emit("copy:board");
 
-				// expect(mockedCopyCalls.copy).not.toHaveBeenCalled();
+				expect(useCopyFlowMock.executeCopyBoard).not.toHaveBeenCalled();
 			});
 		});
 	});

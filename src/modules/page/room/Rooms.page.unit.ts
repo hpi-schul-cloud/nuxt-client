@@ -16,8 +16,7 @@ import {
 	Permission,
 	ShareTokenInfoResponseParentType,
 } from "@api-server";
-import { ImportDialog, useImportFlow } from "@feature-import";
-import { ImportCardDialog } from "@feature-import";
+import { ImportCardDialog, ImportDialog, useImportFlow } from "@feature-import";
 import { RoomGrid } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";

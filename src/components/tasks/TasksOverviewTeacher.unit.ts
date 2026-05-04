@@ -154,15 +154,6 @@ describe("TasksOverviewTeacher", () => {
 			const modal = wrapper.findComponent({ name: "CopyDialog" });
 			expect(modal.exists()).toBe(true);
 		});
-
-		it("should call copyModule.reset when copy dialog is closed", () => {
-			const wrapper = mountComponent();
-
-			const modal = wrapper.findComponent({ name: "CopyDialog" });
-			modal.vm.$emit("copy-dialog-closed");
-
-			// expect(copyModuleMock.reset).toHaveBeenCalled();
-		});
 	});
 
 	describe("Share Modal", () => {
