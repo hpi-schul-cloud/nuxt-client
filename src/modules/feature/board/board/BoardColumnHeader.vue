@@ -99,6 +99,8 @@ const updatedTitle = ref(columnTitle.value);
 const lastEmittedTitle = ref(columnTitle.value);
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(columnId.value);
 
+const boardStore = useBoardStore();
+
 const columnHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(columnId.value, columnHeader);
 

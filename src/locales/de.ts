@@ -34,6 +34,7 @@ export default {
 	"common.actions.shareLink": "Link kopieren",
 	"common.actions.update": "Aktualisieren",
 	"common.actions.moved": "{elementName} wurde verschoben an Position {position}",
+	"common.actions.view": "Anzeigen",
 	"common.labels.moreInfo": "Mehr Infos",
 	"common.ariaLabel.newTab": "öffnet in einem neuen Tab",
 	"common.ariaLabel.openImageInLightBox": "Bild in voller Größe anzeigen",
@@ -441,7 +442,7 @@ export default {
 	"components.board.action.addCard": "Karte hinzufügen",
 	"components.board.action.delete": "Löschen",
 	"components.board.action.deleteFromSection": "Aus Abschnitt entfernen",
-	"components.board.action.detail-view": "Detailansicht",
+	"components.board.action.detail-view": "Vollansicht öffnen",
 	"components.board.action.download": "Herunterladen",
 	"components.board.action.moveDown": "Nach unten verschieben",
 	"components.board.action.moveLeft": "Nach links verschieben",
@@ -464,6 +465,7 @@ export default {
 	"components.board.dialog.readerCanEdit.options.defaultSetting": "Standardeinstellung",
 	"components.board.dialog.readerCanEdit.alert.text":
 		"Der Bereich muss zuerst veröffentlicht werden, bevor die Bearbeitungseinstellungen angepasst werden können.",
+	"components.board.dialog.detail-view.title": "Vollansicht",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Abschnitt-Einstellungen",
 	"components.board.menu.collaborativeTextEditorElement": "Etherpad-Einstellungen",
@@ -2050,6 +2052,16 @@ export default {
 	"pages.folder.trash.infoText": "Dateien werden 7 Tage nach dem Verschieben in den Papierkorb automatisch gelöscht.",
 	"pages.folder.trash.columns.deletedAt": "Gelöscht am",
 	"pages.folder.trash.ariaLabels.actionMenu": "Aktionsmenü für {name}",
+	"pages.folder.trash.ariaLabels.menu": "Papierkorb Menü",
+	"pages.folder.trash.emptyTrash": "Papierkorb leeren",
 	"pages.folder.trash.restore.success": "Dateien wurden erfolgreich wiederhergestellt.",
 	"pages.folder.trash.restore.error": "Dateien konnten nicht wiederhergestellt werden.",
+	"pages.folder.trash.purge.action": "Endgültig löschen",
+	"pages.folder.trash.purge.success": "Dateien wurden endgültig gelöscht.",
+	"pages.folder.trash.purge.error": "Dateien konnten nicht endgültig gelöscht werden.",
+	"pages.folder.trash.purge.dialog.title": "Dateien endgültig löschen?",
+	"pages.folder.trash.purge.dialog.description":
+		"Du bist dabei, {count} Datei(en) endgültig zu löschen. Diese Aktion kann nicht rückgängig gemacht werden.",
+	"pages.folder.trash.purge.dialog.checkboxLabel":
+		"Ich verstehe, dass diese Aktion dauerhaft ist und nicht rückgängig gemacht werden kann.",
 };

@@ -242,5 +242,6 @@ export const useBoardSocketApi = () => {
 		updateBoardVisibilityRequest,
 		updateBoardLayoutRequest,
 		updateReaderCanEditRequest,
+		duplicateColumnRequest,
 	};
 };
