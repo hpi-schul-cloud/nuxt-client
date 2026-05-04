@@ -2031,6 +2031,15 @@ export default {
 	"pages.folder.trash.emptyState": "Кошик порожній",
 	"pages.folder.trash.columns.deletedAt": "Видалено",
 	"pages.folder.trash.ariaLabels.actionMenu": "Меню дій для {name}",
+	"pages.folder.trash.ariaLabels.menu": "Меню кошика",
+	"pages.folder.trash.emptyTrash": "Очистити кошик",
 	"pages.folder.trash.restore.success": "Файли успішно відновлено.",
 	"pages.folder.trash.restore.error": "Не вдалося відновити файли.",
+	"pages.folder.trash.purge.action": "Видалити назавжди",
+	"pages.folder.trash.purge.success": "Файли було остаточно видалено.",
+	"pages.folder.trash.purge.error": "Не вдалося остаточно видалити файли.",
+	"pages.folder.trash.purge.dialog.title": "Назавжди видалити файли?",
+	"pages.folder.trash.purge.dialog.description":
+		"Ви збираєтесь остаточно видалити {count} файл(ів). Цю дію неможливо скасувати.",
+	"pages.folder.trash.purge.dialog.checkboxLabel": "Я розумію, що ця дія є незворотною та не може бути скасована.",
 };
