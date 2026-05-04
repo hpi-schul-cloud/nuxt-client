@@ -2,6 +2,7 @@ import VideoConferenceContentElementDisplay from "./VideoConferenceContentElemen
 import { BoardContextType } from "@/types/board/BoardContext";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useBoardFeatures } from "@data-board";
+import { ContentElementBar } from "@ui-board";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { mount, VueWrapper } from "@vue/test-utils";
 
@@ -255,6 +256,25 @@ describe("VideoConferenceContentElementDisplay", () => {
 				await triggerClick(wrapper);
 				expect(wrapper.emitted("click")).toBeDefined();
 			});
+		});
+	});
+
+	describe("when detail view is enabled", () => {
+		it("should have list style", () => {
+			const wrapper = setupWrapper({
+				propsData: {
+					boardParentType: BoardContextType.COURSE,
+					isRunning: false,
+					isVideoConferenceEnabled: false,
+					hasParticipationPermission: true,
+					canStart: true,
+					title: "video conference",
+					isDetailView: true,
+				},
+			});
+
+			const element = wrapper.findComponent(ContentElementBar);
+			expect(element.props("hasRowStyle")).toBe(true);
 		});
 	});
 });
