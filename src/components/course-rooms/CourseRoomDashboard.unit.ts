@@ -154,8 +154,6 @@ const setup = (options?: { roomData?: SingleColumnBoardResponse; role?: string }
 };
 
 describe("CourseRoomDashboard.vue", () => {
-	let useTaskActionsMock: Mocked<ReturnType<typeof useTaskActions>>;
-
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestEnvStore({

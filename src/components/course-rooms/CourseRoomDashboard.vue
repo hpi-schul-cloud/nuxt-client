@@ -43,7 +43,7 @@
 							:task-card-index="index"
 							:user-role="role"
 							:room="taskData"
-							:task="item.content"
+							:task="asTaskResponse(item.content)"
 							:aria-label="
 								t('pages.room.cards.aria', {
 									itemType: t('common.words.tasks'),
@@ -117,7 +117,7 @@
 					:ref="(el) => setItemRef(el, index)"
 					:task-card-index="index"
 					:user-role="role"
-					:task="item.content"
+					:task="asTaskResponse(item.content)"
 					:aria-label="
 						t('pages.room.cards.aria', {
 							itemType: t('common.words.tasks'),
@@ -175,10 +175,10 @@ import {
 	ImportUserResponseRoleNames,
 	ShareTokenBodyParamsParentType,
 	SingleColumnBoardResponse,
+	TaskResponse,
 } from "@api-server";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { useEnvConfig } from "@data-env";
-import { useTaskActions } from "@data-tasks";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import { storeToRefs } from "pinia";
@@ -371,6 +371,9 @@ const copyBoard = (columnBoardId: string) => {
 		courseId: roomData.value.roomId,
 	});
 };
+
+const asTaskResponse = (content: BoardTaskResponse | BoardLessonResponse | BoardColumnBoardResponse) =>
+	content as unknown as TaskResponse;
 
 const boardCardIsVisibleToStudent = (card: SingleColumnBoardResponse["elements"][number]) => {
 	const isBoardCard = card.type === cardTypes.COLUMN_BOARD;
