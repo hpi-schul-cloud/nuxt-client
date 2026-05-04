@@ -33,9 +33,25 @@ export const useFileTrash = () => {
 		}
 	};
 
+	const purgeFiles = async (fileRecords: FileRecord[]): Promise<void> => {
+		try {
+			const fileRecordIds = fileRecords.map((r) => r.id);
+
+			await fileApi.purgeFiles({ fileRecordIds });
+
+			const purgedIds = new Set(fileRecordIds);
+
+			deletedFileRecords.value = deletedFileRecords.value.filter((r) => !purgedIds.has(r.id));
+		} catch (error) {
+			notifyError(t("components.board.notifications.errors.fileServiceNotAvailable"));
+			throw error;
+		}
+	};
+
 	return {
 		deletedFileRecords,
 		fetchDeletedFiles,
 		restoreFiles,
+		purgeFiles,
 	};
 };

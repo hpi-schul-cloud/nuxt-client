@@ -1,35 +1,101 @@
 import CardHostDetailView from "./CardHostDetailView.vue";
-import CardTitle from "./CardTitle.vue";
-import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
+import {
+	boardResponseFactory,
+	cardResponseFactory,
+	fileElementResponseFactory,
+	mockComposable,
+} from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { CardResponse } from "@api-server";
-import { shallowMount, type VueWrapper } from "@vue/test-utils";
-import { nextTick } from "vue";
+import { BoardResponseAllowedOperations, CardResponse, Colors } from "@api-server";
+import { useBoardAllowedOperations, useCourseBoardEditMode, useSharedEditMode } from "@data-board";
+import { createTestingPinia } from "@pinia/testing";
+import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
+import { computed, ref } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
+import { VDialog } from "vuetify/components";
+
+const backgroundColor = Colors.BLUE;
 
 const CARD_WITH_ELEMENTS: CardResponse = cardResponseFactory.build({
 	elements: [fileElementResponseFactory.build()],
+	backgroundColor: backgroundColor,
 });
 
 vi.mock("@data-board/BoardPermissions.composable");
 
-interface CardHostDetailViewExposed {
-	isEditMode: { value: boolean };
-	onUpdateCardTitle: (value: string) => void;
-	onAddElement: () => void;
-	onDeleteCard: () => Promise<void> | void;
-}
+vi.mock("@data-board/cardActions/cardRestApi.composable");
+vi.mocked(useCardRestApi).mockReturnValue(mockComposable(useCardRestApi));
 
-const getVm = (wrapper: VueWrapper): CardHostDetailViewExposed => wrapper.vm as unknown as CardHostDetailViewExposed;
+vi.mock("@data-board/cardActions/cardSocketApi.composable");
+vi.mocked(useCardSocketApi).mockReturnValue(mockComposable(useCardSocketApi));
+
+vi.mock("@util-board/LastCreatedElement.composable");
+vi.mocked(useSharedLastCreatedElement).mockReturnValue(mockComposable(useSharedLastCreatedElement));
+
+vi.mock("@util-board/file-select.composable");
+vi.mocked(useSharedFileSelect).mockReturnValue(mockComposable(useSharedFileSelect));
+
+vi.mock("@data-board/board-allowed-operations.composable");
+
+vi.mock("@data-board/edit-mode.composable");
+const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
 
 describe("CardHostDetailView", () => {
-	const setup = (props: ComponentProps<typeof CardHostDetailView>) => {
+	afterEach(() => {
+		vi.clearAllMocks();
+	});
+
+	const setup = (
+		props: ComponentProps<typeof CardHostDetailView>,
+		allowedOperations?: Partial<BoardResponseAllowedOperations>,
+		editMode?: boolean
+	) => {
+		const testBoard = allowedOperations
+			? boardResponseFactory.build({ allowedOperations })
+			: boardResponseFactory.build();
+
+		vi.mocked(useBoardAllowedOperations).mockReturnValue({
+			allowedOperations: computed(() => testBoard.allowedOperations as BoardResponseAllowedOperations),
+		});
+
+		vi.mocked(useCourseBoardEditMode).mockReturnValue({
+			isEditMode: computed(() => editMode ?? false),
+			startEditMode: vi.fn(),
+			stopEditMode: vi.fn(),
+		});
+
+		const mockedSharedEditMode = mockComposable(useSharedEditMode, {
+			editModeId: ref(undefined),
+			isInEditMode: computed(() => true),
+		});
+		mockedUseSharedEditMode.mockReturnValue(mockedSharedEditMode);
+
 		const wrapper = shallowMount(CardHostDetailView, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [
+					createTestingPinia({
+						initialState: {
+							cardStore: {
+								cards: {
+									[CARD_WITH_ELEMENTS.id]: CARD_WITH_ELEMENTS,
+								},
+							},
+							boardStore: {
+								board: testBoard,
+							},
+						},
+						stubActions: false,
+					}),
+					createTestingVuetify(),
+					createTestingI18n(),
+				],
 			},
 			propsData: props,
+			attachTo: document.body,
 		});
 
 		return {
@@ -37,117 +103,81 @@ describe("CardHostDetailView", () => {
 		};
 	};
 
-	afterEach(() => {
-		vi.clearAllMocks();
-	});
-
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
 			const { wrapper } = setup({
-				card: CARD_WITH_ELEMENTS,
-				isOpen: true,
-				columnIndex: 0,
-				rowIndex: 1,
+				cardId: CARD_WITH_ELEMENTS.id,
 			});
 			expect(wrapper.findComponent(CardHostDetailView).exists()).toBe(true);
 		});
 	});
 
-	describe("when edit button is clicked", () => {
-		it("should toggle edit mode", async () => {
+	describe("when detail view is open", () => {
+		it("should display the dialog", () => {
 			const { wrapper } = setup({
-				card: CARD_WITH_ELEMENTS,
-				isOpen: true,
-				columnIndex: 0,
-				rowIndex: 1,
+				cardId: CARD_WITH_ELEMENTS.id,
 			});
 
-			const button = wrapper.get("[data-testid='toolbar-edit-button']");
-			await button.trigger("click");
-
-			await nextTick();
-
-			const cardTitleWrapper = wrapper.getComponent(CardTitle);
-			expect(cardTitleWrapper.props("isEditMode")).toBe(true);
+			expect(wrapper.findComponent(VDialog).exists()).toBe(true);
 		});
 	});
 
-	describe("events", () => {
-		it("should emit close event when dialog is closed", async () => {
+	describe("user with edit permissions", () => {
+		it("should show edit button", async () => {
+			const { wrapper } = setup(
+				{
+					cardId: CARD_WITH_ELEMENTS.id,
+				},
+				{ deleteCard: true }
+			);
+
+			const editButton = wrapper.find("[data-testid='toolbar-edit-button']");
+			expect(editButton.exists()).toBe(true);
+		});
+
+		describe("when edit mode is activated", () => {
+			it("should show view button", () => {
+				const { wrapper } = setup(
+					{
+						cardId: CARD_WITH_ELEMENTS.id,
+					},
+					{ deleteCard: true },
+					true
+				);
+
+				const editButton = wrapper.find("[data-testid='toolbar-edit-button']");
+				expect(editButton.exists()).toBe(false);
+
+				const viewButton = wrapper.find("[data-testid='toolbar-view-button']");
+				expect(viewButton.exists()).toBe(true);
+			});
+		});
+	});
+
+	describe("user without edit permissions", () => {
+		it("should not show edit button", () => {
+			const { wrapper } = setup(
+				{
+					cardId: CARD_WITH_ELEMENTS.id,
+				},
+				{ deleteCard: false }
+			);
+
+			const editButton = wrapper.find("[data-testid='toolbar-edit-button']");
+			expect(editButton.exists()).toBe(false);
+		});
+	});
+
+	describe("when close button gets clicked", () => {
+		it("should emit close event", () => {
 			const { wrapper } = setup({
-				card: CARD_WITH_ELEMENTS,
-				isOpen: true,
-				columnIndex: 0,
-				rowIndex: 1,
+				cardId: CARD_WITH_ELEMENTS.id,
 			});
 
-			await wrapper.vm.$emit("close:detail-view");
-			await nextTick();
+			const closeButton = wrapper.find("[data-testid='close-detail-view-button']");
+			closeButton.trigger("click");
 
 			expect(wrapper.emitted("close:detail-view")).toBeTruthy();
-		});
-
-		it("should emit update:title when title is updated", () => {
-			const { wrapper } = setup({
-				card: CARD_WITH_ELEMENTS,
-				isOpen: true,
-				columnIndex: 0,
-				rowIndex: 1,
-			});
-
-			const newTitle = "New title";
-			getVm(wrapper).onUpdateCardTitle(newTitle);
-
-			expect(wrapper.emitted("update:title")?.[0]).toEqual([newTitle]);
-		});
-
-		it("should emit add:element and enable edit mode when element is added", () => {
-			const { wrapper } = setup({
-				card: CARD_WITH_ELEMENTS,
-				isOpen: true,
-				columnIndex: 0,
-				rowIndex: 1,
-			});
-
-			getVm(wrapper).onAddElement();
-
-			expect(wrapper.emitted("add:element")).toBeTruthy();
-		});
-	});
-
-	describe("delete card", () => {
-		it("should emit delete:card when confirmation is accepted", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(true);
-
-			const { wrapper } = setup({
-				card: CARD_WITH_ELEMENTS,
-				isOpen: true,
-				columnIndex: 0,
-				rowIndex: 1,
-			});
-
-			await getVm(wrapper).onDeleteCard();
-
-			expect(confirmDialogUtils.askDeletionForItem).toHaveBeenCalledWith(
-				CARD_WITH_ELEMENTS.title,
-				"components.boardCard"
-			);
-			expect(wrapper.emitted("delete:card")).toBeTruthy();
-		});
-
-		it("should not emit delete:card when confirmation is cancelled", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
-
-			const { wrapper } = setup({
-				card: CARD_WITH_ELEMENTS,
-				isOpen: true,
-				columnIndex: 0,
-				rowIndex: 1,
-			});
-
-			await getVm(wrapper).onDeleteCard();
-
-			expect(wrapper.emitted("delete:card")).toBeFalsy();
 		});
 	});
 });
