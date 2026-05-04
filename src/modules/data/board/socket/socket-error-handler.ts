@@ -101,11 +101,6 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 	const manager = socket.io;
 
 	manager.on("reconnect_attempt", (attempt) => {
-		if (isJwtExpired.value) {
-			log("noSess");
-			socket.disconnect();
-			return;
-		}
 		connectionState = ConnectionState.RECONNECTING;
 		log(`re_att${attempt}`);
 		reportBoardError("socketio_connection", "reconnect_attempt", attempt, [...logs]);
