@@ -1,7 +1,7 @@
 import ExternalToolConfigParameter from "./ExternalToolConfigParameter.vue";
-import { ToolParameter, ToolParameterType } from "@/store/external-tool";
 import { toolParameterFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ToolParameter, ToolParameterType } from "@data-external-tool";
 import { mount } from "@vue/test-utils";
 
 describe("ExternalToolConfigParameter", () => {
