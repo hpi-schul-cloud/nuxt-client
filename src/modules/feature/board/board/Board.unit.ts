@@ -4,12 +4,11 @@ import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
 import ShareModule from "@/store/share";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
-import { COURSE_ROOM_DETAILS_MODULE_KEY, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
+import { COURSE_ROOM_DETAILS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -141,11 +140,10 @@ describe("Board", () => {
 		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getRoomId: "room1",
 		});
-		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule);
+
 		return {
 			shareModule,
 			courseRoomDetailsModule,
-			schoolExternalToolsModule,
 		};
 	};
 
@@ -156,7 +154,7 @@ describe("Board", () => {
 		envs?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
 	}) => {
-		const { shareModule, courseRoomDetailsModule, schoolExternalToolsModule } = setupProvideModules();
+		const { shareModule, courseRoomDetailsModule } = setupProvideModules();
 
 		setActivePinia(createTestingPinia());
 
@@ -191,7 +189,6 @@ describe("Board", () => {
 				provide: {
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
-					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
 				},
 				stubs: {
 					ShareModal: true,

@@ -1,5 +1,5 @@
 <template>
-	<external-tool-configurator
+	<ExternalToolConfigurator
 		:templates="availableTools"
 		:configuration="configuration"
 		:is-preferred-tool="isPreferredTool"
@@ -11,35 +11,36 @@
 		@change="onSelectionChange"
 	>
 		<template #aboveParameters="{ selectedTemplate }">
-			<v-text-field
+			<VTextField
 				v-if="selectedTemplate"
 				v-model="displayName"
-				:label="$t('pages.tool.context.displayName')"
-				:hint="$t('pages.tool.context.displayNameDescription')"
+				:label="t('pages.tool.context.displayName')"
+				:hint="t('pages.tool.context.displayNameDescription')"
 				persistent-hint
 				validate-on="blur"
 				data-testId="parameter-display-name"
 			/>
 		</template>
-	</external-tool-configurator>
+	</ExternalToolConfigurator>
 </template>
 
 <script setup lang="ts">
 import ExternalToolConfigurator from "@/components/administration/external-tools-configuration/ExternalToolConfigurator.vue";
-import { ToolParameterEntry } from "@/store/external-tool";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { BusinessError } from "@/store/types/commons";
-import { injectStrict, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
 import { ToolContextType } from "@api-server";
 import {
 	ContextExternalTool,
 	ContextExternalToolConfigurationTemplate,
 	ContextExternalToolMapper,
 	ContextExternalToolSave,
+	ToolParameterEntry,
 	useContextExternalToolConfigurationState,
 	useContextExternalToolState,
+	usePreferredExternalToolStore,
 } from "@data-external-tool";
+import { storeToRefs } from "pinia";
 import { computed, ComputedRef, PropType, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	configId: {
@@ -65,6 +66,8 @@ const emit = defineEmits<{
 	(e: "cancel"): void;
 }>();
 
+const { t } = useI18n();
+
 const {
 	availableTools,
 	fetchAvailableToolConfigurationsForContext,
@@ -80,6 +83,7 @@ const {
 	isLoading: isLoadingConfig,
 	error: configError,
 } = useContextExternalToolState();
+const { preferredExternalTool } = storeToRefs(usePreferredExternalToolStore());
 
 const hasData: Ref<boolean> = ref(false);
 const loading: ComputedRef<boolean> = computed(
@@ -89,10 +93,6 @@ const loading: ComputedRef<boolean> = computed(
 const displayName: Ref<string | undefined> = ref<string | undefined>();
 
 const apiError: ComputedRef<BusinessError | undefined> = computed(() => configError.value || templateError.value);
-
-const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY);
-
-const preferredTool = schoolExternalToolsModule.getContextExternalToolConfigurationTemplate;
 
 const isPreferredTool: Ref<boolean> = ref(false);
 
@@ -135,10 +135,10 @@ const fetchData = async () => {
 
 		await fetchContextExternalTool(props.configId);
 		displayName.value = configuration.value?.displayName;
-	} else if (preferredTool) {
-		availableTools.value = [preferredTool];
+	} else if (preferredExternalTool.value) {
+		availableTools.value = [preferredExternalTool.value];
 		isPreferredTool.value = true;
-		schoolExternalToolsModule.setContextExternalToolConfigurationTemplate(undefined);
+		preferredExternalTool.value = undefined;
 	} else {
 		await fetchAvailableToolConfigurationsForContext(props.contextId, props.contextType);
 	}

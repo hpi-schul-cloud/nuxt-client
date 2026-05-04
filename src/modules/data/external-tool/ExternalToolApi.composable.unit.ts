@@ -1,5 +1,5 @@
 import { useExternalToolApi } from "./ExternalToolApi.composable";
-import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@/store/external-tool";
+import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "./types";
 import { mockApi, mockApiResponse, toolLaunchRequestResponseFactory } from "@@/tests/test-utils";
 import * as serverApi from "@api-server";
 import { ContextExternalToolBodyParams, LaunchType, ToolContextType, ToolLaunchRequestResponse } from "@api-server";

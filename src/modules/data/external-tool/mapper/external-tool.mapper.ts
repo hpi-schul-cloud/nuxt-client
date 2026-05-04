@@ -1,4 +1,4 @@
-import { ToolParameter } from "../tool-parameter";
+import { ToolParameter } from "../types/tool-parameter";
 import { ToolParamLocationMapping, ToolParamScopeMapping, ToolParamTypeMapping } from "./common-tool.mapper";
 import { CustomParameterResponse } from "@api-server";
 

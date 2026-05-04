@@ -2074,6 +2074,15 @@ export default {
 	"pages.folder.trash.emptyState": "La papelera está vacía",
 	"pages.folder.trash.columns.deletedAt": "Eliminado el",
 	"pages.folder.trash.ariaLabels.actionMenu": "Menú de acciones para {name}",
+	"pages.folder.trash.ariaLabels.menu": "Menú de papelera",
+	"pages.folder.trash.emptyTrash": "Vaciar papelera",
 	"pages.folder.trash.restore.success": "Archivos restaurados correctamente.",
 	"pages.folder.trash.restore.error": "No se pudieron restaurar los archivos.",
+	"pages.folder.trash.purge.action": "Eliminar permanentemente",
+	"pages.folder.trash.purge.success": "Los archivos se han eliminado permanentemente.",
+	"pages.folder.trash.purge.error": "No se pudieron eliminar permanentemente los archivos.",
+	"pages.folder.trash.purge.dialog.title": "¿Eliminar archivos permanentemente?",
+	"pages.folder.trash.purge.dialog.description":
+		"Está a punto de eliminar permanentemente {count} archivo(s). Esta acción no se puede deshacer.",
+	"pages.folder.trash.purge.dialog.checkboxLabel": "Entiendo que esta acción es permanente y no se puede deshacer.",
 };

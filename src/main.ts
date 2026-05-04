@@ -8,7 +8,6 @@ import { initializeAxios } from "./utils/api";
 import {
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "./utils/inject";
@@ -16,7 +15,6 @@ import {
 	courseRoomDetailsModule,
 	filePathsModule,
 	importUsersModule,
-	schoolExternalToolsModule,
 	schoolsModule,
 	shareModule,
 } from "@/store";
@@ -82,7 +80,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide("importUsersModule", importUsersModule);
 
 	app.provide(COURSE_ROOM_DETAILS_MODULE_KEY.valueOf(), courseRoomDetailsModule);
-	app.provide(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(), schoolExternalToolsModule);
 	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
 	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
 

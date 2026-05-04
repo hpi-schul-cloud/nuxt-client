@@ -1,10 +1,7 @@
-import { SchoolExternalToolConfigurationStatus } from "@/store/external-tool/school-external-tool-configuration-status";
+import { SchoolExternalToolConfigurationStatus } from "@data-external-tool";
 import { Factory } from "fishery";
 
 export const schoolToolConfigurationStatusFactory = Factory.define<SchoolExternalToolConfigurationStatus>(() => ({
-	isOutdatedOnScopeContext: false,
 	isOutdatedOnScopeSchool: false,
-	isIncompleteOperationalOnScopeContext: false,
-	isIncompleteOnScopeContext: false,
 	isGloballyDeactivated: false,
 }));

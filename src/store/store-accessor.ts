@@ -8,7 +8,6 @@
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import FilePaths from "@/store/filePaths";
 import ImportUsersModule from "@/store/import-users";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
 import { Store } from "vuex";
@@ -20,7 +19,6 @@ import { getModule } from "vuex-module-decorators";
 export let filePathsModule: FilePaths;
 export let importUsersModule: ImportUsersModule;
 export let courseRoomDetailsModule: CourseRoomDetailsModule;
-export let schoolExternalToolsModule: SchoolExternalToolsModule;
 export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
 
@@ -29,7 +27,6 @@ export function initializeStores(store: Store<unknown>): void {
 	filePathsModule = getModule(FilePaths, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	courseRoomDetailsModule = getModule(CourseRoomDetailsModule, store);
-	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	shareModule = getModule(ShareModule, store);
 }
@@ -41,7 +38,6 @@ export const modules = {
 	filePathsModule: FilePaths,
 	importUsersModule: ImportUsersModule,
 	courseRoomDetailsModule: CourseRoomDetailsModule,
-	schoolExternalToolsModule: SchoolExternalToolsModule,
 	schoolsModule: SchoolsModule,
 	shareModule: ShareModule,
 };
