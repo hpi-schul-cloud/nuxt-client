@@ -491,8 +491,6 @@ export default {
 	"components.board.notifications.errors.notUpdated": "Die Änderungen konnten nicht gespeichert werden.",
 	"components.board.notifications.info.cardDuplicated":
 		"Inhalte aus Etherpads und Whiteboards sowie geschützte Einstellungen externer Tools werden nicht übernommen.",
-	"components.board.notifications.info.columnDuplicated":
-		"Inhalte aus Etherpads und Whiteboards sowie geschützte Einstellungen externer Tools werden nicht übernommen.",
 	"components.board.notifications.success.columnDuplicated": "Der Abschnitt wurde erfolgreich dupliziert.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"Eine Karte wurde von einem anderen Benutzer in Abschnitt {columnPosition} erstellt.",
