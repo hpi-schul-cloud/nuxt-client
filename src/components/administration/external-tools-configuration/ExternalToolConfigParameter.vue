@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import { useExternalToolValidation } from "./external-tool-validation.composable";
-import { ToolParameter, ToolParameterType } from "@/store/external-tool";
+import { ToolParameter, ToolParameterType } from "@data-external-tool";
 import { computed, ModelRef, PropType, Ref, ref, WritableComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
 
