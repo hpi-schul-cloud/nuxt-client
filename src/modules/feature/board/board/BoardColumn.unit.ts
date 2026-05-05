@@ -10,10 +10,9 @@ import { useDragAndDrop, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { computed, nextTick } from "vue";
+import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 
 const { isDragging, dragStart, dragEnd } = useDragAndDrop();
-
-vi.mock("vue-router");
 
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
@@ -28,6 +27,7 @@ mockUseSharedLastCreatedElement.mockReturnValue({
 
 describe("BoardColumn", () => {
 	let mockedUseForceRenderHandler: Mocked<ReturnType<typeof useForceRender>>;
+	let router: RouterMock;
 
 	beforeEach(() => {
 		setupStores({});
@@ -36,6 +36,9 @@ describe("BoardColumn", () => {
 
 		mockedUseForceRenderHandler = mockComposable(useForceRender);
 		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
+
+		router = createRouterMock();
+		injectRouterMock(router);
 	});
 
 	const setup = (options?: { cardsCount?: number; allowedOperations?: Partial<BoardResponseAllowedOperations> }) => {

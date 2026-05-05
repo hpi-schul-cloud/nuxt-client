@@ -1337,4 +1337,42 @@ describe("Board", () => {
 			});
 		});
 	});
+
+	describe("Card detail view", () => {
+		describe("when current route includes cardId", () => {
+			it("should show card detail view", () => {
+				router.currentRoute.value = {
+					...router.currentRoute.value,
+					params: { cardId: "test-card-id-123" },
+				};
+				const { wrapper } = setup();
+
+				const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
+				expect(cardHostDetailView.exists()).toBe(true);
+			});
+		});
+
+		describe("when current route does not include cardId", () => {
+			it("should not show card detail view", () => {
+				const { wrapper } = setup();
+
+				const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
+				expect(cardHostDetailView.exists()).toBe(false);
+			});
+		});
+
+		describe("when detail view is closed", () => {
+			it("should navigate to board route", async () => {
+				router.currentRoute.value = {
+					...router.currentRoute.value,
+					params: { cardId: "test-card-id-123" },
+				};
+				const { wrapper } = setup();
+
+				const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
+				await cardHostDetailView.vm.$emit("close:detail-view");
+				expect(router.replace).toHaveBeenCalled();
+			});
+		});
+	});
 });
