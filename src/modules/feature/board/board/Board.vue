@@ -387,10 +387,10 @@ const isListBoard = computed(() => board.value?.layout === BoardLayout.LIST);
 provide(BOARD_IS_LIST_LAYOUT, isListBoard);
 
 const started2000msAgo = useTimeout(2000);
-const isConnectedOrLoading = computed(
-	() => started2000msAgo.value && (boardStore.isConnected === false || boardStore.isLoading)
+const isLoadingOrNotConnected = computed(
+	() => started2000msAgo.value === true && (boardStore.isConnected === false || boardStore.isLoading)
 );
-const showLoadingDialog = refDebounced(isConnectedOrLoading, 1000);
+const showLoadingDialog = refDebounced(isLoadingOrNotConnected, 2000);
 
 const boardClasses = computed(() => {
 	const classes = ["d-flex", "flex-shrink-1", "board"];
