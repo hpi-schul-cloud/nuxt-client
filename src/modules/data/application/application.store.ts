@@ -144,7 +144,10 @@ export const useAppStore = defineStore("applicationStore", () => {
 	};
 
 	// startTimer when config was loaded
-	watchOnce(() => useEnvConfig().value.JWT_TIMEOUT_SECONDS, startTimer);
+	watchOnce(
+		() => useEnvConfig().value.JWT_TIMEOUT_SECONDS && useEnvConfig().value.JWT_SHOW_TIMEOUT_WARNING_SECONDS,
+		startTimer
+	);
 
 	// session-state synchronization (across tabs and with schulcloud-client)
 
