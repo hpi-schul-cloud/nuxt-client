@@ -1,6 +1,6 @@
 <template>
 	<KebabMenu class="mx-2" :aria-label="t('pages.folder.trash.ariaLabels.menu')" data-testid="folder-trash-menu">
-		<KebabMenuAction :icon="mdiDelete" data-testid="kebab-menu-action-empty-thrash" @click="$emit('empty-trash')">
+		<KebabMenuAction :icon="mdiDelete" data-testid="kebab-menu-action-empty-trash" @click="$emit('empty-trash')">
 			{{ t("pages.folder.trash.emptyTrash") }}
 		</KebabMenuAction>
 	</KebabMenu>
