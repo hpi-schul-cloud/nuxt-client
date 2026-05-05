@@ -100,7 +100,7 @@
 						>
 							{{ t("common.actions.restore") }}
 						</KebabMenuAction>
-						<KebabMenuAction :icon="mdiDelete" data-testid="action-menu-purge" @click="onPurgeByIds(selectedIds)">
+						<KebabMenuAction :icon="mdiDelete" data-testid="kebab-menu-action-purge" @click="onPurgeByIds(selectedIds)">
 							{{ t("pages.folder.trash.purge.action") }}
 						</KebabMenuAction>
 					</template>

@@ -1,4 +1,3 @@
-import { useCardDialogData } from "./card-dialog-composable";
 import MoveCardDialog from "./MoveCardDialog.vue";
 import {
 	columnResponseFactory,
@@ -8,7 +7,7 @@ import {
 	roomItemFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useBoardStore } from "@data-board";
+import { useBoardStore, useCardDialogData } from "@data-board";
 import { useRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { WarningAlert } from "@ui-alert";
@@ -37,7 +36,7 @@ const mockRooms = [
 	roomItemFactory.build({ allowedOperations: { editContent: false } }),
 ];
 
-vi.mock("./card-dialog-composable", () => ({
+vi.mock("@data-board/card-dialog.composable", () => ({
 	useCardDialogData: () => mockCardDialogData,
 }));
 
