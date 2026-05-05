@@ -5,11 +5,7 @@ import store from "./plugins/store";
 import { createVuetifyPlugin } from "./plugins/vuetify";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
-import {
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-	FILE_PATHS_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "./utils/inject";
+import { COURSE_ROOM_DETAILS_MODULE_KEY, FILE_PATHS_MODULE_KEY, SHARE_MODULE_KEY } from "./utils/inject";
 import { courseRoomDetailsModule, filePathsModule, importUsersModule, shareModule } from "@/store";
 import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
