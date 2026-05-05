@@ -1,5 +1,5 @@
 import TasksOverviewListItemMenu from "./TasksOverviewListItemMenu.vue";
-import { CopyParamsTypeEnum } from "@/store/copy";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { createTestAppStoreWithRole, createTestEnvStore, taskResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoleName, TaskResponse } from "@api-server";
@@ -70,7 +70,7 @@ describe("TasksListItemMenu", () => {
 					{
 						id: task.id,
 						courseId: task.courseId,
-						type: CopyParamsTypeEnum.Task,
+						type: ContentItemTypeEnum.Task,
 					},
 				],
 			]);
