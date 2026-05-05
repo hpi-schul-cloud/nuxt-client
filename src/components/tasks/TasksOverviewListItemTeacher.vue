@@ -52,7 +52,7 @@
 <script setup lang="ts">
 import TasksOverviewListItemMenu from "./TasksOverviewListItemMenu.vue";
 import TaskChipsTeacher from "@/components/tasks/task-chips/TaskChipsTeacher.vue";
-import { CopyParams } from "@/store/copy";
+import { CopyParams } from "@/types/copy/CopyParams";
 import { formatUtc, isToday } from "@/utils/date-time.utils";
 import { TaskResponse } from "@api-server";
 import { isTaskDraft, useTaskActions, useTasksOfOverview } from "@data-tasks";
