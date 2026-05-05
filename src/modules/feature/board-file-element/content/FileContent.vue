@@ -63,6 +63,7 @@ const props = defineProps({
 		required: true,
 	},
 	isEditMode: { type: Boolean, required: true },
+	isDetailView: { type: Boolean, required: false },
 });
 
 const emit = defineEmits(["fetch:file", "update:alternativeText", "update:caption", "update:name", "add:alert"]);
@@ -100,7 +101,7 @@ const showTitle = computed(
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
-const isSmallOrLargerListBoard = computed(() => smAndUp.value && isListLayout.value);
+const isSmallOrLargerListBoard = computed(() => smAndUp.value && (isListLayout.value || props.isDetailView));
 
 const hasRowStyle = computed(() => isSmallOrLargerListBoard.value && hasSmallPreview.value);
 

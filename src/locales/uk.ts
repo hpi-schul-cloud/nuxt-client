@@ -8,6 +8,7 @@ export default {
 	"common.actions.copy": "Копіювати",
 	"common.actions.duplicate": "Дублювати",
 	"common.actions.move": "Перемістити",
+	"common.actions.view": "Показати",
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.moveToTrash": "Перемістити до кошика",
@@ -441,7 +442,7 @@ export default {
 	"components.board.action.addCard": "Додати картка",
 	"components.board.action.delete": "Видалити",
 	"components.board.action.deleteFromSection": "Видалити з розділу",
-	"components.board.action.detail-view": "Детальний вигляд",
+	"components.board.action.detail-view": "Відкрити детальний вигляд",
 	"components.board.action.download": "Завантажити",
 	"components.board.action.moveDown": "Рухатися вниз",
 	"components.board.action.moveLeft": "Перемістіться вліво",
@@ -464,6 +465,7 @@ export default {
 	"components.board.dialog.readerCanEdit.options.defaultSetting": "Стандартна настройка",
 	"components.board.dialog.readerCanEdit.alert.text":
 		"Дошка спочатку повинна бути опублікована, перш ніж можна буде налаштувати параметри редагування.",
+	"components.board.dialog.detail-view.title": "Детальний вигляд",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
 	"components.board.menu.collaborativeTextEditorElement": "Налаштування спільного текстового редактора",
@@ -490,13 +492,16 @@ export default {
 	"components.board.notifications.errors.notMoved": "{type} не вдалося позицію.",
 	"components.board.notifications.errors.notUpdated": "Зберегти зміни не вдалося.",
 	"components.board.notifications.info.cardDuplicated":
-		"IВміст з Etherpads і Whiteboards, а також захищені налаштування зовнішніх інструментів не переносяться.",
+		"Вміст з Etherpads і Whiteboards, а також захищені налаштування зовнішніх інструментів не переносяться.",
+	"components.board.notifications.success.columnDuplicated": "Колонка була успішно скопійована.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"Картку було створено іншим користувачем у колонці {columnPosition}.",
 	"components.board.screenReader.notification.columnCreated.success": "Колонку створив інший користувач.",
 	"components.board.screenReader.notification.cardDeleted.success": "Картка була видалена іншим користувачем.",
 	"components.board.screenReader.notification.cardDuplicated.success": "Картка була дуплікована іншим користувачем.",
 	"components.board.screenReader.notification.columnDeleted.success": "Стовпець був видалений іншим користувачем.",
+	"components.board.screenReader.notification.columnDuplicated.success":
+		"Стовпець був дуплікований іншим користувачем.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
 		"У колонці {columnPosition} картку було переміщено на позицію {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
@@ -2032,6 +2037,15 @@ export default {
 	"pages.folder.trash.emptyState": "Кошик порожній",
 	"pages.folder.trash.columns.deletedAt": "Видалено",
 	"pages.folder.trash.ariaLabels.actionMenu": "Меню дій для {name}",
+	"pages.folder.trash.ariaLabels.menu": "Меню кошика",
+	"pages.folder.trash.emptyTrash": "Очистити кошик",
 	"pages.folder.trash.restore.success": "Файли успішно відновлено.",
 	"pages.folder.trash.restore.error": "Не вдалося відновити файли.",
+	"pages.folder.trash.purge.action": "Видалити назавжди",
+	"pages.folder.trash.purge.success": "Файли було остаточно видалено.",
+	"pages.folder.trash.purge.error": "Не вдалося остаточно видалити файли.",
+	"pages.folder.trash.purge.dialog.title": "Назавжди видалити файли?",
+	"pages.folder.trash.purge.dialog.description":
+		"Ви збираєтесь остаточно видалити {count} файл(ів). Цю дію неможливо скасувати.",
+	"pages.folder.trash.purge.dialog.checkboxLabel": "Я розумію, що ця дія є незворотною та не може бути скасована.",
 };

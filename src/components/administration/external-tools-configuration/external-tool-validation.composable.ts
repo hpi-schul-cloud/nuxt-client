@@ -1,4 +1,4 @@
-import { ToolParameter, ToolParameterType } from "@/store/external-tool";
+import { ToolParameter, ToolParameterType } from "@data-external-tool";
 import { useI18n } from "vue-i18n";
 
 export function useExternalToolValidation() {

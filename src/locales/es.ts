@@ -8,6 +8,7 @@ export default {
 	"common.actions.copy": "Copiar",
 	"common.actions.duplicate": "Duplicar",
 	"common.actions.move": "Mover",
+	"common.actions.view": "Mostrar",
 	"common.actions.create": "Crear",
 	"common.actions.delete": "Borrar",
 	"common.actions.moveToTrash": "Mover a la papelera",
@@ -439,7 +440,7 @@ export default {
 	"components.board.action.addCard": "Añadir tarjeta",
 	"components.board.action.delete": "Eliminar",
 	"components.board.action.deleteFromSection": "Quitar de la sección",
-	"components.board.action.detail-view": "Vista detallada",
+	"components.board.action.detail-view": "Abrir vista detallada",
 	"components.board.action.download": "Descargar",
 	"components.board.action.moveDown": "Bajar",
 	"components.board.action.moveLeft": "Mover a la izquierda",
@@ -462,6 +463,7 @@ export default {
 	"components.board.dialog.readerCanEdit.options.defaultSetting": "Configuración predeterminada",
 	"components.board.dialog.readerCanEdit.alert.text":
 		"El tablero debe publicarse primero antes de que se puedan ajustar los ajustes de edición.",
+	"components.board.dialog.detail-view.title": "Vista detallada",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",
 	"components.board.menu.collaborativeTextEditorElement": "Configuración del etherpad",
@@ -490,12 +492,14 @@ export default {
 	"components.board.notifications.errors.notUpdated": "No se han podido guardar los cambios.",
 	"components.board.notifications.info.cardDuplicated":
 		"No se transferirán los contenidos de Etherpads y pizarras blancas, ni tampoco los ajustes protegidos de herramientas externas.",
+	"components.board.notifications.success.columnDuplicated": "La columna se ha duplicado correctamente.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"Otro usuario ha creado una tarjeta en la columna {columnPosition}.",
 	"components.board.screenReader.notification.columnCreated.success": "Una columna fue creada por otro usuario.",
 	"components.board.screenReader.notification.cardDeleted.success": "Una tarjeta fue eliminada por otro usuario.",
 	"components.board.screenReader.notification.cardDuplicated.success": "Una tarjeta fue duplicada por otro usuario.",
 	"components.board.screenReader.notification.columnDeleted.success": "Una columna fue eliminada por otro usuario.",
+	"components.board.screenReader.notification.columnDuplicated.success": "Una columna fue duplicada por otro usuario.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
 		"En la columna {columnPosition}, se ha movido una carta a la posición {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
@@ -2068,6 +2072,15 @@ export default {
 	"pages.folder.trash.emptyState": "La papelera está vacía",
 	"pages.folder.trash.columns.deletedAt": "Eliminado el",
 	"pages.folder.trash.ariaLabels.actionMenu": "Menú de acciones para {name}",
+	"pages.folder.trash.ariaLabels.menu": "Menú de papelera",
+	"pages.folder.trash.emptyTrash": "Vaciar papelera",
 	"pages.folder.trash.restore.success": "Archivos restaurados correctamente.",
 	"pages.folder.trash.restore.error": "No se pudieron restaurar los archivos.",
+	"pages.folder.trash.purge.action": "Eliminar permanentemente",
+	"pages.folder.trash.purge.success": "Los archivos se han eliminado permanentemente.",
+	"pages.folder.trash.purge.error": "No se pudieron eliminar permanentemente los archivos.",
+	"pages.folder.trash.purge.dialog.title": "¿Eliminar archivos permanentemente?",
+	"pages.folder.trash.purge.dialog.description":
+		"Está a punto de eliminar permanentemente {count} archivo(s). Esta acción no se puede deshacer.",
+	"pages.folder.trash.purge.dialog.checkboxLabel": "Entiendo que esta acción es permanente y no se puede deshacer.",
 };

@@ -1,5 +1,5 @@
-import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@/store/external-tool";
 import { LaunchType } from "@api-server";
+import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@data-external-tool";
 import { Factory } from "fishery";
 
 export const toolLaunchRequestFactory = Factory.define<ToolLaunchRequest>(() => ({
