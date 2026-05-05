@@ -387,9 +387,14 @@ const isListBoard = computed(() => board.value?.layout === BoardLayout.LIST);
 provide(BOARD_IS_LIST_LAYOUT, isListBoard);
 
 const started2000msAgo = useTimeout(2000);
-const isLoadingOrNotConnected = computed(
-	() => started2000msAgo.value === true && (boardStore.isConnected === false || boardStore.isLoading)
-);
+const isLoadingOrNotConnected = computed(() => {
+	const result = started2000msAgo.value === true && (boardStore.isConnected === false || boardStore.isLoading);
+	console.log("isLoadingOrNotConnected", result, {
+		isConnected: boardStore.isConnected,
+		isLoading: boardStore.isLoading,
+	});
+	return result;
+});
 const showLoadingDialog = refDebounced(isLoadingOrNotConnected, 2000);
 
 const boardClasses = computed(() => {
