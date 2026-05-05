@@ -386,9 +386,9 @@ const isListBoard = computed(() => board.value?.layout === BoardLayout.LIST);
 
 provide(BOARD_IS_LIST_LAYOUT, isListBoard);
 
-const started500msAgo = useTimeout(500);
+const started2000msAgo = useTimeout(2000);
 const isConnectedOrLoading = computed(
-	() => started500msAgo.value && (boardStore.isConnected === false || boardStore.isLoading)
+	() => started2000msAgo.value && (boardStore.isConnected === false || boardStore.isLoading)
 );
 const showLoadingDialog = refDebounced(isConnectedOrLoading, 1000);
 
