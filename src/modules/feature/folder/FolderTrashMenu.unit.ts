@@ -29,7 +29,7 @@ describe("FolderTrashMenu.vue", () => {
 		await menuButton.trigger("click");
 
 		const action = wrapper.findComponent(KebabMenuAction);
-		expect(action.attributes("data-testid")).toBe("folder-trash-menu-empty");
+		expect(action.attributes("data-testid")).toBe("kebab-menu-action-empty-thrash");
 	});
 
 	it("should emit empty-trash when the empty trash action is clicked", async () => {

@@ -429,7 +429,7 @@ describe("FolderTrash.vue", () => {
 				await actionMenuButton.trigger("click");
 
 				const actionMenuItems = wrapper.findAllComponents(KebabMenuAction);
-				const purgeAction = actionMenuItems.find((a) => a.attributes("data-testid") === "action-menu-purge");
+				const purgeAction = actionMenuItems.find((a) => a.attributes("data-testid") === "kebab-menu-action-purge");
 				await purgeAction?.trigger("click");
 
 				const purgeDialog = wrapper.findComponent(PurgeFilesDialog);
