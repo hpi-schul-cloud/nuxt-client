@@ -1,13 +1,15 @@
 import TasksOverviewPane from "./TasksOverviewPane.vue";
 import TasksOverviewTeacher from "./TasksOverviewTeacher.vue";
-import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import ShareModule from "@/store/share";
-import { COPY_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
+import { CopyParams } from "@/types/copy/CopyParams";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
+import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStoreWithRole, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { RoleName, ShareTokenBodyParamsParentType } from "@api-server";
+import { CopyApiResponseStatus, CopyApiResponseType, RoleName, ShareTokenBodyParamsParentType } from "@api-server";
 import { useTasksOfOverview } from "@data-tasks";
+import { useCopyFlow } from "@feature-copy";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -15,20 +17,18 @@ import { Mocked } from "vitest";
 import { computed, ref } from "vue";
 
 vi.mock("@data-tasks");
+vi.mock("@feature-copy/copy-flow.composable");
 
 describe("TasksOverviewTeacher", () => {
-	let copyModuleMock: CopyModule;
 	let shareModuleMock: ShareModule;
 	let useTasksOfOverviewMock: Mocked<ReturnType<typeof useTasksOfOverview>>;
+	let useCopyFlowMock: Mocked<ReturnType<typeof useCopyFlow>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestAppStoreWithRole(RoleName.TEACHER);
 		createTestEnvStore({ FEATURE_TASK_SHARE: true });
 
-		copyModuleMock = createModuleMocks(CopyModule, {
-			getIsResultModalOpen: false,
-		});
 		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: false,
 		});
@@ -40,6 +40,13 @@ describe("TasksOverviewTeacher", () => {
 			isLoadingFinishedTasks: computed(() => false),
 		});
 		vi.mocked(useTasksOfOverview).mockReturnValue(useTasksOfOverviewMock);
+
+		useCopyFlowMock = mockComposable(useCopyFlow, {
+			isDialogOpen: ref(false),
+			copyItemType: ref(ContentItemTypeEnum.Task),
+			isRunning: computed(() => false),
+		});
+		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
 	});
 
 	afterEach(() => {
@@ -51,7 +58,6 @@ describe("TasksOverviewTeacher", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 				},
 			},
@@ -75,28 +81,35 @@ describe("TasksOverviewTeacher", () => {
 	});
 
 	describe("Copy Task", () => {
+		beforeEach(() => {
+			useCopyFlowMock.executeCopyTask.mockResolvedValue({
+				success: true,
+				result: { id: "copied-id", type: CopyApiResponseType.TASK, status: CopyApiResponseStatus.SUCCESS },
+				error: undefined,
+			});
+		});
+
 		it("should call copy when copy-task event is emitted", async () => {
 			const wrapper = mountComponent();
-			const payload = {
+			const payload: CopyParams = {
 				id: "task-123",
 				courseId: "course-456",
-				type: CopyParamsTypeEnum.Task,
+				type: ContentItemTypeEnum.Task,
 			};
 
 			const pane = wrapper.findComponent(TasksOverviewPane);
-			await pane.vm.$emit("copy-task", payload);
+			pane.vm.$emit("copy-task", payload);
 			await flushPromises();
 
-			// useCopy is used internally, which calls copyModule.copy
-			expect(copyModuleMock.copy).toHaveBeenCalled();
+			expect(useCopyFlowMock.executeCopyTask).toHaveBeenCalledWith(payload.id, payload.courseId);
 		});
 
 		it("should fetch tasks after copy", async () => {
 			const wrapper = mountComponent();
-			const payload = {
+			const payload: CopyParams = {
 				id: "task-123",
 				courseId: "course-456",
-				type: CopyParamsTypeEnum.Task,
+				type: ContentItemTypeEnum.Task,
 			};
 
 			const pane = wrapper.findComponent(TasksOverviewPane);
@@ -134,21 +147,12 @@ describe("TasksOverviewTeacher", () => {
 		});
 	});
 
-	describe("Copy Result Modal", () => {
-		it("should render CopyResultModal", () => {
+	describe("Copy Dialog", () => {
+		it("should render CopyDialog", () => {
 			const wrapper = mountComponent();
 
-			const modal = wrapper.findComponent({ name: "CopyResultModal" });
+			const modal = wrapper.findComponent({ name: "CopyDialog" });
 			expect(modal.exists()).toBe(true);
-		});
-
-		it("should call copyModule.reset when copy dialog is closed", () => {
-			const wrapper = mountComponent();
-
-			const modal = wrapper.findComponent({ name: "CopyResultModal" });
-			modal.vm.$emit("copy-dialog-closed");
-
-			expect(copyModuleMock.reset).toHaveBeenCalled();
 		});
 	});
 

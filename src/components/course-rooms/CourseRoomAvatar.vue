@@ -113,7 +113,7 @@ const stillBeingCopied = computed(() => props.item.copyingSince !== undefined);
 const avatarAriaLabel = computed(() => {
 	const course = t("common.labels.course");
 	if (stillBeingCopied.value) {
-		const ariaLabelSuffix = t("components.molecules.copyResult.courseCopy.ariaLabelSuffix");
+		const ariaLabelSuffix = t("feature-copy.inProgress.ariaLabelSuffix");
 		return `${course} ${props.item.title}: ${ariaLabelSuffix}`;
 	}
 	return `${course} ${props.item.title}`;
@@ -142,7 +142,7 @@ const avatarColor = computed(() => (stillBeingCopied.value ? undefined : props.i
 
 const title = computed(() => {
 	if (props.item.copyingSince) {
-		return t("components.molecules.copyResult.courseCopy.info");
+		return t("feature-copy.inProgress.course.info");
 	}
 
 	if (props.item.titleDate) {
