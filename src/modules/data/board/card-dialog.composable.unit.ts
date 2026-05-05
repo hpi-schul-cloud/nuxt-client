@@ -1,4 +1,4 @@
-import { useCardDialogData } from "./card-dialog-composable";
+import { useCardDialogData } from "./card-dialog.composable";
 import {
 	boardResponseFactory,
 	columnResponseFactory,

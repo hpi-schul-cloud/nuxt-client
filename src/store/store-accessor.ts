@@ -16,7 +16,6 @@ import { getModule } from "vuex-module-decorators";
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
 // (result from getModule(...))
-export let copyModule: CopyModule;
 export let filePathsModule: FilePaths;
 export let importUsersModule: ImportUsersModule;
 export let schoolsModule: SchoolsModule;
@@ -24,7 +23,6 @@ export let shareModule: ShareModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<unknown>): void {
-	copyModule = getModule(CopyModule, store);
 	filePathsModule = getModule(FilePaths, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
@@ -35,7 +33,6 @@ export function initializeStores(store: Store<unknown>): void {
 // appears as an element of the root store's state.
 // (This is required!)
 export const modules = {
-	copyModule: CopyModule,
 	filePathsModule: FilePaths,
 	importUsersModule: ImportUsersModule,
 	schoolsModule: SchoolsModule,
