@@ -44,7 +44,7 @@
 				<VSelect
 					v-model="selectedColumnId"
 					:disabled="!selectedBoardId || isMoving"
-					:label="t('components.molecules.label.section')"
+					:label="t('components.molecules.label.column')"
 					:items="columns"
 					item-value="id"
 					:placeholder="t('components.boardSection')"
@@ -57,10 +57,9 @@
 </template>
 
 <script setup lang="ts">
-import { useCardDialogData } from "./card-dialog-composable";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { RoomItem } from "@/types/room/Room";
-import { useBoardStore, useCardStore } from "@data-board";
+import { useBoardStore, useCardDialogData, useCardStore } from "@data-board";
 import { useRoomStore } from "@data-room";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
