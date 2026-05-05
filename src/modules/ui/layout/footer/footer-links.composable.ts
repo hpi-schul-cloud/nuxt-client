@@ -1,3 +1,4 @@
+import { SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { useFilePaths } from "@data-file";
 import { computed, ComputedRef } from "vue";
@@ -19,10 +20,24 @@ export type FooterLinksOptions = {
 	includeAccessibilityStatement?: boolean;
 };
 
-export const useFooterLinks = (options: FooterLinksOptions = {}): { links: ComputedRef<FooterLink[]> } => {
+const config: Readonly<Record<SchulcloudTheme, FooterLinksOptions>> = {
+	[SchulcloudTheme.BRB]: {},
+	[SchulcloudTheme.DEFAULT]: {
+		privacyPolicyAsRoute: true,
+		includeSecurityLink: true,
+		includeAccessibilityStatement: false,
+	},
+	[SchulcloudTheme.N21]: {},
+	[SchulcloudTheme.THR]: { privacyPolicyKey: "components.legacy.footer.privacy_policy_thr" },
+};
+
+export const useFooterLinks = (): { links: ComputedRef<FooterLink[]> } => {
 	const { t } = useI18n();
 	const { specificFiles } = useFilePaths();
 	const env = useEnvConfig();
+
+	const instance = env.value.SC_THEME;
+	const options = config[instance] ?? {};
 
 	const links = computed<FooterLink[]>(() => {
 		const contactEmail = options.contactEmail ?? env.value.SC_CONTACT_EMAIL ?? "";

@@ -18,11 +18,7 @@
 import { useFooterLinks } from "@ui-layout";
 import { VFooter } from "vuetify/components";
 
-const { links } = useFooterLinks({
-	privacyPolicyAsRoute: true,
-	includeSecurityLink: true,
-	includeAccessibilityStatement: false,
-});
+const { links } = useFooterLinks();
 </script>
 
 <style lang="scss" scoped>
