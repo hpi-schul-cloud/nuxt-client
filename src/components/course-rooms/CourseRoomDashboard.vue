@@ -206,7 +206,16 @@ const dragInProgressDelay = 100;
 
 const isDragging = ref(false);
 const dragInProgress = ref(false);
-const itemRefs = ref<Record<string, { $el?: HTMLElement } | null>>({});
+const itemRefs = ref<Record<string, { $el?: HTMLElement } | HTMLElement | null>>({});
+
+const setItemRef = (id: string, el: { $el?: HTMLElement } | HTMLElement | null) => {
+	if (el) {
+		itemRefs.value[id] = el;
+		return;
+	}
+
+	delete itemRefs.value[id];
+};
 
 const setItemRef = (el: unknown, index: number) => {
 	if (el) {
