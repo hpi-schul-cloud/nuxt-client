@@ -1,5 +1,5 @@
+import { useAppStore } from "./application.store";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { useAppStore } from "@/modules/data/application/application.store";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
 import { mapFeaturesToFeaturesObject } from "@/utils/school-features";

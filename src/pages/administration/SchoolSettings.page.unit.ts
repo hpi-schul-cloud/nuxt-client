@@ -1,7 +1,6 @@
 import SchoolSettings from "./SchoolSettings.page.vue";
-import { createTestEnvStore, maintenanceStatusFactory } from "@@/tests/test-utils";
+import { createTestEnvStore, maintenanceStatusFactory, schoolFactory } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ConfigResponse, FederalStateResponse, SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
@@ -16,6 +15,8 @@ vi.mock("vue-router");
 const useRouteMock = <Mock>useRoute;
 
 describe("SchoolSettingsPage", () => {
+	const mockSchool = schoolFactory.build();
+
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 	});

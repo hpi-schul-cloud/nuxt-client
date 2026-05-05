@@ -10,10 +10,10 @@ import {
 	createTestEnvStore,
 	expectNotification,
 	mockedPiniaStoreTyping,
+	schoolFactory,
 	userResponseFactory,
 } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Permission, RoleName } from "@api-server";
 import { useSchoolStore } from "@data-app";
@@ -54,6 +54,8 @@ function writableComputed<T>(initial: T) {
 }
 
 describe("teacher overview page", () => {
+	const mockSchool = schoolFactory.build();
+
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore();

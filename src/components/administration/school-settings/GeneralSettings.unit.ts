@@ -50,13 +50,12 @@ describe("GeneralSettings", () => {
 
 	describe("displaying correct data", () => {
 		describe("school name", () => {
-			it("should display the school name", () => {
+			it("should display the school name", async () => {
 				const { wrapper, schoolDetails } = setup();
 
-				const textField = wrapper.findComponent("[data-testid='school-name']");
-
+				const textField = wrapper.findComponent<VTextField>("[data-testid='school-name']");
 				expect(textField.exists()).toBe(true);
-				expect(textField.text()).toContain(schoolDetails.name);
+				expect(textField.find("input").element.value).toBe(schoolDetails.name);
 			});
 
 			it("should not be possible to edit the school name if the school is synced", () => {

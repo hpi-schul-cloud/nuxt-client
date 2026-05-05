@@ -1,6 +1,6 @@
 import RoomAdminTable from "./RoomAdminTable.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { mockedPiniaStoreTyping, mockSchool, roomStatsItemResponseFactory } from "@@/tests/test-utils";
+import { mockedPiniaStoreTyping, roomStatsItemResponseFactory, schoolFactory } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomStatsItemResponse } from "@api-server";
@@ -14,11 +14,10 @@ import { nextTick } from "vue";
 import { VIcon } from "vuetify/components";
 
 describe("RoomAdminTable", () => {
-	const ownSchool = {
-		...mockSchool,
+	const ownSchool = schoolFactory.build({
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
-	};
+	});
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());

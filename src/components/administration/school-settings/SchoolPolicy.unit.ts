@@ -3,9 +3,13 @@ import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
 import { Status } from "@/store/types/commons";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { downloadFile } from "@/utils/fileHelper";
-import { createTestAppStoreWithPermissions, mockComposable, privacyPolicyFactory } from "@@/tests/test-utils";
+import {
+	createTestAppStoreWithPermissions,
+	mockComposable,
+	privacyPolicyFactory,
+	schoolFactory,
+} from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Permission } from "@api-server";
 import { ConsentVersion, CreateConsentVersionPayload, useSchoolPrivacyPolicy } from "@data-school";
@@ -21,6 +25,7 @@ vi.mock("@data-school/schoolPrivacyPolicy.composable");
 const useSchoolPrivacyMock = vi.mocked(useSchoolPrivacyPolicy);
 
 describe("SchoolPolicy", () => {
+	const mockSchool = schoolFactory.build();
 	let useSchoolPrivacyPolicyMockReturn: Mocked<ReturnType<typeof useSchoolPrivacyPolicy>>;
 
 	const setup = (

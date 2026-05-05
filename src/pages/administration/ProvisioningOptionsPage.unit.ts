@@ -7,7 +7,6 @@ import {
 	provisioningOptionsResponseFactory,
 } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ConfigResponse, SchulConneXProvisioningOptionsResponse } from "@api-server";
 import { useSchoolStore } from "@data-app";
@@ -26,7 +25,7 @@ describe("ProvisioningOptionsPage", () => {
 	) => {
 		const pinia = createTestingPinia({ stubActions: false });
 		createTestEnvStore(envConfig);
-		createTestSchoolStore({ schoolDetails: mockSchool });
+		createTestSchoolStore();
 		injectRouterMock(createRouterMock());
 
 		const schoolStore = mockedPiniaStoreTyping(useSchoolStore);

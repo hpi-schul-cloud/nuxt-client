@@ -1,10 +1,9 @@
 import { createTestSchoolStore } from "../../../../tests/test-utils/factory/school-test.utils.ts";
-import { mockedPiniaStoreTyping } from "../../../../tests/test-utils/index.ts";
+import { mockedPiniaStoreTyping, schoolFactory } from "../../../../tests/test-utils/index.ts";
 import AuthSystems from "./AuthSystems.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils.ts";
 import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Permission } from "@api-server";
 import { useSchoolStore } from "@data-app";
@@ -53,6 +52,7 @@ const searchStrings = {
 
 describe("AuthSystems", () => {
 	const RouterLinkStubMock = { ...RouterLinkStub, useLink: vi.fn() };
+	const mockSchool = schoolFactory.build();
 
 	const createWrapper = (options = {}) =>
 		mount(AuthSystems, {

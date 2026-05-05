@@ -6,9 +6,9 @@ import {
 	mockApiResponse,
 	mockAxiosInstance,
 	mockedPiniaStoreTyping,
-	mockSchool,
 	roomStatsItemResponseFactory,
 	roomStatsListResponseFactory,
+	schoolFactory,
 } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import * as serverApi from "@api-server";
@@ -22,11 +22,10 @@ import { Mocked } from "vitest";
 describe("useAdministrationRoomStore", () => {
 	let roomAdministrationApiMock: Mocked<serverApi.RoomApiInterface>;
 	let axiosMock: Mocked<AxiosInstance>;
-	const ownSchool = {
-		...mockSchool,
+	const ownSchool = schoolFactory.build({
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
-	};
+	});
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));

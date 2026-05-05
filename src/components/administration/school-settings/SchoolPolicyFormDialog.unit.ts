@@ -1,6 +1,6 @@
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
+import { schoolFactory } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
@@ -11,6 +11,8 @@ import { VFileInput } from "vuetify/components";
 vi.mock("@/utils/fileHelper", () => ({ toBase64: vi.fn().mockResolvedValue("data:application/pdf;base64,AAA") }));
 
 describe("SchoolPolicyFormDialog", () => {
+	const mockSchool = schoolFactory.build();
+
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestSchoolStore({ schoolDetails: mockSchool });

@@ -5,7 +5,7 @@ import {
 	createTestAppStoreWithSchool,
 	createTestEnvStore,
 	maintenanceStatusFactory,
-	mockSchool,
+	schoolFactory,
 } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -15,6 +15,7 @@ import { nextTick } from "vue";
 import { VBtn, VCheckbox } from "vuetify/components";
 
 describe("SchoolYearChangeSection", () => {
+	const mockSchool = schoolFactory.build();
 	const schoolId = mockSchool.id;
 
 	const getWrapper = () => {

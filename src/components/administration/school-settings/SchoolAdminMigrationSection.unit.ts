@@ -1,9 +1,8 @@
 import SchoolAdminMigrationSection from "./SchoolAdminMigrationSection.vue";
 import SchoolMigrationWarningCard from "./SchoolMigrationWarningCard.vue";
 import { BusinessError } from "@/store/types/commons";
-import { businessErrorFactory, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
+import { businessErrorFactory, createTestEnvStore, mockComposable, schoolFactory } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ConfigResponse, SchoolResponse } from "@api-server";
 import { useEnvConfig } from "@data-env";
@@ -18,6 +17,7 @@ vi.mock("@data-user-login-migration");
 const useUserLoginMigrationMock = vi.mocked(useUserLoginMigration);
 
 describe("SchoolAdminMigrationSection", () => {
+	const mockSchool = schoolFactory.build();
 	let useUserLoginMigrationMockReturn: Mocked<ReturnType<typeof useUserLoginMigration>>;
 
 	const setup = (

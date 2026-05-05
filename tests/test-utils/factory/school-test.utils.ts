@@ -1,4 +1,4 @@
-import { mockedPiniaStoreTyping, mockSchool } from "@@/tests/test-utils";
+import { mockedPiniaStoreTyping, schoolFactory } from "@@/tests/test-utils";
 import { SchoolResponse, SchoolSystemResponse } from "@api-server";
 import { useSchoolStore } from "@data-app";
 import { DeepPartial } from "fishery";
@@ -13,7 +13,7 @@ export const createTestSchoolStore = (
 		schoolDetails?: DeepPartial<SchoolResponse>;
 		schoolSystems?: DeepPartial<SchoolSystemResponse[]>;
 		pinia?: Pinia;
-	} = { schoolDetails: mockSchool, schoolSystems: [] }
+	} = { schoolDetails: schoolFactory.build(), schoolSystems: [] }
 ) => {
 	const store = useSchoolStore(pinia);
 

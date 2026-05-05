@@ -7,7 +7,7 @@ import {
 	createTestAppStoreWithPermissions,
 	createTestEnvStore,
 	mockComposable,
-	mockSchool,
+	schoolFactory,
 } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -29,6 +29,7 @@ const findTableComponent = (wrapper: VueWrapper) =>
 	wrapper.findComponent<typeof VDataTableServer>('[data-testid="admin-class-table"]');
 
 describe("ClassOverview", () => {
+	const mockSchool = schoolFactory.build();
 	afterEach(() => {
 		vi.clearAllMocks();
 	});

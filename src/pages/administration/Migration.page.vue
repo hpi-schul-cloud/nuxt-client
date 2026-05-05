@@ -498,7 +498,7 @@ const summary = async () => {
 	isLoading.value = false;
 };
 
-const checkTotalInterval = () => {
+const startPollingImportUserCount = () => {
 	if (schoolMigrationState.value.inUserMigration && totalImportUsers.value === 0) {
 		checkTotal.value = setInterval(() => {
 			importUsersModule.fetchTotal();
@@ -529,7 +529,7 @@ const setSchoolInUserMigration = async () => {
 	if (!schoolMigrationState.value.inUserMigration) {
 		await importUsersModule.setSchoolInUserMigration();
 	}
-	checkTotalInterval();
+	startPollingImportUserCount();
 	isLoading.value = false;
 };
 
@@ -665,7 +665,7 @@ onMounted(async () => {
 		return;
 	}
 	await summary();
-	checkTotalInterval();
+	startPollingImportUserCount();
 });
 
 onUnmounted(() => {

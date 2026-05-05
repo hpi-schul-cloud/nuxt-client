@@ -1,7 +1,7 @@
 import { FilterOption, Registration, UpdateFilterParamType, User } from "../types";
 import { useDataTableFilter } from "./filter.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { createTestAppStore, mockSchool, mountComposable } from "@@/tests/test-utils";
+import { createTestAppStore, mountComposable } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
@@ -31,7 +31,7 @@ describe("filter composable", () => {
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
 		createTestAppStore();
-		createTestSchoolStore({ schoolDetails: mockSchool });
+		createTestSchoolStore();
 	});
 
 	it("should return filterQuery", () => {

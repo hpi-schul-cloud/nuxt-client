@@ -3,9 +3,13 @@ import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
 import { Status } from "@/store/types/commons";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { downloadFile } from "@/utils/fileHelper";
-import { createTestAppStoreWithPermissions, mockComposable, termsOfUseFactory } from "@@/tests/test-utils";
+import {
+	createTestAppStoreWithPermissions,
+	mockComposable,
+	schoolFactory,
+	termsOfUseFactory,
+} from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Permission } from "@api-server";
 import { ConsentVersion, CreateConsentVersionPayload, useSchoolTermsOfUse } from "@data-school";
@@ -21,6 +25,7 @@ vi.mock("@data-school/schoolTermsOfUse.composable");
 const useSchoolTermsOfUseMock = vi.mocked(useSchoolTermsOfUse);
 
 describe("SchoolTerms", () => {
+	const mockSchool = schoolFactory.build();
 	let useSchoolTermsOfUseMockReturn: Mocked<ReturnType<typeof useSchoolTermsOfUse>>;
 
 	const setup = (

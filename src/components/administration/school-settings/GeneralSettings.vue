@@ -1,8 +1,8 @@
 <template>
-	<v-form v-if="localSchool">
-		<v-row>
-			<v-col>
-				<v-text-field
+	<VForm v-if="localSchool">
+		<VRow>
+			<VCol>
+				<VTextField
 					v-model="localSchool.name"
 					class="school-name"
 					:label="t('pages.administration.school.index.generalSettings.labels.nameOfSchool')"
@@ -12,11 +12,11 @@
 					data-testid="school-name"
 					:rules="[validateOnOpeningTag]"
 				/>
-			</v-col>
-		</v-row>
-		<v-row>
-			<v-col>
-				<v-text-field
+			</VCol>
+		</VRow>
+		<VRow>
+			<VCol>
+				<VTextField
 					:model-value="localSchool.currentYear?.name"
 					class="school-year"
 					:label="t('pages.administration.school.index.generalSettings.labels.schoolYear')"
@@ -26,11 +26,11 @@
 					persistent-hint
 					data-testid="school-year"
 				/>
-			</v-col>
-		</v-row>
-		<v-row class="mb-2">
-			<v-col>
-				<v-text-field
+			</VCol>
+		</VRow>
+		<VRow class="mb-2">
+			<VCol>
+				<VTextField
 					v-model="localSchool.officialSchoolNumber"
 					class="school-number"
 					data-testid="school-number"
@@ -41,11 +41,11 @@
 					persistent-hint
 					:readonly="!hasSchoolEditPermission"
 				/>
-			</v-col>
-		</v-row>
-		<v-row class="mb-2">
-			<v-col>
-				<v-select
+			</VCol>
+		</VRow>
+		<VRow class="mb-2">
+			<VCol>
+				<VSelect
 					v-model="localSchool.county"
 					class="school-counties"
 					data-testid="school-counties"
@@ -58,11 +58,11 @@
 					:hint="t('pages.administration.school.index.generalSettings.changeSchoolValueWarning')"
 					persistent-hint
 				/>
-			</v-col>
-		</v-row>
-		<v-row>
-			<v-col>
-				<v-file-input
+			</VCol>
+		</VRow>
+		<VRow>
+			<VCol>
+				<VFileInput
 					v-model="logoFile"
 					class="school-logo truncate-file-input"
 					data-testid="school-logo-input"
@@ -71,11 +71,11 @@
 					prepend-icon=""
 					prepend-inner-icon="$file"
 				/>
-			</v-col>
-		</v-row>
-		<v-row class="mb-2">
-			<v-col>
-				<v-text-field
+			</VCol>
+		</VRow>
+		<VRow class="mb-2">
+			<VCol>
+				<VTextField
 					v-model="localSchool.timezone"
 					class="timezone-input"
 					data-testid="timezone-input"
@@ -85,11 +85,11 @@
 					:hint="t('pages.administration.school.index.generalSettings.timezoneHint')"
 					persistent-hint
 				/>
-			</v-col>
-		</v-row>
-		<v-row class="mb-8">
-			<v-col>
-				<v-select
+			</VCol>
+		</VRow>
+		<VRow class="mb-8">
+			<VCol>
+				<VSelect
 					v-model="localSchool.language"
 					class="language-select"
 					data-testid="language-select"
@@ -99,22 +99,22 @@
 					item-value="abbreviation"
 				>
 					<template #item="{ props, item }">
-						<v-list-item v-bind="props" :prepend-icon="item.raw.flagIcon" />
+						<VListItem v-bind="props" :prepend-icon="item.raw.flagIcon" />
 					</template>
 					<template #selection="{ item }">
-						<v-icon class="me-2"> {{ item.raw.flagIcon }} </v-icon>
+						<VIcon class="me-2"> {{ item.raw.flagIcon }} </VIcon>
 						{{ item.raw.name }}
 					</template>
-				</v-select>
-			</v-col>
-		</v-row>
+				</VSelect>
+			</VCol>
+		</VRow>
 		<PrivacySettings
 			:permissions="localSchool?.permissions ?? {}"
 			:features="localSchoolFeatures ?? {}"
 			@update-privacy-settings="onUpdatePrivacySettings"
 			@update-feature-settings="onUpdateFeatureSettings"
 		/>
-		<v-btn
+		<VBtn
 			class="mt-6 my-4 button-save float-right"
 			data-testid="save-general-setting"
 			color="primary"
@@ -123,8 +123,8 @@
 			@click="save"
 		>
 			{{ $t("pages.administration.school.index.generalSettings.save") }}
-		</v-btn>
-	</v-form>
+		</VBtn>
+	</VForm>
 </template>
 
 <script setup lang="ts">
