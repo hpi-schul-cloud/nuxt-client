@@ -164,7 +164,7 @@
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { courseRoomDetailsModule } from "@/store";
-import { CopyParamsTypeEnum } from "@/store/copy";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { askDeletionForItem } from "@/utils/confirmation-dialog.utils.ts";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import {
@@ -174,6 +174,7 @@ import {
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
 import { useEnvConfig } from "@data-env";
+import { useTaskActions } from "@data-tasks";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import draggable from "vuedraggable";
@@ -321,12 +322,13 @@ export default {
 					return;
 			}
 
-			const confirmed = await askDeletionForItem(itemContent.name || itemContent.title, typeKey);
-
-			if (!confirmed) return;
+			if (itemType === this.cardTypes.LESSON || itemType === this.cardTypes.COLUMN_BOARD) {
+				const confirmed = await askDeletionForItem(itemContent.name || itemContent.title, typeKey);
+				if (!confirmed) return;
+			}
 
 			if (itemType === this.cardTypes.TASK) {
-				await courseRoomDetailsModule.deleteTask(itemContent.id);
+				await useTaskActions().deleteTask(itemContent.id, itemContent.name);
 			} else if (itemType === this.cardTypes.LESSON) {
 				await courseRoomDetailsModule.deleteLesson(itemContent.id);
 			} else if (itemType === this.cardTypes.COLUMN_BOARD) {
@@ -343,21 +345,21 @@ export default {
 		copyTask(taskId) {
 			this.$emit("copy-board-element", {
 				id: taskId,
-				type: CopyParamsTypeEnum.Task,
+				type: ContentItemTypeEnum.Task,
 				courseId: this.roomData.roomId,
 			});
 		},
 		copyLesson(lessonId) {
 			this.$emit("copy-board-element", {
 				id: lessonId,
-				type: CopyParamsTypeEnum.Lesson,
+				type: ContentItemTypeEnum.Lesson,
 				courseId: this.roomData.roomId,
 			});
 		},
 		copyBoard(columnBoardId) {
 			this.$emit("copy-board-element", {
 				id: columnBoardId,
-				type: CopyParamsTypeEnum.ColumnBoard,
+				type: ContentItemTypeEnum.ColumnBoard,
 				courseId: this.roomData.roomId,
 			});
 		},

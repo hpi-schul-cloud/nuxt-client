@@ -1,21 +1,14 @@
+import { useCopyFlow } from "../../copy/copy-flow.composable";
 import MoveCardDialog from "../card/MoveCardDialog.vue";
 import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import { useCopy } from "@/composables/copy";
-import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
 import ShareModule from "@/store/share";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import {
-	COPY_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
+import { COURSE_ROOM_DETAILS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -25,7 +18,7 @@ import {
 	BoardLayout,
 	BoardResponseAllowedOperations,
 	ConfigResponse,
-	CopyApiResponse,
+	CopyApiResponseStatus,
 	CopyApiResponseType,
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
@@ -63,23 +56,19 @@ const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
 vi.mock("@data-board/BoardPageInformation.composable");
 const mockedUseSharedBoardPageInformation = vi.mocked(useSharedBoardPageInformation);
 
-vi.mock("@/composables/copy");
-const mockUseCopy = vi.mocked(useCopy);
-
 vi.mock("@data-board/boardInactivity.composable");
 const mockUseBoardInactivity = <Mock>useBoardInactivity;
 
+vi.mock("@feature-copy/copy-flow.composable");
+
 describe("Board", () => {
-	let mockedCopyCalls: Mocked<ReturnType<typeof useCopy>>;
 	let router: RouterMock;
 	let mockedUsePageInactivity: Mocked<ReturnType<typeof useBoardInactivity>>;
+	let useCopyFlowMock: Mocked<ReturnType<typeof useCopyFlow>>;
 
 	beforeEach(() => {
 		vi.useFakeTimers();
 		vi.clearAllMocks();
-
-		mockedCopyCalls = mockComposable(useCopy);
-		mockUseCopy.mockReturnValue(mockedCopyCalls);
 
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
@@ -113,6 +102,13 @@ describe("Board", () => {
 
 		mockedUsePageInactivity = mockComposable(useBoardInactivity);
 		mockUseBoardInactivity.mockReturnValue(mockedUsePageInactivity);
+
+		useCopyFlowMock = mockComposable(useCopyFlow, {
+			isDialogOpen: ref(false),
+			copyItemType: ref(ContentItemTypeEnum.ColumnBoard),
+			isRunning: computed(() => false),
+		});
+		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
 	});
 
 	afterEach(() => {
@@ -140,26 +136,14 @@ describe("Board", () => {
 	};
 
 	const setupProvideModules = () => {
-		const copyResultId = "42";
-		const copyModule = createModuleMocks(CopyModule, {
-			getIsResultModalOpen: false,
-			getCopyResult: {
-				id: copyResultId,
-				type: CopyApiResponseType.BOARD,
-			} as CopyApiResponse,
-		});
-
 		const shareModule = createModuleMocks(ShareModule);
 		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getRoomId: "room1",
 		});
-		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule);
+
 		return {
-			copyModule,
 			shareModule,
 			courseRoomDetailsModule,
-			copyResultId,
-			schoolExternalToolsModule,
 		};
 	};
 
@@ -170,8 +154,7 @@ describe("Board", () => {
 		envs?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
 	}) => {
-		const { copyModule, shareModule, courseRoomDetailsModule, copyResultId, schoolExternalToolsModule } =
-			setupProvideModules();
+		const { shareModule, courseRoomDetailsModule } = setupProvideModules();
 
 		setActivePinia(createTestingPinia());
 
@@ -204,10 +187,8 @@ describe("Board", () => {
 					createTestingVuetify(),
 				],
 				provide: {
-					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
-					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
 				},
 				stubs: {
 					ShareModal: true,
@@ -227,6 +208,8 @@ describe("Board", () => {
 			openDeleteBoardDialog: () => void;
 			isBoardVisible: boolean;
 			isEditSettingsDialogOpen: boolean;
+			showLoadingDialog: boolean;
+			onBackToOverview: () => void;
 		};
 
 		return {
@@ -235,10 +218,8 @@ describe("Board", () => {
 			boardStore,
 			cardStore,
 			board,
-			copyResultId,
 			shareModule,
 			courseRoomDetailsModule,
-			copyModule,
 		};
 	};
 
@@ -417,26 +398,13 @@ describe("Board", () => {
 	});
 
 	describe("Dialogs", () => {
-		it("should have a result modal component", () => {
-			const { wrapper } = setup();
-
-			expect(wrapper.findComponent(CopyResultModal).exists()).toBe(true);
-		});
-
 		it("should have a move dialog component", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.findComponent(MoveCardDialog).exists()).toBe(true);
 		});
 
-		it("should reset copy module when copy result modal is closed", async () => {
-			const { wrapper, copyModule } = setup();
-
-			const copyResultModal = wrapper.findComponent(CopyResultModal);
-			await copyResultModal.vm.$emit("copy-dialog-closed");
-
-			expect(copyModule.reset).toHaveBeenCalled();
-		});
+		it.todo("should reset copy module when copy result modal is closed");
 	});
 
 	describe("when component is unmounted", () => {
@@ -873,6 +841,14 @@ describe("Board", () => {
 		});
 
 		describe("@copy:board", () => {
+			beforeEach(() => {
+				useCopyFlowMock.executeCopyBoard.mockResolvedValue({
+					success: true,
+					result: { id: "copied-id", type: CopyApiResponseType.COLUMNBOARD, status: CopyApiResponseStatus.SUCCESS },
+					error: undefined,
+				});
+			});
+
 			it("should call the copy function", async () => {
 				const { wrapper } = setup({ allowedOperations: { copyBoard: true } });
 
@@ -881,11 +857,11 @@ describe("Board", () => {
 				});
 				await boardHeader.vm.$emit("copy:board");
 
-				expect(mockedCopyCalls.copy).toHaveBeenCalled();
+				expect(useCopyFlowMock.executeCopyBoard).toHaveBeenCalled();
 			});
 
 			it("should redirect to the board copy", async () => {
-				const { wrapper, copyResultId } = setup({ allowedOperations: { copyBoard: true } });
+				const { wrapper } = setup({ allowedOperations: { copyBoard: true } });
 
 				const boardHeader = wrapper.findComponent({
 					name: "BoardHeader",
@@ -894,7 +870,7 @@ describe("Board", () => {
 
 				expect(router.push).toHaveBeenCalledWith({
 					name: "boards-id",
-					params: { id: copyResultId },
+					params: { id: "copied-id" },
 				});
 			});
 		});
@@ -1156,6 +1132,237 @@ describe("Board", () => {
 
 					expect(boardStore.updateBoardLayoutRequest).not.toHaveBeenCalled();
 				});
+			});
+		});
+	});
+
+	describe("onBackToOverview", () => {
+		it("should have a loading dialog component", () => {
+			const { wrapper } = setup();
+
+			// The VDialog should exist in the component
+			const dialog = wrapper.findComponent({ name: "VDialog" });
+			expect(dialog.exists()).toBe(true);
+		});
+
+		it("should call router.push with dashboard path when invoked", () => {
+			const { wrapperVM } = setup();
+
+			wrapperVM.onBackToOverview();
+
+			expect(router.push).toHaveBeenCalledWith({ path: "/dashboard" });
+		});
+	});
+
+	describe("showLoadingDialog", () => {
+		it("should not show loading dialog when isConnected is true", async () => {
+			const { wrapper, boardStore } = setup();
+
+			boardStore.isConnected = true;
+			boardStore.isLoading = false;
+			vi.advanceTimersByTime(600);
+			await nextTick();
+
+			const dialogText = wrapper.find("[data-testid='dialog-text']");
+			expect(dialogText.exists()).toBe(false);
+		});
+
+		it("should not show loading dialog before 500ms have passed even when disconnected", async () => {
+			const { wrapper, boardStore } = setup();
+
+			boardStore.isConnected = false;
+			vi.advanceTimersByTime(400);
+			await nextTick();
+
+			const dialogText = wrapper.find("[data-testid='dialog-text']");
+			expect(dialogText.exists()).toBe(false);
+		});
+
+		it("should return false when isConnected is true after 500ms", async () => {
+			const { wrapperVM, boardStore } = setup();
+
+			boardStore.isConnected = true;
+			boardStore.isLoading = false;
+			vi.advanceTimersByTime(600);
+			await nextTick();
+
+			expect(wrapperVM.showLoadingDialog).toBe(false);
+		});
+
+		it("should return true when isConnected is false after 500ms", async () => {
+			const { wrapperVM, boardStore } = setup();
+
+			boardStore.isConnected = false;
+			vi.advanceTimersByTime(600);
+			await nextTick();
+
+			expect(wrapperVM.showLoadingDialog).toBe(true);
+		});
+
+		it("should return true when isLoading is true after 500ms", async () => {
+			const { wrapperVM, boardStore } = setup();
+
+			boardStore.isLoading = true;
+			vi.advanceTimersByTime(600);
+			await nextTick();
+
+			expect(wrapperVM.showLoadingDialog).toBe(true);
+		});
+
+		it("should return false before 500ms even when conditions are met", async () => {
+			const { wrapperVM, boardStore } = setup();
+
+			boardStore.isConnected = false;
+			vi.advanceTimersByTime(400);
+			await nextTick();
+
+			expect(wrapperVM.showLoadingDialog).toBe(false);
+		});
+	});
+
+	describe("@onDropColumn", () => {
+		describe("when extractDataAttribute returns undefined", () => {
+			it("should not call moveColumnRequest", () => {
+				mockExtractDataAttribute.mockReturnValue(undefined);
+				const { wrapper, boardStore } = setup({
+					numberOfColumns: 2,
+					allowedOperations: { moveColumn: true },
+				});
+
+				const containerComponent = wrapper.findAllComponents({
+					name: "Sortable",
+				});
+				const payload = {
+					item: document.createElement("div"),
+					newIndex: 1,
+					oldIndex: 0,
+				};
+
+				containerComponent[0].vm.$emit("end", payload);
+
+				expect(boardStore.moveColumnRequest).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when newIndex is undefined", () => {
+			it("should not call moveColumnRequest", () => {
+				mockExtractDataAttribute.mockReturnValue("column-id");
+				const { wrapper, boardStore } = setup({
+					numberOfColumns: 2,
+					allowedOperations: { moveColumn: true },
+				});
+
+				const containerComponent = wrapper.findAllComponents({
+					name: "Sortable",
+				});
+				const payload = {
+					item: document.createElement("div"),
+					newIndex: undefined,
+					oldIndex: 0,
+				};
+
+				containerComponent[0].vm.$emit("end", payload);
+
+				expect(boardStore.moveColumnRequest).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("@onCopyBoard", () => {
+		describe("when user is not permitted to copy board", () => {
+			it("should not call the copy function", async () => {
+				const { wrapper } = setup({ allowedOperations: { copyBoard: false } });
+
+				const boardHeader = wrapper.findComponent({
+					name: "BoardHeader",
+				});
+				await boardHeader.vm.$emit("copy:board");
+
+				expect(useCopyFlowMock.executeCopyBoard).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("@onShareBoard", () => {
+		describe("when user is not permitted to share board", () => {
+			it("should not start the share flow", async () => {
+				const { wrapper, shareModule } = setup({ allowedOperations: { shareBoard: false } });
+
+				const boardHeader = wrapper.findComponent({
+					name: "BoardHeader",
+				});
+				await boardHeader.vm.$emit("share:board");
+
+				expect(shareModule.startShareFlow).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("@onUpdateBoardLayout", () => {
+		describe("when user is not permitted to update board layout", () => {
+			it("should not open the change dialog", async () => {
+				const { wrapper } = setup({ allowedOperations: { updateBoardLayout: false } });
+
+				const boardHeader = wrapper.findComponent(BoardHeader);
+				const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
+
+				boardHeader.vm.$emit("change-layout");
+				await nextTick();
+
+				expect(boardLayoutDialog.props("modelValue")).toEqual(false);
+			});
+		});
+	});
+
+	describe("@onSelectBoardLayout", () => {
+		describe("when user is not permitted to update board layout", () => {
+			it("should not send update request", async () => {
+				const { wrapper, boardStore } = setup({ allowedOperations: { updateBoardLayout: false } });
+
+				const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
+
+				boardLayoutDialog.vm.$emit("select", BoardLayout.LIST);
+				await nextTick();
+
+				expect(boardStore.updateBoardLayoutRequest).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("Card detail view", () => {
+		describe("when current route includes cardId", () => {
+			it("should show card detail view", () => {
+				router.currentRoute.value = {
+					...router.currentRoute.value,
+					params: { cardId: "test-card-id-123" },
+				};
+				const { wrapper } = setup();
+
+				const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
+				expect(cardHostDetailView.exists()).toBe(true);
+			});
+		});
+
+		describe("when current route does not include cardId", () => {
+			it("should not show card detail view", () => {
+				const { wrapper } = setup();
+
+				const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
+				expect(cardHostDetailView.exists()).toBe(false);
+			});
+		});
+
+		describe("when detail view is closed", () => {
+			it("should navigate to board route", async () => {
+				router.currentRoute.value = {
+					...router.currentRoute.value,
+					params: { cardId: "test-card-id-123" },
+				};
+				const { wrapper } = setup();
+
+				const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
+				await cardHostDetailView.vm.$emit("close:detail-view");
+				expect(router.replace).toHaveBeenCalled();
 			});
 		});
 	});
