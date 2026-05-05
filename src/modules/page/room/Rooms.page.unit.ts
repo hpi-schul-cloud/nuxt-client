@@ -1,31 +1,38 @@
 import RoomsPage from "./Rooms.page.vue";
-import ImportFlow from "@/components/share/ImportFlow.vue";
-import CopyModule from "@/store/copy";
 import { RoomItem } from "@/types/room/Room";
-import { COPY_MODULE_KEY } from "@/utils/inject";
 import {
 	createTestAppStoreWithPermissions,
 	createTestRoomStore,
-	expectNotification,
 	mockApi,
+	mockComposable,
 	roomItemFactory,
 } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
-import { Permission, ShareTokenBodyParamsParentType } from "@api-server";
-import { ImportCardDialog } from "@feature-board";
+import {
+	CopyApiResponse,
+	CopyApiResponseStatus,
+	CopyApiResponseType,
+	Permission,
+	ShareTokenInfoResponseParentType,
+} from "@api-server";
+import { ImportCardDialog, ImportDialog, useImportFlow } from "@feature-import";
 import { RoomGrid } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
+import { computed, nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VSkeletonLoader } from "vuetify/components";
 
+vi.mock("@feature-import/import-flow.composable");
+
 describe("RoomsPage", () => {
 	let router: RouterMock;
+	let useImportFlowMock: Mocked<ReturnType<typeof useImportFlow>>;
 
 	beforeEach(() => {
 		const roomApiMock = mockApi<ReturnType<typeof serverApi.RoomApiFactory>>();
@@ -34,14 +41,19 @@ describe("RoomsPage", () => {
 
 		router = createRouterMock();
 		injectRouterMock(router);
+
+		useImportFlowMock = mockComposable(useImportFlow, {
+			isCardImportDialogOpen: computed(() => false),
+			isGenericImportDialogOpen: computed(() => false),
+			shareTokenInfo: ref<serverApi.ShareTokenInfoResponse>(),
+		});
+		vi.mocked(useImportFlow).mockReturnValue(useImportFlowMock);
 	});
 
 	const setup = (
 		roomItems: RoomItem[] = [roomItemFactory.build({ isLocked: false }), roomItemFactory.build({ isLocked: true })],
 		isLoading = false
 	) => {
-		const copyModule = createModuleMocks(CopyModule);
-
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		const { roomStore } = createTestRoomStore(roomItems);
 		roomStore.isLoading = isLoading;
@@ -52,10 +64,7 @@ describe("RoomsPage", () => {
 		const wrapper = mount(RoomsPage, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
-				provide: {
-					[COPY_MODULE_KEY]: copyModule,
-				},
-				stubs: { ImportFlow: true, ImportCardDialog: true, RouterLink: true },
+				stubs: { ImportDialog: true, ImportCardDialog: true, RouterLink: true },
 			},
 		});
 
@@ -97,74 +106,133 @@ describe("RoomsPage", () => {
 		});
 	});
 
+	describe("when a token is provided as query parameter", () => {
+		const token = "6S6s-CWVVxEG";
+
+		it("should try to execute import with the token", () => {
+			useImportFlowMock.executeImport.mockImplementation((tokenParam: string) => {
+				expect(tokenParam).toBe(token);
+				return Promise.resolve({ result: undefined, success: false, error: undefined });
+			});
+			router.setQuery({ import: token });
+			setup();
+		});
+	});
+
 	describe("when the page is in import mode", () => {
 		const token = "6S6s-CWVVxEG";
 
-		const setupImportMode = () => {
-			router.setQuery({ import: token });
-
-			const { wrapper } = setup();
-
-			return {
-				wrapper,
+		const mockSharedTokenInfo = (overrides: Partial<serverApi.ShareTokenInfoResponse>) => {
+			useImportFlowMock.shareTokenInfo.value = {
+				token,
+				parentType: ShareTokenInfoResponseParentType.CARD,
+				parentName: "Item Name",
+				...overrides,
 			};
 		};
 
-		it("should render import card dialog with card type", () => {
-			router.setQuery({ import: token, importedType: ShareTokenBodyParamsParentType.CARD });
-			const { wrapper } = setup();
-
-			const importFLow = wrapper.findComponent(ImportCardDialog);
-
-			expect(importFLow.exists()).toBe(true);
-			expect(importFLow.props().token).toBe(token);
-		});
-
-		it("should not render import card dialog with room type", () => {
-			router.setQuery({ import: token, type: ShareTokenBodyParamsParentType.ROOM });
+		it("should render import card dialog when activated", async () => {
+			mockSharedTokenInfo({ parentType: ShareTokenInfoResponseParentType.CARD });
+			useImportFlowMock.isCardImportDialogOpen = computed(() => true);
 			const { wrapper } = setup();
 			const importFLow = wrapper.findComponent(ImportCardDialog);
-			expect(importFLow.exists()).toBe(false);
+			expect(importFLow.exists()).toBe(true);
+			expect(importFLow.props().shareTokenInfo.token).toBe(token);
 		});
 
-		it("should render import flow and be passed data", () => {
-			const { wrapper } = setupImportMode();
-			const importFLow = wrapper.findComponent(ImportFlow);
-
+		it("should render generic import dialog when activated", () => {
+			mockSharedTokenInfo({ parentType: ShareTokenInfoResponseParentType.ROOM });
+			useImportFlowMock.isGenericImportDialogOpen = computed(() => true);
+			const { wrapper } = setup();
+			const importFLow = wrapper.findComponent(ImportDialog);
 			expect(importFLow.exists()).toBe(true);
-			expect(importFLow.props().isActive).toBe(true);
-			expect(importFLow.props().token).toBe(token);
+			expect(importFLow.props().shareTokenInfo.token).toBe(token);
 		});
 
 		it("should filter out locked rooms for the import flow", () => {
-			const { wrapper } = setupImportMode();
-			const importFLow = wrapper.getComponent(ImportFlow);
+			mockSharedTokenInfo({ parentType: ShareTokenInfoResponseParentType.ROOM });
+			useImportFlowMock.isGenericImportDialogOpen = computed(() => true);
+			const { wrapper } = setup();
+			const importFLow = wrapper.getComponent(ImportDialog);
 
-			const destinations = importFLow.props().destinations as RoomItem[];
+			const destinations = importFLow.props().availableDestinations;
 
 			expect(destinations).toHaveLength(1);
-			expect(destinations.every((room) => !room.isLocked)).toBe(true);
 		});
 
 		describe("when the import flow succeeded", () => {
-			it("should notify about successful import", () => {
-				const { wrapper } = setupImportMode();
-				const importFlow = wrapper.getComponent(ImportFlow);
+			describe("and the destination is a room", () => {
+				const mockBoardCopyResult = () => {
+					const copyResult: CopyApiResponse = {
+						id: "board-copy-id",
+						type: CopyApiResponseType.BOARD,
+						status: CopyApiResponseStatus.SUCCESS,
+					};
 
-				importFlow.vm.$emit("success", "newName", "newId");
+					useImportFlowMock.executeImport.mockResolvedValue({
+						result: { ...copyResult, destination: { id: "room-id", type: "room" } },
+						success: true,
+						error: undefined,
+					});
+				};
 
-				expectNotification("success");
+				it("should go to the room details page", async () => {
+					mockBoardCopyResult();
+					router.setQuery({ import: token });
+					setup();
+					await nextTick();
+
+					expect(router.replace).toHaveBeenCalledWith({ name: "room-details", params: { id: "room-id" } });
+				});
 			});
 
-			it("should go to the room details page", () => {
-				const { wrapper } = setupImportMode();
-				const importFlow = wrapper.getComponent(ImportFlow);
+			describe("and the destination is a column", () => {
+				const mockCardCopyResult = () => {
+					const copyResult: CopyApiResponse = {
+						id: "card-copy-id",
+						type: CopyApiResponseType.CARD,
+						status: CopyApiResponseStatus.SUCCESS,
+					};
 
-				importFlow.vm.$emit("success", "newName", "newId");
+					useImportFlowMock.executeImport.mockResolvedValue({
+						result: { ...copyResult, destination: { id: "column-id", type: "column", boardId: "board-id" } },
+						success: true,
+						error: undefined,
+					});
+				};
 
-				expect(router.replace).toHaveBeenCalledWith({
-					name: "room-details",
-					params: { id: "newId" },
+				it("should go to the room details page", async () => {
+					mockCardCopyResult();
+					router.setQuery({ import: token });
+					setup();
+					await nextTick();
+
+					expect(router.replace).toHaveBeenCalledWith({ name: "boards-id", params: { id: "board-id" } });
+				});
+			});
+
+			describe("and the there is no destination", () => {
+				const mockRoomCopyResult = () => {
+					const copyResult: CopyApiResponse = {
+						id: "room-copy-id",
+						type: CopyApiResponseType.ROOM,
+						status: CopyApiResponseStatus.SUCCESS,
+					};
+
+					useImportFlowMock.executeImport.mockResolvedValue({
+						result: { ...copyResult, destination: undefined },
+						success: true,
+						error: undefined,
+					});
+				};
+
+				it("should go to the rooms page", async () => {
+					mockRoomCopyResult();
+					router.setQuery({ import: token });
+					setup();
+					await nextTick();
+
+					expect(router.replace).toHaveBeenCalledWith({ name: "rooms" });
 				});
 			});
 		});
