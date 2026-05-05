@@ -138,7 +138,6 @@ describe("Board", () => {
 		const shareModule = createModuleMocks(ShareModule);
 		return {
 			shareModule,
-			copyResultId,
 		};
 	};
 
@@ -149,7 +148,7 @@ describe("Board", () => {
 		envs?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
 	}) => {
-		const { copyModule, shareModule, copyResultId } = setupProvideModules();
+		const { shareModule } = setupProvideModules();
 
 		setActivePinia(createTestingPinia());
 
@@ -213,7 +212,6 @@ describe("Board", () => {
 			cardStore,
 			board,
 			shareModule,
-			copyModule,
 		};
 	};
 

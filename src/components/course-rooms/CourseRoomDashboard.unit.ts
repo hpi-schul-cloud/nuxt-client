@@ -1,5 +1,4 @@
 import CourseRoomDashboard from "./CourseRoomDashboard.vue";
-import { CopyParamsTypeEnum } from "@/store/copy";
 import ShareModule from "@/store/share";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
@@ -652,7 +651,7 @@ describe("CourseRoomDashboard.vue", () => {
 			expect(emittedEvents?.[0]).toEqual([
 				{
 					id: mockData.elements[0].content.id,
-					type: CopyParamsTypeEnum.Task,
+					type: ContentItemTypeEnum.Task,
 					courseId: mockData.roomId,
 				},
 			]);
@@ -695,7 +694,7 @@ describe("CourseRoomDashboard.vue", () => {
 			expect(emittedEvents?.[0]).toEqual([
 				{
 					id: mockData.elements[2].content.id,
-					type: CopyParamsTypeEnum.Lesson,
+					type: ContentItemTypeEnum.Lesson,
 					courseId: mockData.roomId,
 				},
 			]);
@@ -738,7 +737,7 @@ describe("CourseRoomDashboard.vue", () => {
 			expect(emittedEvents?.[0]).toEqual([
 				{
 					id: mockData.elements[4].content.id,
-					type: CopyParamsTypeEnum.ColumnBoard,
+					type: ContentItemTypeEnum.ColumnBoard,
 					courseId: mockData.roomId,
 				},
 			]);

@@ -1,4 +1,3 @@
-import CopyModule from "@/store/copy";
 import FilePathsModule from "@/store/filePaths";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";

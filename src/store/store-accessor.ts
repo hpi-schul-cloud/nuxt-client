@@ -5,7 +5,6 @@
 // In here you import all your modules, call getModule on them to turn them
 // into the actual stores, and then re-export them.
 
-import CopyModule from "@/store/copy";
 import FilePaths from "@/store/filePaths";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";

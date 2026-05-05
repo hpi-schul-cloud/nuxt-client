@@ -163,7 +163,7 @@
 <script setup lang="ts">
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import { CopyParamsTypeEnum } from "@/store/copy";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { askDeletionForItem } from "@/utils/confirmation-dialog.utils";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import {
@@ -191,7 +191,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-	"copy-board-element": [payload: { id: string; type: CopyParamsTypeEnum; courseId: string }];
+	"copy-board-element": [payload: { id: string; type: ContentItemTypeEnum; courseId: string }];
 }>();
 
 const shareModule = inject(SHARE_MODULE_KEY)!;
@@ -351,7 +351,7 @@ const restoreTask = async (itemId: string) => {
 const copyTask = (taskId: string) => {
 	emit("copy-board-element", {
 		id: taskId,
-		type: CopyParamsTypeEnum.Task,
+		type: ContentItemTypeEnum.Task,
 		courseId: roomData.value.roomId,
 	});
 };
@@ -359,7 +359,7 @@ const copyTask = (taskId: string) => {
 const copyLesson = (lessonId: string) => {
 	emit("copy-board-element", {
 		id: lessonId,
-		type: CopyParamsTypeEnum.Lesson,
+		type: ContentItemTypeEnum.Lesson,
 		courseId: roomData.value.roomId,
 	});
 };
@@ -367,7 +367,7 @@ const copyLesson = (lessonId: string) => {
 const copyBoard = (columnBoardId: string) => {
 	emit("copy-board-element", {
 		id: columnBoardId,
-		type: CopyParamsTypeEnum.ColumnBoard,
+		type: ContentItemTypeEnum.ColumnBoard,
 		courseId: roomData.value.roomId,
 	});
 };
