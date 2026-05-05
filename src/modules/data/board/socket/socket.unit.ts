@@ -26,8 +26,12 @@ vi.mock("vue-i18n");
 vi.mock("socket.io-client");
 const mockSocketIOClient = vi.mocked(socketModule);
 
-vi.mock("../boardActions/boardSocketApi.composable");
-vi.mock("../boardActions/boardRestApi.composable");
+vi.mock("../boardActions/boardSocketApi.composable", () => ({
+	useBoardSocketApi: vi.fn(() => ({ duplicateColumnRequest: vi.fn() })),
+}));
+vi.mock("../boardActions/boardRestApi.composable", () => ({
+	useBoardRestApi: vi.fn(() => ({ duplicateColumnRequest: vi.fn() })),
+}));
 
 vi.mock("@util-broadcast-channel", () => ({
 	useSessionBroadcast: vi.fn().mockImplementation(() => ({

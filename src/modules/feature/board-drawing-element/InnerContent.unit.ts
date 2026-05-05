@@ -4,16 +4,11 @@ import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { mount } from "@vue/test-utils";
 
 describe("InnerContent", () => {
-	const propsData = {
-		isFirstElement: false,
-		isLastElement: false,
-		hasMultipleElements: false,
-	};
-
-	const setup = (options?: { isListBoard?: boolean; windowWidth?: number }) => {
-		const { isListBoard, windowWidth } = {
+	const setup = (options?: { isListBoard?: boolean; windowWidth?: number; isDetailView?: boolean }) => {
+		const { isListBoard, windowWidth, isDetailView } = {
 			isListBoard: false,
 			windowWidth: 1280,
+			isDetailView: false,
 			...options,
 		};
 
@@ -22,6 +17,10 @@ describe("InnerContent", () => {
 			configurable: true,
 			value: windowWidth,
 		});
+
+		const propsData = {
+			isDetailView,
+		};
 
 		const wrapper = mount(InnerContent, {
 			global: {
@@ -97,6 +96,17 @@ describe("InnerContent", () => {
 			});
 
 			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
+		});
+	});
+
+	describe("when detail view is enabled", () => {
+		it("should have list style", () => {
+			const { wrapper } = setup({
+				isDetailView: true,
+			});
+
+			const contentElementBar = wrapper.find(".content-element-bar");
+			expect(contentElementBar.classes()).toContain("flex-row");
 		});
 	});
 });

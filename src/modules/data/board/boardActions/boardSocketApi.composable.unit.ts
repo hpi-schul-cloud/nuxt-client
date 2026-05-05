@@ -11,6 +11,7 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	boardResponseFactory,
 	cardResponseFactory,
+	columnFullResponseFactory,
 	columnResponseFactory,
 	mockComposable,
 	mockedPiniaStoreTyping,
@@ -294,6 +295,20 @@ describe("useBoardSocketApi", () => {
 			expect(boardStore.updateBoardLayoutSuccess).toHaveBeenCalledWith(payload);
 		});
 
+		it("should call duplicateColumnSuccess for corresponding action", () => {
+			const boardStore = mockedPiniaStoreTyping(useBoardStore);
+			const { dispatch } = useBoardSocketApi();
+
+			const payload = {
+				columnId: "columnId",
+				duplicatedColumn: columnFullResponseFactory.build(),
+				isOwnAction: true,
+			};
+			dispatch(BoardActions.duplicateColumnSuccess(payload));
+
+			expect(boardStore.duplicateColumnSuccess).toHaveBeenCalledWith(payload);
+		});
+
 		describe("failure actions", () => {
 			it("should call handleApplicationError for fetchBoardFailure action", () => {
 				const { dispatch } = useBoardSocketApi();
@@ -414,6 +429,18 @@ describe("useBoardSocketApi", () => {
 					BoardActions.updateBoardLayoutFailure({
 						boardId: "test",
 						layout: BoardLayout.COLUMNS,
+					})
+				);
+
+				expect(socketMock.emitOnSocket).toHaveBeenCalledWith("fetch-board-request", expect.anything());
+			});
+
+			it("should reload the board for duplicateColumnFailure action", () => {
+				const { dispatch } = setupWithFakeBoard();
+
+				dispatch(
+					BoardActions.duplicateColumnFailure({
+						columnId: "test",
 					})
 				);
 
@@ -658,6 +685,18 @@ describe("useBoardSocketApi", () => {
 					layout: BoardLayout.COLUMNS,
 				}
 			);
+		});
+	});
+
+	describe("duplicateColumnRequest", () => {
+		it("should call action with correct parameters", () => {
+			const { duplicateColumnRequest } = useBoardSocketApi();
+
+			duplicateColumnRequest({ columnId: "columnId" });
+
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("duplicate-column-request", {
+				columnId: "columnId",
+			});
 		});
 	});
 });

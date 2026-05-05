@@ -9,7 +9,6 @@ import {
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "./utils/inject";
 import {
@@ -17,7 +16,6 @@ import {
 	courseRoomDetailsModule,
 	filePathsModule,
 	importUsersModule,
-	schoolExternalToolsModule,
 	shareModule,
 } from "@/store";
 import { createDayJs } from "@/utils/date-time.utils";
@@ -82,7 +80,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide("importUsersModule", importUsersModule);
 
 	app.provide(COURSE_ROOM_DETAILS_MODULE_KEY.valueOf(), courseRoomDetailsModule);
-	app.provide(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(), schoolExternalToolsModule);
 	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
 
 	app.mount("#app");

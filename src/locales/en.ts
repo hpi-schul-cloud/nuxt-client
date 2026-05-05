@@ -8,6 +8,7 @@ export default {
 	"common.actions.copy": "Copy",
 	"common.actions.duplicate": "Duplicate",
 	"common.actions.move": "Move",
+	"common.actions.view": "Show",
 	"common.actions.create": "Create",
 	"common.actions.delete": "Delete",
 	"common.actions.moveToTrash": "Move to trash",
@@ -429,7 +430,7 @@ export default {
 	"components.board.action.addCard": "Add card",
 	"components.board.action.delete": "Delete",
 	"components.board.action.deleteFromSection": "Remove from section",
-	"components.board.action.detail-view": "Detail view",
+	"components.board.action.detail-view": "Open detail view",
 	"components.board.action.download": "Download",
 	"components.board.action.moveDown": "Move down",
 	"components.board.action.moveLeft": "Move left",
@@ -452,6 +453,7 @@ export default {
 	"components.board.dialog.readerCanEdit.options.defaultSetting": "Default setting",
 	"components.board.dialog.readerCanEdit.alert.text":
 		"The board must first be published before the editing settings can be adjusted.",
+	"components.board.dialog.detail-view.title": "Detail view",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",
 	"components.board.menu.collaborativeTextEditorElement": "Etherpad settings",
@@ -479,12 +481,14 @@ export default {
 	"components.board.notifications.errors.notUpdated": "Your changes could not be saved.",
 	"components.board.notifications.info.cardDuplicated":
 		"Content from Etherpads and whiteboards as well as protected settings from external tools will not be transferred.",
+	"components.board.notifications.success.columnDuplicated": "The column was successfully duplicated.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"A card was created by another user in column {columnPosition}.",
 	"components.board.screenReader.notification.columnCreated.success": "A column was created by another user.",
 	"components.board.screenReader.notification.cardDeleted.success": "A card was deleted by another user.",
 	"components.board.screenReader.notification.cardDuplicated.success": "A card was duplicated by another user.",
 	"components.board.screenReader.notification.columnDeleted.success": "A column was deleted by another user.",
+	"components.board.screenReader.notification.columnDuplicated.success": "A column was duplicated by another user.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
 		"In column {columnPosition}, a card was moved to position {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
@@ -2013,6 +2017,15 @@ export default {
 	"pages.folder.trash.infoText": "Files are automatically deleted 7 days after being moved to the trash.",
 	"pages.folder.trash.columns.deletedAt": "Deleted on",
 	"pages.folder.trash.ariaLabels.actionMenu": "Action menu for {name}",
+	"pages.folder.trash.ariaLabels.menu": "Trash menu",
+	"pages.folder.trash.emptyTrash": "Empty trash",
 	"pages.folder.trash.restore.success": "Files successfully restored.",
 	"pages.folder.trash.restore.error": "Files could not be restored.",
+	"pages.folder.trash.purge.action": "Delete permanently",
+	"pages.folder.trash.purge.success": "Files have been permanently deleted.",
+	"pages.folder.trash.purge.error": "Files could not be permanently deleted.",
+	"pages.folder.trash.purge.dialog.title": "Permanently delete files?",
+	"pages.folder.trash.purge.dialog.description":
+		"You are about to permanently delete {count} file(s). This action cannot be undone.",
+	"pages.folder.trash.purge.dialog.checkboxLabel": "I understand that this action is permanent and cannot be undone.",
 };

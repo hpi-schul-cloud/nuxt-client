@@ -69,6 +69,7 @@ const props = defineProps<{
 	columnIndex: number;
 	rowIndex: number;
 	elementIndex: number;
+	isDetailView?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -94,7 +95,7 @@ const editorWindow: Ref<Window | null> = ref(null);
 
 const isListLayout: Ref<boolean> = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 
-const isSmallOrLargerListBoard = computed(() => smAndUp.value && isListLayout.value);
+const isSmallOrLargerListBoard = computed(() => smAndUp.value && (isListLayout.value || props.isDetailView));
 
 const contentTitle = ref<string>(t("components.cardElement.h5pElement"));
 

@@ -1,4 +1,4 @@
-import { SchoolExternalToolSave } from "@/store/external-tool";
+import { SchoolExternalToolSave } from "@data-external-tool";
 import { Factory } from "fishery";
 
 export const schoolExternalToolSaveFactory = Factory.define<SchoolExternalToolSave>(({ sequence }) => ({

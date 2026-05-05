@@ -44,4 +44,9 @@ const onEnter = () => emit("enter");
 .text-break-word {
 	word-break: break-word;
 }
+
+.v-card-title h3,
+.v-card-title :deep(.other-title-input textarea) {
+	font-weight: bold !important;
+}
 </style>

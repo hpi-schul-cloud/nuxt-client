@@ -6,16 +6,10 @@ import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue"
 import { useCopy } from "@/composables/copy";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
 import ShareModule from "@/store/share";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import {
-	COPY_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
+import { COPY_MODULE_KEY, COURSE_ROOM_DETAILS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -153,13 +147,12 @@ describe("Board", () => {
 		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getRoomId: "room1",
 		});
-		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule);
+
 		return {
 			copyModule,
 			shareModule,
 			courseRoomDetailsModule,
 			copyResultId,
-			schoolExternalToolsModule,
 		};
 	};
 
@@ -170,8 +163,7 @@ describe("Board", () => {
 		envs?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
 	}) => {
-		const { copyModule, shareModule, courseRoomDetailsModule, copyResultId, schoolExternalToolsModule } =
-			setupProvideModules();
+		const { copyModule, shareModule, courseRoomDetailsModule, copyResultId } = setupProvideModules();
 
 		setActivePinia(createTestingPinia());
 
@@ -207,7 +199,6 @@ describe("Board", () => {
 					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
-					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
 				},
 				stubs: {
 					ShareModal: true,
@@ -1351,6 +1342,44 @@ describe("Board", () => {
 				await nextTick();
 
 				expect(boardStore.updateBoardLayoutRequest).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("Card detail view", () => {
+		describe("when current route includes cardId", () => {
+			it("should show card detail view", () => {
+				router.currentRoute.value = {
+					...router.currentRoute.value,
+					params: { cardId: "test-card-id-123" },
+				};
+				const { wrapper } = setup();
+
+				const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
+				expect(cardHostDetailView.exists()).toBe(true);
+			});
+		});
+
+		describe("when current route does not include cardId", () => {
+			it("should not show card detail view", () => {
+				const { wrapper } = setup();
+
+				const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
+				expect(cardHostDetailView.exists()).toBe(false);
+			});
+		});
+
+		describe("when detail view is closed", () => {
+			it("should navigate to board route", async () => {
+				router.currentRoute.value = {
+					...router.currentRoute.value,
+					params: { cardId: "test-card-id-123" },
+				};
+				const { wrapper } = setup();
+
+				const cardHostDetailView = wrapper.findComponent({ name: "CardHostDetailView" });
+				await cardHostDetailView.vm.$emit("close:detail-view");
+				expect(router.replace).toHaveBeenCalled();
 			});
 		});
 	});
