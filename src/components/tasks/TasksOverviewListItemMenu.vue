@@ -61,7 +61,8 @@
 </template>
 
 <script setup lang="ts">
-import { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
+import { CopyParams } from "@/types/copy/CopyParams";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
@@ -112,7 +113,7 @@ const onCopyTask = () => {
 	emit("copy-task", {
 		id: props.task.id,
 		courseId: props.task.courseId,
-		type: CopyParamsTypeEnum.Task,
+		type: ContentItemTypeEnum.Task,
 	});
 };
 
