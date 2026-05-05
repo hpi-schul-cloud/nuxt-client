@@ -1,6 +1,7 @@
 import TasksOverviewListItemMenu from "./TasksOverviewListItemMenu.vue";
 import TasksOverviewListItemTeacher from "./TasksOverviewListItemTeacher.vue";
-import { CopyParamsTypeEnum } from "@/store/copy";
+import { CopyParams } from "@/types/copy/CopyParams";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { createTestAppStore, taskResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { TaskResponse } from "@api-server";
@@ -25,10 +26,10 @@ describe("TasksOverviewListItemTeacher", () => {
 
 	it("should passthrough copy-task event", () => {
 		const wrapper = setup();
-		const payload = {
+		const payload: CopyParams = {
 			id: "123",
 			courseId: "c789",
-			type: CopyParamsTypeEnum.Task,
+			type: ContentItemTypeEnum.Task,
 		};
 
 		const oneTaskItemMenu = wrapper.findComponent(TasksOverviewListItemMenu);
