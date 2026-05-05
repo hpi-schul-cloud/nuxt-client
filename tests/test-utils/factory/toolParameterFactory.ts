@@ -1,7 +1,4 @@
-import { ToolParameter } from "@/store/external-tool/tool-parameter";
-import { ToolParameterType } from "@/store/external-tool/tool-parameter.enum";
-import { ToolParameterLocation } from "@/store/external-tool/tool-parameter-location.enum";
-import { ToolParameterScope } from "@/store/external-tool/tool-parameter-scope.enum";
+import { ToolParameter, ToolParameterLocation, ToolParameterScope, ToolParameterType } from "@data-external-tool";
 import { Factory } from "fishery";
 
 export const toolParameterFactory = Factory.define<ToolParameter>(({ sequence }) => ({

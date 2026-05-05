@@ -1,37 +1,54 @@
 import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
 import ExternalToolConfigurator from "@/components/administration/external-tools-configuration/ExternalToolConfigurator.vue";
 import ExternalToolMediumDetails from "@/components/administration/external-tools-configuration/ExternalToolMediumDetails.vue";
-import { SchoolExternalToolSave } from "@/store/external-tool";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
-import { createTestAppStoreWithSchool, expectNotification } from "@@/tests/test-utils";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { createTestAppStoreWithSchool, expectNotification, mockComposable } from "@@/tests/test-utils";
 import {
-	businessErrorFactory,
+	expectNoNotification,
 	schoolExternalToolConfigurationTemplateFactory,
 	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ExternalToolMediumStatus } from "@api-server";
-import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
+import {
+	SchoolExternalToolConfigurationTemplate,
+	SchoolExternalToolSave,
+	useSchoolExternalToolConfigurator,
+} from "@data-external-tool";
 import { createTestingPinia } from "@pinia/testing";
-import { mount } from "@vue/test-utils";
+import { DefaultWireframe } from "@ui-layout";
+import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
-import { Component, nextTick } from "vue";
+import { Component, nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
+
+vi.mock("@data-external-tool/school-external-tool-configurator.composable.ts");
 
 describe("SchoolExternalToolConfigurator", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 	});
 
-	const getWrapper = (props: { configId?: string } = {}, getters: Partial<SchoolExternalToolsModule> = {}) => {
-		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule, {
-			getSchoolExternalToolConfigurationTemplates: [schoolExternalToolConfigurationTemplateFactory.build()],
-			getBusinessError: businessErrorFactory.build({ message: undefined }),
-			...getters,
+	const setup = (
+		options?: Partial<{
+			schoolExternalToolConfigurationTemplates: SchoolExternalToolConfigurationTemplate[];
+			configId: string;
+			createOrUpdateToolError: Error;
+		}>
+	) => {
+		const { schoolExternalToolConfigurationTemplates, configId, createOrUpdateToolError } = {
+			schoolExternalToolConfigurationTemplates: schoolExternalToolConfigurationTemplateFactory.buildList(2),
+			configId: undefined,
+			createOrUpdateToolError: undefined,
+			...options,
+		};
+
+		const useSchoolExternalToolConfiguratorMock = mockComposable(useSchoolExternalToolConfigurator, {
+			schoolExternalToolConfigurationTemplates: ref(schoolExternalToolConfigurationTemplates),
+			createOrUpdateToolError: ref(createOrUpdateToolError),
 		});
+		vi.mocked(useSchoolExternalToolConfigurator).mockReturnValue(useSchoolExternalToolConfiguratorMock);
 
 		const schoolId = "schoolId";
 		createTestAppStoreWithSchool(schoolId);
@@ -41,79 +58,74 @@ describe("SchoolExternalToolConfigurator", () => {
 		const wrapper = mount(SchoolExternalToolConfigurator, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
-				},
 			},
-			props,
+			props: { configId },
 		});
 
 		return {
 			wrapper,
 			router,
-			schoolExternalToolsModule,
+			useSchoolExternalToolConfiguratorMock,
 			schoolId,
 		};
 	};
 
 	describe("breadcrumbs", () => {
 		it("should render static breadcrumbs", () => {
-			const { wrapper } = getWrapper();
+			const { wrapper } = setup();
 
-			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
+			const defaultWireframe = wrapper.getComponent(DefaultWireframe);
+			const breadcrumbTitles = defaultWireframe.props("breadcrumbs")?.map((breadcrumb) => breadcrumb.title);
 
-			expect(breadcrumbs.at(0)?.text()).toEqual("pages.administration.school.index.title");
-			expect(breadcrumbs.at(1)?.text()).toEqual("pages.tool.title");
+			const expectedBreadcrumbTitles = ["pages.administration.school.index.title", "pages.tool.title"];
+			expect(breadcrumbTitles).toEqual(expectedBreadcrumbTitles);
 		});
 	});
 
 	describe("title", () => {
-		it("should render title", () => {
-			const { wrapper } = getWrapper({});
+		it("should render headline", () => {
+			const { wrapper } = setup();
 
-			expect(wrapper.find("h1").exists()).toBeTruthy();
+			const defaultWireframe = wrapper.getComponent(DefaultWireframe);
+
+			expect(defaultWireframe.props("headline")).toBe("pages.tool.title");
 		});
 	});
 
 	describe("onMounted", () => {
 		describe("when creating a new configuration", () => {
 			it("should load the available tools for a school", async () => {
-				const { schoolExternalToolsModule, schoolId } = getWrapper({});
-
+				const { useSchoolExternalToolConfiguratorMock, schoolId } = setup();
 				await nextTick();
 
-				expect(schoolExternalToolsModule.loadAvailableToolsForSchool).toHaveBeenCalledWith(schoolId);
+				expect(useSchoolExternalToolConfiguratorMock.loadAvailableToolsForSchool).toHaveBeenCalledWith(schoolId);
 			});
 		});
 
 		describe("when updating an existing configuration", () => {
 			it("should load the template", async () => {
-				const { schoolExternalToolsModule } = getWrapper({
-					configId: "configId",
-				});
-
+				const configId = "configId";
+				const { useSchoolExternalToolConfiguratorMock } = setup({ configId });
 				await nextTick();
 
-				expect(schoolExternalToolsModule.loadConfigurationTemplateForSchoolExternalTool).toHaveBeenCalledWith(
-					"configId"
-				);
+				expect(
+					useSchoolExternalToolConfiguratorMock.loadConfigurationTemplateForSchoolExternalTool
+				).toHaveBeenCalledWith(configId);
 			});
 
 			it("should load the configuration", async () => {
-				const { schoolExternalToolsModule } = getWrapper({
-					configId: "configId",
-				});
-
+				const configId = "configId";
+				const { useSchoolExternalToolConfiguratorMock } = setup({ configId });
 				await nextTick();
 
-				expect(schoolExternalToolsModule.loadSchoolExternalTool).toHaveBeenCalledWith("configId");
+				expect(useSchoolExternalToolConfiguratorMock.loadSchoolExternalTool).toHaveBeenCalledWith(configId);
 			});
 		});
 	});
 
 	describe("onCancel", () => {
 		it("should change page when cancel button was clicked", async () => {
-			const { wrapper, router } = getWrapper({});
+			const { wrapper, router } = setup();
 
 			wrapper.findComponent(ExternalToolConfigurator as Component).vm.$emit("cancel");
 			await nextTick();
@@ -126,29 +138,13 @@ describe("SchoolExternalToolConfigurator", () => {
 
 	describe("onSave", () => {
 		describe("when creating a new configuration", () => {
-			const setup = () => {
+			it("should call store action to save tool", async () => {
 				const template = schoolExternalToolConfigurationTemplateFactory.build({
 					parameters: toolParameterFactory.buildList(1),
 				});
-
-				const { wrapper, router, schoolExternalToolsModule, schoolId } = getWrapper(
-					{},
-					{
-						getSchoolExternalToolConfigurationTemplates: [template],
-					}
-				);
-
-				return {
-					wrapper,
-					router,
-					schoolExternalToolsModule,
-					template,
-					schoolId,
-				};
-			};
-
-			it("should call store action to save tool", async () => {
-				const { wrapper, template, schoolExternalToolsModule, schoolId } = setup();
+				const { wrapper, useSchoolExternalToolConfiguratorMock, schoolId } = setup({
+					schoolExternalToolConfigurationTemplates: [template],
+				});
 				const testValue = "test";
 
 				wrapper.findComponent(ExternalToolConfigurator as Component).vm.$emit("save", template, [
@@ -159,7 +155,9 @@ describe("SchoolExternalToolConfigurator", () => {
 				]);
 				await nextTick();
 
-				expect(schoolExternalToolsModule.createSchoolExternalTool).toHaveBeenCalledWith<[SchoolExternalToolSave]>({
+				expect(useSchoolExternalToolConfiguratorMock.createSchoolExternalTool).toHaveBeenCalledWith<
+					[SchoolExternalToolSave]
+				>({
 					toolId: template.externalToolId,
 					isDeactivated: template.isDeactivated,
 					parameters: [
@@ -173,7 +171,10 @@ describe("SchoolExternalToolConfigurator", () => {
 			});
 
 			it("should redirect back to school settings page when there is no error", async () => {
-				const { wrapper, router, template } = setup();
+				const template = schoolExternalToolConfigurationTemplateFactory.build({
+					parameters: toolParameterFactory.buildList(1),
+				});
+				const { wrapper, router } = setup({ schoolExternalToolConfigurationTemplates: [template] });
 
 				wrapper.findComponent(ExternalToolConfigurator as Component).vm.$emit("save", template, []);
 				await nextTick();
@@ -185,7 +186,10 @@ describe("SchoolExternalToolConfigurator", () => {
 			});
 
 			it("should display a notification when created", async () => {
-				const { wrapper, template } = setup();
+				const template = schoolExternalToolConfigurationTemplateFactory.build({
+					parameters: toolParameterFactory.buildList(1),
+				});
+				const { wrapper } = setup({ schoolExternalToolConfigurationTemplates: [template] });
 
 				wrapper.findComponent(ExternalToolConfigurator as Component).vm.$emit("save", template, []);
 				await nextTick();
@@ -195,35 +199,18 @@ describe("SchoolExternalToolConfigurator", () => {
 		});
 
 		describe("when editing a configuration", () => {
-			const setup = () => {
-				const template = schoolExternalToolConfigurationTemplateFactory.build();
-
-				const schoolExternalToolId = "configId";
-
-				const { wrapper, router, schoolExternalToolsModule, schoolId } = getWrapper(
-					{ configId: schoolExternalToolId },
-					{
-						getSchoolExternalToolConfigurationTemplates: [template],
-					}
-				);
-
-				return {
-					wrapper,
-					router,
-					schoolExternalToolsModule,
-					template,
-					schoolId,
-					schoolExternalToolId,
-				};
-			};
-
 			it("should call store action to update tool", async () => {
-				const { wrapper, schoolExternalToolsModule, template, schoolExternalToolId, schoolId } = setup();
+				const schoolExternalToolId = "configId";
+				const template = schoolExternalToolConfigurationTemplateFactory.build();
+				const { wrapper, useSchoolExternalToolConfiguratorMock, schoolId } = setup({
+					configId: schoolExternalToolId,
+					schoolExternalToolConfigurationTemplates: [template],
+				});
 
 				wrapper.findComponent(ExternalToolConfigurator as Component).vm.$emit("save", template, []);
 				await nextTick();
 
-				expect(schoolExternalToolsModule.updateSchoolExternalTool).toHaveBeenCalledWith<
+				expect(useSchoolExternalToolConfiguratorMock.updateSchoolExternalTool).toHaveBeenCalledWith<
 					[
 						{
 							schoolExternalToolId: string;
@@ -242,7 +229,10 @@ describe("SchoolExternalToolConfigurator", () => {
 			});
 
 			it("should redirect back to school settings page when there is no error", async () => {
-				const { wrapper, router, template } = setup();
+				const template = schoolExternalToolConfigurationTemplateFactory.build({
+					parameters: toolParameterFactory.buildList(1),
+				});
+				const { wrapper, router } = setup({ schoolExternalToolConfigurationTemplates: [template] });
 
 				wrapper.findComponent(ExternalToolConfigurator as Component).vm.$emit("save", template, []);
 				await nextTick();
@@ -254,7 +244,10 @@ describe("SchoolExternalToolConfigurator", () => {
 			});
 
 			it("should display a notification when updated", async () => {
-				const { wrapper, template } = setup();
+				const template = schoolExternalToolConfigurationTemplateFactory.build({
+					parameters: toolParameterFactory.buildList(1),
+				});
+				const { wrapper } = setup({ schoolExternalToolConfigurationTemplates: [template] });
 
 				wrapper.findComponent(ExternalToolConfigurator as Component).vm.$emit("save", template, []);
 				await nextTick();
@@ -263,34 +256,25 @@ describe("SchoolExternalToolConfigurator", () => {
 			});
 		});
 
-		describe("when an error occurs during saving", () => {
-			const setup = () => {
-				const { wrapper, router } = getWrapper(
-					{},
-					{
-						getBusinessError: businessErrorFactory.build(),
-					}
-				);
+		describe("when an error occurs", () => {
+			it("should display an error", async () => {
+				const error = new Error("Save error");
+				const { wrapper } = setup({
+					createOrUpdateToolError: error,
+				});
 
-				return {
-					wrapper,
-					router,
-				};
-			};
+				const externalToolConfigurator = wrapper.findComponent({ name: "ExternalToolConfigurator" });
 
-			it("should display an alert", async () => {
-				const { wrapper } = setup();
-
-				wrapper
-					.findComponent(ExternalToolConfigurator as Component)
-					.vm.$emit("save", schoolExternalToolConfigurationTemplateFactory.build(), []);
-				await nextTick();
-
-				expect(wrapper.find(".v-alert__content").exists()).toBeTruthy();
+				const apiError = mapAxiosErrorToResponseError(error);
+				expect(externalToolConfigurator.props("error")).toEqual({
+					error: apiError,
+					statusCode: apiError.code,
+					message: apiError.message,
+				});
 			});
 
 			it("should not redirect", async () => {
-				const { wrapper, router } = setup();
+				const { wrapper, router } = setup({ createOrUpdateToolError: new Error("Save error") });
 
 				wrapper
 					.findComponent(ExternalToolConfigurator as Component)
@@ -299,56 +283,57 @@ describe("SchoolExternalToolConfigurator", () => {
 
 				expect(router.push).not.toHaveBeenCalled();
 			});
+
+			it("should not display a success notification", async () => {
+				const { wrapper } = setup({ createOrUpdateToolError: new Error("Save error") });
+
+				wrapper
+					.findComponent(ExternalToolConfigurator as Component)
+					.vm.$emit("save", schoolExternalToolConfigurationTemplateFactory.build(), []);
+				await nextTick();
+
+				expectNoNotification();
+			});
 		});
 	});
 
 	describe("ExternalToolMediumDetails", () => {
-		const setup = async (selectedTemplate: SchoolExternalToolConfigurationTemplate) => {
-			const { wrapper } = getWrapper({});
+		const setSelectedTemplate = async (
+			wrapper: VueWrapper,
+			selectedTemplate: SchoolExternalToolConfigurationTemplate
+		) => {
+			const externalToolConfigurator = wrapper.findComponent({ name: "ExternalToolConfigurator" });
+			externalToolConfigurator.vm.selectedTemplate = selectedTemplate;
 
-			const externalToolConfigurator = wrapper.findComponent(ExternalToolConfigurator as Component);
-
-			(externalToolConfigurator.vm as unknown as typeof SchoolExternalToolConfigurator).selectedTemplate =
-				selectedTemplate;
 			await nextTick();
-
-			return { wrapper };
 		};
 
 		describe("when the selected template has medium", () => {
 			it("should show the external tool medium details", async () => {
-				const { wrapper } = await setup({
-					externalToolId: "",
-					name: "School External Tool",
-					baseUrl: "https://test.com",
-					parameters: [],
+				const selectedTemplate = schoolExternalToolConfigurationTemplateFactory.build({
 					medium: {
 						status: ExternalToolMediumStatus.ACTIVE,
 						mediaSourceId: "media-source-id",
 						mediumId: "medium-id",
 					},
-					isDeactivated: false,
 				});
+				const { wrapper } = setup({ schoolExternalToolConfigurationTemplates: [selectedTemplate] });
+				await setSelectedTemplate(wrapper, selectedTemplate);
 
 				const mediumDetails = wrapper.findComponent(ExternalToolMediumDetails);
-
-				expect(mediumDetails.isVisible()).toBe(true);
+				expect(mediumDetails.exists()).toBe(true);
 			});
 		});
 
 		describe("when the selected template has no medium", () => {
 			it("should not show the external tool medium details", async () => {
-				const { wrapper } = await setup({
-					externalToolId: "",
-					name: "School External Tool",
-					baseUrl: "https://test.com",
-					parameters: [],
+				const selectedTemplate = schoolExternalToolConfigurationTemplateFactory.build({
 					medium: undefined,
-					isDeactivated: false,
 				});
+				const { wrapper } = setup({ schoolExternalToolConfigurationTemplates: [selectedTemplate] });
+				await setSelectedTemplate(wrapper, selectedTemplate);
 
 				const mediumDetails = wrapper.findComponent(ExternalToolMediumDetails);
-
 				expect(mediumDetails.exists()).toBe(false);
 			});
 		});

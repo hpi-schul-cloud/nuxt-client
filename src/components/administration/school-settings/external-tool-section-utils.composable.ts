@@ -1,7 +1,6 @@
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { SchoolExternalTool } from "@/store/external-tool";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { SchoolExternalToolMediumResponse, ToolContextType } from "@api-server";
+import { SchoolExternalTool } from "@data-external-tool";
 import { DataTableHeader } from "vuetify";
 
 export function useExternalToolsSectionUtils(t: (key: string) => string = () => "", mediaLicenseEnabled = false) {
@@ -47,9 +46,8 @@ export function useExternalToolsSectionUtils(t: (key: string) => string = () => 
 		});
 	}
 
-	const getItems = (schoolExternalToolsModule: SchoolExternalToolsModule): SchoolExternalToolItem[] => {
-		const schoolExternalTools: SchoolExternalTool[] = schoolExternalToolsModule.getSchoolExternalTools;
-		return schoolExternalTools.map((tool: SchoolExternalTool) => {
+	const getItems = (schoolExternalTools: SchoolExternalTool[]): SchoolExternalToolItem[] =>
+		schoolExternalTools.map((tool: SchoolExternalTool) => {
 			let statusTranslationKey = "components.externalTools.status.latest";
 			if (tool.isDeactivated || tool.status.isGloballyDeactivated) {
 				statusTranslationKey = "components.externalTools.status.deactivated";
@@ -84,7 +82,6 @@ export function useExternalToolsSectionUtils(t: (key: string) => string = () => 
 				medium: tool.medium,
 			};
 		});
-	};
 
 	return {
 		getHeaders,

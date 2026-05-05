@@ -3,13 +3,21 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { mount } from "@vue/test-utils";
 
-const setupWrapper = () => {
+const setupWrapper = ({
+	propsData = {},
+}: {
+	propsData?: object;
+} = {}) => {
 	const wrapper = mount(VideoConferenceContentElementCreate, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[BOARD_IS_LIST_LAYOUT as symbol]: false,
 			},
+		},
+		props: {
+			isDetailView: false,
+			...propsData,
 		},
 	});
 
@@ -66,6 +74,20 @@ describe("VideoConferenceContentElementCreate", () => {
 
 				expect(wrapper.emitted("create:title")).toBeUndefined();
 			});
+		});
+	});
+
+	describe("when detail view is enabled", () => {
+		it("should have list style", () => {
+			const wrapper = setupWrapper({
+				propsData: {
+					isDetailView: true,
+				},
+			});
+
+			const element = wrapper.findComponent("[data-testid='board-video-conference-element-create']");
+			expect(element.exists()).toBe(true);
+			expect(element.classes()).toContain("flex-row");
 		});
 	});
 });

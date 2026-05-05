@@ -1,7 +1,11 @@
-import { CreateCardSuccessPayload, CreateColumnSuccessPayload } from "../boardActions/boardActionPayload.types";
+import {
+	CreateCardSuccessPayload,
+	CreateColumnSuccessPayload,
+	DuplicateColumnSuccessPayload,
+} from "../boardActions/boardActionPayload.types";
 import { SR_I18N_KEYS_MAP, useBoardAriaNotification } from "./ariaLiveNotificationHandler";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { cardResponseFactory, columnResponseFactory } from "@@/tests/test-utils";
+import { cardResponseFactory, columnFullResponseFactory, columnResponseFactory } from "@@/tests/test-utils";
 import { BoardLayout, Colors, ContentElementType } from "@api-server";
 
 vi.mock("vue-i18n", () => ({
@@ -115,6 +119,38 @@ describe("useBoardAriaNotification", () => {
 
 		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS);
+	});
+
+	describe("@notifyDuplicateColumnSuccess", () => {
+		it("should notify on columnDuplicate", () => {
+			const { notifyDuplicateColumnSuccess } = useBoardAriaNotification();
+			const element = document.getElementById("notify-screen-reader-polite");
+
+			const payload: DuplicateColumnSuccessPayload = {
+				columnId: "columnId",
+				duplicatedColumn: columnFullResponseFactory.build(),
+				isOwnAction: false,
+			};
+
+			notifyDuplicateColumnSuccess(payload);
+			vi.advanceTimersByTime(3000);
+			expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.COLUMN_DUPLICATED_SUCCESS);
+		});
+
+		it("should not notify if the action is own", () => {
+			const { notifyDuplicateColumnSuccess } = useBoardAriaNotification();
+			const element = document.getElementById("notify-screen-reader-polite");
+
+			const payload: DuplicateColumnSuccessPayload = {
+				columnId: "columnId",
+				duplicatedColumn: columnFullResponseFactory.build(),
+				isOwnAction: true,
+			};
+
+			notifyDuplicateColumnSuccess(payload);
+			vi.advanceTimersByTime(3000);
+			expect(element?.innerHTML).toBe("");
+		});
 	});
 
 	it("should notify on cardMove", () => {
