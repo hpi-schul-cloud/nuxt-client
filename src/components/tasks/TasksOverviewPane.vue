@@ -132,11 +132,7 @@ const courseFilterOptionsWithCount = computed(() =>
 const filterDensity = computed(() => (smAndDown.value ? "compact" : "default"));
 
 const hasActiveFilters = computed(
-	() =>
-		selectedCourseNames.value.length > 0 ||
-		gradeStatus.value !== undefined ||
-		dueStatus.value !== undefined ||
-		includeSubstitute.value
+	() => selectedCourseNames.value.length > 0 || gradeStatus.value || dueStatus.value || includeSubstitute.value
 );
 </script>
 
