@@ -390,7 +390,7 @@ const started2000msAgo = useTimeout(2000);
 const isLoadingOrNotConnected = computed(
 	() => started2000msAgo.value === true && (boardStore.isConnected === false || boardStore.isLoading)
 );
-const showLoadingDialog = refDebounced(isLoadingOrNotConnected, 2000);
+const showLoadingDialog = refDebounced(isLoadingOrNotConnected, 1000);
 
 const boardClasses = computed(() => {
 	const classes = ["d-flex", "flex-shrink-1", "board"];
