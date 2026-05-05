@@ -92,7 +92,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 			return meApi.meControllerMe();
 		}, "common.notification.error.preferences");
 
-		if (success && meResponse.value?.preferences) {
+		if (success && meResponse.value) {
 			meResponse.value.preferences = result?.data.preferences;
 		}
 	};
