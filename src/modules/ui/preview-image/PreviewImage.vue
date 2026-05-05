@@ -5,6 +5,7 @@
 		data-testid="image-preview"
 		:class="{ 'error-image': isError }"
 		:src="imageSrc"
+		draggable="false"
 		:alt="alt"
 		:cover="cover"
 		:aspect-ratio="aspectRatio"

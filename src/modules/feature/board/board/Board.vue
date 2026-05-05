@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<template v-if="boardStore.isLoading === false && board">
+			<CardHostDetailView v-if="cardId" :key="cardId" :card-id="cardId" @close:detail-view="onCloseDetailView" />
 			<DefaultWireframe
 				ref="main"
 				:breadcrumbs="breadcrumbs"
@@ -96,11 +97,11 @@
 					:has-relocate-board-content-permission="allowedOperations?.relocateContent ?? false"
 					:card-id="moveCardOptions.cardId"
 				/>
-				<CopyResultModal
-					:is-open="isCopyModalOpen"
-					:copy-result-items="copyResultModalItems"
-					:copy-result-root-item-type="copyResultRootItemType"
-					@copy-dialog-closed="onCopyResultModalClosed"
+				<CopyDialog
+					:is-open="isCopyDialogOpen"
+					:copy-item-type="copyItemType"
+					@confirm="onConfirmCopy"
+					@cancel="onCancelCopy"
 				/>
 				<ShareModal v-if="shareModalContextType" :type="shareModalContextType" />
 				<SelectBoardLayoutDialog
@@ -135,6 +136,7 @@
 </template>
 
 <script setup lang="ts">
+import CardHostDetailView from "../card/CardHostDetailView.vue";
 import MoveCardDialog from "../card/MoveCardDialog.vue";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
@@ -142,13 +144,10 @@ import EditSettingsDialog from "../shared/EditSettingsDialog.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import { useCopy } from "@/composables/copy";
-import { CopyParamsTypeEnum } from "@/store/copy";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
-import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
+import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import {
 	BoardExternalReferenceType,
 	BoardLayout,
@@ -168,6 +167,7 @@ import {
 import { useEnvConfig } from "@data-env";
 import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog } from "@feature-collabora";
+import { CopyDialog, useCopyFlow } from "@feature-copy";
 import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
@@ -208,6 +208,13 @@ const route = useRoute();
 useBodyScrolling();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
+const cardId = computed(() => {
+	if (route.params.cardId) {
+		return route.params.cardId as string;
+	}
+	return undefined;
+});
+
 const isEditableChipVisible = computed(() => board.value?.readersCanEdit ?? false);
 const hasReadersEditPermission = ref(false);
 const moveCardOptions = ref<{ isDialogOpen: boolean; cardId: string }>({
@@ -377,19 +384,9 @@ watch(
 	{ immediate: true }
 );
 
-const { copy } = useCopy();
-
-const copyModule = injectStrict(COPY_MODULE_KEY);
-
-const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
-
 const isListBoard = computed(() => board.value?.layout === BoardLayout.LIST);
 
 provide(BOARD_IS_LIST_LAYOUT, isListBoard);
-
-const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
-
-const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
 
 const showLoadingDialog = computed(() => {
 	if (started500msAgo.value === true && boardStore.isConnected === false) {
@@ -429,9 +426,13 @@ const boardColumnClass = computed(() => {
 	return classes;
 });
 
-const onCopyResultModalClosed = () => {
-	copyModule.reset();
-};
+const {
+	isDialogOpen: isCopyDialogOpen,
+	copyItemType,
+	executeCopyBoard,
+	onConfirm: onConfirmCopy,
+	onCancel: onCancelCopy,
+} = useCopyFlow();
 
 const onBackToOverview = () => {
 	router.push({ path: "/dashboard" });
@@ -440,11 +441,11 @@ const onBackToOverview = () => {
 const onCopyBoard = async () => {
 	if (!allowedOperations.value.copyBoard) return;
 
-	await copy({ id: props.boardId, type: CopyParamsTypeEnum.ColumnBoard });
-	const copyId = copyModule.getCopyResult?.id;
-	if (copyId) {
-		boardStore.fetchBoardRequest({ boardId: copyId });
-		router.push({ name: "boards-id", params: { id: copyId } });
+	const { result: copyResult } = await executeCopyBoard(props.boardId);
+
+	if (copyResult?.id) {
+		boardStore.fetchBoardRequest({ boardId: copyResult.id });
+		router.push({ name: "boards-id", params: { id: copyResult.id } });
 	}
 };
 
@@ -506,6 +507,13 @@ const onSaveEditBoardSettings = async (isEditableForEveryone: boolean) => {
 
 const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
 	cardStore.createFileElementWithCollabora(payload.type, payload.fileName);
+};
+
+const onCloseDetailView = () => {
+	router.replace({
+		name: "boards-id",
+		params: { id: props.boardId },
+	});
 };
 </script>
 

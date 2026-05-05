@@ -27,14 +27,16 @@ describe("CollaborativeTextEditorElement", () => {
 		isEditMode?: boolean;
 		isListBoard?: boolean;
 		windowWidth?: number;
+		isDetailView?: boolean;
 	}) => {
 		const element = collaborativeTextEditorElementResponseFactory.build();
 
-		const { isListBoard, getUrlHasError, windowWidth, isEditMode } = {
+		const { isListBoard, getUrlHasError, windowWidth, isEditMode, isDetailView } = {
 			getUrlHasError: false,
 			isListBoard: false,
 			isEditMode: false,
 			windowWidth: 1280,
+			isDetailView: false,
 			...options,
 		};
 
@@ -65,6 +67,7 @@ describe("CollaborativeTextEditorElement", () => {
 				columnIndex: 0,
 				rowIndex: 1,
 				elementIndex: 2,
+				isDetailView,
 			},
 		});
 
@@ -370,6 +373,17 @@ describe("CollaborativeTextEditorElement", () => {
 			});
 
 			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
+		});
+	});
+
+	describe("when detail view is enabled", () => {
+		it("should have list style", () => {
+			const { wrapper } = setup({
+				isDetailView: true,
+			});
+
+			const contentElementBar = wrapper.find(".content-element-bar");
+			expect(contentElementBar.classes()).toContain("flex-row");
 		});
 	});
 });

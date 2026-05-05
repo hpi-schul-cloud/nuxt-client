@@ -10,7 +10,7 @@ import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { BoardResponseAllowedOperations, CardResponse } from "@api-server";
+import { BoardResponseAllowedOperations, CardResponse, Colors } from "@api-server";
 import { useBoardFocusHandler, useCardStore, useCourseBoardEditMode, useSharedEditMode } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
@@ -26,7 +26,8 @@ import { useShareBoardLink, useSharedFileSelect, useSharedLastCreatedElement } f
 import { shallowMount } from "@vue/test-utils";
 import { Mocked } from "vitest";
 import { computed, ref } from "vue";
-import { createRouterMock, injectRouterMock } from "vue-router-mock";
+import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
+import { VCard } from "vuetify/components";
 
 vi.mock("@util-board");
 
@@ -44,6 +45,7 @@ vi.mocked(useCardSocketApi).mockReturnValue(mockComposable(useCardSocketApi));
 describe("CardHost", () => {
 	let useShareBoardLinkMock: Mocked<ReturnType<typeof useShareBoardLink>>;
 	let useSharedFileSelectMock: Mocked<ReturnType<typeof useSharedFileSelect>>;
+	let router: RouterMock;
 
 	beforeEach(() => {
 		vi.mocked(useSharedEditMode).mockReturnValue(
@@ -80,7 +82,8 @@ describe("CardHost", () => {
 		});
 		vi.mocked(useSharedFileSelect).mockReturnValue(useSharedFileSelectMock);
 
-		injectRouterMock(createRouterMock());
+		router = createRouterMock();
+		injectRouterMock(router);
 	});
 
 	afterEach(() => {
@@ -91,13 +94,22 @@ describe("CardHost", () => {
 		hasCard?: boolean;
 		hasElement?: boolean;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
+		backgroundColor?: Colors;
+		cardId?: string;
 	}) => {
-		const { hasElement = false, hasCard = true, allowedOperations = {} } = options ?? {};
+		const {
+			hasElement = false,
+			hasCard = true,
+			allowedOperations = {},
+			backgroundColor = Colors.TRANSPARENT,
+		} = options ?? {};
 
 		let card: CardResponse | null = null;
 		if (hasCard) {
 			card = cardResponseFactory.build({
 				elements: hasElement ? [fileElementResponseFactory.build()] : [],
+				backgroundColor,
+				id: options?.cardId ?? "cardId",
 			});
 		}
 
@@ -114,6 +126,7 @@ describe("CardHost", () => {
 							boardStore: {
 								board: {
 									allowedOperations: allowedOperations,
+									id: "boardId",
 								},
 							},
 						},
@@ -293,6 +306,78 @@ describe("CardHost", () => {
 
 				expect(confirmDialogUtils.askDeletionForType).toHaveBeenCalledWith("components.boardCard");
 				expect(wrapper.emitted("delete:card")).toHaveLength(1);
+			});
+		});
+	});
+
+	describe("card detail view", () => {
+		describe("when detail view button is clicked", () => {
+			it("should navigate to detail view route", async () => {
+				const { wrapper } = setup();
+
+				const detailViewButton = wrapper.findComponent({ name: "DetailViewButton" });
+				await detailViewButton.vm.$emit("open-detail-view");
+
+				expect(router.push).toHaveBeenCalled();
+			});
+		});
+
+		describe("when detail view is active", () => {
+			it("should propagate state to content element list", async () => {
+				router.currentRoute.value = {
+					...router.currentRoute.value,
+					params: { cardId: "cardId" },
+				};
+				const { wrapper } = setup();
+
+				const contentElementList = wrapper.findComponent({ name: "ContentElementList" });
+
+				expect(contentElementList.props("isDetailView")).toBe(true);
+			});
+
+			it("should render card with transparent background", async () => {
+				const backgroundColor = Colors.BLUE;
+				router.currentRoute.value = {
+					...router.currentRoute.value,
+					params: { cardId: "cardId" },
+				};
+				const { wrapper } = setup({
+					backgroundColor,
+				});
+
+				const card = wrapper.findComponent(VCard);
+
+				expect(card.attributes("style")).toContain("background-color: transparent");
+			});
+
+			it("should render card with no border", async () => {
+				const backgroundColor = Colors.BLUE;
+				router.currentRoute.value = {
+					...router.currentRoute.value,
+					params: { cardId: "cardId" },
+				};
+				const { wrapper } = setup({
+					backgroundColor,
+				});
+
+				const card = wrapper.findComponent(VCard);
+
+				expect(card.attributes("style")).not.toContain("border-left");
+			});
+
+			it("should render card with no elevation", async () => {
+				const backgroundColor = Colors.BLUE;
+				router.currentRoute.value = {
+					...router.currentRoute.value,
+					params: { cardId: "cardId" },
+				};
+				const { wrapper } = setup({
+					backgroundColor,
+				});
+
+				const card = wrapper.findComponent(VCard);
+
+				expect(card.attributes("elevation")).toBe("0");
 			});
 		});
 	});

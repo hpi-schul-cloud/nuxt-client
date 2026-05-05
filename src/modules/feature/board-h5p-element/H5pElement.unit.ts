@@ -47,6 +47,7 @@ describe("H5pElement", () => {
 		isEditMode: boolean;
 		contentTitle?: string;
 		isListBoard?: boolean;
+		isDetailView?: boolean;
 	}) => {
 		useH5PEditorMock = mockComposable(useH5PEditorApi);
 		vi.mocked(useH5PEditorApi).mockReturnValue(useH5PEditorMock);
@@ -63,6 +64,7 @@ describe("H5pElement", () => {
 				columnIndex: 0,
 				rowIndex: 1,
 				elementIndex: 2,
+				isDetailView: false,
 				...propsData,
 			},
 		});
@@ -653,7 +655,7 @@ describe("H5pElement", () => {
 				});
 			});
 
-			const setup = (isListBoard: boolean, windowWidth?: number) => {
+			const setup = (isListBoard: boolean, windowWidth?: number, isDetailView?: boolean) => {
 				Object.defineProperty(window, "innerWidth", {
 					writable: true,
 					configurable: true,
@@ -666,6 +668,7 @@ describe("H5pElement", () => {
 					}),
 					isEditMode: false,
 					isListBoard,
+					isDetailView: isDetailView ?? false,
 				});
 
 				return {
@@ -718,6 +721,14 @@ describe("H5pElement", () => {
 						expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
 					}
 				);
+			});
+
+			describe("when detail view is enabled", () => {
+				it("should have list style", () => {
+					const { wrapper } = setup(false, 1280, true);
+
+					expect(wrapper.find(".content-element-bar").classes()).toContain("flex-row");
+				});
 			});
 		});
 	});
