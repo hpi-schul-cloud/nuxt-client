@@ -139,7 +139,7 @@ const GROUP_OPTION_LABELS: Partial<Record<ProvisioningOptionKey, string>> = {
 	groupProvisioningOtherEnabled: t("common.words.otherGroups"),
 };
 
-const newlyTurnedOffGroupOptions = computed(() => {
+const justDisabledGroupOptions = computed(() => {
 	if (!currentOptions.value || !targetOptions.value) return [];
 
 	return (Object.keys(currentOptions.value) as ProvisioningOptionKey[])
@@ -163,7 +163,7 @@ onMounted(async () => {
 });
 
 const onSaveButtonClick = async () => {
-	const turnedOffLabels = newlyTurnedOffGroupOptions.value;
+	const turnedOffLabels = justDisabledGroupOptions.value;
 
 	if (!turnedOffLabels.length) {
 		await saveOptions();

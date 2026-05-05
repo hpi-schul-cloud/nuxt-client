@@ -1,4 +1,5 @@
 import { federalStateResponseFactory } from "@@/tests/test-utils/factory/federalStateResponseFactory";
+import { schoolYearResponseFactory } from "@@/tests/test-utils/factory/schoolYearResponseFactory";
 import { yearsResponseFactory } from "@@/tests/test-utils/factory/yearsResponseFactory";
 import { SchoolResponse } from "@api-server";
 import { Factory } from "fishery";
@@ -16,11 +17,5 @@ export const schoolFactory = Factory.define<SchoolResponse>(({ sequence }) => ({
 	instanceFeatures: [],
 	systemIds: [],
 	logo: { dataUrl: "https://someUrl" },
-	currentYear: {
-		id: "",
-		name: "",
-		startDate: "",
-		endDate: "",
-		courseCreationInNextYear: false,
-	},
+	currentYear: schoolYearResponseFactory.build(),
 }));
