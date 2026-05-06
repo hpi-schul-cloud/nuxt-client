@@ -1181,21 +1181,21 @@ describe("Board", () => {
 			expect(wrapperVM.showLoadingDialog).toBe(false);
 		});
 
-		it("should return true when isConnected is false after 500ms", async () => {
+		it("should return true when isConnected is false after 3000ms", async () => {
 			const { wrapperVM, boardStore } = setup();
 
 			boardStore.isConnected = false;
-			vi.advanceTimersByTime(600);
+			await vi.advanceTimersByTimeAsync(3100);
 			await nextTick();
 
 			expect(wrapperVM.showLoadingDialog).toBe(true);
 		});
 
-		it("should return true when isLoading is true after 500ms", async () => {
+		it("should return true when isLoading is true after 3000ms", async () => {
 			const { wrapperVM, boardStore } = setup();
 
 			boardStore.isLoading = true;
-			vi.advanceTimersByTime(600);
+			await vi.advanceTimersByTimeAsync(3100);
 			await nextTick();
 
 			expect(wrapperVM.showLoadingDialog).toBe(true);
