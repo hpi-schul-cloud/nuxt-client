@@ -2043,7 +2043,8 @@ export default {
 	"pages.folder.trash.breadcrumb": "Кошик",
 	"pages.folder.trash.infoText": "Файли автоматично видаляються через 7 днів після переміщення до кошика.",
 	"pages.folder.trash.emptyState": "Кошик порожній",
-	"pages.folder.trash.columns.deletedAt": "Видалено",
+	"pages.folder.trash.columns.deletedAt": "Переміщено",
+	"pages.folder.trash.columns.purgeAt": "Буде видалено",
 	"pages.folder.trash.ariaLabels.actionMenu": "Меню дій для {name}",
 	"pages.folder.trash.ariaLabels.menu": "Меню кошика",
 	"pages.folder.trash.emptyTrash": "Очистити кошик",
@@ -2052,8 +2053,6 @@ export default {
 	"pages.folder.trash.purge.action": "Видалити назавжди",
 	"pages.folder.trash.purge.success": "Файли було остаточно видалено.",
 	"pages.folder.trash.purge.error": "Не вдалося остаточно видалити файли.",
-	"pages.folder.trash.purge.dialog.title": "Назавжди видалити файли?",
-	"pages.folder.trash.purge.dialog.description":
-		"Ви збираєтесь остаточно видалити {count} файл(ів). Цю дію неможливо скасувати.",
-	"pages.folder.trash.purge.dialog.checkboxLabel": "Я розумію, що ця дія є незворотною та не може бути скасована.",
+	"pages.folder.trash.purge.dialog.title": "Назавжди видалити {count} файл(ів)?",
+	"pages.folder.trash.purge.dialog.checkboxLabel": "Видалення не можна скасувати.",
 };

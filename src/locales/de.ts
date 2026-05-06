@@ -2065,7 +2065,8 @@ export default {
 	"pages.folder.trash.link": "Papierkorb anzeigen",
 	"pages.folder.trash.emptyState": "Der Papierkorb ist leer",
 	"pages.folder.trash.infoText": "Dateien werden 7 Tage nach dem Verschieben in den Papierkorb automatisch gelöscht.",
-	"pages.folder.trash.columns.deletedAt": "Gelöscht am",
+	"pages.folder.trash.columns.deletedAt": "Verschoben am",
+	"pages.folder.trash.columns.purgeAt": "Wird gelöscht am",
 	"pages.folder.trash.ariaLabels.actionMenu": "Aktionsmenü für {name}",
 	"pages.folder.trash.ariaLabels.menu": "Papierkorb Menü",
 	"pages.folder.trash.emptyTrash": "Papierkorb leeren",
@@ -2074,9 +2075,6 @@ export default {
 	"pages.folder.trash.purge.action": "Endgültig löschen",
 	"pages.folder.trash.purge.success": "Dateien wurden endgültig gelöscht.",
 	"pages.folder.trash.purge.error": "Dateien konnten nicht endgültig gelöscht werden.",
-	"pages.folder.trash.purge.dialog.title": "Dateien endgültig löschen?",
-	"pages.folder.trash.purge.dialog.description":
-		"Du bist dabei, {count} Datei(en) endgültig zu löschen. Diese Aktion kann nicht rückgängig gemacht werden.",
-	"pages.folder.trash.purge.dialog.checkboxLabel":
-		"Ich verstehe, dass diese Aktion dauerhaft ist und nicht rückgängig gemacht werden kann.",
+	"pages.folder.trash.purge.dialog.title": "{count} Datei(en) endgültig löschen?",
+	"pages.folder.trash.purge.dialog.checkboxLabel": "Löschen kann nicht rückgängig gemacht werden.",
 };
