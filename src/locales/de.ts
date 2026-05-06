@@ -1685,6 +1685,7 @@ export default {
 	"pages.rooms.ccImportCourse.fileInputLabel": "Datei auswählen",
 	"pages.rooms.ccImportCourse.maxFileSize": "Maximale Dateigröße: {maxSize}",
 	"pages.rooms.ccImportCourse.fileSizeExceeded": "Die Datei überschreitet die maximale Größe von {maxSize}.",
+	"pages.rooms.ccImportCourse.invalidFileType": "Ungültiger Dateityp",
 	"pages.rooms.ccImportCourse.loading": "Upload läuft...",
 	"pages.rooms.ccImportCourse.success": "Deine Kursdatei wurde hochgeladen und wird nun im Hintergrund importiert.",
 	"pages.rooms.ccImportCourse.error": "Beim Hochladen der Kursdatei ist ein Fehler aufgetreten.",
