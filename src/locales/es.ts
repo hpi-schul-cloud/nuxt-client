@@ -2075,7 +2075,7 @@ export default {
 	"pages.folder.trash.infoText":
 		"Los archivos se eliminan automáticamente 7 días después de ser movidos a la papelera.",
 	"pages.folder.trash.emptyState": "La papelera está vacía",
-	"pages.folder.trash.columns.deletedAt": "Movido el",
+	"pages.folder.trash.columns.movedOn": "Movido el",
 	"pages.folder.trash.columns.purgeAt": "Se eliminará el",
 	"pages.folder.trash.ariaLabels.actionMenu": "Menú de acciones para {name}",
 	"pages.folder.trash.ariaLabels.menu": "Menú de papelera",

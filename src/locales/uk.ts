@@ -2043,7 +2043,7 @@ export default {
 	"pages.folder.trash.breadcrumb": "Кошик",
 	"pages.folder.trash.infoText": "Файли автоматично видаляються через 7 днів після переміщення до кошика.",
 	"pages.folder.trash.emptyState": "Кошик порожній",
-	"pages.folder.trash.columns.deletedAt": "Переміщено",
+	"pages.folder.trash.columns.movedOn": "Переміщено",
 	"pages.folder.trash.columns.purgeAt": "Буде видалено",
 	"pages.folder.trash.ariaLabels.actionMenu": "Меню дій для {name}",
 	"pages.folder.trash.ariaLabels.menu": "Меню кошика",

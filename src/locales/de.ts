@@ -2065,7 +2065,7 @@ export default {
 	"pages.folder.trash.link": "Papierkorb anzeigen",
 	"pages.folder.trash.emptyState": "Der Papierkorb ist leer",
 	"pages.folder.trash.infoText": "Dateien werden 7 Tage nach dem Verschieben in den Papierkorb automatisch gelöscht.",
-	"pages.folder.trash.columns.deletedAt": "Verschoben am",
+	"pages.folder.trash.columns.movedOn": "Verschoben am",
 	"pages.folder.trash.columns.purgeAt": "Wird gelöscht am",
 	"pages.folder.trash.ariaLabels.actionMenu": "Aktionsmenü für {name}",
 	"pages.folder.trash.ariaLabels.menu": "Papierkorb Menü",

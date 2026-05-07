@@ -219,7 +219,7 @@ const trashBreadcrumbs = computed(() => {
 
 const headers = [
 	{ title: t("pages.folder.columns.name"), key: "name" },
-	{ title: t("pages.folder.trash.columns.deletedAt"), key: "deletedSince" },
+	{ title: t("pages.folder.trash.columns.movedOn"), key: "deletedSince" },
 	{ title: t("pages.folder.trash.columns.purgeAt"), key: "purgeAt" },
 	{ title: t("pages.folder.columns.size"), key: "size" },
 	{

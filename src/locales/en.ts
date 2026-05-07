@@ -2023,7 +2023,7 @@ export default {
 	"pages.folder.trash.link": "Show trash",
 	"pages.folder.trash.emptyState": "The trash is empty",
 	"pages.folder.trash.infoText": "Files are automatically deleted 7 days after being moved to the trash.",
-	"pages.folder.trash.columns.deletedAt": "Moved on",
+	"pages.folder.trash.columns.movedOn": "Moved on",
 	"pages.folder.trash.columns.purgeAt": "Will be deleted on",
 	"pages.folder.trash.ariaLabels.actionMenu": "Action menu for {name}",
 	"pages.folder.trash.ariaLabels.menu": "Trash menu",
