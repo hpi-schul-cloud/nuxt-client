@@ -77,7 +77,6 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const linkContentElement = ref(null);
-const isLoading = ref(false);
 const element = toRef(props, "element");
 
 const outlined = computed(() =>
@@ -111,21 +110,15 @@ const { getMetaTags } = useMetaTagExtractorApi();
 const { createPreviewImage } = usePreviewGenerator(element.value.id);
 
 const onCreateUrl = async (originalUrl: string) => {
-	isLoading.value = true;
+	const validUrl = ensureProtocolIncluded(originalUrl);
+	const { url, title, description, originalImageUrl } = await getMetaTags(validUrl);
 
-	try {
-		const validUrl = ensureProtocolIncluded(originalUrl);
-		const { url, title, description, originalImageUrl } = await getMetaTags(validUrl);
+	modelValue.value.url = url;
+	modelValue.value.title = title;
+	modelValue.value.description = description;
 
-		modelValue.value.url = url;
-		modelValue.value.title = title;
-		modelValue.value.description = description;
-
-		if (originalImageUrl) {
-			modelValue.value.imageUrl = await createPreviewImage(originalImageUrl);
-		}
-	} finally {
-		isLoading.value = false;
+	if (originalImageUrl) {
+		modelValue.value.imageUrl = await createPreviewImage(originalImageUrl);
 	}
 };
 
