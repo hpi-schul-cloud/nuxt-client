@@ -46,9 +46,11 @@ import { ensureProtocolIncluded } from "../util/url.util";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
+import { FileRecordParentType } from "@api-file-storage";
 import { LinkElementResponse } from "@api-server";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useFileStorageApi } from "@data-file";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { useElementFocus } from "@util-board";
@@ -107,6 +109,7 @@ const isHidden = computed(() => !props.isEditMode && !computedElement.value.cont
 
 const { getMetaTags } = useMetaTagExtractorApi();
 
+const { deleteFilesForParent } = useFileStorageApi();
 const { createPreviewImage } = usePreviewGenerator(element.value.id);
 
 const onCreateUrl = async (originalUrl: string) => {
@@ -116,6 +119,9 @@ const onCreateUrl = async (originalUrl: string) => {
 	modelValue.value.url = url;
 	modelValue.value.title = title;
 	modelValue.value.description = description;
+
+	// When updating the URL, the existing preview must be deleted.
+	await deleteFilesForParent(element.value.id, FileRecordParentType.BOARDNODES);
 
 	if (originalImageUrl) {
 		modelValue.value.imageUrl = await createPreviewImage(originalImageUrl);

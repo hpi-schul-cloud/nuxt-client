@@ -47,5 +47,9 @@ export const useFileRecordsStore = defineStore("fileRecords", {
 				}
 			});
 		},
+
+		deleteByParent(parentId: string) {
+			this.recordsByParent.delete(parentId);
+		},
 	},
 });

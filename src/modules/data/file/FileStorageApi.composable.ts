@@ -39,7 +39,8 @@ export const useFileStorageApi = () => {
 	const wopiApi: WopiApiInterface = WopiApiFactory(undefined, "/v3", $axios);
 	const fileConfig = useEnvFileConfig();
 
-	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords, getFileRecordById } = useFileRecordsStore();
+	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords, deleteByParent, getFileRecordById } =
+		useFileRecordsStore();
 
 	const { getStatisticByParentId, setStatisticForParent } = useParentStatisticsStore();
 
@@ -166,6 +167,11 @@ export const useFileStorageApi = () => {
 		}
 	};
 
+	const deleteFilesForParent = async (parentId: string, parentType: FileRecordParent) => {
+		deleteByParent(parentId);
+		await fileApi.deleteByParent(parentId, parentType);
+	};
+
 	const fetchFileStatistic = async (parentId: string, parentType: FileRecordParent): Promise<void> => {
 		try {
 			const response = await fileApi.getParentStatistic(parentId, parentType);
@@ -236,6 +242,7 @@ export const useFileStorageApi = () => {
 		getFileRecordsByParentId,
 		getFileRecordById,
 		deleteFiles,
+		deleteFilesForParent,
 		getStatisticByParentId,
 		tryGetParentStatisticFromApi: fetchFileStatistic,
 		getAuthorizedCollaboraDocumentUrl,
