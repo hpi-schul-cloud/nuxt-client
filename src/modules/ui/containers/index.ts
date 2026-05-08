@@ -1,3 +1,4 @@
+import SvsLoadingWrapper from "./SvsLoadingWrapper.vue";
 import SvsSuspense from "./SvsSuspense.vue";
 
-export { SvsSuspense };
+export { SvsLoadingWrapper, SvsSuspense };

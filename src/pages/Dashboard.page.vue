@@ -19,7 +19,7 @@
 				<RenderHTML :html="inMaintenanceOrMigrationText" />
 			</WarningAlert>
 
-			<SvsSuspense :loading="isLoadingNews">
+			<SvsLoadingWrapper :is-loading="isLoadingNews">
 				<h2 class="mb-4">{{ t("pages.news.title") }}</h2>
 
 				<!-- Dashboard news -->
@@ -60,7 +60,7 @@
 
 					<VBtn href="/news" data-testid="show-all-news" variant="outlined" :text="t('common.actions.show.all')" />
 				</template>
-			</SvsSuspense>
+			</SvsLoadingWrapper>
 
 			<DashboardTasks v-if="isTeacher || isStudent" />
 
@@ -84,7 +84,7 @@ import { DashboardReleaseDialog, DashboardTasks } from "@feature-dashboard";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
 import { InfoAlert, WarningAlert } from "@ui-alert";
-import { SvsSuspense } from "@ui-containers";
+import { SvsLoadingWrapper } from "@ui-containers";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
@@ -115,7 +115,7 @@ const inMaintenanceOrMigrationText = computed(() => {
 	return undefined;
 });
 
-const { data: newsResponse, isRunning: isLoadingNews } = useSafeAxiosRunner(() =>
+const { data: newsResponse, isLoading: isLoadingNews } = useSafeAxiosRunner(() =>
 	newsApi.newsControllerFindAll(undefined, undefined, undefined, undefined, NEWS_LIMIT)
 );
 const latestNews = computed(() => newsResponse.value?.data.data ?? []);

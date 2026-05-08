@@ -1,5 +1,5 @@
 <template>
-	<SvsSuspense :loading="isLoading">
+	<SvsLoadingWrapper :is-loading="isLoading">
 		<div class="text-center mx-auto container-max-width">
 			<img src="@/assets/img/migration/migration_error.svg" alt="" />
 			<h1 class="px-4">
@@ -43,7 +43,7 @@
 				</VBtn>
 			</div>
 		</div>
-	</SvsSuspense>
+	</SvsLoadingWrapper>
 </template>
 
 <script setup lang="ts">
@@ -52,6 +52,7 @@ import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useSystem } from "@data-access";
 import { useEnvConfig } from "@data-env";
 import { useUserLoginMigration } from "@data-user-login-migration";
+import { SvsLoadingWrapper } from "@ui-containers";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";

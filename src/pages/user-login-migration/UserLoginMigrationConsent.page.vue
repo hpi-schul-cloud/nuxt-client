@@ -1,5 +1,5 @@
 <template>
-	<SvsSuspense :loading="isLoading">
+	<SvsLoadingWrapper :is-loading="isLoading">
 		<div class="text-center mx-auto container-max-width">
 			<img src="@/assets/img/migration/move.svg" alt="" />
 			<h1 class="px-4">
@@ -51,14 +51,14 @@
 				</div>
 			</div>
 		</div>
-	</SvsSuspense>
+	</SvsLoadingWrapper>
 </template>
 
 <script setup lang="ts">
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useSystem } from "@data-access";
 import { useUserLoginMigration } from "@data-user-login-migration";
-import { SvsSuspense } from "@ui-containers";
+import { SvsLoadingWrapper } from "@ui-containers";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";

@@ -56,13 +56,13 @@ export const useSafeTask = () => {
 export const useSafeAxiosTask = () => {
 	const { execute: safeExec, isRunning, reset, status, error } = useSafeTask();
 	const { t } = useI18nGlobal();
-	const isPending = ref(false);
-	const isBlocked = computed(() => isRunning.value || isPending.value);
+	const isLoading = ref(false);
+	const isBlocked = computed(() => isRunning.value || isLoading.value);
 
 	const execute = async <T>(fn: AsyncFunction<T>, onErrorNotifyMessage?: string): Promise<TaskResult<T>> => {
 		const { result, success, error } = await withDebouncedLoading(() => safeExec<T>(fn), {
-			onStart: () => (isPending.value = true),
-			onEnd: () => (isPending.value = false),
+			onStart: () => (isLoading.value = true),
+			onEnd: () => (isLoading.value = false),
 		});
 
 		if (error && onErrorNotifyMessage) {
@@ -87,7 +87,7 @@ export const useSafeAxiosTask = () => {
 		}
 	};
 
-	return { execute, isRunning, isPending: readonly(isPending), isBlocked, reset, status, error };
+	return { execute, isRunning, isLoading: readonly(isLoading), isBlocked, reset, status, error };
 };
 
 export const useSafeTaskRunner = <T>(fn: AsyncFunction<T>, onErrorNotifyMessage?: string) => {
@@ -111,7 +111,7 @@ export const useSafeAxiosRunner = <T>(
 	} = {}
 ) => {
 	const { immediate = true, onErrorNotifyMessage } = options;
-	const { execute: safeExec, isRunning, isPending, isBlocked, reset, status, error } = useSafeAxiosTask();
+	const { execute: safeExec, isRunning, isLoading, isBlocked, reset, status, error } = useSafeAxiosTask();
 
 	const data = ref<T>();
 
@@ -134,7 +134,7 @@ export const useSafeAxiosRunner = <T>(
 		error,
 		status,
 		isRunning,
-		isPending,
+		isLoading,
 		isBlocked,
 		execute,
 		reset,
