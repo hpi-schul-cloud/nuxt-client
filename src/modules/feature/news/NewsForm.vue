@@ -8,7 +8,6 @@
 			:label="t('components.organisms.FormNews.input.title.label')"
 			:rules="[validateOnOpeningTag, isRequired(t('components.organisms.FormNews.errors.missing_title'))]"
 		/>
-
 		<div class="mt-5">
 			<ClassicEditor
 				ref="classicEditor"
@@ -31,11 +30,9 @@
 				</template>
 			</VMessages>
 		</div>
-
 		<p class="mt-13">
 			{{ t("components.organisms.FormNews.label.planned_publish") }}
 		</p>
-
 		<DatePicker
 			:date="newsDate"
 			:label="t('common.labels.date')"
@@ -48,7 +45,6 @@
 			data-testid="news_time"
 			@update:time="newsTime = $event"
 		/>
-
 		<div class="d-flex ga-3 mt-2">
 			<VSpacer />
 			<VBtn variant="text" :text="t('common.actions.discard')" @click="onCancel" />
@@ -76,7 +72,6 @@ import { DatePicker, TimePicker } from "@ui-date-time-picker";
 import { isRequired, useOpeningTagValidator } from "@util-validators";
 import { ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { VMessages } from "vuetify/components";
 
 type Props = {
 	title?: string;
@@ -168,6 +163,7 @@ const onDelete = async () => {
 
 const onCancel = async () => (await askCancel()) && emit("cancel");
 </script>
+
 <style lang="scss" scoped>
 .news-content-error {
 	letter-spacing: 0.4px;

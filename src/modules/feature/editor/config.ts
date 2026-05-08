@@ -19,6 +19,7 @@ export const corePlugins: PluginName[] = [
 	"Essentials",
 	"Heading",
 	"Italic",
+	"Link",
 	"List",
 	"Paragraph",
 	"RemoveFormat",
@@ -95,6 +96,7 @@ export const mediaFormattingToolbar: ToolbarItem[] = [
 	"numberedList",
 	"removeFormat",
 	"|",
+	"link",
 ];
 
 export const compactHeadings: { options: HeadingOption[] } = {
