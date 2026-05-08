@@ -751,6 +751,9 @@ export default {
 	"components.molecules.share.result.mailShare": "Надіслати поштою",
 	"components.molecules.share.result.qrCodeScan": "Відскануйте QR-код",
 	"components.molecules.share.result.title": "Поділіться через",
+	"components.molecules.share.tasks.options.infoText":
+		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі.",
+	"components.molecules.share.tasks.result.linkLabel": "Зв'язати копію завдання",
 	"components.molecules.share.roomMemberInvitation.result.linkLabel": "Посилання на запрошення до кімнати",
 	"components.molecules.share.checkPrivacyAndCopyright":
 		"Будь ласка, перевірте вміст на предмет авторських прав та захисту даних.",
