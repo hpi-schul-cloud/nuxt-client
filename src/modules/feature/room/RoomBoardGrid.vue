@@ -14,12 +14,16 @@
 			<RoomBoardGridItem
 				class="draggable user-select-none room-content-grid-item"
 				:class="{ 'cursor-grab': allowedOperations.editContent }"
+				:room-id="roomId"
 				:board="element"
 				:index
 				@contextmenu.prevent
 				@click.capture="onItemClick"
 				@focusin="focusedBoard = $event.target"
 				@keydown.up.down.left.right="onArrowKeyDown($event, index)"
+				@update:visibility="(boardId, isVisible) => emit('update:boardVisibility', boardId, isVisible)"
+				@delete:board="(boardId, boardTitle) => emit('delete:board', boardId, boardTitle)"
+				@duplicate:board="(boardId) => emit('duplicate:board', boardId)"
 			/>
 		</template>
 	</Sortable>
@@ -44,6 +48,13 @@ const props = defineProps({
 	roomId: { type: String, required: true },
 	boards: { type: Array as PropType<RoomBoardItem[]>, required: true },
 });
+
+const emit = defineEmits<{
+	"update:boardVisibility": [boardId: string, isVisible: boolean];
+	"delete:board": [boardId: string, boardTitle: string];
+	"duplicate:board": [boardId: string];
+}>();
+
 const { t } = useI18n();
 const { execute, error: reorderError } = useSafeTask();
 

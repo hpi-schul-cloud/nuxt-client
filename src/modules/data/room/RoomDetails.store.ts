@@ -2,6 +2,7 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { RoomBoardItem, RoomDetails, RoomUpdateParams } from "@/types/room/Room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { askDeletionForItem } from "@/utils/confirmation-dialog.utils";
 import { BoardApiFactory, BoardLayout, BoardParentType, CreateBoardBodyParams, RoomApiFactory } from "@api-server";
 import { useAppStore } from "@data-app";
 import { defineStore } from "pinia";
@@ -86,6 +87,31 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		}
 	};
 
+	const deleteBoard = async (roomId: string, boardId: string, boardTitle: string) => {
+		const shouldDelete = await askDeletionForItem(boardTitle, "common.words.board");
+		if (!shouldDelete) return;
+
+		const { error } = await execute(
+			() => boardApi.boardControllerDeleteBoard(boardId),
+			t("common.notifications.errors.notDeleted", { type: t("common.words.board") })
+		);
+
+		if (!error) {
+			await fetchRoomAndBoards(roomId);
+		}
+	};
+
+	const updateBoardVisibility = async (roomId: string, boardId: string, isVisible: boolean) => {
+		const { error } = await execute(
+			() => boardApi.boardControllerUpdateVisibility(boardId, { isVisible }),
+			t("components.board.notifications.errors.notUpdated")
+		);
+
+		if (!error) {
+			await fetchRoomAndBoards(roomId);
+		}
+	};
+
 	const resetState = () => {
 		isLoading.value = true;
 		room.value = undefined;
@@ -96,7 +122,9 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		fetchBoardsOfRoom,
 		fetchRoom,
 		createBoard,
+		deleteBoard,
 		moveBoard,
+		updateBoardVisibility,
 		isLoading,
 		resetState,
 		room,

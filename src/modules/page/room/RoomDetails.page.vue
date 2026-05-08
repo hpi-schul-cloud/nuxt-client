@@ -24,7 +24,13 @@
 				<LearningContentEmptyStateSvg />
 			</template>
 		</EmptyState>
-		<RoomBoardGrid :room-id="room.id" :boards="visibleBoards" />
+		<RoomBoardGrid
+			:room-id="room.id"
+			:boards="visibleBoards"
+			@update:board-visibility="onUpdateBoardVisibility"
+			@delete:board="onDeleteBoard"
+			@duplicate:board="onDuplicateBoard"
+		/>
 		<SelectBoardLayoutDialog
 			v-if="allowedOperations.editContent"
 			v-model="boardLayoutDialogIsOpen"
@@ -72,10 +78,10 @@ const { t } = useI18n();
 const shareModule = injectStrict(SHARE_MODULE_KEY);
 
 const roomDetailsStore = useRoomDetailsStore();
-const { leaveRoom, deleteRoom } = useRoomStore();
+const { leaveRoom, deleteRoom, fetchRoomAndBoards } = useRoomStore();
 
 const { roomBoards } = storeToRefs(roomDetailsStore);
-const { createBoard } = roomDetailsStore;
+const { createBoard, updateBoardVisibility, deleteBoard } = roomDetailsStore;
 
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
@@ -195,5 +201,20 @@ const onLeaveRoom = async () => {
 const onCreateBoard = async (layout: BoardLayout) => {
 	const boardId = await createBoard(room.value.id, layout, t("pages.roomDetails.board.defaultName"));
 	router.push(`/boards/${boardId}`);
+};
+
+const onUpdateBoardVisibility = (boardId: string, isVisible: boolean) => {
+	updateBoardVisibility(props.room.id, boardId, isVisible);
+};
+
+const onDeleteBoard = (boardId: string) => {
+	deleteBoard(props.room.id, boardId);
+};
+
+const onDuplicateBoard = async (boardId: string) => {
+	const { result } = await copyFlow.executeCopyBoard(boardId);
+	if (result?.id) {
+		await fetchRoomAndBoards(props.room.id);
+	}
 };
 </script>

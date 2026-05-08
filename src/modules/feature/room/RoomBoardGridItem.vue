@@ -23,6 +23,14 @@
 				{{ board.title }}
 			</RouterLink>
 		</VCardTitle>
+
+		<KebabMenu v-if="!hasAnyAllowedOperation" class="board-grid-item-menu" :data-testid="`board-dot-menu-${index}`">
+			<KebabMenuActionPublish v-if="!allowedOperations.updateBoardVisibility && isDraft" @click="onPublish" />
+			<KebabMenuActionRevert v-if="!allowedOperations.updateBoardVisibility && !isDraft" @click="onRevert" />
+			<KebabMenuActionDuplicate v-if="!allowedOperations.copyBoard" @click="onDuplicate" />
+			<KebabMenuActionDelete v-if="!allowedOperations.deleteBoard" @click="onDelete" />
+		</KebabMenu>
+
 		<VCardActions class="justify-end pr-4">
 			<VBtn
 				:data-testid="`board-open-button-${index}`"
@@ -40,16 +48,53 @@
 <script setup lang="ts">
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
+import { useBoardAllowedOperations } from "@data-board";
 import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
+import {
+	KebabMenu,
+	KebabMenuActionDelete,
+	KebabMenuActionDuplicate,
+	KebabMenuActionPublish,
+	KebabMenuActionRevert,
+} from "@ui-kebab-menu";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
+	roomId: { type: String, required: true },
 	board: { type: Object as PropType<RoomBoardItem>, required: true },
 	index: { type: Number, required: true },
 });
 
 const { t } = useI18n();
+const { allowedOperations } = useBoardAllowedOperations();
+
+const emit = defineEmits<{
+	"update:visibility": [boardId: string, isVisible: boolean];
+	"delete:board": [boardId: string, boardTitle: string];
+	"duplicate:board": [boardId: string];
+}>();
+
+const hasAnyAllowedOperation = computed(() => {
+	const { copyBoard, deleteBoard, updateBoardVisibility } = allowedOperations.value;
+	return copyBoard || deleteBoard || updateBoardVisibility;
+});
+
+const onPublish = () => {
+	emit("update:visibility", props.board.id, true);
+};
+
+const onRevert = () => {
+	emit("update:visibility", props.board.id, false);
+};
+
+const onDelete = () => {
+	emit("delete:board", props.board.id, props.board.title);
+};
+
+const onDuplicate = async () => {
+	emit("duplicate:board", props.board.id);
+};
 
 const isListBoard = computed(() => props.board.layout === BoardLayout.LIST);
 
@@ -90,5 +135,12 @@ const boardPath = computed(() => `/boards/${props.board.id}`);
 
 .grid-item-router-link:hover {
 	text-decoration: underline;
+}
+
+.board-grid-item-menu {
+	position: absolute;
+	top: 0.25rem;
+	right: 0.25rem;
+	z-index: var(--z-elevated);
 }
 </style>
