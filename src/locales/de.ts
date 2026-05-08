@@ -771,6 +771,9 @@ export default {
 	"components.molecules.share.result.mailShare": "Als Mail versenden",
 	"components.molecules.share.result.qrCodeScan": "QR-Code scannen",
 	"components.molecules.share.result.title": "Teilen über",
+	"components.molecules.share.tasks.options.infoText":
+		"Mit dem folgenden Link kann die Aufgabe als Kopie von anderen Lehrkräften importiert werden.",
+	"components.molecules.share.tasks.result.linkLabel": "Link Aufgabekopie",
 	"components.molecules.share.roomMemberInvitation.result.linkLabel": "Link Raum-Einladung",
 	"components.molecules.share.checkPrivacyAndCopyright": "Bitte die Inhalte auf Urheberrecht und Datenschutz prüfen.",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
