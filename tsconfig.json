@@ -39,6 +39,7 @@
       "@data-provisioning-options": ["src/modules/data/provisioning-options"],
       "@data-room": ["src/modules/data/room"],
       "@data-school": ["src/modules/data/school"],
+      "@data-import-users": ["src/modules/data/import-users"],
       "@data-user-login-migration": ["src/modules/data/user-login-migration"],
       "@data-users": ["src/modules/data/users"],
       "@feature-auto-logout": ["src/modules/feature/auto-logout"],
