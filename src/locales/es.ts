@@ -751,6 +751,9 @@ export default {
 	"components.molecules.share.result.mailShare": "Enviar como correo",
 	"components.molecules.share.result.qrCodeScan": "Escanear código QR",
 	"components.molecules.share.result.title": "Compartir vía",
+	"components.molecules.share.tasks.options.infoText":
+		"Con el siguiente enlace, la tarea puede ser importado como copia por otros profesores.",
+	"components.molecules.share.tasks.result.linkLabel": "Enlace a la copia de la tarea",
 	"components.molecules.share.roomMemberInvitation.result.linkLabel": "Enlace de invitación a la sala",
 	"components.molecules.share.checkPrivacyAndCopyright":
 		"Por favor, comprueba los contenidos en cuanto a derechos de autor y protección de datos.",
