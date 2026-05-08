@@ -3,7 +3,11 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { mount } from "@vue/test-utils";
 
-const setupWrapper = (props = {}) => {
+const setupWrapper = ({
+	propsData = {},
+}: {
+	propsData?: object;
+} = {}) => {
 	const wrapper = mount(VideoConferenceContentElementCreate, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
@@ -11,7 +15,10 @@ const setupWrapper = (props = {}) => {
 				[BOARD_IS_LIST_LAYOUT as symbol]: false,
 			},
 		},
-		props,
+		props: {
+			isDetailView: false,
+			...propsData,
+		},
 	});
 	return wrapper;
 };
@@ -44,7 +51,7 @@ describe("VideoConferenceContentElementCreate", () => {
 
 		it("should not emit create:title event when title is unchanged", async () => {
 			const existingTitle = "Existing Title";
-			const wrapper = setupWrapper({ existingTitle });
+			const wrapper = setupWrapper({ propsData: { existingTitle } });
 
 			// Title remains unchanged
 
@@ -56,7 +63,7 @@ describe("VideoConferenceContentElementCreate", () => {
 		it("should emit create:title event when title is changed from existing title", async () => {
 			const existingTitle = "Existing Title";
 			const newTitle = "New Title";
-			const wrapper = setupWrapper({ existingTitle });
+			const wrapper = setupWrapper({ propsData: { existingTitle } });
 
 			await wrapper.findComponent({ name: "VTextField" }).setValue(newTitle);
 
@@ -84,6 +91,20 @@ describe("VideoConferenceContentElementCreate", () => {
 
 			const alerts = wrapper.find('[role="alert"]');
 			expect(alerts.text()).toBe("");
+		});
+	});
+
+	describe("when detail view is enabled", () => {
+		it("should have list style", () => {
+			const wrapper = setupWrapper({
+				propsData: {
+					isDetailView: true,
+				},
+			});
+
+			const element = wrapper.findComponent("[data-testid='board-video-conference-element-create']");
+			expect(element.exists()).toBe(true);
+			expect(element.classes()).toContain("flex-row");
 		});
 	});
 });

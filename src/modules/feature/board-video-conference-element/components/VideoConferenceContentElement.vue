@@ -20,6 +20,7 @@
 			:title="computedElement.content.title"
 			:has-participation-permission="hasParticipationPermission"
 			:is-video-conference-enabled="isVideoConferenceEnabled"
+			:is-detail-view="isDetailView"
 			:can-start="canStart"
 			:can-join="canJoin"
 			:is-running="isConferenceRunning"
@@ -40,6 +41,7 @@
 		<VideoConferenceContentElementCreate
 			v-if="isEditMode && !isConferenceRunning"
 			:existing-title="computedElement.content.title"
+			:is-detail-view="isDetailView"
 			@create:title="onCreateTitle"
 		>
 			<BoardMenu
@@ -102,6 +104,7 @@ const props = defineProps({
 	columnIndex: { type: Number, required: true },
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
+	isDetailView: { type: Boolean, required: false },
 });
 
 const emit = defineEmits(["delete:element", "move-down:edit", "move-up:edit", "move-keyboard:edit"]);

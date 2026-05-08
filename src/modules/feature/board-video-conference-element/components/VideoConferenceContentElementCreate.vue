@@ -44,6 +44,10 @@ const props = defineProps({
 		type: String as PropType<string | undefined>,
 		default: undefined,
 	},
+	isDetailView: {
+		type: Boolean,
+		required: false,
+	},
 });
 
 const emit = defineEmits(["create:title"]);
@@ -61,7 +65,7 @@ const label = existingTitle
 const rules = [isRequired(t("common.validation.required2"))];
 const imageSrc = image;
 
-const isRenderedAsList = computed(() => smAndUp.value && isListLayout.value);
+const isRenderedAsList = computed(() => smAndUp.value && (isListLayout.value || props.isDetailView));
 
 onBeforeUnmount(() => {
 	if (title.value === existingTitle) return;

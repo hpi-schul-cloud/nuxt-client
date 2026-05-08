@@ -73,7 +73,6 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 	}
 
 	h5 {
-		font-size: var(--text-md);
 		letter-spacing: 0.015em;
 	}
 

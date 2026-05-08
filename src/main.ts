@@ -6,24 +6,12 @@ import { createVuetifyPlugin } from "./plugins/vuetify";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
 import {
-	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "./utils/inject";
-import {
-	copyModule,
-	courseRoomDetailsModule,
-	filePathsModule,
-	finishedTasksModule,
-	importUsersModule,
-	schoolExternalToolsModule,
-	schoolsModule,
-	shareModule,
-	tasksModule,
-} from "@/store";
+import { courseRoomDetailsModule, filePathsModule, importUsersModule, schoolsModule, shareModule } from "@/store";
 import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
@@ -81,17 +69,13 @@ app.use(VueDOMPurifyHTML, {
 	app.use(router).use(store).use(vuetify).use(i18n);
 
 	// NUXT_REMOVAL get rid of store DI
-	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
 	app.provide("filePathsModule", filePathsModule);
 	app.provide(FILE_PATHS_MODULE_KEY, filePathsModule);
-	app.provide("finishedTasksModule", finishedTasksModule);
 	app.provide("importUsersModule", importUsersModule);
 
 	app.provide(COURSE_ROOM_DETAILS_MODULE_KEY.valueOf(), courseRoomDetailsModule);
-	app.provide(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(), schoolExternalToolsModule);
 	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
 	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
-	app.provide("tasksModule", tasksModule);
 
 	app.mount("#app");
 })();
