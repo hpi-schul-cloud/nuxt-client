@@ -87,13 +87,20 @@ export const useAppStore = defineStore("applicationStore", () => {
 	const updateUserPreferences = async (options: UpdatePreferencesBodyParams) => {
 		const { execute: executePreferences } = useSafeAxiosTask();
 
-		const { success, result } = await executePreferences(async () => {
-			await meApi.meControllerUpdateMePreferences(options);
-			return meApi.meControllerMe();
-		}, "common.notification.error.preferences");
+		const { success: successUpdate } = await executePreferences(
+			async () => await meApi.meControllerUpdateMePreferences(options),
+			"common.notification.error.preferences.update"
+		);
 
-		if (success && meResponse.value) {
-			meResponse.value.preferences = result?.data.preferences;
+		if (successUpdate) {
+			const { success, result } = await executePreferences(
+				meApi.meControllerMe,
+				"common.notification.error.preferences.retrieve"
+			);
+
+			if (success && meResponse.value) {
+				meResponse.value.preferences = result?.data.preferences;
+			}
 		}
 	};
 
