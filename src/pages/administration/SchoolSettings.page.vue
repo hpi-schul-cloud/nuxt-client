@@ -144,7 +144,7 @@ import { ErrorAlert, InfoAlert } from "@ui-alert";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 
@@ -167,23 +167,7 @@ const isFeatureSchoolPolicyEnabled = computed(() => useEnvConfig().value.FEATURE
 const isFeatureSchoolTermsOfUseEnabled = computed(() => useEnvConfig().value.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED);
 const schoolUsesLdap = computed(() => schoolMaintenanceStatus.value?.schoolUsesLdap === true);
 
-watch(
-	schoolDetails,
-	(newSchool, oldSchool) => {
-		// fetch systems when the school is loaded
-		// if the school object gets a new reference (e.g. after updating it) do not reload the year or systems
-		if (
-			!schoolSystems.value ||
-			!schoolSystems.value.length ||
-			(newSchool && newSchool.id && (!oldSchool || !oldSchool.id))
-		) {
-			fetchSchoolSystems(newSchool.id);
-		}
-	},
-	{ immediate: true }
-);
-
 onMounted(async () => {
-	await fetchMaintenanceStatus(schoolDetails.value.id);
+	await Promise.all([fetchSchoolSystems(schoolDetails.value.id), fetchMaintenanceStatus(schoolDetails.value.id)]);
 });
 </script>
