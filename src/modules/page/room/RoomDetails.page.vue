@@ -24,7 +24,7 @@
 				<LearningContentEmptyStateSvg />
 			</template>
 		</EmptyState>
-		<RoomContentGrid :room-id="room.id" :boards="visibleBoards" />
+		<RoomBoardGrid :room-id="room.id" :boards="visibleBoards" />
 		<SelectBoardLayoutDialog
 			v-if="allowedOperations.editContent"
 			v-model="boardLayoutDialogIsOpen"
@@ -52,7 +52,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
 import { useRoomAllowedOperations, useRoomDetailsStore, useRoomStore } from "@data-room";
 import { CopyDialog, useCopyFlow } from "@feature-copy";
-import { RoomContentGrid, RoomMenu } from "@feature-room";
+import { RoomBoardGrid, RoomMenu } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";

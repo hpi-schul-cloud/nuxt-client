@@ -1,4 +1,4 @@
-import RoomContentGridItem from "./RoomContentGridItem.vue";
+import RoomBoardGridItem from "./RoomBoardGridItem.vue";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -14,9 +14,9 @@ const mockBoard: RoomBoardItem = {
 	updatedAt: "2017-09-28T11:49:39.924Z",
 };
 
-describe("@feature-room/RoomContentGridItem", () => {
-	const setup = (props: ComponentProps<typeof RoomContentGridItem>) => {
-		const wrapper = mount(RoomContentGridItem, {
+describe("@feature-room/RoomBoardGridItem", () => {
+	const setup = (props: ComponentProps<typeof RoomBoardGridItem>) => {
+		const wrapper = mount(RoomBoardGridItem, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: { RouterLink: true },

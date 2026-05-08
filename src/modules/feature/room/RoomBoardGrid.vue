@@ -11,7 +11,7 @@
 		@focusin.once="notifyOnScreenReader(t('common.instructions.orderBy.arrowKeys'))"
 	>
 		<template #item="{ element, index }">
-			<RoomContentGridItem
+			<RoomBoardGridItem
 				class="draggable user-select-none room-content-grid-item"
 				:class="{ 'cursor-grab': allowedOperations.editContent }"
 				:board="element"
@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import RoomContentGridItem from "./RoomContentGridItem.vue";
+import RoomBoardGridItem from "./RoomBoardGridItem.vue";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 import { useSafeTask } from "@/composables/async-tasks.composable";
 import { RoomBoardItem } from "@/types/room/Room";

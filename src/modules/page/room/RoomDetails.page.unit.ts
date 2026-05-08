@@ -13,7 +13,7 @@ import * as serverApi from "@api-server";
 import { CopyApiResponseStatus, CopyApiResponseType } from "@api-server";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { CopyDialog, useCopyFlow } from "@feature-copy";
-import { RoomContentGrid, RoomMenu } from "@feature-room";
+import { RoomBoardGrid, RoomMenu } from "@feature-room";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
@@ -410,7 +410,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					allowedOperations: { accessRoom: true, viewContent: true },
 				});
 
-				const boardGrid = wrapper.findComponent(RoomContentGrid);
+				const boardGrid = wrapper.findComponent(RoomBoardGrid);
 				expect(boardGrid.props("boards").length).toEqual(3);
 			});
 
@@ -441,7 +441,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 							allowedOperations: { accessRoom: true, viewContent: true, viewDraftContent: true },
 						});
 
-						const boardGrid = wrapper.findComponent(RoomContentGrid);
+						const boardGrid = wrapper.findComponent(RoomBoardGrid);
 
 						expect(boardGrid.props("boards").length).toStrictEqual(totalCount);
 					});
@@ -452,7 +452,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						const { wrapper, visibleCount } = setupWithBoards({
 							allowedOperations: { accessRoom: true, viewContent: true, viewDraftContent: false },
 						});
-						const boardGrid = wrapper.findComponent(RoomContentGrid);
+						const boardGrid = wrapper.findComponent(RoomBoardGrid);
 
 						expect(boardGrid.props("boards").length).toStrictEqual(visibleCount);
 					});
@@ -467,7 +467,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					allowedOperations: { accessRoom: false },
 				});
 
-				const boardGrid = wrapper.findComponent(RoomContentGrid);
+				const boardGrid = wrapper.findComponent(RoomBoardGrid);
 
 				expect(boardGrid.props("boards").length).toBe(0);
 			});
