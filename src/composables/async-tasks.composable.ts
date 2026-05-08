@@ -2,6 +2,7 @@ import { i18nKeyExists, useI18nGlobal } from "@/plugins/i18n";
 import { Status } from "@/store/types/commons";
 import { AsyncFunction } from "@/types/async.types";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { withDebouncedLoading } from "@/utils/loading-utils";
 import { useTryCatch } from "@/utils/try-catch.utils";
 import { notifyError } from "@data-app";
 import { logger } from "@util-logger";
@@ -55,9 +56,14 @@ export const useSafeTask = () => {
 export const useSafeAxiosTask = () => {
 	const { execute: safeExec, isRunning, reset, status, error } = useSafeTask();
 	const { t } = useI18nGlobal();
+	const isPending = ref(false);
+	const isBlocked = computed(() => isRunning.value || isPending.value);
 
 	const execute = async <T>(fn: AsyncFunction<T>, onErrorNotifyMessage?: string): Promise<TaskResult<T>> => {
-		const { result, success, error } = await safeExec<T>(fn);
+		const { result, success, error } = await withDebouncedLoading(() => safeExec<T>(fn), {
+			onStart: () => (isPending.value = true),
+			onEnd: () => (isPending.value = false),
+		});
 
 		if (error && onErrorNotifyMessage) {
 			const apiError = mapAxiosErrorToResponseError(error);
@@ -81,7 +87,7 @@ export const useSafeAxiosTask = () => {
 		}
 	};
 
-	return { execute, isRunning, reset, status, error };
+	return { execute, isRunning, isPending: readonly(isPending), isBlocked, reset, status, error };
 };
 
 export const useSafeTaskRunner = <T>(fn: AsyncFunction<T>, onErrorNotifyMessage?: string) => {
@@ -105,7 +111,7 @@ export const useSafeAxiosRunner = <T>(
 	} = {}
 ) => {
 	const { immediate = true, onErrorNotifyMessage } = options;
-	const { execute: safeExec, isRunning, reset, status, error } = useSafeAxiosTask();
+	const { execute: safeExec, isRunning, isPending, isBlocked, reset, status, error } = useSafeAxiosTask();
 
 	const data = ref<T>();
 
@@ -128,6 +134,8 @@ export const useSafeAxiosRunner = <T>(
 		error,
 		status,
 		isRunning,
+		isPending,
+		isBlocked,
 		execute,
 		reset,
 	};

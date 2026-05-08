@@ -110,7 +110,7 @@ const mockApiSuccess = (type: ContentItemTypeEnum) => {
 	}
 };
 
-function mockApiFailure(type: ContentItemTypeEnum, error: Error = new Error("API Error")) {
+const mockApiFailure = (type: ContentItemTypeEnum, error: Error = new Error("API Error")) => {
 	switch (type) {
 		case ContentItemTypeEnum.Course:
 			courseRoomsApi.courseRoomsControllerCopyCourse.mockRejectedValue(error);
@@ -131,7 +131,7 @@ function mockApiFailure(type: ContentItemTypeEnum, error: Error = new Error("API
 			throw new Error("Unknown type");
 	}
 	return error;
-}
+};
 
 describe("useCopyFlow", () => {
 	beforeEach(async () => {
