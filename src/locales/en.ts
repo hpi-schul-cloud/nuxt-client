@@ -737,6 +737,9 @@ export default {
 	"components.molecules.share.result.mailShare": "Send as mail",
 	"components.molecules.share.result.qrCodeScan": "Scan QR code",
 	"components.molecules.share.result.title": "Share via",
+	"components.molecules.share.tasks.options.infoText":
+		"With the following link, the task can be imported as a copy by other teachers. Personal data will not be imported.",
+	"components.molecules.share.tasks.result.linkLabel": "Link task copy",
 	"components.molecules.share.roomMemberInvitation.result.linkLabel": "Room invitation link",
 	"components.molecules.share.checkPrivacyAndCopyright": "Please check the content for copyright and data protection.",
 	"components.molecules.TaskItemMenu.confirmDelete.text": 'Are you sure, you want to delete task "{taskTitle}"?',
