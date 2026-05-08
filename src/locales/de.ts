@@ -576,7 +576,8 @@ export default {
 	"components.cardElement.titleElement.validation.required": "Bitte Titel angeben.",
 	"components.cardElement.titleElement": "Titelelement",
 	"components.cardElement.videoConferenceElement": "Videokonferenz",
-	"components.cardElement.videoConferenceElement.label": "Videokonferenz-Titel einfügen",
+	"components.cardElement.videoConferenceElement.create.label": "Videokonferenz-Titel einfügen",
+	"components.cardElement.videoConferenceElement.edit.label": "Videokonferenz-Titel bearbeiten",
 	"components.cardElement.deletedElement": "Gelöschter Inhalt",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",

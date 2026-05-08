@@ -6,15 +6,16 @@
 		:class="{ 'd-none': isHidden }"
 		:variant="outlined"
 		:ripple="false"
-		:tabindex="tabIndex"
+		:tabindex="isEditMode ? 0 : viewModeTabIndex"
 		target="_blank"
 		link
 		:aria-label="ariaLabel"
 		@keydown.stop.up.down="onKeydownArrow"
+		@keydown.stop
 		@keyup.enter="onContentEnter"
 	>
 		<VideoConferenceContentElementDisplay
-			v-if="computedElement.content.title"
+			v-if="computedElement.content.title && (!isEditMode || isConferenceRunning)"
 			:board-parent-type="boardParentType"
 			:title="computedElement.content.title"
 			:has-participation-permission="hasParticipationPermission"
@@ -36,7 +37,11 @@
 				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</VideoConferenceContentElementDisplay>
-		<VideoConferenceContentElementCreate v-if="isCreating" @create:title="onCreateTitle">
+		<VideoConferenceContentElementCreate
+			v-if="isEditMode && !isConferenceRunning"
+			:existing-title="computedElement.content.title"
+			@create:title="onCreateTitle"
+		>
 			<BoardMenu
 				:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 				has-background
@@ -165,7 +170,6 @@ const onDismissError = () => {
 };
 
 const hasParticipationPermission = computed(() => canJoin.value || canStart.value);
-const isCreating = computed(() => props.isEditMode && !computedElement.value.content.title);
 const boardParentType = computed(() => contextType.value);
 
 const onContentClick = async () => {
@@ -181,7 +185,7 @@ const onContentClick = async () => {
 const onCloseConfigurationDialog = () => (isConfigurationDialogOpen.value = false);
 const onCreateTitle = (title: string) => (modelValue.value.title = title);
 const onKeydownArrow = (event: KeyboardEvent) => {
-	if (!isCreating.value && props.isEditMode) {
+	if (props.isEditMode) {
 		event.preventDefault();
 		emit("move-keyboard:edit", event);
 	}
@@ -218,7 +222,7 @@ const onContentEnter = async () => {
 	}
 };
 
-const tabIndex = computed(() => (!isCreating.value && (canStart.value || isConferenceRunning.value) ? 0 : undefined));
+const viewModeTabIndex = computed(() => (canStart.value || isConferenceRunning.value ? 0 : undefined));
 </script>
 
 <style scoped lang="scss">
