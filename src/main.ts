@@ -12,7 +12,6 @@ import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
 import { useRuntimeConfigStore } from "@data-runtime-config";
 import { htmlConfig } from "@feature-render-html";
-import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
 import axios from "axios";
 import { createPinia } from "pinia";
@@ -42,7 +41,7 @@ app.use(VueDOMPurifyHTML, {
 	const runtimeConfigJson = await axios.get(`${globalThis.location.origin}/runtime.config.json`);
 	axios.defaults.baseURL = runtimeConfigJson.data.apiURL;
 
-	initializeAxios(axios, useSessionBroadcast().handleUnauthorizedError);
+	initializeAxios(axios);
 
 	useRuntimeConfigStore().fetchRuntimeConfig();
 	const success = await useEnvStore().loadConfiguration();
