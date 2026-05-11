@@ -57,7 +57,15 @@
 			data-testid="room-content"
 			@copy-board-element="onCopyRequested"
 		/>
-		<ShareModal :type="ShareTokenBodyParamsParentType.COURSES" />
+		<ShareDialog
+			v-if="shareItemType"
+			:is-open="isShareDialogOpen"
+			:share-item-type="shareItemType"
+			:share-url="shareUrl"
+			@confirm="onConfirmShare"
+			@cancel="onCancelShare"
+			@done="onDone"
+		/>
 		<CopyDialog
 			:is-open="isCopyDialogOpen"
 			:copy-item-type="copyItemType"
@@ -87,11 +95,9 @@ import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCommonCartridgeExportModal.vue";
 import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.vue";
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
-import ShareModal from "@/components/share/ShareModal.vue";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import ShareModule from "@/store/share";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
-import { COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
+import { COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	BoardLayout,
@@ -105,6 +111,7 @@ import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { CopyDialog, useCopyFlow } from "@feature-copy";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
+import { ShareDialog, useShareFlow } from "@feature-share";
 import {
 	mdiAccountGroupOutline,
 	mdiContentCopy,
@@ -150,7 +157,6 @@ type MenuItem = {
 const route = useRoute();
 const router = useRouter();
 
-const shareModule: ShareModule = injectStrict(SHARE_MODULE_KEY);
 const courseRoomDetailsModule: CourseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
 
 const { t } = useI18n();
@@ -377,7 +383,7 @@ const setActiveTabIfPageCached = (event: PageTransitionEvent) => {
 
 const onShareCourse = () => {
 	if (useEnvConfig().value.FEATURE_COURSE_SHARE) {
-		shareModule.startShareFlow({
+		executeShare({
 			id: courseId.value,
 			type: ShareTokenBodyParamsParentType.COURSES,
 		});
@@ -432,6 +438,16 @@ const onCopyRequested = async ({ id, type }: { id: string; type: ContentItemType
 		}
 	}
 };
+
+const {
+	isDialogOpen: isShareDialogOpen,
+	shareItemType,
+	shareUrl,
+	executeShare,
+	onConfirmShare,
+	onCancelShare,
+	onDone,
+} = useShareFlow();
 
 const onCreateBoard = async (roomId: string, layout: BoardLayout) => {
 	const params = {

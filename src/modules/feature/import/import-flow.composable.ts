@@ -1,8 +1,8 @@
 import { ImportDestination } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useAwaitableAction } from "@/composables/awaitable-action.composable";
+import { useImportItemName } from "@/composables/copy-content.composable";
 import { $axios } from "@/utils/api";
-import { getTranslationKeyForContentItem, mapShareTokenParentTypeToContentItemType } from "@/utils/content-item.utils";
 import { ShareTokenApiFactory, ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
 import { notifySuccess, useLoadingStore } from "@data-app";
 import { computed, ref } from "vue";
@@ -38,7 +38,7 @@ export const useImportFlow = () => {
 		const { result, success, error } = await execute(
 			() => shareApi.shareTokenControllerImportShareToken(shareTokenInfo.token, params),
 			t("common.notifications.errors.notImported", {
-				type: t(getMessageKeyForImportFailure(shareTokenInfo.parentType)),
+				type: t(itemNameKey.value),
 			})
 		);
 
@@ -72,11 +72,7 @@ export const useImportFlow = () => {
 		};
 	};
 
-	const getMessageKeyForImportFailure = (parentType: ShareTokenInfoResponse["parentType"]) => {
-		const key = getTranslationKeyForContentItem(mapShareTokenParentTypeToContentItemType(parentType));
-
-		return key ?? "common.labels.link";
-	};
+	const { itemNameKey } = useImportItemName(computed(() => shareTokenInfo.value?.parentType));
 
 	return {
 		isCardImportDialogOpen,
