@@ -50,7 +50,7 @@ describe("GeneralSettings", () => {
 
 	describe("displaying correct data", () => {
 		describe("school name", () => {
-			it("should display the school name", async () => {
+			it("should display the school name", () => {
 				const { wrapper, schoolDetails } = setup();
 
 				const textField = wrapper.findComponent<VTextField>("[data-testid='school-name']");

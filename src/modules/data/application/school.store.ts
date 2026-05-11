@@ -60,7 +60,7 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 	const fetchSchoolDetails = async () => {
 		const { result, success, error } = await executeSchoolApi(
 			() => schoolApi.schoolControllerGetSchoolById(useAppStore().school?.id as string),
-			"pages.administration.school.index.error"
+			t("pages.administration.school.index.error")
 		);
 		if (success) {
 			schoolDetails.value = result?.data;
@@ -71,7 +71,7 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 	const fetchSchoolSystems = async (schoolId: string) => {
 		const { result, success, error } = await executeSchoolApi(
 			() => schoolApi.schoolControllerGetSchoolSystems(schoolId),
-			"pages.administration.school.index.error"
+			t("pages.administration.school.index.error")
 		);
 		if (success) {
 			schoolSystems.value = result.data;
@@ -82,7 +82,7 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 	const deleteSchoolSystem = async (systemId: string) => {
 		const { success } = await executeSchoolApi(
 			() => schoolApi.schoolControllerRemoveSystemFromSchool(schoolDetails.value.id, systemId),
-			"pages.administration.school.index.error"
+			t("pages.administration.school.index.error")
 		);
 
 		if (success) {
@@ -119,7 +119,7 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 	const updateSchool = async (schoolId: string, schoolProps: SchoolUpdateBodyParams) => {
 		const { result, success } = await executeSchoolApi(
 			() => schoolApi.schoolControllerUpdateSchool(schoolId, schoolProps),
-			"pages.administration.school.index.error"
+			t("pages.administration.school.index.error")
 		);
 		if (success) {
 			schoolDetails.value = result?.data;

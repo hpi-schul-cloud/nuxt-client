@@ -241,7 +241,7 @@ describe("AuthSystems", () => {
 
 		it("should not call deleteSystem when deletion is cancelled", async () => {
 			vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(false);
-			createTestAppStoreWithPermissions([Permission.SystemCreate]);
+			createTestAppStoreWithPermissions([Permission.SYSTEM_CREATE]);
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const deleteBtn = wrapper.find(searchStrings.deleteSystemButton);

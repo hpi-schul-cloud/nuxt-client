@@ -528,6 +528,7 @@ const setSchoolInUserMigration = async () => {
 
 	if (!schoolMigrationState.value.inUserMigration) {
 		await importUsersModule.setSchoolInUserMigration();
+		schoolMigrationState.value = { inUserMigration: true, inMaintenance: true };
 	}
 	startPollingImportUserCount();
 	isLoading.value = false;
@@ -548,7 +549,6 @@ const endMaintenance = async () => {
 	isLoading.value = true;
 	if (schoolMigrationState.value.inMaintenance) {
 		await importUsersModule.migrationStartSync();
-		schoolMigrationState.value.inMaintenance = false;
 	}
 	if (!importUsersModule.getBusinessError) {
 		schoolMigrationState.value.inMaintenance = isNbc.value;

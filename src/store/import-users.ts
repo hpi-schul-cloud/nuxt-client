@@ -1,6 +1,5 @@
 import { ApiResponseError, ApiValidationError, BusinessError } from "@/store/types/commons";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
 	ImportUserListResponse,
 	ImportUserResponse,
@@ -242,13 +241,13 @@ export default class ImportUsersModule extends VuexModule {
 			await this.importUserApi.importUserControllerStartSchoolInUserMigration(useCentralLdap);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
-				this.setBusinessError(
-					createApplicationError(
-						error.response?.status ?? 500,
-						"pages.administration.school.index.error",
-						error.message
-					)
-				);
+				const apiError = mapAxiosErrorToResponseError(error);
+
+				this.setBusinessError({
+					error: apiError,
+					statusCode: apiError.code,
+					message: apiError.message,
+				});
 			}
 		}
 	}
@@ -259,13 +258,13 @@ export default class ImportUsersModule extends VuexModule {
 			await this.importUserApi.importUserControllerEndSchoolInMaintenance();
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
-				this.setBusinessError(
-					createApplicationError(
-						error.response?.status ?? 500,
-						"pages.administration.school.index.error",
-						error.message
-					)
-				);
+				const apiError = mapAxiosErrorToResponseError(error);
+
+				this.setBusinessError({
+					error: apiError,
+					statusCode: apiError.code,
+					message: apiError.message,
+				});
 			}
 		}
 	}
