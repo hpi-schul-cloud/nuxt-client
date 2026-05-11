@@ -20,7 +20,7 @@ const buildDashboardElement = (overrides: Partial<DashboardGridElementResponse> 
 		...element,
 		groupId: overrides.groupId ?? "",
 		groupElements: overrides.groupElements ?? [],
-	} as DashboardGridElementResponse;
+	};
 };
 
 describe("useCourseRoomListStore", () => {
