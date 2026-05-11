@@ -29,6 +29,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	const cards: Ref<Record<string, CardResponse>> = ref({});
 	const preferredTools: Ref<PreferredToolResponse[]> = ref([]);
 	const isPreferredToolsLoading: Ref<boolean> = ref(false);
+	const duplicatingCardIds = ref<Set<string>>(new Set());
 
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
 	const { disableFileSelectOnMount, resetFileSelectOnMountEnabled } = useSharedFileSelect();
@@ -100,9 +101,22 @@ export const useCardStore = defineStore("cardStore", () => {
 			].includes(element.type)
 		);
 
+	const isCardDuplicating = (cardId: string): boolean => duplicatingCardIds.value.has(cardId);
+
+	const setDuplicatingCardId = (cardId: string | undefined, isDuplicating = true) => {
+		if (cardId === undefined) return;
+		if (isDuplicating) {
+			duplicatingCardIds.value.add(cardId);
+		} else {
+			duplicatingCardIds.value.delete(cardId);
+		}
+	};
 	const duplicateCardSuccess = (payload: DuplicateCardSuccessPayload) => {
 		const { duplicatedCard } = payload;
 		if (duplicatedCard.id) {
+			if (payload.isOwnAction === true) {
+				duplicatingCardIds.value.delete(payload.cardId);
+			}
 			cards.value[duplicatedCard.id] = duplicatedCard;
 			if (payload.isOwnAction === true && hasRelevantContentForDuplicationWarning(duplicatedCard)) {
 				notifyInfo("components.board.notifications.info.cardDuplicated");
@@ -278,6 +292,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		createElementSuccess,
 		deleteElementRequest,
 		deleteElementSuccess,
+		duplicatingCardIds,
 		updateElementRequest,
 		updateElementSuccess,
 		addTextAfterTitle,
@@ -292,6 +307,8 @@ export const useCardStore = defineStore("cardStore", () => {
 		moveElementRequest,
 		moveElementSuccess,
 		resetState,
+		setDuplicatingCardId,
+		isCardDuplicating,
 		updateCardHeightRequest,
 		updateCardHeightSuccess,
 		updateCardTitleRequest,

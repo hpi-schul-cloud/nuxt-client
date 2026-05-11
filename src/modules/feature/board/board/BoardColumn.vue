@@ -61,8 +61,10 @@
 						:height="element.height"
 						:row-index="elementIndex"
 						:column-index="reactiveIndex"
+						:is-duplicating-card="isDuplicatingCard(element.cardId)"
 						@move:card-keyboard="onMoveCardKeyboard(elementIndex, element.cardId, $event)"
 						@delete:card="onDeleteCard"
+						@duplicate:card="onDuplicateCard"
 						@reload:board="onReloadBoard"
 						@share:card="emit('share:card', $event)"
 						@move:card="emit('move:card', $event)"
@@ -73,7 +75,7 @@
 		</div>
 	</div>
 
-	<div v-if="props.isDuplicating" :key="renderKey" :class="columnClasses" class="d-flex flex-column">
+	<div v-if="props.isDuplicatingColumn" :key="renderKey" :class="columnClasses" class="d-flex flex-column">
 		<BoardColumnHeader
 			:can-edit-column="false"
 			:can-delete-column="false"
@@ -95,7 +97,7 @@ import CardHost from "../card/CardHost.vue";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
 import { BoardColumn } from "@/types/board/Board";
-import { useBoardAllowedOperations, useBoardStore, useForceRender, useSharedEditMode } from "@data-board";
+import { useBoardAllowedOperations, useBoardStore, useCardStore, useForceRender, useSharedEditMode } from "@data-board";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
@@ -106,7 +108,7 @@ type Props = {
 	column: BoardColumn;
 	columnCount: number;
 	index: number;
-	isDuplicating: boolean;
+	isDuplicatingColumn: boolean;
 	isListBoard: boolean;
 };
 
@@ -116,6 +118,7 @@ const emit = defineEmits<{
 	(e: "create:card", columnId: string): void;
 	(e: "move:card", cardId: string): void;
 	(e: "delete:card", cardId: string): void;
+	(e: "duplicate:card", cardId: string): void;
 	(e: "delete:column", columnId: string): void;
 	(e: "duplicate:column", columnId: string): void;
 	(e: "move:column-down"): void;
@@ -128,6 +131,7 @@ const emit = defineEmits<{
 }>();
 
 const boardStore = useBoardStore();
+const cardStore = useCardStore();
 const { allowedOperations } = useBoardAllowedOperations();
 const reactiveIndex = toRef(props, "index");
 const { editModeId } = useSharedEditMode();
@@ -163,6 +167,12 @@ const onColumnDelete = (columnId: string) => {
 
 const onDeleteCard = (cardId: string) => {
 	emit("delete:card", cardId);
+};
+
+const isDuplicatingCard = (cardId: string) => cardStore.isCardDuplicating(cardId);
+
+const onDuplicateCard = (cardId: string) => {
+	emit("duplicate:card", cardId);
 };
 
 const onDragStart = (): void => {

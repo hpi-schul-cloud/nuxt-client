@@ -7,6 +7,7 @@ import {
 	DeleteBoardSuccessPayload,
 	DeleteColumnRequestPayload,
 	DeleteColumnSuccessPayload,
+	DuplicateColumnSuccessPayload,
 	FetchBoardRequestPayload,
 	FetchBoardSuccessPayload,
 	MoveCardRequestPayload,
@@ -34,8 +35,8 @@ import { DeleteCardSuccessPayload, DuplicateCardSuccessPayload } from "./cardAct
 import { useSharedEditMode } from "./edit-mode.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import { ColumnResponse } from "@api-server";
-import { useAppStore, useNotificationStore } from "@data-app";
+import { CardSkeletonResponse, ColumnFullResponse, ColumnResponse, ContentElementType } from "@api-server";
+import { notifyInfo, notifySuccess, useAppStore, useNotificationStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { defineStore } from "pinia";
 import { computed, nextTick, ref } from "vue";
@@ -110,9 +111,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		}
 	};
 
-	const isColumnDuplicating = (columnId: string): boolean => {
-		return duplicatingColumnIds.value.has(columnId);
-	};
+	const isColumnDuplicating = (columnId: string): boolean => duplicatingColumnIds.value.has(columnId);
 
 	const createCardRequest = (payload: CreateCardRequestPayload) => socketOrRest.createCardRequest(payload);
 

@@ -280,9 +280,11 @@ describe("BoardStore", () => {
 		it("should set duplicatingColumnId", () => {
 			const { boardStore } = setup();
 
-			boardStore.setDuplicatingColumnId("columnId");
+			const columnId = "columnIdValue";
 
-			expect(boardStore.duplicatingColumnId).toBe("columnId");
+			boardStore.setDuplicatingColumnId(columnId);
+
+			expect(boardStore.duplicatingColumnIds).toContain(columnId);
 		});
 
 		it("should clear duplicatingColumnId when set to undefined", () => {
@@ -291,7 +293,7 @@ describe("BoardStore", () => {
 			boardStore.setDuplicatingColumnId("columnId");
 			boardStore.setDuplicatingColumnId(undefined);
 
-			expect(boardStore.duplicatingColumnId).toBeUndefined();
+			expect(boardStore.duplicatingColumnIds).toBeUndefined();
 		});
 	});
 
@@ -512,7 +514,7 @@ describe("BoardStore", () => {
 				isOwnAction: true,
 			});
 
-			expect(boardStore.duplicatingColumnId).toBeUndefined();
+			expect(boardStore.duplicatingColumnIds).toBeUndefined();
 		});
 
 		it("should clear duplicatingColumnId when isOwnAction is true", () => {
@@ -527,7 +529,7 @@ describe("BoardStore", () => {
 				isOwnAction: true,
 			});
 
-			expect(boardStore.duplicatingColumnId).toBeUndefined();
+			expect(boardStore.duplicatingColumnIds).toBeUndefined();
 		});
 
 		it("should not clear duplicatingColumnId when isOwnAction is false", () => {
@@ -542,7 +544,7 @@ describe("BoardStore", () => {
 				isOwnAction: false,
 			});
 
-			expect(boardStore.duplicatingColumnId).toBe(firstColumn.id);
+			expect(boardStore.duplicatingColumnIds).toBe(firstColumn.id);
 		});
 
 		it("should duplicate a column and insert it after the original", () => {

@@ -220,6 +220,8 @@ export const useCardRestApi = () => {
 		const card = cardStore.getCard(payload.cardId);
 		if (card === undefined) return;
 
+		cardStore.setDuplicatingCardId(payload.cardId);
+
 		try {
 			const duplicatedCard = await duplicateCardCall(payload.cardId);
 

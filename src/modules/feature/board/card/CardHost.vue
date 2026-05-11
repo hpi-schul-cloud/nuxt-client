@@ -51,7 +51,7 @@
 							<KebabMenuActionDuplicate
 								v-if="allowedOperations?.copyCard"
 								data-testid="kebab-menu-action-duplicate-card"
-								@click="duplicateCard"
+								@click="onDuplicateCard"
 							/>
 							<KebabMenuActionExport v-if="allowedOperations?.moveCard" @click="onMoveCard(cardId)" />
 							<KebabMenuActionShare v-if="allowedOperations?.shareCard" @click="onShareCard" />
@@ -82,7 +82,7 @@
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
-		<VCard v-if="isDuplicating" class="mt-3">
+		<VCard v-if="isDuplicatingCard" class="mt-3">
 			<CardSkeleton :height />
 		</VCard>
 	</div>
@@ -95,7 +95,6 @@ import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
-import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
 import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
 import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
@@ -128,12 +127,14 @@ type Props = {
 	cardId: string;
 	rowIndex: number;
 	columnIndex: number;
+	isDuplicatingCard: boolean;
 };
 
 const props = defineProps<Props>();
 const emit = defineEmits<{
 	(e: "move:card-keyboard", keycode: string): void;
 	(e: "delete:card", cardId: string): void;
+	(e: "duplicate:card", cardId: string): void;
 	(e: "move:card", cardId: string): void;
 	(e: "reload:board"): void;
 	(e: "share:card", cardId: string): void;
@@ -261,9 +262,9 @@ const boardMenuClasses = computed(() => {
 	return "hidden";
 });
 
-const { run: duplicateCard, isRunning: isDuplicating } = useSafeTaskRunner(async () => {
-	await cardStore.duplicateCard({ cardId: props.cardId });
-});
+const onDuplicateCard = () => {
+	emit("duplicate:card", props.cardId);
+};
 
 const onOpenDetailView = () => {
 	const boardId = boardStore.board?.id;

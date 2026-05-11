@@ -64,13 +64,14 @@
 								:column-count="board.columns.length"
 								:class="{ 'my-0': isListBoard, 'user-select-none': isDragging }"
 								:is-list-board="isListBoard"
-								:is-duplicating="isDuplicating(element.id)"
+								:is-duplicating-column="isDuplicatingColumn(element.id)"
 								:data-testid="`board-column-${index}`"
 								@reload:board="onReloadBoard"
 								@create:card="onCreateCard"
 								@delete:card="onDeleteCard"
 								@share:card="onShareCard"
 								@delete:column="onDeleteColumn"
+								@duplicate:card="onDuplicateCard"
 								@duplicate:column="onDuplicateColumn"
 								@move:card="onMoveCard"
 								@update:column-title="onUpdateColumnTitle(element.id, $event)"
@@ -280,7 +281,13 @@ const onDropColumn = async (columnPayload: SortableEvent) => {
 	}
 };
 
-const isDuplicating = (columnId: string) => boardStore.isColumnDuplicating(columnId);
+const onDuplicateCard = (cardId: string) => {
+	if (!allowedOperations.value.copyCard) return;
+
+	cardStore.duplicateCard({ cardId });
+};
+
+const isDuplicatingColumn = (columnId: string) => boardStore.isColumnDuplicating(columnId);
 
 const onDuplicateColumn = (columnId: string) => {
 	if (!allowedOperations.value.copyColumn) return;

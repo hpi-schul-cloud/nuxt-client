@@ -66,6 +66,7 @@ export const useCardSocketApi = () => {
 			on(CardActions.updateCardColorFailure, ({ cardId }) => reloadBoard(cardId)),
 			on(CardActions.deleteCardFailure, ({ cardId }) => reloadBoard(cardId)),
 			on(CardActions.duplicateCardFailure, ({ cardId }) => reloadBoard(cardId)),
+			on(CardActions.duplicateCardFailure, clearDuplicatingCardId),
 		];
 
 		const ariaLiveNotification = [
@@ -153,7 +154,13 @@ export const useCardSocketApi = () => {
 		emitOnSocket("update-card-height-request", payload);
 	};
 
+	const clearDuplicatingCardId = (payload: DuplicateCardRequestPayload) => {
+		cardStore.setDuplicatingCardId(payload.cardId, false);
+		reloadBoard(payload.cardId);
+	};
+
 	const duplicateCardRequest = (payload: DuplicateCardRequestPayload) => {
+		cardStore.setDuplicatingCardId(payload.cardId);
 		emitOnSocket("duplicate-card-request", payload);
 	};
 
