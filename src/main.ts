@@ -5,13 +5,8 @@ import store from "./plugins/store";
 import { createVuetifyPlugin } from "./plugins/vuetify";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
-import {
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-	FILE_PATHS_MODULE_KEY,
-	SCHOOLS_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "./utils/inject";
-import { courseRoomDetailsModule, filePathsModule, schoolsModule, shareModule } from "@/store";
+import { FILE_PATHS_MODULE_KEY, SCHOOLS_MODULE_KEY, SHARE_MODULE_KEY } from "./utils/inject";
+import { filePathsModule, schoolsModule, shareModule } from "@/store";
 import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
@@ -72,7 +67,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide("filePathsModule", filePathsModule);
 	app.provide(FILE_PATHS_MODULE_KEY, filePathsModule);
 
-	app.provide(COURSE_ROOM_DETAILS_MODULE_KEY.valueOf(), courseRoomDetailsModule);
 	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
 	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
 
