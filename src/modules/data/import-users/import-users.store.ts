@@ -35,7 +35,7 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 	});
 
 	/** Result data and aggregate totals for the import-user list */
-	const importUsers = reactive({
+	const importUsersData = reactive({
 		list: { data: [], total: 0, skip: 0, limit: 0 } as ImportUserListResponse,
 		total: 0,
 		totalMatched: 0,
@@ -100,7 +100,7 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 				skip: filter.skip,
 				limit: filter.limit,
 			});
-			importUsers.list = response.data;
+			importUsersData.list = response.data;
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 			businessError.value = { error: apiError, statusCode: apiError.code, message: apiError.message };
@@ -122,7 +122,7 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 	};
 
 	const saveFlag = async (payload: { importUserId: string; flagged: boolean }): Promise<ImportUserResponse | void> => {
-		const editedUser = importUsers.list.data.find((u) => u.importUserId === payload.importUserId);
+		const editedUser = importUsersData.list.data.find((u) => u.importUserId === payload.importUserId);
 		if (editedUser) editedUser.flagged = payload.flagged;
 		try {
 			const response = await importUserApi.value.importUserControllerUpdateFlag(payload.importUserId, {
@@ -151,7 +151,7 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 	const deleteMatch = async (importUserId: string): Promise<ImportUserResponse | void> => {
 		try {
 			const response = await importUserApi.value.importUserControllerRemoveMatch(importUserId);
-			const editedUser = importUsers.list.data.find((u) => u.importUserId === importUserId);
+			const editedUser = importUsersData.list.data.find((u) => u.importUserId === importUserId);
 			if (editedUser) editedUser.match = undefined;
 			return response.data;
 		} catch (error: unknown) {
@@ -163,7 +163,7 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 	const fetchTotal = async (): Promise<void> => {
 		try {
 			const response = await callFindAllImportUsers({ skip: 0, limit: 1 });
-			importUsers.total = response.data.total;
+			importUsersData.total = response.data.total;
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 			businessError.value = { error: apiError, statusCode: apiError.code, message: apiError.message };
@@ -173,7 +173,7 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 	const fetchTotalMatched = async (): Promise<void> => {
 		try {
 			const response = await callFindAllImportUsers({ match: ["admin", "auto"], skip: 0, limit: 1 });
-			importUsers.totalMatched = response.data.total;
+			importUsersData.totalMatched = response.data.total;
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 			businessError.value = { error: apiError, statusCode: apiError.code, message: apiError.message };
@@ -183,7 +183,7 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 	const fetchTotalUnmatched = async (): Promise<void> => {
 		try {
 			const response = await importUserApi.value.importUserControllerFindAllUnmatchedUsers(undefined, 0, 1);
-			importUsers.totalUnmatched = response.data.total;
+			importUsersData.totalUnmatched = response.data.total;
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 			businessError.value = { error: apiError, statusCode: apiError.code, message: apiError.message };
@@ -212,7 +212,7 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 		try {
 			await importUserApi.value.importUserControllerCancelMigration();
 			userSearch.list = { data: [], total: 0, skip: 0, limit: 0 };
-			importUsers.total = 0;
+			importUsersData.total = 0;
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 			businessError.value = { error: apiError, statusCode: apiError.code, message: apiError.message };
@@ -230,7 +230,7 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 
 	return {
 		filter,
-		importUsers,
+		importUsersData,
 		userSearch,
 		businessError,
 		fetchAllImportUsers,

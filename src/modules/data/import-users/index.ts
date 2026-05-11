@@ -1,1 +1,1 @@
-export * from "./importUsers.store";
+export * from "./import-users.store";

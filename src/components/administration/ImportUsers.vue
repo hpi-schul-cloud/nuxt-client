@@ -235,8 +235,7 @@
 
 <script setup lang="ts">
 import ImportUsersMatchSearch from "./ImportUsersMatchSearch.vue";
-import { importUsersModule, schoolsModule } from "@/store";
-import { MatchedBy } from "@/store/import-users";
+import { schoolsModule } from "@/store";
 import {
 	ImportUserResponse,
 	ImportUserResponseRoleNames,
@@ -245,6 +244,7 @@ import {
 	UserMatchResponseMatchedBy,
 } from "@api-server";
 import { useEnvConfig, useEnvStore } from "@data-env";
+import { MatchedBy, useImportUsersStore } from "@data-import-users";
 import {
 	mdiAccountPlus,
 	mdiAccountSwitch,
@@ -254,10 +254,19 @@ import {
 	mdiFlagOutline,
 	mdiPencilOutline,
 } from "@icons/material";
+import { storeToRefs } from "pinia";
 import { computed, nextTick, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
+
+const importUsersStore = useImportUsersStore();
+
+const { importUsersData } = storeToRefs(importUsersStore);
+
+const importUsers = computed(() => importUsersData.value.list.data);
+const total = computed(() => importUsersData.value.total);
+const totalImportUsers = computed(() => importUsersData.value.list.total);
 
 const loading = ref(false);
 const roles = [
@@ -295,10 +304,7 @@ const delay = 500;
 
 const instanceName = computed(() => useEnvStore().instanceName);
 const isNbc = computed(() => useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.N21);
-const importUsers = computed(() => importUsersModule.getImportUserList?.data ?? []);
 const school = computed(() => schoolsModule.getSchool);
-const total = computed(() => importUsersModule.getTotal);
-const totalImportUsers = computed(() => importUsersModule?.getImportUserList?.total ?? 0);
 const canStartMigration = computed(() => school.value.inUserMigration && school.value.inMaintenance);
 const sourceSystemName = computed(() => {
 	const theme = useEnvConfig().value.SC_THEME.toLowerCase();
@@ -411,24 +417,22 @@ const closeEdit = () => {
 const getDataFromApi = async () => {
 	loading.value = true;
 
-	importUsersModule.setFirstName(searchFirstName.value);
-	importUsersModule.setLastName(searchLastName.value);
-	importUsersModule.setLoginName(searchLoginName.value);
-	importUsersModule.setRole(searchRole.value as ImportUserResponseRoleNames);
-	importUsersModule.setClasses(searchClasses.value);
-	importUsersModule.setMatch(searchMatchedBy.value);
-	importUsersModule.setFlagged(searchFlagged.value);
+	importUsersStore.filter.firstName = searchFirstName.value;
+	importUsersStore.filter.lastName = searchLastName.value;
+	importUsersStore.filter.loginName = searchLoginName.value;
+	importUsersStore.filter.role = (searchRole.value as ImportUserResponseRoleNames) ?? "";
+	importUsersStore.filter.classes = searchClasses.value;
+	importUsersStore.filter.match = searchMatchedBy.value;
+	importUsersStore.filter.flagged = searchFlagged.value;
 
-	importUsersModule.setLimit(options.value.itemsPerPage);
-	importUsersModule.setSkip(((options.value.page ?? 1) - 1) * options.value.itemsPerPage);
+	importUsersStore.filter.limit = options.value.itemsPerPage;
+	importUsersStore.filter.skip = ((options.value.page ?? 1) - 1) * options.value.itemsPerPage;
 
 	const sortBy = options.value.sortBy?.length ? options.value.sortBy[0] : { key: "", order: undefined };
+	importUsersStore.filter.sortBy = sortBy.key;
+	importUsersStore.filter.sortOrder = sortBy.order === "asc" || sortBy.order === "desc" ? sortBy.order : undefined;
 
-	importUsersModule.setSortBy(sortBy.key);
-	const sortOrder = sortBy.order === "asc" || sortBy.order === "desc" ? sortBy.order : undefined;
-	importUsersModule.setSortOrder(sortOrder);
-
-	await importUsersModule.fetchAllImportUsers();
+	await importUsersStore.fetchAllImportUsers();
 
 	loading.value = false;
 };
@@ -460,7 +464,7 @@ const saveFlag = async (item: ImportUserResponse) => {
 	if (loading.value) return false;
 	loading.value = true;
 	editedIndex.value = importUsers.value.indexOf(item);
-	await importUsersModule.saveFlag({
+	await importUsersStore.saveFlag({
 		importUserId: editedItem.value.importUserId,
 		flagged: !editedItem.value.flagged,
 	});

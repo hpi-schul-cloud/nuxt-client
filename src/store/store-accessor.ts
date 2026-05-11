@@ -7,7 +7,6 @@
 
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import FilePaths from "@/store/filePaths";
-import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
 import { Store } from "vuex";
@@ -17,7 +16,6 @@ import { getModule } from "vuex-module-decorators";
 // Use these -- they have methods for state/getters/mutations/actions
 // (result from getModule(...))
 export let filePathsModule: FilePaths;
-export let importUsersModule: ImportUsersModule;
 export let courseRoomDetailsModule: CourseRoomDetailsModule;
 export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
@@ -25,7 +23,6 @@ export let shareModule: ShareModule;
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<unknown>): void {
 	filePathsModule = getModule(FilePaths, store);
-	importUsersModule = getModule(ImportUsersModule, store);
 	courseRoomDetailsModule = getModule(CourseRoomDetailsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	shareModule = getModule(ShareModule, store);
@@ -36,7 +33,6 @@ export function initializeStores(store: Store<unknown>): void {
 // (This is required!)
 export const modules = {
 	filePathsModule: FilePaths,
-	importUsersModule: ImportUsersModule,
 	courseRoomDetailsModule: CourseRoomDetailsModule,
 	schoolsModule: SchoolsModule,
 	shareModule: ShareModule,

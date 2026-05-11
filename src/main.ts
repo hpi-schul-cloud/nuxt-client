@@ -11,7 +11,7 @@ import {
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "./utils/inject";
-import { courseRoomDetailsModule, filePathsModule, importUsersModule, schoolsModule, shareModule } from "@/store";
+import { courseRoomDetailsModule, filePathsModule, schoolsModule, shareModule } from "@/store";
 import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
@@ -71,7 +71,6 @@ app.use(VueDOMPurifyHTML, {
 	// NUXT_REMOVAL get rid of store DI
 	app.provide("filePathsModule", filePathsModule);
 	app.provide(FILE_PATHS_MODULE_KEY, filePathsModule);
-	app.provide("importUsersModule", importUsersModule);
 
 	app.provide(COURSE_ROOM_DETAILS_MODULE_KEY.valueOf(), courseRoomDetailsModule);
 	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
