@@ -99,12 +99,6 @@ export const useAppStore = defineStore("applicationStore", () => {
 		}
 	};
 
-	// TODO: remove after testing
-	const shortenSession = () => {
-		setTimerSeconds(10); // Set to 10 seconds for testing purposes, can be adjusted as needed
-		postTimerSeconds(10);
-	};
-
 	const clearUserSession = () => {
 		isLoggedIn.value = false;
 		localStorage.clear();
@@ -268,7 +262,6 @@ export const useAppStore = defineStore("applicationStore", () => {
 		handleApplicationError,
 		startTimer,
 		stopTimer,
-		shortenSession,
 		sessionTimeoutTimestamp: readonly(sessionTimeoutTimestamp),
 		applicationError: readonly(applicationError),
 	};

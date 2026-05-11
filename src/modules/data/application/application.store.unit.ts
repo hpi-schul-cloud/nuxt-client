@@ -447,30 +447,6 @@ describe("useApplicationStore", () => {
 		});
 	});
 
-	describe("shortenSession action", () => {
-		it("should set sessionTimeoutTimestamp to 10 seconds from now", () => {
-			const store = useAppStore();
-			const beforeTime = Date.now();
-
-			store.shortenSession();
-
-			const afterTime = Date.now();
-			const expectedMinTimestamp = beforeTime + 10 * 1000;
-			const expectedMaxTimestamp = afterTime + 10 * 1000;
-
-			expect(store.sessionTimeoutTimestamp).toBeGreaterThanOrEqual(expectedMinTimestamp);
-			expect(store.sessionTimeoutTimestamp).toBeLessThanOrEqual(expectedMaxTimestamp);
-		});
-
-		it("should post timer update with 10 seconds to broadcast channel", () => {
-			const store = useAppStore();
-
-			store.shortenSession();
-
-			expect(broadcastChannelMock.postMessage).toHaveBeenCalledWith("time-updated:10");
-		});
-	});
-
 	describe("broadcastChannel.onmessage handler", () => {
 		let capturedOnMessageHandler: ((event: MessageEvent) => void) | null = null;
 

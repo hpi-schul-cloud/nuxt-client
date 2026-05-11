@@ -32,7 +32,6 @@
 		</TopbarItem>
 		<div v-if="school && isTabletOrBigger" class="mr-3 mr-lg-4 school-name" data-testid="school-name">
 			{{ school.name }}
-			<VBtn @click="shortenSession">{{ sessionTimeoutSeconds }}</VBtn>
 		</div>
 		<img
 			v-if="hasLogo && isDesktop"
@@ -51,7 +50,7 @@ import CloudStatusMessages from "./CloudStatusMessages.vue";
 import PageShare from "./PageShare.vue";
 import TopbarItem from "./TopbarItem.vue";
 import UserMenu from "./UserMenu.vue";
-import { useAppStore, useAppStoreRefs, useStatusAlerts } from "@data-app";
+import { useAppStoreRefs, useStatusAlerts } from "@data-app";
 import { mdiAlert, mdiMenu, mdiQrcode } from "@icons/material";
 import { useWindowScroll } from "@vueuse/core";
 import { computed, onMounted, ref, watch } from "vue";
@@ -90,15 +89,7 @@ const statusAlertColor = computed(() => {
 	return statusAlertsIncludeDanger ? "error" : "info";
 });
 
-// ToDo: remove after testing
-const { user, school, userRoles: roleNames, sessionTimeoutTimestamp } = useAppStoreRefs();
-
-const { shortenSession } = useAppStore();
-const sessionTimeoutSeconds = ref(0);
-setInterval(() => {
-	sessionTimeoutSeconds.value = Math.ceil(((sessionTimeoutTimestamp.value ?? 0) - Date.now()) / 1000);
-}, 300);
-
+const { user, school, userRoles: roleNames } = useAppStoreRefs();
 const hasLogo = computed(() => school.value?.logo?.url !== undefined);
 
 const appBarHeight = computed(() => {
