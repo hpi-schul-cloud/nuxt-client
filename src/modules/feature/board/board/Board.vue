@@ -175,7 +175,7 @@ import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@util-board";
-import { useTimeout } from "@vueuse/core";
+import { refDebounced, useTimeout } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, ComputedRef, onMounted, onUnmounted, provide, ref, watch } from "vue";
@@ -224,8 +224,6 @@ const moveCardOptions = ref<{ isDialogOpen: boolean; cardId: string }>({
 	isDialogOpen: false,
 	cardId: "",
 });
-
-const started500msAgo = useTimeout(500);
 
 const onCreateCard = async (columnId: string) => {
 	if (allowedOperations.value.createCard) boardStore.createCardRequest({ columnId });
@@ -405,15 +403,11 @@ const isListBoard = computed(() => board.value?.layout === BoardLayout.LIST);
 
 provide(BOARD_IS_LIST_LAYOUT, isListBoard);
 
-const showLoadingDialog = computed(() => {
-	if (started500msAgo.value === true && boardStore.isConnected === false) {
-		return true;
-	}
-	if (started500msAgo.value === true && boardStore.isLoading) {
-		return true;
-	}
-	return false;
-});
+const started2000msAgo = useTimeout(2000);
+const isLoadingOrNotConnected = computed(
+	() => started2000msAgo.value === true && (boardStore.isConnected === false || boardStore.isLoading)
+);
+const showLoadingDialog = refDebounced(isLoadingOrNotConnected, 1000);
 
 const boardClasses = computed(() => {
 	const classes = ["d-flex", "flex-shrink-1", "board"];

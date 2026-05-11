@@ -751,6 +751,9 @@ export default {
 	"components.molecules.share.result.mailShare": "Надіслати поштою",
 	"components.molecules.share.result.qrCodeScan": "Відскануйте QR-код",
 	"components.molecules.share.result.title": "Поділіться через",
+	"components.molecules.share.tasks.options.infoText":
+		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі.",
+	"components.molecules.share.tasks.result.linkLabel": "Зв'язати копію завдання",
 	"components.molecules.share.roomMemberInvitation.result.linkLabel": "Посилання на запрошення до кімнати",
 	"components.molecules.share.checkPrivacyAndCopyright":
 		"Будь ласка, перевірте вміст на предмет авторських прав та захисту даних.",
@@ -1489,6 +1492,15 @@ export default {
 	"pages.courseRooms.tabLabel.toolsOld": "Інструмент",
 	"pages.courseRooms.course-locked":
 		"Курс заблоковано, оскільки на нього не призначено викладача. Будь ласка, зверніться до адміністратора школи.",
+	"pages.courseRooms.fetchCourseContent.error": "Під час отримання вмісту курсу виникла помилка.",
+	"pages.courseRooms.createBoard.error": "Під час створення дошки виникла помилка.",
+	"pages.courseRooms.deleteLesson.error": "Під час видалення теми виникла помилка.",
+	"pages.courseRooms.deleteTask.error": "Під час видалення завдання виникла помилка.",
+	"pages.courseRooms.deleteBoard.error": "Під час видалення дошки виникла помилка.",
+	"pages.courseRooms.finishTask.error": "Під час завершення завдання виникла помилка.",
+	"pages.courseRooms.publishCard.error": "Під час публікації картки виникла помилка.",
+	"pages.courseRooms.restoreTask.error": "Під час відновлення завдання виникла помилка.",
+	"pages.courseRooms.sortElements.error": "Під час сортування карток виникла помилка.",
 	"pages.files.overview.courseFiles": "Файли курсу",
 	"pages.files.overview.favorites": "Обрані",
 	"pages.files.overview.personalFiles": "Мої особисті справи",

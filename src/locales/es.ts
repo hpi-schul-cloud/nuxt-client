@@ -751,6 +751,9 @@ export default {
 	"components.molecules.share.result.mailShare": "Enviar como correo",
 	"components.molecules.share.result.qrCodeScan": "Escanear código QR",
 	"components.molecules.share.result.title": "Compartir vía",
+	"components.molecules.share.tasks.options.infoText":
+		"Con el siguiente enlace, la tarea puede ser importado como copia por otros profesores.",
+	"components.molecules.share.tasks.result.linkLabel": "Enlace a la copia de la tarea",
 	"components.molecules.share.roomMemberInvitation.result.linkLabel": "Enlace de invitación a la sala",
 	"components.molecules.share.checkPrivacyAndCopyright":
 		"Por favor, comprueba los contenidos en cuanto a derechos de autor y protección de datos.",
@@ -1505,6 +1508,15 @@ export default {
 	"pages.courseRooms.tabLabel.toolsOld": "Herramientas",
 	"pages.courseRooms.course-locked":
 		"El curso está bloqueado porque no hay ningún profesor asignado para impartirlo. Póngase en contacto con la administración de la escuela.",
+	"pages.courseRooms.fetchCourseContent.error": "Se ha producido un error al obtener el contenido del curso.",
+	"pages.courseRooms.createBoard.error": "Se ha producido un error al crear el tablero.",
+	"pages.courseRooms.deleteLesson.error": "Se ha producido un error al eliminar el tema.",
+	"pages.courseRooms.deleteTask.error": "Se ha producido un error al eliminar la tarea.",
+	"pages.courseRooms.deleteBoard.error": "Se ha producido un error al eliminar el tablero.",
+	"pages.courseRooms.finishTask.error": "Se ha producido un error al finalizar la tarea.",
+	"pages.courseRooms.publishCard.error": "Se ha producido un error al publicar la tarjeta.",
+	"pages.courseRooms.restoreTask.error": "Se ha producido un error al restaurar la tarea.",
+	"pages.courseRooms.sortElements.error": "Se ha producido un error al ordenar las tarjetas.",
 	"pages.files.overview.courseFiles": "Archivos del curso",
 	"pages.files.overview.favorites": "Favoritos",
 	"pages.files.overview.personalFiles": "Archivos personales",
