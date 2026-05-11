@@ -44,7 +44,7 @@ describe("BoardColumn", () => {
 	const setup = (options?: {
 		cardsCount?: number;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
-		isDuplicating?: boolean;
+		isDuplicatingColumn?: boolean;
 	}) => {
 		const cards = cardSkeletonResponseFactory.buildList(options?.cardsCount ?? 3);
 		const column = columnResponseFactory.build({
@@ -66,7 +66,7 @@ describe("BoardColumn", () => {
 				column,
 				index: 1,
 				columnCount: 1,
-				isDuplicating: options?.isDuplicating ?? false,
+				isDuplicatingColumn: options?.isDuplicatingColumn ?? false,
 				isListBoard: false,
 			},
 		});
@@ -403,9 +403,9 @@ describe("BoardColumn", () => {
 		});
 	});
 
-	describe("when isDuplicating prop is true", () => {
+	describe("when isDuplicatingColumn prop is true", () => {
 		it("should show a loading column", () => {
-			const { wrapper } = setup({ isDuplicating: true });
+			const { wrapper } = setup({ isDuplicatingColumn: true });
 
 			const progressCircular = wrapper.findComponent({ name: "VProgressCircular" });
 
@@ -413,7 +413,7 @@ describe("BoardColumn", () => {
 		});
 
 		it("should render two column containers", () => {
-			const { wrapper } = setup({ isDuplicating: true });
+			const { wrapper } = setup({ isDuplicatingColumn: true });
 
 			const columnContainers = wrapper.findAll(".d-flex.flex-column");
 
@@ -421,9 +421,9 @@ describe("BoardColumn", () => {
 		});
 	});
 
-	describe("when isDuplicating prop is false", () => {
+	describe("when isDuplicatingColumn prop is false", () => {
 		it("should render only one column container", () => {
-			const { wrapper } = setup({ isDuplicating: false });
+			const { wrapper } = setup({ isDuplicatingColumn: false });
 
 			const columnContainers = wrapper.findAll(".d-flex.flex-column");
 

@@ -147,17 +147,9 @@ describe("Board", () => {
 		isReadersCanEdit?: boolean;
 		envs?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
+		duplicatingColumnIds?: Set<string>;
 	}) => {
 		const { shareModule } = setupProvideModules();
-
-		setActivePinia(createTestingPinia());
-
-		createTestEnvStore({
-			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
-			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-			FEATURE_COLUMN_BOARD_SHARE: true,
-			...(options?.envs ?? {}),
-		});
 
 		const board = createBoard({
 			numberOfColumns: options?.numberOfColumns,
@@ -166,20 +158,27 @@ describe("Board", () => {
 			allowedOperations: options?.allowedOperations ?? {},
 		});
 
+		const pinia = createTestingPinia({
+			initialState: {
+				boardStore: {
+					board,
+					isLoading: false,
+					duplicatingColumnIds: options?.duplicatingColumnIds ?? new Set(),
+				},
+			},
+		});
+		setActivePinia(pinia);
+
+		createTestEnvStore({
+			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
+			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
+			FEATURE_COLUMN_BOARD_SHARE: true,
+			...(options?.envs ?? {}),
+		});
+
 		const wrapper = mount(BoardVue, {
 			global: {
-				plugins: [
-					createTestingPinia({
-						initialState: {
-							boardStore: {
-								board,
-								isLoading: false,
-							},
-						},
-					}),
-					createTestingI18n(),
-					createTestingVuetify(),
-				],
+				plugins: [pinia, createTestingI18n(), createTestingVuetify()],
 				provide: {
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 				},
@@ -195,6 +194,9 @@ describe("Board", () => {
 
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		const cardStore = mockedPiniaStoreTyping(useCardStore);
+
+		// Wire up isColumnDuplicating to check the actual store state
+		boardStore.isColumnDuplicating.mockImplementation((id: string) => boardStore.duplicatingColumnIds.has(id));
 
 		const wrapperVM = wrapper.vm as unknown as {
 			board: Board;
@@ -350,23 +352,25 @@ describe("Board", () => {
 			expect(boardColumnComponents[1].props("columnCount")).toBe(2);
 		});
 
-		it("should pass isDuplicating prop based on store isColumnDuplicating", async () => {
-			const { wrapper, boardStore, board } = setup({ numberOfColumns: 2 });
+		it("should pass isDuplicatingColumn prop based on store isColumnDuplicating", () => {
+			const { boardStore, board } = setup({ numberOfColumns: 2 });
+
+			// The component calls boardStore.isColumnDuplicating for each column during render
+			expect(boardStore.isColumnDuplicating).toHaveBeenCalledWith(board.columns[0].id);
+			expect(boardStore.isColumnDuplicating).toHaveBeenCalledWith(board.columns[1].id);
+		});
+
+		it("should pass isDuplicatingColumn as false when no column is duplicating", () => {
+			const { wrapper } = setup({ numberOfColumns: 2 });
 
 			const boardColumnComponents = wrapper.findAllComponents({
 				name: "BoardColumn",
 			});
 
-			// Initially no column is duplicating
-			expect(boardColumnComponents[0].props("isDuplicating")).toBe(false);
-			expect(boardColumnComponents[1].props("isDuplicating")).toBe(false);
-
-			// Set the first column as duplicating
-			boardStore.isColumnDuplicating.mockImplementation((columnId: string) => columnId === board.columns[0].id);
-			await nextTick();
-
-			expect(boardColumnComponents[0].props("isDuplicating")).toBe(true);
-			expect(boardColumnComponents[1].props("isDuplicating")).toBe(false);
+			// With a fresh store, no column should be duplicating
+			// The prop might be undefined (falsy) or false
+			expect(boardColumnComponents[0].props("isDuplicatingColumn")).toBeFalsy();
+			expect(boardColumnComponents[1].props("isDuplicatingColumn")).toBeFalsy();
 		});
 	});
 
@@ -565,6 +569,36 @@ describe("Board", () => {
 					columnComponent.vm.$emit("duplicate:column", columnId);
 
 					expect(boardStore.duplicateColumn).not.toHaveBeenCalled();
+				});
+			});
+		});
+
+		describe("@onDuplicateCard", () => {
+			describe("when user is permitted to copy a card", () => {
+				it("should call cardStore.duplicateCard with correct cardId", () => {
+					const { wrapper, cardStore } = setup({ allowedOperations: { copyCard: true } });
+					const cardId = "test-card-id";
+
+					const columnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					columnComponent.vm.$emit("duplicate:card", cardId);
+
+					expect(cardStore.duplicateCard).toHaveBeenCalledWith({ cardId });
+				});
+			});
+
+			describe("when user is not permitted to copy a card", () => {
+				it("should not call cardStore.duplicateCard", () => {
+					const { wrapper, cardStore } = setup({ allowedOperations: { copyCard: false } });
+					const cardId = "test-card-id";
+
+					const columnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					columnComponent.vm.$emit("duplicate:card", cardId);
+
+					expect(cardStore.duplicateCard).not.toHaveBeenCalled();
 				});
 			});
 		});

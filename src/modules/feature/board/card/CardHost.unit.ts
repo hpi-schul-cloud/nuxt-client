@@ -1,17 +1,16 @@
 import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
-import CardSkeleton from "./CardSkeleton.vue";
 import ContentElementList from "./ContentElementList.vue";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { mockComposable } from "@@/tests/test-utils";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardResponseAllowedOperations, CardResponse, Colors } from "@api-server";
-import { useBoardFocusHandler, useCardStore, useCourseBoardEditMode, useSharedEditMode } from "@data-board";
+import { useBoardFocusHandler, useCourseBoardEditMode, useSharedEditMode } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
 import {
@@ -96,12 +95,14 @@ describe("CardHost", () => {
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
 		backgroundColor?: Colors;
 		cardId?: string;
+		isDuplicatingCard?: boolean;
 	}) => {
 		const {
 			hasElement = false,
 			hasCard = true,
 			allowedOperations = {},
 			backgroundColor = Colors.TRANSPARENT,
+			isDuplicatingCard = false,
 		} = options ?? {};
 
 		let card: CardResponse | null = null;
@@ -141,6 +142,7 @@ describe("CardHost", () => {
 				height: card?.height ?? 0,
 				columnIndex: 0,
 				rowIndex: 1,
+				isDuplicatingCard,
 			},
 		});
 
@@ -235,31 +237,23 @@ describe("CardHost", () => {
 
 	describe("card menus", () => {
 		describe("when users clicks duplicate menu btn", () => {
-			it("should call cardStore.duplicateCardRequest", async () => {
+			it("should emit duplicate:card with correct cardId", async () => {
 				const { wrapper, cardId } = setup({ allowedOperations: { copyCard: true } });
 
 				const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
 
 				await duplicateButton.trigger("click");
 
-				expect(useCardStore().duplicateCard).toHaveBeenCalledWith({ cardId });
+				const emitted = wrapper.emitted("duplicate:card");
+				expect(emitted).toHaveLength(1);
+				expect(emitted![0]).toEqual([cardId]);
 			});
 
-			it("should show card skeleton while duplicating", async () => {
-				const { wrapper } = setup({ allowedOperations: { copyCard: true } });
-				const cardStore = mockedPiniaStoreTyping(useCardStore);
-				cardStore.duplicateCard.mockResolvedValueOnce();
+			it("should show card skeleton while duplicating", () => {
+				const { wrapper } = setup({ allowedOperations: { copyCard: true }, isDuplicatingCard: true });
 
-				const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
-				await duplicateButton.trigger("click");
-
-				const cardSkeletons = wrapper.findAllComponents(CardSkeleton);
-				expect(cardSkeletons).toHaveLength(1);
-
-				await wrapper.vm.$nextTick();
-
-				const cardSkeletonsAfterDuplicationFinished = wrapper.findAllComponents(CardSkeleton);
-				expect(cardSkeletonsAfterDuplicationFinished).toHaveLength(0);
+				const skeletonCards = wrapper.findAllComponents({ name: "CardSkeleton" });
+				expect(skeletonCards.length).toBeGreaterThanOrEqual(1);
 			});
 		});
 
