@@ -50,14 +50,15 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["create:title"]);
+const emit = defineEmits(["create:title", "validation:failed"]);
 
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 const { t } = useI18n();
-const { existingTitle } = toRaw(props);
 
+const { existingTitle } = toRaw(props);
 const title = ref(existingTitle || t("components.cardElement.videoConferenceElement"));
+
 const label = existingTitle
 	? t("components.cardElement.videoConferenceElement.edit.label")
 	: t("components.cardElement.videoConferenceElement.create.label");
@@ -71,9 +72,19 @@ onBeforeUnmount(() => {
 	if (title.value === existingTitle) return;
 
 	const isValid = rules.every((rule) => rule(title.value) === true);
+
 	if (isValid) {
 		emit("create:title", title.value);
+	} else if (existingTitle) {
+		// Nur Event emittieren wenn ein existierender Titel vorhanden war
+		emit("validation:failed", {
+			message: "Titel darf nicht leer sein. Ihre Änderungen wurden verworfen.",
+			previousTitle: existingTitle,
+			attemptedTitle: title.value,
+		});
 	}
+	// Für neue Elemente ohne existingTitle: kein Event
+	// Empty State wird automatisch durch !computedElement.content.title angezeigt
 });
 </script>
 

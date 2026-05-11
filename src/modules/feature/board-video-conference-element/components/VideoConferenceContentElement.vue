@@ -3,7 +3,6 @@
 		ref="videoConferenceElement"
 		class="mb-4 video-conference-element"
 		data-testid="video-conference-element"
-		:class="{ 'd-none': isHidden }"
 		:variant="outlined"
 		:ripple="false"
 		:tabindex="isEditMode ? 0 : viewModeTabIndex"
@@ -14,6 +13,7 @@
 		@keydown.stop
 		@keyup.enter="onContentEnter"
 	>
+		<!-- Display im View-Mode mit Titel -->
 		<VideoConferenceContentElementDisplay
 			v-if="computedElement.content.title && (!isEditMode || isConferenceRunning)"
 			:board-parent-type="boardParentType"
@@ -38,11 +38,30 @@
 				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</VideoConferenceContentElementDisplay>
+
+		<!-- Empty State im View-Mode ohne Titel -->
+		<VCardText
+			v-if="!isEditMode && !computedElement.content.title"
+			class="text-center pa-6"
+			data-testid="video-conference-empty-state"
+		>
+			<VIcon :icon="mdiAlertCircle" size="48" color="error" class="mb-3" />
+
+			<p class="text-subtitle-1 font-weight-medium text-error mb-1">
+				{{ "Kein Titel festgelegt" }}
+			</p>
+			<p class="text-body-2 text-medium-emphasis">
+				{{ "Bitte bearbeiten Sie das Board und geben Sie einen gültigen Titel ein" }}
+			</p>
+		</VCardText>
+
+		<!-- Create im Edit-Mode -->
 		<VideoConferenceContentElementCreate
 			v-if="isEditMode && !isConferenceRunning"
 			:existing-title="computedElement.content.title"
 			:is-detail-view="isDetailView"
 			@create:title="onCreateTitle"
+			@validation:failed="onValidationFailed"
 		>
 			<BoardMenu
 				:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
@@ -78,7 +97,7 @@ import VideoConferenceContentElementDisplay from "./VideoConferenceContentElemen
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { BoardFeature, VideoConferenceElementResponse, VideoConferenceScope } from "@api-server";
 import { useVideoConference } from "@data-access";
-import { useAppStoreRefs } from "@data-app";
+import { notifyWarning, useAppStoreRefs } from "@data-app";
 import {
 	useBoardAllowedOperations,
 	useBoardFeatures,
@@ -86,6 +105,7 @@ import {
 	useContentElementState,
 	useSharedBoardPageInformation,
 } from "@data-board";
+import { mdiAlertCircle } from "@icons/material";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { SvsDialog } from "@ui-dialog";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
@@ -157,11 +177,12 @@ const { modelValue, computedElement } = useContentElementState(props, {
 
 const { t } = useI18n();
 
-const isHidden = computed(() => !props.isEditMode && !computedElement.value.content.title);
 const outlined = computed(() => (props.isEditMode || computedElement.value.content.title ? "outlined" : "text"));
+
 const ariaLabel = computed(
 	() => `${t("components.cardElement.videoConferenceElement")}, ${t("common.ariaLabel.newTab")}`
 );
+
 const isConfigurationDialogOpen = ref(false);
 
 const errorDismissed = ref(false);
@@ -186,7 +207,16 @@ const onContentClick = async () => {
 };
 
 const onCloseConfigurationDialog = () => (isConfigurationDialogOpen.value = false);
-const onCreateTitle = (title: string) => (modelValue.value.title = title);
+
+const onCreateTitle = (title: string) => {
+	modelValue.value.title = title;
+};
+
+// Handler für existierende Elemente: notification
+const onValidationFailed = (error: { message: string; previousTitle: string; attemptedTitle: string }) => {
+	notifyWarning(error.message);
+};
+
 const onKeydownArrow = (event: KeyboardEvent) => {
 	if (props.isEditMode) {
 		event.preventDefault();
@@ -195,6 +225,7 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 };
 const onMoveDown = () => emit("move-down:edit");
 const onMoveUp = () => emit("move-up:edit");
+
 const onDelete = async () => {
 	if (await askDeletionForType("components.cardElement.videoConferenceElement"))
 		emit("delete:element", computedElement.value.id);
