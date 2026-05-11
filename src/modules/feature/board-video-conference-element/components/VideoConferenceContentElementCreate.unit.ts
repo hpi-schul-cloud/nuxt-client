@@ -53,8 +53,6 @@ describe("VideoConferenceContentElementCreate", () => {
 			const existingTitle = "Existing Title";
 			const wrapper = setupWrapper({ propsData: { existingTitle } });
 
-			// Title remains unchanged
-
 			wrapper.unmount();
 
 			expect(wrapper.emitted("create:title")).toBeUndefined();
