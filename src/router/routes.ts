@@ -299,6 +299,12 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		beforeEnter: createPermissionGuard([Permission.NEWS_CREATE]),
 	},
 	{
+		path: `/news/:id(${REGEX_ID})`,
+		component: async () => (await import("@page-news")).NewsDetailsPage,
+		name: "news-details",
+		beforeEnter: createPermissionGuard([Permission.NEWS_EDIT]),
+	},
+	{
 		path: `/news/:id(${REGEX_ID})/edit`,
 		component: async () => (await import("@page-news")).NewsEditPage,
 		name: "news-id-edit",

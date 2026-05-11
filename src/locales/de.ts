@@ -1525,6 +1525,7 @@ export default {
 	"pages.news.new.create": "Erstellen",
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
+	"pages.news.details.title": "Neuigkeit",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Die Registrierung konnte leider nicht abgeschlossen werden. Bitte später erneut versuchen.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
