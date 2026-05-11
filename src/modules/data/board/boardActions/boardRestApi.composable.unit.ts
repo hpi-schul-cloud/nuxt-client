@@ -1,7 +1,5 @@
 import { useBoardApi } from "../BoardApi.composable";
 import { useBoardRestApi } from "./boardRestApi.composable";
-import { courseRoomDetailsModule } from "@/store";
-import CourseRoomDetailsModule from "@/store/course-room-details";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
@@ -14,10 +12,10 @@ import {
 	mountComposable,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { BoardLayout } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useBoardStore, useSharedEditMode, useSocketConnection } from "@data-board";
+import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { createTestingPinia } from "@pinia/testing";
 import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
@@ -39,6 +37,9 @@ const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({ t: (key: string) => key }),
+	createI18n: () => ({
+		global: { t: (key: string) => key },
+	}),
 }));
 
 describe("boardRestApi", () => {
@@ -70,10 +71,6 @@ describe("boardRestApi", () => {
 	});
 
 	const setup = (createBoard = true) => {
-		setupStores({
-			courseRoomDetailsModule: CourseRoomDetailsModule,
-		});
-
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		if (createBoard) {
 			const cards = cardSkeletonResponseFactory.buildList(3);
@@ -174,11 +171,11 @@ describe("boardRestApi", () => {
 	describe("@deleteBoardRequest", () => {
 		it("should call 'deleteBoardSuccess'", async () => {
 			const deleteBoardMock = vi.fn();
+			const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
+			courseRoomDetailsStore.deleteBoard = deleteBoardMock;
 			const { boardStore } = setup();
 			const { deleteBoardRequest } = useBoardRestApi();
 			const boardId = boardStore.board!.id;
-
-			courseRoomDetailsModule.deleteBoard = deleteBoardMock;
 
 			await deleteBoardRequest({ boardId });
 
@@ -190,10 +187,11 @@ describe("boardRestApi", () => {
 		});
 		it("should call handleError if the API call fails", async () => {
 			const deleteBoardMock = vi.fn().mockRejectedValue({});
+			const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
+			courseRoomDetailsStore.deleteBoard = deleteBoardMock;
 			const { boardStore } = setup();
 			const { deleteBoardRequest } = useBoardRestApi();
 			const boardId = boardStore.board!.id;
-			courseRoomDetailsModule.deleteBoard = deleteBoardMock;
 
 			await deleteBoardRequest({ boardId });
 
