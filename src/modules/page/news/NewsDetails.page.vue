@@ -14,7 +14,7 @@
 			]"
 			max-width="short"
 		>
-			<h2>{{ currentNews.title }}</h2>
+			<h2 data-testid="news-title">{{ currentNews.title }}</h2>
 			<div class="d-flex mb-2">
 				<div class="d-flex align-center text-subtitle mr-3">
 					<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
@@ -26,10 +26,16 @@
 				</div>
 			</div>
 			<VDivider class="mb-4" />
-			<RenderHTML :html="currentNews?.content" class="ck-content" />
+			<RenderHTML :html="currentNews?.content" class="ck-content" data-testid="news-content" />
 			<div class="d-flex mt-8 ga-3">
-				<VBtn :text="t('common.actions.edit')" color="primary" variant="flat" @click="onEdit" />
-				<VBtn :text="t('common.actions.delete')" variant="outlined" @click="onDelete" />
+				<VBtn
+					data-testid="news-edit-btn"
+					:text="t('common.actions.edit')"
+					color="primary"
+					variant="flat"
+					@click="onEdit"
+				/>
+				<VBtn data-testid="news-delete-btn" :text="t('common.actions.delete')" variant="outlined" @click="onDelete" />
 			</div>
 		</DefaultWireframe>
 	</div>
