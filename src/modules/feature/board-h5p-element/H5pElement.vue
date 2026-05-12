@@ -59,7 +59,7 @@ import { useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
 import { ContentElementBar } from "@ui-board";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { computed, onMounted, Ref, ref, toRef, watch } from "vue";
+import { computed, nextTick, onMounted, Ref, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
@@ -172,6 +172,11 @@ const onDownloadContent = () => {
 	const url = `/api/v3/h5p-editor/download/${element.value.content.contentId}`;
 	// The filename is only a fallback. The server should provide a Content-Disposition header with the correct filename.
 	downloadFile(url, "content.h5p");
+	void nextTick(() => {
+		const card = elementCard.value as unknown as { focus?: () => void; $el?: HTMLElement } | null;
+		card?.focus?.();
+		card?.$el?.focus?.();
+	});
 };
 
 const fetchAndSetContentTitle = async (h5pElement: H5pElementResponse) => {

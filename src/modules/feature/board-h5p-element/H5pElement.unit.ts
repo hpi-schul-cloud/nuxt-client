@@ -302,6 +302,18 @@ describe("H5pElement", () => {
 
 				expect(fileHelper.downloadFile).toHaveBeenCalledWith(`/api/v3/h5p-editor/download/${contentId}`, "content.h5p");
 			});
+
+			it("should keep focus on the card after downloading", async () => {
+				const { wrapper } = setup();
+				const menu = wrapper.getComponent(H5pElementMenu);
+				const elementCard = wrapper.getComponent({ ref: "elementCard" });
+				const focusSpy = vi.spyOn(elementCard.element, "focus");
+
+				menu.vm.$emit("download:content");
+				await nextTick();
+
+				expect(focusSpy).toHaveBeenCalled();
+			});
 		});
 
 		describe("when the download option is clicked in the menu without linked content", () => {
