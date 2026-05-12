@@ -1,18 +1,15 @@
 <template>
 	<SvsDialog
 		v-model="showDialog"
-		:title="dialogTitle"
+		:title="t('feature-autoLogout.button.title')"
 		no-cancel
 		persistent
-		:confirm-btn-lang-key="confirmButtonKey"
-		@confirm="onConfirm"
+		:confirm-btn-lang-key="'feature-autoLogout.button.confirm'"
+		@confirm="extendSession"
 	>
 		<template #content>
 			<WarningAlert class="sloth-text">
-				<span v-if="isSessionEnded">
-					{{ t("feature-autoLogout.message.error.401") }}
-				</span>
-				<i18n-t v-else keypath="feature-autoLogout.warning" scope="global">
+				<i18n-t keypath="feature-autoLogout.warning" scope="global">
 					<span class="text-error">
 						{{
 							t("feature-autoLogout.warning.remainingTime", remainingTimeInMinutes, {
@@ -28,49 +25,54 @@
 </template>
 
 <script lang="ts" setup>
-import { useAutoLogout } from "../auto-logout/autoLogout.composable";
 import SlothSvg from "@/assets/img/logout/Sloth.svg";
+import { useAppStore, useAppStoreRefs } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { SessionState } from "@util-broadcast-channel";
-import { computed, watch } from "vue";
+import { logger } from "@util-logger";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-const router = useRouter();
+const DEFAULT_WARNING_SECONDS = 1 * 60 * 60; // 1 hour
+const { JWT_SHOW_TIMEOUT_WARNING_SECONDS } = useEnvConfig().value;
+const WARNING_THRESHOLD = JWT_SHOW_TIMEOUT_WARNING_SECONDS || DEFAULT_WARNING_SECONDS;
+
+const remainingTimeInSeconds = ref(0);
+const remainingTimeInMinutes = computed(() => Math.ceil(remainingTimeInSeconds.value / 60));
 
 const { t } = useI18n();
 
-const { remainingTimeInMinutes, showDialog, sessionState, extendSession, createSession } = useAutoLogout();
+const router = useRouter();
+const showDialog = ref(false);
 
-const isSessionEnded = computed(() => sessionState.value === SessionState.Expired);
+const { autoLogout, extendSession, startTimer, stopTimer } = useAppStore();
+const { sessionTimeoutTimestamp } = useAppStoreRefs();
 
-const confirmButtonKey = computed(() =>
-	isSessionEnded.value ? "feature-autoLogout.button.confirm.returnToLogin" : "feature-autoLogout.button.confirm"
-);
-
-const dialogTitle = computed(() =>
-	isSessionEnded.value ? "feature-loggedout.title" : "feature-autoLogout.button.title"
-);
-
-const onConfirm = () => {
-	if (isSessionEnded.value) {
-		router.push("/login");
+const regularChecks = () => {
+	if (sessionTimeoutTimestamp.value === null || sessionTimeoutTimestamp.value < 0) {
+		logger.warn("timer not running");
 		return;
 	}
 
-	extendSession();
+	const timeleft = Math.max(sessionTimeoutTimestamp.value - Date.now(), 0);
+	remainingTimeInSeconds.value = Math.ceil(timeleft / 1000);
+
+	if (Date.now() >= sessionTimeoutTimestamp.value) {
+		logger.warn("Session timeout time was set but is already in the past.", sessionTimeoutTimestamp.value);
+		stopTimer();
+		autoLogout();
+		return;
+	}
+
+	showDialog.value = remainingTimeInSeconds.value <= WARNING_THRESHOLD;
 };
 
-watch(
-	() => router.currentRoute.value,
-	(newVal) => {
-		if (newVal) {
-			createSession();
-		}
-	},
-	{ immediate: true }
-);
+// reset the timer whenever the route changes, if the user is logged in
+watch(() => router.currentRoute.value, startTimer, { immediate: true });
+
+setInterval(regularChecks, 1000);
 </script>
 
 <style lang="scss" scoped>
