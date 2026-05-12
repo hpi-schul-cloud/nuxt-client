@@ -5,8 +5,8 @@ import store from "./plugins/store";
 import { createVuetifyPlugin } from "./plugins/vuetify";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
-import { FILE_PATHS_MODULE_KEY, SHARE_MODULE_KEY } from "./utils/inject";
-import { filePathsModule, importUsersModule, shareModule } from "@/store";
+import { SHARE_MODULE_KEY } from "./utils/inject";
+import { importUsersModule, shareModule } from "@/store";
 import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
@@ -44,11 +44,7 @@ app.use(VueDOMPurifyHTML, {
 	initializeAxios(axios);
 
 	useRuntimeConfigStore().fetchRuntimeConfig();
-	const success = await useEnvStore().loadConfiguration();
-
-	if (success) {
-		filePathsModule.init();
-	}
+	await useEnvStore().loadConfiguration();
 
 	try {
 		await useAppStore().login();
@@ -62,8 +58,6 @@ app.use(VueDOMPurifyHTML, {
 	app.use(router).use(store).use(vuetify).use(i18n);
 
 	// NUXT_REMOVAL get rid of store DI
-	app.provide("filePathsModule", filePathsModule);
-	app.provide(FILE_PATHS_MODULE_KEY, filePathsModule);
 	app.provide("importUsersModule", importUsersModule);
 
 	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);

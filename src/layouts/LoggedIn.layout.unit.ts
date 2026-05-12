@@ -1,6 +1,5 @@
 import LoggedInLayout from "./LoggedIn.layout.vue";
-import FilePathsModule from "@/store/filePaths";
-import { FILE_PATHS_MODULE_KEY } from "@/utils/inject";
+import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -34,15 +33,10 @@ vi.mocked(useStatusAlerts).mockReturnValue({
 
 const setup = () => {
 	setActivePinia(createTestingPinia());
+  createTestEnvStore({
+    DOCUMENT_BASE_DIR: "https://example.com/documents/",
+  });
 	createTestSchoolStore();
-	const filePathsModule = createModuleMocks(FilePathsModule, {
-		getSpecificFiles: {
-			accessibilityStatement: "statement",
-			privacy: "",
-			termsOfUse: "",
-			analogConsent: "",
-		},
-	});
 
 	const wrapper = mount(VApp, {
 		slots: {
@@ -50,9 +44,6 @@ const setup = () => {
 		},
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
-			},
 			stubs: {
 				"application-error-wrapper": { template: "<div></div>" },
 				snackbar: { template: "<div></div>" },
