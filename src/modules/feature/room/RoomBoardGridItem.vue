@@ -2,6 +2,7 @@
 	<VCard
 		class="room-content-grid-item d-flex flex-column"
 		:class="isDraft ? 'bg-white' : 'bg-surface-light'"
+		tabindex="0"
 		:variant="isDraft ? 'outlined' : 'flat'"
 		:data-testid="`board-grid-item-${index}`"
 		:ripple="false"
@@ -40,6 +41,7 @@
 		<VCardActions class="justify-end pr-4">
 			<VBtn
 				:data-testid="`board-open-button-${index}`"
+				tabindex="0"
 				variant="text"
 				color="primary"
 				:to="boardPath"
