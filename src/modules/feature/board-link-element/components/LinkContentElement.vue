@@ -46,9 +46,9 @@ import { ensureProtocolIncluded } from "../util/url.util";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
-import { ContentElementType, LinkElementResponse } from "@api-server";
+import { LinkElementResponse } from "@api-server";
 import { sanitizeUrl } from "@braintree/sanitize-url";
-import { useBoardFocusHandler, useCardStore, useContentElementState } from "@data-board";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { useElementFocus } from "@util-board";
@@ -90,8 +90,6 @@ const { modelValue, computedElement } = useContentElementState(props, {
 	autoSaveDebounce: 100,
 });
 
-const cardStore = useCardStore();
-
 const sanitizedUrl = computed(() => (props.element.content.url ? sanitizeUrl(props.element.content.url) : ""));
 
 const target: ComputedRef<string> = computed(() => {
@@ -117,58 +115,18 @@ const onCreateUrl = async (originalUrl: string) => {
 
 	try {
 		const validUrl = ensureProtocolIncluded(originalUrl);
-		const isReplacement = !!computedElement.value.content.url;
+		const { url, title, description, originalImageUrl } = await getMetaTags(validUrl);
 
-		if (isReplacement) {
-			await replaceWithNewElement(validUrl);
-		} else {
-			const { url, title, description, originalImageUrl } = await getMetaTags(validUrl);
+		modelValue.value.url = url;
+		modelValue.value.title = title;
+		modelValue.value.description = description;
 
-			modelValue.value.url = url;
-			modelValue.value.title = title;
-			modelValue.value.description = description;
-
-			if (originalImageUrl) {
-				modelValue.value.imageUrl = await createPreviewImage(originalImageUrl);
-			}
+		if (originalImageUrl) {
+			modelValue.value.imageUrl = await createPreviewImage(originalImageUrl);
 		}
 	} finally {
 		isLoading.value = false;
 	}
-};
-
-const replaceWithNewElement = async (validUrl: string) => {
-	const card = Object.values(cardStore.cards).find((c) => c.elements.some((e) => e.id === element.value.id));
-	if (!card) return;
-
-	const elementPosition = card.elements.findIndex((e) => e.id === element.value.id);
-	const oldElementId = element.value.id;
-
-	const { url, title, description, originalImageUrl } = await getMetaTags(validUrl);
-
-	await cardStore.deleteElementRequest({
-		cardId: card.id,
-		elementId: oldElementId,
-	});
-
-	const newElement = await cardStore.createElementRequest({
-		type: ContentElementType.LINK,
-		cardId: card.id,
-		toPosition: elementPosition,
-	});
-	if (!newElement) {
-		throw new Error("Failed to create new element for URL replacement");
-	}
-
-	const { createPreviewImage: createNewPreview } = usePreviewGenerator(newElement.id);
-	let imageUrl = "";
-	if (originalImageUrl) {
-		imageUrl = (await createNewPreview(originalImageUrl)) ?? "";
-	}
-
-	await cardStore.updateElementRequest({
-		element: { ...newElement, content: { url, title, description, imageUrl } },
-	});
 };
 
 const ariaLabel = computed(() => {
