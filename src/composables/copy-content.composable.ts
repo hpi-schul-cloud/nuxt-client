@@ -173,9 +173,14 @@ export const useImportContent = (shareTokenParentType: Ref<ShareTokenInfoRespons
 };
 
 export const useShareContent = (shareTokenParentType: Ref<ShareTokenBodyParamsParentType | undefined>) => {
+	const { t } = useI18nGlobal();
+
 	const contentItemType = computed(() =>
 		shareTokenParentType.value ? apiTypeToEntityType[shareTokenParentType.value] : undefined
 	);
 
-	return useCopyContent(contentItemType);
+	return {
+		...useCopyContent(contentItemType),
+		text: computed(() => t(`components.molecules.share.${shareTokenParentType.value}.options.infoText`)),
+	};
 };

@@ -8,7 +8,6 @@
 				</VTab>
 			</VTabs>
 		</div>
-
 		<div class="mx-auto">
 			<VWindow :model-value="activeTab">
 				<TasksOverviewPane
@@ -29,7 +28,6 @@
 				/>
 			</VWindow>
 		</div>
-
 		<ShareDialog
 			v-if="shareItemType"
 			:is-open="isShareDialogOpen"
@@ -39,7 +37,6 @@
 			@cancel="onCancelShare"
 			@done="onDone"
 		/>
-
 		<CopyDialog
 			:is-open="isCopyDialogOpen"
 			:copy-item-type="copyItemType"
@@ -51,9 +48,7 @@
 
 <script setup lang="ts">
 import TasksOverviewPane from "./TasksOverviewPane.vue";
-import ShareModule from "@/store/share";
 import { CopyParams } from "@/types/copy/CopyParams";
-import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { ShareTokenBodyParamsParentType } from "@api-server";
 import { useTasksOfOverview } from "@data-tasks";
 import { CopyDialog, useCopyFlow } from "@feature-copy";
@@ -63,8 +58,6 @@ import { mdiArchiveOutline, mdiFormatListChecks, mdiPlaylistEdit } from "@icons/
 import { useUrlSearchParams } from "@vueuse/core";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-
-const shareModule: ShareModule = injectStrict(SHARE_MODULE_KEY);
 
 const { t } = useI18n();
 const params = useUrlSearchParams("history");
