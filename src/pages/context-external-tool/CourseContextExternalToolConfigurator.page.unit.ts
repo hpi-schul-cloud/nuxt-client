@@ -1,7 +1,7 @@
 import CourseContextExternalToolConfigurator from "./CourseContextExternalToolConfigurator.page.vue";
 import ContextExternalToolConfigurator from "@/components/administration/external-tools-configuration/ContextExternalToolConfigurator.vue";
-import { contextExternalToolFactory, expectNotification } from "@@/tests/test-utils/factory";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { contextExternalToolFactory, expectNotification } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ToolContextType } from "@api-server";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
