@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<template v-if="boardStore.isLoading === false && board">
+		<template v-if="board">
 			<CardHostDetailView v-if="cardId" :key="cardId" :card-id="cardId" @close:detail-view="onCloseDetailView" />
 			<DefaultWireframe
 				ref="main"
