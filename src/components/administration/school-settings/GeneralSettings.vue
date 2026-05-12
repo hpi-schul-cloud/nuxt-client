@@ -10,7 +10,7 @@
 					:readonly="!hasSchoolEditPermission"
 					:disabled="isSchoolSynced"
 					data-testid="school-name"
-					:rules="[isRequired(), validateOnOpeningTag]"
+					:rules="[validateOnOpeningTag]"
 				/>
 			</VCol>
 		</VRow>
