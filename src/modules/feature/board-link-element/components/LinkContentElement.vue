@@ -115,17 +115,34 @@ const onCreateUrl = async (originalUrl: string) => {
 
 	try {
 		const validUrl = ensureProtocolIncluded(originalUrl);
+		const currentUrl = computedElement.value.content.url;
+
+		// Nur bei tatsächlicher URL-Änderung Preview neu laden
+		const shouldFetchPreview = !currentUrl || normalizeUrl(currentUrl) !== normalizeUrl(validUrl);
+
 		const { url, title, description, originalImageUrl } = await getMetaTags(validUrl);
 
 		modelValue.value.url = url;
 		modelValue.value.title = title;
 		modelValue.value.description = description;
 
-		if (originalImageUrl) {
+		if (shouldFetchPreview && originalImageUrl) {
 			modelValue.value.imageUrl = await createPreviewImage(originalImageUrl);
 		}
 	} finally {
 		isLoading.value = false;
+	}
+};
+
+// Nach den anderen Composables/Funktionen, z.B. nach onClick
+const normalizeUrl = (url: string): string => {
+	try {
+		const parsed = new URL(url);
+		// Nur Origin + Pathname vergleichen (ohne Query-Parameter und Hash)
+		return `${parsed.origin}${parsed.pathname}`;
+	} catch {
+		// Fallback bei ungültigen URLs
+		return url.toLowerCase().trim();
 	}
 };
 
