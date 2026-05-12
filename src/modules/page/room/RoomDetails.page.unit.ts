@@ -1,4 +1,3 @@
-import { useShareFlow } from "@/modules/feature/share/share-flow.composable";
 import { BoardLayout } from "@/types/board/Board";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { RoomBoardItem } from "@/types/room/Room";
@@ -12,6 +11,7 @@ import { CopyApiResponseStatus, CopyApiResponseType } from "@api-server";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { CopyDialog, useCopyFlow } from "@feature-copy";
 import { RoomContentGrid, RoomMenu } from "@feature-room";
+import { useShareFlow } from "@feature-share";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
