@@ -3,11 +3,10 @@ import { boardResponseFactory, expectNotification, mockedPiniaStoreTyping, mount
 import { useNotificationStore } from "@data-app";
 import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
-import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import * as socketModule from "socket.io-client";
 import { Mock } from "vitest";
-import { nextTick, type Ref } from "vue";
+import { type Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
@@ -31,12 +30,6 @@ vi.mock("../boardActions/boardSocketApi.composable", () => ({
 }));
 vi.mock("../boardActions/boardRestApi.composable", () => ({
 	useBoardRestApi: vi.fn(() => ({ duplicateColumnRequest: vi.fn() })),
-}));
-
-vi.mock("@util-broadcast-channel", () => ({
-	useSessionBroadcast: vi.fn().mockImplementation(() => ({
-		isJwtExpired: mockIsJwtExpired,
-	})),
 }));
 
 vi.mock("@vueuse/shared", () => ({
@@ -411,42 +404,6 @@ describe("socket.ts", () => {
 			getConnectedSocket();
 
 			expect(connected.value).toBe(false);
-		});
-	});
-
-	describe("JWT expiration watch", () => {
-		it("should disconnect socket when JWT expires", async () => {
-			const { getConnectedSocket } = setup();
-
-			// Ensure socket is connected
-			getConnectedSocket();
-			mockSocket.connected = true;
-
-			// Simulate JWT expiring
-			mockIsJwtExpired.value = true;
-			await nextTick();
-			await flushPromises();
-
-			expect(mockSocket.disconnect).toHaveBeenCalled();
-		});
-
-		it("should connect socket when JWT becomes valid", async () => {
-			// Start with expired JWT
-			mockIsJwtExpired.value = true;
-
-			const { getConnectedSocket } = setup();
-			getConnectedSocket();
-
-			// Clear previous connect calls
-			(mockSocket.connect as Mock).mockClear();
-			mockSocket.connected = false;
-
-			// Simulate JWT becoming valid again
-			mockIsJwtExpired.value = false;
-			await nextTick();
-			await flushPromises();
-
-			expect(mockSocket.connect).toHaveBeenCalled();
 		});
 	});
 });

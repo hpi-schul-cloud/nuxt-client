@@ -1,11 +1,10 @@
 import CourseContextExternalToolConfigurator from "./CourseContextExternalToolConfigurator.page.vue";
 import ContextExternalToolConfigurator from "@/components/administration/external-tools-configuration/ContextExternalToolConfigurator.vue";
-import CourseRoomDetailsModule from "@/store/course-room-details";
-import { COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject";
 import { contextExternalToolFactory, expectNotification } from "@@/tests/test-utils/factory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ToolContextType } from "@api-server";
+import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -18,7 +17,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 	let router: RouterMock;
 
 	beforeEach(() => {
-		setActivePinia(createTestingPinia());
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		router = createRouterMock();
 		injectRouterMock(router);
 	});
@@ -28,8 +27,9 @@ describe("CourseContextExternalToolConfigurator", () => {
 
 	const getWrapper = (props: ComponentProps<typeof CourseContextExternalToolConfigurator>) => {
 		const roomTitle = "Room Title";
-		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
-			getRoomData: {
+		const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
+		courseRoomDetailsStore.$patch({
+			roomData: {
 				title: roomTitle,
 				roomId: "contextId",
 				displayColor: "#ffffff",
@@ -38,13 +38,11 @@ describe("CourseContextExternalToolConfigurator", () => {
 				isSynchronized: false,
 			},
 		});
+		courseRoomDetailsStore.fetchContent = vi.fn();
 
 		const wrapper = mount(CourseContextExternalToolConfigurator, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
-				},
 				stubs: {
 					ContextExternalToolConfigurator: {
 						template: "<div></div>",
@@ -63,7 +61,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 
 		return {
 			wrapper,
-			courseRoomDetailsModule,
+			courseRoomDetailsStore,
 			roomTitle,
 		};
 	};
