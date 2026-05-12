@@ -30,7 +30,15 @@
 			</VWindow>
 		</div>
 
-		<ShareModal :type="ShareTokenBodyParamsParentType.TASKS" />
+		<ShareDialog
+			v-if="shareItemType"
+			:is-open="isShareDialogOpen"
+			:share-item-type="shareItemType"
+			:share-url="shareUrl"
+			@confirm="onConfirmShare"
+			@cancel="onCancelShare"
+			@done="onDone"
+		/>
 
 		<CopyDialog
 			:is-open="isCopyDialogOpen"
@@ -43,14 +51,14 @@
 
 <script setup lang="ts">
 import TasksOverviewPane from "./TasksOverviewPane.vue";
-import ShareModal from "@/components/share/ShareModal.vue";
 import ShareModule from "@/store/share";
 import { CopyParams } from "@/types/copy/CopyParams";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { ShareTokenBodyParamsParentType } from "@api-server";
-import { useEnvConfig } from "@data-env";
 import { useTasksOfOverview } from "@data-tasks";
 import { CopyDialog, useCopyFlow } from "@feature-copy";
+import { useShareFlow } from "@feature-share";
+import { ShareDialog } from "@feature-share";
 import { mdiArchiveOutline, mdiFormatListChecks, mdiPlaylistEdit } from "@icons/material";
 import { useUrlSearchParams } from "@vueuse/core";
 import { computed } from "vue";
@@ -100,13 +108,21 @@ const onCopyTask = async ({ id, courseId }: CopyParams) => {
 	}
 };
 
+const {
+	isDialogOpen: isShareDialogOpen,
+	shareItemType,
+	shareUrl,
+	executeShare,
+	onConfirm: onConfirmShare,
+	onCancel: onCancelShare,
+	onDone,
+} = useShareFlow();
+
 const onShareTask = (taskId: string) => {
-	if (useEnvConfig().value.FEATURE_TASK_SHARE) {
-		shareModule.startShareFlow({
-			id: taskId,
-			type: ShareTokenBodyParamsParentType.TASKS,
-		});
-	}
+	executeShare({
+		id: taskId,
+		type: ShareTokenBodyParamsParentType.TASKS,
+	});
 };
 </script>
 
