@@ -1,14 +1,14 @@
 <template>
 	<div v-if="currentNews">
 		<DefaultWireframe
-			:headline="t('pages.news.details.title')"
+			:headline="pageTitle"
 			:breadcrumbs="[
 				{
 					href: '/news',
 					title: t('pages.news.title'),
 				},
 				{
-					title: t('pages.news.details.title'),
+					title: pageTitle,
 					disabled: true,
 				},
 			]"
