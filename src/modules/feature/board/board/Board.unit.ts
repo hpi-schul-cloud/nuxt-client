@@ -2,14 +2,11 @@ import MoveCardDialog from "../card/MoveCardDialog.vue";
 import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
-import CourseRoomDetailsModule from "@/store/course-room-details";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
-import { COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import {
 	BoardExternalReferenceType,
@@ -144,16 +141,6 @@ describe("Board", () => {
 		return board;
 	};
 
-	const setupProvideModules = () => {
-		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
-			getRoomId: "room1",
-		});
-
-		return {
-			courseRoomDetailsModule,
-		};
-	};
-
 	const setup = (options?: {
 		numberOfColumns?: number;
 		isBoardVisible?: boolean;
@@ -161,8 +148,6 @@ describe("Board", () => {
 		envs?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
 	}) => {
-		const { courseRoomDetailsModule } = setupProvideModules();
-
 		setActivePinia(createTestingPinia());
 
 		createTestEnvStore({
@@ -193,9 +178,6 @@ describe("Board", () => {
 					createTestingI18n(),
 					createTestingVuetify(),
 				],
-				provide: {
-					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
-				},
 				stubs: {
 					ShareDialog: true,
 					UseFocusTrap: true,
@@ -224,7 +206,6 @@ describe("Board", () => {
 			boardStore,
 			cardStore,
 			board,
-			courseRoomDetailsModule,
 		};
 	};
 
@@ -1194,21 +1175,21 @@ describe("Board", () => {
 			expect(wrapperVM.showLoadingDialog).toBe(false);
 		});
 
-		it("should return true when isConnected is false after 500ms", async () => {
+		it("should return true when isConnected is false after 3000ms", async () => {
 			const { wrapperVM, boardStore } = setup();
 
 			boardStore.isConnected = false;
-			vi.advanceTimersByTime(600);
+			await vi.advanceTimersByTimeAsync(3100);
 			await nextTick();
 
 			expect(wrapperVM.showLoadingDialog).toBe(true);
 		});
 
-		it("should return true when isLoading is true after 500ms", async () => {
+		it("should return true when isLoading is true after 3000ms", async () => {
 			const { wrapperVM, boardStore } = setup();
 
 			boardStore.isLoading = true;
-			vi.advanceTimersByTime(600);
+			await vi.advanceTimersByTimeAsync(3100);
 			await nextTick();
 
 			expect(wrapperVM.showLoadingDialog).toBe(true);

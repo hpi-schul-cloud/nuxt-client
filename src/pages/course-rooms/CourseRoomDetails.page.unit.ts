@@ -1,16 +1,14 @@
 import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCommonCartridgeExportModal.vue";
-import CourseRoomDetailsModule from "@/store/course-room-details";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
-import { COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject/injection-keys";
 import {
 	createTestAppStore,
 	createTestEnvStore,
 	mockComposable,
+	mockedPiniaStoreTyping,
 	singleColumnBoardResponseFactory,
 } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import {
 	BoardElementResponse,
@@ -22,13 +20,14 @@ import {
 	Permission,
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
+import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { useCopyFlow } from "@feature-copy";
 import { useShareFlow } from "@feature-share";
 import { createTestingPinia } from "@pinia/testing";
 import { DefaultWireframe } from "@ui-layout";
 import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
-import { flushPromises, VueWrapper } from "@vue/test-utils";
+import { flushPromises, shallowMount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { mock } from "vitest-mock-extended";
@@ -66,18 +65,18 @@ const boardElements: Array<BoardElementResponse> = [
 	},
 ];
 
+vi.mock("@data-common-cartridge");
 const mockPermissionsCourseTeacher = [Permission.COURSE_CREATE, Permission.COURSE_EDIT];
 const mockPermissionsCourseSubstitutionTeacher = [Permission.HOMEWORK_CREATE, Permission.HOMEWORK_EDIT];
 const mockPermissionsStudent = [Permission.BASE_VIEW];
 
 describe("CourseRoomDetails.page.vue", () => {
-	let courseRoomDetailsModule: CourseRoomDetailsModule;
 	let router: RouterMock;
 	let useCopyFlowMock: Mocked<ReturnType<typeof useCopyFlow>>;
 	let useShareFlowMock: Mocked<ReturnType<typeof useShareFlow>>;
 
 	beforeEach(() => {
-		setActivePinia(createTestingPinia());
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		router = createRouterMock();
 		injectRouterMock(router);
 
@@ -124,14 +123,18 @@ describe("CourseRoomDetails.page.vue", () => {
 			isArchived,
 		});
 
-		courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
-			getRoomData: singleColumnBoard,
-			getPermissionData: permissionData,
-			getIsLocked: isLocked,
+		const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
+
+		Object.assign(courseRoomDetailsStore, {
+			roomData: singleColumnBoard,
+			scopePermissions: permissionData,
+			isLocked,
 			roomIsEmpty: false,
 		});
 
-		vi.mocked(courseRoomDetailsModule.createBoard).mockResolvedValue({
+		courseRoomDetailsStore.fetchContent.mockResolvedValue(undefined);
+		courseRoomDetailsStore.fetchScopePermission.mockResolvedValue(undefined);
+		courseRoomDetailsStore.createBoard.mockResolvedValue({
 			id: "new-board-id",
 		});
 
@@ -149,9 +152,6 @@ describe("CourseRoomDetails.page.vue", () => {
 		const wrapper = shallowMount(CourseRoomDetailsPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
-				},
 				stubs: {
 					DefaultWireframe: false,
 					RoomDotMenu: false,
@@ -179,15 +179,15 @@ describe("CourseRoomDetails.page.vue", () => {
 			wrapper,
 			singleColumnBoard,
 			router,
-			courseRoomDetailsModule,
+			courseRoomDetailsStore,
 		};
 	};
 
 	it("should fetch data on mount", async () => {
-		const { courseRoomDetailsModule } = setup();
+		const { courseRoomDetailsStore } = setup();
 		await flushPromises();
 
-		expect(courseRoomDetailsModule.fetchContent).toHaveBeenCalled();
+		expect(courseRoomDetailsStore.fetchContent).toHaveBeenCalled();
 	});
 
 	it("'to course files' button should have correct path", async () => {
@@ -533,7 +533,7 @@ describe("CourseRoomDetails.page.vue", () => {
 
 		describe("when a layout is selected", () => {
 			it("should create board when layout is selected", async () => {
-				const { wrapper, courseRoomDetailsModule, singleColumnBoard, router } = setup({
+				const { wrapper, courseRoomDetailsStore, singleColumnBoard, router } = setup({
 					permissionData: [Permission.COURSE_EDIT],
 				});
 				await flushPromises();
@@ -542,7 +542,7 @@ describe("CourseRoomDetails.page.vue", () => {
 				await layoutDialog.vm.$emit("select", BoardLayout.COLUMNS);
 				await flushPromises();
 
-				expect(courseRoomDetailsModule.createBoard).toHaveBeenCalledWith({
+				expect(courseRoomDetailsStore.createBoard).toHaveBeenCalledWith({
 					title: expect.any(String),
 					parentType: "course",
 					parentId: singleColumnBoard.roomId,
@@ -624,7 +624,7 @@ describe("CourseRoomDetails.page.vue", () => {
 						createTestEnvStore({
 							FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
 						});
-						const { wrapper, courseRoomDetailsModule } = setup({ isSynchronized: true });
+						const { wrapper, courseRoomDetailsStore } = setup({ isSynchronized: true });
 						await flushPromises();
 
 						const endSyncDialog = wrapper.findComponent({ name: "EndCourseSyncDialog" });
@@ -632,7 +632,7 @@ describe("CourseRoomDetails.page.vue", () => {
 						await flushPromises();
 
 						// fetchContent is called once during initialization and once on success
-						expect(courseRoomDetailsModule.fetchContent).toHaveBeenCalledTimes(2);
+						expect(courseRoomDetailsStore.fetchContent).toHaveBeenCalledTimes(2);
 					});
 				});
 			});
@@ -681,7 +681,7 @@ describe("CourseRoomDetails.page.vue", () => {
 						createTestEnvStore({
 							FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
 						});
-						const { wrapper, courseRoomDetailsModule } = setup({ isSynchronized: false });
+						const { wrapper, courseRoomDetailsStore } = setup({ isSynchronized: false });
 						await flushPromises();
 
 						const startSyncDialog = wrapper.findComponent({ name: "StartExistingCourseSyncDialog" });
@@ -689,7 +689,7 @@ describe("CourseRoomDetails.page.vue", () => {
 						await flushPromises();
 
 						// fetchContent is called once during initialization and once on success
-						expect(courseRoomDetailsModule.fetchContent).toHaveBeenCalledTimes(2);
+						expect(courseRoomDetailsStore.fetchContent).toHaveBeenCalledTimes(2);
 					});
 				});
 			});
