@@ -83,7 +83,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		const wrapper = mount(RoomDetailsPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				stubs: { LeaveRoomProhibitedDialog: true, UseFocusTrap: true, RoomContentGrid: true },
+				stubs: { LeaveRoomProhibitedDialog: true, RoomBoardGrid: true },
 				provide: {
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 				},
