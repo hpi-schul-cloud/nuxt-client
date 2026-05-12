@@ -230,6 +230,8 @@ export const useCardRestApi = () => {
 				cardStore.duplicateCardSuccess({ cardId: payload.cardId, duplicatedCard, isOwnAction: true });
 			}
 		} catch (error) {
+			cardStore.setDuplicatingCardId(payload.cardId, false);
+
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDuplicated", "boardCard"),
 			});

@@ -284,24 +284,18 @@ describe("BoardStore", () => {
 
 			boardStore.setDuplicatingColumnId(columnId);
 
-			expect(boardStore.duplicatingColumnIds).toContain(columnId);
-		});
-
-		it("should not change duplicatingColumnIds when set to undefined", () => {
-			const { boardStore } = setup();
-
-			boardStore.setDuplicatingColumnId("columnId");
-			boardStore.setDuplicatingColumnId(undefined);
-
-			expect(boardStore.duplicatingColumnIds).toContain("columnId");
+			expect(boardStore.duplicatingColumnIds.has(columnId)).toBe(true);
 		});
 
 		it("should unset duplicatingColumnIds", () => {
 			const { boardStore } = setup();
-			boardStore.setDuplicatingColumnId("columnId");
-			boardStore.setDuplicatingColumnId("columnId", false);
 
-			expect(boardStore.duplicatingColumnIds).not.toContain("columnId");
+			const columnId = "columnIdValue";
+
+			boardStore.setDuplicatingColumnId(columnId);
+			boardStore.setDuplicatingColumnId(columnId, false);
+
+			expect(boardStore.duplicatingColumnIds.has(columnId)).toBe(false);
 		});
 	});
 

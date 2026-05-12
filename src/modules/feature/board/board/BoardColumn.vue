@@ -75,7 +75,7 @@
 		</div>
 	</div>
 
-	<div v-if="isDuplicatingColumn" :key="renderKey" :class="columnClasses" class="d-flex flex-column">
+	<div v-if="isDuplicatingColumn" :key="`duplicate-${renderKey}`" :class="columnClasses" class="d-flex flex-column">
 		<BoardColumnHeader
 			:can-edit-column="false"
 			:can-delete-column="false"

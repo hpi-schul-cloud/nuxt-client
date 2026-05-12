@@ -156,7 +156,6 @@ export const useCardSocketApi = () => {
 
 	const clearDuplicatingCardId = (payload: DuplicateCardRequestPayload) => {
 		cardStore.setDuplicatingCardId(payload.cardId, false);
-		reloadBoard(payload.cardId);
 	};
 
 	const duplicateCardRequest = (payload: DuplicateCardRequestPayload) => {

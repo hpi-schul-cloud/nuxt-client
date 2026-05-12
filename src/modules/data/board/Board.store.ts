@@ -102,7 +102,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		isLoading.value = loading;
 	};
 
-	const setDuplicatingColumnId = (columnId: string | undefined, isDuplicating = true) => {
+	const setDuplicatingColumnId = (columnId: string, isDuplicating = true) => {
 		if (columnId === undefined) return;
 		if (isDuplicating) {
 			duplicatingColumnIds.value.add(columnId);
