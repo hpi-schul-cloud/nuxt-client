@@ -68,7 +68,7 @@ import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-s
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { isRequired, useOpeningTagValidator } from "@util-validators";
-import { computed, reactive, ref, watch } from "vue";
+import { computed, reactive, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -174,7 +174,7 @@ const confirmBtnLangKey = computed(() => {
 	return "common.actions.import";
 });
 
-const { text, warnings } = useImportContent(computed(() => props.shareTokenInfo.parentType));
+const { text, warnings } = useImportContent(toRef(() => props.shareTokenInfo.parentType));
 
 const destinationQuestion = computed(() => {
 	const originalName = props.shareTokenInfo.parentName;

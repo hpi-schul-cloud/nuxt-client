@@ -1,7 +1,7 @@
 import { ShareOptions, ShareParams } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useAwaitableAction } from "@/composables/awaitable-action.composable";
-import { useShareItemName } from "@/composables/copy-content.composable";
+import { useShareContent } from "@/composables/copy-content.composable";
 import { $axios } from "@/utils/api";
 import { BoardExternalReferenceType, ShareTokenApiFactory, ShareTokenBodyParamsParentType } from "@api-server";
 import { computed, ref } from "vue";
@@ -86,15 +86,15 @@ export const useShareFlow = () => {
 		return { success, result };
 	};
 
-	const { itemNameKey } = useShareItemName(computed(() => shareItemType.value));
+	const { itemNameKey } = useShareContent(computed(() => shareItemType.value));
 
 	return {
 		isDialogOpen,
 		shareItemType,
 		shareUrl,
 		executeShare,
-		onConfirmShare: askOptionsAction.complete,
-		onCancelShare: askOptionsAction.cancel,
+		onConfirm: askOptionsAction.complete,
+		onCancel: askOptionsAction.cancel,
 		onDone: resultAction.cancel,
 	};
 };

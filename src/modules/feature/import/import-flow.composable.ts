@@ -1,7 +1,7 @@
 import { ImportDestination } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useAwaitableAction } from "@/composables/awaitable-action.composable";
-import { useImportItemName } from "@/composables/copy-content.composable";
+import { useImportContent } from "@/composables/copy-content.composable";
 import { $axios } from "@/utils/api";
 import { ShareTokenApiFactory, ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
 import { notifySuccess, useLoadingStore } from "@data-app";
@@ -72,7 +72,7 @@ export const useImportFlow = () => {
 		};
 	};
 
-	const { itemNameKey } = useImportItemName(computed(() => shareTokenInfo.value?.parentType));
+	const { itemNameKey } = useImportContent(computed(() => shareTokenInfo.value?.parentType));
 
 	return {
 		isCardImportDialogOpen,

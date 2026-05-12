@@ -14,52 +14,19 @@ export interface CopyContentTemplate {
 	warnings: CopyWarning[];
 }
 
-const mapShareTokenInfoParentTypeToContentItemType = (
-	shareTokenParentType: ShareTokenInfoResponseParentType | undefined
-) => {
-	switch (shareTokenParentType) {
-		case ShareTokenInfoResponseParentType.COURSES:
-			return ContentItemTypeEnum.Course;
-		case ShareTokenInfoResponseParentType.LESSONS:
-			return ContentItemTypeEnum.Lesson;
-		case ShareTokenInfoResponseParentType.TASKS:
-			return ContentItemTypeEnum.Task;
-		case ShareTokenInfoResponseParentType.COLUMN_BOARD:
-			return ContentItemTypeEnum.ColumnBoard;
-		case ShareTokenInfoResponseParentType.ROOM:
-			return ContentItemTypeEnum.Room;
-		case ShareTokenInfoResponseParentType.CARD:
-			return ContentItemTypeEnum.Card;
-		default:
-			return undefined;
-	}
-};
-
-const mapShareTokenBodyParentTypeToContentItemType = (
-	shareTokenBodyParentType: ShareTokenBodyParamsParentType | undefined
-) => {
-	switch (shareTokenBodyParentType) {
-		case ShareTokenBodyParamsParentType.COURSES:
-			return ContentItemTypeEnum.Course;
-		case ShareTokenBodyParamsParentType.LESSONS:
-			return ContentItemTypeEnum.Lesson;
-		case ShareTokenBodyParamsParentType.TASKS:
-			return ContentItemTypeEnum.Task;
-		case ShareTokenBodyParamsParentType.COLUMN_BOARD:
-			return ContentItemTypeEnum.ColumnBoard;
-		case ShareTokenBodyParamsParentType.ROOM:
-			return ContentItemTypeEnum.Room;
-		case ShareTokenBodyParamsParentType.CARD:
-			return ContentItemTypeEnum.Card;
-		default:
-			return undefined;
-	}
+const apiTypeToEntityType: Record<string, ContentItemTypeEnum | undefined> = {
+	[ShareTokenInfoResponseParentType.COURSES]: ContentItemTypeEnum.Course,
+	[ShareTokenInfoResponseParentType.TASKS]: ContentItemTypeEnum.Task,
+	[ShareTokenInfoResponseParentType.LESSONS]: ContentItemTypeEnum.Lesson,
+	[ShareTokenInfoResponseParentType.COLUMN_BOARD]: ContentItemTypeEnum.ColumnBoard,
+	[ShareTokenInfoResponseParentType.ROOM]: ContentItemTypeEnum.Room,
+	[ShareTokenInfoResponseParentType.CARD]: ContentItemTypeEnum.Card,
 };
 
 export const useCopyContent = (copyItemType: Ref<ContentItemTypeEnum | undefined>) => {
 	const { t } = useI18nGlobal();
 
-	const templates: Record<ContentItemTypeEnum, CopyContentTemplate> = {
+	const templates = computed<Record<ContentItemTypeEnum, CopyContentTemplate>>(() => ({
 		[ContentItemTypeEnum.Course]: {
 			text: t("feature-copy.copyInfo.text.nextStep", { type: t("feature-copy.copyInfo.type.ofCourse") }),
 			info: t("feature-copy.copyInfo.checkPrivacyAndCopyright"),
@@ -163,43 +130,17 @@ export const useCopyContent = (copyItemType: Ref<ContentItemTypeEnum | undefined
 				},
 			],
 		},
-	};
+	}));
 
 	const copyContent = computed(() =>
 		copyItemType.value
-			? templates[copyItemType.value]
+			? templates.value[copyItemType.value]
 			: {
 					text: "",
 					info: "",
 					warnings: [],
 				}
 	);
-
-	const text = computed(() => copyContent.value.text);
-	const info = computed(() => copyContent.value.info);
-	const warnings = computed(() => copyContent.value.warnings);
-
-	return {
-		text,
-		info,
-		warnings,
-	};
-};
-
-export const useImportContent = (shareTokenParentType: Ref<ShareTokenInfoResponseParentType>) => {
-	const contentItemType = computed(() => mapShareTokenInfoParentTypeToContentItemType(shareTokenParentType.value));
-
-	return useCopyContent(contentItemType);
-};
-
-export const useShareContent = (shareTokenParentType: Ref<ShareTokenBodyParamsParentType>) => {
-	const contentItemType = computed(() => mapShareTokenBodyParentTypeToContentItemType(shareTokenParentType.value));
-
-	return useCopyContent(contentItemType);
-};
-
-export const useCopyItemName = (copyItemType: Ref<ContentItemTypeEnum | undefined>) => {
-	const { t } = useI18nGlobal();
 
 	const messageKeys: Record<ContentItemTypeEnum, string> = {
 		[ContentItemTypeEnum.Course]: "common.labels.course",
@@ -210,21 +151,31 @@ export const useCopyItemName = (copyItemType: Ref<ContentItemTypeEnum | undefine
 		[ContentItemTypeEnum.Card]: "components.boardCard",
 	};
 
+	const text = computed(() => copyContent.value.text);
+	const info = computed(() => copyContent.value.info);
+	const warnings = computed(() => copyContent.value.warnings);
 	const itemNameKey = computed(() => (copyItemType.value ? messageKeys[copyItemType.value] : "unknown"));
 
 	return {
+		text,
+		info,
+		warnings,
 		itemNameKey,
 	};
 };
 
-export const useImportItemName = (shareTokenParentType: Ref<ShareTokenInfoResponseParentType | undefined>) => {
-	const contentItemType = computed(() => mapShareTokenInfoParentTypeToContentItemType(shareTokenParentType.value));
+export const useImportContent = (shareTokenParentType: Ref<ShareTokenInfoResponseParentType | undefined>) => {
+	const contentItemType = computed(() =>
+		shareTokenParentType.value ? apiTypeToEntityType[shareTokenParentType.value] : undefined
+	);
 
-	return useCopyItemName(contentItemType);
+	return useCopyContent(contentItemType);
 };
 
-export const useShareItemName = (shareTokenParentType: Ref<ShareTokenBodyParamsParentType | undefined>) => {
-	const contentItemType = computed(() => mapShareTokenBodyParentTypeToContentItemType(shareTokenParentType.value));
+export const useShareContent = (shareTokenParentType: Ref<ShareTokenBodyParamsParentType | undefined>) => {
+	const contentItemType = computed(() =>
+		shareTokenParentType.value ? apiTypeToEntityType[shareTokenParentType.value] : undefined
+	);
 
-	return useCopyItemName(contentItemType);
+	return useCopyContent(contentItemType);
 };

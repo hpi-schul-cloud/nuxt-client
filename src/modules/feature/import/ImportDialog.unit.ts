@@ -1,5 +1,5 @@
 import ImportDialog from "./ImportDialog.vue";
-import { type CopyWarning, useCopyContent } from "@/composables/copy-content.composable";
+import { type CopyWarning, useImportContent } from "@/composables/copy-content.composable";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
@@ -20,11 +20,12 @@ describe("ImportDialog", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		vi.mocked(useCopyContent).mockReturnValue({
+		vi.mocked(useImportContent).mockReturnValue({
 			text: computed(() => "Import text"),
 			warnings: computed(() => []),
 			info: computed(() => ""),
-		} as Mocked<ReturnType<typeof useCopyContent>>);
+			itemNameKey: computed(() => "unknown"),
+		} as Mocked<ReturnType<typeof useImportContent>>);
 	});
 
 	const buildShareTokenInfo = (
@@ -167,11 +168,12 @@ describe("ImportDialog", () => {
 
 		it("shows WarningAlert when warnings are present", () => {
 			const mockWarning: CopyWarning = { testId: "warn-1", text: "Warning text" };
-			vi.mocked(useCopyContent).mockReturnValue({
+			vi.mocked(useImportContent).mockReturnValue({
 				text: computed(() => "Import text"),
 				warnings: computed(() => [mockWarning]),
 				info: computed(() => ""),
-			} as Mocked<ReturnType<typeof useCopyContent>>);
+				itemNameKey: computed(() => "unknown"),
+			} as Mocked<ReturnType<typeof useImportContent>>);
 			const { wrapper } = setup({
 				shareTokenInfo: buildShareTokenInfo(ShareTokenInfoResponseParentType.COURSES),
 			});
