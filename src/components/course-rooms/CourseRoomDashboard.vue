@@ -35,7 +35,7 @@
 							@copy-board="copyBoard(item.content.id)"
 							@update-visibility="updateCardVisibility(item.content.id, $event)"
 							@delete-board="onDeleteItem(item.content, item.type)"
-							@share-board="getSharedBoard(item.content.columnBoardId)"
+							@share-board="shareBoard(item.content.columnBoardId)"
 						/>
 						<CourseRoomTaskCard
 							v-if="item.type === cardTypes.TASK"
@@ -61,7 +61,7 @@
 							@finish-task="finishTask(item.content.id)"
 							@restore-task="restoreTask(item.content.id)"
 							@copy-task="copyTask(item.content.id)"
-							@share-task="getSharedTask(item.content.id)"
+							@share-task="shareTask(item.content.id)"
 						/>
 						<RoomLessonCard
 							v-if="item.type === cardTypes.LESSON"
@@ -83,7 +83,7 @@
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
-							@open-modal="getSharedLesson"
+							@open-modal="shareLesson(item.content.id)"
 							@delete-lesson="onDeleteItem(item.content, item.type)"
 							@copy-lesson="copyLesson(item.content.id)"
 						/>
@@ -173,7 +173,6 @@ import {
 	ImportUserResponseRoleNames,
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
-import { useEnvConfig } from "@data-env";
 import { useTaskActions } from "@data-tasks";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
@@ -199,7 +198,7 @@ export default {
 		},
 		role: { type: String, required: true },
 	},
-	emits: ["copy-board-element"],
+	emits: ["copy-board-element", "share-board-element"],
 	data() {
 		return {
 			cardTypes: BoardElementResponseType,
@@ -277,29 +276,23 @@ export default {
 				return columnBoardInfo;
 			}
 		},
-		getSharedBoard(boardId) {
-			if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
-				this.shareModule.startShareFlow({
-					id: boardId,
-					type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
-				});
-			}
+		shareBoard(boardId) {
+			this.$emit("share-board-element", {
+				id: boardId,
+				type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
+			});
 		},
-		getSharedLesson(lessonId) {
-			if (useEnvConfig().value.FEATURE_LESSON_SHARE) {
-				this.shareModule.startShareFlow({
-					id: lessonId,
-					type: ShareTokenBodyParamsParentType.LESSONS,
-				});
-			}
+		shareLesson(lessonId) {
+			this.$emit("share-board-element", {
+				id: lessonId,
+				type: ShareTokenBodyParamsParentType.LESSONS,
+			});
 		},
-		getSharedTask(taskId) {
-			if (useEnvConfig().value.FEATURE_TASK_SHARE) {
-				this.shareModule.startShareFlow({
-					id: taskId,
-					type: ShareTokenBodyParamsParentType.TASKS,
-				});
-			}
+		shareTask(taskId) {
+			this.$emit("share-board-element", {
+				id: taskId,
+				type: ShareTokenBodyParamsParentType.TASKS,
+			});
 		},
 		endDragging() {
 			setTimeout(() => {

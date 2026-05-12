@@ -56,6 +56,7 @@
 			:room-id="courseId"
 			data-testid="room-content"
 			@copy-board-element="onCopyRequested"
+			@share-board-element="onShareBoardElement"
 		/>
 		<ShareDialog
 			v-if="shareItemType"
@@ -111,7 +112,7 @@ import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { CopyDialog, useCopyFlow } from "@feature-copy";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
-import { ShareDialog, useShareFlow } from "@feature-share";
+import { ShareDialog, ShareParams, useShareFlow } from "@feature-share";
 import {
 	mdiAccountGroupOutline,
 	mdiContentCopy,
@@ -382,12 +383,14 @@ const setActiveTabIfPageCached = (event: PageTransitionEvent) => {
 };
 
 const onShareCourse = () => {
-	if (useEnvConfig().value.FEATURE_COURSE_SHARE) {
-		executeShare({
-			id: courseId.value,
-			type: ShareTokenBodyParamsParentType.COURSES,
-		});
-	}
+	executeShare({
+		id: courseId.value,
+		type: ShareTokenBodyParamsParentType.COURSES,
+	});
+};
+
+const onShareBoardElement = (params: ShareParams) => {
+	executeShare(params);
 };
 
 const refreshCourseRoom = async () => {
