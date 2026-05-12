@@ -7,8 +7,6 @@ import router from "./router";
 import { initializeAxios } from "./utils/api";
 import { SCHOOLS_MODULE_KEY, SHARE_MODULE_KEY } from "./utils/inject";
 import { schoolsModule, shareModule } from "@/store";
-import { SCHOOLS_MODULE_KEY, SHARE_MODULE_KEY } from "./utils/inject";
-import { schoolsModule, shareModule } from "@/store";
 import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
