@@ -1,12 +1,12 @@
 import GeneralSettings from "./GeneralSettings.vue";
 import { toBase64 } from "@/utils/fileHelper";
-import { createTestEnvStore, expectNotification, schoolFactory } from "@@/tests/test-utils";
+import { createTestEnvStore, expectNotification, mockApiResponse, schoolFactory } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { schoolYearResponseFactory } from "@@/tests/test-utils/factory/schoolYearResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { LanguageType, SchoolResponse, SchoolSystemResponse } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 import { nextTick } from "vue";
@@ -39,6 +39,11 @@ describe("GeneralSettings", () => {
 		});
 
 		const { schoolStore } = createTestSchoolStore({ schoolDetails, schoolSystems: options?.schoolSystems });
+
+		schoolStore.updateSchool.mockResolvedValue({
+			success: true,
+			result: mockApiResponse({ data: schoolFactory.build() }),
+		});
 
 		const wrapper = mount(GeneralSettings, {
 			global: {
@@ -298,6 +303,7 @@ describe("GeneralSettings", () => {
 
 				const buttonElement = wrapper.findComponent("[data-testid='save-general-setting']");
 				await buttonElement.trigger("click");
+				await flushPromises();
 
 				expect(toBase64).toHaveBeenCalledWith(file);
 				expect(schoolStore.updateSchool).toHaveBeenCalledWith(
@@ -321,6 +327,7 @@ describe("GeneralSettings", () => {
 
 				const buttonElement = wrapper.findComponent("[data-testid='save-general-setting']");
 				await buttonElement.trigger("click");
+				await flushPromises();
 
 				expect(schoolStore.updateSchool).toHaveBeenCalled();
 			});
@@ -342,6 +349,7 @@ describe("GeneralSettings", () => {
 
 			const buttonElement = wrapper.findComponent("[data-testid='save-general-setting']");
 			await buttonElement.trigger("click");
+			await flushPromises();
 
 			expect(schoolStore.updateSchool).toHaveBeenCalled();
 		});
@@ -351,6 +359,7 @@ describe("GeneralSettings", () => {
 
 			const buttonElement = wrapper.findComponent("[data-testid='save-general-setting']");
 			await buttonElement.trigger("click");
+			await flushPromises();
 
 			expect(schoolStore.updateSchool).toHaveBeenCalled();
 		});
@@ -360,6 +369,7 @@ describe("GeneralSettings", () => {
 
 			const buttonElement = wrapper.findComponent("[data-testid='save-general-setting']");
 			await buttonElement.trigger("click");
+			await flushPromises();
 
 			expectNotification("success");
 		});
@@ -371,6 +381,7 @@ describe("GeneralSettings", () => {
 
 			const title = wrapper.find('[data-testid="school-name"]').find("input");
 			await title.setValue("<abc123");
+			await flushPromises();
 
 			expect(wrapper.text()).toContain("common.validation.containsOpeningTag");
 		});
