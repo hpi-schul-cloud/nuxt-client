@@ -12,14 +12,7 @@
 			<VImg class="w-75 d-block mx-auto" src="@/assets/img/surprise.svg" alt="" role="presentation" max-width="360" />
 		</template>
 		<template #actions>
-			<VBtn
-				class="w-100"
-				color="primary"
-				variant="flat"
-				:text="t('common.labels.moreInfo')"
-				href="/system/releases"
-				@click="setReleasePreferences"
-			/>
+			<VBtn class="w-100" color="primary" variant="flat" :text="t('common.labels.moreInfo')" @click="toReleasesRoute" />
 		</template>
 	</SvsDialog>
 </template>
@@ -54,10 +47,15 @@ const hasNewReleaseNotes = computed(() => {
 	return new Date(lastSeenDate) < new Date(publishedAt);
 });
 
-const setReleasePreferences = () => {
+const setReleasePreferences = async () => {
 	if (!latestRelease.value) return;
 
-	updateUserPreferences({ releaseDate: latestRelease.value!.publishedAt });
+	await updateUserPreferences({ releaseDate: latestRelease.value!.publishedAt });
+};
+
+const toReleasesRoute = async () => {
+	await setReleasePreferences();
+	window.location.href = "/system/releases";
 };
 
 watch(
