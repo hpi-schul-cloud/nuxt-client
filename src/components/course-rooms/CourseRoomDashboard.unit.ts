@@ -146,10 +146,7 @@ const setup = (options?: { roomData?: SingleColumnBoardResponse; role?: string }
 describe("CourseRoomDashboard.vue", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		createTestEnvStore({
-			FEATURE_LESSON_SHARE: true,
-			FEATURE_TASK_SHARE: true,
-		});
+		createTestEnvStore();
 	});
 	describe("common features", () => {
 		it("should have props", () => {
@@ -425,16 +422,6 @@ describe("CourseRoomDashboard.vue", () => {
 				],
 			]);
 		});
-
-		it("should not call startShareFlow when FEATURE_LESSON_SHARE is disabled", () => {
-			createTestEnvStore({ FEATURE_LESSON_SHARE: false });
-			const { wrapper } = setup();
-
-			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
-			lessonCard.vm.$emit("open-modal", "12345");
-
-			expect(wrapper.emitted("share-board-element")).toBeUndefined();
-		});
 	});
 
 	describe("Sharing Task", () => {
@@ -452,16 +439,6 @@ describe("CourseRoomDashboard.vue", () => {
 					},
 				],
 			]);
-		});
-
-		it("should not call startShareFlow when FEATURE_TASK_SHARE is disabled", () => {
-			createTestEnvStore({ FEATURE_TASK_SHARE: false });
-			const { wrapper } = setup();
-
-			const taskCard = wrapper.findComponent<VCard>(".task-card");
-			taskCard.vm.$emit("share-task", "1234");
-
-			expect(wrapper.emitted("share-board-element")).toBeUndefined();
 		});
 	});
 
@@ -775,16 +752,6 @@ describe("CourseRoomDashboard.vue", () => {
 					},
 				],
 			]);
-		});
-
-		it("should not call startShareFlow when FEATURE_COLUMN_BOARD_SHARE is disabled", () => {
-			createTestEnvStore({ FEATURE_COLUMN_BOARD_SHARE: false });
-			const { wrapper } = setup();
-
-			const boardCard = wrapper.findComponent({ name: "RoomBoardCard" });
-			boardCard.vm.$emit("share-board", "board-123");
-
-			expect(wrapper.emitted("share-board-element")).toBeUndefined();
 		});
 	});
 

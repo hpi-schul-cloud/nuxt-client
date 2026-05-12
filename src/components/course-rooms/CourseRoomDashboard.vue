@@ -173,7 +173,6 @@ import {
 	TaskResponse,
 } from "@api-server";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
-import { useEnvConfig } from "@data-env";
 import { ShareParams } from "@feature-share";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
@@ -271,30 +270,24 @@ const boardLayoutAriaLabel = (itemLayout: BoardLayout) => {
 };
 
 const shareBoard = (boardId: string) => {
-	if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
-		emit("share-board-element", {
-			id: boardId,
-			type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
-		});
-	}
+	emit("share-board-element", {
+		id: boardId,
+		type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
+	});
 };
 
 const shareLesson = (lessonId: string) => {
-	if (useEnvConfig().value.FEATURE_LESSON_SHARE) {
-		emit("share-board-element", {
-			id: lessonId,
-			type: ShareTokenBodyParamsParentType.LESSONS,
-		});
-	}
+	emit("share-board-element", {
+		id: lessonId,
+		type: ShareTokenBodyParamsParentType.LESSONS,
+	});
 };
 
 const shareTask = (taskId: string) => {
-	if (useEnvConfig().value.FEATURE_TASK_SHARE) {
-		emit("share-board-element", {
-			id: taskId,
-			type: ShareTokenBodyParamsParentType.TASKS,
-		});
-	}
+	emit("share-board-element", {
+		id: taskId,
+		type: ShareTokenBodyParamsParentType.TASKS,
+	});
 };
 
 const endDragging = () => {

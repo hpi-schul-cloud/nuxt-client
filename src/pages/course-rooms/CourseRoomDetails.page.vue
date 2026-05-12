@@ -55,7 +55,7 @@
 			:room-id="courseId"
 			data-testid="room-content"
 			@copy-board-element="onCopyRequested"
-			@share-board-element="onShareBoardElement"
+			@share-board-element="onShareRequested"
 		/>
 		<ShareDialog
 			v-if="shareItemType"
@@ -436,15 +436,22 @@ const {
 	onDone,
 } = useShareFlow();
 
-const onShareCourse = () => {
-	executeShare({
+const onShareCourse = () =>
+	onShareRequested({
 		id: courseId.value,
 		type: ShareTokenBodyParamsParentType.COURSES,
 	});
-};
 
-const onShareBoardElement = (params: ShareParams) => {
-	executeShare(params);
+const onShareRequested = (params: ShareParams) => {
+	const featureFlagByType: Partial<Record<ShareTokenBodyParamsParentType, boolean>> = {
+		[ShareTokenBodyParamsParentType.COURSES]: useEnvConfig().value.FEATURE_COURSE_SHARE,
+		[ShareTokenBodyParamsParentType.COLUMN_BOARD]: useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE,
+		[ShareTokenBodyParamsParentType.LESSONS]: useEnvConfig().value.FEATURE_LESSON_SHARE,
+		[ShareTokenBodyParamsParentType.TASKS]: useEnvConfig().value.FEATURE_TASK_SHARE,
+	};
+	if (featureFlagByType[params.type]) {
+		executeShare(params);
+	}
 };
 
 const onCreateBoard = async (roomId: string, layout: BoardLayout) => {

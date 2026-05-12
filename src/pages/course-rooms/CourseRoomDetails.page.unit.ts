@@ -896,4 +896,61 @@ describe("CourseRoomDetails.page.vue", () => {
 			expect(wrapper.text()).toContain("pages.courseRooms.headerSection.archived");
 		});
 	});
+
+	describe("share-board-element event handling", () => {
+		describe.each([
+			{
+				type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
+				featureName: "FEATURE_COLUMN_BOARD_SHARE",
+				enabledEnv: { FEATURE_COLUMN_BOARD_SHARE: true },
+				disabledEnv: { FEATURE_COLUMN_BOARD_SHARE: false },
+			},
+			{
+				type: ShareTokenBodyParamsParentType.LESSONS,
+				featureName: "FEATURE_LESSON_SHARE",
+				enabledEnv: { FEATURE_LESSON_SHARE: true },
+				disabledEnv: { FEATURE_LESSON_SHARE: false },
+			},
+			{
+				type: ShareTokenBodyParamsParentType.TASKS,
+				featureName: "FEATURE_TASK_SHARE",
+				enabledEnv: { FEATURE_TASK_SHARE: true },
+				disabledEnv: { FEATURE_TASK_SHARE: false },
+			},
+			{
+				type: ShareTokenBodyParamsParentType.COURSES,
+				featureName: "FEATURE_COURSE_SHARE",
+				enabledEnv: { FEATURE_COURSE_SHARE: true },
+				disabledEnv: { FEATURE_COURSE_SHARE: false },
+			},
+		])("for type $type", ({ type, featureName, enabledEnv, disabledEnv }) => {
+			describe(`when ${featureName} is enabled`, () => {
+				it("should call executeShare with the correct params", async () => {
+					createTestEnvStore(enabledEnv);
+					const { wrapper } = setup();
+					await flushPromises();
+
+					const roomContent = wrapper.findComponent('[data-testid="room-content"]');
+					roomContent.vm.$emit("share-board-element", { id: "element-id", type });
+					await nextTick();
+
+					expect(useShareFlowMock.executeShare).toHaveBeenCalledWith({ id: "element-id", type });
+				});
+			});
+
+			describe(`when ${featureName} is disabled`, () => {
+				it("should not call executeShare", async () => {
+					createTestEnvStore(disabledEnv);
+					const { wrapper } = setup();
+					await flushPromises();
+
+					const roomContent = wrapper.findComponent('[data-testid="room-content"]');
+					roomContent.vm.$emit("share-board-element", { id: "element-id", type });
+					await nextTick();
+
+					expect(useShareFlowMock.executeShare).not.toHaveBeenCalled();
+				});
+			});
+		});
+	});
 });
