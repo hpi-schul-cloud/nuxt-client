@@ -159,7 +159,6 @@
 
 <script>
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
-import ShareModal from "@/components/share/ShareModal.vue";
 import { courseRoomDetailsModule } from "@/store";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { askDeletionForItem } from "@/utils/confirmation-dialog.utils.ts";
@@ -181,7 +180,6 @@ export default {
 		RoomLessonCard,
 		draggable,
 		EmptyState,
-		ShareModal,
 		LearningContentEmptyStateSvg,
 	},
 	props: {

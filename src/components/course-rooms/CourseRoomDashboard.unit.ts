@@ -1,12 +1,9 @@
 import CourseRoomDashboard from "./CourseRoomDashboard.vue";
 import { courseRoomDetailsModule } from "@/store";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import ShareModule from "@/store/share";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { ShareTokenBodyParamsParentType } from "@api-server";
@@ -114,19 +111,12 @@ const emptyMockData = {
 	elements: [],
 };
 
-const shareModuleMock = createModuleMocks(ShareModule, {
-	getIsShareModalOpen: false,
-});
-
 const getWrapper = (props: ComponentProps<typeof CourseRoomDashboard>, options?: object) => {
 	injectRouterMock(createRouterMock());
 
 	const wrapper = mount(CourseRoomDashboard, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
-			},
 		},
 		props,
 		...options,
@@ -348,10 +338,14 @@ describe("CourseRoomDashboard.vue", () => {
 			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
 			lessonCard.vm.$emit("open-modal", "3456");
 
-			expect(wrapper.emitted("share-board-element")[0][0]).toStrictEqual({
-				id: "3456",
-				type: ShareTokenBodyParamsParentType.LESSONS,
-			});
+			expect(wrapper.emitted("share-board-element")).toStrictEqual([
+				[
+					{
+						id: "3456",
+						type: ShareTokenBodyParamsParentType.LESSONS,
+					},
+				],
+			]);
 		});
 	});
 
@@ -365,10 +359,14 @@ describe("CourseRoomDashboard.vue", () => {
 
 			taskCard.vm.$emit("share-task", "1234");
 
-			expect(wrapper.emitted("share-board-element")[0][0]).toStrictEqual({
-				id: "1234",
-				type: ShareTokenBodyParamsParentType.TASKS,
-			});
+			expect(wrapper.emitted("share-board-element")).toStrictEqual([
+				[
+					{
+						id: "1234",
+						type: ShareTokenBodyParamsParentType.TASKS,
+					},
+				],
+			]);
 		});
 	});
 

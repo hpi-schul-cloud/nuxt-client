@@ -158,7 +158,7 @@ describe("CourseRoomDetails.page.vue", () => {
 					SelectBoardLayoutDialog: false,
 					CopyDialog: false,
 					CourseCommonCartridgeExportModal: false,
-					ShareModal: false,
+					ShareDialog: false,
 					VTabs: false,
 					VTab: false,
 					VChip: false,
@@ -468,7 +468,7 @@ describe("CourseRoomDetails.page.vue", () => {
 				});
 			});
 
-			it("should call shareModule.startShareFlow when 'Share Course' menu is clicked", async () => {
+			it("should call useShareFlow.executeShare when 'Share Course' menu is clicked", async () => {
 				createTestEnvStore({ FEATURE_COURSE_SHARE: true });
 				const { wrapper, singleColumnBoard } = setup();
 				await flushPromises();
@@ -490,7 +490,7 @@ describe("CourseRoomDetails.page.vue", () => {
 	});
 
 	describe("modal views", () => {
-		it("should render ShareModal component", async () => {
+		it("should render ShareDialog component", async () => {
 			const { wrapper } = setup();
 			await flushPromises();
 

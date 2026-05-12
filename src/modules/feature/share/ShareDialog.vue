@@ -54,9 +54,9 @@
 <script setup lang="ts">
 import ShareDialogResult from "./ShareDialogResult.vue";
 import { useShareContent } from "@/composables/copy-content.composable";
-import { ShareOptions } from "@/store/share";
 import { ShareTokenBodyParamsParentType } from "@api-server";
 import { notifySuccess } from "@data-app";
+import { ShareOptions } from "@feature-share";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { computed, reactive, ref, watch } from "vue";

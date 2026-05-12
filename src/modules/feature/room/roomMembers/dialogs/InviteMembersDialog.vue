@@ -122,7 +122,7 @@
 				</VForm>
 			</template>
 			<template v-else>
-				<ShareModalResult :share-url="sharedUrl" type="roomMemberInvitation" @copied="onCopyLink" @done="onClose" />
+				<ShareDialogResult :share-url="sharedUrl" type="roomMemberInvitation" @copied="onCopyLink" @done="onClose" />
 			</template>
 		</template>
 
@@ -140,7 +140,6 @@
 </template>
 
 <script setup lang="ts">
-import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import { toEndOfDayIso } from "@/utils/date-time.utils";
 import { notifySuccess } from "@data-app";
@@ -152,6 +151,7 @@ import {
 	UpdateRoomInvitationLinkDto,
 	useRoomInvitationLinkStore,
 } from "@data-room";
+import { ShareDialogResult } from "@feature-share";
 import { InfoAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
 import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";

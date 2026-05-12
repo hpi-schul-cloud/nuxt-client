@@ -1,13 +1,11 @@
-import ShareModule from "@/store/share";
+import { useShareFlow } from "@/modules/feature/share/share-flow.composable";
 import { BoardLayout } from "@/types/board/Board";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { RoomBoardItem } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStore, createTestRoomStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/factory/room";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
 import { CopyApiResponseStatus, CopyApiResponseType } from "@api-server";
@@ -27,10 +25,12 @@ import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VBreadcrumbsItem, VBtn, VCard, VFab } from "vuetify/components";
 
 vi.mock("@feature-copy/copy-flow.composable");
+vi.mock("@feature-share/share-flow.composable");
 vi.mock("@data-room/Rooms.state");
 
 describe("@pages/RoomsDetails.page.vue", () => {
 	let useCopyFlowMock: Mocked<ReturnType<typeof useCopyFlow>>;
+	let useShareFlowMock: Mocked<ReturnType<typeof useShareFlow>>;
 
 	beforeEach(() => {
 		vi.useFakeTimers();
@@ -41,6 +41,13 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			isRunning: computed(() => false),
 		});
 		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
+
+		useShareFlowMock = mockComposable(useShareFlow, {
+			isDialogOpen: ref(false),
+			shareItemType: ref(serverApi.ShareTokenBodyParamsParentType.COURSES),
+			shareUrl: ref("http://example.com/share-url"),
+		});
+		vi.mocked(useShareFlow).mockReturnValue(useShareFlowMock);
 	});
 
 	afterEach(() => {
@@ -57,11 +64,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			roomBoards: [],
 			...options,
 		};
-
-		const shareModule = createModuleMocks(ShareModule, {
-			getIsShareModalOpen: false,
-			getParentType: serverApi.ShareTokenBodyParamsParentType.ROOM,
-		});
 
 		const room = roomFactory.build({ allowedOperations: options?.allowedOperations });
 
@@ -84,9 +86,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: { LeaveRoomProhibitedDialog: true, UseFocusTrap: true, RoomContentGrid: true },
-				provide: {
-					[SHARE_MODULE_KEY.valueOf()]: shareModule,
-				},
 			},
 			props: {
 				room,
@@ -101,7 +100,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			room,
 			router,
 			roomStore,
-			shareModule,
 		};
 	};
 
@@ -241,14 +239,14 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		describe("and user clicks on share room", () => {
 			describe("when user has permission to share room", () => {
 				it("should start the share flow", () => {
-					const { wrapper, room, shareModule } = setup({
+					const { wrapper, room } = setup({
 						allowedOperations: { accessRoom: true, shareRoom: true },
 					});
 
 					const menu = wrapper.getComponent({ name: "RoomMenu" });
 					menu.vm.$emit("room:share");
 
-					expect(shareModule.startShareFlow).toHaveBeenCalledWith({
+					expect(useShareFlowMock.executeShare).toHaveBeenCalledWith({
 						id: room.id,
 						type: ShareTokenParentType.ROOM,
 					});
@@ -257,14 +255,14 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 			describe("when user does not have permission to share room", () => {
 				it("should not start the share flow", () => {
-					const { wrapper, shareModule } = setup({
+					const { wrapper } = setup({
 						allowedOperations: { accessRoom: true, shareRoom: false },
 					});
 
 					const menu = wrapper.getComponent({ name: "RoomMenu" });
 					menu.vm.$emit("room:share");
 
-					expect(shareModule.startShareFlow).not.toHaveBeenCalled();
+					expect(useShareFlowMock.executeShare).not.toHaveBeenCalled();
 				});
 			});
 		});
