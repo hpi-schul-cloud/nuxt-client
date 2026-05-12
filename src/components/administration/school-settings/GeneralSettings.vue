@@ -135,7 +135,7 @@ import { mapSchoolFeatureObjectToArray, SchoolFeatureObject } from "@/utils/scho
 import { LanguageType, Permission, SchoolFeature, SchoolResponse, SchoolUpdateBodyParams } from "@api-server";
 import { notifySuccess, useAppStore, useSchoolStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { isOfMaxFileSize, isRequired, useOpeningTagValidator } from "@util-validators";
+import { isOfMaxFileSize, useOpeningTagValidator } from "@util-validators";
 import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 

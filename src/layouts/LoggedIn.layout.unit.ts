@@ -1,7 +1,6 @@
 import LoggedInLayout from "./LoggedIn.layout.vue";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useStatusAlerts } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
@@ -33,9 +32,9 @@ vi.mocked(useStatusAlerts).mockReturnValue({
 
 const setup = () => {
 	setActivePinia(createTestingPinia());
-  createTestEnvStore({
-    DOCUMENT_BASE_DIR: "https://example.com/documents/",
-  });
+	createTestEnvStore({
+		DOCUMENT_BASE_DIR: "https://example.com/documents/",
+	});
 	createTestSchoolStore();
 
 	const wrapper = mount(VApp, {
