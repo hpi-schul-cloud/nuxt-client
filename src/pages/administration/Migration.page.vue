@@ -627,8 +627,7 @@ const doClearAllAutoMatches = async () => {
 
 		await importUsersStore.clearAllAutoMatches();
 
-		// TODO: does reloadData exist?
-		// importUsersRef.value?.reloadData();
+		importUsersRef.value?.reloadData();
 
 		isLoading.value = false;
 	}

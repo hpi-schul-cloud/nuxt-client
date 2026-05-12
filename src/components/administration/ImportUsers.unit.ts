@@ -1,11 +1,11 @@
 import ImportUsers from "./ImportUsers.vue";
-import { importUsersModule, schoolsModule } from "@/store";
-import ImportUsersModule, { MatchedBy } from "@/store/import-users";
+import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { ImportUserListResponse, ImportUserResponseRoleNames, SchulcloudTheme } from "@api-server";
+import { MatchedBy, useImportUsersStore } from "@data-import-users";
 import {
 	mdiAccountPlus,
 	mdiAccountSwitch,
@@ -79,9 +79,9 @@ const mockData: ImportUsersInstance["$data"] = {
 	mdiFlagOutline,
 	mdiPencilOutline,
 	roles: [
-		{ text: "Schüler/-in", value: ImportUserResponseRoleNames.STUDENT },
-		{ text: "Lehrer/-in", value: ImportUserResponseRoleNames.TEACHER },
-		{ text: "Administrator", value: ImportUserResponseRoleNames.ADMIN },
+		{ text: "common.roleName.student", value: ImportUserResponseRoleNames.STUDENT },
+		{ text: "common.roleName.teacher", value: ImportUserResponseRoleNames.TEACHER },
+		{ text: "common.roleName.administrator", value: ImportUserResponseRoleNames.ADMIN },
 	],
 	searchClasses: "",
 	searchFirstName: "",
@@ -98,8 +98,12 @@ const mockData: ImportUsersInstance["$data"] = {
 
 type ImportUsersInstance = InstanceType<typeof ImportUsers>;
 
-const getWrapper = (data?: ImportUsersInstance["$data"], options?: object) => {
-	vi.spyOn(importUsersModule, "fetchAllImportUsers").mockResolvedValue();
+const getWrapper = (
+	importUsersStore: ReturnType<typeof useImportUsersStore>,
+	data?: ImportUsersInstance["$data"],
+	options?: object
+) => {
+	vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
 	return mount(ImportUsers, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
@@ -114,17 +118,19 @@ const getWrapper = (data?: ImportUsersInstance["$data"], options?: object) => {
 };
 
 describe("ImportUsers", () => {
+	let importUsersStore: ReturnType<typeof useImportUsersStore>;
+
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+		importUsersStore = useImportUsersStore();
 		createTestEnvStore({ SC_THEME: SchulcloudTheme.DEFAULT });
 	});
 
 	beforeEach(() => {
 		setupStores({
 			schoolsModule: SchoolsModule,
-			importUsersModule: ImportUsersModule,
 		});
-		importUsersModule.setImportUsersList(mockImportUsers);
+		importUsersStore.importUsersData.list = mockImportUsers;
 		schoolsModule.setSchool(
 			schoolFactory.build({
 				inUserMigration: true,
@@ -134,7 +140,7 @@ describe("ImportUsers", () => {
 	});
 
 	it("should have correct props", () => {
-		const wrapper = getWrapper(mockData);
+		const wrapper = getWrapper(importUsersStore, mockData);
 
 		expect(wrapper.vm.importUsers).toStrictEqual(mockImportUsers.data);
 		expect(wrapper.vm.roles).toStrictEqual(mockData.roles);
@@ -148,7 +154,7 @@ describe("ImportUsers", () => {
 			})
 		);
 
-		const wrapper = getWrapper(mockData);
+		const wrapper = getWrapper(importUsersStore, mockData);
 
 		const alertElement = wrapper.findAll(".v-alert");
 		expect(alertElement).toHaveLength(1);
@@ -174,7 +180,7 @@ describe("ImportUsers", () => {
 			})
 		);
 
-		const wrapper = getWrapper({
+		const wrapper = getWrapper(importUsersStore, {
 			...mockData,
 		});
 
@@ -194,7 +200,7 @@ describe("ImportUsers", () => {
 	});
 
 	it("data table should have correct props", async () => {
-		const wrapper = getWrapper(mockData);
+		const wrapper = getWrapper(importUsersStore, mockData);
 
 		const dataTableElement = wrapper.findComponent<VDataTable>(".v-data-table");
 
@@ -204,13 +210,12 @@ describe("ImportUsers", () => {
 
 	describe("should search with all columns", () => {
 		const setup = () => {
-			const wrapper = getWrapper(mockData);
-
-			const getDataFromApiSpy = vi.spyOn(wrapper.vm, "getDataFromApi");
+			const fetchAllImportUsersSpy = vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
+			const wrapper = getWrapper(importUsersStore, mockData);
 
 			return {
 				wrapper,
-				getDataFromApiSpy,
+				fetchAllImportUsersSpy,
 			};
 		};
 
@@ -219,54 +224,54 @@ describe("ImportUsers", () => {
 		});
 
 		it("should set search data properties when search first name changes", async () => {
-			const { wrapper, getDataFromApiSpy } = setup();
+			const { wrapper, fetchAllImportUsersSpy } = setup();
 
 			const searchFirstNameElement = wrapper.getComponent('[data-testid="search-first-name"]');
 
 			await searchFirstNameElement.setValue("some text");
 
 			expect(wrapper.vm.searchFirstName).toStrictEqual("some text");
-			expect(getDataFromApiSpy).toHaveBeenCalled();
+			expect(fetchAllImportUsersSpy).toHaveBeenCalled();
 		});
 
 		it("should set search data properties when search last name changes", async () => {
-			const { wrapper, getDataFromApiSpy } = setup();
+			const { wrapper, fetchAllImportUsersSpy } = setup();
 
 			const searchLastNameElement = wrapper.getComponent('[data-testid="search-last-name"]');
 			await searchLastNameElement.setValue("some text");
 
 			expect(wrapper.vm.searchLastName).toStrictEqual("some text");
-			expect(getDataFromApiSpy).toHaveBeenCalled();
+			expect(fetchAllImportUsersSpy).toHaveBeenCalled();
 		});
 
 		it("should set search data properties when search username changes", async () => {
-			const { wrapper, getDataFromApiSpy } = setup();
+			const { wrapper, fetchAllImportUsersSpy } = setup();
 
 			const searchLoginNameElement = wrapper.getComponent('[data-testid="search-login-name"]');
 			await searchLoginNameElement.setValue("some text");
 
 			expect(wrapper.vm.searchLoginName).toStrictEqual("some text");
-			expect(getDataFromApiSpy).toHaveBeenCalled();
+			expect(fetchAllImportUsersSpy).toHaveBeenCalled();
 		});
 
 		it("should set search data properties when search role changes", async () => {
-			const { wrapper, getDataFromApiSpy } = setup();
+			const { wrapper, fetchAllImportUsersSpy } = setup();
 
 			const searchRoleElement = wrapper.getComponent('[data-testid="search-role"]');
 			await searchRoleElement.setValue("role search");
 
 			expect(wrapper.vm.searchRole).toStrictEqual("role search");
-			expect(getDataFromApiSpy).toHaveBeenCalled();
+			expect(fetchAllImportUsersSpy).toHaveBeenCalled();
 		});
 
 		it("should set search data properties when search classes changes", async () => {
-			const { wrapper, getDataFromApiSpy } = setup();
+			const { wrapper, fetchAllImportUsersSpy } = setup();
 
 			const searchClassesElement = wrapper.getComponent('[data-testid="search-classes"]');
 			await searchClassesElement.setValue("class search");
 
 			expect(wrapper.vm.searchClasses).toStrictEqual("class search");
-			expect(getDataFromApiSpy).toHaveBeenCalled();
+			expect(fetchAllImportUsersSpy).toHaveBeenCalled();
 		});
 
 		it("should search data proprieties when match filter is set", async () => {
@@ -276,18 +281,21 @@ describe("ImportUsers", () => {
 			const searchMatchedByAdminElement = wrapper.getComponent('[data-testid="search-matched-by-admin"]');
 			const searchMatchedByAutoElement = wrapper.getComponent('[data-testid="search-matched-by-auto"]');
 
+			// Component initializes with [MatchedBy.None], so clicking "none" deselects it
 			await searchMatchedByNoneElement.trigger("click");
-			expect(wrapper.vm.searchMatchedBy).toStrictEqual([MatchedBy.None]);
+			expect(wrapper.vm.searchMatchedBy).toStrictEqual([]);
 
+			// Click "admin" adds it
 			await searchMatchedByAdminElement.trigger("click");
-			expect(wrapper.vm.searchMatchedBy).toStrictEqual([MatchedBy.None, MatchedBy.Admin]);
+			expect(wrapper.vm.searchMatchedBy).toStrictEqual([MatchedBy.Admin]);
 
+			// Click "auto" adds it
 			await searchMatchedByAutoElement.trigger("click");
-			expect(wrapper.vm.searchMatchedBy).toStrictEqual([MatchedBy.None, MatchedBy.Admin, MatchedBy.Auto]);
+			expect(wrapper.vm.searchMatchedBy).toStrictEqual([MatchedBy.Admin, MatchedBy.Auto]);
 		});
 
 		it("should set search data proprieties when flag filter is toggle", async () => {
-			const { wrapper, getDataFromApiSpy } = setup();
+			const { wrapper, fetchAllImportUsersSpy } = setup();
 
 			const searchFlaggedElement = wrapper.getComponent('[data-testid="search-flagged"]');
 			await searchFlaggedElement.trigger("click");
@@ -296,25 +304,16 @@ describe("ImportUsers", () => {
 			await searchFlaggedElement.trigger("click");
 			expect(wrapper.vm.searchFlagged).toBeFalsy();
 
-			expect(getDataFromApiSpy).toHaveBeenCalled();
+			expect(fetchAllImportUsersSpy).toHaveBeenCalled();
 		});
 	});
 
 	describe("should sort by column", () => {
-		const getDataFromApiSpy = vi.fn();
-
 		const setup = (mockData: ImportUsersInstance["$data"]) => {
-			const wrapper = getWrapper(mockData);
-			wrapper.vm.getDataFromApi = getDataFromApiSpy;
-			wrapper.vm.school.inMaintenance = true;
-			wrapper.vm.school.inUserMigration = true;
+			const wrapper = getWrapper(importUsersStore, mockData);
 
 			return { wrapper };
 		};
-
-		afterEach(() => {
-			getDataFromApiSpy.mockClear();
-		});
 
 		it("should sort by first name", async () => {
 			const { wrapper } = setup(mockData);
@@ -328,8 +327,6 @@ describe("ImportUsers", () => {
 
 			await sortFirstNameElement.trigger("click");
 			expect(wrapperVm.options.sortBy[0].order).toEqual("desc");
-
-			getDataFromApiSpy.mockClear();
 		});
 
 		it("should sort by last name", async () => {
@@ -345,8 +342,6 @@ describe("ImportUsers", () => {
 
 			await sortLastNameElement.trigger("click");
 			expect(wrapperVm.options.sortBy[0].order).toBe("desc");
-
-			getDataFromApiSpy.mockClear();
 		});
 	});
 });

@@ -479,6 +479,8 @@ const savedFlag = () => {
 	loading.value = true;
 	reloadData();
 };
+
+defineExpose({ reloadData });
 </script>
 
 <style lang="scss" scoped>
