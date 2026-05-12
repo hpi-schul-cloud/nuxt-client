@@ -238,11 +238,11 @@
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
-import { filePathsModule } from "@/store";
 import { dateFromToday, fromGermanDate, germanDateToIso, toGermanDate } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
+import { useFilePaths } from "@data-file";
 import { useBulkConsent } from "@data-users";
 import { mdiAlert } from "@icons/material";
 import { ErrorAlert } from "@ui-alert";
@@ -256,14 +256,15 @@ import { useRouter } from "vue-router";
 const { t } = useI18n();
 const router = useRouter();
 const { selectedStudentsData, findConsentUsers, updateStudent, register: registerStudents } = useBulkConsent();
+const { specificFiles } = useFilePaths();
 
 const image = SafelyConnectedImage;
 
-const fileLinks = {
-	analogConsent: String(filePathsModule.getSpecificFiles.analogConsent),
+const fileLinks = computed(() => ({
+	analogConsent: specificFiles.value.analogConsent,
 	termsOfUse: "/termsofuse",
 	dataProtection: "/privacypolicy",
-};
+}));
 
 const tableColumns = [
 	{

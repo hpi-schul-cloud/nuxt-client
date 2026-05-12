@@ -1,10 +1,8 @@
 import ConsentPage from "./StudentConsent.page.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
-import FilePathsModule from "@/store/filePaths";
 import { createTestEnvStore, expectNotification } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { ConsentStudent, useBulkConsent } from "@data-users";
 import { createTestingPinia } from "@pinia/testing";
 import { DatePicker } from "@ui-date-time-picker";
@@ -101,9 +99,8 @@ describe("students/consent", () => {
 	beforeEach(() => {
 		mockData = createMockData();
 		setActivePinia(createTestingPinia());
-		createTestEnvStore();
-		setupStores({
-			filePathsModule: FilePathsModule,
+		createTestEnvStore({
+			DOCUMENT_BASE_DIR: "https://example.com/documents/",
 		});
 	});
 
