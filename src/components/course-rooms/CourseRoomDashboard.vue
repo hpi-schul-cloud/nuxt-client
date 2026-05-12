@@ -154,9 +154,6 @@
 				<LearningContentEmptyStateSvg />
 			</template>
 		</EmptyState>
-		<share-modal type="columnBoard" />
-		<share-modal type="lessons" />
-		<share-modal type="tasks" />
 	</div>
 </template>
 
@@ -166,7 +163,6 @@ import ShareModal from "@/components/share/ShareModal.vue";
 import { courseRoomDetailsModule } from "@/store";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { askDeletionForItem } from "@/utils/confirmation-dialog.utils.ts";
-import { SHARE_MODULE_KEY } from "@/utils/inject";
 import {
 	BoardElementResponseType,
 	BoardLayout,
@@ -187,9 +183,6 @@ export default {
 		EmptyState,
 		ShareModal,
 		LearningContentEmptyStateSvg,
-	},
-	inject: {
-		shareModule: { from: SHARE_MODULE_KEY },
 	},
 	props: {
 		roomDataObject: {
