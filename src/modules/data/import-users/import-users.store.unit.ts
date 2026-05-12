@@ -7,7 +7,12 @@ import {
 	mockAxiosInstance,
 } from "@@/tests/test-utils";
 import * as serverApi from "@api-server";
-import { ImportUserResponseRoleNames, UserMatchResponseMatchedBy, UserMatchResponseRoleNames } from "@api-server";
+import {
+	ImportUserListResponse,
+	ImportUserResponseRoleNames,
+	UserMatchResponseMatchedBy,
+	UserMatchResponseRoleNames,
+} from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
@@ -22,7 +27,7 @@ const mockListResponse = {
 	},
 };
 
-const userListTestData = {
+const userListTestData: ImportUserListResponse = {
 	total: 2,
 	skip: 0,
 	limit: 2,
@@ -280,9 +285,9 @@ describe("useImportUsersStore", () => {
 			);
 		});
 
-		it("should not send a sortBy param when sortBy is not firstName or lastName, but still pass sortOrder", async () => {
+		it("should not send sortBy or sortOrder params when sortBy is empty string", async () => {
 			const { store, mockApi } = setup();
-			store.filter.sortBy = "someOtherField";
+			store.filter.sortBy = "";
 			await store.fetchAllImportUsers();
 
 			expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
@@ -293,7 +298,7 @@ describe("useImportUsersStore", () => {
 				undefined,
 				undefined,
 				undefined,
-				"asc",
+				undefined,
 				undefined,
 				0,
 				25
@@ -439,7 +444,7 @@ describe("useImportUsersStore", () => {
 	describe("deleteMatch", () => {
 		it("should call RemoveMatch and clear match on the local list entry", async () => {
 			const { store, mockApi } = setup();
-			store.importUsersData.list = { ...userListTestData } as typeof store.importUsersData.list;
+			store.importUsersData.list = { ...userListTestData };
 
 			await store.deleteMatch("extern.1234");
 

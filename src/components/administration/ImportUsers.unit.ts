@@ -57,14 +57,14 @@ const mockImportUsers: ImportUserListResponse = {
 	],
 };
 
-const mockData: ImportUsersInstance["$data"] = {
+const mockData = {
 	MatchedBy,
 	defaultItem: {
 		firstName: "",
 		lastName: "",
 		loginName: "",
-		roleNames: [],
-		classNames: [],
+		roleNames: [] as ImportUserResponseRoleNames[],
+		classNames: [] as string[],
 		match: {},
 		flagged: false,
 	},
@@ -88,19 +88,17 @@ const mockData: ImportUsersInstance["$data"] = {
 	searchFlagged: false,
 	searchLastName: "",
 	searchLoginName: "",
-	searchMatchedBy: [],
-	searchRole: null,
+	searchMatchedBy: [] as MatchedBy[],
+	searchRole: null as string | null,
 	mdiAlertCircle,
 	options: {
 		itemsPerPage: 25,
 	},
 };
 
-type ImportUsersInstance = InstanceType<typeof ImportUsers>;
-
 const getWrapper = (
 	importUsersStore: ReturnType<typeof useImportUsersStore>,
-	data?: ImportUsersInstance["$data"],
+	data?: typeof mockData,
 	options?: object
 ) => {
 	vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
@@ -309,8 +307,8 @@ describe("ImportUsers", () => {
 	});
 
 	describe("should sort by column", () => {
-		const setup = (mockData: ImportUsersInstance["$data"]) => {
-			const wrapper = getWrapper(importUsersStore, mockData);
+		const setup = (data: typeof mockData) => {
+			const wrapper = getWrapper(importUsersStore, data);
 
 			return { wrapper };
 		};

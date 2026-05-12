@@ -18,36 +18,64 @@ export enum MatchedBy {
 
 type SortOrder = "asc" | "desc" | undefined;
 
+interface FilterState {
+	firstName: string;
+	lastName: string;
+	loginName: string;
+	role: ImportUserResponseRoleNames | "";
+	classes: string;
+	match: MatchedBy[];
+	flagged: boolean;
+	limit: number;
+	skip: number;
+	sortBy: "firstName" | "lastName" | "";
+	sortOrder: SortOrder;
+}
+
+interface ImportUsersDataState {
+	list: ImportUserListResponse;
+	total: number;
+	totalMatched: number;
+	totalUnmatched: number;
+}
+
+interface UserSearchState {
+	query: string;
+	limit: number;
+	skip: number;
+	list: UserMatchListResponse;
+}
+
 export const useImportUsersStore = defineStore("importUsersStore", () => {
 	/** Filter and pagination params sent to importUserControllerFindAllImportUsers */
-	const filter = reactive({
+	const filter = reactive<FilterState>({
 		firstName: "",
 		lastName: "",
 		loginName: "",
-		role: "" as ImportUserResponseRoleNames | "",
+		role: "",
 		classes: "",
-		match: [MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None] as MatchedBy[],
+		match: [MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
 		flagged: false,
 		limit: 25,
 		skip: 0,
 		sortBy: "",
-		sortOrder: "asc" as SortOrder,
+		sortOrder: "asc",
 	});
 
 	/** Result data and aggregate totals for the import-user list */
-	const importUsersData = reactive({
-		list: { data: [], total: 0, skip: 0, limit: 0 } as ImportUserListResponse,
+	const importUsersData = reactive<ImportUsersDataState>({
+		list: { data: [], total: 0, skip: 0, limit: 0 },
 		total: 0,
 		totalMatched: 0,
 		totalUnmatched: 0,
 	});
 
 	/** Params and results for the unmatched-user search */
-	const userSearch = reactive({
+	const userSearch = reactive<UserSearchState>({
 		query: "",
 		limit: 1,
 		skip: 0,
-		list: { data: [], total: 0, skip: 0, limit: 0 } as UserMatchListResponse,
+		list: { data: [], total: 0, skip: 0, limit: 0 },
 	});
 
 	const businessError = ref<BusinessError | null>(null);

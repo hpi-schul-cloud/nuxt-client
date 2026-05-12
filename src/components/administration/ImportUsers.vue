@@ -429,7 +429,7 @@ const getDataFromApi = async () => {
 	importUsersStore.filter.skip = ((options.value.page ?? 1) - 1) * options.value.itemsPerPage;
 
 	const sortBy = options.value.sortBy?.length ? options.value.sortBy[0] : { key: "", order: undefined };
-	importUsersStore.filter.sortBy = sortBy.key;
+	importUsersStore.filter.sortBy = sortBy.key === "firstName" || sortBy.key === "lastName" ? sortBy.key : "";
 	importUsersStore.filter.sortOrder = sortBy.order === "asc" || sortBy.order === "desc" ? sortBy.order : undefined;
 
 	await importUsersStore.fetchAllImportUsers();
@@ -480,7 +480,19 @@ const savedFlag = () => {
 	reloadData();
 };
 
-defineExpose({ reloadData });
+defineExpose({
+	reloadData,
+	importUsers,
+	roles,
+	tableHead,
+	searchFirstName,
+	searchLastName,
+	searchLoginName,
+	searchRole,
+	searchClasses,
+	searchMatchedBy,
+	searchFlagged,
+});
 </script>
 
 <style lang="scss" scoped>
