@@ -1,11 +1,6 @@
 import { MatchedBy, useImportUsersStore } from "./import-users.store";
 import { initializeAxios } from "@/utils/api";
-import {
-	apiResponseErrorFactory,
-	axiosErrorFactory,
-	businessErrorFactory,
-	mockAxiosInstance,
-} from "@@/tests/test-utils";
+import { apiResponseErrorFactory, businessErrorFactory, mockAxiosInstance } from "@@/tests/test-utils";
 import * as serverApi from "@api-server";
 import {
 	ImportUserListResponse,
@@ -14,7 +9,7 @@ import {
 	UserMatchResponseRoleNames,
 } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
-import { AxiosInstance } from "axios";
+import { AxiosError, AxiosHeaders, AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 
@@ -62,13 +57,15 @@ const userListTestData: ImportUserListResponse = {
 	],
 };
 
-const badRequestError = axiosErrorFactory.build({
-	response: {
-		data: apiResponseErrorFactory.build({
-			message: "BAD_REQUEST",
-			code: 400,
-		}),
-	},
+const badRequestError = new AxiosError("BAD_REQUEST", "400", { headers: new AxiosHeaders() }, undefined, {
+	data: apiResponseErrorFactory.build({
+		message: "BAD_REQUEST",
+		code: 400,
+	}),
+	status: 400,
+	statusText: "Bad Request",
+	config: { headers: new AxiosHeaders() },
+	headers: {},
 });
 
 const expectedBusinessError = businessErrorFactory.build({
