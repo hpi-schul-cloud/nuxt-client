@@ -9,8 +9,8 @@
 		:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
-		@click.stop="onClick"
-		@keydown.enter="onClick"
+		@click.stop="openFolder"
+		@keydown.enter="openFolder"
 	>
 		<ContentElementBar :icon="mdiFolderOpenOutline">
 			<template #title>
@@ -158,7 +158,7 @@ const isDownloadAllowed = computed(() => (fileStatistics.value?.fileCount ?? 0) 
 
 const router = useRouter();
 const folderRoute = computed(() => `/folder/${element.value.id}`);
-const onClick = () => {
+const openFolder = () => {
 	if (props.isEditMode) {
 		return;
 	}
