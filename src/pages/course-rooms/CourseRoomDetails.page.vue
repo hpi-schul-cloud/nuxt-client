@@ -51,7 +51,6 @@
 		<component
 			:is="currentTabComponent"
 			v-if="!!currentTabComponent"
-			:room-data-object="roomData"
 			:role="dashBoardRole"
 			:room-id="courseId"
 			data-testid="room-content"
@@ -88,10 +87,9 @@ import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCo
 import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.vue";
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
-import { COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
+import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	BoardLayout,
@@ -101,6 +99,7 @@ import {
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
 import { useAppStore } from "@data-app";
+import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { CopyDialog, useCopyFlow } from "@feature-copy";
@@ -151,7 +150,10 @@ const route = useRoute();
 const router = useRouter();
 
 const shareModule: ShareModule = injectStrict(SHARE_MODULE_KEY);
-const courseRoomDetailsModule: CourseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
+const courseRoomDetailsStore = useCourseRoomDetailsStore();
+
+const { roomData, scopePermissions, isLocked } = storeToRefs(courseRoomDetailsStore);
+const { fetchContent, fetchScopePermission, createBoard } = courseRoomDetailsStore;
 
 const { t } = useI18n();
 const { mdAndUp } = useDisplay();
@@ -164,9 +166,6 @@ const isEndSyncDialogOpen = ref(false);
 const isStartSyncDialogOpen = ref(false);
 const isBoardLayoutDialogOpen = ref(false);
 
-const roomData = computed(() => courseRoomDetailsModule.getRoomData);
-const scopedPermissions = computed(() => courseRoomDetailsModule.getPermissionData || []);
-const isLocked = computed(() => courseRoomDetailsModule.getIsLocked);
 const canEditTools = computed(() => !!useAppStore().userPermissions?.includes(Permission.CONTEXT_TOOL_ADMIN));
 
 const breadcrumbs = computed<Breadcrumb[]>(() => [
@@ -284,7 +283,7 @@ const currentFabItems = computed(() => currentTab.value?.fabItems);
 const currentTabComponent = computed(() => currentTab.value?.component);
 
 const headlineMenuItems = computed<MenuItem[]>(() => {
-	if (!scopedPermissions.value.includes("COURSE_EDIT")) return [];
+	if (!scopePermissions.value.includes("COURSE_EDIT")) return [];
 
 	const items: MenuItem[] = [
 		{
@@ -351,7 +350,7 @@ const initialize = async (id: string, activeTab?: LocationQueryValue | LocationQ
 	setActiveTab(tabName ?? "learn-content");
 	courseId.value = id;
 
-	await courseRoomDetailsModule.fetchContent(id);
+	await fetchContent(id);
 
 	if (roomData.value.roomId) {
 		roomVariant.value = RoomVariant.COURSE_ROOM;
@@ -359,10 +358,7 @@ const initialize = async (id: string, activeTab?: LocationQueryValue | LocationQ
 
 	const userId = useAppStore().user?.id;
 	if (userId) {
-		await courseRoomDetailsModule.fetchScopePermission({
-			courseId: id,
-			userId,
-		});
+		await fetchScopePermission(id, userId);
 	}
 
 	useTitle(buildPageTitle(roomData.value.title, t("common.words.courses")));
@@ -385,7 +381,7 @@ const onShareCourse = () => {
 };
 
 const refreshCourseRoom = async () => {
-	await courseRoomDetailsModule.fetchContent(courseId.value);
+	await fetchContent(courseId.value);
 };
 
 const {
@@ -412,21 +408,21 @@ const onCopyRequested = async ({ id, type }: { id: string; type: ContentItemType
 		case ContentItemTypeEnum.Task: {
 			const { result: copyResult } = await executeCopyTask(id, courseId.value);
 			if (copyResult?.id) {
-				await courseRoomDetailsModule.fetchContent(courseId.value);
+				await fetchContent(courseId.value);
 			}
 			break;
 		}
 		case ContentItemTypeEnum.Lesson: {
 			const { result: copyResult } = await executeCopyLesson(id, courseId.value);
 			if (copyResult?.id) {
-				await courseRoomDetailsModule.fetchContent(courseId.value);
+				await fetchContent(courseId.value);
 			}
 			break;
 		}
 		case ContentItemTypeEnum.ColumnBoard: {
 			const { result: copyResult } = await executeCopyBoard(id);
 			if (copyResult?.id) {
-				await courseRoomDetailsModule.fetchContent(courseId.value);
+				await fetchContent(courseId.value);
 			}
 			break;
 		}
@@ -440,7 +436,7 @@ const onCreateBoard = async (roomId: string, layout: BoardLayout) => {
 		parentId: roomId,
 		layout,
 	};
-	const board = await courseRoomDetailsModule.createBoard(params);
+	const board = await createBoard(params);
 	if (board?.id) {
 		await router.push(`/boards/${board.id}`);
 	}
