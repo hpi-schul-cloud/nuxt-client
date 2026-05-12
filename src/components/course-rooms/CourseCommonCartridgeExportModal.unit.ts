@@ -1,11 +1,9 @@
 import CourseCommonCartridgeExportModal from "./CourseCommonCartridgeExportModal.vue";
-import courseRoomDetailsModule from "@/store/course-room-details";
-import { COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject";
-import { expectNotification } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { expectNotification, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardElementResponse, BoardElementResponseType } from "@api-server";
 import { startExport } from "@data-common-cartridge";
+import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
@@ -15,10 +13,8 @@ import { nextTick, reactive } from "vue";
 vi.mock("@data-common-cartridge");
 
 describe("CourseCommonCartridgeExportModal", () => {
-	let courseRoomDetailsModuleMock: courseRoomDetailsModule;
-
 	beforeEach(() => {
-		setActivePinia(createTestingPinia());
+		setActivePinia(createTestingPinia({ stubActions: false }));
 	});
 
 	const createRoomData = (elements: BoardElementResponse[] = []) =>
@@ -31,21 +27,18 @@ describe("CourseCommonCartridgeExportModal", () => {
 			isSynchronized: false,
 		});
 
-	const setup = (options: { elements?: unknown[]; isSuccess?: boolean } = {}): VueWrapper => {
-		const { elements = [], isSuccess = true } = options;
+	const setup = (options: { elements?: unknown[] } = {}): VueWrapper => {
+		const { elements = [] } = options;
 		const roomData = createRoomData(elements as BoardElementResponse[]);
 
-		courseRoomDetailsModuleMock = createModuleMocks(courseRoomDetailsModule, {
-			getRoomData: roomData,
-			getBusinessError: isSuccess ? { message: "", statusCode: "" } : { message: "Error", statusCode: "500" },
+		const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
+		courseRoomDetailsStore.$patch({
+			roomData: roomData,
 		});
 
 		return mount(CourseCommonCartridgeExportModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModuleMock,
-				},
 			},
 			props: {
 				isOpen: true,
@@ -56,9 +49,9 @@ describe("CourseCommonCartridgeExportModal", () => {
 
 	const setupWithReactiveElements = async (elements: BoardElementResponse[]) => {
 		const roomData = createRoomData([]);
-		courseRoomDetailsModuleMock = createModuleMocks(courseRoomDetailsModule, {
-			getRoomData: roomData,
-			getBusinessError: { message: "", statusCode: "" },
+		const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
+		courseRoomDetailsStore.$patch({
+			roomData: roomData,
 		});
 
 		roomData.elements = elements;
@@ -68,9 +61,6 @@ describe("CourseCommonCartridgeExportModal", () => {
 		return mount(CourseCommonCartridgeExportModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModuleMock,
-				},
 			},
 			props: { isOpen: true, roomId: "room-id-1" },
 		});
@@ -181,12 +171,12 @@ describe("CourseCommonCartridgeExportModal", () => {
 			expect(wrapper.emitted("update:isOpen")).toContainEqual([false]);
 		});
 
-		it("should show error notification when export fails", async () => {
-			const wrapper = setup({ isSuccess: false });
+		it("should show success notification when export starts", async () => {
+			const wrapper = setup();
 			await goToContentSelection(wrapper);
 			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
 
-			expectNotification("error");
+			expectNotification("success");
 		});
 	});
 

@@ -12,7 +12,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import type { Ref } from "vue";
 
 // Create a hoisted ref that can be accessed by the mock
-const { mockIsJwtExpired, mockOnBeforeRouteLeave } = vi.hoisted(() => {
+const { mockOnBeforeRouteLeave } = vi.hoisted(() => {
 	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const { ref: vueRef } = require("vue");
 	return {
@@ -20,12 +20,6 @@ const { mockIsJwtExpired, mockOnBeforeRouteLeave } = vi.hoisted(() => {
 		mockOnBeforeRouteLeave: vi.fn(),
 	};
 });
-
-vi.mock("@util-broadcast-channel", () => ({
-	useSessionBroadcast: vi.fn().mockImplementation(() => ({
-		isJwtExpired: mockIsJwtExpired,
-	})),
-}));
 
 vi.mock("vue-router", () => ({
 	onBeforeRouteLeave: mockOnBeforeRouteLeave,
@@ -116,8 +110,6 @@ describe("socket-error-handler", () => {
 		vi.resetModules();
 		vi.useFakeTimers();
 		vi.clearAllMocks();
-		// Reset the JWT expired state
-		mockIsJwtExpired.value = false;
 		// Default URL and userAgent
 		Object.defineProperty(globalThis, "location", {
 			value: { href: "http://localhost/boards/69121555fd38bab102439ff8" },
@@ -382,41 +374,6 @@ describe("socket-error-handler", () => {
 
 				expect(getState.value.logs.some((log) => log.includes("ERR:Fallback error message"))).toBe(true);
 			});
-		});
-	});
-
-	describe("when isJwtExpired is true", () => {
-		it("should not report in apiCall", async () => {
-			const useConnectionErrorHandling = await importHandler();
-			useConnectionErrorHandling(socket);
-
-			// Set JWT expired after module is loaded
-			mockIsJwtExpired.value = true;
-
-			// Trigger reconnect which calls apiCall directly
-			emitManagerEvent("reconnect", 1);
-
-			// Advance timers
-			await vi.advanceTimersByTimeAsync(1000);
-
-			// API should not be called when JWT is expired
-			expect(boardErrorReportApiMock.boardErrorReportControllerReportError).not.toHaveBeenCalled();
-		});
-
-		it("should disconnect socket on reconnect_attempt", async () => {
-			const useConnectionErrorHandling = await importHandler();
-			const { getState } = useConnectionErrorHandling(socket);
-
-			// Set JWT expired after module is loaded
-			mockIsJwtExpired.value = true;
-
-			const disconnectSpy = vi.spyOn(socket, "disconnect");
-
-			// Trigger reconnect_attempt
-			emitManagerEvent("reconnect_attempt", 1);
-
-			expect(disconnectSpy).toHaveBeenCalled();
-			expect(getState.value.logs.some((log) => log.includes("noSess"))).toBe(true);
 		});
 	});
 

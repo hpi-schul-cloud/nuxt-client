@@ -90,7 +90,6 @@ const statusAlertColor = computed(() => {
 });
 
 const { user, school, userRoles: roleNames } = useAppStoreRefs();
-
 const hasLogo = computed(() => school.value?.logo?.url !== undefined);
 
 const appBarHeight = computed(() => {
