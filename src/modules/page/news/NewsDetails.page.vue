@@ -44,6 +44,7 @@
 <script setup lang="ts">
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
+import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { formatUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { NewsApiFactory, NewsResponse } from "@api-server";
@@ -93,6 +94,14 @@ const onEdit = () => {
 };
 
 const onDelete = async () => {
+	const isConfirmed = await askConfirmation({
+		title: "components.organisms.FormNews.remove.confirm.message",
+		confirmBtnKey: "components.organisms.FormNews.remove.confirm.confirm",
+	});
+	if (isConfirmed) await deleteNews();
+};
+
+const deleteNews = async () => {
 	if (!currentNews.value?.id) {
 		notifyError(t("components.organisms.FormNews.error.remove"));
 		return;
