@@ -1,24 +1,20 @@
 <template>
 	<VCard
 		ref="folderContentElement"
-		class="mb-4 v-card--link"
+		class="mb-4"
 		data-testid="board-folder-element"
 		variant="outlined"
 		:ripple="false"
-		:tabindex="isEditMode ? 0 : undefined"
+		:tabindex="!isEditMode ? 0 : undefined"
 		:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
+		@click.stop="onClick"
+		@keydown.enter="onClick"
 	>
-		<ContentElementBar :icon="mdiFolderOpenOutline" @click="onTitleClick">
+		<ContentElementBar :icon="mdiFolderOpenOutline">
 			<template #title>
-				<RouterLink
-					class="folder-title"
-					:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
-					:to="folderRoute"
-				>
-					{{ elementTitle }}
-				</RouterLink>
+				{{ elementTitle }}
 			</template>
 			<template v-if="isEditMode" #menu>
 				<BoardMenu
@@ -50,7 +46,7 @@
 				:icon="mdiTrayArrowDown"
 				size="small"
 				variant="text"
-				@click="onDownload"
+				@click.stop="onDownload"
 				@keydown.enter="onDownload"
 			/>
 		</VCardActions>
@@ -76,7 +72,7 @@ import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp }
 import dayjs from "dayjs";
 import { computed, onMounted, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { RouterLink, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 
 interface FolderContentElementProps {
 	element: FileFolderElement;
@@ -162,7 +158,12 @@ const isDownloadAllowed = computed(() => (fileStatistics.value?.fileCount ?? 0) 
 
 const router = useRouter();
 const folderRoute = computed(() => `/folder/${element.value.id}`);
-const onTitleClick = () => router.push(folderRoute.value);
+const onClick = () => {
+	if (props.isEditMode) {
+		return;
+	}
+	router.push(folderRoute.value);
+};
 </script>
 
 <style scoped lang="scss">
