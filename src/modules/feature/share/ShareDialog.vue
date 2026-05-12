@@ -20,7 +20,7 @@
 					{{ t("components.molecules.share.checkPrivacyAndCopyright") }}
 				</InfoAlert>
 				<WarningAlert v-if="warnings.length > 0" class="mb-4" data-testid="share-dialog-warnings">
-					<p data-testid="share-options-table-header">
+					<p class="mb-1" data-testid="share-options-table-header">
 						{{ t("components.molecules.share.options.tableHeader.InfoText") }}
 					</p>
 					<ul class="ml-6">

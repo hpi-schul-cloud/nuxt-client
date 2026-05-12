@@ -382,17 +382,6 @@ const setActiveTabIfPageCached = (event: PageTransitionEvent) => {
 	}
 };
 
-const onShareCourse = () => {
-	executeShare({
-		id: courseId.value,
-		type: ShareTokenBodyParamsParentType.COURSES,
-	});
-};
-
-const onShareBoardElement = (params: ShareParams) => {
-	executeShare(params);
-};
-
 const refreshCourseRoom = async () => {
 	await courseRoomDetailsModule.fetchContent(courseId.value);
 };
@@ -447,10 +436,21 @@ const {
 	shareItemType,
 	shareUrl,
 	executeShare,
-	onConfirmShare,
-	onCancelShare,
+	onConfirm: onConfirmShare,
+	onCancel: onCancelShare,
 	onDone,
 } = useShareFlow();
+
+const onShareCourse = () => {
+	executeShare({
+		id: courseId.value,
+		type: ShareTokenBodyParamsParentType.COURSES,
+	});
+};
+
+const onShareBoardElement = (params: ShareParams) => {
+	executeShare(params);
+};
 
 const onCreateBoard = async (roomId: string, layout: BoardLayout) => {
 	const params = {
