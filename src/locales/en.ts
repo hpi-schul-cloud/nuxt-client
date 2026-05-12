@@ -210,6 +210,8 @@ export default {
 	"common.validation.tooLong": "The text you entered exceeds the maximum length",
 	"common.validation.tooShort": "The text you entered is below the minimum length",
 	"common.validation.containsOpeningTag": "Please insert a space after the less-than sign.",
+	"common.validation.containsOpeningTag.discardChanges":
+		"Please insert a space after the less-than sign. Changes have been discarded.",
 	"common.validation.nonEmptyString": "This is a mandatory field and must not contain only spaces.",
 	"common.words.also": "also",
 	"common.words.and": "and",
@@ -566,6 +568,7 @@ export default {
 	"components.cardElement.titleElement.validation.required": "Please enter a title.",
 	"components.cardElement.titleElement": "Title element",
 	"components.cardElement.videoConferenceElement": "Video conference",
+	"components.cardElement.videoConferenceElement.untitled": "Untitled video conference",
 	"components.cardElement.videoConferenceElement.create.label": "Insert video conference title",
 	"components.cardElement.videoConferenceElement.edit.label": "Edit video conference title",
 	"components.cardElement.deletedElement": "Deleted content",

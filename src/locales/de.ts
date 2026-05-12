@@ -221,6 +221,8 @@ export default {
 	"common.validation.tooLong": "Der eingegebene Text überschreitet die Maximallänge",
 	"common.validation.tooShort": "Der eingegebene Text unterschreitet die Mindestlänge",
 	"common.validation.containsOpeningTag": "Bitte Leerzeichen nach Kleiner-als-Zeichen einfügen.",
+	"common.validation.containsOpeningTag.discardChanges":
+		"Bitte Leerzeichen nach Kleiner-als-Zeichen einfügen. Änderungen wurden verworfen.",
 	"common.validation.nonEmptyString": "Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
 	"common.words.also": "auch",
 	"common.words.and": "und",
@@ -586,6 +588,7 @@ export default {
 	"components.cardElement.titleElement.validation.required": "Bitte Titel angeben.",
 	"components.cardElement.titleElement": "Titelelement",
 	"components.cardElement.videoConferenceElement": "Videokonferenz",
+	"components.cardElement.videoConferenceElement.untitled": "Unbenannte Videokonferenz",
 	"components.cardElement.videoConferenceElement.create.label": "Videokonferenz-Titel einfügen",
 	"components.cardElement.videoConferenceElement.edit.label": "Videokonferenz-Titel bearbeiten",
 	"components.cardElement.deletedElement": "Gelöschter Inhalt",

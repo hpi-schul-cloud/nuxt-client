@@ -212,6 +212,8 @@ export default {
 	"common.validation.tooLong": "The text you entered exceeds the maximum length",
 	"common.validation.tooShort": "El texto que ingresó es inferior a la longitud mínima",
 	"common.validation.containsOpeningTag": "Inserte un espacio después del signo menos-que.",
+	"common.validation.containsOpeningTag.discardChanges":
+		"Inserte un espacio después del signo menos-que. Los cambios han sido descartados.",
 	"common.validation.nonEmptyString": "Este campo es obligatorio y no debe contener sólo espacios.",
 	"common.words.also": "también",
 	"common.words.and": "y",
@@ -578,6 +580,7 @@ export default {
 	"components.cardElement.titleElement.validation.required": "Por favor ingrese un título.",
 	"components.cardElement.titleElement": "Elemento título",
 	"components.cardElement.videoConferenceElement": "Videoconferencia",
+	"components.cardElement.videoConferenceElement.untitled": "Videoconferencia sin título",
 	"components.cardElement.videoConferenceElement.create.label": "Insertar título de la videoconferencia",
 	"components.cardElement.videoConferenceElement.edit.label": "Editar título de la videoconferencia",
 	"components.cardElement.deletedElement": "Contenido eliminado",

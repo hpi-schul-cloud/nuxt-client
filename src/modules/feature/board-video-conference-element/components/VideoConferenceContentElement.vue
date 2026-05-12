@@ -13,9 +13,8 @@
 		@keydown.stop
 		@keyup.enter="onContentEnter"
 	>
-		<!-- Display im View-Mode mit Titel -->
 		<VideoConferenceContentElementDisplay
-			v-if="computedElement.content.title && (!isEditMode || isConferenceRunning)"
+			v-if="!isEditMode || isConferenceRunning"
 			:board-parent-type="boardParentType"
 			:title="computedElement.content.title"
 			:has-participation-permission="hasParticipationPermission"
@@ -38,24 +37,6 @@
 				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</VideoConferenceContentElementDisplay>
-
-		<!-- Empty State im View-Mode ohne Titel -->
-		<VCardText
-			v-if="!isEditMode && !computedElement.content.title"
-			class="text-center pa-6"
-			data-testid="video-conference-empty-state"
-		>
-			<VIcon :icon="mdiAlertCircle" size="48" color="error" class="mb-3" />
-
-			<p class="text-subtitle-1 font-weight-medium text-error mb-1">
-				{{ "Kein Titel festgelegt" }}
-			</p>
-			<p class="text-body-2 text-medium-emphasis">
-				{{ "Bitte bearbeiten Sie das Board und geben Sie einen gültigen Titel ein" }}
-			</p>
-		</VCardText>
-
-		<!-- Create im Edit-Mode -->
 		<VideoConferenceContentElementCreate
 			v-if="isEditMode && !isConferenceRunning"
 			:existing-title="computedElement.content.title"
@@ -105,7 +86,6 @@ import {
 	useContentElementState,
 	useSharedBoardPageInformation,
 } from "@data-board";
-import { mdiAlertCircle } from "@icons/material";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { SvsDialog } from "@ui-dialog";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
@@ -212,9 +192,8 @@ const onCreateTitle = (title: string) => {
 	modelValue.value.title = title;
 };
 
-// Handler für existierende Elemente: notification
-const onValidationFailed = (error: { message: string; previousTitle: string; attemptedTitle: string }) => {
-	notifyWarning(error.message);
+const onValidationFailed = (errorMessage: string) => {
+	notifyWarning(errorMessage);
 };
 
 const onKeydownArrow = (event: KeyboardEvent) => {

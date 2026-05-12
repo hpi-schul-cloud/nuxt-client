@@ -219,6 +219,8 @@ export default {
 	"common.validation.tooLong": "Введений текст перевищує максимально дозволену довжину",
 	"common.validation.tooShort": "Введений текст не досягає мінімальної довжини",
 	"common.validation.containsOpeningTag": "Будь ласка, вставте пробіл після знаку менше.",
+	"common.validation.containsOpeningTag.discardChanges":
+		"Будь ласка, вставте пробіл після знаку менше. Зміни були скасовані.",
 	"common.validation.nonEmptyString": "Це обов'язкове поле і не повинно містити лише пробіли.",
 	"common.words.also": "також",
 	"common.words.and": "і",
@@ -578,6 +580,7 @@ export default {
 	"components.cardElement.titleElement.validation.required": "Будь ласка, введіть назву.",
 	"components.cardElement.titleElement": "Елемент заголовка",
 	"components.cardElement.videoConferenceElement": "Відеоконференція",
+	"components.cardElement.videoConferenceElement.untitled": "Відеоконференція без назви",
 	"components.cardElement.videoConferenceElement.create.label": "Вставити назву відеоконференції",
 	"components.cardElement.videoConferenceElement.edit.label": "Редагувати назву відеоконференції",
 	"components.cardElement.deletedElement": "Видалений вміст",

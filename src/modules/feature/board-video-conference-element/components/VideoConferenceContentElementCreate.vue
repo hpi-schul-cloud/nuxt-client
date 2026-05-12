@@ -16,10 +16,9 @@
 					<VTextField
 						v-model="title"
 						:rules="rules"
-						:label="label"
+						:label="t('common.labels.name')"
 						type="text"
 						data-testid="video-conference-element-title"
-						:placeholder="t('components.cardElement.videoConferenceElement')"
 					/>
 					<div class="align-self-center menu">
 						<slot />
@@ -34,7 +33,7 @@
 import image from "@/assets/img/videoConference.svg";
 import { injectStrict } from "@/utils/inject";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { isRequired } from "@util-validators";
+import { useOpeningTagValidator } from "@util-validators";
 import { computed, onBeforeUnmount, PropType, ref, toRaw } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
@@ -57,13 +56,11 @@ const { smAndUp } = useDisplay();
 const { t } = useI18n();
 
 const { existingTitle } = toRaw(props);
-const title = ref(existingTitle || t("components.cardElement.videoConferenceElement"));
+const title = ref(existingTitle || "");
 
-const label = existingTitle
-	? t("components.cardElement.videoConferenceElement.edit.label")
-	: t("components.cardElement.videoConferenceElement.create.label");
+const { validateOnOpeningTag } = useOpeningTagValidator();
+const rules = [(value: string) => validateOnOpeningTag(value)];
 
-const rules = [isRequired(t("common.validation.required2"))];
 const imageSrc = image;
 
 const isRenderedAsList = computed(() => smAndUp.value && (isListLayout.value || props.isDetailView));
@@ -75,16 +72,9 @@ onBeforeUnmount(() => {
 
 	if (isValid) {
 		emit("create:title", title.value);
-	} else if (existingTitle) {
-		// Nur Event emittieren wenn ein existierender Titel vorhanden war
-		emit("validation:failed", {
-			message: "Titel darf nicht leer sein. Ihre Änderungen wurden verworfen.",
-			previousTitle: existingTitle,
-			attemptedTitle: title.value,
-		});
+	} else {
+		emit("validation:failed", t("common.validation.containsOpeningTag.discardChanges"));
 	}
-	// Für neue Elemente ohne existingTitle: kein Event
-	// Empty State wird automatisch durch !computedElement.content.title angezeigt
 });
 </script>
 
@@ -92,15 +82,12 @@ onBeforeUnmount(() => {
 .v-textarea textarea {
 	padding-top: 8px;
 }
-
 .menu {
 	margin-right: -6px;
 }
-
 .display-list-board {
 	flex: 0 0 33%;
 }
-
 .text-list-board {
 	flex: 0 0 67%;
 }
