@@ -22,8 +22,8 @@
 				@focusin="focusedBoard = $event.target"
 				@keydown.up.down.left.right="onArrowKeyDown($event, index)"
 				@update:visibility="(boardId, isVisible) => emit('update:boardVisibility', boardId, isVisible)"
-				@delete:board="(boardId, boardTitle) => emit('delete:board', boardId, boardTitle)"
-				@duplicate:board="(boardId) => emit('duplicate:board', boardId)"
+				@delete:board="emit('delete:board', $event)"
+				@duplicate:board="emit('duplicate:board', $event)"
 			/>
 		</template>
 	</Sortable>
@@ -34,6 +34,7 @@ import RoomBoardGridItem from "./RoomBoardGridItem.vue";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 import { useSafeTask } from "@/composables/async-tasks.composable";
 import { RoomBoardItem } from "@/types/room/Room";
+import { RoomBoardItemResponse } from "@api-server";
 import { notifyError } from "@data-app";
 import { useRoomAllowedOperations, useRoomDetailsStore } from "@data-room";
 import { getGridContainerColumnsCount } from "@util-browser";
@@ -50,9 +51,9 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-	"update:boardVisibility": [boardId: string, isVisible: boolean];
-	"delete:board": [boardId: string, boardTitle: string];
-	"duplicate:board": [boardId: string];
+	"update:boardVisibility": [board: RoomBoardItemResponse, isVisible: boolean];
+	"delete:board": [board: RoomBoardItemResponse];
+	"duplicate:board": [board: RoomBoardItemResponse];
 }>();
 
 const { t } = useI18n();

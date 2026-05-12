@@ -55,6 +55,7 @@ import { ShareTokenParentType } from "@/types/sharing/Token";
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { RoomBoardItemResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useRoomAllowedOperations, useRoomDetailsStore, useRoomStore } from "@data-room";
 import { CopyDialog, useCopyFlow } from "@feature-copy";
@@ -78,7 +79,7 @@ const { t } = useI18n();
 const shareModule = injectStrict(SHARE_MODULE_KEY);
 
 const roomDetailsStore = useRoomDetailsStore();
-const { leaveRoom, deleteRoom, fetchRoomAndBoards } = useRoomStore();
+const { leaveRoom, deleteRoom } = useRoomStore();
 
 const { roomBoards } = storeToRefs(roomDetailsStore);
 const { createBoard, updateBoardVisibility, deleteBoard } = roomDetailsStore;
@@ -203,18 +204,18 @@ const onCreateBoard = async (layout: BoardLayout) => {
 	router.push(`/boards/${boardId}`);
 };
 
-const onUpdateBoardVisibility = (boardId: string, isVisible: boolean) => {
-	updateBoardVisibility(props.room.id, boardId, isVisible);
+const onUpdateBoardVisibility = (board: RoomBoardItemResponse, isVisible: boolean) => {
+	updateBoardVisibility(props.room.id, board.id, isVisible);
 };
 
-const onDeleteBoard = (boardId: string) => {
-	deleteBoard(props.room.id, boardId);
+const onDeleteBoard = (board: RoomBoardItemResponse) => {
+	deleteBoard(props.room.id, board.id, board.title);
 };
 
-const onDuplicateBoard = async (boardId: string) => {
-	const { result } = await copyFlow.executeCopyBoard(boardId);
+const onDuplicateBoard = async (board: RoomBoardItemResponse) => {
+	const { result } = await copyFlow.executeCopyBoard(board.id);
 	if (result?.id) {
-		await fetchRoomAndBoards(props.room.id);
+		await roomDetailsStore.fetchRoomAndBoards(props.room.id);
 	}
 };
 </script>

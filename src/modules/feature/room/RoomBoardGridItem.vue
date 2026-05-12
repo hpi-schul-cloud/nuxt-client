@@ -25,10 +25,16 @@
 		</VCardTitle>
 
 		<KebabMenu v-if="!hasAnyAllowedOperation" class="board-grid-item-menu" :data-testid="`board-dot-menu-${index}`">
-			<KebabMenuActionPublish v-if="!allowedOperations.updateBoardVisibility && isDraft" @click="onPublish" />
-			<KebabMenuActionRevert v-if="!allowedOperations.updateBoardVisibility && !isDraft" @click="onRevert" />
-			<KebabMenuActionDuplicate v-if="!allowedOperations.copyBoard" @click="onDuplicate" />
-			<KebabMenuActionDelete v-if="!allowedOperations.deleteBoard" @click="onDelete" />
+			<KebabMenuActionPublish
+				v-if="!allowedOperations.updateBoardVisibility && isDraft"
+				@click="emit('update:visibility', board, true)"
+			/>
+			<KebabMenuActionRevert
+				v-if="!allowedOperations.updateBoardVisibility && !isDraft"
+				@click="emit('update:visibility', board, false)"
+			/>
+			<KebabMenuActionDuplicate v-if="!allowedOperations.copyBoard" @click="emit('duplicate:board', board)" />
+			<KebabMenuActionDelete v-if="!allowedOperations.deleteBoard" @click="emit('delete:board', board)" />
 		</KebabMenu>
 
 		<VCardActions class="justify-end pr-4">
@@ -48,6 +54,7 @@
 <script setup lang="ts">
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
+import { RoomBoardItemResponse } from "@api-server";
 import { useBoardAllowedOperations } from "@data-board";
 import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
 import {
@@ -70,31 +77,15 @@ const { t } = useI18n();
 const { allowedOperations } = useBoardAllowedOperations();
 
 const emit = defineEmits<{
-	"update:visibility": [boardId: string, isVisible: boolean];
-	"delete:board": [boardId: string, boardTitle: string];
-	"duplicate:board": [boardId: string];
+	"update:visibility": [board: RoomBoardItemResponse, isVisible: boolean];
+	"delete:board": [board: RoomBoardItemResponse];
+	"duplicate:board": [board: RoomBoardItemResponse];
 }>();
 
 const hasAnyAllowedOperation = computed(() => {
 	const { copyBoard, deleteBoard, updateBoardVisibility } = allowedOperations.value;
 	return copyBoard || deleteBoard || updateBoardVisibility;
 });
-
-const onPublish = () => {
-	emit("update:visibility", props.board.id, true);
-};
-
-const onRevert = () => {
-	emit("update:visibility", props.board.id, false);
-};
-
-const onDelete = () => {
-	emit("delete:board", props.board.id, props.board.title);
-};
-
-const onDuplicate = async () => {
-	emit("duplicate:board", props.board.id);
-};
 
 const isListBoard = computed(() => props.board.layout === BoardLayout.LIST);
 
