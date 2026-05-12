@@ -248,7 +248,6 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 		if (error) {
 			const apiError = mapAxiosErrorToResponseError(error);
 			businessError.value = { error: apiError, statusCode: apiError.code, message: apiError.message };
-			return;
 		}
 	};
 
@@ -268,7 +267,6 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 		if (error) {
 			const apiError = mapAxiosErrorToResponseError(error);
 			businessError.value = { error: apiError, statusCode: apiError.code, message: apiError.message };
-			return;
 		}
 	};
 
