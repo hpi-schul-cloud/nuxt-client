@@ -217,6 +217,7 @@ export default {
 	"common.validation.required": "Заповніть це поле",
 	"common.validation.required2": "Це обов'язкове поле.",
 	"common.validation.tooLong": "Введений текст перевищує максимально дозволену довжину",
+	"common.validation.fileTooBig": "Файл не повинен перевищувати {maxSize} КБ.",
 	"common.validation.tooShort": "Введений текст не досягає мінімальної довжини",
 	"common.validation.containsOpeningTag": "Будь ласка, вставте пробіл після знаку менше.",
 	"common.validation.nonEmptyString": "Це обов'язкове поле і не повинно містити лише пробіли.",

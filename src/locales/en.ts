@@ -208,6 +208,7 @@ export default {
 	"common.validation.required": "Please fill out this field",
 	"common.validation.required2": "This is a mandatory field.",
 	"common.validation.tooLong": "The text you entered exceeds the maximum length",
+	"common.validation.fileTooBig": "The file must not exceed {maxSize} KB.",
 	"common.validation.tooShort": "The text you entered is below the minimum length",
 	"common.validation.containsOpeningTag": "Please insert a space after the less-than sign.",
 	"common.validation.nonEmptyString": "This is a mandatory field and must not contain only spaces.",

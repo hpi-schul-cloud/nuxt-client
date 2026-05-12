@@ -41,11 +41,24 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 		const isThr = useEnvConfig().value.SC_THEME === SchulcloudTheme.THR;
 		return schoolDetails.value.isExternal || isThr;
 	});
+
+	/**
+	 * Determines whether the school is connected to an external identity system.
+	 *
+	 * Three system types count as "synced":
+	 *  - "tsp-school": TSP school sync (no provider distinction needed)
+	 *  - "oauth":      OAuth-based login (e.g. provider: "moin.schule")
+	 *  - "ldap":       LDAP-based login — but ONLY for specific providers,
+	 *                  since not every LDAP setup implies a managed/synced school.
+	 */
 	const isSchoolSynced = computed(() =>
 		schoolSystems.value.some(
 			(system) =>
 				system.type === "tsp-school" ||
 				system.type === "oauth" ||
+				// LDAP is only treated as "synced" for providers that represent
+				// a fully managed identity source. Other LDAP setups may exist
+				// without implying school-level sync.
 				(system.type === "ldap" &&
 					(system.ldapConfig?.provider === "iserv-idm" ||
 						system.ldapConfig?.provider === "univention" ||
@@ -124,6 +137,7 @@ export const useSchoolStore = defineStore("schoolStore", () => {
 		if (success) {
 			schoolDetails.value = result?.data;
 		}
+		return { result, success };
 	};
 
 	return {

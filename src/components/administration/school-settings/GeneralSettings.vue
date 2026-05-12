@@ -1,5 +1,5 @@
 <template>
-	<VForm v-if="localSchool">
+	<VForm v-if="localSchool" ref="generalSettingsForm">
 		<VRow>
 			<VCol>
 				<VTextField
@@ -10,7 +10,7 @@
 					:readonly="!hasSchoolEditPermission"
 					:disabled="isSchoolSynced"
 					data-testid="school-name"
-					:rules="[validateOnOpeningTag]"
+					:rules="[isRequired(), validateOnOpeningTag]"
 				/>
 			</VCol>
 		</VRow>
@@ -70,6 +70,7 @@
 					density="compact"
 					prepend-icon=""
 					prepend-inner-icon="$file"
+					:rules="[validateLogoFileSize]"
 				/>
 			</VCol>
 		</VRow>
@@ -134,12 +135,15 @@ import { mapSchoolFeatureObjectToArray, SchoolFeatureObject } from "@/utils/scho
 import { LanguageType, Permission, SchoolFeature, SchoolResponse, SchoolUpdateBodyParams } from "@api-server";
 import { notifySuccess, useAppStore, useSchoolStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { useOpeningTagValidator } from "@util-validators";
-import { computed, onMounted, ref, watch } from "vue";
+import { isOfMaxFileSize, isRequired, useOpeningTagValidator } from "@util-validators";
+import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const { t } = useI18n();
+
+const generalSettingsForm = useTemplateRef("generalSettingsForm");
+const validateLogoFileSize = isOfMaxFileSize(100)();
 
 const localSchool = ref<SchoolResponse>();
 const localSchoolFeatures = ref<SchoolFeatureObject>();
@@ -232,6 +236,11 @@ const save = async () => {
 		return;
 	}
 
+	const formValidation = await generalSettingsForm.value?.validate();
+	if (!formValidation?.valid) {
+		return;
+	}
+
 	const localLanguage = localSchool.value.language as LanguageType; // Should this be changed in the backend SchoolResponse?
 
 	const updatedSchool: SchoolUpdateBodyParams = {
@@ -252,8 +261,10 @@ const save = async () => {
 		updatedSchool.countyId = localSchool.value.county.id;
 	}
 
-	await updateSchool(localSchool.value.id, updatedSchool);
-	notifySuccess(t("pages.administration.school.index.generalSettings.save.success"));
+	const { success } = await updateSchool(localSchool.value.id, updatedSchool);
+	if (success) {
+		notifySuccess(t("pages.administration.school.index.generalSettings.save.success"));
+	}
 	await copyToLocalSchool();
 };
 </script>
