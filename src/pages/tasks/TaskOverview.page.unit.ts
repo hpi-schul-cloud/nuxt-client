@@ -79,7 +79,7 @@ describe("TaskOverview.page", () => {
 			const loading = wrapper.findComponent({ name: "SvsLoadingWrapper" });
 
 			expect(loading.exists()).toBe(true);
-			expect(loading.props("loading")).toBe(true);
+			expect(loading.props("isLoading")).toBe(true);
 		});
 	});
 

@@ -346,10 +346,10 @@ describe("CourseRoomDashboard.vue", () => {
 			});
 
 			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
-			lessonCard.vm.$emit("open-modal", "12345");
+			lessonCard.vm.$emit("open-modal", "3456");
 
-			expect(shareModuleMock.startShareFlow).toBeCalledWith({
-				id: "12345",
+			expect(wrapper.emitted("share-board-element")[0][0]).toStrictEqual({
+				id: "3456",
 				type: ShareTokenBodyParamsParentType.LESSONS,
 			});
 		});
@@ -365,7 +365,7 @@ describe("CourseRoomDashboard.vue", () => {
 
 			taskCard.vm.$emit("share-task", "1234");
 
-			expect(shareModuleMock.startShareFlow).toBeCalledWith({
+			expect(wrapper.emitted("share-board-element")[0][0]).toStrictEqual({
 				id: "1234",
 				type: ShareTokenBodyParamsParentType.TASKS,
 			});

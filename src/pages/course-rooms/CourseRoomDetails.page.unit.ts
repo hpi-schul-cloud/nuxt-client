@@ -2,9 +2,8 @@ import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCommonCartridgeExportModal.vue";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import ShareModule from "@/store/share";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
-import { COURSE_ROOM_DETAILS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject/injection-keys";
+import { COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject/injection-keys";
 import {
 	createTestAppStore,
 	createTestEnvStore,
@@ -24,6 +23,7 @@ import {
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
 import { useCopyFlow } from "@feature-copy";
+import { useShareFlow } from "@feature-share";
 import { createTestingPinia } from "@pinia/testing";
 import { DefaultWireframe } from "@ui-layout";
 import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
@@ -39,6 +39,7 @@ import { TabItem } from "vuetify/lib/components/VTabs/VTabs.mjs";
 
 vi.mock("@data-common-cartridge");
 vi.mock("@feature-copy/copy-flow.composable");
+vi.mock("@feature-share/share-flow.composable");
 
 const boardElements: Array<BoardElementResponse> = [
 	{
@@ -70,10 +71,10 @@ const mockPermissionsCourseSubstitutionTeacher = [Permission.HOMEWORK_CREATE, Pe
 const mockPermissionsStudent = [Permission.BASE_VIEW];
 
 describe("CourseRoomDetails.page.vue", () => {
-	let shareModule: ShareModule;
 	let courseRoomDetailsModule: CourseRoomDetailsModule;
 	let router: RouterMock;
 	let useCopyFlowMock: Mocked<ReturnType<typeof useCopyFlow>>;
+	let useShareFlowMock: Mocked<ReturnType<typeof useShareFlow>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -86,6 +87,13 @@ describe("CourseRoomDetails.page.vue", () => {
 			isRunning: computed(() => false),
 		});
 		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
+
+		useShareFlowMock = mockComposable(useShareFlow, {
+			isDialogOpen: ref(false),
+			shareItemType: ref(ShareTokenBodyParamsParentType.COURSES),
+			shareUrl: ref("https://example.com/share"),
+		});
+		vi.mocked(useShareFlow).mockReturnValue(useShareFlowMock);
 	});
 
 	afterEach(() => {
@@ -116,11 +124,6 @@ describe("CourseRoomDetails.page.vue", () => {
 			isArchived,
 		});
 
-		shareModule = createModuleMocks(ShareModule, {
-			getIsShareModalOpen: true,
-			getParentType: ShareTokenBodyParamsParentType.COURSES,
-		});
-
 		courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getRoomData: singleColumnBoard,
 			getPermissionData: permissionData,
@@ -147,7 +150,6 @@ describe("CourseRoomDetails.page.vue", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				},
 				stubs: {
@@ -177,7 +179,6 @@ describe("CourseRoomDetails.page.vue", () => {
 			wrapper,
 			singleColumnBoard,
 			router,
-			shareModule,
 			courseRoomDetailsModule,
 		};
 	};
@@ -469,7 +470,7 @@ describe("CourseRoomDetails.page.vue", () => {
 
 			it("should call shareModule.startShareFlow when 'Share Course' menu is clicked", async () => {
 				createTestEnvStore({ FEATURE_COURSE_SHARE: true });
-				const { wrapper, shareModule, singleColumnBoard } = setup();
+				const { wrapper, singleColumnBoard } = setup();
 				await flushPromises();
 
 				const menuButton = wrapper.findComponent(RoomDotMenu);
@@ -480,7 +481,7 @@ describe("CourseRoomDetails.page.vue", () => {
 				const shareAction = menuItems.find((item) => item.dataTestId === "room-menu-share");
 				shareAction?.action();
 
-				expect(shareModule.startShareFlow).toHaveBeenCalledWith({
+				expect(useShareFlowMock.executeShare).toHaveBeenCalledWith({
 					id: singleColumnBoard.roomId,
 					type: ShareTokenBodyParamsParentType.COURSES,
 				});
@@ -493,7 +494,7 @@ describe("CourseRoomDetails.page.vue", () => {
 			const { wrapper } = setup();
 			await flushPromises();
 
-			const modalView = wrapper.findComponent({ name: "ShareModal" });
+			const modalView = wrapper.findComponent({ name: "ShareDialog" });
 			expect(modalView.exists()).toBe(true);
 		});
 
