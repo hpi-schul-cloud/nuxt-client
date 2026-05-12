@@ -1508,6 +1508,8 @@ export default {
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
+	"pages.news.details.title": "Новина від {date}",
+	"pages.news.details.title.fallback": "Новина",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Реєстрацію не вдалося завершити. Будь ласка, спробуйте пізніше.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":

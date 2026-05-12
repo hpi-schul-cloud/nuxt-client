@@ -62,18 +62,15 @@ onMounted(async () => {
 	const { result } = await execute(() => newsApi.newsControllerFindOne(route.params.id as string));
 	currentNews.value = result?.data;
 
-	setPageTitle();
+	useTitle(buildPageTitle(pageTitle.value));
 });
 
-const setPageTitle = () => {
-	let pageTitle = t("pages.news.title");
-	if (currentNews.value?.title) {
-		pageTitle = t("pages.news.title", {
-			title: currentNews.value?.title,
-		});
-	}
-	useTitle(buildPageTitle(pageTitle));
-};
+const pageTitle = computed(() => {
+	if (!currentNews.value?.createdAt) return t("pages.news.details.title.fallback");
+	return t("pages.news.details.title", {
+		date: formatUtc(currentNews.value.createdAt, "date"),
+	});
+});
 
 const createdAt = computed(() => {
 	if (!currentNews.value?.createdAt) return "";

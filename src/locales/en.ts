@@ -1493,6 +1493,8 @@ export default {
 	"pages.news.new.create": "Create",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
+	"pages.news.details.title": "News from {date}",
+	"pages.news.details.title.fallback": "News",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Registration could not be completed. Please try again later.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":

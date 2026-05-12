@@ -1524,6 +1524,8 @@ export default {
 	"pages.news.new.create": "Crear",
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
+	"pages.news.details.title": "Noticia de {date}",
+	"pages.news.details.title.fallback": "Noticia",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"La inscripción no pudo completarse. Por favor, inténtelo de nuevo más tarde.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
