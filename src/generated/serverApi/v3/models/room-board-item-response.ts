@@ -14,6 +14,7 @@
 
 
 import { BoardLayout } from './board-layout';
+import { BoardResponseAllowedOperations } from './board-response-allowed-operations';
 
 /**
  * 
@@ -57,6 +58,12 @@ export interface RoomBoardItemResponse {
      * @memberof RoomBoardItemResponse
      */
     updatedAt: string;
+    /**
+     * 
+     * @type {BoardResponseAllowedOperations}
+     * @memberof RoomBoardItemResponse
+     */
+    allowedOperations?: BoardResponseAllowedOperations;
 }
 
 

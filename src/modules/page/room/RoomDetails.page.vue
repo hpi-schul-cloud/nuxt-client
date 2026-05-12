@@ -205,14 +205,17 @@ const onCreateBoard = async (layout: BoardLayout) => {
 };
 
 const onUpdateBoardVisibility = (board: RoomBoardItemResponse, isVisible: boolean) => {
+	if (!board.allowedOperations?.updateBoardVisibility) return;
 	updateBoardVisibility(props.room.id, board.id, isVisible);
 };
 
 const onDeleteBoard = (board: RoomBoardItemResponse) => {
+	if (!board.allowedOperations?.deleteBoard) return;
 	deleteBoard(props.room.id, board.id, board.title);
 };
 
 const onDuplicateBoard = async (board: RoomBoardItemResponse) => {
+	if (!board.allowedOperations?.copyBoard) return;
 	const { result } = await copyFlow.executeCopyBoard(board.id);
 	if (result?.id) {
 		await roomDetailsStore.fetchRoomAndBoards(props.room.id);

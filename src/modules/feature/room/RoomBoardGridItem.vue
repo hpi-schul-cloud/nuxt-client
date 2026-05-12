@@ -24,17 +24,17 @@
 			</RouterLink>
 		</VCardTitle>
 
-		<KebabMenu v-if="!hasAnyAllowedOperation" class="board-grid-item-menu" :data-testid="`board-dot-menu-${index}`">
+		<KebabMenu v-if="hasAnyAllowedOperation" class="board-grid-item-menu" :data-testid="`board-dot-menu-${index}`">
 			<KebabMenuActionPublish
-				v-if="!allowedOperations.updateBoardVisibility && isDraft"
+				v-if="board.allowedOperations?.updateBoardVisibility && isDraft"
 				@click="emit('update:visibility', board, true)"
 			/>
 			<KebabMenuActionRevert
-				v-if="!allowedOperations.updateBoardVisibility && !isDraft"
+				v-if="board.allowedOperations?.updateBoardVisibility && !isDraft"
 				@click="emit('update:visibility', board, false)"
 			/>
-			<KebabMenuActionDuplicate v-if="!allowedOperations.copyBoard" @click="emit('duplicate:board', board)" />
-			<KebabMenuActionDelete v-if="!allowedOperations.deleteBoard" @click="emit('delete:board', board)" />
+			<KebabMenuActionDuplicate v-if="board.allowedOperations?.copyBoard" @click="emit('duplicate:board', board)" />
+			<KebabMenuActionDelete v-if="board.allowedOperations?.deleteBoard" @click="emit('delete:board', board)" />
 		</KebabMenu>
 
 		<VCardActions class="justify-end pr-4">
@@ -55,7 +55,6 @@
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 import { RoomBoardItemResponse } from "@api-server";
-import { useBoardAllowedOperations } from "@data-board";
 import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
 import {
 	KebabMenu,
@@ -74,7 +73,6 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { allowedOperations } = useBoardAllowedOperations();
 
 const emit = defineEmits<{
 	"update:visibility": [board: RoomBoardItemResponse, isVisible: boolean];
@@ -83,7 +81,7 @@ const emit = defineEmits<{
 }>();
 
 const hasAnyAllowedOperation = computed(() => {
-	const { copyBoard, deleteBoard, updateBoardVisibility } = allowedOperations.value;
+	const { copyBoard, deleteBoard, updateBoardVisibility } = props.board?.allowedOperations ?? {};
 	return copyBoard || deleteBoard || updateBoardVisibility;
 });
 
