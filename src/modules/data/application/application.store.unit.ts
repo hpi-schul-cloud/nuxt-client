@@ -18,8 +18,14 @@ import { AxiosInstance, AxiosPromise } from "axios";
 import { DeepPartial } from "fishery";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, vi } from "vitest";
+import { ref } from "vue";
 
 const broadcastChannelMock = mockBroadcastChannel();
+
+const mockEnvConfig = ref({ JWT_TIMEOUT_SECONDS: 7200 });
+vi.mock("@data-env", () => ({
+	useEnvConfig: vi.fn(() => mockEnvConfig),
+}));
 
 vi.mock("@api-server");
 const mockedMeApi = vi.mocked(MeApiFactory);
@@ -451,6 +457,177 @@ describe("useApplicationStore", () => {
 			expect(refs.isLoggedIn).toBeDefined();
 			expect(refs.locale).toBeDefined();
 			expect(refs.userRoles).toBeDefined();
+		});
+	});
+
+	describe("startTimer action", () => {
+		describe("when JWT_TIMEOUT_SECONDS is set", () => {
+			it("should set sessionTimeoutTimestamp based on JWT_TIMEOUT_SECONDS", () => {
+				const store = useAppStore();
+				const beforeTime = Date.now();
+
+				store.startTimer();
+
+				const afterTime = Date.now();
+				const expectedMinTimestamp = beforeTime + 7200 * 1000;
+				const expectedMaxTimestamp = afterTime + 7200 * 1000;
+
+				expect(store.sessionTimeoutTimestamp).toBeGreaterThanOrEqual(expectedMinTimestamp);
+				expect(store.sessionTimeoutTimestamp).toBeLessThanOrEqual(expectedMaxTimestamp);
+			});
+
+			it("should post timer update to broadcast channel", () => {
+				const store = useAppStore();
+
+				store.startTimer();
+
+				expect(broadcastChannelMock.postMessage).toHaveBeenCalledWith("time-updated:7200");
+			});
+		});
+
+		describe("when JWT_TIMEOUT_SECONDS is not set", () => {
+			it("should use default timeout", () => {
+				mockEnvConfig.value = { JWT_TIMEOUT_SECONDS: undefined } as never;
+				const store = useAppStore();
+				const beforeTime = Date.now();
+				const DEFAULT_TIMEOUT = 2 * 60 * 60; // 2 hours in seconds
+
+				store.startTimer();
+
+				const afterTime = Date.now();
+				const expectedMinTimestamp = beforeTime + DEFAULT_TIMEOUT * 1000;
+				const expectedMaxTimestamp = afterTime + DEFAULT_TIMEOUT * 1000;
+
+				expect(store.sessionTimeoutTimestamp).toBeGreaterThanOrEqual(expectedMinTimestamp);
+				expect(store.sessionTimeoutTimestamp).toBeLessThanOrEqual(expectedMaxTimestamp);
+
+				// Reset mock
+				mockEnvConfig.value = { JWT_TIMEOUT_SECONDS: 7200 };
+			});
+		});
+	});
+
+	describe("stopTimer action", () => {
+		it("should set sessionTimeoutTimestamp to null", () => {
+			const store = useAppStore();
+
+			store.startTimer();
+			expect(store.sessionTimeoutTimestamp).not.toBeNull();
+
+			store.stopTimer();
+
+			expect(store.sessionTimeoutTimestamp).toBeNull();
+		});
+	});
+
+	describe("broadcastChannel.onmessage handler", () => {
+		let capturedOnMessageHandler: ((event: MessageEvent) => void) | null = null;
+
+		beforeEach(() => {
+			// Capture the onmessage handler when it's set
+			let storedHandler: ((event: MessageEvent) => void) | null = null;
+
+			class MockBroadcastChannelWithCapture implements BroadcastChannel {
+				readonly name: string;
+				addEventListener = vi.fn();
+				removeEventListener = vi.fn();
+				postMessage = broadcastChannelMock.postMessage;
+				close = broadcastChannelMock.close;
+				dispatchEvent = vi.fn();
+				onmessageerror = null;
+
+				get onmessage() {
+					return storedHandler;
+				}
+				set onmessage(handler: ((event: MessageEvent) => void) | null) {
+					storedHandler = handler;
+					capturedOnMessageHandler = handler;
+				}
+
+				constructor(name: string) {
+					this.name = name;
+				}
+			}
+
+			Object.defineProperty(globalThis, "BroadcastChannel", {
+				value: MockBroadcastChannelWithCapture,
+				writable: true,
+				configurable: true,
+			});
+
+			initializeAxios({
+				defaults: {
+					headers: {
+						common: {
+							Authorization: "",
+						},
+					},
+				},
+			} as AxiosInstance);
+
+			Object.defineProperty(globalThis, "location", {
+				value: { replace: vi.fn() },
+				writable: true,
+			});
+
+			Object.defineProperty(globalThis, "localStorage", {
+				value: { clear: vi.fn() },
+				writable: true,
+			});
+
+			// Create the store to capture the handler
+			setActivePinia(createTestingPinia({ stubActions: false }));
+			useAppStore();
+		});
+
+		describe("when receiving logout message", () => {
+			it("redirect to auto-logout URL", () => {
+				expect(capturedOnMessageHandler).not.toBeNull();
+
+				capturedOnMessageHandler!({ data: "logout" } as MessageEvent);
+
+				expect(globalThis.location.replace).toHaveBeenCalledWith("/logout?auto-logout=true");
+			});
+		});
+
+		describe("when receiving time-updated message", () => {
+			describe("when receiving valid number", () => {
+				it("should update sessionTimeoutTimestamp", () => {
+					const store = useAppStore();
+					const beforeTime = Date.now();
+
+					expect(capturedOnMessageHandler).not.toBeNull();
+
+					capturedOnMessageHandler!({ data: "time-updated:3600" } as MessageEvent);
+
+					const afterTime = Date.now();
+					const expectedMinTimestamp = beforeTime + 3600 * 1000;
+					const expectedMaxTimestamp = afterTime + 3600 * 1000;
+
+					expect(store.sessionTimeoutTimestamp).toBeGreaterThanOrEqual(expectedMinTimestamp);
+					expect(store.sessionTimeoutTimestamp).toBeLessThanOrEqual(expectedMaxTimestamp);
+				});
+			});
+
+			describe("when receiving invalid number", () => {
+				it("should ignore the message", () => {
+					const store = useAppStore();
+					store.startTimer();
+					const timestampBefore = store.sessionTimeoutTimestamp;
+
+					capturedOnMessageHandler!({ data: "time-updated:invalid" } as MessageEvent);
+
+					expect(store.sessionTimeoutTimestamp).toEqual(timestampBefore);
+				});
+			});
+		});
+
+		describe("when receiving unknown message", () => {
+			it("should ignore the message", () => {
+				capturedOnMessageHandler!({ data: "unknown-message" } as MessageEvent);
+
+				expect(globalThis.location.replace).not.toHaveBeenCalled();
+			});
 		});
 	});
 });

@@ -1,4 +1,5 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { notifySuccess } from "./notification-store";
 import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
@@ -12,8 +13,8 @@ import {
 	UserApiFactory,
 } from "@api-server";
 import { useEnvConfig } from "@data-env";
-import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
+import { watchOnce } from "@vueuse/core";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, readonly, ref } from "vue";
 
@@ -25,13 +26,24 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 	document.cookie = `${cname}=${cvalue}; Expires=${expires}; Path=/; Secure; SameSite=None`;
 };
 
+const DEFAULT_TIMEOUT_SECONDS = 2 * 60 * 60; // 2 hours
+const JWT_TIMER_ENDPOINT = "/v1/accounts/jwtTimer";
+
+const sessionTimeoutTimestamp = ref<number | null>(null);
+
+const BROADCAST_CHANNEL_NAME = "user-session-channel";
+const BROADCAST_MESSAGE_LOGOUT = "logout";
+const BROADCAST_MESSAGE_TIME_UPDATED = "time-updated";
+
 export const useAppStore = defineStore("applicationStore", () => {
 	const meApi = MeApiFactory(undefined, "/v3", $axios);
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
-	const { sendLogin, sendLogout, close } = useSessionBroadcast();
 
 	const isLoggedIn = ref(false);
-	const applicationError = ref<{ status: HttpStatusCode; translationKeyOrText: string }>();
+	const applicationError = ref<{
+		status: HttpStatusCode;
+		translationKeyOrText: string;
+	}>();
 
 	const userLocale = ref<LanguageType>();
 	const meResponse = ref<MeResponse>();
@@ -64,25 +76,43 @@ export const useAppStore = defineStore("applicationStore", () => {
 
 	const login = async () => {
 		const { data } = await meApi.meControllerMe();
-		sendLogin();
 		userLocale.value = data.language;
 		meResponse.value = data;
 		isLoggedIn.value = true;
 	};
 
 	const logout = (redirectUrl = "/logout") => {
-		sendLogout();
+		post(BROADCAST_MESSAGE_LOGOUT);
+		logoutWithoutBroadcast(redirectUrl);
+	};
+
+	const logoutWithoutBroadcast = (redirectUrl = "/logout") => {
 		clearUserSession();
+		close();
 		globalThis.location.replace(redirectUrl);
 	};
 
-	const clearUserSession = () => {
-		localStorage.clear();
-		delete $axios.defaults.headers.common["Authorization"];
-		close();
+	const externalLogout = () => logout("/logout/external");
+
+	const autoLogout = () => logout("/logout?auto-logout=true");
+
+	const extendSession = async () => {
+		try {
+			// extend the session on the server
+			const result = await $axios.post(JWT_TIMER_ENDPOINT);
+			setTimerSeconds(result.data.ttl);
+			notifySuccess("feature-autoLogout.message.extending-session-success");
+			postTimerSeconds(result.data.ttl);
+		} catch {
+			logoutWithoutBroadcast("/logout?auto-logout=true");
+		}
 	};
 
-	const externalLogout = () => logout("/logout/external");
+	const clearUserSession = () => {
+		isLoggedIn.value = false;
+		localStorage.clear();
+		delete $axios.defaults.headers.common["Authorization"];
+	};
 
 	const updateUserPreferences = async (options: UpdatePreferencesBodyParams) => {
 		const { execute: executePreferences } = useSafeAxiosTask();
@@ -115,31 +145,106 @@ export const useAppStore = defineStore("applicationStore", () => {
 			})
 			.catch(logger.error);
 
+	// session-timer
+
+	const startTimer = () => {
+		const { JWT_TIMEOUT_SECONDS } = useEnvConfig().value;
+		const timeInSeconds = JWT_TIMEOUT_SECONDS ?? DEFAULT_TIMEOUT_SECONDS;
+		postTimerSeconds(timeInSeconds);
+		setTimerSeconds(timeInSeconds);
+	};
+
+	const stopTimer = () => {
+		sessionTimeoutTimestamp.value = null;
+	};
+
+	const setTimerSeconds = (seconds: number) => {
+		sessionTimeoutTimestamp.value = Date.now() + seconds * 1000;
+	};
+
+	const postTimerSeconds = (seconds: number) => {
+		post(`${BROADCAST_MESSAGE_TIME_UPDATED}:${seconds}`);
+	};
+
+	// startTimer when config was loaded
+	watchOnce(
+		() => useEnvConfig().value.JWT_TIMEOUT_SECONDS && useEnvConfig().value.JWT_SHOW_TIMEOUT_WARNING_SECONDS,
+		startTimer
+	);
+
+	// session-state synchronization (across tabs and with schulcloud-client)
+
+	const broadcastChannel = new BroadcastChannel(BROADCAST_CHANNEL_NAME);
+
+	broadcastChannel.onmessage = (event) => {
+		const message = event.data;
+
+		if (message === BROADCAST_MESSAGE_LOGOUT) {
+			logoutWithoutBroadcast("/logout?auto-logout=true");
+			return;
+		}
+
+		if (message.match(new RegExp(`^${BROADCAST_MESSAGE_TIME_UPDATED}`))) {
+			const time = message.split(":").at(1) ?? "";
+			const timeInSeconds = Number.parseInt(time, 10);
+			if (!Number.isNaN(timeInSeconds)) {
+				setTimerSeconds(timeInSeconds);
+			}
+		}
+	};
+
+	const post = (message: string) => {
+		broadcastChannel.postMessage(message);
+	};
+
+	const close = () => {
+		broadcastChannel.close();
+	};
+
 	const handleApplicationError = (status: HttpStatusCode, translationKeyOrText?: string) => {
 		if (translationKeyOrText) {
-			applicationError.value = { status, translationKeyOrText: translationKeyOrText };
+			applicationError.value = {
+				status,
+				translationKeyOrText: translationKeyOrText,
+			};
 		} else {
 			switch (status) {
 				case HttpStatusCode.BadRequest:
-					applicationError.value = { status, translationKeyOrText: "error.400" };
+					applicationError.value = {
+						status,
+						translationKeyOrText: "error.400",
+					};
 					break;
 				case HttpStatusCode.Unauthorized:
-					applicationError.value = { status, translationKeyOrText: "error.401" };
+					applicationError.value = {
+						status,
+						translationKeyOrText: "error.401",
+					};
 					break;
 				case HttpStatusCode.Forbidden:
-					applicationError.value = { status, translationKeyOrText: "error.403" };
+					applicationError.value = {
+						status,
+						translationKeyOrText: "error.403",
+					};
 					break;
 				case HttpStatusCode.NotFound:
-					applicationError.value = { status, translationKeyOrText: "error.404" };
+					applicationError.value = {
+						status,
+						translationKeyOrText: "error.404",
+					};
 					break;
 				case HttpStatusCode.RequestTimeout:
-					applicationError.value = { status, translationKeyOrText: "error.408" };
+					applicationError.value = {
+						status,
+						translationKeyOrText: "error.408",
+					};
 					break;
 				case HttpStatusCode.InternalServerError:
-					applicationError.value = { status, translationKeyOrText: "error.generic" };
-					break;
 				default:
-					applicationError.value = { status, translationKeyOrText: "error.generic" };
+					applicationError.value = {
+						status,
+						translationKeyOrText: "error.generic",
+					};
 					break;
 			}
 		}
@@ -176,13 +281,18 @@ export const useAppStore = defineStore("applicationStore", () => {
 		systemId,
 		login,
 		logout,
+		extendSession,
 		clearUserSession,
 		externalLogout,
+		autoLogout,
 		updateUserLanguage,
 		updateUserPreferences,
 		clearApplicationError,
 		handleUnknownError,
 		handleApplicationError,
+		startTimer,
+		stopTimer,
+		sessionTimeoutTimestamp: readonly(sessionTimeoutTimestamp),
 		applicationError: readonly(applicationError),
 	};
 });
