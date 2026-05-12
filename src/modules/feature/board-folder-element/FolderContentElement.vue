@@ -1,7 +1,7 @@
 <template>
 	<VCard
 		ref="folderContentElement"
-		class="mb-4"
+		class="mb-4 v-card--link"
 		data-testid="board-folder-element"
 		variant="outlined"
 		:ripple="false"
