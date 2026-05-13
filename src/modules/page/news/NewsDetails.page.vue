@@ -18,17 +18,8 @@
 		<div class="d-flex mb-2">
 			<div class="d-flex align-center text-subtitle mr-3">
 				<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
-				{{ createdAtFormatted }}
-			</div>
-			<div class="d-flex align-center text-subtitle mr-3">
-				<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
-				{{ displayAtFormatted }}
-			</div>
-			<div class="d-flex align-center text-subtitle mr-3">
-				<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
 				{{ lastTouched }}
 			</div>
-
 			<div class="d-flex align-center text-subtitle">
 				<VIcon :icon="mdiHumanMaleBoard" size="sm" class="mr-1" />
 				{{ creator }}
@@ -68,7 +59,7 @@ const route = useRoute();
 
 const newsId = computed(() => route.params.id as string | undefined);
 const { deleteNews } = useNewsActions();
-const { newsInstance, createdAtFormatted, displayAtFormatted, lastTouched, creator } = useNews(newsId);
+const { newsInstance, lastTouched, creator } = useNews(newsId);
 
 const pageTitle = computed(() => {
 	if (!newsInstance.value?.createdAt) return t("pages.news.details.title.fallback");
