@@ -73,10 +73,10 @@ describe("TaskOverview.page", () => {
 	});
 
 	describe("when loading tasks", () => {
-		it("should pass loading state to SvsLoadingWrapper", () => {
+		it("should pass loading state to SvsLoading", () => {
 			const { wrapper } = setup({ isLoading: true, status: "pending" });
 
-			const loading = wrapper.findComponent({ name: "SvsLoadingWrapper" });
+			const loading = wrapper.findComponent({ name: "SvsLoading" });
 
 			expect(loading.exists()).toBe(true);
 			expect(loading.props("isLoading")).toBe(true);

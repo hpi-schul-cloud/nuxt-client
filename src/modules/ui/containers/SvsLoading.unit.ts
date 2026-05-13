@@ -1,12 +1,12 @@
-import SvsLoadingWrapper from "./SvsLoadingWrapper.vue";
+import SvsLoading from "./SvsLoading.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 import { VProgressCircular } from "vuetify/components";
 
-describe("SvsLoadingWrapper", () => {
+describe("SvsLoading", () => {
 	const setup = (props = {}, slots = {}) =>
-		mount(SvsLoadingWrapper, {
+		mount(SvsLoading, {
 			props,
 			slots: { default: "<p>Content</p>", ...slots },
 			global: {
@@ -43,7 +43,7 @@ describe("SvsLoadingWrapper", () => {
 	});
 
 	it("should render custom loading slot when loading", () => {
-		const wrapper = mount(SvsLoadingWrapper, {
+		const wrapper = mount(SvsLoading, {
 			props: { isLoading: true },
 			slots: { loading: "<span>Custom Spinner</span>" },
 			global: { plugins: [createTestingVuetify()] },

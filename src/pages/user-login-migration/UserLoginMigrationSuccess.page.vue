@@ -1,5 +1,5 @@
 <template>
-	<SvsLoadingWrapper :is-loading="isLoading">
+	<SvsLoading :is-loading="isLoading">
 		<div class="text-center mx-auto container-max-width">
 			<img src="@/assets/img/migration/migration_successful.svg" alt="" />
 			<h1 class="px-4">
@@ -25,13 +25,13 @@
 				</VBtn>
 			</div>
 		</div>
-	</SvsLoadingWrapper>
+	</SvsLoading>
 </template>
 
 <script setup lang="ts">
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useSystem } from "@data-access";
-import { SvsLoadingWrapper } from "@ui-containers";
+import { SvsLoading } from "@ui-containers";
 import { useTitle } from "@vueuse/core";
 import { toRef } from "vue";
 import { useI18n } from "vue-i18n";

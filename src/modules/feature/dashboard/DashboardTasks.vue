@@ -1,5 +1,5 @@
 <template>
-	<SvsLoadingWrapper :is-loading="isLoadingTasks">
+	<SvsLoading :is-loading="isLoadingTasks">
 		<h2 class="mb-0 mt-16">{{ t("common.words.tasks") }}</h2>
 		<template v-if="isTeacher">
 			<DashboardTasksOpen
@@ -56,7 +56,7 @@
 		<VBtn class="mt-8" variant="outlined" data-test-id="show-all-tasks" to="/tasks">
 			{{ t("common.actions.show.all") }}
 		</VBtn>
-	</SvsLoadingWrapper>
+	</SvsLoading>
 </template>
 
 <script setup lang="ts">
@@ -64,7 +64,7 @@ import DashboardTasksOpen from "./DashboardTasksOpen.vue";
 import DashboardTasksSection from "./DashboardTasksSection.vue";
 import { useAppStoreRefs } from "@data-app";
 import { isTaskOverdue, toSortedByDueDate, useTasks } from "@data-tasks";
-import { SvsLoadingWrapper } from "@ui-containers";
+import { SvsLoading } from "@ui-containers";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 

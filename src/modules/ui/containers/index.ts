@@ -1,3 +1,1 @@
-import SvsLoadingWrapper from "./SvsLoadingWrapper.vue";
-
-export { SvsLoadingWrapper };
+export { default as SvsLoading } from "./SvsLoading.vue";
