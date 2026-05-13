@@ -4,8 +4,8 @@ import {
 	BoardResponse,
 	CardResponse,
 	CardSkeletonResponse,
-	ColumnResponse,
 	ColumnFullResponse,
+	ColumnResponse,
 	CreateCardBodyParamsRequiredEmptyElements,
 } from "@api-server";
 

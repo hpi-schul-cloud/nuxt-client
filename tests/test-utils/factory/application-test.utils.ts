@@ -42,6 +42,7 @@ export const createTestAppStore = ({
 	const store = useAppStore(pinia);
 
 	store.$patch({ meResponse: mockedMe, userLocale: mockedMe.language });
+
 	const appStore = mockedPiniaStoreTyping(useAppStore);
 	createDayJs();
 
