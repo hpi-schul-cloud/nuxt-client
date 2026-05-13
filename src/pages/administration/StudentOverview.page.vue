@@ -33,7 +33,7 @@
 			track-by="_id"
 			:sort-by="sortBy"
 			:sort-order="sortOrder"
-			:show-external-text="schoolIsExternallyManaged"
+			:show-external-text="isSchoolExternallyManaged"
 			data-testid="students_table"
 			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
@@ -82,7 +82,7 @@
 				</VBtn>
 			</template>
 		</BackendDataTable>
-		<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
+		<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="isSchoolExternallyManaged" />
 	</DefaultWireframe>
 	<DeleteUserDialog
 		v-model="isConfirmDialogOpen"
@@ -101,11 +101,10 @@ import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import { FilterQuery, User } from "@/components/administration/data-filter/types";
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
-import { schoolsModule } from "@/store";
 import { formatUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { Permission, RoleName } from "@api-server";
-import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
+import { notifyError, notifyInfo, notifySuccess, useAppStore, useSchoolStoreRefs } from "@data-app";
 import { useClasses } from "@data-classes";
 import { useEnvConfig } from "@data-env";
 import { useUsersStore } from "@data-users";
@@ -133,6 +132,7 @@ import { useRouter } from "vue-router";
 const { t } = useI18n();
 const router = useRouter();
 
+const { isSchoolExternallyManaged, currentYear } = useSchoolStoreRefs();
 const { currentFilterQuery, sortBy, sortOrder, page, limit, searchQuery } = useFilterLocalStorage(User.STUDENT);
 const { fetchClasses, classNameList } = useClasses();
 
@@ -203,7 +203,6 @@ const isConfirmDialogOpen = ref(false);
 const isDeleting = computed(() => deletingProgress.value.active);
 const deletedPercent = computed(() => deletingProgress.value.percent);
 const getFeatureUserLoginMigrationEnabled = computed(() => useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED);
-const schoolIsExternallyManaged = computed(() => schoolsModule.schoolIsExternallyManaged);
 const showConsent = computed(() => useEnvConfig().value.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN);
 
 const filteredActions = computed(() => {
@@ -215,7 +214,7 @@ const filteredActions = computed(() => {
 	);
 
 	// filter the delete action if school is external
-	if (schoolIsExternallyManaged.value) {
+	if (isSchoolExternallyManaged.value) {
 		editedActions = editedActions.filter(
 			(action) => action.label !== t("pages.administration.students.index.tableActions.delete")
 		);
@@ -227,7 +226,7 @@ const filteredActions = computed(() => {
 const filteredColumns = computed(() => {
 	let editedColumns = tableColumns;
 	// filters out edit column if school is external
-	if (schoolIsExternallyManaged.value) {
+	if (isSchoolExternallyManaged.value) {
 		editedColumns = tableColumns.filter(
 			//_id field sets the edit column
 			(col) => col.field !== "_id"
@@ -276,7 +275,7 @@ const icons = computed(() => {
 });
 
 const fab = computed(() => {
-	if (schoolIsExternallyManaged.value || !userHasPermission(Permission.STUDENT_CREATE)) {
+	if (isSchoolExternallyManaged.value || !userHasPermission(Permission.STUDENT_CREATE)) {
 		return;
 	}
 
@@ -444,11 +443,9 @@ const onUpdateFilter = (query: FilterQuery) => {
 };
 
 const getClassNameList = async () => {
-	const currentYear = schoolsModule.getCurrentYear;
-
 	await fetchClasses({
 		$limit: 1000,
-		year: currentYear?.id || "",
+		year: currentYear.value?.id || "",
 	});
 };
 </script>
