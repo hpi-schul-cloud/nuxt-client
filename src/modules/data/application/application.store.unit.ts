@@ -2,7 +2,7 @@ import { useAppStore, useAppStoreRefs } from "./application.store";
 import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { initializeAxios } from "@/utils/api";
-import { meResponseFactory, mockApiResponse, mockBroadcastChannel } from "@@/tests/test-utils";
+import { createTestEnvStore, meResponseFactory, mockApiResponse, mockBroadcastChannel } from "@@/tests/test-utils";
 import {
 	LanguageType,
 	MeApiFactory,
@@ -18,14 +18,8 @@ import { AxiosInstance, AxiosPromise } from "axios";
 import { DeepPartial } from "fishery";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, vi } from "vitest";
-import { ref } from "vue";
 
 const broadcastChannelMock = mockBroadcastChannel();
-
-const mockEnvConfig = ref({ JWT_TIMEOUT_SECONDS: 7200 });
-vi.mock("@data-env", () => ({
-	useEnvConfig: vi.fn(() => mockEnvConfig),
-}));
 
 vi.mock("@api-server");
 const mockedMeApi = vi.mocked(MeApiFactory);
@@ -35,7 +29,11 @@ const mockedUserApi = vi.mocked(UserApiFactory);
 
 describe("useApplicationStore", () => {
 	beforeEach(() => {
-		setActivePinia(createTestingPinia({ createSpy: vi.fn }));
+		const pinia = createTestingPinia({ stubActions: false });
+		setActivePinia(pinia);
+
+		createTestEnvStore({ JWT_TIMEOUT_SECONDS: 7200 });
+
 		vi.clearAllMocks();
 
 		Object.defineProperty(globalThis, "location", {
@@ -80,10 +78,6 @@ describe("useApplicationStore", () => {
 		await useAppStore().login();
 		return { meResponse };
 	};
-
-	beforeEach(() => {
-		setActivePinia(createTestingPinia({ stubActions: false }));
-	});
 
 	describe("state", () => {
 		it("should return default locale when no user locale is set", () => {
@@ -487,7 +481,7 @@ describe("useApplicationStore", () => {
 
 		describe("when JWT_TIMEOUT_SECONDS is not set", () => {
 			it("should use default timeout", () => {
-				mockEnvConfig.value = { JWT_TIMEOUT_SECONDS: undefined } as never;
+				createTestEnvStore({ JWT_TIMEOUT_SECONDS: undefined });
 				const store = useAppStore();
 				const beforeTime = Date.now();
 				const DEFAULT_TIMEOUT = 2 * 60 * 60; // 2 hours in seconds
@@ -500,9 +494,6 @@ describe("useApplicationStore", () => {
 
 				expect(store.sessionTimeoutTimestamp).toBeGreaterThanOrEqual(expectedMinTimestamp);
 				expect(store.sessionTimeoutTimestamp).toBeLessThanOrEqual(expectedMaxTimestamp);
-
-				// Reset mock
-				mockEnvConfig.value = { JWT_TIMEOUT_SECONDS: 7200 };
 			});
 		});
 	});
