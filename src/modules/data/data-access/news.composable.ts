@@ -96,11 +96,6 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 
 	watch(newsId, loadNews, { immediate: true });
 
-	const createdAtFormatted = computed(() => {
-		if (!newsInstance.value?.createdAt) return "";
-		return formatUtc(newsInstance.value.createdAt, "date");
-	});
-
 	const displayAtFormatted = computed(() => {
 		if (!newsInstance.value?.displayAt) return "";
 		return formatUtc(newsInstance.value.displayAt, "date");
@@ -118,7 +113,6 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 
 	return {
 		newsInstance,
-		createdAtFormatted,
 		displayAtFormatted,
 		lastTouched,
 		creator,
