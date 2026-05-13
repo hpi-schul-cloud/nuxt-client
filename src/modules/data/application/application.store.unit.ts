@@ -336,6 +336,79 @@ describe("useApplicationStore", () => {
 		});
 	});
 
+	describe("updateUserPreferences action", () => {
+		it("should update preferences and refresh meResponse", async () => {
+			const initialPreferences = { releaseDate: "2024-01-01T00:00:00.000Z" };
+			const updatedPreferences = { releaseDate: "2024-06-01T00:00:00.000Z" };
+
+			const meResponse = meResponseFactory.build({ preferences: initialPreferences });
+			const updatedMeResponse = meResponseFactory.build({ preferences: updatedPreferences });
+
+			const mockUpdatePreferences = vi.fn().mockResolvedValue(mockApiResponse({ data: {} }));
+			const mockMe = vi
+				.fn()
+				.mockResolvedValueOnce(mockApiResponse({ data: meResponse }))
+				.mockResolvedValueOnce(mockApiResponse({ data: updatedMeResponse }));
+
+			mockedMeApi.mockReturnValue({
+				meControllerMe: mockMe,
+				meControllerUpdateMePreferences: mockUpdatePreferences,
+			});
+
+			const store = useAppStore();
+			await store.login();
+
+			await store.updateUserPreferences({ releaseDate: "2024-06-01T00:00:00.000Z" });
+
+			expect(mockUpdatePreferences).toHaveBeenCalledWith({ releaseDate: "2024-06-01T00:00:00.000Z" });
+			expect(mockMe).toHaveBeenCalledTimes(2);
+			expect(store.userPreferences).toEqual(updatedPreferences);
+		});
+
+		it("should not refresh meResponse when update fails", async () => {
+			const meResponse = meResponseFactory.build({ preferences: { releaseDate: "2024-01-01T00:00:00.000Z" } });
+
+			const mockUpdatePreferences = vi.fn().mockRejectedValue(new Error("Update failed"));
+			const mockMe = vi.fn().mockResolvedValue(mockApiResponse({ data: meResponse }));
+
+			mockedMeApi.mockReturnValue({
+				meControllerMe: mockMe,
+				meControllerUpdateMePreferences: mockUpdatePreferences,
+			});
+
+			const store = useAppStore();
+			await store.login();
+
+			await store.updateUserPreferences({ releaseDate: "2024-06-01T00:00:00.000Z" });
+
+			expect(mockMe).toHaveBeenCalledTimes(1); // only login call
+			expect(store.userPreferences).toEqual({ releaseDate: "2024-01-01T00:00:00.000Z" });
+		});
+
+		it("should not update preferences when me refresh fails", async () => {
+			const initialPreferences = { releaseDate: "2024-01-01T00:00:00.000Z" };
+			const meResponse = meResponseFactory.build({ preferences: initialPreferences });
+
+			const mockUpdatePreferences = vi.fn().mockResolvedValue(mockApiResponse({ data: {} }));
+			const mockMe = vi
+				.fn()
+				.mockResolvedValueOnce(mockApiResponse({ data: meResponse }))
+				.mockRejectedValueOnce(new Error("Me fetch failed"));
+
+			mockedMeApi.mockReturnValue({
+				meControllerMe: mockMe,
+				meControllerUpdateMePreferences: mockUpdatePreferences,
+			});
+
+			const store = useAppStore();
+			await store.login();
+
+			await store.updateUserPreferences({ releaseDate: "2024-06-01T00:00:00.000Z" });
+
+			expect(store.userPreferences).toEqual(initialPreferences);
+		});
+	});
+
 	describe("clearApplicationError action", () => {
 		it("should clear the application error", () => {
 			const store = useAppStore();
