@@ -114,11 +114,12 @@ const boardPath = computed(() => `/boards/${props.board.id}`);
 }
 
 .grid-item-card-title {
-	max-width: max-content;
+	max-width: 100%;
 	line-height: 1.5 !important;
 }
 
 .grid-item-router-link {
+	display: block;
 	text-decoration: none;
 	color: inherit;
 	white-space: normal;
