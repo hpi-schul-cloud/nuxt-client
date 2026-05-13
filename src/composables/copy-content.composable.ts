@@ -14,7 +14,7 @@ export interface CopyContentTemplate {
 	warnings: CopyWarning[];
 }
 
-const apiTypeToEntityType: Record<string, ContentItemTypeEnum | undefined> = {
+const apiTypeToEntityType: Record<string, ContentItemTypeEnum> = {
 	[ShareTokenInfoResponseParentType.COURSES]: ContentItemTypeEnum.Course,
 	[ShareTokenInfoResponseParentType.TASKS]: ContentItemTypeEnum.Task,
 	[ShareTokenInfoResponseParentType.LESSONS]: ContentItemTypeEnum.Lesson,
@@ -165,22 +165,27 @@ export const useCopyContent = (copyItemType: Ref<ContentItemTypeEnum | undefined
 };
 
 export const useImportContent = (shareTokenParentType: Ref<ShareTokenInfoResponseParentType | undefined>) => {
-	const contentItemType = computed(() =>
-		shareTokenParentType.value ? apiTypeToEntityType[shareTokenParentType.value] : undefined
-	);
+	const contentItemType = computed(() => apiTypeToEntityType[shareTokenParentType.value!]);
 
 	return useCopyContent(contentItemType);
+};
+
+const shareInfoTextKeys: Record<ShareTokenBodyParamsParentType, string> = {
+	[ShareTokenBodyParamsParentType.COURSES]: "components.molecules.share.courses.options.infoText",
+	[ShareTokenBodyParamsParentType.TASKS]: "components.molecules.share.tasks.options.infoText",
+	[ShareTokenBodyParamsParentType.LESSONS]: "components.molecules.share.lessons.options.infoText",
+	[ShareTokenBodyParamsParentType.COLUMN_BOARD]: "components.molecules.share.columnBoard.options.infoText",
+	[ShareTokenBodyParamsParentType.ROOM]: "components.molecules.share.room.options.infoText",
+	[ShareTokenBodyParamsParentType.CARD]: "components.molecules.share.card.options.infoText",
 };
 
 export const useShareContent = (shareTokenParentType: Ref<ShareTokenBodyParamsParentType | undefined>) => {
 	const { t } = useI18nGlobal();
 
-	const contentItemType = computed(() =>
-		shareTokenParentType.value ? apiTypeToEntityType[shareTokenParentType.value] : undefined
-	);
+	const contentItemType = computed(() => apiTypeToEntityType[shareTokenParentType.value!]);
 
 	return {
 		...useCopyContent(contentItemType),
-		text: computed(() => t(`components.molecules.share.${shareTokenParentType.value}.options.infoText`)),
+		text: computed(() => (shareTokenParentType.value ? t(shareInfoTextKeys[shareTokenParentType.value]) : "")),
 	};
 };

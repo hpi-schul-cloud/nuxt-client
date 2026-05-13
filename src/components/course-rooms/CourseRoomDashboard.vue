@@ -35,7 +35,7 @@
 							@copy-board="copyBoard(item.content.id)"
 							@update-visibility="updateCardVisibility(item.content.id, $event)"
 							@delete-board="onDeleteItem(item.content, item.type)"
-							@share-board="shareBoard(item.content.columnBoardId)"
+							@share-board="onShareItem(item.content.columnBoardId, ShareTokenBodyParamsParentType.COLUMN_BOARD)"
 						/>
 						<CourseRoomTaskCard
 							v-if="item.type === cardTypes.TASK"
@@ -61,7 +61,7 @@
 							@finish-task="finishTask(item.content.id)"
 							@restore-task="restoreTask(item.content.id)"
 							@copy-task="copyTask(item.content.id)"
-							@share-task="shareTask(item.content.id)"
+							@share-task="onShareItem(item.content.id, ShareTokenBodyParamsParentType.TASKS)"
 						/>
 						<RoomLessonCard
 							v-if="item.type === cardTypes.LESSON"
@@ -83,7 +83,7 @@
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
-							@open-modal="shareLesson(item.content.id)"
+							@open-modal="onShareItem(item.content.id, ShareTokenBodyParamsParentType.LESSONS)"
 							@delete-lesson="onDeleteItem(item.content, item.type)"
 							@copy-lesson="copyLesson(item.content.id)"
 						/>
@@ -269,25 +269,8 @@ const boardLayoutAriaLabel = (itemLayout: BoardLayout) => {
 	}
 };
 
-const shareBoard = (boardId: string) => {
-	emit("share-board-element", {
-		id: boardId,
-		type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
-	});
-};
-
-const shareLesson = (lessonId: string) => {
-	emit("share-board-element", {
-		id: lessonId,
-		type: ShareTokenBodyParamsParentType.LESSONS,
-	});
-};
-
-const shareTask = (taskId: string) => {
-	emit("share-board-element", {
-		id: taskId,
-		type: ShareTokenBodyParamsParentType.TASKS,
-	});
+const onShareItem = (id: string, type: ShareTokenBodyParamsParentType) => {
+	emit("share-board-element", { id, type });
 };
 
 const endDragging = () => {

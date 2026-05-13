@@ -57,6 +57,8 @@ export const useSafeAxiosTask = () => {
 	const { execute: safeExec, isRunning, reset, status, error } = useSafeTask();
 	const { t } = useI18nGlobal();
 	const isLoading = ref(false);
+	// Can be used to disable UI elements while the task is either running or loading.
+	// Since loading is used to indicate the state of a debounced task, it can be true while the task is not running.
 	const isBlocked = computed(() => isRunning.value || isLoading.value);
 
 	const execute = async <T>(fn: AsyncFunction<T>, onErrorNotifyMessage?: string): Promise<TaskResult<T>> => {

@@ -20,7 +20,7 @@ export interface ConfirmationOptions {
  * This composable is only meant to be used in App.vue where the dialog is rendered.
  */
 export const useInternalConfirmationDialog = createSharedComposable(() => {
-	const action = useAwaitableAction<boolean>();
+	const confirmationAction = useAwaitableAction<boolean>();
 
 	const dialogOptions = ref<ConfirmationOptions | undefined>();
 
@@ -28,12 +28,12 @@ export const useInternalConfirmationDialog = createSharedComposable(() => {
 		dialogOptions.value = undefined;
 	};
 
-	const confirm = () => action.complete(true);
-	const cancel = () => action.cancel();
+	const confirm = () => confirmationAction.complete(true);
+	const cancel = () => confirmationAction.cancel();
 
 	const askInternal = async (options: ConfirmationOptions): Promise<boolean> => {
 		dialogOptions.value = options;
-		const { completed } = await action.start();
+		const { completed } = await confirmationAction.start();
 		return completed;
 	};
 
@@ -56,7 +56,7 @@ export const useInternalConfirmationDialog = createSharedComposable(() => {
 		confirmationTitle,
 		confirmationMessage,
 		dialogOptions,
-		isDialogOpen: action.isActive,
+		isDialogOpen: confirmationAction.isActive,
 		confirm,
 		cancel,
 		resetDialogOptions,
