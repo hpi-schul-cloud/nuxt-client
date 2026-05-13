@@ -14,29 +14,31 @@
 		]"
 		max-width="short"
 	>
-		<h2 data-testid="news-title">{{ newsInstance.title }}</h2>
-		<div class="d-flex mb-2">
-			<div class="d-flex align-center text-subtitle mr-3">
-				<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
-				{{ lastTouched }}
+		<SvsSuspense :loading="isLoadingNews">
+			<h2 data-testid="news-title">{{ newsInstance.title }}</h2>
+			<div class="d-flex mb-2">
+				<div class="d-flex align-center text-subtitle mr-3">
+					<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
+					{{ lastTouched }}
+				</div>
+				<div class="d-flex align-center text-subtitle">
+					<VIcon :icon="mdiHumanMaleBoard" size="sm" class="mr-1" />
+					{{ creator }}
+				</div>
 			</div>
-			<div class="d-flex align-center text-subtitle">
-				<VIcon :icon="mdiHumanMaleBoard" size="sm" class="mr-1" />
-				{{ creator }}
+			<VDivider class="mb-4" />
+			<RenderHTML :html="newsInstance?.content" class="ck-content" data-testid="news-content" />
+			<div class="d-flex mt-8 ga-3">
+				<VBtn
+					data-testid="news-edit-btn"
+					:text="t('common.actions.edit')"
+					color="primary"
+					variant="flat"
+					@click="onEdit"
+				/>
+				<VBtn data-testid="news-delete-btn" :text="t('common.actions.delete')" variant="outlined" @click="onDelete" />
 			</div>
-		</div>
-		<VDivider class="mb-4" />
-		<RenderHTML :html="newsInstance?.content" class="ck-content" data-testid="news-content" />
-		<div class="d-flex mt-8 ga-3">
-			<VBtn
-				data-testid="news-edit-btn"
-				:text="t('common.actions.edit')"
-				color="primary"
-				variant="flat"
-				@click="onEdit"
-			/>
-			<VBtn data-testid="news-delete-btn" :text="t('common.actions.delete')" variant="outlined" @click="onDelete" />
-		</div>
+		</SvsSuspense>
 	</DefaultWireframe>
 </template>
 
@@ -47,6 +49,7 @@ import { useNews, useNewsActions } from "@data-access";
 import { notifySuccess } from "@data-app";
 import { RenderHTML } from "@feature-render-html";
 import { mdiClockOutline, mdiHumanMaleBoard } from "@icons/material";
+import { SvsSuspense } from "@ui-containers";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, watch } from "vue";
@@ -59,7 +62,7 @@ const route = useRoute();
 
 const newsId = computed(() => route.params.id as string | undefined);
 const { deleteNews } = useNewsActions();
-const { newsInstance, lastTouched, creator } = useNews(newsId);
+const { newsInstance, lastTouched, creator, isLoadingNews } = useNews(newsId);
 
 const pageTitle = computed(() => {
 	if (!newsInstance.value?.createdAt) return t("pages.news.details.title.fallback");
