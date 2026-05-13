@@ -80,8 +80,10 @@ const isSessionTokenExpired = computed(
 );
 
 onMounted(async () => {
+	console.log("UserMenu mounted. isExternalLogoutAllowed:", isExternalLogoutAllowed.value);
 	if (isExternalLogoutAllowed.value) {
 		sessionTokenExpiration.value = await getSessionTokenExpiration();
+		console.log("Session token expiration:", sessionTokenExpiration.value);
 	}
 });
 

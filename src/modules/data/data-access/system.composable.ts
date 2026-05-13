@@ -20,6 +20,7 @@ export const useSystem = (systemId: Ref<string | undefined>) => {
 
 		if (success) {
 			system.value = result.data;
+			console.log("Fetched system:", system.value);
 		}
 	};
 
