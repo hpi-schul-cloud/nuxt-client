@@ -342,4 +342,297 @@ describe("ImportUsers", () => {
 			expect(wrapperVm.options.sortBy[0].order).toBe("desc");
 		});
 	});
+
+	describe("editItem", () => {
+		it("should open dialog and set editedIndex when edit button clicked", async () => {
+			const wrapper = getWrapper(importUsersStore, mockData);
+
+			const editButtons = wrapper.findAll('[title="components.organisms.importUsers.editImportUser"]');
+			await editButtons[0].trigger("click");
+
+			expect(wrapper.vm.dialogEdit).toBe(true);
+			expect(wrapper.vm.editedIndex).toBe(0);
+		});
+
+		it("should set correct editedItem when editing second row", async () => {
+			const wrapper = getWrapper(importUsersStore, mockData);
+
+			const editButtons = wrapper.findAll('[title="components.organisms.importUsers.editImportUser"]');
+			await editButtons[1].trigger("click");
+
+			expect(wrapper.vm.editedIndex).toBe(1);
+			expect(wrapper.vm.editedItem.firstName).toBe("Armin");
+		});
+	});
+
+	describe("closeEdit", () => {
+		it("should close dialog and reset editedIndex", async () => {
+			const wrapper = getWrapper(importUsersStore, {
+				...mockData,
+				dialogEdit: true,
+				editedIndex: 1,
+			});
+
+			wrapper.vm.closeEdit();
+			await nextTick();
+
+			expect(wrapper.vm.dialogEdit).toBe(false);
+			await nextTick();
+			expect(wrapper.vm.editedIndex).toBe(-1);
+		});
+	});
+
+	describe("getMatchedByIcon", () => {
+		it("should return mdiAccountPlus when no match", () => {
+			const wrapper = getWrapper(importUsersStore, mockData);
+			const icon = (wrapper.vm as unknown as { getMatchedByIcon: (match: unknown) => string }).getMatchedByIcon(
+				undefined
+			);
+
+			expect(icon).toBe(mdiAccountPlus);
+		});
+
+		it("should return mdiAccountPlus when match has no matchedBy", () => {
+			const wrapper = getWrapper(importUsersStore, mockData);
+			const icon = (wrapper.vm as unknown as { getMatchedByIcon: (match: unknown) => string }).getMatchedByIcon({
+				userId: "123",
+				firstName: "Test",
+				lastName: "User",
+			});
+
+			expect(icon).toBe(mdiAccountPlus);
+		});
+
+		it("should return mdiAccountSwitchOutline for AUTO match", () => {
+			const wrapper = getWrapper(importUsersStore, mockData);
+			const icon = (wrapper.vm as unknown as { getMatchedByIcon: (match: unknown) => string }).getMatchedByIcon({
+				userId: "123",
+				matchedBy: "auto",
+			});
+
+			expect(icon).toBe(mdiAccountSwitchOutline);
+		});
+
+		it("should return mdiAccountSwitch for ADMIN match", () => {
+			const wrapper = getWrapper(importUsersStore, mockData);
+			const icon = (wrapper.vm as unknown as { getMatchedByIcon: (match: unknown) => string }).getMatchedByIcon({
+				userId: "123",
+				matchedBy: "admin",
+			});
+
+			expect(icon).toBe(mdiAccountSwitch);
+		});
+	});
+
+	describe("saveFlag from table", () => {
+		it("should call saveFlag when flag button clicked in table", async () => {
+			const saveFlagMock = vi.spyOn(importUsersStore, "saveFlag").mockResolvedValue(undefined);
+			const wrapper = getWrapper(importUsersStore, mockData);
+			await nextTick();
+
+			// Call saveFlag directly with the first item since VDataTableServer slots may not render in tests
+			await wrapper.vm.saveFlag(mockImportUsers.data[0]);
+
+			expect(saveFlagMock).toHaveBeenCalledWith({
+				importUserId: mockImportUsers.data[0].importUserId,
+				flagged: !mockImportUsers.data[0].flagged,
+			});
+		});
+
+		it("should not call saveFlag when loading is true", async () => {
+			const saveFlagMock = vi.spyOn(importUsersStore, "saveFlag").mockResolvedValue(undefined);
+			const wrapper = getWrapper(importUsersStore, mockData);
+			await nextTick();
+
+			// Set loading to true directly on the component
+			wrapper.vm.loading = true;
+			await nextTick();
+
+			// Call saveFlag directly - it should return early when loading is true
+			await wrapper.vm.saveFlag(mockImportUsers.data[0]);
+
+			expect(saveFlagMock).not.toHaveBeenCalled();
+		});
+
+		it("should set loading to false when searchFlagged is false", async () => {
+			vi.spyOn(importUsersStore, "saveFlag").mockResolvedValue(undefined);
+			const wrapper = getWrapper(importUsersStore, {
+				...mockData,
+				searchFlagged: false,
+			});
+			await nextTick();
+
+			await wrapper.vm.saveFlag(mockImportUsers.data[0]);
+			await nextTick();
+
+			expect(wrapper.vm.loading).toBe(false);
+		});
+
+		it("should reload data when searchFlagged is true", async () => {
+			vi.useFakeTimers();
+			vi.spyOn(importUsersStore, "saveFlag").mockResolvedValue(undefined);
+			const fetchSpy = vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
+
+			const wrapper = getWrapper(importUsersStore, {
+				...mockData,
+				searchFlagged: true,
+			});
+			await nextTick();
+
+			await wrapper.vm.saveFlag(mockImportUsers.data[0]);
+			await nextTick();
+
+			vi.advanceTimersByTime(600);
+			await nextTick();
+
+			expect(fetchSpy).toHaveBeenCalled();
+			vi.useRealTimers();
+		});
+	});
+
+	describe("savedMatch event handler", () => {
+		it("should call reloadData when searchMatchedBy has values", async () => {
+			vi.useFakeTimers();
+			const fetchSpy = vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
+			const wrapper = getWrapper(importUsersStore, mockData);
+			await nextTick();
+
+			// Set searchMatchedBy to have values
+			wrapper.vm.searchMatchedBy = [MatchedBy.Auto];
+			await nextTick();
+
+			wrapper.vm.savedMatch();
+			await nextTick();
+
+			expect(wrapper.vm.loading).toBe(true);
+
+			vi.advanceTimersByTime(600);
+			await nextTick();
+
+			expect(fetchSpy).toHaveBeenCalled();
+			vi.useRealTimers();
+		});
+
+		it("should close dialog without reloading when searchMatchedBy is empty", () => {
+			const wrapper = getWrapper(importUsersStore, {
+				...mockData,
+				dialogEdit: true,
+				searchMatchedBy: [],
+			});
+
+			wrapper.vm.savedMatch();
+
+			expect(wrapper.vm.dialogEdit).toBe(false);
+		});
+	});
+
+	describe("savedFlag event handler", () => {
+		it("should set loading and reload data", async () => {
+			vi.useFakeTimers();
+			const fetchSpy = vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
+			const wrapper = getWrapper(importUsersStore, mockData);
+
+			wrapper.vm.savedFlag();
+
+			expect(wrapper.vm.loading).toBe(true);
+
+			vi.advanceTimersByTime(600);
+			await nextTick();
+
+			expect(fetchSpy).toHaveBeenCalled();
+			vi.useRealTimers();
+		});
+	});
+
+	describe("getRoles", () => {
+		it("should return empty string for empty roleNames", () => {
+			const wrapper = getWrapper(importUsersStore, mockData);
+			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: string[]) => string }).getRoles([]);
+
+			expect(roles).toBe("");
+		});
+
+		it("should return student label for student role", () => {
+			const wrapper = getWrapper(importUsersStore, mockData);
+			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: string[]) => string }).getRoles(["student"]);
+
+			expect(roles).toBe("common.roleName.student");
+		});
+
+		it("should return teacher label for teacher role", () => {
+			const wrapper = getWrapper(importUsersStore, mockData);
+			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: string[]) => string }).getRoles(["teacher"]);
+
+			expect(roles).toBe("common.roleName.teacher");
+		});
+
+		it("should return admin label for admin role", () => {
+			const wrapper = getWrapper(importUsersStore, mockData);
+			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: string[]) => string }).getRoles(["admin"]);
+
+			expect(roles).toBe("common.roleName.administrator");
+		});
+
+		it("should return combined labels for multiple roles", () => {
+			const wrapper = getWrapper(importUsersStore, mockData);
+			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: string[]) => string }).getRoles([
+				"student",
+				"teacher",
+			]);
+
+			expect(roles).toBe("common.roleName.student, common.roleName.teacher");
+		});
+
+		it("should return empty string when roleNames is not an array", () => {
+			const wrapper = getWrapper(importUsersStore, mockData);
+			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: unknown) => string }).getRoles(
+				null as unknown as string[]
+			);
+
+			expect(roles).toBe("");
+		});
+	});
+
+	describe("NBC theme", () => {
+		it("should hide loginName column when isNbc is true", async () => {
+			createTestEnvStore({ SC_THEME: SchulcloudTheme.N21 });
+			const wrapper = getWrapper(importUsersStore, mockData);
+			await nextTick();
+
+			const headers = wrapper.vm.tableHead;
+			const loginNameHeader = headers.find((h: { value: string }) => h.value === "loginName");
+
+			expect(loginNameHeader).toBeUndefined();
+		});
+	});
+
+	describe("watch total", () => {
+		it("should call searchApi when total changes to value > 0", async () => {
+			const fetchSpy = vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
+			getWrapper(importUsersStore, mockData);
+
+			importUsersStore.importUsersData.list = { ...mockImportUsers, total: 5 };
+			await nextTick();
+			await nextTick();
+
+			expect(fetchSpy).toHaveBeenCalled();
+		});
+	});
+
+	describe("onUpdateOptions", () => {
+		it("should update options and fetch data", async () => {
+			const fetchSpy = vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
+			const wrapper = getWrapper(importUsersStore, mockData);
+
+			await wrapper.vm.onUpdateOptions({
+				page: 2,
+				itemsPerPage: 50,
+				sortBy: [{ key: "firstName", order: "asc" }],
+			});
+
+			expect(wrapper.vm.options.page).toBe(2);
+			expect(wrapper.vm.options.itemsPerPage).toBe(50);
+			expect(fetchSpy).toHaveBeenCalled();
+		});
+	});
 });

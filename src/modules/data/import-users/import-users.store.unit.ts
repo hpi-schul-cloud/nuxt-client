@@ -323,6 +323,26 @@ describe("useImportUsersStore", () => {
 			);
 		});
 
+		it("should pass empty array for match when filter.match is empty array", async () => {
+			const { store, mockApi } = setup();
+			store.filter.match = [];
+			await store.fetchAllImportUsers();
+
+			expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
+				undefined,
+				undefined,
+				undefined,
+				[],
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				0,
+				25
+			);
+		});
+
 		it("should set businessError on failure", async () => {
 			const { store } = setup({
 				importUserControllerFindAllImportUsers: vi.fn(() => Promise.reject(badRequestError)),
@@ -353,6 +373,18 @@ describe("useImportUsersStore", () => {
 				1
 			);
 			expect(store.importUsersData.total).toBe(3);
+		});
+
+		it("should set importUsersData.total to 0 when result.data.total is undefined", async () => {
+			const { store } = setup({
+				importUserControllerFindAllImportUsers: vi.fn(() =>
+					Promise.resolve({ data: { total: undefined } })
+				) as unknown as ReturnType<typeof defaultMockApi>["importUserControllerFindAllImportUsers"],
+			});
+
+			await store.fetchTotal();
+
+			expect(store.importUsersData.total).toBe(0);
 		});
 
 		it("should set businessError on failure", async () => {
@@ -387,6 +419,18 @@ describe("useImportUsersStore", () => {
 			expect(store.importUsersData.totalMatched).toBe(3);
 		});
 
+		it("should set importUsersData.totalMatched to 0 when result.data.total is undefined", async () => {
+			const { store } = setup({
+				importUserControllerFindAllImportUsers: vi.fn(() =>
+					Promise.resolve({ data: { total: undefined } })
+				) as unknown as ReturnType<typeof defaultMockApi>["importUserControllerFindAllImportUsers"],
+			});
+
+			await store.fetchTotalMatched();
+
+			expect(store.importUsersData.totalMatched).toBe(0);
+		});
+
 		it("should set businessError on failure", async () => {
 			const { store } = setup({
 				importUserControllerFindAllImportUsers: vi.fn(() => Promise.reject(badRequestError)),
@@ -405,6 +449,18 @@ describe("useImportUsersStore", () => {
 
 			expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledWith(undefined, 0, 1);
 			expect(store.importUsersData.totalUnmatched).toBe(3);
+		});
+
+		it("should set importUsersData.totalUnmatched to 0 when result.data.total is undefined", async () => {
+			const { store } = setup({
+				importUserControllerFindAllUnmatchedUsers: vi.fn(() =>
+					Promise.resolve({ data: { total: undefined } })
+				) as unknown as ReturnType<typeof defaultMockApi>["importUserControllerFindAllUnmatchedUsers"],
+			});
+
+			await store.fetchTotalUnmatched();
+
+			expect(store.importUsersData.totalUnmatched).toBe(0);
 		});
 
 		it("should set businessError on failure", async () => {
@@ -458,6 +514,15 @@ describe("useImportUsersStore", () => {
 			await store.deleteMatch("abc");
 
 			expect(store.businessError).toStrictEqual(expectedBusinessError);
+		});
+
+		it("should succeed even when user is not in local list", async () => {
+			const { store, mockApi } = setup();
+			store.importUsersData.list = { data: [], total: 0, skip: 0, limit: 0 };
+
+			await store.deleteMatch("nonexistent");
+
+			expect(mockApi.importUserControllerRemoveMatch).toHaveBeenCalledWith("nonexistent");
 		});
 	});
 
@@ -528,6 +593,17 @@ describe("useImportUsersStore", () => {
 
 			const user = store.importUsersData.list.data.find((u) => u.importUserId === "abc");
 			expect(user?.flagged).toBe(false);
+			expect(store.businessError).toStrictEqual(expectedBusinessError);
+		});
+
+		it("should handle error without reverting when user is not in list", async () => {
+			const { store } = setup({
+				importUserControllerUpdateFlag: vi.fn(() => Promise.reject(badRequestError)),
+			});
+			store.importUsersData.list = { data: [], total: 0, skip: 0, limit: 0 };
+
+			await store.saveFlag({ importUserId: "nonexistent", flagged: true });
+
 			expect(store.businessError).toStrictEqual(expectedBusinessError);
 		});
 	});
