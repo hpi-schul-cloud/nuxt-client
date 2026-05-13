@@ -147,6 +147,7 @@ export default {
 	"common.nodata": "Datos no disponibles",
 	"common.notification.error": "Se ha producido un error.",
 	"common.notifications.errors.notCreated": "{type} no se ha podido crear. | {type} no se han podido crear.",
+	"common.notifications.errors.notSaved": "{type} no pudo guardarse. | {type} no pudieron guardarse.",
 	"common.notifications.errors.notDeleted": "{type} no se ha podido eliminar. | {type} no se han podido eliminar.",
 	"common.notifications.errors.notDuplicated": "{type} no se ha podido duplicar. | {type} no se han podido duplicar.",
 	"common.notifications.errors.notLoaded": "{type} no se ha podido cargar. | {type} no se han podido cargar.",

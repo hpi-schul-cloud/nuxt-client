@@ -148,6 +148,7 @@ export default {
 	"common.notification.error": "Сталася помилка.",
 	"common.notifications.errors.notCreated":
 		"{type} не вдалося створити. | {type} не вдалося створити. | {type} не вдалося створити.",
+	"common.notifications.errors.notSaved": "{type} не вдалося зберегти. | {type} не вдалося зберегти.",
 	"common.notifications.errors.notDeleted":
 		"{type} не вдалося видалити. | {type} не вдалося видалити. | {type} не вдалося видалити.",
 	"common.notifications.errors.notDuplicated":

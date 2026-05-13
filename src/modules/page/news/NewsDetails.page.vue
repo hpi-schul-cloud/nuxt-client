@@ -18,8 +18,17 @@
 		<div class="d-flex mb-2">
 			<div class="d-flex align-center text-subtitle mr-3">
 				<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
-				{{ createdAt }}
+				{{ createdAtFormatted }}
 			</div>
+			<div class="d-flex align-center text-subtitle mr-3">
+				<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
+				{{ displayAtFormatted }}
+			</div>
+			<div class="d-flex align-center text-subtitle mr-3">
+				<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
+				{{ lastTouched }}
+			</div>
+
 			<div class="d-flex align-center text-subtitle">
 				<VIcon :icon="mdiHumanMaleBoard" size="sm" class="mr-1" />
 				{{ creator }}
@@ -43,14 +52,13 @@
 <script setup lang="ts">
 import { formatUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { NewsResponse } from "@api-server";
-import { useNewsActions } from "@data-access";
-import { notifyError, notifySuccess } from "@data-app";
+import { useNews, useNewsActions } from "@data-access";
+import { notifySuccess } from "@data-app";
 import { RenderHTML } from "@feature-render-html";
 import { mdiClockOutline, mdiHumanMaleBoard } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
@@ -58,13 +66,9 @@ const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 
-const newsInstance = ref<NewsResponse>();
-const { fetchNews, deleteNews } = useNewsActions();
-
-onMounted(async () => {
-	const { success, result } = await fetchNews(route.params.id as string);
-	if (success) newsInstance.value = result?.data;
-});
+const newsId = computed(() => route.params.id as string | undefined);
+const { deleteNews } = useNewsActions();
+const { newsInstance, createdAtFormatted, displayAtFormatted, lastTouched, creator } = useNews(newsId);
 
 const pageTitle = computed(() => {
 	if (!newsInstance.value?.createdAt) return t("pages.news.details.title.fallback");
@@ -73,26 +77,12 @@ const pageTitle = computed(() => {
 	});
 });
 
-const createdAt = computed(() => {
-	if (!newsInstance.value?.createdAt) return "";
-	return formatUtc(newsInstance.value.createdAt, "date");
-});
-
-const creator = computed(() => {
-	if (!newsInstance.value) return "";
-	return `${newsInstance.value.creator.firstName} ${newsInstance.value.creator.lastName}`;
-});
-
 const onEdit = () => {
 	router.push({ path: `/news/${newsInstance.value?.id}/edit` });
 };
 
 const onDelete = async () => {
-	if (!newsInstance.value?.id) {
-		notifyError(t("components.organisms.FormNews.error.remove"));
-		return;
-	}
-	await deleteNews(newsInstance.value.id);
+	await deleteNews(newsInstance.value?.id);
 	notifySuccess(t("components.organisms.FormNews.success.remove"));
 	await router.push({ path: "/news" });
 };

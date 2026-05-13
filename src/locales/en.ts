@@ -145,6 +145,7 @@ export default {
 	"common.nodata": "No data available",
 	"common.notification.error": "An error has occurred.",
 	"common.notifications.errors.notCreated": "{type} could not be created.",
+	"common.notifications.errors.notSaved": "{type} could not be saved.",
 	"common.notifications.errors.notDeleted": "{type} could not be deleted.",
 	"common.notifications.errors.notDuplicated": "{type} could not be duplicated.",
 	"common.notifications.errors.notLoaded": "{type} could not be loaded.",

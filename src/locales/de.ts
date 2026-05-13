@@ -152,6 +152,8 @@ export default {
 	"common.notification.connection.restored": "Die Verbindung wurde wieder hergestellt.",
 	"common.notifications.errors.notCreated":
 		"{type} konnte nicht erstellt werden. | {type} konnten nicht erstellt werden.",
+	"common.notifications.errors.notSaved":
+		"{type} konnte nicht gespeichert werden. | {type} konnten nicht gespeichert werden.",
 	"common.notifications.errors.notDeleted":
 		"{type} konnte nicht gelöscht werden. | {type} konnten nicht gelöscht werden.",
 	"common.notifications.errors.notDuplicated":
