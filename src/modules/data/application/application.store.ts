@@ -1,5 +1,6 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { notifySuccess } from "./notification-store";
+import { useSchoolStore } from "./school.store";
 import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
@@ -73,12 +74,13 @@ export const useAppStore = defineStore("applicationStore", () => {
 		computed(() => userPermissions.value?.includes(permission) ?? false);
 
 	// Actions
-
 	const login = async () => {
 		const { data } = await meApi.meControllerMe();
 		userLocale.value = data.language;
 		meResponse.value = data;
 		isLoggedIn.value = true;
+
+		await useSchoolStore().fetchSchoolDetails();
 	};
 
 	const logout = (redirectUrl = "/logout") => {

@@ -1,46 +1,16 @@
 import { FilterOption, Registration, UpdateFilterParamType, User } from "../types";
 import { useDataTableFilter } from "./filter.composable";
-import SchoolsModule from "@/store/schools";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { createTestAppStore, mountComposable } from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
+import { Mock, vi } from "vitest";
 
-vi.mock("@vueuse/core", async (importOriginal) => {
-	const defaultState = {
-		pagination: {},
-		filter: {
-			studentsManagementPage: {
-				query: {},
-			},
-			teachersManagementPage: {
-				query: {},
-			},
-		},
-		sorting: {},
-		version: 1,
-	};
+vi.mock("@/plugins/i18n");
+(useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
-	const actual = await importOriginal<typeof import("@vueuse/core")>();
-	return {
-		...actual,
-		useStorage: vi.fn().mockReturnValue({ value: defaultState }),
-	};
-});
-
-vi.mock("vue-i18n", () => ({
-	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
-}));
-
-const setup = (userType: User) =>
-	mountComposable(() => {
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-		const dataTableFilter = useDataTableFilter(userType);
-
-		return dataTableFilter;
-	});
+const setup = (userType: User) => mountComposable(() => useDataTableFilter(userType));
 
 const removeAllFilters = () => {
 	const { removeFilter, selectedFilterType, filterQuery } = setup(User.STUDENT);
@@ -61,6 +31,7 @@ describe("filter composable", () => {
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
 		createTestAppStore();
+		createTestSchoolStore();
 	});
 
 	it("should return filterQuery", () => {

@@ -2,7 +2,15 @@ import { useAppStore, useAppStoreRefs } from "./application.store";
 import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { initializeAxios } from "@/utils/api";
-import { createTestEnvStore, meResponseFactory, mockApiResponse, mockBroadcastChannel } from "@@/tests/test-utils";
+import {
+	createTestEnvStore,
+	meResponseFactory,
+	mockApiResponse,
+	mockAxiosInstance,
+	mockBroadcastChannel,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import {
 	LanguageType,
 	MeApiFactory,
@@ -12,11 +20,13 @@ import {
 	SuccessfulResponse,
 	UserApiFactory,
 } from "@api-server";
+import { useSchoolStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { AxiosInstance, AxiosPromise } from "axios";
 import { DeepPartial } from "fishery";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { beforeEach, describe, expect, vi } from "vitest";
 
 const broadcastChannelMock = mockBroadcastChannel();
@@ -28,13 +38,20 @@ vi.mock("@api-file-storage");
 const mockedUserApi = vi.mocked(UserApiFactory);
 
 describe("useApplicationStore", () => {
+	let axiosMock: Mocked<AxiosInstance>;
+
 	beforeEach(() => {
 		const pinia = createTestingPinia({ stubActions: false });
 		setActivePinia(pinia);
 
 		createTestEnvStore({ JWT_TIMEOUT_SECONDS: 7200 });
+		createTestSchoolStore();
+		const schoolStore = mockedPiniaStoreTyping(useSchoolStore);
+		schoolStore.fetchSchoolDetails.mockResolvedValue({ success: true, result: undefined, error: undefined });
 
-		vi.clearAllMocks();
+		axiosMock = mockAxiosInstance();
+		axiosMock.defaults = { headers: { common: {} } } as AxiosInstance["defaults"];
+		initializeAxios(axiosMock);
 
 		Object.defineProperty(globalThis, "location", {
 			value: { replace: vi.fn() },
@@ -187,34 +204,12 @@ describe("useApplicationStore", () => {
 	});
 
 	describe("logout action", () => {
-		beforeEach(() => {
-			initializeAxios({
-				defaults: {
-					headers: {
-						common: {
-							Authorization: "",
-						},
-					},
-				},
-			} as AxiosInstance);
-		});
-
 		it("should redirect to default logout URL", () => {
-			Object.defineProperty(globalThis, "location", {
-				value: { replace: vi.fn() },
-				writable: true,
-			});
-
 			useAppStore().logout();
 			expect(globalThis.location.replace).toHaveBeenCalledWith("/logout");
 		});
 
 		it("should redirect to custom logout URL", () => {
-			Object.defineProperty(globalThis, "location", {
-				value: { replace: vi.fn() },
-				writable: true,
-			});
-
 			useAppStore().logout("/logout-to");
 			expect(globalThis.location.replace).toHaveBeenCalledWith("/logout-to");
 		});
@@ -335,24 +330,7 @@ describe("useApplicationStore", () => {
 	});
 
 	describe("externalLogout action", () => {
-		beforeEach(() => {
-			initializeAxios({
-				defaults: {
-					headers: {
-						common: {
-							Authorization: "",
-						},
-					},
-				},
-			} as AxiosInstance);
-		});
-
 		it("should redirect to external logout URL", () => {
-			Object.defineProperty(globalThis, "location", {
-				value: { replace: vi.fn() },
-				writable: true,
-			});
-
 			useAppStore().externalLogout();
 			expect(globalThis.location.replace).toHaveBeenCalledWith("/logout/external");
 		});
@@ -546,28 +524,7 @@ describe("useApplicationStore", () => {
 				configurable: true,
 			});
 
-			initializeAxios({
-				defaults: {
-					headers: {
-						common: {
-							Authorization: "",
-						},
-					},
-				},
-			} as AxiosInstance);
-
-			Object.defineProperty(globalThis, "location", {
-				value: { replace: vi.fn() },
-				writable: true,
-			});
-
-			Object.defineProperty(globalThis, "localStorage", {
-				value: { clear: vi.fn() },
-				writable: true,
-			});
-
-			// Create the store to capture the handler
-			setActivePinia(createTestingPinia({ stubActions: false }));
+			// Re-create the store to capture the handler
 			useAppStore();
 		});
 

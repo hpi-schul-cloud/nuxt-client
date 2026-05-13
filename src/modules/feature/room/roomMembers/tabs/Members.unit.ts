@@ -1,17 +1,14 @@
 import MemberInvitationsTable from "../tables/MemberInvitationsTable.vue";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
 import {
 	createTestAppStoreWithUser,
 	createTestEnvStore,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
-	schoolFactory,
 } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomItemResponseAllowedOperations } from "@api-server";
-import { useRoomMembersStore } from "@data-room";
+import { useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { Members, MembersTable } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
@@ -21,19 +18,7 @@ describe("Members", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore();
-	});
-
-	beforeEach(() => {
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-
-		schoolsModule.setSchool(
-			schoolFactory.build({
-				id: "school-id",
-				name: "Paul-Gerhardt-Gymnasium",
-			})
-		);
+		createTestSchoolStore();
 	});
 
 	const setup = (
@@ -51,40 +36,26 @@ describe("Members", () => {
 			roomMembers.push(currentUser);
 		}
 
-		const wrapper = shallowMount(Members, {
-			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					createTestingPinia({
-						initialState: {
-							roomMembersStore: {
-								isLoading: options?.isLoading ?? false,
-								roomMembers,
-							},
-							roomDetailsStore: {
-								room: {
-									id: "room-id",
-									name: "Room 1",
-									schoolId: "school-id",
-									allowedOperations: options?.allowedOperations,
-								},
-							},
-						},
-					}),
-				],
+		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
+		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
+		roomMembersStore.$patch({ isLoading: options?.isLoading ?? false, roomMembers });
+		roomDetailsStore.$patch({
+			room: {
+				id: "room-id",
+				name: "Room 1",
+				schoolId: "school-id",
+				allowedOperations: options?.allowedOperations,
 			},
 		});
-		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
+
+		const wrapper = shallowMount(Members, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+		});
 
 		return { wrapper, roomMembersStore };
 	};
-
-	it("renders correctly", () => {
-		const { wrapper } = setup();
-
-		expect(wrapper.exists()).toBe(true);
-	});
 
 	describe("when user is allowed to add room members", () => {
 		it("should render info text", () => {

@@ -1,33 +1,27 @@
 import RoomAdminTable from "./RoomAdminTable.vue";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { mockedPiniaStoreTyping, roomStatsItemResponseFactory, schoolFactory } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomStatsItemResponse } from "@api-server";
 import { useAdministrationRoomStore } from "@data-room";
 import { mdiAlert } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu } from "@ui-kebab-menu";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { VIcon } from "vuetify/components";
 
 describe("RoomAdminTable", () => {
-	const ownSchool = {
+	const ownSchool = schoolFactory.build({
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
-	};
+	});
 
 	beforeEach(() => {
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-		schoolsModule.setSchool(schoolFactory.build(ownSchool));
-	});
-	afterEach(() => {
-		vi.clearAllMocks();
+		setActivePinia(createTestingPinia());
+		createTestSchoolStore({ schoolDetails: ownSchool });
 	});
 
 	const setup = (
@@ -41,22 +35,12 @@ describe("RoomAdminTable", () => {
 				schoolId: ownSchool.id,
 			});
 
+		const adminRoomStore = mockedPiniaStoreTyping(useAdministrationRoomStore);
+		adminRoomStore.$patch({ roomList, isEmptyList: true, isLoading: false });
+
 		const wrapper = mount(RoomAdminTable, {
-			attachTo: document.body,
 			global: {
-				plugins: [
-					createTestingI18n(),
-					createTestingVuetify(),
-					createTestingPinia({
-						initialState: {
-							administrationRoomStore: {
-								roomList,
-								isEmptyList: true,
-								isLoading: false,
-							},
-						},
-					}),
-				],
+				plugins: [createTestingI18n(), createTestingVuetify()],
 			},
 			stubs: {
 				KebabMenuActionRoomMembers: true,
@@ -64,8 +48,6 @@ describe("RoomAdminTable", () => {
 				DataTable: true,
 			},
 		});
-
-		const adminRoomStore = mockedPiniaStoreTyping(useAdministrationRoomStore);
 
 		return {
 			wrapper,
