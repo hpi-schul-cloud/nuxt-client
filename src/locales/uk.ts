@@ -223,6 +223,7 @@ export default {
 	"common.words.also": "також",
 	"common.words.and": "і",
 	"common.words.board": "Дошка | дошки",
+	"common.words.news": "новина | новини",
 	"common.words.classes": "класи",
 	"common.words.color": "Колір",
 	"common.words.color.blue": "Синій",

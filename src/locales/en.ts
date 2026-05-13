@@ -214,6 +214,7 @@ export default {
 	"common.words.also": "also",
 	"common.words.and": "and",
 	"common.words.board": "board | boards",
+	"common.words.news": "news",
 	"common.words.classes": "Classes",
 	"common.words.color": "Color",
 	"common.words.color.blue": "Blue",

@@ -225,6 +225,7 @@ export default {
 	"common.words.also": "auch",
 	"common.words.and": "und",
 	"common.words.board": "Bereich | Bereiche",
+	"common.words.news": "Neuigkeit | Neuigkeiten",
 	"common.words.classes": "Klassen",
 	"common.words.color": "Farbe",
 	"common.words.color.blue": "Blau",

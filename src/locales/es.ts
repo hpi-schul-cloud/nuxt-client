@@ -216,6 +216,7 @@ export default {
 	"common.words.also": "también",
 	"common.words.and": "y",
 	"common.words.board": "tablero | tableros",
+	"common.words.news": "noticia | noticias",
 	"common.words.classes": "Clases",
 	"common.words.color": "Color",
 	"common.words.color.blue": "Azul",
