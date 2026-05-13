@@ -43,7 +43,6 @@
 </template>
 
 <script setup lang="ts">
-import { formatUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useNews, useNewsActions } from "@data-access";
 import { notifySuccess } from "@data-app";
@@ -62,12 +61,12 @@ const route = useRoute();
 
 const newsId = computed(() => route.params.id as string | undefined);
 const { deleteNews } = useNewsActions();
-const { newsInstance, lastTouched, creator, isLoadingNews } = useNews(newsId);
+const { newsInstance, createdAtFormatted, lastTouched, creator, isLoadingNews } = useNews(newsId);
 
 const pageTitle = computed(() => {
 	if (!newsInstance.value?.createdAt) return t("pages.news.details.title.fallback");
 	return t("pages.news.details.title", {
-		date: formatUtc(newsInstance.value.createdAt, "date"),
+		date: createdAtFormatted.value,
 	});
 });
 
