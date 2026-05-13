@@ -2,7 +2,7 @@ import { useAppStore, useAppStoreRefs } from "./application.store";
 import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { initializeAxios } from "@/utils/api";
-import { meResponseFactory, mockApiResponse, mockBroadcastChannel } from "@@/tests/test-utils";
+import { createTestEnvStore, meResponseFactory, mockApiResponse, mockBroadcastChannel } from "@@/tests/test-utils";
 import {
 	LanguageType,
 	MeApiFactory,
@@ -18,14 +18,8 @@ import { AxiosInstance, AxiosPromise } from "axios";
 import { DeepPartial } from "fishery";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, vi } from "vitest";
-import { ref } from "vue";
 
 const broadcastChannelMock = mockBroadcastChannel();
-
-const mockEnvConfig = ref({ JWT_TIMEOUT_SECONDS: 7200 });
-vi.mock("@data-env", () => ({
-	useEnvConfig: vi.fn(() => mockEnvConfig),
-}));
 
 vi.mock("@api-server");
 const mockedMeApi = vi.mocked(MeApiFactory);
@@ -35,7 +29,11 @@ const mockedUserApi = vi.mocked(UserApiFactory);
 
 describe("useApplicationStore", () => {
 	beforeEach(() => {
-		setActivePinia(createTestingPinia({ createSpy: vi.fn }));
+		const pinia = createTestingPinia({ stubActions: false });
+		setActivePinia(pinia);
+
+		createTestEnvStore({ JWT_TIMEOUT_SECONDS: 7200 });
+
 		vi.clearAllMocks();
 
 		Object.defineProperty(globalThis, "location", {
@@ -80,10 +78,6 @@ describe("useApplicationStore", () => {
 		await useAppStore().login();
 		return { meResponse };
 	};
-
-	beforeEach(() => {
-		setActivePinia(createTestingPinia({ stubActions: false }));
-	});
 
 	describe("state", () => {
 		it("should return default locale when no user locale is set", () => {
@@ -364,6 +358,79 @@ describe("useApplicationStore", () => {
 		});
 	});
 
+	describe("updateUserPreferences action", () => {
+		it("should update preferences and refresh meResponse", async () => {
+			const initialPreferences = { releaseDate: "2024-01-01T00:00:00.000Z" };
+			const updatedPreferences = { releaseDate: "2024-06-01T00:00:00.000Z" };
+
+			const meResponse = meResponseFactory.build({ preferences: initialPreferences });
+			const updatedMeResponse = meResponseFactory.build({ preferences: updatedPreferences });
+
+			const mockUpdatePreferences = vi.fn().mockResolvedValue(mockApiResponse({ data: {} }));
+			const mockMe = vi
+				.fn()
+				.mockResolvedValueOnce(mockApiResponse({ data: meResponse }))
+				.mockResolvedValueOnce(mockApiResponse({ data: updatedMeResponse }));
+
+			mockedMeApi.mockReturnValue({
+				meControllerMe: mockMe,
+				meControllerUpdateMePreferences: mockUpdatePreferences,
+			});
+
+			const store = useAppStore();
+			await store.login();
+
+			await store.updateUserPreferences({ releaseDate: "2024-06-01T00:00:00.000Z" });
+
+			expect(mockUpdatePreferences).toHaveBeenCalledWith({ releaseDate: "2024-06-01T00:00:00.000Z" });
+			expect(mockMe).toHaveBeenCalledTimes(2);
+			expect(store.userPreferences).toEqual(updatedPreferences);
+		});
+
+		it("should not refresh meResponse when update fails", async () => {
+			const meResponse = meResponseFactory.build({ preferences: { releaseDate: "2024-01-01T00:00:00.000Z" } });
+
+			const mockUpdatePreferences = vi.fn().mockRejectedValue(new Error("Update failed"));
+			const mockMe = vi.fn().mockResolvedValue(mockApiResponse({ data: meResponse }));
+
+			mockedMeApi.mockReturnValue({
+				meControllerMe: mockMe,
+				meControllerUpdateMePreferences: mockUpdatePreferences,
+			});
+
+			const store = useAppStore();
+			await store.login();
+
+			await store.updateUserPreferences({ releaseDate: "2024-06-01T00:00:00.000Z" });
+
+			expect(mockMe).toHaveBeenCalledTimes(1); // only login call
+			expect(store.userPreferences).toEqual({ releaseDate: "2024-01-01T00:00:00.000Z" });
+		});
+
+		it("should not update preferences when me refresh fails", async () => {
+			const initialPreferences = { releaseDate: "2024-01-01T00:00:00.000Z" };
+			const meResponse = meResponseFactory.build({ preferences: initialPreferences });
+
+			const mockUpdatePreferences = vi.fn().mockResolvedValue(mockApiResponse({ data: {} }));
+			const mockMe = vi
+				.fn()
+				.mockResolvedValueOnce(mockApiResponse({ data: meResponse }))
+				.mockRejectedValueOnce(new Error("Me fetch failed"));
+
+			mockedMeApi.mockReturnValue({
+				meControllerMe: mockMe,
+				meControllerUpdateMePreferences: mockUpdatePreferences,
+			});
+
+			const store = useAppStore();
+			await store.login();
+
+			await store.updateUserPreferences({ releaseDate: "2024-06-01T00:00:00.000Z" });
+
+			expect(store.userPreferences).toEqual(initialPreferences);
+		});
+	});
+
 	describe("clearApplicationError action", () => {
 		it("should clear the application error", () => {
 			const store = useAppStore();
@@ -414,7 +481,7 @@ describe("useApplicationStore", () => {
 
 		describe("when JWT_TIMEOUT_SECONDS is not set", () => {
 			it("should use default timeout", () => {
-				mockEnvConfig.value = { JWT_TIMEOUT_SECONDS: undefined } as never;
+				createTestEnvStore({ JWT_TIMEOUT_SECONDS: undefined });
 				const store = useAppStore();
 				const beforeTime = Date.now();
 				const DEFAULT_TIMEOUT = 2 * 60 * 60; // 2 hours in seconds
@@ -427,9 +494,6 @@ describe("useApplicationStore", () => {
 
 				expect(store.sessionTimeoutTimestamp).toBeGreaterThanOrEqual(expectedMinTimestamp);
 				expect(store.sessionTimeoutTimestamp).toBeLessThanOrEqual(expectedMaxTimestamp);
-
-				// Reset mock
-				mockEnvConfig.value = { JWT_TIMEOUT_SECONDS: 7200 };
 			});
 		});
 	});
