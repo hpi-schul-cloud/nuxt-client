@@ -2,6 +2,7 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
 import { PublicSystemResponse, SystemsApiFactory } from "@api-server";
+import { useOAuthApi } from "@data-oauth";
 import { computed, Ref, ref, watch } from "vue";
 
 export const useSystem = (systemId: Ref<string | undefined>) => {
@@ -13,6 +14,8 @@ export const useSystem = (systemId: Ref<string | undefined>) => {
 
 	const system: Ref<PublicSystemResponse | undefined> = ref();
 	const systemName = computed(() => system.value?.displayName);
+	const { getSessionTokenExpiration } = useOAuthApi();
+	const sessionTokenExpiration: Ref<Date | undefined> = ref();
 
 	const fetchSystem = async (id: string) => {
 		const onErrorNotifyMessage = t("common.notifications.errors.notLoaded", { type: t("common.words.system") });
@@ -21,6 +24,9 @@ export const useSystem = (systemId: Ref<string | undefined>) => {
 		if (success) {
 			system.value = result.data;
 			console.log("Fetched system:", system.value);
+			if (system.value?.oauthConfig?.endSessionEndpoint) {
+				sessionTokenExpiration.value = await getSessionTokenExpiration();
+			}
 		}
 	};
 
@@ -40,5 +46,6 @@ export const useSystem = (systemId: Ref<string | undefined>) => {
 		status,
 		error,
 		isLoading,
+		sessionTokenExpiration,
 	};
 };
