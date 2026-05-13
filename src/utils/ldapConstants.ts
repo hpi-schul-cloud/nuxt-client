@@ -14,12 +14,12 @@ export const ldapPathRegex =
 // Regex for the LDAP URL (possibly unsecured).
 // Allows both ldap:// and ldaps:// protocols.
 // Not recommended for use in production environment.
-export const ldapURLRegex = /^ldaps?:\/\/(([\w.-]+\.[a-z]+)|((\d{0,3}\.){3}\d{0,3}))(:\d+)?$/;
+export const ldapURLRegex = /^ldap?:\/\/(([\w.-]+\.[a-z]+)|((\d{0,3}\.){3}\d{0,3}))(:\d+)?$/;
 
 // Regex for the secured LDAP URL.
 // Allows only the ldaps:// protocol.
 // Should be used in every production environment.
-export const ldapSecuredURLRegex = /^ldaps:\/\/(([\w.-]+\.[a-z]+)|((\d{0,3}\.){3}\d{0,3}))(:\d+)?$/;
+export const ldapSecuredURLRegex = /^ldap:\/\/(([\w.-]+\.[a-z]+)|((\d{0,3}\.){3}\d{0,3}))(:\d+)?$/;
 
 // Placeholder used for an unchanged password.
 export const unchangedPassword = "🐱‍👤[unchanged]**";
