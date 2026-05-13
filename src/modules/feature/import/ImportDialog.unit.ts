@@ -173,7 +173,7 @@ describe("ImportDialog", () => {
 				warnings: computed(() => [mockWarning]),
 				info: computed(() => ""),
 				itemNameKey: computed(() => "unknown"),
-			} as Mocked<ReturnType<typeof useImportContent>>);
+			});
 			const { wrapper } = setup({
 				shareTokenInfo: buildShareTokenInfo(ShareTokenInfoResponseParentType.COURSES),
 			});
