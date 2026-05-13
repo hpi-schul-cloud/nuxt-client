@@ -11,15 +11,15 @@ import {
 	UserBasedRegistrationOptions,
 } from "../types";
 import { useFilterLocalStorage } from "./filterLocalStorage.composable";
-import { schoolsModule } from "@/store";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { formatUtc } from "@/utils/date-time.utils";
+import { useSchoolStoreRefs } from "@data-app";
 import { computed, onMounted, ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 export const useDataTableFilter = (userType: User) => {
-	const { t } = useI18n();
+	const { t } = useI18nGlobal();
 	const { currentFilterQuery } = useFilterLocalStorage(userType);
-	const yearName = schoolsModule.getCurrentYear?.name;
+	const { currentYear } = useSchoolStoreRefs();
 
 	const filterQuery = ref<FilterQuery>({});
 
@@ -29,7 +29,7 @@ export const useDataTableFilter = (userType: User) => {
 			value: FilterOption.REGISTRATION,
 		},
 		{
-			label: t("utils.adminFilter.class.title") + " " + yearName,
+			label: `${t("utils.adminFilter.class.title")} ${currentYear.value?.name}`,
 			value: FilterOption.CLASSES,
 		},
 		{

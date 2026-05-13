@@ -3,8 +3,10 @@ import { useBoardApi } from "../BoardApi.composable";
 import { useSharedEditMode } from "../edit-mode.composable";
 import {
 	CreateCardRequestPayload,
+	CreateColumnRequestPayload,
 	DeleteBoardRequestPayload,
 	DeleteColumnRequestPayload,
+	DuplicateColumnRequestPayload,
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
 	MoveCardToBoardRequestPayload,
@@ -16,10 +18,11 @@ import {
 	UpdateReaderCanEditRequestPayload,
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
-import { courseRoomDetailsModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { useAppStore } from "@data-app";
+import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { BoardObjectType, ErrorType, useErrorHandler } from "@util-error-handling";
+import { ref } from "vue";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();
@@ -29,6 +32,7 @@ export const useBoardRestApi = () => {
 		createCardCall,
 		createColumnCall,
 		deleteColumnCall,
+		duplicateColumnCall,
 		fetchBoardCall,
 		moveCardCall,
 		moveCardToBoardCall,
@@ -73,7 +77,7 @@ export const useBoardRestApi = () => {
 
 	const deleteBoardRequest = async (payload: DeleteBoardRequestPayload) => {
 		try {
-			await courseRoomDetailsModule.deleteBoard(payload.boardId);
+			await useCourseRoomDetailsStore().deleteBoard(payload.boardId);
 			boardStore.deleteBoardSuccess({ ...payload, isOwnAction: true });
 		} catch (error) {
 			handleError(error, {
@@ -82,11 +86,11 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const createColumnRequest = async () => {
+	const createColumnRequest = async (payload: CreateColumnRequestPayload) => {
 		if (boardStore.board === undefined) return;
 
 		try {
-			const newColumn = await createColumnCall(boardStore.board?.id);
+			const newColumn = await createColumnCall(payload.boardId);
 			boardStore.createColumnSuccess({ newColumn, isOwnAction: true });
 			return newColumn;
 		} catch (error) {
@@ -110,6 +114,23 @@ export const useBoardRestApi = () => {
 		}
 	};
 
+	const duplicateColumnRequest = async (payload: DuplicateColumnRequestPayload) => {
+		const columnIndex = boardStore.getColumnIndex(payload.columnId);
+		if (columnIndex < 0) return;
+
+		try {
+			const duplicatedColumn = await duplicateColumnCall(payload.columnId);
+
+			if (duplicatedColumn.id) {
+				boardStore.duplicateColumnSuccess({ columnId: payload.columnId, duplicatedColumn, isOwnAction: true });
+			}
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notDuplicated", "boardColumn"),
+			});
+		}
+	};
+
 	const moveCardRequest = async (payload: MoveCardRequestPayload): Promise<void> => {
 		if (boardStore.board === undefined) return;
 
@@ -125,7 +146,7 @@ export const useBoardRestApi = () => {
 			}
 			if (toColumnId === undefined && toColumnIndex === undefined) {
 				// need to create a new column
-				const newColumn = await createColumnRequest();
+				const newColumn = await createColumnRequest({ boardId: boardStore.board.id });
 				if (newColumn) {
 					toColumnId = newColumn.id;
 					toColumnIndex = boardStore.getLastColumnIndex();
@@ -291,11 +312,13 @@ export const useBoardRestApi = () => {
 	};
 
 	return {
+		connected: ref(true),
 		fetchBoardRequest,
 		createCardRequest,
 		createColumnRequest,
 		deleteBoardRequest,
 		deleteColumnRequest,
+		duplicateColumnRequest,
 		moveCardRequest,
 		moveCardToBoardRequest,
 		moveColumnRequest,

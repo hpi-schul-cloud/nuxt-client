@@ -1,17 +1,12 @@
-import { ToolParameter } from "@/store/external-tool";
+import { ToolParameter } from "./tool-parameter";
 import { ExternalToolMediumResponse } from "@api-server";
 
 export interface ExternalToolConfigurationTemplate {
 	externalToolId: string;
-
 	name: string;
-
 	baseUrl: string;
-
 	logoUrl?: string;
-
 	parameters: ToolParameter[];
-
 	medium?: ExternalToolMediumResponse;
 }
 

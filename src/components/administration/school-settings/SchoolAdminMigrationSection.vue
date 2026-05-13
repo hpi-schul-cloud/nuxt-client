@@ -139,7 +139,7 @@
 
 	<VSwitch
 		v-if="!isGracePeriodExpired && globalFeatureEnableLdapSyncDuringMigration"
-		v-model="school.featureObject.enableLdapSyncDuringMigration"
+		v-model="targetSchoolFeatures.enableLdapSyncDuringMigration"
 		:label="t('components.administration.adminMigrationSection.enableSyncDuringMigration.label')"
 		:disabled="!isMigrationActive"
 		class="ml-1"
@@ -166,7 +166,7 @@
 
 	<VSwitch
 		v-if="globalFeatureShowOutdatedUsers"
-		v-model="school.featureObject.showOutdatedUsers"
+		v-model="targetSchoolFeatures.showOutdatedUsers"
 		:label="t('components.administration.adminMigrationSection.showOutdatedUsers.label')"
 		class="ml-1"
 		:true-icon="mdiCheck"
@@ -182,11 +182,10 @@
 import SchoolMigrationWarningCard from "./SchoolMigrationWarningCard.vue";
 import { useUserLoginMigrationMappings } from "@/composables/user-login-migration-mappings.composable";
 import { BusinessError } from "@/store/types/commons";
-import { School } from "@/store/types/schools";
 import { formatUtc } from "@/utils/date-time.utils";
-import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 import { sanitizeUrl } from "@braintree/sanitize-url";
+import { useSchoolStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useUserLoginMigration } from "@data-user-login-migration";
 import { mdiAlertCircle, mdiCheck } from "@icons/material";
@@ -194,12 +193,7 @@ import { InfoAlert } from "@ui-alert";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-defineOptions({
-	name: "SchoolAdminMigrationSection",
-});
-
 const { t } = useI18n();
-const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 const {
 	userLoginMigration,
 	businessError,
@@ -210,15 +204,16 @@ const {
 	closeUserLoginMigration,
 } = useUserLoginMigration();
 
+const { updateSchool } = useSchoolStore();
+const { schoolDetails, schoolFeatureObject } = useSchoolStoreRefs();
+const targetSchoolFeatures = ref({ ...schoolFeatureObject.value });
+
 onMounted(async () => {
 	await fetchLatestUserLoginMigrationForSchool();
 });
 
-const isMigrationActive = computed<boolean>(
-	() => !!userLoginMigration.value?.startedAt && !userLoginMigration.value.closedAt
-);
-
-const isMigrationMandatory = computed<boolean>(() => !!userLoginMigration.value?.mandatorySince);
+const isMigrationActive = computed(() => !!userLoginMigration.value?.startedAt && !userLoginMigration.value.closedAt);
+const isMigrationMandatory = computed(() => !!userLoginMigration.value?.mandatorySince);
 
 const error = computed<BusinessError | undefined>(() =>
 	businessError.value.message ? businessError.value : undefined
@@ -242,31 +237,29 @@ const onCloseMigration = () => {
 	closeUserLoginMigration();
 };
 
-const school = computed<School>(() => schoolsModule.getSchool);
-
-const isEndWarningVisible = ref<boolean>(false);
+const isEndWarningVisible = ref(false);
 
 const onToggleShowEndWarning = () => {
 	isEndWarningVisible.value = !isEndWarningVisible.value;
 };
 
-const isStartWarningVisible = ref<boolean>(false);
+const isStartWarningVisible = ref(false);
 
 const onToggleShowStartWarning = () => {
 	isStartWarningVisible.value = !isStartWarningVisible.value;
 };
 
-const isEndButtonVisible = computed<boolean>(
+const isEndButtonVisible = computed(
 	() => isMigrationActive.value && !isEndWarningVisible.value && !isStartWarningVisible.value
 );
 
-const isStartButtonVisible = computed<boolean>(
+const isStartButtonVisible = computed(
 	() => !isEndButtonVisible.value && !isEndWarningVisible.value && !isStartWarningVisible.value
 );
 
-const isShowMandatorySwitch = computed<boolean>(() => !isEndWarningVisible.value && !isStartWarningVisible.value);
+const isShowMandatorySwitch = computed(() => !isEndWarningVisible.value && !isStartWarningVisible.value);
 
-const isGracePeriodExpired = computed<boolean>(() => {
+const isGracePeriodExpired = computed(() => {
 	if (userLoginMigration.value?.finishedAt) {
 		return Date.now() >= new Date(userLoginMigration.value.finishedAt).getTime();
 	}
@@ -282,17 +275,14 @@ const latestMigration = computed(() => {
 	}
 });
 
-const officialSchoolNumber = computed<string | undefined>(() => schoolsModule.getSchool.officialSchoolNumber);
+const officialSchoolNumber = computed(() => schoolDetails.value.officialSchoolNumber);
 
-const getSubject = (): string => {
-	const subject = encodeURIComponent(
+const getSubject = () =>
+	encodeURIComponent(
 		`Schule mit der Nummer: ${
 			officialSchoolNumber.value ?? "???"
 		} soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!`
 	);
-
-	return subject;
-};
 
 const supportLink = computed(() => `mailto:${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}?subject=${getSubject()}`);
 
@@ -306,7 +296,7 @@ const isSchoolMigrated = computed(() => {
 	let hasTargetSystem = false;
 
 	if (userLoginMigration.value?.targetSystemId) {
-		hasTargetSystem = schoolsModule.getSchool.systemIds.includes(userLoginMigration.value.targetSystemId);
+		hasTargetSystem = schoolDetails.value.systemIds.includes(userLoginMigration.value.targetSystemId);
 	}
 
 	return hasTargetSystem;
@@ -317,15 +307,12 @@ const showMigrationWizard = computed(() => !!useEnvConfig().value.FEATURE_SHOW_M
 const isMigrationFinished = computed(() => !!userLoginMigration.value?.finishedAt);
 
 const setSchoolFeatures = async () => {
-	await schoolsModule.update({
-		id: school.value.id,
-		props: {
-			features: mapSchoolFeatureObjectToArray(school.value.featureObject),
-		},
+	await updateSchool(schoolDetails.value.id, {
+		features: mapSchoolFeatureObjectToArray(targetSchoolFeatures.value),
 	});
 };
 
-const contactEmailLink = computed<string>(() =>
+const contactEmailLink = computed(() =>
 	sanitizeUrl(`mailto:${useEnvConfig().value.SC_CONTACT_EMAIL}?subject=Schulnummer nicht korrekt`)
 );
 </script>

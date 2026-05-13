@@ -72,7 +72,7 @@
 				</VBtn>
 			</template>
 		</BackendDataTable>
-		<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
+		<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="isSchoolExternallyManaged" />
 	</DefaultWireframe>
 	<DeleteUserDialog
 		v-model="isConfirmDialogOpen"
@@ -91,11 +91,10 @@ import { FilterQuery, User } from "@/components/administration/data-filter/types
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
 import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
-import { schoolsModule } from "@/store";
 import { formatUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { Permission, RoleName } from "@api-server";
-import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
+import { notifyError, notifyInfo, notifySuccess, useAppStore, useSchoolStoreRefs } from "@data-app";
 import { useClasses } from "@data-classes";
 import { useEnvConfig } from "@data-env";
 import { useUsersStore } from "@data-users";
@@ -119,6 +118,8 @@ import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { currentFilterQuery, sortBy, sortOrder, page, limit, searchQuery } = useFilterLocalStorage(User.TEACHER);
+
+const { isSchoolExternallyManaged, currentYear } = useSchoolStoreRefs();
 const { fetchClasses, classNameList } = useClasses();
 
 const usersStore = useUsersStore();
@@ -243,7 +244,6 @@ const icons = [
 
 const isDeleting = computed(() => deletingProgress.value.active);
 const deletedPercent = computed(() => deletingProgress.value.percent);
-const schoolIsExternallyManaged = computed(() => schoolsModule.schoolIsExternallyManaged);
 const getFeatureUserLoginMigrationEnabled = computed(() => useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED);
 
 const showConsent = computed(() => useEnvConfig().value.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN);
@@ -263,7 +263,7 @@ const filteredActions = computed(() => {
 	}
 
 	// filter the delete action if school is external
-	if (schoolIsExternallyManaged.value) {
+	if (isSchoolExternallyManaged.value) {
 		editedActions = editedActions.filter(
 			(action) => action.label !== t("pages.administration.teachers.index.tableActions.delete")
 		);
@@ -275,7 +275,7 @@ const filteredActions = computed(() => {
 const filteredColumns = computed(() => {
 	let editedColumns = tableColumns;
 	// filters out edit column if school is external or if user is not an admin
-	if (schoolIsExternallyManaged.value || !useAppStore().userRoles.some((name) => name === RoleName.ADMINISTRATOR)) {
+	if (isSchoolExternallyManaged.value || !useAppStore().userRoles.some((name) => name === RoleName.ADMINISTRATOR)) {
 		editedColumns = tableColumns.filter(
 			// _id field sets the edit column
 			(col) => col.field !== "_id"
@@ -297,7 +297,7 @@ const filteredColumns = computed(() => {
 });
 
 const fab = computed(() => {
-	if (schoolIsExternallyManaged.value || !userHasPermission(Permission.TEACHER_CREATE)) {
+	if (isSchoolExternallyManaged.value || !userHasPermission(Permission.TEACHER_CREATE)) {
 		return;
 	}
 
@@ -403,11 +403,9 @@ const onUpdateFilter = (query: FilterQuery) => {
 };
 
 const getClassNameList = async () => {
-	const currentYear = schoolsModule.getCurrentYear;
-
 	await fetchClasses({
 		$limit: 1000,
-		year: currentYear?.id || "",
+		year: currentYear.value?.id || "",
 	});
 };
 </script>
@@ -422,7 +420,7 @@ span {
 }
 
 button:not(.is-none):focus {
-	z-index: 100;
+	z-index: var(--z-pinned);
 	outline: none;
 	box-shadow:
 		0 0 0 0 rgba(var(--v-theme-white)),

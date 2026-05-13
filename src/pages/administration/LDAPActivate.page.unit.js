@@ -1,8 +1,9 @@
+import { createTestSchoolStore } from "../../../tests/test-utils/factory/school-test.utils.ts";
+import setupStores from "../../../tests/test-utils/setupStores.js";
 import { default as ldapActivate } from "./LDAPActivate.page.vue";
-import SchoolsModule from "@/store/schools";
+import ImportUsersModule from "@/store/import-users.ts";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
@@ -86,10 +87,11 @@ describe("ldap/activate", () => {
 
 	beforeEach(() => {
 		setupStores({
-			schoolsModule: SchoolsModule,
+			importUsersModule: ImportUsersModule,
 		});
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({ FEATURE_USER_MIGRATION_ENABLED: false });
+		createTestSchoolStore();
 	});
 
 	it("should call 'submitaData' action when submit button is clicked and this.$route.query.id is not defined", async () => {

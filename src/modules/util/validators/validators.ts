@@ -1,5 +1,6 @@
 import { useLocalizedDateTime } from "@/composables/date-time.composables";
 import { useI18nGlobal } from "@/plugins/i18n";
+import { useTryCatchSync } from "@/utils/try-catch.utils";
 
 export type FormValidatorFn<T> = (errMsg?: string) => (value: T) => string | true;
 
@@ -26,25 +27,45 @@ export const isNonEmptyString: FormValidatorFn<unknown> =
 /**
  * Checks if given value is a valid URL
  */
+const isValidHostname = (hostname: string): boolean => {
+	const isLocalhost = hostname === "localhost";
+	if (isLocalhost) return true;
+
+	// Reject IPv4 addresses
+	if (/^\d+(\.\d+){3}$/.test(hostname)) {
+		return false;
+	}
+
+	// DNS compliance: max 253 chars per hostname
+	if (hostname.length > 253) {
+		return false;
+	}
+
+	// Must have at least one dot (TLD)
+	const labels = hostname.split(".");
+	if (labels.length < 2) {
+		return false;
+	}
+
+	// Validate each label (max 63 chars, no leading/trailing hyphen)
+	return labels.every(
+		(label) => label.length > 0 && label.length <= 63 && !label.startsWith("-") && !label.endsWith("-")
+	);
+};
+
 export const isValidUrl: FormValidatorFn<string> =
 	(errMsg = useI18nGlobal().t("util-validators-invalid-url")) =>
 	(value) => {
-		try {
-			const urlWithProtocol = value.match(/:\/\//) ? value : `https://${value}`;
-			const urlObject = new URL(urlWithProtocol);
+		const trimmed = value.trim();
+		const urlWithProtocol = trimmed.match(/:\/\//) ? trimmed : `https://${trimmed}`;
 
-			if (!["http:", "https:"].includes(urlObject.protocol)) {
-				throw new Error("Wrong protocol");
-			}
-			if (!(urlObject.hostname.includes(".") || urlObject.hostname === "localhost")) {
-				throw new Error("TopLevelDomain missing");
-			}
-			if (/(^-)|(--)|(-$)/.test(urlObject.hostname)) {
-				throw new Error("IDN hyphen rules violated");
-			}
-		} catch {
-			return errMsg;
-		}
+		const [error, urlObject] = useTryCatchSync(() => new URL(urlWithProtocol));
+		if (error) return errMsg;
+
+		if (!["http:", "https:"].includes(urlObject.protocol)) return errMsg;
+
+		if (!isValidHostname(urlObject.hostname)) return errMsg;
+
 		return true;
 	};
 
@@ -117,4 +138,15 @@ export const isValidEmail: FormValidatorFn<string> =
 			return errMsg;
 		}
 		return true;
+	};
+
+/**
+ * Checks if a given file does not exceed the specified max size in KB.
+ */
+export const isOfMaxFileSize =
+	(maxSizeInKb: number) =>
+	(errMsg = useI18nGlobal().t("common.validation.fileTooBig", { maxSize: maxSizeInKb })) =>
+	(value: File | undefined | null) => {
+		if (!value || value.size <= maxSizeInKb * 1024) return true;
+		return errMsg;
 	};

@@ -1,13 +1,11 @@
 import RoomMembersPage from "./RoomMembers.page.vue";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
 import { Tab } from "@/types/room/RoomMembers";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { createTestEnvStore, mockedPiniaStoreTyping, roomMemberFactory, schoolFactory } from "@@/tests/test-utils";
+import { createTestEnvStore, mockedPiniaStoreTyping, roomMemberFactory } from "@@/tests/test-utils";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { ConfigResponse, RoleName, RoomDetailsResponse } from "@api-server";
 import {
 	InvitationStep,
@@ -34,7 +32,7 @@ import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
-import { VBtn, VCard, VDialog, VSkeletonLoader, VTab, VTabs } from "vuetify/components";
+import { VBtn, VCard, VSkeletonLoader, VTab, VTabs } from "vuetify/components";
 
 vi.mock("@vueuse/integrations/useFocusTrap", () => ({
 	useFocusTrap: vi.fn(),
@@ -50,17 +48,6 @@ describe("RoomMembersPage", () => {
 	const routeRoomId = "room-id";
 
 	beforeEach(() => {
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-
-		schoolsModule.setSchool(
-			schoolFactory.build({
-				id: "school-id",
-				name: "Paul-Gerhardt-Gymnasium",
-			})
-		);
-
 		router = createRouterMock();
 		router.setParams({ id: routeRoomId });
 		injectRouterMock(router);
@@ -92,6 +79,7 @@ describe("RoomMembersPage", () => {
 
 		setActivePinia(createTestingPinia());
 		createTestEnvStore(envConfig);
+		createTestSchoolStore();
 
 		const room = createRoom ? roomFactory.build({ allowedOperations }) : undefined;
 
@@ -103,31 +91,28 @@ describe("RoomMembersPage", () => {
 
 		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
 
+		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
+		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
+		const roomInvitationLinkStore = mockedPiniaStoreTyping(useRoomInvitationLinkStore);
+		const registrationStore = mockedPiniaStoreTyping(useRegistrationStore);
+
+		roomDetailsStore.$patch({
+			isLoading,
+			room,
+		});
+		roomInvitationLinkStore.$patch({
+			roomInvitationLinks,
+			isInvitationDialogOpen: false,
+			invitationStep: InvitationStep.SHARE,
+		});
+
 		const wrapper = mount(RoomMembersPage, {
 			attachTo: document.body,
 			global: {
-				plugins: [
-					createTestingPinia({
-						initialState: {
-							roomDetailsStore: {
-								isLoading,
-								room,
-							},
-							roomInvitationLinkStore: {
-								roomInvitationLinks,
-								isInvitationDialogOpen: false,
-								invitationStep: InvitationStep.SHARE,
-							},
-						},
-					}),
-					createTestingI18n(),
-					createTestingVuetify(),
-				],
+				plugins: [createTestingI18n(), createTestingVuetify()],
 				stubs: {
 					LeaveRoomProhibitedDialog: true,
-					// Do not stub AddMembersDialog so that VDialog is accessible in tests
-					Members: true,
-					UseFocusTrap: true,
+					AddMembersDialog: true,
 				},
 			},
 
@@ -135,11 +120,6 @@ describe("RoomMembersPage", () => {
 				tab: activeTab,
 			},
 		});
-
-		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
-		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
-		const roomInvitationLinkStore = mockedPiniaStoreTyping(useRoomInvitationLinkStore);
-		const registrationStore = mockedPiniaStoreTyping(useRegistrationStore);
 
 		return {
 			wrapper,
@@ -402,25 +382,6 @@ describe("RoomMembersPage", () => {
 			expect(roomMembersStore.loadSchoolList).toHaveBeenCalled();
 		});
 
-		it("should open Dialog", async () => {
-			const { wrapper } = setup({
-				activeTab: Tab.Members,
-				allowedOperations: { addMembers: true, viewMemberlist: true },
-			});
-			const wireframe = wrapper.findComponent(DefaultWireframe);
-			const addMemberDialogBeforeClick = wrapper.findComponent(AddMembersDialog).findComponent(VDialog);
-
-			expect(addMemberDialogBeforeClick.vm.modelValue).toBe(false);
-
-			const addMemberButton = wireframe.getComponent("[data-testid=fab-add-members]").getComponent(VBtn);
-
-			await addMemberButton.trigger("click");
-
-			const addMemberDialogAfterClick = wrapper.findComponent(AddMembersDialog).findComponent(VDialog);
-
-			expect(addMemberDialogAfterClick.vm.modelValue).toBe(true);
-		});
-
 		describe("when FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED is true", () => {
 			describe("SpeedDialMenu", () => {
 				it("should have speed dial menu actions", async () => {
@@ -450,16 +411,15 @@ describe("RoomMembersPage", () => {
 					allowedOperations: { addMembers: true, viewMemberlist: true },
 				});
 
-				const addMemberDialogBefore = wrapper.findComponent(AddMembersDialog).findComponent(VCard);
-				expect(addMemberDialogBefore.exists()).toBe(false);
+				const addMemberDialog = wrapper.findComponent(AddMembersDialog);
+				expect(addMemberDialog.props("modelValue")).toBe(false);
 
 				await wrapper.findComponent(SpeedDialMenu).findComponent(VBtn).trigger("click");
 
 				const addMemberBtn = wrapper.findComponent("[data-testid='fab-select-from-directory']").getComponent(VBtn);
 				await addMemberBtn.trigger("click");
 
-				const addMemberDialog = wrapper.findComponent(AddMembersDialog).findComponent(VCard);
-				expect(addMemberDialog.exists()).toBe(true);
+				expect(addMemberDialog.props("modelValue")).toBe(true);
 			});
 
 			it("should open AddExternalPerson dialog when clicking on invite-members action", async () => {

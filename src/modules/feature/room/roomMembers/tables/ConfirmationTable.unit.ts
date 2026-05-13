@@ -1,12 +1,11 @@
 import ConfirmationTable from "./ConfirmationTable.vue";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
-import { mockedPiniaStoreTyping, roomMemberFactory, schoolFactory } from "@@/tests/test-utils";
+import { mockedPiniaStoreTyping, roomMemberFactory } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { RoleName } from "@api-server";
 import { RoomMember, useRoomMembersStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
 
 vi.mock("vue-i18n", async (importOriginal) => {
@@ -22,19 +21,8 @@ const mockI18n = vi.mocked(useI18n());
 
 describe("ConfirmationTable", () => {
 	beforeEach(() => {
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-
-		schoolsModule.setSchool(
-			schoolFactory.build({
-				id: "school-id",
-				name: "Paul-Gerhardt-Gymnasium",
-			})
-		);
-	});
-	afterEach(() => {
-		vi.clearAllMocks();
+		setActivePinia(createTestingPinia());
+		createTestSchoolStore();
 	});
 
 	const setup = (
@@ -58,20 +46,12 @@ describe("ConfirmationTable", () => {
 				roomRoleName: RoleName.ROOMAPPLICANT,
 			});
 
+		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
+		roomMembersStore.$patch({ roomMembers: [...roomMembersWithoutApplicants, ...roomApplicants] });
+
 		const wrapper = mount(ConfirmationTable, {
 			global: {
-				plugins: [
-					createTestingI18n(),
-					createTestingVuetify(),
-					createTestingPinia({
-						initialState: {
-							roomMembersStore: {
-								roomMembers: [...roomMembersWithoutApplicants, ...roomApplicants],
-								isRoomOwner: vi.fn(),
-							},
-						},
-					}),
-				],
+				plugins: [createTestingI18n(), createTestingVuetify()],
 			},
 			stubs: {
 				KebabMenuActionConfirmRequest: true,
@@ -80,9 +60,6 @@ describe("ConfirmationTable", () => {
 				BatchActionMenu: true,
 			},
 		});
-
-		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
-		roomMembersStore.roomMembers = [...roomMembersWithoutApplicants, ...roomApplicants];
 
 		return {
 			wrapper,

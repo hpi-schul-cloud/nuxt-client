@@ -7,6 +7,7 @@ import {
 	DeleteBoardSuccessPayload,
 	DeleteColumnRequestPayload,
 	DeleteColumnSuccessPayload,
+	DuplicateColumnSuccessPayload,
 	FetchBoardRequestPayload,
 	FetchBoardSuccessPayload,
 	MoveCardRequestPayload,
@@ -34,8 +35,8 @@ import { DeleteCardSuccessPayload, DuplicateCardSuccessPayload } from "./cardAct
 import { useSharedEditMode } from "./edit-mode.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import { ColumnResponse } from "@api-server";
-import { useAppStore, useNotificationStore } from "@data-app";
+import { CardSkeletonResponse, ColumnFullResponse, ColumnResponse, ContentElementType } from "@api-server";
+import { notifyInfo, notifySuccess, useAppStore, useNotificationStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { defineStore } from "pinia";
 import { computed, nextTick, ref } from "vue";
@@ -52,6 +53,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
 	const socketOrRest = isSocketEnabled ? useBoardSocketApi() : restApi;
+	const isConnected = computed(() => socketOrRest.connected.value);
 
 	const { setEditModeId } = useSharedEditMode();
 	const router = useRouter();
@@ -146,6 +148,46 @@ export const useBoardStore = defineStore("boardStore", () => {
 			cardId: duplicatedCard.id,
 			height: duplicatedCard.height,
 		});
+	};
+
+	const duplicateColumn = socketOrRest.duplicateColumnRequest;
+
+	const hasRelevantContentForDuplicationWarning = (column: ColumnFullResponse): boolean =>
+		column.cards.some((card) =>
+			card.elements.some((element) =>
+				[
+					ContentElementType.COLLABORATIVE_TEXT_EDITOR,
+					ContentElementType.DRAWING,
+					ContentElementType.EXTERNAL_TOOL,
+				].includes(element.type)
+			)
+		);
+
+	const duplicateColumnSuccess = (payload: DuplicateColumnSuccessPayload) => {
+		if (!board.value) return;
+
+		const { columnId, duplicatedColumn } = payload;
+		const columnIndex = getColumnIndex(columnId);
+		if (columnIndex < 0) return;
+
+		const duplicatedColumnSkeleton: ColumnResponse = {
+			...duplicatedColumn,
+			cards: duplicatedColumn.cards.map(
+				(card): CardSkeletonResponse => ({
+					cardId: card.id,
+					height: card.height,
+				})
+			),
+		};
+
+		board.value.columns?.splice(columnIndex + 1, 0, duplicatedColumnSkeleton);
+
+		if (payload.isOwnAction === true) {
+			notifySuccess("components.board.notifications.success.columnDuplicated");
+			if (hasRelevantContentForDuplicationWarning(duplicatedColumn)) {
+				notifyInfo("components.board.notifications.info.cardDuplicated");
+			}
+		}
 	};
 
 	const deleteCardSuccess = (payload: DeleteCardSuccessPayload) => {
@@ -365,6 +407,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const fetchBoardSuccess = (payload: FetchBoardSuccessPayload) => {
 		setBoard(payload);
+		setLoading(false);
 	};
 
 	const deleteBoardRequest = async (payload: DeleteBoardRequestPayload, paramRoomId: string | undefined) => {
@@ -415,6 +458,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	return {
 		board,
 		isLoading,
+		isConnected,
 		getCardLocation,
 		getColumnIndex,
 		getColumnId,
@@ -430,6 +474,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 		deleteBoardSuccess,
 		duplicateCardSuccess,
 		deleteCardSuccess,
+		duplicateColumn,
+		duplicateColumnSuccess,
 		deleteColumnRequest,
 		deleteColumnSuccess,
 		disconnectSocketRequest,

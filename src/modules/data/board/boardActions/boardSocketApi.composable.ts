@@ -8,6 +8,7 @@ import {
 	CreateColumnRequestPayload,
 	DeleteBoardRequestPayload,
 	DeleteColumnRequestPayload,
+	DuplicateColumnRequestPayload,
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
 	MoveCardSuccessPayload,
@@ -32,6 +33,7 @@ export const useBoardSocketApi = () => {
 		notifyCreateColumnSuccess,
 		notifyDeleteCardSuccess,
 		notifyDeleteColumnSuccess,
+		notifyDuplicateColumnSuccess,
 		notifyMoveCardSuccess,
 		notifyMoveCardToBoardSuccess,
 		notifyMoveColumnSuccess,
@@ -60,6 +62,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.updateBoardVisibilitySuccess, boardStore.updateBoardVisibilitySuccess),
 			on(BoardActions.updateBoardLayoutSuccess, boardStore.updateBoardLayoutSuccess),
 			on(BoardActions.updateReaderCanEditSuccess, boardStore.updateReaderCanEditSuccess),
+			on(BoardActions.duplicateColumnSuccess, boardStore.duplicateColumnSuccess),
 		];
 
 		const failureActions = [
@@ -76,6 +79,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.updateBoardVisibilityFailure, reloadBoard),
 			on(BoardActions.updateBoardLayoutFailure, reloadBoard),
 			on(BoardActions.updateReaderCanEditFailure, reloadBoard),
+			on(BoardActions.duplicateColumnFailure, reloadBoard),
 		];
 
 		const ariaLiveNotifications = [
@@ -92,6 +96,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.updateBoardLayoutSuccess, notifyUpdateBoardLayoutSuccess),
 			on(BoardActions.updateReaderCanEditSuccess, notifySetBoardAsEditableForAllUsersSuccess),
 			on(BoardActions.updateReaderCanEditSuccess, notifySetBoardAsNotEditableForAllUsersSuccess),
+			on(BoardActions.duplicateColumnSuccess, notifyDuplicateColumnSuccess),
 		];
 
 		handle(
@@ -104,7 +109,7 @@ export const useBoardSocketApi = () => {
 		);
 	};
 
-	const { emitOnSocket, emitWithAck, disconnectSocket } = useSocketConnection(dispatch);
+	const { emitOnSocket, emitWithAck, disconnectSocket, connected } = useSocketConnection(dispatch);
 
 	const createCardRequest = (payload: CreateCardRequestPayload) => {
 		emitOnSocket("create-card-request", {
@@ -191,6 +196,10 @@ export const useBoardSocketApi = () => {
 		useAppStore().handleApplicationError(HttpStatusCode.NotFound, "components.board.error.404");
 	};
 
+	const duplicateColumnRequest = (payload: DuplicateColumnRequestPayload) => {
+		emitOnSocket("duplicate-column-request", payload);
+	};
+
 	const reloadBoard = () => {
 		const boardId = boardStore.board?.id;
 		if (boardId) {
@@ -210,6 +219,7 @@ export const useBoardSocketApi = () => {
 	};
 
 	return {
+		connected,
 		dispatch,
 		createCardRequest,
 		createColumnRequest,
@@ -225,5 +235,6 @@ export const useBoardSocketApi = () => {
 		updateBoardVisibilityRequest,
 		updateBoardLayoutRequest,
 		updateReaderCanEditRequest,
+		duplicateColumnRequest,
 	};
 };

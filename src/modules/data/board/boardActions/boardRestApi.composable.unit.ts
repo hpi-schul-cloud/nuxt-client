@@ -1,22 +1,21 @@
 import { useBoardApi } from "../BoardApi.composable";
 import { useBoardRestApi } from "./boardRestApi.composable";
-import { courseRoomDetailsModule } from "@/store";
-import CourseRoomDetailsModule from "@/store/course-room-details";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
+	columnFullResponseFactory,
 	columnResponseFactory,
 	mockComposable,
 	mockedPiniaStoreTyping,
 	mountComposable,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { BoardLayout } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useBoardStore, useSharedEditMode, useSocketConnection } from "@data-board";
+import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { createTestingPinia } from "@pinia/testing";
 import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
@@ -38,6 +37,9 @@ const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({ t: (key: string) => key }),
+	createI18n: () => ({
+		global: { t: (key: string) => key },
+	}),
 }));
 
 describe("boardRestApi", () => {
@@ -69,10 +71,6 @@ describe("boardRestApi", () => {
 	});
 
 	const setup = (createBoard = true) => {
-		setupStores({
-			courseRoomDetailsModule: CourseRoomDetailsModule,
-		});
-
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		if (createBoard) {
 			const cards = cardSkeletonResponseFactory.buildList(3);
@@ -173,11 +171,11 @@ describe("boardRestApi", () => {
 	describe("@deleteBoardRequest", () => {
 		it("should call 'deleteBoardSuccess'", async () => {
 			const deleteBoardMock = vi.fn();
+			const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
+			courseRoomDetailsStore.deleteBoard = deleteBoardMock;
 			const { boardStore } = setup();
 			const { deleteBoardRequest } = useBoardRestApi();
 			const boardId = boardStore.board!.id;
-
-			courseRoomDetailsModule.deleteBoard = deleteBoardMock;
 
 			await deleteBoardRequest({ boardId });
 
@@ -189,10 +187,11 @@ describe("boardRestApi", () => {
 		});
 		it("should call handleError if the API call fails", async () => {
 			const deleteBoardMock = vi.fn().mockRejectedValue({});
+			const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
+			courseRoomDetailsStore.deleteBoard = deleteBoardMock;
 			const { boardStore } = setup();
 			const { deleteBoardRequest } = useBoardRestApi();
 			const boardId = boardStore.board!.id;
-			courseRoomDetailsModule.deleteBoard = deleteBoardMock;
 
 			await deleteBoardRequest({ boardId });
 
@@ -205,7 +204,7 @@ describe("boardRestApi", () => {
 			const { boardStore } = setup(false);
 			const { createColumnRequest } = useBoardRestApi();
 
-			await createColumnRequest();
+			await createColumnRequest({ boardId: "some" });
 
 			expect(boardStore.createColumnSuccess).not.toHaveBeenCalled();
 		});
@@ -217,7 +216,7 @@ describe("boardRestApi", () => {
 			const newColumn = columnResponseFactory.build();
 			mockedBoardApiCalls.createColumnCall.mockResolvedValue(newColumn);
 
-			const result = await createColumnRequest();
+			const result = await createColumnRequest({ boardId: "some" });
 
 			expect(boardStore.createColumnSuccess).toHaveBeenCalledWith({
 				newColumn,
@@ -232,7 +231,7 @@ describe("boardRestApi", () => {
 
 			mockedBoardApiCalls.createColumnCall.mockRejectedValue({});
 
-			await createColumnRequest();
+			await createColumnRequest({ boardId: "some" });
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
@@ -269,6 +268,64 @@ describe("boardRestApi", () => {
 			mockedBoardApiCalls.deleteColumnCall.mockRejectedValue({});
 
 			await deleteColumnRequest({ columnId });
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
+
+	describe("duplicateColumnRequest", () => {
+		it("should not call duplicateColumnSuccess action when column index is less than 0", async () => {
+			const { boardStore } = setup();
+			const { duplicateColumnRequest } = useBoardRestApi();
+
+			boardStore.getColumnIndex.mockReturnValue(-1);
+
+			await duplicateColumnRequest({ columnId: "nonExistentColumnId" });
+
+			expect(boardStore.duplicateColumnSuccess).not.toHaveBeenCalled();
+		});
+
+		it("should call duplicateColumnSuccess action if the API call is successful", async () => {
+			const { boardStore } = setup();
+			const { duplicateColumnRequest } = useBoardRestApi();
+			const columnId = boardStore.board!.columns[0].id;
+
+			const duplicatedColumn = columnFullResponseFactory.build();
+			mockedBoardApiCalls.duplicateColumnCall.mockResolvedValue(duplicatedColumn);
+			boardStore.getColumnIndex.mockReturnValue(0);
+
+			await duplicateColumnRequest({ columnId });
+
+			expect(boardStore.duplicateColumnSuccess).toHaveBeenCalledWith({
+				columnId,
+				duplicatedColumn,
+				isOwnAction: true,
+			});
+		});
+
+		it("should not call duplicateColumnSuccess action if duplicated column has no id", async () => {
+			const { boardStore } = setup();
+			const { duplicateColumnRequest } = useBoardRestApi();
+			const columnId = boardStore.board!.columns[0].id;
+
+			const duplicatedColumn = columnFullResponseFactory.build({ id: "" });
+			mockedBoardApiCalls.duplicateColumnCall.mockResolvedValue(duplicatedColumn);
+			boardStore.getColumnIndex.mockReturnValue(0);
+
+			await duplicateColumnRequest({ columnId });
+
+			expect(boardStore.duplicateColumnSuccess).not.toHaveBeenCalled();
+		});
+
+		it("should call handleError if the API call fails", async () => {
+			const { boardStore } = setup();
+			const { duplicateColumnRequest } = useBoardRestApi();
+			const columnId = boardStore.board!.columns[0].id;
+
+			mockedBoardApiCalls.duplicateColumnCall.mockRejectedValue({});
+			boardStore.getColumnIndex.mockReturnValue(0);
+
+			await duplicateColumnRequest({ columnId });
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});

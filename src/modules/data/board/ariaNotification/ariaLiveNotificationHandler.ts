@@ -3,6 +3,7 @@ import {
 	CreateCardSuccessPayload,
 	CreateColumnSuccessPayload,
 	DeleteColumnSuccessPayload,
+	DuplicateColumnSuccessPayload,
 	MoveCardSuccessPayload,
 	MoveCardToBoardSuccessPayload,
 	MoveColumnSuccessPayload,
@@ -35,6 +36,7 @@ export const SR_I18N_KEYS_MAP = {
 	CARD_DELETED_SUCCESS: "components.board.screenReader.notification.cardDeleted.success",
 	CARD_DUPLICATED_SUCCESS: "components.board.screenReader.notification.cardDuplicated.success",
 	COLUMN_DELETED_SUCCESS: "components.board.screenReader.notification.columnDeleted.success",
+	COLUMN_DUPLICATED_SUCCESS: "components.board.screenReader.notification.columnDuplicated.success",
 	CARD_MOVED_IN_SAME_COLUMN_SUCCESS: "components.board.screenReader.notification.cardMovedInSameColumn.success",
 	CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS: "components.board.screenReader.notification.cardMovedToAnotherColumn.success",
 	COLUMN_MOVED_SUCCESS: "components.board.screenReader.notification.columnMoved.success",
@@ -108,6 +110,13 @@ export const useBoardAriaNotification = () => {
 		if (isOwnAction) return;
 
 		notifyOnScreenReader(t(SR_I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS));
+	};
+
+	const notifyDuplicateColumnSuccess = (action: DuplicateColumnSuccessPayload) => {
+		const { isOwnAction } = action;
+		if (isOwnAction) return;
+
+		notifyOnScreenReader(t(SR_I18N_KEYS_MAP.COLUMN_DUPLICATED_SUCCESS));
 	};
 
 	const notifyMoveCardSuccess = (action: MoveCardSuccessPayload) => {
@@ -341,6 +350,7 @@ export const useBoardAriaNotification = () => {
 		notifyDeleteCardSuccess,
 		notifyDuplicateCardSuccess,
 		notifyDeleteColumnSuccess,
+		notifyDuplicateColumnSuccess,
 		notifyDeleteElementSuccess,
 		notifyMoveCardSuccess,
 		notifyMoveCardToBoardSuccess,

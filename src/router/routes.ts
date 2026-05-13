@@ -142,6 +142,14 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		}),
 	},
 	{
+		path: `/boards/:boardId(${REGEX_ID})/cards/:cardId(${REGEX_ID})`,
+		component: async () => (await import("@page-board")).ColumnBoardPage,
+		name: "boards-card-detail",
+		props: (route: RouteLocationNormalized) => ({
+			boardId: route.params.boardId,
+		}),
+	},
+	{
 		path: `/collabora/:id(${REGEX_ID})`,
 		component: async () => (await import("@page-collabora")).CollaboraPage,
 		name: "collabora",
@@ -166,6 +174,15 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		component: async () => (await import("@page-folder")).FolderPage,
 		beforeEnter: [checkFolderFeature],
 		name: "folder-id",
+		props: (route: RouteLocationNormalized) => ({
+			folderId: route.params.id,
+		}),
+	},
+	{
+		path: `/folder/:id(${REGEX_ID})/trash`,
+		component: async () => (await import("@page-folder")).FolderTrashPage,
+		beforeEnter: [checkFolderFeature],
+		name: "folder-trash",
 		props: (route: RouteLocationNormalized) => ({
 			folderId: route.params.id,
 		}),
@@ -268,7 +285,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 			targetSystem: isMongoId,
 		}),
 		props: (to: RouteLocationNormalized) => ({
-			targetSystem: to.query.targetSystem,
+			targetSystemId: to.query.targetSystem,
 		}),
 		meta: {
 			isPublic: true,

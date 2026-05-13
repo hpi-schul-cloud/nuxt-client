@@ -1,13 +1,15 @@
 import SchoolTerms from "./SchoolTerms.vue";
 import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
-import SchoolsModule from "@/store/schools";
 import { Status } from "@/store/types/commons";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { downloadFile } from "@/utils/fileHelper";
-import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
-import { createTestAppStoreWithPermissions, mockComposable, termsOfUseFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import {
+	createTestAppStoreWithPermissions,
+	mockComposable,
+	schoolFactory,
+	termsOfUseFactory,
+} from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Permission } from "@api-server";
 import { ConsentVersion, CreateConsentVersionPayload, useSchoolTermsOfUse } from "@data-school";
@@ -23,15 +25,15 @@ vi.mock("@data-school/schoolTermsOfUse.composable");
 const useSchoolTermsOfUseMock = vi.mocked(useSchoolTermsOfUse);
 
 describe("SchoolTerms", () => {
-	let schoolsModule: Mocked<SchoolsModule>;
+	const mockSchool = schoolFactory.build();
 	let useSchoolTermsOfUseMockReturn: Mocked<ReturnType<typeof useSchoolTermsOfUse>>;
 
 	const setup = (
 		options?: Partial<{ status: Status; permissions: Permission[]; termsOfUse: ConsentVersion | null }>
 	) => {
-		const existitngTermsOfUse = termsOfUseFactory.build({ schoolId: mockSchool.id });
+		const existingTermsOfUse = termsOfUseFactory.build({ schoolId: mockSchool.id });
 		const { termsOfUse, permissions, status } = {
-			termsOfUse: existitngTermsOfUse,
+			termsOfUse: existingTermsOfUse,
 			permissions: [Permission.SCHOOL_EDIT],
 			status: "completed" as Status,
 			...options,
@@ -39,10 +41,7 @@ describe("SchoolTerms", () => {
 
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStoreWithPermissions(permissions);
-
-		schoolsModule = createModuleMocks(SchoolsModule, {
-			getSchool: mockSchool,
-		});
+		createTestSchoolStore({ schoolDetails: mockSchool });
 
 		useSchoolTermsOfUseMockReturn = mockComposable(useSchoolTermsOfUse);
 		useSchoolTermsOfUseMock.mockReturnValue(useSchoolTermsOfUseMockReturn);
@@ -53,9 +52,6 @@ describe("SchoolTerms", () => {
 		const wrapper = mount(SchoolTerms, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
-				},
 			},
 		});
 

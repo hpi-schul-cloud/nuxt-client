@@ -1,5 +1,6 @@
 import Topbar from "./Topbar.vue";
 import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoleName, SchulcloudTheme } from "@api-server";
@@ -8,7 +9,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { h, ref } from "vue";
-import { VApp } from "vuetify/lib/components/index";
+import { VApp } from "vuetify/components";
 
 vi.mock("@data-app/status-alerts.composable");
 vi.mocked(useStatusAlerts).mockReturnValue({
@@ -42,6 +43,7 @@ describe("@ui-layout/Topbar", () => {
 				],
 			},
 		});
+		createTestSchoolStore();
 
 		createTestEnvStore({
 			SC_THEME: SchulcloudTheme.BRB,
@@ -64,7 +66,7 @@ describe("@ui-layout/Topbar", () => {
 			},
 		});
 
-		const topbar = wrapper.findComponent({ name: "Topbar" });
+		const topbar = wrapper.findComponent(Topbar);
 		return { wrapper, topbar };
 	};
 

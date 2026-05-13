@@ -11,6 +11,9 @@ import {
 	DeleteColumnRequestPayload,
 	DeleteColumnSuccessPayload,
 	DisconnectSocketRequestPayload,
+	DuplicateColumnFailurePayload,
+	DuplicateColumnRequestPayload,
+	DuplicateColumnSuccessPayload,
 	FetchBoardFailurePayload,
 	FetchBoardRequestPayload,
 	FetchBoardSuccessPayload,
@@ -162,3 +165,7 @@ export const updateReaderCanEditFailure = createAction(
 	"update-readers-can-edit-failure",
 	props<UpdateReaderCanEditFailurePayload>()
 );
+
+export const duplicateColumnRequest = createAction("duplicate-column-request", props<DuplicateColumnRequestPayload>());
+export const duplicateColumnSuccess = createAction("duplicate-column-success", props<DuplicateColumnSuccessPayload>());
+export const duplicateColumnFailure = createAction("duplicate-column-failure", props<DuplicateColumnFailurePayload>());

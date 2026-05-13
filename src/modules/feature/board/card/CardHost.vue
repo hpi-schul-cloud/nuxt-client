@@ -39,7 +39,8 @@
 						@enter="onEnter"
 					/>
 
-					<div class="board-menu" :class="boardMenuClasses">
+					<div v-if="!isDetailView" class="board-menu" :class="boardMenuClasses">
+						<DetailViewButton class="mr-1" @open-detail-view="onOpenDetailView" />
 						<BoardMenu v-if="hasMenuItem" :scope="BoardMenuScope.CARD" has-background :data-testid="boardMenuTestId">
 							<KebabMenuActionEdit v-if="allowedOperations?.deleteCard && !isEditMode" @click="onStartEditMode" />
 							<SvsColorPickerMenu
@@ -84,30 +85,12 @@
 		<VCard v-if="isDuplicating" class="mt-3">
 			<CardSkeleton :height />
 		</VCard>
-
-		<!-- Detail View -->
-		<CardHostDetailView
-			v-if="card"
-			:card="card"
-			:is-open="isDetailView"
-			:row-index="rowIndex"
-			:column-index="columnIndex"
-			@delete:element="onDeleteElement"
-			@move-down:element="onMoveContentElementDown"
-			@move-up:element="onMoveContentElementUp"
-			@move-keyboard:element="onMoveContentElementKeyboard"
-			@add:element="onAddElement"
-			@enter:title="onEnter"
-			@update:title="onUpdateCardTitle"
-			@close:detail-view="onCloseDetailView"
-		/>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
-import CardHostDetailView from "./CardHostDetailView.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
@@ -118,8 +101,14 @@ import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { delay } from "@/utils/helpers";
 import { Colors } from "@api-server";
-import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
-import { BoardMenu, BoardMenuScope } from "@ui-board";
+import {
+	useBoardAllowedOperations,
+	useBoardFocusHandler,
+	useBoardStore,
+	useCardStore,
+	useCourseBoardEditMode,
+} from "@data-board";
+import { BoardMenu, BoardMenuScope, DetailViewButton } from "@ui-board";
 import { SvsColorPickerMenu } from "@ui-controls";
 import {
 	KebabMenuActionDelete,
@@ -132,6 +121,7 @@ import {
 import { useShareBoardLink } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, onMounted, ref, toRef } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 type Props = {
 	height: number;
@@ -156,9 +146,12 @@ const { isFocusContained, isFocusedById } = useBoardFocusHandler(cardId.value, c
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
 
 const isHovered = useElementHover(cardHost);
-const isDetailView = ref(false);
+const route = useRoute();
+const isDetailView = computed(() => route.params.cardId === props.cardId);
 
 const cardStore = useCardStore();
+const router = useRouter();
+const boardStore = useBoardStore();
 
 const card = computed(() => cardStore.getCard(cardId.value));
 const isLoadingCard = computed(() => card.value === undefined);
@@ -170,6 +163,9 @@ const cardTestId = computed(() => `board-card-${props.columnIndex}-${props.rowIn
 
 const { height: cardHostHeight } = useElementSize(cardHost);
 const cardElevation = computed(() => {
+	if (isDetailView.value) {
+		return 0;
+	}
 	if (isEditMode.value) {
 		return 6;
 	}
@@ -179,10 +175,15 @@ const cardElevation = computed(() => {
 	return 2;
 });
 
-const cardBackground = computed(() => colorToHexLighten5(card.value?.backgroundColor ?? Colors.TRANSPARENT));
+const cardBackground = computed(() => {
+	if (isDetailView.value) {
+		return Colors.TRANSPARENT;
+	}
+	return colorToHexLighten5(card.value?.backgroundColor ?? Colors.TRANSPARENT);
+});
 const cardBorderColor = computed(() => {
 	const color = card.value?.backgroundColor;
-	if (!color || color === Colors.TRANSPARENT) return undefined;
+	if (!color || color === Colors.TRANSPARENT || isDetailView.value) return undefined;
 	return colorToHexLighten3(color);
 });
 
@@ -229,8 +230,6 @@ const onEndEditMode = async () => {
 	});
 };
 
-const onCloseDetailView = () => (isDetailView.value = false);
-
 const onMoveContentElementDown = async ({ payload: elementId, elementIndex }: ElementMove) =>
 	await cardStore.moveElementRequest(props.cardId, elementId, elementIndex, +1);
 
@@ -266,6 +265,19 @@ const { run: duplicateCard, isRunning: isDuplicating } = useSafeTaskRunner(async
 	await cardStore.duplicateCard({ cardId: props.cardId });
 });
 
+const onOpenDetailView = () => {
+	const boardId = boardStore.board?.id;
+	if (boardId) {
+		router.push({
+			name: "boards-card-detail",
+			params: {
+				boardId,
+				cardId: props.cardId,
+			},
+		});
+	}
+};
+
 onMounted(async () => {
 	if (card.value === undefined) {
 		await cardStore.fetchCardRequest({ cardIds: [cardId.value] });
@@ -282,7 +294,7 @@ const onUpdateColor = (backgroundColor: Colors) => {
 	position: absolute;
 	top: 0.25rem;
 	right: 0.25rem;
-	z-index: 1;
+	z-index: var(--z-elevated);
 }
 .hidden {
 	transition: opacity 200ms;

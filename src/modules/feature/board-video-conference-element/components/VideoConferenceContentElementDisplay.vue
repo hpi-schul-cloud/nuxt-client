@@ -75,6 +75,10 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
+	isDetailView: {
+		type: Boolean,
+		required: false,
+	},
 });
 
 const { t } = useI18n();
@@ -82,7 +86,7 @@ const { t } = useI18n();
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
-const isSmallOrLargerListBoard = computed(() => smAndUp.value && isListLayout.value);
+const isSmallOrLargerListBoard = computed(() => smAndUp.value && (isListLayout.value || props.isDetailView));
 
 const shouldShowNoFeatureAlert = computed(() => props.canStart && !props.isVideoConferenceEnabled);
 const shouldShowInfoAlert = computed(() => !props.isRunning && !props.canStart);
@@ -130,7 +134,7 @@ const onContentClick = () => {
 	position: absolute;
 	right: 10px;
 	top: 10px;
-	z-index: 100;
+	z-index: var(--z-pinned);
 }
 
 $pulseIconColor: #15ba97;

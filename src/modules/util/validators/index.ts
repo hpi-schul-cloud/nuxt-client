@@ -8,6 +8,7 @@ import {
 import { hasLowercaseLetter, hasNumber, hasSpecialCharacter, hasUppercaseLetter } from "./passwordValidators";
 import {
 	isNonEmptyString,
+	isOfMaxFileSize,
 	isOfMaxLength,
 	isOfMinLength,
 	isRequired,
@@ -26,6 +27,7 @@ export {
 	hasSpecialCharacter,
 	hasUppercaseLetter,
 	isNonEmptyString,
+	isOfMaxFileSize,
 	isOfMaxLength,
 	isOfMinLength,
 	isRequired,

@@ -6,8 +6,13 @@
 
 <script setup lang="ts">
 import { $axios } from "@/utils/api";
-import { H5pEditorApiFactory } from "@api-h5p";
-import { H5PContentParentType, H5PSaveResponse, LanguageType, PostH5PContentCreateParams } from "@api-h5p";
+import {
+	H5PContentParentType,
+	H5pEditorApiFactory,
+	H5PSaveResponse,
+	LanguageType,
+	PostH5PContentCreateParams,
+} from "@api-h5p";
 import { defineElements, H5PEditorComponent } from "@lumieducation/h5p-webcomponents";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -39,9 +44,7 @@ const language = i18n.locale.value as LanguageType;
 
 const loadContent = async (id?: string) => {
 	try {
-		const { data } = id
-			? await h5pEditorApi.h5PEditorControllerGetH5PEditor(id, language)
-			: await h5pEditorApi.h5PEditorControllerGetNewH5PEditor(language);
+		const { data } = id ? await h5pEditorApi.getH5PEditor(id, language) : await h5pEditorApi.getNewH5PEditor(language);
 
 		return data;
 	} catch (err) {
@@ -61,8 +64,8 @@ const saveContent = async (
 	};
 
 	const { data } = contentId
-		? await h5pEditorApi.h5PEditorControllerSaveH5pContent(contentId, createParams)
-		: await h5pEditorApi.h5PEditorControllerCreateH5pContent(createParams);
+		? await h5pEditorApi.saveH5pContent(contentId, createParams)
+		: await h5pEditorApi.createH5pContent(createParams);
 
 	return data;
 };
