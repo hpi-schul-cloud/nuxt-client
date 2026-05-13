@@ -59,14 +59,14 @@ const props = defineProps({
 const { systemId } = useAppStoreRefs();
 
 const { t } = useI18n();
-const { systemName, sessionTokenExpiration } = useSystem(systemId);
+const { hasEndSessionEndpoint, systemName, sessionTokenExpiration } = useSystem(systemId);
 
 const userRole = computed(() => t(`common.roleName.${toRef(props.roleNames).value[0]}`).toString());
 
 const initials = computed(() => props.user.firstName.slice(0, 1) + props.user.lastName.slice(0, 1));
 
 const isExternalLogoutAllowed = computed(
-	() => useEnvConfig().value.FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED && !!isSessionTokenExpired.value
+	() => useEnvConfig().value.FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED && hasEndSessionEndpoint.value
 );
 
 const isSessionTokenExpired = ref(false);

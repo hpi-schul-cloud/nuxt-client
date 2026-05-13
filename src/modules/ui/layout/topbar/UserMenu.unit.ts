@@ -37,6 +37,8 @@ describe("@ui-layout/UserMenu", () => {
 		useSystemMock = mockComposable(useSystem, {
 			system: ref(mockedSystem),
 			systemName: computed(() => mockedSystem?.displayName),
+			hasEndSessionEndpoint: computed(() => !!mockedSystem?.oauthConfig?.endSessionEndpoint),
+			sessionTokenExpiration: ref(mockedTokenExpiration),
 		});
 		useOAuthApiMock = mockComposable(useOAuthApi);
 

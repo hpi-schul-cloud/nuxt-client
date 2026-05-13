@@ -23,12 +23,13 @@ export const useSystem = (systemId: Ref<string | undefined>) => {
 
 		if (success) {
 			system.value = result.data;
-			console.log("Fetched system:", system.value);
 			if (system.value?.oauthConfig?.endSessionEndpoint) {
 				sessionTokenExpiration.value = await getSessionTokenExpiration();
 			}
 		}
 	};
+
+	const hasEndSessionEndpoint = computed(() => !!system.value?.oauthConfig?.endSessionEndpoint);
 
 	watch(
 		systemId,
@@ -46,6 +47,7 @@ export const useSystem = (systemId: Ref<string | undefined>) => {
 		status,
 		error,
 		isLoading,
+		hasEndSessionEndpoint,
 		sessionTokenExpiration,
 	};
 };
