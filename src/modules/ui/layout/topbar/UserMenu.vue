@@ -40,9 +40,8 @@ import LanguageMenu from "./LanguageMenu.vue";
 import { MeUserResponse } from "@api-server";
 import { useSystem } from "@data-access";
 import { useAppStore, useAppStoreRefs } from "@data-app";
-import { useEnvConfig } from "@data-env";
 import { safariAriaOwnsWorkaround } from "@util-device-detection";
-import { computed, PropType, ref, toRef } from "vue";
+import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -59,22 +58,15 @@ const props = defineProps({
 const { systemId } = useAppStoreRefs();
 
 const { t } = useI18n();
-const { hasEndSessionEndpoint, systemName, sessionTokenExpiration } = useSystem(systemId);
 
 const userRole = computed(() => t(`common.roleName.${toRef(props.roleNames).value[0]}`).toString());
 
 const initials = computed(() => props.user.firstName.slice(0, 1) + props.user.lastName.slice(0, 1));
 
-const isExternalLogoutAllowed = computed(
-	() => useEnvConfig().value.FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED && hasEndSessionEndpoint.value
-);
+const { isExternalLogoutAllowed, isSessionTokenExpired, systemName, updateSessionTokenExpiration } =
+	useSystem(systemId);
 
-const isSessionTokenExpired = ref(false);
-
-const onMenuBtnClicked = () => {
-	const now = new Date();
-	isSessionTokenExpired.value = !sessionTokenExpiration.value || now >= sessionTokenExpiration.value;
-};
+const onMenuBtnClicked = () => updateSessionTokenExpiration();
 
 const logout = () => {
 	useAppStore().logout();
