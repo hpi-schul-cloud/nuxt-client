@@ -930,7 +930,7 @@ describe("CourseRoomDetails.page.vue", () => {
 					const { wrapper } = setup();
 					await flushPromises();
 
-					const roomContent = wrapper.findComponent('[data-testid="room-content"]');
+					const roomContent = wrapper.findComponent('[data-testid="room-content"]') as VueWrapper;
 					roomContent.vm.$emit("share-board-element", { id: "element-id", type });
 					await nextTick();
 
@@ -944,7 +944,7 @@ describe("CourseRoomDetails.page.vue", () => {
 					const { wrapper } = setup();
 					await flushPromises();
 
-					const roomContent = wrapper.findComponent('[data-testid="room-content"]');
+					const roomContent = wrapper.findComponent('[data-testid="room-content"]') as VueWrapper;
 					roomContent.vm.$emit("share-board-element", { id: "element-id", type });
 					await nextTick();
 
