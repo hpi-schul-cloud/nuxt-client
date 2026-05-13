@@ -1,19 +1,12 @@
 import ActionMenu from "./ActionMenu.vue";
 import MembersTable from "./MembersTable.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import {
-	createTestAppStoreWithUser,
-	mockedPiniaStoreTyping,
-	roomMemberFactory,
-	schoolFactory,
-} from "@@/tests/test-utils";
+import { createTestAppStoreWithUser, mockedPiniaStoreTyping, roomMemberFactory } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { RoleName, RoomItemResponseAllowedOperations, RoomMemberResponseAllowedOperations } from "@api-server";
-import { RoomMember, useRoomMembersStore } from "@data-room";
+import { RoomMember, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
 import {
 	mdiAccountClockOutline,
@@ -26,45 +19,18 @@ import { createTestingPinia } from "@pinia/testing";
 import { SvsSearchField } from "@ui-controls";
 import { KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
 import { DOMWrapper, VueWrapper } from "@vue/test-utils";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
+import { setActivePinia } from "pinia";
 import { Mock, vi } from "vitest";
 import { nextTick } from "vue";
 import { VCard, VDataTable, VDialog, VIcon, VTextField } from "vuetify/components";
-
-vi.mock("@vueuse/integrations/useFocusTrap");
 
 vi.mock("@/plugins/i18n");
 (useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("MembersTable", () => {
-	let pauseMock: Mock;
-	let unpauseMock: Mock;
-	let deactivateMock: Mock;
-	let activateMock: Mock;
-
 	beforeEach(() => {
-		pauseMock = vi.fn();
-		unpauseMock = vi.fn();
-		deactivateMock = vi.fn();
-		activateMock = vi.fn();
-
-		(useFocusTrap as Mock).mockReturnValue({
-			pause: pauseMock,
-			unpause: unpauseMock,
-			deactivate: deactivateMock,
-			activate: activateMock,
-		});
-
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-
-		schoolsModule.setSchool(
-			schoolFactory.build({
-				id: "school-id",
-				name: "Paul-Gerhardt-Gymnasium",
-			})
-		);
+		setActivePinia(createTestingPinia());
+		createTestSchoolStore();
 	});
 
 	const tableHeaders = [
@@ -100,36 +66,31 @@ describe("MembersTable", () => {
 				},
 			});
 
-		const windowWidth = options?.windowWidth ?? 1280;
-
 		const currentUser = roomMemberFactory.build({});
 
 		Object.defineProperty(globalThis, "innerWidth", {
 			writable: true,
 			configurable: true,
-			value: windowWidth,
+			value: options?.windowWidth ?? 1280,
 		});
 
-		createTestingPinia({
-			initialState: {
-				roomMembersStore: {
-					roomMembers: [...members, currentUser],
-					isRoomOwner: vi.fn(),
-				},
-				roomDetailsStore: {
-					room: {
-						id: "room-id",
-						name: "Room 1",
-						schoolId: "school-id",
-						allowedOperations: options?.allowedOperations,
-					},
-				},
+		createTestAppStoreWithUser(options?.currentUserId ?? currentUser.userId);
+		const roomMembers = [...members, currentUser];
+		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
+		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
+
+		roomMembersStore.isRoomOwner.mockReturnValue(options?.isRoomOwner ?? false);
+		roomDetailsStore.$patch({
+			room: {
+				id: "room-id",
+				name: "Room 1",
+				schoolId: "school-id",
+				allowedOperations: options?.allowedOperations,
 			},
 		});
-		createTestAppStoreWithUser(options?.currentUserId ?? currentUser.userId);
+		roomMembersStore.$patch({ roomMembers });
 
 		const wrapper = mount(MembersTable, {
-			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -137,10 +98,6 @@ describe("MembersTable", () => {
 				ChangeRole: true,
 			},
 		});
-
-		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
-		roomMembersStore.isRoomOwner.mockReturnValue(options?.isRoomOwner ?? false);
-		const roomMembers = roomMembersStore.roomMembers;
 
 		return { wrapper, roomMembersStore, roomMembers };
 	};

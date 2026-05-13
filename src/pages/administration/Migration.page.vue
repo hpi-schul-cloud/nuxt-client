@@ -387,11 +387,11 @@
 </template>
 <script setup lang="ts">
 import ImportUsers from "@/components/administration/ImportUsers.vue";
-import { schoolsModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { SchulcloudTheme } from "@api-server";
+import { useSchoolStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { useImportUsersStore } from "@data-import-users";
 import { mdiClose } from "@icons/material";
@@ -404,6 +404,8 @@ import { useRouter } from "vue-router";
 
 const { t } = useI18n();
 const importUsersStore = useImportUsersStore();
+const schoolStore = useSchoolStore();
+const { schoolDetails, schoolFeatureObject } = useSchoolStoreRefs();
 
 const router = useRouter();
 const { instanceName } = storeToRefs(useEnvStore());
@@ -422,17 +424,17 @@ const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined
 
 const importUsersRef: Ref<InstanceType<typeof ImportUsers> | null> = ref(null);
 
-const isMigrationNotStarted = computed(() => school.value.inUserMigration === undefined);
+const isMigrationNotStarted = computed(() => schoolDetails.value.inUserMigration === undefined);
 
-const canPerformMigration = computed(() => school.value.inUserMigration && school.value.inMaintenance);
+const canPerformMigration = computed(() => schoolDetails.value.inUserMigration && schoolDetails.value.inMaintenance);
 
-const isMigrationFinished = computed(() => school.value.inUserMigration === false);
+const isMigrationFinished = computed(() => schoolDetails.value.inUserMigration === false);
 
 const canFinishMaintenance = computed(() => isMigrationConfirm.value || isMigrationFinished.value);
 
-const isMaintenanceFinished = computed(() => !school.value.inMaintenance);
+const isMaintenanceFinished = computed(() => !schoolDetails.value.inMaintenance);
 
-const school = computed(() => schoolsModule.getSchool);
+const school = computed(() => schoolDetails.value);
 
 const businessError: ComputedRef<BusinessError | null> = computed(() => importUsersStore.businessError);
 
@@ -472,14 +474,14 @@ const isAllowed = async () => {
 		return true;
 	}
 	if (school.value.id === "") {
-		await schoolsModule.fetchSchool();
+		await schoolStore.fetchSchoolDetails();
 	}
-	return school.value.featureObject.ldapUniventionMigrationSchool;
+	return schoolFeatureObject.value?.ldapUniventionMigrationSchool;
 };
 
 const summary = async () => {
 	if (school.value.id === "") {
-		await schoolsModule.fetchSchool();
+		await schoolStore.fetchSchoolDetails();
 	}
 	if (!canPerformMigration.value) {
 		return;
@@ -522,16 +524,17 @@ const setSchoolInUserMigration = async () => {
 		}
 	}
 
-	await schoolsModule.setSchoolInUserMigration();
+	await importUsersStore.setSchoolInUserMigration();
 
 	checkTotalInterval();
-	if (schoolsModule.getError) {
-		// TODO better error handling
-		importUsersStore.businessError = {
-			statusCode: "500",
-			message: schoolsModule.getError.message,
-		};
+	if (importUsersStore.businessError) {
+		// Error is already set in the store
+		isLoading.value = false;
+		return;
 	}
+
+	// Refresh school details to get updated inUserMigration status
+	await schoolStore.fetchSchoolDetails();
 
 	isLoading.value = false;
 };
@@ -542,27 +545,23 @@ const performMigration = async () => {
 	await importUsersStore.performMigration();
 
 	if (!importUsersStore.businessError) {
-		schoolsModule.setSchool({
-			...schoolsModule.getSchool,
-			inUserMigration: false,
-		});
+		// Refresh school details to get updated status
+		await schoolStore.fetchSchoolDetails();
 		isLoading.value = false;
 		migrationStep.value = 4;
 	}
 };
 const endMaintenance = async () => {
 	isLoading.value = true;
-	await schoolsModule.migrationStartSync();
-	if (schoolsModule.getError) {
-		// TODO better error handling
-		importUsersStore.businessError = {
-			statusCode: "500",
-			message: schoolsModule.getError.message,
-		};
-	} else {
-		school.value.inMaintenance = isNbc.value;
-		migrationStep.value = 5;
+	await importUsersStore.endSchoolInMaintenance();
+	if (importUsersStore.businessError) {
+		// Error is already set in the store
+		isLoading.value = false;
+		return;
 	}
+	// Refresh school details to get updated inMaintenance status
+	await schoolStore.fetchSchoolDetails();
+	migrationStep.value = 5;
 	isLoading.value = false;
 };
 
@@ -601,7 +600,7 @@ const cancelMigration = async () => {
 		isLoading.value = true;
 		await importUsersStore.cancelMigration();
 		migrationStep.value = 0;
-		await schoolsModule.fetchSchool();
+		await schoolStore.fetchSchoolDetails();
 		isLoading.value = false;
 		await redirectToAdminPage();
 	}

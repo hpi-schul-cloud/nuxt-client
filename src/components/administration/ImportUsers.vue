@@ -235,7 +235,6 @@
 
 <script setup lang="ts">
 import ImportUsersMatchSearch from "./ImportUsersMatchSearch.vue";
-import { schoolsModule } from "@/store";
 import {
 	ImportUserResponse,
 	ImportUserResponseRoleNames,
@@ -243,6 +242,7 @@ import {
 	UserMatchResponse,
 	UserMatchResponseMatchedBy,
 } from "@api-server";
+import { useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { MatchedBy, useImportUsersStore } from "@data-import-users";
 import {
@@ -302,10 +302,11 @@ const defaultItem: ImportUserResponse = {
 const editedIndex = ref(-1);
 const delay = 500;
 
+const { schoolDetails } = useSchoolStoreRefs();
+
 const instanceName = computed(() => useEnvStore().instanceName);
 const isNbc = computed(() => useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.N21);
-const school = computed(() => schoolsModule.getSchool);
-const canStartMigration = computed(() => school.value.inUserMigration && school.value.inMaintenance);
+const canStartMigration = computed(() => schoolDetails.value.inUserMigration && schoolDetails.value.inMaintenance);
 const sourceSystemName = computed(() => {
 	const theme = useEnvConfig().value.SC_THEME.toLowerCase();
 	if (theme === SchulcloudTheme.BRB) {

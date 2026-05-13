@@ -1,6 +1,4 @@
 import { useI18nGlobal } from "@/plugins/i18n";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { initializeAxios } from "@/utils/api";
 import {
@@ -17,7 +15,7 @@ import {
 	roomMemberSchoolResponseFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import * as serverApi from "@api-server";
 import {
 	ChangeRoomRoleBodyParamsRoleName,
@@ -53,6 +51,7 @@ describe("useRoomMembers", () => {
 				user: { id: userId },
 			},
 		});
+		createTestSchoolStore({ schoolDetails: schoolFactory.build(ownSchool) });
 	};
 
 	beforeEach(() => {
@@ -62,15 +61,11 @@ describe("useRoomMembers", () => {
 		axiosMock = mockAxiosInstance();
 		consoleErrorSpy = vi.spyOn(logger, "error").mockImplementation(vi.fn());
 
+		createAuthTestUser("default-user-id", RoleName.TEACHER);
+
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
 		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApiMock);
 		initializeAxios(axiosMock);
-
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-
-		schoolsModule.setSchool(schoolFactory.build(ownSchool));
 	});
 
 	const setup = (members: RoomMember[] = []) => {

@@ -146,6 +146,8 @@ export default {
 	"common.medium.information.teacher": "Bitte an Schuladministrator:in wenden.",
 	"common.nodata": "Keine Daten vorhanden",
 	"common.notification.error": "Es ist ein Fehler aufgetreten.",
+	"common.notification.error.preferences.update": "Nutzereinstellungen konnten nicht aktualisiert werden.",
+	"common.notification.error.preferences.retrieve": "Nutzereinstellungen konnten nicht abgerufen werden.",
 	"common.notification.error.videoConference.notFetched": "Die Videokonferenz konnte nicht abgerufen werden.",
 	"common.notification.error.videoConference.notJoined": "Der Videokonferenz konnte nicht beigetreten werden.",
 	"common.notification.error.videoConference.notStarted": "Die Videokonferenz konnte nicht gestartet werden.",
@@ -219,6 +221,7 @@ export default {
 	"common.validation.required": "Bitte fülle dieses Feld aus",
 	"common.validation.required2": "Dies ist ein Pflichtfeld.",
 	"common.validation.tooLong": "Der eingegebene Text überschreitet die Maximallänge",
+	"common.validation.fileTooBig": "Die Datei darf maximal {maxSize} KB groß sein.",
 	"common.validation.tooShort": "Der eingegebene Text unterschreitet die Mindestlänge",
 	"common.validation.containsOpeningTag": "Bitte Leerzeichen nach Kleiner-als-Zeichen einfügen.",
 	"common.validation.nonEmptyString": "Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
@@ -1002,7 +1005,7 @@ export default {
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte kontaktiere deinen Schul-Admin!",
 	"loggedin.text.schoolInTransferPhaseStartNew":
-		'Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte läute <a href="/administration/school/"> hier das neue Schuljahr ein!</a>',
+		'Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte läute <a href="/administration/school-settings/"> hier das neue Schuljahr ein!</a>',
 	"loggedin.text.schoolInMigrationModeStarted":
 		'Die Schule befindet sich im Modus der Benutzermigration. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
 	"loggedin.text.schoolInMigrationMode":

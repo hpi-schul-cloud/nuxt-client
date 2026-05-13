@@ -1,9 +1,6 @@
 import AdministrationRoomsPage from "./AdministrationRooms.page.vue";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
-import { createTestEnvStore, mockedPiniaStoreTyping, schoolFactory } from "@@/tests/test-utils";
+import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { useAdministrationRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
@@ -11,50 +8,25 @@ import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 describe("AdministrationRooms.page", () => {
-	const ownSchool = {
-		id: "school-id",
-		name: "Paul-Gerhardt-Gymnasium",
-	};
-
-	beforeEach(() => {
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-
-		schoolsModule.setSchool(schoolFactory.build(ownSchool));
-	});
-	afterEach(() => {
-		vi.clearAllMocks();
-	});
-
 	const setup = (options?: { isEmptyList?: boolean; featureFlag?: boolean }) => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			FEATURE_ADMINISTRATE_ROOMS_ENABLED: options?.featureFlag ?? true,
 		});
-		const isEmptyList = options?.isEmptyList ?? false;
 		const { router } = injectRouterMock(createRouterMock());
+
+		const adminRoomStore = mockedPiniaStoreTyping(useAdministrationRoomStore);
+		adminRoomStore.$patch({
+			roomList: [],
+			isLoading: false,
+			isEmptyList: options?.isEmptyList ?? false,
+		});
 
 		const wrapper = mount(AdministrationRoomsPage, {
 			global: {
-				plugins: [
-					createTestingI18n(),
-					createTestingVuetify(),
-					createTestingPinia({
-						initialState: {
-							administrationRoomStore: {
-								roomList: [],
-								selectedIds: [],
-								loading: false,
-								isEmptyList: isEmptyList,
-							},
-						},
-					}),
-				],
+				plugins: [createTestingI18n(), createTestingVuetify()],
 			},
 		});
-
-		const adminRoomStore = mockedPiniaStoreTyping(useAdministrationRoomStore);
 
 		return {
 			wrapper,

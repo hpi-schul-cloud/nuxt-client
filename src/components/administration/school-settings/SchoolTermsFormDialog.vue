@@ -32,21 +32,19 @@
 </template>
 
 <script setup lang="ts">
-import { School } from "@/store/types/schools";
 import { nowUtcIso } from "@/utils/date-time.utils";
 import { toBase64 } from "@/utils/fileHelper";
-import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { isValidOrFocusFirstInvalidInput } from "@/utils/validation";
+import { useSchoolStoreRefs } from "@data-app";
 import { CreateConsentVersionPayload } from "@data-school";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { computed, ComputedRef, Ref, ref, useTemplateRef } from "vue";
+import { Ref, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 
-type Props = {
+defineProps<{
 	isOpen: boolean;
-};
-defineProps<Props>();
+}>();
 
 const emit = defineEmits<{
 	(e: "close"): void;
@@ -54,12 +52,11 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 const termsForm = useTemplateRef("termsForm");
 const file: Ref<File | null> = ref(null);
 
-const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
+const { schoolDetails } = useSchoolStoreRefs();
 
 const maxFileUploadSizeInKb = 4194304;
 const rules = {
@@ -85,7 +82,7 @@ const submit = async () => {
 	const isValid = await isValidOrFocusFirstInvalidInput(termsForm);
 	if (isValid && file.value) {
 		const newConsentVersion: CreateConsentVersionPayload = {
-			schoolId: school.value.id,
+			schoolId: schoolDetails.value.id,
 			title: t("pages.administration.school.index.termsOfUse.fileName"),
 			consentText: "",
 			consentTypes: ["termsOfUse"],

@@ -1,7 +1,5 @@
 import ChangeRole from "./ChangeRole.vue";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
-import { createTestAppStoreWithUser, mockedPiniaStoreTyping, roomFactory, schoolFactory } from "@@/tests/test-utils";
+import { createTestAppStoreWithUser, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import {
 	roomAdminFactory,
 	roomEditorFactory,
@@ -9,58 +7,18 @@ import {
 	roomOwnerFactory,
 	roomViewerFactory,
 } from "@@/tests/test-utils/factory/room/roomMembersFactory";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { RoleName } from "@api-server";
 import { RoomMember, useRoomMembersStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import { Mock } from "vitest";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { VAlert, VCard, VRadio, VRadioGroup } from "vuetify/components";
 
-vi.mock("@vueuse/integrations/useFocusTrap");
-
-vi.mock("vue-i18n", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("vue-i18n")>();
-	return {
-		...actual,
-		useI18n: vi.fn().mockReturnValue({
-			t: vi.fn().mockImplementation((key: string) => key),
-		}),
-	};
-});
-
 describe("ChangeRole.vue", () => {
-	let pauseMock: Mock;
-	let unpauseMock: Mock;
-	let deactivateMock: Mock;
-
-	beforeEach(() => {
-		pauseMock = vi.fn();
-		unpauseMock = vi.fn();
-		deactivateMock = vi.fn();
-
-		(useFocusTrap as Mock).mockReturnValue({
-			pause: pauseMock,
-			unpause: unpauseMock,
-			deactivate: deactivateMock,
-		});
-
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-
-		schoolsModule.setSchool(
-			schoolFactory.build({
-				id: "school-id",
-				name: "Paul-Gerhardt-Gymnasium",
-			})
-		);
-	});
-
 	const setup = (
 		options?: Partial<{
 			modelValue: boolean;
@@ -78,26 +36,20 @@ describe("ChangeRole.vue", () => {
 			...options,
 		};
 
-		const roomMembers = [...membersForRoleChange, currentUser];
-		const room = roomFactory.build();
-
-		const pinia = createTestingPinia({
-			initialState: {
-				roomDetailsStore: { room },
-			},
-		});
+		setActivePinia(createTestingPinia());
+		createTestSchoolStore();
 		createTestAppStoreWithUser(currentUser.userId);
-
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
-		roomMembersStore.roomMembers = roomMembers;
-		roomMembersStore.selectedIds = membersForRoleChange.map((member) => member.userId);
+		roomMembersStore.$patch({
+			roomMembers: [...membersForRoleChange, currentUser],
+			selectedIds: membersForRoleChange.map((member) => member.userId),
+		});
 		roomMembersStore.isRoomOwner = vi.fn().mockReturnValue(isRoomOwner ?? false);
-
 		roomMembersStore.getRoomOwnerFullName.mockReturnValue(isRoomOwner ? currentUser.fullName : undefined);
 
 		const wrapper = mount(ChangeRole, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n(), pinia],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
 				modelValue,
@@ -107,10 +59,6 @@ describe("ChangeRole.vue", () => {
 
 		return { wrapper, roomMembersStore };
 	};
-
-	afterEach(() => {
-		vi.clearAllMocks();
-	});
 
 	describe("when the component is rendered", () => {
 		it("should render correctly", () => {

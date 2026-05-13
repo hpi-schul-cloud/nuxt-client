@@ -270,6 +270,24 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 		}
 	};
 
+	const setSchoolInUserMigration = async (useCentralLdap = true): Promise<void> => {
+		const { error } = await execute(() =>
+			importUserApi.importUserControllerStartSchoolInUserMigration(useCentralLdap)
+		);
+		if (error) {
+			const apiError = mapAxiosErrorToResponseError(error);
+			businessError.value = { error: apiError, statusCode: apiError.code, message: apiError.message };
+		}
+	};
+
+	const endSchoolInMaintenance = async (): Promise<void> => {
+		const { error } = await execute(() => importUserApi.importUserControllerEndSchoolInMaintenance());
+		if (error) {
+			const apiError = mapAxiosErrorToResponseError(error);
+			businessError.value = { error: apiError, statusCode: apiError.code, message: apiError.message };
+		}
+	};
+
 	return {
 		filter,
 		importUsersData,
@@ -287,5 +305,7 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 		populateImportUsersFromExternalSystem,
 		cancelMigration,
 		clearAllAutoMatches,
+		setSchoolInUserMigration,
+		endSchoolInMaintenance,
 	};
 });
