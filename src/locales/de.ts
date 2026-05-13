@@ -1003,7 +1003,7 @@ export default {
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte kontaktiere deinen Schul-Admin!",
 	"loggedin.text.schoolInTransferPhaseStartNew":
-		'Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte läute <a href="/administration/school/"> hier das neue Schuljahr ein!</a>',
+		'Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte läute <a href="/administration/school-settings/"> hier das neue Schuljahr ein!</a>',
 	"loggedin.text.schoolInMigrationModeStarted":
 		'Die Schule befindet sich im Modus der Benutzermigration. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
 	"loggedin.text.schoolInMigrationMode":
