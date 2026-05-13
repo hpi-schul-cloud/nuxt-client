@@ -159,13 +159,11 @@
 
 <script setup lang="ts">
 import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
-import SchoolsModule from "@/store/schools";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import { askDeletion } from "@/utils/confirmation-dialog.utils";
-import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { ClassSortQueryType, Permission, SchoolYearQueryType, SchulcloudTheme } from "@api-server";
-import { useAppStore } from "@data-app";
+import { useAppStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { ClassInfo, ClassRootType, CourseInfo, useGroupClasses } from "@data-group";
 import { EndCourseSyncDialog } from "@feature-course-sync";
@@ -203,12 +201,13 @@ const props = defineProps({
 const { hasPermission } = useAppStore();
 const { deleteClass, fetchClassesForSchool, classes, isFetching, pagination, page, sortBy, sortOrder } =
 	useGroupClasses();
-const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 const route = useRoute();
 const router = useRouter();
 
 const { t } = useI18n();
+const { schoolDetails } = useSchoolStoreRefs();
+const { instituteTitle } = storeToRefs(useEnvStore());
 
 const activeTab = computed({
 	get() {
@@ -221,7 +220,7 @@ const activeTab = computed({
 
 useTitle(buildPageTitle(t("pages.administration.classes.index.title")));
 
-const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(() => {
+const schoolYearQueryType = computed(() => {
 	switch (props.tab) {
 		case "next":
 			return SchoolYearQueryType.NEXT_YEAR;
@@ -234,9 +233,8 @@ const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(() => {
 	}
 });
 
-const nextYear = computed(() => schoolsModule.getSchool.years.nextYear.name);
-
-const currentYear = computed(() => schoolsModule.getSchool.years.activeYear.name);
+const nextYear = computed(() => schoolDetails.value.years.nextYear.name);
+const currentYear = computed(() => schoolDetails.value.years.activeYear.name);
 
 const showSourceHeader = computed(() => classes.value.some((classItem) => classItem.externalSourceName !== undefined));
 
@@ -379,8 +377,6 @@ const onUpdateItemsPerPage = async (itemsPerPage: number) => {
 onMounted(() => {
 	onTabsChange(activeTab.value);
 });
-
-const { instituteTitle } = storeToRefs(useEnvStore());
 </script>
 <style lang="scss" scoped>
 :deep(.v-data-table-header__content) {

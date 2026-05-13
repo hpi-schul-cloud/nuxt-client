@@ -74,11 +74,11 @@
 					<VStepperWindowItem :value="1" data-testid="migration_tutorial">
 						<VContainer>
 							<VCard :ripple="false" elevation="2" class="pa-5 mb-10" color="grey-lighten-5">
-								<VProgressLinear v-if="school.inUserMigration && isLoading" indeterminate />
+								<VProgressLinear v-if="schoolMigrationState.inUserMigration && isLoading" indeterminate />
 								<VCardText>
 									<iframe class="full" :src="helpPageUri" />
-									<v-alert
-										v-if="(!school.inUserMigration || isLoading) && !isNbc"
+									<VAlert
+										v-if="(!schoolMigrationState.inUserMigration || isLoading) && !isNbc"
 										density="compact"
 										variant="outlined"
 										type="info"
@@ -119,13 +119,13 @@
 												@click="nextStep"
 											>
 												<VProgressCircular
-													v-if="isLoading && school.inUserMigration"
+													v-if="isLoading && schoolMigrationState.inUserMigration"
 													:size="20"
 													indeterminate
 													class="mr-1"
 												/>
 												{{
-													!isLoading || school.inUserMigration === false
+													!isLoading || schoolMigrationState.inUserMigration === false
 														? t("pages.administration.migration.next")
 														: t("pages.administration.migration.waiting")
 												}}
@@ -387,11 +387,12 @@
 </template>
 <script setup lang="ts">
 import ImportUsers from "@/components/administration/ImportUsers.vue";
-import { importUsersModule, schoolsModule } from "@/store";
+import { importUsersModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { SchulcloudTheme } from "@api-server";
+import { SchoolFeature, SchulcloudTheme } from "@api-server";
+import { useSchoolStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { mdiClose } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
@@ -405,32 +406,38 @@ const { t } = useI18n();
 
 const router = useRouter();
 const { instanceName } = storeToRefs(useEnvStore());
+const { fetchSchoolDetails, hasFeature } = useSchoolStore();
+const { schoolDetails } = useSchoolStoreRefs();
+const schoolMigrationState = ref({
+	inUserMigration: schoolDetails.value.inUserMigration,
+	inMaintenance: schoolDetails.value.inMaintenance,
+});
 
-const migrationStep: Ref<number> = ref(1);
+const migrationStep = ref(1);
 
-const isMigrationConfirm: Ref<boolean> = ref(false);
+const isMigrationConfirm = ref(false);
 
-const errorTimeout: Ref<number> = ref(7500);
+const errorTimeout = ref(7500);
 
-const isLoading: Ref<boolean> = ref(false);
+const isLoading = ref(false);
 
-const matchByPreferredName: Ref<boolean> = ref(false);
+const matchByPreferredName = ref(false);
 
 const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
 
 const importUsersRef: Ref<InstanceType<typeof ImportUsers> | null> = ref(null);
 
-const isMigrationNotStarted = computed(() => school.value.inUserMigration === undefined);
+const isMigrationNotStarted = computed(() => schoolMigrationState.value.inUserMigration === undefined);
 
-const canPerformMigration = computed(() => school.value.inUserMigration && school.value.inMaintenance);
+const canPerformMigration = computed(
+	() => schoolMigrationState.value.inUserMigration && schoolMigrationState.value.inMaintenance
+);
 
-const isMigrationFinished = computed(() => school.value.inUserMigration === false);
+const isMigrationFinished = computed(() => schoolMigrationState.value.inUserMigration === false);
 
 const canFinishMaintenance = computed(() => isMigrationConfirm.value || isMigrationFinished.value);
 
-const isMaintenanceFinished = computed(() => !school.value.inMaintenance);
-
-const school = computed(() => schoolsModule.getSchool);
+const isMaintenanceFinished = computed(() => !schoolMigrationState.value.inMaintenance);
 
 const businessError: ComputedRef<BusinessError | null> = computed(() => importUsersModule.getBusinessError);
 
@@ -469,19 +476,18 @@ const isAllowed = async () => {
 	if (useEnvConfig().value.FEATURE_USER_MIGRATION_ENABLED) {
 		return true;
 	}
-	if (school.value.id === "") {
-		await schoolsModule.fetchSchool();
-	}
-	return school.value.featureObject.ldapUniventionMigrationSchool;
+	return hasFeature(SchoolFeature.LDAP_UNIVENTION_MIGRATION_SCHOOL);
 };
 
 const summary = async () => {
-	if (school.value.id === "") {
-		await schoolsModule.fetchSchool();
-	}
 	if (!canPerformMigration.value) {
 		return;
 	}
+	await fetchSchoolDetails();
+	schoolMigrationState.value = {
+		inUserMigration: schoolDetails.value.inUserMigration,
+		inMaintenance: schoolDetails.value.inMaintenance,
+	};
 
 	isLoading.value = true;
 
@@ -492,8 +498,8 @@ const summary = async () => {
 	isLoading.value = false;
 };
 
-const checkTotalInterval = () => {
-	if (school.value.inUserMigration && totalImportUsers.value === 0) {
+const startPollingImportUserCount = () => {
+	if (schoolMigrationState.value.inUserMigration && totalImportUsers.value === 0) {
 		checkTotal.value = setInterval(() => {
 			importUsersModule.fetchTotal();
 		}, 5000);
@@ -504,7 +510,7 @@ const checkTotalInterval = () => {
 };
 
 const setSchoolInUserMigration = async () => {
-	if (school.value.inUserMigration) {
+	if (schoolMigrationState.value.inUserMigration) {
 		return;
 	}
 
@@ -520,17 +526,11 @@ const setSchoolInUserMigration = async () => {
 		}
 	}
 
-	await schoolsModule.setSchoolInUserMigration();
-
-	checkTotalInterval();
-	if (schoolsModule.getError) {
-		// TODO better error handling
-		importUsersModule.setBusinessError({
-			statusCode: "500",
-			message: schoolsModule.getError.message,
-		});
+	if (!schoolMigrationState.value.inUserMigration) {
+		await importUsersModule.setSchoolInUserMigration();
+		schoolMigrationState.value = { inUserMigration: true, inMaintenance: true };
 	}
-
+	startPollingImportUserCount();
 	isLoading.value = false;
 };
 
@@ -540,25 +540,18 @@ const performMigration = async () => {
 	await importUsersModule.performMigration();
 
 	if (!importUsersModule.getBusinessError) {
-		schoolsModule.setSchool({
-			...schoolsModule.getSchool,
-			inUserMigration: false,
-		});
+		schoolMigrationState.value.inUserMigration = false;
 		isLoading.value = false;
 		migrationStep.value = 4;
 	}
 };
 const endMaintenance = async () => {
 	isLoading.value = true;
-	await schoolsModule.migrationStartSync();
-	if (schoolsModule.getError) {
-		// TODO better error handling
-		importUsersModule.setBusinessError({
-			statusCode: "500",
-			message: schoolsModule.getError.message,
-		});
-	} else {
-		school.value.inMaintenance = isNbc.value;
+	if (schoolMigrationState.value.inMaintenance) {
+		await importUsersModule.migrationStartSync();
+	}
+	if (!importUsersModule.getBusinessError) {
+		schoolMigrationState.value.inMaintenance = isNbc.value;
 		migrationStep.value = 5;
 	}
 	isLoading.value = false;
@@ -599,7 +592,7 @@ const cancelMigration = async () => {
 		isLoading.value = true;
 		await importUsersModule.cancelMigration();
 		migrationStep.value = 0;
-		await schoolsModule.fetchSchool();
+		await fetchSchoolDetails();
 		isLoading.value = false;
 		await redirectToAdminPage();
 	}
@@ -672,7 +665,7 @@ onMounted(async () => {
 		return;
 	}
 	await summary();
-	checkTotalInterval();
+	startPollingImportUserCount();
 });
 
 onUnmounted(() => {
