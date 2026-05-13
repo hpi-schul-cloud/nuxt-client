@@ -436,6 +436,13 @@ const {
 	onDone,
 } = useShareFlow();
 
+const featureFlagByType = computed<Partial<Record<ShareTokenBodyParamsParentType, boolean>>>(() => ({
+	[ShareTokenBodyParamsParentType.COURSES]: useEnvConfig().value.FEATURE_COURSE_SHARE,
+	[ShareTokenBodyParamsParentType.COLUMN_BOARD]: useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE,
+	[ShareTokenBodyParamsParentType.LESSONS]: useEnvConfig().value.FEATURE_LESSON_SHARE,
+	[ShareTokenBodyParamsParentType.TASKS]: useEnvConfig().value.FEATURE_TASK_SHARE,
+}));
+
 const onShareCourse = () =>
 	onShareRequested({
 		id: courseId.value,
@@ -443,13 +450,7 @@ const onShareCourse = () =>
 	});
 
 const onShareRequested = (params: ShareParams) => {
-	const featureFlagByType: Partial<Record<ShareTokenBodyParamsParentType, boolean>> = {
-		[ShareTokenBodyParamsParentType.COURSES]: useEnvConfig().value.FEATURE_COURSE_SHARE,
-		[ShareTokenBodyParamsParentType.COLUMN_BOARD]: useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE,
-		[ShareTokenBodyParamsParentType.LESSONS]: useEnvConfig().value.FEATURE_LESSON_SHARE,
-		[ShareTokenBodyParamsParentType.TASKS]: useEnvConfig().value.FEATURE_TASK_SHARE,
-	};
-	if (featureFlagByType[params.type]) {
+	if (featureFlagByType.value[params.type]) {
 		executeShare(params);
 	}
 };

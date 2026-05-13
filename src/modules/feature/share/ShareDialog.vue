@@ -88,12 +88,11 @@ const isLastStep = computed(() => stepIndex.value === steps.length - 1);
 
 const shareOptions = reactive<ShareOptions>({ isSchoolInternal: true, hasExpiryDate: true });
 
-const currentStepTitle = computed((): string => {
-	if (activeStep.value === "askOptions") {
-		return t("components.molecules.share.options.title");
-	}
-	return t("components.molecules.share.result.title");
-});
+const currentStepTitle = computed(() =>
+	activeStep.value === "askOptions"
+		? t("components.molecules.share.options.title")
+		: t("components.molecules.share.result.title")
+);
 
 const cancelBtnLangKey = computed(() =>
 	activeStep.value === "askOptions" ? "common.actions.cancel" : "common.labels.close"

@@ -18,6 +18,8 @@ export const useShareFlow = () => {
 	const itemType = ref<ShareTokenBodyParamsParentType>();
 	const shareUrl = ref<string>();
 
+	const { itemNameKey } = useShareContent(computed(() => itemType.value));
+
 	const generateShareToken = async (params: ShareParams, options: ShareOptions) => {
 		const { result, success, error } = await execute(
 			() =>
@@ -85,8 +87,6 @@ export const useShareFlow = () => {
 
 		return { success, result };
 	};
-
-	const { itemNameKey } = useShareContent(computed(() => itemType.value));
 
 	return {
 		isShareDialogOpen: isDialogOpen,

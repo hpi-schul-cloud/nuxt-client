@@ -23,6 +23,8 @@ export const useImportFlow = () => {
 	const isGenericImportDialogOpen = computed(() => isImportActive.value && !isCardImport.value);
 	const isCardImportDialogOpen = computed(() => isImportActive.value && isCardImport.value);
 
+	const { itemNameKey } = useImportContent(computed(() => shareTokenInfo.value?.parentType));
+
 	const validateShareToken = async (token: string) => {
 		const { result, success, error } = await execute(
 			() => shareApi.shareTokenControllerLookupShareToken(token),
@@ -71,8 +73,6 @@ export const useImportFlow = () => {
 			error: error ? new Error("Import failed", { cause: error }) : undefined,
 		};
 	};
-
-	const { itemNameKey } = useImportContent(computed(() => shareTokenInfo.value?.parentType));
 
 	return {
 		isCardImportDialogOpen,
