@@ -382,7 +382,7 @@ const refreshCourseRoom = async () => {
 };
 
 const {
-	isDialogOpen: isCopyDialogOpen,
+	isCopyDialogOpen: isCopyDialogOpen,
 	copyItemType,
 	executeCopyCourse,
 	executeCopyTask,
@@ -427,7 +427,7 @@ const onCopyRequested = async ({ id, type }: { id: string; type: ContentItemType
 };
 
 const {
-	isDialogOpen: isShareDialogOpen,
+	isShareDialogOpen,
 	shareItemType,
 	shareUrl,
 	executeShare,

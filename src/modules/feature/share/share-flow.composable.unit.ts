@@ -60,7 +60,7 @@ describe("useShareFlow", () => {
 		const setup = () => mountShareFlowComposable();
 
 		it("should have the dialog closed", () => {
-			const { isDialogOpen } = setup();
+			const { isShareDialogOpen: isDialogOpen } = setup();
 			expect(isDialogOpen.value).toBe(false);
 		});
 
@@ -87,7 +87,7 @@ describe("useShareFlow", () => {
 			};
 
 			it("should open the dialog", () => {
-				const { isDialogOpen } = setup();
+				const { isShareDialogOpen: isDialogOpen } = setup();
 				expect(isDialogOpen.value).toBe(true);
 			});
 
@@ -109,7 +109,7 @@ describe("useShareFlow", () => {
 			};
 
 			it("should close the dialog", async () => {
-				const { isDialogOpen, resultPromise } = setup();
+				const { isShareDialogOpen: isDialogOpen, resultPromise } = setup();
 				await resultPromise;
 				expect(isDialogOpen.value).toBe(false);
 			});
@@ -163,7 +163,7 @@ describe("useShareFlow", () => {
 				});
 
 				it("should keep the dialog open until onDone is called", async () => {
-					const { isDialogOpen, onDone, resultPromise } = setup();
+					const { isShareDialogOpen: isDialogOpen, onDone, resultPromise } = setup();
 					await flushPromises();
 					expect(isDialogOpen.value).toBe(true);
 					onDone();
@@ -244,7 +244,7 @@ describe("useShareFlow", () => {
 				};
 
 				it("should close the dialog", async () => {
-					const { isDialogOpen, resultPromise } = setup();
+					const { isShareDialogOpen: isDialogOpen, resultPromise } = setup();
 					await resultPromise;
 					expect(isDialogOpen.value).toBe(false);
 				});

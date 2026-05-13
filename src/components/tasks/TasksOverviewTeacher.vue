@@ -84,7 +84,7 @@ const { drafts, openForTeacher, isLoadingFinishedTasks, fetchTasks, loadMoreFini
 	useTasksOfOverview();
 
 const {
-	isDialogOpen: isCopyDialogOpen,
+	isCopyDialogOpen,
 	copyItemType,
 	executeCopyTask,
 	onConfirm: onConfirmCopy,
@@ -101,7 +101,7 @@ const onCopyTask = async ({ id, courseId }: CopyParams) => {
 };
 
 const {
-	isDialogOpen: isShareDialogOpen,
+	isShareDialogOpen,
 	shareItemType,
 	shareUrl,
 	executeShare,

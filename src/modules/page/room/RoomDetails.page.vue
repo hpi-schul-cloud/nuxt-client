@@ -145,7 +145,7 @@ const onManageMembers = () => {
 };
 
 const copyFlow = useCopyFlow();
-const { isDialogOpen: isCopyDialogOpen, copyItemType, onConfirm: onConfirmCopy, onCancel: onCancelCopy } = copyFlow;
+const { isCopyDialogOpen, copyItemType, onConfirm: onConfirmCopy, onCancel: onCancelCopy } = copyFlow;
 
 const onCopy = async () => {
 	if (!allowedOperations.value.copyRoom) {
@@ -159,7 +159,7 @@ const onCopy = async () => {
 };
 
 const {
-	isDialogOpen: isShareDialogOpen,
+	isShareDialogOpen,
 	shareItemType,
 	shareUrl,
 	executeShare,

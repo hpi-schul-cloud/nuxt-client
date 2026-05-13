@@ -159,7 +159,7 @@ describe("useCopyFlow", () => {
 		const setup = () => mountCopyFlowComposable();
 
 		it("should have the dialog closed", () => {
-			const { isDialogOpen } = setup();
+			const { isCopyDialogOpen: isDialogOpen } = setup();
 			expect(isDialogOpen.value).toBe(false);
 		});
 
@@ -180,7 +180,7 @@ describe("useCopyFlow", () => {
 			const setup = () => mountCopyFlowComposable(type);
 
 			it("should set the dialog to open", async () => {
-				const { isDialogOpen, executeCopyMethod } = setup();
+				const { isCopyDialogOpen: isDialogOpen, executeCopyMethod } = setup();
 				executeCopyMethod();
 				expect(isDialogOpen.value).toBe(true);
 			});
@@ -201,7 +201,7 @@ describe("useCopyFlow", () => {
 			};
 
 			it("should set the dialog to closed", async () => {
-				const { isDialogOpen, resultPromise } = setup();
+				const { isCopyDialogOpen: isDialogOpen, resultPromise } = setup();
 				await resultPromise;
 				expect(isDialogOpen.value).toBe(false);
 			});
@@ -224,7 +224,7 @@ describe("useCopyFlow", () => {
 				};
 
 				it("should set the dialog to closed", async () => {
-					const { isDialogOpen, resultPromise } = setup();
+					const { isCopyDialogOpen: isDialogOpen, resultPromise } = setup();
 					await resultPromise;
 					expect(isDialogOpen.value).toBe(false);
 				});
@@ -259,7 +259,7 @@ describe("useCopyFlow", () => {
 				};
 
 				it("should set the dialog to closed", async () => {
-					const { isDialogOpen, resultPromise } = setup();
+					const { isCopyDialogOpen: isDialogOpen, resultPromise } = setup();
 					await resultPromise;
 					expect(isDialogOpen.value).toBe(false);
 				});

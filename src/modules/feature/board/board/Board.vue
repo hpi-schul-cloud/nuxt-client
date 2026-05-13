@@ -417,7 +417,7 @@ const boardColumnClass = computed(() => {
 });
 
 const {
-	isDialogOpen: isCopyDialogOpen,
+	isCopyDialogOpen,
 	copyItemType,
 	executeCopyBoard,
 	onConfirm: onConfirmCopy,
@@ -440,7 +440,7 @@ const onCopyBoard = async () => {
 };
 
 const {
-	isDialogOpen: isShareDialogOpen,
+	isShareDialogOpen,
 	shareItemType,
 	shareUrl,
 	executeShare,

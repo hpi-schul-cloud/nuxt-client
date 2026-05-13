@@ -15,7 +15,7 @@ export const useShareFlow = () => {
 	const { t } = useI18n();
 
 	const isDialogOpen = ref(false);
-	const shareItemType = ref<ShareTokenBodyParamsParentType>();
+	const itemType = ref<ShareTokenBodyParamsParentType>();
 	const shareUrl = ref<string>();
 
 	const generateShareToken = async (params: ShareParams, options: ShareOptions) => {
@@ -52,12 +52,12 @@ export const useShareFlow = () => {
 	};
 
 	const openDialog = (type: ShareTokenBodyParamsParentType) => {
-		shareItemType.value = type;
+		itemType.value = type;
 		isDialogOpen.value = true;
 	};
 
 	const closeDialog = () => {
-		shareItemType.value = undefined;
+		itemType.value = undefined;
 		shareUrl.value = undefined;
 		isDialogOpen.value = false;
 	};
@@ -86,11 +86,11 @@ export const useShareFlow = () => {
 		return { success, result };
 	};
 
-	const { itemNameKey } = useShareContent(computed(() => shareItemType.value));
+	const { itemNameKey } = useShareContent(computed(() => itemType.value));
 
 	return {
-		isDialogOpen,
-		shareItemType,
+		isShareDialogOpen: isDialogOpen,
+		shareItemType: itemType,
 		shareUrl,
 		executeShare,
 		onConfirm: askOptionsAction.complete,

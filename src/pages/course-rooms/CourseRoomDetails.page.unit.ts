@@ -31,7 +31,7 @@ import { flushPromises, shallowMount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { mock } from "vitest-mock-extended";
-import { computed, nextTick, ref } from "vue";
+import { nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VBtn, VListItem } from "vuetify/components";
 import { TabItem } from "vuetify/lib/components/VTabs/VTabs.mjs";
@@ -81,14 +81,13 @@ describe("CourseRoomDetails.page.vue", () => {
 		injectRouterMock(router);
 
 		useCopyFlowMock = mockComposable(useCopyFlow, {
-			isDialogOpen: ref(false),
+			isCopyDialogOpen: ref(false),
 			copyItemType: ref(ContentItemTypeEnum.Course),
-			isRunning: computed(() => false),
 		});
 		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
 
 		useShareFlowMock = mockComposable(useShareFlow, {
-			isDialogOpen: ref(false),
+			isShareDialogOpen: ref(false),
 			shareItemType: ref(ShareTokenBodyParamsParentType.COURSES),
 			shareUrl: ref("https://example.com/share"),
 		});

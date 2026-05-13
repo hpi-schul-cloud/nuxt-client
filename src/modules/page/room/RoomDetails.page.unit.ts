@@ -20,7 +20,7 @@ import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-det
 import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VBreadcrumbsItem, VBtn, VCard, VFab } from "vuetify/components";
 
@@ -36,14 +36,13 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		vi.useFakeTimers();
 
 		useCopyFlowMock = mockComposable(useCopyFlow, {
-			isDialogOpen: ref(false),
+			isCopyDialogOpen: ref(false),
 			copyItemType: ref(ContentItemTypeEnum.Course),
-			isRunning: computed(() => false),
 		});
 		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
 
 		useShareFlowMock = mockComposable(useShareFlow, {
-			isDialogOpen: ref(false),
+			isShareDialogOpen: ref(false),
 			shareItemType: ref(serverApi.ShareTokenBodyParamsParentType.COURSES),
 			shareUrl: ref("http://example.com/share-url"),
 		});

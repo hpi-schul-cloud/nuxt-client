@@ -103,14 +103,13 @@ describe("Board", () => {
 		mockUseBoardInactivity.mockReturnValue(mockedUsePageInactivity);
 
 		useCopyFlowMock = mockComposable(useCopyFlow, {
-			isDialogOpen: ref(false),
+			isCopyDialogOpen: ref(false),
 			copyItemType: ref(ContentItemTypeEnum.ColumnBoard),
-			isRunning: computed(() => false),
 		});
 		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
 
 		useShareFlowMock = mockComposable(useShareFlow, {
-			isDialogOpen: ref(false),
+			isShareDialogOpen: ref(false),
 			shareItemType: ref(ShareTokenBodyParamsParentType.TASKS),
 			shareUrl: ref("http://example.com/share-url"),
 		});
