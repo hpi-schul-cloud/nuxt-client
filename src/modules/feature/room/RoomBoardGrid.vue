@@ -21,7 +21,7 @@
 				@click.capture="onItemClick"
 				@focusin="focusedBoard = $event.target"
 				@keydown.up.down.left.right="onArrowKeyDown($event, index)"
-				@update:visibility="(boardId, isVisible) => emit('update:boardVisibility', boardId, isVisible)"
+				@update:visibility="(board, isVisible) => emit('update:boardVisibility', board, isVisible)"
 				@delete:board="emit('delete:board', $event)"
 				@duplicate:board="emit('duplicate:board', $event)"
 			/>

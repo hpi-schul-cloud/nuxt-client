@@ -87,30 +87,21 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		}
 	};
 
-	const deleteBoard = async (roomId: string, boardId: string, boardTitle: string) => {
+	const deleteBoard = async (boardId: string, boardTitle: string) => {
 		const shouldDelete = await askDeletionForItem(boardTitle, "common.words.board");
-		if (!shouldDelete) return;
+		if (!shouldDelete) return { success: false };
 
-		const { error } = await execute(
+		return await execute(
 			() => boardApi.boardControllerDeleteBoard(boardId),
 			t("common.notifications.errors.notDeleted", { type: t("common.words.board") })
 		);
-
-		if (!error) {
-			await fetchRoomAndBoards(roomId);
-		}
 	};
 
-	const updateBoardVisibility = async (roomId: string, boardId: string, isVisible: boolean) => {
-		const { error } = await execute(
+	const updateBoardVisibility = async (boardId: string, isVisible: boolean) =>
+		await execute(
 			() => boardApi.boardControllerUpdateVisibility(boardId, { isVisible }),
 			t("components.board.notifications.errors.notUpdated")
 		);
-
-		if (!error) {
-			await fetchRoomAndBoards(roomId);
-		}
-	};
 
 	const resetState = () => {
 		isLoading.value = true;

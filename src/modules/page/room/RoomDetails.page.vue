@@ -82,7 +82,7 @@ const roomDetailsStore = useRoomDetailsStore();
 const { leaveRoom, deleteRoom } = useRoomStore();
 
 const { roomBoards } = storeToRefs(roomDetailsStore);
-const { createBoard, updateBoardVisibility, deleteBoard } = roomDetailsStore;
+const { createBoard, updateBoardVisibility, deleteBoard, fetchRoomAndBoards } = roomDetailsStore;
 
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
@@ -204,14 +204,19 @@ const onCreateBoard = async (layout: BoardLayout) => {
 	router.push(`/boards/${boardId}`);
 };
 
-const onUpdateBoardVisibility = (board: RoomBoardItemResponse, isVisible: boolean) => {
+const onUpdateBoardVisibility = async (board: RoomBoardItemResponse, isVisible: boolean) => {
 	if (!board.allowedOperations?.updateBoardVisibility) return;
-	updateBoardVisibility(props.room.id, board.id, isVisible);
+	const { success } = await updateBoardVisibility(board.id, isVisible);
+
+	if (success) await fetchRoomAndBoards(props.room.id);
 };
 
-const onDeleteBoard = (board: RoomBoardItemResponse) => {
+const onDeleteBoard = async (board: RoomBoardItemResponse) => {
 	if (!board.allowedOperations?.deleteBoard) return;
-	deleteBoard(props.room.id, board.id, board.title);
+
+	const { success } = await deleteBoard(board.id, board.title);
+
+	if (success) await fetchRoomAndBoards(props.room.id);
 };
 
 const onDuplicateBoard = async (board: RoomBoardItemResponse) => {
