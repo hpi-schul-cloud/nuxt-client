@@ -73,12 +73,12 @@
 import SvgNewsEmpty from "@/assets/img/SvgNewsEmpty.vue";
 import Announcement from "@/components/announcement/Announcement.vue";
 import { useSafeAxiosRunner } from "@/composables/async-tasks.composable";
-import { schoolsModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { NewsApiFactory, NewsTargetModel, Permission, SchulcloudTheme } from "@api-server";
 import { useAppStore, useAppStoreRefs } from "@data-app";
+import { useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { DashboardReleaseDialog, DashboardTasks } from "@feature-dashboard";
 import { RenderHTML } from "@feature-render-html";
@@ -98,8 +98,10 @@ const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 
 useTitle(buildPageTitle(t("pages.dashboard.title")));
 
-const isSchoolInMaintenance = computed(() => schoolsModule.getSchool.inMaintenance);
-const isSchoolInMigration = computed(() => schoolsModule.getSchool.inUserMigration);
+const { schoolDetails } = useSchoolStoreRefs();
+
+const isSchoolInMaintenance = computed(() => schoolDetails.value.inMaintenance);
+const isSchoolInMigration = computed(() => schoolDetails.value.inUserMigration);
 const canSeeImportUsers = useAppStore().hasPermission(Permission.IMPORT_USER_VIEW);
 
 const inMaintenanceOrMigrationText = computed(() => {

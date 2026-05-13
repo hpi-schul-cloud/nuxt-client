@@ -5,8 +5,7 @@ import store from "./plugins/store";
 import { createVuetifyPlugin } from "./plugins/vuetify";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
-import { SCHOOLS_MODULE_KEY } from "./utils/inject";
-import { importUsersModule, schoolsModule } from "@/store";
+import { importUsersModule } from "@/store";
 import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
@@ -48,7 +47,6 @@ app.use(VueDOMPurifyHTML, {
 
 	try {
 		await useAppStore().login();
-		await schoolsModule.fetchSchool(); // fetch school relies on successful login to know the school id
 	} catch (error) {
 		logger.info("Unhandled error during login", error);
 	}
@@ -60,7 +58,6 @@ app.use(VueDOMPurifyHTML, {
 
 	// NUXT_REMOVAL get rid of store DI
 	app.provide("importUsersModule", importUsersModule);
-	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
 
 	app.mount("#app");
 })();
