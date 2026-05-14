@@ -63,16 +63,14 @@ const onSave = async (newsToPatch: UpdateNewsParams) => {
 
 	if (success) {
 		notifySuccess(t("components.organisms.FormNews.success.patch"));
-		await router.push({ path: `/news/${result.data.id}` });
+		await router.push({ path: `/news/${result?.data.id}` });
 	}
 };
 
 const onDelete = async () => {
-	const { success } = await deleteNews(newsInstance.value?.id);
-	if (success) {
-		notifySuccess(t("components.organisms.FormNews.success.remove"));
-		await router.push({ path: "/news" });
-	}
+	await deleteNews(newsInstance.value?.id);
+	notifySuccess(t("components.organisms.FormNews.success.remove"));
+	await router.push({ path: "/news" });
 };
 
 const onCancel = () => {
