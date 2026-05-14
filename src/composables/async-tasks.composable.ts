@@ -57,9 +57,41 @@ export const useSafeAxiosTask = () => {
 	const { execute: safeExec, isRunning, reset, status, error } = useSafeTask();
 	const { t } = useI18nGlobal();
 	const isLoading = ref(false);
-	// Can be used to disable UI elements while the task is either running or loading.
-	// Since loading is used to indicate the state of a debounced task, it can be true while the task is not running.
 	const isBlocked = computed(() => isRunning.value || isLoading.value);
+	// isLoading uses withDebouncedLoading: delays activation and enforces a minimum display time.
+	// isBlocked = isRunning || isLoading — use it to disable UI elements during either state.
+	//
+	// Step-by-step flow (fast task — finishes before delay):
+	//
+	//   execute() called
+	//       │
+	//       ├─ isRunning = true  ──────────────────────────────────────┐
+	//       │                                                          │
+	//       ├─ task finishes → isRunning = false                	  ────┘
+	//       │
+	//       └─ [delay never passes] → isLoading stays false
+	//
+	//   - isLoading never gets activated because the task finishes before the debounce delay.
+	//   - isBlocked gets activated only while isRunning is true.
+	//
+	// Step-by-step flow (slow task — exceeds delay):
+	//
+	//   execute() called
+	//       │
+	//       ├─ isRunning = true  ──────────────────────────────────────┐
+	//       │                                                          │
+	//       ├─ [delay passes] → isLoading = true  ────────────────┐    │
+	//       │                                                     │    │
+	//       ├─ task finishes → isRunning = false                  │ ───┘
+	//       │                                                     │
+	//       └─ [minDisplayTime expires] → isLoading = false  ─────┘
+	//
+	//   - isLoading gets activated after the debounce delay and remains true for at least the minimum display time,
+	//     even if the task finishes in the meantime.
+	//   - isBlocked is true from the moment execute() is called until both isRunning and isLoading are false,
+	//     ensuring the UI remains disabled during the entire operation.
+	//
+	// This approach provides a smoother user experience by preventing flickering for fast tasks and ensuring consistent feedback for slower tasks.
 
 	const execute = async <T>(fn: AsyncFunction<T>, onErrorNotifyMessage?: string): Promise<TaskResult<T>> => {
 		const { result, success, error } = await withDebouncedLoading(() => safeExec<T>(fn), {
