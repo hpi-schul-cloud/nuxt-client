@@ -80,6 +80,13 @@
 								@move:column-right="onMoveColumnForward(index, element.id)"
 								@move:column-up="onMoveColumnBackward(index, element.id)"
 							/>
+							<ColumSkeleton
+								v-if="isDuplicatingColumn(element.id)"
+								:column="element"
+								:is-list-board="isListBoard"
+								:is-not-last-column="true"
+								:index="index"
+							/>
 						</template>
 					</Sortable>
 					<div :class="{ 'mx-auto mt-9 w-100': isListBoard }">
@@ -147,6 +154,7 @@ import EditSettingsDialog from "../shared/EditSettingsDialog.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
+import ColumSkeleton from "./ColumnSkeleton.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";

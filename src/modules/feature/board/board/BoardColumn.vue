@@ -73,22 +73,6 @@
 			</Sortable>
 			<BoardAddCardButton v-if="showAddButton" :data-testid="`column-${index}-add-card-btn`" @add-card="onCreateCard" />
 		</div>
-
-		<div v-if="isDuplicatingColumn" :key="`duplicate-${renderKey}`" :class="columnClasses" class="d-flex flex-column">
-			<BoardColumnHeader
-				:can-edit-column="false"
-				:can-delete-column="false"
-				:column-id="column.id"
-				:title="column.title"
-				:index="index"
-				:is-list-board="isListBoard"
-				:is-not-first-column="isNotFirstColumn"
-				:is-not-last-column="isNotLastColumn"
-			/>
-			<div class="d-flex justify-center align-center" style="min-height: 200px">
-				<VProgressCircular color="primary" indeterminate :size="36" />
-			</div>
-		</div>
 	</div>
 </template>
 
