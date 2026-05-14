@@ -50,6 +50,12 @@ export interface LinkElementContent {
      * @memberof LinkElementContent
      */
     imageUrl?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LinkElementContent
+     */
+    previewImageId?: string;
 }
 
 

@@ -53,6 +53,12 @@ export interface MetaTagExtractorResponse {
     imageUrl?: string;
     /**
      * 
+     * @type {string}
+     * @memberof MetaTagExtractorResponse
+     */
+    previewImageId?: string;
+    /**
+     * 
      * @type {MetaDataEntityType}
      * @memberof MetaTagExtractorResponse
      */

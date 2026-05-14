@@ -122,7 +122,9 @@ const onCreateUrl = async (originalUrl: string) => {
 		modelValue.value.description = description;
 
 		if (originalImageUrl) {
-			modelValue.value.imageUrl = await createPreviewImage(originalImageUrl);
+			const previewImageResult = await createPreviewImage(originalImageUrl);
+			modelValue.value.imageUrl = previewImageResult?.url;
+			modelValue.value.previewImageId = previewImageResult?.fileRecordId;
 		}
 	} finally {
 		isLoading.value = false;
