@@ -9,7 +9,7 @@
 			},
 			{
 				to: `/news/${route.params.id}`,
-				title: newsInstance.title,
+				title: titleForBreadcrumbs,
 			},
 			{
 				title: t('pages.news.edit.title.default'),
@@ -49,12 +49,19 @@ const route = useRoute();
 
 const { saveNews, deleteNews, status } = useNewsActions();
 const newsId = computed(() => route.params.id as string | undefined);
-const { newsInstance } = useNews(newsId);
+const { newsInstance, createdAtFormatted } = useNews(newsId);
 
 const pageTitle = computed(() => {
 	if (!newsInstance.value?.title) return t("pages.news.edit.title.default");
 	return t("pages.news.edit.title", {
 		title: newsInstance.value?.title,
+	});
+});
+
+const titleForBreadcrumbs = computed(() => {
+	if (!newsInstance.value?.createdAt) return t("pages.news.details.title.fallback");
+	return t("pages.news.details.title", {
+		date: createdAtFormatted.value,
 	});
 });
 
