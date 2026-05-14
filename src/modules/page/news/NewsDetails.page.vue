@@ -75,9 +75,11 @@ const onEdit = () => {
 };
 
 const onDelete = async () => {
-	await deleteNews(newsInstance.value?.id);
-	notifySuccess(t("components.organisms.FormNews.success.remove"));
-	await router.push({ path: "/news" });
+	const { success } = await deleteNews(newsInstance.value?.id);
+	if (success) {
+		notifySuccess(t("components.organisms.FormNews.success.remove"));
+		await router.push({ path: "/news" });
+	}
 };
 
 watch(pageTitle, (newTitle) => {

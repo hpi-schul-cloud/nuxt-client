@@ -53,6 +53,8 @@ export const useNewsActions = () => {
 				() => newsApi.newsControllerDelete(newsId),
 				t("common.notifications.errors.notDeleted", { type: t("common.words.news") })
 			);
+		} else {
+			return { success: false };
 		}
 	};
 
