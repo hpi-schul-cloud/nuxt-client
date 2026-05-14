@@ -799,7 +799,7 @@ export default {
 	"components.organisms.FormNews.input.title.placeholder": "Empecemos con el título",
 	"components.organisms.FormNews.label.planned_publish":
 		"Aquí puedes establecer una fecha para la publicación automática en el futuro (opcional):",
-	"components.organisms.FormNews.remove.confirm.confirm": "Eliminar artículo",
+	"components.organisms.FormNews.remove.confirm.confirm": "Eliminar noticia",
 	"components.organisms.FormNews.remove.confirm.message":
 		"¿Estás seguro de que quieres eliminar esta noticia de forma irreversible?",
 	"components.organisms.FormNews.success.create": "Noticia creada.",
