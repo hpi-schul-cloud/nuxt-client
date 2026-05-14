@@ -10,7 +10,7 @@ export default {
 	"common.actions.move": "Mover",
 	"common.actions.view": "Mostrar",
 	"common.actions.create": "Crear",
-	"common.actions.delete": "Borrar",
+	"common.actions.delete": "Eliminar",
 	"common.actions.moveToTrash": "Mover a la papelera",
 	"common.actions.restore": "Restaurar",
 	"common.actions.discard": "Descartar",
@@ -801,7 +801,7 @@ export default {
 		"Aquí puedes establecer una fecha para la publicación automática en el futuro (opcional):",
 	"components.organisms.FormNews.remove.confirm.confirm": "Eliminar artículo",
 	"components.organisms.FormNews.remove.confirm.message":
-		"¿Estás seguro de que quieres borrar esta noticia de forma irreversible?",
+		"¿Estás seguro de que quieres eliminar esta noticia de forma irreversible?",
 	"components.organisms.FormNews.success.create": "Noticia creada.",
 	"components.organisms.FormNews.success.patch": "Noticia actualizada correctamente.",
 	"components.organisms.FormNews.success.remove": "Noticia eliminada correctamente.",
@@ -1051,7 +1051,7 @@ export default {
 	"pages.administration.classes.manage": "Administrar clase",
 	"pages.administration.classes.header.sync": "Sincronizado con",
 	"pages.administration.courses.delete": "Eliminar curso",
-	"pages.administration.courses.deleteDialog.content": '¿Realmente quieres este curso? "{itemName}" borrar?',
+	"pages.administration.courses.deleteDialog.content": '¿Realmente quieres este curso? "{itemName}" eliminar?',
 	"pages.administration.courses.index.add": "Agregar curso",
 	"pages.administration.courses.edit": "Editar curso",
 	"pages.administration.courses.withoutTeacher": "Mostrar sólo los cursos sin profesor",
@@ -1298,8 +1298,8 @@ export default {
 	"pages.administration.school.index.schoolPolicy.delete.success":
 		"El archivo de Política de Privacidad se ha eliminado correctamente.",
 	"pages.administration.school.index.schoolPolicy.delete.text":
-		"Si borra este archivo, se utilizará automáticamente la Política de Privacidad por defecto.",
-	"pages.administration.school.index.schoolPolicy.delete.title": "Borrar la Política de Privacidad",
+		"Si elimina este archivo, se utilizará automáticamente la Política de Privacidad por defecto.",
+	"pages.administration.school.index.schoolPolicy.delete.title": "Eliminar la Política de Privacidad",
 	"pages.administration.school.index.schoolPolicy.download": "Descargar Política de Privacidad",
 	"pages.administration.school.index.schoolPolicy.edit": "Editar Política de Privacidad",
 	"pages.administration.school.index.schoolPolicy.error":
@@ -1322,8 +1322,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.delete.success":
 		"El archivo de condiciones de uso se ha eliminado correctamente.",
 	"pages.administration.school.index.termsOfUse.delete.text":
-		"Si borra este archivo, se utilizarán automáticamente las Condiciones de Uso por defecto.",
-	"pages.administration.school.index.termsOfUse.delete.title": "Borrar las Condiciones de Uso",
+		"Si elimina este archivo, se utilizarán automáticamente las Condiciones de Uso por defecto.",
+	"pages.administration.school.index.termsOfUse.delete.title": "Eliminar las Condiciones de Uso",
 	"pages.administration.school.index.termsOfUse.download": "Descargar Condiciones de Uso",
 	"pages.administration.school.index.termsOfUse.edit": "Editar Condiciones de Uso",
 	"pages.administration.school.index.termsOfUse.error": "Se ha producido un error al cargar la Condiciones de Uso",
@@ -1731,7 +1731,7 @@ export default {
 	"pages.roomDetails.title": "Sala",
 	"pages.roomDetails.ariaLabels.menu": "Menú de la sala",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar sala",
-	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar sala",
+	"pages.roomDetails.ariaLabels.menu.action.delete": "Eliminar sala",
 	"pages.roomDetails.fab.add.board": "Crear tablero",
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
 	"pages.roomDetails.emptyState": "Actualmente no hay contenidos de aprendizaje en esta sala",
@@ -2073,7 +2073,7 @@ export default {
 	"pages.folder.columns.size": "Talla",
 	"pages.folder.ariaLabels.menu": "Menú carpeta",
 	"pages.folder.ariaLabels.menu.action.edit": "Renombrar carpeta",
-	"pages.folder.ariaLabels.menu.action.delete": "Borrar carpeta",
+	"pages.folder.ariaLabels.menu.action.delete": "Eliminar carpeta",
 	"pages.folder.ariaLabels.filter": "Tabla de búsqueda/filtro",
 	"pages.folder.ariaLabels.actionMenu": "Menú de acciones para {name}",
 	"pages.folder.uploadstats": "{uploaded} de {total} archivos cargados",
