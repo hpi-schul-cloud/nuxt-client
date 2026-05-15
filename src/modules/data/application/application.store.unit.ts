@@ -2,7 +2,15 @@ import { useAppStore, useAppStoreRefs } from "./application.store";
 import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { initializeAxios } from "@/utils/api";
-import { meResponseFactory, mockApiResponse, mockBroadcastChannel } from "@@/tests/test-utils";
+import {
+	createTestEnvStore,
+	meResponseFactory,
+	mockApiResponse,
+	mockAxiosInstance,
+	mockBroadcastChannel,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import {
 	LanguageType,
 	MeApiFactory,
@@ -12,20 +20,16 @@ import {
 	SuccessfulResponse,
 	UserApiFactory,
 } from "@api-server";
+import { useSchoolStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { AxiosInstance, AxiosPromise } from "axios";
 import { DeepPartial } from "fishery";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { beforeEach, describe, expect, vi } from "vitest";
-import { ref } from "vue";
 
 const broadcastChannelMock = mockBroadcastChannel();
-
-const mockEnvConfig = ref({ JWT_TIMEOUT_SECONDS: 7200 });
-vi.mock("@data-env", () => ({
-	useEnvConfig: vi.fn(() => mockEnvConfig),
-}));
 
 vi.mock("@api-server");
 const mockedMeApi = vi.mocked(MeApiFactory);
@@ -34,9 +38,20 @@ vi.mock("@api-file-storage");
 const mockedUserApi = vi.mocked(UserApiFactory);
 
 describe("useApplicationStore", () => {
+	let axiosMock: Mocked<AxiosInstance>;
+
 	beforeEach(() => {
-		setActivePinia(createTestingPinia({ createSpy: vi.fn }));
-		vi.clearAllMocks();
+		const pinia = createTestingPinia({ stubActions: false });
+		setActivePinia(pinia);
+
+		createTestEnvStore({ JWT_TIMEOUT_SECONDS: 7200 });
+		createTestSchoolStore();
+		const schoolStore = mockedPiniaStoreTyping(useSchoolStore);
+		schoolStore.fetchSchoolDetails.mockResolvedValue({ success: true, result: undefined, error: undefined });
+
+		axiosMock = mockAxiosInstance();
+		axiosMock.defaults = { headers: { common: {} } } as AxiosInstance["defaults"];
+		initializeAxios(axiosMock);
 
 		Object.defineProperty(globalThis, "location", {
 			value: { replace: vi.fn() },
@@ -80,10 +95,6 @@ describe("useApplicationStore", () => {
 		await useAppStore().login();
 		return { meResponse };
 	};
-
-	beforeEach(() => {
-		setActivePinia(createTestingPinia({ stubActions: false }));
-	});
 
 	describe("state", () => {
 		it("should return default locale when no user locale is set", () => {
@@ -193,34 +204,12 @@ describe("useApplicationStore", () => {
 	});
 
 	describe("logout action", () => {
-		beforeEach(() => {
-			initializeAxios({
-				defaults: {
-					headers: {
-						common: {
-							Authorization: "",
-						},
-					},
-				},
-			} as AxiosInstance);
-		});
-
 		it("should redirect to default logout URL", () => {
-			Object.defineProperty(globalThis, "location", {
-				value: { replace: vi.fn() },
-				writable: true,
-			});
-
 			useAppStore().logout();
 			expect(globalThis.location.replace).toHaveBeenCalledWith("/logout");
 		});
 
 		it("should redirect to custom logout URL", () => {
-			Object.defineProperty(globalThis, "location", {
-				value: { replace: vi.fn() },
-				writable: true,
-			});
-
 			useAppStore().logout("/logout-to");
 			expect(globalThis.location.replace).toHaveBeenCalledWith("/logout-to");
 		});
@@ -341,26 +330,82 @@ describe("useApplicationStore", () => {
 	});
 
 	describe("externalLogout action", () => {
-		beforeEach(() => {
-			initializeAxios({
-				defaults: {
-					headers: {
-						common: {
-							Authorization: "",
-						},
-					},
-				},
-			} as AxiosInstance);
-		});
-
 		it("should redirect to external logout URL", () => {
-			Object.defineProperty(globalThis, "location", {
-				value: { replace: vi.fn() },
-				writable: true,
-			});
-
 			useAppStore().externalLogout();
 			expect(globalThis.location.replace).toHaveBeenCalledWith("/logout/external");
+		});
+	});
+
+	describe("updateUserPreferences action", () => {
+		it("should update preferences and refresh meResponse", async () => {
+			const initialPreferences = { releaseDate: "2024-01-01T00:00:00.000Z" };
+			const updatedPreferences = { releaseDate: "2024-06-01T00:00:00.000Z" };
+
+			const meResponse = meResponseFactory.build({ preferences: initialPreferences });
+			const updatedMeResponse = meResponseFactory.build({ preferences: updatedPreferences });
+
+			const mockUpdatePreferences = vi.fn().mockResolvedValue(mockApiResponse({ data: {} }));
+			const mockMe = vi
+				.fn()
+				.mockResolvedValueOnce(mockApiResponse({ data: meResponse }))
+				.mockResolvedValueOnce(mockApiResponse({ data: updatedMeResponse }));
+
+			mockedMeApi.mockReturnValue({
+				meControllerMe: mockMe,
+				meControllerUpdateMePreferences: mockUpdatePreferences,
+			});
+
+			const store = useAppStore();
+			await store.login();
+
+			await store.updateUserPreferences({ releaseDate: "2024-06-01T00:00:00.000Z" });
+
+			expect(mockUpdatePreferences).toHaveBeenCalledWith({ releaseDate: "2024-06-01T00:00:00.000Z" });
+			expect(mockMe).toHaveBeenCalledTimes(2);
+			expect(store.userPreferences).toEqual(updatedPreferences);
+		});
+
+		it("should not refresh meResponse when update fails", async () => {
+			const meResponse = meResponseFactory.build({ preferences: { releaseDate: "2024-01-01T00:00:00.000Z" } });
+
+			const mockUpdatePreferences = vi.fn().mockRejectedValue(new Error("Update failed"));
+			const mockMe = vi.fn().mockResolvedValue(mockApiResponse({ data: meResponse }));
+
+			mockedMeApi.mockReturnValue({
+				meControllerMe: mockMe,
+				meControllerUpdateMePreferences: mockUpdatePreferences,
+			});
+
+			const store = useAppStore();
+			await store.login();
+
+			await store.updateUserPreferences({ releaseDate: "2024-06-01T00:00:00.000Z" });
+
+			expect(mockMe).toHaveBeenCalledTimes(1); // only login call
+			expect(store.userPreferences).toEqual({ releaseDate: "2024-01-01T00:00:00.000Z" });
+		});
+
+		it("should not update preferences when me refresh fails", async () => {
+			const initialPreferences = { releaseDate: "2024-01-01T00:00:00.000Z" };
+			const meResponse = meResponseFactory.build({ preferences: initialPreferences });
+
+			const mockUpdatePreferences = vi.fn().mockResolvedValue(mockApiResponse({ data: {} }));
+			const mockMe = vi
+				.fn()
+				.mockResolvedValueOnce(mockApiResponse({ data: meResponse }))
+				.mockRejectedValueOnce(new Error("Me fetch failed"));
+
+			mockedMeApi.mockReturnValue({
+				meControllerMe: mockMe,
+				meControllerUpdateMePreferences: mockUpdatePreferences,
+			});
+
+			const store = useAppStore();
+			await store.login();
+
+			await store.updateUserPreferences({ releaseDate: "2024-06-01T00:00:00.000Z" });
+
+			expect(store.userPreferences).toEqual(initialPreferences);
 		});
 	});
 
@@ -414,7 +459,7 @@ describe("useApplicationStore", () => {
 
 		describe("when JWT_TIMEOUT_SECONDS is not set", () => {
 			it("should use default timeout", () => {
-				mockEnvConfig.value = { JWT_TIMEOUT_SECONDS: undefined } as never;
+				createTestEnvStore({ JWT_TIMEOUT_SECONDS: undefined });
 				const store = useAppStore();
 				const beforeTime = Date.now();
 				const DEFAULT_TIMEOUT = 2 * 60 * 60; // 2 hours in seconds
@@ -427,9 +472,6 @@ describe("useApplicationStore", () => {
 
 				expect(store.sessionTimeoutTimestamp).toBeGreaterThanOrEqual(expectedMinTimestamp);
 				expect(store.sessionTimeoutTimestamp).toBeLessThanOrEqual(expectedMaxTimestamp);
-
-				// Reset mock
-				mockEnvConfig.value = { JWT_TIMEOUT_SECONDS: 7200 };
 			});
 		});
 	});
@@ -482,28 +524,7 @@ describe("useApplicationStore", () => {
 				configurable: true,
 			});
 
-			initializeAxios({
-				defaults: {
-					headers: {
-						common: {
-							Authorization: "",
-						},
-					},
-				},
-			} as AxiosInstance);
-
-			Object.defineProperty(globalThis, "location", {
-				value: { replace: vi.fn() },
-				writable: true,
-			});
-
-			Object.defineProperty(globalThis, "localStorage", {
-				value: { clear: vi.fn() },
-				writable: true,
-			});
-
-			// Create the store to capture the handler
-			setActivePinia(createTestingPinia({ stubActions: false }));
+			// Re-create the store to capture the handler
 			useAppStore();
 		});
 
