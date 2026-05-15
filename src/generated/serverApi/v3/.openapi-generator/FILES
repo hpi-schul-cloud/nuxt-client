@@ -126,6 +126,8 @@ models/context-external-tool-post-params.ts
 models/context-external-tool-response.ts
 models/context-external-tool-search-list-response.ts
 models/copy-api-response.ts
+models/copy-element-type.ts
+models/copy-status-enum.ts
 models/county-response.ts
 models/course-common-cartridge-metadata-response.ts
 models/course-info-data-response.ts
@@ -347,7 +349,6 @@ models/school-external-tool-medium-response.ts
 models/school-external-tool-metadata-response.ts
 models/school-external-tool-post-params.ts
 models/school-external-tool-response.ts
-models/school-external-tool-search-list-response.ts
 models/school-feature.ts
 models/school-for-external-invite-response.ts
 models/school-for-ldap-login-response.ts
