@@ -5,29 +5,27 @@
 		:ripple="false"
 		variant="elevated"
 	>
-		<VCardTitle
-			class="text-body-1 flex-grow-1"
-			style="max-width: max-content"
-			:data-testid="`board-grid-title-${index}`"
-		>
+		<VCardItem>
 			<RouterLink tabindex="-1" :to="roomPath" class="room-link-item">
-				<VBadge bordered :model-value="room.isLocked" :icon="mdiLock" :data-testid="`room-badge-lock-${index}`">
-					<div class="room-grid-icon" :class="avatarColor">
+				<VAvatar rounded="lg" :class="avatarColor" class="room-grid-avatar" :data-testid="`room-avatar-${index}`">
+					<VBadge bordered :model-value="room.isLocked" :icon="mdiLock" :data-testid="`room-badge-lock-${index}`">
 						<span class="text-h1 text-white text-decoration-none" :data-testid="`room-short-title-${index}`">
 							{{ roomShortName }}
 						</span>
-					</div>
-				</VBadge>
-				<div class="d-flex flex-column">
-					<span class="text-break mb-2" :data-testid="`room--title-${index}`">
-						{{ room.name }}
-					</span>
-					<VChip size="x-small" :prepend-icon="mdiAccountMultipleOutline">
+					</VBadge>
+				</VAvatar>
+				<div>
+					<VCardTitle class="text-body-1 flex-grow-1" style="max-width: max-content">
+						<span class="text-break mb-2" :data-testid="`room--title-${index}`">
+							{{ room.name }}
+						</span>
+					</VCardTitle>
+					<VChip size="x-small" :prepend-icon="mdiAccountMultipleOutline" class="text-decoration-none">
 						{{ room.totalMembers }} {{ t("common.words.member", room.totalMembers) }}
 					</VChip>
 				</div>
 			</RouterLink>
-		</VCardTitle>
+		</VCardItem>
 		<VCardActions class="justify-end pr-4">
 			<VBtn
 				:data-testid="`room-open-button-${index}`"
@@ -84,21 +82,11 @@ const roomAriaLabel = computed(() => `${t("common.labels.room")} ${props.room.na
 	text-decoration: underline;
 }
 
-.room-grid-icon {
+.room-grid-avatar {
 	width: 5em;
 	height: 5em;
-	border-radius: 8px;
 	user-select: none;
-	flex: none;
-	align-items: center;
-	display: inline-flex;
-	justify-content: center;
-	line-height: normal;
-	overflow: hidden;
-	position: relative;
-	text-align: center;
 	transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 	transition-property: width, height;
-	vertical-align: middle;
 }
 </style>
