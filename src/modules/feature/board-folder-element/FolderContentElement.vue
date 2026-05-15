@@ -5,14 +5,13 @@
 		data-testid="board-folder-element"
 		variant="outlined"
 		:ripple="false"
-		:tabindex="!isEditMode ? 0 : undefined"
 		:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
+		v-bind="!isEditMode ? { tabindex: 0, onClick: openFolder } : {}"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
-		@click.stop="openFolder"
-		@keydown.enter="openFolder"
+		@keydown.enter="!isEditMode ? openFolder() : undefined"
 	>
-		<ContentElementBar :icon="mdiFolderOpenOutline">
+		<ContentElementBar :icon="mdiFolderOpenOutline" :is-edit-mode="isEditMode">
 			<template #title>
 				{{ elementTitle }}
 			</template>
@@ -47,7 +46,7 @@
 				size="small"
 				variant="text"
 				@click.stop="onDownload"
-				@keydown.enter="onDownload"
+				@keydown.stop.enter="onDownload"
 			/>
 		</VCardActions>
 		<FolderAlerts v-else :alerts="alerts" />
@@ -158,12 +157,7 @@ const isDownloadAllowed = computed(() => (fileStatistics.value?.fileCount ?? 0) 
 
 const router = useRouter();
 const folderRoute = computed(() => `/folder/${element.value.id}`);
-const openFolder = () => {
-	if (props.isEditMode) {
-		return;
-	}
-	router.push(folderRoute.value);
-};
+const openFolder = () => router.push(folderRoute.value);
 </script>
 
 <style scoped lang="scss">
