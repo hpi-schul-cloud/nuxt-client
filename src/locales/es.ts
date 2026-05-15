@@ -2090,7 +2090,8 @@ export default {
 	"pages.folder.trash.infoText":
 		"Los archivos se eliminan automáticamente 7 días después de ser movidos a la papelera.",
 	"pages.folder.trash.emptyState": "La papelera está vacía",
-	"pages.folder.trash.columns.deletedAt": "Eliminado el",
+	"pages.folder.trash.columns.movedOn": "Movido el",
+	"pages.folder.trash.columns.purgeAt": "Se eliminará el",
 	"pages.folder.trash.ariaLabels.actionMenu": "Menú de acciones para {name}",
 	"pages.folder.trash.ariaLabels.menu": "Menú de papelera",
 	"pages.folder.trash.emptyTrash": "Vaciar papelera",
@@ -2099,8 +2100,6 @@ export default {
 	"pages.folder.trash.purge.action": "Eliminar permanentemente",
 	"pages.folder.trash.purge.success": "Los archivos se han eliminado permanentemente.",
 	"pages.folder.trash.purge.error": "No se pudieron eliminar permanentemente los archivos.",
-	"pages.folder.trash.purge.dialog.title": "¿Eliminar archivos permanentemente?",
-	"pages.folder.trash.purge.dialog.description":
-		"Está a punto de eliminar permanentemente {count} archivo(s). Esta acción no se puede deshacer.",
-	"pages.folder.trash.purge.dialog.checkboxLabel": "Entiendo que esta acción es permanente y no se puede deshacer.",
+	"pages.folder.trash.purge.dialog.title": "¿Eliminar permanentemente {count} archivo(s)?",
+	"pages.folder.trash.purge.dialog.checkboxLabel": "La eliminación no se puede deshacer.",
 };
