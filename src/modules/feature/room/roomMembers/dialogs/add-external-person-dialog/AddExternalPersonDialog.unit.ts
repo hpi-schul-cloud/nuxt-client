@@ -1,9 +1,6 @@
 import AddExternalPersonDialog from "./AddExternalPersonDialog.vue";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
-import { schoolFactory } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { useNotificationStore } from "@data-app";
 import {
 	ExternalMemberCheckStatus,
@@ -13,67 +10,33 @@ import {
 } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import { Mock } from "vitest";
+import { setActivePinia } from "pinia";
 import { VTextField } from "vuetify/components";
 
 describe("AddExternalPersonDialog", () => {
 	vi.mock("@vueuse/integrations/useFocusTrap");
 	let wrapper: VueWrapper<InstanceType<typeof AddExternalPersonDialog>>;
-	let pauseMock: Mock;
-	let unpauseMock: Mock;
 
 	beforeEach(() => {
-		pauseMock = vi.fn();
-		unpauseMock = vi.fn();
-		(useFocusTrap as Mock).mockReturnValue({
-			pause: pauseMock,
-			unpause: unpauseMock,
-			deactivate: vi.fn(),
-		});
-
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-
-		const ownSchool = {
-			id: "school-id",
-			name: "Paul-Gerhardt-Gymnasium",
-		};
-		schoolsModule.setSchool(schoolFactory.build(ownSchool));
+		setActivePinia(createTestingPinia());
+		createTestSchoolStore();
 	});
 
 	const setup = (options?: { modelValue?: boolean }) => {
-		const pinia = createTestingPinia({
-			stubActions: false,
-		});
-
 		const roomMembersStore = useRoomMembersStore();
-		roomMembersStore.startRegistrationProcess = vi.fn();
-
 		const registrationStore = useRegistrationStore();
-		registrationStore.fetchRegistrationsForCurrentRoom = vi.fn();
 
 		wrapper = mount(AddExternalPersonDialog, {
 			props: {
 				modelValue: options?.modelValue ?? true,
 			},
-			attachTo: document.body,
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n(), pinia],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 		});
 
 		return { wrapper, roomMembersStore, registrationStore };
 	};
-
-	afterEach(() => {
-		wrapper?.unmount();
-	});
-
-	afterAll(() => {
-		vi.clearAllMocks();
-	});
 
 	const clickButton = async (partialName: string) => {
 		const btn = wrapper.getComponent(`[data-testid="add-external-person-${partialName}-btn"]`);
@@ -81,12 +44,8 @@ describe("AddExternalPersonDialog", () => {
 		await flushPromises();
 	};
 
-	const getTextfield = (partialName: string) => {
-		const textfield = wrapper
-			.getComponent(`[data-testid="add-external-person-${partialName}"]`)
-			.getComponent(VTextField);
-		return textfield;
-	};
+	const getTextField = (partialName: string) =>
+		wrapper.getComponent(`[data-testid="add-external-person-${partialName}"]`).getComponent(VTextField);
 
 	describe("when component is mounted", () => {
 		it("should render the component", () => {
@@ -110,7 +69,7 @@ describe("AddExternalPersonDialog", () => {
 			it("should show a validation error and not call addMemberByEmail", async () => {
 				setup();
 
-				const emailInput = getTextfield("email");
+				const emailInput = getTextField("email");
 				await emailInput.setValue("invalid-email");
 
 				await clickButton("add-email");
@@ -131,7 +90,7 @@ describe("AddExternalPersonDialog", () => {
 							.mockResolvedValue(ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED);
 
 						const email = "test@example.com";
-						await getTextfield("email").setValue(email);
+						await getTextField("email").setValue(email);
 
 						await clickButton("add-email");
 
@@ -145,7 +104,7 @@ describe("AddExternalPersonDialog", () => {
 
 							roomMembersStore.addMemberByEmail = vi.fn().mockResolvedValue(undefined);
 
-							await getTextfield("email").setValue("test-email@example.com");
+							await getTextField("email").setValue("test-email@example.com");
 							await clickButton("add-email");
 
 							expect(useNotificationStore().notify).toHaveBeenCalledWith({
@@ -164,7 +123,7 @@ describe("AddExternalPersonDialog", () => {
 							.fn()
 							.mockResolvedValue(ExternalMemberCheckStatus.ACCOUNT_IS_NOT_EXTERNAL);
 
-						await getTextfield("email").setValue("test-email@example.com");
+						await getTextField("email").setValue("test-email@example.com");
 						await clickButton("add-email");
 
 						expect(roomMembersStore.addMemberByEmail).toHaveBeenCalledWith("test-email@example.com");
@@ -181,7 +140,7 @@ describe("AddExternalPersonDialog", () => {
 
 					roomMembersStore.addMemberByEmail = vi.fn().mockResolvedValue(ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND);
 
-					await getTextfield("email").setValue("test-email@example.com");
+					await getTextField("email").setValue("test-email@example.com");
 					await clickButton("add-email");
 
 					expect(roomMembersStore.addMemberByEmail).toHaveBeenCalledWith("test-email@example.com");
@@ -203,7 +162,7 @@ describe("AddExternalPersonDialog", () => {
 
 				roomMembersStore.addMemberByEmail = vi.fn().mockResolvedValue(ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND);
 
-				await getTextfield("email").setValue("test-email@example.com");
+				await getTextField("email").setValue("test-email@example.com");
 				await clickButton("add-email");
 
 				expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe(
@@ -229,13 +188,13 @@ describe("AddExternalPersonDialog", () => {
 				roomMembersStore.addMemberByEmail = vi.fn().mockResolvedValue(ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND);
 
 				const email = "test-email@example.com";
-				await getTextfield("email").setValue(email);
+				await getTextField("email").setValue(email);
 				await clickButton("add-email");
 
 				const firstName = "John";
 				const lastName = "Doe";
-				await getTextfield("firstname").setValue(firstName);
-				await getTextfield("lastname").setValue(lastName);
+				await getTextField("firstname").setValue(firstName);
+				await getTextField("lastname").setValue(lastName);
 				await clickButton("confirm");
 
 				expect(roomMembersStore.startRegistrationProcess).toHaveBeenCalledWith({
@@ -257,11 +216,11 @@ describe("AddExternalPersonDialog", () => {
 				roomMembersStore.addMemberByEmail = vi.fn().mockResolvedValue(ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND);
 				roomMembersStore.startRegistrationProcess = vi.fn().mockRejectedValue(new Error("Network error"));
 
-				await getTextfield("email").setValue("test-email@example.com");
+				await getTextField("email").setValue("test-email@example.com");
 				await clickButton("add-email");
 
-				await getTextfield("firstname").setValue("John");
-				await getTextfield("lastname").setValue("Doe");
+				await getTextField("firstname").setValue("John");
+				await getTextField("lastname").setValue("Doe");
 
 				await clickButton("confirm");
 

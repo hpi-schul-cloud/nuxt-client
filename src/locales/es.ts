@@ -157,6 +157,8 @@ export default {
 	"common.notifications.errors.notFinished": "{type} no se pudo completar. | {type} no se pudieron completar.",
 	"common.notifications.errors.notReverted": "{type} no se pudo restablecer. | {type} no se pudieron restablecer.",
 	"common.notifications.errors.notRestored": "No se ha podido restaurar {type}. | No se han podido restaurar {type}.",
+	"common.notification.error.preferences.update": "No se han podido actualizar las preferencias del usuario.",
+	"common.notification.error.preferences.retrieve": "No se han podido recuperar las preferencias del usuario.",
 	"common.notification.error.videoConference.notFetched": "No se pudo obtener la videoconferencia.",
 	"common.notification.error.videoConference.notJoined": "No se pudo unirse a la videoconferencia.",
 	"common.notification.error.videoConference.notStarted": "No se pudo iniciar la videoconferencia.",
@@ -211,6 +213,7 @@ export default {
 	"common.validation.required": "Por favor, rellene este campo",
 	"common.validation.required2": "Este es un campo obligatorio.",
 	"common.validation.tooLong": "The text you entered exceeds the maximum length",
+	"common.validation.fileTooBig": "El archivo no debe superar {maxSize} KB.",
 	"common.validation.tooShort": "El texto que ingresó es inferior a la longitud mínima",
 	"common.validation.containsOpeningTag": "Inserte un espacio después del signo menos-que.",
 	"common.validation.nonEmptyString": "Este campo es obligatorio y no debe contener sólo espacios.",
@@ -999,7 +1002,7 @@ export default {
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"La escuela está en fase de transferencia al nuevo año escolar. No se pueden crear clases ni usuarios. ¡Ponte en contacto con el administrador de la escuela!",
 	"loggedin.text.schoolInTransferPhaseStartNew":
-		'La escuela está en fase de transferencia al nuevo año escolar. No se pueden crear clases ni usuarios. ¡Accede al <a href="/administration/school/">nuevo año escolar aquí!</a>',
+		'La escuela está en fase de transferencia al nuevo año escolar. No se pueden crear clases ni usuarios. ¡Accede al <a href="/administration/school-settings/">nuevo año escolar aquí!</a>',
 	"loggedin.text.schoolInMigrationModeStarted":
 		'La escuela está en modo de migración de usuarios. Para migrar los usuarios, por favor vaya a <a href="/administration/migration/">esta página</a>.',
 	"loggedin.text.schoolInMigrationMode":
@@ -2091,7 +2094,8 @@ export default {
 	"pages.folder.trash.infoText":
 		"Los archivos se eliminan automáticamente 7 días después de ser movidos a la papelera.",
 	"pages.folder.trash.emptyState": "La papelera está vacía",
-	"pages.folder.trash.columns.deletedAt": "Eliminado el",
+	"pages.folder.trash.columns.movedOn": "Movido el",
+	"pages.folder.trash.columns.purgeAt": "Se eliminará el",
 	"pages.folder.trash.ariaLabels.actionMenu": "Menú de acciones para {name}",
 	"pages.folder.trash.ariaLabels.menu": "Menú de papelera",
 	"pages.folder.trash.emptyTrash": "Vaciar papelera",
@@ -2100,8 +2104,6 @@ export default {
 	"pages.folder.trash.purge.action": "Eliminar permanentemente",
 	"pages.folder.trash.purge.success": "Los archivos se han eliminado permanentemente.",
 	"pages.folder.trash.purge.error": "No se pudieron eliminar permanentemente los archivos.",
-	"pages.folder.trash.purge.dialog.title": "¿Eliminar archivos permanentemente?",
-	"pages.folder.trash.purge.dialog.description":
-		"Está a punto de eliminar permanentemente {count} archivo(s). Esta acción no se puede deshacer.",
-	"pages.folder.trash.purge.dialog.checkboxLabel": "Entiendo que esta acción es permanente y no se puede deshacer.",
+	"pages.folder.trash.purge.dialog.title": "¿Eliminar permanentemente {count} archivo(s)?",
+	"pages.folder.trash.purge.dialog.checkboxLabel": "La eliminación no se puede deshacer.",
 };

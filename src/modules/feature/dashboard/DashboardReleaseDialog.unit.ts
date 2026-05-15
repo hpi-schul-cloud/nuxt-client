@@ -2,8 +2,9 @@ import DashboardReleaseDialog from "./DashboardReleaseDialog.vue";
 import { initializeAxios } from "@/utils/api";
 import { createTestAppStore, mockApi, mockApiResponse, mockAxiosInstance } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { MeApiInterface, ReleaseApiInterface, ReleaseItemResponse } from "@api-server";
+import { ReleaseApiInterface, ReleaseItemResponse } from "@api-server";
 import * as serverApi from "@api-server";
+import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
 import { flushPromises } from "@vue/test-utils";
@@ -13,19 +14,16 @@ import { Mocked } from "vitest";
 
 describe("DashboardReleaseDialog", () => {
 	let releasesApi: Mocked<ReleaseApiInterface>;
-	let meApi: Mocked<MeApiInterface>;
 	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		axiosMock = mockAxiosInstance();
 		initializeAxios(axiosMock);
-		setActivePinia(createTestingPinia({ stubActions: false }));
+		setActivePinia(createTestingPinia());
 
 		releasesApi = mockApi<ReleaseApiInterface>();
-		meApi = mockApi<MeApiInterface>();
 
 		vi.spyOn(serverApi, "ReleaseApiFactory").mockReturnValue(releasesApi);
-		vi.spyOn(serverApi, "MeApiFactory").mockReturnValue(meApi);
 	});
 
 	const setup = (options?: { releaseDate?: string; latestReleasePublishedAt?: string }) => {
@@ -44,8 +42,6 @@ describe("DashboardReleaseDialog", () => {
 				data: { data: releaseData, total: releaseData.length, skip: 0, limit: 1 },
 			})
 		);
-
-		meApi.meControllerUpdateMePreferences.mockResolvedValue(mockApiResponse({}));
 
 		const wrapper = mount(DashboardReleaseDialog, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
@@ -97,7 +93,7 @@ describe("DashboardReleaseDialog", () => {
 			});
 			await flushPromises();
 
-			expect(meApi.meControllerUpdateMePreferences).toHaveBeenCalledWith({
+			expect(useAppStore().updateUserPreferences).toHaveBeenCalledWith({
 				releaseDate: "2024-06-01T00:00:00.000Z",
 			});
 		});
