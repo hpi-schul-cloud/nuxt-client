@@ -18,13 +18,16 @@
 						</span>
 					</div>
 				</VBadge>
-
-				<span class="text-break" :data-testid="`room--title-${index}`">
-					{{ room.name }}
-				</span>
+				<div class="d-flex flex-column">
+					<span class="text-break mb-2" :data-testid="`room--title-${index}`">
+						{{ room.name }}
+					</span>
+					<VChip size="x-small" :prepend-icon="mdiAccountMultipleOutline">
+						{{ room.totalMembers }} {{ t("common.words.member", room.totalMembers) }}
+					</VChip>
+				</div>
 			</RouterLink>
 		</VCardTitle>
-
 		<VCardActions class="justify-end pr-4">
 			<VBtn
 				:data-testid="`room-open-button-${index}`"
@@ -42,7 +45,7 @@
 
 <script setup lang="ts">
 import { RoomItem } from "@/types/room/Room";
-import { mdiLock } from "@icons/material";
+import { mdiAccountMultipleOutline, mdiLock } from "@icons/material";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 

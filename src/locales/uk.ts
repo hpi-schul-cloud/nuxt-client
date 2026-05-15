@@ -254,6 +254,7 @@ export default {
 	"common.words.languages.uk": "Yкраїнська",
 	"common.words.learnContent": "Зміст навчання",
 	"common.words.mainSchool": "Основна школа",
+	"common.words.member": "Член | Члени",
 	"common.words.no": "Немає",
 	"common.words.not": "не",
 	"common.words.noChoice": "Немає вибору",

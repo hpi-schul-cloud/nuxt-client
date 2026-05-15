@@ -247,6 +247,7 @@ export default {
 	"common.words.languages.uk": "Ucranio",
 	"common.words.learnContent": "Contenidos de aprendizaje",
 	"common.words.mainSchool": "Escuela principal",
+	"common.words.member": "Miembro | Miembros",
 	"common.words.no": "No",
 	"common.words.not": "no",
 	"common.words.noChoice": "Sin elección",
