@@ -1,13 +1,12 @@
+import { createTestSchoolStore } from "../../../../tests/test-utils/factory/school-test.utils.ts";
+import { mockedPiniaStoreTyping, schoolFactory } from "../../../../tests/test-utils/index.ts";
 import AuthSystems from "./AuthSystems.vue";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils.ts";
 import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { Permission } from "@api-server";
+import { useSchoolStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, RouterLinkStub } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -53,9 +52,10 @@ const searchStrings = {
 
 describe("AuthSystems", () => {
 	const RouterLinkStubMock = { ...RouterLinkStub, useLink: vi.fn() };
+	const mockSchool = schoolFactory.build();
 
-	const createWrapper = (options = {}) => {
-		const wrapper = mount(AuthSystems, {
+	const createWrapper = (options = {}) =>
+		mount(AuthSystems, {
 			global: {
 				mocks: { RouterLink: RouterLinkStubMock },
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -63,14 +63,9 @@ describe("AuthSystems", () => {
 			...options,
 		});
 
-		return wrapper;
-	};
-
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
+		createTestSchoolStore({ schoolDetails: mockSchool });
 	});
 
 	describe("login link", () => {
@@ -88,14 +83,14 @@ describe("AuthSystems", () => {
 			expect(loginLinkFieldVisibility).toHaveLength(0);
 		});
 
-		it("login link field should be visible for all systems", () => {
-			schoolsModule.setSchool(mockSchool);
+		it("login link field should be visible for all systems", async () => {
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const loginLinkFieldVisibility = wrapper.findAll(searchStrings.schoolLoginLink);
 			const oauthAndLdapLink = wrapper.find(searchStrings.oauthAndLdapLink);
 			const ldapLink = wrapper.find(searchStrings.ldapLink);
 			const oauthLink = wrapper.find(searchStrings.oauthLink);
+			await flushPromises();
 
 			expect(loginLinkFieldVisibility).toHaveLength(3);
 			expect(oauthAndLdapLink.element.value).toContain(`strategy=${wrapper.props().systems[1].oauthConfig.provider}`);
@@ -228,7 +223,6 @@ describe("AuthSystems", () => {
 		it("should call deleteSystem when deletion is confirmed", async () => {
 			const askDeletionSpy = vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(true);
 			createTestAppStoreWithPermissions([Permission.SYSTEM_CREATE]);
-			const deleteSpy = vi.spyOn(schoolsModule, "deleteSystem").mockImplementation(vi.fn());
 			const wrapper = createWrapper({ props: generateProps() });
 
 			expect(wrapper.findAll("tr").length).toBe(5);
@@ -241,20 +235,21 @@ describe("AuthSystems", () => {
 				"pages.administration.school.index.authSystems.deleteAuthSystem",
 				"pages.administration.school.index.authSystems.confirmDeleteText"
 			);
-			expect(deleteSpy).toHaveBeenCalledWith("3");
+			const schoolStore = mockedPiniaStoreTyping(useSchoolStore);
+			expect(schoolStore.deleteSchoolSystem).toHaveBeenCalledWith("3");
 		});
 
 		it("should not call deleteSystem when deletion is cancelled", async () => {
 			vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(false);
-			createTestAppStoreWithPermissions([Permission.SystemCreate]);
-			const deleteSpy = vi.spyOn(schoolsModule, "deleteSystem").mockImplementation(vi.fn());
+			createTestAppStoreWithPermissions([Permission.SYSTEM_CREATE]);
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const deleteBtn = wrapper.find(searchStrings.deleteSystemButton);
 			await deleteBtn.trigger("click");
 			await flushPromises();
 
-			expect(deleteSpy).not.toHaveBeenCalled();
+			const schoolStore = mockedPiniaStoreTyping(useSchoolStore);
+			expect(schoolStore.deleteSchoolSystem).not.toHaveBeenCalled();
 		});
 	});
 	describe("display system buttons", () => {

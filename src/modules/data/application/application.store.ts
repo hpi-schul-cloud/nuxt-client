@@ -1,8 +1,18 @@
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { notifySuccess } from "./notification-store";
+import { useSchoolStore } from "./school.store";
 import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
-import { LanguageType, MeApiFactory, MeResponse, Permission, RoleName, UserApiFactory } from "@api-server";
+import {
+	LanguageType,
+	MeApiFactory,
+	MeResponse,
+	Permission,
+	RoleName,
+	UpdatePreferencesBodyParams,
+	UserApiFactory,
+} from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { logger } from "@util-logger";
 import { watchOnce } from "@vueuse/core";
@@ -64,12 +74,13 @@ export const useAppStore = defineStore("applicationStore", () => {
 		computed(() => userPermissions.value?.includes(permission) ?? false);
 
 	// Actions
-
 	const login = async () => {
 		const { data } = await meApi.meControllerMe();
 		userLocale.value = data.language;
 		meResponse.value = data;
 		isLoggedIn.value = true;
+
+		await useSchoolStore().fetchSchoolDetails();
 	};
 
 	const logout = (redirectUrl = "/logout") => {
@@ -103,6 +114,26 @@ export const useAppStore = defineStore("applicationStore", () => {
 		isLoggedIn.value = false;
 		localStorage.clear();
 		delete $axios.defaults.headers.common["Authorization"];
+	};
+
+	const updateUserPreferences = async (options: UpdatePreferencesBodyParams) => {
+		const { execute: executePreferences } = useSafeAxiosTask();
+
+		const { success: successUpdate } = await executePreferences(
+			async () => await meApi.meControllerUpdateMePreferences(options),
+			"common.notification.error.preferences.update"
+		);
+
+		if (successUpdate) {
+			const { success, result } = await executePreferences(
+				meApi.meControllerMe,
+				"common.notification.error.preferences.retrieve"
+			);
+
+			if (success && meResponse.value) {
+				meResponse.value.preferences = result?.data.preferences;
+			}
+		}
 	};
 
 	const updateUserLanguage = (language: LanguageType) =>
@@ -257,6 +288,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 		externalLogout,
 		autoLogout,
 		updateUserLanguage,
+		updateUserPreferences,
 		clearApplicationError,
 		handleUnknownError,
 		handleApplicationError,

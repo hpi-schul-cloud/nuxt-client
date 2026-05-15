@@ -1,17 +1,10 @@
 import RoomAdminMembersTable from "./RoomAdminMembersTable.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import {
-	createTestAppStoreWithUser,
-	mockedPiniaStoreTyping,
-	roomMemberFactory,
-	schoolFactory,
-} from "@@/tests/test-utils";
+import { createTestAppStoreWithUser, mockedPiniaStoreTyping, roomMemberFactory } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup/createTestingI18n";
 import { createTestingVuetify } from "@@/tests/test-utils/setup/createTestingVuetify";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { RoleName } from "@api-server";
 import { RoomMember, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
@@ -30,21 +23,6 @@ vi.mock("@/plugins/i18n");
 describe("RoomAdminMembersTable", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-
-		schoolsModule.setSchool(
-			schoolFactory.build({
-				id: "school-id",
-				name: "Paul-Gerhardt-Gymnasium",
-			})
-		);
-	});
-
-	afterEach(() => {
-		vi.clearAllMocks();
 	});
 
 	const setup = (
@@ -53,7 +31,6 @@ describe("RoomAdminMembersTable", () => {
 		}>
 	) => {
 		const currentUser = roomMemberFactory.build({});
-		createTestAppStoreWithUser(currentUser.userId);
 
 		const members = options?.members ?? [
 			...roomMemberFactory.buildList(3, {
@@ -75,30 +52,21 @@ describe("RoomAdminMembersTable", () => {
 			}),
 		];
 
-		const wrapper = mount(RoomAdminMembersTable, {
-			attachTo: document.body,
-			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					createTestingPinia({
-						initialState: {
-							roomMembersStore: {
-								roomMembers: members,
-								isRoomOwner: vi.fn(),
-							},
-						},
-					}),
-				],
-			},
-		});
+		createTestAppStoreWithUser(currentUser.userId);
+		createTestSchoolStore();
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
 		roomMembersStore.setAdminMode(true);
-		roomMembersStore.roomMembers = members;
+		roomMembersStore.$patch({ roomMembers: members });
 		roomMembersStore.isRoomOwner.mockReturnValue(false);
 		const roomMembersWithoutApplicants = roomMembersStore.roomMembersWithoutApplicants;
 		const roomMembers = roomMembersStore.roomMembers;
+
+		const wrapper = mount(RoomAdminMembersTable, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+		});
 
 		return { wrapper, roomMembersStore, roomMembersWithoutApplicants, roomMembers };
 	};
@@ -211,7 +179,7 @@ describe("RoomAdminMembersTable", () => {
 				await nextTick();
 				const kebabMenu = wrapper.findComponent(`[data-testid="kebab-menu-${member.userId}"]`);
 
-				expect(kebabMenu.exists()).toBe(member.schoolId === "school-id" ? true : false);
+				expect(kebabMenu.exists()).toBe(member.schoolId === "school-id");
 			});
 		});
 

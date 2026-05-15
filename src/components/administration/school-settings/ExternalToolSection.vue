@@ -8,8 +8,8 @@
 			:items="items"
 			:headers="getHeaders"
 			:loading="isLoading"
-			:loading-text="t('common.loading.text')"
-			:no-data-text="t('common.nodata')"
+			loading-text="common.loading.text"
+			no-data-text="common.nodata"
 		>
 			<template #[`item.name`]="{ item }">
 				<span data-testid="external-tool-name">
