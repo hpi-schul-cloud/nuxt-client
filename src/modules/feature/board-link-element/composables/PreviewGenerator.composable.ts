@@ -1,7 +1,6 @@
 import { convertDownloadToPreviewUrl, isPreviewPossible } from "@/utils/fileHelper";
 import { FileRecordParentType } from "@api-file-storage";
 import { useFileStorageApi } from "@data-file";
-import { computed } from "vue";
 
 export interface PreviewImageResult {
 	fileRecordId: string;
@@ -9,18 +8,15 @@ export interface PreviewImageResult {
 }
 
 export const usePreviewGenerator = (elementId: string) => {
-	const { getFileRecordsByParentId, uploadFromUrl } = useFileStorageApi();
+	const { uploadFromUrl } = useFileStorageApi();
 
 	const createPreviewImage = async (externalImageUrl: string): Promise<PreviewImageResult | undefined> => {
-		await uploadFromUrl(externalImageUrl, elementId, FileRecordParentType.BOARDNODES);
+		const uploadedFileRecord = await uploadFromUrl(externalImageUrl, elementId, FileRecordParentType.BOARDNODES);
 
-		const fileRecord = computed(() => getFileRecordsByParentId(elementId)[0]);
-
-		if (fileRecord.value?.previewStatus && isPreviewPossible(fileRecord.value?.previewStatus)) {
-			const imageUrl = convertDownloadToPreviewUrl(fileRecord.value.url);
-
+		if (uploadedFileRecord?.previewStatus && isPreviewPossible(uploadedFileRecord.previewStatus)) {
+			const imageUrl = convertDownloadToPreviewUrl(uploadedFileRecord.url);
 			return {
-				fileRecordId: fileRecord.value.id,
+				fileRecordId: uploadedFileRecord.id,
 				url: imageUrl,
 			};
 		}

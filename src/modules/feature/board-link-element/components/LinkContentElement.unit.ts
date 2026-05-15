@@ -119,9 +119,10 @@ describe("LinkContentElement", () => {
 			imageUrl: "https://imagestock.com/great-image.jpg",
 		});
 
-		usePreviewGeneratorMock.createPreviewImage.mockResolvedValue(
-			"https://some.schulcloud.de/my-upload-preview-image.jpg"
-		);
+		usePreviewGeneratorMock.createPreviewImage.mockResolvedValue({
+			url: "https://some.schulcloud.de/my-upload-preview-image.jpg",
+			fileRecordId: "preview-file-record-id",
+		});
 
 		const { wrapper } = getWrapper({
 			element,
@@ -472,7 +473,7 @@ describe("LinkContentElement", () => {
 
 			await wrapper.getComponent(LinkContentElementCreate).vm.$emit("create:url", url);
 
-			expect(usePreviewGeneratorMock.createPreviewImage).toHaveBeenCalledWith(fakeMetaTags.imageUrl);
+			expect(usePreviewGeneratorMock.createPreviewImage).toHaveBeenCalledWith(fakeMetaTags.originalImageUrl);
 		});
 
 		it("should sanitize html-encoded urls", () => {

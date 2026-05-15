@@ -38,7 +38,7 @@ describe("usePreviewGenerator", () => {
 
 					const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi);
 					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
-					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord]);
+					fileStorageApiMock.uploadFromUrl.mockResolvedValueOnce(fileRecord);
 
 					const { wrapper, composable } = getWrapper(elementId);
 
@@ -70,14 +70,17 @@ describe("usePreviewGenerator", () => {
 					);
 				});
 
-				it("should return image url for the preview image", async () => {
+				it("should return image url and fileRecordId for the preview image", async () => {
 					const { composable, fileRecord } = setup();
 
 					const externalImageUrl = "https://test.de/my-article/image.jpg";
 					const result = await composable?.createPreviewImage(externalImageUrl);
 
 					const expectedPreviewImageUrl = convertDownloadToPreviewUrl(fileRecord.url);
-					expect(result).toEqual(expect.stringContaining(expectedPreviewImageUrl));
+					expect(result).toEqual({
+						fileRecordId: fileRecord.id,
+						url: expect.stringContaining(expectedPreviewImageUrl),
+					});
 				});
 			});
 

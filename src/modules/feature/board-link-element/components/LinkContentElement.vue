@@ -17,7 +17,7 @@
 			v-if="!isEditMode && computedElement.content.url"
 			:url="computedElement.content.url"
 			:title="computedElement.content.title"
-			:image-url="computedElement.content.imageUrl"
+			:image-url="modelValue.imageUrl"
 			:is-edit-mode="isEditMode"
 			><BoardMenu
 				:scope="BoardMenuScope.LINK_ELEMENT"
@@ -90,10 +90,12 @@ const { modelValue, computedElement } = useContentElementState(props, {
 	autoSaveDebounce: 100,
 });
 
-const sanitizedUrl = computed(() => (props.element.content.url ? sanitizeUrl(props.element.content.url) : ""));
+const sanitizedUrl = computed(() =>
+	computedElement.value.content.url ? sanitizeUrl(computedElement.value.content.url) : ""
+);
 
 const target: ComputedRef<string> = computed(() => {
-	if (props.element.content.url) {
+	if (computedElement.value.content.url) {
 		const url = new URL(sanitizedUrl.value);
 
 		if (url.host === window.location.host && url.pathname === window.location.pathname) {
@@ -117,15 +119,24 @@ const onCreateUrl = async (originalUrl: string) => {
 		const validUrl = ensureProtocolIncluded(originalUrl);
 		const { url, title, description, originalImageUrl } = await getMetaTags(validUrl);
 
-		modelValue.value.url = url;
-		modelValue.value.title = title;
-		modelValue.value.description = description;
+		const updates = {
+			url,
+			title,
+			description,
+			imageUrl: "",
+			previewImageId: "",
+		};
 
 		if (originalImageUrl) {
-			const previewImageResult = await createPreviewImage(originalImageUrl);
-			modelValue.value.imageUrl = previewImageResult?.url;
-			modelValue.value.previewImageId = previewImageResult?.fileRecordId;
+			const previewResult = await createPreviewImage(originalImageUrl);
+
+			if (previewResult) {
+				updates.imageUrl = previewResult.url;
+				updates.previewImageId = previewResult.fileRecordId;
+			}
 		}
+
+		Object.assign(modelValue.value, updates);
 	} finally {
 		isLoading.value = false;
 	}
