@@ -221,6 +221,7 @@ export default {
 	"common.validation.required": "Bitte fülle dieses Feld aus",
 	"common.validation.required2": "Dies ist ein Pflichtfeld.",
 	"common.validation.tooLong": "Der eingegebene Text überschreitet die Maximallänge",
+	"common.validation.fileTooBig": "Die Datei darf maximal {maxSize} KB groß sein.",
 	"common.validation.tooShort": "Der eingegebene Text unterschreitet die Mindestlänge",
 	"common.validation.containsOpeningTag": "Bitte Leerzeichen nach Kleiner-als-Zeichen einfügen.",
 	"common.validation.nonEmptyString": "Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
@@ -1004,7 +1005,7 @@ export default {
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte kontaktiere deinen Schul-Admin!",
 	"loggedin.text.schoolInTransferPhaseStartNew":
-		'Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte läute <a href="/administration/school/"> hier das neue Schuljahr ein!</a>',
+		'Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte läute <a href="/administration/school-settings/"> hier das neue Schuljahr ein!</a>',
 	"loggedin.text.schoolInMigrationModeStarted":
 		'Die Schule befindet sich im Modus der Benutzermigration. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
 	"loggedin.text.schoolInMigrationMode":
@@ -2079,7 +2080,8 @@ export default {
 	"pages.folder.trash.link": "Papierkorb anzeigen",
 	"pages.folder.trash.emptyState": "Der Papierkorb ist leer",
 	"pages.folder.trash.infoText": "Dateien werden 7 Tage nach dem Verschieben in den Papierkorb automatisch gelöscht.",
-	"pages.folder.trash.columns.deletedAt": "Gelöscht am",
+	"pages.folder.trash.columns.movedOn": "Verschoben am",
+	"pages.folder.trash.columns.purgeAt": "Wird gelöscht am",
 	"pages.folder.trash.ariaLabels.actionMenu": "Aktionsmenü für {name}",
 	"pages.folder.trash.ariaLabels.menu": "Papierkorb Menü",
 	"pages.folder.trash.emptyTrash": "Papierkorb leeren",
@@ -2088,9 +2090,6 @@ export default {
 	"pages.folder.trash.purge.action": "Endgültig löschen",
 	"pages.folder.trash.purge.success": "Dateien wurden endgültig gelöscht.",
 	"pages.folder.trash.purge.error": "Dateien konnten nicht endgültig gelöscht werden.",
-	"pages.folder.trash.purge.dialog.title": "Dateien endgültig löschen?",
-	"pages.folder.trash.purge.dialog.description":
-		"Du bist dabei, {count} Datei(en) endgültig zu löschen. Diese Aktion kann nicht rückgängig gemacht werden.",
-	"pages.folder.trash.purge.dialog.checkboxLabel":
-		"Ich verstehe, dass diese Aktion dauerhaft ist und nicht rückgängig gemacht werden kann.",
+	"pages.folder.trash.purge.dialog.title": "{count} Datei(en) endgültig löschen?",
+	"pages.folder.trash.purge.dialog.checkboxLabel": "Löschen kann nicht rückgängig gemacht werden.",
 };

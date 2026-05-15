@@ -1,17 +1,15 @@
 import ClassOverview from "./ClassOverview.page.vue";
-import SchoolsModule from "@/store/schools";
-import { School, Year } from "@/store/types/schools";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import {
 	classInfoFactory,
 	courseFactory,
 	createTestAppStoreWithPermissions,
 	createTestEnvStore,
 	mockComposable,
+	schoolFactory,
 } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ConfigResponse, Permission, SchulcloudTheme } from "@api-server";
 import { ClassInfo, ClassRootType, useGroupClasses } from "@data-group";
@@ -31,6 +29,7 @@ const findTableComponent = (wrapper: VueWrapper) =>
 	wrapper.findComponent<typeof VDataTableServer>('[data-testid="admin-class-table"]');
 
 describe("ClassOverview", () => {
+	const mockSchool = schoolFactory.build();
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
@@ -64,19 +63,18 @@ describe("ClassOverview", () => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStoreWithPermissions(userPermissions);
 
-		const schoolModule = createModuleMocks(SchoolsModule, {
-			getSchool: {
+		createTestSchoolStore({
+			schoolDetails: {
+				...mockSchool,
 				years: {
-					schoolYears: [],
 					nextYear: {
 						name: "2024/25",
-					} as Year,
+					},
 					activeYear: {
 						name: "2023/24",
-					} as Year,
-					lastYear: {} as Year,
+					},
 				},
-			} as unknown as School,
+			},
 		});
 
 		createTestEnvStore({
@@ -100,9 +98,6 @@ describe("ClassOverview", () => {
 		const wrapper = mount(ClassOverview, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[SCHOOLS_MODULE_KEY.valueOf()]: schoolModule,
-				},
 				stubs: {
 					EndCourseSyncDialog: true,
 				},

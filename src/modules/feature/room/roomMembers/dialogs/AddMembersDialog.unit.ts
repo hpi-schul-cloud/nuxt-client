@@ -1,22 +1,19 @@
 import AddMembersDialog from "./AddMembersDialog.vue";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
 import {
 	createTestAppStoreWithRole,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	roomMemberSchoolResponseFactory,
-	schoolFactory,
 } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { RoleName } from "@api-server";
 import { useRoomMembersStore } from "@data-room";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { VueWrapper } from "@vue/test-utils";
+import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
@@ -37,17 +34,6 @@ describe("AddMembersDialog", () => {
 			unpause: unpauseMock,
 			deactivate: vi.fn(),
 		});
-
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-
-		schoolsModule.setSchool(
-			schoolFactory.build({
-				id: "school-id",
-				name: "Paul-Gerhardt-Gymnasium",
-			})
-		);
 	});
 
 	const setup = (options?: {
@@ -62,11 +48,15 @@ describe("AddMembersDialog", () => {
 		});
 
 		setActivePinia(createTestingPinia({ stubActions: false }));
+		createTestSchoolStore();
+		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
+
 		const { mockedMe } = createTestAppStoreWithRole(options?.schoolRole ?? RoleName.TEACHER);
 
 		roomMembers[0].schoolRoleNames = [options?.schoolRole ?? RoleName.TEACHER];
 		roomMembers[0].userId = mockedMe.user.id;
 		roomMembersSchools[0].id = mockedMe.school.id;
+		roomMembersStore.$patch({ potentialRoomMembers, roomMembers, schools: roomMembersSchools });
 
 		wrapper = mount(AddMembersDialog, {
 			props: {
@@ -75,26 +65,9 @@ describe("AddMembersDialog", () => {
 			},
 			attachTo: document.body,
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					createTestingPinia({
-						initialState: {
-							roomMembersStore: {
-								potentialRoomMembers,
-								schools: roomMembersSchools,
-								roomMembers,
-							},
-							applicationStore: {
-								meResponse: mockedMe,
-							},
-						},
-					}),
-				],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 		});
-
-		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
 
 		return {
 			wrapper,
@@ -267,6 +240,7 @@ describe("AddMembersDialog", () => {
 
 			const dialog = wrapper.getComponent(SvsDialog);
 			await dialog.vm.$emit("confirm");
+			await flushPromises();
 
 			expect(wrapper.emitted()).toHaveProperty("close");
 		});

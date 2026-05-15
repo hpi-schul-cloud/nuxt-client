@@ -1,4 +1,4 @@
-import { useVideoConference } from "./VideoConference.composable";
+import { useVideoConference } from "./video-conference.composable";
 import { mockApi } from "@@/tests/test-utils/mockApiFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import * as serverApi from "@api-server";

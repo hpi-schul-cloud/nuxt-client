@@ -60,15 +60,16 @@ import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-type Props = {
-	headerBottom?: number;
-	showSelect?: boolean;
-};
-
-withDefaults(defineProps<Props>(), {
-	headerBottom: 0,
-	showSelect: false,
-});
+withDefaults(
+	defineProps<{
+		headerBottom?: number;
+		showSelect?: boolean;
+	}>(),
+	{
+		headerBottom: 0,
+		showSelect: false,
+	}
+);
 
 const { t } = useI18n();
 const { allowedOperations } = useRoomAllowedOperations();
