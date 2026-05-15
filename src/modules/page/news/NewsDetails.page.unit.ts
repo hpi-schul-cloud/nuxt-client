@@ -47,7 +47,6 @@ describe("NewsDetailsPage", () => {
 		await router.push({ name: "news-details", params: { id: news.id } });
 
 		const wrapper = mount(NewsDetailsPage, {
-			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
 			},
