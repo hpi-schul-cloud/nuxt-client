@@ -44,8 +44,8 @@ const mockImportResponse = (overrides: Partial<serverApi.CopyApiResponse> = {}) 
 		data: {
 			id: "new-item-id",
 			title: "Imported Item",
-			type: serverApi.CopyApiResponseType.COURSE,
-			status: serverApi.CopyApiResponseStatus.SUCCESS,
+			type: serverApi.CopyElementType.COURSE,
+			status: serverApi.CopyStatusEnum.SUCCESS,
 			...overrides,
 		},
 	});

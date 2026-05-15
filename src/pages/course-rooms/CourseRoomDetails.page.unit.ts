@@ -17,8 +17,8 @@ import {
 	BoardElementResponse,
 	BoardElementResponseType as BoardTypes,
 	BoardLayout,
-	CopyApiResponseStatus,
-	CopyApiResponseType,
+	CopyElementType,
+	CopyStatusEnum,
 	ImportUserResponseRoleNames,
 	Permission,
 	ShareTokenBodyParamsParentType,
@@ -409,7 +409,7 @@ describe("CourseRoomDetails.page.vue", () => {
 
 						useCopyFlowMock.executeCopyCourse.mockResolvedValue({
 							success: true,
-							result: { id: "copied-id", type: CopyApiResponseType.COURSE, status: CopyApiResponseStatus.SUCCESS },
+							result: { id: "copied-id", type: CopyElementType.COURSE, status: CopyStatusEnum.SUCCESS },
 							error: undefined,
 						});
 
@@ -564,7 +564,7 @@ describe("CourseRoomDetails.page.vue", () => {
 			await flushPromises();
 
 			useCopyFlowMock.executeCopyCourse.mockResolvedValue({
-				result: { id: "copied-id", type: CopyApiResponseType.COURSE, status: CopyApiResponseStatus.SUCCESS },
+				result: { id: "copied-id", type: CopyElementType.COURSE, status: CopyStatusEnum.SUCCESS },
 				success: true,
 				error: undefined,
 			});
@@ -790,7 +790,7 @@ describe("CourseRoomDetails.page.vue", () => {
 
 				useCopyFlowMock.executeCopyLesson.mockResolvedValue({
 					success: true,
-					result: { id: "copied-lesson-id", type: CopyApiResponseType.LESSON, status: CopyApiResponseStatus.SUCCESS },
+					result: { id: "copied-lesson-id", type: CopyElementType.LESSON, status: CopyStatusEnum.SUCCESS },
 					error: undefined,
 				});
 

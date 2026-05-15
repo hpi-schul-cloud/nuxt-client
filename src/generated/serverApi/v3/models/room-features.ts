@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * The features of the room
  * @export
  * @enum {string}
  */

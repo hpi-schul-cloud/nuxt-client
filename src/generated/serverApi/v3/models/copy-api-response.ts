@@ -13,6 +13,8 @@
  */
 
 
+import { CopyElementType } from './copy-element-type';
+import { CopyStatusEnum } from './copy-status-enum';
 
 /**
  * 
@@ -34,10 +36,10 @@ export interface CopyApiResponse {
     title?: string;
     /**
      * Type of copied element
-     * @type {string}
+     * @type {CopyElementType}
      * @memberof CopyApiResponse
      */
-    type: CopyApiResponseType;
+    type: CopyElementType;
     /**
      * Id of destination parent reference
      * @type {string}
@@ -46,10 +48,10 @@ export interface CopyApiResponse {
     destinationId?: string;
     /**
      * Copy progress status of copied element
-     * @type {string}
+     * @type {CopyStatusEnum}
      * @memberof CopyApiResponse
      */
-    status: CopyApiResponseStatus;
+    status: CopyStatusEnum;
     /**
      * List of included sub elements with recursive type structure
      * @type {Array<CopyApiResponse>}
@@ -57,64 +59,5 @@ export interface CopyApiResponse {
      */
     elements?: Array<CopyApiResponse>;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CopyApiResponseType {
-    ROOM = 'ROOM',
-    BOARD = 'BOARD',
-    CARD = 'CARD',
-    COLLABORATIVE_TEXT_EDITOR_ELEMENT = 'COLLABORATIVE_TEXT_EDITOR_ELEMENT',
-    COLUMN = 'COLUMN',
-    COLUMNBOARD = 'COLUMNBOARD',
-    CONTENT = 'CONTENT',
-    COURSE = 'COURSE',
-    COURSEGROUP_GROUP = 'COURSEGROUP_GROUP',
-    DELETED_ELEMENT = 'DELETED_ELEMENT',
-    EXTERNAL_TOOL = 'EXTERNAL_TOOL',
-    EXTERNAL_TOOL_ELEMENT = 'EXTERNAL_TOOL_ELEMENT',
-    FILE = 'FILE',
-    FILE_ELEMENT = 'FILE_ELEMENT',
-    FILE_FOLDER_ELEMENT = 'FILE_FOLDER_ELEMENT',
-    DRAWING_ELEMENT = 'DRAWING_ELEMENT',
-    FILE_GROUP = 'FILE_GROUP',
-    H5_P_ELEMENT = 'H5P_ELEMENT',
-    LEAF = 'LEAF',
-    LESSON = 'LESSON',
-    LESSON_CONTENT_ETHERPAD = 'LESSON_CONTENT_ETHERPAD',
-    LESSON_CONTENT_GEOGEBRA = 'LESSON_CONTENT_GEOGEBRA',
-    LESSON_CONTENT_GROUP = 'LESSON_CONTENT_GROUP',
-    LESSON_CONTENT_LERNSTORE = 'LESSON_CONTENT_LERNSTORE',
-    LESSON_CONTENT_TASK = 'LESSON_CONTENT_TASK',
-    LESSON_CONTENT_TEXT = 'LESSON_CONTENT_TEXT',
-    LERNSTORE_MATERIAL = 'LERNSTORE_MATERIAL',
-    LERNSTORE_MATERIAL_GROUP = 'LERNSTORE_MATERIAL_GROUP',
-    LINK_ELEMENT = 'LINK_ELEMENT',
-    MEDIA_BOARD = 'MEDIA_BOARD',
-    MEDIA_LINE = 'MEDIA_LINE',
-    MEDIA_EXTERNAL_TOOL_ELEMENT = 'MEDIA_EXTERNAL_TOOL_ELEMENT',
-    METADATA = 'METADATA',
-    RICHTEXT_ELEMENT = 'RICHTEXT_ELEMENT',
-    SUBMISSION_GROUP = 'SUBMISSION_GROUP',
-    TASK = 'TASK',
-    TASK_GROUP = 'TASK_GROUP',
-    TIME_GROUP = 'TIME_GROUP',
-    USER_GROUP = 'USER_GROUP',
-    VIDEO_CONFERENCE_ELEMENT = 'VIDEO_CONFERENCE_ELEMENT'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CopyApiResponseStatus {
-    SUCCESS = 'success',
-    FAILURE = 'failure',
-    NOT_DOING = 'not-doing',
-    NOT_IMPLEMENTED = 'not-implemented',
-    PARTIAL = 'partial'
-}
-
 
 

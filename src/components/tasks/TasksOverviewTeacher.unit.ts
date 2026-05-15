@@ -7,7 +7,7 @@ import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStoreWithRole, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { CopyApiResponseStatus, CopyApiResponseType, RoleName, ShareTokenBodyParamsParentType } from "@api-server";
+import { CopyElementType, CopyStatusEnum, RoleName, ShareTokenBodyParamsParentType } from "@api-server";
 import { useTasksOfOverview } from "@data-tasks";
 import { useCopyFlow } from "@feature-copy";
 import { createTestingPinia } from "@pinia/testing";
@@ -84,7 +84,7 @@ describe("TasksOverviewTeacher", () => {
 		beforeEach(() => {
 			useCopyFlowMock.executeCopyTask.mockResolvedValue({
 				success: true,
-				result: { id: "copied-id", type: CopyApiResponseType.TASK, status: CopyApiResponseStatus.SUCCESS },
+				result: { id: "copied-id", type: CopyElementType.TASK, status: CopyStatusEnum.SUCCESS },
 				error: undefined,
 			});
 		});
