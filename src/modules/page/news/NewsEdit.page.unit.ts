@@ -18,6 +18,7 @@ import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 
 describe("NewsEditPage", () => {
 	let newsApi: Mocked<NewsApiInterface>;
@@ -84,7 +85,7 @@ describe("NewsEditPage", () => {
 		expect(defaultWireframe.exists()).toBe(true);
 		expect(defaultWireframe.props("breadcrumbs")).toEqual([
 			{ to: "/news", title: "pages.news.title" },
-			{ to: `/news/${news.id}`, title: news.title },
+			{ to: `/news/${news.id}`, title: "pages.news.details.title" },
 			{ title: "pages.news.edit.title.default", disabled: true },
 		]);
 	});
@@ -186,6 +187,10 @@ describe("NewsEditPage", () => {
 	});
 
 	describe("delete news", () => {
+		beforeEach(() => {
+			vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
+		});
+
 		it("should delete news", async () => {
 			const { wrapper, news } = await setup();
 			const newsForm = wrapper.getComponent(NewsForm);

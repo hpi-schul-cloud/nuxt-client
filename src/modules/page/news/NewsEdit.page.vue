@@ -75,16 +75,22 @@ const onSave = async (newsToPatch: UpdateNewsParams) => {
 };
 
 const onDelete = async () => {
-	await deleteNews(newsInstance.value?.id);
-	notifySuccess(t("components.organisms.FormNews.success.remove"));
-	await router.push({ path: "/news" });
+	const { success } = await deleteNews(newsInstance.value?.id);
+	if (success) {
+		notifySuccess(t("components.organisms.FormNews.success.remove"));
+		await router.push({ path: "/news" });
+	}
 };
 
 const onCancel = () => {
 	router.go(-1);
 };
 
-watch(pageTitle, (newTitle) => {
-	useTitle(buildPageTitle(newTitle));
-});
+watch(
+	pageTitle,
+	(newTitle) => {
+		useTitle(buildPageTitle(newTitle));
+	},
+	{ immediate: true }
+);
 </script>
