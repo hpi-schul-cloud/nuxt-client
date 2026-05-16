@@ -1,4 +1,3 @@
-import UserMenu from "./UserMenu.vue";
 import { createTestAppStore, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { publicSystemResponseFactory } from "@@/tests/test-utils/factory/publicSystemResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -11,6 +10,7 @@ import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { computed, nextTick, ref } from "vue";
 import { VBtn, VListItem } from "vuetify/lib/components/index";
+import UserMenu from "./UserMenu.vue";
 
 vi.mock("@data-access");
 vi.mock("@data-oauth");
@@ -19,11 +19,17 @@ describe("@ui-layout/UserMenu", () => {
 	let useSystemMock: Mocked<ReturnType<typeof useSystem>>;
 	let useOAuthApiMock: Mocked<ReturnType<typeof useOAuthApi>>;
 
-	const setupWrapper = (
+	const setupWrapper = ({
 		isExternalFeatureEnabled = false,
-		mockedSystem?: PublicSystemResponse,
-		mockedTokenExpiration?: Date
-	) => {
+		mockedSystem,
+		mockedTokenExpiration,
+		isSessionTokenExpired = false,
+	}: {
+		isExternalFeatureEnabled?: boolean;
+		mockedSystem?: PublicSystemResponse;
+		mockedTokenExpiration?: Date;
+		isSessionTokenExpired?: boolean;
+	} = {}) => {
 		setActivePinia(createTestingPinia());
 		const { appStore } = createTestAppStore({
 			me: { systemId: mockedSystem?.id },
@@ -37,6 +43,11 @@ describe("@ui-layout/UserMenu", () => {
 		useSystemMock = mockComposable(useSystem, {
 			system: ref(mockedSystem),
 			systemName: computed(() => mockedSystem?.displayName),
+			isSessionTokenExpired: ref(isSessionTokenExpired),
+			isExternalLogoutAllowed: computed(
+				() => isExternalFeatureEnabled && !!mockedSystem?.oauthConfig?.endSessionEndpoint
+			),
+			updateSessionTokenExpiration: vi.fn(),
 		});
 		useOAuthApiMock = mockComposable(useOAuthApi);
 
@@ -101,7 +112,7 @@ describe("@ui-layout/UserMenu", () => {
 			const setup = () => {
 				const mockedSystem = publicSystemResponseFactory.build({ oauthConfig: { endSessionEndpoint: "blub" } });
 
-				const { wrapper, appStore } = setupWrapper(true, mockedSystem);
+				const { wrapper, appStore } = setupWrapper({ isExternalFeatureEnabled: true, mockedSystem });
 
 				return { wrapper, appStore, mockedSystem };
 			};
@@ -149,7 +160,7 @@ describe("@ui-layout/UserMenu", () => {
 			const setup = () => {
 				const mockedSystem = publicSystemResponseFactory.build();
 
-				const { wrapper } = setupWrapper(false, mockedSystem);
+				const { wrapper } = setupWrapper({ isExternalFeatureEnabled: false, mockedSystem });
 
 				return { wrapper };
 			};
@@ -182,7 +193,7 @@ describe("@ui-layout/UserMenu", () => {
 			const setup = () => {
 				const mockedSystem = publicSystemResponseFactory.build();
 
-				const { wrapper } = setupWrapper(true, mockedSystem);
+				const { wrapper } = setupWrapper({ isExternalFeatureEnabled: true, mockedSystem });
 
 				return { wrapper };
 			};
@@ -216,7 +227,7 @@ describe("@ui-layout/UserMenu", () => {
 				const mockedSystem = publicSystemResponseFactory.build({ oauthConfig: { endSessionEndpoint: "blub" } });
 				const mockedTokenExpiration = new Date(Date.now() + 3 * 3600 * 1000);
 
-				const { wrapper } = setupWrapper(true, mockedSystem, mockedTokenExpiration);
+				const { wrapper } = setupWrapper({ isExternalFeatureEnabled: true, mockedSystem, mockedTokenExpiration });
 
 				return { wrapper };
 			};
@@ -241,31 +252,12 @@ describe("@ui-layout/UserMenu", () => {
 				const mockedSystem = publicSystemResponseFactory.build({ oauthConfig: { endSessionEndpoint: "blub" } });
 				const mockedTokenExpiration = new Date(Date.now() - 3 * 3600 * 1000);
 
-				const { wrapper } = setupWrapper(true, mockedSystem, mockedTokenExpiration);
-
-				return { wrapper };
-			};
-
-			it("should disable the option to do an external logout", async () => {
-				const { wrapper } = setup();
-
-				const menuBtn = wrapper.findComponent(VBtn);
-				await menuBtn.trigger("click");
-
-				await nextTick();
-
-				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>("[data-testid=external-logout]");
-
-				expect(externalLogoutBtn.exists()).toBe(true);
-				expect(externalLogoutBtn.props().disabled).toBe(true);
-			});
-		});
-
-		describe("when the oauth session token could not be found", () => {
-			const setup = () => {
-				const mockedSystem = publicSystemResponseFactory.build({ oauthConfig: { endSessionEndpoint: "blub" } });
-
-				const { wrapper } = setupWrapper(true, mockedSystem);
+				const { wrapper } = setupWrapper({
+					isExternalFeatureEnabled: true,
+					isSessionTokenExpired: true,
+					mockedSystem,
+					mockedTokenExpiration,
+				});
 
 				return { wrapper };
 			};

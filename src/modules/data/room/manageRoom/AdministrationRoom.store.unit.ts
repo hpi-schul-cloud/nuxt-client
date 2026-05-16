@@ -1,5 +1,3 @@
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import { formatUtc } from "@/utils/date-time.utils";
 import {
@@ -12,26 +10,22 @@ import {
 	roomStatsListResponseFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import * as serverApi from "@api-server";
 import { RoomStatsItemResponse, RoomStatsListResponse } from "@api-server";
 import { useAdministrationRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
-import { Mock, Mocked } from "vitest";
-import { useI18n } from "vue-i18n";
-
-vi.mock("vue-i18n");
-(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
+import { Mocked } from "vitest";
 
 describe("useAdministrationRoomStore", () => {
 	let roomAdministrationApiMock: Mocked<serverApi.RoomApiInterface>;
 	let axiosMock: Mocked<AxiosInstance>;
-	const ownSchool = {
+	const ownSchool = schoolFactory.build({
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
-	};
+	});
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
@@ -40,15 +34,7 @@ describe("useAdministrationRoomStore", () => {
 		axiosMock = mockAxiosInstance();
 		initializeAxios(axiosMock);
 
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-
-		schoolsModule.setSchool(schoolFactory.build(ownSchool));
-	});
-
-	afterEach(() => {
-		vi.clearAllMocks();
+		createTestSchoolStore({ schoolDetails: ownSchool });
 	});
 
 	const setup = (roomList?: RoomStatsItemResponse[]) => {
