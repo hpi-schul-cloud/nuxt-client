@@ -35,7 +35,7 @@
 							@copy-board="copyBoard(item.content.id)"
 							@update-visibility="updateCardVisibility(item.content.id, $event)"
 							@delete-board="onDeleteItem(item.content, item.type)"
-							@share-board="getSharedBoard(item.content.columnBoardId)"
+							@share-board="onShareItem(item.content.columnBoardId, ShareTokenBodyParamsParentType.COLUMN_BOARD)"
 						/>
 						<CourseRoomTaskCard
 							v-if="item.type === cardTypes.TASK"
@@ -61,7 +61,7 @@
 							@finish-task="finishTask(item.content.id)"
 							@restore-task="restoreTask(item.content.id)"
 							@copy-task="copyTask(item.content.id)"
-							@share-task="getSharedTask(item.content.id)"
+							@share-task="onShareItem(item.content.id, ShareTokenBodyParamsParentType.TASKS)"
 						/>
 						<RoomLessonCard
 							v-if="item.type === cardTypes.LESSON"
@@ -83,7 +83,7 @@
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
-							@open-modal="getSharedLesson"
+							@open-modal="onShareItem(item.content.id, ShareTokenBodyParamsParentType.LESSONS)"
 							@delete-lesson="onDeleteItem(item.content, item.type)"
 							@copy-lesson="copyLesson(item.content.id)"
 						/>
@@ -154,18 +154,13 @@
 				<LearningContentEmptyStateSvg />
 			</template>
 		</EmptyState>
-		<ShareModal :type="ShareTokenBodyParamsParentType.COLUMN_BOARD" />
-		<ShareModal :type="ShareTokenBodyParamsParentType.LESSONS" />
-		<ShareModal :type="ShareTokenBodyParamsParentType.TASKS" />
 	</div>
 </template>
 
 <script setup lang="ts">
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
-import ShareModal from "@/components/share/ShareModal.vue";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { askDeletionForItem } from "@/utils/confirmation-dialog.utils";
-import { SHARE_MODULE_KEY } from "@/utils/inject";
 import {
 	BoardColumnBoardResponse,
 	BoardElementResponseType,
@@ -178,11 +173,11 @@ import {
 	TaskResponse,
 } from "@api-server";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
-import { useEnvConfig } from "@data-env";
+import { ShareParams } from "@feature-share";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import { storeToRefs } from "pinia";
-import { computed, inject, nextTick, onMounted, onUnmounted, ref } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import draggable from "vuedraggable";
 
@@ -192,9 +187,9 @@ const props = defineProps<{
 
 const emit = defineEmits<{
 	"copy-board-element": [payload: { id: string; type: ContentItemTypeEnum; courseId: string }];
+	"share-board-element": [payload: ShareParams];
 }>();
 
-const shareModule = inject(SHARE_MODULE_KEY)!;
 const { t } = useI18n();
 
 const courseRoomDetailsStore = useCourseRoomDetailsStore();
@@ -274,31 +269,8 @@ const boardLayoutAriaLabel = (itemLayout: BoardLayout) => {
 	}
 };
 
-const getSharedBoard = (boardId: string) => {
-	if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
-		shareModule.startShareFlow({
-			id: boardId,
-			type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
-		});
-	}
-};
-
-const getSharedLesson = (lessonId: string) => {
-	if (useEnvConfig().value.FEATURE_LESSON_SHARE) {
-		shareModule.startShareFlow({
-			id: lessonId,
-			type: ShareTokenBodyParamsParentType.LESSONS,
-		});
-	}
-};
-
-const getSharedTask = (taskId: string) => {
-	if (useEnvConfig().value.FEATURE_TASK_SHARE) {
-		shareModule.startShareFlow({
-			id: taskId,
-			type: ShareTokenBodyParamsParentType.TASKS,
-		});
-	}
+const onShareItem = (id: string, type: ShareTokenBodyParamsParentType) => {
+	emit("share-board-element", { id, type });
 };
 
 const endDragging = () => {

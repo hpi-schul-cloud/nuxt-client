@@ -59,7 +59,5 @@ app.use(VueDOMPurifyHTML, {
 
 	// NUXT_REMOVAL get rid of store DI
 
-	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
-
 	app.mount("#app");
 })();
