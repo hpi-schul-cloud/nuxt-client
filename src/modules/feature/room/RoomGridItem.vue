@@ -21,7 +21,7 @@
 						</span>
 					</VCardTitle>
 					<VChip
-						size="x-small"
+						size="small"
 						:prepend-icon="mdiAccountMultipleOutline"
 						class="text-decoration-none"
 						:data-testid="`room--member-count-${index}`"
