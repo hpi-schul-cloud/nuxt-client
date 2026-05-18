@@ -271,9 +271,7 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 	};
 
 	const setSchoolInUserMigration = async (useCentralLdap = true): Promise<void> => {
-		const { error } = await execute(() =>
-			importUserApi.importUserControllerStartSchoolInUserMigration(useCentralLdap)
-		);
+		const { error } = await execute(() => importUserApi.importUserControllerStartSchoolInUserMigration(useCentralLdap));
 		if (error) {
 			const apiError = mapAxiosErrorToResponseError(error);
 			businessError.value = { error: apiError, statusCode: apiError.code, message: apiError.message };
