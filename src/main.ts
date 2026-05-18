@@ -55,7 +55,5 @@ app.use(VueDOMPurifyHTML, {
 	const vuetify = createVuetifyPlugin(i18n);
 	app.use(router).use(store).use(vuetify).use(i18n);
 
-	// NUXT_REMOVAL get rid of store DI
-
 	app.mount("#app");
 })();
