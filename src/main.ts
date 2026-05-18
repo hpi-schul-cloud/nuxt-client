@@ -5,8 +5,6 @@ import store from "./plugins/store";
 import { createVuetifyPlugin } from "./plugins/vuetify";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
-import { SHARE_MODULE_KEY } from "./utils/inject";
-import { shareModule } from "@/store";
 import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";

@@ -1,7 +1,6 @@
 import { createTestSchoolStore } from "../../../tests/test-utils/factory/school-test.utils.ts";
-import setupStores from "../../../tests/test-utils/setupStores.js";
+// import setupStores from "../../../tests/test-utils/setupStores.js";
 import { default as ldapActivate } from "./LDAPActivate.page.vue";
-import ImportUsersModule from "@/store/import-users.ts";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { SchulcloudTheme } from "@api-server";
@@ -86,9 +85,9 @@ describe("ldap/activate", () => {
 	};
 
 	beforeEach(() => {
-		setupStores({
-			importUsersModule: ImportUsersModule,
-		});
+		// setupStores({
+		// 	importUsersModule: ImportUsersModule,
+		// });
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({ FEATURE_USER_MIGRATION_ENABLED: false });
 		createTestSchoolStore();
