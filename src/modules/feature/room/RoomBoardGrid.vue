@@ -11,25 +11,30 @@
 		@focusin.once="notifyOnScreenReader(t('common.instructions.orderBy.arrowKeys'))"
 	>
 		<template #item="{ element, index }">
-			<RoomContentGridItem
+			<RoomBoardGridItem
 				class="draggable user-select-none room-content-grid-item"
 				:class="{ 'cursor-grab': allowedOperations.editContent }"
+				:room-id="roomId"
 				:board="element"
 				:index
 				@contextmenu.prevent
 				@click.capture="onItemClick"
 				@focusin="focusedBoard = $event.target"
 				@keydown.up.down.left.right="onArrowKeyDown($event, index)"
+				@update:visibility="(board, isVisible) => emit('update:boardVisibility', board, isVisible)"
+				@delete:board="emit('delete:board', $event)"
+				@duplicate:board="emit('duplicate:board', $event)"
 			/>
 		</template>
 	</Sortable>
 </template>
 
 <script setup lang="ts">
-import RoomContentGridItem from "./RoomContentGridItem.vue";
+import RoomBoardGridItem from "./RoomBoardGridItem.vue";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 import { useSafeTask } from "@/composables/async-tasks.composable";
 import { RoomBoardItem } from "@/types/room/Room";
+import { RoomBoardItemResponse } from "@api-server";
 import { notifyError } from "@data-app";
 import { useRoomAllowedOperations, useRoomDetailsStore } from "@data-room";
 import { getGridContainerColumnsCount } from "@util-browser";
@@ -44,6 +49,13 @@ const props = defineProps({
 	roomId: { type: String, required: true },
 	boards: { type: Array as PropType<RoomBoardItem[]>, required: true },
 });
+
+const emit = defineEmits<{
+	"update:boardVisibility": [board: RoomBoardItemResponse, isVisible: boolean];
+	"delete:board": [board: RoomBoardItemResponse];
+	"duplicate:board": [board: RoomBoardItemResponse];
+}>();
+
 const { t } = useI18n();
 const { execute, error: reorderError } = useSafeTask();
 
