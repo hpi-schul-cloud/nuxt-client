@@ -48,14 +48,13 @@ export const useNewsActions = () => {
 			title: "components.organisms.FormNews.remove.confirm.message",
 			confirmBtnKey: "components.organisms.FormNews.remove.confirm.confirm",
 		});
-		if (isConfirmed) {
-			return await execute(
-				() => newsApi.newsControllerDelete(newsId),
-				t("common.notifications.errors.notDeleted", { type: t("common.words.news") })
-			);
-		} else {
-			return { success: false };
-		}
+
+		if (!isConfirmed) return { success: false, error: new Error("Deletion cancelled") };
+
+		return await execute(
+			() => newsApi.newsControllerDelete(newsId),
+			t("common.notifications.errors.notDeleted", { type: t("common.words.news") })
+		);
 	};
 
 	return {
