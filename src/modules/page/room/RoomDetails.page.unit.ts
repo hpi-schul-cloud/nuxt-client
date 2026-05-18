@@ -464,7 +464,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				});
 				useCopyFlowMock.executeCopyBoard.mockResolvedValue({
 					success: true,
-					result: { id: "copied-board-id", type: CopyApiResponseType.BOARD, status: CopyApiResponseStatus.SUCCESS },
+					result: { id: "copied-board-id", type: CopyElementType.BOARD, status: CopyStatusEnum.SUCCESS },
 					error: undefined,
 				});
 
