@@ -17,6 +17,7 @@
 						v-model="title"
 						:rules="rules"
 						:label="t('common.labels.name')"
+						:placeholder="t('components.cardElement.videoConferenceElement')"
 						type="text"
 						data-testid="video-conference-element-title"
 					/>
