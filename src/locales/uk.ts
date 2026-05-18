@@ -163,6 +163,7 @@ export default {
 	"common.notifications.errors.notFinished": "{type} не вдалося завершити. | {type} не вдалося завершити.",
 	"common.notifications.errors.notReverted": "{type} не вдалося скинути. | {type} не вдалося скинути.",
 	"common.notifications.errors.notRestored": "{type} не вдалося відновити. | Не вдалося відновити {type}.",
+	"common.notifications.errors.notShared": "{type} не вдалося поділитися. | {type} не вдалося поділитися.",
 	"common.notification.error.preferences.update": "Налаштування користувача не вдалося оновити.",
 	"common.notification.error.preferences.retrieve": "Налаштування користувача не вдалося отримати.",
 	"common.notification.error.videoConference.notFetched": "Не вдалося отримати відеоконференцію.",
@@ -2058,7 +2059,8 @@ export default {
 	"pages.folder.trash.breadcrumb": "Кошик",
 	"pages.folder.trash.infoText": "Файли автоматично видаляються через 7 днів після переміщення до кошика.",
 	"pages.folder.trash.emptyState": "Кошик порожній",
-	"pages.folder.trash.columns.deletedAt": "Видалено",
+	"pages.folder.trash.columns.movedOn": "Переміщено",
+	"pages.folder.trash.columns.purgeAt": "Буде видалено",
 	"pages.folder.trash.ariaLabels.actionMenu": "Меню дій для {name}",
 	"pages.folder.trash.ariaLabels.menu": "Меню кошика",
 	"pages.folder.trash.emptyTrash": "Очистити кошик",
@@ -2067,8 +2069,6 @@ export default {
 	"pages.folder.trash.purge.action": "Видалити назавжди",
 	"pages.folder.trash.purge.success": "Файли було остаточно видалено.",
 	"pages.folder.trash.purge.error": "Не вдалося остаточно видалити файли.",
-	"pages.folder.trash.purge.dialog.title": "Назавжди видалити файли?",
-	"pages.folder.trash.purge.dialog.description":
-		"Ви збираєтесь остаточно видалити {count} файл(ів). Цю дію неможливо скасувати.",
-	"pages.folder.trash.purge.dialog.checkboxLabel": "Я розумію, що ця дія є незворотною та не може бути скасована.",
+	"pages.folder.trash.purge.dialog.title": "Назавжди видалити {count} файл(ів)?",
+	"pages.folder.trash.purge.dialog.checkboxLabel": "Видалення не можна скасувати.",
 };

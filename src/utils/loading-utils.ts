@@ -7,6 +7,15 @@ export type LoadingDelayParams = {
 	minDisplayTime?: number;
 };
 
+// Runs an async function and calls `onStart`/`onEnd` to signal a loading state,
+// with two UX-friendly safeguards:
+//
+// - Delay (default 200ms): `onStart` is only called if the function takes longer
+//   than `delay`. Fast operations skip the loading indicator entirely, avoiding flicker.
+//
+// - Minimum display time (default 500ms): once `onStart` has been called, the loading
+//   indicator is shown for at least `minDisplayTime` before `onEnd` is called, even if
+//   the function already finished. This prevents the indicator from flashing too briefly.
 export const withDebouncedLoading = async <T>(fn: AsyncFunction<T>, params: LoadingDelayParams): Promise<T> => {
 	const { onStart, onEnd, delay = 200, minDisplayTime = 500 } = params;
 

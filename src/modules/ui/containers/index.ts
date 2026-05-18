@@ -1,3 +1,1 @@
-import SvsSuspense from "./SvsSuspense.vue";
-
-export { SvsSuspense };
+export { default as SvsLoading } from "./SvsLoading.vue";

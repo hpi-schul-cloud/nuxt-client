@@ -154,6 +154,7 @@ export default {
 	"common.notifications.errors.notFinished": "{type} could not be completed.",
 	"common.notifications.errors.notReverted": "{type} could not be reset",
 	"common.notifications.errors.notRestored": "{type} could not be restored.",
+	"common.notifications.errors.notShared": "{type} could not be shared. | {type} could not be shared.",
 	"common.notification.error.preferences.update": "User preferences could not be updated.",
 	"common.notification.error.preferences.retrieve": "User preferences could not be retrieved.",
 	"common.notification.error.videoConference.notFetched": "The video conference could not be fetched.",
@@ -2038,7 +2039,8 @@ export default {
 	"pages.folder.trash.link": "Show trash",
 	"pages.folder.trash.emptyState": "The trash is empty",
 	"pages.folder.trash.infoText": "Files are automatically deleted 7 days after being moved to the trash.",
-	"pages.folder.trash.columns.deletedAt": "Deleted on",
+	"pages.folder.trash.columns.movedOn": "Moved on",
+	"pages.folder.trash.columns.purgeAt": "Will be deleted on",
 	"pages.folder.trash.ariaLabels.actionMenu": "Action menu for {name}",
 	"pages.folder.trash.ariaLabels.menu": "Trash menu",
 	"pages.folder.trash.emptyTrash": "Empty trash",
@@ -2047,8 +2049,6 @@ export default {
 	"pages.folder.trash.purge.action": "Delete permanently",
 	"pages.folder.trash.purge.success": "Files have been permanently deleted.",
 	"pages.folder.trash.purge.error": "Files could not be permanently deleted.",
-	"pages.folder.trash.purge.dialog.title": "Permanently delete files?",
-	"pages.folder.trash.purge.dialog.description":
-		"You are about to permanently delete {count} file(s). This action cannot be undone.",
-	"pages.folder.trash.purge.dialog.checkboxLabel": "I understand that this action is permanent and cannot be undone.",
+	"pages.folder.trash.purge.dialog.title": "Permanently delete {count} file(s)?",
+	"pages.folder.trash.purge.dialog.checkboxLabel": "Deletion cannot be undone.",
 };

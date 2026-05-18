@@ -5,5 +5,4 @@ export enum ContentItemTypeEnum {
 	ColumnBoard = "board",
 	Room = "room",
 	Card = "card",
-	Unknown = "unknown",
 }
