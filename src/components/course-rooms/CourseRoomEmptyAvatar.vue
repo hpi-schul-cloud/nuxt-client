@@ -63,7 +63,6 @@ const dragEnter = () => {
 }
 
 .avatar-component-empty {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	border-radius: 1em;
 }
 
