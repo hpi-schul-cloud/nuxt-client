@@ -1,9 +1,9 @@
-import ShareModalResult from "@/components/share/ShareModalResult.vue";
+import ShareDialogResult from "./ShareDialogResult.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { VTextField } from "vuetify/lib/components/index";
 
-describe("@/components/share/ShareModalResult", () => {
+describe("@/components/share/ShareDialogResult", () => {
 	const setup = (options?: { windowWidth?: number }) => {
 		const { windowWidth } = {
 			windowWidth: 1280,
@@ -16,7 +16,7 @@ describe("@/components/share/ShareModalResult", () => {
 		});
 		const shareUrl = "http://example.com";
 
-		const wrapper = mount(ShareModalResult, {
+		const wrapper = mount(ShareDialogResult, {
 			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
