@@ -1,16 +1,14 @@
-import { DialogKey, DialogRegistry, dialogRegistry } from "./dialog-registry";
-import type { AwaitableResult, PropsOf, ResultOf } from "./dialog-types";
+import { dialogRegistry } from "./dialog-registry";
+import type { AwaitableResult, DialogKey, DialogProps, DialogResult } from "./dialog-types";
 import { ref } from "vue";
-
-type PendingSettlement = { completed: true; data: unknown } | { completed: false; data: undefined } | null;
 
 type StackItem<K extends DialogKey = DialogKey> = {
 	id: number;
 	type: K;
-	props: PropsOf<DialogRegistry[K]>;
+	props: DialogProps<K>;
 	modelValue: boolean;
 	resolved: boolean;
-	pendingSettlement: PendingSettlement;
+	pendingSettlement: AwaitableResult<DialogResult<K>> | null;
 	resolve: (value: AwaitableResult<unknown>) => void;
 };
 
@@ -22,7 +20,7 @@ const findDialog = (id: number) => stack.value.find((item) => item.id === id);
 
 const findDialogIndex = (id: number) => stack.value.findIndex((item) => item.id === id);
 
-const beginSettlement = (id: number, result: PendingSettlement) => {
+const beginSettlement = <K extends DialogKey>(id: number, result: AwaitableResult<DialogResult<K>>) => {
 	const item = findDialog(id);
 	if (!item) return;
 	if (item.resolved) return;
@@ -43,15 +41,14 @@ const finalizeSettlement = (id: number) => {
 	item.resolved = true;
 	stack.value.splice(index, 1);
 
-	(item.resolve as (value: AwaitableResult<unknown>) => void)(item.pendingSettlement);
+	item.resolve(item.pendingSettlement);
 };
 
 export const openDialog = <K extends DialogKey>(
 	type: K,
-	props: PropsOf<DialogRegistry[K]>
-): Promise<AwaitableResult<ResultOf<DialogRegistry[K]>>> => {
-	console.log("Opening dialog:", type, props);
-	return new Promise((resolve) => {
+	props: DialogProps<K>
+): Promise<AwaitableResult<DialogResult<K>>> =>
+	new Promise((resolve) => {
 		stack.value.push({
 			id: nextId++,
 			type,
@@ -62,9 +59,8 @@ export const openDialog = <K extends DialogKey>(
 			resolve: resolve as (value: AwaitableResult<unknown>) => void,
 		});
 	});
-};
 
-export const completeDialog = <K extends DialogKey>(id: number, data: ResultOf<DialogRegistry[K]>) => {
+export const completeDialog = <K extends DialogKey>(id: number, data: DialogResult<K>) => {
 	beginSettlement(id, { completed: true, data });
 };
 
@@ -97,7 +93,7 @@ export const cancelAllDialogsImmediately = () => {
 	for (const item of items) {
 		if (item.resolved) continue;
 		item.resolved = true;
-		(item.resolve as (value: AwaitableResult<unknown>) => void)({
+		item.resolve({
 			completed: false,
 			data: undefined,
 		});

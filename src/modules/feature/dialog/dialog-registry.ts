@@ -6,6 +6,3 @@ export const dialogRegistry = {
 	confirm: defineDialog<{ title: string; message: string }, boolean>(ConfirmDialog),
 	prompt: defineDialog<{ title: string; placeholder?: string; initialValue?: string }, string>(PromptDialog),
 };
-
-export type DialogRegistry = typeof dialogRegistry;
-export type DialogKey = keyof DialogRegistry;
