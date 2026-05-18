@@ -94,6 +94,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
+		roomDetailsStore.updateBoardVisibility.mockResolvedValue({ success: false, error: new Error("Any") });
+		roomDetailsStore.deleteBoard.mockResolvedValue({ success: false });
 
 		return {
 			wrapper,
@@ -408,12 +410,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const boards = roomBoardGridItemFactory.buildList(1, {
 					allowedOperations: { updateBoardVisibility: true },
 				});
-				const { wrapper, roomDetailsStore, room } = setup({ roomBoards: boards });
+				const { wrapper, roomDetailsStore } = setup({ roomBoards: boards });
 
 				const boardGrid = wrapper.getComponent(RoomBoardGrid);
 				boardGrid.vm.$emit("update:boardVisibility", boards[0], true);
 
-				expect(roomDetailsStore.updateBoardVisibility).toHaveBeenCalledWith(room.id, boards[0].id, true);
+				expect(roomDetailsStore.updateBoardVisibility).toHaveBeenCalledWith(boards[0].id, true);
 			});
 
 			it("should not call updateBoardVisibility when board lacks permission", () => {
@@ -434,12 +436,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const boards = roomBoardGridItemFactory.buildList(1, {
 					allowedOperations: { deleteBoard: true },
 				});
-				const { wrapper, roomDetailsStore, room } = setup({ roomBoards: boards });
+				const { wrapper, roomDetailsStore } = setup({ roomBoards: boards });
 
 				const boardGrid = wrapper.getComponent(RoomBoardGrid);
 				boardGrid.vm.$emit("delete:board", boards[0]);
 
-				expect(roomDetailsStore.deleteBoard).toHaveBeenCalledWith(room.id, boards[0].id, boards[0].title);
+				expect(roomDetailsStore.deleteBoard).toHaveBeenCalledWith(boards[0].id, boards[0].title);
 			});
 
 			it("should not call deleteBoard when board lacks permission", () => {
