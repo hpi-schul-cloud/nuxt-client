@@ -146,12 +146,16 @@ export default {
 	"common.medium.information.teacher": "Bitte an Schuladministrator:in wenden.",
 	"common.nodata": "Keine Daten vorhanden",
 	"common.notification.error": "Es ist ein Fehler aufgetreten.",
+	"common.notification.error.preferences.update": "Nutzereinstellungen konnten nicht aktualisiert werden.",
+	"common.notification.error.preferences.retrieve": "Nutzereinstellungen konnten nicht abgerufen werden.",
 	"common.notification.error.videoConference.notFetched": "Die Videokonferenz konnte nicht abgerufen werden.",
 	"common.notification.error.videoConference.notJoined": "Der Videokonferenz konnte nicht beigetreten werden.",
 	"common.notification.error.videoConference.notStarted": "Die Videokonferenz konnte nicht gestartet werden.",
 	"common.notification.connection.restored": "Die Verbindung wurde wieder hergestellt.",
 	"common.notifications.errors.notCreated":
 		"{type} konnte nicht erstellt werden. | {type} konnten nicht erstellt werden.",
+	"common.notifications.errors.notSaved":
+		"{type} konnte nicht gespeichert werden. | {type} konnten nicht gespeichert werden.",
 	"common.notifications.errors.notDeleted":
 		"{type} konnte nicht gelöscht werden. | {type} konnten nicht gelöscht werden.",
 	"common.notifications.errors.notDuplicated":
@@ -219,12 +223,14 @@ export default {
 	"common.validation.required": "Bitte fülle dieses Feld aus",
 	"common.validation.required2": "Dies ist ein Pflichtfeld.",
 	"common.validation.tooLong": "Der eingegebene Text überschreitet die Maximallänge",
+	"common.validation.fileTooBig": "Die Datei darf maximal {maxSize} KB groß sein.",
 	"common.validation.tooShort": "Der eingegebene Text unterschreitet die Mindestlänge",
 	"common.validation.containsOpeningTag": "Bitte Leerzeichen nach Kleiner-als-Zeichen einfügen.",
 	"common.validation.nonEmptyString": "Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
 	"common.words.also": "auch",
 	"common.words.and": "und",
 	"common.words.board": "Bereich | Bereiche",
+	"common.words.news": "Neuigkeit | Neuigkeiten",
 	"common.words.classes": "Klassen",
 	"common.words.color": "Farbe",
 	"common.words.color.blue": "Blau",
@@ -804,11 +810,12 @@ export default {
 	"components.organisms.FormNews.input.title.placeholder": "Los geht's mit dem Titel",
 	"components.organisms.FormNews.label.planned_publish":
 		"Hier kannst du ein Datum für die automatische Veröffentlichung in der Zukunft setzen (optional):",
-	"components.organisms.FormNews.remove.confirm.confirm": "Artikel löschen",
-	"components.organisms.FormNews.remove.confirm.message": "Möchtest du diesen Artikel wirklich unwiderruflich löschen?",
-	"components.organisms.FormNews.success.create": "Artikel erstellt.",
-	"components.organisms.FormNews.success.patch": "Artikel wurde aktualisiert.",
-	"components.organisms.FormNews.success.remove": "Artikel erfolgreich gelöscht.",
+	"components.organisms.FormNews.remove.confirm.confirm": "Neuigkeit löschen",
+	"components.organisms.FormNews.remove.confirm.message":
+		"Möchtest du diese Neuigkeit wirklich unwiderruflich löschen?",
+	"components.organisms.FormNews.success.create": "Neuigkeit erstellt.",
+	"components.organisms.FormNews.success.patch": "Neuigkeit wurde aktualisiert.",
+	"components.organisms.FormNews.success.remove": "Neuigkeit erfolgreich gelöscht.",
 	"components.organisms.importUsers.createNew": "Neu erstellen",
 	"components.organisms.importUsers.editImportUser": "Nutzer bearbeiten",
 	"components.organisms.importUsers.flagImportUser": "Nutzer markieren",
@@ -1002,7 +1009,7 @@ export default {
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte kontaktiere deinen Schul-Admin!",
 	"loggedin.text.schoolInTransferPhaseStartNew":
-		'Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte läute <a href="/administration/school/"> hier das neue Schuljahr ein!</a>',
+		'Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte läute <a href="/administration/school-settings/"> hier das neue Schuljahr ein!</a>',
 	"loggedin.text.schoolInMigrationModeStarted":
 		'Die Schule befindet sich im Modus der Benutzermigration. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
 	"loggedin.text.schoolInMigrationMode":
@@ -1509,6 +1516,15 @@ export default {
 	"pages.courseRooms.tabLabel.toolsOld": "Tools",
 	"pages.courseRooms.course-locked":
 		"Der Kurs ist gesperrt, weil keine unterrichtende Lehrkraft zugeordnet ist. Bitte an den Schul-Admin wenden.",
+	"pages.courseRooms.fetchCourseContent.error": "Beim Abrufen der Kursinhalte ist ein Fehler aufgetreten.",
+	"pages.courseRooms.createBoard.error": "Beim Erstellen des Boards ist ein Fehler aufgetreten.",
+	"pages.courseRooms.deleteLesson.error": "Beim Lschen des Themas ist ein Fehler aufgetreten.",
+	"pages.courseRooms.deleteTask.error": "Beim Lschen der Aufgabe ist ein Fehler aufgetreten.",
+	"pages.courseRooms.deleteBoard.error": "Beim Lschen des Boards ist ein Fehler aufgetreten.",
+	"pages.courseRooms.finishTask.error": "Beim Abschlieen der Aufgabe ist ein Fehler aufgetreten.",
+	"pages.courseRooms.publishCard.error": "Beim Veröffentlichen der Karte ist ein Fehler aufgetreten.",
+	"pages.courseRooms.restoreTask.error": "Beim Wiederherstellen der Aufgabe ist ein Fehler aufgetreten.",
+	"pages.courseRooms.sortElements.error": "Beim Sortieren der Karten ist ein Fehler aufgetreten.",
 	"pages.files.overview.courseFiles": "Kurs-Dateien",
 	"pages.files.overview.favorites": "Favoriten",
 	"pages.files.overview.personalFiles": "Meine persönlichen Dateien",
@@ -1519,7 +1535,7 @@ export default {
 	"pages.licenseList.title": "Open-Source-Lizenzliste",
 	"pages.licenseList.introduction": "Im Folgenden sind die Softwarelizenzen der verwendeten Pakete aufgeführt.",
 	"pages.licenseList.packageIntroduction": "Unter dieser Lizenz verwendete Pakete:",
-	"pages.news.edit.title.default": "Artikel bearbeiten",
+	"pages.news.edit.title.default": "Neuigkeit bearbeiten",
 	"pages.news.edit.title": "{title} bearbeiten",
 	"pages.news.index.new": "Neuigkeit hinzufügen",
 	"pages.news.new.create": "Erstellen",
@@ -2070,7 +2086,8 @@ export default {
 	"pages.folder.trash.link": "Papierkorb anzeigen",
 	"pages.folder.trash.emptyState": "Der Papierkorb ist leer",
 	"pages.folder.trash.infoText": "Dateien werden 7 Tage nach dem Verschieben in den Papierkorb automatisch gelöscht.",
-	"pages.folder.trash.columns.deletedAt": "Gelöscht am",
+	"pages.folder.trash.columns.movedOn": "Verschoben am",
+	"pages.folder.trash.columns.purgeAt": "Wird gelöscht am",
 	"pages.folder.trash.ariaLabels.actionMenu": "Aktionsmenü für {name}",
 	"pages.folder.trash.ariaLabels.menu": "Papierkorb Menü",
 	"pages.folder.trash.emptyTrash": "Papierkorb leeren",
@@ -2079,9 +2096,6 @@ export default {
 	"pages.folder.trash.purge.action": "Endgültig löschen",
 	"pages.folder.trash.purge.success": "Dateien wurden endgültig gelöscht.",
 	"pages.folder.trash.purge.error": "Dateien konnten nicht endgültig gelöscht werden.",
-	"pages.folder.trash.purge.dialog.title": "Dateien endgültig löschen?",
-	"pages.folder.trash.purge.dialog.description":
-		"Du bist dabei, {count} Datei(en) endgültig zu löschen. Diese Aktion kann nicht rückgängig gemacht werden.",
-	"pages.folder.trash.purge.dialog.checkboxLabel":
-		"Ich verstehe, dass diese Aktion dauerhaft ist und nicht rückgängig gemacht werden kann.",
+	"pages.folder.trash.purge.dialog.title": "{count} Datei(en) endgültig löschen?",
+	"pages.folder.trash.purge.dialog.checkboxLabel": "Löschen kann nicht rückgängig gemacht werden.",
 };

@@ -6,7 +6,6 @@ export * from "./mockAxiosInstance";
 export * from "./mockBroadcastChannel";
 export * from "./mockComposable";
 export * from "./mockedPiniaStoreTyping";
-export * from "./mockObjects";
 export * from "./mockStatusAlerts";
 export * from "./mountComposable";
 export * from "./ObjectIdMock";

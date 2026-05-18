@@ -1,24 +1,25 @@
 <template>
-	<div v-if="currentNews">
-		<DefaultWireframe
-			:headline="t('pages.news.details.title')"
-			:breadcrumbs="[
-				{
-					href: '/news',
-					title: t('pages.news.title'),
-				},
-				{
-					title: t('pages.news.details.title'),
-					disabled: true,
-				},
-			]"
-			max-width="short"
-		>
-			<h2>{{ currentNews.title }}</h2>
+	<DefaultWireframe
+		v-if="newsInstance"
+		:headline="pageTitle"
+		:breadcrumbs="[
+			{
+				href: '/news',
+				title: t('pages.news.title'),
+			},
+			{
+				title: pageTitle,
+				disabled: true,
+			},
+		]"
+		max-width="short"
+	>
+		<SvsSuspense :loading="isLoadingNews">
+			<h2 data-testid="news-title">{{ newsInstance.title }}</h2>
 			<div class="d-flex mb-2">
 				<div class="d-flex align-center text-subtitle mr-3">
 					<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
-					{{ createdAt }}
+					{{ lastTouched }}
 				</div>
 				<div class="d-flex align-center text-subtitle">
 					<VIcon :icon="mdiHumanMaleBoard" size="sm" class="mr-1" />
@@ -26,27 +27,31 @@
 				</div>
 			</div>
 			<VDivider class="mb-4" />
-			<RenderHTML :html="currentNews?.content" class="ck-content" />
+			<RenderHTML :html="newsInstance?.content" class="ck-content" data-testid="news-content" />
 			<div class="d-flex mt-8 ga-3">
-				<VBtn :text="t('common.actions.edit')" color="primary" variant="flat" @click="onEdit" />
-				<VBtn :text="t('common.actions.delete')" variant="outlined" @click="onDelete" />
+				<VBtn
+					data-testid="news-edit-btn"
+					:text="t('common.actions.edit')"
+					color="primary"
+					variant="flat"
+					@click="onEdit"
+				/>
+				<VBtn data-testid="news-delete-btn" :text="t('common.actions.delete')" variant="outlined" @click="onDelete" />
 			</div>
-		</DefaultWireframe>
-	</div>
+		</SvsSuspense>
+	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
-import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { $axios } from "@/utils/api";
-import { formatUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { NewsApiFactory, NewsResponse } from "@api-server";
-import { notifyError, notifySuccess } from "@data-app";
+import { useNews, useNewsActions } from "@data-access";
+import { notifySuccess } from "@data-app";
 import { RenderHTML } from "@feature-render-html";
 import { mdiClockOutline, mdiHumanMaleBoard } from "@icons/material";
+import { SvsSuspense } from "@ui-containers";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed, onMounted, ref } from "vue";
+import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
@@ -54,53 +59,30 @@ const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 
-const { execute } = useSafeAxiosTask();
-const currentNews = ref<NewsResponse | undefined>(undefined);
-const newsApi = NewsApiFactory(undefined, "/v3", $axios);
-
-onMounted(async () => {
-	const { result } = await execute(() => newsApi.newsControllerFindOne(route.params.id as string));
-	currentNews.value = result?.data;
-
-	useTitle(buildPageTitle(pageTitle.value));
-});
+const newsId = computed(() => route.params.id as string | undefined);
+const { deleteNews } = useNewsActions();
+const { newsInstance, createdAtFormatted, lastTouched, creator, isLoadingNews } = useNews(newsId);
 
 const pageTitle = computed(() => {
-	if (!currentNews.value?.createdAt) return t("pages.news.details.title.fallback");
+	if (!newsInstance.value?.createdAt) return t("pages.news.details.title.fallback");
 	return t("pages.news.details.title", {
-		date: formatUtc(currentNews.value.createdAt, "date"),
+		date: createdAtFormatted.value,
 	});
 });
 
-const createdAt = computed(() => {
-	if (!currentNews.value?.createdAt) return "";
-	return formatUtc(currentNews.value.createdAt, "date");
-});
-
-const creator = computed(() => {
-	if (!currentNews.value) return "";
-	return `${currentNews.value.creator.firstName} ${currentNews.value.creator.lastName}`;
-});
-
 const onEdit = () => {
-	router.push({ path: `/news/${currentNews.value?.id}/edit` });
+	router.push({ path: `/news/${newsInstance.value?.id}/edit` });
 };
 
 const onDelete = async () => {
-	if (!currentNews.value?.id) {
-		notifyError(t("components.organisms.FormNews.error.remove"));
-		return;
+	const { success } = await deleteNews(newsInstance.value?.id);
+	if (success) {
+		notifySuccess(t("components.organisms.FormNews.success.remove"));
+		await router.push({ path: "/news" });
 	}
-	const newsId = currentNews.value.id;
-
-	const { success } = await execute(
-		() => newsApi.newsControllerDelete(newsId),
-		t("components.organisms.FormNews.error.remove")
-	);
-	if (!success) return;
-
-	currentNews.value = undefined;
-	notifySuccess(t("components.organisms.FormNews.success.remove"));
-	await router.push({ path: "/news" });
 };
+
+watch(pageTitle, (newTitle) => {
+	useTitle(buildPageTitle(newTitle));
+});
 </script>

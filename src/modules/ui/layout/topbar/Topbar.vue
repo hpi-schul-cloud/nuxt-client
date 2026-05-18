@@ -30,12 +30,12 @@
 		>
 			<PageShare />
 		</TopbarItem>
-		<div v-if="school && isTabletOrBigger" class="mr-3 mr-lg-4 school-name" data-testid="school-name">
-			{{ school.name }}
+		<div v-if="schoolDetails && isTabletOrBigger" class="mr-3 mr-lg-4 school-name" data-testid="school-name">
+			{{ schoolDetails.name }}
 		</div>
 		<img
-			v-if="hasLogo && isDesktop"
-			:src="school!.logo.url"
+			v-if="schoolDetails.logo?.dataUrl && isDesktop"
+			:src="schoolDetails.logo.dataUrl"
 			alt=""
 			class="school-logo mr-3"
 			data-testid="school-logo"
@@ -50,7 +50,7 @@ import CloudStatusMessages from "./CloudStatusMessages.vue";
 import PageShare from "./PageShare.vue";
 import TopbarItem from "./TopbarItem.vue";
 import UserMenu from "./UserMenu.vue";
-import { useAppStoreRefs, useStatusAlerts } from "@data-app";
+import { useAppStoreRefs, useSchoolStoreRefs, useStatusAlerts } from "@data-app";
 import { mdiAlert, mdiMenu, mdiQrcode } from "@icons/material";
 import { useWindowScroll } from "@vueuse/core";
 import { computed, onMounted, ref, watch } from "vue";
@@ -89,9 +89,8 @@ const statusAlertColor = computed(() => {
 	return statusAlertsIncludeDanger ? "error" : "info";
 });
 
-const { user, school, userRoles: roleNames } = useAppStoreRefs();
-
-const hasLogo = computed(() => school.value?.logo?.url !== undefined);
+const { user, userRoles: roleNames } = useAppStoreRefs();
+const { schoolDetails } = useSchoolStoreRefs();
 
 const appBarHeight = computed(() => {
 	const height = window.getComputedStyle(document.documentElement).getPropertyValue("--topbar-height");

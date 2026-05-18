@@ -104,7 +104,7 @@
 				{{ t("pages.administration.ldap.activate.migrateExistingUsers.info") }}
 			</p>
 		</section>
-		<div v-if="schoolErrors" class="errors-container">
+		<div v-if="importUsersError" class="errors-container">
 			<InfoMessage
 				data-testid="school-migration-activation-error"
 				:message="t('pages.administration.ldap.activate.migrateExistingUsers.error')"
@@ -149,7 +149,7 @@
 
 <script>
 import InfoMessage from "@/components/administration/InfoMessage.vue";
-import { schoolsModule } from "@/store";
+import { importUsersModule } from "@/store/index.ts";
 import { unchangedPassword } from "@/utils/ldapConstants";
 import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -211,8 +211,8 @@ export default defineComponent({
 				!this.$route?.query?.id
 			);
 		},
-		schoolErrors() {
-			return schoolsModule.error;
+		importUsersError() {
+			return importUsersModule.getBusinessError;
 		},
 		activationErrors() {
 			return ldapErrorHandler(this.submitted.errors, this);
@@ -265,8 +265,8 @@ export default defineComponent({
 			}
 
 			if (this.migrateUsersCheckbox) {
-				await schoolsModule.setSchoolInUserMigration(false);
-				if (this.schoolErrors) {
+				await importUsersModule.setSchoolInUserMigration(false);
+				if (importUsersModule.getBusinessError) {
 					return;
 				}
 			}

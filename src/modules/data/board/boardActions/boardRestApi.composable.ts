@@ -18,9 +18,9 @@ import {
 	UpdateReaderCanEditRequestPayload,
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
-import { courseRoomDetailsModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { useAppStore } from "@data-app";
+import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { BoardObjectType, ErrorType, useErrorHandler } from "@util-error-handling";
 import { ref } from "vue";
 
@@ -77,7 +77,7 @@ export const useBoardRestApi = () => {
 
 	const deleteBoardRequest = async (payload: DeleteBoardRequestPayload) => {
 		try {
-			await courseRoomDetailsModule.deleteBoard(payload.boardId);
+			await useCourseRoomDetailsStore().deleteBoard(payload.boardId);
 			boardStore.deleteBoardSuccess({ ...payload, isOwnAction: true });
 		} catch (error) {
 			handleError(error, {

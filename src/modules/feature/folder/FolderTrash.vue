@@ -53,9 +53,6 @@
 			</template>
 			<template v-else>
 				<DataTable :table-headers="headers" :items="fileRecordItems" :show-select="true">
-					<template #[`item.preview`]>
-						<v-icon aria-hidden="true">{{ mdiFileDocumentOutline }}</v-icon>
-					</template>
 					<template #[`item.name`]="{ item }">
 						<span :data-testid="`name-${item.name}`">
 							{{ item.name }}
@@ -65,6 +62,11 @@
 					<template #[`item.deletedSince`]="{ item }">
 						<span :data-testid="`deleted-since-${item.name}`">
 							{{ item.deletedSince ? d(item.deletedSince) : "" }}
+						</span>
+					</template>
+					<template #[`item.purgeAt`]="{ item }">
+						<span :data-testid="`purge-at-${item.name}`">
+							{{ item.purgeAt ? d(item.purgeAt) : "" }}
 						</span>
 					</template>
 					<template #[`item.size`]="{ item }">
@@ -122,7 +124,7 @@ import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { formatFileSize } from "@/utils/fileHelper";
 import { useFileTrash } from "@data-file";
 import { useFolderState } from "@data-folder";
-import { mdiDelete, mdiFileDocumentOutline, mdiRestore } from "@icons/material";
+import { mdiDelete, mdiRestore } from "@icons/material";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu, KebabMenuAction } from "@ui-kebab-menu";
@@ -216,9 +218,9 @@ const trashBreadcrumbs = computed(() => {
 });
 
 const headers = [
-	{ title: t("pages.folder.columns.preview"), key: "preview", sortable: false },
 	{ title: t("pages.folder.columns.name"), key: "name" },
-	{ title: t("pages.folder.trash.columns.deletedAt"), key: "deletedSince" },
+	{ title: t("pages.folder.trash.columns.movedOn"), key: "deletedSince" },
+	{ title: t("pages.folder.trash.columns.purgeAt"), key: "purgeAt" },
 	{ title: t("pages.folder.columns.size"), key: "size" },
 	{
 		title: t("ui.actionMenu.actions"),
@@ -231,6 +233,7 @@ const headers = [
 const fileRecordItems = computed(() =>
 	deletedFileRecords.value.map((item) => ({
 		...item,
+		purgeAt: item.deletedSince ? new Date(new Date(item.deletedSince).getTime() + 7 * 24 * 60 * 60 * 1000) : undefined,
 		isSelectable: true,
 	}))
 );

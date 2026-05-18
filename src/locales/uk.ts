@@ -148,6 +148,7 @@ export default {
 	"common.notification.error": "Сталася помилка.",
 	"common.notifications.errors.notCreated":
 		"{type} не вдалося створити. | {type} не вдалося створити. | {type} не вдалося створити.",
+	"common.notifications.errors.notSaved": "{type} не вдалося зберегти. | {type} не вдалося зберегти.",
 	"common.notifications.errors.notDeleted":
 		"{type} не вдалося видалити. | {type} не вдалося видалити. | {type} не вдалося видалити.",
 	"common.notifications.errors.notDuplicated":
@@ -163,6 +164,8 @@ export default {
 	"common.notifications.errors.notFinished": "{type} не вдалося завершити. | {type} не вдалося завершити.",
 	"common.notifications.errors.notReverted": "{type} не вдалося скинути. | {type} не вдалося скинути.",
 	"common.notifications.errors.notRestored": "{type} не вдалося відновити. | Не вдалося відновити {type}.",
+	"common.notification.error.preferences.update": "Налаштування користувача не вдалося оновити.",
+	"common.notification.error.preferences.retrieve": "Налаштування користувача не вдалося отримати.",
 	"common.notification.error.videoConference.notFetched": "Не вдалося отримати відеоконференцію.",
 	"common.notification.error.videoConference.notJoined": "Не вдалося приєднатися до відеоконференції.",
 	"common.notification.error.videoConference.notStarted": "Не вдалося розпочати відеоконференцію.",
@@ -217,12 +220,14 @@ export default {
 	"common.validation.required": "Заповніть це поле",
 	"common.validation.required2": "Це обов'язкове поле.",
 	"common.validation.tooLong": "Введений текст перевищує максимально дозволену довжину",
+	"common.validation.fileTooBig": "Файл не повинен перевищувати {maxSize} КБ.",
 	"common.validation.tooShort": "Введений текст не досягає мінімальної довжини",
 	"common.validation.containsOpeningTag": "Будь ласка, вставте пробіл після знаку менше.",
 	"common.validation.nonEmptyString": "Це обов'язкове поле і не повинно містити лише пробіли.",
 	"common.words.also": "також",
 	"common.words.and": "і",
 	"common.words.board": "Дошка | дошки",
+	"common.words.news": "новина | новини",
 	"common.words.classes": "класи",
 	"common.words.color": "Колір",
 	"common.words.color.blue": "Синій",
@@ -795,11 +800,11 @@ export default {
 	"components.organisms.FormNews.input.title.placeholder": "Почнемо із заголовка",
 	"components.organisms.FormNews.label.planned_publish":
 		"Тут можна встановити дату автоматичної публікації в майбутньому (необов’язково):",
-	"components.organisms.FormNews.remove.confirm.confirm": "Видалити статтю",
-	"components.organisms.FormNews.remove.confirm.message": "Ви дійсно хочете назавжди видалити цю статтю?",
-	"components.organisms.FormNews.success.create": "Статтю створено.",
-	"components.organisms.FormNews.success.patch": "Статтю оновлено.",
-	"components.organisms.FormNews.success.remove": "Статтю успішно видалено.",
+	"components.organisms.FormNews.remove.confirm.confirm": "Видалити новину",
+	"components.organisms.FormNews.remove.confirm.message": "Ви дійсно хочете назавжди видалити цю новину?",
+	"components.organisms.FormNews.success.create": "Новину створено.",
+	"components.organisms.FormNews.success.patch": "Новину оновлено.",
+	"components.organisms.FormNews.success.remove": "Новину успішно видалено.",
 	"components.organisms.importUsers.createNew": "Створити новий",
 	"components.organisms.importUsers.editImportUser": "Редагувати користувача",
 	"components.organisms.importUsers.flagImportUser": "позначати користувачів",
@@ -994,7 +999,7 @@ export default {
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів.",
 	"loggedin.text.schoolInTransferPhaseStartNew":
-		'Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів. Зателефонуйте в <a href="/administration/school/"> новий навчальний рік тут!</a>',
+		'Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів. Зателефонуйте в <a href="/administration/school-settings/"> новий навчальний рік тут!</a>',
 	"loggedin.text.schoolInMigrationModeStarted":
 		'Школа перебуває в режимі міграції користувачів. Щоб перенести користувачів, перейдіть на <a href="/administration/migration/">цю сторінку</a>.',
 	"loggedin.text.schoolInMigrationMode":
@@ -1492,6 +1497,15 @@ export default {
 	"pages.courseRooms.tabLabel.toolsOld": "Інструмент",
 	"pages.courseRooms.course-locked":
 		"Курс заблоковано, оскільки на нього не призначено викладача. Будь ласка, зверніться до адміністратора школи.",
+	"pages.courseRooms.fetchCourseContent.error": "Під час отримання вмісту курсу виникла помилка.",
+	"pages.courseRooms.createBoard.error": "Під час створення дошки виникла помилка.",
+	"pages.courseRooms.deleteLesson.error": "Під час видалення теми виникла помилка.",
+	"pages.courseRooms.deleteTask.error": "Під час видалення завдання виникла помилка.",
+	"pages.courseRooms.deleteBoard.error": "Під час видалення дошки виникла помилка.",
+	"pages.courseRooms.finishTask.error": "Під час завершення завдання виникла помилка.",
+	"pages.courseRooms.publishCard.error": "Під час публікації картки виникла помилка.",
+	"pages.courseRooms.restoreTask.error": "Під час відновлення завдання виникла помилка.",
+	"pages.courseRooms.sortElements.error": "Під час сортування карток виникла помилка.",
 	"pages.files.overview.courseFiles": "Файли курсу",
 	"pages.files.overview.favorites": "Обрані",
 	"pages.files.overview.personalFiles": "Мої особисті справи",
@@ -1502,7 +1516,7 @@ export default {
 	"pages.licenseList.title": "Список ліцензій на відкритий код",
 	"pages.licenseList.introduction": "Ліцензії на програмне забезпечення для використаних пакетів наведені нижче.",
 	"pages.licenseList.packageIntroduction": "Пакунки, що використовуються за цією ліцензією:",
-	"pages.news.edit.title.default": "Редагувати статтю",
+	"pages.news.edit.title.default": "Редагувати новину",
 	"pages.news.edit.title": "Редагувати {title}",
 	"pages.news.index.new": "Додати новини",
 	"pages.news.new.create": "Створити",
@@ -2048,7 +2062,8 @@ export default {
 	"pages.folder.trash.breadcrumb": "Кошик",
 	"pages.folder.trash.infoText": "Файли автоматично видаляються через 7 днів після переміщення до кошика.",
 	"pages.folder.trash.emptyState": "Кошик порожній",
-	"pages.folder.trash.columns.deletedAt": "Видалено",
+	"pages.folder.trash.columns.movedOn": "Переміщено",
+	"pages.folder.trash.columns.purgeAt": "Буде видалено",
 	"pages.folder.trash.ariaLabels.actionMenu": "Меню дій для {name}",
 	"pages.folder.trash.ariaLabels.menu": "Меню кошика",
 	"pages.folder.trash.emptyTrash": "Очистити кошик",
@@ -2057,8 +2072,6 @@ export default {
 	"pages.folder.trash.purge.action": "Видалити назавжди",
 	"pages.folder.trash.purge.success": "Файли було остаточно видалено.",
 	"pages.folder.trash.purge.error": "Не вдалося остаточно видалити файли.",
-	"pages.folder.trash.purge.dialog.title": "Назавжди видалити файли?",
-	"pages.folder.trash.purge.dialog.description":
-		"Ви збираєтесь остаточно видалити {count} файл(ів). Цю дію неможливо скасувати.",
-	"pages.folder.trash.purge.dialog.checkboxLabel": "Я розумію, що ця дія є незворотною та не може бути скасована.",
+	"pages.folder.trash.purge.dialog.title": "Назавжди видалити {count} файл(ів)?",
+	"pages.folder.trash.purge.dialog.checkboxLabel": "Видалення не можна скасувати.",
 };

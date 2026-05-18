@@ -1,17 +1,16 @@
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
-import CourseRoomDetailsModule from "@/store/course-room-details";
 import { CourseFeatures } from "@/store/types/room";
-import { COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import {
 	businessErrorFactory,
 	courseFactory,
 	createTestEnvStore,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils/factory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockComposable } from "@@/tests/test-utils/mockComposable";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { ExternalToolDisplayData, useExternalToolDisplayListState } from "@data-external-tool";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
@@ -26,22 +25,17 @@ describe("RoomExternalToolOverview", () => {
 	let useExternalToolDisplayListStateMock: Mocked<ReturnType<typeof useExternalToolDisplayListState>>;
 
 	const getWrapper = () => {
-		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
-			getLoading: false,
-		});
-
 		const refreshTime = 299000;
-		setActivePinia(createTestingPinia());
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestEnvStore({ CTL_TOOLS_RELOAD_TIME_MS: refreshTime });
 
-		courseRoomDetailsModule.fetchCourse.mockResolvedValue(null);
+		const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
+		courseRoomDetailsStore.loading = false;
+		courseRoomDetailsStore.fetchCourse.mockResolvedValue(null);
 
 		const wrapper = shallowMount(RoomExternalToolsOverview, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
-				},
 			},
 			props: {
 				roomId: "testRoolId",
@@ -50,7 +44,7 @@ describe("RoomExternalToolOverview", () => {
 
 		return {
 			wrapper,
-			courseRoomDetailsModule,
+			courseRoomDetailsStore,
 			refreshTime,
 		};
 	};
@@ -129,9 +123,9 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when video conferences are enabled", () => {
 		const setup = async () => {
-			const { wrapper, courseRoomDetailsModule } = getWrapper();
+			const { wrapper, courseRoomDetailsStore } = getWrapper();
 
-			courseRoomDetailsModule.fetchCourse.mockResolvedValue(
+			courseRoomDetailsStore.fetchCourse.mockResolvedValue(
 				courseFactory.build({ features: [CourseFeatures.VIDEOCONFERENCE] })
 			);
 

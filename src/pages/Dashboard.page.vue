@@ -24,7 +24,7 @@
 
 				<!-- Dashboard news -->
 				<EmptyState
-					v-if="latestNews.length === 0"
+					v-if="latestNews?.length === 0"
 					data-testid="empty-state-news"
 					:title="t('pages.dashboard.empty.news')"
 				>
@@ -72,13 +72,12 @@
 <script lang="ts" setup>
 import SvgNewsEmpty from "@/assets/img/SvgNewsEmpty.vue";
 import Announcement from "@/components/announcement/Announcement.vue";
-import { useSafeAxiosRunner } from "@/composables/async-tasks.composable";
-import { schoolsModule } from "@/store";
-import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { NewsApiFactory, NewsTargetModel, Permission, SchulcloudTheme } from "@api-server";
+import { NewsTargetModel, Permission, SchulcloudTheme } from "@api-server";
+import { useNewsList } from "@data-access";
 import { useAppStore, useAppStoreRefs } from "@data-app";
+import { useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { DashboardReleaseDialog, DashboardTasks } from "@feature-dashboard";
 import { RenderHTML } from "@feature-render-html";
@@ -94,12 +93,13 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 const { isTeacher, isStudent, isAdmin } = useAppStoreRefs();
 const NEWS_LIMIT = 4;
-const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 
 useTitle(buildPageTitle(t("pages.dashboard.title")));
 
-const isSchoolInMaintenance = computed(() => schoolsModule.getSchool.inMaintenance);
-const isSchoolInMigration = computed(() => schoolsModule.getSchool.inUserMigration);
+const { schoolDetails } = useSchoolStoreRefs();
+
+const isSchoolInMaintenance = computed(() => schoolDetails.value.inMaintenance);
+const isSchoolInMigration = computed(() => schoolDetails.value.inUserMigration);
 const canSeeImportUsers = useAppStore().hasPermission(Permission.IMPORT_USER_VIEW);
 
 const inMaintenanceOrMigrationText = computed(() => {
@@ -114,11 +114,7 @@ const inMaintenanceOrMigrationText = computed(() => {
 	}
 	return undefined;
 });
-
-const { data: newsResponse, isRunning: isLoadingNews } = useSafeAxiosRunner(() =>
-	newsApi.newsControllerFindAll(undefined, undefined, undefined, undefined, NEWS_LIMIT)
-);
-const latestNews = computed(() => newsResponse.value?.data.data ?? []);
+const { news: latestNews, isLoadingNews } = useNewsList(NEWS_LIMIT);
 
 const envConfig = useEnvConfig();
 // Workaround, since accessing the same parameters is in progress.

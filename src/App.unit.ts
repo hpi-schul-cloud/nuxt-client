@@ -2,24 +2,12 @@ import App from "./App.vue";
 import LoggedInLayout from "./layouts/LoggedIn.layout.vue";
 import LoggedOutLayout from "./layouts/LoggedOut.layout.vue";
 import { Layouts } from "./layouts/types";
-import FilePathsModule from "./store/filePaths";
-import { FILE_PATHS_MODULE_KEY } from "./utils/inject";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { createRouterMock, injectRouterMock, type RouterMock } from "vue-router-mock";
-
-const filePathsModule = createModuleMocks(FilePathsModule, {
-	getSpecificFiles: {
-		accessibilityStatement: "statement",
-		privacy: "",
-		termsOfUse: "",
-		analogConsent: "",
-	},
-});
 
 describe("App.vue", () => {
 	let router: RouterMock;
@@ -43,9 +31,6 @@ describe("App.vue", () => {
 			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
-				},
 				stubs: {
 					RouterView: true,
 				},

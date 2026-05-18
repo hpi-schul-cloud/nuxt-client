@@ -1,13 +1,13 @@
 import LoggedInLayout from "./LoggedIn.layout.vue";
-import FilePathsModule from "@/store/filePaths";
-import { FILE_PATHS_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useStatusAlerts } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { Sidebar, Topbar } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { h, nextTick, ref } from "vue";
 import { VApp } from "vuetify/components";
 
@@ -31,24 +31,18 @@ vi.mocked(useStatusAlerts).mockReturnValue({
 });
 
 const setup = () => {
-	const filePathsModule = createModuleMocks(FilePathsModule, {
-		getSpecificFiles: {
-			accessibilityStatement: "statement",
-			privacy: "",
-			termsOfUse: "",
-			analogConsent: "",
-		},
+	setActivePinia(createTestingPinia());
+	createTestEnvStore({
+		DOCUMENT_BASE_DIR: "https://example.com/documents/",
 	});
+	createTestSchoolStore();
 
 	const wrapper = mount(VApp, {
 		slots: {
 			default: h(LoggedInLayout),
 		},
 		global: {
-			plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
-			provide: {
-				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
-			},
+			plugins: [createTestingVuetify(), createTestingI18n()],
 			stubs: {
 				"application-error-wrapper": { template: "<div></div>" },
 				snackbar: { template: "<div></div>" },
