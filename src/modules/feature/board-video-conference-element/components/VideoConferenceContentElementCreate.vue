@@ -34,14 +34,15 @@ import image from "@/assets/img/videoConference.svg";
 import { injectStrict } from "@/utils/inject";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useOpeningTagValidator } from "@util-validators";
-import { computed, onBeforeUnmount, PropType, ref, toRaw } from "vue";
+import { computed, onBeforeUnmount, ref, toRaw } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
 const props = defineProps({
 	existingTitle: {
-		type: String as PropType<string | undefined>,
-		default: undefined,
+		type: String,
+		required: false,
+		default: "",
 	},
 	isDetailView: {
 		type: Boolean,
@@ -56,7 +57,7 @@ const { smAndUp } = useDisplay();
 const { t } = useI18n();
 
 const { existingTitle } = toRaw(props);
-const title = ref(existingTitle || "");
+const title = ref(existingTitle);
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const rules = [(value: string) => validateOnOpeningTag(value)];

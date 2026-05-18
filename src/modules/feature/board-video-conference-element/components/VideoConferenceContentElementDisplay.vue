@@ -17,10 +17,10 @@
 			@click.stop="onContentClick"
 		>
 			<template #display>
-				<VImg :src="imageSrc" alt="" cover />
+				<VImg :src="isRunning ? imageActiveSrc : imageDefaultSrc" alt="" cover />
 			</template>
 			<template #title>
-				{{ title }}
+				{{ displayTitle }}
 			</template>
 			<template v-if="isEditMode" #menu>
 				<slot />
@@ -33,7 +33,8 @@
 </template>
 
 <script setup lang="ts">
-import image from "@/assets/img/videoConference.svg";
+import imageDefault from "@/assets/img/videoConference.svg";
+import imageActive from "@/assets/img/videoConferenceActive.svg";
 import { BoardContextType } from "@/types/board/BoardContext";
 import { injectStrict } from "@/utils/inject";
 import { mdiVideoOutline } from "@icons/material";
@@ -46,7 +47,8 @@ import { useDisplay } from "vuetify";
 
 const emit = defineEmits(["click", "refresh"]);
 
-const imageSrc = image;
+const imageDefaultSrc = imageDefault;
+const imageActiveSrc = imageActive;
 
 const props = defineProps({
 	boardParentType: {
@@ -85,6 +87,8 @@ const { t } = useI18n();
 
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
+
+const displayTitle = computed(() => props.title || t("components.cardElement.videoConferenceElement"));
 
 const isSmallOrLargerListBoard = computed(() => smAndUp.value && (isListLayout.value || props.isDetailView));
 
