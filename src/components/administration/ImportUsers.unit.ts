@@ -97,7 +97,7 @@ const mockData = {
 const setup = (
 	importUsersStore: ReturnType<typeof useImportUsersStore>,
 	data?: typeof mockData,
-	schoolDetails?: Parameters<typeof createTestSchoolStore>[0]["schoolDetails"],
+	schoolDetails?: NonNullable<Parameters<typeof createTestSchoolStore>[0]>["schoolDetails"],
 	options?: object
 ) => {
 	vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
@@ -192,7 +192,7 @@ describe("ImportUsers", () => {
 	});
 
 	describe("should search with all columns", () => {
-		const setup = () => {
+		const getWrapper = () => {
 			const fetchAllImportUsersSpy = vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
 			const wrapper = setup(importUsersStore, mockData);
 
@@ -207,7 +207,7 @@ describe("ImportUsers", () => {
 		});
 
 		it("should set search data properties when search first name changes", async () => {
-			const { wrapper, fetchAllImportUsersSpy } = setup();
+			const { wrapper, fetchAllImportUsersSpy } = getWrapper();
 
 			const searchFirstNameElement = wrapper.getComponent('[data-testid="search-first-name"]');
 
@@ -218,7 +218,7 @@ describe("ImportUsers", () => {
 		});
 
 		it("should set search data properties when search last name changes", async () => {
-			const { wrapper, fetchAllImportUsersSpy } = setup();
+			const { wrapper, fetchAllImportUsersSpy } = getWrapper();
 
 			const searchLastNameElement = wrapper.getComponent('[data-testid="search-last-name"]');
 			await searchLastNameElement.setValue("some text");
@@ -228,7 +228,7 @@ describe("ImportUsers", () => {
 		});
 
 		it("should set search data properties when search username changes", async () => {
-			const { wrapper, fetchAllImportUsersSpy } = setup();
+			const { wrapper, fetchAllImportUsersSpy } = getWrapper();
 
 			const searchLoginNameElement = wrapper.getComponent('[data-testid="search-login-name"]');
 			await searchLoginNameElement.setValue("some text");
@@ -238,7 +238,7 @@ describe("ImportUsers", () => {
 		});
 
 		it("should set search data properties when search role changes", async () => {
-			const { wrapper, fetchAllImportUsersSpy } = setup();
+			const { wrapper, fetchAllImportUsersSpy } = getWrapper();
 
 			const searchRoleElement = wrapper.getComponent('[data-testid="search-role"]');
 			await searchRoleElement.setValue("role search");
@@ -248,7 +248,7 @@ describe("ImportUsers", () => {
 		});
 
 		it("should set search data properties when search classes changes", async () => {
-			const { wrapper, fetchAllImportUsersSpy } = setup();
+			const { wrapper, fetchAllImportUsersSpy } = getWrapper();
 
 			const searchClassesElement = wrapper.getComponent('[data-testid="search-classes"]');
 			await searchClassesElement.setValue("class search");
@@ -258,7 +258,7 @@ describe("ImportUsers", () => {
 		});
 
 		it("should search data proprieties when match filter is set", async () => {
-			const { wrapper } = setup();
+			const { wrapper } = getWrapper();
 
 			const searchMatchedByNoneElement = wrapper.getComponent('[data-testid="search-matched-by-none"]');
 			const searchMatchedByAdminElement = wrapper.getComponent('[data-testid="search-matched-by-admin"]');
@@ -278,7 +278,7 @@ describe("ImportUsers", () => {
 		});
 
 		it("should set search data proprieties when flag filter is toggle", async () => {
-			const { wrapper, fetchAllImportUsersSpy } = setup();
+			const { wrapper, fetchAllImportUsersSpy } = getWrapper();
 
 			const searchFlaggedElement = wrapper.getComponent('[data-testid="search-flagged"]');
 			await searchFlaggedElement.trigger("click");
@@ -292,14 +292,8 @@ describe("ImportUsers", () => {
 	});
 
 	describe("should sort by column", () => {
-		const setup = (data: typeof mockData) => {
-			const wrapper = setup(importUsersStore, data);
-
-			return { wrapper };
-		};
-
 		it("should sort by first name", async () => {
-			const { wrapper } = setup(mockData);
+			const wrapper = setup(importUsersStore, mockData);
 			const wrapperVm = wrapper.vm as unknown as typeof ImportUsers;
 
 			const sortFirstNameElement = wrapper.find('[data-testid="head-first-name"]');
@@ -313,7 +307,7 @@ describe("ImportUsers", () => {
 		});
 
 		it("should sort by last name", async () => {
-			const { wrapper } = setup(mockData);
+			const wrapper = setup(importUsersStore, mockData);
 
 			const sortLastNameElement = wrapper.find('[data-testid="head-last-name"]');
 			await sortLastNameElement.trigger("click");

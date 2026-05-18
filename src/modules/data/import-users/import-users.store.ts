@@ -81,56 +81,28 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 
 	const businessError = ref<BusinessError | null>(null);
 
-	type FindAllImportUsersParams = {
-		firstName?: string;
-		lastName?: string;
-		loginName?: string;
-		match?: Array<"auto" | "admin" | "none">;
-		flagged?: boolean;
-		classes?: string;
-		role?: ImportUserResponseRoleNames;
-		sortOrder?: SortOrder;
-		sortBy?: "firstName" | "lastName";
-		skip?: number;
-		limit?: number;
-	};
-
 	const importUserApi = UserImportApiFactory(undefined, "/v3", $axios);
 
 	const { execute } = useSafeAxiosTask();
 
-	const callFindAllImportUsers = (params: FindAllImportUsersParams = {}) =>
-		importUserApi.importUserControllerFindAllImportUsers(
-			params.firstName,
-			params.lastName,
-			params.loginName,
-			params.match,
-			params.flagged,
-			params.classes,
-			params.role,
-			params.sortOrder,
-			params.sortBy,
-			params.skip,
-			params.limit
-		);
-
 	const fetchAllImportUsers = async (): Promise<void> => {
 		const sortByParam = filter.sortBy === "firstName" || filter.sortBy === "lastName" ? filter.sortBy : undefined;
 
+		const params = {
+			...(filter.firstName && { firstName: filter.firstName }),
+			...(filter.lastName && { lastName: filter.lastName }),
+			...(filter.loginName && { loginName: filter.loginName }),
+			match: filter.match,
+			...(filter.flagged && { flagged: true }),
+			...(filter.classes && { classes: filter.classes }),
+			...(filter.role && { role: filter.role }),
+			...(sortByParam && { sortBy: sortByParam, sortOrder: filter.sortOrder }),
+			skip: filter.skip,
+			limit: filter.limit,
+		};
+
 		const { result, error } = await execute(() =>
-			callFindAllImportUsers({
-				firstName: filter.firstName || undefined,
-				lastName: filter.lastName || undefined,
-				loginName: filter.loginName || undefined,
-				match: filter.match || undefined,
-				flagged: filter.flagged ? true : undefined,
-				classes: filter.classes || undefined,
-				role: filter.role || undefined,
-				sortOrder: filter.sortBy ? filter.sortOrder : undefined,
-				sortBy: sortByParam,
-				skip: filter.skip,
-				limit: filter.limit,
-			})
+			$axios.get<ImportUserListResponse>("/v3/user/import", { params })
 		);
 		importUsersData.list = result?.data ?? { data: [], total: 0, skip: 0, limit: 0 };
 
@@ -141,12 +113,14 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 	};
 
 	const fetchAllUsers = async (): Promise<void> => {
+		const params = {
+			...(userSearch.query && { name: userSearch.query }),
+			skip: userSearch.skip,
+			limit: userSearch.limit,
+		};
+
 		const { result, error } = await execute(() =>
-			importUserApi.importUserControllerFindAllUnmatchedUsers(
-				userSearch.query || undefined,
-				userSearch.skip,
-				userSearch.limit
-			)
+			$axios.get<UserMatchListResponse>("/v3/user/import/unassigned", { params })
 		);
 		userSearch.list = result?.data ?? { data: [], total: 0, skip: 0, limit: 0 };
 		if (error) {
@@ -200,7 +174,9 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 	};
 
 	const fetchTotal = async (): Promise<void> => {
-		const { result, error } = await execute(() => callFindAllImportUsers({ skip: 0, limit: 1 }));
+		const { result, error } = await execute(() =>
+			$axios.get<ImportUserListResponse>("/v3/user/import", { params: { skip: 0, limit: 1 } })
+		);
 		if (error) {
 			const apiError = mapAxiosErrorToResponseError(error);
 			businessError.value = { error: apiError, statusCode: apiError.code, message: apiError.message };
@@ -211,7 +187,9 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 
 	const fetchTotalMatched = async (): Promise<void> => {
 		const { result, error } = await execute(() =>
-			callFindAllImportUsers({ match: ["admin", "auto"], skip: 0, limit: 1 })
+			$axios.get<ImportUserListResponse>("/v3/user/import", {
+				params: { match: ["admin", "auto"], skip: 0, limit: 1 },
+			})
 		);
 		if (error) {
 			const apiError = mapAxiosErrorToResponseError(error);
@@ -223,7 +201,7 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 
 	const fetchTotalUnmatched = async (): Promise<void> => {
 		const { result, error } = await execute(() =>
-			importUserApi.importUserControllerFindAllUnmatchedUsers(undefined, 0, 1)
+			$axios.get<UserMatchListResponse>("/v3/user/import/unassigned", { params: { skip: 0, limit: 1 } })
 		);
 		if (error) {
 			const apiError = mapAxiosErrorToResponseError(error);

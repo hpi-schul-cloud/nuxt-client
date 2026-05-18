@@ -374,13 +374,10 @@ const tableHead = computed(() => {
 watch(dialogEdit, (val) => {
 	if (!val) closeEdit();
 });
-watch(searchFirstName, () => searchApi());
-watch(searchLastName, () => searchApi());
-watch(searchLoginName, () => searchApi());
-watch(searchRole, () => searchApi());
-watch(searchClasses, () => searchApi());
-watch(searchMatchedBy, () => searchApi());
-watch(searchFlagged, () => searchApi());
+watch(
+	[searchFirstName, searchLastName, searchLoginName, searchRole, searchClasses, searchMatchedBy, searchFlagged],
+	() => searchApi()
+);
 watch(total, async (val) => {
 	if (val > 0) {
 		await searchApi();

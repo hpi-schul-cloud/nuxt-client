@@ -140,7 +140,11 @@ describe("User Migration / Index", () => {
 		});
 
 		it("should show button for start inUserMigration", async () => {
-			vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValue({ result: undefined, success: true, error: undefined });
+			vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValue({
+				result: undefined,
+				success: true,
+				error: undefined,
+			});
 			vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
 			vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();
 
@@ -259,7 +263,6 @@ describe("User Migration / Index", () => {
 			await btn.trigger("click");
 			await flushPromises();
 
-			// TODO after implementing of backend and store, mock store response and expect to be called with
 			expect(performMigrationMock).toHaveBeenCalledTimes(1);
 			expect(wrapper.vm.migrationStep).toBe(4);
 			expect(schoolStore.schoolDetails.inUserMigration).toBe(false);
@@ -320,7 +323,11 @@ describe("User Migration / Index", () => {
 	describe("cancel migration", () => {
 		describe("in step migration_importUsers", () => {
 			beforeEach(() => {
-				vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValue({ result: undefined, success: true, error: undefined });
+				vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValue({
+					result: undefined,
+					success: true,
+					error: undefined,
+				});
 				vi.spyOn(importUsersStore, "fetchTotal").mockResolvedValue();
 				vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
 				vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();
@@ -383,7 +390,11 @@ describe("User Migration / Index", () => {
 					});
 				});
 
-				vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValueOnce({ result: undefined, success: true, error: undefined });
+				vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValueOnce({
+					result: undefined,
+					success: true,
+					error: undefined,
+				});
 
 				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
 				await button.trigger("click");
@@ -709,7 +720,7 @@ describe("User Migration / Index", () => {
 			});
 			importUsersStore.importUsersData.total = 0;
 
-			const wrapper = getWrapper();
+			getWrapper();
 			await flushPromises();
 
 			// Set total > 0 to trigger interval clear
@@ -949,7 +960,11 @@ describe("User Migration / Index", () => {
 				}),
 			});
 
-			vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValue({ result: undefined, success: true, error: undefined });
+			vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValue({
+				result: undefined,
+				success: true,
+				error: undefined,
+			});
 
 			getWrapper();
 			await flushPromises();
@@ -965,7 +980,11 @@ describe("User Migration / Index", () => {
 				MIGRATION_WIZARD_DOCUMENTATION_LINK: "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true",
 			});
 
-			vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValue({ result: undefined, success: true, error: undefined });
+			vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValue({
+				result: undefined,
+				success: true,
+				error: undefined,
+			});
 			vi.spyOn(importUsersStore, "fetchTotal").mockResolvedValue();
 			vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
 			vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();

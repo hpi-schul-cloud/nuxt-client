@@ -528,12 +528,10 @@ const setSchoolInUserMigration = async () => {
 
 	checkTotalInterval();
 	if (importUsersStore.businessError) {
-		// Error is already set in the store
 		isLoading.value = false;
 		return;
 	}
 
-	// Refresh school details to get updated inUserMigration status
 	await schoolStore.fetchSchoolDetails();
 
 	isLoading.value = false;
@@ -545,7 +543,6 @@ const performMigration = async () => {
 	await importUsersStore.performMigration();
 
 	if (!importUsersStore.businessError) {
-		// Refresh school details to get updated status
 		await schoolStore.fetchSchoolDetails();
 		isLoading.value = false;
 		migrationStep.value = 4;
@@ -555,11 +552,10 @@ const endMaintenance = async () => {
 	isLoading.value = true;
 	await importUsersStore.endSchoolInMaintenance();
 	if (importUsersStore.businessError) {
-		// Error is already set in the store
 		isLoading.value = false;
 		return;
 	}
-	// Refresh school details to get updated inMaintenance status
+
 	await schoolStore.fetchSchoolDetails();
 	migrationStep.value = 5;
 	isLoading.value = false;

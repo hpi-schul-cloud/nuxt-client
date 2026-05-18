@@ -13,6 +13,8 @@ import { AxiosError, AxiosHeaders, AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 
+vi.mock("@util-logger");
+
 const mockListResponse = {
 	data: {
 		data: [{ mockKey: "mock value" }],
@@ -83,8 +85,6 @@ describe("useImportUsersStore", () => {
 	let axiosMock: Mocked<AxiosInstance>;
 
 	const defaultMockApi = () => ({
-		importUserControllerFindAllUnmatchedUsers: vi.fn(() => Promise.resolve(mockListResponse)),
-		importUserControllerFindAllImportUsers: vi.fn(() => Promise.resolve(mockListResponse)),
 		importUserControllerRemoveMatch: vi.fn(() => Promise.resolve(mockListResponse)),
 		importUserControllerSetMatch: vi.fn(() => Promise.resolve(mockListResponse)),
 		importUserControllerUpdateFlag: vi.fn(() => Promise.resolve(mockListResponse)),
@@ -109,6 +109,7 @@ describe("useImportUsersStore", () => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 
 		axiosMock = mockAxiosInstance();
+		axiosMock.get.mockResolvedValue(mockListResponse);
 		initializeAxios(axiosMock);
 	});
 
@@ -156,36 +157,41 @@ describe("useImportUsersStore", () => {
 
 	describe("fetchAllUsers", () => {
 		it("should call the api with default params and update userSearch.list", async () => {
-			const { store, mockApi } = setup();
+			const { store } = setup();
 			await store.fetchAllUsers();
 
-			expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledWith(undefined, 0, 1);
-			expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledTimes(1);
+			expect(axiosMock.get).toHaveBeenCalledWith("/v3/user/import/unassigned", {
+				params: { skip: 0, limit: 1 },
+			});
+			expect(axiosMock.get).toHaveBeenCalledTimes(1);
 			expect(store.userSearch.list.data).toStrictEqual([{ mockKey: "mock value" }]);
 			expect(store.userSearch.list.total).toBe(3);
 		});
 
 		it("should pass query when set", async () => {
-			const { store, mockApi } = setup();
+			const { store } = setup();
 			store.userSearch.query = "john";
 			await store.fetchAllUsers();
 
-			expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledWith("john", 0, 1);
+			expect(axiosMock.get).toHaveBeenCalledWith("/v3/user/import/unassigned", {
+				params: { name: "john", skip: 0, limit: 1 },
+			});
 		});
 
 		it("should pass skip and limit when set", async () => {
-			const { store, mockApi } = setup();
+			const { store } = setup();
 			store.userSearch.skip = 10;
 			store.userSearch.limit = 5;
 			await store.fetchAllUsers();
 
-			expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledWith(undefined, 10, 5);
+			expect(axiosMock.get).toHaveBeenCalledWith("/v3/user/import/unassigned", {
+				params: { skip: 10, limit: 5 },
+			});
 		});
 
 		it("should set businessError on failure", async () => {
-			const { store } = setup({
-				importUserControllerFindAllUnmatchedUsers: vi.fn(() => Promise.reject(badRequestError)),
-			});
+			const { store } = setup();
+			axiosMock.get.mockRejectedValueOnce(badRequestError);
 
 			await store.fetchAllUsers();
 
@@ -195,27 +201,21 @@ describe("useImportUsersStore", () => {
 
 	describe("fetchAllImportUsers", () => {
 		it("should call api with default filter params and update importUsersData.list", async () => {
-			const { store, mockApi } = setup();
+			const { store } = setup();
 			await store.fetchAllImportUsers();
 
-			expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
-				undefined,
-				undefined,
-				undefined,
-				[MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				0,
-				25
-			);
+			expect(axiosMock.get).toHaveBeenCalledWith("/v3/user/import", {
+				params: {
+					match: [MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
+					skip: 0,
+					limit: 25,
+				},
+			});
 			expect(store.importUsersData.list.data).toStrictEqual([{ mockKey: "mock value" }]);
 		});
 
 		it("should pass filter values when set", async () => {
-			const { store, mockApi } = setup();
+			const { store } = setup();
 			store.filter.firstName = "John";
 			store.filter.lastName = "Doe";
 			store.filter.loginName = "johnny";
@@ -225,128 +225,101 @@ describe("useImportUsersStore", () => {
 			store.filter.role = ImportUserResponseRoleNames.STUDENT;
 			await store.fetchAllImportUsers();
 
-			expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
-				"John",
-				"Doe",
-				"johnny",
-				[MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
-				true,
-				"5a",
-				"student",
-				undefined,
-				undefined,
-				0,
-				25
-			);
+			expect(axiosMock.get).toHaveBeenCalledWith("/v3/user/import", {
+				params: {
+					firstName: "John",
+					lastName: "Doe",
+					loginName: "johnny",
+					match: [MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
+					flagged: true,
+					classes: "5a",
+					role: "student",
+					skip: 0,
+					limit: 25,
+				},
+			});
 		});
 
 		it("should pass sortBy firstName with sortOrder", async () => {
-			const { store, mockApi } = setup();
+			const { store } = setup();
 			store.filter.sortBy = "firstName";
 			store.filter.sortOrder = "asc";
 			await store.fetchAllImportUsers();
 
-			expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
-				undefined,
-				undefined,
-				undefined,
-				[MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
-				undefined,
-				undefined,
-				undefined,
-				"asc",
-				"firstName",
-				0,
-				25
-			);
+			expect(axiosMock.get).toHaveBeenCalledWith("/v3/user/import", {
+				params: {
+					match: [MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
+					sortOrder: "asc",
+					sortBy: "firstName",
+					skip: 0,
+					limit: 25,
+				},
+			});
 		});
 
 		it("should pass sortBy lastName desc", async () => {
-			const { store, mockApi } = setup();
+			const { store } = setup();
 			store.filter.sortBy = "lastName";
 			store.filter.sortOrder = "desc";
 			await store.fetchAllImportUsers();
 
-			expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
-				undefined,
-				undefined,
-				undefined,
-				[MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
-				undefined,
-				undefined,
-				undefined,
-				"desc",
-				"lastName",
-				0,
-				25
-			);
+			expect(axiosMock.get).toHaveBeenCalledWith("/v3/user/import", {
+				params: {
+					match: [MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
+					sortOrder: "desc",
+					sortBy: "lastName",
+					skip: 0,
+					limit: 25,
+				},
+			});
 		});
 
 		it("should not send sortBy or sortOrder params when sortBy is empty string", async () => {
-			const { store, mockApi } = setup();
+			const { store } = setup();
 			store.filter.sortBy = "";
 			await store.fetchAllImportUsers();
 
-			expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
-				undefined,
-				undefined,
-				undefined,
-				[MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				0,
-				25
-			);
+			expect(axiosMock.get).toHaveBeenCalledWith("/v3/user/import", {
+				params: {
+					match: [MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
+					skip: 0,
+					limit: 25,
+				},
+			});
 		});
 
 		it("should pass skip and limit from filter", async () => {
-			const { store, mockApi } = setup();
+			const { store } = setup();
 			store.filter.skip = 7;
 			store.filter.limit = 11;
 			await store.fetchAllImportUsers();
 
-			expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
-				undefined,
-				undefined,
-				undefined,
-				[MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				7,
-				11
-			);
+			expect(axiosMock.get).toHaveBeenCalledWith("/v3/user/import", {
+				params: {
+					match: [MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None],
+					skip: 7,
+					limit: 11,
+				},
+			});
 		});
 
 		it("should pass empty array for match when filter.match is empty array", async () => {
-			const { store, mockApi } = setup();
+			const { store } = setup();
 			store.filter.match = [];
 			await store.fetchAllImportUsers();
 
-			expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
-				undefined,
-				undefined,
-				undefined,
-				[],
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				0,
-				25
-			);
+			expect(axiosMock.get).toHaveBeenCalledWith("/v3/user/import", {
+				params: {
+					match: [],
+					skip: 0,
+					limit: 25,
+				},
+			});
 		});
 
 		it("should set businessError on failure", async () => {
-			const { store } = setup({
-				importUserControllerFindAllImportUsers: vi.fn(() => Promise.reject(badRequestError)),
-			});
+			const { store } = setup();
+			axiosMock.get.mockRejectedValueOnce(badRequestError);
 
 			await store.fetchAllImportUsers();
 
@@ -356,31 +329,18 @@ describe("useImportUsersStore", () => {
 
 	describe("fetchTotal", () => {
 		it("should call api with skip=0, limit=1 and update importUsersData.total", async () => {
-			const { store, mockApi } = setup();
+			const { store } = setup();
 			await store.fetchTotal();
 
-			expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				0,
-				1
-			);
+			expect(axiosMock.get).toHaveBeenCalledWith("/v3/user/import", {
+				params: { skip: 0, limit: 1 },
+			});
 			expect(store.importUsersData.total).toBe(3);
 		});
 
 		it("should set importUsersData.total to 0 when result.data.total is undefined", async () => {
-			const { store } = setup({
-				importUserControllerFindAllImportUsers: vi.fn(() =>
-					Promise.resolve({ data: { total: undefined } })
-				) as unknown as ReturnType<typeof defaultMockApi>["importUserControllerFindAllImportUsers"],
-			});
+			const { store } = setup();
+			axiosMock.get.mockResolvedValueOnce({ data: { total: undefined } });
 
 			await store.fetchTotal();
 
@@ -388,9 +348,8 @@ describe("useImportUsersStore", () => {
 		});
 
 		it("should set businessError on failure", async () => {
-			const { store } = setup({
-				importUserControllerFindAllImportUsers: vi.fn(() => Promise.reject(badRequestError)),
-			});
+			const { store } = setup();
+			axiosMock.get.mockRejectedValueOnce(badRequestError);
 
 			await store.fetchTotal();
 
@@ -400,31 +359,18 @@ describe("useImportUsersStore", () => {
 
 	describe("fetchTotalMatched", () => {
 		it("should call api with match=[admin, auto] and update importUsersData.totalMatched", async () => {
-			const { store, mockApi } = setup();
+			const { store } = setup();
 			await store.fetchTotalMatched();
 
-			expect(mockApi.importUserControllerFindAllImportUsers).toHaveBeenCalledWith(
-				undefined,
-				undefined,
-				undefined,
-				["admin", "auto"],
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				0,
-				1
-			);
+			expect(axiosMock.get).toHaveBeenCalledWith("/v3/user/import", {
+				params: { match: ["admin", "auto"], skip: 0, limit: 1 },
+			});
 			expect(store.importUsersData.totalMatched).toBe(3);
 		});
 
 		it("should set importUsersData.totalMatched to 0 when result.data.total is undefined", async () => {
-			const { store } = setup({
-				importUserControllerFindAllImportUsers: vi.fn(() =>
-					Promise.resolve({ data: { total: undefined } })
-				) as unknown as ReturnType<typeof defaultMockApi>["importUserControllerFindAllImportUsers"],
-			});
+			const { store } = setup();
+			axiosMock.get.mockResolvedValueOnce({ data: { total: undefined } });
 
 			await store.fetchTotalMatched();
 
@@ -432,9 +378,8 @@ describe("useImportUsersStore", () => {
 		});
 
 		it("should set businessError on failure", async () => {
-			const { store } = setup({
-				importUserControllerFindAllImportUsers: vi.fn(() => Promise.reject(badRequestError)),
-			});
+			const { store } = setup();
+			axiosMock.get.mockRejectedValueOnce(badRequestError);
 
 			await store.fetchTotalMatched();
 
@@ -444,19 +389,18 @@ describe("useImportUsersStore", () => {
 
 	describe("fetchTotalUnmatched", () => {
 		it("should call api and update importUsersData.totalUnmatched", async () => {
-			const { store, mockApi } = setup();
+			const { store } = setup();
 			await store.fetchTotalUnmatched();
 
-			expect(mockApi.importUserControllerFindAllUnmatchedUsers).toHaveBeenCalledWith(undefined, 0, 1);
+			expect(axiosMock.get).toHaveBeenCalledWith("/v3/user/import/unassigned", {
+				params: { skip: 0, limit: 1 },
+			});
 			expect(store.importUsersData.totalUnmatched).toBe(3);
 		});
 
 		it("should set importUsersData.totalUnmatched to 0 when result.data.total is undefined", async () => {
-			const { store } = setup({
-				importUserControllerFindAllUnmatchedUsers: vi.fn(() =>
-					Promise.resolve({ data: { total: undefined } })
-				) as unknown as ReturnType<typeof defaultMockApi>["importUserControllerFindAllUnmatchedUsers"],
-			});
+			const { store } = setup();
+			axiosMock.get.mockResolvedValueOnce({ data: { total: undefined } });
 
 			await store.fetchTotalUnmatched();
 
@@ -464,9 +408,8 @@ describe("useImportUsersStore", () => {
 		});
 
 		it("should set businessError on failure", async () => {
-			const { store } = setup({
-				importUserControllerFindAllUnmatchedUsers: vi.fn(() => Promise.reject(badRequestError)),
-			});
+			const { store } = setup();
+			axiosMock.get.mockRejectedValueOnce(badRequestError);
 
 			await store.fetchTotalUnmatched();
 
