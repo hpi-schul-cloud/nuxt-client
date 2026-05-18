@@ -1,9 +1,12 @@
 <template>
 	<v-app>
+		<div class="d-flex justify-center gap-2 pa-2">
+			<v-btn @click="askBeforeDelete">Delete</v-btn>
+			<v-btn @click="askForName">Prompt</v-btn>
+		</div>
 		<component :is="layout">
 			<router-view />
 		</component>
-
 		<SvsDialog
 			v-model="isDialogOpen"
 			data-testid="confirm-dialog"
@@ -22,12 +25,15 @@
 				</InfoAlert>
 			</template>
 		</SvsDialog>
+		<DialogHost />
 	</v-app>
 </template>
 
 <script setup lang="ts">
 import { useInternalConfirmationDialog } from "./composables/confirmation-dialog.composable";
 import { availableLayouts, isLayout } from "./layouts";
+import DialogHost from "./modules/feature/dialog/DialogHost.vue";
+import { askBeforeDelete, askForName } from "./modules/feature/dialog/example-usage";
 import { setComputedScrollbarWidthAsCssVar } from "./utils/scrollbarWidth";
 import { Layouts } from "@/layouts/types";
 import { useAppStore } from "@data-app";
@@ -55,4 +61,33 @@ const layout = computed(() => {
 		throw new Error(`Unknown layout '${layoutName}'`);
 	}
 });
+
+// async function askBeforeDelete() {
+// 	const result = await openDialog("confirm", {
+// 		title: "Delete item",
+// 		message: "Are you sure you want to delete this item?",
+// 	});
+
+// 	if (!result.completed) {
+// 		console.log("User cancelled");
+// 		return;
+// 	}
+
+// 	console.log("Confirmed:", result.data); // boolean
+// }
+
+// async function askForName() {
+// 	const result = await openDialog("prompt", {
+// 		title: "Enter your name",
+// 		placeholder: "Name",
+// 		initialValue: "",
+// 	});
+
+// 	if (!result.completed) {
+// 		console.log("Prompt cancelled");
+// 		return;
+// 	}
+
+// 	console.log("Name:", result.data); // string
+// }
 </script>
