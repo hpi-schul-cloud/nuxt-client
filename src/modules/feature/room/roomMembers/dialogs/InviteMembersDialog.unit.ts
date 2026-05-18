@@ -1,11 +1,11 @@
 import InviteMembersDialog from "./InviteMembersDialog.vue";
-import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { toEndOfDayIso, toIsoDate } from "@/utils/date-time.utils";
 import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { SchulcloudTheme } from "@api-server";
 import { InvitationStep, RoomInvitationLink, useRoomInvitationLinkStore } from "@data-room";
+import { ShareDialogResult } from "@feature-share";
 import { createTestingPinia } from "@pinia/testing";
 import { DatePicker } from "@ui-date-time-picker";
 import { SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
@@ -152,11 +152,11 @@ describe("InviteMembersDialog", () => {
 				expect(continueButton.text()).toBe("common.actions.continue");
 			});
 
-			it("should not render the ShareModalResult component", async () => {
+			it("should not render the ShareDialogResult component", async () => {
 				const { wrapper } = await setup();
 
-				const shareModalResult = wrapper.findComponent(ShareModalResult);
-				expect(shareModalResult.exists()).toBe(false);
+				const shareDialogResult = wrapper.findComponent(ShareDialogResult);
+				expect(shareDialogResult.exists()).toBe(false);
 			});
 
 			it("should render radio buttons", async () => {
@@ -444,33 +444,33 @@ describe("InviteMembersDialog", () => {
 				expect(closeButton.text()).toBe("common.labels.close");
 			});
 
-			it("should render the ShareModalResult component", async () => {
+			it("should render the ShareDialogResult component", async () => {
 				const { wrapper } = await setup({ preDefinedStep: InvitationStep.SHARE });
 
-				const shareModalResult = wrapper.findComponent(ShareModalResult);
-				expect(shareModalResult.exists()).toBe(true);
+				const shareDialogResult = wrapper.findComponent(ShareDialogResult);
+				expect(shareDialogResult.exists()).toBe(true);
 			});
 
-			describe("when copy link button is clicked on ShareModalResult", () => {
+			describe("when copy link button is clicked on ShareDialogResult", () => {
 				it("should copy the link to clipboard", async () => {
 					const { wrapper } = await setup({
 						preDefinedStep: InvitationStep.SHARE,
 					});
 
-					const shareModalResult = wrapper.getComponent(ShareModalResult);
-					await shareModalResult.vm.$emit("copied");
+					const shareDialogResult = wrapper.getComponent(ShareDialogResult);
+					await shareDialogResult.vm.$emit("copied");
 					expectNotification("success");
 				});
 			});
 
-			describe("when close button is clicked on ShareModalResult", () => {
+			describe("when close button is clicked on ShareDialogResult", () => {
 				it("should emit 'close'", async () => {
 					const { wrapper } = await setup({
 						preDefinedStep: InvitationStep.SHARE,
 					});
 
-					const shareModalResult = wrapper.getComponent(ShareModalResult);
-					await shareModalResult.vm.$emit("done");
+					const shareDialogResult = wrapper.getComponent(ShareDialogResult);
+					await shareDialogResult.vm.$emit("done");
 
 					expect(wrapper.emitted()).toHaveProperty("close");
 				});
@@ -484,8 +484,8 @@ describe("InviteMembersDialog", () => {
 				const { wrapper, roomInvitationLinkStore } = await setup({
 					preDefinedStep: InvitationStep.PREPARE,
 				});
-				const shareModalBefore = wrapper.findComponent(ShareModalResult);
-				expect(shareModalBefore.exists()).toBe(false);
+				const shareDialogResultBefore = wrapper.findComponent(ShareDialogResult);
+				expect(shareDialogResultBefore.exists()).toBe(false);
 
 				const nextButton = wrapper.getComponent(SvsDialogBtnConfirm);
 				await nextButton.trigger("click");
@@ -509,8 +509,8 @@ describe("InviteMembersDialog", () => {
 				});
 				await nextTick();
 
-				const shareModalBefore = wrapper.findComponent(ShareModalResult);
-				expect(shareModalBefore.exists()).toBe(false);
+				const shareDialogResultBefore = wrapper.findComponent(ShareDialogResult);
+				expect(shareDialogResultBefore.exists()).toBe(false);
 
 				const nextButton = wrapper.getComponent(SvsDialogBtnConfirm);
 				await nextButton.trigger("click");

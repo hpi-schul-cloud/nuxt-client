@@ -1,5 +1,5 @@
-import RoomContentGrid from "./RoomContentGrid.vue";
-import RoomContentGridItem from "./RoomContentGridItem.vue";
+import RoomBoardGrid from "./RoomBoardGrid.vue";
+import RoomBoardGridItem from "./RoomBoardGridItem.vue";
 import { roomBoardGridItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomItemResponseAllowedOperations } from "@api-server";
@@ -8,7 +8,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-describe("@feature-room/RoomContentGrid", () => {
+describe("@feature-room/RoomBoardGrid", () => {
 	beforeEach(() => {
 		useRoomDetailsStore(createTestingPinia({ stubActions: true }));
 		vi.clearAllMocks();
@@ -21,7 +21,7 @@ describe("@feature-room/RoomContentGrid", () => {
 	) => {
 		const boards = roomBoardGridItemFactory.buildList(3);
 
-		const wrapper = mount(RoomContentGrid, {
+		const wrapper = mount(RoomBoardGrid, {
 			global: {
 				plugins: [
 					createTestingVuetify(),
@@ -49,9 +49,9 @@ describe("@feature-room/RoomContentGrid", () => {
 		return { wrapper, boards };
 	};
 
-	it("should render RoomContentGridItem for each board", () => {
+	it("should render RoomBoardGridItem for each board", () => {
 		const { wrapper, boards } = setup();
-		expect(wrapper.findAllComponents(RoomContentGridItem)).toHaveLength(boards.length);
+		expect(wrapper.findAllComponents(RoomBoardGridItem)).toHaveLength(boards.length);
 	});
 
 	it("should call moveBoard on drag and drop reorder", () => {
@@ -76,7 +76,7 @@ describe("@feature-room/RoomContentGrid", () => {
 		it("should handle keyboard navigation - ArrowRight", () => {
 			const { wrapper, boards } = setup({ allowedOperations: { editContent: true } });
 
-			const boardItem = wrapper.findAllComponents(RoomContentGridItem).at(0);
+			const boardItem = wrapper.findAllComponents(RoomBoardGridItem).at(0);
 			boardItem?.vm.$emit("keydown", { key: "ArrowRight" });
 
 			expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[0].id, 1);
@@ -85,7 +85,7 @@ describe("@feature-room/RoomContentGrid", () => {
 		it("should handle keyboard navigation - ArrowLeft", () => {
 			const { wrapper, boards } = setup({ allowedOperations: { editContent: true } });
 
-			const boardItem = wrapper.findAllComponents(RoomContentGridItem).at(2);
+			const boardItem = wrapper.findAllComponents(RoomBoardGridItem).at(2);
 			boardItem?.vm.$emit("keydown", { key: "ArrowLeft" });
 
 			expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[2].id, 1);
@@ -94,7 +94,7 @@ describe("@feature-room/RoomContentGrid", () => {
 		it("should handle keyboard navigation - ArrowDown", () => {
 			const { wrapper, boards } = setup({ allowedOperations: { editContent: true } });
 
-			const boardItem = wrapper.findAllComponents(RoomContentGridItem)[0];
+			const boardItem = wrapper.findAllComponents(RoomBoardGridItem)[0];
 			boardItem.vm.$emit("keydown", { key: "ArrowDown" });
 
 			expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[0].id, 1);
@@ -103,7 +103,7 @@ describe("@feature-room/RoomContentGrid", () => {
 		it("should handle keyboard navigation - ArrowUp", () => {
 			const { wrapper, boards } = setup({ allowedOperations: { editContent: true } });
 
-			const boardItem = wrapper.findAllComponents(RoomContentGridItem)[2];
+			const boardItem = wrapper.findAllComponents(RoomBoardGridItem)[2];
 			boardItem.vm.$emit("keydown", { key: "ArrowUp" });
 
 			expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[2].id, 1);
@@ -112,7 +112,7 @@ describe("@feature-room/RoomContentGrid", () => {
 
 	it("should respect board boundaries in keyboard navigation", () => {
 		const { wrapper } = setup();
-		const boardItems = wrapper.findAllComponents(RoomContentGridItem);
+		const boardItems = wrapper.findAllComponents(RoomBoardGridItem);
 		// Attempt to go left at first index
 		boardItems[0].vm.$emit("keydown", { key: "ArrowLeft" });
 		// Attempt to go right at last index

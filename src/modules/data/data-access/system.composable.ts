@@ -11,7 +11,7 @@ export const useSystem = (systemId: Ref<string | undefined>) => {
 
 	const { t } = useI18nGlobal();
 
-	const { execute, status, error, isRunning: isLoading } = useSafeAxiosTask();
+	const { execute, status, error, isLoading } = useSafeAxiosTask();
 
 	const system: Ref<PublicSystemResponse | undefined> = ref();
 	const systemName = computed(() => system.value?.displayName);
