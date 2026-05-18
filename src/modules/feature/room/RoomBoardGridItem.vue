@@ -2,6 +2,7 @@
 	<VCard
 		class="room-content-grid-item d-flex flex-column"
 		:class="isDraft ? 'bg-white' : 'bg-surface-light'"
+		tabindex="0"
 		:variant="isDraft ? 'outlined' : 'flat'"
 		:data-testid="`board-grid-item-${index}`"
 		:ripple="false"
@@ -23,9 +24,24 @@
 				{{ board.title }}
 			</RouterLink>
 		</VCardTitle>
+
+		<KebabMenu v-if="hasAnyAllowedOperation" class="board-grid-item-menu" :data-testid="`board-dot-menu-${index}`">
+			<KebabMenuActionPublish
+				v-if="board.allowedOperations?.updateBoardVisibility && isDraft"
+				@click="emit('update:visibility', board, true)"
+			/>
+			<KebabMenuActionRevert
+				v-if="board.allowedOperations?.updateBoardVisibility && !isDraft"
+				@click="emit('update:visibility', board, false)"
+			/>
+			<KebabMenuActionDuplicate v-if="board.allowedOperations?.copyBoard" @click="emit('duplicate:board', board)" />
+			<KebabMenuActionDelete v-if="board.allowedOperations?.deleteBoard" @click="emit('delete:board', board)" />
+		</KebabMenu>
+
 		<VCardActions class="justify-end pr-4">
 			<VBtn
 				:data-testid="`board-open-button-${index}`"
+				tabindex="0"
 				variant="text"
 				color="primary"
 				:to="boardPath"
@@ -40,16 +56,36 @@
 <script setup lang="ts">
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
+import { RoomBoardItemResponse } from "@api-server";
 import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
+import {
+	KebabMenu,
+	KebabMenuActionDelete,
+	KebabMenuActionDuplicate,
+	KebabMenuActionPublish,
+	KebabMenuActionRevert,
+} from "@ui-kebab-menu";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
+	roomId: { type: String, required: true },
 	board: { type: Object as PropType<RoomBoardItem>, required: true },
 	index: { type: Number, required: true },
 });
 
 const { t } = useI18n();
+
+const emit = defineEmits<{
+	"update:visibility": [board: RoomBoardItemResponse, isVisible: boolean];
+	"delete:board": [board: RoomBoardItemResponse];
+	"duplicate:board": [board: RoomBoardItemResponse];
+}>();
+
+const hasAnyAllowedOperation = computed(() => {
+	const { copyBoard, deleteBoard, updateBoardVisibility } = props.board?.allowedOperations ?? {};
+	return copyBoard || deleteBoard || updateBoardVisibility;
+});
 
 const isListBoard = computed(() => props.board.layout === BoardLayout.LIST);
 
@@ -78,11 +114,12 @@ const boardPath = computed(() => `/boards/${props.board.id}`);
 }
 
 .grid-item-card-title {
-	max-width: max-content;
+	max-width: 100%;
 	line-height: 1.5 !important;
 }
 
 .grid-item-router-link {
+	display: block;
 	text-decoration: none;
 	color: inherit;
 	white-space: normal;
@@ -90,5 +127,12 @@ const boardPath = computed(() => `/boards/${props.board.id}`);
 
 .grid-item-router-link:hover {
 	text-decoration: underline;
+}
+
+.board-grid-item-menu {
+	position: absolute;
+	top: 0.25rem;
+	right: 0.25rem;
+	z-index: var(--z-elevated);
 }
 </style>

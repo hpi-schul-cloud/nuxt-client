@@ -142,17 +142,13 @@ export default {
 
 @media #{map.get($display-breakpoints, 'xs')} {
 	.subtitle {
-		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin-right: unset;
-		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin-left: unset;
-		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		font-size: 14px;
 	}
 }
 
 .group-avatar .card-component {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	border-radius: 0.5em;
 }
 
