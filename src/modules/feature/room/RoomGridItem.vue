@@ -20,7 +20,12 @@
 							{{ room.name }}
 						</span>
 					</VCardTitle>
-					<VChip size="x-small" :prepend-icon="mdiAccountMultipleOutline" class="text-decoration-none">
+					<VChip
+						size="x-small"
+						:prepend-icon="mdiAccountMultipleOutline"
+						class="text-decoration-none"
+						:data-testid="`room--member-count-${index}`"
+					>
 						{{ room.totalMembers }} {{ t("common.words.member", room.totalMembers) }}
 					</VChip>
 				</div>
