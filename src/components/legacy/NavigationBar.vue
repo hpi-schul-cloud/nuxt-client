@@ -105,10 +105,10 @@ const linksToDisplay = computed(() => (isDefaultTheme.value ? props.links : []))
 	}
 
 	@media (min-width: 991px) {
-		height: var(--legacy-topbar-height);
+		height: var(--topbar-height);
 
 		> a > img {
-			height: var(--legacy-topbar-height);
+			height: var(--topbar-height);
 		}
 	}
 }

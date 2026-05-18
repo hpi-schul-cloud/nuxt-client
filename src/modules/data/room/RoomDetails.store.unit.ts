@@ -1,6 +1,7 @@
 import { RoomVariant, useRoomDetailsStore } from "./RoomDetails.store";
 import { RoomUpdateParams } from "@/types/room/Room";
 import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { apiResponseErrorFactory, mockApi, mockApiResponse, mockAxiosInstance } from "@@/tests/test-utils";
 import * as serverApi from "@api-server";
 import { RoomColor } from "@api-server";
@@ -175,6 +176,46 @@ describe("useRoomDetailsStore", () => {
 			expect(roomApiMock.roomControllerUpdateRoom).toHaveBeenCalledWith("room-id", params);
 
 			expect(store.isLoading).toBe(false);
+		});
+	});
+
+	describe("deleteBoard", () => {
+		it("should call deleteBoard api when user confirms", async () => {
+			const { store } = setup();
+			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(true);
+
+			await store.deleteBoard("board-id", "board-title");
+
+			expect(confirmDialogUtils.askDeletionForItem).toHaveBeenCalled();
+			expect(boardApiMock.boardControllerDeleteBoard).toHaveBeenCalledWith("board-id");
+		});
+
+		it("should not call deleteBoard api when user cancels", async () => {
+			const { store } = setup();
+			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
+
+			const result = await store.deleteBoard("board-id", "board-title");
+
+			expect(boardApiMock.boardControllerDeleteBoard).not.toHaveBeenCalled();
+			expect(result).toEqual({ success: false });
+		});
+	});
+
+	describe("updateBoardVisibility", () => {
+		it("should call updateVisibility api", async () => {
+			const { store } = setup();
+
+			await store.updateBoardVisibility("board-id", true);
+
+			expect(boardApiMock.boardControllerUpdateVisibility).toHaveBeenCalled();
+		});
+
+		it("should call updateVisibility api with false", async () => {
+			const { store } = setup();
+
+			await store.updateBoardVisibility("board-id", false);
+
+			expect(boardApiMock.boardControllerUpdateVisibility).toHaveBeenCalled();
 		});
 	});
 

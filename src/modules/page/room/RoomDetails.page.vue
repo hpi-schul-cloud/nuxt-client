@@ -24,7 +24,13 @@
 				<LearningContentEmptyStateSvg />
 			</template>
 		</EmptyState>
-		<RoomContentGrid :room-id="room.id" :boards="visibleBoards" />
+		<RoomBoardGrid
+			:room-id="room.id"
+			:boards="visibleBoards"
+			@update:board-visibility="onUpdateBoardVisibility"
+			@delete:board="onDeleteBoard"
+			@duplicate:board="onDuplicateBoard"
+		/>
 		<SelectBoardLayoutDialog
 			v-if="allowedOperations.editContent"
 			v-model="boardLayoutDialogIsOpen"
@@ -49,10 +55,11 @@ import { ShareTokenParentType } from "@/types/sharing/Token";
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { RoomBoardItemResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useRoomAllowedOperations, useRoomDetailsStore, useRoomStore } from "@data-room";
 import { CopyDialog, useCopyFlow } from "@feature-copy";
-import { RoomContentGrid, RoomMenu } from "@feature-room";
+import { RoomBoardGrid, RoomMenu } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
@@ -75,7 +82,7 @@ const roomDetailsStore = useRoomDetailsStore();
 const { leaveRoom, deleteRoom } = useRoomStore();
 
 const { roomBoards } = storeToRefs(roomDetailsStore);
-const { createBoard } = roomDetailsStore;
+const { createBoard, updateBoardVisibility, deleteBoard, fetchRoomAndBoards } = roomDetailsStore;
 
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
@@ -195,5 +202,28 @@ const onLeaveRoom = async () => {
 const onCreateBoard = async (layout: BoardLayout) => {
 	const boardId = await createBoard(room.value.id, layout, t("pages.roomDetails.board.defaultName"));
 	router.push(`/boards/${boardId}`);
+};
+
+const onUpdateBoardVisibility = async (board: RoomBoardItemResponse, isVisible: boolean) => {
+	if (!board.allowedOperations?.updateBoardVisibility) return;
+	const { success } = await updateBoardVisibility(board.id, isVisible);
+
+	if (success) await fetchRoomAndBoards(props.room.id);
+};
+
+const onDeleteBoard = async (board: RoomBoardItemResponse) => {
+	if (!board.allowedOperations?.deleteBoard) return;
+
+	const { success } = await deleteBoard(board.id, board.title);
+
+	if (success) await fetchRoomAndBoards(props.room.id);
+};
+
+const onDuplicateBoard = async (board: RoomBoardItemResponse) => {
+	if (!board.allowedOperations?.copyBoard) return;
+	const { result } = await copyFlow.executeCopyBoard(board.id);
+	if (result?.id) {
+		await roomDetailsStore.fetchRoomAndBoards(props.room.id);
+	}
 };
 </script>
