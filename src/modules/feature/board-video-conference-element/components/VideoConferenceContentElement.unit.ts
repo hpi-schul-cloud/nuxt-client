@@ -153,7 +153,6 @@ describe("VideoConferenceContentElement", () => {
 				},
 				stubs: {
 					VideoConferenceConfigurationDialog: true,
-					VideoConferenceContentElementDisplay: true,
 				},
 			},
 			props: {
@@ -174,27 +173,26 @@ describe("VideoConferenceContentElement", () => {
 
 	describe("when rendered in view mode", () => {
 		describe("and content title is undefined", () => {
-			it("should not render display of video conference content", () => {
+			it("should render display of video conference content", () => {
 				const { wrapper } = setupWrapper({ isEditMode: false });
 
 				const videoConferenceElementDisplay = wrapper.findComponent(VideoConferenceContentElementDisplay);
 
-				expect(videoConferenceElementDisplay.exists()).toBe(false);
+				expect(videoConferenceElementDisplay.exists()).toBe(true);
 			});
 
-			it("should hide video conference element", () => {
+			it("should keep video conference element visible", () => {
 				const { wrapper } = setupWrapper({ isEditMode: false });
 
 				const videoConferenceElement = wrapper.findComponent('[data-testid="video-conference-element"]');
 
-				expect(videoConferenceElement.attributes("class")).toContain("d-none");
+				expect(videoConferenceElement.attributes("class")).not.toContain("d-none");
 			});
 
-			it("should not render video conference element menu", () => {
+			it("should not render a board menu in view mode", () => {
 				const { wrapper } = setupWrapper({ isEditMode: false });
 
 				const videoConferenceElementMenu = wrapper.findComponent(BoardMenu);
-
 				expect(videoConferenceElementMenu.exists()).toBe(false);
 			});
 		});
@@ -233,7 +231,8 @@ describe("VideoConferenceContentElement", () => {
 					isEditMode: false,
 				});
 
-				expect(wrapper.html()).toEqual(expect.stringContaining(videoConferenceTitle));
+				const videoConferenceElementDisplay = wrapper.findComponent(VideoConferenceContentElementDisplay);
+				expect(videoConferenceElementDisplay.props("title")).toEqual(videoConferenceTitle);
 			});
 
 			describe("when user has manage video conference permission", () => {
@@ -657,6 +656,17 @@ describe("VideoConferenceContentElement", () => {
 				const videoConferenceElement = wrapper.findComponent('[data-testid="video-conference-element"]');
 
 				expect(videoConferenceElement.attributes("tabindex")).toEqual("0");
+			});
+
+			it("should render a board menu when conference is running in edit mode", () => {
+				const { wrapper } = setupWrapper({
+					content: videoConferenceElementContentFactory.build({ title: "test-title" }),
+					isEditMode: true,
+					isConferenceRunning: true,
+				});
+
+				const videoConferenceElementMenu = wrapper.findComponent(BoardMenu);
+				expect(videoConferenceElementMenu.exists()).toBe(true);
 			});
 		});
 	});

@@ -69,18 +69,31 @@ describe("VideoConferenceContentElementCreate", () => {
 
 			expect(wrapper.emitted("create:title")).toEqual([[newTitle]]);
 		});
+
+		it("should emit validation:failed when title contains an opening tag string without empty space", async () => {
+			const existingTitle = "Existing Title";
+			const invalidTitle = "<invalid";
+			const wrapper = setupWrapper({ propsData: { existingTitle } });
+
+			await wrapper.findComponent({ name: "VTextField" }).setValue(invalidTitle);
+
+			wrapper.unmount();
+
+			expect(wrapper.emitted("create:title")).toBeUndefined();
+			expect(wrapper.emitted("validation:failed")).toEqual([["common.validation.containsOpeningTag.discardChanges"]]);
+		});
 	});
 
 	describe("validation", () => {
-		it("should show required-error-message when title is empty and field is blurred", async () => {
+		it("should show opening-tag error when title contains an opening tag without empty space", async () => {
 			const wrapper = setupWrapper();
 			const textField = wrapper.findComponent({ name: "VTextField" });
 
-			await textField.setValue("");
+			await textField.setValue("<invalid");
 			await textField.trigger("blur");
 
 			const alerts = wrapper.find('[role="alert"]');
-			expect(alerts.text()).toEqual("common.validation.required2");
+			expect(alerts.text()).toEqual("common.validation.containsOpeningTag");
 		});
 
 		it("should not show error-message when title is valid", async () => {
