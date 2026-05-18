@@ -15,10 +15,8 @@
 					</VBadge>
 				</VAvatar>
 				<div>
-					<VCardTitle class="text-body-1 flex-grow-1" style="max-width: max-content">
-						<span class="text-break mb-2" :data-testid="`room--title-${index}`">
-							{{ room.name }}
-						</span>
+					<VCardTitle class="text-break text-body-1 font-weight-bold mb-1">
+						{{ room.name }}
 					</VCardTitle>
 					<VChip
 						size="small"
@@ -77,14 +75,17 @@ const roomAriaLabel = computed(() => `${t("common.labels.room")} ${props.room.na
 	display: flex;
 	flex-direction: row;
 	gap: 16px;
-	white-space: normal;
 	color: inherit;
 	text-decoration: none;
-	line-height: 1.5 !important;
-}
 
-.room-link-item:hover span {
-	text-decoration: underline;
+	.v-card-title {
+		line-height: 1.5 !important;
+		white-space: normal;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
 }
 
 .room-grid-avatar {
