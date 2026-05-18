@@ -61,6 +61,8 @@ import { SchoolExternalToolPostParams } from '../models';
 // @ts-ignore
 import { SchoolExternalToolResponse } from '../models';
 // @ts-ignore
+import { SchoolExternalToolSearchListResponse } from '../models';
+// @ts-ignore
 import { ToolContextType } from '../models';
 // @ts-ignore
 import { ToolContextTypesListResponse } from '../models';
@@ -1720,7 +1722,7 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolSchoolControllerGetSchoolExternalTools(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolSearchListResponse>> {
+        async toolSchoolControllerGetSchoolExternalTools(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolSearchListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolSchoolControllerGetSchoolExternalTools(schoolId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2062,7 +2064,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolSchoolControllerGetSchoolExternalTools(schoolId: string, options?: any): AxiosPromise<ExternalToolSearchListResponse> {
+        toolSchoolControllerGetSchoolExternalTools(schoolId: string, options?: any): AxiosPromise<SchoolExternalToolSearchListResponse> {
             return localVarFp.toolSchoolControllerGetSchoolExternalTools(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2402,7 +2404,7 @@ export interface ToolApiInterface {
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolSchoolControllerGetSchoolExternalTools(schoolId: string, options?: any): AxiosPromise<ExternalToolSearchListResponse>;
+    toolSchoolControllerGetSchoolExternalTools(schoolId: string, options?: any): AxiosPromise<SchoolExternalToolSearchListResponse>;
 
     /**
      * 

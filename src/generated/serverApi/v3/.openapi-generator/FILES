@@ -350,6 +350,7 @@ models/school-external-tool-medium-response.ts
 models/school-external-tool-metadata-response.ts
 models/school-external-tool-post-params.ts
 models/school-external-tool-response.ts
+models/school-external-tool-search-list-response.ts
 models/school-feature.ts
 models/school-for-external-invite-response.ts
 models/school-for-ldap-login-response.ts
