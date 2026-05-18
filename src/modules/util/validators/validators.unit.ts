@@ -5,6 +5,7 @@ import {
 	hasSpecialCharacter,
 	hasUppercaseLetter,
 	isNonEmptyString,
+	isOfMaxFileSize,
 	isOfMaxLength,
 	isOfMinLength,
 	isRequired,
@@ -303,6 +304,25 @@ describe("util-validators", () => {
 			expect(isValid("test@.com")).toBe(ERROR);
 			expect(isValid("testexample.com")).toBe(ERROR);
 			expect(isValid("test@exam_ple.com")).toBe(ERROR);
+		});
+	});
+
+	describe("isOfMaxFileSize", () => {
+		const isValid = isOfMaxFileSize(100)(ERROR);
+
+		it("should accept null or undefined", () => {
+			expect(isValid(null)).toBe(true);
+			expect(isValid(undefined)).toBe(true);
+		});
+
+		it("should accept file within size limit", () => {
+			const file = new File(["x".repeat(100 * 1024)], "small.png");
+			expect(isValid(file)).toBe(true);
+		});
+
+		it("should reject file exceeding size limit", () => {
+			const file = new File(["x".repeat(100 * 1024 + 1)], "big.png");
+			expect(isValid(file)).toBe(ERROR);
 		});
 	});
 });

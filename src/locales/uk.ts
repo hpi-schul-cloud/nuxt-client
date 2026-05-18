@@ -163,6 +163,8 @@ export default {
 	"common.notifications.errors.notFinished": "{type} не вдалося завершити. | {type} не вдалося завершити.",
 	"common.notifications.errors.notReverted": "{type} не вдалося скинути. | {type} не вдалося скинути.",
 	"common.notifications.errors.notRestored": "{type} не вдалося відновити. | Не вдалося відновити {type}.",
+	"common.notification.error.preferences.update": "Налаштування користувача не вдалося оновити.",
+	"common.notification.error.preferences.retrieve": "Налаштування користувача не вдалося отримати.",
 	"common.notification.error.videoConference.notFetched": "Не вдалося отримати відеоконференцію.",
 	"common.notification.error.videoConference.notJoined": "Не вдалося приєднатися до відеоконференції.",
 	"common.notification.error.videoConference.notStarted": "Не вдалося розпочати відеоконференцію.",
@@ -217,6 +219,7 @@ export default {
 	"common.validation.required": "Заповніть це поле",
 	"common.validation.required2": "Це обов'язкове поле.",
 	"common.validation.tooLong": "Введений текст перевищує максимально дозволену довжину",
+	"common.validation.fileTooBig": "Файл не повинен перевищувати {maxSize} КБ.",
 	"common.validation.tooShort": "Введений текст не досягає мінімальної довжини",
 	"common.validation.containsOpeningTag": "Будь ласка, вставте пробіл після знаку менше.",
 	"common.validation.nonEmptyString": "Це обов'язкове поле і не повинно містити лише пробіли.",
@@ -994,7 +997,7 @@ export default {
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів.",
 	"loggedin.text.schoolInTransferPhaseStartNew":
-		'Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів. Зателефонуйте в <a href="/administration/school/"> новий навчальний рік тут!</a>',
+		'Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів. Зателефонуйте в <a href="/administration/school-settings/"> новий навчальний рік тут!</a>',
 	"loggedin.text.schoolInMigrationModeStarted":
 		'Школа перебуває в режимі міграції користувачів. Щоб перенести користувачів, перейдіть на <a href="/administration/migration/">цю сторінку</a>.',
 	"loggedin.text.schoolInMigrationMode":
@@ -2055,7 +2058,8 @@ export default {
 	"pages.folder.trash.breadcrumb": "Кошик",
 	"pages.folder.trash.infoText": "Файли автоматично видаляються через 7 днів після переміщення до кошика.",
 	"pages.folder.trash.emptyState": "Кошик порожній",
-	"pages.folder.trash.columns.deletedAt": "Видалено",
+	"pages.folder.trash.columns.movedOn": "Переміщено",
+	"pages.folder.trash.columns.purgeAt": "Буде видалено",
 	"pages.folder.trash.ariaLabels.actionMenu": "Меню дій для {name}",
 	"pages.folder.trash.ariaLabels.menu": "Меню кошика",
 	"pages.folder.trash.emptyTrash": "Очистити кошик",
@@ -2064,8 +2068,6 @@ export default {
 	"pages.folder.trash.purge.action": "Видалити назавжди",
 	"pages.folder.trash.purge.success": "Файли було остаточно видалено.",
 	"pages.folder.trash.purge.error": "Не вдалося остаточно видалити файли.",
-	"pages.folder.trash.purge.dialog.title": "Назавжди видалити файли?",
-	"pages.folder.trash.purge.dialog.description":
-		"Ви збираєтесь остаточно видалити {count} файл(ів). Цю дію неможливо скасувати.",
-	"pages.folder.trash.purge.dialog.checkboxLabel": "Я розумію, що ця дія є незворотною та не може бути скасована.",
+	"pages.folder.trash.purge.dialog.title": "Назавжди видалити {count} файл(ів)?",
+	"pages.folder.trash.purge.dialog.checkboxLabel": "Видалення не можна скасувати.",
 };
