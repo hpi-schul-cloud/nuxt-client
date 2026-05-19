@@ -37,14 +37,14 @@ const mockResponseData = {
 };
 
 const getStoreOptions = (): {
-	storeOptions: StoreOptions<object>;
+	storeOptions: StoreOptions<Record<string, unknown>>;
 	submitStub: ReturnType<typeof vi.fn>;
 	patchStub: ReturnType<typeof vi.fn>;
 } => {
 	const submitStub = vi.fn();
 	const patchStub = vi.fn();
 
-	const storeOptions: StoreOptions<object> = {
+	const storeOptions: StoreOptions<Record<string, unknown>> = {
 		modules: {
 			"ldap-config": {
 				namespaced: true,
@@ -76,7 +76,7 @@ describe("ldap/activate", () => {
 		storeOptions,
 	}: {
 		route: { query: Record<string, string> };
-		storeOptions: StoreOptions<object>;
+		storeOptions: StoreOptions<Record<string, unknown>>;
 	}) => {
 		const routerPushStub = vi.fn();
 
