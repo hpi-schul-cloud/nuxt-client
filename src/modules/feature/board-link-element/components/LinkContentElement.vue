@@ -17,7 +17,7 @@
 			v-if="!isEditMode && computedElement.content.url"
 			:url="computedElement.content.url"
 			:title="computedElement.content.title"
-			:image-url="computedElement.content.imageUrl"
+			:image-url="modelValue.imageUrl"
 			:is-edit-mode="isEditMode"
 			><BoardMenu
 				:scope="BoardMenuScope.LINK_ELEMENT"
@@ -41,14 +41,16 @@
 
 <script setup lang="ts">
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
-import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
 import { ensureProtocolIncluded } from "../util/url.util";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
+import { convertDownloadToPreviewUrl, isPreviewPossible } from "@/utils/fileHelper";
+import { FileRecordParentType } from "@api-file-storage";
 import { LinkElementResponse } from "@api-server";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useFileStorageApi } from "@data-file";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { useElementFocus } from "@util-board";
@@ -90,10 +92,12 @@ const { modelValue, computedElement } = useContentElementState(props, {
 	autoSaveDebounce: 100,
 });
 
-const sanitizedUrl = computed(() => (props.element.content.url ? sanitizeUrl(props.element.content.url) : ""));
+const sanitizedUrl = computed(() =>
+	computedElement.value.content.url ? sanitizeUrl(computedElement.value.content.url) : ""
+);
 
 const target: ComputedRef<string> = computed(() => {
-	if (props.element.content.url) {
+	if (computedElement.value.content.url) {
 		const url = new URL(sanitizedUrl.value);
 
 		if (url.host === window.location.host && url.pathname === window.location.pathname) {
@@ -107,8 +111,15 @@ const target: ComputedRef<string> = computed(() => {
 const isHidden = computed(() => !props.isEditMode && !computedElement.value.content.url);
 
 const { getMetaTags } = useMetaTagExtractorApi();
+const { uploadFromUrl } = useFileStorageApi();
 
-const { createPreviewImage } = usePreviewGenerator(element.value.id);
+const createPreviewImage = async (externalImageUrl: string): Promise<string | undefined> => {
+	const uploadedFileRecord = await uploadFromUrl(externalImageUrl, element.value.id, FileRecordParentType.BOARDNODES);
+
+	if (uploadedFileRecord?.previewStatus && isPreviewPossible(uploadedFileRecord.previewStatus)) {
+		return convertDownloadToPreviewUrl(uploadedFileRecord.url);
+	}
+};
 
 const onCreateUrl = async (originalUrl: string) => {
 	isLoading.value = true;
@@ -117,13 +128,19 @@ const onCreateUrl = async (originalUrl: string) => {
 		const validUrl = ensureProtocolIncluded(originalUrl);
 		const { url, title, description, originalImageUrl } = await getMetaTags(validUrl);
 
-		modelValue.value.url = url;
-		modelValue.value.title = title;
-		modelValue.value.description = description;
+		const updates = {
+			url,
+			title,
+			description,
+			imageUrl: "",
+		};
 
 		if (originalImageUrl) {
-			modelValue.value.imageUrl = await createPreviewImage(originalImageUrl);
+			const previewResult = await createPreviewImage(originalImageUrl);
+			if (previewResult) updates.imageUrl = previewResult;
 		}
+
+		Object.assign(modelValue.value, updates);
 	} finally {
 		isLoading.value = false;
 	}

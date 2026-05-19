@@ -317,6 +317,7 @@ models/rich-text-element-content.ts
 models/rich-text-element-response.ts
 models/rich-text.ts
 models/role-name.ts
+models/room-board-item-response-allowed-operations.ts
 models/room-board-item-response.ts
 models/room-board-list-response.ts
 models/room-color.ts

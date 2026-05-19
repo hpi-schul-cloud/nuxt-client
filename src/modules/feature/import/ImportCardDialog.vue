@@ -68,9 +68,8 @@
 
 <script setup lang="ts">
 import { ImportDestination, ImportDestinationItem, ImportDestinationType } from "./types";
-import { useCopyContent } from "@/composables/copy-content.composable";
-import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
-import { ShareTokenInfoResponse } from "@api-server";
+import { useImportContent } from "@/composables/copy-content.composable";
+import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
 import { useCardDialogData } from "@data-board";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
@@ -120,5 +119,5 @@ const dialogQuestion = computed(() => {
 	});
 });
 
-const { text, warnings } = useCopyContent(ref(ContentItemTypeEnum.Card));
+const { text, warnings } = useImportContent(ref(ShareTokenInfoResponseParentType.CARD));
 </script>

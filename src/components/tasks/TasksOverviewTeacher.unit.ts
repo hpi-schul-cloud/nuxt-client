@@ -1,15 +1,13 @@
 import TasksOverviewPane from "./TasksOverviewPane.vue";
 import TasksOverviewTeacher from "./TasksOverviewTeacher.vue";
-import ShareModule from "@/store/share";
 import { CopyParams } from "@/types/copy/CopyParams";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
-import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStoreWithRole, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { CopyApiResponseStatus, CopyApiResponseType, RoleName, ShareTokenBodyParamsParentType } from "@api-server";
 import { useTasksOfOverview } from "@data-tasks";
 import { useCopyFlow } from "@feature-copy";
+import { useShareFlow } from "@feature-share";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -18,20 +16,17 @@ import { computed, ref } from "vue";
 
 vi.mock("@data-tasks");
 vi.mock("@feature-copy/copy-flow.composable");
+vi.mock("@feature-share/share-flow.composable");
 
 describe("TasksOverviewTeacher", () => {
-	let shareModuleMock: ShareModule;
 	let useTasksOfOverviewMock: Mocked<ReturnType<typeof useTasksOfOverview>>;
 	let useCopyFlowMock: Mocked<ReturnType<typeof useCopyFlow>>;
+	let useShareFlowMock: Mocked<ReturnType<typeof useShareFlow>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestAppStoreWithRole(RoleName.TEACHER);
 		createTestEnvStore({ FEATURE_TASK_SHARE: true });
-
-		shareModuleMock = createModuleMocks(ShareModule, {
-			getIsShareModalOpen: false,
-		});
 
 		useTasksOfOverviewMock = mockComposable(useTasksOfOverview, {
 			drafts: computed(() => []),
@@ -42,11 +37,17 @@ describe("TasksOverviewTeacher", () => {
 		vi.mocked(useTasksOfOverview).mockReturnValue(useTasksOfOverviewMock);
 
 		useCopyFlowMock = mockComposable(useCopyFlow, {
-			isDialogOpen: ref(false),
+			isCopyDialogOpen: ref(false),
 			copyItemType: ref(ContentItemTypeEnum.Task),
-			isRunning: computed(() => false),
 		});
 		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
+
+		useShareFlowMock = mockComposable(useShareFlow, {
+			isShareDialogOpen: ref(false),
+			shareItemType: ref(ShareTokenBodyParamsParentType.TASKS),
+			shareUrl: ref("http://example.com/share-url"),
+		});
+		vi.mocked(useShareFlow).mockReturnValue(useShareFlowMock);
 	});
 
 	afterEach(() => {
@@ -57,9 +58,6 @@ describe("TasksOverviewTeacher", () => {
 		shallowMount(TasksOverviewTeacher, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
-				},
 			},
 			...attrs,
 		});
@@ -128,7 +126,7 @@ describe("TasksOverviewTeacher", () => {
 			const pane = wrapper.findComponent(TasksOverviewPane);
 			pane.vm.$emit("share-task", taskId);
 
-			expect(shareModuleMock.startShareFlow).toHaveBeenCalledWith({
+			expect(useShareFlowMock.executeShare).toHaveBeenCalledWith({
 				id: taskId,
 				type: ShareTokenBodyParamsParentType.TASKS,
 			});
@@ -157,12 +155,12 @@ describe("TasksOverviewTeacher", () => {
 	});
 
 	describe("Share Modal", () => {
-		it("should render ShareModal for tasks", () => {
+		it("should render ShareDialog for tasks", () => {
 			const wrapper = mountComponent();
 
-			const modal = wrapper.findComponent({ name: "ShareModal" });
+			const modal = wrapper.findComponent({ name: "ShareDialog" });
 			expect(modal.exists()).toBe(true);
-			expect(modal.props("type")).toBe(ShareTokenBodyParamsParentType.TASKS);
+			expect(modal.props("shareItemType")).toBe(ShareTokenBodyParamsParentType.TASKS);
 		});
 	});
 });
