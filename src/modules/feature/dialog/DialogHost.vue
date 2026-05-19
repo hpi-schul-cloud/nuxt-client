@@ -14,7 +14,8 @@
 
 <script setup lang="ts">
 import { useDialogManager } from "./dialog-manager";
-import { onBeforeUnmount } from "vue";
+import { onBeforeUnmount, watch } from "vue";
+import { useRoute } from "vue-router";
 
 const {
 	activeDialog,
@@ -25,6 +26,9 @@ const {
 	onDialogAfterLeave,
 	cancelAllDialogsImmediately,
 } = useDialogManager();
+
+const route = useRoute();
+watch(() => route.path, cancelAllDialogsImmediately);
 
 onBeforeUnmount(() => {
 	cancelAllDialogsImmediately();
