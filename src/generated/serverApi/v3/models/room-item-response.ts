@@ -82,6 +82,12 @@ export interface RoomItemResponse {
      * @memberof RoomItemResponse
      */
     isLocked: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof RoomItemResponse
+     */
+    totalMembers: number;
 }
 
 
