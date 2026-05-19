@@ -1,9 +1,9 @@
+import H5pElementMenu from "./H5pElementMenu.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { KebabMenuAction, KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
-import H5pElementMenu from "./H5pElementMenu.vue";
 
 describe("H5pElementMenu", () => {
 	const getWrapper = (propsData: ComponentProps<typeof H5pElementMenu>) => {
@@ -23,22 +23,22 @@ describe("H5pElementMenu", () => {
 		vi.resetAllMocks();
 	});
 
-	describe("Move Up Button", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper({
-				isNotFirstElement: true,
-				isNotLastElement: true,
-				columnIndex: 0,
-				rowIndex: 1,
-				elementIndex: 2,
-				hasLinkedContent: false,
-			});
+	const setup = (hasLinkedContent = false) => {
+		const { wrapper } = getWrapper({
+			isNotFirstElement: true,
+			isNotLastElement: true,
+			columnIndex: 0,
+			rowIndex: 1,
+			elementIndex: 2,
+			hasLinkedContent,
+		});
 
-			return {
-				wrapper,
-			};
+		return {
+			wrapper,
 		};
+	};
 
+	describe("Move Up Button", () => {
 		it("should have a menu option to move element up", () => {
 			const { wrapper } = setup();
 
@@ -59,21 +59,6 @@ describe("H5pElementMenu", () => {
 	});
 
 	describe("Move Down Button", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper({
-				isNotFirstElement: true,
-				isNotLastElement: true,
-				columnIndex: 0,
-				rowIndex: 1,
-				elementIndex: 2,
-				hasLinkedContent: false,
-			});
-
-			return {
-				wrapper,
-			};
-		};
-
 		it("should have a menu option to move element down", () => {
 			const { wrapper } = setup();
 
@@ -94,21 +79,6 @@ describe("H5pElementMenu", () => {
 	});
 
 	describe("Settings Button", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper({
-				isNotFirstElement: true,
-				isNotLastElement: true,
-				columnIndex: 0,
-				rowIndex: 1,
-				elementIndex: 2,
-				hasLinkedContent: false,
-			});
-
-			return {
-				wrapper,
-			};
-		};
-
 		it("should have a menu option to move element down", () => {
 			const { wrapper } = setup();
 
@@ -128,21 +98,6 @@ describe("H5pElementMenu", () => {
 	});
 
 	describe("Edit Button", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper({
-				isNotFirstElement: true,
-				isNotLastElement: true,
-				columnIndex: 0,
-				rowIndex: 1,
-				elementIndex: 2,
-				hasLinkedContent: false,
-			});
-
-			return {
-				wrapper,
-			};
-		};
-
 		it("should have a menu option to edit", () => {
 			const { wrapper } = setup();
 
@@ -163,23 +118,8 @@ describe("H5pElementMenu", () => {
 
 	describe("Download Button", () => {
 		describe("when hasLinkedContent is true", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper({
-					isNotFirstElement: true,
-					isNotLastElement: true,
-					columnIndex: 0,
-					rowIndex: 1,
-					elementIndex: 2,
-					hasLinkedContent: true,
-				});
-
-				return {
-					wrapper,
-				};
-			};
-
 			it("should have a menu option to download", () => {
-				const { wrapper } = setup();
+				const { wrapper } = setup(true);
 
 				const menuItems = wrapper.findAllComponents(KebabMenuAction);
 				const downloadItem = menuItems.find((item) => item.text().includes("download"));
@@ -188,7 +128,7 @@ describe("H5pElementMenu", () => {
 			});
 
 			it("should emit the download event on click", async () => {
-				const { wrapper } = setup();
+				const { wrapper } = setup(true);
 
 				const menuItems = wrapper.findAllComponents(KebabMenuAction);
 				const downloadItem = menuItems.find((item) => item.text().includes("download"));
@@ -200,21 +140,6 @@ describe("H5pElementMenu", () => {
 		});
 
 		describe("when hasLinkedContent is false", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper({
-					isNotFirstElement: true,
-					isNotLastElement: true,
-					columnIndex: 0,
-					rowIndex: 1,
-					elementIndex: 2,
-					hasLinkedContent: false,
-				});
-
-				return {
-					wrapper,
-				};
-			};
-
 			it("should not have a menu option to download", () => {
 				const { wrapper } = setup();
 
@@ -227,21 +152,6 @@ describe("H5pElementMenu", () => {
 	});
 
 	describe("Delete Button", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper({
-				isNotFirstElement: true,
-				isNotLastElement: true,
-				columnIndex: 0,
-				rowIndex: 1,
-				elementIndex: 2,
-				hasLinkedContent: false,
-			});
-
-			return {
-				wrapper,
-			};
-		};
-
 		it("should have a menu option to delete", () => {
 			const { wrapper } = setup();
 
