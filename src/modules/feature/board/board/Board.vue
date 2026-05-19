@@ -97,15 +97,7 @@
 					:has-relocate-board-content-permission="allowedOperations?.relocateContent ?? false"
 					:card-id="moveCardOptions.cardId"
 				/>
-				<ShareDialog
-					v-if="shareItemType"
-					:is-open="isShareDialogOpen"
-					:share-item-type="shareItemType"
-					:share-url="shareUrl"
-					@confirm="onConfirmShare"
-					@cancel="onCancelShare"
-					@done="onDone"
-				/>
+
 				<SelectBoardLayoutDialog
 					v-model="isSelectBoardLayoutDialogOpen"
 					:current-layout="board.layout"
@@ -168,7 +160,7 @@ import { useEnvConfig } from "@data-env";
 import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog } from "@feature-collabora";
 import { useCopyFlow } from "@feature-copy";
-import { ShareDialog, useShareFlow } from "@feature-share";
+import { useShareFlow } from "@feature-share";
 import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
@@ -427,15 +419,7 @@ const onCopyBoard = async () => {
 	}
 };
 
-const {
-	isShareDialogOpen,
-	shareItemType,
-	shareUrl,
-	executeShare,
-	onConfirm: onConfirmShare,
-	onCancel: onCancelShare,
-	onDone,
-} = useShareFlow();
+const { executeShare } = useShareFlow();
 
 const onShareBoard = () => {
 	if (!allowedOperations.value.shareBoard) return;

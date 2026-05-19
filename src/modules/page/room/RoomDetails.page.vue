@@ -37,15 +37,6 @@
 			@select="onCreateBoard"
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
-		<ShareDialog
-			v-if="shareItemType"
-			:is-open="isShareDialogOpen"
-			:share-item-type="shareItemType"
-			:share-url="shareUrl"
-			@confirm="onConfirmShare"
-			@cancel="onCancelShare"
-			@done="onDone"
-		/>
 	</DefaultWireframe>
 </template>
 
@@ -60,7 +51,7 @@ import { useAppStoreRefs } from "@data-app";
 import { useRoomAllowedOperations, useRoomDetailsStore, useRoomStore } from "@data-room";
 import { useCopyFlow } from "@feature-copy";
 import { RoomBoardGrid, RoomMenu } from "@feature-room";
-import { ShareDialog, useShareFlow } from "@feature-share";
+import { useShareFlow } from "@feature-share";
 import { mdiPlus } from "@icons/material";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
@@ -158,15 +149,7 @@ const onCopy = async () => {
 	}
 };
 
-const {
-	isShareDialogOpen,
-	shareItemType,
-	shareUrl,
-	executeShare,
-	onConfirm: onConfirmShare,
-	onCancel: onCancelShare,
-	onDone,
-} = useShareFlow();
+const { executeShare } = useShareFlow();
 
 const onShare = () => {
 	if (allowedOperations.value.shareRoom) {

@@ -3,7 +3,7 @@ import { defineDialog } from "./dialog-types";
 import ConfirmDialog from "./dialogs/ConfirmDialog.vue";
 import PromptDialog from "./dialogs/PromptDialog.vue";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
-import { ShareTokenInfoResponse } from "@api-server";
+import { ShareTokenBodyParamsParentType, ShareTokenInfoResponse } from "@api-server";
 import { CopyDialog } from "@feature-copy";
 import {
 	ImportCardDialog,
@@ -12,6 +12,8 @@ import {
 	ImportDestinationType,
 	ImportDialog,
 } from "@feature-import";
+import type { ShareOptions } from "@feature-share";
+import { ShareDialog } from "@feature-share";
 
 export const dialogRegistry = {
 	confirm: defineDialog<{ title: string; message: string }, boolean>(ConfirmDialog),
@@ -34,4 +36,11 @@ export const dialogRegistry = {
 		},
 		{ newName: string; destination?: ImportDestination }
 	>(ImportCardDialog),
+	share: defineDialog<
+		{
+			shareItemType: ShareTokenBodyParamsParentType;
+			onConfirm: (options: ShareOptions) => Promise<string>;
+		},
+		void
+	>(ShareDialog),
 };

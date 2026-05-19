@@ -28,15 +28,6 @@
 				/>
 			</VWindow>
 		</div>
-		<ShareDialog
-			v-if="shareItemType"
-			:is-open="isShareDialogOpen"
-			:share-item-type="shareItemType"
-			:share-url="shareUrl"
-			@confirm="onConfirmShare"
-			@cancel="onCancelShare"
-			@done="onDone"
-		/>
 	</section>
 </template>
 
@@ -46,7 +37,7 @@ import { CopyParams } from "@/types/copy/CopyParams";
 import { ShareTokenBodyParamsParentType } from "@api-server";
 import { useTasksOfOverview } from "@data-tasks";
 import { useCopyFlow } from "@feature-copy";
-import { ShareDialog, useShareFlow } from "@feature-share";
+import { useShareFlow } from "@feature-share";
 import { mdiArchiveOutline, mdiFormatListChecks, mdiPlaylistEdit } from "@icons/material";
 import { useUrlSearchParams } from "@vueuse/core";
 import { computed } from "vue";
@@ -88,15 +79,7 @@ const onCopyTask = async ({ id, courseId }: CopyParams) => {
 	}
 };
 
-const {
-	isShareDialogOpen,
-	shareItemType,
-	shareUrl,
-	executeShare,
-	onConfirm: onConfirmShare,
-	onCancel: onCancelShare,
-	onDone,
-} = useShareFlow();
+const { executeShare } = useShareFlow();
 
 const onShareTask = (taskId: string) => {
 	executeShare({
