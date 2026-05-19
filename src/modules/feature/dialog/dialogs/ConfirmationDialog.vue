@@ -21,14 +21,13 @@
 </template>
 
 <script setup lang="ts">
-import { ConfirmationOptions } from "../dialog-contracts";
+import { ConfirmationDialogProps } from "../dialog-contracts";
 import { i18nKeyExists, useI18nGlobal } from "@/plugins/i18n";
+import { InfoAlert, WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { computed } from "vue";
 
-const props = defineProps<{
-	options: ConfirmationOptions;
-}>();
+const props = defineProps<ConfirmationDialogProps>();
 
 const emit = defineEmits<{
 	cancel: [];
