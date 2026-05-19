@@ -1,2 +1,2 @@
 export * from "./dialog-contracts";
-export { openDialog } from "./dialog-stack";
+export { openDialog } from "./dialog-manager";

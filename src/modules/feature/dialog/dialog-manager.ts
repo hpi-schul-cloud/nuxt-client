@@ -2,27 +2,34 @@ import { dialogRegistry } from "./dialog-registry";
 import type { AwaitableResult, DialogKey, DialogProps, DialogResult } from "./dialog-types";
 import { ref } from "vue";
 
-type StackItem<K extends DialogKey = DialogKey> = {
+type DialogRequest<K extends DialogKey = DialogKey> = {
 	id: number;
 	type: K;
 	props: DialogProps<K>;
 	modelValue: boolean;
 	resolved: boolean;
-	pendingSettlement: AwaitableResult<DialogResult<K>> | null;
+	pendingSettlement: AwaitableResult<unknown> | undefined;
 	resolve: (value: AwaitableResult<unknown>) => void;
 };
 
-const stack = ref<StackItem[]>([]);
+type AnyDialogRequest = {
+	[K in DialogKey]: DialogRequest<K>;
+}[DialogKey];
+
+const activeDialog = ref<AnyDialogRequest | undefined>(undefined);
+const queue = ref<AnyDialogRequest[]>([]);
 
 let nextId = 1;
 
-const findDialog = (id: number) => stack.value.find((item) => item.id === id);
-
-const findDialogIndex = (id: number) => stack.value.findIndex((item) => item.id === id);
+const activateNextDialog = () => {
+	if (activeDialog.value || queue.value.length === 0) return;
+	activeDialog.value = queue.value.shift() ?? undefined;
+};
 
 const beginSettlement = <K extends DialogKey>(id: number, result: AwaitableResult<DialogResult<K>>) => {
-	const item = findDialog(id);
+	const item = activeDialog.value;
 	if (!item) return;
+	if (item.id !== id) return;
 	if (item.resolved) return;
 	if (item.pendingSettlement) return;
 
@@ -31,17 +38,18 @@ const beginSettlement = <K extends DialogKey>(id: number, result: AwaitableResul
 };
 
 const finalizeSettlement = (id: number) => {
-	const index = findDialogIndex(id);
-	if (index === -1) return;
-
-	const item = stack.value[index];
+	const item = activeDialog.value;
+	if (!item) return;
+	if (item.id !== id) return;
 	if (item.resolved) return;
 	if (!item.pendingSettlement) return;
 
 	item.resolved = true;
-	stack.value.splice(index, 1);
+	activeDialog.value = undefined;
 
 	item.resolve(item.pendingSettlement);
+
+	activateNextDialog();
 };
 
 export const openDialog = <K extends DialogKey>(
@@ -49,15 +57,21 @@ export const openDialog = <K extends DialogKey>(
 	props: DialogProps<K>
 ): Promise<AwaitableResult<DialogResult<K>>> =>
 	new Promise((resolve) => {
-		stack.value.push({
+		const item: DialogRequest<K> = {
 			id: nextId++,
 			type,
 			props,
 			modelValue: true,
 			resolved: false,
-			pendingSettlement: null,
+			pendingSettlement: undefined,
 			resolve: resolve as (value: AwaitableResult<unknown>) => void,
-		});
+		};
+
+		if (activeDialog.value === undefined) {
+			activeDialog.value = item as AnyDialogRequest;
+		} else {
+			queue.value.push(item as AnyDialogRequest);
+		}
 	});
 
 export const completeDialog = <K extends DialogKey>(id: number, data: DialogResult<K>) => {
@@ -69,14 +83,13 @@ export const cancelDialog = (id: number) => {
 };
 
 export const setDialogModelValue = (id: number, value: boolean) => {
-	const item = findDialog(id);
+	const item = activeDialog.value;
 	if (!item) return;
+	if (item.id !== id) return;
 	if (item.resolved) return;
 
 	item.modelValue = value;
 
-	// If something external caused the dialog to close,
-	// treat it as cancellation unless settlement is already in progress.
 	if (value === false && !item.pendingSettlement) {
 		item.pendingSettlement = { completed: false, data: undefined };
 	}
@@ -87,10 +100,21 @@ export const onDialogAfterLeave = (id: number) => {
 };
 
 export const cancelAllDialogsImmediately = () => {
-	const items = [...stack.value];
-	stack.value.splice(0, stack.value.length);
+	const active = activeDialog.value;
+	const queued = [...queue.value];
 
-	for (const item of items) {
+	activeDialog.value = undefined;
+	queue.value.splice(0, queue.value.length);
+
+	if (active && !active.resolved) {
+		active.resolved = true;
+		active.resolve({
+			completed: false,
+			data: undefined,
+		});
+	}
+
+	for (const item of queued) {
 		if (item.resolved) continue;
 		item.resolved = true;
 		item.resolve({
@@ -100,8 +124,9 @@ export const cancelAllDialogsImmediately = () => {
 	}
 };
 
-export const useDialogStack = () => ({
-	stack,
+export const useDialogManager = () => ({
+	activeDialog,
+	queue,
 	registry: dialogRegistry,
 	openDialog,
 	completeDialog,

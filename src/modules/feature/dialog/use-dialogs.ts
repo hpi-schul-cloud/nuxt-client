@@ -1,4 +1,4 @@
-import { openDialog } from "./dialog-stack";
+import { openDialog } from "./dialog-manager";
 
 export const useDialogs = () => ({
 	openDialog,
