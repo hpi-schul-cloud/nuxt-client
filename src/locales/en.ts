@@ -154,6 +154,7 @@ export default {
 	"common.notifications.errors.notFinished": "{type} could not be completed.",
 	"common.notifications.errors.notReverted": "{type} could not be reset",
 	"common.notifications.errors.notRestored": "{type} could not be restored.",
+	"common.notifications.errors.notShared": "{type} could not be shared. | {type} could not be shared.",
 	"common.notification.error.preferences.update": "User preferences could not be updated.",
 	"common.notification.error.preferences.retrieve": "User preferences could not be retrieved.",
 	"common.notification.error.videoConference.notFetched": "The video conference could not be fetched.",

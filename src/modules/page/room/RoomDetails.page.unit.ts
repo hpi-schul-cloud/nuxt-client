@@ -1,19 +1,17 @@
-import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { RoomBoardItem } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStore, createTestRoomStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/factory/room";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
 import { CopyApiResponseStatus, CopyApiResponseType } from "@api-server";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { CopyDialog, useCopyFlow } from "@feature-copy";
-import { RoomContentGrid, RoomMenu } from "@feature-room";
+import { RoomBoardGrid, RoomMenu } from "@feature-room";
+import { useShareFlow } from "@feature-share";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
@@ -22,25 +20,33 @@ import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-det
 import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VBreadcrumbsItem, VBtn, VCard, VFab } from "vuetify/components";
 
 vi.mock("@feature-copy/copy-flow.composable");
+vi.mock("@feature-share/share-flow.composable");
 vi.mock("@data-room/Rooms.state");
 
 describe("@pages/RoomsDetails.page.vue", () => {
 	let useCopyFlowMock: Mocked<ReturnType<typeof useCopyFlow>>;
+	let useShareFlowMock: Mocked<ReturnType<typeof useShareFlow>>;
 
 	beforeEach(() => {
 		vi.useFakeTimers();
 
 		useCopyFlowMock = mockComposable(useCopyFlow, {
-			isDialogOpen: ref(false),
+			isCopyDialogOpen: ref(false),
 			copyItemType: ref(ContentItemTypeEnum.Course),
-			isRunning: computed(() => false),
 		});
 		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
+
+		useShareFlowMock = mockComposable(useShareFlow, {
+			isShareDialogOpen: ref(false),
+			shareItemType: ref(serverApi.ShareTokenBodyParamsParentType.COURSES),
+			shareUrl: ref("http://example.com/share-url"),
+		});
+		vi.mocked(useShareFlow).mockReturnValue(useShareFlowMock);
 	});
 
 	afterEach(() => {
@@ -57,11 +63,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			roomBoards: [],
 			...options,
 		};
-
-		const shareModule = createModuleMocks(ShareModule, {
-			getIsShareModalOpen: false,
-			getParentType: serverApi.ShareTokenBodyParamsParentType.ROOM,
-		});
 
 		const room = roomFactory.build({ allowedOperations: options?.allowedOperations });
 
@@ -84,9 +85,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: { LeaveRoomProhibitedDialog: true, UseFocusTrap: true, RoomContentGrid: true },
-				provide: {
-					[SHARE_MODULE_KEY.valueOf()]: shareModule,
-				},
 			},
 			props: {
 				room,
@@ -94,6 +92,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
+		roomDetailsStore.updateBoardVisibility.mockResolvedValue({ success: false, error: new Error("Any") });
+		roomDetailsStore.deleteBoard.mockResolvedValue({ success: false });
 
 		return {
 			wrapper,
@@ -101,7 +101,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			room,
 			router,
 			roomStore,
-			shareModule,
 		};
 	};
 
@@ -241,14 +240,14 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		describe("and user clicks on share room", () => {
 			describe("when user has permission to share room", () => {
 				it("should start the share flow", () => {
-					const { wrapper, room, shareModule } = setup({
+					const { wrapper, room } = setup({
 						allowedOperations: { accessRoom: true, shareRoom: true },
 					});
 
 					const menu = wrapper.getComponent({ name: "RoomMenu" });
 					menu.vm.$emit("room:share");
 
-					expect(shareModule.startShareFlow).toHaveBeenCalledWith({
+					expect(useShareFlowMock.executeShare).toHaveBeenCalledWith({
 						id: room.id,
 						type: ShareTokenParentType.ROOM,
 					});
@@ -257,14 +256,14 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 			describe("when user does not have permission to share room", () => {
 				it("should not start the share flow", () => {
-					const { wrapper, shareModule } = setup({
+					const { wrapper } = setup({
 						allowedOperations: { accessRoom: true, shareRoom: false },
 					});
 
 					const menu = wrapper.getComponent({ name: "RoomMenu" });
 					menu.vm.$emit("room:share");
 
-					expect(shareModule.startShareFlow).not.toHaveBeenCalled();
+					expect(useShareFlowMock.executeShare).not.toHaveBeenCalled();
 				});
 			});
 		});
@@ -402,6 +401,98 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 	});
 
+	describe("board actions", () => {
+		describe("when user updates board visibility", () => {
+			it("should call updateBoardVisibility when board has permission", () => {
+				const boards = roomBoardGridItemFactory.buildList(1, {
+					allowedOperations: { updateBoardVisibility: true },
+				});
+				const { wrapper, roomDetailsStore } = setup({ roomBoards: boards });
+
+				const boardGrid = wrapper.getComponent(RoomBoardGrid);
+				boardGrid.vm.$emit("update:boardVisibility", boards[0], true);
+
+				expect(roomDetailsStore.updateBoardVisibility).toHaveBeenCalledWith(boards[0].id, true);
+			});
+
+			it("should not call updateBoardVisibility when board lacks permission", () => {
+				const boards = roomBoardGridItemFactory.buildList(1, {
+					allowedOperations: { updateBoardVisibility: false },
+				});
+				const { wrapper, roomDetailsStore } = setup({ roomBoards: boards });
+
+				const boardGrid = wrapper.getComponent(RoomBoardGrid);
+				boardGrid.vm.$emit("update:boardVisibility", boards[0], true);
+
+				expect(roomDetailsStore.updateBoardVisibility).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when user deletes a board", () => {
+			it("should call deleteBoard when board has permission", () => {
+				const boards = roomBoardGridItemFactory.buildList(1, {
+					allowedOperations: { deleteBoard: true },
+				});
+				const { wrapper, roomDetailsStore } = setup({ roomBoards: boards });
+
+				const boardGrid = wrapper.getComponent(RoomBoardGrid);
+				boardGrid.vm.$emit("delete:board", boards[0]);
+
+				expect(roomDetailsStore.deleteBoard).toHaveBeenCalledWith(boards[0].id, boards[0].title);
+			});
+
+			it("should not call deleteBoard when board lacks permission", () => {
+				const boards = roomBoardGridItemFactory.buildList(1, {
+					allowedOperations: { deleteBoard: false },
+				});
+				const { wrapper, roomDetailsStore } = setup({ roomBoards: boards });
+
+				const boardGrid = wrapper.getComponent(RoomBoardGrid);
+				boardGrid.vm.$emit("delete:board", boards[0]);
+
+				expect(roomDetailsStore.deleteBoard).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when user duplicates a board", () => {
+			it("should call executeCopyBoard and refresh when board has permission", async () => {
+				const boards = roomBoardGridItemFactory.buildList(1, {
+					allowedOperations: { copyBoard: true },
+				});
+				useCopyFlowMock.executeCopyBoard.mockResolvedValue({
+					success: true,
+					result: { id: "copied-board-id", type: CopyApiResponseType.BOARD, status: CopyApiResponseStatus.SUCCESS },
+					error: undefined,
+				});
+
+				const { wrapper, roomDetailsStore, room } = setup({
+					roomBoards: boards,
+					allowedOperations: { accessRoom: true, viewContent: true },
+				});
+
+				const boardGrid = wrapper.getComponent(RoomBoardGrid);
+				await boardGrid.vm.$emit("duplicate:board", boards[0]);
+				await flushPromises();
+
+				expect(useCopyFlowMock.executeCopyBoard).toHaveBeenCalledWith(boards[0].id);
+				expect(roomDetailsStore.fetchRoomAndBoards).toHaveBeenCalledWith(room.id);
+			});
+
+			it("should not call executeCopyBoard when board lacks permission", async () => {
+				const boards = roomBoardGridItemFactory.buildList(1, {
+					allowedOperations: { copyBoard: false },
+				});
+				const { wrapper } = setup({ roomBoards: boards });
+
+				const boardGrid = wrapper.getComponent(RoomBoardGrid);
+				await boardGrid.vm.$emit("duplicate:board", boards[0]);
+				await flushPromises();
+
+				expect(useCopyFlowMock.executeCopyBoard).not.toHaveBeenCalled();
+			});
+		});
+	});
+
 	describe("room boards", () => {
 		describe("when user can view room", () => {
 			it("should render room boards", () => {
@@ -410,7 +501,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					allowedOperations: { accessRoom: true, viewContent: true },
 				});
 
-				const boardGrid = wrapper.findComponent(RoomContentGrid);
+				const boardGrid = wrapper.findComponent(RoomBoardGrid);
 				expect(boardGrid.props("boards").length).toEqual(3);
 			});
 
@@ -441,7 +532,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 							allowedOperations: { accessRoom: true, viewContent: true, viewDraftContent: true },
 						});
 
-						const boardGrid = wrapper.findComponent(RoomContentGrid);
+						const boardGrid = wrapper.findComponent(RoomBoardGrid);
 
 						expect(boardGrid.props("boards").length).toStrictEqual(totalCount);
 					});
@@ -452,7 +543,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						const { wrapper, visibleCount } = setupWithBoards({
 							allowedOperations: { accessRoom: true, viewContent: true, viewDraftContent: false },
 						});
-						const boardGrid = wrapper.findComponent(RoomContentGrid);
+						const boardGrid = wrapper.findComponent(RoomBoardGrid);
 
 						expect(boardGrid.props("boards").length).toStrictEqual(visibleCount);
 					});
@@ -467,7 +558,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					allowedOperations: { accessRoom: false },
 				});
 
-				const boardGrid = wrapper.findComponent(RoomContentGrid);
+				const boardGrid = wrapper.findComponent(RoomBoardGrid);
 
 				expect(boardGrid.props("boards").length).toBe(0);
 			});
