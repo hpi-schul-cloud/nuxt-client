@@ -15,7 +15,7 @@ export const useCopyFlow = () => {
 
 	const { t } = useI18n();
 	const { withLoadingState } = useLoadingStore();
-	const { execute, isRunning } = useSafeAxiosTask();
+	const { execute } = useSafeAxiosTask();
 
 	const courseRoomApi = CourseRoomsApiFactory(undefined, "/v3", $axios);
 	const taskApi = TaskApiFactory(undefined, "/v3", $axios);
@@ -128,9 +128,8 @@ export const useCopyFlow = () => {
 	};
 
 	return {
-		isDialogOpen,
+		isCopyDialogOpen: isDialogOpen,
 		copyItemType,
-		isRunning,
 		executeCopyCourse,
 		executeCopyTask,
 		executeCopyLesson,
