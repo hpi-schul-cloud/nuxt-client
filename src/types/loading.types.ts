@@ -1,4 +1,4 @@
-export type WithLoadingStateOptions = {
+export type LoadingStateOptions = {
 	delay?: number;
 	minDisplayTime?: number;
 };

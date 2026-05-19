@@ -178,6 +178,88 @@ describe("useSafeAxiosTask", () => {
 			expect.objectContaining({ status: "error", text: "Request failed. Fehlerhafte Anfrage" })
 		);
 	});
+
+	describe("isLoading and isBlocked", () => {
+		beforeEach(() => {
+			vi.useFakeTimers();
+		});
+
+		afterEach(() => {
+			vi.useRealTimers();
+		});
+
+		it("should initialise isLoading and isBlocked as false", () => {
+			const { isLoading, isBlocked } = useSafeAxiosTask();
+
+			expect(isLoading.value).toBe(false);
+			expect(isBlocked.value).toBe(false);
+		});
+
+		it("should set isBlocked to true immediately when executing", async () => {
+			const { execute, isBlocked } = useSafeAxiosTask();
+			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
+
+			const promise = execute(fn);
+
+			expect(isBlocked.value).toBe(true);
+
+			await vi.runAllTimersAsync();
+			await promise;
+		});
+
+		it("should set isLoading to true after the delay fires", async () => {
+			const { execute, isLoading } = useSafeAxiosTask();
+			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
+
+			const promise = execute(fn);
+
+			await vi.advanceTimersByTimeAsync(199);
+			expect(isLoading.value).toBe(false);
+
+			await vi.advanceTimersByTimeAsync(1);
+			expect(isLoading.value).toBe(true);
+
+			await vi.runAllTimersAsync();
+			await promise;
+		});
+
+		it("should not set isLoading if the function completes before the delay", async () => {
+			const { execute, isLoading } = useSafeAxiosTask();
+			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("fast"), 100)));
+
+			const promise = execute(fn);
+			await vi.runAllTimersAsync();
+			await promise;
+
+			expect(isLoading.value).toBe(false);
+		});
+
+		it("should reset isLoading and isBlocked to false after execution completes", async () => {
+			const { execute, isLoading, isBlocked } = useSafeAxiosTask();
+			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
+
+			const promise = execute(fn);
+			await vi.runAllTimersAsync();
+			await promise;
+
+			expect(isLoading.value).toBe(false);
+			expect(isBlocked.value).toBe(false);
+		});
+
+		it("should reset isLoading and isBlocked to false even when the function throws", async () => {
+			const { execute, isLoading, isBlocked } = useSafeAxiosTask();
+			const fn = vi
+				.fn()
+				.mockImplementation(() => new Promise((_, reject) => setTimeout(() => reject(new Error("boom")), 1000)));
+
+			const promise = execute(fn);
+			await vi.runAllTimersAsync();
+			await promise;
+
+			expect(isLoading.value).toBe(false);
+			expect(isBlocked.value).toBe(false);
+		});
+	});
 });
 
 describe("useSafeAxiosQuery", () => {
@@ -224,6 +306,63 @@ describe("useSafeAxiosQuery", () => {
 
 			expect(mockFn).toHaveBeenCalledTimes(1);
 			expect(data.value).toBe("lazy data");
+		});
+	});
+
+	describe("isLoading and isBlocked", () => {
+		beforeEach(() => {
+			vi.useFakeTimers();
+		});
+
+		afterEach(() => {
+			vi.useRealTimers();
+		});
+
+		it("should initialise isLoading and isBlocked as false", () => {
+			const { isLoading, isBlocked } = useSafeAxiosRunner(vi.fn().mockResolvedValue("data"), { immediate: false });
+
+			expect(isLoading.value).toBe(false);
+			expect(isBlocked.value).toBe(false);
+		});
+
+		it("should set isBlocked to true immediately when executing", async () => {
+			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
+			const { execute, isBlocked } = useSafeAxiosRunner(fn, { immediate: false });
+
+			const promise = execute();
+
+			expect(isBlocked.value).toBe(true);
+
+			await vi.runAllTimersAsync();
+			await promise;
+		});
+
+		it("should set isLoading to true after the delay fires", async () => {
+			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
+			const { execute, isLoading } = useSafeAxiosRunner(fn, { immediate: false });
+
+			const promise = execute();
+
+			await vi.advanceTimersByTimeAsync(199);
+			expect(isLoading.value).toBe(false);
+
+			await vi.advanceTimersByTimeAsync(1);
+			expect(isLoading.value).toBe(true);
+
+			await vi.runAllTimersAsync();
+			await promise;
+		});
+
+		it("should reset isLoading and isBlocked to false after execution completes", async () => {
+			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
+			const { execute, isLoading, isBlocked } = useSafeAxiosRunner(fn, { immediate: false });
+
+			const promise = execute();
+			await vi.runAllTimersAsync();
+			await promise;
+
+			expect(isLoading.value).toBe(false);
+			expect(isBlocked.value).toBe(false);
 		});
 	});
 });

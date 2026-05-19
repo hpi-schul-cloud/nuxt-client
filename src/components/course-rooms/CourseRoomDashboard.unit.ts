@@ -1,10 +1,7 @@
 import CourseRoomDashboard from "./CourseRoomDashboard.vue";
-import ShareModule from "@/store/share";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import {
 	BoardElementResponseType,
@@ -127,10 +124,6 @@ const emptyMockData = {
 	elements: [],
 };
 
-const shareModuleMock = createModuleMocks(ShareModule, {
-	getIsShareModalOpen: false,
-});
-
 const setup = (options?: { roomData?: SingleColumnBoardResponse; role?: string }) => {
 	injectRouterMock(createRouterMock());
 	const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
@@ -141,9 +134,6 @@ const setup = (options?: { roomData?: SingleColumnBoardResponse; role?: string }
 	const wrapper = mount(CourseRoomDashboard, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
-			},
 		},
 		props: {
 			role: options?.role || "teacher",
@@ -156,10 +146,7 @@ const setup = (options?: { roomData?: SingleColumnBoardResponse; role?: string }
 describe("CourseRoomDashboard.vue", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		createTestEnvStore({
-			FEATURE_LESSON_SHARE: true,
-			FEATURE_TASK_SHARE: true,
-		});
+		createTestEnvStore();
 	});
 	describe("common features", () => {
 		it("should have props", () => {
@@ -424,23 +411,16 @@ describe("CourseRoomDashboard.vue", () => {
 			const { wrapper } = setup();
 
 			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
-			lessonCard.vm.$emit("open-modal", "12345");
+			lessonCard.vm.$emit("open-modal", "3456");
 
-			expect(shareModuleMock.startShareFlow).toBeCalledWith({
-				id: "12345",
-				type: ShareTokenBodyParamsParentType.LESSONS,
-			});
-		});
-
-		it("should not call startShareFlow when FEATURE_LESSON_SHARE is disabled", () => {
-			createTestEnvStore({ FEATURE_LESSON_SHARE: false });
-			const { wrapper } = setup();
-			shareModuleMock.startShareFlow.mockClear();
-
-			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
-			lessonCard.vm.$emit("open-modal", "12345");
-
-			expect(shareModuleMock.startShareFlow).not.toHaveBeenCalled();
+			expect(wrapper.emitted("share-board-element")).toStrictEqual([
+				[
+					{
+						id: "3456",
+						type: ShareTokenBodyParamsParentType.LESSONS,
+					},
+				],
+			]);
 		});
 	});
 
@@ -451,21 +431,14 @@ describe("CourseRoomDashboard.vue", () => {
 
 			taskCard.vm.$emit("share-task", "1234");
 
-			expect(shareModuleMock.startShareFlow).toBeCalledWith({
-				id: "1234",
-				type: ShareTokenBodyParamsParentType.TASKS,
-			});
-		});
-
-		it("should not call startShareFlow when FEATURE_TASK_SHARE is disabled", () => {
-			createTestEnvStore({ FEATURE_TASK_SHARE: false });
-			const { wrapper } = setup();
-			shareModuleMock.startShareFlow.mockClear();
-
-			const taskCard = wrapper.findComponent<VCard>(".task-card");
-			taskCard.vm.$emit("share-task", "1234");
-
-			expect(shareModuleMock.startShareFlow).not.toHaveBeenCalled();
+			expect(wrapper.emitted("share-board-element")).toStrictEqual([
+				[
+					{
+						id: "1234",
+						type: ShareTokenBodyParamsParentType.TASKS,
+					},
+				],
+			]);
 		});
 	});
 
@@ -767,26 +740,18 @@ describe("CourseRoomDashboard.vue", () => {
 		it("should call startShareFlow when board is shared and FEATURE_COLUMN_BOARD_SHARE is enabled", () => {
 			createTestEnvStore({ FEATURE_COLUMN_BOARD_SHARE: true });
 			const { wrapper } = setup();
-			shareModuleMock.startShareFlow.mockClear();
 
 			const boardCard = wrapper.findComponent({ name: "RoomBoardCard" });
 			boardCard.vm.$emit("share-board", "board-123");
 
-			expect(shareModuleMock.startShareFlow).toHaveBeenCalledWith({
-				id: "board-123",
-				type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
-			});
-		});
-
-		it("should not call startShareFlow when FEATURE_COLUMN_BOARD_SHARE is disabled", () => {
-			createTestEnvStore({ FEATURE_COLUMN_BOARD_SHARE: false });
-			const { wrapper } = setup();
-			shareModuleMock.startShareFlow.mockClear();
-
-			const boardCard = wrapper.findComponent({ name: "RoomBoardCard" });
-			boardCard.vm.$emit("share-board", "board-123");
-
-			expect(shareModuleMock.startShareFlow).not.toHaveBeenCalled();
+			expect(wrapper.emitted("share-board-element")).toStrictEqual([
+				[
+					{
+						id: "board-123",
+						type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
+					},
+				],
+			]);
 		});
 	});
 

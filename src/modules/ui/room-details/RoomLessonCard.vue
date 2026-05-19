@@ -289,7 +289,6 @@ const onKeyPress = (e: KeyboardEvent) => {
 
 		.chip-value {
 			font-size: var(--text-xs);
-			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 			color: rgba(0, 0, 0, 0.87);
 		}
 	}

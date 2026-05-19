@@ -20,6 +20,9 @@ export function downloadFile(url: string, fileName: string) {
 	link.href = url;
 	link.download = fileName;
 	link.hidden = true;
+	link.addEventListener("click", function (event) {
+		event.stopPropagation();
+	});
 	// This functionality adds a hidden <a> element to the page,
 	// fires its click event and removes it afterwards, as it is
 	// no longer needed and should not clutter the page any further.
