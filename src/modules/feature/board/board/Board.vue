@@ -97,12 +97,6 @@
 					:has-relocate-board-content-permission="allowedOperations?.relocateContent ?? false"
 					:card-id="moveCardOptions.cardId"
 				/>
-				<CopyDialog
-					:is-open="isCopyDialogOpen"
-					:copy-item-type="copyItemType"
-					@confirm="onConfirmCopy"
-					@cancel="onCancelCopy"
-				/>
 				<ShareDialog
 					v-if="shareItemType"
 					:is-open="isShareDialogOpen"
@@ -173,7 +167,7 @@ import {
 import { useEnvConfig } from "@data-env";
 import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog } from "@feature-collabora";
-import { CopyDialog, useCopyFlow } from "@feature-copy";
+import { useCopyFlow } from "@feature-copy";
 import { ShareDialog, useShareFlow } from "@feature-share";
 import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
@@ -416,13 +410,7 @@ const boardColumnClass = computed(() => {
 	return classes;
 });
 
-const {
-	isCopyDialogOpen,
-	copyItemType,
-	executeCopyBoard,
-	onConfirm: onConfirmCopy,
-	onCancel: onCancelCopy,
-} = useCopyFlow();
+const { executeCopyBoard } = useCopyFlow();
 
 const onBackToOverview = () => {
 	router.push({ path: "/dashboard" });

@@ -6,8 +6,9 @@
 		confirm-btn-lang-key="common.actions.duplicate"
 		cancel-btn-lang-key="common.actions.cancel"
 		data-testid="copy-info-dialog"
-		@confirm="emit('confirm', true)"
+		@confirm="emit('complete', true)"
 		@cancel="emit('cancel')"
+		@after-leave="emit('after-leave')"
 	>
 		<template #content>
 			<p data-testid="copy-info-text">
@@ -45,14 +46,12 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-	(e: "cancel"): void;
-	(e: "confirm", payload: boolean): void;
+	cancel: [];
+	complete: [boolean];
+	"after-leave": [];
 }>();
 
-const isOpen = defineModel("is-open", {
-	type: Boolean,
-	default: false,
-});
+const isOpen = defineModel<boolean>({ default: false });
 
 const title = computed(() =>
 	t("feature-copy.copyInfo.title", { type: t(`feature-copy.copyInfo.type.${props.copyItemType}`) })

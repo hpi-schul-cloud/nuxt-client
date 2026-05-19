@@ -66,12 +66,6 @@
 			@cancel="onCancelShare"
 			@done="onDone"
 		/>
-		<CopyDialog
-			:is-open="isCopyDialogOpen"
-			:copy-item-type="copyItemType"
-			@confirm="onConfirmCopy"
-			@cancel="onCancelCopy"
-		/>
 		<CourseCommonCartridgeExportModal v-model:is-open="isExportDialogOpen" :room-id="roomData.roomId" />
 		<EndCourseSyncDialog
 			v-model:is-open="isEndSyncDialogOpen"
@@ -108,7 +102,7 @@ import { useAppStore } from "@data-app";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
-import { CopyDialog, useCopyFlow } from "@feature-copy";
+import { useCopyFlow } from "@feature-copy";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
 import { ShareDialog, ShareParams, useShareFlow } from "@feature-share";
 import {
@@ -381,16 +375,7 @@ const refreshCourseRoom = async () => {
 	await fetchContent(courseId.value);
 };
 
-const {
-	isCopyDialogOpen: isCopyDialogOpen,
-	copyItemType,
-	executeCopyCourse,
-	executeCopyTask,
-	executeCopyLesson,
-	executeCopyBoard,
-	onConfirm: onConfirmCopy,
-	onCancel: onCancelCopy,
-} = useCopyFlow();
+const { executeCopyCourse, executeCopyTask, executeCopyLesson, executeCopyBoard } = useCopyFlow();
 
 const onCopyRequested = async ({ id, type }: { id: string; type: ContentItemTypeEnum }) => {
 	switch (type) {

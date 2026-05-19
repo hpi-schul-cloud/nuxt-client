@@ -37,12 +37,6 @@
 			@select="onCreateBoard"
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
-		<CopyDialog
-			:is-open="isCopyDialogOpen"
-			:copy-item-type="copyItemType"
-			@confirm="onConfirmCopy"
-			@cancel="onCancelCopy"
-		/>
 		<ShareDialog
 			v-if="shareItemType"
 			:is-open="isShareDialogOpen"
@@ -64,7 +58,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { RoomBoardItemResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useRoomAllowedOperations, useRoomDetailsStore, useRoomStore } from "@data-room";
-import { CopyDialog, useCopyFlow } from "@feature-copy";
+import { useCopyFlow } from "@feature-copy";
 import { RoomBoardGrid, RoomMenu } from "@feature-room";
 import { ShareDialog, useShareFlow } from "@feature-share";
 import { mdiPlus } from "@icons/material";
@@ -151,15 +145,14 @@ const onManageMembers = () => {
 	});
 };
 
-const copyFlow = useCopyFlow();
-const { isCopyDialogOpen, copyItemType, onConfirm: onConfirmCopy, onCancel: onCancelCopy } = copyFlow;
+const { executeCopyRoom } = useCopyFlow();
 
 const onCopy = async () => {
 	if (!allowedOperations.value.copyRoom) {
 		return;
 	}
 
-	const { result: copyResult } = await copyFlow.executeCopyRoom(room.value.id);
+	const { result: copyResult } = await executeCopyRoom(room.value.id);
 	if (copyResult?.id) {
 		await router.replace({ name: "room-details", params: { id: copyResult.id } });
 	}

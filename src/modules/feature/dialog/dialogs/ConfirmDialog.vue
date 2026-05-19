@@ -4,7 +4,7 @@
 		:title="title"
 		:is-open-state-managed-externally="true"
 		@cancel="emit('cancel')"
-		@confirm="onConfirm"
+		@confirm="emit('complete', true)"
 		@after-leave="emit('after-leave')"
 	>
 		<template #content>
@@ -28,8 +28,4 @@ const emit = defineEmits<{
 }>();
 
 const isOpen = defineModel<boolean>({ default: false });
-
-const onConfirm = () => {
-	emit("complete", true);
-};
 </script>
