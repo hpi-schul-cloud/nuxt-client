@@ -1,6 +1,6 @@
 import { dialogRegistry } from "./dialog-registry";
 import type { AwaitableResult, DialogKey, DialogProps, DialogResult } from "./dialog-types";
-import { ref } from "vue";
+import { markRaw, ref } from "vue";
 
 type DialogRequest<K extends DialogKey = DialogKey> = {
 	id: number;
@@ -91,7 +91,7 @@ export const setDialogModelValue = (id: number, value: boolean) => {
 	item.modelValue = value;
 
 	if (value === false && !item.pendingSettlement) {
-		item.pendingSettlement = { completed: false, data: undefined };
+		item.pendingSettlement = markRaw({ completed: false, data: undefined });
 	}
 };
 

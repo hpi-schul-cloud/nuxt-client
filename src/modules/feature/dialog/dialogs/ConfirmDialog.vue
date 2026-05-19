@@ -2,7 +2,7 @@
 	<SvsDialog
 		v-model="isOpen"
 		:title="title"
-		:is-open-state-managed-externally="true"
+		is-open-state-managed-externally
 		@cancel="emit('cancel')"
 		@confirm="emit('complete', true)"
 		@after-leave="emit('after-leave')"

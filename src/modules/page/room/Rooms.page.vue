@@ -13,24 +13,6 @@
 			</template>
 		</EmptyState>
 		<RoomGrid v-else :rooms />
-		<ImportCardDialog
-			v-if="shareTokenInfo"
-			:is-dialog-open="isCardImportDialogOpen"
-			:share-token-info="shareTokenInfo"
-			:available-destinations="availableDestinations"
-			destination-type="column"
-			@confirm="onConfirmImport"
-			@cancel="onCancelImport"
-		/>
-		<ImportDialog
-			v-if="shareTokenInfo"
-			:is-dialog-open="isGenericImportDialogOpen"
-			:share-token-info="shareTokenInfo"
-			:available-destinations="availableDestinations"
-			destination-type="room"
-			@confirm="onConfirmImport"
-			@cancel="onCancelImport"
-		/>
 	</DefaultWireframe>
 </template>
 
@@ -39,7 +21,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useRoomStore } from "@data-room";
-import { ImportCardDialog, ImportDialog, useImportFlow } from "@feature-import";
+import { useImportFlow } from "@feature-import";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
@@ -76,17 +58,10 @@ const fabAction = computed(() => {
 
 const availableDestinations = computed(() => rooms.value.filter((room) => !room.isLocked));
 
-const {
-	executeImport,
-	isGenericImportDialogOpen,
-	isCardImportDialogOpen,
-	shareTokenInfo,
-	onConfirmImport,
-	onCancelImport,
-} = useImportFlow();
+const { executeImport } = useImportFlow();
 
 const executeImportFlow = async (token: string) => {
-	const { result: importResult } = await executeImport(token);
+	const { result: importResult } = await executeImport(token, availableDestinations);
 
 	if (!importResult) {
 		router.push({ name: "rooms" });

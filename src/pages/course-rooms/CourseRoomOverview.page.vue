@@ -99,15 +99,6 @@
 		tabindex="0"
 		@drag-from-group="dragFromGroup"
 	/>
-	<ImportDialog
-		v-if="shareTokenInfo"
-		:is-dialog-open="isGenericImportDialogOpen"
-		:share-token-info="shareTokenInfo"
-		:available-destinations="availableDestinations"
-		destination-type="course"
-		@confirm="onConfirmImport"
-		@cancel="onCancelImport"
-	/>
 </template>
 
 <script setup lang="ts">
@@ -121,7 +112,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { DashboardGridElementResponse } from "@api-server";
 import { notifySuccess } from "@data-app";
 import { GroupDataType, useCourseRoomListStore } from "@data-course-rooms";
-import { ImportDialog, useImportFlow } from "@feature-import";
+import { useImportFlow } from "@feature-import";
 import { mdiCheck } from "@icons/material";
 import { SvsSearchField } from "@ui-controls";
 import { useTitle } from "@vueuse/core";
@@ -200,10 +191,10 @@ const availableDestinations = computed(() =>
 	)
 );
 
-const { executeImport, isGenericImportDialogOpen, shareTokenInfo, onConfirmImport, onCancelImport } = useImportFlow();
+const { executeImport, shareTokenInfo } = useImportFlow();
 
 const executeImportFlow = async (token: string) => {
-	const { result: importResult } = await executeImport(token);
+	const { result: importResult } = await executeImport(token, availableDestinations);
 
 	if (!importResult) {
 		router.push({ name: "course-room-overview" });

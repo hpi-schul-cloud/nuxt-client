@@ -1,6 +1,6 @@
 <template>
 	<SvsDialog
-		:model-value="isDialogOpen"
+		v-model="isDialogOpen"
 		is-open-state-managed-externally
 		:title="currentStepTitle"
 		:confirm-btn-lang-key="confirmBtnLangKey"
@@ -81,14 +81,12 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-	(e: "confirm", payload: { newName: string; destination?: ImportDestination }): void;
-	(e: "cancel"): void;
+	cancel: [];
+	complete: [{ newName: string; destination?: ImportDestination }];
+	"after-leave": [];
 }>();
 
-const isDialogOpen = defineModel("is-dialog-open", {
-	type: Boolean,
-	default: false,
-});
+const isDialogOpen = defineModel<boolean>({ default: false });
 
 const hasSelectStep = computed(
 	() =>
@@ -114,6 +112,7 @@ const resetDialog = () => {
 	stepIndex.value = 0;
 	selectedDestinationId.value = undefined;
 	nameInput.value = undefined;
+	emit("after-leave");
 };
 
 const rules = reactive({ required: isRequired(), validateOnOpeningTag });
@@ -140,7 +139,7 @@ const onNext = () => {
 		return;
 	}
 
-	emit("confirm", {
+	emit("complete", {
 		newName: newName.value,
 		destination: selectedDestinationId.value
 			? { type: props.destinationType, id: selectedDestinationId.value }

@@ -1,12 +1,14 @@
 <template>
 	<SvsDialog
 		v-model="isDialogOpen"
+		is-open-state-managed-externally
 		:title="importCardTitle"
 		confirm-btn-lang-key="common.actions.import"
 		:confirm-btn-disabled="!selectedColumnId"
 		data-testid="import-card-dialog"
 		@confirm="onConfirm"
 		@cancel="onCancel"
+		@after-leave="emit('after-leave')"
 	>
 		<template #content>
 			<WarningAlert v-if="availableDestinations.length === 0" class="mb-2">
@@ -85,20 +87,18 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-	(e: "confirm", payload: { newName: string; destination?: ImportDestination }): void;
-	(e: "cancel"): void;
+	cancel: [];
+	complete: [{ newName: string; destination?: ImportDestination }];
+	"after-leave": [];
 }>();
 
-const isDialogOpen = defineModel("is-dialog-open", {
-	type: Boolean,
-	default: false,
-});
+const isDialogOpen = defineModel<boolean>({ default: false });
 
 const { selectedBoardId, selectedColumnId, selectedRoomId, resetBoardSelection, columns, boards } =
 	useCardDialogData(isDialogOpen);
 
 const onConfirm = () => {
-	emit("confirm", {
+	emit("complete", {
 		newName: props.shareTokenInfo.parentName,
 		destination: { type: props.destinationType, id: selectedColumnId.value!, boardId: selectedBoardId.value! },
 	});

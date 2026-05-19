@@ -228,9 +228,11 @@ const onDeleteBoard = async (board: RoomBoardItemResponse) => {
 	if (success) await fetchRoomAndBoards(props.room.id);
 };
 
+const { executeCopyBoard } = useCopyFlow();
+
 const onDuplicateBoard = async (board: RoomBoardItemResponse) => {
 	if (!board.allowedOperations?.copyBoard) return;
-	const { result } = await copyFlow.executeCopyBoard(board.id);
+	const { result } = await executeCopyBoard(board.id);
 	if (result?.id) {
 		await roomDetailsStore.fetchRoomAndBoards(props.room.id);
 	}
