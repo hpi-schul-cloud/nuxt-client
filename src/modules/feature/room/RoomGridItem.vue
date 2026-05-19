@@ -81,8 +81,10 @@ const roomAriaLabel = computed(() => `${t("common.labels.room")} ${props.room.na
 	.v-card-title {
 		line-height: 1.5 !important;
 		white-space: normal;
+	}
 
-		&:hover {
+	&:hover {
+		.v-card-title {
 			text-decoration: underline;
 		}
 	}
