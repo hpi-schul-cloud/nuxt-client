@@ -101,9 +101,7 @@ export const useImportUsersStore = defineStore("importUsersStore", () => {
 			limit: filter.limit,
 		};
 
-		const { result, error } = await execute(() =>
-			$axios.get<ImportUserListResponse>("/v3/user/import", { params })
-		);
+		const { result, error } = await execute(() => $axios.get<ImportUserListResponse>("/v3/user/import", { params }));
 		importUsersData.list = result?.data ?? { data: [], total: 0, skip: 0, limit: 0 };
 
 		if (error) {

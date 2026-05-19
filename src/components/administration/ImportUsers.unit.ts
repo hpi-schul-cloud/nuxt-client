@@ -564,9 +564,7 @@ describe("ImportUsers", () => {
 
 		it("should return empty string when roleNames is not an array", () => {
 			const wrapper = setup(importUsersStore, mockData);
-			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: unknown) => string }).getRoles(
-				null as unknown as string[]
-			);
+			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: unknown) => string }).getRoles(null);
 
 			expect(roles).toBe("");
 		});

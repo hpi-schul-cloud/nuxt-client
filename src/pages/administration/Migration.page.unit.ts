@@ -644,6 +644,7 @@ describe("User Migration / Index", () => {
 							inMaintenance: true,
 						}),
 					});
+					wrapper.vm.isLoading = true;
 					await flushPromises();
 
 					return {
