@@ -29,7 +29,7 @@ type MigrationPageWrapperType = Partial<{
 	migrationStep: number;
 	isMigrationConfirm: boolean;
 	isClearAutoMatchesDialogOpen: boolean;
-	school: { inUserMigration: boolean; inMaintenance: boolean };
+	schoolMigrationState: { inUserMigration: boolean | undefined; inMaintenance: boolean | undefined };
 }>;
 
 const getWrapper = (
@@ -157,12 +157,10 @@ describe("User Migration / Index", () => {
 			expect(nextBtn.exists()).toEqual(false);
 
 			importUsersStore.importUsersData.total = 100;
-			schoolStore.$patch({
-				schoolDetails: schoolFactory.build({
-					inUserMigration: true,
-					inMaintenance: true,
-				}),
-			});
+			wrapper.vm.schoolMigrationState = {
+				inUserMigration: true,
+				inMaintenance: true,
+			};
 			await nextTick();
 
 			const btnRemoved = wrapper.find("[data-testid=start_user_migration]");
@@ -237,17 +235,6 @@ describe("User Migration / Index", () => {
 			const performMigrationMock = vi.spyOn(importUsersStore, "performMigration");
 			performMigrationMock.mockResolvedValue();
 
-			// Mock fetchSchoolDetails to return updated school data after migration
-			vi.spyOn(schoolStore, "fetchSchoolDetails").mockImplementation(async () => {
-				schoolStore.$patch({
-					schoolDetails: {
-						...schoolStore.schoolDetails,
-						inUserMigration: false,
-					},
-				});
-				return { result: undefined, success: true, error: undefined };
-			});
-
 			const wrapper = getWrapper();
 
 			wrapper.vm.migrationStep = 3;
@@ -265,8 +252,7 @@ describe("User Migration / Index", () => {
 
 			expect(performMigrationMock).toHaveBeenCalledTimes(1);
 			expect(wrapper.vm.migrationStep).toBe(4);
-			expect(schoolStore.schoolDetails.inUserMigration).toBe(false);
-			expect(wrapper.vm.school?.inUserMigration).toBe(false);
+			expect(wrapper.vm.schoolMigrationState?.inUserMigration).toBe(false);
 		});
 	});
 
@@ -275,6 +261,10 @@ describe("User Migration / Index", () => {
 			const wrapper = getWrapper();
 			wrapper.vm.migrationStep = 4;
 			wrapper.vm.isMigrationConfirm = true;
+			wrapper.vm.schoolMigrationState = {
+				inUserMigration: false,
+				inMaintenance: true,
+			};
 			await nextTick();
 
 			return {
@@ -299,15 +289,7 @@ describe("User Migration / Index", () => {
 			const { wrapper } = await setup();
 
 			const endMaintenanceMock = vi.spyOn(importUsersStore, "endSchoolInMaintenance");
-			endMaintenanceMock.mockImplementation(async () => {
-				schoolStore.$patch({
-					schoolDetails: {
-						...schoolStore.schoolDetails,
-						inMaintenance: false,
-					},
-				});
-				return Promise.resolve();
-			});
+			endMaintenanceMock.mockResolvedValue();
 
 			const btn = wrapper.find("[data-testid=migration_endMaintenance]");
 			await btn.trigger("click");
@@ -316,7 +298,7 @@ describe("User Migration / Index", () => {
 
 			expect(endMaintenanceMock).toHaveBeenCalledTimes(1);
 			expect(wrapper.vm.migrationStep).toBe(5);
-			expect(wrapper.vm.school?.inMaintenance).toBe(false);
+			expect(wrapper.vm.schoolMigrationState?.inMaintenance).toBe(false);
 		});
 	});
 
@@ -569,12 +551,10 @@ describe("User Migration / Index", () => {
 				const migrationStartedSetup = async () => {
 					const { wrapper } = await setup();
 
-					schoolStore.$patch({
-						schoolDetails: schoolFactory.build({
-							inUserMigration: true,
-							inMaintenance: true,
-						}),
-					});
+					wrapper.vm.schoolMigrationState = {
+						inUserMigration: true,
+						inMaintenance: true,
+					};
 					await flushPromises();
 
 					return {
@@ -638,12 +618,10 @@ describe("User Migration / Index", () => {
 				const migrationStartedSetup = async () => {
 					const { wrapper } = await setup();
 
-					schoolStore.$patch({
-						schoolDetails: schoolFactory.build({
-							inUserMigration: true,
-							inMaintenance: true,
-						}),
-					});
+					wrapper.vm.schoolMigrationState = {
+						inUserMigration: true,
+						inMaintenance: true,
+					};
 					wrapper.vm.isLoading = true;
 					await flushPromises();
 

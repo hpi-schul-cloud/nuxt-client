@@ -74,11 +74,11 @@
 					<VStepperWindowItem :value="1" data-testid="migration_tutorial">
 						<VContainer>
 							<VCard :ripple="false" elevation="2" class="pa-5 mb-10" color="grey-lighten-5">
-								<VProgressLinear v-if="school.inUserMigration && isLoading" indeterminate />
+								<VProgressLinear v-if="schoolMigrationState.inUserMigration && isLoading" indeterminate />
 								<VCardText>
 									<iframe class="full" :src="helpPageUri" :title="t('pages.administration.migration.title')" />
-									<v-alert
-										v-if="(!school.inUserMigration || isLoading) && !isNbc"
+									<VAlert
+										v-if="(!schoolMigrationState.inUserMigration || isLoading) && !isNbc"
 										density="compact"
 										variant="outlined"
 										type="info"
@@ -119,13 +119,13 @@
 												@click="nextStep"
 											>
 												<VProgressCircular
-													v-if="isLoading && school.inUserMigration"
+													v-if="isLoading && schoolMigrationState.inUserMigration"
 													:size="20"
 													indeterminate
 													class="mr-1"
 												/>
 												{{
-													!isLoading || school.inUserMigration === false
+													!isLoading || schoolMigrationState.inUserMigration === false
 														? t("pages.administration.migration.next")
 														: t("pages.administration.migration.waiting")
 												}}
@@ -390,7 +390,7 @@ import ImportUsers from "@/components/administration/ImportUsers.vue";
 import { BusinessError } from "@/store/types/commons";
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { SchulcloudTheme } from "@api-server";
+import { SchoolFeature, SchulcloudTheme } from "@api-server";
 import { useSchoolStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { useImportUsersStore } from "@data-import-users";
@@ -404,37 +404,41 @@ import { useRouter } from "vue-router";
 
 const { t } = useI18n();
 const importUsersStore = useImportUsersStore();
-const schoolStore = useSchoolStore();
-const { schoolDetails, schoolFeatureObject } = useSchoolStoreRefs();
 
 const router = useRouter();
 const { instanceName } = storeToRefs(useEnvStore());
+const { fetchSchoolDetails, hasFeature } = useSchoolStore();
+const { schoolDetails } = useSchoolStoreRefs();
+const schoolMigrationState = ref({
+	inUserMigration: schoolDetails.value.inUserMigration,
+	inMaintenance: schoolDetails.value.inMaintenance,
+});
 
-const migrationStep: Ref<number> = ref(1);
+const migrationStep = ref(1);
 
-const isMigrationConfirm: Ref<boolean> = ref(false);
+const isMigrationConfirm = ref(false);
 
-const errorTimeout: Ref<number> = ref(7500);
+const errorTimeout = ref(7500);
 
-const isLoading: Ref<boolean> = ref(false);
+const isLoading = ref(false);
 
-const matchByPreferredName: Ref<boolean> = ref(false);
+const matchByPreferredName = ref(false);
 
 const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
 
 const importUsersRef: Ref<InstanceType<typeof ImportUsers> | null> = ref(null);
 
-const isMigrationNotStarted = computed(() => schoolDetails.value.inUserMigration === undefined);
+const isMigrationNotStarted = computed(() => schoolMigrationState.value.inUserMigration === undefined);
 
-const canPerformMigration = computed(() => schoolDetails.value.inUserMigration && schoolDetails.value.inMaintenance);
+const canPerformMigration = computed(
+	() => schoolMigrationState.value.inUserMigration && schoolMigrationState.value.inMaintenance
+);
 
-const isMigrationFinished = computed(() => schoolDetails.value.inUserMigration === false);
+const isMigrationFinished = computed(() => schoolMigrationState.value.inUserMigration === false);
 
 const canFinishMaintenance = computed(() => isMigrationConfirm.value || isMigrationFinished.value);
 
-const isMaintenanceFinished = computed(() => !schoolDetails.value.inMaintenance);
-
-const school = computed(() => schoolDetails.value);
+const isMaintenanceFinished = computed(() => !schoolMigrationState.value.inMaintenance);
 
 const businessError: ComputedRef<BusinessError | null> = computed(() => importUsersStore.businessError);
 
@@ -473,19 +477,18 @@ const isAllowed = async () => {
 	if (useEnvConfig().value.FEATURE_USER_MIGRATION_ENABLED) {
 		return true;
 	}
-	if (school.value.id === "") {
-		await schoolStore.fetchSchoolDetails();
-	}
-	return schoolFeatureObject.value?.ldapUniventionMigrationSchool;
+	return hasFeature(SchoolFeature.LDAP_UNIVENTION_MIGRATION_SCHOOL);
 };
 
 const summary = async () => {
-	if (school.value.id === "") {
-		await schoolStore.fetchSchoolDetails();
-	}
 	if (!canPerformMigration.value) {
 		return;
 	}
+	await fetchSchoolDetails();
+	schoolMigrationState.value = {
+		inUserMigration: schoolDetails.value.inUserMigration,
+		inMaintenance: schoolDetails.value.inMaintenance,
+	};
 
 	isLoading.value = true;
 
@@ -496,8 +499,8 @@ const summary = async () => {
 	isLoading.value = false;
 };
 
-const checkTotalInterval = () => {
-	if (school.value.inUserMigration && totalImportUsers.value === 0) {
+const startPollingImportUserCount = () => {
+	if (schoolMigrationState.value.inUserMigration && totalImportUsers.value === 0) {
 		checkTotal.value = setInterval(() => {
 			importUsersStore.fetchTotal();
 		}, 5000);
@@ -508,7 +511,7 @@ const checkTotalInterval = () => {
 };
 
 const setSchoolInUserMigration = async () => {
-	if (school.value.inUserMigration) {
+	if (schoolMigrationState.value.inUserMigration) {
 		return;
 	}
 
@@ -524,16 +527,11 @@ const setSchoolInUserMigration = async () => {
 		}
 	}
 
-	await importUsersStore.setSchoolInUserMigration();
-
-	checkTotalInterval();
-	if (importUsersStore.businessError) {
-		isLoading.value = false;
-		return;
+	if (!schoolMigrationState.value.inUserMigration) {
+		await importUsersStore.setSchoolInUserMigration();
+		schoolMigrationState.value = { inUserMigration: true, inMaintenance: true };
 	}
-
-	await schoolStore.fetchSchoolDetails();
-
+	startPollingImportUserCount();
 	isLoading.value = false;
 };
 
@@ -543,21 +541,20 @@ const performMigration = async () => {
 	await importUsersStore.performMigration();
 
 	if (!importUsersStore.businessError) {
-		await schoolStore.fetchSchoolDetails();
+		schoolMigrationState.value.inUserMigration = false;
 		isLoading.value = false;
 		migrationStep.value = 4;
 	}
 };
 const endMaintenance = async () => {
 	isLoading.value = true;
-	await importUsersStore.endSchoolInMaintenance();
-	if (importUsersStore.businessError) {
-		isLoading.value = false;
-		return;
+	if (schoolMigrationState.value.inMaintenance) {
+		await importUsersStore.endSchoolInMaintenance();
 	}
-
-	await schoolStore.fetchSchoolDetails();
-	migrationStep.value = 5;
+	if (!importUsersStore.businessError) {
+		schoolMigrationState.value.inMaintenance = isNbc.value;
+		migrationStep.value = 5;
+	}
 	isLoading.value = false;
 };
 
@@ -596,7 +593,7 @@ const cancelMigration = async () => {
 		isLoading.value = true;
 		await importUsersStore.cancelMigration();
 		migrationStep.value = 0;
-		await schoolStore.fetchSchoolDetails();
+		await fetchSchoolDetails();
 		isLoading.value = false;
 		await redirectToAdminPage();
 	}
@@ -669,7 +666,7 @@ onMounted(async () => {
 		return;
 	}
 	await summary();
-	checkTotalInterval();
+	startPollingImportUserCount();
 });
 
 onUnmounted(() => {
