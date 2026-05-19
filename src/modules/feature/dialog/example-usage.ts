@@ -29,3 +29,16 @@ export const askForName = async () => {
 
 	console.log("Name:", result.data); // string
 };
+
+export const askDeletion = (
+	title: string,
+	message?: string,
+	messageType: "info" | "warning" = "warning",
+	confirmBtnKey = "common.actions.delete"
+) =>
+	openDialog("confirmation", {
+		title,
+		message,
+		messageType,
+		confirmBtnKey,
+	});
