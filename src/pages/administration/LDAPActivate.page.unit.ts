@@ -5,8 +5,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { StoreOptions } from "vuex";
-import { createStore } from "vuex";
+import { createStore, StoreOptions } from "vuex";
 
 const mockResponseData = {
 	ok: true,
@@ -138,9 +137,6 @@ describe("ldap/activate", () => {
 		const submitBtn = wrapper.findComponent(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
 		await submitBtn.trigger("click");
-
-		// TODO make sure that route is pushed in the component
-		// expect(routerPushStub).toHaveBeenCalled();
 	});
 
 	it("should render confirm modal component", () => {
