@@ -14,7 +14,7 @@
 		]"
 		max-width="short"
 	>
-		<SvsSuspense :loading="isLoadingNews">
+		<SvsLoading :loading="isLoadingNews">
 			<h2 data-testid="news-title">{{ newsInstance.title }}</h2>
 			<div class="d-flex mb-2">
 				<div class="d-flex align-center text-subtitle mr-3">
@@ -38,7 +38,7 @@
 				/>
 				<VBtn data-testid="news-delete-btn" :text="t('common.actions.delete')" variant="outlined" @click="onDelete" />
 			</div>
-		</SvsSuspense>
+		</SvsLoading>
 	</DefaultWireframe>
 </template>
 
@@ -48,7 +48,7 @@ import { useNews, useNewsActions } from "@data-access";
 import { notifySuccess } from "@data-app";
 import { RenderHTML } from "@feature-render-html";
 import { mdiClockOutline, mdiHumanMaleBoard } from "@icons/material";
-import { SvsSuspense } from "@ui-containers";
+import { SvsLoading } from "@ui-containers";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, watch } from "vue";
