@@ -5,20 +5,26 @@
 		data-testid="board-folder-element"
 		variant="outlined"
 		:ripple="false"
-		:tabindex="isEditMode ? 0 : undefined"
 		:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
+		tabindex="0"
+		@click="openFolder"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
+		@keydown.enter="openFolder"
 	>
-		<ContentElementBar :icon="mdiFolderOpenOutline" @click="onTitleClick">
+		<ContentElementBar :icon="mdiFolderOpenOutline">
 			<template #title>
 				<RouterLink
+					v-if="isEditMode"
 					class="folder-title"
 					:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
 					:to="folderRoute"
 				>
 					{{ elementTitle }}
 				</RouterLink>
+				<span v-else>
+					{{ elementTitle }}
+				</span>
 			</template>
 			<template v-if="isEditMode" #menu>
 				<BoardMenu
@@ -50,8 +56,8 @@
 				:icon="mdiTrayArrowDown"
 				size="small"
 				variant="text"
-				@click="onDownload"
-				@keydown.enter="onDownload"
+				@click.stop="onDownload"
+				@keydown.stop.enter="onDownload"
 			/>
 		</VCardActions>
 		<FolderAlerts v-else :alerts="alerts" />
@@ -162,7 +168,12 @@ const isDownloadAllowed = computed(() => (fileStatistics.value?.fileCount ?? 0) 
 
 const router = useRouter();
 const folderRoute = computed(() => `/folder/${element.value.id}`);
-const onTitleClick = () => router.push(folderRoute.value);
+const openFolder = () => {
+	if (props.isEditMode) {
+		return;
+	}
+	router.push(folderRoute.value);
+};
 </script>
 
 <style scoped lang="scss">
