@@ -9,6 +9,7 @@ import {
 } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import * as serverApi from "@api-server";
 import {
 	NewsApiInterface,
 	NewsResponse,
@@ -18,7 +19,6 @@ import {
 	RoleName,
 	RuntimeConfigApiInterface,
 } from "@api-server";
-import * as serverApi from "@api-server";
 import { DashboardTasks } from "@feature-dashboard";
 import { createTestingPinia } from "@pinia/testing";
 import { WarningAlert } from "@ui-alert";
