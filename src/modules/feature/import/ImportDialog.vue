@@ -6,7 +6,7 @@
 		:confirm-btn-lang-key="confirmBtnLangKey"
 		:confirm-btn-disabled="!isActiveStepValid"
 		data-testid="import-dialog"
-		@confirm="onConfirm"
+		@confirm="onNext"
 		@cancel="onCancel"
 		@after-leave="resetDialog"
 	>
@@ -63,13 +63,12 @@
 
 <script setup lang="ts">
 import { ImportDestination, ImportDestinationItem, ImportDestinationType } from "./types";
-import { useCopyContent } from "@/composables/copy-content.composable";
-import { mapShareTokenParentTypeToContentItemType } from "@/utils/content-item.utils";
+import { useImportContent } from "@/composables/copy-content.composable";
 import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { isRequired, useOpeningTagValidator } from "@util-validators";
-import { computed, reactive, ref, watch } from "vue";
+import { computed, reactive, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -135,7 +134,7 @@ const isActiveStepValid = computed(() => {
 	return false;
 });
 
-const onConfirm = () => {
+const onNext = () => {
 	if (!isLastStep.value) {
 		stepIndex.value += 1;
 		return;
@@ -175,8 +174,7 @@ const confirmBtnLangKey = computed(() => {
 	return "common.actions.import";
 });
 
-const contentItemType = computed(() => mapShareTokenParentTypeToContentItemType(props.shareTokenInfo.parentType));
-const { text, warnings } = useCopyContent(contentItemType);
+const { text, warnings } = useImportContent(toRef(() => props.shareTokenInfo.parentType));
 
 const destinationQuestion = computed(() => {
 	const originalName = props.shareTokenInfo.parentName;

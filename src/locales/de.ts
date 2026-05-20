@@ -173,6 +173,7 @@ export default {
 		"{type} konnte nicht zurückgesetzt werden. | {type} konnten nicht zurückgesetzt werden.",
 	"common.notifications.errors.notRestored":
 		"{type} konnte nicht wiederhergestellt werden. | {type} konnten nicht wiederhergestellt werden.",
+	"common.notifications.errors.notShared": "{type} konnte nicht geteilt werden. | {type} konnten nicht geteilt werden.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.email.confirmation": "E-Mail-Adresse wiederholen",
 	"common.placeholder.email.update": "Neue E-Mail-Adresse",
@@ -260,6 +261,7 @@ export default {
 	"common.words.languages.uk": "Ukrainisch",
 	"common.words.learnContent": "Lerninhalte",
 	"common.words.mainSchool": "Stammschule",
+	"common.words.member": "Mitglied | Mitglieder",
 	"common.words.no": "Nein",
 	"common.words.not": "nicht",
 	"common.words.noChoice": "Keine Auswahl",

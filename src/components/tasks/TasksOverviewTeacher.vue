@@ -8,7 +8,6 @@
 				</VTab>
 			</VTabs>
 		</div>
-
 		<div class="mx-auto">
 			<VWindow :model-value="activeTab">
 				<TasksOverviewPane
@@ -29,9 +28,15 @@
 				/>
 			</VWindow>
 		</div>
-
-		<ShareModal :type="ShareTokenBodyParamsParentType.TASKS" />
-
+		<ShareDialog
+			v-if="shareItemType"
+			:is-open="isShareDialogOpen"
+			:share-item-type="shareItemType"
+			:share-url="shareUrl"
+			@confirm="onConfirmShare"
+			@cancel="onCancelShare"
+			@done="onDone"
+		/>
 		<CopyDialog
 			:is-open="isCopyDialogOpen"
 			:copy-item-type="copyItemType"
@@ -43,20 +48,15 @@
 
 <script setup lang="ts">
 import TasksOverviewPane from "./TasksOverviewPane.vue";
-import ShareModal from "@/components/share/ShareModal.vue";
-import ShareModule from "@/store/share";
 import { CopyParams } from "@/types/copy/CopyParams";
-import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { ShareTokenBodyParamsParentType } from "@api-server";
-import { useEnvConfig } from "@data-env";
 import { useTasksOfOverview } from "@data-tasks";
 import { CopyDialog, useCopyFlow } from "@feature-copy";
+import { ShareDialog, useShareFlow } from "@feature-share";
 import { mdiArchiveOutline, mdiFormatListChecks, mdiPlaylistEdit } from "@icons/material";
 import { useUrlSearchParams } from "@vueuse/core";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-
-const shareModule: ShareModule = injectStrict(SHARE_MODULE_KEY);
 
 const { t } = useI18n();
 const params = useUrlSearchParams("history");
@@ -84,7 +84,7 @@ const { drafts, openForTeacher, isLoadingFinishedTasks, fetchTasks, loadMoreFini
 	useTasksOfOverview();
 
 const {
-	isDialogOpen: isCopyDialogOpen,
+	isCopyDialogOpen,
 	copyItemType,
 	executeCopyTask,
 	onConfirm: onConfirmCopy,
@@ -100,13 +100,21 @@ const onCopyTask = async ({ id, courseId }: CopyParams) => {
 	}
 };
 
+const {
+	isShareDialogOpen,
+	shareItemType,
+	shareUrl,
+	executeShare,
+	onConfirm: onConfirmShare,
+	onCancel: onCancelShare,
+	onDone,
+} = useShareFlow();
+
 const onShareTask = (taskId: string) => {
-	if (useEnvConfig().value.FEATURE_TASK_SHARE) {
-		shareModule.startShareFlow({
-			id: taskId,
-			type: ShareTokenBodyParamsParentType.TASKS,
-		});
-	}
+	executeShare({
+		id: taskId,
+		type: ShareTokenBodyParamsParentType.TASKS,
+	});
 };
 </script>
 

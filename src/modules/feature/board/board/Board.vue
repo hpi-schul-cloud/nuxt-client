@@ -103,7 +103,15 @@
 					@confirm="onConfirmCopy"
 					@cancel="onCancelCopy"
 				/>
-				<ShareModal v-if="shareModalContextType" :type="shareModalContextType" />
+				<ShareDialog
+					v-if="shareItemType"
+					:is-open="isShareDialogOpen"
+					:share-item-type="shareItemType"
+					:share-url="shareUrl"
+					@confirm="onConfirmShare"
+					@cancel="onCancelShare"
+					@done="onDone"
+				/>
 				<SelectBoardLayoutDialog
 					v-model="isSelectBoardLayoutDialogOpen"
 					:current-layout="board.layout"
@@ -144,10 +152,8 @@ import EditSettingsDialog from "../shared/EditSettingsDialog.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
-import ShareModal from "@/components/share/ShareModal.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
-import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import {
 	BoardExternalReferenceType,
 	BoardLayout,
@@ -168,6 +174,7 @@ import { useEnvConfig } from "@data-env";
 import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog } from "@feature-collabora";
 import { CopyDialog, useCopyFlow } from "@feature-copy";
+import { ShareDialog, useShareFlow } from "@feature-share";
 import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
@@ -196,7 +203,6 @@ const { breadcrumbs, contextType, roomId, createPageInformation, resetPageInform
 	useSharedBoardPageInformation();
 const isDragging = ref(false);
 const isEditSettingsDialogOpen = ref(false);
-const shareModalContextType = ref();
 const router = useRouter();
 
 watch(board, async () => {
@@ -241,16 +247,6 @@ const onMoveCard = (cardId: string) => {
 		isDialogOpen: true,
 		cardId,
 	};
-};
-
-const onShareCard = async (cardId: string) => {
-	shareModalContextType.value = ShareTokenBodyParamsParentType.CARD;
-
-	shareModule.startShareFlow({
-		id: cardId,
-		type: ShareTokenBodyParamsParentType.CARD,
-		destinationType: BoardExternalReferenceType.ROOM,
-	});
 };
 
 const onDeleteColumn = async (columnId: string) => {
@@ -421,7 +417,7 @@ const boardColumnClass = computed(() => {
 });
 
 const {
-	isDialogOpen: isCopyDialogOpen,
+	isCopyDialogOpen,
 	copyItemType,
 	executeCopyBoard,
 	onConfirm: onConfirmCopy,
@@ -443,20 +439,34 @@ const onCopyBoard = async () => {
 	}
 };
 
-const shareModule = injectStrict(SHARE_MODULE_KEY);
+const {
+	isShareDialogOpen,
+	shareItemType,
+	shareUrl,
+	executeShare,
+	onConfirm: onConfirmShare,
+	onCancel: onCancelShare,
+	onDone,
+} = useShareFlow();
 
 const onShareBoard = () => {
 	if (!allowedOperations.value.shareBoard) return;
 
 	if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
-		shareModalContextType.value = ShareTokenBodyParamsParentType.COLUMN_BOARD;
-
-		shareModule.startShareFlow({
+		executeShare({
 			id: props.boardId,
 			type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
 			destinationType: contextType.value,
 		});
 	}
+};
+
+const onShareCard = async (cardId: string) => {
+	executeShare({
+		id: cardId,
+		type: ShareTokenBodyParamsParentType.CARD,
+		destinationType: BoardExternalReferenceType.ROOM,
+	});
 };
 
 const openDeleteBoardDialog = async (id: string) => {
