@@ -83,7 +83,6 @@ export const useImportFlow = () => {
 	};
 
 	return {
-		shareTokenInfo,
 		executeImport,
 	};
 };

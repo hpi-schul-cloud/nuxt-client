@@ -1,5 +1,5 @@
 <template>
-	<CourseRoomWrapper :has-rooms="hasCurrentRooms" :has-import-token="!!shareTokenInfo">
+	<CourseRoomWrapper :has-rooms="hasCurrentRooms" :has-import-token="hasImportToken">
 		<template #header>
 			<h1 class="py-2">
 				{{ $t("pages.courseRooms.index.courses.active") }}
@@ -191,7 +191,7 @@ const availableDestinations = computed(() =>
 	)
 );
 
-const { executeImport, shareTokenInfo } = useImportFlow();
+const { executeImport } = useImportFlow();
 
 const executeImportFlow = async (token: string) => {
 	const { result: importResult } = await executeImport(token, availableDestinations);
@@ -384,6 +384,8 @@ const initializeComponent = async () => {
 };
 
 useTitle(buildPageTitle(t("pages.courseRooms.index.courses.active")));
+
+const hasImportToken = computed(() => route.query.import !== undefined);
 
 watch(
 	() => route.query.import,
