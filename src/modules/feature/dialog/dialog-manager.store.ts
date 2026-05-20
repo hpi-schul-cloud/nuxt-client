@@ -1,10 +1,16 @@
-import { dialogRegistry } from "./dialog-registry";
-import type { AwaitableResult, DialogKey, DialogProps, DialogResult } from "./dialog-types";
+import {
+	type AwaitableResult,
+	type DialogKey,
+	type DialogProps,
+	dialogRegistry,
+	type DialogResult,
+} from "./dialog-registry";
+import { uniqueId } from "lodash-es";
 import { defineStore } from "pinia";
 import { markRaw, ref } from "vue";
 
-type DialogRequest<K extends DialogKey = DialogKey> = {
-	id: number;
+type DialogRequest<K extends DialogKey> = {
+	id: string;
 	type: K;
 	props: DialogProps<K>;
 	modelValue: boolean;
@@ -18,83 +24,93 @@ type AnyDialogRequest = {
 }[DialogKey];
 
 export const useDialogStore = defineStore("dialog", () => {
-	const activeDialog = ref<AnyDialogRequest | undefined>(undefined);
+	const activeDialog = ref<AnyDialogRequest>();
 	const queue = ref<AnyDialogRequest[]>([]);
-	let nextId = 1;
 
-	const activateNextDialog = () => {
-		if (activeDialog.value || queue.value.length === 0) return;
+	const beginSettlement = (request: AnyDialogRequest, result: AwaitableResult<unknown>) => {
+		if (request !== activeDialog.value) return;
+		if (request.resolved) return;
+		if (request.pendingSettlement) return;
+
+		request.pendingSettlement = result;
+		request.modelValue = false;
+	};
+
+	const finalizeSettlement = (request: AnyDialogRequest) => {
+		if (request !== activeDialog.value) return;
+		if (request.resolved) return;
+		if (!request.pendingSettlement) return;
+
+		request.resolved = true;
+		activeDialog.value = undefined;
+
+		request.resolve(request.pendingSettlement);
+
 		activeDialog.value = queue.value.shift() ?? undefined;
 	};
 
-	const beginSettlement = <K extends DialogKey>(id: number, result: AwaitableResult<DialogResult<K>>) => {
-		const item = activeDialog.value;
-		if (!item) return;
-		if (item.id !== id) return;
-		if (item.resolved) return;
-		if (item.pendingSettlement) return;
-
-		item.pendingSettlement = result;
-		item.modelValue = false;
-	};
-
-	const finalizeSettlement = (id: number) => {
-		const item = activeDialog.value;
-		if (!item) return;
-		if (item.id !== id) return;
-		if (item.resolved) return;
-		if (!item.pendingSettlement) return;
-
-		item.resolved = true;
-		activeDialog.value = undefined;
-
-		item.resolve(item.pendingSettlement);
-
-		activateNextDialog();
-	};
-
-	const openDialog = <K extends DialogKey>(type: K, props: DialogProps<K>): Promise<AwaitableResult<DialogResult<K>>> =>
-		new Promise((resolve) => {
-			const item: DialogRequest<K> = {
-				id: nextId++,
-				type,
-				props,
-				modelValue: true,
-				resolved: false,
-				pendingSettlement: undefined,
-				resolve: resolve as (value: AwaitableResult<unknown>) => void,
-			};
-
-			if (activeDialog.value === undefined) {
-				activeDialog.value = item as AnyDialogRequest;
-			} else {
-				queue.value.push(item as AnyDialogRequest);
+	const cancelDialog = (request: AnyDialogRequest) => {
+		if (activeDialog.value === request) {
+			beginSettlement(request, { completed: false, data: undefined });
+		} else {
+			const index = queue.value.indexOf(request);
+			if (index !== -1) queue.value.splice(index, 1);
+			if (!request.resolved) {
+				request.resolved = true;
+				request.resolve({ completed: false, data: undefined });
 			}
-		});
-
-	const completeDialog = <K extends DialogKey>(id: number, data: DialogResult<K>) => {
-		beginSettlement(id, { completed: true, data });
-	};
-
-	const cancelDialog = (id: number) => {
-		beginSettlement(id, { completed: false, data: undefined });
-	};
-
-	const setDialogModelValue = (id: number, value: boolean) => {
-		const item = activeDialog.value;
-		if (!item) return;
-		if (item.id !== id) return;
-		if (item.resolved) return;
-
-		item.modelValue = value;
-
-		if (value === false && !item.pendingSettlement) {
-			item.pendingSettlement = markRaw({ completed: false, data: undefined });
 		}
 	};
 
-	const onDialogAfterLeave = (id: number) => {
-		finalizeSettlement(id);
+	const openDialog = <K extends DialogKey>(
+		type: K,
+		props: DialogProps<K>
+	): { result: Promise<AwaitableResult<DialogResult<K>>>; cancel: () => void } => {
+		let resolvePromise!: (value: AwaitableResult<unknown>) => void;
+		const result = new Promise<AwaitableResult<DialogResult<K>>>((resolve) => {
+			resolvePromise = resolve as (value: AwaitableResult<unknown>) => void;
+		});
+
+		const item: DialogRequest<K> = {
+			id: uniqueId(),
+			type,
+			props,
+			modelValue: true,
+			resolved: false,
+			pendingSettlement: undefined,
+			resolve: resolvePromise,
+		};
+
+		if (activeDialog.value === undefined) {
+			activeDialog.value = item as AnyDialogRequest;
+		} else {
+			queue.value.push(item as AnyDialogRequest);
+		}
+
+		return { result, cancel: () => cancelDialog(item as AnyDialogRequest) };
+	};
+
+	const onCompleteDialog = <K extends DialogKey>(request: DialogRequest<K>, data: DialogResult<K>) => {
+		beginSettlement(request as AnyDialogRequest, { completed: true, data });
+	};
+
+	const onCancelDialog = (request: AnyDialogRequest) => {
+		beginSettlement(request, { completed: false, data: undefined });
+	};
+
+	const setDialogModelValue = (request: AnyDialogRequest, value: boolean) => {
+		if (request !== activeDialog.value) return;
+		if (request.resolved) return;
+
+		request.modelValue = value;
+
+		if (value === false && !request.pendingSettlement) {
+			request.pendingSettlement = { completed: false, data: undefined };
+		}
+	};
+
+	const onDialogAfterLeave = (request: AnyDialogRequest) => {
+		finalizeSettlement(request);
 	};
 
 	const cancelAllDialogsImmediately = () => {
@@ -121,8 +137,8 @@ export const useDialogStore = defineStore("dialog", () => {
 		queue,
 		registry: markRaw(dialogRegistry),
 		openDialog,
-		completeDialog,
-		cancelDialog,
+		onCompleteDialog,
+		onCancelDialog,
 		setDialogModelValue,
 		onDialogAfterLeave,
 		cancelAllDialogsImmediately,

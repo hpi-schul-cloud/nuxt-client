@@ -60,7 +60,7 @@ export const useShareFlow = () => {
 				const sharePath = buildSharePath(type, destinationType);
 				return `${window.location.origin}/${sharePath}?import=${tokenResult.result!.token}`;
 			},
-		});
+		}).result;
 
 		if (!completed) {
 			return tokenResult

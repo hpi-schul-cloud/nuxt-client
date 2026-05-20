@@ -5,10 +5,10 @@
 		:key="activeDialog.id"
 		:model-value="activeDialog.modelValue"
 		v-bind="activeDialog.props"
-		@update:model-value="setDialogModelValue(activeDialog.id, $event)"
-		@complete="completeDialog(activeDialog.id, $event)"
-		@cancel="cancelDialog(activeDialog.id)"
-		@after-leave="onDialogAfterLeave(activeDialog.id)"
+		@update:model-value="setDialogModelValue(activeDialog, $event)"
+		@complete="onCompleteDialog(activeDialog, $event)"
+		@cancel="onCancelDialog(activeDialog)"
+		@after-leave="onDialogAfterLeave(activeDialog)"
 	/>
 </template>
 
@@ -20,8 +20,14 @@ import { useRoute } from "vue-router";
 
 const dialogStore = useDialogStore();
 const { activeDialog } = storeToRefs(dialogStore);
-const { registry, setDialogModelValue, completeDialog, cancelDialog, onDialogAfterLeave, cancelAllDialogsImmediately } =
-	dialogStore;
+const {
+	registry,
+	setDialogModelValue,
+	onCompleteDialog,
+	onCancelDialog,
+	onDialogAfterLeave,
+	cancelAllDialogsImmediately,
+} = dialogStore;
 
 const route = useRoute();
 watch(() => route.path, cancelAllDialogsImmediately);

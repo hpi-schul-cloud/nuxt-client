@@ -1,8 +1,8 @@
 import { i18nKeyExists, useI18nGlobal } from "@/plugins/i18n";
-import { ConfirmationOptions, openDialog } from "@feature-dialog";
+import { ConfirmationDialogProps, openDialog } from "@feature-dialog";
 
-export const askConfirmation = async (options: ConfirmationOptions): Promise<boolean> => {
-	const { completed } = await openDialog("confirmation", { options });
+export const askConfirmation = async (options: ConfirmationDialogProps): Promise<boolean> => {
+	const { completed } = await openDialog("confirmation", options).result;
 	return completed;
 };
 
