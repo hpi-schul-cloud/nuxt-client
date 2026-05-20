@@ -9,23 +9,7 @@ It communicates with the [Schulcloud-Server](https://github.com/hpi-schul-cloud/
 
 ## 🏗️ Architecture Overview
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                        Browser                          │
-├─────────────────────────────────────────────────────────┤
-│  nuxt-client (Vue 3 SPA)                                │
-│  ┌───────────┐  ┌───────────┐  ┌────────────────────┐  │
-│  │  Pages    │→ │  Modules  │→ │  Generated API     │  │
-│  │  (router) │  │  (domain) │  │  Clients (OpenAPI) │  │
-│  └───────────┘  └───────────┘  └────────┬───────────┘  │
-├──────────────────────────────────────────┼──────────────┤
-│                                          ▼              │
-│  ┌──────────────────────┐   ┌────────────────────────┐  │
-│  │  Schulcloud-Client   │   │   Schulcloud-Server    │  │
-│  │  (Legacy Frontend)   │   │   (Nest.js REST API)   │  │
-│  └──────────────────────┘   └────────────────────────┘  │
-└─────────────────────────────────────────────────────────┘
-```
+📎 [Architecture Diagram](docs/architecture.drawio) *(open in [diagrams.net](https://app.diagrams.net) or the draw.io IDE plugin)*
 
 ## 🚀 Getting Started
 
