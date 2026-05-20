@@ -260,6 +260,7 @@ export default {
 	"common.words.languages.uk": "Ukrainisch",
 	"common.words.learnContent": "Lerninhalte",
 	"common.words.mainSchool": "Stammschule",
+	"common.words.member": "Mitglied | Mitglieder",
 	"common.words.no": "Nein",
 	"common.words.not": "nicht",
 	"common.words.noChoice": "Keine Auswahl",
