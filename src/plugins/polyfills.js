@@ -9,5 +9,6 @@ polyfill({
 	// this flag is set as a workaround of polyfill not applying e.g. on iPads because of a browser requesting
 	// full-type website, see https://github.com/timruffles/mobile-drag-drop/issues/167 for more
 	forceApply: true,
+	// set delay before dragging to 200ms to behave as dragging in the board column component via sortablejs
 	holdToDrag: 200,
 });
