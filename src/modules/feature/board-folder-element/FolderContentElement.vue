@@ -6,10 +6,11 @@
 		variant="outlined"
 		:ripple="false"
 		:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
-		v-bind="!isEditMode ? { tabindex: 0, onClick: openFolder } : {}"
+		tabindex="0"
+		@click="openFolder"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
-		@keydown.enter="!isEditMode ? openFolder() : undefined"
+		@keydown.enter="openFolder"
 	>
 		<ContentElementBar :icon="mdiFolderOpenOutline">
 			<template #title>
@@ -167,7 +168,12 @@ const isDownloadAllowed = computed(() => (fileStatistics.value?.fileCount ?? 0) 
 
 const router = useRouter();
 const folderRoute = computed(() => `/folder/${element.value.id}`);
-const openFolder = () => router.push(folderRoute.value);
+const openFolder = () => {
+	if (props.isEditMode) {
+		return;
+	}
+	router.push(folderRoute.value);
+};
 </script>
 
 <style scoped lang="scss">
