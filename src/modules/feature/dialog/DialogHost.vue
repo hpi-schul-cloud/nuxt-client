@@ -13,19 +13,15 @@
 </template>
 
 <script setup lang="ts">
-import { useDialogManager } from "./dialog-manager";
+import { useDialogStore } from "./dialog-manager.store";
+import { storeToRefs } from "pinia";
 import { onBeforeUnmount, watch } from "vue";
 import { useRoute } from "vue-router";
 
-const {
-	activeDialog,
-	registry,
-	setDialogModelValue,
-	completeDialog,
-	cancelDialog,
-	onDialogAfterLeave,
-	cancelAllDialogsImmediately,
-} = useDialogManager();
+const dialogStore = useDialogStore();
+const { activeDialog } = storeToRefs(dialogStore);
+const { registry, setDialogModelValue, completeDialog, cancelDialog, onDialogAfterLeave, cancelAllDialogsImmediately } =
+	dialogStore;
 
 const route = useRoute();
 watch(() => route.path, cancelAllDialogsImmediately);
