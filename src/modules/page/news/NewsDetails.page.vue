@@ -17,11 +17,11 @@
 		<SvsLoading :loading="isLoadingNews">
 			<h2 data-testid="news-title">{{ newsInstance.title }}</h2>
 			<div class="d-flex mb-2">
-				<div class="d-flex align-center text-subtitle mr-3">
+				<div class="d-flex align-center text-subtitle mr-3" data-testid="news-last-touched">
 					<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
 					{{ lastTouched }}
 				</div>
-				<div class="d-flex align-center text-subtitle">
+				<div class="d-flex align-center text-subtitle" data-testid="news-creator">
 					<VIcon :icon="mdiHumanMaleBoard" size="sm" class="mr-1" />
 					{{ creator }}
 				</div>
