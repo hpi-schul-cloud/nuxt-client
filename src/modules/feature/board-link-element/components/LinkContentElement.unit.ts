@@ -1,13 +1,17 @@
 import { MetaTagResult, useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
-import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
+import { FilePreviewStatus } from "@/types/file/File";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
+import * as fileHelper from "@/utils/fileHelper";
+import { fileRecordFactory } from "@@/tests/test-utils";
 import { linkElementContentFactory } from "@@/tests/test-utils/factory/linkElementContentFactory";
 import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { FileRecordParentType } from "@api-file-storage";
 import { LinkElementContent, LinkElementResponse } from "@api-server";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useFileStorageApi } from "@data-file";
 import { LinkContentElement } from "@feature-board-link-element";
 import { BoardMenu } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
@@ -16,10 +20,11 @@ import { Mocked } from "vitest";
 import { computed, ref } from "vue";
 
 vi.mock("@data-board/ContentElementState.composable");
-
 vi.mock("@data-board/BoardFocusHandler.composable");
 vi.mock("../composables/MetaTagExtractorApi.composable");
-vi.mock("../composables/PreviewGenerator.composable");
+vi.mock("@data-file");
+vi.mock("@/utils/fileHelper");
+
 const mockedUseContentElementState = vi.mocked(useContentElementState);
 
 let defaultElement = linkElementResponseFactory.build();
@@ -27,7 +32,7 @@ let defaultElement = linkElementResponseFactory.build();
 describe("LinkContentElement", () => {
 	let useBoardFocusHandlerMock: Mocked<ReturnType<typeof useBoardFocusHandler>>;
 	let useMetaTagExtractorApiMock: Mocked<ReturnType<typeof useMetaTagExtractorApi>>;
-	let usePreviewGeneratorMock: Mocked<ReturnType<typeof usePreviewGenerator>>;
+	let useFileStorageApiMock: Pick<Mocked<ReturnType<typeof useFileStorageApi>>, "uploadFromUrl">;
 
 	beforeAll(() => {
 		Object.defineProperty(URL, "canParse", {
@@ -44,14 +49,19 @@ describe("LinkContentElement", () => {
 		useMetaTagExtractorApiMock = {
 			getMetaTags: vi.fn(),
 		};
-		usePreviewGeneratorMock = {
-			createPreviewImage: vi.fn(),
+		useFileStorageApiMock = {
 			uploadFromUrl: vi.fn(),
 		};
 
 		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
 		vi.mocked(useMetaTagExtractorApi).mockReturnValue(useMetaTagExtractorApiMock);
-		vi.mocked(usePreviewGenerator).mockReturnValue(usePreviewGeneratorMock);
+		vi.mocked(useFileStorageApi).mockReturnValue(
+			useFileStorageApiMock as unknown as ReturnType<typeof useFileStorageApi>
+		);
+		vi.mocked(fileHelper.isPreviewPossible).mockReturnValue(true);
+		vi.mocked(fileHelper.convertDownloadToPreviewUrl).mockReturnValue(
+			"https://some.schulcloud.de/my-upload-preview-image.jpg"
+		);
 
 		defaultElement = linkElementResponseFactory.build();
 		vi.useFakeTimers();
@@ -106,8 +116,9 @@ describe("LinkContentElement", () => {
 			}),
 		};
 
+		const modelValueRef = ref(element.content);
 		mockedUseContentElementState.mockReturnValue({
-			modelValue: ref(element.content),
+			modelValue: modelValueRef,
 			computedElement: computed(() => element),
 		});
 
@@ -119,9 +130,12 @@ describe("LinkContentElement", () => {
 			imageUrl: "https://imagestock.com/great-image.jpg",
 		});
 
-		usePreviewGeneratorMock.createPreviewImage.mockResolvedValue(
-			"https://some.schulcloud.de/my-upload-preview-image.jpg"
-		);
+		const mockFileRecord = fileRecordFactory.build({
+			url: "https://some.schulcloud.de/my-upload-image.jpg",
+			previewStatus: FilePreviewStatus.PREVIEW_POSSIBLE,
+		});
+
+		useFileStorageApiMock.uploadFromUrl.mockResolvedValue(mockFileRecord);
 
 		const { wrapper } = getWrapper({
 			element,
@@ -137,6 +151,7 @@ describe("LinkContentElement", () => {
 		return {
 			element,
 			wrapper,
+			modelValueRef,
 		};
 	};
 
@@ -457,22 +472,60 @@ describe("LinkContentElement", () => {
 			expect(useMetaTagExtractorApiMock.getMetaTags).toHaveBeenCalledWith(`https://${url}`);
 		});
 
-		it("should create a preview image when imageUrl is present in meta tags", async () => {
-			const { wrapper } = setupWrapper({ isEditMode: true });
-			const url = "https://abc.de/my-article";
+		describe("when creating preview image", () => {
 			const fakeMetaTags: MetaTagResult = {
-				url,
+				url: "https://abc.de/my-article",
 				title: "my title",
 				description: "",
 				originalImageUrl: "https://abc.de/foto.png",
 				imageUrl: "https://abc.de/foto.png",
 			};
 
-			useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(fakeMetaTags);
+			it("should upload the external image when imageUrl is present in meta tags", async () => {
+				const { wrapper, element } = setupWrapper({ isEditMode: true });
+				useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(fakeMetaTags);
 
-			await wrapper.getComponent(LinkContentElementCreate).vm.$emit("create:url", url);
+				await wrapper.getComponent(LinkContentElementCreate).vm.$emit("create:url", fakeMetaTags.url);
+				await vi.runAllTimersAsync();
 
-			expect(usePreviewGeneratorMock.createPreviewImage).toHaveBeenCalledWith(fakeMetaTags.imageUrl);
+				expect(useFileStorageApiMock.uploadFromUrl).toHaveBeenCalledWith(
+					fakeMetaTags.originalImageUrl,
+					element.id,
+					FileRecordParentType.BOARDNODES
+				);
+			});
+
+			it("should set the preview image url in modelValue", async () => {
+				const { wrapper, modelValueRef } = setupWrapper({ isEditMode: true });
+				useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(fakeMetaTags);
+
+				await wrapper.getComponent(LinkContentElementCreate).vm.$emit("create:url", fakeMetaTags.url);
+				await vi.runAllTimersAsync();
+
+				expect(modelValueRef.value.imageUrl).toBe("https://some.schulcloud.de/my-upload-preview-image.jpg");
+			});
+
+			it("should not set imageUrl when uploadFromUrl returns no file record", async () => {
+				const { wrapper, modelValueRef } = setupWrapper({ isEditMode: true });
+				useFileStorageApiMock.uploadFromUrl.mockResolvedValue(undefined);
+				useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(fakeMetaTags);
+
+				await wrapper.getComponent(LinkContentElementCreate).vm.$emit("create:url", fakeMetaTags.url);
+				await vi.runAllTimersAsync();
+
+				expect(modelValueRef.value.imageUrl).toBe("");
+			});
+
+			it("should not set imageUrl when preview is not possible", async () => {
+				const { wrapper, modelValueRef } = setupWrapper({ isEditMode: true });
+				vi.mocked(fileHelper.isPreviewPossible).mockReturnValue(false);
+				useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(fakeMetaTags);
+
+				await wrapper.getComponent(LinkContentElementCreate).vm.$emit("create:url", fakeMetaTags.url);
+				await vi.runAllTimersAsync();
+
+				expect(modelValueRef.value.imageUrl).toBe("");
+			});
 		});
 
 		it("should sanitize html-encoded urls", () => {

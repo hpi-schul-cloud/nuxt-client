@@ -17,9 +17,8 @@ import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed } from "vue";
-import { RouterLink } from "vue-router";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
-import { VAlert } from "vuetify/components";
+import { VAlert, VCard } from "vuetify/components";
 
 vi.mock("./useFolderAlerts.composable");
 
@@ -154,14 +153,15 @@ describe("FolderContentElement", () => {
 			expect(menu.exists()).toBe(false);
 		});
 
-		it("should render folder element title link with correct props", async () => {
-			const { wrapper, mockElement } = setupWrapper({
+		it("should link folder element to folder route", async () => {
+			const { wrapper, mockElement, router } = setupWrapper({
 				isEditMode: false,
 			});
 
-			const link = wrapper.getComponent(RouterLink);
-			expect(link.props("to")).toBe(`/folder/${mockElement.id}`);
-			expect(link.attributes("aria-label")).toBe(`components.cardElement.folderElement ${mockElement.content.title}`);
+			const card = wrapper.findComponent(VCard);
+			await card.trigger("click");
+
+			expect(router.push).toHaveBeenCalledWith(`/folder/${mockElement.id}`);
 		});
 
 		it.each(["up", "down"])(
@@ -250,6 +250,17 @@ describe("FolderContentElement", () => {
 
 				expect(wrapper.emitted()).toHaveProperty("delete:element");
 			});
+		});
+
+		it("should not link folder element to folder route", async () => {
+			const { wrapper, mockElement, router } = setupWrapper({
+				isEditMode: true,
+			});
+
+			const card = wrapper.findComponent(VCard);
+			await card.trigger("click");
+
+			expect(router.push).not.toHaveBeenCalledWith(`/folder/${mockElement.id}`);
 		});
 
 		it.each(["up", "down"])("should 'emit move-keyboard:edit' when arrow key %s is pressed", async (key) => {
