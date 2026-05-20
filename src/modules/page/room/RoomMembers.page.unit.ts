@@ -1,7 +1,7 @@
 import RoomMembersPage from "./RoomMembers.page.vue";
 import { Tab } from "@/types/room/RoomMembers";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { createTestEnvStore, mockedPiniaStoreTyping, roomMemberFactory } from "@@/tests/test-utils";
+import { createTestAppStore, createTestEnvStore, mockedPiniaStoreTyping, roomMemberFactory } from "@@/tests/test-utils";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
@@ -69,8 +69,9 @@ describe("RoomMembersPage", () => {
 		isLoading?: boolean;
 		envConfig?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<RoomDetailsResponse["allowedOperations"]>;
+		memberSchoolRoleNames?: RoleName[];
 	}) => {
-		const { createRoom, activeTab, isLoading, envConfig, allowedOperations } = {
+		const { createRoom, activeTab, isLoading, envConfig, allowedOperations, memberSchoolRoleNames } = {
 			createRoom: true,
 			activeTab: Tab.Members,
 			isLoading: false,
@@ -79,6 +80,7 @@ describe("RoomMembersPage", () => {
 
 		setActivePinia(createTestingPinia());
 		createTestEnvStore(envConfig);
+		createTestAppStore({ me: { user: { id: "test-user-id" } } });
 		createTestSchoolStore();
 
 		const room = createRoom ? roomFactory.build({ allowedOperations }) : undefined;
@@ -95,6 +97,12 @@ describe("RoomMembersPage", () => {
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
 		const roomInvitationLinkStore = mockedPiniaStoreTyping(useRoomInvitationLinkStore);
 		const registrationStore = mockedPiniaStoreTyping(useRegistrationStore);
+
+		if (memberSchoolRoleNames !== undefined) {
+			(roomMembersStore.getMemberById as Mock).mockReturnValue({
+				schoolRoleNames: memberSchoolRoleNames,
+			});
+		}
 
 		roomDetailsStore.$patch({
 			isLoading,
@@ -384,21 +392,47 @@ describe("RoomMembersPage", () => {
 
 		describe("when FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED is true", () => {
 			describe("SpeedDialMenu", () => {
-				it("should have speed dial menu actions", async () => {
-					const { wrapper } = setup({
-						activeTab: Tab.Members,
-						envConfig: {
-							FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
-						},
-						allowedOperations: { addMembers: true, viewMemberlist: true },
+				describe("when user is not a student", () => {
+					it("should have speed dial menu actions", async () => {
+						const { wrapper } = setup({
+							activeTab: Tab.Members,
+							envConfig: {
+								FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
+							},
+							memberSchoolRoleNames: [RoleName.ROOMEDITOR],
+							allowedOperations: { addMembers: true, viewMemberlist: true },
+						});
+
+						const wireframe = wrapper.findComponent(DefaultWireframe);
+						const addMemberButton = wireframe.getComponent("[data-testid=fab-add-members]").getComponent(VBtn);
+						await addMemberButton.trigger("click");
+
+						const fabActions = wrapper.findAllComponents(SpeedDialMenuAction);
+						expect(fabActions.length).toBe(2);
 					});
+				});
 
-					const wireframe = wrapper.findComponent(DefaultWireframe);
-					const addMemberButton = wireframe.getComponent("[data-testid=fab-add-members]").getComponent(VBtn);
-					await addMemberButton.trigger("click");
+				describe("when user is a student", () => {
+					it("should not show external person action", async () => {
+						const { wrapper } = setup({
+							activeTab: Tab.Members,
+							envConfig: {
+								FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
+							},
+							memberSchoolRoleNames: [RoleName.STUDENT],
+							allowedOperations: { addMembers: true, viewMemberlist: true },
+						});
 
-					const fabActions = wrapper.findAllComponents(SpeedDialMenuAction);
-					expect(fabActions.length).toBe(2);
+						const wireframe = wrapper.findComponent(DefaultWireframe);
+						const addMemberButton = wireframe.getComponent("[data-testid=fab-add-members]").getComponent(VBtn);
+						await addMemberButton.trigger("click");
+
+						const fabActions = wrapper.findAllComponents(SpeedDialMenuAction);
+						expect(fabActions.length).toBe(1);
+
+						const addExternalBtn = wrapper.findComponent("[data-testid='fab-add-external-person']");
+						expect(addExternalBtn.exists()).toBe(false);
+					});
 				});
 			});
 
@@ -428,6 +462,7 @@ describe("RoomMembersPage", () => {
 					envConfig: {
 						FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
 					},
+					memberSchoolRoleNames: [RoleName.ROOMEDITOR],
 					allowedOperations: { addMembers: true, viewMemberlist: true },
 				});
 
