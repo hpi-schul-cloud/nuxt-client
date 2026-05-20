@@ -7,7 +7,7 @@ The **nuxt-client** is the primary frontend application for the [dBildungscloud]
 It is a Vue 3 single-page application built with Vite, Vuetify, and TypeScript. The application serves teachers, students, and administrators across multiple German federal states (branded via a theming system). 
 It communicates with the [Schulcloud-Server](https://github.com/hpi-schul-cloud/schulcloud-server) REST and Socket API and coexists with the [legacy client](https://github.com/hpi-schul-cloud/schulcloud-client) during an ongoing migration.
 
-## 🏗️ Architecture Overview
+## 🏗️ Tech Stack Overview
 
 📎 [Architecture Diagram](docs/architecture.drawio) *(open in [diagrams.net](https://app.diagrams.net) or the draw.io IDE plugin)*
 
