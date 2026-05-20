@@ -1,9 +1,7 @@
 import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCommonCartridgeExportModal.vue";
-import ShareModule from "@/store/share";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
-import { SHARE_MODULE_KEY } from "@/utils/inject/injection-keys";
 import {
 	createTestAppStore,
 	createTestEnvStore,
@@ -11,7 +9,6 @@ import {
 	mockedPiniaStoreTyping,
 	singleColumnBoardResponseFactory,
 } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import {
 	BoardElementResponse,
@@ -25,6 +22,7 @@ import {
 } from "@api-server";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { useCopyFlow } from "@feature-copy";
+import { useShareFlow } from "@feature-share";
 import { createTestingPinia } from "@pinia/testing";
 import { DefaultWireframe } from "@ui-layout";
 import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
@@ -33,13 +31,14 @@ import { flushPromises, shallowMount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { mock } from "vitest-mock-extended";
-import { computed, nextTick, ref } from "vue";
+import { nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VBtn, VListItem } from "vuetify/components";
 import { TabItem } from "vuetify/lib/components/VTabs/VTabs.mjs";
 
 vi.mock("@data-common-cartridge");
 vi.mock("@feature-copy/copy-flow.composable");
+vi.mock("@feature-share/share-flow.composable");
 
 const boardElements: Array<BoardElementResponse> = [
 	{
@@ -72,9 +71,9 @@ const mockPermissionsCourseSubstitutionTeacher = [Permission.HOMEWORK_CREATE, Pe
 const mockPermissionsStudent = [Permission.BASE_VIEW];
 
 describe("CourseRoomDetails.page.vue", () => {
-	let shareModule: ShareModule;
 	let router: RouterMock;
 	let useCopyFlowMock: Mocked<ReturnType<typeof useCopyFlow>>;
+	let useShareFlowMock: Mocked<ReturnType<typeof useShareFlow>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
@@ -82,11 +81,17 @@ describe("CourseRoomDetails.page.vue", () => {
 		injectRouterMock(router);
 
 		useCopyFlowMock = mockComposable(useCopyFlow, {
-			isDialogOpen: ref(false),
+			isCopyDialogOpen: ref(false),
 			copyItemType: ref(ContentItemTypeEnum.Course),
-			isRunning: computed(() => false),
 		});
 		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
+
+		useShareFlowMock = mockComposable(useShareFlow, {
+			isShareDialogOpen: ref(false),
+			shareItemType: ref(ShareTokenBodyParamsParentType.COURSES),
+			shareUrl: ref("https://example.com/share"),
+		});
+		vi.mocked(useShareFlow).mockReturnValue(useShareFlowMock);
 	});
 
 	afterEach(() => {
@@ -115,11 +120,6 @@ describe("CourseRoomDetails.page.vue", () => {
 			elements: boardElements,
 			isSynchronized,
 			isArchived,
-		});
-
-		shareModule = createModuleMocks(ShareModule, {
-			getIsShareModalOpen: true,
-			getParentType: ShareTokenBodyParamsParentType.COURSES,
 		});
 
 		const courseRoomDetailsStore = mockedPiniaStoreTyping(useCourseRoomDetailsStore);
@@ -151,16 +151,13 @@ describe("CourseRoomDetails.page.vue", () => {
 		const wrapper = shallowMount(CourseRoomDetailsPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[SHARE_MODULE_KEY.valueOf()]: shareModule,
-				},
 				stubs: {
 					DefaultWireframe: false,
 					RoomDotMenu: false,
 					SelectBoardLayoutDialog: false,
 					CopyDialog: false,
 					CourseCommonCartridgeExportModal: false,
-					ShareModal: false,
+					ShareDialog: false,
 					VTabs: false,
 					VTab: false,
 					VChip: false,
@@ -181,7 +178,6 @@ describe("CourseRoomDetails.page.vue", () => {
 			wrapper,
 			singleColumnBoard,
 			router,
-			shareModule,
 			courseRoomDetailsStore,
 		};
 	};
@@ -471,9 +467,9 @@ describe("CourseRoomDetails.page.vue", () => {
 				});
 			});
 
-			it("should call shareModule.startShareFlow when 'Share Course' menu is clicked", async () => {
+			it("should call useShareFlow.executeShare when 'Share Course' menu is clicked", async () => {
 				createTestEnvStore({ FEATURE_COURSE_SHARE: true });
-				const { wrapper, shareModule, singleColumnBoard } = setup();
+				const { wrapper, singleColumnBoard } = setup();
 				await flushPromises();
 
 				const menuButton = wrapper.findComponent(RoomDotMenu);
@@ -484,7 +480,7 @@ describe("CourseRoomDetails.page.vue", () => {
 				const shareAction = menuItems.find((item) => item.dataTestId === "room-menu-share");
 				shareAction?.action();
 
-				expect(shareModule.startShareFlow).toHaveBeenCalledWith({
+				expect(useShareFlowMock.executeShare).toHaveBeenCalledWith({
 					id: singleColumnBoard.roomId,
 					type: ShareTokenBodyParamsParentType.COURSES,
 				});
@@ -493,11 +489,11 @@ describe("CourseRoomDetails.page.vue", () => {
 	});
 
 	describe("modal views", () => {
-		it("should render ShareModal component", async () => {
+		it("should render ShareDialog component", async () => {
 			const { wrapper } = setup();
 			await flushPromises();
 
-			const modalView = wrapper.findComponent({ name: "ShareModal" });
+			const modalView = wrapper.findComponent({ name: "ShareDialog" });
 			expect(modalView.exists()).toBe(true);
 		});
 
@@ -897,6 +893,63 @@ describe("CourseRoomDetails.page.vue", () => {
 			await flushPromises();
 
 			expect(wrapper.text()).toContain("pages.courseRooms.headerSection.archived");
+		});
+	});
+
+	describe("share-board-element event handling", () => {
+		describe.each([
+			{
+				type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
+				featureName: "FEATURE_COLUMN_BOARD_SHARE",
+				enabledEnv: { FEATURE_COLUMN_BOARD_SHARE: true },
+				disabledEnv: { FEATURE_COLUMN_BOARD_SHARE: false },
+			},
+			{
+				type: ShareTokenBodyParamsParentType.LESSONS,
+				featureName: "FEATURE_LESSON_SHARE",
+				enabledEnv: { FEATURE_LESSON_SHARE: true },
+				disabledEnv: { FEATURE_LESSON_SHARE: false },
+			},
+			{
+				type: ShareTokenBodyParamsParentType.TASKS,
+				featureName: "FEATURE_TASK_SHARE",
+				enabledEnv: { FEATURE_TASK_SHARE: true },
+				disabledEnv: { FEATURE_TASK_SHARE: false },
+			},
+			{
+				type: ShareTokenBodyParamsParentType.COURSES,
+				featureName: "FEATURE_COURSE_SHARE",
+				enabledEnv: { FEATURE_COURSE_SHARE: true },
+				disabledEnv: { FEATURE_COURSE_SHARE: false },
+			},
+		])("for type $type", ({ type, featureName, enabledEnv, disabledEnv }) => {
+			describe(`when ${featureName} is enabled`, () => {
+				it("should call executeShare with the correct params", async () => {
+					createTestEnvStore(enabledEnv);
+					const { wrapper } = setup();
+					await flushPromises();
+
+					const roomContent = wrapper.findComponent('[data-testid="room-content"]') as VueWrapper;
+					roomContent.vm.$emit("share-board-element", { id: "element-id", type });
+					await nextTick();
+
+					expect(useShareFlowMock.executeShare).toHaveBeenCalledWith({ id: "element-id", type });
+				});
+			});
+
+			describe(`when ${featureName} is disabled`, () => {
+				it("should not call executeShare", async () => {
+					createTestEnvStore(disabledEnv);
+					const { wrapper } = setup();
+					await flushPromises();
+
+					const roomContent = wrapper.findComponent('[data-testid="room-content"]') as VueWrapper;
+					roomContent.vm.$emit("share-board-element", { id: "element-id", type });
+					await nextTick();
+
+					expect(useShareFlowMock.executeShare).not.toHaveBeenCalled();
+				});
+			});
 		});
 	});
 });

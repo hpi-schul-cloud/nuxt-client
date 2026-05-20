@@ -1,16 +1,12 @@
-import { useCopyFlow } from "../../copy/copy-flow.composable";
 import MoveCardDialog from "../card/MoveCardDialog.vue";
 import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
-import ShareModule from "@/store/share";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
-import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import {
 	BoardExternalReferenceType,
@@ -32,6 +28,8 @@ import {
 } from "@data-board";
 import { CollaboraFileType } from "@data-file";
 import { AddCollaboraFileDialog } from "@feature-collabora";
+import { useCopyFlow } from "@feature-copy";
+import { useShareFlow } from "@feature-share";
 import { createTestingPinia } from "@pinia/testing";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { extractDataAttribute, useSharedLastCreatedElement } from "@util-board";
@@ -59,11 +57,13 @@ vi.mock("@data-board/boardInactivity.composable");
 const mockUseBoardInactivity = <Mock>useBoardInactivity;
 
 vi.mock("@feature-copy/copy-flow.composable");
+vi.mock("@feature-share/share-flow.composable");
 
 describe("Board", () => {
 	let router: RouterMock;
 	let mockedUsePageInactivity: Mocked<ReturnType<typeof useBoardInactivity>>;
 	let useCopyFlowMock: Mocked<ReturnType<typeof useCopyFlow>>;
+	let useShareFlowMock: Mocked<ReturnType<typeof useShareFlow>>;
 
 	beforeEach(() => {
 		vi.useFakeTimers();
@@ -103,11 +103,17 @@ describe("Board", () => {
 		mockUseBoardInactivity.mockReturnValue(mockedUsePageInactivity);
 
 		useCopyFlowMock = mockComposable(useCopyFlow, {
-			isDialogOpen: ref(false),
+			isCopyDialogOpen: ref(false),
 			copyItemType: ref(ContentItemTypeEnum.ColumnBoard),
-			isRunning: computed(() => false),
 		});
 		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
+
+		useShareFlowMock = mockComposable(useShareFlow, {
+			isShareDialogOpen: ref(false),
+			shareItemType: ref(ShareTokenBodyParamsParentType.TASKS),
+			shareUrl: ref("http://example.com/share-url"),
+		});
+		vi.mocked(useShareFlow).mockReturnValue(useShareFlowMock);
 	});
 
 	afterEach(() => {
@@ -134,13 +140,6 @@ describe("Board", () => {
 		return board;
 	};
 
-	const setupProvideModules = () => {
-		const shareModule = createModuleMocks(ShareModule);
-		return {
-			shareModule,
-		};
-	};
-
 	const setup = (options?: {
 		numberOfColumns?: number;
 		isBoardVisible?: boolean;
@@ -148,8 +147,6 @@ describe("Board", () => {
 		envs?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
 	}) => {
-		const { shareModule } = setupProvideModules();
-
 		setActivePinia(createTestingPinia());
 
 		createTestEnvStore({
@@ -180,11 +177,8 @@ describe("Board", () => {
 					createTestingI18n(),
 					createTestingVuetify(),
 				],
-				provide: {
-					[SHARE_MODULE_KEY.valueOf()]: shareModule,
-				},
 				stubs: {
-					ShareModal: true,
+					ShareDialog: true,
 					UseFocusTrap: true,
 					EditSettingsDialog: true,
 				},
@@ -211,7 +205,6 @@ describe("Board", () => {
 			boardStore,
 			cardStore,
 			board,
-			shareModule,
 		};
 	};
 
@@ -944,14 +937,14 @@ describe("Board", () => {
 		describe("@share:board", () => {
 			describe("when feature is enabled", () => {
 				it("should start the share flow", async () => {
-					const { wrapper, board, shareModule } = setup({ allowedOperations: { shareBoard: true } });
+					const { wrapper, board } = setup({ allowedOperations: { shareBoard: true } });
 
 					const boardHeader = wrapper.findComponent({
 						name: "BoardHeader",
 					});
 					await boardHeader.vm.$emit("share:board");
 
-					expect(shareModule.startShareFlow).toHaveBeenCalledWith({
+					expect(useShareFlowMock.executeShare).toHaveBeenCalledWith({
 						id: board.id,
 						type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
 					});
@@ -960,7 +953,7 @@ describe("Board", () => {
 
 			describe("when feature is disabled", () => {
 				it("should do nothing", async () => {
-					const { wrapper, shareModule } = setup({
+					const { wrapper } = setup({
 						envs: { FEATURE_COLUMN_BOARD_SHARE: false },
 					});
 
@@ -969,19 +962,19 @@ describe("Board", () => {
 					});
 					await boardHeader.vm.$emit("share:board");
 
-					expect(shareModule.startShareFlow).not.toHaveBeenCalled();
+					expect(useShareFlowMock.executeShare).not.toHaveBeenCalled();
 				});
 			});
 		});
 
 		describe("@share:card", () => {
 			it("should start the card share flow", async () => {
-				const { wrapper, shareModule } = setup({ allowedOperations: { shareCard: true } });
+				const { wrapper } = setup({ allowedOperations: { shareCard: true } });
 
 				const boardColumn = wrapper.findComponent(BoardColumn);
 				await boardColumn.vm.$emit("share:card", "card-id");
 
-				expect(shareModule.startShareFlow).toHaveBeenCalledWith({
+				expect(useShareFlowMock.executeShare).toHaveBeenCalledWith({
 					id: "card-id",
 					type: ShareTokenBodyParamsParentType.CARD,
 					destinationType: BoardExternalReferenceType.ROOM,
@@ -1278,14 +1271,14 @@ describe("Board", () => {
 	describe("@onShareBoard", () => {
 		describe("when user is not permitted to share board", () => {
 			it("should not start the share flow", async () => {
-				const { wrapper, shareModule } = setup({ allowedOperations: { shareBoard: false } });
+				const { wrapper } = setup({ allowedOperations: { shareBoard: false } });
 
 				const boardHeader = wrapper.findComponent({
 					name: "BoardHeader",
 				});
 				await boardHeader.vm.$emit("share:board");
 
-				expect(shareModule.startShareFlow).not.toHaveBeenCalled();
+				expect(useShareFlowMock.executeShare).not.toHaveBeenCalled();
 			});
 		});
 	});

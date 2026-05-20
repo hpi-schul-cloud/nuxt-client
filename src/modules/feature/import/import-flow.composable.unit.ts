@@ -10,6 +10,7 @@ import { createTestingI18n } from "@@/tests/test-utils/setup/createTestingI18n";
 import * as serverApi from "@api-server";
 import { useLoadingStore, useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
+import { logger } from "@util-logger";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
@@ -122,6 +123,10 @@ describe("useImportflow", () => {
 		});
 
 		describe("when token validation fails", () => {
+			beforeEach(() => {
+				vi.spyOn(logger, "error").mockImplementation(vi.fn());
+			});
+
 			const setup = () => {
 				const composable = mountImportFlowComposable();
 				const validationError = new Error("Validation failed");
@@ -205,6 +210,10 @@ describe("useImportflow", () => {
 			});
 
 			describe("and the api call fails", () => {
+				beforeEach(() => {
+					vi.spyOn(logger, "error").mockImplementation(vi.fn());
+				});
+
 				const setup = async () => {
 					const composable = mountImportFlowComposable();
 					mockValidationResponse();
