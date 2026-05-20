@@ -480,28 +480,6 @@ const savedFlag = () => {
 
 defineExpose({
 	reloadData,
-	importUsers,
-	roles,
-	tableHead,
-	searchFirstName,
-	searchLastName,
-	searchLoginName,
-	searchRole,
-	searchClasses,
-	searchMatchedBy,
-	searchFlagged,
-	dialogEdit,
-	editedIndex,
-	editedItem,
-	closeEdit,
-	getMatchedByIcon,
-	getRoles,
-	savedMatch,
-	savedFlag,
-	options,
-	onUpdateOptions,
-	loading,
-	saveFlag,
 });
 </script>
 

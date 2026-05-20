@@ -1,4 +1,4 @@
-import MigrationWizard from "./Migration.page.vue";
+import MigrationPage from "./Migration.page.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestEnvStore, createTestSchoolStore, schoolFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -33,9 +33,9 @@ type MigrationPageWrapperType = Partial<{
 }>;
 
 const getWrapper = (
-	options: ComponentMountingOptions<typeof MigrationWizard> = {}
+	options: ComponentMountingOptions<typeof MigrationPage> = {}
 ): VueWrapper<ComponentPublicInstance & MigrationPageWrapperType> =>
-	mount(MigrationWizard, {
+	mount(MigrationPage, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			stubs: {
@@ -47,9 +47,9 @@ const getWrapper = (
 	});
 
 const getWrapperShallow = (
-	options: ComponentMountingOptions<typeof MigrationWizard> = {}
+	options: ComponentMountingOptions<typeof MigrationPage> = {}
 ): VueWrapper<ComponentPublicInstance & MigrationPageWrapperType> =>
-	shallowMount(MigrationWizard, {
+	shallowMount(MigrationPage, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
@@ -80,6 +80,12 @@ describe("User Migration / Index", () => {
 				inUserMigration: undefined,
 				inMaintenance: undefined,
 			}),
+		});
+
+		vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValue({
+			result: undefined,
+			success: true,
+			error: undefined,
 		});
 	});
 

@@ -33,11 +33,8 @@ const testProps = {
 	ldapSource: "LDAP",
 };
 
-const getWrapper = (
-	importUsersStore: ReturnType<typeof useImportUsersStore>,
-	props: ComponentProps<typeof ImportUsersMatchSearch>,
-	options?: object
-) => {
+const getWrapper = (props: ComponentProps<typeof ImportUsersMatchSearch>, options?: object) => {
+	const importUsersStore = useImportUsersStore();
 	vi.spyOn(importUsersStore, "fetchAllUsers").mockResolvedValue();
 	return mount(ImportUsersMatchSearch, {
 		global: {
@@ -60,7 +57,7 @@ describe("ImportUsersMatchSearch", () => {
 	});
 
 	it("should display 'editedItem' property in HTML section", async () => {
-		const wrapper = getWrapper(importUsersStore, testProps);
+		const wrapper = getWrapper(testProps);
 		const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
 		expect(editedItemElement).toContain("Max");
@@ -74,7 +71,7 @@ describe("ImportUsersMatchSearch", () => {
 		const saveFlagMock = vi.spyOn(importUsersStore, "saveFlag");
 		saveFlagMock.mockResolvedValue({ ...testProps.editedItem, flagged: true });
 
-		const wrapper = getWrapper(importUsersStore, testProps);
+		const wrapper = getWrapper(testProps);
 
 		const flagButtonElement = wrapper.find("[data-testid=flag-button]");
 		expect(flagButtonElement.element.innerHTML).toContain(mdiFlagOutline);
@@ -97,7 +94,7 @@ describe("ImportUsersMatchSearch", () => {
 			roleNames: [ImportUserResponseRoleNames.TEACHER],
 			text: "Cord Carl",
 		};
-		const wrapper = getWrapper(importUsersStore, testProps);
+		const wrapper = getWrapper(testProps);
 		const autoCompleteElement = wrapper.findComponent(VAutocomplete);
 		autoCompleteElement.vm.$emit("update:modelValue", payload);
 		await nextTick();
@@ -121,7 +118,7 @@ describe("ImportUsersMatchSearch", () => {
 		const saveMatchMock = vi.spyOn(importUsersStore, "saveMatch");
 		saveMatchMock.mockResolvedValue({ ...testProps.editedItem, match });
 
-		const wrapper = getWrapper(importUsersStore, testProps);
+		const wrapper = getWrapper(testProps);
 
 		const autoCompleteElement = wrapper.findComponent(VAutocomplete);
 		autoCompleteElement.vm.$emit("update:modelValue", match);
@@ -158,7 +155,7 @@ describe("ImportUsersMatchSearch", () => {
 			roleNames: [UserMatchResponseRoleNames.ADMIN],
 			matchedBy: UserMatchResponseMatchedBy.ADMIN,
 		};
-		const wrapper = getWrapper(importUsersStore, {
+		const wrapper = getWrapper({
 			editedItem: { ...importUser, match },
 			ldapSource: "LDAP",
 		});
@@ -175,7 +172,7 @@ describe("ImportUsersMatchSearch", () => {
 	});
 
 	it("should disable delete button when edited item has no match", () => {
-		const wrapper = getWrapper(importUsersStore, testProps);
+		const wrapper = getWrapper(testProps);
 		const deleteMatchButton = wrapper
 			.findAllComponents(VBtn)
 			.filter((btn) => btn.attributes("data-testid") === "delete-match-btn")[0];
@@ -184,7 +181,7 @@ describe("ImportUsersMatchSearch", () => {
 	});
 
 	it("should disable save button when no item was selected", () => {
-		const wrapper = getWrapper(importUsersStore, testProps);
+		const wrapper = getWrapper(testProps);
 
 		const saveMatchButton = wrapper
 			.findAllComponents(VBtn)
@@ -194,7 +191,7 @@ describe("ImportUsersMatchSearch", () => {
 	});
 
 	it("should not display username when prop nbc is set", () => {
-		const wrapper = getWrapper(importUsersStore, { ...testProps, isNbc: true });
+		const wrapper = getWrapper({ ...testProps, isNbc: true });
 
 		const editedItemUsername = wrapper.find("[data-testid=edited-item-username]");
 
@@ -225,7 +222,7 @@ describe("ImportUsersMatchSearch", () => {
 
 		it("should not contain any text for external role", () => {
 			const { setupTestProps } = setup();
-			const wrapper = getWrapper(importUsersStore, setupTestProps);
+			const wrapper = getWrapper(setupTestProps);
 
 			const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
@@ -258,7 +255,7 @@ describe("ImportUsersMatchSearch", () => {
 
 			it("should correctly show the external role of the user", () => {
 				const { adminTestProps } = setup();
-				const wrapper = getWrapper(importUsersStore, adminTestProps);
+				const wrapper = getWrapper(adminTestProps);
 
 				const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
@@ -296,7 +293,7 @@ describe("ImportUsersMatchSearch", () => {
 
 			it("should correctly show the external role of the user", () => {
 				const { adminTestProps } = setup();
-				const wrapper = getWrapper(importUsersStore, adminTestProps);
+				const wrapper = getWrapper(adminTestProps);
 
 				const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
@@ -334,7 +331,7 @@ describe("ImportUsersMatchSearch", () => {
 
 			it("should correctly show the external role of the user", () => {
 				const { adminTestProps } = setup();
-				const wrapper = getWrapper(importUsersStore, adminTestProps);
+				const wrapper = getWrapper(adminTestProps);
 
 				const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
@@ -372,7 +369,7 @@ describe("ImportUsersMatchSearch", () => {
 
 			it("should correctly show the external role of the user", () => {
 				const { adminTestProps } = setup();
-				const wrapper = getWrapper(importUsersStore, adminTestProps);
+				const wrapper = getWrapper(adminTestProps);
 
 				const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
@@ -410,7 +407,7 @@ describe("ImportUsersMatchSearch", () => {
 
 			it("should show that the role is not available", () => {
 				const { setupTestProps } = setup();
-				const wrapper = getWrapper(importUsersStore, setupTestProps);
+				const wrapper = getWrapper(setupTestProps);
 
 				const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
@@ -438,7 +435,7 @@ describe("ImportUsersMatchSearch", () => {
 					ldapSource: "moin.schule",
 					isNbc: true,
 				};
-				const wrapper = getWrapper(importUsersStore, propsWithUnknownRole);
+				const wrapper = getWrapper(propsWithUnknownRole);
 				const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
 				expect(editedItemElement).toContain("UnknownRole");
@@ -455,7 +452,7 @@ describe("ImportUsersMatchSearch", () => {
 					roleNames: [ImportUserResponseRoleNames.ADMIN],
 				},
 			};
-			const wrapper = getWrapper(importUsersStore, propsWithAdminRole);
+			const wrapper = getWrapper(propsWithAdminRole);
 			const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
 			expect(editedItemElement).toContain("common.roleName.administrator");
@@ -469,7 +466,7 @@ describe("ImportUsersMatchSearch", () => {
 					roleNames: ["expert"] as unknown as ImportUserResponseRoleNames[],
 				},
 			};
-			const wrapper = getWrapper(importUsersStore, propsWithExpertRole);
+			const wrapper = getWrapper(propsWithExpertRole);
 			const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
 			expect(editedItemElement).toContain("common.roleName.expert");
@@ -483,7 +480,7 @@ describe("ImportUsersMatchSearch", () => {
 					roleNames: ["externalPerson"] as unknown as ImportUserResponseRoleNames[],
 				},
 			};
-			const wrapper = getWrapper(importUsersStore, propsWithExternalPersonRole);
+			const wrapper = getWrapper(propsWithExternalPersonRole);
 			const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
 			expect(editedItemElement).toContain("common.roleName.externalPerson");
@@ -497,7 +494,7 @@ describe("ImportUsersMatchSearch", () => {
 					roleNames: ["superhero"] as unknown as ImportUserResponseRoleNames[],
 				},
 			};
-			const wrapper = getWrapper(importUsersStore, propsWithSuperheroRole);
+			const wrapper = getWrapper(propsWithSuperheroRole);
 			const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
 			expect(editedItemElement).toContain("common.roleName.superhero");
@@ -511,7 +508,7 @@ describe("ImportUsersMatchSearch", () => {
 					roleNames: ["unknownRole"] as unknown as ImportUserResponseRoleNames[],
 				},
 			};
-			const wrapper = getWrapper(importUsersStore, propsWithUnknownRole);
+			const wrapper = getWrapper(propsWithUnknownRole);
 			const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
 			expect(editedItemElement).toContain("unknownRole");
@@ -534,7 +531,7 @@ describe("ImportUsersMatchSearch", () => {
 					match,
 				},
 			};
-			const wrapper = getWrapper(importUsersStore, propsWithMatch);
+			const wrapper = getWrapper(propsWithMatch);
 
 			const autoCompleteElement = wrapper.findComponent(VAutocomplete);
 			autoCompleteElement.vm.$emit("update:modelValue", match);
@@ -562,7 +559,7 @@ describe("ImportUsersMatchSearch", () => {
 			saveMatchMock.mockResolvedValue(undefined);
 			importUsersStore.businessError = { statusCode: 500, message: "Error", error: {} as never };
 
-			const wrapper = getWrapper(importUsersStore, testProps);
+			const wrapper = getWrapper(testProps);
 
 			const autoCompleteElement = wrapper.findComponent(VAutocomplete);
 			autoCompleteElement.vm.$emit("update:modelValue", match);
@@ -594,7 +591,7 @@ describe("ImportUsersMatchSearch", () => {
 			const saveMatchMock = vi.spyOn(importUsersStore, "saveMatch");
 			saveMatchMock.mockResolvedValue({ ...testProps.editedItem, match: returnedMatch });
 
-			const wrapper = getWrapper(importUsersStore, testProps);
+			const wrapper = getWrapper(testProps);
 
 			const autoCompleteElement = wrapper.findComponent(VAutocomplete);
 			autoCompleteElement.vm.$emit("update:modelValue", selectedMatch);
@@ -630,7 +627,7 @@ describe("ImportUsersMatchSearch", () => {
 			deleteMatchMock.mockResolvedValue(undefined);
 			importUsersStore.businessError = { statusCode: 500, message: "Error", error: {} as never };
 
-			const wrapper = getWrapper(importUsersStore, propsWithMatch);
+			const wrapper = getWrapper(propsWithMatch);
 
 			const deleteMatchButton = wrapper.find("[data-testid=delete-match-btn]");
 			await deleteMatchButton.trigger("click");
@@ -656,13 +653,12 @@ describe("ImportUsersMatchSearch", () => {
 			};
 
 			const deleteMatchMock = vi.spyOn(importUsersStore, "deleteMatch");
-			const wrapper = getWrapper(importUsersStore, propsWithInvalidMatch);
+			const wrapper = getWrapper(propsWithInvalidMatch);
 
 			const deleteMatchButton = wrapper.find("[data-testid=delete-match-btn]");
 			await deleteMatchButton.trigger("click");
 			await nextTick();
 
-			// deleteMatch should not be called because userId is undefined
 			expect(deleteMatchMock).not.toHaveBeenCalled();
 		});
 	});
@@ -673,7 +669,7 @@ describe("ImportUsersMatchSearch", () => {
 			saveFlagMock.mockResolvedValue(undefined);
 			importUsersStore.businessError = { statusCode: 500, message: "Error", error: {} as never };
 
-			const wrapper = getWrapper(importUsersStore, testProps);
+			const wrapper = getWrapper(testProps);
 
 			const flagButtonElement = wrapper.find("[data-testid=flag-button]");
 			await flagButtonElement.trigger("click");
@@ -684,10 +680,9 @@ describe("ImportUsersMatchSearch", () => {
 
 		it("should not emit saved-flag when returned flag does not match expected value", async () => {
 			const saveFlagMock = vi.spyOn(importUsersStore, "saveFlag");
-			// Return the same value as current (not toggled)
 			saveFlagMock.mockResolvedValue({ ...testProps.editedItem, flagged: false });
 
-			const wrapper = getWrapper(importUsersStore, testProps);
+			const wrapper = getWrapper(testProps);
 
 			const flagButtonElement = wrapper.find("[data-testid=flag-button]");
 			await flagButtonElement.trigger("click");
@@ -699,7 +694,7 @@ describe("ImportUsersMatchSearch", () => {
 
 	describe("close button", () => {
 		it("should emit close event and reset selectedItem when close button clicked", async () => {
-			const wrapper = getWrapper(importUsersStore, testProps);
+			const wrapper = getWrapper(testProps);
 
 			const closeButton = wrapper.findAllComponents(VBtn).find((btn) => btn.props("icon") !== undefined);
 			await closeButton?.trigger("click");
