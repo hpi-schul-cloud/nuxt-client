@@ -7,13 +7,13 @@
 	>
 		<VCardItem>
 			<RouterLink tabindex="-1" :to="roomPath" class="room-link-item">
-				<VAvatar rounded="lg" :class="avatarColor" class="room-grid-avatar" :data-testid="`room-avatar-${index}`">
-					<VBadge bordered :model-value="room.isLocked" :icon="mdiLock" :data-testid="`room-badge-lock-${index}`">
+				<VBadge :model-value="room.isLocked" bordered :icon="mdiLock" :data-testid="`room-badge-lock-${index}`">
+					<VAvatar rounded="lg" :class="avatarColor" class="room-grid-avatar" :data-testid="`room-avatar-${index}`">
 						<span class="text-h1 text-white text-decoration-none" :data-testid="`room-short-title-${index}`">
 							{{ roomShortName }}
 						</span>
-					</VBadge>
-				</VAvatar>
+					</VAvatar>
+				</VBadge>
 				<div>
 					<VCardTitle class="text-break text-body-1 font-weight-bold mb-1" :data-testid="`room--title-${index}`">
 						{{ room.name }}
@@ -77,6 +77,10 @@ const roomAriaLabel = computed(() => `${t("common.labels.room")} ${props.room.na
 	gap: 16px;
 	color: inherit;
 	text-decoration: none;
+
+	.v-card-item__content {
+		overflow: auto;
+	}
 
 	.v-card-title {
 		line-height: 1.5 !important;
