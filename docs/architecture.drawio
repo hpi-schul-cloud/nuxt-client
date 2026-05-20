@@ -1,6 +1,6 @@
-<mxfile host="drawio-plugin" modified="2026-05-20T12:08:12.796Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" version="22.1.22" etag="byvJgg01t-SiJcQAd2SE" type="embed">
+<mxfile host="drawio-plugin" modified="2026-05-20T12:09:13.685Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" version="22.1.22" etag="yS94X4kR4H-CPEWVznYT" type="embed">
   <diagram name="Architecture" id="nuxt-client-arch">
-    <mxGraphModel dx="0" dy="61" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="819" pageHeight="459" math="0" shadow="0">
+    <mxGraphModel dx="1559" dy="708" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="819" pageHeight="459" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -53,10 +53,14 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="e8" value="REST" style="edgeStyle=orthogonalEdgeStyle;" parent="1" source="9" target="10" edge="1">
-          <mxGeometry relative="1" as="geometry" />
+          <mxGeometry y="-30" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="e9" value="WebSocket" style="edgeStyle=orthogonalEdgeStyle;dashed=1;" parent="1" source="2" target="10" edge="1">
-          <mxGeometry relative="1" as="geometry" />
+          <mxGeometry x="0.7419" y="50" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
