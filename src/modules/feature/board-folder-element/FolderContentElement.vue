@@ -82,7 +82,7 @@ import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp }
 import dayjs from "dayjs";
 import { computed, onMounted, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 
 interface FolderContentElementProps {
 	element: FileFolderElement;
