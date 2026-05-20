@@ -3,6 +3,30 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=hpi-schul-cloud_nuxt-client&metric=coverage)](https://sonarcloud.io/summary/new_code?id=hpi-schul-cloud_nuxt-client)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=hpi-schul-cloud_nuxt-client&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=hpi-schul-cloud_nuxt-client)
 
+The **nuxt-client** is the primary frontend application for the [dBildungscloud](https://github.com/hpi-schul-cloud) ecosystem. 
+It is a Vue 3 single-page application built with Vite, Vuetify, and TypeScript. The application serves teachers, students, and administrators across multiple German federal states (branded via a theming system). 
+It communicates with the [Schulcloud-Server](https://github.com/hpi-schul-cloud/schulcloud-server) REST and Socket API and coexists with the [legacy client](https://github.com/hpi-schul-cloud/schulcloud-client) during an ongoing migration.
+
+## 🏗️ Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                        Browser                          │
+├─────────────────────────────────────────────────────────┤
+│  nuxt-client (Vue 3 SPA)                                │
+│  ┌───────────┐  ┌───────────┐  ┌────────────────────┐  │
+│  │  Pages    │→ │  Modules  │→ │  Generated API     │  │
+│  │  (router) │  │  (domain) │  │  Clients (OpenAPI) │  │
+│  └───────────┘  └───────────┘  └────────┬───────────┘  │
+├──────────────────────────────────────────┼──────────────┤
+│                                          ▼              │
+│  ┌──────────────────────┐   ┌────────────────────────┐  │
+│  │  Schulcloud-Client   │   │   Schulcloud-Server    │  │
+│  │  (Legacy Frontend)   │   │   (Nest.js REST API)   │  │
+│  └──────────────────────┘   └────────────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+```
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -73,7 +97,6 @@ Unit tests use [Vitest](https://vitest.dev/) with [Vue Test Utils](https://test-
 npm run test:unit
 ```
 
-
 ## 🤖 API Client Generation
 
 API clients are auto-generated from OpenAPI specs via [openapi-generator-cli](https://openapi-generator.tech/). Configuration lives in `openapitools.json`.
@@ -85,6 +108,29 @@ npm run generate-client:filestorage
 npm run generate-client:h5p-editor
 npm run generate-client:common-cartridge
 ```
+
+## 💡 Coding Conventions
+
+### General
+
+- Use `async/await` for better readability instead of callbacks
+- Leverage TypeScript for type safety – use inference over declared return types
+- Avoid `// @ts-ignore` – define types properly instead
+- File naming: kebab-case, e.g. `MyComponent.vue`, `my-util.ts`
+- Context meta tags separated by dots: `MyComponent.unit.ts`
+- Function names: `camelCase`
+- Pure functions as directly importable utils/ES modules
+- Avoid assigning a variable only to immediately return it
+- Avoid `async` as part of function names
+
+### CSS / Styling
+
+- Global styles live in a central `styles/` directory, imported via `main.ts`
+- Use **scoped styles** by default in page and module components
+- Font sizes via CSS custom properties defined in `src/styles/css-variables/_typography.scss` (e.g. `--heading-1`, `--text-md`) – do not use hardcoded pixel values
+- Prefer CSS Grid / Flexbox for column/row layouts
+- Font changes exclusively in `src/styles/utility/_fonts.scss`
+- Refer to the official [Vue Style Guide](https://vuejs.org/style-guide/) for component conventions
 
 ## 📖 Documentation
 
