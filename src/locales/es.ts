@@ -585,9 +585,6 @@ export default {
 	"components.cardElement.titleElement.validation.required": "Por favor ingrese un título.",
 	"components.cardElement.titleElement": "Elemento título",
 	"components.cardElement.videoConferenceElement": "Videoconferencia",
-	"components.cardElement.videoConferenceElement.untitled": "Videoconferencia sin título",
-	"components.cardElement.videoConferenceElement.create.label": "Insertar título de la videoconferencia",
-	"components.cardElement.videoConferenceElement.edit.label": "Editar título de la videoconferencia",
 	"components.cardElement.deletedElement": "Contenido eliminado",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",

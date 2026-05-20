@@ -573,9 +573,6 @@ export default {
 	"components.cardElement.titleElement.validation.required": "Please enter a title.",
 	"components.cardElement.titleElement": "Title element",
 	"components.cardElement.videoConferenceElement": "Video conference",
-	"components.cardElement.videoConferenceElement.untitled": "Untitled video conference",
-	"components.cardElement.videoConferenceElement.create.label": "Insert video conference title",
-	"components.cardElement.videoConferenceElement.edit.label": "Edit video conference title",
 	"components.cardElement.deletedElement": "Deleted content",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} not available. Please contact the school administrator.",

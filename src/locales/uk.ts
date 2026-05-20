@@ -585,9 +585,6 @@ export default {
 	"components.cardElement.titleElement.validation.required": "Будь ласка, введіть назву.",
 	"components.cardElement.titleElement": "Елемент заголовка",
 	"components.cardElement.videoConferenceElement": "Відеоконференція",
-	"components.cardElement.videoConferenceElement.untitled": "Відеоконференція без назви",
-	"components.cardElement.videoConferenceElement.create.label": "Вставити назву відеоконференції",
-	"components.cardElement.videoConferenceElement.edit.label": "Редагувати назву відеоконференції",
 	"components.cardElement.deletedElement": "Видалений вміст",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
