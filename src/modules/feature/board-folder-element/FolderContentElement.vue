@@ -11,9 +11,19 @@
 		@keydown.stop
 		@keydown.enter="!isEditMode ? openFolder() : undefined"
 	>
-		<ContentElementBar :icon="mdiFolderOpenOutline" :is-edit-mode="isEditMode">
+		<ContentElementBar :icon="mdiFolderOpenOutline">
 			<template #title>
-				{{ elementTitle }}
+				<RouterLink
+					v-if="isEditMode"
+					class="folder-title"
+					:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
+					:to="folderRoute"
+				>
+					{{ elementTitle }}
+				</RouterLink>
+				<span v-else>
+					{{ elementTitle }}
+				</span>
 			</template>
 			<template v-if="isEditMode" #menu>
 				<BoardMenu
