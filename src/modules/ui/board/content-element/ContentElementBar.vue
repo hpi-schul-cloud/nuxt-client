@@ -6,7 +6,6 @@
 		:class="{
 			'flex-row': hasRowStyle,
 			'flex-column': !hasRowStyle,
-			'edit-mode': isEditMode,
 		}"
 	>
 		<div v-if="$slots.menu" class="three-dot-menu">
@@ -83,11 +82,6 @@ defineProps({
 		required: false,
 		default: undefined,
 	},
-	isEditMode: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
 });
 </script>
 
@@ -127,7 +121,7 @@ defineProps({
 	flex: 0 0 33%;
 }
 
-.content-element-bar:not(.edit-mode):hover {
+.content-element-bar:hover {
 	.content-element-title {
 		text-decoration: underline;
 	}
