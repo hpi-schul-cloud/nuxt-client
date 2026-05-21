@@ -356,6 +356,44 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Get a list of room applicants.
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerGetApplicants: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerGetApplicants', 'roomId', roomId)
+            const localVarPath = `/rooms/{roomId}/applicants`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get the list of room invitation links of a room.
          * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
@@ -925,6 +963,17 @@ export const RoomApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get a list of room applicants.
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerGetApplicants(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomMemberListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetApplicants(roomId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get the list of room invitation links of a room.
          * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
@@ -1144,6 +1193,16 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Get a list of room applicants.
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerGetApplicants(roomId: string, options?: any): AxiosPromise<RoomMemberListResponse> {
+            return localVarFp.roomControllerGetApplicants(roomId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get the list of room invitation links of a room.
          * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
@@ -1347,6 +1406,16 @@ export interface RoomApiInterface {
      * @memberof RoomApiInterface
      */
     roomControllerDeleteRoom(roomId: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Get a list of room applicants.
+     * @param {string} roomId The id of the room.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerGetApplicants(roomId: string, options?: any): AxiosPromise<RoomMemberListResponse>;
 
     /**
      * 
@@ -1566,6 +1635,18 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      */
     public roomControllerDeleteRoom(roomId: string, options?: any) {
         return RoomApiFp(this.configuration).roomControllerDeleteRoom(roomId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a list of room applicants.
+     * @param {string} roomId The id of the room.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerGetApplicants(roomId: string, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerGetApplicants(roomId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
