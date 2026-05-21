@@ -124,6 +124,8 @@ The comprehensive guide covering architecture, design patterns, and development 
 
 - [Schulcloud-Server](https://github.com/hpi-schul-cloud/schulcloud-server) - the backend (Node.js / Nest.js)
 - [Schulcloud-Client](https://github.com/hpi-schul-cloud/schulcloud-client) - the (partly still in use) legacy frontend
+- [file-storage](https://github.com/hpi-schul-cloud/file-storage) - file storage service
+- [h5p-server](https://github.com/hpi-schul-cloud/h5p-server) - H5P editor service
 - [dof_app_deploy](https://github.com/hpi-schul-cloud/dof_app_deploy) - **D**ev**O**ps**F**uture – CI/CD and instance configurations
 - [e2e-system-tests](https://github.com/hpi-schul-cloud/e2e-system-tests) - BDD end-to-end tests
 
