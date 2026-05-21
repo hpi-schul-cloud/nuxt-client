@@ -621,7 +621,6 @@ export default {
 	"components.legacy.footer.contact": "Contacto",
 	"components.legacy.footer.github": "GitHub",
 	"components.legacy.footer.imprint": "Impresión",
-	"components.legacy.footer.lokalise_logo_alt": "logotipo de lokalise.com",
 	"components.legacy.footer.powered_by": "Traducido por",
 	"components.legacy.footer.privacy_policy_thr": "Política de privacidad",
 	"components.legacy.footer.privacy_policy": "Política de privacidad",
