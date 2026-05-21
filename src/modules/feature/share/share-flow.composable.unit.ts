@@ -4,6 +4,7 @@ import { expectNotification, mockApi, mockApiResponse, mountComposable } from "@
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
 import { BoardExternalReferenceType, ShareTokenBodyParamsParentType, ShareTokenResponse } from "@api-server";
+import type { ShareDialogProps } from "@feature-dialog";
 import * as featureDialog from "@feature-dialog";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
@@ -64,7 +65,7 @@ describe("useShareFlow", () => {
 	describe("executeShare", () => {
 		describe("when called", () => {
 			const setup = () => {
-				vi.mocked(featureDialog.openDialog).mockReturnValue(new Promise(() => {}));
+				vi.mocked(featureDialog.openDialog).mockReturnValue(new Promise(() => undefined));
 				const composable = mountShareFlowComposable();
 				composable.executeShare({
 					id: "item-id",
@@ -107,8 +108,8 @@ describe("useShareFlow", () => {
 			describe("and the api call is successful", () => {
 				const setup = () => {
 					const response = mockCreateShareTokenSuccess("abc123");
-					vi.mocked(featureDialog.openDialog).mockImplementation(async (_type, props: any) => {
-						await props.onConfirm(DEFAULT_SHARE_OPTIONS);
+					vi.mocked(featureDialog.openDialog).mockImplementation(async (_type, props) => {
+						await (props as ShareDialogProps).onConfirm(DEFAULT_SHARE_OPTIONS);
 						return { completed: true, data: undefined };
 					});
 					const composable = mountShareFlowComposable();
@@ -141,8 +142,8 @@ describe("useShareFlow", () => {
 			describe("when hasExpiryDate option is set", () => {
 				const setup = () => {
 					mockCreateShareTokenSuccess();
-					vi.mocked(featureDialog.openDialog).mockImplementation(async (_type, props: any) => {
-						await props.onConfirm({ isSchoolInternal: false, hasExpiryDate: true });
+					vi.mocked(featureDialog.openDialog).mockImplementation(async (_type, props) => {
+						await (props as ShareDialogProps).onConfirm({ isSchoolInternal: false, hasExpiryDate: true });
 						return { completed: true, data: undefined };
 					});
 					const composable = mountShareFlowComposable();
@@ -165,8 +166,8 @@ describe("useShareFlow", () => {
 			describe("when isSchoolInternal option is set", () => {
 				const setup = () => {
 					mockCreateShareTokenSuccess();
-					vi.mocked(featureDialog.openDialog).mockImplementation(async (_type, props: any) => {
-						await props.onConfirm({ isSchoolInternal: true, hasExpiryDate: false });
+					vi.mocked(featureDialog.openDialog).mockImplementation(async (_type, props) => {
+						await (props as ShareDialogProps).onConfirm({ isSchoolInternal: true, hasExpiryDate: false });
 						return { completed: true, data: undefined };
 					});
 					const composable = mountShareFlowComposable();
@@ -193,9 +194,9 @@ describe("useShareFlow", () => {
 
 				const setup = () => {
 					shareApi.shareTokenControllerCreateShareToken.mockRejectedValue(new Error("API Error"));
-					vi.mocked(featureDialog.openDialog).mockImplementation(async (_type, props: any) => {
+					vi.mocked(featureDialog.openDialog).mockImplementation(async (_type, props) => {
 						try {
-							await props.onConfirm(DEFAULT_SHARE_OPTIONS);
+							await (props as ShareDialogProps).onConfirm(DEFAULT_SHARE_OPTIONS);
 						} catch {
 							// dialog catches the error and cancels
 						}
@@ -262,8 +263,8 @@ describe("useShareFlow", () => {
 			async ({ type, destinationType, expectedPath }) => {
 				mockCreateShareTokenSuccess("token-123");
 				let capturedUrl: string | undefined;
-				vi.mocked(featureDialog.openDialog).mockImplementation(async (_type, props: any) => {
-					capturedUrl = await props.onConfirm(DEFAULT_SHARE_OPTIONS);
+				vi.mocked(featureDialog.openDialog).mockImplementation(async (_type, props) => {
+					capturedUrl = await (props as ShareDialogProps).onConfirm(DEFAULT_SHARE_OPTIONS);
 					return { completed: true, data: undefined };
 				});
 				const composable = mountShareFlowComposable();

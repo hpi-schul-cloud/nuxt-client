@@ -149,7 +149,7 @@ describe("useCopyFlow", () => {
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApi);
 
 		vi.mocked(featureDialog.openDialog).mockResolvedValue({ completed: false, data: undefined });
-		vi.mocked(featureDialog.withLoadingState).mockImplementation(async (fn: any) => fn());
+		vi.mocked(featureDialog.withLoadingState).mockImplementation(async (fn: () => Promise<unknown>) => fn());
 		vi.spyOn(logger, "error").mockImplementation(vi.fn());
 	});
 
@@ -166,7 +166,7 @@ describe("useCopyFlow", () => {
 	])("$name", ({ type }) => {
 		describe("when the method is called", () => {
 			it("should call openDialog with the correct copyItemType", () => {
-				vi.mocked(featureDialog.openDialog).mockReturnValue(new Promise(() => {}));
+				vi.mocked(featureDialog.openDialog).mockReturnValue(new Promise(() => undefined));
 				const { executeCopyMethod } = mountCopyFlowComposable(type);
 				executeCopyMethod();
 				expect(featureDialog.openDialog).toHaveBeenCalledWith("copy", { copyItemType: type });

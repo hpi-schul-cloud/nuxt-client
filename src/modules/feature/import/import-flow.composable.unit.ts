@@ -58,7 +58,7 @@ describe("useImportflow", () => {
 		vi.spyOn(serverApi, "ShareTokenApiFactory").mockReturnValue(shareApi);
 
 		vi.mocked(featureDialog.openDialog).mockResolvedValue({ completed: false, data: undefined });
-		vi.mocked(featureDialog.withLoadingState).mockImplementation(async (fn: any) => fn());
+		vi.mocked(featureDialog.withLoadingState).mockImplementation(async (fn: () => Promise<unknown>) => fn());
 	});
 
 	afterEach(() => {
@@ -69,7 +69,7 @@ describe("useImportflow", () => {
 		describe("when called with a valid token", () => {
 			it("should call openDialog('import') for non-card items", async () => {
 				mockValidationResponse();
-				vi.mocked(featureDialog.openDialog).mockReturnValue(new Promise(() => {}));
+				vi.mocked(featureDialog.openDialog).mockReturnValue(new Promise(() => undefined));
 				const composable = mountImportFlowComposable();
 				composable.executeImport("valid-token", []);
 				await flushPromises();
@@ -78,7 +78,7 @@ describe("useImportflow", () => {
 
 			it("should call openDialog('importCard') for card items", async () => {
 				mockValidationResponse({ parentType: serverApi.ShareTokenInfoResponseParentType.CARD });
-				vi.mocked(featureDialog.openDialog).mockReturnValue(new Promise(() => {}));
+				vi.mocked(featureDialog.openDialog).mockReturnValue(new Promise(() => undefined));
 				const composable = mountImportFlowComposable();
 				composable.executeImport("valid-token", []);
 				await flushPromises();
