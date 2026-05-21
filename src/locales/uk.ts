@@ -620,7 +620,6 @@ export default {
 	"components.legacy.footer.contact": "Контакт",
 	"components.legacy.footer.github": "GitHub",
 	"components.legacy.footer.imprint": "Вихідні дані",
-	"components.legacy.footer.lokalise_logo_alt": "логотип lokalise.com",
 	"components.legacy.footer.powered_by": "Перекладено:",
 	"components.legacy.footer.privacy_policy_thr": "Політика конфіденційності",
 	"components.legacy.footer.privacy_policy": "Політика конфіденційності",
