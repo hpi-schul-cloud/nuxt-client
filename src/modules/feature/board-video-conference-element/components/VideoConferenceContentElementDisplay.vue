@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div :class="{ 'is-large-list-layout': isSmallOrLargerListBoard }">
 		<InfoAlert v-if="shouldShowNoFeatureAlert" data-testid="vc-info-box-no-feature">
 			{{ notEnabledMessage }}
 		</InfoAlert>
@@ -134,6 +134,10 @@ const onContentClick = () => {
 </script>
 
 <style lang="scss" scoped>
+.is-large-list-layout :deep(.status-info) {
+	margin-left: 16px;
+}
+
 .menu {
 	position: absolute;
 	right: 10px;
