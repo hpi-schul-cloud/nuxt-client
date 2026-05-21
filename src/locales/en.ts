@@ -608,7 +608,6 @@ export default {
 	"components.legacy.footer.contact": "Contact",
 	"components.legacy.footer.github": "GitHub",
 	"components.legacy.footer.imprint": "Imprint",
-	"components.legacy.footer.lokalise_logo_alt": "lokalise.com logo",
 	"components.legacy.footer.powered_by": "Translated by",
 	"components.legacy.footer.privacy_policy_thr": "Privacy Policy",
 	"components.legacy.footer.privacy_policy": "Privacy Policy",
