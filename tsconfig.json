@@ -40,6 +40,7 @@
       "@data-school": ["src/modules/data/school"],
       "@data-user-login-migration": ["src/modules/data/user-login-migration"],
       "@data-users": ["src/modules/data/users"],
+      "@data-notification": ["src/modules/data/notification"],
       "@feature-auto-logout": ["src/modules/feature/auto-logout"],
       "@feature-board-file-element": ["src/modules/feature/board-file-element"],
       "@feature-board-text-element": ["src/modules/feature/board-text-element"],
@@ -124,6 +125,7 @@
       "@api-fwu": ["src/generated/fwuApi/v3"],
       "@api-h5p": ["src/generated/h5pEditorApi/v3"],
       "@api-common-cartridge": ["src/generated/commonCartridgeApi/v3"],
+      "@api-notification": ["src/generated/notificationApi/v1"],
       "@/*": ["src/*"],
       "@@/*": ["*"]
     },
