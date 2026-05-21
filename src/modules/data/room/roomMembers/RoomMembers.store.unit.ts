@@ -754,9 +754,8 @@ describe("useRoomMembers", () => {
 
 			await roomMembersStore.confirmInvitations([membersMock[0].userId]);
 
-			expect(roomApiMock.roomControllerChangeRolesOfMembers).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
+			expect(roomApiMock.roomControllerConfirmApplicants).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
 				userIds: [membersMock[0].userId],
-				roleName: ChangeRoomRoleBodyParamsRoleName.ROOMVIEWER,
 			});
 		});
 
@@ -780,7 +779,7 @@ describe("useRoomMembers", () => {
 			const { roomMembersStore } = setup();
 
 			const error = new Error("Test error");
-			roomApiMock.roomControllerChangeRolesOfMembers.mockRejectedValue(error);
+			roomApiMock.roomControllerConfirmApplicants.mockRejectedValue(error);
 
 			await roomMembersStore.confirmInvitations(["id"]);
 			expectNotification("error");
@@ -798,7 +797,7 @@ describe("useRoomMembers", () => {
 
 			await roomMembersStore.rejectInvitations([membersMock[0].userId]);
 
-			expect(roomApiMock.roomControllerRemoveMembers).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
+			expect(roomApiMock.roomControllerRejectApplicants).toHaveBeenCalledWith(roomDetailsStore.room!.id, {
 				userIds: [membersMock[0].userId],
 			});
 		});
@@ -809,20 +808,20 @@ describe("useRoomMembers", () => {
 			const membersMock = roomMemberFactory.buildList(3, {
 				roomRoleName: RoleName.ROOMAPPLICANT,
 			});
-			roomMembersStore.roomMembers = membersMock;
+			roomMembersStore.roomApplicants = membersMock;
 
-			expect(roomMembersStore.roomMembers).toHaveLength(3);
+			expect(roomMembersStore.roomApplicants).toHaveLength(3);
 
 			await roomMembersStore.rejectInvitations([membersMock[0].userId]);
 
-			expect(roomMembersStore.roomMembers).toHaveLength(2);
+			expect(roomMembersStore.roomApplicants).toHaveLength(2);
 		});
 
 		it("should throw an error if the API call fails", async () => {
 			const { roomMembersStore } = setup();
 
 			const error = new Error("Test error");
-			roomApiMock.roomControllerRemoveMembers.mockRejectedValue(error);
+			roomApiMock.roomControllerRejectApplicants.mockRejectedValue(error);
 
 			await roomMembersStore.rejectInvitations(["id"]);
 			expectNotification("error");
