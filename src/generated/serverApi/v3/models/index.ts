@@ -7,6 +7,7 @@ export * from './add-by-email-body-params';
 export * from './add-room-members-body-params';
 export * from './alert-response';
 export * from './api-validation-error';
+export * from './applicant-ids-body-params';
 export * from './authorization-body-params';
 export * from './authorization-context-params';
 export * from './authorization-many-references-body-params';

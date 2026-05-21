@@ -209,6 +209,14 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return member.fullName;
 	};
 
+	const getApplicantFullName = (userId = "") => {
+		const applicant = roomApplicants.value.find((applicant) => applicant.userId === userId);
+		if (!applicant) {
+			return "";
+		}
+		return applicant.fullName;
+	};
+
 	const getRoomOwnerFullName = () => {
 		const owner = roomMembers.value.find((member) => member.roomRoleName === RoleName.ROOMOWNER);
 		return owner?.fullName;
@@ -366,9 +374,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const confirmInvitations = async (ids: string[]) => {
 		try {
-			await roomApi.roomControllerChangeRolesOfMembers(getRoomId(), {
+			await roomApi.roomControllerConfirmApplicants(getRoomId(), {
 				userIds: ids,
-				roleName: ChangeRoomRoleBodyParamsRoleName.ROOMVIEWER,
 			});
 
 			showNotification(ids, "confirm");
@@ -392,13 +399,13 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const rejectInvitations = async (ids: string[]) => {
 		try {
-			await roomApi.roomControllerRemoveMembers(getRoomId(), {
+			await roomApi.roomControllerRejectApplicants(getRoomId(), {
 				userIds: ids,
 			});
 
 			showNotification(ids, "reject");
 
-			roomMembers.value = roomMembers.value.filter((member) => !ids.includes(member.userId));
+			roomApplicants.value = roomApplicants.value.filter((applicant) => !ids.includes(applicant.userId));
 		} catch {
 			notifyError(t("pages.rooms.members.error.remove"));
 		}
@@ -411,7 +418,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			ids.length > 1
 				? t(`pages.rooms.members.confirmationTable.notification.${actionType}.multiple`)
 				: t(`pages.rooms.members.confirmationTable.notification.${actionType}`, {
-						fullName: getMemberFullName(ids[0]),
+						fullName: getMemberFullName(ids[0]) || getApplicantFullName(ids[0]) || "",
 					});
 		notifySuccess(successMessage);
 	};
@@ -463,6 +470,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		confirmInvitations,
 		fetchMembersAndApplicants,
 		fetchMembers,
+		fetchApplicants,
 		resetPotentialMembers,
 		resetStore,
 		getPotentialMembers,
