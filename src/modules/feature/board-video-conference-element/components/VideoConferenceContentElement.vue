@@ -5,7 +5,7 @@
 		data-testid="video-conference-element"
 		:variant="outlined"
 		:ripple="false"
-		:tabindex="isEditMode ? 0 : viewModeTabIndex"
+		:tabindex="tabIndex"
 		target="_blank"
 		link
 		:aria-label="ariaLabel"
@@ -235,7 +235,13 @@ const onContentEnter = async () => {
 	}
 };
 
-const viewModeTabIndex = computed(() => (canStart.value || isConferenceRunning.value ? 0 : undefined));
+const tabIndex = computed(() => {
+	if (props.isEditMode) {
+		return 0;
+	}
+
+	return canStart.value || isConferenceRunning.value ? 0 : undefined;
+});
 </script>
 
 <style scoped lang="scss">

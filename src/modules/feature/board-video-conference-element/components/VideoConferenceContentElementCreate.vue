@@ -81,9 +81,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.v-textarea textarea {
-	padding-top: 8px;
-}
 .menu {
 	margin-right: -6px;
 }
