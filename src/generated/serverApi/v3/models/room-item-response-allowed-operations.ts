@@ -103,13 +103,13 @@ export interface RoomItemResponseAllowedOperations {
      * @type {boolean}
      * @memberof RoomItemResponseAllowedOperations
      */
-    getRoomApplicants: boolean;
+    leaveRoom: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof RoomItemResponseAllowedOperations
      */
-    leaveRoom: boolean;
+    manageRoomApplicants: boolean;
     /**
      * 
      * @type {boolean}
