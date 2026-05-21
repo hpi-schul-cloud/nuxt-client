@@ -1,7 +1,8 @@
 import { useFolderState } from "./Folder.state";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
+import { ContentElementType, ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	axiosErrorFactory,
 	fileFolderElementResponseFactory,
@@ -25,33 +26,38 @@ describe("useFolderState", () => {
 	});
 
 	const setup = (props?: { element?: unknown; parentNodeInfos?: ParentNodeInfo[] }) => {
-		const boardApi = mockApi<serverApi.BoardElementApiInterface>();
+		const boardElementApi = mockApi<serverApi.BoardElementApiInterface>();
+		const boardApi = mockApi<serverApi.BoardApiInterface>();
 		const folderElement = fileFolderElementResponseFactory.build();
 		const parentNodeInfos = parentNodeInfoFactory.build();
 
-		boardApi.elementControllerGetElementWithParentHierarchy.mockReturnValueOnce({
+		boardElementApi.elementControllerGetElementWithParentHierarchy.mockReturnValueOnce({
 			data: {
 				element: props?.element ?? folderElement,
 				parentHierarchy: props?.parentNodeInfos ?? parentNodeInfos,
 			},
 		} as unknown as AxiosPromise);
 
-		vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardApi);
+		vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardElementApi);
+		vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApi);
 
 		return {
 			testId: folderElement.id,
 			title: folderElement.content.title,
 			createdAt: folderElement.timestamps.createdAt,
 			lastUpdatedAt: folderElement.timestamps.lastUpdatedAt,
+			boardElementApi,
+			boardApi,
 		};
 	};
 
 	it("should initialize with default values", () => {
-		const { breadcrumbs, fileFolderElement, folderName, parent } = useFolderState();
+		const { breadcrumbs, fileFolderElement, folderName, pageTitle, parent } = useFolderState();
 
 		expect(breadcrumbs.value).toEqual([]);
 		expect(fileFolderElement.value).toBeUndefined();
 		expect(folderName.value).toBe("pages.folder.untitled");
+		expect(pageTitle.value).toBe(buildPageTitle("pages.folder.untitled", "pages.folder.title"));
 		expect(parent.value).toBeUndefined();
 	});
 
@@ -71,15 +77,17 @@ describe("useFolderState", () => {
 				});
 			});
 
-			describe("when element is not a file folder element", () => {
+			describe("when api call fails", () => {
 				const setupWithError = (statusCode: HttpStatusCode) => {
-					const boardApi = mockApi<serverApi.BoardElementApiInterface>();
+					const boardElementApi = mockApi<serverApi.BoardElementApiInterface>();
+					const boardApi = mockApi<serverApi.BoardApiInterface>();
 
 					const axiosError = axiosErrorFactory.withStatusCode(statusCode).build();
 
-					boardApi.elementControllerGetElementWithParentHierarchy.mockRejectedValueOnce(axiosError);
+					boardElementApi.elementControllerGetElementWithParentHierarchy.mockRejectedValueOnce(axiosError);
 
-					vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardApi);
+					vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardElementApi);
+					vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApi);
 				};
 
 				it("should create an application error", async () => {
@@ -91,6 +99,23 @@ describe("useFolderState", () => {
 
 					await fetchFileFolderElement("invalid-id");
 					expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.NotFound);
+				});
+			});
+
+			describe("when element is not a file folder element", () => {
+				it("should map internal error to application error", async () => {
+					const { testId } = setup({
+						element: {
+							...fileFolderElementResponseFactory.build(),
+							type: ContentElementType.EXTERNAL_TOOL,
+						},
+					});
+
+					const { fetchFileFolderElement } = useFolderState();
+
+					await fetchFileFolderElement(testId);
+
+					expect(useAppStore().handleApplicationError).toHaveBeenCalled();
 				});
 			});
 
@@ -223,6 +248,114 @@ describe("useFolderState", () => {
 					expect(() => breadcrumbs.value).toThrow(userError);
 				});
 			});
+
+			describe("when parent hierarchy contains an empty slot", () => {
+				it("should keep breadcrumbs with only the folder title", async () => {
+					const parentNodeInfos = new Array(1) as ParentNodeInfo[];
+					const { testId, title } = setup({ parentNodeInfos });
+
+					const { fetchFileFolderElement, breadcrumbs } = useFolderState();
+
+					await fetchFileFolderElement(testId);
+
+					expect(breadcrumbs.value).toEqual([
+						{
+							disabled: true,
+							title,
+						},
+					]);
+				});
+			});
+		});
+	});
+
+	describe("renameFolder", () => {
+		it("should update element and refetch folder", async () => {
+			const { testId, boardElementApi } = setup();
+
+			boardElementApi.elementControllerUpdateElement.mockResolvedValue({} as AxiosPromise);
+			boardElementApi.elementControllerGetElementWithParentHierarchy.mockResolvedValue({
+				data: {
+					element: fileFolderElementResponseFactory.build(),
+					parentHierarchy: parentNodeInfoFactory.build(),
+				},
+			} as unknown as AxiosPromise);
+
+			const { renameFolder } = useFolderState();
+
+			await renameFolder("Updated Title", testId);
+
+			expect(boardElementApi.elementControllerUpdateElement).toHaveBeenCalledWith(testId, {
+				data: { content: { title: "Updated Title" }, type: ContentElementType.FILE_FOLDER },
+			});
+			expect(boardElementApi.elementControllerGetElementWithParentHierarchy).toHaveBeenCalledWith(testId);
+		});
+
+		it("should handle api errors", async () => {
+			const { testId, boardElementApi } = setup();
+			const axiosError = axiosErrorFactory.withStatusCode(HttpStatusCode.BadRequest).build();
+
+			boardElementApi.elementControllerUpdateElement.mockRejectedValueOnce(axiosError);
+
+			const { renameFolder } = useFolderState();
+
+			await renameFolder("Updated Title", testId);
+
+			expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.BadRequest);
+		});
+	});
+
+	describe("removeFolder", () => {
+		it("should delete folder by id", async () => {
+			const { testId, boardElementApi } = setup();
+			boardElementApi.elementControllerDeleteElement.mockResolvedValue({} as AxiosPromise);
+
+			const { removeFolder } = useFolderState();
+
+			await removeFolder(testId);
+
+			expect(boardElementApi.elementControllerDeleteElement).toHaveBeenCalledWith(testId);
+		});
+	});
+
+	describe("fetchAllowedOperations", () => {
+		it("should set allowed operations when returned by api", async () => {
+			const { boardApi } = setup();
+			const allowedOperations = { createFileElement: true } as serverApi.BoardResponseAllowedOperations;
+			boardApi.boardControllerGetBoardSkeleton.mockResolvedValueOnce({
+				data: { allowedOperations },
+			} as unknown as AxiosPromise);
+
+			const { fetchAllowedOperations: fetchOperations, allowedOperations: stateAllowedOperations } = useFolderState();
+
+			await fetchOperations("parent-id");
+
+			expect(stateAllowedOperations.value).toEqual(allowedOperations);
+		});
+
+		it("should keep fallback allowed operations when response has none", async () => {
+			const { boardApi } = setup();
+			boardApi.boardControllerGetBoardSkeleton.mockResolvedValueOnce({
+				data: {},
+			} as unknown as AxiosPromise);
+
+			const { fetchAllowedOperations: fetchOperations, allowedOperations: stateAllowedOperations } = useFolderState();
+
+			await fetchOperations("parent-id");
+
+			expect(stateAllowedOperations.value.createFileElement).toBe(false);
+		});
+
+		it("should handle api errors", async () => {
+			const { boardApi } = setup();
+			const axiosError = axiosErrorFactory.withStatusCode(HttpStatusCode.Forbidden).build();
+			boardApi.boardControllerGetBoardSkeleton.mockRejectedValueOnce(axiosError);
+
+			const { fetchAllowedOperations: fetchOperations } = useFolderState();
+
+			await fetchOperations("parent-id");
+
+			expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.Forbidden);
 		});
 	});
 
