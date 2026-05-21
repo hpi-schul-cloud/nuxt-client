@@ -1,23 +1,22 @@
-import { schoolsModule } from "@/store/store-accessor";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
 import { formatUtc } from "@/utils/date-time.utils";
 import { RoomApiFactory, RoomStatsItemResponse } from "@api-server";
-import { notifyError } from "@data-app";
+import { notifyError, useSchoolStoreRefs } from "@data-app";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 export const useAdministrationRoomStore = defineStore("administrationRoomStore", () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
-	const { t } = useI18n();
+	const { t } = useI18nGlobal();
 	const isLoading = ref(true);
 	const roomList = ref<RoomStatsItemResponse[]>([]);
 	const isEmptyList = ref(false);
-	const userSchoolName = computed(() => schoolsModule.getSchool.name);
-	const userSchoolId = computed(() => schoolsModule.getSchool.id);
+	const { schoolDetails } = useSchoolStoreRefs();
+	const userSchoolId = computed(() => schoolDetails.value.id);
 
 	const sortAndFormatList = (list: RoomStatsItemResponse[]) => {
-		const currentUserSchoolName = userSchoolName.value;
+		const userSchoolName = schoolDetails.value.name;
 		return list
 			.map((room) => ({
 				...room,
@@ -27,8 +26,8 @@ export const useAdministrationRoomStore = defineStore("administrationRoomStore",
 				if (!a.owner && b.owner) return -1;
 				if (a.owner && !b.owner) return 1;
 
-				if (a.schoolName === currentUserSchoolName && b.schoolName !== currentUserSchoolName) return -1;
-				if (a.schoolName !== currentUserSchoolName && b.schoolName === currentUserSchoolName) return 1;
+				if (a.schoolName === userSchoolName && b.schoolName !== userSchoolName) return -1;
+				if (a.schoolName !== userSchoolName && b.schoolName === userSchoolName) return 1;
 
 				return a.schoolName.localeCompare(b.schoolName) || a.name.localeCompare(b.name);
 			});

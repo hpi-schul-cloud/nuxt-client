@@ -2,7 +2,15 @@ import { useAppStore, useAppStoreRefs } from "./application.store";
 import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { initializeAxios } from "@/utils/api";
-import { meResponseFactory, mockApiResponse, mockBroadcastChannel } from "@@/tests/test-utils";
+import {
+	createTestEnvStore,
+	meResponseFactory,
+	mockApiResponse,
+	mockAxiosInstance,
+	mockBroadcastChannel,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import {
 	LanguageType,
 	MeApiFactory,
@@ -12,11 +20,13 @@ import {
 	SuccessfulResponse,
 	UserApiFactory,
 } from "@api-server";
+import { useSchoolStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { AxiosInstance, AxiosPromise } from "axios";
 import { DeepPartial } from "fishery";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { beforeEach, describe, expect, vi } from "vitest";
 
 const broadcastChannelMock = mockBroadcastChannel();
@@ -28,9 +38,20 @@ vi.mock("@api-file-storage");
 const mockedUserApi = vi.mocked(UserApiFactory);
 
 describe("useApplicationStore", () => {
+	let axiosMock: Mocked<AxiosInstance>;
+
 	beforeEach(() => {
-		setActivePinia(createTestingPinia({ createSpy: vi.fn }));
-		vi.clearAllMocks();
+		const pinia = createTestingPinia({ stubActions: false });
+		setActivePinia(pinia);
+
+		createTestEnvStore({ JWT_TIMEOUT_SECONDS: 7200 });
+		createTestSchoolStore();
+		const schoolStore = mockedPiniaStoreTyping(useSchoolStore);
+		schoolStore.fetchSchoolDetails.mockResolvedValue({ success: true, result: undefined, error: undefined });
+
+		axiosMock = mockAxiosInstance();
+		axiosMock.defaults = { headers: { common: {} } } as AxiosInstance["defaults"];
+		initializeAxios(axiosMock);
 
 		Object.defineProperty(globalThis, "location", {
 			value: { replace: vi.fn() },
@@ -74,10 +95,6 @@ describe("useApplicationStore", () => {
 		await useAppStore().login();
 		return { meResponse };
 	};
-
-	beforeEach(() => {
-		setActivePinia(createTestingPinia({ stubActions: false }));
-	});
 
 	describe("state", () => {
 		it("should return default locale when no user locale is set", () => {
@@ -187,34 +204,12 @@ describe("useApplicationStore", () => {
 	});
 
 	describe("logout action", () => {
-		beforeEach(() => {
-			initializeAxios({
-				defaults: {
-					headers: {
-						common: {
-							Authorization: "",
-						},
-					},
-				},
-			} as AxiosInstance);
-		});
-
 		it("should redirect to default logout URL", () => {
-			Object.defineProperty(globalThis, "location", {
-				value: { replace: vi.fn() },
-				writable: true,
-			});
-
 			useAppStore().logout();
 			expect(globalThis.location.replace).toHaveBeenCalledWith("/logout");
 		});
 
 		it("should redirect to custom logout URL", () => {
-			Object.defineProperty(globalThis, "location", {
-				value: { replace: vi.fn() },
-				writable: true,
-			});
-
 			useAppStore().logout("/logout-to");
 			expect(globalThis.location.replace).toHaveBeenCalledWith("/logout-to");
 		});
@@ -335,26 +330,82 @@ describe("useApplicationStore", () => {
 	});
 
 	describe("externalLogout action", () => {
-		beforeEach(() => {
-			initializeAxios({
-				defaults: {
-					headers: {
-						common: {
-							Authorization: "",
-						},
-					},
-				},
-			} as AxiosInstance);
-		});
-
 		it("should redirect to external logout URL", () => {
-			Object.defineProperty(globalThis, "location", {
-				value: { replace: vi.fn() },
-				writable: true,
-			});
-
 			useAppStore().externalLogout();
 			expect(globalThis.location.replace).toHaveBeenCalledWith("/logout/external");
+		});
+	});
+
+	describe("updateUserPreferences action", () => {
+		it("should update preferences and refresh meResponse", async () => {
+			const initialPreferences = { releaseDate: "2024-01-01T00:00:00.000Z" };
+			const updatedPreferences = { releaseDate: "2024-06-01T00:00:00.000Z" };
+
+			const meResponse = meResponseFactory.build({ preferences: initialPreferences });
+			const updatedMeResponse = meResponseFactory.build({ preferences: updatedPreferences });
+
+			const mockUpdatePreferences = vi.fn().mockResolvedValue(mockApiResponse({ data: {} }));
+			const mockMe = vi
+				.fn()
+				.mockResolvedValueOnce(mockApiResponse({ data: meResponse }))
+				.mockResolvedValueOnce(mockApiResponse({ data: updatedMeResponse }));
+
+			mockedMeApi.mockReturnValue({
+				meControllerMe: mockMe,
+				meControllerUpdateMePreferences: mockUpdatePreferences,
+			});
+
+			const store = useAppStore();
+			await store.login();
+
+			await store.updateUserPreferences({ releaseDate: "2024-06-01T00:00:00.000Z" });
+
+			expect(mockUpdatePreferences).toHaveBeenCalledWith({ releaseDate: "2024-06-01T00:00:00.000Z" });
+			expect(mockMe).toHaveBeenCalledTimes(2);
+			expect(store.userPreferences).toEqual(updatedPreferences);
+		});
+
+		it("should not refresh meResponse when update fails", async () => {
+			const meResponse = meResponseFactory.build({ preferences: { releaseDate: "2024-01-01T00:00:00.000Z" } });
+
+			const mockUpdatePreferences = vi.fn().mockRejectedValue(new Error("Update failed"));
+			const mockMe = vi.fn().mockResolvedValue(mockApiResponse({ data: meResponse }));
+
+			mockedMeApi.mockReturnValue({
+				meControllerMe: mockMe,
+				meControllerUpdateMePreferences: mockUpdatePreferences,
+			});
+
+			const store = useAppStore();
+			await store.login();
+
+			await store.updateUserPreferences({ releaseDate: "2024-06-01T00:00:00.000Z" });
+
+			expect(mockMe).toHaveBeenCalledTimes(1); // only login call
+			expect(store.userPreferences).toEqual({ releaseDate: "2024-01-01T00:00:00.000Z" });
+		});
+
+		it("should not update preferences when me refresh fails", async () => {
+			const initialPreferences = { releaseDate: "2024-01-01T00:00:00.000Z" };
+			const meResponse = meResponseFactory.build({ preferences: initialPreferences });
+
+			const mockUpdatePreferences = vi.fn().mockResolvedValue(mockApiResponse({ data: {} }));
+			const mockMe = vi
+				.fn()
+				.mockResolvedValueOnce(mockApiResponse({ data: meResponse }))
+				.mockRejectedValueOnce(new Error("Me fetch failed"));
+
+			mockedMeApi.mockReturnValue({
+				meControllerMe: mockMe,
+				meControllerUpdateMePreferences: mockUpdatePreferences,
+			});
+
+			const store = useAppStore();
+			await store.login();
+
+			await store.updateUserPreferences({ releaseDate: "2024-06-01T00:00:00.000Z" });
+
+			expect(store.userPreferences).toEqual(initialPreferences);
 		});
 	});
 
@@ -378,6 +429,153 @@ describe("useApplicationStore", () => {
 			expect(refs.isLoggedIn).toBeDefined();
 			expect(refs.locale).toBeDefined();
 			expect(refs.userRoles).toBeDefined();
+		});
+	});
+
+	describe("startTimer action", () => {
+		describe("when JWT_TIMEOUT_SECONDS is set", () => {
+			it("should set sessionTimeoutTimestamp based on JWT_TIMEOUT_SECONDS", () => {
+				const store = useAppStore();
+				const beforeTime = Date.now();
+
+				store.startTimer();
+
+				const afterTime = Date.now();
+				const expectedMinTimestamp = beforeTime + 7200 * 1000;
+				const expectedMaxTimestamp = afterTime + 7200 * 1000;
+
+				expect(store.sessionTimeoutTimestamp).toBeGreaterThanOrEqual(expectedMinTimestamp);
+				expect(store.sessionTimeoutTimestamp).toBeLessThanOrEqual(expectedMaxTimestamp);
+			});
+
+			it("should post timer update to broadcast channel", () => {
+				const store = useAppStore();
+
+				store.startTimer();
+
+				expect(broadcastChannelMock.postMessage).toHaveBeenCalledWith("time-updated:7200");
+			});
+		});
+
+		describe("when JWT_TIMEOUT_SECONDS is not set", () => {
+			it("should use default timeout", () => {
+				createTestEnvStore({ JWT_TIMEOUT_SECONDS: undefined });
+				const store = useAppStore();
+				const beforeTime = Date.now();
+				const DEFAULT_TIMEOUT = 2 * 60 * 60; // 2 hours in seconds
+
+				store.startTimer();
+
+				const afterTime = Date.now();
+				const expectedMinTimestamp = beforeTime + DEFAULT_TIMEOUT * 1000;
+				const expectedMaxTimestamp = afterTime + DEFAULT_TIMEOUT * 1000;
+
+				expect(store.sessionTimeoutTimestamp).toBeGreaterThanOrEqual(expectedMinTimestamp);
+				expect(store.sessionTimeoutTimestamp).toBeLessThanOrEqual(expectedMaxTimestamp);
+			});
+		});
+	});
+
+	describe("stopTimer action", () => {
+		it("should set sessionTimeoutTimestamp to null", () => {
+			const store = useAppStore();
+
+			store.startTimer();
+			expect(store.sessionTimeoutTimestamp).not.toBeNull();
+
+			store.stopTimer();
+
+			expect(store.sessionTimeoutTimestamp).toBeNull();
+		});
+	});
+
+	describe("broadcastChannel.onmessage handler", () => {
+		let capturedOnMessageHandler: ((event: MessageEvent) => void) | null = null;
+
+		beforeEach(() => {
+			// Capture the onmessage handler when it's set
+			let storedHandler: ((event: MessageEvent) => void) | null = null;
+
+			class MockBroadcastChannelWithCapture implements BroadcastChannel {
+				readonly name: string;
+				addEventListener = vi.fn();
+				removeEventListener = vi.fn();
+				postMessage = broadcastChannelMock.postMessage;
+				close = broadcastChannelMock.close;
+				dispatchEvent = vi.fn();
+				onmessageerror = null;
+
+				get onmessage() {
+					return storedHandler;
+				}
+				set onmessage(handler: ((event: MessageEvent) => void) | null) {
+					storedHandler = handler;
+					capturedOnMessageHandler = handler;
+				}
+
+				constructor(name: string) {
+					this.name = name;
+				}
+			}
+
+			Object.defineProperty(globalThis, "BroadcastChannel", {
+				value: MockBroadcastChannelWithCapture,
+				writable: true,
+				configurable: true,
+			});
+
+			// Re-create the store to capture the handler
+			useAppStore();
+		});
+
+		describe("when receiving logout message", () => {
+			it("redirect to auto-logout URL", () => {
+				expect(capturedOnMessageHandler).not.toBeNull();
+
+				capturedOnMessageHandler!({ data: "logout" } as MessageEvent);
+
+				expect(globalThis.location.replace).toHaveBeenCalledWith("/logout?auto-logout=true");
+			});
+		});
+
+		describe("when receiving time-updated message", () => {
+			describe("when receiving valid number", () => {
+				it("should update sessionTimeoutTimestamp", () => {
+					const store = useAppStore();
+					const beforeTime = Date.now();
+
+					expect(capturedOnMessageHandler).not.toBeNull();
+
+					capturedOnMessageHandler!({ data: "time-updated:3600" } as MessageEvent);
+
+					const afterTime = Date.now();
+					const expectedMinTimestamp = beforeTime + 3600 * 1000;
+					const expectedMaxTimestamp = afterTime + 3600 * 1000;
+
+					expect(store.sessionTimeoutTimestamp).toBeGreaterThanOrEqual(expectedMinTimestamp);
+					expect(store.sessionTimeoutTimestamp).toBeLessThanOrEqual(expectedMaxTimestamp);
+				});
+			});
+
+			describe("when receiving invalid number", () => {
+				it("should ignore the message", () => {
+					const store = useAppStore();
+					store.startTimer();
+					const timestampBefore = store.sessionTimeoutTimestamp;
+
+					capturedOnMessageHandler!({ data: "time-updated:invalid" } as MessageEvent);
+
+					expect(store.sessionTimeoutTimestamp).toEqual(timestampBefore);
+				});
+			});
+		});
+
+		describe("when receiving unknown message", () => {
+			it("should ignore the message", () => {
+				capturedOnMessageHandler!({ data: "unknown-message" } as MessageEvent);
+
+				expect(globalThis.location.replace).not.toHaveBeenCalled();
+			});
 		});
 	});
 });

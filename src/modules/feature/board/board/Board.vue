@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<template v-if="boardStore.isLoading === false && board">
+		<template v-if="board">
 			<CardHostDetailView v-if="cardId" :key="cardId" :card-id="cardId" @close:detail-view="onCloseDetailView" />
 			<DefaultWireframe
 				ref="main"
@@ -97,13 +97,21 @@
 					:has-relocate-board-content-permission="allowedOperations?.relocateContent ?? false"
 					:card-id="moveCardOptions.cardId"
 				/>
-				<CopyResultModal
-					:is-open="isCopyModalOpen"
-					:copy-result-items="copyResultModalItems"
-					:copy-result-root-item-type="copyResultRootItemType"
-					@copy-dialog-closed="onCopyResultModalClosed"
+				<CopyDialog
+					:is-open="isCopyDialogOpen"
+					:copy-item-type="copyItemType"
+					@confirm="onConfirmCopy"
+					@cancel="onCancelCopy"
 				/>
-				<ShareModal v-if="shareModalContextType" :type="shareModalContextType" />
+				<ShareDialog
+					v-if="shareItemType"
+					:is-open="isShareDialogOpen"
+					:share-item-type="shareItemType"
+					:share-url="shareUrl"
+					@confirm="onConfirmShare"
+					@cancel="onCancelShare"
+					@done="onDone"
+				/>
 				<SelectBoardLayoutDialog
 					v-model="isSelectBoardLayoutDialogOpen"
 					:current-layout="board.layout"
@@ -144,13 +152,8 @@ import EditSettingsDialog from "../shared/EditSettingsDialog.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import ShareModal from "@/components/share/ShareModal.vue";
-import { useCopy } from "@/composables/copy";
-import { CopyParamsTypeEnum } from "@/store/copy";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
-import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import {
 	BoardExternalReferenceType,
 	BoardLayout,
@@ -170,11 +173,13 @@ import {
 import { useEnvConfig } from "@data-env";
 import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog } from "@feature-collabora";
+import { CopyDialog, useCopyFlow } from "@feature-copy";
+import { ShareDialog, useShareFlow } from "@feature-share";
 import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@util-board";
-import { useTimeout } from "@vueuse/core";
+import { refDebounced, useTimeout } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, ComputedRef, onMounted, onUnmounted, provide, ref, watch } from "vue";
@@ -198,7 +203,6 @@ const { breadcrumbs, contextType, roomId, createPageInformation, resetPageInform
 	useSharedBoardPageInformation();
 const isDragging = ref(false);
 const isEditSettingsDialogOpen = ref(false);
-const shareModalContextType = ref();
 const router = useRouter();
 
 watch(board, async () => {
@@ -224,8 +228,6 @@ const moveCardOptions = ref<{ isDialogOpen: boolean; cardId: string }>({
 	cardId: "",
 });
 
-const started500msAgo = useTimeout(500);
-
 const onCreateCard = async (columnId: string) => {
 	if (allowedOperations.value.createCard) boardStore.createCardRequest({ columnId });
 };
@@ -245,16 +247,6 @@ const onMoveCard = (cardId: string) => {
 		isDialogOpen: true,
 		cardId,
 	};
-};
-
-const onShareCard = async (cardId: string) => {
-	shareModalContextType.value = ShareTokenBodyParamsParentType.CARD;
-
-	shareModule.startShareFlow({
-		id: cardId,
-		type: ShareTokenBodyParamsParentType.CARD,
-		destinationType: BoardExternalReferenceType.ROOM,
-	});
 };
 
 const onDeleteColumn = async (columnId: string) => {
@@ -386,29 +378,15 @@ watch(
 	{ immediate: true }
 );
 
-const { copy } = useCopy();
-
-const copyModule = injectStrict(COPY_MODULE_KEY);
-
-const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
-
 const isListBoard = computed(() => board.value?.layout === BoardLayout.LIST);
 
 provide(BOARD_IS_LIST_LAYOUT, isListBoard);
 
-const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
-
-const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
-
-const showLoadingDialog = computed(() => {
-	if (started500msAgo.value === true && boardStore.isConnected === false) {
-		return true;
-	}
-	if (started500msAgo.value === true && boardStore.isLoading) {
-		return true;
-	}
-	return false;
-});
+const started2000msAgo = useTimeout(2000);
+const isLoadingOrNotConnected = computed(
+	() => started2000msAgo.value === true && (boardStore.isConnected === false || boardStore.isLoading)
+);
+const showLoadingDialog = refDebounced(isLoadingOrNotConnected, 1000);
 
 const boardClasses = computed(() => {
 	const classes = ["d-flex", "flex-shrink-1", "board"];
@@ -438,9 +416,13 @@ const boardColumnClass = computed(() => {
 	return classes;
 });
 
-const onCopyResultModalClosed = () => {
-	copyModule.reset();
-};
+const {
+	isCopyDialogOpen,
+	copyItemType,
+	executeCopyBoard,
+	onConfirm: onConfirmCopy,
+	onCancel: onCancelCopy,
+} = useCopyFlow();
 
 const onBackToOverview = () => {
 	router.push({ path: "/dashboard" });
@@ -449,28 +431,42 @@ const onBackToOverview = () => {
 const onCopyBoard = async () => {
 	if (!allowedOperations.value.copyBoard) return;
 
-	await copy({ id: props.boardId, type: CopyParamsTypeEnum.ColumnBoard });
-	const copyId = copyModule.getCopyResult?.id;
-	if (copyId) {
-		boardStore.fetchBoardRequest({ boardId: copyId });
-		router.push({ name: "boards-id", params: { id: copyId } });
+	const { result: copyResult } = await executeCopyBoard(props.boardId);
+
+	if (copyResult?.id) {
+		boardStore.fetchBoardRequest({ boardId: copyResult.id });
+		router.push({ name: "boards-id", params: { id: copyResult.id } });
 	}
 };
 
-const shareModule = injectStrict(SHARE_MODULE_KEY);
+const {
+	isShareDialogOpen,
+	shareItemType,
+	shareUrl,
+	executeShare,
+	onConfirm: onConfirmShare,
+	onCancel: onCancelShare,
+	onDone,
+} = useShareFlow();
 
 const onShareBoard = () => {
 	if (!allowedOperations.value.shareBoard) return;
 
 	if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
-		shareModalContextType.value = ShareTokenBodyParamsParentType.COLUMN_BOARD;
-
-		shareModule.startShareFlow({
+		executeShare({
 			id: props.boardId,
 			type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
 			destinationType: contextType.value,
 		});
 	}
+};
+
+const onShareCard = async (cardId: string) => {
+	executeShare({
+		id: cardId,
+		type: ShareTokenBodyParamsParentType.CARD,
+		destinationType: BoardExternalReferenceType.ROOM,
+	});
 };
 
 const openDeleteBoardDialog = async (id: string) => {

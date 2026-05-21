@@ -83,7 +83,7 @@
 import TasksOverviewList from "./TasksOverviewList.vue";
 import TasksOverviewListItemStudent from "@/components/tasks/TasksOverviewListItemStudent.vue";
 import TasksOverviewListItemTeacher from "@/components/tasks/TasksOverviewListItemTeacher.vue";
-import { CopyParams } from "@/store/copy";
+import { CopyParams } from "@/types/copy/CopyParams";
 import { TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useTasksFilter } from "@data-tasks";
@@ -132,11 +132,7 @@ const courseFilterOptionsWithCount = computed(() =>
 const filterDensity = computed(() => (smAndDown.value ? "compact" : "default"));
 
 const hasActiveFilters = computed(
-	() =>
-		selectedCourseNames.value.length > 0 ||
-		gradeStatus.value !== undefined ||
-		dueStatus.value !== undefined ||
-		includeSubstitute.value
+	() => selectedCourseNames.value.length > 0 || gradeStatus.value || dueStatus.value || includeSubstitute.value
 );
 </script>
 

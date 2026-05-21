@@ -139,3 +139,14 @@ export const isValidEmail: FormValidatorFn<string> =
 		}
 		return true;
 	};
+
+/**
+ * Checks if a given file does not exceed the specified max size in KB.
+ */
+export const isOfMaxFileSize =
+	(maxSizeInKb: number) =>
+	(errMsg = useI18nGlobal().t("common.validation.fileTooBig", { maxSize: maxSizeInKb })) =>
+	(value: File | undefined | null) => {
+		if (!value || value.size <= maxSizeInKb * 1024) return true;
+		return errMsg;
+	};

@@ -8,7 +8,6 @@
 				</VTab>
 			</VTabs>
 		</div>
-
 		<div class="mx-auto">
 			<VWindow :model-value="activeTab">
 				<TasksOverviewPane
@@ -29,38 +28,37 @@
 				/>
 			</VWindow>
 		</div>
-
-		<ShareModal :type="ShareTokenBodyParamsParentType.TASKS" />
-		<CopyResultModal
-			:is-open="isCopyModalOpen"
-			:copy-result-items="copyResultModalItems"
-			:copy-result-root-item-type="copyResultRootItemType"
-			@copy-dialog-closed="onCopyResultModalClosed"
+		<ShareDialog
+			v-if="shareItemType"
+			:is-open="isShareDialogOpen"
+			:share-item-type="shareItemType"
+			:share-url="shareUrl"
+			@confirm="onConfirmShare"
+			@cancel="onCancelShare"
+			@done="onDone"
+		/>
+		<CopyDialog
+			:is-open="isCopyDialogOpen"
+			:copy-item-type="copyItemType"
+			@confirm="onConfirmCopy"
+			@cancel="onCancelCopy"
 		/>
 	</section>
 </template>
 
 <script setup lang="ts">
 import TasksOverviewPane from "./TasksOverviewPane.vue";
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import ShareModal from "@/components/share/ShareModal.vue";
-import { useCopy } from "@/composables/copy";
-import { CopyParams } from "@/store/copy";
-import ShareModule from "@/store/share";
-import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
+import { CopyParams } from "@/types/copy/CopyParams";
 import { ShareTokenBodyParamsParentType } from "@api-server";
-import { useEnvConfig } from "@data-env";
 import { useTasksOfOverview } from "@data-tasks";
+import { CopyDialog, useCopyFlow } from "@feature-copy";
+import { ShareDialog, useShareFlow } from "@feature-share";
 import { mdiArchiveOutline, mdiFormatListChecks, mdiPlaylistEdit } from "@icons/material";
 import { useUrlSearchParams } from "@vueuse/core";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-const shareModule: ShareModule = injectStrict(SHARE_MODULE_KEY);
-const copyModule = injectStrict(COPY_MODULE_KEY);
-
 const { t } = useI18n();
-const { copy } = useCopy();
 const params = useUrlSearchParams("history");
 
 enum TaskTab {
@@ -85,27 +83,38 @@ const activeTab = computed({
 const { drafts, openForTeacher, isLoadingFinishedTasks, fetchTasks, loadMoreFinishedTasks, finishedTasks } =
 	useTasksOfOverview();
 
-const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
-const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
-const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
+const {
+	isCopyDialogOpen,
+	copyItemType,
+	executeCopyTask,
+	onConfirm: onConfirmCopy,
+	onCancel: onCancelCopy,
+} = useCopyFlow();
 
-const onCopyResultModalClosed = () => {
-	copyModule.reset();
+const onCopyTask = async ({ id, courseId }: CopyParams) => {
+	const { success } = await executeCopyTask(id, courseId!);
+
+	if (success) {
+		activeTab.value = TaskTab.DRAFTS;
+		await fetchTasks();
+	}
 };
 
-const onCopyTask = async (payload: CopyParams) => {
-	await copy(payload);
-	activeTab.value = TaskTab.DRAFTS;
-	await fetchTasks();
-};
+const {
+	isShareDialogOpen,
+	shareItemType,
+	shareUrl,
+	executeShare,
+	onConfirm: onConfirmShare,
+	onCancel: onCancelShare,
+	onDone,
+} = useShareFlow();
 
 const onShareTask = (taskId: string) => {
-	if (useEnvConfig().value.FEATURE_TASK_SHARE) {
-		shareModule.startShareFlow({
-			id: taskId,
-			type: ShareTokenBodyParamsParentType.TASKS,
-		});
-	}
+	executeShare({
+		id: taskId,
+		type: ShareTokenBodyParamsParentType.TASKS,
+	});
 };
 </script>
 

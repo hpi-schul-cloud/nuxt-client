@@ -57,29 +57,26 @@
 
 <script setup lang="ts">
 import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
-import { School } from "@/store/types/schools";
 import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { formatRecentOrActual } from "@/utils/date-time.utils";
 import { downloadFile } from "@/utils/fileHelper";
-import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { Permission } from "@api-server";
-import { useAppStore } from "@data-app";
+import { useAppStore, useSchoolStoreRefs } from "@data-app";
 import { CreateConsentVersionPayload, useSchoolTermsOfUse } from "@data-school";
 import { mdiFilePdfBox, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
 import { ErrorAlert } from "@ui-alert";
-import { computed, ComputedRef, Ref, ref, watch } from "vue";
+import { Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 const isSchoolTermsFormDialogOpen: Ref<boolean> = ref(false);
 const { status, fetchTermsOfUse, termsOfUse, createTermsOfUse, deleteTermsOfUse } = useSchoolTermsOfUse();
+const { schoolDetails } = useSchoolStoreRefs();
 
-const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 watch(
-	school,
-	async (newValue) => {
-		await fetchTermsOfUse(newValue.id);
+	() => schoolDetails.value.id,
+	async (schoolId) => {
+		await fetchTermsOfUse(schoolId);
 	},
 	{ immediate: true }
 );

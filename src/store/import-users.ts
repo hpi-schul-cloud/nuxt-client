@@ -8,6 +8,7 @@ import {
 	UserImportApiInterface,
 	UserMatchListResponse,
 } from "@api-server";
+import { AxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 export enum MatchedBy {
@@ -231,6 +232,40 @@ export default class ImportUsersModule extends VuexModule {
 				statusCode: apiError.code,
 				message: apiError.message,
 			});
+		}
+	}
+
+	@Action
+	async setSchoolInUserMigration(useCentralLdap = true): Promise<void> {
+		try {
+			await this.importUserApi.importUserControllerStartSchoolInUserMigration(useCentralLdap);
+		} catch (error: unknown) {
+			if (error instanceof AxiosError) {
+				const apiError = mapAxiosErrorToResponseError(error);
+
+				this.setBusinessError({
+					error: apiError,
+					statusCode: apiError.code,
+					message: apiError.message,
+				});
+			}
+		}
+	}
+
+	@Action
+	async migrationStartSync(): Promise<void> {
+		try {
+			await this.importUserApi.importUserControllerEndSchoolInMaintenance();
+		} catch (error: unknown) {
+			if (error instanceof AxiosError) {
+				const apiError = mapAxiosErrorToResponseError(error);
+
+				this.setBusinessError({
+					error: apiError,
+					statusCode: apiError.code,
+					message: apiError.message,
+				});
+			}
 		}
 	}
 

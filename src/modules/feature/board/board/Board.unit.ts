@@ -2,24 +2,18 @@ import MoveCardDialog from "../card/MoveCardDialog.vue";
 import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import { useCopy } from "@/composables/copy";
-import CopyModule from "@/store/copy";
-import CourseRoomDetailsModule from "@/store/course-room-details";
-import ShareModule from "@/store/share";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import { COPY_MODULE_KEY, COURSE_ROOM_DETAILS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import {
 	BoardExternalReferenceType,
 	BoardLayout,
 	BoardResponseAllowedOperations,
 	ConfigResponse,
-	CopyApiResponse,
+	CopyApiResponseStatus,
 	CopyApiResponseType,
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
@@ -34,6 +28,8 @@ import {
 } from "@data-board";
 import { CollaboraFileType } from "@data-file";
 import { AddCollaboraFileDialog } from "@feature-collabora";
+import { useCopyFlow } from "@feature-copy";
+import { useShareFlow } from "@feature-share";
 import { createTestingPinia } from "@pinia/testing";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { extractDataAttribute, useSharedLastCreatedElement } from "@util-board";
@@ -57,23 +53,21 @@ const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
 vi.mock("@data-board/BoardPageInformation.composable");
 const mockedUseSharedBoardPageInformation = vi.mocked(useSharedBoardPageInformation);
 
-vi.mock("@/composables/copy");
-const mockUseCopy = vi.mocked(useCopy);
-
 vi.mock("@data-board/boardInactivity.composable");
 const mockUseBoardInactivity = <Mock>useBoardInactivity;
 
+vi.mock("@feature-copy/copy-flow.composable");
+vi.mock("@feature-share/share-flow.composable");
+
 describe("Board", () => {
-	let mockedCopyCalls: Mocked<ReturnType<typeof useCopy>>;
 	let router: RouterMock;
 	let mockedUsePageInactivity: Mocked<ReturnType<typeof useBoardInactivity>>;
+	let useCopyFlowMock: Mocked<ReturnType<typeof useCopyFlow>>;
+	let useShareFlowMock: Mocked<ReturnType<typeof useShareFlow>>;
 
 	beforeEach(() => {
 		vi.useFakeTimers();
 		vi.clearAllMocks();
-
-		mockedCopyCalls = mockComposable(useCopy);
-		mockUseCopy.mockReturnValue(mockedCopyCalls);
 
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
@@ -107,6 +101,19 @@ describe("Board", () => {
 
 		mockedUsePageInactivity = mockComposable(useBoardInactivity);
 		mockUseBoardInactivity.mockReturnValue(mockedUsePageInactivity);
+
+		useCopyFlowMock = mockComposable(useCopyFlow, {
+			isCopyDialogOpen: ref(false),
+			copyItemType: ref(ContentItemTypeEnum.ColumnBoard),
+		});
+		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
+
+		useShareFlowMock = mockComposable(useShareFlow, {
+			isShareDialogOpen: ref(false),
+			shareItemType: ref(ShareTokenBodyParamsParentType.TASKS),
+			shareUrl: ref("http://example.com/share-url"),
+		});
+		vi.mocked(useShareFlow).mockReturnValue(useShareFlowMock);
 	});
 
 	afterEach(() => {
@@ -133,29 +140,6 @@ describe("Board", () => {
 		return board;
 	};
 
-	const setupProvideModules = () => {
-		const copyResultId = "42";
-		const copyModule = createModuleMocks(CopyModule, {
-			getIsResultModalOpen: false,
-			getCopyResult: {
-				id: copyResultId,
-				type: CopyApiResponseType.BOARD,
-			} as CopyApiResponse,
-		});
-
-		const shareModule = createModuleMocks(ShareModule);
-		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
-			getRoomId: "room1",
-		});
-
-		return {
-			copyModule,
-			shareModule,
-			courseRoomDetailsModule,
-			copyResultId,
-		};
-	};
-
 	const setup = (options?: {
 		numberOfColumns?: number;
 		isBoardVisible?: boolean;
@@ -163,8 +147,6 @@ describe("Board", () => {
 		envs?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<BoardResponseAllowedOperations>;
 	}) => {
-		const { copyModule, shareModule, courseRoomDetailsModule, copyResultId } = setupProvideModules();
-
 		setActivePinia(createTestingPinia());
 
 		createTestEnvStore({
@@ -195,13 +177,8 @@ describe("Board", () => {
 					createTestingI18n(),
 					createTestingVuetify(),
 				],
-				provide: {
-					[COPY_MODULE_KEY.valueOf()]: copyModule,
-					[SHARE_MODULE_KEY.valueOf()]: shareModule,
-					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
-				},
 				stubs: {
-					ShareModal: true,
+					ShareDialog: true,
 					UseFocusTrap: true,
 					EditSettingsDialog: true,
 				},
@@ -228,10 +205,6 @@ describe("Board", () => {
 			boardStore,
 			cardStore,
 			board,
-			copyResultId,
-			shareModule,
-			courseRoomDetailsModule,
-			copyModule,
 		};
 	};
 
@@ -410,26 +383,13 @@ describe("Board", () => {
 	});
 
 	describe("Dialogs", () => {
-		it("should have a result modal component", () => {
-			const { wrapper } = setup();
-
-			expect(wrapper.findComponent(CopyResultModal).exists()).toBe(true);
-		});
-
 		it("should have a move dialog component", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.findComponent(MoveCardDialog).exists()).toBe(true);
 		});
 
-		it("should reset copy module when copy result modal is closed", async () => {
-			const { wrapper, copyModule } = setup();
-
-			const copyResultModal = wrapper.findComponent(CopyResultModal);
-			await copyResultModal.vm.$emit("copy-dialog-closed");
-
-			expect(copyModule.reset).toHaveBeenCalled();
-		});
+		it.todo("should reset copy module when copy result modal is closed");
 	});
 
 	describe("when component is unmounted", () => {
@@ -866,6 +826,14 @@ describe("Board", () => {
 		});
 
 		describe("@copy:board", () => {
+			beforeEach(() => {
+				useCopyFlowMock.executeCopyBoard.mockResolvedValue({
+					success: true,
+					result: { id: "copied-id", type: CopyApiResponseType.COLUMNBOARD, status: CopyApiResponseStatus.SUCCESS },
+					error: undefined,
+				});
+			});
+
 			it("should call the copy function", async () => {
 				const { wrapper } = setup({ allowedOperations: { copyBoard: true } });
 
@@ -874,11 +842,11 @@ describe("Board", () => {
 				});
 				await boardHeader.vm.$emit("copy:board");
 
-				expect(mockedCopyCalls.copy).toHaveBeenCalled();
+				expect(useCopyFlowMock.executeCopyBoard).toHaveBeenCalled();
 			});
 
 			it("should redirect to the board copy", async () => {
-				const { wrapper, copyResultId } = setup({ allowedOperations: { copyBoard: true } });
+				const { wrapper } = setup({ allowedOperations: { copyBoard: true } });
 
 				const boardHeader = wrapper.findComponent({
 					name: "BoardHeader",
@@ -887,7 +855,7 @@ describe("Board", () => {
 
 				expect(router.push).toHaveBeenCalledWith({
 					name: "boards-id",
-					params: { id: copyResultId },
+					params: { id: "copied-id" },
 				});
 			});
 		});
@@ -969,14 +937,14 @@ describe("Board", () => {
 		describe("@share:board", () => {
 			describe("when feature is enabled", () => {
 				it("should start the share flow", async () => {
-					const { wrapper, board, shareModule } = setup({ allowedOperations: { shareBoard: true } });
+					const { wrapper, board } = setup({ allowedOperations: { shareBoard: true } });
 
 					const boardHeader = wrapper.findComponent({
 						name: "BoardHeader",
 					});
 					await boardHeader.vm.$emit("share:board");
 
-					expect(shareModule.startShareFlow).toHaveBeenCalledWith({
+					expect(useShareFlowMock.executeShare).toHaveBeenCalledWith({
 						id: board.id,
 						type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
 					});
@@ -985,7 +953,7 @@ describe("Board", () => {
 
 			describe("when feature is disabled", () => {
 				it("should do nothing", async () => {
-					const { wrapper, shareModule } = setup({
+					const { wrapper } = setup({
 						envs: { FEATURE_COLUMN_BOARD_SHARE: false },
 					});
 
@@ -994,19 +962,19 @@ describe("Board", () => {
 					});
 					await boardHeader.vm.$emit("share:board");
 
-					expect(shareModule.startShareFlow).not.toHaveBeenCalled();
+					expect(useShareFlowMock.executeShare).not.toHaveBeenCalled();
 				});
 			});
 		});
 
 		describe("@share:card", () => {
 			it("should start the card share flow", async () => {
-				const { wrapper, shareModule } = setup({ allowedOperations: { shareCard: true } });
+				const { wrapper } = setup({ allowedOperations: { shareCard: true } });
 
 				const boardColumn = wrapper.findComponent(BoardColumn);
 				await boardColumn.vm.$emit("share:card", "card-id");
 
-				expect(shareModule.startShareFlow).toHaveBeenCalledWith({
+				expect(useShareFlowMock.executeShare).toHaveBeenCalledWith({
 					id: "card-id",
 					type: ShareTokenBodyParamsParentType.CARD,
 					destinationType: BoardExternalReferenceType.ROOM,
@@ -1206,21 +1174,21 @@ describe("Board", () => {
 			expect(wrapperVM.showLoadingDialog).toBe(false);
 		});
 
-		it("should return true when isConnected is false after 500ms", async () => {
+		it("should return true when isConnected is false after 3000ms", async () => {
 			const { wrapperVM, boardStore } = setup();
 
 			boardStore.isConnected = false;
-			vi.advanceTimersByTime(600);
+			await vi.advanceTimersByTimeAsync(3100);
 			await nextTick();
 
 			expect(wrapperVM.showLoadingDialog).toBe(true);
 		});
 
-		it("should return true when isLoading is true after 500ms", async () => {
+		it("should return true when isLoading is true after 3000ms", async () => {
 			const { wrapperVM, boardStore } = setup();
 
 			boardStore.isLoading = true;
-			vi.advanceTimersByTime(600);
+			await vi.advanceTimersByTimeAsync(3100);
 			await nextTick();
 
 			expect(wrapperVM.showLoadingDialog).toBe(true);
@@ -1295,7 +1263,7 @@ describe("Board", () => {
 				});
 				await boardHeader.vm.$emit("copy:board");
 
-				expect(mockedCopyCalls.copy).not.toHaveBeenCalled();
+				expect(useCopyFlowMock.executeCopyBoard).not.toHaveBeenCalled();
 			});
 		});
 	});
@@ -1303,14 +1271,14 @@ describe("Board", () => {
 	describe("@onShareBoard", () => {
 		describe("when user is not permitted to share board", () => {
 			it("should not start the share flow", async () => {
-				const { wrapper, shareModule } = setup({ allowedOperations: { shareBoard: false } });
+				const { wrapper } = setup({ allowedOperations: { shareBoard: false } });
 
 				const boardHeader = wrapper.findComponent({
 					name: "BoardHeader",
 				});
 				await boardHeader.vm.$emit("share:board");
 
-				expect(shareModule.startShareFlow).not.toHaveBeenCalled();
+				expect(useShareFlowMock.executeShare).not.toHaveBeenCalled();
 			});
 		});
 	});

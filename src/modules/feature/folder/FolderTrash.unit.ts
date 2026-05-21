@@ -268,6 +268,63 @@ describe("FolderTrash.vue", () => {
 			expect(wrapper.html()).toContain(fileRecord2.name);
 		});
 
+		describe("purgeAt column", () => {
+			it("should render a purge-at cell for each file", async () => {
+				const { wrapper, fileRecord1 } = await setup();
+
+				const purgeAtCell = wrapper.find(`[data-testid='purge-at-${fileRecord1.name}']`);
+				expect(purgeAtCell.exists()).toBe(true);
+			});
+
+			it("should show purgeAt date 7 days after deletedSince", async () => {
+				const folderStateMock = createFolderStateMock();
+				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
+
+				const deletedSince = new Date("2026-05-01T00:00:00.000Z");
+
+				const fileRecord = fileRecordFactory.build({ deletedSince: deletedSince.toISOString() });
+
+				const fileTrashMock = createFileTrashMock();
+				fileTrashMock.deletedFileRecords = ref([fileRecord]);
+				vi.spyOn(FileTrashApi, "useFileTrash").mockReturnValueOnce(fileTrashMock);
+
+				const wrapper = mount(FolderTrash, {
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
+					},
+					props: { folderId: "test-folder-id" },
+				});
+
+				await flushPromises();
+
+				const purgeAtCell = wrapper.find(`[data-testid='purge-at-${fileRecord.name}']`);
+				expect(purgeAtCell.text()).toContain("5/8/2026");
+			});
+
+			it("should show empty purgeAt cell when deletedSince is not set", async () => {
+				const folderStateMock = createFolderStateMock();
+				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
+
+				const fileRecord = fileRecordFactory.build({ deletedSince: undefined });
+
+				const fileTrashMock = createFileTrashMock();
+				fileTrashMock.deletedFileRecords = ref([fileRecord]);
+				vi.spyOn(FileTrashApi, "useFileTrash").mockReturnValueOnce(fileTrashMock);
+
+				const wrapper = mount(FolderTrash, {
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
+					},
+					props: { folderId: "test-folder-id" },
+				});
+
+				await flushPromises();
+
+				const purgeAtCell = wrapper.find(`[data-testid='purge-at-${fileRecord.name}']`);
+				expect(purgeAtCell.text()).toBe("");
+			});
+		});
+
 		describe("when a file has virus detected status", () => {
 			it("should show the virus detected error chip", async () => {
 				const folderStateMock = createFolderStateMock();
@@ -429,7 +486,7 @@ describe("FolderTrash.vue", () => {
 				await actionMenuButton.trigger("click");
 
 				const actionMenuItems = wrapper.findAllComponents(KebabMenuAction);
-				const purgeAction = actionMenuItems.find((a) => a.attributes("data-testid") === "action-menu-purge");
+				const purgeAction = actionMenuItems.find((a) => a.attributes("data-testid") === "kebab-menu-action-purge");
 				await purgeAction?.trigger("click");
 
 				const purgeDialog = wrapper.findComponent(PurgeFilesDialog);

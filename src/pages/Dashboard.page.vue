@@ -19,7 +19,7 @@
 				<RenderHTML :html="inMaintenanceOrMigrationText" />
 			</WarningAlert>
 
-			<SvsSuspense :loading="isLoadingNews">
+			<SvsLoading :is-loading="isLoadingNews">
 				<h2 class="mb-4">{{ t("pages.news.title") }}</h2>
 
 				<!-- Dashboard news -->
@@ -60,7 +60,7 @@
 
 					<VBtn href="/news" data-testid="show-all-news" variant="outlined" :text="t('common.actions.show.all')" />
 				</template>
-			</SvsSuspense>
+			</SvsLoading>
 
 			<DashboardTasks v-if="isTeacher || isStudent" />
 
@@ -73,18 +73,18 @@
 import SvgNewsEmpty from "@/assets/img/SvgNewsEmpty.vue";
 import Announcement from "@/components/announcement/Announcement.vue";
 import { useSafeAxiosRunner } from "@/composables/async-tasks.composable";
-import { schoolsModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { NewsApiFactory, NewsTargetModel, Permission, SchulcloudTheme } from "@api-server";
 import { useAppStore, useAppStoreRefs } from "@data-app";
+import { useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { DashboardReleaseDialog, DashboardTasks } from "@feature-dashboard";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
 import { InfoAlert, WarningAlert } from "@ui-alert";
-import { SvsSuspense } from "@ui-containers";
+import { SvsLoading } from "@ui-containers";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
@@ -98,8 +98,10 @@ const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 
 useTitle(buildPageTitle(t("pages.dashboard.title")));
 
-const isSchoolInMaintenance = computed(() => schoolsModule.getSchool.inMaintenance);
-const isSchoolInMigration = computed(() => schoolsModule.getSchool.inUserMigration);
+const { schoolDetails } = useSchoolStoreRefs();
+
+const isSchoolInMaintenance = computed(() => schoolDetails.value.inMaintenance);
+const isSchoolInMigration = computed(() => schoolDetails.value.inUserMigration);
 const canSeeImportUsers = useAppStore().hasPermission(Permission.IMPORT_USER_VIEW);
 
 const inMaintenanceOrMigrationText = computed(() => {
@@ -115,7 +117,7 @@ const inMaintenanceOrMigrationText = computed(() => {
 	return undefined;
 });
 
-const { data: newsResponse, isRunning: isLoadingNews } = useSafeAxiosRunner(() =>
+const { data: newsResponse, isLoading: isLoadingNews } = useSafeAxiosRunner(() =>
 	newsApi.newsControllerFindAll(undefined, undefined, undefined, undefined, NEWS_LIMIT)
 );
 const latestNews = computed(() => newsResponse.value?.data.data ?? []);

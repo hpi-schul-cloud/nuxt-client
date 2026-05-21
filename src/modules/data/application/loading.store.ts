@@ -1,3 +1,5 @@
+import { AsyncFunction } from "@/types/async.types";
+import { withDebouncedLoading } from "@/utils/loading-utils";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
@@ -14,9 +16,16 @@ export const useLoadingStore = defineStore("loadingStore", () => {
 		isLoading.value = value;
 	}
 
+	const withLoadingState = <T>(fn: AsyncFunction<T>, loadingMessage: string): Promise<T> =>
+		withDebouncedLoading(fn, {
+			onStart: () => setLoadingState(true, loadingMessage),
+			onEnd: () => setLoadingState(false),
+		});
+
 	return {
 		loadingText,
 		isLoading,
 		setLoadingState,
+		withLoadingState,
 	};
 });

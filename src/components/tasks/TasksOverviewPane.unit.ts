@@ -2,7 +2,7 @@ import TasksOverviewList from "./TasksOverviewList.vue";
 import TasksOverviewListItemStudent from "./TasksOverviewListItemStudent.vue";
 import TasksOverviewListItemTeacher from "./TasksOverviewListItemTeacher.vue";
 import TasksOverviewPane from "./TasksOverviewPane.vue";
-import { CopyParamsTypeEnum } from "@/store/copy";
+import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { createTestAppStoreWithRole, mockComposable, taskResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoleName } from "@api-server";
@@ -156,7 +156,7 @@ describe("TasksOverviewPane", () => {
 
 		it("should emit copy-task when TasksOverviewListItemTeacher emits it", () => {
 			const wrapper = mountComponent(RoleName.TEACHER);
-			const payload = { id: "task-1", type: CopyParamsTypeEnum.Task };
+			const payload = { id: "task-1", type: ContentItemTypeEnum.Task };
 
 			const listItem = wrapper.findComponent(TasksOverviewListItemTeacher);
 			listItem.vm.$emit("copy-task", payload);

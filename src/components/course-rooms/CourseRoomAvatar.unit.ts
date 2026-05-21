@@ -236,7 +236,7 @@ describe("RoomAvatar", () => {
 
 			const element = wrapper.find(".subtitle").element as HTMLElement;
 
-			expect(element.innerHTML.trim()).toContain("components.molecules.copyResult.courseCopy.info");
+			expect(element.innerHTML.trim()).toContain("feature-copy.inProgress.course.info");
 			expect(element.className).toContain("text-grey");
 			expect(element.className).toContain("text-darken-1");
 		});
