@@ -113,10 +113,10 @@ const onDialogClose = () => {
 	--fullscreen-scale-text: 1.25;
 
 	/* Override with scaled versions, referencing original root values */
-	--heading-3: calc(1.4375rem * var(--fullscreen-scale-heading));
-	--heading-4: calc(1.1875rem * var(--fullscreen-scale-heading));
-	--heading-5: calc(1rem * var(--fullscreen-scale-heading));
-	--heading-6: calc(0.875rem * var(--fullscreen-scale-heading));
+	--heading-3: calc(1.375rem * 1.5); // to get also 33px like h1
+	--heading-4: calc(1.25rem * var(--fullscreen-scale-heading));
+	--heading-5: calc(1.125rem * var(--fullscreen-scale-heading));
+	--heading-6: calc(1rem * var(--fullscreen-scale-heading));
 
 	/* text sizes */
 	--text-xs: calc(0.694rem * var(--fullscreen-scale-text));
