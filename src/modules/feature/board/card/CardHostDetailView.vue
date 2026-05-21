@@ -76,7 +76,11 @@ const cardStore = useCardStore();
 const isOpen = ref(true);
 const card = computed(() => cardStore.getCard(cardRef.value));
 
-const cardBackground = computed(() => colorToHexLighten5(card.value?.backgroundColor ?? Colors.TRANSPARENT));
+const cardBackground = computed(() => {
+	const bg = card.value?.backgroundColor;
+	if (!bg || bg === Colors.TRANSPARENT) return "#fafafa";
+	return colorToHexLighten5(bg);
+});
 const cardBorderColor = computed(() => {
 	const color = card.value?.backgroundColor;
 	if (!color || color === Colors.TRANSPARENT) return undefined;
