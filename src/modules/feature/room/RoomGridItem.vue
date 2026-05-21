@@ -15,8 +15,8 @@
 					</VAvatar>
 				</VBadge>
 				<div>
-					<VCardTitle class="text-break text-body-1 font-weight-bold mb-1" :data-testid="`room--title-${index}`">
-						{{ room.name }}
+					<VCardTitle class="mb-1" :data-testid="`room--title-${index}`">
+						<h2 class="text-break text-body-1 font-weight-bold ma-0">{{ room.name }}</h2>
 					</VCardTitle>
 					<VChip
 						size="small"
