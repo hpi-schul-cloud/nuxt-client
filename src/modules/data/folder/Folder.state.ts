@@ -8,7 +8,7 @@ import {
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { BoardElementApiFactory } from "@api-server";
+import { BoardApiFactory, BoardElementApiFactory, BoardResponseAllowedOperations } from "@api-server";
 import { useAppStore } from "@data-app";
 import { Breadcrumb } from "@ui-layout";
 import { computed, Ref, ref } from "vue";
@@ -16,6 +16,7 @@ import { useI18n } from "vue-i18n";
 
 export const useFolderState = () => {
 	const boardElementApi = BoardElementApiFactory(undefined, "/v3", $axios);
+	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 	const { t } = useI18n();
 
 	const fileFolderElement = ref<FileFolderElement | undefined>(undefined);
@@ -27,6 +28,12 @@ export const useFolderState = () => {
 
 		return parent;
 	});
+
+	const allowedOperations = ref<BoardResponseAllowedOperations>(
+		new Proxy({} as BoardResponseAllowedOperations, {
+			get: () => false,
+		})
+	);
 
 	const folderName = computed(() => {
 		const title = fileFolderElement.value?.content.title;
@@ -77,6 +84,21 @@ export const useFolderState = () => {
 		}
 	};
 
+	const removeFolder = async (fileFolderElementId: string): Promise<void> => {
+		await boardElementApi.elementControllerDeleteElement(fileFolderElementId);
+	};
+
+	const fetchAllowedOperations = async (parentId: string) => {
+		try {
+			const result = await boardApi.boardControllerGetBoardSkeleton(parentId);
+			if (result.data.allowedOperations) {
+				allowedOperations.value = result.data.allowedOperations;
+			}
+		} catch (error) {
+			throwApplicationError(error);
+		}
+	};
+
 	const buildRootBreadCrumbItem = (parentNodeInfos: Ref<ParentNodeInfo[]>) => {
 		if (!parentNodeInfos.value[0]) return;
 
@@ -87,7 +109,7 @@ export const useFolderState = () => {
 				title: t("common.words.courses"),
 				to: "/rooms/courses-overview",
 			};
-		} else if (ParentNodeType.ROOM) {
+		} else if (firstItem.type === ParentNodeType.ROOM) {
 			return { title: t("pages.rooms.title"), to: "/rooms" };
 		}
 	};
@@ -128,5 +150,8 @@ export const useFolderState = () => {
 		fetchFileFolderElement,
 		mapNodeTypeToPathType,
 		renameFolder,
+		removeFolder,
+		fetchAllowedOperations,
+		allowedOperations,
 	};
 };
