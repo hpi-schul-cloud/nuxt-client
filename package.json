@@ -76,7 +76,7 @@
 		"fishery": "^2.4.0",
 		"globals": "^17.6.0",
 		"http-proxy-middleware": "^4.0.0",
-		"jsdom": "^28.1.0",
+		"jsdom": "^29.1.1",
 		"npm-run-all2": "^9.0.0",
 		"prettier": "^3.8.3",
 		"resize-observer-polyfill": "^1.5.1",
