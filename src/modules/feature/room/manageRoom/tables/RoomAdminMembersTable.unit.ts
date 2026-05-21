@@ -244,7 +244,7 @@ describe("RoomAdminMembersTable", () => {
 			await nextTick();
 
 			expect(roomMembersStore.selectedIds).toEqual([]);
-			expect(roomMembersStore.fetchMembersAndApplicants).toHaveBeenCalled();
+			expect(roomMembersStore.fetchMembers).toHaveBeenCalled();
 		});
 	});
 
