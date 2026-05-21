@@ -192,6 +192,7 @@ const cursorToEnd = () => {
 }
 
 .other-title {
+	font-size: var(--heading-3);
 	line-height: var(--line-height-lg);
 	margin: 0;
 	padding: 8px 16px;
