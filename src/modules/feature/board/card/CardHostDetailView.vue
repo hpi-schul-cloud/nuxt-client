@@ -94,7 +94,7 @@ const onDialogClose = () => {
 @use "sass:map";
 
 .detail-view-size {
-	max-width: 900px;
+	max-width: 860px;
 	min-width: 17rem;
 }
 
