@@ -85,11 +85,11 @@ describe("useRoomMembers", () => {
 
 	it("should throw an error if the roomId is undefined", async () => {
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
-		await roomMembersStore.fetchMembers();
+		await roomMembersStore.fetchMembersAndApplicants();
 		expectNotification("error");
 	});
 
-	describe("fetchMembers", () => {
+	describe("fetchMembersAndApplicants", () => {
 		describe("when the user is not room owner", () => {
 			it("should fetch teacher members and map members with role names", async () => {
 				const { roomMembersStore } = setup();
@@ -106,7 +106,7 @@ describe("useRoomMembers", () => {
 					})
 				);
 
-				await roomMembersStore.fetchMembers();
+				await roomMembersStore.fetchMembersAndApplicants();
 
 				expect(roomMembersStore.roomMembers).toEqual(
 					membersMock.map((member) => ({
@@ -132,7 +132,7 @@ describe("useRoomMembers", () => {
 					})
 				);
 
-				await roomMembersStore.fetchMembers();
+				await roomMembersStore.fetchMembersAndApplicants();
 
 				expect(roomMembersStore.roomMembers).toEqual(
 					membersMock.map((member) => ({
@@ -155,7 +155,7 @@ describe("useRoomMembers", () => {
 						data: { data: membersMock },
 					})
 				);
-				await roomMembersStore.fetchMembers();
+				await roomMembersStore.fetchMembersAndApplicants();
 				expect(roomMembersStore.roomMembers).toEqual(
 					membersMock.map((member) => ({
 						...member,
@@ -182,7 +182,7 @@ describe("useRoomMembers", () => {
 					})
 				);
 
-				await roomMembersStore.fetchMembers();
+				await roomMembersStore.fetchMembersAndApplicants();
 
 				expect(roomMembersStore.roomMembers).toEqual(
 					membersMock.map((member) => ({
@@ -209,7 +209,7 @@ describe("useRoomMembers", () => {
 					})
 				);
 
-				await roomMembersStore.fetchMembers();
+				await roomMembersStore.fetchMembersAndApplicants();
 
 				expect(roomMembersStore.roomMembers).toEqual(
 					membersMock.map((member) => ({
@@ -228,7 +228,7 @@ describe("useRoomMembers", () => {
 			const error = new Error("Test error");
 			roomApiMock.roomControllerGetMembers.mockRejectedValue(error);
 
-			await roomMembersStore.fetchMembers();
+			await roomMembersStore.fetchMembersAndApplicants();
 			expectNotification("error");
 		});
 	});
@@ -1032,7 +1032,8 @@ describe("useRoomMembers", () => {
 				roomRoleName: RoleName.ROOMVIEWER,
 			});
 
-			roomMembersStore.roomMembers = [...roomApplicants, ...roomMembersWithoutApplicants];
+			roomMembersStore.roomMembers = [...roomMembersWithoutApplicants];
+			roomMembersStore.roomApplicants = [...roomApplicants];
 
 			await nextTick();
 
@@ -1040,7 +1041,7 @@ describe("useRoomMembers", () => {
 			expect(roomMembersStore.roomApplicants.length).toEqual(3);
 			expect(roomMembersStore.roomMembersWithoutApplicants).toEqual(roomMembersWithoutApplicants);
 			expect(roomMembersStore.roomMembersWithoutApplicants.length).toEqual(2);
-			expect(roomMembersStore.roomMembers.length).toEqual(5);
+			expect(roomMembersStore.roomMembers.length).toEqual(2);
 		});
 	});
 

@@ -392,7 +392,27 @@ describe("RoomMembersPage", () => {
 
 		describe("when FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED is true", () => {
 			describe("SpeedDialMenu", () => {
-				describe("when user is not a student", () => {
+				describe("when user is allowed to add members and external persons", () => {
+					it("should have speed dial menu actions", async () => {
+						const { wrapper } = setup({
+							activeTab: Tab.Members,
+							envConfig: {
+								FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
+							},
+							memberSchoolRoleNames: [RoleName.ROOMEDITOR],
+							allowedOperations: { addMembers: true, viewMemberlist: true, addExternalPersonByEmail: true },
+						});
+
+						const wireframe = wrapper.findComponent(DefaultWireframe);
+						const addMemberButton = wireframe.getComponent("[data-testid=fab-add-members]").getComponent(VBtn);
+						await addMemberButton.trigger("click");
+
+						const fabActions = wrapper.findAllComponents(SpeedDialMenuAction);
+						expect(fabActions.length).toBe(2);
+					});
+				});
+
+				describe("when user is allowed to add members", () => {
 					it("should have speed dial menu actions", async () => {
 						const { wrapper } = setup({
 							activeTab: Tab.Members,
@@ -408,7 +428,7 @@ describe("RoomMembersPage", () => {
 						await addMemberButton.trigger("click");
 
 						const fabActions = wrapper.findAllComponents(SpeedDialMenuAction);
-						expect(fabActions.length).toBe(2);
+						expect(fabActions.length).toBe(1);
 					});
 				});
 
@@ -463,7 +483,7 @@ describe("RoomMembersPage", () => {
 						FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
 					},
 					memberSchoolRoleNames: [RoleName.ROOMEDITOR],
-					allowedOperations: { addMembers: true, viewMemberlist: true },
+					allowedOperations: { addMembers: true, viewMemberlist: true, addExternalPersonByEmail: true },
 				});
 
 				const addExternalMemberDialogBefore = wrapper.findComponent(AddExternalPersonDialog).findComponent(VCard);

@@ -39,7 +39,7 @@ const isMembersDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
 roomMembersStore.setAdminMode(true);
-const { fetchMembers, loadSchoolList, resetStore } = roomMembersStore;
+const { fetchMembersAndApplicants, loadSchoolList, resetStore } = roomMembersStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
@@ -56,7 +56,7 @@ useTitle(pageTitle);
 onMounted(async () => {
 	const roomId = route.params.roomId?.toString();
 	await fetchRoom(roomId);
-	await fetchMembers();
+	await fetchMembersAndApplicants();
 });
 
 onUnmounted(() => {

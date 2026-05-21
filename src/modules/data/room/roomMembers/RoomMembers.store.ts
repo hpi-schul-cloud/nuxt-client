@@ -27,6 +27,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const roomId = computed(() => room.value?.id);
 
 	const roomMembers: Ref<RoomMember[]> = ref([]);
+	const roomApplicants: Ref<RoomMember[]> = ref([]);
 	const confirmationList: Ref<Record<string, unknown>[]> = ref([]);
 	const potentialRoomMembers: Ref<Omit<RoomMember, "roomRoleName" | "displayRoomRole">[]> = ref([]);
 
@@ -36,10 +37,6 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const roomMembersWithoutApplicants = computed(() =>
 		roomMembers.value.filter((member) => member.roomRoleName !== RoleName.ROOMAPPLICANT).map(mapAnonymizedMember)
-	);
-
-	const roomApplicants = computed(() =>
-		roomMembers.value.filter((member) => member.roomRoleName === RoleName.ROOMAPPLICANT)
 	);
 
 	const mapAnonymizedMember = (member: RoomMember) => {
@@ -102,6 +99,10 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return roomId.value;
 	};
 
+	const fetchMembersAndApplicants = async () => {
+		await Promise.all([fetchMembers(), fetchApplicants()]);
+	};
+
 	const fetchMembers = async () => {
 		const isSelectable = (member: RoomMemberResponse) => {
 			const isRoomOwner = member.roomRoleName === RoleName.ROOMOWNER;
@@ -126,6 +127,23 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 				isSelectable: isSelectable(member),
 				displayRoomRole: roomRole[member.roomRoleName],
 				displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
+			}));
+		} catch {
+			notifyError(t("pages.rooms.members.error.load"));
+		} finally {
+			isLoading.value = false;
+		}
+	};
+
+	const fetchApplicants = async () => {
+		try {
+			isLoading.value = true;
+			const { data } = (await roomApi.roomControllerGetApplicants(getRoomId())).data;
+			roomApplicants.value = data.map((applicant: RoomMemberResponse) => ({
+				...applicant,
+				fullName: `${applicant.firstName} ${applicant.lastName}`,
+				displayRoomRole: roomRole[applicant.roomRoleName],
+				displaySchoolRole: getSchoolRoleName(applicant.schoolRoleNames),
 			}));
 		} catch {
 			notifyError(t("pages.rooms.members.error.load"));
@@ -232,7 +250,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const addMembers = async (userIds: string[]) => {
 		try {
 			await roomApi.roomControllerAddMembers(getRoomId(), { userIds });
-			await fetchMembers();
+			await fetchMembersAndApplicants();
 		} catch {
 			notifyError(t("pages.rooms.members.error.add"));
 		}
@@ -267,7 +285,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		try {
 			const roomId = getRoomId();
 			await roomApi.roomControllerAddByEmail(roomId, { email });
-			await fetchMembers();
+			await fetchMembersAndApplicants();
 			return ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED;
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
@@ -355,11 +373,16 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 			showNotification(ids, "confirm");
 
+			const applicants = roomApplicants.value.filter((applicant) => ids.includes(applicant.userId));
+
+			roomMembers.value = [...roomMembers.value, ...applicants];
 			roomMembers.value
 				.filter((member) => ids.includes(member.userId))
 				.forEach((member) => {
 					updateMemberRole(member, RoleName.ROOMVIEWER, true);
 				});
+
+			roomApplicants.value = [...roomApplicants.value.filter((applicant) => !ids.includes(applicant.userId))];
 		} catch {
 			notifyError(t("pages.rooms.members.error.updateRole"));
 		}
@@ -438,6 +461,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		setAdminMode,
 		changeRoomOwner,
 		confirmInvitations,
+		fetchMembersAndApplicants,
 		fetchMembers,
 		resetPotentialMembers,
 		resetStore,
