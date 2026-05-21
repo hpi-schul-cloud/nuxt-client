@@ -81,6 +81,7 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 	ol {
 		font-size: var(--text-md);
 		margin-bottom: 8px;
+		line-height: var(--line-height-xl);
 	}
 
 	ul {
