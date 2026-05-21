@@ -75,7 +75,7 @@
 		"eslint-plugin-vue": "^10.9.1",
 		"fishery": "^2.4.0",
 		"globals": "^17.6.0",
-		"http-proxy-middleware": "^3.0.5",
+		"http-proxy-middleware": "^4.0.0",
 		"jsdom": "^28.1.0",
 		"npm-run-all2": "^9.0.0",
 		"prettier": "^3.8.3",
