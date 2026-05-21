@@ -162,6 +162,10 @@ const cursorToEnd = () => {
 	font-family: var(--font-accent);
 	font-weight: normal;
 
+	:deep(.v-messages) {
+		font-family: var(--font-primary);
+	}
+
 	&.board-title-input :deep(textarea) {
 		font-size: var(--heading-1);
 		line-height: var(--line-height-md);
