@@ -273,13 +273,15 @@ describe("useFolderState", () => {
 		it("should update element and refetch folder", async () => {
 			const { testId, boardElementApi } = setup();
 
-			boardElementApi.elementControllerUpdateElement.mockResolvedValue({} as AxiosPromise);
-			boardElementApi.elementControllerGetElementWithParentHierarchy.mockResolvedValue({
-				data: {
-					element: fileFolderElementResponseFactory.build(),
-					parentHierarchy: parentNodeInfoFactory.build(),
-				},
-			} as unknown as AxiosPromise);
+			boardElementApi.elementControllerUpdateElement.mockResolvedValue(await ({} as AxiosPromise));
+			boardElementApi.elementControllerGetElementWithParentHierarchy.mockResolvedValue(
+				await ({
+					data: {
+						element: fileFolderElementResponseFactory.build(),
+						parentHierarchy: parentNodeInfoFactory.build(),
+					},
+				} as unknown as AxiosPromise)
+			);
 
 			const { renameFolder } = useFolderState();
 
@@ -308,7 +310,7 @@ describe("useFolderState", () => {
 	describe("removeFolder", () => {
 		it("should delete folder by id", async () => {
 			const { testId, boardElementApi } = setup();
-			boardElementApi.elementControllerDeleteElement.mockResolvedValue({} as AxiosPromise);
+			boardElementApi.elementControllerDeleteElement.mockResolvedValue(await ({} as AxiosPromise));
 
 			const { removeFolder } = useFolderState();
 
@@ -322,9 +324,11 @@ describe("useFolderState", () => {
 		it("should set allowed operations when returned by api", async () => {
 			const { boardApi } = setup();
 			const allowedOperations = { createFileElement: true } as serverApi.BoardResponseAllowedOperations;
-			boardApi.boardControllerGetBoardSkeleton.mockResolvedValueOnce({
-				data: { allowedOperations },
-			} as unknown as AxiosPromise);
+			boardApi.boardControllerGetBoardSkeleton.mockResolvedValueOnce(
+				await ({
+					data: { allowedOperations },
+				} as unknown as AxiosPromise)
+			);
 
 			const { fetchAllowedOperations: fetchOperations, allowedOperations: stateAllowedOperations } = useFolderState();
 
@@ -335,9 +339,11 @@ describe("useFolderState", () => {
 
 		it("should keep fallback allowed operations when response has none", async () => {
 			const { boardApi } = setup();
-			boardApi.boardControllerGetBoardSkeleton.mockResolvedValueOnce({
-				data: {},
-			} as unknown as AxiosPromise);
+			boardApi.boardControllerGetBoardSkeleton.mockResolvedValueOnce(
+				await ({
+					data: {},
+				} as unknown as AxiosPromise)
+			);
 
 			const { fetchAllowedOperations: fetchOperations, allowedOperations: stateAllowedOperations } = useFolderState();
 

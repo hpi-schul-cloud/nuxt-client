@@ -65,7 +65,7 @@ import { LightBox } from "@ui-light-box";
 import { FabAction } from "@ui-speed-dial-menu";
 import { useErrorHandler } from "@util-error-handling";
 import dayjs from "dayjs";
-import { computed, handleError, onMounted, ref, toRef, watch } from "vue";
+import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
