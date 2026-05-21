@@ -3,8 +3,8 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useImportContent } from "@/composables/copy-content.composable";
 import { $axios } from "@/utils/api";
 import { ShareTokenApiFactory, ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
-import { notifySuccess, useLoadingStore } from "@data-app";
-import { openDialog } from "@feature-dialog";
+import { notifySuccess } from "@data-app";
+import { openDialog, withLoadingState } from "@feature-dialog";
 import type { MaybeRefOrGetter } from "vue";
 import { computed, ref, toValue } from "vue";
 import { useI18n } from "vue-i18n";
@@ -12,7 +12,6 @@ import { useI18n } from "vue-i18n";
 export const useImportFlow = () => {
 	const shareApi = ShareTokenApiFactory(undefined, "/v3", $axios);
 	const { execute } = useSafeAxiosTask();
-	const { withLoadingState } = useLoadingStore();
 	const { t } = useI18n();
 
 	const shareTokenInfo = ref<ShareTokenInfoResponse>();

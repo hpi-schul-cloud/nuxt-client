@@ -24,9 +24,13 @@ export type ImportCardDialogProps = {
 	availableDestinations: { id: string; name: string }[];
 	destinationType: Extract<ImportDestinationType, "column">;
 };
-export type ImportCardDialogResult = { newName: string; destination?: ImportDestination };
+export type ImportCardDialogResult = ImportDialogResult;
 
 export type ShareDialogProps = {
 	shareItemType: ShareTokenBodyParamsParentType;
 	onConfirm: (options: ShareOptions) => Promise<string>;
+};
+
+export type LoadingStateDialogProps = {
+	loadingText: string;
 };

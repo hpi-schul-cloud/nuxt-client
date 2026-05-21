@@ -21,15 +21,13 @@
 </template>
 
 <script setup lang="ts">
-import { ConfirmationDialogProps } from "../dialog-contracts";
-import { ManagedDialogEmits } from "../dialog-registry";
 import { i18nKeyExists, useI18nGlobal } from "@/plugins/i18n";
+import { ConfirmationDialogProps, ManagedDialogEmits } from "@feature-dialog";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { computed } from "vue";
 
 const props = defineProps<ConfirmationDialogProps>();
-
 const emit = defineEmits<ManagedDialogEmits<boolean>>();
 
 const isOpen = defineModel<boolean>({ default: false });

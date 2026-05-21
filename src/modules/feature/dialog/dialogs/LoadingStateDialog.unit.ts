@@ -1,7 +1,6 @@
 import LoadingStateDialog from "./LoadingStateDialog.vue";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils/mockedPiniaStoreTyping";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useLoadingStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { nextTick } from "vue";
 import { VCard, VDialog, VProgressLinear } from "vuetify/lib/components/index";

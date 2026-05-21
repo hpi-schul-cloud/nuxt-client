@@ -5,9 +5,10 @@ import type {
 	ImportCardDialogResult,
 	ImportDialogProps,
 	ImportDialogResult,
+	LoadingStateDialogProps,
 	ShareDialogProps,
 } from "./dialog-contracts";
-import ConfirmationDialog from "./dialogs/ConfirmationDialog.vue";
+import { ConfirmationDialog, LoadingStateDialog } from "./dialogs";
 import { CopyDialog } from "@feature-copy";
 import { ImportCardDialog, ImportDialog } from "@feature-import";
 import { ShareDialog } from "@feature-share";
@@ -38,6 +39,7 @@ export const dialogRegistry = {
 	import: defineDialog<ImportDialogProps, ImportDialogResult>(ImportDialog),
 	importCard: defineDialog<ImportCardDialogProps, ImportCardDialogResult>(ImportCardDialog),
 	share: defineDialog<ShareDialogProps, void>(ShareDialog),
+	loadingState: defineDialog<LoadingStateDialogProps, void>(LoadingStateDialog),
 };
 
 export type DialogRegistry = typeof dialogRegistry;

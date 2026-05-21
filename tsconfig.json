@@ -93,7 +93,6 @@
       "@ui-layout": ["src/modules/ui/layout"],
       "@ui-light-box": ["src/modules/ui/light-box"],
       "@ui-line-clamp": ["src/modules/ui/line-clamp"],
-      "@ui-loading-state-dialog": ["src/modules/ui/loading-state-dialog"],
       "@ui-preview-image": ["src/modules/ui/preview-image"],
       "@ui-qr-code": ["src/modules/ui/qr-code"],
       "@ui-room-details": ["src/modules/ui/room-details"],

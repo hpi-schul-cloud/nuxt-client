@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import { useCopyContent } from "@/composables/copy-content.composable";
-import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
+import { CopyDialogProps, ManagedDialogEmits } from "@feature-dialog";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { computed, toRef } from "vue";
@@ -41,15 +41,8 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const props = defineProps<{
-	copyItemType: ContentItemTypeEnum;
-}>();
-
-const emit = defineEmits<{
-	cancel: [];
-	complete: [boolean];
-	"after-leave": [];
-}>();
+const props = defineProps<CopyDialogProps>();
+const emit = defineEmits<ManagedDialogEmits<boolean>>();
 
 const isOpen = defineModel<boolean>({ default: false });
 

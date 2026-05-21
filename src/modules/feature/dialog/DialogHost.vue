@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDialogStore } from "./dialog-manager.store";
+import { useDialogStore } from "./dialog.store";
 import { storeToRefs } from "pinia";
 import { onBeforeUnmount, watch } from "vue";
 import { useRoute } from "vue-router";

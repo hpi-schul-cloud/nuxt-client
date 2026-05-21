@@ -62,9 +62,9 @@
 </template>
 
 <script setup lang="ts">
-import { ImportDestination, ImportDestinationItem, ImportDestinationType } from "./types";
 import { useImportContent } from "@/composables/copy-content.composable";
-import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
+import { ShareTokenInfoResponseParentType } from "@api-server";
+import { ImportDialogProps, ImportDialogResult, ManagedDialogEmits } from "@feature-dialog";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { isRequired, useOpeningTagValidator } from "@util-validators";
@@ -74,17 +74,8 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
-const props = defineProps<{
-	shareTokenInfo: ShareTokenInfoResponse;
-	availableDestinations: ImportDestinationItem[];
-	destinationType: Extract<ImportDestinationType, "room" | "course">;
-}>();
-
-const emit = defineEmits<{
-	cancel: [];
-	complete: [{ newName: string; destination?: ImportDestination }];
-	"after-leave": [];
-}>();
+const props = defineProps<ImportDialogProps>();
+const emit = defineEmits<ManagedDialogEmits<ImportDialogResult>>();
 
 const isDialogOpen = defineModel<boolean>({ default: false });
 

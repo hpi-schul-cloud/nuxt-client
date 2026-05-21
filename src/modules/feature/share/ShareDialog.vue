@@ -55,8 +55,8 @@
 <script setup lang="ts">
 import ShareDialogResult from "./ShareDialogResult.vue";
 import { useShareContent } from "@/composables/copy-content.composable";
-import { ShareTokenBodyParamsParentType } from "@api-server";
 import { notifySuccess } from "@data-app";
+import { ManagedDialogEmits, ShareDialogProps } from "@feature-dialog";
 import { ShareOptions } from "@feature-share";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
@@ -65,16 +65,8 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const props = defineProps<{
-	shareItemType: ShareTokenBodyParamsParentType;
-	onConfirm: (options: ShareOptions) => Promise<string>;
-}>();
-
-const emit = defineEmits<{
-	complete: [];
-	cancel: [];
-	"after-leave": [];
-}>();
+const props = defineProps<ShareDialogProps>();
+const emit = defineEmits<ManagedDialogEmits<void>>();
 
 const isOpen = defineModel<boolean>({ default: false });
 

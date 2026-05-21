@@ -2,13 +2,12 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { $axios } from "@/utils/api";
 import { BoardApiFactory, CourseRoomsApiFactory, RoomApiFactory, TaskApiFactory } from "@api-server";
-import { notifySuccess, useLoadingStore } from "@data-app";
-import { openDialog } from "@feature-dialog";
+import { notifySuccess } from "@data-app";
+import { openDialog, withLoadingState } from "@feature-dialog";
 import { useI18n } from "vue-i18n";
 
 export const useCopyFlow = () => {
 	const { t } = useI18n();
-	const { withLoadingState } = useLoadingStore();
 	const { execute } = useSafeAxiosTask();
 
 	const courseRoomApi = CourseRoomsApiFactory(undefined, "/v3", $axios);
