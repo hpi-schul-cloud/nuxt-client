@@ -69,7 +69,6 @@
 import { Tab } from "@/types/room/RoomMembers";
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { RoleName } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import {
 	InvitationStep,
@@ -326,18 +325,13 @@ const fabItems = computed<FabAction[] | undefined>(() => {
 			clickHandler: () => handleAddMember(FabEvent.ADD_MEMBERS),
 		});
 
-		if (user.value) {
-			const member = roomMembersStore.getMemberById(user.value.id);
-			const userIsNotStudent = member?.schoolRoleNames?.includes(RoleName.STUDENT);
-
-			if (!userIsNotStudent) {
-				actions.push({
-					icon: mdiAccountClockOutline,
-					label: t("pages.rooms.members.fab.addExternalPerson"),
-					dataTestId: "fab-add-external-person",
-					clickHandler: () => handleAddMember(FabEvent.INVITE_MEMBERS),
-				});
-			}
+		if (allowedOperations.value.addExternalPersonByEmail) {
+			actions.push({
+				icon: mdiAccountClockOutline,
+				label: t("pages.rooms.members.fab.addExternalPerson"),
+				dataTestId: "fab-add-external-person",
+				clickHandler: () => handleAddMember(FabEvent.INVITE_MEMBERS),
+			});
 		}
 
 		return actions;
