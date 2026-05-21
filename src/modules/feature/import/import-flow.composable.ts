@@ -51,19 +51,17 @@ export const useImportFlow = () => {
 
 		const destinations = toValue(availableDestinations);
 		const isCard = validationResult.parentType === ShareTokenInfoResponseParentType.CARD;
-		const { completed, data } = await (
-			isCard
-				? openDialog("importCard", {
-						shareTokenInfo: validationResult,
-						availableDestinations: destinations,
-						destinationType: "column",
-					})
-				: openDialog("import", {
-						shareTokenInfo: validationResult,
-						availableDestinations: destinations,
-						destinationType: validationResult.parentType === ShareTokenInfoResponseParentType.ROOM ? "room" : "course",
-					})
-		).result;
+		const { completed, data } = await (isCard
+			? openDialog("importCard", {
+					shareTokenInfo: validationResult,
+					availableDestinations: destinations,
+					destinationType: "column",
+				})
+			: openDialog("import", {
+					shareTokenInfo: validationResult,
+					availableDestinations: destinations,
+					destinationType: validationResult.parentType === ShareTokenInfoResponseParentType.ROOM ? "room" : "course",
+				}));
 
 		if (!completed) return { success: false, error: new Error("Import cancelled") };
 		const { newName, destination } = data;

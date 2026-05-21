@@ -62,7 +62,7 @@ export const useDialogStore = defineStore("dialog", () => {
 		}
 	};
 
-	const openDialog = <K extends DialogKey>(
+	const createDialog = <K extends DialogKey>(
 		type: K,
 		props: DialogProps<K>
 	): { result: Promise<AwaitableResult<DialogResult<K>>>; cancel: () => void } => {
@@ -136,7 +136,7 @@ export const useDialogStore = defineStore("dialog", () => {
 		activeDialog,
 		queue,
 		registry: markRaw(dialogRegistry),
-		openDialog,
+		createDialog,
 		onCompleteDialog,
 		onCancelDialog,
 		setDialogModelValue,
@@ -146,4 +146,7 @@ export const useDialogStore = defineStore("dialog", () => {
 });
 
 export const openDialog = <K extends DialogKey>(type: K, props: DialogProps<K>) =>
-	useDialogStore().openDialog(type, props);
+	useDialogStore().createDialog(type, props).result;
+
+export const openCancellableDialog = <K extends DialogKey>(type: K, props: DialogProps<K>) =>
+	useDialogStore().createDialog(type, props);

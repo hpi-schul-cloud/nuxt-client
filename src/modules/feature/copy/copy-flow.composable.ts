@@ -27,7 +27,7 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyCourse = async (courseId: string) => {
-		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Course }).result;
+		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Course });
 		if (!completed) return { success: false, error: copyCancelledError() };
 
 		const { result, success, error } = await withCopyLoading(() =>
@@ -45,7 +45,7 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyTask = async (taskId: string, targetCourseId: string) => {
-		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Task }).result;
+		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Task });
 		if (!completed) return { success: false, error: copyCancelledError() };
 
 		const { result, success, error } = await withCopyLoading(() =>
@@ -63,7 +63,7 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyLesson = async (lessonId: string, targetCourseId: string) => {
-		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Lesson }).result;
+		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Lesson });
 		if (!completed) return { success: false, error: copyCancelledError() };
 
 		const { result, success, error } = await withCopyLoading(() =>
@@ -81,7 +81,7 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyBoard = async (boardId: string) => {
-		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.ColumnBoard }).result;
+		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.ColumnBoard });
 		if (!completed) return { success: false, error: copyCancelledError() };
 
 		const { result, success, error } = await withCopyLoading(() =>
@@ -99,7 +99,7 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyRoom = async (roomId: string) => {
-		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Room }).result;
+		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Room });
 		if (!completed) return { success: false, error: copyCancelledError() };
 
 		const { result, success, error } = await withCopyLoading(() =>
