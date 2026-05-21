@@ -1,9 +1,9 @@
-import { ProvisioningOptions } from "@data-provisioning-options";
+import { SchulConneXProvisioningOptionsResponse } from "@api-server";
 import { Factory } from "fishery";
 
-export const provisioningOptionsDataFactory = Factory.define<ProvisioningOptions>(() => ({
-	class: true,
-	course: false,
-	others: false,
-	schoolExternalTools: false,
+export const provisioningOptionsResponseFactory = Factory.define<SchulConneXProvisioningOptionsResponse>(() => ({
+	groupProvisioningClassesEnabled: true,
+	groupProvisioningCoursesEnabled: false,
+	groupProvisioningOtherEnabled: false,
+	schoolExternalToolProvisioningEnabled: false,
 }));

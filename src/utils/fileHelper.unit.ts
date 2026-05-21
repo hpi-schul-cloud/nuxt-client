@@ -30,13 +30,8 @@ describe("@/utils/fileHelper", () => {
 		const setup = () => {
 			const url = "test-url";
 			const fileName = "test-file.ext";
-			const link = {
-				...document.createElement("a"),
-				href: "",
-				download: "",
-				dataset: { testid: "" },
-				click: vi.fn(),
-			};
+			const link = document.createElement("a");
+			link.click = vi.fn();
 			const createElementSpy = vi.spyOn(document, "createElement").mockImplementationOnce(() => link);
 			document.body.appendChild = vi.fn();
 			document.body.removeChild = vi.fn();
@@ -50,12 +45,33 @@ describe("@/utils/fileHelper", () => {
 			downloadFile(url, fileName);
 
 			expect(createElementSpy).toHaveBeenCalledWith("a");
-			expect(link.href).toEqual(url);
+			expect(link.getAttribute("href")).toEqual(url);
 			expect(link.download).toEqual(fileName);
 			expect(link.hidden).toBe(true);
 			expect(document.body.appendChild).toHaveBeenCalledWith(link);
 			expect(link.click).toHaveBeenCalledTimes(1);
 			expect(document.body.removeChild).toHaveBeenCalledWith(link);
+		});
+
+		it("should stop click event propagation on the download link", () => {
+			const { url, fileName, link } = setup();
+			const addEventListenerSpy = vi.spyOn(link, "addEventListener");
+
+			downloadFile(url, fileName);
+
+			expect(addEventListenerSpy).toHaveBeenCalledWith("click", expect.any(Function));
+
+			const clickHandler = addEventListenerSpy.mock.calls[0]?.[1];
+			const event = new MouseEvent("click");
+			const stopPropagationSpy = vi.spyOn(event, "stopPropagation");
+
+			if (typeof clickHandler !== "function") {
+				throw new Error("Expected click handler to be registered");
+			}
+
+			clickHandler(event);
+
+			expect(stopPropagationSpy).toHaveBeenCalledTimes(1);
 		});
 	});
 

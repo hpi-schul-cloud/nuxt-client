@@ -12,35 +12,26 @@
 			<VImg class="w-75 d-block mx-auto" src="@/assets/img/surprise.svg" alt="" role="presentation" max-width="360" />
 		</template>
 		<template #actions>
-			<VBtn
-				class="w-100"
-				color="primary"
-				variant="flat"
-				:text="t('common.labels.moreInfo')"
-				href="/system/releases"
-				@click="setReleasePreferences"
-			/>
+			<VBtn class="w-100" color="primary" variant="flat" :text="t('common.labels.moreInfo')" @click="toReleasesRoute" />
 		</template>
 	</SvsDialog>
 </template>
 
 <script lang="ts" setup>
-import { useSafeAxiosRunner, useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { useSafeAxiosRunner } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
-import { MeApiFactory, ReleaseApiFactory } from "@api-server";
-import { useAppStoreRefs } from "@data-app";
+import { ReleaseApiFactory } from "@api-server";
+import { useAppStore, useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { SvsDialog } from "@ui-dialog";
 import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const envConfig = useEnvConfig();
+const { updateUserPreferences } = useAppStore();
 const { userPreferences } = useAppStoreRefs();
 const { t } = useI18n();
 
-const { execute: setPreference } = useSafeAxiosTask();
-
-const meApi = MeApiFactory(undefined, "/v3", $axios);
 const releasesApi = ReleaseApiFactory(undefined, "/v3", $axios);
 
 const { data: releasesResponse } = useSafeAxiosRunner(() => releasesApi.releaseControllerGetReleases(0, 1));
@@ -56,14 +47,15 @@ const hasNewReleaseNotes = computed(() => {
 	return new Date(lastSeenDate) < new Date(publishedAt);
 });
 
-const setReleasePreferences = () => {
+const setReleasePreferences = async () => {
 	if (!latestRelease.value) return;
 
-	setPreference(() =>
-		meApi.meControllerUpdateMePreferences({
-			releaseDate: latestRelease.value!.publishedAt,
-		})
-	);
+	await updateUserPreferences({ releaseDate: latestRelease.value!.publishedAt });
+};
+
+const toReleasesRoute = async () => {
+	await setReleasePreferences();
+	window.location.href = "/system/releases";
 };
 
 watch(

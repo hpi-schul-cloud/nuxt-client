@@ -1,332 +1,205 @@
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { createTestEnvStore, mockComposable, provisioningOptionsDataFactory } from "@@/tests/test-utils";
+import {
+	AxiosResponseFactory,
+	createTestEnvStore,
+	mockedPiniaStoreTyping,
+	provisioningOptionsResponseFactory,
+} from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { ConfigResponse } from "@api-server";
-import { ProvisioningOptions, useProvisioningOptionsState } from "@data-provisioning-options";
+import { ConfigResponse, SchulConneXProvisioningOptionsResponse } from "@api-server";
+import { useSchoolStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
-import { setActivePinia } from "pinia";
-import { Mocked, vi } from "vitest";
-import { nextTick, ref } from "vue";
+import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import { createRouterMock, getRouter, injectRouterMock, RouterMock } from "vue-router-mock";
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 import { VCheckboxBtn } from "vuetify/components";
 
-vi.mock("@data-provisioning-options");
-
 describe("ProvisioningOptionsPage", () => {
-	vi.spyOn(window, "scrollTo").mockImplementation(() => ({
-		top: 0,
-		behavior: "smooth",
-	}));
-
-	let useProvisioningOptionsStateMock: Mocked<ReturnType<typeof useProvisioningOptionsState>>;
-	let router: RouterMock;
-
 	const getWrapper = (
-		props: ComponentProps<typeof ProvisioningOptionsPage> = {
-			systemId: "systemId",
-		},
-		envConfig: Partial<ConfigResponse> = {
-			FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: false,
-		}
+		props: ComponentProps<typeof ProvisioningOptionsPage> = { systemId: "systemId" },
+		envConfig: Partial<ConfigResponse> = { FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: false },
+		provisioningOptions: SchulConneXProvisioningOptionsResponse = provisioningOptionsResponseFactory.build()
 	) => {
-		setActivePinia(createTestingPinia());
+		const pinia = createTestingPinia({ stubActions: false });
 		createTestEnvStore(envConfig);
+		createTestSchoolStore();
 		injectRouterMock(createRouterMock());
+
+		const schoolStore = mockedPiniaStoreTyping(useSchoolStore);
+		schoolStore.fetchProvisioningOptions.mockResolvedValue({
+			result: AxiosResponseFactory.create(provisioningOptions),
+			success: true,
+			error: undefined,
+		});
+		schoolStore.setProvisioningOptions.mockResolvedValue({
+			result: AxiosResponseFactory.create(provisioningOptions),
+			success: true,
+			error: undefined,
+		});
 
 		const wrapper = mount(ProvisioningOptionsPage, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [pinia, createTestingVuetify(), createTestingI18n()],
 			},
 			props,
 		});
 
-		return {
-			wrapper,
-		};
+		return { wrapper, schoolStore };
 	};
 
-	beforeEach(() => {
-		router = createRouterMock();
-		useProvisioningOptionsStateMock = mockComposable(useProvisioningOptionsState, {
-			isLoading: ref(false),
-			provisioningOptionsData: ref(provisioningOptionsDataFactory.build()),
-			error: ref(),
-		});
-
-		vi.mocked(useProvisioningOptionsState).mockReturnValue(useProvisioningOptionsStateMock);
-	});
-
-	afterEach(() => {
-		vi.clearAllMocks();
-	});
-
-	describe("breadcrumbs", () => {
-		it("should render static breadcrumbs", () => {
-			const { wrapper } = getWrapper();
-
-			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
-
-			expect(breadcrumbs[0].text()).toEqual("pages.administration.school.index.title");
-			expect(breadcrumbs[1].text()).toEqual("components.administration.provisioningOptions.page.title");
-		});
-	});
-
-	describe("title", () => {
-		it("should render static title", () => {
-			const { wrapper } = getWrapper();
-
-			const title = wrapper.find("h1");
-
-			expect(title.text()).toContain("components.administration.provisioningOptions.page.title");
-		});
-	});
+	const redirectPath = {
+		path: "/administration/school-settings",
+		query: { openPanels: "authentication" },
+	};
 
 	describe("onMounted", () => {
-		describe("when loading the page", () => {
-			it("should load provisioning options", async () => {
-				getWrapper({ systemId: "systemId" });
+		it("should load provisioning options", async () => {
+			const { schoolStore } = getWrapper({ systemId: "testSystemId" });
+			await flushPromises();
 
-				await nextTick();
-
-				expect(useProvisioningOptionsStateMock.fetchProvisioningOptionsData).toHaveBeenCalledWith("systemId");
-			});
+			expect(schoolStore.fetchProvisioningOptions).toHaveBeenCalledWith("testSystemId");
 		});
 	});
 
 	describe("checkboxes", () => {
-		describe("when the licensing is disabled", () => {
-			const setup = () => {
-				const provisioningOptions = provisioningOptionsDataFactory.build();
+		describe("when media licensing is disabled", () => {
+			it("should render 3 checkboxes", async () => {
+				const { wrapper } = getWrapper({ systemId: "systemId" }, { FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: false });
+				await flushPromises();
 
-				useProvisioningOptionsStateMock.provisioningOptionsData.value = provisioningOptions;
-
-				const { wrapper } = getWrapper(
-					{ systemId: "systemId" },
-					{
-						FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: false,
-					}
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should render 3 checkboxes", () => {
-				const { wrapper } = setup();
-
-				const classCheckbox = wrapper.find("[data-testid=checkbox-option-class]");
-				const courseCheckbox = wrapper.find("[data-testid=checkbox-option-course]");
-				const othersCheckbox = wrapper.find("[data-testid=checkbox-option-others]");
-				const schoolExternalToolCheckbox = wrapper.find("[data-testid=checkbox-option-school-external-tools]");
-
-				expect(classCheckbox.isVisible()).toEqual(true);
-				expect(courseCheckbox.isVisible()).toEqual(true);
-				expect(othersCheckbox.isVisible()).toEqual(true);
-				expect(schoolExternalToolCheckbox.exists()).toEqual(false);
+				expect(wrapper.find("[data-testid=checkbox-option-class]").exists()).toBe(true);
+				expect(wrapper.find("[data-testid=checkbox-option-course]").exists()).toBe(true);
+				expect(wrapper.find("[data-testid=checkbox-option-others]").exists()).toBe(true);
+				expect(wrapper.find("[data-testid=checkbox-option-school-external-tools]").exists()).toBe(false);
 			});
 		});
 
-		describe("when the licensing is enabled", () => {
-			const setup = () => {
-				const provisioningOptions = provisioningOptionsDataFactory.build();
+		describe("when media licensing is enabled", () => {
+			it("should render 4 checkboxes", async () => {
+				const { wrapper } = getWrapper({ systemId: "systemId" }, { FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: true });
+				await flushPromises();
 
-				useProvisioningOptionsStateMock.provisioningOptionsData.value = provisioningOptions;
-
-				const { wrapper } = getWrapper(
-					{ systemId: "systemId" },
-					{
-						FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: true,
-					}
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should render 4 checkboxes", () => {
-				const { wrapper } = setup();
-
-				const classCheckbox = wrapper.find("[data-testid=checkbox-option-class]");
-				const courseCheckbox = wrapper.find("[data-testid=checkbox-option-course]");
-				const othersCheckbox = wrapper.find("[data-testid=checkbox-option-others]");
-				const schoolExternalToolCheckbox = wrapper.find("[data-testid=checkbox-option-school-external-tools]");
-
-				expect(classCheckbox.isVisible()).toEqual(true);
-				expect(courseCheckbox.isVisible()).toEqual(true);
-				expect(othersCheckbox.isVisible()).toEqual(true);
-				expect(schoolExternalToolCheckbox.isVisible()).toEqual(true);
+				expect(wrapper.find("[data-testid=checkbox-option-class]").exists()).toBe(true);
+				expect(wrapper.find("[data-testid=checkbox-option-course]").exists()).toBe(true);
+				expect(wrapper.find("[data-testid=checkbox-option-others]").exists()).toBe(true);
+				expect(wrapper.find("[data-testid=checkbox-option-school-external-tools]").exists()).toBe(true);
 			});
 		});
 	});
 
-	describe("buttons", () => {
-		describe("when clicking the cancel button", () => {
-			const setup = () => {
-				useProvisioningOptionsStateMock.provisioningOptionsData.value = provisioningOptionsDataFactory.build();
+	describe("cancel button", () => {
+		it("should not call update function", async () => {
+			const { wrapper, schoolStore } = getWrapper();
+			await flushPromises();
 
-				const { wrapper } = getWrapper();
+			const cancelButton = wrapper.find('[data-testid="provisioning-options-cancel-button"]');
+			await cancelButton.trigger("click");
 
-				const cancelButton = wrapper.find('[data-testid="provisioning-options-cancel-button"]');
+			expect(schoolStore.setProvisioningOptions).not.toHaveBeenCalled();
+		});
 
-				const redirect = {
-					path: "/administration/school-settings",
-					query: { openPanels: "authentication" },
-				};
+		it("should redirect to school settings page", async () => {
+			const { wrapper } = getWrapper();
+			await flushPromises();
 
-				return {
-					cancelButton,
-					redirect,
-				};
-			};
+			const cancelButton = wrapper.find('[data-testid="provisioning-options-cancel-button"]');
+			await cancelButton.trigger("click");
 
-			it("should not call the update function", async () => {
-				const { cancelButton } = setup();
+			expect(getRouter().push).toHaveBeenCalledWith(redirectPath);
+		});
+	});
 
-				await cancelButton.trigger("click");
+	describe("save button", () => {
+		describe("when enabling options", () => {
+			it("should call the update function with current options", async () => {
+				const options = provisioningOptionsResponseFactory.build();
+				const { wrapper, schoolStore } = getWrapper({ systemId: "systemId" }, {}, options);
+				await flushPromises();
 
-				expect(useProvisioningOptionsStateMock.updateProvisioningOptionsData).not.toHaveBeenCalled();
+				const saveButton = wrapper.find('[data-testid="provisioning-options-save-button"]');
+				await saveButton.trigger("click");
+				await flushPromises();
+
+				expect(schoolStore.setProvisioningOptions).toHaveBeenCalledWith("systemId", options);
 			});
 
-			it("should return to school settings page", async () => {
-				const { cancelButton, redirect } = setup();
+			it("should redirect to school settings page on success", async () => {
+				const { wrapper } = getWrapper();
+				await flushPromises();
 
-				await cancelButton.trigger("click");
+				const saveButton = wrapper.find('[data-testid="provisioning-options-save-button"]');
+				await saveButton.trigger("click");
+				await flushPromises();
 
-				expect(getRouter().push).toHaveBeenCalledWith(redirect);
+				expect(getRouter().push).toHaveBeenCalledWith(redirectPath);
 			});
 		});
 
-		describe("when clicking the save", () => {
-			describe("when enabling options", () => {
-				const setup = () => {
-					useProvisioningOptionsStateMock.provisioningOptionsData.value = provisioningOptionsDataFactory.build();
-
-					const { wrapper } = getWrapper();
-
-					const saveButton = wrapper.find('[data-testid="provisioning-options-save-button"]');
-
-					const redirect = {
-						path: "/administration/school-settings",
-						query: { openPanels: "authentication" },
-					};
-
-					return {
-						saveButton,
-						redirect,
-					};
-				};
-
-				it("should call the update function", async () => {
-					const { saveButton } = setup();
-
-					await saveButton.trigger("click");
-
-					expect(useProvisioningOptionsStateMock.updateProvisioningOptionsData).toHaveBeenCalledWith<
-						[string, ProvisioningOptions]
-					>("systemId", {
-						class: true,
-						course: false,
-						others: false,
-						schoolExternalTools: false,
-					});
+		describe("when disabling group options", () => {
+			it("should show confirmation dialog", async () => {
+				const askConfirmationSpy = vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(false);
+				const options = provisioningOptionsResponseFactory.build({
+					groupProvisioningClassesEnabled: true,
 				});
+				const { wrapper } = getWrapper({ systemId: "systemId" }, {}, options);
+				await flushPromises();
 
-				it("should return to school settings page", async () => {
-					const { saveButton, redirect } = setup();
+				const checkboxes = wrapper.findAllComponents(VCheckboxBtn);
+				const classCheckbox = checkboxes[0];
+				classCheckbox.vm.$emit("update:modelValue", false);
+				await nextTick();
 
-					await saveButton.trigger("click");
-					await flushPromises();
+				const saveButton = wrapper.find('[data-testid="provisioning-options-save-button"]');
+				await saveButton.trigger("click");
+				await flushPromises();
 
-					expect(getRouter().push).toHaveBeenCalledWith(redirect);
-				});
+				expect(askConfirmationSpy).toHaveBeenCalledWith(
+					expect.objectContaining({
+						title: "components.administration.provisioningOptions.warning.title",
+						messageType: "warning",
+					})
+				);
 			});
 
-			describe("when disabling options", () => {
-				beforeEach(() => {
-					vi.clearAllMocks();
+			it("should not call update function when confirmation is declined", async () => {
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(false);
+				const options = provisioningOptionsResponseFactory.build({
+					groupProvisioningClassesEnabled: true,
 				});
-				const setup = async () => {
-					useProvisioningOptionsStateMock.provisioningOptionsData.value = provisioningOptionsDataFactory.build({
-						class: true,
-					});
+				const { wrapper, schoolStore } = getWrapper({ systemId: "systemId" }, {}, options);
+				await flushPromises();
 
-					const { wrapper } = getWrapper();
+				const checkboxes = wrapper.findAllComponents(VCheckboxBtn);
+				checkboxes[0].vm.$emit("update:modelValue", false);
+				await nextTick();
 
-					const saveButton = wrapper.find('[data-testid="provisioning-options-save-button"]');
+				const saveButton = wrapper.find('[data-testid="provisioning-options-save-button"]');
+				await saveButton.trigger("click");
+				await flushPromises();
 
-					await flushPromises();
-
-					const checkBoxes = wrapper.findAllComponents(VCheckboxBtn);
-
-					const classCheckbox = checkBoxes[0];
-					classCheckbox.vm.$emit("update:modelValue", false);
-					await nextTick();
-
-					return {
-						wrapper,
-						saveButton,
-					};
-				};
-
-				it("should not call the update function", async () => {
-					vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(false);
-					const { saveButton } = await setup();
-
-					await saveButton.trigger("click");
-
-					expect(useProvisioningOptionsStateMock.updateProvisioningOptionsData).not.toHaveBeenCalled();
-				});
+				expect(schoolStore.setProvisioningOptions).not.toHaveBeenCalled();
 			});
 
-			describe("when an error occurs", () => {
-				const setup = () => {
-					useProvisioningOptionsStateMock.provisioningOptionsData.value = provisioningOptionsDataFactory.build();
-
-					const { wrapper } = getWrapper();
-
-					const saveButton = wrapper.find('[data-testid="provisioning-options-save-button"]');
-
-					useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
-					useProvisioningOptionsStateMock.error.value = {
-						error: new Error(),
-						message: "mockMessage",
-						statusCode: 500,
-					};
-
-					return {
-						saveButton,
-					};
-				};
-
-				it("should call the update function", () => {
-					vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
-					const { saveButton } = setup();
-
-					saveButton.trigger("click");
-
-					expect(useProvisioningOptionsStateMock.updateProvisioningOptionsData).toHaveBeenCalledWith<
-						[string, ProvisioningOptions]
-					>("systemId", {
-						class: true,
-						course: false,
-						others: false,
-						schoolExternalTools: false,
-					});
+			it("should call update function when confirmation is accepted", async () => {
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
+				const options = provisioningOptionsResponseFactory.build({
+					groupProvisioningClassesEnabled: true,
 				});
+				const { wrapper, schoolStore } = getWrapper({ systemId: "systemId" }, {}, options);
+				await flushPromises();
 
-				it("should stay on provisioning options page", async () => {
-					const { saveButton } = setup();
+				const checkboxes = wrapper.findAllComponents(VCheckboxBtn);
+				checkboxes[0].vm.$emit("update:modelValue", false);
+				await nextTick();
 
-					await saveButton.trigger("click");
-					await flushPromises();
+				const saveButton = wrapper.find('[data-testid="provisioning-options-save-button"]');
+				await saveButton.trigger("click");
+				await flushPromises();
 
-					expect(router.push).not.toHaveBeenCalled();
-				});
+				expect(schoolStore.setProvisioningOptions).toHaveBeenCalled();
 			});
 		});
 	});

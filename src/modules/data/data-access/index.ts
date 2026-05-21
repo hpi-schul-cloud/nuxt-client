@@ -1,2 +1,2 @@
 export * from "./system.composable";
-export * from "./VideoConference.composable";
+export * from "./video-conference.composable";

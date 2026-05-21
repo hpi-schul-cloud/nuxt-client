@@ -1,17 +1,15 @@
 import AdministrationRoomMembersPage from "./AdministrationRoomMembers.page.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
 import {
 	createTestAppStoreWithRole,
 	createTestEnvStore,
 	mockedPiniaStoreTyping,
 	schoolFactory,
 } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { RoleName } from "@api-server";
-import { useAdministrationRoomStore, useRoomMembersStore } from "@data-room";
+import { useRoomMembersStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { Mock, vi } from "vitest";
@@ -26,64 +24,38 @@ vi.mock("@/plugins/i18n");
 (useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("AdministrationRoomMembers.page", () => {
-	const ownSchool = {
-		id: "school-id",
-		name: "Paul-Gerhardt-Gymnasium",
-	};
-
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		injectRouterMock(createRouterMock());
 
-		setupStores({
-			schoolsModule: SchoolsModule,
-		});
-
 		createTestAppStoreWithRole(RoleName.ADMINISTRATOR);
-
-		schoolsModule.setSchool(schoolFactory.build(ownSchool));
+		createTestSchoolStore({
+			schoolDetails: schoolFactory.build({
+				id: "school-id",
+				name: "Paul-Gerhardt-Gymnasium",
+			}),
+		});
 	});
-	afterEach(() => {
-		vi.clearAllMocks();
-	});
 
-	const setup = (options?: { isEmptyList?: boolean; featureFlag?: boolean }) => {
+	const setup = (options?: { featureFlag?: boolean }) => {
 		createTestEnvStore({
 			FEATURE_ADMINISTRATE_ROOMS_ENABLED: options?.featureFlag ?? true,
 		});
-		const isEmptyList = options?.isEmptyList ?? false;
+
+		const memberStore = mockedPiniaStoreTyping(useRoomMembersStore);
+		memberStore.setAdminMode(true);
 
 		const wrapper = mount(AdministrationRoomMembersPage, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingPinia({
-						initialState: {
-							administrationRoomStore: {
-								roomList: [],
-								loading: false,
-								isEmptyList: isEmptyList,
-								selectedRoom: {
-									id: "room-id",
-									name: "Room Name",
-								},
-							},
-						},
-					}),
-				],
+				plugins: [createTestingVuetify()],
 				stubs: {
 					RoomAdminMembersTable: true,
 				},
 			},
 		});
 
-		const adminRoomStore = mockedPiniaStoreTyping(useAdministrationRoomStore);
-		const memberStore = mockedPiniaStoreTyping(useRoomMembersStore);
-		memberStore.setAdminMode(true);
-
 		return {
 			wrapper,
-			adminRoomStore,
 			memberStore,
 		};
 	};

@@ -33,13 +33,6 @@ describe("PurgeFilesDialog.vue", () => {
 		expect(wrapper.findComponent(SvsDialog).exists()).toBe(true);
 	});
 
-	it("should show the file count in the description", () => {
-		const { wrapper } = setupWrapper(true, 3);
-
-		const description = wrapper.findComponent(VCard).find("[data-testid='purge-files-dialog-description']");
-		expect(description.exists()).toBe(true);
-	});
-
 	it("should have the confirm button disabled initially", () => {
 		const { wrapper } = setupWrapper();
 

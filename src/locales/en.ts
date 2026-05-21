@@ -154,6 +154,9 @@ export default {
 	"common.notifications.errors.notFinished": "{type} could not be completed.",
 	"common.notifications.errors.notReverted": "{type} could not be reset",
 	"common.notifications.errors.notRestored": "{type} could not be restored.",
+	"common.notifications.errors.notShared": "{type} could not be shared. | {type} could not be shared.",
+	"common.notification.error.preferences.update": "User preferences could not be updated.",
+	"common.notification.error.preferences.retrieve": "User preferences could not be retrieved.",
 	"common.notification.error.videoConference.notFetched": "The video conference could not be fetched.",
 	"common.notification.error.videoConference.notJoined": "The video conference could not be joined.",
 	"common.notification.error.videoConference.notStarted": "The video conference could not be started.",
@@ -208,6 +211,7 @@ export default {
 	"common.validation.required": "Please fill out this field",
 	"common.validation.required2": "This is a mandatory field.",
 	"common.validation.tooLong": "The text you entered exceeds the maximum length",
+	"common.validation.fileTooBig": "The file must not exceed {maxSize} KB.",
 	"common.validation.tooShort": "The text you entered is below the minimum length",
 	"common.validation.containsOpeningTag": "Please insert a space after the less-than sign.",
 	"common.validation.nonEmptyString": "This is a mandatory field and must not contain only spaces.",
@@ -242,6 +246,7 @@ export default {
 	"common.words.languages.uk": "Ukrainian",
 	"common.words.learnContent": "Learning content",
 	"common.words.mainSchool": "Main School",
+	"common.words.member": "Member | Members",
 	"common.words.no": "No",
 	"common.words.not": "not",
 	"common.words.noChoice": "No choice",
@@ -603,7 +608,6 @@ export default {
 	"components.legacy.footer.contact": "Contact",
 	"components.legacy.footer.github": "GitHub",
 	"components.legacy.footer.imprint": "Imprint",
-	"components.legacy.footer.lokalise_logo_alt": "lokalise.com logo",
 	"components.legacy.footer.powered_by": "Translated by",
 	"components.legacy.footer.privacy_policy_thr": "Privacy Policy",
 	"components.legacy.footer.privacy_policy": "Privacy Policy",
@@ -977,7 +981,7 @@ export default {
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"The school is in the transfer phase to the new school year. No classes and users can be created. Please contact the school administrator!",
 	"loggedin.text.schoolInTransferPhaseStartNew":
-		'The school is in the transfer phase to the new school year. No classes and users can be created. Please ring in <a href="/administration/school/"> the new school year here!</a>',
+		'The school is in the transfer phase to the new school year. No classes and users can be created. Please ring in <a href="/administration/school-settings/"> the new school year here!</a>',
 	"loggedin.text.schoolInMigrationModeStarted":
 		'The school is in user migration mode. To migrate users, please go to <a href="/administration/migration/">this page</a>.',
 	"loggedin.text.schoolInMigrationMode":
@@ -2036,7 +2040,8 @@ export default {
 	"pages.folder.trash.link": "Show trash",
 	"pages.folder.trash.emptyState": "The trash is empty",
 	"pages.folder.trash.infoText": "Files are automatically deleted 7 days after being moved to the trash.",
-	"pages.folder.trash.columns.deletedAt": "Deleted on",
+	"pages.folder.trash.columns.movedOn": "Moved on",
+	"pages.folder.trash.columns.purgeAt": "Will be deleted on",
 	"pages.folder.trash.ariaLabels.actionMenu": "Action menu for {name}",
 	"pages.folder.trash.ariaLabels.menu": "Trash menu",
 	"pages.folder.trash.emptyTrash": "Empty trash",
@@ -2045,8 +2050,6 @@ export default {
 	"pages.folder.trash.purge.action": "Delete permanently",
 	"pages.folder.trash.purge.success": "Files have been permanently deleted.",
 	"pages.folder.trash.purge.error": "Files could not be permanently deleted.",
-	"pages.folder.trash.purge.dialog.title": "Permanently delete files?",
-	"pages.folder.trash.purge.dialog.description":
-		"You are about to permanently delete {count} file(s). This action cannot be undone.",
-	"pages.folder.trash.purge.dialog.checkboxLabel": "I understand that this action is permanent and cannot be undone.",
+	"pages.folder.trash.purge.dialog.title": "Permanently delete {count} file(s)?",
+	"pages.folder.trash.purge.dialog.checkboxLabel": "Deletion cannot be undone.",
 };

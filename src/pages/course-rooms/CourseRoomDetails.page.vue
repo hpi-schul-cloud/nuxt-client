@@ -55,8 +55,17 @@
 			:room-id="courseId"
 			data-testid="room-content"
 			@copy-board-element="onCopyRequested"
+			@share-board-element="onShareRequested"
 		/>
-		<ShareModal :type="ShareTokenBodyParamsParentType.COURSES" />
+		<ShareDialog
+			v-if="shareItemType"
+			:is-open="isShareDialogOpen"
+			:share-item-type="shareItemType"
+			:share-url="shareUrl"
+			@confirm="onConfirmShare"
+			@cancel="onCancelShare"
+			@done="onDone"
+		/>
 		<CopyDialog
 			:is-open="isCopyDialogOpen"
 			:copy-item-type="copyItemType"
@@ -86,10 +95,7 @@ import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCommonCartridgeExportModal.vue";
 import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.vue";
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
-import ShareModal from "@/components/share/ShareModal.vue";
-import ShareModule from "@/store/share";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
-import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	BoardLayout,
@@ -104,6 +110,7 @@ import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { CopyDialog, useCopyFlow } from "@feature-copy";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
+import { ShareDialog, ShareParams, useShareFlow } from "@feature-share";
 import {
 	mdiAccountGroupOutline,
 	mdiContentCopy,
@@ -149,7 +156,6 @@ type MenuItem = {
 const route = useRoute();
 const router = useRouter();
 
-const shareModule: ShareModule = injectStrict(SHARE_MODULE_KEY);
 const courseRoomDetailsStore = useCourseRoomDetailsStore();
 
 const { roomData, scopePermissions, isLocked } = storeToRefs(courseRoomDetailsStore);
@@ -371,21 +377,12 @@ const setActiveTabIfPageCached = (event: PageTransitionEvent) => {
 	}
 };
 
-const onShareCourse = () => {
-	if (useEnvConfig().value.FEATURE_COURSE_SHARE) {
-		shareModule.startShareFlow({
-			id: courseId.value,
-			type: ShareTokenBodyParamsParentType.COURSES,
-		});
-	}
-};
-
 const refreshCourseRoom = async () => {
 	await fetchContent(courseId.value);
 };
 
 const {
-	isDialogOpen: isCopyDialogOpen,
+	isCopyDialogOpen: isCopyDialogOpen,
 	copyItemType,
 	executeCopyCourse,
 	executeCopyTask,
@@ -426,6 +423,35 @@ const onCopyRequested = async ({ id, type }: { id: string; type: ContentItemType
 			}
 			break;
 		}
+	}
+};
+
+const {
+	isShareDialogOpen,
+	shareItemType,
+	shareUrl,
+	executeShare,
+	onConfirm: onConfirmShare,
+	onCancel: onCancelShare,
+	onDone,
+} = useShareFlow();
+
+const featureFlagByType = computed<Partial<Record<ShareTokenBodyParamsParentType, boolean>>>(() => ({
+	[ShareTokenBodyParamsParentType.COURSES]: useEnvConfig().value.FEATURE_COURSE_SHARE,
+	[ShareTokenBodyParamsParentType.COLUMN_BOARD]: useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE,
+	[ShareTokenBodyParamsParentType.LESSONS]: useEnvConfig().value.FEATURE_LESSON_SHARE,
+	[ShareTokenBodyParamsParentType.TASKS]: useEnvConfig().value.FEATURE_TASK_SHARE,
+}));
+
+const onShareCourse = () =>
+	onShareRequested({
+		id: courseId.value,
+		type: ShareTokenBodyParamsParentType.COURSES,
+	});
+
+const onShareRequested = (params: ShareParams) => {
+	if (featureFlagByType.value[params.type]) {
+		executeShare(params);
 	}
 };
 

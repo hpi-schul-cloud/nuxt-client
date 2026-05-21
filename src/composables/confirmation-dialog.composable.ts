@@ -1,3 +1,4 @@
+import { useAwaitableAction } from "@/composables/awaitable-action.composable";
 import { i18nKeyExists, useI18nGlobal } from "@/plugins/i18n";
 import { createSharedComposable } from "@vueuse/core";
 import { computed, ref } from "vue";
@@ -19,33 +20,21 @@ export interface ConfirmationOptions {
  * This composable is only meant to be used in App.vue where the dialog is rendered.
  */
 export const useInternalConfirmationDialog = createSharedComposable(() => {
-	let resolvePromise: ((value: boolean) => void) | undefined = undefined;
+	const confirmationAction = useAwaitableAction<boolean>();
 
 	const dialogOptions = ref<ConfirmationOptions | undefined>();
-	const isDialogOpen = ref(false);
-
-	const closeDialog = (result: boolean) => {
-		if (resolvePromise) {
-			resolvePromise(result);
-		}
-		isDialogOpen.value = false;
-		resolvePromise = undefined;
-	};
 
 	const resetDialogOptions = () => {
 		dialogOptions.value = undefined;
 	};
 
-	const confirm = () => closeDialog(true);
-	const cancel = () => closeDialog(false);
+	const confirm = () => confirmationAction.complete(true);
+	const cancel = () => confirmationAction.cancel();
 
-	const askInternal = (options: ConfirmationOptions): Promise<boolean> => {
+	const askInternal = async (options: ConfirmationOptions): Promise<boolean> => {
 		dialogOptions.value = options;
-		isDialogOpen.value = true;
-
-		return new Promise<boolean>((resolve) => {
-			resolvePromise = resolve;
-		});
+		const { completed } = await confirmationAction.start();
+		return completed;
 	};
 
 	const confirmationTitle = computed(() => {
@@ -67,7 +56,7 @@ export const useInternalConfirmationDialog = createSharedComposable(() => {
 		confirmationTitle,
 		confirmationMessage,
 		dialogOptions,
-		isDialogOpen,
+		isDialogOpen: confirmationAction.isActive,
 		confirm,
 		cancel,
 		resetDialogOptions,
