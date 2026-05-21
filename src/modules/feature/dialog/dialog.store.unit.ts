@@ -78,7 +78,7 @@ describe("useDialogStore", () => {
 			store.createDialog("confirmation", { title: "Queued" });
 			const queuedRequest = store.queue[0];
 
-			store.onCompleteDialog(queuedRequest as never, true);
+			store.onCompleteDialog(queuedRequest, true);
 
 			expect(queuedRequest.pendingSettlement).toBeUndefined();
 		});
