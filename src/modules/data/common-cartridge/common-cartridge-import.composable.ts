@@ -21,7 +21,7 @@ export const useCommonCartridgeImport = () => {
 		}
 
 		try {
-			commonCartridgeApi.commonCartridgeControllerUploadFileAndStartImport(file);
+			await commonCartridgeApi.commonCartridgeControllerUploadFileAndStartImport(file);
 			isSuccess.value = true;
 		} catch {
 			isSuccess.value = false;
