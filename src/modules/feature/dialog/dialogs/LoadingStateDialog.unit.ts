@@ -1,63 +1,53 @@
 import LoadingStateDialog from "./LoadingStateDialog.vue";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils/mockedPiniaStoreTyping";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createTestingPinia } from "@pinia/testing";
-import { nextTick } from "vue";
 import { VCard, VDialog, VProgressLinear } from "vuetify/lib/components/index";
 
 describe("LoadingStateDialog", () => {
-	const setup = async (isLoading: boolean) => {
+	const setup = (modelValue: boolean, loadingText = "") => {
 		const wrapper = mount(LoadingStateDialog, {
+			props: { modelValue, loadingText },
 			global: {
-				plugins: [createTestingVuetify(), createTestingPinia()],
+				plugins: [createTestingVuetify()],
 			},
 		});
-		const loadingStore = mockedPiniaStoreTyping(useLoadingStore);
-		loadingStore.isLoading = isLoading;
-		await nextTick();
 
-		return { wrapper, loadingStore };
+		return { wrapper };
 	};
 
-	it("should display its contents when is loading true", async () => {
-		const { wrapper } = await setup(true);
+	it("should display its contents when modelValue is true", () => {
+		const { wrapper } = setup(true);
 
 		const dialog = wrapper.findComponent(VDialog);
 		const card = dialog.findComponent(VCard);
 		expect(card.exists()).toBe(true);
 	});
 
-	it("should not display its contents when is loading false", async () => {
-		const { wrapper } = await setup(false);
+	it("should not display its contents when modelValue is false", () => {
+		const { wrapper } = setup(false);
 
 		const card = wrapper.findComponent(VCard);
 		expect(card.exists()).toBe(false);
 	});
 
-	it("should update model value to false when is loading set to false", async () => {
-		const { wrapper, loadingStore } = await setup(true);
-		loadingStore.isLoading = false;
-		await nextTick();
-
-		const dialog = wrapper.findComponent(VDialog);
-		expect(dialog.props().modelValue).toBe(false);
-	});
-
-	it("should display the text", async () => {
-		const { wrapper, loadingStore } = await setup(true);
+	it("should display the loading text", () => {
 		const loadingText = "Loading...";
-		loadingStore.loadingText = loadingText;
-		await nextTick();
+		const { wrapper } = setup(true, loadingText);
 
-		const card = wrapper.findComponent(VCard);
-		const dialogTitle = card.find('[data-testid="dialog-text"]');
-
-		expect(dialogTitle.text()).toBe(loadingText);
+		const card = wrapper.findComponent(VDialog).findComponent(VCard);
+		expect(card.text()).toContain(loadingText);
 	});
 
-	it("should display the progress bar", async () => {
-		const { wrapper } = await setup(true);
+	it("should display the progress bar", () => {
+		const { wrapper } = setup(true);
 
 		expect(wrapper.findComponent(VProgressLinear).exists()).toBe(true);
+	});
+
+	it("should emit after-leave when the VDialog transition ends", async () => {
+		const { wrapper } = setup(true);
+
+		await wrapper.findComponent(VDialog).vm.$emit("after-leave");
+
+		expect(wrapper.emitted("after-leave")).toBeDefined();
 	});
 });

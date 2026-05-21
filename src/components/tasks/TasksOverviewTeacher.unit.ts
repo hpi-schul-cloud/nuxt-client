@@ -36,17 +36,10 @@ describe("TasksOverviewTeacher", () => {
 		});
 		vi.mocked(useTasksOfOverview).mockReturnValue(useTasksOfOverviewMock);
 
-		useCopyFlowMock = mockComposable(useCopyFlow, {
-			isCopyDialogOpen: ref(false),
-			copyItemType: ref(ContentItemTypeEnum.Task),
-		});
+		useCopyFlowMock = mockComposable(useCopyFlow, {});
 		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
 
-		useShareFlowMock = mockComposable(useShareFlow, {
-			isShareDialogOpen: ref(false),
-			shareItemType: ref(ShareTokenBodyParamsParentType.TASKS),
-			shareUrl: ref("http://example.com/share-url"),
-		});
+		useShareFlowMock = mockComposable(useShareFlow, {});
 		vi.mocked(useShareFlow).mockReturnValue(useShareFlowMock);
 	});
 
@@ -142,25 +135,6 @@ describe("TasksOverviewTeacher", () => {
 			finishedPane?.vm.$emit("load-more-tasks");
 
 			expect(useTasksOfOverviewMock.loadMoreFinishedTasks).toHaveBeenCalled();
-		});
-	});
-
-	describe("Copy Dialog", () => {
-		it("should render CopyDialog", () => {
-			const wrapper = mountComponent();
-
-			const modal = wrapper.findComponent({ name: "CopyDialog" });
-			expect(modal.exists()).toBe(true);
-		});
-	});
-
-	describe("Share Modal", () => {
-		it("should render ShareDialog for tasks", () => {
-			const wrapper = mountComponent();
-
-			const modal = wrapper.findComponent({ name: "ShareDialog" });
-			expect(modal.exists()).toBe(true);
-			expect(modal.props("shareItemType")).toBe(ShareTokenBodyParamsParentType.TASKS);
 		});
 	});
 });

@@ -4,18 +4,19 @@ import { expectNotification, mockApi, mockApiResponse, mountComposable } from "@
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
 import { CopyApiResponse, CopyApiResponseStatus, CopyApiResponseType } from "@api-server";
-import { useLoadingStore, useNotificationStore } from "@data-app";
+import { useNotificationStore } from "@data-app";
+import * as featureDialog from "@feature-dialog";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 
+vi.mock("@feature-dialog", () => ({ openDialog: vi.fn(), withLoadingState: vi.fn() }));
+
 let courseRoomsApi: Mocked<serverApi.CourseRoomsApiInterface>;
 let taskApi: Mocked<serverApi.TaskApiInterface>;
 let boardApi: Mocked<serverApi.BoardApiInterface>;
 let roomApi: Mocked<serverApi.RoomApiInterface>;
-
-let withLoadingStateSpy: ReturnType<typeof vi.spyOn>;
 
 type CopyResult =
 	| { success: boolean; error: Error; result: undefined }
@@ -147,26 +148,13 @@ describe("useCopyFlow", () => {
 		vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApi);
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApi);
 
-		withLoadingStateSpy = vi.spyOn(useLoadingStore(), "withLoadingState").mockImplementation(async (fn) => fn());
+		vi.mocked(featureDialog.openDialog).mockResolvedValue({ completed: false, data: undefined });
+		vi.mocked(featureDialog.withLoadingState).mockImplementation(async (fn: any) => fn());
 		vi.spyOn(logger, "error").mockImplementation(vi.fn());
 	});
 
 	afterEach(() => {
 		vi.clearAllMocks();
-	});
-
-	describe("initial state", () => {
-		const setup = () => mountCopyFlowComposable();
-
-		it("should have the dialog closed", () => {
-			const { isCopyDialogOpen: isDialogOpen } = setup();
-			expect(isDialogOpen.value).toBe(false);
-		});
-
-		it("should have the default copy item type set to course", () => {
-			const { copyItemType } = setup();
-			expect(copyItemType.value).toBe(ContentItemTypeEnum.Course);
-		});
 	});
 
 	describe.for([
@@ -177,18 +165,11 @@ describe("useCopyFlow", () => {
 		{ name: "executeCopyRoom", type: ContentItemTypeEnum.Room },
 	])("$name", ({ type }) => {
 		describe("when the method is called", () => {
-			const setup = () => mountCopyFlowComposable(type);
-
-			it("should set the dialog to open", async () => {
-				const { isCopyDialogOpen: isDialogOpen, executeCopyMethod } = setup();
+			it("should call openDialog with the correct copyItemType", () => {
+				vi.mocked(featureDialog.openDialog).mockReturnValue(new Promise(() => {}));
+				const { executeCopyMethod } = mountCopyFlowComposable(type);
 				executeCopyMethod();
-				expect(isDialogOpen.value).toBe(true);
-			});
-
-			it("should set copyItemType based on the executed method", () => {
-				const { copyItemType, executeCopyMethod } = setup();
-				executeCopyMethod();
-				expect(copyItemType.value).toBe(type);
+				expect(featureDialog.openDialog).toHaveBeenCalledWith("copy", { copyItemType: type });
 			});
 		});
 
@@ -196,15 +177,8 @@ describe("useCopyFlow", () => {
 			const setup = () => {
 				const composable = mountCopyFlowComposable(type);
 				const resultPromise = composable.executeCopyMethod();
-				composable.onCancel();
 				return { ...composable, resultPromise };
 			};
-
-			it("should set the dialog to closed", async () => {
-				const { isCopyDialogOpen: isDialogOpen, resultPromise } = setup();
-				await resultPromise;
-				expect(isDialogOpen.value).toBe(false);
-			});
 
 			it("should return error", async () => {
 				const { resultPromise } = setup();
@@ -217,22 +191,16 @@ describe("useCopyFlow", () => {
 			describe("and the api call is successfull", () => {
 				const setup = () => {
 					const response = mockApiSuccess(type);
+					vi.mocked(featureDialog.openDialog).mockResolvedValue({ completed: true, data: true });
 					const composable = mountCopyFlowComposable(type);
 					const resultPromise = composable.executeCopyMethod();
-					composable.onConfirm(true);
 					return { ...composable, resultPromise, response };
 				};
-
-				it("should set the dialog to closed", async () => {
-					const { isCopyDialogOpen: isDialogOpen, resultPromise } = setup();
-					await resultPromise;
-					expect(isDialogOpen.value).toBe(false);
-				});
 
 				it("should activate loading state during execution", async () => {
 					const { resultPromise } = setup();
 					await resultPromise;
-					expect(withLoadingStateSpy).toHaveBeenCalledOnce();
+					expect(featureDialog.withLoadingState).toHaveBeenCalledOnce();
 				});
 
 				it("should return the result", async () => {
@@ -252,22 +220,16 @@ describe("useCopyFlow", () => {
 			describe("and the api call fails", () => {
 				const setup = () => {
 					const error = mockApiFailure(type);
+					vi.mocked(featureDialog.openDialog).mockResolvedValue({ completed: true, data: true });
 					const composable = mountCopyFlowComposable(type);
 					const resultPromise = composable.executeCopyMethod();
-					composable.onConfirm(true);
 					return { ...composable, resultPromise, error };
 				};
-
-				it("should set the dialog to closed", async () => {
-					const { isCopyDialogOpen: isDialogOpen, resultPromise } = setup();
-					await resultPromise;
-					expect(isDialogOpen.value).toBe(false);
-				});
 
 				it("should activate loading state during execution", async () => {
 					const { resultPromise } = setup();
 					await resultPromise;
-					expect(withLoadingStateSpy).toHaveBeenCalledOnce();
+					expect(featureDialog.withLoadingState).toHaveBeenCalledOnce();
 				});
 
 				it("should return the error", async () => {

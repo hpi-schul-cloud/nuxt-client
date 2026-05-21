@@ -9,14 +9,8 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
-import {
-	CopyApiResponse,
-	CopyApiResponseStatus,
-	CopyApiResponseType,
-	Permission,
-	ShareTokenInfoResponseParentType,
-} from "@api-server";
-import { ImportCardDialog, ImportDialog, useImportFlow } from "@feature-import";
+import { CopyApiResponse, CopyApiResponseStatus, CopyApiResponseType, Permission } from "@api-server";
+import { useImportFlow } from "@feature-import";
 import { RoomGrid } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";
@@ -24,7 +18,7 @@ import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
-import { computed, nextTick, ref } from "vue";
+import { nextTick, toValue } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VSkeletonLoader } from "vuetify/components";
 
@@ -42,12 +36,9 @@ describe("RoomsPage", () => {
 		router = createRouterMock();
 		injectRouterMock(router);
 
-		useImportFlowMock = mockComposable(useImportFlow, {
-			isCardImportDialogOpen: computed(() => false),
-			isGenericImportDialogOpen: computed(() => false),
-			shareTokenInfo: ref<serverApi.ShareTokenInfoResponse>(),
-		});
+		useImportFlowMock = mockComposable(useImportFlow, {});
 		vi.mocked(useImportFlow).mockReturnValue(useImportFlowMock);
+		useImportFlowMock.executeImport.mockResolvedValue({ result: undefined, success: false, error: undefined });
 	});
 
 	const setup = (
@@ -64,7 +55,7 @@ describe("RoomsPage", () => {
 		const wrapper = mount(RoomsPage, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
-				stubs: { ImportDialog: true, ImportCardDialog: true, RouterLink: true },
+				stubs: { RouterLink: true },
 			},
 		});
 
@@ -110,54 +101,22 @@ describe("RoomsPage", () => {
 		const token = "6S6s-CWVVxEG";
 
 		it("should try to execute import with the token", () => {
-			useImportFlowMock.executeImport.mockImplementation((tokenParam: string) => {
-				expect(tokenParam).toBe(token);
-				return Promise.resolve({ result: undefined, success: false, error: undefined });
-			});
 			router.setQuery({ import: token });
 			setup();
+
+			expect(useImportFlowMock.executeImport).toHaveBeenCalledWith(token, expect.anything());
 		});
 	});
 
 	describe("when the page is in import mode", () => {
 		const token = "6S6s-CWVVxEG";
 
-		const mockSharedTokenInfo = (overrides: Partial<serverApi.ShareTokenInfoResponse>) => {
-			useImportFlowMock.shareTokenInfo.value = {
-				token,
-				parentType: ShareTokenInfoResponseParentType.CARD,
-				parentName: "Item Name",
-				...overrides,
-			};
-		};
+		it("should pass only unlocked rooms as available destinations", () => {
+			router.setQuery({ import: token });
+			setup();
 
-		it("should render import card dialog when activated", async () => {
-			mockSharedTokenInfo({ parentType: ShareTokenInfoResponseParentType.CARD });
-			useImportFlowMock.isCardImportDialogOpen = computed(() => true);
-			const { wrapper } = setup();
-			const importFLow = wrapper.findComponent(ImportCardDialog);
-			expect(importFLow.exists()).toBe(true);
-			expect(importFLow.props().shareTokenInfo.token).toBe(token);
-		});
-
-		it("should render generic import dialog when activated", () => {
-			mockSharedTokenInfo({ parentType: ShareTokenInfoResponseParentType.ROOM });
-			useImportFlowMock.isGenericImportDialogOpen = computed(() => true);
-			const { wrapper } = setup();
-			const importFLow = wrapper.findComponent(ImportDialog);
-			expect(importFLow.exists()).toBe(true);
-			expect(importFLow.props().shareTokenInfo.token).toBe(token);
-		});
-
-		it("should filter out locked rooms for the import flow", () => {
-			mockSharedTokenInfo({ parentType: ShareTokenInfoResponseParentType.ROOM });
-			useImportFlowMock.isGenericImportDialogOpen = computed(() => true);
-			const { wrapper } = setup();
-			const importFLow = wrapper.getComponent(ImportDialog);
-
-			const destinations = importFLow.props().availableDestinations;
-
-			expect(destinations).toHaveLength(1);
+			const [, destinations] = useImportFlowMock.executeImport.mock.calls[0];
+			expect(toValue(destinations)).toHaveLength(1);
 		});
 
 		describe("when the import flow succeeded", () => {
