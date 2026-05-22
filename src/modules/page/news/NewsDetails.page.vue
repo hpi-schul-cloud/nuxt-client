@@ -1,6 +1,5 @@
 <template>
 	<DefaultWireframe
-		v-if="newsInstance"
 		:headline="pageTitle"
 		:breadcrumbs="[
 			{
@@ -15,11 +14,11 @@
 		max-width="short"
 	>
 		<SvsLoading :is-loading="isLoadingNews">
-			<h2 data-testid="news-title">{{ newsInstance.title }}</h2>
+			<h2 data-testid="news-title">{{ newsInstance?.title }}</h2>
 			<div class="d-flex mb-2">
 				<div class="d-flex align-center text-subtitle mr-3" data-testid="news-last-touched">
 					<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
-					{{ lastTouched }}
+					{{ newsDate }}
 				</div>
 				<div class="d-flex align-center text-subtitle" data-testid="news-creator">
 					<VIcon :icon="mdiHumanMaleBoard" size="sm" class="mr-1" />
@@ -27,7 +26,7 @@
 				</div>
 			</div>
 			<VDivider class="mb-4" />
-			<RenderHTML :html="newsInstance?.content" class="ck-content" data-testid="news-content" />
+			<RenderHTML :html="newsInstance?.content ?? ''" class="ck-content" data-testid="news-content" />
 			<div class="d-flex mt-8 ga-3">
 				<VBtn
 					data-testid="news-edit-btn"
@@ -61,13 +60,36 @@ const route = useRoute();
 
 const newsId = computed(() => route.params.id as string | undefined);
 const { deleteNews } = useNewsActions();
-const { newsInstance, createdAtFormatted, lastTouched, creator, isLoadingNews } = useNews(newsId);
+const {
+	newsInstance,
+	createdAtFormattedStandard,
+	createdAtFormattedFromNow,
+	lastTouchedFormatted,
+	displayAtFormattedStandard,
+	displayAtFormattedFromNow,
+	creator,
+	isLoadingNews,
+} = useNews(newsId);
 
 const pageTitle = computed(() => {
-	if (!newsInstance.value?.createdAt) return t("pages.news.details.title.fallback");
+	const date =
+		displayAtFormattedStandard.value === "" ? createdAtFormattedStandard.value : displayAtFormattedStandard.value;
+
+	if (!date) return t("pages.news.details.title.fallback");
 	return t("pages.news.details.title", {
-		date: createdAtFormatted.value,
+		date,
 	});
+});
+
+const newsDate = computed(() => {
+	let date = createdAtFormattedFromNow.value;
+
+	if (displayAtFormattedFromNow.value !== "") {
+		date = displayAtFormattedFromNow.value;
+	}
+
+	const dateString = `${date}, last edited: ${lastTouchedFormatted.value}`;
+	return !lastTouchedFormatted.value ? date : dateString;
 });
 
 const onEdit = () => {

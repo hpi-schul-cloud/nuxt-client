@@ -97,17 +97,27 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 
 	watch(newsId, loadNews, { immediate: true });
 
-	const createdAtFormatted = computed(() => {
+	const createdAtFormattedStandard = computed(() => {
 		if (!newsInstance.value?.createdAt) return "";
 		return formatUtc(newsInstance.value.createdAt, "date");
 	});
 
-	const displayAtFormatted = computed(() => {
+	const createdAtFormattedFromNow = computed(() => {
+		if (!newsInstance.value?.createdAt) return "";
+		return fromNowUtc(newsInstance.value.createdAt);
+	});
+
+	const displayAtFormattedStandard = computed(() => {
 		if (!newsInstance.value?.displayAt) return "";
 		return formatUtc(newsInstance.value.displayAt, "date");
 	});
 
-	const lastTouched = computed(() => {
+	const displayAtFormattedFromNow = computed(() => {
+		if (!newsInstance.value?.displayAt) return "";
+		return fromNowUtc(newsInstance.value.displayAt);
+	});
+
+	const lastTouchedFormatted = computed(() => {
 		if (!newsInstance.value?.updatedAt) return "";
 		return fromNowUtc(newsInstance.value.updatedAt);
 	});
@@ -119,9 +129,11 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 
 	return {
 		newsInstance,
-		createdAtFormatted,
-		displayAtFormatted,
-		lastTouched,
+		createdAtFormattedStandard,
+		createdAtFormattedFromNow,
+		displayAtFormattedStandard,
+		displayAtFormattedFromNow,
+		lastTouchedFormatted,
 		creator,
 		loadNews,
 		isLoadingNews: isLoading,
