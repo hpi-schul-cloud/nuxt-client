@@ -1,9 +1,6 @@
 import ImportUsersMatchSearch from "./ImportUsersMatchSearch.vue";
-import { importUsersModule } from "@/store";
-import ImportUsersModule from "@/store/import-users";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	ImportUserResponse,
 	ImportUserResponseRoleNames,
@@ -12,6 +9,7 @@ import {
 	UserMatchResponseMatchedBy,
 	UserMatchResponseRoleNames,
 } from "@api-server";
+import { useImportUsersStore } from "@data-import-users";
 import { mdiFlag, mdiFlagOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
@@ -36,7 +34,8 @@ const testProps = {
 };
 
 const getWrapper = (props: ComponentProps<typeof ImportUsersMatchSearch>, options?: object) => {
-	vi.spyOn(importUsersModule, "fetchAllUsers").mockResolvedValue();
+	const importUsersStore = useImportUsersStore();
+	vi.spyOn(importUsersStore, "fetchAllUsers").mockResolvedValue();
 	return mount(ImportUsersMatchSearch, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
@@ -47,12 +46,14 @@ const getWrapper = (props: ComponentProps<typeof ImportUsersMatchSearch>, option
 };
 
 describe("ImportUsersMatchSearch", () => {
+	let importUsersStore: ReturnType<typeof useImportUsersStore>;
+
 	beforeEach(() => {
-		setActivePinia(createTestingPinia());
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestEnvStore({
 			SC_THEME: SchulcloudTheme.THR,
 		});
-		setupStores({ importUsersModule: ImportUsersModule });
+		importUsersStore = useImportUsersStore();
 	});
 
 	it("should display 'editedItem' property in HTML section", async () => {
@@ -67,7 +68,7 @@ describe("ImportUsersMatchSearch", () => {
 	});
 
 	it("should set 'flagged' property true when flag-button clicked", async () => {
-		const saveFlagMock = vi.spyOn(importUsersModule, "saveFlag");
+		const saveFlagMock = vi.spyOn(importUsersStore, "saveFlag");
 		saveFlagMock.mockResolvedValue({ ...testProps.editedItem, flagged: true });
 
 		const wrapper = getWrapper(testProps);
@@ -114,7 +115,7 @@ describe("ImportUsersMatchSearch", () => {
 			roleNames: [UserMatchResponseRoleNames.TEACHER],
 		};
 
-		const saveMatchMock = vi.spyOn(importUsersModule, "saveMatch");
+		const saveMatchMock = vi.spyOn(importUsersStore, "saveMatch");
 		saveMatchMock.mockResolvedValue({ ...testProps.editedItem, match });
 
 		const wrapper = getWrapper(testProps);
@@ -159,7 +160,7 @@ describe("ImportUsersMatchSearch", () => {
 			ldapSource: "LDAP",
 		});
 
-		const deleteMatchMock = vi.spyOn(importUsersModule, "deleteMatch");
+		const deleteMatchMock = vi.spyOn(importUsersStore, "deleteMatch");
 		deleteMatchMock.mockImplementation(async () => Promise.resolve(importUser));
 		const deleteMatchButton = wrapper.find("[data-testid=delete-match-btn]");
 		await deleteMatchButton.trigger("click");
@@ -415,6 +416,290 @@ describe("ImportUsersMatchSearch", () => {
 				expect(editedItemElement).toContain("common.roleName.student");
 				expect(editedItemElement).toContain("components.molecules.importUsersMatch.externalRoleName.none");
 			});
+		});
+
+		describe("when the external role is unknown", () => {
+			it("should show the raw role name when not in schulconnex mapping", () => {
+				const propsWithUnknownRole = {
+					editedItem: {
+						flagged: false,
+						importUserId: "123",
+						loginName: "max_mus",
+						firstName: "Max",
+						lastName: "Mustermann",
+						roleNames: [ImportUserResponseRoleNames.STUDENT],
+						classNames: ["6a"],
+						externalRoleNames: ["UnknownRole"],
+					},
+					isDialog: true,
+					ldapSource: "moin.schule",
+					isNbc: true,
+				};
+				const wrapper = getWrapper(propsWithUnknownRole);
+				const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
+
+				expect(editedItemElement).toContain("UnknownRole");
+			});
+		});
+	});
+
+	describe("mapRoleNames", () => {
+		it("should map admin role correctly", () => {
+			const propsWithAdminRole = {
+				...testProps,
+				editedItem: {
+					...testProps.editedItem,
+					roleNames: [ImportUserResponseRoleNames.ADMIN],
+				},
+			};
+			const wrapper = getWrapper(propsWithAdminRole);
+			const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
+
+			expect(editedItemElement).toContain("common.roleName.administrator");
+		});
+
+		it("should map expert role correctly", () => {
+			const propsWithExpertRole = {
+				...testProps,
+				editedItem: {
+					...testProps.editedItem,
+					roleNames: ["expert"] as unknown as ImportUserResponseRoleNames[],
+				},
+			};
+			const wrapper = getWrapper(propsWithExpertRole);
+			const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
+
+			expect(editedItemElement).toContain("common.roleName.expert");
+		});
+
+		it("should map externalPerson role correctly", () => {
+			const propsWithExternalPersonRole = {
+				...testProps,
+				editedItem: {
+					...testProps.editedItem,
+					roleNames: ["externalPerson"] as unknown as ImportUserResponseRoleNames[],
+				},
+			};
+			const wrapper = getWrapper(propsWithExternalPersonRole);
+			const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
+
+			expect(editedItemElement).toContain("common.roleName.externalPerson");
+		});
+
+		it("should map superhero role correctly", () => {
+			const propsWithSuperheroRole = {
+				...testProps,
+				editedItem: {
+					...testProps.editedItem,
+					roleNames: ["superhero"] as unknown as ImportUserResponseRoleNames[],
+				},
+			};
+			const wrapper = getWrapper(propsWithSuperheroRole);
+			const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
+
+			expect(editedItemElement).toContain("common.roleName.superhero");
+		});
+
+		it("should return raw role name for unknown roles", () => {
+			const propsWithUnknownRole = {
+				...testProps,
+				editedItem: {
+					...testProps.editedItem,
+					roleNames: ["unknownRole"] as unknown as ImportUserResponseRoleNames[],
+				},
+			};
+			const wrapper = getWrapper(propsWithUnknownRole);
+			const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
+
+			expect(editedItemElement).toContain("unknownRole");
+		});
+	});
+
+	describe("canSave computed", () => {
+		it("should return false when selected user is already matched", async () => {
+			const match: UserMatchResponse = {
+				userId: "existing-user-id",
+				loginName: "existing@schul-cloud.org",
+				firstName: "Existing",
+				lastName: "User",
+				roleNames: [UserMatchResponseRoleNames.TEACHER],
+			};
+			const propsWithMatch = {
+				...testProps,
+				editedItem: {
+					...testProps.editedItem,
+					match,
+				},
+			};
+			const wrapper = getWrapper(propsWithMatch);
+
+			const autoCompleteElement = wrapper.findComponent(VAutocomplete);
+			autoCompleteElement.vm.$emit("update:modelValue", match);
+			await nextTick();
+
+			const saveMatchButton = wrapper
+				.findAllComponents(VBtn)
+				.filter((btn) => btn.attributes("data-testid") === "save-match-btn")[0];
+
+			expect(saveMatchButton.props("disabled")).toBe(true);
+		});
+	});
+
+	describe("saveMatch error handling", () => {
+		it("should not emit saved-match when businessError occurs", async () => {
+			const match: UserMatchResponse = {
+				userId: "0000d231816abba584714c9e",
+				loginName: "lehrer@schul-cloud.org",
+				firstName: "Cord",
+				lastName: "Carl",
+				roleNames: [UserMatchResponseRoleNames.TEACHER],
+			};
+
+			const saveMatchMock = vi.spyOn(importUsersStore, "saveMatch");
+			saveMatchMock.mockResolvedValue(undefined);
+			importUsersStore.businessError = { statusCode: 500, message: "Error", error: {} as never };
+
+			const wrapper = getWrapper(testProps);
+
+			const autoCompleteElement = wrapper.findComponent(VAutocomplete);
+			autoCompleteElement.vm.$emit("update:modelValue", match);
+			await nextTick();
+
+			const saveMatchButton = wrapper.find("[data-testid=save-match-btn]");
+			await saveMatchButton.trigger("click");
+			await nextTick();
+
+			expect(wrapper.emitted()["saved-match"]).toBeFalsy();
+		});
+
+		it("should not emit saved-match when returned match userId does not match", async () => {
+			const selectedMatch: UserMatchResponse = {
+				userId: "selected-user-id",
+				loginName: "lehrer@schul-cloud.org",
+				firstName: "Cord",
+				lastName: "Carl",
+				roleNames: [UserMatchResponseRoleNames.TEACHER],
+			};
+			const returnedMatch: UserMatchResponse = {
+				userId: "different-user-id",
+				loginName: "other@schul-cloud.org",
+				firstName: "Other",
+				lastName: "User",
+				roleNames: [UserMatchResponseRoleNames.TEACHER],
+			};
+
+			const saveMatchMock = vi.spyOn(importUsersStore, "saveMatch");
+			saveMatchMock.mockResolvedValue({ ...testProps.editedItem, match: returnedMatch });
+
+			const wrapper = getWrapper(testProps);
+
+			const autoCompleteElement = wrapper.findComponent(VAutocomplete);
+			autoCompleteElement.vm.$emit("update:modelValue", selectedMatch);
+			await nextTick();
+
+			const saveMatchButton = wrapper.find("[data-testid=save-match-btn]");
+			await saveMatchButton.trigger("click");
+			await nextTick();
+
+			expect(wrapper.emitted()["saved-match"]).toBeFalsy();
+		});
+	});
+
+	describe("deleteMatch error handling", () => {
+		it("should not emit deleted-match when businessError occurs", async () => {
+			const match: UserMatchResponse = {
+				userId: "0000d213816abba584714c0a",
+				loginName: "admin@schul-cloud.org",
+				firstName: "Thorsten",
+				lastName: "Test",
+				roleNames: [UserMatchResponseRoleNames.ADMIN],
+				matchedBy: UserMatchResponseMatchedBy.ADMIN,
+			};
+			const propsWithMatch = {
+				...testProps,
+				editedItem: {
+					...testProps.editedItem,
+					match,
+				},
+			};
+
+			const deleteMatchMock = vi.spyOn(importUsersStore, "deleteMatch");
+			deleteMatchMock.mockResolvedValue(undefined);
+			importUsersStore.businessError = { statusCode: 500, message: "Error", error: {} as never };
+
+			const wrapper = getWrapper(propsWithMatch);
+
+			const deleteMatchButton = wrapper.find("[data-testid=delete-match-btn]");
+			await deleteMatchButton.trigger("click");
+			await nextTick();
+
+			expect(wrapper.emitted()["deleted-match"]).toBeFalsy();
+		});
+
+		it("should not call deleteMatch when match has no userId", async () => {
+			const matchWithoutUserId = {
+				loginName: "admin@schul-cloud.org",
+				firstName: "Thorsten",
+				lastName: "Test",
+				roleNames: [UserMatchResponseRoleNames.ADMIN],
+				userId: undefined,
+			};
+			const propsWithInvalidMatch = {
+				...testProps,
+				editedItem: {
+					...testProps.editedItem,
+					match: matchWithoutUserId as unknown as UserMatchResponse,
+				},
+			};
+
+			const deleteMatchMock = vi.spyOn(importUsersStore, "deleteMatch");
+			const wrapper = getWrapper(propsWithInvalidMatch);
+
+			const deleteMatchButton = wrapper.find("[data-testid=delete-match-btn]");
+			await deleteMatchButton.trigger("click");
+			await nextTick();
+
+			expect(deleteMatchMock).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("saveFlag error handling", () => {
+		it("should not emit saved-flag when businessError occurs", async () => {
+			const saveFlagMock = vi.spyOn(importUsersStore, "saveFlag");
+			saveFlagMock.mockResolvedValue(undefined);
+			importUsersStore.businessError = { statusCode: 500, message: "Error", error: {} as never };
+
+			const wrapper = getWrapper(testProps);
+
+			const flagButtonElement = wrapper.find("[data-testid=flag-button]");
+			await flagButtonElement.trigger("click");
+			await nextTick();
+
+			expect(wrapper.emitted()["saved-flag"]).toBeFalsy();
+		});
+
+		it("should not emit saved-flag when returned flag does not match expected value", async () => {
+			const saveFlagMock = vi.spyOn(importUsersStore, "saveFlag");
+			saveFlagMock.mockResolvedValue({ ...testProps.editedItem, flagged: false });
+
+			const wrapper = getWrapper(testProps);
+
+			const flagButtonElement = wrapper.find("[data-testid=flag-button]");
+			await flagButtonElement.trigger("click");
+			await nextTick();
+
+			expect(wrapper.emitted()["saved-flag"]).toBeFalsy();
+		});
+	});
+
+	describe("close button", () => {
+		it("should emit close event and reset selectedItem when close button clicked", async () => {
+			const wrapper = getWrapper(testProps);
+
+			const closeButton = wrapper.findAllComponents(VBtn).find((btn) => btn.props("icon") !== undefined);
+			await closeButton?.trigger("click");
+
+			expect(wrapper.emitted()["close"]).toBeTruthy();
 		});
 	});
 });

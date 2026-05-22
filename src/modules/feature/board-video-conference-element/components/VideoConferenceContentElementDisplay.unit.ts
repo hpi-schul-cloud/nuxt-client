@@ -59,6 +59,17 @@ describe("VideoConferenceContentElementDisplay", () => {
 			const titleElement = wrapper.find('[data-testid="content-element-title-slot"]');
 			expect(titleElement.text()).toEqual(title);
 		});
+
+		it("should display a fallback title when no title is provided", () => {
+			const wrapper = setupWrapper({
+				propsData: {
+					title: "",
+				},
+			});
+
+			const titleElement = wrapper.find('[data-testid="content-element-title-slot"]');
+			expect(titleElement.text()).toEqual("components.cardElement.videoConferenceElement");
+		});
 	});
 
 	describe("Alerts", () => {
@@ -255,6 +266,38 @@ describe("VideoConferenceContentElementDisplay", () => {
 
 				await triggerClick(wrapper);
 				expect(wrapper.emitted("click")).toBeDefined();
+			});
+
+			it("should not emit any event when feature is disabled", async () => {
+				const wrapper = setupWrapper({
+					propsData: {
+						isRunning: false,
+						isVideoConferenceEnabled: false,
+						hasParticipationPermission: true,
+						canStart: true,
+						title: "video conference",
+					},
+				});
+
+				await triggerClick(wrapper);
+				expect(wrapper.emitted("click")).toBeUndefined();
+				expect(wrapper.emitted("refresh")).toBeUndefined();
+			});
+
+			it("should not emit any event when user has no participation permission", async () => {
+				const wrapper = setupWrapper({
+					propsData: {
+						isRunning: false,
+						isVideoConferenceEnabled: true,
+						hasParticipationPermission: false,
+						canStart: false,
+						title: "video conference",
+					},
+				});
+
+				await triggerClick(wrapper);
+				expect(wrapper.emitted("click")).toBeUndefined();
+				expect(wrapper.emitted("refresh")).toBeUndefined();
 			});
 		});
 	});

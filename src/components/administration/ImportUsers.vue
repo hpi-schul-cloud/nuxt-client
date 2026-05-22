@@ -233,13 +233,18 @@
 	</div>
 </template>
 
-<script>
+<script setup lang="ts">
 import ImportUsersMatchSearch from "./ImportUsersMatchSearch.vue";
-import { importUsersModule } from "@/store";
-import { MatchedBy } from "@/store/import-users";
-import { ImportUserResponseRoleNames, SchulcloudTheme } from "@api-server";
-import { useSchoolStore } from "@data-app";
+import {
+	ImportUserResponse,
+	ImportUserResponseRoleNames,
+	SchulcloudTheme,
+	UserMatchResponse,
+	UserMatchResponseMatchedBy,
+} from "@api-server";
+import { useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
+import { MatchedBy, useImportUsersStore } from "@data-import-users";
 import {
 	mdiAccountPlus,
 	mdiAccountSwitch,
@@ -249,292 +254,233 @@ import {
 	mdiFlagOutline,
 	mdiPencilOutline,
 } from "@icons/material";
+import { storeToRefs } from "pinia";
+import { computed, nextTick, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default {
-	components: {
-		ImportUsersMatchSearch,
-	},
-	data() {
-		return {
-			mdiAccountPlus,
-			mdiAccountSwitch,
-			mdiAccountSwitchOutline,
-			mdiAlertCircle,
-			mdiFlag,
-			mdiFlagOutline,
-			mdiPencilOutline,
-			MatchedBy,
-			loading: false,
-			roles: [
-				{
-					text: this.$t("common.roleName.student"),
-					value: ImportUserResponseRoleNames.STUDENT,
-				},
-				{
-					text: this.$t("common.roleName.teacher"),
-					value: ImportUserResponseRoleNames.TEACHER,
-				},
-				{
-					text: this.$t("common.roleName.administrator"),
-					value: ImportUserResponseRoleNames.ADMIN,
-				},
-			],
-			searchFirstName: "",
-			searchLastName: "",
-			searchLoginName: "",
-			searchRole: null,
-			searchClasses: "",
-			searchMatchedBy: [MatchedBy.None],
-			searchFlagged: false,
-			dialogEdit: false,
-			options: {
-				itemsPerPage: 25,
-			},
-			defaultItem: {
-				firstName: "",
-				lastName: "",
-				loginName: "",
-				roleNames: [],
-				classNames: [],
-				match: {},
-				flagged: false,
-			},
-			editedIndex: -1,
-			delay: 500,
-		};
-	},
-	computed: {
-		tableHead() {
-			const tableHeaders = [
-				{
-					title: this.$t("components.organisms.importUsers.tableFirstName"),
-					value: "firstName",
-					sortable: true,
-					headerProps: {
-						"data-testid": "head-first-name",
-					},
-				},
-				{
-					title: this.$t("components.organisms.importUsers.tableLastName"),
-					value: "lastName",
-					sortable: true,
-					headerProps: {
-						"data-testid": "head-last-name",
-					},
-				},
-				{
-					title: this.$t("components.organisms.importUsers.tableUserName"),
-					value: "loginName",
-					sortable: false,
-				},
-				{
-					title: this.$t("components.organisms.importUsers.tableRoles"),
-					value: "roleNames",
-					sortable: false,
-				},
-				{
-					title: this.$t("components.organisms.importUsers.tableClasses"),
-					value: "classNames",
-					sortable: false,
-				},
-				{
-					title: this.$t("components.organisms.importUsers.tableMatch", {
-						instance: this.instanceName,
-					}),
-					value: "match",
-					sortable: false,
-				},
-				{
-					title: this.$t("components.organisms.importUsers.tableFlag"),
-					value: "flagged",
-					sortable: false,
-				},
-			];
-			if (this.isNbc) {
-				return tableHeaders.filter((header) => header.value !== "loginName");
-			}
-			return tableHeaders;
-		},
-		isNbc() {
-			return useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.N21;
-		},
-		canStartMigration() {
-			return this.school.inUserMigration && this.school.inMaintenance;
-		},
-		sourceSystemName() {
-			if (useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.BRB) {
-				return this.$t("pages.administration.migration.brbSchulportal");
-			} else if (useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.N21) {
-				return "moin.schule";
-			} else {
-				return this.$t("pages.administration.migration.ldapSource");
-			}
-		},
-		instanceName() {
-			return useEnvStore().instanceName;
-		},
-		editedItem() {
-			if (this.editedIndex < 0) {
-				return { ...this.defaultItem };
-			}
-			return this.importUsers[this.editedIndex];
-		},
-		importUsers() {
-			if (importUsersModule.getImportUserList?.data) {
-				return importUsersModule.getImportUserList.data;
-			}
-			return [];
-		},
-		school() {
-			return useSchoolStore().schoolDetails;
-		},
-		total() {
-			return importUsersModule.getTotal;
-		},
-		totalImportUsers() {
-			if (importUsersModule?.getImportUserList?.total) {
-				return importUsersModule.getImportUserList.total;
-			}
-			return 0;
-		},
-	},
-	watch: {
-		dialogEdit(val) {
-			if (!val) {
-				this.closeEdit();
-			}
-		},
-		searchFirstName() {
-			this.searchApi();
-		},
-		searchLastName() {
-			this.searchApi();
-		},
-		searchLoginName() {
-			this.searchApi();
-		},
-		searchRole() {
-			this.searchApi();
-		},
-		searchClasses() {
-			this.searchApi();
-		},
-		searchMatchedBy() {
-			this.searchApi();
-		},
-		searchFlagged() {
-			this.searchApi();
-		},
-		async total(val) {
-			if (val > 0) {
-				await this.searchApi();
-			}
-		},
-	},
-	methods: {
-		getRoles(roles) {
-			const rolesLables = [];
-			if (Array.isArray(roles) && roles.length > 0) {
-				if (roles.includes("student")) {
-					rolesLables.push(this.$t("common.roleName.student"));
-				}
-				if (roles.includes("teacher")) {
-					rolesLables.push(this.$t("common.roleName.teacher"));
-				}
-				if (roles.includes("admin")) {
-					rolesLables.push(this.$t("common.roleName.administrator"));
-				}
-			}
-			return rolesLables.join(", ");
-		},
-		getMatchedByIcon(match) {
-			if (!match || !match.matchedBy) {
-				return mdiAccountPlus;
-			}
-			if (match.matchedBy === MatchedBy.Auto) {
-				return mdiAccountSwitchOutline;
-			}
-			if (match.matchedBy === MatchedBy.Admin) {
-				return mdiAccountSwitch;
-			}
-		},
-		editItem(item) {
-			this.editedIndex = this.importUsers.indexOf(item);
-			this.dialogEdit = true;
-		},
-		closeEdit() {
-			this.dialogEdit = false;
-			this.$nextTick(() => {
-				this.editedIndex = -1;
-			});
-		},
-		savedMatch() {
-			if (this.searchMatchedBy) {
-				this.loading = true;
-				this.reloadData();
-			}
-			this.closeEdit();
-		},
-		async saveFlag(item) {
-			if (this.loading) return false;
-			this.loading = true;
-			this.editedIndex = this.importUsers.indexOf(item);
-			await importUsersModule.saveFlag({
-				importUserId: this.editedItem.importUserId,
-				flagged: !this.editedItem.flagged,
-			});
-			if (this.searchFlagged) {
-				this.reloadData();
-			} else {
-				this.loading = false;
-			}
-		},
-		savedFlag() {
-			this.loading = true;
-			this.reloadData();
-		},
-		reloadData() {
-			setTimeout(() => {
-				this.searchApi();
-			}, this.delay);
-		},
-		searchApi() {
-			if (!this.canStartMigration) {
-				return;
-			}
-			this.options.page = 1;
-			this.getDataFromApi();
-		},
-		async onUpdateOptions(options) {
-			this.options = options;
+const { t } = useI18n();
 
-			await this.getDataFromApi();
-		},
-		async getDataFromApi() {
-			this.loading = true;
+const importUsersStore = useImportUsersStore();
 
-			importUsersModule.setFirstName(this.searchFirstName);
-			importUsersModule.setLastName(this.searchLastName);
-			importUsersModule.setLoginName(this.searchLoginName);
-			importUsersModule.setRole(this.searchRole);
-			importUsersModule.setClasses(this.searchClasses);
-			importUsersModule.setMatch(this.searchMatchedBy);
-			importUsersModule.setFlagged(this.searchFlagged);
+const { importUsersData } = storeToRefs(importUsersStore);
 
-			importUsersModule.setLimit(this.options.itemsPerPage);
-			importUsersModule.setSkip((this.options.page - 1) * this.options.itemsPerPage);
+const importUsers = computed(() => importUsersData.value.list.data);
+const total = computed(() => importUsersData.value.total);
+const totalImportUsers = computed(() => importUsersData.value.list.total);
 
-			const sortBy = this.options.sortBy?.length ? this.options.sortBy[0] : { key: "", order: "" };
-
-			importUsersModule.setSortBy(sortBy.key);
-			importUsersModule.setSortOrder(sortBy.order);
-
-			await importUsersModule.fetchAllImportUsers();
-
-			this.loading = false;
-		},
-	},
+const loading = ref(false);
+const roles = [
+	{ text: t("common.roleName.student"), value: ImportUserResponseRoleNames.STUDENT },
+	{ text: t("common.roleName.teacher"), value: ImportUserResponseRoleNames.TEACHER },
+	{ text: t("common.roleName.administrator"), value: ImportUserResponseRoleNames.ADMIN },
+];
+const searchFirstName = ref("");
+const searchLastName = ref("");
+const searchLoginName = ref("");
+const searchRole = ref<string | null>(null);
+const searchClasses = ref("");
+const searchMatchedBy = ref<MatchedBy[]>([MatchedBy.None]);
+const searchFlagged = ref(false);
+const dialogEdit = ref(false);
+type DataTableOptions = {
+	itemsPerPage: number;
+	page?: number;
+	sortBy?: Array<{ key: string; order?: boolean | "asc" | "desc" }>;
 };
+const options = ref<DataTableOptions>({
+	itemsPerPage: 25,
+});
+const defaultItem: ImportUserResponse = {
+	importUserId: "",
+	firstName: "",
+	lastName: "",
+	loginName: "",
+	roleNames: [],
+	classNames: [],
+	flagged: false,
+};
+const editedIndex = ref(-1);
+const delay = 500;
+
+const { schoolDetails } = useSchoolStoreRefs();
+
+const instanceName = computed(() => useEnvStore().instanceName);
+const isNbc = computed(() => useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.N21);
+const canStartMigration = computed(() => schoolDetails.value.inUserMigration && schoolDetails.value.inMaintenance);
+const sourceSystemName = computed(() => {
+	const theme = useEnvConfig().value.SC_THEME.toLowerCase();
+	if (theme === SchulcloudTheme.BRB) {
+		return t("pages.administration.migration.brbSchulportal");
+	} else if (theme === SchulcloudTheme.N21) {
+		return "moin.schule";
+	} else {
+		return t("pages.administration.migration.ldapSource");
+	}
+});
+const editedItem = computed<ImportUserResponse>(() => {
+	if (editedIndex.value < 0) {
+		return { ...defaultItem };
+	}
+	return importUsers.value[editedIndex.value];
+});
+const tableHead = computed(() => {
+	const headers = [
+		{
+			title: t("components.organisms.importUsers.tableFirstName"),
+			value: "firstName",
+			sortable: true,
+			headerProps: { "data-testid": "head-first-name" },
+		},
+		{
+			title: t("components.organisms.importUsers.tableLastName"),
+			value: "lastName",
+			sortable: true,
+			headerProps: { "data-testid": "head-last-name" },
+		},
+		{
+			title: t("components.organisms.importUsers.tableUserName"),
+			value: "loginName",
+			sortable: false,
+		},
+		{
+			title: t("components.organisms.importUsers.tableRoles"),
+			value: "roleNames",
+			sortable: false,
+		},
+		{
+			title: t("components.organisms.importUsers.tableClasses"),
+			value: "classNames",
+			sortable: false,
+		},
+		{
+			title: t("components.organisms.importUsers.tableMatch", {
+				instance: instanceName.value,
+			}),
+			value: "match",
+			sortable: false,
+		},
+		{
+			title: t("components.organisms.importUsers.tableFlag"),
+			value: "flagged",
+			sortable: false,
+		},
+	];
+	if (isNbc.value) {
+		return headers.filter((header) => header.value !== "loginName");
+	}
+	return headers;
+});
+
+watch(dialogEdit, (val) => {
+	if (!val) closeEdit();
+});
+watch(
+	[searchFirstName, searchLastName, searchLoginName, searchRole, searchClasses, searchMatchedBy, searchFlagged],
+	() => searchApi()
+);
+watch(total, async (val) => {
+	if (val > 0) {
+		await searchApi();
+	}
+});
+
+const getRoles = (roleNames: string[]) => {
+	const labels: string[] = [];
+	if (Array.isArray(roleNames) && roleNames.length > 0) {
+		if (roleNames.includes("student")) labels.push(t("common.roleName.student"));
+		if (roleNames.includes("teacher")) labels.push(t("common.roleName.teacher"));
+		if (roleNames.includes("admin")) labels.push(t("common.roleName.administrator"));
+	}
+	return labels.join(", ");
+};
+
+const getMatchedByIcon = (match: UserMatchResponse | undefined) => {
+	if (!match || !match.matchedBy) return mdiAccountPlus;
+	if (match.matchedBy === UserMatchResponseMatchedBy.AUTO) return mdiAccountSwitchOutline;
+	if (match.matchedBy === UserMatchResponseMatchedBy.ADMIN) return mdiAccountSwitch;
+};
+
+const editItem = (item: ImportUserResponse) => {
+	editedIndex.value = importUsers.value.indexOf(item);
+	dialogEdit.value = true;
+};
+
+const closeEdit = () => {
+	dialogEdit.value = false;
+	nextTick(() => {
+		editedIndex.value = -1;
+	});
+};
+
+const getDataFromApi = async () => {
+	loading.value = true;
+
+	importUsersStore.filter.firstName = searchFirstName.value;
+	importUsersStore.filter.lastName = searchLastName.value;
+	importUsersStore.filter.loginName = searchLoginName.value;
+	importUsersStore.filter.role = (searchRole.value as ImportUserResponseRoleNames) ?? "";
+	importUsersStore.filter.classes = searchClasses.value;
+	importUsersStore.filter.match = searchMatchedBy.value;
+	importUsersStore.filter.flagged = searchFlagged.value;
+
+	importUsersStore.filter.limit = options.value.itemsPerPage;
+	importUsersStore.filter.skip = ((options.value.page ?? 1) - 1) * options.value.itemsPerPage;
+
+	const sortBy = options.value.sortBy?.length ? options.value.sortBy[0] : { key: "", order: undefined };
+	importUsersStore.filter.sortBy = sortBy.key === "firstName" || sortBy.key === "lastName" ? sortBy.key : "";
+	importUsersStore.filter.sortOrder = sortBy.order === "asc" || sortBy.order === "desc" ? sortBy.order : undefined;
+
+	await importUsersStore.fetchAllImportUsers();
+
+	loading.value = false;
+};
+
+const searchApi = async () => {
+	if (!canStartMigration.value) return;
+	options.value.page = 1;
+	await getDataFromApi();
+};
+
+const reloadData = () => {
+	setTimeout(() => searchApi(), delay);
+};
+
+const onUpdateOptions = async (newOptions: DataTableOptions) => {
+	options.value = newOptions;
+	await getDataFromApi();
+};
+
+const savedMatch = () => {
+	if (searchMatchedBy.value) {
+		loading.value = true;
+		reloadData();
+	}
+	closeEdit();
+};
+
+const saveFlag = async (item: ImportUserResponse) => {
+	if (loading.value) return false;
+	loading.value = true;
+	editedIndex.value = importUsers.value.indexOf(item);
+	await importUsersStore.saveFlag({
+		importUserId: editedItem.value.importUserId,
+		flagged: !editedItem.value.flagged,
+	});
+	if (searchFlagged.value) {
+		reloadData();
+	} else {
+		loading.value = false;
+	}
+};
+
+const savedFlag = () => {
+	loading.value = true;
+	reloadData();
+};
+
+defineExpose({
+	reloadData,
+});
 </script>
 
 <style lang="scss" scoped>

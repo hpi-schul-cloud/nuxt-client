@@ -127,6 +127,8 @@ models/context-external-tool-post-params.ts
 models/context-external-tool-response.ts
 models/context-external-tool-search-list-response.ts
 models/copy-api-response.ts
+models/copy-element-type.ts
+models/copy-status-enum.ts
 models/county-response.ts
 models/course-common-cartridge-metadata-response.ts
 models/course-info-data-response.ts
