@@ -29,7 +29,7 @@
       "@data-external-tool": ["./src/modules/data/external-tool"],
       "@data-file": ["./src/modules/data/file"],
       "@data-folder": ["./src/modules/data/folder"],
-      "@data-import-users": ["src/modules/data/import-users"],
+      "@data-import-users": ["./src/modules/data/import-users"],
       "@data-runtime-config": ["./src/modules/data/runtime-config"],
       "@data-tasks": ["./src/modules/data/tasks"],
       "@data-group": ["./src/modules/data/group"],
