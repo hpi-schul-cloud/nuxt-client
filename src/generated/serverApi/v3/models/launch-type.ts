@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * Specifies the underlying type of the request
  * @export
  * @enum {string}
  */

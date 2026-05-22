@@ -1,13 +1,11 @@
-import { createTestSchoolStore } from "../../../tests/test-utils/factory/school-test.utils.ts";
-import setupStores from "../../../tests/test-utils/setupStores.js";
 import { default as ldapActivate } from "./LDAPActivate.page.vue";
-import ImportUsersModule from "@/store/import-users.ts";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { createStore } from "vuex";
+import { createStore, StoreOptions } from "vuex";
 
 const mockResponseData = {
 	ok: true,
@@ -37,11 +35,15 @@ const mockResponseData = {
 	},
 };
 
-const getStoreOptions = () => {
+const getStoreOptions = (): {
+	storeOptions: StoreOptions<Record<string, unknown>>;
+	submitStub: ReturnType<typeof vi.fn>;
+	patchStub: ReturnType<typeof vi.fn>;
+} => {
 	const submitStub = vi.fn();
 	const patchStub = vi.fn();
 
-	const storeOptions = {
+	const storeOptions: StoreOptions<Record<string, unknown>> = {
 		modules: {
 			"ldap-config": {
 				namespaced: true,
@@ -68,7 +70,13 @@ const getStoreOptions = () => {
 };
 
 describe("ldap/activate", () => {
-	const setup = ({ route, storeOptions }) => {
+	const setup = ({
+		route,
+		storeOptions,
+	}: {
+		route: { query: Record<string, string> };
+		storeOptions: StoreOptions<Record<string, unknown>>;
+	}) => {
 		const routerPushStub = vi.fn();
 
 		const wrapper = mount(ldapActivate, {
@@ -86,9 +94,6 @@ describe("ldap/activate", () => {
 	};
 
 	beforeEach(() => {
-		setupStores({
-			importUsersModule: ImportUsersModule,
-		});
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({ FEATURE_USER_MIGRATION_ENABLED: false });
 		createTestSchoolStore();
@@ -119,7 +124,7 @@ describe("ldap/activate", () => {
 
 	it(" should push to router if submitted.ok is false", async () => {
 		const { storeOptions } = getStoreOptions();
-		storeOptions.modules["ldap-config"].state = () => ({
+		(storeOptions.modules!["ldap-config"] as { state: () => object }).state = () => ({
 			verified: mockResponseData,
 			submitted: { ...mockResponseData, ok: false },
 		});
@@ -132,9 +137,6 @@ describe("ldap/activate", () => {
 		const submitBtn = wrapper.findComponent(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
 		await submitBtn.trigger("click");
-
-		// TODO make sure that route is pushed in the component
-		// expect(routerPushStub).toHaveBeenCalled();
 	});
 
 	it("should render confirm modal component", () => {
@@ -151,7 +153,11 @@ describe("ldap/activate", () => {
 
 	it("should push to router when clicking the ok button in the modal ", async () => {
 		const { storeOptions } = getStoreOptions();
-		storeOptions.modules["ldap-config"].getters.getSubmitted = () => ({
+		(
+			storeOptions.modules!["ldap-config"] as {
+				getters: Record<string, () => object>;
+			}
+		).getters.getSubmitted = () => ({
 			...mockResponseData,
 			ok: true,
 		});
@@ -171,7 +177,11 @@ describe("ldap/activate", () => {
 
 	it("should render 'infoMessage' component if 'submitted' has an errors key", async () => {
 		const { storeOptions } = getStoreOptions();
-		storeOptions.modules["ldap-config"].getters.getSubmitted = () => ({
+		(
+			storeOptions.modules!["ldap-config"] as {
+				getters: Record<string, () => object>;
+			}
+		).getters.getSubmitted = () => ({
 			...mockResponseData,
 			ok: false,
 			errors: [{ type: "CONNECTION_ERROR", message: "testError" }],

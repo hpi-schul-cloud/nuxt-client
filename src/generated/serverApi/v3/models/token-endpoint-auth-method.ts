@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * OAuth2 token endpoint method
  * @export
  * @enum {string}
  */
