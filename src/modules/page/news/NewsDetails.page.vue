@@ -72,8 +72,7 @@ const {
 } = useNews(newsId);
 
 const pageTitle = computed(() => {
-	const date =
-		displayAtFormattedStandard.value === "" ? createdAtFormattedStandard.value : displayAtFormattedStandard.value;
+	const date = displayAtFormattedStandard.value ?? createdAtFormattedStandard.value ?? undefined;
 
 	if (!date) return t("pages.news.details.title.fallback");
 	return t("pages.news.details.title", {
@@ -84,7 +83,7 @@ const pageTitle = computed(() => {
 const newsDate = computed(() => {
 	let date = createdAtFormattedFromNow.value;
 
-	if (displayAtFormattedFromNow.value !== "") {
+	if (displayAtFormattedFromNow.value) {
 		date = displayAtFormattedFromNow.value;
 	}
 

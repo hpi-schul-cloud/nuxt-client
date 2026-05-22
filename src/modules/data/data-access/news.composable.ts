@@ -98,32 +98,32 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 	watch(newsId, loadNews, { immediate: true });
 
 	const createdAtFormattedStandard = computed(() => {
-		if (!newsInstance.value?.createdAt) return "";
+		if (!newsInstance.value?.createdAt) return undefined;
 		return formatUtc(newsInstance.value.createdAt, "date");
 	});
 
 	const createdAtFormattedFromNow = computed(() => {
-		if (!newsInstance.value?.createdAt) return "";
+		if (!newsInstance.value?.createdAt) return undefined;
 		return fromNowUtc(newsInstance.value.createdAt);
 	});
 
 	const displayAtFormattedStandard = computed(() => {
-		if (!newsInstance.value?.displayAt) return "";
+		if (!newsInstance.value?.displayAt) return undefined;
 		return formatUtc(newsInstance.value.displayAt, "date");
 	});
 
 	const displayAtFormattedFromNow = computed(() => {
-		if (!newsInstance.value?.displayAt) return "";
+		if (!newsInstance.value?.displayAt) return undefined;
 		return fromNowUtc(newsInstance.value.displayAt);
 	});
 
 	const lastTouchedFormatted = computed(() => {
-		if (!newsInstance.value?.updatedAt) return "";
+		if (!newsInstance.value?.updatedAt) return undefined;
 		return fromNowUtc(newsInstance.value.updatedAt);
 	});
 
 	const creator = computed(() => {
-		if (!newsInstance.value) return "";
+		if (!newsInstance.value) return undefined;
 		return `${newsInstance.value.creator.firstName} ${newsInstance.value.creator.lastName}`;
 	});
 
