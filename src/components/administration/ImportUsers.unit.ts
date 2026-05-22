@@ -1,7 +1,7 @@
 import ImportUsers from "./ImportUsers.vue";
 import { createTestEnvStore, createTestSchoolStore, schoolFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { ImportUserListResponse, ImportUserResponseRoleNames, SchulcloudTheme } from "@api-server";
+import { ImportUserListResponse, ImportUserResponse, ImportUserResponseRoleNames, SchulcloudTheme } from "@api-server";
 import { useSchoolStore } from "@data-app";
 import { MatchedBy, useImportUsersStore } from "@data-import-users";
 import {
@@ -14,11 +14,44 @@ import {
 	mdiPencilOutline,
 } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
-import { mount } from "@vue/test-utils";
+import { mount, type VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 import { nextTick } from "vue";
 import { VDataTable } from "vuetify/components";
+
+type ImportUsersVm = {
+	importUsers: ImportUserResponse[];
+	roles: { text: string; value: ImportUserResponseRoleNames }[];
+	tableHead: { value: string; title: string; sortable: boolean; headerProps?: Record<string, string> }[];
+	searchFirstName: string;
+	searchLastName: string;
+	searchLoginName: string;
+	searchRole: string | null;
+	searchClasses: string;
+	searchMatchedBy: MatchedBy[];
+	searchFlagged: boolean;
+	dialogEdit: boolean;
+	editedIndex: number;
+	editedItem: ImportUserResponse;
+	loading: boolean;
+	options: {
+		page?: number;
+		itemsPerPage: number;
+		sortBy?: { key: string; order?: boolean | "asc" | "desc" }[];
+	};
+	closeEdit: () => void;
+	saveFlag: (item: ImportUserResponse) => Promise<boolean | void>;
+	savedMatch: () => void;
+	savedFlag: () => void;
+	getMatchedByIcon: (match: unknown) => string | undefined;
+	getRoles: (roleNames: unknown) => string;
+	onUpdateOptions: (options: {
+		page: number;
+		itemsPerPage: number;
+		sortBy: { key: string; order: string }[];
+	}) => Promise<void>;
+};
 
 const mockImportUsers: ImportUserListResponse = {
 	total: 3,
@@ -99,7 +132,7 @@ const setup = (
 	data?: typeof mockData,
 	schoolDetails?: NonNullable<Parameters<typeof createTestSchoolStore>[0]>["schoolDetails"],
 	options?: object
-) => {
+): VueWrapper & { vm: ImportUsersVm } => {
 	vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
 	vi.spyOn(importUsersStore, "fetchAllUsers").mockResolvedValue();
 	createTestSchoolStore({
@@ -115,7 +148,7 @@ const setup = (
 			};
 		},
 		...options,
-	});
+	}) as unknown as VueWrapper & { vm: ImportUsersVm };
 };
 
 describe("ImportUsers", () => {
@@ -294,16 +327,15 @@ describe("ImportUsers", () => {
 	describe("should sort by column", () => {
 		it("should sort by first name", async () => {
 			const wrapper = setup(importUsersStore, mockData);
-			const wrapperVm = wrapper.vm as unknown as typeof ImportUsers;
 
 			const sortFirstNameElement = wrapper.find('[data-testid="head-first-name"]');
 			await sortFirstNameElement.trigger("click");
 
-			expect(wrapperVm.options.sortBy[0].key).toEqual("firstName");
-			expect(wrapperVm.options.sortBy[0].order).toEqual("asc");
+			expect(wrapper.vm.options.sortBy![0].key).toEqual("firstName");
+			expect(wrapper.vm.options.sortBy![0].order).toEqual("asc");
 
 			await sortFirstNameElement.trigger("click");
-			expect(wrapperVm.options.sortBy[0].order).toEqual("desc");
+			expect(wrapper.vm.options.sortBy![0].order).toEqual("desc");
 		});
 
 		it("should sort by last name", async () => {
@@ -312,13 +344,11 @@ describe("ImportUsers", () => {
 			const sortLastNameElement = wrapper.find('[data-testid="head-last-name"]');
 			await sortLastNameElement.trigger("click");
 
-			const wrapperVm = wrapper.vm as unknown as typeof ImportUsers;
-
-			expect(wrapperVm.options.sortBy[0].key).toBe("lastName");
-			expect(wrapperVm.options.sortBy[0].order).toBe("asc");
+			expect(wrapper.vm.options.sortBy![0].key).toBe("lastName");
+			expect(wrapper.vm.options.sortBy![0].order).toBe("asc");
 
 			await sortLastNameElement.trigger("click");
-			expect(wrapperVm.options.sortBy[0].order).toBe("desc");
+			expect(wrapper.vm.options.sortBy![0].order).toBe("desc");
 		});
 	});
 
@@ -364,16 +394,14 @@ describe("ImportUsers", () => {
 	describe("getMatchedByIcon", () => {
 		it("should return mdiAccountPlus when no match", () => {
 			const wrapper = setup(importUsersStore, mockData);
-			const icon = (wrapper.vm as unknown as { getMatchedByIcon: (match: unknown) => string }).getMatchedByIcon(
-				undefined
-			);
+			const icon = wrapper.vm.getMatchedByIcon(undefined);
 
 			expect(icon).toBe(mdiAccountPlus);
 		});
 
 		it("should return mdiAccountPlus when match has no matchedBy", () => {
 			const wrapper = setup(importUsersStore, mockData);
-			const icon = (wrapper.vm as unknown as { getMatchedByIcon: (match: unknown) => string }).getMatchedByIcon({
+			const icon = wrapper.vm.getMatchedByIcon({
 				userId: "123",
 				firstName: "Test",
 				lastName: "User",
@@ -384,7 +412,7 @@ describe("ImportUsers", () => {
 
 		it("should return mdiAccountSwitchOutline for AUTO match", () => {
 			const wrapper = setup(importUsersStore, mockData);
-			const icon = (wrapper.vm as unknown as { getMatchedByIcon: (match: unknown) => string }).getMatchedByIcon({
+			const icon = wrapper.vm.getMatchedByIcon({
 				userId: "123",
 				matchedBy: "auto",
 			});
@@ -394,7 +422,7 @@ describe("ImportUsers", () => {
 
 		it("should return mdiAccountSwitch for ADMIN match", () => {
 			const wrapper = setup(importUsersStore, mockData);
-			const icon = (wrapper.vm as unknown as { getMatchedByIcon: (match: unknown) => string }).getMatchedByIcon({
+			const icon = wrapper.vm.getMatchedByIcon({
 				userId: "123",
 				matchedBy: "admin",
 			});
@@ -526,45 +554,42 @@ describe("ImportUsers", () => {
 	describe("getRoles", () => {
 		it("should return empty string for empty roleNames", () => {
 			const wrapper = setup(importUsersStore, mockData);
-			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: string[]) => string }).getRoles([]);
+			const roles = wrapper.vm.getRoles([]);
 
 			expect(roles).toBe("");
 		});
 
 		it("should return student label for student role", () => {
 			const wrapper = setup(importUsersStore, mockData);
-			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: string[]) => string }).getRoles(["student"]);
+			const roles = wrapper.vm.getRoles(["student"]);
 
 			expect(roles).toBe("common.roleName.student");
 		});
 
 		it("should return teacher label for teacher role", () => {
 			const wrapper = setup(importUsersStore, mockData);
-			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: string[]) => string }).getRoles(["teacher"]);
+			const roles = wrapper.vm.getRoles(["teacher"]);
 
 			expect(roles).toBe("common.roleName.teacher");
 		});
 
 		it("should return admin label for admin role", () => {
 			const wrapper = setup(importUsersStore, mockData);
-			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: string[]) => string }).getRoles(["admin"]);
+			const roles = wrapper.vm.getRoles(["admin"]);
 
 			expect(roles).toBe("common.roleName.administrator");
 		});
 
 		it("should return combined labels for multiple roles", () => {
 			const wrapper = setup(importUsersStore, mockData);
-			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: string[]) => string }).getRoles([
-				"student",
-				"teacher",
-			]);
+			const roles = wrapper.vm.getRoles(["student", "teacher"]);
 
 			expect(roles).toBe("common.roleName.student, common.roleName.teacher");
 		});
 
 		it("should return empty string when roleNames is not an array", () => {
 			const wrapper = setup(importUsersStore, mockData);
-			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: unknown) => string }).getRoles(null);
+			const roles = wrapper.vm.getRoles(null);
 
 			expect(roles).toBe("");
 		});
@@ -577,7 +602,7 @@ describe("ImportUsers", () => {
 			await nextTick();
 
 			const headers = wrapper.vm.tableHead;
-			const loginNameHeader = headers.find((h: { value: string }) => h.value === "loginName");
+			const loginNameHeader = headers.find((h) => h.value === "loginName");
 
 			expect(loginNameHeader).toBeUndefined();
 		});
