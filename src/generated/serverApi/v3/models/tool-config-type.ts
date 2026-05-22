@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * Configuration type of the tool.
  * @export
  * @enum {string}
  */
