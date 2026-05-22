@@ -22,13 +22,17 @@
 
 <script setup lang="ts">
 import { i18nKeyExists, useI18nGlobal } from "@/plugins/i18n";
-import { ConfirmationDialogProps, ManagedDialogEmits } from "@feature-dialog";
+import { ConfirmationDialogProps } from "@feature-dialog";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { computed } from "vue";
 
 const props = defineProps<ConfirmationDialogProps>();
-const emit = defineEmits<ManagedDialogEmits<boolean>>();
+const emit = defineEmits<{
+	complete: [result: boolean];
+	cancel: [];
+	"after-leave": [];
+}>();
 
 const isOpen = defineModel<boolean>({ default: false });
 

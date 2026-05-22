@@ -16,12 +16,6 @@ import type { Component } from "vue";
 
 export type AwaitableResult<T> = { completed: true; data: T } | { completed: false; data: undefined };
 
-export type ManagedDialogEmits<Result> = {
-	complete: [result: Result];
-	cancel: [];
-	"after-leave": [];
-};
-
 declare const propsTypeSymbol: unique symbol;
 declare const resultTypeSymbol: unique symbol;
 

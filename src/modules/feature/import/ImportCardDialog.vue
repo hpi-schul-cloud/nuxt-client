@@ -72,7 +72,7 @@
 import { useImportContent } from "@/composables/copy-content.composable";
 import { ShareTokenInfoResponseParentType } from "@api-server";
 import { useCardDialogData } from "@data-board";
-import { ImportCardDialogProps, ImportCardDialogResult, ManagedDialogEmits } from "@feature-dialog";
+import { ImportCardDialogProps, ImportCardDialogResult } from "@feature-dialog";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { computed, ref } from "vue";
@@ -81,7 +81,11 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 const props = defineProps<ImportCardDialogProps>();
-const emit = defineEmits<ManagedDialogEmits<ImportCardDialogResult>>();
+const emit = defineEmits<{
+	complete: [result: ImportCardDialogResult];
+	cancel: [];
+	"after-leave": [];
+}>();
 
 const isDialogOpen = defineModel<boolean>({ default: false });
 

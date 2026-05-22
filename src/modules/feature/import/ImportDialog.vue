@@ -64,7 +64,7 @@
 <script setup lang="ts">
 import { useImportContent } from "@/composables/copy-content.composable";
 import { ShareTokenInfoResponseParentType } from "@api-server";
-import { ImportDialogProps, ImportDialogResult, ManagedDialogEmits } from "@feature-dialog";
+import { ImportDialogProps, ImportDialogResult } from "@feature-dialog";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { isRequired, useOpeningTagValidator } from "@util-validators";
@@ -75,7 +75,11 @@ const { t } = useI18n();
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const props = defineProps<ImportDialogProps>();
-const emit = defineEmits<ManagedDialogEmits<ImportDialogResult>>();
+const emit = defineEmits<{
+	complete: [result: ImportDialogResult];
+	cancel: [];
+	"after-leave": [];
+}>();
 
 const isDialogOpen = defineModel<boolean>({ default: false });
 

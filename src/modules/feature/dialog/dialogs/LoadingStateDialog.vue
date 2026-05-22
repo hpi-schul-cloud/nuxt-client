@@ -12,10 +12,14 @@
 </template>
 
 <script setup lang="ts">
-import { LoadingStateDialogProps, ManagedDialogEmits } from "@feature-dialog";
+import { LoadingStateDialogProps } from "@feature-dialog";
 
 defineProps<LoadingStateDialogProps>();
-const emit = defineEmits<ManagedDialogEmits<void>>();
+const emit = defineEmits<{
+	complete: [];
+	cancel: [];
+	"after-leave": [];
+}>();
 
 const isLoading = defineModel<boolean>({ default: false });
 </script>
