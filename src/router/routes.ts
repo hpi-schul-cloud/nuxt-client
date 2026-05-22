@@ -275,6 +275,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 				return true;
 			}
 			useAppStore().handleApplicationError(HttpStatusCode.NotFound);
+			return false;
 		},
 	},
 	{
