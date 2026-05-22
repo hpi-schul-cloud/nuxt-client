@@ -3,16 +3,19 @@ import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { NavigationGuard } from "vue-router";
 
-export function createPermissionGuard(permissions: Permission[], fallbackRoute?: string): NavigationGuard {
-	return (to, from, next) => {
-		if (permissions.every((p) => useAppStore().userPermissions.includes(p))) {
-			return next();
+export const createPermissionGuard =
+	(permissions: Permission[], fallbackRoute?: string): NavigationGuard =>
+	() => {
+		const appStore = useAppStore();
+
+		if (permissions.every((p) => appStore.userPermissions.includes(p))) {
+			return true;
 		}
 
 		if (fallbackRoute) {
-			return next(fallbackRoute);
+			return fallbackRoute;
 		}
 
-		useAppStore().handleApplicationError(HttpStatusCode.Unauthorized);
+		appStore.handleApplicationError(HttpStatusCode.Unauthorized);
+		return false;
 	};
-}
