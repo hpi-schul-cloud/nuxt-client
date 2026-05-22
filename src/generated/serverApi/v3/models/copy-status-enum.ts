@@ -15,13 +15,16 @@
 
 
 /**
- * The Launch Request method (GET or POST)
+ * Copy progress status of copied element
  * @export
  * @enum {string}
  */
-export enum LaunchRequestMethod {
-    GET = 'GET',
-    POST = 'POST'
+export enum CopyStatusEnum {
+    SUCCESS = 'success',
+    FAILURE = 'failure',
+    NOT_DOING = 'not-doing',
+    NOT_IMPLEMENTED = 'not-implemented',
+    PARTIAL = 'partial'
 }
 
 

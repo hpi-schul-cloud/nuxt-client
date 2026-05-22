@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * License type of the media source
  * @export
  * @enum {string}
  */
