@@ -153,7 +153,6 @@ describe("VideoConferenceContentElement", () => {
 				},
 				stubs: {
 					VideoConferenceConfigurationDialog: true,
-					VideoConferenceContentElementDisplay: true,
 				},
 			},
 			props: {
@@ -172,21 +171,28 @@ describe("VideoConferenceContentElement", () => {
 		return { element, useVideoConferenceMock, wrapper };
 	};
 
-	describe("when video conference element is displayed", () => {
+	describe("when rendered in view mode", () => {
 		describe("and content title is undefined", () => {
-			it("should not render display of video conference content", () => {
+			it("should render display of video conference content", () => {
 				const { wrapper } = setupWrapper({ isEditMode: false });
 
 				const videoConferenceElementDisplay = wrapper.findComponent(VideoConferenceContentElementDisplay);
 
-				expect(videoConferenceElementDisplay.exists()).toBe(false);
+				expect(videoConferenceElementDisplay.exists()).toBe(true);
 			});
 
-			it("should not render video conference element menu", () => {
+			it("should keep video conference element visible", () => {
+				const { wrapper } = setupWrapper({ isEditMode: false });
+
+				const videoConferenceElement = wrapper.findComponent('[data-testid="video-conference-element"]');
+
+				expect(videoConferenceElement.attributes("class")).not.toContain("d-none");
+			});
+
+			it("should not render a board menu in view mode", () => {
 				const { wrapper } = setupWrapper({ isEditMode: false });
 
 				const videoConferenceElementMenu = wrapper.findComponent(BoardMenu);
-
 				expect(videoConferenceElementMenu.exists()).toBe(false);
 			});
 		});
@@ -216,6 +222,17 @@ describe("VideoConferenceContentElement", () => {
 				expect(videoConferenceElement.attributes("aria-label")).toEqual(
 					"components.cardElement.videoConferenceElement, common.ariaLabel.newTab"
 				);
+			});
+
+			it("should render the title", () => {
+				const videoConferenceTitle = "Very specific vc title";
+				const { wrapper } = setupWrapper({
+					content: videoConferenceElementContentFactory.build({ title: videoConferenceTitle }),
+					isEditMode: false,
+				});
+
+				const videoConferenceElementDisplay = wrapper.findComponent(VideoConferenceContentElementDisplay);
+				expect(videoConferenceElementDisplay.props("title")).toEqual(videoConferenceTitle);
 			});
 
 			describe("when user has manage video conference permission", () => {
@@ -333,115 +350,6 @@ describe("VideoConferenceContentElement", () => {
 				});
 			});
 
-			describe("and element is in edit mode", () => {
-				it("should render video conference element menu", () => {
-					const videoConferenceElementContent = videoConferenceElementContentFactory.build();
-					const { wrapper } = setupWrapper({
-						content: videoConferenceElementContent,
-						isEditMode: true,
-					});
-
-					const videoConferenceElementMenu = wrapper.findComponent(BoardMenu);
-
-					expect(videoConferenceElementMenu.exists()).toBe(true);
-				});
-
-				describe("when element is first element", () => {
-					describe("and move up menu item is clicked", () => {
-						it("should not render move-up menu item", () => {
-							const videoConferenceElementContent = videoConferenceElementContentFactory.build();
-							const { wrapper } = setupWrapper({
-								content: videoConferenceElementContent,
-								isEditMode: true,
-								isNotFirstElement: false,
-							});
-
-							const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
-
-							expect(menuItem.exists()).toBe(false);
-						});
-					});
-				});
-
-				describe("when element is not first element", () => {
-					describe("and move up menu item is clicked", () => {
-						it("should emit 'move-up:edit' event", async () => {
-							const videoConferenceElementContent = videoConferenceElementContentFactory.build();
-							const { wrapper } = setupWrapper({
-								content: videoConferenceElementContent,
-								isEditMode: true,
-								isNotFirstElement: true,
-							});
-
-							const menuBtn = wrapper.findComponent({ name: "BoardMenu" }).findComponent({ name: "VBtn" });
-							await menuBtn.trigger("click");
-
-							const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
-							await menuItem.trigger("click");
-
-							expect(wrapper.emitted()).toHaveProperty("move-up:edit");
-						});
-					});
-				});
-
-				describe("when element is last element", () => {
-					describe("and move down menu item is clicked", () => {
-						it("should not render move-down menu item", () => {
-							const videoConferenceElementContent = videoConferenceElementContentFactory.build();
-							const { wrapper } = setupWrapper({
-								content: videoConferenceElementContent,
-								isEditMode: true,
-								isNotLastElement: false,
-							});
-
-							const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
-
-							expect(menuItem.exists()).toBe(false);
-						});
-					});
-				});
-
-				describe("when element is not last element", () => {
-					describe("and move down menu item is clicked", () => {
-						it("should emit 'move-down:edit' event", async () => {
-							const videoConferenceElementContent = videoConferenceElementContentFactory.build();
-							const { wrapper } = setupWrapper({
-								content: videoConferenceElementContent,
-								isEditMode: true,
-								isNotLastElement: true,
-							});
-
-							const menuBtn = wrapper.findComponent({ name: "BoardMenu" }).findComponent({ name: "VBtn" });
-							await menuBtn.trigger("click");
-
-							const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
-							await menuItem.trigger("click");
-
-							expect(wrapper.emitted()).toHaveProperty("move-down:edit");
-						});
-					});
-				});
-
-				describe("and delete menu item is clicked", () => {
-					it("should emit 'delete:element' event", async () => {
-						vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
-						const videoConferenceElementContent = videoConferenceElementContentFactory.build();
-						const { wrapper } = setupWrapper({
-							content: videoConferenceElementContent,
-							isEditMode: true,
-						});
-
-						const menuBtn = wrapper.findComponent({ name: "BoardMenu" }).findComponent({ name: "VBtn" });
-						await menuBtn.trigger("click");
-
-						const menuItem = wrapper.findComponent(KebabMenuActionDelete);
-						await menuItem.trigger("click");
-
-						expect(wrapper.emitted()).toHaveProperty("delete:element");
-					});
-				});
-			});
-
 			describe("and element is in view mode", () => {
 				describe.each(["up", "down"])("and arrow key %s is pressed", (key) => {
 					it("should not emit 'move-keyboard:edit'", async () => {
@@ -455,23 +363,6 @@ describe("VideoConferenceContentElement", () => {
 						await videoConferenceElement.trigger(`keydown.${key}`);
 
 						expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
-					});
-				});
-			});
-
-			describe("and element is in edit mode with title", () => {
-				describe.each(["up", "down"])("and arrow key %s is pressed", (key) => {
-					it("should emit 'move-keyboard:edit'", async () => {
-						const videoConferenceElementContent = videoConferenceElementContentFactory.build();
-						const { wrapper } = setupWrapper({
-							content: videoConferenceElementContent,
-							isEditMode: true,
-						});
-
-						const videoConferenceElement = wrapper.findComponent('[data-testid="video-conference-element"]');
-						await videoConferenceElement.trigger(`keydown.${key}`);
-
-						expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
 					});
 				});
 			});
@@ -526,150 +417,6 @@ describe("VideoConferenceContentElement", () => {
 					videoConferenceElementDisplay.vm.$emit("refresh");
 
 					expect(useVideoConferenceMock.fetchVideoConferenceInfo).toHaveBeenCalledTimes(2);
-				});
-			});
-		});
-	});
-
-	describe("when video conference element is being created", () => {
-		describe("and no title was entered", () => {
-			it("should hide video conference element in view mode", () => {
-				const { wrapper } = setupWrapper({ isEditMode: false });
-
-				const videoConferenceElement = wrapper.findComponent('[data-testid="video-conference-element"]');
-
-				expect(videoConferenceElement.attributes("class")).toContain("d-none");
-			});
-
-			it("should not render video conference element menu in view mode", () => {
-				const { wrapper } = setupWrapper({ isEditMode: false });
-
-				const videoConferenceElementMenu = wrapper.findComponent(BoardMenu);
-
-				expect(videoConferenceElementMenu.exists()).toBe(false);
-			});
-		});
-
-		describe("and element is in edit mode", () => {
-			it("should render VideoConferenceContentElementCreate component", () => {
-				const { wrapper } = setupWrapper({ isEditMode: true });
-
-				const videoConferenceCreateComponent = wrapper.findComponent(VideoConferenceContentElementCreate);
-
-				expect(videoConferenceCreateComponent.exists()).toBe(true);
-			});
-
-			it.each(["up", "down"])("should not emit 'move-keyboard:edit' when arrow key %s is pressed", async (key) => {
-				const { wrapper } = setupWrapper({ isEditMode: true });
-
-				const videoConferenceElement = wrapper.findComponent('[data-testid="video-conference-element"]');
-				await videoConferenceElement.trigger(`keydown.${key}`);
-
-				expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
-			});
-
-			describe("when video conference element menu is clicked", () => {
-				it("should render video conference element menu", () => {
-					const { wrapper } = setupWrapper({ isEditMode: true });
-
-					const videoConferenceElementMenu = wrapper.findComponent(BoardMenu);
-
-					expect(videoConferenceElementMenu.exists()).toBe(true);
-				});
-
-				describe("and element is first element", () => {
-					it("should hide 'move-up' menu item", () => {
-						const { wrapper } = setupWrapper({
-							isEditMode: true,
-							isNotFirstElement: false,
-						});
-
-						const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
-
-						expect(menuItem.exists()).toBe(false);
-					});
-				});
-
-				describe("and element is not first element", () => {
-					describe("and move up menu item is clicked", () => {
-						it("should emit 'move-up:edit' event", async () => {
-							const { wrapper } = setupWrapper({
-								isEditMode: true,
-								isNotFirstElement: true,
-							});
-
-							const menuBtn = wrapper.getComponent({ name: "BoardMenu" }).getComponent({ name: "VBtn" });
-							await menuBtn.trigger("click");
-
-							const menuItem = wrapper.getComponent(KebabMenuActionMoveUp);
-							await menuItem.trigger("click");
-
-							expect(wrapper.emitted()).toHaveProperty("move-up:edit");
-						});
-					});
-				});
-
-				describe("and element is last element", () => {
-					describe("and move down menu item is clicked", () => {
-						it("should hide 'move-down' menu item", () => {
-							const { wrapper } = setupWrapper({
-								isEditMode: true,
-								isNotLastElement: false,
-							});
-
-							const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
-
-							expect(menuItem.exists()).toBe(false);
-						});
-					});
-				});
-
-				describe("and element is not last element", () => {
-					describe("and move down menu item is clicked", () => {
-						it("should emit 'move-down:edit' event", async () => {
-							const { wrapper } = setupWrapper({
-								isEditMode: true,
-								isNotLastElement: true,
-							});
-
-							const menuBtn = wrapper.getComponent({ name: "BoardMenu" }).getComponent({ name: "VBtn" });
-							await menuBtn.trigger("click");
-
-							const menuItem = wrapper.getComponent(KebabMenuActionMoveDown);
-							await menuItem.trigger("click");
-
-							expect(wrapper.emitted()).toHaveProperty("move-down:edit");
-						});
-					});
-				});
-
-				describe("and delete menu item is clicked", () => {
-					it("should emit 'delete:element' event", async () => {
-						vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
-						const { wrapper } = setupWrapper({ isEditMode: true });
-
-						const menuBtn = wrapper.findComponent({ name: "BoardMenu" }).findComponent({ name: "VBtn" });
-						await menuBtn.trigger("click");
-
-						const menuItem = wrapper.findComponent(KebabMenuActionDelete);
-						await menuItem.trigger("click");
-
-						expect(wrapper.emitted()).toHaveProperty("delete:element");
-					});
-				});
-			});
-		});
-
-		describe("onCreateTitle", () => {
-			describe("and title was provided", () => {
-				it("should display the title", () => {
-					const videoConferenceTitle = "Very specific vc title";
-					const { wrapper } = setupWrapper({
-						content: videoConferenceElementContentFactory.build({ title: videoConferenceTitle }),
-						isEditMode: false,
-					});
-
-					expect(wrapper.html()).toEqual(expect.stringContaining(videoConferenceTitle));
 				});
 			});
 		});
@@ -768,6 +515,159 @@ describe("VideoConferenceContentElement", () => {
 			vi.mocked(useBoardFeatures).mockImplementation(() => ({
 				isFeatureEnabled: vi.fn().mockReturnValue(true),
 			}));
+		});
+	});
+
+	describe("when rendered in edit mode", () => {
+		describe("and the conference is not running", () => {
+			it("should render the create component when no title exists", () => {
+				const { wrapper } = setupWrapper({ isEditMode: true });
+
+				const videoConferenceCreateComponent = wrapper.findComponent(VideoConferenceContentElementCreate);
+				const videoConferenceElementDisplay = wrapper.findComponent(VideoConferenceContentElementDisplay);
+
+				expect(videoConferenceCreateComponent.exists()).toBe(true);
+				expect(videoConferenceElementDisplay.exists()).toBe(false);
+			});
+
+			it("should render the create component with an existing title", () => {
+				const videoConferenceTitle = "Existing conference title";
+				const { wrapper } = setupWrapper({
+					content: videoConferenceElementContentFactory.build({ title: videoConferenceTitle }),
+					isEditMode: true,
+				});
+
+				const videoConferenceCreateComponent = wrapper.getComponent(VideoConferenceContentElementCreate);
+				const videoConferenceElementDisplay = wrapper.findComponent(VideoConferenceContentElementDisplay);
+
+				expect(videoConferenceCreateComponent.props("existingTitle")).toEqual(videoConferenceTitle);
+				expect(videoConferenceElementDisplay.exists()).toBe(false);
+			});
+
+			it("should render the video conference element menu", () => {
+				const { wrapper } = setupWrapper({ isEditMode: true });
+
+				const videoConferenceElementMenu = wrapper.findComponent(BoardMenu);
+
+				expect(videoConferenceElementMenu.exists()).toBe(true);
+			});
+
+			describe.each(["up", "down"])("and arrow key %s is pressed", (key) => {
+				it("should emit 'move-keyboard:edit'", async () => {
+					const { wrapper } = setupWrapper({ isEditMode: true });
+
+					const videoConferenceElement = wrapper.findComponent('[data-testid="video-conference-element"]');
+					await videoConferenceElement.trigger(`keydown.${key}`);
+
+					expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
+				});
+			});
+
+			describe("menu actions", () => {
+				it("should not render move-up when element is first", () => {
+					const { wrapper } = setupWrapper({
+						isEditMode: true,
+						isNotFirstElement: false,
+					});
+
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
+
+					expect(menuItem.exists()).toBe(false);
+				});
+
+				it("should emit 'move-up:edit' when move up is clicked", async () => {
+					const { wrapper } = setupWrapper({
+						isEditMode: true,
+						isNotFirstElement: true,
+					});
+
+					const menuBtn = wrapper.getComponent({ name: "BoardMenu" }).getComponent({ name: "VBtn" });
+					await menuBtn.trigger("click");
+
+					const menuItem = wrapper.getComponent(KebabMenuActionMoveUp);
+					await menuItem.trigger("click");
+
+					expect(wrapper.emitted()).toHaveProperty("move-up:edit");
+				});
+
+				it("should not render move-down when element is last", () => {
+					const { wrapper } = setupWrapper({
+						isEditMode: true,
+						isNotLastElement: false,
+					});
+
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
+
+					expect(menuItem.exists()).toBe(false);
+				});
+
+				it("should emit 'move-down:edit' when move down is clicked", async () => {
+					const { wrapper } = setupWrapper({
+						isEditMode: true,
+						isNotLastElement: true,
+					});
+
+					const menuBtn = wrapper.getComponent({ name: "BoardMenu" }).getComponent({ name: "VBtn" });
+					await menuBtn.trigger("click");
+
+					const menuItem = wrapper.getComponent(KebabMenuActionMoveDown);
+					await menuItem.trigger("click");
+
+					expect(wrapper.emitted()).toHaveProperty("move-down:edit");
+				});
+
+				it("should emit 'delete:element' when delete is clicked", async () => {
+					vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
+					const { wrapper } = setupWrapper({ isEditMode: true });
+
+					const menuBtn = wrapper.findComponent({ name: "BoardMenu" }).findComponent({ name: "VBtn" });
+					await menuBtn.trigger("click");
+
+					const menuItem = wrapper.findComponent(KebabMenuActionDelete);
+					await menuItem.trigger("click");
+
+					expect(wrapper.emitted()).toHaveProperty("delete:element");
+				});
+			});
+		});
+
+		describe("and the conference is running", () => {
+			it("should only render the display component", () => {
+				const { wrapper } = setupWrapper({
+					content: videoConferenceElementContentFactory.build({ title: "test-title" }),
+					isEditMode: true,
+					isConferenceRunning: true,
+				});
+
+				const videoConferenceCreateComponent = wrapper.findComponent(VideoConferenceContentElementCreate);
+				const videoConferenceElementDisplay = wrapper.findComponent(VideoConferenceContentElementDisplay);
+
+				expect(videoConferenceCreateComponent.exists()).toBe(false);
+				expect(videoConferenceElementDisplay.exists()).toBe(true);
+			});
+
+			it("should keep the card focusable", () => {
+				const { wrapper } = setupWrapper({
+					content: videoConferenceElementContentFactory.build({ title: "test-title" }),
+					isEditMode: true,
+					isConferenceRunning: true,
+				});
+
+				const videoConferenceElement = wrapper.findComponent('[data-testid="video-conference-element"]');
+
+				expect(videoConferenceElement.attributes("tabindex")).toEqual("0");
+			});
+
+			it("should render a board menu when conference is running in edit mode", () => {
+				const { wrapper } = setupWrapper({
+					content: videoConferenceElementContentFactory.build({ title: "test-title" }),
+					isEditMode: true,
+					isConferenceRunning: true,
+				});
+
+				const videoConferenceElementMenu = wrapper.findComponent(BoardMenu);
+				expect(videoConferenceElementMenu.exists()).toBe(true);
+			});
 		});
 	});
 
