@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * The type of the medium
  * @export
  * @enum {string}
  */

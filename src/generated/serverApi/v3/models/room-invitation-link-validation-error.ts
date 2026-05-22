@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * The error details.
  * @export
  * @enum {string}
  */
