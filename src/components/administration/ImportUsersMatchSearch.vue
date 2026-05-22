@@ -161,9 +161,9 @@
 </template>
 
 <script setup lang="ts">
-import { importUsersModule } from "@/store";
 import { ImportUserResponse, UserMatchResponse } from "@api-server";
 import { useEnvStore } from "@data-env";
+import { useImportUsersStore } from "@data-import-users";
 import { mdiAccountSearch, mdiClose, mdiContentSave, mdiDelete, mdiFlag, mdiFlagOutline } from "@icons/material";
 import { useDebounceFn } from "@vueuse/core";
 import { storeToRefs } from "pinia";
@@ -227,6 +227,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const importUsersStore = useImportUsersStore();
 const { instanceName } = storeToRefs(useEnvStore());
 
 const entries: Ref<UserMatchResponse[]> = ref([]);
@@ -274,18 +275,18 @@ const externalRoleText: ComputedRef<string> = computed(() => {
 const getDataFromApi = async (append = false) => {
 	loading.value = true;
 
-	importUsersModule.setUsersLimit(limit.value);
-	importUsersModule.setUsersSkip(skip.value);
-	importUsersModule.setUserSearch(searchUser.value);
+	importUsersStore.userSearch.limit = limit.value;
+	importUsersStore.userSearch.skip = skip.value;
+	importUsersStore.userSearch.query = searchUser.value;
 
-	await importUsersModule.fetchAllUsers();
+	await importUsersStore.fetchAllUsers();
 
-	total.value = importUsersModule.getUserList.total;
+	total.value = importUsersStore.userSearch.list.total;
 
 	if (append) {
-		entries.value.push(...importUsersModule.getUserList.data);
+		entries.value.push(...importUsersStore.userSearch.list.data);
 	} else {
-		entries.value = importUsersModule.getUserList.data;
+		entries.value = importUsersStore.userSearch.list.data;
 	}
 
 	loading.value = false;
@@ -320,15 +321,11 @@ const saveMatch = async () => {
 	if (!selectedItem.value) {
 		return false;
 	}
-	const importUser = await importUsersModule.saveMatch({
+	const importUser = await importUsersStore.saveMatch({
 		importUserId: props.editedItem.importUserId,
 		userId: selectedItem.value.userId,
 	});
-	if (
-		!importUsersModule.getBusinessError &&
-		importUser?.match &&
-		importUser.match.userId === selectedItem.value.userId
-	) {
+	if (!importUsersStore.businessError && importUser?.match && importUser.match.userId === selectedItem.value.userId) {
 		emit("saved-match");
 		closeEdit();
 	}
@@ -338,20 +335,20 @@ const deleteMatch = async () => {
 	if (!props.editedItem.match || !props.editedItem.match.userId) {
 		return false;
 	}
-	const importUser = await importUsersModule.deleteMatch(props.editedItem.importUserId);
-	if (!importUsersModule.getBusinessError && importUser?.match === undefined) {
+	const importUser = await importUsersStore.deleteMatch(props.editedItem.importUserId);
+	if (!importUsersStore.businessError && importUser?.match === undefined) {
 		emit("deleted-match");
 		closeEdit();
 	}
 };
 
 const saveFlag = async () => {
-	const importUser = await importUsersModule.saveFlag({
+	const importUser = await importUsersStore.saveFlag({
 		importUserId: props.editedItem.importUserId,
 		flagged: !flagged.value,
 	});
 
-	if (!importUsersModule.getBusinessError && importUser?.flagged === !flagged.value) {
+	if (!importUsersStore.businessError && importUser?.flagged === !flagged.value) {
 		flagged.value = !flagged.value;
 		emit("saved-flag");
 	}

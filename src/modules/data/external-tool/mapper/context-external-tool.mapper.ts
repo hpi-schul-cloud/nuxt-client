@@ -11,15 +11,8 @@ import {
 	ContextExternalToolConfigurationTemplateResponse,
 	ContextExternalToolPostParams,
 	ContextExternalToolResponse,
-	ContextExternalToolResponseContextType,
 	ToolContextType,
 } from "@api-server";
-
-export const ToolContextMapping: Record<ContextExternalToolResponseContextType, ToolContextType> = {
-	[ContextExternalToolResponseContextType.COURSE]: ToolContextType.COURSE,
-	[ContextExternalToolResponseContextType.BOARD_ELEMENT]: ToolContextType.BOARD_ELEMENT,
-	[ContextExternalToolResponseContextType.MEDIA_BOARD]: ToolContextType.MEDIA_BOARD,
-};
 
 export class ContextExternalToolMapper {
 	static mapToContextExternalToolConfigurationTemplate(
@@ -83,7 +76,7 @@ export class ContextExternalToolMapper {
 		const mapped: ContextExternalTool = {
 			id: response.id,
 			contextId: response.contextId,
-			contextType: ToolContextMapping[response.contextType],
+			contextType: response.contextType,
 			displayName: response.displayName,
 			schoolToolId: response.schoolToolId,
 			parameters: response.parameters.map(

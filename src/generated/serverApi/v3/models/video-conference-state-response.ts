@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * The state of the video conference.
  * @export
  * @enum {string}
  */

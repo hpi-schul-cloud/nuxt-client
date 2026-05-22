@@ -9,4 +9,3 @@ export * from "./mockedPiniaStoreTyping";
 export * from "./mockStatusAlerts";
 export * from "./mountComposable";
 export * from "./ObjectIdMock";
-export * from "./setupStores";

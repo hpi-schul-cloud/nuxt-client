@@ -1,5 +1,5 @@
 import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
-import { ContextExternalToolMapper, ToolContextMapping } from "./mapper";
+import { ContextExternalToolMapper } from "./mapper";
 import { ContextExternalTool, ContextExternalToolConfigurationTemplate, ContextExternalToolSave } from "./types";
 import {
 	contextExternalToolConfigurationTemplateResponseFactory,
@@ -61,7 +61,7 @@ describe("contextExternalToolApi.composable", () => {
 				id: contextExternalTool.id,
 				displayName: contextExternalTool.displayName,
 				contextId: contextExternalTool.contextId,
-				contextType: ToolContextMapping[contextExternalTool.contextType],
+				contextType: contextExternalTool.contextType,
 				parameters: contextExternalTool.parameters,
 				schoolToolId: contextExternalTool.schoolToolId,
 			});
@@ -103,7 +103,7 @@ describe("contextExternalToolApi.composable", () => {
 				id: contextExternalToolResponse.id,
 				displayName: contextExternalToolResponse.displayName,
 				contextId: contextExternalToolResponse.contextId,
-				contextType: ToolContextMapping[contextExternalToolResponse.contextType],
+				contextType: contextExternalToolResponse.contextType,
 				parameters: contextExternalToolResponse.parameters,
 				schoolToolId: contextExternalToolResponse.schoolToolId,
 			});
@@ -150,7 +150,7 @@ describe("contextExternalToolApi.composable", () => {
 				id: contextExternalToolResponse.id,
 				displayName: contextExternalToolResponse.displayName,
 				contextId: contextExternalToolResponse.contextId,
-				contextType: ToolContextMapping[contextExternalToolResponse.contextType],
+				contextType: contextExternalToolResponse.contextType,
 				parameters: contextExternalToolResponse.parameters,
 				schoolToolId: contextExternalToolResponse.schoolToolId,
 			});

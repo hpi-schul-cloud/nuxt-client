@@ -8,12 +8,7 @@ import {
 	courseRoomSubElementFactory,
 } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import {
-	CopyApiResponse,
-	CopyApiResponseStatus,
-	CopyApiResponseType,
-	type DashboardGridElementResponse,
-} from "@api-server";
+import { CopyApiResponse, CopyElementType, CopyStatusEnum, type DashboardGridElementResponse } from "@api-server";
 import type { GroupDataType } from "@data-course-rooms";
 import { useCourseRoomListStore } from "@data-course-rooms";
 import { useImportFlow } from "@feature-import";
@@ -435,8 +430,8 @@ describe("CourseRoomOverview.page", () => {
 		beforeEach(() => {
 			const copyResult: CopyApiResponse = {
 				id: "task-copy-id",
-				type: CopyApiResponseType.TASK,
-				status: CopyApiResponseStatus.SUCCESS,
+				type: CopyElementType.TASK,
+				status: CopyStatusEnum.SUCCESS,
 			};
 
 			useImportFlowMock.executeImport.mockResolvedValue({

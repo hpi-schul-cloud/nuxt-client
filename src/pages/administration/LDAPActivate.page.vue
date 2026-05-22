@@ -149,12 +149,12 @@
 
 <script>
 import InfoMessage from "@/components/administration/InfoMessage.vue";
-import { importUsersModule } from "@/store/index.ts";
 import { unchangedPassword } from "@/utils/ldapConstants";
 import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
+import { useImportUsersStore } from "@data-import-users";
 import {
 	mdiAccountEye,
 	mdiAccountSchoolOutline,
@@ -184,7 +184,8 @@ export default defineComponent({
 	},
 	setup() {
 		const { t } = useI18n();
-		return { t };
+		const importUsersStore = useImportUsersStore();
+		return { t, importUsersStore };
 	},
 	data() {
 		return {
@@ -212,7 +213,7 @@ export default defineComponent({
 			);
 		},
 		importUsersError() {
-			return importUsersModule.getBusinessError;
+			return this.importUsersStore.businessError;
 		},
 		activationErrors() {
 			return ldapErrorHandler(this.submitted.errors, this);
@@ -265,8 +266,8 @@ export default defineComponent({
 			}
 
 			if (this.migrateUsersCheckbox) {
-				await importUsersModule.setSchoolInUserMigration(false);
-				if (importUsersModule.getBusinessError) {
+				await this.importUsersStore.setSchoolInUserMigration(false);
+				if (this.importUsersStore.businessError) {
 					return;
 				}
 			}
