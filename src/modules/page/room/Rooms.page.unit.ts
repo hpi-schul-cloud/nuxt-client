@@ -11,8 +11,8 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import * as serverApi from "@api-server";
 import {
 	CopyApiResponse,
-	CopyApiResponseStatus,
-	CopyApiResponseType,
+	CopyElementType,
+	CopyStatusEnum,
 	Permission,
 	ShareTokenInfoResponseParentType,
 } from "@api-server";
@@ -165,8 +165,8 @@ describe("RoomsPage", () => {
 				const mockBoardCopyResult = () => {
 					const copyResult: CopyApiResponse = {
 						id: "board-copy-id",
-						type: CopyApiResponseType.BOARD,
-						status: CopyApiResponseStatus.SUCCESS,
+						type: CopyElementType.BOARD,
+						status: CopyStatusEnum.SUCCESS,
 					};
 
 					useImportFlowMock.executeImport.mockResolvedValue({
@@ -190,8 +190,8 @@ describe("RoomsPage", () => {
 				const mockCardCopyResult = () => {
 					const copyResult: CopyApiResponse = {
 						id: "card-copy-id",
-						type: CopyApiResponseType.CARD,
-						status: CopyApiResponseStatus.SUCCESS,
+						type: CopyElementType.CARD,
+						status: CopyStatusEnum.SUCCESS,
 					};
 
 					useImportFlowMock.executeImport.mockResolvedValue({
@@ -215,8 +215,8 @@ describe("RoomsPage", () => {
 				const mockRoomCopyResult = () => {
 					const copyResult: CopyApiResponse = {
 						id: "room-copy-id",
-						type: CopyApiResponseType.ROOM,
-						status: CopyApiResponseStatus.SUCCESS,
+						type: CopyElementType.ROOM,
+						status: CopyStatusEnum.SUCCESS,
 					};
 
 					useImportFlowMock.executeImport.mockResolvedValue({

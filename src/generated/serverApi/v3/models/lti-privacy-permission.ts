@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * Describes the amount of personal information that the tool provider gets.
  * @export
  * @enum {string}
  */
