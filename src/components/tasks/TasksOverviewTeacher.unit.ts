@@ -4,7 +4,7 @@ import { CopyParams } from "@/types/copy/CopyParams";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { createTestAppStoreWithRole, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { CopyApiResponseStatus, CopyApiResponseType, RoleName, ShareTokenBodyParamsParentType } from "@api-server";
+import { CopyElementType, CopyStatusEnum, RoleName, ShareTokenBodyParamsParentType } from "@api-server";
 import { useTasksOfOverview } from "@data-tasks";
 import { useCopyFlow } from "@feature-copy";
 import { useShareFlow } from "@feature-share";
@@ -82,7 +82,7 @@ describe("TasksOverviewTeacher", () => {
 		beforeEach(() => {
 			useCopyFlowMock.executeCopyTask.mockResolvedValue({
 				success: true,
-				result: { id: "copied-id", type: CopyApiResponseType.TASK, status: CopyApiResponseStatus.SUCCESS },
+				result: { id: "copied-id", type: CopyElementType.TASK, status: CopyStatusEnum.SUCCESS },
 				error: undefined,
 			});
 		});

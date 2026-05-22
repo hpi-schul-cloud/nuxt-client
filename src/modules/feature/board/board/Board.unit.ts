@@ -13,8 +13,8 @@ import {
 	BoardLayout,
 	BoardResponseAllowedOperations,
 	ConfigResponse,
-	CopyApiResponseStatus,
-	CopyApiResponseType,
+	CopyElementType,
+	CopyStatusEnum,
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
 import { useAppStore, useNotificationStore } from "@data-app";
@@ -829,7 +829,7 @@ describe("Board", () => {
 			beforeEach(() => {
 				useCopyFlowMock.executeCopyBoard.mockResolvedValue({
 					success: true,
-					result: { id: "copied-id", type: CopyApiResponseType.COLUMNBOARD, status: CopyApiResponseStatus.SUCCESS },
+					result: { id: "copied-id", type: CopyElementType.COLUMNBOARD, status: CopyStatusEnum.SUCCESS },
 					error: undefined,
 				});
 			});

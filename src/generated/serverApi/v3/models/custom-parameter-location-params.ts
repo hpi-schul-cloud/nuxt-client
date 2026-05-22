@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * Location where the parameter is transmitted in the HTTP request to the tool provider.
  * @export
  * @enum {string}
  */

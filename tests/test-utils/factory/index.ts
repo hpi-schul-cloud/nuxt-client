@@ -64,6 +64,7 @@ export * from "./schoolExternalToolMetadataResponseFactory";
 export * from "./schoolExternalToolResponseFactory";
 export * from "./schoolExternalToolSaveFactory";
 export * from "./schoolFactory";
+export * from "./school-test.utils";
 export * from "./singleColumnBoardResponseFactory";
 export * from "./taskResponseFactory";
 export * from "./timestampsResponseFactory";
