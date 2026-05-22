@@ -3,7 +3,6 @@
 		ref="videoConferenceElement"
 		class="mb-4 video-conference-element"
 		data-testid="video-conference-element"
-		:class="{ 'd-none': isHidden }"
 		:variant="outlined"
 		:ripple="false"
 		:tabindex="tabIndex"
@@ -11,10 +10,11 @@
 		link
 		:aria-label="ariaLabel"
 		@keydown.stop.up.down="onKeydownArrow"
+		@keydown.stop
 		@keyup.enter="onContentEnter"
 	>
 		<VideoConferenceContentElementDisplay
-			v-if="computedElement.content.title"
+			v-if="!isEditMode || isConferenceRunning"
 			:board-parent-type="boardParentType"
 			:title="computedElement.content.title"
 			:has-participation-permission="hasParticipationPermission"
@@ -37,7 +37,13 @@
 				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</VideoConferenceContentElementDisplay>
-		<VideoConferenceContentElementCreate v-if="isCreating" :is-detail-view="isDetailView" @create:title="onCreateTitle">
+		<VideoConferenceContentElementCreate
+			v-if="isEditMode && !isConferenceRunning"
+			:existing-title="computedElement.content.title"
+			:is-detail-view="isDetailView"
+			@create:title="onCreateTitle"
+			@validation:failed="onValidationFailed"
+		>
 			<BoardMenu
 				:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 				has-background
@@ -72,7 +78,7 @@ import VideoConferenceContentElementDisplay from "./VideoConferenceContentElemen
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { BoardFeature, VideoConferenceElementResponse, VideoConferenceScope } from "@api-server";
 import { useVideoConference } from "@data-access";
-import { useAppStoreRefs } from "@data-app";
+import { notifyWarning, useAppStoreRefs } from "@data-app";
 import {
 	useBoardAllowedOperations,
 	useBoardFeatures,
@@ -151,11 +157,12 @@ const { modelValue, computedElement } = useContentElementState(props, {
 
 const { t } = useI18n();
 
-const isHidden = computed(() => !props.isEditMode && !computedElement.value.content.title);
 const outlined = computed(() => (props.isEditMode || computedElement.value.content.title ? "outlined" : "text"));
+
 const ariaLabel = computed(
 	() => `${t("components.cardElement.videoConferenceElement")}, ${t("common.ariaLabel.newTab")}`
 );
+
 const isConfigurationDialogOpen = ref(false);
 
 const errorDismissed = ref(false);
@@ -167,7 +174,6 @@ const onDismissError = () => {
 };
 
 const hasParticipationPermission = computed(() => canJoin.value || canStart.value);
-const isCreating = computed(() => props.isEditMode && !computedElement.value.content.title);
 const boardParentType = computed(() => contextType.value);
 
 const onContentClick = async () => {
@@ -181,15 +187,24 @@ const onContentClick = async () => {
 };
 
 const onCloseConfigurationDialog = () => (isConfigurationDialogOpen.value = false);
-const onCreateTitle = (title: string) => (modelValue.value.title = title);
+
+const onCreateTitle = (title: string) => {
+	modelValue.value.title = title;
+};
+
+const onValidationFailed = (errorMessage: string) => {
+	notifyWarning(errorMessage);
+};
+
 const onKeydownArrow = (event: KeyboardEvent) => {
-	if (!isCreating.value && props.isEditMode) {
+	if (props.isEditMode) {
 		event.preventDefault();
 		emit("move-keyboard:edit", event);
 	}
 };
 const onMoveDown = () => emit("move-down:edit");
 const onMoveUp = () => emit("move-up:edit");
+
 const onDelete = async () => {
 	if (await askDeletionForType("components.cardElement.videoConferenceElement"))
 		emit("delete:element", computedElement.value.id);
@@ -220,7 +235,13 @@ const onContentEnter = async () => {
 	}
 };
 
-const tabIndex = computed(() => (!isCreating.value && (canStart.value || isConferenceRunning.value) ? 0 : undefined));
+const tabIndex = computed(() => {
+	if (props.isEditMode) {
+		return 0;
+	}
+
+	return canStart.value || isConferenceRunning.value ? 0 : undefined;
+});
 </script>
 
 <style scoped lang="scss">

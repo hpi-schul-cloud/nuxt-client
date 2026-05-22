@@ -223,6 +223,8 @@ export default {
 	"common.validation.fileTooBig": "Файл не повинен перевищувати {maxSize} КБ.",
 	"common.validation.tooShort": "Введений текст не досягає мінімальної довжини",
 	"common.validation.containsOpeningTag": "Будь ласка, вставте пробіл після знаку менше.",
+	"common.validation.containsOpeningTag.discardChanges":
+		"Будь ласка, вставте пробіл після знаку менше. Зміни були скасовані.",
 	"common.validation.nonEmptyString": "Це обов'язкове поле і не повинно містити лише пробіли.",
 	"common.words.also": "також",
 	"common.words.and": "і",
@@ -583,7 +585,6 @@ export default {
 	"components.cardElement.titleElement.validation.required": "Будь ласка, введіть назву.",
 	"components.cardElement.titleElement": "Елемент заголовка",
 	"components.cardElement.videoConferenceElement": "Відеоконференція",
-	"components.cardElement.videoConferenceElement.label": "Вставити назву відеоконференції",
 	"components.cardElement.deletedElement": "Видалений вміст",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
