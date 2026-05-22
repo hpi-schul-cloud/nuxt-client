@@ -2,7 +2,6 @@ import BoardColumnVue from "./BoardColumn.vue";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { BoardResponseAllowedOperations } from "@api-server";
 import { useBoardStore, useForceRender, useSharedEditMode } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
@@ -30,7 +29,6 @@ describe("BoardColumn", () => {
 	let router: RouterMock;
 
 	beforeEach(() => {
-		setupStores({});
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({ FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false });
 
