@@ -9,7 +9,7 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
-import { CopyApiResponse, CopyApiResponseStatus, CopyApiResponseType, Permission } from "@api-server";
+import { CopyApiResponse, CopyElementType, CopyStatusEnum, Permission } from "@api-server";
 import { useImportFlow } from "@feature-import";
 import { RoomGrid } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
@@ -124,8 +124,8 @@ describe("RoomsPage", () => {
 				const mockBoardCopyResult = () => {
 					const copyResult: CopyApiResponse = {
 						id: "board-copy-id",
-						type: CopyApiResponseType.BOARD,
-						status: CopyApiResponseStatus.SUCCESS,
+						type: CopyElementType.BOARD,
+						status: CopyStatusEnum.SUCCESS,
 					};
 
 					useImportFlowMock.executeImport.mockResolvedValue({
@@ -149,8 +149,8 @@ describe("RoomsPage", () => {
 				const mockCardCopyResult = () => {
 					const copyResult: CopyApiResponse = {
 						id: "card-copy-id",
-						type: CopyApiResponseType.CARD,
-						status: CopyApiResponseStatus.SUCCESS,
+						type: CopyElementType.CARD,
+						status: CopyStatusEnum.SUCCESS,
 					};
 
 					useImportFlowMock.executeImport.mockResolvedValue({
@@ -174,8 +174,8 @@ describe("RoomsPage", () => {
 				const mockRoomCopyResult = () => {
 					const copyResult: CopyApiResponse = {
 						id: "room-copy-id",
-						type: CopyApiResponseType.ROOM,
-						status: CopyApiResponseStatus.SUCCESS,
+						type: CopyElementType.ROOM,
+						status: CopyStatusEnum.SUCCESS,
 					};
 
 					useImportFlowMock.executeImport.mockResolvedValue({

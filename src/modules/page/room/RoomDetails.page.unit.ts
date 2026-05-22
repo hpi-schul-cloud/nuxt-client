@@ -6,7 +6,7 @@ import { createTestAppStore, createTestRoomStore, mockComposable, mockedPiniaSto
 import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/factory/room";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
-import { CopyApiResponseStatus, CopyApiResponseType } from "@api-server";
+import { CopyElementType, CopyStatusEnum } from "@api-server";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { useCopyFlow } from "@feature-copy";
 import { RoomBoardGrid, RoomMenu } from "@feature-room";
@@ -263,7 +263,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			beforeEach(() => {
 				useCopyFlowMock.executeCopyRoom.mockResolvedValue({
 					success: true,
-					result: { id: "copied-room-id", type: CopyApiResponseType.ROOM, status: CopyApiResponseStatus.SUCCESS },
+					result: { id: "copied-room-id", type: CopyElementType.ROOM, status: CopyStatusEnum.SUCCESS },
 					error: undefined,
 				});
 			});
@@ -309,7 +309,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			it("should navigate to copied room on successful copy", async () => {
 				useCopyFlowMock.executeCopyRoom.mockResolvedValue({
 					success: true,
-					result: { id: "copied-room-id", type: CopyApiResponseType.ROOM, status: CopyApiResponseStatus.SUCCESS },
+					result: { id: "copied-room-id", type: CopyElementType.ROOM, status: CopyStatusEnum.SUCCESS },
 					error: undefined,
 				});
 
@@ -451,7 +451,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				});
 				useCopyFlowMock.executeCopyBoard.mockResolvedValue({
 					success: true,
-					result: { id: "copied-board-id", type: CopyApiResponseType.BOARD, status: CopyApiResponseStatus.SUCCESS },
+					result: { id: "copied-board-id", type: CopyElementType.BOARD, status: CopyStatusEnum.SUCCESS },
 					error: undefined,
 				});
 

@@ -3,7 +3,7 @@ import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { expectNotification, mockApi, mockApiResponse, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
-import { CopyApiResponse, CopyApiResponseStatus, CopyApiResponseType } from "@api-server";
+import { CopyApiResponse, CopyElementType, CopyStatusEnum } from "@api-server";
 import { useNotificationStore } from "@data-app";
 import * as featureDialog from "@feature-dialog";
 import { createTestingPinia } from "@pinia/testing";
@@ -55,8 +55,8 @@ const mockApiSuccess = (type: ContentItemTypeEnum) => {
 			const response = mockApiResponse<CopyApiResponse>({
 				data: {
 					id: "new-course-id",
-					type: CopyApiResponseType.COURSE,
-					status: CopyApiResponseStatus.SUCCESS,
+					type: CopyElementType.COURSE,
+					status: CopyStatusEnum.SUCCESS,
 				},
 			});
 			courseRoomsApi.courseRoomsControllerCopyCourse.mockResolvedValue(response);
@@ -66,8 +66,8 @@ const mockApiSuccess = (type: ContentItemTypeEnum) => {
 			const response = mockApiResponse<CopyApiResponse>({
 				data: {
 					id: "new-task-id",
-					type: CopyApiResponseType.TASK,
-					status: CopyApiResponseStatus.SUCCESS,
+					type: CopyElementType.TASK,
+					status: CopyStatusEnum.SUCCESS,
 				},
 			});
 			taskApi.taskControllerCopyTask.mockResolvedValue(response);
@@ -77,8 +77,8 @@ const mockApiSuccess = (type: ContentItemTypeEnum) => {
 			const response = mockApiResponse<CopyApiResponse>({
 				data: {
 					id: "new-lesson-id",
-					type: CopyApiResponseType.LESSON,
-					status: CopyApiResponseStatus.SUCCESS,
+					type: CopyElementType.LESSON,
+					status: CopyStatusEnum.SUCCESS,
 				},
 			});
 			courseRoomsApi.courseRoomsControllerCopyLesson.mockResolvedValue(response);
@@ -88,8 +88,8 @@ const mockApiSuccess = (type: ContentItemTypeEnum) => {
 			const response = mockApiResponse<CopyApiResponse>({
 				data: {
 					id: "new-board-id",
-					type: CopyApiResponseType.BOARD,
-					status: CopyApiResponseStatus.SUCCESS,
+					type: CopyElementType.BOARD,
+					status: CopyStatusEnum.SUCCESS,
 				},
 			});
 			boardApi.boardControllerCopyBoard.mockResolvedValue(response);
@@ -99,8 +99,8 @@ const mockApiSuccess = (type: ContentItemTypeEnum) => {
 			const response = mockApiResponse<CopyApiResponse>({
 				data: {
 					id: "new-room-id",
-					type: CopyApiResponseType.ROOM,
-					status: CopyApiResponseStatus.SUCCESS,
+					type: CopyElementType.ROOM,
+					status: CopyStatusEnum.SUCCESS,
 				},
 			});
 			roomApi.roomControllerCopyRoom.mockResolvedValue(response);

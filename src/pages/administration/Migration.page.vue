@@ -76,7 +76,7 @@
 							<VCard :ripple="false" elevation="2" class="pa-5 mb-10" color="grey-lighten-5">
 								<VProgressLinear v-if="schoolMigrationState.inUserMigration && isLoading" indeterminate />
 								<VCardText>
-									<iframe class="full" :src="helpPageUri" />
+									<iframe class="full" :src="helpPageUri" :title="t('pages.administration.migration.title')" />
 									<VAlert
 										v-if="(!schoolMigrationState.inUserMigration || isLoading) && !isNbc"
 										density="compact"
@@ -387,13 +387,13 @@
 </template>
 <script setup lang="ts">
 import ImportUsers from "@/components/administration/ImportUsers.vue";
-import { importUsersModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { SchoolFeature, SchulcloudTheme } from "@api-server";
 import { useSchoolStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
+import { useImportUsersStore } from "@data-import-users";
 import { mdiClose } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
@@ -403,6 +403,7 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 const { t } = useI18n();
+const importUsersStore = useImportUsersStore();
 
 const router = useRouter();
 const { instanceName } = storeToRefs(useEnvStore());
@@ -439,13 +440,13 @@ const canFinishMaintenance = computed(() => isMigrationConfirm.value || isMigrat
 
 const isMaintenanceFinished = computed(() => !schoolMigrationState.value.inMaintenance);
 
-const businessError: ComputedRef<BusinessError | null> = computed(() => importUsersModule.getBusinessError);
+const businessError: ComputedRef<BusinessError | null> = computed(() => importUsersStore.businessError);
 
-const totalMatched = computed(() => importUsersModule.getTotalMatched);
+const totalMatched = computed(() => importUsersStore.importUsersData.totalMatched);
 
-const totalUnmatched = computed(() => importUsersModule.getTotalUnmatched);
+const totalUnmatched = computed(() => importUsersStore.importUsersData.totalUnmatched);
 
-const totalImportUsers = computed(() => importUsersModule.getTotal);
+const totalImportUsers = computed(() => importUsersStore.importUsersData.total);
 
 const isBrb = computed(() => useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.BRB);
 
@@ -491,9 +492,9 @@ const summary = async () => {
 
 	isLoading.value = true;
 
-	await importUsersModule.fetchTotal();
-	await importUsersModule.fetchTotalMatched();
-	await importUsersModule.fetchTotalUnmatched();
+	await importUsersStore.fetchTotal();
+	await importUsersStore.fetchTotalMatched();
+	await importUsersStore.fetchTotalUnmatched();
 
 	isLoading.value = false;
 };
@@ -501,7 +502,7 @@ const summary = async () => {
 const startPollingImportUserCount = () => {
 	if (schoolMigrationState.value.inUserMigration && totalImportUsers.value === 0) {
 		checkTotal.value = setInterval(() => {
-			importUsersModule.fetchTotal();
+			importUsersStore.fetchTotal();
 		}, 5000);
 	}
 	if (totalImportUsers.value > 0) {
@@ -517,9 +518,9 @@ const setSchoolInUserMigration = async () => {
 	isLoading.value = true;
 
 	if (isNbc.value) {
-		await importUsersModule.populateImportUsersFromExternalSystem(matchByPreferredName.value);
+		await importUsersStore.populateImportUsersFromExternalSystem(matchByPreferredName.value);
 
-		if (importUsersModule.getBusinessError) {
+		if (importUsersStore.businessError) {
 			isLoading.value = false;
 
 			return;
@@ -527,7 +528,7 @@ const setSchoolInUserMigration = async () => {
 	}
 
 	if (!schoolMigrationState.value.inUserMigration) {
-		await importUsersModule.setSchoolInUserMigration();
+		await importUsersStore.setSchoolInUserMigration();
 		schoolMigrationState.value = { inUserMigration: true, inMaintenance: true };
 	}
 	startPollingImportUserCount();
@@ -537,9 +538,9 @@ const setSchoolInUserMigration = async () => {
 const performMigration = async () => {
 	isLoading.value = true;
 
-	await importUsersModule.performMigration();
+	await importUsersStore.performMigration();
 
-	if (!importUsersModule.getBusinessError) {
+	if (!importUsersStore.businessError) {
 		schoolMigrationState.value.inUserMigration = false;
 		isLoading.value = false;
 		migrationStep.value = 4;
@@ -548,9 +549,9 @@ const performMigration = async () => {
 const endMaintenance = async () => {
 	isLoading.value = true;
 	if (schoolMigrationState.value.inMaintenance) {
-		await importUsersModule.migrationStartSync();
+		await importUsersStore.endSchoolInMaintenance();
 	}
-	if (!importUsersModule.getBusinessError) {
+	if (!importUsersStore.businessError) {
 		schoolMigrationState.value.inMaintenance = isNbc.value;
 		migrationStep.value = 5;
 	}
@@ -558,7 +559,7 @@ const endMaintenance = async () => {
 };
 
 const resetBusinessError = () => {
-	importUsersModule.setBusinessError(null);
+	importUsersStore.businessError = null;
 };
 
 const scrollToTop = () => {
@@ -590,7 +591,7 @@ const cancelMigration = async () => {
 	});
 	if (isCancelConfirmed) {
 		isLoading.value = true;
-		await importUsersModule.cancelMigration();
+		await importUsersStore.cancelMigration();
 		migrationStep.value = 0;
 		await fetchSchoolDetails();
 		isLoading.value = false;
@@ -616,7 +617,7 @@ const doClearAllAutoMatches = async () => {
 	if (isClearConfirmed) {
 		isLoading.value = true;
 
-		await importUsersModule.clearAllAutoMatches();
+		await importUsersStore.clearAllAutoMatches();
 
 		importUsersRef.value?.reloadData();
 

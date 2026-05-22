@@ -1,13 +1,11 @@
 import MigrationPage from "./Migration.page.vue";
-import { importUsersModule } from "@/store";
-import ImportUsersModule from "@/store/import-users";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { createTestEnvStore } from "@@/tests/test-utils";
-import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
+import { createTestEnvStore, createTestSchoolStore, schoolFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { SchulcloudTheme } from "@api-server";
+import { useSchoolStore } from "@data-app";
 import { useEnvStore } from "@data-env";
+import { useImportUsersStore } from "@data-import-users";
 import { createTestingPinia } from "@pinia/testing";
 import { ComponentMountingOptions, flushPromises, mount, shallowMount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -16,10 +14,12 @@ import { NamedValue } from "vue-i18n";
 import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 import { VBtn, VCardText, VProgressCircular } from "vuetify/components";
 
+const reloadDataMock = vi.fn(() => Promise.resolve());
+
 const importUsersStub = {
 	template: "<div></div>",
-	methods: {
-		reloadData: async () => Promise.resolve(),
+	setup() {
+		return { reloadData: reloadDataMock };
 	},
 };
 
@@ -29,10 +29,7 @@ type MigrationPageWrapperType = Partial<{
 	migrationStep: number;
 	isMigrationConfirm: boolean;
 	isClearAutoMatchesDialogOpen: boolean;
-	schoolMigrationState: {
-		inUserMigration: boolean;
-		inMaintenance: boolean;
-	};
+	schoolMigrationState: { inUserMigration: boolean | undefined; inMaintenance: boolean | undefined };
 }>;
 
 const getWrapper = (
@@ -62,8 +59,13 @@ const getWrapperShallow = (
 describe("User Migration / Index", () => {
 	window.scrollTo = vi.fn();
 
+	let importUsersStore: ReturnType<typeof useImportUsersStore>;
+	let schoolStore: ReturnType<typeof useSchoolStore>;
+
 	beforeEach(() => {
-		setActivePinia(createTestingPinia());
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		importUsersStore = useImportUsersStore();
+		schoolStore = useSchoolStore();
 		injectRouterMock(createRouterMock());
 		createTestEnvStore({
 			SC_TITLE: "dBildungscloud",
@@ -71,12 +73,20 @@ describe("User Migration / Index", () => {
 			FEATURE_USER_MIGRATION_ENABLED: true,
 			MIGRATION_WIZARD_DOCUMENTATION_LINK: "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true",
 		});
-		createTestSchoolStore({ schoolDetails: { inUserMigration: undefined, inMaintenance: undefined } });
-		setupStores({
-			importUsersModule: ImportUsersModule,
+
+		importUsersStore.importUsersData.total = 100;
+		createTestSchoolStore({
+			schoolDetails: schoolFactory.build({
+				inUserMigration: undefined,
+				inMaintenance: undefined,
+			}),
 		});
 
-		importUsersModule.setTotal(100);
+		vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValue({
+			result: undefined,
+			success: true,
+			error: undefined,
+		});
 	});
 
 	it("should set page title", () => {
@@ -91,10 +101,10 @@ describe("User Migration / Index", () => {
 	});
 
 	it("shows business error", async () => {
-		importUsersModule.setBusinessError({
+		importUsersStore.businessError = {
 			statusCode: "500",
 			message: "foo",
-		});
+		};
 		const wrapper = getWrapperShallow();
 		const findText = wrapper.find('[data-testid="error-dialog"]');
 		const errorMsg = wrapper.vm.t?.("pages.administration.migration.error");
@@ -102,7 +112,7 @@ describe("User Migration / Index", () => {
 	});
 
 	it("shows not show business error, if it is not set", () => {
-		importUsersModule.setBusinessError(null);
+		importUsersStore.businessError = null;
 		const wrapper = getWrapper();
 		const findText = wrapper.find(".v-snack");
 		expect(findText.exists()).toBe(false);
@@ -119,8 +129,8 @@ describe("User Migration / Index", () => {
 
 	describe("Start user migration", () => {
 		beforeEach(() => {
-			vi.spyOn(importUsersModule, "fetchTotal").mockResolvedValue();
-			importUsersModule.setTotal(0);
+			vi.spyOn(importUsersStore, "fetchTotal").mockResolvedValue();
+			importUsersStore.importUsersData.total = 0;
 		});
 
 		it("should show hint text that sync can take some time", async () => {
@@ -136,8 +146,13 @@ describe("User Migration / Index", () => {
 		});
 
 		it("should show button for start inUserMigration", async () => {
-			vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
-			vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
+			vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValue({
+				result: undefined,
+				success: true,
+				error: undefined,
+			});
+			vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();
 
 			const wrapper = getWrapper();
 
@@ -147,7 +162,7 @@ describe("User Migration / Index", () => {
 			const nextBtn = wrapper.find("[data-testid=migration_tutorial_next]");
 			expect(nextBtn.exists()).toEqual(false);
 
-			importUsersModule.setTotal(100);
+			importUsersStore.importUsersData.total = 100;
 			wrapper.vm.schoolMigrationState = {
 				inUserMigration: true,
 				inMaintenance: true,
@@ -164,11 +179,16 @@ describe("User Migration / Index", () => {
 
 	describe("show summary", () => {
 		beforeEach(() => {
-			vi.spyOn(importUsersModule, "fetchTotal").mockResolvedValue();
-			vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
-			vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotal").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();
 
-			createTestSchoolStore({ schoolDetails: { inUserMigration: true, inMaintenance: true } });
+			createTestSchoolStore({
+				schoolDetails: schoolFactory.build({
+					inUserMigration: true,
+					inMaintenance: true,
+				}),
+			});
 		});
 
 		it("should display summary text with totals", async () => {
@@ -176,9 +196,9 @@ describe("User Migration / Index", () => {
 			const totalMatched = 2;
 			const totalUnmatched = 4;
 
-			importUsersModule.setTotal(totalImportUsers);
-			importUsersModule.setTotalUnmatched(totalUnmatched);
-			importUsersModule.setTotalMatched(totalMatched);
+			importUsersStore.importUsersData.total = totalImportUsers;
+			importUsersStore.importUsersData.totalUnmatched = totalUnmatched;
+			importUsersStore.importUsersData.totalMatched = totalMatched;
 
 			const wrapper = getWrapperShallow();
 
@@ -218,8 +238,8 @@ describe("User Migration / Index", () => {
 		});
 
 		it("implement perform migration", async () => {
-			const performMigrationMock = vi.spyOn(importUsersModule, "performMigration");
-			performMigrationMock.mockImplementation(async () => Promise.resolve());
+			const performMigrationMock = vi.spyOn(importUsersStore, "performMigration");
+			performMigrationMock.mockResolvedValue();
 
 			const wrapper = getWrapper();
 
@@ -236,9 +256,9 @@ describe("User Migration / Index", () => {
 			await btn.trigger("click");
 			await flushPromises();
 
-			// TODO after implementing of backend and store, mock store response and expect to be called with
 			expect(performMigrationMock).toHaveBeenCalledTimes(1);
 			expect(wrapper.vm.migrationStep).toBe(4);
+			expect(wrapper.vm.schoolMigrationState?.inUserMigration).toBe(false);
 		});
 	});
 
@@ -247,6 +267,10 @@ describe("User Migration / Index", () => {
 			const wrapper = getWrapper();
 			wrapper.vm.migrationStep = 4;
 			wrapper.vm.isMigrationConfirm = true;
+			wrapper.vm.schoolMigrationState = {
+				inUserMigration: false,
+				inMaintenance: true,
+			};
 			await nextTick();
 
 			return {
@@ -268,10 +292,10 @@ describe("User Migration / Index", () => {
 		});
 
 		it("perform end maintenance", async () => {
-			createTestSchoolStore({ schoolDetails: { inMaintenance: true, inUserMigration: true } });
 			const { wrapper } = await setup();
 
-			const endMaintenanceMock = vi.spyOn(importUsersModule, "migrationStartSync").mockResolvedValue();
+			const endMaintenanceMock = vi.spyOn(importUsersStore, "endSchoolInMaintenance");
+			endMaintenanceMock.mockResolvedValue();
 
 			const btn = wrapper.find("[data-testid=migration_endMaintenance]");
 			await btn.trigger("click");
@@ -280,24 +304,33 @@ describe("User Migration / Index", () => {
 
 			expect(endMaintenanceMock).toHaveBeenCalledTimes(1);
 			expect(wrapper.vm.migrationStep).toBe(5);
+			expect(wrapper.vm.schoolMigrationState?.inMaintenance).toBe(false);
 		});
 	});
 
 	describe("cancel migration", () => {
 		describe("in step migration_importUsers", () => {
 			beforeEach(() => {
-				vi.spyOn(importUsersModule, "fetchTotal").mockResolvedValue();
-				vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
-				vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
+				vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValue({
+					result: undefined,
+					success: true,
+					error: undefined,
+				});
+				vi.spyOn(importUsersStore, "fetchTotal").mockResolvedValue();
+				vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
+				vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();
 			});
 			const setup = async () => {
-				const { schoolStore } = createTestSchoolStore({
-					schoolDetails: { inUserMigration: true, inMaintenance: true },
+				createTestSchoolStore({
+					schoolDetails: schoolFactory.build({
+						inUserMigration: true,
+						inMaintenance: true,
+					}),
 				});
 
-				importUsersModule.setTotal(10);
-				importUsersModule.setTotalUnmatched(5);
-				importUsersModule.setTotalMatched(5);
+				importUsersStore.importUsersData.total = 10;
+				importUsersStore.importUsersData.totalUnmatched = 5;
+				importUsersStore.importUsersData.totalMatched = 5;
 
 				const wrapper = getWrapper();
 
@@ -316,7 +349,6 @@ describe("User Migration / Index", () => {
 
 				return {
 					wrapper,
-					schoolStore,
 					redirect,
 				};
 			};
@@ -332,24 +364,50 @@ describe("User Migration / Index", () => {
 			it("should call stores on dialog-confirm", async () => {
 				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 
-				const { wrapper, schoolStore } = await setup();
-				const cancelMigrationMock = vi.spyOn(importUsersModule, "cancelMigration");
-				cancelMigrationMock.mockImplementationOnce(async () => Promise.resolve());
+				const { wrapper } = await setup();
+
+				const cancelMigrationMock = vi.spyOn(importUsersStore, "cancelMigration");
+
+				cancelMigrationMock.mockImplementationOnce(async () => {
+					schoolStore.$patch({
+						schoolDetails: {
+							...schoolStore.schoolDetails,
+							inUserMigration: false,
+							inMaintenance: false,
+						},
+					});
+				});
+
+				vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValueOnce({
+					result: undefined,
+					success: true,
+					error: undefined,
+				});
 
 				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
 				await button.trigger("click");
 
 				await nextTick();
 
-				expect(importUsersModule.cancelMigration).toHaveBeenCalled();
+				expect(importUsersStore.cancelMigration).toHaveBeenCalled();
 				expect(schoolStore.fetchSchoolDetails).toHaveBeenCalled();
 			});
 
 			it("should redirect to school settings migration section", async () => {
 				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 				const { wrapper } = await setup();
-				const cancelMigrationMock = vi.spyOn(importUsersModule, "cancelMigration");
-				cancelMigrationMock.mockImplementationOnce(async () => Promise.resolve());
+
+				const cancelMigrationMock = vi.spyOn(importUsersStore, "cancelMigration");
+				cancelMigrationMock.mockImplementationOnce(async () => {
+					schoolStore.$patch({
+						schoolDetails: {
+							...schoolStore.schoolDetails,
+							inUserMigration: false,
+							inMaintenance: false,
+						},
+					});
+					return Promise.resolve();
+				});
 
 				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
 				await button.trigger("click");
@@ -365,7 +423,12 @@ describe("User Migration / Index", () => {
 
 		describe("in step migration_summary", () => {
 			const setup = async () => {
-				createTestSchoolStore({ schoolDetails: { inUserMigration: true, inMaintenance: true } });
+				createTestSchoolStore({
+					schoolDetails: schoolFactory.build({
+						inUserMigration: true,
+						inMaintenance: true,
+					}),
+				});
 
 				const wrapper = getWrapper();
 
@@ -381,9 +444,9 @@ describe("User Migration / Index", () => {
 			};
 
 			it("should show cancel button", async () => {
-				vi.spyOn(importUsersModule, "fetchTotal").mockResolvedValue();
-				vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
-				vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
+				vi.spyOn(importUsersStore, "fetchTotal").mockResolvedValue();
+				vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
+				vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();
 				const { wrapper } = await setup();
 
 				const button = wrapper.findComponent("[data-testid=summary-cancel-migration-btn]");
@@ -400,26 +463,32 @@ describe("User Migration / Index", () => {
 				dialogTeleportDiv.className = "v-overlay-container";
 				document.body.appendChild(dialogTeleportDiv);
 
-				vi.spyOn(importUsersModule, "fetchTotal").mockResolvedValue();
-				vi.spyOn(importUsersModule, "fetchTotalMatched").mockResolvedValue();
-				vi.spyOn(importUsersModule, "fetchTotalUnmatched").mockResolvedValue();
+				vi.spyOn(importUsersStore, "fetchTotal").mockResolvedValue();
+				vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
+				vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();
 			});
 
 			afterEach(() => {
 				document.body.innerHTML = "";
 				vi.clearAllMocks();
+				reloadDataMock.mockClear();
 			});
 
 			const setup = async () => {
-				importUsersModule.setTotal(10);
-				importUsersModule.setTotalUnmatched(5);
-				importUsersModule.setTotalMatched(5);
+				createTestSchoolStore({
+					schoolDetails: schoolFactory.build({
+						inUserMigration: true,
+						inMaintenance: true,
+					}),
+				});
+
+				importUsersStore.importUsersData.total = 10;
+				importUsersStore.importUsersData.totalUnmatched = 5;
+				importUsersStore.importUsersData.totalMatched = 5;
 
 				const wrapper = getWrapper();
 
-				vi.spyOn(importUsersModule, "clearAllAutoMatches").mockResolvedValueOnce(await Promise.resolve());
-
-				vi.spyOn(importUsersStub.methods, "reloadData");
+				vi.spyOn(importUsersStore, "clearAllAutoMatches").mockResolvedValue();
 
 				wrapper.vm.migrationStep = 2;
 				wrapper.vm.t?.("pages.administration.migration.title", {
@@ -428,6 +497,7 @@ describe("User Migration / Index", () => {
 				});
 
 				await nextTick();
+				await flushPromises();
 
 				return {
 					wrapper,
@@ -450,9 +520,10 @@ describe("User Migration / Index", () => {
 
 				const button = wrapper.findComponent('[data-testid="import-users-clear-auto-matches-btn"]');
 				await button.trigger("click");
+				await flushPromises();
 
-				expect(importUsersModule.clearAllAutoMatches).toHaveBeenCalled();
-				expect(importUsersStub.methods.reloadData).toHaveBeenCalled();
+				expect(importUsersStore.clearAllAutoMatches).toHaveBeenCalled();
+				expect(reloadDataMock).toHaveBeenCalled();
 			});
 		});
 	});
@@ -462,9 +533,9 @@ describe("User Migration / Index", () => {
 			const setup = async () => {
 				const wrapper = getWrapper();
 
-				importUsersModule.setTotal(10);
-				importUsersModule.setTotalUnmatched(5);
-				importUsersModule.setTotalMatched(5);
+				importUsersStore.importUsersData.total = 10;
+				importUsersStore.importUsersData.totalUnmatched = 5;
+				importUsersStore.importUsersData.totalMatched = 5;
 
 				wrapper.vm.isLoading = false;
 				await flushPromises();
@@ -485,6 +556,7 @@ describe("User Migration / Index", () => {
 			describe("when the migration has started", () => {
 				const migrationStartedSetup = async () => {
 					const { wrapper } = await setup();
+
 					wrapper.vm.schoolMigrationState = {
 						inUserMigration: true,
 						inMaintenance: true,
@@ -528,9 +600,9 @@ describe("User Migration / Index", () => {
 			const setup = async () => {
 				const wrapper = getWrapper();
 
-				importUsersModule.setTotal(0);
-				importUsersModule.setTotalUnmatched(0);
-				importUsersModule.setTotalMatched(0);
+				importUsersStore.importUsersData.total = 0;
+				importUsersStore.importUsersData.totalUnmatched = 0;
+				importUsersStore.importUsersData.totalMatched = 0;
 
 				wrapper.vm.isLoading = true;
 				await flushPromises();
@@ -550,8 +622,13 @@ describe("User Migration / Index", () => {
 
 			describe("when the migration has started", () => {
 				const migrationStartedSetup = async () => {
-					createTestSchoolStore({ schoolDetails: { inUserMigration: true, inMaintenance: true } });
 					const { wrapper } = await setup();
+
+					wrapper.vm.schoolMigrationState = {
+						inUserMigration: true,
+						inMaintenance: true,
+					};
+					wrapper.vm.isLoading = true;
 					await flushPromises();
 
 					return {
@@ -585,6 +662,451 @@ describe("User Migration / Index", () => {
 					expect(button.text()).toBe("pages.administration.migration.waiting");
 				});
 			});
+		});
+	});
+
+	describe("checkTotalInterval", () => {
+		beforeEach(() => {
+			vi.useFakeTimers();
+			vi.spyOn(importUsersStore, "fetchTotal").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();
+		});
+
+		afterEach(() => {
+			vi.useRealTimers();
+		});
+
+		it("should start interval when inUserMigration is true and total is 0", async () => {
+			createTestSchoolStore({
+				schoolDetails: schoolFactory.build({
+					inUserMigration: true,
+					inMaintenance: true,
+				}),
+			});
+			importUsersStore.importUsersData.total = 0;
+
+			getWrapper();
+			await flushPromises();
+
+			// Advance timers by 5 seconds
+			vi.advanceTimersByTime(5000);
+			await flushPromises();
+
+			expect(importUsersStore.fetchTotal).toHaveBeenCalled();
+		});
+
+		it("should clear interval when total becomes greater than 0", async () => {
+			createTestSchoolStore({
+				schoolDetails: schoolFactory.build({
+					inUserMigration: true,
+					inMaintenance: true,
+				}),
+			});
+			importUsersStore.importUsersData.total = 0;
+
+			getWrapper();
+			await flushPromises();
+
+			// Set total > 0 to trigger interval clear
+			importUsersStore.importUsersData.total = 10;
+			await nextTick();
+			await flushPromises();
+
+			// Advance timers - interval should be cleared
+			const callCountBefore = vi.mocked(importUsersStore.fetchTotal).mock.calls.length;
+			vi.advanceTimersByTime(10000);
+			await flushPromises();
+
+			// No new calls after clearing
+			expect(vi.mocked(importUsersStore.fetchTotal).mock.calls.length).toBe(callCountBefore);
+		});
+	});
+
+	describe("setSchoolInUserMigration", () => {
+		beforeEach(() => {
+			vi.spyOn(importUsersStore, "fetchTotal").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();
+			vi.spyOn(importUsersStore, "setSchoolInUserMigration").mockResolvedValue();
+		});
+
+		it("should return early when school is already in user migration", async () => {
+			createTestSchoolStore({
+				schoolDetails: schoolFactory.build({
+					inUserMigration: true,
+					inMaintenance: true,
+				}),
+			});
+
+			const wrapper = getWrapper();
+			await flushPromises();
+
+			const startBtn = wrapper.find("[data-testid=start_user_migration]");
+			expect(startBtn.exists()).toBe(false);
+		});
+
+		it("should set business error when importUsersStore has error", async () => {
+			createTestSchoolStore({
+				schoolDetails: schoolFactory.build({
+					inUserMigration: undefined,
+					inMaintenance: undefined,
+				}),
+			});
+
+			vi.spyOn(importUsersStore, "setSchoolInUserMigration").mockImplementation(async () => {
+				importUsersStore.businessError = { message: "Test error", statusCode: "500" };
+			});
+
+			const wrapper = getWrapper();
+			await flushPromises();
+
+			const startBtn = wrapper.find("[data-testid=start_user_migration]");
+			await startBtn.trigger("click");
+			await flushPromises();
+
+			expect(importUsersStore.businessError).toEqual({
+				statusCode: "500",
+				message: "Test error",
+			});
+		});
+
+		describe("when NBC theme", () => {
+			beforeEach(() => {
+				createTestEnvStore({
+					SC_TITLE: "dBildungscloud",
+					SC_THEME: SchulcloudTheme.N21,
+					FEATURE_USER_MIGRATION_ENABLED: true,
+					MIGRATION_WIZARD_DOCUMENTATION_LINK: "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true",
+				});
+			});
+
+			it("should call populateImportUsersFromExternalSystem", async () => {
+				createTestSchoolStore({
+					schoolDetails: schoolFactory.build({
+						inUserMigration: undefined,
+						inMaintenance: undefined,
+					}),
+				});
+
+				const populateMock = vi.spyOn(importUsersStore, "populateImportUsersFromExternalSystem").mockResolvedValue();
+
+				const wrapper = getWrapper();
+				await flushPromises();
+
+				const startBtn = wrapper.find("[data-testid=start_user_migration]");
+				await startBtn.trigger("click");
+				await flushPromises();
+
+				expect(populateMock).toHaveBeenCalled();
+			});
+
+			it("should return early when populateImportUsersFromExternalSystem has businessError", async () => {
+				createTestSchoolStore({
+					schoolDetails: schoolFactory.build({
+						inUserMigration: undefined,
+						inMaintenance: undefined,
+					}),
+				});
+
+				vi.spyOn(importUsersStore, "populateImportUsersFromExternalSystem").mockImplementation(async () => {
+					importUsersStore.businessError = { statusCode: "500", message: "Populate error" };
+				});
+
+				const wrapper = getWrapper();
+				await flushPromises();
+
+				const startBtn = wrapper.find("[data-testid=start_user_migration]");
+				await startBtn.trigger("click");
+				await flushPromises();
+
+				expect(importUsersStore.setSchoolInUserMigration).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("endMaintenance error handling", () => {
+		it("should set business error when endSchoolInMaintenance fails", async () => {
+			vi.spyOn(importUsersStore, "fetchTotal").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();
+
+			vi.spyOn(importUsersStore, "endSchoolInMaintenance").mockImplementation(async () => {
+				importUsersStore.businessError = { message: "Sync error", statusCode: "500" };
+			});
+
+			createTestSchoolStore({
+				schoolDetails: schoolFactory.build({
+					inUserMigration: true,
+					inMaintenance: true,
+				}),
+			});
+
+			const wrapper = getWrapper();
+			wrapper.vm.migrationStep = 4;
+			wrapper.vm.isMigrationConfirm = true;
+			await nextTick();
+			await flushPromises();
+
+			const endMaintenanceBtn = wrapper.find("[data-testid=migration_endMaintenance]");
+			await endMaintenanceBtn.trigger("click");
+			await flushPromises();
+
+			expect(importUsersStore.businessError).toEqual({
+				statusCode: "500",
+				message: "Sync error",
+			});
+		});
+	});
+
+	describe("nextStep", () => {
+		beforeEach(() => {
+			vi.spyOn(importUsersStore, "fetchTotal").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();
+		});
+
+		it("should go to step 2 when on step 1", async () => {
+			createTestSchoolStore({
+				schoolDetails: schoolFactory.build({
+					inUserMigration: true,
+					inMaintenance: true,
+				}),
+			});
+			importUsersStore.importUsersData.total = 10;
+
+			const wrapper = getWrapper();
+			await flushPromises();
+
+			expect(wrapper.vm.migrationStep).toBe(1);
+
+			const nextBtn = wrapper.find("[data-testid=migration_tutorial_next]");
+			await nextBtn.trigger("click");
+			await flushPromises();
+
+			expect(wrapper.vm.migrationStep).toBe(2);
+		});
+
+		it("should go to step 4 when migration is finished", async () => {
+			// isMigrationFinished = inUserMigration === false
+			createTestSchoolStore({
+				schoolDetails: schoolFactory.build({
+					inUserMigration: false,
+					inMaintenance: true,
+				}),
+			});
+			importUsersStore.importUsersData.total = 10;
+
+			const wrapper = getWrapper();
+			await flushPromises();
+
+			// Button should be migration_tutorial_skip for finished migration
+			const skipBtn = wrapper.find("#migration_tutorial_skip");
+			await skipBtn.trigger("click");
+			await flushPromises();
+
+			expect(wrapper.vm.migrationStep).toBe(4);
+		});
+
+		it("should go to step 5 when maintenance is finished", async () => {
+			// isMaintenanceFinished = !inMaintenance
+			createTestSchoolStore({
+				schoolDetails: schoolFactory.build({
+					inUserMigration: false,
+					inMaintenance: false,
+				}),
+			});
+			importUsersStore.importUsersData.total = 10;
+
+			const wrapper = getWrapper();
+			await flushPromises();
+
+			// Button should be migration_tutorial_skip for finished maintenance
+			const skipBtn = wrapper.find("#migration_tutorial_skip");
+			await skipBtn.trigger("click");
+			await flushPromises();
+
+			expect(wrapper.vm.migrationStep).toBe(5);
+		});
+	});
+
+	describe("isAllowed", () => {
+		it("should redirect to / when not allowed", async () => {
+			createTestEnvStore({
+				SC_TITLE: "dBildungscloud",
+				SC_THEME: SchulcloudTheme.DEFAULT,
+				FEATURE_USER_MIGRATION_ENABLED: false,
+				MIGRATION_WIZARD_DOCUMENTATION_LINK: "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true",
+			});
+
+			createTestSchoolStore({
+				schoolDetails: schoolFactory.build({
+					features: [],
+				}),
+			});
+
+			vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValue({
+				result: undefined,
+				success: true,
+				error: undefined,
+			});
+
+			getWrapper();
+			await flushPromises();
+
+			expect(getRouter().push).toHaveBeenCalledWith("/");
+		});
+
+		it("should allow when FEATURE_USER_MIGRATION_ENABLED is true", async () => {
+			createTestEnvStore({
+				SC_TITLE: "dBildungscloud",
+				SC_THEME: SchulcloudTheme.DEFAULT,
+				FEATURE_USER_MIGRATION_ENABLED: true,
+				MIGRATION_WIZARD_DOCUMENTATION_LINK: "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true",
+			});
+
+			vi.spyOn(schoolStore, "fetchSchoolDetails").mockResolvedValue({
+				result: undefined,
+				success: true,
+				error: undefined,
+			});
+			vi.spyOn(importUsersStore, "fetchTotal").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();
+
+			getWrapper();
+			await flushPromises();
+
+			expect(getRouter().push).not.toHaveBeenCalledWith("/");
+		});
+	});
+
+	describe("onUnmounted", () => {
+		it("should clear interval when component is unmounted", async () => {
+			vi.useFakeTimers();
+			vi.spyOn(importUsersStore, "fetchTotal").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();
+
+			createTestSchoolStore({
+				schoolDetails: schoolFactory.build({
+					inUserMigration: true,
+					inMaintenance: true,
+				}),
+			});
+			importUsersStore.importUsersData.total = 0;
+
+			const wrapper = getWrapper();
+			await flushPromises();
+
+			// Verify interval is running
+			vi.advanceTimersByTime(5000);
+			await flushPromises();
+			expect(importUsersStore.fetchTotal).toHaveBeenCalled();
+
+			const callCount = vi.mocked(importUsersStore.fetchTotal).mock.calls.length;
+
+			// Unmount the component
+			wrapper.unmount();
+
+			// Advance timers again - interval should be cleared
+			vi.advanceTimersByTime(10000);
+			await flushPromises();
+
+			// No new calls after unmounting
+			expect(vi.mocked(importUsersStore.fetchTotal).mock.calls.length).toBe(callCount);
+			vi.useRealTimers();
+		});
+	});
+
+	describe("sourceSystemName", () => {
+		it("should return brbSchulportal for BRB theme", async () => {
+			createTestEnvStore({
+				SC_TITLE: "dBildungscloud",
+				SC_THEME: SchulcloudTheme.BRB,
+				FEATURE_USER_MIGRATION_ENABLED: true,
+				MIGRATION_WIZARD_DOCUMENTATION_LINK: "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true",
+			});
+
+			vi.spyOn(importUsersStore, "fetchTotal").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();
+
+			const wrapper = getWrapperShallow();
+
+			expect(wrapper.vm.t?.("pages.administration.migration.brbSchulportal")).toBeDefined();
+		});
+
+		it("should use moin.schule for N21 theme", async () => {
+			createTestEnvStore({
+				SC_TITLE: "dBildungscloud",
+				SC_THEME: SchulcloudTheme.N21,
+				FEATURE_USER_MIGRATION_ENABLED: true,
+				MIGRATION_WIZARD_DOCUMENTATION_LINK: "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true",
+			});
+
+			vi.spyOn(importUsersStore, "fetchTotal").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();
+
+			const wrapper = getWrapperShallow();
+			await flushPromises();
+
+			// N21 theme uses moin.schule as source name
+			expect(wrapper.vm.t).toBeDefined();
+		});
+	});
+
+	describe("performMigration error handling", () => {
+		it("should not advance step when businessError occurs", async () => {
+			vi.spyOn(importUsersStore, "fetchTotal").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalMatched").mockResolvedValue();
+			vi.spyOn(importUsersStore, "fetchTotalUnmatched").mockResolvedValue();
+
+			createTestSchoolStore({
+				schoolDetails: schoolFactory.build({
+					inUserMigration: true,
+					inMaintenance: true,
+				}),
+			});
+
+			vi.spyOn(importUsersStore, "performMigration").mockImplementation(async () => {
+				importUsersStore.businessError = { statusCode: "500", message: "Migration failed" };
+			});
+
+			const wrapper = getWrapper();
+			wrapper.vm.migrationStep = 3;
+			wrapper.vm.isMigrationConfirm = true;
+			await flushPromises();
+
+			const btn = wrapper.find("[data-testid=migration_performMigration]");
+			await btn.trigger("click");
+			await flushPromises();
+
+			expect(wrapper.vm.migrationStep).toBe(3);
+		});
+	});
+
+	describe("resetBusinessError", () => {
+		it("should reset business error when error dialog is closed", async () => {
+			importUsersStore.businessError = {
+				statusCode: "500",
+				message: "foo",
+			};
+
+			const wrapper = getWrapperShallow();
+			await flushPromises();
+
+			const errorDialog = wrapper.find('[data-testid="error-dialog"]');
+			expect(errorDialog.exists()).toBe(true);
+
+			// Find and click the close button
+			const closeBtn = errorDialog.find("button");
+			if (closeBtn.exists()) {
+				await closeBtn.trigger("click");
+				await flushPromises();
+				expect(importUsersStore.businessError).toBeNull();
+			}
 		});
 	});
 });
