@@ -14,7 +14,7 @@
 		]"
 		max-width="short"
 	>
-		<SvsLoading :loading="isLoadingNews">
+		<SvsLoading :is-loading="isLoadingNews">
 			<h2 data-testid="news-title">{{ newsInstance.title }}</h2>
 			<div class="d-flex mb-2">
 				<div class="d-flex align-center text-subtitle mr-3" data-testid="news-last-touched">
