@@ -1,5 +1,5 @@
 import { useCourseRoomDetailsStore } from "./course-room-details.store";
-import * as apiUtils from "@/utils/api";
+import * as utils from "@/utils/api";
 import { apiResponseErrorFactory, mockApi, mockApiResponse } from "@@/tests/test-utils";
 import {
 	BoardApiFactory,
@@ -39,7 +39,7 @@ vi.mock("@/utils/api", async (importOriginal) => {
 	};
 });
 
-const mockedAxiosGet = vi.mocked(apiUtils.$axios.get);
+const mockedAxiosGet = vi.mocked(utils.$axios.get);
 let mapAxiosErrorToResponseErrorSpy: ReturnType<typeof vi.spyOn>;
 
 const buildRoomData = (overrides: Partial<SingleColumnBoardResponse> = {}): SingleColumnBoardResponse => ({
@@ -71,7 +71,7 @@ describe("useCourseRoomDetailsStore", () => {
 		vi.mocked(LessonApiFactory).mockReturnValue(lessonApiMock);
 		vi.mocked(TaskApiFactory).mockReturnValue(taskApiMock);
 		vi.mocked(BoardApiFactory).mockReturnValue(boardApiMock);
-		mapAxiosErrorToResponseErrorSpy = vi.spyOn(apiUtils, "mapAxiosErrorToResponseError");
+		mapAxiosErrorToResponseErrorSpy = vi.spyOn(utils, "mapAxiosErrorToResponseError");
 	});
 
 	afterEach(() => {
