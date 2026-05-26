@@ -14,6 +14,7 @@
 
 
 import { CustomParameterEntryResponse } from './custom-parameter-entry-response';
+import { ToolContextType } from './tool-context-type';
 
 /**
  * 
@@ -41,10 +42,10 @@ export interface ContextExternalToolResponse {
     contextId: string;
     /**
      * 
-     * @type {string}
+     * @type {ToolContextType}
      * @memberof ContextExternalToolResponse
      */
-    contextType: ContextExternalToolResponseContextType;
+    contextType: ToolContextType;
     /**
      * 
      * @type {string}
@@ -58,16 +59,5 @@ export interface ContextExternalToolResponse {
      */
     parameters: Array<CustomParameterEntryResponse>;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum ContextExternalToolResponseContextType {
-    COURSE = 'course',
-    BOARD_ELEMENT = 'board-element',
-    MEDIA_BOARD = 'media-board'
-}
-
 
 

@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * LTI 1.1 message type.
  * @export
  * @enum {string}
  */

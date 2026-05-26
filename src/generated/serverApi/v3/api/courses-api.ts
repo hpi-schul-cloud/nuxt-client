@@ -327,7 +327,7 @@ export const CoursesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerGetUserPermissions(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async courseControllerGetUserPermissions(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: Array<string>; }>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerGetUserPermissions(courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -401,7 +401,7 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerGetUserPermissions(courseId: string, options?: any): AxiosPromise<void> {
+        courseControllerGetUserPermissions(courseId: string, options?: any): AxiosPromise<{ [key: string]: Array<string>; }> {
             return localVarFp.courseControllerGetUserPermissions(courseId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -472,7 +472,7 @@ export interface CoursesApiInterface {
      * @throws {RequiredError}
      * @memberof CoursesApiInterface
      */
-    courseControllerGetUserPermissions(courseId: string, options?: any): AxiosPromise<void>;
+    courseControllerGetUserPermissions(courseId: string, options?: any): AxiosPromise<{ [key: string]: Array<string>; }>;
 
     /**
      * 
