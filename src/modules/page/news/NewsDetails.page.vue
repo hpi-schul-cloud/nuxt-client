@@ -18,7 +18,7 @@
 			<div class="d-flex mb-2">
 				<div class="d-flex align-center text-subtitle mr-3" data-testid="news-last-touched">
 					<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
-					{{ newsDate }}
+					{{ displayedDateText }}
 				</div>
 				<div class="d-flex align-center text-subtitle" data-testid="news-creator">
 					<VIcon :icon="mdiHumanMaleBoard" size="sm" class="mr-1" />
@@ -63,10 +63,8 @@ const { deleteNews } = useNewsActions();
 const {
 	newsInstance,
 	createdAtFormattedStandard,
-	createdAtFormattedFromNow,
-	lastTouchedFormatted,
 	displayAtFormattedStandard,
-	displayAtFormattedFromNow,
+	displayedDateText,
 	creator,
 	isLoadingNews,
 } = useNews(newsId);
@@ -78,17 +76,6 @@ const pageTitle = computed(() => {
 	return t("pages.news.details.title", {
 		date,
 	});
-});
-
-const newsDate = computed(() => {
-	let date = createdAtFormattedFromNow.value;
-
-	if (displayAtFormattedFromNow.value) {
-		date = displayAtFormattedFromNow.value;
-	}
-
-	const dateString = `${date}, last edited: ${lastTouchedFormatted.value}`;
-	return !lastTouchedFormatted.value ? date : dateString;
 });
 
 const onEdit = () => {

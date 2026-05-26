@@ -1526,6 +1526,9 @@ export default {
 	"pages.news.title": "Новини",
 	"pages.news.details.title": "Новина від {date}",
 	"pages.news.details.title.fallback": "Новина",
+	"pages.news.details.created": "Створено {date}",
+	"pages.news.details.published": "Опубліковано {date}",
+	"pages.news.details.updated": "Останнє оновлення {date}",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Реєстрацію не вдалося завершити. Будь ласка, спробуйте пізніше.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":

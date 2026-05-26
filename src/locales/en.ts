@@ -1511,6 +1511,9 @@ export default {
 	"pages.news.title": "News",
 	"pages.news.details.title": "News from {date}",
 	"pages.news.details.title.fallback": "News",
+	"pages.news.details.created": "Created {date}",
+	"pages.news.details.published": "Published {date}",
+	"pages.news.details.updated": "Last updated {date}",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Registration could not be completed. Please try again later.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
