@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * Target model to which the News entity is related
  * @export
  * @enum {string}
  */

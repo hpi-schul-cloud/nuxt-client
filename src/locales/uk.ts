@@ -224,6 +224,8 @@ export default {
 	"common.validation.fileTooBig": "Файл не повинен перевищувати {maxSize} КБ.",
 	"common.validation.tooShort": "Введений текст не досягає мінімальної довжини",
 	"common.validation.containsOpeningTag": "Будь ласка, вставте пробіл після знаку менше.",
+	"common.validation.containsOpeningTag.discardChanges":
+		"Будь ласка, вставте пробіл після знаку менше. Зміни були скасовані.",
 	"common.validation.nonEmptyString": "Це обов'язкове поле і не повинно містити лише пробіли.",
 	"common.words.also": "також",
 	"common.words.and": "і",
@@ -585,7 +587,6 @@ export default {
 	"components.cardElement.titleElement.validation.required": "Будь ласка, введіть назву.",
 	"components.cardElement.titleElement": "Елемент заголовка",
 	"components.cardElement.videoConferenceElement": "Відеоконференція",
-	"components.cardElement.videoConferenceElement.label": "Вставити назву відеоконференції",
 	"components.cardElement.deletedElement": "Видалений вміст",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
@@ -622,7 +623,6 @@ export default {
 	"components.legacy.footer.contact": "Контакт",
 	"components.legacy.footer.github": "GitHub",
 	"components.legacy.footer.imprint": "Вихідні дані",
-	"components.legacy.footer.lokalise_logo_alt": "логотип lokalise.com",
 	"components.legacy.footer.powered_by": "Перекладено:",
 	"components.legacy.footer.privacy_policy_thr": "Політика конфіденційності",
 	"components.legacy.footer.privacy_policy": "Політика конфіденційності",
@@ -1688,6 +1688,7 @@ export default {
 	"pages.rooms.ccImportCourse.fileInputLabel": "Виберіть файл",
 	"pages.rooms.ccImportCourse.maxFileSize": "Максимальний розмір файлу: {maxSize}",
 	"pages.rooms.ccImportCourse.fileSizeExceeded": "Файл перевищує максимальний розмір {maxSize}.",
+	"pages.rooms.ccImportCourse.invalidFileType": "Недійсний тип файлу. Дозволені типи файлів: .zip, .imscc",
 	"pages.rooms.ccImportCourse.loading": "Триває завантаження...",
 	"pages.rooms.ccImportCourse.success": "Файл вашого курсу завантажено та зараз імпортується у фоновому режимі.",
 	"pages.rooms.ccImportCourse.error": "Під час завантаження файлу курсу сталася помилка.",

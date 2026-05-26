@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * Scope where the parameter has to be configured.
  * @export
  * @enum {string}
  */

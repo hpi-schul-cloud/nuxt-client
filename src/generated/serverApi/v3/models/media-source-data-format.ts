@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * Format of the media source data
  * @export
  * @enum {string}
  */

@@ -215,6 +215,8 @@ export default {
 	"common.validation.fileTooBig": "The file must not exceed {maxSize} KB.",
 	"common.validation.tooShort": "The text you entered is below the minimum length",
 	"common.validation.containsOpeningTag": "Please insert a space after the less-than sign.",
+	"common.validation.containsOpeningTag.discardChanges":
+		"Please insert a space after the less-than sign. Changes have been discarded.",
 	"common.validation.nonEmptyString": "This is a mandatory field and must not contain only spaces.",
 	"common.words.also": "also",
 	"common.words.and": "and",
@@ -573,7 +575,6 @@ export default {
 	"components.cardElement.titleElement.validation.required": "Please enter a title.",
 	"components.cardElement.titleElement": "Title element",
 	"components.cardElement.videoConferenceElement": "Video conference",
-	"components.cardElement.videoConferenceElement.label": "Insert video conference title",
 	"components.cardElement.deletedElement": "Deleted content",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} not available. Please contact the school administrator.",
@@ -610,7 +611,6 @@ export default {
 	"components.legacy.footer.contact": "Contact",
 	"components.legacy.footer.github": "GitHub",
 	"components.legacy.footer.imprint": "Imprint",
-	"components.legacy.footer.lokalise_logo_alt": "lokalise.com logo",
 	"components.legacy.footer.powered_by": "Translated by",
 	"components.legacy.footer.privacy_policy_thr": "Privacy Policy",
 	"components.legacy.footer.privacy_policy": "Privacy Policy",
@@ -1674,6 +1674,7 @@ export default {
 	"pages.rooms.ccImportCourse.fileInputLabel": "Select file",
 	"pages.rooms.ccImportCourse.maxFileSize": "Maximum file size: {maxSize}",
 	"pages.rooms.ccImportCourse.fileSizeExceeded": "The file exceeds the maximum size of {maxSize}.",
+	"pages.rooms.ccImportCourse.invalidFileType": "Invalid file type. Allowed file types: .zip, .imscc",
 	"pages.rooms.ccImportCourse.loading": "Upload in progress...",
 	"pages.rooms.ccImportCourse.success":
 		"Your course file has been uploaded and is now being imported in the background.",

@@ -5,7 +5,6 @@ import store from "./plugins/store";
 import { createVuetifyPlugin } from "./plugins/vuetify";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
-import { importUsersModule } from "@/store";
 import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
@@ -55,9 +54,6 @@ app.use(VueDOMPurifyHTML, {
 	const i18n = createI18n();
 	const vuetify = createVuetifyPlugin(i18n);
 	app.use(router).use(store).use(vuetify).use(i18n);
-
-	// NUXT_REMOVAL get rid of store DI
-	app.provide("importUsersModule", importUsersModule);
 
 	app.mount("#app");
 })();

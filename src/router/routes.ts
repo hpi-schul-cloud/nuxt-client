@@ -270,11 +270,12 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: `/media-shelf/fwu-media`,
 		component: async () => (await import("@page-fwu-media")).FwuMedia,
 		name: "fwu-media",
-		beforeEnter(to, from, next) {
+		beforeEnter() {
 			if (useEnvConfig().value.FEATURE_FWU_CONTENT_ENABLED) {
-				return next();
+				return true;
 			}
 			useAppStore().handleApplicationError(HttpStatusCode.NotFound);
+			return false;
 		},
 	},
 	{
