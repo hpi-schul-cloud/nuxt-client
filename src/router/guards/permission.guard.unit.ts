@@ -5,7 +5,7 @@ import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
-import { NavigationGuard, NavigationGuardNext, RouteLocationNormalized } from "vue-router";
+import { NavigationGuard, RouteLocationNormalized } from "vue-router";
 
 describe("PermissionGuard", () => {
 	const validPermissionA = "validPermissionA" as Permission;
@@ -17,65 +17,62 @@ describe("PermissionGuard", () => {
 		createTestAppStoreWithPermissions([validPermissionA, validPermissionB]);
 	});
 
-	afterEach(() => {
-		vi.clearAllMocks();
-	});
-
 	function setup() {
 		const route: RouteLocationNormalized = {} as RouteLocationNormalized;
-		const next: NavigationGuardNext = vi.fn();
-		return { to: route, from: route, next };
+		return { to: route, from: route };
 	}
 
 	describe("createPermissionGuard", () => {
 		it("should check permissions from the application store and allow access", () => {
-			const { to, from, next } = setup();
-			const permissionGuard: NavigationGuard = createPermissionGuard([validPermissionA], "/dashboard");
+			const { to, from } = setup();
+			const permissionGuard = createPermissionGuard([validPermissionA], "/dashboard");
 
-			permissionGuard(to, from, next);
+			const result = permissionGuard(to, from, vi.fn);
 
-			expect(next).toHaveBeenCalledWith();
+			expect(result).toBe(true);
 		});
 
 		it("should check with one valid and one invalid permissions from the application store and deny access", () => {
-			const { to, from, next } = setup();
+			const { to, from } = setup();
 			const fallbackRoute = "/dashboard";
 			const permissionGuard: NavigationGuard = createPermissionGuard(
 				[validPermissionA, invalidPermission],
 				fallbackRoute
 			);
 
-			permissionGuard(to, from, next);
+			const result = permissionGuard(to, from, vi.fn);
 
-			expect(next).toHaveBeenCalledWith(fallbackRoute);
+			expect(result).toBe(fallbackRoute);
 		});
 
 		it("should check permissions from the application store and deny access", () => {
-			const { to, from, next } = setup();
+			const { to, from } = setup();
 			const fallbackRoute = "/dashboard";
 			const permissionGuard: NavigationGuard = createPermissionGuard([invalidPermission], fallbackRoute);
 
-			permissionGuard(to, from, next);
+			const result = permissionGuard(to, from, vi.fn);
 
-			expect(next).toHaveBeenCalledWith(fallbackRoute);
+			expect(result).toBe(fallbackRoute);
 		});
 
 		it("should create a '403' error if fallbackRoute is not provided and with invalid permission", () => {
-			const { to, from, next } = setup();
+			const { to, from } = setup();
 			const permissionGuard: NavigationGuard = createPermissionGuard([invalidPermission]);
 
-			permissionGuard(to, from, next);
+			const result = permissionGuard(to, from, vi.fn);
 
 			expect(useAppStore().handleApplicationError).toHaveBeenCalled();
+			expect(result).toBe(false);
 		});
 
 		it("should create a '403' error if fallbackRoute is not provided and with one invalid permission", () => {
-			const { to, from, next } = setup();
+			const { to, from } = setup();
 			const permissionGuard: NavigationGuard = createPermissionGuard([validPermissionA, invalidPermission]);
 
-			permissionGuard(to, from, next);
+			const result = permissionGuard(to, from, vi.fn);
 
 			expect(useAppStore().handleApplicationError).toHaveBeenCalled();
+			expect(result).toBe(false);
 		});
 	});
 });

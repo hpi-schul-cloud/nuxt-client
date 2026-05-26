@@ -7,8 +7,8 @@ import {
 	schoolExternalToolFactory,
 	schoolExternalToolResponseFactory,
 } from "@@/tests/test-utils";
-import { SchoolExternalToolSearchListResponse, ToolApiInterface } from "@api-server";
 import * as serverApi from "@api-server";
+import { SchoolExternalToolSearchListResponse, ToolApiInterface } from "@api-server";
 import { useSchoolExternalTools } from "@data-external-tool";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";

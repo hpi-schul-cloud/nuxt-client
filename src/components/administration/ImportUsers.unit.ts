@@ -4,15 +4,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { ImportUserListResponse, ImportUserResponseRoleNames, SchulcloudTheme } from "@api-server";
 import { useSchoolStore } from "@data-app";
 import { MatchedBy, useImportUsersStore } from "@data-import-users";
-import {
-	mdiAccountPlus,
-	mdiAccountSwitch,
-	mdiAccountSwitchOutline,
-	mdiAlertCircle,
-	mdiFlag,
-	mdiFlagOutline,
-	mdiPencilOutline,
-} from "@icons/material";
+import { mdiAccountPlus, mdiAccountSwitch, mdiAccountSwitchOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -55,64 +47,17 @@ const mockImportUsers: ImportUserListResponse = {
 	],
 };
 
-const mockData = {
-	MatchedBy,
-	defaultItem: {
-		firstName: "",
-		lastName: "",
-		loginName: "",
-		roleNames: [] as ImportUserResponseRoleNames[],
-		classNames: [] as string[],
-		match: {},
-		flagged: false,
-	},
-	delay: 500,
-	dialogEdit: false,
-	editedIndex: -1,
-	loading: false,
-	mdiAccountPlus,
-	mdiAccountSwitch,
-	mdiAccountSwitchOutline,
-	mdiFlag,
-	mdiFlagOutline,
-	mdiPencilOutline,
-	roles: [
-		{ text: "common.roleName.student", value: ImportUserResponseRoleNames.STUDENT },
-		{ text: "common.roleName.teacher", value: ImportUserResponseRoleNames.TEACHER },
-		{ text: "common.roleName.administrator", value: ImportUserResponseRoleNames.ADMIN },
-	],
-	searchClasses: "",
-	searchFirstName: "",
-	searchFlagged: false,
-	searchLastName: "",
-	searchLoginName: "",
-	searchMatchedBy: [] as MatchedBy[],
-	searchRole: null as string | null,
-	mdiAlertCircle,
-	options: {
-		itemsPerPage: 25,
-	},
-};
-
 const setup = (
-	importUsersStore: ReturnType<typeof useImportUsersStore>,
-	data?: typeof mockData,
 	schoolDetails?: NonNullable<Parameters<typeof createTestSchoolStore>[0]>["schoolDetails"],
 	options?: object
 ) => {
-	vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
-	vi.spyOn(importUsersStore, "fetchAllUsers").mockResolvedValue();
 	createTestSchoolStore({
 		schoolDetails: schoolDetails ?? schoolFactory.build({ inUserMigration: true, inMaintenance: true }),
 	});
+
 	return mount(ImportUsers, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-		},
-		data() {
-			return {
-				...data,
-			};
 		},
 		...options,
 	});
@@ -125,24 +70,21 @@ describe("ImportUsers", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		importUsersStore = useImportUsersStore();
+		vi.spyOn(importUsersStore, "fetchAllUsers").mockResolvedValue();
+		vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
 		schoolStore = useSchoolStore();
 		createTestEnvStore({ SC_THEME: SchulcloudTheme.DEFAULT });
 		importUsersStore.importUsersData.list = mockImportUsers;
 	});
 
 	it("should have correct props", () => {
-		const wrapper = setup(importUsersStore, mockData);
+		const wrapper = setup();
 
 		expect(wrapper.vm.importUsers).toStrictEqual(mockImportUsers.data);
-		expect(wrapper.vm.roles).toStrictEqual(mockData.roles);
 	});
 
 	it("alert section should visible/invisible according to 'canStartMigration' value", async () => {
-		const wrapper = setup(
-			importUsersStore,
-			mockData,
-			schoolFactory.build({ inUserMigration: false, inMaintenance: false })
-		);
+		const wrapper = setup(schoolFactory.build({ inUserMigration: false, inMaintenance: false }));
 
 		const alertElement = wrapper.findAll(".v-alert");
 		expect(alertElement).toHaveLength(1);
@@ -161,11 +103,7 @@ describe("ImportUsers", () => {
 	});
 
 	it("alert section should be visible/invisible according to 'canStartMigration' value", async () => {
-		const wrapper = setup(
-			importUsersStore,
-			{ ...mockData },
-			schoolFactory.build({ inUserMigration: false, inMaintenance: true })
-		);
+		const wrapper = setup(schoolFactory.build({ inUserMigration: false, inMaintenance: true }));
 
 		const visibleAlertElement = wrapper.findAll(".v-alert");
 		expect(visibleAlertElement).toHaveLength(1);
@@ -183,7 +121,7 @@ describe("ImportUsers", () => {
 	});
 
 	it("data table should have correct props", async () => {
-		const wrapper = setup(importUsersStore, mockData);
+		const wrapper = setup();
 
 		const dataTableElement = wrapper.findComponent<VDataTable>(".v-data-table");
 
@@ -194,7 +132,7 @@ describe("ImportUsers", () => {
 	describe("should search with all columns", () => {
 		const getWrapper = () => {
 			const fetchAllImportUsersSpy = vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 
 			return {
 				wrapper,
@@ -293,7 +231,7 @@ describe("ImportUsers", () => {
 
 	describe("should sort by column", () => {
 		it("should sort by first name", async () => {
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 			const wrapperVm = wrapper.vm as unknown as typeof ImportUsers;
 
 			const sortFirstNameElement = wrapper.find('[data-testid="head-first-name"]');
@@ -307,7 +245,7 @@ describe("ImportUsers", () => {
 		});
 
 		it("should sort by last name", async () => {
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 
 			const sortLastNameElement = wrapper.find('[data-testid="head-last-name"]');
 			await sortLastNameElement.trigger("click");
@@ -324,7 +262,7 @@ describe("ImportUsers", () => {
 
 	describe("editItem", () => {
 		it("should open dialog and set editedIndex when edit button clicked", async () => {
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 
 			const editButtons = wrapper.findAll('[title="components.organisms.importUsers.editImportUser"]');
 			await editButtons[0].trigger("click");
@@ -334,7 +272,7 @@ describe("ImportUsers", () => {
 		});
 
 		it("should set correct editedItem when editing second row", async () => {
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 
 			const editButtons = wrapper.findAll('[title="components.organisms.importUsers.editImportUser"]');
 			await editButtons[1].trigger("click");
@@ -346,8 +284,7 @@ describe("ImportUsers", () => {
 
 	describe("closeEdit", () => {
 		it("should close dialog and reset editedIndex", async () => {
-			const wrapper = setup(importUsersStore, {
-				...mockData,
+			const wrapper = setup({
 				dialogEdit: true,
 				editedIndex: 1,
 			});
@@ -363,7 +300,7 @@ describe("ImportUsers", () => {
 
 	describe("getMatchedByIcon", () => {
 		it("should return mdiAccountPlus when no match", () => {
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 			const icon = (wrapper.vm as unknown as { getMatchedByIcon: (match: unknown) => string }).getMatchedByIcon(
 				undefined
 			);
@@ -372,7 +309,7 @@ describe("ImportUsers", () => {
 		});
 
 		it("should return mdiAccountPlus when match has no matchedBy", () => {
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 			const icon = (wrapper.vm as unknown as { getMatchedByIcon: (match: unknown) => string }).getMatchedByIcon({
 				userId: "123",
 				firstName: "Test",
@@ -383,7 +320,7 @@ describe("ImportUsers", () => {
 		});
 
 		it("should return mdiAccountSwitchOutline for AUTO match", () => {
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 			const icon = (wrapper.vm as unknown as { getMatchedByIcon: (match: unknown) => string }).getMatchedByIcon({
 				userId: "123",
 				matchedBy: "auto",
@@ -393,7 +330,7 @@ describe("ImportUsers", () => {
 		});
 
 		it("should return mdiAccountSwitch for ADMIN match", () => {
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 			const icon = (wrapper.vm as unknown as { getMatchedByIcon: (match: unknown) => string }).getMatchedByIcon({
 				userId: "123",
 				matchedBy: "admin",
@@ -406,7 +343,7 @@ describe("ImportUsers", () => {
 	describe("saveFlag from table", () => {
 		it("should call saveFlag when flag button clicked in table", async () => {
 			const saveFlagMock = vi.spyOn(importUsersStore, "saveFlag").mockResolvedValue(undefined);
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 			await nextTick();
 
 			// Call saveFlag directly with the first item since VDataTableServer slots may not render in tests
@@ -420,7 +357,7 @@ describe("ImportUsers", () => {
 
 		it("should not call saveFlag when loading is true", async () => {
 			const saveFlagMock = vi.spyOn(importUsersStore, "saveFlag").mockResolvedValue(undefined);
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 			await nextTick();
 
 			// Set loading to true directly on the component
@@ -435,8 +372,7 @@ describe("ImportUsers", () => {
 
 		it("should set loading to false when searchFlagged is false", async () => {
 			vi.spyOn(importUsersStore, "saveFlag").mockResolvedValue(undefined);
-			const wrapper = setup(importUsersStore, {
-				...mockData,
+			const wrapper = setup({
 				searchFlagged: false,
 			});
 			await nextTick();
@@ -452,10 +388,7 @@ describe("ImportUsers", () => {
 			vi.spyOn(importUsersStore, "saveFlag").mockResolvedValue(undefined);
 			const fetchSpy = vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
 
-			const wrapper = setup(importUsersStore, {
-				...mockData,
-				searchFlagged: true,
-			});
+			const wrapper = setup();
 			await nextTick();
 
 			await wrapper.vm.saveFlag(mockImportUsers.data[0]);
@@ -473,7 +406,7 @@ describe("ImportUsers", () => {
 		it("should call reloadData when searchMatchedBy has values", async () => {
 			vi.useFakeTimers();
 			const fetchSpy = vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 			await nextTick();
 
 			// Set searchMatchedBy to have values
@@ -493,8 +426,7 @@ describe("ImportUsers", () => {
 		});
 
 		it("should close dialog without reloading when searchMatchedBy is empty", () => {
-			const wrapper = setup(importUsersStore, {
-				...mockData,
+			const wrapper = setup({
 				dialogEdit: true,
 				searchMatchedBy: [],
 			});
@@ -509,7 +441,7 @@ describe("ImportUsers", () => {
 		it("should set loading and reload data", async () => {
 			vi.useFakeTimers();
 			const fetchSpy = vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 
 			wrapper.vm.savedFlag();
 
@@ -525,35 +457,35 @@ describe("ImportUsers", () => {
 
 	describe("getRoles", () => {
 		it("should return empty string for empty roleNames", () => {
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: string[]) => string }).getRoles([]);
 
 			expect(roles).toBe("");
 		});
 
 		it("should return student label for student role", () => {
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: string[]) => string }).getRoles(["student"]);
 
 			expect(roles).toBe("common.roleName.student");
 		});
 
 		it("should return teacher label for teacher role", () => {
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: string[]) => string }).getRoles(["teacher"]);
 
 			expect(roles).toBe("common.roleName.teacher");
 		});
 
 		it("should return admin label for admin role", () => {
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: string[]) => string }).getRoles(["admin"]);
 
 			expect(roles).toBe("common.roleName.administrator");
 		});
 
 		it("should return combined labels for multiple roles", () => {
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: string[]) => string }).getRoles([
 				"student",
 				"teacher",
@@ -563,7 +495,7 @@ describe("ImportUsers", () => {
 		});
 
 		it("should return empty string when roleNames is not an array", () => {
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 			const roles = (wrapper.vm as unknown as { getRoles: (roleNames: unknown) => string }).getRoles(null);
 
 			expect(roles).toBe("");
@@ -573,7 +505,7 @@ describe("ImportUsers", () => {
 	describe("NBC theme", () => {
 		it("should hide loginName column when isNbc is true", async () => {
 			createTestEnvStore({ SC_THEME: SchulcloudTheme.N21 });
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 			await nextTick();
 
 			const headers = wrapper.vm.tableHead;
@@ -586,7 +518,7 @@ describe("ImportUsers", () => {
 	describe("watch total", () => {
 		it("should call searchApi when total changes to value > 0", async () => {
 			const fetchSpy = vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
-			setup(importUsersStore, mockData);
+			setup();
 
 			importUsersStore.importUsersData.list = { ...mockImportUsers, total: 5 };
 			await nextTick();
@@ -599,7 +531,7 @@ describe("ImportUsers", () => {
 	describe("onUpdateOptions", () => {
 		it("should update options and fetch data", async () => {
 			const fetchSpy = vi.spyOn(importUsersStore, "fetchAllImportUsers").mockResolvedValue();
-			const wrapper = setup(importUsersStore, mockData);
+			const wrapper = setup();
 
 			await wrapper.vm.onUpdateOptions({
 				page: 2,
