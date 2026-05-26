@@ -9,8 +9,8 @@ import {
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { ElementWithParentHierarchyResponse } from "@api-server";
 import * as serverApi from "@api-server";
+import { ElementWithParentHierarchyResponse } from "@api-server";
 import * as FileStorageApi from "@data-file";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, shallowMount } from "@vue/test-utils";

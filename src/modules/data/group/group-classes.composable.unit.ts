@@ -12,8 +12,8 @@ import {
 } from "@@/tests/test-utils";
 import { classInfoFactory } from "@@/tests/test-utils/factory/classInfoFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
-import { GroupApiInterface, SchoolYearQueryType } from "@api-server";
 import * as serverApi from "@api-server";
+import { GroupApiInterface, SchoolYearQueryType } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
