@@ -216,6 +216,8 @@ export default {
 	"common.validation.fileTooBig": "El archivo no debe superar {maxSize} KB.",
 	"common.validation.tooShort": "El texto que ingresó es inferior a la longitud mínima",
 	"common.validation.containsOpeningTag": "Inserte un espacio después del signo menos-que.",
+	"common.validation.containsOpeningTag.discardChanges":
+		"Inserte un espacio después del signo menos-que. Los cambios han sido descartados.",
 	"common.validation.nonEmptyString": "Este campo es obligatorio y no debe contener sólo espacios.",
 	"common.words.also": "también",
 	"common.words.and": "y",
@@ -583,7 +585,6 @@ export default {
 	"components.cardElement.titleElement.validation.required": "Por favor ingrese un título.",
 	"components.cardElement.titleElement": "Elemento título",
 	"components.cardElement.videoConferenceElement": "Videoconferencia",
-	"components.cardElement.videoConferenceElement.label": "Insertar título de la videoconferencia",
 	"components.cardElement.deletedElement": "Contenido eliminado",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
@@ -620,7 +621,6 @@ export default {
 	"components.legacy.footer.contact": "Contacto",
 	"components.legacy.footer.github": "GitHub",
 	"components.legacy.footer.imprint": "Impresión",
-	"components.legacy.footer.lokalise_logo_alt": "logotipo de lokalise.com",
 	"components.legacy.footer.powered_by": "Traducido por",
 	"components.legacy.footer.privacy_policy_thr": "Política de privacidad",
 	"components.legacy.footer.privacy_policy": "Política de privacidad",
@@ -1701,6 +1701,7 @@ export default {
 	"pages.rooms.ccImportCourse.fileInputLabel": "Seleccionar archivo",
 	"pages.rooms.ccImportCourse.maxFileSize": "Tamaño máximo de archivo: {maxSize}",
 	"pages.rooms.ccImportCourse.fileSizeExceeded": "El archivo supera el tamaño máximo de {maxSize}.",
+	"pages.rooms.ccImportCourse.invalidFileType": "Tipo de archivo no válido. Tipos de archivo permitidos: .zip, .imscc",
 	"pages.rooms.ccImportCourse.loading": "Subida en progreso...",
 	"pages.rooms.ccImportCourse.success":
 		"Su archivo del curso se ha cargado y ahora se está importando en segundo plano.",

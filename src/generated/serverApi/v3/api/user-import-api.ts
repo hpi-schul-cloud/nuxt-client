@@ -427,13 +427,11 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
-         * @param {boolean} useCentralLdap 
+         * @param {boolean} [useCentralLdap] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerStartSchoolInUserMigration: async (useCentralLdap: boolean, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'useCentralLdap' is not null or undefined
-            assertParamExists('importUserControllerStartSchoolInUserMigration', 'useCentralLdap', useCentralLdap)
+        importUserControllerStartSchoolInUserMigration: async (useCentralLdap?: boolean, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/user/import/startUserMigration`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -622,11 +620,11 @@ export const UserImportApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {boolean} useCentralLdap 
+         * @param {boolean} [useCentralLdap] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerStartSchoolInUserMigration(useCentralLdap: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async importUserControllerStartSchoolInUserMigration(useCentralLdap?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerStartSchoolInUserMigration(useCentralLdap, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -746,11 +744,11 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
-         * @param {boolean} useCentralLdap 
+         * @param {boolean} [useCentralLdap] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerStartSchoolInUserMigration(useCentralLdap: boolean, options?: any): AxiosPromise<void> {
+        importUserControllerStartSchoolInUserMigration(useCentralLdap?: boolean, options?: any): AxiosPromise<void> {
             return localVarFp.importUserControllerStartSchoolInUserMigration(useCentralLdap, options).then((request) => request(axios, basePath));
         },
         /**
@@ -867,12 +865,12 @@ export interface UserImportApiInterface {
 
     /**
      * 
-     * @param {boolean} useCentralLdap 
+     * @param {boolean} [useCentralLdap] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApiInterface
      */
-    importUserControllerStartSchoolInUserMigration(useCentralLdap: boolean, options?: any): AxiosPromise<void>;
+    importUserControllerStartSchoolInUserMigration(useCentralLdap?: boolean, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -1006,12 +1004,12 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
 
     /**
      * 
-     * @param {boolean} useCentralLdap 
+     * @param {boolean} [useCentralLdap] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApi
      */
-    public importUserControllerStartSchoolInUserMigration(useCentralLdap: boolean, options?: any) {
+    public importUserControllerStartSchoolInUserMigration(useCentralLdap?: boolean, options?: any) {
         return UserImportApiFp(this.configuration).importUserControllerStartSchoolInUserMigration(useCentralLdap, options).then((request) => request(this.axios, this.basePath));
     }
 

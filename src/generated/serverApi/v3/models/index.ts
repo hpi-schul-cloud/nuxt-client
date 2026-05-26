@@ -65,6 +65,8 @@ export * from './context-external-tool-post-params';
 export * from './context-external-tool-response';
 export * from './context-external-tool-search-list-response';
 export * from './copy-api-response';
+export * from './copy-element-type';
+export * from './copy-status-enum';
 export * from './county-response';
 export * from './course-common-cartridge-metadata-response';
 export * from './course-info-data-response';
