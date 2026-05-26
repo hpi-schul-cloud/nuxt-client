@@ -11,18 +11,10 @@ import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import * as FileHelper from "@/utils/fileHelper";
-import {
-	boardResponseFactory,
-	createTestEnvStore,
-	fileRecordFactory,
-	mockComposable,
-	mockedPiniaStoreTyping,
-	parentNodeInfoFactory,
-} from "@@/tests/test-utils";
+import { createTestEnvStore, fileRecordFactory, mockComposable, parentNodeInfoFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardResponseAllowedOperations } from "@api-server";
 import * as BoardApi from "@data-board";
-import { useBoardAllowedOperations, useBoardStore } from "@data-board";
 import * as FileStorageApi from "@data-file";
 import { CollaboraFileType } from "@data-file";
 import * as FolderState from "@data-folder";
@@ -38,6 +30,8 @@ import { computed, ComputedRef, nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VBtn, VSkeletonLoader } from "vuetify/lib/components/index";
 
+const defaultAllowedOperations = { createFileElement: true } as BoardResponseAllowedOperations;
+
 const createFolderStateMock = () =>
 	mockComposable(FolderState.useFolderState, {
 		breadcrumbs: computed(() => []),
@@ -45,6 +39,9 @@ const createFolderStateMock = () =>
 		folderName: computed(() => ""),
 		pageTitle: computed(() => ""),
 		parent: computed(() => ({ id: "parent-id", type: ParentNodeType.BOARD, name: "parent-name" })),
+		allowedOperations: ref(defaultAllowedOperations) as unknown as ComputedRef<BoardResponseAllowedOperations>,
+		renameFolder: vi.fn().mockResolvedValue(undefined),
+		fetchAllowedOperations: vi.fn().mockResolvedValue({}),
 	});
 
 const createBoardPageInfoMock = () =>
@@ -65,11 +62,6 @@ const createAddCollaboraFileMock = (overrides: Partial<Mocked<ReturnType<typeof 
 		isCollaboraFileDialogOpen: ref(false),
 		...overrides,
 	});
-
-vi.mock("@data-board/BoardApi.composable");
-const mockedUseBoardApi = vi.mocked(BoardApi.useBoardApi);
-
-vi.mock("@data-board/board-allowed-operations.composable");
 
 vi.mock("@feature-collabora/composables/add-collabora-file.composable");
 const mockedUseAddCollaboraFile = vi.mocked(useAddCollaboraFile);
@@ -98,19 +90,7 @@ describe("Folder.vue", () => {
 		const fileStorageApiMock = createFileStorageApiMock();
 		vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 
-		const boardApiMock = mockComposable(BoardApi.useBoardApi);
-		mockedUseBoardApi.mockReturnValue(boardApiMock);
-
-		const useBoardStoreMock = mockComposable(BoardApi.useBoardStore, {
-			board: undefined,
-			isLoading: false,
-			fetchBoardRequest: vi.fn().mockResolvedValue(undefined),
-		});
-		vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
-
-		setupBoardAllowedOperationsMock(options.allowedOperations);
-
-		return { folderStateMock, folderName, parent, boardState, boardApiMock, fileStorageApiMock };
+		return { folderStateMock, folderName, parent, boardState, fileStorageApiMock };
 	};
 
 	const setupFolderStateMock = (
@@ -121,7 +101,7 @@ describe("Folder.vue", () => {
 			allowedOperations?: Partial<BoardResponseAllowedOperations>;
 		} = {}
 	) => {
-		const { breadcrumbs = [], parentType = ParentNodeType.BOARD } = options;
+		const { breadcrumbs = [], parentType = ParentNodeType.BOARD, allowedOperations = {} } = options;
 		const folderStateMock = createFolderStateMock();
 		vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
 
@@ -137,21 +117,12 @@ describe("Folder.vue", () => {
 		const folderName = ref("Test Folder") as unknown as ComputedRef<string>;
 		folderStateMock.folderName = folderName;
 		folderStateMock.breadcrumbs = ref(breadcrumbs) as unknown as ComputedRef;
+		folderStateMock.allowedOperations = ref({
+			...defaultAllowedOperations,
+			...allowedOperations,
+		}) as unknown as ComputedRef<BoardResponseAllowedOperations>;
 
 		return { folderStateMock, folderName, parent };
-	};
-
-	const setupBoardAllowedOperationsMock = (allowedOperations?: Partial<BoardResponseAllowedOperations>) => {
-		const { createFileElement = true, ...restAllowedOperations } = allowedOperations ?? {};
-		vi.mocked(useBoardAllowedOperations).mockReturnValue({
-			allowedOperations: computed(
-				() =>
-					({
-						createFileElement,
-						...restAllowedOperations,
-					}) as unknown as BoardResponseAllowedOperations
-			),
-		} as ReturnType<typeof useBoardAllowedOperations>);
 	};
 
 	const buildUploadStatsTranslation = (uploaded: string, total: string) =>
@@ -196,7 +167,7 @@ describe("Folder.vue", () => {
 	describe("when user has board edit permission", () => {
 		describe("when folder contains no files", () => {
 			describe("when component is loaded", () => {
-				const setup = async (boardInStoreUndefined = false, boardInStoreIsParent = true) => {
+				const setup = async () => {
 					const folderStateMock = createFolderStateMock();
 					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
 
@@ -212,26 +183,15 @@ describe("Folder.vue", () => {
 					const boardState = createBoardPageInfoMock();
 					vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(boardState);
 
-					const boardApiMock = mockComposable(BoardApi.useBoardApi);
-					mockedUseBoardApi.mockReturnValue(boardApiMock);
-
 					const fileStorageApiMock = createFileStorageApiMock();
 					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-					vi.mocked(useBoardAllowedOperations).mockReturnValue({
-						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
-					} as ReturnType<typeof useBoardAllowedOperations>);
-
 					const addCollaboraFileMock = createAddCollaboraFileMock();
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper } = setupWrapper();
-					const useBoardStoreMock = mockedPiniaStoreTyping(useBoardStore);
-					const id = boardInStoreIsParent && parent["id"] ? parent.id : "different-board-id";
-					const board = boardResponseFactory.build({ id });
-					useBoardStoreMock.board = boardInStoreUndefined ? undefined : board;
 
 					const windowOpenMock = vi.fn();
 					vi.spyOn(globalThis, "open").mockImplementation(windowOpenMock);
@@ -245,7 +205,6 @@ describe("Folder.vue", () => {
 						folderName,
 						boardState,
 						parent,
-						useBoardStoreMock,
 					};
 				};
 
@@ -281,34 +240,6 @@ describe("Folder.vue", () => {
 					const includesFolderName = wrapper.text().includes(folderName as unknown as string);
 
 					expect(includesFolderName).toBe(true);
-				});
-
-				describe("when board is not in store", () => {
-					it("should call fetchBoardRequest", async () => {
-						const { useBoardStoreMock, parent } = await setup(true);
-
-						expect(useBoardStoreMock.fetchBoardRequest).toHaveBeenCalledWith({
-							boardId: parent.id,
-						});
-					});
-				});
-
-				describe("when board in store is not the same as parent", () => {
-					it("should call fetchBoardRequest", async () => {
-						const { useBoardStoreMock, parent } = await setup(false, false);
-
-						expect(useBoardStoreMock.fetchBoardRequest).toHaveBeenCalledWith({
-							boardId: parent.id,
-						});
-					});
-				});
-
-				describe("when board in store is the same as parent", () => {
-					it("should not call fetchBoardRequest", async () => {
-						const { useBoardStoreMock } = await setup(false, true);
-
-						expect(useBoardStoreMock.fetchBoardRequest).not.toHaveBeenCalled();
-					});
 				});
 
 				describe("when folder is board", () => {
@@ -399,7 +330,7 @@ describe("Folder.vue", () => {
 				const setup = async () => {
 					vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 
-					const { folderStateMock, folderName, parent, fileStorageApiMock, boardApiMock } = setupMocks({
+					const { folderStateMock, folderName, parent, fileStorageApiMock } = setupMocks({
 						parentType: ParentNodeType.BOARD,
 					});
 
@@ -424,16 +355,15 @@ describe("Folder.vue", () => {
 						wrapper,
 						fileStorageApiMock,
 						folderName,
-						boardApiMock,
 						router,
 						parent,
 					};
 				};
 
 				it("should call delete", async () => {
-					const { boardApiMock } = await setup();
+					const { folderStateMock } = await setup();
 
-					expect(boardApiMock.deleteElementCall).toHaveBeenCalled();
+					expect(folderStateMock.removeFolder).toHaveBeenCalled();
 				});
 
 				it("should call router replace", async () => {
@@ -447,7 +377,7 @@ describe("Folder.vue", () => {
 				const setup = async () => {
 					vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 
-					const { folderStateMock, folderName, fileStorageApiMock, boardApiMock } = setupMocks({
+					const { folderStateMock, folderName, fileStorageApiMock } = setupMocks({
 						parentType: ParentNodeType.COURSE,
 					});
 
@@ -472,9 +402,7 @@ describe("Folder.vue", () => {
 						wrapper,
 						fileStorageApiMock,
 						folderName,
-						boardApiMock,
 						router,
-						parent,
 					};
 				};
 
@@ -488,7 +416,7 @@ describe("Folder.vue", () => {
 				const setup = async () => {
 					vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(false);
 
-					const { folderStateMock, folderName, fileStorageApiMock, boardApiMock } = setupMocks({
+					const { folderStateMock, folderName, fileStorageApiMock } = setupMocks({
 						parentType: ParentNodeType.BOARD,
 					});
 
@@ -513,15 +441,14 @@ describe("Folder.vue", () => {
 						wrapper,
 						fileStorageApiMock,
 						folderName,
-						boardApiMock,
 						router,
 					};
 				};
 
 				it("should not call delete", async () => {
-					const { boardApiMock } = await setup();
+					const { folderStateMock } = await setup();
 
-					expect(boardApiMock.deleteElementCall).not.toHaveBeenCalled();
+					expect(folderStateMock.removeFolder).not.toHaveBeenCalled();
 				});
 
 				it("should not call router replace", async () => {
@@ -533,7 +460,7 @@ describe("Folder.vue", () => {
 
 			describe("when rename folder button is clicked and dialog confirmed", () => {
 				const setup = async () => {
-					const { folderStateMock, folderName, parent, fileStorageApiMock, boardApiMock } = setupMocks({
+					const { folderStateMock, folderName, parent, fileStorageApiMock } = setupMocks({
 						parentType: ParentNodeType.BOARD,
 					});
 
@@ -560,7 +487,6 @@ describe("Folder.vue", () => {
 						wrapper,
 						fileStorageApiMock,
 						folderName,
-						boardApiMock,
 						router,
 						parent,
 					};
@@ -599,7 +525,7 @@ describe("Folder.vue", () => {
 
 			describe("when rename folder button is clicked and dialog not confirmed", () => {
 				const setup = async () => {
-					const { folderStateMock, folderName, fileStorageApiMock, boardApiMock } = setupMocks({
+					const { folderStateMock, folderName, fileStorageApiMock } = setupMocks({
 						parentType: ParentNodeType.BOARD,
 					});
 
@@ -626,9 +552,7 @@ describe("Folder.vue", () => {
 						wrapper,
 						fileStorageApiMock,
 						folderName,
-						boardApiMock,
 						router,
-						parent,
 					};
 				};
 
