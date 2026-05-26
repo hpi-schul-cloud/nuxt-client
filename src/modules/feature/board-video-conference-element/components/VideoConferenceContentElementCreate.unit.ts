@@ -20,7 +20,6 @@ const setupWrapper = ({
 			...propsData,
 		},
 	});
-
 	return wrapper;
 };
 
@@ -31,49 +30,78 @@ describe("VideoConferenceContentElementCreate", () => {
 		vi.resetAllMocks();
 	});
 
-	describe("when a valid title is entered", () => {
-		describe("and enter is pressed", () => {
-			it("should not show error-message", async () => {
-				const wrapper = setupWrapper();
+	describe("when component is unmounted", () => {
+		it("should emit create:title event with valid title", async () => {
+			const wrapper = setupWrapper();
+			await wrapper.findComponent({ name: "VTextField" }).setValue(title);
 
-				await wrapper.findComponent({ name: "VTextarea" }).setValue(title);
-				await wrapper.find("form").trigger("submit.prevent");
+			wrapper.unmount();
 
-				const alerts = wrapper.find('[role="alert"]');
-				expect(alerts.text()).toBe("");
-			});
+			expect(wrapper.emitted("create:title")).toEqual([[title]]);
+		});
 
-			it("should emit create:title event", async () => {
-				const wrapper = setupWrapper();
+		it("should not emit create:title event when title is empty", async () => {
+			const wrapper = setupWrapper();
+			await wrapper.findComponent({ name: "VTextField" }).setValue("");
 
-				await wrapper.findComponent({ name: "VTextarea" }).setValue(title);
-				await wrapper.findComponent({ name: "VTextarea" }).trigger("keydown.enter");
+			wrapper.unmount();
 
-				expect(wrapper.emitted("create:title")).toEqual([[title]]);
-			});
+			expect(wrapper.emitted("create:title")).toBeUndefined();
+		});
+
+		it("should not emit create:title event when title is unchanged", async () => {
+			const existingTitle = "Existing Title";
+			const wrapper = setupWrapper({ propsData: { existingTitle } });
+
+			wrapper.unmount();
+
+			expect(wrapper.emitted("create:title")).toBeUndefined();
+		});
+
+		it("should emit create:title event when title is changed from existing title", async () => {
+			const existingTitle = "Existing Title";
+			const newTitle = "New Title";
+			const wrapper = setupWrapper({ propsData: { existingTitle } });
+
+			await wrapper.findComponent({ name: "VTextField" }).setValue(newTitle);
+
+			wrapper.unmount();
+
+			expect(wrapper.emitted("create:title")).toEqual([[newTitle]]);
+		});
+
+		it("should emit validation:failed when title contains an opening tag string without empty space", async () => {
+			const existingTitle = "Existing Title";
+			const invalidTitle = "<invalid";
+			const wrapper = setupWrapper({ propsData: { existingTitle } });
+
+			await wrapper.findComponent({ name: "VTextField" }).setValue(invalidTitle);
+
+			wrapper.unmount();
+
+			expect(wrapper.emitted("create:title")).toBeUndefined();
+			expect(wrapper.emitted("validation:failed")).toEqual([["common.validation.containsOpeningTag.discardChanges"]]);
 		});
 	});
 
-	describe("when the title field is empty", () => {
-		describe("and the submit button is clicked", () => {
-			it("should show required-error-message", async () => {
-				const wrapper = setupWrapper();
+	describe("validation", () => {
+		it("should show opening-tag error when title contains an opening tag without empty space", async () => {
+			const wrapper = setupWrapper();
+			const textField = wrapper.findComponent({ name: "VTextField" });
 
-				await wrapper.findComponent({ name: "VTextarea" }).setValue("");
-				await wrapper.find("form").trigger("submit.prevent");
+			await textField.setValue("<invalid");
+			await textField.trigger("blur");
 
-				const alerts = wrapper.find('[role="alert"]').text();
-				expect(alerts).toEqual("common.validation.required2");
-			});
+			const alerts = wrapper.find('[role="alert"]');
+			expect(alerts.text()).toEqual("common.validation.containsOpeningTag");
+		});
 
-			it("should not emit create:title event", async () => {
-				const wrapper = setupWrapper();
+		it("should not show error-message when title is valid", async () => {
+			const wrapper = setupWrapper();
+			await wrapper.findComponent({ name: "VTextField" }).setValue(title);
 
-				await wrapper.findComponent({ name: "VTextarea" }).setValue("");
-				await wrapper.find("form").trigger("submit.prevent");
-
-				expect(wrapper.emitted("create:title")).toBeUndefined();
-			});
+			const alerts = wrapper.find('[role="alert"]');
+			expect(alerts.text()).toBe("");
 		});
 	});
 

@@ -225,6 +225,8 @@ export default {
 	"common.validation.fileTooBig": "Die Datei darf maximal {maxSize} KB groß sein.",
 	"common.validation.tooShort": "Der eingegebene Text unterschreitet die Mindestlänge",
 	"common.validation.containsOpeningTag": "Bitte Leerzeichen nach Kleiner-als-Zeichen einfügen.",
+	"common.validation.containsOpeningTag.discardChanges":
+		"Bitte Leerzeichen nach Kleiner-als-Zeichen einfügen. Änderungen wurden verworfen.",
 	"common.validation.nonEmptyString": "Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
 	"common.words.also": "auch",
 	"common.words.and": "und",
@@ -591,7 +593,6 @@ export default {
 	"components.cardElement.titleElement.validation.required": "Bitte Titel angeben.",
 	"components.cardElement.titleElement": "Titelelement",
 	"components.cardElement.videoConferenceElement": "Videokonferenz",
-	"components.cardElement.videoConferenceElement.label": "Videokonferenz-Titel einfügen",
 	"components.cardElement.deletedElement": "Gelöschter Inhalt",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
@@ -1701,6 +1702,7 @@ export default {
 	"pages.rooms.ccImportCourse.fileInputLabel": "Datei auswählen",
 	"pages.rooms.ccImportCourse.maxFileSize": "Maximale Dateigröße: {maxSize}",
 	"pages.rooms.ccImportCourse.fileSizeExceeded": "Die Datei überschreitet die maximale Größe von {maxSize}.",
+	"pages.rooms.ccImportCourse.invalidFileType": "Ungültiger Dateityp. Erlaubte Dateitypen: .zip, .imscc",
 	"pages.rooms.ccImportCourse.loading": "Upload läuft...",
 	"pages.rooms.ccImportCourse.success": "Deine Kursdatei wurde hochgeladen und wird nun im Hintergrund importiert.",
 	"pages.rooms.ccImportCourse.error": "Beim Hochladen der Kursdatei ist ein Fehler aufgetreten.",

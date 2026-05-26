@@ -1,14 +1,11 @@
 import { isLegacyClient } from "../legacy-client-route.js";
-import { NavigationGuard, NavigationGuardNext, RouteLocationNormalized } from "vue-router";
+import { NavigationGuard, RouteLocationNormalized } from "vue-router";
 
-export const legacyCompatibilityGuard: NavigationGuard = (
-	to: RouteLocationNormalized,
-	from: RouteLocationNormalized,
-	next: NavigationGuardNext
-) => {
+export const legacyCompatibilityGuard: NavigationGuard = (to: RouteLocationNormalized) => {
 	if (isLegacyClient(to.path)) {
 		window.location.assign(to.path);
+		return false;
 	} else {
-		next();
+		return true;
 	}
 };

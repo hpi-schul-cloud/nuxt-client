@@ -64,6 +64,7 @@ const rules = [isRequired(t("common.validation.required2")), isValidUrl()];
 
 const onSubmit = async () => {
 	if (form?.value) {
+		// await needed for validation to finish
 		const { valid } = await form.value.validate();
 		if (valid) {
 			isUrlValidated.value = true;
