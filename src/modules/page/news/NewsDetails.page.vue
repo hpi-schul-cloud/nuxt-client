@@ -60,21 +60,12 @@ const route = useRoute();
 
 const newsId = computed(() => route.params.id as string | undefined);
 const { deleteNews } = useNewsActions();
-const {
-	newsInstance,
-	createdAtFormattedStandard,
-	displayAtFormattedStandard,
-	displayedDateText,
-	creator,
-	isLoadingNews,
-} = useNews(newsId);
+const { newsInstance, displayAtFormattedStandard, displayedDateText, creator, isLoadingNews } = useNews(newsId);
 
 const pageTitle = computed(() => {
-	const date = displayAtFormattedStandard.value ?? createdAtFormattedStandard.value ?? undefined;
-
-	if (!date) return t("pages.news.details.title.fallback");
+	if (!displayAtFormattedStandard.value) return t("pages.news.details.title.fallback");
 	return t("pages.news.details.title", {
-		date,
+		date: displayAtFormattedStandard.value,
 	});
 });
 

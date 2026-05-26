@@ -100,11 +100,6 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 
 	watch(newsId, loadNews, { immediate: true });
 
-	const createdAtFormattedStandard = computed(() => {
-		if (!newsInstance.value?.createdAt) return undefined;
-		return formatUtc(newsInstance.value.createdAt, "date");
-	});
-
 	const createdAtFormattedFromNow = computed(() => {
 		if (!newsInstance.value?.createdAt) return undefined;
 		return fromNowUtc(newsInstance.value.createdAt);
@@ -142,7 +137,6 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 
 	return {
 		newsInstance,
-		createdAtFormattedStandard,
 		createdAtFormattedFromNow,
 		displayAtFormattedStandard,
 		displayAtFormattedFromNow,
