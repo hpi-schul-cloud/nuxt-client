@@ -1,3 +1,4 @@
+import UserMenu from "./UserMenu.vue";
 import { createTestAppStore, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { publicSystemResponseFactory } from "@@/tests/test-utils/factory/publicSystemResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -9,8 +10,7 @@ import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { computed, nextTick, ref } from "vue";
-import { VBtn, VListItem } from "vuetify/lib/components/index";
-import UserMenu from "./UserMenu.vue";
+import { VBtn, VListItem } from "vuetify/components";
 
 vi.mock("@data-access");
 vi.mock("@data-oauth");
