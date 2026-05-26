@@ -60,13 +60,18 @@ const route = useRoute();
 
 const newsId = computed(() => route.params.id as string | undefined);
 const { deleteNews } = useNewsActions();
-const { newsInstance, displayAtFormattedStandard, displayedDateText, creator, isLoadingNews } = useNews(newsId);
+const { newsInstance, displayAtFormattedStandard, displayAtFormattedFromNow, creator, isLoadingNews } = useNews(newsId);
 
 const pageTitle = computed(() => {
 	if (!displayAtFormattedStandard.value) return t("pages.news.details.title.fallback");
 	return t("pages.news.details.title", {
 		date: displayAtFormattedStandard.value,
 	});
+});
+
+const displayedDateText = computed(() => {
+	if (!newsInstance.value?.displayAt) return undefined;
+	return t("pages.news.details.published", { date: displayAtFormattedFromNow.value });
 });
 
 const onEdit = () => {

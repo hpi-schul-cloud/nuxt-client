@@ -2,10 +2,9 @@ import { useSafeAxiosRunner, useSafeAxiosTask } from "@/composables/async-tasks.
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
-import { diff, formatUtc, fromNowUtc } from "@/utils/date-time.utils";
+import { formatUtc, fromNowUtc } from "@/utils/date-time.utils";
 import { NewsApiFactory, NewsResponse, type UpdateNewsParams } from "@api-server";
 import { notifyError } from "@data-app";
-import dayjs from "dayjs";
 import { computed, Ref, ref, watch } from "vue";
 
 export const useNewsActions = () => {
@@ -86,8 +85,6 @@ export const useNewsList = (newsLimit: number) => {
 };
 
 export const useNews = (newsId: Ref<string | undefined>) => {
-	const { t } = useI18nGlobal();
-
 	const { fetchNews, isLoading } = useNewsActions();
 
 	const newsInstance = ref<NewsResponse>();
@@ -100,11 +97,6 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 
 	watch(newsId, loadNews, { immediate: true });
 
-	const createdAtFormattedFromNow = computed(() => {
-		if (!newsInstance.value?.createdAt) return undefined;
-		return fromNowUtc(newsInstance.value.createdAt);
-	});
-
 	const displayAtFormattedStandard = computed(() => {
 		if (!newsInstance.value?.displayAt) return undefined;
 		return formatUtc(newsInstance.value.displayAt, "date");
@@ -115,21 +107,6 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 		return fromNowUtc(newsInstance.value.displayAt);
 	});
 
-	const lastTouchedFormattedFromNow = computed(() => {
-		if (!newsInstance.value?.updatedAt) return undefined;
-		return fromNowUtc(newsInstance.value.updatedAt);
-	});
-
-	const displayedDateText = computed(() => {
-		const wasUpdated = diff(dayjs(newsInstance.value?.createdAt), dayjs(newsInstance.value?.updatedAt), "second") !== 0;
-		const isScheduled =
-			diff(dayjs(newsInstance.value?.createdAt), dayjs(newsInstance.value?.displayAt), "second") !== 0;
-
-		if (isScheduled) return t("pages.news.details.published", { date: displayAtFormattedFromNow.value });
-		if (wasUpdated) return t("pages.news.details.updated", { date: lastTouchedFormattedFromNow.value });
-		return t("pages.news.details.created", { date: createdAtFormattedFromNow.value });
-	});
-
 	const creator = computed(() => {
 		if (!newsInstance.value) return undefined;
 		return `${newsInstance.value.creator.firstName} ${newsInstance.value.creator.lastName}`;
@@ -137,11 +114,9 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 
 	return {
 		newsInstance,
-		createdAtFormattedFromNow,
 		displayAtFormattedStandard,
 		displayAtFormattedFromNow,
-		lastTouchedFormattedFromNow,
-		displayedDateText,
+
 		creator,
 		loadNews,
 		isLoadingNews: isLoading,

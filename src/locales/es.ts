@@ -1542,9 +1542,7 @@ export default {
 	"pages.news.title": "Noticias",
 	"pages.news.details.title": "Noticia de {date}",
 	"pages.news.details.title.fallback": "Noticia",
-	"pages.news.details.created": "Creado {date}",
 	"pages.news.details.published": "Publicado {date}",
-	"pages.news.details.updated": "Última actualización {date}",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"La inscripción no pudo completarse. Por favor, inténtelo de nuevo más tarde.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
