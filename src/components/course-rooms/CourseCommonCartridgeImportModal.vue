@@ -17,7 +17,7 @@
 				class="truncate-file-input"
 				:label="t('pages.rooms.ccImportCourse.fileInputLabel')"
 				:prepend-icon="mdiTrayArrowUp"
-				:rules="fileSizeRules"
+				:rules="fileRules"
 				accept=".imscc, .zip"
 				clearable
 				show-size
@@ -65,9 +65,24 @@ const isFileSizeValid = computed(() => {
 	return file.value.size <= maxFileSizeBytes.value;
 });
 
-const fileSizeRules = computed(() => [
+const isFileTypeValid = computed(() => {
+	if (!file.value) return true;
+
+	const allowedExtensions = [".zip", ".imscc"];
+	const fileName = file.value.name?.toLowerCase() || "";
+
+	const isExtensionAllowed = allowedExtensions.some((ext) => fileName.endsWith(ext));
+
+	return isExtensionAllowed;
+});
+
+const fileRules = computed(() => [
 	(value: File | undefined) => {
 		if (!value) return true;
+
+		if (!isFileTypeValid.value) {
+			return t("pages.rooms.ccImportCourse.invalidFileType");
+		}
 
 		return (
 			value.size <= maxFileSizeBytes.value ||
@@ -76,7 +91,7 @@ const fileSizeRules = computed(() => [
 	},
 ]);
 
-const importButtonDisabled = computed(() => !file.value || !isFileSizeValid.value);
+const importButtonDisabled = computed(() => !file.value || !isFileSizeValid.value || !isFileTypeValid.value);
 
 const onCancel = () => {
 	file.value = undefined;
