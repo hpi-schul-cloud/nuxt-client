@@ -2,6 +2,7 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { Course } from "@/store/types/room";
 import { $axios } from "@/utils/api";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	BoardApiFactory,
 	CourseRoomsApiFactory,
@@ -91,10 +92,10 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 		if (success && result) {
 			roomData.value = result;
 		} else if (taskError) {
-			if (taskError.message?.includes("LOCKED_COURSE")) {
+			const apiError = mapAxiosErrorToResponseError(taskError);
+			if (apiError.type === "LOCKED_COURSE") {
 				roomData.value = {
 					...roomData.value,
-					title: taskError.message,
 				};
 				isLocked.value = true;
 			}
