@@ -1012,6 +1012,13 @@ export default {
 		'Die Schule befindet sich im Modus der Benutzermigration. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
 	"loggedin.text.schoolInMigrationMode":
 		'Die Schule kann Benutzerkonten von Schulportal importieren. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
+	"loggedin.text.teamsToRooms": "Jetzt auf Räume umsteigen",
+	"loggedin.text.teamsToRooms.possibilities":
+		"In den Räumen stehen nun alle Möglichkeiten bereit, um noch besser schulintern und -übergreifend zusammenzuarbeiten.",
+	"loggedin.text.teamsToRooms.migration":
+		"Teams werden daher zum 30.09.2026 abgeschaltet, können aber zuvor durch Nutzende mit der Rolle „lernbegleitend“ automatisiert in Räume umgewandelt werden. Parallel dazu müssen die noch benötigten Team-Dateien bis dahin gesichert bzw. heruntergeladen werden.",
+	"loggedin.text.teamsToRooms.helpLink": "Weitere Infos zur Migration finden sich auf den {helpLink}.",
+	"loggedin.text.teamsToRooms.helpLink.help": "Hilfeseiten",
 	"pages.dashboard.title": "Übersicht",
 	"pages.dashboard.empty.news": "Bisher gibt es keine News.",
 	"pages.dashboard.new.features": "Es gibt neue Features in der {instanceTitle}.",

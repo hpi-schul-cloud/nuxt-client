@@ -1,21 +1,30 @@
 <template>
 	<DefaultWireframe max-width="full" main-with-bottom-padding>
 		<template #header>
-			<Announcement />
 			<h1 data-testid="dashboard-title">{{ t("pages.dashboard.title") }}</h1>
 		</template>
 		<template #default>
-			<InfoAlert v-if="hasGlobalAnnouncement && (isTeacher || isAdmin)" class="mt-6">
-				<i18n-t keypath="loggedin.text.backupFeatures" scope="global">
-					<template #helpLink>
-						<a href="https://dbildungscloud.de/help/confluence/485132545" target="_blank" rel="noopener noreferrer">
-							{{ t("loggedin.text.backupFeatures.helpLink") }}
-						</a>
-					</template>
-				</i18n-t>
-			</InfoAlert>
+			<Announcement class="mt-6" />
+			<!-- Teams to Rooms Migration Alert, should completely be deleted after migration -->
+			<WarningAlert class="mt-6" data-testid="teams-to-rooms-migration-alert">
+				{{ t("loggedin.text.teamsToRooms") }}
 
-			<WarningAlert v-if="inMaintenanceOrMigrationText" class="mt-4">
+				<ul class="mt-1 pl-5">
+					<li>{{ t("loggedin.text.teamsToRooms.possibilities") }}</li>
+					<li>{{ t("loggedin.text.teamsToRooms.migration") }}</li>
+					<li>
+						<i18n-t keypath="loggedin.text.teamsToRooms.helpLink" scope="global">
+							<template #helpLink>
+								<a :href="helpLink" target="_blank" rel="noopener noreferrer" :aria-label="helpAriaLabel">
+									{{ t("loggedin.text.teamsToRooms.helpLink.help") }}
+								</a>
+							</template>
+						</i18n-t>
+					</li>
+				</ul>
+			</WarningAlert>
+
+			<WarningAlert v-if="inMaintenanceOrMigrationText" class="mt-4" data-testid="maintenance-migration-alert">
 				<RenderHTML :html="inMaintenanceOrMigrationText" />
 			</WarningAlert>
 
@@ -76,14 +85,12 @@ import { useSafeAxiosRunner } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { NewsApiFactory, NewsTargetModel, Permission, SchulcloudTheme } from "@api-server";
-import { useAppStore, useAppStoreRefs } from "@data-app";
-import { useSchoolStoreRefs } from "@data-app";
-import { useEnvConfig } from "@data-env";
+import { NewsApiFactory, NewsTargetModel, Permission } from "@api-server";
+import { useAppStore, useAppStoreRefs, useSchoolStoreRefs } from "@data-app";
 import { DashboardReleaseDialog, DashboardTasks } from "@feature-dashboard";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
-import { InfoAlert, WarningAlert } from "@ui-alert";
+import { WarningAlert } from "@ui-alert";
 import { SvsLoading } from "@ui-containers";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
@@ -122,9 +129,10 @@ const { data: newsResponse, isLoading: isLoadingNews } = useSafeAxiosRunner(() =
 );
 const latestNews = computed(() => newsResponse.value?.data.data ?? []);
 
-const envConfig = useEnvConfig();
-// Workaround, since accessing the same parameters is in progress.
-const hasGlobalAnnouncement = computed(() => envConfig.value.SC_THEME === SchulcloudTheme.DEFAULT);
+const helpAriaLabel = computed(
+	() => `${t("pages.rooms.infoAlert.welcome.furtherInformation.help")}, ${t("common.ariaLabel.newTab")}`
+);
+const helpLink = computed(() => `${window.location.origin}/help/confluence/426313035`);
 </script>
 
 <style scoped>

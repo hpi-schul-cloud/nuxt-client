@@ -1007,6 +1007,13 @@ export default {
 		'La escuela está en modo de migración de usuarios. Para migrar los usuarios, por favor vaya a <a href="/administration/migration/">esta página</a>.',
 	"loggedin.text.schoolInMigrationMode":
 		'La escuela puede importar cuentas de usuario de Schulportal. Para migrar los usuarios, por favor vaya a <a href="/administration/migration/">esta página</a>.',
+	"loggedin.text.teamsToRooms": "Cambiar a Espacios ahora",
+	"loggedin.text.teamsToRooms.possibilities":
+		"Espacios ahora ofrece todas las herramientas que necesitas para colaborar de manera más efectiva dentro y entre escuelas.",
+	"loggedin.text.teamsToRooms.migration":
+		"Equipos se desactivará el 30.09.2026, pero puede convertirse automáticamente en Espacios por los usuarios con el rol de 'profesor' antes de esa fecha. Paralelamente, cualquier archivo de Equipo necesario debe ser respaldado o descargado para entonces.",
+	"loggedin.text.teamsToRooms.helpLink": "Más información sobre la migración se puede encontrar en {helpLink}.",
+	"loggedin.text.teamsToRooms.helpLink.help": "páginas de ayuda",
 	"pages.dashboard.title": "Panel",
 	"pages.dashboard.empty.news": "Hasta el momento no hay noticias.",
 	"pages.dashboard.new.features": "Hay nuevas funciones en {instanceTitle}.",
