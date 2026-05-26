@@ -49,7 +49,7 @@ const route = useRoute();
 
 const { saveNews, deleteNews, status } = useNewsActions();
 const newsId = computed(() => route.params.id as string | undefined);
-const { newsInstance, createdAtFormatted } = useNews(newsId);
+const { newsInstance, displayAtFormattedStandard } = useNews(newsId);
 
 const pageTitle = computed(() => {
 	if (!newsInstance.value?.title) return t("pages.news.edit.title.default");
@@ -61,7 +61,7 @@ const pageTitle = computed(() => {
 const titleForBreadcrumbs = computed(() => {
 	if (!newsInstance.value?.createdAt) return t("pages.news.details.title.fallback");
 	return t("pages.news.details.title", {
-		date: createdAtFormatted.value,
+		date: displayAtFormattedStandard.value,
 	});
 });
 
