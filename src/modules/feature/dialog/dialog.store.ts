@@ -23,7 +23,7 @@ type AnyDialogRequest = {
 	[K in DialogKey]: DialogRequest<K>;
 }[DialogKey];
 
-export const useDialogStore = defineStore("dialog", () => {
+export const useDialogStore = defineStore("dialogStore", () => {
 	const activeDialog = ref<AnyDialogRequest>();
 	const queue = ref<AnyDialogRequest[]>([]);
 
