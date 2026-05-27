@@ -1,8 +1,8 @@
 import { useSchoolExternalToolApi } from "./SchoolExternalToolApi.composable";
 import { SchoolExternalToolMetadata } from "./types";
 import { mockApi, mockApiResponse, schoolExternalToolMetadataResponseFactory } from "@@/tests/test-utils";
-import { SchoolExternalToolMetadataResponse } from "@api-server";
 import * as serverApi from "@api-server";
+import { SchoolExternalToolMetadataResponse } from "@api-server";
 import { Mocked } from "vitest";
 
 describe("SchoolExternalToolApi.composable", () => {

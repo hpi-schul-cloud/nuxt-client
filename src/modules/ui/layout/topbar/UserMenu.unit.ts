@@ -10,7 +10,7 @@ import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { computed, nextTick, ref } from "vue";
-import { VBtn, VListItem } from "vuetify/lib/components/index";
+import { VBtn, VListItem } from "vuetify/components";
 
 vi.mock("@data-access");
 vi.mock("@data-oauth");

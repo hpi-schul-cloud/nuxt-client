@@ -1683,6 +1683,7 @@ export default {
 	"pages.rooms.ccImportCourse.fileInputLabel": "Виберіть файл",
 	"pages.rooms.ccImportCourse.maxFileSize": "Максимальний розмір файлу: {maxSize}",
 	"pages.rooms.ccImportCourse.fileSizeExceeded": "Файл перевищує максимальний розмір {maxSize}.",
+	"pages.rooms.ccImportCourse.invalidFileType": "Недійсний тип файлу. Дозволені типи файлів: .zip, .imscc",
 	"pages.rooms.ccImportCourse.loading": "Триває завантаження...",
 	"pages.rooms.ccImportCourse.success": "Файл вашого курсу завантажено та зараз імпортується у фоновому режимі.",
 	"pages.rooms.ccImportCourse.error": "Під час завантаження файлу курсу сталася помилка.",
