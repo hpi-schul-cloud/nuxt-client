@@ -14,7 +14,7 @@
 			density="compact"
 			rows="1"
 			auto-grow
-			:rules="[validateOnOpeningTag, isOfMaxLength(100)()]"
+			:rules="validationRules"
 			:placeholder="t('components.cardElement.titleElement.placeholder')"
 			:autofocus="internalIsFocused"
 			:maxlength="maxLength"
@@ -65,6 +65,8 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
+const validationRules = [validateOnOpeningTag, isOfMaxLength(100)()];
+
 const modelValue = ref("");
 const externalValue = toRef(props, "value");
 const internalIsFocused = ref(false);
@@ -86,6 +88,7 @@ const setFocusOnEdit = async () => {
 };
 
 watch(modelValue, async (newValue) => {
+	await nextTick();
 	await titleInput?.value?.validate();
 	const isValid = titleInput?.value?.isValid;
 
