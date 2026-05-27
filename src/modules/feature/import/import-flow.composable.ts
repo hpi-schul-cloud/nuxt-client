@@ -40,7 +40,11 @@ export const useImportFlow = () => {
 		return { result: result?.data, success, error };
 	};
 
-	const executeImport = async (token: string, availableDestinations: MaybeRefOrGetter<ImportDestinationItem[]>) => {
+	const executeImport = async (
+		token: string,
+		availableDestinations: MaybeRefOrGetter<ImportDestinationItem[]>,
+		destinationType = "room"
+	) => {
 		const { result: validationResult, error: validationError } = await validateShareToken(token);
 
 		if (!validationResult) {
@@ -59,7 +63,7 @@ export const useImportFlow = () => {
 			: openDialog("import", {
 					shareTokenInfo: validationResult,
 					availableDestinations: destinations,
-					destinationType: validationResult.parentType === ShareTokenInfoResponseParentType.ROOM ? "room" : "course",
+					destinationType: destinationType === "room" ? "room" : "course",
 				}));
 
 		if (!completed) return { success: false, error: new Error("Import cancelled") };
