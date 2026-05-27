@@ -6,7 +6,6 @@
 	</div>
 	<slot v-else />
 </template>
-#
 
 <script setup lang="ts">
 // It is recommended to pass a debounced `isLoading` value to this component to avoid

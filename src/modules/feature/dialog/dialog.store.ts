@@ -28,7 +28,7 @@ export const useDialogStore = defineStore("dialog", () => {
 	const queue = ref<AnyDialogRequest[]>([]);
 
 	const beginSettlement = (request: AnyDialogRequest, result: AwaitableResult<unknown>) => {
-		if (request !== activeDialog.value) return;
+		if (request.id !== activeDialog.value?.id) return;
 		if (request.resolved) return;
 		if (request.pendingSettlement) return;
 
@@ -37,7 +37,7 @@ export const useDialogStore = defineStore("dialog", () => {
 	};
 
 	const finalizeSettlement = (request: AnyDialogRequest) => {
-		if (request !== activeDialog.value) return;
+		if (request.id !== activeDialog.value?.id) return;
 		if (request.resolved) return;
 		if (!request.pendingSettlement) return;
 
@@ -50,10 +50,10 @@ export const useDialogStore = defineStore("dialog", () => {
 	};
 
 	const cancelDialog = (request: AnyDialogRequest) => {
-		if (activeDialog.value === request) {
+		if (activeDialog.value?.id === request.id) {
 			beginSettlement(request, { completed: false, data: undefined });
 		} else {
-			const index = queue.value.indexOf(request);
+			const index = queue.value.findIndex((r) => r.id === request.id);
 			if (index !== -1) queue.value.splice(index, 1);
 			if (!request.resolved) {
 				request.resolved = true;
@@ -99,7 +99,7 @@ export const useDialogStore = defineStore("dialog", () => {
 	};
 
 	const setDialogModelValue = (request: AnyDialogRequest, value: boolean) => {
-		if (request !== activeDialog.value) return;
+		if (request.id !== activeDialog.value?.id) return;
 		if (request.resolved) return;
 
 		request.modelValue = value;
