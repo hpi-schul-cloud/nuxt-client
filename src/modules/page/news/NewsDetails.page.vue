@@ -50,7 +50,13 @@
 						<SvgNewsEmpty />
 					</template>
 					<template #text>
-						<VBtn to="/news" :text="t('common.labels.backToOverview')" color="primary" flat />
+						<VBtn
+							to="/news"
+							:text="t('common.labels.backToOverview')"
+							color="primary"
+							flat
+							data-testid="back-to-overview-btn"
+						/>
 					</template>
 				</EmptyState>
 			</template>
