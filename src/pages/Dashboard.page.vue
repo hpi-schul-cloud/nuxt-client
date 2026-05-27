@@ -7,7 +7,7 @@
 			<Announcement class="mt-6" />
 			<!-- Teams to Rooms Migration Alert, should completely be deleted after migration -->
 			<WarningAlert class="mt-6" data-testid="teams-to-rooms-migration-alert">
-				{{ t("loggedin.text.teamsToRooms") }}
+				<span class="font-weight-bold">{{ t("loggedin.text.teamsToRooms") }}</span>
 
 				<ul class="mt-1 pl-5">
 					<li>{{ t("loggedin.text.teamsToRooms.possibilities") }}</li>

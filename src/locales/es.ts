@@ -1007,7 +1007,7 @@ export default {
 		'La escuela está en modo de migración de usuarios. Para migrar los usuarios, por favor vaya a <a href="/administration/migration/">esta página</a>.',
 	"loggedin.text.schoolInMigrationMode":
 		'La escuela puede importar cuentas de usuario de Schulportal. Para migrar los usuarios, por favor vaya a <a href="/administration/migration/">esta página</a>.',
-	"loggedin.text.teamsToRooms": "Cambiar a Espacios ahora",
+	"loggedin.text.teamsToRooms": "Cambiar a Espacios ahora: Equipos será desactivado",
 	"loggedin.text.teamsToRooms.possibilities":
 		"Espacios ahora ofrece todas las herramientas que necesitas para colaborar de manera más efectiva dentro y entre escuelas.",
 	"loggedin.text.teamsToRooms.migration":

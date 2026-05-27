@@ -987,7 +987,7 @@ export default {
 		'The school is in user migration mode. To migrate users, please go to <a href="/administration/migration/">this page</a>.',
 	"loggedin.text.schoolInMigrationMode":
 		'The school can import user accounts from Schulportal. To migrate users, please go to <a href="/administration/migration/">this page</a>.',
-	"loggedin.text.teamsToRooms": "Switch to Rooms now",
+	"loggedin.text.teamsToRooms": "Switch to Rooms now – Teams are shut down",
 	"loggedin.text.teamsToRooms.possibilities":
 		"Rooms now offer all the tools you need to collaborate even more effectively within and across schools.",
 	"loggedin.text.teamsToRooms.migration":

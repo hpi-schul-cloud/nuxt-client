@@ -1004,7 +1004,7 @@ export default {
 		'Школа перебуває в режимі міграції користувачів. Щоб перенести користувачів, перейдіть на <a href="/administration/migration/">цю сторінку</a>.',
 	"loggedin.text.schoolInMigrationMode":
 		'Школа може імпортувати облікові записи користувачів з Schulportal. Для виконання міграції користувачів відвідайте, будь ласка, <a href="/administration/migration/">цю сторінку</a>.',
-	"loggedin.text.teamsToRooms": "Перехід на Простори зараз",
+	"loggedin.text.teamsToRooms": "Перехід на Простори зараз – Команди буде вимкнено",
 	"loggedin.text.teamsToRooms.possibilities":
 		"Простори тепер пропонує всі інструменти, необхідні для більш ефективної співпраці всередині та між школами.",
 	"loggedin.text.teamsToRooms.migration":

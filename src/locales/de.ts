@@ -1012,7 +1012,7 @@ export default {
 		'Die Schule befindet sich im Modus der Benutzermigration. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
 	"loggedin.text.schoolInMigrationMode":
 		'Die Schule kann Benutzerkonten von Schulportal importieren. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
-	"loggedin.text.teamsToRooms": "Jetzt auf Räume umsteigen",
+	"loggedin.text.teamsToRooms": "Jetzt auf Räume umsteigen – Teams werden abgeschaltet",
 	"loggedin.text.teamsToRooms.possibilities":
 		"In den Räumen stehen nun alle Möglichkeiten bereit, um noch besser schulintern und -übergreifend zusammenzuarbeiten.",
 	"loggedin.text.teamsToRooms.migration":
