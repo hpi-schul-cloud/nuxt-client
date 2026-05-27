@@ -22,7 +22,7 @@
 						{{ displayedDateText }}
 					</div>
 					<div class="d-flex align-center text-subtitle" data-testid="news-creator">
-						<VIcon :icon="mdiHumanMaleBoard" size="sm" class="mr-1" />
+						<VIcon :icon="mdiAccountOutline" size="sm" class="mr-1" />
 						{{ creator }}
 					</div>
 				</div>
@@ -64,7 +64,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useNews, useNewsActions } from "@data-access";
 import { notifySuccess, useAppStoreRefs } from "@data-app";
 import { RenderHTML } from "@feature-render-html";
-import { mdiClockOutline, mdiHumanMaleBoard } from "@icons/material";
+import { mdiAccountOutline, mdiClockOutline } from "@icons/material";
 import { SvsLoading } from "@ui-containers";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
