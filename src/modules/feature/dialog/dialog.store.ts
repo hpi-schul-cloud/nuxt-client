@@ -32,8 +32,8 @@ export const useDialogStore = defineStore("dialogStore", () => {
 		if (request.resolved) return;
 		if (request.pendingSettlement) return;
 
-		request.pendingSettlement = result;
-		request.modelValue = false;
+		activeDialog.value!.pendingSettlement = result;
+		activeDialog.value!.modelValue = false;
 	};
 
 	const finalizeSettlement = (request: AnyDialogRequest) => {

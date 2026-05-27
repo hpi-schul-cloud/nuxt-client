@@ -263,11 +263,22 @@ describe("useDialogStore", () => {
 
 	describe("cancel() function returned by createDialog", () => {
 		describe("when the dialog is active", () => {
-			it("resolves the result promise immediately with completed: false", async () => {
+			it("sets modelValue to false on the active dialog", () => {
 				const store = useDialogStore();
-				const { result, cancel } = store.createDialog("confirmation", { title: "Test" });
+				const { cancel } = store.createDialog("confirmation", { title: "Test" });
 
 				cancel();
+
+				expect(store.activeDialog?.modelValue).toBe(false);
+			});
+
+			it("resolves the result promise with completed: false after onDialogAfterLeave", async () => {
+				const store = useDialogStore();
+				const { result, cancel } = store.createDialog("confirmation", { title: "Test" });
+				const request = store.activeDialog!;
+
+				cancel();
+				store.onDialogAfterLeave(request);
 				await flushPromises();
 
 				expect(await result).toEqual({ completed: false, data: undefined });
