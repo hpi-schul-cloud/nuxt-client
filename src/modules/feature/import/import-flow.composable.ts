@@ -4,7 +4,7 @@ import { useImportContent } from "@/composables/copy-content.composable";
 import { $axios } from "@/utils/api";
 import { ShareTokenApiFactory, ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
 import { notifySuccess } from "@data-app";
-import { openDialog, withLoadingState } from "@feature-dialog";
+import { openDialog, withGlobalLoadingState } from "@feature-dialog";
 import type { MaybeRefOrGetter } from "vue";
 import { computed, ref, toValue } from "vue";
 import { useI18n } from "vue-i18n";
@@ -65,7 +65,7 @@ export const useImportFlow = () => {
 		if (!completed) return { success: false, error: new Error("Import cancelled") };
 		const { newName, destination } = data;
 
-		const { result, success, error } = await withLoadingState(
+		const { result, success, error } = await withGlobalLoadingState(
 			() => importShareToken(validationResult, { newName, destinationId: destination?.id }),
 			t("components.molecules.import.options.loadingMessage")
 		);

@@ -1,15 +1,20 @@
+import { useDebouncedLoading } from "@/composables/debounced-loading.composable";
 import { AsyncFunction } from "@/types/async.types";
-import { withDebouncedLoading } from "@/utils/loading-utils";
 import { openCancellableDialog } from "@feature-dialog";
+import { watch } from "vue";
 
-export const withLoadingState = <T>(fn: AsyncFunction<T>, loadingMessage: string): Promise<T> => {
+export const withGlobalLoadingState = <T>(fn: AsyncFunction<T>, loadingMessage: string): Promise<T> => {
+	const { loadingState, withLoadingState } = useDebouncedLoading();
 	let cancelDialog: (() => void) | undefined;
 
-	return withDebouncedLoading(fn, {
-		onStart: () => {
+	const stopWatch = watch(loadingState, (state) => {
+		if (state === "loading") {
 			const { cancel } = openCancellableDialog("loadingState", { loadingText: loadingMessage });
 			cancelDialog = cancel;
-		},
-		onEnd: () => cancelDialog?.(),
+		} else if (state === "loaded") {
+			cancelDialog?.();
+		}
 	});
+
+	return withLoadingState(fn).finally(() => stopWatch());
 };

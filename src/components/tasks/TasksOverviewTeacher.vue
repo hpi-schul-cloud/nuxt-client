@@ -65,8 +65,12 @@ const activeTab = computed({
 	},
 });
 
-const { drafts, openForTeacher, isLoadingFinishedTasks, fetchTasks, loadMoreFinishedTasks, finishedTasks } =
+const { drafts, openForTeacher, finishedTasksLoadingState, fetchTasks, loadMoreFinishedTasks, finishedTasks } =
 	useTasksOfOverview();
+
+const isLoadingFinishedTasks = computed(
+	() => finishedTasksLoadingState.value === "loading" || finishedTasksLoadingState.value === "extLoading"
+);
 
 const { executeCopyTask } = useCopyFlow();
 

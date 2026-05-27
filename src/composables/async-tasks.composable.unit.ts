@@ -179,7 +179,7 @@ describe("useSafeAxiosTask", () => {
 		);
 	});
 
-	describe("isLoading and isBlocked", () => {
+	describe("loadingState", () => {
 		beforeEach(() => {
 			vi.useFakeTimers();
 		});
@@ -188,66 +188,64 @@ describe("useSafeAxiosTask", () => {
 			vi.useRealTimers();
 		});
 
-		it("should initialise isLoading and isBlocked as false", () => {
-			const { isLoading, isBlocked } = useSafeAxiosTask();
+		it("should initialise loadingState as 'idle'", () => {
+			const { loadingState } = useSafeAxiosTask();
 
-			expect(isLoading.value).toBe(false);
-			expect(isBlocked.value).toBe(false);
+			expect(loadingState.value).toBe("idle");
 		});
 
-		it("should set isBlocked to true immediately when executing", async () => {
-			const { execute, isBlocked } = useSafeAxiosTask();
+		it("should set isRunning to true immediately when executing", async () => {
+			const { execute, isRunning } = useSafeAxiosTask();
 			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
 
 			const promise = execute(fn);
 
-			expect(isBlocked.value).toBe(true);
+			expect(isRunning.value).toBe(true);
 
 			await vi.runAllTimersAsync();
 			await promise;
 		});
 
-		it("should set isLoading to true after the delay fires", async () => {
-			const { execute, isLoading } = useSafeAxiosTask();
+		it("should set loadingState to 'loading' after the delay fires", async () => {
+			const { execute, loadingState } = useSafeAxiosTask();
 			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
 
 			const promise = execute(fn);
 
 			await vi.advanceTimersByTimeAsync(199);
-			expect(isLoading.value).toBe(false);
+			expect(loadingState.value).not.toBe("loading");
 
 			await vi.advanceTimersByTimeAsync(1);
-			expect(isLoading.value).toBe(true);
+			expect(loadingState.value).toBe("loading");
 
 			await vi.runAllTimersAsync();
 			await promise;
 		});
 
-		it("should not set isLoading if the function completes before the delay", async () => {
-			const { execute, isLoading } = useSafeAxiosTask();
+		it("should transition to 'loaded' without showing the spinner for fast operations", async () => {
+			const { execute, loadingState } = useSafeAxiosTask();
 			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("fast"), 100)));
 
 			const promise = execute(fn);
 			await vi.runAllTimersAsync();
 			await promise;
 
-			expect(isLoading.value).toBe(false);
+			expect(loadingState.value).toBe("loaded");
 		});
 
-		it("should reset isLoading and isBlocked to false after execution completes", async () => {
-			const { execute, isLoading, isBlocked } = useSafeAxiosTask();
+		it("should set loadingState to 'loaded' after execution completes", async () => {
+			const { execute, loadingState } = useSafeAxiosTask();
 			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
 
 			const promise = execute(fn);
 			await vi.runAllTimersAsync();
 			await promise;
 
-			expect(isLoading.value).toBe(false);
-			expect(isBlocked.value).toBe(false);
+			expect(loadingState.value).toBe("loaded");
 		});
 
-		it("should reset isLoading and isBlocked to false even when the function throws", async () => {
-			const { execute, isLoading, isBlocked } = useSafeAxiosTask();
+		it("should set loadingState to 'loaded' even when the function throws after the delay", async () => {
+			const { execute, loadingState } = useSafeAxiosTask();
 			const fn = vi
 				.fn()
 				.mockImplementation(() => new Promise((_, reject) => setTimeout(() => reject(new Error("boom")), 1000)));
@@ -256,8 +254,7 @@ describe("useSafeAxiosTask", () => {
 			await vi.runAllTimersAsync();
 			await promise;
 
-			expect(isLoading.value).toBe(false);
-			expect(isBlocked.value).toBe(false);
+			expect(loadingState.value).toBe("loaded");
 		});
 	});
 });
@@ -309,7 +306,7 @@ describe("useSafeAxiosQuery", () => {
 		});
 	});
 
-	describe("isLoading and isBlocked", () => {
+	describe("loadingState", () => {
 		beforeEach(() => {
 			vi.useFakeTimers();
 		});
@@ -318,51 +315,49 @@ describe("useSafeAxiosQuery", () => {
 			vi.useRealTimers();
 		});
 
-		it("should initialise isLoading and isBlocked as false", () => {
-			const { isLoading, isBlocked } = useSafeAxiosRunner(vi.fn().mockResolvedValue("data"), { immediate: false });
+		it("should initialise loadingState as 'idle'", () => {
+			const { loadingState } = useSafeAxiosRunner(vi.fn().mockResolvedValue("data"), { immediate: false });
 
-			expect(isLoading.value).toBe(false);
-			expect(isBlocked.value).toBe(false);
+			expect(loadingState.value).toBe("idle");
 		});
 
-		it("should set isBlocked to true immediately when executing", async () => {
+		it("should set isRunning to true immediately when executing", async () => {
 			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
-			const { execute, isBlocked } = useSafeAxiosRunner(fn, { immediate: false });
+			const { execute, isRunning } = useSafeAxiosRunner(fn, { immediate: false });
 
 			const promise = execute();
 
-			expect(isBlocked.value).toBe(true);
+			expect(isRunning.value).toBe(true);
 
 			await vi.runAllTimersAsync();
 			await promise;
 		});
 
-		it("should set isLoading to true after the delay fires", async () => {
+		it("should set loadingState to 'loading' after the delay fires", async () => {
 			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
-			const { execute, isLoading } = useSafeAxiosRunner(fn, { immediate: false });
+			const { execute, loadingState } = useSafeAxiosRunner(fn, { immediate: false });
 
 			const promise = execute();
 
 			await vi.advanceTimersByTimeAsync(199);
-			expect(isLoading.value).toBe(false);
+			expect(loadingState.value).not.toBe("loading");
 
 			await vi.advanceTimersByTimeAsync(1);
-			expect(isLoading.value).toBe(true);
+			expect(loadingState.value).toBe("loading");
 
 			await vi.runAllTimersAsync();
 			await promise;
 		});
 
-		it("should reset isLoading and isBlocked to false after execution completes", async () => {
+		it("should set loadingState to 'loaded' after execution completes", async () => {
 			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
-			const { execute, isLoading, isBlocked } = useSafeAxiosRunner(fn, { immediate: false });
+			const { execute, loadingState } = useSafeAxiosRunner(fn, { immediate: false });
 
 			const promise = execute();
 			await vi.runAllTimersAsync();
 			await promise;
 
-			expect(isLoading.value).toBe(false);
-			expect(isBlocked.value).toBe(false);
+			expect(loadingState.value).toBe("loaded");
 		});
 	});
 });

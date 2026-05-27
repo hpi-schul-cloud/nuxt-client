@@ -1,4 +1,4 @@
-import { withLoadingState } from "./utils";
+import { withGlobalLoadingState } from "./utils";
 import * as featureDialog from "@feature-dialog";
 import { flushPromises } from "@vue/test-utils";
 
@@ -28,7 +28,7 @@ describe("withLoadingState", () => {
 	it("returns the result of the wrapped function", async () => {
 		const fn = vi.fn().mockResolvedValue("value");
 
-		const resultPromise = withLoadingState(fn, "Loading...");
+		const resultPromise = withGlobalLoadingState(fn, "Loading...");
 		await vi.runAllTimersAsync();
 		const result = await resultPromise;
 
@@ -38,7 +38,7 @@ describe("withLoadingState", () => {
 	it("opens a loadingState dialog with the given message after the delay fires", async () => {
 		const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
 
-		const promise = withLoadingState(fn, "Please wait");
+		const promise = withGlobalLoadingState(fn, "Please wait");
 
 		// Before the default 200ms delay — dialog should not be opened yet
 		await vi.advanceTimersByTimeAsync(199);
@@ -57,7 +57,7 @@ describe("withLoadingState", () => {
 	it("does not open a dialog if the function completes before the delay", async () => {
 		const fn = vi.fn().mockResolvedValue("fast");
 
-		const promise = withLoadingState(fn, "Loading...");
+		const promise = withGlobalLoadingState(fn, "Loading...");
 		// Flush microtasks so the `await fn()` continuation runs and clears the timer
 		// before fake time is advanced past the 200ms delay
 		await flushPromises();
@@ -69,7 +69,7 @@ describe("withLoadingState", () => {
 	it("cancels the dialog when the function completes", async () => {
 		const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
 
-		const promise = withLoadingState(fn, "Loading...");
+		const promise = withGlobalLoadingState(fn, "Loading...");
 
 		await vi.advanceTimersByTimeAsync(200); // delay fires → dialog opens
 		await vi.runAllTimersAsync();

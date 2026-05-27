@@ -3,7 +3,7 @@ import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { $axios } from "@/utils/api";
 import { BoardApiFactory, CourseRoomsApiFactory, RoomApiFactory, TaskApiFactory } from "@api-server";
 import { notifySuccess } from "@data-app";
-import { openDialog, withLoadingState } from "@feature-dialog";
+import { openDialog, withGlobalLoadingState } from "@feature-dialog";
 import { useI18n } from "vue-i18n";
 
 export const useCopyFlow = () => {
@@ -17,7 +17,8 @@ export const useCopyFlow = () => {
 
 	const copyCancelledError = () => new Error("Copy cancelled");
 
-	const withCopyLoading = <T>(fn: () => Promise<T>) => withLoadingState(fn, t("feature-copy.inProgress.title.loading"));
+	const withCopyLoading = <T>(fn: () => Promise<T>) =>
+		withGlobalLoadingState(fn, t("feature-copy.inProgress.title.loading"));
 
 	const notifyCopySuccess = (type: ContentItemTypeEnum) => {
 		notifySuccess(

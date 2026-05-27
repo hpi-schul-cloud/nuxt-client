@@ -10,7 +10,7 @@ import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 
-vi.mock("@feature-dialog", () => ({ openDialog: vi.fn(), withLoadingState: vi.fn() }));
+vi.mock("@feature-dialog", () => ({ openDialog: vi.fn(), withGlobalLoadingState: vi.fn() }));
 
 let shareApi: Mocked<serverApi.ShareTokenApiInterface>;
 
@@ -58,7 +58,7 @@ describe("useImportflow", () => {
 		vi.spyOn(serverApi, "ShareTokenApiFactory").mockReturnValue(shareApi);
 
 		vi.mocked(featureDialog.openDialog).mockResolvedValue({ completed: false, data: undefined });
-		vi.mocked(featureDialog.withLoadingState).mockImplementation(async (fn: () => Promise<unknown>) => fn());
+		vi.mocked(featureDialog.withGlobalLoadingState).mockImplementation(async (fn: () => Promise<unknown>) => fn());
 	});
 
 	afterEach(() => {
@@ -141,7 +141,7 @@ describe("useImportflow", () => {
 				it("should activate loading state during execution", async () => {
 					const { resultPromise } = await setup();
 					await resultPromise;
-					expect(featureDialog.withLoadingState).toHaveBeenCalledOnce();
+					expect(featureDialog.withGlobalLoadingState).toHaveBeenCalledOnce();
 				});
 
 				it("should return the result", async () => {
@@ -179,7 +179,7 @@ describe("useImportflow", () => {
 				it("should activate loading state during execution", async () => {
 					const { resultPromise } = await setup();
 					await resultPromise;
-					expect(featureDialog.withLoadingState).toHaveBeenCalledOnce();
+					expect(featureDialog.withGlobalLoadingState).toHaveBeenCalledOnce();
 				});
 
 				it("should return the error", async () => {

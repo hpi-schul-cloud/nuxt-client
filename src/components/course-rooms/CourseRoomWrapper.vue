@@ -31,7 +31,7 @@ import { useCommonCartridgeImport } from "@data-common-cartridge";
 import { useCourseRoomListStore } from "@data-course-rooms";
 import { useEnvConfig } from "@data-env";
 import { StartNewCourseSyncDialog } from "@feature-course-sync";
-import { withLoadingState } from "@feature-dialog";
+import { withGlobalLoadingState } from "@feature-dialog";
 import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@icons/material";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
@@ -116,7 +116,7 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 const handleImport = async (file: File): Promise<void> => {
 	commonCartridgeImport.isOpen.value = false;
 
-	withLoadingState(async () => {
+	withGlobalLoadingState(async () => {
 		await commonCartridgeImport.importCommonCartridgeFile(file);
 	}, t("pages.rooms.ccImportCourse.loading"));
 

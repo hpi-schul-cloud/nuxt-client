@@ -11,7 +11,7 @@ import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 
-vi.mock("@feature-dialog", () => ({ openDialog: vi.fn(), withLoadingState: vi.fn() }));
+vi.mock("@feature-dialog", () => ({ openDialog: vi.fn(), withGlobalLoadingState: vi.fn() }));
 
 let courseRoomsApi: Mocked<serverApi.CourseRoomsApiInterface>;
 let taskApi: Mocked<serverApi.TaskApiInterface>;
@@ -149,7 +149,7 @@ describe("useCopyFlow", () => {
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApi);
 
 		vi.mocked(featureDialog.openDialog).mockResolvedValue({ completed: false, data: undefined });
-		vi.mocked(featureDialog.withLoadingState).mockImplementation(async (fn: () => Promise<unknown>) => fn());
+		vi.mocked(featureDialog.withGlobalLoadingState).mockImplementation(async (fn: () => Promise<unknown>) => fn());
 		vi.spyOn(logger, "error").mockImplementation(vi.fn());
 	});
 
@@ -200,7 +200,7 @@ describe("useCopyFlow", () => {
 				it("should activate loading state during execution", async () => {
 					const { resultPromise } = setup();
 					await resultPromise;
-					expect(featureDialog.withLoadingState).toHaveBeenCalledOnce();
+					expect(featureDialog.withGlobalLoadingState).toHaveBeenCalledOnce();
 				});
 
 				it("should return the result", async () => {
@@ -229,7 +229,7 @@ describe("useCopyFlow", () => {
 				it("should activate loading state during execution", async () => {
 					const { resultPromise } = setup();
 					await resultPromise;
-					expect(featureDialog.withLoadingState).toHaveBeenCalledOnce();
+					expect(featureDialog.withGlobalLoadingState).toHaveBeenCalledOnce();
 				});
 
 				it("should return the error", async () => {

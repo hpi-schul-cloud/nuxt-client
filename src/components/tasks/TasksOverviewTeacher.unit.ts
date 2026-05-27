@@ -32,7 +32,7 @@ describe("TasksOverviewTeacher", () => {
 			drafts: computed(() => []),
 			openForTeacher: computed(() => []),
 			finishedTasks: ref([]),
-			isLoadingFinishedTasks: computed(() => false),
+			finishedTasksLoadingState: computed(() => "idle"),
 		});
 		vi.mocked(useTasksOfOverview).mockReturnValue(useTasksOfOverviewMock);
 

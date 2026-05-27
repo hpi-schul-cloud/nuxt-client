@@ -21,7 +21,7 @@ describe("TaskOverview.page", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		useTasksOfOverviewMock = mockComposable(useTasksOfOverview, {
-			isLoadingTasks: computed(() => false),
+			tasksLoadingState: computed(() => "idle"),
 			status: ref("completed"),
 		});
 		vi.mocked(useTasksOfOverview).mockReturnValue(useTasksOfOverviewMock);
@@ -37,7 +37,7 @@ describe("TaskOverview.page", () => {
 		status = "completed" as Status,
 		permissions = [Permission.HOMEWORK_CREATE],
 	} = {}) => {
-		useTasksOfOverviewMock.isLoadingTasks = computed(() => isLoading);
+		useTasksOfOverviewMock.tasksLoadingState = computed(() => (isLoading ? "loading" : "idle"));
 		useTasksOfOverviewMock.status = ref(status);
 
 		createTestAppStore({
@@ -79,7 +79,7 @@ describe("TaskOverview.page", () => {
 			const loading = wrapper.findComponent({ name: "SvsLoading" });
 
 			expect(loading.exists()).toBe(true);
-			expect(loading.props("isLoading")).toBe(true);
+			expect(loading.props("loadingState")).toBe("loading");
 		});
 	});
 
