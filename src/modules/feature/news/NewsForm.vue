@@ -156,7 +156,7 @@ const onSave = async () => {
 const onDelete = async () => {
 	const isConfirmed = await askConfirmation({
 		title: "components.organisms.FormNews.remove.confirm.message",
-		confirmBtnKey: "components.organisms.FormNews.remove.confirm.confirm",
+		confirmBtnKey: "common.actions.delete",
 	});
 	if (isConfirmed) emit("delete");
 };

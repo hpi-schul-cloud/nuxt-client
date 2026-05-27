@@ -788,7 +788,6 @@ export default {
 	"components.organisms.FormNews.input.title.placeholder": "Let's start with the title",
 	"components.organisms.FormNews.label.planned_publish":
 		"Here you can set a date for automatic publication in the future (optional):",
-	"components.organisms.FormNews.remove.confirm.confirm": "Delete news",
 	"components.organisms.FormNews.remove.confirm.message": "Do you really want to delete this news irrevocably?",
 	"components.organisms.FormNews.success.create": "News created.",
 	"components.organisms.FormNews.success.patch": "News was updated.",

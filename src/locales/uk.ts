@@ -803,7 +803,6 @@ export default {
 	"components.organisms.FormNews.input.title.placeholder": "Почнемо із заголовка",
 	"components.organisms.FormNews.label.planned_publish":
 		"Тут можна встановити дату автоматичної публікації в майбутньому (необов’язково):",
-	"components.organisms.FormNews.remove.confirm.confirm": "Видалити новину",
 	"components.organisms.FormNews.remove.confirm.message": "Ви дійсно хочете назавжди видалити цю новину?",
 	"components.organisms.FormNews.success.create": "Новину створено.",
 	"components.organisms.FormNews.success.patch": "Новину оновлено.",

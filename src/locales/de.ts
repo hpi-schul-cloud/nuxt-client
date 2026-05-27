@@ -813,7 +813,6 @@ export default {
 	"components.organisms.FormNews.input.title.placeholder": "Los geht's mit dem Titel",
 	"components.organisms.FormNews.label.planned_publish":
 		"Hier kannst du ein Datum für die automatische Veröffentlichung in der Zukunft setzen (optional):",
-	"components.organisms.FormNews.remove.confirm.confirm": "Neuigkeit löschen",
 	"components.organisms.FormNews.remove.confirm.message":
 		"Möchtest du diese Neuigkeit wirklich unwiderruflich löschen?",
 	"components.organisms.FormNews.success.create": "Neuigkeit erstellt.",
