@@ -135,4 +135,32 @@ describe("CourseCommonCartridgeImportModal", () => {
 			expect(wrapper.emitted("import")).toBeFalsy();
 		});
 	});
+
+	describe("file type validation", () => {
+		it("passes confirmBtnDisabled=true when file type is invalid", async () => {
+			const invalidFile = createMockFile("file.test", 1024);
+			const { dialog } = getWrapper(invalidFile);
+			await flushPromises();
+
+			expect(dialog.props("confirmBtnDisabled")).toBe(true);
+		});
+
+		it("validation rule returns true for valid file type", () => {
+			const { rules } = getWrapper();
+
+			const validFile = createMockFile("test.imscc", 1024);
+			const result = rules[0](validFile);
+
+			expect(result).toBe(true);
+		});
+
+		it("validation rule returns error message for wrong file type", async () => {
+			const invalidFile = createMockFile("file.test", 1024);
+			const { rules } = getWrapper(invalidFile);
+
+			const result = rules[0](invalidFile);
+
+			expect(result).toBe("pages.rooms.ccImportCourse.invalidFileType");
+		});
+	});
 });

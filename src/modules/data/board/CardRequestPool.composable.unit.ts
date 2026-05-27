@@ -1,6 +1,6 @@
 import { useSharedCardRequestPool } from "./CardRequestPool.composable";
-import { BoardCardApiInterface } from "@api-server";
 import * as serverApi from "@api-server";
+import { BoardCardApiInterface } from "@api-server";
 
 let mockReturnData: { data: { data: { id: string }[] } };
 const cardsApiFactoryMock = {
