@@ -2,6 +2,7 @@ import NewsDetailsPage from "./NewsDetails.page.vue";
 import { initializeAxios } from "@/utils/api";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import {
+	createTestAppStore,
 	expectNotification,
 	mockApi,
 	mockApiResponse,
@@ -31,7 +32,15 @@ describe("NewsDetailsPage", () => {
 		initializeAxios(axiosMock);
 	});
 
-	const setup = async (options?: Partial<{ currentNews: NewsResponse | undefined }>) => {
+	const setup = async (options?: { currentNews?: NewsResponse | undefined; roleName?: string }) => {
+		createTestAppStore({
+			me: {
+				roles: options?.roleName
+					? [{ id: options.roleName, name: options.roleName }]
+					: [{ id: "teacher", name: "teacher" }],
+			},
+		});
+
 		const news = newsResponseFactory.build();
 		const { currentNews } = {
 			currentNews: news,
@@ -130,6 +139,18 @@ describe("NewsDetailsPage", () => {
 			expect(getRouter().push).not.toHaveBeenCalled();
 			expectNotification("error");
 			consoleErrorSpy.mockRestore();
+		});
+	});
+
+	describe("when user is a student", () => {
+		it("should not display edit and delete buttons", async () => {
+			const { wrapper } = await setup({ roleName: "student" });
+
+			const editButton = wrapper.find("[data-testid='news-edit-btn']");
+			const deleteButton = wrapper.find("[data-testid='news-delete-btn']");
+
+			expect(editButton.exists()).toBe(false);
+			expect(deleteButton.exists()).toBe(false);
 		});
 	});
 

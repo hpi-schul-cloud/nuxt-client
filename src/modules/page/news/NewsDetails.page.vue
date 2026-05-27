@@ -28,7 +28,9 @@
 				</div>
 				<VDivider class="mb-4" />
 				<RenderHTML :html="newsInstance.content" class="ck-content" data-testid="news-content" />
-				<div class="d-flex mt-8 ga-3">
+				<div v-if="isTeacher || isAdmin" class="d-flex mt-8 ga-3">
+					<VSpacer />
+					<VBtn data-testid="news-delete-btn" :text="t('common.actions.delete')" variant="text" @click="onDelete" />
 					<VBtn
 						data-testid="news-edit-btn"
 						:text="t('common.actions.edit')"
@@ -36,7 +38,6 @@
 						variant="flat"
 						@click="onEdit"
 					/>
-					<VBtn data-testid="news-delete-btn" :text="t('common.actions.delete')" variant="outlined" @click="onDelete" />
 				</div>
 			</template>
 			<template v-else>
@@ -61,7 +62,7 @@
 import SvgNewsEmpty from "@/assets/img/SvgNewsEmpty.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useNews, useNewsActions } from "@data-access";
-import { notifySuccess } from "@data-app";
+import { notifySuccess, useAppStoreRefs } from "@data-app";
 import { RenderHTML } from "@feature-render-html";
 import { mdiClockOutline, mdiHumanMaleBoard } from "@icons/material";
 import { SvsLoading } from "@ui-containers";
@@ -79,6 +80,8 @@ const route = useRoute();
 const newsId = computed(() => route.params.id as string | undefined);
 const { deleteNews } = useNewsActions();
 const { newsInstance, displayAtFormattedStandard, displayAtFormattedFromNow, creator, isLoadingNews } = useNews(newsId);
+
+const { isTeacher, isAdmin } = useAppStoreRefs();
 
 const pageTitle = computed(() => {
 	if (!displayAtFormattedStandard.value) return t("pages.news.details.title.fallback");
