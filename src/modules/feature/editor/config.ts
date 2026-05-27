@@ -33,7 +33,6 @@ export const advancedPlugins: PluginName[] = [
 	"FontBackgroundColor",
 	"FontColor",
 	"HorizontalLine",
-	"Link",
 	"Math",
 	"SpecialCharacters",
 	"SpecialCharactersEssentials",
