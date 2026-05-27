@@ -116,7 +116,7 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 const handleImport = async (file: File): Promise<void> => {
 	commonCartridgeImport.isOpen.value = false;
 
-	withGlobalLoadingState(async () => {
+	await withGlobalLoadingState(async () => {
 		await commonCartridgeImport.importCommonCartridgeFile(file);
 	}, t("pages.rooms.ccImportCourse.loading"));
 
