@@ -73,7 +73,7 @@ export function downloadFilesAsArchive(params: ArchiveFileParams) {
 	form.method = "POST";
 	form.action = "/api/v3/file/download-files-as-archive";
 	form.enctype = "application/json";
-	form.target = "_blank";
+	form.target = "_self";
 
 	const archiveNameInput = document.createElement("input");
 	archiveNameInput.type = "hidden";
