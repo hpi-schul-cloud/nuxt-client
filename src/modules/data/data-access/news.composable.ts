@@ -17,7 +17,7 @@ export const useNewsActions = () => {
 	const fetchNewsList = async (newsLimit: number) =>
 		await execute(
 			() => newsApi.newsControllerFindAll(undefined, undefined, undefined, undefined, newsLimit),
-			t("common.notifications.errors.notLoaded", { type: t("common.words.news", 2) })
+			t("common.notifications.errors.notLoaded", { count: 2, type: t("common.words.news", 2) })
 		);
 
 	const fetchNews = async (newsId: string) =>

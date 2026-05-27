@@ -59,7 +59,7 @@ const pageTitle = computed(() => {
 });
 
 const titleForBreadcrumbs = computed(() => {
-	if (!newsInstance.value?.createdAt) return t("pages.news.details.title.fallback");
+	if (!newsInstance.value?.displayAt) return t("pages.news.details.title.fallback");
 	return t("pages.news.details.title", {
 		date: displayAtFormattedStandard.value,
 	});

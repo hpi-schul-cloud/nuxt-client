@@ -1,5 +1,6 @@
 import NewsEditPage from "./NewsEdit.page.vue";
 import { initializeAxios } from "@/utils/api";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import {
 	expectNotification,
 	mockApi,
@@ -18,7 +19,6 @@ import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
-import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 
 describe("NewsEditPage", () => {
 	let newsApi: Mocked<NewsApiInterface>;

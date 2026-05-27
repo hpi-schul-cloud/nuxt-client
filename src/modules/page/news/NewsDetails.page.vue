@@ -75,18 +75,22 @@ const displayedDateText = computed(() => {
 });
 
 const onEdit = () => {
-	router.push({ path: `/news/${newsInstance.value?.id}/edit` });
+	router.push({ path: `/news/${newsId.value}/edit` });
 };
 
 const onDelete = async () => {
-	const { success } = await deleteNews(newsInstance.value?.id);
+	const { success } = await deleteNews(newsId.value);
 	if (success) {
 		notifySuccess(t("components.organisms.FormNews.success.remove"));
 		await router.push({ path: "/news" });
 	}
 };
 
-watch(pageTitle, (newTitle) => {
-	useTitle(buildPageTitle(newTitle));
-});
+watch(
+	pageTitle,
+	(newTitle) => {
+		useTitle(buildPageTitle(newTitle));
+	},
+	{ immediate: true }
+);
 </script>
