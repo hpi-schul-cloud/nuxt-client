@@ -6,6 +6,7 @@
 		confirm-btn-lang-key="common.actions.continue"
 		:no-confirm="activeStep === 'showResult'"
 		:is-loading="isLoading"
+		:are-actions-disabled="isLoading"
 		:cancel-btn-lang-key="cancelBtnLangKey"
 		data-testid="share-dialog"
 		@confirm="onNext"
@@ -97,6 +98,7 @@ const cancelBtnLangKey = computed(() =>
 const { text, warnings } = useShareContent(computed(() => props.shareItemType));
 
 const onNext = async () => {
+	if (isLoading.value) return;
 	isLoading.value = true;
 	try {
 		shareUrl.value = await props.onConfirm({ ...shareOptions });
