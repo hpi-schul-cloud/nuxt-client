@@ -31,10 +31,6 @@ describe("NewsDetailsPage", () => {
 		initializeAxios(axiosMock);
 	});
 
-	afterEach(() => {
-		vi.clearAllMocks();
-	});
-
 	const setup = async (options?: Partial<{ currentNews: NewsResponse | undefined }>) => {
 		const news = newsResponseFactory.build();
 		const { currentNews } = {
@@ -55,7 +51,7 @@ describe("NewsDetailsPage", () => {
 
 		const wrapper = mount(NewsDetailsPage, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 		});
 		await flushPromises();
