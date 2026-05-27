@@ -194,7 +194,7 @@ const availableDestinations = computed(() =>
 const { executeImport } = useImportFlow();
 
 const executeImportFlow = async (token: string) => {
-	const { result: importResult } = await executeImport(token, availableDestinations);
+	const { result: importResult } = await executeImport(token, availableDestinations, "course");
 
 	if (!importResult) {
 		router.push({ name: "course-room-overview" });
