@@ -10,6 +10,7 @@ common.ts
 configuration.ts
 git_push.sh
 index.ts
+models/add-office-document-to-parent-params.ts
 models/api-validation-error.ts
 models/archive-file-params.ts
 models/authorized-collabora-document-url-response.ts
@@ -27,6 +28,7 @@ models/file-url-params.ts
 models/files-storage-config-response.ts
 models/index.ts
 models/multi-file-params.ts
+models/office-document-type.ts
 models/parent-statistic-response.ts
 models/preview-output-mime-types.ts
 models/preview-status.ts

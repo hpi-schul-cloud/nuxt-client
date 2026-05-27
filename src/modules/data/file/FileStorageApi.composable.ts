@@ -9,8 +9,15 @@ import {
 	StorageLocation,
 } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { formatFileSize, getFileExtension } from "@/utils/fileHelper";
-import { FileApiFactory, FileApiInterface, WopiApiFactory, WopiApiInterface } from "@api-file-storage";
+import { formatFileSize } from "@/utils/fileHelper";
+import {
+	type AddOfficeDocumentToParentParams,
+	FileApiFactory,
+	FileApiInterface,
+	OfficeDocumentType,
+	WopiApiFactory,
+	WopiApiInterface,
+} from "@api-file-storage";
 import { notifyError, useAppStore } from "@data-app";
 import { useEnvFileConfig } from "@data-env";
 import { useI18n } from "vue-i18n";
@@ -77,17 +84,26 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const getCollaboraAssetUrl = (collaboraFileType: CollaboraFileType): string => {
-		const base = `${window.location.origin}/collabora`;
-
+	const getOfficeDocumentType = (collaboraFileType: CollaboraFileType): OfficeDocumentType => {
 		if (collaboraFileType === CollaboraFileType.Text) {
-			return `${base}/doc.docx`;
+			return OfficeDocumentType.WORDPROCESSINGML_DOCUMENT;
 		}
 		if (collaboraFileType === CollaboraFileType.Spreadsheet) {
-			return `${base}/spreadsheet.xlsx`;
+			return OfficeDocumentType.SPREADSHEETML_SHEET;
 		}
 
-		return `${base}/presentation.pptx`;
+		return OfficeDocumentType.PRESENTATIONML_PRESENTATION;
+	};
+
+	const getOfficeDocumentFileExtension = (collaboraFileType: CollaboraFileType): string => {
+		if (collaboraFileType === CollaboraFileType.Text) {
+			return "docx";
+		}
+		if (collaboraFileType === CollaboraFileType.Spreadsheet) {
+			return "xlsx";
+		}
+
+		return "pptx";
 	};
 
 	const uploadCollaboraFile = async (
@@ -96,13 +112,29 @@ export const useFileStorageApi = () => {
 		parentType: FileRecordParent,
 		fileName: string
 	) => {
-		const assetUrl = getCollaboraAssetUrl(type);
-		const fileExtension = getFileExtension(assetUrl);
+		const fileExtension = getOfficeDocumentFileExtension(type);
 		const fullFileName = `${fileName}.${fileExtension}`;
 
-		const fileRecord = await uploadFromUrl(assetUrl, parentId, parentType, fullFileName);
+		try {
+			const schoolId = useAppStore().school?.id as string;
+			const addOfficeDocumentToParentParams: AddOfficeDocumentToParentParams = {
+				fileName: fullFileName,
+				officeDocumentType: getOfficeDocumentType(type),
+			};
+			const response = await fileApi.addOfficeDocumentToParent(
+				schoolId,
+				StorageLocation.SCHOOL,
+				parentId,
+				parentType,
+				addOfficeDocumentToParentParams
+			);
 
-		return fileRecord;
+			upsertFileRecords([response.data]);
+
+			return response.data;
+		} catch (error) {
+			showError(error);
+		}
 	};
 
 	const uploadFromUrl = async (

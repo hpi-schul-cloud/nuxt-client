@@ -1,3 +1,4 @@
+export * from './add-office-document-to-parent-params';
 export * from './api-validation-error';
 export * from './archive-file-params';
 export * from './authorized-collabora-document-url-response';
@@ -14,6 +15,7 @@ export * from './file-record-scan-status';
 export * from './file-url-params';
 export * from './files-storage-config-response';
 export * from './multi-file-params';
+export * from './office-document-type';
 export * from './parent-statistic-response';
 export * from './preview-output-mime-types';
 export * from './preview-status';

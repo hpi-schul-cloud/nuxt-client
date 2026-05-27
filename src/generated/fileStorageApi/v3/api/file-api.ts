@@ -21,6 +21,8 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
+import { AddOfficeDocumentToParentParams } from '../models';
+// @ts-ignore
 import { ApiValidationError } from '../models';
 // @ts-ignore
 import { ArchiveFileParams } from '../models';
@@ -54,6 +56,62 @@ import { StorageLocation } from '../models';
  */
 export const FileApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @summary Upload office document from filesystem
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
+         * @param {string} parentId 
+         * @param {FileRecordParentType} parentType 
+         * @param {AddOfficeDocumentToParentParams} addOfficeDocumentToParentParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addOfficeDocumentToParent: async (storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, addOfficeDocumentToParentParams: AddOfficeDocumentToParentParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'storageLocationId' is not null or undefined
+            assertParamExists('addOfficeDocumentToParent', 'storageLocationId', storageLocationId)
+            // verify required parameter 'storageLocation' is not null or undefined
+            assertParamExists('addOfficeDocumentToParent', 'storageLocation', storageLocation)
+            // verify required parameter 'parentId' is not null or undefined
+            assertParamExists('addOfficeDocumentToParent', 'parentId', parentId)
+            // verify required parameter 'parentType' is not null or undefined
+            assertParamExists('addOfficeDocumentToParent', 'parentType', parentType)
+            // verify required parameter 'addOfficeDocumentToParentParams' is not null or undefined
+            assertParamExists('addOfficeDocumentToParent', 'addOfficeDocumentToParentParams', addOfficeDocumentToParentParams)
+            const localVarPath = `/file/add-office-document/{storageLocation}/{storageLocationId}/{parentType}/{parentId}`
+                .replace(`{${"storageLocationId"}}`, encodeURIComponent(String(storageLocationId)))
+                .replace(`{${"storageLocation"}}`, encodeURIComponent(String(storageLocation)))
+                .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)))
+                .replace(`{${"parentType"}}`, encodeURIComponent(String(parentType)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addOfficeDocumentToParentParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @summary Copy all files of a parent entityId to a target entityId
@@ -1043,6 +1101,21 @@ export const FileApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Upload office document from filesystem
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
+         * @param {string} parentId 
+         * @param {FileRecordParentType} parentType 
+         * @param {AddOfficeDocumentToParentParams} addOfficeDocumentToParentParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async addOfficeDocumentToParent(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, addOfficeDocumentToParentParams: AddOfficeDocumentToParentParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addOfficeDocumentToParent(storageLocationId, storageLocation, parentId, parentType, addOfficeDocumentToParentParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Copy all files of a parent entityId to a target entityId
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
@@ -1317,6 +1390,20 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
+         * @summary Upload office document from filesystem
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
+         * @param {string} parentId 
+         * @param {FileRecordParentType} parentType 
+         * @param {AddOfficeDocumentToParentParams} addOfficeDocumentToParentParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addOfficeDocumentToParent(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, addOfficeDocumentToParentParams: AddOfficeDocumentToParentParams, options?: any): AxiosPromise<FileRecordResponse> {
+            return localVarFp.addOfficeDocumentToParent(storageLocationId, storageLocation, parentId, parentType, addOfficeDocumentToParentParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Copy all files of a parent entityId to a target entityId
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
@@ -1570,6 +1657,20 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
 export interface FileApiInterface {
     /**
      * 
+     * @summary Upload office document from filesystem
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
+     * @param {string} parentId 
+     * @param {FileRecordParentType} parentType 
+     * @param {AddOfficeDocumentToParentParams} addOfficeDocumentToParentParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApiInterface
+     */
+    addOfficeDocumentToParent(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, addOfficeDocumentToParentParams: AddOfficeDocumentToParentParams, options?: any): AxiosPromise<FileRecordResponse>;
+
+    /**
+     * 
      * @summary Copy all files of a parent entityId to a target entityId
      * @param {string} storageLocationId 
      * @param {StorageLocation} storageLocation 
@@ -1821,6 +1922,22 @@ export interface FileApiInterface {
  * @extends {BaseAPI}
  */
 export class FileApi extends BaseAPI implements FileApiInterface {
+    /**
+     * 
+     * @summary Upload office document from filesystem
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
+     * @param {string} parentId 
+     * @param {FileRecordParentType} parentType 
+     * @param {AddOfficeDocumentToParentParams} addOfficeDocumentToParentParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApi
+     */
+    public addOfficeDocumentToParent(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, addOfficeDocumentToParentParams: AddOfficeDocumentToParentParams, options?: any) {
+        return FileApiFp(this.configuration).addOfficeDocumentToParent(storageLocationId, storageLocation, parentId, parentType, addOfficeDocumentToParentParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Copy all files of a parent entityId to a target entityId
