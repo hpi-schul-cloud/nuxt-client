@@ -14,40 +14,58 @@
 		max-width="short"
 	>
 		<SvsLoading :is-loading="isLoadingNews">
-			<h2 data-testid="news-title">{{ newsInstance?.title }}</h2>
-			<div class="d-flex mb-2">
-				<div class="d-flex align-center text-subtitle mr-3" data-testid="news-last-touched">
-					<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
-					{{ displayedDateText }}
+			<template v-if="newsInstance">
+				<h2 data-testid="news-title">{{ newsInstance.title }}</h2>
+				<div class="d-flex mb-2">
+					<div class="d-flex align-center text-subtitle mr-3" data-testid="news-last-touched">
+						<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
+						{{ displayedDateText }}
+					</div>
+					<div class="d-flex align-center text-subtitle" data-testid="news-creator">
+						<VIcon :icon="mdiHumanMaleBoard" size="sm" class="mr-1" />
+						{{ creator }}
+					</div>
 				</div>
-				<div class="d-flex align-center text-subtitle" data-testid="news-creator">
-					<VIcon :icon="mdiHumanMaleBoard" size="sm" class="mr-1" />
-					{{ creator }}
+				<VDivider class="mb-4" />
+				<RenderHTML :html="newsInstance.content" class="ck-content" data-testid="news-content" />
+				<div class="d-flex mt-8 ga-3">
+					<VBtn
+						data-testid="news-edit-btn"
+						:text="t('common.actions.edit')"
+						color="primary"
+						variant="flat"
+						@click="onEdit"
+					/>
+					<VBtn data-testid="news-delete-btn" :text="t('common.actions.delete')" variant="outlined" @click="onDelete" />
 				</div>
-			</div>
-			<VDivider class="mb-4" />
-			<RenderHTML :html="newsInstance?.content ?? ''" class="ck-content" data-testid="news-content" />
-			<div class="d-flex mt-8 ga-3">
-				<VBtn
-					data-testid="news-edit-btn"
-					:text="t('common.actions.edit')"
-					color="primary"
-					variant="flat"
-					@click="onEdit"
-				/>
-				<VBtn data-testid="news-delete-btn" :text="t('common.actions.delete')" variant="outlined" @click="onDelete" />
-			</div>
+			</template>
+			<template v-else>
+				<EmptyState
+					data-testid="empty-state-news"
+					class="mt-16"
+					:title="t('common.notifications.errors.notLoaded', { type: t('common.words.news') })"
+				>
+					<template #media>
+						<SvgNewsEmpty />
+					</template>
+					<template #text>
+						<VBtn to="/news" :text="t('common.labels.backToOverview')" color="primary" flat />
+					</template>
+				</EmptyState>
+			</template>
 		</SvsLoading>
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
+import SvgNewsEmpty from "@/assets/img/SvgNewsEmpty.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useNews, useNewsActions } from "@data-access";
 import { notifySuccess } from "@data-app";
 import { RenderHTML } from "@feature-render-html";
 import { mdiClockOutline, mdiHumanMaleBoard } from "@icons/material";
 import { SvsLoading } from "@ui-containers";
+import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, watch } from "vue";

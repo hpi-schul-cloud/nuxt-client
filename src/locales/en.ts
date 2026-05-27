@@ -56,6 +56,7 @@ export default {
 	"common.instructions.orderBy.arrowKeys": "The items in this list can be moved using the arrow keys.",
 	"common.labels.admin": "",
 	"common.labels.allSchools": "all schools",
+	"common.labels.backToOverview": "Back to overview",
 	"common.labels.birthdate": "Date of birth",
 	"common.labels.birthday": "Date of Birth",
 	"common.labels.changed": "Changed",

@@ -58,6 +58,7 @@ export default {
 	"common.files": "Файли",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.allSchools": "всі школи",
+	"common.labels.backToOverview": "Повернутися до огляду",
 	"common.labels.birthdate": "Дата народження",
 	"common.labels.birthday": "Дата народження",
 	"common.labels.changed": "Змінений",

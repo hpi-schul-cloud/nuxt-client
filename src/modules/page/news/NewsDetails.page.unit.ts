@@ -1,6 +1,13 @@
 import NewsDetailsPage from "./NewsDetails.page.vue";
 import { initializeAxios } from "@/utils/api";
-import { mockApi, mockApiResponse, mockAxiosInstance, newsResponseFactory } from "@@/tests/test-utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
+import {
+	expectNotification,
+	mockApi,
+	mockApiResponse,
+	mockAxiosInstance,
+	newsResponseFactory,
+} from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { NewsApiInterface, NewsResponse } from "@api-server";
 import * as serverApi from "@api-server";
@@ -90,7 +97,44 @@ describe("NewsDetailsPage", () => {
 	});
 
 	describe("when the delete button is clicked", () => {
-		it.todo("should call onDelete when delete button is clicked");
+		beforeEach(() => {
+			vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
+		});
+
+		it("should delete news", async () => {
+			const { wrapper, news } = await setup();
+
+			const deleteButton = wrapper.find("[data-testid='news-delete-btn']");
+			await deleteButton.trigger("click");
+
+			expect(newsApi.newsControllerDelete).toHaveBeenCalledWith(news.id);
+		});
+
+		it("should notify success and navigate to news list page after successful deletion", async () => {
+			const { wrapper } = await setup();
+
+			const deleteButton = wrapper.find("[data-testid='news-delete-btn']");
+			await deleteButton.trigger("click");
+			await flushPromises();
+
+			expect(getRouter().push).toHaveBeenCalledWith({ path: "/news" });
+			expectNotification("success");
+		});
+
+		it("should not navigate to news list page when deletion fails and notify error", async () => {
+			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
+			const { wrapper } = await setup();
+
+			newsApi.newsControllerDelete.mockRejectedValue(new Error("Failed to delete news"));
+
+			const deleteButton = wrapper.find("[data-testid='news-delete-btn']");
+			await deleteButton.trigger("click");
+			await flushPromises();
+
+			expect(getRouter().push).not.toHaveBeenCalled();
+			expectNotification("error");
+			consoleErrorSpy.mockRestore();
+		});
 	});
 
 	describe("when news is not loaded", () => {

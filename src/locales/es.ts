@@ -58,6 +58,7 @@ export default {
 	"common.instructions.orderBy.arrowKeys": "Los elementos de esta lista se pueden mover con las teclas de flecha.",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.allSchools": "todas las escuelas",
+	"common.labels.backToOverview": "Volver a la vista general",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",
 	"common.labels.changed": "Cambiado",

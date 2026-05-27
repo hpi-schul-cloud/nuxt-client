@@ -58,6 +58,7 @@ export default {
 	"common.instructions.orderBy.arrowKeys": "Die Elemente dieser Liste können per Pfeiltaste verschoben werden.",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.allSchools": "alle Schulen",
+	"common.labels.backToOverview": "Zurück zur Übersicht",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",
 	"common.labels.changed": "Geändert",
