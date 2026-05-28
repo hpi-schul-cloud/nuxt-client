@@ -1,5 +1,4 @@
 import { BoardLayout } from "@/types/board/Board";
-import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { RoomBoardItem } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
@@ -9,7 +8,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import * as serverApi from "@api-server";
 import { CopyElementType, CopyStatusEnum } from "@api-server";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
-import { CopyDialog, useCopyFlow } from "@feature-copy";
+import { useCopyFlow } from "@feature-copy";
 import { RoomBoardGrid, RoomMenu } from "@feature-room";
 import { useShareFlow } from "@feature-share";
 import { RoomDetailsPage } from "@page-room";
@@ -20,7 +19,6 @@ import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-det
 import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
-import { ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VBreadcrumbsItem, VBtn, VCard, VFab } from "vuetify/components";
 
@@ -35,17 +33,10 @@ describe("@pages/RoomsDetails.page.vue", () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
 
-		useCopyFlowMock = mockComposable(useCopyFlow, {
-			isCopyDialogOpen: ref(false),
-			copyItemType: ref(ContentItemTypeEnum.Course),
-		});
+		useCopyFlowMock = mockComposable(useCopyFlow, {});
 		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
 
-		useShareFlowMock = mockComposable(useShareFlow, {
-			isShareDialogOpen: ref(false),
-			shareItemType: ref(serverApi.ShareTokenBodyParamsParentType.COURSES),
-			shareUrl: ref("http://example.com/share-url"),
-		});
+		useShareFlowMock = mockComposable(useShareFlow, {});
 		vi.mocked(useShareFlow).mockReturnValue(useShareFlowMock);
 	});
 
@@ -278,21 +269,21 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			});
 
 			describe("when user has permission to copy room", () => {
-				it("should open the copy flow", async () => {
-					const { wrapper } = setup({
+				it("should call executeCopyRoom", async () => {
+					const { wrapper, room } = setup({
 						allowedOperations: { accessRoom: true, copyRoom: true },
 					});
 
 					const menu = wrapper.getComponent({ name: "RoomMenu" });
 					await menu.vm.$emit("room:copy");
+					await flushPromises();
 
-					const copyFlow = wrapper.findComponent(CopyDialog);
-					expect(copyFlow.exists()).toBe(true);
+					expect(useCopyFlowMock.executeCopyRoom).toHaveBeenCalledWith(room.id);
 				});
 			});
 
 			describe("when user does not have permission to copy room", () => {
-				it("should not open the copy flow", async () => {
+				it("should not call executeCopyRoom", async () => {
 					const { wrapper } = setup({
 						allowedOperations: { accessRoom: true, copyRoom: false },
 					});
@@ -300,8 +291,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					const menu = wrapper.getComponent(RoomMenu);
 					await menu.vm.$emit("room:copy");
 
-					const copyFlow = wrapper.findComponent(CopyDialog);
-					expect(copyFlow.emitted()["update:modelValue"]).toBeFalsy();
+					expect(useCopyFlowMock.executeCopyRoom).not.toHaveBeenCalled();
 				});
 			});
 		});

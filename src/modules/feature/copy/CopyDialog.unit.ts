@@ -15,7 +15,7 @@ describe("CopyDialog", () => {
 
 		const wrapper = mount(CopyDialog, {
 			props: {
-				isOpen: true,
+				modelValue: true,
 				copyItemType: ContentItemTypeEnum.Room,
 			},
 			global: {

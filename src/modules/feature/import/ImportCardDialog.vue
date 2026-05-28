@@ -1,12 +1,14 @@
 <template>
 	<SvsDialog
 		v-model="isDialogOpen"
+		is-open-state-managed-externally
 		:title="importCardTitle"
 		confirm-btn-lang-key="common.actions.import"
 		:confirm-btn-disabled="!selectedColumnId"
 		data-testid="import-card-dialog"
 		@confirm="onConfirm"
 		@cancel="onCancel"
+		@after-leave="emit('after-leave')"
 	>
 		<template #content>
 			<WarningAlert v-if="availableDestinations.length === 0" class="mb-2">
@@ -67,10 +69,10 @@
 </template>
 
 <script setup lang="ts">
-import { ImportDestination, ImportDestinationItem, ImportDestinationType } from "./types";
 import { useImportContent } from "@/composables/copy-content.composable";
-import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
+import { ShareTokenInfoResponseParentType } from "@api-server";
 import { useCardDialogData } from "@data-board";
+import { ImportCardDialogProps, ImportCardDialogResult } from "@feature-dialog";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { computed, ref } from "vue";
@@ -78,27 +80,20 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const props = defineProps<{
-	shareTokenInfo: ShareTokenInfoResponse;
-	availableDestinations: ImportDestinationItem[];
-	destinationType: Extract<ImportDestinationType, "column">;
-}>();
-
+const props = defineProps<ImportCardDialogProps>();
 const emit = defineEmits<{
-	(e: "confirm", payload: { newName: string; destination?: ImportDestination }): void;
-	(e: "cancel"): void;
+	complete: [result: ImportCardDialogResult];
+	cancel: [];
+	"after-leave": [];
 }>();
 
-const isDialogOpen = defineModel("is-dialog-open", {
-	type: Boolean,
-	default: false,
-});
+const isDialogOpen = defineModel<boolean>({ default: false });
 
 const { selectedBoardId, selectedColumnId, selectedRoomId, resetBoardSelection, columns, boards } =
 	useCardDialogData(isDialogOpen);
 
 const onConfirm = () => {
-	emit("confirm", {
+	emit("complete", {
 		newName: props.shareTokenInfo.parentName,
 		destination: { type: props.destinationType, id: selectedColumnId.value!, boardId: selectedBoardId.value! },
 	});
