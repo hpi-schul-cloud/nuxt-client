@@ -67,6 +67,8 @@ const availableDestinations = computed(() =>
 const { executeImport } = useImportFlow();
 
 const executeImportFlow = async (token: string) => {
+	// rooms might not be loaded yet, so we need to fetch them before executing the import
+	await fetchRooms();
 	const { result: importResult } = await executeImport(token, availableDestinations);
 
 	if (!importResult) {

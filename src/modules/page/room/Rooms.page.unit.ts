@@ -9,13 +9,20 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
-import { CopyApiResponse, CopyElementType, CopyStatusEnum, Permission } from "@api-server";
+import {
+	CopyApiResponse,
+	CopyElementType,
+	CopyStatusEnum,
+	Permission,
+	RoomItemResponseAllowedOperations,
+} from "@api-server";
 import { useImportFlow } from "@feature-import";
 import { RoomGrid } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
+import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { nextTick, toValue } from "vue";
@@ -100,9 +107,10 @@ describe("RoomsPage", () => {
 	describe("when a token is provided as query parameter", () => {
 		const token = "6S6s-CWVVxEG";
 
-		it("should try to execute import with the token", () => {
+		it("should try to execute import with the token", async () => {
 			router.setQuery({ import: token });
 			setup();
+			await flushPromises();
 
 			expect(useImportFlowMock.executeImport).toHaveBeenCalledWith(token, expect.anything());
 		});
@@ -111,9 +119,20 @@ describe("RoomsPage", () => {
 	describe("when the page is in import mode", () => {
 		const token = "6S6s-CWVVxEG";
 
-		it("should pass only unlocked rooms as available destinations", () => {
+		it("should pass only unlocked rooms as available destinations", async () => {
+			const roomsWithEditContent = [
+				roomItemFactory.build({
+					isLocked: false,
+					allowedOperations: { editContent: true } as unknown as RoomItemResponseAllowedOperations,
+				}),
+				roomItemFactory.build({
+					isLocked: true,
+					allowedOperations: { editContent: true } as unknown as RoomItemResponseAllowedOperations,
+				}),
+			];
 			router.setQuery({ import: token });
-			setup();
+			setup(roomsWithEditContent);
+			await flushPromises();
 
 			const [, destinations] = useImportFlowMock.executeImport.mock.calls[0];
 			expect(toValue(destinations)).toHaveLength(1);
