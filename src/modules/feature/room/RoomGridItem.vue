@@ -78,8 +78,8 @@ const roomAriaLabel = computed(() => `${t("common.labels.room")} ${props.room.na
 	color: inherit;
 	text-decoration: none;
 
-	.v-card-item__content {
-		overflow: auto;
+	:deep(.v-card-item__content) {
+		overflow: visible;
 	}
 
 	.v-card-title {

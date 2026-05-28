@@ -1,29 +1,37 @@
-@forward "vuetify/settings" with ($body-font-family: var(--font-primary),
+@forward "vuetify/settings" with (
+	$body-font-family: var(--font-primary),
 	$heading-font-family: var(--font-accent),
 	$line-height-root: var(--line-height-md),
-	$typography: ("h1": ("size": var(--heading-1),
+	$typography: (
+		"h1": (
+			"size": var(--heading-1),
 			"line-height": 40px,
 			"letter-spacing": 0px,
 		),
-		"h2": ("size": var(--heading-2),
+		"h2": (
+			"size": var(--heading-2),
 			"line-height": 33px,
 			"letter-spacing": 0px,
 		),
-		"h3": ("size": var(--heading-3),
+		"h3": (
+			"size": var(--heading-3),
 			"line-height": 31px,
 			"letter-spacing": 0px,
 		),
-		"h4": ("size": var(--heading-4),
+		"h4": (
+			"size": var(--heading-4),
 			"weight": 700,
 			"line-height": 30px,
 			"letter-spacing": 0px,
 		),
-		"h5": ("size": var(--heading-5),
+		"h5": (
+			"size": var(--heading-5),
 			"weight": 700,
 			"line-height": 30px,
 			"letter-spacing": 0px,
 		),
-		"h6": ("size": var(--heading-6),
+		"h6": (
+			"size": var(--heading-6),
 			"weight": 400,
 			"line-height": 30px,
 			"letter-spacing": 0px,
@@ -47,4 +55,5 @@
 	$breadcrumbs-item-padding: 0px,
 
 	// v-label
-	$label-opacity: var(--v-high-emphasis-opacity));
+	$label-opacity: var(--v-high-emphasis-opacity)
+);

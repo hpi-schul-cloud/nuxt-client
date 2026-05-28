@@ -1,11 +1,8 @@
-$system-fonts: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, ubuntu,
-	"Helvetica Neue", arial, sans-serif;
+$system-fonts: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, ubuntu, "Helvetica Neue", arial, sans-serif;
 
 :root {
-	--font-primary: "PT Sans",
-	#{$system-fonts};
-	--font-accent: "PT Sans Narrow",
-	#{$system-fonts};
+	--font-primary: "PT Sans", #{$system-fonts};
+	--font-accent: "PT Sans Narrow", #{$system-fonts};
 
 	/* heading sizes */
 	--heading-1: 2.0625rem; // 33px
