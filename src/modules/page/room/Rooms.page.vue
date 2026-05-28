@@ -27,6 +27,7 @@ import { mdiPlus } from "@icons/material";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
+import { sortBy } from "lodash-es";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, toValue, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -56,7 +57,12 @@ const fabAction = computed(() => {
 	];
 });
 
-const availableDestinations = computed(() => rooms.value.filter((room) => !room.isLocked));
+const availableDestinations = computed(() =>
+	sortBy(
+		rooms.value.filter((room) => !room.isLocked && (room.allowedOperations?.editContent ?? false)),
+		(r) => r.name
+	)
+);
 
 const { executeImport } = useImportFlow();
 
