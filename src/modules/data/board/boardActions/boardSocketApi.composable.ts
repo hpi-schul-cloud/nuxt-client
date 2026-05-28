@@ -25,9 +25,11 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
 import { CreateCardBodyParamsRequiredEmptyElements } from "@api-server";
 import { useAppStore } from "@data-app";
+import { useErrorHandler } from "@util-error-handling";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
+	const { notifySocketError } = useErrorHandler();
 	const {
 		notifyCreateCardSuccess,
 		notifyCreateColumnSuccess,
@@ -79,7 +81,10 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.updateBoardVisibilityFailure, reloadBoard),
 			on(BoardActions.updateBoardLayoutFailure, reloadBoard),
 			on(BoardActions.updateReaderCanEditFailure, reloadBoard),
-			on(BoardActions.duplicateColumnFailure, reloadBoard),
+			on(BoardActions.duplicateColumnFailure, () => {
+				notifySocketError("notDuplicated", "boardColumn");
+				reloadBoard();
+			}),
 		];
 
 		const ariaLiveNotifications = [
