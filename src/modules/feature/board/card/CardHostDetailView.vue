@@ -77,7 +77,7 @@ const card = computed(() => cardStore.getCard(cardRef.value));
 
 const cardBackground = computed(() => {
 	const color = card.value?.backgroundColor;
-	if (!color || color === Colors.TRANSPARENT) return "grey-lighten-5";
+	if (!color || color === Colors.TRANSPARENT) return colorToHexLighten5(Colors.GREY);
 
 	return colorToHexLighten5(color);
 });
