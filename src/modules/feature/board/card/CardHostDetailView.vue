@@ -55,35 +55,36 @@ import { mdiClose } from "@icons/material";
 import { computed, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
-type Props = {
+const props = defineProps<{
 	cardId: string;
-};
-
-const props = defineProps<Props>();
+}>();
 const cardRef = toRef(props, "cardId");
 
 const emit = defineEmits<{
 	(e: "close:detail-view"): void;
 }>();
 
+const { t } = useI18n();
+
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardRef.value);
 const { allowedOperations } = useBoardAllowedOperations();
+const cardStore = useCardStore();
 const { setFocus } = useBoardFocusHandler();
 setFocus("card-detail-view-toolbar");
-const { t } = useI18n();
-const cardStore = useCardStore();
 
 const isOpen = ref(true);
 const card = computed(() => cardStore.getCard(cardRef.value));
 
 const cardBackground = computed(() => {
-	const bg = card.value?.backgroundColor;
-	if (!bg || bg === Colors.TRANSPARENT) return "#fafafa";
-	return colorToHexLighten5(bg);
+	const color = card.value?.backgroundColor;
+	if (!color || color === Colors.TRANSPARENT) return "grey-lighten-5";
+
+	return colorToHexLighten5(color);
 });
 const cardBorderColor = computed(() => {
 	const color = card.value?.backgroundColor;
 	if (!color || color === Colors.TRANSPARENT) return undefined;
+
 	return colorToHexLighten3(color);
 });
 
