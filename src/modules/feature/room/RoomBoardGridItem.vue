@@ -7,7 +7,7 @@
 		:data-testid="`board-grid-item-${index}`"
 		:ripple="false"
 	>
-		<RouterLink tabindex="-1" :to="boardPath" class="grid-item-router-link">
+		<RouterLink tabindex="-1" :to="boardPath" class="grid-item-router-link flex-grow-1">
 			<VCardSubtitle
 				class="mt-4 d-flex align-center"
 				:class="{ 'opacity-80': isDraft }"
