@@ -5,7 +5,7 @@
 		:ripple="false"
 		variant="elevated"
 	>
-		<VCardItem class="flex-grow-1">
+		<VCardItem class="d-block flex-grow-1">
 			<RouterLink tabindex="-1" :to="roomPath" class="room-link-item">
 				<VBadge :model-value="room.isLocked" bordered :icon="mdiLock" :data-testid="`room-badge-lock-${index}`">
 					<VAvatar rounded="lg" :class="avatarColor" class="room-grid-avatar" :data-testid="`room-avatar-${index}`">
