@@ -46,7 +46,7 @@
 					<slot name="title" />
 				</LineClamp>
 
-				<div v-if="$slots.statusInfo" class="statusInfo" data-testid="status-info-slot">
+				<div v-if="$slots.statusInfo" class="status-info" data-testid="status-info-slot">
 					<slot name="statusInfo" />
 				</div>
 			</div>
@@ -142,7 +142,7 @@ defineProps({
 	width: 24px;
 	height: 24px;
 }
-.statusInfo {
+.status-info {
 	margin-left: auto;
 }
 
