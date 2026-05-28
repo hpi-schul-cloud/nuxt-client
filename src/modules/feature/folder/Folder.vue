@@ -53,7 +53,7 @@ import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useBoardAllowedOperations, useBoardApi, useBoardStore, useSharedBoardPageInformation } from "@data-board";
+import { useSharedBoardPageInformation } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
@@ -69,8 +69,6 @@ import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-const boardApi = useBoardApi();
-
 const { t } = useI18n();
 const router = useRouter();
 
@@ -85,16 +83,21 @@ const emit = defineEmits<{
 	(update: "update:folder-name", pageTitle: string): void;
 }>();
 
-const { allowedOperations } = useBoardAllowedOperations();
-
-const { breadcrumbs, folderName, fetchFileFolderElement, parent, mapNodeTypeToPathType, renameFolder } =
-	useFolderState();
+const {
+	allowedOperations,
+	breadcrumbs,
+	fetchAllowedOperations,
+	fetchFileFolderElement,
+	folderName,
+	mapNodeTypeToPathType,
+	parent,
+	removeFolder,
+	renameFolder,
+} = useFolderState();
 
 const { createPageInformation } = useSharedBoardPageInformation();
 
 const { fetchFiles, upload, uploadCollaboraFile, getFileRecordsByParentId, deleteFiles, rename } = useFileStorageApi();
-
-const boardStore = useBoardStore();
 
 const { handleError, notifyWithTemplate } = useErrorHandler();
 
@@ -202,7 +205,7 @@ const deleteAndNavigateToBoard = async (folderId: string) => {
 	const boardPath = mapNodeTypeToPathType(parent.value.type);
 
 	try {
-		await boardApi.deleteElementCall(folderId);
+		await removeFolder(folderId);
 	} catch (error) {
 		handleError(error, {
 			404: notifyWithTemplate("notDeleted", "boardElement"),
@@ -280,9 +283,8 @@ onMounted(async () => {
 	} catch {
 		fileStorageError.value = true;
 	}
-	if (!boardStore.board || boardStore.board.id !== parent.value.id) {
-		await boardStore.fetchBoardRequest({ boardId: parent.value.id });
-	}
+
+	await fetchAllowedOperations(parent.value.id);
 
 	isLoading.value = false;
 });
