@@ -248,7 +248,7 @@ describe("NewsForm", () => {
 			expect(wrapper.emitted().delete).toHaveLength(1);
 			expect(askConfirmationSpy).toHaveBeenCalledWith({
 				title: "components.organisms.FormNews.remove.confirm.message",
-				confirmBtnKey: "components.organisms.FormNews.remove.confirm.confirm",
+				confirmBtnKey: "common.actions.delete",
 			});
 		});
 	});
