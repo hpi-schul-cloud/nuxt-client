@@ -112,7 +112,7 @@ describe("@/utils/fileHelper", () => {
 			expect(formMock.method).toBe("POST");
 			expect(formMock.action).toBe("/api/v3/file/download-files-as-archive");
 			expect(formMock.enctype).toBe("application/json");
-			expect(formMock.target).toBe("_blank");
+			expect(formMock.target).toBe("_self");
 		});
 
 		it("should create inputs with correct attributes", () => {

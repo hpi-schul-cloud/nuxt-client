@@ -8,8 +8,8 @@ import {
 	newsResponseFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { NewsApiInterface, NewsResponse } from "@api-server";
 import * as serverApi from "@api-server";
+import { NewsApiInterface, NewsResponse } from "@api-server";
 import { NewsForm } from "@feature-news";
 import { createTestingPinia } from "@pinia/testing";
 import { DefaultWireframe } from "@ui-layout";
