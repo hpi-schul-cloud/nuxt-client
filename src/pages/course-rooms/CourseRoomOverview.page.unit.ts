@@ -441,7 +441,7 @@ describe("CourseRoomOverview.page", () => {
 
 		it("should show import mode when query has import token", async () => {
 			getWrapper({ routeQuery: { import: "test-token" } });
-			expect(useImportFlowMock.executeImport).toHaveBeenCalledWith("test-token", expect.anything());
+			expect(useImportFlowMock.executeImport).toHaveBeenCalledWith("test-token", expect.anything(), "course");
 		});
 
 		it("should navigate to room-details on import success with id", async () => {
