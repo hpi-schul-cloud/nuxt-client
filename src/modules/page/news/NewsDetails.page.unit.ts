@@ -32,7 +32,7 @@ describe("NewsDetailsPage", () => {
 		initializeAxios(axiosMock);
 	});
 
-	const setup = async (options?: { currentNews?: NewsResponse | undefined; roleName?: string }) => {
+	const setup = async (options?: { currentNews?: NewsResponse; roleName?: string }) => {
 		createTestAppStore({
 			me: {
 				roles: options?.roleName
