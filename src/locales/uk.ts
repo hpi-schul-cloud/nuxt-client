@@ -497,7 +497,7 @@ export default {
 		"Кількість файлів перевищує допустимий ліміт {fileLimitPerParent} файлів.",
 	"components.board.notifications.errors.notCreated": "{type}: Не вдалося створити.",
 	"components.board.notifications.errors.notDeleted": "{type}: Не вдалося видалити.",
-	"components.board.notifications.errors.notDuplicated": "{type} не вдалося дублікувати.",
+	"components.board.notifications.errors.notDuplicated": "{type} не вдалося або не повністю вдалося продублювати.",
 	"components.board.notifications.errors.notLoaded": "{type}: не вдалося завантажити.",
 	"components.board.notifications.errors.notMoved": "{type} не вдалося позицію.",
 	"components.board.notifications.errors.notUpdated": "Зберегти зміни не вдалося.",

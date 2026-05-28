@@ -495,7 +495,8 @@ export default {
 		"El número de archivos supera el límite permitido de {fileLimitPerParent} archivos.",
 	"components.board.notifications.errors.notCreated": "{type} no se ha podido crear.",
 	"components.board.notifications.errors.notDeleted": "{type} no se ha podido eliminar.",
-	"components.board.notifications.errors.notDuplicated": "{type} no se ha podido duplicar.",
+	"components.board.notifications.errors.notDuplicated":
+		"{type} no se ha podido duplicar o no se ha duplicado completamente.",
 	"components.board.notifications.errors.notLoaded": "{type} no se ha podido cargar.",
 	"components.board.notifications.errors.notMoved": "{type} no se ha podido movido.",
 	"components.board.notifications.errors.notUpdated": "No se han podido guardar los cambios.",

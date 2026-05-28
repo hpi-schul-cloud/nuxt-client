@@ -498,7 +498,8 @@ export default {
 		"Die Anzahl der Dateien überschreitet das zulässige Limit von {fileLimitPerParent} Dateien.",
 	"components.board.notifications.errors.notCreated": "{type} konnte nicht erstellt werden.",
 	"components.board.notifications.errors.notDeleted": "{type} konnte nicht gelöscht werden.",
-	"components.board.notifications.errors.notDuplicated": "{type} konnte nicht dupliziert werden.",
+	"components.board.notifications.errors.notDuplicated":
+		"{type} konnte nicht oder nicht vollständig dupliziert dupliziert werden.",
 	"components.board.notifications.errors.notLoaded": "{type} konnte nicht geladen werden.",
 	"components.board.notifications.errors.notMoved": "{type} konnte nicht verschoben werden.",
 	"components.board.notifications.errors.notUpdated": "Die Änderungen konnten nicht gespeichert werden.",
