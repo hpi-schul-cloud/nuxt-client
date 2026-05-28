@@ -111,6 +111,7 @@ describe("color.utils", () => {
 				Colors.DEEP_ORANGE,
 				Colors.AMBER,
 				Colors.BLUE_GREY,
+				Colors.GREY,
 			];
 
 			expect(Object.keys(COLORS_LIGHTEN3)).toEqual(expectedColors);
