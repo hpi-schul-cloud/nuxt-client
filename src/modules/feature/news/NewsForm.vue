@@ -48,7 +48,13 @@
 		<div class="d-flex ga-3 mt-2">
 			<VSpacer />
 			<VBtn variant="text" :text="t('common.actions.discard')" @click="onCancel" />
-			<VBtn v-if="showDeleteButton" variant="text" color="error" :text="t('common.actions.delete')" @click="onDelete" />
+			<VBtn
+				v-if="showDeleteButton"
+				variant="text"
+				color="error"
+				:text="t('common.actions.delete')"
+				@click="emit('delete')"
+			/>
 			<VBtn
 				color="primary"
 				variant="flat"
@@ -64,7 +70,7 @@
 <script setup lang="ts">
 import { Status } from "@/store/types/commons";
 import { FormNews } from "@/store/types/news";
-import { askCancel, askConfirmation } from "@/utils/confirmation-dialog.utils";
+import { askCancel } from "@/utils/confirmation-dialog.utils";
 import { formatUtc, toCombinedDateTimeIso, toIsoDate } from "@/utils/date-time.utils";
 import { isValidOrFocusFirstInvalidInput } from "@/utils/validation";
 import { ClassicEditor } from "@feature-editor";
@@ -151,14 +157,6 @@ const onSave = async () => {
 		content: newsContent.value,
 		displayAt: toCombinedDateTimeIso(newsDate.value, newsTime.value),
 	});
-};
-
-const onDelete = async () => {
-	const isConfirmed = await askConfirmation({
-		title: "components.organisms.FormNews.remove.confirm.message",
-		confirmBtnKey: "common.actions.delete",
-	});
-	if (isConfirmed) emit("delete");
 };
 
 const onCancel = async () => (await askCancel()) && emit("cancel");
