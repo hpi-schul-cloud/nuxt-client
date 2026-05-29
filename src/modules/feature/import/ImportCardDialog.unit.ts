@@ -46,7 +46,7 @@ describe("ImportCardDialog", () => {
 				shareTokenInfo,
 				availableDestinations: rooms.map((room) => ({ id: room.id, name: room.name })),
 				destinationType: "column",
-				isDialogOpen: true,
+				modelValue: true,
 			},
 			global: {
 				stubs: { UseFocusTrap: true },
@@ -78,7 +78,7 @@ describe("ImportCardDialog", () => {
 		const dialog = wrapper.findComponent(SvsDialog);
 		dialog.vm.$emit("confirm");
 
-		expect(wrapper.emitted("confirm")).toEqual([
+		expect(wrapper.emitted("complete")).toEqual([
 			[
 				{
 					newName: "Room 1",

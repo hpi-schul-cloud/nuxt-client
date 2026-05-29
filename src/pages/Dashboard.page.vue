@@ -19,7 +19,7 @@
 				<RenderHTML :html="inMaintenanceOrMigrationText" />
 			</WarningAlert>
 
-			<SvsLoading :is-loading="isLoadingNews">
+			<SvsLoading :loading-state="newsLoadingState">
 				<h2 class="mb-4">{{ t("pages.news.title") }}</h2>
 
 				<!-- Dashboard news -->
@@ -117,7 +117,7 @@ const inMaintenanceOrMigrationText = computed(() => {
 	return undefined;
 });
 
-const { data: newsResponse, isLoading: isLoadingNews } = useSafeAxiosRunner(() =>
+const { data: newsResponse, loadingState: newsLoadingState } = useSafeAxiosRunner(() =>
 	newsApi.newsControllerFindAll(undefined, undefined, undefined, undefined, NEWS_LIMIT)
 );
 const latestNews = computed(() => newsResponse.value?.data.data ?? []);
