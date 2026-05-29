@@ -1,5 +1,5 @@
 <template>
-	<SvsLoading :is-loading="isLoadingTasks">
+	<SvsLoading :loading-state="tasksLoadingState">
 		<h2 class="mb-0 mt-16">{{ t("common.words.tasks") }}</h2>
 		<template v-if="isTeacher">
 			<DashboardTasksOpen
@@ -79,7 +79,7 @@ const {
 	openForStudent,
 	ungradedForStudent,
 	gradedForStudent,
-	isLoadingTasks,
+	tasksLoadingState,
 } = useTasks({
 	range: {
 		from: { amount: 1, unit: "month" },

@@ -74,8 +74,12 @@ export const useTasks = (
 ) => {
 	const tasksApi = TaskApiFactory(undefined, "/v3", $axios);
 	const { t } = useI18nGlobal();
-	const { execute: executeTasks, isLoading: isLoadingTasks, error, status } = useSafeAxiosTask();
-	const { execute: executeFinished, isLoading: isLoadingFinishedTasks, error: errorFinished } = useSafeAxiosTask();
+	const { execute: executeTasks, loadingState: tasksLoadingState, error, status } = useSafeAxiosTask();
+	const {
+		execute: executeFinished,
+		loadingState: finishedTasksLoadingState,
+		error: errorFinished,
+	} = useSafeAxiosTask();
 
 	// === Raw Data ===
 	const allTasks = ref<TaskResponse[]>([]);
@@ -203,8 +207,8 @@ export const useTasks = (
 		loadMoreFinishedTasks,
 
 		// Status
-		isLoadingTasks,
-		isLoadingFinishedTasks,
+		tasksLoadingState,
+		finishedTasksLoadingState,
 		status,
 		error,
 		errorFinished,

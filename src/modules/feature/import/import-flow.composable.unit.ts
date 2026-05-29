@@ -1,23 +1,18 @@
 import { useImportFlow } from "./import-flow.composable";
-import {
-	expectNotification,
-	mockApi,
-	mockApiResponse,
-	mockedPiniaStoreTyping,
-	mountComposable,
-} from "@@/tests/test-utils";
+import { expectNotification, mockApi, mockApiResponse, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup/createTestingI18n";
 import * as serverApi from "@api-server";
-import { useLoadingStore, useNotificationStore } from "@data-app";
+import { useNotificationStore } from "@data-app";
+import * as featureDialog from "@feature-dialog";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 
-let shareApi: Mocked<serverApi.ShareTokenApiInterface>;
+vi.mock("@feature-dialog", () => ({ openDialog: vi.fn(), withGlobalLoadingState: vi.fn() }));
 
-let mockWithLoadingState: ReturnType<typeof vi.fn>;
+let shareApi: Mocked<serverApi.ShareTokenApiInterface>;
 
 const mountImportFlowComposable = () =>
 	mountComposable(() => useImportFlow(), {
@@ -62,63 +57,32 @@ describe("useImportflow", () => {
 		shareApi = mockApi<serverApi.ShareTokenApiInterface>();
 		vi.spyOn(serverApi, "ShareTokenApiFactory").mockReturnValue(shareApi);
 
-		const loadingStore = mockedPiniaStoreTyping(useLoadingStore);
-		mockWithLoadingState = vi.fn().mockImplementation(async (fn) => fn());
-		vi.spyOn(loadingStore, "withLoadingState").mockImplementation(mockWithLoadingState);
+		vi.mocked(featureDialog.openDialog).mockResolvedValue({ completed: false, data: undefined });
+		vi.mocked(featureDialog.withGlobalLoadingState).mockImplementation(async (fn: () => Promise<unknown>) => fn());
 	});
 
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
 
-	describe("initial state", () => {
-		const setup = () => mountImportFlowComposable();
-
-		it("should have the dialog closed", () => {
-			const { isCardImportDialogOpen, isGenericImportDialogOpen } = setup();
-			expect(isCardImportDialogOpen.value).toBe(false);
-			expect(isGenericImportDialogOpen.value).toBe(false);
-		});
-
-		it("should have no share token info", () => {
-			const { shareTokenInfo } = setup();
-			expect(shareTokenInfo.value).toBeUndefined();
-		});
-	});
-
 	describe("executeImport", () => {
 		describe("when called with a valid token", () => {
-			const setup = () => {
+			it("should call openDialog('import') for non-card items", async () => {
+				mockValidationResponse();
+				vi.mocked(featureDialog.openDialog).mockReturnValue(new Promise(() => undefined));
 				const composable = mountImportFlowComposable();
-				const validationResponse = mockValidationResponse();
-				return { ...composable, validationResponse };
-			};
-
-			it("should set the shareTokenInfo", async () => {
-				const { shareTokenInfo, validationResponse, executeImport } = setup();
-				executeImport("valid-token");
+				composable.executeImport("valid-token", []);
 				await flushPromises();
-				expect(shareTokenInfo.value).toEqual(validationResponse.data);
+				expect(featureDialog.openDialog).toHaveBeenCalledWith("import", expect.anything());
 			});
 
-			it("should open the generic import dialog for non-card items", async () => {
-				const { isGenericImportDialogOpen, isCardImportDialogOpen, executeImport } = setup();
-				executeImport("valid-token");
+			it("should call openDialog('importCard') for card items", async () => {
+				mockValidationResponse({ parentType: serverApi.ShareTokenInfoResponseParentType.CARD });
+				vi.mocked(featureDialog.openDialog).mockReturnValue(new Promise(() => undefined));
+				const composable = mountImportFlowComposable();
+				composable.executeImport("valid-token", []);
 				await flushPromises();
-				expect(isGenericImportDialogOpen.value).toBe(true);
-				expect(isCardImportDialogOpen.value).toBe(false);
-			});
-
-			it("should open the card import dialog for card items", async () => {
-				const { isGenericImportDialogOpen, isCardImportDialogOpen, executeImport, shareTokenInfo } = setup();
-				executeImport("valid-token");
-				await flushPromises();
-				shareTokenInfo.value = {
-					...shareTokenInfo.value!,
-					parentType: serverApi.ShareTokenInfoResponseParentType.CARD,
-				}; // Simulate card type
-				expect(isGenericImportDialogOpen.value).toBe(false);
-				expect(isCardImportDialogOpen.value).toBe(true);
+				expect(featureDialog.openDialog).toHaveBeenCalledWith("importCard", expect.anything());
 			});
 		});
 
@@ -129,37 +93,27 @@ describe("useImportflow", () => {
 
 			const setup = () => {
 				const composable = mountImportFlowComposable();
-				const validationError = new Error("Validation failed");
-				shareApi.shareTokenControllerLookupShareToken.mockRejectedValue(validationError);
-
-				return { ...composable, validationError };
+				shareApi.shareTokenControllerLookupShareToken.mockRejectedValue(new Error("Validation failed"));
+				return { ...composable };
 			};
 
 			it("should return an error", async () => {
-				const { executeImport, validationError } = setup();
-				const { result, success, error } = await executeImport("invalid-token");
+				const { executeImport } = setup();
+				const { result, success, error } = await executeImport("invalid-token", []);
 				expect(result).toBeUndefined();
 				expect(success).toBe(false);
-				expect(error).toEqual(validationError);
+				expect(error?.message).toBe("Validation failed");
 			});
 		});
 
 		describe("when import is cancelled", () => {
 			const setup = async () => {
-				const composable = mountImportFlowComposable();
 				mockValidationResponse();
-				const resultPromise = composable.executeImport("valid-token");
-				await flushPromises();
-				composable.onCancelImport();
+				vi.mocked(featureDialog.openDialog).mockResolvedValue({ completed: false, data: undefined });
+				const composable = mountImportFlowComposable();
+				const resultPromise = composable.executeImport("valid-token", []);
 				return { ...composable, resultPromise };
 			};
-
-			it("should set the dialog to closed", async () => {
-				const { isGenericImportDialogOpen, isCardImportDialogOpen, resultPromise } = await setup();
-				await resultPromise;
-				expect(isGenericImportDialogOpen.value).toBe(false);
-				expect(isCardImportDialogOpen.value).toBe(false);
-			});
 
 			it("should return error", async () => {
 				const { resultPromise } = await setup();
@@ -173,33 +127,28 @@ describe("useImportflow", () => {
 		describe("when import dialog is completed", () => {
 			describe("and the api call is successful", () => {
 				const setup = async () => {
-					const composable = mountImportFlowComposable();
 					mockValidationResponse();
 					const importResponse = mockImportResponse();
-					const resultPromise = composable.executeImport("valid-token");
-					await flushPromises();
-					composable.onConfirmImport({ newName: "New Item Name" });
+					vi.mocked(featureDialog.openDialog).mockResolvedValue({
+						completed: true,
+						data: { newName: "New Item Name", destination: undefined },
+					});
+					const composable = mountImportFlowComposable();
+					const resultPromise = composable.executeImport("valid-token", []);
 					return { ...composable, resultPromise, importResponse };
 				};
-
-				it("should set the dialog to closed", async () => {
-					const { isGenericImportDialogOpen, isCardImportDialogOpen, resultPromise } = await setup();
-					await resultPromise;
-					expect(isGenericImportDialogOpen.value).toBe(false);
-					expect(isCardImportDialogOpen.value).toBe(false);
-				});
 
 				it("should activate loading state during execution", async () => {
 					const { resultPromise } = await setup();
 					await resultPromise;
-					expect(mockWithLoadingState).toHaveBeenCalledOnce();
+					expect(featureDialog.withGlobalLoadingState).toHaveBeenCalledOnce();
 				});
 
 				it("should return the result", async () => {
 					const { resultPromise, importResponse } = await setup();
 					const { result, success } = await resultPromise;
 					expect(success).toBe(true);
-					expect(result).toEqual(importResponse.data);
+					expect(result).toEqual({ ...importResponse.data, destination: undefined });
 				});
 
 				it("should show a success notification", async () => {
@@ -215,27 +164,22 @@ describe("useImportflow", () => {
 				});
 
 				const setup = async () => {
-					const composable = mountImportFlowComposable();
 					mockValidationResponse();
 					const importError = new Error("Import failed");
 					shareApi.shareTokenControllerImportShareToken.mockRejectedValue(importError);
-					const resultPromise = composable.executeImport("valid-token");
-					await flushPromises();
-					composable.onConfirmImport({ newName: "New Item Name" });
+					vi.mocked(featureDialog.openDialog).mockResolvedValue({
+						completed: true,
+						data: { newName: "New Item Name", destination: undefined },
+					});
+					const composable = mountImportFlowComposable();
+					const resultPromise = composable.executeImport("valid-token", []);
 					return { ...composable, resultPromise, importError };
 				};
-
-				it("should set the dialog to closed", async () => {
-					const { isGenericImportDialogOpen, isCardImportDialogOpen, resultPromise } = await setup();
-					await resultPromise;
-					expect(isGenericImportDialogOpen.value).toBe(false);
-					expect(isCardImportDialogOpen.value).toBe(false);
-				});
 
 				it("should activate loading state during execution", async () => {
 					const { resultPromise } = await setup();
 					await resultPromise;
-					expect(mockWithLoadingState).toHaveBeenCalledOnce();
+					expect(featureDialog.withGlobalLoadingState).toHaveBeenCalledOnce();
 				});
 
 				it("should return the error", async () => {

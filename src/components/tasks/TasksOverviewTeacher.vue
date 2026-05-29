@@ -28,21 +28,6 @@
 				/>
 			</VWindow>
 		</div>
-		<ShareDialog
-			v-if="shareItemType"
-			:is-open="isShareDialogOpen"
-			:share-item-type="shareItemType"
-			:share-url="shareUrl"
-			@confirm="onConfirmShare"
-			@cancel="onCancelShare"
-			@done="onDone"
-		/>
-		<CopyDialog
-			:is-open="isCopyDialogOpen"
-			:copy-item-type="copyItemType"
-			@confirm="onConfirmCopy"
-			@cancel="onCancelCopy"
-		/>
 	</section>
 </template>
 
@@ -51,8 +36,8 @@ import TasksOverviewPane from "./TasksOverviewPane.vue";
 import { CopyParams } from "@/types/copy/CopyParams";
 import { ShareTokenBodyParamsParentType } from "@api-server";
 import { useTasksOfOverview } from "@data-tasks";
-import { CopyDialog, useCopyFlow } from "@feature-copy";
-import { ShareDialog, useShareFlow } from "@feature-share";
+import { useCopyFlow } from "@feature-copy";
+import { useShareFlow } from "@feature-share";
 import { mdiArchiveOutline, mdiFormatListChecks, mdiPlaylistEdit } from "@icons/material";
 import { useUrlSearchParams } from "@vueuse/core";
 import { computed } from "vue";
@@ -80,16 +65,14 @@ const activeTab = computed({
 	},
 });
 
-const { drafts, openForTeacher, isLoadingFinishedTasks, fetchTasks, loadMoreFinishedTasks, finishedTasks } =
+const { drafts, openForTeacher, finishedTasksLoadingState, fetchTasks, loadMoreFinishedTasks, finishedTasks } =
 	useTasksOfOverview();
 
-const {
-	isCopyDialogOpen,
-	copyItemType,
-	executeCopyTask,
-	onConfirm: onConfirmCopy,
-	onCancel: onCancelCopy,
-} = useCopyFlow();
+const isLoadingFinishedTasks = computed(
+	() => finishedTasksLoadingState.value === "loading" || finishedTasksLoadingState.value === "extLoading"
+);
+
+const { executeCopyTask } = useCopyFlow();
 
 const onCopyTask = async ({ id, courseId }: CopyParams) => {
 	const { success } = await executeCopyTask(id, courseId!);
@@ -100,15 +83,7 @@ const onCopyTask = async ({ id, courseId }: CopyParams) => {
 	}
 };
 
-const {
-	isShareDialogOpen,
-	shareItemType,
-	shareUrl,
-	executeShare,
-	onConfirm: onConfirmShare,
-	onCancel: onCancelShare,
-	onDone,
-} = useShareFlow();
+const { executeShare } = useShareFlow();
 
 const onShareTask = (taskId: string) => {
 	executeShare({
