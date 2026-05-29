@@ -66,6 +66,7 @@
 			"@feature-copy": ["./src/modules/feature/copy"],
 			"@feature-import": ["./src/modules/feature/import"],
 			"@feature-share": ["./src/modules/feature/share"],
+			"@feature-dialog": ["./src/modules/feature/dialog"],
 			"@icons/*": ["./src/components/icons/*"],
 			"@ui-alert": ["./src/modules/ui/alert"],
 			"@ui-appearance": ["./src/modules/ui/appearance"],

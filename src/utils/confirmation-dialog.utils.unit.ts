@@ -5,24 +5,20 @@ import {
 	askDeletionForItem,
 	askDeletionForType,
 } from "./confirmation-dialog.utils";
-import { useInternalConfirmationDialog } from "@/composables/confirmation-dialog.composable";
 import * as i18nModule from "@/plugins/i18n";
-import { mockComposable } from "@@/tests/test-utils";
-import { beforeEach, describe, expect, it, type Mocked, vi } from "vitest";
+import * as featureDialog from "@feature-dialog";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@/composables/confirmation-dialog.composable");
+vi.mock("@feature-dialog", () => ({
+	openDialog: vi.fn(),
+}));
 vi.mock("@/plugins/i18n");
 
 describe("confirmation-dialog.utils", () => {
-	let useInternalConfirmationDialogMock: Mocked<ReturnType<typeof useInternalConfirmationDialog>>;
-
 	beforeEach(() => {
 		vi.clearAllMocks();
 
-		useInternalConfirmationDialogMock = mockComposable(useInternalConfirmationDialog, {
-			askInternal: vi.fn().mockResolvedValue(true),
-		});
-		vi.mocked(useInternalConfirmationDialog).mockReturnValue(useInternalConfirmationDialogMock);
+		vi.mocked(featureDialog.openDialog).mockResolvedValue({ completed: true, data: true });
 
 		vi.mocked(i18nModule.useI18nGlobal).mockReturnValue({
 			t: vi.fn((key: string) => key),
@@ -31,7 +27,7 @@ describe("confirmation-dialog.utils", () => {
 	});
 
 	describe("askConfirmation", () => {
-		it("should call askInternal with the given options", async () => {
+		it("should call openDialog with the given options", async () => {
 			const options = {
 				title: "Test Title",
 				message: "Test Message",
@@ -41,12 +37,12 @@ describe("confirmation-dialog.utils", () => {
 
 			const result = await askConfirmation(options);
 
-			expect(useInternalConfirmationDialogMock.askInternal).toHaveBeenCalledWith(options);
+			expect(featureDialog.openDialog).toHaveBeenCalledWith("confirmation", options);
 			expect(result).toBe(true);
 		});
 
 		it("should return false when user cancels", async () => {
-			useInternalConfirmationDialogMock.askInternal.mockResolvedValue(false);
+			vi.mocked(featureDialog.openDialog).mockResolvedValue({ completed: false, data: undefined });
 
 			const result = await askConfirmation({ title: "Test" });
 
@@ -55,10 +51,10 @@ describe("confirmation-dialog.utils", () => {
 	});
 
 	describe("askDeletion", () => {
-		it("should call askConfirmation with correct defaults", async () => {
+		it("should call openDialog with correct defaults", async () => {
 			await askDeletion("Delete Title");
 
-			expect(useInternalConfirmationDialogMock.askInternal).toHaveBeenCalledWith({
+			expect(featureDialog.openDialog).toHaveBeenCalledWith("confirmation", {
 				title: "Delete Title",
 				message: undefined,
 				messageType: "warning",
@@ -69,7 +65,7 @@ describe("confirmation-dialog.utils", () => {
 		it("should include message when provided", async () => {
 			await askDeletion("Delete Title", "Are you sure?");
 
-			expect(useInternalConfirmationDialogMock.askInternal).toHaveBeenCalledWith({
+			expect(featureDialog.openDialog).toHaveBeenCalledWith("confirmation", {
 				title: "Delete Title",
 				message: "Are you sure?",
 				messageType: "warning",
@@ -80,7 +76,7 @@ describe("confirmation-dialog.utils", () => {
 		it("should use provided messageType", async () => {
 			await askDeletion("Delete Title", "Message", "info");
 
-			expect(useInternalConfirmationDialogMock.askInternal).toHaveBeenCalledWith({
+			expect(featureDialog.openDialog).toHaveBeenCalledWith("confirmation", {
 				title: "Delete Title",
 				message: "Message",
 				messageType: "info",
@@ -91,7 +87,7 @@ describe("confirmation-dialog.utils", () => {
 		it("should use provided confirmBtnKey", async () => {
 			await askDeletion("Delete Title", "Message", "info", "common.actions.remove");
 
-			expect(useInternalConfirmationDialogMock.askInternal).toHaveBeenCalledWith({
+			expect(featureDialog.openDialog).toHaveBeenCalledWith("confirmation", {
 				title: "Delete Title",
 				message: "Message",
 				messageType: "info",
@@ -100,7 +96,7 @@ describe("confirmation-dialog.utils", () => {
 		});
 	});
 
-	describe("askDeletionByTitle", () => {
+	describe("askDeletionForItem", () => {
 		it("should translate title with itemName and itemType when itemType key exists", async () => {
 			const mockT = vi.fn((key: string, params?: Record<string, string>) => {
 				if (key === "ui-confirmation-dialog.ask-delete") {
@@ -147,7 +143,7 @@ describe("confirmation-dialog.utils", () => {
 		});
 	});
 
-	describe("askDeletionByType", () => {
+	describe("askDeletionForType", () => {
 		it("should translate with itemType when key exists", async () => {
 			const mockT = vi.fn((key: string, params?: Record<string, string>) => {
 				if (key === "ui-confirmation-dialog.ask-delete-type") {
@@ -188,10 +184,10 @@ describe("confirmation-dialog.utils", () => {
 	});
 
 	describe("askCancel", () => {
-		it("should call askConfirmation with default values", async () => {
+		it("should call openDialog with default values", async () => {
 			await askCancel();
 
-			expect(useInternalConfirmationDialogMock.askInternal).toHaveBeenCalledWith({
+			expect(featureDialog.openDialog).toHaveBeenCalledWith("confirmation", {
 				title: "ui-confirmation-dialog.ask-cancel-form",
 				message: "ui-confirmation-dialog.ask-cancel-warning-message",
 				messageType: "warning",
@@ -202,7 +198,7 @@ describe("confirmation-dialog.utils", () => {
 		it("should use custom title when provided", async () => {
 			await askCancel("Custom Title");
 
-			expect(useInternalConfirmationDialogMock.askInternal).toHaveBeenCalledWith({
+			expect(featureDialog.openDialog).toHaveBeenCalledWith("confirmation", {
 				title: "Custom Title",
 				message: "ui-confirmation-dialog.ask-cancel-warning-message",
 				messageType: "warning",
@@ -213,7 +209,7 @@ describe("confirmation-dialog.utils", () => {
 		it("should use custom message when provided", async () => {
 			await askCancel("Custom Title", "Custom Message");
 
-			expect(useInternalConfirmationDialogMock.askInternal).toHaveBeenCalledWith({
+			expect(featureDialog.openDialog).toHaveBeenCalledWith("confirmation", {
 				title: "Custom Title",
 				message: "Custom Message",
 				messageType: "warning",

@@ -1,15 +1,17 @@
 <template>
 	<SvsDialog
-		:model-value="isDialogOpen"
+		:model-value="isOpen"
 		is-open-state-managed-externally
 		:title="currentStepTitle"
 		confirm-btn-lang-key="common.actions.continue"
 		:no-confirm="activeStep === 'showResult'"
+		:is-loading="isLoading"
+		:are-actions-disabled="isLoading"
 		:cancel-btn-lang-key="cancelBtnLangKey"
 		data-testid="share-dialog"
 		@confirm="onNext"
 		@cancel="onCancel"
-		@after-leave="resetDialog"
+		@after-leave="onAfterLeave"
 	>
 		<template #content>
 			<template v-if="activeStep === 'askOptions'">
@@ -45,7 +47,7 @@
 				/>
 			</template>
 			<template v-if="activeStep === 'showResult' && shareUrl">
-				<ShareDialogResult :share-url="shareUrl" :type="shareItemType" @done="onDone" @copied="onCopy" />
+				<ShareDialogResult :share-url="shareUrl" :type="shareItemType" @done="emit('complete')" @copied="onCopy" />
 			</template>
 		</template>
 	</SvsDialog>
@@ -54,39 +56,34 @@
 <script setup lang="ts">
 import ShareDialogResult from "./ShareDialogResult.vue";
 import { useShareContent } from "@/composables/copy-content.composable";
-import { ShareTokenBodyParamsParentType } from "@api-server";
 import { notifySuccess } from "@data-app";
+import { ShareDialogProps } from "@feature-dialog";
 import { ShareOptions } from "@feature-share";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { computed, reactive, ref, watch } from "vue";
+import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const props = defineProps<{
-	shareItemType: ShareTokenBodyParamsParentType;
-	shareUrl?: string;
-}>();
-
+const props = defineProps<ShareDialogProps>();
 const emit = defineEmits<{
-	(e: "confirm", payload: ShareOptions): void;
-	(e: "cancel"): void;
-	(e: "done"): void;
+	complete: [];
+	cancel: [];
+	"after-leave": [];
 }>();
 
-const isDialogOpen = defineModel("is-open", {
-	type: Boolean,
-	default: false,
-});
+const isOpen = defineModel<boolean>({ default: false });
 
 type StepType = "askOptions" | "showResult";
 const steps: StepType[] = ["askOptions", "showResult"];
 const stepIndex = ref(0);
 const activeStep = computed(() => steps[stepIndex.value]);
-const isLastStep = computed(() => stepIndex.value === steps.length - 1);
 
 const shareOptions = reactive<ShareOptions>({ isSchoolInternal: true, hasExpiryDate: true });
+
+const shareUrl = ref<string>();
+const isLoading = ref(false);
 
 const currentStepTitle = computed(() =>
 	activeStep.value === "askOptions"
@@ -100,10 +97,16 @@ const cancelBtnLangKey = computed(() =>
 
 const { text, warnings } = useShareContent(computed(() => props.shareItemType));
 
-const onNext = () => {
-	if (!isLastStep.value) {
+const onNext = async () => {
+	if (isLoading.value) return;
+	isLoading.value = true;
+	try {
+		shareUrl.value = await props.onConfirm({ ...shareOptions });
 		stepIndex.value += 1;
-		emit("confirm", { ...shareOptions });
+	} catch {
+		emit("cancel");
+	} finally {
+		isLoading.value = false;
 	}
 };
 
@@ -111,31 +114,19 @@ const onCancel = () => {
 	if (activeStep.value === "askOptions") {
 		emit("cancel");
 	} else {
-		emit("done");
+		emit("complete");
 	}
-};
-
-const onDone = () => {
-	emit("done");
 };
 
 const onCopy = () => {
 	notifySuccess(t("common.words.copiedToClipboard"));
 };
 
-const resetDialog = () => {
+const onAfterLeave = () => {
 	stepIndex.value = 0;
+	shareUrl.value = undefined;
 	shareOptions.isSchoolInternal = true;
 	shareOptions.hasExpiryDate = true;
+	emit("after-leave");
 };
-
-watch(
-	isDialogOpen,
-	(isOpen) => {
-		if (isOpen) {
-			stepIndex.value = 0;
-		}
-	},
-	{ immediate: true }
-);
 </script>

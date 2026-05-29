@@ -19,7 +19,7 @@
 				<RenderHTML :html="inMaintenanceOrMigrationText" />
 			</WarningAlert>
 
-			<SvsLoading :is-loading="isLoadingNews">
+			<SvsLoading :loading-state="newsLoadingState">
 				<h2 class="mb-4">{{ t("pages.news.title") }}</h2>
 
 				<!-- Dashboard news -->
@@ -114,7 +114,7 @@ const inMaintenanceOrMigrationText = computed(() => {
 	}
 	return undefined;
 });
-const { news: latestNews, isLoadingNews } = useNewsList(NEWS_LIMIT);
+const { news: latestNews, newsLoadingState } = useNewsList(NEWS_LIMIT);
 
 const envConfig = useEnvConfig();
 // Workaround, since accessing the same parameters is in progress.
