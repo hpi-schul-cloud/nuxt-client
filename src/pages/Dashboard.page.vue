@@ -24,7 +24,7 @@
 
 				<!-- Dashboard news -->
 				<EmptyState
-					v-if="latestNews?.length === 0"
+					v-if="latestNews.length === 0"
 					data-testid="empty-state-news"
 					:title="t('pages.dashboard.empty.news')"
 				>

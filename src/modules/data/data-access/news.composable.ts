@@ -72,7 +72,7 @@ export const useNewsList = (newsLimit: number) => {
 	const { fetchNewsList } = useNewsActions();
 
 	const {
-		data: news,
+		data: newsData,
 		loadingState: newsLoadingState,
 		execute,
 	} = useSafeAxiosRunner(async () => {
@@ -80,6 +80,8 @@ export const useNewsList = (newsLimit: number) => {
 
 		return result?.data.data ?? [];
 	});
+
+	const news = computed(() => newsData.value ?? []);
 
 	return { news, newsLoadingState, updateNews: execute };
 };
