@@ -6,7 +6,7 @@
 		variant="elevated"
 	>
 		<VCardItem class="d-block flex-grow-1">
-			<RouterLink tabindex="-1" :to="roomPath" class="room-link-item">
+			<RouterLink tabindex="-1" :to="roomPath" class="room-link-item overflow-visible">
 				<VBadge :model-value="room.isLocked" bordered :icon="mdiLock" :data-testid="`room-badge-lock-${index}`">
 					<VAvatar rounded="lg" :class="avatarColor" class="room-grid-avatar" :data-testid="`room-avatar-${index}`">
 						<span class="text-h1 text-white text-decoration-none" :data-testid="`room-short-title-${index}`">
@@ -71,16 +71,16 @@ const roomAriaLabel = computed(() => `${t("common.labels.room")} ${props.room.na
 	outline: auto;
 }
 
+:deep(.v-card-item__content) {
+	overflow: visible;
+}
+
 .room-link-item {
 	display: flex;
 	flex-direction: row;
 	gap: 16px;
 	color: inherit;
 	text-decoration: none;
-
-	:deep(.v-card-item__content) {
-		overflow: visible;
-	}
 
 	.v-card-title {
 		line-height: 1.5 !important;
