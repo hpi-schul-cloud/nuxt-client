@@ -307,6 +307,17 @@ describe("useCardSocketApi", () => {
 				expect(boardStore.reloadBoard).toHaveBeenCalled();
 			});
 
+			it("should notify error for duplicateCardFailure action", () => {
+				const { dispatch } = setupWithFakeBoard();
+
+				const payload: DuplicateCardFailurePayload = {
+					cardId: "cardId",
+				};
+				dispatch(CardActions.duplicateCardFailure(payload));
+
+				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith("notDuplicated", "boardCard");
+			});
+
 			it("should reload the board for fetchCardFailure action", () => {
 				const { dispatch, boardStore } = setupWithFakeBoard();
 
