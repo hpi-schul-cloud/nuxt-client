@@ -13,7 +13,7 @@
 		]"
 		max-width="short"
 	>
-		<SvsLoading :is-loading="isLoadingNews">
+		<SvsLoading :loading-state="newsLoadingState">
 			<template v-if="newsInstance">
 				<h2 data-testid="news-title">{{ newsInstance.title }}</h2>
 				<div class="d-flex mb-2">
@@ -85,7 +85,8 @@ const route = useRoute();
 
 const newsId = computed(() => route.params.id as string | undefined);
 const { deleteNews } = useNewsActions();
-const { newsInstance, displayAtFormattedStandard, displayAtFormattedFromNow, creator, isLoadingNews } = useNews(newsId);
+const { newsInstance, displayAtFormattedStandard, displayAtFormattedFromNow, creator, newsLoadingState } =
+	useNews(newsId);
 
 const { isTeacher, isAdmin } = useAppStoreRefs();
 

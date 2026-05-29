@@ -12,7 +12,7 @@ export const useNewsActions = () => {
 
 	const { t } = useI18nGlobal();
 
-	const { execute, status, error, isRunning: isLoading } = useSafeAxiosTask();
+	const { execute, status, error, loadingState } = useSafeAxiosTask();
 
 	const fetchNewsList = async (newsLimit: number) =>
 		await execute(
@@ -62,7 +62,7 @@ export const useNewsActions = () => {
 		fetchNews,
 		saveNews,
 		deleteNews,
-		isLoading,
+		loadingState,
 		error,
 		status,
 	};
@@ -73,7 +73,7 @@ export const useNewsList = (newsLimit: number) => {
 
 	const {
 		data: news,
-		isRunning: isLoadingNews,
+		loadingState: newsLoadingState,
 		execute,
 	} = useSafeAxiosRunner(async () => {
 		const { result } = await fetchNewsList(newsLimit);
@@ -81,11 +81,11 @@ export const useNewsList = (newsLimit: number) => {
 		return result?.data.data ?? [];
 	});
 
-	return { news, isLoadingNews, updateNews: execute };
+	return { news, newsLoadingState, updateNews: execute };
 };
 
 export const useNews = (newsId: Ref<string | undefined>) => {
-	const { fetchNews, isLoading } = useNewsActions();
+	const { fetchNews, loadingState } = useNewsActions();
 
 	const newsInstance = ref<NewsResponse>();
 
@@ -119,6 +119,6 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 
 		creator,
 		loadNews,
-		isLoadingNews: isLoading,
+		newsLoadingState: loadingState,
 	};
 };
