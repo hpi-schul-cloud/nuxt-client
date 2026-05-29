@@ -1,6 +1,7 @@
 import { $axios } from "@/utils/api";
 import { CommonCartridgeApiFactory } from "@api-common-cartridge";
 import { useAppStoreRefs } from "@data-app";
+import { buffer } from "node:stream/consumers";
 import { ref } from "vue";
 
 export const useCommonCartridgeImport = () => {
@@ -8,7 +9,10 @@ export const useCommonCartridgeImport = () => {
 	const isSuccess = ref(false);
 	const file = ref<File | undefined>(undefined);
 
-	const commonCartridgeApi = CommonCartridgeApiFactory(undefined, "/v3", $axios);
+	const configuration = {
+		isJsonMime: (mime: string) => mime?.includes("application/json") ?? false,
+	};
+	const commonCartridgeApi = CommonCartridgeApiFactory(configuration, "/v3", $axios);
 
 	const importCommonCartridgeFile = async (file: File | undefined): Promise<void> => {
 		const { user, school } = useAppStoreRefs();
@@ -21,9 +25,7 @@ export const useCommonCartridgeImport = () => {
 		}
 
 		try {
-			await commonCartridgeApi.commonCartridgeControllerUploadFileAndStartImport(file, {
-				transformRequest: [(data: unknown) => data],
-			});
+			await commonCartridgeApi.commonCartridgeControllerUploadFileAndStartImport(file);
 			isSuccess.value = true;
 		} catch {
 			isSuccess.value = false;
