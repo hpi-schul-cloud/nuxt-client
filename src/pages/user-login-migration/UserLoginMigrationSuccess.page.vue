@@ -1,5 +1,5 @@
 <template>
-	<SvsLoading :is-loading="isLoading">
+	<SvsLoading :loading-state="loadingState">
 		<div class="text-center mx-auto container-max-width">
 			<img src="@/assets/img/migration/migration_successful.svg" alt="" />
 			<h1 class="px-4">
@@ -38,7 +38,7 @@ import { useI18n } from "vue-i18n";
 
 const props = defineProps<{ targetSystemId: string }>();
 
-const { systemName, isLoading } = useSystem(toRef(props, "targetSystemId"));
+const { systemName, loadingState } = useSystem(toRef(props, "targetSystemId"));
 
 const { t } = useI18n();
 

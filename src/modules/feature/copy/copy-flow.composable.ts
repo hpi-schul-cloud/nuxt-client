@@ -1,20 +1,13 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { useAwaitableAction } from "@/composables/awaitable-action.composable";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { $axios } from "@/utils/api";
 import { BoardApiFactory, CourseRoomsApiFactory, RoomApiFactory, TaskApiFactory } from "@api-server";
-import { notifySuccess, useLoadingStore } from "@data-app";
-import { ref } from "vue";
+import { notifySuccess } from "@data-app";
+import { openDialog, withGlobalLoadingState } from "@feature-dialog";
 import { useI18n } from "vue-i18n";
 
 export const useCopyFlow = () => {
-	const confirmAction = useAwaitableAction<boolean>();
-
-	const isDialogOpen = confirmAction.isActive;
-	const copyItemType = ref<ContentItemTypeEnum>(ContentItemTypeEnum.Course);
-
 	const { t } = useI18n();
-	const { withLoadingState } = useLoadingStore();
 	const { execute } = useSafeAxiosTask();
 
 	const courseRoomApi = CourseRoomsApiFactory(undefined, "/v3", $axios);
@@ -22,14 +15,10 @@ export const useCopyFlow = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 
-	const confirm = (type: ContentItemTypeEnum) => {
-		copyItemType.value = type;
-		return confirmAction.start();
-	};
-
 	const copyCancelledError = () => new Error("Copy cancelled");
 
-	const withCopyLoading = <T>(fn: () => Promise<T>) => withLoadingState(fn, t("feature-copy.inProgress.title.loading"));
+	const withCopyLoading = <T>(fn: () => Promise<T>) =>
+		withGlobalLoadingState(fn, t("feature-copy.inProgress.title.loading"));
 
 	const notifyCopySuccess = (type: ContentItemTypeEnum) => {
 		notifySuccess(
@@ -38,7 +27,7 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyCourse = async (courseId: string) => {
-		const { completed } = await confirm(ContentItemTypeEnum.Course);
+		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Course });
 		if (!completed) return { success: false, error: copyCancelledError() };
 
 		const { result, success, error } = await withCopyLoading(() =>
@@ -56,7 +45,7 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyTask = async (taskId: string, targetCourseId: string) => {
-		const { completed } = await confirm(ContentItemTypeEnum.Task);
+		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Task });
 		if (!completed) return { success: false, error: copyCancelledError() };
 
 		const { result, success, error } = await withCopyLoading(() =>
@@ -74,7 +63,7 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyLesson = async (lessonId: string, targetCourseId: string) => {
-		const { completed } = await confirm(ContentItemTypeEnum.Lesson);
+		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Lesson });
 		if (!completed) return { success: false, error: copyCancelledError() };
 
 		const { result, success, error } = await withCopyLoading(() =>
@@ -92,7 +81,7 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyBoard = async (boardId: string) => {
-		const { completed } = await confirm(ContentItemTypeEnum.ColumnBoard);
+		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.ColumnBoard });
 		if (!completed) return { success: false, error: copyCancelledError() };
 
 		const { result, success, error } = await withCopyLoading(() =>
@@ -110,7 +99,7 @@ export const useCopyFlow = () => {
 	};
 
 	const executeCopyRoom = async (roomId: string) => {
-		const { completed } = await confirm(ContentItemTypeEnum.Room);
+		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Room });
 		if (!completed) return { success: false, error: copyCancelledError() };
 
 		const { result, success, error } = await withCopyLoading(() =>
@@ -128,14 +117,10 @@ export const useCopyFlow = () => {
 	};
 
 	return {
-		isCopyDialogOpen: isDialogOpen,
-		copyItemType,
 		executeCopyCourse,
 		executeCopyTask,
 		executeCopyLesson,
 		executeCopyBoard,
 		executeCopyRoom,
-		onConfirm: confirmAction.complete,
-		onCancel: confirmAction.cancel,
 	};
 };

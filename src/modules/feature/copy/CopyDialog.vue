@@ -6,8 +6,9 @@
 		confirm-btn-lang-key="common.actions.duplicate"
 		cancel-btn-lang-key="common.actions.cancel"
 		data-testid="copy-info-dialog"
-		@confirm="emit('confirm', true)"
+		@confirm="emit('complete', true)"
 		@cancel="emit('cancel')"
+		@after-leave="emit('after-leave')"
 	>
 		<template #content>
 			<p data-testid="copy-info-text">
@@ -32,7 +33,7 @@
 
 <script setup lang="ts">
 import { useCopyContent } from "@/composables/copy-content.composable";
-import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
+import { CopyDialogProps } from "@feature-dialog";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { computed, toRef } from "vue";
@@ -40,19 +41,14 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const props = defineProps<{
-	copyItemType: ContentItemTypeEnum;
-}>();
-
+const props = defineProps<CopyDialogProps>();
 const emit = defineEmits<{
-	(e: "cancel"): void;
-	(e: "confirm", payload: boolean): void;
+	complete: [result: boolean];
+	cancel: [];
+	"after-leave": [];
 }>();
 
-const isOpen = defineModel("is-open", {
-	type: Boolean,
-	default: false,
-});
+const isOpen = defineModel<boolean>({ default: false });
 
 const title = computed(() =>
 	t("feature-copy.copyInfo.title", { type: t(`feature-copy.copyInfo.type.${props.copyItemType}`) })

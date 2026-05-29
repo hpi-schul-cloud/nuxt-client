@@ -1,27 +1,20 @@
-import { ImportDestination } from "./types";
+import { ImportDestinationItem } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { useAwaitableAction } from "@/composables/awaitable-action.composable";
 import { useImportContent } from "@/composables/copy-content.composable";
 import { $axios } from "@/utils/api";
 import { ShareTokenApiFactory, ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
-import { notifySuccess, useLoadingStore } from "@data-app";
-import { computed, ref } from "vue";
+import { notifySuccess } from "@data-app";
+import { openDialog, withGlobalLoadingState } from "@feature-dialog";
+import type { MaybeRefOrGetter } from "vue";
+import { computed, ref, toValue } from "vue";
 import { useI18n } from "vue-i18n";
 
 export const useImportFlow = () => {
 	const shareApi = ShareTokenApiFactory(undefined, "/v3", $axios);
 	const { execute } = useSafeAxiosTask();
-	const importDialogAction = useAwaitableAction<{ newName: string; destination?: ImportDestination }>();
-	const { withLoadingState } = useLoadingStore();
 	const { t } = useI18n();
 
 	const shareTokenInfo = ref<ShareTokenInfoResponse>();
-
-	const isImportActive = computed(() => importDialogAction.isActive.value);
-	const isCardImport = computed(() => shareTokenInfo.value?.parentType === ShareTokenInfoResponseParentType.CARD);
-
-	const isGenericImportDialogOpen = computed(() => isImportActive.value && !isCardImport.value);
-	const isCardImportDialogOpen = computed(() => isImportActive.value && isCardImport.value);
 
 	const { itemNameKey } = useImportContent(computed(() => shareTokenInfo.value?.parentType));
 
@@ -47,7 +40,11 @@ export const useImportFlow = () => {
 		return { result: result?.data, success, error };
 	};
 
-	const executeImport = async (token: string) => {
+	const executeImport = async (
+		token: string,
+		availableDestinations: MaybeRefOrGetter<ImportDestinationItem[]>,
+		destinationType = "room"
+	) => {
 		const { result: validationResult, error: validationError } = await validateShareToken(token);
 
 		if (!validationResult) {
@@ -55,31 +52,40 @@ export const useImportFlow = () => {
 		}
 		shareTokenInfo.value = validationResult;
 
-		const { completed, data } = await importDialogAction.start();
-		if (!completed) return { success: false, error: new Error("Import cancelled") };
+		const destinations = toValue(availableDestinations);
+		const isCard = validationResult.parentType === ShareTokenInfoResponseParentType.CARD;
+		const { completed, data } = await (isCard
+			? openDialog("importCard", {
+					shareTokenInfo: validationResult,
+					availableDestinations: destinations,
+					destinationType: "column",
+				})
+			: openDialog("import", {
+					shareTokenInfo: validationResult,
+					availableDestinations: destinations,
+					destinationType: destinationType === "room" ? "room" : "course",
+				}));
 
-		const { result, success, error } = await withLoadingState(
-			() => importShareToken(validationResult, { newName: data.newName, destinationId: data.destination?.id }),
+		if (!completed) return { success: false, error: new Error("Import cancelled") };
+		const { newName, destination } = data;
+
+		const { result, success, error } = await withGlobalLoadingState(
+			() => importShareToken(validationResult, { newName, destinationId: destination?.id }),
 			t("components.molecules.import.options.loadingMessage")
 		);
 
 		if (success) {
-			notifySuccess(t("components.molecules.import.options.success", { name: data.newName }));
+			notifySuccess(t("components.molecules.import.options.success", { name: newName }));
 		}
 
 		return {
-			result: result ? { ...result, destination: data.destination } : result,
+			result: result ? { ...result, destination } : result,
 			success,
 			error: error ? new Error("Import failed", { cause: error }) : undefined,
 		};
 	};
 
 	return {
-		isCardImportDialogOpen,
-		isGenericImportDialogOpen,
-		shareTokenInfo,
 		executeImport,
-		onConfirmImport: importDialogAction.complete,
-		onCancelImport: importDialogAction.cancel,
 	};
 };
