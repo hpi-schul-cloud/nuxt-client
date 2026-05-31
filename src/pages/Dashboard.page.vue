@@ -72,11 +72,10 @@
 <script lang="ts" setup>
 import SvgNewsEmpty from "@/assets/img/SvgNewsEmpty.vue";
 import Announcement from "@/components/announcement/Announcement.vue";
-import { useSafeAxiosRunner } from "@/composables/async-tasks.composable";
-import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { NewsApiFactory, NewsTargetModel, Permission, SchulcloudTheme } from "@api-server";
+import { NewsTargetModel, Permission, SchulcloudTheme } from "@api-server";
+import { useNewsList } from "@data-access";
 import { useAppStore, useAppStoreRefs } from "@data-app";
 import { useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
@@ -94,7 +93,6 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 const { isTeacher, isStudent, isAdmin } = useAppStoreRefs();
 const NEWS_LIMIT = 4;
-const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 
 useTitle(buildPageTitle(t("pages.dashboard.title")));
 
@@ -116,11 +114,7 @@ const inMaintenanceOrMigrationText = computed(() => {
 	}
 	return undefined;
 });
-
-const { data: newsResponse, loadingState: newsLoadingState } = useSafeAxiosRunner(() =>
-	newsApi.newsControllerFindAll(undefined, undefined, undefined, undefined, NEWS_LIMIT)
-);
-const latestNews = computed(() => newsResponse.value?.data.data ?? []);
+const { news: latestNews, newsLoadingState } = useNewsList(NEWS_LIMIT);
 
 const envConfig = useEnvConfig();
 // Workaround, since accessing the same parameters is in progress.

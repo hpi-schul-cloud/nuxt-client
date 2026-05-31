@@ -58,6 +58,7 @@ export default {
 	"common.files": "Файли",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.allSchools": "всі школи",
+	"common.labels.backToOverview": "Повернутися до огляду",
 	"common.labels.birthdate": "Дата народження",
 	"common.labels.birthday": "Дата народження",
 	"common.labels.changed": "Змінений",
@@ -148,6 +149,7 @@ export default {
 	"common.notification.error": "Сталася помилка.",
 	"common.notifications.errors.notCreated":
 		"{type} не вдалося створити. | {type} не вдалося створити. | {type} не вдалося створити.",
+	"common.notifications.errors.notSaved": "{type} не вдалося зберегти. | {type} не вдалося зберегти.",
 	"common.notifications.errors.notDeleted":
 		"{type} не вдалося видалити. | {type} не вдалося видалити. | {type} не вдалося видалити.",
 	"common.notifications.errors.notDuplicated":
@@ -229,6 +231,7 @@ export default {
 	"common.words.also": "також",
 	"common.words.and": "і",
 	"common.words.board": "Дошка | дошки",
+	"common.words.news": "новина | новини",
 	"common.words.classes": "класи",
 	"common.words.color": "Колір",
 	"common.words.color.blue": "Синій",
@@ -800,11 +803,10 @@ export default {
 	"components.organisms.FormNews.input.title.placeholder": "Почнемо із заголовка",
 	"components.organisms.FormNews.label.planned_publish":
 		"Тут можна встановити дату автоматичної публікації в майбутньому (необов’язково):",
-	"components.organisms.FormNews.remove.confirm.confirm": "Видалити статтю",
-	"components.organisms.FormNews.remove.confirm.message": "Ви дійсно хочете назавжди видалити цю статтю?",
-	"components.organisms.FormNews.success.create": "Статтю створено.",
-	"components.organisms.FormNews.success.patch": "Статтю оновлено.",
-	"components.organisms.FormNews.success.remove": "Статтю успішно видалено.",
+	"components.organisms.FormNews.remove.confirm.message": "Ви дійсно хочете назавжди видалити цю новину?",
+	"components.organisms.FormNews.success.create": "Новину створено.",
+	"components.organisms.FormNews.success.patch": "Новину оновлено.",
+	"components.organisms.FormNews.success.remove": "Новину успішно видалено.",
 	"components.organisms.importUsers.createNew": "Створити новий",
 	"components.organisms.importUsers.editImportUser": "Редагувати користувача",
 	"components.organisms.importUsers.flagImportUser": "позначати користувачів",
@@ -1516,12 +1518,15 @@ export default {
 	"pages.licenseList.title": "Список ліцензій на відкритий код",
 	"pages.licenseList.introduction": "Ліцензії на програмне забезпечення для використаних пакетів наведені нижче.",
 	"pages.licenseList.packageIntroduction": "Пакунки, що використовуються за цією ліцензією:",
-	"pages.news.edit.title.default": "Редагувати статтю",
+	"pages.news.edit.title.default": "Редагувати новину",
 	"pages.news.edit.title": "Редагувати {title}",
 	"pages.news.index.new": "Додати новини",
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
+	"pages.news.details.title": "Новина від {date}",
+	"pages.news.details.title.fallback": "Новина",
+	"pages.news.details.published": "Опубліковано {date}",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Реєстрацію не вдалося завершити. Будь ласка, спробуйте пізніше.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
