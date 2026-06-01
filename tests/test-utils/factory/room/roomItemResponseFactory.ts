@@ -11,4 +11,5 @@ export const roomItemResponseFactory = Factory.define<RoomItemResponse>(({ seque
 	createdAt: new Date().toISOString(),
 	updatedAt: new Date().toISOString(),
 	isLocked: false,
+	totalMembers: 0,
 }));

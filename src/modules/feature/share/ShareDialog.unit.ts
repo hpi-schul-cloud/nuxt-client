@@ -6,7 +6,7 @@ import { ShareTokenBodyParamsParentType } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { nextTick } from "vue";
@@ -27,7 +27,8 @@ describe("@feature-share/ShareDialog", () => {
 			},
 			props: {
 				shareItemType,
-				"is-open": true,
+				modelValue: true,
+				onConfirm: vi.fn().mockResolvedValue(""),
 				...extraProps,
 			},
 			attachTo: document.body,
@@ -85,33 +86,32 @@ describe("@feature-share/ShareDialog", () => {
 	});
 
 	describe("when confirm button is clicked", () => {
-		it("emits 'confirm' with default share options", async () => {
-			const { wrapper } = setup(ShareTokenBodyParamsParentType.COURSES);
+		it("calls onConfirm with default share options", async () => {
+			const onConfirm = vi.fn().mockResolvedValue("");
+			const { wrapper } = setup(ShareTokenBodyParamsParentType.COURSES, { onConfirm });
 
 			wrapper.findComponent(SvsDialog).vm.$emit("confirm");
-			await nextTick();
+			await flushPromises();
 
-			expect(wrapper.emitted("confirm")).toEqual([[{ isSchoolInternal: true, hasExpiryDate: true }]]);
+			expect(onConfirm).toHaveBeenCalledWith({ isSchoolInternal: true, hasExpiryDate: true });
 		});
 
-		it("advances to the showResult step when shareUrl is provided", async () => {
-			const { wrapper } = setup(ShareTokenBodyParamsParentType.COURSES, {
-				shareUrl: "https://example.com/share",
-			});
+		it("advances to the showResult step", async () => {
+			const onConfirm = vi.fn().mockResolvedValue("https://example.com/share");
+			const { wrapper } = setup(ShareTokenBodyParamsParentType.COURSES, { onConfirm });
 
 			wrapper.findComponent(SvsDialog).vm.$emit("confirm");
-			await nextTick();
+			await flushPromises();
 
 			expect(wrapper.findComponent(ShareDialogResult).exists()).toBe(true);
 		});
 
 		it("shows the result title after advancing to the showResult step", async () => {
-			const { wrapper } = setup(ShareTokenBodyParamsParentType.COURSES, {
-				shareUrl: "https://example.com/share",
-			});
+			const onConfirm = vi.fn().mockResolvedValue("https://example.com/share");
+			const { wrapper } = setup(ShareTokenBodyParamsParentType.COURSES, { onConfirm });
 
 			wrapper.findComponent(SvsDialog).vm.$emit("confirm");
-			await nextTick();
+			await flushPromises();
 
 			expect(wrapper.findComponent({ name: "v-card-title" }).text()).toContain(
 				"components.molecules.share.result.title"
@@ -132,29 +132,30 @@ describe("@feature-share/ShareDialog", () => {
 
 	describe("in the showResult step", () => {
 		const setupShowResult = async (shareUrl = "https://example.com/share") => {
-			const { wrapper } = setup(ShareTokenBodyParamsParentType.COURSES, { shareUrl });
+			const onConfirm = vi.fn().mockResolvedValue(shareUrl);
+			const { wrapper } = setup(ShareTokenBodyParamsParentType.COURSES, { onConfirm });
 			wrapper.findComponent(SvsDialog).vm.$emit("confirm");
-			await nextTick();
+			await flushPromises();
 
 			return { wrapper };
 		};
 
-		it("emits 'done' when cancel button is clicked", async () => {
+		it("emits 'complete' when cancel button is clicked", async () => {
 			const { wrapper } = await setupShowResult();
 
 			wrapper.findComponent(SvsDialog).vm.$emit("cancel");
 			await nextTick();
 
-			expect(wrapper.emitted("done")).toBeTruthy();
+			expect(wrapper.emitted("complete")).toBeTruthy();
 		});
 
-		it("emits 'done' when ShareDialogResult emits 'done'", async () => {
+		it("emits 'complete' when ShareDialogResult emits 'done'", async () => {
 			const { wrapper } = await setupShowResult();
 
 			wrapper.findComponent(ShareDialogResult).vm.$emit("done");
 			await nextTick();
 
-			expect(wrapper.emitted("done")).toBeTruthy();
+			expect(wrapper.emitted("complete")).toBeTruthy();
 		});
 
 		it("shows a success notification when ShareDialogResult emits 'copied'", async () => {

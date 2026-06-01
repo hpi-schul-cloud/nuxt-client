@@ -1,6 +1,5 @@
 import { $axios } from "@/utils/api";
 import { CommonCartridgeApiFactory } from "@api-common-cartridge";
-import { FileApiFactory, FileRecordParentType, StorageLocation } from "@api-file-storage";
 import { useAppStoreRefs } from "@data-app";
 import { ref } from "vue";
 
@@ -9,8 +8,10 @@ export const useCommonCartridgeImport = () => {
 	const isSuccess = ref(false);
 	const file = ref<File | undefined>(undefined);
 
-	const commonCartridgeApi = CommonCartridgeApiFactory(undefined, "/v3", $axios);
-	const fileStorageApi = FileApiFactory(undefined, "/v3", $axios);
+	const configuration = {
+		isJsonMime: (mime: string) => mime?.includes("application/json") ?? false,
+	};
+	const commonCartridgeApi = CommonCartridgeApiFactory(configuration, "/v3", $axios);
 
 	const importCommonCartridgeFile = async (file: File | undefined): Promise<void> => {
 		const { user, school } = useAppStoreRefs();
@@ -23,21 +24,7 @@ export const useCommonCartridgeImport = () => {
 		}
 
 		try {
-			const uploadResult = await fileStorageApi.upload(
-				schoolId,
-				StorageLocation.SCHOOL,
-				currentUserId,
-				FileRecordParentType.USERS,
-				file
-			);
-
-			const fileRecords = uploadResult.data;
-
-			await commonCartridgeApi.commonCartridgeControllerImportCourse({
-				fileRecordId: fileRecords.id,
-				fileName: fileRecords.name,
-				fileUrl: fileRecords.url,
-			});
+			await commonCartridgeApi.commonCartridgeControllerUploadFileAndStartImport(file);
 			isSuccess.value = true;
 		} catch {
 			isSuccess.value = false;

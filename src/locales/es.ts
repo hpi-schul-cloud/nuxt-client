@@ -10,7 +10,7 @@ export default {
 	"common.actions.move": "Mover",
 	"common.actions.view": "Mostrar",
 	"common.actions.create": "Crear",
-	"common.actions.delete": "Borrar",
+	"common.actions.delete": "Eliminar",
 	"common.actions.moveToTrash": "Mover a la papelera",
 	"common.actions.restore": "Restaurar",
 	"common.actions.discard": "Descartar",
@@ -58,6 +58,7 @@ export default {
 	"common.instructions.orderBy.arrowKeys": "Los elementos de esta lista se pueden mover con las teclas de flecha.",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.allSchools": "todas las escuelas",
+	"common.labels.backToOverview": "Volver a la vista general",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",
 	"common.labels.changed": "Cambiado",
@@ -147,6 +148,7 @@ export default {
 	"common.nodata": "Datos no disponibles",
 	"common.notification.error": "Se ha producido un error.",
 	"common.notifications.errors.notCreated": "{type} no se ha podido crear. | {type} no se han podido crear.",
+	"common.notifications.errors.notSaved": "{type} no pudo guardarse. | {type} no pudieron guardarse.",
 	"common.notifications.errors.notDeleted": "{type} no se ha podido eliminar. | {type} no se han podido eliminar.",
 	"common.notifications.errors.notDuplicated": "{type} no se ha podido duplicar. | {type} no se han podido duplicar.",
 	"common.notifications.errors.notLoaded": "{type} no se ha podido cargar. | {type} no se han podido cargar.",
@@ -222,6 +224,7 @@ export default {
 	"common.words.also": "también",
 	"common.words.and": "y",
 	"common.words.board": "tablero | tableros",
+	"common.words.news": "noticia | noticias",
 	"common.words.classes": "Clases",
 	"common.words.color": "Color",
 	"common.words.color.blue": "Azul",
@@ -802,12 +805,11 @@ export default {
 	"components.organisms.FormNews.input.title.placeholder": "Empecemos con el título",
 	"components.organisms.FormNews.label.planned_publish":
 		"Aquí puedes establecer una fecha para la publicación automática en el futuro (opcional):",
-	"components.organisms.FormNews.remove.confirm.confirm": "Eliminar artículo",
 	"components.organisms.FormNews.remove.confirm.message":
-		"¿Estás seguro de que quieres borrar este artículo de forma irreversible?",
-	"components.organisms.FormNews.success.create": "Artículo creado.",
-	"components.organisms.FormNews.success.patch": "Artículo actualizado correctamente.",
-	"components.organisms.FormNews.success.remove": "Artículo eliminado correctamente.",
+		"¿Estás seguro de que quieres eliminar esta noticia de forma irreversible?",
+	"components.organisms.FormNews.success.create": "Noticia creada.",
+	"components.organisms.FormNews.success.patch": "Noticia actualizada correctamente.",
+	"components.organisms.FormNews.success.remove": "Noticia eliminada correctamente.",
 	"components.organisms.importUsers.createNew": "Crear nuevo",
 	"components.organisms.importUsers.editImportUser": "Editar usario",
 	"components.organisms.importUsers.flagImportUser": "Marcar usario",
@@ -996,9 +998,6 @@ export default {
 	"mixins.typeMeta.types.image": "Imagen",
 	"mixins.typeMeta.types.video": "Vídeo",
 	"mixins.typeMeta.types.webpage": "Página web",
-	"loggedin.text.backupFeatures":
-		"Haga una copia de seguridad de sus contenidos de la nube y utilice también la nueva función para exportar cursos. {helpLink}",
-	"loggedin.text.backupFeatures.helpLink": "Más información y ayuda disponible aquí",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"La escuela está en fase de transferencia al nuevo año escolar. No se pueden crear clases ni usuarios. ¡Ponte en contacto con el administrador de la escuela!",
 	"loggedin.text.schoolInTransferPhaseStartNew":
@@ -1007,6 +1006,13 @@ export default {
 		'La escuela está en modo de migración de usuarios. Para migrar los usuarios, por favor vaya a <a href="/administration/migration/">esta página</a>.',
 	"loggedin.text.schoolInMigrationMode":
 		'La escuela puede importar cuentas de usuario de Schulportal. Para migrar los usuarios, por favor vaya a <a href="/administration/migration/">esta página</a>.',
+	"loggedin.text.teamsToRooms": "Cambiar a Espacios ahora: Equipos será desactivado",
+	"loggedin.text.teamsToRooms.possibilities":
+		"Espacios ahora ofrece todas las herramientas que necesitas para colaborar de manera más efectiva dentro y entre escuelas.",
+	"loggedin.text.teamsToRooms.migration":
+		"Equipos se desactivará el 30.09.2026, pero puede convertirse automáticamente en Espacios por los usuarios con el rol de 'profesor' antes de esa fecha. Paralelamente, cualquier archivo de Equipo necesario debe ser respaldado o descargado para entonces.",
+	"loggedin.text.teamsToRooms.helpLink": "Más información sobre la migración se puede encontrar en {helpLink}.",
+	"loggedin.text.teamsToRooms.helpLink.help": "páginas de ayuda",
 	"pages.dashboard.title": "Panel",
 	"pages.dashboard.empty.news": "Hasta el momento no hay noticias.",
 	"pages.dashboard.new.features": "Hay nuevas funciones en {instanceTitle}.",
@@ -1054,7 +1060,7 @@ export default {
 	"pages.administration.classes.manage": "Administrar clase",
 	"pages.administration.classes.header.sync": "Sincronizado con",
 	"pages.administration.courses.delete": "Eliminar curso",
-	"pages.administration.courses.deleteDialog.content": '¿Realmente quieres este curso? "{itemName}" borrar?',
+	"pages.administration.courses.deleteDialog.content": '¿Realmente quieres este curso? "{itemName}" eliminar?',
 	"pages.administration.courses.index.add": "Agregar curso",
 	"pages.administration.courses.edit": "Editar curso",
 	"pages.administration.courses.withoutTeacher": "Mostrar sólo los cursos sin profesor",
@@ -1301,8 +1307,8 @@ export default {
 	"pages.administration.school.index.schoolPolicy.delete.success":
 		"El archivo de Política de Privacidad se ha eliminado correctamente.",
 	"pages.administration.school.index.schoolPolicy.delete.text":
-		"Si borra este archivo, se utilizará automáticamente la Política de Privacidad por defecto.",
-	"pages.administration.school.index.schoolPolicy.delete.title": "Borrar la Política de Privacidad",
+		"Si elimina este archivo, se utilizará automáticamente la Política de Privacidad por defecto.",
+	"pages.administration.school.index.schoolPolicy.delete.title": "Eliminar la Política de Privacidad",
 	"pages.administration.school.index.schoolPolicy.download": "Descargar Política de Privacidad",
 	"pages.administration.school.index.schoolPolicy.edit": "Editar Política de Privacidad",
 	"pages.administration.school.index.schoolPolicy.error":
@@ -1325,8 +1331,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.delete.success":
 		"El archivo de condiciones de uso se ha eliminado correctamente.",
 	"pages.administration.school.index.termsOfUse.delete.text":
-		"Si borra este archivo, se utilizarán automáticamente las Condiciones de Uso por defecto.",
-	"pages.administration.school.index.termsOfUse.delete.title": "Borrar las Condiciones de Uso",
+		"Si elimina este archivo, se utilizarán automáticamente las Condiciones de Uso por defecto.",
+	"pages.administration.school.index.termsOfUse.delete.title": "Eliminar las Condiciones de Uso",
 	"pages.administration.school.index.termsOfUse.download": "Descargar Condiciones de Uso",
 	"pages.administration.school.index.termsOfUse.edit": "Editar Condiciones de Uso",
 	"pages.administration.school.index.termsOfUse.error": "Se ha producido un error al cargar la Condiciones de Uso",
@@ -1532,12 +1538,15 @@ export default {
 	"pages.licenseList.title": "Lista de licencias de código abierto",
 	"pages.licenseList.introduction": "A continuación se indican las licencias de software de los paquetes utilizados.",
 	"pages.licenseList.packageIntroduction": "Paquetes utilizados bajo esta licencia:",
-	"pages.news.edit.title.default": "Editar artículo",
+	"pages.news.edit.title.default": "Editar noticia",
 	"pages.news.edit.title": "Editar {title}",
 	"pages.news.index.new": "Añadir noticias",
 	"pages.news.new.create": "Crear",
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
+	"pages.news.details.title": "Noticia de {date}",
+	"pages.news.details.title.fallback": "Noticia",
+	"pages.news.details.published": "Publicado {date}",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"La inscripción no pudo completarse. Por favor, inténtelo de nuevo más tarde.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
@@ -1733,7 +1742,7 @@ export default {
 	"pages.roomDetails.title": "Sala",
 	"pages.roomDetails.ariaLabels.menu": "Menú de la sala",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar sala",
-	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar sala",
+	"pages.roomDetails.ariaLabels.menu.action.delete": "Eliminar sala",
 	"pages.roomDetails.fab.add.board": "Crear tablero",
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
 	"pages.roomDetails.emptyState": "Actualmente no hay contenidos de aprendizaje en esta sala",
@@ -2075,7 +2084,7 @@ export default {
 	"pages.folder.columns.size": "Talla",
 	"pages.folder.ariaLabels.menu": "Menú carpeta",
 	"pages.folder.ariaLabels.menu.action.edit": "Renombrar carpeta",
-	"pages.folder.ariaLabels.menu.action.delete": "Borrar carpeta",
+	"pages.folder.ariaLabels.menu.action.delete": "Eliminar carpeta",
 	"pages.folder.ariaLabels.filter": "Tabla de búsqueda/filtro",
 	"pages.folder.ariaLabels.actionMenu": "Menú de acciones para {name}",
 	"pages.folder.uploadstats": "{uploaded} de {total} archivos cargados",
