@@ -58,6 +58,7 @@ export default {
 	"common.instructions.orderBy.arrowKeys": "Die Elemente dieser Liste können per Pfeiltaste verschoben werden.",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.allSchools": "alle Schulen",
+	"common.labels.backToOverview": "Zurück zur Übersicht",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",
 	"common.labels.changed": "Geändert",
@@ -154,6 +155,8 @@ export default {
 	"common.notification.connection.restored": "Die Verbindung wurde wieder hergestellt.",
 	"common.notifications.errors.notCreated":
 		"{type} konnte nicht erstellt werden. | {type} konnten nicht erstellt werden.",
+	"common.notifications.errors.notSaved":
+		"{type} konnte nicht gespeichert werden. | {type} konnten nicht gespeichert werden.",
 	"common.notifications.errors.notDeleted":
 		"{type} konnte nicht gelöscht werden. | {type} konnten nicht gelöscht werden.",
 	"common.notifications.errors.notDuplicated":
@@ -231,6 +234,7 @@ export default {
 	"common.words.also": "auch",
 	"common.words.and": "und",
 	"common.words.board": "Bereich | Bereiche",
+	"common.words.news": "Neuigkeit | Neuigkeiten",
 	"common.words.classes": "Klassen",
 	"common.words.color": "Farbe",
 	"common.words.color.blue": "Blau",
@@ -809,11 +813,11 @@ export default {
 	"components.organisms.FormNews.input.title.placeholder": "Los geht's mit dem Titel",
 	"components.organisms.FormNews.label.planned_publish":
 		"Hier kannst du ein Datum für die automatische Veröffentlichung in der Zukunft setzen (optional):",
-	"components.organisms.FormNews.remove.confirm.confirm": "Artikel löschen",
-	"components.organisms.FormNews.remove.confirm.message": "Möchtest du diesen Artikel wirklich unwiderruflich löschen?",
-	"components.organisms.FormNews.success.create": "Artikel erstellt.",
-	"components.organisms.FormNews.success.patch": "Artikel wurde aktualisiert.",
-	"components.organisms.FormNews.success.remove": "Artikel erfolgreich gelöscht.",
+	"components.organisms.FormNews.remove.confirm.message":
+		"Möchtest du diese Neuigkeit wirklich unwiderruflich löschen?",
+	"components.organisms.FormNews.success.create": "Neuigkeit erstellt.",
+	"components.organisms.FormNews.success.patch": "Neuigkeit wurde aktualisiert.",
+	"components.organisms.FormNews.success.remove": "Neuigkeit erfolgreich gelöscht.",
 	"components.organisms.importUsers.createNew": "Neu erstellen",
 	"components.organisms.importUsers.editImportUser": "Nutzer bearbeiten",
 	"components.organisms.importUsers.flagImportUser": "Nutzer markieren",
@@ -1523,10 +1527,10 @@ export default {
 		"Der Kurs ist gesperrt, weil keine unterrichtende Lehrkraft zugeordnet ist. Bitte an den Schul-Admin wenden.",
 	"pages.courseRooms.fetchCourseContent.error": "Beim Abrufen der Kursinhalte ist ein Fehler aufgetreten.",
 	"pages.courseRooms.createBoard.error": "Beim Erstellen des Boards ist ein Fehler aufgetreten.",
-	"pages.courseRooms.deleteLesson.error": "Beim Lschen des Themas ist ein Fehler aufgetreten.",
-	"pages.courseRooms.deleteTask.error": "Beim Lschen der Aufgabe ist ein Fehler aufgetreten.",
-	"pages.courseRooms.deleteBoard.error": "Beim Lschen des Boards ist ein Fehler aufgetreten.",
-	"pages.courseRooms.finishTask.error": "Beim Abschlieen der Aufgabe ist ein Fehler aufgetreten.",
+	"pages.courseRooms.deleteLesson.error": "Beim Löschen des Themas ist ein Fehler aufgetreten.",
+	"pages.courseRooms.deleteTask.error": "Beim Löschen der Aufgabe ist ein Fehler aufgetreten.",
+	"pages.courseRooms.deleteBoard.error": "Beim Löschen des Boards ist ein Fehler aufgetreten.",
+	"pages.courseRooms.finishTask.error": "Beim Abschließen der Aufgabe ist ein Fehler aufgetreten.",
 	"pages.courseRooms.publishCard.error": "Beim Veröffentlichen der Karte ist ein Fehler aufgetreten.",
 	"pages.courseRooms.restoreTask.error": "Beim Wiederherstellen der Aufgabe ist ein Fehler aufgetreten.",
 	"pages.courseRooms.sortElements.error": "Beim Sortieren der Karten ist ein Fehler aufgetreten.",
@@ -1540,12 +1544,15 @@ export default {
 	"pages.licenseList.title": "Open-Source-Lizenzliste",
 	"pages.licenseList.introduction": "Im Folgenden sind die Softwarelizenzen der verwendeten Pakete aufgeführt.",
 	"pages.licenseList.packageIntroduction": "Unter dieser Lizenz verwendete Pakete:",
-	"pages.news.edit.title.default": "Artikel bearbeiten",
+	"pages.news.edit.title.default": "Neuigkeit bearbeiten",
 	"pages.news.edit.title": "{title} bearbeiten",
 	"pages.news.index.new": "Neuigkeit hinzufügen",
 	"pages.news.new.create": "Erstellen",
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
+	"pages.news.details.title": "Neuigkeit vom {date}",
+	"pages.news.details.title.fallback": "Neuigkeit",
+	"pages.news.details.published": "Veröffentlicht {date}",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Die Registrierung konnte leider nicht abgeschlossen werden. Bitte später erneut versuchen.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":

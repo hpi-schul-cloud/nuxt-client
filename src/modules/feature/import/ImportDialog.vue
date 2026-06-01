@@ -1,6 +1,6 @@
 <template>
 	<SvsDialog
-		:model-value="isDialogOpen"
+		v-model="isDialogOpen"
 		is-open-state-managed-externally
 		:title="currentStepTitle"
 		:confirm-btn-lang-key="confirmBtnLangKey"
@@ -62,9 +62,9 @@
 </template>
 
 <script setup lang="ts">
-import { ImportDestination, ImportDestinationItem, ImportDestinationType } from "./types";
 import { useImportContent } from "@/composables/copy-content.composable";
-import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
+import { ShareTokenInfoResponseParentType } from "@api-server";
+import { ImportDialogProps, ImportDialogResult } from "@feature-dialog";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { isRequired, useOpeningTagValidator } from "@util-validators";
@@ -74,21 +74,14 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
-const props = defineProps<{
-	shareTokenInfo: ShareTokenInfoResponse;
-	availableDestinations: ImportDestinationItem[];
-	destinationType: Extract<ImportDestinationType, "room" | "course">;
-}>();
-
+const props = defineProps<ImportDialogProps>();
 const emit = defineEmits<{
-	(e: "confirm", payload: { newName: string; destination?: ImportDestination }): void;
-	(e: "cancel"): void;
+	complete: [result: ImportDialogResult];
+	cancel: [];
+	"after-leave": [];
 }>();
 
-const isDialogOpen = defineModel("is-dialog-open", {
-	type: Boolean,
-	default: false,
-});
+const isDialogOpen = defineModel<boolean>({ default: false });
 
 const hasSelectStep = computed(
 	() =>
@@ -114,6 +107,7 @@ const resetDialog = () => {
 	stepIndex.value = 0;
 	selectedDestinationId.value = undefined;
 	nameInput.value = undefined;
+	emit("after-leave");
 };
 
 const rules = reactive({ required: isRequired(), validateOnOpeningTag });
@@ -140,7 +134,7 @@ const onNext = () => {
 		return;
 	}
 
-	emit("confirm", {
+	emit("complete", {
 		newName: newName.value,
 		destination: selectedDestinationId.value
 			? { type: props.destinationType, id: selectedDestinationId.value }

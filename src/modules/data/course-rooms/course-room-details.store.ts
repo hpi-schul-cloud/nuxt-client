@@ -1,7 +1,7 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { Course } from "@/store/types/room";
-import { $axios } from "@/utils/api";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	BoardApiFactory,
 	CourseRoomsApiFactory,
@@ -13,6 +13,7 @@ import {
 	SingleColumnBoardResponse,
 	TaskApiFactory,
 } from "@api-server";
+import { notifyError } from "@data-app";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
@@ -86,17 +87,20 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 		} = await fetchContentCall.execute(async () => {
 			const response = await getRoomsApi().courseRoomsControllerGetRoomBoard(id);
 			return response.data;
-		}, t("pages.courseRooms.fetchCourseContent.error"));
+		});
 
 		if (success && result) {
 			roomData.value = result;
 		} else if (taskError) {
-			if (taskError.message?.includes("LOCKED_COURSE")) {
+			const apiError = mapAxiosErrorToResponseError(taskError);
+
+			if (apiError.type === "LOCKED_COURSE") {
 				roomData.value = {
 					...roomData.value,
-					title: taskError.message,
 				};
 				isLocked.value = true;
+			} else {
+				notifyError(t("pages.courseRooms.fetchCourseContent.error"));
 			}
 		}
 	};
