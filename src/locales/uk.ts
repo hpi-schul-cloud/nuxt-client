@@ -995,9 +995,6 @@ export default {
 	"mixins.typeMeta.types.image": "Зображення",
 	"mixins.typeMeta.types.video": "Відео",
 	"mixins.typeMeta.types.webpage": "Веб-сайт",
-	"loggedin.text.backupFeatures":
-		"Зробіть резервну копію вашого контенту в хмарі та використовуйте також нову функцію для експорту курсів. {helpLink}",
-	"loggedin.text.backupFeatures.helpLink": "Додаткову інформацію та допомогу можна знайти тут.",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів.",
 	"loggedin.text.schoolInTransferPhaseStartNew":
@@ -1006,6 +1003,13 @@ export default {
 		'Школа перебуває в режимі міграції користувачів. Щоб перенести користувачів, перейдіть на <a href="/administration/migration/">цю сторінку</a>.',
 	"loggedin.text.schoolInMigrationMode":
 		'Школа може імпортувати облікові записи користувачів з Schulportal. Для виконання міграції користувачів відвідайте, будь ласка, <a href="/administration/migration/">цю сторінку</a>.',
+	"loggedin.text.teamsToRooms": "Перехід на Простори зараз – Команди буде вимкнено",
+	"loggedin.text.teamsToRooms.possibilities":
+		"Простори тепер пропонує всі інструменти, необхідні для більш ефективної співпраці всередині та між школами.",
+	"loggedin.text.teamsToRooms.migration":
+		"Команди буде деактивовано 30.09.2026, але користувачі з роллю 'викладач' можуть автоматично перейти до Простори до цієї дати. Паралельно будь-які необхідні файли Команди повинні бути збережені або завантажені до цього часу.",
+	"loggedin.text.teamsToRooms.helpLink": "Більше інформації про міграцію можна знайти на {helpLink}.",
+	"loggedin.text.teamsToRooms.helpLink.help": "сторінки довідки",
 	"pages.dashboard.title": "Панель керування",
 	"pages.dashboard.empty.news": "Немає останніх новин. Перегляньте розділ новин, щоб бути в курсі.",
 	"pages.dashboard.new.features": "В {instanceTitle} є нові функції",
