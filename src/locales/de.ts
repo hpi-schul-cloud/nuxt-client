@@ -1005,9 +1005,6 @@ export default {
 	"mixins.typeMeta.types.image": "Bild",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Webseite",
-	"loggedin.text.backupFeatures":
-		"Sichern Sie Ihre Inhalte der Cloud und nutzen Sie auch die neue Funktion zum Export von Kursen. {helpLink}",
-	"loggedin.text.backupFeatures.helpLink": "Weitere Informationen und Hilfestellungen sind hier zu finden.",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte kontaktiere deinen Schul-Admin!",
 	"loggedin.text.schoolInTransferPhaseStartNew":
@@ -1016,6 +1013,13 @@ export default {
 		'Die Schule befindet sich im Modus der Benutzermigration. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
 	"loggedin.text.schoolInMigrationMode":
 		'Die Schule kann Benutzerkonten von Schulportal importieren. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
+	"loggedin.text.teamsToRooms": "Jetzt auf Räume umsteigen – Teams werden abgeschaltet",
+	"loggedin.text.teamsToRooms.possibilities":
+		"In den Räumen stehen nun alle Möglichkeiten bereit, um noch besser schulintern und -übergreifend zusammenzuarbeiten.",
+	"loggedin.text.teamsToRooms.migration":
+		"Teams werden daher zum 30.09.2026 abgeschaltet, können aber zuvor durch Nutzende mit der Rolle „lernbegleitend“ automatisiert in Räume umgewandelt werden. Parallel dazu müssen die noch benötigten Team-Dateien bis dahin gesichert bzw. heruntergeladen werden.",
+	"loggedin.text.teamsToRooms.helpLink": "Weitere Infos zur Migration finden sich auf den {helpLink}.",
+	"loggedin.text.teamsToRooms.helpLink.help": "Hilfeseiten",
 	"pages.dashboard.title": "Übersicht",
 	"pages.dashboard.empty.news": "Bisher gibt es keine News.",
 	"pages.dashboard.new.features": "Es gibt neue Features in der {instanceTitle}.",
