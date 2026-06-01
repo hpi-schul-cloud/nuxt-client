@@ -16,7 +16,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import type { Mocked } from "vitest";
-import { ComponentPublicInstance, computed, nextTick, ref } from "vue";
+import { ComponentPublicInstance, nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 
 vi.mock("@feature-import/import-flow.composable");
@@ -119,9 +119,7 @@ describe("CourseRoomOverview.page", () => {
 		courseRoomListStore.updateCourse.mockResolvedValue();
 
 		useImportFlowMock = mockComposable(useImportFlow, {
-			isCardImportDialogOpen: computed(() => false),
-			isGenericImportDialogOpen: computed(() => false),
-			shareTokenInfo: computed(() => undefined),
+			executeImport: vi.fn(),
 		});
 
 		vi.mocked(useImportFlow).mockReturnValue(useImportFlowMock);
@@ -443,7 +441,7 @@ describe("CourseRoomOverview.page", () => {
 
 		it("should show import mode when query has import token", async () => {
 			getWrapper({ routeQuery: { import: "test-token" } });
-			expect(useImportFlowMock.executeImport).toHaveBeenCalledWith("test-token");
+			expect(useImportFlowMock.executeImport).toHaveBeenCalledWith("test-token", expect.anything(), "course");
 		});
 
 		it("should navigate to room-details on import success with id", async () => {

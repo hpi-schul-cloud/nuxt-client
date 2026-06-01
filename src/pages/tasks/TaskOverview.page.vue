@@ -1,6 +1,6 @@
 <template>
 	<DefaultWireframe :headline="t('common.words.tasks')" max-width="limited" :fab-items="fabItems">
-		<SvsLoading :is-loading="isLoadingTasks && !hasLoadedOnce">
+		<SvsLoading :loading-state="onlyOnceTasksLoadingState">
 			<template #loading>
 				<div class="d-flex flex-column w-100">
 					<VSkeletonLoader type="text" :max-width="'15%'" />
@@ -33,7 +33,16 @@ const { isStudent, isTeacher } = useAppStoreRefs();
 const hasLoadedOnce = ref(false);
 const { t } = useI18n();
 
-const { isLoadingTasks, status } = useTasksOfOverview();
+const { tasksLoadingState, status } = useTasksOfOverview();
+
+const onlyOnceTasksLoadingState = computed(() => {
+	if (tasksLoadingState.value === "loading" && !hasLoadedOnce.value) {
+		return "loading";
+	} else if (tasksLoadingState.value === "loaded" || hasLoadedOnce.value) {
+		return "loaded";
+	}
+	return "idle";
+});
 
 useTitle(buildPageTitle(t("common.words.tasks")));
 

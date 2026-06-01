@@ -62,7 +62,7 @@ describe("ImportDialog", () => {
 				shareTokenInfo,
 				availableDestinations,
 				destinationType,
-				"is-dialog-open": isDialogOpen,
+				modelValue: isDialogOpen,
 			},
 			global: {
 				stubs: { UseFocusTrap: true },
@@ -163,7 +163,7 @@ describe("ImportDialog", () => {
 			});
 			wrapper.findComponent(SvsDialog).vm.$emit("confirm");
 			await nextTick();
-			expect(wrapper.emitted("confirm")).toEqual([[{ newName: "My Course", destination: undefined }]]);
+			expect(wrapper.emitted("complete")).toEqual([[{ newName: "My Course", destination: undefined }]]);
 		});
 
 		it("shows WarningAlert when warnings are present", () => {
@@ -204,7 +204,7 @@ describe("ImportDialog", () => {
 			wrapper.findComponent(SvsDialog).vm.$emit("confirm");
 			await nextTick();
 
-			expect(wrapper.emitted("confirm")).toEqual([
+			expect(wrapper.emitted("complete")).toEqual([
 				[{ newName: "My Lesson", destination: { type: "course", id: "dest-1" } }],
 			]);
 		});
