@@ -14,29 +14,36 @@ describe("SvsLoading", () => {
 			},
 		});
 
-	it("should render default slot content when not loading", () => {
-		const wrapper = setup({ isLoading: false });
+	it("should render default slot content when loadingState is 'loaded'", () => {
+		const wrapper = setup({ loadingState: "loaded" });
 
 		expect(wrapper.find("p").exists()).toBe(true);
 		expect(wrapper.findComponent(VProgressCircular).exists()).toBe(false);
 	});
 
-	it("should show spinner and hide content when loading", () => {
-		const wrapper = setup({ isLoading: true });
+	it("should show spinner and hide content when loadingState is 'loading'", () => {
+		const wrapper = setup({ loadingState: "loading" });
 
 		expect(wrapper.findComponent(VProgressCircular).exists()).toBe(true);
 		expect(wrapper.find("p").exists()).toBe(false);
 	});
 
-	it("should default to not loading", () => {
+	it("should show spinner and hide content when loadingState is 'extLoading'", () => {
+		const wrapper = setup({ loadingState: "extLoading" });
+
+		expect(wrapper.findComponent(VProgressCircular).exists()).toBe(true);
+		expect(wrapper.find("p").exists()).toBe(false);
+	});
+
+	it("should show neither spinner nor content when loadingState is 'idle' (default)", () => {
 		const wrapper = setup();
 
-		expect(wrapper.find("p").exists()).toBe(true);
+		expect(wrapper.find("p").exists()).toBe(false);
 		expect(wrapper.findComponent(VProgressCircular).exists()).toBe(false);
 	});
 
 	it("should pass size prop to VProgressCircular", () => {
-		const wrapper = setup({ isLoading: true, size: 50 });
+		const wrapper = setup({ loadingState: "loading", size: 50 });
 
 		const spinner = wrapper.findComponent(VProgressCircular);
 		expect(spinner.props("size")).toBe(50);
@@ -44,7 +51,7 @@ describe("SvsLoading", () => {
 
 	it("should render custom loading slot when loading", () => {
 		const wrapper = mount(SvsLoading, {
-			props: { isLoading: true },
+			props: { loadingState: "loading" },
 			slots: { loading: "<span>Custom Spinner</span>" },
 			global: { plugins: [createTestingVuetify()] },
 		});

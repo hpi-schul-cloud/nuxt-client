@@ -4,26 +4,24 @@
 			<VProgressCircular indeterminate :size />
 		</slot>
 	</div>
-	<slot v-else />
+	<slot v-else-if="isLoaded" />
 </template>
-#
 
 <script setup lang="ts">
-// It is recommended to pass a debounced `isLoading` value to this component to avoid
-// flickering on fast operations and ensure the indicator is shown long enough to be noticed.
-//
-// Debounced loading state is provided out of the box by:
-// - `useSafeAxiosTask` / `useSafeAxiosRunner` (via the `isLoading` return value)
-//
-// For custom cases, use `withDebouncedLoading` from `@/utils/loading-utils` directly.
-withDefaults(
+import { DebouncedLoadingState } from "@/types/loading.types";
+import { computed } from "vue";
+
+const props = withDefaults(
 	defineProps<{
-		isLoading?: boolean;
+		loadingState?: DebouncedLoadingState;
 		size?: number | string;
 	}>(),
 	{
-		isLoading: false,
+		loadingState: "idle",
 		size: 115,
 	}
 );
+
+const isLoading = computed(() => props.loadingState === "loading" || props.loadingState === "extLoading");
+const isLoaded = computed(() => props.loadingState === "loaded");
 </script>

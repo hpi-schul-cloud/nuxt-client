@@ -1,26 +1,22 @@
 import { ShareOptions, ShareParams } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { useAwaitableAction } from "@/composables/awaitable-action.composable";
 import { useShareContent } from "@/composables/copy-content.composable";
 import { $axios } from "@/utils/api";
 import { BoardExternalReferenceType, ShareTokenApiFactory, ShareTokenBodyParamsParentType } from "@api-server";
-import { computed, ref } from "vue";
+import { openDialog } from "@feature-dialog";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export const useShareFlow = () => {
 	const shareApi = ShareTokenApiFactory(undefined, "/v3", $axios);
 	const { execute } = useSafeAxiosTask();
-	const askOptionsAction = useAwaitableAction<ShareOptions>();
-	const resultAction = useAwaitableAction<boolean>();
 	const { t } = useI18n();
 
-	const isDialogOpen = ref(false);
-	const itemType = ref<ShareTokenBodyParamsParentType>();
-	const shareUrl = ref<string>();
-
-	const { itemNameKey } = useShareContent(computed(() => itemType.value));
+	const shareItemType = ref<ShareTokenBodyParamsParentType>();
+	const { itemNameKey } = useShareContent(shareItemType);
 
 	const generateShareToken = async (params: ShareParams, options: ShareOptions) => {
+		shareItemType.value = params.type;
 		const { result, success, error } = await execute(
 			() =>
 				shareApi.shareTokenControllerCreateShareToken({
@@ -53,48 +49,26 @@ export const useShareFlow = () => {
 		return "rooms/courses-overview";
 	};
 
-	const openDialog = (type: ShareTokenBodyParamsParentType) => {
-		itemType.value = type;
-		isDialogOpen.value = true;
-	};
-
-	const closeDialog = () => {
-		itemType.value = undefined;
-		shareUrl.value = undefined;
-		isDialogOpen.value = false;
-	};
-
 	const executeShare = async ({ id, type, destinationType }: ShareParams) => {
-		openDialog(type);
-		const { completed: confirmed, data: options } = await askOptionsAction.start();
+		let tokenResult: Awaited<ReturnType<typeof generateShareToken>> | undefined;
 
-		if (!confirmed) {
-			closeDialog();
-			return { success: false, error: new Error("Share cancelled") };
+		const { completed } = await openDialog("share", {
+			shareItemType: type,
+			onConfirm: async (options: ShareOptions) => {
+				tokenResult = await generateShareToken({ id, type, destinationType }, options);
+				if (!tokenResult.success) throw new Error("Share failed", { cause: tokenResult.error });
+				const sharePath = buildSharePath(type, destinationType);
+				return `${window.location.origin}/${sharePath}?import=${tokenResult.result!.token}`;
+			},
+		});
+
+		if (!completed) {
+			return tokenResult
+				? { success: false as const, error: new Error("Share failed", { cause: tokenResult.error }) }
+				: { success: false as const, error: new Error("Share cancelled") };
 		}
-
-		const { result, success, error } = await generateShareToken({ id, type, destinationType }, options);
-		if (!success) {
-			closeDialog();
-			return { success, error: new Error("Share failed", { cause: error }) };
-		}
-
-		const sharePath = buildSharePath(type, destinationType);
-		shareUrl.value = `${window.location.origin}/${sharePath}?import=${result?.token}`;
-
-		await resultAction.start();
-		closeDialog();
-
-		return { success, result };
+		return { success: true, result: tokenResult!.result };
 	};
 
-	return {
-		isShareDialogOpen: isDialogOpen,
-		shareItemType: itemType,
-		shareUrl,
-		executeShare,
-		onConfirm: askOptionsAction.complete,
-		onCancel: askOptionsAction.cancel,
-		onDone: resultAction.cancel,
-	};
+	return { executeShare };
 };
