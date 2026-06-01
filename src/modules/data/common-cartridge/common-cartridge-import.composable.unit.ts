@@ -46,7 +46,9 @@ describe("useCommonCartridgeImport composable", () => {
 		};
 
 		commonCartridgeApiMock = {
-			commonCartridgeControllerImportCourse: vi.fn(() => Promise.resolve(AxiosResponseFactory.create(undefined))),
+			commonCartridgeControllerUploadFileAndStartImport: vi.fn(() =>
+				Promise.resolve(AxiosResponseFactory.create(undefined))
+			),
 		};
 
 		(FileApiFactory as Mock).mockReturnValue(fileStorageApiMock);
@@ -74,42 +76,38 @@ describe("useCommonCartridgeImport composable", () => {
 
 	describe("actions", () => {
 		describe("importCommonCartridgeFile", () => {
-			it("should call fileStorageApi.upload with the given file, import the course and set success to true", async () => {
+			it("should call commonCartridgeApiMock.commonCartridgeControllerUploadFileAndStartImport with the given file, import the course and set success to true", async () => {
 				const { importCommonCartridgeFile, isSuccess } = useCommonCartridgeImport();
 
 				const file = new File([""], "file.txt", { type: "text/plain" });
 
 				await importCommonCartridgeFile(file);
 
-				expect(fileStorageApiMock.upload).toHaveBeenCalledWith("schoolId", "school", "userId", "users", file);
-				expect(commonCartridgeApiMock.commonCartridgeControllerImportCourse).toHaveBeenCalledWith({
-					fileRecordId: "fileId",
-					fileName: "fileName",
-					fileUrl: "fileUrl",
-				});
+				expect(commonCartridgeApiMock.commonCartridgeControllerUploadFileAndStartImport).toHaveBeenCalledWith(file);
 				expect(isSuccess.value).toBe(true);
 			});
 
-			it("should call fileStorageApi.upload with the given file and in case of upload failure set success to false", async () => {
+			it("should call commonCartridgeApiMock.commonCartridgeControllerUploadFileAndStartImport with the given file and in case of upload failure set success to false", async () => {
 				const { importCommonCartridgeFile, isSuccess } = useCommonCartridgeImport();
 
 				const file = new File([""], "file.txt", { type: "text/plain" });
 
-				(fileStorageApiMock.upload as Mock).mockRejectedValueOnce(new Error("Upload failed"));
+				(commonCartridgeApiMock.commonCartridgeControllerUploadFileAndStartImport as Mock).mockRejectedValueOnce(
+					new Error("Upload failed")
+				);
 				await importCommonCartridgeFile(file);
 
-				expect(fileStorageApiMock.upload).toHaveBeenCalledWith("schoolId", "school", "userId", "users", file);
-				expect(commonCartridgeApiMock.commonCartridgeControllerImportCourse).not.toHaveBeenCalled();
+				expect(commonCartridgeApiMock.commonCartridgeControllerUploadFileAndStartImport).toHaveBeenCalledWith(file);
 				expect(isSuccess.value).toBe(false);
 			});
 
-			it("should not call fileStorageApi.upload if the file is undefined", async () => {
+			it("should not call commonCartridgeApiMock.commonCartridgeControllerUploadFileAndStartImport if the file is undefined", async () => {
 				const { importCommonCartridgeFile, isSuccess } = useCommonCartridgeImport();
 
 				await importCommonCartridgeFile(undefined);
 
 				expect(fileStorageApiMock.upload).not.toHaveBeenCalled();
-				expect(commonCartridgeApiMock.commonCartridgeControllerImportCourse).not.toHaveBeenCalled();
+				expect(commonCartridgeApiMock.commonCartridgeControllerUploadFileAndStartImport).not.toHaveBeenCalled();
 				expect(isSuccess.value).toBe(false);
 			});
 		});
