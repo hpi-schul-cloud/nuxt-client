@@ -96,12 +96,12 @@ describe("useNotificationStream", () => {
 
 		it("should use custom baseUrl when provided", () => {
 			const { connect } = useNotificationStream({
-				baseUrl: "http://custom-server:3033",
+				baseUrl: "https://custom-server:3033",
 			});
 
 			connect();
 
-			expect(MockEventSource.instances[0].url).toBe("http://custom-server:3033/notifications/stream");
+			expect(MockEventSource.instances[0].url).toBe("https://custom-server:3033/notifications/stream");
 		});
 	});
 
