@@ -99,10 +99,6 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return roomId.value;
 	};
 
-	const fetchMembersAndApplicants = async () => {
-		await Promise.all([fetchMembers(), fetchApplicants()]);
-	};
-
 	const fetchMembers = async () => {
 		const isSelectable = (member: RoomMemberResponse) => {
 			const isRoomOwner = member.roomRoleName === RoleName.ROOMOWNER;
@@ -258,7 +254,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const addMembers = async (userIds: string[]) => {
 		try {
 			await roomApi.roomControllerAddMembers(getRoomId(), { userIds });
-			await fetchMembersAndApplicants();
+			await fetchMembers();
 		} catch {
 			notifyError(t("pages.rooms.members.error.add"));
 		}
@@ -293,7 +289,6 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		try {
 			const roomId = getRoomId();
 			await roomApi.roomControllerAddByEmail(roomId, { email });
-			await fetchMembersAndApplicants();
 			return ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED;
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
@@ -468,7 +463,6 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		setAdminMode,
 		changeRoomOwner,
 		confirmInvitations,
-		fetchMembersAndApplicants,
 		fetchMembers,
 		fetchApplicants,
 		resetPotentialMembers,
