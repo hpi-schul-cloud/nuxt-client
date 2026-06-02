@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { formatBytes } from "@/utils/fileSize";
-import { useEnvConfig } from "@data-env";
+import { useEnvCommonCartridgeConfig } from "@data-env";
 import { mdiTrayArrowUp } from "@icons/material";
 import { SvsDialog } from "@ui-dialog";
 import { computed, ref } from "vue";
@@ -38,7 +38,7 @@ import { VFileInput } from "vuetify/components";
 
 const { t } = useI18n();
 
-const envConfig = useEnvConfig();
+const envConfig = useEnvCommonCartridgeConfig();
 const maxFileSizeBytes = computed(() => envConfig.value.FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_MAX_FILE_SIZE);
 const formattedMaxFileSize = computed(() => formatBytes(maxFileSizeBytes.value));
 
