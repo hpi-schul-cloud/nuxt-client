@@ -148,7 +148,7 @@ export default {
 	"common.notifications.errors.notCreated": "{type} could not be created.",
 	"common.notifications.errors.notSaved": "{type} could not be saved.",
 	"common.notifications.errors.notDeleted": "{type} could not be deleted.",
-	"common.notifications.errors.notDuplicated": "{type} could not or not fully be duplicated.",
+	"common.notifications.errors.notDuplicated": "{type} could not be duplicated or was only partially duplicated.",
 	"common.notifications.errors.notLoaded": "{type} could not be loaded.",
 	"common.notifications.errors.notMoved": "{type} could not be moved.",
 	"common.notifications.errors.notExited": "{type} could not be exited.",
