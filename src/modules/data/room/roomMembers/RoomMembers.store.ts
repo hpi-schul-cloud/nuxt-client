@@ -138,7 +138,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			roomApplicants.value = data.map((applicant: RoomMemberResponse) => ({
 				...applicant,
 				fullName: `${applicant.firstName} ${applicant.lastName}`,
-				displayRoomRole: roomRole[applicant.roomRoleName],
+				displayRoomRole: "",
 				displaySchoolRole: getSchoolRoleName(applicant.schoolRoleNames),
 			}));
 		} catch {

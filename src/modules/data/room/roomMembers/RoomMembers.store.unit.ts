@@ -89,6 +89,201 @@ describe("useRoomMembers", () => {
 		expectNotification("error");
 	});
 
+	describe("fetchMembers", () => {
+		describe("when the user is not room owner", () => {
+			it("should fetch teacher members and map members with role names", async () => {
+				const { roomMembersStore } = setup();
+
+				const membersMock = roomMemberFactory.buildList(3, {
+					roomRoleName: RoleName.ROOMADMIN,
+					schoolRoleNames: [RoleName.TEACHER],
+					schoolId: "school-id-1",
+				});
+
+				roomApiMock.roomControllerGetMembers.mockResolvedValue(
+					mockApiResponse({
+						data: { data: membersMock },
+					})
+				);
+
+				await roomMembersStore.fetchMembers();
+
+				expect(roomMembersStore.roomMembers).toEqual(
+					membersMock.map((member) => ({
+						...member,
+						displayRoomRole: "pages.rooms.members.roomPermissions.admin",
+						displaySchoolRole: "common.labels.teacher.neutral",
+						isSelectable: true,
+					}))
+				);
+			});
+
+			it("should fetch student members and map members with role names", async () => {
+				const { roomMembersStore } = setup();
+
+				const membersMock = roomMemberFactory.buildList(3, {
+					roomRoleName: RoleName.ROOMVIEWER,
+					schoolRoleNames: [RoleName.STUDENT],
+				});
+
+				roomApiMock.roomControllerGetMembers.mockResolvedValue(
+					mockApiResponse({
+						data: { data: membersMock },
+					})
+				);
+
+				await roomMembersStore.fetchMembers();
+
+				expect(roomMembersStore.roomMembers).toEqual(
+					membersMock.map((member) => ({
+						...member,
+						displayRoomRole: "pages.rooms.members.roomPermissions.viewer",
+						displaySchoolRole: "common.labels.student.neutral",
+						isSelectable: true,
+					}))
+				);
+			});
+
+			it("should fetch expert members and map members with role names", async () => {
+				const { roomMembersStore } = setup();
+				const membersMock = roomMemberFactory.buildList(3, {
+					roomRoleName: RoleName.ROOMEDITOR,
+					schoolRoleNames: [RoleName.EXTERNAL_PERSON],
+				});
+				roomApiMock.roomControllerGetMembers.mockResolvedValue(
+					mockApiResponse({
+						data: { data: membersMock },
+					})
+				);
+				await roomMembersStore.fetchMembers();
+				expect(roomMembersStore.roomMembers).toEqual(
+					membersMock.map((member) => ({
+						...member,
+						displayRoomRole: "pages.rooms.members.roomPermissions.editor",
+						displaySchoolRole: "common.roleName.externalPerson",
+						isSelectable: true,
+					}))
+				);
+			});
+		});
+
+		describe("when the user is room owner", () => {
+			it("should fetch members and map members with role names", async () => {
+				const { roomMembersStore } = setup();
+				const membersMock = roomMemberFactory.buildList(3, {
+					roomRoleName: RoleName.ROOMOWNER,
+				});
+
+				roomApiMock.roomControllerGetMembers.mockResolvedValue(
+					mockApiResponse({
+						data: {
+							data: membersMock,
+						},
+					})
+				);
+
+				await roomMembersStore.fetchMembers();
+
+				expect(roomMembersStore.roomMembers).toEqual(
+					membersMock.map((member) => ({
+						...member,
+						displayRoomRole: "pages.rooms.members.roomPermissions.owner",
+						displaySchoolRole: "common.labels.teacher.neutral",
+						isSelectable: false,
+					}))
+				);
+			});
+		});
+
+		describe("when the user has school role administrator and teacher", () => {
+			it("should map the school role to teacher", async () => {
+				const { roomMembersStore } = setup();
+				const membersMock = roomMemberFactory.buildList(1, {
+					roomRoleName: RoleName.ROOMADMIN,
+					schoolRoleNames: [RoleName.ADMINISTRATOR, RoleName.TEACHER],
+				});
+
+				roomApiMock.roomControllerGetMembers.mockResolvedValue(
+					mockApiResponse({
+						data: { data: membersMock },
+					})
+				);
+
+				await roomMembersStore.fetchMembers();
+
+				expect(roomMembersStore.roomMembers).toEqual(
+					membersMock.map((member) => ({
+						...member,
+						displayRoomRole: "pages.rooms.members.roomPermissions.admin",
+						displaySchoolRole: "common.labels.teacher.neutral",
+						isSelectable: true,
+					}))
+				);
+			});
+		});
+
+		describe("when api call fails", () => {
+			it("should throw an error", async () => {
+				const { roomMembersStore } = setup();
+
+				const error = new Error("Test error");
+				roomApiMock.roomControllerGetMembers.mockRejectedValue(error);
+
+				await roomMembersStore.fetchMembers();
+				expectNotification("error");
+			});
+		});
+	});
+
+	describe("fetchApplicants", () => {
+		describe("when the room has applicants", () => {
+			it("should return the applicants", async () => {
+				const { roomMembersStore } = setup();
+
+				const teacherRoomApplicants = roomMemberFactory.buildList(3, {
+					roomRoleName: RoleName.ROOMAPPLICANT,
+					schoolRoleNames: [RoleName.TEACHER],
+				});
+
+				const studentRoomApplicants = roomMemberFactory.buildList(1, {
+					roomRoleName: RoleName.ROOMAPPLICANT,
+					schoolRoleNames: [RoleName.STUDENT],
+				});
+
+				const membersMock = [...teacherRoomApplicants, ...studentRoomApplicants];
+				roomApiMock.roomControllerGetApplicants.mockResolvedValue(
+					mockApiResponse({
+						data: { data: membersMock },
+					})
+				);
+
+				await roomMembersStore.fetchApplicants();
+
+				expect(roomMembersStore.roomApplicants).toEqual(
+					membersMock.map((member) => ({
+						...member,
+						displayRoomRole: "",
+						displaySchoolRole: expect.toBeOneOf(["common.labels.teacher.neutral", "common.labels.student.neutral"]),
+						isSelectable: true,
+					}))
+				);
+				expect(roomMembersStore.isLoading).toBe(false);
+			});
+		});
+
+		it("should throw an error", async () => {
+			const { roomMembersStore } = setup();
+
+			const error = new Error("Test error");
+			roomApiMock.roomControllerGetApplicants.mockRejectedValue(error);
+
+			await roomMembersStore.fetchApplicants();
+
+			expectNotification("error");
+			expect(roomMembersStore.isLoading).toBe(false);
+		});
+	});
+
 	describe("getPotentialMembers", () => {
 		it("should get potential teacher members", async () => {
 			const { roomMembersStore } = setup();
