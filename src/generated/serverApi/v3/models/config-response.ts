@@ -289,6 +289,12 @@ export interface ConfigResponse {
     FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: boolean;
     /**
      * 
+     * @type {number}
+     * @memberof ConfigResponse
+     */
+    FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_MAX_FILE_SIZE: number;
+    /**
+     * 
      * @type {boolean}
      * @memberof ConfigResponse
      */
