@@ -151,7 +151,7 @@ export default {
 	"common.notifications.errors.notDeleted":
 		"{type} не вдалося видалити. | {type} не вдалося видалити. | {type} не вдалося видалити.",
 	"common.notifications.errors.notDuplicated":
-		"{type} не вдалося дублювати. | {type} не вдалося дублювати. | {type} не вдалося дублювати.",
+		"{type} не вдалося дублювати або не вдалося дублювати повністю. | {type} не вдалося дублювати або не вдалося дублювати повністю. | {type} не вдалося дублювати або не вдалося дублювати повністю.",
 	"common.notifications.errors.notLoaded":
 		"{type} не вдалося завантажити. | {type} не вдалося завантажити. | {type} не вдалося завантажити.",
 	"common.notifications.errors.notMoved":

@@ -148,7 +148,8 @@ export default {
 	"common.notification.error": "Se ha producido un error.",
 	"common.notifications.errors.notCreated": "{type} no se ha podido crear. | {type} no se han podido crear.",
 	"common.notifications.errors.notDeleted": "{type} no se ha podido eliminar. | {type} no se han podido eliminar.",
-	"common.notifications.errors.notDuplicated": "{type} no se ha podido duplicar. | {type} no se han podido duplicar.",
+	"common.notifications.errors.notDuplicated":
+		"{type} no se ha podido duplicar o no se ha duplicado completamente. | {type} no se han podido duplicar o no se han duplicado completamente.",
 	"common.notifications.errors.notLoaded": "{type} no se ha podido cargar. | {type} no se han podido cargar.",
 	"common.notifications.errors.notMoved": "{type} no se ha podido mover. | {type} no se han podido mover.",
 	"common.notifications.errors.notExited": "{type} no se ha podido salir. | {type} no se han podido salir.",
