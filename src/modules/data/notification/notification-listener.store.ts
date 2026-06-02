@@ -7,10 +7,10 @@ import { useNotificationStream } from "./notification-sse.composable";
 
 /**
  * Notification types from the SSE stream.
- * - "note" maps to info (blue bubble)
+ * - "info" maps to info (blue bubble)
  * - "error" maps to error (red bubble)
  */
-export type ServerNotificationType = "note" | "error";
+export type ServerNotificationType = "info" | "error";
 
 /**
  * Structure of the inner notification object from the notification-server SSE stream.
@@ -49,7 +49,7 @@ const isServerNotificationMessage = (data: unknown): data is ServerNotificationM
 	const notification = obj.notification as Record<string, unknown>;
 	return (
 		typeof notification.type === "string" &&
-		["note", "error"].includes(notification.type) &&
+		["info", "error"].includes(notification.type) &&
 		Array.isArray(notification.arguments) &&
 		notification.arguments.length > 0 &&
 		typeof notification.arguments[0] === "string"
@@ -58,11 +58,11 @@ const isServerNotificationMessage = (data: unknown): data is ServerNotificationM
 
 /**
  * Maps a server notification type to the corresponding notify function.
- * - "note" → info (blue bubble)
+ * - "info" → info (blue bubble)
  * - "error" → error (red bubble)
  */
 const notifyByType: Record<ServerNotificationType, (text: string, autoClose?: boolean) => void> = {
-	note: notifyInfo,
+	info: notifyInfo,
 	error: notifyError,
 };
 

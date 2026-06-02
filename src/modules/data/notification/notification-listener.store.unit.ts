@@ -39,7 +39,7 @@ vi.mock("@data-app", () => ({
 /**
  * Helper to create a valid server notification message
  */
-const createNotificationMessage = (type: "note" | "error", message: string): ServerNotificationMessage => ({
+const createNotificationMessage = (type: "info" | "error", message: string): ServerNotificationMessage => ({
 	type: "live",
 	notification: {
 		_id: { buffer: { type: "Buffer", data: [1, 2, 3] } },
@@ -105,10 +105,10 @@ describe("useNotificationListenerStore", () => {
 	});
 
 	describe("notification handling", () => {
-		it("should display info notification for 'note' type", () => {
+		it("should display info notification for 'info' type", () => {
 			useNotificationListenerStore();
 
-			const notification = createNotificationMessage("note", "Hello from the server!");
+			const notification = createNotificationMessage("info", "Hello from the server!");
 
 			mockOnNotification?.(notification);
 
@@ -135,7 +135,7 @@ describe("useNotificationListenerStore", () => {
 				notification: {
 					_id: {},
 					userId: "user123",
-					type: "note",
+					type: "info",
 					key: "GREETING",
 					arguments: ["Hello from the terminal!"],
 					expiresAt: "2026-05-21T20:00:00.000Z",
