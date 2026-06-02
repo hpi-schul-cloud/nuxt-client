@@ -488,7 +488,7 @@ export default {
 		"The number of files exceeds the permitted limit of {fileLimitPerParent} files.",
 	"components.board.notifications.errors.notCreated": "{type} could not be created.",
 	"components.board.notifications.errors.notDeleted": "{type} could not be deleted.",
-	"components.board.notifications.errors.notDuplicated": "{type} could not or not fully be duplicated.",
+	"components.board.notifications.errors.notDuplicated": "{type} could not be duplicated or was only partially duplicated.",
 	"components.board.notifications.errors.notLoaded": "{type} could not be loaded.",
 	"components.board.notifications.errors.notMoved": "{type} could not be moved.",
 	"components.board.notifications.errors.notUpdated": "Your changes could not be saved.",
