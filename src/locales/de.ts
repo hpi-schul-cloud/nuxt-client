@@ -58,6 +58,7 @@ export default {
 	"common.instructions.orderBy.arrowKeys": "Die Elemente dieser Liste können per Pfeiltaste verschoben werden.",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.allSchools": "alle Schulen",
+	"common.labels.backToOverview": "Zurück zur Übersicht",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",
 	"common.labels.changed": "Geändert",
@@ -154,6 +155,8 @@ export default {
 	"common.notification.connection.restored": "Die Verbindung wurde wieder hergestellt.",
 	"common.notifications.errors.notCreated":
 		"{type} konnte nicht erstellt werden. | {type} konnten nicht erstellt werden.",
+	"common.notifications.errors.notSaved":
+		"{type} konnte nicht gespeichert werden. | {type} konnten nicht gespeichert werden.",
 	"common.notifications.errors.notDeleted":
 		"{type} konnte nicht gelöscht werden. | {type} konnten nicht gelöscht werden.",
 	"common.notifications.errors.notDuplicated":
@@ -231,6 +234,7 @@ export default {
 	"common.words.also": "auch",
 	"common.words.and": "und",
 	"common.words.board": "Bereich | Bereiche",
+	"common.words.news": "Neuigkeit | Neuigkeiten",
 	"common.words.classes": "Klassen",
 	"common.words.color": "Farbe",
 	"common.words.color.blue": "Blau",
@@ -810,11 +814,11 @@ export default {
 	"components.organisms.FormNews.input.title.placeholder": "Los geht's mit dem Titel",
 	"components.organisms.FormNews.label.planned_publish":
 		"Hier kannst du ein Datum für die automatische Veröffentlichung in der Zukunft setzen (optional):",
-	"components.organisms.FormNews.remove.confirm.confirm": "Artikel löschen",
-	"components.organisms.FormNews.remove.confirm.message": "Möchtest du diesen Artikel wirklich unwiderruflich löschen?",
-	"components.organisms.FormNews.success.create": "Artikel erstellt.",
-	"components.organisms.FormNews.success.patch": "Artikel wurde aktualisiert.",
-	"components.organisms.FormNews.success.remove": "Artikel erfolgreich gelöscht.",
+	"components.organisms.FormNews.remove.confirm.message":
+		"Möchtest du diese Neuigkeit wirklich unwiderruflich löschen?",
+	"components.organisms.FormNews.success.create": "Neuigkeit erstellt.",
+	"components.organisms.FormNews.success.patch": "Neuigkeit wurde aktualisiert.",
+	"components.organisms.FormNews.success.remove": "Neuigkeit erfolgreich gelöscht.",
 	"components.organisms.importUsers.createNew": "Neu erstellen",
 	"components.organisms.importUsers.editImportUser": "Nutzer bearbeiten",
 	"components.organisms.importUsers.flagImportUser": "Nutzer markieren",
@@ -1002,9 +1006,6 @@ export default {
 	"mixins.typeMeta.types.image": "Bild",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Webseite",
-	"loggedin.text.backupFeatures":
-		"Sichern Sie Ihre Inhalte der Cloud und nutzen Sie auch die neue Funktion zum Export von Kursen. {helpLink}",
-	"loggedin.text.backupFeatures.helpLink": "Weitere Informationen und Hilfestellungen sind hier zu finden.",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte kontaktiere deinen Schul-Admin!",
 	"loggedin.text.schoolInTransferPhaseStartNew":
@@ -1013,6 +1014,13 @@ export default {
 		'Die Schule befindet sich im Modus der Benutzermigration. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
 	"loggedin.text.schoolInMigrationMode":
 		'Die Schule kann Benutzerkonten von Schulportal importieren. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
+	"loggedin.text.teamsToRooms": "Jetzt auf Räume umsteigen – Teams werden abgeschaltet",
+	"loggedin.text.teamsToRooms.possibilities":
+		"In den Räumen stehen nun alle Möglichkeiten bereit, um noch besser schulintern und -übergreifend zusammenzuarbeiten.",
+	"loggedin.text.teamsToRooms.migration":
+		"Teams werden daher zum 30.09.2026 abgeschaltet, können aber zuvor durch Nutzende mit der Rolle „lernbegleitend“ automatisiert in Räume umgewandelt werden. Parallel dazu müssen die noch benötigten Team-Dateien bis dahin gesichert bzw. heruntergeladen werden.",
+	"loggedin.text.teamsToRooms.helpLink": "Weitere Infos zur Migration finden sich auf den {helpLink}.",
+	"loggedin.text.teamsToRooms.helpLink.help": "Hilfeseiten",
 	"pages.dashboard.title": "Übersicht",
 	"pages.dashboard.empty.news": "Bisher gibt es keine News.",
 	"pages.dashboard.new.features": "Es gibt neue Features in der {instanceTitle}.",
@@ -1534,12 +1542,15 @@ export default {
 	"pages.licenseList.title": "Open-Source-Lizenzliste",
 	"pages.licenseList.introduction": "Im Folgenden sind die Softwarelizenzen der verwendeten Pakete aufgeführt.",
 	"pages.licenseList.packageIntroduction": "Unter dieser Lizenz verwendete Pakete:",
-	"pages.news.edit.title.default": "Artikel bearbeiten",
+	"pages.news.edit.title.default": "Neuigkeit bearbeiten",
 	"pages.news.edit.title": "{title} bearbeiten",
 	"pages.news.index.new": "Neuigkeit hinzufügen",
 	"pages.news.new.create": "Erstellen",
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
+	"pages.news.details.title": "Neuigkeit vom {date}",
+	"pages.news.details.title.fallback": "Neuigkeit",
+	"pages.news.details.published": "Veröffentlicht {date}",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Die Registrierung konnte leider nicht abgeschlossen werden. Bitte später erneut versuchen.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":

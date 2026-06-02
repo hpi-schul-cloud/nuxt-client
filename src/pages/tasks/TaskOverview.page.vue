@@ -38,7 +38,7 @@ const { tasksLoadingState, status } = useTasksOfOverview();
 const onlyOnceTasksLoadingState = computed(() => {
 	if (tasksLoadingState.value === "loading" && !hasLoadedOnce.value) {
 		return "loading";
-	} else if (tasksLoadingState.value === "loaded") {
+	} else if (tasksLoadingState.value === "loaded" || hasLoadedOnce.value) {
 		return "loaded";
 	}
 	return "idle";

@@ -56,6 +56,7 @@ export default {
 	"common.instructions.orderBy.arrowKeys": "The items in this list can be moved using the arrow keys.",
 	"common.labels.admin": "",
 	"common.labels.allSchools": "all schools",
+	"common.labels.backToOverview": "Back to overview",
 	"common.labels.birthdate": "Date of birth",
 	"common.labels.birthday": "Date of Birth",
 	"common.labels.changed": "Changed",
@@ -145,6 +146,7 @@ export default {
 	"common.nodata": "No data available",
 	"common.notification.error": "An error has occurred.",
 	"common.notifications.errors.notCreated": "{type} could not be created.",
+	"common.notifications.errors.notSaved": "{type} could not be saved.",
 	"common.notifications.errors.notDeleted": "{type} could not be deleted.",
 	"common.notifications.errors.notDuplicated": "{type} could not or not fully be duplicated.",
 	"common.notifications.errors.notLoaded": "{type} could not be loaded.",
@@ -220,6 +222,7 @@ export default {
 	"common.words.also": "also",
 	"common.words.and": "and",
 	"common.words.board": "board | boards",
+	"common.words.news": "news",
 	"common.words.classes": "Classes",
 	"common.words.color": "Color",
 	"common.words.color.blue": "Blue",
@@ -785,11 +788,10 @@ export default {
 	"components.organisms.FormNews.input.title.placeholder": "Let's start with the title",
 	"components.organisms.FormNews.label.planned_publish":
 		"Here you can set a date for automatic publication in the future (optional):",
-	"components.organisms.FormNews.remove.confirm.confirm": "Delete article",
-	"components.organisms.FormNews.remove.confirm.message": "Do you really want to delete this article irrevocably?",
-	"components.organisms.FormNews.success.create": "Article created.",
-	"components.organisms.FormNews.success.patch": "Article was updated.",
-	"components.organisms.FormNews.success.remove": "Article successfully deleted.",
+	"components.organisms.FormNews.remove.confirm.message": "Do you really want to delete this news irrevocably?",
+	"components.organisms.FormNews.success.create": "News created.",
+	"components.organisms.FormNews.success.patch": "News was updated.",
+	"components.organisms.FormNews.success.remove": "News successfully deleted.",
 	"components.organisms.importUsers.createNew": "Create new",
 	"components.organisms.importUsers.editImportUser": "Edit user",
 	"components.organisms.importUsers.flagImportUser": "Flag user",
@@ -976,9 +978,6 @@ export default {
 	"mixins.typeMeta.types.image": "Image",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Website",
-	"loggedin.text.backupFeatures":
-		"Back up your cloud content and also use the new function for exporting courses. {helpLink}",
-	"loggedin.text.backupFeatures.helpLink": "More information and instructions can be found here.",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"The school is in the transfer phase to the new school year. No classes and users can be created. Please contact the school administrator!",
 	"loggedin.text.schoolInTransferPhaseStartNew":
@@ -987,6 +986,13 @@ export default {
 		'The school is in user migration mode. To migrate users, please go to <a href="/administration/migration/">this page</a>.',
 	"loggedin.text.schoolInMigrationMode":
 		'The school can import user accounts from Schulportal. To migrate users, please go to <a href="/administration/migration/">this page</a>.',
+	"loggedin.text.teamsToRooms": "Switch to Rooms now – Teams are shut down",
+	"loggedin.text.teamsToRooms.possibilities":
+		"Rooms now offer all the tools you need to collaborate even more effectively within and across schools.",
+	"loggedin.text.teamsToRooms.migration":
+		"Teams will be deactivated on 30.09.2026, but can be automatically converted into Rooms by users with the role 'teacher' beforehand. In parallel, any necessary Team files must be backed up or downloaded by then.",
+	"loggedin.text.teamsToRooms.helpLink": "More information about the migration can be found on the {helpLink}.",
+	"loggedin.text.teamsToRooms.helpLink.help": "help pages",
 	"pages.dashboard.title": "Dashboard",
 	"pages.dashboard.empty.news": "So far there is no news.",
 	"pages.dashboard.new.features": "There are new features in the {instanceTitle}.",
@@ -1501,12 +1507,15 @@ export default {
 	"pages.licenseList.title": "Open Source License List",
 	"pages.licenseList.introduction": "The software licences for the packages used are listed below.",
 	"pages.licenseList.packageIntroduction": "Packages used under this licence:",
-	"pages.news.edit.title.default": "Edit article",
+	"pages.news.edit.title.default": "Edit news",
 	"pages.news.edit.title": "Edit {title}",
 	"pages.news.index.new": "Add news",
 	"pages.news.new.create": "Create",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
+	"pages.news.details.title": "News from {date}",
+	"pages.news.details.title.fallback": "News",
+	"pages.news.details.published": "Published {date}",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Registration could not be completed. Please try again later.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
