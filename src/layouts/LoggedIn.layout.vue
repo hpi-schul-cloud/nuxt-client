@@ -9,7 +9,6 @@
 				<router-view />
 			</ApplicationError>
 		</VMain>
-		<LoadingStateDialog />
 		<KeepAlive>
 			<AutoLogoutWarning />
 		</KeepAlive>
@@ -20,7 +19,6 @@
 import { AutoLogoutWarning } from "@feature-auto-logout";
 import { useNotificationListenerStore } from "@data-notification";
 import { AlertContainer, ApplicationError, Sidebar, Topbar } from "@ui-layout";
-import { LoadingStateDialog } from "@ui-loading-state-dialog";
 import { SkipLink } from "@ui-skip-link";
 import { useStorage } from "@vueuse/core";
 import { computed, onMounted, onUnmounted, watch } from "vue";

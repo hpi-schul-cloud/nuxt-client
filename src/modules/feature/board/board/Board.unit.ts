@@ -4,7 +4,6 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -13,8 +12,8 @@ import {
 	BoardLayout,
 	BoardResponseAllowedOperations,
 	ConfigResponse,
-	CopyApiResponseStatus,
-	CopyApiResponseType,
+	CopyElementType,
+	CopyStatusEnum,
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
 import { useAppStore, useNotificationStore } from "@data-app";
@@ -102,17 +101,10 @@ describe("Board", () => {
 		mockedUsePageInactivity = mockComposable(useBoardInactivity);
 		mockUseBoardInactivity.mockReturnValue(mockedUsePageInactivity);
 
-		useCopyFlowMock = mockComposable(useCopyFlow, {
-			isCopyDialogOpen: ref(false),
-			copyItemType: ref(ContentItemTypeEnum.ColumnBoard),
-		});
+		useCopyFlowMock = mockComposable(useCopyFlow, {});
 		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
 
-		useShareFlowMock = mockComposable(useShareFlow, {
-			isShareDialogOpen: ref(false),
-			shareItemType: ref(ShareTokenBodyParamsParentType.TASKS),
-			shareUrl: ref("http://example.com/share-url"),
-		});
+		useShareFlowMock = mockComposable(useShareFlow, {});
 		vi.mocked(useShareFlow).mockReturnValue(useShareFlowMock);
 	});
 
@@ -178,7 +170,6 @@ describe("Board", () => {
 					createTestingVuetify(),
 				],
 				stubs: {
-					ShareDialog: true,
 					UseFocusTrap: true,
 					EditSettingsDialog: true,
 				},
@@ -829,7 +820,7 @@ describe("Board", () => {
 			beforeEach(() => {
 				useCopyFlowMock.executeCopyBoard.mockResolvedValue({
 					success: true,
-					result: { id: "copied-id", type: CopyApiResponseType.COLUMNBOARD, status: CopyApiResponseStatus.SUCCESS },
+					result: { id: "copied-id", type: CopyElementType.COLUMNBOARD, status: CopyStatusEnum.SUCCESS },
 					error: undefined,
 				});
 			});

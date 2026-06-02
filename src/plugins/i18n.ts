@@ -5,6 +5,7 @@ import ukUA from "../locales/uk";
 import { MessageSchema } from "@/locales/schema";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
+import { isNil } from "lodash-es";
 import { createI18n } from "vue-i18n";
 import { default as deVuetify } from "vuetify/lib/locale/de";
 import { default as enVuetify } from "vuetify/lib/locale/en";
@@ -64,9 +65,19 @@ export { createTypedI18nInstance as createI18n };
 
 export const useI18nGlobal = () => createTypedI18nInstance()?.global;
 
+// export const i18nKeyExists = (key: string) => {
+// 	const { locale, messages } = createTypedI18nInstance().global;
+//
+// 	// @ts-expect-error Schema for i18n is not properly written yet. TODO: Fix schema, then remove this line.
+// 	return key in messages.value[locale.value];
+// };
+
 export const i18nKeyExists = (key: string) => {
-	const { locale, messages } = createTypedI18nInstance().global;
+	const { locale, messages, fallbackLocale } = createTypedI18nInstance().global;
+
+	const messageMap = messages.value;
 
 	// @ts-expect-error Schema for i18n is not properly written yet. TODO: Fix schema, then remove this line.
-	return key in messages.value[locale.value];
+	const localeMessages = messageMap[locale.value] ?? messageMap[fallbackLocale.value];
+	return !isNil(localeMessages) && key in localeMessages;
 };

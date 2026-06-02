@@ -14,8 +14,8 @@ import {
 	BoardElementResponse,
 	BoardElementResponseType as BoardTypes,
 	BoardLayout,
-	CopyApiResponseStatus,
-	CopyApiResponseType,
+	CopyElementType,
+	CopyStatusEnum,
 	ImportUserResponseRoleNames,
 	Permission,
 	ShareTokenBodyParamsParentType,
@@ -31,7 +31,7 @@ import { flushPromises, shallowMount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { mock } from "vitest-mock-extended";
-import { nextTick, ref } from "vue";
+import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VBtn, VListItem } from "vuetify/components";
 import { TabItem } from "vuetify/lib/components/VTabs/VTabs.mjs";
@@ -80,17 +80,10 @@ describe("CourseRoomDetails.page.vue", () => {
 		router = createRouterMock();
 		injectRouterMock(router);
 
-		useCopyFlowMock = mockComposable(useCopyFlow, {
-			isCopyDialogOpen: ref(false),
-			copyItemType: ref(ContentItemTypeEnum.Course),
-		});
+		useCopyFlowMock = mockComposable(useCopyFlow, {});
 		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
 
-		useShareFlowMock = mockComposable(useShareFlow, {
-			isShareDialogOpen: ref(false),
-			shareItemType: ref(ShareTokenBodyParamsParentType.COURSES),
-			shareUrl: ref("https://example.com/share"),
-		});
+		useShareFlowMock = mockComposable(useShareFlow, {});
 		vi.mocked(useShareFlow).mockReturnValue(useShareFlowMock);
 	});
 
@@ -155,9 +148,7 @@ describe("CourseRoomDetails.page.vue", () => {
 					DefaultWireframe: false,
 					RoomDotMenu: false,
 					SelectBoardLayoutDialog: false,
-					CopyDialog: false,
 					CourseCommonCartridgeExportModal: false,
-					ShareDialog: false,
 					VTabs: false,
 					VTab: false,
 					VChip: false,
@@ -405,7 +396,7 @@ describe("CourseRoomDetails.page.vue", () => {
 
 						useCopyFlowMock.executeCopyCourse.mockResolvedValue({
 							success: true,
-							result: { id: "copied-id", type: CopyApiResponseType.COURSE, status: CopyApiResponseStatus.SUCCESS },
+							result: { id: "copied-id", type: CopyElementType.COURSE, status: CopyStatusEnum.SUCCESS },
 							error: undefined,
 						});
 
@@ -488,24 +479,6 @@ describe("CourseRoomDetails.page.vue", () => {
 		});
 	});
 
-	describe("modal views", () => {
-		it("should render ShareDialog component", async () => {
-			const { wrapper } = setup();
-			await flushPromises();
-
-			const modalView = wrapper.findComponent({ name: "ShareDialog" });
-			expect(modalView.exists()).toBe(true);
-		});
-
-		it("should render CopyDialog component", async () => {
-			const { wrapper } = setup();
-			await flushPromises();
-
-			const modalView = wrapper.findComponent({ name: "CopyDialog" });
-			expect(modalView.exists()).toBe(true);
-		});
-	});
-
 	describe("board creation functionality", () => {
 		describe("when add board action is triggered", () => {
 			it("should open board layout dialog when add board action is triggered", async () => {
@@ -560,7 +533,7 @@ describe("CourseRoomDetails.page.vue", () => {
 			await flushPromises();
 
 			useCopyFlowMock.executeCopyCourse.mockResolvedValue({
-				result: { id: "copied-id", type: CopyApiResponseType.COURSE, status: CopyApiResponseStatus.SUCCESS },
+				result: { id: "copied-id", type: CopyElementType.COURSE, status: CopyStatusEnum.SUCCESS },
 				success: true,
 				error: undefined,
 			});
@@ -786,7 +759,7 @@ describe("CourseRoomDetails.page.vue", () => {
 
 				useCopyFlowMock.executeCopyLesson.mockResolvedValue({
 					success: true,
-					result: { id: "copied-lesson-id", type: CopyApiResponseType.LESSON, status: CopyApiResponseStatus.SUCCESS },
+					result: { id: "copied-lesson-id", type: CopyElementType.LESSON, status: CopyStatusEnum.SUCCESS },
 					error: undefined,
 				});
 

@@ -59,8 +59,12 @@ const activeTab = computed({
 	},
 });
 
-const { openForStudent, finishedTasks, isLoadingFinishedTasks, loadMoreFinishedTasks, submittedForStudent } =
+const { openForStudent, finishedTasks, finishedTasksLoadingState, loadMoreFinishedTasks, submittedForStudent } =
 	useTasksOfOverview();
+
+const isLoadingFinishedTasks = computed(
+	() => finishedTasksLoadingState.value === "loading" || finishedTasksLoadingState.value === "extLoading"
+);
 </script>
 
 <style lang="scss" scoped>

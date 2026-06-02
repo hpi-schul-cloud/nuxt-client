@@ -1,6 +1,6 @@
-import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { notifySuccess } from "./notification-store";
 import { useSchoolStore } from "./school.store";
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
@@ -36,6 +36,9 @@ const BROADCAST_CHANNEL_NAME = "user-session-channel";
 const BROADCAST_MESSAGE_LOGOUT = "logout";
 const BROADCAST_MESSAGE_TIME_UPDATED = "time-updated";
 
+const isLanguageType = (lang: string | undefined): lang is LanguageType =>
+	Object.values(LanguageType).includes(lang as LanguageType);
+
 export const useAppStore = defineStore("applicationStore", () => {
 	const meApi = MeApiFactory(undefined, "/v3", $axios);
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
@@ -55,10 +58,11 @@ export const useAppStore = defineStore("applicationStore", () => {
 
 	const userRoles = computed(() => meResponse.value?.roles.map((r) => r.name) ?? []);
 
-	const locale = computed(
-		() =>
-			// TODO: Why is it not directly using useEnvStore().fallBackLanguage and if it is, why is here default preferred before fallBack ?!
-			userLocale.value ?? useEnvConfig().value.I18N__DEFAULT_LANGUAGE ?? LanguageType.DE
+	const locale = computed(() =>
+		// TODO: Why is it not directly using useEnvStore().fallBackLanguage and if it is, why is here default preferred before fallBack ?!
+		isLanguageType(userLocale.value)
+			? userLocale.value
+			: (useEnvConfig().value.I18N__DEFAULT_LANGUAGE ?? LanguageType.DE)
 	);
 	const userPreferences = computed(() => meResponse.value?.preferences);
 	const userPermissions = computed(() => meResponse.value?.permissions ?? []);
@@ -76,6 +80,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 	// Actions
 	const login = async () => {
 		const { data } = await meApi.meControllerMe();
+
 		userLocale.value = data.language;
 		meResponse.value = data;
 		isLoggedIn.value = true;

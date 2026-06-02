@@ -15,7 +15,7 @@
 
 
 /**
- * 
+ * The Launch Request method (GET or POST)
  * @export
  * @enum {string}
  */

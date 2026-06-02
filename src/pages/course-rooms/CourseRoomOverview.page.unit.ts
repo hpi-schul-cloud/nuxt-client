@@ -8,12 +8,7 @@ import {
 	courseRoomSubElementFactory,
 } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import {
-	CopyApiResponse,
-	CopyApiResponseStatus,
-	CopyApiResponseType,
-	type DashboardGridElementResponse,
-} from "@api-server";
+import { CopyApiResponse, CopyElementType, CopyStatusEnum, type DashboardGridElementResponse } from "@api-server";
 import type { GroupDataType } from "@data-course-rooms";
 import { useCourseRoomListStore } from "@data-course-rooms";
 import { useImportFlow } from "@feature-import";
@@ -21,7 +16,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import type { Mocked } from "vitest";
-import { ComponentPublicInstance, computed, nextTick, ref } from "vue";
+import { ComponentPublicInstance, nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 
 vi.mock("@feature-import/import-flow.composable");
@@ -124,9 +119,7 @@ describe("CourseRoomOverview.page", () => {
 		courseRoomListStore.updateCourse.mockResolvedValue();
 
 		useImportFlowMock = mockComposable(useImportFlow, {
-			isCardImportDialogOpen: computed(() => false),
-			isGenericImportDialogOpen: computed(() => false),
-			shareTokenInfo: computed(() => undefined),
+			executeImport: vi.fn(),
 		});
 
 		vi.mocked(useImportFlow).mockReturnValue(useImportFlowMock);
@@ -435,8 +428,8 @@ describe("CourseRoomOverview.page", () => {
 		beforeEach(() => {
 			const copyResult: CopyApiResponse = {
 				id: "task-copy-id",
-				type: CopyApiResponseType.TASK,
-				status: CopyApiResponseStatus.SUCCESS,
+				type: CopyElementType.TASK,
+				status: CopyStatusEnum.SUCCESS,
 			};
 
 			useImportFlowMock.executeImport.mockResolvedValue({
@@ -448,7 +441,7 @@ describe("CourseRoomOverview.page", () => {
 
 		it("should show import mode when query has import token", async () => {
 			getWrapper({ routeQuery: { import: "test-token" } });
-			expect(useImportFlowMock.executeImport).toHaveBeenCalledWith("test-token");
+			expect(useImportFlowMock.executeImport).toHaveBeenCalledWith("test-token", expect.anything(), "course");
 		});
 
 		it("should navigate to room-details on import success with id", async () => {

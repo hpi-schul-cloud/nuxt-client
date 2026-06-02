@@ -9,6 +9,7 @@ import {
 } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import * as serverApi from "@api-server";
 import {
 	NewsApiInterface,
 	NewsResponse,
@@ -18,10 +19,8 @@ import {
 	RoleName,
 	RuntimeConfigApiInterface,
 } from "@api-server";
-import * as serverApi from "@api-server";
 import { DashboardTasks } from "@feature-dashboard";
 import { createTestingPinia } from "@pinia/testing";
-import { WarningAlert } from "@ui-alert";
 import { flushPromises } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
@@ -141,6 +140,20 @@ describe("DashboardPage", () => {
 		});
 	});
 
+	describe("teams-to-rooms warning", () => {
+		it("is always visible and renders the expected content", async () => {
+			const { wrapper } = setup();
+			await flushPromises();
+
+			const warningAlert = wrapper.findComponent("[data-testid='teams-to-rooms-migration-alert']");
+			expect(warningAlert.exists()).toBe(true);
+			expect(warningAlert.text()).toContain("loggedin.text.teamsToRooms");
+			expect(warningAlert.text()).toContain("loggedin.text.teamsToRooms.possibilities");
+			expect(warningAlert.text()).toContain("loggedin.text.teamsToRooms.migration");
+			expect(warningAlert.text()).toContain("loggedin.text.teamsToRooms.helpLink");
+		});
+	});
+
 	describe("inMaintenanceOrMigrationText", () => {
 		it("shows migration warning for admin with IMPORT_USER_VIEW permission when school is in migration", async () => {
 			const { wrapper } = setup({
@@ -150,8 +163,9 @@ describe("DashboardPage", () => {
 			});
 			await flushPromises();
 
-			const warningAlert = wrapper.findComponent(WarningAlert);
+			const warningAlert = wrapper.findComponent("[data-testid='maintenance-migration-alert']");
 			expect(warningAlert.exists()).toBe(true);
+			expect(warningAlert.text()).toContain("loggedin.text.schoolInMigrationModeStarted");
 		});
 
 		it("shows maintenance warning for admin when school is in maintenance", async () => {
@@ -161,18 +175,21 @@ describe("DashboardPage", () => {
 			});
 			await flushPromises();
 
-			const warningAlert = wrapper.findComponent(WarningAlert);
+			const warningAlert = wrapper.findComponent("[data-testid='maintenance-migration-alert']");
 			expect(warningAlert.exists()).toBe(true);
+			expect(warningAlert.text()).toContain("loggedin.text.schoolInTransferPhaseStartNew");
 		});
 
-		it("does not show warning when school is neither in maintenance nor migration", async () => {
+		it("does not show maintenance or migration warning when school is neither in maintenance nor migration", async () => {
 			const { wrapper } = setup({
 				roleName: RoleName.ADMINISTRATOR,
 			});
 			await flushPromises();
 
-			const warningAlert = wrapper.findComponent(WarningAlert);
+			const warningAlert = wrapper.findComponent("[data-testid='maintenance-migration-alert']");
 			expect(warningAlert.exists()).toBe(false);
+			expect(wrapper.text()).not.toContain("loggedin.text.schoolInMigrationModeStarted");
+			expect(wrapper.text()).not.toContain("loggedin.text.schoolInTransferPhaseStartNew");
 		});
 	});
 });

@@ -4,7 +4,7 @@ import { CopyParams } from "@/types/copy/CopyParams";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { createTestAppStoreWithRole, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { CopyApiResponseStatus, CopyApiResponseType, RoleName, ShareTokenBodyParamsParentType } from "@api-server";
+import { CopyElementType, CopyStatusEnum, RoleName, ShareTokenBodyParamsParentType } from "@api-server";
 import { useTasksOfOverview } from "@data-tasks";
 import { useCopyFlow } from "@feature-copy";
 import { useShareFlow } from "@feature-share";
@@ -32,21 +32,14 @@ describe("TasksOverviewTeacher", () => {
 			drafts: computed(() => []),
 			openForTeacher: computed(() => []),
 			finishedTasks: ref([]),
-			isLoadingFinishedTasks: computed(() => false),
+			finishedTasksLoadingState: computed(() => "idle"),
 		});
 		vi.mocked(useTasksOfOverview).mockReturnValue(useTasksOfOverviewMock);
 
-		useCopyFlowMock = mockComposable(useCopyFlow, {
-			isCopyDialogOpen: ref(false),
-			copyItemType: ref(ContentItemTypeEnum.Task),
-		});
+		useCopyFlowMock = mockComposable(useCopyFlow, {});
 		vi.mocked(useCopyFlow).mockReturnValue(useCopyFlowMock);
 
-		useShareFlowMock = mockComposable(useShareFlow, {
-			isShareDialogOpen: ref(false),
-			shareItemType: ref(ShareTokenBodyParamsParentType.TASKS),
-			shareUrl: ref("http://example.com/share-url"),
-		});
+		useShareFlowMock = mockComposable(useShareFlow, {});
 		vi.mocked(useShareFlow).mockReturnValue(useShareFlowMock);
 	});
 
@@ -82,7 +75,7 @@ describe("TasksOverviewTeacher", () => {
 		beforeEach(() => {
 			useCopyFlowMock.executeCopyTask.mockResolvedValue({
 				success: true,
-				result: { id: "copied-id", type: CopyApiResponseType.TASK, status: CopyApiResponseStatus.SUCCESS },
+				result: { id: "copied-id", type: CopyElementType.TASK, status: CopyStatusEnum.SUCCESS },
 				error: undefined,
 			});
 		});
@@ -142,25 +135,6 @@ describe("TasksOverviewTeacher", () => {
 			finishedPane?.vm.$emit("load-more-tasks");
 
 			expect(useTasksOfOverviewMock.loadMoreFinishedTasks).toHaveBeenCalled();
-		});
-	});
-
-	describe("Copy Dialog", () => {
-		it("should render CopyDialog", () => {
-			const wrapper = mountComponent();
-
-			const modal = wrapper.findComponent({ name: "CopyDialog" });
-			expect(modal.exists()).toBe(true);
-		});
-	});
-
-	describe("Share Modal", () => {
-		it("should render ShareDialog for tasks", () => {
-			const wrapper = mountComponent();
-
-			const modal = wrapper.findComponent({ name: "ShareDialog" });
-			expect(modal.exists()).toBe(true);
-			expect(modal.props("shareItemType")).toBe(ShareTokenBodyParamsParentType.TASKS);
 		});
 	});
 });

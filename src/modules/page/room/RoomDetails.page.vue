@@ -37,21 +37,6 @@
 			@select="onCreateBoard"
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
-		<CopyDialog
-			:is-open="isCopyDialogOpen"
-			:copy-item-type="copyItemType"
-			@confirm="onConfirmCopy"
-			@cancel="onCancelCopy"
-		/>
-		<ShareDialog
-			v-if="shareItemType"
-			:is-open="isShareDialogOpen"
-			:share-item-type="shareItemType"
-			:share-url="shareUrl"
-			@confirm="onConfirmShare"
-			@cancel="onCancelShare"
-			@done="onDone"
-		/>
 	</DefaultWireframe>
 </template>
 
@@ -64,9 +49,9 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { RoomBoardItemResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useRoomAllowedOperations, useRoomDetailsStore, useRoomStore } from "@data-room";
-import { CopyDialog, useCopyFlow } from "@feature-copy";
+import { useCopyFlow } from "@feature-copy";
 import { RoomBoardGrid, RoomMenu } from "@feature-room";
-import { ShareDialog, useShareFlow } from "@feature-share";
+import { useShareFlow } from "@feature-share";
 import { mdiPlus } from "@icons/material";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
@@ -151,29 +136,20 @@ const onManageMembers = () => {
 	});
 };
 
-const copyFlow = useCopyFlow();
-const { isCopyDialogOpen, copyItemType, onConfirm: onConfirmCopy, onCancel: onCancelCopy } = copyFlow;
+const { executeCopyRoom } = useCopyFlow();
 
 const onCopy = async () => {
 	if (!allowedOperations.value.copyRoom) {
 		return;
 	}
 
-	const { result: copyResult } = await copyFlow.executeCopyRoom(room.value.id);
+	const { result: copyResult } = await executeCopyRoom(room.value.id);
 	if (copyResult?.id) {
 		await router.replace({ name: "room-details", params: { id: copyResult.id } });
 	}
 };
 
-const {
-	isShareDialogOpen,
-	shareItemType,
-	shareUrl,
-	executeShare,
-	onConfirm: onConfirmShare,
-	onCancel: onCancelShare,
-	onDone,
-} = useShareFlow();
+const { executeShare } = useShareFlow();
 
 const onShare = () => {
 	if (allowedOperations.value.shareRoom) {
@@ -235,9 +211,11 @@ const onDeleteBoard = async (board: RoomBoardItemResponse) => {
 	if (success) await fetchRoomAndBoards(props.room.id);
 };
 
+const { executeCopyBoard } = useCopyFlow();
+
 const onDuplicateBoard = async (board: RoomBoardItemResponse) => {
 	if (!board.allowedOperations?.copyBoard) return;
-	const { result } = await copyFlow.executeCopyBoard(board.id);
+	const { result } = await executeCopyBoard(board.id);
 	if (result?.id) {
 		await roomDetailsStore.fetchRoomAndBoards(props.room.id);
 	}

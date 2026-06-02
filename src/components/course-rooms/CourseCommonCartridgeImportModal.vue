@@ -17,7 +17,7 @@
 				class="truncate-file-input"
 				:label="t('pages.rooms.ccImportCourse.fileInputLabel')"
 				:prepend-icon="mdiTrayArrowUp"
-				:rules="fileSizeRules"
+				:rules="fileRules"
 				accept=".imscc, .zip"
 				clearable
 				show-size
@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { formatBytes } from "@/utils/fileSize";
-import { useRuntimeConfigStore } from "@data-runtime-config";
+import { useEnvCommonCartridgeConfig } from "@data-env";
 import { mdiTrayArrowUp } from "@icons/material";
 import { SvsDialog } from "@ui-dialog";
 import { computed, ref } from "vue";
@@ -38,15 +38,8 @@ import { VFileInput } from "vuetify/components";
 
 const { t } = useI18n();
 
-const oneGigabyteInBytes = 1024 ** 3;
-const defaultMaxFileSizeBytes = oneGigabyteInBytes;
-
-const { runtimeConfig } = useRuntimeConfigStore();
-const maxFileSizeBytes = computed(() => {
-	const configValue = runtimeConfig["FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_MAX_FILE_SIZE_IN_BYTES"];
-	return typeof configValue === "number" ? configValue : defaultMaxFileSizeBytes;
-});
-
+const envConfig = useEnvCommonCartridgeConfig();
+const maxFileSizeBytes = computed(() => envConfig.value.FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_MAX_FILE_SIZE);
 const formattedMaxFileSize = computed(() => formatBytes(maxFileSizeBytes.value));
 
 const isOpen = defineModel({
@@ -65,9 +58,24 @@ const isFileSizeValid = computed(() => {
 	return file.value.size <= maxFileSizeBytes.value;
 });
 
-const fileSizeRules = computed(() => [
+const isFileTypeValid = computed(() => {
+	if (!file.value) return true;
+
+	const allowedExtensions = [".zip", ".imscc"];
+	const fileName = file.value.name?.toLowerCase() || "";
+
+	const isExtensionAllowed = allowedExtensions.some((ext) => fileName.endsWith(ext));
+
+	return isExtensionAllowed;
+});
+
+const fileRules = computed(() => [
 	(value: File | undefined) => {
 		if (!value) return true;
+
+		if (!isFileTypeValid.value) {
+			return t("pages.rooms.ccImportCourse.invalidFileType");
+		}
 
 		return (
 			value.size <= maxFileSizeBytes.value ||
@@ -76,7 +84,7 @@ const fileSizeRules = computed(() => [
 	},
 ]);
 
-const importButtonDisabled = computed(() => !file.value || !isFileSizeValid.value);
+const importButtonDisabled = computed(() => !file.value || !isFileSizeValid.value || !isFileTypeValid.value);
 
 const onCancel = () => {
 	file.value = undefined;

@@ -58,6 +58,7 @@ export default {
 	"common.files": "Файли",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.allSchools": "всі школи",
+	"common.labels.backToOverview": "Повернутися до огляду",
 	"common.labels.birthdate": "Дата народження",
 	"common.labels.birthday": "Дата народження",
 	"common.labels.changed": "Змінений",
@@ -148,6 +149,7 @@ export default {
 	"common.notification.error": "Сталася помилка.",
 	"common.notifications.errors.notCreated":
 		"{type} не вдалося створити. | {type} не вдалося створити. | {type} не вдалося створити.",
+	"common.notifications.errors.notSaved": "{type} не вдалося зберегти. | {type} не вдалося зберегти.",
 	"common.notifications.errors.notDeleted":
 		"{type} не вдалося видалити. | {type} не вдалося видалити. | {type} не вдалося видалити.",
 	"common.notifications.errors.notDuplicated":
@@ -223,10 +225,13 @@ export default {
 	"common.validation.fileTooBig": "Файл не повинен перевищувати {maxSize} КБ.",
 	"common.validation.tooShort": "Введений текст не досягає мінімальної довжини",
 	"common.validation.containsOpeningTag": "Будь ласка, вставте пробіл після знаку менше.",
+	"common.validation.containsOpeningTag.discardChanges":
+		"Будь ласка, вставте пробіл після знаку менше. Зміни були скасовані.",
 	"common.validation.nonEmptyString": "Це обов'язкове поле і не повинно містити лише пробіли.",
 	"common.words.also": "також",
 	"common.words.and": "і",
 	"common.words.board": "Дошка | дошки",
+	"common.words.news": "новина | новини",
 	"common.words.classes": "класи",
 	"common.words.color": "Колір",
 	"common.words.color.blue": "Синій",
@@ -583,7 +588,6 @@ export default {
 	"components.cardElement.titleElement.validation.required": "Будь ласка, введіть назву.",
 	"components.cardElement.titleElement": "Елемент заголовка",
 	"components.cardElement.videoConferenceElement": "Відеоконференція",
-	"components.cardElement.videoConferenceElement.label": "Вставити назву відеоконференції",
 	"components.cardElement.deletedElement": "Видалений вміст",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
@@ -799,11 +803,10 @@ export default {
 	"components.organisms.FormNews.input.title.placeholder": "Почнемо із заголовка",
 	"components.organisms.FormNews.label.planned_publish":
 		"Тут можна встановити дату автоматичної публікації в майбутньому (необов’язково):",
-	"components.organisms.FormNews.remove.confirm.confirm": "Видалити статтю",
-	"components.organisms.FormNews.remove.confirm.message": "Ви дійсно хочете назавжди видалити цю статтю?",
-	"components.organisms.FormNews.success.create": "Статтю створено.",
-	"components.organisms.FormNews.success.patch": "Статтю оновлено.",
-	"components.organisms.FormNews.success.remove": "Статтю успішно видалено.",
+	"components.organisms.FormNews.remove.confirm.message": "Ви дійсно хочете назавжди видалити цю новину?",
+	"components.organisms.FormNews.success.create": "Новину створено.",
+	"components.organisms.FormNews.success.patch": "Новину оновлено.",
+	"components.organisms.FormNews.success.remove": "Новину успішно видалено.",
 	"components.organisms.importUsers.createNew": "Створити новий",
 	"components.organisms.importUsers.editImportUser": "Редагувати користувача",
 	"components.organisms.importUsers.flagImportUser": "позначати користувачів",
@@ -992,9 +995,6 @@ export default {
 	"mixins.typeMeta.types.image": "Зображення",
 	"mixins.typeMeta.types.video": "Відео",
 	"mixins.typeMeta.types.webpage": "Веб-сайт",
-	"loggedin.text.backupFeatures":
-		"Зробіть резервну копію вашого контенту в хмарі та використовуйте також нову функцію для експорту курсів. {helpLink}",
-	"loggedin.text.backupFeatures.helpLink": "Додаткову інформацію та допомогу можна знайти тут.",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів.",
 	"loggedin.text.schoolInTransferPhaseStartNew":
@@ -1003,6 +1003,13 @@ export default {
 		'Школа перебуває в режимі міграції користувачів. Щоб перенести користувачів, перейдіть на <a href="/administration/migration/">цю сторінку</a>.',
 	"loggedin.text.schoolInMigrationMode":
 		'Школа може імпортувати облікові записи користувачів з Schulportal. Для виконання міграції користувачів відвідайте, будь ласка, <a href="/administration/migration/">цю сторінку</a>.',
+	"loggedin.text.teamsToRooms": "Перехід на Простори зараз – Команди буде вимкнено",
+	"loggedin.text.teamsToRooms.possibilities":
+		"Простори тепер пропонує всі інструменти, необхідні для більш ефективної співпраці всередині та між школами.",
+	"loggedin.text.teamsToRooms.migration":
+		"Команди буде деактивовано 30.09.2026, але користувачі з роллю 'викладач' можуть автоматично перейти до Простори до цієї дати. Паралельно будь-які необхідні файли Команди повинні бути збережені або завантажені до цього часу.",
+	"loggedin.text.teamsToRooms.helpLink": "Більше інформації про міграцію можна знайти на {helpLink}.",
+	"loggedin.text.teamsToRooms.helpLink.help": "сторінки довідки",
 	"pages.dashboard.title": "Панель керування",
 	"pages.dashboard.empty.news": "Немає останніх новин. Перегляньте розділ новин, щоб бути в курсі.",
 	"pages.dashboard.new.features": "В {instanceTitle} є нові функції",
@@ -1515,12 +1522,15 @@ export default {
 	"pages.licenseList.title": "Список ліцензій на відкритий код",
 	"pages.licenseList.introduction": "Ліцензії на програмне забезпечення для використаних пакетів наведені нижче.",
 	"pages.licenseList.packageIntroduction": "Пакунки, що використовуються за цією ліцензією:",
-	"pages.news.edit.title.default": "Редагувати статтю",
+	"pages.news.edit.title.default": "Редагувати новину",
 	"pages.news.edit.title": "Редагувати {title}",
 	"pages.news.index.new": "Додати новини",
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
+	"pages.news.details.title": "Новина від {date}",
+	"pages.news.details.title.fallback": "Новина",
+	"pages.news.details.published": "Опубліковано {date}",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Реєстрацію не вдалося завершити. Будь ласка, спробуйте пізніше.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
@@ -1682,6 +1692,7 @@ export default {
 	"pages.rooms.ccImportCourse.fileInputLabel": "Виберіть файл",
 	"pages.rooms.ccImportCourse.maxFileSize": "Максимальний розмір файлу: {maxSize}",
 	"pages.rooms.ccImportCourse.fileSizeExceeded": "Файл перевищує максимальний розмір {maxSize}.",
+	"pages.rooms.ccImportCourse.invalidFileType": "Недійсний тип файлу. Дозволені типи файлів: .zip, .imscc",
 	"pages.rooms.ccImportCourse.loading": "Триває завантаження...",
 	"pages.rooms.ccImportCourse.success": "Файл вашого курсу завантажено та зараз імпортується у фоновому режимі.",
 	"pages.rooms.ccImportCourse.error": "Під час завантаження файлу курсу сталася помилка.",

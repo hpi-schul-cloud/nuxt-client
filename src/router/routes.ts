@@ -270,11 +270,12 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: `/media-shelf/fwu-media`,
 		component: async () => (await import("@page-fwu-media")).FwuMedia,
 		name: "fwu-media",
-		beforeEnter(to, from, next) {
+		beforeEnter() {
 			if (useEnvConfig().value.FEATURE_FWU_CONTENT_ENABLED) {
-				return next();
+				return true;
 			}
 			useAppStore().handleApplicationError(HttpStatusCode.NotFound);
+			return false;
 		},
 	},
 	{
@@ -294,13 +295,18 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: "/news/new",
-		component: () => import("@/pages/NewsCreate.page.vue"),
+		component: async () => (await import("@page-news")).NewsCreatePage,
 		name: "news-new",
 		beforeEnter: createPermissionGuard([Permission.NEWS_CREATE]),
 	},
 	{
+		path: `/news/:id(${REGEX_ID})`,
+		component: async () => (await import("@page-news")).NewsDetailsPage,
+		name: "news-details",
+	},
+	{
 		path: `/news/:id(${REGEX_ID})/edit`,
-		component: () => import("@/pages/NewsEdit.page.vue"),
+		component: async () => (await import("@page-news")).NewsEditPage,
 		name: "news-id-edit",
 		beforeEnter: createPermissionGuard([Permission.NEWS_EDIT]),
 	},
