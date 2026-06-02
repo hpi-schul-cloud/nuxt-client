@@ -1,5 +1,5 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useNotificationStream } from "./notification-sse.composable";
-import { beforeEach, describe, expect, it, vi, afterEach } from "vitest";
 
 // Mock EventSource
 class MockEventSource {
@@ -348,4 +348,3 @@ describe("useNotificationStream", () => {
 		});
 	});
 });
-

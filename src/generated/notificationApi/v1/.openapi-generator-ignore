@@ -21,3 +21,6 @@
 #docs/*.md
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
+
+# We don't have any models which are necessary. Therefore we just export an empty object to fix a build problem
+models/index.ts

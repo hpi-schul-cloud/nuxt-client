@@ -13,4 +13,3 @@ export const isH5pStaticFiles = (path: string) => path.startsWith("/api/v3/h5p-e
 export const isCommonCartridge = (path: string) => path.startsWith("/api/v3/common-cartridge");
 
 export const isNotification = (path: string) => path.startsWith("/notifications");
-

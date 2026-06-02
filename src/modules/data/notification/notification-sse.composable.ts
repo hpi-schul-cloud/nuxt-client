@@ -188,4 +188,3 @@ export const useNotificationStream = (options: UseNotificationStreamOptions = {}
 		resetReconnectAttempts,
 	};
 };
-
