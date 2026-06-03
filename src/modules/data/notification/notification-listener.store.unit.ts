@@ -17,6 +17,10 @@ vi.mock("@data-app", () => ({
 	})),
 }));
 
+vi.mock("@/plugins/i18n", () => ({
+	i18nKeyExists: vi.fn((key) => key === "TEST_KEY"),
+}));
+
 vi.mock("./notification-sse.composable", () => ({
 	useNotificationStream: (options: { onNotification?: (data: unknown) => void }) => {
 		mockOnNotification = options.onNotification;
@@ -38,13 +42,13 @@ vi.mock("./notification-sse.composable", () => ({
 /**
  * Helper to create a valid server notification message
  */
-const createNotificationMessage = (type: "info" | "error", message: string): ServerNotificationMessage => ({
+const createNotificationMessage = (type: "info" | "error"): ServerNotificationMessage => ({
 	type: "live",
 	notification: {
 		_id: { buffer: { type: "Buffer", data: [1, 2, 3] } },
 		userId: "user123",
 		type,
-		messageOrKey: "TEST_KEY",
+		key: "TEST_KEY",
 		arguments: {},
 		expiresAt: "2026-05-21T20:00:00.000Z",
 		createdAt: "2026-05-21T19:00:00.000Z",
@@ -107,13 +111,13 @@ describe("useNotificationListenerStore", () => {
 		it("should display info notification for 'info' type", () => {
 			useNotificationListenerStore();
 
-			const notification = createNotificationMessage("info", "Hello from the server!");
+			const notification = createNotificationMessage("info");
 
 			mockOnNotification?.(notification);
 
 			expect(mockNotify).toHaveBeenCalledWith({
 				status: notification.notification.type,
-				text: notification.notification.messageOrKey,
+				text: notification.notification.key,
 				replace: notification.notification.arguments,
 				autoClose: true,
 			});
@@ -122,13 +126,13 @@ describe("useNotificationListenerStore", () => {
 		it("should display error notification for 'error' type", () => {
 			useNotificationListenerStore();
 
-			const notification = createNotificationMessage("error", "Something went wrong!");
+			const notification = createNotificationMessage("error");
 
 			mockOnNotification?.(notification);
 
 			expect(mockNotify).toHaveBeenCalledWith({
 				status: notification.notification.type,
-				text: notification.notification.messageOrKey,
+				text: notification.notification.key,
 				replace: notification.notification.arguments,
 				autoClose: true,
 			});
@@ -140,6 +144,7 @@ describe("useNotificationListenerStore", () => {
 			mockOnNotification?.({
 				type: "other",
 				notification: {
+					key: "TEST_KEY",
 					type: "info",
 					arguments: ["Test"],
 				},
@@ -156,12 +161,33 @@ describe("useNotificationListenerStore", () => {
 			expect(mockNotify).not.toHaveBeenCalled();
 		});
 
+		it("should ignore notifications with missing localization keys", () => {
+			useNotificationListenerStore();
+
+			mockOnNotification?.({
+				type: "live",
+				notification: {
+					_id: { buffer: { type: "Buffer", data: [1, 2, 3] } },
+					userId: "user123",
+					type: "info",
+					key: "MISSING_KEY",
+					arguments: {},
+					expiresAt: "2026-05-21T20:00:00.000Z",
+					createdAt: "2026-05-21T19:00:00.000Z",
+					updatedAt: "2026-05-21T19:00:00.000Z",
+				},
+			});
+
+			expect(mockNotify).not.toHaveBeenCalled();
+		});
+
 		it("should ignore notification with invalid type", () => {
 			useNotificationListenerStore();
 
 			mockOnNotification?.({
 				type: "live",
 				notification: {
+					key: "TEST_KEY",
 					type: "warning", // not "note" or "error"
 					arguments: ["Test"],
 				},

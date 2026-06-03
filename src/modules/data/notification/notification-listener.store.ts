@@ -1,4 +1,5 @@
 import { useNotificationStream } from "./notification-sse.composable";
+import { i18nKeyExists } from "@/plugins/i18n";
 import { AlertStatus, useNotificationStore } from "@data-app";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
@@ -18,7 +19,7 @@ export interface ServerNotificationPayload {
 	_id: unknown;
 	userId: string;
 	type: ServerNotificationType;
-	messageOrKey: string;
+	key: string;
 	arguments?: Record<string, unknown>;
 	expiresAt: string;
 	createdAt: string;
@@ -48,7 +49,8 @@ const isServerNotificationMessage = (data: unknown): data is ServerNotificationM
 	return (
 		typeof notification.type === "string" &&
 		["info", "error"].includes(notification.type) &&
-		typeof notification.messageOrKey === "string" &&
+		typeof notification.key === "string" &&
+		i18nKeyExists(notification.key) &&
 		(typeof notification.arguments === "undefined" ||
 			notification.arguments === null ||
 			(typeof notification.arguments === "object" &&
@@ -134,8 +136,8 @@ export const useNotificationListenerStore = defineStore("notificationListenerSto
 		const notifyFn = notifyByType[notification.type];
 
 		if (notifyFn) {
-			notifyFn(notification.messageOrKey, notification.arguments);
-			logger.info(`[NotificationListener] Displayed ${notification.type} notification:`, notification.messageOrKey);
+			notifyFn(notification.key, notification.arguments);
+			logger.info(`[NotificationListener] Displayed ${notification.type} notification:`, notification.key);
 		}
 	}
 
