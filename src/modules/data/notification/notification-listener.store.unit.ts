@@ -9,6 +9,14 @@ const mockDisconnect = vi.fn();
 const mockClearNotifications = vi.fn();
 let mockOnNotification: ((data: unknown) => void) | undefined;
 
+const mockNotify = vi.fn();
+
+vi.mock("@data-app", () => ({
+	useNotificationStore: vi.fn(() => ({
+		notify: mockNotify,
+	})),
+}));
+
 vi.mock("./notification-sse.composable", () => ({
 	useNotificationStream: (options: { onNotification?: (data: unknown) => void }) => {
 		mockOnNotification = options.onNotification;
@@ -27,15 +35,6 @@ vi.mock("./notification-sse.composable", () => ({
 	},
 }));
 
-// Mock the notification store functions
-const mockNotifyInfo = vi.fn();
-const mockNotifyError = vi.fn();
-
-vi.mock("@data-app", () => ({
-	notifyInfo: (text: string, autoClose?: boolean) => mockNotifyInfo(text, autoClose),
-	notifyError: (text: string, autoClose?: boolean) => mockNotifyError(text, autoClose),
-}));
-
 /**
  * Helper to create a valid server notification message
  */
@@ -45,8 +44,8 @@ const createNotificationMessage = (type: "info" | "error", message: string): Ser
 		_id: { buffer: { type: "Buffer", data: [1, 2, 3] } },
 		userId: "user123",
 		type,
-		key: "TEST_KEY",
-		arguments: [message],
+		messageOrKey: "TEST_KEY",
+		arguments: {},
 		expiresAt: "2026-05-21T20:00:00.000Z",
 		createdAt: "2026-05-21T19:00:00.000Z",
 		updatedAt: "2026-05-21T19:00:00.000Z",
@@ -112,8 +111,12 @@ describe("useNotificationListenerStore", () => {
 
 			mockOnNotification?.(notification);
 
-			expect(mockNotifyInfo).toHaveBeenCalledWith("Hello from the server!", true);
-			expect(mockNotifyError).not.toHaveBeenCalled();
+			expect(mockNotify).toHaveBeenCalledWith({
+				status: notification.notification.type,
+				text: notification.notification.messageOrKey,
+				replace: notification.notification.arguments,
+				autoClose: true,
+			});
 		});
 
 		it("should display error notification for 'error' type", () => {
@@ -123,30 +126,12 @@ describe("useNotificationListenerStore", () => {
 
 			mockOnNotification?.(notification);
 
-			expect(mockNotifyError).toHaveBeenCalledWith("Something went wrong!", true);
-			expect(mockNotifyInfo).not.toHaveBeenCalled();
-		});
-
-		it("should extract message from arguments array", () => {
-			useNotificationListenerStore();
-
-			const notification: ServerNotificationMessage = {
-				type: "live",
-				notification: {
-					_id: {},
-					userId: "user123",
-					type: "info",
-					key: "GREETING",
-					arguments: ["Hello from the terminal!"],
-					expiresAt: "2026-05-21T20:00:00.000Z",
-					createdAt: "2026-05-21T19:00:00.000Z",
-					updatedAt: "2026-05-21T19:00:00.000Z",
-				},
-			};
-
-			mockOnNotification?.(notification);
-
-			expect(mockNotifyInfo).toHaveBeenCalledWith("Hello from the terminal!", true);
+			expect(mockNotify).toHaveBeenCalledWith({
+				status: notification.notification.type,
+				text: notification.notification.messageOrKey,
+				replace: notification.notification.arguments,
+				autoClose: true,
+			});
 		});
 
 		it("should ignore messages without 'live' type", () => {
@@ -155,13 +140,12 @@ describe("useNotificationListenerStore", () => {
 			mockOnNotification?.({
 				type: "other",
 				notification: {
-					type: "note",
+					type: "info",
 					arguments: ["Test"],
 				},
 			});
 
-			expect(mockNotifyInfo).not.toHaveBeenCalled();
-			expect(mockNotifyError).not.toHaveBeenCalled();
+			expect(mockNotify).not.toHaveBeenCalled();
 		});
 
 		it("should ignore invalid notification format", () => {
@@ -169,8 +153,7 @@ describe("useNotificationListenerStore", () => {
 
 			mockOnNotification?.({ invalid: "data" });
 
-			expect(mockNotifyInfo).not.toHaveBeenCalled();
-			expect(mockNotifyError).not.toHaveBeenCalled();
+			expect(mockNotify).not.toHaveBeenCalled();
 		});
 
 		it("should ignore notification with invalid type", () => {
@@ -184,22 +167,7 @@ describe("useNotificationListenerStore", () => {
 				},
 			});
 
-			expect(mockNotifyInfo).not.toHaveBeenCalled();
-			expect(mockNotifyError).not.toHaveBeenCalled();
-		});
-
-		it("should ignore notification with empty arguments", () => {
-			useNotificationListenerStore();
-
-			mockOnNotification?.({
-				type: "live",
-				notification: {
-					type: "note",
-					arguments: [],
-				},
-			});
-
-			expect(mockNotifyInfo).not.toHaveBeenCalled();
+			expect(mockNotify).not.toHaveBeenCalled();
 		});
 	});
 });

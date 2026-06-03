@@ -1,4 +1,4 @@
-import { notifyError, notifyInfo } from "@data-app";
+import { AlertStatus, useNotificationStore } from "@data-app";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
 import { ref } from "vue";
@@ -19,9 +19,8 @@ export interface ServerNotificationPayload {
 	_id: unknown;
 	userId: string;
 	type: ServerNotificationType;
-	key: string;
-	/** Array containing a single string message */
-	arguments: string[];
+	messageOrKey: string;
+	arguments?: Record<string, unknown>;
 	expiresAt: string;
 	createdAt: string;
 	updatedAt: string;
@@ -50,20 +49,35 @@ const isServerNotificationMessage = (data: unknown): data is ServerNotificationM
 	return (
 		typeof notification.type === "string" &&
 		["info", "error"].includes(notification.type) &&
-		Array.isArray(notification.arguments) &&
-		notification.arguments.length > 0 &&
-		typeof notification.arguments[0] === "string"
+		typeof notification.messageOrKey === "string" &&
+		(typeof notification.arguments === "undefined" ||
+			(typeof notification.arguments === "object" &&
+				notification.arguments !== null &&
+				!Array.isArray(notification.arguments)))
 	);
 };
+
+const createNotification = (status: AlertStatus, textOrKey: string, messageArguments?: Record<string, unknown>) => {
+	useNotificationStore().notify({ status, text: textOrKey, replace: messageArguments, autoClose: true });
+};
+
+const createInfoNotification = (textOrKey: string, messageArguments?: Record<string, unknown>) =>
+	createNotification("info", textOrKey, messageArguments);
+
+const createErrorNotification = (textOrKey: string, messageArguments?: Record<string, unknown>) =>
+	createNotification("error", textOrKey, messageArguments);
 
 /**
  * Maps a server notification type to the corresponding notify function.
  * - "info" → info (blue bubble)
  * - "error" → error (red bubble)
  */
-const notifyByType: Record<ServerNotificationType, (text: string, autoClose?: boolean) => void> = {
-	info: notifyInfo,
-	error: notifyError,
+const notifyByType: Record<
+	ServerNotificationType,
+	(textOrKey: string, messageArguments?: Record<string, unknown>) => void
+> = {
+	info: createInfoNotification,
+	error: createErrorNotification,
 };
 
 /**
@@ -117,12 +131,11 @@ export const useNotificationListenerStore = defineStore("notificationListenerSto
 		}
 
 		const { notification } = data;
-		const message = notification.arguments[0];
 		const notifyFn = notifyByType[notification.type];
 
-		if (notifyFn && message) {
-			notifyFn(message, true);
-			logger.info(`[NotificationListener] Displayed ${notification.type} notification:`, message);
+		if (notifyFn) {
+			notifyFn(notification.messageOrKey, notification.arguments);
+			logger.info(`[NotificationListener] Displayed ${notification.type} notification:`, notification.messageOrKey);
 		}
 	}
 
