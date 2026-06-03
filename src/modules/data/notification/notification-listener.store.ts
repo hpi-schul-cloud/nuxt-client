@@ -1,9 +1,8 @@
+import { useNotificationStream } from "./notification-sse.composable";
 import { AlertStatus, useNotificationStore } from "@data-app";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
 import { ref } from "vue";
-
-import { useNotificationStream } from "./notification-sse.composable";
 
 /**
  * Notification types from the SSE stream.

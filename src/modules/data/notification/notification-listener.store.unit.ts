@@ -1,4 +1,4 @@
-import { useNotificationListenerStore, ServerNotificationMessage } from "./notification-listener.store";
+import { ServerNotificationMessage, useNotificationListenerStore } from "./notification-listener.store";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
