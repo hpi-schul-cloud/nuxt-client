@@ -51,6 +51,7 @@ const isServerNotificationMessage = (data: unknown): data is ServerNotificationM
 		["info", "error"].includes(notification.type) &&
 		typeof notification.messageOrKey === "string" &&
 		(typeof notification.arguments === "undefined" ||
+			notification.arguments === null ||
 			(typeof notification.arguments === "object" &&
 				notification.arguments !== null &&
 				!Array.isArray(notification.arguments)))
