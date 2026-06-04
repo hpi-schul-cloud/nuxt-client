@@ -16,8 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import { AutoLogoutWarning } from "@feature-auto-logout";
 import { useNotificationListenerStore } from "@data-notification";
+import { AutoLogoutWarning } from "@feature-auto-logout";
 import { AlertContainer, ApplicationError, Sidebar, Topbar } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
 import { useStorage } from "@vueuse/core";
