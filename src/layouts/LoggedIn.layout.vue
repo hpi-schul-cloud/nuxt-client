@@ -21,7 +21,8 @@ import { AutoLogoutWarning } from "@feature-auto-logout";
 import { AlertContainer, ApplicationError, Sidebar, Topbar } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
 import { useStorage } from "@vueuse/core";
-import { computed, onMounted, watch } from "vue";
+import { computed, watch } from "vue";
+import { useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 
 const { lgAndUp } = useDisplay();
@@ -30,9 +31,11 @@ const isDesktop = computed(() => lgAndUp.value);
 
 const sidebarExpanded = useStorage("sidebarExpanded", isDesktop.value);
 
-onMounted(() => {
-	notifyFromQueryParams();
-});
+useRouter()
+	.isReady()
+	.then(() => {
+		notifyFromQueryParams();
+	});
 
 watch(isDesktop, () => {
 	sidebarExpanded.value = lgAndUp.value;

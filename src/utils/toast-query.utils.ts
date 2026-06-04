@@ -5,7 +5,7 @@ export const notifyFromQueryParams = () => {
 	if (!document.referrer || new URL(document.referrer).origin !== location.origin) {
 		return;
 	}
-	const params = useUrlSearchParams();
+	const params = useUrlSearchParams<Record<string, undefined>>();
 
 	const type = params["toast-type"];
 	const message = params["toast-message"];
@@ -18,4 +18,7 @@ export const notifyFromQueryParams = () => {
 		status: type as AlertStatus,
 		autoClose: false,
 	});
+
+	params["toast-type"] = undefined;
+	params["toast-message"] = undefined;
 };
