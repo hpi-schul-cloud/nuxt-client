@@ -11,15 +11,15 @@
 			<div class="toolbar-navigation">
 				<VBtn
 					:icon="mdiChevronLeft"
-					data-testid="toolbar-backward-button"
-					:aria-label="'Previous card'"
+					data-testid="prev-detail-view-button"
+					:aria-label="t('components.board.action.prev-detail-view')"
 					:to="previousCardRoute"
 					:disabled="!previousCardRoute"
 				/>
 				<VBtn
 					:icon="mdiChevronRight"
-					data-testid="toolbar-forward-button"
-					:aria-label="'Next card'"
+					data-testid="next-detail-view-button"
+					:aria-label="t('components.board.action.next-detail-view')"
 					:to="nextCardRoute"
 					:disabled="!nextCardRoute"
 				/>

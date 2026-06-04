@@ -453,6 +453,8 @@ export default {
 	"components.board.action.delete": "Eliminar",
 	"components.board.action.deleteFromSection": "Quitar de la sección",
 	"components.board.action.detail-view": "Abrir vista detallada",
+	"components.board.action.next-detail-view": "Abrir siguiente vista detallada",
+	"components.board.action.prev-detail-view": "Abrir vista detallada anterior",
 	"components.board.action.download": "Descargar",
 	"components.board.action.moveDown": "Bajar",
 	"components.board.action.moveLeft": "Mover a la izquierda",
