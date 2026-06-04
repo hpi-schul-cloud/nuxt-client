@@ -1685,6 +1685,9 @@ export default {
 	"pages.rooms.ccImportCourse.success":
 		"Your course file has been uploaded and is now being imported in the background.",
 	"pages.rooms.ccImportCourse.error": "An error occurred while uploading the course.",
+	"pages.rooms.ccImportCourse.importSuccess":
+		"Your course file '{file}' has been successfully imported and will be available in the course overview after reloading.",
+	"pages.rooms.ccImportCourse.importError": "An error occurred while importing the course file '{file}'.",
 	"pages.rooms.ccExportCourse.started": "Course export is downloading.",
 	"pages.rooms.ccExportCourse.error": "An error occurred while exporting the course.",
 	"pages.rooms.roomModal.courseGroupTitle": "Course group title",
