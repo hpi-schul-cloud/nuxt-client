@@ -1,7 +1,14 @@
 <template>
 	<div>
 		<template v-if="board">
-			<CardHostDetailView v-if="cardId" :key="cardId" :card-id="cardId" @close:detail-view="onCloseDetailView" />
+			<CardHostDetailView
+				v-if="cardId"
+				:key="cardId"
+				:card-id="cardId"
+				:previous-card-route="previousCardRoute"
+				:next-card-route="nextCardRoute"
+				@close:detail-view="onCloseDetailView"
+			/>
 			<DefaultWireframe
 				ref="main"
 				:breadcrumbs="breadcrumbs"
@@ -170,7 +177,7 @@ import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, ComputedRef, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
+import { RouteLocationRaw, useRoute, useRouter } from "vue-router";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -205,6 +212,22 @@ const cardId = computed(() => {
 		return route.params.cardId as string;
 	}
 	return undefined;
+});
+
+const allCardIds = computed(() => columns.value.flatMap((col) => col.cards.map((c) => c.cardId)));
+
+const currentCardIndex = computed(() => (cardId.value ? allCardIds.value.indexOf(cardId.value) : -1));
+
+const previousCardRoute = computed((): RouteLocationRaw | undefined => {
+	if (currentCardIndex.value <= 0) return undefined;
+	const prevCardId = allCardIds.value[currentCardIndex.value - 1];
+	return { name: "boards-card-detail", params: { boardId: props.boardId, cardId: prevCardId } };
+});
+
+const nextCardRoute = computed((): RouteLocationRaw | undefined => {
+	if (currentCardIndex.value === -1 || currentCardIndex.value >= allCardIds.value.length - 1) return undefined;
+	const nextCardId = allCardIds.value[currentCardIndex.value + 1];
+	return { name: "boards-card-detail", params: { boardId: props.boardId, cardId: nextCardId } };
 });
 
 const isEditableChipVisible = computed(() => board.value?.readersCanEdit ?? false);

@@ -8,6 +8,22 @@
 				@click="onDialogClose"
 			/>
 			<VToolbarTitle>{{ $t("components.board.dialog.detail-view.title") }}</VToolbarTitle>
+			<div class="toolbar-navigation">
+				<VBtn
+					:icon="mdiChevronLeft"
+					data-testid="toolbar-backward-button"
+					:aria-label="'Previous card'"
+					:to="previousCardRoute"
+					:disabled="!previousCardRoute"
+				/>
+				<VBtn
+					:icon="mdiChevronRight"
+					data-testid="toolbar-forward-button"
+					:aria-label="'Next card'"
+					:to="nextCardRoute"
+					:disabled="!nextCardRoute"
+				/>
+			</div>
 			<VSpacer />
 			<VBtn
 				v-if="allowedOperations?.deleteCard && !isEditMode"
@@ -51,12 +67,15 @@ import CardHost from "./CardHost.vue";
 import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { Colors } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
-import { mdiClose } from "@icons/material";
+import { mdiChevronLeft, mdiChevronRight, mdiClose } from "@icons/material";
 import { computed, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
+import type { RouteLocationRaw } from "vue-router";
 
 type Props = {
 	cardId: string;
+	previousCardRoute?: RouteLocationRaw;
+	nextCardRoute?: RouteLocationRaw;
 };
 
 const props = defineProps<Props>();
@@ -102,6 +121,17 @@ const onDialogClose = () => {
 	position: absolute;
 	width: 100%;
 	z-index: 2001;
+}
+
+.toolbar-navigation {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	display: flex;
+	gap: 0.25rem;
+	align-items: center;
+	justify-content: center;
 }
 
 .v-card {
