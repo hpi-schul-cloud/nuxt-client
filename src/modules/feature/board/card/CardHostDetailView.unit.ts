@@ -116,8 +116,8 @@ describe("CardHostDetailView", () => {
 				cardId: CARD_WITH_ELEMENTS.id,
 			});
 
-			expect(wrapper.find("[data-testid='toolbar-backward-button']").exists()).toBe(true);
-			expect(wrapper.find("[data-testid='toolbar-forward-button']").exists()).toBe(true);
+			expect(wrapper.find("[data-testid='prev-detail-view-button']").exists()).toBe(true);
+			expect(wrapper.find("[data-testid='next-detail-view-button']").exists()).toBe(true);
 		});
 	});
 
