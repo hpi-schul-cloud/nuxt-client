@@ -1718,6 +1718,9 @@ export default {
 	"pages.rooms.ccImportCourse.loading": "Upload läuft...",
 	"pages.rooms.ccImportCourse.success": "Deine Kursdatei wurde hochgeladen und wird nun im Hintergrund importiert.",
 	"pages.rooms.ccImportCourse.error": "Beim Hochladen der Kursdatei ist ein Fehler aufgetreten.",
+	"pages.rooms.ccImportCourse.importSuccess":
+		"Deine Kursdatei „{file}“ wurde erfolgreich importiert und ist in der Kursübersicht nach dem Neuladen auffindbar.",
+	"pages.rooms.ccImportCourse.importError": "Beim Import der Kursdatei „{file}“ ist es zu einem Fehler gekommen.",
 	"pages.rooms.ccExportCourse.started": "Kurs-Export wird heruntergeladen.",
 	"pages.rooms.ccExportCourse.error": "Beim Exportieren des Kurses ist ein Fehler aufgetreten.",
 	"pages.rooms.roomModal.courseGroupTitle": "Kursgruppentitel",
