@@ -147,7 +147,7 @@
 	</DefaultWireframe>
 </template>
 
-<script>
+<script setup lang="ts">
 import InfoMessage from "@/components/administration/InfoMessage.vue";
 import { unchangedPassword } from "@/utils/ldapConstants";
 import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
@@ -155,6 +155,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { useImportUsersStore } from "@data-import-users";
+import { useLdapConfigStore } from "@data-ldap";
 import {
 	mdiAccountEye,
 	mdiAccountSchoolOutline,
@@ -163,10 +164,12 @@ import {
 	mdiHumanMaleBoard,
 	mdiShieldAccountVariantOutline,
 } from "@icons/material";
-import { DefaultWireframe } from "@ui-layout";
-import { defineComponent } from "vue";
+import { type Breadcrumb, DefaultWireframe } from "@ui-layout";
+import { useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { mapGetters } from "vuex";
+import { useRoute, useRouter } from "vue-router";
 
 const redirectToConfigPage = (page) => {
 	const { id } = page.$route.query;
@@ -177,117 +180,97 @@ const redirectToConfigPage = (page) => {
 	}
 };
 
-export default defineComponent({
-	components: {
-		InfoMessage,
-		DefaultWireframe,
-	},
-	setup() {
-		const { t } = useI18n();
-		const importUsersStore = useImportUsersStore();
-		return { t, importUsersStore };
-	},
-	data() {
-		return {
-			migrateUsersCheckbox: false,
-			mdiAccountSchoolOutline,
-			mdiCheckCircle,
-			mdiChevronLeft,
-			mdiShieldAccountVariantOutline,
-			mdiAccountEye,
-			mdiHumanMaleBoard,
-		};
-	},
-	computed: {
-		...mapGetters("ldap-config", {
-			verified: "getVerified",
-			temp: "getTemp",
-			submitted: "getSubmitted",
-			status: "getStatus",
-		}),
-		showUserMigrationOption() {
-			return (
-				useEnvConfig().value.SC_THEME !== SchulcloudTheme.N21 &&
-				useEnvConfig().value.FEATURE_USER_MIGRATION_ENABLED &&
-				!this.$route?.query?.id
-			);
-		},
-		importUsersError() {
-			return this.importUsersStore.businessError;
-		},
-		activationErrors() {
-			return ldapErrorHandler(this.submitted.errors, this);
-		},
-		ldapConfigRoute() {
-			const { id } = this.$route.query;
-			if (id) {
-				return `/administration/ldap/config?id=${id}`;
-			} else {
-				return "/administration/ldap/config";
-			}
-		},
-		breadcrumbs() {
-			return [
-				{
-					title: this.t("pages.administration.school.index.title"),
-					to: "/administration/school-settings",
-				},
-				{
-					title: this.t("pages.administration.ldap.index.title"),
-					href: this.ldapConfigRoute,
-				},
-				{
-					title: this.t("pages.administration.ldap.activate.breadcrumb"),
-					disabled: true,
-				},
-			];
-		},
-	},
-	created() {
-		if (!Object.keys(this.verified).length) {
-			redirectToConfigPage(this);
-		}
-	},
-	mounted() {
-		this.migrateUsersCheckbox = this.showUserMigrationOption;
+const { t } = useI18n();
+const route = useRoute();
+const router = useRouter();
 
-		document.title = buildPageTitle(this.t("pages.administration.ldap.save.title"));
-	},
-	methods: {
-		backButtonHandler() {
-			redirectToConfigPage(this);
-		},
-		async submitButtonHandler() {
-			const { id } = this.$route.query;
-			const temporaryConfigData = { ...this.temp };
+const importUsersStore = useImportUsersStore();
+const ldapConfigStore = useLdapConfigStore();
+const { verified, submitted, temp, status } = storeToRefs(ldapConfigStore);
+const { patchData, submitData } = ldapConfigStore;
 
-			if (temporaryConfigData.searchUserPassword === unchangedPassword) {
-				temporaryConfigData.searchUserPassword = undefined;
-			}
+const migrateUsersCheckbox = ref(false);
 
-			if (this.migrateUsersCheckbox) {
-				await this.importUsersStore.setSchoolInUserMigration(false);
-				if (this.importUsersStore.businessError) {
-					return;
-				}
-			}
+const showUserMigrationOption = computed(
+	() =>
+		useEnvConfig().value.SC_THEME !== SchulcloudTheme.N21 &&
+		useEnvConfig().value.FEATURE_USER_MIGRATION_ENABLED &&
+		!route?.query?.id
+);
 
-			if (id) {
-				await this.$store.dispatch("ldap-config/patchData", {
-					systemData: temporaryConfigData,
-					systemId: id,
-				});
-			} else {
-				await this.$store.dispatch("ldap-config/submitData", temporaryConfigData);
-			}
-		},
-		okButtonHandler() {
-			this.$router.push({
-				path: `/administration/school-settings`,
-			});
-		},
-	},
+const importUsersError = computed(() => importUsersStore.businessError);
+const activationErrors = computed(() => ldapErrorHandler(submitted.value.errors, t));
+const ldapConfigRoute = computed(() => {
+	const { id } = route.query;
+	if (id) {
+		return `/administration/ldap/config?id=${id}`;
+	} else {
+		return "/administration/ldap/config";
+	}
 });
+
+const breadcrumbs = computed<Breadcrumb[]>(() => [
+	{
+		title: t("pages.administration.school.index.title"),
+		to: "/administration/school-settings",
+	},
+	{
+		title: t("pages.administration.ldap.index.title"),
+		to: ldapConfigRoute.value,
+	},
+	{
+		title: t("pages.administration.ldap.activate.breadcrumb"),
+		disabled: true,
+	},
+]);
+
+const pageTitle = buildPageTitle(t("pages.administration.ldap.save.title"));
+useTitle(pageTitle);
+
+onMounted(() => {
+	if (!Object.keys(verified.value).length) {
+		redirectToConfigPage(this);
+	}
+
+	migrateUsersCheckbox.value = showUserMigrationOption.value;
+});
+
+const backButtonHandler = () => {
+	redirectToConfigPage(this);
+};
+
+const submitButtonHandler = async () => {
+	const { id } = route.query;
+	const temporaryConfigData = { ...temp.value };
+
+	if (temporaryConfigData.searchUserPassword === unchangedPassword) {
+		temporaryConfigData.searchUserPassword = undefined;
+	}
+
+	if (migrateUsersCheckbox.value) {
+		await importUsersStore.setSchoolInUserMigration(false);
+		if (importUsersStore.businessError) {
+			return;
+		}
+	}
+
+	if (id) {
+		await patchData(temporaryConfigData, id);
+		// await this.$store.dispatch("ldap-config/patchData", {
+		// 	systemData: temporaryConfigData,
+		// 	systemId: id,
+		// });
+	} else {
+		await submitData(temporaryConfigData);
+		// await this.$store.dispatch("ldap-config/submitData", temporaryConfigData);
+	}
+};
+
+const okButtonHandler = () => {
+	router.push({
+		path: `/administration/school-settings`,
+	});
+};
 </script>
 
 <style lang="scss" scoped>

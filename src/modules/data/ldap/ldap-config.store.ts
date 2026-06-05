@@ -2,6 +2,7 @@ import { unchangedPassword } from "../../../utils/ldapConstants";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { notifyError } from "@data-app";
+import { defineStore } from "pinia";
 import { ref } from "vue";
 
 type LdapFormData = {
@@ -56,7 +57,7 @@ const formatClientData = (data: LdapFormData) => ({
 	},
 });
 
-export const useLdapConfig = () => {
+export const useLdapConfigStore = defineStore("ldapConfig", () => {
 	const initialLdapConfig: LdapFormData = {
 		url: "",
 		basisPath: "",
@@ -184,4 +185,4 @@ export const useLdapConfig = () => {
 		patchData,
 		status,
 	};
-};
+});

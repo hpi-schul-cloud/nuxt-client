@@ -61,9 +61,10 @@ import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { isValidOrFocusFirstInvalidInput } from "@/utils/validation";
 import { notifySuccess } from "@data-app";
-import { useLdapConfig } from "@data-ldap";
+import { useLdapConfigStore } from "@data-ldap";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { computed, onMounted, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
@@ -71,8 +72,9 @@ import { useRoute, useRouter } from "vue-router";
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const { ldapConfig, verified, temp, status, verifyExisting, verifyData, getLdapConfig, resetLdapConfig } =
-	useLdapConfig();
+const ldapConfigStore = useLdapConfigStore();
+const { ldapConfig, verified, temp, status } = storeToRefs(ldapConfigStore);
+const { verifyExisting, verifyData, getLdapConfig, resetLdapConfig } = ldapConfigStore;
 const ldapForm = useTemplateRef("ldapForm");
 
 const pageTitle = buildPageTitle(t("pages.administration.ldap.title"));
@@ -97,7 +99,6 @@ const validateHandler = async () => {
 	const systemId = route.query.id as string;
 
 	const isValid = await isValidOrFocusFirstInvalidInput(ldapForm);
-	console.log("isValid", isValid);
 
 	if (isValid) {
 		if (systemId) {
@@ -108,12 +109,9 @@ const validateHandler = async () => {
 			await verifyExisting(systemId, ldapConfig.value);
 		} else {
 			await verifyData(ldapConfig.value);
-			console.log("verifyData called with", ldapConfig.value);
-			// await this.$store.dispatch("ldap-config/verifyData", this.systemData);
 		}
 
 		if (!verified.value.ok) {
-			console.log("Verification failed with errors", verified.value.errors);
 			return;
 		} else {
 			notifySuccess(t("pages.administration.ldap.index.verified"));

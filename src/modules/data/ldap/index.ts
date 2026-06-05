@@ -1,1 +1,1 @@
-export * from "./ldap-config.composable";
+export * from "./ldap-config.store";
