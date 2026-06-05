@@ -1,5 +1,6 @@
 import { unchangedPassword } from "../../../utils/ldapConstants";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
 import { notifyError } from "@data-app";
 import { defineStore } from "pinia";
@@ -58,6 +59,7 @@ const formatClientData = (data: LdapFormData) => ({
 });
 
 export const useLdapConfigStore = defineStore("ldapConfig", () => {
+	const { t } = useI18nGlobal();
 	const initialLdapConfig: LdapFormData = {
 		url: "",
 		basisPath: "",
@@ -87,38 +89,44 @@ export const useLdapConfigStore = defineStore("ldapConfig", () => {
 	const { execute, status } = useSafeAxiosTask();
 
 	const getLdapConfig = async (id: string) => {
-		const { result, success, error } = await execute(() => $axios.get(`/v1/ldap-config/${id}`));
+		const { result, success } = await execute(() => $axios.get(`/v1/ldap-config/${id}`), t("error.load"));
 
 		if (success) {
-			const { providerOptions } = result.data;
-			const { userAttributeNameMapping, roleAttributeNameMapping, classAttributeNameMapping } = providerOptions;
+			const { providerOptions, url, rootPath, searchUser } = result.data;
+			const {
+				userAttributeNameMapping,
+				roleAttributeNameMapping,
+				classAttributeNameMapping,
+				userPathAdditions,
+				classPathAdditions,
+				roleType,
+			} = providerOptions;
 
 			ldapConfig.value = {
-				url: result.data.url,
-				basisPath: result.data.rootPath,
-				searchUser: result.data.searchUser,
+				url,
+				basisPath: rootPath,
+				searchUser,
 				searchUserPassword: unchangedPassword,
-				userPath: providerOptions.userPathAdditions,
+				userPath: userPathAdditions,
 				firstName: userAttributeNameMapping.givenName,
 				familyName: userAttributeNameMapping.sn,
 				email: userAttributeNameMapping.mail,
 				uid: userAttributeNameMapping.uid,
 				uuid: userAttributeNameMapping.uuid,
-				groupOption: providerOptions.roleType,
+				groupOption: roleType,
 				member: userAttributeNameMapping.role,
 				student: roleAttributeNameMapping.roleStudent,
 				teacher: roleAttributeNameMapping.roleTeacher,
 				admin: roleAttributeNameMapping.roleAdmin,
 				user: roleAttributeNameMapping.roleNoSc,
-				classPath: providerOptions.classPathAdditions,
+				classPath: classPathAdditions,
 				nameAttribute: classAttributeNameMapping.description,
 				participantAttribute: classAttributeNameMapping.uniqueMember,
 			};
-		} else {
-			notifyError(String(error));
 		}
 	};
 
+	// TODO: rename function
 	const verifyData = async (payload: LdapFormData) => {
 		const { result, success, error } = await execute(() =>
 			$axios.post("/v1/ldap-config?verifyOnly=true", formatClientData(payload))

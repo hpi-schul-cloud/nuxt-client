@@ -70,12 +70,15 @@ import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
+
 const route = useRoute();
 const router = useRouter();
+
+const ldapForm = useTemplateRef("ldapForm");
+
 const ldapConfigStore = useLdapConfigStore();
 const { ldapConfig, verified, temp, status } = storeToRefs(ldapConfigStore);
 const { verifyExisting, verifyData, getLdapConfig, resetLdapConfig } = ldapConfigStore;
-const ldapForm = useTemplateRef("ldapForm");
 
 const pageTitle = buildPageTitle(t("pages.administration.ldap.title"));
 useTitle(pageTitle);
@@ -96,11 +99,9 @@ const validationError = ref("");
 const validateHandler = async () => {
 	validationError.value = "";
 
-	const systemId = route.query.id as string;
-
 	const isValid = await isValidOrFocusFirstInvalidInput(ldapForm);
-
 	if (isValid) {
+		const systemId = route.query.id as string;
 		if (systemId) {
 			if (ldapConfig.value.searchUserPassword === unchangedPassword) {
 				ldapConfig.value.searchUserPassword = undefined;
@@ -111,21 +112,19 @@ const validateHandler = async () => {
 			await verifyData(ldapConfig.value);
 		}
 
-		if (!verified.value.ok) {
-			return;
+		if (!verified.value.ok) return;
+
+		notifySuccess(t("pages.administration.ldap.index.verified"));
+		if (systemId) {
+			router.push({
+				path: `/administration/ldap/activate?id=${systemId}`,
+			});
 		} else {
-			notifySuccess(t("pages.administration.ldap.index.verified"));
-			if (systemId) {
-				router.push({
-					path: `/administration/ldap/activate?id=${systemId}`,
-				});
-			} else {
-				router.push({
-					path: "/administration/ldap/activate",
-				});
-			}
-			return;
+			router.push({
+				path: "/administration/ldap/activate",
+			});
 		}
+		return;
 	}
 
 	validationError.value = t("common.validation.invalid");
@@ -136,16 +135,14 @@ const clearInputsHandler = () => {
 };
 
 const clearClassesSectionData = () => {
-	ldapConfig.value = {
-		...ldapConfig.value,
-		classPath: undefined,
-		nameAttribute: undefined,
-		participantAttribute: undefined,
-	};
+	ldapConfig.value.classPath = undefined;
+	ldapConfig.value.nameAttribute = undefined;
+	ldapConfig.value.participantAttribute = undefined;
 };
 
 const verificationErrors = computed(() => ldapErrorHandler(verified.value.errors, t));
 
+// TODO: have a look again (distinction between edit and add)
 onMounted(async () => {
 	const { id } = route.query;
 
@@ -153,7 +150,8 @@ onMounted(async () => {
 		ldapConfig.value = { ...temp.value };
 	} else if (id) {
 		await getLdapConfig(id as string);
-		// ldapConfig.value = { ...ldapConfig.value };
+	} else {
+		resetLdapConfig();
 	}
 });
 </script>

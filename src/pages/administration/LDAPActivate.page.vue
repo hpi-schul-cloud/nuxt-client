@@ -171,12 +171,12 @@ import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
-const redirectToConfigPage = (page) => {
-	const { id } = page.$route.query;
+const redirectToConfigPage = () => {
+	const { id } = route.query;
 	if (id) {
-		page.$router.push(`/administration/ldap/config?id=${id}`);
+		router.push(`/administration/ldap/config?id=${id}`);
 	} else {
-		page.$router.push("/administration/ldap/config");
+		router.push("/administration/ldap/config");
 	}
 };
 
@@ -229,14 +229,14 @@ useTitle(pageTitle);
 
 onMounted(() => {
 	if (!Object.keys(verified.value).length) {
-		redirectToConfigPage(this);
+		redirectToConfigPage();
 	}
 
 	migrateUsersCheckbox.value = showUserMigrationOption.value;
 });
 
 const backButtonHandler = () => {
-	redirectToConfigPage(this);
+	redirectToConfigPage();
 };
 
 const submitButtonHandler = async () => {
