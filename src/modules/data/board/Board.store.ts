@@ -42,7 +42,7 @@ import {
 	ContentElementType,
 	CopyStatusEnum,
 } from "@api-server";
-import { notifyInfo, notifySuccess, useAppStore, useNotificationStore } from "@data-app";
+import { notifyError, notifyInfo, notifySuccess, useAppStore, useNotificationStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useErrorHandler } from "@util-error-handling";
 import { defineStore } from "pinia";
@@ -65,7 +65,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const { setEditModeId } = useSharedEditMode();
 	const router = useRouter();
 
-	const { notifySocketError } = useErrorHandler();
+	const { generateErrorText } = useErrorHandler();
 
 	const getLastColumnIndex = () => board.value!.columns.length - 1;
 
@@ -193,7 +193,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 		if (payload.isOwnAction === true) {
 			if (payload.status !== CopyStatusEnum.SUCCESS) {
-				notifySocketError("notDuplicated", "boardColumn");
+				notifyError(generateErrorText("notDuplicated", "boardColumn"));
 			} else {
 				notifySuccess("components.board.notifications.success.columnDuplicated");
 			}

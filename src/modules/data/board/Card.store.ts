@@ -18,7 +18,7 @@ import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useSharedEditMode } from "./edit-mode.composable";
 import { FileRecordParent } from "@/types/file/File";
 import { CardResponse, ContentElementType, CopyStatusEnum, PreferredToolResponse, ToolContextType } from "@api-server";
-import { notifyInfo } from "@data-app";
+import { notifyError, notifyInfo, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { CollaboraFileType, useFileStorageApi } from "@data-file";
 import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
@@ -42,7 +42,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	const { setFocus, forceFocus } = useBoardFocusHandler();
 	const { setEditModeId, editModeId } = useSharedEditMode();
 	const { uploadCollaboraFile } = useFileStorageApi();
-	const { notifySocketError } = useErrorHandler();
+	const { generateErrorText } = useErrorHandler();
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
@@ -104,12 +104,19 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const duplicateCardSuccess = (payload: DuplicateCardSuccessPayload) => {
 		const { duplicatedCard } = payload;
-		if (duplicatedCard.id) {
-			cards.value[duplicatedCard.id] = duplicatedCard;
-			if (payload.isOwnAction === true && payload.status !== CopyStatusEnum.SUCCESS) {
-				notifySocketError("notDuplicated", "boardCard");
+
+		if (payload.isOwnAction === true) {
+			if (payload.status !== CopyStatusEnum.SUCCESS) {
+				notifyError(generateErrorText("notDuplicated", "boardCard"));
+			} else {
+				notifySuccess("components.board.notifications.success.cardDuplicated");
 			}
-			if (payload.isOwnAction === true && hasRelevantContentForDuplicationWarning(duplicatedCard)) {
+			if (!duplicatedCard.id) {
+				return;
+			}
+
+			cards.value[duplicatedCard.id] = duplicatedCard;
+			if (hasRelevantContentForDuplicationWarning(duplicatedCard)) {
 				notifyInfo("components.board.notifications.info.cardDuplicated");
 			}
 		}
