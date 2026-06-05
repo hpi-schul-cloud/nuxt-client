@@ -198,3 +198,45 @@ export function formatSecondsToHourMinSec(seconds: number) {
 
 	return formattedString;
 }
+
+async function getFilesFromEntry(entry: FileSystemEntry): Promise<File[]> {
+	if (entry.isFile) {
+		return new Promise<File[]>((resolve, reject) => {
+			(entry as FileSystemFileEntry).file((file) => resolve([file]), reject);
+		});
+	}
+
+	if (entry.isDirectory) {
+		const reader = (entry as FileSystemDirectoryEntry).createReader();
+		const allEntries: FileSystemEntry[] = [];
+
+		// readEntries returns at most 100 entries per call; loop until empty
+		const readBatch = (): Promise<void> =>
+			new Promise((resolve, reject) => {
+				reader.readEntries(async (batch) => {
+					if (batch.length === 0) {
+						resolve();
+					} else {
+						allEntries.push(...batch);
+						readBatch().then(resolve, reject);
+					}
+				}, reject);
+			});
+
+		await readBatch();
+		const nested = await Promise.all(allEntries.map(getFilesFromEntry));
+		return nested.flat();
+	}
+
+	return [];
+}
+
+export async function extractFilesFromItems(items: DataTransferItemList): Promise<File[]> {
+	const entries = Array.from(items)
+		.filter((item) => item.kind === "file")
+		.map((item) => item.webkitGetAsEntry())
+		.filter((entry): entry is FileSystemEntry => entry !== null);
+
+	const fileArrays = await Promise.all(entries.map(getFilesFromEntry));
+	return fileArrays.flat();
+}

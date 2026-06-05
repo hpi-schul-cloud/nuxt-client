@@ -62,7 +62,7 @@ import RenameFolderDialog from "./RenameFolderDialog.vue";
 import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
-import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
+import { downloadFile, downloadFilesAsArchive, extractFilesFromItems } from "@/utils/fileHelper";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useSharedBoardPageInformation } from "@data-board";
 import { useEnvConfig } from "@data-env";
@@ -75,7 +75,7 @@ import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { FabAction } from "@ui-speed-dial-menu";
 import { useErrorHandler } from "@util-error-handling";
-import { useDropZone } from "@vueuse/core";
+import { useDropZone, useEventListener } from "@vueuse/core";
 import dayjs from "dayjs";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -261,16 +261,20 @@ const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
 	window.open(url, "_blank");
 };
 
-const onDrop = async (files: File[] | null) => {
-	if (!files || !allowedOperations.value.createFileElement) return;
+const { isOverDropZone } = useDropZone(dropZoneRef);
+
+useEventListener(dropZoneRef, "drop", async (event: DragEvent) => {
+	event.preventDefault();
+	if (!event.dataTransfer?.items || !allowedOperations.value.createFileElement) return;
+
+	const files = await extractFilesFromItems(event.dataTransfer.items);
+	if (files.length === 0) return;
 
 	incrementUploadProgressTotal(files.length);
 	incrementRunningUploads(files.length);
 	await uploadFiles(files);
 	decrementRunningUploads(files.length);
-};
-
-const { isOverDropZone } = useDropZone(dropZoneRef, { onDrop });
+});
 
 const resetUploadProgress = () => {
 	uploadProgress.value = { uploaded: 0, total: 0 };
