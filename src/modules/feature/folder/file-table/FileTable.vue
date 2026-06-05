@@ -12,11 +12,29 @@
 		</EmptyState>
 	</template>
 	<template v-else-if="isEmpty && !areUploadStatsVisible">
-		<EmptyState :title="t('pages.folder.emptyState')">
-			<template #media>
-				<EmptyFolderSvg />
-			</template>
-		</EmptyState>
+		<template v-if="props.hasEditPermission">
+			<div
+				class="drop-zone-empty"
+				:class="{ 'drop-zone-empty--active': props.isOverDropZone }"
+				data-testid="drop-zone-empty-state"
+			>
+				<VIcon :icon="mdiTrayArrowUp" size="48" color="primary" class="mb-4" />
+				<p class="drop-zone-empty__title">{{ t("pages.folder.dropZone.emptyState.title") }}</p>
+				<p class="drop-zone-empty__subtitle">
+					{{ t("pages.folder.dropZone.emptyState.orText") }}
+					<button type="button" class="drop-zone-empty__browse-link" @click="emit('click:browse')">
+						{{ t("pages.folder.dropZone.emptyState.browse") }}
+					</button>
+				</p>
+			</div>
+		</template>
+		<template v-else>
+			<EmptyState :title="t('pages.folder.emptyState')">
+				<template #media>
+					<EmptyFolderSvg />
+				</template>
+			</EmptyState>
+		</template>
 	</template>
 	<template v-else>
 		<div class="mt-2">
@@ -126,6 +144,7 @@ import RenameFileDialog from "./RenameFileDialog.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
 import { FileRecord } from "@/types/file/File";
 import { formatFileSize, getFileExtension, isScanStatusBlocked } from "@/utils/fileHelper";
+import { mdiTrayArrowUp } from "@icons/material";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu, KebabMenuActionRename } from "@ui-kebab-menu";
@@ -166,6 +185,10 @@ const props = defineProps({
 		type: Boolean,
 		default: false,
 	},
+	isOverDropZone: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const emit = defineEmits([
@@ -174,6 +197,7 @@ const emit = defineEmits([
 	"reset-upload-progress",
 	"download-file",
 	"download-files-as-archive",
+	"click:browse",
 ]);
 
 const headers = [
@@ -261,3 +285,51 @@ const buildActionMenuAriaLabel = (item: FileRecord): string =>
 		name: item.name,
 	});
 </script>
+
+<style scoped>
+.drop-zone-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 240px;
+	margin-top: 16px;
+	padding: 40px 24px;
+	border: 2px dashed rgb(var(--v-theme-primary));
+	border-radius: 4px;
+	transition:
+		background-color 0.15s ease,
+		border-color 0.15s ease;
+}
+
+.drop-zone-empty--active {
+	border-color: rgb(var(--v-theme-primary));
+	background-color: rgba(var(--v-theme-primary), 0.08);
+}
+
+.drop-zone-empty__title {
+	margin: 0 0 4px;
+	font-size: 1.125rem;
+	font-weight: 500;
+	color: rgb(var(--v-theme-on-surface));
+}
+
+.drop-zone-empty__subtitle {
+	margin: 0;
+	color: rgba(var(--v-theme-on-surface), 0.6);
+}
+
+.drop-zone-empty__browse-link {
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	color: rgb(var(--v-theme-primary));
+	font-size: inherit;
+	text-decoration: underline;
+}
+
+.drop-zone-empty__browse-link:hover {
+	text-decoration: none;
+}
+</style>

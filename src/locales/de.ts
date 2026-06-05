@@ -2095,4 +2095,8 @@ export default {
 	"pages.folder.trash.purge.error": "Dateien konnten nicht endgültig gelöscht werden.",
 	"pages.folder.trash.purge.dialog.title": "{count} Datei(en) endgültig löschen?",
 	"pages.folder.trash.purge.dialog.checkboxLabel": "Löschen kann nicht rückgängig gemacht werden.",
+	"pages.folder.dropZone.dropFilesHere": "Dateien hier ablegen zum Hochladen",
+	"pages.folder.dropZone.emptyState.title": "Dateien hier ablegen zum Hochladen",
+	"pages.folder.dropZone.emptyState.orText": "oder",
+	"pages.folder.dropZone.emptyState.browse": "Dateien durchsuchen",
 };

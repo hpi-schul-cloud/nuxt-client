@@ -2105,4 +2105,8 @@ export default {
 	"pages.folder.trash.purge.error": "No se pudieron eliminar permanentemente los archivos.",
 	"pages.folder.trash.purge.dialog.title": "¿Eliminar permanentemente {count} archivo(s)?",
 	"pages.folder.trash.purge.dialog.checkboxLabel": "La eliminación no se puede deshacer.",
+	"pages.folder.dropZone.dropFilesHere": "Suelta los archivos aquí para subirlos",
+	"pages.folder.dropZone.emptyState.title": "Suelta los archivos aquí para subirlos",
+	"pages.folder.dropZone.emptyState.orText": "o",
+	"pages.folder.dropZone.emptyState.browse": "buscar tus archivos",
 };
