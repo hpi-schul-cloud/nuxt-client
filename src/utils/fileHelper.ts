@@ -199,32 +199,34 @@ export function formatSecondsToHourMinSec(seconds: number) {
 	return formattedString;
 }
 
+function getFileFromFileEntry(entry: FileSystemFileEntry): Promise<File> {
+	return new Promise((resolve, reject) => entry.file(resolve, reject));
+}
+
+async function readAllDirectoryEntries(reader: FileSystemDirectoryReader): Promise<FileSystemEntry[]> {
+	const allEntries: FileSystemEntry[] = [];
+	let batch: FileSystemEntry[];
+
+	// readEntries returns at most 100 entries per call; loop until empty
+	do {
+		batch = await new Promise<FileSystemEntry[]>((resolve, reject) => reader.readEntries(resolve, reject));
+		allEntries.push(...batch);
+	} while (batch.length > 0);
+
+	return allEntries;
+}
+
 async function getFilesFromEntry(entry: FileSystemEntry): Promise<File[]> {
 	if (entry.isFile) {
-		return new Promise<File[]>((resolve, reject) => {
-			(entry as FileSystemFileEntry).file((file) => resolve([file]), reject);
-		});
+		const file = await getFileFromFileEntry(entry as FileSystemFileEntry);
+		return [file];
 	}
 
 	if (entry.isDirectory) {
 		const reader = (entry as FileSystemDirectoryEntry).createReader();
-		const allEntries: FileSystemEntry[] = [];
-
-		// readEntries returns at most 100 entries per call; loop until empty
-		const readBatch = (): Promise<void> =>
-			new Promise((resolve, reject) => {
-				reader.readEntries(async (batch) => {
-					if (batch.length === 0) {
-						resolve();
-					} else {
-						allEntries.push(...batch);
-						readBatch().then(resolve, reject);
-					}
-				}, reject);
-			});
-
-		await readBatch();
-		const nested = await Promise.all(allEntries.map(getFilesFromEntry));
+		const entries = await readAllDirectoryEntries(reader);
+		const filePromises = entries.map(getFilesFromEntry);
+		const nested = await Promise.all(filePromises);
 		return nested.flat();
 	}
 
@@ -237,6 +239,8 @@ export async function extractFilesFromItems(items: DataTransferItemList): Promis
 		.map((item) => item.webkitGetAsEntry())
 		.filter((entry): entry is FileSystemEntry => entry !== null);
 
-	const fileArrays = await Promise.all(entries.map(getFilesFromEntry));
+	const entriePromises = entries.map((entry) => getFilesFromEntry(entry));
+	const fileArrays = await Promise.all(entriePromises);
+
 	return fileArrays.flat();
 }
