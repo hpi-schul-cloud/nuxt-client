@@ -1,5 +1,5 @@
 <template>
-	<SvsLoading :is-loading="isLoading">
+	<SvsLoading :loading-state="loadingState">
 		<div class="text-center mx-auto container-max-width">
 			<img src="@/assets/img/migration/migration_error.svg" alt="" />
 			<h1 class="px-4">
@@ -47,6 +47,7 @@
 </template>
 
 <script setup lang="ts">
+import { DebouncedLoadingState } from "@/types/loading.types";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useSystem } from "@data-access";
@@ -62,7 +63,7 @@ const props = defineProps<{ targetSchoolNumber?: string; sourceSchoolNumber?: st
 const { userLoginMigration, fetchLatestUserLoginMigrationForSchool } = useUserLoginMigration();
 
 const targetSystemId = computed(() => userLoginMigration.value?.targetSystemId);
-const { systemName, isLoading: isLoadingSystem } = useSystem(targetSystemId);
+const { systemName, loadingState: systemLoadingState } = useSystem(targetSystemId);
 
 const { t } = useI18n();
 
@@ -70,7 +71,10 @@ const pageTitle = buildPageTitle(t("pages.userMigration.error.title"));
 useTitle(pageTitle);
 
 const isLoadingUserLoginMigration = ref(true);
-const isLoading = computed(() => isLoadingUserLoginMigration.value || isLoadingSystem.value);
+const loadingState = computed((): DebouncedLoadingState => {
+	if (isLoadingUserLoginMigration.value) return "loading";
+	return systemLoadingState.value;
+});
 
 const getSubject = () => {
 	let subject: string = encodeURIComponent("Fehler bei der Migration");

@@ -39,7 +39,7 @@ interface EditorWithSourceElement extends Editor {
 
 export const useEditorConfig = () => {
 	const { t, locale } = useI18n();
-	const DEFAULT_PROTOCOL = "//";
+	const DEFAULT_PROTOCOL = "https://";
 
 	const generalConfig = reactive<GeneralConfig>({
 		language: locale.value || useEnvStore().fallBackLanguage,

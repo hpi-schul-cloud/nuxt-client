@@ -9,19 +9,16 @@ import { SkipLink } from "@ui-skip-link";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { h, nextTick, ref } from "vue";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VApp } from "vuetify/components";
 
 vi.mock("@data-app/status-alerts.composable");
+
 vi.mocked(useStatusAlerts).mockReturnValue({
 	status: ref(""),
 	statusAlerts: ref([]),
 	fetchStatusAlerts: vi.fn(),
 });
-
-vi.mock("vue-router", () => ({
-	useRoute: () => ({ path: "rooms/courses-list" }),
-	useRouter: vi.fn(),
-}));
 
 vi.mock("@data-app/status-alerts.composable");
 vi.mocked(useStatusAlerts).mockReturnValue({
@@ -31,6 +28,7 @@ vi.mocked(useStatusAlerts).mockReturnValue({
 });
 
 const setup = () => {
+	injectRouterMock(createRouterMock());
 	setActivePinia(createTestingPinia());
 	createTestEnvStore({
 		DOCUMENT_BASE_DIR: "https://example.com/documents/",

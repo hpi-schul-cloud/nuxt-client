@@ -114,6 +114,42 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @summary Starts the login process for service accounts which are locally managed.
+         * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loginControllerLoginLocalServiceAccount: async (localAuthorizationBodyParams: LocalAuthorizationBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'localAuthorizationBodyParams' is not null or undefined
+            assertParamExists('loginControllerLoginLocalServiceAccount', 'localAuthorizationBodyParams', localAuthorizationBodyParams)
+            const localVarPath = `/authentication/local-service-account`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(localAuthorizationBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Starts the login process for users which are authenticated via OAuth 2.
          * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
          * @param {*} [options] Override http request option.
@@ -286,6 +322,17 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Starts the login process for service accounts which are locally managed.
+         * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Starts the login process for users which are authenticated via OAuth 2.
          * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
          * @param {*} [options] Override http request option.
@@ -358,6 +405,16 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
+         * @summary Starts the login process for service accounts which are locally managed.
+         * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse> {
+            return localVarFp.loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Starts the login process for users which are authenticated via OAuth 2.
          * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
          * @param {*} [options] Override http request option.
@@ -422,6 +479,16 @@ export interface AuthenticationApiInterface {
      * @memberof AuthenticationApiInterface
      */
     loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse>;
+
+    /**
+     * 
+     * @summary Starts the login process for service accounts which are locally managed.
+     * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApiInterface
+     */
+    loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse>;
 
     /**
      * 
@@ -492,6 +559,18 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      */
     public loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any) {
         return AuthenticationApiFp(this.configuration).loginControllerLoginLocal(localAuthorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Starts the login process for service accounts which are locally managed.
+     * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApi
+     */
+    public loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any) {
+        return AuthenticationApiFp(this.configuration).loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

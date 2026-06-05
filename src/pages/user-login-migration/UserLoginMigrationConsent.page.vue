@@ -1,5 +1,5 @@
 <template>
-	<SvsLoading :is-loading="isLoading">
+	<SvsLoading :loading-state="loadingState">
 		<div class="text-center mx-auto container-max-width">
 			<img src="@/assets/img/migration/move.svg" alt="" />
 			<h1 class="px-4">
@@ -55,6 +55,7 @@
 </template>
 
 <script setup lang="ts">
+import { DebouncedLoadingState } from "@/types/loading.types";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useSystem } from "@data-access";
 import { useUserLoginMigration } from "@data-user-login-migration";
@@ -66,7 +67,7 @@ import { useI18n } from "vue-i18n";
 const { userLoginMigration, fetchLatestUserLoginMigrationForSchool } = useUserLoginMigration();
 
 const targetSystemId = computed(() => userLoginMigration.value?.targetSystemId);
-const { systemName, isLoading: isLoadingSystem } = useSystem(targetSystemId);
+const { systemName, loadingState: systemLoadingState } = useSystem(targetSystemId);
 const { t } = useI18n();
 
 const pageTitle = buildPageTitle(t("pages.userMigration.title"));
@@ -81,7 +82,10 @@ const migrationDescription = computed(() =>
 const canSkipMigration = computed(() => !userLoginMigration.value?.mandatorySince);
 
 const isLoadingUserLoginMigration = ref(true);
-const isLoading = computed(() => isLoadingUserLoginMigration.value || isLoadingSystem.value);
+const loadingState = computed((): DebouncedLoadingState => {
+	if (isLoadingUserLoginMigration.value) return "loading";
+	return systemLoadingState.value;
+});
 
 onMounted(async () => {
 	await fetchLatestUserLoginMigrationForSchool();
