@@ -2,10 +2,12 @@
 .npmignore
 api.ts
 api/common-cartridge-api.ts
+api/common-cartridge-config-api.ts
 base.ts
 common.ts
 configuration.ts
 git_push.sh
 index.ts
+models/common-cartridge-config-response.ts
 models/course-export-body-params.ts
 models/index.ts

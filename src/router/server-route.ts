@@ -11,3 +11,5 @@ export const isFWUEndpoint = (path: string) => path.startsWith("/api/v3/fwu");
 export const isH5pStaticFiles = (path: string) => path.startsWith("/api/v3/h5p-editor/h5pstatics");
 
 export const isCommonCartridge = (path: string) => path.startsWith("/api/v3/common-cartridge");
+
+export const isNotification = (path: string) => path.startsWith("/notifications");

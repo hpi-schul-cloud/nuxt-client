@@ -1696,6 +1696,9 @@ export default {
 	"pages.rooms.ccImportCourse.loading": "Триває завантаження...",
 	"pages.rooms.ccImportCourse.success": "Файл вашого курсу завантажено та зараз імпортується у фоновому режимі.",
 	"pages.rooms.ccImportCourse.error": "Під час завантаження файлу курсу сталася помилка.",
+	"pages.rooms.ccImportCourse.importSuccess":
+		"Твій файл курсу «{file}» було успішно імпортовано, і він буде доступний в огляді курсів після перезавантаження.",
+	"pages.rooms.ccImportCourse.importError": "Під час імпорту файлу курсу «{file}» сталася помилка.",
 	"pages.rooms.ccExportCourse.started": "Завантажується експорт курсу",
 	"pages.rooms.ccExportCourse.error": "Під час експорту курсу сталася помилка.",
 	"pages.rooms.roomModal.courseGroupTitle": "назва групи курсу",

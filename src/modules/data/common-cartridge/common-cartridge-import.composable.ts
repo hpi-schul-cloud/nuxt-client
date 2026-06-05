@@ -24,7 +24,12 @@ export const useCommonCartridgeImport = () => {
 		}
 
 		try {
-			await commonCartridgeApi.commonCartridgeControllerUploadFileAndStartImport(file);
+			const encodedFileName = encodeURIComponent(file.name);
+			await commonCartridgeApi.commonCartridgeControllerUploadFileAndStartImport(file, {
+				headers: {
+					"Content-Disposition": `attachment; filename="${encodedFileName}"; filename*=UTF-8''${encodedFileName}`,
+				},
+			});
 			isSuccess.value = true;
 		} catch {
 			isSuccess.value = false;

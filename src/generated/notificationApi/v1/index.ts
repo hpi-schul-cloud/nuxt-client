@@ -13,7 +13,6 @@
  */
 
 
-
-export * from './api/common-cartridge-api';
-export * from './api/common-cartridge-config-api';
-
+export * from "./api";
+export * from "./configuration";
+export * from "./models";

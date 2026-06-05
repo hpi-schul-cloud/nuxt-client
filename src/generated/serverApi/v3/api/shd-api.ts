@@ -23,6 +23,8 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 // @ts-ignore
 import { ApiValidationError } from '../models';
 // @ts-ignore
+import { LoginResponse } from '../models';
+// @ts-ignore
 import { TargetUserIdParams } from '../models';
 /**
  * ShdApi - axios parameter creator
@@ -87,7 +89,7 @@ export const ShdApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async shdControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async shdControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.shdControllerSupportJwt(targetUserIdParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -108,7 +110,7 @@ export const ShdApiFactory = function (configuration?: Configuration, basePath?:
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shdControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any): AxiosPromise<string> {
+        shdControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any): AxiosPromise<LoginResponse> {
             return localVarFp.shdControllerSupportJwt(targetUserIdParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -128,7 +130,7 @@ export interface ShdApiInterface {
      * @throws {RequiredError}
      * @memberof ShdApiInterface
      */
-    shdControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any): AxiosPromise<string>;
+    shdControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any): AxiosPromise<LoginResponse>;
 
 }
 
