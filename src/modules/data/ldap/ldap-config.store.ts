@@ -82,36 +82,52 @@ const formatClientData = (data: LdapFormData) => ({
 	},
 });
 
+const emptyLdapConfig: Readonly<LdapFormData> = {
+	url: "",
+	basisPath: "",
+	searchUser: "",
+	searchUserPassword: "",
+	userPath: "",
+	groupOption: "group",
+	firstName: "",
+	familyName: "",
+	email: "",
+	uid: "",
+	uuid: "",
+	member: "memberOf",
+	student: "",
+	teacher: "",
+	admin: "",
+	user: "",
+	classPath: "",
+	nameAttribute: "",
+	participantAttribute: "",
+};
+
 export const useLdapConfigStore = defineStore("ldapConfig", () => {
 	const { t } = useI18nGlobal();
-	const initialLdapConfig: LdapFormData = {
-		url: "",
-		basisPath: "",
-		searchUser: "",
-		searchUserPassword: "",
-		userPath: "",
-		groupOption: "group",
-		firstName: "",
-		familyName: "",
-		email: "",
-		uid: "",
-		uuid: "",
-		member: "memberOf",
-		student: "",
-		teacher: "",
-		admin: "",
-		user: "",
-		classPath: "",
-		nameAttribute: "",
-		participantAttribute: "",
-	};
-	const ldapConfig = ref<LdapFormData>({ ...initialLdapConfig });
 
+	const systemId = ref<string | undefined>(undefined);
+	const originalLdapConfig = ref<LdapFormData>({ ...emptyLdapConfig });
+	const ldapFormData = ref<LdapFormData>({ ...originalLdapConfig.value });
 	const verified = ref<VerifiedData | undefined>(undefined);
 	const submitted = ref<VerifiedData | undefined>(undefined);
-	const temp = ref<Partial<LdapFormData>>({});
 
 	const { execute, status } = useSafeAxiosTask();
+
+	const initializeStore = async (id?: string) => {
+		if (systemId.value === id) return;
+
+		systemId.value = id;
+		if (id) {
+			await getLdapConfig(id);
+		} else {
+			originalLdapConfig.value = { ...emptyLdapConfig };
+		}
+		resetLdapFormData();
+		verified.value = undefined;
+		submitted.value = undefined;
+	};
 
 	const getLdapConfig = async (id: string) => {
 		const { result, success } = await execute(() => $axios.get(`/v1/ldap-config/${id}`), t("error.load"));
@@ -127,7 +143,7 @@ export const useLdapConfigStore = defineStore("ldapConfig", () => {
 				roleType,
 			} = providerOptions;
 
-			ldapConfig.value = {
+			originalLdapConfig.value = {
 				url,
 				basisPath: rootPath,
 				searchUser,
@@ -156,7 +172,7 @@ export const useLdapConfigStore = defineStore("ldapConfig", () => {
 			$axios.post("/v1/ldap-config?verifyOnly=true", formatClientData(payload))
 		);
 		if (success) {
-			temp.value = payload;
+			ldapFormData.value = payload;
 			verified.value = result.data;
 		} else {
 			notifyError(String(error));
@@ -171,7 +187,7 @@ export const useLdapConfigStore = defineStore("ldapConfig", () => {
 			if (!payload.searchUserPassword) {
 				payload.searchUserPassword = unchangedPassword;
 			}
-			temp.value = payload;
+			ldapFormData.value = payload;
 			verified.value = result.data;
 		} else {
 			notifyError(String(error));
@@ -200,21 +216,22 @@ export const useLdapConfigStore = defineStore("ldapConfig", () => {
 		}
 	};
 
-	const resetLdapConfig = () => {
-		ldapConfig.value = { ...initialLdapConfig };
+	const resetLdapFormData = () => {
+		ldapFormData.value = { ...originalLdapConfig.value };
 	};
 
 	return {
-		ldapConfig,
+		systemId,
+		originalLdapConfig,
 		verified,
 		submitted,
-		temp,
-		getLdapConfig,
-		resetLdapConfig,
+		ldapFormData,
+		status,
+		initializeStore,
+		resetLdapFormData,
 		verifyNewLdapConfig,
 		verifyExistingLdapConfig,
 		createLdapConfig,
 		updateLdapConfig,
-		status,
 	};
 });

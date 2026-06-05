@@ -15,11 +15,11 @@
 			</div>
 			<VForm ref="ldapForm" validate-on="submit" @submit.prevent.stop="validateHandler">
 				<div class="form-container">
-					<LdapConnectionSection v-model="ldapConfig" data-testid="ldapConnectionSection" />
-					<LdapUsersSection v-model="ldapConfig" data-testid="ldapUsersSection" />
-					<LdapRolesSection v-model="ldapConfig" data-testid="ldapRolesSection" />
+					<LdapConnectionSection v-model="ldapFormData" data-testid="ldapConnectionSection" />
+					<LdapUsersSection v-model="ldapFormData" data-testid="ldapUsersSection" />
+					<LdapRolesSection v-model="ldapFormData" data-testid="ldapRolesSection" />
 					<LdapClassesSection
-						v-model="ldapConfig"
+						v-model="ldapFormData"
 						data-testid="ldapClassesSection"
 						@update:inputs="clearClassesSectionData"
 					/>
@@ -31,7 +31,7 @@
 					</span>
 				</div>
 				<div class="buttons-container">
-					<VBtn variant="text" data-testid="ldapResetInputsButton" @click="clearInputsHandler">
+					<VBtn variant="text" data-testid="ldapResetInputsButton" @click="onReset">
 						{{ t("pages.administration.ldap.index.buttons.reset") }}
 					</VBtn>
 					<VBtn
@@ -77,8 +77,8 @@ const router = useRouter();
 const ldapForm = useTemplateRef("ldapForm");
 
 const ldapConfigStore = useLdapConfigStore();
-const { ldapConfig, verified, temp, status } = storeToRefs(ldapConfigStore);
-const { verifyExistingLdapConfig, verifyNewLdapConfig, getLdapConfig, resetLdapConfig } = ldapConfigStore;
+const { verified, ldapFormData, status } = storeToRefs(ldapConfigStore);
+const { verifyExistingLdapConfig, verifyNewLdapConfig, initializeStore, resetLdapFormData } = ldapConfigStore;
 
 const pageTitle = buildPageTitle(t("pages.administration.ldap.title"));
 useTitle(pageTitle);
@@ -103,13 +103,13 @@ const validateHandler = async () => {
 	if (isValid) {
 		const systemId = route.query.id as string;
 		if (systemId) {
-			if (ldapConfig.value.searchUserPassword === unchangedPassword) {
-				ldapConfig.value.searchUserPassword = undefined;
+			if (ldapFormData.value.searchUserPassword === unchangedPassword) {
+				ldapFormData.value.searchUserPassword = undefined;
 			}
 
-			await verifyExistingLdapConfig(systemId, ldapConfig.value);
+			await verifyExistingLdapConfig(systemId, ldapFormData.value);
 		} else {
-			await verifyNewLdapConfig(ldapConfig.value);
+			await verifyNewLdapConfig(ldapFormData.value);
 		}
 
 		if (!verified.value?.ok) return;
@@ -125,29 +125,21 @@ const validateHandler = async () => {
 	validationError.value = t("common.validation.invalid");
 };
 
-const clearInputsHandler = () => {
-	resetLdapConfig();
+const onReset = () => {
+	resetLdapFormData();
 };
 
 const clearClassesSectionData = () => {
-	ldapConfig.value.classPath = undefined;
-	ldapConfig.value.nameAttribute = undefined;
-	ldapConfig.value.participantAttribute = undefined;
+	ldapFormData.value.classPath = undefined;
+	ldapFormData.value.nameAttribute = undefined;
+	ldapFormData.value.participantAttribute = undefined;
 };
 
 const verificationErrors = computed(() => ldapErrorHandler(verified.value?.errors, t));
 
-// TODO: have a look again (distinction between edit and add)
 onMounted(async () => {
 	const { id } = route.query;
-
-	if (Object.keys(temp.value).length) {
-		ldapConfig.value = { ...temp.value };
-	} else if (id) {
-		await getLdapConfig(id as string);
-	} else {
-		resetLdapConfig();
-	}
+	await initializeStore(id as string | undefined);
 });
 </script>
 

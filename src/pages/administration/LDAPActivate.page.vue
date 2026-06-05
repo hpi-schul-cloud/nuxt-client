@@ -177,7 +177,8 @@ const router = useRouter();
 
 const importUsersStore = useImportUsersStore();
 const ldapConfigStore = useLdapConfigStore();
-const { verified, submitted, temp, status } = storeToRefs(ldapConfigStore);
+const { verified, submitted, ldapFormData, status } = storeToRefs(ldapConfigStore);
+
 const { updateLdapConfig, createLdapConfig } = ldapConfigStore;
 
 const migrateUsersCheckbox = ref(false);
@@ -237,7 +238,7 @@ const onBack = () => {
 
 const onSubmit = async () => {
 	const { id } = route.query;
-	const temporaryConfigData = { ...temp.value };
+	const temporaryConfigData = { ...ldapFormData.value };
 
 	if (temporaryConfigData.searchUserPassword === unchangedPassword) {
 		temporaryConfigData.searchUserPassword = undefined;
@@ -251,7 +252,7 @@ const onSubmit = async () => {
 	}
 
 	if (id) {
-		await updateLdapConfig(temporaryConfigData, id);
+		await updateLdapConfig(temporaryConfigData, id as string);
 	} else {
 		await createLdapConfig(temporaryConfigData);
 	}
