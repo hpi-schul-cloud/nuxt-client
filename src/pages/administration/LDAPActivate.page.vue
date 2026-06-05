@@ -1,6 +1,6 @@
 <template>
 	<DefaultWireframe :headline="t('pages.administration.ldap.save.title')" :breadcrumbs="breadcrumbs" max-width="short">
-		<section class="section">
+		<section v-if="verified" class="section">
 			<div class="icon-text">
 				<div class="icon-text-unit">
 					<VIcon :icon="mdiAccountSchoolOutline" />
@@ -112,7 +112,7 @@
 			/>
 		</div>
 		<div class="bottom-buttons">
-			<VBtn variant="text" data-testid="ldapBackButton" @click="backButtonHandler">
+			<VBtn variant="text" data-testid="ldapBackButton" @click="onBack">
 				<VIcon size="20" class="mr-1">{{ mdiChevronLeft }}</VIcon>
 				{{ t("common.actions.back") }}
 			</VBtn>
@@ -121,12 +121,12 @@
 				variant="flat"
 				data-testid="ldapSubmitButton"
 				:disabled="status === 'pending'"
-				@click="submitButtonHandler"
+				@click="onSubmit"
 			>
 				{{ t("pages.administration.ldap.save.example.synchronize") }}
 			</VBtn>
 		</div>
-		<VDialog :model-value="submitted.ok" :persistent="true" data-testid="confirmModal" width="480">
+		<VDialog :model-value="submitted?.ok" :persistent="true" data-testid="confirmModal" width="480">
 			<VCard>
 				<VCardText class="d-flex flex-column align-center text-center">
 					<VIcon size="60" color="success" :icon="mdiCheckCircle" />
@@ -139,7 +139,7 @@
 						color="success"
 						:text="t('pages.administration.ldap.activate.ok')"
 						data-testid="ldapOkButton"
-						@click="okButtonHandler"
+						@click="onConfirm"
 					/>
 				</VCardActions>
 			</VCard>
@@ -171,15 +171,6 @@ import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
-const redirectToConfigPage = () => {
-	const { id } = route.query;
-	if (id) {
-		router.push(`/administration/ldap/config?id=${id}`);
-	} else {
-		router.push("/administration/ldap/config");
-	}
-};
-
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -187,7 +178,7 @@ const router = useRouter();
 const importUsersStore = useImportUsersStore();
 const ldapConfigStore = useLdapConfigStore();
 const { verified, submitted, temp, status } = storeToRefs(ldapConfigStore);
-const { patchData, submitData } = ldapConfigStore;
+const { updateLdapConfig, createLdapConfig } = ldapConfigStore;
 
 const migrateUsersCheckbox = ref(false);
 
@@ -199,7 +190,8 @@ const showUserMigrationOption = computed(
 );
 
 const importUsersError = computed(() => importUsersStore.businessError);
-const activationErrors = computed(() => ldapErrorHandler(submitted.value.errors, t));
+const activationErrors = computed(() => ldapErrorHandler(submitted.value?.errors, t));
+
 const ldapConfigRoute = computed(() => {
 	const { id } = route.query;
 	if (id) {
@@ -208,6 +200,10 @@ const ldapConfigRoute = computed(() => {
 		return "/administration/ldap/config";
 	}
 });
+
+const redirectToConfigPage = () => {
+	router.push(ldapConfigRoute.value);
+};
 
 const breadcrumbs = computed<Breadcrumb[]>(() => [
 	{
@@ -228,18 +224,18 @@ const pageTitle = buildPageTitle(t("pages.administration.ldap.save.title"));
 useTitle(pageTitle);
 
 onMounted(() => {
-	if (!Object.keys(verified.value).length) {
+	if (!verified.value) {
 		redirectToConfigPage();
 	}
 
 	migrateUsersCheckbox.value = showUserMigrationOption.value;
 });
 
-const backButtonHandler = () => {
+const onBack = () => {
 	redirectToConfigPage();
 };
 
-const submitButtonHandler = async () => {
+const onSubmit = async () => {
 	const { id } = route.query;
 	const temporaryConfigData = { ...temp.value };
 
@@ -255,18 +251,13 @@ const submitButtonHandler = async () => {
 	}
 
 	if (id) {
-		await patchData(temporaryConfigData, id);
-		// await this.$store.dispatch("ldap-config/patchData", {
-		// 	systemData: temporaryConfigData,
-		// 	systemId: id,
-		// });
+		await updateLdapConfig(temporaryConfigData, id);
 	} else {
-		await submitData(temporaryConfigData);
-		// await this.$store.dispatch("ldap-config/submitData", temporaryConfigData);
+		await createLdapConfig(temporaryConfigData);
 	}
 };
 
-const okButtonHandler = () => {
+const onConfirm = () => {
 	router.push({
 		path: `/administration/school-settings`,
 	});

@@ -1,14 +1,14 @@
 type TranslateFn = (key: string) => string;
 
-type LdapError = {
+export type LdapError = {
 	type: string;
 	message?: string;
 };
 
-export const ldapErrorHandler = (error: LdapError[] = [], t: TranslateFn): string[] => {
+export const ldapErrorHandler = (error: LdapError[] | undefined, t: TranslateFn): string[] => {
 	const errorMessages: string[] = [];
 
-	error.forEach((err) => {
+	error?.forEach((err) => {
 		switch (err.type) {
 			case "WRONG_CREDENTIALS":
 				errorMessages.push(t("pages.administration.ldap.errors.credentials"));

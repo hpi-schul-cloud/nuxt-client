@@ -78,7 +78,7 @@ const ldapForm = useTemplateRef("ldapForm");
 
 const ldapConfigStore = useLdapConfigStore();
 const { ldapConfig, verified, temp, status } = storeToRefs(ldapConfigStore);
-const { verifyExisting, verifyData, getLdapConfig, resetLdapConfig } = ldapConfigStore;
+const { verifyExistingLdapConfig, verifyNewLdapConfig, getLdapConfig, resetLdapConfig } = ldapConfigStore;
 
 const pageTitle = buildPageTitle(t("pages.administration.ldap.title"));
 useTitle(pageTitle);
@@ -107,23 +107,18 @@ const validateHandler = async () => {
 				ldapConfig.value.searchUserPassword = undefined;
 			}
 
-			await verifyExisting(systemId, ldapConfig.value);
+			await verifyExistingLdapConfig(systemId, ldapConfig.value);
 		} else {
-			await verifyData(ldapConfig.value);
+			await verifyNewLdapConfig(ldapConfig.value);
 		}
 
-		if (!verified.value.ok) return;
+		if (!verified.value?.ok) return;
 
 		notifySuccess(t("pages.administration.ldap.index.verified"));
-		if (systemId) {
-			router.push({
-				path: `/administration/ldap/activate?id=${systemId}`,
-			});
-		} else {
-			router.push({
-				path: "/administration/ldap/activate",
-			});
-		}
+		router.push({
+			path: "/administration/ldap/activate",
+			query: systemId ? { id: systemId } : {},
+		});
 		return;
 	}
 
@@ -140,7 +135,7 @@ const clearClassesSectionData = () => {
 	ldapConfig.value.participantAttribute = undefined;
 };
 
-const verificationErrors = computed(() => ldapErrorHandler(verified.value.errors, t));
+const verificationErrors = computed(() => ldapErrorHandler(verified.value?.errors, t));
 
 // TODO: have a look again (distinction between edit and add)
 onMounted(async () => {
