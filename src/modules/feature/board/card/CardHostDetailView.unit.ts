@@ -14,9 +14,10 @@ import { BoardResponseAllowedOperations, CardResponse, Colors } from "@api-serve
 import { useBoardAllowedOperations, useCourseBoardEditMode, useSharedEditMode } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
+import { type VueWrapper } from "@vue/test-utils";
 import { computed, ref } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
-import { VDialog } from "vuetify/components";
+import { VBtn, VDialog } from "vuetify/components";
 
 const backgroundColor = Colors.BLUE;
 
@@ -122,14 +123,54 @@ describe("CardHostDetailView", () => {
 			expect(wrapper.find("[data-testid='next-detail-view-button']").exists()).toBe(true);
 		});
 
+		describe("when there is a previous card", () => {
+			it("should enable the previous button", () => {
+				const previousCardRoute = {
+					name: "boards-card-detail",
+					params: { boardId: "any-board-id", cardId: "previous-card-id" },
+				};
+				const { wrapper } = setup({
+					cardId: CARD_WITH_ELEMENTS.id,
+					previousCardRoute,
+				});
+
+				const prevButton = wrapper.findComponent("[data-testid='prev-detail-view-button']") as VueWrapper<
+					InstanceType<typeof VBtn>
+				>;
+				expect(prevButton.props("disabled")).toBe(false);
+				expect(prevButton.props("to")).toEqual(previousCardRoute);
+			});
+		});
+
 		describe("when there is no previous card", () => {
 			it("should disable the previous button", () => {
 				const { wrapper } = setup({
 					cardId: CARD_WITH_ELEMENTS.id,
 				});
 
-				const prevButton = wrapper.find("[data-testid='prev-detail-view-button']");
-				expect(prevButton.attributes("disabled")).toBeDefined();
+				const prevButton = wrapper.findComponent("[data-testid='prev-detail-view-button']") as VueWrapper<
+					InstanceType<typeof VBtn>
+				>;
+				expect(prevButton.props("disabled")).toBe(true);
+			});
+		});
+
+		describe("when there is a next card", () => {
+			it("should enable the next button and link to it", () => {
+				const nextCardRoute = {
+					name: "boards-card-detail",
+					params: { boardId: "any-board-id", cardId: "next-card-id" },
+				};
+				const { wrapper } = setup({
+					cardId: CARD_WITH_ELEMENTS.id,
+					nextCardRoute,
+				});
+
+				const nextButton = wrapper.findComponent("[data-testid='next-detail-view-button']") as VueWrapper<
+					InstanceType<typeof VBtn>
+				>;
+				expect(nextButton.props("disabled")).toBe(false);
+				expect(nextButton.props("to")).toEqual(nextCardRoute);
 			});
 		});
 
@@ -139,8 +180,10 @@ describe("CardHostDetailView", () => {
 					cardId: CARD_WITH_ELEMENTS.id,
 				});
 
-				const nextButton = wrapper.find("[data-testid='next-detail-view-button']");
-				expect(nextButton.attributes("disabled")).toBeDefined();
+				const nextButton = wrapper.findComponent("[data-testid='next-detail-view-button']") as VueWrapper<
+					InstanceType<typeof VBtn>
+				>;
+				expect(nextButton.props("disabled")).toBe(true);
 			});
 		});
 	});
