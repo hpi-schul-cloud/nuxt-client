@@ -2,7 +2,7 @@ import { unchangedPassword } from "../../../utils/ldapConstants";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
-import { LdapError } from "@/utils/ldapErrorHandling";
+import { LdapError } from "@/utils/ldap-error-handling.utils";
 import { notifyError } from "@data-app";
 import { defineStore } from "pinia";
 import { ref } from "vue";

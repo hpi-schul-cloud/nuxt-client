@@ -149,8 +149,8 @@
 
 <script setup lang="ts">
 import InfoMessage from "@/components/administration/InfoMessage.vue";
+import { ldapErrorHandler } from "@/utils/ldap-error-handling.utils";
 import { unchangedPassword } from "@/utils/ldapConstants";
-import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";

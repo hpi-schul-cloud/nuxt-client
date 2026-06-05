@@ -1,7 +1,8 @@
-import { actions, mutations } from "../../src/store/ldap-config";
-import { unchangedPassword } from "../utils/ldapConstants";
+import { actions, mutations } from "../../../store/ldap-config";
+import { unchangedPassword } from "../../../utils/ldapConstants";
 import { initializeAxios } from "@/utils/api";
 
+// TODO: Refactor tests from vuex to pinia
 const serverMockData = {
 	providerOptions: {
 		userAttributeNameMapping: {

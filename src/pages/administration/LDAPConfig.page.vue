@@ -56,8 +56,8 @@ import LdapClassesSection from "@/components/administration/ldap/LdapClassesSect
 import LdapConnectionSection from "@/components/administration/ldap/LdapConnectionSection.vue";
 import LdapRolesSection from "@/components/administration/ldap/LdapRolesSection.vue";
 import LdapUsersSection from "@/components/administration/ldap/LdapUsersSection.vue";
+import { ldapErrorHandler } from "@/utils/ldap-error-handling.utils";
 import { unchangedPassword } from "@/utils/ldapConstants";
-import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { isValidOrFocusFirstInvalidInput } from "@/utils/validation";
 import { notifySuccess } from "@data-app";
