@@ -16,7 +16,6 @@ export const notifyFromQueryParams = () => {
 	useNotificationStore().notify({
 		text: decodeURI(message as string),
 		status: type as AlertStatus,
-		autoClose: false,
 	});
 
 	params["toast-type"] = undefined;
