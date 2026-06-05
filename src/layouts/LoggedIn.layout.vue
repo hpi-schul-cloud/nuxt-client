@@ -17,11 +17,12 @@
 
 <script setup lang="ts">
 import { notifyFromQueryParams } from "@/utils/toast-query.utils";
+import { useNotificationListenerStore } from "@data-notification";
 import { AutoLogoutWarning } from "@feature-auto-logout";
 import { AlertContainer, ApplicationError, Sidebar, Topbar } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
 import { useStorage } from "@vueuse/core";
-import { computed, watch } from "vue";
+import { computed, onMounted, onUnmounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 
@@ -44,4 +45,15 @@ watch(isDesktop, () => {
 const onToggleSidebar = () => {
 	sidebarExpanded.value = !sidebarExpanded.value;
 };
+
+// Start SSE notification listener when layout mounts (user is logged in)
+const notificationListener = useNotificationListenerStore();
+
+onMounted(() => {
+	notificationListener.startListening();
+});
+
+onUnmounted(() => {
+	notificationListener.stopListening();
+});
 </script>
