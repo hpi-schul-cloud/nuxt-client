@@ -1,0 +1,199 @@
+import { ServerNotificationMessage, useNotificationListenerStore } from "./notification-listener.store";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+// Mock the useNotificationStream composable
+const mockConnect = vi.fn();
+const mockDisconnect = vi.fn();
+const mockClearNotifications = vi.fn();
+let mockOnNotification: ((data: unknown) => void) | undefined;
+
+const mockNotify = vi.fn();
+
+vi.mock("@data-app", () => ({
+	useNotificationStore: vi.fn(() => ({
+		notify: mockNotify,
+	})),
+}));
+
+vi.mock("@/plugins/i18n", () => ({
+	i18nKeyExists: vi.fn((key) => key === "TEST_KEY"),
+}));
+
+vi.mock("./notification-sse.composable", () => ({
+	useNotificationStream: (options: { onNotification?: (data: unknown) => void }) => {
+		mockOnNotification = options.onNotification;
+		return {
+			connect: mockConnect,
+			disconnect: mockDisconnect,
+			status: { value: "disconnected" },
+			isConnected: { value: false },
+			isConnecting: { value: false },
+			hasError: { value: false },
+			notifications: { value: [] },
+			lastNotification: { value: null },
+			reconnectAttempts: { value: 0 },
+			clearNotifications: mockClearNotifications,
+		};
+	},
+}));
+
+/**
+ * Helper to create a valid server notification message
+ */
+const createNotificationMessage = (type: "info" | "error"): ServerNotificationMessage => ({
+	type: "live",
+	notification: {
+		_id: { buffer: { type: "Buffer", data: [1, 2, 3] } },
+		userId: "user123",
+		type,
+		key: "TEST_KEY",
+		arguments: {},
+		expiresAt: "2026-05-21T20:00:00.000Z",
+		createdAt: "2026-05-21T19:00:00.000Z",
+		updatedAt: "2026-05-21T19:00:00.000Z",
+	},
+});
+
+describe("useNotificationListenerStore", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		vi.clearAllMocks();
+	});
+
+	afterEach(() => {
+		mockOnNotification = undefined;
+	});
+
+	describe("startListening", () => {
+		it("should call connect on first start", () => {
+			const store = useNotificationListenerStore();
+
+			store.startListening();
+
+			expect(mockConnect).toHaveBeenCalledTimes(1);
+			expect(store.isInitialized).toBe(true);
+		});
+
+		it("should not call connect if already initialized", () => {
+			const store = useNotificationListenerStore();
+
+			store.startListening();
+			store.startListening();
+
+			expect(mockConnect).toHaveBeenCalledTimes(1);
+		});
+	});
+
+	describe("stopListening", () => {
+		it("should call disconnect when stopping", () => {
+			const store = useNotificationListenerStore();
+
+			store.startListening();
+			store.stopListening();
+
+			expect(mockDisconnect).toHaveBeenCalledTimes(1);
+			expect(mockClearNotifications).toHaveBeenCalledTimes(1);
+			expect(store.isInitialized).toBe(false);
+		});
+
+		it("should not call disconnect if not initialized", () => {
+			const store = useNotificationListenerStore();
+
+			store.stopListening();
+
+			expect(mockDisconnect).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("notification handling", () => {
+		it("should display info notification for 'info' type", () => {
+			useNotificationListenerStore();
+
+			const notification = createNotificationMessage("info");
+
+			mockOnNotification?.(notification);
+
+			expect(mockNotify).toHaveBeenCalledWith({
+				status: notification.notification.type,
+				text: notification.notification.key,
+				replace: notification.notification.arguments,
+				autoClose: true,
+			});
+		});
+
+		it("should display error notification for 'error' type", () => {
+			useNotificationListenerStore();
+
+			const notification = createNotificationMessage("error");
+
+			mockOnNotification?.(notification);
+
+			expect(mockNotify).toHaveBeenCalledWith({
+				status: notification.notification.type,
+				text: notification.notification.key,
+				replace: notification.notification.arguments,
+				autoClose: true,
+			});
+		});
+
+		it("should ignore messages without 'live' type", () => {
+			useNotificationListenerStore();
+
+			mockOnNotification?.({
+				type: "other",
+				notification: {
+					key: "TEST_KEY",
+					type: "info",
+					arguments: ["Test"],
+				},
+			});
+
+			expect(mockNotify).not.toHaveBeenCalled();
+		});
+
+		it("should ignore invalid notification format", () => {
+			useNotificationListenerStore();
+
+			mockOnNotification?.({ invalid: "data" });
+
+			expect(mockNotify).not.toHaveBeenCalled();
+		});
+
+		it("should ignore notifications with missing localization keys", () => {
+			useNotificationListenerStore();
+
+			mockOnNotification?.({
+				type: "live",
+				notification: {
+					_id: { buffer: { type: "Buffer", data: [1, 2, 3] } },
+					userId: "user123",
+					type: "info",
+					key: "MISSING_KEY",
+					arguments: {},
+					expiresAt: "2026-05-21T20:00:00.000Z",
+					createdAt: "2026-05-21T19:00:00.000Z",
+					updatedAt: "2026-05-21T19:00:00.000Z",
+				},
+			});
+
+			expect(mockNotify).not.toHaveBeenCalled();
+		});
+
+		it("should ignore notification with invalid type", () => {
+			useNotificationListenerStore();
+
+			mockOnNotification?.({
+				type: "live",
+				notification: {
+					key: "TEST_KEY",
+					type: "warning", // not "note" or "error"
+					arguments: ["Test"],
+				},
+			});
+
+			expect(mockNotify).not.toHaveBeenCalled();
+		});
+	});
+});

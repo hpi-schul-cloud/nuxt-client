@@ -83,7 +83,12 @@ describe("useCommonCartridgeImport composable", () => {
 
 				await importCommonCartridgeFile(file);
 
-				expect(commonCartridgeApiMock.commonCartridgeControllerUploadFileAndStartImport).toHaveBeenCalledWith(file);
+				const encodedFileName = encodeURIComponent(file.name);
+				expect(commonCartridgeApiMock.commonCartridgeControllerUploadFileAndStartImport).toHaveBeenCalledWith(file, {
+					headers: {
+						"Content-Disposition": `attachment; filename="${encodedFileName}"; filename*=UTF-8''${encodedFileName}`,
+					},
+				});
 				expect(isSuccess.value).toBe(true);
 			});
 
@@ -97,7 +102,12 @@ describe("useCommonCartridgeImport composable", () => {
 				);
 				await importCommonCartridgeFile(file);
 
-				expect(commonCartridgeApiMock.commonCartridgeControllerUploadFileAndStartImport).toHaveBeenCalledWith(file);
+				const encodedFileName = encodeURIComponent(file.name);
+				expect(commonCartridgeApiMock.commonCartridgeControllerUploadFileAndStartImport).toHaveBeenCalledWith(file, {
+					headers: {
+						"Content-Disposition": `attachment; filename="${encodedFileName}"; filename*=UTF-8''${encodedFileName}`,
+					},
+				});
 				expect(isSuccess.value).toBe(false);
 			});
 
