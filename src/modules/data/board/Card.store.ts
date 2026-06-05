@@ -18,7 +18,7 @@ import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useSharedEditMode } from "./edit-mode.composable";
 import { FileRecordParent } from "@/types/file/File";
 import { CardResponse, ContentElementType, CopyStatusEnum, PreferredToolResponse, ToolContextType } from "@api-server";
-import { notifyError, notifyInfo, notifySuccess } from "@data-app";
+import { notifyError, notifyInfo } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { CollaboraFileType, useFileStorageApi } from "@data-file";
 import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
@@ -108,8 +108,6 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (payload.isOwnAction === true) {
 			if (payload.status !== CopyStatusEnum.SUCCESS) {
 				notifyError(generateErrorText("notDuplicated", "boardCard"));
-			} else {
-				notifySuccess("components.board.notifications.success.cardDuplicated");
 			}
 			if (!duplicatedCard.id) {
 				return;
