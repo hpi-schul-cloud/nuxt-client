@@ -19,7 +19,6 @@ import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { AnyContentElementSchema } from "@/types/board/ContentElement.schema";
 import { notifyError } from "@data-app";
-import { useErrorHandler } from "@util-error-handling";
 import { useDebounceFn } from "@vueuse/core";
 import { chunk } from "lodash-es";
 import { storeToRefs } from "pinia";
@@ -28,7 +27,6 @@ import { useI18n } from "vue-i18n";
 export const useCardSocketApi = () => {
 	const cardStore = useCardStore();
 	const { t } = useI18n();
-	const { notifySocketError } = useErrorHandler();
 
 	const WAIT_AFTER_LAST_CALL_IN_MS = 30;
 	const MAX_WAIT_BEFORE_FIRST_CALL_IN_MS = 200;
@@ -67,10 +65,7 @@ export const useCardSocketApi = () => {
 			on(CardActions.updateCardTitleFailure, ({ cardId }) => reloadBoard(cardId)),
 			on(CardActions.updateCardColorFailure, ({ cardId }) => reloadBoard(cardId)),
 			on(CardActions.deleteCardFailure, ({ cardId }) => reloadBoard(cardId)),
-			on(CardActions.duplicateCardFailure, ({ cardId }) => {
-				notifySocketError("notDuplicated", "boardCard");
-				reloadBoard(cardId);
-			}),
+			on(CardActions.duplicateCardFailure, ({ cardId }) => reloadBoard(cardId)),
 		];
 
 		const ariaLiveNotification = [

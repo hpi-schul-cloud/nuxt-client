@@ -446,18 +446,6 @@ describe("useBoardSocketApi", () => {
 
 				expect(socketMock.emitOnSocket).toHaveBeenCalledWith("fetch-board-request", expect.anything());
 			});
-
-			it("should notify error for duplicateColumnFailure action", () => {
-				const { dispatch } = setupWithFakeBoard();
-
-				dispatch(
-					BoardActions.duplicateColumnFailure({
-						columnId: "test",
-					})
-				);
-
-				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith("notDuplicated", "boardColumn");
-			});
 		});
 	});
 
