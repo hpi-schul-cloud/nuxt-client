@@ -2,24 +2,24 @@
 	<DefaultWireframe :headline="$t('pages.administration.ldap.title')" :breadcrumbs="breadcrumbs" max-width="short">
 		<section class="section">
 			<p class="subtitle-text">
-				{{ $t("pages.administration.ldap.subtitle.one") }}
+				{{ t("pages.administration.ldap.subtitle.one") }}
 			</p>
 			<p class="subtitle-text">
-				{{ $t("pages.administration.ldap.subtitle.two") }}
+				{{ t("pages.administration.ldap.subtitle.two") }}
 			</p>
 			<div class="help-section">
-				{{ $t("pages.administration.ldap.subtitle.help") }}
+				{{ t("pages.administration.ldap.subtitle.help") }}
 				<a href="https://docs.dbildungscloud.de/x/PgBVAw" target="_blank">
-					{{ $t("pages.administration.ldap.subtitle.helping.link") }}.
+					{{ t("pages.administration.ldap.subtitle.helping.link") }}.
 				</a>
 			</div>
 			<VForm ref="ldapForm" validate-on="submit" @submit.prevent.stop="validateHandler">
 				<div class="form-container">
-					<LdapConnectionSection v-model="systemData" data-testid="ldapConnectionSection" />
-					<LdapUsersSection v-model="systemData" data-testid="ldapUsersSection" />
-					<LdapRolesSection v-model="systemData" data-testid="ldapRolesSection" />
+					<LdapConnectionSection v-model="ldapConfig" data-testid="ldapConnectionSection" />
+					<LdapUsersSection v-model="ldapConfig" data-testid="ldapUsersSection" />
+					<LdapRolesSection v-model="ldapConfig" data-testid="ldapRolesSection" />
 					<LdapClassesSection
-						v-model="systemData"
+						v-model="ldapConfig"
 						data-testid="ldapClassesSection"
 						@update:inputs="clearClassesSectionData"
 					/>
@@ -32,7 +32,7 @@
 				</div>
 				<div class="buttons-container">
 					<VBtn variant="text" data-testid="ldapResetInputsButton" @click="clearInputsHandler">
-						{{ $t("pages.administration.ldap.index.buttons.reset") }}
+						{{ t("pages.administration.ldap.index.buttons.reset") }}
 					</VBtn>
 					<VBtn
 						color="primary"
@@ -42,7 +42,7 @@
 						:disabled="status === 'pending'"
 						@click="validateHandler"
 					>
-						{{ $t("pages.administration.ldap.index.buttons.verify") }}
+						{{ t("pages.administration.ldap.index.buttons.verify") }}
 					</VBtn>
 				</div>
 			</VForm>
@@ -50,7 +50,7 @@
 	</DefaultWireframe>
 </template>
 
-<script>
+<script setup lang="ts">
 import InfoMessage from "@/components/administration/InfoMessage.vue";
 import LdapClassesSection from "@/components/administration/ldap/LdapClassesSection.vue";
 import LdapConnectionSection from "@/components/administration/ldap/LdapConnectionSection.vue";
@@ -59,127 +59,104 @@ import LdapUsersSection from "@/components/administration/ldap/LdapUsersSection.
 import { unchangedPassword } from "@/utils/ldapConstants";
 import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { isValidOrFocusFirstInvalidInput } from "@/utils/validation";
 import { notifySuccess } from "@data-app";
-import { DefaultWireframe } from "@ui-layout";
-import { defineComponent, useTemplateRef } from "vue";
-import { mapGetters } from "vuex";
+import { useLdapConfig } from "@data-ldap";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
+import { useTitle } from "@vueuse/core";
+import { computed, onMounted, ref, useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
 
-export default defineComponent({
-	components: {
-		DefaultWireframe,
-		LdapRolesSection,
-		LdapConnectionSection,
-		LdapUsersSection,
-		LdapClassesSection,
-		InfoMessage,
-	},
-	setup() {
-		const ldapForm = useTemplateRef("ldapForm");
-		return { ldapForm };
-	},
-	data() {
-		return {
-			breadcrumbs: [
-				{
-					title: this.$t("pages.administration.school.index.title"),
-					to: "/administration/school-settings",
-				},
-				{
-					title: this.$t("pages.administration.ldap.index.title"),
-					disabled: true,
-				},
-			],
-			validationError: "",
-			systemData: {
-				// default input values
-				member: "memberOf",
-				groupOption: "group",
-			},
-		};
-	},
-	computed: {
-		...mapGetters("ldap-config", {
-			data: "getData",
-			verified: "getVerified",
-			temp: "getTemp",
-			status: "getStatus",
-		}),
-		verificationErrors() {
-			return ldapErrorHandler(this.verified.errors, this);
-		},
-	},
-	async created() {
-		const { id } = this.$route.query;
+const { t } = useI18n();
+const route = useRoute();
+const router = useRouter();
+const { ldapConfig, verified, temp, status, verifyExisting, verifyData, getLdapConfig, resetLdapConfig } =
+	useLdapConfig();
+const ldapForm = useTemplateRef("ldapForm");
 
-		if (Object.keys(this.temp).length) {
-			this.systemData = { ...this.temp };
-		} else if (id) {
-			await this.$store.dispatch("ldap-config/getData", id);
-			this.systemData = { ...this.data };
+const pageTitle = buildPageTitle(t("pages.administration.ldap.title"));
+useTitle(pageTitle);
+
+const breadcrumbs = computed<Breadcrumb[]>(() => [
+	{
+		title: t("pages.administration.school.index.title"),
+		to: "/administration/school-settings",
+	},
+	{
+		title: t("pages.administration.ldap.index.title"),
+		disabled: true,
+	},
+]);
+
+const validationError = ref("");
+
+const validateHandler = async () => {
+	validationError.value = "";
+
+	const systemId = route.query.id as string;
+
+	const isValid = await isValidOrFocusFirstInvalidInput(ldapForm);
+	console.log("isValid", isValid);
+
+	if (isValid) {
+		if (systemId) {
+			if (ldapConfig.value.searchUserPassword === unchangedPassword) {
+				ldapConfig.value.searchUserPassword = undefined;
+			}
+
+			await verifyExisting(systemId, ldapConfig.value);
+		} else {
+			await verifyData(ldapConfig.value);
+			console.log("verifyData called with", ldapConfig.value);
+			// await this.$store.dispatch("ldap-config/verifyData", this.systemData);
 		}
-	},
-	mounted() {
-		document.title = buildPageTitle(this.$t("pages.administration.ldap.title"));
-	},
-	methods: {
-		validateHandler() {
-			this.validationError = "";
 
-			const systemId = this.$route.query.id;
+		if (!verified.value.ok) {
+			console.log("Verification failed with errors", verified.value.errors);
+			return;
+		} else {
+			notifySuccess(t("pages.administration.ldap.index.verified"));
+			if (systemId) {
+				router.push({
+					path: `/administration/ldap/activate?id=${systemId}`,
+				});
+			} else {
+				router.push({
+					path: "/administration/ldap/activate",
+				});
+			}
+			return;
+		}
+	}
 
-			this.$nextTick(async () => {
-				const { valid } = await this.ldapForm.validate();
+	validationError.value = t("common.validation.invalid");
+};
 
-				if (valid) {
-					if (systemId) {
-						if (this.systemData.searchUserPassword === unchangedPassword) {
-							this.systemData.searchUserPassword = undefined;
-						}
+const clearInputsHandler = () => {
+	resetLdapConfig();
+};
 
-						await this.$store.dispatch("ldap-config/verifyExisting", {
-							systemId: systemId,
-							systemData: this.systemData,
-						});
-					} else {
-						await this.$store.dispatch("ldap-config/verifyData", this.systemData);
-					}
+const clearClassesSectionData = () => {
+	ldapConfig.value = {
+		...ldapConfig.value,
+		classPath: undefined,
+		nameAttribute: undefined,
+		participantAttribute: undefined,
+	};
+};
 
-					if (!this.verified.ok) {
-						return;
-					} else {
-						notifySuccess(this.$t("pages.administration.ldap.index.verified"));
-						if (systemId) {
-							this.$router.push({
-								path: `/administration/ldap/activate?id=${systemId}`,
-							});
-						} else {
-							this.$router.push({
-								path: "/administration/ldap/activate",
-							});
-						}
-						return;
-					}
-				}
+const verificationErrors = computed(() => ldapErrorHandler(verified.value.errors, t));
 
-				this.validationError = this.$t("common.validation.invalid");
-			});
-		},
-		clearInputsHandler() {
-			this.systemData = {
-				// default input values
-				member: "memberOf",
-				groupOption: "group",
-			};
-		},
-		clearClassesSectionData() {
-			this.systemData = {
-				...this.systemData,
-				classPath: undefined,
-				nameAttribute: undefined,
-				participantAttribute: undefined,
-			};
-		},
-	},
+onMounted(async () => {
+	const { id } = route.query;
+
+	if (Object.keys(temp.value).length) {
+		ldapConfig.value = { ...temp.value };
+	} else if (id) {
+		await getLdapConfig(id as string);
+		// ldapConfig.value = { ...ldapConfig.value };
+	}
 });
 </script>
 
