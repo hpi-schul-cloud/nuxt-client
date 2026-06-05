@@ -763,7 +763,7 @@ export default {
 	"components.molecules.export.options.info.point1": "Uploaded files within the course.",
 	"components.molecules.export.options.info.point2": "Submissions",
 	"components.molecules.export.options.info.point3":
-		"To ensure compatibility with Moodle, file folders are exported as a group of individual files.",
+		"To ensure compatibility with Moodle, file folders are exported in Common Cartridge version 1.1 as a group of individual files.",
 	"components.molecules.export.options.info.point4": "Following Card Elements within sections:",
 	"components.molecules.export.options.info.point4.sub1": "Whiteboard",
 	"components.molecules.export.options.info.point4.sub2": "Etherpad",
