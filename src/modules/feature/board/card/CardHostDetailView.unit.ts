@@ -110,14 +110,38 @@ describe("CardHostDetailView", () => {
 			});
 			expect(wrapper.findComponent(CardHostDetailView).exists()).toBe(true);
 		});
+	});
 
-		it("should show backward and forward navigation buttons", () => {
+	describe("pagination buttons", () => {
+		it("should render backward and forward navigation buttons", () => {
 			const { wrapper } = setup({
 				cardId: CARD_WITH_ELEMENTS.id,
 			});
 
 			expect(wrapper.find("[data-testid='prev-detail-view-button']").exists()).toBe(true);
 			expect(wrapper.find("[data-testid='next-detail-view-button']").exists()).toBe(true);
+		});
+
+		describe("when there is no previous card", () => {
+			it("should disable the previous button", () => {
+				const { wrapper } = setup({
+					cardId: CARD_WITH_ELEMENTS.id,
+				});
+
+				const prevButton = wrapper.find("[data-testid='prev-detail-view-button']");
+				expect(prevButton.attributes("disabled")).toBeDefined();
+			});
+		});
+
+		describe("when there is no next card", () => {
+			it("should disable the next button", () => {
+				const { wrapper } = setup({
+					cardId: CARD_WITH_ELEMENTS.id,
+				});
+
+				const nextButton = wrapper.find("[data-testid='next-detail-view-button']");
+				expect(nextButton.attributes("disabled")).toBeDefined();
+			});
 		});
 	});
 

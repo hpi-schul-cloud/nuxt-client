@@ -215,7 +215,7 @@ const cardId = computed(() => {
 	return undefined;
 });
 
-const { previousCardRoute, nextCardRoute } = useBoardCardNavigation(computed(() => props.boardId));
+const { previousCardRoute, nextCardRoute } = useBoardCardNavigation();
 
 const isEditableChipVisible = computed(() => board.value?.readersCanEdit ?? false);
 const hasReadersEditPermission = ref(false);

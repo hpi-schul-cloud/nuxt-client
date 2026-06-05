@@ -31,8 +31,6 @@ vi.mock("vue-router", () => ({
 }));
 
 describe("board-card-navigation.composable", () => {
-	const BOARD_ID = "board-1";
-
 	const setup = (board?: Board) => {
 		const mockedBoardStore = mockComposable(useBoardStore, { board });
 		mockedUseBoardStore.mockReturnValue(mockedBoardStore);
@@ -46,7 +44,20 @@ describe("board-card-navigation.composable", () => {
 		it("should return undefined for both routes", () => {
 			setup();
 
-			const { previousCardRoute, nextCardRoute } = useBoardCardNavigation(BOARD_ID);
+			const { previousCardRoute, nextCardRoute } = useBoardCardNavigation();
+
+			expect(previousCardRoute.value).toBeUndefined();
+			expect(nextCardRoute.value).toBeUndefined();
+		});
+	});
+
+	describe("when board has no columns", () => {
+		it("should return undefined for both routes", () => {
+			const board = boardResponseFactory.build({ columns: undefined as never });
+			setup(board);
+			mockCardId.value = "any-card-id";
+
+			const { previousCardRoute, nextCardRoute } = useBoardCardNavigation();
 
 			expect(previousCardRoute.value).toBeUndefined();
 			expect(nextCardRoute.value).toBeUndefined();
@@ -60,7 +71,7 @@ describe("board-card-navigation.composable", () => {
 			const board = boardResponseFactory.build({ columns: [column] });
 			setup(board);
 
-			const { previousCardRoute, nextCardRoute } = useBoardCardNavigation(BOARD_ID);
+			const { previousCardRoute, nextCardRoute } = useBoardCardNavigation();
 
 			expect(previousCardRoute.value).toBeUndefined();
 			expect(nextCardRoute.value).toBeUndefined();
@@ -75,7 +86,7 @@ describe("board-card-navigation.composable", () => {
 			setup(board);
 			mockCardId.value = cards[0].cardId;
 
-			const { previousCardRoute } = useBoardCardNavigation(BOARD_ID);
+			const { previousCardRoute } = useBoardCardNavigation();
 
 			expect(previousCardRoute.value).toBeUndefined();
 		});
@@ -87,11 +98,11 @@ describe("board-card-navigation.composable", () => {
 			setup(board);
 			mockCardId.value = cards[0].cardId;
 
-			const { nextCardRoute } = useBoardCardNavigation(BOARD_ID);
+			const { nextCardRoute } = useBoardCardNavigation();
 
 			expect(nextCardRoute.value).toEqual({
 				name: "boards-card-detail",
-				params: { boardId: BOARD_ID, cardId: cards[1].cardId },
+				params: { boardId: board.id, cardId: cards[1].cardId },
 			});
 		});
 	});
@@ -104,7 +115,7 @@ describe("board-card-navigation.composable", () => {
 			setup(board);
 			mockCardId.value = cards[2].cardId;
 
-			const { nextCardRoute } = useBoardCardNavigation(BOARD_ID);
+			const { nextCardRoute } = useBoardCardNavigation();
 
 			expect(nextCardRoute.value).toBeUndefined();
 		});
@@ -116,11 +127,11 @@ describe("board-card-navigation.composable", () => {
 			setup(board);
 			mockCardId.value = cards[2].cardId;
 
-			const { previousCardRoute } = useBoardCardNavigation(BOARD_ID);
+			const { previousCardRoute } = useBoardCardNavigation();
 
 			expect(previousCardRoute.value).toEqual({
 				name: "boards-card-detail",
-				params: { boardId: BOARD_ID, cardId: cards[1].cardId },
+				params: { boardId: board.id, cardId: cards[1].cardId },
 			});
 		});
 	});
@@ -133,15 +144,15 @@ describe("board-card-navigation.composable", () => {
 			setup(board);
 			mockCardId.value = cards[1].cardId;
 
-			const { previousCardRoute, nextCardRoute } = useBoardCardNavigation(BOARD_ID);
+			const { previousCardRoute, nextCardRoute } = useBoardCardNavigation();
 
 			expect(previousCardRoute.value).toEqual({
 				name: "boards-card-detail",
-				params: { boardId: BOARD_ID, cardId: cards[0].cardId },
+				params: { boardId: board.id, cardId: cards[0].cardId },
 			});
 			expect(nextCardRoute.value).toEqual({
 				name: "boards-card-detail",
-				params: { boardId: BOARD_ID, cardId: cards[2].cardId },
+				params: { boardId: board.id, cardId: cards[2].cardId },
 			});
 		});
 	});
@@ -157,11 +168,11 @@ describe("board-card-navigation.composable", () => {
 				setup(board);
 				mockCardId.value = cardsA[1].cardId;
 
-				const { nextCardRoute } = useBoardCardNavigation(BOARD_ID);
+				const { nextCardRoute } = useBoardCardNavigation();
 
 				expect(nextCardRoute.value).toEqual({
 					name: "boards-card-detail",
-					params: { boardId: BOARD_ID, cardId: cardsB[0].cardId },
+					params: { boardId: board.id, cardId: cardsB[0].cardId },
 				});
 			});
 		});
@@ -176,30 +187,12 @@ describe("board-card-navigation.composable", () => {
 				setup(board);
 				mockCardId.value = cardsB[0].cardId;
 
-				const { previousCardRoute } = useBoardCardNavigation(BOARD_ID);
+				const { previousCardRoute } = useBoardCardNavigation();
 
 				expect(previousCardRoute.value).toEqual({
 					name: "boards-card-detail",
-					params: { boardId: BOARD_ID, cardId: cardsA[1].cardId },
+					params: { boardId: board.id, cardId: cardsA[1].cardId },
 				});
-			});
-		});
-	});
-
-	describe("when boardId is passed as a Ref", () => {
-		it("should use the ref value in the route params", () => {
-			const cards = cardSkeletonResponseFactory.buildList(2);
-			const column = columnResponseFactory.build({ cards });
-			const board = boardResponseFactory.build({ columns: [column] });
-			setup(board);
-			mockCardId.value = cards[0].cardId;
-
-			const boardIdRef = ref("ref-board-id");
-			const { nextCardRoute } = useBoardCardNavigation(boardIdRef);
-
-			expect(nextCardRoute.value).toEqual({
-				name: "boards-card-detail",
-				params: { boardId: "ref-board-id", cardId: cards[1].cardId },
 			});
 		});
 	});
