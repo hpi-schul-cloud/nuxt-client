@@ -1,0 +1,31 @@
+type TranslateFn = (key: string) => string;
+
+type LdapError = {
+	type: string;
+	message?: string;
+};
+
+export const ldapErrorHandler = (error: LdapError[] = [], t: TranslateFn): string[] => {
+	const errorMessages: string[] = [];
+
+	error.forEach((err) => {
+		switch (err.type) {
+			case "WRONG_CREDENTIALS":
+				errorMessages.push(t("pages.administration.ldap.errors.credentials"));
+				break;
+			case "CONNECTION_ERROR":
+				errorMessages.push(err.message ?? "");
+				break;
+			case "WRONG_SEARCH_PATH":
+				errorMessages.push(t("pages.administration.ldap.errors.path"));
+				break;
+			case "INVALID_CONFIGURATION_OBJECT":
+				errorMessages.push(t("pages.administration.ldap.errors.configuration"));
+				break;
+			default:
+				return;
+		}
+	});
+
+	return errorMessages;
+};
