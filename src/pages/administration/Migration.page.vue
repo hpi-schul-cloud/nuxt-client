@@ -468,7 +468,7 @@ useTitle(
 	buildPageTitle(
 		t("pages.administration.migration.title", {
 			source: sourceSystemName.value,
-			instance: instanceName,
+			instance: instanceName.value,
 		})
 	)
 );
