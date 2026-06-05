@@ -777,7 +777,8 @@ export default {
 	"components.molecules.export.options.info": "Наступний вміст не експортується:",
 	"components.molecules.export.options.info.point1": "Завантажені файли в межах курсу.",
 	"components.molecules.export.options.info.point2": "Подання",
-	"components.molecules.export.options.info.point3": "Папки файлів не експортуються з Common Cartridge версією 1.1",
+	"components.molecules.export.options.info.point3":
+		"Щоб забезпечити сумісність із Moodle, папки файлів експортуються як група окремих файлів.",
 	"components.molecules.export.options.info.point4": "Наступні елементи карти в межах областей:",
 	"components.molecules.export.options.info.point4.sub1": "Біла дошка",
 	"components.molecules.export.options.info.point4.sub2": "Etherpad",
