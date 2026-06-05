@@ -1,7 +1,6 @@
 import "@/plugins/polyfills";
 import App from "./App.vue";
 import { createI18n } from "./plugins/i18n";
-import store from "./plugins/store";
 import { createVuetifyPlugin } from "./plugins/vuetify";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
@@ -53,7 +52,7 @@ app.use(VueDOMPurifyHTML, {
 	// creation of i18n relies on App.store
 	const i18n = createI18n();
 	const vuetify = createVuetifyPlugin(i18n);
-	app.use(router).use(store).use(vuetify).use(i18n);
+	app.use(router).use(vuetify).use(i18n);
 
 	app.mount("#app");
 })();
