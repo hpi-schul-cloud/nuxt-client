@@ -316,7 +316,7 @@ const buildActionMenuAriaLabel = (item: FileRecord): string =>
 
 .drop-zone-empty__subtitle {
 	margin: 0;
-	color: rgba(var(--v-theme-on-surface));
+	color: rgb(var(--v-theme-on-surface));
 }
 
 .drop-zone-empty__browse-link {
