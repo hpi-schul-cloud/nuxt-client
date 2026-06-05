@@ -8,22 +8,20 @@
 				@click="onDialogClose"
 			/>
 			<VToolbarTitle>{{ $t("components.board.dialog.detail-view.title") }}</VToolbarTitle>
-			<div class="toolbar-navigation">
-				<VBtn
-					:icon="mdiChevronLeft"
-					data-testid="prev-detail-view-button"
-					:aria-label="t('components.board.action.prev-detail-view')"
-					:to="previousCardRoute"
-					:disabled="!previousCardRoute"
-				/>
-				<VBtn
-					:icon="mdiChevronRight"
-					data-testid="next-detail-view-button"
-					:aria-label="t('components.board.action.next-detail-view')"
-					:to="nextCardRoute"
-					:disabled="!nextCardRoute"
-				/>
-			</div>
+			<VBtn
+				:icon="mdiChevronLeft"
+				data-testid="prev-detail-view-button"
+				:aria-label="t('components.board.action.prev-detail-view')"
+				:to="previousCardRoute"
+				:disabled="!previousCardRoute"
+			/>
+			<VBtn
+				:icon="mdiChevronRight"
+				data-testid="next-detail-view-button"
+				:aria-label="t('components.board.action.next-detail-view')"
+				:to="nextCardRoute"
+				:disabled="!nextCardRoute"
+			/>
 			<VSpacer />
 			<VBtn
 				v-if="allowedOperations?.deleteCard && !isEditMode"
@@ -121,17 +119,6 @@ const onDialogClose = () => {
 	position: absolute;
 	width: 100%;
 	z-index: 2001;
-}
-
-.toolbar-navigation {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-	display: flex;
-	gap: 0.25rem;
-	align-items: center;
-	justify-content: center;
 }
 
 .v-card {
