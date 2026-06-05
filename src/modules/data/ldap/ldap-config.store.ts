@@ -7,7 +7,7 @@ import { notifyError } from "@data-app";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-type LdapFormData = {
+export type LdapFormData = {
 	url: string;
 	basisPath: string;
 	searchUser: string;
@@ -29,7 +29,7 @@ type LdapFormData = {
 	participantAttribute: string | undefined;
 };
 
-type VerifiedData = {
+export type VerifiedData = {
 	ok: boolean;
 	errors: LdapError[];
 	users: {
