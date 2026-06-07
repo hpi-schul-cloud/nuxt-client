@@ -5,6 +5,7 @@ import {
 	isFWUEndpoint,
 	isH5pEditor,
 	isH5pStaticFiles,
+	isNotification,
 	isServer,
 } from "../../src/router/server-route.js";
 import { isVueClient } from "../../src/router/vue-client-route.js";
@@ -46,6 +47,9 @@ const proxyMiddleware: Connect.NextHandleFunction = (req, res, next) => {
 	} else if (isCommonCartridge(path)) {
 		const commonCartridgeProxy = createProxy(3350);
 		commonCartridgeProxy(req, res, next);
+	} else if (isNotification(path)) {
+		const notificationProxy = createProxy(3033);
+		notificationProxy(req, res, next);
 	} else if (isServer(path)) {
 		const serverProxy = createProxy(3030);
 		serverProxy(req, res, next);

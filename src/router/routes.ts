@@ -295,13 +295,18 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: "/news/new",
-		component: () => import("@/pages/NewsCreate.page.vue"),
+		component: async () => (await import("@page-news")).NewsCreatePage,
 		name: "news-new",
 		beforeEnter: createPermissionGuard([Permission.NEWS_CREATE]),
 	},
 	{
+		path: `/news/:id(${REGEX_ID})`,
+		component: async () => (await import("@page-news")).NewsDetailsPage,
+		name: "news-details",
+	},
+	{
 		path: `/news/:id(${REGEX_ID})/edit`,
-		component: () => import("@/pages/NewsEdit.page.vue"),
+		component: async () => (await import("@page-news")).NewsEditPage,
 		name: "news-id-edit",
 		beforeEnter: createPermissionGuard([Permission.NEWS_EDIT]),
 	},
