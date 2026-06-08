@@ -1,6 +1,7 @@
 import { unchangedPassword } from "../../../utils/ldapConstants";
 import { emptyLdapConfig, LdapFormData, useLdapConfigStore, VerifiedData } from "./ldap-config.store";
 import { initializeAxios } from "@/utils/api";
+import { expectNotification } from "@@/tests/test-utils/factory/application-test.utils";
 import { mockAxiosInstance } from "@@/tests/test-utils/mockAxiosInstance";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
@@ -12,7 +13,6 @@ const serverMockData = {
 		userAttributeNameMapping: {
 			givenName: "givenName",
 			sn: "sn",
-			dn: "dn",
 			uuid: "uidNumber",
 			uid: "uid",
 			mail: "mail",
@@ -26,19 +26,15 @@ const serverMockData = {
 		},
 		classAttributeNameMapping: {
 			description: "description",
-			dn: "dn",
 			uniqueMember: "member",
 		},
 		userPathAdditions: "ou=users",
 		classPathAdditions: "ou=classes,ou=groups",
 		roleType: "group",
-		schoolName: "Paul-Gerhardt-Gymnasium",
 	},
 	url: "ldaps://ldap.hpi-schul-cloud.de",
 	rootPath: "dc=schul-cloud,dc=org",
 	searchUser: "cn=ldapadmin,dc=schul-cloud,dc=org",
-	provider: "general",
-	active: true,
 };
 
 const clientMockData: LdapFormData = {
@@ -63,6 +59,32 @@ const clientMockData: LdapFormData = {
 	participantAttribute: "member",
 };
 
+const verifiedData: VerifiedData = {
+	ok: true,
+	errors: [],
+	users: {
+		total: 8,
+		admin: 2,
+		teacher: 2,
+		student: 4,
+		sample: {
+			email: "sample@example.com",
+			firstName: "Sample",
+			lastName: "User",
+			ldapUID: "sampleUID",
+			ldapUUID: "sampleUUID",
+			roles: ["student"],
+		},
+	},
+	classes: {
+		total: 2,
+		sample: {
+			name: "Sample Class",
+			ldapUUID: "sampleClassUUID",
+		},
+	},
+};
+
 describe("ldap-config.store", () => {
 	let axiosMock: Mocked<AxiosInstance>;
 	beforeEach(() => {
@@ -84,7 +106,7 @@ describe("ldap-config.store", () => {
 
 				expect(axiosMock.get).not.toHaveBeenCalledWith("/v1/ldap-config/id");
 			});
-			it("call fetch ldap config", async () => {
+			it("should call fetch ldap config", async () => {
 				axiosMock.get.mockResolvedValueOnce({ data: serverMockData });
 
 				await useLdapConfigStore().initializeStore("id");
@@ -92,7 +114,7 @@ describe("ldap-config.store", () => {
 				expect(axiosMock.get).toHaveBeenCalledWith("/v1/ldap-config/id");
 			});
 
-			it("should set orignal ldap config correctly", async () => {
+			it("should set original ldap config correctly", async () => {
 				axiosMock.get.mockResolvedValueOnce({ data: serverMockData });
 
 				const store = useLdapConfigStore();
@@ -102,7 +124,7 @@ describe("ldap-config.store", () => {
 			});
 		});
 		describe("when initialized without id", () => {
-			it("should set orignal ldap config to empty config", async () => {
+			it("should set original ldap config to empty config", async () => {
 				const store = useLdapConfigStore();
 				store.systemId = "someId";
 
@@ -140,13 +162,49 @@ describe("ldap-config.store", () => {
 			expect(store.ldapFormData).toEqual(store.originalLdapConfig);
 		});
 
-		it.todo("should notify error if fetching ldap config fails");
+		it("should notify error if fetching ldap config fails", async () => {
+			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
+			axiosMock.get.mockRejectedValueOnce(new Error("network"));
+
+			const { initializeStore } = useLdapConfigStore();
+			await initializeStore("id");
+
+			expectNotification("error");
+			consoleErrorSpy.mockRestore();
+		});
 	});
 
 	describe("verifyNewLdapConfig", () => {
-		it.todo("should call ldap-config api");
-		it.todo("should set verified data and form data on success");
-		it.todo("should notify error if api request fails");
+		it("should call ldap-config api", async () => {
+			axiosMock.post.mockResolvedValueOnce({ data: verifiedData });
+
+			const store = useLdapConfigStore();
+			await store.verifyNewLdapConfig(clientMockData);
+
+			expect(axiosMock.post).toHaveBeenCalledWith("/v1/ldap-config?verifyOnly=true", {
+				...serverMockData,
+				searchUserPassword: unchangedPassword,
+			});
+		});
+		it("should set verified data and form data on success", async () => {
+			axiosMock.post.mockResolvedValueOnce({ data: verifiedData });
+
+			const store = useLdapConfigStore();
+			await store.verifyNewLdapConfig(clientMockData);
+
+			expect(store.verified).toEqual(verifiedData);
+			expect(store.ldapFormData).toEqual(clientMockData);
+		});
+		it("should notify error if api request fails", async () => {
+			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
+			axiosMock.post.mockRejectedValueOnce(new Error("network"));
+
+			const store = useLdapConfigStore();
+			await store.verifyNewLdapConfig(clientMockData);
+
+			expectNotification("error");
+			consoleErrorSpy.mockRestore();
+		});
 	});
 	describe("verifyExistingLdapConfig", () => {
 		it.todo("should call ldap-config api");
