@@ -401,6 +401,10 @@ export const useBoardStore = defineStore("boardStore", () => {
 		socketOrRest.disconnectSocketRequest();
 	};
 
+	const cancelSocketReconnection = () => {
+		socketOrRest.cancelSocketReconnection();
+	};
+
 	const fetchBoardRequest = async (payload: FetchBoardRequestPayload) => {
 		await socketOrRest.fetchBoardRequest(payload);
 	};
@@ -457,6 +461,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	return {
 		board,
+		cancelSocketReconnection,
 		isLoading,
 		isConnected,
 		getCardLocation,

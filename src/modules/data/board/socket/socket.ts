@@ -29,6 +29,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 	const boardStore = useBoardStore();
 	const cardStore = useCardStore();
 	const { t } = useI18n();
+	let cancelSocketReconnection = (): void => undefined;
 
 	const getConnectedSocket = () => {
 		if (instance === null) {
@@ -70,7 +71,9 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 				}, 1000);
 			});
 
-			const { getState } = useConnectionErrorHandling(instance);
+			const { getState, cancelSocketReconnection: cancelReconnection } = useConnectionErrorHandling(instance);
+			cancelSocketReconnection = cancelReconnection;
+
 			logger.log("Connection state:", getState.value);
 		}
 
@@ -103,12 +106,14 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 		if (instance?.connected) {
 			instance.disconnect();
 		}
+		instance?.close();
 		instance = null;
 		isInitialConnection = true;
 		if (timeoutFn?.isPending.value) timeoutFn.stop();
 	};
 
 	return {
+		cancelSocketReconnection,
 		getConnectedSocket,
 		emitOnSocket,
 		emitWithAck,

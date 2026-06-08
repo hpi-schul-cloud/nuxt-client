@@ -119,6 +119,12 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 		log("reconn_failed");
 	});
 
+	const cancelSocketReconnection = () => {
+		log("cancel_reconn");
+		socket.disconnect();
+		socket.close();
+	};
+
 	socket.on("connect_error", handleError);
 
 	socket.io.engine.on("upgrade", () => {
@@ -150,6 +156,7 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 	const getState = computed(() => ({ startTime, transport: engine.transport.name, connectionState, logs }));
 
 	return {
+		cancelSocketReconnection,
 		getState,
 	};
 };
