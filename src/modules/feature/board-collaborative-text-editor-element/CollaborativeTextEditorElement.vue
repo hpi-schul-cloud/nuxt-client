@@ -37,6 +37,7 @@
 </template>
 
 <script setup lang="ts">
+import { askDeletionForType } from "../../../utils/confirmation-dialog.utils";
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
 import image from "@/assets/img/collaborativeEditor.svg";
@@ -95,7 +96,12 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 	}
 };
 
-const onDelete = () => emit("delete:element", props.element.id);
+const onDelete = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.collaborativeTextEditorElement");
+	if (shouldDelete) {
+		emit("delete:element", props.element.id);
+	}
+};
 const onMoveUp = () => emit("move-up:edit");
 const onMoveDown = () => emit("move-down:edit");
 

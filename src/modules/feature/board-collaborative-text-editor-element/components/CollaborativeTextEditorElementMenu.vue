@@ -11,7 +11,6 @@
 </template>
 
 <script setup lang="ts">
-import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 
@@ -30,10 +29,7 @@ const emit = defineEmits<{
 }>();
 
 const onDelete = async () => {
-	const shouldDelete = await askDeletionForType("components.cardElement.collaborativeTextEditorElement");
-	if (shouldDelete) {
-		emit("delete:element");
-	}
+	emit("delete:element");
 };
 
 const onMoveDown = () => emit("move-down:element");

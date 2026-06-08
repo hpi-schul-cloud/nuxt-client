@@ -48,6 +48,7 @@
 </template>
 
 <script setup lang="ts">
+import { askDeletionForType } from "../../../utils/confirmation-dialog.utils";
 import H5pElementMenu from "./H5pElementMenu.vue";
 import H5PImage from "@/assets/img/h5p/default_h5p_display.svg";
 import { downloadFile } from "@/utils/fileHelper";
@@ -150,7 +151,12 @@ const onMoveElementUp = () => {
 	emit("move-up:edit");
 };
 
-const onDeleteElement = () => emit("delete:element", element.value.id);
+const onDeleteElement = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.h5pElement");
+	if (shouldDelete) {
+		emit("delete:element", element.value.id);
+	}
+};
 
 const onEdit = () => {
 	openEditorWindow();

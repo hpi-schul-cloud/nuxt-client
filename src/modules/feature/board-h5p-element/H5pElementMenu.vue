@@ -17,7 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { mdiCogOutline, mdiTrayArrowDown } from "@icons/material";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuAction, KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
@@ -45,10 +44,7 @@ const emit = defineEmits([
 const onEdit = () => emit("edit:element");
 const onDownload = () => emit("download:content");
 const onDelete = async () => {
-	const shouldDelete = await askDeletionForType("components.cardElement.h5pElement");
-	if (shouldDelete) {
-		emit("delete:element");
-	}
+	emit("delete:element");
 };
 
 const onMoveDown = () => emit("move-down:element");
