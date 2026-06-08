@@ -99,6 +99,10 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 	.math-tex {
 		font-size: large;
 	}
+
+	a {
+		color: #00489a;
+	}
 }
 
 :deep(.ck.ck-editor__editable_inline) {
