@@ -70,33 +70,38 @@ import { computed, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import type { RouteLocationRaw } from "vue-router";
 
-type Props = {
+const props = defineProps<{
 	cardId: string;
 	previousCardRoute?: RouteLocationRaw;
 	nextCardRoute?: RouteLocationRaw;
-};
-
-const props = defineProps<Props>();
+}>();
 const cardRef = toRef(props, "cardId");
 
 const emit = defineEmits<{
 	(e: "close:detail-view"): void;
 }>();
 
+const { t } = useI18n();
+
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardRef.value);
 const { allowedOperations } = useBoardAllowedOperations();
+const cardStore = useCardStore();
 const { setFocus } = useBoardFocusHandler();
 setFocus("card-detail-view-toolbar");
-const { t } = useI18n();
-const cardStore = useCardStore();
 
 const isOpen = ref(true);
 const card = computed(() => cardStore.getCard(cardRef.value));
 
-const cardBackground = computed(() => colorToHexLighten5(card.value?.backgroundColor ?? Colors.TRANSPARENT));
+const cardBackground = computed(() => {
+	const color = card.value?.backgroundColor;
+	if (!color || color === Colors.TRANSPARENT) return colorToHexLighten5(Colors.GREY);
+
+	return colorToHexLighten5(color);
+});
 const cardBorderColor = computed(() => {
 	const color = card.value?.backgroundColor;
 	if (!color || color === Colors.TRANSPARENT) return undefined;
+
 	return colorToHexLighten3(color);
 });
 
@@ -111,7 +116,7 @@ const onDialogClose = () => {
 @use "sass:map";
 
 .detail-view-size {
-	max-width: 900px;
+	max-width: 860px;
 	min-width: 17rem;
 }
 
@@ -130,10 +135,10 @@ const onDialogClose = () => {
 	--fullscreen-scale-text: 1.25;
 
 	/* Override with scaled versions, referencing original root values */
-	--heading-3: calc(1.4375rem * var(--fullscreen-scale-heading));
-	--heading-4: calc(1.1875rem * var(--fullscreen-scale-heading));
-	--heading-5: calc(1rem * var(--fullscreen-scale-heading));
-	--heading-6: calc(0.875rem * var(--fullscreen-scale-heading));
+	--heading-3: calc(1.375rem * 1.5); // to get also 33px like h1
+	--heading-4: calc(1.25rem * var(--fullscreen-scale-heading));
+	--heading-5: calc(1.125rem * var(--fullscreen-scale-heading));
+	--heading-6: calc(1rem * var(--fullscreen-scale-heading));
 
 	/* text sizes */
 	--text-xs: calc(0.694rem * var(--fullscreen-scale-text));

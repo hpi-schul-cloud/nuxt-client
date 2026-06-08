@@ -97,7 +97,7 @@ export const isValidDate = (value: string | undefined) => {
  */
 export const isOfMaxLength =
 	(maxLength: number): FormValidatorFn<unknown> =>
-	(errMsg = useI18nGlobal().t("common.validation.tooLong")) =>
+	(errMsg = useI18nGlobal().t("common.validation.tooLong", { maxLength })) =>
 	(value) => {
 		if (value === null || value === undefined) {
 			return true;
@@ -114,7 +114,7 @@ export const isOfMaxLength =
  */
 export const isOfMinLength =
 	(minLength: number): FormValidatorFn<string | null | undefined> =>
-	(errMsg = useI18nGlobal().t("common.validation.tooShort")) =>
+	(errMsg = useI18nGlobal().t("common.validation.tooShort", { minLength })) =>
 	(value) => {
 		if (value === null || value === undefined) {
 			return true;
