@@ -7,23 +7,23 @@
 		:data-testid="`board-grid-item-${index}`"
 		:ripple="false"
 	>
-		<VCardSubtitle
-			class="mt-4 d-flex align-center"
-			:class="{ 'opacity-80': isDraft }"
-			:data-testid="`board-grid-item-subtitle-${index}`"
-		>
-			<VIcon size="14" class="mr-1" :icon="subtitleIcon" />
-			{{ subtitleText }}
-		</VCardSubtitle>
-		<VCardTitle
-			:class="{ 'opacity-80': isDraft }"
-			class="grid-item-card-title text-body-1 font-weight-bold flex-grow-1"
-			:data-testid="`board-grid-title-${index}`"
-		>
-			<RouterLink tabindex="-1" :to="boardPath" class="grid-item-router-link text-break">
-				{{ board.title }}
-			</RouterLink>
-		</VCardTitle>
+		<RouterLink tabindex="-1" :to="boardPath" class="grid-item-router-link flex-grow-1">
+			<VCardSubtitle
+				class="mt-4 d-flex align-center"
+				:class="{ 'opacity-80': isDraft }"
+				:data-testid="`board-grid-item-subtitle-${index}`"
+			>
+				<VIcon size="14" class="mr-1" :icon="subtitleIcon" />
+				{{ subtitleText }}
+			</VCardSubtitle>
+			<VCardTitle
+				:class="{ 'opacity-80': isDraft }"
+				class="grid-item-card-title"
+				:data-testid="`board-grid-title-${index}`"
+			>
+				<h2 class="text-break text-body-1 font-weight-bold ma-0">{{ board.title }}</h2>
+			</VCardTitle>
+		</RouterLink>
 
 		<KebabMenu v-if="hasAnyAllowedOperation" class="board-grid-item-menu" :data-testid="`board-dot-menu-${index}`">
 			<KebabMenuActionPublish
@@ -108,6 +108,7 @@ const subtitleText = computed(() => {
 
 const boardPath = computed(() => `/boards/${props.board.id}`);
 </script>
+
 <style>
 .room-content-grid-item:focus-within {
 	outline: auto;
@@ -116,17 +117,19 @@ const boardPath = computed(() => `/boards/${props.board.id}`);
 .grid-item-card-title {
 	max-width: 100%;
 	line-height: 1.5 !important;
+	white-space: normal;
 }
 
 .grid-item-router-link {
 	display: block;
 	text-decoration: none;
 	color: inherit;
-	white-space: normal;
 }
 
 .grid-item-router-link:hover {
-	text-decoration: underline;
+	.grid-item-card-title {
+		text-decoration: underline;
+	}
 }
 
 .board-grid-item-menu {
