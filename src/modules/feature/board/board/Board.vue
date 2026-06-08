@@ -138,7 +138,7 @@ import EditSettingsDialog from "../shared/EditSettingsDialog.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum.js";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	BoardExternalReferenceType,

@@ -1,6 +1,6 @@
 import { useAppStore, useAppStoreRefs } from "./application.store";
-import { ApplicationError } from "@/store/types/application-error";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { ApplicationError } from "@/modules/data/application/types/application-error";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { initializeAxios } from "@/utils/api";
 import {
 	createTestEnvStore,

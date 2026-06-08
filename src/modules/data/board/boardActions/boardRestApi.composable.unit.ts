@@ -1,6 +1,6 @@
 import { useBoardApi } from "../BoardApi.composable";
 import { useBoardRestApi } from "./boardRestApi.composable";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	boardResponseFactory,

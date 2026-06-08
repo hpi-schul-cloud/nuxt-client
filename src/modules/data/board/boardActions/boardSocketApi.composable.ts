@@ -21,7 +21,7 @@ import {
 	UpdateReaderCanEditRequestPayload,
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
 import { CreateCardBodyParamsRequiredEmptyElements } from "@api-server";
 import { useAppStore } from "@data-app";

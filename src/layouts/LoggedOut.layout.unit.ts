@@ -1,5 +1,5 @@
 import LoggedOutLayout from "./LoggedOut.layout.vue";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum.js";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { SchulcloudTheme } from "@api-server";

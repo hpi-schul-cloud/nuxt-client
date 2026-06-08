@@ -7,7 +7,7 @@ import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	collaborativeTextEditorElementResponseFactory,

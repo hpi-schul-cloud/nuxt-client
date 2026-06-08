@@ -1,4 +1,4 @@
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { $axios } from "@/utils/api";
 import { CommonCartridgeConfigApiFactory, CommonCartridgeConfigResponse } from "@api-common-cartridge";
 import { FileConfigApiFactory, FilesStorageConfigResponse } from "@api-file-storage";

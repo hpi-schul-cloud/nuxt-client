@@ -1,5 +1,5 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { DroppedObject, RoomsData } from "@/store/types/rooms";
+import { DroppedObject, RoomsData } from "@/types/course-room/rooms";
 import { $axios } from "@/utils/api";
 import { isInPast } from "@/utils/date-time.utils";
 import {

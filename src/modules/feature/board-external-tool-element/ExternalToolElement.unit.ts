@@ -1,7 +1,7 @@
 import ExternalToolElement from "./ExternalToolElement.vue";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
-import { BusinessError } from "@/store/types/commons";
+import { BusinessError } from "@/types/common/commons";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	contextExternalToolFactory,

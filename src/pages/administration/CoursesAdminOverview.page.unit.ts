@@ -1,5 +1,5 @@
 import CoursesAdminOverviewPage from "./CoursesAdminOverview.page.vue";
-import { SortOrder } from "@/store/types/sort-order.enum";
+import { SortOrder } from "@/types/enum/sort-order.enum.js";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import {
 	courseInfoDataResponseFactory,

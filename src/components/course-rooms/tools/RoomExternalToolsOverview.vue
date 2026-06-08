@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
-import { Course, CourseFeatures } from "@/store/types/room";
+import { Course, CourseFeatures } from "@/types/course-room/room.js";
 import { ToolContextType } from "@api-server";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { useEnvConfig } from "@data-env";

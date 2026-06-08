@@ -1,5 +1,5 @@
 import { useBoardApi } from "./BoardApi.composable";
-import { ApplicationError } from "@/store/types/application-error";
+import { ApplicationError } from "@/modules/data/application/types/application-error";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { mockApi, mockApiResponse } from "@@/tests/test-utils";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";

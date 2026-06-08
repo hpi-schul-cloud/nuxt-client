@@ -1,5 +1,5 @@
-import { Pagination } from "../../../store/types/commons";
-import { SortOrder } from "../../../store/types/sort-order.enum";
+import { Pagination } from "@/types/common/commons";
+import { SortOrder } from "../../../types/enum/sort-order.enum";
 import { useGroupClasses } from "./group-classes.composable";
 import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {

@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { CreateNewsParams, CreateNewsParamsTargetModel, NewsApiFactory } from "@api-server";
