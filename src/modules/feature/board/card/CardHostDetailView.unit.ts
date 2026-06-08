@@ -124,7 +124,7 @@ describe("CardHostDetailView", () => {
 		});
 
 		describe("when there is a previous card", () => {
-			it("should enable the previous button", () => {
+			it("should enable the previous button and link to it", () => {
 				const previousCardRoute = {
 					name: "boards-card-detail",
 					params: { boardId: "any-board-id", cardId: "previous-card-id" },
