@@ -1,14 +1,19 @@
 import { default as ldapActivate } from "./LDAPActivate.page.vue";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { SchulcloudTheme } from "@api-server";
+import { useLdapConfigStore } from "@data-ldap";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { createStore, StoreOptions } from "vuex";
+import { nextTick } from "vue";
+import { LocationQuery } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
+import { VCard, VDialog } from "vuetify/components";
 
 const mockResponseData = {
 	ok: true,
+	errors: [],
 	users: {
 		total: 8,
 		admin: 2,
@@ -35,178 +40,128 @@ const mockResponseData = {
 	},
 };
 
-const getStoreOptions = (): {
-	storeOptions: StoreOptions<Record<string, unknown>>;
-	submitStub: ReturnType<typeof vi.fn>;
-	patchStub: ReturnType<typeof vi.fn>;
-} => {
-	const submitStub = vi.fn();
-	const patchStub = vi.fn();
-
-	const storeOptions: StoreOptions<Record<string, unknown>> = {
-		modules: {
-			"ldap-config": {
-				namespaced: true,
-				actions: {
-					submitData: submitStub,
-					patchData: patchStub,
-				},
-				state: () => ({
-					verified: { ...mockResponseData },
-					submitted: { ...mockResponseData },
-				}),
-				getters: {
-					getVerified: () => ({ ...mockResponseData }),
-					getSubmitted: () => ({ ...mockResponseData }),
-					getTemp: () => ({}),
-					getStatus: () => "completed",
-					getData: () => ({}),
-				},
-			},
-		},
-	};
-
-	return { storeOptions, submitStub, patchStub };
-};
-
 describe("ldap/activate", () => {
-	const setup = ({
-		route,
-		storeOptions,
-	}: {
-		route: { query: Record<string, string> };
-		storeOptions: StoreOptions<Record<string, unknown>>;
-	}) => {
-		const routerPushStub = vi.fn();
-
-		const wrapper = mount(ldapActivate, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-				mocks: {
-					$router: { push: routerPushStub },
-					$route: route,
-					$store: createStore(storeOptions),
-				},
-			},
-		});
-
-		return { wrapper, routerPushStub };
-	};
-
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({ FEATURE_USER_MIGRATION_ENABLED: false });
 		createTestSchoolStore();
 	});
 
-	it("should call 'submitaData' action when submit button is clicked and this.$route.query.id is not defined", async () => {
-		const { storeOptions, submitStub } = getStoreOptions();
-		const { wrapper } = setup({ route: { query: {} }, storeOptions });
+	const setup = (options?: Partial<Partial<{ query: LocationQuery }>>) => {
+		const router = createRouterMock();
+		injectRouterMock(router);
+
+		if (options?.query) {
+			router.setQuery(options.query);
+		}
+
+		const wrapper = mount(ldapActivate, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+		});
+
+		const ldapConfigStore = mockedPiniaStoreTyping(useLdapConfigStore);
+
+		return { wrapper, ldapConfigStore, router };
+	};
+
+	describe("when verified value is undefined", () => {
+		describe("and route query has id", () => {
+			it("should redirect to ldap config page", () => {
+				const id = "mockId";
+				const { router, ldapConfigStore } = setup({
+					query: { id },
+				});
+
+				ldapConfigStore.verified = undefined;
+
+				expect(router.push).toHaveBeenCalledWith(`/administration/ldap/config?id=${id}`);
+			});
+		});
+		describe("and route query does not have id", () => {
+			it("should redirect to ldap config page without id", () => {
+				const { router, ldapConfigStore } = setup({
+					query: {},
+				});
+
+				ldapConfigStore.verified = undefined;
+
+				expect(router.push).toHaveBeenCalledWith("/administration/ldap/config");
+			});
+		});
+	});
+
+	it("should call 'createLdapConfig' action when submit button is clicked and route.query.id is not defined", async () => {
+		const { wrapper, ldapConfigStore } = setup({ query: {} });
+
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
 		await submitBtn.trigger("click");
 
-		expect(submitStub).toHaveBeenCalled();
+		expect(ldapConfigStore.createLdapConfig).toHaveBeenCalled();
 	});
 
-	it("should call 'patchData' action when submit button is clicked and this.$route.query.id is defined", async () => {
-		const { storeOptions, patchStub } = getStoreOptions();
-		const { wrapper } = setup({
-			route: { query: { id: "mockId" } },
-			storeOptions,
+	it("should call 'updateLdapConfig' action when submit button is clicked and route.query.id is defined", async () => {
+		const { wrapper, ldapConfigStore } = setup({
+			query: { id: "mockId" },
 		});
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
 		await submitBtn.trigger("click");
 
-		expect(patchStub).toHaveBeenCalled();
-	});
-
-	it(" should push to router if submitted.ok is false", async () => {
-		const { storeOptions } = getStoreOptions();
-		(storeOptions.modules!["ldap-config"] as { state: () => object }).state = () => ({
-			verified: mockResponseData,
-			submitted: { ...mockResponseData, ok: false },
-		});
-
-		const { wrapper } = setup({
-			route: { query: { id: "mockId" } },
-			storeOptions,
-		});
-
-		const submitBtn = wrapper.findComponent(`[data-testid="ldapSubmitButton"]`);
-		expect(submitBtn.exists()).toBe(true);
-		await submitBtn.trigger("click");
+		expect(ldapConfigStore.updateLdapConfig).toHaveBeenCalled();
 	});
 
 	it("should render confirm modal component", () => {
-		const { storeOptions } = getStoreOptions();
-
 		const { wrapper } = setup({
-			route: { query: { id: "mockId" } },
-			storeOptions,
+			query: { id: "mockId" },
 		});
 
-		const confirmModal = wrapper.findComponent({ name: "v-dialog" });
+		const confirmModal = wrapper.findComponent(VDialog);
 		expect(confirmModal.exists()).toBe(true);
 	});
 
 	it("should push to router when clicking the ok button in the modal ", async () => {
-		const { storeOptions } = getStoreOptions();
-		(
-			storeOptions.modules!["ldap-config"] as {
-				getters: Record<string, () => object>;
-			}
-		).getters.getSubmitted = () => ({
-			...mockResponseData,
-			ok: true,
+		const { wrapper, router, ldapConfigStore } = setup({
+			query: { id: "mockId" },
 		});
 
-		const { wrapper, routerPushStub } = setup({
-			route: { query: { id: "mockId" } },
-			storeOptions,
-		});
+		ldapConfigStore.submitted = mockResponseData;
+		await nextTick();
 
-		const confirmModal = wrapper.findComponent({ name: "v-dialog" });
-		const confirmBtn = confirmModal.findComponent({ name: "v-card" }).find('[data-testid="ldapOkButton"]');
+		const confirmModal = wrapper.findComponent(VDialog);
+		const confirmBtn = confirmModal.findComponent(VCard).find('[data-testid="ldapOkButton"]');
 		expect(confirmBtn.exists()).toBe(true);
 		await confirmBtn.trigger("click");
 
-		expect(routerPushStub).toHaveBeenCalled();
+		expect(router.push).toHaveBeenCalled();
 	});
 
 	it("should render 'infoMessage' component if 'submitted' has an errors key", async () => {
-		const { storeOptions } = getStoreOptions();
-		(
-			storeOptions.modules!["ldap-config"] as {
-				getters: Record<string, () => object>;
-			}
-		).getters.getSubmitted = () => ({
+		const { wrapper, ldapConfigStore } = setup({
+			query: { id: "mockId" },
+		});
+
+		ldapConfigStore.submitted = {
 			...mockResponseData,
 			ok: false,
 			errors: [{ type: "CONNECTION_ERROR", message: "testError" }],
-		});
-
-		const { wrapper } = setup({
-			route: { query: { id: "mockId" } },
-			storeOptions,
-		});
+		};
+		await nextTick();
 
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
 		submitBtn.trigger("click");
-		await wrapper.vm.$nextTick();
+		await nextTick();
 
 		const infoMessage = wrapper.find(`[data-testid="errorInfoMessage"]`);
 		expect(infoMessage.exists()).toBe(true);
 	});
 
 	it("should not show checkbox for user migration", () => {
-		const { storeOptions } = getStoreOptions();
-
 		const { wrapper } = setup({
-			route: { query: { id: "mockId" } },
-			storeOptions,
+			query: { id: "mockId" },
 		});
 
 		const section = wrapper.find(`[data-testid="migrateUsersSection"]`);
@@ -218,11 +173,8 @@ describe("ldap/activate", () => {
 	it("should show checkbox for user migration", () => {
 		createTestEnvStore({ FEATURE_USER_MIGRATION_ENABLED: true });
 
-		const { storeOptions } = getStoreOptions();
-
 		const { wrapper } = setup({
-			route: { query: {} },
-			storeOptions,
+			query: {},
 		});
 
 		const section = wrapper.find(`[data-testid="migrateUsersSection"]`);
@@ -238,11 +190,8 @@ describe("ldap/activate", () => {
 				FEATURE_USER_MIGRATION_ENABLED: true,
 			});
 
-			const { storeOptions } = getStoreOptions();
-
 			const { wrapper } = setup({
-				route: { query: {} },
-				storeOptions,
+				query: {},
 			});
 
 			return { wrapper };
@@ -256,6 +205,19 @@ describe("ldap/activate", () => {
 
 			expect(section.exists()).toBe(false);
 			expect(checkbox.exists()).toBe(false);
+		});
+	});
+
+	describe("onBack", () => {
+		it("should redirect to ldap config page", async () => {
+			const { wrapper, router } = setup({
+				query: { id: "mockId" },
+			});
+
+			const backBtn = wrapper.find(`[data-testid="ldapBackButton"]`);
+			await backBtn.trigger("click");
+
+			expect(router.push).toHaveBeenCalledWith("/administration/ldap/config?id=mockId");
 		});
 	});
 });

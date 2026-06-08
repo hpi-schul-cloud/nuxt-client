@@ -1,5 +1,5 @@
 import { unchangedPassword } from "../../../utils/ldapConstants";
-import { LdapFormData, useLdapConfigStore, VerifiedData } from "./ldap-config.store";
+import { emptyLdapConfig, LdapFormData, useLdapConfigStore, VerifiedData } from "./ldap-config.store";
 import { initializeAxios } from "@/utils/api";
 import { mockAxiosInstance } from "@@/tests/test-utils/mockAxiosInstance";
 import { createTestingPinia } from "@pinia/testing";
@@ -61,28 +61,6 @@ const clientMockData: LdapFormData = {
 	classPath: "ou=classes,ou=groups",
 	nameAttribute: "description",
 	participantAttribute: "member",
-};
-
-const emptyLdapConfig: Readonly<LdapFormData> = {
-	url: "",
-	basisPath: "",
-	searchUser: "",
-	searchUserPassword: "",
-	userPath: "",
-	groupOption: "group",
-	firstName: "",
-	familyName: "",
-	email: "",
-	uid: "",
-	uuid: "",
-	member: "memberOf",
-	student: "",
-	teacher: "",
-	admin: "",
-	user: "",
-	classPath: "",
-	nameAttribute: "",
-	participantAttribute: "",
 };
 
 describe("ldap-config.store", () => {

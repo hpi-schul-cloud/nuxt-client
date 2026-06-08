@@ -82,7 +82,7 @@ const formatClientData = (data: LdapFormData) => ({
 	},
 });
 
-const emptyLdapConfig: Readonly<LdapFormData> = {
+export const emptyLdapConfig: Readonly<LdapFormData> = {
 	url: "",
 	basisPath: "",
 	searchUser: "",
