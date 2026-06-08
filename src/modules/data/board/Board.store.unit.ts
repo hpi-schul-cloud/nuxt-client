@@ -501,7 +501,7 @@ describe("BoardStore", () => {
 			expect(boardStore.board?.columns[2]).toEqual(secondColumn);
 		});
 
-		it("should show success notification when isOwnAction is true", () => {
+		it("should show success notification when isOwnAction is true and copy was successful", () => {
 			const { boardStore, firstColumn } = setup();
 			const duplicatedColumn = columnFullResponseFactory.build();
 
@@ -513,6 +513,20 @@ describe("BoardStore", () => {
 			});
 
 			expectNotification("success");
+		});
+
+		it("should show error notification when isOwnAction is true and copy was not fully successful", () => {
+			const { boardStore, firstColumn } = setup();
+			const duplicatedColumn = columnFullResponseFactory.build();
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				status: CopyStatusEnum.PARTIAL,
+				isOwnAction: true,
+			});
+
+			expectNotification("error");
 		});
 
 		it("should show info notification when column contains external tool element", () => {
