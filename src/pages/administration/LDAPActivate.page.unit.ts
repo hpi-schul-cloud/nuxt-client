@@ -102,46 +102,53 @@ describe("ldap/activate", () => {
 		});
 	});
 
-	it("should call 'createLdapConfig' action when submit button is clicked and route.query.id is not defined", async () => {
-		const { wrapper, ldapConfigStore } = setup({ query: {} });
+	describe("submit", () => {
+		describe("when route query has no id", () => {
+			it("should call 'createLdapConfig' action", async () => {
+				const { wrapper, ldapConfigStore } = setup({ query: {} });
 
-		await triggerSubmit(wrapper);
+				await triggerSubmit(wrapper);
 
-		expect(ldapConfigStore.createLdapConfig).toHaveBeenCalled();
+				expect(ldapConfigStore.createLdapConfig).toHaveBeenCalled();
+			});
+		});
+		describe("when route query has id", () => {
+			it("should call 'updateLdapConfig' action", async () => {
+				const { wrapper, ldapConfigStore } = setup({
+					query: { id: "mockId" },
+				});
+				await triggerSubmit(wrapper);
+
+				expect(ldapConfigStore.updateLdapConfig).toHaveBeenCalled();
+			});
+		});
 	});
 
-	it("should call 'updateLdapConfig' action when submit button is clicked and route.query.id is defined", async () => {
-		const { wrapper, ldapConfigStore } = setup({
-			query: { id: "mockId" },
-		});
-		await triggerSubmit(wrapper);
+	describe("confirmation dialog", () => {
+		it("should render confirm modal component", () => {
+			const { wrapper } = setup({
+				query: { id: "mockId" },
+			});
 
-		expect(ldapConfigStore.updateLdapConfig).toHaveBeenCalled();
-	});
-
-	it("should render confirm modal component", () => {
-		const { wrapper } = setup({
-			query: { id: "mockId" },
+			const confirmModal = wrapper.findComponent(VDialog);
+			expect(confirmModal.exists()).toBe(true);
 		});
 
-		const confirmModal = wrapper.findComponent(VDialog);
-		expect(confirmModal.exists()).toBe(true);
-	});
+		it("should push to router when clicking the ok button", async () => {
+			const { wrapper, router, ldapConfigStore } = setup({
+				query: { id: "mockId" },
+			});
 
-	it("should push to router when clicking the ok button in the modal ", async () => {
-		const { wrapper, router, ldapConfigStore } = setup({
-			query: { id: "mockId" },
+			ldapConfigStore.submitted = mockResponseData;
+			await nextTick();
+
+			const confirmModal = wrapper.findComponent(VDialog);
+			const confirmBtn = confirmModal.findComponent(VCard).get('[data-testid="ldapOkButton"]');
+
+			await confirmBtn.trigger("click");
+
+			expect(router.push).toHaveBeenCalled();
 		});
-
-		ldapConfigStore.submitted = mockResponseData;
-		await nextTick();
-
-		const confirmModal = wrapper.findComponent(VDialog);
-		const confirmBtn = confirmModal.findComponent(VCard).find('[data-testid="ldapOkButton"]');
-		expect(confirmBtn.exists()).toBe(true);
-		await confirmBtn.trigger("click");
-
-		expect(router.push).toHaveBeenCalled();
 	});
 
 	it("should render 'infoMessage' component if 'submitted' has an errors key", async () => {
@@ -162,62 +169,64 @@ describe("ldap/activate", () => {
 		expect(infoMessage.exists()).toBe(true);
 	});
 
-	it("should not show checkbox for user migration", () => {
-		const { wrapper } = setup({
-			query: { id: "mockId" },
-		});
+	describe("user migration", () => {
+		describe("when user migration is enabled", () => {
+			it("should show checkbox for user migration", () => {
+				createTestEnvStore({ FEATURE_USER_MIGRATION_ENABLED: true });
 
-		const section = wrapper.find(`[data-testid="migrateUsersSection"]`);
-		expect(section.exists()).toBe(false);
-		const checkbox = wrapper.find(`[data-testid="migrateUsersCheckbox"]`);
-		expect(checkbox.exists()).toBe(false);
-	});
+				const { wrapper } = setup({
+					query: {},
+				});
 
-	it("should show checkbox for user migration", () => {
-		createTestEnvStore({ FEATURE_USER_MIGRATION_ENABLED: true });
-
-		const { wrapper } = setup({
-			query: {},
-		});
-
-		const section = wrapper.find(`[data-testid="migrateUsersSection"]`);
-		expect(section.exists()).toBe(true);
-		const checkbox = wrapper.find(`[data-testid="migrateUsersCheckbox"]`);
-		expect(checkbox.exists()).toBe(true);
-	});
-
-	it("should call 'setSchoolUserMigration' on submit when user migration checkbox is checked", async () => {
-		createTestEnvStore({ FEATURE_USER_MIGRATION_ENABLED: true });
-
-		const { wrapper, importUsersStore } = setup();
-
-		await triggerSubmit(wrapper);
-
-		expect(importUsersStore.setSchoolInUserMigration).toHaveBeenCalledWith(false);
-	});
-
-	describe("when the instance is NBC", () => {
-		const setupNbc = () => {
-			createTestEnvStore({
-				SC_THEME: SchulcloudTheme.N21,
-				FEATURE_USER_MIGRATION_ENABLED: true,
+				const section = wrapper.get(`[data-testid="migrateUsersSection"]`);
+				const checkbox = section.find(`[data-testid="migrateUsersCheckbox"]`);
+				expect(checkbox.exists()).toBe(true);
 			});
 
-			const { wrapper } = setup({
-				query: {},
+			it("should call 'setSchoolUserMigration' on submit", async () => {
+				createTestEnvStore({ FEATURE_USER_MIGRATION_ENABLED: true });
+
+				const { wrapper, importUsersStore } = setup();
+
+				await triggerSubmit(wrapper);
+
+				expect(importUsersStore.setSchoolInUserMigration).toHaveBeenCalledWith(false);
 			});
+		});
+		describe("when user migration is disabled", () => {
+			it("should not show checkbox for user migration", () => {
+				const { wrapper } = setup({
+					query: { id: "mockId" },
+				});
 
-			return { wrapper };
-		};
+				const checkbox = wrapper.find(`[data-testid="migrateUsersCheckbox"]`);
+				expect(checkbox.exists()).toBe(false);
+			});
+		});
 
-		it("should not show show section and checkbox for user migration", () => {
-			const { wrapper } = setupNbc();
+		describe("when the instance is NBC", () => {
+			const setupNbc = () => {
+				createTestEnvStore({
+					SC_THEME: SchulcloudTheme.N21,
+					FEATURE_USER_MIGRATION_ENABLED: true,
+				});
 
-			const section = wrapper.find(`[data-testid="migrateUsersSection"]`);
-			const checkbox = wrapper.find(`[data-testid="migrateUsersCheckbox"]`);
+				const { wrapper } = setup({
+					query: {},
+				});
 
-			expect(section.exists()).toBe(false);
-			expect(checkbox.exists()).toBe(false);
+				return { wrapper };
+			};
+
+			it("should not show show section and checkbox for user migration", () => {
+				const { wrapper } = setupNbc();
+
+				const section = wrapper.find(`[data-testid="migrateUsersSection"]`);
+				const checkbox = wrapper.find(`[data-testid="migrateUsersCheckbox"]`);
+
+				expect(section.exists()).toBe(false);
+				expect(checkbox.exists()).toBe(false);
+			});
 		});
 	});
 
