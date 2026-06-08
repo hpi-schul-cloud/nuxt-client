@@ -18,7 +18,7 @@
 				:class="{ 'drop-zone-empty--active': props.isOverDropZone }"
 				data-testid="drop-zone-empty-state"
 			>
-				<VIcon :icon="mdiTrayArrowUp" size="48" color="primary" class="mb-4" />
+				<VIcon :icon="mdiTrayArrowUp" size="48" color="primary" class="mb-4" aria-hidden="true" />
 				<p class="drop-zone-empty__title">{{ t("pages.folder.dropZone.emptyState.title") }}</p>
 				<p class="drop-zone-empty__subtitle">
 					{{ t("pages.folder.dropZone.emptyState.orText") }}
