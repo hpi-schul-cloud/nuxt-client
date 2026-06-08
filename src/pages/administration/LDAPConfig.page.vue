@@ -40,7 +40,6 @@
 						type="submit"
 						data-testid="ldapVerifyButton"
 						:disabled="status === 'pending'"
-						@click="validateHandler"
 					>
 						{{ t("pages.administration.ldap.index.buttons.verify") }}
 					</VBtn>
@@ -101,7 +100,7 @@ const validateHandler = async () => {
 
 	const isValid = await isValidOrFocusFirstInvalidInput(ldapForm);
 	if (isValid) {
-		const systemId = route.query.id as string;
+		const systemId = route.query.id as string | undefined;
 		if (systemId) {
 			if (ldapFormData.value.searchUserPassword === unchangedPassword) {
 				ldapFormData.value.searchUserPassword = undefined;
