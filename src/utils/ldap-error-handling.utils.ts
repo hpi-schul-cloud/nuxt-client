@@ -14,7 +14,9 @@ export const ldapErrorHandler = (error: LdapError[] | undefined, t: TranslateFn)
 				errorMessages.push(t("pages.administration.ldap.errors.credentials"));
 				break;
 			case "CONNECTION_ERROR":
-				errorMessages.push(err.message ?? "");
+				if (err.message) {
+					errorMessages.push(err.message);
+				}
 				break;
 			case "WRONG_SEARCH_PATH":
 				errorMessages.push(t("pages.administration.ldap.errors.path"));
