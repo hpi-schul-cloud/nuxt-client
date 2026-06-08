@@ -270,10 +270,7 @@ useEventListener(dropZoneRef, "drop", async (event: DragEvent) => {
 	const files = await extractFilesFromItems(event.dataTransfer.items);
 	if (files.length === 0) return;
 
-	incrementUploadProgressTotal(files.length);
-	incrementRunningUploads(files.length);
 	await uploadFiles(files);
-	decrementRunningUploads(files.length);
 });
 
 const resetUploadProgress = () => {
@@ -323,11 +320,8 @@ const onFileSelection = async (event: Event) => {
 	if (!files) return;
 
 	const fileArray = Array.from(files);
-	incrementUploadProgressTotal(fileArray.length);
 
-	incrementRunningUploads(fileArray.length);
 	await uploadFiles(fileArray);
-	decrementRunningUploads(fileArray.length);
 };
 
 watch(
@@ -342,12 +336,17 @@ watch(
 );
 
 const uploadFiles = async (files: File[]) => {
+	incrementUploadProgressTotal(files.length);
+	incrementRunningUploads(files.length);
+
 	await Promise.allSettled(
 		files.map(async (file) => {
 			await upload(file, props.folderId, FileRecordParent.BOARDNODES);
 			incrementUploadProgressUploaded(1);
 		})
 	);
+
+	decrementRunningUploads(files.length);
 };
 
 watch(
