@@ -194,6 +194,8 @@ const availableDestinations = computed(() =>
 const { executeImport } = useImportFlow();
 
 const executeImportFlow = async (token: string) => {
+	//  courses might not be loaded yet, so we need to fetch them before executing the import
+	await fetchAllElements();
 	const { result: importResult } = await executeImport(token, availableDestinations, "course");
 
 	if (!importResult) {
