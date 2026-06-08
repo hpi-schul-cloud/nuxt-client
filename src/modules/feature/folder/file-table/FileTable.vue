@@ -14,15 +14,21 @@
 	<template v-else-if="isEmpty && !areUploadStatsVisible">
 		<template v-if="props.hasEditPermission">
 			<div
-				class="drop-zone-empty"
+				class="drop-zone-empty d-flex flex-column align-center justify-center mt-4 py-10 px-6 rounded"
 				:class="{ 'drop-zone-empty--active': props.isOverDropZone }"
 				data-testid="drop-zone-empty-state"
 			>
 				<VIcon :icon="mdiTrayArrowUp" size="48" color="primary" class="mb-4" aria-hidden="true" />
-				<p class="drop-zone-empty__title">{{ t("pages.folder.dropZone.emptyState.title") }}</p>
-				<p class="drop-zone-empty__subtitle">
+				<p class="drop-zone-empty__title ma-0 mb-1 font-weight-medium text-on-surface">
+					{{ t("pages.folder.dropZone.emptyState.title") }}
+				</p>
+				<p class="drop-zone-empty__subtitle ma-0 text-on-surface">
 					{{ t("pages.folder.dropZone.emptyState.orText") }}
-					<button type="button" class="drop-zone-empty__browse-link" @click="emit('click:browse')">
+					<button
+						type="button"
+						class="drop-zone-empty__browse-link bg-transparent pa-0 cursor-pointer text-primary"
+						@click="emit('click:browse')"
+					>
 						{{ t("pages.folder.dropZone.emptyState.browse") }}
 					</button>
 				</p>
@@ -288,15 +294,8 @@ const buildActionMenuAriaLabel = (item: FileRecord): string =>
 
 <style scoped>
 .drop-zone-empty {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
 	min-height: 240px;
-	margin-top: 16px;
-	padding: 40px 24px;
 	border: 2px dashed rgb(var(--v-theme-primary));
-	border-radius: 4px;
 	transition:
 		background-color 0.15s ease,
 		border-color 0.15s ease;
@@ -308,23 +307,11 @@ const buildActionMenuAriaLabel = (item: FileRecord): string =>
 }
 
 .drop-zone-empty__title {
-	margin: 0 0 4px;
 	font-size: 1.125rem;
-	font-weight: 500;
-	color: rgb(var(--v-theme-on-surface));
-}
-
-.drop-zone-empty__subtitle {
-	margin: 0;
-	color: rgb(var(--v-theme-on-surface));
 }
 
 .drop-zone-empty__browse-link {
-	background: none;
 	border: none;
-	padding: 0;
-	cursor: pointer;
-	color: rgb(var(--v-theme-primary));
 	font-size: inherit;
 	text-decoration: underline;
 }
