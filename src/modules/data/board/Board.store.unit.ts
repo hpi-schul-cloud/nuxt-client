@@ -25,7 +25,7 @@ import {
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import { BoardLayout } from "@api-server";
+import { BoardLayout, CopyStatusEnum } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useCardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
@@ -441,6 +441,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateCardSuccess({
 				cardId: cards[0].cardId,
 				duplicatedCard: cardResponseFactory.build(),
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -455,6 +456,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateCardSuccess({
 				cardId: firstCardId,
 				duplicatedCard,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -475,6 +477,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
 				duplicatedColumn,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -488,6 +491,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
 				duplicatedColumn,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -504,6 +508,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
 				duplicatedColumn,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -519,6 +524,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
 				duplicatedColumn,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -534,6 +540,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
 				duplicatedColumn,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -549,6 +556,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
 				duplicatedColumn,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -562,6 +570,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
 				duplicatedColumn,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: false,
 			});
 

@@ -6,7 +6,7 @@ import {
 import { SR_I18N_KEYS_MAP, useBoardAriaNotification } from "./ariaLiveNotificationHandler";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { cardResponseFactory, columnFullResponseFactory, columnResponseFactory } from "@@/tests/test-utils";
-import { BoardLayout, Colors, ContentElementType } from "@api-server";
+import { BoardLayout, Colors, ContentElementType, CopyStatusEnum } from "@api-server";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
@@ -102,6 +102,7 @@ describe("useBoardAriaNotification", () => {
 		notifyDuplicateCardSuccess({
 			cardId: "unknown-id",
 			duplicatedCard: cardResponseFactory.build(),
+			status: CopyStatusEnum.SUCCESS,
 			isOwnAction: false,
 		});
 		vi.advanceTimersByTime(3000);

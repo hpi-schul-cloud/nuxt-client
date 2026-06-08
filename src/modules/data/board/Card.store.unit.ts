@@ -21,6 +21,7 @@ import {
 	CollaborativeTextEditorElementResponse,
 	Colors,
 	ContentElementType,
+	CopyStatusEnum,
 	PreferredToolResponse,
 	ToolContextType,
 } from "@api-server";
@@ -311,6 +312,7 @@ describe("CardStore", () => {
 			cardStore.duplicateCardSuccess({
 				cardId: "unknownId",
 				duplicatedCard: cardResponseFactory.build({ id: undefined }),
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -325,6 +327,7 @@ describe("CardStore", () => {
 			cardStore.duplicateCardSuccess({
 				cardId: "unknownId",
 				duplicatedCard,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -345,6 +348,7 @@ describe("CardStore", () => {
 						id: "newCardId",
 						elements,
 					}),
+					status: CopyStatusEnum.SUCCESS,
 					isOwnAction,
 				});
 			};
