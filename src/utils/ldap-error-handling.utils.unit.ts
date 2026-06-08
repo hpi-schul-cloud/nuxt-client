@@ -13,10 +13,6 @@ describe("ldapErrorHandler", () => {
 			expected: "connection refused",
 		},
 		{
-			error: { type: "CONNECTION_ERROR" },
-			expected: "",
-		},
-		{
 			error: { type: "WRONG_SEARCH_PATH" },
 			expected: "pages.administration.ldap.errors.path",
 		},
@@ -28,6 +24,12 @@ describe("ldapErrorHandler", () => {
 		const result = ldapErrorHandler([error], t);
 
 		expect(result).toEqual([expected]);
+	});
+
+	it("should skip CONNECTION_ERROR when message is missing", () => {
+		const result = ldapErrorHandler([{ type: "CONNECTION_ERROR" }], t);
+
+		expect(result).toEqual([]);
 	});
 
 	it("should ignore unknown error types", () => {
