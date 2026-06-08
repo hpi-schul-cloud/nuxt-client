@@ -3,7 +3,6 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
 import { LdapError } from "@/utils/ldap-error-handling.utils";
-import { notifyError } from "@data-app";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
@@ -168,20 +167,20 @@ export const useLdapConfigStore = defineStore("ldapConfig", () => {
 	};
 
 	const verifyNewLdapConfig = async (payload: LdapFormData) => {
-		const { result, success, error } = await execute(() =>
-			$axios.post("/v1/ldap-config?verifyOnly=true", formatClientData(payload))
+		const { result, success } = await execute(
+			() => $axios.post("/v1/ldap-config?verifyOnly=true", formatClientData(payload)),
+			t("error.generic")
 		);
 		if (success) {
 			ldapFormData.value = payload;
 			verified.value = result.data;
-		} else {
-			notifyError(String(error));
 		}
 	};
 
 	const verifyExistingLdapConfig = async (systemId: string, payload: LdapFormData) => {
-		const { result, success, error } = await execute(() =>
-			$axios.patch(`/v1/ldap-config/${systemId}?verifyOnly=true`, formatClientData(payload))
+		const { result, success } = await execute(
+			() => $axios.patch(`/v1/ldap-config/${systemId}?verifyOnly=true`, formatClientData(payload)),
+			t("error.generic")
 		);
 		if (success) {
 			if (!payload.searchUserPassword) {
@@ -189,30 +188,26 @@ export const useLdapConfigStore = defineStore("ldapConfig", () => {
 			}
 			ldapFormData.value = payload;
 			verified.value = result.data;
-		} else {
-			notifyError(String(error));
 		}
 	};
 
 	const createLdapConfig = async (payload: LdapFormData) => {
-		const { result, success, error } = await execute(() =>
-			$axios.post("/v1/ldap-config?verifyOnly=false&activate=true", formatClientData(payload))
+		const { result, success } = await execute(
+			() => $axios.post("/v1/ldap-config?verifyOnly=false&activate=true", formatClientData(payload)),
+			t("error.generic")
 		);
 		if (success) {
 			submitted.value = result.data;
-		} else {
-			notifyError(String(error));
 		}
 	};
 
 	const updateLdapConfig = async (payload: LdapFormData, systemId: string) => {
-		const { result, success, error } = await execute(() =>
-			$axios.patch(`/v1/ldap-config/${systemId}?verifyOnly=false&activate=true`, formatClientData(payload))
+		const { result, success } = await execute(
+			() => $axios.patch(`/v1/ldap-config/${systemId}?verifyOnly=false&activate=true`, formatClientData(payload)),
+			t("error.generic")
 		);
 		if (success) {
 			submitted.value = result.data;
-		} else {
-			notifyError(String(error));
 		}
 	};
 
