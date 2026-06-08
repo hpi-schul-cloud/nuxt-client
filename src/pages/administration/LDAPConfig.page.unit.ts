@@ -71,8 +71,8 @@ describe("ldap/config", () => {
 
 	describe("submit", () => {
 		const triggerSubmit = async (wrapper: VueWrapper) => {
-			const submitButton = wrapper.find(`[data-testid="ldapVerifyButton"]`);
-			await submitButton.trigger("click");
+			const ldapForm = wrapper.findComponent({ ref: "ldapForm" });
+			ldapForm.trigger("submit");
 			await flushPromises();
 		};
 		describe("when validation fails", () => {
