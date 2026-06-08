@@ -1,7 +1,7 @@
 import { notifySuccess } from "./notification-store";
 import { useSchoolStore } from "./school.store";
+import { ApplicationError } from "./types/application-error";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { ApplicationError } from "@/modules/data/application/types/application-error";
 import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { $axios } from "@/utils/api";
 import {

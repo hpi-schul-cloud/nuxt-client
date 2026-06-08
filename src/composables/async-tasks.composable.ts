@@ -1,7 +1,7 @@
 import { useDebouncedLoading } from "./debounced-loading.composable";
 import { i18nKeyExists, useI18nGlobal } from "@/plugins/i18n";
-import { Status } from "@/types/common/commons";
 import { AsyncFunction } from "@/types/async.types";
+import { Status } from "@/types/common/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useTryCatch } from "@/utils/try-catch.utils";
 import { notifyError } from "@data-app";

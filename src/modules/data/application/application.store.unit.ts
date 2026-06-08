@@ -1,5 +1,4 @@
 import { useAppStore, useAppStoreRefs } from "./application.store";
-import { ApplicationError } from "@/modules/data/application/types/application-error";
 import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { initializeAxios } from "@/utils/api";
 import {
@@ -20,6 +19,7 @@ import {
 	SuccessfulResponse,
 	UserApiFactory,
 } from "@api-server";
+import { ApplicationError } from "@data-app";
 import { useSchoolStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";

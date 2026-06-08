@@ -1,5 +1,4 @@
 import { useBoardApi } from "./BoardApi.composable";
-import { ApplicationError } from "@/modules/data/application/types/application-error";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { mockApi, mockApiResponse } from "@@/tests/test-utils";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
@@ -12,6 +11,7 @@ import {
 	LayoutBodyParams,
 } from "@api-server";
 import { CardResponse, DrawingElementResponse } from "@api-server";
+import { ApplicationError } from "@data-app";
 import { Mocked } from "vitest";
 
 let boardApi: Mocked<serverApi.BoardApiInterface>;

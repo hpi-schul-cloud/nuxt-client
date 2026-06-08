@@ -1,7 +1,7 @@
 import { useBoardApi } from "../BoardApi.composable";
 import { useBoardRestApi } from "./boardRestApi.composable";
-import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,

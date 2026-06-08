@@ -1,5 +1,5 @@
-import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { AnyContentElement } from "@/types/board/ContentElement";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { ContentElementType, H5pElementResponse } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useBoardApi, useCardStore } from "@data-board";

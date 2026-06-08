@@ -1,3 +1,4 @@
+import { defaultConfigEnvs, useEnvConfig, useEnvStore } from "./env-config.store";
 import { mockApiResponse } from "@@/tests/test-utils";
 import { CommonCartridgeConfigApiFactory, CommonCartridgeConfigResponse } from "@api-common-cartridge";
 import { FileConfigApiFactory, FilesStorageConfigResponse } from "@api-file-storage";
@@ -6,7 +7,6 @@ import { createTestingPinia } from "@pinia/testing";
 import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
 import { beforeAll, beforeEach, expect } from "vitest";
-import { defaultConfigEnvs, useEnvConfig, useEnvStore } from "./env-config.store";
 
 vi.mock("@api-server");
 const mockedServerApi = vi.mocked(ServerConfigApiFactory);
