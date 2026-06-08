@@ -3,8 +3,10 @@ import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils"
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { SchulcloudTheme } from "@api-server";
+import { useImportUsersStore } from "@data-import-users";
 import { useLdapConfigStore } from "@data-ldap";
 import { createTestingPinia } from "@pinia/testing";
+import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { LocationQuery } from "vue-router";
@@ -62,8 +64,16 @@ describe("ldap/activate", () => {
 		});
 
 		const ldapConfigStore = mockedPiniaStoreTyping(useLdapConfigStore);
+		const importUsersStore = mockedPiniaStoreTyping(useImportUsersStore);
 
-		return { wrapper, ldapConfigStore, router };
+		return { wrapper, ldapConfigStore, importUsersStore, router };
+	};
+
+	const triggerSubmit = async (wrapper: VueWrapper) => {
+		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
+		expect(submitBtn.exists()).toBe(true);
+		await submitBtn.trigger("click");
+		await flushPromises();
 	};
 
 	describe("when verified value is undefined", () => {
@@ -95,9 +105,7 @@ describe("ldap/activate", () => {
 	it("should call 'createLdapConfig' action when submit button is clicked and route.query.id is not defined", async () => {
 		const { wrapper, ldapConfigStore } = setup({ query: {} });
 
-		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
-		expect(submitBtn.exists()).toBe(true);
-		await submitBtn.trigger("click");
+		await triggerSubmit(wrapper);
 
 		expect(ldapConfigStore.createLdapConfig).toHaveBeenCalled();
 	});
@@ -106,9 +114,7 @@ describe("ldap/activate", () => {
 		const { wrapper, ldapConfigStore } = setup({
 			query: { id: "mockId" },
 		});
-		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
-		expect(submitBtn.exists()).toBe(true);
-		await submitBtn.trigger("click");
+		await triggerSubmit(wrapper);
 
 		expect(ldapConfigStore.updateLdapConfig).toHaveBeenCalled();
 	});
@@ -150,10 +156,7 @@ describe("ldap/activate", () => {
 		};
 		await nextTick();
 
-		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
-		expect(submitBtn.exists()).toBe(true);
-		submitBtn.trigger("click");
-		await nextTick();
+		await triggerSubmit(wrapper);
 
 		const infoMessage = wrapper.find(`[data-testid="errorInfoMessage"]`);
 		expect(infoMessage.exists()).toBe(true);
@@ -181,6 +184,16 @@ describe("ldap/activate", () => {
 		expect(section.exists()).toBe(true);
 		const checkbox = wrapper.find(`[data-testid="migrateUsersCheckbox"]`);
 		expect(checkbox.exists()).toBe(true);
+	});
+
+	it("should call 'setSchoolUserMigration' on submit when user migration checkbox is checked", async () => {
+		createTestEnvStore({ FEATURE_USER_MIGRATION_ENABLED: true });
+
+		const { wrapper, importUsersStore } = setup();
+
+		await triggerSubmit(wrapper);
+
+		expect(importUsersStore.setSchoolInUserMigration).toHaveBeenCalledWith(false);
 	});
 
 	describe("when the instance is NBC", () => {
