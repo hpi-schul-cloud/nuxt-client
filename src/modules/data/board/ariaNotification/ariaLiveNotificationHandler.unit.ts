@@ -130,6 +130,7 @@ describe("useBoardAriaNotification", () => {
 			const payload: DuplicateColumnSuccessPayload = {
 				columnId: "columnId",
 				duplicatedColumn: columnFullResponseFactory.build(),
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: false,
 			};
 
@@ -145,6 +146,7 @@ describe("useBoardAriaNotification", () => {
 			const payload: DuplicateColumnSuccessPayload = {
 				columnId: "columnId",
 				duplicatedColumn: columnFullResponseFactory.build(),
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			};
 
