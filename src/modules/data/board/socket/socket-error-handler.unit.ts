@@ -523,4 +523,38 @@ describe("socket-error-handler", () => {
 			expect(boardErrorReportApiMock.boardErrorReportControllerReportError).not.toHaveBeenCalled();
 		});
 	});
+
+	describe("when cancelSocketReconnection is called", () => {
+		it("should report user canceled reconnect and close the socket", async () => {
+			const useConnectionErrorHandling = await importHandler();
+			const { cancelSocketReconnection } = useConnectionErrorHandling(socket);
+
+			const disconnectSpy = vi.spyOn(socket, "disconnect");
+			const closeSpy = vi.spyOn(socket, "close");
+
+			cancelSocketReconnection();
+
+			expect(boardErrorReportApiMock.boardErrorReportControllerReportError).toHaveBeenCalledWith(
+				expect.objectContaining({
+					type: "socketio_connection",
+					message: "reconnect_usr_canceled",
+					retryCount: 0,
+				})
+			);
+			expect(disconnectSpy).toHaveBeenCalled();
+			expect(closeSpy).toHaveBeenCalled();
+		});
+
+		it("should reset logs after user canceled reconnect", async () => {
+			const useConnectionErrorHandling = await importHandler();
+			const { cancelSocketReconnection, getState } = useConnectionErrorHandling(socket);
+
+			emitEngineEvent("upgrade", { name: "websocket" });
+			expect(getState.value.logs.length).toBeGreaterThan(0);
+
+			cancelSocketReconnection();
+
+			expect(getState.value.logs).toHaveLength(0);
+		});
+	});
 });

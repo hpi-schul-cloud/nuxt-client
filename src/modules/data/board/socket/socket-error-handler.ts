@@ -120,7 +120,8 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 	});
 
 	const cancelSocketReconnection = () => {
-		log("cancel_reconn");
+		apiCall("socketio_connection", "reconnect_usr_canceled", 0, [...logs]);
+		resetLogs();
 		socket.disconnect();
 		socket.close();
 	};
