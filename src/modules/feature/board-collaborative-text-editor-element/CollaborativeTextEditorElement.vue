@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { askDeletionForType } from "../../../utils/confirmation-dialog.utils";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
 import image from "@/assets/img/collaborativeEditor.svg";
