@@ -1,15 +1,13 @@
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
-import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { KebabMenuAction, KebabMenuActionDelete } from "@ui-kebab-menu";
-import { flushPromises, shallowMount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
 describe("ExternalToolElementMenu", () => {
 	const getWrapper = (propsData: {
-		isFirstElement: boolean;
-		isLastElement: boolean;
-		hasMultipleElements: boolean;
+		isNotFirstElement: boolean;
+		isNotLastElement: boolean;
 		columnIndex: number;
 		rowIndex: number;
 		elementIndex: number;
@@ -33,9 +31,8 @@ describe("ExternalToolElementMenu", () => {
 	describe("Edit Button", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({
-				hasMultipleElements: true,
-				isFirstElement: false,
-				isLastElement: false,
+				isNotFirstElement: true,
+				isNotLastElement: true,
 				columnIndex: 0,
 				rowIndex: 1,
 				elementIndex: 2,
@@ -69,9 +66,8 @@ describe("ExternalToolElementMenu", () => {
 	describe("Delete Button", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({
-				hasMultipleElements: true,
-				isFirstElement: false,
-				isLastElement: false,
+				isNotFirstElement: true,
+				isNotLastElement: true,
 				columnIndex: 0,
 				rowIndex: 1,
 				elementIndex: 2,
@@ -91,13 +87,11 @@ describe("ExternalToolElementMenu", () => {
 		});
 
 		it("should emit the delete event on click", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 			const { wrapper } = setup();
 
 			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 
 			await menuItem.trigger("click");
-			await flushPromises();
 
 			expect(wrapper.emitted("delete:element")).toBeDefined();
 		});

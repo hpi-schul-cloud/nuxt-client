@@ -14,7 +14,6 @@
 </template>
 
 <script setup lang="ts">
-import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { mdiCogOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuAction, KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
@@ -36,12 +35,7 @@ defineProps({
 const emit = defineEmits(["edit:element", "delete:element", "move-down:element", "move-up:element"]);
 const onEdit = () => emit("edit:element");
 
-const onDelete = async () => {
-	const shouldDelete = await askDeletionForType("components.cardElement.externalToolElement");
-	if (shouldDelete) {
-		emit("delete:element");
-	}
-};
+const onDelete = () => emit("delete:element");
 
 const onMoveDown = () => emit("move-down:element");
 

@@ -1,5 +1,6 @@
 import H5pElement from "./H5pElement.vue";
 import H5pElementMenu from "./H5pElementMenu.vue";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import * as fileHelper from "@/utils/fileHelper";
 import { h5pElementResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -260,7 +261,8 @@ describe("H5pElement", () => {
 				};
 			};
 
-			it("should emit 'delete:element'", async () => {
+			it("should emit 'delete:element' when deletion is confirmed", async () => {
+				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 				const { wrapper } = setup();
 
 				const menu = wrapper.getComponent(H5pElementMenu);
@@ -269,6 +271,18 @@ describe("H5pElement", () => {
 				await nextTick();
 
 				expect(wrapper.emitted("delete:element")).toBeDefined();
+			});
+
+			it("should not emit 'delete:element' when deletion is cancelled", async () => {
+				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(false);
+				const { wrapper } = setup();
+
+				const menu = wrapper.getComponent(H5pElementMenu);
+
+				menu.vm.$emit("delete:element");
+				await nextTick();
+
+				expect(wrapper.emitted("delete:element")).toBeUndefined();
 			});
 		});
 
