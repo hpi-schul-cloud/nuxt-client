@@ -19,8 +19,7 @@ import {
 	SuccessfulResponse,
 	UserApiFactory,
 } from "@api-server";
-import { ApplicationError } from "@data-app";
-import { useSchoolStore } from "@data-app";
+import { ApplicationError, useSchoolStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { AxiosInstance, AxiosPromise } from "axios";
