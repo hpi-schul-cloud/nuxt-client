@@ -23,9 +23,12 @@ export const useBoardCardNavigation = () => {
 	});
 
 	const currentCardIndex = computed(() => (currentCardId.value ? allCardIds.value.indexOf(currentCardId.value) : -1));
+	const isCardFound = computed(() => currentCardIndex.value !== -1);
+	const isFirstCard = computed(() => currentCardIndex.value <= 0);
+	const isLastCard = computed(() => currentCardIndex.value >= allCardIds.value.length - 1);
 
 	const previousCardRoute = computed((): RouteLocationRaw | undefined => {
-		if (!board.value || currentCardIndex.value <= 0) {
+		if (!board.value || !isCardFound.value || isFirstCard.value) {
 			return undefined;
 		}
 
@@ -34,7 +37,7 @@ export const useBoardCardNavigation = () => {
 	});
 
 	const nextCardRoute = computed((): RouteLocationRaw | undefined => {
-		if (!board.value || currentCardIndex.value === -1 || currentCardIndex.value >= allCardIds.value.length - 1) {
+		if (!board.value || !isCardFound.value || isLastCard.value) {
 			return undefined;
 		}
 
