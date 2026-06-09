@@ -469,6 +469,9 @@ export default {
 	"components.board.dialog.readerCanEdit.alert.text":
 		"The board must first be published before the editing settings can be adjusted.",
 	"components.board.dialog.detail-view.title": "Detail view",
+	"components.board.dialog.detail-view.toc.toggle": "Board overview",
+	"components.board.dialog.detail-view.toc.title": "Board overview",
+	"components.board.dialog.detail-view.toc.untitled-card": "(untitled)",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",
 	"components.board.menu.collaborativeTextEditorElement": "Etherpad settings",

@@ -1,71 +1,86 @@
 <template>
-	<VDialog :model-value="isOpen" fullscreen scrollable :transition="false" @keydown.escape="onDialogClose">
-		<VToolbar id="card-detail-view-toolbar" class="toolbar border-b-thin">
-			<VBtn
-				:icon="mdiClose"
-				data-testid="close-detail-view-button"
-				:aria-label="t('common.labels.close')"
-				@click="onDialogClose"
-			/>
-			<VToolbarTitle>{{ $t("components.board.dialog.detail-view.title") }}</VToolbarTitle>
-			<VBtn
-				:icon="mdiChevronLeft"
-				data-testid="prev-detail-view-button"
-				:aria-label="t('components.board.action.prev-detail-view')"
-				:to="previousCardRoute"
-				:disabled="!previousCardRoute"
-			/>
-			<VBtn
-				:icon="mdiChevronRight"
-				data-testid="next-detail-view-button"
-				:aria-label="t('components.board.action.next-detail-view')"
-				:to="nextCardRoute"
-				:disabled="!nextCardRoute"
-			/>
-			<VSpacer />
-			<VBtn
-				v-if="allowedOperations?.deleteCard && !isEditMode"
-				class="mr-4 keep-inline-edit-mode"
-				data-testid="toolbar-edit-button"
-				variant="flat"
-				color="primary"
-				@click="startEditMode"
-			>
-				{{ $t("common.actions.edit") }}
-			</VBtn>
-			<VBtn
-				v-if="allowedOperations?.deleteCard && isEditMode"
-				class="mr-4 keep-inline-edit-mode"
-				data-testid="toolbar-view-button"
-				variant="flat"
-				color="primary"
-				@click="stopEditMode"
-			>
-				{{ $t("common.actions.view") }}
-			</VBtn>
-		</VToolbar>
-		<VCard :style="{ backgroundColor: cardBackground }">
-			<VCardText>
-				<div
-					class="detail-view-size w-100 mx-auto elevation-3 rounded-lg mt-4"
-					:style="{
-						backgroundColor: 'white',
-						borderLeft: cardBorderColor ? `3px solid ${cardBorderColor}` : undefined,
-					}"
+	<VDialog :model-value="isOpen" fullscreen :transition="false" @keydown.escape="onDialogClose">
+		<div class="d-flex flex-column" style="height: 100%">
+			<VToolbar id="card-detail-view-toolbar" class="border-b-thin flex-grow-0">
+				<VBtn
+					:icon="mdiClose"
+					data-testid="close-detail-view-button"
+					:aria-label="t('common.labels.close')"
+					@click="onDialogClose"
+				/>
+				<VBtn
+					:icon="mdiFormatListBulleted"
+					data-testid="toc-toggle-button"
+					:aria-label="t('components.board.dialog.detail-view.toc.toggle')"
+					:color="isTocOpen ? 'primary' : undefined"
+					@click="isTocOpen = !isTocOpen"
+				/>
+				<VToolbarTitle>{{ $t("components.board.dialog.detail-view.title") }}</VToolbarTitle>
+				<VBtn
+					:icon="mdiChevronLeft"
+					data-testid="prev-detail-view-button"
+					:aria-label="t('components.board.action.prev-detail-view')"
+					:to="previousCardRoute"
+					:disabled="!previousCardRoute"
+				/>
+				<VBtn
+					:icon="mdiChevronRight"
+					data-testid="next-detail-view-button"
+					:aria-label="t('components.board.action.next-detail-view')"
+					:to="nextCardRoute"
+					:disabled="!nextCardRoute"
+				/>
+				<VSpacer />
+				<VBtn
+					v-if="allowedOperations?.deleteCard && !isEditMode"
+					class="mr-4 keep-inline-edit-mode"
+					data-testid="toolbar-edit-button"
+					variant="flat"
+					color="primary"
+					@click="startEditMode"
 				>
-					<CardHost :height="100" :card-id="cardId" :row-index="-1" :column-index="-1" @click.stop />
+					{{ $t("common.actions.edit") }}
+				</VBtn>
+				<VBtn
+					v-if="allowedOperations?.deleteCard && isEditMode"
+					class="mr-4 keep-inline-edit-mode"
+					data-testid="toolbar-view-button"
+					variant="flat"
+					color="primary"
+					@click="stopEditMode"
+				>
+					{{ $t("common.actions.view") }}
+				</VBtn>
+			</VToolbar>
+			<div class="d-flex flex-row flex-grow-1 overflow-hidden">
+				<Transition name="toc-slide">
+					<BoardTableOfContents v-if="isTocOpen" :current-card-id="cardId" />
+				</Transition>
+				<div class="flex-grow-1 overflow-y-auto" :style="{ backgroundColor: cardBackground }">
+					<VCardText>
+						<div
+							class="detail-view-size w-100 mx-auto elevation-3 rounded-lg mt-4"
+							:style="{
+								backgroundColor: 'white',
+								borderLeft: cardBorderColor ? `3px solid ${cardBorderColor}` : undefined,
+							}"
+						>
+							<CardHost :height="100" :card-id="cardId" :row-index="-1" :column-index="-1" @click.stop />
+						</div>
+					</VCardText>
 				</div>
-			</VCardText>
-		</VCard>
+			</div>
+		</div>
 	</VDialog>
 </template>
 
 <script setup lang="ts">
+import BoardTableOfContents from "./BoardTableOfContents.vue";
 import CardHost from "./CardHost.vue";
 import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { Colors } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
-import { mdiChevronLeft, mdiChevronRight, mdiClose } from "@icons/material";
+import { mdiChevronLeft, mdiChevronRight, mdiClose, mdiFormatListBulleted } from "@icons/material";
 import { computed, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import type { RouteLocationRaw } from "vue-router";
@@ -90,6 +105,7 @@ const { setFocus } = useBoardFocusHandler();
 setFocus("card-detail-view-toolbar");
 
 const isOpen = ref(true);
+const isTocOpen = ref(false);
 const card = computed(() => cardStore.getCard(cardRef.value));
 
 const cardBackground = computed(() => {
@@ -120,14 +136,18 @@ const onDialogClose = () => {
 	min-width: 17rem;
 }
 
-.toolbar {
-	position: absolute;
-	width: 100%;
-	z-index: 2001;
+.toc-slide-enter-active,
+.toc-slide-leave-active {
+	transition:
+		width 0.25s ease,
+		min-width 0.25s ease;
+	overflow: hidden;
 }
 
-.v-card {
-	padding-top: 64px;
+.toc-slide-enter-from,
+.toc-slide-leave-to {
+	width: 0 !important;
+	min-width: 0 !important;
 }
 
 .v-dialog {
