@@ -81,6 +81,7 @@ describe("socket.ts", () => {
 			emit: vi.fn(),
 			connect: vi.fn(),
 			disconnect: vi.fn(),
+			close: vi.fn(),
 			onAny: vi.fn(),
 			timeout: vi.fn().mockReturnValue(timeoutResponseMock),
 			io: {
