@@ -441,6 +441,7 @@ describe("CourseRoomOverview.page", () => {
 
 		it("should show import mode when query has import token", async () => {
 			getWrapper({ routeQuery: { import: "test-token" } });
+			await flushPromises();
 			expect(useImportFlowMock.executeImport).toHaveBeenCalledWith("test-token", expect.anything(), "course");
 		});
 

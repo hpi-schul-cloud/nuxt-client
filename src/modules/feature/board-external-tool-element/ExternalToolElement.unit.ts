@@ -1,6 +1,8 @@
 import ExternalToolElement from "./ExternalToolElement.vue";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
+import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { BusinessError } from "@/store/types/commons";
 import {
 	contextExternalToolConfigurationStatusFactory,
@@ -962,6 +964,48 @@ describe("ExternalToolElement", () => {
 			await card.trigger("keydown.up");
 
 			expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
+		});
+	});
+
+	describe("Delete", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper(
+				{
+					element: externalToolElementResponseFactory.build({
+						content: { contextExternalToolId: "contextExternalToolId" },
+					}),
+					isEditMode: true,
+				},
+				externalToolDisplayDataFactory.build({
+					status: schoolToolConfigurationStatusFactory.build(),
+				})
+			);
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should emit delete event when deletion is confirmed", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
+			const { wrapper } = setup();
+
+			const menu = wrapper.getComponent(ExternalToolElementMenu);
+			menu.vm.$emit("delete:element");
+			await nextTick();
+
+			expect(wrapper.emitted("delete:element")).toBeDefined();
+		});
+
+		it("should not emit delete event when deletion is canceled", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(false);
+			const { wrapper } = setup();
+
+			const menu = wrapper.getComponent(ExternalToolElementMenu);
+			menu.vm.$emit("delete:element");
+			await nextTick();
+
+			expect(wrapper.emitted("delete:element")).toBeUndefined();
 		});
 	});
 

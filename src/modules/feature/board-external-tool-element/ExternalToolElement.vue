@@ -64,6 +64,7 @@
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { ExternalToolElementResponse } from "@api-server";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useEnvConfig } from "@data-env";
@@ -196,7 +197,12 @@ const onMoveElementDown = () => emit("move-down:edit");
 
 const onMoveElementUp = () => emit("move-up:edit");
 
-const onDeleteElement = () => emit("delete:element", element.value.id);
+const onDeleteElement = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.externalToolElement");
+	if (shouldDelete) {
+		emit("delete:element", element.value.id);
+	}
+};
 
 const onEditElement = () => (isConfigurationDialogOpen.value = true);
 
