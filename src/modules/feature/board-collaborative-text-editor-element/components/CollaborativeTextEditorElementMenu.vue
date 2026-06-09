@@ -28,7 +28,7 @@ const emit = defineEmits<{
 	(e: "move-up:element"): void;
 }>();
 
-const onDelete = async () => {
+const onDelete = () => {
 	emit("delete:element");
 };
 

@@ -43,7 +43,7 @@ const emit = defineEmits([
 ]);
 const onEdit = () => emit("edit:element");
 const onDownload = () => emit("download:content");
-const onDelete = async () => {
+const onDelete = () => {
 	emit("delete:element");
 };
 
