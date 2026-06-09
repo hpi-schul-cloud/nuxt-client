@@ -15,6 +15,7 @@ const DEFAULT_COLORS = [
 	Colors.DEEP_ORANGE,
 	Colors.AMBER,
 	Colors.BLUE_GREY,
+	Colors.GREY,
 ];
 
 const colorToHex = (color: Colors, shade: ColorShade): string =>
