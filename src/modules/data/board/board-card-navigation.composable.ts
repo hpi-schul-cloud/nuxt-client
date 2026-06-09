@@ -15,7 +15,12 @@ export const useBoardCardNavigation = () => {
 		return board.value.columns.flatMap((column) => column.cards.map((card) => card.cardId));
 	});
 
-	const currentCardId = computed(() => (route.params.cardId ? (route.params.cardId as string) : undefined));
+	const currentCardId = computed(() => {
+		if (typeof route.params.cardId !== "string") {
+			return undefined;
+		}
+		return route.params.cardId;
+	});
 
 	const currentCardIndex = computed(() => (currentCardId.value ? allCardIds.value.indexOf(currentCardId.value) : -1));
 
