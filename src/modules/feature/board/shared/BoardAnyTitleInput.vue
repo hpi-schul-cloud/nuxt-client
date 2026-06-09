@@ -14,7 +14,7 @@
 			density="compact"
 			rows="1"
 			auto-grow
-			:rules="[validateOnOpeningTag]"
+			:rules="validationRules"
 			:placeholder="t('components.cardElement.titleElement.placeholder')"
 			:autofocus="internalIsFocused"
 			:maxlength="maxLength"
@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { useInlineEditInteractionHandler } from "@util-board";
-import { useOpeningTagValidator } from "@util-validators";
+import { isOfMaxLength, useOpeningTagValidator } from "@util-validators";
 import { computed, nextTick, onMounted, ref, toRef, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { VTextarea } from "vuetify/components";
@@ -65,6 +65,8 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
+const validationRules = [validateOnOpeningTag, isOfMaxLength(100)()];
+
 const modelValue = ref("");
 const externalValue = toRef(props, "value");
 const internalIsFocused = ref(false);
@@ -86,6 +88,7 @@ const setFocusOnEdit = async () => {
 };
 
 watch(modelValue, async (newValue) => {
+	await nextTick();
 	await titleInput?.value?.validate();
 	const isValid = titleInput?.value?.isValid;
 
@@ -161,6 +164,10 @@ const cursorToEnd = () => {
 	letter-spacing: $field-letter-spacing;
 	font-family: var(--font-accent);
 	font-weight: normal;
+
+	:deep(.v-messages) {
+		font-family: var(--font-primary);
+	}
 
 	&.board-title-input :deep(textarea) {
 		font-size: var(--heading-1);
