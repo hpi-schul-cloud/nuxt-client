@@ -168,7 +168,7 @@ import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@ut
 import { refDebounced, useTimeout } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, ComputedRef, onMounted, onUnmounted, provide, ref, watch } from "vue";
+import { computed, ComputedRef, onUnmounted, provide, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
@@ -315,14 +315,20 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 
 const { focusNodeFromHash } = useElementFocus();
 
-onMounted(async () => {
-	resetPageInformation();
-	useBoardInactivity();
+watch(
+	() => props.boardId,
+	async (newBoardId, oldBoardId) => {
+		if (newBoardId !== oldBoardId) {
+			resetPageInformation();
+			useBoardInactivity();
 
-	await boardStore.fetchBoardRequest({ boardId: props.boardId });
+			await boardStore.fetchBoardRequest({ boardId: props.boardId });
 
-	focusNodeFromHash();
-});
+			focusNodeFromHash();
+		}
+	},
+	{ immediate: true }
+);
 
 watch(
 	() => allowedOperations.value.createExternalToolElement,
