@@ -779,7 +779,7 @@ export default {
 	"components.molecules.export.options.info.point1": "Archivos subidos dentro del curso.",
 	"components.molecules.export.options.info.point2": "Envíos",
 	"components.molecules.export.options.info.point3":
-		"Las carpetas de archivos no se exportan con la Common Cartridge versión 1.1",
+		"Para garantizar la compatibilidad con Moodle, las carpetas de archivos se exportan en Common Cartridge versión 1.1 como un grupo de archivos individuales.",
 	"components.molecules.export.options.info.point4": "Los siguientes elementos del mapa dentro de las áreas:",
 	"components.molecules.export.options.info.point4.sub1": "Pizarra",
 	"components.molecules.export.options.info.point4.sub2": "Etherpad",
