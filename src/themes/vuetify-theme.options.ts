@@ -7,6 +7,7 @@ const federalStateTheme: ThemeDefinition = {
 	colors: {
 		primary: "#2370CB",
 		"primary-darken-1": "#1e599c",
+		"primary-darken-2": "#1a4d75",
 		"primary-lighten": "#e9f1fa",
 		"on-surface": "#0f3551",
 		"on-background": "#0f3551",

@@ -101,7 +101,7 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 	}
 
 	a {
-		color: #00489a;
+		color: rgba(var(--v-theme-primary-darken-2));
 	}
 }
 
