@@ -133,13 +133,13 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 		}
 	});
 
-	useEventListener(window, "beforeunload", async () => {
+	useEventListener(globalThis, "beforeunload", async () => {
 		await reportLogs("page_unload");
 	});
 
 	const reportLogs = async (cause: string) => {
 		if (logs.length > 0) {
-			await apiCall("socketio_connection", cause, 0, [...logs]);
+			apiCall("socketio_connection", cause, 0, [...logs]);
 			resetLogs();
 		}
 	};
