@@ -66,7 +66,7 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 			url,
 			boardId,
 			retryCount,
-			logSteps: steps,
+			logSteps: steps ?? [],
 		};
 
 		boardErrorReportApi
