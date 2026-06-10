@@ -99,6 +99,11 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 	.math-tex {
 		font-size: large;
 	}
+
+	// ensures contrast AAA confirmity for colored cards
+	a {
+		color: rgba(var(--v-theme-primary-darken-2));
+	}
 }
 
 :deep(.ck.ck-editor__editable_inline) {
