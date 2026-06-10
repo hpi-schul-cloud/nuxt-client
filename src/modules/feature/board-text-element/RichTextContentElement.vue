@@ -100,6 +100,7 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 		font-size: large;
 	}
 
+	// ensures contrast AAA confirmity for colored cards
 	a {
 		color: rgba(var(--v-theme-primary-darken-2));
 	}
