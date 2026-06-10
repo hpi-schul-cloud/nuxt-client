@@ -318,20 +318,21 @@ const fabItems = computed<FabAction[] | undefined>(() => {
 			return actions;
 		}
 
-		actions.push(
-			{
-				icon: mdiListBoxOutline,
-				label: t("pages.rooms.members.fab.selectFromDirectory"),
-				dataTestId: "fab-select-from-directory",
-				clickHandler: () => handleAddMember(FabEvent.ADD_MEMBERS),
-			},
-			{
+		actions.push({
+			icon: mdiListBoxOutline,
+			label: t("pages.rooms.members.fab.selectFromDirectory"),
+			dataTestId: "fab-select-from-directory",
+			clickHandler: () => handleAddMember(FabEvent.ADD_MEMBERS),
+		});
+
+		if (allowedOperations.value.addExternalPersonByEmail) {
+			actions.push({
 				icon: mdiAccountClockOutline,
 				label: t("pages.rooms.members.fab.addExternalPerson"),
 				dataTestId: "fab-add-external-person",
 				clickHandler: () => handleAddMember(FabEvent.INVITE_MEMBERS),
-			}
-		);
+			});
+		}
 
 		return actions;
 	}
