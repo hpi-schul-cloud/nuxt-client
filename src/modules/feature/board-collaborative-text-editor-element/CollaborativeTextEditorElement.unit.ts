@@ -1,5 +1,6 @@
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { collaborativeTextEditorElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { CollaborativeTextEditorParentType } from "@api-server";
@@ -320,7 +321,8 @@ describe("CollaborativeTextEditorElement", () => {
 		});
 
 		describe("when delete is clicked", () => {
-			it('should emit "delete" collaborative text editor', async () => {
+			it('should emit "delete" collaborative text editor when deletion is confirmed', async () => {
+				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 				const { wrapper } = setup({
 					isEditMode: true,
 				});
@@ -330,6 +332,19 @@ describe("CollaborativeTextEditorElement", () => {
 				await nextTick();
 
 				expect(wrapper.emitted("delete:element")).toBeTruthy();
+			});
+
+			it('should not emit "delete" collaborative text editor when deletion is cancelled', async () => {
+				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(false);
+				const { wrapper } = setup({
+					isEditMode: true,
+				});
+
+				const boardMenu = wrapper.findComponent(CollaborativeTextEditorElementMenu);
+				boardMenu.vm.$emit("delete:element");
+				await nextTick();
+
+				expect(wrapper.emitted("delete:element")).toBeUndefined();
 			});
 		});
 	});
