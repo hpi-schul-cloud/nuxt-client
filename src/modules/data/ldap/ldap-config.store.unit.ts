@@ -1,6 +1,6 @@
-import { unchangedPassword } from "../../../utils/ldapConstants";
 import { emptyLdapConfig, LdapFormData, useLdapConfigStore, VerifiedData } from "./ldap-config.store";
 import { initializeAxios } from "@/utils/api";
+import { unchangedPassword } from "@/utils/ldapConstants";
 import { expectNotification } from "@@/tests/test-utils/factory/application-test.utils";
 import { mockAxiosInstance } from "@@/tests/test-utils/mockAxiosInstance";
 import { createTestingPinia } from "@pinia/testing";
