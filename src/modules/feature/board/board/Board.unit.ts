@@ -222,6 +222,18 @@ describe("Board", () => {
 			expect(mockUseBoardInactivity).toHaveBeenCalled();
 		});
 
+		it("should not re-register board inactivity when boardId changes and should fetch the new board", async () => {
+			const { wrapper, boardStore } = setup();
+
+			expect(mockUseBoardInactivity).toHaveBeenCalledTimes(1);
+
+			await wrapper.setProps({ boardId: "next-board-id" });
+			await nextTick();
+
+			expect(mockUseBoardInactivity).toHaveBeenCalledTimes(1);
+			expect(boardStore.fetchBoardRequest).toHaveBeenLastCalledWith({ boardId: "next-board-id" });
+		});
+
 		it("should create page information when board changes", async () => {
 			const { boardStore, board } = setup();
 

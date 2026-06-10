@@ -198,6 +198,7 @@ watch(board, async () => {
 const route = useRoute();
 
 useBodyScrolling();
+useBoardInactivity();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
 const cardId = computed(() => {
@@ -320,9 +321,8 @@ watch(
 	async (newBoardId, oldBoardId) => {
 		if (newBoardId !== oldBoardId) {
 			resetPageInformation();
-			useBoardInactivity();
 
-			await boardStore.fetchBoardRequest({ boardId: props.boardId });
+			await boardStore.fetchBoardRequest({ boardId: newBoardId });
 
 			focusNodeFromHash();
 		}
