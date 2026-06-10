@@ -708,7 +708,7 @@ export default {
 	"components.molecules.export.options.info.point1": "Hochgeladene Dateien innerhalb des Kurses.",
 	"components.molecules.export.options.info.point2": "Abgaben",
 	"components.molecules.export.options.info.point3":
-		"Dateiordner werden mit Common Cartridge Version 1.1 nicht exportiert",
+		"Um die Kompatibilität mit Moodle zu gewährleisten, werden Dateiordner in Common Cartridge Version 1.1 als Gruppe von Einzeldateien exportiert.",
 	"components.molecules.export.options.info.point4": "Folgende Karten Elemente innerhalb von Bereichen:",
 	"components.molecules.export.options.info.point4.sub1": "Whiteboard",
 	"components.molecules.export.options.info.point4.sub2": "Etherpad",
