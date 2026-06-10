@@ -18,7 +18,6 @@
 						:has-edit-permission="canEditColumn"
 						class="w-100"
 						:is-focused="isFocusedById"
-						:max-length="100"
 						@update:value="onUpdateTitle"
 						@blur="onEndEditMode"
 					/>

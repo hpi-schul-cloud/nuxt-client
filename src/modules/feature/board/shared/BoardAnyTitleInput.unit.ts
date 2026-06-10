@@ -1,5 +1,6 @@
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VTextarea } from "vuetify/components";
@@ -24,7 +25,7 @@ describe("BoardAnyTitleInput", () => {
 	}) => {
 		const wrapper = mount(BoardAnyTitleInput, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
 			},
 			propsData: {
 				...defaultProps,
