@@ -1,5 +1,5 @@
 <template>
-	<Board :board-id="boardId" />
+	<Board :key="boardId" :board-id="boardId" />
 </template>
 
 <script setup lang="ts">
