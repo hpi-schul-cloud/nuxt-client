@@ -47,7 +47,8 @@ describe("ConfirmationTable", () => {
 			});
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
-		roomMembersStore.$patch({ roomMembers: [...roomMembersWithoutApplicants, ...roomApplicants] });
+		roomMembersStore.$patch({ roomMembers: roomMembersWithoutApplicants });
+		roomMembersStore.$patch({ roomApplicants: roomApplicants });
 
 		const wrapper = mount(ConfirmationTable, {
 			global: {
