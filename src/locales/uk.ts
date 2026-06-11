@@ -456,6 +456,8 @@ export default {
 	"components.board.action.delete": "Видалити",
 	"components.board.action.deleteFromSection": "Видалити з розділу",
 	"components.board.action.detail-view": "Відкрити детальний вигляд",
+	"components.board.action.next-detail-view": "Відкрити наступний детальний вигляд",
+	"components.board.action.prev-detail-view": "Відкрити попередній детальний вигляд",
 	"components.board.action.download": "Завантажити",
 	"components.board.action.moveDown": "Рухатися вниз",
 	"components.board.action.moveLeft": "Перемістіться вліво",
