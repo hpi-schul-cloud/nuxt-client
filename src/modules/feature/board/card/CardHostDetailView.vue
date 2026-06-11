@@ -1,5 +1,12 @@
 <template>
-	<VDialog :model-value="isOpen" fullscreen scrollable :transition="false" @keydown.escape="onDialogClose">
+	<VDialog
+		:model-value="isOpen"
+		fullscreen
+		scrollable
+		:scrim="false"
+		:transition="false"
+		@keydown.escape="onDialogClose"
+	>
 		<VToolbar id="card-detail-view-toolbar" class="toolbar border-b-thin">
 			<VBtn
 				:icon="mdiClose"
