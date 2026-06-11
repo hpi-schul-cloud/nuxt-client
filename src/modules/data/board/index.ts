@@ -13,6 +13,7 @@ import { useForceRender } from "./fixSamePositionDnD.composable";
 import { useSocketConnection } from "./socket/socket";
 
 export { useBoardAllowedOperations } from "./board-allowed-operations.composable";
+export { useBoardCardNavigation } from "./board-card-navigation.composable";
 export * from "./cardActions/cardActionPayload.types";
 export * from "./edit-mode.composable";
 

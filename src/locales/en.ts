@@ -444,6 +444,8 @@ export default {
 	"components.board.action.delete": "Delete",
 	"components.board.action.deleteFromSection": "Remove from section",
 	"components.board.action.detail-view": "Open detail view",
+	"components.board.action.next-detail-view": "Open next detail view",
+	"components.board.action.prev-detail-view": "Open previous detail view",
 	"components.board.action.download": "Download",
 	"components.board.action.moveDown": "Move down",
 	"components.board.action.moveLeft": "Move left",
