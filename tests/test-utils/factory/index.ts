@@ -29,6 +29,7 @@ export * from "./courseMetadataResponseFactory";
 export * from "./courseRoomDataFactory";
 export * from "./courseRoomItemFactory";
 export * from "./customParameterResponseFactory";
+export * from "./dataTransferFactory";
 export * from "./deletedElementResponseFactory";
 export * from "./drawingElementResponseFactory";
 export * from "./env-test.utils";

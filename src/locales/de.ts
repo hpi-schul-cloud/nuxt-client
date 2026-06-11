@@ -458,6 +458,8 @@ export default {
 	"components.board.action.delete": "Löschen",
 	"components.board.action.deleteFromSection": "Aus Abschnitt entfernen",
 	"components.board.action.detail-view": "Vollansicht öffnen",
+	"components.board.action.next-detail-view": "Nächste Vollansicht öffnen",
+	"components.board.action.prev-detail-view": "Vorherige Vollansicht öffnen",
 	"components.board.action.download": "Herunterladen",
 	"components.board.action.moveDown": "Nach unten verschieben",
 	"components.board.action.moveLeft": "Nach links verschieben",
@@ -708,7 +710,7 @@ export default {
 	"components.molecules.export.options.info.point1": "Hochgeladene Dateien innerhalb des Kurses.",
 	"components.molecules.export.options.info.point2": "Abgaben",
 	"components.molecules.export.options.info.point3":
-		"Dateiordner werden mit Common Cartridge Version 1.1 nicht exportiert",
+		"Um die Kompatibilität mit Moodle zu gewährleisten, werden Dateiordner in Common Cartridge Version 1.1 als Gruppe von Einzeldateien exportiert.",
 	"components.molecules.export.options.info.point4": "Folgende Karten Elemente innerhalb von Bereichen:",
 	"components.molecules.export.options.info.point4.sub1": "Whiteboard",
 	"components.molecules.export.options.info.point4.sub2": "Etherpad",
@@ -2109,4 +2111,8 @@ export default {
 	"pages.folder.trash.purge.error": "Dateien konnten nicht endgültig gelöscht werden.",
 	"pages.folder.trash.purge.dialog.title": "{count} Datei(en) endgültig löschen?",
 	"pages.folder.trash.purge.dialog.checkboxLabel": "Löschen kann nicht rückgängig gemacht werden.",
+	"pages.folder.dropZone.dropFilesHere": "Dateien hier ablegen zum Hochladen",
+	"pages.folder.dropZone.emptyState.title": "Dateien hier ablegen zum Hochladen",
+	"pages.folder.dropZone.emptyState.orText": "oder",
+	"pages.folder.dropZone.emptyState.browse": "Dateien durchsuchen",
 };

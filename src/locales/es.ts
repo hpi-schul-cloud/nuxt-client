@@ -453,6 +453,8 @@ export default {
 	"components.board.action.delete": "Eliminar",
 	"components.board.action.deleteFromSection": "Quitar de la sección",
 	"components.board.action.detail-view": "Abrir vista detallada",
+	"components.board.action.next-detail-view": "Abrir siguiente vista detallada",
+	"components.board.action.prev-detail-view": "Abrir vista detallada anterior",
 	"components.board.action.download": "Descargar",
 	"components.board.action.moveDown": "Bajar",
 	"components.board.action.moveLeft": "Mover a la izquierda",
@@ -779,7 +781,7 @@ export default {
 	"components.molecules.export.options.info.point1": "Archivos subidos dentro del curso.",
 	"components.molecules.export.options.info.point2": "Envíos",
 	"components.molecules.export.options.info.point3":
-		"Las carpetas de archivos no se exportan con la Common Cartridge versión 1.1",
+		"Para garantizar la compatibilidad con Moodle, las carpetas de archivos se exportan en Common Cartridge versión 1.1 como un grupo de archivos individuales.",
 	"components.molecules.export.options.info.point4": "Los siguientes elementos del mapa dentro de las áreas:",
 	"components.molecules.export.options.info.point4.sub1": "Pizarra",
 	"components.molecules.export.options.info.point4.sub2": "Etherpad",
@@ -2117,4 +2119,8 @@ export default {
 	"pages.folder.trash.purge.error": "No se pudieron eliminar permanentemente los archivos.",
 	"pages.folder.trash.purge.dialog.title": "¿Eliminar permanentemente {count} archivo(s)?",
 	"pages.folder.trash.purge.dialog.checkboxLabel": "La eliminación no se puede deshacer.",
+	"pages.folder.dropZone.dropFilesHere": "Suelta los archivos aquí para subirlos",
+	"pages.folder.dropZone.emptyState.title": "Suelta los archivos aquí para subirlos",
+	"pages.folder.dropZone.emptyState.orText": "o",
+	"pages.folder.dropZone.emptyState.browse": "buscar tus archivos",
 };

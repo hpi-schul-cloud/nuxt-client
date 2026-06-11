@@ -109,6 +109,12 @@ export interface RoomItemResponseAllowedOperations {
      * @type {boolean}
      * @memberof RoomItemResponseAllowedOperations
      */
+    manageRoomApplicants: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
     shareRoom: boolean;
     /**
      * 

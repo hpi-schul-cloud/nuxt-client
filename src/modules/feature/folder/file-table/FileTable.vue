@@ -12,11 +12,35 @@
 		</EmptyState>
 	</template>
 	<template v-else-if="isEmpty && !areUploadStatsVisible">
-		<EmptyState :title="t('pages.folder.emptyState')">
-			<template #media>
-				<EmptyFolderSvg />
-			</template>
-		</EmptyState>
+		<template v-if="props.hasEditPermission">
+			<div
+				class="drop-zone-empty d-flex flex-column align-center justify-center mt-4 py-10 px-6 rounded"
+				:class="{ 'drop-zone-empty--active': props.isOverDropZone }"
+				data-testid="drop-zone-empty-state"
+			>
+				<VIcon :icon="mdiTrayArrowUp" size="48" color="primary" class="mb-4" aria-hidden="true" />
+				<p class="drop-zone-empty__title ma-0 mb-1 font-weight-medium text-on-surface">
+					{{ t("pages.folder.dropZone.emptyState.title") }}
+				</p>
+				<p class="drop-zone-empty__subtitle ma-0 text-on-surface">
+					{{ t("pages.folder.dropZone.emptyState.orText") }}
+					<button
+						type="button"
+						class="drop-zone-empty__browse-link bg-transparent pa-0 cursor-pointer text-primary"
+						@click="emit('click:browse')"
+					>
+						{{ t("pages.folder.dropZone.emptyState.browse") }}
+					</button>
+				</p>
+			</div>
+		</template>
+		<template v-else>
+			<EmptyState :title="t('pages.folder.emptyState')">
+				<template #media>
+					<EmptyFolderSvg />
+				</template>
+			</EmptyState>
+		</template>
 	</template>
 	<template v-else>
 		<div class="mt-2">
@@ -126,6 +150,7 @@ import RenameFileDialog from "./RenameFileDialog.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
 import { FileRecord } from "@/types/file/File";
 import { formatFileSize, getFileExtension, isScanStatusBlocked } from "@/utils/fileHelper";
+import { mdiTrayArrowUp } from "@icons/material";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu, KebabMenuActionRename } from "@ui-kebab-menu";
@@ -166,6 +191,10 @@ const props = defineProps({
 		type: Boolean,
 		default: false,
 	},
+	isOverDropZone: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const emit = defineEmits([
@@ -174,6 +203,7 @@ const emit = defineEmits([
 	"reset-upload-progress",
 	"download-file",
 	"download-files-as-archive",
+	"click:browse",
 ]);
 
 const headers = [
@@ -261,3 +291,32 @@ const buildActionMenuAriaLabel = (item: FileRecord): string =>
 		name: item.name,
 	});
 </script>
+
+<style scoped>
+.drop-zone-empty {
+	min-height: 240px;
+	border: 2px dashed rgb(var(--v-theme-primary));
+	transition:
+		background-color 0.15s ease,
+		border-color 0.15s ease;
+}
+
+.drop-zone-empty--active {
+	border-color: rgb(var(--v-theme-primary));
+	background-color: rgba(var(--v-theme-primary), 0.08);
+}
+
+.drop-zone-empty__title {
+	font-size: 1.125rem;
+}
+
+.drop-zone-empty__browse-link {
+	border: none;
+	font-size: inherit;
+	text-decoration: underline;
+}
+
+.drop-zone-empty__browse-link:hover {
+	text-decoration: none;
+}
+</style>

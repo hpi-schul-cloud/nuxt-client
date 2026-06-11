@@ -1,6 +1,5 @@
 import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { $axios } from "@/utils/api";
-import { CommonCartridgeConfigApiFactory, CommonCartridgeConfigResponse } from "@api-common-cartridge";
 import { FileConfigApiFactory, FilesStorageConfigResponse } from "@api-file-storage";
 import { ConfigResponse, LanguageType, SchulcloudTheme, ServerConfigApiFactory, Timezone } from "@api-server";
 import { useAppStore } from "@data-app";
@@ -89,17 +88,11 @@ export const defaultConfigEnvs: ConfigResponse = {
 export const useEnvStore = defineStore("envConfigStore", () => {
 	const serverApi = ServerConfigApiFactory(undefined, "/v3", $axios);
 	const fileConfigApi = FileConfigApiFactory(undefined, "/v3", $axios);
-	const ccConfigApi = CommonCartridgeConfigApiFactory(undefined, "/v3", $axios);
 
 	const envFile = reactive<FilesStorageConfigResponse>({
 		MAX_FILE_SIZE: 2684354560,
 		COLLABORA_MAX_FILE_SIZE_IN_BYTES: 104857600,
 		FILES_STORAGE_MAX_FILES_PER_PARENT: 1000,
-	});
-	const envCommonCartridge = reactive<CommonCartridgeConfigResponse>({
-		FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: false,
-		FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: false,
-		FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_MAX_FILE_SIZE: 1073741824,
 	});
 	const env = reactive<ConfigResponse>(defaultConfigEnvs);
 
@@ -109,10 +102,6 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 
 	const setFileEnvs = (fileEnvsConfig: FilesStorageConfigResponse) => {
 		Object.assign(envFile, fileEnvsConfig);
-	};
-
-	const setCcEnvs = (ccEnvsConfig: CommonCartridgeConfigResponse) => {
-		Object.assign(envCommonCartridge, ccEnvsConfig);
 	};
 
 	const fallBackLanguage = computed(() => env.I18N__FALLBACK_LANGUAGE ?? env.I18N__DEFAULT_LANGUAGE);
@@ -145,18 +134,14 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 
 	const loadConfiguration = async () => {
 		try {
-			const [serverConfigRes, fileConfigRes, ccConfigRes] = await Promise.all([
+			const [serverConfigRes, fileConfigRes] = await Promise.all([
 				serverApi.serverConfigControllerPublicConfig(),
 				fileConfigApi.publicConfig().catch(() => undefined), // Optional, catching when not available
-				ccConfigApi.commonCartridgeConfigControllerPublicConfig().catch(() => undefined), // Optional, catching when not available
 			]);
 
 			setEnvs(serverConfigRes.data);
 			if (fileConfigRes?.data) {
 				setFileEnvs(fileConfigRes?.data);
-			}
-			if (ccConfigRes?.data) {
-				setCcEnvs(ccConfigRes?.data);
 			}
 
 			return true;
@@ -170,7 +155,6 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		loadConfiguration,
 		env,
 		envFile,
-		envCommonCartridge,
 		fallBackLanguage,
 		instanceName,
 		instituteTitle,
@@ -185,9 +169,4 @@ export const useEnvConfig = createSharedComposable(() => {
 export const useEnvFileConfig = createSharedComposable(() => {
 	const { envFile } = storeToRefs(useEnvStore());
 	return envFile;
-});
-
-export const useEnvCommonCartridgeConfig = createSharedComposable(() => {
-	const { envCommonCartridge } = storeToRefs(useEnvStore());
-	return envCommonCartridge;
 });

@@ -1,7 +1,14 @@
 <template>
 	<div>
 		<template v-if="board">
-			<CardHostDetailView v-if="cardId" :key="cardId" :card-id="cardId" @close:detail-view="onCloseDetailView" />
+			<CardHostDetailView
+				v-if="cardId"
+				:key="cardId"
+				:card-id="cardId"
+				:previous-card-route="previousCardRoute"
+				:next-card-route="nextCardRoute"
+				@close:detail-view="onCloseDetailView"
+			/>
 			<DefaultWireframe
 				ref="main"
 				:breadcrumbs="breadcrumbs"
@@ -150,6 +157,7 @@ import {
 import { useAppStore, useNotificationStore } from "@data-app";
 import {
 	useBoardAllowedOperations,
+	useBoardCardNavigation,
 	useBoardInactivity,
 	useBoardStore,
 	useCardStore,
@@ -206,6 +214,8 @@ const cardId = computed(() => {
 	}
 	return undefined;
 });
+
+const { previousCardRoute, nextCardRoute } = useBoardCardNavigation();
 
 const isEditableChipVisible = computed(() => board.value?.readersCanEdit ?? false);
 const hasReadersEditPermission = ref(false);
