@@ -456,6 +456,8 @@ export default {
 	"components.board.action.delete": "Видалити",
 	"components.board.action.deleteFromSection": "Видалити з розділу",
 	"components.board.action.detail-view": "Відкрити детальний вигляд",
+	"components.board.action.next-detail-view": "Відкрити наступний детальний вигляд",
+	"components.board.action.prev-detail-view": "Відкрити попередній детальний вигляд",
 	"components.board.action.download": "Завантажити",
 	"components.board.action.moveDown": "Рухатися вниз",
 	"components.board.action.moveLeft": "Перемістіться вліво",
@@ -777,7 +779,8 @@ export default {
 	"components.molecules.export.options.info": "Наступний вміст не експортується:",
 	"components.molecules.export.options.info.point1": "Завантажені файли в межах курсу.",
 	"components.molecules.export.options.info.point2": "Подання",
-	"components.molecules.export.options.info.point3": "Папки файлів не експортуються з Common Cartridge версією 1.1",
+	"components.molecules.export.options.info.point3":
+		"Щоб забезпечити сумісність із Moodle, папки файлів експортуються у форматі Common Cartridge версії 1.1 як група окремих файлів.",
 	"components.molecules.export.options.info.point4": "Наступні елементи карти в межах областей:",
 	"components.molecules.export.options.info.point4.sub1": "Біла дошка",
 	"components.molecules.export.options.info.point4.sub2": "Etherpad",
