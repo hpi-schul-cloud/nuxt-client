@@ -44,7 +44,7 @@ import { useRoomMembersStore } from "@data-room";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
 defineProps({
@@ -75,6 +75,10 @@ const onConfirm = async (ids: string[]) => {
 const onReject = async (ids: string[]) => {
 	await rejectInvitations(ids);
 };
+
+onMounted(() => {
+	roomMembersStore.fetchApplicants();
+});
 
 const getAriaLabel = (item: { fullName: string }, actionFor?: "confirm" | "reject") =>
 	actionFor
