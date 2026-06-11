@@ -456,6 +456,8 @@ export default {
 	"components.board.action.delete": "Видалити",
 	"components.board.action.deleteFromSection": "Видалити з розділу",
 	"components.board.action.detail-view": "Відкрити детальний вигляд",
+	"components.board.action.next-detail-view": "Відкрити наступний детальний вигляд",
+	"components.board.action.prev-detail-view": "Відкрити попередній детальний вигляд",
 	"components.board.action.download": "Завантажити",
 	"components.board.action.moveDown": "Рухатися вниз",
 	"components.board.action.moveLeft": "Перемістіться вліво",
@@ -2086,4 +2088,8 @@ export default {
 	"pages.folder.trash.purge.error": "Не вдалося остаточно видалити файли.",
 	"pages.folder.trash.purge.dialog.title": "Назавжди видалити {count} файл(ів)?",
 	"pages.folder.trash.purge.dialog.checkboxLabel": "Видалення не можна скасувати.",
+	"pages.folder.dropZone.dropFilesHere": "Перетягніть файли сюди для завантаження",
+	"pages.folder.dropZone.emptyState.title": "Перетягніть файли сюди для завантаження",
+	"pages.folder.dropZone.emptyState.orText": "або",
+	"pages.folder.dropZone.emptyState.browse": "оглянути файли",
 };
