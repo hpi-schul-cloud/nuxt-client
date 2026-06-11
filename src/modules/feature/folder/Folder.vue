@@ -13,20 +13,31 @@
 				/>
 			</div>
 		</template>
-		<FileTable
-			:is-loading="isLoading"
-			:is-empty="isEmpty"
-			:file-storage-error="fileStorageError"
-			:has-edit-permission="allowedOperations.createFileElement"
-			:file-records="uploadedFileRecords"
-			:upload-progress="uploadProgress"
-			:are-upload-stats-visible="areUploadStatsVisible"
-			@delete-files="onDeleteFiles"
-			@update:name="onUpdateName"
-			@reset-upload-progress="resetUploadProgress"
-			@download-file="downloadFileHandler"
-			@download-files-as-archive="downloadFilesAsArchiveHandler"
-		/>
+		<div ref="dropZoneRef" class="drop-zone">
+			<FileTable
+				:is-loading="isLoading"
+				:is-empty="isEmpty"
+				:file-storage-error="fileStorageError"
+				:has-edit-permission="allowedOperations.createFileElement"
+				:file-records="uploadedFileRecords"
+				:upload-progress="uploadProgress"
+				:are-upload-stats-visible="areUploadStatsVisible"
+				:is-over-drop-zone="isOverDropZone"
+				@delete-files="onDeleteFiles"
+				@update:name="onUpdateName"
+				@reset-upload-progress="resetUploadProgress"
+				@download-file="downloadFileHandler"
+				@download-files-as-archive="downloadFilesAsArchiveHandler"
+				@click:browse="uploadFile"
+			/>
+			<div
+				v-if="isOverDropZone && allowedOperations.createFileElement && !isEmpty"
+				class="drop-zone__overlay"
+				aria-hidden="true"
+			>
+				<span class="drop-zone__overlay-text">{{ t("pages.folder.dropZone.dropFilesHere") }}</span>
+			</div>
+		</div>
 		<div v-if="allowedOperations.createFileElement" class="d-flex justify-start mt-2">
 			<RouterLink :to="{ name: 'folder-trash', params: { id: folderId } }" data-testid="trash-link">
 				{{ t("pages.folder.trash.link") }}
@@ -51,7 +62,7 @@ import RenameFolderDialog from "./RenameFolderDialog.vue";
 import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
-import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
+import { downloadFile, downloadFilesAsArchive, extractFilesFromItems } from "@/utils/fileHelper";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useSharedBoardPageInformation } from "@data-board";
 import { useEnvConfig } from "@data-env";
@@ -64,6 +75,7 @@ import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { FabAction } from "@ui-speed-dial-menu";
 import { useErrorHandler } from "@util-error-handling";
+import { useDropZone, useEventListener } from "@vueuse/core";
 import dayjs from "dayjs";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -107,6 +119,7 @@ const folderId = toRef(props, "folderId");
 const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
 
 const fileInput = ref<HTMLInputElement | null>(null);
+const dropZoneRef = ref<HTMLDivElement | null>(null);
 const isRenameDialogOpen = ref(false);
 
 const isCollaboraEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED);
@@ -248,6 +261,18 @@ const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
 	window.open(url, "_blank");
 };
 
+const { isOverDropZone } = useDropZone(dropZoneRef);
+
+useEventListener(dropZoneRef, "drop", async (event: DragEvent) => {
+	event.preventDefault();
+	if (!event.dataTransfer?.items || !allowedOperations.value.createFileElement) return;
+
+	const files = await extractFilesFromItems(event.dataTransfer.items);
+	if (files.length === 0) return;
+
+	await uploadFiles(files);
+});
+
 const resetUploadProgress = () => {
 	uploadProgress.value = { uploaded: 0, total: 0 };
 };
@@ -295,11 +320,8 @@ const onFileSelection = async (event: Event) => {
 	if (!files) return;
 
 	const fileArray = Array.from(files);
-	incrementUploadProgressTotal(fileArray.length);
 
-	incrementRunningUploads(fileArray.length);
 	await uploadFiles(fileArray);
-	decrementRunningUploads(fileArray.length);
 };
 
 watch(
@@ -314,12 +336,17 @@ watch(
 );
 
 const uploadFiles = async (files: File[]) => {
+	incrementUploadProgressTotal(files.length);
+	incrementRunningUploads(files.length);
+
 	await Promise.allSettled(
 		files.map(async (file) => {
 			await upload(file, props.folderId, FileRecordParent.BOARDNODES);
 			incrementUploadProgressUploaded(1);
 		})
 	);
+
+	decrementRunningUploads(files.length);
 };
 
 watch(
@@ -342,3 +369,29 @@ watch(
 	{ immediate: true }
 );
 </script>
+
+<style scoped>
+.drop-zone {
+	position: relative;
+}
+
+.drop-zone__overlay {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 2px dashed rgb(var(--v-theme-primary));
+	border-radius: 4px;
+	background-color: rgba(var(--v-theme-primary), 0.5);
+	pointer-events: none;
+	z-index: 10;
+}
+
+.drop-zone__overlay-text {
+	font-size: 1.75rem;
+	font-weight: 700;
+	color: white;
+	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+</style>

@@ -23,6 +23,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
+import { useDropZone } from "@vueuse/core";
 import dayjs from "dayjs";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
@@ -66,12 +67,22 @@ const createAddCollaboraFileMock = (overrides: Partial<Mocked<ReturnType<typeof 
 vi.mock("@feature-collabora/composables/add-collabora-file.composable");
 const mockedUseAddCollaboraFile = vi.mocked(useAddCollaboraFile);
 
+vi.mock("@vueuse/core", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@vueuse/core")>();
+	return {
+		...actual,
+		useDropZone: vi.fn(),
+	};
+});
+const mockedUseDropZone = vi.mocked(useDropZone);
+
 describe("Folder.vue", () => {
 	enableAutoUnmount(afterEach);
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		vi.restoreAllMocks();
+		mockedUseDropZone.mockReturnValue({ isOverDropZone: ref(false), files: ref([]) });
 	});
 
 	const setupMocks = (
@@ -227,11 +238,11 @@ describe("Folder.vue", () => {
 					expect(loadingSpinner.exists()).toBe(false);
 				});
 
-				it("should show EmptyFolderState", async () => {
+				it("should show drop zone empty state", async () => {
 					const { wrapper } = await setup();
 
-					const emptyState = wrapper.findComponent(EmptyFolderSvg);
-					expect(emptyState.exists()).toBe(true);
+					const dropZoneEmptyState = wrapper.find("[data-testid='drop-zone-empty-state']");
+					expect(dropZoneEmptyState.exists()).toBe(true);
 				});
 
 				it("should render folder name", async () => {
@@ -815,6 +826,102 @@ describe("Folder.vue", () => {
 			});
 		});
 
+		describe("when dragging files over the drop zone", () => {
+			const setup = async (isOverDropZone = false) => {
+				if (isOverDropZone) {
+					mockedUseDropZone.mockReturnValueOnce({ isOverDropZone: ref(true), files: ref([]) });
+				}
+
+				const { fileStorageApiMock } = setupMocks();
+
+				const fileRecord1 = fileRecordFactory.build();
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord1]);
+
+				const addCollaboraFileMock = createAddCollaboraFileMock({
+					isCollaboraFileDialogOpen: ref(false),
+				});
+				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
+
+				const { wrapper } = setupWrapper();
+				await flushPromises();
+				return { wrapper };
+			};
+
+			it("should show drop zone overlay when dragging over", async () => {
+				const { wrapper } = await setup(true);
+
+				const overlay = wrapper.find(".drop-zone__overlay");
+				expect(overlay.exists()).toBe(true);
+			});
+
+			it("should not show drop zone overlay when not dragging over", async () => {
+				const { wrapper } = await setup(false);
+
+				const overlay = wrapper.find(".drop-zone__overlay");
+				expect(overlay.exists()).toBe(false);
+			});
+		});
+
+		describe("when files are dropped onto the drop zone", () => {
+			const setup = async () => {
+				const { fileStorageApiMock } = setupMocks();
+
+				const fileRecord1 = fileRecordFactory.build();
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord1]);
+
+				const addCollaboraFileMock = createAddCollaboraFileMock({
+					isCollaboraFileDialogOpen: ref(false),
+				});
+				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
+
+				const { wrapper, parentId } = setupWrapper();
+				await flushPromises();
+				return { wrapper, fileStorageApiMock, parentId };
+			};
+
+			it("should call upload for each dropped file", async () => {
+				const { wrapper, fileStorageApiMock, parentId } = await setup();
+
+				const droppedFile = new File(["content"], "dropped.txt", { type: "text/plain" });
+				vi.spyOn(FileHelper, "extractFilesFromItems").mockResolvedValue([droppedFile]);
+
+				const dropEvent = new Event("drop", { bubbles: true, cancelable: true });
+				Object.defineProperty(dropEvent, "dataTransfer", {
+					value: { items: [{}] },
+					writable: false,
+				});
+				wrapper.find(".drop-zone").element.dispatchEvent(dropEvent);
+				await flushPromises();
+
+				expect(fileStorageApiMock.upload).toHaveBeenCalledWith(droppedFile, parentId, FileRecordParent.BOARDNODES);
+			});
+
+			it("when user has no edit permission, should not call upload", async () => {
+				const { fileStorageApiMock } = setupMocks({ allowedOperations: { createFileElement: false } });
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
+
+				const addCollaboraFileMock = createAddCollaboraFileMock({
+					isCollaboraFileDialogOpen: ref(false),
+				});
+				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
+
+				const { wrapper } = setupWrapper();
+				await flushPromises();
+
+				vi.spyOn(FileHelper, "extractFilesFromItems").mockResolvedValue([new File([""], "file.txt")]);
+
+				const dropEvent = new Event("drop", { bubbles: true, cancelable: true });
+				Object.defineProperty(dropEvent, "dataTransfer", {
+					value: { items: [{}] },
+					writable: false,
+				});
+				wrapper.find(".drop-zone").element.dispatchEvent(dropEvent);
+				await flushPromises();
+
+				expect(fileStorageApiMock.upload).not.toHaveBeenCalled();
+			});
+		});
+
 		describe("when folder contains only one file with isUploading true", () => {
 			const setup = async () => {
 				const { folderStateMock, fileStorageApiMock } = setupMocks();
@@ -846,11 +953,11 @@ describe("Folder.vue", () => {
 				expect(loadingSpinner.exists()).toBe(false);
 			});
 
-			it("should show EmptyFolderState", async () => {
+			it("should show drop zone empty state", async () => {
 				const { wrapper } = await setup();
 
-				const emptyState = wrapper.findComponent(EmptyFolderSvg);
-				expect(emptyState.exists()).toBe(true);
+				const dropZoneEmptyState = wrapper.find("[data-testid='drop-zone-empty-state']");
+				expect(dropZoneEmptyState.exists()).toBe(true);
 			});
 		});
 

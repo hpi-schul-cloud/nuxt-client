@@ -444,6 +444,8 @@ export default {
 	"components.board.action.delete": "Delete",
 	"components.board.action.deleteFromSection": "Remove from section",
 	"components.board.action.detail-view": "Open detail view",
+	"components.board.action.next-detail-view": "Open next detail view",
+	"components.board.action.prev-detail-view": "Open previous detail view",
 	"components.board.action.download": "Download",
 	"components.board.action.moveDown": "Move down",
 	"components.board.action.moveLeft": "Move left",
@@ -2066,4 +2068,8 @@ export default {
 	"pages.folder.trash.purge.error": "Files could not be permanently deleted.",
 	"pages.folder.trash.purge.dialog.title": "Permanently delete {count} file(s)?",
 	"pages.folder.trash.purge.dialog.checkboxLabel": "Deletion cannot be undone.",
+	"pages.folder.dropZone.dropFilesHere": "Drop files here to upload",
+	"pages.folder.dropZone.emptyState.title": "Drop files here to upload",
+	"pages.folder.dropZone.emptyState.orText": "or",
+	"pages.folder.dropZone.emptyState.browse": "browse your files",
 };

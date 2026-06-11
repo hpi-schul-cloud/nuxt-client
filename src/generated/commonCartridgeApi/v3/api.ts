@@ -15,5 +15,4 @@
 
 
 export * from './api/common-cartridge-api';
-export * from './api/common-cartridge-config-api';
 
