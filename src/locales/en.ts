@@ -444,6 +444,8 @@ export default {
 	"components.board.action.delete": "Delete",
 	"components.board.action.deleteFromSection": "Remove from section",
 	"components.board.action.detail-view": "Open detail view",
+	"components.board.action.next-detail-view": "Open next detail view",
+	"components.board.action.prev-detail-view": "Open previous detail view",
 	"components.board.action.download": "Download",
 	"components.board.action.moveDown": "Move down",
 	"components.board.action.moveLeft": "Move left",
@@ -763,7 +765,8 @@ export default {
 	"components.molecules.export.options.info": "The following content is not exported:",
 	"components.molecules.export.options.info.point1": "Uploaded files within the course.",
 	"components.molecules.export.options.info.point2": "Submissions",
-	"components.molecules.export.options.info.point3": "File folders are not exported with Common Cartridge Version 1.1",
+	"components.molecules.export.options.info.point3":
+		"To ensure compatibility with Moodle, file folders are exported in Common Cartridge version 1.1 as a group of individual files.",
 	"components.molecules.export.options.info.point4": "Following Card Elements within sections:",
 	"components.molecules.export.options.info.point4.sub1": "Whiteboard",
 	"components.molecules.export.options.info.point4.sub2": "Etherpad",
@@ -2066,4 +2069,8 @@ export default {
 	"pages.folder.trash.purge.error": "Files could not be permanently deleted.",
 	"pages.folder.trash.purge.dialog.title": "Permanently delete {count} file(s)?",
 	"pages.folder.trash.purge.dialog.checkboxLabel": "Deletion cannot be undone.",
+	"pages.folder.dropZone.dropFilesHere": "Drop files here to upload",
+	"pages.folder.dropZone.emptyState.title": "Drop files here to upload",
+	"pages.folder.dropZone.emptyState.orText": "or",
+	"pages.folder.dropZone.emptyState.browse": "browse your files",
 };

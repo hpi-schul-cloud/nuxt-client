@@ -27,6 +27,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const roomId = computed(() => room.value?.id);
 
 	const roomMembers: Ref<RoomMember[]> = ref([]);
+	const roomApplicants: Ref<RoomMember[]> = ref([]);
 	const confirmationList: Ref<Record<string, unknown>[]> = ref([]);
 	const potentialRoomMembers: Ref<Omit<RoomMember, "roomRoleName" | "displayRoomRole">[]> = ref([]);
 
@@ -36,10 +37,6 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const roomMembersWithoutApplicants = computed(() =>
 		roomMembers.value.filter((member) => member.roomRoleName !== RoleName.ROOMAPPLICANT).map(mapAnonymizedMember)
-	);
-
-	const roomApplicants = computed(() =>
-		roomMembers.value.filter((member) => member.roomRoleName === RoleName.ROOMAPPLICANT)
 	);
 
 	const mapAnonymizedMember = (member: RoomMember) => {
@@ -134,6 +131,23 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		}
 	};
 
+	const fetchApplicants = async () => {
+		try {
+			isLoading.value = true;
+			const { data } = (await roomApi.roomControllerGetApplicants(getRoomId())).data;
+			roomApplicants.value = data.map((applicant: RoomMemberResponse) => ({
+				...applicant,
+				fullName: `${applicant.firstName} ${applicant.lastName}`,
+				displayRoomRole: "",
+				displaySchoolRole: getSchoolRoleName(applicant.schoolRoleNames),
+			}));
+		} catch {
+			notifyError(t("pages.rooms.members.error.load"));
+		} finally {
+			isLoading.value = false;
+		}
+	};
+
 	const getSchoolRoleName = (schoolRoleNames: RoleName[]) => {
 		const isAdmin = schoolRoleNames.includes(RoleName.ADMINISTRATOR);
 		const isTeacher = schoolRoleNames.includes(RoleName.TEACHER);
@@ -189,6 +203,14 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			return "";
 		}
 		return member.fullName;
+	};
+
+	const getApplicantFullName = (userId = "") => {
+		const applicant = roomApplicants.value.find((applicant) => applicant.userId === userId);
+		if (!applicant) {
+			return "";
+		}
+		return applicant.fullName;
 	};
 
 	const getRoomOwnerFullName = () => {
@@ -267,7 +289,6 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		try {
 			const roomId = getRoomId();
 			await roomApi.roomControllerAddByEmail(roomId, { email });
-			await fetchMembers();
 			return ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED;
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
@@ -348,18 +369,22 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const confirmInvitations = async (ids: string[]) => {
 		try {
-			await roomApi.roomControllerChangeRolesOfMembers(getRoomId(), {
+			await roomApi.roomControllerConfirmApplicants(getRoomId(), {
 				userIds: ids,
-				roleName: ChangeRoomRoleBodyParamsRoleName.ROOMVIEWER,
 			});
 
 			showNotification(ids, "confirm");
 
+			const applicants = roomApplicants.value.filter((applicant) => ids.includes(applicant.userId));
+
+			roomMembers.value = [...roomMembers.value, ...applicants];
 			roomMembers.value
 				.filter((member) => ids.includes(member.userId))
 				.forEach((member) => {
 					updateMemberRole(member, RoleName.ROOMVIEWER, true);
 				});
+
+			roomApplicants.value = [...roomApplicants.value.filter((applicant) => !ids.includes(applicant.userId))];
 		} catch {
 			notifyError(t("pages.rooms.members.error.updateRole"));
 		}
@@ -369,13 +394,13 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const rejectInvitations = async (ids: string[]) => {
 		try {
-			await roomApi.roomControllerRemoveMembers(getRoomId(), {
+			await roomApi.roomControllerRejectApplicants(getRoomId(), {
 				userIds: ids,
 			});
 
 			showNotification(ids, "reject");
 
-			roomMembers.value = roomMembers.value.filter((member) => !ids.includes(member.userId));
+			roomApplicants.value = roomApplicants.value.filter((applicant) => !ids.includes(applicant.userId));
 		} catch {
 			notifyError(t("pages.rooms.members.error.remove"));
 		}
@@ -388,7 +413,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			ids.length > 1
 				? t(`pages.rooms.members.confirmationTable.notification.${actionType}.multiple`)
 				: t(`pages.rooms.members.confirmationTable.notification.${actionType}`, {
-						fullName: getMemberFullName(ids[0]),
+						fullName: getMemberFullName(ids[0]) || getApplicantFullName(ids[0]) || "",
 					});
 		notifySuccess(successMessage);
 	};
@@ -439,6 +464,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		changeRoomOwner,
 		confirmInvitations,
 		fetchMembers,
+		fetchApplicants,
 		resetPotentialMembers,
 		resetStore,
 		getPotentialMembers,
