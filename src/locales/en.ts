@@ -2068,4 +2068,8 @@ export default {
 	"pages.folder.trash.purge.error": "Files could not be permanently deleted.",
 	"pages.folder.trash.purge.dialog.title": "Permanently delete {count} file(s)?",
 	"pages.folder.trash.purge.dialog.checkboxLabel": "Deletion cannot be undone.",
+	"pages.folder.dropZone.dropFilesHere": "Drop files here to upload",
+	"pages.folder.dropZone.emptyState.title": "Drop files here to upload",
+	"pages.folder.dropZone.emptyState.orText": "or",
+	"pages.folder.dropZone.emptyState.browse": "browse your files",
 };

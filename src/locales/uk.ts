@@ -2088,4 +2088,8 @@ export default {
 	"pages.folder.trash.purge.error": "Не вдалося остаточно видалити файли.",
 	"pages.folder.trash.purge.dialog.title": "Назавжди видалити {count} файл(ів)?",
 	"pages.folder.trash.purge.dialog.checkboxLabel": "Видалення не можна скасувати.",
+	"pages.folder.dropZone.dropFilesHere": "Перетягніть файли сюди для завантаження",
+	"pages.folder.dropZone.emptyState.title": "Перетягніть файли сюди для завантаження",
+	"pages.folder.dropZone.emptyState.orText": "або",
+	"pages.folder.dropZone.emptyState.browse": "оглянути файли",
 };
