@@ -59,7 +59,7 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 	const apiCall = (type: string, message: string, retryCount: number, logSteps: string[] = [], reportRetries = 3) => {
 		const url = globalThis.location.href;
 		const boardId = /boards\/([0-9a-fA-F]{24})/.exec(url)?.[1] ?? "unknown";
-		const steps = [...logSteps, connectionState + " " + socket.io.engine.transport.name].join("|");
+		const steps = [...logSteps, `${connectionState} ${socket.io.engine.transport.name ?? "unknown"}`].join("|");
 		const data: BoardErrorReportBodyParams = {
 			type,
 			message,
