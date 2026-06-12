@@ -52,7 +52,6 @@
 		"vue-router": "^5.0.7",
 		"vuedraggable": "^4.1.0",
 		"vuetify": "^3.12.6",
-		"vuex": "^4.1.0",
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
@@ -91,8 +90,7 @@
 		"vitest": "^4.1.7",
 		"vitest-mock-extended": "^4.0.0",
 		"vue-router-mock": "^2.0.2",
-		"vue-tsc": "^3.3.1",
-		"vuex-module-decorators": "^1.2.0"
+		"vue-tsc": "^3.3.1"
 	},
 	"overrides": {
 		"@openapitools/openapi-generator-cli": {
