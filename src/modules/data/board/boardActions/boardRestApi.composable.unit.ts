@@ -12,7 +12,7 @@ import {
 	mountComposable,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import { BoardLayout } from "@api-server";
+import { BoardLayout, CopyStatusEnum } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useBoardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
@@ -299,6 +299,7 @@ describe("boardRestApi", () => {
 			expect(boardStore.duplicateColumnSuccess).toHaveBeenCalledWith({
 				columnId,
 				duplicatedColumn,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 		});
