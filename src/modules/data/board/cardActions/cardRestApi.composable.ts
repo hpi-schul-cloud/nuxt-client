@@ -19,6 +19,7 @@ import { AnyContentElement } from "@/types/board/ContentElement";
 import { delay } from "@/utils/helpers";
 import {
 	ContentElementType,
+	CopyStatusEnum,
 	ExternalToolElementResponse,
 	PreferredToolListResponse,
 	PreferredToolResponse,
@@ -224,8 +225,18 @@ export const useCardRestApi = () => {
 			const duplicatedCard = await duplicateCardCall(payload.cardId);
 
 			if (duplicatedCard.id) {
-				boardStore.duplicateCardSuccess({ cardId: payload.cardId, duplicatedCard, isOwnAction: true });
-				cardStore.duplicateCardSuccess({ cardId: payload.cardId, duplicatedCard, isOwnAction: true });
+				boardStore.duplicateCardSuccess({
+					cardId: payload.cardId,
+					duplicatedCard,
+					status: CopyStatusEnum.SUCCESS,
+					isOwnAction: true,
+				});
+				cardStore.duplicateCardSuccess({
+					cardId: payload.cardId,
+					duplicatedCard,
+					status: CopyStatusEnum.SUCCESS,
+					isOwnAction: true,
+				});
 			}
 		} catch (error) {
 			handleError(error, {

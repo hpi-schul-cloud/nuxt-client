@@ -1,3 +1,4 @@
+import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FilePreview from "./FilePreview.vue";
 import FileTable from "./FileTable.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
@@ -30,6 +31,8 @@ describe("FileTable", () => {
 			uploaded: number;
 			total: number;
 		};
+		hasEditPermission?: boolean;
+		isOverDropZone?: boolean;
 	}) => {
 		const wrapper = mount(FileTable, {
 			global: {
@@ -42,7 +45,8 @@ describe("FileTable", () => {
 				isStudent: false,
 				fileRecords: props.fileRecords,
 				uploadProgress: props.uploadProgress,
-				hasEditPermission: true,
+				hasEditPermission: props.hasEditPermission ?? true,
+				isOverDropZone: props.isOverDropZone ?? false,
 			},
 		});
 
@@ -66,18 +70,105 @@ describe("FileTable", () => {
 	});
 
 	describe("when isLoading is false and isEmpty is true and uploadProgress.total is 0 ", () => {
-		it("should show empty state", () => {
-			const { wrapper } = setupWrapper({
-				isLoading: false,
-				isEmpty: true,
-				fileStorageError: false,
-				fileRecords: [],
-				uploadProgress: { uploaded: 0, total: 0 },
+		describe("when hasEditPermission is false", () => {
+			it("should show empty state", () => {
+				const { wrapper } = setupWrapper({
+					isLoading: false,
+					isEmpty: true,
+					fileStorageError: false,
+					fileRecords: [],
+					uploadProgress: { uploaded: 0, total: 0 },
+					hasEditPermission: false,
+				});
+
+				expect(wrapper.findComponent(VSkeletonLoader).exists()).toBe(false);
+				expect(wrapper.findComponent(EmptyState).exists()).toBe(true);
+				expect(wrapper.findComponent(DataTable).exists()).toBe(false);
 			});
 
-			expect(wrapper.findComponent(VSkeletonLoader).exists()).toBe(false);
-			expect(wrapper.findComponent(EmptyState).exists()).toBe(true);
-			expect(wrapper.findComponent(DataTable).exists()).toBe(false);
+			it("should show EmptyFolderSvg", () => {
+				const { wrapper } = setupWrapper({
+					isLoading: false,
+					isEmpty: true,
+					fileStorageError: false,
+					fileRecords: [],
+					uploadProgress: { uploaded: 0, total: 0 },
+					hasEditPermission: false,
+				});
+
+				expect(wrapper.findComponent(EmptyFolderSvg).exists()).toBe(true);
+			});
+		});
+
+		describe("when hasEditPermission is true", () => {
+			it("should show drop zone empty state", () => {
+				const { wrapper } = setupWrapper({
+					isLoading: false,
+					isEmpty: true,
+					fileStorageError: false,
+					fileRecords: [],
+					uploadProgress: { uploaded: 0, total: 0 },
+				});
+
+				expect(wrapper.find("[data-testid='drop-zone-empty-state']").exists()).toBe(true);
+				expect(wrapper.findComponent(EmptyState).exists()).toBe(false);
+				expect(wrapper.findComponent(DataTable).exists()).toBe(false);
+			});
+
+			it("should not show EmptyFolderSvg", () => {
+				const { wrapper } = setupWrapper({
+					isLoading: false,
+					isEmpty: true,
+					fileStorageError: false,
+					fileRecords: [],
+					uploadProgress: { uploaded: 0, total: 0 },
+				});
+
+				expect(wrapper.findComponent(EmptyFolderSvg).exists()).toBe(false);
+			});
+
+			it("when isOverDropZone is true, should apply active class", () => {
+				const { wrapper } = setupWrapper({
+					isLoading: false,
+					isEmpty: true,
+					fileStorageError: false,
+					fileRecords: [],
+					uploadProgress: { uploaded: 0, total: 0 },
+					isOverDropZone: true,
+				});
+
+				const dropZoneEmpty = wrapper.find("[data-testid='drop-zone-empty-state']");
+				expect(dropZoneEmpty.classes()).toContain("drop-zone-empty--active");
+			});
+
+			it("when isOverDropZone is false, should not apply active class", () => {
+				const { wrapper } = setupWrapper({
+					isLoading: false,
+					isEmpty: true,
+					fileStorageError: false,
+					fileRecords: [],
+					uploadProgress: { uploaded: 0, total: 0 },
+					isOverDropZone: false,
+				});
+
+				const dropZoneEmpty = wrapper.find("[data-testid='drop-zone-empty-state']");
+				expect(dropZoneEmpty.classes()).not.toContain("drop-zone-empty--active");
+			});
+
+			it("when browse button is clicked, should emit click:browse", async () => {
+				const { wrapper } = setupWrapper({
+					isLoading: false,
+					isEmpty: true,
+					fileStorageError: false,
+					fileRecords: [],
+					uploadProgress: { uploaded: 0, total: 0 },
+				});
+
+				const browseButton = wrapper.find(".drop-zone-empty__browse-link");
+				await browseButton.trigger("click");
+
+				expect(wrapper.emitted("click:browse")).toHaveLength(1);
+			});
 		});
 	});
 
