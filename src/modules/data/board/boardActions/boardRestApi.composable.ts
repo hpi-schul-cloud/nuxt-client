@@ -50,11 +50,12 @@ export const useBoardRestApi = () => {
 		if (boardStore.board === undefined) return;
 
 		try {
-			const newCard = await createCardCall(payload.columnId);
+			const newCard = await createCardCall({ columnId: payload.columnId, cardId: payload.cardId });
 
 			boardStore.createCardSuccess({
 				newCard,
 				columnId: payload.columnId,
+				cardId: payload.cardId,
 				isOwnAction: true,
 			});
 		} catch (error) {

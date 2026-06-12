@@ -42,6 +42,11 @@
 					<div v-if="!isDetailView" class="board-menu" :class="boardMenuClasses">
 						<DetailViewButton class="mr-1" @open-detail-view="onOpenDetailView" />
 						<BoardMenu v-if="hasMenuItem" :scope="BoardMenuScope.CARD" has-background :data-testid="boardMenuTestId">
+							<KebabMenuActionAdd
+								v-if="allowedOperations?.createCard"
+								:text="t('components.board.action.addCard')"
+								@click="onCreateCard"
+							/>
 							<KebabMenuActionEdit v-if="allowedOperations?.deleteCard && !isEditMode" @click="onStartEditMode" />
 							<SvsColorPickerMenu
 								v-if="allowedOperations.updateCardColor"
@@ -111,6 +116,7 @@ import {
 import { BoardMenu, BoardMenuScope, DetailViewButton } from "@ui-board";
 import { SvsColorPickerMenu } from "@ui-controls";
 import {
+	KebabMenuActionAdd,
 	KebabMenuActionDelete,
 	KebabMenuActionDuplicate,
 	KebabMenuActionEdit,
@@ -121,6 +127,7 @@ import {
 import { useShareBoardLink } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, onMounted, ref, toRef } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 type Props = {
@@ -137,7 +144,10 @@ const emit = defineEmits<{
 	(e: "move:card", cardId: string): void;
 	(e: "reload:board"): void;
 	(e: "share:card", cardId: string): void;
+	(e: "create:card", cardId: string): void;
 }>();
+
+const { t } = useI18n();
 
 const { allowedOperations } = useBoardAllowedOperations();
 const cardHost = ref(null);
@@ -199,6 +209,9 @@ const onMoveCardKeyboard = (event: KeyboardEvent) => emit("move:card-keyboard", 
 const onMoveCard = (cardId: string) => emit("move:card", cardId);
 const onShareCard = () => {
 	emit("share:card", props.cardId);
+};
+const onCreateCard = () => {
+	emit("create:card", props.cardId);
 };
 
 const _updateCardTitle = (newTitle: string) => {

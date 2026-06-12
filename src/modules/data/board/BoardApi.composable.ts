@@ -36,6 +36,7 @@ import {
 	VideoConferenceElementContentBody,
 	VideoConferenceElementResponse,
 } from "@api-server";
+import { logger } from "@util-logger";
 import { AxiosPromise, AxiosResponse } from "axios";
 
 export const useBoardApi = () => {
@@ -205,8 +206,9 @@ export const useBoardApi = () => {
 
 	const deleteColumnCall = async (columnId: string) => boardColumnApi.columnControllerDeleteColumn(columnId);
 
-	const createCardCall = async (columnId: string): Promise<CardResponse> => {
-		const response = await boardColumnApi.columnControllerCreateCard(columnId, {
+	const createCardCall = async (payload: { columnId: string; cardId?: string }): Promise<CardResponse> => {
+		logger.log(payload);
+		const response = await boardColumnApi.columnControllerCreateCard(payload.columnId, {
 			requiredEmptyElements: [CreateCardBodyParamsRequiredEmptyElements.RICH_TEXT],
 		});
 		return response.data;
