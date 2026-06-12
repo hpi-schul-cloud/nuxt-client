@@ -153,7 +153,7 @@ export default {
 	"common.notifications.errors.notDeleted":
 		"{type} не вдалося видалити. | {type} не вдалося видалити. | {type} не вдалося видалити.",
 	"common.notifications.errors.notDuplicated":
-		"{type} не вдалося дублювати. | {type} не вдалося дублювати. | {type} не вдалося дублювати.",
+		"{type} не вдалося дублювати або не вдалося дублювати повністю. | {type} не вдалося дублювати або не вдалося дублювати повністю. | {type} не вдалося дублювати або не вдалося дублювати повністю.",
 	"common.notifications.errors.notLoaded":
 		"{type} не вдалося завантажити. | {type} не вдалося завантажити. | {type} не вдалося завантажити.",
 	"common.notifications.errors.notMoved":
@@ -502,7 +502,7 @@ export default {
 		"Кількість файлів перевищує допустимий ліміт {fileLimitPerParent} файлів.",
 	"components.board.notifications.errors.notCreated": "{type}: Не вдалося створити.",
 	"components.board.notifications.errors.notDeleted": "{type}: Не вдалося видалити.",
-	"components.board.notifications.errors.notDuplicated": "{type} не вдалося дублікувати.",
+	"components.board.notifications.errors.notDuplicated": "{type}: не вдалося або не повністю вдалося продублювати.",
 	"components.board.notifications.errors.notLoaded": "{type}: не вдалося завантажити.",
 	"components.board.notifications.errors.notMoved": "{type} не вдалося позицію.",
 	"components.board.notifications.errors.notUpdated": "Зберегти зміни не вдалося.",

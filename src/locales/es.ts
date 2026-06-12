@@ -150,7 +150,8 @@ export default {
 	"common.notifications.errors.notCreated": "{type} no se ha podido crear. | {type} no se han podido crear.",
 	"common.notifications.errors.notSaved": "{type} no pudo guardarse. | {type} no pudieron guardarse.",
 	"common.notifications.errors.notDeleted": "{type} no se ha podido eliminar. | {type} no se han podido eliminar.",
-	"common.notifications.errors.notDuplicated": "{type} no se ha podido duplicar. | {type} no se han podido duplicar.",
+	"common.notifications.errors.notDuplicated":
+		"{type} no se ha podido duplicar o no se ha duplicado completamente. | {type} no se han podido duplicar o no se han duplicado completamente.",
 	"common.notifications.errors.notLoaded": "{type} no se ha podido cargar. | {type} no se han podido cargar.",
 	"common.notifications.errors.notMoved": "{type} no se ha podido mover. | {type} no se han podido mover.",
 	"common.notifications.errors.notExited": "{type} no se ha podido salir. | {type} no se han podido salir.",
@@ -500,7 +501,8 @@ export default {
 		"El número de archivos supera el límite permitido de {fileLimitPerParent} archivos.",
 	"components.board.notifications.errors.notCreated": "{type} no se ha podido crear.",
 	"components.board.notifications.errors.notDeleted": "{type} no se ha podido eliminar.",
-	"components.board.notifications.errors.notDuplicated": "{type} no se ha podido duplicar.",
+	"components.board.notifications.errors.notDuplicated":
+		"{type} no se ha podido duplicar o no se ha duplicado completamente.",
 	"components.board.notifications.errors.notLoaded": "{type} no se ha podido cargar.",
 	"components.board.notifications.errors.notMoved": "{type} no se ha podido movido.",
 	"components.board.notifications.errors.notUpdated": "No se han podido guardar los cambios.",

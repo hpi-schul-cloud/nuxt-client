@@ -35,9 +35,16 @@ import { DeleteCardSuccessPayload, DuplicateCardSuccessPayload } from "./cardAct
 import { useSharedEditMode } from "./edit-mode.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import { CardSkeletonResponse, ColumnFullResponse, ColumnResponse, ContentElementType } from "@api-server";
-import { notifyInfo, notifySuccess, useAppStore, useNotificationStore } from "@data-app";
+import {
+	CardSkeletonResponse,
+	ColumnFullResponse,
+	ColumnResponse,
+	ContentElementType,
+	CopyStatusEnum,
+} from "@api-server";
+import { notifyError, notifyInfo, notifySuccess, useAppStore, useNotificationStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
+import { useErrorHandler } from "@util-error-handling";
 import { defineStore } from "pinia";
 import { computed, nextTick, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -57,6 +64,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const { setEditModeId } = useSharedEditMode();
 	const router = useRouter();
+
+	const { generateErrorText } = useErrorHandler();
 
 	const getLastColumnIndex = () => board.value!.columns.length - 1;
 
@@ -183,7 +192,11 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board.value.columns?.splice(columnIndex + 1, 0, duplicatedColumnSkeleton);
 
 		if (payload.isOwnAction === true) {
-			notifySuccess("components.board.notifications.success.columnDuplicated");
+			if (payload.status !== CopyStatusEnum.SUCCESS) {
+				notifyError(generateErrorText("notDuplicated", "boardColumn"));
+			} else {
+				notifySuccess("components.board.notifications.success.columnDuplicated");
+			}
 			if (hasRelevantContentForDuplicationWarning(duplicatedColumn)) {
 				notifyInfo("components.board.notifications.info.cardDuplicated");
 			}

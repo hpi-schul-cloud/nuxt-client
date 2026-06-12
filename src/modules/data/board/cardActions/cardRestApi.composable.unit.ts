@@ -19,6 +19,7 @@ import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFac
 import {
 	Colors,
 	ContentElementType,
+	CopyStatusEnum,
 	ExternalToolElementResponse,
 	PreferredToolListResponse,
 	PreferredToolResponse,
@@ -738,6 +739,7 @@ describe("useCardRestApi", () => {
 			expect(cardStore.duplicateCardSuccess).toHaveBeenCalledWith({
 				cardId,
 				duplicatedCard,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 		});
