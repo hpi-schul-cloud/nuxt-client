@@ -1,5 +1,5 @@
 import ClassOverview from "./ClassOverview.page.vue";
-import { SortOrder } from "@/types/enum/sort-order.enum.js";
+import { SortOrder } from "@/types/enum/sort-order.enum";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import {
 	classInfoFactory,
