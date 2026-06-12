@@ -6,6 +6,7 @@ import {
 	CardSkeletonResponse,
 	ColumnFullResponse,
 	ColumnResponse,
+	CopyStatusEnum,
 	CreateCardBodyParamsRequiredEmptyElements,
 } from "@api-server";
 
@@ -41,6 +42,7 @@ export type DuplicateColumnRequestPayload = {
 export type DuplicateColumnSuccessPayload = {
 	columnId: string;
 	duplicatedColumn: ColumnFullResponse;
+	status: CopyStatusEnum;
 	isOwnAction: boolean;
 };
 export type DuplicateColumnFailurePayload = DuplicateColumnRequestPayload;
