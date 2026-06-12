@@ -1,5 +1,5 @@
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
-import { HttpStatusCode } from "@/types/enum/http-status-code.enum.js";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { axiosErrorFactory, expectNotification, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useSchoolLicenseApi } from "@data-license";

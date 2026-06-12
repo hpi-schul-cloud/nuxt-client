@@ -1,7 +1,7 @@
 import H5pEditorPage from "./H5PEditor.page.vue";
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
-import { HttpStatusCode } from "@/types/enum/http-status-code.enum.js";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import {
 	apiValidationResponseErrorFactory,
 	axiosErrorFactory,

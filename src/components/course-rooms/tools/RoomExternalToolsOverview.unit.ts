@@ -1,6 +1,6 @@
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
-import { CourseFeatures } from "@/types/course-room/room.js";
+import { CourseFeatures } from "@/types/course-room/room";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import {
 	businessErrorFactory,

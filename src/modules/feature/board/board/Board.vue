@@ -146,7 +146,7 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
 import { ColumnMove } from "@/types/board/DragAndDrop";
-import { HttpStatusCode } from "@/types/enum/http-status-code.enum.js";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import {
 	BoardExternalReferenceType,
 	BoardLayout,

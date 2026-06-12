@@ -1,5 +1,5 @@
 import CollaboraEditor from "./CollaboraEditor.vue";
-import { HttpStatusCode } from "@/types/enum/http-status-code.enum.js";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { EditorMode } from "@/types/file/File";
 import {
 	authorizedCollaboraDocumentUrlResponseFactory,
