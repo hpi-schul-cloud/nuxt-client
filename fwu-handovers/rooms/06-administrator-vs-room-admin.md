@@ -1,4 +1,4 @@
-# Technical Handover: Room Frontend
+# Technical Handover: Room - Frontend
 
 ## 6. Administrator vs. Room Owner/Admin
 

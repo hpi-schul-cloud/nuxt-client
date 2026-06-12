@@ -1,4 +1,4 @@
-# Technical Handover: Room Frontend
+# Technical Handover: Room - Frontend
 
 ## 2. Architecture
 
@@ -51,6 +51,7 @@ src/modules/
     ├── RoomDotMenu.vue
     └── LeaveRoomProhibitedDialog.vue
 ```
+see: [building blocks / module structure](https://documentation.dbildungscloud.dev/docs/frontend-design-patterns/ProjectStructure#types-of-building-blocks).
 
 ### Type Definitions
 
@@ -61,8 +62,6 @@ src/types/room/
 ```
 
 ### Generated API Clients
-
-*See [board-frontend-handover.md §1.3](board-frontend-handover.md#13-relationship-with-backend) for how generated clients work.*
 
 Room-specific generated files:
 
