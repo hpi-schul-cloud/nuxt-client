@@ -1,7 +1,14 @@
 <template>
 	<div>
 		<template v-if="board">
-			<CardHostDetailView v-if="cardId" :key="cardId" :card-id="cardId" @close:detail-view="onCloseDetailView" />
+			<CardHostDetailView
+				v-if="cardId"
+				:key="cardId"
+				:card-id="cardId"
+				:previous-card-route="previousCardRoute"
+				:next-card-route="nextCardRoute"
+				@close:detail-view="onCloseDetailView"
+			/>
 			<DefaultWireframe
 				ref="main"
 				:breadcrumbs="breadcrumbs"
@@ -138,8 +145,8 @@ import EditSettingsDialog from "../shared/EditSettingsDialog.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import {
 	BoardExternalReferenceType,
 	BoardLayout,
@@ -150,6 +157,7 @@ import {
 import { useAppStore, useNotificationStore } from "@data-app";
 import {
 	useBoardAllowedOperations,
+	useBoardCardNavigation,
 	useBoardInactivity,
 	useBoardStore,
 	useCardStore,
@@ -168,7 +176,7 @@ import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@ut
 import { refDebounced, useTimeout } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, ComputedRef, onMounted, onUnmounted, provide, ref, watch } from "vue";
+import { computed, ComputedRef, onUnmounted, provide, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
@@ -198,6 +206,7 @@ watch(board, async () => {
 const route = useRoute();
 
 useBodyScrolling();
+useBoardInactivity();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
 const cardId = computed(() => {
@@ -206,6 +215,8 @@ const cardId = computed(() => {
 	}
 	return undefined;
 });
+
+const { previousCardRoute, nextCardRoute } = useBoardCardNavigation();
 
 const isEditableChipVisible = computed(() => board.value?.readersCanEdit ?? false);
 const hasReadersEditPermission = ref(false);
@@ -315,14 +326,19 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 
 const { focusNodeFromHash } = useElementFocus();
 
-onMounted(async () => {
-	resetPageInformation();
-	useBoardInactivity();
+watch(
+	() => props.boardId,
+	async (newBoardId, oldBoardId) => {
+		if (newBoardId !== oldBoardId) {
+			resetPageInformation();
 
-	await boardStore.fetchBoardRequest({ boardId: props.boardId });
+			await boardStore.fetchBoardRequest({ boardId: newBoardId });
 
-	focusNodeFromHash();
-});
+			focusNodeFromHash();
+		}
+	},
+	{ immediate: true }
+);
 
 watch(
 	() => allowedOperations.value.createExternalToolElement,

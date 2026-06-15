@@ -1,4 +1,4 @@
-import { ApiValidationError } from "@/store/types/commons";
+import { ApiValidationError } from "@/types/common/commons";
 import { Factory } from "fishery";
 
 export const apiValidationResponseErrorFactory = Factory.define<ApiValidationError>(({ sequence }) => ({

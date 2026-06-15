@@ -1,4 +1,4 @@
-import { ApiResponseError, ApiValidationError } from "@/store/types/commons";
+import { ApiResponseError, ApiValidationError } from "@/types/common/commons";
 import { isObject } from "@vueuse/core";
 import { AxiosInstance, isAxiosError } from "axios";
 import { getCurrentInstance } from "vue";

@@ -1,8 +1,8 @@
 import { useExternalToolApi } from "./ExternalToolApi.composable";
 import { useExternalToolLaunchState } from "./ExternalToolLaunchState.composable";
 import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "./types";
-import { BusinessError } from "@/store/types/commons";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { BusinessError } from "@/types/common/commons";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	axiosErrorFactory,

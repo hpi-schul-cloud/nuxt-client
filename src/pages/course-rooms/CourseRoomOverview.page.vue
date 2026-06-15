@@ -107,7 +107,7 @@ import CourseRoomEmptyAvatar from "@/components/course-rooms/CourseRoomEmptyAvat
 import CourseRoomGroupAvatar from "@/components/course-rooms/CourseRoomGroupAvatar.vue";
 import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
 import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
-import { DroppedObject } from "@/store/types/rooms";
+import { DroppedObject } from "@/types/course-room/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { DashboardGridElementResponse } from "@api-server";
 import { notifySuccess } from "@data-app";

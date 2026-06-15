@@ -2,8 +2,8 @@ import ExternalToolElement from "./ExternalToolElement.vue";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
+import { BusinessError } from "@/types/common/commons";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { BusinessError } from "@/store/types/commons";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	contextExternalToolFactory,

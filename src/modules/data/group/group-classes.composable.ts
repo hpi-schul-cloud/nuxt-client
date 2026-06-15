@@ -1,7 +1,7 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { Pagination } from "@/store/types/commons";
-import { SortOrder } from "@/store/types/sort-order.enum";
+import { Pagination } from "@/types/common/commons";
+import { SortOrder } from "@/types/enum/sort-order.enum";
 import { $axios } from "@/utils/api";
 import { ClassSortQueryType, GroupApiFactory, SchoolYearQueryType } from "@api-server";
 import { ClassInfo, GroupMapper } from "@data-group";

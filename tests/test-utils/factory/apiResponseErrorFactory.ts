@@ -1,4 +1,4 @@
-import { ApiResponseError } from "@/store/types/commons";
+import { ApiResponseError } from "@/types/common/commons";
 import { Factory } from "fishery";
 
 export const apiResponseErrorFactory = Factory.define<ApiResponseError>(({ sequence }) => ({
