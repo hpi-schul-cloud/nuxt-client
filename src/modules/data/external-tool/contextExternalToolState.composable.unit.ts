@@ -1,7 +1,7 @@
 import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
 import { useContextExternalToolState } from "./contextExternalToolState.composable";
 import { ContextExternalTool } from "./types";
-import { BusinessError } from "@/store/types/commons";
+import { BusinessError } from "@/types/common/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { axiosErrorFactory, contextExternalToolFactory, mockComposable } from "@@/tests/test-utils";
 import { Mocked } from "vitest";

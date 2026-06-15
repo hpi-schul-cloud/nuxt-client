@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import ExternalToolConfigurator from "@/components/administration/external-tools-configuration/ExternalToolConfigurator.vue";
 import ExternalToolMediumDetails from "@/components/administration/external-tools-configuration/ExternalToolMediumDetails.vue";
-import { BusinessError } from "@/store/types/commons";
+import { BusinessError } from "@/types/common/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess, useAppStoreRefs } from "@data-app";

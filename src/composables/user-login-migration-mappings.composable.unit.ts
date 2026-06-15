@@ -1,5 +1,5 @@
 import { useUserLoginMigrationMappings } from "./user-login-migration-mappings.composable";
-import { BusinessError } from "@/store/types/commons";
+import { BusinessError } from "@/types/common/commons";
 
 describe("useUserLoginMigrationMapping", () => {
 	describe("getBusinessErrorTranslationKey", () => {

@@ -1,4 +1,4 @@
-import { BusinessError } from "@/store/types/commons";
+import { BusinessError } from "@/types/common/commons";
 
 const ErrorTypeTranslationKeyMap = new Map<string, string>([
 	["TOOL_PARAMETER_DUPLICATE", "pages.tool.apiError.tool_param_duplicate"],

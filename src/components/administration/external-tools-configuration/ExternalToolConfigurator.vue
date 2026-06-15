@@ -81,7 +81,7 @@ import { useExternalToolUrlInsertion } from "./external-tool-url-insertion.compo
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 import ExternalToolConfigSettings from "@/components/administration/external-tools-configuration/ExternalToolConfigSettings.vue";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
-import { BusinessError } from "@/store/types/commons";
+import { BusinessError } from "@/types/common/commons";
 import { notifyError } from "@data-app";
 import {
 	ContextExternalTool,

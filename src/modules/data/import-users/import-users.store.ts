@@ -1,5 +1,5 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { BusinessError } from "@/store/types/commons";
+import { BusinessError } from "@/types/common/commons";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	ImportUserListResponse,

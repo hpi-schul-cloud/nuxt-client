@@ -181,7 +181,7 @@
 <script setup lang="ts">
 import SchoolMigrationWarningCard from "./SchoolMigrationWarningCard.vue";
 import { useUserLoginMigrationMappings } from "@/composables/user-login-migration-mappings.composable";
-import { BusinessError } from "@/store/types/commons";
+import { BusinessError } from "@/types/common/commons";
 import { formatUtc } from "@/utils/date-time.utils";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 import { sanitizeUrl } from "@braintree/sanitize-url";
