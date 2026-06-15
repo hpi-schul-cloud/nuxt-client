@@ -68,8 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { Status } from "@/store/types/commons";
-import { FormNews } from "@/store/types/news";
+import { Status } from "@/types/common/commons";
 import { askCancel } from "@/utils/confirmation-dialog.utils";
 import { formatUtc, toCombinedDateTimeIso, toIsoDate } from "@/utils/date-time.utils";
 import { isValidOrFocusFirstInvalidInput } from "@/utils/validation";
@@ -78,6 +77,12 @@ import { DatePicker, TimePicker } from "@ui-date-time-picker";
 import { isRequired, useOpeningTagValidator } from "@util-validators";
 import { ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
+
+type FormNews = {
+	title: string;
+	content: string;
+	displayAt?: string;
+};
 
 type Props = {
 	title?: string;

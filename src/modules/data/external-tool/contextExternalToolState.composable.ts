@@ -1,6 +1,6 @@
 import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
 import { ContextExternalTool, ContextExternalToolSave } from "./types";
-import { BusinessError } from "@/store/types/commons";
+import { BusinessError } from "@/types/common/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { Ref, ref } from "vue";
 

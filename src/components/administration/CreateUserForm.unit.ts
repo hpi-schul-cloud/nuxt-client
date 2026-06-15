@@ -5,7 +5,6 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VForm } from "vuetify/components";
-import { createStore } from "vuex";
 
 const validRole = {
 	data: ["student"],
@@ -17,11 +16,6 @@ type MockActions = {
 	create?: () => void;
 };
 
-const getMockActions = (): MockActions => ({
-	findStudents: vi.fn().mockReturnValue(Promise.resolve()),
-	find: vi.fn().mockReturnValue(Promise.resolve(validRole)),
-});
-
 const getMockActionsErrorCreate = (): MockActions => ({
 	create: () => {
 		throw new Error("Duplicate Mail");
@@ -30,22 +24,10 @@ const getMockActionsErrorCreate = (): MockActions => ({
 });
 
 describe("CreateUserForm", () => {
-	const setup = (actions: MockActions = getMockActions(), options = {}) => {
+	const setup = (options = {}) => {
 		const wrapper = mount(CreateUserForm, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				mocks: {
-					$store: createStore({
-						modules: {
-							users: {
-								actions,
-							},
-							roles: {
-								actions,
-							},
-						},
-					}),
-				},
 			},
 			...options,
 		});
@@ -89,7 +71,7 @@ describe("CreateUserForm", () => {
 		});
 
 		it("does not emit create-user event if form is invalid", async () => {
-			const { wrapper } = setup(getMockActionsErrorCreate());
+			const { wrapper } = setup();
 
 			const submitButton = wrapper.find('button[data-testid="button_create-user_submit"]');
 
@@ -100,7 +82,7 @@ describe("CreateUserForm", () => {
 		});
 
 		it("renders slot content", () => {
-			const { wrapper } = setup(getMockActionsErrorCreate(), {
+			const { wrapper } = setup({
 				slots: {
 					inputs: '<input label="test"/>',
 				},

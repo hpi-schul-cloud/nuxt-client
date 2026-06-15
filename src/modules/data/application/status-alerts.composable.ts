@@ -1,5 +1,5 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { StatusAlert } from "@/store/types/status-alert";
+import { StatusAlert } from "@/types/status-alert/status-alert";
 import { $axios } from "@/utils/api";
 import { AlertApiFactory } from "@api-server";
 import { readonly, ref } from "vue";

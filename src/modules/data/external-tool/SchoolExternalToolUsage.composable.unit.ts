@@ -1,7 +1,7 @@
 import { useSchoolExternalToolApi } from "./SchoolExternalToolApi.composable";
 import { useSchoolExternalToolUsage } from "./SchoolExternalToolUsage.composable";
 import { SchoolExternalToolMetadata } from "./types";
-import { BusinessError } from "@/store/types/commons";
+import { BusinessError } from "@/types/common/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { axiosErrorFactory, mockComposable, schoolExternalToolMetadataFactory } from "@@/tests/test-utils";
 import { Mocked } from "vitest";

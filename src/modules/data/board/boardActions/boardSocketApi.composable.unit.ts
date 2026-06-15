@@ -7,7 +7,7 @@ import {
 import * as BoardActions from "./boardActions";
 import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import {
 	boardResponseFactory,
 	cardResponseFactory,

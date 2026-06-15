@@ -1,6 +1,6 @@
 import { useRoomDetailsStore } from "../RoomDetails.store";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { LanguageType, RegistrationApiFactory, RegistrationItemResponse, RegistrationListResponse } from "@api-server";
 import { notifyError, notifyInfo, notifySuccess } from "@data-app";

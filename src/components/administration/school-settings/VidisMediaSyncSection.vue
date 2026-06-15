@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError, notifyInfo, notifySuccess } from "@data-app";
 import { useSchoolLicenseApi } from "@data-license";

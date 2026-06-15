@@ -1,5 +1,5 @@
 import { useExternalToolMappings } from "./external-tool-mappings.composable";
-import { BusinessError } from "@/store/types/commons";
+import { BusinessError } from "@/types/common/commons";
 
 describe("useExternalToolMappings", () => {
 	describe("getBusinessErrorTranslationKey", () => {

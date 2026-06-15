@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { ApiResponseError } from "@/store/types/commons";
+import { ApiResponseError } from "@/types/common/commons";
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError } from "@data-app";

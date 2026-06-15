@@ -1,4 +1,4 @@
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { RoomColor, RoomDetails, RoomUpdateParams } from "@/types/room/Room";
 import { expectNotification, mockApi, mockApiResponse, mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
