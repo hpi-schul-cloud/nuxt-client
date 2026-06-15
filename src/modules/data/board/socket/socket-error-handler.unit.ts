@@ -302,6 +302,38 @@ describe("socket-error-handler", () => {
 
 			expect(boardErrorReportApiMock.boardErrorReportControllerReportError).toHaveBeenCalledTimes(2);
 		});
+
+		it("should defer a follow-up report until the active report finishes", async () => {
+			const useConnectionErrorHandling = await importHandler();
+			useConnectionErrorHandling(socket);
+
+			let resolveFirstRequest: (() => void) | undefined;
+			const firstRequest = new Promise<void>((resolve) => {
+				resolveFirstRequest = resolve;
+			});
+
+			boardErrorReportApiMock.boardErrorReportControllerReportError
+				.mockImplementationOnce(() => firstRequest as never)
+				.mockResolvedValueOnce({} as never);
+
+			emitManagerEvent("reconnect", 1);
+			expect(boardErrorReportApiMock.boardErrorReportControllerReportError).toHaveBeenCalledTimes(1);
+
+			emitManagerEvent("reconnect_failed");
+			expect(boardErrorReportApiMock.boardErrorReportControllerReportError).toHaveBeenCalledTimes(1);
+
+			resolveFirstRequest?.();
+			await Promise.resolve();
+			await Promise.resolve();
+
+			expect(boardErrorReportApiMock.boardErrorReportControllerReportError).toHaveBeenCalledTimes(2);
+			expect(boardErrorReportApiMock.boardErrorReportControllerReportError).toHaveBeenNthCalledWith(
+				2,
+				expect.objectContaining({
+					message: "reconnect_failed",
+				})
+			);
+		});
 	});
 
 	describe("when socket connect event is emitted", () => {
@@ -492,7 +524,7 @@ describe("socket-error-handler", () => {
 			emitEngineEvent("upgrade", { name: "websocket" });
 
 			// Trigger beforeunload event
-			window.dispatchEvent(new Event("beforeunload"));
+			globalThis.dispatchEvent(new Event("beforeunload"));
 
 			await vi.advanceTimersByTimeAsync(100);
 

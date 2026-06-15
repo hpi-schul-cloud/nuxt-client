@@ -45,7 +45,7 @@ import { useRouter } from "vue-router";
 export const useBoardStore = defineStore("boardStore", () => {
 	const cardStore = useCardStore();
 	const board = ref<Board | undefined>(undefined);
-	const isLoading = ref<boolean>(false);
+	const isLoading = ref<boolean>(true);
 	const { setFocus, forceFocus } = useBoardFocusHandler();
 	const roomId = ref<string | undefined>(undefined);
 
