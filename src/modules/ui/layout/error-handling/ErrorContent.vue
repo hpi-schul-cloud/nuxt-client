@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import NotFoundSvg from "@/assets/img/NotFoundSvg.vue";
 import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
 import { computed } from "vue";

@@ -1,4 +1,4 @@
-import { Lesson } from "@/store/types/room";
+import { Lesson } from "@/types/course-room/room";
 import { BoardLayout } from "@api-server";
 
 export type MenuItem = {

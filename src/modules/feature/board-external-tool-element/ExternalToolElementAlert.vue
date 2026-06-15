@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { BusinessError } from "@/store/types/commons";
+import { BusinessError } from "@/types/common/commons";
 import { useBoardAllowedOperations } from "@data-board";
 import { ContextExternalToolConfigurationStatus, useContextExternalToolConfigurationStatus } from "@data-external-tool";
 import { InfoAlert, WarningAlert } from "@ui-alert";

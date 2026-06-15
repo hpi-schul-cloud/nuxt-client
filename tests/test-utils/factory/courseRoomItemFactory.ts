@@ -1,4 +1,4 @@
-import { ListItemsObject } from "@/store/types/rooms";
+import { ListItemsObject } from "@/types/course-room/rooms";
 import { Factory } from "fishery";
 
 // Extended type for processed room data (ListItemsObject + additional properties from processAllElements)
