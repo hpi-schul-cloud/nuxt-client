@@ -3,7 +3,7 @@
 		:model-value="isOpen"
 		fullscreen
 		scrollable
-		:scrim="false"
+		scrim="transparent"
 		:transition="false"
 		@keydown.escape="onDialogClose"
 	>
