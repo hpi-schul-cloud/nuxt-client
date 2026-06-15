@@ -58,7 +58,7 @@
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@mdi/js": "^7.4.47",
-		"@openapitools/openapi-generator-cli": "^2.34.0",
+		"@openapitools/openapi-generator-cli": "^2.38.0",
 		"@pinia/testing": "^1.0.3",
 		"@types/katex": "^0.16.8",
 		"@types/sortablejs": "^1.15.9",
@@ -78,7 +78,7 @@
 		"globals": "^17.6.0",
 		"http-proxy-middleware": "^4.0.0",
 		"jsdom": "^29.1.1",
-		"npm-run-all2": "^9.0.0",
+		"npm-run-all2": "^9.0.1",
 		"prettier": "^3.8.3",
 		"resize-observer-polyfill": "^1.5.1",
 		"sass-embedded": "^1.100.0",
