@@ -20,7 +20,6 @@
 				<v-icon size="20" class="mr-1">{{ mdiEmailOutline }}</v-icon>
 				<a
 					href="mailto:schul-cloud@support.meinlibra.de"
-					target="_blank"
 					rel="noopener"
 					:aria-label="$t('components.legacy.footer.ariaLabel', { itemName: 'Mail' })"
 					>schul-cloud@support.meinlibra.de</a
