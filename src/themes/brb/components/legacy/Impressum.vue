@@ -5,7 +5,6 @@
 			<h2>I. Anbieter</h2>
 			<p>
 				Ministerium für Bildung, Jugend und Sport des Landes Brandenburg<br />
-				<br />
 				Vertreten durch den Minister für Bildung, Jugend und Sport<br />
 				Heinrich-Mann-Allee 107, 14473 Potsdam
 			</p>
