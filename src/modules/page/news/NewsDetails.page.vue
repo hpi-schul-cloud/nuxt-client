@@ -31,11 +31,6 @@
 							<VIcon :icon="mdiAccountGroupOutline" size="sm" class="mr-1" />
 							<a :href="`/teams/${newsInstance.targetId}`">{{ newsInstance.target.name }}</a>
 						</template>
-
-						<template v-if="newsInstance.targetModel === 'courses'">
-							<VIcon :icon="mdiAccountGroupOutline" size="sm" class="mr-1" />
-							<RouterLink :to="`/rooms/${newsInstance.targetId}`">{{ newsInstance.target.name }}</RouterLink>
-						</template>
 					</div>
 				</div>
 				<VDivider class="mb-4" />
