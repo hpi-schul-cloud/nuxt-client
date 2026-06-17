@@ -1,6 +1,6 @@
 import SchoolPolicy from "./SchoolPolicy.vue";
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
-import { Status } from "@/store/types/commons";
+import { Status } from "@/types/common/commons";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { downloadFile } from "@/utils/fileHelper";
 import {

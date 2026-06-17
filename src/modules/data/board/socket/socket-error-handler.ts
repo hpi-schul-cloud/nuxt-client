@@ -56,10 +56,10 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 		}
 	};
 
-	const apiCall = (type: string, message: string, retryCount: number, logSteps: string[], reportRetries = 3) => {
+	const apiCall = (type: string, message: string, retryCount: number, logSteps: string[] = [], reportRetries = 3) => {
 		const url = globalThis.location.href;
 		const boardId = /boards\/([0-9a-fA-F]{24})/.exec(url)?.[1] ?? "unknown";
-		const steps = [...logSteps, connectionState + " " + socket.io.engine.transport.name].join("|");
+		const steps = [...logSteps, `${connectionState} ${socket.io.engine.transport.name ?? "unknown"}`].join("|");
 		const data: BoardErrorReportBodyParams = {
 			type,
 			message,
@@ -127,19 +127,19 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 
 	// send logs when the user leaves the page or changes the tab to hidden
 
-	useEventListener(document, "visibilitychange", async () => {
+	useEventListener(document, "visibilitychange", () => {
 		if (document.visibilityState === "hidden") {
-			await reportLogs("tab_hidden");
+			reportLogs("tab_hidden");
 		}
 	});
 
-	useEventListener(window, "beforeunload", async () => {
-		await reportLogs("page_unload");
+	useEventListener(globalThis, "beforeunload", () => {
+		reportLogs("page_unload");
 	});
 
-	const reportLogs = async (cause: string) => {
+	const reportLogs = (cause: string) => {
 		if (logs.length > 0) {
-			await apiCall("socketio_connection", cause, 0, [...logs]);
+			apiCall("socketio_connection", cause, 0, [...logs]);
 			resetLogs();
 		}
 	};
