@@ -71,6 +71,7 @@ export default {
 	"common.labels.complete.lastName": "Vollständiger Nachname",
 	"common.labels.consent": "Einverständnis",
 	"common.labels.course": "Kurs",
+	"common.labels.team": "Team",
 	"common.labels.createAt": "Erstellt:",
 	"common.labels.createdAt": "Erstellungsdatum",
 	"common.labels.date": "Datum",

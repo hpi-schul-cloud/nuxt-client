@@ -18,6 +18,13 @@
 		]"
 		max-width="short"
 	>
+		<div class="d-flex align-center text-subtitle mb-4" data-testid="news-creator">
+			<template v-if="newsInstance.targetModel === 'teams'">
+				<span class="mr-2">{{ t("common.labels.team") }}:</span>
+				<VIcon :icon="mdiAccountGroupOutline" size="sm" class="mr-1" />
+				<a :href="`/teams/${newsInstance.targetId}`">{{ newsInstance.target.name }}</a>
+			</template>
+		</div>
 		<NewsForm
 			:title="newsInstance.title"
 			:content="newsInstance.content"
@@ -37,6 +44,7 @@ import { type UpdateNewsParams } from "@api-server";
 import { useNews, useNewsActions } from "@data-access";
 import { notifySuccess } from "@data-app";
 import { NewsForm } from "@feature-news";
+import { mdiAccountGroupOutline } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, watch } from "vue";
