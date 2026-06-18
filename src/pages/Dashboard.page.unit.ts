@@ -156,7 +156,7 @@ describe("DashboardPage", () => {
 			expect(warningAlert.text()).toContain("loggedin.text.teamsToRooms.helpLink");
 		});
 
-		it("is not always visible when dbc", async () => {
+		it("is not visible when dbc", async () => {
 			createTestEnvStore({ SC_THEME: SchulcloudTheme.DEFAULT });
 			const { wrapper } = setup();
 			await flushPromises();
