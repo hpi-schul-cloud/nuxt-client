@@ -71,6 +71,7 @@ export default {
 	"common.labels.complete.lastName": "Повне прізвище",
 	"common.labels.consent": "Згода",
 	"common.labels.course": "Курс",
+	"common.labels.team": "Команда",
 	"common.labels.createAt": "Створено:",
 	"common.labels.createdAt": "Створено в",
 	"common.labels.date": "Дата",
