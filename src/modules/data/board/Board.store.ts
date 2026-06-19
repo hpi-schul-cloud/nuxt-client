@@ -52,7 +52,7 @@ import { useRouter } from "vue-router";
 export const useBoardStore = defineStore("boardStore", () => {
 	const cardStore = useCardStore();
 	const board = ref<Board | undefined>(undefined);
-	const isLoading = ref<boolean>(false);
+	const isLoading = ref<boolean>(true);
 	const { setFocus, forceFocus } = useBoardFocusHandler();
 	const roomId = ref<string | undefined>(undefined);
 
@@ -414,6 +414,10 @@ export const useBoardStore = defineStore("boardStore", () => {
 		socketOrRest.disconnectSocketRequest();
 	};
 
+	const cancelSocketReconnection = () => {
+		socketOrRest.cancelSocketReconnection();
+	};
+
 	const fetchBoardRequest = async (payload: FetchBoardRequestPayload) => {
 		await socketOrRest.fetchBoardRequest(payload);
 	};
@@ -470,6 +474,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	return {
 		board,
+		cancelSocketReconnection,
 		isLoading,
 		isConnected,
 		getCardLocation,

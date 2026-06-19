@@ -61,6 +61,14 @@ const initializeTimeout = (pending = false) => {
 };
 
 const dispatchMock = vi.fn();
+const cancelSocketReconnectionMock = vi.fn();
+
+vi.mock("./socket-error-handler", () => ({
+	useConnectionErrorHandling: vi.fn(() => ({
+		getState: { value: "connected" },
+		cancelSocketReconnection: cancelSocketReconnectionMock,
+	})),
+}));
 
 type Fn = (...args: unknown[]) => unknown;
 
@@ -81,6 +89,7 @@ describe("socket.ts", () => {
 			emit: vi.fn(),
 			connect: vi.fn(),
 			disconnect: vi.fn(),
+			close: vi.fn(),
 			onAny: vi.fn(),
 			timeout: vi.fn().mockReturnValue(timeoutResponseMock),
 			io: {
@@ -147,7 +156,7 @@ describe("socket.ts", () => {
 		};
 		getOrInitialiseBoardStore().boardStore.board = boardResponseFactory.build();
 
-		const { emitOnSocket, emitWithAck, disconnectSocket, getConnectedSocket, connected } =
+		const { emitOnSocket, emitWithAck, disconnectSocket, getConnectedSocket, connected, cancelSocketReconnection } =
 			useSocketConnection(dispatchMock);
 		const socket = getConnectedSocket();
 
@@ -178,6 +187,7 @@ describe("socket.ts", () => {
 			eventCallbacks,
 			emitOnSocket,
 			emitWithAck,
+			cancelSocketReconnection,
 			disconnectSocket,
 			getConnectedSocket,
 			triggerServerEvent,
@@ -337,6 +347,16 @@ describe("socket.ts", () => {
 
 				expect(stopMock).toHaveBeenCalled();
 			});
+		});
+	});
+
+	describe("cancelSocketReconnection", () => {
+		it("should call cancelSocketReconnection from socket error handler", () => {
+			const { cancelSocketReconnection } = setup();
+
+			cancelSocketReconnection();
+
+			expect(cancelSocketReconnectionMock).toHaveBeenCalled();
 		});
 	});
 

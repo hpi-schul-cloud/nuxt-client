@@ -1112,6 +1112,16 @@ describe("BoardStore", () => {
 		});
 	});
 
+	describe("cancelSocketReconnection", () => {
+		it("should call cancelSocketReconnection on active api", () => {
+			const { boardStore } = setup();
+
+			boardStore.cancelSocketReconnection();
+
+			expect(mockedBoardRestApi.cancelSocketReconnection).toHaveBeenCalled();
+		});
+	});
+
 	describe("@FEATURE_COLUMN_BOARD_SOCKET_ENABLED", () => {
 		describe("@createCardRequest", () => {
 			const payload = { columnId: "testColumnId" };

@@ -421,6 +421,7 @@ const boardColumnClass = computed(() => {
 const { executeCopyBoard } = useCopyFlow();
 
 const onBackToOverview = () => {
+	boardStore.cancelSocketReconnection();
 	router.push({ path: "/dashboard" });
 };
 
