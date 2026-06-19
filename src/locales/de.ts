@@ -71,6 +71,7 @@ export default {
 	"common.labels.complete.lastName": "Vollständiger Nachname",
 	"common.labels.consent": "Einverständnis",
 	"common.labels.course": "Kurs",
+	"common.labels.team": "Team",
 	"common.labels.createAt": "Erstellt:",
 	"common.labels.createdAt": "Erstellungsdatum",
 	"common.labels.date": "Datum",
@@ -1008,6 +1009,9 @@ export default {
 	"mixins.typeMeta.types.image": "Bild",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Webseite",
+	"loggedin.text.backupFeatures":
+		"Sichern Sie Ihre Inhalte der Cloud und nutzen Sie auch die neue Funktion zum Export von Kursen. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "Weitere Informationen und Hilfestellungen sind hier zu finden.",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte kontaktiere deinen Schul-Admin!",
 	"loggedin.text.schoolInTransferPhaseStartNew":
