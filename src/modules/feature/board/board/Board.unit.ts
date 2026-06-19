@@ -1141,7 +1141,7 @@ describe("Board", () => {
 			boardStore.isConnected = false;
 			await nextTick();
 
-			await vi.advanceTimersByTimeAsync(1100);
+			await vi.advanceTimersByTimeAsync(3100);
 			await nextTick();
 
 			expect(wrapperVM.showLoadingDialog).toBe(true);
