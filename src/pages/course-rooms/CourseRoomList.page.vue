@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import CourseRoomAvatar from "@/components/course-rooms/CourseRoomAvatar.vue";
 import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
-import { ListItemsObject } from "@/store/types/rooms";
+import { ListItemsObject } from "@/types/course-room/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useCourseRoomListStore } from "@data-course-rooms";
 import { SvsSearchField } from "@ui-controls";

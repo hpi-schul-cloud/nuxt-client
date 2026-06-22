@@ -1,7 +1,7 @@
 import { Layouts } from "@/layouts/types";
 import { checkFolderFeature, checkRegisterExternalPersonsFeature, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { isEnum, isMongoId, isOfficialSchoolNumber, REGEX_ID } from "@/utils/validation";
 import { H5PContentParentType } from "@api-h5p";
 import { Permission, ToolContextType } from "@api-server";
@@ -295,13 +295,18 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: "/news/new",
-		component: () => import("@/pages/NewsCreate.page.vue"),
+		component: async () => (await import("@page-news")).NewsCreatePage,
 		name: "news-new",
 		beforeEnter: createPermissionGuard([Permission.NEWS_CREATE]),
 	},
 	{
+		path: `/news/:id(${REGEX_ID})`,
+		component: async () => (await import("@page-news")).NewsDetailsPage,
+		name: "news-details",
+	},
+	{
 		path: `/news/:id(${REGEX_ID})/edit`,
-		component: () => import("@/pages/NewsEdit.page.vue"),
+		component: async () => (await import("@page-news")).NewsEditPage,
 		name: "news-id-edit",
 		beforeEnter: createPermissionGuard([Permission.NEWS_EDIT]),
 	},

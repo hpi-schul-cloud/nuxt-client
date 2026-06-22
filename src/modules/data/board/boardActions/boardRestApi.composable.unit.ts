@@ -1,7 +1,7 @@
 import { useBoardApi } from "../BoardApi.composable";
 import { useBoardRestApi } from "./boardRestApi.composable";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
@@ -12,7 +12,7 @@ import {
 	mountComposable,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import { BoardLayout } from "@api-server";
+import { BoardLayout, CopyStatusEnum } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useBoardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
@@ -299,6 +299,7 @@ describe("boardRestApi", () => {
 			expect(boardStore.duplicateColumnSuccess).toHaveBeenCalledWith({
 				columnId,
 				duplicatedColumn,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 		});

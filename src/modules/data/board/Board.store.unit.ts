@@ -7,8 +7,8 @@ import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import {
 	collaborativeTextEditorElementResponseFactory,
 	createTestEnvStore,
@@ -25,7 +25,7 @@ import {
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import { BoardLayout } from "@api-server";
+import { BoardLayout, CopyStatusEnum } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useCardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
@@ -441,6 +441,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateCardSuccess({
 				cardId: cards[0].cardId,
 				duplicatedCard: cardResponseFactory.build(),
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -455,6 +456,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateCardSuccess({
 				cardId: firstCardId,
 				duplicatedCard,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -475,6 +477,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
 				duplicatedColumn,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -488,6 +491,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
 				duplicatedColumn,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -497,17 +501,32 @@ describe("BoardStore", () => {
 			expect(boardStore.board?.columns[2]).toEqual(secondColumn);
 		});
 
-		it("should show success notification when isOwnAction is true", () => {
+		it("should show success notification when isOwnAction is true and copy was successful", () => {
 			const { boardStore, firstColumn } = setup();
 			const duplicatedColumn = columnFullResponseFactory.build();
 
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
 				duplicatedColumn,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
 			expectNotification("success");
+		});
+
+		it("should show error notification when isOwnAction is true and copy was not fully successful", () => {
+			const { boardStore, firstColumn } = setup();
+			const duplicatedColumn = columnFullResponseFactory.build();
+
+			boardStore.duplicateColumnSuccess({
+				columnId: firstColumn.id,
+				duplicatedColumn,
+				status: CopyStatusEnum.PARTIAL,
+				isOwnAction: true,
+			});
+
+			expectNotification("error");
 		});
 
 		it("should show info notification when column contains external tool element", () => {
@@ -519,6 +538,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
 				duplicatedColumn,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -534,6 +554,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
 				duplicatedColumn,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -549,6 +570,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
 				duplicatedColumn,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -562,6 +584,7 @@ describe("BoardStore", () => {
 			boardStore.duplicateColumnSuccess({
 				columnId: firstColumn.id,
 				duplicatedColumn,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: false,
 			});
 
@@ -1086,6 +1109,16 @@ describe("BoardStore", () => {
 			boardStore.fetchBoardSuccess(newBoard);
 
 			expect(boardStore.board).toEqual(newBoard);
+		});
+	});
+
+	describe("cancelSocketReconnection", () => {
+		it("should call cancelSocketReconnection on active api", () => {
+			const { boardStore } = setup();
+
+			boardStore.cancelSocketReconnection();
+
+			expect(mockedBoardRestApi.cancelSocketReconnection).toHaveBeenCalled();
 		});
 	});
 

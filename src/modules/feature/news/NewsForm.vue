@@ -8,7 +8,6 @@
 			:label="t('components.organisms.FormNews.input.title.label')"
 			:rules="[validateOnOpeningTag, isRequired(t('components.organisms.FormNews.errors.missing_title'))]"
 		/>
-
 		<div class="mt-5">
 			<ClassicEditor
 				ref="classicEditor"
@@ -31,11 +30,9 @@
 				</template>
 			</VMessages>
 		</div>
-
 		<p class="mt-13">
 			{{ t("components.organisms.FormNews.label.planned_publish") }}
 		</p>
-
 		<DatePicker
 			:date="newsDate"
 			:label="t('common.labels.date')"
@@ -48,11 +45,16 @@
 			data-testid="news_time"
 			@update:time="newsTime = $event"
 		/>
-
 		<div class="d-flex ga-3 mt-2">
 			<VSpacer />
 			<VBtn variant="text" :text="t('common.actions.discard')" @click="onCancel" />
-			<VBtn v-if="showDeleteButton" variant="text" color="error" :text="t('common.actions.delete')" @click="onDelete" />
+			<VBtn
+				v-if="showDeleteButton"
+				variant="text"
+				color="error"
+				:text="t('common.actions.delete')"
+				@click="emit('delete')"
+			/>
 			<VBtn
 				color="primary"
 				variant="flat"
@@ -66,9 +68,8 @@
 </template>
 
 <script setup lang="ts">
-import { Status } from "@/store/types/commons";
-import { FormNews } from "@/store/types/news";
-import { askCancel, askConfirmation } from "@/utils/confirmation-dialog.utils";
+import { Status } from "@/types/common/commons";
+import { askCancel } from "@/utils/confirmation-dialog.utils";
 import { formatUtc, toCombinedDateTimeIso, toIsoDate } from "@/utils/date-time.utils";
 import { isValidOrFocusFirstInvalidInput } from "@/utils/validation";
 import { ClassicEditor } from "@feature-editor";
@@ -76,7 +77,12 @@ import { DatePicker, TimePicker } from "@ui-date-time-picker";
 import { isRequired, useOpeningTagValidator } from "@util-validators";
 import { ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { VMessages } from "vuetify/components";
+
+type FormNews = {
+	title: string;
+	content: string;
+	displayAt?: string;
+};
 
 type Props = {
 	title?: string;
@@ -158,16 +164,9 @@ const onSave = async () => {
 	});
 };
 
-const onDelete = async () => {
-	const isConfirmed = await askConfirmation({
-		title: "components.organisms.FormNews.remove.confirm.message",
-		confirmBtnKey: "components.organisms.FormNews.remove.confirm.confirm",
-	});
-	if (isConfirmed) emit("delete");
-};
-
 const onCancel = async () => (await askCancel()) && emit("cancel");
 </script>
+
 <style lang="scss" scoped>
 .news-content-error {
 	letter-spacing: 0.4px;

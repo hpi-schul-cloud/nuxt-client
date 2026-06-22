@@ -81,6 +81,7 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 	ol {
 		font-size: var(--text-md);
 		margin-bottom: 8px;
+		line-height: var(--line-height-xl);
 	}
 
 	ul {
@@ -97,6 +98,11 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 
 	.math-tex {
 		font-size: large;
+	}
+
+	// ensures contrast AAA confirmity for colored cards
+	a {
+		color: rgba(var(--v-theme-primary-darken-2));
 	}
 }
 

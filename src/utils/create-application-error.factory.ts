@@ -1,5 +1,5 @@
-import { ApplicationError } from "@/store/types/application-error";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
+import { ApplicationError } from "@data-app";
 import { logger } from "@util-logger";
 
 /**

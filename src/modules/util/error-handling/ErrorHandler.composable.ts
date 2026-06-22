@@ -1,4 +1,4 @@
-import { ApiResponseError, ApiValidationError } from "@/store/types/commons";
+import { ApiResponseError, ApiValidationError } from "@/types/common/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useNotificationStore } from "@data-app";
 import { logger } from "@util-logger";

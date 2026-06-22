@@ -61,7 +61,7 @@
 <script setup lang="ts">
 import RoomDotMenu from "./RoomDotMenu.vue";
 import { LessonData } from "./types";
-import { RoomData } from "@/store/types/room";
+import { RoomData } from "@/types/course-room/room";
 import { ImportUserResponseRoleNames as Roles } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import {

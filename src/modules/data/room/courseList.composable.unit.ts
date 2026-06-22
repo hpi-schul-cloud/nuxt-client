@@ -1,7 +1,7 @@
 import { useCourseApi } from "./courseApi.composable";
 import { useCourseInfoApi } from "./courseInfoApi.composable";
 import { useCourseList } from "./courseList.composable";
-import { BusinessError, Pagination } from "@/store/types/commons";
+import { BusinessError, Pagination } from "@/types/common/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	axiosErrorFactory,

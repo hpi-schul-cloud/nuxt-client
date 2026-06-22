@@ -23,18 +23,30 @@ let connectionState: ConnectionState = ConnectionState.STARTING;
 export const useConnectionErrorHandling = (socket: Socket) => {
 	let startTime = Date.now();
 	let timeoutHandle: NodeJS.Timeout | null = null;
+	let inFlightReport: Promise<void> | null = null;
+	let pendingReport: {
+		type: string;
+		message: string;
+		retryCount: number;
+		logSteps: string[];
+		reportRetries: number;
+	} | null = null;
 
 	const log = (message: string) => {
 		logs.push(`[${Date.now() - startTime}ms]${message}`);
 	};
 
-	const resetLogs = () => {
-		startTime = Date.now();
-		logs.splice(0, logs.length);
+	const clearScheduledReport = () => {
 		if (timeoutHandle) {
 			clearTimeout(timeoutHandle);
 			timeoutHandle = null;
 		}
+	};
+
+	const resetLogs = () => {
+		startTime = Date.now();
+		logs.splice(0, logs.length);
+		clearScheduledReport();
 	};
 
 	const handleError = (error: Error & { data?: unknown }) => {
@@ -44,11 +56,9 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 
 	// whenever this function is called the actual execution is delayed by X ms, if the function is called again within this delay, the previous call is canceled and the timer restarts
 	const reportBoardError = (type: string, message: string, retryCount: number, logSteps: string[]) => {
-		if (timeoutHandle) {
-			clearTimeout(timeoutHandle);
-		}
+		clearScheduledReport();
 		timeoutHandle = setTimeout(() => {
-			apiCall(type, message, retryCount, logSteps);
+			void apiCall(type, message, retryCount, logSteps);
 		}, 7000);
 
 		if (logs.length > 30) {
@@ -56,36 +66,60 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 		}
 	};
 
-	const apiCall = (type: string, message: string, retryCount: number, logSteps: string[], reportRetries = 3) => {
+	const apiCall = async (
+		type: string,
+		message: string,
+		retryCount: number,
+		steps: string[] = [],
+		reportRetries = 3
+	): Promise<void> => {
+		const report = { type, message, retryCount, logSteps: steps, reportRetries };
+
+		if (inFlightReport) {
+			pendingReport = report;
+			return inFlightReport;
+		}
+
 		const url = globalThis.location.href;
 		const boardId = /boards\/([0-9a-fA-F]{24})/.exec(url)?.[1] ?? "unknown";
-		const steps = [...logSteps, connectionState + " " + socket.io.engine.transport.name].join("|");
+		const logSteps = [...report.logSteps, `${connectionState} ${socket.io.engine.transport.name ?? "unknown"}`].join(
+			"|"
+		);
 		const data: BoardErrorReportBodyParams = {
-			type,
-			message,
+			type: report.type,
+			message: report.message,
 			url,
 			boardId,
-			retryCount,
-			logSteps: steps,
+			retryCount: report.retryCount,
+			logSteps,
 		};
 
-		boardErrorReportApi
-			.boardErrorReportControllerReportError(data)
-			.then(() => {
-				if (timeoutHandle) {
-					clearTimeout(timeoutHandle);
-				}
-			})
-			.catch((err) => {
+		inFlightReport = (async () => {
+			try {
+				await boardErrorReportApi.boardErrorReportControllerReportError(data);
+			} catch (err) {
 				logger.error(`Failed to report error (retries left ${reportRetries})`, err);
-				if (reportRetries <= 0) {
+				if (report.reportRetries <= 0) {
 					return;
 				}
+				clearScheduledReport();
 				timeoutHandle = setTimeout(() => {
 					// try again in 5 seconds
-					apiCall(type, message + " Failed => retry", retryCount, logSteps, reportRetries - 1);
+					const { type, message, retryCount, logSteps, reportRetries } = report;
+					void apiCall(type, message + " Failed => retry", retryCount, logSteps, reportRetries - 1);
 				}, 5000);
-			});
+			} finally {
+				inFlightReport = null;
+				if (pendingReport) {
+					const { type, message, retryCount, logSteps, reportRetries } = pendingReport;
+					pendingReport = null;
+					clearScheduledReport();
+					await apiCall(type, message, retryCount, logSteps, reportRetries);
+				}
+			}
+		})();
+
+		return inFlightReport;
 	};
 
 	// attach socket- and manager-eventhandlers
@@ -119,6 +153,13 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 		log("reconn_failed");
 	});
 
+	const cancelSocketReconnection = () => {
+		void apiCall("socketio_connection", "reconnect_usr_canceled", 0, [...logs]);
+		resetLogs();
+		socket.disconnect();
+		socket.close();
+	};
+
 	socket.on("connect_error", handleError);
 
 	socket.io.engine.on("upgrade", () => {
@@ -127,19 +168,19 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 
 	// send logs when the user leaves the page or changes the tab to hidden
 
-	useEventListener(document, "visibilitychange", async () => {
+	useEventListener(document, "visibilitychange", () => {
 		if (document.visibilityState === "hidden") {
-			await reportLogs("tab_hidden");
+			reportLogs("tab_hidden");
 		}
 	});
 
-	useEventListener(window, "beforeunload", async () => {
-		await reportLogs("page_unload");
+	useEventListener(globalThis, "beforeunload", () => {
+		reportLogs("page_unload");
 	});
 
-	const reportLogs = async (cause: string) => {
+	const reportLogs = (cause: string) => {
 		if (logs.length > 0) {
-			await apiCall("socketio_connection", cause, 0, [...logs]);
+			apiCall("socketio_connection", cause, 0, [...logs]);
 			resetLogs();
 		}
 	};
@@ -150,6 +191,7 @@ export const useConnectionErrorHandling = (socket: Socket) => {
 	const getState = computed(() => ({ startTime, transport: engine.transport.name, connectionState, logs }));
 
 	return {
+		cancelSocketReconnection,
 		getState,
 	};
 };

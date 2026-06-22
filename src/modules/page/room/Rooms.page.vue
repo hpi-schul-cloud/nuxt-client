@@ -13,24 +13,6 @@
 			</template>
 		</EmptyState>
 		<RoomGrid v-else :rooms />
-		<ImportCardDialog
-			v-if="shareTokenInfo"
-			:is-dialog-open="isCardImportDialogOpen"
-			:share-token-info="shareTokenInfo"
-			:available-destinations="availableDestinations"
-			destination-type="column"
-			@confirm="onConfirmImport"
-			@cancel="onCancelImport"
-		/>
-		<ImportDialog
-			v-if="shareTokenInfo"
-			:is-dialog-open="isGenericImportDialogOpen"
-			:share-token-info="shareTokenInfo"
-			:available-destinations="availableDestinations"
-			destination-type="room"
-			@confirm="onConfirmImport"
-			@cancel="onCancelImport"
-		/>
 	</DefaultWireframe>
 </template>
 
@@ -39,12 +21,13 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useRoomStore } from "@data-room";
-import { ImportCardDialog, ImportDialog, useImportFlow } from "@feature-import";
+import { useImportFlow } from "@feature-import";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
+import { sortBy } from "lodash-es";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, toValue, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -74,19 +57,19 @@ const fabAction = computed(() => {
 	];
 });
 
-const availableDestinations = computed(() => rooms.value.filter((room) => !room.isLocked));
+const availableDestinations = computed(() =>
+	sortBy(
+		rooms.value.filter((room) => !room.isLocked && (room.allowedOperations?.editContent ?? false)),
+		(r) => r.name
+	)
+);
 
-const {
-	executeImport,
-	isGenericImportDialogOpen,
-	isCardImportDialogOpen,
-	shareTokenInfo,
-	onConfirmImport,
-	onCancelImport,
-} = useImportFlow();
+const { executeImport } = useImportFlow();
 
 const executeImportFlow = async (token: string) => {
-	const { result: importResult } = await executeImport(token);
+	// rooms might not be loaded yet, so we need to fetch them before executing the import
+	await fetchRooms();
+	const { result: importResult } = await executeImport(token, availableDestinations);
 
 	if (!importResult) {
 		router.push({ name: "rooms" });

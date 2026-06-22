@@ -198,3 +198,49 @@ export function formatSecondsToHourMinSec(seconds: number) {
 
 	return formattedString;
 }
+
+function getFileFromFileEntry(entry: FileSystemFileEntry): Promise<File> {
+	return new Promise((resolve, reject) => entry.file(resolve, reject));
+}
+
+async function readAllDirectoryEntries(reader: FileSystemDirectoryReader): Promise<FileSystemEntry[]> {
+	const allEntries: FileSystemEntry[] = [];
+	let batch: FileSystemEntry[];
+
+	// readEntries returns at most 100 entries per call; loop until empty
+	do {
+		batch = await new Promise<FileSystemEntry[]>((resolve, reject) => reader.readEntries(resolve, reject));
+		allEntries.push(...batch);
+	} while (batch.length > 0);
+
+	return allEntries;
+}
+
+async function getFilesFromEntry(entry: FileSystemEntry): Promise<File[]> {
+	if (entry.isFile) {
+		const file = await getFileFromFileEntry(entry as FileSystemFileEntry);
+		return [file];
+	}
+
+	if (entry.isDirectory) {
+		const reader = (entry as FileSystemDirectoryEntry).createReader();
+		const entries = await readAllDirectoryEntries(reader);
+		const filePromises = entries.map(getFilesFromEntry);
+		const nested = await Promise.all(filePromises);
+		return nested.flat();
+	}
+
+	return [];
+}
+
+export async function extractFilesFromItems(items: DataTransferItemList): Promise<File[]> {
+	const entries = Array.from(items)
+		.filter((item) => item.kind === "file")
+		.map((item) => item.webkitGetAsEntry())
+		.filter((entry): entry is FileSystemEntry => entry !== null);
+
+	const entriePromises = entries.map((entry) => getFilesFromEntry(entry));
+	const fileArrays = await Promise.all(entriePromises);
+
+	return fileArrays.flat();
+}

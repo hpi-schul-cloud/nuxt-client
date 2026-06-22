@@ -1,14 +1,21 @@
 <template>
 	<div>
 		<template v-if="board">
-			<CardHostDetailView v-if="cardId" :key="cardId" :card-id="cardId" @close:detail-view="onCloseDetailView" />
+			<CardHostDetailView
+				v-if="cardId"
+				:key="cardId"
+				:card-id="cardId"
+				:previous-card-route="previousCardRoute"
+				:next-card-route="nextCardRoute"
+				@close:detail-view="onCloseDetailView"
+			/>
 			<DefaultWireframe
 				ref="main"
 				:breadcrumbs="breadcrumbs"
 				max-width="full"
 				hide-border
 				main-without-padding
-				:is-flex-container="!isListBoard"
+				is-flex-container
 			>
 				<template #header>
 					<BoardHeader
@@ -97,21 +104,7 @@
 					:has-relocate-board-content-permission="allowedOperations?.relocateContent ?? false"
 					:card-id="moveCardOptions.cardId"
 				/>
-				<CopyDialog
-					:is-open="isCopyDialogOpen"
-					:copy-item-type="copyItemType"
-					@confirm="onConfirmCopy"
-					@cancel="onCancelCopy"
-				/>
-				<ShareDialog
-					v-if="shareItemType"
-					:is-open="isShareDialogOpen"
-					:share-item-type="shareItemType"
-					:share-url="shareUrl"
-					@confirm="onConfirmShare"
-					@cancel="onCancelShare"
-					@done="onDone"
-				/>
+
 				<SelectBoardLayoutDialog
 					v-model="isSelectBoardLayoutDialogOpen"
 					:current-layout="board.layout"
@@ -152,8 +145,8 @@ import EditSettingsDialog from "../shared/EditSettingsDialog.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import {
 	BoardExternalReferenceType,
 	BoardLayout,
@@ -164,6 +157,7 @@ import {
 import { useAppStore, useNotificationStore } from "@data-app";
 import {
 	useBoardAllowedOperations,
+	useBoardCardNavigation,
 	useBoardInactivity,
 	useBoardStore,
 	useCardStore,
@@ -173,8 +167,8 @@ import {
 import { useEnvConfig } from "@data-env";
 import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog } from "@feature-collabora";
-import { CopyDialog, useCopyFlow } from "@feature-copy";
-import { ShareDialog, useShareFlow } from "@feature-share";
+import { useCopyFlow } from "@feature-copy";
+import { useShareFlow } from "@feature-share";
 import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
@@ -182,7 +176,7 @@ import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@ut
 import { refDebounced, useTimeout } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, ComputedRef, onMounted, onUnmounted, provide, ref, watch } from "vue";
+import { computed, ComputedRef, onUnmounted, provide, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
@@ -212,6 +206,7 @@ watch(board, async () => {
 const route = useRoute();
 
 useBodyScrolling();
+useBoardInactivity();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
 const cardId = computed(() => {
@@ -220,6 +215,8 @@ const cardId = computed(() => {
 	}
 	return undefined;
 });
+
+const { previousCardRoute, nextCardRoute } = useBoardCardNavigation();
 
 const isEditableChipVisible = computed(() => board.value?.readersCanEdit ?? false);
 const hasReadersEditPermission = ref(false);
@@ -329,14 +326,19 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 
 const { focusNodeFromHash } = useElementFocus();
 
-onMounted(async () => {
-	resetPageInformation();
-	useBoardInactivity();
+watch(
+	() => props.boardId,
+	async (newBoardId, oldBoardId) => {
+		if (newBoardId !== oldBoardId) {
+			resetPageInformation();
 
-	await boardStore.fetchBoardRequest({ boardId: props.boardId });
+			await boardStore.fetchBoardRequest({ boardId: newBoardId });
 
-	focusNodeFromHash();
-});
+			focusNodeFromHash();
+		}
+	},
+	{ immediate: true }
+);
 
 watch(
 	() => allowedOperations.value.createExternalToolElement,
@@ -416,15 +418,10 @@ const boardColumnClass = computed(() => {
 	return classes;
 });
 
-const {
-	isCopyDialogOpen,
-	copyItemType,
-	executeCopyBoard,
-	onConfirm: onConfirmCopy,
-	onCancel: onCancelCopy,
-} = useCopyFlow();
+const { executeCopyBoard } = useCopyFlow();
 
 const onBackToOverview = () => {
+	boardStore.cancelSocketReconnection();
 	router.push({ path: "/dashboard" });
 };
 
@@ -439,15 +436,7 @@ const onCopyBoard = async () => {
 	}
 };
 
-const {
-	isShareDialogOpen,
-	shareItemType,
-	shareUrl,
-	executeShare,
-	onConfirm: onConfirmShare,
-	onCancel: onCancelShare,
-	onDone,
-} = useShareFlow();
+const { executeShare } = useShareFlow();
 
 const onShareBoard = () => {
 	if (!allowedOperations.value.shareBoard) return;

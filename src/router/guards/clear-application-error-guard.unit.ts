@@ -1,5 +1,5 @@
 import { clearApplicationErrorGuard } from "@/router/guards/clear-application-error.guard";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";

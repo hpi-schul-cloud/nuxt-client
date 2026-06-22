@@ -1,6 +1,6 @@
 import ClassicEditor from "../editor/ClassicEditor.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { Status } from "@/store/types/commons";
+import { Status } from "@/types/common/commons";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { toCombinedDateTimeIso } from "@/utils/date-time.utils";
 import { newsResponseFactory } from "@@/tests/test-utils";
@@ -225,31 +225,14 @@ describe("NewsForm", () => {
 			expect(deleteButton).toBeUndefined();
 		});
 
-		it("should not emit delete event on delete button click when deletion cancelled", async () => {
-			askConfirmationSpy.mockResolvedValue(false);
+		it("should emit delete event on delete button click", async () => {
 			const { wrapper } = setup({ showDeleteButton: true });
 
 			const deleteButton = getDeleteButton(wrapper);
 			await deleteButton?.trigger("click");
-			await flushPromises();
-
-			expect(wrapper.emitted()).not.toHaveProperty("delete");
-		});
-
-		it("should emit delete event on delete button click when deletion confirmed", async () => {
-			askConfirmationSpy.mockResolvedValue(true);
-			const { wrapper } = setup({ showDeleteButton: true });
-
-			const deleteButton = getDeleteButton(wrapper);
-			await deleteButton?.trigger("click");
-			await flushPromises();
 
 			expect(wrapper.emitted()).toHaveProperty("delete");
 			expect(wrapper.emitted().delete).toHaveLength(1);
-			expect(askConfirmationSpy).toHaveBeenCalledWith({
-				title: "components.organisms.FormNews.remove.confirm.message",
-				confirmBtnKey: "components.organisms.FormNews.remove.confirm.confirm",
-			});
 		});
 	});
 

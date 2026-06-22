@@ -21,6 +21,7 @@ import {
 	CollaborativeTextEditorElementResponse,
 	Colors,
 	ContentElementType,
+	CopyStatusEnum,
 	PreferredToolResponse,
 	ToolContextType,
 } from "@api-server";
@@ -311,6 +312,7 @@ describe("CardStore", () => {
 			cardStore.duplicateCardSuccess({
 				cardId: "unknownId",
 				duplicatedCard: cardResponseFactory.build({ id: undefined }),
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -325,6 +327,7 @@ describe("CardStore", () => {
 			cardStore.duplicateCardSuccess({
 				cardId: "unknownId",
 				duplicatedCard,
+				status: CopyStatusEnum.SUCCESS,
 				isOwnAction: true,
 			});
 
@@ -336,7 +339,7 @@ describe("CardStore", () => {
 				vi.clearAllMocks();
 			});
 
-			const setupDuplicate = (elements: AnyContentElement[], isOwnAction = true) => {
+			const setupDuplicate = (elements: AnyContentElement[], isOwnAction = true, status = CopyStatusEnum.SUCCESS) => {
 				const { cardStore } = setup();
 
 				cardStore.duplicateCardSuccess({
@@ -345,6 +348,7 @@ describe("CardStore", () => {
 						id: "newCardId",
 						elements,
 					}),
+					status,
 					isOwnAction,
 				});
 			};
@@ -375,6 +379,11 @@ describe("CardStore", () => {
 					setupDuplicate([element]);
 					expectNotification("info");
 				});
+			});
+
+			it("should show error notification when isOwnAction is true and copy was not fully successful", () => {
+				setupDuplicate([], true, CopyStatusEnum.PARTIAL);
+				expectNotification("error");
 			});
 
 			it("should not show notification when duplicating card with only regular elements (text, files)", () => {

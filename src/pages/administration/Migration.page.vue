@@ -387,7 +387,7 @@
 </template>
 <script setup lang="ts">
 import ImportUsers from "@/components/administration/ImportUsers.vue";
-import { BusinessError } from "@/store/types/commons";
+import { BusinessError } from "@/types/common/commons";
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { SchoolFeature, SchulcloudTheme } from "@api-server";
@@ -468,7 +468,7 @@ useTitle(
 	buildPageTitle(
 		t("pages.administration.migration.title", {
 			source: sourceSystemName.value,
-			instance: instanceName,
+			instance: instanceName.value,
 		})
 	)
 );

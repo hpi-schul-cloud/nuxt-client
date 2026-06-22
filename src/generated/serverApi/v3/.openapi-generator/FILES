@@ -68,6 +68,7 @@ models/add-by-email-body-params.ts
 models/add-room-members-body-params.ts
 models/alert-response.ts
 models/api-validation-error.ts
+models/applicant-ids-body-params.ts
 models/authorization-body-params.ts
 models/authorization-context-params.ts
 models/authorization-many-references-body-params.ts

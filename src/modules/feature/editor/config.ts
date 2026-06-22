@@ -19,6 +19,7 @@ export const corePlugins: PluginName[] = [
 	"Essentials",
 	"Heading",
 	"Italic",
+	"Link",
 	"List",
 	"Paragraph",
 	"RemoveFormat",
@@ -32,7 +33,6 @@ export const advancedPlugins: PluginName[] = [
 	"FontBackgroundColor",
 	"FontColor",
 	"HorizontalLine",
-	"Link",
 	"Math",
 	"SpecialCharacters",
 	"SpecialCharactersEssentials",
@@ -95,6 +95,7 @@ export const mediaFormattingToolbar: ToolbarItem[] = [
 	"numberedList",
 	"removeFormat",
 	"|",
+	"link",
 ];
 
 export const compactHeadings: { options: HeadingOption[] } = {
@@ -149,15 +150,15 @@ export const prominentHeadings: { options: HeadingOption[] } = {
 
 export const fontColors = (t: (key: string) => string): { colors: FontColor[] } => ({
 	colors: [
-		{ color: "#827717", label: t("components.editor.fonts.colors.oliveGreen") },
-		{ color: "#388E3C", label: "Green" },
-		{ color: "#00838F", label: "Turquoise" },
-		{ color: "#1976D2", label: "Blue" },
-		{ color: "#3F51B5", label: t("components.editor.fonts.colors.indigo") },
-		{ color: "#673AB7", label: t("components.editor.fonts.colors.darkPurple") },
-		{ color: "#9C27B0", label: "Purple" },
-		{ color: "#D81B60", label: t("components.editor.fonts.colors.pink") },
-		{ color: "#D32F2F", label: "Red" },
+		{ color: "#625a11", label: t("components.editor.fonts.colors.oliveGreen") },
+		{ color: "#1b5e20", label: "Green" },
+		{ color: "#006064", label: "Turquoise" },
+		{ color: "#0d47a1", label: "Blue" },
+		{ color: "#303f9f", label: t("components.editor.fonts.colors.indigo") },
+		{ color: "#5e35b1", label: t("components.editor.fonts.colors.darkPurple") },
+		{ color: "#7b1fa2", label: "Purple" },
+		{ color: "#ac1457", label: t("components.editor.fonts.colors.pink") },
+		{ color: "#af1b1b", label: "Red" },
 	],
 });
 

@@ -3,6 +3,7 @@ import {
 	convertFileSize,
 	downloadFile,
 	downloadFilesAsArchive,
+	extractFilesFromItems,
 	formatFileSize,
 	formatSecondsToHourMinSec,
 	getFileExtension,
@@ -17,6 +18,13 @@ import {
 	removeFileExtension,
 } from "./fileHelper";
 import { ArchiveFileParams, FilePreviewStatus, FilePreviewWidth, FileRecordVirusScanStatus } from "@/types/file/File";
+import {
+	dataTransferFileItemFactory,
+	dataTransferItemListFactory,
+	dataTransferStringItemFactory,
+	fileSystemDirectoryEntryFactory,
+	fileSystemFileEntryFactory,
+} from "@@/tests/test-utils";
 import { mock } from "vitest-mock-extended";
 
 vi.mock("vue-i18n", () => ({
@@ -741,6 +749,105 @@ describe("@/utils/fileHelper", () => {
 			const wrapper = mount(TestComponent, { props: { size: 1536 } });
 
 			expect(wrapper.text()).toBe("1.5 KB");
+		});
+	});
+
+	describe("extractFilesFromItems", () => {
+		const makeFile = (name: string) => new File(["content"], name, { type: "text/plain" });
+
+		describe("when items list is empty", () => {
+			it("should return an empty array", async () => {
+				const result = await extractFilesFromItems(dataTransferItemListFactory([]));
+				expect(result).toEqual([]);
+			});
+		});
+
+		describe("when items contain a single file", () => {
+			it("should return that file", async () => {
+				const file = makeFile("document.txt");
+				const result = await extractFilesFromItems(
+					dataTransferItemListFactory([dataTransferFileItemFactory(fileSystemFileEntryFactory(file))])
+				);
+				expect(result).toEqual([file]);
+			});
+		});
+
+		describe("when items contain multiple files", () => {
+			it("should return all files", async () => {
+				const files = [makeFile("a.txt"), makeFile("b.txt"), makeFile("c.txt")];
+				const result = await extractFilesFromItems(
+					dataTransferItemListFactory(
+						files.map((file) => dataTransferFileItemFactory(fileSystemFileEntryFactory(file)))
+					)
+				);
+				expect(result).toEqual(files);
+			});
+		});
+
+		describe("when items contain non-file items", () => {
+			it("should filter them out", async () => {
+				const file = makeFile("document.txt");
+				const result = await extractFilesFromItems(
+					dataTransferItemListFactory([
+						dataTransferStringItemFactory(),
+						dataTransferFileItemFactory(fileSystemFileEntryFactory(file)),
+					])
+				);
+				expect(result).toEqual([file]);
+			});
+		});
+
+		describe("when an item returns a null entry", () => {
+			it("should filter it out", async () => {
+				const file = makeFile("document.txt");
+				const result = await extractFilesFromItems(
+					dataTransferItemListFactory([
+						dataTransferFileItemFactory(null),
+						dataTransferFileItemFactory(fileSystemFileEntryFactory(file)),
+					])
+				);
+				expect(result).toEqual([file]);
+			});
+		});
+
+		describe("when items contain a folder", () => {
+			it("should return all files inside the folder", async () => {
+				const files = [makeFile("a.txt"), makeFile("b.txt")];
+				const dirEntry = fileSystemDirectoryEntryFactory("my-folder", files.map(fileSystemFileEntryFactory));
+				const result = await extractFilesFromItems(
+					dataTransferItemListFactory([dataTransferFileItemFactory(dirEntry)])
+				);
+				expect(result).toEqual(files);
+			});
+		});
+
+		describe("when items contain nested folders", () => {
+			it("should recursively return all files", async () => {
+				const innerFile = makeFile("nested.txt");
+				const outerFile = makeFile("top.txt");
+				const innerDir = fileSystemDirectoryEntryFactory("inner", [fileSystemFileEntryFactory(innerFile)]);
+				const outerDir = fileSystemDirectoryEntryFactory("outer", [fileSystemFileEntryFactory(outerFile), innerDir]);
+				const result = await extractFilesFromItems(
+					dataTransferItemListFactory([dataTransferFileItemFactory(outerDir)])
+				);
+				expect(result).toHaveLength(2);
+				expect(result).toContain(outerFile);
+				expect(result).toContain(innerFile);
+			});
+		});
+
+		describe("when a directory has more than 100 entries", () => {
+			it("should read all batches until empty", async () => {
+				const batch1 = Array.from({ length: 100 }, (_, i) => fileSystemFileEntryFactory(makeFile(`file-${i}.txt`)));
+				const batch2 = Array.from({ length: 50 }, (_, i) =>
+					fileSystemFileEntryFactory(makeFile(`file-${100 + i}.txt`))
+				);
+				const dirEntry = fileSystemDirectoryEntryFactory("large-folder", [], [batch1, batch2, []]);
+				const result = await extractFilesFromItems(
+					dataTransferItemListFactory([dataTransferFileItemFactory(dirEntry)])
+				);
+				expect(result).toHaveLength(150);
+			});
 		});
 	});
 });

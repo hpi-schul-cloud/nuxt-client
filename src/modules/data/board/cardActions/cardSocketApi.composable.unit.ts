@@ -22,7 +22,7 @@ import {
 	richTextElementContentFactory,
 } from "@@/tests/test-utils";
 import { richTextElementResponseFactory } from "@@/tests/test-utils/factory/richTextElementResponseFactory";
-import { BoardLayout, Colors, ContentElementType } from "@api-server";
+import { BoardLayout, Colors, ContentElementType, CopyStatusEnum } from "@api-server";
 import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
@@ -167,6 +167,7 @@ describe("useCardSocketApi", () => {
 				const payload = {
 					cardId: "unknown-id",
 					duplicatedCard: cardResponseFactory.build(),
+					status: CopyStatusEnum.SUCCESS,
 					isOwnAction: true,
 				};
 				dispatch(CardActions.duplicateCardSuccess(payload));

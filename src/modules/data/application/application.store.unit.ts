@@ -1,6 +1,5 @@
 import { useAppStore, useAppStoreRefs } from "./application.store";
-import { ApplicationError } from "@/store/types/application-error";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { initializeAxios } from "@/utils/api";
 import {
 	createTestEnvStore,
@@ -20,14 +19,13 @@ import {
 	SuccessfulResponse,
 	UserApiFactory,
 } from "@api-server";
-import { useSchoolStore } from "@data-app";
+import { ApplicationError, useSchoolStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { AxiosInstance, AxiosPromise } from "axios";
 import { DeepPartial } from "fishery";
 import { setActivePinia } from "pinia";
-import { Mocked } from "vitest";
-import { beforeEach, describe, expect, vi } from "vitest";
+import { beforeEach, describe, expect, Mocked, vi } from "vitest";
 
 const broadcastChannelMock = mockBroadcastChannel();
 

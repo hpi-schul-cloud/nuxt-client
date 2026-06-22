@@ -12,6 +12,7 @@ import {
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardLayout } from "@api-server";
 import { useMediaBoardEditMode } from "@data-board";
+import { createTestingPinia } from "@pinia/testing";
 import { useDragAndDrop } from "@util-board";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { SortableEvent } from "sortablejs";
@@ -30,7 +31,7 @@ describe("MediaBoardLine", () => {
 	) => {
 		const wrapper = mount(MediaBoardLine, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
 				stubs: {
 					MediaBoardLineMenu: true,
 					MediaBoardExternalToolElement: true,

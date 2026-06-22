@@ -1,11 +1,29 @@
 <template>
 	<DefaultWireframe max-width="full" main-with-bottom-padding>
 		<template #header>
-			<Announcement />
 			<h1 data-testid="dashboard-title">{{ t("pages.dashboard.title") }}</h1>
 		</template>
 		<template #default>
-			<InfoAlert v-if="hasGlobalAnnouncement && (isTeacher || isAdmin)" class="mt-6">
+			<Announcement class="mt-6" />
+			<!-- Teams to Rooms Migration Alert, should completely be deleted after migration -->
+			<WarningAlert v-if="!isDbc" class="mt-6" data-testid="teams-to-rooms-migration-alert">
+				<span class="font-weight-bold">{{ t("loggedin.text.teamsToRooms") }}</span>
+
+				<ul class="mt-1 pl-5">
+					<li>{{ t("loggedin.text.teamsToRooms.possibilities") }}</li>
+					<li>{{ t("loggedin.text.teamsToRooms.migration") }}</li>
+					<li>
+						<i18n-t keypath="loggedin.text.teamsToRooms.helpLink" scope="global">
+							<template #helpLink>
+								<a :href="helpLink" target="_blank" rel="noopener noreferrer" :aria-label="helpAriaLabel">
+									{{ t("loggedin.text.teamsToRooms.helpLink.help") }}
+								</a>
+							</template>
+						</i18n-t>
+					</li>
+				</ul>
+			</WarningAlert>
+			<InfoAlert v-if="isDbc && (isTeacher || isAdmin)" class="mt-6">
 				<i18n-t keypath="loggedin.text.backupFeatures" scope="global">
 					<template #helpLink>
 						<a href="https://dbildungscloud.de/help/confluence/485132545" target="_blank" rel="noopener noreferrer">
@@ -15,11 +33,11 @@
 				</i18n-t>
 			</InfoAlert>
 
-			<WarningAlert v-if="inMaintenanceOrMigrationText" class="mt-4">
+			<WarningAlert v-if="inMaintenanceOrMigrationText" class="mt-4" data-testid="maintenance-migration-alert">
 				<RenderHTML :html="inMaintenanceOrMigrationText" />
 			</WarningAlert>
 
-			<SvsLoading :is-loading="isLoadingNews">
+			<SvsLoading :loading-state="newsLoadingState">
 				<h2 class="mb-4">{{ t("pages.news.title") }}</h2>
 
 				<!-- Dashboard news -->
@@ -72,11 +90,10 @@
 <script lang="ts" setup>
 import SvgNewsEmpty from "@/assets/img/SvgNewsEmpty.vue";
 import Announcement from "@/components/announcement/Announcement.vue";
-import { useSafeAxiosRunner } from "@/composables/async-tasks.composable";
-import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { NewsApiFactory, NewsTargetModel, Permission, SchulcloudTheme } from "@api-server";
+import { NewsTargetModel, Permission, SchulcloudTheme } from "@api-server";
+import { useNewsList } from "@data-access";
 import { useAppStore, useAppStoreRefs } from "@data-app";
 import { useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
@@ -94,7 +111,6 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 const { isTeacher, isStudent, isAdmin } = useAppStoreRefs();
 const NEWS_LIMIT = 4;
-const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 
 useTitle(buildPageTitle(t("pages.dashboard.title")));
 
@@ -116,15 +132,14 @@ const inMaintenanceOrMigrationText = computed(() => {
 	}
 	return undefined;
 });
+const { news: latestNews, newsLoadingState } = useNewsList(NEWS_LIMIT);
 
-const { data: newsResponse, isLoading: isLoadingNews } = useSafeAxiosRunner(() =>
-	newsApi.newsControllerFindAll(undefined, undefined, undefined, undefined, NEWS_LIMIT)
+const helpAriaLabel = computed(
+	() => `${t("pages.rooms.infoAlert.welcome.furtherInformation.help")}, ${t("common.ariaLabel.newTab")}`
 );
-const latestNews = computed(() => newsResponse.value?.data.data ?? []);
+const helpLink = computed(() => `${window.location.origin}/help/confluence/426313035`);
 
-const envConfig = useEnvConfig();
-// Workaround, since accessing the same parameters is in progress.
-const hasGlobalAnnouncement = computed(() => envConfig.value.SC_THEME === SchulcloudTheme.DEFAULT);
+const isDbc = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.DEFAULT);
 </script>
 
 <style scoped>

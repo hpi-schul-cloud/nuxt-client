@@ -1,5 +1,5 @@
 <template>
-	<CourseRoomWrapper :has-rooms="hasCurrentRooms" :has-import-token="!!shareTokenInfo">
+	<CourseRoomWrapper :has-rooms="hasCurrentRooms" :has-import-token="hasImportToken">
 		<template #header>
 			<h1 class="py-2">
 				{{ $t("pages.courseRooms.index.courses.active") }}
@@ -99,15 +99,6 @@
 		tabindex="0"
 		@drag-from-group="dragFromGroup"
 	/>
-	<ImportDialog
-		v-if="shareTokenInfo"
-		:is-dialog-open="isGenericImportDialogOpen"
-		:share-token-info="shareTokenInfo"
-		:available-destinations="availableDestinations"
-		destination-type="course"
-		@confirm="onConfirmImport"
-		@cancel="onCancelImport"
-	/>
 </template>
 
 <script setup lang="ts">
@@ -116,12 +107,12 @@ import CourseRoomEmptyAvatar from "@/components/course-rooms/CourseRoomEmptyAvat
 import CourseRoomGroupAvatar from "@/components/course-rooms/CourseRoomGroupAvatar.vue";
 import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
 import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
-import { DroppedObject } from "@/store/types/rooms";
+import { DroppedObject } from "@/types/course-room/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { DashboardGridElementResponse } from "@api-server";
 import { notifySuccess } from "@data-app";
 import { GroupDataType, useCourseRoomListStore } from "@data-course-rooms";
-import { ImportDialog, useImportFlow } from "@feature-import";
+import { useImportFlow } from "@feature-import";
 import { mdiCheck } from "@icons/material";
 import { SvsSearchField } from "@ui-controls";
 import { useTitle } from "@vueuse/core";
@@ -200,10 +191,12 @@ const availableDestinations = computed(() =>
 	)
 );
 
-const { executeImport, isGenericImportDialogOpen, shareTokenInfo, onConfirmImport, onCancelImport } = useImportFlow();
+const { executeImport } = useImportFlow();
 
 const executeImportFlow = async (token: string) => {
-	const { result: importResult } = await executeImport(token);
+	//  courses might not be loaded yet, so we need to fetch them before executing the import
+	await fetchAllElements();
+	const { result: importResult } = await executeImport(token, availableDestinations, "course");
 
 	if (!importResult) {
 		router.push({ name: "course-room-overview" });
@@ -393,6 +386,8 @@ const initializeComponent = async () => {
 };
 
 useTitle(buildPageTitle(t("pages.courseRooms.index.courses.active")));
+
+const hasImportToken = computed(() => route.query.import !== undefined);
 
 watch(
 	() => route.query.import,

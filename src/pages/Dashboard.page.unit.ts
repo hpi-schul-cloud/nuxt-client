@@ -2,6 +2,7 @@ import DashboardPage from "./Dashboard.page.vue";
 import { initializeAxios } from "@/utils/api";
 import {
 	createTestAppStore,
+	createTestEnvStore,
 	mockApi,
 	mockApiResponse,
 	mockAxiosInstance,
@@ -18,10 +19,10 @@ import {
 	ReleaseItemResponse,
 	RoleName,
 	RuntimeConfigApiInterface,
+	SchulcloudTheme,
 } from "@api-server";
 import { DashboardTasks } from "@feature-dashboard";
 import { createTestingPinia } from "@pinia/testing";
-import { WarningAlert } from "@ui-alert";
 import { flushPromises } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
@@ -141,6 +142,30 @@ describe("DashboardPage", () => {
 		});
 	});
 
+	describe("teams-to-rooms warning", () => {
+		it("is visible and renders the expected content when not dbc", async () => {
+			createTestEnvStore({ SC_THEME: SchulcloudTheme.N21 });
+			const { wrapper } = setup();
+			await flushPromises();
+
+			const warningAlert = wrapper.findComponent("[data-testid='teams-to-rooms-migration-alert']");
+			expect(warningAlert.exists()).toBe(true);
+			expect(warningAlert.text()).toContain("loggedin.text.teamsToRooms");
+			expect(warningAlert.text()).toContain("loggedin.text.teamsToRooms.possibilities");
+			expect(warningAlert.text()).toContain("loggedin.text.teamsToRooms.migration");
+			expect(warningAlert.text()).toContain("loggedin.text.teamsToRooms.helpLink");
+		});
+
+		it("is not visible when dbc", async () => {
+			createTestEnvStore({ SC_THEME: SchulcloudTheme.DEFAULT });
+			const { wrapper } = setup();
+			await flushPromises();
+
+			const warningAlert = wrapper.findComponent("[data-testid='teams-to-rooms-migration-alert']");
+			expect(warningAlert.exists()).toBe(false);
+		});
+	});
+
 	describe("inMaintenanceOrMigrationText", () => {
 		it("shows migration warning for admin with IMPORT_USER_VIEW permission when school is in migration", async () => {
 			const { wrapper } = setup({
@@ -150,8 +175,9 @@ describe("DashboardPage", () => {
 			});
 			await flushPromises();
 
-			const warningAlert = wrapper.findComponent(WarningAlert);
+			const warningAlert = wrapper.findComponent("[data-testid='maintenance-migration-alert']");
 			expect(warningAlert.exists()).toBe(true);
+			expect(warningAlert.text()).toContain("loggedin.text.schoolInMigrationModeStarted");
 		});
 
 		it("shows maintenance warning for admin when school is in maintenance", async () => {
@@ -161,18 +187,21 @@ describe("DashboardPage", () => {
 			});
 			await flushPromises();
 
-			const warningAlert = wrapper.findComponent(WarningAlert);
+			const warningAlert = wrapper.findComponent("[data-testid='maintenance-migration-alert']");
 			expect(warningAlert.exists()).toBe(true);
+			expect(warningAlert.text()).toContain("loggedin.text.schoolInTransferPhaseStartNew");
 		});
 
-		it("does not show warning when school is neither in maintenance nor migration", async () => {
+		it("does not show maintenance or migration warning when school is neither in maintenance nor migration", async () => {
 			const { wrapper } = setup({
 				roleName: RoleName.ADMINISTRATOR,
 			});
 			await flushPromises();
 
-			const warningAlert = wrapper.findComponent(WarningAlert);
+			const warningAlert = wrapper.findComponent("[data-testid='maintenance-migration-alert']");
 			expect(warningAlert.exists()).toBe(false);
+			expect(wrapper.text()).not.toContain("loggedin.text.schoolInMigrationModeStarted");
+			expect(wrapper.text()).not.toContain("loggedin.text.schoolInTransferPhaseStartNew");
 		});
 	});
 });

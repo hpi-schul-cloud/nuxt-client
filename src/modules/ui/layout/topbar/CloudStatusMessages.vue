@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { StatusAlert } from "@/store/types/status-alert";
+import { StatusAlert } from "@/types/status-alert/status-alert";
 import { formatRecentOrActual } from "@/utils/date-time.utils";
 import { mdiAlertCircle, mdiInformation } from "@icons/material";
 
