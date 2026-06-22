@@ -21,6 +21,7 @@
 				:list="column.cards"
 				item-key="cardId"
 				tag="div"
+				:data-column-scroller="column.id"
 				:options="{
 					group: 'cards',
 					animation: 250,

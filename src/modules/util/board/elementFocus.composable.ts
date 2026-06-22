@@ -1,4 +1,6 @@
 import { logger } from "@util-logger";
+import { useResizeObserver } from "@vueuse/core";
+import { debounce } from "lodash-es";
 
 const ATTEMPTS_LIMIT = 10;
 const TIMEOUT_BETWEEN_ATTEMPTS = 100;
@@ -21,9 +23,37 @@ export const useElementFocus = () => {
 					return;
 				}
 
-				targetElement.scrollIntoView({ block: "center", inline: "center" });
-				targetElement.focus({ focusVisible: true });
-				resolve();
+				const column = targetElement.closest<HTMLElement>("[data-column-scroller]");
+				console.log(column);
+
+				if (!column) {
+					console.log("scroll here");
+					targetElement.scrollIntoView({ block: "center", inline: "center", behavior: "smooth" });
+					// targetElement.focus({ focusVisible: true });
+					resolve();
+					return;
+				}
+
+				let settled = false;
+
+				const debouncedFocus = debounce(() => {
+					if (settled) return;
+					settled = true;
+					stop();
+					window.addEventListener(
+						"scrollend",
+						() => {
+							console.log("with focus");
+							targetElement.focus({ focusVisible: true });
+							resolve();
+						},
+						{ once: true }
+					);
+					targetElement.scrollIntoView({ block: "center", inline: "center", behavior: "smooth" });
+				}, 200);
+
+				const { stop } = useResizeObserver(column, debouncedFocus);
+				debouncedFocus();
 			};
 
 			tryFocus();
