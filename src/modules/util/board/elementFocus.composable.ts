@@ -22,7 +22,7 @@ export const useElementFocus = () => {
 				}
 
 				targetElement.scrollIntoView({ block: "center", inline: "center" });
-				targetElement.focus();
+				targetElement.focus({ focusVisible: true });
 				resolve();
 			};
 
