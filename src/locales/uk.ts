@@ -255,6 +255,7 @@ export default {
 	"common.words.courses": "Мій курс",
 	"common.words.draft": "Чернетка",
 	"common.words.drafts": "Чернетки",
+	"common.words.external": "зовнішній",
 	"common.words.languages.de": "Німецька",
 	"common.words.languages.en": "Англійська",
 	"common.words.languages.es": "Іспанська",
