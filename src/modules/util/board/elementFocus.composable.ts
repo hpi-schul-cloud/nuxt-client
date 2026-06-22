@@ -23,36 +23,19 @@ export const useElementFocus = () => {
 					return;
 				}
 
-				const column = targetElement.closest<HTMLElement>("[data-column-scroller]");
-				console.log(column);
+				const scrollerElement = targetElement.closest<HTMLElement>("[data-column-scroller]");
 
-				if (!column) {
-					console.log("scroll here");
-					targetElement.scrollIntoView({ block: "center", inline: "center", behavior: "smooth" });
-					// targetElement.focus({ focusVisible: true });
-					resolve();
-					return;
-				}
-
-				let settled = false;
-
+				// Actually mitigating that it's very hard to keep track of the loading process of the board/card/card-elements.
+				// Therefore, it would still be possible to scroll to target, but not ending up seeing it, because of async loading content.
+				// Future: Have websocket transmission only. Keep track of board-column finished loading to start scrolling.
+				// --> loadData --> renderContent --> nextTick(focusElement)
 				const debouncedFocus = debounce(() => {
-					if (settled) return;
-					settled = true;
-					stop();
-					window.addEventListener(
-						"scrollend",
-						() => {
-							console.log("with focus");
-							targetElement.focus({ focusVisible: true });
-							resolve();
-						},
-						{ once: true }
-					);
 					targetElement.scrollIntoView({ block: "center", inline: "center", behavior: "smooth" });
+					targetElement.focus({ focusVisible: true, preventScroll: true });
+					stop();
 				}, 200);
 
-				const { stop } = useResizeObserver(column, debouncedFocus);
+				const { stop } = useResizeObserver(scrollerElement, debouncedFocus);
 				debouncedFocus();
 			};
 

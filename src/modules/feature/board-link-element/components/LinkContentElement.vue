@@ -7,11 +7,9 @@
 		:variant="outlined"
 		:ripple="false"
 		:aria-label="ariaLabel"
-		v-bind="isEditMode ? {} : { href: sanitizedUrl, target: target, rel: 'noopener noreferrer' }"
-		@keydown.enter.space="onClick"
+		v-bind="linkProps"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
-		@click="onClick"
 	>
 		<LinkContentElementDisplay
 			v-if="!isEditMode && computedElement.content.url"
@@ -53,8 +51,7 @@ import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
-import { useElementFocus } from "@util-board";
-import { computed, ComputedRef, PropType, ref, toRef } from "vue";
+import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -96,16 +93,15 @@ const sanitizedUrl = computed(() =>
 	computedElement.value.content.url ? sanitizeUrl(computedElement.value.content.url) : ""
 );
 
-const target: ComputedRef<string> = computed(() => {
-	if (computedElement.value.content.url) {
-		const url = new URL(sanitizedUrl.value);
+const linkProps = computed(() => {
+	if (props.isEditMode) return {};
 
-		if (url.host === window.location.host && url.pathname === window.location.pathname) {
-			return "_self";
-		}
+	const url = new URL(sanitizedUrl.value);
+	if (url.host === window.location.host && url.pathname === window.location.pathname && url.hash) {
+		return { to: { hash: url.hash } };
 	}
 
-	return "_blank";
+	return { href: sanitizedUrl.value, target: "_blank", rel: "noopener noreferrer" };
 });
 
 const isHidden = computed(() => !props.isEditMode && !computedElement.value.content.url);
@@ -167,26 +163,6 @@ const onDelete = async () => {
 	const shouldDelete = await askDeletionForType("components.cardElement.LinkElement");
 	if (shouldDelete) {
 		emit("delete:element", element.value.id);
-	}
-};
-
-const { focusNodeFromHash } = useElementFocus();
-const isInternalHashLink = computed(() => {
-	if (!sanitizedUrl.value) return false;
-	try {
-		const url = new URL(sanitizedUrl.value);
-		return url.host === window.location.host && url.pathname === window.location.pathname && !!url.hash;
-	} catch {
-		return false;
-	}
-});
-
-const onClick = (event: MouseEvent | KeyboardEvent) => {
-	if (isInternalHashLink.value) {
-		event.preventDefault();
-		const url = new URL(sanitizedUrl.value);
-		window.history.replaceState(null, "", url.hash);
-		focusNodeFromHash();
 	}
 };
 </script>
