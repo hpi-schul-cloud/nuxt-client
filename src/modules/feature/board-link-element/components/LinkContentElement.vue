@@ -44,6 +44,7 @@ import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { convertDownloadToPreviewUrl, isPreviewPossible } from "@/utils/fileHelper";
+import { useTryCatchSync } from "@/utils/try-catch.utils";
 import { FileRecordParentType } from "@api-file-storage";
 import { LinkElementResponse } from "@api-server";
 import { sanitizeUrl } from "@braintree/sanitize-url";
@@ -96,8 +97,8 @@ const sanitizedUrl = computed(() =>
 const linkProps = computed(() => {
 	if (props.isEditMode) return {};
 
-	const url = new URL(sanitizedUrl.value);
-	if (url.host === window.location.host && url.pathname === window.location.pathname && url.hash) {
+	const [error, url] = useTryCatchSync(() => new URL(sanitizedUrl.value));
+	if (!error && url.host === window.location.host && url.pathname === window.location.pathname && url.hash) {
 		return { to: { hash: url.hash } };
 	}
 

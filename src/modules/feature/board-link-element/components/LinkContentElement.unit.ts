@@ -429,10 +429,11 @@ describe("LinkContentElement", () => {
 					return { wrapper };
 				};
 
-				it("should open in the same tab", () => {
+				it("should use vue-router navigation with the hash", () => {
 					const { wrapper } = setup();
+					const linkElement = wrapper.findComponent({ ref: "linkContentElement" });
 
-					expect(wrapper.findComponent('[data-testid="board-link-element"]').attributes("target")).toEqual("_self");
+					expect(linkElement.props("to")).toEqual({ hash: "#card-12345" });
 				});
 			});
 		});
