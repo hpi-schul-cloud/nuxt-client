@@ -311,6 +311,8 @@ export const useBoardRestApi = () => {
 	// this unused function is added to make sure that the same name is used in both socketApi and restApi
 	const reloadBoardSuccess = (action: ReturnType<typeof BoardActions.reloadBoardSuccess>) => action;
 
+	const cancelSocketReconnection = (): void => undefined;
+
 	// this unused function is added to make sure that the same name is used in both socketApi and restApi
 	// eslint-disable-next-line arrow-body-style
 	const disconnectSocketRequest = (): void => {
@@ -319,6 +321,7 @@ export const useBoardRestApi = () => {
 
 	return {
 		connected: ref(true),
+		cancelSocketReconnection,
 		fetchBoardRequest,
 		createCardRequest,
 		createColumnRequest,
