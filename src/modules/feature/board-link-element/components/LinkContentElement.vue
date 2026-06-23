@@ -111,10 +111,18 @@ const target: ComputedRef<string> = computed(() => {
 const isHidden = computed(() => !props.isEditMode && !computedElement.value.content.url);
 
 const { getMetaTags } = useMetaTagExtractorApi();
-const { uploadFromUrl } = useFileStorageApi();
+const { upload } = useFileStorageApi();
 
 const createPreviewImage = async (externalImageUrl: string): Promise<string | undefined> => {
-	const uploadedFileRecord = await uploadFromUrl(externalImageUrl, element.value.id, FileRecordParentType.BOARDNODES);
+	const response = await fetch(externalImageUrl, {
+		mode: "cors",
+	});
+	const blob = await response.blob();
+	const { pathname } = new URL(externalImageUrl);
+	const fileName = pathname.substring(pathname.lastIndexOf("/") + 1) || "file";
+	const file = new File([blob], fileName, { type: blob.type });
+
+	const uploadedFileRecord = await upload(file, element.value.id, FileRecordParentType.BOARDNODES);
 
 	if (uploadedFileRecord?.previewStatus && isPreviewPossible(uploadedFileRecord.previewStatus)) {
 		return convertDownloadToPreviewUrl(uploadedFileRecord.url);
