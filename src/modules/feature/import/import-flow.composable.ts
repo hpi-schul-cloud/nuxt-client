@@ -40,6 +40,17 @@ export const useImportFlow = () => {
 		return { result: result?.data, success, error };
 	};
 
+	const importToDestinations = (tokenInfo: ShareTokenInfoResponse, newName: string, destinations: { id: string }[]) =>
+		Promise.all(
+			destinations.map(async (destination) => {
+				const { success, error } = await importShareToken(tokenInfo, { newName, destinationId: destination.id });
+				return { success, error, destination };
+			})
+		);
+
+	const importWithoutDestination = (tokenInfo: ShareTokenInfoResponse, newName: string) =>
+		importShareToken(tokenInfo, { newName });
+
 	const executeImport = async (
 		token: string,
 		availableDestinations: MaybeRefOrGetter<ImportDestinationItem[]>,
@@ -69,10 +80,9 @@ export const useImportFlow = () => {
 		if (!completed) return { success: false, error: new Error("Import cancelled") };
 		const { newName, destinations } = data;
 
-		if (destinations.length <= 1) {
-			const destinationId = destinations[0]?.id;
-			const { result, success, error } = await withGlobalLoadingState(
-				() => importShareToken(validationResult, { newName, destinationId }),
+		if (destinations.length === 0) {
+			const { success, error } = await withGlobalLoadingState(
+				() => importWithoutDestination(validationResult, newName),
 				t("components.molecules.import.options.loadingMessage")
 			);
 
@@ -81,30 +91,22 @@ export const useImportFlow = () => {
 			}
 
 			return {
-				result: result ? { ...result, destinations } : result,
+				result: success ? { destinations } : undefined,
 				success,
 				error: error ? new Error("Import failed", { cause: error }) : undefined,
 			};
 		}
 
-		// Multiple destinations: import to each room
-		const importResults = await withGlobalLoadingState(async () => {
-			const results = [];
-			for (const destination of destinations) {
-				const { result, success, error } = await importShareToken(validationResult, {
-					newName,
-					destinationId: destination.id,
-				});
-				results.push({ result, success, error, destination });
-			}
-			return results;
-		}, t("components.molecules.import.options.loadingMessage"));
+		const importResults = await withGlobalLoadingState(
+			() => importToDestinations(validationResult, newName, destinations),
+			t("components.molecules.import.options.loadingMessage")
+		);
 
 		for (const importResult of importResults) {
 			if (importResult.success) {
-				const destinationName =
-					toValue(availableDestinations).find((d) => d.id === importResult.destination.id)?.name ?? "";
-				notifySuccess(t("components.molecules.import.options.success", { name: `${newName} → ${destinationName}` }));
+				const destinationName = availableItems.find((d) => d.id === importResult.destination.id)?.name;
+				const name = destinationName ? `${newName} → ${destinationName}` : newName;
+				notifySuccess(t("components.molecules.import.options.success", { name }));
 			}
 		}
 
