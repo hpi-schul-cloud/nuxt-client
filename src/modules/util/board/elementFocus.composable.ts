@@ -33,7 +33,6 @@ export const useElementFocus = () => {
 					targetElement.scrollIntoView({ block: "center", inline: "center", behavior: "smooth" });
 					targetElement.focus({ focusVisible: true, preventScroll: true });
 					stop();
-					resolve();
 				}, 200);
 
 				const { stop } = useResizeObserver(scrollerElement, debouncedFocus);

@@ -424,15 +424,31 @@ describe("LinkContentElement", () => {
 						}),
 					});
 
+					const domElementMock = {
+						scrollIntoView: vi.fn(),
+						focus: vi.fn(),
+					} as unknown as HTMLElement;
+					vi.spyOn(document, "querySelector").mockReturnValue(domElementMock);
+
 					const { wrapper } = setupWrapper({ content: linkElementContent, isEditMode: false });
 
-					return { wrapper };
+					return { wrapper, domElementMock };
 				};
 
 				it("should open in the same tab", () => {
 					const { wrapper } = setup();
 
 					expect(wrapper.findComponent('[data-testid="board-link-element"]').attributes("target")).toEqual("_self");
+				});
+
+				it("should scroll to and focus the element when clicked", async () => {
+					const { wrapper, domElementMock } = setup();
+
+					await wrapper.findComponent('[data-testid="board-link-element"]').trigger("click");
+					vi.runAllTimers();
+
+					expect(domElementMock.scrollIntoView).toHaveBeenCalledWith({ block: "center", inline: "center" });
+					expect(domElementMock.focus).toHaveBeenCalled();
 				});
 			});
 		});

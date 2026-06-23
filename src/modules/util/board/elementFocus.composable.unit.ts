@@ -32,7 +32,10 @@ describe("elementFocus.composable", () => {
 			focusNodeFromHash();
 			vi.runAllTimers();
 
-			expect(domElementMock.scrollIntoView).toHaveBeenCalled();
+			expect(domElementMock.scrollIntoView).toHaveBeenCalledWith({
+				block: "center",
+				inline: "center",
+			});
 			expect(domElementMock.focus).toHaveBeenCalled();
 		});
 	});
@@ -43,7 +46,7 @@ describe("elementFocus.composable", () => {
 				get: () => ({ hash: "" }),
 			});
 
-			const { focusNodeFromHash } = useElementFocus();
+			const { focusNodeFromHash } = setup();
 			await expect(focusNodeFromHash()).resolves.toBeUndefined();
 		});
 	});
