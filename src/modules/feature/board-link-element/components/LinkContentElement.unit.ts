@@ -12,7 +12,6 @@ import { FileRecordParentType } from "@api-file-storage";
 import { LinkElementContent, LinkElementResponse } from "@api-server";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useFileStorageApi } from "@data-file";
-import { useCourseApi } from "@data-room";
 import { LinkContentElement } from "@feature-board-link-element";
 import { BoardMenu } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";

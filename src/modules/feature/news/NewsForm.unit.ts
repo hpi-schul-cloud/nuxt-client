@@ -31,12 +31,10 @@ vi.mock("@/plugins/i18n");
 
 describe("NewsForm", () => {
 	let wrapper: VueWrapper<InstanceType<typeof NewsForm>>;
-	let askConfirmationSpy: MockInstance;
 	let askCancelSpy: MockInstance;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		askConfirmationSpy = vi.spyOn(confirmDialogUtils, "askConfirmation");
 		askCancelSpy = vi.spyOn(confirmDialogUtils, "askCancel");
 	});
 
