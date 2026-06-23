@@ -21,9 +21,16 @@
 						<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
 						{{ displayedDateText }}
 					</div>
-					<div class="d-flex align-center text-subtitle" data-testid="news-creator">
+					<div class="d-flex align-center text-subtitle mr-3" data-testid="news-creator">
 						<VIcon :icon="mdiAccountCircleOutline" size="sm" class="mr-1" />
 						{{ creator }}
+					</div>
+
+					<div class="d-flex align-center text-subtitle" data-testid="news-creator">
+						<template v-if="newsInstance.targetModel === 'teams'">
+							<VIcon :icon="mdiAccountGroupOutline" size="sm" class="mr-1" />
+							<a :href="`/teams/${newsInstance.targetId}`">{{ newsInstance.target.name }}</a>
+						</template>
 					</div>
 				</div>
 				<VDivider class="mb-4" />
@@ -70,7 +77,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useNews, useNewsActions } from "@data-access";
 import { notifySuccess, useAppStoreRefs } from "@data-app";
 import { RenderHTML } from "@feature-render-html";
-import { mdiAccountCircleOutline, mdiClockOutline } from "@icons/material";
+import { mdiAccountCircleOutline, mdiAccountGroupOutline, mdiClockOutline } from "@icons/material";
 import { SvsLoading } from "@ui-containers";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
@@ -78,7 +85,6 @@ import { useTitle } from "@vueuse/core";
 import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();

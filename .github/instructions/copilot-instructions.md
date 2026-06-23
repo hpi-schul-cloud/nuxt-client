@@ -6,7 +6,6 @@ This project is a Vue/Nuxt client for Schul-Cloud, with a modular architecture a
 
 - **Entry Point:** `src/main.ts` bootstraps the app; `App.vue` is the root component.
 - **Component Structure:** Organized by atomic design (`src/components/atoms`, `molecules`, `organisms`, etc.).
-- **State Management:** Uses Vuex store in `src/store/` (see its README for Nuxt-specific auto-activation).
 - **Theming:** Themes and assets are in `src/assets/` and `public/themes/`. Images go in `src/assets/img/`, fonts in `src/assets/fonts/`.
 - **Config & Plugins:** Vite config in `vite.config.ts`, Nuxt/Vue plugins in `src/plugins/`, and custom Vite plugins in `config/vite/`.
 - **API Integration:** API modules are in `src/commonCartridgeApi/`, `fileStorageApi/`, `h5pEditorApi/`, and `serverApi/`.
@@ -24,7 +23,6 @@ This project is a Vue/Nuxt client for Schul-Cloud, with a modular architecture a
 - **Komponenten-Props bevorzugen:** Passe nach Möglichkeit direkt die Props von Vuetify-Komponenten an, um gewünschtes Verhalten oder Styling zu erreichen. Vermeide CSS-Workarounds, wenn eine Lösung über Properties möglich ist.
 - **Assets:** Use `/assets` for images and fonts to support theming. Avoid placing images in `/public` unless strictly static.
 - **Logos:** Only logos in `src/assets/img/logo/` (see its README).
-- **Vuex:** Store modules auto-activate by file presence (Nuxt convention).
 - **Testing:** Place unit tests next to source files with `.unit.ts` suffix, or in `tests/unit/`.
 - **External Docs:** See [project documentation](https://documentation.dbildungscloud.dev/docs/category/nuxt-client) for deeper details.
 

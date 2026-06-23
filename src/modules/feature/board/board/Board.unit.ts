@@ -2,8 +2,8 @@ import MoveCardDialog from "../card/MoveCardDialog.vue";
 import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -1131,6 +1131,22 @@ describe("Board", () => {
 	});
 
 	describe("showLoadingDialog", () => {
+		it("should show loading dialog when connection drops before initial startup timeout elapsed", async () => {
+			const { wrapperVM, boardStore } = setup();
+
+			boardStore.isConnected = true;
+			await nextTick();
+
+			await vi.advanceTimersByTimeAsync(500);
+			boardStore.isConnected = false;
+			await nextTick();
+
+			await vi.advanceTimersByTimeAsync(3100);
+			await nextTick();
+
+			expect(wrapperVM.showLoadingDialog).toBe(true);
+		});
+
 		it("should not show loading dialog when isConnected is true", async () => {
 			const { wrapper, boardStore } = setup();
 

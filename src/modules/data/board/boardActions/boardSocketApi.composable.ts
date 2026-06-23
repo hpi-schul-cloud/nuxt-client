@@ -21,8 +21,8 @@ import {
 	UpdateReaderCanEditRequestPayload,
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { CreateCardBodyParamsRequiredEmptyElements } from "@api-server";
 import { useAppStore } from "@data-app";
 
@@ -109,7 +109,8 @@ export const useBoardSocketApi = () => {
 		);
 	};
 
-	const { emitOnSocket, emitWithAck, disconnectSocket, connected } = useSocketConnection(dispatch);
+	const { emitOnSocket, emitWithAck, cancelSocketReconnection, disconnectSocket, connected } =
+		useSocketConnection(dispatch);
 
 	const createCardRequest = (payload: CreateCardRequestPayload) => {
 		emitOnSocket("create-card-request", {
@@ -220,6 +221,7 @@ export const useBoardSocketApi = () => {
 
 	return {
 		connected,
+		cancelSocketReconnection,
 		dispatch,
 		createCardRequest,
 		createColumnRequest,

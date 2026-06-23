@@ -71,6 +71,7 @@ export default {
 	"common.labels.complete.lastName": "Vollständiger Nachname",
 	"common.labels.consent": "Einverständnis",
 	"common.labels.course": "Kurs",
+	"common.labels.team": "Team",
 	"common.labels.createAt": "Erstellt:",
 	"common.labels.createdAt": "Erstellungsdatum",
 	"common.labels.date": "Datum",
@@ -160,7 +161,7 @@ export default {
 	"common.notifications.errors.notDeleted":
 		"{type} konnte nicht gelöscht werden. | {type} konnten nicht gelöscht werden.",
 	"common.notifications.errors.notDuplicated":
-		"{type} konnte nicht dupliziert werden. | {type} konnten nicht dupliziert werden.",
+		"{type} konnte nicht oder nicht vollständig dupliziert werden. | {type} konnten nicht oder nicht vollständig dupliziert werden.",
 	"common.notifications.errors.notLoaded": "{type} konnte nicht geladen werden. | {type} konnten nicht geladen werden.",
 	"common.notifications.errors.notMoved":
 		"{type} konnte nicht verschoben werden. | {type} konnten nicht verschoben werden.",
@@ -504,7 +505,8 @@ export default {
 		"Die Anzahl der Dateien überschreitet das zulässige Limit von {fileLimitPerParent} Dateien.",
 	"components.board.notifications.errors.notCreated": "{type} konnte nicht erstellt werden.",
 	"components.board.notifications.errors.notDeleted": "{type} konnte nicht gelöscht werden.",
-	"components.board.notifications.errors.notDuplicated": "{type} konnte nicht dupliziert werden.",
+	"components.board.notifications.errors.notDuplicated":
+		"{type} konnte nicht oder nicht vollständig dupliziert werden.",
 	"components.board.notifications.errors.notLoaded": "{type} konnte nicht geladen werden.",
 	"components.board.notifications.errors.notMoved": "{type} konnte nicht verschoben werden.",
 	"components.board.notifications.errors.notUpdated": "Die Änderungen konnten nicht gespeichert werden.",
@@ -1007,6 +1009,9 @@ export default {
 	"mixins.typeMeta.types.image": "Bild",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Webseite",
+	"loggedin.text.backupFeatures":
+		"Sichern Sie Ihre Inhalte der Cloud und nutzen Sie auch die neue Funktion zum Export von Kursen. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "Weitere Informationen und Hilfestellungen sind hier zu finden.",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte kontaktiere deinen Schul-Admin!",
 	"loggedin.text.schoolInTransferPhaseStartNew":

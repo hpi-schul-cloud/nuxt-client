@@ -17,11 +17,12 @@ import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useSharedEditMode } from "./edit-mode.composable";
 import { FileRecordParent } from "@/types/file/File";
-import { CardResponse, ContentElementType, PreferredToolResponse, ToolContextType } from "@api-server";
-import { notifyInfo } from "@data-app";
+import { CardResponse, ContentElementType, CopyStatusEnum, PreferredToolResponse, ToolContextType } from "@api-server";
+import { notifyError, notifyInfo } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { CollaboraFileType, useFileStorageApi } from "@data-file";
 import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
+import { useErrorHandler } from "@util-error-handling";
 import { defineStore } from "pinia";
 import { nextTick, Ref, ref } from "vue";
 
@@ -41,6 +42,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	const { setFocus, forceFocus } = useBoardFocusHandler();
 	const { setEditModeId, editModeId } = useSharedEditMode();
 	const { uploadCollaboraFile } = useFileStorageApi();
+	const { generateErrorText } = useErrorHandler();
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
@@ -102,9 +104,17 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const duplicateCardSuccess = (payload: DuplicateCardSuccessPayload) => {
 		const { duplicatedCard } = payload;
-		if (duplicatedCard.id) {
+
+		if (payload.isOwnAction === true) {
+			if (payload.status !== CopyStatusEnum.SUCCESS) {
+				notifyError(generateErrorText("notDuplicated", "boardCard"));
+			}
+			if (!duplicatedCard.id) {
+				return;
+			}
+
 			cards.value[duplicatedCard.id] = duplicatedCard;
-			if (payload.isOwnAction === true && hasRelevantContentForDuplicationWarning(duplicatedCard)) {
+			if (hasRelevantContentForDuplicationWarning(duplicatedCard)) {
 				notifyInfo("components.board.notifications.info.cardDuplicated");
 			}
 		}

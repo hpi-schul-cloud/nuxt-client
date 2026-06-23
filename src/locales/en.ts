@@ -69,6 +69,7 @@ export default {
 	"common.labels.complete.lastName": "Full surname",
 	"common.labels.consent": "Consent",
 	"common.labels.course": "Course",
+	"common.labels.team": "Team",
 	"common.labels.createAt": "Created:",
 	"common.labels.createdAt": "Created At",
 	"common.labels.date": "Date",
@@ -148,7 +149,7 @@ export default {
 	"common.notifications.errors.notCreated": "{type} could not be created.",
 	"common.notifications.errors.notSaved": "{type} could not be saved.",
 	"common.notifications.errors.notDeleted": "{type} could not be deleted.",
-	"common.notifications.errors.notDuplicated": "{type} could not be duplicated.",
+	"common.notifications.errors.notDuplicated": "{type} could not be duplicated or was only partially duplicated.",
 	"common.notifications.errors.notLoaded": "{type} could not be loaded.",
 	"common.notifications.errors.notMoved": "{type} could not be moved.",
 	"common.notifications.errors.notExited": "{type} could not be exited.",
@@ -490,7 +491,8 @@ export default {
 		"The number of files exceeds the permitted limit of {fileLimitPerParent} files.",
 	"components.board.notifications.errors.notCreated": "{type} could not be created.",
 	"components.board.notifications.errors.notDeleted": "{type} could not be deleted.",
-	"components.board.notifications.errors.notDuplicated": "{type} could not be duplicated.",
+	"components.board.notifications.errors.notDuplicated":
+		"{type} could not be duplicated or was only partially duplicated.",
 	"components.board.notifications.errors.notLoaded": "{type} could not be loaded.",
 	"components.board.notifications.errors.notMoved": "{type} could not be moved.",
 	"components.board.notifications.errors.notUpdated": "Your changes could not be saved.",
@@ -981,6 +983,9 @@ export default {
 	"mixins.typeMeta.types.image": "Image",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Website",
+	"loggedin.text.backupFeatures":
+		"Back up your cloud content and also use the new function for exporting courses. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "More information and instructions can be found here.",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"The school is in the transfer phase to the new school year. No classes and users can be created. Please contact the school administrator!",
 	"loggedin.text.schoolInTransferPhaseStartNew":

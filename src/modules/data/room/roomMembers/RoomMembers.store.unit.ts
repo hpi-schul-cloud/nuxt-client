@@ -1,5 +1,5 @@
 import { useI18nGlobal } from "@/plugins/i18n";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { initializeAxios } from "@/utils/api";
 import {
 	axiosErrorFactory,

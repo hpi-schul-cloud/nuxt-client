@@ -18,7 +18,8 @@ import {
 	UpdateReaderCanEditRequestPayload,
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
+import { CopyStatusEnum } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { BoardObjectType, ErrorType, useErrorHandler } from "@util-error-handling";
@@ -128,7 +129,12 @@ export const useBoardRestApi = () => {
 			const duplicatedColumn = await duplicateColumnCall(payload.columnId);
 
 			if (duplicatedColumn.id) {
-				boardStore.duplicateColumnSuccess({ columnId: payload.columnId, duplicatedColumn, isOwnAction: true });
+				boardStore.duplicateColumnSuccess({
+					columnId: payload.columnId,
+					duplicatedColumn,
+					status: CopyStatusEnum.SUCCESS,
+					isOwnAction: true,
+				});
 			}
 		} catch (error) {
 			handleError(error, {
@@ -311,6 +317,8 @@ export const useBoardRestApi = () => {
 	// this unused function is added to make sure that the same name is used in both socketApi and restApi
 	const reloadBoardSuccess = (action: ReturnType<typeof BoardActions.reloadBoardSuccess>) => action;
 
+	const cancelSocketReconnection = (): void => undefined;
+
 	// this unused function is added to make sure that the same name is used in both socketApi and restApi
 	// eslint-disable-next-line arrow-body-style
 	const disconnectSocketRequest = (): void => {
@@ -319,6 +327,7 @@ export const useBoardRestApi = () => {
 
 	return {
 		connected: ref(true),
+		cancelSocketReconnection,
 		fetchBoardRequest,
 		createCardRequest,
 		createColumnRequest,

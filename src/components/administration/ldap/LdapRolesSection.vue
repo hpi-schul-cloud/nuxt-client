@@ -21,7 +21,7 @@
 			</p>
 		</div>
 		<VTextField
-			:model-value="modelValue.member"
+			:model-value="member"
 			:disabled="groupOption === 'group'"
 			:label="t('pages.administration.ldapEdit.roles.labels.member')"
 			:placeholder="t('pages.administration.ldapEdit.roles.placeholder.member')"
@@ -105,7 +105,8 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
-const groupOption = computed(() => props.modelValue.groupOption || "undefined");
+const groupOption = computed(() => props.modelValue.groupOption || "group");
+const member = computed(() => props.modelValue.member || "memberOf");
 
 const rules = computed(() => {
 	if (groupOption.value === "group") {
