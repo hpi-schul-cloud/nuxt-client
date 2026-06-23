@@ -1,4 +1,4 @@
-import { ImportDestinationItem } from "./types";
+import { ImportDestination, ImportDestinationItem } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useImportContent } from "@/composables/copy-content.composable";
 import { $axios } from "@/utils/api";
@@ -40,65 +40,40 @@ export const useImportFlow = () => {
 		return { result: result?.data, success, error };
 	};
 
-	const importToDestinations = (tokenInfo: ShareTokenInfoResponse, newName: string, destinations: { id: string }[]) =>
-		Promise.all(
-			destinations.map(async (destination) => {
-				const { success, error } = await importShareToken(tokenInfo, { newName, destinationId: destination.id });
-				return { success, error, destination };
-			})
+	const importWithoutDestination = async (tokenInfo: ShareTokenInfoResponse, newName: string) => {
+		const { success, error } = await withGlobalLoadingState(
+			() => importShareToken(tokenInfo, { newName }),
+			t("components.molecules.import.options.loadingMessage")
 		);
 
-	const importWithoutDestination = (tokenInfo: ShareTokenInfoResponse, newName: string) =>
-		importShareToken(tokenInfo, { newName });
+		if (success) {
+			notifySuccess(t("components.molecules.import.options.success", { name: newName }));
+		}
 
-	const executeImport = async (
-		token: string,
-		availableDestinations: MaybeRefOrGetter<ImportDestinationItem[]>,
-		destinationType = "room"
+		return {
+			result: success ? { destinations: [] as ImportDestination[] } : undefined,
+			success,
+			error: error ? new Error("Import failed", { cause: error }) : undefined,
+		};
+	};
+
+	const importToDestinations = async (
+		tokenInfo: ShareTokenInfoResponse,
+		newName: string,
+		destinations: ImportDestination[],
+		availableItems: ImportDestinationItem[]
 	) => {
-		const { result: validationResult, error: validationError } = await validateShareToken(token);
-
-		if (!validationResult) {
-			return { success: false, error: new Error("Validation failed", { cause: validationError }) };
-		}
-		shareTokenInfo.value = validationResult;
-
-		const availableItems = toValue(availableDestinations);
-		const isCard = validationResult.parentType === ShareTokenInfoResponseParentType.CARD;
-		const { completed, data } = await (isCard
-			? openDialog("importCard", {
-					shareTokenInfo: validationResult,
-					availableDestinations: availableItems,
-					destinationType: "column",
-				})
-			: openDialog("import", {
-					shareTokenInfo: validationResult,
-					availableDestinations: availableItems,
-					destinationType: destinationType === "room" ? "room" : "course",
-				}));
-
-		if (!completed) return { success: false, error: new Error("Import cancelled") };
-		const { newName, destinations } = data;
-
-		if (destinations.length === 0) {
-			const { success, error } = await withGlobalLoadingState(
-				() => importWithoutDestination(validationResult, newName),
-				t("components.molecules.import.options.loadingMessage")
-			);
-
-			if (success) {
-				notifySuccess(t("components.molecules.import.options.success", { name: newName }));
-			}
-
-			return {
-				result: success ? { destinations } : undefined,
-				success,
-				error: error ? new Error("Import failed", { cause: error }) : undefined,
-			};
-		}
-
 		const importResults = await withGlobalLoadingState(
-			() => importToDestinations(validationResult, newName, destinations),
+			() =>
+				Promise.all(
+					destinations.map(async (destination) => {
+						const { success, error } = await importShareToken(tokenInfo, {
+							newName,
+							destinationId: destination.id,
+						});
+						return { success, error, destination };
+					})
+				),
 			t("components.molecules.import.options.loadingMessage")
 		);
 
@@ -116,6 +91,42 @@ export const useImportFlow = () => {
 			success: allSuccessful,
 			error: allSuccessful ? undefined : new Error("Some imports failed"),
 		};
+	};
+
+	const executeImport = async (
+		token: string,
+		availableDestinations: MaybeRefOrGetter<ImportDestinationItem[]>,
+		destinationType = "room"
+	) => {
+		const { result: validationResult, error: validationError } = await validateShareToken(token);
+
+		if (!validationResult) {
+			return { success: false, error: new Error("Validation failed", { cause: validationError }) };
+		}
+		shareTokenInfo.value = validationResult;
+
+		const availableDestinationsItems = toValue(availableDestinations);
+		const isCard = validationResult.parentType === ShareTokenInfoResponseParentType.CARD;
+		const { completed, data } = await (isCard
+			? openDialog("importCard", {
+					shareTokenInfo: validationResult,
+					availableDestinations: availableDestinationsItems,
+					destinationType: "column",
+				})
+			: openDialog("import", {
+					shareTokenInfo: validationResult,
+					availableDestinations: availableDestinationsItems,
+					destinationType: destinationType === "room" ? "room" : "course",
+				}));
+
+		if (!completed) return { success: false, error: new Error("Import cancelled") };
+		const { newName, destinations } = data;
+
+		if (destinations.length === 0) {
+			return importWithoutDestination(validationResult, newName);
+		} else {
+			return importToDestinations(validationResult, newName, destinations, availableDestinationsItems);
+		}
 	};
 
 	return {
