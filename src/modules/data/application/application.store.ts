@@ -5,6 +5,7 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { $axios } from "@/utils/api";
 import {
+	AuthenticationApiFactory,
 	LanguageType,
 	MeApiFactory,
 	MeResponse,
@@ -28,8 +29,6 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 };
 
 const DEFAULT_TIMEOUT_SECONDS = 2 * 60 * 60; // 2 hours
-const JWT_TIMER_ENDPOINT = "/v1/accounts/jwtTimer";
-
 const sessionTimeoutTimestamp = ref<number | null>(null);
 
 const BROADCAST_CHANNEL_NAME = "user-session-channel";
@@ -42,6 +41,7 @@ const isLanguageType = (lang: string | undefined): lang is LanguageType =>
 export const useAppStore = defineStore("applicationStore", () => {
 	const meApi = MeApiFactory(undefined, "/v3", $axios);
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
+	const authApi = AuthenticationApiFactory(undefined, "/v3", $axios);
 
 	const isLoggedIn = ref(false);
 	const applicationError = ref<{
@@ -106,10 +106,10 @@ export const useAppStore = defineStore("applicationStore", () => {
 	const extendSession = async () => {
 		try {
 			// extend the session on the server
-			const result = await $axios.post(JWT_TIMER_ENDPOINT);
-			setTimerSeconds(result.data.ttl);
+			const result = await authApi.loginControllerExtendSession();
+			setTimerSeconds(result.data.expiresInSeconds);
 			notifySuccess("feature-autoLogout.message.extending-session-success");
-			postTimerSeconds(result.data.ttl);
+			postTimerSeconds(result.data.expiresInSeconds);
 		} catch {
 			logoutWithoutBroadcast("/logout?auto-logout=true");
 		}
