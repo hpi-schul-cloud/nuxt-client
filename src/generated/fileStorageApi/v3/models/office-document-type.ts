@@ -20,9 +20,9 @@
  * @enum {string}
  */
 export enum OfficeDocumentType {
-    WORDPROCESSINGML_DOCUMENT = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    SPREADSHEETML_SHEET = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    PRESENTATIONML_PRESENTATION = 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    DOCX = 'docx',
+    XLSX = 'xlsx',
+    PPTX = 'pptx'
 }
 
 
