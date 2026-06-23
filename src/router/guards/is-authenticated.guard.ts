@@ -2,7 +2,7 @@ import { getLoginUrlWithRedirect } from "../login-redirect-url";
 import { useAppStore } from "@data-app";
 import { RouteLocationNormalized } from "vue-router";
 
-export const isAuthenticatedGuard = (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
+export const isAuthenticatedGuard = (to: RouteLocationNormalized) => {
 	const userIsLoggedIn = useAppStore().isLoggedIn;
 
 	if (userIsLoggedIn || isRoutePublic(to)) {

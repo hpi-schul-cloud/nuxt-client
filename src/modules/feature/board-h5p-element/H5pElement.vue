@@ -48,9 +48,9 @@
 </template>
 
 <script setup lang="ts">
-import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import H5pElementMenu from "./H5pElementMenu.vue";
 import H5PImage from "@/assets/img/h5p/default_h5p_display.svg";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict } from "@/utils/inject";
 import { decodeHtmlEntities } from "@/utils/textFormatting";
