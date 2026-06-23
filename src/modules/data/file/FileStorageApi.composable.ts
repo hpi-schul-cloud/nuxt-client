@@ -86,13 +86,13 @@ export const useFileStorageApi = () => {
 
 	const getOfficeDocumentType = (collaboraFileType: CollaboraFileType): OfficeDocumentType => {
 		if (collaboraFileType === CollaboraFileType.Text) {
-			return OfficeDocumentType.WORDPROCESSINGML_DOCUMENT;
+			return OfficeDocumentType.DOCX;
 		}
 		if (collaboraFileType === CollaboraFileType.Spreadsheet) {
-			return OfficeDocumentType.SPREADSHEETML_SHEET;
+			return OfficeDocumentType.XLSX;
 		}
 
-		return OfficeDocumentType.PRESENTATIONML_PRESENTATION;
+		return OfficeDocumentType.PPTX;
 	};
 
 	const getOfficeDocumentFileExtension = (collaboraFileType: CollaboraFileType): string => {
