@@ -96,7 +96,7 @@ type Props = {
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-	(e: "create:card", payload: { columnId: string; cardId?: string }): void;
+	(e: "create:card", payload: { columnId: string; cardId?: string; position?: number }): void;
 	(e: "move:card", cardId: string): void;
 	(e: "delete:card", cardId: string): void;
 	(e: "delete:column", columnId: string): void;
@@ -138,7 +138,12 @@ const isNotFirstColumn = computed(() => props.index !== 0);
 const isNotLastColumn = computed(() => props.index !== props.columnCount - 1);
 
 // const onCreateCard = () => emit("create:card", props.column.id);
-const onCreateCard = (cardId?: string) => emit("create:card", { columnId: props.column.id, cardId });
+const onCreateCard = (cardId?: string) => {
+	const cardIndex = cardId ? props.column.cards.findIndex((card) => card.cardId === cardId) : -1;
+	const position = cardIndex < 0 ? undefined : cardIndex;
+
+	emit("create:card", { columnId: props.column.id, cardId, position });
+};
 
 const onColumnDelete = (columnId: string) => {
 	emit("delete:column", columnId);

@@ -106,12 +106,17 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const createCardSuccess = (payload: CreateCardSuccessPayload) => {
 		if (!board.value) return;
 
-		const { newCard } = payload;
+		const { newCard, position } = payload;
 
 		cardStore.createCardSuccess(payload);
 
 		const columnIndex = board.value.columns.findIndex((column) => column.id === payload.columnId);
-		board.value.columns[columnIndex].cards.push({
+		if (columnIndex < 0) return;
+
+		const cards = board.value.columns[columnIndex].cards;
+		const insertIndex = position === undefined ? cards.length : Math.min(Math.max(position, 0), cards.length);
+
+		cards.splice(insertIndex, 0, {
 			cardId: newCard.id,
 			height: 120,
 		});
