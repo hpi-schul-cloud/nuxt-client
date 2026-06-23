@@ -131,7 +131,7 @@ describe("useImportflow", () => {
 					const importResponse = mockImportResponse();
 					vi.mocked(featureDialog.openDialog).mockResolvedValue({
 						completed: true,
-						data: { newName: "New Item Name", destination: undefined },
+						data: { newName: "New Item Name", destinations: [] },
 					});
 					const composable = mountImportFlowComposable();
 					const resultPromise = composable.executeImport("valid-token", []);
@@ -169,7 +169,7 @@ describe("useImportflow", () => {
 					shareApi.shareTokenControllerImportShareToken.mockRejectedValue(importError);
 					vi.mocked(featureDialog.openDialog).mockResolvedValue({
 						completed: true,
-						data: { newName: "New Item Name", destination: undefined },
+						data: { newName: "New Item Name", destinations: [] },
 					});
 					const composable = mountImportFlowComposable();
 					const resultPromise = composable.executeImport("valid-token", []);

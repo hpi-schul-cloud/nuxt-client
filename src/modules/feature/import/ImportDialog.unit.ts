@@ -163,7 +163,7 @@ describe("ImportDialog", () => {
 			});
 			wrapper.findComponent(SvsDialog).vm.$emit("confirm");
 			await nextTick();
-			expect(wrapper.emitted("complete")).toEqual([[{ newName: "My Course", destination: undefined }]]);
+			expect(wrapper.emitted("complete")).toEqual([[{ newName: "My Course", destinations: [] }]]);
 		});
 
 		it("shows WarningAlert when warnings are present", () => {
@@ -195,7 +195,7 @@ describe("ImportDialog", () => {
 			});
 
 			// Step 1: select a destination and advance
-			await wrapper.findComponent(VSelect).vm.$emit("update:modelValue", "dest-1");
+			await wrapper.findComponent(VSelect).vm.$emit("update:modelValue", ["dest-1"]);
 			await nextTick();
 			wrapper.findComponent(SvsDialog).vm.$emit("confirm");
 			await nextTick();
@@ -205,7 +205,7 @@ describe("ImportDialog", () => {
 			await nextTick();
 
 			expect(wrapper.emitted("complete")).toEqual([
-				[{ newName: "My Lesson", destination: { type: "course", id: "dest-1" } }],
+				[{ newName: "My Lesson", destinations: [{ type: "course", id: "dest-1" }] }],
 			]);
 		});
 	});

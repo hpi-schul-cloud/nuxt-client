@@ -41,7 +41,7 @@ export const useImportFlow = () => {
 	};
 
 	const importWithoutDestination = async (tokenInfo: ShareTokenInfoResponse, newName: string) => {
-		const { success, error } = await withGlobalLoadingState(
+		const { success, error, result } = await withGlobalLoadingState(
 			() => importShareToken(tokenInfo, { newName }),
 			t("components.molecules.import.options.loadingMessage")
 		);
@@ -51,7 +51,7 @@ export const useImportFlow = () => {
 		}
 
 		return {
-			result: success ? { destinations: [] as ImportDestination[] } : undefined,
+			result,
 			success,
 			error: error ? new Error("Import failed", { cause: error }) : undefined,
 		};
@@ -67,11 +67,11 @@ export const useImportFlow = () => {
 			() =>
 				Promise.all(
 					destinations.map(async (destination) => {
-						const { success, error } = await importShareToken(tokenInfo, {
+						const { success, error, result } = await importShareToken(tokenInfo, {
 							newName,
 							destinationId: destination.id,
 						});
-						return { success, error, destination };
+						return { success, error, result };
 					})
 				),
 			t("components.molecules.import.options.loadingMessage")
@@ -79,7 +79,7 @@ export const useImportFlow = () => {
 
 		for (const importResult of importResults) {
 			if (importResult.success) {
-				const destinationName = availableItems.find((d) => d.id === importResult.destination.id)?.name;
+				const destinationName = availableItems.find((d) => d.id === importResult.result?.destinationId)?.name;
 				const name = destinationName ? `${newName} → ${destinationName}` : newName;
 				notifySuccess(t("components.molecules.import.options.success", { name }));
 			}
@@ -87,7 +87,7 @@ export const useImportFlow = () => {
 
 		const allSuccessful = importResults.every((r) => r.success);
 		return {
-			result: allSuccessful ? { destinations } : undefined,
+			result: importResults,
 			success: allSuccessful,
 			error: allSuccessful ? undefined : new Error("Some imports failed"),
 		};
@@ -101,7 +101,7 @@ export const useImportFlow = () => {
 		const { result: validationResult, error: validationError } = await validateShareToken(token);
 
 		if (!validationResult) {
-			return { success: false, error: new Error("Validation failed", { cause: validationError }) };
+			return { result: undefined, success: false, error: new Error("Validation failed", { cause: validationError }) };
 		}
 		shareTokenInfo.value = validationResult;
 
@@ -119,7 +119,7 @@ export const useImportFlow = () => {
 					destinationType: destinationType === "room" ? "room" : "course",
 				}));
 
-		if (!completed) return { success: false, error: new Error("Import cancelled") };
+		if (!completed) return { result: undefined, success: false, error: new Error("Import cancelled") };
 		const { newName, destinations } = data;
 
 		if (destinations.length === 0) {
