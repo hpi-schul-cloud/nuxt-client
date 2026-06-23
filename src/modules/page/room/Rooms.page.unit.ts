@@ -148,7 +148,7 @@ describe("RoomsPage", () => {
 					};
 
 					useImportFlowMock.executeImport.mockResolvedValue({
-						result: { ...copyResult, destination: { id: "room-id", type: "room" } },
+						result: { ...copyResult, destinations: [{ id: "room-id", type: "room" }] },
 						success: true,
 						error: undefined,
 					});
@@ -173,7 +173,7 @@ describe("RoomsPage", () => {
 					};
 
 					useImportFlowMock.executeImport.mockResolvedValue({
-						result: { ...copyResult, destination: { id: "column-id", type: "column", boardId: "board-id" } },
+						result: { ...copyResult, destinations: [{ id: "column-id", type: "column", boardId: "board-id" }] },
 						success: true,
 						error: undefined,
 					});
@@ -198,7 +198,7 @@ describe("RoomsPage", () => {
 					};
 
 					useImportFlowMock.executeImport.mockResolvedValue({
-						result: { ...copyResult, destination: undefined },
+						result: { ...copyResult, destinations: [] },
 						success: true,
 						error: undefined,
 					});

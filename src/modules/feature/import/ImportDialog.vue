@@ -33,13 +33,16 @@
 					{{ destinationQuestion }}
 				</p>
 				<VSelect
-					v-model="selectedDestinationId"
+					v-model="selectedDestinationIds"
 					:items="availableDestinations"
 					item-value="id"
 					item-title="name"
 					:label="selectionLabel"
 					:placeholder="selectionPlaceholder"
-					:rules="[rules.required]"
+					:rules="[rules.atLeastOneSelected]"
+					:multiple="isMultiSelectEnabled"
+					:chips="isMultiSelectEnabled"
+					closable-chips
 					eager-validation
 					:hint="selectionHint"
 					persistent-hint
@@ -96,7 +99,7 @@ const activeStep = computed(() => steps[stepIndex.value]);
 const isLastStep = computed(() => stepIndex.value === steps.length - 1);
 
 // form data
-const selectedDestinationId = ref<string>();
+const selectedDestinationIds = ref<string[]>([]);
 const nameInput = ref<string | undefined>(undefined);
 const newName = computed({
 	get: () => nameInput.value ?? props.shareTokenInfo.parentName ?? "",
@@ -105,13 +108,19 @@ const newName = computed({
 
 const resetDialog = () => {
 	stepIndex.value = 0;
-	selectedDestinationId.value = undefined;
+	selectedDestinationIds.value = [];
 	nameInput.value = undefined;
 	emit("after-leave");
 };
 
-const rules = reactive({ required: isRequired(), validateOnOpeningTag });
-const isSelectedDestinationValid = computed(() => !!selectedDestinationId.value);
+const isMultiSelectEnabled = computed(() => props.destinationType === "room");
+
+const rules = reactive({
+	required: isRequired(),
+	validateOnOpeningTag,
+	atLeastOneSelected: (v: string[]) => v.length > 0 || t("common.validation.required"),
+});
+const isSelectedDestinationValid = computed(() => selectedDestinationIds.value.length > 0);
 const isNewNameValid = computed(
 	() => rules.required(newName.value) === true && rules.validateOnOpeningTag(newName.value) === true
 );
@@ -134,11 +143,14 @@ const onNext = () => {
 		return;
 	}
 
+	const destinations = selectedDestinationIds.value.map((id) => ({
+		type: props.destinationType,
+		id,
+	}));
+
 	emit("complete", {
 		newName: newName.value,
-		destination: selectedDestinationId.value
-			? { type: props.destinationType, id: selectedDestinationId.value }
-			: undefined,
+		destinations,
 	});
 };
 

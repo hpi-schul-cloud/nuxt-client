@@ -52,36 +52,67 @@ export const useImportFlow = () => {
 		}
 		shareTokenInfo.value = validationResult;
 
-		const destinations = toValue(availableDestinations);
+		const availableItems = toValue(availableDestinations);
 		const isCard = validationResult.parentType === ShareTokenInfoResponseParentType.CARD;
 		const { completed, data } = await (isCard
 			? openDialog("importCard", {
 					shareTokenInfo: validationResult,
-					availableDestinations: destinations,
+					availableDestinations: availableItems,
 					destinationType: "column",
 				})
 			: openDialog("import", {
 					shareTokenInfo: validationResult,
-					availableDestinations: destinations,
+					availableDestinations: availableItems,
 					destinationType: destinationType === "room" ? "room" : "course",
 				}));
 
 		if (!completed) return { success: false, error: new Error("Import cancelled") };
-		const { newName, destination } = data;
+		const { newName, destinations } = data;
 
-		const { result, success, error } = await withGlobalLoadingState(
-			() => importShareToken(validationResult, { newName, destinationId: destination?.id }),
-			t("components.molecules.import.options.loadingMessage")
-		);
+		if (destinations.length <= 1) {
+			const destinationId = destinations[0]?.id;
+			const { result, success, error } = await withGlobalLoadingState(
+				() => importShareToken(validationResult, { newName, destinationId }),
+				t("components.molecules.import.options.loadingMessage")
+			);
 
-		if (success) {
-			notifySuccess(t("components.molecules.import.options.success", { name: newName }));
+			if (success) {
+				notifySuccess(t("components.molecules.import.options.success", { name: newName }));
+			}
+
+			return {
+				result: result ? { ...result, destinations } : result,
+				success,
+				error: error ? new Error("Import failed", { cause: error }) : undefined,
+			};
 		}
 
+		// Multiple destinations: import to each room
+		const importResults = await withGlobalLoadingState(async () => {
+			const results = [];
+			for (const destination of destinations) {
+				const { result, success, error } = await importShareToken(validationResult, {
+					newName,
+					destinationId: destination.id,
+				});
+				results.push({ result, success, error, destination });
+			}
+			return results;
+		}, t("components.molecules.import.options.loadingMessage"));
+
+		for (const importResult of importResults) {
+			if (importResult.success) {
+				const destinationName =
+					toValue(availableDestinations).find((d) => d.id === importResult.destination.id)?.name ?? "";
+				notifySuccess(t("components.molecules.import.options.success", { name: `${newName} → ${destinationName}` }));
+			}
+		}
+
+		const allSuccessful = importResults.every((r) => r.success);
 		return {
-			result: result ? { ...result, destination } : result,
-			success,
-			error: error ? new Error("Import failed", { cause: error }) : undefined,
+			result: allSuccessful ? { destinations } : undefined,
+			success: allSuccessful,
+			error: allSuccessful ? undefined : new Error("Some imports failed"),
 		};
 	};
 

@@ -433,7 +433,7 @@ describe("CourseRoomOverview.page", () => {
 			};
 
 			useImportFlowMock.executeImport.mockResolvedValue({
-				result: { ...copyResult, destination: { id: "room-123", type: "course" } },
+				result: { ...copyResult, destinations: [{ id: "room-123", type: "course" }] },
 				success: true,
 				error: undefined,
 			});
