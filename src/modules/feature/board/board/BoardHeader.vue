@@ -50,12 +50,23 @@
 				<KebabMenuActionDelete :name="title" @click="onDeleteBoard" />
 			</BoardMenu>
 		</div>
+		<div v-if="isScrollModeToggleVisible" class="ms-auto mt-4 scroll-mode-toggle">
+			<VSwitch
+				:model-value="!isPageScrollMode"
+				:label="t('components.board.action.fixColumns')"
+				hide-details
+				density="compact"
+				data-testid="scroll-mode-toggle-checkbox"
+				@update:model-value="toggleScrollMode"
+			/>
+		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { BoardExternalReferenceType } from "../../../../generated/serverApi/v3";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
+import { useBoardScrollMode } from "../shared/BoardScrollMode.composable";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import BoardEditableChip from "./BoardEditableChip.vue";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
@@ -84,6 +95,7 @@ type Props = {
 	isDraft: boolean;
 	isEditableChipVisible?: boolean;
 	hasReadersEditPermission: boolean;
+	isListBoard?: boolean;
 };
 
 const props = defineProps<Props>();
@@ -104,6 +116,8 @@ const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(board
 const boardHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
 const { allowedOperations } = useBoardAllowedOperations();
+const { isPageScrollMode, toggleScrollMode } = useBoardScrollMode();
+const isScrollModeToggleVisible = computed(() => !props.isListBoard);
 
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref("0px");
@@ -204,6 +218,36 @@ watchEffect(() => {
 });
 </script>
 
+<style>
+html.board-page-scroll .v-navigation-drawer {
+	position: absolute !important;
+}
+
+html.board-page-scroll .top-bar {
+	position: static !important;
+}
+
+html.board-page-scroll .v-main {
+	max-width: none;
+	overflow-x: visible;
+}
+
+html.board-page-scroll .wireframe-container-flex {
+	height: auto;
+	display: block;
+}
+
+html.board-page-scroll .main-content-flex {
+	flex: unset;
+	overflow-y: unset;
+}
+
+html.board-page-scroll .column-board {
+	overflow-x: visible;
+	height: auto;
+}
+</style>
+
 <style lang="scss" scoped>
 @use "@/styles/settings.scss" as *;
 
@@ -225,5 +269,14 @@ watchEffect(() => {
 .input {
 	max-width: calc(100%);
 	width: v-bind("fieldWidth");
+}
+
+.scroll-mode-toggle :deep(.v-selection-control) {
+	flex-direction: row-reverse;
+
+	.v-label {
+		padding-inline-start: 0;
+		padding-inline-end: 10px;
+	}
 }
 </style>
