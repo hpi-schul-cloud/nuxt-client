@@ -12,7 +12,7 @@ class MockEventSource {
 	onerror: ((event: Event) => void) | null = null;
 	readyState = 0;
 
-	constructor(url: string, options?: EventSourceInit) {
+	constructor(url: string, options?: { withCredentials?: boolean }) {
 		this.url = url;
 		this.withCredentials = options?.withCredentials ?? false;
 		MockEventSource.instances.push(this);
