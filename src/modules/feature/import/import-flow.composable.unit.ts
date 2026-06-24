@@ -148,7 +148,7 @@ describe("useImportflow", () => {
 					const { resultPromise, importResponse } = await setup();
 					const { result, success } = await resultPromise;
 					expect(success).toBe(true);
-					expect(result).toEqual({ ...importResponse.data, destination: undefined });
+					expect(result).toEqual({ ...importResponse.data, destinations: undefined });
 				});
 
 				it("should show a success notification", async () => {

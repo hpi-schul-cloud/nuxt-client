@@ -33,7 +33,7 @@
 					{{ destinationQuestion }}
 				</p>
 				<VSelect
-					v-model="selectedDestinationIds"
+					v-model="selectedDestinationsModel"
 					:items="availableDestinations"
 					item-value="id"
 					item-title="name"
@@ -99,7 +99,13 @@ const activeStep = computed(() => steps[stepIndex.value]);
 const isLastStep = computed(() => stepIndex.value === steps.length - 1);
 
 // form data
-const selectedDestinationIds = ref<string[]>([]);
+const selectedDestinationsModel = ref<string | string[]>();
+const selectedDestinationIds = computed<string[]>(() => {
+	const val = selectedDestinationsModel.value;
+	if (!val) return [];
+	return Array.isArray(val) ? val : [val];
+});
+
 const nameInput = ref<string | undefined>(undefined);
 const newName = computed({
 	get: () => nameInput.value ?? props.shareTokenInfo.parentName ?? "",
@@ -108,7 +114,7 @@ const newName = computed({
 
 const resetDialog = () => {
 	stepIndex.value = 0;
-	selectedDestinationIds.value = [];
+	selectedDestinationsModel.value = [];
 	nameInput.value = undefined;
 	emit("after-leave");
 };
@@ -118,7 +124,8 @@ const isMultiSelectEnabled = computed(() => props.destinationType === "room");
 const rules = reactive({
 	required: isRequired(),
 	validateOnOpeningTag,
-	atLeastOneSelected: (v: string[]) => v.length > 0 || t("common.validation.required"),
+	atLeastOneSelected: (v: string[] | string) =>
+		(Array.isArray(v) && v.length > 0) || (typeof v === "string" && v.length > 0) || t("common.validation.required"),
 });
 const isSelectedDestinationValid = computed(() => selectedDestinationIds.value.length > 0);
 const isNewNameValid = computed(

@@ -195,7 +195,7 @@ describe("ImportDialog", () => {
 			});
 
 			// Step 1: select a destination and advance
-			await wrapper.findComponent(VSelect).vm.$emit("update:modelValue", ["dest-1"]);
+			await wrapper.findComponent(VSelect).vm.$emit("update:modelValue", "dest-1");
 			await nextTick();
 			wrapper.findComponent(SvsDialog).vm.$emit("confirm");
 			await nextTick();
