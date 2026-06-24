@@ -903,7 +903,7 @@ describe("FileStorageApi Composable", () => {
 					parentType,
 					{
 						fileName: `${fileName}.docx`,
-						DocumentType: serverApi.DocumentType.WORDPROCESSINGML_DOCUMENT,
+						documentType: serverApi.DocumentType.WORDPROCESSINGML_DOCUMENT,
 					}
 				);
 			});
@@ -967,7 +967,7 @@ describe("FileStorageApi Composable", () => {
 					parentType,
 					{
 						fileName: `${fileName}.xlsx`,
-						DocumentType: serverApi.DocumentType.SPREADSHEETML_SHEET,
+						documentType: serverApi.DocumentType.SPREADSHEETML_SHEET,
 					}
 				);
 			});
@@ -1031,7 +1031,7 @@ describe("FileStorageApi Composable", () => {
 					parentType,
 					{
 						fileName: `${fileName}.pptx`,
-						DocumentType: serverApi.DocumentType.PRESENTATIONML_PRESENTATION,
+						documentType: serverApi.DocumentType.PRESENTATIONML_PRESENTATION,
 					}
 				);
 			});
