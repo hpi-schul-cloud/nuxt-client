@@ -698,7 +698,9 @@ export default {
 	"components.molecules.import.options.failure.invalidToken": "Das Token im Link ist unbekannt oder abgelaufen.",
 	"components.molecules.import.options.failure.permissionError": "Leider fehlt die notwendige Berechtigung.",
 	"components.molecules.import.options.loadingMessage": "Import läuft...",
-	"components.molecules.import.options.success": "{name} wurde erfolgreich importiert",
+	"components.molecules.import.options.success": '{type} "{name}" erfolgreich importiert',
+	"components.molecules.import.options.successWithDestination":
+		'{type} "{name}" erfolgreich in {destinationType} "{destinationName}" importiert',
 	"components.molecules.import.options.tableHeader.InfoText": "Folgende Inhalte werden nicht importiert:",
 	"components.molecules.import.room.options.title": "Raum importieren",
 	"components.molecules.import.room.rename": "Bei Bedarf kann der Name des Raumes umbenannt werden: ",

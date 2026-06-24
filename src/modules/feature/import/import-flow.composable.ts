@@ -1,4 +1,4 @@
-import { ImportDestination, ImportDestinationItem } from "./types";
+import { ImportDestination, ImportDestinationItem, ImportDestinationType } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useImportContent } from "@/composables/copy-content.composable";
 import { $axios } from "@/utils/api";
@@ -17,6 +17,12 @@ export const useImportFlow = () => {
 	const shareTokenInfo = ref<ShareTokenInfoResponse>();
 
 	const { itemNameKey } = useImportContent(computed(() => shareTokenInfo.value?.parentType));
+
+	const destinationTypeTranslation: Record<ImportDestinationType, string> = {
+		room: t("common.labels.room"),
+		course: t("common.labels.course"),
+		column: t("components.boardColumn"),
+	};
 
 	const validateShareToken = async (token: string) => {
 		const { result, success, error } = await execute(
@@ -47,7 +53,7 @@ export const useImportFlow = () => {
 		);
 
 		if (success) {
-			notifySuccess(t("components.molecules.import.options.success", { name: newName }));
+			notifySuccess(t("components.molecules.import.options.success", { type: t(itemNameKey.value), name: newName }));
 		}
 
 		return {
@@ -62,7 +68,8 @@ export const useImportFlow = () => {
 		tokenInfo: ShareTokenInfoResponse,
 		newName: string,
 		destinations: ImportDestination[],
-		availableItems: ImportDestinationItem[]
+		availableItems: ImportDestinationItem[],
+		destinationType: ImportDestinationType
 	) => {
 		const importResults = await withGlobalLoadingState(
 			() =>
@@ -81,8 +88,20 @@ export const useImportFlow = () => {
 		for (const importResult of importResults) {
 			if (importResult.success) {
 				const destinationName = availableItems.find((d) => d.id === importResult.result?.destinationId)?.name;
-				const name = destinationName ? `${newName} → ${destinationName}` : newName;
-				notifySuccess(t("components.molecules.import.options.success", { name }));
+				if (destinationName) {
+					notifySuccess(
+						t("components.molecules.import.options.successWithDestination", {
+							type: t(itemNameKey.value),
+							name: newName,
+							destinationType: destinationTypeTranslation[destinationType],
+							destinationName,
+						})
+					);
+				} else {
+					notifySuccess(
+						t("components.molecules.import.options.success", { type: t(itemNameKey.value), name: newName })
+					);
+				}
 			}
 		}
 
@@ -116,6 +135,7 @@ export const useImportFlow = () => {
 
 		const availableDestinationItems = toValue(availableDestinations);
 		const isCard = validationResult.parentType === ShareTokenInfoResponseParentType.CARD;
+		const actualDestinationType = isCard ? "column" : destinationType === "room" ? "room" : "course";
 		const { completed, data } = await (isCard
 			? openDialog("importCard", {
 					shareTokenInfo: validationResult,
@@ -133,9 +153,18 @@ export const useImportFlow = () => {
 		const { newName, destinations } = data;
 
 		if (destinations.length === 0) {
+			console.log("importwithout desitnation", actualDestinationType, destinations);
 			return importWithoutDestination(validationResult, newName);
 		} else {
-			return importToDestinations(validationResult, newName, destinations, availableDestinationItems);
+			console.log("importwith desitnation", actualDestinationType, destinations);
+
+			return importToDestinations(
+				validationResult,
+				newName,
+				destinations,
+				availableDestinationItems,
+				actualDestinationType
+			);
 		}
 	};
 
