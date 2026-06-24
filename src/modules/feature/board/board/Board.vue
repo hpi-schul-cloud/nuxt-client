@@ -25,6 +25,7 @@
 						:is-draft="!isBoardVisible"
 						:is-editable-chip-visible="isEditableChipVisible"
 						:has-readers-edit-permission="hasReadersEditPermission"
+						:is-list-board="isListBoard"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
 						@copy:board="onCopyBoard"
