@@ -198,6 +198,129 @@ describe("useImportflow", () => {
 					);
 				});
 			});
+
+			describe("with destinations selected and all succeed", () => {
+				const setup = async () => {
+					mockValidationResponse();
+					const availableItems = [
+						{ id: "dest-1", name: "Room A" },
+						{ id: "dest-2", name: "Room B" },
+					];
+					const destinations = [
+						{ id: "dest-1", type: "room" as const },
+						{ id: "dest-2", type: "room" as const },
+					];
+
+					shareApi.shareTokenControllerImportShareToken
+						.mockResolvedValueOnce(
+							mockApiResponse({
+								data: {
+									id: "new-1",
+									title: "X",
+									type: serverApi.CopyElementType.COURSE,
+									status: serverApi.CopyStatusEnum.SUCCESS,
+									destinationId: "dest-1",
+								},
+							})
+						)
+						.mockResolvedValueOnce(
+							mockApiResponse({
+								data: {
+									id: "new-2",
+									title: "X",
+									type: serverApi.CopyElementType.COURSE,
+									status: serverApi.CopyStatusEnum.SUCCESS,
+									destinationId: "dest-2",
+								},
+							})
+						);
+
+					vi.mocked(featureDialog.openDialog).mockResolvedValue({
+						completed: true,
+						data: { newName: "Item", destinations },
+					});
+					const composable = mountImportFlowComposable();
+					return { resultPromise: composable.executeImport("valid-token", availableItems), destinations };
+				};
+
+				it("should import to each destination and return success", async () => {
+					const { resultPromise, destinations } = await setup();
+					const { success, destinations: returned } = await resultPromise;
+					expect(shareApi.shareTokenControllerImportShareToken).toHaveBeenCalledTimes(2);
+					expect(success).toBe(true);
+					expect(returned).toEqual(destinations);
+				});
+
+				it("should show a success notification per destination", async () => {
+					const { resultPromise } = await setup();
+					await resultPromise;
+					expect(useNotificationStore().notify).toHaveBeenCalledTimes(2);
+				});
+			});
+
+			describe("with destinations selected and some fail", () => {
+				beforeEach(() => {
+					vi.spyOn(logger, "error").mockImplementation(vi.fn());
+				});
+
+				it("should return failure and undefined destinations", async () => {
+					mockValidationResponse();
+					const destinations = [
+						{ id: "d1", type: "room" as const },
+						{ id: "d2", type: "room" as const },
+					];
+					shareApi.shareTokenControllerImportShareToken
+						.mockResolvedValueOnce(
+							mockApiResponse({
+								data: {
+									id: "1",
+									title: "X",
+									type: serverApi.CopyElementType.COURSE,
+									status: serverApi.CopyStatusEnum.SUCCESS,
+									destinationId: "d1",
+								},
+							})
+						)
+						.mockRejectedValueOnce(new Error("fail"));
+					vi.mocked(featureDialog.openDialog).mockResolvedValue({
+						completed: true,
+						data: { newName: "Item", destinations },
+					});
+
+					const composable = mountImportFlowComposable();
+					const { success, destinations: returned } = await composable.executeImport("valid-token", [
+						{ id: "d1", name: "A" },
+						{ id: "d2", name: "B" },
+					]);
+					expect(success).toBe(false);
+					expect(returned).toBeUndefined();
+				});
+			});
+		});
+
+		it("should pass destinationType to openDialog", async () => {
+			mockValidationResponse();
+			vi.mocked(featureDialog.openDialog).mockReturnValue(new Promise(() => undefined));
+			const composable = mountImportFlowComposable();
+			composable.executeImport("valid-token", [], "course");
+			await flushPromises();
+			expect(featureDialog.openDialog).toHaveBeenCalledWith(
+				"import",
+				expect.objectContaining({ destinationType: "course" })
+			);
+		});
+
+		it("should pass availableDestinations to openDialog", async () => {
+			mockValidationResponse();
+			const items = [{ id: "x", name: "X" }];
+			vi.mocked(featureDialog.openDialog).mockReturnValue(new Promise(() => undefined));
+			const composable = mountImportFlowComposable();
+			composable.executeImport("valid-token", items);
+			await flushPromises();
+			expect(featureDialog.openDialog).toHaveBeenCalledWith(
+				"import",
+				expect.objectContaining({ availableDestinations: items })
+			);
 		});
 	});
 });
