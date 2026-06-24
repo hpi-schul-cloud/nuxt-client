@@ -51,7 +51,7 @@ export const useImportFlow = () => {
 		}
 
 		return {
-			result,
+			result: result ? [result] : undefined,
 			destinations: success ? ([] as ImportDestination[]) : undefined,
 			success,
 			error: error ? new Error("Import failed", { cause: error }) : undefined,

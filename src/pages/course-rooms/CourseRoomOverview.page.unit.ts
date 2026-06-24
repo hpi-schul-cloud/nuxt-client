@@ -433,7 +433,7 @@ describe("CourseRoomOverview.page", () => {
 			};
 
 			useImportFlowMock.executeImport.mockResolvedValue({
-				result: copyResult,
+				result: [copyResult],
 				destinations: [{ id: "room-123", type: "course" }],
 				success: true,
 				error: undefined,
@@ -456,7 +456,7 @@ describe("CourseRoomOverview.page", () => {
 			});
 		});
 
-		it("should navigate to course-room-overview on import success without id", async () => {
+		it("should navigate to course-room-overview when import fails", async () => {
 			useImportFlowMock.executeImport.mockResolvedValue({
 				result: undefined,
 				destinations: undefined,
