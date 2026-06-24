@@ -18,14 +18,24 @@
 					<VCardTitle class="mb-1" :data-testid="`room--title-${index}`">
 						<h2 class="text-break text-body-1 font-weight-bold ma-0">{{ room.name }}</h2>
 					</VCardTitle>
-					<VChip
-						size="small"
-						:prepend-icon="mdiAccountMultipleOutline"
-						class="text-decoration-none"
-						:data-testid="`room--member-count-${index}`"
-					>
-						{{ room.totalMembers }} {{ t("common.words.member", room.totalMembers) }}
-					</VChip>
+					<div class="d-flex ga-2">
+						<VChip
+							size="small"
+							:prepend-icon="mdiAccountMultipleOutline"
+							class="text-decoration-none"
+							:data-testid="`room--member-count-${index}`"
+						>
+							{{ room.totalMembers }} {{ t("common.words.member", room.totalMembers) }}
+						</VChip>
+						<VChip
+							v-if="isExternalSchool"
+							size="small"
+							class="text-decoration-none"
+							:data-testid="`room--external-school-${index}`"
+						>
+							{{ t("common.words.external") }}
+						</VChip>
+					</div>
 				</div>
 			</RouterLink>
 		</VCardItem>
@@ -46,6 +56,7 @@
 
 <script setup lang="ts">
 import { RoomItem } from "@/types/room/Room";
+import { useSchoolStoreRefs } from "@data-app";
 import { mdiAccountMultipleOutline, mdiLock } from "@icons/material";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
@@ -59,6 +70,10 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
+
+const { schoolDetails } = useSchoolStoreRefs();
+
+const isExternalSchool = computed(() => schoolDetails.value?.id !== props.room.schoolId);
 
 const roomPath = computed(() => `/rooms/${props.room.id}`);
 const roomShortName = computed(() => props.room?.name?.slice(0, 2) ?? "");

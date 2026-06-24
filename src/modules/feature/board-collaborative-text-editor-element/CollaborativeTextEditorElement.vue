@@ -37,10 +37,10 @@
 </template>
 
 <script setup lang="ts">
-import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
 import image from "@/assets/img/collaborativeEditor.svg";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { injectStrict } from "@/utils/inject";
 import { CollaborativeTextEditorElementResponse, CollaborativeTextEditorParentType } from "@api-server";
 import { useBoardFocusHandler } from "@data-board";

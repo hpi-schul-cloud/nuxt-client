@@ -171,8 +171,21 @@ const onDelete = async () => {
 };
 
 const { focusNodeFromHash } = useElementFocus();
-const onClick = () => {
-	if (sanitizedUrl.value === window.location.href) {
+const isInternalHashLink = computed(() => {
+	if (!sanitizedUrl.value) return false;
+	try {
+		const url = new URL(sanitizedUrl.value);
+		return url.host === window.location.host && url.pathname === window.location.pathname && !!url.hash;
+	} catch {
+		return false;
+	}
+});
+
+const onClick = (event: MouseEvent | KeyboardEvent) => {
+	if (isInternalHashLink.value) {
+		event.preventDefault();
+		const url = new URL(sanitizedUrl.value);
+		window.history.replaceState(null, "", url.hash);
 		focusNodeFromHash();
 	}
 };
