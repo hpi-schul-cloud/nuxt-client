@@ -249,6 +249,7 @@ export default {
 	"common.words.courses": "Cursos",
 	"common.words.draft": "Borrador",
 	"common.words.drafts": "Borradores",
+	"common.words.external": "externo",
 	"common.words.languages.de": "Alemán",
 	"common.words.languages.en": "Inglés",
 	"common.words.languages.es": "Español",

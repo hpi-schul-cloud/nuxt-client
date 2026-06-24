@@ -259,6 +259,7 @@ export default {
 	"common.words.courses": "Kurse",
 	"common.words.draft": "Entwurf",
 	"common.words.drafts": "Entwürfe",
+	"common.words.external": "extern",
 	"common.words.languages.de": "Deutsch",
 	"common.words.languages.en": "Englisch",
 	"common.words.languages.es": "Spanisch",
