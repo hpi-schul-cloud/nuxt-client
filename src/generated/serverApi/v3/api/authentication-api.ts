@@ -31,7 +31,11 @@ import { LoginResponse } from '../models';
 // @ts-ignore
 import { Oauth2AuthorizationBodyParams } from '../models';
 // @ts-ignore
+import { OauthLoginResponse } from '../models';
+// @ts-ignore
 import { OidcLogoutBodyParams } from '../models';
+// @ts-ignore
+import { SessionInfoResponse } from '../models';
 // @ts-ignore
 import { ValidationError } from '../models';
 /**
@@ -40,6 +44,40 @@ import { ValidationError } from '../models';
  */
 export const AuthenticationApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @summary Extends the lifetime of the current session.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loginControllerExtendSession: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/authentication/refresh-session`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @summary Starts the login process for users which are authenticated via LDAP
@@ -300,6 +338,16 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Extends the lifetime of the current session.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async loginControllerExtendSession(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SessionInfoResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerExtendSession(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Starts the login process for users which are authenticated via LDAP
          * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
@@ -338,7 +386,7 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
+        async loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthLoginResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginOauth2(oauth2AuthorizationBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -385,6 +433,15 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
     return {
         /**
          * 
+         * @summary Extends the lifetime of the current session.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loginControllerExtendSession(options?: any): AxiosPromise<SessionInfoResponse> {
+            return localVarFp.loginControllerExtendSession(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Starts the login process for users which are authenticated via LDAP
          * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
@@ -420,7 +477,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse> {
+        loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): AxiosPromise<OauthLoginResponse> {
             return localVarFp.loginControllerLoginOauth2(oauth2AuthorizationBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -462,6 +519,15 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
 export interface AuthenticationApiInterface {
     /**
      * 
+     * @summary Extends the lifetime of the current session.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApiInterface
+     */
+    loginControllerExtendSession(options?: any): AxiosPromise<SessionInfoResponse>;
+
+    /**
+     * 
      * @summary Starts the login process for users which are authenticated via LDAP
      * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
@@ -498,7 +564,7 @@ export interface AuthenticationApiInterface {
      * @throws {RequiredError}
      * @memberof AuthenticationApiInterface
      */
-    loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse>;
+    loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): AxiosPromise<OauthLoginResponse>;
 
     /**
      * 
@@ -537,6 +603,17 @@ export interface AuthenticationApiInterface {
  * @extends {BaseAPI}
  */
 export class AuthenticationApi extends BaseAPI implements AuthenticationApiInterface {
+    /**
+     * 
+     * @summary Extends the lifetime of the current session.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApi
+     */
+    public loginControllerExtendSession(options?: any) {
+        return AuthenticationApiFp(this.configuration).loginControllerExtendSession(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Starts the login process for users which are authenticated via LDAP

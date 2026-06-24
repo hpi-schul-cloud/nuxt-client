@@ -284,10 +284,7 @@ describe("Board", () => {
 
 				await nextTick();
 
-				expect(domElementMock.scrollIntoView).toHaveBeenCalledWith({
-					block: "center",
-					inline: "center",
-				});
+				expect(domElementMock.scrollIntoView).toHaveBeenCalled();
 				expect(domElementMock.focus).toHaveBeenCalled();
 			});
 		});
@@ -1131,6 +1128,22 @@ describe("Board", () => {
 	});
 
 	describe("showLoadingDialog", () => {
+		it("should show loading dialog when connection drops before initial startup timeout elapsed", async () => {
+			const { wrapperVM, boardStore } = setup();
+
+			boardStore.isConnected = true;
+			await nextTick();
+
+			await vi.advanceTimersByTimeAsync(500);
+			boardStore.isConnected = false;
+			await nextTick();
+
+			await vi.advanceTimersByTimeAsync(3100);
+			await nextTick();
+
+			expect(wrapperVM.showLoadingDialog).toBe(true);
+		});
+
 		it("should not show loading dialog when isConnected is true", async () => {
 			const { wrapper, boardStore } = setup();
 

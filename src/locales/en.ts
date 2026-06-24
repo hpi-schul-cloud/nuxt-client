@@ -69,6 +69,7 @@ export default {
 	"common.labels.complete.lastName": "Full surname",
 	"common.labels.consent": "Consent",
 	"common.labels.course": "Course",
+	"common.labels.team": "Team",
 	"common.labels.createAt": "Created:",
 	"common.labels.createdAt": "Created At",
 	"common.labels.date": "Date",
@@ -245,6 +246,7 @@ export default {
 	"common.words.courses": "Courses",
 	"common.words.draft": "Draft",
 	"common.words.drafts": "Drafts",
+	"common.words.external": "external",
 	"common.words.languages.de": "German",
 	"common.words.languages.en": "English",
 	"common.words.languages.es": "Spanish",
@@ -982,6 +984,9 @@ export default {
 	"mixins.typeMeta.types.image": "Image",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Website",
+	"loggedin.text.backupFeatures":
+		"Back up your cloud content and also use the new function for exporting courses. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "More information and instructions can be found here.",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"The school is in the transfer phase to the new school year. No classes and users can be created. Please contact the school administrator!",
 	"loggedin.text.schoolInTransferPhaseStartNew":

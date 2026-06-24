@@ -4,7 +4,7 @@ import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 import { FilePreviewStatus } from "@/types/file/File";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import * as fileHelper from "@/utils/fileHelper";
-import { fileRecordFactory } from "@@/tests/test-utils";
+import { fileRecordFactory, mockComposable } from "@@/tests/test-utils";
 import { linkElementContentFactory } from "@@/tests/test-utils/factory/linkElementContentFactory";
 import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -15,6 +15,7 @@ import { useFileStorageApi } from "@data-file";
 import { LinkContentElement } from "@feature-board-link-element";
 import { BoardMenu } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
+import { useElementFocus } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { Mocked } from "vitest";
 import { computed, ref } from "vue";
@@ -24,8 +25,10 @@ vi.mock("@data-board/BoardFocusHandler.composable");
 vi.mock("../composables/MetaTagExtractorApi.composable");
 vi.mock("@data-file");
 vi.mock("@/utils/fileHelper");
+vi.mock("@util-board");
 
 const mockedUseContentElementState = vi.mocked(useContentElementState);
+let useElementFocusMock: Mocked<ReturnType<typeof useElementFocus>>;
 
 let defaultElement = linkElementResponseFactory.build();
 
@@ -41,6 +44,8 @@ describe("LinkContentElement", () => {
 	});
 
 	beforeEach(() => {
+		useElementFocusMock = mockComposable(useElementFocus, { focusNodeFromHash: vi.fn() });
+
 		useBoardFocusHandlerMock = {
 			isAnythingFocused: ref(false),
 			setFocus: vi.fn(),
@@ -53,6 +58,7 @@ describe("LinkContentElement", () => {
 			uploadFromUrl: vi.fn(),
 		};
 
+		vi.mocked(useElementFocus).mockReturnValue(useElementFocusMock);
 		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
 		vi.mocked(useMetaTagExtractorApi).mockReturnValue(useMetaTagExtractorApiMock);
 		vi.mocked(useFileStorageApi).mockReturnValue(
@@ -424,15 +430,9 @@ describe("LinkContentElement", () => {
 						}),
 					});
 
-					const domElementMock = {
-						scrollIntoView: vi.fn(),
-						focus: vi.fn(),
-					} as unknown as HTMLElement;
-					vi.spyOn(document, "querySelector").mockReturnValue(domElementMock);
-
 					const { wrapper } = setupWrapper({ content: linkElementContent, isEditMode: false });
 
-					return { wrapper, domElementMock };
+					return { wrapper };
 				};
 
 				it("should open in the same tab", () => {
@@ -441,14 +441,12 @@ describe("LinkContentElement", () => {
 					expect(wrapper.findComponent('[data-testid="board-link-element"]').attributes("target")).toEqual("_self");
 				});
 
-				it("should scroll to and focus the element when clicked", async () => {
-					const { wrapper, domElementMock } = setup();
+				it("should call focusNodeFromHash when clicked", async () => {
+					const { wrapper } = setup();
 
 					await wrapper.findComponent('[data-testid="board-link-element"]').trigger("click");
-					vi.runAllTimers();
 
-					expect(domElementMock.scrollIntoView).toHaveBeenCalledWith({ block: "center", inline: "center" });
-					expect(domElementMock.focus).toHaveBeenCalled();
+					expect(useElementFocusMock.focusNodeFromHash).toHaveBeenCalled();
 				});
 			});
 		});

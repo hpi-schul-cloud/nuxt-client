@@ -71,6 +71,7 @@ export default {
 	"common.labels.complete.lastName": "Apellido completo",
 	"common.labels.consent": "Consentimiento",
 	"common.labels.course": "Curso",
+	"common.labels.team": "Equipo",
 	"common.labels.createAt": "Creado:",
 	"common.labels.createdAt": "Creado en",
 	"common.labels.date": "Fecha",
@@ -248,6 +249,7 @@ export default {
 	"common.words.courses": "Cursos",
 	"common.words.draft": "Borrador",
 	"common.words.drafts": "Borradores",
+	"common.words.external": "externo",
 	"common.words.languages.de": "Alemán",
 	"common.words.languages.en": "Inglés",
 	"common.words.languages.es": "Español",
@@ -1002,6 +1004,9 @@ export default {
 	"mixins.typeMeta.types.image": "Imagen",
 	"mixins.typeMeta.types.video": "Vídeo",
 	"mixins.typeMeta.types.webpage": "Página web",
+	"loggedin.text.backupFeatures":
+		"Haga una copia de seguridad de sus contenidos de la nube y utilice también la nueva función para exportar cursos. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "Más información y ayuda disponible aquí",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"La escuela está en fase de transferencia al nuevo año escolar. No se pueden crear clases ni usuarios. ¡Ponte en contacto con el administrador de la escuela!",
 	"loggedin.text.schoolInTransferPhaseStartNew":

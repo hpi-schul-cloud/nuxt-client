@@ -2,6 +2,7 @@ import DashboardPage from "./Dashboard.page.vue";
 import { initializeAxios } from "@/utils/api";
 import {
 	createTestAppStore,
+	createTestEnvStore,
 	mockApi,
 	mockApiResponse,
 	mockAxiosInstance,
@@ -18,6 +19,7 @@ import {
 	ReleaseItemResponse,
 	RoleName,
 	RuntimeConfigApiInterface,
+	SchulcloudTheme,
 } from "@api-server";
 import { DashboardTasks } from "@feature-dashboard";
 import { createTestingPinia } from "@pinia/testing";
@@ -141,7 +143,8 @@ describe("DashboardPage", () => {
 	});
 
 	describe("teams-to-rooms warning", () => {
-		it("is always visible and renders the expected content", async () => {
+		it("is visible and renders the expected content when not dbc", async () => {
+			createTestEnvStore({ SC_THEME: SchulcloudTheme.N21 });
 			const { wrapper } = setup();
 			await flushPromises();
 
@@ -151,6 +154,15 @@ describe("DashboardPage", () => {
 			expect(warningAlert.text()).toContain("loggedin.text.teamsToRooms.possibilities");
 			expect(warningAlert.text()).toContain("loggedin.text.teamsToRooms.migration");
 			expect(warningAlert.text()).toContain("loggedin.text.teamsToRooms.helpLink");
+		});
+
+		it("is not visible when dbc", async () => {
+			createTestEnvStore({ SC_THEME: SchulcloudTheme.DEFAULT });
+			const { wrapper } = setup();
+			await flushPromises();
+
+			const warningAlert = wrapper.findComponent("[data-testid='teams-to-rooms-migration-alert']");
+			expect(warningAlert.exists()).toBe(false);
 		});
 	});
 

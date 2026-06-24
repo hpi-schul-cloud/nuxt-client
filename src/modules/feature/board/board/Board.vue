@@ -15,7 +15,7 @@
 				max-width="full"
 				hide-border
 				main-without-padding
-				:is-flex-container="!isListBoard"
+				is-flex-container
 			>
 				<template #header>
 					<BoardHeader
@@ -362,7 +362,6 @@ watch(
 	() => focusNodeFromHash(),
 	{ immediate: true }
 );
-
 watch(
 	[isBoardVisible, allowedOperations],
 	() => {
@@ -421,6 +420,7 @@ const boardColumnClass = computed(() => {
 const { executeCopyBoard } = useCopyFlow();
 
 const onBackToOverview = () => {
+	boardStore.cancelSocketReconnection();
 	router.push({ path: "/dashboard" });
 };
 

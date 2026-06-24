@@ -6,5 +6,11 @@
 	--z-pinned: 40; // Pinned/fixed elements
 	--z-floating: 50; // Topbar, toolbars
 	--z-skip-link: 60;
-	--z-notification: 10100; // 10000 = highest Vuetify z-index + 100
+	--z-notification: 10010; // 10000 = highest Vuetify z-index + 10
+
+	// defaults:
+	// v-dialog: 2400
+	// ck-z-panel: 1000 (999+1)
+	// ck-z-dialog: 9999
+	// ck-z-tooltip: calc(var(--ck-z-dialog) + 100); 9999+100 = 10099
 }
