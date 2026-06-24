@@ -870,7 +870,7 @@ describe("FileStorageApi Composable", () => {
 
 				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
-				fileApi.addOfficeDocumentToParent.mockResolvedValueOnce(response);
+				fileApi.addDocumentToParent.mockResolvedValueOnce(response);
 
 				return {
 					fileRecordResponse,
@@ -890,20 +890,20 @@ describe("FileStorageApi Composable", () => {
 				expect(newFile).toBe(fileRecordResponse);
 			});
 
-			it("calls addOfficeDocumentToParent with correct params", async () => {
+			it("calls addDocumentToParent with correct params", async () => {
 				const { fileName, parentId, parentType, fileApi } = setup();
 				const { uploadCollaboraFile } = useFileStorageApi();
 
 				await uploadCollaboraFile(CollaboraFileType.Text, parentId, parentType, fileName);
 
-				expect(fileApi.addOfficeDocumentToParent).toHaveBeenCalledWith(
+				expect(fileApi.addDocumentToParent).toHaveBeenCalledWith(
 					"schoolId",
 					StorageLocation.SCHOOL,
 					parentId,
 					parentType,
 					{
 						fileName: `${fileName}.docx`,
-						officeDocumentType: serverApi.OfficeDocumentType.WORDPROCESSINGML_DOCUMENT,
+						DocumentType: serverApi.DocumentType.WORDPROCESSINGML_DOCUMENT,
 					}
 				);
 			});
@@ -934,7 +934,7 @@ describe("FileStorageApi Composable", () => {
 
 				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
-				fileApi.addOfficeDocumentToParent.mockResolvedValueOnce(response);
+				fileApi.addDocumentToParent.mockResolvedValueOnce(response);
 
 				return {
 					fileRecordResponse,
@@ -954,20 +954,20 @@ describe("FileStorageApi Composable", () => {
 				expect(newFile).toBe(fileRecordResponse);
 			});
 
-			it("calls addOfficeDocumentToParent with correct params", async () => {
+			it("calls addDocumentToParent with correct params", async () => {
 				const { fileName, parentId, parentType, fileApi } = setup();
 				const { uploadCollaboraFile } = useFileStorageApi();
 
 				await uploadCollaboraFile(CollaboraFileType.Spreadsheet, parentId, parentType, fileName);
 
-				expect(fileApi.addOfficeDocumentToParent).toHaveBeenCalledWith(
+				expect(fileApi.addDocumentToParent).toHaveBeenCalledWith(
 					"schoolId",
 					StorageLocation.SCHOOL,
 					parentId,
 					parentType,
 					{
 						fileName: `${fileName}.xlsx`,
-						officeDocumentType: serverApi.OfficeDocumentType.SPREADSHEETML_SHEET,
+						DocumentType: serverApi.DocumentType.SPREADSHEETML_SHEET,
 					}
 				);
 			});
@@ -998,7 +998,7 @@ describe("FileStorageApi Composable", () => {
 
 				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
-				fileApi.addOfficeDocumentToParent.mockResolvedValueOnce(response);
+				fileApi.addDocumentToParent.mockResolvedValueOnce(response);
 
 				return {
 					fileRecordResponse,
@@ -1018,20 +1018,20 @@ describe("FileStorageApi Composable", () => {
 				expect(newFile).toBe(fileRecordResponse);
 			});
 
-			it("calls addOfficeDocumentToParent with correct params", async () => {
+			it("calls addDocumentToParent with correct params", async () => {
 				const { fileName, parentId, parentType, fileApi } = setup();
 				const { uploadCollaboraFile } = useFileStorageApi();
 
 				await uploadCollaboraFile(CollaboraFileType.Presentation, parentId, parentType, fileName);
 
-				expect(fileApi.addOfficeDocumentToParent).toHaveBeenCalledWith(
+				expect(fileApi.addDocumentToParent).toHaveBeenCalledWith(
 					"schoolId",
 					StorageLocation.SCHOOL,
 					parentId,
 					parentType,
 					{
 						fileName: `${fileName}.pptx`,
-						officeDocumentType: serverApi.OfficeDocumentType.PRESENTATIONML_PRESENTATION,
+						DocumentType: serverApi.DocumentType.PRESENTATIONML_PRESENTATION,
 					}
 				);
 			});
@@ -1057,7 +1057,7 @@ describe("FileStorageApi Composable", () => {
 
 				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
-				fileApi.addOfficeDocumentToParent.mockRejectedValueOnce(responseError);
+				fileApi.addDocumentToParent.mockRejectedValueOnce(responseError);
 
 				return {
 					fileName,

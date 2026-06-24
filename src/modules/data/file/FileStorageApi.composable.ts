@@ -1,6 +1,7 @@
 import { useFileRecordsStore } from "./FileRecords.state";
 import { useParentStatisticsStore } from "./ParentStatistics.state";
 import {
+	DocumentType,
 	EditorMode,
 	FileRecord,
 	FileRecordParent,
@@ -11,10 +12,9 @@ import {
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { formatFileSize } from "@/utils/fileHelper";
 import {
-	type AddOfficeDocumentToParentParams,
+	AddDocumentToParentParams,
 	FileApiFactory,
 	FileApiInterface,
-	OfficeDocumentType,
 	WopiApiFactory,
 	WopiApiInterface,
 } from "@api-file-storage";
@@ -84,15 +84,15 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const getOfficeDocumentType = (collaboraFileType: CollaboraFileType): OfficeDocumentType => {
+	const getDocumentType = (collaboraFileType: CollaboraFileType): DocumentType => {
 		if (collaboraFileType === CollaboraFileType.Text) {
-			return OfficeDocumentType.WORDPROCESSINGML_DOCUMENT;
+			return DocumentType.WORDPROCESSINGML_DOCUMENT;
 		}
 		if (collaboraFileType === CollaboraFileType.Spreadsheet) {
-			return OfficeDocumentType.SPREADSHEETML_SHEET;
+			return DocumentType.SPREADSHEETML_SHEET;
 		}
 
-		return OfficeDocumentType.PRESENTATIONML_PRESENTATION;
+		return DocumentType.PRESENTATIONML_PRESENTATION;
 	};
 
 	const getOfficeDocumentFileExtension = (collaboraFileType: CollaboraFileType): string => {
@@ -117,16 +117,16 @@ export const useFileStorageApi = () => {
 
 		try {
 			const schoolId = useAppStore().school?.id as string;
-			const addOfficeDocumentToParentParams: AddOfficeDocumentToParentParams = {
+			const addDocumentToParentParams: AddDocumentToParentParams = {
 				fileName: fullFileName,
-				officeDocumentType: getOfficeDocumentType(type),
+				documentType: getDocumentType(type),
 			};
-			const response = await fileApi.addOfficeDocumentToParent(
+			const response = await fileApi.addDocumentToParent(
 				schoolId,
 				StorageLocation.SCHOOL,
 				parentId,
 				parentType,
-				addOfficeDocumentToParentParams
+				addDocumentToParentParams
 			);
 
 			upsertFileRecords([response.data]);

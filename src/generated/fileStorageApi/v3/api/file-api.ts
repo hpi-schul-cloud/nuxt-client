@@ -21,7 +21,7 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
-import { AddOfficeDocumentToParentParams } from '../models';
+import { AddDocumentToParentParams } from '../models';
 // @ts-ignore
 import { ApiValidationError } from '../models';
 // @ts-ignore
@@ -58,27 +58,27 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
-         * @summary Upload office document from filesystem
+         * @summary Add document to parent
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
-         * @param {AddOfficeDocumentToParentParams} addOfficeDocumentToParentParams 
+         * @param {AddDocumentToParentParams} addDocumentToParentParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        addOfficeDocumentToParent: async (storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, addOfficeDocumentToParentParams: AddOfficeDocumentToParentParams, options: any = {}): Promise<RequestArgs> => {
+        addDocumentToParent: async (storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, addDocumentToParentParams: AddDocumentToParentParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'storageLocationId' is not null or undefined
-            assertParamExists('addOfficeDocumentToParent', 'storageLocationId', storageLocationId)
+            assertParamExists('addDocumentToParent', 'storageLocationId', storageLocationId)
             // verify required parameter 'storageLocation' is not null or undefined
-            assertParamExists('addOfficeDocumentToParent', 'storageLocation', storageLocation)
+            assertParamExists('addDocumentToParent', 'storageLocation', storageLocation)
             // verify required parameter 'parentId' is not null or undefined
-            assertParamExists('addOfficeDocumentToParent', 'parentId', parentId)
+            assertParamExists('addDocumentToParent', 'parentId', parentId)
             // verify required parameter 'parentType' is not null or undefined
-            assertParamExists('addOfficeDocumentToParent', 'parentType', parentType)
-            // verify required parameter 'addOfficeDocumentToParentParams' is not null or undefined
-            assertParamExists('addOfficeDocumentToParent', 'addOfficeDocumentToParentParams', addOfficeDocumentToParentParams)
-            const localVarPath = `/file/add-office-document/{storageLocation}/{storageLocationId}/{parentType}/{parentId}`
+            assertParamExists('addDocumentToParent', 'parentType', parentType)
+            // verify required parameter 'addDocumentToParentParams' is not null or undefined
+            assertParamExists('addDocumentToParent', 'addDocumentToParentParams', addDocumentToParentParams)
+            const localVarPath = `/file/add-document-to-parent/{storageLocation}/{storageLocationId}/{parentType}/{parentId}`
                 .replace(`{${"storageLocationId"}}`, encodeURIComponent(String(storageLocationId)))
                 .replace(`{${"storageLocation"}}`, encodeURIComponent(String(storageLocation)))
                 .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)))
@@ -105,7 +105,7 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(addOfficeDocumentToParentParams, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(addDocumentToParentParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1101,17 +1101,17 @@ export const FileApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Upload office document from filesystem
+         * @summary Add document to parent
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
-         * @param {AddOfficeDocumentToParentParams} addOfficeDocumentToParentParams 
+         * @param {AddDocumentToParentParams} addDocumentToParentParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async addOfficeDocumentToParent(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, addOfficeDocumentToParentParams: AddOfficeDocumentToParentParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.addOfficeDocumentToParent(storageLocationId, storageLocation, parentId, parentType, addOfficeDocumentToParentParams, options);
+        async addDocumentToParent(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, addDocumentToParentParams: AddDocumentToParentParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addDocumentToParent(storageLocationId, storageLocation, parentId, parentType, addDocumentToParentParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1390,17 +1390,17 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
-         * @summary Upload office document from filesystem
+         * @summary Add document to parent
          * @param {string} storageLocationId 
          * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
-         * @param {AddOfficeDocumentToParentParams} addOfficeDocumentToParentParams 
+         * @param {AddDocumentToParentParams} addDocumentToParentParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        addOfficeDocumentToParent(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, addOfficeDocumentToParentParams: AddOfficeDocumentToParentParams, options?: any): AxiosPromise<FileRecordResponse> {
-            return localVarFp.addOfficeDocumentToParent(storageLocationId, storageLocation, parentId, parentType, addOfficeDocumentToParentParams, options).then((request) => request(axios, basePath));
+        addDocumentToParent(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, addDocumentToParentParams: AddDocumentToParentParams, options?: any): AxiosPromise<FileRecordResponse> {
+            return localVarFp.addDocumentToParent(storageLocationId, storageLocation, parentId, parentType, addDocumentToParentParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1657,17 +1657,17 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
 export interface FileApiInterface {
     /**
      * 
-     * @summary Upload office document from filesystem
+     * @summary Add document to parent
      * @param {string} storageLocationId 
      * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
-     * @param {AddOfficeDocumentToParentParams} addOfficeDocumentToParentParams 
+     * @param {AddDocumentToParentParams} addDocumentToParentParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    addOfficeDocumentToParent(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, addOfficeDocumentToParentParams: AddOfficeDocumentToParentParams, options?: any): AxiosPromise<FileRecordResponse>;
+    addDocumentToParent(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, addDocumentToParentParams: AddDocumentToParentParams, options?: any): AxiosPromise<FileRecordResponse>;
 
     /**
      * 
@@ -1924,18 +1924,18 @@ export interface FileApiInterface {
 export class FileApi extends BaseAPI implements FileApiInterface {
     /**
      * 
-     * @summary Upload office document from filesystem
+     * @summary Add document to parent
      * @param {string} storageLocationId 
      * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
-     * @param {AddOfficeDocumentToParentParams} addOfficeDocumentToParentParams 
+     * @param {AddDocumentToParentParams} addDocumentToParentParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public addOfficeDocumentToParent(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, addOfficeDocumentToParentParams: AddOfficeDocumentToParentParams, options?: any) {
-        return FileApiFp(this.configuration).addOfficeDocumentToParent(storageLocationId, storageLocation, parentId, parentType, addOfficeDocumentToParentParams, options).then((request) => request(this.axios, this.basePath));
+    public addDocumentToParent(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, addDocumentToParentParams: AddDocumentToParentParams, options?: any) {
+        return FileApiFp(this.configuration).addDocumentToParent(storageLocationId, storageLocation, parentId, parentType, addDocumentToParentParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
