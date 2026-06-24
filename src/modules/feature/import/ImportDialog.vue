@@ -39,7 +39,7 @@
 					item-title="name"
 					:label="selectionLabel"
 					:placeholder="selectionPlaceholder"
-					:rules="[rules.atLeastOneSelected]"
+					:rules="isMultiSelectEnabled ? [rules.atLeastOneSelected] : []"
 					:multiple="isMultiSelectEnabled"
 					:chips="isMultiSelectEnabled"
 					closable-chips
