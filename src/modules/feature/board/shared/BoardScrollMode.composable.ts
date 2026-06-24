@@ -1,18 +1,40 @@
 import { useLocalStorage } from "@vueuse/core";
-import { computed } from "vue";
+import { computed, onUnmounted } from "vue";
 
-export type BoardScrollMode = "columns" | "page";
+enum ScrollModeEnum {
+	COLUMNS = "columns",
+	PAGE = "page",
+}
+export type BoardScrollMode = ScrollModeEnum;
 
 const STORAGE_KEY = "board-column-scroll-mode";
 
-export const useBoardScrollMode = () => {
-	const scrollMode = useLocalStorage<BoardScrollMode>(STORAGE_KEY, "columns");
+const applyScrollMode = (isPageScroll: boolean) => {
+	const htmlTag = document.documentElement;
+	if (isPageScroll) {
+		htmlTag.classList.add("board-page-scroll");
+		htmlTag.style.removeProperty("max-height");
+		htmlTag.style.setProperty("--v-layout-top", "0px");
+	} else {
+		htmlTag.classList.remove("board-page-scroll");
+		htmlTag.style.setProperty("max-height", "100vh");
+		htmlTag.style.removeProperty("--v-layout-top");
+	}
+};
 
-	const isPageScrollMode = computed(() => scrollMode.value === "page");
+export const useBoardScrollMode = () => {
+	const scrollMode = useLocalStorage<BoardScrollMode>(STORAGE_KEY, ScrollModeEnum.COLUMNS);
+
+	const isPageScrollMode = computed(() => scrollMode.value === ScrollModeEnum.PAGE);
 
 	const toggleScrollMode = () => {
-		scrollMode.value = scrollMode.value === "columns" ? "page" : "columns";
+		scrollMode.value = scrollMode.value === ScrollModeEnum.COLUMNS ? ScrollModeEnum.PAGE : ScrollModeEnum.COLUMNS;
+		applyScrollMode(isPageScrollMode.value);
 	};
+
+	applyScrollMode(isPageScrollMode.value);
+
+	onUnmounted(() => applyScrollMode(false));
 
 	return {
 		scrollMode,
