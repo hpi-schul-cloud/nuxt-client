@@ -114,7 +114,7 @@ const newName = computed({
 
 const resetDialog = () => {
 	stepIndex.value = 0;
-	selectedDestinationsModel.value = [];
+	selectedDestinationsModel.value = isMultiSelectEnabled.value ? [] : undefined;
 	nameInput.value = undefined;
 	emit("after-leave");
 };

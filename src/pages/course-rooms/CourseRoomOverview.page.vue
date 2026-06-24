@@ -196,13 +196,9 @@ const { executeImport } = useImportFlow();
 const executeImportFlow = async (token: string) => {
 	//  courses might not be loaded yet, so we need to fetch them before executing the import
 	await fetchAllElements();
-	const { result: importResults, destinations: importDestinations } = await executeImport(
-		token,
-		availableDestinations,
-		"course"
-	);
+	const { destinations: importDestinations, success } = await executeImport(token, availableDestinations, "course");
 
-	if (!importResults) {
+	if (!success) {
 		router.push({ name: "course-room-overview" });
 		return;
 	}
