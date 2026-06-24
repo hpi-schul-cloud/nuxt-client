@@ -86,9 +86,11 @@ export const useImportFlow = () => {
 			}
 		}
 
+		const importedElements = importResults.flatMap((r) => (r.result ? [r.result] : []));
+
 		const allSuccessful = importResults.every((r) => r.success);
 		return {
-			result: importResults,
+			result: allSuccessful ? importedElements : undefined,
 			destinations: allSuccessful ? destinations : undefined,
 			success: allSuccessful,
 			error: allSuccessful ? undefined : new Error("Some imports failed"),

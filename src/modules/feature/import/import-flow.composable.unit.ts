@@ -148,7 +148,7 @@ describe("useImportflow", () => {
 					const { resultPromise, importResponse } = await setup();
 					const { result, success, destinations } = await resultPromise;
 					expect(success).toBe(true);
-					expect(result).toEqual(importResponse.data);
+					expect(result).toEqual([importResponse.data]);
 					expect(destinations).toEqual([]);
 				});
 
