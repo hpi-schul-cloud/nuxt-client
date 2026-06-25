@@ -12,7 +12,6 @@
 						:persistent-hint="isUrlValidated"
 						type="text"
 						data-testid="input-link"
-						:autofocus="true"
 						:auto-grow="true"
 						rows="1"
 						class="text"

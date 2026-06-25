@@ -96,6 +96,7 @@ import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
+import { CardEditModeKey } from "@/types/board/Card";
 import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
 import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
@@ -120,7 +121,7 @@ import {
 } from "@ui-kebab-menu";
 import { useShareBoardLink } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
-import { computed, onMounted, ref, toRef } from "vue";
+import { computed, onMounted, provide, ref, toRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 type Props = {
@@ -144,6 +145,8 @@ const cardHost = ref(null);
 const cardId = toRef(props, "cardId");
 const { isFocusContained, isFocusedById } = useBoardFocusHandler(cardId.value, cardHost);
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
+
+provide(CardEditModeKey, { startEditMode, isEditMode });
 
 const isHovered = useElementHover(cardHost);
 const route = useRoute();
