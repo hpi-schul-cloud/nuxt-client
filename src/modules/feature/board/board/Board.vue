@@ -225,11 +225,10 @@ const moveCardOptions = ref<{ isDialogOpen: boolean; cardId: string }>({
 	cardId: "",
 });
 
-const onCreateCard = async (payload: { columnId: string; cardId?: string; position?: number }) => {
+const onCreateCard = async (payload: { columnId: string; position?: number }) => {
 	if (allowedOperations.value.createCard)
 		boardStore.createCardRequest({
 			columnId: payload.columnId,
-			cardId: payload.cardId,
 			position: payload.position,
 		});
 };

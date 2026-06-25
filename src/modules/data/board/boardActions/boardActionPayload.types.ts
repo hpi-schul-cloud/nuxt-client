@@ -12,14 +12,12 @@ import {
 
 export type CreateCardRequestPayload = {
 	columnId: string;
-	cardId?: string;
 	position?: number;
 	requiredEmptyElements?: CreateCardBodyParamsRequiredEmptyElements[];
 };
 export type CreateCardSuccessPayload = {
 	newCard: CardResponse;
 	columnId: string;
-	cardId?: string;
 	position?: number;
 	isOwnAction: boolean;
 };

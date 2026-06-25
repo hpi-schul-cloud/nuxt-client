@@ -53,14 +53,12 @@ export const useBoardRestApi = () => {
 		try {
 			const newCard = await createCardCall({
 				columnId: payload.columnId,
-				cardId: payload.cardId,
 				position: payload.position,
 			});
 
 			boardStore.createCardSuccess({
 				newCard,
 				columnId: payload.columnId,
-				cardId: payload.cardId,
 				position: payload.position,
 				isOwnAction: true,
 			});

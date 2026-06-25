@@ -205,11 +205,7 @@ export const useBoardApi = () => {
 
 	const deleteColumnCall = async (columnId: string) => boardColumnApi.columnControllerDeleteColumn(columnId);
 
-	const createCardCall = async (payload: {
-		columnId: string;
-		cardId?: string;
-		position?: number;
-	}): Promise<CardResponse> => {
+	const createCardCall = async (payload: { columnId: string; position?: number }): Promise<CardResponse> => {
 		const response = await boardColumnApi.columnControllerCreateCard(payload.columnId, {
 			requiredEmptyElements: [CreateCardBodyParamsRequiredEmptyElements.RICH_TEXT],
 			position: payload.position,
