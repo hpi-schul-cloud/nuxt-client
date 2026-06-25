@@ -50,7 +50,7 @@
 				<KebabMenuActionDelete :name="title" @click="onDeleteBoard" />
 			</BoardMenu>
 		</div>
-		<div v-if="isScrollModeToggleVisible" class="ms-auto mt-4 scroll-mode-toggle">
+		<div v-if="isScrollModeToggleVisible" class="ms-auto mt-4 scroll-mode-toggle" :style="actionsScrollStyle">
 			<VSwitch
 				:model-value="!isPageScrollMode"
 				:label="t('components.board.action.fixColumns')"
@@ -84,7 +84,7 @@ import {
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
 } from "@ui-kebab-menu";
-import { useDebounceFn } from "@vueuse/core";
+import { useDebounceFn, useWindowScroll } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -118,6 +118,16 @@ const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
 const { allowedOperations } = useBoardAllowedOperations();
 const { isPageScrollMode, toggleScrollMode } = useBoardScrollMode();
 const isScrollModeToggleVisible = computed(() => !props.isListBoard);
+
+const { x: windowScrollX } = useWindowScroll();
+const actionsScrollStyle = computed(() => {
+	if (!isPageScrollMode.value) return {};
+	return { transform: `translateX(${windowScrollX.value}px)` };
+});
+
+watchEffect(() => {
+	// document.documentElement.style.setProperty("--scroll-x", isPageScrollMode.value ? `${windowScrollX.value}px` : "0px");
+});
 
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref("0px");
@@ -220,31 +230,42 @@ watchEffect(() => {
 
 <style>
 html.board-page-scroll .v-navigation-drawer {
-	position: absolute !important;
+	/* position: absolute !important; */
 }
 
-html.board-page-scroll .top-bar {
+html.board-page-scroll .top-bar .v-toolbar {
 	position: static !important;
 }
 
 html.board-page-scroll .v-main {
-	max-width: none;
-	overflow-x: visible;
+	/* max-width: none;
+	overflow-x: visible; */
 }
 
 html.board-page-scroll .wireframe-container-flex {
-	height: auto;
-	display: block;
+	/* height: auto;
+	display: block; */
 }
 
 html.board-page-scroll .main-content-flex {
-	flex: unset;
-	overflow-y: unset;
+	/* flex: unset; */
+	/* overflow-y: unset; */
 }
 
 html.board-page-scroll .column-board {
 	overflow-x: visible;
 	height: auto;
+}
+
+html.board-page-scroll .scroll-mode-toggle {
+	position: relative;
+	z-index: var(--z-header);
+	/* background-color: rgb(var(--v-theme-white)); */
+}
+
+html.board-page-scroll .top-bar-right {
+	transform: translateX(var(--scroll-x, 0px));
+	/* background-color: #fff; */
 }
 </style>
 
