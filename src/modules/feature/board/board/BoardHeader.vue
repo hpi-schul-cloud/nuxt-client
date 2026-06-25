@@ -125,10 +125,6 @@ const actionsScrollStyle = computed(() => {
 	return { transform: `translateX(${windowScrollX.value}px)` };
 });
 
-watchEffect(() => {
-	// document.documentElement.style.setProperty("--scroll-x", isPageScrollMode.value ? `${windowScrollX.value}px` : "0px");
-});
-
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref("0px");
 
@@ -229,43 +225,8 @@ watchEffect(() => {
 </script>
 
 <style>
-html.board-page-scroll .v-navigation-drawer {
-	/* position: absolute !important; */
-}
-
-html.board-page-scroll .top-bar .v-toolbar {
-	position: static !important;
-}
-
-html.board-page-scroll .v-main {
-	/* max-width: none;
-	overflow-x: visible; */
-}
-
-html.board-page-scroll .wireframe-container-flex {
-	/* height: auto;
-	display: block; */
-}
-
-html.board-page-scroll .main-content-flex {
-	/* flex: unset; */
-	/* overflow-y: unset; */
-}
-
 html.board-page-scroll .column-board {
-	overflow-x: visible;
 	height: auto;
-}
-
-html.board-page-scroll .scroll-mode-toggle {
-	position: relative;
-	z-index: var(--z-header);
-	/* background-color: rgb(var(--v-theme-white)); */
-}
-
-html.board-page-scroll .top-bar-right {
-	transform: translateX(var(--scroll-x, 0px));
-	/* background-color: #fff; */
 }
 </style>
 
