@@ -137,7 +137,6 @@ const showAddButton = computed(
 const isNotFirstColumn = computed(() => props.index !== 0);
 const isNotLastColumn = computed(() => props.index !== props.columnCount - 1);
 
-// const onCreateCard = () => emit("create:card", props.column.id);
 const onCreateCard = (cardId?: string) => {
 	const cardIndex = cardId ? props.column.cards.findIndex((card) => card.cardId === cardId) : -1;
 	const position = cardIndex < 0 ? undefined : cardIndex;
