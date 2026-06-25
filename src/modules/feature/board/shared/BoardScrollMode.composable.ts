@@ -27,14 +27,17 @@ export const useBoardScrollMode = () => {
 
 	const isPageScrollMode = computed(() => scrollMode.value === ScrollModeEnum.PAGE);
 
+	if (getCurrentScope()) {
+		watch(isPageScrollMode, applyScrollMode, { immediate: true });
+		onUnmounted(() => applyScrollMode(false));
+	} else {
+		applyScrollMode(isPageScrollMode.value);
+	}
+
 	const toggleScrollMode = () => {
-		scrollMode.value = scrollMode.value === ScrollModeEnum.COLUMNS ? ScrollModeEnum.PAGE : ScrollModeEnum.COLUMNS;
+		scrollMode.value = isPageScrollMode.value ? ScrollModeEnum.COLUMNS : ScrollModeEnum.PAGE;
 		applyScrollMode(isPageScrollMode.value);
 	};
-
-	applyScrollMode(isPageScrollMode.value);
-
-	onUnmounted(() => applyScrollMode(false));
 
 	return {
 		scrollMode,
