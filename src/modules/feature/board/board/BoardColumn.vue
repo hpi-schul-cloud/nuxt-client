@@ -138,10 +138,13 @@ const isNotFirstColumn = computed(() => props.index !== 0);
 const isNotLastColumn = computed(() => props.index !== props.columnCount - 1);
 
 const onCreateCard = (cardId?: string) => {
-	const cardIndex = cardId ? props.column.cards.findIndex((card) => card.cardId === cardId) : -1;
-	const position = cardIndex < 0 ? undefined : cardIndex;
+	if (!cardId) {
+		emit("create:card", { columnId: props.column.id });
+	} else {
+		const position = boardStore.getCardLocation(cardId)?.cardIndex;
 
-	emit("create:card", { columnId: props.column.id, position });
+		emit("create:card", { columnId: props.column.id, position });
+	}
 };
 
 const onColumnDelete = (columnId: string) => {
