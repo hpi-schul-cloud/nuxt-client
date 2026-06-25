@@ -153,11 +153,8 @@ export const useImportFlow = () => {
 		const { newName, destinations } = data;
 
 		if (destinations.length === 0) {
-			console.log("importwithout desitnation", actualDestinationType, destinations);
 			return importWithoutDestination(validationResult, newName);
 		} else {
-			console.log("importwith desitnation", actualDestinationType, destinations);
-
 			return importToDestinations(
 				validationResult,
 				newName,
