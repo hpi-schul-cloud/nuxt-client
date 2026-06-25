@@ -13,7 +13,10 @@
 		<template #item="{ element, index }">
 			<RoomBoardGridItem
 				class="draggable user-select-none room-content-grid-item"
-				:class="{ 'cursor-grab': allowedOperations.editContent }"
+				:class="{
+					'cursor-grab room-content-grid-item-editable': allowedOperations.editContent,
+					'cursor-default': !allowedOperations.editContent,
+				}"
 				:room-id="roomId"
 				:board="element"
 				:index
