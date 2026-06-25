@@ -40,6 +40,7 @@
 
 		<VCardActions class="justify-end pr-4">
 			<VBtn
+				class="board-open-button"
 				:data-testid="`board-open-button-${index}`"
 				tabindex="0"
 				variant="text"
@@ -110,8 +111,13 @@ const boardPath = computed(() => `/boards/${props.board.id}`);
 </script>
 
 <style>
-.room-content-grid-item:focus-within {
+.room-content-grid-item-editable:focus-within {
 	outline: auto;
+}
+
+.room-content-grid-item.cursor-default:hover:not(:has(.grid-item-router-link:hover, .board-open-button:hover))
+	.v-card__overlay {
+	opacity: 0;
 }
 
 .grid-item-card-title {

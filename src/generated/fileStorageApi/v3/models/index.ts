@@ -1,3 +1,4 @@
+export * from './add-document-to-parent-params';
 export * from './api-validation-error';
 export * from './archive-file-params';
 export * from './authorized-collabora-document-url-response';
@@ -5,6 +6,7 @@ export * from './copy-file-list-response';
 export * from './copy-file-params';
 export * from './copy-file-response';
 export * from './delete-by-storage-location-response';
+export * from './document-type';
 export * from './editor-mode';
 export * from './file-record-list-response';
 export * from './file-record-params';
