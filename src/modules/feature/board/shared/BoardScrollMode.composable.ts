@@ -1,5 +1,5 @@
 import { useLocalStorage } from "@vueuse/core";
-import { computed, onUnmounted } from "vue";
+import { computed, getCurrentScope, onUnmounted, watch } from "vue";
 
 enum ScrollModeEnum {
 	COLUMNS = "columns",
