@@ -384,11 +384,13 @@ const isListBoard = computed(() => board.value?.layout === BoardLayout.LIST);
 
 provide(BOARD_IS_LIST_LAYOUT, isListBoard);
 
-const TwoSecondsPassedSinceInitialRender = useTimeout(2000);
+const twoSecondsPassedSinceInitialRender = useTimeout(2000);
 const isLoadingOrNotConnected = computed(
-	() => TwoSecondsPassedSinceInitialRender.value === true && (boardStore.isConnected === false || boardStore.isLoading)
+	() => twoSecondsPassedSinceInitialRender.value === true && (boardStore.isConnected === false || boardStore.isLoading)
 );
 
+// Show loading dialog if the board is loading or not connected for more than 1 second
+// Hide loading dialog immediately when connection is restored
 watch(isLoadingOrNotConnected, (newValue) => {
 	if (!newValue) {
 		showLoadingDialog.value = false;
