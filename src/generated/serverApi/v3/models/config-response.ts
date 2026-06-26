@@ -214,13 +214,13 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_COLUMN_BOARD_MAP_ELEMENT_ENABLED: boolean;
+    FEATURE_COLUMN_BOARD_H5P_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_COLUMN_BOARD_H5P_ENABLED: boolean;
+    FEATURE_COLUMN_BOARD_MAP_ELEMENT_ENABLED: boolean;
     /**
      * 
      * @type {boolean}

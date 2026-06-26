@@ -161,7 +161,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			});
 		}
 
-		if (true) {
+		if (envConfig.value.FEATURE_COLUMN_BOARD_MAP_ELEMENT_ENABLED) {
 			options.push({
 				icon: mdiMap,
 				label: t("components.elementTypeSelection.elements.mapElement.subtitle"),

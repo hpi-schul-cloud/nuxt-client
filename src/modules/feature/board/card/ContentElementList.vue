@@ -127,7 +127,7 @@ const mapToComponent = (type: ContentElementType) => {
 			}
 			break;
 		case ContentElementType.MAP:
-			if (true) {
+			if (envConfig.value.FEATURE_COLUMN_BOARD_MAP_ELEMENT_ENABLED) {
 				return MapContentElement;
 			}
 			break;
