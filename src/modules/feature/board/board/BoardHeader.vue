@@ -1,65 +1,68 @@
 <template>
-	<div class="d-flex align-start board-header mb-6">
-		<InlineEditInteractionHandler
-			:id="boardId"
-			class="input-container"
-			:is-edit-mode="isEditMode"
-			tabindex="0"
-			@start-edit-mode="onStartEditMode"
-			@end-edit-mode="onEndEditMode"
-			@keydown.enter.prevent="onToggleEditMode"
-		>
-			<BoardAnyTitleInput
-				ref="boardHeader"
-				:value="boardTitle"
-				class="input"
-				scope="board"
-				data-testid="board-title"
+	<div>
+		<div class="d-flex align-start board-header mb-2">
+			<InlineEditInteractionHandler
+				:id="boardId"
+				class="input-container"
 				:is-edit-mode="isEditMode"
-				:is-focused="isFocusedById"
-				:has-edit-permission="allowedOperations.updateBoardTitle"
-				@update:value="updateBoardTitle"
-				@blur="onBoardTitleBlur"
-			/>
-			<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
-		</InlineEditInteractionHandler>
-		<div class="d-flex mt-4">
-			<VChip v-if="isDraft" class="align-self-center cursor-default" data-testid="board-draft-chip">
-				{{ t("common.words.draft") }}
-			</VChip>
-			<BoardEditableChip v-if="isEditableChipVisible" />
-			<BoardMenu
-				v-if="allowedOperations.updateBoardTitle || allowedOperations.shareBoard"
-				:scope="BoardMenuScope.BOARD"
-				data-testid="board-menu-btn"
+				tabindex="0"
+				@start-edit-mode="onStartEditMode"
+				@end-edit-mode="onEndEditMode"
+				@keydown.enter.prevent="onToggleEditMode"
 			>
-				<KebabMenuActionRename @click="onStartEditMode" />
-				<KebabMenuActionDuplicate
-					v-if="allowedOperations.copyBoard"
-					data-testid="kebab-menu-action-duplicate-board"
-					@click="onCopyBoard"
+				<BoardAnyTitleInput
+					ref="boardHeader"
+					:value="boardTitle"
+					class="input"
+					scope="board"
+					data-testid="board-title"
+					:is-edit-mode="isEditMode"
+					:is-focused="isFocusedById"
+					:has-edit-permission="allowedOperations.updateBoardTitle"
+					@update:value="updateBoardTitle"
+					@blur="onBoardTitleBlur"
 				/>
-				<KebabMenuActionShare v-if="isShareEnabled && allowedOperations.shareBoard" @click="onShareBoard" />
-				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
-				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
-				<KebabMenuActionEditingSettings
-					v-if="allowedOperations.updateReadersCanEditSetting && isRoomBoard"
-					@click="onEditBoardSettings"
+				<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
+			</InlineEditInteractionHandler>
+			<div class="d-flex mt-4">
+				<VChip v-if="isDraft" class="align-self-center cursor-default" data-testid="board-draft-chip">
+					{{ t("common.words.draft") }}
+				</VChip>
+				<BoardEditableChip v-if="isEditableChipVisible" />
+				<BoardMenu
+					v-if="allowedOperations.updateBoardTitle || allowedOperations.shareBoard"
+					:scope="BoardMenuScope.BOARD"
+					data-testid="board-menu-btn"
+				>
+					<KebabMenuActionRename @click="onStartEditMode" />
+					<KebabMenuActionDuplicate
+						v-if="allowedOperations.copyBoard"
+						data-testid="kebab-menu-action-duplicate-board"
+						@click="onCopyBoard"
+					/>
+					<KebabMenuActionShare v-if="isShareEnabled && allowedOperations.shareBoard" @click="onShareBoard" />
+					<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
+					<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
+					<KebabMenuActionEditingSettings
+						v-if="allowedOperations.updateReadersCanEditSetting && isRoomBoard"
+						@click="onEditBoardSettings"
+					/>
+					<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
+					<KebabMenuActionDelete :name="title" @click="onDeleteBoard" />
+				</BoardMenu>
+			</div>
+			<div v-if="isScrollModeToggleVisible" class="ms-auto mt-4 scroll-mode-toggle" :style="actionsScrollStyle">
+				<VSwitch
+					:model-value="isPageScrollMode"
+					:label="t('components.board.action.fixColumns')"
+					hide-details
+					density="compact"
+					data-testid="scroll-mode-toggle-checkbox"
+					@update:model-value="toggleScrollMode"
 				/>
-				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
-				<KebabMenuActionDelete :name="title" @click="onDeleteBoard" />
-			</BoardMenu>
+			</div>
 		</div>
-		<div v-if="isScrollModeToggleVisible" class="ms-auto mt-4 scroll-mode-toggle" :style="actionsScrollStyle">
-			<VSwitch
-				:model-value="!isPageScrollMode"
-				:label="t('components.board.action.fixColumns')"
-				hide-details
-				density="compact"
-				data-testid="scroll-mode-toggle-checkbox"
-				@update:model-value="toggleScrollMode"
-			/>
-		</div>
+		<VDivider v-if="isPageScrollMode" class="mx-n6" role="presentation" />
 	</div>
 </template>
 
