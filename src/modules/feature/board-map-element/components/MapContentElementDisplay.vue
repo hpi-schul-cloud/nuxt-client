@@ -34,7 +34,7 @@ const initMap = () => {
 
 	mapInstance = L.map(mapContainer.value, {
 		zoomControl: true,
-		dragging: false,
+		dragging: true,
 		scrollWheelZoom: false,
 		doubleClickZoom: false,
 		touchZoom: false,
