@@ -53,7 +53,16 @@ const loadFeatures = (featuresStr: string) => {
 	if (!mapInstance) return;
 	try {
 		const featureCollection = JSON.parse(featuresStr) as GeoJSON.FeatureCollection;
-		L.geoJSON(featureCollection).addTo(mapInstance);
+		L.geoJSON(featureCollection, {
+			onEachFeature(feature, layer) {
+				if (feature.properties?.label) {
+					(layer as L.Marker | L.Path).bindTooltip(feature.properties.label as string, {
+						permanent: true,
+						direction: "top",
+					});
+				}
+			},
+		}).addTo(mapInstance);
 	} catch {
 		// invalid or empty GeoJSON — nothing to render
 	}

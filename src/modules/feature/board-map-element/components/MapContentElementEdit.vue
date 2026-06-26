@@ -59,11 +59,79 @@ const onMapChange = () => {
 	});
 };
 
+type LabeledLayer = (L.Marker | L.Path) & { feature?: GeoJSON.Feature };
+
+const setLayerLabel = (layer: LabeledLayer, text: string) => {
+	layer.feature = layer.feature ?? { type: "Feature", properties: {}, geometry: { type: "Point", coordinates: [] } };
+	layer.feature.properties = layer.feature.properties ?? {};
+	if (text) {
+		layer.feature.properties.label = text;
+		layer.unbindTooltip();
+		layer.bindTooltip(text, { permanent: true, direction: "top" });
+	} else {
+		delete layer.feature.properties.label;
+		layer.unbindTooltip();
+	}
+};
+
+const openLabelPopup = (layer: LabeledLayer) => {
+	const currentLabel = (layer.feature?.properties?.label as string) ?? "";
+
+	const container = L.DomUtil.create("div");
+	container.style.display = "flex";
+	container.style.flexDirection = "column";
+	container.style.gap = "6px";
+	container.style.minWidth = "180px";
+
+	const input = L.DomUtil.create("input", "", container) as HTMLInputElement;
+	input.type = "text";
+	input.value = currentLabel;
+	input.placeholder = "Enter label…";
+	input.style.width = "100%";
+	input.style.boxSizing = "border-box";
+
+	const saveBtn = L.DomUtil.create("button", "", container) as HTMLButtonElement;
+	saveBtn.textContent = "Save";
+
+	const save = () => {
+		setLayerLabel(layer, input.value.trim());
+		layer.closePopup();
+		onMapChange();
+	};
+
+	L.DomEvent.on(saveBtn, "click", save);
+	L.DomEvent.on(input, "keydown", (e: Event) => {
+		if ((e as KeyboardEvent).key === "Enter") save();
+		if ((e as KeyboardEvent).key === "Escape") layer.closePopup();
+	});
+
+	layer.bindPopup(container).openPopup();
+	setTimeout(() => input.focus(), 50);
+};
+
+const attachClickHandler = (layer: LabeledLayer) => {
+	layer.on("click", () => {
+		if (mapInstance?.pm.globalEditModeEnabled()) return;
+		openLabelPopup(layer);
+	});
+};
+
 const loadFeatures = (featuresStr: string) => {
 	if (!mapInstance) return;
 	try {
 		const featureCollection = JSON.parse(featuresStr) as GeoJSON.FeatureCollection;
-		L.geoJSON(featureCollection).addTo(mapInstance);
+		L.geoJSON(featureCollection, {
+			onEachFeature(feature, layer) {
+				const labeledLayer = layer as LabeledLayer;
+				if (feature.properties?.label) {
+					labeledLayer.bindTooltip(feature.properties.label as string, {
+						permanent: true,
+						direction: "top",
+					});
+				}
+				attachClickHandler(labeledLayer);
+			},
+		}).addTo(mapInstance);
 	} catch {
 		// invalid or empty — nothing to load
 	}
@@ -96,7 +164,12 @@ onMounted(async () => {
 		rotateMode: false,
 	});
 
-	mapInstance.on("pm:create", onMapChange);
+	mapInstance.on("pm:create", ({ layer }) => {
+		const labeledLayer = layer as LabeledLayer;
+		attachClickHandler(labeledLayer);
+		openLabelPopup(labeledLayer);
+		onMapChange();
+	});
 	mapInstance.on("pm:remove", onMapChange);
 	mapInstance.on("pm:edit", onMapChange);
 	mapInstance.on("moveend", onMapChange);
