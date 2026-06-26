@@ -123,7 +123,7 @@
 		<VDialog :model-value="showLoadingDialog" class="w-33" :persistent="true">
 			<VCard class="pa-4">
 				<VCard-text class="text-center">
-					<div v-if="boardStore.isConnected === false && board" class="text-center" data-testid="dialog-text">
+					<div class="text-center" data-testid="dialog-text">
 						{{ t("error.ws.connectionLost") }}
 					</div>
 					<VProgressCircular color="primary" indeterminate :size="36" class="my-4" />
@@ -173,7 +173,7 @@ import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@util-board";
-import { refDebounced, useTimeout } from "@vueuse/core";
+import { useTimeout } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, ComputedRef, onUnmounted, provide, ref, watch } from "vue";
@@ -196,6 +196,7 @@ const { allowedOperations } = useBoardAllowedOperations();
 const { breadcrumbs, contextType, roomId, createPageInformation, resetPageInformation } =
 	useSharedBoardPageInformation();
 const isDragging = ref(false);
+const showLoadingDialog = ref(false);
 const isEditSettingsDialogOpen = ref(false);
 const router = useRouter();
 
@@ -383,11 +384,22 @@ const isListBoard = computed(() => board.value?.layout === BoardLayout.LIST);
 
 provide(BOARD_IS_LIST_LAYOUT, isListBoard);
 
-const started2000msAgo = useTimeout(2000);
+const TwoSecondsPassedSinceInitialRender = useTimeout(2000);
 const isLoadingOrNotConnected = computed(
-	() => started2000msAgo.value === true && (boardStore.isConnected === false || boardStore.isLoading)
+	() => TwoSecondsPassedSinceInitialRender.value === true && (boardStore.isConnected === false || boardStore.isLoading)
 );
-const showLoadingDialog = refDebounced(isLoadingOrNotConnected, 1000);
+
+watch(isLoadingOrNotConnected, (newValue) => {
+	if (!newValue) {
+		showLoadingDialog.value = false;
+	} else {
+		setTimeout(() => {
+			if (isLoadingOrNotConnected.value) {
+				showLoadingDialog.value = true;
+			}
+		}, 1000);
+	}
+});
 
 const boardClasses = computed(() => {
 	const classes = ["d-flex", "flex-shrink-1", "board"];
