@@ -230,6 +230,7 @@ watchEffect(() => {
 <style>
 html.board-page-scroll .column-board {
 	height: auto;
+	overflow-x: visible;
 }
 </style>
 

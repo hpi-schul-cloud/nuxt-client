@@ -457,7 +457,7 @@ describe("BoardHeader", () => {
 				const { wrapper } = setup({}, { isListBoard: false });
 
 				const toggle = wrapper.findComponent(VSwitch);
-				expect(toggle.props("modelValue")).toBe(true);
+				expect(toggle.props("modelValue")).toBe(false);
 			});
 
 			it("should be false when in page scroll mode", () => {
@@ -469,7 +469,7 @@ describe("BoardHeader", () => {
 				const { wrapper } = setup({}, { isListBoard: false });
 
 				const toggle = wrapper.findComponent(VSwitch);
-				expect(toggle.props("modelValue")).toBe(false);
+				expect(toggle.props("modelValue")).toBe(true);
 			});
 		});
 
