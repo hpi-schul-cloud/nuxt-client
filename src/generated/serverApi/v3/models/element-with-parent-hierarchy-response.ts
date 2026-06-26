@@ -21,6 +21,7 @@ import { FileElementResponse } from './file-element-response';
 import { FileFolderElementResponse } from './file-folder-element-response';
 import { H5pElementResponse } from './h5p-element-response';
 import { LinkElementResponse } from './link-element-response';
+import { MapElementResponse } from './map-element-response';
 import { ParentNodeInfoResponse } from './parent-node-info-response';
 import { RichTextElementResponse } from './rich-text-element-response';
 import { VideoConferenceElementResponse } from './video-conference-element-response';
@@ -33,10 +34,10 @@ import { VideoConferenceElementResponse } from './video-conference-element-respo
 export interface ElementWithParentHierarchyResponse {
     /**
      * The element data
-     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse}
+     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse | MapElementResponse}
      * @memberof ElementWithParentHierarchyResponse
      */
-    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse;
+    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse | MapElementResponse;
     /**
      * The hierarchical path of parent elements
      * @type {Array<ParentNodeInfoResponse>}

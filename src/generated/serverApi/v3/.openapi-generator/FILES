@@ -241,6 +241,8 @@ models/maintenance-response.ts
 models/maintenance-status-response.ts
 models/map-content-body.ts
 models/map-element-content-body.ts
+models/map-element-content.ts
+models/map-element-response.ts
 models/material-response.ts
 models/me-account-response.ts
 models/me-preferences-response.ts

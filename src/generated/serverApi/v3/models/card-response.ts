@@ -22,6 +22,7 @@ import { FileElementResponse } from './file-element-response';
 import { FileFolderElementResponse } from './file-folder-element-response';
 import { H5pElementResponse } from './h5p-element-response';
 import { LinkElementResponse } from './link-element-response';
+import { MapElementResponse } from './map-element-response';
 import { RichTextElementResponse } from './rich-text-element-response';
 import { TimestampsResponse } from './timestamps-response';
 import { VideoConferenceElementResponse } from './video-conference-element-response';
@@ -59,10 +60,10 @@ export interface CardResponse {
     height: number;
     /**
      * 
-     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse>}
+     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse | MapElementResponse>}
      * @memberof CardResponse
      */
-    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse>;
+    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse | MapElementResponse>;
     /**
      * 
      * @type {VisibilitySettingsResponse}
