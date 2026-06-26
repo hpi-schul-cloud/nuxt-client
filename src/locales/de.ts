@@ -920,6 +920,10 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectTool": "Tool auswählen...",
 	"feature-board-external-tool-element.placeholder.selectContent": "{toolName} Inhalt auswählen...",
 	"feature-board-file-element.placeholder.uploadFile": "Datei hochladen",
+	"feature-board-map-element.consent.title": "Externer Karteninhalt",
+	"feature-board-map-element.consent.description":
+		"Diese Karte wird von OpenStreetMap, einem externen Dienst, bereitgestellt. Beim Laden der Karte wird Ihre IP-Adresse an OpenStreetMap-Server übertragen. Stimmen Sie dem Laden der Karte zu?",
+	"feature-board-map-element.consent.approve": "Karte laden",
 	"feature-copy.copyInfo.success": "Kopiervorgang für {type} '{name}' erfolgreich gestartet.",
 	"feature-copy.copyInfo.title": "{type} duplizieren",
 	"feature-copy.copyInfo.checkPrivacyAndCopyright": "Bitte die Inhalte auf Urheberrecht und Datenschutz prüfen.",

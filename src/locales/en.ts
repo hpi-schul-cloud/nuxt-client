@@ -894,6 +894,10 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectTool": "Select Tool...",
 	"feature-board-external-tool-element.placeholder.selectContent": "Select {toolName} content...",
 	"feature-board-file-element.placeholder.uploadFile": "Upload file",
+	"feature-board-map-element.consent.title": "External map content",
+	"feature-board-map-element.consent.description":
+		"This map is provided by OpenStreetMap, an external service. Loading the map will transmit your IP address to OpenStreetMap servers. Do you agree to load the map?",
+	"feature-board-map-element.consent.approve": "Load map",
 	"feature-copy.copyInfo.success": "Copy process for {type} '{name}' successfully started.",
 	"feature-copy.copyInfo.title": "Duplicate {type}",
 	"feature-copy.copyInfo.checkPrivacyAndCopyright": "Please check the contents for copyright and privacy.",

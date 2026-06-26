@@ -8,7 +8,9 @@
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
-		<MapContentElementDisplay v-if="!isEditMode" :content="computedElement.content">
+		<MapConsentOverlay v-if="!consentGiven" @approve="onApproveConsent" />
+
+		<MapContentElementDisplay v-else-if="!isEditMode" :content="computedElement.content">
 			<template #menu>
 				<BoardMenu
 					:scope="BoardMenuScope.MAP_ELEMENT"
@@ -22,7 +24,7 @@
 			</template>
 		</MapContentElementDisplay>
 
-		<div v-if="isEditMode" class="map-edit-wrapper">
+		<div v-else class="map-edit-wrapper">
 			<div class="map-edit-menu">
 				<BoardMenu
 					:scope="BoardMenuScope.MAP_ELEMENT"
@@ -40,6 +42,7 @@
 </template>
 
 <script setup lang="ts">
+import MapConsentOverlay from "./components/MapConsentOverlay.vue";
 import MapContentElementDisplay from "./components/MapContentElementDisplay.vue";
 import MapContentElementEdit from "./components/MapContentElementEdit.vue";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
@@ -47,7 +50,7 @@ import { MapElementContent, MapElementResponse } from "@api-server";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
-import { PropType, ref, toRef } from "vue";
+import { onMounted, PropType, ref, toRef } from "vue";
 
 const props = defineProps({
 	element: {
@@ -76,6 +79,18 @@ const element = toRef(props, "element");
 useBoardFocusHandler(element.value.id, mapContentElement);
 
 const { modelValue, computedElement } = useContentElementState(props);
+
+const OSM_CONSENT_KEY = "osm-consent-given";
+const consentGiven = ref(false);
+
+onMounted(() => {
+	consentGiven.value = sessionStorage.getItem(OSM_CONSENT_KEY) === "true";
+});
+
+const onApproveConsent = () => {
+	sessionStorage.setItem(OSM_CONSENT_KEY, "true");
+	consentGiven.value = true;
+};
 
 const onMapUpdate = (newContent: MapElementContent) => {
 	Object.assign(modelValue.value, newContent);

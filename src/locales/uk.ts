@@ -909,6 +909,10 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectTool": "Виберіть інструмент...",
 	"feature-board-external-tool-element.placeholder.selectContent": "Виберіть вміст {toolName}...",
 	"feature-board-file-element.placeholder.uploadFile": "Завантажити файл",
+	"feature-board-map-element.consent.title": "Зовнішній вміст карти",
+	"feature-board-map-element.consent.description":
+		"Ця карта надається OpenStreetMap — зовнішнім сервісом. Під час завантаження карти ваша IP-адреса буде передана на сервери OpenStreetMap. Ви погоджуєтесь завантажити карту?",
+	"feature-board-map-element.consent.approve": "Завантажити карту",
 	"feature-copy.copyInfo.success": "Процес копіювання для {type} '{name}' успішно розпочато.",
 	"feature-copy.copyInfo.title": "Дублювати {type}",
 	"feature-copy.copyInfo.checkPrivacyAndCopyright":

@@ -913,6 +913,10 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectTool": "Herramienta de selección...",
 	"feature-board-external-tool-element.placeholder.selectContent": "Seleccionar contenido de {toolName}...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
+	"feature-board-map-element.consent.title": "Contenido de mapa externo",
+	"feature-board-map-element.consent.description":
+		"Este mapa es proporcionado por OpenStreetMap, un servicio externo. Al cargar el mapa, su dirección IP será transmitida a los servidores de OpenStreetMap. ¿Acepta cargar el mapa?",
+	"feature-board-map-element.consent.approve": "Cargar mapa",
 	"feature-copy.copyInfo.success": "El proceso de copia para {type} '{name}' se ha iniciado correctamente.",
 	"feature-copy.copyInfo.title": "Duplicar {type}",
 	"feature-copy.copyInfo.checkPrivacyAndCopyright":
