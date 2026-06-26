@@ -8,10 +8,7 @@
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
-		<MapContentElementDisplay
-			v-if="!isEditMode"
-			:content="computedElement.content"
-		>
+		<MapContentElementDisplay v-if="!isEditMode" :content="computedElement.content">
 			<template #menu>
 				<BoardMenu
 					:scope="BoardMenuScope.MAP_ELEMENT"
@@ -37,23 +34,20 @@
 					<KebabMenuActionDelete @click="onDelete" />
 				</BoardMenu>
 			</div>
-			<MapContentElementEdit
-				:model-value="modelValue"
-				@update:model-value="onMapUpdate"
-			/>
+			<MapContentElementEdit :model-value="modelValue" @update:model-value="onMapUpdate" />
 		</div>
 	</VCard>
 </template>
 
 <script setup lang="ts">
+import MapContentElementDisplay from "./components/MapContentElementDisplay.vue";
+import MapContentElementEdit from "./components/MapContentElementEdit.vue";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { MapElementContent, MapElementResponse } from "@api-server";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { PropType, ref, toRef } from "vue";
-import MapContentElementDisplay from "./components/MapContentElementDisplay.vue";
-import MapContentElementEdit from "./components/MapContentElementEdit.vue";
 
 const props = defineProps({
 	element: {

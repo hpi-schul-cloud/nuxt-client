@@ -4,6 +4,8 @@
 			ref="mapContainer"
 			class="map-display"
 			data-testid="map-content-element-display"
+			@mousedown.stop
+			@touchstart.stop
 		/>
 		<div class="map-display-menu">
 			<slot name="menu" />
@@ -12,9 +14,9 @@
 </template>
 
 <script setup lang="ts">
+import "leaflet/dist/leaflet.css";
 import { MapElementContent } from "@api-server";
 import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import { onBeforeUnmount, onMounted, PropType, ref, watch } from "vue";
 
 const props = defineProps({
