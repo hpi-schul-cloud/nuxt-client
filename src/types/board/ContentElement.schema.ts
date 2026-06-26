@@ -47,6 +47,13 @@ const VideoConferenceElementContentSchema = z.object({
 
 const CollaborativeTextEditorElementContentSchema = z.object({});
 
+const MapElementContentSchema = z.object({
+	centerLat: z.number(),
+	centerLng: z.number(),
+	zoom: z.number(),
+	features: z.string(),
+});
+
 export const AnyContentElementSchema = z.object({
 	id: z.string(),
 	type: z.enum(ContentElementType),
@@ -65,5 +72,6 @@ export const AnyContentElementSchema = z.object({
 		DeletedElementContentSchema,
 		VideoConferenceElementContentSchema,
 		CollaborativeTextEditorElementContentSchema,
+		MapElementContentSchema,
 	]),
 });

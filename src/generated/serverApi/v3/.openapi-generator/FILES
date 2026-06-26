@@ -239,6 +239,8 @@ models/lti11-tool-config-update-params.ts
 models/maintenance-params.ts
 models/maintenance-response.ts
 models/maintenance-status-response.ts
+models/map-content-body.ts
+models/map-element-content-body.ts
 models/material-response.ts
 models/me-account-response.ts
 models/me-preferences-response.ts

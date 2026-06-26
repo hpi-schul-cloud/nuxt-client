@@ -490,6 +490,7 @@ export default {
 	"components.board.menu.fileElement": "Configuración del archivo",
 	"components.board.menu.folderElement": "Configuración de la carpeta de archivos",
 	"components.board.menu.linkElement": "Configuración del enlace",
+	"components.board.menu.mapElement": "Configuración del mapa",
 	"components.board.menu.videoConferenceElement": "Configuración de la videoconferencia",
 	"components.board.menu.h5pElement": "Configuración de elementos de aprendizaje interactivo",
 	"components.board.menu.deletedElement": "Configuración de contenido eliminado",
@@ -557,6 +558,7 @@ export default {
 	"components.cardElement.deleteElement": "Suprimir elemento",
 	"components.cardElement.dragElement": "Mover elemento",
 	"components.cardElement.drawingElement": "Pizarra",
+	"components.cardElement.mapElement": "Mapa",
 	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Este Etherpad es visible y editable para todos los participantes en el curso.",
@@ -618,6 +620,7 @@ export default {
 	"components.elementTypeSelection.elements.textElement.subtitle": "Texto",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle": "Videoconferencia",
 	"components.elementTypeSelection.elements.h5pElement.subtitle": "Elemento de aprendizaje interactivo",
+	"components.elementTypeSelection.elements.mapElement.subtitle": "Mapa",
 	"components.elementTypeSelection.elements.collabora.subtitle": "Crear documento",
 	"components.externalTools.status.deactivated": "Desactivado",
 	"components.externalTools.status.incomplete": "Configuración incompleta",

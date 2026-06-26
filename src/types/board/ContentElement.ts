@@ -7,6 +7,7 @@ import {
 	FileFolderElementResponse,
 	H5pElementResponse,
 	LinkElementResponse,
+	MapElementResponse,
 	ParentNodeInfoResponse,
 	ParentNodeType,
 	RichTextElementResponse,
@@ -24,7 +25,8 @@ export type AnyContentElement =
 	| DrawingElementResponse
 	| CollaborativeTextEditorElementResponse
 	| VideoConferenceElementResponse
-	| H5pElementResponse;
+	| H5pElementResponse
+	| MapElementResponse;
 
 export type ParentNodeInfo = ParentNodeInfoResponse;
 

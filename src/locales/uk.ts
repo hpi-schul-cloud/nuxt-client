@@ -492,6 +492,7 @@ export default {
 	"components.board.menu.fileElement": "Налаштування файлу",
 	"components.board.menu.folderElement": "Налаштування папки файлів",
 	"components.board.menu.linkElement": "Налаштування посилання",
+	"components.board.menu.mapElement": "Налаштування карти",
 	"components.board.menu.videoConferenceElement": "Налаштування відеоконференція",
 	"components.board.menu.h5pElement": "Налаштування інтерактивних навчальних елементів",
 	"components.board.menu.deletedElement": "Видалені налаштування вмісту",
@@ -556,6 +557,7 @@ export default {
 	"components.cardElement.deleteElement": "Видалити елемент",
 	"components.cardElement.dragElement": "Перемістити елемент",
 	"components.cardElement.drawingElement": "Дошка",
+	"components.cardElement.mapElement": "Карта",
 	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Цей Etherpad є видимою і доступною для редагування для всіх учасників курсу.",
@@ -616,6 +618,7 @@ export default {
 	"components.elementTypeSelection.elements.textElement.subtitle": "Текст",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle": "Відеоконференція",
 	"components.elementTypeSelection.elements.h5pElement.subtitle": "Інтерактивний елемент навчання",
+	"components.elementTypeSelection.elements.mapElement.subtitle": "Карта",
 	"components.elementTypeSelection.elements.collabora.subtitle": "Створити документ",
 	"components.externalTools.status.deactivated": "Деактивовано",
 	"components.externalTools.status.incomplete": "Конфігурація не завершена",

@@ -37,6 +37,7 @@ import { FileContentElement } from "@feature-board-file-element";
 import { FolderContentElement } from "@feature-board-folder-element";
 import { H5pElement } from "@feature-board-h5p-element";
 import { LinkContentElement } from "@feature-board-link-element";
+import { MapContentElement } from "@feature-board-map-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import { PropType } from "vue";
@@ -123,6 +124,11 @@ const mapToComponent = (type: ContentElementType) => {
 		case ContentElementType.LINK:
 			if (envConfig.value.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
 				return LinkContentElement;
+			}
+			break;
+		case ContentElementType.MAP:
+			if (true) {
+				return MapContentElement;
 			}
 			break;
 		case ContentElementType.RICH_TEXT:

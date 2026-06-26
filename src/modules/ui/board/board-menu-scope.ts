@@ -9,6 +9,7 @@ export enum BoardMenuScope {
 	FOLDER_ELEMENT = "folderElement",
 	LINK_ELEMENT = "linkElement",
 	DELETED_ELEMENT = "deletedElement",
+	MAP_ELEMENT = "mapElement",
 	MEDIA_EXTERNAL_TOOL_ELEMENT = "mediaExternalToolElement",
 	VIDEO_CONFERENCE_ELEMENT = "videoConferenceElement",
 	H5P_ELEMENT = "h5pElement",

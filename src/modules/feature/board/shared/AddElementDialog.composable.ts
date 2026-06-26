@@ -15,6 +15,7 @@ import {
 	mdiFolderOpenOutline,
 	mdiFormatText,
 	mdiLink,
+	mdiMap,
 	mdiPresentation,
 	mdiPuzzleOutline,
 	mdiTextBoxEditOutline,
@@ -157,6 +158,15 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 				label: t("components.elementTypeSelection.elements.h5pElement.subtitle"),
 				action: () => onElementClick(ContentElementType.H5P),
 				testId: "create-element-h5p",
+			});
+		}
+
+		if (true) {
+			options.push({
+				icon: mdiMap,
+				label: t("components.elementTypeSelection.elements.mapElement.subtitle"),
+				action: () => onElementClick(ContentElementType.MAP),
+				testId: "create-element-map",
 			});
 		}
 

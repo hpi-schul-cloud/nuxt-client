@@ -30,6 +30,9 @@ import {
 	LinkContentBody,
 	LinkElementContentBody,
 	LinkElementResponse,
+	MapContentBody,
+	MapElementContentBody,
+	MapElementResponse,
 	RichTextElementContentBody,
 	RichTextElementResponse,
 	RoomApiFactory,
@@ -188,6 +191,17 @@ export const useBoardApi = () => {
 				type: ContentElementType.H5P,
 			};
 
+			return body;
+		}
+
+		const isMapElement = (element: AnyContentElement): element is MapElementResponse =>
+			element.type === ContentElementType.MAP;
+
+		if (isMapElement(element)) {
+			const body: MapElementContentBody = {
+				content: element.content as MapContentBody,
+				type: ContentElementType.MAP,
+			};
 			return body;
 		}
 
