@@ -690,7 +690,9 @@ export default {
 	"components.molecules.import.options.failure.invalidToken": "El token en el enlace es desconocido o ha caducado.",
 	"components.molecules.import.options.failure.permissionError": "Desafortunadamente, falta la autorización necesaria.",
 	"components.molecules.import.options.loadingMessage": "Importación en curso...",
-	"components.molecules.import.options.success": "{name} importado con éxito",
+	"components.molecules.import.options.success": '{type} "{name}" importado con éxito',
+	"components.molecules.import.options.successWithDestination":
+		'{type} "{name}" importado con éxito en {destinationType} "{destinationName}"',
 	"components.molecules.import.options.tableHeader.InfoText": "No se importará el siguiente contenido:",
 	"components.molecules.import.room.label": "Nombre de la sala",
 	"components.molecules.import.room.options.title": "Importar sala",
