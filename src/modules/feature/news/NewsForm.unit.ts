@@ -1,6 +1,6 @@
 import ClassicEditor from "../editor/ClassicEditor.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { Status } from "@/store/types/commons";
+import { Status } from "@/types/common/commons";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { toCombinedDateTimeIso } from "@/utils/date-time.utils";
 import { newsResponseFactory } from "@@/tests/test-utils";
@@ -31,12 +31,10 @@ vi.mock("@/plugins/i18n");
 
 describe("NewsForm", () => {
 	let wrapper: VueWrapper<InstanceType<typeof NewsForm>>;
-	let askConfirmationSpy: MockInstance;
 	let askCancelSpy: MockInstance;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		askConfirmationSpy = vi.spyOn(confirmDialogUtils, "askConfirmation");
 		askCancelSpy = vi.spyOn(confirmDialogUtils, "askCancel");
 	});
 

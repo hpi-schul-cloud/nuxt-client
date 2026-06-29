@@ -1,5 +1,12 @@
 <template>
-	<VDialog :model-value="isOpen" fullscreen scrollable @keydown.escape="onDialogClose">
+	<VDialog
+		:model-value="isOpen"
+		fullscreen
+		scrollable
+		scrim="transparent"
+		:transition="false"
+		@keydown.escape="onDialogClose"
+	>
 		<VToolbar id="card-detail-view-toolbar" class="toolbar border-b-thin">
 			<VBtn
 				:icon="mdiClose"
@@ -8,6 +15,20 @@
 				@click="onDialogClose"
 			/>
 			<VToolbarTitle>{{ $t("components.board.dialog.detail-view.title") }}</VToolbarTitle>
+			<VBtn
+				:icon="mdiChevronLeft"
+				data-testid="prev-detail-view-button"
+				:aria-label="t('components.board.action.prev-detail-view')"
+				:to="previousCardRoute"
+				:disabled="!previousCardRoute"
+			/>
+			<VBtn
+				:icon="mdiChevronRight"
+				data-testid="next-detail-view-button"
+				:aria-label="t('components.board.action.next-detail-view')"
+				:to="nextCardRoute"
+				:disabled="!nextCardRoute"
+			/>
 			<VSpacer />
 			<VBtn
 				v-if="allowedOperations?.deleteCard && !isEditMode"
@@ -51,12 +72,15 @@ import CardHost from "./CardHost.vue";
 import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { Colors } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
-import { mdiClose } from "@icons/material";
+import { mdiChevronLeft, mdiChevronRight, mdiClose } from "@icons/material";
 import { computed, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
+import type { RouteLocationRaw } from "vue-router";
 
 const props = defineProps<{
 	cardId: string;
+	previousCardRoute?: RouteLocationRaw;
+	nextCardRoute?: RouteLocationRaw;
 }>();
 const cardRef = toRef(props, "cardId");
 

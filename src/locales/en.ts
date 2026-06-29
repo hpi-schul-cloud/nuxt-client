@@ -69,6 +69,7 @@ export default {
 	"common.labels.complete.lastName": "Full surname",
 	"common.labels.consent": "Consent",
 	"common.labels.course": "Course",
+	"common.labels.team": "Team",
 	"common.labels.createAt": "Created:",
 	"common.labels.createdAt": "Created At",
 	"common.labels.date": "Date",
@@ -148,7 +149,7 @@ export default {
 	"common.notifications.errors.notCreated": "{type} could not be created.",
 	"common.notifications.errors.notSaved": "{type} could not be saved.",
 	"common.notifications.errors.notDeleted": "{type} could not be deleted.",
-	"common.notifications.errors.notDuplicated": "{type} could not be duplicated.",
+	"common.notifications.errors.notDuplicated": "{type} could not be duplicated or was only partially duplicated.",
 	"common.notifications.errors.notLoaded": "{type} could not be loaded.",
 	"common.notifications.errors.notMoved": "{type} could not be moved.",
 	"common.notifications.errors.notExited": "{type} could not be exited.",
@@ -245,6 +246,7 @@ export default {
 	"common.words.courses": "Courses",
 	"common.words.draft": "Draft",
 	"common.words.drafts": "Drafts",
+	"common.words.external": "external",
 	"common.words.languages.de": "German",
 	"common.words.languages.en": "English",
 	"common.words.languages.es": "Spanish",
@@ -444,6 +446,8 @@ export default {
 	"components.board.action.delete": "Delete",
 	"components.board.action.deleteFromSection": "Remove from section",
 	"components.board.action.detail-view": "Open detail view",
+	"components.board.action.next-detail-view": "Open next detail view",
+	"components.board.action.prev-detail-view": "Open previous detail view",
 	"components.board.action.download": "Download",
 	"components.board.action.moveDown": "Move down",
 	"components.board.action.moveLeft": "Move left",
@@ -488,7 +492,8 @@ export default {
 		"The number of files exceeds the permitted limit of {fileLimitPerParent} files.",
 	"components.board.notifications.errors.notCreated": "{type} could not be created.",
 	"components.board.notifications.errors.notDeleted": "{type} could not be deleted.",
-	"components.board.notifications.errors.notDuplicated": "{type} could not be duplicated.",
+	"components.board.notifications.errors.notDuplicated":
+		"{type} could not be duplicated or was only partially duplicated.",
 	"components.board.notifications.errors.notLoaded": "{type} could not be loaded.",
 	"components.board.notifications.errors.notMoved": "{type} could not be moved.",
 	"components.board.notifications.errors.notUpdated": "Your changes could not be saved.",
@@ -672,7 +677,9 @@ export default {
 	"components.molecules.import.options.failure.permissionError":
 		"Unfortunately, the necessary authorization is missing.",
 	"components.molecules.import.options.loadingMessage": "Import in progress...",
-	"components.molecules.import.options.success": "{name} imported successfully",
+	"components.molecules.import.options.success": '{type} "{name}" imported successfully',
+	"components.molecules.import.options.successWithDestination":
+		'{type} "{name}" successfully imported into {destinationType} "{destinationName}"',
 	"components.molecules.import.options.tableHeader.InfoText": "The following content will not be imported:",
 	"components.molecules.import.room.label": "Room name",
 	"components.molecules.import.room.options.title": "Import room",
@@ -762,7 +769,8 @@ export default {
 	"components.molecules.export.options.info": "The following content is not exported:",
 	"components.molecules.export.options.info.point1": "Uploaded files within the course.",
 	"components.molecules.export.options.info.point2": "Submissions",
-	"components.molecules.export.options.info.point3": "File folders are not exported with Common Cartridge Version 1.1",
+	"components.molecules.export.options.info.point3":
+		"To ensure compatibility with Moodle, file folders are exported in Common Cartridge version 1.1 as a group of individual files.",
 	"components.molecules.export.options.info.point4": "Following Card Elements within sections:",
 	"components.molecules.export.options.info.point4.sub1": "Whiteboard",
 	"components.molecules.export.options.info.point4.sub2": "Etherpad",
@@ -978,6 +986,9 @@ export default {
 	"mixins.typeMeta.types.image": "Image",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Website",
+	"loggedin.text.backupFeatures":
+		"Back up your cloud content and also use the new function for exporting courses. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "More information and instructions can be found here.",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"The school is in the transfer phase to the new school year. No classes and users can be created. Please contact the school administrator!",
 	"loggedin.text.schoolInTransferPhaseStartNew":
@@ -2065,4 +2076,8 @@ export default {
 	"pages.folder.trash.purge.error": "Files could not be permanently deleted.",
 	"pages.folder.trash.purge.dialog.title": "Permanently delete {count} file(s)?",
 	"pages.folder.trash.purge.dialog.checkboxLabel": "Deletion cannot be undone.",
+	"pages.folder.dropZone.dropFilesHere": "Drop files here to upload",
+	"pages.folder.dropZone.emptyState.title": "Drop files here to upload",
+	"pages.folder.dropZone.emptyState.orText": "or",
+	"pages.folder.dropZone.emptyState.browse": "browse your files",
 };

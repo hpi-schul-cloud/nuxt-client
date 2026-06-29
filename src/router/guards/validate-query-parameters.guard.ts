@@ -1,4 +1,4 @@
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { useAppStore } from "@data-app";
 import { NavigationGuard, RouteLocationNormalized } from "vue-router";
 

@@ -40,6 +40,7 @@
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
 import image from "@/assets/img/collaborativeEditor.svg";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { injectStrict } from "@/utils/inject";
 import { CollaborativeTextEditorElementResponse, CollaborativeTextEditorParentType } from "@api-server";
 import { useBoardFocusHandler } from "@data-board";
@@ -95,7 +96,12 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 	}
 };
 
-const onDelete = () => emit("delete:element", props.element.id);
+const onDelete = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.collaborativeTextEditorElement");
+	if (shouldDelete) {
+		emit("delete:element", props.element.id);
+	}
+};
 const onMoveUp = () => emit("move-up:edit");
 const onMoveDown = () => emit("move-down:edit");
 

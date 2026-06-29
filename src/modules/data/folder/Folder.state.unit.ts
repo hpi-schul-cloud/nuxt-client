@@ -1,6 +1,6 @@
 import { useFolderState } from "./Folder.state";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ContentElementType, ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {

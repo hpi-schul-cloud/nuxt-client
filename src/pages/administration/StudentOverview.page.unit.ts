@@ -4,7 +4,6 @@ import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
-import store from "@/plugins/store";
 import {
 	createTestAppStore,
 	createTestEnvStore,
@@ -122,7 +121,7 @@ describe("student overview page", () => {
 
 		const wrapper = mount(StudentPage, {
 			global: {
-				plugins: [createTestingI18n(), createTestingVuetify(), store],
+				plugins: [createTestingI18n(), createTestingVuetify()],
 				stubs: { RouterLink: RouterLinkStub },
 			},
 		});

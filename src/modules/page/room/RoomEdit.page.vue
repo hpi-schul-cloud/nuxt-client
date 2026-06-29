@@ -12,8 +12,8 @@
 </template>
 
 <script setup lang="ts">
-import { ApiResponseError } from "@/store/types/commons";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { ApiResponseError } from "@/types/common/commons";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { RoomUpdateParams } from "@/types/room/Room";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, useAppStore } from "@data-app";

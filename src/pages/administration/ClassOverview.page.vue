@@ -159,7 +159,7 @@
 
 <script setup lang="ts">
 import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
-import { SortOrder } from "@/store/types/sort-order.enum";
+import { SortOrder } from "@/types/enum/sort-order.enum";
 import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { ClassSortQueryType, Permission, SchoolYearQueryType, SchulcloudTheme } from "@api-server";

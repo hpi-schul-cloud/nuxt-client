@@ -1,21 +1,17 @@
+import { defaultConfigEnvs, useEnvConfig, useEnvStore } from "./env-config.store";
 import { mockApiResponse } from "@@/tests/test-utils";
-import { CommonCartridgeConfigApiFactory, CommonCartridgeConfigResponse } from "@api-common-cartridge";
 import { FileConfigApiFactory, FilesStorageConfigResponse } from "@api-file-storage";
 import { ConfigResponse, LanguageType, SchulcloudTheme, ServerConfigApiFactory } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
 import { beforeAll, beforeEach, expect } from "vitest";
-import { defaultConfigEnvs, useEnvConfig, useEnvStore } from "./env-config.store";
 
 vi.mock("@api-server");
 const mockedServerApi = vi.mocked(ServerConfigApiFactory);
 
 vi.mock("@api-file-storage");
 const mockedFileConfigApi = vi.mocked(FileConfigApiFactory);
-
-vi.mock("@api-common-cartridge");
-const mockedCommonCartridgeConfigApi = vi.mocked(CommonCartridgeConfigApiFactory);
 
 describe("useEnvStore", () => {
 	const doMockServerApiData = (data: ConfigResponse) => {
@@ -34,14 +30,6 @@ describe("useEnvStore", () => {
 		});
 	};
 
-	const doMockCommonCartridgeConfigApiData = (data: CommonCartridgeConfigResponse) => {
-		mockedCommonCartridgeConfigApi.mockReturnValue({
-			commonCartridgeConfigControllerPublicConfig(): Promise<AxiosResponse<CommonCartridgeConfigResponse>> {
-				return Promise.resolve(mockApiResponse({ data }));
-			},
-		});
-	};
-
 	const setup = async (
 		loadConfig = true,
 		dataServerApi: Partial<ConfigResponse> = {},
@@ -49,16 +37,10 @@ describe("useEnvStore", () => {
 			MAX_FILE_SIZE: 10,
 			COLLABORA_MAX_FILE_SIZE_IN_BYTES: 20,
 			FILES_STORAGE_MAX_FILES_PER_PARENT: 30,
-		},
-		dataCcApi: CommonCartridgeConfigResponse = {
-			FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: false,
-			FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: false,
-			FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_MAX_FILE_SIZE: 1073741824,
 		}
 	) => {
 		doMockServerApiData({ ...defaultConfigEnvs, ...dataServerApi });
 		doMockFileConfigApiData(dataFileApi);
-		doMockCommonCartridgeConfigApiData(dataCcApi);
 		if (loadConfig) {
 			await useEnvStore().loadConfiguration();
 		}
@@ -173,26 +155,6 @@ describe("useEnvStore", () => {
 
 			const success = await useEnvStore().loadConfiguration();
 			expect(success).toEqual(false);
-		});
-
-		it("should request, process and provide env common cartridge data.", async () => {
-			const mockCcData: CommonCartridgeConfigResponse = {
-				FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: true,
-				FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: true,
-				FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_MAX_FILE_SIZE: 100,
-			};
-			await setup(true, undefined, undefined, mockCcData);
-			expect(useEnvStore().envCommonCartridge).toEqual(mockCcData);
-		});
-
-		it("should handle error on cc configuration gracefully", async () => {
-			doMockServerApiData(defaultConfigEnvs);
-
-			mockedCommonCartridgeConfigApi.mockReturnValue({
-				commonCartridgeConfigControllerPublicConfig: vi.fn().mockRejectedValue(new Error("Cc config not available")),
-			});
-
-			await useEnvStore().loadConfiguration();
 		});
 	});
 });

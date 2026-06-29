@@ -1,5 +1,5 @@
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { CardResponse, Colors, ContentElementType } from "@api-server";
+import { CardResponse, Colors, ContentElementType, CopyStatusEnum } from "@api-server";
 
 export type FetchCardRequestPayload = {
 	cardIds: string[];
@@ -74,6 +74,7 @@ export type DuplicateCardRequestPayload = {
 export type DuplicateCardSuccessPayload = {
 	cardId: string;
 	duplicatedCard: CardResponse;
+	status: CopyStatusEnum;
 	isOwnAction: boolean;
 };
 export type DuplicateCardFailurePayload = DuplicateCardRequestPayload;

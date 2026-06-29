@@ -68,6 +68,7 @@ models/add-by-email-body-params.ts
 models/add-room-members-body-params.ts
 models/alert-response.ts
 models/api-validation-error.ts
+models/applicant-ids-body-params.ts
 models/authorization-body-params.ts
 models/authorization-context-params.ts
 models/authorization-many-references-body-params.ts
@@ -278,6 +279,7 @@ models/oauth-client-create-body.ts
 models/oauth-client-response.ts
 models/oauth-client-update-body.ts
 models/oauth-config-response.ts
+models/oauth-login-response.ts
 models/oauth-provider-login-response.ts
 models/oauth-session-token-expiration-response.ts
 models/oauth2-authorization-body-params.ts
@@ -370,6 +372,7 @@ models/school-year-response.ts
 models/schul-conne-xprovisioning-options-params.ts
 models/schul-conne-xprovisioning-options-response.ts
 models/schulcloud-theme.ts
+models/session-info-response.ts
 models/set-height-body-params.ts
 models/share-token-body-params.ts
 models/share-token-import-body-params.ts

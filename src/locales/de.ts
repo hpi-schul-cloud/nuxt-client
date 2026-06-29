@@ -71,6 +71,7 @@ export default {
 	"common.labels.complete.lastName": "Vollständiger Nachname",
 	"common.labels.consent": "Einverständnis",
 	"common.labels.course": "Kurs",
+	"common.labels.team": "Team",
 	"common.labels.createAt": "Erstellt:",
 	"common.labels.createdAt": "Erstellungsdatum",
 	"common.labels.date": "Datum",
@@ -160,7 +161,7 @@ export default {
 	"common.notifications.errors.notDeleted":
 		"{type} konnte nicht gelöscht werden. | {type} konnten nicht gelöscht werden.",
 	"common.notifications.errors.notDuplicated":
-		"{type} konnte nicht dupliziert werden. | {type} konnten nicht dupliziert werden.",
+		"{type} konnte nicht oder nicht vollständig dupliziert werden. | {type} konnten nicht oder nicht vollständig dupliziert werden.",
 	"common.notifications.errors.notLoaded": "{type} konnte nicht geladen werden. | {type} konnten nicht geladen werden.",
 	"common.notifications.errors.notMoved":
 		"{type} konnte nicht verschoben werden. | {type} konnten nicht verschoben werden.",
@@ -258,6 +259,7 @@ export default {
 	"common.words.courses": "Kurse",
 	"common.words.draft": "Entwurf",
 	"common.words.drafts": "Entwürfe",
+	"common.words.external": "extern",
 	"common.words.languages.de": "Deutsch",
 	"common.words.languages.en": "Englisch",
 	"common.words.languages.es": "Spanisch",
@@ -458,6 +460,8 @@ export default {
 	"components.board.action.delete": "Löschen",
 	"components.board.action.deleteFromSection": "Aus Abschnitt entfernen",
 	"components.board.action.detail-view": "Vollansicht öffnen",
+	"components.board.action.next-detail-view": "Nächste Vollansicht öffnen",
+	"components.board.action.prev-detail-view": "Vorherige Vollansicht öffnen",
 	"components.board.action.download": "Herunterladen",
 	"components.board.action.moveDown": "Nach unten verschieben",
 	"components.board.action.moveLeft": "Nach links verschieben",
@@ -502,7 +506,8 @@ export default {
 		"Die Anzahl der Dateien überschreitet das zulässige Limit von {fileLimitPerParent} Dateien.",
 	"components.board.notifications.errors.notCreated": "{type} konnte nicht erstellt werden.",
 	"components.board.notifications.errors.notDeleted": "{type} konnte nicht gelöscht werden.",
-	"components.board.notifications.errors.notDuplicated": "{type} konnte nicht dupliziert werden.",
+	"components.board.notifications.errors.notDuplicated":
+		"{type} konnte nicht oder nicht vollständig dupliziert werden.",
 	"components.board.notifications.errors.notLoaded": "{type} konnte nicht geladen werden.",
 	"components.board.notifications.errors.notMoved": "{type} konnte nicht verschoben werden.",
 	"components.board.notifications.errors.notUpdated": "Die Änderungen konnten nicht gespeichert werden.",
@@ -694,7 +699,9 @@ export default {
 	"components.molecules.import.options.failure.invalidToken": "Das Token im Link ist unbekannt oder abgelaufen.",
 	"components.molecules.import.options.failure.permissionError": "Leider fehlt die notwendige Berechtigung.",
 	"components.molecules.import.options.loadingMessage": "Import läuft...",
-	"components.molecules.import.options.success": "{name} wurde erfolgreich importiert",
+	"components.molecules.import.options.success": '{type} "{name}" erfolgreich importiert',
+	"components.molecules.import.options.successWithDestination":
+		'{type} "{name}" erfolgreich in {destinationType} "{destinationName}" importiert',
 	"components.molecules.import.options.tableHeader.InfoText": "Folgende Inhalte werden nicht importiert:",
 	"components.molecules.import.room.options.title": "Raum importieren",
 	"components.molecules.import.room.rename": "Bei Bedarf kann der Name des Raumes umbenannt werden: ",
@@ -708,7 +715,7 @@ export default {
 	"components.molecules.export.options.info.point1": "Hochgeladene Dateien innerhalb des Kurses.",
 	"components.molecules.export.options.info.point2": "Abgaben",
 	"components.molecules.export.options.info.point3":
-		"Dateiordner werden mit Common Cartridge Version 1.1 nicht exportiert",
+		"Um die Kompatibilität mit Moodle zu gewährleisten, werden Dateiordner in Common Cartridge Version 1.1 als Gruppe von Einzeldateien exportiert.",
 	"components.molecules.export.options.info.point4": "Folgende Karten Elemente innerhalb von Bereichen:",
 	"components.molecules.export.options.info.point4.sub1": "Whiteboard",
 	"components.molecules.export.options.info.point4.sub2": "Etherpad",
@@ -1005,6 +1012,9 @@ export default {
 	"mixins.typeMeta.types.image": "Bild",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Webseite",
+	"loggedin.text.backupFeatures":
+		"Sichern Sie Ihre Inhalte der Cloud und nutzen Sie auch die neue Funktion zum Export von Kursen. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "Weitere Informationen und Hilfestellungen sind hier zu finden.",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte kontaktiere deinen Schul-Admin!",
 	"loggedin.text.schoolInTransferPhaseStartNew":
@@ -2109,4 +2119,8 @@ export default {
 	"pages.folder.trash.purge.error": "Dateien konnten nicht endgültig gelöscht werden.",
 	"pages.folder.trash.purge.dialog.title": "{count} Datei(en) endgültig löschen?",
 	"pages.folder.trash.purge.dialog.checkboxLabel": "Löschen kann nicht rückgängig gemacht werden.",
+	"pages.folder.dropZone.dropFilesHere": "Dateien hier ablegen zum Hochladen",
+	"pages.folder.dropZone.emptyState.title": "Dateien hier ablegen zum Hochladen",
+	"pages.folder.dropZone.emptyState.orText": "oder",
+	"pages.folder.dropZone.emptyState.browse": "Dateien durchsuchen",
 };

@@ -1,6 +1,6 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { Course } from "@/store/types/room";
+import { Course } from "@/types/course-room/room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	BoardApiFactory,

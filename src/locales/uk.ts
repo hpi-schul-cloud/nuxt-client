@@ -71,6 +71,7 @@ export default {
 	"common.labels.complete.lastName": "Повне прізвище",
 	"common.labels.consent": "Згода",
 	"common.labels.course": "Курс",
+	"common.labels.team": "Команда",
 	"common.labels.createAt": "Створено:",
 	"common.labels.createdAt": "Створено в",
 	"common.labels.date": "Дата",
@@ -153,7 +154,7 @@ export default {
 	"common.notifications.errors.notDeleted":
 		"{type} не вдалося видалити. | {type} не вдалося видалити. | {type} не вдалося видалити.",
 	"common.notifications.errors.notDuplicated":
-		"{type} не вдалося дублювати. | {type} не вдалося дублювати. | {type} не вдалося дублювати.",
+		"{type} не вдалося дублювати або не вдалося дублювати повністю. | {type} не вдалося дублювати або не вдалося дублювати повністю. | {type} не вдалося дублювати або не вдалося дублювати повністю.",
 	"common.notifications.errors.notLoaded":
 		"{type} не вдалося завантажити. | {type} не вдалося завантажити. | {type} не вдалося завантажити.",
 	"common.notifications.errors.notMoved":
@@ -254,6 +255,7 @@ export default {
 	"common.words.courses": "Мій курс",
 	"common.words.draft": "Чернетка",
 	"common.words.drafts": "Чернетки",
+	"common.words.external": "зовнішній",
 	"common.words.languages.de": "Німецька",
 	"common.words.languages.en": "Англійська",
 	"common.words.languages.es": "Іспанська",
@@ -456,6 +458,8 @@ export default {
 	"components.board.action.delete": "Видалити",
 	"components.board.action.deleteFromSection": "Видалити з розділу",
 	"components.board.action.detail-view": "Відкрити детальний вигляд",
+	"components.board.action.next-detail-view": "Відкрити наступний детальний вигляд",
+	"components.board.action.prev-detail-view": "Відкрити попередній детальний вигляд",
 	"components.board.action.download": "Завантажити",
 	"components.board.action.moveDown": "Рухатися вниз",
 	"components.board.action.moveLeft": "Перемістіться вліво",
@@ -500,7 +504,7 @@ export default {
 		"Кількість файлів перевищує допустимий ліміт {fileLimitPerParent} файлів.",
 	"components.board.notifications.errors.notCreated": "{type}: Не вдалося створити.",
 	"components.board.notifications.errors.notDeleted": "{type}: Не вдалося видалити.",
-	"components.board.notifications.errors.notDuplicated": "{type} не вдалося дублікувати.",
+	"components.board.notifications.errors.notDuplicated": "{type}: не вдалося або не повністю вдалося продублювати.",
 	"components.board.notifications.errors.notLoaded": "{type}: не вдалося завантажити.",
 	"components.board.notifications.errors.notMoved": "{type} не вдалося позицію.",
 	"components.board.notifications.errors.notUpdated": "Зберегти зміни не вдалося.",
@@ -684,7 +688,9 @@ export default {
 	"components.molecules.import.options.failure.invalidToken": "Маркер у посиланні невідомий або термін дії минув.",
 	"components.molecules.import.options.failure.permissionError": "На жаль, відсутній необхідний дозвіл.",
 	"components.molecules.import.options.loadingMessage": "Виконується імпорту...",
-	"components.molecules.import.options.success": "{name} успішно імпортовано",
+	"components.molecules.import.options.success": '{type} "{name}" успішно імпортовано',
+	"components.molecules.import.options.successWithDestination":
+		'{type} "{name}" успішно імпортовано в {destinationType} "{destinationName}"',
 	"components.molecules.import.options.tableHeader.InfoText": "Наступний вміст не буде імпортовано:",
 	"components.molecules.import.room.label": "Назва кімнати",
 	"components.molecules.import.room.options.title": "Імпортувати кімнату",
@@ -777,7 +783,8 @@ export default {
 	"components.molecules.export.options.info": "Наступний вміст не експортується:",
 	"components.molecules.export.options.info.point1": "Завантажені файли в межах курсу.",
 	"components.molecules.export.options.info.point2": "Подання",
-	"components.molecules.export.options.info.point3": "Папки файлів не експортуються з Common Cartridge версією 1.1",
+	"components.molecules.export.options.info.point3":
+		"Щоб забезпечити сумісність із Moodle, папки файлів експортуються у форматі Common Cartridge версії 1.1 як група окремих файлів.",
 	"components.molecules.export.options.info.point4": "Наступні елементи карти в межах областей:",
 	"components.molecules.export.options.info.point4.sub1": "Біла дошка",
 	"components.molecules.export.options.info.point4.sub2": "Etherpad",
@@ -995,6 +1002,9 @@ export default {
 	"mixins.typeMeta.types.image": "Зображення",
 	"mixins.typeMeta.types.video": "Відео",
 	"mixins.typeMeta.types.webpage": "Веб-сайт",
+	"loggedin.text.backupFeatures":
+		"Зробіть резервну копію вашого контенту в хмарі та використовуйте також нову функцію для експорту курсів. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink": "Додаткову інформацію та допомогу можна знайти тут.",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів.",
 	"loggedin.text.schoolInTransferPhaseStartNew":
@@ -1083,25 +1093,27 @@ export default {
 	"pages.administration.ldap.activate.uuid": "UUID",
 	"pages.administration.ldap.classes.activate.import": "Активний імпорт для класів",
 	"pages.administration.ldap.classes.hint":
-		"Jedes LDAP-System nutzt andere Attribute, um Klassen darzustellen. Bitte hilf uns bei der Zuordnung der Attribute deiner Klassen. Wir haben einige sinnvolle Voreinstellungen getroffen, die du hier jederzeit anpassen kannst.",
+		"Кожна система LDAP використовує різні атрибути для представлення класів. Будь ласка, допоможіть нам із зіставленням атрибутів ваших класів. Ми підготували кілька корисних значень за замовчуванням, які ви можете будь-коли змінити тут.",
 	"pages.administration.ldap.classes.notice.title": "Відображувана назва атрибута",
 	"pages.administration.ldap.classes.participant.title": "Учасник атрибута",
 	"pages.administration.ldap.classes.path.info": "Відносний шлях від базового шляху",
 	"pages.administration.ldap.classes.path.subtitle":
 		"Тут ви повинні визначити, де ми знаходимо класи і як вони структуровані.",
 	"pages.administration.ldap.classes.path.title": "Шлях класу",
-	"pages.administration.ldap.classes.subtitle": "",
-	"pages.administration.ldap.classes.title": "",
+	"pages.administration.ldap.classes.subtitle":
+		"Укажіть атрибут класу, у якому доступна наведена нижче інформація у вашому LDAP.",
+	"pages.administration.ldap.classes.title": "Класи (необов'язково)",
 	"pages.administration.ldap.connection.basis.path.info":
-		"Alle Nutzer und Klassen müssen unterhalb des Basispfads erreichbar sein.",
-	"pages.administration.ldap.connection.basis.path": "",
+		"Усі користувачі та класи мають бути доступні в межах базового шляху.",
+	"pages.administration.ldap.connection.basis.path": "Базовий шлях школи",
 	"pages.administration.ldap.connection.search.user.info":
-		"Vollständige Nutzer-DN inkl. Root-Pfad des Nutzers der Zugriff auf alle Nutzerinformationen hat.",
-	"pages.administration.ldap.connection.search.user.password": "Password Such-Nutzer",
+		"Повний DN користувача, включно з кореневим шляхом користувача, який має доступ до всієї інформації про користувачів.",
+	"pages.administration.ldap.connection.search.user.password": "Пароль користувача для пошуку",
 	"pages.administration.ldap.connection.search.user": "пошук користувача",
-	"pages.administration.ldap.connection.server.info": "",
-	"pages.administration.ldap.connection.server.url": "",
-	"pages.administration.ldap.connection.title": "",
+	"pages.administration.ldap.connection.server.info":
+		"Переконайтеся, що сервер доступний через захищений протокол ldaps://.",
+	"pages.administration.ldap.connection.server.url": "URL сервера",
+	"pages.administration.ldap.connection.title": "З'єднання",
 	"pages.administration.ldap.errors.configuration": "Недійсний об’єкт конфігурації",
 	"pages.administration.ldap.errors.credentials": "Неправильні облікові дані користувача для пошуку",
 	"pages.administration.ldap.errors.path": "Неправильний пошук або базовий шлях",
@@ -1110,27 +1122,27 @@ export default {
 	"pages.administration.ldap.index.title": "Конфігурація LDAP",
 	"pages.administration.ldap.index.verified": "Перевірка пройшла успішно",
 	"pages.administration.ldap.save.example.class": "Приклад класу",
-	"pages.administration.ldap.save.example.synchronize": "Synchronisation aktivieren",
+	"pages.administration.ldap.save.example.synchronize": "Увімкнути синхронізацію",
 	"pages.administration.ldap.save.example.user": "Приклад користувача",
 	"pages.administration.ldap.save.subtitle":
 		"Нижче ви можете перевірити на прикладах, чи правильно ми призначили атрибути.",
-	"pages.administration.ldap.save.title": "Folgende Datensätze stehen zur Synchronisation bereit",
+	"pages.administration.ldap.save.title": "Для синхронізації доступні такі записи",
 	"pages.administration.ldap.subtitle.help": "Додаткові відомості можна знайти на нашому",
 	"pages.administration.ldap.subtitle.helping.link": "Розділ довідки щодо налаштування LDAP.",
 	"pages.administration.ldap.subtitle.one":
-		"Jegliche Änderungen an der folgenden Konfiguration kann zur Folge haben, dass der Login für dich und alle Nutzer deiner Schule nicht mehr funktioniert. Daher nimm nur Änderungen vor, wenn dir die Konsequenzen bewusst sind. Einige Bereiche sind nur lesbar.",
+		"Будь-які зміни в наведеній нижче конфігурації можуть призвести до того, що вхід більше не працюватиме для вас і всіх користувачів вашої школи. Тому вносьте зміни лише тоді, коли усвідомлюєте наслідки. Деякі розділи доступні лише для читання.",
 	"pages.administration.ldap.subtitle.two":
-		"Nach der Verifizierung kannst du dir die ausgelesenen Inhalte in der Vorschau ansehen. Nutzer, denen im Verzeichnis eines der benötigten Attribute fehlt, werden nicht synchronisiert.",
+		"Після перевірки ви можете переглянути зчитаний вміст у попередньому перегляді. Користувачі, у яких у каталозі відсутній хоча б один із необхідних атрибутів, не будуть синхронізовані.",
 	"pages.administration.ldap.title": "Конфігурація Синхронізація користувача та вхід через LDAP",
 	"pages.administration.ldap.users.domain.title": "Назва домену (шлях у LDAP)",
 	"pages.administration.ldap.users.hint":
-		"Jedes LDAP System nutzt andere Attribute, um Nutzer darzustellen. Bitte hilf uns bei der Zuordnung der Attribute deiner Nutzer. Wir haben einige sinnvolle Voreinstellungen getroffen, die du hier jederzeit anpassen kannst.",
+		"Кожна система LDAP використовує різні атрибути для представлення користувачів. Будь ласка, допоможіть нам із зіставленням атрибутів ваших користувачів. Ми підготували кілька корисних значень за замовчуванням, які ви можете будь-коли змінити тут.",
 	"pages.administration.ldap.users.path.email": "Значення атрибута Електронна пошта",
 	"pages.administration.ldap.users.path.firstname": "Значення атрибута Ім'я",
 	"pages.administration.ldap.users.path.lastname": "Значення атрибута Прізвище",
 	"pages.administration.ldap.users.path.title": "Шлях(-и) користувача",
 	"pages.administration.ldap.users.title.info":
-		"In dem folgenden Eingabefeld musst du festlegen, wo wir Nutzer finden und wie diese strukturiert sind. Mit Hilfe von zwei Semikolons (;;) hast du die Möglichkeit, mehrere Nutzerpfade getrennt voneinander zu hinterlegen.",
+		"У наведеному нижче полі введення потрібно визначити, де ми знаходимо користувачів і як вони структуровані. За допомогою двох крапок із комою (;;) ви можете окремо вказати кілька шляхів користувачів.",
 	"pages.administration.ldap.users.title": "Користувач",
 	"pages.administration.ldap.users.uid.info":
 		"Ім'я для входу, яке використовується пізніше, може існувати у вашій системі LDAP одночасно лише один раз.",
@@ -1147,7 +1159,7 @@ export default {
 	"pages.administration.ldapEdit.roles.info.user": "Наприклад: cn=ehemalige,ou=rollen,o=schule,dc=de",
 	"pages.administration.ldapEdit.roles.labels.admin": "Значення атрибуту для адміністратора",
 	"pages.administration.ldapEdit.roles.labels.member": "Атрибут ролі",
-	"pages.administration.ldapEdit.roles.labels.noSchoolCloud": "Attributwert Nutzer:innen ignorieren",
+	"pages.administration.ldapEdit.roles.labels.noSchoolCloud": "Значення атрибута для ігнорування користувача",
 	"pages.administration.ldapEdit.roles.labels.radio.description":
 		"Чи зберігається роль користувача у текстовому вигляді в атрибуті користувача чи існує група LDAP для відповідних ролей користувачів?",
 	"pages.administration.ldapEdit.roles.labels.radio.ldapGroup": "Група LDAP",
@@ -2085,4 +2097,8 @@ export default {
 	"pages.folder.trash.purge.error": "Не вдалося остаточно видалити файли.",
 	"pages.folder.trash.purge.dialog.title": "Назавжди видалити {count} файл(ів)?",
 	"pages.folder.trash.purge.dialog.checkboxLabel": "Видалення не можна скасувати.",
+	"pages.folder.dropZone.dropFilesHere": "Перетягніть файли сюди для завантаження",
+	"pages.folder.dropZone.emptyState.title": "Перетягніть файли сюди для завантаження",
+	"pages.folder.dropZone.emptyState.orText": "або",
+	"pages.folder.dropZone.emptyState.browse": "оглянути файли",
 };

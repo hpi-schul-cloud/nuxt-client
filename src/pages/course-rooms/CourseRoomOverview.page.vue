@@ -107,7 +107,7 @@ import CourseRoomEmptyAvatar from "@/components/course-rooms/CourseRoomEmptyAvat
 import CourseRoomGroupAvatar from "@/components/course-rooms/CourseRoomGroupAvatar.vue";
 import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
 import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
-import { DroppedObject } from "@/store/types/rooms";
+import { DroppedObject } from "@/types/course-room/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { DashboardGridElementResponse } from "@api-server";
 import { notifySuccess } from "@data-app";
@@ -196,15 +196,17 @@ const { executeImport } = useImportFlow();
 const executeImportFlow = async (token: string) => {
 	//  courses might not be loaded yet, so we need to fetch them before executing the import
 	await fetchAllElements();
-	const { result: importResult } = await executeImport(token, availableDestinations, "course");
+	const { destinations: importDestinations, success } = await executeImport(token, availableDestinations, "course");
 
-	if (!importResult) {
+	if (!success) {
 		router.push({ name: "course-room-overview" });
 		return;
 	}
 
-	if (importResult.destination && importResult.destination.type === "course") {
-		router.replace({ name: "room-details", params: { id: importResult.destination.id } });
+	const destinations = importDestinations ?? [];
+
+	if (destinations.length === 1 && destinations[0].type === "course") {
+		router.replace({ name: "room-details", params: { id: destinations[0].id } });
 	} else {
 		router.replace({ name: "course-room-overview" });
 		fetchCourses();

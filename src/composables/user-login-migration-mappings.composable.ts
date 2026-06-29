@@ -1,4 +1,4 @@
-import { BusinessError } from "@/store/types/commons";
+import { BusinessError } from "@/types/common/commons";
 
 const ErrorTypeTranslationKeyMap = new Map<string, string>([
 	["IDENTICAL_USER_LOGIN_MIGRATION_SYSTEM", "pages.administration.migration.identical_user_login_migration_system"],

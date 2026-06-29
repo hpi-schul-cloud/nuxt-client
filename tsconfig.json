@@ -34,6 +34,7 @@
 			"@data-tasks": ["./src/modules/data/tasks"],
 			"@data-group": ["./src/modules/data/group"],
 			"@data-h5p": ["./src/modules/data/h5p"],
+			"@data-ldap": ["./src/modules/data/ldap"],
 			"@data-license": ["./src/modules/data/license"],
 			"@data-oauth": ["./src/modules/data/oauth"],
 			"@data-room": ["./src/modules/data/room"],

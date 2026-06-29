@@ -1,5 +1,4 @@
 import H5pElementMenu from "./H5pElementMenu.vue";
-import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { KebabMenuAction, KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
@@ -161,7 +160,6 @@ describe("H5pElementMenu", () => {
 		});
 
 		it("should emit the delete event on click", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 			const { wrapper } = setup();
 
 			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
