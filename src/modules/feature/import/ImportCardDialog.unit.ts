@@ -82,11 +82,13 @@ describe("ImportCardDialog", () => {
 			[
 				{
 					newName: "Room 1",
-					destination: {
-						type: "column",
-						id: "column-123",
-						boardId: "board-123",
-					},
+					destinations: [
+						{
+							type: "column",
+							id: "column-123",
+							boardId: "board-123",
+						},
+					],
 				},
 			],
 		]);

@@ -69,17 +69,19 @@ const { executeImport } = useImportFlow();
 const executeImportFlow = async (token: string) => {
 	// rooms might not be loaded yet, so we need to fetch them before executing the import
 	await fetchRooms();
-	const { result: importResult } = await executeImport(token, availableDestinations);
+	const { destinations: importDestinations, success } = await executeImport(token, availableDestinations);
 
-	if (!importResult) {
+	if (!success) {
 		router.push({ name: "rooms" });
 		return;
 	}
 
-	if (importResult.destination && importResult.destination.type === "room") {
-		router.replace({ name: "room-details", params: { id: importResult.destination.id } });
-	} else if (importResult.destination && importResult.destination.type === "column") {
-		router.replace({ name: "boards-id", params: { id: importResult.destination.boardId } });
+	const destinations = importDestinations ?? [];
+
+	if (destinations.length === 1 && destinations[0].type === "room") {
+		router.replace({ name: "room-details", params: { id: destinations[0].id } });
+	} else if (destinations.length === 1 && destinations[0].type === "column" && "boardId" in destinations[0]) {
+		router.replace({ name: "boards-id", params: { id: destinations[0].boardId } });
 	} else {
 		router.replace({ name: "rooms" });
 		fetchRooms();

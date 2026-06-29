@@ -1,4 +1,4 @@
-import { StatusAlert } from "@/store/types/status-alert";
+import { StatusAlert } from "@/types/status-alert/status-alert";
 
 export const mockStatusAlerts: StatusAlert[] = [
 	{

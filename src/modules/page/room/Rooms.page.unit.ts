@@ -45,7 +45,12 @@ describe("RoomsPage", () => {
 
 		useImportFlowMock = mockComposable(useImportFlow, {});
 		vi.mocked(useImportFlow).mockReturnValue(useImportFlowMock);
-		useImportFlowMock.executeImport.mockResolvedValue({ result: undefined, success: false, error: undefined });
+		useImportFlowMock.executeImport.mockResolvedValue({
+			result: undefined,
+			success: false,
+			error: undefined,
+			destinations: undefined,
+		});
 	});
 
 	const setup = (
@@ -148,7 +153,8 @@ describe("RoomsPage", () => {
 					};
 
 					useImportFlowMock.executeImport.mockResolvedValue({
-						result: { ...copyResult, destination: { id: "room-id", type: "room" } },
+						result: [copyResult],
+						destinations: [{ id: "room-id", type: "room" }],
 						success: true,
 						error: undefined,
 					});
@@ -173,7 +179,8 @@ describe("RoomsPage", () => {
 					};
 
 					useImportFlowMock.executeImport.mockResolvedValue({
-						result: { ...copyResult, destination: { id: "column-id", type: "column", boardId: "board-id" } },
+						result: [copyResult],
+						destinations: [{ id: "column-id", type: "column", boardId: "board-id" }],
 						success: true,
 						error: undefined,
 					});
@@ -198,7 +205,8 @@ describe("RoomsPage", () => {
 					};
 
 					useImportFlowMock.executeImport.mockResolvedValue({
-						result: { ...copyResult, destination: undefined },
+						result: [copyResult],
+						destinations: [],
 						success: true,
 						error: undefined,
 					});
