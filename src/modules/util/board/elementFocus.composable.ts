@@ -1,4 +1,6 @@
 import { logger } from "@util-logger";
+import { useResizeObserver } from "@vueuse/core";
+import { debounce } from "lodash-es";
 
 const ATTEMPTS_LIMIT = 10;
 const TIMEOUT_BETWEEN_ATTEMPTS = 100;
@@ -21,9 +23,21 @@ export const useElementFocus = () => {
 					return;
 				}
 
-				targetElement.scrollIntoView({ block: "center", inline: "center" });
-				targetElement.focus();
-				resolve();
+				const scrollerElement = targetElement.closest<HTMLElement>("[data-column-scroller]");
+
+				// Actually mitigating that it's very hard to keep track of the loading process of the board/card/card-elements.
+				// Therefore, it would still be possible to scroll to target, but not ending up seeing it, because of async loading content.
+				// Future: Have websocket transmission only. Keep track of board-column finished loading to start scrolling.
+				// --> loadData --> renderContent --> nextTick(focusElement)
+				const debouncedFocus = debounce(() => {
+					targetElement.scrollIntoView({ block: "center", inline: "center", behavior: "smooth" });
+					targetElement.focus({ focusVisible: true, preventScroll: true });
+					stop();
+					resolve();
+				}, 200);
+
+				const { stop } = useResizeObserver(scrollerElement, debouncedFocus);
+				debouncedFocus();
 			};
 
 			tryFocus();

@@ -1,6 +1,8 @@
 import {
+	AddDocumentToParentParams,
 	type ArchiveFileParams,
 	AuthorizedCollaboraDocumentUrlResponse,
+	DocumentType,
 	EditorMode,
 	FileRecordListResponse,
 	FileRecordParentType as FileRecordParent,
@@ -19,8 +21,10 @@ export type FileRecord = FileRecordResponse;
 export type ParentStatistic = ParentStatisticResponse;
 
 export {
+	type AddDocumentToParentParams,
 	ArchiveFileParams,
 	type AuthorizedCollaboraDocumentUrlResponse,
+	DocumentType,
 	EditorMode,
 	FilePreviewStatus,
 	FilePreviewWidth,

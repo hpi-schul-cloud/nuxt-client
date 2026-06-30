@@ -366,7 +366,6 @@ watch(
 	() => focusNodeFromHash(),
 	{ immediate: true }
 );
-
 watch(
 	[isBoardVisible, allowedOperations],
 	() => {

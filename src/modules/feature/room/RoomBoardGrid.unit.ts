@@ -125,4 +125,23 @@ describe("@feature-room/RoomBoardGrid", () => {
 		const sortable = wrapper.findComponent({ name: "Sortable" });
 		expect(sortable.props("options").disabled).toBe(true);
 	});
+
+	it("should render board items with default cursor and no editable outline marker for view-only users", () => {
+		const { wrapper } = setup({ allowedOperations: { editContent: false } });
+
+		const boardItem = wrapper.get("[data-testid='board-grid-item-0']");
+
+		expect(boardItem.classes()).toContain("cursor-default");
+		expect(boardItem.classes()).not.toContain("room-content-grid-item-editable");
+	});
+
+	it("should render board items with grab cursor and editable outline marker for editors", () => {
+		const { wrapper } = setup({ allowedOperations: { editContent: true } });
+
+		const boardItem = wrapper.get("[data-testid='board-grid-item-0']");
+
+		expect(boardItem.classes()).toContain("cursor-grab");
+		expect(boardItem.classes()).toContain("room-content-grid-item-editable");
+		expect(boardItem.classes()).not.toContain("room-content-grid-item--view-only");
+	});
 });

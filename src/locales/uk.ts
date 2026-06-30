@@ -255,6 +255,7 @@ export default {
 	"common.words.courses": "Мій курс",
 	"common.words.draft": "Чернетка",
 	"common.words.drafts": "Чернетки",
+	"common.words.external": "зовнішній",
 	"common.words.languages.de": "Німецька",
 	"common.words.languages.en": "Англійська",
 	"common.words.languages.es": "Іспанська",
@@ -687,7 +688,9 @@ export default {
 	"components.molecules.import.options.failure.invalidToken": "Маркер у посиланні невідомий або термін дії минув.",
 	"components.molecules.import.options.failure.permissionError": "На жаль, відсутній необхідний дозвіл.",
 	"components.molecules.import.options.loadingMessage": "Виконується імпорту...",
-	"components.molecules.import.options.success": "{name} успішно імпортовано",
+	"components.molecules.import.options.success": '{type} "{name}" успішно імпортовано',
+	"components.molecules.import.options.successWithDestination":
+		'{type} "{name}" успішно імпортовано в {destinationType} "{destinationName}"',
 	"components.molecules.import.options.tableHeader.InfoText": "Наступний вміст не буде імпортовано:",
 	"components.molecules.import.room.label": "Назва кімнати",
 	"components.molecules.import.room.options.title": "Імпортувати кімнату",
