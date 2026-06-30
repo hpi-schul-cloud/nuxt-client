@@ -985,8 +985,8 @@ export default {
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Website",
 	"loggedin.text.backupFeatures":
-		"The dBildungscloud will be deactivated on September 14, 2026, as the underlying grant project is coming to an end. As of that date, the dBildungscloud will no longer be available for school operations and instruction. Please back up your data by then. {helpLink}",
-	"loggedin.text.backupFeatures.helpLink": "You can find more information and tips on data backup here.",
+		"The dBildungscloud will be deactivated on September 14, 2026, as the underlying grant project is coming to an end. As of that date, the dBildungscloud will no longer be available for school operations and instruction. Please back up your data by then. {helpLink}.",
+	"loggedin.text.backupFeatures.helpLink": "You can find more information and tips on data backup here",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"The school is in the transfer phase to the new school year. No classes and users can be created. Please contact the school administrator!",
 	"loggedin.text.schoolInTransferPhaseStartNew":

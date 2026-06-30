@@ -1005,9 +1005,9 @@ export default {
 	"mixins.typeMeta.types.video": "Vídeo",
 	"mixins.typeMeta.types.webpage": "Página web",
 	"loggedin.text.backupFeatures":
-		"La dBildungscloud se desactivará el 14 de septiembre de 2026, ya que finaliza el proyecto subvencionado en el que se basa. A partir de esa fecha, la dBildungscloud ya no estará disponible para el funcionamiento de los centros educativos ni para la enseñanza. Por favor, haga una copia de seguridad de sus datos antes de esa fecha. {helpLink}",
+		"La dBildungscloud se desactivará el 14 de septiembre de 2026, ya que finaliza el proyecto subvencionado en el que se basa. A partir de esa fecha, la dBildungscloud ya no estará disponible para el funcionamiento de los centros educativos ni para la enseñanza. Por favor, haga una copia de seguridad de sus datos antes de esa fecha. {helpLink}.",
 	"loggedin.text.backupFeatures.helpLink":
-		"Aquí encontrará más información y consejos sobre cómo realizar copias de seguridad.",
+		"Aquí encontrará más información y consejos sobre cómo realizar copias de seguridad",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"La escuela está en fase de transferencia al nuevo año escolar. No se pueden crear clases ni usuarios. ¡Ponte en contacto con el administrador de la escuela!",
 	"loggedin.text.schoolInTransferPhaseStartNew":
