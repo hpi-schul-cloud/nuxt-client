@@ -81,6 +81,45 @@ describe("BoardColumn", () => {
 		});
 	});
 
+	describe("when a card is created", () => {
+		it("should emit create:card with position at the triggering card index", async () => {
+			const { wrapper, cards, column, store } = setup();
+			store.getCardLocation.mockReturnValue({
+				cardIndex: 0,
+				columnIndex: 0,
+				columnId: column.id,
+			});
+
+			const cardHostComponents = wrapper.findAllComponents({ name: "CardHost" });
+			await cardHostComponents[0].vm.$emit("create:card", cards[0].cardId);
+
+			const emitted = wrapper.emitted("create:card");
+			expect(emitted).toHaveLength(1);
+			expect(emitted?.[0]).toEqual([
+				{
+					columnId: column.id,
+					position: 0,
+				},
+			]);
+		});
+
+		it("should emit create:card without position when triggered by add button", async () => {
+			const { wrapper, column } = setup({ allowedOperations: { createCard: true } });
+
+			const addCardButton = wrapper.findComponent({ name: "BoardAddCardButton" });
+			await addCardButton.vm.$emit("add-card");
+
+			const emitted = wrapper.emitted("create:card");
+			expect(emitted).toHaveLength(1);
+			expect(emitted?.[0]).toEqual([
+				{
+					columnId: column.id,
+					position: undefined,
+				},
+			]);
+		});
+	});
+
 	describe("when a card moved ", () => {
 		it("should call 'moveCardRequest' method", () => {
 			const { wrapper, store } = setup();

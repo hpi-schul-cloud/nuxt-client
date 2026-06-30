@@ -374,14 +374,18 @@ describe("BoardApi.composable", () => {
 
 			columnApi.columnControllerCreateCard.mockResolvedValueOnce(FAKE_RESPONSE);
 
-			const payload = "column-id";
+			const payload = {
+				columnId: "column-id",
+				position: 1,
+			};
 			const INITIAL_ELEMENTS = {
 				requiredEmptyElements: [serverApi.CreateCardBodyParamsRequiredEmptyElements.RICH_TEXT],
+				position: 1,
 			};
 
 			const result = await createCardCall(payload);
 
-			expect(columnApi.columnControllerCreateCard).toHaveBeenCalledWith(payload, INITIAL_ELEMENTS);
+			expect(columnApi.columnControllerCreateCard).toHaveBeenCalledWith(payload.columnId, INITIAL_ELEMENTS);
 
 			expect(result).toBe(FAKE_RESPONSE.data);
 		});

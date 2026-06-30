@@ -99,15 +99,23 @@ describe("boardRestApi", () => {
 			const { boardStore } = setup();
 			const { createCardRequest } = useBoardRestApi();
 			const columnId = boardStore.board!.columns[0].id;
+			const position = 1;
 
 			const newCard = cardResponseFactory.build();
 			mockedBoardApiCalls.createCardCall.mockResolvedValue(newCard);
 
-			await createCardRequest({ columnId: columnId });
+			await createCardRequest({ columnId: columnId, position });
+
+			expect(mockedBoardApiCalls.createCardCall).toHaveBeenCalledWith({
+				columnId,
+				cardId: undefined,
+				position,
+			});
 
 			expect(boardStore.createCardSuccess).toHaveBeenCalledWith({
 				newCard: newCard,
 				columnId: columnId,
+				position,
 				isOwnAction: true,
 			});
 		});
