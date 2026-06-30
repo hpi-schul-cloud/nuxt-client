@@ -114,7 +114,6 @@ describe("BoardColumn", () => {
 			expect(emitted?.[0]).toEqual([
 				{
 					columnId: column.id,
-					position: undefined,
 				},
 			]);
 		});
