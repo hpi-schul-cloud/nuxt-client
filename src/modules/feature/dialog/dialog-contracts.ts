@@ -17,7 +17,7 @@ export type ImportDialogProps = {
 	availableDestinations: ImportDestinationItem[];
 	destinationType: Extract<ImportDestinationType, "room" | "course">;
 };
-export type ImportDialogResult = { newName: string; destination?: ImportDestination };
+export type ImportDialogResult = { newName: string; destinations: ImportDestination[] };
 
 export type ImportCardDialogProps = {
 	shareTokenInfo: ShareTokenInfoResponse;

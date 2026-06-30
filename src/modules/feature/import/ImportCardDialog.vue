@@ -95,7 +95,7 @@ const { selectedBoardId, selectedColumnId, selectedRoomId, resetBoardSelection, 
 const onConfirm = () => {
 	emit("complete", {
 		newName: props.shareTokenInfo.parentName,
-		destination: { type: props.destinationType, id: selectedColumnId.value!, boardId: selectedBoardId.value! },
+		destinations: [{ type: props.destinationType, id: selectedColumnId.value!, boardId: selectedBoardId.value! }],
 	});
 };
 
