@@ -677,7 +677,9 @@ export default {
 	"components.molecules.import.options.failure.permissionError":
 		"Unfortunately, the necessary authorization is missing.",
 	"components.molecules.import.options.loadingMessage": "Import in progress...",
-	"components.molecules.import.options.success": "{name} imported successfully",
+	"components.molecules.import.options.success": '{type} "{name}" imported successfully',
+	"components.molecules.import.options.successWithDestination":
+		'{type} "{name}" successfully imported into {destinationType} "{destinationName}"',
 	"components.molecules.import.options.tableHeader.InfoText": "The following content will not be imported:",
 	"components.molecules.import.room.label": "Room name",
 	"components.molecules.import.room.options.title": "Import room",
