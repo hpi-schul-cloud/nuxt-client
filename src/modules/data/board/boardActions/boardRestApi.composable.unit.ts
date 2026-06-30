@@ -106,11 +106,7 @@ describe("boardRestApi", () => {
 
 			await createCardRequest({ columnId: columnId, position });
 
-			expect(mockedBoardApiCalls.createCardCall).toHaveBeenCalledWith({
-				columnId,
-				cardId: undefined,
-				position,
-			});
+			expect(mockedBoardApiCalls.createCardCall).toHaveBeenCalledWith(columnId, position);
 
 			expect(boardStore.createCardSuccess).toHaveBeenCalledWith({
 				newCard: newCard,

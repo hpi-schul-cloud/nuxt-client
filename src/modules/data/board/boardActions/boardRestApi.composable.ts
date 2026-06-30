@@ -51,10 +51,7 @@ export const useBoardRestApi = () => {
 		if (boardStore.board === undefined) return;
 
 		try {
-			const newCard = await createCardCall({
-				columnId: payload.columnId,
-				position: payload.position,
-			});
+			const newCard = await createCardCall(payload.columnId, payload.position);
 
 			boardStore.createCardSuccess({
 				newCard,
