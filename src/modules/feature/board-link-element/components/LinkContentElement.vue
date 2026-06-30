@@ -29,7 +29,11 @@
 				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementDisplay>
-		<LinkContentElementCreate v-if="isEditMode" :existing-url="sanitizedUrl" @create:url="onCreateUrl"
+		<LinkContentElementCreate
+			v-if="isEditMode"
+			:existing-url="sanitizedUrl"
+			:autofocus="autofocus"
+			@create:url="onCreateUrl"
 			><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
@@ -86,7 +90,10 @@ const outlined = computed(() =>
 	props.isEditMode === true || computedElement.value.content.url !== "" ? "outlined" : "text"
 );
 
-useBoardFocusHandler(element.value.id, linkContentElement);
+const autofocus = ref(false);
+useBoardFocusHandler(element.value.id, linkContentElement, () => {
+	autofocus.value = true;
+});
 
 const { modelValue, computedElement } = useContentElementState(props, {
 	autoSaveDebounce: 100,
