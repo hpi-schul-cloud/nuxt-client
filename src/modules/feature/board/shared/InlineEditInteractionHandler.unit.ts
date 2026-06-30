@@ -126,6 +126,29 @@ describe("InlineEditInteractionHandler", () => {
 				const emitted = wrapper.emitted();
 				expect(emitted["end-edit-mode"]).toBeUndefined();
 			});
+
+			it("should not emit 'end-edit-mode' if the target is inside a Vuetify dialog", () => {
+				const event = document.createEvent("MouseEvent");
+				const dialogElement = document.createElement("div");
+				dialogElement.classList.add("v-dialog");
+				const inputElement = document.createElement("input");
+				dialogElement.appendChild(inputElement);
+
+				Object.defineProperty(event, "target", {
+					value: inputElement,
+					writable: false,
+				});
+
+				const { wrapper } = setup({ isEditMode: true });
+
+				const outsideHandler = wrapper.findComponent({
+					name: "OnClickOutside",
+				});
+				outsideHandler.vm.$emit("trigger", event);
+
+				const emitted = wrapper.emitted();
+				expect(emitted["end-edit-mode"]).toBeUndefined();
+			});
 		});
 
 		describe("when double clicked", () => {
