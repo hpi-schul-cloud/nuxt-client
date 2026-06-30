@@ -383,7 +383,7 @@ describe("BoardApi.composable", () => {
 				position: 1,
 			};
 
-			const result = await createCardCall(payload);
+			const result = await createCardCall(payload.columnId, payload.position);
 
 			expect(columnApi.columnControllerCreateCard).toHaveBeenCalledWith(payload.columnId, INITIAL_ELEMENTS);
 
