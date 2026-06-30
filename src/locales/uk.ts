@@ -1001,8 +1001,9 @@ export default {
 	"mixins.typeMeta.types.video": "Відео",
 	"mixins.typeMeta.types.webpage": "Веб-сайт",
 	"loggedin.text.backupFeatures":
-		"Зробіть резервну копію вашого контенту в хмарі та використовуйте також нову функцію для експорту курсів. {helpLink}",
-	"loggedin.text.backupFeatures.helpLink": "Додаткову інформацію та допомогу можна знайти тут.",
+		"Сервіс dBildungscloud буде вимкнено 14 вересня 2026 року, оскільки закінчується термін дії відповідного грантового проєкту. З цього моменту сервіс dBildungscloud більше не буде доступний для шкільної діяльності та проведення занять. Просимо вас до цього часу створити резервні копії своїх даних. {helpLink}",
+	"loggedin.text.backupFeatures.helpLink":
+		"Додаткову інформацію та вказівки щодо резервного копіювання даних можна знайти тут.",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів.",
 	"loggedin.text.schoolInTransferPhaseStartNew":
