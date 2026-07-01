@@ -135,18 +135,35 @@ export const useImportFlow = () => {
 
 		const availableDestinationItems = toValue(availableDestinations);
 		const isCard = validationResult.parentType === ShareTokenInfoResponseParentType.CARD;
+<<<<<<< Updated upstream
 		const actualDestinationType = isCard ? "column" : destinationType === "room" ? "room" : "course";
+=======
+		const isColumn = validationResult.parentType === ShareTokenInfoResponseParentType.COLUMN;
+>>>>>>> Stashed changes
 		const { completed, data } = await (isCard
 			? openDialog("importCard", {
 					shareTokenInfo: validationResult,
 					availableDestinations: availableDestinationItems,
 					destinationType: "column",
 				})
+<<<<<<< Updated upstream
 			: openDialog("import", {
 					shareTokenInfo: validationResult,
 					availableDestinations: availableDestinationItems,
 					destinationType: destinationType === "room" ? "room" : "course",
 				}));
+=======
+			: isColumn
+				? openDialog("importColumn", {
+						shareTokenInfo: validationResult,
+						availableDestinations: destinations,
+					})
+				: openDialog("import", {
+						shareTokenInfo: validationResult,
+						availableDestinations: destinations,
+						destinationType: destinationType === "room" ? "room" : "course",
+					}));
+>>>>>>> Stashed changes
 
 		if (!completed)
 			return { result: undefined, destinations: undefined, success: false, error: new Error("Import cancelled") };

@@ -30,8 +30,11 @@
 						v-if="allowedOperations?.copyColumn"
 						data-testid="kebab-menu-action-duplicate-column"
 						@click="duplicateColumn"
-					/>
-					<template v-if="isListBoard">
+					/>				<KebabMenuActionShare
+					v-if="allowedOperations?.shareColumn"
+					data-testid="kebab-menu-action-share-column"
+					@click="onShareColumn"
+				/>					<template v-if="isListBoard">
 						<KebabMenuActionMoveUp v-if="isNotFirstColumn" @click="onMoveColumnUp" />
 						<KebabMenuActionMoveDown v-if="isNotLastColumn" @click="onMoveColumnDown" />
 					</template>
@@ -62,6 +65,7 @@ import {
 	KebabMenuActionMoveRight,
 	KebabMenuActionMoveUp,
 	KebabMenuActionRename,
+	KebabMenuActionShare,
 } from "@ui-kebab-menu";
 import { watchDebounced } from "@vueuse/core";
 import { ref, toRef, watch } from "vue";
@@ -84,6 +88,7 @@ const emit = defineEmits([
 	"move:column-left",
 	"move:column-right",
 	"move:column-up",
+	"share:column",
 	"update:title",
 ]);
 const { t } = useI18n();
@@ -152,6 +157,8 @@ const onUpdateTitle = (newTitle: string) => (updatedTitle.value = newTitle);
 const { run: duplicateColumn } = useSafeTaskRunner(async () => {
 	await boardStore.duplicateColumn({ columnId: props.columnId });
 });
+
+const onShareColumn = () => emit("share:column", props.columnId);
 
 const emitTitleUpdate = () => {
 	if (lastEmittedTitle.value !== updatedTitle.value) {

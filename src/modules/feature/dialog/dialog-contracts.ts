@@ -26,6 +26,12 @@ export type ImportCardDialogProps = {
 };
 export type ImportCardDialogResult = ImportDialogResult;
 
+export type ImportColumnDialogProps = {
+	shareTokenInfo: ShareTokenInfoResponse;
+	availableDestinations: ImportDestinationItem[];
+};
+export type ImportColumnDialogResult = ImportDialogResult;
+
 export type ShareDialogProps = {
 	shareItemType: ShareTokenBodyParamsParentType;
 	onConfirm: (options: ShareOptions) => Promise<string>;
