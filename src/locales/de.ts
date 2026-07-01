@@ -1014,8 +1014,8 @@ export default {
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Webseite",
 	"loggedin.text.backupFeatures":
-		"Sichern Sie Ihre Inhalte der Cloud und nutzen Sie auch die neue Funktion zum Export von Kursen. {helpLink}",
-	"loggedin.text.backupFeatures.helpLink": "Weitere Informationen und Hilfestellungen sind hier zu finden.",
+		"Die dBildungscloud wird zum 14.09.2026 deaktiviert, da das zugrundeliegende Förderprojekt endet. Ab diesem Zeitpunkt steht die dBildungscloud nicht mehr für Schulbetrieb und Unterricht zur Verfügung. Bitte sichern Sie bis dahin Ihre Daten. {helpLink}.",
+	"loggedin.text.backupFeatures.helpLink": "Weitere Informationen und Hinweise zur Datensicherung finden Sie hier",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Die Schule befindet sich in der Transferphase zum neuen Schuljahr. Es können keine Klassen und Nutzer:innen angelegt werden. Bitte kontaktiere deinen Schul-Admin!",
 	"loggedin.text.schoolInTransferPhaseStartNew":
