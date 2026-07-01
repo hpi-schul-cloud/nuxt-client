@@ -727,7 +727,6 @@ export default {
 	"components.molecules.share.column.result.linkLabel": "Link section copy",
 	"components.molecules.share.column.mail.subject": "Section to import",
 	"components.molecules.share.column.mail.body": "Link to the section: ",
-	"components.molecules.share.card.result.linkLabel": "Link card copy",
 	"components.molecules.share.courses.options.infoText":
 		"With the following link, the course can be imported as a copy by other teachers.",
 	"components.molecules.shareImport.options.restrictions.infoText.personalData": "Personal data",

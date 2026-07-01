@@ -30,11 +30,13 @@
 						v-if="allowedOperations?.copyColumn"
 						data-testid="kebab-menu-action-duplicate-column"
 						@click="duplicateColumn"
-					/>				<KebabMenuActionShare
-					v-if="allowedOperations?.shareColumn"
-					data-testid="kebab-menu-action-share-column"
-					@click="onShareColumn"
-				/>					<template v-if="isListBoard">
+					/>
+					<KebabMenuActionShare
+						v-if="allowedOperations?.shareColumn"
+						data-testid="kebab-menu-action-share-column"
+						@click="onShareColumn"
+					/>
+					<template v-if="isListBoard">
 						<KebabMenuActionMoveUp v-if="isNotFirstColumn" @click="onMoveColumnUp" />
 						<KebabMenuActionMoveDown v-if="isNotLastColumn" @click="onMoveColumnDown" />
 					</template>

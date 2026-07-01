@@ -164,7 +164,7 @@ export const useCopyContent = (copyItemType: Ref<ContentItemTypeEnum | undefined
 		[ContentItemTypeEnum.ColumnBoard]: "components.board",
 		[ContentItemTypeEnum.Room]: "common.labels.room",
 		[ContentItemTypeEnum.Card]: "components.boardCard",
-		[ContentItemTypeEnum.Column]: "components.boardSection",
+		[ContentItemTypeEnum.Column]: "components.boardColumn",
 	};
 
 	const text = computed(() => copyContent.value.text);

@@ -76,21 +76,14 @@ const executeImportFlow = async (token: string) => {
 		return;
 	}
 
-<<<<<<< Updated upstream
 	const destinations = importDestinations ?? [];
 
 	if (destinations.length === 1 && destinations[0].type === "room") {
 		router.replace({ name: "room-details", params: { id: destinations[0].id } });
 	} else if (destinations.length === 1 && destinations[0].type === "column" && "boardId" in destinations[0]) {
 		router.replace({ name: "boards-id", params: { id: destinations[0].boardId } });
-=======
-	if (importResult.destination && importResult.destination.type === "room") {
-		router.replace({ name: "room-details", params: { id: importResult.destination.id } });
-	} else if (importResult.destination && importResult.destination.type === "column") {
-		router.replace({ name: "boards-id", params: { id: importResult.destination.boardId } });
-	} else if (importResult.destination && importResult.destination.type === "board") {
-		router.replace({ name: "boards-id", params: { id: importResult.destination.id } });
->>>>>>> Stashed changes
+	} else if (destinations.length === 1 && destinations[0].type === "board") {
+		router.replace({ name: "boards-id", params: { id: destinations[0].id } });
 	} else {
 		router.replace({ name: "rooms" });
 		fetchRooms();

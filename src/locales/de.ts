@@ -956,7 +956,6 @@ export default {
 	"feature-copy.copyInfo.type.ofRoom": "des Raumes",
 	"feature-copy.copyInfo.type.ofCard": "der Karte",
 	"feature-copy.copyInfo.type.ofColumn": "des Abschnitts",
-	"feature-copy.copyInfo.type.ofColumn": "des Abschnitts",
 	"feature-course-sync.EndCourseSyncDialog.title": "Synchronisation beenden",
 	"feature-course-sync.EndCourseSyncDialog":
 		"Soll die Synchronisation des Kurses {courseName} mit der Nutzendengruppe {groupName} wirklich beendet werden?",

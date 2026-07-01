@@ -83,7 +83,7 @@ const { selectedBoardId, selectedRoomId, resetBoardSelection, boards } = useCard
 const onConfirm = () => {
 	emit("complete", {
 		newName: props.shareTokenInfo.parentName,
-		destination: { type: "board", id: selectedBoardId.value! },
+		destinations: [{ type: "board", id: selectedBoardId.value! }],
 	});
 };
 
