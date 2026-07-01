@@ -32,7 +32,7 @@
 						@click="duplicateColumn"
 					/>
 					<KebabMenuActionShare
-						v-if="allowedOperations?.shareColumn"
+						v-if="isShareEnabled && allowedOperations?.shareColumn"
 						data-testid="kebab-menu-action-share-column"
 						@click="onShareColumn"
 					/>
@@ -58,6 +58,7 @@ import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { useBoardAllowedOperations, useBoardFocusHandler, useBoardStore, useCourseBoardEditMode } from "@data-board";
+import { useEnvConfig } from "@data-env";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
 	KebabMenuActionDelete,
@@ -70,7 +71,7 @@ import {
 	KebabMenuActionShare,
 } from "@ui-kebab-menu";
 import { watchDebounced } from "@vueuse/core";
-import { ref, toRef, watch } from "vue";
+import { computed, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -96,6 +97,8 @@ const emit = defineEmits([
 const { t } = useI18n();
 
 const { allowedOperations } = useBoardAllowedOperations();
+
+const isShareEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE);
 
 const columnId = toRef(props, "columnId");
 const columnTitle = toRef(props, "title");
