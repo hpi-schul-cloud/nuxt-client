@@ -43,7 +43,6 @@ api/school-license-api.ts
 api/server-api.ts
 api/server-config-api.ts
 api/share-token-api.ts
-api/shd-api.ts
 api/submission-api.ts
 api/systems-api.ts
 api/task-api.ts

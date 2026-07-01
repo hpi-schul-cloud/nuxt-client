@@ -21,6 +21,8 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
+import { ApiValidationError } from '../models';
+// @ts-ignore
 import { ForbiddenOperationError } from '../models';
 // @ts-ignore
 import { LdapAuthorizationBodyParams } from '../models';
@@ -36,6 +38,8 @@ import { OauthLoginResponse } from '../models';
 import { OidcLogoutBodyParams } from '../models';
 // @ts-ignore
 import { SessionInfoResponse } from '../models';
+// @ts-ignore
+import { TargetUserIdParams } from '../models';
 // @ts-ignore
 import { ValidationError } from '../models';
 /**
@@ -224,6 +228,46 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @summary Create a support jwt for a user.
+         * @param {TargetUserIdParams} targetUserIdParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loginControllerSupportJwt: async (targetUserIdParams: TargetUserIdParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'targetUserIdParams' is not null or undefined
+            assertParamExists('loginControllerSupportJwt', 'targetUserIdParams', targetUserIdParams)
+            const localVarPath = `/authentication/support-jwt`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(targetUserIdParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Logs out a user from the external system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -392,6 +436,17 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create a support jwt for a user.
+         * @param {TargetUserIdParams} targetUserIdParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async loginControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerSupportJwt(targetUserIdParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Logs out a user from the external system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -482,6 +537,16 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
+         * @summary Create a support jwt for a user.
+         * @param {TargetUserIdParams} targetUserIdParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loginControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any): AxiosPromise<LoginResponse> {
+            return localVarFp.loginControllerSupportJwt(targetUserIdParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Logs out a user from the external system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -565,6 +630,16 @@ export interface AuthenticationApiInterface {
      * @memberof AuthenticationApiInterface
      */
     loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): AxiosPromise<OauthLoginResponse>;
+
+    /**
+     * 
+     * @summary Create a support jwt for a user.
+     * @param {TargetUserIdParams} targetUserIdParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApiInterface
+     */
+    loginControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any): AxiosPromise<LoginResponse>;
 
     /**
      * 
@@ -660,6 +735,18 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      */
     public loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any) {
         return AuthenticationApiFp(this.configuration).loginControllerLoginOauth2(oauth2AuthorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Create a support jwt for a user.
+     * @param {TargetUserIdParams} targetUserIdParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApi
+     */
+    public loginControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any) {
+        return AuthenticationApiFp(this.configuration).loginControllerSupportJwt(targetUserIdParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
