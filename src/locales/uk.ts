@@ -653,6 +653,8 @@ export default {
 	"components.molecules.ContentCardMenu.action.share": "Надати спільний доступ",
 	"components.molecules.ContextMenu.action.close": "Закрити контекстне меню",
 	"components.molecules.import.card.options.title": "Імпортувати картку",
+	"components.molecules.import.column.options.title": "XYZ",
+	"components.molecules.import.column.question": "XYZ",
 	"components.molecules.import.columnBoard.label": "Назва дошки",
 	"components.molecules.label.room": "Оберіть кімнату",
 	"components.molecules.label.board": "Оберіть дошку",
@@ -724,6 +726,11 @@ export default {
 	"components.molecules.share.card.options.infoText":
 		"За наступним посиланням цю картка можуть імпортувати як копію інші особи.",
 	"components.molecules.share.card.result.linkLabel": "Посилання на копію картки",
+	"components.molecules.share.column.options.infoText":
+		"Mit dem folgenden Link kann dieser Abschnitt von anderen Personen in einen Raum importiert werden.",
+	"components.molecules.share.column.result.linkLabel": "Link Abschnitt-Kopie",
+	"components.molecules.share.column.mail.subject": "Abschnitt zum Importieren",
+	"components.molecules.share.column.mail.body": "Link zum Abschnitt: ",
 	"components.molecules.share.columnBoard.options.infoText":
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Посилання на копію дошки",
@@ -938,6 +945,7 @@ export default {
 	"feature-copy.copyInfo.type.ofLesson": "уроку",
 	"feature-copy.copyInfo.type.ofRoom": "кімнати",
 	"feature-copy.copyInfo.type.ofCard": "картки",
+	"feature-copy.copyInfo.type.ofColumn": "des Abschnitts",
 	"feature-course-sync.EndCourseSyncDialog.title": "Завершити синхронізацію",
 	"feature-course-sync.EndCourseSyncDialog":
 		"Чи дійсно слід припинити синхронізацію курсу {courseName} із групою користувачів {groupName}?",
