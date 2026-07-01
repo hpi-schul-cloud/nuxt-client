@@ -23,7 +23,7 @@
 					</li>
 				</ul>
 			</WarningAlert>
-			<InfoAlert v-if="isDbc && (isTeacher || isAdmin)" class="mt-6">
+			<InfoAlert v-if="isDbc && isAdmin" class="mt-6">
 				<i18n-t keypath="loggedin.text.backupFeatures" scope="global">
 					<template #helpLink>
 						<a href="https://dbildungscloud.de/help/confluence/485132545" target="_blank" rel="noopener noreferrer">
@@ -94,8 +94,7 @@ import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { NewsTargetModel, Permission, SchulcloudTheme } from "@api-server";
 import { useNewsList } from "@data-access";
-import { useAppStore, useAppStoreRefs } from "@data-app";
-import { useSchoolStoreRefs } from "@data-app";
+import { useAppStore, useAppStoreRefs, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { DashboardReleaseDialog, DashboardTasks } from "@feature-dashboard";
 import { RenderHTML } from "@feature-render-html";
