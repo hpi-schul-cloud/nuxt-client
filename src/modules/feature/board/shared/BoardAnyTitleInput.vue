@@ -33,10 +33,9 @@
 </template>
 
 <script setup lang="ts">
-import { InlineEditInteractionEvent } from "@/types/board/InlineEditInteractionEvent.symbol";
 import { useInlineEditInteractionHandler } from "@util-board";
 import { isOfMaxLength, useOpeningTagValidator } from "@util-validators";
-import { computed, inject, nextTick, onMounted, Ref, ref, toRef, useTemplateRef, watch } from "vue";
+import { computed, nextTick, onMounted, ref, toRef, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { VTextarea } from "vuetify/components";
 
@@ -73,8 +72,6 @@ const externalValue = toRef(props, "value");
 const internalIsFocused = ref(false);
 const titleInput = useTemplateRef<VTextarea>("titleInput");
 
-const interactionEvent = inject<Ref<{ x: number; y: number } | undefined>>(InlineEditInteractionEvent, ref(undefined));
-
 const hasErrors = computed(() => (titleInput.value ? !titleInput.value.isValid : false));
 
 useInlineEditInteractionHandler(async () => {
@@ -89,6 +86,8 @@ const setFocusOnEdit = async () => {
 		cursorToEnd();
 	}
 };
+
+defineExpose({ focusIn: setFocusOnEdit });
 
 watch(modelValue, async (newValue) => {
 	await nextTick();
@@ -116,27 +115,13 @@ onMounted(() => {
 
 watch(
 	() => props.isEditMode,
-	async (newVal, oldVal) => {
+	(newVal, oldVal) => {
 		if (!newVal && oldVal) {
 			internalIsFocused.value = false;
-			return;
 		}
 
-		if (props.scope !== "column" && props.scope !== "board") {
-			// For card scope: only auto-focus title on keyboard-triggered edit mode
-			// (no interaction coordinates). Mouse clicks are handled by useInlineEditInteractionHandler.
-			if (!props.isFocused || interactionEvent.value !== undefined) {
-				return;
-			}
-		}
-
-		if (newVal && !oldVal) {
-			const text = externalValue.value.length > 0 ? externalValue.value : props.emptyValueFallback;
-			modelValue.value = text;
-
-			await nextTick();
-			await setFocusOnEdit();
-		}
+		const text = externalValue.value.length > 0 ? externalValue.value : props.emptyValueFallback;
+		modelValue.value = text;
 	}
 );
 

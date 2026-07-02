@@ -1,6 +1,7 @@
 <template>
 	<VCardTitle v-if="isEditMode || value !== ''" class="d-block text-break-word pt-0 pb-0">
 		<BoardAnyTitleInput
+			ref="titleInput"
 			scope="card"
 			:value="modelValue"
 			:is-edit-mode="isEditMode"
@@ -17,6 +18,7 @@
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import { useBoardAllowedOperations } from "@data-board";
 import { useVModel } from "@vueuse/core";
+import { useTemplateRef } from "vue";
 
 const { allowedOperations } = useBoardAllowedOperations();
 
@@ -35,9 +37,17 @@ const props = defineProps({
 });
 const emit = defineEmits(["update:value", "enter"]);
 
+const titleInput = useTemplateRef("titleInput");
+
 const modelValue = useVModel(props, "value", emit);
 const onUpdateValue = (newValue: string) => (modelValue.value = newValue);
 const onEnter = () => emit("enter");
+
+const focusIn = async () => {
+	await titleInput.value?.focusIn();
+};
+
+defineExpose({ focusIn });
 </script>
 
 <style scoped>
