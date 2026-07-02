@@ -73,11 +73,12 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const upload = async (file: File, parentId: string, parentType: FileRecordParent): Promise<void> => {
+	const upload = async (file: File, parentId: string, parentType: FileRecordParent): Promise<FileRecord | void> => {
 		try {
 			const schoolId = useAppStore().school?.id as string;
 			const response = await fileApi.upload(schoolId, StorageLocation.SCHOOL, parentId, parentType, file);
 			upsertFileRecords([response.data]);
+			return response.data;
 		} catch (error) {
 			showError(error);
 			throw error;
