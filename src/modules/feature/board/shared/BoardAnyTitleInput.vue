@@ -122,10 +122,7 @@ watch(
 			return;
 		}
 
-		console.log(interactionEvent.value, "interactionEvent.value");
-
 		if (props.scope !== "column" && props.scope !== "board") {
-			console.log(interactionEvent.value, props.isFocused);
 			if (!props.isFocused || interactionEvent.value !== undefined) {
 				return;
 			}
