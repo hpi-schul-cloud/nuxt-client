@@ -1,4 +1,3 @@
-import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
 import CardSkeleton from "./CardSkeleton.vue";
@@ -308,40 +307,6 @@ describe("CardHost", () => {
 				expect(confirmDialogUtils.askDeletionForType).toHaveBeenCalledWith("components.boardCard");
 				expect(wrapper.emitted("delete:card")).toHaveLength(1);
 			});
-		});
-	});
-
-	describe("keyboard interactions", () => {
-		describe("arrow keys", () => {
-			it.each(["up", "down", "left", "right"])(
-				"should emit 'move:card-keyboard' with '%s' key when not in edit mode",
-				async (key) => {
-					vi.mocked(useCourseBoardEditMode).mockReturnValue(
-						mockComposable(useCourseBoardEditMode, {
-							isEditMode: computed(() => false),
-						})
-					);
-					const { wrapper } = setup();
-
-					const handler = wrapper.findComponent(InlineEditInteractionHandler);
-					await handler.trigger(`keydown.${key}`);
-
-					expect(wrapper.emitted("move:card-keyboard")).toBeDefined();
-					expect(wrapper.emitted("move:card-keyboard")![0]).toBeDefined();
-				}
-			);
-
-			it.each(["up", "down", "left", "right"])(
-				"should not emit 'move:card-keyboard' with '%s' key when in edit mode",
-				async (key) => {
-					const { wrapper } = setup();
-
-					const handler = wrapper.findComponent(InlineEditInteractionHandler);
-					await handler.trigger(`keydown.${key}`);
-
-					expect(wrapper.emitted("move:card-keyboard")).toBeUndefined();
-				}
-			);
 		});
 	});
 

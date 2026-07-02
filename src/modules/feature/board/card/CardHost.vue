@@ -1,11 +1,10 @@
 <template>
 	<div>
-		<InlineEditInteractionHandler
+		<CardHostInteractionHandler
 			:is-edit-mode="isEditMode"
-			@keydown.up.down.left.right="onKeydownArrow"
-			@keydown.enter="onKeydownEnter"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
+			@move:card-keyboard="onMoveCardKeyboard"
 		>
 			<VCard
 				:id="cardId"
@@ -30,7 +29,6 @@
 				</template>
 				<template v-if="card">
 					<CardTitle
-						ref="cardTitle"
 						:is-edit-mode="isEditMode"
 						:value="card.title"
 						scope="card"
@@ -83,7 +81,7 @@
 					</div>
 				</template>
 			</VCard>
-		</InlineEditInteractionHandler>
+		</CardHostInteractionHandler>
 		<VCard v-if="isDuplicating" class="mt-3">
 			<CardSkeleton :height />
 		</VCard>
@@ -92,8 +90,8 @@
 
 <script setup lang="ts">
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
-import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
+import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
@@ -122,7 +120,7 @@ import {
 } from "@ui-kebab-menu";
 import { useShareBoardLink } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
-import { computed, nextTick, onMounted, ref, toRef, useTemplateRef } from "vue";
+import { computed, onMounted, ref, toRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 type Props = {
@@ -143,7 +141,6 @@ const emit = defineEmits<{
 
 const { allowedOperations } = useBoardAllowedOperations();
 const cardHost = ref(null);
-const cardTitle = useTemplateRef("cardTitle");
 const cardId = toRef(props, "cardId");
 const { isFocusContained, isFocusedById } = useBoardFocusHandler(cardId.value, cardHost);
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
@@ -198,26 +195,7 @@ const hasMenuItem = computed(() =>
 	)
 );
 
-const onKeydownArrow = (event: KeyboardEvent) => {
-	if (!isEditMode.value) {
-		event.preventDefault();
-		emit("move:card-keyboard", event.code);
-	}
-};
-
-const onKeydownEnter = async (event: KeyboardEvent) => {
-	const element = event.target as HTMLElement;
-	const classNames = element?.getAttribute("class") ?? "";
-	const isCardHost = classNames.split(" ").includes("card-host");
-	if (!isEditMode.value && isCardHost) {
-		event.stopImmediatePropagation();
-		event.preventDefault();
-		startEditMode();
-		await nextTick();
-		await cardTitle.value?.focusIn();
-	}
-};
-
+const onMoveCardKeyboard = (event: KeyboardEvent) => emit("move:card-keyboard", event.code);
 const onMoveCard = (cardId: string) => emit("move:card", cardId);
 const onShareCard = () => {
 	emit("share:card", props.cardId);
