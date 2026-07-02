@@ -1,17 +1,19 @@
 <template>
-	<InlineEditInteractionHandler
-		:is-edit-mode="isEditMode"
-		@start-edit-mode="onStartEditMode"
-		@end-edit-mode="onEndEditMode"
-	>
-		<div data-testid="event-handle" @keydown.up.down.left.right="onKeydownArrow" @keydown.enter="onKeydownEnter">
+	<OnClickOutside :options="{ capture: false }" @trigger="onClickOutside">
+		<div
+			data-testid="event-handle"
+			@dblclick="onDoubleClick"
+			@keydown.esc="onKeydownEscape"
+			@keydown.up.down.left.right="onKeydownArrow"
+			@keydown.enter="onKeydownEnter"
+		>
 			<slot />
 		</div>
-	</InlineEditInteractionHandler>
+	</OnClickOutside>
 </template>
 
 <script setup lang="ts">
-import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
+import { OnClickOutside } from "@vueuse/components";
 
 type Props = {
 	isEditMode: boolean;
@@ -23,12 +25,24 @@ const emit = defineEmits<{
 	(e: "move:card-keyboard", event: KeyboardEvent): void;
 }>();
 
-const onStartEditMode = () => {
-	emit("start-edit-mode");
+const onDoubleClick = () => {
+	if (!props.isEditMode) {
+		emit("start-edit-mode");
+	}
 };
-const onEndEditMode = () => {
-	emit("end-edit-mode");
+
+const onClickOutside = () => {
+	if (props.isEditMode) {
+		emit("end-edit-mode");
+	}
 };
+
+const onKeydownEscape = () => {
+	if (props.isEditMode) {
+		emit("end-edit-mode");
+	}
+};
+
 const onKeydownArrow = (event: KeyboardEvent) => {
 	if (!props.isEditMode) {
 		event.preventDefault();

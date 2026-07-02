@@ -114,7 +114,7 @@ onMounted(() => {
 watch(
 	() => props.isEditMode,
 	async (newVal, oldVal) => {
-		if (props.scope !== "column" && props.scope !== "board" && !props.isFocused) {
+		if (props.scope !== "column" && props.scope !== "board") {
 			return;
 		}
 
@@ -150,6 +150,8 @@ const cursorToEnd = () => {
 		titleInput.value.setSelectionRange(length, length);
 	}
 };
+
+defineExpose({ focus: setFocusOnEdit });
 </script>
 
 <style scoped lang="scss">

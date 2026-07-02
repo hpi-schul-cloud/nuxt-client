@@ -1,8 +1,9 @@
 import CardTitle from "./CardTitle.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { CardEditModeKey } from "@/types/board/Card";
 import { useBoardAllowedOperations } from "@data-board";
 import { shallowMount } from "@vue/test-utils";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 const componentProps = {
 	value: "props value",
@@ -23,13 +24,16 @@ describe("CardTitle", () => {
 		const wrapper = shallowMount(CardTitle, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[CardEditModeKey as symbol]: {
+						startEditMode: vi.fn(),
+						isEditMode: ref(options.isEditMode),
+					},
+				},
 			},
 			propsData: {
 				...componentProps,
 				isEditMode: options.isEditMode,
-			},
-			provide: {
-				CARD_HOST_INTERACTION_EVENT: undefined,
 			},
 		});
 

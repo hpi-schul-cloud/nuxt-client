@@ -2,9 +2,10 @@ import RichTextContentElementComponent from "./RichTextContentElement.vue";
 import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { CardEditModeKey } from "@/types/board/Card";
 import { ContentElementType, RichTextElementResponse } from "@api-server";
 import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
+import { nextTick, ref } from "vue";
 
 const mockElement: RichTextElementResponse = {
 	id: "test-id",
@@ -37,6 +38,12 @@ describe("RichTextContentElement", () => {
 		const wrapper = mount(RichTextContentElementComponent, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[CardEditModeKey as symbol]: {
+						startEditMode: vi.fn(),
+						isEditMode: ref(props.isEditMode),
+					},
+				},
 				stubs: {
 					RichTextContentElementEdit: true,
 				},

@@ -42,5 +42,37 @@ describe("CardHostInteractionHandler", () => {
 				}
 			);
 		});
+
+		describe("when double-clicked", () => {
+			it("should emit 'start-edit-mode' when not in edit mode", async () => {
+				const { wrapper } = setup({ isEditMode: false });
+				const eventHandle = wrapper.find("[data-testid=event-handle]");
+				await eventHandle.trigger("dblclick");
+				expect(wrapper.emitted("start-edit-mode")).toHaveLength(1);
+			});
+
+			it("should not emit 'start-edit-mode' when already in edit mode", async () => {
+				const { wrapper } = setup({ isEditMode: true });
+				const eventHandle = wrapper.find("[data-testid=event-handle]");
+				await eventHandle.trigger("dblclick");
+				expect(wrapper.emitted("start-edit-mode")).toBeUndefined();
+			});
+		});
+
+		describe("when escape is pressed", () => {
+			it("should emit 'end-edit-mode' when in edit mode", async () => {
+				const { wrapper } = setup({ isEditMode: true });
+				const eventHandle = wrapper.find("[data-testid=event-handle]");
+				await eventHandle.trigger("keydown", { key: "Escape" });
+				expect(wrapper.emitted("end-edit-mode")).toHaveLength(1);
+			});
+
+			it("should not emit 'end-edit-mode' when not in edit mode", async () => {
+				const { wrapper } = setup({ isEditMode: false });
+				const eventHandle = wrapper.find("[data-testid=event-handle]");
+				await eventHandle.trigger("keydown", { key: "Escape" });
+				expect(wrapper.emitted("end-edit-mode")).toBeUndefined();
+			});
+		});
 	});
 });

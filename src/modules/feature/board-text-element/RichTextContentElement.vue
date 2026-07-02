@@ -1,5 +1,5 @@
 <template>
-	<div :class="{ 'first-element': isFirstElement }">
+	<div :class="{ 'first-element': isFirstElement }" @dblclick="onDblClick">
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
 			:data-testid="`rich-text-display-${columnIndex}-${elementIndex}`"
@@ -23,9 +23,10 @@
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
+import { CardEditModeKey } from "@/types/board/Card";
 import { RichTextElementResponse } from "@api-server";
 import { useBoardFocusHandler } from "@data-board";
-import { computed, PropType, ref, toRef } from "vue";
+import { computed, inject, PropType, ref, toRef } from "vue";
 
 const props = defineProps({
 	element: {
@@ -44,9 +45,18 @@ const { ensurePoliteNotifications } = useAriaLiveNotifier();
 const element = toRef(props, "element");
 
 const autofocus = ref(false);
+const cardEditMode = inject(CardEditModeKey, undefined);
+
 useBoardFocusHandler(element.value.id, ref(null), () => {
 	autofocus.value = true;
 });
+
+const onDblClick = () => {
+	if (cardEditMode && !cardEditMode.isEditMode.value) {
+		cardEditMode.startEditMode();
+	}
+	autofocus.value = true;
+};
 
 const onBlur = () => (autofocus.value = false);
 
