@@ -12,7 +12,7 @@
 						:persistent-hint="isUrlValidated"
 						type="text"
 						data-testid="input-link"
-						:autofocus="true"
+						:autofocus="autofocus"
 						:auto-grow="true"
 						rows="1"
 						class="text"
@@ -44,6 +44,10 @@ const props = defineProps({
 	existingUrl: {
 		type: String,
 		default: "",
+	},
+	autofocus: {
+		type: Boolean,
+		default: false,
 	},
 });
 
