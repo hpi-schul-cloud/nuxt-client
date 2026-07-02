@@ -1,4 +1,5 @@
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
+import { useBoardScrollMode } from "../shared/BoardScrollMode.composable";
 import BoardHeader from "./BoardHeader.vue";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
@@ -20,6 +21,7 @@ import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
+import { VSwitch } from "vuetify/components";
 
 vi.mock("@data-board/BoardFocusHandler.composable");
 const mockUseBoardFocusHandler = vi.mocked(useBoardFocusHandler);
@@ -35,6 +37,9 @@ mockedUseSharedEditMode.mockReturnValue({
 
 vi.mock("vue-router");
 
+vi.mock("../shared/BoardScrollMode.composable");
+const mockUseBoardScrollMode = vi.mocked(useBoardScrollMode);
+
 describe("BoardHeader", () => {
 	const setup = (
 		options?: {
@@ -46,6 +51,7 @@ describe("BoardHeader", () => {
 			hasReadersEditPermission?: boolean;
 			boardContextType?: BoardExternalReferenceType;
 			isEditMode?: boolean;
+			isListBoard?: boolean;
 		}
 	) => {
 		const isEditMode = computed(() => props?.isEditMode ?? true);
@@ -97,6 +103,14 @@ describe("BoardHeader", () => {
 		});
 		return { startEditMode, stopEditMode, wrapper };
 	};
+
+	beforeEach(() => {
+		mockUseBoardScrollMode.mockReturnValue({
+			scrollMode: ref("columns"),
+			isPageScrollMode: computed(() => false),
+			toggleScrollMode: vi.fn(),
+		} as unknown as ReturnType<typeof useBoardScrollMode>);
+	});
 
 	afterEach(() => {
 		vi.clearAllMocks();
@@ -401,6 +415,73 @@ describe("BoardHeader", () => {
 			const { wrapper } = setup({}, { boardContextType: BoardExternalReferenceType.COURSE });
 
 			expect(wrapper.findComponent(KebabMenuActionEditingSettings).exists()).toBe(false);
+		});
+	});
+
+	describe("scroll mode toggle", () => {
+		const mockToggleScrollMode = vi.fn();
+
+		beforeEach(() => {
+			mockUseBoardScrollMode.mockReturnValue({
+				scrollMode: ref("columns"),
+				isPageScrollMode: computed(() => false),
+				toggleScrollMode: mockToggleScrollMode,
+			} as unknown as ReturnType<typeof useBoardScrollMode>);
+		});
+
+		describe("when isListBoard is false", () => {
+			it("should render the scroll mode toggle", () => {
+				const { wrapper } = setup({}, { isListBoard: false });
+
+				const toggle = wrapper.find('[data-testid="scroll-mode-toggle-checkbox"]');
+				expect(toggle.exists()).toBe(true);
+			});
+		});
+
+		describe("when isListBoard is true", () => {
+			it("should not render the scroll mode toggle", () => {
+				const { wrapper } = setup({}, { isListBoard: true });
+
+				const toggle = wrapper.find('[data-testid="scroll-mode-toggle-checkbox"]');
+				expect(toggle.exists()).toBe(false);
+			});
+		});
+
+		describe("when the scroll mode toggle model value", () => {
+			it("should be true when not in page scroll mode", () => {
+				mockUseBoardScrollMode.mockReturnValue({
+					scrollMode: ref("columns"),
+					isPageScrollMode: computed(() => false),
+					toggleScrollMode: mockToggleScrollMode,
+				} as unknown as ReturnType<typeof useBoardScrollMode>);
+				const { wrapper } = setup({}, { isListBoard: false });
+
+				const toggle = wrapper.findComponent(VSwitch);
+				expect(toggle.props("modelValue")).toBe(false);
+			});
+
+			it("should be false when in page scroll mode", () => {
+				mockUseBoardScrollMode.mockReturnValue({
+					scrollMode: ref("page"),
+					isPageScrollMode: computed(() => true),
+					toggleScrollMode: mockToggleScrollMode,
+				} as unknown as ReturnType<typeof useBoardScrollMode>);
+				const { wrapper } = setup({}, { isListBoard: false });
+
+				const toggle = wrapper.findComponent(VSwitch);
+				expect(toggle.props("modelValue")).toBe(true);
+			});
+		});
+
+		describe("when the scroll mode toggle is changed", () => {
+			it("should call toggleScrollMode", async () => {
+				const { wrapper } = setup({}, { isListBoard: false });
+
+				const toggle = wrapper.findComponent(VSwitch);
+				toggle.vm.$emit("update:modelValue", true);
+
+				expect(mockToggleScrollMode).toHaveBeenCalled();
+			});
 		});
 	});
 });
