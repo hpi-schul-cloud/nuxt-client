@@ -90,6 +90,7 @@ import {
 import { useDebounceFn, useWindowScroll } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
 
 type Props = {
 	boardId: string;
@@ -120,7 +121,8 @@ const boardHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
 const { allowedOperations } = useBoardAllowedOperations();
 const { isPageScrollMode, toggleScrollMode } = useBoardScrollMode();
-const isScrollModeToggleVisible = computed(() => !props.isListBoard);
+const { xs } = useDisplay();
+const isScrollModeToggleVisible = computed(() => !props.isListBoard && !xs.value);
 
 const { x: windowScrollX } = useWindowScroll();
 const actionsScrollStyle = computed(() => {
@@ -231,6 +233,7 @@ watchEffect(() => {
 html.board-page-scroll .column-board {
 	height: auto;
 	overflow-x: visible;
+	padding-top: 16px;
 }
 </style>
 
