@@ -66,6 +66,7 @@ const isAllowedTarget = (event: Event): boolean => {
 
 const onClickOutside = (event: Event) => {
 	if (props.isEditMode && isAllowedTarget(event) && !hasTextSelection()) {
+		interactionEvent.value = undefined;
 		emit("end-edit-mode");
 	}
 };
@@ -78,6 +79,7 @@ const onDoubleClick = (event: MouseEvent) => {
 };
 const onKeydownEscape = () => {
 	if (props.isEditMode) {
+		interactionEvent.value = undefined;
 		emit("end-edit-mode");
 	}
 };

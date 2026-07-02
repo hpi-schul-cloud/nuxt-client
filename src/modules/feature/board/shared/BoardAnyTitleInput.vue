@@ -122,9 +122,10 @@ watch(
 			return;
 		}
 
+		console.log(interactionEvent.value, "interactionEvent.value");
+
 		if (props.scope !== "column" && props.scope !== "board") {
-			// For card scope: only auto-focus title on keyboard-triggered edit mode
-			// (no interaction coordinates). Mouse clicks are handled by useInlineEditInteractionHandler.
+			console.log(interactionEvent.value, props.isFocused);
 			if (!props.isFocused || interactionEvent.value !== undefined) {
 				return;
 			}
