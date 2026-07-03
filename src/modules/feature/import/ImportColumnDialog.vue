@@ -70,6 +70,7 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 const props = defineProps<ImportColumnDialogProps>();
+const availableDestinations = computed(() => props.availableDestinations);
 const emit = defineEmits<{
 	complete: [result: ImportColumnDialogResult];
 	cancel: [];

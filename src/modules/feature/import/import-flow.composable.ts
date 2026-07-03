@@ -137,7 +137,13 @@ export const useImportFlow = () => {
 		const availableDestinationItems = toValue(availableDestinations);
 		const isCard = validationResult.parentType === ShareTokenInfoResponseParentType.CARD;
 		const isColumn = validationResult.parentType === ShareTokenInfoResponseParentType.COLUMN;
-		const actualDestinationType = isCard ? "column" : destinationType === "room" ? "room" : "course";
+		const actualDestinationType = isCard
+			? "column"
+			: isColumn
+				? "board"
+				: destinationType === "room"
+					? "room"
+					: "course";
 
 		const { completed, data } = await (isCard
 			? openDialog("importCard", {
