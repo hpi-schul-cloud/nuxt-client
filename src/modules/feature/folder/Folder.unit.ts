@@ -300,7 +300,7 @@ describe("Folder.vue", () => {
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 					// eslint-disable-next-line @typescript-eslint/no-empty-function
-					const mockFolderPromise = new Promise<void>(() => {});
+					const mockFolderPromise = new Promise<boolean>(() => {});
 					folderStateMock.fetchFileFolderElement.mockReturnValueOnce(mockFolderPromise);
 
 					// eslint-disable-next-line @typescript-eslint/no-empty-function
