@@ -529,7 +529,7 @@ describe("BoardColumnHeader", () => {
 				await shareButton.vm.$emit("click");
 				const emitted = wrapper.emitted();
 				expect(emitted["share:column"]).toBeDefined();
-				expect(emitted["share:column"]![0]).toEqual(["abc123"]);
+				expect(emitted["share:column"][0]).toEqual(["abc123"]);
 			});
 		});
 
