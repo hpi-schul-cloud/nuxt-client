@@ -871,6 +871,7 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.drafts": "Entwürfe",
 	"components.organisms.TasksDashboardMain.tab.finished": "Abgeschlossen",
 	"components.organisms.TasksDashboardMain.tab.open": "Offen",
+	"components.room.error.404": "Raum nicht gefunden",
 	"components.roomForm.labels.roomName": "Name des Raumes",
 	"components.roomForm.labels.timePeriod": "Zeitraum",
 	"components.roomForm.labels.timePeriod.from": "Zeitraum von",
