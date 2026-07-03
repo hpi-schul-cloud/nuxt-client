@@ -19,9 +19,16 @@ import {
 } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { computed, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
-import { VSwitch } from "vuetify/components";
+import { VDivider, VSwitch } from "vuetify/components";
+
+vi.mock("@vueuse/core", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@vueuse/core")>();
+	return { ...actual, useScroll: vi.fn() };
+});
+import { useScroll } from "@vueuse/core";
+const mockUseScroll = vi.mocked(useScroll);
 
 vi.mock("@data-board/BoardFocusHandler.composable");
 const mockUseBoardFocusHandler = vi.mocked(useBoardFocusHandler);
@@ -110,6 +117,7 @@ describe("BoardHeader", () => {
 			isPageScrollMode: computed(() => false),
 			toggleScrollMode: vi.fn(),
 		} as unknown as ReturnType<typeof useBoardScrollMode>);
+		mockUseScroll.mockReturnValue({ y: ref(0) } as unknown as ReturnType<typeof useScroll>);
 	});
 
 	afterEach(() => {
@@ -481,6 +489,59 @@ describe("BoardHeader", () => {
 				toggle.vm.$emit("update:modelValue", true);
 
 				expect(mockToggleScrollMode).toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("VDivider visibility", () => {
+		const scrollY = ref(0);
+
+		beforeEach(() => {
+			scrollY.value = 0;
+			mockUseScroll.mockReturnValue({ y: scrollY } as unknown as ReturnType<typeof useScroll>);
+		});
+
+		describe("when not in page scroll mode", () => {
+			it("should not render the VDivider", () => {
+				const { wrapper } = setup();
+
+				expect(wrapper.findComponent(VDivider).exists()).toBe(false);
+			});
+		});
+
+		describe("when in page scroll mode", () => {
+			beforeEach(() => {
+				mockUseBoardScrollMode.mockReturnValue({
+					scrollMode: ref("page"),
+					isPageScrollMode: computed(() => true),
+					toggleScrollMode: vi.fn(),
+				} as unknown as ReturnType<typeof useBoardScrollMode>);
+			});
+
+			it("should not render the VDivider when scroll position is at the top", () => {
+				const { wrapper } = setup();
+
+				expect(wrapper.findComponent(VDivider).exists()).toBe(false);
+			});
+
+			it("should render the VDivider when scrolled down", async () => {
+				const { wrapper } = setup();
+
+				scrollY.value = 100;
+				await nextTick();
+
+				expect(wrapper.findComponent(VDivider).exists()).toBe(true);
+			});
+
+			it("should not render the VDivider when scrolled back to the top", async () => {
+				const { wrapper } = setup();
+
+				scrollY.value = 100;
+				await nextTick();
+				scrollY.value = 0;
+				await nextTick();
+
+				expect(wrapper.findComponent(VDivider).exists()).toBe(false);
 			});
 		});
 	});
