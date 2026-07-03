@@ -2103,4 +2103,5 @@ export default {
 	"pages.folder.dropZone.emptyState.title": "Перетягніть файли сюди для завантаження",
 	"pages.folder.dropZone.emptyState.orText": "або",
 	"pages.folder.dropZone.emptyState.browse": "оглянути файли",
+	"pages.folder.error.404": "Папку не знайдено",
 };

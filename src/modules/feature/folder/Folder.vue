@@ -302,7 +302,9 @@ onMounted(async () => {
 		fileInput.value.addEventListener("change", async (event) => onFileSelection(event));
 	}
 
-	await fetchFileFolderElement(props.folderId);
+	const success = await fetchFileFolderElement(props.folderId);
+	if (!success) return;
+
 	try {
 		await fetchFiles(folderId.value, FileRecordParent.BOARDNODES);
 	} catch {

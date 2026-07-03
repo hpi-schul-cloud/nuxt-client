@@ -2124,4 +2124,5 @@ export default {
 	"pages.folder.dropZone.emptyState.title": "Dateien hier ablegen zum Hochladen",
 	"pages.folder.dropZone.emptyState.orText": "oder",
 	"pages.folder.dropZone.emptyState.browse": "Dateien durchsuchen",
+	"pages.folder.error.404": "Ordner nicht gefunden",
 };

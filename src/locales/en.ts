@@ -2081,4 +2081,5 @@ export default {
 	"pages.folder.dropZone.emptyState.title": "Drop files here to upload",
 	"pages.folder.dropZone.emptyState.orText": "or",
 	"pages.folder.dropZone.emptyState.browse": "browse your files",
+	"pages.folder.error.404": "Folder not found",
 };

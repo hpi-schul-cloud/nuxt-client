@@ -2134,4 +2134,5 @@ export default {
 	"pages.folder.dropZone.emptyState.title": "Suelta los archivos aquí para subirlos",
 	"pages.folder.dropZone.emptyState.orText": "o",
 	"pages.folder.dropZone.emptyState.browse": "buscar tus archivos",
+	"pages.folder.error.404": "Carpeta no encontrada",
 };
