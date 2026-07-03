@@ -970,6 +970,34 @@ describe("Board", () => {
 			});
 		});
 
+		describe("@share:column", () => {
+			it("should start the column share flow", async () => {
+				const { wrapper } = setup({ allowedOperations: { shareColumn: true } });
+
+				const boardColumn = wrapper.findComponent(BoardColumn);
+				await boardColumn.vm.$emit("share:column", "column-id");
+
+				expect(useShareFlowMock.executeShare).toHaveBeenCalledWith({
+					id: "column-id",
+					type: ShareTokenBodyParamsParentType.COLUMN,
+					destinationType: BoardExternalReferenceType.ROOM,
+				});
+			});
+
+			describe("when feature is disabled", () => {
+				it("should do nothing", async () => {
+					const { wrapper } = setup({
+						envs: { FEATURE_COLUMN_BOARD_SHARE: false },
+					});
+
+					const boardColumn = wrapper.findComponent(BoardColumn);
+					await boardColumn.vm.$emit("share:column", "column-id");
+
+					expect(useShareFlowMock.executeShare).not.toHaveBeenCalled();
+				});
+			});
+		});
+
 		describe("@onMoveCard", () => {
 			it("should open the move card dialog with the correct card id", async () => {
 				const { wrapper } = setup();
