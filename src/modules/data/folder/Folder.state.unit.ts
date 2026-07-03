@@ -98,7 +98,7 @@ describe("useFolderState", () => {
 					const { fetchFileFolderElement } = useFolderState();
 
 					await fetchFileFolderElement("invalid-id");
-					expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.NotFound);
+					expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.NotFound, "pages.folder.error.404");
 				});
 			});
 
@@ -115,7 +115,7 @@ describe("useFolderState", () => {
 
 					await fetchFileFolderElement(testId);
 
-					expect(useAppStore().handleApplicationError).toHaveBeenCalled();
+					expect(useAppStore().handleUnknownError).toHaveBeenCalled();
 				});
 			});
 
@@ -303,7 +303,7 @@ describe("useFolderState", () => {
 
 			await renameFolder("Updated Title", testId);
 
-			expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.BadRequest);
+			expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.BadRequest, undefined);
 		});
 	});
 
@@ -361,7 +361,7 @@ describe("useFolderState", () => {
 
 			await fetchOperations("parent-id");
 
-			expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.Forbidden);
+			expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.Forbidden, undefined);
 		});
 	});
 

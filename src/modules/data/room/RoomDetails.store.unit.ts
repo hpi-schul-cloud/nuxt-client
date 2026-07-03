@@ -5,6 +5,7 @@ import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { apiResponseErrorFactory, mockApi, mockApiResponse, mockAxiosInstance } from "@@/tests/test-utils";
 import * as serverApi from "@api-server";
 import { RoomColor } from "@api-server";
+import { useAppStore } from "@data-app";
 import { AxiosInstance } from "axios";
 import { createPinia, setActivePinia } from "pinia";
 import { Mocked } from "vitest";
@@ -84,15 +85,17 @@ describe("useRoomDetailsStore", () => {
 		});
 
 		describe("when fetching room fails with 404", () => {
-			it("should set roomVariant to COURSE_ROOM", async () => {
+			it("should handle application error and keep roomVariant as ROOM", async () => {
 				const { store } = setup();
+				const handleAppError = vi.spyOn(useAppStore(), "handleApplicationError");
 				expect(store.isLoading).toBe(true);
 				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue(new Error("not found"));
 				mockErrorResponse({ code: 404 });
 
 				await store.fetchRoomAndBoards("room-id");
 
-				expect(store.roomVariant).toBe(RoomVariant.COURSE_ROOM);
+				expect(store.roomVariant).toBe(RoomVariant.ROOM);
+				expect(handleAppError).toHaveBeenCalledWith(404, "components.room.error.404");
 				expect(store.isLoading).toBe(false);
 			});
 		});

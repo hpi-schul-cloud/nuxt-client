@@ -42,6 +42,7 @@ const createFolderStateMock = () =>
 		parent: computed(() => ({ id: "parent-id", type: ParentNodeType.BOARD, name: "parent-name" })),
 		allowedOperations: ref(defaultAllowedOperations) as unknown as ComputedRef<BoardResponseAllowedOperations>,
 		renameFolder: vi.fn().mockResolvedValue(undefined),
+		fetchFileFolderElement: vi.fn().mockResolvedValue(true),
 		fetchAllowedOperations: vi.fn().mockResolvedValue({}),
 	});
 
