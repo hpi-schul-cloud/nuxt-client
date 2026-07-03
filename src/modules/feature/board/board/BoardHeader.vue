@@ -51,7 +51,7 @@
 					<KebabMenuActionDelete :name="title" @click="onDeleteBoard" />
 				</BoardMenu>
 			</div>
-			<div v-if="isScrollModeToggleVisible" class="ms-auto mt-4 scroll-mode-toggle" :style="actionsScrollStyle">
+			<div v-if="isScrollModeToggleVisible" class="ms-auto mt-4 scroll-mode-toggle">
 				<VSwitch
 					:model-value="isPageScrollMode"
 					:label="t('components.board.action.fixColumns')"
@@ -62,7 +62,7 @@
 				/>
 			</div>
 		</div>
-		<VDivider v-if="isPageScrollMode" class="mx-n6" role="presentation" />
+		<VDivider v-if="isPageScrollMode && hasScrolledInPageMode" class="mx-n6 pb-4" role="presentation" />
 	</div>
 </template>
 
@@ -87,8 +87,8 @@ import {
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
 } from "@ui-kebab-menu";
-import { useDebounceFn, useWindowScroll } from "@vueuse/core";
-import { computed, onMounted, ref, toRef, watchEffect } from "vue";
+import { useDebounceFn, useScroll } from "@vueuse/core";
+import { computed, onMounted, ref, toRef, watch, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
@@ -124,16 +124,28 @@ const { isPageScrollMode, toggleScrollMode } = useBoardScrollMode();
 const { xs } = useDisplay();
 const isScrollModeToggleVisible = computed(() => !props.isListBoard && !xs.value);
 
-const { x: windowScrollX } = useWindowScroll();
-const actionsScrollStyle = computed(() => {
-	if (!isPageScrollMode.value) return {};
-	return { transform: `translateX(${windowScrollX.value}px)` };
+const boardScrollContainer = ref<HTMLElement | null>(null);
+const { y: contentScrollY } = useScroll(boardScrollContainer);
+
+const hasScrolledInPageMode = ref(false);
+
+watch(isPageScrollMode, () => {
+	hasScrolledInPageMode.value = false;
+});
+
+watch(contentScrollY, () => {
+	if (isPageScrollMode.value && contentScrollY.value > 0) {
+		hasScrolledInPageMode.value = true;
+	}
 });
 
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref("0px");
 
-onMounted(() => setTimeout(calculateWidth, 100));
+onMounted(() => {
+	boardScrollContainer.value = document.querySelector<HTMLElement>(".main-content-flex");
+	setTimeout(calculateWidth, 100);
+});
 
 const boardTitle = ref("");
 const boardTitleFallback = computed(() => {
@@ -225,7 +237,6 @@ const isShareEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_
 
 watchEffect(() => {
 	boardTitle.value = props.title;
-	setTimeout(calculateWidth, 100);
 });
 </script>
 
@@ -233,7 +244,6 @@ watchEffect(() => {
 html.board-page-scroll .column-board {
 	height: auto;
 	overflow-x: visible;
-	padding-top: 16px;
 }
 </style>
 
