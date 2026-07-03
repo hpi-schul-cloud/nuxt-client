@@ -134,8 +134,8 @@ watch(isPageScrollMode, () => {
 });
 
 watch(contentScrollY, () => {
-	if (isPageScrollMode.value && contentScrollY.value > 0) {
-		hasScrolledInPageMode.value = true;
+	if (isPageScrollMode.value) {
+		hasScrolledInPageMode.value = contentScrollY.value > 0;
 	}
 });
 
