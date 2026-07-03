@@ -98,7 +98,10 @@ describe("useFolderState", () => {
 					const { fetchFileFolderElement } = useFolderState();
 
 					await fetchFileFolderElement("invalid-id");
-					expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.NotFound, "pages.folder.error.404");
+					expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(
+						HttpStatusCode.NotFound,
+						"pages.folder.error.404"
+					);
 				});
 			});
 
