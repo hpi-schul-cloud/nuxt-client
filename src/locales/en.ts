@@ -723,7 +723,7 @@ export default {
 		"With the following link, the card can be imported by other people.",
 	"components.molecules.share.card.result.linkLabel": "Link card copy",
 	"components.molecules.share.column.options.infoText":
-		"With the following link, this section can be imported into a room by other people.",
+		"The following link allows others to import this section into a room.",
 	"components.molecules.share.column.result.linkLabel": "Link section copy",
 	"components.molecules.share.column.mail.subject": "Section to import",
 	"components.molecules.share.column.mail.body": "Link to the section: ",
