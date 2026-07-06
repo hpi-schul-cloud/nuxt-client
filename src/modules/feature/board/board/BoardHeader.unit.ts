@@ -1,5 +1,6 @@
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import { useBoardScrollMode } from "../shared/BoardScrollMode.composable";
+import BoardEditableChip from "./BoardEditableChip.vue";
 import BoardHeader from "./BoardHeader.vue";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
@@ -59,7 +60,10 @@ describe("BoardHeader", () => {
 			boardContextType?: BoardExternalReferenceType;
 			isEditMode?: boolean;
 			isListBoard?: boolean;
-		}
+			isEditableChipVisible?: boolean;
+			title?: string;
+		},
+		additionalStubs?: Record<string, unknown>
 	) => {
 		const isEditMode = computed(() => props?.isEditMode ?? true);
 		const startEditMode = vi.fn();
@@ -95,14 +99,15 @@ describe("BoardHeader", () => {
 				stubs: {
 					VTooltip: false,
 					VOverlay: false,
+					...additionalStubs,
 				},
 			},
 			props: {
-				title: "title-text",
+				title: props?.title ?? "title-text",
 				titlePlaceholder: "Board 1",
 				boardId: "abc123",
 				isDraft: props?.isDraft ?? false,
-				isEditableChipVisible: true,
+				isEditableChipVisible: props?.isEditableChipVisible ?? true,
 				hasReadersEditPermission: props?.hasReadersEditPermission || false,
 				boardContextType: BoardExternalReferenceType.ROOM,
 				...props,
@@ -357,6 +362,17 @@ describe("BoardHeader", () => {
 
 			expect(wrapper.emitted("delete:board")).toHaveLength(1);
 		});
+
+		it("should not emit 'delete:board' when deletion is cancelled", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(false);
+			const { wrapper } = setup({ allowedOperations: { updateBoardTitle: true, deleteBoard: true } });
+
+			const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
+			await deleteButton.trigger("click");
+			await nextTick();
+
+			expect(wrapper.emitted("delete:board")).toBeUndefined();
+		});
 	});
 
 	describe("when the 'change layout' menu button is clicked", () => {
@@ -423,6 +439,34 @@ describe("BoardHeader", () => {
 			const { wrapper } = setup({}, { boardContextType: BoardExternalReferenceType.COURSE });
 
 			expect(wrapper.findComponent(KebabMenuActionEditingSettings).exists()).toBe(false);
+		});
+	});
+
+	describe("when isEditableChipVisible is false", () => {
+		it("should not render the BoardEditableChip", () => {
+			const { wrapper } = setup({}, { isEditableChipVisible: false });
+
+			expect(wrapper.findComponent(BoardEditableChip).exists()).toBe(false);
+		});
+	});
+
+	describe("when calculateWidth is called with a mounted span element", () => {
+		it("should use the fallback placeholder when board title is empty", async () => {
+			const { wrapper } = setup({}, { title: "" });
+
+			// The inputWidthCalcSpan ref remains null in shallowMount because
+			// the span is inside a stubbed component's slot (rendering context lost).
+			// Set it manually via Vue's internal setup state.
+			const spanEl = document.createElement("span");
+
+			(wrapper.vm as unknown as { $: { setupState: Record<string, unknown> } }).$.setupState["inputWidthCalcSpan"] =
+				spanEl;
+
+			const titleInput = wrapper.findComponent(BoardAnyTitleInput);
+			titleInput.vm.$emit("update:value", "");
+			await nextTick();
+
+			expect(wrapper.findComponent(BoardHeader).exists()).toBe(true);
 		});
 	});
 
@@ -539,6 +583,28 @@ describe("BoardHeader", () => {
 				scrollY.value = 100;
 				await nextTick();
 				scrollY.value = 0;
+				await nextTick();
+
+				expect(wrapper.findComponent(VDivider).exists()).toBe(false);
+			});
+		});
+
+		describe("when scroll mode changes from page to column while scrolled", () => {
+			it("should hide the VDivider after resetting hasScrolledInPageMode", async () => {
+				const isPageScrollMode = ref(true);
+				mockUseBoardScrollMode.mockReturnValue({
+					scrollMode: ref("page"),
+					isPageScrollMode,
+					toggleScrollMode: vi.fn(),
+				} as unknown as ReturnType<typeof useBoardScrollMode>);
+
+				const { wrapper } = setup();
+
+				scrollY.value = 100;
+				await nextTick();
+				expect(wrapper.findComponent(VDivider).exists()).toBe(true);
+
+				isPageScrollMode.value = false;
 				await nextTick();
 
 				expect(wrapper.findComponent(VDivider).exists()).toBe(false);
