@@ -304,7 +304,10 @@ onMounted(async () => {
 	}
 
 	await fetchFileFolderElement(props.folderId);
-	if (!fileFolderElement.value) return;
+	if (!fileFolderElement.value) {
+		isLoading.value = false;
+		return;
+	}
 
 	try {
 		await fetchFiles(folderId.value, FileRecordParent.BOARDNODES);
