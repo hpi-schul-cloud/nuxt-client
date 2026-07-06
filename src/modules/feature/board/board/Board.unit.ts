@@ -401,12 +401,12 @@ describe("Board", () => {
 		describe("@onCreateCard", () => {
 			describe("when user is permitted to create card", () => {
 				it("should call the createCard method", () => {
-					const { wrapper, boardStore } = setup({ allowedOperations: { createCard: true } });
+					const { wrapper, boardStore, board } = setup({ allowedOperations: { createCard: true } });
 
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
-					columnComponent.vm.$emit("create:card");
+					columnComponent.vm.$emit("create:card", { columnId: board.columns[0].id });
 
 					expect(boardStore.createCardRequest).toHaveBeenCalled();
 				});
