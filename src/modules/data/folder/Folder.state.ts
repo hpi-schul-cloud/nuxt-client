@@ -70,10 +70,8 @@ export const useFolderState = () => {
 
 			fileFolderElement.value = castToFileFolderElement(response.data.element);
 			parentNodeInfos.value = response.data.parentHierarchy;
-			return true;
 		} catch (error) {
 			handleApplicationError(error);
-			return false;
 		}
 	};
 

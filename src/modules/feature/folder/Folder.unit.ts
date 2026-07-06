@@ -11,7 +11,13 @@ import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import * as FileHelper from "@/utils/fileHelper";
-import { createTestEnvStore, fileRecordFactory, mockComposable, parentNodeInfoFactory } from "@@/tests/test-utils";
+import {
+	createTestEnvStore,
+	fileFolderElementResponseFactory,
+	fileRecordFactory,
+	mockComposable,
+	parentNodeInfoFactory,
+} from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardResponseAllowedOperations } from "@api-server";
 import * as BoardApi from "@data-board";
@@ -36,13 +42,13 @@ const defaultAllowedOperations = { createFileElement: true } as BoardResponseAll
 const createFolderStateMock = () =>
 	mockComposable(FolderState.useFolderState, {
 		breadcrumbs: computed(() => []),
-		fileFolderElement: ref(),
+		fileFolderElement: ref(fileFolderElementResponseFactory.build()),
 		folderName: computed(() => ""),
 		pageTitle: computed(() => ""),
 		parent: computed(() => ({ id: "parent-id", type: ParentNodeType.BOARD, name: "parent-name" })),
 		allowedOperations: ref(defaultAllowedOperations) as unknown as ComputedRef<BoardResponseAllowedOperations>,
 		renameFolder: vi.fn().mockResolvedValue(undefined),
-		fetchFileFolderElement: vi.fn().mockResolvedValue(true),
+		fetchFileFolderElement: vi.fn().mockResolvedValue(undefined),
 		fetchAllowedOperations: vi.fn().mockResolvedValue({}),
 	});
 
@@ -300,7 +306,7 @@ describe("Folder.vue", () => {
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 					// eslint-disable-next-line @typescript-eslint/no-empty-function
-					const mockFolderPromise = new Promise<boolean>(() => {});
+					const mockFolderPromise = new Promise<void>(() => {});
 					folderStateMock.fetchFileFolderElement.mockReturnValueOnce(mockFolderPromise);
 
 					// eslint-disable-next-line @typescript-eslint/no-empty-function

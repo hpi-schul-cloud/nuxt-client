@@ -100,6 +100,7 @@ const {
 	breadcrumbs,
 	fetchAllowedOperations,
 	fetchFileFolderElement,
+	fileFolderElement,
 	folderName,
 	mapNodeTypeToPathType,
 	parent,
@@ -302,8 +303,8 @@ onMounted(async () => {
 		fileInput.value.addEventListener("change", async (event) => onFileSelection(event));
 	}
 
-	const success = await fetchFileFolderElement(props.folderId);
-	if (!success) return;
+	await fetchFileFolderElement(props.folderId);
+	if (!fileFolderElement.value) return;
 
 	try {
 		await fetchFiles(folderId.value, FileRecordParent.BOARDNODES);
