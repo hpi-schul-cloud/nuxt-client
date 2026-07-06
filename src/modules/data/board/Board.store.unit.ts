@@ -306,6 +306,22 @@ describe("BoardStore", () => {
 			});
 		});
 
+		it("should create a card at the provided position", () => {
+			const { boardStore, firstColumn } = setup();
+
+			boardStore.createCardSuccess({
+				newCard: NEW_CARD,
+				columnId: firstColumn.id,
+				position: 1,
+				isOwnAction: true,
+			});
+
+			expect(boardStore.board?.columns[0].cards[1]).toEqual({
+				cardId: NEW_CARD.id,
+				height: NEW_CARD.height,
+			});
+		});
+
 		it("should call setEditModeId", () => {
 			const { boardStore, firstColumn } = setup();
 

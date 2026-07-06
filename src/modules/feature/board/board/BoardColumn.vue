@@ -66,6 +66,7 @@
 						@reload:board="onReloadBoard"
 						@share:card="emit('share:card', $event)"
 						@move:card="emit('move:card', $event)"
+						@create:card="onCreateCard"
 					/>
 				</template>
 			</Sortable>
@@ -96,7 +97,7 @@ type Props = {
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-	(e: "create:card", columnId: string): void;
+	(e: "create:card", payload: { columnId: string; position?: number }): void;
 	(e: "move:card", cardId: string): void;
 	(e: "delete:card", cardId: string): void;
 	(e: "delete:column", columnId: string): void;
@@ -137,7 +138,15 @@ const showAddButton = computed(
 const isNotFirstColumn = computed(() => props.index !== 0);
 const isNotLastColumn = computed(() => props.index !== props.columnCount - 1);
 
-const onCreateCard = () => emit("create:card", props.column.id);
+const onCreateCard = (cardId?: string) => {
+	if (!cardId) {
+		emit("create:card", { columnId: props.column.id });
+	} else {
+		const position = boardStore.getCardLocation(cardId)?.cardIndex;
+
+		emit("create:card", { columnId: props.column.id, position });
+	}
+};
 
 const onColumnDelete = (columnId: string) => {
 	emit("delete:column", columnId);
