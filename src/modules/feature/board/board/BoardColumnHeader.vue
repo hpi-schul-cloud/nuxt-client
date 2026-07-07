@@ -98,7 +98,8 @@ const { t } = useI18n();
 
 const { allowedOperations } = useBoardAllowedOperations();
 
-const isShareEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE);
+const envConfig = useEnvConfig();
+const isShareEnabled = computed(() => envConfig.value.FEATURE_COLUMN_BOARD_SHARE);
 
 const columnId = toRef(props, "columnId");
 const columnTitle = toRef(props, "title");

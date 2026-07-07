@@ -12,7 +12,7 @@ import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VForm, VSelect } from "vuetify/components";
 
-vi.mock("@data-room/index");
+vi.mock("@data-room");
 
 const mockRooms = [
 	roomItemFactory.build({ allowedOperations: { editContent: true } }),
