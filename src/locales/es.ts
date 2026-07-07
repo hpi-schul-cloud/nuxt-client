@@ -655,8 +655,8 @@ export default {
 	"components.molecules.ContentCardMenu.action.share": "Compartir",
 	"components.molecules.ContextMenu.action.close": "Cerrar menú contextual",
 	"components.molecules.import.card.options.title": "Importar tarjeta",
-	"components.import.column.options.title": "Importar sección",
-	"components.import.column.question": "¿Dónde se debe importar la sección{title}?",
+	"components.molecules.import.column.options.title": "Importar sección",
+	"components.molecules.import.column.question": "¿Dónde se debe importar la sección{title}?",
 	"components.molecules.import.columnBoard.label": "Título del tablero",
 	"components.molecules.label.room": "Seleccionar sala",
 	"components.molecules.label.board": "Seleccionar tablero",
@@ -728,11 +728,11 @@ export default {
 	"components.molecules.share.card.options.infoText":
 		"Con el siguiente enlace, la tarjeta puede ser importada como copia por otros personas.",
 	"components.molecules.share.card.result.linkLabel": "Enlace a la copia de la tarjeta",
-	"components.share.column.options.infoText":
+	"components.molecules.share.column.options.infoText":
 		"Mediante el siguiente enlace, otras personas pueden importar esta sección a una sala.",
-	"components.share.column.result.linkLabel": "Enlace a la copia de la sección",
-	"components.share.column.mail.subject": "Sección para importar",
-	"components.share.column.mail.body": "Enlace a la sección: ",
+	"components.molecules.share.column.result.linkLabel": "Enlace a la copia de la sección",
+	"components.molecules.share.column.mail.subject": "Sección para importar",
+	"components.molecules.share.column.mail.body": "Enlace a la sección: ",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Con el siguiente enlace, el tablero puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Enlace a la copia del tablón",

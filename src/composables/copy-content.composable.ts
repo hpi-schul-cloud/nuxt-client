@@ -193,7 +193,7 @@ const shareInfoTextKeys: Record<ShareTokenBodyParamsParentType, string> = {
 	[ShareTokenBodyParamsParentType.COLUMN_BOARD]: "components.molecules.share.columnBoard.options.infoText",
 	[ShareTokenBodyParamsParentType.ROOM]: "components.molecules.share.room.options.infoText",
 	[ShareTokenBodyParamsParentType.CARD]: "components.molecules.share.card.options.infoText",
-	[ShareTokenBodyParamsParentType.COLUMN]: "components.share.column.options.infoText",
+	[ShareTokenBodyParamsParentType.COLUMN]: "components.molecules.share.column.options.infoText",
 };
 
 export const useShareContent = (shareTokenParentType: Ref<ShareTokenBodyParamsParentType | undefined>) => {
