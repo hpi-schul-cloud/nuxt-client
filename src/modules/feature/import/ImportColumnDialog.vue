@@ -59,12 +59,12 @@
 
 <script setup lang="ts">
 import { useImportContent } from "@/composables/copy-content.composable";
-import { ShareTokenInfoResponseParentType } from "@api-server";
-import { useCardDialogData } from "@data-board";
+import { RoomBoardItemResponse, ShareTokenInfoResponseParentType } from "@api-server";
+import { useRoomDetailsStore } from "@data-room";
 import { ImportColumnDialogProps, ImportColumnDialogResult } from "@feature-dialog";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { computed, ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -79,7 +79,19 @@ const emit = defineEmits<{
 
 const isDialogOpen = defineModel<boolean>({ default: false });
 
-const { selectedBoardId, selectedRoomId, resetBoardSelection, boards } = useCardDialogData(isDialogOpen);
+const selectedRoomId = ref<string | undefined>(undefined);
+const selectedBoardId = ref<string | undefined>(undefined);
+const boards = ref<RoomBoardItemResponse[]>();
+
+watchEffect(async () => {
+	if (isDialogOpen.value && selectedRoomId.value) {
+		boards.value = (await useRoomDetailsStore().fetchBoardsOfRoom(selectedRoomId.value)).boards;
+	}
+});
+
+const resetBoardSelection = () => {
+	selectedBoardId.value = undefined;
+};
 
 const onConfirm = () => {
 	emit("complete", {

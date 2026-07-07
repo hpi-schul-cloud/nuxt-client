@@ -1,19 +1,18 @@
 import ImportColumnDialog from "./ImportColumnDialog.vue";
-import { mockComposable, roomItemFactory } from "@@/tests/test-utils";
+import { roomItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
-import { useCardDialogData } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it } from "vitest";
-import { nextTick, ref } from "vue";
+import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
-import { VForm } from "vuetify/components";
+import { VForm, VSelect } from "vuetify/components";
 
-vi.mock("@data-board/card-dialog.composable");
+vi.mock("@data-room/index");
 
 const mockRooms = [
 	roomItemFactory.build({ allowedOperations: { editContent: true } }),
@@ -22,18 +21,9 @@ const mockRooms = [
 ];
 
 describe("ImportColumnDialog", () => {
-	let useCardDialogDataMock: ReturnType<typeof useCardDialogData>;
-
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		injectRouterMock(createRouterMock());
-		useCardDialogDataMock = mockComposable(useCardDialogData, {
-			boards: ref([]),
-			selectedRoomId: ref<string | undefined>(undefined),
-			selectedBoardId: ref<string | undefined>(undefined),
-			resetBoardSelection: vi.fn(),
-		});
-		vi.mocked(useCardDialogData).mockReturnValue(useCardDialogDataMock);
 	});
 
 	const setup = (rooms = mockRooms) => {
@@ -72,7 +62,9 @@ describe("ImportColumnDialog", () => {
 	it("should emit confirm event with correct payload when board is selected", async () => {
 		const { wrapper, shareTokenInfo } = setup();
 
-		useCardDialogDataMock.selectedBoardId.value = "board-123";
+		const boardSelect = wrapper.findAllComponents(VSelect)[1];
+		await boardSelect.vm.$emit("update:modelValue", "board-123");
+		await nextTick();
 
 		const dialog = wrapper.findComponent(SvsDialog);
 		dialog.vm.$emit("confirm");
@@ -100,8 +92,11 @@ describe("ImportColumnDialog", () => {
 
 	it("should enable confirm button when a board is selected", async () => {
 		const { wrapper } = setup();
-		useCardDialogDataMock.selectedBoardId.value = "board-456";
+
+		const boardSelect = wrapper.findAllComponents(VSelect)[1];
+		await boardSelect.vm.$emit("update:modelValue", "board-456");
 		await nextTick();
+
 		const dialog = wrapper.findComponent(SvsDialog);
 		expect(dialog.props("confirmBtnDisabled")).toBe(false);
 	});
