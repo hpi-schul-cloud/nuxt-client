@@ -600,6 +600,7 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
 	"components.cardElement.h5pElement": "Elemento de aprendizaje interactivo",
+	"components.cardElement.h5pElement.noElement": "No hay elemento de aprendizaje",
 	"components.cardElement.h5pElement.create": "Crear elemento de aprendizaje...",
 	"components.cardElement.h5pElement.title.error.load":
 		"No se pudo cargar el título de un elemento de aprendizaje interactivo.",

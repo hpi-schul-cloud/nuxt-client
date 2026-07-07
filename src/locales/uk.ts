@@ -598,6 +598,7 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
 	"components.cardElement.h5pElement": "Інтерактивний елемент навчання",
+	"components.cardElement.h5pElement.noElement": "Елемент навчання відсутній",
 	"components.cardElement.h5pElement.create": "Створіть елемент навчання...",
 	"components.cardElement.h5pElement.title.error.load":
 		"Не вдалося завантажити назву інтерактивного навчального елемента.",

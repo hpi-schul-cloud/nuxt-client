@@ -587,6 +587,7 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} not available. Please contact the school administrator.",
 	"components.cardElement.h5pElement": "Interactive learning element",
+	"components.cardElement.h5pElement.noElement": "No learning element available",
 	"components.cardElement.h5pElement.create": "Create learning element...",
 	"components.cardElement.h5pElement.title.error.load":
 		"The title of an interactive learning element could not be loaded.",

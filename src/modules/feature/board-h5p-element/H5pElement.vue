@@ -1,6 +1,5 @@
 <template>
 	<VCard
-		v-show="hasLinkedContent || isEditMode"
 		ref="elementCard"
 		class="mb-4"
 		data-testid="board-hp5-element"
@@ -13,37 +12,40 @@
 		@keyup.enter.space="onClickElement"
 		@click="onClickElement"
 	>
-		<ContentElementBar icon="$h5pOutline" :has-row-style="isSmallOrLargerListBoard">
-			<template #display>
-				<v-img
-					v-if="hasLinkedContent"
-					:src="H5PImage"
-					:aspect-ratio="isSmallOrLargerListBoard ? 1.77777 : undefined"
-					:cover="isSmallOrLargerListBoard"
-					alt=""
-				/>
-			</template>
-			<template #title>
-				{{ hasLinkedContent ? contentTitle : t("components.cardElement.h5pElement.create") }}
-			</template>
-			<template #menu>
-				<H5pElementMenu
-					v-if="isEditMode"
-					:display-name="contentTitle"
-					:column-index="columnIndex"
-					:row-index="rowIndex"
-					:element-index="elementIndex"
-					:is-not-first-element="isNotFirstElement"
-					:is-not-last-element="isNotLastElement"
-					:has-linked-content="hasLinkedContent"
-					@move-down:element="onMoveElementDown"
-					@move-up:element="onMoveElementUp"
-					@delete:element="onDeleteElement"
-					@edit:element="onEdit"
-					@download:content="onDownloadContent"
-				/>
-			</template>
-		</ContentElementBar>
+		<template v-if="hasLinkedContent || isEditMode">
+			<ContentElementBar icon="$h5pOutline" :has-row-style="isSmallOrLargerListBoard">
+				<template #display>
+					<v-img
+						v-if="hasLinkedContent"
+						:src="H5PImage"
+						:aspect-ratio="isSmallOrLargerListBoard ? 1.77777 : undefined"
+						:cover="isSmallOrLargerListBoard"
+						alt=""
+					/>
+				</template>
+				<template #title>
+					{{ hasLinkedContent ? contentTitle : t("components.cardElement.h5pElement.create") }}
+				</template>
+				<template #menu>
+					<H5pElementMenu
+						v-if="isEditMode"
+						:display-name="contentTitle"
+						:column-index="columnIndex"
+						:row-index="rowIndex"
+						:element-index="elementIndex"
+						:is-not-first-element="isNotFirstElement"
+						:is-not-last-element="isNotLastElement"
+						:has-linked-content="hasLinkedContent"
+						@move-down:element="onMoveElementDown"
+						@move-up:element="onMoveElementUp"
+						@delete:element="onDeleteElement"
+						@edit:element="onEdit"
+						@download:content="onDownloadContent"
+					/>
+				</template>
+			</ContentElementBar>
+		</template>
+		<EmptyElement v-else icon="$h5pOutline" :title="t('components.cardElement.h5pElement.noElement')" />
 	</VCard>
 </template>
 
@@ -58,9 +60,9 @@ import { H5PContentParentType } from "@api-h5p";
 import { H5pElementResponse } from "@api-server";
 import { useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
-import { ContentElementBar } from "@ui-board";
+import { ContentElementBar, EmptyElement } from "@ui-board";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { computed, onMounted, Ref, ref, toRef, watch } from "vue";
+import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
@@ -87,17 +89,17 @@ const { t } = useI18n();
 const { smAndUp } = useDisplay();
 const { getContentTitle } = useH5PEditorApi();
 
-const element: Ref<H5pElementResponse> = toRef(props, "element");
+const element = toRef(props, "element");
 
-const elementCard: Ref<HTMLElement | null> = ref(null);
+const elementCard = ref<HTMLElement | null>(null);
 useBoardFocusHandler(element.value.id, elementCard);
 
 const hasLinkedContent = computed(() => !!element.value.content.contentId);
 
 const router = useRouter();
-const editorWindow: Ref<Window | null> = ref(null);
+const editorWindow = ref<Window | null>(null);
 
-const isListLayout: Ref<boolean> = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
+const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 
 const isSmallOrLargerListBoard = computed(() => smAndUp.value && (isListLayout.value || props.isDetailView));
 

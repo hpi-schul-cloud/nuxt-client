@@ -158,12 +158,13 @@ describe("H5pElement", () => {
 				};
 			};
 
-			it("should hide the card", () => {
+			it("should show empty element", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.getComponent({ ref: "elementCard" });
 
-				expect(card.isVisible()).toEqual(false);
+				expect(card.isVisible()).toEqual(true);
+				expect(wrapper.text()).toContain("components.cardElement.h5pElement.noElement");
 			});
 		});
 	});
