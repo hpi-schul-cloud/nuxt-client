@@ -62,7 +62,7 @@
 				/>
 			</div>
 		</div>
-		<VDivider v-if="isPageScrollMode && hasScrolledInPageMode" class="mx-n6 pb-4" role="presentation" />
+		<VDivider v-if="isPageScrollMode && hasScrolledInPageMode" class="mx-n6" role="presentation" />
 	</div>
 </template>
 
