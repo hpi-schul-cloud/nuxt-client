@@ -29,9 +29,8 @@ describe("ImportColumnDialog", () => {
 		injectRouterMock(createRouterMock());
 		useCardDialogDataMock = mockComposable(useCardDialogData, {
 			boards: ref([]),
-			columns: ref([]),
+			selectedRoomId: ref<string | undefined>(undefined),
 			selectedBoardId: ref<string | undefined>(undefined),
-			selectedColumnId: ref<string | undefined>(undefined),
 			resetBoardSelection: vi.fn(),
 		});
 		vi.mocked(useCardDialogData).mockReturnValue(useCardDialogDataMock);

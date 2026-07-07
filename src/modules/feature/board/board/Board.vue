@@ -459,6 +459,7 @@ const onShareCard = async (cardId: string) => {
 };
 
 const onShareColumn = (columnId: string) => {
+	if (!allowedOperations.value.shareColumn) return;
 	if (!useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) return;
 	executeShare({
 		id: columnId,

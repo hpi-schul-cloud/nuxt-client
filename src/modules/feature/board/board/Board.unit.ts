@@ -940,7 +940,7 @@ describe("Board", () => {
 			});
 
 			describe("when feature is disabled", () => {
-				it("should do nothing", async () => {
+				it("should not emit share:board", async () => {
 					const { wrapper } = setup({
 						envs: { FEATURE_COLUMN_BOARD_SHARE: false },
 					});
@@ -984,10 +984,24 @@ describe("Board", () => {
 				});
 			});
 
+			describe("when permission is missing", () => {
+				it("should not emit share:column", async () => {
+					const { wrapper } = setup({
+						allowedOperations: { shareColumn: false },
+					});
+
+					const boardColumn = wrapper.findComponent(BoardColumn);
+					await boardColumn.vm.$emit("share:column", "column-id");
+
+					expect(useShareFlowMock.executeShare).not.toHaveBeenCalled();
+				});
+			});
+
 			describe("when feature is disabled", () => {
-				it("should do nothing", async () => {
+				it("should not emit share:column", async () => {
 					const { wrapper } = setup({
 						envs: { FEATURE_COLUMN_BOARD_SHARE: false },
+						allowedOperations: { shareColumn: true },
 					});
 
 					const boardColumn = wrapper.findComponent(BoardColumn);
