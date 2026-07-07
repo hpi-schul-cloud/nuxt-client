@@ -571,6 +571,7 @@ export default {
 	"components.cardElement.LinkElement": "Link",
 	"components.cardElement.LinkElement.create.label": "Insert link address",
 	"components.cardElement.LinkElement.edit.label": "Edit link address",
+	"components.cardElement.LinkElement.noLink": "No link available",
 	"components.cardElement.LinkElement.validation.success": "The link address is valid",
 	"components.cardElement.notification.visibleAndEditable":
 		"This whiteboard is visible and editable for all course participants.",

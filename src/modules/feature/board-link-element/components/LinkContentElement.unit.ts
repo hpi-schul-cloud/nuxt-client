@@ -13,7 +13,8 @@ import { LinkElementContent, LinkElementResponse } from "@api-server";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { LinkContentElement } from "@feature-board-link-element";
-import { BoardMenu } from "@ui-board";
+import { mdiLink } from "@icons/material";
+import { BoardMenu, EmptyElement } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { useElementFocus } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
@@ -177,12 +178,13 @@ describe("LinkContentElement", () => {
 		});
 
 		describe("when element is in view mode", () => {
-			it("should hide the element", () => {
+			it("should render EmptyElement", () => {
 				const { wrapper } = setupWrapper({ isEditMode: false });
 
-				const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
-
-				expect(linkElement.attributes("class")).toContain("d-none");
+				const element = wrapper.findComponent(EmptyElement);
+				expect(element.exists()).toBe(true);
+				expect(element.props("icon")).toBe(mdiLink);
+				expect(element.props("title")).toBe("components.cardElement.LinkElement.noLink");
 			});
 
 			it("should not render the element menu", () => {

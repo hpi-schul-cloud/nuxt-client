@@ -582,6 +582,7 @@ export default {
 	"components.cardElement.LinkElement": "Посилання",
 	"components.cardElement.LinkElement.create.label": "Вставити адресу посилання",
 	"components.cardElement.LinkElement.edit.label": "Редагувати адресу посилання",
+	"components.cardElement.LinkElement.noLink": "Посилання відсутнє",
 	"components.cardElement.LinkElement.validation.success": "URL-адреса дійсна",
 	"components.cardElement.notification.visibleAndEditable":
 		"Ця дошка є видимою і доступною для редагування для всіх учасників курсу.",
