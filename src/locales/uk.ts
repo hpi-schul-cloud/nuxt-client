@@ -653,6 +653,8 @@ export default {
 	"components.molecules.ContentCardMenu.action.share": "Надати спільний доступ",
 	"components.molecules.ContextMenu.action.close": "Закрити контекстне меню",
 	"components.molecules.import.card.options.title": "Імпортувати картку",
+	"components.molecules.import.column.options.title": "Імпортувати розділ",
+	"components.molecules.import.column.question": "Куди слід імпортувати розділ{title}?",
 	"components.molecules.import.columnBoard.label": "Назва дошки",
 	"components.molecules.label.room": "Оберіть кімнату",
 	"components.molecules.label.board": "Оберіть дошку",
@@ -688,7 +690,9 @@ export default {
 	"components.molecules.import.options.failure.invalidToken": "Маркер у посиланні невідомий або термін дії минув.",
 	"components.molecules.import.options.failure.permissionError": "На жаль, відсутній необхідний дозвіл.",
 	"components.molecules.import.options.loadingMessage": "Виконується імпорту...",
-	"components.molecules.import.options.success": "{name} успішно імпортовано",
+	"components.molecules.import.options.success": '{type} "{name}" успішно імпортовано',
+	"components.molecules.import.options.successWithDestination":
+		'{type} "{name}" успішно імпортовано в {destinationType} "{destinationName}"',
 	"components.molecules.import.options.tableHeader.InfoText": "Наступний вміст не буде імпортовано:",
 	"components.molecules.import.room.label": "Назва кімнати",
 	"components.molecules.import.room.options.title": "Імпортувати кімнату",
@@ -722,6 +726,11 @@ export default {
 	"components.molecules.share.card.options.infoText":
 		"За наступним посиланням цю картка можуть імпортувати як копію інші особи.",
 	"components.molecules.share.card.result.linkLabel": "Посилання на копію картки",
+	"components.molecules.share.column.options.infoText":
+		"За допомогою наведеного нижче посилання цей розділ можна імпортувати в кімнату іншим користувачам.",
+	"components.molecules.share.column.result.linkLabel": "Посилання на копію розділу",
+	"components.molecules.share.column.mail.subject": "Розділ для імпорту",
+	"components.molecules.share.column.mail.body": "Посилання на розділ: ",
 	"components.molecules.share.columnBoard.options.infoText":
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Посилання на копію дошки",
@@ -936,6 +945,7 @@ export default {
 	"feature-copy.copyInfo.type.ofLesson": "уроку",
 	"feature-copy.copyInfo.type.ofRoom": "кімнати",
 	"feature-copy.copyInfo.type.ofCard": "картки",
+	"feature-copy.copyInfo.type.ofColumn": "розділу",
 	"feature-course-sync.EndCourseSyncDialog.title": "Завершити синхронізацію",
 	"feature-course-sync.EndCourseSyncDialog":
 		"Чи дійсно слід припинити синхронізацію курсу {courseName} із групою користувачів {groupName}?",
@@ -1001,8 +1011,9 @@ export default {
 	"mixins.typeMeta.types.video": "Відео",
 	"mixins.typeMeta.types.webpage": "Веб-сайт",
 	"loggedin.text.backupFeatures":
-		"Зробіть резервну копію вашого контенту в хмарі та використовуйте також нову функцію для експорту курсів. {helpLink}",
-	"loggedin.text.backupFeatures.helpLink": "Додаткову інформацію та допомогу можна знайти тут.",
+		"Сервіс dBildungscloud буде вимкнено 14 вересня 2026 року, оскільки закінчується термін дії відповідного грантового проєкту. З цього моменту сервіс dBildungscloud більше не буде доступний для шкільної діяльності та проведення занять. Просимо вас до цього часу створити резервні копії своїх даних. {helpLink}.",
+	"loggedin.text.backupFeatures.helpLink":
+		"Додаткову інформацію та вказівки щодо резервного копіювання даних можна знайти тут",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"Школа перебуває у фазі переходу до нового навчального року. Не можна створювати класи та користувачів.",
 	"loggedin.text.schoolInTransferPhaseStartNew":

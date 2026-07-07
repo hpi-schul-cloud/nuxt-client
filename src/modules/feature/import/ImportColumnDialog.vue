@@ -2,10 +2,10 @@
 	<SvsDialog
 		v-model="isDialogOpen"
 		is-open-state-managed-externally
-		:title="importCardTitle"
+		:title="importColumnTitle"
 		confirm-btn-lang-key="common.actions.import"
-		:confirm-btn-disabled="!selectedColumnId"
-		data-testid="import-card-dialog"
+		:confirm-btn-disabled="!selectedBoardId"
+		data-testid="import-column-dialog"
 		@confirm="onConfirm"
 		@cancel="onCancel"
 		@after-leave="emit('after-leave')"
@@ -27,10 +27,10 @@
 					</li>
 				</ul>
 			</WarningAlert>
-			<p class="mt-2" data-testid="import-card-dialog-question">
+			<p class="mt-2" data-testid="import-column-dialog-question">
 				{{ dialogQuestion }}
 			</p>
-			<VForm id="importCardForm" data-testid="import-card-form">
+			<VForm id="importColumnForm" data-testid="import-column-form">
 				<VSelect
 					v-model="selectedRoomId"
 					:items="availableDestinations"
@@ -38,8 +38,8 @@
 					item-title="name"
 					:label="t('components.molecules.label.room')"
 					:placeholder="t('common.labels.room')"
-					:menu-props="{ attach: '#importCardForm' }"
-					data-testid="import-card-select-room"
+					:menu-props="{ attach: '#importColumnForm' }"
+					data-testid="import-column-select-room"
 					@update:menu="resetBoardSelection"
 				/>
 				<VSelect
@@ -49,19 +49,8 @@
 					item-value="id"
 					:label="t('components.molecules.label.board')"
 					:placeholder="t('common.words.board')"
-					:menu-props="{ attach: '#importCardForm' }"
-					data-testid="import-card-select-board"
-					@update:menu="selectedColumnId = undefined"
-				/>
-				<VSelect
-					v-model="selectedColumnId"
-					:disabled="!selectedBoardId"
-					:items="columns"
-					item-value="id"
-					:label="t('components.molecules.label.column')"
-					:placeholder="t('components.boardSection')"
-					:menu-props="{ attach: '#importCardForm' }"
-					data-testid="import-card-select-column"
+					:menu-props="{ attach: '#importColumnForm' }"
+					data-testid="import-column-select-board"
 				/>
 			</VForm>
 		</template>
@@ -70,32 +59,44 @@
 
 <script setup lang="ts">
 import { useImportContent } from "@/composables/copy-content.composable";
-import { ShareTokenInfoResponseParentType } from "@api-server";
-import { useCardDialogData } from "@data-board";
-import { ImportCardDialogProps, ImportCardDialogResult } from "@feature-dialog";
+import { RoomBoardItemResponse, ShareTokenInfoResponseParentType } from "@api-server";
+import { useRoomDetailsStore } from "@data-room";
+import { ImportColumnDialogProps, ImportColumnDialogResult } from "@feature-dialog";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { computed, ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const props = defineProps<ImportCardDialogProps>();
+const props = defineProps<ImportColumnDialogProps>();
+const availableDestinations = computed(() => props.availableDestinations);
 const emit = defineEmits<{
-	complete: [result: ImportCardDialogResult];
+	complete: [result: ImportColumnDialogResult];
 	cancel: [];
 	"after-leave": [];
 }>();
 
 const isDialogOpen = defineModel<boolean>({ default: false });
 
-const { selectedBoardId, selectedColumnId, selectedRoomId, resetBoardSelection, columns, boards } =
-	useCardDialogData(isDialogOpen);
+const selectedRoomId = ref<string | undefined>(undefined);
+const selectedBoardId = ref<string | undefined>(undefined);
+const boards = ref<RoomBoardItemResponse[]>();
+
+watchEffect(async () => {
+	if (isDialogOpen.value && selectedRoomId.value) {
+		boards.value = (await useRoomDetailsStore().fetchBoardsOfRoom(selectedRoomId.value)).boards;
+	}
+});
+
+const resetBoardSelection = () => {
+	selectedBoardId.value = undefined;
+};
 
 const onConfirm = () => {
 	emit("complete", {
 		newName: props.shareTokenInfo.parentName,
-		destinations: [{ type: props.destinationType, id: selectedColumnId.value!, boardId: selectedBoardId.value! }],
+		destinations: [{ type: "board", id: selectedBoardId.value! }],
 	});
 };
 
@@ -103,16 +104,14 @@ const onCancel = () => {
 	emit("cancel");
 };
 
-const importCardTitle = computed(() =>
-	t(`components.molecules.import.${props.shareTokenInfo.parentType}.options.title`)
-);
+const importColumnTitle = computed(() => t("components.molecules.import.column.options.title"));
 
 const dialogQuestion = computed(() => {
-	const cardName = props.shareTokenInfo.parentName;
-	return t("components.molecules.import.card.question", {
-		title: cardName ? ` "${cardName}"` : "",
+	const columnName = props.shareTokenInfo.parentName;
+	return t("components.molecules.import.column.question", {
+		title: columnName ? ` "${columnName}"` : "",
 	});
 });
 
-const { text, warnings } = useImportContent(ref(ShareTokenInfoResponseParentType.CARD));
+const { text, warnings } = useImportContent(ref(ShareTokenInfoResponseParentType.COLUMN));
 </script>

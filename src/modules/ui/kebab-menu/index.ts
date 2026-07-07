@@ -1,5 +1,6 @@
 import KebabMenu from "./KebabMenu.vue";
 import KebabMenuAction from "./KebabMenuAction.vue";
+import KebabMenuActionAdd from "./KebabMenuActionAdd.vue";
 import KebabMenuActionChangeLayout from "./KebabMenuActionChangeLayout.vue";
 import KebabMenuActionChangePermission from "./KebabMenuActionChangePermission.vue";
 import KebabMenuActionDelete from "./KebabMenuActionDelete.vue";
@@ -25,6 +26,7 @@ import KebabMenuList from "./KebabMenuList.vue";
 export {
 	KebabMenu,
 	KebabMenuAction,
+	KebabMenuActionAdd,
 	KebabMenuActionChangeLayout,
 	KebabMenuActionChangePermission,
 	KebabMenuActionDelete,

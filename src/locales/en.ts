@@ -642,6 +642,8 @@ export default {
 	"components.molecules.ContentCardMenu.action.share": "Share",
 	"components.molecules.ContextMenu.action.close": "Close context menu",
 	"components.molecules.import.card.options.title": "Import card",
+	"components.molecules.import.column.options.title": "Import section",
+	"components.molecules.import.column.question": "Where should the section{title} be imported?",
 	"components.molecules.import.columnBoard.label": "Board title",
 	"components.molecules.label.room": "Select room",
 	"components.molecules.label.board": "Select board",
@@ -677,7 +679,9 @@ export default {
 	"components.molecules.import.options.failure.permissionError":
 		"Unfortunately, the necessary authorization is missing.",
 	"components.molecules.import.options.loadingMessage": "Import in progress...",
-	"components.molecules.import.options.success": "{name} imported successfully",
+	"components.molecules.import.options.success": '{type} "{name}" imported successfully',
+	"components.molecules.import.options.successWithDestination":
+		'{type} "{name}" successfully imported into {destinationType} "{destinationName}"',
 	"components.molecules.import.options.tableHeader.InfoText": "The following content will not be imported:",
 	"components.molecules.import.room.label": "Room name",
 	"components.molecules.import.room.options.title": "Import room",
@@ -718,6 +722,11 @@ export default {
 	"components.molecules.share.card.options.infoText":
 		"With the following link, the card can be imported by other people.",
 	"components.molecules.share.card.result.linkLabel": "Link card copy",
+	"components.molecules.share.column.options.infoText":
+		"The following link allows others to import this section into a room.",
+	"components.molecules.share.column.result.linkLabel": "Link section copy",
+	"components.molecules.share.column.mail.subject": "Section to import",
+	"components.molecules.share.column.mail.body": "Link to the section: ",
 	"components.molecules.share.courses.options.infoText":
 		"With the following link, the course can be imported as a copy by other teachers.",
 	"components.molecules.shareImport.options.restrictions.infoText.personalData": "Personal data",
@@ -920,6 +929,7 @@ export default {
 	"feature-copy.copyInfo.type.ofLesson": "of the lesson",
 	"feature-copy.copyInfo.type.ofRoom": "of the room",
 	"feature-copy.copyInfo.type.ofCard": "of the card",
+	"feature-copy.copyInfo.type.ofColumn": "of the section",
 	"feature-course-sync.EndCourseSyncDialog.title": "End synchronization",
 	"feature-course-sync.EndCourseSyncDialog":
 		"Should the synchronization of the course {courseName} with the user group {groupName} really be stopped?",
@@ -985,8 +995,8 @@ export default {
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Website",
 	"loggedin.text.backupFeatures":
-		"Back up your cloud content and also use the new function for exporting courses. {helpLink}",
-	"loggedin.text.backupFeatures.helpLink": "More information and instructions can be found here.",
+		"The dBildungscloud will be deactivated on September 14, 2026, as the underlying grant project is coming to an end. As of that date, the dBildungscloud will no longer be available for school operations and instruction. Please back up your data by then. {helpLink}.",
+	"loggedin.text.backupFeatures.helpLink": "You can find more information and tips on data backup here",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"The school is in the transfer phase to the new school year. No classes and users can be created. Please contact the school administrator!",
 	"loggedin.text.schoolInTransferPhaseStartNew":

@@ -471,6 +471,18 @@ describe("useBoardSocketApi", () => {
 				requiredEmptyElements: ["richText"],
 			});
 		});
+
+		it("should forward optional position", () => {
+			const { createCardRequest } = useBoardSocketApi();
+
+			createCardRequest({ columnId: "test", position: 2 });
+
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("create-card-request", {
+				columnId: "test",
+				position: 2,
+				requiredEmptyElements: ["richText"],
+			});
+		});
 	});
 
 	describe("fetchBoardRequest", () => {

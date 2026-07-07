@@ -17,7 +17,7 @@ export type ImportDialogProps = {
 	availableDestinations: ImportDestinationItem[];
 	destinationType: Extract<ImportDestinationType, "room" | "course">;
 };
-export type ImportDialogResult = { newName: string; destination?: ImportDestination };
+export type ImportDialogResult = { newName: string; destinations: ImportDestination[] };
 
 export type ImportCardDialogProps = {
 	shareTokenInfo: ShareTokenInfoResponse;
@@ -25,6 +25,12 @@ export type ImportCardDialogProps = {
 	destinationType: Extract<ImportDestinationType, "column">;
 };
 export type ImportCardDialogResult = ImportDialogResult;
+
+export type ImportColumnDialogProps = {
+	shareTokenInfo: ShareTokenInfoResponse;
+	availableDestinations: ImportDestinationItem[];
+};
+export type ImportColumnDialogResult = ImportDialogResult;
 
 export type ShareDialogProps = {
 	shareItemType: ShareTokenBodyParamsParentType;

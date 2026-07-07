@@ -14,6 +14,7 @@
 			@move:column-left="onMoveColumnLeft"
 			@move:column-right="onMoveColumnRight"
 			@move:column-up="onMoveColumnUp"
+			@share:column="emit('share:column', $event)"
 			@update:title="onUpdateTitle"
 		/>
 		<div class="h-100 pt-3" :class="scrollableClasses">
@@ -66,6 +67,7 @@
 						@reload:board="onReloadBoard"
 						@share:card="emit('share:card', $event)"
 						@move:card="emit('move:card', $event)"
+						@create:card="onCreateCard"
 					/>
 				</template>
 			</Sortable>
@@ -96,7 +98,7 @@ type Props = {
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-	(e: "create:card", columnId: string): void;
+	(e: "create:card", payload: { columnId: string; position?: number }): void;
 	(e: "move:card", cardId: string): void;
 	(e: "delete:card", cardId: string): void;
 	(e: "delete:column", columnId: string): void;
@@ -107,6 +109,7 @@ const emit = defineEmits<{
 	(e: "reload:board"): void;
 	(e: "update:column-title", newTitle: string): void;
 	(e: "share:card", cardId: string): void;
+	(e: "share:column", columnId: string): void;
 }>();
 
 const boardStore = useBoardStore();
@@ -137,7 +140,15 @@ const showAddButton = computed(
 const isNotFirstColumn = computed(() => props.index !== 0);
 const isNotLastColumn = computed(() => props.index !== props.columnCount - 1);
 
-const onCreateCard = () => emit("create:card", props.column.id);
+const onCreateCard = (cardId?: string) => {
+	if (!cardId) {
+		emit("create:card", { columnId: props.column.id });
+	} else {
+		const position = boardStore.getCardLocation(cardId)?.cardIndex;
+
+		emit("create:card", { columnId: props.column.id, position });
+	}
+};
 
 const onColumnDelete = (columnId: string) => {
 	emit("delete:column", columnId);

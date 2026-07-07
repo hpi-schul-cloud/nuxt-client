@@ -50,6 +50,8 @@ const isKeepInlineEditModeButton = (target: HTMLElement | SVGElement): boolean =
 	return button.className?.includes("keep-inline-edit-mode");
 };
 
+const isDialog = (target: HTMLElement | SVGElement): boolean | void => !!target.closest(".v-dialog");
+
 const hasTextSelection = (): boolean => {
 	const selection = window.getSelection();
 	return selection !== null && selection.toString().length > 0;
@@ -59,7 +61,7 @@ const isAllowedTarget = (event: Event): boolean => {
 	const target = event.target as HTMLElement | SVGElement;
 	if (!(target instanceof HTMLElement) && !(target instanceof SVGElement)) return true;
 
-	const disallowedConditions = [isListItem, isDatePicker, isFileElementLink, isKeepInlineEditModeButton];
+	const disallowedConditions = [isListItem, isDatePicker, isFileElementLink, isKeepInlineEditModeButton, isDialog];
 
 	return target && disallowedConditions.every((fn) => !fn(target));
 };

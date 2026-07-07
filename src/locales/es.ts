@@ -655,6 +655,8 @@ export default {
 	"components.molecules.ContentCardMenu.action.share": "Compartir",
 	"components.molecules.ContextMenu.action.close": "Cerrar menú contextual",
 	"components.molecules.import.card.options.title": "Importar tarjeta",
+	"components.molecules.import.column.options.title": "Importar sección",
+	"components.molecules.import.column.question": "¿Dónde se debe importar la sección{title}?",
 	"components.molecules.import.columnBoard.label": "Título del tablero",
 	"components.molecules.label.room": "Seleccionar sala",
 	"components.molecules.label.board": "Seleccionar tablero",
@@ -690,7 +692,9 @@ export default {
 	"components.molecules.import.options.failure.invalidToken": "El token en el enlace es desconocido o ha caducado.",
 	"components.molecules.import.options.failure.permissionError": "Desafortunadamente, falta la autorización necesaria.",
 	"components.molecules.import.options.loadingMessage": "Importación en curso...",
-	"components.molecules.import.options.success": "{name} importado con éxito",
+	"components.molecules.import.options.success": '{type} "{name}" importado con éxito',
+	"components.molecules.import.options.successWithDestination":
+		'{type} "{name}" importado con éxito en {destinationType} "{destinationName}"',
 	"components.molecules.import.options.tableHeader.InfoText": "No se importará el siguiente contenido:",
 	"components.molecules.import.room.label": "Nombre de la sala",
 	"components.molecules.import.room.options.title": "Importar sala",
@@ -724,6 +728,11 @@ export default {
 	"components.molecules.share.card.options.infoText":
 		"Con el siguiente enlace, la tarjeta puede ser importada como copia por otros personas.",
 	"components.molecules.share.card.result.linkLabel": "Enlace a la copia de la tarjeta",
+	"components.molecules.share.column.options.infoText":
+		"Mediante el siguiente enlace, otras personas pueden importar esta sección a una sala.",
+	"components.molecules.share.column.result.linkLabel": "Enlace a la copia de la sección",
+	"components.molecules.share.column.mail.subject": "Sección para importar",
+	"components.molecules.share.column.mail.body": "Enlace a la sección: ",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Con el siguiente enlace, el tablero puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Enlace a la copia del tablón",
@@ -940,6 +949,7 @@ export default {
 	"feature-copy.copyInfo.type.ofLesson": "de la lección",
 	"feature-copy.copyInfo.type.ofRoom": "de la sala",
 	"feature-copy.copyInfo.type.ofCard": "de la tarjeta",
+	"feature-copy.copyInfo.type.ofColumn": "de la sección",
 	"feature-course-sync.EndCourseSyncDialog.title": "Finalizar sincronización",
 	"feature-course-sync.EndCourseSyncDialog":
 		"¿Debería realmente detenerse la sincronización del curso {courseName} con el grupo de usuarios {groupName}?",
@@ -1005,8 +1015,9 @@ export default {
 	"mixins.typeMeta.types.video": "Vídeo",
 	"mixins.typeMeta.types.webpage": "Página web",
 	"loggedin.text.backupFeatures":
-		"Haga una copia de seguridad de sus contenidos de la nube y utilice también la nueva función para exportar cursos. {helpLink}",
-	"loggedin.text.backupFeatures.helpLink": "Más información y ayuda disponible aquí",
+		"La dBildungscloud se desactivará el 14 de septiembre de 2026, ya que finaliza el proyecto subvencionado en el que se basa. A partir de esa fecha, la dBildungscloud ya no estará disponible para el funcionamiento de los centros educativos ni para la enseñanza. Por favor, haga una copia de seguridad de sus datos antes de esa fecha. {helpLink}.",
+	"loggedin.text.backupFeatures.helpLink":
+		"Aquí encontrará más información y consejos sobre cómo realizar copias de seguridad",
 	"loggedin.text.schoolInTransferPhaseContactAdmin":
 		"La escuela está en fase de transferencia al nuevo año escolar. No se pueden crear clases ni usuarios. ¡Ponte en contacto con el administrador de la escuela!",
 	"loggedin.text.schoolInTransferPhaseStartNew":
