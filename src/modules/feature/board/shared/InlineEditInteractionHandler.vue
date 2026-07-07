@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { InlineEditInteractionEvent } from "@/types/board/InlineEditInteractionEvent.symbol";
 import { OnClickOutside } from "@vueuse/components";
-import { provide, shallowRef } from "vue";
+import { nextTick, provide, shallowRef } from "vue";
 
 type Props = {
 	isEditMode: boolean;
@@ -73,10 +73,12 @@ const onClickOutside = (event: Event) => {
 	}
 };
 
-const onDoubleClick = (event: MouseEvent) => {
+const onDoubleClick = async (event: MouseEvent) => {
 	if (!props.isEditMode) {
 		interactionEvent.value = { x: event.x, y: event.y };
 		emit("start-edit-mode");
+		await nextTick();
+		interactionEvent.value = undefined;
 	}
 };
 const onKeydownEscape = () => {
