@@ -35,11 +35,12 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
 
-			if (responseError.code === 403 && responseError.type === "LOCKED_ROOM") {
+			if (responseError.code === 404) {
+				roomVariant.value = RoomVariant.COURSE_ROOM;
+			} else if (responseError.code === 403 && responseError.type === "LOCKED_ROOM") {
 				return { isLocked: true, lockedRoomName: responseError.message };
 			} else {
-				const errorMessage = responseError.code === 404 ? "components.room.error.404" : undefined;
-				useAppStore().handleApplicationError(responseError.code, errorMessage);
+				useAppStore().handleApplicationError(responseError.code);
 			}
 		} finally {
 			isLoading.value = false;
