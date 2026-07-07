@@ -26,8 +26,9 @@ import {
 } from "@data-external-tool";
 import { mdiPuzzleOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
-import { ContentElementBar } from "@ui-board";
+import { ContentElementBar, EmptyElement } from "@ui-board";
 import { useSharedLastCreatedElement } from "@util-board";
+import { logger } from "@util-logger";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
@@ -326,12 +327,14 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should hide the element", () => {
+			it("should should empty element", () => {
 				const { wrapper } = setup();
 
-				const element = wrapper.findComponent({ ref: "externalToolElement" });
+				const element = wrapper.findComponent(EmptyElement);
 
-				expect(element.isVisible()).toEqual(false);
+				expect(element.isVisible()).toEqual(true);
+				expect(element.props().icon).toEqual(mdiPuzzleOutline);
+				expect(element.props().title).toEqual("components.cardElement.externalToolElement.noElement");
 			});
 		});
 
@@ -347,10 +350,10 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should show the element", () => {
+			it("should render element for tool selection", () => {
 				const { wrapper } = setup();
 
-				const element = wrapper.findComponent({ ref: "externalToolElement" });
+				const element = wrapper.findComponent(ContentElementBar);
 
 				expect(element.isVisible()).toEqual(true);
 			});
@@ -377,12 +380,13 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should hide the element", () => {
+			it("should show empty element", () => {
 				const { wrapper } = setup();
+				logger.log("wrapper.html()", wrapper.html());
 
-				const element = wrapper.findComponent({ ref: "externalToolElement" });
+				const element = wrapper.findComponent(EmptyElement);
 
-				expect(element.isVisible()).toEqual(false);
+				expect(element.isVisible()).toEqual(true);
 			});
 		});
 
@@ -406,10 +410,10 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should show the element", () => {
+			it("should show element for tool selection", () => {
 				const { wrapper } = setup();
 
-				const element = wrapper.findComponent({ ref: "externalToolElement" });
+				const element = wrapper.findComponent(ContentElementBar);
 
 				expect(element.isVisible()).toEqual(true);
 			});
@@ -440,7 +444,7 @@ describe("ExternalToolElement", () => {
 			it("should show the element", () => {
 				const { wrapper } = setup();
 
-				const element = wrapper.findComponent({ ref: "externalToolElement" });
+				const element = wrapper.findComponent(ContentElementBar);
 
 				expect(element.isVisible()).toEqual(true);
 			});
@@ -469,7 +473,7 @@ describe("ExternalToolElement", () => {
 			it("should show the element", () => {
 				const { wrapper } = setup();
 
-				const element = wrapper.findComponent({ ref: "externalToolElement" });
+				const element = wrapper.findComponent(ContentElementBar);
 
 				expect(element.isVisible()).toEqual(true);
 			});

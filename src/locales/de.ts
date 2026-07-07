@@ -569,6 +569,7 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Dieses Etherpad ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
 	"components.cardElement.externalToolElement": "Externes Tool",
+	"components.cardElement.externalToolElement.noElement": "Kein Tool vorhanden",
 	"components.cardElement.mediaExternalToolElement": "Medium",
 	"components.cardElement.fileElement": "Datei",
 	"components.cardElement.fileElement.altDescription":

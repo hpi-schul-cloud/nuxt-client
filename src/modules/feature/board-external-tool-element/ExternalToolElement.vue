@@ -1,6 +1,5 @@
 <template>
-	<v-card
-		v-show="showTool || isEditMode"
+	<VCard
 		ref="externalToolElement"
 		class="mb-4"
 		:data-testid="`board-external-tool-element-${toolDisplayName}`"
@@ -14,50 +13,57 @@
 		@keydown.stop
 		@click="onClickElement"
 	>
-		<ExternalToolElementAlert
-			:tool-display-name="toolDisplayName"
-			:error="displayError || launchError"
-			:tool-status="toolConfigurationStatus"
-			data-testid="board-external-tool-element-alert"
-		/>
-		<ContentElementBar :icon="getIcon">
-			<template v-if="displayData && displayData.logoUrl" #logo>
-				<VImg data-testid="board-external-tool-element-logo" height="100%" class="mx-auto" :src="displayData.logoUrl" />
-			</template>
-			<template #title>
-				{{ toolTitle }}
-			</template>
-			<template v-if="displayData" #subtitle>
-				<LineClamp data-testid="board-external-tool-element-domain">
-					{{ displayData.domain }}
-				</LineClamp>
-			</template>
-			<template #menu>
-				<ExternalToolElementMenu
-					v-if="isEditMode"
-					ref="externalToolElementMenu"
-					:display-name="displayData?.name"
-					:column-index="columnIndex"
-					:row-index="rowIndex"
-					:element-index="elementIndex"
-					:is-not-first-element="isNotFirstElement"
-					:is-not-last-element="isNotLastElement"
-					@move-down:element="onMoveElementDown"
-					@move-up:element="onMoveElementUp"
-					@delete:element="onDeleteElement"
-					@edit:element="onEditElement"
-				/>
-			</template>
-		</ContentElementBar>
-		<ExternalToolElementConfigurationDialog
-			:is-open="isConfigurationDialogOpen"
-			:context-id="element.id"
-			:config-id="element.content.contextExternalToolId"
-			data-testid="board-external-tool-element-configuration-dialog"
-			@close="onConfigurationDialogClose"
-			@save="onConfigurationDialogSave"
-		/>
-	</v-card>
+		<template v-if="showTool || isEditMode">
+			<ExternalToolElementAlert
+				:tool-display-name="toolDisplayName"
+				:error="displayError || launchError"
+				:tool-status="toolConfigurationStatus"
+				data-testid="board-external-tool-element-alert" />
+
+			<ContentElementBar :icon="getIcon">
+				<template v-if="displayData && displayData.logoUrl" #logo>
+					<VImg
+						data-testid="board-external-tool-element-logo"
+						height="100%"
+						class="mx-auto"
+						:src="displayData.logoUrl"
+					/>
+				</template>
+				<template #title>
+					{{ toolTitle }}
+				</template>
+				<template v-if="displayData" #subtitle>
+					<LineClamp data-testid="board-external-tool-element-domain">
+						{{ displayData.domain }}
+					</LineClamp>
+				</template>
+				<template #menu>
+					<ExternalToolElementMenu
+						v-if="isEditMode"
+						ref="externalToolElementMenu"
+						:display-name="displayData?.name"
+						:column-index="columnIndex"
+						:row-index="rowIndex"
+						:element-index="elementIndex"
+						:is-not-first-element="isNotFirstElement"
+						:is-not-last-element="isNotLastElement"
+						@move-down:element="onMoveElementDown"
+						@move-up:element="onMoveElementUp"
+						@delete:element="onDeleteElement"
+						@edit:element="onEditElement"
+					/>
+				</template>
+			</ContentElementBar>
+			<ExternalToolElementConfigurationDialog
+				:is-open="isConfigurationDialogOpen"
+				:context-id="element.id"
+				:config-id="element.content.contextExternalToolId"
+				data-testid="board-external-tool-element-configuration-dialog"
+				@close="onConfigurationDialogClose"
+				@save="onConfigurationDialogSave"
+		/></template>
+		<EmptyElement v-else :icon="mdiPuzzleOutline" :title="t('components.cardElement.externalToolElement.noElement')" />
+	</VCard>
 </template>
 
 <script setup lang="ts">
@@ -75,24 +81,21 @@ import {
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { mdiPuzzleOutline } from "@icons/material";
-import { ContentElementBar } from "@ui-board";
+import { ContentElementBar, EmptyElement } from "@ui-board";
 import { LineClamp } from "@ui-line-clamp";
 import { useSharedLastCreatedElement } from "@util-board";
-import { computed, ComputedRef, onMounted, onUnmounted, PropType, Ref, ref, toRef, watch } from "vue";
+import { computed, onMounted, onUnmounted, Ref, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
-const props = defineProps({
-	element: {
-		type: Object as PropType<ExternalToolElementResponse>,
-		required: true,
-	},
-	isEditMode: { type: Boolean, required: true },
-	isNotFirstElement: { type: Boolean, required: false },
-	isNotLastElement: { type: Boolean, required: false },
-	columnIndex: { type: Number, required: true },
-	rowIndex: { type: Number, required: true },
-	elementIndex: { type: Number, required: true },
-});
+const props = defineProps<{
+	element: ExternalToolElementResponse;
+	isEditMode: boolean;
+	isNotFirstElement?: boolean;
+	isNotLastElement?: boolean;
+	columnIndex: number;
+	rowIndex: number;
+	elementIndex: number;
+}>();
 
 const emit = defineEmits<{
 	(e: "delete:element", id: string): void;
@@ -118,7 +121,7 @@ const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
 const externalToolElement = ref<HTMLElement | null>(null);
 useBoardFocusHandler(element.value.id, externalToolElement);
 
-const getIcon: ComputedRef<string | undefined> = computed(() => {
+const getIcon = computed(() => {
 	if (!displayData.value?.logoUrl) {
 		return mdiPuzzleOutline;
 	}
@@ -127,15 +130,15 @@ const getIcon: ComputedRef<string | undefined> = computed(() => {
 
 const { lastCreatedElementId, resetLastCreatedElementId } = useSharedLastCreatedElement();
 
-const hasLinkedTool: ComputedRef<boolean> = computed(
+const hasLinkedTool = computed(
 	() => modelValue.value.contextExternalToolId !== null || props.element.content.contextExternalToolId !== null
 );
 
-const isDeepLinkingTool: ComputedRef<boolean> = computed(() => !!displayData.value?.isLtiDeepLinkingTool);
+const isDeepLinkingTool = computed(() => !!displayData.value?.isLtiDeepLinkingTool);
 
-const hasDeepLink: ComputedRef<boolean> = computed(() => !!displayData.value?.ltiDeepLink);
+const hasDeepLink = computed(() => !!displayData.value?.ltiDeepLink);
 
-const showTool: ComputedRef<boolean> = computed(() => {
+const showTool = computed(() => {
 	if (!displayData.value || !hasLinkedTool.value) {
 		return false;
 	}
@@ -143,9 +146,9 @@ const showTool: ComputedRef<boolean> = computed(() => {
 	return isDeepLinkingTool.value ? hasDeepLink.value : true;
 });
 
-const toolDisplayName: ComputedRef<string> = computed(() => displayData.value?.name ?? "...");
+const toolDisplayName = computed(() => displayData.value?.name ?? "...");
 
-const isToolLaunchable: ComputedRef<boolean> = computed(
+const isToolLaunchable = computed(
 	() =>
 		!displayData.value?.status.isOutdatedOnScopeSchool &&
 		!displayData.value?.status.isOutdatedOnScopeContext &&
@@ -154,7 +157,7 @@ const isToolLaunchable: ComputedRef<boolean> = computed(
 		!displayData.value?.status.isNotLicensed
 );
 
-const toolConfigurationStatus: ComputedRef<ContextExternalToolConfigurationStatus> = computed(
+const toolConfigurationStatus = computed<ContextExternalToolConfigurationStatus>(
 	() =>
 		displayData.value?.status ?? {
 			isOutdatedOnScopeSchool: false,
@@ -168,9 +171,9 @@ const toolConfigurationStatus: ComputedRef<ContextExternalToolConfigurationStatu
 
 const isLoading = computed(() => hasLinkedTool.value && !displayData.value && isDisplayDataLoading.value);
 
-const isConfigurationDialogOpen: Ref<boolean> = ref(false);
+const isConfigurationDialogOpen = ref(false);
 
-const toolTitle: ComputedRef<string> = computed(() => {
+const toolTitle = computed(() => {
 	if (!hasLinkedTool.value) {
 		return t("feature-board-external-tool-element.placeholder.selectTool");
 	}
