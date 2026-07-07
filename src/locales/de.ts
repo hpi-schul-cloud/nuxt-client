@@ -579,6 +579,7 @@ export default {
 		"Das Audioformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
 	"components.cardElement.fileElement.caption": "Beschreibung",
 	"components.cardElement.fileElement.emptyAlt": "Hier ist ein Bild mit folgendem Namen",
+	"components.cardElement.fileElement.noElement": "Keine Datei vorhanden",
 	"components.cardElement.fileElement.pdfAlt": "Vorschaubild für ",
 	"components.cardElement.fileElement.collaboraFile": "Dokument",
 	"components.cardElement.fileElement.previewError": "Laden der Vorschau fehlgeschlagen.",

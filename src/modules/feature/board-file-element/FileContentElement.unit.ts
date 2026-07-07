@@ -172,7 +172,7 @@ describe("FileContentElement", () => {
 
 				const card = wrapper.findComponent({ ref: "fileContentElement" });
 
-				expect(card.props("variant")).toBe("elevated");
+				expect(card.props("variant")).toBe("outlined");
 			});
 
 			it("should not render FileContent component", async () => {
@@ -190,7 +190,7 @@ describe("FileContentElement", () => {
 				await nextTick();
 
 				const fileUpload = wrapper.findComponent(FileUpload);
-				expect(fileUpload.exists()).toBe(true);
+				expect(fileUpload.exists()).toBe(false);
 			});
 
 			it("should not render slot menu component", async () => {
@@ -286,7 +286,7 @@ describe("FileContentElement", () => {
 
 					const card = wrapper.findComponent({ ref: "fileContentElement" });
 
-					expect(card.props("variant")).toBe("elevated");
+					expect(card.props("variant")).toBe("text");
 				});
 			});
 

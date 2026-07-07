@@ -569,6 +569,7 @@ export default {
 		"Формат аудіо не підтримується цим браузером / операційною системою.",
 	"components.cardElement.fileElement.caption": "опис",
 	"components.cardElement.fileElement.emptyAlt": "Ось зображення з такою назвою",
+	"components.cardElement.fileElement.noElement": "Файл відсутній",
 	"components.cardElement.fileElement.pdfAlt": "попередній перегляд зображення для ",
 	"components.cardElement.fileElement.collaboraFile": "Документ",
 	"components.cardElement.fileElement.previewError": "Не вдалося завантажити попередній перегляд.",

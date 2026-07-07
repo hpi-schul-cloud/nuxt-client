@@ -558,6 +558,7 @@ export default {
 		"The audio format is not supported by this browser/operating system.",
 	"components.cardElement.fileElement.caption": "Caption",
 	"components.cardElement.fileElement.emptyAlt": "Here is an image with the following name",
+	"components.cardElement.fileElement.noElement": "No file available",
 	"components.cardElement.fileElement.pdfAlt": "Preview image for ",
 	"components.cardElement.fileElement.collaboraFile": "Document",
 	"components.cardElement.fileElement.previewError": "Failed to load the preview.",

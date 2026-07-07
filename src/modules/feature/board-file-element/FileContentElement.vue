@@ -3,8 +3,7 @@
 		ref="fileContentElement"
 		class="board-file-element-card mb-4"
 		data-testid="board-file-element"
-		elevation="0"
-		:variant="isOutlined ? 'outlined' : 'elevated'"
+		:variant="cardVariant"
 		:ripple="false"
 		:aria-label="cardAriaLabel"
 		@keydown.up.down="onKeydownArrow"
@@ -34,6 +33,11 @@
 				<KebabMenuActionDelete :name="fileProperties.name" @click="onDelete" />
 			</BoardMenu>
 		</FileContent>
+		<EmptyElement
+			v-else-if="!isEditMode && !alerts.includes(FileAlert.FILE_STORAGE_ERROR)"
+			:icon="mdiFileDocumentOutline"
+			:title="t('components.cardElement.fileElement.noElement')"
+		/>
 		<FileUpload
 			v-else-if="!alerts.includes(FileAlert.FILE_STORAGE_ERROR)"
 			:element-id="element.id"
@@ -64,14 +68,15 @@ import { FileElementResponse } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { useFileStorageApi } from "@data-file";
-import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { mdiFileDocumentOutline } from "@icons/material";
+import { BoardMenu, BoardMenuScope, EmptyElement } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { useDebounceFn } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-type Props = {
+const props = defineProps<{
 	element: FileElementResponse;
 	isEditMode: boolean;
 	isNotFirstElement?: boolean;
@@ -80,9 +85,7 @@ type Props = {
 	rowIndex: number;
 	elementIndex: number;
 	isDetailView?: boolean;
-};
-
-const props = defineProps<Props>();
+}>();
 
 const emit = defineEmits<{
 	(e: "delete:element", elementId: string): void;
@@ -133,11 +136,11 @@ const fileProperties = computed(() => {
 	};
 });
 
-const isOutlined = computed(() => {
-	const { isEditMode } = props;
-	const isUploadingInViewMode = fileRecord.value?.id !== undefined && !isEditMode && !isUploading.value;
+const cardVariant = computed(() => {
+	const hasFileRecord = fileRecord.value?.id !== undefined;
+	const isUploadinginViewMode = hasFileRecord && !props.isEditMode && isUploading.value === true;
 
-	return isUploadingInViewMode || isEditMode;
+	return isUploadinginViewMode ? "text" : "outlined";
 });
 
 watch(element.value, async () => {
@@ -158,7 +161,7 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 	}
 };
 
-const onUploadFile = async (file: File): Promise<void> => {
+const onUploadFile = async (file: File) => {
 	try {
 		await upload(file, element.value.id, FileRecordParentType.BOARDNODES);
 		element.value.content.caption = " ";
@@ -167,7 +170,7 @@ const onUploadFile = async (file: File): Promise<void> => {
 	}
 };
 
-const onFetchFile = async (): Promise<void> => {
+const onFetchFile = async () => {
 	await tryFetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
 };
 
@@ -235,6 +238,7 @@ const openCollabora = () => {
 	window.open(url, "_blank");
 };
 </script>
+
 <style lang="scss" scoped>
 /* show focus indicatator properly on all browsers */
 .board-file-element-card:focus {

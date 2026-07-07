@@ -571,6 +571,7 @@ export default {
 		"El formato de audio no es compatible con este navegador / sistema operativo.",
 	"components.cardElement.fileElement.caption": "Descripción",
 	"components.cardElement.fileElement.emptyAlt": "Aquí tenéis una imagen con el siguiente nombre",
+	"components.cardElement.fileElement.noElement": "No hay archivo",
 	"components.cardElement.fileElement.pdfAlt": "Imagen de vista previa para ",
 	"components.cardElement.fileElement.collaboraFile": "Archivo",
 	"components.cardElement.fileElement.previewError": "No se ha podido cargar la vista previa.",
