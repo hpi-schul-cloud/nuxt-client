@@ -97,6 +97,12 @@ export interface BoardResponseAllowedOperations {
      * @type {boolean}
      * @memberof BoardResponseAllowedOperations
      */
+    shareColumn: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
     updateColumnTitle: boolean;
     /**
      * 

@@ -14,6 +14,7 @@
 			@move:column-left="onMoveColumnLeft"
 			@move:column-right="onMoveColumnRight"
 			@move:column-up="onMoveColumnUp"
+			@share:column="emit('share:column', $event)"
 			@update:title="onUpdateTitle"
 		/>
 		<div class="h-100 pt-3" :class="scrollableClasses">
@@ -108,6 +109,7 @@ const emit = defineEmits<{
 	(e: "reload:board"): void;
 	(e: "update:column-title", newTitle: string): void;
 	(e: "share:card", cardId: string): void;
+	(e: "share:column", columnId: string): void;
 }>();
 
 const boardStore = useBoardStore();

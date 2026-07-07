@@ -56,7 +56,8 @@ export enum ShareTokenBodyParamsParentType {
     LESSONS = 'lessons',
     COLUMN_BOARD = 'columnBoard',
     ROOM = 'room',
-    CARD = 'card'
+    CARD = 'card',
+    COLUMN = 'column'
 }
 
 
