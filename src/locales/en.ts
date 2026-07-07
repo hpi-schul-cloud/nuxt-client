@@ -642,6 +642,8 @@ export default {
 	"components.molecules.ContentCardMenu.action.share": "Share",
 	"components.molecules.ContextMenu.action.close": "Close context menu",
 	"components.molecules.import.card.options.title": "Import card",
+	"components.molecules.import.column.options.title": "Import section",
+	"components.molecules.import.column.question": "Where should the section{title} be imported?",
 	"components.molecules.import.columnBoard.label": "Board title",
 	"components.molecules.label.room": "Select room",
 	"components.molecules.label.board": "Select board",
@@ -720,6 +722,11 @@ export default {
 	"components.molecules.share.card.options.infoText":
 		"With the following link, the card can be imported by other people.",
 	"components.molecules.share.card.result.linkLabel": "Link card copy",
+	"components.molecules.share.column.options.infoText":
+		"The following link allows others to import this section into a room.",
+	"components.molecules.share.column.result.linkLabel": "Link section copy",
+	"components.molecules.share.column.mail.subject": "Section to import",
+	"components.molecules.share.column.mail.body": "Link to the section: ",
 	"components.molecules.share.courses.options.infoText":
 		"With the following link, the course can be imported as a copy by other teachers.",
 	"components.molecules.shareImport.options.restrictions.infoText.personalData": "Personal data",
@@ -922,6 +929,7 @@ export default {
 	"feature-copy.copyInfo.type.ofLesson": "of the lesson",
 	"feature-copy.copyInfo.type.ofRoom": "of the room",
 	"feature-copy.copyInfo.type.ofCard": "of the card",
+	"feature-copy.copyInfo.type.ofColumn": "of the section",
 	"feature-course-sync.EndCourseSyncDialog.title": "End synchronization",
 	"feature-course-sync.EndCourseSyncDialog":
 		"Should the synchronization of the course {courseName} with the user group {groupName} really be stopped?",
