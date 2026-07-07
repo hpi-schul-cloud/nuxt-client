@@ -104,11 +104,11 @@ const onCancel = () => {
 	emit("cancel");
 };
 
-const importColumnTitle = computed(() => t("components.molecules.import.column.options.title"));
+const importColumnTitle = computed(() => t("components.import.column.options.title"));
 
 const dialogQuestion = computed(() => {
 	const columnName = props.shareTokenInfo.parentName;
-	return t("components.molecules.import.column.question", {
+	return t("components.import.column.question", {
 		title: columnName ? ` "${columnName}"` : "",
 	});
 });
