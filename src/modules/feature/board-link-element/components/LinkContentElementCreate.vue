@@ -20,10 +20,18 @@
 						@keydown.enter.prevent="onSubmit"
 					/>
 					<div class="align-self-center pl-2">
-						<button ref="submit" type="submit" data-testid="save-link-in-card">
+						<VBtn
+							ref="submit"
+							type="submit"
+							icon
+							size="36"
+							:ripple="false"
+							variant="text"
+							data-testid="save-link-in-card"
+						>
 							<VIcon aria-hidden="true"> {{ mdiCheck }}</VIcon>
-							<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
-						</button>
+							<span class="d-sr-only">{{ t("common.actions.save") }}</span>
+						</VBtn>
 					</div>
 					<div class="align-self-center menu">
 						<slot />
