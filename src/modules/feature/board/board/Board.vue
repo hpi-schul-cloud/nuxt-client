@@ -536,6 +536,7 @@ const onCloseDetailView = () => {
 .column-board {
 	overflow-x: auto;
 	height: 100%;
+	padding: 16px 24px 0 24px !important;
 }
 
 .user-select-none {
