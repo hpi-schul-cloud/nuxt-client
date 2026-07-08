@@ -19,7 +19,7 @@ import CKEditor from "@ckeditor/ckeditor5-vue";
 import { InlineEditor } from "@hpi-schul-cloud/ckeditor";
 import { useVModel } from "@vueuse/core";
 import katex from "katex";
-import { computed, ref } from "vue";
+import { computed, watch } from "vue";
 (window as Window).katex = katex;
 
 const props = defineProps({
@@ -46,7 +46,7 @@ const CKEditorVue = CKEditor.component;
 const { generalConfig, registerDeletionHandler } = useEditorConfig();
 
 const modelValue = useVModel(props, "value", emit);
-const ck = ref(null);
+let editorInstance: Editor | null = null;
 
 const config = computed(() => ({
 	...generalConfig,
@@ -63,19 +63,40 @@ const config = computed(() => ({
 	},
 }));
 
+const moveCursorToEnd = (editor: Editor) => {
+	const root = editor.model.document.getRoot();
+	if (!root) return;
+	editor.model.change((writer) => {
+		writer.setSelection(root, "end");
+	});
+};
+
 const handleFocus = () => emit("focus");
 const handleBlur = () => emit("blur");
 const handleDelete = () => emit("keyboard:delete");
 
 const handleReady = (editor: Editor) => {
+	editorInstance = editor;
 	emit("ready");
 
 	if (props.autofocus) {
 		editor.editing.view.focus();
+		moveCursorToEnd(editor);
 	}
 
 	registerDeletionHandler(editor, handleDelete);
 };
+
+watch(
+	() => props.autofocus,
+	(newVal) => {
+		const editor = editorInstance;
+		if (newVal && editor) {
+			editor.editing.view.focus();
+			moveCursorToEnd(editor);
+		}
+	}
+);
 </script>
 
 <style lang="css">
