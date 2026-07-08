@@ -34,7 +34,8 @@ export const useShareFlow = () => {
 	const buildSharePath = (parentType: ShareTokenBodyParamsParentType, destinationType?: BoardExternalReferenceType) => {
 		if (
 			parentType === ShareTokenBodyParamsParentType.COLUMN_BOARD ||
-			parentType === ShareTokenBodyParamsParentType.CARD
+			parentType === ShareTokenBodyParamsParentType.CARD ||
+			parentType === ShareTokenBodyParamsParentType.COLUMN
 		) {
 			if (destinationType === BoardExternalReferenceType.ROOM) {
 				return "rooms";

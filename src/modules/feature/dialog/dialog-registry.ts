@@ -3,6 +3,8 @@ import type {
 	CopyDialogProps,
 	ImportCardDialogProps,
 	ImportCardDialogResult,
+	ImportColumnDialogProps,
+	ImportColumnDialogResult,
 	ImportDialogProps,
 	ImportDialogResult,
 	LoadingStateDialogProps,
@@ -10,7 +12,7 @@ import type {
 } from "./dialog-contracts";
 import { ConfirmationDialog, LoadingStateDialog } from "./dialogs";
 import { CopyDialog } from "@feature-copy";
-import { ImportCardDialog, ImportDialog } from "@feature-import";
+import { ImportCardDialog, ImportColumnDialog, ImportDialog } from "@feature-import";
 import { ShareDialog } from "@feature-share";
 import type { Component } from "vue";
 
@@ -32,6 +34,7 @@ export const dialogRegistry = {
 	copy: defineDialog<CopyDialogProps, boolean>(CopyDialog),
 	import: defineDialog<ImportDialogProps, ImportDialogResult>(ImportDialog),
 	importCard: defineDialog<ImportCardDialogProps, ImportCardDialogResult>(ImportCardDialog),
+	importColumn: defineDialog<ImportColumnDialogProps, ImportColumnDialogResult>(ImportColumnDialog),
 	share: defineDialog<ShareDialogProps, void>(ShareDialog),
 	loadingState: defineDialog<LoadingStateDialogProps, void>(LoadingStateDialog),
 };

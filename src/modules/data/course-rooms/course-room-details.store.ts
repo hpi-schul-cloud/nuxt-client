@@ -13,7 +13,7 @@ import {
 	SingleColumnBoardResponse,
 	TaskApiFactory,
 } from "@api-server";
-import { notifyError } from "@data-app";
+import { notifyError, useAppStore } from "@data-app";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
@@ -99,6 +99,8 @@ export const useCourseRoomDetailsStore = defineStore("courseRoomDetailsStore", (
 					...roomData.value,
 				};
 				isLocked.value = true;
+			} else if (apiError.code === 404) {
+				useAppStore().handleApplicationError(apiError.code);
 			} else {
 				notifyError(t("pages.courseRooms.fetchCourseContent.error"));
 			}

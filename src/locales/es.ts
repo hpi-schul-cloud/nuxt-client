@@ -655,6 +655,8 @@ export default {
 	"components.molecules.ContentCardMenu.action.share": "Compartir",
 	"components.molecules.ContextMenu.action.close": "Cerrar menú contextual",
 	"components.molecules.import.card.options.title": "Importar tarjeta",
+	"components.molecules.import.column.options.title": "Importar sección",
+	"components.molecules.import.column.question": "¿Dónde se debe importar la sección{title}?",
 	"components.molecules.import.columnBoard.label": "Título del tablero",
 	"components.molecules.label.room": "Seleccionar sala",
 	"components.molecules.label.board": "Seleccionar tablero",
@@ -726,6 +728,11 @@ export default {
 	"components.molecules.share.card.options.infoText":
 		"Con el siguiente enlace, la tarjeta puede ser importada como copia por otros personas.",
 	"components.molecules.share.card.result.linkLabel": "Enlace a la copia de la tarjeta",
+	"components.molecules.share.column.options.infoText":
+		"Mediante el siguiente enlace, otras personas pueden importar esta sección a una sala.",
+	"components.molecules.share.column.result.linkLabel": "Enlace a la copia de la sección",
+	"components.molecules.share.column.mail.subject": "Sección para importar",
+	"components.molecules.share.column.mail.body": "Enlace a la sección: ",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Con el siguiente enlace, el tablero puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Enlace a la copia del tablón",
@@ -864,6 +871,7 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.drafts": "Borradores",
 	"components.organisms.TasksDashboardMain.tab.finished": "Terminado",
 	"components.organisms.TasksDashboardMain.tab.open": "Abrir",
+	"components.room.error.404": "Sala no encontrada",
 	"components.roomForm.labels.roomName": "Nombre de la sala",
 	"components.roomForm.labels.timePeriod": "Periodo de tiempo",
 	"components.roomForm.labels.timePeriod.from": "Periodo de tiempo desde",
@@ -942,6 +950,7 @@ export default {
 	"feature-copy.copyInfo.type.ofLesson": "de la lección",
 	"feature-copy.copyInfo.type.ofRoom": "de la sala",
 	"feature-copy.copyInfo.type.ofCard": "de la tarjeta",
+	"feature-copy.copyInfo.type.ofColumn": "de la sección",
 	"feature-course-sync.EndCourseSyncDialog.title": "Finalizar sincronización",
 	"feature-course-sync.EndCourseSyncDialog":
 		"¿Debería realmente detenerse la sincronización del curso {courseName} con el grupo de usuarios {groupName}?",
@@ -2133,4 +2142,5 @@ export default {
 	"pages.folder.dropZone.emptyState.title": "Suelta los archivos aquí para subirlos",
 	"pages.folder.dropZone.emptyState.orText": "o",
 	"pages.folder.dropZone.emptyState.browse": "buscar tus archivos",
+	"pages.folder.error.404": "Carpeta no encontrada",
 };

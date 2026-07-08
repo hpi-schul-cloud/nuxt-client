@@ -84,6 +84,15 @@ describe("useImportflow", () => {
 				await flushPromises();
 				expect(featureDialog.openDialog).toHaveBeenCalledWith("importCard", expect.anything());
 			});
+
+			it("should call openDialog('importColumn') for column items", async () => {
+				mockValidationResponse({ parentType: serverApi.ShareTokenInfoResponseParentType.COLUMN });
+				vi.mocked(featureDialog.openDialog).mockReturnValue(new Promise(() => undefined));
+				const composable = mountImportFlowComposable();
+				composable.executeImport("valid-token", []);
+				await flushPromises();
+				expect(featureDialog.openDialog).toHaveBeenCalledWith("importColumn", expect.anything());
+			});
 		});
 
 		describe("when token validation fails", () => {

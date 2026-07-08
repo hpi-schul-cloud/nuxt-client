@@ -653,6 +653,8 @@ export default {
 	"components.molecules.ContentCardMenu.action.share": "Надати спільний доступ",
 	"components.molecules.ContextMenu.action.close": "Закрити контекстне меню",
 	"components.molecules.import.card.options.title": "Імпортувати картку",
+	"components.molecules.import.column.options.title": "Імпортувати розділ",
+	"components.molecules.import.column.question": "Куди слід імпортувати розділ{title}?",
 	"components.molecules.import.columnBoard.label": "Назва дошки",
 	"components.molecules.label.room": "Оберіть кімнату",
 	"components.molecules.label.board": "Оберіть дошку",
@@ -724,6 +726,11 @@ export default {
 	"components.molecules.share.card.options.infoText":
 		"За наступним посиланням цю картка можуть імпортувати як копію інші особи.",
 	"components.molecules.share.card.result.linkLabel": "Посилання на копію картки",
+	"components.molecules.share.column.options.infoText":
+		"За допомогою наведеного нижче посилання цей розділ можна імпортувати в кімнату іншим користувачам.",
+	"components.molecules.share.column.result.linkLabel": "Посилання на копію розділу",
+	"components.molecules.share.column.mail.subject": "Розділ для імпорту",
+	"components.molecules.share.column.mail.body": "Посилання на розділ: ",
 	"components.molecules.share.columnBoard.options.infoText":
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Посилання на копію дошки",
@@ -860,6 +867,7 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.drafts": "Чернетки",
 	"components.organisms.TasksDashboardMain.tab.finished": "Завершено",
 	"components.organisms.TasksDashboardMain.tab.open": "Відкрити",
+	"components.room.error.404": "Кімнату не знайдено",
 	"components.roomForm.labels.roomName": "Назва кімнати",
 	"components.roomForm.labels.timePeriod": "Період часу",
 	"components.roomForm.labels.timePeriod.from": "Період від",
@@ -938,6 +946,7 @@ export default {
 	"feature-copy.copyInfo.type.ofLesson": "уроку",
 	"feature-copy.copyInfo.type.ofRoom": "кімнати",
 	"feature-copy.copyInfo.type.ofCard": "картки",
+	"feature-copy.copyInfo.type.ofColumn": "розділу",
 	"feature-course-sync.EndCourseSyncDialog.title": "Завершити синхронізацію",
 	"feature-course-sync.EndCourseSyncDialog":
 		"Чи дійсно слід припинити синхронізацію курсу {courseName} із групою користувачів {groupName}?",
@@ -2102,4 +2111,5 @@ export default {
 	"pages.folder.dropZone.emptyState.title": "Перетягніть файли сюди для завантаження",
 	"pages.folder.dropZone.emptyState.orText": "або",
 	"pages.folder.dropZone.emptyState.browse": "оглянути файли",
+	"pages.folder.error.404": "Папку не знайдено",
 };

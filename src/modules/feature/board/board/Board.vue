@@ -76,6 +76,7 @@
 								@create:card="onCreateCard"
 								@delete:card="onDeleteCard"
 								@share:card="onShareCard"
+								@share:column="onShareColumn"
 								@delete:column="onDeleteColumn"
 								@move:card="onMoveCard"
 								@update:column-title="onUpdateColumnTitle(element.id, $event)"
@@ -123,7 +124,7 @@
 		<VDialog :model-value="showLoadingDialog" class="w-33" :persistent="true">
 			<VCard class="pa-4">
 				<VCard-text class="text-center">
-					<div v-if="boardStore.isConnected === false && board" class="text-center" data-testid="dialog-text">
+					<div class="text-center" data-testid="dialog-text">
 						{{ t("error.ws.connectionLost") }}
 					</div>
 					<VProgressCircular color="primary" indeterminate :size="36" class="my-4" />
@@ -173,7 +174,7 @@ import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@util-board";
-import { refDebounced, useTimeout } from "@vueuse/core";
+import { useTimeout } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, ComputedRef, onUnmounted, provide, ref, watch } from "vue";
@@ -196,6 +197,7 @@ const { allowedOperations } = useBoardAllowedOperations();
 const { breadcrumbs, contextType, roomId, createPageInformation, resetPageInformation } =
 	useSharedBoardPageInformation();
 const isDragging = ref(false);
+const showLoadingDialog = ref(false);
 const isEditSettingsDialogOpen = ref(false);
 const router = useRouter();
 
@@ -225,8 +227,12 @@ const moveCardOptions = ref<{ isDialogOpen: boolean; cardId: string }>({
 	cardId: "",
 });
 
-const onCreateCard = async (columnId: string) => {
-	if (allowedOperations.value.createCard) boardStore.createCardRequest({ columnId });
+const onCreateCard = async (payload: { columnId: string; position?: number }) => {
+	if (allowedOperations.value.createCard)
+		boardStore.createCardRequest({
+			columnId: payload.columnId,
+			position: payload.position,
+		});
 };
 
 const onCreateColumn = async () => {
@@ -383,11 +389,24 @@ const isListBoard = computed(() => board.value?.layout === BoardLayout.LIST);
 
 provide(BOARD_IS_LIST_LAYOUT, isListBoard);
 
-const started2000msAgo = useTimeout(2000);
+const twoSecondsPassedSinceInitialRender = useTimeout(2000);
 const isLoadingOrNotConnected = computed(
-	() => started2000msAgo.value === true && (boardStore.isConnected === false || boardStore.isLoading)
+	() => twoSecondsPassedSinceInitialRender.value === true && (boardStore.isConnected === false || boardStore.isLoading)
 );
-const showLoadingDialog = refDebounced(isLoadingOrNotConnected, 1000);
+
+// Show loading dialog if the board is loading or not connected for more than 1 second
+// Hide loading dialog immediately when connection is restored
+watch(isLoadingOrNotConnected, (newValue) => {
+	if (!newValue) {
+		showLoadingDialog.value = false;
+	} else {
+		setTimeout(() => {
+			if (isLoadingOrNotConnected.value) {
+				showLoadingDialog.value = true;
+			}
+		}, 1000);
+	}
+});
 
 const boardClasses = computed(() => {
 	const classes = ["d-flex", "flex-shrink-1", "board"];
@@ -453,6 +472,16 @@ const onShareCard = async (cardId: string) => {
 	executeShare({
 		id: cardId,
 		type: ShareTokenBodyParamsParentType.CARD,
+		destinationType: BoardExternalReferenceType.ROOM,
+	});
+};
+
+const onShareColumn = (columnId: string) => {
+	if (!allowedOperations.value.shareColumn) return;
+	if (!useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) return;
+	executeShare({
+		id: columnId,
+		type: ShareTokenBodyParamsParentType.COLUMN,
 		destinationType: BoardExternalReferenceType.ROOM,
 	});
 };

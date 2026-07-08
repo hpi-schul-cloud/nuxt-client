@@ -401,12 +401,12 @@ describe("Board", () => {
 		describe("@onCreateCard", () => {
 			describe("when user is permitted to create card", () => {
 				it("should call the createCard method", () => {
-					const { wrapper, boardStore } = setup({ allowedOperations: { createCard: true } });
+					const { wrapper, boardStore, board } = setup({ allowedOperations: { createCard: true } });
 
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
-					columnComponent.vm.$emit("create:card");
+					columnComponent.vm.$emit("create:card", { columnId: board.columns[0].id });
 
 					expect(boardStore.createCardRequest).toHaveBeenCalled();
 				});
@@ -940,7 +940,7 @@ describe("Board", () => {
 			});
 
 			describe("when feature is disabled", () => {
-				it("should do nothing", async () => {
+				it("should not emit share:board", async () => {
 					const { wrapper } = setup({
 						envs: { FEATURE_COLUMN_BOARD_SHARE: false },
 					});
@@ -966,6 +966,48 @@ describe("Board", () => {
 					id: "card-id",
 					type: ShareTokenBodyParamsParentType.CARD,
 					destinationType: BoardExternalReferenceType.ROOM,
+				});
+			});
+		});
+
+		describe("@share:column", () => {
+			it("should start the column share flow", async () => {
+				const { wrapper } = setup({ allowedOperations: { shareColumn: true } });
+
+				const boardColumn = wrapper.findComponent(BoardColumn);
+				await boardColumn.vm.$emit("share:column", "column-id");
+
+				expect(useShareFlowMock.executeShare).toHaveBeenCalledWith({
+					id: "column-id",
+					type: ShareTokenBodyParamsParentType.COLUMN,
+					destinationType: BoardExternalReferenceType.ROOM,
+				});
+			});
+
+			describe("when permission is missing", () => {
+				it("should not emit share:column", async () => {
+					const { wrapper } = setup({
+						allowedOperations: { shareColumn: false },
+					});
+
+					const boardColumn = wrapper.findComponent(BoardColumn);
+					await boardColumn.vm.$emit("share:column", "column-id");
+
+					expect(useShareFlowMock.executeShare).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("when feature is disabled", () => {
+				it("should not emit share:column", async () => {
+					const { wrapper } = setup({
+						envs: { FEATURE_COLUMN_BOARD_SHARE: false },
+						allowedOperations: { shareColumn: true },
+					});
+
+					const boardColumn = wrapper.findComponent(BoardColumn);
+					await boardColumn.vm.$emit("share:column", "column-id");
+
+					expect(useShareFlowMock.executeShare).not.toHaveBeenCalled();
 				});
 			});
 		});
