@@ -49,7 +49,7 @@ export const useAdministrationRoomStore = defineStore("administrationRoomStore",
 				const { data, total: nextTotal, limit: nextLimit } = response;
 
 				total = nextTotal;
-limit = nextLimit > 0 ? nextLimit : DEFAULT_ROOM_STATS_LIMIT;
+				limit = nextLimit > 0 ? nextLimit : DEFAULT_ROOM_STATS_LIMIT;
 				rooms.push(...data);
 
 				if (data.length === 0) {
