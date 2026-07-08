@@ -1,11 +1,12 @@
 <template>
 	<VCard
+		v-if="showTool || isEditMode"
 		ref="externalToolElement"
 		class="mb-4"
 		:data-testid="`board-external-tool-element-${toolDisplayName}`"
 		variant="outlined"
 		:ripple="false"
-		:role="showTool || isEditMode ? 'link' : undefined"
+		:role="isEditMode ? undefined : 'link'"
 		:loading="isLoading"
 		:aria-label="ariaLabel"
 		@keyup.enter="onClickElement"
@@ -13,58 +14,51 @@
 		@keydown.stop
 		@click="onClickElement"
 	>
-		<template v-if="showTool || isEditMode">
-			<ExternalToolElementAlert
-				:tool-display-name="toolDisplayName"
-				:error="displayError || launchError"
-				:tool-status="toolConfigurationStatus"
-				data-testid="board-external-tool-element-alert"
-			/>
-			<ContentElementBar :icon="getIcon">
-				<template v-if="displayData && displayData.logoUrl" #logo>
-					<VImg
-						data-testid="board-external-tool-element-logo"
-						height="100%"
-						class="mx-auto"
-						:src="displayData.logoUrl"
-					/>
-				</template>
-				<template #title>
-					{{ toolTitle }}
-				</template>
-				<template v-if="displayData" #subtitle>
-					<LineClamp data-testid="board-external-tool-element-domain">
-						{{ displayData.domain }}
-					</LineClamp>
-				</template>
-				<template #menu>
-					<ExternalToolElementMenu
-						v-if="isEditMode"
-						ref="externalToolElementMenu"
-						:display-name="displayData?.name"
-						:column-index="columnIndex"
-						:row-index="rowIndex"
-						:element-index="elementIndex"
-						:is-not-first-element="isNotFirstElement"
-						:is-not-last-element="isNotLastElement"
-						@move-down:element="onMoveElementDown"
-						@move-up:element="onMoveElementUp"
-						@delete:element="onDeleteElement"
-						@edit:element="onEditElement"
-					/>
-				</template>
-			</ContentElementBar>
-			<ExternalToolElementConfigurationDialog
-				:is-open="isConfigurationDialogOpen"
-				:context-id="element.id"
-				:config-id="element.content.contextExternalToolId"
-				data-testid="board-external-tool-element-configuration-dialog"
-				@close="onConfigurationDialogClose"
-				@save="onConfigurationDialogSave"
-			/>
-		</template>
-		<EmptyElement v-else :icon="mdiPuzzleOutline" :title="t('components.cardElement.externalToolElement.noElement')" />
+		<ExternalToolElementAlert
+			:tool-display-name="toolDisplayName"
+			:error="displayError || launchError"
+			:tool-status="toolConfigurationStatus"
+			data-testid="board-external-tool-element-alert"
+		/>
+		<ContentElementBar :icon="getIcon">
+			<template v-if="displayData && displayData.logoUrl" #logo>
+				<VImg data-testid="board-external-tool-element-logo" height="100%" class="mx-auto" :src="displayData.logoUrl" />
+			</template>
+			<template #title>
+				{{ toolTitle }}
+			</template>
+			<template v-if="displayData" #subtitle>
+				<LineClamp data-testid="board-external-tool-element-domain">
+					{{ displayData.domain }}
+				</LineClamp>
+			</template>
+			<template #menu>
+				<ExternalToolElementMenu
+					v-if="isEditMode"
+					ref="externalToolElementMenu"
+					:display-name="displayData?.name"
+					:column-index="columnIndex"
+					:row-index="rowIndex"
+					:element-index="elementIndex"
+					:is-not-first-element="isNotFirstElement"
+					:is-not-last-element="isNotLastElement"
+					@move-down:element="onMoveElementDown"
+					@move-up:element="onMoveElementUp"
+					@delete:element="onDeleteElement"
+					@edit:element="onEditElement"
+				/>
+			</template>
+		</ContentElementBar>
+		<ExternalToolElementConfigurationDialog
+			:is-open="isConfigurationDialogOpen"
+			:context-id="element.id"
+			:config-id="element.content.contextExternalToolId"
+			data-testid="board-external-tool-element-configuration-dialog"
+			@close="onConfigurationDialogClose"
+			@save="onConfigurationDialogSave"
+		/>
 	</VCard>
+	<EmptyElement v-else :icon="mdiPuzzleOutline" :title="t('components.cardElement.externalToolElement.noElement')" />
 </template>
 
 <script setup lang="ts">

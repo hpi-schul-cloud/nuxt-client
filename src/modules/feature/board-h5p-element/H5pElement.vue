@@ -1,5 +1,6 @@
 <template>
 	<VCard
+		v-if="hasLinkedContent || isEditMode"
 		ref="elementCard"
 		class="mb-4"
 		data-testid="board-hp5-element"
@@ -12,41 +13,39 @@
 		@keyup.enter.space="onClickElement"
 		@click="onClickElement"
 	>
-		<template v-if="hasLinkedContent || isEditMode">
-			<ContentElementBar icon="$h5pOutline" :has-row-style="isSmallOrLargerListBoard">
-				<template #display>
-					<v-img
-						v-if="hasLinkedContent"
-						:src="H5PImage"
-						:aspect-ratio="isSmallOrLargerListBoard ? 1.77777 : undefined"
-						:cover="isSmallOrLargerListBoard"
-						alt=""
-					/>
-				</template>
-				<template #title>
-					{{ hasLinkedContent ? contentTitle : t("components.cardElement.h5pElement.create") }}
-				</template>
-				<template #menu>
-					<H5pElementMenu
-						v-if="isEditMode"
-						:display-name="contentTitle"
-						:column-index="columnIndex"
-						:row-index="rowIndex"
-						:element-index="elementIndex"
-						:is-not-first-element="isNotFirstElement"
-						:is-not-last-element="isNotLastElement"
-						:has-linked-content="hasLinkedContent"
-						@move-down:element="onMoveElementDown"
-						@move-up:element="onMoveElementUp"
-						@delete:element="onDeleteElement"
-						@edit:element="onEdit"
-						@download:content="onDownloadContent"
-					/>
-				</template>
-			</ContentElementBar>
-		</template>
-		<EmptyElement v-else icon="$h5pOutline" :title="t('components.cardElement.h5pElement.noElement')" />
+		<ContentElementBar icon="$h5pOutline" :has-row-style="isSmallOrLargerListBoard">
+			<template #display>
+				<v-img
+					v-if="hasLinkedContent"
+					:src="H5PImage"
+					:aspect-ratio="isSmallOrLargerListBoard ? 1.77777 : undefined"
+					:cover="isSmallOrLargerListBoard"
+					alt=""
+				/>
+			</template>
+			<template #title>
+				{{ hasLinkedContent ? contentTitle : t("components.cardElement.h5pElement.create") }}
+			</template>
+			<template #menu>
+				<H5pElementMenu
+					v-if="isEditMode"
+					:display-name="contentTitle"
+					:column-index="columnIndex"
+					:row-index="rowIndex"
+					:element-index="elementIndex"
+					:is-not-first-element="isNotFirstElement"
+					:is-not-last-element="isNotLastElement"
+					:has-linked-content="hasLinkedContent"
+					@move-down:element="onMoveElementDown"
+					@move-up:element="onMoveElementUp"
+					@delete:element="onDeleteElement"
+					@edit:element="onEdit"
+					@download:content="onDownloadContent"
+				/>
+			</template>
+		</ContentElementBar>
 	</VCard>
+	<EmptyElement v-else icon="$h5pOutline" :title="t('components.cardElement.h5pElement.noElement')" />
 </template>
 
 <script setup lang="ts">

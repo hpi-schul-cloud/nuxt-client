@@ -1,5 +1,11 @@
 <template>
+	<EmptyElement
+		v-if="!isEditMode && !fileProperties"
+		:icon="mdiFileDocumentOutline"
+		:title="t('components.cardElement.fileElement.noElement')"
+	/>
 	<VCard
+		v-else
 		ref="fileContentElement"
 		class="board-file-element-card mb-4"
 		data-testid="board-file-element"
@@ -33,11 +39,6 @@
 				<KebabMenuActionDelete :name="fileProperties.name" @click="onDelete" />
 			</BoardMenu>
 		</FileContent>
-		<EmptyElement
-			v-else-if="!isEditMode && !alerts.includes(FileAlert.FILE_STORAGE_ERROR)"
-			:icon="mdiFileDocumentOutline"
-			:title="t('components.cardElement.fileElement.noElement')"
-		/>
 		<FileUpload
 			v-else-if="!alerts.includes(FileAlert.FILE_STORAGE_ERROR)"
 			:element-id="element.id"
@@ -137,10 +138,10 @@ const fileProperties = computed(() => {
 });
 
 const cardVariant = computed(() => {
-	const hasFileRecord = fileRecord.value?.id !== undefined;
-	const isUploadingInViewMode = hasFileRecord && !props.isEditMode && isUploading.value === true;
+	const { isEditMode } = props;
+	const isUploadingInViewMode = fileRecord.value?.id !== undefined && !isEditMode && !isUploading.value;
 
-	return isUploadingInViewMode ? "text" : "outlined";
+	return isUploadingInViewMode || isEditMode ? "outlined" : "text";
 });
 
 watch(element.value, async () => {
