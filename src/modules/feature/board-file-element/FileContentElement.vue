@@ -138,9 +138,9 @@ const fileProperties = computed(() => {
 
 const cardVariant = computed(() => {
 	const hasFileRecord = fileRecord.value?.id !== undefined;
-	const isUploadinginViewMode = hasFileRecord && !props.isEditMode && isUploading.value === true;
+	const isUploadingInViewMode = hasFileRecord && !props.isEditMode && isUploading.value === true;
 
-	return isUploadinginViewMode ? "text" : "outlined";
+	return isUploadingInViewMode ? "text" : "outlined";
 });
 
 watch(element.value, async () => {

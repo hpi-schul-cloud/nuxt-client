@@ -6,7 +6,11 @@
 		:variant="cardVariant"
 		:ripple="false"
 		:aria-label="ariaLabel"
-		v-bind="isEditMode ? {} : { href: sanitizedUrl, target: target, rel: 'noopener noreferrer' }"
+		v-bind="
+			!isEditMode && computedElement.content.url
+				? { href: sanitizedUrl, target: target, rel: 'noopener noreferrer' }
+				: {}
+		"
 		@keydown.enter.space="onClick"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop

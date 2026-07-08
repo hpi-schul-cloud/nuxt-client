@@ -5,7 +5,7 @@
 		:data-testid="`board-external-tool-element-${toolDisplayName}`"
 		variant="outlined"
 		:ripple="false"
-		:role="isEditMode ? undefined : 'link'"
+		:role="showTool || isEditMode ? 'link' : undefined"
 		:loading="isLoading"
 		:aria-label="ariaLabel"
 		@keyup.enter="onClickElement"
@@ -18,8 +18,8 @@
 				:tool-display-name="toolDisplayName"
 				:error="displayError || launchError"
 				:tool-status="toolConfigurationStatus"
-				data-testid="board-external-tool-element-alert" />
-
+				data-testid="board-external-tool-element-alert"
+			/>
 			<ContentElementBar :icon="getIcon">
 				<template v-if="displayData && displayData.logoUrl" #logo>
 					<VImg
@@ -61,7 +61,8 @@
 				data-testid="board-external-tool-element-configuration-dialog"
 				@close="onConfigurationDialogClose"
 				@save="onConfigurationDialogSave"
-		/></template>
+			/>
+		</template>
 		<EmptyElement v-else :icon="mdiPuzzleOutline" :title="t('components.cardElement.externalToolElement.noElement')" />
 	</VCard>
 </template>

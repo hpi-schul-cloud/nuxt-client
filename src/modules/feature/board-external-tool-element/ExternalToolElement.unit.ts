@@ -28,7 +28,6 @@ import { mdiPuzzleOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { ContentElementBar, EmptyElement } from "@ui-board";
 import { useSharedLastCreatedElement } from "@util-board";
-import { logger } from "@util-logger";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
@@ -327,7 +326,7 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should should empty element", () => {
+			it("should show empty element", () => {
 				const { wrapper } = setup();
 
 				const element = wrapper.findComponent(EmptyElement);
@@ -382,7 +381,6 @@ describe("ExternalToolElement", () => {
 
 			it("should show empty element", () => {
 				const { wrapper } = setup();
-				logger.log("wrapper.html()", wrapper.html());
 
 				const element = wrapper.findComponent(EmptyElement);
 
