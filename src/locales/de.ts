@@ -675,6 +675,8 @@ export default {
 		"Mit der Berechtigung „Bearbeiten“ können Karten nur innerhalb des selben Raumes in andere Bereiche verschoben werden.",
 	"components.molecules.move.card.message.success": "Karte erfolgreich in den Bereich {link} - {column} verschoben",
 	"components.molecules.import.card.options.title": "Karte importieren",
+	"components.molecules.import.column.options.title": "Abschnitt importieren",
+	"components.molecules.import.column.question": "Wohin soll der Abschnitt{title} importiert werden?",
 	"components.molecules.import.columnBoard.label": "Titel des Bereichs",
 	"components.molecules.import.columnBoard.rename": "Bei Bedarf kann der Name des Bereiches umbenannt werden: ",
 	"components.molecules.import.columnBoard.options.infoText": "Der Bereich kann im Folgenden umbenannt werden. ",
@@ -748,6 +750,11 @@ export default {
 	"components.molecules.share.card.options.infoText":
 		"Mit dem folgenden Link kann diese Karte von anderen Personen importiert werden.",
 	"components.molecules.share.card.result.linkLabel": "Link Karten-Kopie",
+	"components.molecules.share.column.options.infoText":
+		"Mit dem folgenden Link kann dieser Abschnitt von anderen Personen in einen Raum importiert werden.",
+	"components.molecules.share.column.result.linkLabel": "Link Abschnitt-Kopie",
+	"components.molecules.share.column.mail.subject": "Abschnitt zum Importieren",
+	"components.molecules.share.column.mail.body": "Link zum Abschnitt: ",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Link Bereich-Kopie",
@@ -949,6 +956,7 @@ export default {
 	"feature-copy.copyInfo.type.ofLesson": "des Themas",
 	"feature-copy.copyInfo.type.ofRoom": "des Raumes",
 	"feature-copy.copyInfo.type.ofCard": "der Karte",
+	"feature-copy.copyInfo.type.ofColumn": "des Abschnitts",
 	"feature-course-sync.EndCourseSyncDialog.title": "Synchronisation beenden",
 	"feature-course-sync.EndCourseSyncDialog":
 		"Soll die Synchronisation des Kurses {courseName} mit der Nutzendengruppe {groupName} wirklich beendet werden?",

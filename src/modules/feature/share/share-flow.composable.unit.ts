@@ -249,6 +249,16 @@ describe("useShareFlow", () => {
 				expectedPath: "rooms",
 			},
 			{
+				type: ShareTokenBodyParamsParentType.COLUMN,
+				destinationType: undefined,
+				expectedPath: "rooms/courses-overview",
+			},
+			{
+				type: ShareTokenBodyParamsParentType.COLUMN,
+				destinationType: BoardExternalReferenceType.ROOM,
+				expectedPath: "rooms",
+			},
+			{
 				type: ShareTokenBodyParamsParentType.ROOM,
 				destinationType: undefined,
 				expectedPath: "rooms",

@@ -77,6 +77,7 @@
 								@create:card="onCreateCard"
 								@delete:card="onDeleteCard"
 								@share:card="onShareCard"
+								@share:column="onShareColumn"
 								@delete:column="onDeleteColumn"
 								@move:card="onMoveCard"
 								@update:column-title="onUpdateColumnTitle(element.id, $event)"
@@ -472,6 +473,16 @@ const onShareCard = async (cardId: string) => {
 	executeShare({
 		id: cardId,
 		type: ShareTokenBodyParamsParentType.CARD,
+		destinationType: BoardExternalReferenceType.ROOM,
+	});
+};
+
+const onShareColumn = (columnId: string) => {
+	if (!allowedOperations.value.shareColumn) return;
+	if (!useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) return;
+	executeShare({
+		id: columnId,
+		type: ShareTokenBodyParamsParentType.COLUMN,
 		destinationType: BoardExternalReferenceType.ROOM,
 	});
 };
