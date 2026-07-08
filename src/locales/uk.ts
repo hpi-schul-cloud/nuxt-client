@@ -867,6 +867,7 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.drafts": "Чернетки",
 	"components.organisms.TasksDashboardMain.tab.finished": "Завершено",
 	"components.organisms.TasksDashboardMain.tab.open": "Відкрити",
+	"components.room.error.404": "Кімнату не знайдено",
 	"components.roomForm.labels.roomName": "Назва кімнати",
 	"components.roomForm.labels.timePeriod": "Період часу",
 	"components.roomForm.labels.timePeriod.from": "Період від",
@@ -2110,4 +2111,5 @@ export default {
 	"pages.folder.dropZone.emptyState.title": "Перетягніть файли сюди для завантаження",
 	"pages.folder.dropZone.emptyState.orText": "або",
 	"pages.folder.dropZone.emptyState.browse": "оглянути файли",
+	"pages.folder.error.404": "Папку не знайдено",
 };
