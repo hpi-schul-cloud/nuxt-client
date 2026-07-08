@@ -853,6 +853,7 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.drafts": "Drafts",
 	"components.organisms.TasksDashboardMain.tab.finished": "Finished",
 	"components.organisms.TasksDashboardMain.tab.open": "Open",
+	"components.room.error.404": "Room not found",
 	"components.roomForm.labels.roomName": "Name of the room",
 	"components.roomForm.labels.timePeriod": "Time period",
 	"components.roomForm.labels.timePeriod.from": "Time period from",
@@ -2089,4 +2090,5 @@ export default {
 	"pages.folder.dropZone.emptyState.title": "Drop files here to upload",
 	"pages.folder.dropZone.emptyState.orText": "or",
 	"pages.folder.dropZone.emptyState.browse": "browse your files",
+	"pages.folder.error.404": "Folder not found",
 };

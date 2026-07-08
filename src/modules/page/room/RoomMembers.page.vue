@@ -266,6 +266,9 @@ onMounted(async () => {
 	if (room.value === undefined) {
 		await fetchRoom(roomId);
 	}
+	if (room.value === undefined) {
+		return;
+	}
 	if (allowedOperations.value.viewMemberlist === false) {
 		router.replace("/rooms");
 		return;
