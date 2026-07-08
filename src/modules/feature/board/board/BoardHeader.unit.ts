@@ -451,22 +451,18 @@ describe("BoardHeader", () => {
 	});
 
 	describe("when calculateWidth is called with a mounted span element", () => {
-		it("should use the fallback placeholder when board title is empty", async () => {
+		it("should update fieldWidth using the fallback placeholder when board title is empty", () => {
 			const { wrapper } = setup({}, { title: "" });
 
-			// The inputWidthCalcSpan ref remains null in shallowMount because
-			// the span is inside a stubbed component's slot (rendering context lost).
-			// Set it manually via Vue's internal setup state.
 			const spanEl = document.createElement("span");
+			Object.defineProperty(spanEl, "offsetWidth", { value: 120, configurable: true });
 
-			(wrapper.vm as unknown as { $: { setupState: Record<string, unknown> } }).$.setupState["inputWidthCalcSpan"] =
-				spanEl;
+			const setupState = (wrapper.vm as unknown as { $: { setupState: Record<string, unknown> } }).$.setupState;
+			setupState["inputWidthCalcSpan"] = spanEl;
 
-			const titleInput = wrapper.findComponent(BoardAnyTitleInput);
-			titleInput.vm.$emit("update:value", "");
-			await nextTick();
+			wrapper.findComponent(BoardAnyTitleInput).vm.$emit("update:value", "");
 
-			expect(wrapper.findComponent(BoardHeader).exists()).toBe(true);
+			expect(setupState["fieldWidth"]).toBe("121px"); // offsetWidth(120) + 1
 		});
 	});
 

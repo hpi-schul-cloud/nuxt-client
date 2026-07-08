@@ -251,6 +251,7 @@ const isShareEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_
 
 watchEffect(() => {
 	boardTitle.value = props.title;
+	setTimeout(calculateWidth);
 });
 </script>
 
