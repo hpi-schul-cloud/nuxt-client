@@ -22,6 +22,7 @@ export const useImportFlow = () => {
 		room: t("common.labels.room"),
 		course: t("common.labels.course"),
 		column: t("components.boardColumn"),
+		board: t("components.board"),
 	};
 
 	const validateShareToken = async (token: string) => {
@@ -86,23 +87,18 @@ export const useImportFlow = () => {
 		);
 
 		for (const importResult of importResults) {
-			if (importResult.success) {
-				const destinationName = availableItems.find((d) => d.id === importResult.result?.destinationId)?.name;
-				if (destinationName) {
-					notifySuccess(
-						t("components.molecules.import.options.successWithDestination", {
-							type: t(itemNameKey.value),
-							name: newName,
-							destinationType: destinationTypeTranslation[destinationType],
-							destinationName,
-						})
-					);
-				} else {
-					notifySuccess(
-						t("components.molecules.import.options.success", { type: t(itemNameKey.value), name: newName })
-					);
-				}
-			}
+			if (!importResult.success) continue;
+
+			const destinationName = availableItems.find((d) => d.id === importResult.result?.destinationId)?.name;
+			const message = destinationName
+				? t("components.molecules.import.options.successWithDestination", {
+						type: t(itemNameKey.value),
+						name: newName,
+						destinationType: destinationTypeTranslation[destinationType],
+						destinationName,
+					})
+				: t("components.molecules.import.options.success", { type: t(itemNameKey.value), name: newName });
+			notifySuccess(message);
 		}
 
 		const importedElements = importResults.flatMap((r) => (r.result ? [r.result] : []));
@@ -135,18 +131,33 @@ export const useImportFlow = () => {
 
 		const availableDestinationItems = toValue(availableDestinations);
 		const isCard = validationResult.parentType === ShareTokenInfoResponseParentType.CARD;
-		const actualDestinationType = isCard ? "column" : destinationType === "room" ? "room" : "course";
-		const { completed, data } = await (isCard
-			? openDialog("importCard", {
-					shareTokenInfo: validationResult,
-					availableDestinations: availableDestinationItems,
-					destinationType: "column",
-				})
-			: openDialog("import", {
-					shareTokenInfo: validationResult,
-					availableDestinations: availableDestinationItems,
-					destinationType: destinationType === "room" ? "room" : "course",
-				}));
+		const isColumn = validationResult.parentType === ShareTokenInfoResponseParentType.COLUMN;
+		let actualDestinationType: ImportDestinationType;
+		let dialogResult: Awaited<ReturnType<typeof openDialog>>;
+
+		if (isCard) {
+			actualDestinationType = "column";
+			dialogResult = await openDialog("importCard", {
+				shareTokenInfo: validationResult,
+				availableDestinations: availableDestinationItems,
+				destinationType: "column",
+			});
+		} else if (isColumn) {
+			actualDestinationType = "board";
+			dialogResult = await openDialog("importColumn", {
+				shareTokenInfo: validationResult,
+				availableDestinations: availableDestinationItems,
+			});
+		} else {
+			actualDestinationType = destinationType === "room" ? "room" : "course";
+			dialogResult = await openDialog("import", {
+				shareTokenInfo: validationResult,
+				availableDestinations: availableDestinationItems,
+				destinationType: actualDestinationType,
+			});
+		}
+
+		const { completed, data } = dialogResult;
 
 		if (!completed)
 			return { result: undefined, destinations: undefined, success: false, error: new Error("Import cancelled") };
@@ -154,15 +165,14 @@ export const useImportFlow = () => {
 
 		if (destinations.length === 0) {
 			return importWithoutDestination(validationResult, newName);
-		} else {
-			return importToDestinations(
-				validationResult,
-				newName,
-				destinations,
-				availableDestinationItems,
-				actualDestinationType
-			);
 		}
+		return importToDestinations(
+			validationResult,
+			newName,
+			destinations,
+			availableDestinationItems,
+			actualDestinationType
+		);
 	};
 
 	return {

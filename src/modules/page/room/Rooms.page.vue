@@ -82,6 +82,8 @@ const executeImportFlow = async (token: string) => {
 		router.replace({ name: "room-details", params: { id: destinations[0].id } });
 	} else if (destinations.length === 1 && destinations[0].type === "column" && "boardId" in destinations[0]) {
 		router.replace({ name: "boards-id", params: { id: destinations[0].boardId } });
+	} else if (destinations.length === 1 && destinations[0].type === "board") {
+		router.replace({ name: "boards-id", params: { id: destinations[0].id } });
 	} else {
 		router.replace({ name: "rooms" });
 		fetchRooms();

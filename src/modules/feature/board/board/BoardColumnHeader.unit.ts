@@ -1,9 +1,12 @@
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
+import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ConfigResponse } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useBoardStore, useCourseBoardEditMode } from "@data-board";
 import { BoardColumnInteractionHandler } from "@feature-board";
+import { createTestingPinia } from "@pinia/testing";
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionDuplicate,
@@ -12,9 +15,11 @@ import {
 	KebabMenuActionMoveRight,
 	KebabMenuActionMoveUp,
 	KebabMenuActionRename,
+	KebabMenuActionShare,
 } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import { flatten } from "lodash-es";
+import { setActivePinia } from "pinia";
 import { computed } from "vue";
 
 vi.mock("@data-board");
@@ -32,11 +37,16 @@ describe("BoardColumnHeader", () => {
 			isEditMode?: boolean;
 			canEditColumn?: boolean;
 			canDeleteColumn?: boolean;
+			envs?: Partial<ConfigResponse>;
+			shareColumn?: boolean;
 		} = {},
 		props?: object
 	) => {
 		const isEditMode = computed(() => options.isEditMode ?? true);
 		const { canEditColumn = true, canDeleteColumn = true } = options;
+
+		setActivePinia(createTestingPinia());
+		createTestEnvStore({ FEATURE_COLUMN_BOARD_SHARE: true, ...options.envs });
 
 		mockedUseEditMode.mockReturnValue({
 			isEditMode,
@@ -49,6 +59,7 @@ describe("BoardColumnHeader", () => {
 		mockedUseBoardAllowedOperations.mockReturnValue({
 			allowedOperations: computed(() => ({
 				copyColumn: true,
+				shareColumn: options.shareColumn ?? false,
 			})),
 		} as ReturnType<typeof useBoardAllowedOperations>);
 		mockedUseBoardStore.mockReturnValue({
@@ -500,6 +511,44 @@ describe("BoardColumnHeader", () => {
 				const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
 
 				expect(duplicateButton.exists()).toBe(false);
+			});
+		});
+	});
+
+	describe("share column", () => {
+		describe("when feature flag is enabled and user has shareColumn permission", () => {
+			it("should show the share button", () => {
+				const wrapper = setup({ shareColumn: true });
+				const shareButton = wrapper.findComponent(KebabMenuActionShare);
+				expect(shareButton.exists()).toBe(true);
+			});
+
+			it("should emit 'share:column' with columnId when share button is clicked", async () => {
+				const wrapper = setup({ shareColumn: true });
+				const shareButton = wrapper.findComponent(KebabMenuActionShare);
+				await shareButton.vm.$emit("click");
+				const emitted = wrapper.emitted();
+				expect(emitted["share:column"]).toBeDefined();
+				expect(emitted["share:column"][0]).toEqual(["abc123"]);
+			});
+		});
+
+		describe("when user does not have shareColumn permission", () => {
+			it("should not show the share button", () => {
+				const wrapper = setup({ shareColumn: false });
+				const shareButton = wrapper.findComponent(KebabMenuActionShare);
+				expect(shareButton.exists()).toBe(false);
+			});
+		});
+
+		describe("when feature flag is disabled", () => {
+			it("should not show the share button even if user has permission", () => {
+				const wrapper = setup({
+					shareColumn: true,
+					envs: { FEATURE_COLUMN_BOARD_SHARE: false },
+				});
+				const shareButton = wrapper.findComponent(KebabMenuActionShare);
+				expect(shareButton.exists()).toBe(false);
 			});
 		});
 	});
