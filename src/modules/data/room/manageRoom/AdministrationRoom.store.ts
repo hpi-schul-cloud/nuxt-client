@@ -35,29 +35,29 @@ export const useAdministrationRoomStore = defineStore("administrationRoomStore",
 			});
 	};
 
+	// this is a workaround. Proper (server-based) pagination should be implemented across all our tables in future
+	const fetchAllRoomPages = async (batchSize = 500) => {
+		const rooms: RoomStatsItemResponse[] = [];
+
+		const firstBatch = (await roomApi.roomControllerGetRoomStats(0, batchSize)).data;
+		if (firstBatch.total > batchSize) {
+			rooms.push(...firstBatch.data);
+
+			for (let skip = batchSize; skip < firstBatch.total; skip += batchSize) {
+				const nextBatch = (await roomApi.roomControllerGetRoomStats(skip, batchSize)).data;
+				rooms.push(...nextBatch.data);
+			}
+		} else {
+			rooms.push(...firstBatch.data);
+		}
+
+		return rooms;
+	};
+
 	const fetchRooms = async () => {
 		try {
 			isLoading.value = true;
-			const rooms: RoomStatsItemResponse[] = [];
-			let skip = 0;
-			let total = 0;
-			let limit = DEFAULT_ROOM_STATS_LIMIT;
-
-			// this is a workaround. Proper (server-based) pagination should be implemented across all our tables in future
-			do {
-				const response = (await roomApi.roomControllerGetRoomStats(skip, limit)).data;
-				const { data, total: nextTotal, limit: nextLimit } = response;
-
-				total = nextTotal;
-				limit = nextLimit > 0 ? nextLimit : DEFAULT_ROOM_STATS_LIMIT;
-				rooms.push(...data);
-
-				if (data.length === 0) {
-					break;
-				}
-
-				skip += data.length;
-			} while (rooms.length < total);
+			const rooms: RoomStatsItemResponse[] = await fetchAllRoomPages();
 
 			if (rooms.length === 0) {
 				isEmptyList.value = true;
