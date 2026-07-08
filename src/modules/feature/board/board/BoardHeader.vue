@@ -58,7 +58,7 @@
 					hide-details
 					density="compact"
 					data-testid="scroll-mode-toggle-checkbox"
-					@update:model-value="toggleScrollMode"
+					@update:model-value="onToggleScrollMode"
 				/>
 			</div>
 		</div>
@@ -121,6 +121,26 @@ const boardHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
 const { allowedOperations } = useBoardAllowedOperations();
 const { isPageScrollMode, toggleScrollMode } = useBoardScrollMode();
+
+const onToggleScrollMode = () => {
+	const columnBoard = document.querySelector<HTMLElement>(".column-board");
+	const mainContent = boardScrollContainer.value;
+	const wasPageMode = isPageScrollMode.value;
+
+	// In page mode the scroll container is .main-content-flex; in columns mode it is .column-board
+	const scrollLeft = wasPageMode ? (mainContent?.scrollLeft ?? 0) : (columnBoard?.scrollLeft ?? 0);
+
+	toggleScrollMode();
+
+	// Restore the horizontal scroll position to the container that is now responsible for horizontal scrolling.
+	requestAnimationFrame(() => {
+		if (wasPageMode) {
+			if (columnBoard) columnBoard.scrollLeft = scrollLeft;
+		} else {
+			if (mainContent) mainContent.scrollLeft = scrollLeft;
+		}
+	});
+};
 const { xs } = useDisplay();
 const isScrollModeToggleVisible = computed(() => !props.isListBoard && !xs.value);
 
