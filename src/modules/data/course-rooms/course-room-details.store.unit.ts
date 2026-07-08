@@ -11,6 +11,7 @@ import {
 	SingleColumnBoardResponse,
 	TaskApiFactory,
 } from "@api-server";
+import { useAppStore } from "@data-app";
 import { logger } from "@util-logger";
 import { createPinia, setActivePinia } from "pinia";
 import { Mocked } from "vitest";
@@ -258,6 +259,29 @@ describe("useCourseRoomDetailsStore", () => {
 
 				expect(store.isLocked).toBe(false);
 				expect(store.roomData.title).toBe("");
+			});
+
+			it("should call handleApplicationError when fetch fails with 404", async () => {
+				const error = Object.assign(new Error("not found"), {
+					isAxiosError: true,
+					response: {
+						data: apiResponseErrorFactory.build({
+							code: 404,
+							type: "NOT_FOUND",
+						}),
+					},
+				});
+				courseRoomsApiMock.courseRoomsControllerGetRoomBoard.mockRejectedValue(error);
+				mapAxiosErrorToResponseErrorSpy.mockReturnValue(
+					apiResponseErrorFactory.build({ code: 404, type: "NOT_FOUND" })
+				);
+
+				const { store } = setup();
+				const handleApplicationErrorSpy = vi.spyOn(useAppStore(), "handleApplicationError");
+
+				await store.fetchContent("room-1");
+
+				expect(handleApplicationErrorSpy).toHaveBeenCalledWith(404);
 			});
 
 			it("should leave the room unlocked when error has no message property", async () => {
