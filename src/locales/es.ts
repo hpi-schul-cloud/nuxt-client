@@ -875,6 +875,7 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.drafts": "Borradores",
 	"components.organisms.TasksDashboardMain.tab.finished": "Terminado",
 	"components.organisms.TasksDashboardMain.tab.open": "Abrir",
+	"components.room.error.404": "Sala no encontrada",
 	"components.roomForm.labels.roomName": "Nombre de la sala",
 	"components.roomForm.labels.timePeriod": "Periodo de tiempo",
 	"components.roomForm.labels.timePeriod.from": "Periodo de tiempo desde",
@@ -2145,4 +2146,5 @@ export default {
 	"pages.folder.dropZone.emptyState.title": "Suelta los archivos aquí para subirlos",
 	"pages.folder.dropZone.emptyState.orText": "o",
 	"pages.folder.dropZone.emptyState.browse": "buscar tus archivos",
+	"pages.folder.error.404": "Carpeta no encontrada",
 };

@@ -5,12 +5,14 @@ import {
 	ParentNodeInfo,
 	ParentNodeType,
 } from "@/types/board/ContentElement";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
+import { $axios } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { BoardApiFactory, BoardElementApiFactory, BoardResponseAllowedOperations } from "@api-server";
 import { useAppStore } from "@data-app";
 import { Breadcrumb } from "@ui-layout";
+import { isAxiosError } from "axios";
 import { computed, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -69,7 +71,7 @@ export const useFolderState = () => {
 			fileFolderElement.value = castToFileFolderElement(response.data.element);
 			parentNodeInfos.value = response.data.parentHierarchy;
 		} catch (error) {
-			throwApplicationError(error);
+			handleApplicationError(error);
 		}
 	};
 
@@ -80,7 +82,7 @@ export const useFolderState = () => {
 			});
 			await fetchFileFolderElement(fileFolderElementId);
 		} catch (error) {
-			throwApplicationError(error);
+			handleApplicationError(error);
 		}
 	};
 
@@ -95,7 +97,7 @@ export const useFolderState = () => {
 				allowedOperations.value = result.data.allowedOperations;
 			}
 		} catch (error) {
-			throwApplicationError(error);
+			handleApplicationError(error);
 		}
 	};
 
@@ -122,10 +124,14 @@ export const useFolderState = () => {
 		}
 	};
 
-	const throwApplicationError = (error: unknown) => {
-		const responseError = mapAxiosErrorToResponseError(error);
-
-		useAppStore().handleApplicationError(responseError.code);
+	const handleApplicationError = (error: unknown) => {
+		if (isAxiosError(error)) {
+			const statusCode = error.response?.status ?? HttpStatusCode.InternalServerError;
+			const errorMessage = statusCode === 404 ? "pages.folder.error.404" : undefined;
+			useAppStore().handleApplicationError(statusCode, errorMessage);
+		} else {
+			useAppStore().handleUnknownError(error);
+		}
 	};
 
 	const mapNodeTypeToPathType = (nodeType: string): string => {

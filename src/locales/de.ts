@@ -882,6 +882,7 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.drafts": "Entwürfe",
 	"components.organisms.TasksDashboardMain.tab.finished": "Abgeschlossen",
 	"components.organisms.TasksDashboardMain.tab.open": "Offen",
+	"components.room.error.404": "Raum nicht gefunden",
 	"components.roomForm.labels.roomName": "Name des Raumes",
 	"components.roomForm.labels.timePeriod": "Zeitraum",
 	"components.roomForm.labels.timePeriod.from": "Zeitraum von",
@@ -2135,4 +2136,5 @@ export default {
 	"pages.folder.dropZone.emptyState.title": "Dateien hier ablegen zum Hochladen",
 	"pages.folder.dropZone.emptyState.orText": "oder",
 	"pages.folder.dropZone.emptyState.browse": "Dateien durchsuchen",
+	"pages.folder.error.404": "Ordner nicht gefunden",
 };
