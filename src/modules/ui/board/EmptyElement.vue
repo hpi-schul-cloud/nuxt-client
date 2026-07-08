@@ -1,10 +1,10 @@
 <template>
-	<div data-testid="board-empty-element" tabindex="-1">
+	<VCard variant="outlined" class="mb-4" data-testid="board-empty-element" tabindex="-1">
 		<VCardText class="d-flex">
 			<VIcon :icon class="mr-2" />
 			<span>{{ title }}</span>
 		</VCardText>
-	</div>
+	</VCard>
 </template>
 
 <script setup lang="ts">

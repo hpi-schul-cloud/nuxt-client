@@ -1,26 +1,23 @@
 <template>
+	<EmptyElement
+		v-if="!isEditMode && !computedElement.content.url"
+		:icon="mdiLink"
+		:title="t('components.cardElement.LinkElement.noLink')"
+	/>
 	<VCard
+		v-else
 		ref="linkContentElement"
 		class="mb-4"
 		data-testid="board-link-element"
 		:variant="cardVariant"
 		:ripple="false"
 		:aria-label="ariaLabel"
-		v-bind="
-			!isEditMode && computedElement.content.url
-				? { href: sanitizedUrl, target: target, rel: 'noopener noreferrer' }
-				: {}
-		"
+		v-bind="isEditMode ? {} : { href: sanitizedUrl, target: target, rel: 'noopener noreferrer' }"
 		@keydown.enter.space="onClick"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 		@click="onClick"
 	>
-		<EmptyElement
-			v-if="!isEditMode && !computedElement.content.url"
-			:icon="mdiLink"
-			:title="t('components.cardElement.LinkElement.noLink')"
-		/>
 		<LinkContentElementDisplay
 			v-if="!isEditMode && computedElement.content.url"
 			:url="computedElement.content.url"
@@ -90,12 +87,9 @@ const linkContentElement = ref(null);
 const isLoading = ref(false);
 const element = toRef(props, "element");
 
-const cardVariant = computed(() => {
-	if (props.isEditMode) return "outlined";
-	if (!props.isEditMode && !element.value.content.url) return "outlined";
-
-	return "text";
-});
+const cardVariant = computed(() =>
+	props.isEditMode === true || computedElement.value.content.url !== "" ? "outlined" : "text"
+);
 
 useBoardFocusHandler(element.value.id, linkContentElement);
 
