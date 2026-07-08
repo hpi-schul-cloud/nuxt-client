@@ -132,14 +132,8 @@ const onToggleScrollMode = () => {
 
 	toggleScrollMode();
 
-	// Restore the horizontal scroll position to the container that is now responsible for horizontal scrolling.
-	requestAnimationFrame(() => {
-		if (wasPageMode) {
-			if (columnBoard) columnBoard.scrollLeft = scrollLeft;
-		} else {
-			if (mainContent) mainContent.scrollLeft = scrollLeft;
-		}
-	});
+	const target = wasPageMode ? columnBoard : mainContent;
+	if (target) target.scrollLeft = scrollLeft;
 };
 const { xs } = useDisplay();
 const isScrollModeToggleVisible = computed(() => !props.isListBoard && !xs.value);

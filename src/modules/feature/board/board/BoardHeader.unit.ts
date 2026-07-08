@@ -535,6 +535,64 @@ describe("BoardHeader", () => {
 				expect(mockToggleScrollMode).toHaveBeenCalled();
 			});
 		});
+
+		describe("when toggling from page mode to columns mode", () => {
+			beforeEach(() => {
+				mockUseBoardScrollMode.mockReturnValue({
+					scrollMode: ref("page"),
+					isPageScrollMode: computed(() => true),
+					toggleScrollMode: mockToggleScrollMode,
+				} as unknown as ReturnType<typeof useBoardScrollMode>);
+			});
+
+			it("should call toggleScrollMode", () => {
+				const { wrapper } = setup({}, { isListBoard: false });
+
+				wrapper.findComponent(VSwitch).vm.$emit("update:modelValue");
+
+				expect(mockToggleScrollMode).toHaveBeenCalled();
+			});
+
+			it("should restore the scrollLeft from .main-content-flex to .column-board", () => {
+				const { wrapper } = setup({}, { isListBoard: false });
+
+				const columnBoard = document.createElement("div");
+				columnBoard.className = "column-board";
+				Object.defineProperty(columnBoard, "scrollLeft", { value: 0, writable: true });
+				document.body.appendChild(columnBoard);
+
+				const mainContent = document.createElement("div");
+				Object.defineProperty(mainContent, "scrollLeft", { value: 250, writable: true });
+				const setupState = (wrapper.vm as unknown as { $: { setupState: Record<string, unknown> } }).$.setupState;
+				setupState["boardScrollContainer"] = mainContent;
+
+				wrapper.findComponent(VSwitch).vm.$emit("update:modelValue");
+
+				expect(columnBoard.scrollLeft).toBe(250);
+				document.body.removeChild(columnBoard);
+			});
+		});
+
+		describe("when toggling from columns mode to page mode", () => {
+			it("should restore the scrollLeft from .column-board to .main-content-flex", () => {
+				const { wrapper } = setup({}, { isListBoard: false });
+
+				const columnBoard = document.createElement("div");
+				columnBoard.className = "column-board";
+				Object.defineProperty(columnBoard, "scrollLeft", { value: 350, writable: true });
+				document.body.appendChild(columnBoard);
+
+				const mainContent = document.createElement("div");
+				Object.defineProperty(mainContent, "scrollLeft", { value: 0, writable: true });
+				const setupState = (wrapper.vm as unknown as { $: { setupState: Record<string, unknown> } }).$.setupState;
+				setupState["boardScrollContainer"] = mainContent;
+
+				wrapper.findComponent(VSwitch).vm.$emit("update:modelValue");
+
+				expect(mainContent.scrollLeft).toBe(350);
+				document.body.removeChild(columnBoard);
+			});
+		});
 	});
 
 	describe("VDivider visibility", () => {
