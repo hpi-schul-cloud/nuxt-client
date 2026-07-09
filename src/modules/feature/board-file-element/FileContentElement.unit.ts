@@ -15,6 +15,7 @@ import { FileElementResponse } from "@api-server";
 import { useBoardAllowedOperations, useContentElementState } from "@data-board";
 import * as FileStorageApi from "@data-file";
 import { createTestingPinia } from "@pinia/testing";
+import { EmptyElement } from "@ui-board";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { computed, nextTick, ref } from "vue";
@@ -171,8 +172,10 @@ describe("FileContentElement", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.findComponent({ ref: "fileContentElement" });
-
-				expect(card.props("variant")).toBe("outlined");
+				const emptyElement = wrapper.findComponent(EmptyElement);
+				expect(card.exists()).toBe(false);
+				expect(emptyElement.exists()).toBe(true);
+				expect(emptyElement.props("title")).toBe("components.cardElement.fileElement.noElement");
 			});
 
 			it("should not render FileContent component", async () => {
@@ -198,6 +201,18 @@ describe("FileContentElement", () => {
 				await nextTick();
 
 				expect(wrapper.html()).not.toContain(menu);
+			});
+
+			it("should not render card or empty element when user has no edit permissions", () => {
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ updateElement: false, createFileElement: false }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
+
+				const { wrapper } = setup();
+
+				const card = wrapper.findComponent({ ref: "fileContentElement" });
+				expect(card.exists()).toBe(false);
+				expect(wrapper.text()).not.toContain("components.cardElement.fileElement.noElement");
 			});
 		});
 
@@ -1250,7 +1265,7 @@ describe("FileContentElement", () => {
 
 			const { wrapper, mockedAlerts } = getWrapper({
 				element,
-				isEditMode: false,
+				isEditMode: true,
 				columnIndex: 0,
 				rowIndex: 1,
 				elementIndex: 2,

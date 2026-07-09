@@ -45,7 +45,11 @@
 			</template>
 		</ContentElementBar>
 	</VCard>
-	<EmptyElement v-else icon="$h5pOutline" :title="t('components.cardElement.h5pElement.noElement')" />
+	<EmptyElement
+		v-else-if="canManageH5pElements"
+		icon="$h5pOutline"
+		:title="t('components.cardElement.h5pElement.noElement')"
+	/>
 </template>
 
 <script setup lang="ts">
@@ -57,7 +61,7 @@ import { injectStrict } from "@/utils/inject";
 import { decodeHtmlEntities } from "@/utils/textFormatting";
 import { H5PContentParentType } from "@api-h5p";
 import { H5pElementResponse } from "@api-server";
-import { useBoardFocusHandler } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
 import { ContentElementBar, EmptyElement } from "@ui-board";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
@@ -85,6 +89,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { allowedOperations } = useBoardAllowedOperations();
 const { smAndUp } = useDisplay();
 const { getContentTitle } = useH5PEditorApi();
 
@@ -94,6 +99,8 @@ const elementCard = ref<HTMLElement | null>(null);
 useBoardFocusHandler(element.value.id, elementCard);
 
 const hasLinkedContent = computed(() => !!element.value.content.contentId);
+
+const canManageH5pElements = computed(() => allowedOperations.value.updateElement);
 
 const router = useRouter();
 const editorWindow = ref<Window | null>(null);

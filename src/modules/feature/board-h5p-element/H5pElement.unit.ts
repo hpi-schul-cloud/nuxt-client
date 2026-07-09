@@ -6,7 +6,7 @@ import { h5pElementResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { H5PContentParentType } from "@api-h5p";
 import { H5pElementResponse } from "@api-server";
-import { useBoardFocusHandler } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
 import { ContentElementBar } from "@ui-board";
 import { LineClamp } from "@ui-line-clamp";
@@ -14,7 +14,7 @@ import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { flushPromises, mount } from "@vue/test-utils";
 import { Mocked } from "vitest";
 import { mock } from "vitest-mock-extended";
-import { nextTick } from "vue";
+import { computed, nextTick } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VImg } from "vuetify/components";
 
@@ -37,6 +37,9 @@ describe("H5pElement", () => {
 
 		useBoardFocusHandlerMock = mockComposable(useBoardFocusHandler);
 		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
+		vi.mocked(useBoardAllowedOperations).mockReturnValue({
+			allowedOperations: computed(() => ({ updateElement: true }) as unknown),
+		} as ReturnType<typeof useBoardAllowedOperations>);
 	});
 
 	afterEach(() => {
@@ -161,10 +164,19 @@ describe("H5pElement", () => {
 			it("should show empty element", () => {
 				const { wrapper } = setup();
 
-				const card = wrapper.getComponent({ ref: "elementCard" });
-
-				expect(card.isVisible()).toEqual(true);
+				expect(wrapper.findComponent({ ref: "elementCard" }).exists()).toEqual(false);
 				expect(wrapper.text()).toContain("components.cardElement.h5pElement.noElement");
+			});
+
+			it("should not show card or empty element when user has no edit permissions", () => {
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ updateElement: false }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
+
+				const { wrapper } = setup();
+
+				expect(wrapper.findComponent({ ref: "elementCard" }).exists()).toEqual(false);
+				expect(wrapper.text()).not.toContain("components.cardElement.h5pElement.noElement");
 			});
 		});
 	});

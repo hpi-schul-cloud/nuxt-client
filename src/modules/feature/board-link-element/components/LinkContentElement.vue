@@ -1,11 +1,11 @@
 <template>
 	<EmptyElement
-		v-if="!isEditMode && !computedElement.content.url"
+		v-if="!isEditMode && !computedElement.content.url && canManageLinkElements"
 		:icon="mdiLink"
 		:title="t('components.cardElement.LinkElement.noLink')"
 	/>
 	<VCard
-		v-else
+		v-else-if="isEditMode || computedElement.content.url"
 		ref="linkContentElement"
 		class="mb-4"
 		data-testid="board-link-element"
@@ -55,7 +55,7 @@ import { convertDownloadToPreviewUrl, isPreviewPossible } from "@/utils/fileHelp
 import { FileRecordParentType } from "@api-file-storage";
 import { LinkElementResponse } from "@api-server";
 import { sanitizeUrl } from "@braintree/sanitize-url";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { mdiLink } from "@icons/material";
 import { BoardMenu, BoardMenuScope, EmptyElement } from "@ui-board";
@@ -83,6 +83,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { allowedOperations } = useBoardAllowedOperations();
 const linkContentElement = ref(null);
 const isLoading = ref(false);
 const element = toRef(props, "element");
@@ -90,6 +91,8 @@ const element = toRef(props, "element");
 const cardVariant = computed(() =>
 	props.isEditMode === true || computedElement.value.content.url !== "" ? "outlined" : "text"
 );
+
+const canManageLinkElements = computed(() => allowedOperations.value.updateElement);
 
 useBoardFocusHandler(element.value.id, linkContentElement);
 

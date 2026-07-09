@@ -58,7 +58,11 @@
 			@save="onConfigurationDialogSave"
 		/>
 	</VCard>
-	<EmptyElement v-else :icon="mdiPuzzleOutline" :title="t('components.cardElement.externalToolElement.noElement')" />
+	<EmptyElement
+		v-else-if="canManageExternalToolElements"
+		:icon="mdiPuzzleOutline"
+		:title="t('components.cardElement.externalToolElement.noElement')"
+	/>
 </template>
 
 <script setup lang="ts">
@@ -67,7 +71,7 @@ import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigu
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { ExternalToolElementResponse } from "@api-server";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import {
 	ContextExternalTool,
@@ -100,6 +104,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { allowedOperations } = useBoardAllowedOperations();
 const { modelValue } = useContentElementState(props, {
 	autoSaveDebounce: 0,
 });
@@ -140,6 +145,10 @@ const showTool = computed(() => {
 
 	return isDeepLinkingTool.value ? hasDeepLink.value : true;
 });
+
+const canManageExternalToolElements = computed(
+	() => allowedOperations.value.updateElement || allowedOperations.value.createExternalToolElement
+);
 
 const toolDisplayName = computed(() => displayData.value?.name ?? "...");
 

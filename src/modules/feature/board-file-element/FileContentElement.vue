@@ -1,11 +1,11 @@
 <template>
 	<EmptyElement
-		v-if="!isEditMode && !fileProperties"
+		v-if="!isEditMode && !fileProperties && canManageFileElements"
 		:icon="mdiFileDocumentOutline"
 		:title="t('components.cardElement.fileElement.noElement')"
 	/>
 	<VCard
-		v-else
+		v-else-if="isEditMode || fileProperties"
 		ref="fileContentElement"
 		class="board-file-element-card mb-4"
 		data-testid="board-file-element"
@@ -136,6 +136,10 @@ const fileProperties = computed(() => {
 		isCollaboraEditable: fileRecord.value.isCollaboraEditable,
 	};
 });
+
+const canManageFileElements = computed(
+	() => allowedOperations.value.updateElement || allowedOperations.value.createFileElement
+);
 
 const cardVariant = computed(() => {
 	const { isEditMode } = props;
