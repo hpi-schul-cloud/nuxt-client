@@ -24,6 +24,7 @@ describe("BoardAnyTitleInput", () => {
 			emptyValueFallback?: string;
 			isFocused?: boolean;
 			maxLength?: number;
+			focusTitleOnEditStart?: boolean;
 		},
 		options?: { interactionEvent?: Ref<{ x: number; y: number } | undefined> }
 	) => {
@@ -305,6 +306,61 @@ describe("BoardAnyTitleInput", () => {
 
 				const textAreaComponent = wrapper.findComponent(VTextarea);
 				expect(textAreaComponent.props("autofocus")).toBe(false);
+			});
+		});
+
+		describe("when focusTitleOnEditStart is true and no interaction event is injected", () => {
+			it("should auto-focus the textarea", async () => {
+				const { wrapper } = setup({ isEditMode: false, scope: "card", isFocused: false, focusTitleOnEditStart: true });
+
+				await wrapper.setProps({ isEditMode: true });
+				await nextTick();
+				await nextTick();
+
+				expect(wrapper.findComponent(VTextarea).props("autofocus")).toBe(true);
+			});
+		});
+	});
+
+	describe("when mounted with isEditMode already true (e.g. empty title freshly rendered in edit mode)", () => {
+		describe("when isFocused is true and no interaction event", () => {
+			it("should auto-focus the textarea on mount", async () => {
+				const { wrapper } = setup({ isEditMode: true, scope: "card", isFocused: true });
+				await nextTick();
+				await nextTick();
+
+				expect(wrapper.findComponent(VTextarea).props("autofocus")).toBe(true);
+			});
+		});
+
+		describe("when isFocused is true and an interaction event is active", () => {
+			it("should not auto-focus the textarea on mount (interaction handler takes over)", async () => {
+				const interactionEvent = ref<{ x: number; y: number } | undefined>({ x: 100, y: 100 });
+				const { wrapper } = setup({ isEditMode: true, scope: "card", isFocused: true }, { interactionEvent });
+				await nextTick();
+				await nextTick();
+
+				expect(wrapper.findComponent(VTextarea).props("autofocus")).toBe(false);
+			});
+		});
+
+		describe("when focusTitleOnEditStart is true and no interaction event", () => {
+			it("should auto-focus the textarea on mount", async () => {
+				const { wrapper } = setup({ isEditMode: true, scope: "card", isFocused: false, focusTitleOnEditStart: true });
+				await nextTick();
+				await nextTick();
+
+				expect(wrapper.findComponent(VTextarea).props("autofocus")).toBe(true);
+			});
+		});
+
+		describe("when neither isFocused nor focusTitleOnEditStart", () => {
+			it("should not auto-focus the textarea on mount", async () => {
+				const { wrapper } = setup({ isEditMode: true, scope: "card", isFocused: false });
+				await nextTick();
+				await nextTick();
+
+				expect(wrapper.findComponent(VTextarea).props("autofocus")).toBe(false);
 			});
 		});
 	});

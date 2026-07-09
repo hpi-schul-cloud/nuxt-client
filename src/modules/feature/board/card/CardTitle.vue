@@ -6,6 +6,7 @@
 			:is-edit-mode="isEditMode"
 			:has-edit-permission="allowedOperations.updateCardTitle"
 			:is-focused="isFocused"
+			:focus-title-on-edit-start="focusTitleOnEditStart"
 			data-testid="card-title"
 			@update:value="onUpdateValue"
 			@enter="onEnter"
@@ -31,6 +32,10 @@ const props = defineProps({
 	},
 	isFocused: {
 		type: Boolean,
+	},
+	focusTitleOnEditStart: {
+		type: Boolean,
+		default: false,
 	},
 });
 const emit = defineEmits(["update:value", "enter"]);

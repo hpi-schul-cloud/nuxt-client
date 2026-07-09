@@ -23,6 +23,11 @@ declare type FocusHandler = {
  */
 export function useBoardFocusHandler(): Pick<FocusHandler, "isAnythingFocused" | "setFocus" | "forceFocus">;
 /**
+ * Access the shared board focus state (focusedId) without registering a DOM element.
+ * Useful for components that need to observe or reset the focused ID without tracking a specific element.
+ */
+export function useBoardFocusHandler(id: MaybeRefOrGetter<FocusableId>): Pick<FocusHandler, "setFocus" | "focusedId">;
+/**
  * Keeps track of focused elements on the Board to retain focus state across Board changes.
  * Also keeps track of focus of child-elements. The Composable associates the given ID to the given element
  * and tries to focus it in onMounted hook when the ID matches the currently focused ID.
@@ -121,7 +126,11 @@ export function useBoardFocusHandler(
 	 * If an InlineEditInteraction is fired within the element boundary, force focus on this element
 	 */
 	useInlineEditInteractionHandler(async () => {
-		await forceFocusOnMount();
+		await nextTick();
+		if (onFocusReceived !== undefined) {
+			onFocusReceived();
+		}
+		setFocus(id);
 	});
 
 	onUnmounted(() => {

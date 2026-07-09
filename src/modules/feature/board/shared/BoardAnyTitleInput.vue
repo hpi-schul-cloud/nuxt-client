@@ -49,12 +49,14 @@ const props = withDefaults(
 		maxLength?: number;
 		emptyValueFallback?: string;
 		hasEditPermission?: boolean;
+		focusTitleOnEditStart?: boolean;
 	}>(),
 	{
 		isFocused: false,
 		emptyValueFallback: "",
 		hasEditPermission: false,
 		maxLength: undefined,
+		focusTitleOnEditStart: false,
 	}
 );
 
@@ -110,7 +112,14 @@ watch(
 );
 
 onMounted(() => {
-	if (props.isFocused && props.isEditMode) setFocusOnEdit();
+	// This path fires when the component mounts with isEditMode already true
+	// (e.g. the card title is empty so it wasn't rendered before edit mode started).
+	// Apply the same guards as watch(isEditMode): skip if a double-click interaction
+	// is active (the clicked element handles its own focus), and only focus when the
+	// card is keyboard-focused or the consumer opted in via focusTitleOnEditStart.
+	if (props.isEditMode && interactionEvent.value === undefined && (props.isFocused || props.focusTitleOnEditStart)) {
+		setFocusOnEdit();
+	}
 	modelValue.value = props.value;
 });
 
@@ -123,8 +132,18 @@ watch(
 		}
 
 		const isCardScope = props.scope !== "column" && props.scope !== "board";
-		if (isCardScope && (!props.isFocused || interactionEvent.value !== undefined)) {
-			return;
+		if (isCardScope) {
+			// A double-click interaction event is present: the InlineEditInteractionHandler has
+			// already routed focus to the specific element that was clicked (e.g. a text element
+			// inside the card). Let that handler win — do not steal focus for the title.
+			if (interactionEvent.value !== undefined) return;
+
+			// No interaction event means edit mode was triggered via keyboard navigation or an
+			// explicit "Edit" button (detail view). Only auto-focus the title when:
+			// - isFocused: the card is the currently focused board element (keyboard nav), OR
+			// - focusTitleOnEditStart: the consumer explicitly requests title focus on edit start
+			//   (used by CardHostDetailView so its "Edit" button always lands in the title).
+			if (!props.isFocused && !props.focusTitleOnEditStart) return;
 		}
 
 		modelValue.value = externalValue.value || props.emptyValueFallback;
