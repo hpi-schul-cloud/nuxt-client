@@ -1,5 +1,6 @@
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
+import { flushPromises } from "@vue/test-utils";
 import { Ref, ref } from "vue";
 
 describe("BoardFocusHandler composable", () => {
@@ -81,5 +82,51 @@ describe("BoardFocusHandler composable", () => {
 		expect(isFocused.value).toBe(true);
 		expect(isFocusWithin.value).toBe(true);
 		expect(isFocusContained.value).toBe(true);
+	});
+
+	describe("when onFocusReceived callback is provided", () => {
+		describe("when the element is the currently focused board element on mount", () => {
+			it("should call the callback", async () => {
+				const elementId = "focus-handler-test-callback";
+				const onFocusReceived = vi.fn();
+
+				mountComposable(() => {
+					const { setFocus } = useBoardFocusHandler();
+					setFocus(elementId);
+					return useBoardFocusHandler(elementId, target, onFocusReceived);
+				});
+
+				await flushPromises();
+
+				expect(onFocusReceived).toHaveBeenCalledTimes(1);
+			});
+
+			it("should still focus the tracked DOM element", async () => {
+				const elementId = "focus-handler-test-dom";
+				const onFocusReceived = vi.fn();
+
+				mountComposable(() => {
+					const { setFocus } = useBoardFocusHandler();
+					setFocus(elementId);
+					return useBoardFocusHandler(elementId, target, onFocusReceived);
+				});
+
+				await flushPromises();
+
+				expect(document.activeElement).toBe(target.value);
+			});
+		});
+
+		describe("when the element is not the currently focused board element on mount", () => {
+			it("should not call the callback", async () => {
+				const onFocusReceived = vi.fn();
+
+				mountComposable(() => useBoardFocusHandler("other-element-id", target, onFocusReceived));
+
+				await flushPromises();
+
+				expect(onFocusReceived).not.toHaveBeenCalled();
+			});
+		});
 	});
 });

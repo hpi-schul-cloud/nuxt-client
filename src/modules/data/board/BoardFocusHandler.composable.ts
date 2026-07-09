@@ -102,7 +102,6 @@ export function useBoardFocusHandler(
 		if (onFocusReceived !== undefined) {
 			onFocusReceived();
 			setFocus(id);
-			return;
 		}
 		isFocused.value = true;
 	};

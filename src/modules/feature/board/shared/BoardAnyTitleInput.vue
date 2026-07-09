@@ -116,25 +116,20 @@ onMounted(() => {
 
 watch(
 	() => props.isEditMode,
-	async (newVal, oldVal) => {
-		if (!newVal && oldVal) {
+	async (newVal) => {
+		if (!newVal) {
 			internalIsFocused.value = false;
 			return;
 		}
 
-		if (props.scope !== "column" && props.scope !== "board") {
-			if (!props.isFocused || interactionEvent.value !== undefined) {
-				return;
-			}
+		const isCardScope = props.scope !== "column" && props.scope !== "board";
+		if (isCardScope && (!props.isFocused || interactionEvent.value !== undefined)) {
+			return;
 		}
 
-		if (newVal && !oldVal) {
-			const text = externalValue.value.length > 0 ? externalValue.value : props.emptyValueFallback;
-			modelValue.value = text;
-
-			await nextTick();
-			await setFocusOnEdit();
-		}
+		modelValue.value = externalValue.value || props.emptyValueFallback;
+		await nextTick();
+		await setFocusOnEdit();
 	}
 );
 

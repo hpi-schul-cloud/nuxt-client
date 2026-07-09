@@ -71,6 +71,11 @@ const moveCursorToEnd = (editor: Editor) => {
 	});
 };
 
+const focusAtEnd = (editor: Editor) => {
+	editor.editing.view.focus();
+	moveCursorToEnd(editor);
+};
+
 const handleFocus = () => emit("focus");
 const handleBlur = () => emit("blur");
 const handleDelete = () => emit("keyboard:delete");
@@ -80,8 +85,7 @@ const handleReady = (editor: Editor) => {
 	emit("ready");
 
 	if (props.autofocus) {
-		editor.editing.view.focus();
-		moveCursorToEnd(editor);
+		focusAtEnd(editor);
 	}
 
 	registerDeletionHandler(editor, handleDelete);
@@ -92,8 +96,7 @@ watch(
 	(newVal) => {
 		const editor = editorInstance;
 		if (newVal && editor) {
-			editor.editing.view.focus();
-			moveCursorToEnd(editor);
+			focusAtEnd(editor);
 		}
 	}
 );

@@ -66,7 +66,7 @@ describe("LinkContentElement", () => {
 				if (onFocusReceived !== undefined) {
 					onFocusReceivedCallback = onFocusReceived;
 				}
-				return useBoardFocusHandlerMock as ReturnType<typeof useBoardFocusHandler>;
+				return useBoardFocusHandlerMock;
 			}
 		);
 		vi.mocked(useMetaTagExtractorApi).mockReturnValue(useMetaTagExtractorApiMock);

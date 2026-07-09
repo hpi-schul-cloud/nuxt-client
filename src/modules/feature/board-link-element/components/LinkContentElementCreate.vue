@@ -66,7 +66,7 @@ const label = existingUrl
 	: t("components.cardElement.LinkElement.create.label");
 
 const form = useTemplateRef("form");
-const urlInput = useTemplateRef<InstanceType<typeof VTextarea>>("urlInput");
+const urlInput = useTemplateRef("urlInput");
 const rules = [isRequired(t("common.validation.required2")), isValidUrl()];
 
 watch(
