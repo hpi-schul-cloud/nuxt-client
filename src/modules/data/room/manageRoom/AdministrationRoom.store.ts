@@ -6,8 +6,6 @@ import { notifyError, useSchoolStoreRefs } from "@data-app";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-const DEFAULT_ROOM_STATS_LIMIT = 50;
-
 export const useAdministrationRoomStore = defineStore("administrationRoomStore", () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const { t } = useI18nGlobal();
@@ -35,20 +33,17 @@ export const useAdministrationRoomStore = defineStore("administrationRoomStore",
 			});
 	};
 
-	// this is a workaround. Proper (server-based) pagination should be implemented across all our tables in future
 	const fetchAllRoomPages = async (batchSize = 500) => {
 		const rooms: RoomStatsItemResponse[] = [];
 
 		const firstBatch = (await roomApi.roomControllerGetRoomStats(0, batchSize)).data;
-		if (firstBatch.total > batchSize) {
-			rooms.push(...firstBatch.data);
+		rooms.push(...firstBatch.data);
 
+		if (firstBatch.total > batchSize) {
 			for (let skip = batchSize; skip < firstBatch.total; skip += batchSize) {
 				const nextBatch = (await roomApi.roomControllerGetRoomStats(skip, batchSize)).data;
 				rooms.push(...nextBatch.data);
 			}
-		} else {
-			rooms.push(...firstBatch.data);
 		}
 
 		return rooms;
