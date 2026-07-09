@@ -56,9 +56,43 @@ describe("useAdministrationRoomStore", () => {
 
 			await roomAdminStore.fetchRooms();
 
-			expect(roomAdministrationApiMock.roomControllerGetRoomStats).toHaveBeenCalled();
+			expect(roomAdministrationApiMock.roomControllerGetRoomStats).toHaveBeenCalledWith(0, 500);
 			expect(roomAdminStore.isLoading).toBe(false);
 			expect(roomAdminStore.isEmptyList).toBe(false);
+		});
+
+		it("should fetch all room pages", async () => {
+			const firstPage = roomStatsListResponseFactory.build({
+				data: roomStatsItemResponseFactory.buildList(500),
+				total: 600,
+				skip: 0,
+				limit: 500,
+			});
+			const secondPage = roomStatsListResponseFactory.build({
+				data: roomStatsItemResponseFactory.buildList(100),
+				total: 600,
+				skip: 500,
+				limit: 500,
+			});
+			const { roomAdminStore } = setup();
+
+			roomAdministrationApiMock.roomControllerGetRoomStats
+				.mockResolvedValueOnce(
+					mockApiResponse<RoomStatsListResponse>({
+						data: firstPage,
+					})
+				)
+				.mockResolvedValueOnce(
+					mockApiResponse<RoomStatsListResponse>({
+						data: secondPage,
+					})
+				);
+
+			await roomAdminStore.fetchRooms();
+
+			expect(roomAdministrationApiMock.roomControllerGetRoomStats).toHaveBeenNthCalledWith(1, 0, 500);
+			expect(roomAdministrationApiMock.roomControllerGetRoomStats).toHaveBeenNthCalledWith(2, 500, 500);
+			expect(roomAdminStore.roomList).toHaveLength(600);
 		});
 
 		it("should return empty list if no rooms are found", async () => {
