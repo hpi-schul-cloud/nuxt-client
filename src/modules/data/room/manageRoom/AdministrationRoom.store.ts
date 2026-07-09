@@ -33,21 +33,39 @@ export const useAdministrationRoomStore = defineStore("administrationRoomStore",
 			});
 	};
 
+	const fetchAllRoomPages = async (batchSize = 500) => {
+		const rooms: RoomStatsItemResponse[] = [];
+
+		const firstBatch = (await roomApi.roomControllerGetRoomStats(0, batchSize)).data;
+		rooms.push(...firstBatch.data);
+
+		if (firstBatch.total > batchSize) {
+			for (let skip = batchSize; skip < firstBatch.total; skip += batchSize) {
+				const nextBatch = (await roomApi.roomControllerGetRoomStats(skip, batchSize)).data;
+				rooms.push(...nextBatch.data);
+			}
+		}
+
+		return rooms;
+	};
+
 	const fetchRooms = async () => {
 		try {
 			isLoading.value = true;
-			const { data } = (await roomApi.roomControllerGetRoomStats()).data;
+			const rooms: RoomStatsItemResponse[] = await fetchAllRoomPages();
 
-			if (data && data.length === 0) {
+			if (rooms.length === 0) {
 				isEmptyList.value = true;
+				roomList.value = [];
 				return;
 			}
 
 			isEmptyList.value = false;
-			roomList.value = sortAndFormatList(data);
+			roomList.value = sortAndFormatList(rooms);
 		} catch {
 			notifyError(t("pages.rooms.administration.error.load"));
 			isEmptyList.value = true;
+			roomList.value = [];
 		} finally {
 			isLoading.value = false;
 		}
