@@ -1,61 +1,75 @@
 <template>
-	<div class="d-flex align-start board-header mb-6">
-		<InlineEditInteractionHandler
-			:id="boardId"
-			class="input-container"
-			:is-edit-mode="isEditMode"
-			tabindex="0"
-			@start-edit-mode="onStartEditMode"
-			@end-edit-mode="onEndEditMode"
-			@keydown.enter.prevent="onToggleEditMode"
-		>
-			<BoardAnyTitleInput
-				ref="boardHeader"
-				:value="boardTitle"
-				class="input"
-				scope="board"
-				data-testid="board-title"
+	<div>
+		<div class="d-flex align-start board-header mb-2">
+			<InlineEditInteractionHandler
+				:id="boardId"
+				class="input-container"
 				:is-edit-mode="isEditMode"
-				:is-focused="isFocusedById"
-				:has-edit-permission="allowedOperations.updateBoardTitle"
-				@update:value="updateBoardTitle"
-				@blur="onBoardTitleBlur"
-			/>
-			<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
-		</InlineEditInteractionHandler>
-		<div class="d-flex mt-4">
-			<VChip v-if="isDraft" class="align-self-center cursor-default" data-testid="board-draft-chip">
-				{{ t("common.words.draft") }}
-			</VChip>
-			<BoardEditableChip v-if="isEditableChipVisible" />
-			<BoardMenu
-				v-if="allowedOperations.updateBoardTitle || allowedOperations.shareBoard"
-				:scope="BoardMenuScope.BOARD"
-				data-testid="board-menu-btn"
+				tabindex="0"
+				@start-edit-mode="onStartEditMode"
+				@end-edit-mode="onEndEditMode"
+				@keydown.enter.prevent="onToggleEditMode"
 			>
-				<KebabMenuActionRename @click="onStartEditMode" />
-				<KebabMenuActionDuplicate
-					v-if="allowedOperations.copyBoard"
-					data-testid="kebab-menu-action-duplicate-board"
-					@click="onCopyBoard"
+				<BoardAnyTitleInput
+					ref="boardHeader"
+					:value="boardTitle"
+					class="input"
+					scope="board"
+					data-testid="board-title"
+					:is-edit-mode="isEditMode"
+					:is-focused="isFocusedById"
+					:has-edit-permission="allowedOperations.updateBoardTitle"
+					@update:value="updateBoardTitle"
+					@blur="onBoardTitleBlur"
 				/>
-				<KebabMenuActionShare v-if="isShareEnabled && allowedOperations.shareBoard" @click="onShareBoard" />
-				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
-				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
-				<KebabMenuActionEditingSettings
-					v-if="allowedOperations.updateReadersCanEditSetting && isRoomBoard"
-					@click="onEditBoardSettings"
+				<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
+			</InlineEditInteractionHandler>
+			<div class="d-flex mt-4">
+				<VChip v-if="isDraft" class="align-self-center cursor-default" data-testid="board-draft-chip">
+					{{ t("common.words.draft") }}
+				</VChip>
+				<BoardEditableChip v-if="isEditableChipVisible" />
+				<BoardMenu
+					v-if="allowedOperations.updateBoardTitle || allowedOperations.shareBoard"
+					:scope="BoardMenuScope.BOARD"
+					data-testid="board-menu-btn"
+				>
+					<KebabMenuActionRename @click="onStartEditMode" />
+					<KebabMenuActionDuplicate
+						v-if="allowedOperations.copyBoard"
+						data-testid="kebab-menu-action-duplicate-board"
+						@click="onCopyBoard"
+					/>
+					<KebabMenuActionShare v-if="isShareEnabled && allowedOperations.shareBoard" @click="onShareBoard" />
+					<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
+					<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
+					<KebabMenuActionEditingSettings
+						v-if="allowedOperations.updateReadersCanEditSetting && isRoomBoard"
+						@click="onEditBoardSettings"
+					/>
+					<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
+					<KebabMenuActionDelete :name="title" @click="onDeleteBoard" />
+				</BoardMenu>
+			</div>
+			<div v-if="isScrollModeToggleVisible" class="ms-auto mt-4 scroll-mode-toggle">
+				<VSwitch
+					:model-value="isPageScrollMode"
+					:label="t('components.board.action.fixColumns')"
+					hide-details
+					density="compact"
+					data-testid="scroll-mode-toggle-checkbox"
+					@update:model-value="onToggleScrollMode"
 				/>
-				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
-				<KebabMenuActionDelete :name="title" @click="onDeleteBoard" />
-			</BoardMenu>
+			</div>
 		</div>
+		<VDivider v-if="isPageScrollMode && hasScrolledInPageMode" class="mx-n6" role="presentation" />
 	</div>
 </template>
 
 <script setup lang="ts">
 import { BoardExternalReferenceType } from "../../../../generated/serverApi/v3";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
+import { useBoardScrollMode } from "../shared/BoardScrollMode.composable";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import BoardEditableChip from "./BoardEditableChip.vue";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
@@ -73,9 +87,10 @@ import {
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
 } from "@ui-kebab-menu";
-import { useDebounceFn } from "@vueuse/core";
-import { computed, onMounted, ref, toRef, watchEffect } from "vue";
+import { useDebounceFn, useScroll } from "@vueuse/core";
+import { computed, onMounted, ref, toRef, watch, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
 
 type Props = {
 	boardId: string;
@@ -84,6 +99,7 @@ type Props = {
 	isDraft: boolean;
 	isEditableChipVisible?: boolean;
 	hasReadersEditPermission: boolean;
+	isListBoard?: boolean;
 };
 
 const props = defineProps<Props>();
@@ -104,11 +120,46 @@ const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(board
 const boardHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
 const { allowedOperations } = useBoardAllowedOperations();
+const { isPageScrollMode, toggleScrollMode } = useBoardScrollMode();
+
+const onToggleScrollMode = () => {
+	const columnBoard = document.querySelector<HTMLElement>(".column-board");
+	const mainContent = boardScrollContainer.value;
+	const wasPageMode = isPageScrollMode.value;
+
+	// In page mode the scroll container is .main-content-flex; in columns mode it is .column-board
+	const scrollLeft = wasPageMode ? (mainContent?.scrollLeft ?? 0) : (columnBoard?.scrollLeft ?? 0);
+
+	toggleScrollMode();
+
+	const target = wasPageMode ? columnBoard : mainContent;
+	if (target) target.scrollLeft = scrollLeft;
+};
+const { xs } = useDisplay();
+const isScrollModeToggleVisible = computed(() => !props.isListBoard && !xs.value);
+
+const boardScrollContainer = ref<HTMLElement | null>(null);
+const { y: contentScrollY } = useScroll(boardScrollContainer);
+
+const hasScrolledInPageMode = ref(false);
+
+watch(isPageScrollMode, () => {
+	hasScrolledInPageMode.value = false;
+});
+
+watch(contentScrollY, () => {
+	if (isPageScrollMode.value) {
+		hasScrolledInPageMode.value = contentScrollY.value > 0;
+	}
+});
 
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref("0px");
 
-onMounted(() => setTimeout(calculateWidth, 100));
+onMounted(() => {
+	boardScrollContainer.value = document.querySelector<HTMLElement>(".main-content-flex");
+	setTimeout(calculateWidth, 100);
+});
 
 const boardTitle = ref("");
 const boardTitleFallback = computed(() => {
@@ -200,9 +251,16 @@ const isShareEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_
 
 watchEffect(() => {
 	boardTitle.value = props.title;
-	setTimeout(calculateWidth, 100);
+	setTimeout(calculateWidth);
 });
 </script>
+
+<style>
+html.board-page-scroll .column-board {
+	height: auto;
+	overflow-x: visible;
+}
+</style>
 
 <style lang="scss" scoped>
 @use "@/styles/settings.scss" as *;
@@ -225,5 +283,14 @@ watchEffect(() => {
 .input {
 	max-width: calc(100%);
 	width: v-bind("fieldWidth");
+}
+
+.scroll-mode-toggle :deep(.v-selection-control) {
+	flex-direction: row-reverse;
+
+	.v-label {
+		padding-inline-start: 0;
+		padding-inline-end: 10px;
+	}
 }
 </style>
