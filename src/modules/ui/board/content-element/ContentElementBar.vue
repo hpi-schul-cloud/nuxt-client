@@ -139,12 +139,12 @@ defineProps({
 </style>
 
 <style lang="scss">
-.content-element-card:hover [data-testid="content-element-bar-board"] .content-element-title,
-.content-element-card:hover [data-testid="content-element-bar-board"] .content-element-title a {
+.content-element-card:hover .content-element-title,
+.content-element-card:hover .content-element-title a {
 	text-decoration: underline;
 }
 
-.content-element-card:hover [data-testid="content-element-bar-board"] .content-element-display {
+.content-element-card:hover .content-element-display {
 	filter: brightness(80%);
 }
 </style>
