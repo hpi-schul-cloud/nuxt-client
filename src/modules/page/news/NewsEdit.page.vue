@@ -18,7 +18,7 @@
 		]"
 		max-width="short"
 	>
-		<div class="d-flex align-center text-subtitle mb-4" data-testid="news-creator">
+		<div class="d-flex align-center mb-4" data-testid="news-creator">
 			<template v-if="newsInstance.targetModel === 'teams'">
 				<span class="mr-2">{{ t("common.labels.team") }}:</span>
 				<VIcon :icon="mdiAccountGroupOutline" size="sm" class="mr-1" />
