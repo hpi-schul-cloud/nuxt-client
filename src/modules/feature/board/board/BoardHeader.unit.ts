@@ -1,4 +1,6 @@
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
+import { useBoardScrollMode } from "../shared/BoardScrollMode.composable";
+import BoardEditableChip from "./BoardEditableChip.vue";
 import BoardHeader from "./BoardHeader.vue";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
@@ -18,8 +20,16 @@ import {
 } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { computed, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
+import { VDivider, VSwitch } from "vuetify/components";
+
+vi.mock("@vueuse/core", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@vueuse/core")>();
+	return { ...actual, useScroll: vi.fn() };
+});
+import { useScroll } from "@vueuse/core";
+const mockUseScroll = vi.mocked(useScroll);
 
 vi.mock("@data-board/BoardFocusHandler.composable");
 const mockUseBoardFocusHandler = vi.mocked(useBoardFocusHandler);
@@ -35,6 +45,9 @@ mockedUseSharedEditMode.mockReturnValue({
 
 vi.mock("vue-router");
 
+vi.mock("../shared/BoardScrollMode.composable");
+const mockUseBoardScrollMode = vi.mocked(useBoardScrollMode);
+
 describe("BoardHeader", () => {
 	const setup = (
 		options?: {
@@ -46,7 +59,11 @@ describe("BoardHeader", () => {
 			hasReadersEditPermission?: boolean;
 			boardContextType?: BoardExternalReferenceType;
 			isEditMode?: boolean;
-		}
+			isListBoard?: boolean;
+			isEditableChipVisible?: boolean;
+			title?: string;
+		},
+		additionalStubs?: Record<string, unknown>
 	) => {
 		const isEditMode = computed(() => props?.isEditMode ?? true);
 		const startEditMode = vi.fn();
@@ -82,14 +99,15 @@ describe("BoardHeader", () => {
 				stubs: {
 					VTooltip: false,
 					VOverlay: false,
+					...additionalStubs,
 				},
 			},
 			props: {
-				title: "title-text",
+				title: props?.title ?? "title-text",
 				titlePlaceholder: "Board 1",
 				boardId: "abc123",
 				isDraft: props?.isDraft ?? false,
-				isEditableChipVisible: true,
+				isEditableChipVisible: props?.isEditableChipVisible ?? true,
 				hasReadersEditPermission: props?.hasReadersEditPermission || false,
 				boardContextType: BoardExternalReferenceType.ROOM,
 				...props,
@@ -97,6 +115,15 @@ describe("BoardHeader", () => {
 		});
 		return { startEditMode, stopEditMode, wrapper };
 	};
+
+	beforeEach(() => {
+		mockUseBoardScrollMode.mockReturnValue({
+			scrollMode: ref("columns"),
+			isPageScrollMode: computed(() => false),
+			toggleScrollMode: vi.fn(),
+		} as unknown as ReturnType<typeof useBoardScrollMode>);
+		mockUseScroll.mockReturnValue({ y: ref(0) } as unknown as ReturnType<typeof useScroll>);
+	});
 
 	afterEach(() => {
 		vi.clearAllMocks();
@@ -335,6 +362,17 @@ describe("BoardHeader", () => {
 
 			expect(wrapper.emitted("delete:board")).toHaveLength(1);
 		});
+
+		it("should not emit 'delete:board' when deletion is cancelled", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(false);
+			const { wrapper } = setup({ allowedOperations: { updateBoardTitle: true, deleteBoard: true } });
+
+			const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
+			await deleteButton.trigger("click");
+			await nextTick();
+
+			expect(wrapper.emitted("delete:board")).toBeUndefined();
+		});
 	});
 
 	describe("when the 'change layout' menu button is clicked", () => {
@@ -401,6 +439,230 @@ describe("BoardHeader", () => {
 			const { wrapper } = setup({}, { boardContextType: BoardExternalReferenceType.COURSE });
 
 			expect(wrapper.findComponent(KebabMenuActionEditingSettings).exists()).toBe(false);
+		});
+	});
+
+	describe("when isEditableChipVisible is false", () => {
+		it("should not render the BoardEditableChip", () => {
+			const { wrapper } = setup({}, { isEditableChipVisible: false });
+
+			expect(wrapper.findComponent(BoardEditableChip).exists()).toBe(false);
+		});
+	});
+
+	describe("when calculateWidth is called with a mounted span element", () => {
+		it("should update fieldWidth using the fallback placeholder when board title is empty", () => {
+			const { wrapper } = setup({}, { title: "" });
+
+			const spanEl = document.createElement("span");
+			Object.defineProperty(spanEl, "offsetWidth", { value: 120, configurable: true });
+
+			const setupState = (wrapper.vm as unknown as { $: { setupState: Record<string, unknown> } }).$.setupState;
+			setupState["inputWidthCalcSpan"] = spanEl;
+
+			wrapper.findComponent(BoardAnyTitleInput).vm.$emit("update:value", "");
+
+			expect(setupState["fieldWidth"]).toBe("121px"); // offsetWidth(120) + 1
+		});
+	});
+
+	describe("scroll mode toggle", () => {
+		const mockToggleScrollMode = vi.fn();
+
+		beforeEach(() => {
+			mockUseBoardScrollMode.mockReturnValue({
+				scrollMode: ref("columns"),
+				isPageScrollMode: computed(() => false),
+				toggleScrollMode: mockToggleScrollMode,
+			} as unknown as ReturnType<typeof useBoardScrollMode>);
+		});
+
+		describe("when isListBoard is false", () => {
+			it("should render the scroll mode toggle", () => {
+				const { wrapper } = setup({}, { isListBoard: false });
+
+				const toggle = wrapper.find('[data-testid="scroll-mode-toggle-checkbox"]');
+				expect(toggle.exists()).toBe(true);
+			});
+		});
+
+		describe("when isListBoard is true", () => {
+			it("should not render the scroll mode toggle", () => {
+				const { wrapper } = setup({}, { isListBoard: true });
+
+				const toggle = wrapper.find('[data-testid="scroll-mode-toggle-checkbox"]');
+				expect(toggle.exists()).toBe(false);
+			});
+		});
+
+		describe("when the scroll mode toggle model value", () => {
+			it("should be true when not in page scroll mode", () => {
+				mockUseBoardScrollMode.mockReturnValue({
+					scrollMode: ref("columns"),
+					isPageScrollMode: computed(() => false),
+					toggleScrollMode: mockToggleScrollMode,
+				} as unknown as ReturnType<typeof useBoardScrollMode>);
+				const { wrapper } = setup({}, { isListBoard: false });
+
+				const toggle = wrapper.findComponent(VSwitch);
+				expect(toggle.props("modelValue")).toBe(false);
+			});
+
+			it("should be false when in page scroll mode", () => {
+				mockUseBoardScrollMode.mockReturnValue({
+					scrollMode: ref("page"),
+					isPageScrollMode: computed(() => true),
+					toggleScrollMode: mockToggleScrollMode,
+				} as unknown as ReturnType<typeof useBoardScrollMode>);
+				const { wrapper } = setup({}, { isListBoard: false });
+
+				const toggle = wrapper.findComponent(VSwitch);
+				expect(toggle.props("modelValue")).toBe(true);
+			});
+		});
+
+		describe("when the scroll mode toggle is changed", () => {
+			it("should call toggleScrollMode", async () => {
+				const { wrapper } = setup({}, { isListBoard: false });
+
+				const toggle = wrapper.findComponent(VSwitch);
+				toggle.vm.$emit("update:modelValue", true);
+
+				expect(mockToggleScrollMode).toHaveBeenCalled();
+			});
+		});
+
+		describe("when toggling from page mode to columns mode", () => {
+			beforeEach(() => {
+				mockUseBoardScrollMode.mockReturnValue({
+					scrollMode: ref("page"),
+					isPageScrollMode: computed(() => true),
+					toggleScrollMode: mockToggleScrollMode,
+				} as unknown as ReturnType<typeof useBoardScrollMode>);
+			});
+
+			it("should call toggleScrollMode", () => {
+				const { wrapper } = setup({}, { isListBoard: false });
+
+				wrapper.findComponent(VSwitch).vm.$emit("update:modelValue");
+
+				expect(mockToggleScrollMode).toHaveBeenCalled();
+			});
+
+			it("should restore the scrollLeft from .main-content-flex to .column-board", () => {
+				const { wrapper } = setup({}, { isListBoard: false });
+
+				const columnBoard = document.createElement("div");
+				columnBoard.className = "column-board";
+				Object.defineProperty(columnBoard, "scrollLeft", { value: 0, writable: true });
+				document.body.appendChild(columnBoard);
+
+				const mainContent = document.createElement("div");
+				Object.defineProperty(mainContent, "scrollLeft", { value: 250, writable: true });
+				const setupState = (wrapper.vm as unknown as { $: { setupState: Record<string, unknown> } }).$.setupState;
+				setupState["boardScrollContainer"] = mainContent;
+
+				wrapper.findComponent(VSwitch).vm.$emit("update:modelValue");
+
+				expect(columnBoard.scrollLeft).toBe(250);
+				document.body.removeChild(columnBoard);
+			});
+		});
+
+		describe("when toggling from columns mode to page mode", () => {
+			it("should restore the scrollLeft from .column-board to .main-content-flex", () => {
+				const { wrapper } = setup({}, { isListBoard: false });
+
+				const columnBoard = document.createElement("div");
+				columnBoard.className = "column-board";
+				Object.defineProperty(columnBoard, "scrollLeft", { value: 350, writable: true });
+				document.body.appendChild(columnBoard);
+
+				const mainContent = document.createElement("div");
+				Object.defineProperty(mainContent, "scrollLeft", { value: 0, writable: true });
+				const setupState = (wrapper.vm as unknown as { $: { setupState: Record<string, unknown> } }).$.setupState;
+				setupState["boardScrollContainer"] = mainContent;
+
+				wrapper.findComponent(VSwitch).vm.$emit("update:modelValue");
+
+				expect(mainContent.scrollLeft).toBe(350);
+				document.body.removeChild(columnBoard);
+			});
+		});
+	});
+
+	describe("VDivider visibility", () => {
+		const scrollY = ref(0);
+
+		beforeEach(() => {
+			scrollY.value = 0;
+			mockUseScroll.mockReturnValue({ y: scrollY } as unknown as ReturnType<typeof useScroll>);
+		});
+
+		describe("when not in page scroll mode", () => {
+			it("should not render the VDivider", () => {
+				const { wrapper } = setup();
+
+				expect(wrapper.findComponent(VDivider).exists()).toBe(false);
+			});
+		});
+
+		describe("when in page scroll mode", () => {
+			beforeEach(() => {
+				mockUseBoardScrollMode.mockReturnValue({
+					scrollMode: ref("page"),
+					isPageScrollMode: computed(() => true),
+					toggleScrollMode: vi.fn(),
+				} as unknown as ReturnType<typeof useBoardScrollMode>);
+			});
+
+			it("should not render the VDivider when scroll position is at the top", () => {
+				const { wrapper } = setup();
+
+				expect(wrapper.findComponent(VDivider).exists()).toBe(false);
+			});
+
+			it("should render the VDivider when scrolled down", async () => {
+				const { wrapper } = setup();
+
+				scrollY.value = 100;
+				await nextTick();
+
+				expect(wrapper.findComponent(VDivider).exists()).toBe(true);
+			});
+
+			it("should not render the VDivider when scrolled back to the top", async () => {
+				const { wrapper } = setup();
+
+				scrollY.value = 100;
+				await nextTick();
+				scrollY.value = 0;
+				await nextTick();
+
+				expect(wrapper.findComponent(VDivider).exists()).toBe(false);
+			});
+		});
+
+		describe("when scroll mode changes from page to column while scrolled", () => {
+			it("should hide the VDivider after resetting hasScrolledInPageMode", async () => {
+				const isPageScrollMode = ref(true);
+				mockUseBoardScrollMode.mockReturnValue({
+					scrollMode: ref("page"),
+					isPageScrollMode,
+					toggleScrollMode: vi.fn(),
+				} as unknown as ReturnType<typeof useBoardScrollMode>);
+
+				const { wrapper } = setup();
+
+				scrollY.value = 100;
+				await nextTick();
+				expect(wrapper.findComponent(VDivider).exists()).toBe(true);
+
+				isPageScrollMode.value = false;
+				await nextTick();
+
+				expect(wrapper.findComponent(VDivider).exists()).toBe(false);
+			});
 		});
 	});
 });

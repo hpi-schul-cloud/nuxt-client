@@ -25,6 +25,7 @@
 						:is-draft="!isBoardVisible"
 						:is-editable-chip-visible="isEditableChipVisible"
 						:has-readers-edit-permission="hasReadersEditPermission"
+						:is-list-board="isListBoard"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
 						@copy:board="onCopyBoard"
@@ -546,6 +547,7 @@ const onCloseDetailView = () => {
 .column-board {
 	overflow-x: auto;
 	height: 100%;
+	padding: 16px 24px 0 24px !important;
 }
 
 .user-select-none {
