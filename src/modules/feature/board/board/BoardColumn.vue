@@ -53,9 +53,9 @@
 					<CardHost
 						v-if="element"
 						:data-card-id="element.cardId"
-						class="draggable mb-3"
+						class="mb-3"
 						:class="{
-							'drag-disabled': !allowedOperations?.moveCard,
+							draggable: allowedOperations.moveCard && editModeId !== element.cardId,
 							'mx-2': !isListBoard,
 						}"
 						:card-id="element.cardId"
