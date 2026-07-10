@@ -95,9 +95,6 @@ defineProps({
 		color: var(--v-black-base) !important;
 		text-decoration: none;
 	}
-	:deep(a:hover) {
-		text-decoration: underline;
-	}
 }
 
 .content-element-bar-texts {
@@ -121,16 +118,6 @@ defineProps({
 	flex: 0 0 33%;
 }
 
-.content-element-bar:hover {
-	.content-element-title {
-		text-decoration: underline;
-	}
-
-	.content-element-display {
-		filter: brightness(80%);
-	}
-}
-
 .three-dot-menu {
 	position: absolute;
 	right: 0.75rem;
@@ -148,5 +135,16 @@ defineProps({
 
 .min-width-0 {
 	min-width: 0;
+}
+</style>
+
+<style lang="scss">
+.content-element-card:hover [data-testid="content-element-bar-board"] .content-element-title,
+.content-element-card:hover [data-testid="content-element-bar-board"] .content-element-title a {
+	text-decoration: underline;
+}
+
+.content-element-card:hover [data-testid="content-element-bar-board"] .content-element-display {
+	filter: brightness(80%);
 }
 </style>

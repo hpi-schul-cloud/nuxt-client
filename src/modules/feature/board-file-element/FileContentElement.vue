@@ -1,7 +1,7 @@
 <template>
 	<VCard
 		ref="fileContentElement"
-		class="board-file-element-card mb-4"
+		class="content-element-card board-file-element-card mb-4"
 		data-testid="board-file-element"
 		elevation="0"
 		:variant="isOutlined ? 'outlined' : 'elevated'"

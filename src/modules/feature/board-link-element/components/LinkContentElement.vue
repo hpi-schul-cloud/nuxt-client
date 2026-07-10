@@ -1,7 +1,7 @@
 <template>
 	<VCard
 		ref="linkContentElement"
-		class="mb-4"
+		class="content-element-card mb-4"
 		data-testid="board-link-element"
 		:class="{ 'd-none': isHidden }"
 		:variant="outlined"
