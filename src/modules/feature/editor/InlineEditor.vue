@@ -74,6 +74,8 @@ const moveCursorToEnd = (editor: Editor) => {
 const focusAtEnd = (editor: Editor) => {
 	editor.editing.view.focus();
 	moveCursorToEnd(editor);
+	// Scroll all ancestor scrollable containers so the cursor is visible
+	editor.editing.view.scrollToTheSelection();
 };
 
 const handleFocus = () => emit("focus");

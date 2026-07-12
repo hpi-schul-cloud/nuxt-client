@@ -77,6 +77,7 @@ describe("@feature-editor/InlineEditor", () => {
 					view: {
 						document: { on: vi.fn() },
 						focus: vi.fn(),
+						scrollToTheSelection: vi.fn(),
 					},
 				},
 				model: {
