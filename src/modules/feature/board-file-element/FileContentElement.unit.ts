@@ -235,8 +235,10 @@ describe("FileContentElement", () => {
 				isCollaboraEnabled?: boolean;
 				mimeType?: string;
 				isCollaboraEditable?: boolean;
+				alternativeText?: string;
 			}) => {
 				const element = fileElementResponseFactory.build();
+				element.content.alternativeText = props?.alternativeText ?? "alternativeText";
 				const fileRecordResponse = fileRecordFactory.build({
 					securityCheckStatus: props?.scanStatus ?? FileRecordScanStatus.PENDING,
 					previewStatus: props?.previewStatus ?? PreviewStatus.PREVIEW_POSSIBLE,
@@ -576,7 +578,26 @@ describe("FileContentElement", () => {
 							type: "IMAGE",
 							downloadUrl: fileRecordResponse.url,
 							previewUrl: convertDownloadToPreviewUrl(fileRecordResponse.url),
+							alt: "alternativeText",
 							name: fileRecordResponse.name,
+						})
+					);
+				});
+
+				it("should use file name as alt text fallback when alternative text is empty", async () => {
+					const { wrapper, fileRecordResponse } = setup({
+						isCollaboraEnabled: false,
+						mimeType: "image/png",
+						isCollaboraEditable: false,
+						alternativeText: "",
+					});
+
+					const card = wrapper.findComponent(VCard);
+					await card.trigger("click");
+
+					expect(openLightBoxMock).toHaveBeenCalledWith(
+						expect.objectContaining({
+							alt: expect.stringContaining(fileRecordResponse.name),
 						})
 					);
 				});
@@ -596,6 +617,7 @@ describe("FileContentElement", () => {
 							type: "IMAGE",
 							downloadUrl: fileRecordResponse.url,
 							previewUrl: convertDownloadToPreviewUrl(fileRecordResponse.url),
+							alt: "alternativeText",
 							name: fileRecordResponse.name,
 						})
 					);

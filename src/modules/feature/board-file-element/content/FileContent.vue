@@ -122,7 +122,7 @@ const isDescriptionDownloadLink = computed(
 
 const fileDescriptionHref = computed(() => {
 	if (hasCollaboraType.value) {
-		return props.collaboraHref ?? props.fileProperties.url;
+		return isCollaboraEnabled.value ? props.collaboraHref : props.fileProperties.url;
 	}
 
 	if (hasPdfMimeType.value || isDescriptionDownloadLink.value) {

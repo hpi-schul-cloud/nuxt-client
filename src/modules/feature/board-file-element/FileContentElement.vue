@@ -214,16 +214,12 @@ const onDelete = async () => {
 const onMoveUp = () => emit("move-up:edit");
 const onMoveDown = () => emit("move-down:edit");
 
-const isCollaboraEditable = computed(() => {
-	if (!fileRecord.value) return false;
-
-	return fileRecord.value.isCollaboraEditable;
-});
+const isCollaboraEditable = computed(() => fileRecord.value?.isCollaboraEditable ?? false);
 
 const isCollaboraEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED);
 
 const collaboraDescriptionHref = computed(() => {
-	if (!isCollaboraEnabled.value || !isCollaboraEditable.value || !fileRecord.value) {
+	if (!isCollaboraEnabled.value || !isCollaboraEditable.value) {
 		return undefined;
 	}
 
@@ -306,14 +302,14 @@ const openImageLightBox = () => {
 	const altTranslation = t("components.cardElement.fileElement.emptyAlt");
 	const altText = element.value.content.alternativeText
 		? element.value.content.alternativeText
-		: `${altTranslation} ${fileRecord.value.name}`;
+		: `${altTranslation} ${fileRecord.value!.name}`;
 
 	const options: LightBoxOptions = {
 		type: LightBoxContentType.IMAGE,
-		downloadUrl: fileRecord.value.url,
-		previewUrl: convertDownloadToPreviewUrl(fileRecord.value.url),
+		downloadUrl: fileRecord.value!.url,
+		previewUrl: convertDownloadToPreviewUrl(fileRecord.value!.url),
 		alt: altText,
-		name: fileRecord.value.name,
+		name: fileRecord.value!.name,
 	};
 
 	const { open } = useLightBox();

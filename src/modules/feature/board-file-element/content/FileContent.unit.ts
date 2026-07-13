@@ -650,7 +650,7 @@ describe("FileContent", () => {
 				expect(props.href).toBe("testUrl");
 			});
 
-			it("should pass file url when collabora file", () => {
+			it("should pass collabora href when collabora is enabled and file is collabora editable", () => {
 				const { wrapper } = setup({
 					mimeType: "text/plain",
 					isCollaboraEditable: true,
