@@ -10,7 +10,7 @@
 		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
-		v-on="folderInteractionListeners"
+		v-on="cardInteractionListeners"
 	>
 		<ContentElementBar :icon="mdiFolderOpenOutline">
 			<template #title>
@@ -177,7 +177,7 @@ const onFolderInteractionKeydown = (event: KeyboardEvent) => {
 	}
 };
 
-const folderInteractionListeners = computed(() => {
+const cardInteractionListeners = computed(() => {
 	if (props.isEditMode) {
 		return {};
 	}

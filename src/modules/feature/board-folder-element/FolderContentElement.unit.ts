@@ -201,6 +201,17 @@ describe("FolderContentElement", () => {
 				expect(router.push).toHaveBeenCalledWith(`/folder/${mockElement.id}`);
 			});
 		});
+
+		it("should push folder route when enter is pressed on card", async () => {
+			const { wrapper, mockElement, router } = setupWrapper({
+				isEditMode: false,
+			});
+
+			const card = wrapper.findComponent(VCard);
+			await card.trigger("keydown.enter");
+
+			expect(router.push).toHaveBeenCalledWith(`/folder/${mockElement.id}`);
+		});
 	});
 
 	describe("when element is in edit mode", () => {
@@ -279,6 +290,17 @@ describe("FolderContentElement", () => {
 
 			const card = wrapper.findComponent(VCard);
 			await card.trigger("click");
+
+			expect(router.push).not.toHaveBeenCalledWith(`/folder/${mockElement.id}`);
+		});
+
+		it("should not link folder element to route when enter is pressed", async () => {
+			const { wrapper, mockElement, router } = setupWrapper({
+				isEditMode: true,
+			});
+
+			const card = wrapper.findComponent(VCard);
+			await card.trigger("keydown.enter");
 
 			expect(router.push).not.toHaveBeenCalledWith(`/folder/${mockElement.id}`);
 		});

@@ -1033,6 +1033,68 @@ describe("FileContentElement", () => {
 				expect(card.classes()).toContain("content-element-card-edit-mode");
 			});
 
+			it("should not open pdf url when card is clicked in edit mode", async () => {
+				const { wrapper } = setup({
+					isCollaboraEnabled: false,
+					mimeType: "application/pdf",
+					isCollaboraEditable: false,
+				});
+
+				const card = wrapper.findComponent(VCard);
+				const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(vi.fn());
+
+				await card.trigger("click");
+
+				expect(windowOpenSpy).not.toHaveBeenCalled();
+				windowOpenSpy.mockRestore();
+			});
+
+			it("should not open pdf url when enter is pressed in edit mode", async () => {
+				const { wrapper } = setup({
+					isCollaboraEnabled: false,
+					mimeType: "application/pdf",
+					isCollaboraEditable: false,
+				});
+
+				const card = wrapper.findComponent(VCard);
+				const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(vi.fn());
+
+				await card.trigger("keydown.enter");
+
+				expect(windowOpenSpy).not.toHaveBeenCalled();
+				windowOpenSpy.mockRestore();
+			});
+
+			it("should not download file when card is clicked in edit mode", async () => {
+				const { wrapper } = setup({
+					previewStatus: PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE,
+					isCollaboraEnabled: false,
+					mimeType: "application/zip",
+					isCollaboraEditable: false,
+				});
+
+				const card = wrapper.findComponent(VCard);
+
+				await card.trigger("click");
+
+				expect(vi.mocked(downloadFile)).not.toHaveBeenCalled();
+			});
+
+			it("should not download file when enter is pressed in edit mode", async () => {
+				const { wrapper } = setup({
+					previewStatus: PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE,
+					isCollaboraEnabled: false,
+					mimeType: "application/zip",
+					isCollaboraEditable: false,
+				});
+
+				const card = wrapper.findComponent(VCard);
+
+				await card.trigger("keydown.enter");
+
+				expect(vi.mocked(downloadFile)).not.toHaveBeenCalled();
+			});
+
 			describe("when v-card emits keydown.down event", () => {
 				it("should emit move-keyboard:edit event", async () => {
 					const { wrapper } = setup();
