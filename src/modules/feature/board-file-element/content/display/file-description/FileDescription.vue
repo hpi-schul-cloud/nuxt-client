@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<ContentElementBar :icon="mdiFileDocumentOutline" :is-text-area-hoverable="isEditMode && showTitle">
+		<ContentElementBar :icon="mdiFileDocumentOutline">
 			<template v-if="showTitle" #title>
 				<a
 					v-if="href"

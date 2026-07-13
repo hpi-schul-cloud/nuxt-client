@@ -4,9 +4,6 @@ import { mount } from "@vue/test-utils";
 
 type Props = {
 	icon?: string;
-	isTextAreaActivatable?: boolean;
-	activatableAriaLabel?: string;
-	isTextAreaHoverable?: boolean;
 };
 
 type Slots = {
@@ -161,62 +158,6 @@ describe("ContentElementBar", () => {
 			const textsDiv = wrapper.find("div.content-element-bar-texts");
 
 			expect(textsDiv.exists()).toBe(true);
-		});
-	});
-
-	describe("when text area is activatable", () => {
-		it("should set button semantics and interactive classes", () => {
-			const { wrapper } = setup(
-				{
-					isTextAreaActivatable: true,
-					activatableAriaLabel: "activate me",
-				},
-				{
-					title: "my title",
-				}
-			);
-
-			const textsDiv = wrapper.find("div.content-element-bar-texts");
-
-			expect(textsDiv.attributes("role")).toBe("button");
-			expect(textsDiv.attributes("tabindex")).toBe("0");
-			expect(textsDiv.attributes("aria-label")).toBe("activate me");
-			expect(textsDiv.classes()).toContain("interactive-cursor");
-			expect(textsDiv.classes()).toContain("content-element-texts-activatable");
-		});
-
-		it("should emit activate on click", async () => {
-			const { wrapper } = setup(
-				{
-					isTextAreaActivatable: true,
-				},
-				{
-					title: "my title",
-				}
-			);
-
-			await wrapper.find("div.content-element-bar-texts").trigger("click");
-
-			expect(wrapper.emitted("activate")).toHaveLength(1);
-		});
-	});
-
-	describe("when text area is hoverable", () => {
-		it("should set hoverable class without button semantics", () => {
-			const { wrapper } = setup(
-				{
-					isTextAreaHoverable: true,
-				},
-				{
-					title: "my title",
-				}
-			);
-
-			const textsDiv = wrapper.find("div.content-element-bar-texts");
-
-			expect(textsDiv.classes()).toContain("content-element-texts-hoverable");
-			expect(textsDiv.attributes("role")).toBeUndefined();
-			expect(textsDiv.attributes("tabindex")).toBeUndefined();
 		});
 	});
 

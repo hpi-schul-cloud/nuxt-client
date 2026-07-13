@@ -105,18 +105,6 @@ describe("FileDescription", () => {
 				expect(contentElementBar.props("icon")).toBe(mdiFileDocumentOutline);
 			});
 
-			it("should pass hoverable text area prop in edit mode when title is shown", () => {
-				const { wrapper } = shallowMountSetup({
-					isEditMode: true,
-					showTitle: true,
-					showMenu: true,
-				});
-
-				const contentElementBar = wrapper.findComponent(ContentElementBar);
-
-				expect(contentElementBar.props("isTextAreaHoverable")).toBe(true);
-			});
-
 			describe("when href is defined", () => {
 				it("should render link", () => {
 					const { wrapper, name } = mountSetup({
@@ -235,18 +223,6 @@ describe("FileDescription", () => {
 
 				expect(contentElementBar.exists()).toBe(true);
 			});
-
-			it("should not pass hoverable text area prop when title is hidden", () => {
-				const { wrapper } = shallowMountSetup({
-					isEditMode: true,
-					showTitle: false,
-					showMenu: false,
-				});
-
-				const contentElementBar = wrapper.findComponent(ContentElementBar);
-
-				expect(contentElementBar.props("isTextAreaHoverable")).toBe(false);
-			});
 		});
 	});
 
@@ -262,18 +238,6 @@ describe("FileDescription", () => {
 				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
 				expect(contentElementBar.exists()).toBe(true);
-			});
-
-			it("should not pass hoverable text area prop in view mode", () => {
-				const { wrapper } = shallowMountSetup({
-					isEditMode: false,
-					showTitle: true,
-					showMenu: true,
-				});
-
-				const contentElementBar = wrapper.findComponent(ContentElementBar);
-
-				expect(contentElementBar.props("isTextAreaHoverable")).toBe(false);
 			});
 
 			it("should render caption", () => {
