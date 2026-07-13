@@ -2,7 +2,12 @@ import ContentElementBar from "./ContentElementBar.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 
-type Props = { icon?: string; isTextAreaActivatable?: boolean; activatableAriaLabel?: string; isTextAreaHoverable?: boolean };
+type Props = {
+	icon?: string;
+	isTextAreaActivatable?: boolean;
+	activatableAriaLabel?: string;
+	isTextAreaHoverable?: boolean;
+};
 
 type Slots = {
 	description?: string;

@@ -3,7 +3,6 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { mdiFileDocumentOutline } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { mount, shallowMount } from "@vue/test-utils";
-import { defineComponent } from "vue";
 
 describe("FileDescription", () => {
 	const shallowMountSetup = (props: {
@@ -147,39 +146,49 @@ describe("FileDescription", () => {
 				});
 
 				it("should stop click bubbling", async () => {
+					const host = document.createElement("div");
 					const parentClick = vi.fn();
-					const Parent = defineComponent({
-						components: { FileDescription },
-						setup: () => ({ parentClick }),
-						template:
-							'<div @click="parentClick"><FileDescription name="testName" :show-title="true" :show-menu="false" :is-edit-mode="true" href="testHref" /></div>',
-					});
-
-					const wrapper = mount(Parent, {
+					host.addEventListener("click", parentClick);
+					const wrapper = mount(FileDescription, {
+						props: {
+							name: "testName",
+							showTitle: true,
+							showMenu: false,
+							isEditMode: true,
+							href: "testHref",
+						},
+						attachTo: host,
 						global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 					});
 
 					await wrapper.find("a").trigger("click");
 
 					expect(parentClick).not.toHaveBeenCalled();
+					wrapper.unmount();
+					host.remove();
 				});
 
 				it("should stop enter keydown bubbling", async () => {
+					const host = document.createElement("div");
 					const parentKeydown = vi.fn();
-					const Parent = defineComponent({
-						components: { FileDescription },
-						setup: () => ({ parentKeydown }),
-						template:
-							'<div @keydown="parentKeydown"><FileDescription name="testName" :show-title="true" :show-menu="false" :is-edit-mode="true" href="testHref" /></div>',
-					});
-
-					const wrapper = mount(Parent, {
+					host.addEventListener("keydown", parentKeydown);
+					const wrapper = mount(FileDescription, {
+						props: {
+							name: "testName",
+							showTitle: true,
+							showMenu: false,
+							isEditMode: true,
+							href: "testHref",
+						},
+						attachTo: host,
 						global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 					});
 
 					await wrapper.find("a").trigger("keydown.enter");
 
 					expect(parentKeydown).not.toHaveBeenCalled();
+					wrapper.unmount();
+					host.remove();
 				});
 
 				it("should render download link when configured", () => {

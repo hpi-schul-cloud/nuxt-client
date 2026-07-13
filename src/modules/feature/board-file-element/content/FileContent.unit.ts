@@ -33,7 +33,16 @@ describe("FileContent", () => {
 		isEditMode?: boolean;
 		isDownloadAllowed?: boolean;
 	}) => {
-		const { isListBoard, mimeType, previewUrl, windowWidth, isCollaboraEditable, isDetailView, isEditMode, isDownloadAllowed } = {
+		const {
+			isListBoard,
+			mimeType,
+			previewUrl,
+			windowWidth,
+			isCollaboraEditable,
+			isDetailView,
+			isEditMode,
+			isDownloadAllowed,
+		} = {
 			isListBoard: false,
 			mimeType: "testMimeType",
 			previewUrl: "testPreviewUrl",
