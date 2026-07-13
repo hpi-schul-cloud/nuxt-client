@@ -9,7 +9,7 @@ h1 {
 	font-family: var(--font-accent);
 	font-weight: normal;
 	font-size: var(--heading-1);
-	line-height: var(--line-height-body);
+	line-height: var(--line-height-md);
 	letter-spacing: 0px;
 	margin: 16px 0;
 }
@@ -18,7 +18,7 @@ h2 {
 	font-family: var(--font-accent);
 	font-weight: normal;
 	font-size: var(--heading-2);
-	line-height: var(--line-height-body);
+	line-height: var(--line-height-md);
 	letter-spacing: 0px;
 	margin: 32px 0 12px 0;
 }
@@ -27,7 +27,7 @@ h3 {
 	font-family: var(--font-accent);
 	font-weight: bold;
 	font-size: var(--heading-3);
-	line-height: var(--line-height-body);
+	line-height: var(--line-height-md);
 	letter-spacing: 0px;
 	margin: 32px 0 12px 0;
 }
