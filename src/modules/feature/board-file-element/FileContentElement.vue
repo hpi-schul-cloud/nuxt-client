@@ -2,6 +2,7 @@
 	<VCard
 		ref="fileContentElement"
 		class="content-element-card board-file-element-card mb-4"
+		:class="{ 'content-element-card-edit-mode': isEditMode }"
 		data-testid="board-file-element"
 		elevation="0"
 		:variant="isOutlined ? 'outlined' : 'elevated'"
@@ -9,8 +10,7 @@
 		:aria-label="cardAriaLabel"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
-		@click="onCardInteraction"
-		@keydown.enter="onCardInteraction"
+		v-on="cardInteractionListeners"
 	>
 		<FileContent
 			v-if="fileProperties && isUploading !== true"
@@ -22,6 +22,7 @@
 			@update:caption="onUpdateCaption"
 			@update:name="onUpdateName"
 			@add:alert="onAddAlert"
+			@activate="onCardInteraction"
 		>
 			<BoardMenu
 				v-if="isEditMode"
@@ -58,7 +59,15 @@ import FileContent from "./content/FileContent.vue";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
-import { convertDownloadToPreviewUrl, isPreviewPossible, isScanStatusBlocked } from "@/utils/fileHelper";
+import {
+	convertDownloadToPreviewUrl,
+	downloadFile,
+	isAudioMimeType,
+	isPdfMimeType,
+	isPreviewPossible,
+	isScanStatusBlocked,
+	isVideoMimeType,
+} from "@/utils/fileHelper";
 import { FileRecordParentType, PreviewWidth } from "@api-file-storage";
 import { FileElementResponse } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";
@@ -66,6 +75,7 @@ import { useEnvConfig } from "@data-env";
 import { useFileStorageApi } from "@data-file";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
+import { LightBoxContentType, LightBoxOptions, useLightBox } from "@ui-light-box";
 import { useDebounceFn } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -218,9 +228,107 @@ const cardAriaLabel = computed(() => {
 	}
 	return undefined;
 });
-const onCardInteraction = () => {
-	if (isCollaboraEnabled.value && isCollaboraEditable.value) openCollabora();
+
+const onCardInteractionKeydown = (event: KeyboardEvent) => {
+	const isEnterKey = event.key === "Enter" || event.code === "Enter" || event.keyCode === 13;
+
+	if (isEnterKey) {
+		onCardInteraction();
+	}
 };
+
+const cardInteractionListeners = computed(() => {
+	if (props.isEditMode) {
+		return {};
+	}
+
+	return {
+		click: onCardInteraction,
+		keydown: onCardInteractionKeydown,
+	};
+});
+
+type CardInteractionType = "collabora" | "pdf" | "image" | "download" | "none";
+
+const cardInteractionType = computed<CardInteractionType>(() => {
+	if (!fileRecord.value) {
+		return "none";
+	}
+
+	if (isCollaboraEnabled.value && isCollaboraEditable.value) {
+		return "collabora";
+	}
+
+	if (isPdfMimeType(fileRecord.value.mimeType)) {
+		return "pdf";
+	}
+
+	if (fileProperties.value?.previewUrl) {
+		return "image";
+	}
+
+	if (isVideoMimeType(fileRecord.value.mimeType) || isAudioMimeType(fileRecord.value.mimeType)) {
+		return "none";
+	}
+
+	if (fileProperties.value?.isDownloadAllowed) {
+		return "download";
+	}
+
+	return "none";
+});
+
+const onCardInteraction = () => {
+	switch (cardInteractionType.value) {
+		case "collabora":
+			openCollabora();
+			break;
+		case "pdf":
+			openPdf();
+			break;
+		case "image":
+			openImageLightBox();
+			break;
+		case "download":
+			onDownload();
+			break;
+		default:
+			break;
+	}
+};
+
+const onDownload = () => {
+	if (!fileRecord.value || !fileProperties.value?.isDownloadAllowed) return;
+
+	downloadFile(fileRecord.value.url, fileRecord.value.name);
+};
+
+const openPdf = () => {
+	if (!fileRecord.value) return;
+
+	window.open(fileRecord.value.url, "_blank");
+};
+
+const openImageLightBox = () => {
+	if (!fileRecord.value) return;
+
+	const altTranslation = t("components.cardElement.fileElement.emptyAlt");
+	const altText = element.value.content.alternativeText
+		? element.value.content.alternativeText
+		: `${altTranslation} ${fileRecord.value.name}`;
+
+	const options: LightBoxOptions = {
+		type: LightBoxContentType.IMAGE,
+		downloadUrl: fileRecord.value.url,
+		previewUrl: convertDownloadToPreviewUrl(fileRecord.value.url),
+		alt: altText,
+		name: fileRecord.value.name,
+	};
+
+	const { open } = useLightBox();
+	open(options);
+};
+
 const openCollabora = () => {
 	const url = router.resolve({
 		name: "collabora",

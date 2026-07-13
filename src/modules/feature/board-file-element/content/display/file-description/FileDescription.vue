@@ -1,8 +1,16 @@
 <template>
 	<div>
-		<ContentElementBar :icon="mdiFileDocumentOutline">
+		<ContentElementBar :icon="mdiFileDocumentOutline" :is-text-area-hoverable="isEditMode && showTitle">
 			<template v-if="showTitle" #title>
-				<a v-if="src" :href="src" target="_blank" :aria-label="ariaLabel">
+				<a
+					v-if="href"
+					:href="href"
+					:target="isDownloadLink ? undefined : '_blank'"
+					:download="isDownloadLink ? name : undefined"
+					:aria-label="ariaLabel"
+					@click.stop
+					@keydown.enter.stop
+				>
 					{{ name }}
 				</a>
 				<span v-else>{{ name }}</span>
@@ -29,12 +37,17 @@ const props = defineProps({
 	showTitle: { type: Boolean, required: true },
 	showMenu: { type: Boolean, required: true },
 	isEditMode: { type: Boolean, required: true },
-	src: { type: String, required: false, default: undefined },
+	href: { type: String, required: false, default: undefined },
+	isDownloadLink: { type: Boolean, required: false, default: false },
 });
 
 const { t } = useI18n();
 
-const ariaLabel = computed(() => `${props.name}, ${t("common.ariaLabel.newTab")}`);
+const ariaLabel = computed(() =>
+	props.isDownloadLink
+		? `${props.name}, ${t("components.board.action.download")}`
+		: `${props.name}, ${t("common.ariaLabel.newTab")}`
+);
 </script>
 
 <style scoped>

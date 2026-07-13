@@ -144,6 +144,16 @@ describe("FolderContentElement", () => {
 	});
 
 	describe("when element is in view mode", () => {
+		it("should not set edit-mode marker class on folder card", () => {
+			const { wrapper } = setupWrapper({
+				isEditMode: false,
+			});
+
+			const card = wrapper.findComponent(VCard);
+
+			expect(card.classes()).not.toContain("content-element-card-edit-mode");
+		});
+
 		it("should not render menu", () => {
 			const { wrapper } = setupWrapper({
 				isEditMode: false,
@@ -194,6 +204,16 @@ describe("FolderContentElement", () => {
 	});
 
 	describe("when element is in edit mode", () => {
+		it("should set edit-mode marker class on folder card", () => {
+			const { wrapper } = setupWrapper({
+				isEditMode: true,
+			});
+
+			const card = wrapper.findComponent(VCard);
+
+			expect(card.classes()).toContain("content-element-card-edit-mode");
+		});
+
 		describe("folder element menu", () => {
 			it("should render folder element menu", () => {
 				const { wrapper } = setupWrapper({

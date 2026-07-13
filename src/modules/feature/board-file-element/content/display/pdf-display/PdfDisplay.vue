@@ -1,7 +1,13 @@
 <template>
 	<ContentElementBar>
 		<template #display>
-			<div @click="openPdf">
+			<div
+				:class="{
+					'interactive-cursor': isEditMode,
+					'content-element-display-activatable': isEditMode,
+				}"
+				@click="onActivate"
+			>
 				<PreviewImage :src="previewSrc" alt="" :aspect-ratio="1.77777" position="top" :cover="true" />
 			</div>
 		</template>
@@ -25,7 +31,22 @@ type Props = {
 
 const props = defineProps<Props>();
 
-const openPdf = () => {
-	window.open(props.src, "_blank");
+const emit = defineEmits<{
+	(e: "activate", event: Event): void;
+}>();
+
+const onActivate = (event: Event) => {
+	if (!props.isEditMode) {
+		return;
+	}
+
+	event.stopPropagation();
+	emit("activate", event);
 };
 </script>
+
+<style scoped>
+.interactive-cursor {
+	cursor: pointer;
+}
+</style>

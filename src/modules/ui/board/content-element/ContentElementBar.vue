@@ -26,8 +26,16 @@
 			v-if="$slots.title || $slots.element || $slots.subtitle || $slots.description"
 			:class="{
 				'content-element-bar-texts-list-board': hasRowStyle,
+				'interactive-cursor': isTextAreaActivatable,
+				'content-element-texts-hoverable': isTextAreaHoverable,
+				'content-element-texts-activatable': isTextAreaActivatable,
 			}"
 			class="content-element-bar-texts py-4"
+			:tabindex="isTextAreaActivatable ? 0 : undefined"
+			:role="isTextAreaActivatable ? 'button' : undefined"
+			:aria-label="isTextAreaActivatable ? activatableAriaLabel : undefined"
+			@click="onActivate"
+			@keydown.enter.space="onActivate"
 		>
 			<div
 				v-if="$slots.title"
@@ -72,7 +80,7 @@ import { hasSlotContent } from "@util-vue";
 import { PropType } from "vue";
 import { IconProps } from "vuetify";
 
-defineProps({
+const props = defineProps({
 	hasRowStyle: {
 		type: Boolean,
 		default: false,
@@ -82,7 +90,33 @@ defineProps({
 		required: false,
 		default: undefined,
 	},
+	isTextAreaActivatable: {
+		type: Boolean,
+		default: false,
+	},
+	activatableAriaLabel: {
+		type: String,
+		required: false,
+		default: undefined,
+	},
+	isTextAreaHoverable: {
+		type: Boolean,
+		default: false,
+	},
 });
+
+const emit = defineEmits<{
+	(e: "activate", event: Event): void;
+}>();
+
+const onActivate = (event: Event) => {
+	if (!props.isTextAreaActivatable) {
+		return;
+	}
+
+	event.stopPropagation();
+	emit("activate", event);
+};
 </script>
 
 <style scoped lang="scss">
@@ -136,15 +170,44 @@ defineProps({
 .min-width-0 {
 	min-width: 0;
 }
+
+.interactive-cursor {
+	cursor: pointer;
+}
 </style>
 
 <style lang="scss">
-.content-element-card:hover .content-element-title,
-.content-element-card:hover .content-element-title a {
+.content-element-card:not(.content-element-card-edit-mode):hover .content-element-title,
+.content-element-card:not(.content-element-card-edit-mode):hover .content-element-title a {
 	text-decoration: underline;
 }
 
-.content-element-card:hover .content-element-display {
+.content-element-card.content-element-card-edit-mode:has(.content-element-title a:hover) .content-element-title,
+.content-element-card.content-element-card-edit-mode:has(.content-element-title a:hover) .content-element-title a {
+	text-decoration: underline;
+}
+
+.content-element-card.content-element-card-edit-mode:not(:has(.content-element-title a)):has(
+		.content-element-texts-hoverable:hover
+	)
+	.content-element-title,
+.content-element-card.content-element-card-edit-mode:not(:has(.content-element-title a)):has(
+		.content-element-texts-hoverable:hover
+	)
+	.content-element-title
+	a {
+	text-decoration: underline;
+}
+
+.content-element-card:not(.content-element-card-edit-mode):hover .content-element-display {
+	filter: brightness(80%);
+}
+
+.content-element-card.content-element-card-edit-mode:has(
+		.content-element-display-activatable:hover,
+		.content-element-texts-activatable:hover
+	)
+	.content-element-display {
 	filter: brightness(80%);
 }
 </style>
