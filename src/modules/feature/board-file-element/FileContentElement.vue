@@ -15,6 +15,7 @@
 		<FileContent
 			v-if="fileProperties && isUploading !== true"
 			:file-properties="fileProperties"
+			:collabora-href="collaboraDescriptionHref"
 			:is-edit-mode="isEditMode"
 			:is-detail-view="isDetailView"
 			@fetch:file="onFetchFile"
@@ -222,6 +223,23 @@ const isCollaboraEditable = computed(() => {
 });
 
 const isCollaboraEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED);
+
+const collaboraDescriptionHref = computed(() => {
+	if (!isCollaboraEnabled.value || !isCollaboraEditable.value || !fileRecord.value) {
+		return undefined;
+	}
+
+	return router.resolve({
+		name: "collabora",
+		params: {
+			id: fileRecord.value.id,
+		},
+		query: {
+			edit: allowedOperations.value.createFileElement.toString(),
+		},
+	}).href;
+});
+
 const cardAriaLabel = computed(() => {
 	if (isCollaboraEnabled.value && isCollaboraEditable.value) {
 		return t("components.cardElement.fileElement.openOfficeDocument");
@@ -330,17 +348,9 @@ const openImageLightBox = () => {
 };
 
 const openCollabora = () => {
-	const url = router.resolve({
-		name: "collabora",
-		params: {
-			id: fileRecord.value.id,
-		},
-		query: {
-			edit: allowedOperations.value.createFileElement.toString(),
-		},
-	}).href;
+	if (!collaboraDescriptionHref.value) return;
 
-	window.open(url, "_blank");
+	window.open(collaboraDescriptionHref.value, "_blank");
 };
 </script>
 <style lang="scss" scoped>

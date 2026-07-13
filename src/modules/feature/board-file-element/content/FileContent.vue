@@ -66,6 +66,7 @@ const props = defineProps({
 	},
 	isEditMode: { type: Boolean, required: true },
 	isDetailView: { type: Boolean, required: false },
+	collaboraHref: { type: String, required: false, default: undefined },
 });
 
 const emit = defineEmits([
@@ -109,31 +110,27 @@ const showTitle = computed(
 	() => hasPdfMimeType.value || (!props.fileProperties.previewUrl && !hasVideoMimeType.value && !hasAudioMimeType.value)
 );
 
-const fileDescriptionHref = computed(() => {
-	if (hasPdfMimeType.value) {
-		return props.fileProperties.url;
-	}
-
-	if (props.fileProperties.isCollaboraEditable) {
-		return props.fileProperties.url;
-	}
-
-	if (isDescriptionDownloadLink.value) {
-		return props.fileProperties.url;
-	}
-
-	return undefined;
-});
-
 const isDescriptionDownloadLink = computed(
 	() =>
 		!hasPdfMimeType.value &&
-		!props.fileProperties.isCollaboraEditable &&
+		!hasCollaboraType.value &&
 		!props.fileProperties.previewUrl &&
 		!hasVideoMimeType.value &&
 		!hasAudioMimeType.value &&
 		props.fileProperties.isDownloadAllowed
 );
+
+const fileDescriptionHref = computed(() => {
+	if (hasCollaboraType.value) {
+		return props.collaboraHref ?? props.fileProperties.url;
+	}
+
+	if (hasPdfMimeType.value || isDescriptionDownloadLink.value) {
+		return props.fileProperties.url;
+	}
+
+	return undefined;
+});
 
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();

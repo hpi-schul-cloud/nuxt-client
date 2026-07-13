@@ -32,6 +32,7 @@ describe("FileContent", () => {
 		isDetailView?: boolean;
 		isEditMode?: boolean;
 		isDownloadAllowed?: boolean;
+		collaboraHref?: string;
 	}) => {
 		const {
 			isListBoard,
@@ -42,6 +43,7 @@ describe("FileContent", () => {
 			isDetailView,
 			isEditMode,
 			isDownloadAllowed,
+			collaboraHref,
 		} = {
 			isListBoard: false,
 			mimeType: "testMimeType",
@@ -51,6 +53,7 @@ describe("FileContent", () => {
 			isDetailView: false,
 			isEditMode: true,
 			isDownloadAllowed: true,
+			collaboraHref: undefined,
 			...options,
 		};
 
@@ -83,6 +86,7 @@ describe("FileContent", () => {
 		const wrapper = shallowMount(FileContent, {
 			props: {
 				fileProperties,
+				collaboraHref,
 				isEditMode,
 				isDetailView: isDetailView ?? false,
 				alerts,
@@ -652,6 +656,19 @@ describe("FileContent", () => {
 					isCollaboraEditable: true,
 					isCollaboraEnabled: true,
 					previewUrl: undefined,
+					collaboraHref: "/collabora/123?edit=true",
+				});
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.href).toBe("/collabora/123?edit=true");
+			});
+
+			it("should pass file url when collabora file and collabora feature is disabled", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isCollaboraEditable: true,
+					isCollaboraEnabled: false,
+					previewUrl: undefined,
 				});
 				const props = wrapper.findComponent(FileDescription).attributes();
 
@@ -688,6 +705,19 @@ describe("FileContent", () => {
 				const props = wrapper.findComponent(FileDescription).attributes();
 
 				expect(props.isdownloadlink).toBe("false");
+			});
+
+			it("should pass false when file is collabora and collabora feature is disabled", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isCollaboraEditable: true,
+					isCollaboraEnabled: false,
+					previewUrl: undefined,
+				});
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.isdownloadlink).toBe("false");
+				expect(props.href).toBe("testUrl");
 			});
 
 			it("should pass false when file is not downloadable", () => {

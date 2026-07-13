@@ -1246,6 +1246,18 @@ describe("FileContentElement", () => {
 					expect(card.attributes("aria-label")).toBe("components.cardElement.fileElement.openOfficeDocument");
 				});
 
+				it("should pass collabora href to file content", () => {
+					const { wrapper, fileRecordResponse } = setup({
+						isCollaboraEnabled: true,
+						mimeType: "application/vnd.oasis.opendocument.text",
+						isCollaboraEditable: true,
+					});
+
+					const fileContent = wrapper.findComponent(FileContent);
+
+					expect(fileContent.props("collaboraHref")).toBe(`/collabora/${fileRecordResponse.id}?edit=true`);
+				});
+
 				it("should open collabora url in new tab when file content emits activate", async () => {
 					const { wrapper, fileRecordResponse } = setup({
 						isCollaboraEnabled: true,
