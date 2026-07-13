@@ -63,11 +63,9 @@ import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import {
 	convertDownloadToPreviewUrl,
 	downloadFile,
-	isAudioMimeType,
-	isPdfMimeType,
+	getFileCardInteractionType,
 	isPreviewPossible,
 	isScanStatusBlocked,
-	isVideoMimeType,
 } from "@/utils/fileHelper";
 import { FileRecordParentType, PreviewWidth } from "@api-file-storage";
 import { FileElementResponse } from "@api-server";
@@ -266,35 +264,16 @@ const cardInteractionListeners = computed(() => {
 	};
 });
 
-type CardInteractionType = "collabora" | "pdf" | "image" | "download" | "none";
-
-const cardInteractionType = computed<CardInteractionType>(() => {
-	if (!fileRecord.value) {
-		return "none";
-	}
-
-	if (isCollaboraEnabled.value && isCollaboraEditable.value) {
-		return "collabora";
-	}
-
-	if (isPdfMimeType(fileRecord.value.mimeType)) {
-		return "pdf";
-	}
-
-	if (fileProperties.value?.previewUrl) {
-		return "image";
-	}
-
-	if (isVideoMimeType(fileRecord.value.mimeType) || isAudioMimeType(fileRecord.value.mimeType)) {
-		return "none";
-	}
-
-	if (fileProperties.value?.isDownloadAllowed) {
-		return "download";
-	}
-
-	return "none";
-});
+const cardInteractionType = computed(() =>
+	getFileCardInteractionType({
+		hasFileRecord: !!fileRecord.value,
+		isCollaboraEnabled: isCollaboraEnabled.value,
+		isCollaboraEditable: isCollaboraEditable.value,
+		mimeType: fileRecord.value?.mimeType,
+		hasPreviewUrl: !!fileProperties.value?.previewUrl,
+		isDownloadAllowed: !!fileProperties.value?.isDownloadAllowed,
+	})
+);
 
 const onCardInteraction = () => {
 	switch (cardInteractionType.value) {

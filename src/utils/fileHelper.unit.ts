@@ -6,6 +6,7 @@ import {
 	extractFilesFromItems,
 	formatFileSize,
 	formatSecondsToHourMinSec,
+	getFileCardInteractionType,
 	getFileExtension,
 	isAudioMimeType,
 	isPdfMimeType,
@@ -633,6 +634,125 @@ describe("@/utils/fileHelper", () => {
 
 				expect(result).toBe(false);
 			});
+		});
+	});
+
+	describe("getFileCardInteractionType", () => {
+		it("should return none when no file record is available", () => {
+			const result = getFileCardInteractionType({
+				hasFileRecord: false,
+				isCollaboraEnabled: false,
+				isCollaboraEditable: false,
+				mimeType: "application/pdf",
+				hasPreviewUrl: false,
+				isDownloadAllowed: true,
+			});
+
+			expect(result).toBe("none");
+		});
+
+		it("should return collabora when collabora is enabled and editable", () => {
+			const result = getFileCardInteractionType({
+				hasFileRecord: true,
+				isCollaboraEnabled: true,
+				isCollaboraEditable: true,
+				mimeType: "application/vnd.oasis.opendocument.text",
+				hasPreviewUrl: false,
+				isDownloadAllowed: true,
+			});
+
+			expect(result).toBe("collabora");
+		});
+
+		it("should return pdf for pdf mime type", () => {
+			const result = getFileCardInteractionType({
+				hasFileRecord: true,
+				isCollaboraEnabled: false,
+				isCollaboraEditable: false,
+				mimeType: "application/pdf",
+				hasPreviewUrl: false,
+				isDownloadAllowed: true,
+			});
+
+			expect(result).toBe("pdf");
+		});
+
+		it("should return image when preview url is available", () => {
+			const result = getFileCardInteractionType({
+				hasFileRecord: true,
+				isCollaboraEnabled: false,
+				isCollaboraEditable: false,
+				mimeType: "image/png",
+				hasPreviewUrl: true,
+				isDownloadAllowed: true,
+			});
+
+			expect(result).toBe("image");
+		});
+
+		it("should return none for video mime type", () => {
+			const result = getFileCardInteractionType({
+				hasFileRecord: true,
+				isCollaboraEnabled: false,
+				isCollaboraEditable: false,
+				mimeType: "video/mp4",
+				hasPreviewUrl: false,
+				isDownloadAllowed: true,
+			});
+
+			expect(result).toBe("none");
+		});
+
+		it("should return none for audio mime type", () => {
+			const result = getFileCardInteractionType({
+				hasFileRecord: true,
+				isCollaboraEnabled: false,
+				isCollaboraEditable: false,
+				mimeType: "audio/mp4",
+				hasPreviewUrl: false,
+				isDownloadAllowed: true,
+			});
+
+			expect(result).toBe("none");
+		});
+
+		it("should return download for fallback downloadable files", () => {
+			const result = getFileCardInteractionType({
+				hasFileRecord: true,
+				isCollaboraEnabled: false,
+				isCollaboraEditable: false,
+				mimeType: "application/zip",
+				hasPreviewUrl: false,
+				isDownloadAllowed: true,
+			});
+
+			expect(result).toBe("download");
+		});
+
+		it("should return none for fallback non-downloadable files", () => {
+			const result = getFileCardInteractionType({
+				hasFileRecord: true,
+				isCollaboraEnabled: false,
+				isCollaboraEditable: false,
+				mimeType: "application/zip",
+				hasPreviewUrl: false,
+				isDownloadAllowed: false,
+			});
+
+			expect(result).toBe("none");
+		});
+
+		it("should return none when mime type is missing", () => {
+			const result = getFileCardInteractionType({
+				hasFileRecord: true,
+				isCollaboraEnabled: false,
+				isCollaboraEditable: false,
+				mimeType: undefined,
+				hasPreviewUrl: false,
+				isDownloadAllowed: true,
+			});
+
+			expect(result).toBe("none");
 		});
 	});
 

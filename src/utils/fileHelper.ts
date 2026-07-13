@@ -187,6 +187,49 @@ export function isAudioMimeType(mimeType: string): boolean {
 	return mimeType.startsWith("audio/");
 }
 
+export type FileCardInteractionType = "collabora" | "pdf" | "image" | "download" | "none";
+
+type FileCardInteractionTypeInput = {
+	hasFileRecord: boolean;
+	isCollaboraEnabled: boolean;
+	isCollaboraEditable: boolean;
+	mimeType?: string;
+	hasPreviewUrl: boolean;
+	isDownloadAllowed: boolean;
+};
+
+export function getFileCardInteractionType(input: FileCardInteractionTypeInput): FileCardInteractionType {
+	if (!input.hasFileRecord) {
+		return "none";
+	}
+
+	if (input.isCollaboraEnabled && input.isCollaboraEditable) {
+		return "collabora";
+	}
+
+	if (!input.mimeType) {
+		return "none";
+	}
+
+	if (isPdfMimeType(input.mimeType)) {
+		return "pdf";
+	}
+
+	if (input.hasPreviewUrl) {
+		return "image";
+	}
+
+	if (isVideoMimeType(input.mimeType) || isAudioMimeType(input.mimeType)) {
+		return "none";
+	}
+
+	if (input.isDownloadAllowed) {
+		return "download";
+	}
+
+	return "none";
+}
+
 export function formatSecondsToHourMinSec(seconds: number) {
 	const isoString = new Date(1000 * seconds).toISOString();
 	let formattedString = isoString.slice(14, 19);
