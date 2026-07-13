@@ -1,5 +1,6 @@
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 import { InlineEditInteractionEvent } from "@/types/board/InlineEditInteractionEvent.symbol";
+import { InlineEditInteractionHandled } from "@/types/board/InlineEditInteractionHandled.symbol";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
@@ -26,12 +27,18 @@ describe("BoardAnyTitleInput", () => {
 			maxLength?: number;
 			focusTitleOnEditStart?: boolean;
 		},
-		options?: { interactionEvent?: Ref<{ x: number; y: number } | undefined> }
+		options?: {
+			interactionEvent?: Ref<{ x: number; y: number } | undefined>;
+			interactionHandled?: Ref<boolean>;
+		}
 	) => {
 		const wrapper = mount(BoardAnyTitleInput, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
-				...(options?.interactionEvent ? { provide: { [InlineEditInteractionEvent]: options.interactionEvent } } : {}),
+				provide: {
+					...(options?.interactionEvent ? { [InlineEditInteractionEvent]: options.interactionEvent } : {}),
+					...(options?.interactionHandled ? { [InlineEditInteractionHandled]: options.interactionHandled } : {}),
+				},
 			},
 			propsData: {
 				...defaultProps,
@@ -320,6 +327,44 @@ describe("BoardAnyTitleInput", () => {
 				expect(wrapper.findComponent(VTextarea).props("autofocus")).toBe(true);
 			});
 		});
+
+		describe("when an interaction event is injected and interactionHandled is true", () => {
+			it("should not auto-focus the textarea (a content element claimed the interaction)", async () => {
+				const interactionEvent = ref<{ x: number; y: number } | undefined>(undefined);
+				const interactionHandled = ref(true);
+				const { wrapper } = setup({ isEditMode: false, scope: "card" }, { interactionEvent, interactionHandled });
+
+				interactionEvent.value = { x: 999, y: 999 };
+				await wrapper.setProps({ isEditMode: true });
+				await flushPromises();
+
+				expect(wrapper.findComponent(VTextarea).props("autofocus")).toBe(false);
+			});
+		});
+	});
+
+	describe("when an interaction event fires while already in edit mode (double-click on empty card area)", () => {
+		it("should auto-focus the title as fallback when no content element claims the interaction (non-empty title, already mounted)", async () => {
+			const interactionEvent = ref<{ x: number; y: number } | undefined>(undefined);
+			// Non-empty title: component is mounted in view mode; watch(interactionEvent) handles it
+			const { wrapper } = setup({ isEditMode: false, scope: "card" }, { interactionEvent });
+
+			interactionEvent.value = { x: 999, y: 999 };
+			await wrapper.setProps({ isEditMode: true });
+			await flushPromises();
+
+			expect(wrapper.findComponent(VTextarea).props("autofocus")).toBe(true);
+		});
+
+		it("should auto-focus the title as fallback when component mounts during double-click (empty title hidden in view mode)", async () => {
+			const interactionEvent = ref<{ x: number; y: number } | undefined>({ x: 999, y: 999 });
+			// Empty title: component mounts WITH isEditMode=true and interactionEvent already set.
+			// onMounted handles this path (watch cannot catch the already-set value).
+			const { wrapper } = setup({ isEditMode: true, scope: "card" }, { interactionEvent });
+			await flushPromises();
+
+			expect(wrapper.findComponent(VTextarea).props("autofocus")).toBe(true);
+		});
 	});
 
 	describe("when mounted with isEditMode already true (e.g. empty title freshly rendered in edit mode)", () => {
@@ -336,9 +381,13 @@ describe("BoardAnyTitleInput", () => {
 		describe("when isFocused is true and an interaction event is active", () => {
 			it("should not auto-focus the textarea on mount (interaction handler takes over)", async () => {
 				const interactionEvent = ref<{ x: number; y: number } | undefined>({ x: 100, y: 100 });
-				const { wrapper } = setup({ isEditMode: true, scope: "card", isFocused: true }, { interactionEvent });
-				await nextTick();
-				await nextTick();
+				// Provide interactionHandled=true to correctly model a content element claiming the interaction.
+				const interactionHandled = ref(true);
+				const { wrapper } = setup(
+					{ isEditMode: true, scope: "card", isFocused: true },
+					{ interactionEvent, interactionHandled }
+				);
+				await flushPromises();
 
 				expect(wrapper.findComponent(VTextarea).props("autofocus")).toBe(false);
 			});

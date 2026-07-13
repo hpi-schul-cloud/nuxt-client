@@ -34,9 +34,10 @@
 
 <script setup lang="ts">
 import { InlineEditInteractionEvent } from "@/types/board/InlineEditInteractionEvent.symbol";
+import { InlineEditInteractionHandled } from "@/types/board/InlineEditInteractionHandled.symbol";
 import { useInlineEditInteractionHandler } from "@util-board";
 import { isOfMaxLength, useOpeningTagValidator } from "@util-validators";
-import { computed, inject, nextTick, onMounted, Ref, ref, toRef, useTemplateRef, watch } from "vue";
+import { computed, inject, nextTick, onMounted, Ref, ref, shallowRef, toRef, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { VTextarea } from "vuetify/components";
 
@@ -76,10 +77,22 @@ const internalIsFocused = ref(false);
 const titleInput = useTemplateRef<VTextarea>("titleInput");
 
 const interactionEvent = inject<Ref<{ x: number; y: number } | undefined>>(InlineEditInteractionEvent, ref(undefined));
+const interactionHandled = inject<Ref<boolean>>(InlineEditInteractionHandled, shallowRef(false));
 
 const hasErrors = computed(() => (titleInput.value ? !titleInput.value.isValid : false));
 
 useInlineEditInteractionHandler(async () => {
+	await setFocusOnEdit();
+});
+
+// Card-scope fallback: focus the title if no content element claims the interaction.
+// Two ticks are needed so content element handlers (registered in onMounted) can run
+// and set interactionHandled = true before we check it.
+watch(interactionEvent, async (newBoundary) => {
+	if (!newBoundary || props.scope !== "card") return;
+	await nextTick(); // content element handlers run
+	await nextTick(); // interactionHandled is now stable
+	if (interactionHandled.value) return;
 	await setFocusOnEdit();
 });
 
@@ -111,14 +124,18 @@ watch(
 	}
 );
 
-onMounted(() => {
-	// This path fires when the component mounts with isEditMode already true
-	// (e.g. the card title is empty so it wasn't rendered before edit mode started).
-	// Apply the same guards as watch(isEditMode): skip if a double-click interaction
-	// is active (the clicked element handles its own focus), and only focus when the
-	// card is keyboard-focused or the consumer opted in via focusTitleOnEditStart.
-	if (props.isEditMode && interactionEvent.value === undefined && (props.isFocused || props.focusTitleOnEditStart)) {
-		setFocusOnEdit();
+onMounted(async () => {
+	if (props.isEditMode) {
+		if (interactionEvent.value !== undefined && props.scope === "card") {
+			// Mounted during a double-click (e.g. empty title hidden in view mode);
+			// use the same two-tick fallback as watch(interactionEvent).
+			await nextTick();
+			await nextTick();
+			if (!interactionHandled.value) await setFocusOnEdit();
+		} else if (interactionEvent.value === undefined && (props.isFocused || props.focusTitleOnEditStart)) {
+			// Keyboard navigation or "Edit" button: no active interaction.
+			setFocusOnEdit();
+		}
 	}
 	modelValue.value = props.value;
 });

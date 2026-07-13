@@ -1,9 +1,10 @@
 import { BoardColumn } from "@/types/board/Board";
 import { BoardCard } from "@/types/board/Card";
 import { AnyContentElement } from "@/types/board/ContentElement";
+import { InlineEditInteractionHandled } from "@/types/board/InlineEditInteractionHandled.symbol";
 import { useInlineEditInteractionHandler } from "@util-board";
 import { createSharedComposable, useEventListener, useFocus, useFocusWithin } from "@vueuse/core";
-import { computed, MaybeRefOrGetter, nextTick, onMounted, onUnmounted, Ref, ref } from "vue";
+import { computed, inject, MaybeRefOrGetter, nextTick, onMounted, onUnmounted, Ref, ref, shallowRef } from "vue";
 
 declare type FocusableId = BoardColumn["id"] | BoardCard["id"] | AnyContentElement["id"];
 
@@ -125,10 +126,12 @@ export function useBoardFocusHandler(
 	/**
 	 * If an InlineEditInteraction is fired within the element boundary, force focus on this element
 	 */
+	const interactionHandled = inject<Ref<boolean>>(InlineEditInteractionHandled, shallowRef(false));
 	useInlineEditInteractionHandler(async () => {
 		await nextTick();
 		if (onFocusReceived !== undefined) {
 			onFocusReceived();
+			interactionHandled.value = true;
 		}
 		setFocus(id);
 	});
