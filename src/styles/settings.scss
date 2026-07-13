@@ -1,7 +1,7 @@
 @forward "vuetify/settings" with (
 	$body-font-family: var(--font-primary),
 	$heading-font-family: var(--font-accent),
-	$line-height-root: var(--line-height-md),
+	$line-height-root: var(--line-height-sm),
 	$typography: (
 		"h1": (
 			"size": var(--heading-1),
