@@ -75,7 +75,7 @@ describe("FileDisplay", () => {
 				const { wrapper } = setup();
 				const imageDisplay = wrapper.findComponent(ImageDisplay);
 
-				imageDisplay.vm.$emit("activate", new MouseEvent("click"));
+				imageDisplay.vm.$emit("activate");
 
 				expect(wrapper.emitted("activate")).toHaveLength(1);
 			});
@@ -184,7 +184,7 @@ describe("FileDisplay", () => {
 				const { wrapper } = setup();
 				const pdfDisplay = wrapper.findComponent(PdfDisplay);
 
-				pdfDisplay.vm.$emit("activate", new MouseEvent("click"));
+				pdfDisplay.vm.$emit("activate");
 
 				expect(wrapper.emitted("activate")).toHaveLength(1);
 			});
@@ -388,7 +388,7 @@ describe("FileDisplay", () => {
 				const { wrapper } = setup();
 				const collaboraDisplay = wrapper.findComponent(CollaboraDisplay);
 
-				collaboraDisplay.vm.$emit("activate", new MouseEvent("click"));
+				collaboraDisplay.vm.$emit("activate");
 
 				expect(wrapper.emitted("activate")).toHaveLength(1);
 			});

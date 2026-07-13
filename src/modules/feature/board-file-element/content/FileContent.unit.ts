@@ -333,7 +333,7 @@ describe("FileContent", () => {
 		it("should emit activate when FileDisplay emits activate", () => {
 			const { wrapper } = setup();
 
-			wrapper.findComponent(FileDisplay).vm.$emit("activate", new MouseEvent("click"));
+			wrapper.findComponent(FileDisplay).vm.$emit("activate");
 
 			expect(wrapper.emitted("activate")).toHaveLength(1);
 		});

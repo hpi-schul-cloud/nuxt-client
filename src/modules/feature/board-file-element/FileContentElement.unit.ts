@@ -517,7 +517,7 @@ describe("FileContentElement", () => {
 					const windowOpenMock = vi.fn();
 					const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
-					wrapper.findComponent(FileContent).vm.$emit("activate", new MouseEvent("click"));
+					wrapper.findComponent(FileContent).vm.$emit("activate");
 
 					expect(windowOpenSpy).toHaveBeenCalledWith(fileRecordResponse.url, "_blank");
 					windowOpenSpy.mockRestore();
@@ -1256,7 +1256,7 @@ describe("FileContentElement", () => {
 					const windowOpenMock = vi.fn();
 					const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
-					wrapper.findComponent(FileContent).vm.$emit("activate", new MouseEvent("click"));
+					wrapper.findComponent(FileContent).vm.$emit("activate");
 
 					expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?edit=true`, "_blank");
 
