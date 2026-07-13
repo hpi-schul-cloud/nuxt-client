@@ -632,6 +632,48 @@ describe("FileContentElement", () => {
 				});
 			});
 
+			describe("when mime type is video", () => {
+				it("should not trigger any action when card is clicked", async () => {
+					const { wrapper } = setup({
+						isCollaboraEnabled: false,
+						mimeType: "video/mp4",
+						isCollaboraEditable: false,
+						previewStatus: PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE,
+					});
+
+					const card = wrapper.findComponent(VCard);
+					const windowOpenSpy = vi.spyOn(window, "open");
+
+					await card.trigger("click");
+
+					expect(windowOpenSpy).not.toHaveBeenCalled();
+					expect(vi.mocked(downloadFile)).not.toHaveBeenCalled();
+					expect(openLightBoxMock).not.toHaveBeenCalled();
+
+					windowOpenSpy.mockRestore();
+				});
+
+				it("should not trigger any action when enter is pressed", async () => {
+					const { wrapper } = setup({
+						isCollaboraEnabled: false,
+						mimeType: "video/mp4",
+						isCollaboraEditable: false,
+						previewStatus: PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE,
+					});
+
+					const card = wrapper.findComponent(VCard);
+					const windowOpenSpy = vi.spyOn(window, "open");
+
+					await card.trigger("keydown.enter");
+
+					expect(windowOpenSpy).not.toHaveBeenCalled();
+					expect(vi.mocked(downloadFile)).not.toHaveBeenCalled();
+					expect(openLightBoxMock).not.toHaveBeenCalled();
+
+					windowOpenSpy.mockRestore();
+				});
+			});
+
 			describe("when collabora feature is not enabled and mime typ is collabora type", () => {
 				it("should not add aria label to v-card", () => {
 					const { wrapper } = setup({

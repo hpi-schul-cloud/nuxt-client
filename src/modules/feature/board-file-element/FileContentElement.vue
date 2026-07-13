@@ -295,20 +295,14 @@ const onCardInteraction = () => {
 };
 
 const onDownload = () => {
-	if (!fileRecord.value || !fileProperties.value?.isDownloadAllowed) return;
-
-	downloadFile(fileRecord.value.url, fileRecord.value.name);
+	downloadFile(fileRecord.value!.url, fileRecord.value!.name);
 };
 
 const openPdf = () => {
-	if (!fileRecord.value) return;
-
-	window.open(fileRecord.value.url, "_blank");
+	window.open(fileRecord.value!.url, "_blank");
 };
 
 const openImageLightBox = () => {
-	if (!fileRecord.value) return;
-
 	const altTranslation = t("components.cardElement.fileElement.emptyAlt");
 	const altText = element.value.content.alternativeText
 		? element.value.content.alternativeText
@@ -327,9 +321,7 @@ const openImageLightBox = () => {
 };
 
 const openCollabora = () => {
-	if (!collaboraDescriptionHref.value) return;
-
-	window.open(collaboraDescriptionHref.value, "_blank");
+	window.open(collaboraDescriptionHref.value!, "_blank");
 };
 </script>
 <style lang="scss" scoped>
