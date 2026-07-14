@@ -2,21 +2,13 @@ import InlineEditInteractionHandler from "./InlineEditInteractionHandler.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("InlineEditInteractionHandler", () => {
-	const setup = (
-		options?: Partial<{
-			isEditMode: boolean;
-		}>
-	) => {
-		const { isEditMode } = {
-			isEditMode: false,
-			...options,
-		};
+	const setup = (options?: Partial<{ isEditMode: boolean }>, mountOptions?: { attachTo?: HTMLElement }) => {
+		const { isEditMode } = { isEditMode: false, ...options };
 
 		const wrapper = mount(InlineEditInteractionHandler, {
-			global: {
-				plugins: [createTestingVuetify()],
-			},
+			global: { plugins: [createTestingVuetify()] },
 			props: { isEditMode },
+			...mountOptions,
 		});
 
 		return { wrapper };
@@ -148,6 +140,30 @@ describe("InlineEditInteractionHandler", () => {
 
 				const emitted = wrapper.emitted();
 				expect(emitted["end-edit-mode"]).toBeUndefined();
+			});
+
+			it("should emit 'end-edit-mode' when the handler and the click target share the same dialog (CardHostDetailView case)", () => {
+				// The handler is mounted inside a .v-dialog (via attachTo).
+				// The click is on a different element inside the same dialog.
+				// Both share the same dialog → isDialog returns false → edit mode ends.
+				const dialogElement = document.createElement("div");
+				dialogElement.classList.add("v-dialog");
+				document.body.appendChild(dialogElement);
+
+				const { wrapper } = setup({ isEditMode: true }, { attachTo: dialogElement });
+
+				const clickTarget = document.createElement("div");
+				dialogElement.appendChild(clickTarget);
+
+				const event = document.createEvent("MouseEvent");
+				Object.defineProperty(event, "target", { value: clickTarget, writable: false });
+
+				wrapper.findComponent({ name: "OnClickOutside" }).vm.$emit("trigger", event);
+
+				expect(wrapper.emitted()["end-edit-mode"]).toBeDefined();
+
+				wrapper.unmount();
+				document.body.removeChild(dialogElement);
 			});
 		});
 

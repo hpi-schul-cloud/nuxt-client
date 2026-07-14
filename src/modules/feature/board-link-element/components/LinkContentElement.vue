@@ -29,7 +29,11 @@
 				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementDisplay>
-		<LinkContentElementCreate v-if="isEditMode" :existing-url="sanitizedUrl" @create:url="onCreateUrl"
+		<LinkContentElementCreate
+			v-if="isEditMode"
+			:existing-url="sanitizedUrl"
+			:autofocus="autofocus"
+			@create:url="onCreateUrl"
 			><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
@@ -54,7 +58,7 @@ import { useFileStorageApi } from "@data-file";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { useElementFocus } from "@util-board";
-import { computed, ComputedRef, PropType, ref, toRef } from "vue";
+import { computed, ComputedRef, PropType, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -82,11 +86,12 @@ const linkContentElement = ref(null);
 const isLoading = ref(false);
 const element = toRef(props, "element");
 
-const outlined = computed(() =>
-	props.isEditMode === true || computedElement.value.content.url !== "" ? "outlined" : "text"
-);
+const outlined = computed(() => (props.isEditMode || computedElement.value.content.url !== "" ? "outlined" : "text"));
 
-useBoardFocusHandler(element.value.id, linkContentElement);
+const autofocus = ref(false);
+useBoardFocusHandler(element.value.id, linkContentElement, () => {
+	autofocus.value = true;
+});
 
 const { modelValue, computedElement } = useContentElementState(props, {
 	autoSaveDebounce: 100,
@@ -189,4 +194,13 @@ const onClick = (event: MouseEvent | KeyboardEvent) => {
 		focusNodeFromHash();
 	}
 };
+
+watch(
+	() => props.isEditMode,
+	(newVal) => {
+		if (!newVal) {
+			autofocus.value = false;
+		}
+	}
+);
 </script>
