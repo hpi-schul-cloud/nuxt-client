@@ -187,7 +187,13 @@ export function isAudioMimeType(mimeType: string): boolean {
 	return mimeType.startsWith("audio/");
 }
 
-export type FileCardInteractionType = "collabora" | "pdf" | "image" | "download" | "none";
+export enum FileCardInteractionType {
+	Collabora = "collabora",
+	Pdf = "pdf",
+	Image = "image",
+	Download = "download",
+	None = "none",
+}
 
 type FileCardInteractionTypeInput = {
 	hasFileRecord: boolean;
@@ -200,34 +206,34 @@ type FileCardInteractionTypeInput = {
 
 export function getFileCardInteractionType(input: FileCardInteractionTypeInput): FileCardInteractionType {
 	if (!input.hasFileRecord) {
-		return "none";
+		return FileCardInteractionType.None;
 	}
 
 	if (input.isCollaboraEnabled && input.isCollaboraEditable) {
-		return "collabora";
+		return FileCardInteractionType.Collabora;
 	}
 
 	if (!input.mimeType) {
-		return "none";
+		return FileCardInteractionType.None;
 	}
 
 	if (isPdfMimeType(input.mimeType)) {
-		return "pdf";
+		return FileCardInteractionType.Pdf;
 	}
 
 	if (input.hasPreviewUrl) {
-		return "image";
+		return FileCardInteractionType.Image;
 	}
 
 	if (isVideoMimeType(input.mimeType) || isAudioMimeType(input.mimeType)) {
-		return "none";
+		return FileCardInteractionType.None;
 	}
 
 	if (input.isDownloadAllowed) {
-		return "download";
+		return FileCardInteractionType.Download;
 	}
 
-	return "none";
+	return FileCardInteractionType.None;
 }
 
 export function formatSecondsToHourMinSec(seconds: number) {

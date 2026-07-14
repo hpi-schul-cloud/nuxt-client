@@ -4,6 +4,7 @@ import {
 	downloadFile,
 	downloadFilesAsArchive,
 	extractFilesFromItems,
+	FileCardInteractionType,
 	formatFileSize,
 	formatSecondsToHourMinSec,
 	getFileCardInteractionType,
@@ -648,7 +649,7 @@ describe("@/utils/fileHelper", () => {
 				isDownloadAllowed: true,
 			});
 
-			expect(result).toBe("none");
+			expect(result).toBe(FileCardInteractionType.None);
 		});
 
 		it("should return collabora when collabora is enabled and editable", () => {
@@ -661,7 +662,7 @@ describe("@/utils/fileHelper", () => {
 				isDownloadAllowed: true,
 			});
 
-			expect(result).toBe("collabora");
+			expect(result).toBe(FileCardInteractionType.Collabora);
 		});
 
 		it("should return pdf for pdf mime type", () => {
@@ -674,7 +675,7 @@ describe("@/utils/fileHelper", () => {
 				isDownloadAllowed: true,
 			});
 
-			expect(result).toBe("pdf");
+			expect(result).toBe(FileCardInteractionType.Pdf);
 		});
 
 		it("should return image when preview url is available", () => {
@@ -687,7 +688,7 @@ describe("@/utils/fileHelper", () => {
 				isDownloadAllowed: true,
 			});
 
-			expect(result).toBe("image");
+			expect(result).toBe(FileCardInteractionType.Image);
 		});
 
 		it("should return none for video mime type", () => {
@@ -700,7 +701,7 @@ describe("@/utils/fileHelper", () => {
 				isDownloadAllowed: true,
 			});
 
-			expect(result).toBe("none");
+			expect(result).toBe(FileCardInteractionType.None);
 		});
 
 		it("should return none for audio mime type", () => {
@@ -713,7 +714,7 @@ describe("@/utils/fileHelper", () => {
 				isDownloadAllowed: true,
 			});
 
-			expect(result).toBe("none");
+			expect(result).toBe(FileCardInteractionType.None);
 		});
 
 		it("should return download for fallback downloadable files", () => {
@@ -726,7 +727,7 @@ describe("@/utils/fileHelper", () => {
 				isDownloadAllowed: true,
 			});
 
-			expect(result).toBe("download");
+			expect(result).toBe(FileCardInteractionType.Download);
 		});
 
 		it("should return none for fallback non-downloadable files", () => {
@@ -739,7 +740,7 @@ describe("@/utils/fileHelper", () => {
 				isDownloadAllowed: false,
 			});
 
-			expect(result).toBe("none");
+			expect(result).toBe(FileCardInteractionType.None);
 		});
 
 		it("should return none when mime type is missing", () => {
@@ -752,7 +753,7 @@ describe("@/utils/fileHelper", () => {
 				isDownloadAllowed: true,
 			});
 
-			expect(result).toBe("none");
+			expect(result).toBe(FileCardInteractionType.None);
 		});
 	});
 

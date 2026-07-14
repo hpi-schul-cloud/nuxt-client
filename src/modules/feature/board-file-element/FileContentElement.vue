@@ -63,6 +63,7 @@ import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import {
 	convertDownloadToPreviewUrl,
 	downloadFile,
+	FileCardInteractionType,
 	getFileCardInteractionType,
 	isPreviewPossible,
 	isScanStatusBlocked,
@@ -273,16 +274,16 @@ const cardInteractionType = computed(() =>
 
 const onCardInteraction = () => {
 	switch (cardInteractionType.value) {
-		case "collabora":
+		case FileCardInteractionType.Collabora:
 			openCollabora();
 			break;
-		case "pdf":
+		case FileCardInteractionType.Pdf:
 			openPdf();
 			break;
-		case "image":
+		case FileCardInteractionType.Image:
 			openImageLightBox();
 			break;
-		case "download":
+		case FileCardInteractionType.Download:
 			onDownload();
 			break;
 		default:
