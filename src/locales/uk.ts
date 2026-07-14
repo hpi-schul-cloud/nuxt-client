@@ -576,6 +576,7 @@ export default {
 	"components.cardElement.fileElement.videoFormatError":
 		"Формат відео не підтримується цим браузером / операційною системою.",
 	"components.cardElement.fileElement.openOfficeDocument": "Документ у форматі Open Office",
+	"components.cardElement.fileElement.openImagePreview": "Відкрити перегляд зображення",
 	"components.cardElement.folderElement": "Папка з файлами",
 	"components.cardElement.folderElement.untitled": "Папка без назви",
 	"components.cardElement.folderElement.storage.error":

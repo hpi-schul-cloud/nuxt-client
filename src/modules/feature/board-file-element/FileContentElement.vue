@@ -236,10 +236,18 @@ const collaboraDescriptionHref = computed(() => {
 });
 
 const cardAriaLabel = computed(() => {
-	if (isCollaboraEnabled.value && isCollaboraEditable.value) {
-		return t("components.cardElement.fileElement.openOfficeDocument");
+	switch (cardInteractionType.value) {
+		case FileCardInteractionType.Collabora:
+			return t("components.cardElement.fileElement.openOfficeDocument");
+		case FileCardInteractionType.Pdf:
+			return t("common.ariaLabel.newTab");
+		case FileCardInteractionType.Image:
+			return t("components.cardElement.fileElement.openImagePreview");
+		case FileCardInteractionType.Download:
+			return t("components.board.action.download");
+		default:
+			return undefined;
 	}
-	return undefined;
 });
 
 const onCardInteractionKeydown = (event: KeyboardEvent) => {
