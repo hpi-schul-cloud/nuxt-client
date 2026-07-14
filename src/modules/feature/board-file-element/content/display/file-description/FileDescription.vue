@@ -6,6 +6,7 @@
 					v-if="href"
 					:href="href"
 					:target="isDownloadLink ? undefined : '_blank'"
+					:rel="isDownloadLink ? undefined : 'noopener noreferrer'"
 					:download="isDownloadLink ? name : undefined"
 					:aria-label="ariaLabel"
 					@click.stop
