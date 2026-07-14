@@ -8,8 +8,8 @@
 					'content-element-display-activatable': isEditMode,
 				}"
 				style="min-height: 52px"
-				tabindex="0"
-				role="button"
+				:tabindex="isEditMode ? 0 : undefined"
+				:role="isEditMode ? 'button' : undefined"
 				data-testid="image-thumbnail-in-card"
 				@click="onActivate"
 				@keydown.enter.space="onActivate"

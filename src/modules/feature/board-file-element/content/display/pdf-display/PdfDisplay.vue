@@ -6,7 +6,10 @@
 					'interactive-cursor': isEditMode,
 					'content-element-display-activatable': isEditMode,
 				}"
+				:tabindex="isEditMode ? 0 : undefined"
+				:role="isEditMode ? 'button' : undefined"
 				@click="onActivate"
+				@keydown.enter.space="onActivate"
 			>
 				<PreviewImage :src="previewSrc" alt="" :aspect-ratio="1.77777" position="top" :cover="true" />
 			</div>
