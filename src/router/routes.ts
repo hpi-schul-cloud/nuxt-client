@@ -155,13 +155,21 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		redirect: (to) => {
 			const pathParam = String(to.params.cardLink);
 			const hashIndex = pathParam.indexOf("#card");
-			if (hashIndex !== -1) {
-				return {
-					path: `/boards/${pathParam.substring(0, hashIndex)}`,
-					hash: pathParam.substring(hashIndex),
-				};
+			if (hashIndex === -1) {
+				return { name: "error" };
 			}
-			return { name: "error" };
+
+			const boardId = pathParam.substring(0, hashIndex);
+			if (!isMongoId(boardId)) {
+				return { name: "error" };
+			}
+
+			return {
+				name: "boards-id",
+				params: { id: boardId },
+				hash: pathParam.substring(hashIndex),
+				query: to.query,
+			};
 		},
 		name: "board-card-link",
 	},
