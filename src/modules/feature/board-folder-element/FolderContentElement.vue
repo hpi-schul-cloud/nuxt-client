@@ -8,6 +8,7 @@
 		:ripple="false"
 		:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
 		tabindex="0"
+		link
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 		v-on="cardInteractionListeners"

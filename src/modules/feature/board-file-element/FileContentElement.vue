@@ -8,6 +8,7 @@
 		:variant="isOutlined ? 'outlined' : 'elevated'"
 		:ripple="false"
 		:aria-label="cardAriaLabel"
+		:link="cardInteractionType !== FileCardInteractionType.None"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 		v-on="cardInteractionListeners"

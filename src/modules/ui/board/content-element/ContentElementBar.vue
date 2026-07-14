@@ -149,6 +149,10 @@ defineProps({
 	text-decoration: underline;
 }
 
+.content-element-card.content-element-card-edit-mode {
+	cursor: default !important;
+}
+
 .content-element-card:not(.content-element-card-edit-mode):hover .content-element-display {
 	filter: brightness(80%);
 }
