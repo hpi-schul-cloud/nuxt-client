@@ -3,10 +3,7 @@
 		<template #display>
 			<div
 				class="d-flex align-center focusable-container"
-				:class="{
-					'interactive-cursor': isEditMode,
-					'content-element-display-activatable': isEditMode,
-				}"
+				:class="{ 'content-element-interactive': isEditMode }"
 				style="min-height: 52px"
 				:tabindex="isEditMode ? 0 : undefined"
 				:role="isEditMode ? 'button' : undefined"
@@ -77,9 +74,5 @@ const onActivate = (event: Event) => {
 /* Ensure the focus indicator is visible and not obscured by the image */
 .image-container {
 	position: relative;
-}
-
-.interactive-cursor {
-	cursor: pointer;
 }
 </style>

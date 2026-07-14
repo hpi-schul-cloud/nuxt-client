@@ -2,10 +2,7 @@
 	<ContentElementBar>
 		<template #display>
 			<div
-				:class="{
-					'interactive-cursor': isEditMode,
-					'content-element-display-activatable': isEditMode,
-				}"
+				:class="{ 'content-element-interactive': isEditMode }"
 				:tabindex="isEditMode ? 0 : undefined"
 				:role="isEditMode ? 'button' : undefined"
 				@click="onActivate"
@@ -47,9 +44,3 @@ const onActivate = (event: Event) => {
 	emit("activate", event);
 };
 </script>
-
-<style scoped>
-.interactive-cursor {
-	cursor: pointer;
-}
-</style>

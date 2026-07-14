@@ -153,8 +153,11 @@ defineProps({
 	filter: brightness(80%);
 }
 
-.content-element-card.content-element-card-edit-mode:has(.content-element-display-activatable:hover)
-	.content-element-display {
+.content-element-card.content-element-card-edit-mode:has(.content-element-interactive:hover) .content-element-display {
 	filter: brightness(80%);
+}
+
+.content-element-interactive {
+	cursor: pointer;
 }
 </style>

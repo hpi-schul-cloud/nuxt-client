@@ -31,28 +31,16 @@ describe("CollaboraDisplay", () => {
 		expect(vImage.props("src")).toEqual("/src/assets/img/collabora.svg");
 	});
 
-	it("should not set interactive cursor class in view mode", () => {
+	it("should not set interactive class in view mode", () => {
 		const { wrapper } = setup(false);
 
-		expect(wrapper.find(".interactive-cursor").exists()).toBe(false);
+		expect(wrapper.find(".content-element-interactive").exists()).toBe(false);
 	});
 
-	it("should not set activatable class in view mode", () => {
-		const { wrapper } = setup(false);
-
-		expect(wrapper.find(".content-element-display-activatable").exists()).toBe(false);
-	});
-
-	it("should set interactive cursor class in edit mode", () => {
+	it("should set interactive class in edit mode", () => {
 		const { wrapper } = setup(true);
 
-		expect(wrapper.find(".interactive-cursor").exists()).toBe(true);
-	});
-
-	it("should set activatable class in edit mode", () => {
-		const { wrapper } = setup(true);
-
-		expect(wrapper.find(".content-element-display-activatable").exists()).toBe(true);
+		expect(wrapper.find(".content-element-interactive").exists()).toBe(true);
 	});
 
 	it("should not emit activate in view mode", async () => {

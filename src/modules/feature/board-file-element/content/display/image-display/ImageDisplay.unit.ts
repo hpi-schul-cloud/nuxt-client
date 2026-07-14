@@ -108,16 +108,10 @@ describe("ImageDisplay", () => {
 			});
 		});
 
-		it("should not set interactive cursor class in view mode", () => {
+		it("should not set interactive class in view mode", () => {
 			const { wrapper } = setup({ isEditMode: false });
 
-			expect(wrapper.find(".interactive-cursor").exists()).toBe(false);
-		});
-
-		it("should not set activatable class in view mode", () => {
-			const { wrapper } = setup({ isEditMode: false });
-
-			expect(wrapper.find(".content-element-display-activatable").exists()).toBe(false);
+			expect(wrapper.find(".content-element-interactive").exists()).toBe(false);
 		});
 
 		describe("when div emits keydown", () => {
@@ -191,16 +185,10 @@ describe("ImageDisplay", () => {
 			});
 		});
 
-		it("should set interactive cursor class in edit mode", () => {
+		it("should set interactive class in edit mode", () => {
 			const { wrapper } = setup({ isEditMode: true });
 
-			expect(wrapper.find(".interactive-cursor").exists()).toBe(true);
-		});
-
-		it("should set activatable class in edit mode", () => {
-			const { wrapper } = setup({ isEditMode: true });
-
-			expect(wrapper.find(".content-element-display-activatable").exists()).toBe(true);
+			expect(wrapper.find(".content-element-interactive").exists()).toBe(true);
 		});
 	});
 });
