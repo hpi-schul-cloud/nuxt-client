@@ -266,7 +266,7 @@ const onKeyPress = (e: KeyboardEvent) => {
 	align-items: center;
 
 	.title-section {
-		line-height: var(--line-height-md);
+		line-height: var(--line-height-sm);
 		text-align: left;
 	}
 
