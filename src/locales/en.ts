@@ -565,7 +565,6 @@ export default {
 	"components.cardElement.fileElement.videoFormatError":
 		"The video format is not supported by this browser/operating system.",
 	"components.cardElement.fileElement.openOfficeDocument": "Open office document",
-	"components.cardElement.fileElement.openImagePreview": "Open image preview",
 	"components.cardElement.folderElement": "File folder",
 	"components.cardElement.folderElement.untitled": "Untitled folder",
 	"components.cardElement.folderElement.storage.error":

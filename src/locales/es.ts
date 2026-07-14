@@ -578,7 +578,6 @@ export default {
 	"components.cardElement.fileElement.videoFormatError":
 		"El formato de vídeo no es compatible con este navegador / sistema operativo.",
 	"components.cardElement.fileElement.openOfficeDocument": "Abrir documento Office",
-	"components.cardElement.fileElement.openImagePreview": "Abrir vista previa de imagen",
 	"components.cardElement.folderElement": "Carpeta de archivos",
 	"components.cardElement.folderElement.untitled": "Carpeta sin título",
 	"components.cardElement.folderElement.storage.error":
