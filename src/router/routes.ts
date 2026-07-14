@@ -150,6 +150,22 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		}),
 	},
 	{
+		// Redirects URLs where '#' was percent-encoded as '%23' to the correct hash-fragment URL.
+		path: `/boards/:cardLink(.+)`,
+		redirect: (to) => {
+			const pathParam = String(to.params.cardLink);
+			const hashIndex = pathParam.indexOf("#card");
+			if (hashIndex !== -1) {
+				return {
+					path: `/boards/${pathParam.substring(0, hashIndex)}`,
+					hash: pathParam.substring(hashIndex),
+				};
+			}
+			return { name: "error" };
+		},
+		name: "board-card-link",
+	},
+	{
 		path: `/collabora/:id(${REGEX_ID})`,
 		component: async () => (await import("@page-collabora")).CollaboraPage,
 		name: "collabora",
