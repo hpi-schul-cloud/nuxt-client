@@ -633,7 +633,7 @@ describe("FileContent", () => {
 		});
 
 		describe("file description href", () => {
-			it("should pass file url when fallback file is downloadable", () => {
+			it("should pass file url when file is a plain downloadable type", () => {
 				const { wrapper } = setup({
 					previewUrl: undefined,
 				});
