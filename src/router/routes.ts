@@ -1,5 +1,6 @@
 import { Layouts } from "@/layouts/types";
 import { checkFolderFeature, checkRegisterExternalPersonsFeature, validateQueryParameters } from "@/router/guards";
+import { boardCardLinkRedirect } from "@/router/guards/board-card-link-redirect";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { isEnum, isMongoId, isOfficialSchoolNumber, REGEX_ID } from "@/utils/validation";
@@ -152,25 +153,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		// Redirects URLs where '#' was percent-encoded as '%23' to the correct hash-fragment URL.
 		path: `/boards/:cardLink(.+)`,
-		redirect: (to) => {
-			const pathParam = String(to.params.cardLink);
-			const hashIndex = pathParam.indexOf("#card");
-			if (hashIndex === -1) {
-				return { name: "error" };
-			}
-
-			const boardId = pathParam.substring(0, hashIndex);
-			if (!isMongoId(boardId)) {
-				return { name: "error" };
-			}
-
-			return {
-				name: "boards-id",
-				params: { id: boardId },
-				hash: pathParam.substring(hashIndex),
-				query: to.query,
-			};
-		},
+		redirect: boardCardLinkRedirect,
 		name: "board-card-link",
 	},
 	{
