@@ -13,8 +13,9 @@
 
 <script setup lang="ts">
 import { InlineEditInteractionEvent } from "@/types/board/InlineEditInteractionEvent.symbol";
+import { InlineEditInteractionHandled } from "@/types/board/InlineEditInteractionHandled.symbol";
 import { OnClickOutside } from "@vueuse/components";
-import { provide, shallowRef } from "vue";
+import { nextTick, onMounted, provide, shallowRef, useTemplateRef } from "vue";
 
 type Props = {
 	isEditMode: boolean;
@@ -27,6 +28,19 @@ const emit = defineEmits<{
 
 const interactionEvent = shallowRef<{ x: number; y: number } | undefined>();
 provide(InlineEditInteractionEvent, interactionEvent);
+
+const interactionHandled = shallowRef(false);
+provide(InlineEditInteractionHandled, interactionHandled);
+
+const eventHandle = useTemplateRef<HTMLElement>("event-handle");
+
+// Pre-computed once the component is in its final (possibly teleported) DOM position.
+// null -> handler is not inside any .v-dialog
+// Element -> the nearest .v-dialog ancestor of this handler
+let handlerContainingDialog: Element | null = null;
+onMounted(() => {
+	handlerContainingDialog = eventHandle.value?.closest(".v-dialog") ?? null;
+});
 
 const isDatePicker = (target: HTMLElement | SVGElement): boolean | void => !!target.closest(".v-date-picker");
 
@@ -50,7 +64,15 @@ const isKeepInlineEditModeButton = (target: HTMLElement | SVGElement): boolean =
 	return button.className?.includes("keep-inline-edit-mode");
 };
 
-const isDialog = (target: HTMLElement | SVGElement): boolean | void => !!target.closest(".v-dialog");
+const isDialog = (target: HTMLElement | SVGElement): boolean => {
+	const targetDialog = (target as Element).closest(".v-dialog");
+	if (!targetDialog) return false;
+	// Only suppress end-edit-mode when the click lands in a different dialog
+	// (e.g. a confirmation overlay on top). If both this handler and the click
+	// target share the same .v-dialog ancestor (e.g. CardHostDetailView), a click
+	// outside the card should still end edit mode normally.
+	return targetDialog !== handlerContainingDialog;
+};
 
 const hasTextSelection = (): boolean => {
 	const selection = window.getSelection();
@@ -68,18 +90,23 @@ const isAllowedTarget = (event: Event): boolean => {
 
 const onClickOutside = (event: Event) => {
 	if (props.isEditMode && isAllowedTarget(event) && !hasTextSelection()) {
+		interactionEvent.value = undefined;
 		emit("end-edit-mode");
 	}
 };
 
-const onDoubleClick = (event: MouseEvent) => {
+const onDoubleClick = async (event: MouseEvent) => {
 	if (!props.isEditMode) {
+		interactionHandled.value = false;
 		interactionEvent.value = { x: event.x, y: event.y };
 		emit("start-edit-mode");
+		await nextTick();
+		interactionEvent.value = undefined;
 	}
 };
 const onKeydownEscape = () => {
 	if (props.isEditMode) {
+		interactionEvent.value = undefined;
 		emit("end-edit-mode");
 	}
 };

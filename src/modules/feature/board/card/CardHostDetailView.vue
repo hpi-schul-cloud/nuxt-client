@@ -60,7 +60,14 @@
 						borderLeft: cardBorderColor ? `3px solid ${cardBorderColor}` : undefined,
 					}"
 				>
-					<CardHost :height="100" :card-id="cardId" :row-index="-1" :column-index="-1" @click.stop />
+					<CardHost
+						:height="100"
+						:card-id="cardId"
+						:row-index="-1"
+						:column-index="-1"
+						:focus-title-on-edit-start="true"
+						@click.stop
+					/>
 				</div>
 			</VCardText>
 		</VCard>
@@ -73,7 +80,7 @@ import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { Colors } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
 import { mdiChevronLeft, mdiChevronRight, mdiClose } from "@icons/material";
-import { computed, ref, toRef } from "vue";
+import { computed, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import type { RouteLocationRaw } from "vue-router";
 
@@ -93,8 +100,21 @@ const { t } = useI18n();
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardRef.value);
 const { allowedOperations } = useBoardAllowedOperations();
 const cardStore = useCardStore();
-const { setFocus } = useBoardFocusHandler();
+const { setFocus, focusedId } = useBoardFocusHandler("card-detail-view-toolbar");
 setFocus("card-detail-view-toolbar");
+
+// 'focusedId' is shared global state. Any click inside the card sets it to
+// 'cardId' via a 'focusin' listener on the VCard. If that happens while the
+// detail view is NOT in edit mode, the main-board's card title would also see
+// 'isFocusedById = true' and call '.focus()' on itself when edit mode starts
+// (because 'isEditMode' is also shared). This would cause the keyboard focus to
+// jump outside the VDialog. Reset 'focusedId' to the toolbar sentinel whenever
+// the card grabs focus in view mode to prevent that cross-dialog focus conflict.
+watchEffect(() => {
+	if (focusedId?.value === props.cardId && !isEditMode.value) {
+		setFocus("card-detail-view-toolbar");
+	}
+});
 
 const isOpen = ref(true);
 const card = computed(() => cardStore.getCard(cardRef.value));
