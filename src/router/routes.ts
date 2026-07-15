@@ -152,7 +152,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		// Redirects URLs where '#' was percent-encoded as '%23' to the correct hash-fragment URL.
-		path: `/boards/:cardLink(.+)`,
+		path: `/boards/:cardLink(${REGEX_ID}%23card[^/]+)`,
 		redirect: boardCardLinkRedirect,
 		name: "board-card-link",
 	},
