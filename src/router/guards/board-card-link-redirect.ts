@@ -3,7 +3,8 @@ import { RouteLocation, RouteLocationRaw } from "vue-router";
 
 export const boardCardLinkRedirect = (to: RouteLocation): RouteLocationRaw => {
 	const pathParam = String(to.params.cardLink).replace(/%23/gi, "#");
-	const hashIndex = pathParam.indexOf("#card");
+	const marker = "#card-";
+	const hashIndex = pathParam.indexOf(marker);
 	if (hashIndex === -1) {
 		return { name: "error" };
 	}
