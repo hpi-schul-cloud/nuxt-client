@@ -32,7 +32,7 @@ describe("boardCardLinkRedirect", () => {
 		});
 	});
 
-	describe("when the param does not contain #card", () => {
+	describe("when the param does not contain '#card' before decoding", () => {
 		it("should redirect to the error route", () => {
 			const to = buildRoute(VALID_BOARD_ID);
 
