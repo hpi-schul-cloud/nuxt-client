@@ -42,7 +42,7 @@ describe("boardCardLinkRedirect", () => {
 		});
 
 		it("should redirect to boards-id when '#' is percent-encoded as '%23'", () => {
-			const encodedCardLink = `${VALID_BOARD_ID}${VALID_CARD_HASH.replace("#", "%23")}`;
+			const encodedCardLink = `${VALID_BOARD_ID}${VALID_CARD_HASH.replace(/#/g, "%23")}`;
 			const to = buildRoute(encodedCardLink);
 
 			const result = boardCardLinkRedirect(to);
