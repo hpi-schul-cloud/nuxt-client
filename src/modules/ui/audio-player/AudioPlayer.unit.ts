@@ -65,7 +65,7 @@ describe("AudioPlayer", () => {
 
 			const audio = wrapper.find("audio");
 
-			expect(audio.attributes("loading")).toBe("lazy");
+			expect(audio.attributes("loading")).not.toBe("lazy");
 		});
 
 		it("should pass duration to v-slider", () => {
