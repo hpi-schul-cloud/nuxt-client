@@ -35,7 +35,12 @@
 				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementDisplay>
-		<LinkContentElementCreate v-if="isEditMode" :existing-url="sanitizedUrl" @create:url="onCreateUrl">
+		<LinkContentElementCreate
+			v-if="isEditMode"
+			:existing-url="sanitizedUrl"
+			:autofocus="autofocus"
+			@create:url="onCreateUrl"
+		>
 			<BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
@@ -61,7 +66,7 @@ import { mdiLink } from "@icons/material";
 import { BoardMenu, BoardMenuScope, EmptyElement } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { useElementFocus } from "@util-board";
-import { computed, ref, toRef } from "vue";
+import { computed, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps<{
@@ -94,7 +99,10 @@ const cardVariant = computed(() =>
 
 const canManageLinkElements = computed(() => allowedOperations.value.updateElement);
 
-useBoardFocusHandler(element.value.id, linkContentElement);
+const autofocus = ref(false);
+useBoardFocusHandler(element.value.id, linkContentElement, () => {
+	autofocus.value = true;
+});
 
 const { modelValue, computedElement } = useContentElementState(props, {
 	autoSaveDebounce: 100,
@@ -195,4 +203,13 @@ const onClick = (event: MouseEvent | KeyboardEvent) => {
 		focusNodeFromHash();
 	}
 };
+
+watch(
+	() => props.isEditMode,
+	(newVal) => {
+		if (!newVal) {
+			autofocus.value = false;
+		}
+	}
+);
 </script>

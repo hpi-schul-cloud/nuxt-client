@@ -4,6 +4,7 @@
 			<VForm ref="form" validate-on="submit" @submit.prevent.stop="onSubmit">
 				<div class="d-flex flex-row">
 					<VTextarea
+						ref="urlInput"
 						v-model="url"
 						:rules="rules"
 						:label="label"
@@ -12,7 +13,7 @@
 						:persistent-hint="isUrlValidated"
 						type="text"
 						data-testid="input-link"
-						:autofocus="true"
+						:autofocus="autofocus"
 						:auto-grow="true"
 						rows="1"
 						class="text"
@@ -45,13 +46,17 @@
 <script setup lang="ts">
 import { mdiCheck } from "@icons/material";
 import { isRequired, isValidUrl } from "@util-validators";
-import { onBeforeUnmount, ref, toRaw, useTemplateRef } from "vue";
+import { nextTick, onBeforeUnmount, ref, toRaw, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	existingUrl: {
 		type: String,
 		default: "",
+	},
+	autofocus: {
+		type: Boolean,
+		default: false,
 	},
 });
 
@@ -68,7 +73,18 @@ const label = existingUrl
 	: t("components.cardElement.LinkElement.create.label");
 
 const form = useTemplateRef("form");
+const urlInput = useTemplateRef("urlInput");
 const rules = [isRequired(t("common.validation.required2")), isValidUrl()];
+
+watch(
+	() => props.autofocus,
+	async (newVal) => {
+		if (newVal) {
+			await nextTick();
+			urlInput.value?.focus();
+		}
+	}
+);
 
 const onSubmit = async () => {
 	if (form?.value) {

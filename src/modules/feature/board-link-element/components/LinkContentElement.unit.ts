@@ -19,7 +19,7 @@ import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp }
 import { useElementFocus } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { Mocked } from "vitest";
-import { computed, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 
 vi.mock("@data-board");
 vi.mock("../composables/MetaTagExtractorApi.composable");
@@ -36,6 +36,7 @@ describe("LinkContentElement", () => {
 	let useBoardFocusHandlerMock: Mocked<ReturnType<typeof useBoardFocusHandler>>;
 	let useMetaTagExtractorApiMock: Mocked<ReturnType<typeof useMetaTagExtractorApi>>;
 	let useFileStorageApiMock: Pick<Mocked<ReturnType<typeof useFileStorageApi>>, "uploadFromUrl">;
+	let onFocusReceivedCallback: (() => void) | undefined;
 
 	beforeAll(() => {
 		Object.defineProperty(URL, "canParse", {
@@ -44,6 +45,7 @@ describe("LinkContentElement", () => {
 	});
 
 	beforeEach(() => {
+		onFocusReceivedCallback = undefined;
 		useElementFocusMock = mockComposable(useElementFocus, { focusNodeFromHash: vi.fn() });
 
 		useBoardFocusHandlerMock = {
@@ -59,7 +61,14 @@ describe("LinkContentElement", () => {
 		};
 
 		vi.mocked(useElementFocus).mockReturnValue(useElementFocusMock);
-		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
+		vi.mocked(useBoardFocusHandler).mockImplementation(
+			(_id?: unknown, _element?: unknown, onFocusReceived?: () => void) => {
+				if (onFocusReceived !== undefined) {
+					onFocusReceivedCallback = onFocusReceived;
+				}
+				return useBoardFocusHandlerMock;
+			}
+		);
 		vi.mocked(useMetaTagExtractorApi).mockReturnValue(useMetaTagExtractorApiMock);
 		vi.mocked(useFileStorageApi).mockReturnValue(
 			useFileStorageApiMock as unknown as ReturnType<typeof useFileStorageApi>
@@ -569,6 +578,42 @@ describe("LinkContentElement", () => {
 			});
 
 			expect(wrapper.html()).toEqual(expect.stringContaining("de.wikipedia.org"));
+		});
+	});
+
+	describe("autofocus prop forwarding", () => {
+		describe("when useBoardFocusHandler focus callback has not been called", () => {
+			it("should pass autofocus=false to LinkContentElementCreate", () => {
+				const { wrapper } = setupWrapper({ isEditMode: true });
+
+				expect(wrapper.findComponent(LinkContentElementCreate).props("autofocus")).toBe(false);
+			});
+		});
+
+		describe("when useBoardFocusHandler focus callback is called", () => {
+			it("should pass autofocus=true to LinkContentElementCreate", async () => {
+				const { wrapper } = setupWrapper({ isEditMode: true });
+
+				onFocusReceivedCallback?.();
+				await nextTick();
+
+				expect(wrapper.findComponent(LinkContentElementCreate).props("autofocus")).toBe(true);
+			});
+		});
+
+		describe("when isEditMode transitions to false", () => {
+			it("should reset autofocus so it is false when re-entering edit mode without a new focus callback", async () => {
+				const { wrapper } = setupWrapper({ isEditMode: true });
+
+				onFocusReceivedCallback?.();
+				await nextTick();
+				expect(wrapper.findComponent(LinkContentElementCreate).props("autofocus")).toBe(true);
+
+				await wrapper.setProps({ isEditMode: false });
+				await wrapper.setProps({ isEditMode: true });
+
+				expect(wrapper.findComponent(LinkContentElementCreate).props("autofocus")).toBe(false);
+			});
 		});
 	});
 });
