@@ -1,23 +1,22 @@
-import { isMongoId } from "@/utils/validation";
+import { REGEX_ID } from "@/utils/validation";
 import { RouteLocation, RouteLocationRaw } from "vue-router";
 
+const CARD_LINK_REGEX = new RegExp(`^(${REGEX_ID})(?:#|%23)card-(${REGEX_ID})$`);
+
 export const boardCardLinkRedirect = (to: RouteLocation): RouteLocationRaw => {
-	const pathParam = String(to.params.cardLink).replace(/%23/gi, "#");
-	const marker = "#card-";
-	const hashIndex = pathParam.indexOf(marker);
-	if (hashIndex === -1) {
+	const match = String(to.params.cardLink).match(CARD_LINK_REGEX);
+
+	if (!match) {
 		return { name: "error" };
 	}
 
-	const boardId = pathParam.substring(0, hashIndex);
-	if (!isMongoId(boardId)) {
-		return { name: "error" };
-	}
+	const matchedBoardId = match[1];
+	const matchedCardId = match[2];
 
 	return {
 		name: "boards-id",
-		params: { id: boardId },
-		hash: pathParam.substring(hashIndex),
+		params: { id: matchedBoardId },
+		hash: `#card-${matchedCardId}`,
 		query: to.query,
 	};
 };

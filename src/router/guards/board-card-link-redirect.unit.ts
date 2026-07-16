@@ -9,7 +9,7 @@ const buildRoute = (boardId: string, anchorName: string): RouteLocation =>
 	({ params: { cardLink: `${boardId}${anchorName}` }, query: {} }) as unknown as RouteLocation;
 
 describe("boardCardLinkRedirect", () => {
-	describe("when the param contains a valid board id and a #card hash", () => {
+	describe("when the param contains a valid board id and a #card anchor", () => {
 		it("should redirect to boards-id with the correct params and hash", () => {
 			const to = buildRoute(VALID_BOARD_ID, VALID_ANCHOR_NAME);
 
@@ -31,19 +31,8 @@ describe("boardCardLinkRedirect", () => {
 
 			expect(result).toEqual(expect.objectContaining({ query }));
 		});
-	});
-
-	describe("when the param does not contain '#card'", () => {
-		it("should redirect to the error route", () => {
-			const to = buildRoute(VALID_BOARD_ID, INVALID_CARD_HASH);
-
-			const result = boardCardLinkRedirect(to);
-
-			expect(result).toEqual({ name: "error" });
-		});
-
-		it("should redirect to boards-id when '#card' is percent-encoded as '%23card'", () => {
-			const to = buildRoute(VALID_BOARD_ID, VALID_ANCHOR_NAME.replace(/#card/g, "%23card"));
+		it("should also redirect when '#card' is percent-encoded as '%23card'", () => {
+			const to = buildRoute(VALID_BOARD_ID, VALID_ANCHOR_NAME.replace("#", "%23"));
 
 			const result = boardCardLinkRedirect(to);
 
@@ -56,7 +45,17 @@ describe("boardCardLinkRedirect", () => {
 		});
 	});
 
-	describe("when the part before #card is not a valid mongo id", () => {
+	describe("when the param does not contain '#card'", () => {
+		it("should redirect to the error route", () => {
+			const to = buildRoute(VALID_BOARD_ID, INVALID_CARD_HASH);
+
+			const result = boardCardLinkRedirect(to);
+
+			expect(result).toEqual({ name: "error" });
+		});
+	});
+
+	describe("when the part before '#card' is not a valid mongo id", () => {
 		it("should redirect to the error route", () => {
 			const to = buildRoute("not-a-valid-mongo-id", VALID_ANCHOR_NAME);
 
