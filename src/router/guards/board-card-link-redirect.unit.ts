@@ -32,7 +32,7 @@ describe("boardCardLinkRedirect", () => {
 			expect(result).toEqual(expect.objectContaining({ query }));
 		});
 		it("should also redirect when '#card' is percent-encoded as '%23card'", () => {
-			const to = buildRoute(VALID_BOARD_ID, VALID_ANCHOR_NAME.replace("#", "%23"));
+			const to = buildRoute(VALID_BOARD_ID, VALID_ANCHOR_NAME.replace(/#/g, "%23"));
 
 			const result = boardCardLinkRedirect(to);
 
