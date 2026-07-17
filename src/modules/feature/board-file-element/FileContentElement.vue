@@ -55,20 +55,15 @@
 </template>
 
 <script setup lang="ts">
+import { useFileInteractionType } from "./composables/file-interaction-type.composable";
 import FileAlerts from "./content/alert/FileAlerts.vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
+import { FileInteractionType } from "./shared/types/file-interaction-types";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
-import {
-	convertDownloadToPreviewUrl,
-	downloadFile,
-	FileCardInteractionType,
-	getFileCardInteractionType,
-	isPreviewPossible,
-	isScanStatusBlocked,
-} from "@/utils/fileHelper";
+import { convertDownloadToPreviewUrl, downloadFile, isPreviewPossible, isScanStatusBlocked } from "@/utils/fileHelper";
 import { FileRecordParentType, PreviewWidth } from "@api-file-storage";
 import { FileElementResponse } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";
@@ -262,8 +257,8 @@ const cardInteractionListeners = computed(() => {
 	};
 });
 
-const cardInteractionType = computed(() =>
-	getFileCardInteractionType({
+const fileInteractionType = computed(() =>
+	useFileInteractionType({
 		hasFileRecord: !!fileRecord.value,
 		isCollaboraEnabled: isCollaboraEnabled.value,
 		isCollaboraEditable: isCollaboraEditable.value,
@@ -274,17 +269,17 @@ const cardInteractionType = computed(() =>
 );
 
 const onCardInteraction = () => {
-	switch (cardInteractionType.value) {
-		case FileCardInteractionType.Collabora:
+	switch (fileInteractionType.value) {
+		case FileInteractionType.Collabora:
 			openCollabora();
 			break;
-		case FileCardInteractionType.Pdf:
+		case FileInteractionType.Pdf:
 			openPdf();
 			break;
-		case FileCardInteractionType.Image:
+		case FileInteractionType.Image:
 			openImageLightBox();
 			break;
-		case FileCardInteractionType.Download:
+		case FileInteractionType.Download:
 			onDownload();
 			break;
 		default:
