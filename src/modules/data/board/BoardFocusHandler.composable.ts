@@ -1,9 +1,10 @@
 import { BoardColumn } from "@/types/board/Board";
 import { BoardCard } from "@/types/board/Card";
 import { AnyContentElement } from "@/types/board/ContentElement";
+import { InlineEditInteractionHandled } from "@/types/board/InlineEditInteractionHandled.symbol";
 import { useInlineEditInteractionHandler } from "@util-board";
 import { createSharedComposable, useEventListener, useFocus, useFocusWithin } from "@vueuse/core";
-import { computed, MaybeRefOrGetter, nextTick, onMounted, onUnmounted, Ref, ref } from "vue";
+import { computed, inject, MaybeRefOrGetter, nextTick, onMounted, onUnmounted, Ref, ref, shallowRef } from "vue";
 
 declare type FocusableId = BoardColumn["id"] | BoardCard["id"] | AnyContentElement["id"];
 
@@ -22,6 +23,11 @@ declare type FocusHandler = {
  * Use this composable to force focus on a focusable element on the Board.
  */
 export function useBoardFocusHandler(): Pick<FocusHandler, "isAnythingFocused" | "setFocus" | "forceFocus">;
+/**
+ * Access the shared board focus state (focusedId) without registering a DOM element.
+ * Useful for components that need to observe or reset the focused ID without tracking a specific element.
+ */
+export function useBoardFocusHandler(id: MaybeRefOrGetter<FocusableId>): Pick<FocusHandler, "setFocus" | "focusedId">;
 /**
  * Keeps track of focused elements on the Board to retain focus state across Board changes.
  * Also keeps track of focus of child-elements. The Composable associates the given ID to the given element
@@ -102,7 +108,6 @@ export function useBoardFocusHandler(
 		if (onFocusReceived !== undefined) {
 			onFocusReceived();
 			setFocus(id);
-			return;
 		}
 		isFocused.value = true;
 	};
@@ -121,8 +126,14 @@ export function useBoardFocusHandler(
 	/**
 	 * If an InlineEditInteraction is fired within the element boundary, force focus on this element
 	 */
+	const interactionHandled = inject<Ref<boolean>>(InlineEditInteractionHandled, shallowRef(false));
 	useInlineEditInteractionHandler(async () => {
-		await forceFocusOnMount();
+		await nextTick();
+		if (onFocusReceived !== undefined) {
+			onFocusReceived();
+			interactionHandled.value = true;
+		}
+		setFocus(id);
 	});
 
 	onUnmounted(() => {

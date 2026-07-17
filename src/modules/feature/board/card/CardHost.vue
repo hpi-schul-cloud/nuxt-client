@@ -32,6 +32,7 @@
 						:value="card.title"
 						scope="card"
 						:is-focused="isFocusedById"
+						:focus-title-on-edit-start="focusTitleOnEditStart"
 						class="mx-n4 mb-n2"
 						:has-edit-permission="allowedOperations?.updateCardTitle"
 						@update:value="onUpdateCardTitle"
@@ -134,6 +135,7 @@ type Props = {
 	cardId: string;
 	rowIndex: number;
 	columnIndex: number;
+	focusTitleOnEditStart?: boolean;
 };
 
 const props = defineProps<Props>();
