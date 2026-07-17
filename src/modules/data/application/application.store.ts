@@ -55,7 +55,6 @@ export const useAppStore = defineStore("applicationStore", () => {
 	// Computed store properties
 	const school = computed(() => meResponse.value?.school);
 	const user = computed(() => meResponse.value?.user);
-	const externalLogoutEnabled = computed(() => useEnvConfig().value.FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED);
 
 	const userRoles = computed(() => meResponse.value?.roles.map((r) => r.name) ?? []);
 
@@ -102,13 +101,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 
 	const externalLogout = () => logout("/logout/external");
 
-	const autoLogout = () => {
-		if (externalLogoutEnabled.value) {
-			externalLogout();
-		} else {
-			logout("/logout?auto-logout=true");
-		}
-	};
+	const autoLogout = () => logout("/logout?auto-logout=true");
 
 	const extendSession = async () => {
 		try {
