@@ -7,6 +7,7 @@ type CkEditorProps = {
 	value?: string;
 	placeholder?: string;
 	viewportOffsetTop?: number;
+	autofocus?: boolean;
 };
 
 class ResizeObserver {
@@ -55,9 +56,7 @@ describe("@feature-editor/InlineEditor", () => {
 			props,
 		});
 
-		const editorMock = { editing: { view: { document: { on: vi.fn() } } } };
-
-		return { wrapper, editorMock };
+		return { wrapper };
 	};
 
 	beforeEach(() => {
@@ -70,8 +69,28 @@ describe("@feature-editor/InlineEditor", () => {
 	});
 
 	describe("events", () => {
+		const buildEditorMock = () => {
+			const root = {};
+			const writer = { setSelection: vi.fn() };
+			return {
+				editing: {
+					view: {
+						document: { on: vi.fn() },
+						focus: vi.fn(),
+						scrollToTheSelection: vi.fn(),
+					},
+				},
+				model: {
+					change: vi.fn((callback) => callback(writer)),
+					document: { getRoot: vi.fn(() => root) },
+				},
+				root,
+				writer,
+			};
+		};
 		it("should emit ready on editor ready", async () => {
-			const { wrapper, editorMock } = setup();
+			const { wrapper } = setup();
+			const editorMock = buildEditorMock();
 			const ck = wrapper.findComponent({ ref: "ck" });
 
 			await ck.vm.$emit("ready", editorMock);
@@ -82,7 +101,8 @@ describe("@feature-editor/InlineEditor", () => {
 		});
 
 		it("should emit update:value on content changes", async () => {
-			const { wrapper, editorMock } = setup();
+			const { wrapper } = setup();
+			const editorMock = buildEditorMock();
 
 			const ck = wrapper.findComponent({
 				ref: "ck",
@@ -110,11 +130,11 @@ describe("@feature-editor/InlineEditor", () => {
 			expect(wrapper.emitted("blur")).toHaveLength(1);
 		});
 
-		/* 
+		/*
 		TODO We cannot test this because mounting the ckeditor is not possible
 		with versions prior to 42.x.
 		see CKEditor5 doc: https://ckeditor.com/docs/ckeditor5/latest/getting-started/installation/self-hosted/vuejs-v3.html#jest-testing
-		
+
 		Update of ckeditor to 42.x and above is currently not possible because the
 		@isaul32/ckeditor5-math package doesn't support ckeditor new installation methods
 		required by ckeditor 42.x and above.
@@ -125,5 +145,62 @@ describe("@feature-editor/InlineEditor", () => {
 		it.todo("should emit delete on delete event and empty text");
 
 		it.todo("should not emit delete on delete event and non-empty text");
+
+		describe("when autofocus is true at editor ready", () => {
+			it("should focus the editor view", async () => {
+				const { wrapper } = setup({ autofocus: true });
+				const editorMock = buildEditorMock();
+				const ck = wrapper.findComponent({ ref: "ck" });
+
+				await ck.vm.$emit("ready", editorMock);
+
+				expect(editorMock.editing.view.focus).toHaveBeenCalled();
+			});
+
+			it("should move cursor to end of content", async () => {
+				const { wrapper } = setup({ autofocus: true });
+				const editorMock = buildEditorMock();
+				const ck = wrapper.findComponent({ ref: "ck" });
+
+				await ck.vm.$emit("ready", editorMock);
+
+				expect(editorMock.writer.setSelection).toHaveBeenCalledWith(editorMock.root, "end");
+			});
+		});
+
+		describe("when autofocus transitions to true after editor ready", () => {
+			it("should focus the editor view", async () => {
+				const { wrapper } = setup({ autofocus: false });
+				const editorMock = buildEditorMock();
+				const ck = wrapper.findComponent({ ref: "ck" });
+
+				await ck.vm.$emit("ready", editorMock);
+				await wrapper.setProps({ autofocus: true });
+
+				expect(editorMock.editing.view.focus).toHaveBeenCalled();
+			});
+
+			it("should move cursor to end of content", async () => {
+				const { wrapper } = setup({ autofocus: false });
+				const editorMock = buildEditorMock();
+				const ck = wrapper.findComponent({ ref: "ck" });
+
+				await ck.vm.$emit("ready", editorMock);
+				await wrapper.setProps({ autofocus: true });
+
+				expect(editorMock.writer.setSelection).toHaveBeenCalledWith(editorMock.root, "end");
+			});
+
+			it("should not focus or move cursor when autofocus is false", async () => {
+				const { wrapper } = setup({ autofocus: false });
+				const editorMock = buildEditorMock();
+				const ck = wrapper.findComponent({ ref: "ck" });
+
+				await ck.vm.$emit("ready", editorMock);
+
+				expect(editorMock.editing.view.focus).not.toHaveBeenCalled();
+				expect(editorMock.writer.setSelection).not.toHaveBeenCalled();
+			});
+		});
 	});
 });
