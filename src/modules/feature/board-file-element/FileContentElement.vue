@@ -59,7 +59,7 @@ import { useFileInteractionType } from "./composables/file-interaction-type.comp
 import FileAlerts from "./content/alert/FileAlerts.vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
-import { FileInteractionType } from "./shared/types/file-interaction-types";
+import { FileInteractionType } from "./shared/types/file-interaction-type";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";

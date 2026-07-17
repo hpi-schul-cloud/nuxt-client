@@ -1,4 +1,4 @@
-import { FileInteractionType } from "../shared/types/file-interaction-types";
+import { FileInteractionType } from "../shared/types/file-interaction-type";
 import { useFileInteractionType } from "./file-interaction-type.composable";
 
 describe("useFileInteractionType", () => {

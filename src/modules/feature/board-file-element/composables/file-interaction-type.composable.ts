@@ -1,4 +1,4 @@
-import { FileInteractionType } from "../shared/types/file-interaction-types";
+import { FileInteractionType } from "../shared/types/file-interaction-type";
 import { isAudioMimeType, isPdfMimeType, isVideoMimeType } from "@/utils/fileHelper";
 
 type FileInteractionTypeInput = {
