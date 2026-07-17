@@ -9,7 +9,7 @@ const buildRoute = (boardId: string, anchorName: string): RouteLocation =>
 	({ params: { cardLink: `${boardId}${anchorName}` }, query: {} }) as unknown as RouteLocation;
 
 describe("boardCardLinkRedirect", () => {
-	describe("when the param contains a valid board id and a #card anchor", () => {
+	describe("when the param contains a valid boardId and a #card anchor", () => {
 		it("should redirect to boards-id with the correct params and hash", () => {
 			const to = buildRoute(VALID_BOARD_ID, VALID_ANCHOR_NAME);
 
@@ -31,8 +31,10 @@ describe("boardCardLinkRedirect", () => {
 
 			expect(result).toEqual(expect.objectContaining({ query }));
 		});
+
 		it("should also redirect when '#card' is percent-encoded as '%23card'", () => {
-			const to = buildRoute(VALID_BOARD_ID, VALID_ANCHOR_NAME.replace(/#/g, "%23"));
+			const ENCODED_ANCHOR_NAME = VALID_ANCHOR_NAME.replace(/#/g, "%23");
+			const to = buildRoute(VALID_BOARD_ID, ENCODED_ANCHOR_NAME);
 
 			const result = boardCardLinkRedirect(to);
 
