@@ -58,12 +58,14 @@ describe("AudioPlayer", () => {
 			expect(onSourceErrorMock).toHaveBeenCalled();
 		});
 
-		it("should render audio element with lazy prop", () => {
+		it("should render audio element without lazy prop", () => {
+			// Because we have custom controls.
+			// https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/audio#lazy
 			const { wrapper } = setup();
 
 			const audio = wrapper.find("audio");
 
-			expect(audio.attributes("loading")).toBe("lazy");
+			expect(audio.attributes("loading")).not.toBe("lazy");
 		});
 
 		it("should pass duration to v-slider", () => {
