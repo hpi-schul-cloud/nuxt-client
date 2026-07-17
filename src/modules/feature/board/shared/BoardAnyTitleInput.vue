@@ -33,9 +33,11 @@
 </template>
 
 <script setup lang="ts">
+import { InlineEditInteractionEvent } from "@/types/board/InlineEditInteractionEvent.symbol";
+import { InlineEditInteractionHandled } from "@/types/board/InlineEditInteractionHandled.symbol";
 import { useInlineEditInteractionHandler } from "@util-board";
 import { isOfMaxLength, useOpeningTagValidator } from "@util-validators";
-import { computed, nextTick, onMounted, ref, toRef, useTemplateRef, watch } from "vue";
+import { computed, inject, nextTick, onMounted, Ref, ref, shallowRef, toRef, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { VTextarea } from "vuetify/components";
 
@@ -48,12 +50,14 @@ const props = withDefaults(
 		maxLength?: number;
 		emptyValueFallback?: string;
 		hasEditPermission?: boolean;
+		focusTitleOnEditStart?: boolean;
 	}>(),
 	{
 		isFocused: false,
 		emptyValueFallback: "",
 		hasEditPermission: false,
 		maxLength: undefined,
+		focusTitleOnEditStart: false,
 	}
 );
 
@@ -72,9 +76,23 @@ const externalValue = toRef(props, "value");
 const internalIsFocused = ref(false);
 const titleInput = useTemplateRef<VTextarea>("titleInput");
 
+const interactionEvent = inject<Ref<{ x: number; y: number } | undefined>>(InlineEditInteractionEvent, ref(undefined));
+const interactionHandled = inject<Ref<boolean>>(InlineEditInteractionHandled, shallowRef(false));
+
 const hasErrors = computed(() => (titleInput.value ? !titleInput.value.isValid : false));
 
 useInlineEditInteractionHandler(async () => {
+	await setFocusOnEdit();
+});
+
+// Card-scope fallback: focus the title if no content element claims the interaction.
+// Two ticks are needed so content element handlers (registered in onMounted) can run
+// and set interactionHandled = true before we check it.
+watch(interactionEvent, async (newBoundary) => {
+	if (!newBoundary || props.scope !== "card") return;
+	await nextTick(); // content element handlers run
+	await nextTick(); // interactionHandled is now stable
+	if (interactionHandled.value) return;
 	await setFocusOnEdit();
 });
 
@@ -106,25 +124,48 @@ watch(
 	}
 );
 
-onMounted(() => {
-	if (props.isFocused && props.isEditMode) setFocusOnEdit();
+onMounted(async () => {
+	if (props.isEditMode) {
+		if (interactionEvent.value !== undefined && props.scope === "card") {
+			// Mounted during a double-click (e.g. empty title hidden in view mode);
+			// use the same two-tick fallback as watch(interactionEvent).
+			await nextTick();
+			await nextTick();
+			if (!interactionHandled.value) await setFocusOnEdit();
+		} else if (interactionEvent.value === undefined && (props.isFocused || props.focusTitleOnEditStart)) {
+			// Keyboard navigation or "Edit" button: no active interaction.
+			setFocusOnEdit();
+		}
+	}
 	modelValue.value = props.value;
 });
 
 watch(
 	() => props.isEditMode,
-	async (newVal, oldVal) => {
-		if (props.scope !== "column" && props.scope !== "board" && !props.isFocused) {
+	async (newVal) => {
+		if (!newVal) {
+			internalIsFocused.value = false;
 			return;
 		}
 
-		if (newVal && !oldVal) {
-			const text = externalValue.value.length > 0 ? externalValue.value : props.emptyValueFallback;
-			modelValue.value = text;
+		const isCardScope = props.scope !== "column" && props.scope !== "board";
+		if (isCardScope) {
+			// A double-click interaction event is present: the InlineEditInteractionHandler has
+			// already routed focus to the specific element that was clicked (e.g. a text element
+			// inside the card). Let that handler win — do not steal focus for the title.
+			if (interactionEvent.value !== undefined) return;
 
-			await nextTick();
-			await setFocusOnEdit();
+			// No interaction event means edit mode was triggered via keyboard navigation or an
+			// explicit "Edit" button (detail view). Only auto-focus the title when:
+			// - isFocused: the card is the currently focused board element (keyboard nav), OR
+			// - focusTitleOnEditStart: the consumer explicitly requests title focus on edit start
+			//   (used by CardHostDetailView so its "Edit" button always lands in the title).
+			if (!props.isFocused && !props.focusTitleOnEditStart) return;
 		}
+
+		modelValue.value = externalValue.value || props.emptyValueFallback;
+		await nextTick();
+		await setFocusOnEdit();
 	}
 );
 
@@ -171,7 +212,7 @@ const cursorToEnd = () => {
 
 	&.board-title-input :deep(textarea) {
 		font-size: var(--heading-1);
-		line-height: var(--line-height-md);
+		line-height: var(--line-height-sm);
 		padding-top: 16px;
 		overflow: hidden; // prevent scrollbar in board title
 	}
@@ -192,7 +233,7 @@ const cursorToEnd = () => {
 
 .board-title {
 	font-size: var(--heading-1);
-	line-height: var(--line-height-md);
+	line-height: var(--line-height-sm);
 	margin-bottom: 0;
 	overflow-wrap: break-word;
 	word-break: break-word;

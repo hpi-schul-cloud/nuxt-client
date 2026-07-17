@@ -17,16 +17,16 @@
 			<template v-if="newsInstance">
 				<h2 data-testid="news-title">{{ newsInstance.title }}</h2>
 				<div class="d-flex mb-2">
-					<div class="d-flex align-center text-subtitle mr-3" data-testid="news-last-touched">
+					<div class="d-flex align-center mr-3" data-testid="news-last-touched">
 						<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
 						{{ displayedDateText }}
 					</div>
-					<div class="d-flex align-center text-subtitle mr-3" data-testid="news-creator">
+					<div class="d-flex align-center mr-3" data-testid="news-creator">
 						<VIcon :icon="mdiAccountCircleOutline" size="sm" class="mr-1" />
 						{{ creator }}
 					</div>
 
-					<div class="d-flex align-center text-subtitle" data-testid="news-creator">
+					<div class="d-flex align-center" data-testid="news-creator">
 						<template v-if="newsInstance.targetModel === 'teams'">
 							<VIcon :icon="mdiAccountGroupOutline" size="sm" class="mr-1" />
 							<a :href="`/teams/${newsInstance.targetId}`">{{ newsInstance.target.name }}</a>
