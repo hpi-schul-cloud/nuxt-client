@@ -5,6 +5,30 @@
 const mongoId = "[a-z0-9]{24}";
 const h5pId = "[a-z0-9]+";
 
+type RouteRule = {
+	route: string;
+	valid: RegExp;
+};
+
+const inCompleteRouteRules: RouteRule[] = [
+	{
+		route: "/boards",
+		valid: new RegExp(`^/boards/${mongoId}(?:/cards/${mongoId})?/?$`, "i"),
+	},
+];
+
+export const isRouteValid = (route: string): boolean => {
+	const normalizedRoute = route.split("?")[0].toLowerCase();
+
+	return inCompleteRouteRules.some((rule) => {
+		if (!normalizedRoute.startsWith(rule.route)) {
+			return false;
+		}
+
+		return rule.valid.test(normalizedRoute);
+	});
+};
+
 const vueRoutes = [
 	`^/favicon.png$`,
 	`^/collabora/doc.docx$`,
@@ -71,4 +95,6 @@ const vueRoutes = [
 	`^/node_modules/`,
 ];
 
-export const isVueClient = (path: string) => vueRoutes.some((regex) => new RegExp(regex).exec(path));
+const matchesWhitelist = (path: string) => vueRoutes.some((regex) => new RegExp(regex).exec(path));
+
+export const isVueClient = (path: string) => matchesWhitelist(path) || isRouteValid(path);

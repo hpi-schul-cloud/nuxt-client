@@ -2,6 +2,7 @@ import { routes } from "./routes";
 import { clearApplicationErrorGuard } from "@/router/guards/clear-application-error.guard";
 import { isAuthenticatedGuard } from "@/router/guards/is-authenticated.guard";
 import { legacyCompatibilityGuard } from "@/router/guards/legacy-route-compatibility.guard";
+import { isRouteValidGuard } from "@/router/route-validation";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -15,6 +16,7 @@ const router = createRouter({
 });
 
 router.beforeEach(clearApplicationErrorGuard);
+router.beforeEach(isRouteValidGuard);
 router.beforeEach(legacyCompatibilityGuard);
 router.beforeEach(isAuthenticatedGuard);
 
