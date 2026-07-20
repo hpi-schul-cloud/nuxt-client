@@ -73,10 +73,24 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const upload = async (file: File, parentId: string, parentType: FileRecordParent): Promise<void> => {
+	const upload = async (
+		file: File,
+		parentId: string,
+		parentType: FileRecordParent,
+		onUploadProgress?: (progress: number) => void
+	): Promise<void> => {
 		try {
 			const schoolId = useAppStore().school?.id as string;
-			const response = await fileApi.upload(schoolId, StorageLocation.SCHOOL, parentId, parentType, file);
+			const options = onUploadProgress
+				? {
+						onUploadProgress: (event: ProgressEvent) => {
+							if (event.total) {
+								onUploadProgress(Math.round((event.loaded / event.total) * 100));
+							}
+						},
+					}
+				: undefined;
+			const response = await fileApi.upload(schoolId, StorageLocation.SCHOOL, parentId, parentType, file, options);
 			upsertFileRecords([response.data]);
 		} catch (error) {
 			showError(error);
