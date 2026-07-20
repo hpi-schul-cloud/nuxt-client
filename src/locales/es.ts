@@ -1550,6 +1550,10 @@ export default {
 	"pages.courseRooms.publishCard.error": "Se ha producido un error al publicar la tarjeta.",
 	"pages.courseRooms.restoreTask.error": "Se ha producido un error al restaurar la tarea.",
 	"pages.courseRooms.sortElements.error": "Se ha producido un error al ordenar las tarjetas.",
+	"pages.courseRooms.tools.videoConference.notEnabled.teacher":
+		"Las videoconferencias están deshabilitadas para la escuela. Por favor, consulte con el administrador de la escuela.",
+	"pages.courseRooms.tools.videoConference.notEnabled.participant":
+		"Las videoconferencias están deshabilitadas para la escuela. Por favor, consulte con el profesor.",
 	"pages.files.overview.courseFiles": "Archivos del curso",
 	"pages.files.overview.favorites": "Favoritos",
 	"pages.files.overview.personalFiles": "Archivos personales",
