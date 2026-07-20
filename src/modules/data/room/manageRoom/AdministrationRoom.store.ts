@@ -1,6 +1,5 @@
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
-import { formatUtc } from "@/utils/date-time.utils";
 import { RoomApiFactory, RoomStatsItemResponse } from "@api-server";
 import { notifyError, useSchoolStoreRefs } from "@data-app";
 import { defineStore } from "pinia";
@@ -20,7 +19,6 @@ export const useAdministrationRoomStore = defineStore("administrationRoomStore",
 		return list
 			.map((room) => ({
 				...room,
-				createdAt: formatUtc(room.createdAt, "date") ?? room.createdAt,
 			}))
 			.sort((a, b) => {
 				if (!a.owner && b.owner) return -1;
