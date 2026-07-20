@@ -288,7 +288,7 @@ describe("RoomVideoConferenceCard", () => {
 			it("should display the teacher disabled message", () => {
 				const { wrapper } = setup();
 				const text = wrapper.find('[data-testId="vc-info-box"] span.my-auto');
-				expect(text.text()).toEqual("pages.videoConference.info.courseParent.notEnabledTeacher");
+				expect(text.text()).toEqual("pages.courseRooms.tools.videoConference.notEnabled.teacher");
 			});
 
 			it("should not display the refresh button", () => {
@@ -318,7 +318,7 @@ describe("RoomVideoConferenceCard", () => {
 			it("should display the participant disabled message", () => {
 				const { wrapper } = setup();
 				const text = wrapper.find('[data-testId="vc-info-box"] span.my-auto');
-				expect(text.text()).toEqual("pages.videoConference.info.notEnabledParticipants");
+				expect(text.text()).toEqual("pages.courseRooms.tools.videoConference.notEnabled.participant");
 			});
 
 			it("should not display the refresh button", () => {
