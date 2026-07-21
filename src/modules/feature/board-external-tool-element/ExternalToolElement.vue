@@ -2,7 +2,7 @@
 	<v-card
 		v-show="showTool || isEditMode"
 		ref="externalToolElement"
-		class="mb-4"
+		class="content-element-card mb-4"
 		:data-testid="`board-external-tool-element-${toolDisplayName}`"
 		variant="outlined"
 		:ripple="false"

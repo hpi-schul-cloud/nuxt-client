@@ -1,7 +1,13 @@
 <template>
 	<ContentElementBar>
 		<template #display>
-			<div @click="openPdf">
+			<div
+				:class="{ 'content-element-interactive': isEditMode }"
+				:tabindex="isEditMode ? 0 : undefined"
+				:role="isEditMode ? 'button' : undefined"
+				@click="onActivate"
+				@keydown.enter.space="onActivate"
+			>
 				<PreviewImage :src="previewSrc" alt="" :aspect-ratio="1.77777" position="top" :cover="true" />
 			</div>
 		</template>
@@ -25,7 +31,16 @@ type Props = {
 
 const props = defineProps<Props>();
 
-const openPdf = () => {
-	window.open(props.src, "_blank");
+const emit = defineEmits<{
+	(e: "activate", event: Event): void;
+}>();
+
+const onActivate = (event: Event) => {
+	if (!props.isEditMode) {
+		return;
+	}
+
+	event.stopPropagation();
+	emit("activate", event);
 };
 </script>
