@@ -6,6 +6,7 @@ import { Permission, RoleName, VideoConferenceScope, VideoConferenceStateRespons
 import { useVideoConference } from "@data-access";
 import { createTestingPinia } from "@pinia/testing";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
+import { createAxiosError } from "@util-error-handling";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { computed, nextTick, ref } from "vue";
@@ -330,6 +331,28 @@ describe("RoomVideoConferenceSection", () => {
 				});
 
 				expect(getErrorDialog(wrapper).findComponent({ name: "VCard" }).exists()).toBe(true);
+			});
+		});
+
+		describe("when the fetchError is a 403 Forbidden (videoconference feature disabled)", () => {
+			it("should not display the error dialog", () => {
+				const { wrapper } = getWrapper({
+					roomId: "roomId",
+					userPermissions: [Permission.JOIN_MEETING],
+					fetchError: createAxiosError({ statusCode: 403 }),
+				});
+
+				expect(getErrorDialog(wrapper).findComponent({ name: "VCard" }).exists()).toBe(false);
+			});
+
+			it("should pass isVideoConferenceEnabled=false to the card", () => {
+				const { wrapper } = getWrapper({
+					roomId: "roomId",
+					userPermissions: [Permission.JOIN_MEETING],
+					fetchError: createAxiosError({ statusCode: 403 }),
+				});
+
+				expect(wrapper.findComponent(RoomVideoConferenceCard).props("isVideoConferenceEnabled")).toBe(false);
 			});
 		});
 
