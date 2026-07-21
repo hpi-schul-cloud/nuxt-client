@@ -1,4 +1,4 @@
-import { isRouteValid, isRouteValidGuard } from "@/router/route-validation";
+import { isIncompleteRoute, isRouteValidGuard } from "@/router/route-validation";
 import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
@@ -16,13 +16,13 @@ describe("route-validation", () => {
 	});
 
 	it("marks incomplete board routes as invalid", () => {
-		expect(isRouteValid("/boards")).toBe(true);
-		expect(isRouteValid("/boards/507f1f77bcf86cd799439011/cards")).toBe(true);
+		expect(isIncompleteRoute("/boards")).toBe(true);
+		expect(isIncompleteRoute("/boards/507f1f77bcf86cd799439011/cards")).toBe(true);
 	});
 
 	it("does not mark complete board routes as invalid", () => {
-		expect(isRouteValid("/boards/507f1f77bcf86cd799439011")).toBe(false);
-		expect(isRouteValid("/boards/507f1f77bcf86cd799439011/cards/507f1f77bcf86cd799439012")).toBe(false);
+		expect(isIncompleteRoute("/boards/507f1f77bcf86cd799439011")).toBe(false);
+		expect(isIncompleteRoute("/boards/507f1f77bcf86cd799439011/cards/507f1f77bcf86cd799439012")).toBe(false);
 	});
 
 	it("blocks unmatched incomplete board routes and raises a not found error", () => {
