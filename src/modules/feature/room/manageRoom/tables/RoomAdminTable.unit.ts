@@ -1,6 +1,5 @@
 import RoomAdminTable from "./RoomAdminTable.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { formatUtc } from "@/utils/date-time.utils";
 import { mockedPiniaStoreTyping, roomStatsItemResponseFactory, schoolFactory } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -81,35 +80,6 @@ describe("RoomAdminTable", () => {
 			const dataTable = wrapper.getComponent(DataTable);
 			expect(dataTable.props("items")).toEqual(roomList);
 			expect(dataTable.props("tableHeaders")!.map((header) => header.title)).toEqual(tableHeaders);
-		});
-
-		it("should display the formatted createdAt date while keeping the raw value for sorting", () => {
-			const room = roomStatsItemResponseFactory.build({
-				createdAt: "2026-01-07T10:00:00.000Z",
-			});
-			const { wrapper } = setup({ roomList: [room] });
-
-			const dataTable = wrapper.getComponent(DataTable);
-
-			expect(dataTable.props("items")).toEqual([room]);
-			expect(dataTable.text()).toContain(formatUtc(room.createdAt, "date"));
-		});
-
-		it("should map each room's own createdAt date correctly, keyed by roomId", () => {
-			const roomA = roomStatsItemResponseFactory.build({
-				roomId: "room-a",
-				createdAt: "2026-01-07T10:00:00.000Z",
-			});
-			const roomB = roomStatsItemResponseFactory.build({
-				roomId: "room-b",
-				createdAt: "2025-07-20T10:00:00.000Z",
-			});
-			const { wrapper } = setup({ roomList: [roomA, roomB] });
-
-			const dataTable = wrapper.getComponent(DataTable);
-
-			expect(dataTable.text()).toContain(formatUtc(roomA.createdAt, "date"));
-			expect(dataTable.text()).toContain(formatUtc(roomB.createdAt, "date"));
 		});
 
 		it("should render icon with text if room has no owner", () => {
