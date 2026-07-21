@@ -1,4 +1,4 @@
-import { REGEX_ID } from "@/utils/validation";
+import { REGEX_ID } from "../utils/validation/validationUtil";
 
 export type PrefixRouteRule = {
 	prefix: string;

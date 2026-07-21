@@ -1,42 +1,14 @@
 // Whitelisted Vue routes
 // everything else will be forwarded to the legacy client
 // using the ./proxy.js serverMiddleware
+//
+// Loaded by vite.config via dev-server-proxy-plugin (Node context).
+// Only use relative imports to lightweight modules — no @/ aliases or app dependencies.
 
-// import { isCompletePrefixedRoute } from "./prefix-route-rules";
+import { isCompletePrefixedRoute } from "./prefix-route-rules";
 
 const mongoId = "[a-z0-9]{24}";
 const h5pId = "[a-z0-9]+";
-
-type PrefixRouteRule = {
-	prefix: string;
-	valid: RegExp;
-};
-
-const PREFIX_ROUTE_RULES: PrefixRouteRule[] = [
-	{
-		prefix: "/boards",
-		valid: new RegExp(`^/boards/${mongoId}(?:/cards/${mongoId})?/?$`, "i"),
-	},
-	{
-		prefix: "/folder",
-		valid: new RegExp(`^/folder/${mongoId}(?:/trash)?/?$`, "i"),
-	},
-];
-
-const normalizeRoutePath = (route: string): string => route.split("?")[0].toLowerCase();
-
-const matchesPrefixRouteRule = (route: string, rule: PrefixRouteRule): boolean => {
-	const normalizedRoute = normalizeRoutePath(route);
-
-	if (!normalizedRoute.startsWith(rule.prefix)) {
-		return false;
-	}
-
-	return rule.valid.test(normalizedRoute);
-};
-
-const isCompletePrefixedRoute = (route: string): boolean =>
-	PREFIX_ROUTE_RULES.some((rule) => matchesPrefixRouteRule(route, rule));
 
 export const isCompleteVueRoute = isCompletePrefixedRoute;
 
