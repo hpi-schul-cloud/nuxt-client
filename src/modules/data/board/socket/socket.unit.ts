@@ -17,6 +17,10 @@ const { mockIsJwtExpired } = vi.hoisted(() => {
 	return { mockIsJwtExpired: vueRef(false) as Ref<boolean> };
 });
 
+const { visibilityChangeListeners } = vi.hoisted(() => ({
+	visibilityChangeListeners: [] as Array<() => void>,
+}));
+
 vi.mock("axios");
 
 vi.mock("vue-i18n");
@@ -24,6 +28,19 @@ vi.mock("vue-i18n");
 
 vi.mock("socket.io-client");
 const mockSocketIOClient = vi.mocked(socketModule);
+
+vi.mock("@vueuse/core", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@vueuse/core")>();
+	return {
+		...actual,
+		useEventListener: vi.fn((_, event: string, listener: EventListenerOrEventListenerObject) => {
+			if (event !== "visibilitychange") return vi.fn();
+			const callback = typeof listener === "function" ? listener : (evt: Event) => listener.handleEvent(evt);
+			visibilityChangeListeners.push(() => callback(new Event("visibilitychange")));
+			return vi.fn();
+		}),
+	};
+});
 
 vi.mock("../boardActions/boardSocketApi.composable", () => ({
 	useBoardSocketApi: vi.fn(() => ({ duplicateColumnRequest: vi.fn() })),
@@ -119,6 +136,7 @@ describe("socket.ts", () => {
 		vi.clearAllMocks();
 		resetSocketStateForTesting();
 		mockIsJwtExpired.value = false;
+		visibilityChangeListeners.length = 0;
 	});
 
 	const getEventCallbacks = (eventName: string): Fn[] => {
@@ -424,6 +442,41 @@ describe("socket.ts", () => {
 			getConnectedSocket();
 
 			expect(connected.value).toBe(false);
+		});
+	});
+
+	describe("visibilitychange event", () => {
+		describe("when tab becomes visible", () => {
+			const mockVisibilityChange = (visibilityState: string) => {
+				Object.defineProperty(document, "visibilityState", {
+					configurable: true,
+					value: visibilityState,
+				});
+
+				visibilityChangeListeners.forEach((listener) => listener());
+			};
+
+			describe("when socket instance exists", () => {
+				it("should ensure socket is connected", () => {
+					setup();
+					mockSocket.connected = false;
+
+					mockVisibilityChange("visible");
+
+					expect(mockSocket.connect).toHaveBeenCalled();
+				});
+			});
+
+			describe("when socket instance does not exist", () => {
+				it("should not ensure socket is connected", () => {
+					useSocketConnection(dispatchMock);
+
+					mockVisibilityChange("visible");
+
+					expect(mockSocketIOClient.io).not.toHaveBeenCalled();
+					expect(mockSocket.connect).not.toHaveBeenCalled();
+				});
+			});
 		});
 	});
 });

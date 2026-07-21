@@ -1539,6 +1539,10 @@ export default {
 	"pages.courseRooms.publishCard.error": "Під час публікації картки виникла помилка.",
 	"pages.courseRooms.restoreTask.error": "Під час відновлення завдання виникла помилка.",
 	"pages.courseRooms.sortElements.error": "Під час сортування карток виникла помилка.",
+	"pages.courseRooms.tools.videoConference.notEnabled.teacher":
+		"Відеоконференції вимкнено для школи. Будь ласка, зверніться до адміністратора школи.",
+	"pages.courseRooms.tools.videoConference.notEnabled.participant":
+		"Відеоконференції вимкнено для школи. Будь ласка, зверніться до викладача.",
 	"pages.files.overview.courseFiles": "Файли курсу",
 	"pages.files.overview.favorites": "Обрані",
 	"pages.files.overview.personalFiles": "Мої особисті справи",

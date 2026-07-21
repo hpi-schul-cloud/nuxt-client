@@ -1555,6 +1555,10 @@ export default {
 	"pages.courseRooms.publishCard.error": "Beim Veröffentlichen der Karte ist ein Fehler aufgetreten.",
 	"pages.courseRooms.restoreTask.error": "Beim Wiederherstellen der Aufgabe ist ein Fehler aufgetreten.",
 	"pages.courseRooms.sortElements.error": "Beim Sortieren der Karten ist ein Fehler aufgetreten.",
+	"pages.courseRooms.tools.videoConference.notEnabled.teacher":
+		"Videokonferenzen sind für die Schule deaktiviert. Bitte an den Schul-Admin wenden.",
+	"pages.courseRooms.tools.videoConference.notEnabled.participant":
+		"Videokonferenzen sind für die Schule deaktiviert. Bitte an die Lehrkraft wenden.",
 	"pages.files.overview.courseFiles": "Kurs-Dateien",
 	"pages.files.overview.favorites": "Favoriten",
 	"pages.files.overview.personalFiles": "Meine persönlichen Dateien",

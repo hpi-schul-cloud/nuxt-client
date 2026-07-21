@@ -1522,6 +1522,10 @@ export default {
 	"pages.courseRooms.publishCard.error": "An error occurred while publishing the card.",
 	"pages.courseRooms.restoreTask.error": "An error occurred while restoring the task.",
 	"pages.courseRooms.sortElements.error": "An error occurred while sorting the cards.",
+	"pages.courseRooms.tools.videoConference.notEnabled.teacher":
+		"Video conferences are disabled for the school. Please refer to the school administrator.",
+	"pages.courseRooms.tools.videoConference.notEnabled.participant":
+		"Video conferences are disabled for the school. Please refer to the teacher.",
 	"pages.files.overview.courseFiles": "Course files",
 	"pages.files.overview.favorites": "Favourites",
 	"pages.files.overview.personalFiles": "My personal files",

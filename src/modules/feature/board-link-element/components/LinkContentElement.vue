@@ -7,8 +7,9 @@
 	<VCard
 		v-else-if="isEditMode || computedElement.content.url"
 		ref="linkContentElement"
-		class="mb-4"
+		class="content-element-card mb-4"
 		data-testid="board-link-element"
+		:class="{ 'content-element-card-edit-mode': isEditMode }"
 		:variant="cardVariant"
 		:ripple="false"
 		:aria-label="ariaLabel"
