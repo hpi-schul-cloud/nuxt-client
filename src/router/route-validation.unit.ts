@@ -6,6 +6,13 @@ import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 import { RouteLocationNormalized } from "vue-router";
 
+const createRoute = (path: string, hasMatch = false): RouteLocationNormalized => {
+	const route = {} as RouteLocationNormalized;
+	route.path = path;
+	route.matched = hasMatch ? ([{}] as RouteLocationNormalized["matched"]) : [];
+	return route;
+};
+
 describe("route-validation", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -26,10 +33,7 @@ describe("route-validation", () => {
 	});
 
 	it("blocks unmatched incomplete board routes and raises a not found error", () => {
-		const to = {
-			matched: [],
-			path: "/boards",
-		} as RouteLocationNormalized;
+		const to = createRoute("/boards");
 
 		const result = isRouteValidGuard(to, to, vi.fn);
 
@@ -38,10 +42,7 @@ describe("route-validation", () => {
 	});
 
 	it("allows matched routes through the guard", () => {
-		const to = {
-			matched: [{}],
-			path: "/boards/507f1f77bcf86cd799439011",
-		} as RouteLocationNormalized;
+		const to = createRoute("/boards/507f1f77bcf86cd799439011", true);
 
 		const result = isRouteValidGuard(to, to, vi.fn);
 

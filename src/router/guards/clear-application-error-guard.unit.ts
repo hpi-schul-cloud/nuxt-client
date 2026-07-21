@@ -15,7 +15,11 @@ describe("clearApplicationErrorGuard", () => {
 		it("should clear the application error", async () => {
 			const appStore = useAppStore();
 			appStore.handleApplicationError(HttpStatusCode.NotFound);
-			clearApplicationErrorGuard({ path: "/dashboard" } as RouteLocationNormalized, {} as RouteLocationNormalized, vi.fn());
+			clearApplicationErrorGuard(
+				{ path: "/dashboard" } as RouteLocationNormalized,
+				{} as RouteLocationNormalized,
+				vi.fn()
+			);
 			expect(appStore.clearApplicationError).toHaveBeenCalled();
 		});
 
@@ -32,7 +36,11 @@ describe("clearApplicationErrorGuard", () => {
 	describe("when no application error exists", () => {
 		it("should call next without clearing", () => {
 			const appStore = useAppStore();
-			clearApplicationErrorGuard({ path: "/dashboard" } as RouteLocationNormalized, {} as RouteLocationNormalized, vi.fn());
+			clearApplicationErrorGuard(
+				{ path: "/dashboard" } as RouteLocationNormalized,
+				{} as RouteLocationNormalized,
+				vi.fn()
+			);
 			expect(appStore.clearApplicationError).not.toHaveBeenCalled();
 		});
 	});
