@@ -90,7 +90,7 @@
 		"vitest": "^4.1.7",
 		"vitest-mock-extended": "^4.0.0",
 		"vue-router-mock": "^2.0.2",
-		"vue-tsc": "^3.3.1"
+		"vue-tsc": "^3.3.7"
 	},
 	"overrides": {
 		"@openapitools/openapi-generator-cli": {
