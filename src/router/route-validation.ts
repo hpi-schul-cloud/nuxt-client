@@ -23,7 +23,7 @@ export const isRouteValid = (route: string): boolean => {
 			return false;
 		}
 
-		return rule.valid.test(normalizedRoute);
+		return !rule.valid.test(normalizedRoute);
 	});
 };
 
@@ -34,7 +34,7 @@ export const isRouteValidGuard: NavigationGuard = (to) => {
 
 	if (isRouteValid(to.path)) {
 		useAppStore().handleApplicationError(HttpStatusCode.NotFound);
-		return false;
+		return { path: "/error" };
 	}
 
 	return true;
