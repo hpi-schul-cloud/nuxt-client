@@ -2,7 +2,7 @@
 	<VCard
 		v-show="hasLinkedContent || isEditMode"
 		ref="elementCard"
-		class="mb-4"
+		class="content-element-card mb-4"
 		data-testid="board-hp5-element"
 		variant="outlined"
 		:aria-label="ariaLabel"

@@ -16,6 +16,7 @@
 				:is-edit-mode="isEditMode"
 				:show-menu="isMenuShownOnFileDisplay"
 				@add:alert="onAddAlert"
+				@activate="onActivate"
 			>
 				<slot />
 			</FileDisplay>
@@ -27,7 +28,8 @@
 				:show-title="showTitle"
 				:show-menu="!isMenuShownOnFileDisplay"
 				:is-edit-mode="isEditMode"
-				:src="fileDescriptionSrc"
+				:href="fileDescriptionHref"
+				:is-download-link="isDescriptionDownloadLink"
 			>
 				<slot />
 			</FileDescription>
@@ -64,9 +66,17 @@ const props = defineProps({
 	},
 	isEditMode: { type: Boolean, required: true },
 	isDetailView: { type: Boolean, required: false },
+	collaboraHref: { type: String, required: false, default: undefined },
 });
 
-const emit = defineEmits(["fetch:file", "update:alternativeText", "update:caption", "update:name", "add:alert"]);
+const emit = defineEmits([
+	"fetch:file",
+	"update:alternativeText",
+	"update:caption",
+	"update:name",
+	"add:alert",
+	"activate",
+]);
 
 const onUpdateCaption = (value: string) => {
 	emit("update:caption", value);
@@ -84,6 +94,10 @@ const onAddAlert = (alert: FileAlert) => {
 	emit("add:alert", alert);
 };
 
+const onActivate = (event: Event) => {
+	emit("activate", event);
+};
+
 const hasVideoMimeType = computed(() => isVideoMimeType(props.fileProperties.mimeType));
 
 const hasCollaboraType = computed(() => props.fileProperties.isCollaboraEditable);
@@ -92,11 +106,31 @@ const hasPdfMimeType = computed(() => isPdfMimeType(props.fileProperties.mimeTyp
 
 const hasAudioMimeType = computed(() => isAudioMimeType(props.fileProperties.mimeType));
 
-const fileDescriptionSrc = computed(() => (hasPdfMimeType.value ? props.fileProperties.url : undefined));
-
 const showTitle = computed(
 	() => hasPdfMimeType.value || (!props.fileProperties.previewUrl && !hasVideoMimeType.value && !hasAudioMimeType.value)
 );
+
+const isDescriptionDownloadLink = computed(
+	() =>
+		!hasPdfMimeType.value &&
+		!hasCollaboraType.value &&
+		!props.fileProperties.previewUrl &&
+		!hasVideoMimeType.value &&
+		!hasAudioMimeType.value &&
+		props.fileProperties.isDownloadAllowed
+);
+
+const fileDescriptionHref = computed(() => {
+	if (hasCollaboraType.value) {
+		return isCollaboraEnabled.value ? props.collaboraHref : props.fileProperties.url;
+	}
+
+	if (hasPdfMimeType.value || isDescriptionDownloadLink.value) {
+		return props.fileProperties.url;
+	}
+
+	return undefined;
+});
 
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();

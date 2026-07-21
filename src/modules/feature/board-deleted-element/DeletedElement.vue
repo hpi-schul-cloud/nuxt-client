@@ -2,7 +2,7 @@
 	<VCard
 		v-show="allowedOperations.deleteElement"
 		ref="deletedElement"
-		class="mb-4"
+		class="content-element-card mb-4"
 		data-testid="board-deleted-element"
 		elevation="0"
 		variant="outlined"
