@@ -1,16 +1,7 @@
 import ImageDisplay from "./ImageDisplay.vue";
-import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { LightBoxContentType, LightBoxOptions, useLightBox } from "@ui-light-box";
 import { mount } from "@vue/test-utils";
-import { ref } from "vue";
-
-vi.mock("@ui-light-box");
-vi.mock("@/utils/fileHelper");
-
-const mockedUseLightBox = vi.mocked(useLightBox);
-const mockedConvertDownloadToPreviewUrl = vi.mocked(convertDownloadToPreviewUrl);
 
 describe("ImageDisplay", () => {
 	const setup = (props: { isEditMode: boolean; alternativeText?: string }) => {
@@ -26,16 +17,6 @@ describe("ImageDisplay", () => {
 			showMenu: true,
 		};
 
-		const open = vi.fn();
-		mockedUseLightBox.mockReturnValue({
-			isLightBoxOpen: ref(false),
-			open,
-			close: vi.fn(),
-			lightBoxOptions: ref(),
-		});
-
-		mockedConvertDownloadToPreviewUrl.mockImplementation((downloadUrl) => downloadUrl);
-
 		const wrapper = mount(ImageDisplay, {
 			props: propsData,
 			global: {
@@ -50,7 +31,6 @@ describe("ImageDisplay", () => {
 			nameProp: propsData.name,
 			previewSrc: propsData.previewSrc,
 			element,
-			open,
 		};
 	};
 	const imageSelektor = "preview-image-stub";
@@ -101,50 +81,64 @@ describe("ImageDisplay", () => {
 		});
 
 		describe("when div emits click", () => {
-			it("should call open function", () => {
-				const alternativeText = "alternative text";
-				const { wrapper, src, nameProp, open } = setup({
+			it("should not emit activate event in view mode", async () => {
+				const { wrapper } = setup({
 					isEditMode: false,
-					alternativeText,
+					alternativeText: "alternative text",
 				});
-				const options: LightBoxOptions = {
-					type: LightBoxContentType.IMAGE,
-					downloadUrl: src,
-					previewUrl: src,
-					alt: alternativeText,
-					name: nameProp,
-				};
 
 				const image = wrapper.find(imageSelektor);
 				expect(image.exists()).toBe(true);
-				image.trigger("click");
+				await image.trigger("click");
 
-				expect(open).toHaveBeenCalledTimes(1);
-				expect(open).toHaveBeenCalledWith(options);
+				expect(wrapper.emitted("activate")).toBeUndefined();
+			});
+
+			it("should emit activate event in edit mode", async () => {
+				const { wrapper } = setup({
+					isEditMode: true,
+					alternativeText: "alternative text",
+				});
+
+				const image = wrapper.find(imageSelektor);
+				expect(image.exists()).toBe(true);
+				await image.trigger("click");
+
+				expect(wrapper.emitted("activate")).toHaveLength(1);
 			});
 		});
 
+		it("should not set interactive class in view mode", () => {
+			const { wrapper } = setup({ isEditMode: false });
+
+			expect(wrapper.find(".content-element-interactive").exists()).toBe(false);
+		});
+
 		describe("when div emits keydown", () => {
-			it.each(["space", "enter"])("should call open function when pressing %s", async (key) => {
-				const alternativeText = "alternative text";
-				const { wrapper, src, nameProp, open } = setup({
+			it.each(["space", "enter"])("should not emit activate event in view mode when pressing %s", async (key) => {
+				const { wrapper } = setup({
 					isEditMode: false,
-					alternativeText,
+					alternativeText: "alternative text",
 				});
-				const options: LightBoxOptions = {
-					type: LightBoxContentType.IMAGE,
-					downloadUrl: src,
-					previewUrl: src,
-					alt: alternativeText,
-					name: nameProp,
-				};
 
 				const image = wrapper.find(imageSelektor);
 				expect(image.exists()).toBe(true);
-				image.trigger(`keydown.${key}`);
+				await image.trigger(`keydown.${key}`);
 
-				expect(open).toHaveBeenCalledTimes(1);
-				expect(open).toHaveBeenCalledWith(options);
+				expect(wrapper.emitted("activate")).toBeUndefined();
+			});
+
+			it.each(["space", "enter"])("should emit activate event in edit mode when pressing %s", async (key) => {
+				const { wrapper } = setup({
+					isEditMode: true,
+					alternativeText: "alternative text",
+				});
+
+				const image = wrapper.find(imageSelektor);
+				expect(image.exists()).toBe(true);
+				await image.trigger(`keydown.${key}`);
+
+				expect(wrapper.emitted("activate")).toHaveLength(1);
 			});
 		});
 	});
@@ -189,6 +183,12 @@ describe("ImageDisplay", () => {
 
 				expect(alt).toBe("components.cardElement.fileElement.emptyAlt " + nameProp);
 			});
+		});
+
+		it("should set interactive class in edit mode", () => {
+			const { wrapper } = setup({ isEditMode: true });
+
+			expect(wrapper.find(".content-element-interactive").exists()).toBe(true);
 		});
 	});
 });

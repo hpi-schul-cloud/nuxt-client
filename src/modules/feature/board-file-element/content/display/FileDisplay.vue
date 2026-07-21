@@ -7,6 +7,7 @@
 		:is-edit-mode="isEditMode"
 		:element="fileProperties.element"
 		:show-menu="showMenu"
+		@activate="onActivate"
 	>
 		<slot />
 	</PdfDisplay>
@@ -18,6 +19,7 @@
 		:is-edit-mode="isEditMode"
 		:element="fileProperties.element"
 		:show-menu="showMenu"
+		@activate="onActivate"
 	>
 		<slot />
 	</ImageDisplay>
@@ -33,7 +35,12 @@
 	<AudioDisplay v-else-if="hasAudioMimeType" :src="fileProperties.url" :show-menu="showMenu" @error="onAddAlert">
 		<slot />
 	</AudioDisplay>
-	<CollaboraDisplay v-else-if="hasCollaboraMimeType && isCollaboraEnabled" :show-menu="showMenu">
+	<CollaboraDisplay
+		v-else-if="hasCollaboraMimeType && isCollaboraEnabled"
+		:is-edit-mode="isEditMode"
+		:show-menu="showMenu"
+		@activate="onActivate"
+	>
 		<slot />
 	</CollaboraDisplay>
 </template>
@@ -61,6 +68,7 @@ const props = defineProps({
 
 interface Emits {
 	(e: "add:alert", alert: FileAlert): void;
+	(e: "activate", event: Event): void;
 }
 const emit = defineEmits<Emits>();
 
@@ -73,5 +81,9 @@ const isCollaboraEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BO
 
 const onAddAlert = (alert: FileAlert) => {
 	emit("add:alert", alert);
+};
+
+const onActivate = (event: Event) => {
+	emit("activate", event);
 };
 </script>

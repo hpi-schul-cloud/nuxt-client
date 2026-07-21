@@ -24,12 +24,22 @@ import {
 } from "@ui-kebab-menu";
 import { useShareBoardLink, useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
+import { useElementHover } from "@vueuse/core";
 import { Mocked } from "vitest";
 import { computed, ref } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VCard } from "vuetify/components";
 
 vi.mock("@util-board");
+
+vi.mock("@vueuse/core", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@vueuse/core")>();
+
+	return {
+		...actual,
+		useElementHover: vi.fn(actual.useElementHover),
+	};
+});
 
 vi.mock("@data-board/BoardFocusHandler.composable");
 vi.mock("@data-board/edit-mode.composable");
@@ -306,6 +316,44 @@ describe("CardHost", () => {
 
 				expect(confirmDialogUtils.askDeletionForType).toHaveBeenCalledWith("components.boardCard");
 				expect(wrapper.emitted("delete:card")).toHaveLength(1);
+			});
+		});
+	});
+
+	describe("hover state", () => {
+		describe("when user hovers over card and user has move permission", () => {
+			describe("when card is not in edit mode", () => {
+				it("should apply hover attribute to Card", async () => {
+					vi.mocked(useElementHover).mockReturnValue(ref(true));
+
+					vi.mocked(useCourseBoardEditMode).mockReturnValue(
+						mockComposable(useCourseBoardEditMode, {
+							isEditMode: computed(() => false),
+						})
+					);
+
+					const { wrapper } = setup({ allowedOperations: { moveCard: true } });
+					const card = wrapper.findComponent(VCard);
+
+					expect(card.props("hover")).toBe(true);
+				});
+			});
+
+			describe("when card is in edit mode", () => {
+				it("should not apply hover attribute to Card", async () => {
+					vi.mocked(useElementHover).mockReturnValue(ref(true));
+
+					vi.mocked(useCourseBoardEditMode).mockReturnValue(
+						mockComposable(useCourseBoardEditMode, {
+							isEditMode: computed(() => true),
+						})
+					);
+
+					const { wrapper } = setup({ allowedOperations: { moveCard: true } });
+					const card = wrapper.findComponent(VCard);
+
+					expect(card.props("hover")).toBe(false);
+				});
 			});
 		});
 	});

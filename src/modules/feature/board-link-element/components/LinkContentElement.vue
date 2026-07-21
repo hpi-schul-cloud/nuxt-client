@@ -1,9 +1,9 @@
 <template>
 	<VCard
 		ref="linkContentElement"
-		class="mb-4"
+		class="content-element-card mb-4"
 		data-testid="board-link-element"
-		:class="{ 'd-none': isHidden }"
+		:class="{ 'd-none': isHidden, 'content-element-card-edit-mode': isEditMode }"
 		:variant="outlined"
 		:ripple="false"
 		:aria-label="ariaLabel"
