@@ -16,19 +16,15 @@ export const useAdministrationRoomStore = defineStore("administrationRoomStore",
 
 	const sortAndFormatList = (list: RoomStatsItemResponse[]) => {
 		const userSchoolName = schoolDetails.value.name;
-		return list
-			.map((room) => ({
-				...room,
-			}))
-			.sort((a, b) => {
-				if (!a.owner && b.owner) return -1;
-				if (a.owner && !b.owner) return 1;
+		return list.sort((a, b) => {
+			if (!a.owner && b.owner) return -1;
+			if (a.owner && !b.owner) return 1;
 
-				if (a.schoolName === userSchoolName && b.schoolName !== userSchoolName) return -1;
-				if (a.schoolName !== userSchoolName && b.schoolName === userSchoolName) return 1;
+			if (a.schoolName === userSchoolName && b.schoolName !== userSchoolName) return -1;
+			if (a.schoolName !== userSchoolName && b.schoolName === userSchoolName) return 1;
 
-				return a.schoolName.localeCompare(b.schoolName) || a.name.localeCompare(b.name);
-			});
+			return a.schoolName.localeCompare(b.schoolName) || a.name.localeCompare(b.name);
+		});
 	};
 
 	const fetchAllRoomPages = async (batchSize = 500) => {
