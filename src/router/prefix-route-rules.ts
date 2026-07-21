@@ -10,6 +10,10 @@ export const PREFIX_ROUTE_RULES: PrefixRouteRule[] = [
 		prefix: "/boards",
 		valid: new RegExp(`^/boards/${REGEX_ID}(?:/cards/${REGEX_ID})?/?$`, "i"),
 	},
+	{
+		prefix: "/folder",
+		valid: new RegExp(`^/folder/${REGEX_ID}(?:/trash)?/?$`, "i"),
+	},
 ];
 
 const normalizeRoutePath = (route: string): string => route.split("?")[0].toLowerCase();
