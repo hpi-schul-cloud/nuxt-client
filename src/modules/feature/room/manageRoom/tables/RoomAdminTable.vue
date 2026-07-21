@@ -15,7 +15,7 @@
 		</template>
 
 		<template #[`item.createdAt`]="{ item }: RoomAdminTableItem">
-			<span>{{ formatUtc(item.createdAt, "date") }}</span>
+			<span>{{ formattedCreatedAtByRoomId.get(item.roomId) }}</span>
 		</template>
 
 		<template #[`item.actions`]="{ item }: RoomAdminTableItem">
@@ -79,6 +79,14 @@ const { t } = useI18n();
 const administrationRoomStore = useAdministrationRoomStore();
 const { deleteRoom } = administrationRoomStore;
 const { roomList, userSchoolId } = storeToRefs(administrationRoomStore);
+
+const formattedCreatedAtByRoomId = computed(() => {
+	const map = new Map<string, string | undefined>();
+	for (const room of roomList.value) {
+		map.set(room.roomId, formatUtc(room.createdAt, "date"));
+	}
+	return map;
+});
 
 const onDeleteRoom = async (item: RoomStatsItemResponse) => {
 	const shouldDelete = await askDeletion(
