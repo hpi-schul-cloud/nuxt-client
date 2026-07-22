@@ -14,6 +14,7 @@ import { FileRecordScanStatus, PreviewStatus, PreviewWidth } from "@api-file-sto
 import { FileElementResponse } from "@api-server";
 import { useBoardAllowedOperations, useContentElementState } from "@data-board";
 import * as FileStorageApi from "@data-file";
+import { mdiFileDocumentOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyElement } from "@ui-board";
 import { flushPromises, shallowMount } from "@vue/test-utils";
@@ -186,22 +187,15 @@ describe("FileContentElement", () => {
 				expect(wrapper.findComponent(FileContentElement).exists()).toBe(true);
 			});
 
-			it("should pass isOutlined prop to v-card", () => {
+			it("should render EmptyElement", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.findComponent({ ref: "fileContentElement" });
 				const emptyElement = wrapper.findComponent(EmptyElement);
 				expect(card.exists()).toBe(false);
 				expect(emptyElement.exists()).toBe(true);
+				expect(emptyElement.props("icon")).toBe(mdiFileDocumentOutline);
 				expect(emptyElement.props("title")).toBe("components.cardElement.fileElement.noElement");
-			});
-
-			it("should not set edit-mode marker class on v-card", () => {
-				const { wrapper } = setup();
-
-				const card = wrapper.findComponent({ ref: "fileContentElement" });
-
-				expect(card.classes()).not.toContain("content-element-card-edit-mode");
 			});
 
 			it("should not render FileContent component", async () => {

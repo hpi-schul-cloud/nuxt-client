@@ -8,7 +8,7 @@ import { H5PContentParentType } from "@api-h5p";
 import { H5pElementResponse } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
-import { ContentElementBar } from "@ui-board";
+import { ContentElementBar, EmptyElement } from "@ui-board";
 import { LineClamp } from "@ui-line-clamp";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { flushPromises, mount } from "@vue/test-utils";
@@ -164,8 +164,12 @@ describe("H5pElement", () => {
 			it("should show empty element", () => {
 				const { wrapper } = setup();
 
+				const emptyElement = wrapper.findComponent(EmptyElement);
+
 				expect(wrapper.findComponent({ ref: "elementCard" }).exists()).toEqual(false);
-				expect(wrapper.text()).toContain("components.cardElement.h5pElement.noElement");
+				expect(emptyElement.exists()).toEqual(true);
+				expect(emptyElement.props("icon")).toEqual("$h5pOutline");
+				expect(emptyElement.props("title")).toEqual("components.cardElement.h5pElement.noElement");
 			});
 
 			it("should not show card or empty element when user has no edit permissions", () => {
@@ -176,6 +180,7 @@ describe("H5pElement", () => {
 				const { wrapper } = setup();
 
 				expect(wrapper.findComponent({ ref: "elementCard" }).exists()).toEqual(false);
+				expect(wrapper.findComponent(EmptyElement).exists()).toEqual(false);
 				expect(wrapper.text()).not.toContain("components.cardElement.h5pElement.noElement");
 			});
 		});
