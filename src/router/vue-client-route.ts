@@ -2,7 +2,6 @@
 // everything else will be forwarded to the legacy client
 // using the ./proxy.js serverMiddleware
 //
-// Loaded by vite.config via dev-server-proxy-plugin (Node context).
 // Only use relative imports to lightweight modules — no @/ aliases or app dependencies.
 
 import { isCompletePrefixedRoute } from "./prefix-route-rules";
@@ -78,6 +77,8 @@ const vueRoutes = [
 	`^/src/`,
 	`^/node_modules/`,
 ];
+
+const invalidVueRoutes = ["^/boards/?$", "^/folder/?$", "^/collabora/?$"];
 
 const matchesWhitelist = (path: string) => vueRoutes.some((regex) => new RegExp(regex).exec(path));
 
