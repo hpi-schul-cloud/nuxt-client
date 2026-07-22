@@ -550,6 +550,7 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"This Etherpad is visible and editable for all course participants.",
 	"components.cardElement.externalToolElement": "External tool",
+	"components.cardElement.externalToolElement.noElement": "No tool available",
 	"components.cardElement.mediaExternalToolElement": "Medium",
 	"components.cardElement.fileElement": "File",
 	"components.cardElement.fileElement.altDescription": "A short description helps people who cannot see the picture.",
@@ -558,6 +559,7 @@ export default {
 		"The audio format is not supported by this browser/operating system.",
 	"components.cardElement.fileElement.caption": "Caption",
 	"components.cardElement.fileElement.emptyAlt": "Here is an image with the following name",
+	"components.cardElement.fileElement.noElement": "No file available",
 	"components.cardElement.fileElement.pdfAlt": "Preview image for ",
 	"components.cardElement.fileElement.collaboraFile": "Document",
 	"components.cardElement.fileElement.previewError": "Failed to load the preview.",
@@ -572,6 +574,7 @@ export default {
 	"components.cardElement.LinkElement": "Link",
 	"components.cardElement.LinkElement.create.label": "Insert link address",
 	"components.cardElement.LinkElement.edit.label": "Edit link address",
+	"components.cardElement.LinkElement.noLink": "No link available",
 	"components.cardElement.LinkElement.validation.success": "The link address is valid",
 	"components.cardElement.notification.visibleAndEditable":
 		"This whiteboard is visible and editable for all course participants.",
@@ -586,6 +589,7 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} not available. Please contact the school administrator.",
 	"components.cardElement.h5pElement": "Interactive learning element",
+	"components.cardElement.h5pElement.noElement": "No learning element available",
 	"components.cardElement.h5pElement.create": "Create learning element...",
 	"components.cardElement.h5pElement.title.error.load":
 		"The title of an interactive learning element could not be loaded.",

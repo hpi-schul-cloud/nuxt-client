@@ -14,7 +14,9 @@ import { FileRecordScanStatus, PreviewStatus, PreviewWidth } from "@api-file-sto
 import { FileElementResponse } from "@api-server";
 import { useBoardAllowedOperations, useContentElementState } from "@data-board";
 import * as FileStorageApi from "@data-file";
+import { mdiFileDocumentOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
+import { EmptyElement } from "@ui-board";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { computed, nextTick, ref } from "vue";
@@ -185,20 +187,15 @@ describe("FileContentElement", () => {
 				expect(wrapper.findComponent(FileContentElement).exists()).toBe(true);
 			});
 
-			it("should pass isOutlined prop to v-card", () => {
+			it("should render EmptyElement", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.findComponent({ ref: "fileContentElement" });
-
-				expect(card.props("variant")).toBe("elevated");
-			});
-
-			it("should not set edit-mode marker class on v-card", () => {
-				const { wrapper } = setup();
-
-				const card = wrapper.findComponent({ ref: "fileContentElement" });
-
-				expect(card.classes()).not.toContain("content-element-card-edit-mode");
+				const emptyElement = wrapper.findComponent(EmptyElement);
+				expect(card.exists()).toBe(false);
+				expect(emptyElement.exists()).toBe(true);
+				expect(emptyElement.props("icon")).toBe(mdiFileDocumentOutline);
+				expect(emptyElement.props("title")).toBe("components.cardElement.fileElement.noElement");
 			});
 
 			it("should not render FileContent component", async () => {
@@ -216,7 +213,7 @@ describe("FileContentElement", () => {
 				await nextTick();
 
 				const fileUpload = wrapper.findComponent(FileUpload);
-				expect(fileUpload.exists()).toBe(true);
+				expect(fileUpload.exists()).toBe(false);
 			});
 
 			it("should not render slot menu component", async () => {
@@ -224,6 +221,18 @@ describe("FileContentElement", () => {
 				await nextTick();
 
 				expect(wrapper.html()).not.toContain(menu);
+			});
+
+			it("should not render card or empty element when user has no edit permissions", () => {
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ updateElement: false, createFileElement: false }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
+
+				const { wrapper } = setup();
+
+				const card = wrapper.findComponent({ ref: "fileContentElement" });
+				expect(card.exists()).toBe(false);
+				expect(wrapper.text()).not.toContain("components.cardElement.fileElement.noElement");
 			});
 		});
 
@@ -314,7 +323,7 @@ describe("FileContentElement", () => {
 
 					const card = wrapper.findComponent({ ref: "fileContentElement" });
 
-					expect(card.props("variant")).toBe("elevated");
+					expect(card.props("variant")).toBe("text");
 				});
 			});
 
@@ -1565,7 +1574,7 @@ describe("FileContentElement", () => {
 
 			const { wrapper, mockedAlerts } = getWrapper({
 				element,
-				isEditMode: false,
+				isEditMode: true,
 				columnIndex: 0,
 				rowIndex: 1,
 				elementIndex: 2,
