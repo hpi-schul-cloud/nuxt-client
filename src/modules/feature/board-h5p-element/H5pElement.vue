@@ -1,6 +1,6 @@
 <template>
 	<VCard
-		v-show="hasLinkedContent || isEditMode"
+		v-if="hasLinkedContent || isEditMode"
 		ref="elementCard"
 		class="content-element-card mb-4"
 		data-testid="board-hp5-element"
@@ -45,6 +45,11 @@
 			</template>
 		</ContentElementBar>
 	</VCard>
+	<EmptyElement
+		v-else-if="canManageH5pElements"
+		icon="$h5pOutline"
+		:title="t('components.cardElement.h5pElement.noElement')"
+	/>
 </template>
 
 <script setup lang="ts">
@@ -56,11 +61,11 @@ import { injectStrict } from "@/utils/inject";
 import { decodeHtmlEntities } from "@/utils/textFormatting";
 import { H5PContentParentType } from "@api-h5p";
 import { H5pElementResponse } from "@api-server";
-import { useBoardFocusHandler } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
-import { ContentElementBar } from "@ui-board";
+import { ContentElementBar, EmptyElement } from "@ui-board";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { computed, onMounted, Ref, ref, toRef, watch } from "vue";
+import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
@@ -84,20 +89,23 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { allowedOperations } = useBoardAllowedOperations();
 const { smAndUp } = useDisplay();
 const { getContentTitle } = useH5PEditorApi();
 
-const element: Ref<H5pElementResponse> = toRef(props, "element");
+const element = toRef(props, "element");
 
-const elementCard: Ref<HTMLElement | null> = ref(null);
+const elementCard = ref<HTMLElement | null>(null);
 useBoardFocusHandler(element.value.id, elementCard);
 
 const hasLinkedContent = computed(() => !!element.value.content.contentId);
 
-const router = useRouter();
-const editorWindow: Ref<Window | null> = ref(null);
+const canManageH5pElements = computed(() => allowedOperations.value.updateElement);
 
-const isListLayout: Ref<boolean> = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
+const router = useRouter();
+const editorWindow = ref<Window | null>(null);
+
+const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 
 const isSmallOrLargerListBoard = computed(() => smAndUp.value && (isListLayout.value || props.isDetailView));
 
@@ -115,6 +123,12 @@ const openEditorWindow = () => {
 		},
 	});
 
+	/******************************************************************************
+	 * e2e tests (hpi-schul-cloud/e2e-system-tests) depend on this window.open() call
+	 * to intercept the editor URL via a stub. Do NOT replace this with an
+	 * <a target="_blank"> link, router navigation, or any other mechanism that bypasses
+	 * window.open — doing so will break the e2e tests.
+	 ******************************************************************************/
 	editorWindow.value = window.open(route.href, "_blank");
 };
 
@@ -133,6 +147,12 @@ const openPlayerWindow = () => {
 		},
 	});
 
+	/******************************************************************************
+	 * e2e tests (hpi-schul-cloud/e2e-system-tests) depend on this window.open() call
+	 * to intercept the player URL via a stub. Do NOT replace this with an
+	 * <a target="_blank"> link, router navigation, or any other mechanism that bypasses
+	 * window.open — doing so will break the e2e tests.
+	 ******************************************************************************/
 	editorWindow.value = window.open(route.href, "_blank");
 };
 

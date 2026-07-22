@@ -16,7 +16,7 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ExternalToolElementResponse } from "@api-server";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
 	ContextExternalTool,
 	ExternalToolDisplayData,
@@ -26,12 +26,12 @@ import {
 } from "@data-external-tool";
 import { mdiPuzzleOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
-import { ContentElementBar } from "@ui-board";
+import { ContentElementBar, EmptyElement } from "@ui-board";
 import { useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
-import { nextTick, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { VImg } from "vuetify/lib/components/index";
 
 vi.mock("@data-board");
@@ -71,6 +71,15 @@ describe("ExternalToolElement", () => {
 		vi.mocked(useExternalToolLaunchState).mockReturnValue(useExternalToolLaunchStateMock);
 		vi.mocked(useSharedLastCreatedElement).mockReturnValue(useSharedLastCreatedElementMock);
 		vi.mocked(useContextExternalToolConfigurationStatus).mockReturnValue(useToolConfigurationStatusMock);
+		vi.mocked(useBoardAllowedOperations).mockReturnValue({
+			allowedOperations: computed(
+				() =>
+					({
+						updateElement: true,
+						createExternalToolElement: true,
+					}) as unknown
+			),
+		} as ReturnType<typeof useBoardAllowedOperations>);
 	});
 
 	afterEach(() => {
@@ -326,12 +335,32 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should hide the element", () => {
+			it("should show empty element", () => {
 				const { wrapper } = setup();
 
-				const element = wrapper.findComponent({ ref: "externalToolElement" });
+				const element = wrapper.findComponent(EmptyElement);
 
-				expect(element.isVisible()).toEqual(false);
+				expect(element.isVisible()).toEqual(true);
+				expect(element.props().icon).toEqual(mdiPuzzleOutline);
+				expect(element.props().title).toEqual("components.cardElement.externalToolElement.noElement");
+			});
+
+			it("should not show empty element when user has no edit permissions", () => {
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(
+						() =>
+							({
+								updateElement: false,
+								createExternalToolElement: false,
+							}) as unknown
+					),
+				} as ReturnType<typeof useBoardAllowedOperations>);
+
+				const { wrapper } = setup();
+
+				const element = wrapper.findComponent(EmptyElement);
+
+				expect(element.exists()).toEqual(false);
 			});
 		});
 
@@ -347,10 +376,10 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should show the element", () => {
+			it("should render element for tool selection", () => {
 				const { wrapper } = setup();
 
-				const element = wrapper.findComponent({ ref: "externalToolElement" });
+				const element = wrapper.findComponent(ContentElementBar);
 
 				expect(element.isVisible()).toEqual(true);
 			});
@@ -377,12 +406,30 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should hide the element", () => {
+			it("should show empty element", () => {
 				const { wrapper } = setup();
 
-				const element = wrapper.findComponent({ ref: "externalToolElement" });
+				const element = wrapper.findComponent(EmptyElement);
 
-				expect(element.isVisible()).toEqual(false);
+				expect(element.isVisible()).toEqual(true);
+			});
+
+			it("should not show empty element when user has no edit permissions", () => {
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(
+						() =>
+							({
+								updateElement: false,
+								createExternalToolElement: false,
+							}) as unknown
+					),
+				} as ReturnType<typeof useBoardAllowedOperations>);
+
+				const { wrapper } = setup();
+
+				const element = wrapper.findComponent(EmptyElement);
+
+				expect(element.exists()).toEqual(false);
 			});
 		});
 
@@ -406,10 +453,10 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should show the element", () => {
+			it("should show element for tool selection", () => {
 				const { wrapper } = setup();
 
-				const element = wrapper.findComponent({ ref: "externalToolElement" });
+				const element = wrapper.findComponent(ContentElementBar);
 
 				expect(element.isVisible()).toEqual(true);
 			});
@@ -440,7 +487,7 @@ describe("ExternalToolElement", () => {
 			it("should show the element", () => {
 				const { wrapper } = setup();
 
-				const element = wrapper.findComponent({ ref: "externalToolElement" });
+				const element = wrapper.findComponent(ContentElementBar);
 
 				expect(element.isVisible()).toEqual(true);
 			});
@@ -469,7 +516,7 @@ describe("ExternalToolElement", () => {
 			it("should show the element", () => {
 				const { wrapper } = setup();
 
-				const element = wrapper.findComponent({ ref: "externalToolElement" });
+				const element = wrapper.findComponent(ContentElementBar);
 
 				expect(element.isVisible()).toEqual(true);
 			});
@@ -598,7 +645,7 @@ describe("ExternalToolElement", () => {
 					element: externalToolElementResponseFactory.build({
 						content: { contextExternalToolId: "contextExternalToolId" },
 					}),
-					isEditMode: false,
+					isEditMode: true,
 				});
 
 				return {
@@ -726,12 +773,20 @@ describe("ExternalToolElement", () => {
 	describe("Launch", () => {
 		describe("when clicking on a configured tool card", () => {
 			const setup = () => {
-				const { wrapper } = getWrapper({
-					element: externalToolElementResponseFactory.build({
-						content: { contextExternalToolId: "contextExternalToolId" },
-					}),
-					isEditMode: false,
-				});
+				const contextExternalToolId = "contextExternalToolId";
+				const { wrapper } = getWrapper(
+					{
+						element: externalToolElementResponseFactory.build({
+							content: { contextExternalToolId },
+						}),
+						isEditMode: false,
+					},
+					externalToolDisplayDataFactory.build({
+						contextExternalToolId,
+						isLtiDeepLinkingTool: false,
+						status: schoolToolConfigurationStatusFactory.build(),
+					})
+				);
 
 				return {
 					wrapper,
@@ -1011,12 +1066,20 @@ describe("ExternalToolElement", () => {
 
 	describe("role attribute", () => {
 		const setup = (isEditMode: boolean) => {
-			const { wrapper } = getWrapper({
-				element: externalToolElementResponseFactory.build({
-					content: { contextExternalToolId: null },
-				}),
-				isEditMode,
-			});
+			const contextExternalToolId = "contextExternalToolId";
+			const { wrapper } = getWrapper(
+				{
+					element: externalToolElementResponseFactory.build({
+						content: { contextExternalToolId },
+					}),
+					isEditMode,
+				},
+				externalToolDisplayDataFactory.build({
+					contextExternalToolId,
+					isLtiDeepLinkingTool: false,
+					status: schoolToolConfigurationStatusFactory.build(),
+				})
+			);
 
 			return {
 				wrapper,

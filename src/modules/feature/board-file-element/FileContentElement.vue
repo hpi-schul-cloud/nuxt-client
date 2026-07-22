@@ -1,11 +1,16 @@
 <template>
+	<EmptyElement
+		v-if="!isEditMode && !fileProperties && canManageFileElements"
+		:icon="mdiFileDocumentOutline"
+		:title="t('components.cardElement.fileElement.noElement')"
+	/>
 	<VCard
+		v-else-if="isEditMode || fileProperties"
 		ref="fileContentElement"
 		class="content-element-card board-file-element-card mb-4"
 		:class="{ 'content-element-card-edit-mode': isEditMode }"
 		data-testid="board-file-element"
-		elevation="0"
-		:variant="isOutlined ? 'outlined' : 'elevated'"
+		:variant="cardVariant"
 		:ripple="false"
 		:aria-label="cardAriaLabel"
 		link
@@ -69,7 +74,8 @@ import { FileElementResponse } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { useFileStorageApi } from "@data-file";
-import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { mdiFileDocumentOutline } from "@icons/material";
+import { BoardMenu, BoardMenuScope, EmptyElement } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { LightBoxContentType, LightBoxOptions, useLightBox } from "@ui-light-box";
 import { useDebounceFn } from "@vueuse/core";
@@ -77,7 +83,7 @@ import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-type Props = {
+const props = defineProps<{
 	element: FileElementResponse;
 	isEditMode: boolean;
 	isNotFirstElement?: boolean;
@@ -86,9 +92,7 @@ type Props = {
 	rowIndex: number;
 	elementIndex: number;
 	isDetailView?: boolean;
-};
-
-const props = defineProps<Props>();
+}>();
 
 const emit = defineEmits<{
 	(e: "delete:element", elementId: string): void;
@@ -139,11 +143,15 @@ const fileProperties = computed(() => {
 	};
 });
 
-const isOutlined = computed(() => {
+const canManageFileElements = computed(
+	() => allowedOperations.value.updateElement || allowedOperations.value.createFileElement
+);
+
+const cardVariant = computed(() => {
 	const { isEditMode } = props;
 	const isUploadingInViewMode = fileRecord.value?.id !== undefined && !isEditMode && !isUploading.value;
 
-	return isUploadingInViewMode || isEditMode;
+	return isUploadingInViewMode || isEditMode ? "outlined" : "text";
 });
 
 watch(element.value, async () => {
@@ -164,7 +172,7 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 	}
 };
 
-const onUploadFile = async (file: File): Promise<void> => {
+const onUploadFile = async (file: File) => {
 	try {
 		await upload(file, element.value.id, FileRecordParentType.BOARDNODES);
 		element.value.content.caption = " ";
@@ -173,7 +181,7 @@ const onUploadFile = async (file: File): Promise<void> => {
 	}
 };
 
-const onFetchFile = async (): Promise<void> => {
+const onFetchFile = async () => {
 	await tryFetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
 };
 
@@ -314,9 +322,16 @@ const openImageLightBox = () => {
 };
 
 const openCollabora = () => {
+	/******************************************************************************
+	 * e2e tests (hpi-schul-cloud/e2e-system-tests) depend on this window.open() call
+	 * to intercept the Collabora editor URL via a stub. Do NOT replace this with an
+	 * <a target="_blank"> link, router navigation, or any other mechanism that bypasses
+	 * window.open — doing so will break the Collabora e2e tests.
+	 ******************************************************************************/
 	window.open(collaboraDescriptionHref.value!, "_blank");
 };
 </script>
+
 <style lang="scss" scoped>
 /* show focus indicatator properly on all browsers */
 .board-file-element-card:focus {
