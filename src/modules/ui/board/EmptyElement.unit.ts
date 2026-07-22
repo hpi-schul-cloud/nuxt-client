@@ -29,4 +29,12 @@ describe("EmptyElement", () => {
 		expect(iconComponent.props("icon")).toBe(icon);
 		expect(wrapper.text()).toContain(title);
 	});
+
+	it("should have a marker class so keyboard interactions can be identified by parent handlers", () => {
+		const { wrapper } = setup({ icon: mdiLink, title: "No content available" });
+
+		const card = wrapper.find('[data-testid="board-empty-element"]');
+
+		expect(card.classes()).toContain("board-empty-element");
+	});
 });
