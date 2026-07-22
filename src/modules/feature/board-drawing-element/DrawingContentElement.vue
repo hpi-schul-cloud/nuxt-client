@@ -1,7 +1,7 @@
 <template>
 	<v-card
 		ref="drawingElement"
-		class="mb-4"
+		class="content-element-card mb-4"
 		data-testid="drawing-element"
 		variant="outlined"
 		:ripple="false"

@@ -5,7 +5,7 @@ import FileContent from "./FileContent.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 import FileInputs from "./inputs/FileInputs.vue";
 import { createTestEnvStore, fileElementResponseFactory } from "@@/tests/test-utils";
-import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { PreviewStatus } from "@api-file-storage";
 import { createTestingPinia } from "@pinia/testing";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
@@ -30,14 +30,30 @@ describe("FileContent", () => {
 		isCollaboraEditable?: boolean;
 		isCollaboraEnabled?: boolean;
 		isDetailView?: boolean;
+		isEditMode?: boolean;
+		isDownloadAllowed?: boolean;
+		collaboraHref?: string;
 	}) => {
-		const { isListBoard, mimeType, previewUrl, windowWidth, isCollaboraEditable, isDetailView } = {
+		const {
+			isListBoard,
+			mimeType,
+			previewUrl,
+			windowWidth,
+			isCollaboraEditable,
+			isDetailView,
+			isEditMode,
+			isDownloadAllowed,
+			collaboraHref,
+		} = {
 			isListBoard: false,
 			mimeType: "testMimeType",
 			previewUrl: "testPreviewUrl",
 			windowWidth: 1280,
 			isCollaboraEditable: false,
 			isDetailView: false,
+			isEditMode: true,
+			isDownloadAllowed: true,
+			collaboraHref: undefined,
 			...options,
 		};
 
@@ -55,7 +71,7 @@ describe("FileContent", () => {
 			url: "testUrl",
 			previewUrl,
 			previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
-			isDownloadAllowed: true,
+			isDownloadAllowed,
 			element,
 			mimeType,
 			isCollaboraEditable,
@@ -70,12 +86,13 @@ describe("FileContent", () => {
 		const wrapper = shallowMount(FileContent, {
 			props: {
 				fileProperties,
-				isEditMode: true,
+				collaboraHref,
+				isEditMode,
 				isDetailView: isDetailView ?? false,
 				alerts,
 			},
 			global: {
-				plugins: [createTestingVuetify()],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[BOARD_IS_LIST_LAYOUT as symbol]: isListBoard,
 				},
@@ -315,6 +332,14 @@ describe("FileContent", () => {
 				isEditMode: true,
 				showMenu: true,
 			});
+		});
+
+		it("should emit activate when FileDisplay emits activate", () => {
+			const { wrapper } = setup();
+
+			wrapper.findComponent(FileDisplay).vm.$emit("activate");
+
+			expect(wrapper.emitted("activate")).toHaveLength(1);
 		});
 
 		describe("show menu", () => {
@@ -607,20 +632,103 @@ describe("FileContent", () => {
 			});
 		});
 
-		describe("file description src", () => {
-			it("should be undefined when not a pdf file", () => {
-				const { wrapper } = setup();
+		describe("file description href", () => {
+			it("should pass file url when file is a plain downloadable type", () => {
+				const { wrapper } = setup({
+					previewUrl: undefined,
+				});
 				const props = wrapper.findComponent(FileDescription).attributes();
-				expect(props.src).toBe(undefined);
+				expect(props.href).toBe("testUrl");
 			});
 
-			it("should pass url to src when pdf file", () => {
-				const { wrapper, fileProperties } = setup({
+			it("should pass file url when pdf file", () => {
+				const { wrapper } = setup({
 					mimeType: "application/pdf",
 				});
 				const props = wrapper.findComponent(FileDescription).attributes();
 
-				expect(props.src).toBe(fileProperties.url);
+				expect(props.href).toBe("testUrl");
+			});
+
+			it("should pass collabora href when collabora is enabled and file is collabora editable", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isCollaboraEditable: true,
+					isCollaboraEnabled: true,
+					previewUrl: undefined,
+					collaboraHref: "/collabora/123?edit=true",
+				});
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.href).toBe("/collabora/123?edit=true");
+			});
+
+			it("should pass file url when collabora file and collabora feature is disabled", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isCollaboraEditable: true,
+					isCollaboraEnabled: false,
+					previewUrl: undefined,
+				});
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.href).toBe("testUrl");
+			});
+		});
+
+		describe("file description download link", () => {
+			it("should pass true when fallback file is downloadable", () => {
+				const { wrapper } = setup({
+					previewUrl: undefined,
+				});
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.isdownloadlink).toBe("true");
+			});
+
+			it("should pass false when file is pdf", () => {
+				const { wrapper } = setup({
+					mimeType: "application/pdf",
+				});
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.isdownloadlink).toBe("false");
+			});
+
+			it("should pass false when file is collabora", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isCollaboraEditable: true,
+					isCollaboraEnabled: true,
+					previewUrl: undefined,
+				});
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.isdownloadlink).toBe("false");
+			});
+
+			it("should pass false when file is collabora and collabora feature is disabled", () => {
+				const { wrapper } = setup({
+					mimeType: "text/plain",
+					isCollaboraEditable: true,
+					isCollaboraEnabled: false,
+					previewUrl: undefined,
+				});
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.isdownloadlink).toBe("false");
+				expect(props.href).toBe("testUrl");
+			});
+
+			it("should pass false when file is not downloadable", () => {
+				const { wrapper } = setup({
+					previewUrl: undefined,
+					isDownloadAllowed: false,
+				});
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.isdownloadlink).toBe("false");
+				expect(props.href).toBeUndefined();
 			});
 		});
 	});

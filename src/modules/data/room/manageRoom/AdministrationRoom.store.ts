@@ -1,6 +1,5 @@
 import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
-import { formatUtc } from "@/utils/date-time.utils";
 import { RoomApiFactory, RoomStatsItemResponse } from "@api-server";
 import { notifyError, useSchoolStoreRefs } from "@data-app";
 import { defineStore } from "pinia";
@@ -17,20 +16,15 @@ export const useAdministrationRoomStore = defineStore("administrationRoomStore",
 
 	const sortAndFormatList = (list: RoomStatsItemResponse[]) => {
 		const userSchoolName = schoolDetails.value.name;
-		return list
-			.map((room) => ({
-				...room,
-				createdAt: formatUtc(room.createdAt, "date") ?? room.createdAt,
-			}))
-			.sort((a, b) => {
-				if (!a.owner && b.owner) return -1;
-				if (a.owner && !b.owner) return 1;
+		return list.sort((a, b) => {
+			if (!a.owner && b.owner) return -1;
+			if (a.owner && !b.owner) return 1;
 
-				if (a.schoolName === userSchoolName && b.schoolName !== userSchoolName) return -1;
-				if (a.schoolName !== userSchoolName && b.schoolName === userSchoolName) return 1;
+			if (a.schoolName === userSchoolName && b.schoolName !== userSchoolName) return -1;
+			if (a.schoolName !== userSchoolName && b.schoolName === userSchoolName) return 1;
 
-				return a.schoolName.localeCompare(b.schoolName) || a.name.localeCompare(b.name);
-			});
+			return a.schoolName.localeCompare(b.schoolName) || a.name.localeCompare(b.name);
+		});
 	};
 
 	const fetchAllRoomPages = async (batchSize = 500) => {

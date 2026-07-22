@@ -1,7 +1,7 @@
 <template>
 	<v-card
 		ref="collaborativeTextEditorElement"
-		class="text-editor-card mb-4"
+		class="content-element-card text-editor-card mb-4"
 		data-testid="collaborative-text-editor-element"
 		variant="outlined"
 		:ripple="false"

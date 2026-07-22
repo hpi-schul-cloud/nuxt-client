@@ -44,6 +44,18 @@ describe("PdfDisplay", () => {
 		expect(image.attributes("aspectratio")).toBe("1.77777");
 	});
 
+	it("should not set interactive class in view mode", () => {
+		const { wrapper } = setup({ isEditMode: false });
+
+		expect(wrapper.find(".content-element-interactive").exists()).toBe(false);
+	});
+
+	it("should set interactive class in edit mode", () => {
+		const { wrapper } = setup({ isEditMode: true });
+
+		expect(wrapper.find(".content-element-interactive").exists()).toBe(true);
+	});
+
 	it("should display menu when showMenu is true", () => {
 		const { wrapper } = setup({ isEditMode: true, showMenu: true });
 
@@ -61,18 +73,24 @@ describe("PdfDisplay", () => {
 	});
 
 	describe("when div emits click", () => {
-		it("should call open function", () => {
-			const { wrapper, src } = setup({ isEditMode: false });
-
-			const windowOpenSpy = vi.fn();
-			window.open = windowOpenSpy;
+		it("should not emit activate event in view mode", async () => {
+			const { wrapper } = setup({ isEditMode: false });
 
 			const image = wrapper.find("preview-image-stub");
 			expect(image.exists()).toBe(true);
-			image.trigger("click");
+			await image.trigger("click");
 
-			expect(windowOpenSpy).toHaveBeenCalledTimes(1);
-			expect(windowOpenSpy).toHaveBeenCalledWith(src, "_blank");
+			expect(wrapper.emitted("activate")).toBeUndefined();
+		});
+
+		it("should emit activate event in edit mode", async () => {
+			const { wrapper } = setup({ isEditMode: true });
+
+			const image = wrapper.find("preview-image-stub");
+			expect(image.exists()).toBe(true);
+			await image.trigger("click");
+
+			expect(wrapper.emitted("activate")).toHaveLength(1);
 		});
 	});
 });
