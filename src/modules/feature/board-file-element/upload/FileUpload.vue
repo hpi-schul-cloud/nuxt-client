@@ -14,10 +14,8 @@
 					</template>
 				</v-progress-linear>
 			</div>
-
 			<FilePicker v-else v-model:is-file-picker-open="isFilePickerOpen" @update:file="onFileSelect" />
 		</template>
-
 		<template #menu>
 			<slot />
 		</template>

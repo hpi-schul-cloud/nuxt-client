@@ -570,6 +570,7 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Dieses Etherpad ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
 	"components.cardElement.externalToolElement": "Externes Tool",
+	"components.cardElement.externalToolElement.noElement": "Kein Tool vorhanden",
 	"components.cardElement.mediaExternalToolElement": "Medium",
 	"components.cardElement.fileElement": "Datei",
 	"components.cardElement.fileElement.altDescription":
@@ -579,6 +580,7 @@ export default {
 		"Das Audioformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
 	"components.cardElement.fileElement.caption": "Beschreibung",
 	"components.cardElement.fileElement.emptyAlt": "Hier ist ein Bild mit folgendem Namen",
+	"components.cardElement.fileElement.noElement": "Keine Datei vorhanden",
 	"components.cardElement.fileElement.pdfAlt": "Vorschaubild für ",
 	"components.cardElement.fileElement.collaboraFile": "Dokument",
 	"components.cardElement.fileElement.previewError": "Laden der Vorschau fehlgeschlagen.",
@@ -593,6 +595,7 @@ export default {
 	"components.cardElement.LinkElement": "Link",
 	"components.cardElement.LinkElement.create.label": "Link-Adresse einfügen",
 	"components.cardElement.LinkElement.edit.label": "Link-Adresse bearbeiten",
+	"components.cardElement.LinkElement.noLink": "Kein Link vorhanden",
 	"components.cardElement.LinkElement.validation.success": "Link-Adresse gültig",
 	"components.cardElement.notification.visibleAndEditable":
 		"Dieses Whiteboard ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
@@ -607,6 +610,7 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
 	"components.cardElement.h5pElement": "Interaktives Lernelement",
+	"components.cardElement.h5pElement.noElement": "Kein Lernelement vorhanden",
 	"components.cardElement.h5pElement.create": "Lernelement erstellen...",
 	"components.cardElement.h5pElement.title.error.load":
 		"Der Titel eines interaktiven Lernelements konnte nicht geladen werden.",
@@ -1551,6 +1555,10 @@ export default {
 	"pages.courseRooms.publishCard.error": "Beim Veröffentlichen der Karte ist ein Fehler aufgetreten.",
 	"pages.courseRooms.restoreTask.error": "Beim Wiederherstellen der Aufgabe ist ein Fehler aufgetreten.",
 	"pages.courseRooms.sortElements.error": "Beim Sortieren der Karten ist ein Fehler aufgetreten.",
+	"pages.courseRooms.tools.videoConference.notEnabled.teacher":
+		"Videokonferenzen sind für die Schule deaktiviert. Bitte an den Schul-Admin wenden.",
+	"pages.courseRooms.tools.videoConference.notEnabled.participant":
+		"Videokonferenzen sind für die Schule deaktiviert. Bitte an die Lehrkraft wenden.",
 	"pages.files.overview.courseFiles": "Kurs-Dateien",
 	"pages.files.overview.favorites": "Favoriten",
 	"pages.files.overview.personalFiles": "Meine persönlichen Dateien",

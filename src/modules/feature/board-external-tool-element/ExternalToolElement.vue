@@ -1,8 +1,8 @@
 <template>
-	<v-card
-		v-show="showTool || isEditMode"
+	<VCard
+		v-if="showTool || isEditMode"
 		ref="externalToolElement"
-		class="mb-4"
+		class="content-element-card mb-4"
 		:data-testid="`board-external-tool-element-${toolDisplayName}`"
 		variant="outlined"
 		:ripple="false"
@@ -57,7 +57,12 @@
 			@close="onConfigurationDialogClose"
 			@save="onConfigurationDialogSave"
 		/>
-	</v-card>
+	</VCard>
+	<EmptyElement
+		v-else-if="canManageExternalToolElements"
+		:icon="mdiPuzzleOutline"
+		:title="t('components.cardElement.externalToolElement.noElement')"
+	/>
 </template>
 
 <script setup lang="ts">
@@ -66,7 +71,7 @@ import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigu
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { ExternalToolElementResponse } from "@api-server";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import {
 	ContextExternalTool,
@@ -75,24 +80,21 @@ import {
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { mdiPuzzleOutline } from "@icons/material";
-import { ContentElementBar } from "@ui-board";
+import { ContentElementBar, EmptyElement } from "@ui-board";
 import { LineClamp } from "@ui-line-clamp";
 import { useSharedLastCreatedElement } from "@util-board";
-import { computed, ComputedRef, onMounted, onUnmounted, PropType, Ref, ref, toRef, watch } from "vue";
+import { computed, onMounted, onUnmounted, Ref, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
-const props = defineProps({
-	element: {
-		type: Object as PropType<ExternalToolElementResponse>,
-		required: true,
-	},
-	isEditMode: { type: Boolean, required: true },
-	isNotFirstElement: { type: Boolean, required: false },
-	isNotLastElement: { type: Boolean, required: false },
-	columnIndex: { type: Number, required: true },
-	rowIndex: { type: Number, required: true },
-	elementIndex: { type: Number, required: true },
-});
+const props = defineProps<{
+	element: ExternalToolElementResponse;
+	isEditMode: boolean;
+	isNotFirstElement?: boolean;
+	isNotLastElement?: boolean;
+	columnIndex: number;
+	rowIndex: number;
+	elementIndex: number;
+}>();
 
 const emit = defineEmits<{
 	(e: "delete:element", id: string): void;
@@ -102,6 +104,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { allowedOperations } = useBoardAllowedOperations();
 const { modelValue } = useContentElementState(props, {
 	autoSaveDebounce: 0,
 });
@@ -118,7 +121,7 @@ const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
 const externalToolElement = ref<HTMLElement | null>(null);
 useBoardFocusHandler(element.value.id, externalToolElement);
 
-const getIcon: ComputedRef<string | undefined> = computed(() => {
+const getIcon = computed(() => {
 	if (!displayData.value?.logoUrl) {
 		return mdiPuzzleOutline;
 	}
@@ -127,15 +130,15 @@ const getIcon: ComputedRef<string | undefined> = computed(() => {
 
 const { lastCreatedElementId, resetLastCreatedElementId } = useSharedLastCreatedElement();
 
-const hasLinkedTool: ComputedRef<boolean> = computed(
+const hasLinkedTool = computed(
 	() => modelValue.value.contextExternalToolId !== null || props.element.content.contextExternalToolId !== null
 );
 
-const isDeepLinkingTool: ComputedRef<boolean> = computed(() => !!displayData.value?.isLtiDeepLinkingTool);
+const isDeepLinkingTool = computed(() => !!displayData.value?.isLtiDeepLinkingTool);
 
-const hasDeepLink: ComputedRef<boolean> = computed(() => !!displayData.value?.ltiDeepLink);
+const hasDeepLink = computed(() => !!displayData.value?.ltiDeepLink);
 
-const showTool: ComputedRef<boolean> = computed(() => {
+const showTool = computed(() => {
 	if (!displayData.value || !hasLinkedTool.value) {
 		return false;
 	}
@@ -143,9 +146,13 @@ const showTool: ComputedRef<boolean> = computed(() => {
 	return isDeepLinkingTool.value ? hasDeepLink.value : true;
 });
 
-const toolDisplayName: ComputedRef<string> = computed(() => displayData.value?.name ?? "...");
+const canManageExternalToolElements = computed(
+	() => allowedOperations.value.updateElement || allowedOperations.value.createExternalToolElement
+);
 
-const isToolLaunchable: ComputedRef<boolean> = computed(
+const toolDisplayName = computed(() => displayData.value?.name ?? "...");
+
+const isToolLaunchable = computed(
 	() =>
 		!displayData.value?.status.isOutdatedOnScopeSchool &&
 		!displayData.value?.status.isOutdatedOnScopeContext &&
@@ -154,7 +161,7 @@ const isToolLaunchable: ComputedRef<boolean> = computed(
 		!displayData.value?.status.isNotLicensed
 );
 
-const toolConfigurationStatus: ComputedRef<ContextExternalToolConfigurationStatus> = computed(
+const toolConfigurationStatus = computed<ContextExternalToolConfigurationStatus>(
 	() =>
 		displayData.value?.status ?? {
 			isOutdatedOnScopeSchool: false,
@@ -168,9 +175,9 @@ const toolConfigurationStatus: ComputedRef<ContextExternalToolConfigurationStatu
 
 const isLoading = computed(() => hasLinkedTool.value && !displayData.value && isDisplayDataLoading.value);
 
-const isConfigurationDialogOpen: Ref<boolean> = ref(false);
+const isConfigurationDialogOpen = ref(false);
 
-const toolTitle: ComputedRef<string> = computed(() => {
+const toolTitle = computed(() => {
 	if (!hasLinkedTool.value) {
 		return t("feature-board-external-tool-element.placeholder.selectTool");
 	}
