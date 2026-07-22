@@ -72,4 +72,8 @@ const vueRoutes = [
 	`^/node_modules/`,
 ];
 
-export const isVueClient = (path: string) => vueRoutes.some((regex) => new RegExp(regex).exec(path));
+const invalidVueRoutes = ["^/boards/?$", "^/folder/?$", "^/collabora/?$"];
+
+export const isVueClient = (path: string) =>
+	vueRoutes.some((regex) => new RegExp(regex).exec(path)) &&
+	!invalidVueRoutes.some((regex) => new RegExp(regex).exec(path));

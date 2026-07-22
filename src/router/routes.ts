@@ -134,11 +134,11 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		component: () => import("@/pages/Dashboard.page.vue"),
 		name: "dashboard",
 	},
-	{
-		path: "/boards",
-		name: "boards",
-		redirect: { name: "error" },
-	},
+	// {
+	// 	path: "/boards",
+	// 	name: "boards",
+	// 	redirect: { name: "error" },
+	// },
 	{
 		path: `/boards/:id(${REGEX_ID})`,
 		component: async () => (await import("@page-board")).ColumnBoardPage,
