@@ -13,33 +13,19 @@ import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
 // Prevent infinite redirect loops between the Vue and legacy clients
 const incorrectRoutes: Readonly<RouteRecordRaw>[] = [
-	{
-		path: "/boards",
-		name: "boards-error",
-	},
-	{
-		path: "/h5p/player",
-		name: "h5p-player-error",
-	},
-	{
-		path: "/collabora",
-		name: "collabora-error",
-	},
-	{
-		path: "/folder",
-		name: "folder-error",
-	},
-	{
-		path: "/rooms/invitation-link",
-		name: "rooms-invitation-link-error",
-	},
+	"/boards",
+	"/h5p/player",
+	"/collabora",
+	"/folder",
+	"/rooms/invitation-link",
 ].map((route) => ({
-	...route,
-	component: () => import("@/pages/Error.page.vue"),
+	path: route,
+	name: `${route.replace("/", "-")}-error`,
 	beforeEnter: () => {
 		useAppStore().handleApplicationError(HttpStatusCode.NotFound);
 		return true;
 	},
+	component: () => import("@/pages/Error.page.vue"),
 }));
 
 export const routes: Readonly<RouteRecordRaw>[] = [
