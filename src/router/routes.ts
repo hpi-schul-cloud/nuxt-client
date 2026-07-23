@@ -38,7 +38,7 @@ const incorrectRoutes: Readonly<RouteRecordRaw>[] = [
 	component: () => import("@/pages/Error.page.vue"),
 	beforeEnter: () => {
 		useAppStore().handleApplicationError(HttpStatusCode.NotFound);
-		return false;
+		return true;
 	},
 }));
 
