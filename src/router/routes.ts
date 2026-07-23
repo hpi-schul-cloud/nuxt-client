@@ -11,6 +11,35 @@ import { useEnvConfig } from "@data-env";
 import { isDefined } from "@vueuse/core";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
+// Prevent infinite redirect loops between the Vue and legacy clients
+const incorrectRoutes: Readonly<RouteRecordRaw>[] = [
+	{
+		path: "/boards",
+		name: "boards-error",
+		redirect: { name: "error" },
+	},
+	{
+		path: "/h5p/player",
+		name: "h5p-player-error",
+		redirect: { name: "error" },
+	},
+	{
+		path: "/collabora",
+		name: "collabora-error",
+		redirect: { name: "error" },
+	},
+	{
+		path: "/folder",
+		name: "folder-error",
+		redirect: { name: "error" },
+	},
+	{
+		path: "/rooms/invitation-link",
+		name: "rooms-invitation-link-error",
+		redirect: { name: "error" },
+	},
+];
+
 export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: "/administration/ldap/activate",
@@ -155,36 +184,6 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: `/boards/:cardLink(${REGEX_ID}%23card[^/]+)`,
 		redirect: boardCardLinkRedirect,
 		name: "board-card-link",
-	},
-	// Prevents an infinite redirect loop between the Vue and legacy clients for /boards.
-	{
-		path: "/boards",
-		name: "boards",
-		redirect: { name: "error" },
-	},
-	// Prevents an infinite redirect loop between the Vue and legacy clients for /h5p/player.
-	{
-		path: "/h5p/player",
-		name: "h5p-player",
-		redirect: { name: "error" },
-	},
-	// Prevents an infinite redirect loop between the Vue and legacy clients for /collabora.
-	{
-		path: "/collabora",
-		name: "collabora",
-		redirect: { name: "error" },
-	},
-	// Prevents an infinite redirect loop between the Vue and legacy clients for /folder.
-	{
-		path: "/folder",
-		name: "folder",
-		redirect: { name: "error" },
-	},
-	// Prevents an infinite redirect loop between the Vue and legacy clients for /rooms/invitation-link.
-	{
-		path: "/rooms/invitation-link",
-		name: "rooms-invitation-link",
-		redirect: { name: "error" },
 	},
 	{
 		path: `/collabora/:id(${REGEX_ID})`,
@@ -455,4 +454,5 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		component: () => import("@/pages/Home.page.vue"),
 		name: "home",
 	},
+	...incorrectRoutes,
 ];
