@@ -16,29 +16,31 @@ const incorrectRoutes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: "/boards",
 		name: "boards-error",
-		redirect: { name: "error" },
 	},
 	{
 		path: "/h5p/player",
 		name: "h5p-player-error",
-		redirect: { name: "error" },
 	},
 	{
 		path: "/collabora",
 		name: "collabora-error",
-		redirect: { name: "error" },
 	},
 	{
 		path: "/folder",
 		name: "folder-error",
-		redirect: { name: "error" },
 	},
 	{
 		path: "/rooms/invitation-link",
 		name: "rooms-invitation-link-error",
-		redirect: { name: "error" },
 	},
-];
+].map((route) => ({
+	...route,
+	component: () => import("@/pages/Error.page.vue"),
+	beforeEnter: () => {
+		useAppStore().handleApplicationError(HttpStatusCode.NotFound);
+		return false;
+	},
+}));
 
 export const routes: Readonly<RouteRecordRaw>[] = [
 	{
