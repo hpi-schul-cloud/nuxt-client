@@ -561,6 +561,7 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Цей Etherpad є видимою і доступною для редагування для всіх учасників курсу.",
 	"components.cardElement.externalToolElement": "Зовнішній інструмент",
+	"components.cardElement.externalToolElement.noElement": "Інструмент відсутній",
 	"components.cardElement.mediaExternalToolElement": "Середній",
 	"components.cardElement.fileElement": "Файл",
 	"components.cardElement.fileElement.altDescription": "Короткий опис допомагає людям, які не бачать зображення.",
@@ -569,6 +570,7 @@ export default {
 		"Формат аудіо не підтримується цим браузером / операційною системою.",
 	"components.cardElement.fileElement.caption": "опис",
 	"components.cardElement.fileElement.emptyAlt": "Ось зображення з такою назвою",
+	"components.cardElement.fileElement.noElement": "Файл відсутній",
 	"components.cardElement.fileElement.pdfAlt": "попередній перегляд зображення для ",
 	"components.cardElement.fileElement.collaboraFile": "Документ",
 	"components.cardElement.fileElement.previewError": "Не вдалося завантажити попередній перегляд.",
@@ -583,6 +585,7 @@ export default {
 	"components.cardElement.LinkElement": "Посилання",
 	"components.cardElement.LinkElement.create.label": "Вставити адресу посилання",
 	"components.cardElement.LinkElement.edit.label": "Редагувати адресу посилання",
+	"components.cardElement.LinkElement.noLink": "Посилання відсутнє",
 	"components.cardElement.LinkElement.validation.success": "URL-адреса дійсна",
 	"components.cardElement.notification.visibleAndEditable":
 		"Ця дошка є видимою і доступною для редагування для всіх учасників курсу.",
@@ -597,6 +600,7 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
 	"components.cardElement.h5pElement": "Інтерактивний елемент навчання",
+	"components.cardElement.h5pElement.noElement": "Елемент навчання відсутній",
 	"components.cardElement.h5pElement.create": "Створіть елемент навчання...",
 	"components.cardElement.h5pElement.title.error.load":
 		"Не вдалося завантажити назву інтерактивного навчального елемента.",
