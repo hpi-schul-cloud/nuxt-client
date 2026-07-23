@@ -335,7 +335,14 @@ describe("FileStorageApi Composable", () => {
 
 				await upload(file, parentId, parentType);
 
-				expect(fileApi.upload).toHaveBeenCalledWith("schoolId", StorageLocation.SCHOOL, parentId, parentType, file);
+				expect(fileApi.upload).toHaveBeenCalledWith(
+					"schoolId",
+					StorageLocation.SCHOOL,
+					parentId,
+					parentType,
+					file,
+					undefined
+				);
 			});
 
 			it("should set filerecord", async () => {
