@@ -134,11 +134,6 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		component: () => import("@/pages/Dashboard.page.vue"),
 		name: "dashboard",
 	},
-	// {
-	// 	path: "/boards",
-	// 	name: "boards",
-	// 	redirect: { name: "error" },
-	// },
 	{
 		path: `/boards/:id(${REGEX_ID})`,
 		component: async () => (await import("@page-board")).ColumnBoardPage,
@@ -160,6 +155,36 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: `/boards/:cardLink(${REGEX_ID}%23card[^/]+)`,
 		redirect: boardCardLinkRedirect,
 		name: "board-card-link",
+	},
+	// Prevents an infinite redirect loop between the Vue and legacy clients for /boards.
+	{
+		path: "/boards",
+		name: "boards",
+		redirect: { name: "error" },
+	},
+	// Prevents an infinite redirect loop between the Vue and legacy clients for /h5p/player.
+	{
+		path: "/h5p/player",
+		name: "h5p-player",
+		redirect: { name: "error" },
+	},
+	// Prevents an infinite redirect loop between the Vue and legacy clients for /collabora.
+	{
+		path: "/collabora",
+		name: "collabora",
+		redirect: { name: "error" },
+	},
+	// Prevents an infinite redirect loop between the Vue and legacy clients for /folder.
+	{
+		path: "/folder",
+		name: "folder",
+		redirect: { name: "error" },
+	},
+	// Prevents an infinite redirect loop between the Vue and legacy clients for /rooms/invitation-link.
+	{
+		path: "/rooms/invitation-link",
+		name: "rooms-invitation-link",
+		redirect: { name: "error" },
 	},
 	{
 		path: `/collabora/:id(${REGEX_ID})`,

@@ -30,11 +30,14 @@ const vueRoutes = [
 	`^/administration/rooms/new/?$`,
 	`^/administration/rooms/manage/?$`,
 	`^/administration/rooms/manage/${mongoId}?$`,
+	`^/boards/?$`,
 	`^/boards/${mongoId}/?$`,
 	`^/boards/${mongoId}%23card[^/]+/?$`,
 	`^/boards/${mongoId}/cards/${mongoId}/?$`,
+	`^/collabora/$?$`,
 	`^/collabora/${mongoId}/?$`,
 	`^/error/?$`,
+	`^/h5p/player/?$`,
 	`^/h5p/player/${h5pId}/?$`,
 	`^/h5p/editor/?$`,
 	`^/h5p/editor/${h5pId}/?$`,
@@ -50,8 +53,10 @@ const vueRoutes = [
 	`^/news/${mongoId}/?$`,
 	`^/news/${mongoId}/edit/?$`,
 	`^/poc-files/?$`,
+	`^/folder/$?$`,
 	`^/folder/${mongoId}/?$`,
 	`^/folder/${mongoId}/trash/?$`,
+	`^/rooms/invitation-link/$?$`,
 	`^/rooms/invitation-link/${mongoId}?$`,
 	`^/rooms/?$`,
 	`^/rooms/new/?$`,
@@ -72,8 +77,4 @@ const vueRoutes = [
 	`^/node_modules/`,
 ];
 
-const invalidVueRoutes = ["^/boards/?$", "^/folder/?$", "^/collabora/?$"];
-
-export const isVueClient = (path: string) =>
-	vueRoutes.some((regex) => new RegExp(regex).exec(path)) &&
-	!invalidVueRoutes.some((regex) => new RegExp(regex).exec(path));
+export const isVueClient = (path: string) => vueRoutes.some((regex) => new RegExp(regex).exec(path));
