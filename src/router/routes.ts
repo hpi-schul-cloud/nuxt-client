@@ -20,7 +20,7 @@ const incorrectRoutes: Readonly<RouteRecordRaw>[] = [
 	"/rooms/invitation-link",
 ].map((route) => ({
 	path: route,
-	name: `${route.replace("/", "-")}-error`,
+	name: `${route.slice(1).replaceAll("/", "-")}-error`,
 	beforeEnter: () => {
 		useAppStore().handleApplicationError(HttpStatusCode.NotFound);
 		return true;
