@@ -24,7 +24,7 @@
 				/>
 				<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
 			</InlineEditInteractionHandler>
-			<div class="d-flex mt-4">
+			<div class="d-flex mt-4 mr-8">
 				<VChip v-if="isDraft" class="align-self-center cursor-default" data-testid="board-draft-chip">
 					{{ t("common.words.draft") }}
 				</VChip>
