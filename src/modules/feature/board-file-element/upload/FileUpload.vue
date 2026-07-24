@@ -5,7 +5,6 @@
 				<VProgressLinear
 					data-testid="board-file-element-progress-bar"
 					:model-value="uploadProgress > 0 ? uploadProgress : undefined"
-					:indeterminate="uploadProgress === 0"
 					color="primary"
 				/>
 				<div class="ms-4">{{ uploadProgress.toFixed(0) }}%</div>
