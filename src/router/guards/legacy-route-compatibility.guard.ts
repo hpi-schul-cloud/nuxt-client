@@ -3,9 +3,11 @@ import { NavigationGuard, RouteLocationNormalized } from "vue-router";
 
 export const legacyCompatibilityGuard: NavigationGuard = (to: RouteLocationNormalized) => {
 	if (isLegacyClient(to.path)) {
+		if (window.location.pathname === to.path) {
+			return true;
+		}
 		window.location.assign(to.path);
 		return false;
-	} else {
-		return true;
 	}
+	return true;
 };
