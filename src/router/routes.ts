@@ -21,7 +21,7 @@ const incorrectRoutes: Readonly<RouteRecordRaw>[] = [
 	"/folder",
 	"/rooms/invitation-link",
 ].map((route) => ({
-	path: `${route}/:pathMatch(.*)*`,
+	path: route,
 	name: `${route.slice(1).replaceAll("/", "-")}-error`,
 	beforeEnter: () => {
 		useAppStore().handleApplicationError(HttpStatusCode.NotFound);
@@ -445,4 +445,13 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "home",
 	},
 	...incorrectRoutes,
+	{
+		path: "/:pathMatch(.*)*",
+		name: "not-found",
+		component: () => import("@/pages/Error.page.vue"),
+		beforeEnter: () => {
+			useAppStore().handleApplicationError(HttpStatusCode.NotFound);
+			return true;
+		},
+	},
 ];
