@@ -84,8 +84,9 @@ export const useFileStorageApi = () => {
 			const options = onUploadProgress
 				? {
 						onUploadProgress: (event: ProgressEvent) => {
-							if (event.total) {
-								onUploadProgress(Math.round((event.loaded / event.total) * 100));
+							if (event.total && event.total > 0) {
+								const percent = Math.round((event.loaded / event.total) * 100);
+								onUploadProgress(Math.min(100, Math.max(0, percent)));
 							}
 						},
 					}

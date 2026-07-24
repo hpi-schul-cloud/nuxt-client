@@ -2,17 +2,13 @@
 	<ContentElementBar v-if="isEditMode">
 		<template #element>
 			<div v-if="isUploading || fileWasPicked" class="d-flex align-center pt-1 mr-1">
-				<v-progress-linear
+				<VProgressLinear
 					data-testid="board-file-element-progress-bar"
 					:model-value="uploadProgress > 0 ? uploadProgress : undefined"
 					:indeterminate="uploadProgress === 0"
 					color="primary"
-					height="25"
-				>
-					<template v-if="uploadProgress > 0" #default="{ value }">
-						<span class="text-caption">{{ value.toFixed(0) }}%</span>
-					</template>
-				</v-progress-linear>
+				/>
+				<div class="ms-4">{{ uploadProgress.toFixed(0) }}%</div>
 			</div>
 			<FilePicker v-else v-model:is-file-picker-open="isFilePickerOpen" @update:file="onFileSelect" />
 		</template>
