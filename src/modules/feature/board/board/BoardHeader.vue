@@ -291,6 +291,7 @@ html.board-page-scroll .column-board {
 	.v-label {
 		padding-inline-start: 0;
 		padding-inline-end: 10px;
+		text-align: right;
 	}
 }
 </style>
