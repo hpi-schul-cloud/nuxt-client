@@ -1,8 +1,13 @@
 <template>
 	<ContentElementBar v-if="isEditMode">
 		<template #element>
-			<div v-if="isUploading || fileWasPicked" class="d-flex align-center pt-1" style="height: 32px">
-				<VProgressLinear data-testid="board-file-element-progress-bar" indeterminate color="primary" />
+			<div v-if="isUploading || fileWasPicked" class="d-flex align-center pt-1 mr-1">
+				<VProgressLinear
+					data-testid="board-file-element-progress-bar"
+					:model-value="uploadProgress > 0 ? uploadProgress : undefined"
+					color="primary"
+				/>
+				<div class="ms-4">{{ uploadProgress.toFixed(0) }}%</div>
 			</div>
 			<FilePicker v-else v-model:is-file-picker-open="isFilePickerOpen" @update:file="onFileSelect" />
 		</template>
@@ -25,6 +30,7 @@ export default defineComponent({
 		elementId: { type: String, required: true },
 		isEditMode: { type: Boolean },
 		isUploading: { type: Boolean },
+		uploadProgress: { type: Number, default: 0 },
 	},
 	emits: ["upload:file"],
 	setup(props, { emit }) {
