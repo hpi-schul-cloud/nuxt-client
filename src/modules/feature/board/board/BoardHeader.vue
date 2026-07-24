@@ -24,7 +24,7 @@
 				/>
 				<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
 			</InlineEditInteractionHandler>
-			<div class="d-flex mt-4 mr-8">
+			<div class="d-flex mt-4">
 				<VChip v-if="isDraft" class="align-self-center cursor-default" data-testid="board-draft-chip">
 					{{ t("common.words.draft") }}
 				</VChip>
@@ -51,7 +51,7 @@
 					<KebabMenuActionDelete :name="title" @click="onDeleteBoard" />
 				</BoardMenu>
 			</div>
-			<div v-if="isScrollModeToggleVisible" class="mt-4 flex-1-0 scroll-mode-toggle">
+			<div v-if="isScrollModeToggleVisible" class="flex-1-0 mt-4 ml-8 scroll-mode-toggle">
 				<VSwitch
 					:model-value="isPageScrollMode"
 					:label="t('components.board.action.fixColumns')"
