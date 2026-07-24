@@ -10,7 +10,7 @@ import {
 	StorageLocation,
 } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { formatFileSize } from "@/utils/fileHelper";
+import { buildUploadOptions, formatFileSize } from "@/utils/fileHelper";
 import {
 	AddDocumentToParentParams,
 	FileApiFactory,
@@ -81,16 +81,7 @@ export const useFileStorageApi = () => {
 	): Promise<void> => {
 		try {
 			const schoolId = useAppStore().school?.id as string;
-			const options = onUploadProgress
-				? {
-						onUploadProgress: (event: ProgressEvent) => {
-							if (event.total && event.total > 0) {
-								const percent = Math.round((event.loaded / event.total) * 100);
-								onUploadProgress(Math.min(100, Math.max(0, percent)));
-							}
-						},
-					}
-				: undefined;
+			const options = buildUploadOptions(onUploadProgress);
 			const response = await fileApi.upload(schoolId, StorageLocation.SCHOOL, parentId, parentType, file, options);
 			upsertFileRecords([response.data]);
 		} catch (error) {
