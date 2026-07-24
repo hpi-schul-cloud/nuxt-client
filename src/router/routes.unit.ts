@@ -7,8 +7,10 @@ import { NavigationGuard, RouteLocationNormalized, RouteRecordRaw } from "vue-ro
 
 const toIncorrectRouteName = (path: string) => `${path.slice(1).replaceAll("/", "-")}-error`;
 
-const INCORRECT_ROUTES = ["/boards", "/h5p/player", "/collabora", "/folder", "/rooms/invitation-link"].map((path) => ({
-	path,
+const INCORRECT_ROUTE_PREFIXES = ["/boards", "/h5p/player", "/collabora", "/folder", "/rooms/invitation-link"];
+
+const INCORRECT_ROUTES = INCORRECT_ROUTE_PREFIXES.map((path) => ({
+	path: `${path}/:pathMatch(.*)*`,
 	name: toIncorrectRouteName(path),
 }));
 
@@ -44,5 +46,13 @@ describe("routes", () => {
 				expect(result).toBe(true);
 			}
 		);
+
+		it("should match invalid board ids after the mongo-id board route", () => {
+			const boardIdRouteIndex = routes.findIndex((route) => route.name === "boards-id");
+			const incorrectBoardsRouteIndex = routes.findIndex((route) => route.name === "boards-error");
+
+			expect(boardIdRouteIndex).toBeGreaterThanOrEqual(0);
+			expect(incorrectBoardsRouteIndex).toBeGreaterThan(boardIdRouteIndex);
+		});
 	});
 });

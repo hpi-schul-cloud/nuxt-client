@@ -11,7 +11,9 @@ import { useEnvConfig } from "@data-env";
 import { isDefined } from "@vueuse/core";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
-// Prevent infinite redirect loops between the Vue and legacy clients
+// Prevent infinite redirect loops between the Vue and legacy clients.
+// Catch-all under Vue-owned prefixes so invalid ids (e.g. /boards/1) stay on Vue
+// and show NotFound instead of being proxied to the legacy client.
 const incorrectRoutes: Readonly<RouteRecordRaw>[] = [
 	"/boards",
 	"/h5p/player",
@@ -19,7 +21,7 @@ const incorrectRoutes: Readonly<RouteRecordRaw>[] = [
 	"/folder",
 	"/rooms/invitation-link",
 ].map((route) => ({
-	path: route,
+	path: `${route}/:pathMatch(.*)*`,
 	name: `${route.slice(1).replaceAll("/", "-")}-error`,
 	beforeEnter: () => {
 		useAppStore().handleApplicationError(HttpStatusCode.NotFound);
