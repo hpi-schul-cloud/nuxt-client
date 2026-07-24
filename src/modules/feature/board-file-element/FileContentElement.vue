@@ -47,6 +47,7 @@
 			:element-id="element.id"
 			:is-edit-mode="isEditMode"
 			:is-uploading="isUploading"
+			:upload-progress="uploadProgress"
 			@upload:file="onUploadFile"
 		>
 			<BoardMenu :scope="BoardMenuScope.FILE_ELEMENT" has-background>
@@ -120,6 +121,7 @@ const fileRecord = computed(() => getFileRecordsByParentId(element.value.id)[0])
 const { alerts, addAlert } = useFileAlerts(fileRecord);
 
 const isUploading = computed(() => fileRecord.value?.isUploading);
+const uploadProgress = ref(0);
 
 const fileProperties = computed(() => {
 	if (fileRecord.value === undefined) {
@@ -172,12 +174,17 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 	}
 };
 
-const onUploadFile = async (file: File) => {
+const onUploadFile = async (file: File): Promise<void> => {
+	uploadProgress.value = 0;
 	try {
-		await upload(file, element.value.id, FileRecordParentType.BOARDNODES);
+		await upload(file, element.value.id, FileRecordParentType.BOARDNODES, (progress) => {
+			uploadProgress.value = progress;
+		});
 		element.value.content.caption = " ";
 	} catch {
 		emit("delete:element", element.value.id);
+	} finally {
+		uploadProgress.value = 0;
 	}
 };
 
