@@ -51,7 +51,7 @@
 					<KebabMenuActionDelete :name="title" @click="onDeleteBoard" />
 				</BoardMenu>
 			</div>
-			<div v-if="isScrollModeToggleVisible" class="ms-auto mt-4 scroll-mode-toggle">
+			<div v-if="isScrollModeToggleVisible" class="mt-4 flex-1-0 scroll-mode-toggle">
 				<VSwitch
 					:model-value="isPageScrollMode"
 					:label="t('components.board.action.fixColumns')"
