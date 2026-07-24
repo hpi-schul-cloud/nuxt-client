@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="d-flex align-start board-header mb-2">
+		<div class="d-flex align-start mb-2">
 			<InlineEditInteractionHandler
 				:id="boardId"
 				class="input-container"
