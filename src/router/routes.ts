@@ -11,25 +11,6 @@ import { useEnvConfig } from "@data-env";
 import { isDefined } from "@vueuse/core";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
-// Prevent infinite redirect loops between the Vue and legacy clients.
-// Catch-all under Vue-owned prefixes so invalid ids (e.g. /boards/1) stay on Vue
-// and show NotFound instead of being proxied to the legacy client.
-const incorrectRoutes: Readonly<RouteRecordRaw>[] = [
-	"/boards",
-	"/h5p/player",
-	"/collabora",
-	"/folder",
-	"/rooms/invitation-link",
-].map((route) => ({
-	path: `${route}/:pathMatch(.*)*`,
-	name: `${route.slice(1).replaceAll("/", "-")}-error`,
-	beforeEnter: () => {
-		useAppStore().handleApplicationError(HttpStatusCode.NotFound);
-		return true;
-	},
-	component: () => import("@/pages/Error.page.vue"),
-}));
-
 export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: "/administration/ldap/activate",
@@ -444,5 +425,13 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		component: () => import("@/pages/Home.page.vue"),
 		name: "home",
 	},
-	...incorrectRoutes,
+	{
+		path: "/:pathMatch(.*)*",
+		name: "not-found",
+		component: () => import("@/pages/Error.page.vue"),
+		beforeEnter: () => {
+			useAppStore().handleApplicationError(HttpStatusCode.NotFound);
+			return true;
+		},
+	},
 ];
