@@ -425,4 +425,13 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		component: () => import("@/pages/Home.page.vue"),
 		name: "home",
 	},
+	{
+		path: "/:pathMatch(.*)*",
+		name: "not-found",
+		component: () => import("@/pages/Error.page.vue"),
+		beforeEnter: () => {
+			useAppStore().handleApplicationError(HttpStatusCode.NotFound);
+			return true;
+		},
+	},
 ];
