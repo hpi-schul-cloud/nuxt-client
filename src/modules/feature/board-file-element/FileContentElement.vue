@@ -80,7 +80,7 @@ import { BoardMenu, BoardMenuScope, EmptyElement } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { LightBoxContentType, LightBoxOptions, useLightBox } from "@ui-light-box";
 import { useDebounceFn } from "@vueuse/core";
-import { computed, onBeforeUnmount, onMounted, ref, toRef, watch } from "vue";
+import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -168,18 +168,13 @@ const handleBeforeUnload = (event: BeforeUnloadEvent) => {
 		// Opens confirmation dialog in firefox
 		event.preventDefault();
 		// Opens confirmation dialog in chrome
-		event.returnValue = "";
+		event.returnValue = true;
 	}
 };
 
 onMounted(async () => {
-	window.addEventListener("beforeunload", handleBeforeUnload);
 	await tryFetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
 	isLoadingFileRecord.value = false;
-});
-
-onBeforeUnmount(() => {
-	window.removeEventListener("beforeunload", handleBeforeUnload);
 });
 
 const onKeydownArrow = (event: KeyboardEvent) => {
@@ -192,6 +187,7 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 const onUploadFile = async (file: File) => {
 	fileWasPicked.value = true;
 	uploadProgress.value = 0;
+	window.addEventListener("beforeunload", handleBeforeUnload);
 	try {
 		await upload(file, element.value.id, FileRecordParentType.BOARDNODES, (progress) => {
 			uploadProgress.value = progress;
@@ -202,6 +198,7 @@ const onUploadFile = async (file: File) => {
 	} finally {
 		fileWasPicked.value = false;
 		uploadProgress.value = 0;
+		window.removeEventListener("beforeunload", handleBeforeUnload);
 	}
 };
 

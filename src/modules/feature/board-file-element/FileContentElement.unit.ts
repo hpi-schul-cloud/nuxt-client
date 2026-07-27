@@ -1614,8 +1614,13 @@ describe("FileContentElement", () => {
 		const setup = () => {
 			const element = fileElementResponseFactory.build();
 
+			let resolveUpload!: () => void;
+			const uploadPromise = new Promise<void>((resolve) => {
+				resolveUpload = resolve;
+			});
+
 			const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi, {
-				upload: vi.fn().mockReturnValue(new Promise(() => true)),
+				upload: vi.fn().mockReturnValue(uploadPromise),
 				getFileRecordsByParentId: vi.fn().mockReturnValueOnce([]),
 			});
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
@@ -1644,6 +1649,11 @@ describe("FileContentElement", () => {
 				await nextTick();
 			};
 
+			const finishLocalUpload = async () => {
+				resolveUpload();
+				await flushPromises();
+			};
+
 			const dispatchBeforeUnload = () => {
 				const beforeUnloadEvent = new Event("beforeunload");
 				const preventDefaultSpy = vi.fn();
@@ -1653,36 +1663,36 @@ describe("FileContentElement", () => {
 				return preventDefaultSpy;
 			};
 
-			return { wrapper, startLocalUpload, dispatchBeforeUnload };
+			return { wrapper, startLocalUpload, finishLocalUpload, dispatchBeforeUnload };
 		};
 
 		it("should warn before leaving the page while a local upload is in progress", async () => {
-			const { startLocalUpload, dispatchBeforeUnload, wrapper } = setup();
+			const { startLocalUpload, dispatchBeforeUnload, finishLocalUpload } = setup();
 			await flushPromises();
 			await startLocalUpload();
 
 			const preventDefaultSpy = dispatchBeforeUnload();
 
 			expect(preventDefaultSpy).toHaveBeenCalled();
-			wrapper.unmount();
+
+			await finishLocalUpload();
 		});
 
 		it("should not warn before leaving the page when no local upload is in progress", async () => {
-			const { dispatchBeforeUnload, wrapper } = setup();
+			const { dispatchBeforeUnload } = setup();
 			await flushPromises();
 
 			const preventDefaultSpy = dispatchBeforeUnload();
 
 			expect(preventDefaultSpy).not.toHaveBeenCalled();
-			wrapper.unmount();
 		});
 
-		it("should remove the beforeunload listener on unmount", async () => {
-			const { wrapper, startLocalUpload, dispatchBeforeUnload } = setup();
+		it("should stop warning once the local upload has finished", async () => {
+			const { startLocalUpload, finishLocalUpload, dispatchBeforeUnload } = setup();
 			await flushPromises();
 			await startLocalUpload();
 
-			wrapper.unmount();
+			await finishLocalUpload();
 			const preventDefaultSpy = dispatchBeforeUnload();
 
 			expect(preventDefaultSpy).not.toHaveBeenCalled();
