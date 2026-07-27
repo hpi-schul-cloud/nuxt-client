@@ -191,7 +191,7 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 
 const onUploadFile = async (file: File) => {
 	fileWasPicked.value = true;
-  uploadProgress.value = 0;
+	uploadProgress.value = 0;
 	try {
 		await upload(file, element.value.id, FileRecordParentType.BOARDNODES, (progress) => {
 			uploadProgress.value = progress;
@@ -201,7 +201,7 @@ const onUploadFile = async (file: File) => {
 		emit("delete:element", element.value.id);
 	} finally {
 		fileWasPicked.value = false;
-    uploadProgress.value = 0;
+		uploadProgress.value = 0;
 	}
 };
 
