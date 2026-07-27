@@ -1609,4 +1609,83 @@ describe("FileContentElement", () => {
 			});
 		});
 	});
+
+	describe("beforeunload warning", () => {
+		const setup = () => {
+			const element = fileElementResponseFactory.build();
+
+			const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi, {
+				upload: vi.fn().mockReturnValue(new Promise(() => true)),
+				getFileRecordsByParentId: vi.fn().mockReturnValueOnce([]),
+			});
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
+
+			vi.mocked(useBoardAllowedOperations).mockReturnValue({
+				allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+			} as ReturnType<typeof useBoardAllowedOperations>);
+
+			const useContentElementStateMock = vi.mocked(useContentElementState);
+			const fileContentElement = fileElementResponseFactory.build();
+			useContentElementStateMock.mockReturnValueOnce({
+				modelValue: ref(fileContentElement),
+				computedElement: computed(() => fileContentElement),
+			});
+
+			const { wrapper } = getWrapper({
+				element,
+				isEditMode: true,
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
+			});
+
+			const startLocalUpload = async () => {
+				wrapper.findComponent(FileUpload).vm.$emit("upload:file", { fileName: "sample.txt" });
+				await nextTick();
+			};
+
+			const dispatchBeforeUnload = () => {
+				const beforeUnloadEvent = new Event("beforeunload");
+				const preventDefaultSpy = vi.fn();
+				beforeUnloadEvent.preventDefault = preventDefaultSpy;
+				window.dispatchEvent(beforeUnloadEvent);
+
+				return preventDefaultSpy;
+			};
+
+			return { wrapper, startLocalUpload, dispatchBeforeUnload };
+		};
+
+		it("should warn before leaving the page while a local upload is in progress", async () => {
+			const { startLocalUpload, dispatchBeforeUnload, wrapper } = setup();
+			await flushPromises();
+			await startLocalUpload();
+
+			const preventDefaultSpy = dispatchBeforeUnload();
+
+			expect(preventDefaultSpy).toHaveBeenCalled();
+			wrapper.unmount();
+		});
+
+		it("should not warn before leaving the page when no local upload is in progress", async () => {
+			const { dispatchBeforeUnload, wrapper } = setup();
+			await flushPromises();
+
+			const preventDefaultSpy = dispatchBeforeUnload();
+
+			expect(preventDefaultSpy).not.toHaveBeenCalled();
+			wrapper.unmount();
+		});
+
+		it("should remove the beforeunload listener on unmount", async () => {
+			const { wrapper, startLocalUpload, dispatchBeforeUnload } = setup();
+			await flushPromises();
+			await startLocalUpload();
+
+			wrapper.unmount();
+			const preventDefaultSpy = dispatchBeforeUnload();
+
+			expect(preventDefaultSpy).not.toHaveBeenCalled();
+		});
+	});
 });

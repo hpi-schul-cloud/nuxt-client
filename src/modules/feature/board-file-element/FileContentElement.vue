@@ -80,7 +80,7 @@ import { BoardMenu, BoardMenuScope, EmptyElement } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { LightBoxContentType, LightBoxOptions, useLightBox } from "@ui-light-box";
 import { useDebounceFn } from "@vueuse/core";
-import { computed, onMounted, ref, toRef, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -120,8 +120,9 @@ const fileRecord = computed(() => getFileRecordsByParentId(element.value.id)[0])
 
 const { alerts, addAlert } = useFileAlerts(fileRecord);
 
-const isUploading = computed(() => fileRecord.value?.isUploading);
+const fileWasPicked = ref(false);
 const uploadProgress = ref(0);
+const isUploading = computed(() => fileRecord.value?.isUploading || fileWasPicked.value);
 
 const fileProperties = computed(() => {
 	if (fileRecord.value === undefined) {
@@ -162,9 +163,23 @@ watch(element.value, async () => {
 	isLoadingFileRecord.value = false;
 });
 
+const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+	if (fileWasPicked.value) {
+		// Opens confirmation dialog in firefox
+		event.preventDefault();
+		// Opens confirmation dialog in chrome
+		event.returnValue = "";
+	}
+};
+
 onMounted(async () => {
+	window.addEventListener("beforeunload", handleBeforeUnload);
 	await tryFetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
 	isLoadingFileRecord.value = false;
+});
+
+onBeforeUnmount(() => {
+	window.removeEventListener("beforeunload", handleBeforeUnload);
 });
 
 const onKeydownArrow = (event: KeyboardEvent) => {
@@ -174,8 +189,9 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 	}
 };
 
-const onUploadFile = async (file: File): Promise<void> => {
-	uploadProgress.value = 0;
+const onUploadFile = async (file: File) => {
+	fileWasPicked.value = true;
+  uploadProgress.value = 0;
 	try {
 		await upload(file, element.value.id, FileRecordParentType.BOARDNODES, (progress) => {
 			uploadProgress.value = progress;
@@ -184,7 +200,8 @@ const onUploadFile = async (file: File): Promise<void> => {
 	} catch {
 		emit("delete:element", element.value.id);
 	} finally {
-		uploadProgress.value = 0;
+		fileWasPicked.value = false;
+    uploadProgress.value = 0;
 	}
 };
 
