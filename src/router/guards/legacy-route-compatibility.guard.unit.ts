@@ -48,23 +48,27 @@ describe("legacyCompatibilityGuard", () => {
 			expect(window.location.assign).toHaveBeenCalledWith("/homework");
 		});
 
-		it("should forward query parameters when leaving the Vue client", () => {
-			mockedIsLegacyClient.mockReturnValue(true);
-			vi.stubGlobal("location", { pathname: "/dashboard", assign: vi.fn() });
+		describe("when leaving the Vue client", () => {
+			it("should forward query parameters", () => {
+				mockedIsLegacyClient.mockReturnValue(true);
+				vi.stubGlobal("location", { pathname: "/dashboard", assign: vi.fn() });
 
-			legacyCompatibilityGuard(buildLocation("/homework", "/homework?tab=open"), dashboardLocation, vi.fn());
+				legacyCompatibilityGuard(buildLocation("/homework", "/homework?tab=open"), dashboardLocation, vi.fn());
 
-			expect(window.location.assign).toHaveBeenCalledWith("/homework?tab=open");
+				expect(window.location.assign).toHaveBeenCalledWith("/homework?tab=open");
+			});
 		});
 
-		it("should not redirect when the browser is already on the legacy path", () => {
-			mockedIsLegacyClient.mockReturnValue(true);
-			vi.stubGlobal("location", { pathname: "/boards/1", assign: vi.fn() });
+		describe("when the browser is already on the legacy path", () => {
+			it("should not redirect", () => {
+				mockedIsLegacyClient.mockReturnValue(true);
+				vi.stubGlobal("location", { pathname: "/boards/1", assign: vi.fn() });
 
-			const result = legacyCompatibilityGuard(buildLocation("/boards/1"), homeLocation, vi.fn());
+				const result = legacyCompatibilityGuard(buildLocation("/boards/1"), homeLocation, vi.fn());
 
-			expect(result).toBe(true);
-			expect(window.location.assign).not.toHaveBeenCalled();
+				expect(result).toBe(true);
+				expect(window.location.assign).not.toHaveBeenCalled();
+			});
 		});
 	});
 });
