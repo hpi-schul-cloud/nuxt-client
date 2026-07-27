@@ -1,5 +1,6 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { $axios } from "@/utils/api";
 import {
 	VideoConferenceApiFactory,
@@ -8,6 +9,8 @@ import {
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
 } from "@api-server";
+import { notifyError } from "@data-app";
+import { isAxiosError } from "axios";
 import { computed, onMounted, ref } from "vue";
 
 export const useVideoConference = (scope: VideoConferenceScope, scopeId: string, fetchImmediate = true) => {
@@ -35,10 +38,16 @@ export const useVideoConference = (scope: VideoConferenceScope, scopeId: string,
 	const isLoading = computed(() => isFetching.value || isStarting.value || isJoining.value);
 
 	const fetchVideoConferenceInfo = async () => {
-		const { result, success } = await execFetch(
-			() => videoConferenceApi.videoConferenceControllerInfo(scope, scopeId),
-			t("common.notification.error.videoConference.notFetched")
+		const { result, success, error } = await execFetch(
+			() => videoConferenceApi.videoConferenceControllerInfo(scope, scopeId)
+			// Don't pass onErrorNotifyMessage - we handle 403 silently below
 		);
+
+		// Show notification for non-403 errors (403 = feature disabled, which is handled by UI)
+		if (error && !(isAxiosError(error) && error.response?.status === HttpStatusCode.Forbidden)) {
+			notifyError(t("common.notification.error.videoConference.notFetched"));
+		}
+
 		if (success && result) {
 			videoConferenceInfo.value = {
 				state: result.data.state,

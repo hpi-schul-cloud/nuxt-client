@@ -14,6 +14,10 @@
 			</span>
 		</template>
 
+		<template #[`item.createdAt`]="{ item }: RoomAdminTableItem">
+			<span>{{ formatUtc(item.createdAt, "date") }}</span>
+		</template>
+
 		<template #[`item.actions`]="{ item }: RoomAdminTableItem">
 			<KebabMenu
 				:data-testid="`kebab-menu-room-${item.roomId}`"
@@ -43,6 +47,7 @@
 
 <script setup lang="ts">
 import { askDeletion } from "@/utils/confirmation-dialog.utils";
+import { formatUtc } from "@/utils/date-time.utils";
 import { RoomStatsItemResponse } from "@api-server";
 import { useAdministrationRoomStore } from "@data-room";
 import { mdiAlert, mdiTrashCanOutline } from "@icons/material";

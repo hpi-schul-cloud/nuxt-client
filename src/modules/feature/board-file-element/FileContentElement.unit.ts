@@ -5,7 +5,7 @@ import FileContentElement from "./FileContentElement.vue";
 import { FileProperties } from "./shared/types/file-properties";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
-import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
+import { convertDownloadToPreviewUrl, downloadFile } from "@/utils/fileHelper";
 import { createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
@@ -14,16 +14,36 @@ import { FileRecordScanStatus, PreviewStatus, PreviewWidth } from "@api-file-sto
 import { FileElementResponse } from "@api-server";
 import { useBoardAllowedOperations, useContentElementState } from "@data-board";
 import * as FileStorageApi from "@data-file";
+import { mdiFileDocumentOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
+import { EmptyElement } from "@ui-board";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { computed, nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VCard } from "vuetify/components";
 
+const openLightBoxMock = vi.hoisted(() => vi.fn());
+
 vi.mock("@data-board");
 vi.mock("@feature-board");
 vi.mock("./content/alert/useFileAlerts.composable");
+vi.mock("@/utils/fileHelper", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@/utils/fileHelper")>();
+
+	return {
+		...actual,
+		downloadFile: vi.fn(actual.downloadFile),
+	};
+});
+vi.mock("@ui-light-box", () => ({
+	LightBoxContentType: {
+		IMAGE: "IMAGE",
+	},
+	useLightBox: () => ({
+		open: openLightBoxMock,
+	}),
+}));
 
 describe("FileContentElement", () => {
 	beforeEach(() => {
@@ -167,12 +187,15 @@ describe("FileContentElement", () => {
 				expect(wrapper.findComponent(FileContentElement).exists()).toBe(true);
 			});
 
-			it("should pass isOutlined prop to v-card", () => {
+			it("should render EmptyElement", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.findComponent({ ref: "fileContentElement" });
-
-				expect(card.props("variant")).toBe("elevated");
+				const emptyElement = wrapper.findComponent(EmptyElement);
+				expect(card.exists()).toBe(false);
+				expect(emptyElement.exists()).toBe(true);
+				expect(emptyElement.props("icon")).toBe(mdiFileDocumentOutline);
+				expect(emptyElement.props("title")).toBe("components.cardElement.fileElement.noElement");
 			});
 
 			it("should not render FileContent component", async () => {
@@ -190,7 +213,7 @@ describe("FileContentElement", () => {
 				await nextTick();
 
 				const fileUpload = wrapper.findComponent(FileUpload);
-				expect(fileUpload.exists()).toBe(true);
+				expect(fileUpload.exists()).toBe(false);
 			});
 
 			it("should not render slot menu component", async () => {
@@ -198,6 +221,18 @@ describe("FileContentElement", () => {
 				await nextTick();
 
 				expect(wrapper.html()).not.toContain(menu);
+			});
+
+			it("should not render card or empty element when user has no edit permissions", () => {
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ updateElement: false, createFileElement: false }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
+
+				const { wrapper } = setup();
+
+				const card = wrapper.findComponent({ ref: "fileContentElement" });
+				expect(card.exists()).toBe(false);
+				expect(wrapper.text()).not.toContain("components.cardElement.fileElement.noElement");
 			});
 		});
 
@@ -209,8 +244,10 @@ describe("FileContentElement", () => {
 				isCollaboraEnabled?: boolean;
 				mimeType?: string;
 				isCollaboraEditable?: boolean;
+				alternativeText?: string;
 			}) => {
 				const element = fileElementResponseFactory.build();
+				element.content.alternativeText = props?.alternativeText ?? "alternativeText";
 				const fileRecordResponse = fileRecordFactory.build({
 					securityCheckStatus: props?.scanStatus ?? FileRecordScanStatus.PENDING,
 					previewStatus: props?.previewStatus ?? PreviewStatus.PREVIEW_POSSIBLE,
@@ -286,7 +323,7 @@ describe("FileContentElement", () => {
 
 					const card = wrapper.findComponent({ ref: "fileContentElement" });
 
-					expect(card.props("variant")).toBe("elevated");
+					expect(card.props("variant")).toBe("text");
 				});
 			});
 
@@ -477,6 +514,194 @@ describe("FileContentElement", () => {
 
 						windowOpenSpy.mockRestore();
 					});
+				});
+			});
+
+			describe("when mime type is pdf", () => {
+				it("should open pdf url in new tab when file content emits activate", async () => {
+					const { wrapper, fileRecordResponse } = setup({
+						isCollaboraEnabled: false,
+						mimeType: "application/pdf",
+						isCollaboraEditable: false,
+					});
+
+					const windowOpenMock = vi.fn();
+					const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
+
+					wrapper.findComponent(FileContent).vm.$emit("activate");
+
+					expect(windowOpenSpy).toHaveBeenCalledWith(fileRecordResponse.url, "_blank");
+					windowOpenSpy.mockRestore();
+				});
+
+				it("should open pdf url in new tab when card is clicked", async () => {
+					const { wrapper, fileRecordResponse } = setup({
+						isCollaboraEnabled: false,
+						mimeType: "application/pdf",
+						isCollaboraEditable: false,
+					});
+					const card = wrapper.findComponent(VCard);
+
+					const windowOpenMock = vi.fn();
+					const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
+
+					await card.trigger("click");
+
+					expect(windowOpenSpy).toHaveBeenCalledWith(fileRecordResponse.url, "_blank");
+					windowOpenSpy.mockRestore();
+				});
+
+				it("should open pdf url in new tab when enter is pressed", async () => {
+					const { wrapper, fileRecordResponse } = setup({
+						isCollaboraEnabled: false,
+						mimeType: "application/pdf",
+						isCollaboraEditable: false,
+					});
+
+					const card = wrapper.findComponent(VCard);
+
+					const windowOpenMock = vi.fn();
+					const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
+
+					await card.trigger("keydown.enter");
+
+					expect(windowOpenSpy).toHaveBeenCalledWith(fileRecordResponse.url, "_blank");
+
+					windowOpenSpy.mockRestore();
+				});
+			});
+
+			describe("when mime type is image", () => {
+				it("should open image in lightbox when card is clicked", async () => {
+					const { wrapper, fileRecordResponse } = setup({
+						isCollaboraEnabled: false,
+						mimeType: "image/png",
+						isCollaboraEditable: false,
+					});
+
+					const card = wrapper.findComponent(VCard);
+					await card.trigger("click");
+
+					expect(openLightBoxMock).toHaveBeenCalledWith(
+						expect.objectContaining({
+							type: "IMAGE",
+							downloadUrl: fileRecordResponse.url,
+							previewUrl: convertDownloadToPreviewUrl(fileRecordResponse.url),
+							alt: "alternativeText",
+							name: fileRecordResponse.name,
+						})
+					);
+				});
+
+				it("should use file name as alt text fallback when alternative text is empty", async () => {
+					const { wrapper, fileRecordResponse } = setup({
+						isCollaboraEnabled: false,
+						mimeType: "image/png",
+						isCollaboraEditable: false,
+						alternativeText: "",
+					});
+
+					const card = wrapper.findComponent(VCard);
+					await card.trigger("click");
+
+					expect(openLightBoxMock).toHaveBeenCalledWith(
+						expect.objectContaining({
+							alt: expect.stringContaining(fileRecordResponse.name),
+						})
+					);
+				});
+
+				it("should open image in lightbox when enter is pressed", async () => {
+					const { wrapper, fileRecordResponse } = setup({
+						isCollaboraEnabled: false,
+						mimeType: "image/png",
+						isCollaboraEditable: false,
+					});
+
+					const card = wrapper.findComponent(VCard);
+					await card.trigger("keydown.enter");
+
+					expect(openLightBoxMock).toHaveBeenCalledWith(
+						expect.objectContaining({
+							type: "IMAGE",
+							downloadUrl: fileRecordResponse.url,
+							previewUrl: convertDownloadToPreviewUrl(fileRecordResponse.url),
+							alt: "alternativeText",
+							name: fileRecordResponse.name,
+						})
+					);
+				});
+			});
+
+			describe("when mime type has no dedicated preview", () => {
+				it("should download file when card is clicked", async () => {
+					const { wrapper, fileRecordResponse } = setup({
+						previewStatus: PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE,
+						isCollaboraEnabled: false,
+						mimeType: "application/zip",
+						isCollaboraEditable: false,
+					});
+
+					const card = wrapper.findComponent(VCard);
+					await card.trigger("click");
+
+					expect(vi.mocked(downloadFile)).toHaveBeenCalledWith(fileRecordResponse.url, fileRecordResponse.name);
+				});
+
+				it("should download file when enter is pressed", async () => {
+					const { wrapper, fileRecordResponse } = setup({
+						previewStatus: PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE,
+						isCollaboraEnabled: false,
+						mimeType: "application/zip",
+						isCollaboraEditable: false,
+					});
+
+					const card = wrapper.findComponent(VCard);
+					await card.trigger("keydown.enter");
+
+					expect(vi.mocked(downloadFile)).toHaveBeenCalledWith(fileRecordResponse.url, fileRecordResponse.name);
+				});
+			});
+
+			describe("when mime type is video", () => {
+				it("should not trigger any action when card is clicked", async () => {
+					const { wrapper } = setup({
+						isCollaboraEnabled: false,
+						mimeType: "video/mp4",
+						isCollaboraEditable: false,
+						previewStatus: PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE,
+					});
+
+					const card = wrapper.findComponent(VCard);
+					const windowOpenSpy = vi.spyOn(window, "open");
+
+					await card.trigger("click");
+
+					expect(windowOpenSpy).not.toHaveBeenCalled();
+					expect(vi.mocked(downloadFile)).not.toHaveBeenCalled();
+					expect(openLightBoxMock).not.toHaveBeenCalled();
+
+					windowOpenSpy.mockRestore();
+				});
+
+				it("should not trigger any action when enter is pressed", async () => {
+					const { wrapper } = setup({
+						isCollaboraEnabled: false,
+						mimeType: "video/mp4",
+						isCollaboraEditable: false,
+						previewStatus: PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE,
+					});
+
+					const card = wrapper.findComponent(VCard);
+					const windowOpenSpy = vi.spyOn(window, "open");
+
+					await card.trigger("keydown.enter");
+
+					expect(windowOpenSpy).not.toHaveBeenCalled();
+					expect(vi.mocked(downloadFile)).not.toHaveBeenCalled();
+					expect(openLightBoxMock).not.toHaveBeenCalled();
+
+					windowOpenSpy.mockRestore();
 				});
 			});
 
@@ -873,6 +1098,76 @@ describe("FileContentElement", () => {
 				expect(card.props("variant")).toBe("outlined");
 			});
 
+			it("should set edit-mode marker class on v-card", () => {
+				const { wrapper } = setup();
+
+				const card = wrapper.findComponent({ ref: "fileContentElement" });
+
+				expect(card.classes()).toContain("content-element-card-edit-mode");
+			});
+
+			it("should not open pdf url when card is clicked in edit mode", async () => {
+				const { wrapper } = setup({
+					isCollaboraEnabled: false,
+					mimeType: "application/pdf",
+					isCollaboraEditable: false,
+				});
+
+				const card = wrapper.findComponent(VCard);
+				const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(vi.fn());
+
+				await card.trigger("click");
+
+				expect(windowOpenSpy).not.toHaveBeenCalled();
+				windowOpenSpy.mockRestore();
+			});
+
+			it("should not open pdf url when enter is pressed in edit mode", async () => {
+				const { wrapper } = setup({
+					isCollaboraEnabled: false,
+					mimeType: "application/pdf",
+					isCollaboraEditable: false,
+				});
+
+				const card = wrapper.findComponent(VCard);
+				const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(vi.fn());
+
+				await card.trigger("keydown.enter");
+
+				expect(windowOpenSpy).not.toHaveBeenCalled();
+				windowOpenSpy.mockRestore();
+			});
+
+			it("should not download file when card is clicked in edit mode", async () => {
+				const { wrapper } = setup({
+					previewStatus: PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE,
+					isCollaboraEnabled: false,
+					mimeType: "application/zip",
+					isCollaboraEditable: false,
+				});
+
+				const card = wrapper.findComponent(VCard);
+
+				await card.trigger("click");
+
+				expect(vi.mocked(downloadFile)).not.toHaveBeenCalled();
+			});
+
+			it("should not download file when enter is pressed in edit mode", async () => {
+				const { wrapper } = setup({
+					previewStatus: PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE,
+					isCollaboraEnabled: false,
+					mimeType: "application/zip",
+					isCollaboraEditable: false,
+				});
+
+				const card = wrapper.findComponent(VCard);
+
+				await card.trigger("keydown.enter");
+
+				expect(vi.mocked(downloadFile)).not.toHaveBeenCalled();
+			});
+
 			describe("when v-card emits keydown.down event", () => {
 				it("should emit move-keyboard:edit event", async () => {
 					const { wrapper } = setup();
@@ -1024,8 +1319,37 @@ describe("FileContentElement", () => {
 					expect(card.attributes("aria-label")).toBe("components.cardElement.fileElement.openOfficeDocument");
 				});
 
+				it("should pass collabora href to file content", () => {
+					const { wrapper, fileRecordResponse } = setup({
+						isCollaboraEnabled: true,
+						mimeType: "application/vnd.oasis.opendocument.text",
+						isCollaboraEditable: true,
+					});
+
+					const fileContent = wrapper.findComponent(FileContent);
+
+					expect(fileContent.props("collaboraHref")).toBe(`/collabora/${fileRecordResponse.id}?edit=true`);
+				});
+
+				it("should open collabora url in new tab when file content emits activate", async () => {
+					const { wrapper, fileRecordResponse } = setup({
+						isCollaboraEnabled: true,
+						mimeType: "application/vnd.oasis.opendocument.text",
+						isCollaboraEditable: true,
+					});
+
+					const windowOpenMock = vi.fn();
+					const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
+
+					wrapper.findComponent(FileContent).vm.$emit("activate");
+
+					expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?edit=true`, "_blank");
+
+					windowOpenSpy.mockRestore();
+				});
+
 				describe("when card is clicked", () => {
-					it("should open collabora url in new tab", () => {
+					it("should not open collabora url in new tab", () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/vnd.oasis.opendocument.text",
@@ -1038,13 +1362,13 @@ describe("FileContentElement", () => {
 
 						card.trigger("click");
 
-						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?edit=true`, "_blank");
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?edit=true`, "_blank");
 						windowOpenSpy.mockRestore();
 					});
 				});
 
 				describe("when card is focused and enter is pressed", () => {
-					it("should open collabora url in new tab", async () => {
+					it("should not open collabora url in new tab", async () => {
 						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/vnd.oasis.opendocument.text",
@@ -1058,7 +1382,7 @@ describe("FileContentElement", () => {
 
 						await card.trigger("keydown.enter");
 
-						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?edit=true`, "_blank");
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?edit=true`, "_blank");
 
 						windowOpenSpy.mockRestore();
 					});
@@ -1250,7 +1574,7 @@ describe("FileContentElement", () => {
 
 			const { wrapper, mockedAlerts } = getWrapper({
 				element,
-				isEditMode: false,
+				isEditMode: true,
 				columnIndex: 0,
 				rowIndex: 1,
 				elementIndex: 2,

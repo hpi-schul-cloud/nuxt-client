@@ -42,5 +42,52 @@ describe("CardHostInteractionHandler", () => {
 				}
 			);
 		});
+
+		describe("when enter is pressed", () => {
+			const triggerEnterWithTargetClass = (wrapper: ReturnType<typeof mount>, className: string | undefined) => {
+				const eventHandle = wrapper.find("[data-testid=event-handle]").element;
+				const target = document.createElement("div");
+				if (className) target.setAttribute("class", className);
+
+				const event = new KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true });
+				Object.defineProperty(event, "target", { value: target, writable: false });
+
+				eventHandle.dispatchEvent(event);
+
+				return event;
+			};
+
+			it("should emit 'start-edit-mode' when the target is the card host and not editing", () => {
+				const { wrapper } = setup({ isEditMode: false });
+
+				triggerEnterWithTargetClass(wrapper, "card-host");
+
+				expect(wrapper.emitted("start-edit-mode")).toHaveLength(1);
+			});
+
+			it("should emit 'start-edit-mode' when the target is the empty element placeholder and not editing", () => {
+				const { wrapper } = setup({ isEditMode: false });
+
+				triggerEnterWithTargetClass(wrapper, "board-empty-element");
+
+				expect(wrapper.emitted("start-edit-mode")).toHaveLength(1);
+			});
+
+			it("should not emit 'start-edit-mode' when the target is neither the card host nor the empty element", () => {
+				const { wrapper } = setup({ isEditMode: false });
+
+				triggerEnterWithTargetClass(wrapper, "some-other-class");
+
+				expect(wrapper.emitted("start-edit-mode")).toBeUndefined();
+			});
+
+			it("should not emit 'start-edit-mode' when already editing", () => {
+				const { wrapper } = setup({ isEditMode: true });
+
+				triggerEnterWithTargetClass(wrapper, "board-empty-element");
+
+				expect(wrapper.emitted("start-edit-mode")).toBeUndefined();
+			});
+		});
 	});
 });

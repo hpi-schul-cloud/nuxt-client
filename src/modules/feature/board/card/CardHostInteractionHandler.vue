@@ -38,8 +38,10 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 const onKeydownEnter = (event: KeyboardEvent) => {
 	const element = event.target as HTMLElement;
 	const classNames = event.target ? element.getAttribute("class") : "";
-	const isCardHost = classNames?.split(" ").includes("card-host");
-	if (!props.isEditMode && isCardHost) {
+	const classList = classNames?.split(" ") ?? [];
+	const isCardHost = classList.includes("card-host");
+	const isEmptyElement = classList.includes("board-empty-element");
+	if (!props.isEditMode && (isCardHost || isEmptyElement)) {
 		emit("start-edit-mode");
 		event.stopImmediatePropagation();
 		event.preventDefault();

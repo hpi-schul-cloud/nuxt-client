@@ -27,26 +27,17 @@ import { injectStrict } from "@/utils/inject";
 import { mdiLink } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { computed, ComputedRef, ref } from "vue";
+import { computed, ref } from "vue";
 import { useDisplay } from "vuetify";
 
-const props = defineProps({
-	url: {
-		type: String,
-		required: true,
-	},
-	title: {
-		type: String,
-		required: true,
-	},
-	imageUrl: {
-		type: String,
-		default: undefined,
-	},
-	isEditMode: { type: Boolean, required: true },
-});
+const props = defineProps<{
+	url: string;
+	title: string;
+	imageUrl?: string;
+	isEditMode: boolean;
+}>();
 
-const hostname: ComputedRef<string> = computed(() => {
+const hostname = computed<string>(() => {
 	try {
 		const urlObject = new URL(props.url);
 		return urlObject.hostname;
@@ -60,5 +51,3 @@ const { smAndUp } = useDisplay();
 
 const isSmallOrLargerListBoard = computed(() => smAndUp.value && isListLayout.value);
 </script>
-
-<style scoped></style>

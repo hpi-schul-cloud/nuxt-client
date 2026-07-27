@@ -3,7 +3,7 @@
 		<v-text-field
 			v-model="titleRef"
 			:rules="rules"
-			:label="t('pages.folder.ariaLabels.menu.action.edit')"
+			:label="t('common.labels.title')"
 			type="text"
 			data-testid="folder-title-text-field-in-card"
 			class="text"

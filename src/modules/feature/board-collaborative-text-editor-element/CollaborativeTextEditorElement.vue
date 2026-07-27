@@ -1,7 +1,7 @@
 <template>
 	<v-card
 		ref="collaborativeTextEditorElement"
-		class="text-editor-card mb-4"
+		class="content-element-card text-editor-card mb-4"
 		data-testid="collaborative-text-editor-element"
 		variant="outlined"
 		:ripple="false"
@@ -76,6 +76,12 @@ useBoardFocusHandler(element.value.id, collaborativeTextEditorElement);
 const { getUrl } = useCollaborativeTextEditorApi();
 
 const redirectToEditorUrl = async () => {
+	/******************************************************************************
+	 * e2e tests (hpi-schul-cloud/e2e-system-tests) depend on this window.open() call
+	 * to intercept the editor URL via a stub. Do NOT replace this with an
+	 * <a target="_blank"> link, router navigation, or any other mechanism that bypasses
+	 * window.open — doing so will break the e2e tests.
+	 ******************************************************************************/
 	const windowReference = window.open();
 
 	getUrl(element.value.id, CollaborativeTextEditorParentType.CONTENT_ELEMENT).then((url) => {

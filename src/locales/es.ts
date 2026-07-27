@@ -562,6 +562,7 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Este Etherpad es visible y editable para todos los participantes en el curso.",
 	"components.cardElement.externalToolElement": "Herramienta externa",
+	"components.cardElement.externalToolElement.noElement": "No hay herramienta",
 	"components.cardElement.mediaExternalToolElement": "Medio",
 	"components.cardElement.fileElement": "Archivo",
 	"components.cardElement.fileElement.altDescription":
@@ -571,6 +572,7 @@ export default {
 		"El formato de audio no es compatible con este navegador / sistema operativo.",
 	"components.cardElement.fileElement.caption": "Descripción",
 	"components.cardElement.fileElement.emptyAlt": "Aquí tenéis una imagen con el siguiente nombre",
+	"components.cardElement.fileElement.noElement": "No hay archivo",
 	"components.cardElement.fileElement.pdfAlt": "Imagen de vista previa para ",
 	"components.cardElement.fileElement.collaboraFile": "Archivo",
 	"components.cardElement.fileElement.previewError": "No se ha podido cargar la vista previa.",
@@ -585,6 +587,7 @@ export default {
 	"components.cardElement.LinkElement": "Enlace",
 	"components.cardElement.LinkElement.create.label": "Inserte la dirección del enlace",
 	"components.cardElement.LinkElement.edit.label": "Editar la dirección del enlace",
+	"components.cardElement.LinkElement.noLink": "No hay enlace",
 	"components.cardElement.LinkElement.validation.success": "La dirección del enlace es válida",
 	"components.cardElement.notification.visibleAndEditable":
 		"Esta pizarra es visible y editable para todos los participantes en el curso.",
@@ -599,6 +602,7 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
 	"components.cardElement.h5pElement": "Elemento de aprendizaje interactivo",
+	"components.cardElement.h5pElement.noElement": "No hay elemento de aprendizaje",
 	"components.cardElement.h5pElement.create": "Crear elemento de aprendizaje...",
 	"components.cardElement.h5pElement.title.error.load":
 		"No se pudo cargar el título de un elemento de aprendizaje interactivo.",
@@ -1550,6 +1554,10 @@ export default {
 	"pages.courseRooms.publishCard.error": "Se ha producido un error al publicar la tarjeta.",
 	"pages.courseRooms.restoreTask.error": "Se ha producido un error al restaurar la tarea.",
 	"pages.courseRooms.sortElements.error": "Se ha producido un error al ordenar las tarjetas.",
+	"pages.courseRooms.tools.videoConference.notEnabled.teacher":
+		"Las videoconferencias están deshabilitadas para la escuela. Por favor, consulte con el administrador de la escuela.",
+	"pages.courseRooms.tools.videoConference.notEnabled.participant":
+		"Las videoconferencias están deshabilitadas para la escuela. Por favor, consulte con el profesor.",
 	"pages.files.overview.courseFiles": "Archivos del curso",
 	"pages.files.overview.favorites": "Favoritos",
 	"pages.files.overview.personalFiles": "Archivos personales",

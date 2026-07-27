@@ -1,7 +1,7 @@
 <template>
 	<VCard
 		ref="videoConferenceElement"
-		class="mb-4 video-conference-element"
+		class="content-element-card mb-4 video-conference-element"
 		data-testid="video-conference-element"
 		:variant="outlined"
 		:ripple="false"

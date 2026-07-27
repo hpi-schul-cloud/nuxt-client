@@ -144,6 +144,16 @@ describe("FolderContentElement", () => {
 	});
 
 	describe("when element is in view mode", () => {
+		it("should not set edit-mode marker class on folder card", () => {
+			const { wrapper } = setupWrapper({
+				isEditMode: false,
+			});
+
+			const card = wrapper.findComponent(VCard);
+
+			expect(card.classes()).not.toContain("content-element-card-edit-mode");
+		});
+
 		it("should not render menu", () => {
 			const { wrapper } = setupWrapper({
 				isEditMode: false,
@@ -191,9 +201,30 @@ describe("FolderContentElement", () => {
 				expect(router.push).toHaveBeenCalledWith(`/folder/${mockElement.id}`);
 			});
 		});
+
+		it("should push folder route when enter is pressed on card", async () => {
+			const { wrapper, mockElement, router } = setupWrapper({
+				isEditMode: false,
+			});
+
+			const card = wrapper.findComponent(VCard);
+			await card.trigger("keydown.enter");
+
+			expect(router.push).toHaveBeenCalledWith(`/folder/${mockElement.id}`);
+		});
 	});
 
 	describe("when element is in edit mode", () => {
+		it("should set edit-mode marker class on folder card", () => {
+			const { wrapper } = setupWrapper({
+				isEditMode: true,
+			});
+
+			const card = wrapper.findComponent(VCard);
+
+			expect(card.classes()).toContain("content-element-card-edit-mode");
+		});
+
 		describe("folder element menu", () => {
 			it("should render folder element menu", () => {
 				const { wrapper } = setupWrapper({
@@ -259,6 +290,17 @@ describe("FolderContentElement", () => {
 
 			const card = wrapper.findComponent(VCard);
 			await card.trigger("click");
+
+			expect(router.push).not.toHaveBeenCalledWith(`/folder/${mockElement.id}`);
+		});
+
+		it("should not link folder element to route when enter is pressed", async () => {
+			const { wrapper, mockElement, router } = setupWrapper({
+				isEditMode: true,
+			});
+
+			const card = wrapper.findComponent(VCard);
+			await card.trigger("keydown.enter");
 
 			expect(router.push).not.toHaveBeenCalledWith(`/folder/${mockElement.id}`);
 		});

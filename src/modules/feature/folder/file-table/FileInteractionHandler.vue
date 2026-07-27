@@ -126,6 +126,12 @@ const openCollabora = () => {
 		},
 	}).href;
 
+	/******************************************************************************
+	 * e2e tests (hpi-schul-cloud/e2e-system-tests) depend on this window.open() call
+	 * to intercept the editor URL via a stub. Do NOT replace this with an
+	 * <a target="_blank"> link, router navigation, or any other mechanism that bypasses
+	 * window.open — doing so will break the e2e tests.
+	 ******************************************************************************/
 	window.open(url, "_blank");
 };
 </script>

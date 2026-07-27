@@ -3,12 +3,13 @@
 		<template #display>
 			<div
 				class="d-flex align-center focusable-container"
+				:class="{ 'content-element-interactive': isEditMode }"
 				style="min-height: 52px"
-				tabindex="0"
-				role="button"
+				:tabindex="isEditMode ? 0 : undefined"
+				:role="isEditMode ? 'button' : undefined"
 				data-testid="image-thumbnail-in-card"
-				@click="openLightBox"
-				@keydown.enter.space="openLightBox"
+				@click="onActivate"
+				@keydown.enter.space="onActivate"
 			>
 				<div class="w-100 h-100 image-container">
 					<PreviewImage :src="previewSrc" :alt="alternativeText" :max-height="336" />
@@ -22,10 +23,8 @@
 </template>
 
 <script setup lang="ts">
-import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { FileElementResponse } from "@api-server";
 import { ContentElementBar } from "@ui-board";
-import { LightBoxContentType, LightBoxOptions, useLightBox } from "@ui-light-box";
 import { PreviewImage } from "@ui-preview-image";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -41,6 +40,10 @@ type Props = {
 
 const props = defineProps<Props>();
 
+const emit = defineEmits<{
+	(e: "activate", event: Event): void;
+}>();
+
 const { t } = useI18n();
 
 const alternativeText = computed(() => {
@@ -52,20 +55,13 @@ const alternativeText = computed(() => {
 	return altText;
 });
 
-const openLightBox = () => {
-	const previewUrl = convertDownloadToPreviewUrl(props.src);
+const onActivate = (event: Event) => {
+	if (!props.isEditMode) {
+		return;
+	}
 
-	const options: LightBoxOptions = {
-		type: LightBoxContentType.IMAGE,
-		downloadUrl: props.src,
-		previewUrl: previewUrl,
-		alt: alternativeText.value,
-		name: props.name,
-	};
-
-	const { open } = useLightBox();
-
-	open(options);
+	event.stopPropagation();
+	emit("activate", event);
 };
 </script>
 <style scoped lang="scss">

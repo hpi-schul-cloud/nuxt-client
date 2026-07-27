@@ -7,6 +7,21 @@ import {
 } from "@/types/file/File";
 import { useI18n } from "vue-i18n";
 
+const toClampedPercent = (loaded: number, total: number): number =>
+	Math.min(100, Math.max(0, Math.round((loaded / total) * 100)));
+
+export const buildUploadOptions = (onUploadProgress?: (progress: number) => void) => {
+	if (!onUploadProgress) return undefined;
+
+	return {
+		onUploadProgress: (event: ProgressEvent) => {
+			if (event.total && event.total > 0) {
+				onUploadProgress(toClampedPercent(event.loaded, event.total));
+			}
+		},
+	};
+};
+
 export const toBase64 = (file: File) =>
 	new Promise((resolve, reject) => {
 		const reader = new FileReader();

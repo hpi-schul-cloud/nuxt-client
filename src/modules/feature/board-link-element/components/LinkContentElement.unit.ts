@@ -10,18 +10,18 @@ import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElem
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { FileRecordParentType } from "@api-file-storage";
 import { LinkElementContent, LinkElementResponse } from "@api-server";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { LinkContentElement } from "@feature-board-link-element";
-import { BoardMenu } from "@ui-board";
+import { mdiLink } from "@icons/material";
+import { BoardMenu, EmptyElement } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { useElementFocus } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { Mocked } from "vitest";
 import { computed, nextTick, ref } from "vue";
 
-vi.mock("@data-board/ContentElementState.composable");
-vi.mock("@data-board/BoardFocusHandler.composable");
+vi.mock("@data-board");
 vi.mock("../composables/MetaTagExtractorApi.composable");
 vi.mock("@data-file");
 vi.mock("@/utils/fileHelper");
@@ -73,6 +73,9 @@ describe("LinkContentElement", () => {
 		vi.mocked(useFileStorageApi).mockReturnValue(
 			useFileStorageApiMock as unknown as ReturnType<typeof useFileStorageApi>
 		);
+		vi.mocked(useBoardAllowedOperations).mockReturnValue({
+			allowedOperations: computed(() => ({ updateElement: true }) as unknown),
+		} as ReturnType<typeof useBoardAllowedOperations>);
 		vi.mocked(fileHelper.isPreviewPossible).mockReturnValue(true);
 		vi.mocked(fileHelper.convertDownloadToPreviewUrl).mockReturnValue(
 			"https://some.schulcloud.de/my-upload-preview-image.jpg"
@@ -186,12 +189,24 @@ describe("LinkContentElement", () => {
 		});
 
 		describe("when element is in view mode", () => {
-			it("should hide the element", () => {
+			it("should render EmptyElement", () => {
 				const { wrapper } = setupWrapper({ isEditMode: false });
 
-				const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
+				const element = wrapper.findComponent(EmptyElement);
+				expect(element.exists()).toBe(true);
+				expect(element.props("icon")).toBe(mdiLink);
+				expect(element.props("title")).toBe("components.cardElement.LinkElement.noLink");
+			});
 
-				expect(linkElement.attributes("class")).toContain("d-none");
+			it("should not render card or empty element when user has no edit permissions", () => {
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ updateElement: false }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
+
+				const { wrapper } = setupWrapper({ isEditMode: false });
+
+				expect(wrapper.find('[data-testid="board-link-element"]').exists()).toBe(false);
+				expect(wrapper.findComponent(EmptyElement).exists()).toBe(false);
 			});
 
 			it("should not render the element menu", () => {

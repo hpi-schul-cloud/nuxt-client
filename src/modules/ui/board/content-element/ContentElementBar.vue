@@ -95,9 +95,6 @@ defineProps({
 		color: var(--v-black-base) !important;
 		text-decoration: none;
 	}
-	:deep(a:hover) {
-		text-decoration: underline;
-	}
 }
 
 .content-element-bar-texts {
@@ -121,16 +118,6 @@ defineProps({
 	flex: 0 0 33%;
 }
 
-.content-element-bar:hover {
-	.content-element-title {
-		text-decoration: underline;
-	}
-
-	.content-element-display {
-		filter: brightness(80%);
-	}
-}
-
 .three-dot-menu {
 	position: absolute;
 	right: 0.75rem;
@@ -148,5 +135,33 @@ defineProps({
 
 .min-width-0 {
 	min-width: 0;
+}
+</style>
+
+<style lang="scss">
+.content-element-card:not(.content-element-card-edit-mode):hover .content-element-title,
+.content-element-card:not(.content-element-card-edit-mode):hover .content-element-title a {
+	text-decoration: underline;
+}
+
+.content-element-card.content-element-card-edit-mode:has(.content-element-title a:hover) .content-element-title,
+.content-element-card.content-element-card-edit-mode:has(.content-element-title a:hover) .content-element-title a {
+	text-decoration: underline;
+}
+
+.content-element-card.content-element-card-edit-mode {
+	cursor: default !important;
+}
+
+.content-element-card:not(.content-element-card-edit-mode):hover .content-element-display {
+	filter: brightness(80%);
+}
+
+.content-element-card.content-element-card-edit-mode:has(.content-element-interactive:hover) .content-element-display {
+	filter: brightness(80%);
+}
+
+.content-element-interactive {
+	cursor: pointer;
 }
 </style>

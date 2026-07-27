@@ -1,6 +1,6 @@
 import { InlineEditInteractionEvent } from "@/types/board/InlineEditInteractionEvent.symbol";
 import { useCurrentElement, useElementBounding } from "@vueuse/core";
-import { inject, onMounted, Ref, ref, watch } from "vue";
+import { computed, inject, onMounted, Ref, ref, watch } from "vue";
 
 export const useInlineEditInteractionHandler = (
 	onFocusCallback: (interactionBoundary: { x: number; y: number }) => Promise<void>
@@ -15,7 +15,8 @@ export const useInlineEditInteractionHandler = (
 		ref(undefined)
 	);
 
-	const elementHost = useCurrentElement<HTMLElement>();
+	const currentElement = useCurrentElement();
+	const elementHost = computed(() => (currentElement.value instanceof HTMLElement ? currentElement.value : null));
 	const { top, right, bottom, left } = useElementBounding(elementHost);
 
 	onMounted(() => {

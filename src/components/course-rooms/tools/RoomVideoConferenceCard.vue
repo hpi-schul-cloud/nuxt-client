@@ -4,17 +4,14 @@
 			<div v-if="isRunning && hasPermission" class="pulsating-dot my-auto" />
 		</template>
 		<template #footer>
-			<div v-show="!isRunning && !canStart" class="mt-2" data-testId="vc-info-box-show">
+			<div v-show="!isRunning && (!isVideoConferenceEnabled || !canStart)" class="mt-2" data-testId="vc-info-box-show">
 				<v-alert density="compact" class="ma-0" type="info" data-testId="vc-info-box">
 					<div class="d-flex flex-wrap gap-4">
 						<span class="flex-1 my-auto">
-							{{
-								hasPermission
-									? t("pages.videoConference.info.notStarted")
-									: t("pages.videoConference.info.noPermission")
-							}}
+							{{ footerMessage }}
 						</span>
 						<v-btn
+							v-if="isVideoConferenceEnabled"
 							class="my-auto"
 							variant="outlined"
 							:disabled="isRefreshing"
@@ -46,6 +43,7 @@ type Props = {
 	hasPermission: boolean;
 	canStart: boolean;
 	isRefreshing: boolean;
+	isVideoConferenceEnabled: boolean;
 };
 
 const props = defineProps<Props>();
@@ -61,6 +59,7 @@ const refreshVideoConferenceStatus = () => {
 };
 
 const onClick = () => {
+	if (!props.isVideoConferenceEnabled) return;
 	emit("click");
 };
 
@@ -73,6 +72,17 @@ const logoUrl: ComputedRef<string> = computed(() => {
 
 	return notStartedImg;
 });
+
+const getFooterMessageKey = (): string => {
+	if (!props.isVideoConferenceEnabled) {
+		return props.canStart
+			? "pages.courseRooms.tools.videoConference.notEnabled.teacher"
+			: "pages.courseRooms.tools.videoConference.notEnabled.participant";
+	}
+	return props.hasPermission ? "pages.videoConference.info.notStarted" : "pages.videoConference.info.noPermission";
+};
+
+const footerMessage = computed(() => t(getFooterMessageKey()));
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,4 @@
 import { initializeAxios } from "@/utils/api";
-import { formatUtc } from "@/utils/date-time.utils";
 import {
 	expectNotification,
 	mockApi,
@@ -126,12 +125,7 @@ describe("useAdministrationRoomStore", () => {
 
 			await roomAdminStore.fetchRooms();
 
-			const expectedRoomList = mockRoomList.data.map((room) => ({
-				...room,
-				createdAt: formatUtc(room.createdAt, "date"),
-			}));
-
-			expect(roomAdminStore.roomList).toEqual(expectedRoomList);
+			expect(roomAdminStore.roomList).toEqual(mockRoomList.data);
 		});
 
 		it("should handle errors and show failure notification", async () => {
@@ -147,7 +141,7 @@ describe("useAdministrationRoomStore", () => {
 		});
 
 		describe("sortAndFormatList", () => {
-			it("should format createdAt date", async () => {
+			it("should keep createdAt as raw ISO string", async () => {
 				const mockRoomList = roomStatsListResponseFactory.build();
 				const { roomAdminStore } = setup();
 
@@ -159,9 +153,7 @@ describe("useAdministrationRoomStore", () => {
 
 				await roomAdminStore.fetchRooms();
 
-				const expectedDate = formatUtc(mockRoomList.data[0].createdAt, "date");
-
-				expect(roomAdminStore.roomList[0].createdAt).toBe(expectedDate);
+				expect(roomAdminStore.roomList[0].createdAt).toBe(mockRoomList.data[0].createdAt);
 			});
 
 			it("should sort and format the room list correctly", async () => {
@@ -210,12 +202,7 @@ describe("useAdministrationRoomStore", () => {
 						roomsFromAnotherSchool[1],
 					],
 				});
-				const sortedAndFormattedRoomList = sortedList.data.map((room) => ({
-					...room,
-					createdAt: formatUtc(room.createdAt, "date"),
-				}));
-
-				expect(roomAdminStore.roomList).toEqual(sortedAndFormattedRoomList);
+				expect(roomAdminStore.roomList).toEqual(sortedList.data);
 			});
 		});
 	});

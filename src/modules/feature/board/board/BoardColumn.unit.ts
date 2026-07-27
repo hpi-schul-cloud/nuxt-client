@@ -314,6 +314,36 @@ describe("BoardColumn", () => {
 				expect(addCardButton.exists()).toBe(false);
 			});
 		});
+
+		describe("when user is allowed to move cards", () => {
+			it("should enable dragging for all cards", async () => {
+				const { wrapper } = setup({ allowedOperations: { moveCard: true } });
+
+				await nextTick();
+
+				const cardHostComponents = wrapper.findAllComponents({
+					name: "CardHost",
+				});
+				cardHostComponents.forEach((cardHost) => {
+					expect(cardHost.classes()).toContain("draggable");
+				});
+			});
+		});
+
+		describe("when user is not allowed to move cards", () => {
+			it("should disable dragging for all cards", async () => {
+				const { wrapper } = setup({ allowedOperations: { moveCard: false } });
+
+				await nextTick();
+
+				const cardHostComponents = wrapper.findAllComponents({
+					name: "CardHost",
+				});
+				cardHostComponents.forEach((cardHost) => {
+					expect(cardHost.classes()).not.toContain("draggable");
+				});
+			});
+		});
 	});
 
 	describe("when move was triggered by column header", () => {
@@ -375,6 +405,19 @@ describe("BoardColumn", () => {
 	});
 
 	describe("when editing a card", () => {
+		it("should disable dragging for this card", async () => {
+			const { wrapper, setEditModeId, cards } = setup({ allowedOperations: { moveCard: true } });
+			const cardId = cards[0].cardId;
+			setEditModeId(cardId);
+			await nextTick();
+
+			const cardHostComponents = wrapper.findAllComponents({
+				name: "CardHost",
+			});
+			const draggedCard = cardHostComponents.at(0);
+			expect(draggedCard?.classes()).not.toContain("draggable");
+		});
+
 		it("should not show addCardButton in the same column", async () => {
 			const { wrapper, setEditModeId, cards } = setup();
 			const cardId = cards[0].cardId;

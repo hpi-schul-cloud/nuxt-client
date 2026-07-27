@@ -8,6 +8,7 @@ describe("RoomVideoConferenceCard", () => {
 		hasPermission: boolean;
 		canStart: boolean;
 		isRefreshing: boolean;
+		isVideoConferenceEnabled: boolean;
 	}) => {
 		const wrapper = mount(RoomVideoConferenceCard, {
 			global: {
@@ -32,6 +33,7 @@ describe("RoomVideoConferenceCard", () => {
 				hasPermission: true,
 				canStart: true,
 				isRefreshing: false,
+				isVideoConferenceEnabled: true,
 			});
 
 			return {
@@ -55,6 +57,7 @@ describe("RoomVideoConferenceCard", () => {
 				hasPermission: true,
 				canStart: false,
 				isRefreshing: false,
+				isVideoConferenceEnabled: true,
 			});
 
 			return {
@@ -96,6 +99,7 @@ describe("RoomVideoConferenceCard", () => {
 				hasPermission: true,
 				canStart: true,
 				isRefreshing: false,
+				isVideoConferenceEnabled: true,
 			});
 
 			return {
@@ -144,6 +148,7 @@ describe("RoomVideoConferenceCard", () => {
 				hasPermission: true,
 				canStart: true,
 				isRefreshing: false,
+				isVideoConferenceEnabled: true,
 			});
 
 			return {
@@ -175,6 +180,7 @@ describe("RoomVideoConferenceCard", () => {
 				hasPermission: false,
 				canStart: false,
 				isRefreshing: false,
+				isVideoConferenceEnabled: true,
 			});
 
 			return {
@@ -216,6 +222,7 @@ describe("RoomVideoConferenceCard", () => {
 				hasPermission: true,
 				canStart: false,
 				isRefreshing: false,
+				isVideoConferenceEnabled: true,
 			});
 
 			return {
@@ -241,6 +248,7 @@ describe("RoomVideoConferenceCard", () => {
 				hasPermission: true,
 				canStart: false,
 				isRefreshing: false,
+				isVideoConferenceEnabled: true,
 			});
 
 			return {
@@ -259,6 +267,73 @@ describe("RoomVideoConferenceCard", () => {
 		});
 	});
 
+	describe("when the video conference feature is disabled", () => {
+		describe("when the user is a teacher", () => {
+			const setup = () => {
+				const wrapper = getWrapper({
+					isRunning: false,
+					hasPermission: true,
+					canStart: true,
+					isRefreshing: false,
+					isVideoConferenceEnabled: false,
+				});
+				return { wrapper };
+			};
+
+			it("should show the footer info box", () => {
+				const { wrapper } = setup();
+				expect(wrapper.find('[data-testId="vc-info-box-show"]').isVisible()).toBe(true);
+			});
+
+			it("should display the teacher disabled message", () => {
+				const { wrapper } = setup();
+				const text = wrapper.find('[data-testId="vc-info-box"] span.my-auto');
+				expect(text.text()).toEqual("pages.courseRooms.tools.videoConference.notEnabled.teacher");
+			});
+
+			it("should not display the refresh button", () => {
+				const { wrapper } = setup();
+				expect(wrapper.find('[data-testId="refresh-btn"]').exists()).toBe(false);
+			});
+
+			it("should not emit a click event when the card is clicked", async () => {
+				const { wrapper } = setup();
+				await wrapper.find('[data-testId="vc-card"]').trigger("click");
+				expect(wrapper.emitted("click")).toBeUndefined();
+			});
+		});
+
+		describe("when the user is a student", () => {
+			const setup = () => {
+				const wrapper = getWrapper({
+					isRunning: false,
+					hasPermission: true,
+					canStart: false,
+					isRefreshing: false,
+					isVideoConferenceEnabled: false,
+				});
+				return { wrapper };
+			};
+
+			it("should display the participant disabled message", () => {
+				const { wrapper } = setup();
+				const text = wrapper.find('[data-testId="vc-info-box"] span.my-auto');
+				expect(text.text()).toEqual("pages.courseRooms.tools.videoConference.notEnabled.participant");
+			});
+
+			it("should not display the refresh button", () => {
+				const { wrapper } = setup();
+				expect(wrapper.find('[data-testId="refresh-btn"]').exists()).toBe(false);
+			});
+
+			it("should not emit a click event when the card is clicked", async () => {
+				const { wrapper } = setup();
+				await wrapper.find('[data-testId="vc-card"]').trigger("click");
+				expect(wrapper.emitted("click")).toBeUndefined();
+			});
+		});
+	});
+
 	describe("when refreshing", () => {
 		const setup = () => {
 			const wrapper = getWrapper({
@@ -266,6 +341,7 @@ describe("RoomVideoConferenceCard", () => {
 				hasPermission: true,
 				canStart: false,
 				isRefreshing: true,
+				isVideoConferenceEnabled: true,
 			});
 
 			return {

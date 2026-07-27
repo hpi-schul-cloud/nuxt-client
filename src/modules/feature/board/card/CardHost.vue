@@ -15,12 +15,11 @@
 					backgroundColor: cardBackground,
 					borderLeft: cardBorderColor ? `3px solid ${cardBorderColor}` : undefined,
 				}"
-				:class="{ 'drag-disabled': isEditMode }"
 				tabindex="0"
 				min-height="120px"
 				:elevation="cardElevation"
 				:ripple="false"
-				:hover="isHovered && allowedOperations?.moveCard"
+				:hover="isHovered && allowedOperations?.moveCard && !isEditMode"
 				:data-testid="cardTestId"
 				:data-scroll-target="getShareLinkId(cardId, BoardMenuScope.CARD)"
 			>

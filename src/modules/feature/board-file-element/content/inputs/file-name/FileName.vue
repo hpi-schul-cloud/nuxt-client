@@ -2,7 +2,7 @@
 	<VTextField
 		v-model="nameRef"
 		data-testid="file-name-input"
-		:label="t('common.labels.fileName')"
+		:label="t('common.labels.title')"
 		:rules="[rules.isRequired, rules.validateOnOpeningTag, rules.invalidCharacters]"
 		@click.stop
 		@keydown.enter.stop

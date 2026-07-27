@@ -3,5 +3,6 @@ import BoardMenu from "./BoardMenu.vue";
 import BoardSectionCreationHeader from "./BoardSectionCreationHeader.vue";
 import ContentElementBar from "./content-element/ContentElementBar.vue";
 import DetailViewButton from "./DetailViewButton.vue";
+import EmptyElement from "./EmptyElement.vue";
 
-export { BoardMenu, BoardMenuScope, BoardSectionCreationHeader, ContentElementBar, DetailViewButton };
+export { BoardMenu, BoardMenuScope, BoardSectionCreationHeader, ContentElementBar, DetailViewButton, EmptyElement };

@@ -5,6 +5,7 @@
 			:can-start="canStart"
 			:is-running="isConferenceRunning"
 			:is-refreshing="isLoading"
+			:is-video-conference-enabled="!isVideoConferenceForbidden"
 			data-testid="video-conference-card"
 			@click="onClick"
 			@refresh="onRefresh"
@@ -27,11 +28,13 @@
 
 <script setup lang="ts">
 import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
+import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { Permission, VideoConferenceScope, VideoConferenceStateResponse } from "@api-server";
 import { useVideoConference } from "@data-access";
 import { useAppStore, useAppStoreRefs } from "@data-app";
 import { SvsDialog } from "@ui-dialog";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
+import { isAxiosError } from "axios";
 import { computed, ref, toRef } from "vue";
 
 const props = defineProps({
@@ -67,8 +70,14 @@ const hasPermission = computed(() => canJoin.value || canStart.value);
 
 const errorDismissed = ref(false);
 
+const isVideoConferenceForbidden = computed(
+	() => isAxiosError(fetchError.value) && fetchError.value.response?.status === HttpStatusCode.Forbidden
+);
+
 const isErrorDialogOpen = computed(
-	() => (!!fetchError.value || !!startError.value || !!joinError.value) && !errorDismissed.value
+	() =>
+		((!isVideoConferenceForbidden.value && !!fetchError.value) || !!startError.value || !!joinError.value) &&
+		!errorDismissed.value
 );
 
 const isConfigurationDialogOpen = ref(false);

@@ -1,16 +1,17 @@
 <template>
 	<VCard
 		ref="folderContentElement"
-		class="mb-4"
+		class="content-element-card mb-4"
+		:class="{ 'content-element-card-edit-mode': isEditMode }"
 		data-testid="board-folder-element"
 		variant="outlined"
 		:ripple="false"
 		:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
 		tabindex="0"
-		@click="openFolder"
+		link
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
-		@keydown.enter="openFolder"
+		v-on="cardInteractionListeners"
 	>
 		<ContentElementBar :icon="mdiFolderOpenOutline">
 			<template #title>
@@ -168,6 +169,26 @@ const isDownloadAllowed = computed(() => (fileStatistics.value?.fileCount ?? 0) 
 
 const router = useRouter();
 const folderRoute = computed(() => `/folder/${element.value.id}`);
+
+const onFolderInteractionKeydown = (event: KeyboardEvent) => {
+	const isEnterKey = event.key === "Enter" || event.code === "Enter" || event.keyCode === 13;
+
+	if (isEnterKey) {
+		openFolder();
+	}
+};
+
+const cardInteractionListeners = computed(() => {
+	if (props.isEditMode) {
+		return {};
+	}
+
+	return {
+		click: openFolder,
+		keydown: onFolderInteractionKeydown,
+	};
+});
+
 const openFolder = () => {
 	if (props.isEditMode) {
 		return;

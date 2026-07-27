@@ -335,7 +335,14 @@ describe("FileStorageApi Composable", () => {
 
 				await upload(file, parentId, parentType);
 
-				expect(fileApi.upload).toHaveBeenCalledWith("schoolId", StorageLocation.SCHOOL, parentId, parentType, file);
+				expect(fileApi.upload).toHaveBeenCalledWith(
+					"schoolId",
+					StorageLocation.SCHOOL,
+					parentId,
+					parentType,
+					file,
+					undefined
+				);
 			});
 
 			it("should set filerecord", async () => {
@@ -346,6 +353,109 @@ describe("FileStorageApi Composable", () => {
 
 				const fileRecord = getFileRecordsByParentId(parentId);
 				expect(fileRecord).toStrictEqual([fileRecordResponse]);
+			});
+		});
+
+		describe("when onUploadProgress callback is provided", () => {
+			const setup = () => {
+				const file = new File([""], "filename");
+				const parentId = ObjectIdMock();
+				const parentType = FileRecordParent.BOARDNODES;
+				const fileRecordResponse = fileRecordFactory.build({
+					parentId,
+					parentType,
+				});
+				const response = mockApiResponse<FileRecord>({
+					data: fileRecordResponse,
+				});
+
+				const fileApi = mockApi<serverApi.FileApiInterface>();
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				fileApi.upload.mockResolvedValueOnce(response);
+
+				return {
+					parentId,
+					parentType,
+					file,
+					fileApi,
+				};
+			};
+
+			it("should call FileApiFactory.upload with onUploadProgress option", async () => {
+				const { parentId, parentType, file, fileApi } = setup();
+				const { upload } = useFileStorageApi();
+				const onUploadProgress = vi.fn();
+
+				await upload(file, parentId, parentType, onUploadProgress);
+
+				expect(fileApi.upload).toHaveBeenCalledWith(
+					"schoolId",
+					StorageLocation.SCHOOL,
+					parentId,
+					parentType,
+					file,
+					expect.objectContaining({ onUploadProgress: expect.any(Function) })
+				);
+			});
+
+			it("should call onUploadProgress with correct percentage", async () => {
+				const { parentId, parentType, file, fileApi } = setup();
+				const { upload } = useFileStorageApi();
+				const onUploadProgress = vi.fn();
+
+				await upload(file, parentId, parentType, onUploadProgress);
+
+				const capturedOptions = fileApi.upload.mock.calls[0][5] as {
+					onUploadProgress: (event: ProgressEvent) => void;
+				};
+				capturedOptions.onUploadProgress({ loaded: 50, total: 100 } as ProgressEvent);
+
+				expect(onUploadProgress).toHaveBeenCalledWith(50);
+			});
+
+			it("should clamp progress to 100 at most", async () => {
+				const { parentId, parentType, file, fileApi } = setup();
+				const { upload } = useFileStorageApi();
+				const onUploadProgress = vi.fn();
+
+				await upload(file, parentId, parentType, onUploadProgress);
+
+				const capturedOptions = fileApi.upload.mock.calls[0][5] as {
+					onUploadProgress: (event: ProgressEvent) => void;
+				};
+				capturedOptions.onUploadProgress({ loaded: 110, total: 100 } as ProgressEvent);
+
+				expect(onUploadProgress).toHaveBeenCalledWith(100);
+			});
+
+			it("should not call onUploadProgress when event.total is 0", async () => {
+				const { parentId, parentType, file, fileApi } = setup();
+				const { upload } = useFileStorageApi();
+				const onUploadProgress = vi.fn();
+
+				await upload(file, parentId, parentType, onUploadProgress);
+
+				const capturedOptions = fileApi.upload.mock.calls[0][5] as {
+					onUploadProgress: (event: ProgressEvent) => void;
+				};
+				capturedOptions.onUploadProgress({ loaded: 0, total: 0 } as ProgressEvent);
+
+				expect(onUploadProgress).not.toHaveBeenCalled();
+			});
+
+			it("should not call onUploadProgress when event.total is undefined", async () => {
+				const { parentId, parentType, file, fileApi } = setup();
+				const { upload } = useFileStorageApi();
+				const onUploadProgress = vi.fn();
+
+				await upload(file, parentId, parentType, onUploadProgress);
+
+				const capturedOptions = fileApi.upload.mock.calls[0][5] as {
+					onUploadProgress: (event: ProgressEvent) => void;
+				};
+				capturedOptions.onUploadProgress({ loaded: 50, total: undefined } as unknown as ProgressEvent);
+
+				expect(onUploadProgress).not.toHaveBeenCalled();
 			});
 		});
 

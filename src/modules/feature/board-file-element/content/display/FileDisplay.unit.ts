@@ -70,6 +70,15 @@ describe("FileDisplay", () => {
 				expect(props.iseditmode).toBe("true");
 				expect(props.element).toBeDefined();
 			});
+
+			it("should emit activate when image display emits activate", async () => {
+				const { wrapper } = setup();
+				const imageDisplay = wrapper.findComponent(ImageDisplay);
+
+				imageDisplay.vm.$emit("activate");
+
+				expect(wrapper.emitted("activate")).toHaveLength(1);
+			});
 		});
 
 		describe("when mimeType is a video type", () => {
@@ -169,6 +178,15 @@ describe("FileDisplay", () => {
 				expect(props.previewsrc).toBe(previewUrlProp);
 				expect(props.src).toBe(srcProp);
 				expect(props.element).toBeDefined();
+			});
+
+			it("should emit activate when pdf display emits activate", async () => {
+				const { wrapper } = setup();
+				const pdfDisplay = wrapper.findComponent(PdfDisplay);
+
+				pdfDisplay.vm.$emit("activate");
+
+				expect(wrapper.emitted("activate")).toHaveLength(1);
 			});
 		});
 	});
@@ -364,6 +382,15 @@ describe("FileDisplay", () => {
 				const collaboraDisplay = wrapper.findComponent(CollaboraDisplay);
 
 				expect(collaboraDisplay.exists()).toBe(true);
+			});
+
+			it("should emit activate when collabora display emits activate", () => {
+				const { wrapper } = setup();
+				const collaboraDisplay = wrapper.findComponent(CollaboraDisplay);
+
+				collaboraDisplay.vm.$emit("activate");
+
+				expect(wrapper.emitted("activate")).toHaveLength(1);
 			});
 		});
 

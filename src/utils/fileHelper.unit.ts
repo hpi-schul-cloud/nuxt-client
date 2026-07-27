@@ -1,4 +1,5 @@
 import {
+	buildUploadOptions,
 	convertDownloadToPreviewUrl,
 	convertFileSize,
 	downloadFile,
@@ -34,6 +35,61 @@ vi.mock("vue-i18n", () => ({
 }));
 
 describe("@/utils/fileHelper", () => {
+	describe("buildUploadOptions", () => {
+		it("should return undefined when no callback is provided", () => {
+			expect(buildUploadOptions(undefined)).toBeUndefined();
+		});
+
+		it("should return an object with onUploadProgress when a callback is provided", () => {
+			const callback = vi.fn();
+			const options = buildUploadOptions(callback);
+			expect(options).toBeDefined();
+			expect(options).toHaveProperty("onUploadProgress");
+		});
+
+		it("should call the callback with the correct percentage", () => {
+			const callback = vi.fn();
+			const options = buildUploadOptions(callback)!;
+			options.onUploadProgress({ loaded: 50, total: 100 } as ProgressEvent);
+			expect(callback).toHaveBeenCalledWith(50);
+		});
+
+		it("should clamp the percentage to 100", () => {
+			const callback = vi.fn();
+			const options = buildUploadOptions(callback)!;
+			options.onUploadProgress({ loaded: 110, total: 100 } as ProgressEvent);
+			expect(callback).toHaveBeenCalledWith(100);
+		});
+
+		it("should clamp the percentage to 0", () => {
+			const callback = vi.fn();
+			const options = buildUploadOptions(callback)!;
+			options.onUploadProgress({ loaded: -10, total: 100 } as ProgressEvent);
+			expect(callback).toHaveBeenCalledWith(0);
+		});
+
+		it("should not call the callback when total is 0", () => {
+			const callback = vi.fn();
+			const options = buildUploadOptions(callback)!;
+			options.onUploadProgress({ loaded: 0, total: 0 } as ProgressEvent);
+			expect(callback).not.toHaveBeenCalled();
+		});
+
+		it("should not call the callback when total is undefined", () => {
+			const callback = vi.fn();
+			const options = buildUploadOptions(callback)!;
+			options.onUploadProgress({ loaded: 50, total: undefined } as unknown as ProgressEvent);
+			expect(callback).not.toHaveBeenCalled();
+		});
+
+		it("should round the percentage", () => {
+			const callback = vi.fn();
+			const options = buildUploadOptions(callback)!;
+			options.onUploadProgress({ loaded: 1, total: 3 } as ProgressEvent);
+			expect(callback).toHaveBeenCalledWith(33);
+		});
+	});
+
 	describe("downloadFile", () => {
 		const setup = () => {
 			const url = "test-url";

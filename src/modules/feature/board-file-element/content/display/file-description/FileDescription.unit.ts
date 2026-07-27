@@ -11,7 +11,8 @@ describe("FileDescription", () => {
 		showMenu: boolean;
 		name?: string;
 		caption?: string;
-		src?: string;
+		href?: string;
+		isDownloadLink?: boolean;
 	}) => {
 		const propsData = {
 			name: props.name ?? "testName",
@@ -19,7 +20,8 @@ describe("FileDescription", () => {
 			isEditMode: props.isEditMode,
 			showTitle: props.showTitle,
 			showMenu: props.showMenu,
-			src: props.src,
+			href: props.href,
+			isDownloadLink: props.isDownloadLink ?? false,
 		};
 		const wrapper = shallowMount(FileDescription, {
 			props: propsData,
@@ -30,7 +32,6 @@ describe("FileDescription", () => {
 			wrapper,
 			name: propsData.name,
 			caption: propsData.caption,
-			src: propsData.src,
 		};
 	};
 
@@ -40,7 +41,8 @@ describe("FileDescription", () => {
 		showMenu: boolean;
 		name?: string;
 		caption?: string;
-		src?: string;
+		href?: string;
+		isDownloadLink?: boolean;
 	}) => {
 		const propsData = {
 			name: props.name ?? "testName",
@@ -48,7 +50,8 @@ describe("FileDescription", () => {
 			isEditMode: props.isEditMode,
 			showTitle: props.showTitle,
 			showMenu: props.showMenu,
-			src: props.src,
+			href: props.href,
+			isDownloadLink: props.isDownloadLink ?? false,
 		};
 		const wrapper = mount(FileDescription, {
 			props: propsData,
@@ -59,7 +62,6 @@ describe("FileDescription", () => {
 			wrapper,
 			name: propsData.name,
 			caption: propsData.caption,
-			src: propsData.src,
 		};
 	};
 
@@ -103,45 +105,107 @@ describe("FileDescription", () => {
 				expect(contentElementBar.props("icon")).toBe(mdiFileDocumentOutline);
 			});
 
-			describe("when src is defined", () => {
+			describe("when href is defined", () => {
 				it("should render link", () => {
-					const src = "testSrc";
 					const { wrapper, name } = mountSetup({
-						isEditMode: false,
+						isEditMode: true,
 						showTitle: true,
 						showMenu: true,
-						src,
+						href: "testHref",
 					});
 					const link = wrapper.find("a");
 
-					expect(link.attributes("href")).toBe(src);
-					expect(link.text()).toBe(name);
+					expect(link.exists()).toBe(true);
+					expect(link.text()).toContain(name);
+					expect(link.attributes("href")).toBe("testHref");
+					expect(link.attributes("target")).toBe("_blank");
 				});
 
 				it("should have correct aria-label", () => {
-					const src = "testSrc";
 					const { wrapper, name } = mountSetup({
-						isEditMode: false,
+						isEditMode: true,
 						showTitle: true,
 						showMenu: true,
-						src,
+						href: "testHref",
 					});
 					const link = wrapper.find("a");
 
 					expect(link.attributes("aria-label")).toBe(`${name}, common.ariaLabel.newTab`);
 				});
+
+				it("should stop click bubbling", async () => {
+					const host = document.createElement("div");
+					const parentClick = vi.fn();
+					host.addEventListener("click", parentClick);
+					const wrapper = mount(FileDescription, {
+						props: {
+							name: "testName",
+							showTitle: true,
+							showMenu: false,
+							isEditMode: true,
+							href: "testHref",
+						},
+						attachTo: host,
+						global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+					});
+
+					await wrapper.find("a").trigger("click");
+
+					expect(parentClick).not.toHaveBeenCalled();
+					wrapper.unmount();
+					host.remove();
+				});
+
+				it("should stop enter keydown bubbling", async () => {
+					const host = document.createElement("div");
+					const parentKeydown = vi.fn();
+					host.addEventListener("keydown", parentKeydown);
+					const wrapper = mount(FileDescription, {
+						props: {
+							name: "testName",
+							showTitle: true,
+							showMenu: false,
+							isEditMode: true,
+							href: "testHref",
+						},
+						attachTo: host,
+						global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+					});
+
+					await wrapper.find("a").trigger("keydown.enter");
+
+					expect(parentKeydown).not.toHaveBeenCalled();
+					wrapper.unmount();
+					host.remove();
+				});
+
+				it("should render download link when configured", () => {
+					const { wrapper, name } = mountSetup({
+						isEditMode: true,
+						showTitle: true,
+						showMenu: true,
+						href: "testHref",
+						isDownloadLink: true,
+					});
+					const link = wrapper.find("a");
+
+					expect(link.attributes("href")).toBe("testHref");
+					expect(link.attributes("download")).toBe(name);
+					expect(link.attributes("target")).toBeUndefined();
+					expect(link.attributes("aria-label")).toBe(`${name}, components.board.action.download`);
+				});
 			});
 
-			describe("when src is undefined", () => {
+			describe("when href is undefined", () => {
 				it("should not render link", () => {
 					const { wrapper, name } = mountSetup({
-						isEditMode: false,
+						isEditMode: true,
 						showTitle: true,
 						showMenu: true,
 					});
 					const link = wrapper.find("a");
 
-					expect(link.exists()).toBeFalsy();
+					expect(link.exists()).toBe(false);
 					expect(wrapper.text()).toContain(name);
 				});
 			});
@@ -190,23 +254,7 @@ describe("FileDescription", () => {
 				expect(text).toContain(caption);
 			});
 
-			describe("when src is defined", () => {
-				it("should render link", () => {
-					const src = "testSrc";
-					const { wrapper, name } = mountSetup({
-						isEditMode: false,
-						showTitle: true,
-						showMenu: true,
-						src,
-					});
-					const link = wrapper.find("a");
-
-					expect(link.attributes("href")).toBe(src);
-					expect(link.text()).toBe(name);
-				});
-			});
-
-			describe("when src is undefined", () => {
+			describe("when href is undefined", () => {
 				it("should not render link", () => {
 					const { wrapper, name } = mountSetup({
 						isEditMode: false,
@@ -215,7 +263,7 @@ describe("FileDescription", () => {
 					});
 					const link = wrapper.find("a");
 
-					expect(link.exists()).toBeFalsy();
+					expect(link.exists()).toBe(false);
 					expect(wrapper.text()).toContain(name);
 				});
 			});

@@ -1,5 +1,6 @@
 import { Layouts } from "@/layouts/types";
 import { checkFolderFeature, checkRegisterExternalPersonsFeature, validateQueryParameters } from "@/router/guards";
+import { boardCardLinkRedirect } from "@/router/guards/board-card-link-redirect";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { isEnum, isMongoId, isOfficialSchoolNumber, REGEX_ID } from "@/utils/validation";
@@ -148,6 +149,12 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		props: (route: RouteLocationNormalized) => ({
 			boardId: route.params.boardId,
 		}),
+	},
+	{
+		// Redirects URLs where '#' was percent-encoded as '%23' to the correct hash-fragment URL.
+		path: `/boards/:cardLink(${REGEX_ID}%23card[^/]+)`,
+		redirect: boardCardLinkRedirect,
+		name: "board-card-link",
 	},
 	{
 		path: `/collabora/:id(${REGEX_ID})`,
