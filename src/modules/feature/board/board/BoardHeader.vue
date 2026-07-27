@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="d-flex align-start board-header mb-2">
+		<div class="d-flex align-start mb-2">
 			<InlineEditInteractionHandler
 				:id="boardId"
 				class="input-container"
@@ -51,7 +51,7 @@
 					<KebabMenuActionDelete :name="title" @click="onDeleteBoard" />
 				</BoardMenu>
 			</div>
-			<div v-if="isScrollModeToggleVisible" class="ms-auto mt-4 scroll-mode-toggle">
+			<div v-if="isScrollModeToggleVisible" class="flex-1-0 mt-4 ml-8 scroll-mode-toggle">
 				<VSwitch
 					:model-value="isPageScrollMode"
 					:label="t('components.board.action.fixColumns')"
@@ -291,6 +291,7 @@ html.board-page-scroll .column-board {
 	.v-label {
 		padding-inline-start: 0;
 		padding-inline-end: 10px;
+		text-align: right;
 	}
 }
 </style>
