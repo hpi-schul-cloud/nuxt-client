@@ -434,4 +434,13 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 			return true;
 		},
 	},
+	{
+		path: "/:pathMatch(.*)*",
+		name: "not-found",
+		beforeEnter: () => {
+			useAppStore().handleApplicationError(HttpStatusCode.NotFound);
+			return true;
+		},
+		redirect: { name: "error" },
+	},
 ];
