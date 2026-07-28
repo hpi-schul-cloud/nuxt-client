@@ -120,8 +120,9 @@ const fileRecord = computed(() => getFileRecordsByParentId(element.value.id)[0])
 
 const { alerts, addAlert } = useFileAlerts(fileRecord);
 
-const isUploading = computed(() => fileRecord.value?.isUploading);
+const fileWasPicked = ref(false);
 const uploadProgress = ref(0);
+const isUploading = computed(() => fileRecord.value?.isUploading || fileWasPicked.value);
 
 const fileProperties = computed(() => {
 	if (fileRecord.value === undefined) {
@@ -162,6 +163,15 @@ watch(element.value, async () => {
 	isLoadingFileRecord.value = false;
 });
 
+const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+	if (fileWasPicked.value) {
+		// Opens confirmation dialog in firefox
+		event.preventDefault();
+		// Opens confirmation dialog in chrome
+		event.returnValue = true;
+	}
+};
+
 onMounted(async () => {
 	await tryFetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
 	isLoadingFileRecord.value = false;
@@ -174,8 +184,10 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 	}
 };
 
-const onUploadFile = async (file: File): Promise<void> => {
+const onUploadFile = async (file: File) => {
+	fileWasPicked.value = true;
 	uploadProgress.value = 0;
+	window.addEventListener("beforeunload", handleBeforeUnload);
 	try {
 		await upload(file, element.value.id, FileRecordParentType.BOARDNODES, (progress) => {
 			uploadProgress.value = progress;
@@ -184,7 +196,9 @@ const onUploadFile = async (file: File): Promise<void> => {
 	} catch {
 		emit("delete:element", element.value.id);
 	} finally {
+		fileWasPicked.value = false;
 		uploadProgress.value = 0;
+		window.removeEventListener("beforeunload", handleBeforeUnload);
 	}
 };
 
