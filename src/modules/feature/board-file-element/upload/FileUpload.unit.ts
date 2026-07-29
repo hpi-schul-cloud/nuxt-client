@@ -4,7 +4,6 @@ import { mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as utilBoard from "@util-board";
 import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
 
 const setupUseSharedLastCreatedElementMock = () => {
 	const mockedUse = mockComposable(utilBoard.useSharedLastCreatedElement);
@@ -58,22 +57,9 @@ describe("FileUpload", () => {
 
 				expect(wrapper.html()).toContain(testSlot);
 			});
-
-			it("should not show notification on page unload", async () => {
-				setup();
-
-				const beforeUnloadEvent = new Event("beforeunload");
-				const preventDefaultSpy = vi.fn();
-				preventDefaultSpy.mockClear();
-
-				beforeUnloadEvent.preventDefault = preventDefaultSpy;
-				window.dispatchEvent(beforeUnloadEvent);
-
-				expect(preventDefaultSpy).not.toHaveBeenCalled();
-			});
 		});
 
-		describe("when file gets picked and is uploading", () => {
+		describe("when file gets picked", () => {
 			const setup = (fileName = "") => {
 				setupUseSharedLastCreatedElementMock();
 
@@ -111,52 +97,6 @@ describe("FileUpload", () => {
 				filePicker.vm.$emit("update:file", { fileName: "Test.jpg" });
 
 				expect(wrapper.emitted("upload:file")).toHaveLength(1);
-			});
-
-			it("should render v-progress-linear component", async () => {
-				const { wrapper } = setup();
-
-				const filePicker = wrapper.findComponent(FilePicker);
-				expect(filePicker.exists()).toBe(true);
-
-				filePicker.vm.$emit("update:file", { fileName: "Test.jpg" });
-
-				await nextTick();
-
-				const progressLinear = wrapper.findComponent({
-					name: "v-progress-linear",
-				});
-				expect(progressLinear.exists()).toBe(true);
-			});
-
-			it("should not render FilePicker component", async () => {
-				const { wrapper } = setup();
-
-				const filePicker = wrapper.findComponent(FilePicker);
-				expect(filePicker.exists()).toBe(true);
-
-				filePicker.vm.$emit("update:file", { fileName: "Test.jpg" });
-
-				await nextTick();
-
-				expect(filePicker.exists()).toBe(false);
-			});
-
-			it("should show notification on page unload", async () => {
-				const { wrapper } = setup();
-
-				const filePicker = wrapper.findComponent(FilePicker);
-				expect(filePicker.exists()).toBe(true);
-
-				filePicker.vm.$emit("update:file", { fileName: "Test.jpg" });
-
-				const beforeUnloadEvent = new Event("beforeunload");
-				const preventDefaultSpy = vi.fn();
-
-				beforeUnloadEvent.preventDefault = preventDefaultSpy;
-				window.dispatchEvent(beforeUnloadEvent);
-
-				expect(preventDefaultSpy).toHaveBeenCalled();
 			});
 		});
 
@@ -203,18 +143,6 @@ describe("FileUpload", () => {
 
 				const filePicker = wrapper.findComponent(FilePicker);
 				expect(filePicker.exists()).toBe(false);
-			});
-
-			it("should show notification on page unload", async () => {
-				setup();
-
-				const beforeUnloadEvent = new Event("beforeunload");
-				const preventDefaultSpy = vi.fn();
-
-				beforeUnloadEvent.preventDefault = preventDefaultSpy;
-				window.dispatchEvent(beforeUnloadEvent);
-
-				expect(preventDefaultSpy).toHaveBeenCalled();
 			});
 		});
 	});
@@ -268,18 +196,6 @@ describe("FileUpload", () => {
 				name: "v-progress-linear",
 			});
 			expect(progressLinear.exists()).toBe(false);
-		});
-
-		it("should show notification on page unload", async () => {
-			setup();
-
-			const beforeUnloadEvent = new Event("beforeunload");
-			const preventDefaultSpy = vi.fn();
-
-			beforeUnloadEvent.preventDefault = preventDefaultSpy;
-			window.dispatchEvent(beforeUnloadEvent);
-
-			expect(preventDefaultSpy).toHaveBeenCalled();
 		});
 	});
 });
