@@ -21,6 +21,16 @@ const firstPageNews = newsResponseFactory.buildList(3);
 const secondPageNews = newsResponseFactory.buildList(1);
 const unpublishedNews = newsResponseFactory.buildList(2);
 
+const getExpectedNewsData = (unpublished?: boolean, skip?: number) => {
+	if (unpublished) {
+		return unpublishedNews;
+	}
+	if (skip === 10) {
+		return secondPageNews;
+	}
+	return firstPageNews;
+};
+
 describe("NewsOverviewPage", () => {
 	let newsApi: Mocked<NewsApiInterface>;
 	let axiosMock: Mocked<AxiosInstance>;
@@ -33,7 +43,7 @@ describe("NewsOverviewPage", () => {
 		vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(newsApi);
 
 		newsApi.newsControllerFindAll.mockImplementation(async (_targetModel, _targetId, unpublished, skip, limit) => {
-			const data = unpublished ? unpublishedNews : skip === 10 ? secondPageNews : firstPageNews;
+			const data = getExpectedNewsData(unpublished, skip);
 			return mockApiResponse({
 				data: { data, total: unpublished ? 2 : 11, skip: skip ?? 0, limit: limit ?? 10 },
 			});
