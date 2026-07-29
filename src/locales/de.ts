@@ -1572,6 +1572,8 @@ export default {
 	"pages.news.edit.title.default": "Neuigkeit bearbeiten",
 	"pages.news.edit.title": "{title} bearbeiten",
 	"pages.news.index.new": "Neuigkeit hinzufügen",
+	"pages.news.tabs.published": "Veröffentlicht",
+	"pages.news.tabs.unpublished": "Unveröffentlicht",
 	"pages.news.new.create": "Erstellen",
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",

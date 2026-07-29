@@ -1539,6 +1539,8 @@ export default {
 	"pages.news.edit.title.default": "Edit news",
 	"pages.news.edit.title": "Edit {title}",
 	"pages.news.index.new": "Add news",
+	"pages.news.tabs.published": "Published",
+	"pages.news.tabs.unpublished": "Unpublished",
 	"pages.news.new.create": "Create",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",

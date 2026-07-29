@@ -1556,6 +1556,8 @@ export default {
 	"pages.news.edit.title.default": "Редагувати новину",
 	"pages.news.edit.title": "Редагувати {title}",
 	"pages.news.index.new": "Додати новини",
+	"pages.news.tabs.published": "Опубліковано",
+	"pages.news.tabs.unpublished": "Не опубліковано",
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
