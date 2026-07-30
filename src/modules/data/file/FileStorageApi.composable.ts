@@ -10,7 +10,7 @@ import {
 	StorageLocation,
 } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { buildUploadOptions, formatFileSize } from "@/utils/fileHelper";
+import { buildUploadOptions, convertFileSize } from "@/utils/fileHelper";
 import {
 	AddDocumentToParentParams,
 	FileApiFactory,
@@ -41,7 +41,7 @@ export enum CollaboraFileType {
 }
 
 export const useFileStorageApi = () => {
-	const { t } = useI18n();
+	const { t, n } = useI18n();
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
 	const wopiApi: WopiApiInterface = WopiApiFactory(undefined, "/v3", $axios);
 	const fileConfig = useEnvFileConfig();
@@ -235,7 +235,8 @@ export const useFileStorageApi = () => {
 	const showMessageByType = (message: ErrorType | string) => {
 		switch (message) {
 			case ErrorType.FILE_TOO_BIG: {
-				const maxFileSizeWithUnit = formatFileSize(useEnvFileConfig().value.MAX_FILE_SIZE);
+				const { convertedSize, unit } = convertFileSize(useEnvFileConfig().value.MAX_FILE_SIZE);
+				const maxFileSizeWithUnit = `${n(convertedSize, "fileSize")} ${unit}`;
 
 				notifyError(
 					t("components.board.notifications.errors.fileToBig", {
