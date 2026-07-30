@@ -1570,7 +1570,7 @@ export default {
 	"pages.licenseList.packageIntroduction": "Paquetes utilizados bajo esta licencia:",
 	"pages.news.edit.title.default": "Editar noticia",
 	"pages.news.edit.title": "Editar {title}",
-	"pages.news.index.new": "Añadir noticias",
+	"pages.news.index.new": "Nueva noticia",
 	"pages.news.tabs.published": "Publicado",
 	"pages.news.tabs.unpublished": "Sin publicar",
 	"pages.news.new.create": "Crear",

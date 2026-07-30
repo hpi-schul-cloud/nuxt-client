@@ -1571,7 +1571,7 @@ export default {
 	"pages.licenseList.packageIntroduction": "Unter dieser Lizenz verwendete Pakete:",
 	"pages.news.edit.title.default": "Neuigkeit bearbeiten",
 	"pages.news.edit.title": "{title} bearbeiten",
-	"pages.news.index.new": "Neuigkeit hinzufügen",
+	"pages.news.index.new": "Neuigkeit erstellen",
 	"pages.news.tabs.published": "Veröffentlicht",
 	"pages.news.tabs.unpublished": "Unveröffentlicht",
 	"pages.news.new.create": "Erstellen",

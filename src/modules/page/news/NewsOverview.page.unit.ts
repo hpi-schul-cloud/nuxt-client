@@ -75,6 +75,25 @@ describe("NewsOverviewPage", () => {
 		expect(wrapper.findAll("[data-testid='news-card-item']")).toHaveLength(firstPageNews.length);
 	});
 
+	it("renders news cards as links like the dashboard preview", async () => {
+		const { wrapper } = await setup();
+
+		expect(wrapper.find("[data-testid='news-card-item']").attributes("href")).toBe(`/news/${firstPageNews[0].id}`);
+	});
+
+	it("provides the create action as a sticky wireframe action", async () => {
+		const { wrapper } = await setup({ permissions: [Permission.NEWS_CREATE] });
+
+		expect(wrapper.findComponent({ name: "DefaultWireframe" }).props("fabItems")).toEqual([
+			{
+				icon: expect.any(String),
+				label: "pages.news.index.new",
+				to: "/news/new",
+				dataTestId: "create-news-btn",
+			},
+		]);
+	});
+
 	it("requests ten news items for the first page", async () => {
 		await setup();
 
@@ -104,6 +123,8 @@ describe("NewsOverviewPage", () => {
 
 	it("loads unpublished news for users with edit permission", async () => {
 		const { wrapper } = await setup({ permissions: [Permission.NEWS_EDIT] });
+
+		expect(wrapper.find("[data-testid='unpublished-news-count']").text()).toBe("(2)");
 
 		await wrapper.find("[data-testid='unpublished-news-tab']").trigger("click");
 		await flushPromises();

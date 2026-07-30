@@ -1,24 +1,14 @@
 <template>
-	<DefaultWireframe max-width="full">
+	<DefaultWireframe max-width="full" :fab-items="fabAction" main-with-bottom-padding>
 		<template #header>
-			<div class="d-flex align-center justify-space-between ga-4">
-				<h1 data-testid="news-overview-title">{{ t("pages.news.title") }}</h1>
-				<VBtn
-					v-if="canCreateNews"
-					to="/news/new"
-					:prepend-icon="mdiPlus"
-					:text="t('pages.news.index.new')"
-					color="primary"
-					data-testid="create-news-btn"
-				/>
-			</div>
+			<h1 data-testid="news-overview-title">{{ t("pages.news.title") }}</h1>
 			<VTabs v-if="canEditNews && unpublishedTotal > 0" v-model="activeTab" class="mt-4" grow>
 				<VTab :prepend-icon="mdiEyeOutline" value="published" data-testid="published-news-tab">
 					{{ t("pages.news.tabs.published") }}
 				</VTab>
 				<VTab :prepend-icon="mdiEyeOffOutline" value="unpublished" data-testid="unpublished-news-tab">
 					{{ t("pages.news.tabs.unpublished") }}
-					<VBadge class="ml-2" color="primary" inline :content="unpublishedTotal" />
+					<span class="ml-1" data-testid="unpublished-news-count"> ({{ unpublishedTotal }}) </span>
 				</VTab>
 			</VTabs>
 		</template>
@@ -30,12 +20,12 @@
 				</template>
 			</EmptyState>
 			<template v-else>
-				<div class="news-grid mt-6" data-testid="news-section">
+				<div class="news-grid mt-8" data-testid="news-section">
 					<VCard
 						v-for="newsItem in news"
 						:key="newsItem.id"
 						class="d-flex flex-column news-card"
-						:to="`/news/${newsItem.id}`"
+						:href="`/news/${newsItem.id}`"
 						data-testid="news-card-item"
 						@dragstart.prevent
 					>
@@ -103,6 +93,18 @@ const currentPage = ref(1);
 const canCreateNews = computed(() => appStore.hasPermission(Permission.NEWS_CREATE));
 const canEditNews = computed(() => appStore.hasPermission(Permission.NEWS_EDIT));
 const pageCount = computed(() => Math.ceil(total.value / NEWS_PER_PAGE));
+const fabAction = computed(() => {
+	if (!canCreateNews.value) return;
+
+	return [
+		{
+			icon: mdiPlus,
+			label: t("pages.news.index.new"),
+			to: "/news/new",
+			dataTestId: "create-news-btn",
+		},
+	];
+});
 
 useTitle(buildPageTitle(t("pages.news.title")));
 
