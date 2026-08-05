@@ -948,6 +948,8 @@ export default {
 	"feature-copy.inProgress.course.info": "Kurs wird erstellt",
 	"feature-copy.inProgress.ariaLabelSuffix": "wird noch kopiert",
 	"feature-copy.inProgress.timeoutSuccess": "Das Duplizieren wurde abgeschlossen.",
+	"feature-copy.notifications.warning.duplicationInProgress":
+		"{type} wird gerade dupliziert. Dies dauert länger, als erwartet. Bitte später erneut prüfen. | {type} werden gerade dupliziert. Dies dauert länger, als erwartet. Bitte später erneut prüfen.",
 	"feature-copy.notifications.success.successfullyCopied": "{type} erfolgreich dupliziert",
 	"feature-copy.copyInfo.type.course": "Kurs",
 	"feature-copy.copyInfo.type.board": "Bereich",

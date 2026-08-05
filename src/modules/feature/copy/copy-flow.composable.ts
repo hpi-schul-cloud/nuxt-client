@@ -2,7 +2,7 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { $axios } from "@/utils/api";
 import { BoardApiFactory, CourseRoomsApiFactory, RoomApiFactory, TaskApiFactory } from "@api-server";
-import { notifySuccess } from "@data-app";
+import { notifySuccess, notifyWarning } from "@data-app";
 import { openDialog, withGlobalLoadingState } from "@feature-dialog";
 import { useI18n } from "vue-i18n";
 
@@ -102,18 +102,24 @@ export const useCopyFlow = () => {
 		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Room });
 		if (!completed) return { success: false, error: copyCancelledError() };
 
-		const { result, success, error } = await withCopyLoading(() =>
-			execute(
-				() => roomApi.roomControllerCopyRoom(roomId),
-				t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.room") })
-			)
-		);
+		const res = await withCopyLoading(() => roomApi.roomControllerCopyRoom(roomId));
 
-		if (success) {
+		if (res.status === 200) {
 			notifyCopySuccess(ContentItemTypeEnum.Room);
+			return { result: res.data, success: true, error: undefined };
 		}
 
-		return { result: result?.data, success, error };
+		// if the gateway times out that usually means the copy process takes a long time,
+		// so we can assume that the copy process is still running and will complete eventually
+		// since we do not know the id of the new room yet, we cannot navigate to it, but we can inform the user that the copy process is still in progress
+		if (res.status === 504) {
+			notifyWarning(
+				t("feature-copy.notifications.warnings.duplicationInProgress", { type: t("feature-copy.copyInfo.type.room") })
+			);
+			return { result: undefined, success: true, error: new Error("Room copy is still in progress") };
+		}
+
+		return { result: undefined, success: false, error: new Error("Room copy failed") };
 	};
 
 	return {

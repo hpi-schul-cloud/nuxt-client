@@ -938,6 +938,8 @@ export default {
 	"feature-copy.inProgress.course.info": "Створення курс",
 	"feature-copy.inProgress.ariaLabelSuffix": "bсе ще копіюється",
 	"feature-copy.inProgress.timeoutSuccess": "Процес дублювання завершено.",
+	"feature-copy.notifications.warnings.duplicationInProgress":
+		"{type} зараз дублюється. Це займає більше часу, ніж очікувалося. Будь ласка, перевірте пізніше. | {type} зараз дублюються. Це займає більше часу, ніж очікувалося. Будь ласка, перевірте пізніше.",
 	"feature-copy.notifications.success.successfullyCopied": "{type} успішно продубльовано",
 	"feature-copy.copyInfo.type.course": "Курс",
 	"feature-copy.copyInfo.type.board": "Дошка",
