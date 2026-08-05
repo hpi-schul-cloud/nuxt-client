@@ -1671,6 +1671,7 @@ export default {
 	"pages.tasks.with.due": "Mit Abgabefrist",
 	"pages.tasks.no.due": "Ohne Abgabefrist",
 	"pages.tasks.rating": "Bewertung",
+	"pages.tasks.submissions": "Abgaben",
 	"pages.room.taskCard.teacher.label.submitted": "Abgegeben",
 	"pages.room.learningContent.emptyState": "Aktuell gibt es keine Lerninhalte in diesem Kurs",
 	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount} Kurse",

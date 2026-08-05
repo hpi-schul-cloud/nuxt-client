@@ -13,6 +13,14 @@
 				</VChip>
 				<KebabMenu v-if="task" :aria-label="t('common.words.task')" data-testid="task-menu">
 					<VListItem
+						v-if="canManage"
+						:prepend-icon="mdiFormatListChecks"
+						:title="t('pages.tasks.submissions')"
+						:href="`/homework/${task.id}?tab=submissions#activetabid=submissions`"
+						data-testid="task-submissions"
+						role="menuitem"
+					/>
+					<VListItem
 						v-if="canEdit"
 						:prepend-icon="mdiPencilOutline"
 						:title="t('common.actions.edit')"
@@ -82,7 +90,7 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { formatUtc } from "@/utils/date-time.utils";
 import type { TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
-import { mdiArchiveOutline, mdiPencilOutline, mdiTrashCanOutline, mdiUndoVariant } from "@icons/material";
+import { mdiArchiveOutline, mdiFormatListChecks, mdiPencilOutline, mdiTrashCanOutline, mdiUndoVariant } from "@icons/material";
 import { KebabMenu } from "@ui-kebab-menu";
 
 const route = useRoute();

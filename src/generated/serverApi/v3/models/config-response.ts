@@ -246,6 +246,12 @@ export interface ConfigResponse {
      */
     FEATURE_TASK_SHARE: boolean;
     /**
+     *
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_TASKS_V3_ENABLED: boolean;
+    /**
      * 
      * @type {boolean}
      * @memberof ConfigResponse
@@ -486,5 +492,3 @@ export interface ConfigResponse {
      */
     ROOM_MEMBER_ADD_EXTERNAL_PERSON_REQUIREMENTS_URL: string | null;
 }
-
-

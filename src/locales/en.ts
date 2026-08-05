@@ -1638,6 +1638,7 @@ export default {
 	"pages.tasks.with.due": "With due date",
 	"pages.tasks.no.due": "No due date",
 	"pages.tasks.rating": "Rating",
+	"pages.tasks.submissions": "Submissions",
 	"pages.room.taskCard.teacher.label.submitted": "Submitted",
 	"pages.room.learningContent.emptyState": "Currently there is no learning content in this course",
 	"pages.rooms.a11y.group.text": "{title}, folder, {itemCount} courses",
