@@ -1,6 +1,6 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
-import { $axios } from "@/utils/api";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { BoardApiFactory, CourseRoomsApiFactory, RoomApiFactory, TaskApiFactory } from "@api-server";
 import { notifySuccess, notifyWarning } from "@data-app";
 import { openDialog, withGlobalLoadingState } from "@feature-dialog";
@@ -16,110 +16,91 @@ export const useCopyFlow = () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 
 	const copyCancelledError = () => new Error("Copy cancelled");
+	const copyInProgressError = () => new Error("Copy is still in progress");
+
+	const getTypeLabel = (type: ContentItemTypeEnum) => t(`feature-copy.copyInfo.type.${type}`);
+
+	const getCopyFailedMessage = (type: ContentItemTypeEnum) =>
+		t("common.notifications.errors.notDuplicated", { type: getTypeLabel(type) });
+
+	const isCopyInProgress = (error: Error | undefined) => {
+		if (!error) return false;
+
+		const apiError = mapAxiosErrorToResponseError(error);
+		return apiError.code === 504;
+	};
 
 	const withCopyLoading = <T>(fn: () => Promise<T>) =>
 		withGlobalLoadingState(fn, t("feature-copy.inProgress.title.loading"));
 
 	const notifyCopySuccess = (type: ContentItemTypeEnum) => {
-		notifySuccess(
-			t("feature-copy.notifications.success.successfullyCopied", { type: t(`feature-copy.copyInfo.type.${type}`) })
+		notifySuccess(t("feature-copy.notifications.success.successfullyCopied", { type: getTypeLabel(type) }));
+	};
+
+	const notifyCopyInProgress = (type: ContentItemTypeEnum) => {
+		notifyWarning(t("feature-copy.notifications.duplicationInProgress", { type: getTypeLabel(type) }));
+	};
+
+	const executeCopyRequest = async <T>(
+		type: ContentItemTypeEnum,
+		request: () => Promise<{ data: T }>
+	): Promise<{ result: T | undefined; success: boolean; error: Error | undefined }> => {
+		const { result, success, error } = await withCopyLoading(() =>
+			execute(request, getCopyFailedMessage(type), { skipErrorNotification: isCopyInProgress })
 		);
+
+		if (success) {
+			notifyCopySuccess(type);
+			return { result: result?.data, success: true, error: undefined };
+		}
+
+		if (isCopyInProgress(error)) {
+			notifyCopyInProgress(type);
+			return { result: undefined, success: true, error: copyInProgressError() };
+		}
+
+		return { result: undefined, success: false, error };
 	};
 
 	const executeCopyCourse = async (courseId: string) => {
 		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Course });
-		if (!completed) return { success: false, error: copyCancelledError() };
+		if (!completed) return { result: undefined, success: false, error: copyCancelledError() };
 
-		const { result, success, error } = await withCopyLoading(() =>
-			execute(
-				() => courseRoomApi.courseRoomsControllerCopyCourse(courseId),
-				t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.course") })
-			)
+		return executeCopyRequest(ContentItemTypeEnum.Course, () =>
+			courseRoomApi.courseRoomsControllerCopyCourse(courseId)
 		);
-
-		if (success) {
-			notifyCopySuccess(ContentItemTypeEnum.Course);
-		}
-
-		return { result: result?.data, success, error };
 	};
 
 	const executeCopyTask = async (taskId: string, targetCourseId: string) => {
 		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Task });
-		if (!completed) return { success: false, error: copyCancelledError() };
+		if (!completed) return { result: undefined, success: false, error: copyCancelledError() };
 
-		const { result, success, error } = await withCopyLoading(() =>
-			execute(
-				() => taskApi.taskControllerCopyTask(taskId, { courseId: targetCourseId }),
-				t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.task") })
-			)
+		return executeCopyRequest(ContentItemTypeEnum.Task, () =>
+			taskApi.taskControllerCopyTask(taskId, { courseId: targetCourseId })
 		);
-
-		if (success) {
-			notifyCopySuccess(ContentItemTypeEnum.Task);
-		}
-
-		return { result: result?.data, success, error };
 	};
 
 	const executeCopyLesson = async (lessonId: string, targetCourseId: string) => {
 		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Lesson });
-		if (!completed) return { success: false, error: copyCancelledError() };
+		if (!completed) return { result: undefined, success: false, error: copyCancelledError() };
 
-		const { result, success, error } = await withCopyLoading(() =>
-			execute(
-				() => courseRoomApi.courseRoomsControllerCopyLesson(lessonId, { courseId: targetCourseId }),
-				t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.lesson") })
-			)
+		return executeCopyRequest(ContentItemTypeEnum.Lesson, () =>
+			courseRoomApi.courseRoomsControllerCopyLesson(lessonId, { courseId: targetCourseId })
 		);
-
-		if (success) {
-			notifyCopySuccess(ContentItemTypeEnum.Lesson);
-		}
-
-		return { result: result?.data, success, error };
 	};
 
 	const executeCopyBoard = async (boardId: string) => {
 		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.ColumnBoard });
-		if (!completed) return { success: false, error: copyCancelledError() };
+		if (!completed) return { result: undefined, success: false, error: copyCancelledError() };
 
-		const { result, success, error } = await withCopyLoading(() =>
-			execute(
-				() => boardApi.boardControllerCopyBoard(boardId),
-				t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.board") })
-			)
-		);
-
-		if (success) {
-			notifyCopySuccess(ContentItemTypeEnum.ColumnBoard);
-		}
-
-		return { result: result?.data, success, error };
+		return executeCopyRequest(ContentItemTypeEnum.ColumnBoard, () => boardApi.boardControllerCopyBoard(boardId));
 	};
 
 	const executeCopyRoom = async (roomId: string) => {
 		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Room });
-		if (!completed) return { success: false, error: copyCancelledError() };
+		if (!completed) return { result: undefined, success: false, error: copyCancelledError() };
 
-		const res = await withCopyLoading(() => roomApi.roomControllerCopyRoom(roomId));
-
-		if (res.status === 200) {
-			notifyCopySuccess(ContentItemTypeEnum.Room);
-			return { result: res.data, success: true, error: undefined };
-		}
-
-		// if the gateway times out that usually means the copy process takes a long time,
-		// so we can assume that the copy process is still running and will complete eventually
-		// since we do not know the id of the new room yet, we cannot navigate to it, but we can inform the user that the copy process is still in progress
-		if (res.status === 504) {
-			notifyWarning(
-				t("feature-copy.notifications.duplicationInProgress", { type: t("feature-copy.copyInfo.type.room") })
-			);
-			return { result: undefined, success: true, error: new Error("Room copy is still in progress") };
-		}
-
-		return { result: undefined, success: false, error: new Error("Room copy failed") };
+		return executeCopyRequest(ContentItemTypeEnum.Room, () => roomApi.roomControllerCopyRoom(roomId));
 	};
 
 	return {
