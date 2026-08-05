@@ -1,42 +1,67 @@
 <template>
-	<DefaultWireframe :headline="task?.name ?? t('common.words.task')" :breadcrumbs="breadcrumbs" max-width="short">
+	<DefaultWireframe :breadcrumbs="breadcrumbs" max-width="limited">
+		<template #header>
+			<div class="task-page-header">
+				<h1>{{ task?.name ?? t('common.words.task') }}</h1>
+				<VChip
+					v-if="task"
+					class="task-status-chip"
+					:color="task.status.isDraft ? 'warning' : 'success'"
+					variant="tonal"
+				>
+					{{ task.status.isDraft ? 'Draft' : 'Published' }}
+				</VChip>
+			</div>
+		</template>
 		<SvsLoading :loading-state="loadingState">
 			<template #default>
-				<div v-if="task" class="d-flex flex-column ga-6">
-					<div>
-						<div class="text-subtitle-1">{{ task.courseName }}</div>
-						<div v-if="task.lessonName" class="text-subtitle-2">{{ task.lessonName }}</div>
-					</div>
-					<div v-if="task.description" v-dompurify-html="task.description.content" class="task-description" />
-					<TaskFiles v-if="task" :task-id="task.id" />
-					<div class="d-flex flex-wrap ga-2">
-						<VChip v-if="task.availableDate">{{ formatDate(task.availableDate) }}</VChip>
-						<VChip v-if="task.dueDate">{{ t('pages.tasks.labels.due') }} {{ formatDate(task.dueDate) }}</VChip>
-					</div>
-					<div class="d-flex flex-wrap ga-2">
-						<VBtn v-if="canEdit" color="primary" :to="`/tasks/${task.id}/edit`">
-							{{ t('common.actions.edit') }}
-						</VBtn>
-						<VBtn
-							v-if="canManage"
-							color="error"
-							variant="outlined"
-							:loading="isMutating"
-							@click="onDelete"
-						>
-							{{ t('common.actions.delete') }}
-						</VBtn>
-						<VBtn
-							v-if="canFinish"
-							variant="outlined"
-							:loading="isMutating"
-							@click="onFinish"
-						>
-							{{ task.status.isFinished ? t('common.labels.restore') : t('components.molecules.TaskItemMenu.finish') }}
-						</VBtn>
-						<VBtn variant="outlined" to="/tasks">
-							{{ t('common.actions.back') }}
-						</VBtn>
+				<div v-if="task" class="task-detail d-flex flex-column ga-5">
+					<VCard v-if="task.description" class="task-description-card" elevation="1">
+						<VCardTitle>Task definition</VCardTitle>
+						<VCardText v-dompurify-html="task.description.content" class="task-description" />
+					</VCard>
+
+					<VCard class="task-schedule-card" elevation="1">
+						<VCardTitle>Schedule</VCardTitle>
+						<VCardText class="d-flex flex-wrap ga-2">
+							<VChip v-if="task.availableDate">{{ formatDate(task.availableDate) }}</VChip>
+							<VChip v-if="task.dueDate">{{ t('pages.tasks.labels.due') }} {{ formatDate(task.dueDate) }}</VChip>
+						</VCardText>
+					</VCard>
+
+					<VCard class="task-attachments-card" elevation="1">
+						<VCardTitle>Attachments</VCardTitle>
+						<VCardText>
+							<TaskFiles :task-id="task.id" />
+						</VCardText>
+					</VCard>
+
+					<div class="task-actions d-flex flex-wrap justify-end ga-2">
+						<div class="d-flex flex-wrap ga-2">
+							<VBtn v-if="canEdit" color="primary" :to="`/tasks/${task.id}/edit`">
+								{{ t('common.actions.edit') }}
+							</VBtn>
+							<VBtn
+								v-if="canManage"
+								color="error"
+								variant="outlined"
+								:loading="isMutating"
+								@click="onDelete"
+							>
+								{{ t('common.actions.delete') }}
+							</VBtn>
+							<VBtn
+								v-if="canFinish"
+								variant="outlined"
+								:loading="isMutating"
+								@click="onFinish"
+							>
+								{{ task.status.isFinished ? t('common.labels.restore') : t('components.molecules.TaskItemMenu.finish') }}
+							</VBtn>
+							<VBtn variant="outlined" to="/tasks">
+								{{ t('common.actions.back') }}
+							</VBtn>
+						</div>
 					</div>
 				</div>
 			</template>
@@ -70,6 +95,10 @@ const canEdit = computed(() => canManage.value);
 const canFinish = computed(() => task.value !== undefined);
 const breadcrumbs = computed(() => [
 	{ title: t('common.words.tasks'), to: '/tasks' },
+	...(task.value?.courseName
+		? [{ title: task.value.courseName, to: `/courses/${task.value.courseId}` }]
+		: []),
+	...(task.value?.lessonName ? [{ title: task.value.lessonName, disabled: true }] : []),
 	{ title: task.value?.name ?? t('common.words.task'), disabled: true },
 ]);
 const formatDate = (value: string) => formatUtc(value, 'dateTimeYY');
@@ -95,7 +124,70 @@ const onFinish = async () => {
 </script>
 
 <style scoped>
+.task-detail :deep(.v-card-title) {
+	font-size: 1.1rem;
+	font-weight: 600;
+	padding-bottom: 0;
+}
+
+.task-detail {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.8fr) minmax(280px, 1fr);
+	gap: 20px;
+}
+
+.task-attachments-card,
+.task-actions {
+	grid-column: 1 / -1;
+}
+
+.task-page-header {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding-bottom: 16px;
+}
+
+.task-page-header h1 {
+	margin-bottom: 0 !important;
+}
+
+.task-status-chip {
+	margin-bottom: 0;
+}
+
+.task-description-card {
+	grid-column: 1;
+}
+
+.task-schedule-card {
+	grid-column: 2;
+}
+
+.task-attachments-card :deep(.v-card-text) {
+	padding: 0 16px 16px;
+}
+
+.task-attachments-card :deep(.mt-2) {
+	margin-top: 0 !important;
+}
+
+.task-attachments-card :deep(.table-title-header) {
+	min-height: 0 !important;
+	margin-bottom: 0 !important;
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+
 .task-description {
 	white-space: normal;
+	line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+	.task-detail {
+		display: flex !important;
+		flex-direction: column;
+	}
 }
 </style>

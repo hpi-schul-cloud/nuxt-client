@@ -1,56 +1,65 @@
 <template>
 	<DefaultWireframe
 		:headline="isNew ? 'Create task' : 'Edit task'"
-		max-width="short"
+		:breadcrumbs="breadcrumbs"
+		max-width="limited"
 	>
-		<VForm @submit.prevent="save">
-			<VTextField v-model="form.name" label="Title" required data-testid="task-name" />
+		<VForm class="task-form" @submit.prevent="save">
+			<VCard class="task-card task-meta-card" elevation="1">
+				<VCardTitle>Task details</VCardTitle>
+				<VCardText>
+					<VTextField v-model="form.name" label="Title" required data-testid="task-name" />
 
-			<VSelect
-				v-model="form.courseId"
-				:items="courses"
-				item-title="title"
-				item-value="id"
-				label="Course"
-				clearable
-				data-testid="task-course"
-			/>
-			<VSelect
-				v-model="form.lessonId"
-				:items="lessons"
-				item-title="name"
-				item-value="id"
-				label="Topic"
-				clearable
-				:disabled="!form.courseId || lessonsLoading"
-				:loading="lessonsLoading"
-				data-testid="task-topic"
-			/>
-
-			<div class="task-editor mb-6">
-				<div class="text-subtitle-1 mb-2">Description</div>
-				<InlineEditor v-model:value="form.description" placeholder="Describe the task" />
-			</div>
-
-			<div class="d-flex flex-wrap ga-4">
-				<VTextField v-model="form.availableDate" type="datetime-local" label="Available from" />
-				<VTextField v-model="form.dueDate" type="datetime-local" label="Due date" />
-			</div>
-
-			<VExpansionPanels class="my-4">
-				<VExpansionPanel title="Task and submission settings">
-					<VExpansionPanelText>
-						<VCheckbox v-model="form.private" label="Keep as draft (only visible to me)" :disabled="!form.courseId" />
-						<VCheckbox
-							v-model="form.publicSubmissions"
-							label="Make student submissions visible to other students"
-							:disabled="!form.courseId || form.private"
+					<div class="d-flex flex-column flex-sm-row ga-4">
+						<VSelect
+							v-model="form.courseId"
+							:items="courses"
+							item-title="title"
+							item-value="id"
+							label="Course"
+							clearable
+							data-testid="task-course"
 						/>
-						<VCheckbox
-							v-model="form.teamSubmissions"
-							label="Allow group submissions"
-							:disabled="!form.courseId"
+						<VSelect
+							v-model="form.lessonId"
+							:items="lessons"
+							item-title="name"
+							item-value="id"
+							label="Topic"
+							clearable
+							:disabled="!form.courseId || lessonsLoading"
+							:loading="lessonsLoading"
+							data-testid="task-topic"
 						/>
+					</div>
+				</VCardText>
+			</VCard>
+
+			<VCard class="task-card task-options-card" elevation="1">
+				<VCardTitle>Schedule and submission settings</VCardTitle>
+				<VCardText>
+					<div class="task-options-content">
+						<div class="task-date-fields">
+							<VTextField v-model="form.availableDate" type="datetime-local" label="Available from" density="compact" />
+							<VTextField v-model="form.dueDate" type="datetime-local" label="Due date" density="compact" />
+						</div>
+						<div class="task-submission-settings">
+							<VCheckbox
+								v-model="form.private"
+								label="Keep as draft (only visible to me)"
+								:disabled="!form.courseId"
+							/>
+							<VCheckbox
+								v-model="form.publicSubmissions"
+								label="Make student submissions visible to other students"
+								:disabled="!form.courseId || form.private"
+							/>
+							<VCheckbox
+								v-model="form.teamSubmissions"
+								label="Allow group submissions"
+								:disabled="!form.courseId"
+							/>
+						</div>
 						<VTextField
 							v-if="form.teamSubmissions"
 							v-model.number="form.maxTeamMembers"
@@ -59,15 +68,29 @@
 							min="2"
 							required
 						/>
-					</VExpansionPanelText>
-				</VExpansionPanel>
-			</VExpansionPanels>
+					</div>
+				</VCardText>
+			</VCard>
 
-			<TaskFiles ref="taskFiles" :task-id="taskId" :editable="true" />
+			<VCard class="task-card task-description-card" elevation="1">
+				<VCardTitle>Task definition</VCardTitle>
+				<VCardText>
+					<div class="task-editor">
+						<InlineEditor v-model:value="form.description" placeholder="Describe the task" />
+					</div>
+				</VCardText>
+			</VCard>
 
-			<div class="d-flex ga-2 mt-6">
+			<VCard class="task-card task-attachments-card" elevation="1">
+				<VCardTitle>Attachments</VCardTitle>
+				<VCardText>
+					<TaskFiles ref="taskFiles" :task-id="taskId" :editable="true" />
+				</VCardText>
+			</VCard>
+
+			<div class="task-actions d-flex justify-end ga-3">
+				<VBtn variant="text" to="/tasks">Cancel</VBtn>
 				<VBtn color="primary" type="submit" :loading="isRunning">Save</VBtn>
-				<VBtn variant="outlined" to="/tasks">Cancel</VBtn>
 			</div>
 		</VForm>
 	</DefaultWireframe>
@@ -91,6 +114,10 @@ const route = useRoute();
 const router = useRouter();
 const isNew = computed(() => route.name === "task-new");
 const taskId = computed(() => (isNew.value ? "pending-task" : (route.params.taskId as string)));
+const breadcrumbs = computed(() => [
+	{ title: "Tasks", to: "/tasks" },
+	{ title: isNew.value ? "Create task" : "Edit task", disabled: true },
+]);
 const { execute, isRunning } = useSafeAxiosTask();
 const courses = ref<CourseOption[]>([]);
 const lessons = ref<LessonOption[]>([]);
@@ -183,9 +210,91 @@ const save = async () => {
 </script>
 
 <style scoped>
+.task-form {
+	padding-bottom: 24px;
+	display: grid;
+	grid-template-columns: minmax(0, 1.8fr) minmax(280px, 1fr);
+	gap: 20px;
+}
+
+	.task-card :deep(.v-card-title) {
+	font-size: 1.1rem;
+	font-weight: 600;
+	padding-bottom: 0;
+}
+
+.task-meta-card {
+	grid-column: 1 / -1;
+}
+
+.task-attachments-card,
+.task-actions {
+	grid-column: 1 / -1;
+}
+
+.task-description-card {
+	grid-column: 1;
+	grid-row: 2;
+	min-height: 360px;
+}
+
+.task-options-card {
+	grid-column: 2;
+	grid-row: 2;
+	min-height: 360px;
+}
+
 .task-editor {
 	border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 	border-radius: 4px;
 	padding: 8px;
+	min-height: 292px;
+
+	:deep(.ck-editor__editable_inline) {
+		min-height: 260px;
+	}
+}
+
+.task-options-content {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.task-date-fields {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+}
+
+.task-submission-settings {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+@media (max-width: 900px) {
+	.task-form {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.task-description-card,
+	.task-options-card {
+		min-height: unset;
+	}
+
+	.task-editor {
+		min-height: 240px;
+
+		:deep(.ck-editor__editable_inline) {
+			min-height: 208px;
+		}
+	}
+
+	.task-date-fields {
+		grid-template-columns: 1fr;
+	}
 }
 </style>
