@@ -114,7 +114,7 @@ export const useCopyFlow = () => {
 		// since we do not know the id of the new room yet, we cannot navigate to it, but we can inform the user that the copy process is still in progress
 		if (res.status === 504) {
 			notifyWarning(
-				t("feature-copy.notifications.warnings.duplicationInProgress", { type: t("feature-copy.copyInfo.type.room") })
+				t("feature-copy.notifications.duplicationInProgress", { type: t("feature-copy.copyInfo.type.room") })
 			);
 			return { result: undefined, success: true, error: new Error("Room copy is still in progress") };
 		}
