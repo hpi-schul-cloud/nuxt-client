@@ -11,6 +11,34 @@
 				>
 					{{ task.status.isDraft ? 'Draft' : 'Published' }}
 				</VChip>
+				<KebabMenu v-if="task" :aria-label="t('common.words.task')" data-testid="task-menu">
+					<VListItem
+						v-if="canEdit"
+						:prepend-icon="mdiPencilOutline"
+						:title="t('common.actions.edit')"
+						:href="`/tasks/${task.id}/edit`"
+						data-testid="task-edit"
+						role="menuitem"
+					/>
+					<VListItem
+						v-if="canManage"
+						:prepend-icon="mdiTrashCanOutline"
+						:title="t('common.actions.delete')"
+						:disabled="isMutating"
+						data-testid="task-delete"
+						role="menuitem"
+						@click="onDelete"
+					/>
+					<VListItem
+						v-if="canFinish"
+						:prepend-icon="task.status.isFinished ? mdiUndoVariant : mdiArchiveOutline"
+						:title="task.status.isFinished ? t('common.labels.restore') : t('components.molecules.TaskItemMenu.finish')"
+						:disabled="isMutating"
+						data-testid="task-finish"
+						role="menuitem"
+						@click="onFinish"
+					/>
+				</KebabMenu>
 			</div>
 		</template>
 		<SvsLoading :loading-state="loadingState">
@@ -36,33 +64,6 @@
 						</VCardText>
 					</VCard>
 
-					<div class="task-actions d-flex flex-wrap justify-end ga-2">
-						<div class="d-flex flex-wrap ga-2">
-							<VBtn v-if="canEdit" color="primary" :to="`/tasks/${task.id}/edit`">
-								{{ t('common.actions.edit') }}
-							</VBtn>
-							<VBtn
-								v-if="canManage"
-								color="error"
-								variant="outlined"
-								:loading="isMutating"
-								@click="onDelete"
-							>
-								{{ t('common.actions.delete') }}
-							</VBtn>
-							<VBtn
-								v-if="canFinish"
-								variant="outlined"
-								:loading="isMutating"
-								@click="onFinish"
-							>
-								{{ task.status.isFinished ? t('common.labels.restore') : t('components.molecules.TaskItemMenu.finish') }}
-							</VBtn>
-							<VBtn variant="outlined" to="/tasks">
-								{{ t('common.actions.back') }}
-							</VBtn>
-						</div>
-					</div>
 				</div>
 			</template>
 		</SvsLoading>
@@ -81,6 +82,8 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { formatUtc } from "@/utils/date-time.utils";
 import type { TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
+import { mdiArchiveOutline, mdiPencilOutline, mdiTrashCanOutline, mdiUndoVariant } from "@icons/material";
+import { KebabMenu } from "@ui-kebab-menu";
 
 const route = useRoute();
 const router = useRouter();
@@ -136,8 +139,7 @@ const onFinish = async () => {
 	gap: 20px;
 }
 
-.task-attachments-card,
-.task-actions {
+.task-attachments-card {
 	grid-column: 1 / -1;
 }
 
