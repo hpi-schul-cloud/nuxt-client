@@ -54,7 +54,7 @@ const fabItems = computed(() => {
 			{
 				icon: mdiPlus,
 				label: t("components.organisms.TasksDashboardMain.fab.createTask"),
-				href: "/homework/new?returnUrl=tasks",
+				href: "/tasks/new",
 				dataTestId: "add-task",
 			},
 		];

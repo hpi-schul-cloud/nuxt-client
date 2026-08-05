@@ -173,7 +173,7 @@ const moreActionsMenuItems = computed(() => {
 	if (props.userRole === Roles.TEACHER) {
 		roleBasedMoreActions[Roles.TEACHER].push({
 			icon: mdiPencilOutline,
-			action: () => redirectAction(`/homework/${props.task.id}/edit?returnUrl=rooms/${props.room.roomId}`),
+			action: () => redirectAction(`/tasks/${props.task.id}/edit?returnUrl=rooms/${props.room.roomId}`),
 			name: t("pages.room.taskCard.label.edit"),
 			dataTestId: `room-task-card-menu-edit-${props.taskCardIndex}`,
 		});
@@ -253,7 +253,7 @@ const cardTitle = (dueDate: string | undefined) => {
 
 const handleClick = () => {
 	if (!props.dragInProgress) {
-		redirectAction(`/homework/${props.task.id}`);
+		redirectAction(`/tasks/${props.task.id}`);
 	}
 };
 

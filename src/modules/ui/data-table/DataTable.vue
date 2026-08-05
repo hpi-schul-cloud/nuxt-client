@@ -1,5 +1,6 @@
 <template>
 	<div
+		v-if="showSearch || $slots['left-of-search']"
 		class="d-flex justify-space-between align-center ga-3 mb-2 pb-2 table-title-header sticky"
 		:class="{
 			'flex-column mt-4': isExtraSmallDisplay,
@@ -18,6 +19,7 @@
 		</BatchActionMenu>
 		<slot name="left-of-search" />
 		<SvsSearchField
+			v-if="showSearch"
 			v-model="search"
 			:class="{ 'order-1 w-100 mt-2': isExtraSmallDisplay }"
 			mobile-breakpoint="sm"
@@ -38,6 +40,7 @@
 		:headers="tableHeaders"
 		:items-per-page-options="[5, 10, 25, 50, 100]"
 		:items-per-page="50"
+		:hide-default-footer="hideDefaultFooter"
 		:mobile="null"
 		:show-select="showSelect"
 		:sort-asc-icon="mdiMenuDown"
@@ -97,6 +100,14 @@ const props = defineProps({
 		required: true,
 	},
 	showSelect: {
+		type: Boolean,
+		default: false,
+	},
+	showSearch: {
+		type: Boolean,
+		default: true,
+	},
+	hideDefaultFooter: {
 		type: Boolean,
 		default: false,
 	},

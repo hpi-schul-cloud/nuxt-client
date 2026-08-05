@@ -185,7 +185,7 @@ const learnContentFabItems = computed<FabAction[] | undefined>(() => {
 		actions.push({
 			label: t("pages.courseRoomDetails.fab.add.task"),
 			icon: mdiFormatListChecks,
-			href: `/homework/new?course=${roomData.value.roomId}&returnUrl=rooms/${roomData.value.roomId}`,
+			href: `/tasks/new?courseId=${roomData.value.roomId}`,
 			dataTestId: "fab_button_add_task",
 		});
 	}

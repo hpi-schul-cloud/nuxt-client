@@ -49,7 +49,7 @@ describe("TasksListItemMenu", () => {
 			await wrapper.find("[data-testid='task-menu']").trigger("click");
 			const editItem = wrapper.find("[data-testId='task-edit']");
 
-			expect(editItem.attributes("href")).toBe(`/homework/${task.id}/edit`);
+		expect(editItem.attributes("href")).toBe(`/tasks/${task.id}/edit`);
 		});
 	});
 

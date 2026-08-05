@@ -44,7 +44,13 @@
 	</template>
 	<template v-else>
 		<div class="mt-2">
-			<DataTable :table-headers="headers" :items="fileRecordItems" :show-select="true">
+			<DataTable
+				:table-headers="headers"
+				:items="fileRecordItems"
+				:show-select="true"
+				:show-search="showSearch"
+				:hide-default-footer="hideDefaultFooter"
+			>
 				<template #[`item.preview`]="{ item }">
 					<FileInteractionHandler :file-record-item="item" :has-edit-permission="props.hasEditPermission">
 						<FilePreview
@@ -192,6 +198,14 @@ const props = defineProps({
 		default: false,
 	},
 	isOverDropZone: {
+		type: Boolean,
+		default: false,
+	},
+	showSearch: {
+		type: Boolean,
+		default: true,
+	},
+	hideDefaultFooter: {
 		type: Boolean,
 		default: false,
 	},
