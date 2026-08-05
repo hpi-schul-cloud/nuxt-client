@@ -197,8 +197,13 @@ const isInternalHashLink = computed(() => {
 });
 
 const onClick = (event: MouseEvent | KeyboardEvent) => {
+	event.preventDefault();
+
+	if (props.isEditMode) {
+		return;
+	}
+
 	if (isInternalHashLink.value) {
-		event.preventDefault();
 		const url = new URL(sanitizedUrl.value);
 		window.history.replaceState(null, "", url.hash);
 		focusNodeFromHash();
