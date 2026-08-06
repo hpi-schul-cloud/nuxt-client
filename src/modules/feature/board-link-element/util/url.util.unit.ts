@@ -25,32 +25,42 @@ describe("url.util", () => {
 		const boardId = ObjectIdMock();
 		const cardId = ObjectIdMock();
 
-		it("should return true for a card link on the same host", () => {
-			const url = `https://${host}/boards/${boardId}#card-${cardId}`;
+		describe("when the url is a board card link on the same host", () => {
+			it("should return true", () => {
+				const url = `https://${host}/boards/${boardId}#card-${cardId}`;
 
-			expect(isBoardCardLink(url, host)).toBe(true);
+				expect(isBoardCardLink(url, host)).toBe(true);
+			});
 		});
 
-		it("should return false for a card link on a different host", () => {
-			const url = `https://other.host/boards/${boardId}#card-${cardId}`;
+		describe("when the url is a board card link on a different host", () => {
+			it("should return false", () => {
+				const url = `https://other.host/boards/${boardId}#card-${cardId}`;
 
-			expect(isBoardCardLink(url, host)).toBe(false);
+				expect(isBoardCardLink(url, host)).toBe(false);
+			});
 		});
 
-		it("should return false when the hash is not a card hash", () => {
-			const url = `https://${host}/boards/${boardId}#column-${cardId}`;
+		describe("when the hash does not target a card", () => {
+			it("should return false", () => {
+				const url = `https://${host}/boards/${boardId}#column-${cardId}`;
 
-			expect(isBoardCardLink(url, host)).toBe(false);
+				expect(isBoardCardLink(url, host)).toBe(false);
+			});
 		});
 
-		it("should return false when the path is not a board path", () => {
-			const url = `https://${host}/rooms/${boardId}#card-${cardId}`;
+		describe("when the path is not a board path", () => {
+			it("should return false", () => {
+				const url = `https://${host}/rooms/${boardId}#card-${cardId}`;
 
-			expect(isBoardCardLink(url, host)).toBe(false);
+				expect(isBoardCardLink(url, host)).toBe(false);
+			});
 		});
 
-		it("should return false for an invalid url", () => {
-			expect(isBoardCardLink("not-a-url", host)).toBe(false);
+		describe("when the url is invalid", () => {
+			it("should return false", () => {
+				expect(isBoardCardLink("not-a-url", host)).toBe(false);
+			});
 		});
 	});
 });
