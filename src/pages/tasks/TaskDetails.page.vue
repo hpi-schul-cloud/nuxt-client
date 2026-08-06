@@ -247,6 +247,30 @@ const onFinish = async () => {
 	width: 100%;
 }
 
+.task-description :deep(.table) {
+	display: table;
+	margin: 0.9em auto;
+}
+
+.task-description :deep(.table table) {
+	border: 1px double hsl(0, 0%, 70%);
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+}
+
+.task-description :deep(.table table td),
+.task-description :deep(.table table th) {
+	border: 1px solid hsl(0, 0%, 75%);
+	min-width: 2em;
+	padding: 0.4em;
+}
+
+.task-description :deep(.table table th) {
+	background: hsla(0, 0%, 0%, 5%);
+	font-weight: bold;
+}
+
 @media (max-width: 900px) {
 	.task-detail {
 		display: flex !important;
