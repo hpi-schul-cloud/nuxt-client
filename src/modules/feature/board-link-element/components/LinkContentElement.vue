@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
-import { ensureProtocolIncluded } from "../util/url.util";
+import { ensureProtocolIncluded, isBoardCardLink } from "../util/url.util";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
@@ -114,12 +114,19 @@ const sanitizedUrl = computed(() =>
 );
 
 const target = computed<string>(() => {
-	if (computedElement.value.content.url) {
-		const url = new URL(sanitizedUrl.value);
+	if (!sanitizedUrl.value) {
+		return "_blank";
+	}
 
-		if (url.host === window.location.host && url.pathname === window.location.pathname) {
+	try {
+		const url = new URL(sanitizedUrl.value);
+		const isSamePageLink = url.host === window.location.host && url.pathname === window.location.pathname;
+
+		if (isSamePageLink || isBoardCardLink(sanitizedUrl.value)) {
 			return "_self";
 		}
+	} catch {
+		return "_blank";
 	}
 
 	return "_blank";
