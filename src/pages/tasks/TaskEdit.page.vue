@@ -4,7 +4,13 @@
 			<VCard class="task-card task-meta-card" elevation="1">
 				<VCardTitle>Task details</VCardTitle>
 				<VCardText>
-					<VTextField v-model="form.name" label="Title" required data-testid="task-name" />
+					<VTextField
+						v-model="form.name"
+						:rules="[requiredTitleRule]"
+						label="Title"
+						required
+						data-testid="task-name"
+					/>
 
 					<div class="d-flex flex-column flex-sm-row ga-4">
 						<VSelect
@@ -133,6 +139,7 @@ const isUploadingImage = ref(false);
 type InlineImageFile = Pick<FileRecord, "id" | "name" | "url">;
 const inlineImages = ref<Array<{ temporary: FileRecord; permanent?: InlineImageFile }>>([]);
 const { uploadTemporary, copyFileToParent, deleteFiles } = useFileStorageApi();
+const requiredTitleRule = (value: string) => Boolean(value?.trim()) || "Title is required";
 
 const form = reactive<TaskWriteParams & { maxTeamMembers?: number }>({
 	name: "",
@@ -264,6 +271,7 @@ const promoteImages = async (taskId: string, description: string): Promise<strin
 };
 
 const save = async () => {
+	if (!form.name.trim()) return;
 	const description = form.description ?? "";
 	const descriptionBeforeImagePromotion = removePendingImagesFromDescription(description);
 	const payload: TaskWriteParams = {

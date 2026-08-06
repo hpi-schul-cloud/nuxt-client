@@ -54,7 +54,9 @@
 				<div v-if="task" class="task-detail d-flex flex-column ga-5">
 					<VCard v-if="task.description" class="task-description-card" elevation="1">
 						<VCardTitle>Task definition</VCardTitle>
-						<VCardText v-dompurify-html="task.description.content" class="task-description" />
+						<VCardText>
+							<div ref="descriptionElement" v-dompurify-html="task.description.content" class="task-description" />
+						</VCardText>
 					</VCard>
 
 					<VCard class="task-schedule-card" elevation="1">
@@ -83,7 +85,9 @@ import { getTask, useTaskActions } from "@data-tasks";
 import { DefaultWireframe } from "@ui-layout";
 import { SvsLoading } from "@ui-containers";
 import TaskFiles from "@/components/tasks/TaskFiles.vue";
-import { computed, onMounted, ref } from "vue";
+import renderMathInElement from "katex/dist/contrib/auto-render.js";
+import "katex/dist/katex.min.css";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
@@ -97,7 +101,9 @@ const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
 const { isTeacher } = useAppStoreRefs();
-const task = ref<TaskResponse>();
+type TaskDetailsResponse = TaskResponse & { lessonId?: string };
+const task = ref<TaskDetailsResponse>();
+const descriptionElement = ref<HTMLElement>();
 const { execute, loadingState } = useSafeAxiosTask();
 const { isMutating, deleteTask, finishTask, restoreFinishedTask } = useTaskActions();
 
@@ -109,7 +115,16 @@ const breadcrumbs = computed(() => [
 	...(task.value?.courseName
 		? [{ title: task.value.courseName, to: `/courses/${task.value.courseId}` }]
 		: []),
-	...(task.value?.lessonName ? [{ title: task.value.lessonName, disabled: true }] : []),
+	...(task.value?.lessonName
+		? [
+				{
+					title: task.value.lessonName,
+					...(task.value.courseId && task.value.lessonId
+						? { to: `/courses/${task.value.courseId}/topics/${task.value.lessonId}` }
+						: { disabled: true }),
+				},
+			]
+		: []),
 	{ title: task.value?.name ?? t('common.words.task'), disabled: true },
 ]);
 const formatDate = (value: string) => formatUtc(value, 'dateTimeYY');
@@ -118,6 +133,17 @@ onMounted(async () => {
 	const result = await execute(() => getTask(route.params.taskId as string));
 	if (result.success) task.value = result.result;
 });
+
+watch(
+	() => task.value?.description?.content,
+	async (content) => {
+		if (!content) return;
+		await nextTick();
+		descriptionElement.value?.querySelectorAll(".math-tex").forEach((element) => {
+			renderMathInElement(element as HTMLElement);
+		});
+	},
+);
 
 const onDelete = async () => {
 	if (!task.value) return;
