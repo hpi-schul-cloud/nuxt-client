@@ -1,9 +1,5 @@
 <template>
-	<DefaultWireframe
-		:headline="isNew ? 'Create task' : 'Edit task'"
-		:breadcrumbs="breadcrumbs"
-		max-width="limited"
-	>
+	<DefaultWireframe :headline="isNew ? 'Create task' : 'Edit task'" :breadcrumbs="breadcrumbs" max-width="limited">
 		<VForm class="task-form" @submit.prevent="save">
 			<VCard class="task-card task-meta-card" elevation="1">
 				<VCardTitle>Task details</VCardTitle>
@@ -44,21 +40,13 @@
 							<VTextField v-model="form.dueDate" type="datetime-local" label="Due date" density="compact" />
 						</div>
 						<div class="task-submission-settings">
-							<VCheckbox
-								v-model="form.private"
-								label="Keep as draft (only visible to me)"
-								:disabled="!form.courseId"
-							/>
+							<VCheckbox v-model="form.private" label="Keep as draft (only visible to me)" :disabled="!form.courseId" />
 							<VCheckbox
 								v-model="form.publicSubmissions"
 								label="Make student submissions visible to other students"
 								:disabled="!form.courseId || form.private"
 							/>
-							<VCheckbox
-								v-model="form.teamSubmissions"
-								label="Allow group submissions"
-								:disabled="!form.courseId"
-							/>
+							<VCheckbox v-model="form.teamSubmissions" label="Allow group submissions" :disabled="!form.courseId" />
 						</div>
 						<VTextField
 							v-if="form.teamSubmissions"
@@ -76,7 +64,20 @@
 				<VCardTitle>Task definition</VCardTitle>
 				<VCardText>
 					<div class="task-editor">
-						<InlineEditor v-model:value="form.description" placeholder="Describe the task" />
+						<InlineEditor
+							v-model:value="form.description"
+							placeholder="Describe the task"
+							:image-upload-handler="browseImage"
+							@ready="handleEditorReady"
+						/>
+						<input
+							ref="imageInput"
+							type="file"
+							accept="image/*"
+							hidden
+							data-testid="task-image-input"
+							@change="onImageSelection"
+						/>
 					</div>
 				</VCardText>
 			</VCard>
@@ -97,13 +98,16 @@
 </template>
 
 <script setup lang="ts">
-import { CourseRoomsApiFactory, CoursesApiFactory, BoardElementResponseType } from "@api-server";
-import { InlineEditor } from "@feature-editor";
-import { createTask, getTask, updateTask, type TaskWriteParams } from "@data-tasks";
-import { DefaultWireframe } from "@ui-layout";
 import TaskFiles from "@/components/tasks/TaskFiles.vue";
-import { $axios } from "@/utils/api";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { type FileRecord, FileRecordParent } from "@/types/file/File";
+import { $axios } from "@/utils/api";
+import { BoardElementResponseType, CourseRoomsApiFactory, CoursesApiFactory } from "@api-server";
+import type { Editor } from "@ckeditor/ckeditor5-core";
+import { useFileStorageApi } from "@data-file";
+import { createTask, getTask, type TaskWriteParams, updateTask } from "@data-tasks";
+import { InlineEditor } from "@feature-editor";
+import { DefaultWireframe } from "@ui-layout";
 import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -123,6 +127,12 @@ const courses = ref<CourseOption[]>([]);
 const lessons = ref<LessonOption[]>([]);
 const lessonsLoading = ref(false);
 const taskFiles = ref<{ uploadSelectedFiles: (parentId?: string) => Promise<void> }>();
+const imageInput = ref<HTMLInputElement>();
+const taskEditor = ref<Editor>();
+const isUploadingImage = ref(false);
+type InlineImageFile = Pick<FileRecord, "id" | "name" | "url">;
+const inlineImages = ref<Array<{ temporary: FileRecord; permanent?: InlineImageFile }>>([]);
+const { uploadTemporary, copyFileToParent, deleteFiles } = useFileStorageApi();
 
 const form = reactive<TaskWriteParams & { maxTeamMembers?: number }>({
 	name: "",
@@ -163,9 +173,12 @@ const loadLessons = async (courseId?: string) => {
 	}
 };
 
-watch(() => form.courseId, (courseId, previousCourseId) => {
-	if (courseId !== previousCourseId) void loadLessons(courseId);
-});
+watch(
+	() => form.courseId,
+	(courseId, previousCourseId) => {
+		if (courseId !== previousCourseId) void loadLessons(courseId);
+	}
+);
 
 onMounted(async () => {
 	await loadCourses();
@@ -192,9 +205,70 @@ onMounted(async () => {
 
 const toIso = (value?: string) => (value ? new Date(value).toISOString() : undefined);
 
+const handleEditorReady = (editor: Editor) => {
+	taskEditor.value = editor;
+};
+
+const browseImage = () => {
+	imageInput.value?.click();
+};
+
+const onImageSelection = async (event: Event) => {
+	const input = event.target as HTMLInputElement;
+	const file = input.files?.[0];
+	input.value = "";
+	if (!file || !taskEditor.value) return;
+
+	isUploadingImage.value = true;
+	try {
+		const temporary = await uploadTemporary(file);
+		if (!temporary) return;
+
+		inlineImages.value.push({ temporary });
+		taskEditor.value.execute("insertImage", { source: temporary.url });
+	} finally {
+		isUploadingImage.value = false;
+	}
+};
+
+const removePendingImagesFromDescription = (description: string): string => {
+	if (!inlineImages.value.length) return description;
+
+	const container = document.createElement("div");
+	container.innerHTML = description;
+	container.querySelectorAll("img").forEach((image) => {
+		if (!inlineImages.value.some(({ temporary }) => temporary.url === image.getAttribute("src"))) return;
+		const figure = image.closest("figure");
+		(figure ?? image).remove();
+	});
+
+	return container.innerHTML;
+};
+
+const promoteImages = async (taskId: string, description: string): Promise<string> => {
+	const referencedImages = inlineImages.value.filter(({ temporary }) => description.includes(temporary.url));
+
+	let finalDescription = description;
+	for (const image of referencedImages) {
+		if (!image.permanent) {
+			const permanent = await copyFileToParent(image.temporary.id, taskId, FileRecordParent.TASKS);
+			if (!permanent) throw new Error("Could not promote task image");
+			image.permanent = permanent;
+		}
+		const permanent = image.permanent;
+		if (!permanent) throw new Error("Could not promote task image");
+		finalDescription = finalDescription.replaceAll(image.temporary.url, permanent.url);
+	}
+
+	return finalDescription;
+};
+
 const save = async () => {
+	const description = form.description ?? "";
+	const descriptionBeforeImagePromotion = removePendingImagesFromDescription(description);
 	const payload: TaskWriteParams = {
 		...form,
+		description: descriptionBeforeImagePromotion,
 		availableDate: toIso(form.availableDate),
 		dueDate: toIso(form.dueDate),
 		maxTeamMembers: form.teamSubmissions ? Number(form.maxTeamMembers || 5) : undefined,
@@ -203,8 +277,18 @@ const save = async () => {
 		isNew.value ? createTask(payload) : updateTask(route.params.taskId as string, payload)
 	);
 	if (result.success) {
-		await taskFiles.value?.uploadSelectedFiles(result.result.id);
-		await router.push(`/tasks/${result.result.id}`);
+		const savedTask = result.result;
+		await taskFiles.value?.uploadSelectedFiles(savedTask.id);
+		const descriptionWithPermanentImages = await promoteImages(savedTask.id, description);
+		if (descriptionWithPermanentImages !== descriptionBeforeImagePromotion) {
+			const updateResult = await execute(() =>
+				updateTask(savedTask.id, { ...payload, description: descriptionWithPermanentImages })
+			);
+			if (!updateResult.success) return;
+		}
+		if (inlineImages.value.length) await deleteFiles(inlineImages.value.map(({ temporary }) => temporary));
+		inlineImages.value = [];
+		await router.push(`/tasks/${savedTask.id}`);
 	}
 };
 </script>
@@ -217,7 +301,7 @@ const save = async () => {
 	gap: 20px;
 }
 
-	.task-card :deep(.v-card-title) {
+.task-card :deep(.v-card-title) {
 	font-size: 1.1rem;
 	font-weight: 600;
 	padding-bottom: 0;

@@ -43,6 +43,14 @@ export const advancedPlugins: PluginName[] = [
 	"WordCount",
 ];
 
+export const advancedPluginsWithImage: PluginName[] = [
+	...advancedPlugins,
+	"Image",
+	"ImageInsertViaUrl",
+	"ImageResize",
+	"TaskImageUpload",
+];
+
 export const basicFormattingToolbar: ToolbarItem[] = [
 	"heading",
 	"|",
@@ -80,6 +88,10 @@ export const advancedFormattingToolbar: ToolbarItem[] = [
 	"specialCharacters",
 	"removeFormat",
 ];
+
+export const advancedFormattingToolbarWithImage: ToolbarItem[] = advancedFormattingToolbar.flatMap((item) =>
+	item === "link" ? [item, "taskImageUpload"] : [item]
+);
 
 export const mediaFormattingToolbar: ToolbarItem[] = [
 	"undo",

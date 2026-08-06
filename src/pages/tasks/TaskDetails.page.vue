@@ -194,6 +194,34 @@ const onFinish = async () => {
 	line-height: 1.6;
 }
 
+/* The editor's image styles are scoped to .ck-content and are not present
+ * when the saved task description is rendered on this page. */
+.task-description :deep(figure.image) {
+	clear: both;
+	display: table;
+	margin: 0.9em auto;
+	max-width: 100%;
+	min-width: 50px;
+	text-align: center;
+}
+
+.task-description :deep(figure.image.image_resized) {
+	box-sizing: border-box;
+	display: block;
+	max-width: 100%;
+}
+
+.task-description :deep(figure.image img) {
+	display: block;
+	height: auto;
+	margin: 0 auto;
+	max-width: 100%;
+}
+
+.task-description :deep(figure.image.image_resized img) {
+	width: 100%;
+}
+
 @media (max-width: 900px) {
 	.task-detail {
 		display: flex !important;
