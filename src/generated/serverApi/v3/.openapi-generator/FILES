@@ -388,9 +388,11 @@ models/system-type.ts
 models/target-info-response.ts
 models/target-user-id-params.ts
 models/task-copy-api-params.ts
+models/task-create-params.ts
 models/task-list-response.ts
 models/task-response.ts
 models/task-status-response.ts
+models/task-update-params.ts
 models/teacher-permission-params.ts
 models/team-create-room-response.ts
 models/team-permissions-body.ts
