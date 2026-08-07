@@ -67,14 +67,15 @@
 			<p>
 				Für die Verarbeitung personenbezogener Daten innerhalb der Cloud gelten die jeweils aktuellen
 				Nutzungsbedingungen der Plattform sowie die ergänzenden
-				<a href="/privacypolicy">Datenschutzinformationen</a> und <a href="/termsofuse">Nutzungsordnungen</a> der
-				Schule. Die Nutzung erfolgt auf Grundlage der datenschutzrechtlichen und schulrechtlichen Bestimmungen des
-				Landes Niedersachsen.
+				<a target="_blank" href="/privacypolicy">Datenschutzinformationen</a> und
+				<a target="_blank" href="/termsofuse">Nutzungsordnungen</a> der Schule. Die Nutzung erfolgt auf Grundlage der
+				datenschutzrechtlichen und schulrechtlichen Bestimmungen des Landes Niedersachsen.
 			</p>
 
 			<p>
 				Weitere Informationen zur Niedersächsischen Bildungscloud finden Sie unter:
 				<a
+					target="_blank"
 					href="https://bildungsportal-niedersachsen.de/digitale-welt/niedersaechsische-bildungscloud-und-moinschule"
 					aria-label="Niedersächsische Bildungscloud und moin.schule"
 					>https://bildungsportal-niedersachsen.de/digitale-welt/niedersaechsische-bildungscloud-und-moinschule</a
