@@ -125,7 +125,7 @@ describe("TaskOverview.page", () => {
 				expect(fabItems).toHaveLength(1);
 				expect(fabItems?.[0]).toEqual(
 					expect.objectContaining({
-						href: "/homework/new?returnUrl=tasks",
+						href: "/tasks/new",
 						dataTestId: "add-task",
 					})
 				);

@@ -65,6 +65,12 @@ export interface TaskResponse {
      */
     courseId: string;
     /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
+    lessonId?: string;
+    /**
      * Task description object, with props content: string and type: input format types
      * @type {RichText}
      * @memberof TaskResponse
@@ -100,6 +106,24 @@ export interface TaskResponse {
      * @memberof TaskResponse
      */
     status: TaskStatusResponse;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TaskResponse
+     */
+    publicSubmissions?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TaskResponse
+     */
+    teamSubmissions?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof TaskResponse
+     */
+    maxTeamMembers?: number;
 }
 
 

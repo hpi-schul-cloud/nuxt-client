@@ -1670,6 +1670,7 @@ export default {
 	"pages.tasks.with.due": "Con plazo",
 	"pages.tasks.no.due": "Sin plazo",
 	"pages.tasks.rating": "Valoración",
+	"pages.tasks.submissions": "Entregas",
 	"pages.room.taskCard.teacher.label.submitted": "Entregado",
 	"pages.room.learningContent.emptyState": "Actualmente no hay contenidos de aprendizaje en este curso",
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",

@@ -13,6 +13,8 @@ import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { buildUploadOptions, convertFileSize } from "@/utils/fileHelper";
 import {
 	AddDocumentToParentParams,
+	CopyFileParams,
+	CopyFileResponse,
 	FileApiFactory,
 	FileApiInterface,
 	WopiApiFactory,
@@ -39,6 +41,8 @@ export enum CollaboraFileType {
 	Spreadsheet = "SPREADSHEET",
 	Presentation = "PRESENTATION",
 }
+
+type CopiedFileRecord = Pick<FileRecord, "id" | "name" | "url">;
 
 export const useFileStorageApi = () => {
 	const { t, n } = useI18n();
@@ -84,6 +88,64 @@ export const useFileStorageApi = () => {
 			const options = buildUploadOptions(onUploadProgress);
 			const response = await fileApi.upload(schoolId, StorageLocation.SCHOOL, parentId, parentType, file, options);
 			upsertFileRecords([response.data]);
+		} catch (error) {
+			showError(error);
+			throw error;
+		}
+	};
+
+	const uploadTemporary = async (
+		file: File,
+		onUploadProgress?: (progress: number) => void
+	): Promise<FileRecord | void> => {
+		try {
+			const schoolId = useAppStore().school?.id as string;
+			const userId = useAppStore().user?.id;
+			if (!schoolId || !userId) return;
+
+			const options = buildUploadOptions(onUploadProgress);
+			const response = await fileApi.tempUpload(
+				schoolId,
+				StorageLocation.SCHOOL,
+				userId,
+				FileRecordParent.USERS,
+				file,
+				options
+			);
+
+			return response.data;
+		} catch (error) {
+			showError(error);
+			throw error;
+		}
+	};
+
+	const copyFileToParent = async (
+		fileRecordId: string,
+		parentId: string,
+		parentType: FileRecordParent
+	): Promise<CopiedFileRecord | void> => {
+		try {
+			const schoolId = useAppStore().school?.id as string;
+			if (!schoolId) return;
+
+			const target: CopyFileParams = {
+				target: {
+					storageLocation: StorageLocation.SCHOOL,
+					storageLocationId: schoolId,
+					parentId,
+					parentType,
+				},
+			};
+			const response = await fileApi.copyFile(fileRecordId, target);
+			const copiedFile = response.data as unknown as CopyFileResponse;
+			if (!copiedFile.id) return;
+
+			return {
+				id: copiedFile.id,
+				name: copiedFile.name,
+				url: `/api/v3/file/download/${copiedFile.id}/${encodeURIComponent(copiedFile.name)}`,
+			};
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -280,5 +342,7 @@ export const useFileStorageApi = () => {
 		getAuthorizedCollaboraDocumentUrl,
 		fetchFileById,
 		uploadCollaboraFile,
+		uploadTemporary,
+		copyFileToParent,
 	};
 };

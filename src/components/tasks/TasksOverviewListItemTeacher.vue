@@ -131,7 +131,7 @@ const topic = computed(() => (props.task.lessonName ? `${t("common.words.topic")
 const ariaLabel = computed(() => `${t("common.words.task")} ${props.task.name}`);
 
 const handleClick = () => {
-	window.location.href = `/homework/${props.task.id}`;
+	window.location.href = `/tasks/${props.task.id}`;
 };
 
 const onCopyTask = (payload: CopyParams) => {

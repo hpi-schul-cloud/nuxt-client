@@ -81,7 +81,7 @@ const onRestoreTask = async (taskId: string) => {
 };
 
 const handleClick = () => {
-	window.location.href = `/homework/${props.task.id}`;
+	window.location.href = `/tasks/${props.task.id}`;
 };
 </script>
 
