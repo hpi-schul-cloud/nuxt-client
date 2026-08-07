@@ -37,44 +37,47 @@
 			</p>
 			<h2>Rechtliche Hinweise</h2>
 			<p>
-				Das Landesprojekt Niedersächsische Bildungscloud wird durchgeführt durch das Niedersächsische Landesinstitut für
-				schulische Qualitätsentwicklung (NLQ), im Auftrag des Niedersächsischen Kultusministerium und in
-				technisch-organisatorischer Kooperation mit der Dataport AöR (https://www.dataport.de).
+				Die Niedersächsische Bildungscloud (Cloud) wird im Auftrag des Niedersächsischen Kultusministeriums durch das
+				Niedersächsische Landesinstitut für schulische Qualitätsentwicklung (NLQ) betrieben. Die technische
+				Bereitstellung erfolgt im Rahmen der landeseigenen Bildungsmedieninfrastruktur.
 			</p>
+
 			<p>
-				Die Inhalte der Niedersächsischen Bildungscloud stellen keine offiziellen Verlautbarungen des niedersächsischen
-				Kultusministeriums, des NLQ oder Dataports dar. Für die veröffentlichten Inhalte sind die jeweiligen Autorinnen
-				oder Autoren selbst verantwortlich. Für angemeldete Nutzende können Bildungseinrichtungen weitergehende
-				Datenschutzhinweise und Nutzungsordnungen bereitstellen.
+				Soweit innerhalb der Cloud Inhalte, Materialien, Beiträge oder Dateien von Lernbegleitenden, Lernenden oder
+				weiteren Nutzenden veröffentlicht werden, sind für diese Inhalte ausschließlich die jeweiligen Autorinnen und
+				Autoren verantwortlich.
 			</p>
+
 			<p>
-				Als Diensteanbieter sind wir für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.
-				Wir sind als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu
-				überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
+				Die über die Plattform bereitgestellten Inhalte stellen nicht notwendigerweise die Auffassung der Schule, des
+				NLQ, des Niedersächsischen Kultusministeriums oder der technischen Dienstleister dar.
 			</p>
+
 			<p>
-				Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben
-				hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten
-				Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte
-				umgehend entfernen
+				Es wird keine Gewähr übernommen für die jederzeitige Verfügbarkeit der bereitgestellten Dienste durch externe
+				Anbieter oder integrierte Drittanwendungen. Für Inhalte verlinkter externer Internetseiten sind ausschließlich
+				deren Betreiber verantwortlich.
 			</p>
+
 			<p>
-				Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb
-				können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist
-				stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum
-				Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der
-				Verlinkung nicht erkennbar.
+				Bei Bekanntwerden von Rechtsverletzungen durch eingestellte Inhalte oder auf verlinkten Internetseiten werden
+				diese umgehend entfernt.
 			</p>
+
 			<p>
-				Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer
-				Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend
-				entfernen.
+				Für die Verarbeitung personenbezogener Daten innerhalb der Cloud gelten die jeweils aktuellen
+				Nutzungsbedingungen der Plattform sowie die ergänzenden
+				<a href="/privacypolicy">Datenschutzinformationen</a> und <a href="/termsofuse">Nutzungsordnungen</a> der
+				Schule. Die Nutzung erfolgt auf Grundlage der datenschutzrechtlichen und schulrechtlichen Bestimmungen des
+				Landes Niedersachsen.
 			</p>
+
 			<p>
-				<b
-					>Wir wünschen Ihnen viel Freude und Erfolg beim Lernen und Arbeiten mit der Niedersächsischen Bildungscloud!
-					Ihre Ideen, Wünsche und Ihr Feedback sind uns wichtig – gemeinsam gestalten wir eine noch bessere
-					Lernumgebung.</b
+				Weitere Informationen zur Niedersächsischen Bildungscloud finden Sie unter:
+				<a
+					href="https://bildungsportal-niedersachsen.de/digitale-welt/niedersaechsische-bildungscloud-und-moinschule"
+					aria-label="Niedersächsische Bildungscloud und moin.schule"
+					>https://bildungsportal-niedersachsen.de/digitale-welt/niedersaechsische-bildungscloud-und-moinschule</a
 				>
 			</p>
 		</div>
