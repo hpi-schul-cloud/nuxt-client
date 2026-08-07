@@ -57,6 +57,50 @@ describe("url.util", () => {
 			});
 		});
 
+		describe("when no current host is provided", () => {
+			it("should use window.location.host", () => {
+				const boardId = ObjectIdMock();
+				const cardId = ObjectIdMock();
+				const url = `https://${host}/boards/${boardId}#card-${cardId}`;
+
+				Object.defineProperty(window, "location", {
+					get: () => ({ host }),
+					configurable: true,
+				});
+
+				expect(isBoardCardLink(url)).toBe(true);
+			});
+
+			describe("when window.location.host is empty", () => {
+				it("should return false ", () => {
+					const boardId = ObjectIdMock();
+					const cardId = ObjectIdMock();
+					const url = `https://${host}/boards/${boardId}#card-${cardId}`;
+
+					Object.defineProperty(window, "location", {
+						get: () => ({ host: "" }),
+						configurable: true,
+					});
+
+					expect(isBoardCardLink(url)).toBe(false);
+				});
+			});
+
+			describe(" when window is not available", () => {
+				it("should return false", () => {
+					const boardId = ObjectIdMock();
+					const cardId = ObjectIdMock();
+					const url = `https://${host}/boards/${boardId}#card-${cardId}`;
+
+					vi.stubGlobal("window", undefined);
+
+					expect(isBoardCardLink(url)).toBe(false);
+
+					vi.unstubAllGlobals();
+				});
+			});
+		});
+
 		describe("when the url is invalid", () => {
 			it("should return false", () => {
 				expect(isBoardCardLink("not-a-url", host)).toBe(false);
