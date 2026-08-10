@@ -1,4 +1,5 @@
-import { ensureProtocolIncluded } from "./url.util";
+import { ensureProtocolIncluded, isBoardCardLink } from "./url.util";
+import { ObjectIdMock } from "@@/tests/test-utils";
 
 describe("url.util", () => {
 	describe("ensureProtocolIncluded", () => {
@@ -15,6 +16,94 @@ describe("url.util", () => {
 				const url = "abc.de/foto.png";
 				const result = ensureProtocolIncluded(url);
 				expect(result.indexOf("https://")).toEqual(0);
+			});
+		});
+	});
+
+	describe("isBoardCardLink", () => {
+		const host = "dbildungscloud.test";
+		const boardId = ObjectIdMock();
+		const cardId = ObjectIdMock();
+
+		describe("when the url is a board card link on the same host", () => {
+			it("should return true", () => {
+				const url = `https://${host}/boards/${boardId}#card-${cardId}`;
+
+				expect(isBoardCardLink(url, host)).toBe(true);
+			});
+		});
+
+		describe("when the url is a board card link on a different host", () => {
+			it("should return false", () => {
+				const url = `https://other.host/boards/${boardId}#card-${cardId}`;
+
+				expect(isBoardCardLink(url, host)).toBe(false);
+			});
+		});
+
+		describe("when the hash does not target a card", () => {
+			it("should return false", () => {
+				const url = `https://${host}/boards/${boardId}#column-${cardId}`;
+
+				expect(isBoardCardLink(url, host)).toBe(false);
+			});
+		});
+
+		describe("when the path is not a board path", () => {
+			it("should return false", () => {
+				const url = `https://${host}/rooms/${boardId}#card-${cardId}`;
+
+				expect(isBoardCardLink(url, host)).toBe(false);
+			});
+		});
+
+		describe("when no current host is provided", () => {
+			it("should use window.location.host", () => {
+				const boardId = ObjectIdMock();
+				const cardId = ObjectIdMock();
+				const url = `https://${host}/boards/${boardId}#card-${cardId}`;
+
+				Object.defineProperty(window, "location", {
+					get: () => ({ host }),
+					configurable: true,
+				});
+
+				expect(isBoardCardLink(url)).toBe(true);
+			});
+
+			describe("when window.location.host is empty", () => {
+				it("should return false ", () => {
+					const boardId = ObjectIdMock();
+					const cardId = ObjectIdMock();
+					const url = `https://${host}/boards/${boardId}#card-${cardId}`;
+
+					Object.defineProperty(window, "location", {
+						get: () => ({ host: "" }),
+						configurable: true,
+					});
+
+					expect(isBoardCardLink(url)).toBe(false);
+				});
+			});
+
+			describe(" when window is not available", () => {
+				it("should return false", () => {
+					const boardId = ObjectIdMock();
+					const cardId = ObjectIdMock();
+					const url = `https://${host}/boards/${boardId}#card-${cardId}`;
+
+					vi.stubGlobal("window", undefined);
+
+					expect(isBoardCardLink(url)).toBe(false);
+
+					vi.unstubAllGlobals();
+				});
+			});
+		});
+
+		describe("when the url is invalid", () => {
+			it("should return false", () => {
+				expect(isBoardCardLink("not-a-url", host)).toBe(false);
 			});
 		});
 	});
