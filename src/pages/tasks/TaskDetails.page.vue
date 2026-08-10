@@ -247,6 +247,12 @@ const onFinish = async () => {
 	width: 100%;
 }
 
+.task-description :deep(video) {
+	display: block;
+	height: auto;
+	max-width: 100%;
+}
+
 .task-description :deep(.table) {
 	display: table;
 	margin: 0.9em auto;

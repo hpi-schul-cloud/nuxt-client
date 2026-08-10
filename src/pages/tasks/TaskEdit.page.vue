@@ -69,6 +69,7 @@
 							placeholder="Describe the task"
 							:image-upload-handler="browseImage"
 							:audio-upload-handler="browseAudio"
+							:video-upload-handler="browseVideo"
 							@ready="handleEditorReady"
 						/>
 						<input
@@ -86,6 +87,14 @@
 							hidden
 							data-testid="task-audio-input"
 							@change="onAudioSelection"
+						/>
+						<input
+							ref="videoInput"
+							type="file"
+							accept="video/*"
+							hidden
+							data-testid="task-video-input"
+							@change="onVideoSelection"
 						/>
 					</div>
 				</VCardText>
@@ -138,11 +147,13 @@ const lessonsLoading = ref(false);
 const taskFiles = ref<{ uploadSelectedFiles: (parentId?: string) => Promise<void> }>();
 const imageInput = ref<HTMLInputElement>();
 const audioInput = ref<HTMLInputElement>();
+const videoInput = ref<HTMLInputElement>();
 const taskEditor = ref<Editor>();
 const isUploadingImage = ref(false);
 const isUploadingAudio = ref(false);
+const isUploadingVideo = ref(false);
 type InlineImageFile = Pick<FileRecord, "id" | "name" | "url">;
-type InlineMediaKind = "image" | "audio";
+type InlineMediaKind = "image" | "audio" | "video";
 type InlineMedia = { temporary: FileRecord; permanent?: InlineImageFile; kind: InlineMediaKind };
 const inlineMedia = ref<InlineMedia[]>([]);
 const { uploadTemporary, copyFileToParent, deleteFiles } = useFileStorageApi();
@@ -231,36 +242,45 @@ const browseAudio = () => {
 	audioInput.value?.click();
 };
 
+const browseVideo = () => {
+	videoInput.value?.click();
+};
+
 const onMediaSelection = async (event: Event, kind: InlineMediaKind) => {
 	const input = event.target as HTMLInputElement;
 	const file = input.files?.[0];
 	input.value = "";
 	if (!file || !taskEditor.value) return;
 	if (kind === "audio" && !file.type.startsWith("audio/")) return;
+	if (kind === "video" && !file.type.startsWith("video/")) return;
 
 	if (kind === "image") isUploadingImage.value = true;
 	if (kind === "audio") isUploadingAudio.value = true;
+	if (kind === "video") isUploadingVideo.value = true;
 	try {
 		const temporary = await uploadTemporary(file);
 		if (!temporary) return;
 
 		inlineMedia.value.push({ temporary, kind });
-		taskEditor.value.execute(kind === "image" ? "insertImage" : "insertAudio", { source: temporary.url });
+		const command = kind === "image" ? "insertImage" : kind === "audio" ? "insertAudio" : "insertVideo";
+		taskEditor.value.execute(command, { source: temporary.url });
 	} finally {
 		if (kind === "image") isUploadingImage.value = false;
 		if (kind === "audio") isUploadingAudio.value = false;
+		if (kind === "video") isUploadingVideo.value = false;
 	}
 };
 
 const onImageSelection = (event: Event) => onMediaSelection(event, "image");
 const onAudioSelection = (event: Event) => onMediaSelection(event, "audio");
+const onVideoSelection = (event: Event) => onMediaSelection(event, "video");
 
 const removePendingMediaFromDescription = (description: string): string => {
 	if (!inlineMedia.value.length) return description;
 
 	const container = document.createElement("div");
 	container.innerHTML = description;
-	container.querySelectorAll("img, audio").forEach((media) => {
+	container.querySelectorAll("img, audio, video").forEach((media) => {
 		if (!inlineMedia.value.some(({ temporary }) => temporary.url === media.getAttribute("src"))) return;
 		const figure = media.closest("figure");
 		(figure ?? media).remove();
