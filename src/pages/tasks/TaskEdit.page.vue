@@ -4,13 +4,7 @@
 			<VCard class="task-card task-meta-card" elevation="1">
 				<VCardTitle>Task details</VCardTitle>
 				<VCardText>
-					<VTextField
-						v-model="form.name"
-						:rules="[requiredTitleRule]"
-						label="Title"
-						required
-						data-testid="task-name"
-					/>
+					<VTextField v-model="form.name" :rules="[requiredTitleRule]" label="Title" required data-testid="task-name" />
 
 					<div class="d-flex flex-column flex-sm-row ga-4">
 						<VSelect
@@ -74,6 +68,7 @@
 							v-model:value="form.description"
 							placeholder="Describe the task"
 							:image-upload-handler="browseImage"
+							:audio-upload-handler="browseAudio"
 							@ready="handleEditorReady"
 						/>
 						<input
@@ -83,6 +78,14 @@
 							hidden
 							data-testid="task-image-input"
 							@change="onImageSelection"
+						/>
+						<input
+							ref="audioInput"
+							type="file"
+							accept="audio/*"
+							hidden
+							data-testid="task-audio-input"
+							@change="onAudioSelection"
 						/>
 					</div>
 				</VCardText>
@@ -134,10 +137,14 @@ const lessons = ref<LessonOption[]>([]);
 const lessonsLoading = ref(false);
 const taskFiles = ref<{ uploadSelectedFiles: (parentId?: string) => Promise<void> }>();
 const imageInput = ref<HTMLInputElement>();
+const audioInput = ref<HTMLInputElement>();
 const taskEditor = ref<Editor>();
 const isUploadingImage = ref(false);
+const isUploadingAudio = ref(false);
 type InlineImageFile = Pick<FileRecord, "id" | "name" | "url">;
-const inlineImages = ref<Array<{ temporary: FileRecord; permanent?: InlineImageFile }>>([]);
+type InlineMediaKind = "image" | "audio";
+type InlineMedia = { temporary: FileRecord; permanent?: InlineImageFile; kind: InlineMediaKind };
+const inlineMedia = ref<InlineMedia[]>([]);
 const { uploadTemporary, copyFileToParent, deleteFiles } = useFileStorageApi();
 const requiredTitleRule = (value: string) => Boolean(value?.trim()) || "Title is required";
 
@@ -220,51 +227,61 @@ const browseImage = () => {
 	imageInput.value?.click();
 };
 
-const onImageSelection = async (event: Event) => {
+const browseAudio = () => {
+	audioInput.value?.click();
+};
+
+const onMediaSelection = async (event: Event, kind: InlineMediaKind) => {
 	const input = event.target as HTMLInputElement;
 	const file = input.files?.[0];
 	input.value = "";
 	if (!file || !taskEditor.value) return;
+	if (kind === "audio" && !file.type.startsWith("audio/")) return;
 
-	isUploadingImage.value = true;
+	if (kind === "image") isUploadingImage.value = true;
+	if (kind === "audio") isUploadingAudio.value = true;
 	try {
 		const temporary = await uploadTemporary(file);
 		if (!temporary) return;
 
-		inlineImages.value.push({ temporary });
-		taskEditor.value.execute("insertImage", { source: temporary.url });
+		inlineMedia.value.push({ temporary, kind });
+		taskEditor.value.execute(kind === "image" ? "insertImage" : "insertAudio", { source: temporary.url });
 	} finally {
-		isUploadingImage.value = false;
+		if (kind === "image") isUploadingImage.value = false;
+		if (kind === "audio") isUploadingAudio.value = false;
 	}
 };
 
-const removePendingImagesFromDescription = (description: string): string => {
-	if (!inlineImages.value.length) return description;
+const onImageSelection = (event: Event) => onMediaSelection(event, "image");
+const onAudioSelection = (event: Event) => onMediaSelection(event, "audio");
+
+const removePendingMediaFromDescription = (description: string): string => {
+	if (!inlineMedia.value.length) return description;
 
 	const container = document.createElement("div");
 	container.innerHTML = description;
-	container.querySelectorAll("img").forEach((image) => {
-		if (!inlineImages.value.some(({ temporary }) => temporary.url === image.getAttribute("src"))) return;
-		const figure = image.closest("figure");
-		(figure ?? image).remove();
+	container.querySelectorAll("img, audio").forEach((media) => {
+		if (!inlineMedia.value.some(({ temporary }) => temporary.url === media.getAttribute("src"))) return;
+		const figure = media.closest("figure");
+		(figure ?? media).remove();
 	});
 
 	return container.innerHTML;
 };
 
-const promoteImages = async (taskId: string, description: string): Promise<string> => {
-	const referencedImages = inlineImages.value.filter(({ temporary }) => description.includes(temporary.url));
+const promoteMedia = async (taskId: string, description: string): Promise<string> => {
+	const referencedMedia = inlineMedia.value.filter(({ temporary }) => description.includes(temporary.url));
 
 	let finalDescription = description;
-	for (const image of referencedImages) {
-		if (!image.permanent) {
-			const permanent = await copyFileToParent(image.temporary.id, taskId, FileRecordParent.TASKS);
-			if (!permanent) throw new Error("Could not promote task image");
-			image.permanent = permanent;
+	for (const media of referencedMedia) {
+		if (!media.permanent) {
+			const permanent = await copyFileToParent(media.temporary.id, taskId, FileRecordParent.TASKS);
+			if (!permanent) throw new Error(`Could not promote task ${media.kind}`);
+			media.permanent = permanent;
 		}
-		const permanent = image.permanent;
-		if (!permanent) throw new Error("Could not promote task image");
-		finalDescription = finalDescription.replaceAll(image.temporary.url, permanent.url);
+		const permanent = media.permanent;
+		if (!permanent) throw new Error(`Could not promote task ${media.kind}`);
+		finalDescription = finalDescription.replaceAll(media.temporary.url, permanent.url);
 	}
 
 	return finalDescription;
@@ -273,10 +290,10 @@ const promoteImages = async (taskId: string, description: string): Promise<strin
 const save = async () => {
 	if (!form.name.trim()) return;
 	const description = form.description ?? "";
-	const descriptionBeforeImagePromotion = removePendingImagesFromDescription(description);
+	const descriptionBeforeMediaPromotion = removePendingMediaFromDescription(description);
 	const payload: TaskWriteParams = {
 		...form,
-		description: descriptionBeforeImagePromotion,
+		description: descriptionBeforeMediaPromotion,
 		availableDate: toIso(form.availableDate),
 		dueDate: toIso(form.dueDate),
 		maxTeamMembers: form.teamSubmissions ? Number(form.maxTeamMembers || 5) : undefined,
@@ -287,15 +304,15 @@ const save = async () => {
 	if (result.success) {
 		const savedTask = result.result;
 		await taskFiles.value?.uploadSelectedFiles(savedTask.id);
-		const descriptionWithPermanentImages = await promoteImages(savedTask.id, description);
-		if (descriptionWithPermanentImages !== descriptionBeforeImagePromotion) {
+		const descriptionWithPermanentMedia = await promoteMedia(savedTask.id, description);
+		if (descriptionWithPermanentMedia !== descriptionBeforeMediaPromotion) {
 			const updateResult = await execute(() =>
-				updateTask(savedTask.id, { ...payload, description: descriptionWithPermanentImages })
+				updateTask(savedTask.id, { ...payload, description: descriptionWithPermanentMedia })
 			);
 			if (!updateResult.success) return;
 		}
-		if (inlineImages.value.length) await deleteFiles(inlineImages.value.map(({ temporary }) => temporary));
-		inlineImages.value = [];
+		if (inlineMedia.value.length) await deleteFiles(inlineMedia.value.map(({ temporary }) => temporary));
+		inlineMedia.value = [];
 		await router.push(`/tasks/${savedTask.id}`);
 	}
 };

@@ -48,6 +48,7 @@ export const advancedPluginsWithImage: PluginName[] = [
 	"Image",
 	"ImageInsertViaUrl",
 	"ImageResize",
+	"TaskAudioUpload",
 	"TaskImageUpload",
 ];
 
@@ -90,7 +91,7 @@ export const advancedFormattingToolbar: ToolbarItem[] = [
 ];
 
 export const advancedFormattingToolbarWithImage: ToolbarItem[] = advancedFormattingToolbar.flatMap((item) =>
-	item === "link" ? [item, "taskImageUpload"] : [item]
+	item === "link" ? [item, "taskImageUpload", "taskAudioUpload"] : [item]
 );
 
 export const mediaFormattingToolbar: ToolbarItem[] = [

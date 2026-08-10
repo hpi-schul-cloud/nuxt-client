@@ -47,6 +47,10 @@ const props = defineProps({
 		type: Function,
 		default: undefined,
 	},
+	audioUploadHandler: {
+		type: Function,
+		default: undefined,
+	},
 });
 
 const emit = defineEmits(["ready", "focus", "update:value", "blur", "keyboard:delete"]);
@@ -64,6 +68,7 @@ const config = computed(() => ({
 	},
 	plugins: advancedPluginsWithImage,
 	taskImageUpload: props.imageUploadHandler,
+	taskAudioUpload: props.audioUploadHandler,
 	heading: compactHeadings,
 	placeholder: props.placeholder,
 	ui: {
