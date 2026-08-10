@@ -65,6 +65,16 @@
 						<span :data-testid="`name-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }">
 							{{ item.name }}
 							<FileStatus :file-record="item" />
+							<VChip
+								v-if="item.isReferencedInDescription"
+								size="x-small"
+								color="primary"
+								variant="tonal"
+								class="ml-2"
+								:title="t('pages.tasks.files.usedInDescription')"
+							>
+								{{ t("pages.tasks.files.usedInDescription") }}
+							</VChip>
 						</span>
 					</FileInteractionHandler>
 				</template>
@@ -186,6 +196,10 @@ const props = defineProps({
 		type: Array as PropType<FileRecord[]>,
 		required: true,
 	},
+	highlightedFileIds: {
+		type: Array as PropType<string[]>,
+		default: () => [],
+	},
 	uploadProgress: {
 		type: Object as PropType<{
 			uploaded: number;
@@ -242,6 +256,7 @@ const fileRecordItems = computed(() =>
 	props.fileRecords.map((item) => ({
 		...item,
 		isSelectable: !isScanStatusBlocked(item.securityCheckStatus),
+		isReferencedInDescription: props.highlightedFileIds.includes(item.id),
 	}))
 );
 

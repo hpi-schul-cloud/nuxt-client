@@ -103,7 +103,7 @@
 			<VCard class="task-card task-attachments-card" elevation="1">
 				<VCardTitle>Attachments</VCardTitle>
 				<VCardText>
-					<TaskFiles ref="taskFiles" :task-id="taskId" :editable="true" />
+					<TaskFiles ref="taskFiles" :task-id="taskId" :description="form.description" :editable="true" />
 				</VCardText>
 			</VCard>
 

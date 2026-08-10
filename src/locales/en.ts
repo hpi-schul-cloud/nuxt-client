@@ -1918,6 +1918,7 @@ export default {
 		"The dBildungscloud regularly undergoes security checks and penetration tests, as the security of our users' data is very important to us. You still found a security problem? Write to us so that we can close the gap as soon as possible: ",
 
 	"pages.tasks.labels.due": "Due",
+	"pages.tasks.files.usedInDescription": "Used in task description",
 	"pages.tasks.labels.noCourse": "No course assigned",
 	"pages.tasks.labels.planned": "Planned",
 	"pages.tasks.graded": "Graded",

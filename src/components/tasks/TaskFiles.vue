@@ -11,6 +11,7 @@
 			:file-storage-error="fileStorageError"
 			:has-edit-permission="editable"
 			:file-records="fileRecords"
+			:highlighted-file-ids="highlightedFileIds"
 			:upload-progress="uploadProgress"
 			:are-upload-stats-visible="areUploadStatsVisible"
 			:is-over-drop-zone="isOverDropZone"
@@ -32,14 +33,18 @@
 </template>
 
 <script setup lang="ts">
-import FileTable from "@/modules/feature/folder/file-table/FileTable.vue";
-import { FileRecordParent, type FileRecord } from "@/types/file/File";
+import { type FileRecord, FileRecordParent } from "@/types/file/File";
 import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
+import { extractReferencedTaskFileIds } from "@/utils/task-description-files";
 import { useFileRecordsStore, useFileStorageApi } from "@data-file";
+import { FileTable } from "@feature-folder";
 import { LightBox } from "@ui-light-box";
 import { computed, onMounted, ref } from "vue";
 
-const props = withDefaults(defineProps<{ taskId: string; editable?: boolean }>(), { editable: false });
+const props = withDefaults(defineProps<{ taskId: string; editable?: boolean; description?: string }>(), {
+	editable: false,
+	description: "",
+});
 const { fetchFiles, upload, deleteFiles, rename } = useFileStorageApi();
 const fileRecordsStore = useFileRecordsStore();
 const fileInput = ref<HTMLInputElement>();
@@ -53,6 +58,7 @@ const areUploadStatsVisible = computed(() => runningUploads.value > 0);
 const fileRecords = computed(() =>
 	fileRecordsStore.getFileRecordsByParentId(props.taskId).filter((file) => !file.isUploading)
 );
+const highlightedFileIds = computed(() => extractReferencedTaskFileIds(props.description));
 const uploadSelectedFiles = async (parentId = props.taskId) => {
 	if (!pendingFiles.value.length) return;
 	const files = pendingFiles.value;

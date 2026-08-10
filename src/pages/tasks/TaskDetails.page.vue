@@ -2,14 +2,14 @@
 	<DefaultWireframe :breadcrumbs="breadcrumbs" max-width="limited">
 		<template #header>
 			<div class="task-page-header">
-				<h1>{{ task?.name ?? t('common.words.task') }}</h1>
+				<h1>{{ task?.name ?? t("common.words.task") }}</h1>
 				<VChip
 					v-if="task"
 					class="task-status-chip"
 					:color="task.status.isDraft ? 'warning' : 'success'"
 					variant="tonal"
 				>
-					{{ task.status.isDraft ? 'Draft' : 'Published' }}
+					{{ task.status.isDraft ? "Draft" : "Published" }}
 				</VChip>
 				<KebabMenu v-if="task" :aria-label="t('common.words.task')" data-testid="task-menu">
 					<VListItem
@@ -63,17 +63,16 @@
 						<VCardTitle>Schedule</VCardTitle>
 						<VCardText class="d-flex flex-wrap ga-2">
 							<VChip v-if="task.availableDate">{{ formatDate(task.availableDate) }}</VChip>
-							<VChip v-if="task.dueDate">{{ t('pages.tasks.labels.due') }} {{ formatDate(task.dueDate) }}</VChip>
+							<VChip v-if="task.dueDate">{{ t("pages.tasks.labels.due") }} {{ formatDate(task.dueDate) }}</VChip>
 						</VCardText>
 					</VCard>
 
 					<VCard class="task-attachments-card" elevation="1">
 						<VCardTitle>Attachments</VCardTitle>
 						<VCardText>
-							<TaskFiles :task-id="task.id" />
+							<TaskFiles :task-id="task.id" :description="task.description?.content" />
 						</VCardText>
 					</VCard>
-
 				</div>
 			</template>
 		</SvsLoading>
@@ -81,21 +80,27 @@
 </template>
 
 <script setup lang="ts">
-import { getTask, useTaskActions } from "@data-tasks";
-import { DefaultWireframe } from "@ui-layout";
-import { SvsLoading } from "@ui-containers";
-import TaskFiles from "@/components/tasks/TaskFiles.vue";
-import renderMathInElement from "katex/dist/contrib/auto-render.js";
 import "katex/dist/katex.min.css";
-import { computed, nextTick, onMounted, ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
+import TaskFiles from "@/components/tasks/TaskFiles.vue";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { formatUtc } from "@/utils/date-time.utils";
 import type { TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
-import { mdiArchiveOutline, mdiFormatListChecks, mdiPencilOutline, mdiTrashCanOutline, mdiUndoVariant } from "@icons/material";
+import { getTask, useTaskActions } from "@data-tasks";
+import {
+	mdiArchiveOutline,
+	mdiFormatListChecks,
+	mdiPencilOutline,
+	mdiTrashCanOutline,
+	mdiUndoVariant,
+} from "@icons/material";
+import { SvsLoading } from "@ui-containers";
 import { KebabMenu } from "@ui-kebab-menu";
+import { DefaultWireframe } from "@ui-layout";
+import renderMathInElement from "katex/dist/contrib/auto-render.js";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
@@ -110,10 +115,8 @@ const canManage = computed(() => isTeacher.value === true);
 const canEdit = computed(() => canManage.value);
 const canFinish = computed(() => task.value !== undefined);
 const breadcrumbs = computed(() => [
-	{ title: t('common.words.tasks'), to: '/tasks' },
-	...(task.value?.courseName
-		? [{ title: task.value.courseName, to: `/courses/${task.value.courseId}` }]
-		: []),
+	{ title: t("common.words.tasks"), to: "/tasks" },
+	...(task.value?.courseName ? [{ title: task.value.courseName, to: `/courses/${task.value.courseId}` }] : []),
 	...(task.value?.lessonName
 		? [
 				{
@@ -124,9 +127,9 @@ const breadcrumbs = computed(() => [
 				},
 			]
 		: []),
-	{ title: task.value?.name ?? t('common.words.task'), disabled: true },
+	{ title: task.value?.name ?? t("common.words.task"), disabled: true },
 ]);
-const formatDate = (value: string) => formatUtc(value, 'dateTimeYY');
+const formatDate = (value: string) => formatUtc(value, "dateTimeYY");
 
 onMounted(async () => {
 	const result = await execute(() => getTask(route.params.taskId as string));
@@ -141,7 +144,7 @@ watch(
 		descriptionElement.value?.querySelectorAll(".math-tex").forEach((element) => {
 			renderMathInElement(element as HTMLElement);
 		});
-	},
+	}
 );
 
 const onDelete = async () => {

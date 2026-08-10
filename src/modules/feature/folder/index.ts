@@ -1,4 +1,5 @@
+import FileTable from "./file-table/FileTable.vue";
 import Folder from "./Folder.vue";
 import FolderTrash from "./FolderTrash.vue";
 
-export { Folder, FolderTrash };
+export { FileTable, Folder, FolderTrash };

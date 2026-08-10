@@ -1955,6 +1955,7 @@ export default {
 	"pages.security.text":
 		"Die dBildungscloud wird regelmäßig Sicherheitsüberprüfungen und Penetrationstests unterzogen, da uns die Sicherheit der Daten unserer Nutzer:innen sehr wichtig ist. Du hast trotzdem ein Sicherheitsproblem gefunden? Schreib uns, damit wir die Lücke schnellstmöglich schließen können: ",
 	"pages.tasks.labels.due": "Abgabe",
+	"pages.tasks.files.usedInDescription": "In der Aufgabenstellung verwendet",
 	"pages.tasks.labels.noCourse": "Ohne Kurszuordnung",
 	"pages.tasks.labels.planned": "Geplant",
 	"pages.tasks.graded": "Bewertet",
