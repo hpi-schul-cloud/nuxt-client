@@ -169,6 +169,42 @@ const mockApiTimeout = (type: ContentItemTypeEnum) => {
 	return timeoutError;
 };
 
+const mockApiErrorWithStatus = (type: ContentItemTypeEnum, statusCode: number, statusText: string) => {
+	const error = createAxiosError({
+		statusCode,
+		statusText,
+		message: statusText,
+		data: {
+			code: statusCode,
+			type: statusText,
+			title: statusText,
+			message: statusText,
+		},
+	});
+
+	switch (type) {
+		case ContentItemTypeEnum.Course:
+			courseRoomsApi.courseRoomsControllerCopyCourse.mockRejectedValue(error);
+			break;
+		case ContentItemTypeEnum.Task:
+			taskApi.taskControllerCopyTask.mockRejectedValue(error);
+			break;
+		case ContentItemTypeEnum.Lesson:
+			courseRoomsApi.courseRoomsControllerCopyLesson.mockRejectedValue(error);
+			break;
+		case ContentItemTypeEnum.ColumnBoard:
+			boardApi.boardControllerCopyBoard.mockRejectedValue(error);
+			break;
+		case ContentItemTypeEnum.Room:
+			roomApi.roomControllerCopyRoom.mockRejectedValue(error);
+			break;
+		default:
+			throw new Error("Unknown type");
+	}
+
+	return error;
+};
+
 describe("useCopyFlow", () => {
 	beforeEach(async () => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
@@ -324,6 +360,42 @@ describe("useCopyFlow", () => {
 					await resultPromise;
 					expectNotification("warning");
 					expect(useNotificationStore().notify).not.toHaveBeenCalledWith(expect.objectContaining({ status: "error" }));
+					expect(useNotificationStore().notify).not.toHaveBeenCalledWith(
+						expect.objectContaining({ status: "success" })
+					);
+				});
+			});
+
+			describe("and the api call fails with a non-timeout axios error", () => {
+				const setup = () => {
+					const apiError = mockApiErrorWithStatus(type, 500, "Internal Server Error");
+					vi.mocked(featureDialog.openDialog).mockResolvedValue({ completed: true, data: true });
+					const composable = mountCopyFlowComposable(type);
+					const resultPromise = composable.executeCopyMethod();
+					return { ...composable, resultPromise, apiError };
+				};
+
+				it("should return the original error", async () => {
+					const { resultPromise, apiError } = setup();
+					const { success, result, error } = await resultPromise;
+					expect(success).toBe(false);
+					expect(result).toBeUndefined();
+					expect(error).toBe(apiError);
+				});
+
+				it("should log the error", async () => {
+					const { resultPromise, apiError } = setup();
+					await resultPromise;
+					expect(logger.error).toHaveBeenCalledWith(apiError);
+				});
+
+				it("should show a generic error notification and no warning", async () => {
+					const { resultPromise } = setup();
+					await resultPromise;
+					expectNotification("error");
+					expect(useNotificationStore().notify).not.toHaveBeenCalledWith(
+						expect.objectContaining({ status: "warninggg" })
+					);
 					expect(useNotificationStore().notify).not.toHaveBeenCalledWith(
 						expect.objectContaining({ status: "success" })
 					);
