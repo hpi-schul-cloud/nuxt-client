@@ -20,6 +20,12 @@ export const useNewsActions = () => {
 			t("common.notifications.errors.notLoaded", { count: 2, type: t("common.words.news", 2) })
 		);
 
+	const fetchNewsPage = async ({ limit, skip, unpublished }: { limit: number; skip: number; unpublished: boolean }) =>
+		await execute(
+			() => newsApi.newsControllerFindAll(undefined, undefined, unpublished, skip, limit),
+			t("common.notifications.errors.notLoaded", { count: 2, type: t("common.words.news", 2) })
+		);
+
 	const fetchNews = async (newsId: string) =>
 		await execute(
 			() => newsApi.newsControllerFindOne(newsId),
@@ -59,6 +65,7 @@ export const useNewsActions = () => {
 
 	return {
 		fetchNewsList,
+		fetchNewsPage,
 		fetchNews,
 		saveNews,
 		deleteNews,
