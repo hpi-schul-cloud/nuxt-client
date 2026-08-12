@@ -943,7 +943,7 @@ export default {
 	"feature-copy.inProgress.ariaLabelSuffix": "se sigue copiando",
 	"feature-copy.inProgress.timeoutSuccess": "El proceso de duplicación ha finalizado.",
 	"feature-copy.notifications.duplicationInProgress":
-		"{type} se está duplicando actualmente. Esto está tardando más de lo esperado. Por favor, vuelve a comprobarlo más tarde. | {type} se están duplicando actualmente. Esto está tardando más de lo esperado. Por favor, vuelve a comprobarlo más tarde."
+		"{type} se está duplicando actualmente. Esto está tardando más de lo esperado. Por favor, vuelve a comprobarlo más tarde. | {type} se están duplicando actualmente. Esto está tardando más de lo esperado. Por favor, vuelve a comprobarlo más tarde.",
 	"feature-copy.notifications.success.successfullyCopied": "{type} duplicado con éxito",
 	"feature-copy.copyInfo.type.course": "Curso",
 	"feature-copy.copyInfo.type.board": "Tablero",
