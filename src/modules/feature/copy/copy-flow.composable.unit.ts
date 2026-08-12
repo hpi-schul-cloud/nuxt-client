@@ -341,10 +341,10 @@ describe("useCopyFlow", () => {
 					expect(featureDialog.withGlobalLoadingState).toHaveBeenCalledOnce();
 				});
 
-				it("should return a successful in-progress result", async () => {
+				it("should return a failed in-progress result", async () => {
 					const { resultPromise } = setup();
 					const { success, result, error } = await resultPromise;
-					expect(success).toBe(true);
+					expect(success).toBe(false);
 					expect(result).toBeUndefined();
 					expect(error).toEqual(new Error("Copy is still in progress"));
 				});

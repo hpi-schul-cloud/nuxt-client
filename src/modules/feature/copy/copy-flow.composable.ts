@@ -4,6 +4,7 @@ import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { BoardApiFactory, CourseRoomsApiFactory, RoomApiFactory, TaskApiFactory } from "@api-server";
 import { notifySuccess, notifyWarning } from "@data-app";
 import { openDialog, withGlobalLoadingState } from "@feature-dialog";
+import { isAxiosError } from "axios";
 import { useI18n } from "vue-i18n";
 
 export const useCopyFlow = () => {
@@ -24,8 +25,13 @@ export const useCopyFlow = () => {
 		t("common.notifications.errors.notDuplicated", { type: getTypeLabel(type) });
 
 	const isCopyInProgress = (error: Error | undefined) => {
-		if (!error) return false;
+		if (!error || !isAxiosError(error)) return false;
 
+		if (error.response?.status === 504) {
+			return true;
+		}
+
+		// Fallback for payload-driven API errors when HTTP status is not available.
 		const apiError = mapAxiosErrorToResponseError(error);
 		return apiError.code === 504;
 	};
@@ -56,7 +62,7 @@ export const useCopyFlow = () => {
 
 		if (isCopyInProgress(error)) {
 			notifyCopyInProgress(type);
-			return { result: undefined, success: true, error: copyInProgressError() };
+			return { result: undefined, success: false, error: copyInProgressError() };
 		}
 
 		return { result: undefined, success: false, error };
