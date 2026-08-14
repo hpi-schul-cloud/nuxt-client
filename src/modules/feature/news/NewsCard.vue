@@ -19,18 +19,18 @@
 		</VCardTitle>
 		<VCardText class="flex-grow-1 pt-3 text-md" data-testid="news-content">
 			<div class="news-content-truncate">
-				<RenderHTML :html="newsItem.content" />
+				<RenderHTML :html="newsItem.content" config="richTextNoLinks" />
 			</div>
 		</VCardText>
 	</VCard>
 </template>
 
 <script setup lang="ts">
-import type { NewsCardItem } from "./news-card.types";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { NewsTargetModel } from "@api-server";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
+import type { NewsCardItem } from "./news-card.types";
 
 withDefaults(
 	defineProps<{
