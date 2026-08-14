@@ -128,11 +128,31 @@ jobs:
     steps:
       - run: echo "deploy was successful"
 
+  resolve_e2e_ref:
+    needs:
+      - branch_meta
+    runs-on: ubuntu-latest
+    outputs:
+      ref: ${{ steps.resolve.outputs.ref }}
+    steps:
+      - name: Resolve e2e branch
+        id: resolve
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="${{ needs.branch_meta.outputs.branch }}"
+          if gh api repos/hpi-schul-cloud/e2e-system-tests/branches/${BRANCH} &>/dev/null; then
+            echo "ref=${BRANCH}" >> $GITHUB_OUTPUT
+          else
+            echo "ref=main" >> $GITHUB_OUTPUT
+          fi
+
   cy-e2e-tests:
     needs:
       - branch_meta
       - deploy
-    uses: hpi-schul-cloud/e2e-system-tests/.github/workflows/remote-trigger.yml@main
+      - resolve_e2e_ref
+    uses: hpi-schul-cloud/e2e-system-tests/.github/workflows/remote-trigger.yml@${{ needs.resolve_e2e_ref.outputs.ref }}
     with:
       ref: ${{ needs.branch_meta.outputs.branch }}
     secrets:
