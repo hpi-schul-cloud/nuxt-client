@@ -20,35 +20,7 @@
 				</template>
 			</EmptyState>
 			<template v-else>
-				<div class="news-grid mt-8" data-testid="news-section">
-					<VCard
-						v-for="newsItem in news"
-						:key="newsItem.id"
-						class="d-flex flex-column news-card"
-						:href="`/news/${newsItem.id}`"
-						data-testid="news-card-item"
-						@dragstart.prevent
-					>
-						<VCardTitle class="news-card-title bg-primary-lighten text-wrap">
-							<div class="d-flex align-center">
-								<VIcon size="14" class="mr-1" :icon="mdiNewspaperVariantOutline" />
-								<span class="text-sm font-weight-regular">{{ fromNowUtc(newsItem.displayAt) }}</span>
-								<VChip
-									v-if="newsItem.targetModel === NewsTargetModel.TEAMS"
-									class="ml-auto"
-									size="small"
-									variant="tonal"
-								>
-									{{ newsItem.target.name }}
-								</VChip>
-							</div>
-							<h2 class="text-h4 my-1 news-title" data-testid="news-title">{{ newsItem.title }}</h2>
-						</VCardTitle>
-						<VCardText class="flex-grow-1 pt-3 text-md">
-							<RenderHTML :html="newsItem.content" class="news-content" data-testid="news-content" />
-						</VCardText>
-					</VCard>
-				</div>
+				<NewsGrid class="mt-8" :news-items="news" />
 				<VPagination
 					v-if="pageCount > 1"
 					:model-value="currentPage"
@@ -64,13 +36,12 @@
 
 <script setup lang="ts">
 import SvgNewsEmpty from "@/assets/img/SvgNewsEmpty.vue";
-import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { NewsResponse, NewsTargetModel, Permission } from "@api-server";
+import { NewsResponse, Permission } from "@api-server";
 import { useNewsActions } from "@data-access";
 import { useAppStore } from "@data-app";
-import { RenderHTML } from "@feature-render-html";
-import { mdiEyeOffOutline, mdiEyeOutline, mdiNewspaperVariantOutline, mdiPlus } from "@icons/material";
+import { NewsGrid } from "@feature-news";
+import { mdiEyeOffOutline, mdiEyeOutline, mdiPlus } from "@icons/material";
 import { SvsLoading } from "@ui-containers";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
@@ -140,35 +111,3 @@ watch(activeTab, async () => {
 loadNews();
 loadUnpublishedTotal();
 </script>
-
-<style scoped>
-.news-grid {
-	display: grid;
-	gap: 12px;
-	grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr));
-}
-
-.news-card {
-	min-width: 312px;
-}
-
-.news-card-title {
-	color: rgba(var(--v-theme-on-surface)) !important;
-}
-
-.news-title {
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 2;
-	line-clamp: 2;
-	overflow: hidden;
-}
-
-.news-content {
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 3;
-	line-clamp: 3;
-	overflow: hidden;
-}
-</style>

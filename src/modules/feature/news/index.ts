@@ -1,3 +1,5 @@
+import NewsCard from "./NewsCard.vue";
 import NewsForm from "./NewsForm.vue";
+import NewsGrid from "./NewsGrid.vue";
 
-export { NewsForm };
+export { NewsCard, NewsForm, NewsGrid };
