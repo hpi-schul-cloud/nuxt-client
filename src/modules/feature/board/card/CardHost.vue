@@ -280,7 +280,7 @@ const { run: duplicateCard, loadingState: duplicateCardLoadingState } = useSafeT
 	await cardStore.duplicateCard({ cardId: props.cardId });
 });
 
-const isDuplicating = computed(() => ["loading", "extLoading"].includes(duplicateCardLoadingState.value));
+const isDuplicating = computed(() => duplicateCardLoadingState.value === "loading");
 
 const onOpenDetailView = () => {
 	const boardId = boardStore.board?.id;

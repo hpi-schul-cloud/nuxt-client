@@ -165,7 +165,7 @@ const { run: duplicateColumn, loadingState: duplicateColumnLoadingState } = useS
 	await boardStore.duplicateColumn({ columnId: props.columnId });
 });
 
-const isDuplicating = computed(() => ["loading", "extLoading"].includes(duplicateColumnLoadingState.value));
+const isDuplicating = computed(() => duplicateColumnLoadingState.value === "loading");
 
 const onShareColumn = () => emit("share:column", props.columnId);
 

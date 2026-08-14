@@ -274,7 +274,7 @@ describe("CardHost", () => {
 				await wrapper.vm.$nextTick();
 				expect(wrapper.findAllComponents(CardSkeleton)).toHaveLength(1);
 
-				await vi.advanceTimersByTimeAsync(500);
+				await vi.advanceTimersByTimeAsync(50);
 				await wrapper.vm.$nextTick();
 				expect(wrapper.findAllComponents(CardSkeleton)).toHaveLength(0);
 			});
