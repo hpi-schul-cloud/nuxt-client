@@ -179,6 +179,32 @@ describe("useSafeAxiosTask", () => {
 		);
 	});
 
+	it("should not notify when skipErrorNotification returns true", async () => {
+		const error = new Error("Test error");
+		const mockFn = vi.fn().mockRejectedValue(error);
+		const skipErrorNotification = vi.fn().mockReturnValue(true);
+
+		const { execute } = useSafeAxiosTask();
+		await execute(mockFn, "Something went wrong", { skipErrorNotification });
+
+		expect(skipErrorNotification).toHaveBeenCalledWith(error);
+		expect(useNotificationStore().notify).not.toHaveBeenCalled();
+	});
+
+	it("should notify when skipErrorNotification returns false", async () => {
+		const error = new Error("Test error");
+		const mockFn = vi.fn().mockRejectedValue(error);
+		const skipErrorNotification = vi.fn().mockReturnValue(false);
+
+		const { execute } = useSafeAxiosTask();
+		await execute(mockFn, "Something went wrong", { skipErrorNotification });
+
+		expect(skipErrorNotification).toHaveBeenCalledWith(error);
+		expect(useNotificationStore().notify).toHaveBeenCalledWith(
+			expect.objectContaining({ status: "error", text: "Something went wrong" })
+		);
+	});
+
 	describe("loadingState", () => {
 		beforeEach(() => {
 			vi.useFakeTimers();
