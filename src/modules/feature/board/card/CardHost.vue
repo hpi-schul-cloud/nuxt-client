@@ -56,7 +56,6 @@
 							<KebabMenuActionDuplicate
 								v-if="allowedOperations?.copyCard"
 								data-testid="kebab-menu-action-duplicate-card"
-								:loading="isDuplicating"
 								@click="duplicateCard"
 							/>
 							<KebabMenuActionExport v-if="allowedOperations?.moveCard" @click="onMoveCard(cardId)" />
@@ -88,9 +87,6 @@
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
-		<VCard v-if="isDuplicating" class="mt-3">
-			<CardSkeleton :height />
-		</VCard>
 	</div>
 </template>
 
@@ -114,6 +110,7 @@ import {
 	useCardStore,
 	useCourseBoardEditMode,
 } from "@data-board";
+import { withGlobalLoadingState } from "@feature-dialog";
 import { BoardMenu, BoardMenuScope, DetailViewButton } from "@ui-board";
 import { SvsColorPickerMenu } from "@ui-controls";
 import {
@@ -276,11 +273,12 @@ const boardMenuClasses = computed(() => {
 	return "hidden";
 });
 
-const { run: duplicateCard, loadingState: duplicateCardLoadingState } = useSafeTaskRunner(async () => {
-	await cardStore.duplicateCard({ cardId: props.cardId });
+const { run: duplicateCard } = useSafeTaskRunner(async () => {
+	await withGlobalLoadingState(
+		() => cardStore.duplicateCard({ cardId: props.cardId }),
+		t("feature-copy.inProgress.title.loading")
+	);
 });
-
-const isDuplicating = computed(() => duplicateCardLoadingState.value === "loading");
 
 const onOpenDetailView = () => {
 	const boardId = boardStore.board?.id;

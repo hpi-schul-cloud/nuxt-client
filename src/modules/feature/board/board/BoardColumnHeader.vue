@@ -29,7 +29,6 @@
 					<KebabMenuActionDuplicate
 						v-if="allowedOperations?.copyColumn"
 						data-testid="kebab-menu-action-duplicate-column"
-						:loading="isDuplicating"
 						@click="duplicateColumn"
 					/>
 					<KebabMenuActionShare
@@ -60,6 +59,7 @@ import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { useBoardAllowedOperations, useBoardFocusHandler, useBoardStore, useCourseBoardEditMode } from "@data-board";
 import { useEnvConfig } from "@data-env";
+import { withGlobalLoadingState } from "@feature-dialog";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
 	KebabMenuActionDelete,
@@ -161,11 +161,12 @@ const onMoveColumnUp = () => emit("move:column-up");
 
 const onUpdateTitle = (newTitle: string) => (updatedTitle.value = newTitle);
 
-const { run: duplicateColumn, loadingState: duplicateColumnLoadingState } = useSafeTaskRunner(async () => {
-	await boardStore.duplicateColumn({ columnId: props.columnId });
+const { run: duplicateColumn } = useSafeTaskRunner(async () => {
+	await withGlobalLoadingState(
+		() => boardStore.duplicateColumn({ columnId: props.columnId }),
+		t("feature-copy.inProgress.title.loading")
+	);
 });
-
-const isDuplicating = computed(() => duplicateColumnLoadingState.value === "loading");
 
 const onShareColumn = () => emit("share:column", props.columnId);
 
