@@ -54,6 +54,7 @@ const NEWS_PER_PAGE = 10;
 const { t } = useI18n();
 const appStore = useAppStore();
 const { fetchNewsPage, loadingState } = useNewsActions();
+const { fetchNewsPage: fetchNewsCountPage } = useNewsActions();
 
 const news = ref<NewsResponse[]>([]);
 const total = ref(0);
@@ -95,8 +96,10 @@ const loadNews = async () => {
 
 const loadUnpublishedTotal = async () => {
 	if (!canEditNews.value) return;
-	const { success, result } = await fetchNewsPage({ limit: 1, skip: 0, unpublished: true });
-	if (success && result) unpublishedTotal.value = result.data.total;
+	const { success, result } = await fetchNewsCountPage({ limit: 1, skip: 0, unpublished: true });
+	if (success && result) {
+		unpublishedTotal.value = result.data.total;
+	}
 };
 
 const onPageChange = async (page: number) => {
