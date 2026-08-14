@@ -56,6 +56,7 @@
 							<KebabMenuActionDuplicate
 								v-if="allowedOperations?.copyCard"
 								data-testid="kebab-menu-action-duplicate-card"
+								:loading="isDuplicating"
 								@click="duplicateCard"
 							/>
 							<KebabMenuActionExport v-if="allowedOperations?.moveCard" @click="onMoveCard(cardId)" />
@@ -275,9 +276,11 @@ const boardMenuClasses = computed(() => {
 	return "hidden";
 });
 
-const { run: duplicateCard, isRunning: isDuplicating } = useSafeTaskRunner(async () => {
+const { run: duplicateCard, loadingState: duplicateCardLoadingState } = useSafeTaskRunner(async () => {
 	await cardStore.duplicateCard({ cardId: props.cardId });
 });
+
+const isDuplicating = computed(() => ["loading", "extLoading"].includes(duplicateCardLoadingState.value));
 
 const onOpenDetailView = () => {
 	const boardId = boardStore.board?.id;

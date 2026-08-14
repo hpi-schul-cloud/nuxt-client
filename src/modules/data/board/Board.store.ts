@@ -57,9 +57,10 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const roomId = ref<string | undefined>(undefined);
 
 	const restApi = useBoardRestApi();
+	const socketApi = useBoardSocketApi();
 	const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
-	const socketOrRest = isSocketEnabled ? useBoardSocketApi() : restApi;
+	const socketOrRest = isSocketEnabled ? socketApi : restApi;
 	const isConnected = computed(() => socketOrRest.connected.value);
 
 	const { setEditModeId } = useSharedEditMode();
@@ -164,7 +165,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		});
 	};
 
-	const duplicateColumn = socketOrRest.duplicateColumnRequest;
+	const duplicateColumn = socketApi.duplicateColumnRequest;
 
 	const hasRelevantContentForDuplicationWarning = (column: ColumnFullResponse): boolean =>
 		column.cards.some((card) =>

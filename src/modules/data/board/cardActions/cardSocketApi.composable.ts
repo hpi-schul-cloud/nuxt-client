@@ -152,9 +152,7 @@ export const useCardSocketApi = () => {
 		emitOnSocket("update-card-height-request", payload);
 	};
 
-	const duplicateCardRequest = (payload: DuplicateCardRequestPayload) => {
-		emitOnSocket("duplicate-card-request", payload);
-	};
+	const duplicateCardRequest = (payload: DuplicateCardRequestPayload) => emitWithAck("duplicate-card-request", payload);
 
 	const reloadBoard = (cardId = "") => {
 		const boardStore = useBoardStore();

@@ -35,9 +35,10 @@ export const useCardStore = defineStore("cardStore", () => {
 	const { disableFileSelectOnMount, resetFileSelectOnMountEnabled } = useSharedFileSelect();
 
 	const restApi = useCardRestApi();
+	const socketApi = useCardSocketApi();
 	const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
-	const socketOrRest = isSocketEnabled ? useCardSocketApi() : restApi;
+	const socketOrRest = isSocketEnabled ? socketApi : restApi;
 
 	const { setFocus, forceFocus } = useBoardFocusHandler();
 	const { setEditModeId, editModeId } = useSharedEditMode();
@@ -91,7 +92,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		card.height = payload.newHeight;
 	};
 
-	const duplicateCard = socketOrRest.duplicateCardRequest;
+	const duplicateCard = socketApi.duplicateCardRequest;
 
 	const hasRelevantContentForDuplicationWarning = (card: CardResponse): boolean =>
 		card.elements.some((element) =>

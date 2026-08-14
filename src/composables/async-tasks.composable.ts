@@ -89,15 +89,16 @@ export const useSafeAxiosTask = () => {
 
 export const useSafeTaskRunner = <T>(fn: AsyncFunction<T>, onErrorNotifyMessage?: string) => {
 	const { error, status, isRunning, execute, reset } = useSafeTask();
+	const { loadingState, withLoadingState } = useDebouncedLoading();
 
 	const data = ref<T>();
 
 	const run = async () => {
-		const { result, success } = await execute(fn, onErrorNotifyMessage);
+		const { result, success } = await withLoadingState(() => execute(fn, onErrorNotifyMessage));
 		data.value = result;
 		return { result, success };
 	};
-	return { data: readonly(data), error, status, isRunning, run, reset };
+	return { data: readonly(data), error, status, isRunning, loadingState, run, reset };
 };
 
 export const useSafeAxiosRunner = <T>(

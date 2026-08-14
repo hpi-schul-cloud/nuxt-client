@@ -255,21 +255,28 @@ describe("CardHost", () => {
 				expect(useCardStore().duplicateCard).toHaveBeenCalledWith({ cardId });
 			});
 
-			it("should show card skeleton while duplicating", async () => {
+			it("should show card skeleton only after duplication takes a little longer", async () => {
+				vi.useFakeTimers();
 				const { wrapper } = setup({ allowedOperations: { copyCard: true } });
 				const cardStore = mockedPiniaStoreTyping(useCardStore);
-				cardStore.duplicateCard.mockResolvedValueOnce();
+				cardStore.duplicateCard.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 250)));
 
 				const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
 				await duplicateButton.trigger("click");
 
-				const cardSkeletons = wrapper.findAllComponents(CardSkeleton);
-				expect(cardSkeletons).toHaveLength(1);
+				expect(wrapper.findAllComponents(CardSkeleton)).toHaveLength(0);
 
+				await vi.advanceTimersByTimeAsync(199);
 				await wrapper.vm.$nextTick();
+				expect(wrapper.findAllComponents(CardSkeleton)).toHaveLength(0);
 
-				const cardSkeletonsAfterDuplicationFinished = wrapper.findAllComponents(CardSkeleton);
-				expect(cardSkeletonsAfterDuplicationFinished).toHaveLength(0);
+				await vi.advanceTimersByTimeAsync(1);
+				await wrapper.vm.$nextTick();
+				expect(wrapper.findAllComponents(CardSkeleton)).toHaveLength(1);
+
+				await vi.advanceTimersByTimeAsync(500);
+				await wrapper.vm.$nextTick();
+				expect(wrapper.findAllComponents(CardSkeleton)).toHaveLength(0);
 			});
 		});
 

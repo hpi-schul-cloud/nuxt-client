@@ -7,7 +7,6 @@ import {
 	CreateElementRequestPayload,
 	DeleteCardRequestPayload,
 	DeleteElementRequestPayload,
-	DuplicateCardRequestPayload,
 	FetchCardRequestPayload,
 	MoveElementRequestPayload,
 	UpdateCardColorRequestPayload,
@@ -19,7 +18,6 @@ import { AnyContentElement } from "@/types/board/ContentElement";
 import { delay } from "@/utils/helpers";
 import {
 	ContentElementType,
-	CopyStatusEnum,
 	ExternalToolElementResponse,
 	PreferredToolListResponse,
 	PreferredToolResponse,
@@ -55,7 +53,6 @@ export const useCardRestApi = () => {
 		updateCardTitle,
 		updateCardColor,
 		updateCardHeightCall,
-		duplicateCardCall,
 	} = useBoardApi();
 
 	const { fetchPreferredTools, createContextExternalToolCall, fetchAvailableToolsForContextCall } =
@@ -217,34 +214,6 @@ export const useCardRestApi = () => {
 		}
 	};
 
-	const duplicateCardRequest = async (payload: DuplicateCardRequestPayload) => {
-		const card = cardStore.getCard(payload.cardId);
-		if (card === undefined) return;
-
-		try {
-			const duplicatedCard = await duplicateCardCall(payload.cardId);
-
-			if (duplicatedCard.id) {
-				boardStore.duplicateCardSuccess({
-					cardId: payload.cardId,
-					duplicatedCard,
-					status: CopyStatusEnum.SUCCESS,
-					isOwnAction: true,
-				});
-				cardStore.duplicateCardSuccess({
-					cardId: payload.cardId,
-					duplicatedCard,
-					status: CopyStatusEnum.SUCCESS,
-					isOwnAction: true,
-				});
-			}
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notDuplicated", "boardCard"),
-			});
-		}
-	};
-
 	const fetchCardRequest = async (payload: FetchCardRequestPayload): Promise<void> => {
 		await delay(100);
 		try {
@@ -318,7 +287,6 @@ export const useCardRestApi = () => {
 		deleteElementRequest,
 		moveElementRequest,
 		updateElementRequest,
-		duplicateCardRequest,
 		deleteCardRequest,
 		fetchCardRequest,
 		updateCardTitleRequest,

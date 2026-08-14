@@ -6,7 +6,6 @@ import {
 	CreateColumnRequestPayload,
 	DeleteBoardRequestPayload,
 	DeleteColumnRequestPayload,
-	DuplicateColumnRequestPayload,
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
 	MoveCardToBoardRequestPayload,
@@ -19,7 +18,6 @@ import {
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
 import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
-import { CopyStatusEnum } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { BoardObjectType, ErrorType, useErrorHandler } from "@util-error-handling";
@@ -33,7 +31,6 @@ export const useBoardRestApi = () => {
 		createCardCall,
 		createColumnCall,
 		deleteColumnCall,
-		duplicateColumnCall,
 		fetchBoardCall,
 		moveCardCall,
 		moveCardToBoardCall,
@@ -112,28 +109,6 @@ export const useBoardRestApi = () => {
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardColumn"),
-			});
-		}
-	};
-
-	const duplicateColumnRequest = async (payload: DuplicateColumnRequestPayload) => {
-		const columnIndex = boardStore.getColumnIndex(payload.columnId);
-		if (columnIndex < 0) return;
-
-		try {
-			const duplicatedColumn = await duplicateColumnCall(payload.columnId);
-
-			if (duplicatedColumn.id) {
-				boardStore.duplicateColumnSuccess({
-					columnId: payload.columnId,
-					duplicatedColumn,
-					status: CopyStatusEnum.SUCCESS,
-					isOwnAction: true,
-				});
-			}
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notDuplicated", "boardColumn"),
 			});
 		}
 	};
@@ -328,7 +303,6 @@ export const useBoardRestApi = () => {
 		createColumnRequest,
 		deleteBoardRequest,
 		deleteColumnRequest,
-		duplicateColumnRequest,
 		moveCardRequest,
 		moveCardToBoardRequest,
 		moveColumnRequest,

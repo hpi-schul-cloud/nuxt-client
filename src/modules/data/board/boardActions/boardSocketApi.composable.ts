@@ -197,9 +197,8 @@ export const useBoardSocketApi = () => {
 		useAppStore().handleApplicationError(HttpStatusCode.NotFound, "components.board.error.404");
 	};
 
-	const duplicateColumnRequest = (payload: DuplicateColumnRequestPayload) => {
-		emitOnSocket("duplicate-column-request", payload);
-	};
+	const duplicateColumnRequest = (payload: DuplicateColumnRequestPayload) =>
+		emitWithAck("duplicate-column-request", payload);
 
 	const reloadBoard = () => {
 		const boardId = boardStore.board?.id;

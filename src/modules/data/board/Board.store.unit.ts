@@ -1202,20 +1202,12 @@ describe("BoardStore", () => {
 		describe("@duplicateColumn", () => {
 			const payload = { columnId: "testColumnId" };
 
-			it("should call socketApi.duplicateColumnRequest when feature flag is set true", async () => {
-				const { boardStore } = setup({ socketFlag: true });
-
-				await boardStore.duplicateColumn(payload);
-
-				expect(mockedBoardSocketApi.duplicateColumnRequest).toHaveBeenCalledWith(payload);
-			});
-
-			it("should call restApi.duplicateColumnRequest when feature flag is set false", async () => {
+			it("should call socketApi.duplicateColumnRequest", async () => {
 				const { boardStore } = setup();
 
 				await boardStore.duplicateColumn(payload);
 
-				expect(mockedBoardRestApi.duplicateColumnRequest).toHaveBeenCalledWith(payload);
+				expect(mockedBoardSocketApi.duplicateColumnRequest).toHaveBeenCalledWith(payload);
 			});
 		});
 

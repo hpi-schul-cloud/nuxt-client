@@ -278,26 +278,14 @@ describe("CardStore", () => {
 	});
 
 	describe("duplicateCardRequest", () => {
-		it("should call socket Api if feature flag is enabled", () => {
-			const { cardStore, cardId } = setup(true);
-
-			cardStore.duplicateCard({
-				cardId,
-			});
-
-			expect(mockedCardSocketApiActions.duplicateCardRequest).toHaveBeenCalledWith({
-				cardId,
-			});
-		});
-
-		it("should call rest Api if feature flag is enabled", () => {
+		it("should call socket Api", () => {
 			const { cardStore, cardId } = setup();
 
 			cardStore.duplicateCard({
 				cardId,
 			});
 
-			expect(mockedCardRestApiActions.duplicateCardRequest).toHaveBeenCalledWith({
+			expect(mockedCardSocketApiActions.duplicateCardRequest).toHaveBeenCalledWith({
 				cardId,
 			});
 		});

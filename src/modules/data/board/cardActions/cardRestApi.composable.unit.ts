@@ -19,7 +19,6 @@ import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFac
 import {
 	Colors,
 	ContentElementType,
-	CopyStatusEnum,
 	ExternalToolElementResponse,
 	PreferredToolListResponse,
 	PreferredToolResponse,
@@ -708,51 +707,6 @@ describe("useCardRestApi", () => {
 			mockedBoardApiCalls.deleteCardCall.mockRejectedValue({});
 
 			await deleteCardRequest({ cardId });
-
-			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
-		});
-	});
-
-	describe("duplicateCardRequest", () => {
-		it("should not call duplicateCardSuccess action when card is undefined", async () => {
-			const { cardStore } = setup();
-			const { duplicateCardRequest } = useCardRestApi();
-
-			cardStore.getCard.mockReturnValue(undefined);
-
-			await duplicateCardRequest({ cardId: "cardId" });
-
-			expect(cardStore.duplicateCardSuccess).not.toHaveBeenCalled();
-		});
-
-		it("should call duplicateCardSuccess action if the API call is successful", async () => {
-			const { cardStore, card } = setup();
-			const { duplicateCardRequest } = useCardRestApi();
-			const cardId = card.id;
-
-			cardStore.getCard.mockReturnValue(card);
-			const duplicatedCard = { ...card, id: "newCardId" };
-			mockedBoardApiCalls.duplicateCardCall.mockResolvedValue(duplicatedCard);
-
-			await duplicateCardRequest({ cardId });
-
-			expect(cardStore.duplicateCardSuccess).toHaveBeenCalledWith({
-				cardId,
-				duplicatedCard,
-				status: CopyStatusEnum.SUCCESS,
-				isOwnAction: true,
-			});
-		});
-
-		it("should call handleError if the API call fails", async () => {
-			const { cardStore, card } = setup();
-			const { duplicateCardRequest } = useCardRestApi();
-			const cardId = card.id;
-
-			cardStore.getCard.mockReturnValue(card);
-			mockedBoardApiCalls.duplicateCardCall.mockRejectedValue({});
-
-			await duplicateCardRequest({ cardId });
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});

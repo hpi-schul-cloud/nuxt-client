@@ -29,6 +29,7 @@
 					<KebabMenuActionDuplicate
 						v-if="allowedOperations?.copyColumn"
 						data-testid="kebab-menu-action-duplicate-column"
+						:loading="isDuplicating"
 						@click="duplicateColumn"
 					/>
 					<KebabMenuActionShare
@@ -160,9 +161,11 @@ const onMoveColumnUp = () => emit("move:column-up");
 
 const onUpdateTitle = (newTitle: string) => (updatedTitle.value = newTitle);
 
-const { run: duplicateColumn } = useSafeTaskRunner(async () => {
+const { run: duplicateColumn, loadingState: duplicateColumnLoadingState } = useSafeTaskRunner(async () => {
 	await boardStore.duplicateColumn({ columnId: props.columnId });
 });
+
+const isDuplicating = computed(() => ["loading", "extLoading"].includes(duplicateColumnLoadingState.value));
 
 const onShareColumn = () => emit("share:column", props.columnId);
 
