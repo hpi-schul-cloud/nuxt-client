@@ -432,13 +432,13 @@ describe("useCardSocketApi", () => {
 	});
 
 	describe("duplicateCardRequest", () => {
-		it("should call emitWithAck with correct parameters", async () => {
+		it("should call emitOnSocket with correct parameters", () => {
 			const payload: DuplicateCardRequestPayload = { cardId: "cardId" };
 			const { duplicateCardRequest } = useCardSocketApi();
 
-			await duplicateCardRequest(payload);
+			duplicateCardRequest(payload);
 
-			expect(socketMock.emitWithAck).toHaveBeenCalledWith("duplicate-card-request", payload);
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("duplicate-card-request", payload);
 		});
 	});
 

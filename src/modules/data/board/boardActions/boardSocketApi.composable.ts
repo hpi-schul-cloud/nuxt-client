@@ -28,6 +28,30 @@ import { useAppStore } from "@data-app";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
+	const pendingDuplicateColumnRequests = new Map<
+		string,
+		{
+			resolve: () => void;
+			reject: (error?: unknown) => void;
+		}
+	>();
+
+	const resolveDuplicateColumnRequest = (columnId: string) => {
+		const pendingRequest = pendingDuplicateColumnRequests.get(columnId);
+		if (!pendingRequest) return;
+
+		pendingDuplicateColumnRequests.delete(columnId);
+		pendingRequest.resolve();
+	};
+
+	const rejectDuplicateColumnRequest = (columnId: string, errorMessage: string) => {
+		const pendingRequest = pendingDuplicateColumnRequests.get(columnId);
+		if (!pendingRequest) return;
+
+		pendingDuplicateColumnRequests.delete(columnId);
+		pendingRequest.reject(new Error(errorMessage));
+	};
+
 	const {
 		notifyCreateCardSuccess,
 		notifyCreateColumnSuccess,
@@ -62,7 +86,10 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.updateBoardVisibilitySuccess, boardStore.updateBoardVisibilitySuccess),
 			on(BoardActions.updateBoardLayoutSuccess, boardStore.updateBoardLayoutSuccess),
 			on(BoardActions.updateReaderCanEditSuccess, boardStore.updateReaderCanEditSuccess),
-			on(BoardActions.duplicateColumnSuccess, boardStore.duplicateColumnSuccess),
+			on(BoardActions.duplicateColumnSuccess, (payload) => {
+				boardStore.duplicateColumnSuccess(payload);
+				resolveDuplicateColumnRequest(payload.columnId);
+			}),
 		];
 
 		const failureActions = [
@@ -79,7 +106,10 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.updateBoardVisibilityFailure, reloadBoard),
 			on(BoardActions.updateBoardLayoutFailure, reloadBoard),
 			on(BoardActions.updateReaderCanEditFailure, reloadBoard),
-			on(BoardActions.duplicateColumnFailure, reloadBoard),
+			on(BoardActions.duplicateColumnFailure, ({ columnId }) => {
+				reloadBoard();
+				rejectDuplicateColumnRequest(columnId, "Duplicate column failed");
+			}),
 		];
 
 		const ariaLiveNotifications = [
@@ -197,8 +227,22 @@ export const useBoardSocketApi = () => {
 		useAppStore().handleApplicationError(HttpStatusCode.NotFound, "components.board.error.404");
 	};
 
-	const duplicateColumnRequest = (payload: DuplicateColumnRequestPayload) =>
-		emitWithAck("duplicate-column-request", payload);
+	const duplicateColumnRequest = (payload: DuplicateColumnRequestPayload) => {
+		const existingPendingRequest = pendingDuplicateColumnRequests.get(payload.columnId);
+		if (existingPendingRequest) {
+			existingPendingRequest.reject(new Error("Duplicate column request replaced by a newer request"));
+			pendingDuplicateColumnRequests.delete(payload.columnId);
+		}
+
+		return new Promise<void>((resolve, reject) => {
+			pendingDuplicateColumnRequests.set(payload.columnId, {
+				resolve,
+				reject,
+			});
+
+			emitOnSocket("duplicate-column-request", payload);
+		});
+	};
 
 	const reloadBoard = () => {
 		const boardId = boardStore.board?.id;

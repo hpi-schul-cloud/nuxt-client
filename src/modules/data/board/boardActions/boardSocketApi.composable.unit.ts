@@ -702,12 +702,12 @@ describe("useBoardSocketApi", () => {
 	});
 
 	describe("duplicateColumnRequest", () => {
-		it("should call emitWithAck with correct parameters", async () => {
+		it("should call emitOnSocket with correct parameters", () => {
 			const { duplicateColumnRequest } = useBoardSocketApi();
 
-			await duplicateColumnRequest({ columnId: "columnId" });
+			duplicateColumnRequest({ columnId: "columnId" });
 
-			expect(socketMock.emitWithAck).toHaveBeenCalledWith("duplicate-column-request", {
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("duplicate-column-request", {
 				columnId: "columnId",
 			});
 		});

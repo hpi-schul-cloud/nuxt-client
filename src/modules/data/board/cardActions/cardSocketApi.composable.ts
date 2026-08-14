@@ -32,6 +32,14 @@ export const useCardSocketApi = () => {
 	const MAX_WAIT_BEFORE_FIRST_CALL_IN_MS = 200;
 	let cardIdsToFetch: string[] = [];
 
+	const pendingDuplicateCardRequests = new Map<
+		string,
+		{
+			resolve: () => void;
+			reject: (error?: unknown) => void;
+		}
+	>();
+
 	const {
 		notifyUpdateCardTitleSuccess,
 		notifyUpdateCardColorSuccess,
@@ -41,6 +49,22 @@ export const useCardSocketApi = () => {
 		notifyMoveElementSuccess,
 		notifyUpdateElementSuccess,
 	} = useBoardAriaNotification();
+
+	const resolveDuplicateCardRequest = (cardId: string) => {
+		const pendingRequest = pendingDuplicateCardRequests.get(cardId);
+		if (!pendingRequest) return;
+
+		pendingDuplicateCardRequests.delete(cardId);
+		pendingRequest.resolve();
+	};
+
+	const rejectDuplicateCardRequest = (cardId: string, errorMessage: string) => {
+		const pendingRequest = pendingDuplicateCardRequests.get(cardId);
+		if (!pendingRequest) return;
+
+		pendingDuplicateCardRequests.delete(cardId);
+		pendingRequest.reject(new Error(errorMessage));
+	};
 
 	const dispatch = async (action: PermittedStoreActions<typeof CardActions>) => {
 		const successActions = [
@@ -53,7 +77,10 @@ export const useCardSocketApi = () => {
 			on(CardActions.updateCardTitleSuccess, cardStore.updateCardTitleSuccess),
 			on(CardActions.updateCardColorSuccess, cardStore.updateCardColorSuccess),
 			on(CardActions.updateCardHeightSuccess, cardStore.updateCardHeightSuccess),
-			on(CardActions.duplicateCardSuccess, cardStore.duplicateCardSuccess),
+			on(CardActions.duplicateCardSuccess, (payload) => {
+				cardStore.duplicateCardSuccess(payload);
+				resolveDuplicateCardRequest(payload.cardId);
+			}),
 		];
 
 		const failureActions = [
@@ -65,7 +92,10 @@ export const useCardSocketApi = () => {
 			on(CardActions.updateCardTitleFailure, ({ cardId }) => reloadBoard(cardId)),
 			on(CardActions.updateCardColorFailure, ({ cardId }) => reloadBoard(cardId)),
 			on(CardActions.deleteCardFailure, ({ cardId }) => reloadBoard(cardId)),
-			on(CardActions.duplicateCardFailure, ({ cardId }) => reloadBoard(cardId)),
+			on(CardActions.duplicateCardFailure, ({ cardId }) => {
+				reloadBoard(cardId);
+				rejectDuplicateCardRequest(cardId, "Duplicate card failed");
+			}),
 		];
 
 		const ariaLiveNotification = [
@@ -152,7 +182,22 @@ export const useCardSocketApi = () => {
 		emitOnSocket("update-card-height-request", payload);
 	};
 
-	const duplicateCardRequest = (payload: DuplicateCardRequestPayload) => emitWithAck("duplicate-card-request", payload);
+	const duplicateCardRequest = (payload: DuplicateCardRequestPayload) => {
+		const existingPendingRequest = pendingDuplicateCardRequests.get(payload.cardId);
+		if (existingPendingRequest) {
+			existingPendingRequest.reject(new Error("Duplicate card request replaced by a newer request"));
+			pendingDuplicateCardRequests.delete(payload.cardId);
+		}
+
+		return new Promise<void>((resolve, reject) => {
+			pendingDuplicateCardRequests.set(payload.cardId, {
+				resolve,
+				reject,
+			});
+
+			emitOnSocket("duplicate-card-request", payload);
+		});
+	};
 
 	const reloadBoard = (cardId = "") => {
 		const boardStore = useBoardStore();
