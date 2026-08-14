@@ -1,5 +1,5 @@
 <template>
-	<KebabMenuAction :icon="mdiContentCopy" :data-testid="testId" :loading="loading">
+	<KebabMenuAction :icon="mdiContentCopy" :data-testid="testId">
 		{{ t("common.actions.duplicate") }}
 	</KebabMenuAction>
 </template>
@@ -10,10 +10,6 @@ import { mdiContentCopy } from "@icons/material";
 import { useAttrs } from "vue";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
-
-defineProps({
-	loading: { type: Boolean, default: false },
-});
 
 const attrs = useAttrs();
 const testId = attrs["data-testid"] ?? "kebab-menu-action-duplicate";
