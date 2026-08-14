@@ -1,7 +1,7 @@
 import { useNews, useNewsActions, useNewsList } from "./news.composable";
-import { mockApi, mockApiResponse, newsResponseFactory } from "@@/tests/test-utils";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import * as dateTimeUtils from "@/utils/date-time.utils";
+import { mockApi, mockApiResponse, newsResponseFactory } from "@@/tests/test-utils";
 import * as serverApi from "@api-server";
 import * as dataApp from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
