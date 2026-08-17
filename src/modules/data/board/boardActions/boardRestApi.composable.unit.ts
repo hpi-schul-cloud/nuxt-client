@@ -5,14 +5,13 @@ import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
-	columnFullResponseFactory,
 	columnResponseFactory,
 	mockComposable,
 	mockedPiniaStoreTyping,
 	mountComposable,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import { BoardLayout, CopyStatusEnum } from "@api-server";
+import { BoardLayout } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useBoardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
