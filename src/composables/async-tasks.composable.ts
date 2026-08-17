@@ -2,6 +2,7 @@ import { useDebouncedLoading } from "./debounced-loading.composable";
 import { i18nKeyExists, useI18nGlobal } from "@/plugins/i18n";
 import { AsyncFunction } from "@/types/async.types";
 import { Status } from "@/types/common/commons";
+import { LoadingStateOptions } from "@/types/loading.types";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useTryCatch } from "@/utils/try-catch.utils";
 import { notifyError } from "@data-app";
@@ -11,6 +12,15 @@ import { computed, readonly, ref } from "vue";
 type TaskResult<T> =
 	| { success: true; result: T; error?: undefined }
 	| { success: false; result?: undefined; error: Error };
+
+type SafeTaskLoadingOptions = LoadingStateOptions & {
+	skipErrorNotification?: (error: Error) => boolean;
+};
+
+export const noDebounceLoadingOptions: LoadingStateOptions = {
+	delay: 0,
+	minDisplayTime: 0,
+};
 
 export const useSafeTask = () => {
 	const error = ref<Error>();
@@ -59,10 +69,15 @@ export const useSafeAxiosTask = () => {
 
 	const { loadingState, withLoadingState } = useDebouncedLoading();
 
-	const execute = async <T>(fn: AsyncFunction<T>, onErrorNotifyMessage?: string): Promise<TaskResult<T>> => {
-		const { result, success, error } = await withLoadingState(() => safeExec<T>(fn));
+	const execute = async <T>(
+		fn: AsyncFunction<T>,
+		onErrorNotifyMessage?: string,
+		options: SafeTaskLoadingOptions = {}
+	): Promise<TaskResult<T>> => {
+		const { skipErrorNotification, ...loadingOptions } = options;
+		const { result, success, error } = await withLoadingState(() => safeExec<T>(fn), loadingOptions);
 
-		if (error && onErrorNotifyMessage) {
+		if (error && onErrorNotifyMessage && !skipErrorNotification?.(error)) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
 			if (apiError.code) {
@@ -89,16 +104,15 @@ export const useSafeAxiosTask = () => {
 
 export const useSafeTaskRunner = <T>(fn: AsyncFunction<T>, onErrorNotifyMessage?: string) => {
 	const { error, status, isRunning, execute, reset } = useSafeTask();
-	const { loadingState, withLoadingState } = useDebouncedLoading();
 
 	const data = ref<T>();
 
 	const run = async () => {
-		const { result, success } = await withLoadingState(() => execute(fn, onErrorNotifyMessage));
+		const { result, success } = await execute(fn, onErrorNotifyMessage);
 		data.value = result;
 		return { result, success };
 	};
-	return { data: readonly(data), error, status, isRunning, loadingState, run, reset };
+	return { data: readonly(data), error, status, isRunning, run, reset };
 };
 
 export const useSafeAxiosRunner = <T>(
@@ -106,15 +120,16 @@ export const useSafeAxiosRunner = <T>(
 	options: {
 		immediate?: boolean;
 		onErrorNotifyMessage?: string;
+		loadingOptions?: SafeTaskLoadingOptions;
 	} = {}
 ) => {
-	const { immediate = true, onErrorNotifyMessage } = options;
+	const { immediate = true, onErrorNotifyMessage, loadingOptions } = options;
 	const { execute: safeExec, isRunning, loadingState, reset, status, error } = useSafeAxiosTask();
 
 	const data = ref<T>();
 
 	const execute = async (): Promise<TaskResult<T>> => {
-		const { result, success, error } = await safeExec(fn, onErrorNotifyMessage);
+		const { result, success, error } = await safeExec(fn, onErrorNotifyMessage, loadingOptions);
 
 		if (success) {
 			data.value = result;

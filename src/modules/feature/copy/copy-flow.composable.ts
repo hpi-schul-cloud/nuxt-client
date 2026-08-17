@@ -3,7 +3,7 @@ import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { $axios } from "@/utils/api";
 import { BoardApiFactory, CourseRoomsApiFactory, RoomApiFactory, TaskApiFactory } from "@api-server";
 import { notifySuccess } from "@data-app";
-import { openDialog, withGlobalLoadingState } from "@feature-dialog";
+import { executeWithGlobalLoadingState, openDialog } from "@feature-dialog";
 import { useI18n } from "vue-i18n";
 
 export const useCopyFlow = () => {
@@ -16,9 +16,7 @@ export const useCopyFlow = () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 
 	const copyCancelledError = () => new Error("Copy cancelled");
-
-	const withCopyLoading = <T>(fn: () => Promise<T>) =>
-		withGlobalLoadingState(fn, t("feature-copy.inProgress.title.loading"));
+	const copyLoadingMessage = t("feature-copy.inProgress.title.loading");
 
 	const notifyCopySuccess = (type: ContentItemTypeEnum) => {
 		notifySuccess(
@@ -30,11 +28,11 @@ export const useCopyFlow = () => {
 		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Course });
 		if (!completed) return { success: false, error: copyCancelledError() };
 
-		const { result, success, error } = await withCopyLoading(() =>
-			execute(
-				() => courseRoomApi.courseRoomsControllerCopyCourse(courseId),
-				t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.course") })
-			)
+		const { result, success, error } = await executeWithGlobalLoadingState(
+			execute,
+			() => courseRoomApi.courseRoomsControllerCopyCourse(courseId),
+			t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.course") }),
+			copyLoadingMessage
 		);
 
 		if (success) {
@@ -48,11 +46,11 @@ export const useCopyFlow = () => {
 		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Task });
 		if (!completed) return { success: false, error: copyCancelledError() };
 
-		const { result, success, error } = await withCopyLoading(() =>
-			execute(
-				() => taskApi.taskControllerCopyTask(taskId, { courseId: targetCourseId }),
-				t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.task") })
-			)
+		const { result, success, error } = await executeWithGlobalLoadingState(
+			execute,
+			() => taskApi.taskControllerCopyTask(taskId, { courseId: targetCourseId }),
+			t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.task") }),
+			copyLoadingMessage
 		);
 
 		if (success) {
@@ -66,11 +64,11 @@ export const useCopyFlow = () => {
 		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Lesson });
 		if (!completed) return { success: false, error: copyCancelledError() };
 
-		const { result, success, error } = await withCopyLoading(() =>
-			execute(
-				() => courseRoomApi.courseRoomsControllerCopyLesson(lessonId, { courseId: targetCourseId }),
-				t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.lesson") })
-			)
+		const { result, success, error } = await executeWithGlobalLoadingState(
+			execute,
+			() => courseRoomApi.courseRoomsControllerCopyLesson(lessonId, { courseId: targetCourseId }),
+			t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.lesson") }),
+			copyLoadingMessage
 		);
 
 		if (success) {
@@ -84,11 +82,11 @@ export const useCopyFlow = () => {
 		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.ColumnBoard });
 		if (!completed) return { success: false, error: copyCancelledError() };
 
-		const { result, success, error } = await withCopyLoading(() =>
-			execute(
-				() => boardApi.boardControllerCopyBoard(boardId),
-				t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.board") })
-			)
+		const { result, success, error } = await executeWithGlobalLoadingState(
+			execute,
+			() => boardApi.boardControllerCopyBoard(boardId),
+			t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.board") }),
+			copyLoadingMessage
 		);
 
 		if (success) {
@@ -102,11 +100,11 @@ export const useCopyFlow = () => {
 		const { completed } = await openDialog("copy", { copyItemType: ContentItemTypeEnum.Room });
 		if (!completed) return { success: false, error: copyCancelledError() };
 
-		const { result, success, error } = await withCopyLoading(() =>
-			execute(
-				() => roomApi.roomControllerCopyRoom(roomId),
-				t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.room") })
-			)
+		const { result, success, error } = await executeWithGlobalLoadingState(
+			execute,
+			() => roomApi.roomControllerCopyRoom(roomId),
+			t("common.notifications.errors.notDuplicated", { type: t("feature-copy.copyInfo.type.room") }),
+			copyLoadingMessage
 		);
 
 		if (success) {
