@@ -53,8 +53,8 @@ const NEWS_PER_PAGE = 10;
 
 const { t } = useI18n();
 const appStore = useAppStore();
-const { fetchNewsPage, loadingState } = useNewsActions();
-const { fetchNewsPage: fetchNewsCountPage } = useNewsActions();
+const { fetchNewsList, loadingState } = useNewsActions();
+const { fetchNewsList: fetchNewsCountPage } = useNewsActions();
 
 const news = ref<NewsResponse[]>([]);
 const total = ref(0);
@@ -82,7 +82,7 @@ useTitle(buildPageTitle(t("pages.news.title")));
 
 const loadNews = async () => {
 	const unpublished = activeTab.value === "unpublished";
-	const { success, result } = await fetchNewsPage({
+	const { success, result } = await fetchNewsList({
 		limit: NEWS_PER_PAGE,
 		skip: (currentPage.value - 1) * NEWS_PER_PAGE,
 		unpublished,

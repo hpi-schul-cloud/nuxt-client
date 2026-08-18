@@ -1,6 +1,6 @@
 <template>
 	<div class="news-grid" data-testid="news-section">
-		<NewsCard v-for="newsItem in newsItems" :key="newsItem.id" :news-item="newsItem" :data-test-id="dataTestid" />
+		<NewsCard v-for="(newsItem, index) in newsItems" :key="newsItem.id" :news-item="newsItem" :index />
 	</div>
 </template>
 
@@ -8,15 +8,9 @@
 import type { NewsCardItem } from "./news-card.types";
 import NewsCard from "./NewsCard.vue";
 
-withDefaults(
-	defineProps<{
-		newsItems: readonly NewsCardItem[];
-		dataTestid?: string;
-	}>(),
-	{
-		dataTestid: undefined,
-	}
-);
+defineProps<{
+	newsItems: readonly NewsCardItem[];
+}>();
 </script>
 
 <style scoped>

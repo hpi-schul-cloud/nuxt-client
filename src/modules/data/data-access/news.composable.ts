@@ -14,13 +14,7 @@ export const useNewsActions = () => {
 
 	const { execute, status, error, loadingState } = useSafeAxiosTask();
 
-	const fetchNewsList = async (newsLimit: number) =>
-		await execute(
-			() => newsApi.newsControllerFindAll(undefined, undefined, undefined, undefined, newsLimit),
-			t("common.notifications.errors.notLoaded", { count: 2, type: t("common.words.news", 2) })
-		);
-
-	const fetchNewsPage = async ({ limit, skip, unpublished }: { limit: number; skip: number; unpublished: boolean }) =>
+	const fetchNewsList = async ({ limit, skip, unpublished }: { limit: number; skip?: number; unpublished?: boolean }) =>
 		await execute(
 			() => newsApi.newsControllerFindAll(undefined, undefined, unpublished, skip, limit),
 			t("common.notifications.errors.notLoaded", { count: 2, type: t("common.words.news", 2) })
@@ -65,7 +59,6 @@ export const useNewsActions = () => {
 
 	return {
 		fetchNewsList,
-		fetchNewsPage,
 		fetchNews,
 		saveNews,
 		deleteNews,
@@ -75,7 +68,7 @@ export const useNewsActions = () => {
 	};
 };
 
-export const useNewsList = (newsLimit: number) => {
+export const useNewsList = (limit: number) => {
 	const { fetchNewsList } = useNewsActions();
 
 	const {
@@ -83,7 +76,7 @@ export const useNewsList = (newsLimit: number) => {
 		loadingState: newsLoadingState,
 		execute,
 	} = useSafeAxiosRunner(async () => {
-		const { result } = await fetchNewsList(newsLimit);
+		const { result } = await fetchNewsList({ limit });
 
 		return result?.data.data ?? [];
 	});

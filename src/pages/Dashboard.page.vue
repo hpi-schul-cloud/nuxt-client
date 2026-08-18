@@ -53,7 +53,7 @@
 				<template v-else>
 					<NewsGrid class="mb-4" :news-items="latestNews" />
 
-					<VBtn href="/news" data-testid="show-all-news" variant="outlined" :text="t('common.actions.show.all')" />
+					<VBtn to="/news" data-testid="show-all-news" variant="outlined" :text="t('common.actions.show.all')" />
 				</template>
 			</SvsLoading>
 
