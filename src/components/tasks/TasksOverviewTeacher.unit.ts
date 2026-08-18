@@ -109,6 +109,27 @@ describe("TasksOverviewTeacher", () => {
 
 			expect(useTasksOfOverviewMock.fetchTasks).toHaveBeenCalled();
 		});
+
+		it("should not fetch tasks when copy is still in progress", async () => {
+			useCopyFlowMock.executeCopyTask.mockResolvedValue({
+				success: false,
+				result: undefined,
+				error: new Error("Copy is still in progress"),
+			});
+
+			const wrapper = mountComponent();
+			const payload: CopyParams = {
+				id: "task-123",
+				courseId: "course-456",
+				type: ContentItemTypeEnum.Task,
+			};
+
+			const pane = wrapper.findComponent(TasksOverviewPane);
+			await pane.vm.$emit("copy-task", payload);
+			await flushPromises();
+
+			expect(useTasksOfOverviewMock.fetchTasks).not.toHaveBeenCalled();
+		});
 	});
 
 	describe("Share Task", () => {
