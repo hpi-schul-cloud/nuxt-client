@@ -59,10 +59,14 @@ export const useSafeAxiosTask = () => {
 
 	const { loadingState, withLoadingState } = useDebouncedLoading();
 
-	const execute = async <T>(fn: AsyncFunction<T>, onErrorNotifyMessage?: string): Promise<TaskResult<T>> => {
+	const execute = async <T>(
+		fn: AsyncFunction<T>,
+		onErrorNotifyMessage?: string,
+		options?: { skipErrorNotification?: (error: Error) => boolean }
+	): Promise<TaskResult<T>> => {
 		const { result, success, error } = await withLoadingState(() => safeExec<T>(fn));
 
-		if (error && onErrorNotifyMessage) {
+		if (error && onErrorNotifyMessage && !options?.skipErrorNotification?.(error)) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
 			if (apiError.code) {

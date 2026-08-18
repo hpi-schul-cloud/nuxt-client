@@ -7,6 +7,7 @@ import { CopyApiResponse, CopyElementType, CopyStatusEnum } from "@api-server";
 import { useNotificationStore } from "@data-app";
 import * as featureDialog from "@feature-dialog";
 import { createTestingPinia } from "@pinia/testing";
+import { createAxiosError } from "@util-error-handling";
 import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
@@ -18,9 +19,7 @@ let taskApi: Mocked<serverApi.TaskApiInterface>;
 let boardApi: Mocked<serverApi.BoardApiInterface>;
 let roomApi: Mocked<serverApi.RoomApiInterface>;
 
-type CopyResult =
-	| { success: boolean; error: Error; result: undefined }
-	| { result: CopyApiResponse | undefined; success: boolean; error: Error | undefined };
+type CopyResult = { result?: CopyApiResponse; success: boolean; error: Error | undefined };
 
 const mountCopyFlowComposable = (type: ContentItemTypeEnum = ContentItemTypeEnum.Room) => {
 	const composable = mountComposable(() => useCopyFlow(), {
@@ -131,6 +130,78 @@ const mockApiFailure = (type: ContentItemTypeEnum, error: Error = new Error("API
 		default:
 			throw new Error("Unknown type");
 	}
+	return error;
+};
+
+const mockApiTimeout = (type: ContentItemTypeEnum) => {
+	const timeoutError = createAxiosError({
+		statusCode: 504,
+		statusText: "Gateway Timeout",
+		message: "Gateway Timeout",
+		data: {
+			code: 504,
+			type: "Gateway Timeout",
+			title: "Gateway Timeout",
+			message: "Gateway Timeout",
+		},
+	});
+
+	switch (type) {
+		case ContentItemTypeEnum.Course:
+			courseRoomsApi.courseRoomsControllerCopyCourse.mockRejectedValue(timeoutError);
+			break;
+		case ContentItemTypeEnum.Task:
+			taskApi.taskControllerCopyTask.mockRejectedValue(timeoutError);
+			break;
+		case ContentItemTypeEnum.Lesson:
+			courseRoomsApi.courseRoomsControllerCopyLesson.mockRejectedValue(timeoutError);
+			break;
+		case ContentItemTypeEnum.ColumnBoard:
+			boardApi.boardControllerCopyBoard.mockRejectedValue(timeoutError);
+			break;
+		case ContentItemTypeEnum.Room:
+			roomApi.roomControllerCopyRoom.mockRejectedValue(timeoutError);
+			break;
+		default:
+			throw new Error("Unknown type");
+	}
+
+	return timeoutError;
+};
+
+const mockApiErrorWithStatus = (type: ContentItemTypeEnum, statusCode: number, statusText: string) => {
+	const error = createAxiosError({
+		statusCode,
+		statusText,
+		message: statusText,
+		data: {
+			code: statusCode,
+			type: statusText,
+			title: statusText,
+			message: statusText,
+		},
+	});
+
+	switch (type) {
+		case ContentItemTypeEnum.Course:
+			courseRoomsApi.courseRoomsControllerCopyCourse.mockRejectedValue(error);
+			break;
+		case ContentItemTypeEnum.Task:
+			taskApi.taskControllerCopyTask.mockRejectedValue(error);
+			break;
+		case ContentItemTypeEnum.Lesson:
+			courseRoomsApi.courseRoomsControllerCopyLesson.mockRejectedValue(error);
+			break;
+		case ContentItemTypeEnum.ColumnBoard:
+			boardApi.boardControllerCopyBoard.mockRejectedValue(error);
+			break;
+		case ContentItemTypeEnum.Room:
+			roomApi.roomControllerCopyRoom.mockRejectedValue(error);
+			break;
+		default:
+			throw new Error("Unknown type");
+	}
+
 	return error;
 };
 
@@ -249,6 +320,82 @@ describe("useCopyFlow", () => {
 					const { resultPromise } = setup();
 					await resultPromise;
 					expectNotification("error");
+					expect(useNotificationStore().notify).not.toHaveBeenCalledWith(
+						expect.objectContaining({ status: "success" })
+					);
+				});
+			});
+
+			describe("and the api call times out", () => {
+				const setup = () => {
+					const timeoutError = mockApiTimeout(type);
+					vi.mocked(featureDialog.openDialog).mockResolvedValue({ completed: true, data: true });
+					const composable = mountCopyFlowComposable(type);
+					const resultPromise = composable.executeCopyMethod();
+					return { ...composable, resultPromise, timeoutError };
+				};
+
+				it("should activate loading state during execution", async () => {
+					const { resultPromise } = setup();
+					await resultPromise;
+					expect(featureDialog.withGlobalLoadingState).toHaveBeenCalledOnce();
+				});
+
+				it("should return a failed in-progress result", async () => {
+					const { resultPromise } = setup();
+					const { success, result, error } = await resultPromise;
+					expect(success).toBe(false);
+					expect(result).toBeUndefined();
+					expect(error).toEqual(new Error("Copy is still in progress"));
+				});
+
+				it("should log the timeout error", async () => {
+					const { resultPromise, timeoutError } = setup();
+					await resultPromise;
+					expect(logger.error).toHaveBeenCalledWith(timeoutError);
+				});
+
+				it("should show warning notification and no error notification", async () => {
+					const { resultPromise } = setup();
+					await resultPromise;
+					expectNotification("warning");
+					expect(useNotificationStore().notify).not.toHaveBeenCalledWith(expect.objectContaining({ status: "error" }));
+					expect(useNotificationStore().notify).not.toHaveBeenCalledWith(
+						expect.objectContaining({ status: "success" })
+					);
+				});
+			});
+
+			describe("and the api call fails with a non-timeout axios error", () => {
+				const setup = () => {
+					const apiError = mockApiErrorWithStatus(type, 500, "Internal Server Error");
+					vi.mocked(featureDialog.openDialog).mockResolvedValue({ completed: true, data: true });
+					const composable = mountCopyFlowComposable(type);
+					const resultPromise = composable.executeCopyMethod();
+					return { ...composable, resultPromise, apiError };
+				};
+
+				it("should return the original error", async () => {
+					const { resultPromise, apiError } = setup();
+					const { success, result, error } = await resultPromise;
+					expect(success).toBe(false);
+					expect(result).toBeUndefined();
+					expect(error).toBe(apiError);
+				});
+
+				it("should log the error", async () => {
+					const { resultPromise, apiError } = setup();
+					await resultPromise;
+					expect(logger.error).toHaveBeenCalledWith(apiError);
+				});
+
+				it("should show a generic error notification and no warning", async () => {
+					const { resultPromise } = setup();
+					await resultPromise;
+					expectNotification("error");
+					expect(useNotificationStore().notify).not.toHaveBeenCalledWith(
+						expect.objectContaining({ status: "warninggg" })
+					);
 					expect(useNotificationStore().notify).not.toHaveBeenCalledWith(
 						expect.objectContaining({ status: "success" })
 					);
