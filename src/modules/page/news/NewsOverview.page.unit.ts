@@ -72,13 +72,13 @@ describe("NewsOverviewPage", () => {
 	it("renders a card for each returned published news item", async () => {
 		const { wrapper } = await setup();
 
-		expect(wrapper.findAll("[data-testid='news-card-item']")).toHaveLength(firstPageNews.length);
+		expect(wrapper.findAll("[data-testid^='news-card-item-']")).toHaveLength(firstPageNews.length);
 	});
 
 	it("renders news cards as links like the dashboard preview", async () => {
 		const { wrapper } = await setup();
 
-		expect(wrapper.find("[data-testid='news-card-item']").attributes("href")).toBe(`/news/${firstPageNews[0].id}`);
+		expect(wrapper.findAll("a[data-testid^='news-card-item-']")).toHaveLength(firstPageNews.length);
 	});
 
 	it("provides the create action as a sticky wireframe action", async () => {
@@ -94,6 +94,12 @@ describe("NewsOverviewPage", () => {
 		]);
 	});
 
+	it("does not provide a create action when create permission is missing", async () => {
+		const { wrapper } = await setup();
+
+		expect(wrapper.findComponent({ name: "DefaultWireframe" }).props("fabItems")).toBeUndefined();
+	});
+
 	it("requests ten news items for the first page", async () => {
 		await setup();
 
@@ -107,8 +113,8 @@ describe("NewsOverviewPage", () => {
 		await flushPromises();
 
 		expect(newsApi.newsControllerFindAll).toHaveBeenCalledWith(undefined, undefined, false, 10, 10);
-		expect(wrapper.findAll("[data-testid='news-card-item']")).toHaveLength(secondPageNews.length);
-		expect(wrapper.find("[data-testid='news-title']").text()).toBe(secondPageNews[0].title);
+		expect(wrapper.findAll("[data-testid^='news-card-item-']")).toHaveLength(secondPageNews.length);
+		expect(wrapper.find("[data-testid='news-title-0']").text()).toBe(secondPageNews[0].title);
 	});
 
 	it("does not render pagination when there are at most ten news", async () => {
@@ -121,10 +127,44 @@ describe("NewsOverviewPage", () => {
 		expect(wrapper.find("[data-testid='news-pagination']").exists()).toBe(false);
 	});
 
+	it("renders the news empty state when no news are returned", async () => {
+		newsApi.newsControllerFindAll.mockResolvedValue(
+			mockApiResponse({ data: { data: [], total: 0, skip: 0, limit: 10 } })
+		);
+
+		const { wrapper } = await setup();
+
+		expect(wrapper.find("[data-testid='empty-state-news']").exists()).toBe(true);
+		expect(wrapper.findAll("[data-testid^='news-card-item-']")).toHaveLength(0);
+	});
+
+	it("does not render unpublished tabs without edit permission", async () => {
+		const { wrapper } = await setup();
+
+		expect(wrapper.find("[data-testid='published-news-tab']").exists()).toBe(false);
+		expect(wrapper.find("[data-testid='unpublished-news-tab']").exists()).toBe(false);
+		expect(newsApi.newsControllerFindAll).toHaveBeenCalledTimes(1);
+	});
+
 	it("loads unpublished news for users with edit permission", async () => {
 		const { wrapper } = await setup({ permissions: [Permission.NEWS_EDIT] });
 
+		expect(newsApi.newsControllerFindAll).toHaveBeenNthCalledWith(1, undefined, undefined, false, 0, 10);
+		expect(newsApi.newsControllerFindAll).toHaveBeenNthCalledWith(2, undefined, undefined, true, 0, 1);
+
 		expect(wrapper.find("[data-testid='unpublished-news-count']").text()).toBe("(2)");
+
+		await wrapper.find("[data-testid='unpublished-news-tab']").trigger("click");
+		await flushPromises();
+
+		expect(newsApi.newsControllerFindAll).toHaveBeenCalledWith(undefined, undefined, true, 0, 10);
+	});
+
+	it("resets to the first page when switching tabs", async () => {
+		const { wrapper } = await setup({ permissions: [Permission.NEWS_EDIT] });
+
+		wrapper.findComponent({ name: "VPagination" }).vm.$emit("update:modelValue", 2);
+		await flushPromises();
 
 		await wrapper.find("[data-testid='unpublished-news-tab']").trigger("click");
 		await flushPromises();

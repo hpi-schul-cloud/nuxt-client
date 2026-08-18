@@ -14,13 +14,13 @@
 		</template>
 
 		<SvsLoading :loading-state="loadingState">
-			<EmptyState v-if="news.length === 0" data-testid="empty-state-news" :title="t('pages.dashboard.empty.news')">
+			<EmptyState v-if="newsList.length === 0" data-testid="empty-state-news" :title="t('pages.dashboard.empty.news')">
 				<template #media>
 					<SvgNewsEmpty />
 				</template>
 			</EmptyState>
 			<template v-else>
-				<NewsGrid class="mt-8" :news-items="news" />
+				<NewsGrid class="mt-8" :news-items="newsList" />
 				<VPagination
 					v-if="pageCount > 1"
 					:model-value="currentPage"
@@ -56,7 +56,7 @@ const appStore = useAppStore();
 const { fetchNewsList, loadingState } = useNewsActions();
 const { fetchNewsList: fetchNewsCountPage } = useNewsActions();
 
-const news = ref<NewsResponse[]>([]);
+const newsList = ref<NewsResponse[]>([]);
 const total = ref(0);
 const unpublishedTotal = ref(0);
 const activeTab = ref<"published" | "unpublished">("published");
@@ -89,7 +89,7 @@ const loadNews = async () => {
 	});
 
 	if (success && result) {
-		news.value = result.data.data;
+		newsList.value = result.data.data;
 		total.value = result.data.total;
 		if (unpublished) {
 			unpublishedTotal.value = result.data.total;
