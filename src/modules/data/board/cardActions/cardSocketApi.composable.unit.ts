@@ -353,6 +353,15 @@ describe("useCardSocketApi", () => {
 
 			expect(socketMock.disconnectSocket).toHaveBeenCalled();
 		});
+
+		it("should reject pending duplicateCardRequest promises", async () => {
+			const { disconnectSocketRequest, duplicateCardRequest } = useCardSocketApi();
+			const pendingRequest = duplicateCardRequest({ cardId: "cardId" });
+
+			disconnectSocketRequest();
+
+			await expect(pendingRequest).rejects.toThrow("Socket disconnected before duplicate card request completed");
+		});
 	});
 
 	describe("createElementRequest", () => {

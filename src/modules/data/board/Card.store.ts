@@ -92,7 +92,14 @@ export const useCardStore = defineStore("cardStore", () => {
 		card.height = payload.newHeight;
 	};
 
-	const duplicateCard = socketApi.duplicateCardRequest;
+	const duplicateCard = async (payload: { cardId: string }) => {
+		if (!isSocketEnabled) {
+			notifyError(generateErrorText("notDuplicated", "boardCard"));
+			throw new Error("Socket-based card duplication is disabled");
+		}
+
+		return socketApi.duplicateCardRequest(payload);
+	};
 
 	const hasRelevantContentForDuplicationWarning = (card: CardResponse): boolean =>
 		card.elements.some((element) =>

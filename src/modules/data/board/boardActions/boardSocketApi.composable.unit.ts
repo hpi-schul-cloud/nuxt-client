@@ -458,6 +458,15 @@ describe("useBoardSocketApi", () => {
 
 			expect(socketMock.disconnectSocket).toHaveBeenCalled();
 		});
+
+		it("should reject pending duplicateColumnRequest promises", async () => {
+			const { disconnectSocketRequest, duplicateColumnRequest } = useBoardSocketApi();
+			const pendingRequest = duplicateColumnRequest({ columnId: "columnId" });
+
+			disconnectSocketRequest();
+
+			await expect(pendingRequest).rejects.toThrow("Socket disconnected before duplicate column request completed");
+		});
 	});
 
 	describe("createCardRequest", () => {

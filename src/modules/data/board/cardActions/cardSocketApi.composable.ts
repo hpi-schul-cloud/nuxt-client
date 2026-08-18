@@ -66,6 +66,13 @@ export const useCardSocketApi = () => {
 		pendingRequest.reject(new Error(errorMessage));
 	};
 
+	const rejectAllPendingDuplicateCardRequests = (errorMessage: string) => {
+		for (const [cardId, pendingRequest] of pendingDuplicateCardRequests) {
+			pendingRequest.reject(new Error(errorMessage));
+			pendingDuplicateCardRequests.delete(cardId);
+		}
+	};
+
 	const dispatch = async (action: PermittedStoreActions<typeof CardActions>) => {
 		const successActions = [
 			on(CardActions.createElementSuccess, cardStore.createElementSuccess),
@@ -120,6 +127,7 @@ export const useCardSocketApi = () => {
 	const { emitOnSocket, disconnectSocket, emitWithAck } = useSocketConnection(dispatch);
 
 	const disconnectSocketRequest = () => {
+		rejectAllPendingDuplicateCardRequests("Socket disconnected before duplicate card request completed");
 		disconnectSocket();
 	};
 

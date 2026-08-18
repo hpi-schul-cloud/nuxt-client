@@ -52,6 +52,13 @@ export const useBoardSocketApi = () => {
 		pendingRequest.reject(new Error(errorMessage));
 	};
 
+	const rejectAllPendingDuplicateColumnRequests = (errorMessage: string) => {
+		for (const [columnId, pendingRequest] of pendingDuplicateColumnRequests) {
+			pendingRequest.reject(new Error(errorMessage));
+			pendingDuplicateColumnRequests.delete(columnId);
+		}
+	};
+
 	const {
 		notifyCreateCardSuccess,
 		notifyCreateColumnSuccess,
@@ -155,6 +162,7 @@ export const useBoardSocketApi = () => {
 	};
 
 	const disconnectSocketRequest = () => {
+		rejectAllPendingDuplicateColumnRequests("Socket disconnected before duplicate column request completed");
 		disconnectSocket();
 	};
 

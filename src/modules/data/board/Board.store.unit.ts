@@ -1202,12 +1202,23 @@ describe("BoardStore", () => {
 		describe("@duplicateColumn", () => {
 			const payload = { columnId: "testColumnId" };
 
-			it("should call socketApi.duplicateColumnRequest", async () => {
-				const { boardStore } = setup();
+			it("should call socketApi.duplicateColumnRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
 
 				await boardStore.duplicateColumn(payload);
 
 				expect(mockedBoardSocketApi.duplicateColumnRequest).toHaveBeenCalledWith(payload);
+			});
+
+			it("should show error and not call socketApi.duplicateColumnRequest when feature flag is set false", async () => {
+				const { boardStore } = setup({ socketFlag: false });
+
+				await expect(boardStore.duplicateColumn(payload)).rejects.toThrow(
+					"Socket-based column duplication is disabled"
+				);
+
+				expect(mockedBoardSocketApi.duplicateColumnRequest).not.toHaveBeenCalled();
+				expectNotification("error");
 			});
 		});
 

@@ -165,7 +165,14 @@ export const useBoardStore = defineStore("boardStore", () => {
 		});
 	};
 
-	const duplicateColumn = socketApi.duplicateColumnRequest;
+	const duplicateColumn = async (payload: { columnId: string }) => {
+		if (!isSocketEnabled) {
+			notifyError(generateErrorText("notDuplicated", "boardColumn"));
+			throw new Error("Socket-based column duplication is disabled");
+		}
+
+		return socketApi.duplicateColumnRequest(payload);
+	};
 
 	const hasRelevantContentForDuplicationWarning = (column: ColumnFullResponse): boolean =>
 		column.cards.some((card) =>

@@ -278,8 +278,8 @@ describe("CardStore", () => {
 	});
 
 	describe("duplicateCardRequest", () => {
-		it("should call socket Api", () => {
-			const { cardStore, cardId } = setup();
+		it("should call socket Api when feature flag is enabled", () => {
+			const { cardStore, cardId } = setup(true);
 
 			cardStore.duplicateCard({
 				cardId,
@@ -288,6 +288,19 @@ describe("CardStore", () => {
 			expect(mockedCardSocketApiActions.duplicateCardRequest).toHaveBeenCalledWith({
 				cardId,
 			});
+		});
+
+		it("should show error and not call socket Api when feature flag is disabled", async () => {
+			const { cardStore, cardId } = setup(false);
+
+			await expect(
+				cardStore.duplicateCard({
+					cardId,
+				})
+			).rejects.toThrow("Socket-based card duplication is disabled");
+
+			expect(mockedCardSocketApiActions.duplicateCardRequest).not.toHaveBeenCalled();
+			expectNotification("error");
 		});
 	});
 
