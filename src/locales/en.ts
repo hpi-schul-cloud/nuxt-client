@@ -922,6 +922,8 @@ export default {
 	"feature-copy.inProgress.course.info": "Creating course",
 	"feature-copy.inProgress.ariaLabelSuffix": "is still being copied",
 	"feature-copy.inProgress.timeoutSuccess": "The duplication process has been completed.",
+	"feature-copy.notifications.duplicationInProgress":
+		"{type} is currently being duplicated. This is taking longer than expected. Please check again later. | {type} are currently being duplicated. This is taking longer than expected. Please check again later.",
 	"feature-copy.notifications.success.successfullyCopied": "{type} successfully duplicated",
 	"feature-copy.copyInfo.type.course": "Course",
 	"feature-copy.copyInfo.type.board": "Board",
