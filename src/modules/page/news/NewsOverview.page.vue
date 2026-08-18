@@ -91,6 +91,9 @@ const loadNews = async () => {
 	if (success && result) {
 		news.value = result.data.data;
 		total.value = result.data.total;
+		if (unpublished) {
+			unpublishedTotal.value = result.data.total;
+		}
 	}
 };
 
