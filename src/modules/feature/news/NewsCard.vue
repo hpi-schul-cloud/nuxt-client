@@ -27,10 +27,12 @@ import { NewsTargetModel } from "@api-server";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
 
-defineProps<{
+type Props = {
 	newsItem: NewsCardItem;
-	index: { type: number; required: true };
-}>();
+	index: number;
+};
+
+defineProps<Props>();
 </script>
 
 <style scoped>
