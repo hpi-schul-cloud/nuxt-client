@@ -2,17 +2,15 @@
 	<component :is="component" v-dompurify-html:[config]="html" />
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from "vue";
-export default defineComponent({
-	name: "RenderHTML",
-	props: {
-		component: { type: String, default: "div" },
-		html: { type: String, required: true },
-		config: {
-			type: String as PropType<"richText" | "richTextNoLinks">,
-			default: "richText",
-		},
-	},
+<script setup lang="ts">
+type Props = {
+	component?: string;
+	html: string;
+	config?: "richText" | "richTextNoLinks";
+};
+
+withDefaults(defineProps<Props>(), {
+	component: "div",
+	config: "richText",
 });
 </script>
