@@ -37,8 +37,8 @@
 <script setup lang="ts">
 import SvgNewsEmpty from "@/assets/img/SvgNewsEmpty.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { NewsResponse, Permission } from "@api-server";
-import { useNewsActions } from "@data-access";
+import { Permission } from "@api-server";
+import { useNewsOverview } from "@data-access";
 import { useAppStore } from "@data-app";
 import { NewsGrid } from "@feature-news";
 import { mdiEyeOffOutline, mdiEyeOutline, mdiPlus } from "@icons/material";
@@ -46,25 +46,19 @@ import { SvsLoading } from "@ui-containers";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed, ref, watch } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-
-const NEWS_PER_PAGE = 10;
 
 const { t } = useI18n();
 const appStore = useAppStore();
-const { fetchNewsList, loadingState } = useNewsActions();
-const { fetchNewsList: fetchNewsCountPage } = useNewsActions();
-
-const newsList = ref<NewsResponse[]>([]);
-const total = ref(0);
-const unpublishedTotal = ref(0);
-const activeTab = ref<"published" | "unpublished">("published");
-const currentPage = ref(1);
 
 const canCreateNews = computed(() => appStore.hasPermission(Permission.NEWS_CREATE).value);
 const canEditNews = computed(() => appStore.hasPermission(Permission.NEWS_EDIT).value);
-const pageCount = computed(() => Math.ceil(total.value / NEWS_PER_PAGE));
+
+const { newsList, unpublishedTotal, activeTab, currentPage, pageCount, loadingState, onPageChange } = useNewsOverview({
+	canEditNews,
+});
+
 const fabAction = computed(() => {
 	if (!canCreateNews.value) return;
 
@@ -79,41 +73,4 @@ const fabAction = computed(() => {
 });
 
 useTitle(buildPageTitle(t("pages.news.title")));
-
-const loadNews = async () => {
-	const unpublished = activeTab.value === "unpublished";
-	const { success, result } = await fetchNewsList({
-		limit: NEWS_PER_PAGE,
-		skip: (currentPage.value - 1) * NEWS_PER_PAGE,
-		unpublished,
-	});
-
-	if (success && result) {
-		newsList.value = result.data.data;
-		total.value = result.data.total;
-		if (unpublished) {
-			unpublishedTotal.value = result.data.total;
-		}
-	}
-};
-
-const loadUnpublishedTotal = async () => {
-	if (!canEditNews.value) return;
-	const { success, result } = await fetchNewsCountPage({ limit: 1, skip: 0, unpublished: true });
-	if (success && result) {
-		unpublishedTotal.value = result.data.total;
-	}
-};
-
-const onPageChange = async (page: number) => {
-	currentPage.value = page;
-	await loadNews();
-};
-
-watch(activeTab, async () => {
-	currentPage.value = 1;
-	await loadNews();
-});
-loadNews();
-loadUnpublishedTotal();
 </script>
