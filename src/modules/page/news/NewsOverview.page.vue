@@ -62,8 +62,8 @@ const unpublishedTotal = ref(0);
 const activeTab = ref<"published" | "unpublished">("published");
 const currentPage = ref(1);
 
-const canCreateNews = computed(() => appStore.hasPermission(Permission.NEWS_CREATE));
-const canEditNews = computed(() => appStore.hasPermission(Permission.NEWS_EDIT));
+const canCreateNews = computed(() => appStore.hasPermission(Permission.NEWS_CREATE).value);
+const canEditNews = computed(() => appStore.hasPermission(Permission.NEWS_EDIT).value);
 const pageCount = computed(() => Math.ceil(total.value / NEWS_PER_PAGE));
 const fabAction = computed(() => {
 	if (!canCreateNews.value) return;
