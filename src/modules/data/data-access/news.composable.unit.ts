@@ -28,15 +28,15 @@ describe("useNews", () => {
 		it("fetchNewsList should call API with the provided limit", async () => {
 			const { fetchNewsList } = useNewsActions();
 
-			await fetchNewsList(4);
+			await fetchNewsList({ limit: 4 });
 
 			expect(newsApiMock.newsControllerFindAll).toHaveBeenCalledWith(undefined, undefined, undefined, undefined, 4);
 		});
 
 		it("fetchNewsPage should call API with pagination and unpublished filter", async () => {
-			const { fetchNewsPage } = useNewsActions();
+			const { fetchNewsList } = useNewsActions();
 
-			await fetchNewsPage({ limit: 10, skip: 5, unpublished: true });
+			await fetchNewsList({ limit: 10, skip: 5, unpublished: true });
 
 			expect(newsApiMock.newsControllerFindAll).toHaveBeenCalledWith(undefined, undefined, true, 5, 10);
 		});
