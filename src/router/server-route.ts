@@ -4,8 +4,7 @@ export const isFileStorage = (path: string) => path.startsWith("/api/v3/file") |
 
 export const isH5pEditor = (path: string) => path.startsWith("/api/v3/h5p-editor");
 
-export const isArchiveDownload = (path: string) =>
-	path.startsWith("/api/v1/filestorage/files/archive") && !path.includes("file-list");
+export const isArchiveDownload = (path: string) => path.startsWith("/api/v1/filestorage/files/archive");
 
 export const isFWUEndpoint = (path: string) => path.startsWith("/api/v3/fwu");
 
