@@ -3,7 +3,7 @@
 		<VCardTitle class="news-card-title bg-primary-lighten text-wrap" :data-testid="`news-header-${index}`">
 			<div class="d-flex align-center">
 				<VIcon size="14" class="mr-1" :icon="mdiNewspaperVariantOutline" />
-				<span class="text-sm font-weight-regular">{{ fromNowUtc(newsItem.displayAt) }}</span>
+				<span class="text-sm font-weight-regular">{{ displayAtFromNow }}</span>
 				<VChip v-if="newsItem.targetModel === NewsTargetModel.TEAMS" class="ml-auto" size="small" variant="tonal">
 					{{ newsItem.target?.name }}
 				</VChip>
@@ -26,13 +26,16 @@ import { fromNowUtc } from "@/utils/date-time.utils";
 import { NewsTargetModel } from "@api-server";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
+import { computed } from "vue";
 
 type Props = {
 	newsItem: NewsCardItem;
 	index: number;
 };
 
-defineProps<Props>();
+const props = defineProps<Props>();
+
+const displayAtFromNow = computed(() => fromNowUtc(props.newsItem.displayAt));
 </script>
 
 <style scoped>
