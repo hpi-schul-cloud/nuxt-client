@@ -116,6 +116,16 @@ describe("news composable", () => {
 	});
 
 	describe("useNewsList", () => {
+		it("should return an empty list immediately before the first fetch resolves", () => {
+			newsApiMock.newsControllerFindAll.mockResolvedValueOnce(
+				mockApiResponse({ data: { data: [newsResponseFactory.build()], total: 1, skip: 0, limit: 4 } })
+			);
+
+			const { news } = useNewsList(4);
+
+			expect(news.value).toEqual([]);
+		});
+
 		it("should fetch and expose the initial news list", async () => {
 			const firstNews = [newsResponseFactory.build(), newsResponseFactory.build()];
 			newsApiMock.newsControllerFindAll.mockResolvedValueOnce(
@@ -144,9 +154,42 @@ describe("news composable", () => {
 
 			expect(news.value).toEqual(secondNews);
 		});
+
+		it("should expose empty list when fetch fails", async () => {
+			newsApiMock.newsControllerFindAll.mockRejectedValueOnce(new Error("fetch failed"));
+
+			const { news } = useNewsList(4);
+			await flushPromises();
+
+			expect(news.value).toEqual([]);
+		});
 	});
 
 	describe("useNewsOverview", () => {
+		it("should keep defaults when initial published fetch fails", async () => {
+			newsApiMock.newsControllerFindAll.mockRejectedValueOnce(new Error("fetch failed"));
+
+			const overview = useNewsOverview({ canEditNews: ref(false) });
+			await flushPromises();
+
+			expect(overview.newsList.value).toEqual([]);
+			expect(overview.total.value).toBe(0);
+		});
+
+		it("should keep unpublished total unchanged when total fetch fails", async () => {
+			newsApiMock.newsControllerFindAll
+				.mockResolvedValueOnce(
+					mockApiResponse({ data: { data: [newsResponseFactory.build()], total: 5, skip: 0, limit: 10 } })
+				)
+				.mockRejectedValueOnce(new Error("fetch unpublished total failed"));
+
+			const overview = useNewsOverview({ canEditNews: ref(true) });
+			await flushPromises();
+
+			expect(overview.total.value).toBe(5);
+			expect(overview.unpublishedTotal.value).toBe(0);
+		});
+
 		describe("when editing is allowed", () => {
 			it("should load published news and unpublished total on init", async () => {
 				const publishedNews = [newsResponseFactory.build(), newsResponseFactory.build()];
@@ -233,6 +276,15 @@ describe("news composable", () => {
 	});
 
 	describe("useNews", () => {
+		it("should expose undefined formatted fields and creator before data is loaded", async () => {
+			const newsId = ref<string | undefined>(undefined);
+			const { creator, displayAtFormattedFromNow, displayAtFormattedStandard } = useNews(newsId);
+
+			expect(creator.value).toBeUndefined();
+			expect(displayAtFormattedStandard.value).toBeUndefined();
+			expect(displayAtFormattedFromNow.value).toBeUndefined();
+		});
+
 		describe("when newsId is undefined", () => {
 			it("should not fetch API", async () => {
 				const newsId = ref<string | undefined>(undefined);
@@ -295,6 +347,23 @@ describe("news composable", () => {
 			expect(displayAtFormattedFromNow.value).toBe("in 2 days");
 			expect(dateTimeUtils.formatUtc).toHaveBeenCalledWith(displayAt, "date");
 			expect(dateTimeUtils.fromNowUtc).toHaveBeenCalledWith(displayAt);
+		});
+
+		it("should keep formatted dates undefined when displayAt is missing", async () => {
+			const newsId = ref("news-1");
+			const mockedNews = {
+				...newsResponseFactory.build(),
+				displayAt: undefined,
+			} as unknown as serverApi.NewsResponse;
+			newsApiMock.newsControllerFindOne.mockResolvedValueOnce(mockApiResponse({ data: mockedNews }));
+
+			const { displayAtFormattedFromNow, displayAtFormattedStandard } = useNews(newsId);
+			await flushPromises();
+
+			expect(displayAtFormattedStandard.value).toBeUndefined();
+			expect(displayAtFormattedFromNow.value).toBeUndefined();
+			expect(dateTimeUtils.formatUtc).not.toHaveBeenCalled();
+			expect(dateTimeUtils.fromNowUtc).not.toHaveBeenCalled();
 		});
 
 		describe("when fetch fails", () => {
