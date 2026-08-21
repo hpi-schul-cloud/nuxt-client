@@ -56,7 +56,7 @@ export interface Message {
      * @type {string}
      * @memberof Message
      */
-    status: string;
+    status: MessageStatus;
     /**
      * 
      * @type {string}
@@ -64,5 +64,16 @@ export interface Message {
      */
     createdAt: string;
 }
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum MessageStatus {
+    INFO = 'info',
+    DONE = 'done',
+    DANGER = 'danger'
+}
+
 
 

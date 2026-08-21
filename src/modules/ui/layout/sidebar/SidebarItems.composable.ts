@@ -86,7 +86,7 @@ export const useSidebarItems = () => {
 		},
 		{
 			title: "pages.news.title",
-			href: "/news",
+			to: "/news",
 			icon: mdiNewspaperVariantOutline,
 			testId: "sidebar-news",
 		},

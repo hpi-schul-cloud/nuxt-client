@@ -3,7 +3,7 @@
 		:headline="pageTitle"
 		:breadcrumbs="[
 			{
-				href: '/news',
+				to: '/news',
 				title: t('pages.news.title'),
 			},
 			{
