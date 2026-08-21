@@ -114,8 +114,10 @@ describe("DashboardPage", () => {
 			const { wrapper } = setup({ news });
 			await flushPromises();
 
-			const newsCards = wrapper.findAll("[data-testid='news-card-item']");
+			const newsCards = wrapper.findAll("[data-testid^='news-card-item-']");
 			expect(newsCards).toHaveLength(news.length);
+			expect(wrapper.find("[data-testid='news-section']").exists()).toBe(true);
+			expect(wrapper.find("[data-testid='show-all-news']").exists()).toBe(true);
 		});
 	});
 

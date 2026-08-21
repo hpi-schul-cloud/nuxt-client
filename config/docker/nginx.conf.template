@@ -19,10 +19,6 @@ server {
     # either: implement everything in this client
     # or: use an entirely different route
 
-    location ~ '^/news/?$' {
-        proxy_pass ${LEGACY_CLIENT_URL};
-    }
-
     location ~ '^/administration/students/[a-z0-9]{24}/?$' {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
