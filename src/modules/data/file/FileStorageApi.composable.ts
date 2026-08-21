@@ -191,6 +191,21 @@ export const useFileStorageApi = () => {
 		showMessageByType(message);
 	};
 
+	const syncParentsAfterDeleteFailure = async (fileRecords: FileRecord[]): Promise<void> => {
+		const uniqueParents = new Map<string, { parentId: string; parentType: FileRecordParent }>();
+
+		for (const fileRecord of fileRecords) {
+			const key = `${fileRecord.parentType}:${fileRecord.parentId}`;
+			if (!uniqueParents.has(key)) {
+				uniqueParents.set(key, { parentId: fileRecord.parentId, parentType: fileRecord.parentType });
+			}
+		}
+
+		await Promise.all(
+			Array.from(uniqueParents.values()).map(({ parentId, parentType }) => fetchFiles(parentId, parentType))
+		);
+	};
+
 	const deleteFiles = async (fileRecords: FileRecord[]): Promise<void> => {
 		try {
 			const fileRecordIds = fileRecords.map((fileRecord) => fileRecord.id);
@@ -198,7 +213,11 @@ export const useFileStorageApi = () => {
 			deleteFileRecords(fileRecords);
 			await fileApi.deleteFiles({ fileRecordIds });
 		} catch (error) {
-			upsertFileRecords(fileRecords);
+			try {
+				await syncParentsAfterDeleteFailure(fileRecords);
+			} catch {
+				upsertFileRecords(fileRecords);
+			}
 			showError(error);
 			notifyError(t("components.board.notifications.errors.fileNotDeleted"));
 		}

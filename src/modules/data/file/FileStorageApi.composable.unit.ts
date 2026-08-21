@@ -38,6 +38,13 @@ vi.mock("@/utils/helpers");
 vi.mock("@/utils/api");
 const mockedMapAxiosErrorToResponseError = vi.mocked(mapAxiosErrorToResponseError);
 
+const createFileRecordListResponse = (data: FileRecord[] = []): FileRecordListResponse => ({
+	data,
+	total: data.length,
+	skip: 0,
+	limit: data.length,
+});
+
 const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 	const expectedPayload = apiResponseErrorFactory.build({
 		message,
@@ -208,7 +215,7 @@ describe("FileStorageApi Composable", () => {
 					parentType,
 				});
 				const response = mockApiResponse<FileRecordListResponse>({
-					data: { data: [fileRecordResponse] } as FileRecordListResponse,
+					data: createFileRecordListResponse([fileRecordResponse]),
 				});
 
 				const fileApi = mockApi<serverApi.FileApiInterface>();
@@ -756,7 +763,7 @@ describe("FileStorageApi Composable", () => {
 				});
 
 				const fetchResponse = mockApiResponse<FileRecordListResponse>({
-					data: { data: [fileRecordResponse] } as FileRecordListResponse,
+					data: createFileRecordListResponse([fileRecordResponse]),
 				});
 
 				const fileApi = mockApi<serverApi.FileApiInterface>();
@@ -765,7 +772,7 @@ describe("FileStorageApi Composable", () => {
 				fileApi.list.mockResolvedValueOnce(fetchResponse);
 
 				const response = mockApiResponse<FileRecordListResponse>({
-					data: { data: [fileRecordResponse] } as FileRecordListResponse,
+					data: createFileRecordListResponse([fileRecordResponse]),
 				});
 
 				fileApi.deleteFiles.mockResolvedValue(response);
@@ -804,41 +811,59 @@ describe("FileStorageApi Composable", () => {
 		});
 
 		describe("when file api returns error", () => {
-			const setup = () => {
+			const setup = ({ syncFails = false }: { syncFails?: boolean } = {}) => {
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParent.BOARDNODES;
 				const fileRecordResponse = fileRecordFactory.build({
 					parentId,
 					parentType,
 				});
-				const response = mockApiResponse<FileRecordListResponse>({
-					data: { data: [fileRecordResponse] } as FileRecordListResponse,
+				const initialListResponse = mockApiResponse<FileRecordListResponse>({
+					data: createFileRecordListResponse([fileRecordResponse]),
+				});
+				const syncListResponse = mockApiResponse<FileRecordListResponse>({
+					data: createFileRecordListResponse(),
 				});
 
 				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
-				fileApi.list.mockResolvedValueOnce(response);
+				fileApi.list.mockResolvedValueOnce(initialListResponse);
 
 				const { responseError, expectedPayload } = setupErrorResponse(ErrorType.FILE_NOT_FOUND);
 
 				mockedMapAxiosErrorToResponseError.mockReturnValue(expectedPayload);
 				fileApi.deleteFiles.mockRejectedValue(responseError);
+				if (syncFails) {
+					fileApi.list.mockRejectedValueOnce(responseError);
+				} else {
+					fileApi.list.mockResolvedValueOnce(syncListResponse);
+				}
 
 				return {
 					expectedPayload,
 					fileRecordResponse,
+					fileApi,
 				};
 			};
 
-			it("should notify internal server error, file not deleted error and upsert filerecords", async () => {
-				const { fileRecordResponse } = setup();
+			it("should refetch parent files on delete error and keep server state", async () => {
+				const { fileRecordResponse, fileApi } = setup();
 				const { deleteFiles, getFileRecordsByParentId, fetchFiles } = useFileStorageApi();
 
 				await fetchFiles(fileRecordResponse.parentId, fileRecordResponse.parentType);
 
 				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([fileRecordResponse]);
 
-				await deleteFiles([]);
+				await deleteFiles([fileRecordResponse]);
+
+				expect(fileApi.list).toHaveBeenNthCalledWith(
+					2,
+					"schoolId",
+					StorageLocation.SCHOOL,
+					fileRecordResponse.parentId,
+					fileRecordResponse.parentType
+				);
+				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([]);
 
 				expect(useNotificationStore().notify).toHaveBeenCalledWith(
 					expect.objectContaining({
@@ -852,6 +877,18 @@ describe("FileStorageApi Composable", () => {
 						text: "components.board.notifications.errors.fileServiceNotAvailable",
 					})
 				);
+			});
+
+			it("should restore previous local state when delete error refetch also fails", async () => {
+				const { fileRecordResponse } = setup({ syncFails: true });
+				const { deleteFiles, getFileRecordsByParentId, fetchFiles } = useFileStorageApi();
+
+				await fetchFiles(fileRecordResponse.parentId, fileRecordResponse.parentType);
+
+				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([fileRecordResponse]);
+
+				await deleteFiles([fileRecordResponse]);
+
 				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([fileRecordResponse]);
 			});
 		});
