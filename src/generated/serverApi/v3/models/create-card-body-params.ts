@@ -27,7 +27,7 @@ export interface CreateCardBodyParams {
      */
     requiredEmptyElements?: Array<CreateCardBodyParamsRequiredEmptyElements>;
     /**
-     * Position to insert the card at within the column. If omitted, the card is appended at the end.
+     * Position within the column at which to insert the card. If omitted, the card is appended at the end.
      * @type {number}
      * @memberof CreateCardBodyParams
      */

@@ -4,7 +4,7 @@ import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 import { FilePreviewStatus } from "@/types/file/File";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import * as fileHelper from "@/utils/fileHelper";
-import { fileRecordFactory, mockComposable } from "@@/tests/test-utils";
+import { fileRecordFactory, mockComposable, ObjectIdMock } from "@@/tests/test-utils";
 import { linkElementContentFactory } from "@@/tests/test-utils/factory/linkElementContentFactory";
 import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -440,37 +440,115 @@ describe("LinkContentElement", () => {
 					expect(wrapper.findComponent('[data-testid="board-link-element"]').attributes("target")).toEqual("_blank");
 				});
 			});
+		});
 
-			describe("when the link references the same page", () => {
-				const setup = () => {
-					const url = new URL("https://dbildungscloud.test/path#card-12345");
-					const linkElementContent = linkElementContentFactory.build({ url: url.toString() });
-					Object.defineProperty(window, "location", {
-						get: () => ({
-							host: url.host,
-							pathname: url.pathname,
-							hash: url.hash,
-							href: url.href,
-						}),
-					});
+		describe("when the link points to a card on another board", () => {
+			const setup = (isEditMode: boolean) => {
+				const currentBoardId = ObjectIdMock();
+				const otherBoardId = ObjectIdMock();
+				const cardId = ObjectIdMock();
+				const url = new URL(`https://dbildungscloud.test/boards/${otherBoardId}#card-${cardId}`);
+				const linkElementContent = linkElementContentFactory.build({ url: url.toString() });
+				Object.defineProperty(window, "location", {
+					get: () => ({
+						host: url.host,
+						pathname: `/boards/${currentBoardId}`,
+						hash: "",
+						href: `https://dbildungscloud.test/boards/${currentBoardId}`,
+					}),
+				});
 
-					const { wrapper } = setupWrapper({ content: linkElementContent, isEditMode: false });
+				const { wrapper } = setupWrapper({ content: linkElementContent, isEditMode });
 
-					return { wrapper };
-				};
+				return { wrapper };
+			};
 
+			describe("when element is in view mode", () => {
 				it("should open in the same tab", () => {
-					const { wrapper } = setup();
+					const { wrapper } = setup(false);
 
 					expect(wrapper.findComponent('[data-testid="board-link-element"]').attributes("target")).toEqual("_self");
 				});
 
-				it("should call focusNodeFromHash when clicked", async () => {
-					const { wrapper } = setup();
+				it("should not focus a card on the current board when clicked", async () => {
+					const { wrapper } = setup(false);
+
+					await wrapper.findComponent('[data-testid="board-link-element"]').trigger("click");
+
+					expect(useElementFocusMock.focusNodeFromHash).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("when element is in edit mode", () => {
+				it("should not have href and target attributes", () => {
+					const { wrapper } = setup(true);
+					const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
+
+					expect(linkElement.attributes("href")).toBeUndefined();
+					expect(linkElement.attributes("target")).toBeUndefined();
+				});
+
+				it("should not focus a card when clicked", async () => {
+					const { wrapper } = setup(true);
+
+					await wrapper.findComponent('[data-testid="board-link-element"]').trigger("click");
+
+					expect(useElementFocusMock.focusNodeFromHash).not.toHaveBeenCalled();
+				});
+			});
+		});
+
+		describe("when the link points to a card on the same board", () => {
+			const setup = (isEditMode: boolean) => {
+				const boardId = ObjectIdMock();
+				const cardId = ObjectIdMock();
+				const url = new URL(`https://dbildungscloud.test/boards/${boardId}#card-${cardId}`);
+				const linkElementContent = linkElementContentFactory.build({ url: url.toString() });
+				Object.defineProperty(window, "location", {
+					get: () => ({
+						host: url.host,
+						pathname: url.pathname,
+						hash: url.hash,
+						href: url.href,
+					}),
+				});
+
+				const { wrapper } = setupWrapper({ content: linkElementContent, isEditMode });
+
+				return { wrapper };
+			};
+
+			describe("when element is in view mode", () => {
+				it("should open in the same tab", () => {
+					const { wrapper } = setup(false);
+
+					expect(wrapper.findComponent('[data-testid="board-link-element"]').attributes("target")).toEqual("_self");
+				});
+
+				it("should focus the linked card when clicked", async () => {
+					const { wrapper } = setup(false);
 
 					await wrapper.findComponent('[data-testid="board-link-element"]').trigger("click");
 
 					expect(useElementFocusMock.focusNodeFromHash).toHaveBeenCalled();
+				});
+			});
+
+			describe("when element is in edit mode", () => {
+				it("should not have href and target attributes", () => {
+					const { wrapper } = setup(true);
+					const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
+
+					expect(linkElement.attributes("href")).toBeUndefined();
+					expect(linkElement.attributes("target")).toBeUndefined();
+				});
+
+				it("should not focus the linked card when clicked", async () => {
+					const { wrapper } = setup(true);
+
+					await wrapper.findComponent('[data-testid="board-link-element"]').trigger("click");
+
+					expect(useElementFocusMock.focusNodeFromHash).not.toHaveBeenCalled();
 				});
 			});
 		});
