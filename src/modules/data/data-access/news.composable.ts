@@ -14,9 +14,9 @@ export const useNewsActions = () => {
 
 	const { execute, status, error, loadingState } = useSafeAxiosTask();
 
-	const fetchNewsList = async (newsLimit: number) =>
+	const fetchNewsList = async ({ limit, skip, unpublished }: { limit: number; skip?: number; unpublished?: boolean }) =>
 		await execute(
-			() => newsApi.newsControllerFindAll(undefined, undefined, undefined, undefined, newsLimit),
+			() => newsApi.newsControllerFindAll(undefined, undefined, unpublished, skip, limit),
 			t("common.notifications.errors.notLoaded", { count: 2, type: t("common.words.news", 2) })
 		);
 
@@ -68,7 +68,7 @@ export const useNewsActions = () => {
 	};
 };
 
-export const useNewsList = (newsLimit: number) => {
+export const useNewsList = (limit: number) => {
 	const { fetchNewsList } = useNewsActions();
 
 	const {
@@ -76,7 +76,7 @@ export const useNewsList = (newsLimit: number) => {
 		loadingState: newsLoadingState,
 		execute,
 	} = useSafeAxiosRunner(async () => {
-		const { result } = await fetchNewsList(newsLimit);
+		const { result } = await fetchNewsList({ limit });
 
 		return result?.data.data ?? [];
 	});
@@ -111,7 +111,7 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 
 	const creator = computed(() => {
 		if (!newsInstance.value) return undefined;
-		return `${newsInstance.value.creator.firstName} ${newsInstance.value.creator.lastName}`;
+		return `${newsInstance.value.creator?.firstName} ${newsInstance.value.creator.lastName}`;
 	});
 
 	return {
@@ -122,5 +122,72 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 		creator,
 		loadNews,
 		newsLoadingState: loadingState,
+	};
+};
+
+export const useNewsOverview = (params: { canEditNews: Ref<boolean> }) => {
+	type NewsOverviewTab = "published" | "unpublished";
+
+	const { canEditNews } = params;
+	const NEWS_PER_PAGE = 10;
+
+	const { fetchNewsList, loadingState } = useNewsActions();
+	const { fetchNewsList: fetchUnpublishedTotalPage } = useNewsActions();
+
+	const newsList = ref<NewsResponse[]>([]);
+	const total = ref(0);
+	const unpublishedTotal = ref(0);
+	const activeTab = ref<NewsOverviewTab>("published");
+	const currentPage = ref(1);
+
+	const pageCount = computed(() => Math.ceil(total.value / NEWS_PER_PAGE));
+
+	const loadNews = async () => {
+		const unpublished = activeTab.value === "unpublished";
+		const { success, result } = await fetchNewsList({
+			limit: NEWS_PER_PAGE,
+			skip: (currentPage.value - 1) * NEWS_PER_PAGE,
+			unpublished,
+		});
+
+		if (!success || !result) return;
+
+		newsList.value = result.data.data;
+		total.value = result.data.total;
+
+		if (unpublished) unpublishedTotal.value = result.data.total;
+	};
+
+	const loadUnpublishedTotal = async () => {
+		if (!canEditNews.value) return;
+
+		const { success, result } = await fetchUnpublishedTotalPage({ limit: 1, skip: 0, unpublished: true });
+		if (!success || !result) return;
+
+		unpublishedTotal.value = result.data.total;
+	};
+
+	const onPageChange = async (page: number) => {
+		currentPage.value = page;
+		await loadNews();
+	};
+
+	watch(activeTab, async () => {
+		currentPage.value = 1;
+		await loadNews();
+	});
+
+	loadNews();
+	loadUnpublishedTotal();
+
+	return {
+		newsList,
+		total,
+		unpublishedTotal,
+		activeTab,
+		currentPage,
+		pageCount,
+		loadingState,
+		onPageChange,
 	};
 };
