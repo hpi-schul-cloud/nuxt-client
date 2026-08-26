@@ -201,6 +201,7 @@ export const useFileStorageApi = () => {
 			}
 		}
 
+		await new Promise((resolve) => setTimeout(resolve, 500));
 		await Promise.all(
 			Array.from(uniqueParents.values()).map(({ parentId, parentType }) => fetchFiles(parentId, parentType))
 		);

@@ -811,6 +811,14 @@ describe("FileStorageApi Composable", () => {
 		});
 
 		describe("when file api returns error", () => {
+			beforeEach(() => {
+				vi.useFakeTimers();
+			});
+
+			afterEach(() => {
+				vi.useRealTimers();
+			});
+
 			const setup = ({ syncFails = false }: { syncFails?: boolean } = {}) => {
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParent.BOARDNODES;
@@ -854,7 +862,9 @@ describe("FileStorageApi Composable", () => {
 
 				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([fileRecordResponse]);
 
-				await deleteFiles([fileRecordResponse]);
+				const deletePromise = deleteFiles([fileRecordResponse]);
+				await vi.advanceTimersByTimeAsync(500);
+				await deletePromise;
 
 				expect(fileApi.list).toHaveBeenNthCalledWith(
 					2,
@@ -887,7 +897,9 @@ describe("FileStorageApi Composable", () => {
 
 				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([fileRecordResponse]);
 
-				await deleteFiles([fileRecordResponse]);
+				const deletePromise = deleteFiles([fileRecordResponse]);
+				await vi.advanceTimersByTimeAsync(500);
+				await deletePromise;
 
 				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([fileRecordResponse]);
 			});
