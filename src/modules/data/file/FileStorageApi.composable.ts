@@ -202,9 +202,10 @@ export const useFileStorageApi = () => {
 		}
 
 		await new Promise((resolve) => setTimeout(resolve, 500));
-		await Promise.all(
-			Array.from(uniqueParents.values()).map(({ parentId, parentType }) => fetchFiles(parentId, parentType))
-		);
+
+		const uniqueParentsArray = Array.from(uniqueParents.values());
+		const promises = uniqueParentsArray.map(({ parentId, parentType }) => fetchFiles(parentId, parentType));
+		await Promise.all(promises);
 	};
 
 	const deleteFiles = async (fileRecords: FileRecord[]): Promise<void> => {
