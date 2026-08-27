@@ -14,6 +14,7 @@ import {
 	createTestAppStoreWithSchool,
 	mockApi,
 	mockApiResponse,
+	parentStatisticFactory,
 } from "@@/tests/test-utils";
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
@@ -306,6 +307,41 @@ describe("FileStorageApi Composable", () => {
 					})
 				);
 			});
+		});
+	});
+
+	describe("tryGetParentStatisticFromApi", () => {
+		it("should fetch and store the parent statistic", async () => {
+			const parentId = ObjectIdMock();
+			const parentType = FileRecordParent.BOARDNODES;
+			const statistic = parentStatisticFactory.build();
+			const fileApi = mockApi<serverApi.FileApiInterface>();
+			vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+			fileApi.getParentStatistic.mockResolvedValueOnce(mockApiResponse({ data: statistic }));
+
+			const { tryGetParentStatisticFromApi, getStatisticByParentId } = useFileStorageApi();
+
+			await tryGetParentStatisticFromApi(parentId, parentType);
+
+			expect(fileApi.getParentStatistic).toHaveBeenCalledWith(parentId, parentType);
+			expect(getStatisticByParentId(parentId)).toStrictEqual(statistic);
+		});
+
+		it("should notify and rethrow when fetching the parent statistic fails", async () => {
+			const parentId = ObjectIdMock();
+			const parentType = FileRecordParent.BOARDNODES;
+			const { responseError, expectedPayload } = setupErrorResponse(ErrorType.Forbidden);
+			mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
+			const fileApi = mockApi<serverApi.FileApiInterface>();
+			vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+			fileApi.getParentStatistic.mockRejectedValueOnce(responseError);
+
+			const { tryGetParentStatisticFromApi } = useFileStorageApi();
+
+			await expect(tryGetParentStatisticFromApi(parentId, parentType)).rejects.toBe(responseError);
+			expect(useNotificationStore().notify).toHaveBeenCalledWith(
+				expect.objectContaining({ status: "error", text: "error.403" })
+			);
 		});
 	});
 
@@ -902,6 +938,23 @@ describe("FileStorageApi Composable", () => {
 				await deletePromise;
 
 				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([fileRecordResponse]);
+			});
+
+			it("should refetch a shared parent only once when multiple deletes fail", async () => {
+				const { fileRecordResponse, fileApi } = setup();
+				const secondFileRecord = fileRecordFactory.build({
+					parentId: fileRecordResponse.parentId,
+					parentType: fileRecordResponse.parentType,
+				});
+				const { deleteFiles, fetchFiles } = useFileStorageApi();
+
+				await fetchFiles(fileRecordResponse.parentId, fileRecordResponse.parentType);
+
+				const deletePromise = deleteFiles([fileRecordResponse, secondFileRecord]);
+				await vi.advanceTimersByTimeAsync(500);
+				await deletePromise;
+
+				expect(fileApi.list).toHaveBeenCalledTimes(2);
 			});
 		});
 	});
