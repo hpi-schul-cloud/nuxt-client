@@ -7,7 +7,7 @@
 				:key="task.id"
 				class="grid-item"
 				:style="`border-left: 4px solid ${task.displayColor};`"
-				:href="`/homework/${task.id}`"
+				:href="`/tasks/${task.id}`"
 				@dragstart.prevent
 			>
 				<VCardText>

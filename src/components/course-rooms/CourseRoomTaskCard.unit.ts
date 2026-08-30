@@ -101,7 +101,7 @@ describe("CourseRoomTaskCard", () => {
 
 			await taskCard.trigger("click");
 
-			expect(locationSpy).toHaveBeenCalledWith("/homework/123");
+		expect(locationSpy).toHaveBeenCalledWith("/tasks/123");
 		});
 
 		it("should NOT redirect to homework page if dragging is in progress", async () => {
@@ -214,7 +214,7 @@ describe("CourseRoomTaskCard", () => {
 				const moreActionButton = wrapper.findComponent(`[data-testid="room-task-card-menu-edit-0"]`);
 				await moreActionButton.trigger("click");
 
-				expect(window.location.assign).toHaveBeenCalledWith("/homework/123/edit?returnUrl=rooms/456");
+		expect(window.location.assign).toHaveBeenCalledWith("/tasks/123/edit?returnUrl=rooms/456");
 			});
 
 			it("should trigger the 'unPublishCard' method when 'more action' unpublish button is clicked", async () => {
@@ -398,7 +398,7 @@ describe("CourseRoomTaskCard", () => {
 			await wrapper.trigger("keydown.enter");
 			await nextTick();
 
-			expect(locationSpy).toHaveBeenCalledWith("/homework/123");
+		expect(locationSpy).toHaveBeenCalledWith("/tasks/123");
 		});
 
 		it("should call 'onKeyPress' event when 'up, down, space' keys are pressed", async () => {

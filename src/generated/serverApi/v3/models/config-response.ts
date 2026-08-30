@@ -250,6 +250,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_TASKS_V3_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_BOARD_LAYOUT_ENABLED: boolean;
     /**
      * 

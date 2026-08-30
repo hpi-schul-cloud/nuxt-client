@@ -1658,6 +1658,7 @@ export default {
 	"pages.tasks.with.due": "З терміном здачі",
 	"pages.tasks.no.due": "Без терміну здачі",
 	"pages.tasks.rating": "Оцінка",
+	"pages.tasks.submissions": "Подання",
 	"pages.room.taskCard.teacher.label.submitted": "Надіслано",
 	"pages.room.learningContent.emptyState": "Наразі в цьому курсі немає навчальних матеріалів",
 	"pages.rooms.a11y.group.text": "{title}, папка, {itemCount} курси(-ів)",
@@ -1938,6 +1939,7 @@ export default {
 		"dBildungscloud регулярно проходить перевірки безпеки та тести на проникнення, оскільки безпека даних наших користувачів дуже важлива для нас. Ви все ще виявили проблему безпеки? Напишіть нам, щоб ми могли закрити прогалину якомога швидше: ",
 
 	"pages.tasks.labels.due": "Термін",
+	"pages.tasks.files.usedInDescription": "Використовується в описі завдання",
 	"pages.tasks.labels.noCourse": "Курс не призначено",
 	"pages.tasks.labels.planned": "Заплановано",
 	"pages.tasks.graded": "Оцінено",

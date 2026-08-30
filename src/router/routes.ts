@@ -402,6 +402,23 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "tasks",
 	},
 	{
+		path: `/tasks/new`,
+		component: () => import("@/pages/tasks/TaskEdit.page.vue"),
+		name: "task-new",
+	},
+	{
+		path: `/tasks/:taskId(${REGEX_ID})/edit`,
+		component: () => import("@/pages/tasks/TaskEdit.page.vue"),
+		name: "task-edit",
+		props: (route: RouteLocationNormalized) => ({ taskId: route.params.taskId }),
+	},
+	{
+		path: `/tasks/:taskId(${REGEX_ID})`,
+		component: () => import("@/pages/tasks/TaskDetails.page.vue"),
+		name: "task-details",
+		props: (route: RouteLocationNormalized) => ({ taskId: route.params.taskId }),
+	},
+	{
 		path: `/tools/context/tool-configuration`,
 		component: () => import("@/pages/context-external-tool/CourseContextExternalToolConfigurator.page.vue"),
 		name: "context-external-tool-configuration",

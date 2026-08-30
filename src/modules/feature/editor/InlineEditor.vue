@@ -12,7 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import { advancedFormattingToolbar, advancedPlugins, compactHeadings } from "./config";
+import {
+	advancedFormattingToolbar,
+	advancedFormattingToolbarWithImage,
+	advancedPluginsWithImage,
+	compactHeadings,
+} from "./config";
 import { useEditorConfig } from "./EditorConfig.composable";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import CKEditor from "@ckeditor/ckeditor5-vue";
@@ -38,6 +43,18 @@ const props = defineProps({
 		type: Number,
 		default: 0,
 	},
+	imageUploadHandler: {
+		type: Function,
+		default: undefined,
+	},
+	audioUploadHandler: {
+		type: Function,
+		default: undefined,
+	},
+	videoUploadHandler: {
+		type: Function,
+		default: undefined,
+	},
 });
 
 const emit = defineEmits(["ready", "focus", "update:value", "blur", "keyboard:delete"]);
@@ -51,9 +68,12 @@ let editorInstance: Editor | null = null;
 const config = computed(() => ({
 	...generalConfig,
 	toolbar: {
-		items: advancedFormattingToolbar,
+		items: props.imageUploadHandler ? advancedFormattingToolbarWithImage : advancedFormattingToolbar,
 	},
-	plugins: advancedPlugins,
+	plugins: advancedPluginsWithImage,
+	taskImageUpload: props.imageUploadHandler,
+	taskAudioUpload: props.audioUploadHandler,
+	taskVideoUpload: props.videoUploadHandler,
 	heading: compactHeadings,
 	placeholder: props.placeholder,
 	ui: {
@@ -84,7 +104,7 @@ const handleDelete = () => emit("keyboard:delete");
 
 const handleReady = (editor: Editor) => {
 	editorInstance = editor;
-	emit("ready");
+	emit("ready", editor);
 
 	if (props.autofocus) {
 		focusAtEnd(editor);

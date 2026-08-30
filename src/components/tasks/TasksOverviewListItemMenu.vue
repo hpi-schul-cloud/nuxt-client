@@ -99,7 +99,7 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const envConfig = useEnvConfig();
 
-const editLink = computed(() => `/homework/${props.task.id}/edit`);
+const editLink = computed(() => `/tasks/${props.task.id}/edit`);
 const copyLink = computed(() => `/homework/${props.task.id}/copy?returnUrl=/tasks`);
 const copyServiceEnabled = computed(() => envConfig.value.FEATURE_COPY_SERVICE_ENABLED);
 const shareTaskEnabled = computed(() => envConfig.value.FEATURE_TASK_SHARE);

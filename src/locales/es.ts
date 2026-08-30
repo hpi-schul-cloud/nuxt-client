@@ -1674,6 +1674,7 @@ export default {
 	"pages.tasks.with.due": "Con plazo",
 	"pages.tasks.no.due": "Sin plazo",
 	"pages.tasks.rating": "Valoración",
+	"pages.tasks.submissions": "Entregas",
 	"pages.room.taskCard.teacher.label.submitted": "Entregado",
 	"pages.room.learningContent.emptyState": "Actualmente no hay contenidos de aprendizaje en este curso",
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",
@@ -1965,6 +1966,7 @@ export default {
 		"dBildungscloud está sometido a controles de seguridad y pruebas de intrusión regularmente, ya que la seguridad de los datos de nuestros usuarios es muy importante para nosotros. ¿Sigues con problemas de seguridad? Escríbenos para que podamos cerrar la incidencia lo antes posible: ",
 
 	"pages.tasks.labels.due": "Entrega",
+	"pages.tasks.files.usedInDescription": "Usado en la descripción de la tarea",
 	"pages.tasks.labels.noCourse": "Sin asignación de curso",
 	"pages.tasks.labels.planned": "Planificada",
 	"pages.tasks.graded": "Calificado",
