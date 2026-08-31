@@ -301,6 +301,11 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		},
 	},
 	{
+		path: "/news",
+		component: async () => (await import("@page-news")).NewsOverviewPage,
+		name: "news-list",
+	},
+	{
 		path: "/news/new",
 		component: async () => (await import("@page-news")).NewsCreatePage,
 		name: "news-new",

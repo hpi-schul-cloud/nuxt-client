@@ -2,7 +2,7 @@ import RenderHTML from "./RenderHTML.vue";
 import { mount } from "@vue/test-utils";
 
 describe("RenderHTML", () => {
-	const setup = (props: { html: string; component?: string; config?: "richText" }) => {
+	const setup = (props: { html: string; component?: string; config?: "richText" | "richTextNoLinks" }) => {
 		const wrapper = mount(RenderHTML, {
 			props,
 		});
@@ -71,6 +71,51 @@ describe("RenderHTML", () => {
 				expect(wrapper.html()).toEqual(
 					'<div><span style="font-color: green;" class="someclass">test value</span></div>'
 				);
+			});
+		});
+
+		describe("when richTextNoLinks config is active", () => {
+			it("should strip anchor tags", () => {
+				const { wrapper } = setup({
+					html: '<a href="https://example.com">click here</a>',
+					config: "richTextNoLinks",
+				});
+				expect(wrapper.find("a").exists()).toBe(false);
+			});
+
+			it("should preserve the anchor text content after stripping", () => {
+				const { wrapper } = setup({
+					html: '<a href="https://example.com">click here</a>',
+					config: "richTextNoLinks",
+				});
+				expect(wrapper.text()).toContain("click here");
+			});
+
+			it("should strip anchors nested inside other allowed tags", () => {
+				const { wrapper } = setup({
+					html: '<p>See <a href="https://example.com">this link</a> for details.</p>',
+					config: "richTextNoLinks",
+				});
+				expect(wrapper.find("a").exists()).toBe(false);
+				expect(wrapper.find("p").exists()).toBe(true);
+				expect(wrapper.text()).toContain("this link");
+			});
+
+			it("should still allow other whitelisted tags", () => {
+				const { wrapper } = setup({
+					html: "<strong>bold</strong> and <em>italic</em>",
+					config: "richTextNoLinks",
+				});
+				expect(wrapper.find("strong").exists()).toBe(true);
+				expect(wrapper.find("em").exists()).toBe(true);
+			});
+
+			it("should strip non-whitelisted tags just like richText", () => {
+				const { wrapper } = setup({
+					html: "<h1>heading</h1>",
+					config: "richTextNoLinks",
+				});
+				expect(wrapper.find("h1").exists()).toBe(false);
 			});
 		});
 	});
