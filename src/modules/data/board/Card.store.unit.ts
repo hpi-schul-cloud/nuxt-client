@@ -171,12 +171,12 @@ describe("CardStore", () => {
 				cardIds,
 			});
 		});
-		it("should call rest Api if feature flag is disabled", async () => {
+		it("should call socket Api when feature flag is disabled", async () => {
 			const { cardStore } = setup(false);
 			const cardIds = ["id1", "id2aewr", "id3423"];
 
 			await cardStore.fetchCardRequest({ cardIds });
-			expect(mockedCardRestApiActions.fetchCardRequest).toHaveBeenCalledWith({
+			expect(mockedCardSocketApiActions.fetchCardRequest).toHaveBeenCalledWith({
 				cardIds,
 			});
 		});
@@ -225,14 +225,14 @@ describe("CardStore", () => {
 			});
 		});
 
-		it("should call rest Api if feature flag is enabled", () => {
+		it("should call socket Api when feature flag is disabled", () => {
 			const { cardStore, cardId } = setup();
 
 			cardStore.deleteCardRequest({
 				cardId,
 			});
 
-			expect(mockedCardRestApiActions.deleteCardRequest).toHaveBeenCalledWith({
+			expect(mockedCardSocketApiActions.deleteCardRequest).toHaveBeenCalledWith({
 				cardId,
 			});
 		});
@@ -290,17 +290,12 @@ describe("CardStore", () => {
 			});
 		});
 
-		it("should show error and not call socket Api when feature flag is disabled", async () => {
+		it("should call socket Api when feature flag is disabled", async () => {
 			const { cardStore, cardId } = setup(false);
 
-			await expect(
-				cardStore.duplicateCard({
-					cardId,
-				})
-			).rejects.toThrow("Socket-based card duplication is disabled");
+			cardStore.duplicateCard({ cardId });
 
-			expect(mockedCardSocketApiActions.duplicateCardRequest).not.toHaveBeenCalled();
-			expectNotification("error");
+			expect(mockedCardSocketApiActions.duplicateCardRequest).toHaveBeenCalledWith({ cardId });
 		});
 	});
 
@@ -429,7 +424,7 @@ describe("CardStore", () => {
 
 			cardStore.updateCardTitleRequest(payload);
 
-			expect(mockedCardRestApiActions.updateCardTitleRequest).toHaveBeenCalledWith(payload);
+			expect(mockedCardSocketApiActions.updateCardTitleRequest).toHaveBeenCalledWith(payload);
 		});
 	});
 
@@ -478,7 +473,7 @@ describe("CardStore", () => {
 
 			cardStore.updateCardHeightRequest(payload);
 
-			expect(mockedCardRestApiActions.updateCardHeightRequest).toHaveBeenCalledWith(payload);
+			expect(mockedCardSocketApiActions.updateCardHeightRequest).toHaveBeenCalledWith(payload);
 		});
 	});
 
@@ -582,7 +577,7 @@ describe("CardStore", () => {
 
 			await cardStore.createElementRequest(payload);
 
-			expect(mockedCardRestApiActions.createElementRequest).toHaveBeenCalledWith(payload);
+			expect(mockedCardSocketApiActions.createElementRequest).toHaveBeenCalledWith(payload);
 		});
 	});
 
@@ -665,7 +660,7 @@ describe("CardStore", () => {
 
 			await cardStore.moveElementRequest("unknownId", " elementId", -1, MOVE_DOWN);
 
-			expect(mockedCardRestApiActions.moveElementRequest).not.toHaveBeenCalled();
+			expect(mockedCardSocketApiActions.moveElementRequest).not.toHaveBeenCalled();
 		});
 
 		it("should not move element up if first element is moved", async () => {
@@ -706,7 +701,7 @@ describe("CardStore", () => {
 
 			await cardStore.moveElementRequest(cardId, elementId, 0, MOVE_DOWN);
 
-			expect(mockedCardRestApiActions.moveElementRequest).toHaveBeenCalledWith({
+			expect(mockedCardSocketApiActions.moveElementRequest).toHaveBeenCalledWith({
 				elementId,
 				toCardId: cardId,
 				toPosition: 1,
@@ -856,7 +851,7 @@ describe("CardStore", () => {
 
 			await cardStore.addTextAfterTitle("unknownId");
 
-			expect(mockedCardRestApiActions.createElementRequest).not.toHaveBeenCalled();
+			expect(mockedCardSocketApiActions.createElementRequest).not.toHaveBeenCalled();
 		});
 
 		it("should add text after title", async () => {
@@ -870,7 +865,7 @@ describe("CardStore", () => {
 				toPosition: 0,
 			};
 
-			expect(mockedCardRestApiActions.createElementRequest).toHaveBeenCalledWith(expectedCall);
+			expect(mockedCardSocketApiActions.createElementRequest).toHaveBeenCalledWith(expectedCall);
 		});
 	});
 
@@ -1003,7 +998,7 @@ describe("CardStore", () => {
 
 				cardStore.disconnectSocketRequest();
 
-				expect(mockedCardRestApiActions.disconnectSocketRequest).toHaveBeenCalled();
+				expect(mockedCardSocketApiActions.disconnectSocketRequest).toHaveBeenCalled();
 			});
 		});
 	});
@@ -1021,7 +1016,7 @@ describe("CardStore", () => {
 						type: ContentElementType.FILE,
 						content: {},
 					} as CollaborativeTextEditorElementResponse);
-			mockedCardRestApiActions.createElementRequest.mockResolvedValue(createElementRequestReturnValue);
+			mockedCardSocketApiActions.createElementRequest.mockResolvedValue(createElementRequestReturnValue);
 
 			const uploadCollaboraFileReturnValue = uploadFails ? undefined : ({ id: "fileId" } as FileRecordResponse);
 			mockedFileStorageActions.uploadCollaboraFile.mockResolvedValue(uploadCollaboraFileReturnValue);
@@ -1045,7 +1040,7 @@ describe("CardStore", () => {
 
 				cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
 
-				expect(mockedCardRestApiActions.createElementRequest).toHaveBeenCalled();
+				expect(mockedCardSocketApiActions.createElementRequest).toHaveBeenCalled();
 			});
 
 			it("should call uploadCollaboraFile", async () => {
@@ -1088,7 +1083,7 @@ describe("CardStore", () => {
 
 					await cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
 
-					expect(mockedCardRestApiActions.deleteElementRequest).toHaveBeenCalled();
+					expect(mockedCardSocketApiActions.deleteElementRequest).toHaveBeenCalled();
 				});
 			});
 		});
@@ -1099,7 +1094,7 @@ describe("CardStore", () => {
 
 				cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
 
-				expect(mockedCardRestApiActions.createElementRequest).not.toHaveBeenCalled();
+				expect(mockedCardSocketApiActions.createElementRequest).not.toHaveBeenCalled();
 			});
 
 			it("should not call uploadCollaboraFile", async () => {

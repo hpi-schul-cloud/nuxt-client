@@ -1,21 +1,9 @@
 import { useBoardStore } from "../Board.store";
 import { useBoardApi } from "../BoardApi.composable";
 import { useCardStore } from "../Card.store";
-import { useSharedCardRequestPool } from "../CardRequestPool.composable";
 import { useSharedEditMode } from "../edit-mode.composable";
-import {
-	CreateElementRequestPayload,
-	DeleteCardRequestPayload,
-	DeleteElementRequestPayload,
-	FetchCardRequestPayload,
-	MoveElementRequestPayload,
-	UpdateCardColorRequestPayload,
-	UpdateCardHeightRequestPayload,
-	UpdateCardTitleRequestPayload,
-	UpdateElementRequestPayload,
-} from "./cardActionPayload.types";
+import { CreateElementRequestPayload } from "./cardActionPayload.types";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { delay } from "@/utils/helpers";
 import {
 	ContentElementType,
 	ExternalToolElementResponse,
@@ -41,19 +29,9 @@ export const useCardRestApi = () => {
 	const cardStore = useCardStore();
 	const { preferredExternalTool } = storeToRefs(usePreferredExternalToolStore());
 
-	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
 	const { handleError, notifyWithTemplate } = useErrorHandler();
 
-	const {
-		createElementCall,
-		deleteElementCall,
-		deleteCardCall,
-		updateElementCall,
-		moveElementCall,
-		updateCardTitle,
-		updateCardColor,
-		updateCardHeightCall,
-	} = useBoardApi();
+	const { createElementCall, updateElementCall } = useBoardApi();
 
 	const { fetchPreferredTools, createContextExternalToolCall, fetchAvailableToolsForContextCall } =
 		useContextExternalToolApi();
@@ -61,28 +39,6 @@ export const useCardRestApi = () => {
 	const { setEditModeId } = useSharedEditMode();
 
 	const { t } = useI18n();
-
-	const createElementRequest = async (payload: CreateElementRequestPayload): Promise<AnyContentElement | undefined> => {
-		const card = cardStore.getCard(payload.cardId);
-		if (card === undefined) return;
-
-		try {
-			const params = {
-				type: payload.type,
-				toPosition: payload.toPosition,
-			};
-			const newElement = await createElementCall(payload.cardId, params);
-			return cardStore.createElementSuccess({
-				...payload,
-				newElement: newElement.data,
-				isOwnAction: true,
-			});
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
-			});
-		}
-	};
 
 	const createPreferredElement = async (
 		payload: CreateElementRequestPayload,
@@ -153,120 +109,6 @@ export const useCardRestApi = () => {
 		}
 	};
 
-	const deleteElementRequest = async (payload: DeleteElementRequestPayload) => {
-		const card = cardStore.getCard(payload.cardId);
-		if (card === undefined) return;
-
-		try {
-			await deleteElementCall(payload.elementId);
-			cardStore.deleteElementSuccess({ ...payload, isOwnAction: true });
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notDeleted", "boardElement"),
-			});
-		}
-	};
-
-	const moveElementRequest = async (payload: MoveElementRequestPayload) => {
-		const card = cardStore.getCard(payload.toCardId);
-		if (card === undefined) return;
-
-		try {
-			await moveElementCall(payload.elementId, payload.toCardId, payload.toPosition);
-			cardStore.moveElementSuccess({ ...payload, isOwnAction: true });
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notMoved", "boardElement"),
-			});
-		}
-	};
-
-	const updateElementRequest = async (payload: UpdateElementRequestPayload) => {
-		try {
-			const success = await updateElementCall(payload.element);
-			cardStore.updateElementSuccess({
-				elementId: success.data.id,
-				data: {
-					type: success.data.type,
-					content: success.data.content,
-				},
-				isOwnAction: true,
-			});
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplate("notUpdated", "boardElement"),
-			});
-		}
-	};
-
-	const deleteCardRequest = async (payload: DeleteCardRequestPayload) => {
-		const card = cardStore.getCard(payload.cardId);
-		if (card === undefined) return;
-
-		try {
-			await deleteCardCall(payload.cardId);
-			boardStore.deleteCardSuccess({ ...payload, isOwnAction: true });
-			cardStore.deleteCardSuccess({ ...payload, isOwnAction: true });
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
-			});
-		}
-	};
-
-	const fetchCardRequest = async (payload: FetchCardRequestPayload): Promise<void> => {
-		await delay(100);
-		try {
-			const promises = payload.cardIds.map(fetchCardFromApi);
-			const cards = await Promise.all(promises);
-			cardStore.fetchCardSuccess({ cards, isOwnAction: true });
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notLoaded", "boardCard"),
-			});
-		}
-	};
-
-	const updateCardTitleRequest = async (payload: UpdateCardTitleRequestPayload): Promise<void> => {
-		const card = cardStore.getCard(payload.cardId);
-		if (card === undefined) return;
-
-		try {
-			await updateCardTitle(payload.cardId, payload.newTitle);
-			cardStore.updateCardTitleSuccess({ ...payload, isOwnAction: true });
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated"),
-			});
-		}
-	};
-
-	const updateCardColorRequest = async (payload: UpdateCardColorRequestPayload): Promise<void> => {
-		const card = cardStore.getCard(payload.cardId);
-		if (card === undefined) return;
-
-		try {
-			await updateCardColor(payload.cardId, payload.backgroundColor);
-			cardStore.updateCardColorSuccess({ ...payload, isOwnAction: true });
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated"),
-			});
-		}
-	};
-
-	const updateCardHeightRequest = async (payload: UpdateCardHeightRequestPayload) => {
-		const card = cardStore.getCard(payload.cardId);
-		if (card === undefined) return;
-
-		try {
-			await updateCardHeightCall(payload.cardId, payload.newHeight);
-			cardStore.updateCardHeightSuccess({ ...payload, isOwnAction: true });
-		} catch (error) {
-			handleError(error, {});
-		}
-	};
-
 	const notifyWithTemplateAndReload: ApiErrorHandlerFactory =
 		(errorType: ErrorType, boardObjectType?: BoardObjectType) => () => {
 			notifyWithTemplate(errorType, boardObjectType)();
@@ -274,24 +116,8 @@ export const useCardRestApi = () => {
 			setEditModeId(undefined);
 		};
 
-	// this unused function is added to make sure that the same name is used in both socketApi and restApi
-	// eslint-disable-next-line arrow-body-style
-	const disconnectSocketRequest = (): void => {
-		return;
-	};
-
 	return {
-		createElementRequest,
 		createPreferredElement,
 		getPreferredTools,
-		deleteElementRequest,
-		moveElementRequest,
-		updateElementRequest,
-		deleteCardRequest,
-		fetchCardRequest,
-		updateCardTitleRequest,
-		updateCardColorRequest,
-		updateCardHeightRequest,
-		disconnectSocketRequest,
 	};
 };

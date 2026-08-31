@@ -1,5 +1,5 @@
 import { ImportDestination, ImportDestinationItem, ImportDestinationType } from "./types";
-import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { noDebounceLoadingOptions, useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useImportContent } from "@/composables/copy-content.composable";
 import { $axios } from "@/utils/api";
 import { ShareTokenApiFactory, ShareTokenInfoResponse, ShareTokenInfoResponseParentType } from "@api-server";
@@ -35,35 +35,44 @@ export const useImportFlow = () => {
 		return { result: result?.data, success, error };
 	};
 
+	const getImportErrorMessage = () =>
+		t("common.notifications.errors.notImported", {
+			type: t(itemNameKey.value),
+		});
+
+	const getImportRequest =
+		(shareTokenInfo: ShareTokenInfoResponse, params: { newName: string; destinationId?: string }) => () =>
+			shareApi.shareTokenControllerImportShareToken(shareTokenInfo.token, params);
+
 	const importShareToken = async (
 		shareTokenInfo: ShareTokenInfoResponse,
-		params: { newName: string; destinationId?: string },
-		withLoading = true
+		params: { newName: string; destinationId?: string }
 	) => {
-		const runImport = () =>
-			execute(
-				() => shareApi.shareTokenControllerImportShareToken(shareTokenInfo.token, params),
-				t("common.notifications.errors.notImported", {
-					type: t(itemNameKey.value),
-				})
-			);
+		const { result, success, error } = await execute(
+			getImportRequest(shareTokenInfo, params),
+			getImportErrorMessage(),
+			noDebounceLoadingOptions
+		);
 
-		const { result, success, error } = withLoading
-			? await executeWithGlobalLoadingState(
-					execute,
-					() => shareApi.shareTokenControllerImportShareToken(shareTokenInfo.token, params),
-					t("common.notifications.errors.notImported", {
-						type: t(itemNameKey.value),
-					}),
-					importLoadingMessage
-				)
-			: await runImport();
+		return { result: result?.data, success, error };
+	};
+
+	const importOneWithGlobalLoading = async (
+		shareTokenInfo: ShareTokenInfoResponse,
+		params: { newName: string; destinationId?: string }
+	) => {
+		const { result, success, error } = await executeWithGlobalLoadingState(
+			execute,
+			getImportRequest(shareTokenInfo, params),
+			getImportErrorMessage(),
+			importLoadingMessage
+		);
 
 		return { result: result?.data, success, error };
 	};
 
 	const importWithoutDestination = async (tokenInfo: ShareTokenInfoResponse, newName: string) => {
-		const { success, error, result } = await importShareToken(tokenInfo, { newName });
+		const { success, error, result } = await importOneWithGlobalLoading(tokenInfo, { newName });
 
 		if (success) {
 			notifySuccess(t("components.molecules.import.options.success", { type: t(itemNameKey.value), name: newName }));
@@ -88,14 +97,10 @@ export const useImportFlow = () => {
 			Promise.all(
 				destinations.map(
 					async (destination) =>
-						await importShareToken(
-							tokenInfo,
-							{
-								newName,
-								destinationId: destination.id,
-							},
-							false
-						)
+						await importShareToken(tokenInfo, {
+							newName,
+							destinationId: destination.id,
+						})
 				)
 			)
 		);

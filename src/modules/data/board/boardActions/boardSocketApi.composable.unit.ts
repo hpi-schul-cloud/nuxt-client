@@ -5,7 +5,6 @@ import {
 	UpdateBoardLayoutSuccessPayload,
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
-import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";
 import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import {
@@ -33,9 +32,6 @@ const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 vi.mock("../fixSamePositionDnD.composable");
 const mockedUseForceRender = vi.mocked(useForceRender);
 
-vi.mock("./boardRestApi.composable");
-const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
-
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
@@ -48,7 +44,6 @@ vi.mock("vue-i18n", () => ({
 
 describe("useBoardSocketApi", () => {
 	let socketMock: Mocked<ReturnType<typeof useSocketConnection>>;
-	let mockedBoardRestApiHandler: Mocked<ReturnType<typeof useBoardRestApi>>;
 	let mockedErrorHandler: Mocked<ReturnType<typeof useErrorHandler>>;
 	let mockedSharedLastCreatedElementActions: Mocked<ReturnType<typeof useSharedLastCreatedElement>>;
 	let mockedUseForceRenderHandler: ReturnType<typeof useForceRender>;
@@ -58,9 +53,6 @@ describe("useBoardSocketApi", () => {
 
 		socketMock = mockComposable(useSocketConnection);
 		mockedUseSocketConnection.mockReturnValue(socketMock);
-
-		mockedBoardRestApiHandler = mockComposable(useBoardRestApi);
-		mockedUseBoardRestApi.mockReturnValue(mockedBoardRestApiHandler);
 
 		mockedErrorHandler = mockComposable(useErrorHandler);
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
