@@ -120,10 +120,9 @@ describe("BoardStore", () => {
 		useRouteMock.mockReturnValue(router.currentRoute.value);
 	});
 
-	const setup = (options?: { createBoard?: boolean; socketFlag?: boolean }) => {
-		const { createBoard, socketFlag } = {
+	const setup = (options?: { createBoard?: boolean }) => {
+		const { createBoard } = {
 			createBoard: true,
-			socketFlag: false,
 			...options,
 		};
 
@@ -134,9 +133,7 @@ describe("BoardStore", () => {
 			columns: [firstColumn, secondColumn],
 		});
 
-		createTestEnvStore({
-			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: socketFlag,
-		});
+		createTestEnvStore();
 
 		const boardStore = useBoardStore();
 		if (createBoard) {
@@ -780,50 +777,23 @@ describe("BoardStore", () => {
 			expect(boardStore.board).toBe(undefined);
 		});
 
-		describe("when socket connection is not established", () => {
-			it("should update readersCanEdit", () => {
-				const { boardStore } = setup({ socketFlag: false });
-				boardStore.updateReaderCanEditSuccess({
-					...payload,
-					isOwnAction: true,
-				});
-				expect(boardStore.board?.readersCanEdit).toBe(true);
-				expect(mockedBoardSocketApi.fetchBoardRequest).not.toHaveBeenCalled();
+		it("should update readersCanEdit", () => {
+			const { boardStore } = setup();
+			boardStore.updateReaderCanEditSuccess({
+				...payload,
+				isOwnAction: true,
 			});
-
-			describe("when isOwnAction is false", () => {
-				it("should fetch board", () => {
-					const { boardStore } = setup({ socketFlag: false });
-					boardStore.updateReaderCanEditSuccess({
-						...payload,
-						isOwnAction: false,
-					});
-					expect(mockedBoardSocketApi.fetchBoardRequest).toHaveBeenCalled();
-				});
-			});
+			expect(boardStore.board?.readersCanEdit).toBe(true);
+			expect(mockedBoardSocketApi.fetchBoardRequest).not.toHaveBeenCalled();
 		});
 
-		describe("when socket connection is established", () => {
-			it("should update readersCanEdit", () => {
-				const { boardStore } = setup({ socketFlag: true });
-				boardStore.updateReaderCanEditSuccess({
-					...payload,
-					isOwnAction: true,
-				});
-				expect(boardStore.board?.readersCanEdit).toBe(true);
-				expect(mockedBoardSocketApi.fetchBoardRequest).not.toHaveBeenCalled();
+		it("should fetch board when isOwnAction is false", () => {
+			const { boardStore } = setup();
+			boardStore.updateReaderCanEditSuccess({
+				...payload,
+				isOwnAction: false,
 			});
-
-			describe("when isOwnAction is false", () => {
-				it("should fetch board", () => {
-					const { boardStore } = setup({ socketFlag: true });
-					boardStore.updateReaderCanEditSuccess({
-						...payload,
-						isOwnAction: false,
-					});
-					expect(mockedBoardSocketApi.fetchBoardRequest).toHaveBeenCalled();
-				});
-			});
+			expect(mockedBoardSocketApi.fetchBoardRequest).toHaveBeenCalled();
 		});
 	});
 
@@ -930,24 +900,8 @@ describe("BoardStore", () => {
 			expect(mockedBoardSocketApi.moveCardRequest).not.toHaveBeenCalled();
 		});
 
-		it("should call moveCardRequest from socket api if feature flag is disabled", async () => {
-			const { boardStore, firstColumn } = setup({ socketFlag: false });
-
-			const cardId = firstColumn.cards[0].cardId;
-
-			await boardStore.moveCardToNewColumn(cardId);
-
-			expect(mockedBoardSocketApi.moveCardRequest).toHaveBeenCalledWith({
-				cardId,
-				fromColumnId: firstColumn.id,
-				fromColumnIndex: 0,
-				oldIndex: 0,
-				newIndex: 0,
-			});
-		});
-
-		it("should call moveCardRequest from socket api if feature flag is enabled", async () => {
-			const { boardStore, firstColumn } = setup({ socketFlag: true });
+		it("should call moveCardRequest from socket api", async () => {
+			const { boardStore, firstColumn } = setup();
 
 			const cardId = firstColumn.cards[0].cardId;
 
@@ -1130,19 +1084,11 @@ describe("BoardStore", () => {
 		});
 	});
 
-	describe("@FEATURE_COLUMN_BOARD_SOCKET_ENABLED", () => {
+	describe("socket action routing", () => {
 		describe("@createCardRequest", () => {
 			const payload = { columnId: "testColumnId" };
 
-			it("should call socketApi.createCardRequest when feature flag is set true", async () => {
-				const { boardStore } = setup({ socketFlag: true });
-
-				await boardStore.createCardRequest(payload);
-
-				expect(mockedBoardSocketApi.createCardRequest).toHaveBeenCalledWith(payload);
-			});
-
-			it("should call restApi.createCardRequest when feature flag is set false", async () => {
+			it("should call socketApi.createCardRequest", async () => {
 				const { boardStore } = setup();
 
 				await boardStore.createCardRequest(payload);
@@ -1152,18 +1098,9 @@ describe("BoardStore", () => {
 		});
 
 		describe("@createColumnRequest", () => {
-			it("should call socketApi.createColumnRequest when feature flag is set true", async () => {
-				const { boardStore } = setup({ socketFlag: true });
-				const payload = { boardId: "testBoardId" };
-
-				await boardStore.createColumnRequest(payload);
-
-				expect(mockedBoardSocketApi.createColumnRequest).toHaveBeenCalledWith(payload);
-			});
-
-			it("should call restApi.createColumnRequest when feature flag is set false", async () => {
+			it("should call socketApi.createColumnRequest", async () => {
 				const { boardStore } = setup();
-				const payload = { boardId: boardStore.board?.id ?? "boardId" };
+				const payload = { boardId: "testBoardId" };
 
 				await boardStore.createColumnRequest(payload);
 
@@ -1174,15 +1111,7 @@ describe("BoardStore", () => {
 		describe("@deleteColumnRequest", () => {
 			const payload = { columnId: "testId" };
 
-			it("should call socketApi.deleteColumnRequest when feature flag is set true", async () => {
-				const { boardStore } = setup({ socketFlag: true });
-
-				await boardStore.deleteColumnRequest(payload);
-
-				expect(mockedBoardSocketApi.deleteColumnRequest).toHaveBeenCalledWith(payload);
-			});
-
-			it("should call restApi.deleteColumnRequest when feature flag is set false", async () => {
+			it("should call socketApi.deleteColumnRequest", async () => {
 				const { boardStore } = setup();
 
 				await boardStore.deleteColumnRequest(payload);
@@ -1194,16 +1123,8 @@ describe("BoardStore", () => {
 		describe("@duplicateColumn", () => {
 			const payload = { columnId: "testColumnId" };
 
-			it("should call socketApi.duplicateColumnRequest when feature flag is set true", async () => {
-				const { boardStore } = setup({ socketFlag: true });
-
-				await boardStore.duplicateColumn(payload);
-
-				expect(mockedBoardSocketApi.duplicateColumnRequest).toHaveBeenCalledWith(payload);
-			});
-
-			it("should show error and not call socketApi.duplicateColumnRequest when feature flag is set false", async () => {
-				const { boardStore } = setup({ socketFlag: false });
+			it("should call socketApi.duplicateColumnRequest", async () => {
+				const { boardStore } = setup();
 
 				await boardStore.duplicateColumn(payload);
 
@@ -1214,15 +1135,7 @@ describe("BoardStore", () => {
 		describe("@updateBoardTitleRequest", () => {
 			const payload = { boardId: "boardId", newTitle: "newTitle" };
 
-			it("should call socketApi.updateBoardTitleRequest when feature flag is set true", async () => {
-				const { boardStore } = setup({ socketFlag: true });
-
-				await boardStore.updateBoardTitleRequest(payload);
-
-				expect(mockedBoardSocketApi.updateBoardTitleRequest).toHaveBeenCalledWith(payload);
-			});
-
-			it("should call restApi.updateColumnTitleRequest when feature flag is set false", async () => {
+			it("should call socketApi.updateBoardTitleRequest", async () => {
 				const { boardStore } = setup();
 
 				await boardStore.updateBoardTitleRequest(payload);
@@ -1234,15 +1147,7 @@ describe("BoardStore", () => {
 		describe("@updateColumnTitleRequest", () => {
 			const payload = { columnId: "columnId", newTitle: "newTitle" };
 
-			it("should call socketApi.updateColumnTitleRequest when feature flag is set true", async () => {
-				const { boardStore } = setup({ socketFlag: true });
-
-				await boardStore.updateColumnTitleRequest(payload);
-
-				expect(mockedBoardSocketApi.updateColumnTitleRequest).toHaveBeenCalledWith(payload);
-			});
-
-			it("should call restApi.updateColumnTitleRequest when feature flag is set false", async () => {
+			it("should call socketApi.updateColumnTitleRequest", async () => {
 				const { boardStore } = setup();
 
 				await boardStore.updateColumnTitleRequest(payload);
@@ -1254,15 +1159,7 @@ describe("BoardStore", () => {
 		describe("@updateBoardVisibilityRequest", () => {
 			const payload = { boardId: "boardId", isVisible: true };
 
-			it("should call socketApi.updateBoardVisibilityRequest when feature flag is set true", async () => {
-				const { boardStore } = setup({ socketFlag: true });
-
-				await boardStore.updateBoardVisibilityRequest(payload);
-
-				expect(mockedBoardSocketApi.updateBoardVisibilityRequest).toHaveBeenCalledWith(payload);
-			});
-
-			it("should call restApi.updateBoardVisibilityRequest when feature flag is set false", async () => {
+			it("should call socketApi.updateBoardVisibilityRequest", async () => {
 				const { boardStore } = setup();
 
 				await boardStore.updateBoardVisibilityRequest(payload);
@@ -1273,14 +1170,7 @@ describe("BoardStore", () => {
 
 		describe("@updateReadersRequest", () => {
 			const payload = { boardId: "boardId", readersCanEdit: true };
-			it("should call socketApi.updateReaderCanEditRequest when feature flag is set true", async () => {
-				const { boardStore } = setup({ socketFlag: true });
-
-				await boardStore.updateReaderCanEditRequest(payload);
-
-				expect(mockedBoardSocketApi.updateReaderCanEditRequest).toHaveBeenCalledWith(payload);
-			});
-			it("should call restApi.updateReaderCanEditRequest when feature flag is set false", async () => {
+			it("should call socketApi.updateReaderCanEditRequest", async () => {
 				const { boardStore } = setup();
 
 				await boardStore.updateReaderCanEditRequest(payload);
@@ -1295,15 +1185,7 @@ describe("BoardStore", () => {
 				layout: BoardLayout.COLUMNS,
 			};
 
-			it("should call socketApi.updateBoardLayoutRequest when feature flag is set true", async () => {
-				const { boardStore } = setup({ socketFlag: true });
-
-				await boardStore.updateBoardLayoutRequest(payload);
-
-				expect(mockedBoardSocketApi.updateBoardLayoutRequest).toHaveBeenCalledWith(payload);
-			});
-
-			it("should call restApi.updateBoardLayoutRequest when feature flag is set false", async () => {
+			it("should call socketApi.updateBoardLayoutRequest", async () => {
 				const { boardStore } = setup();
 
 				await boardStore.updateBoardLayoutRequest(payload);
@@ -1323,15 +1205,7 @@ describe("BoardStore", () => {
 				byKeyboard: false,
 			};
 
-			it("should call socketApi.moveColumnRequest when feature flag is set true", async () => {
-				const { boardStore } = setup({ socketFlag: true });
-
-				await boardStore.moveColumnRequest(payload);
-
-				expect(mockedBoardSocketApi.moveColumnRequest).toHaveBeenCalledWith(payload);
-			});
-
-			it("should call restApi.moveColumnRequest when feature flag is set false", async () => {
+			it("should call socketApi.moveColumnRequest", async () => {
 				const { boardStore } = setup();
 
 				await boardStore.moveColumnRequest(payload);
@@ -1341,27 +1215,9 @@ describe("BoardStore", () => {
 		});
 
 		describe("@moveCardRequest", () => {
-			it("should call socketApi.moveCardRequest when feature flag is set true", async () => {
-				const { boardStore } = setup({ socketFlag: true });
-
-				const payload = {
-					cardId: boardStore.board?.columns[0].cards[0].cardId ?? "cardId",
-					oldIndex: 0,
-					newIndex: 1,
-					fromColumnId: boardStore.board?.columns[0].id ?? "columnId",
-					fromColumnIndex: 0,
-					toColumnId: boardStore.board?.columns[0].id ?? "columnId",
-					toColumnIndex: 0,
-					forceNextTick: false,
-				};
-
-				await boardStore.moveCardRequest(payload);
-
-				expect(mockedBoardSocketApi.moveCardRequest).toHaveBeenCalledWith(payload);
-			});
-
-			it("should call restApi.moveCardRequest when feature flag is set false", async () => {
+			it("should call socketApi.moveCardRequest", async () => {
 				const { boardStore } = setup();
+
 				const payload = {
 					cardId: boardStore.board?.columns[0].cards[0].cardId ?? "cardId",
 					oldIndex: 0,
@@ -1370,7 +1226,6 @@ describe("BoardStore", () => {
 					fromColumnIndex: 0,
 					toColumnId: boardStore.board?.columns[0].id ?? "columnId",
 					toColumnIndex: 0,
-					columnDelta: 0,
 					forceNextTick: false,
 				};
 
@@ -1382,14 +1237,7 @@ describe("BoardStore", () => {
 
 		describe("@fetchBoardRequest", () => {
 			const payload = { boardId: "boardId" };
-			it("should call socketApi.fetchBoardRequest when feature flag is set true", async () => {
-				const { boardStore } = setup({ socketFlag: true });
-
-				await boardStore.fetchBoardRequest(payload);
-				expect(mockedBoardSocketApi.fetchBoardRequest).toHaveBeenCalledWith(payload);
-			});
-
-			it("should call restApi.fetchBoardRequest when feature flag is set false", async () => {
+			it("should call socketApi.fetchBoardRequest", async () => {
 				const { boardStore } = setup();
 
 				await boardStore.fetchBoardRequest(payload);
@@ -1398,15 +1246,7 @@ describe("BoardStore", () => {
 		});
 
 		describe("@disconnectSocketRequest", () => {
-			it("should call socketApi.disconnectSocketRequest when feature flag is set true", () => {
-				const { boardStore } = setup({ socketFlag: true });
-
-				boardStore.disconnectSocketRequest();
-
-				expect(mockedBoardSocketApi.disconnectSocketRequest).toHaveBeenCalled();
-			});
-
-			it("should call restApi.disconnectSocketRequest when feature flag is set false", () => {
+			it("should call socketApi.disconnectSocketRequest", () => {
 				const { boardStore } = setup();
 
 				boardStore.disconnectSocketRequest();
@@ -1416,23 +1256,16 @@ describe("BoardStore", () => {
 		});
 
 		describe("@reloadBoard", () => {
-			it.each([true, false])(
-				"should not reload board when board value is undefined and socketFlag is %s",
-				async (socketFlag) => {
-					const { boardStore } = setup({ createBoard: false, socketFlag });
+			it("should not reload board when board value is undefined", async () => {
+				const { boardStore } = setup({ createBoard: false });
 
-					await boardStore.reloadBoard();
+				await boardStore.reloadBoard();
 
-					if (socketFlag) {
-						expect(mockedBoardSocketApi.fetchBoardRequest).not.toHaveBeenCalled();
-					} else {
-						expect(mockedBoardSocketApi.fetchBoardRequest).not.toHaveBeenCalled();
-					}
-				}
-			);
+				expect(mockedBoardSocketApi.fetchBoardRequest).not.toHaveBeenCalled();
+			});
 
-			it("should call socketApi.fetchBoardRequest when feature flag is set true", async () => {
-				const { boardStore } = setup({ socketFlag: true });
+			it("should call socketApi.fetchBoardRequest", async () => {
+				const { boardStore } = setup();
 
 				await boardStore.reloadBoard();
 
@@ -1440,40 +1273,23 @@ describe("BoardStore", () => {
 					boardId: boardStore.board?.id,
 				});
 			});
-
-			it("should call restApi.fetchBoardRequest when feature flag is set true", async () => {
-				const { boardStore } = setup();
-
-				await boardStore.reloadBoard();
-
-				expect(mockedBoardSocketApi.fetchBoardRequest).toHaveBeenCalledWith({ boardId: boardStore.board?.id });
-			});
 		});
 
 		describe("@deleteBoardRequest", () => {
-			it("should call socketApi.deleteBoardRequest when feature flag is set true", async () => {
-				const { boardStore } = setup({ socketFlag: true });
+			it("should call socketApi.deleteBoardRequest", async () => {
+				const { boardStore } = setup();
 
 				await boardStore.deleteBoardRequest({ boardId: "boardId" }, "roomId");
 
 				expect(mockedBoardSocketApi.deleteBoardRequest).toHaveBeenCalledWith({
 					boardId: "boardId",
 				});
-				expect(mockedBoardSocketApi.deleteBoardRequest).toHaveBeenCalledWith({ boardId: "boardId" });
-			});
-
-			it("should call socketApi.deleteBoardRequest when feature flag is set false", async () => {
-				const { boardStore } = setup();
-
-				await boardStore.deleteBoardRequest({ boardId: "boardId" }, "roomId");
-
-				expect(mockedBoardSocketApi.deleteBoardRequest).toHaveBeenCalledWith({ boardId: "boardId" });
 			});
 		});
 
 		describe("@deleteBoardSuccess", () => {
 			it("should redirect to page if 'isOwnAction' is true", async () => {
-				const { boardStore } = setup({ socketFlag: true });
+				const { boardStore } = setup();
 				await boardStore.deleteBoardRequest({ boardId: "boardId" }, "roomId");
 
 				boardStore.deleteBoardSuccess({
@@ -1488,7 +1304,7 @@ describe("BoardStore", () => {
 			});
 
 			it('should call handleApplicationError if "isOwnAction" is false', async () => {
-				const { boardStore } = setup({ socketFlag: true });
+				const { boardStore } = setup();
 				await boardStore.deleteBoardRequest({ boardId: "boardId" }, "roomId");
 
 				boardStore.deleteBoardSuccess({
