@@ -65,9 +65,7 @@ describe("useCardRestApi", () => {
 
 	it("loads preferred tools", async () => {
 		const preferredTools: PreferredToolResponse[] = [];
-		contextExternalToolApi.fetchPreferredTools.mockResolvedValue(
-			mockApiResponse({ data: { data: preferredTools } })
-		);
+		contextExternalToolApi.fetchPreferredTools.mockResolvedValue(mockApiResponse({ data: { data: preferredTools } }));
 
 		const result = await useCardRestApi().getPreferredTools(ToolContextType.BOARD_ELEMENT);
 

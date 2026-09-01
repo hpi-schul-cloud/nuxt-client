@@ -15,7 +15,6 @@ import { createRouterMock, injectRouterMock } from "vue-router-mock";
 vi.mock("../boardActions/boardSocketApi.composable");
 const mockedUseBoardSocketApi = vi.mocked(useBoardSocketApi);
 
-
 vi.mock("@util-board");
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 const mockedUseSharedFileSelect = vi.mocked(useSharedFileSelect);
@@ -52,7 +51,6 @@ describe("BoardStore - moveCardSuccess", () => {
 
 		mockedUseSocketConnection.mockReturnValue(mockComposable(useSocketConnection));
 		mockedUseBoardSocketApi.mockReturnValue(mockComposable(useBoardSocketApi));
-
 
 		mockedUseCardSocketApi.mockReturnValue(
 			mockComposable(useCardSocketApi, {
