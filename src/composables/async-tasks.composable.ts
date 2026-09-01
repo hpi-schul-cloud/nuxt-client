@@ -13,10 +13,6 @@ type TaskResult<T> =
 	| { success: true; result: T; error?: undefined }
 	| { success: false; result?: undefined; error: Error };
 
-type SafeTaskLoadingOptions = LoadingStateOptions & {
-	skipErrorNotification?: (error: Error) => boolean;
-};
-
 export const noDebounceLoadingOptions: LoadingStateOptions = {
 	delay: 0,
 	minDisplayTime: 0,
@@ -72,7 +68,7 @@ export const useSafeAxiosTask = () => {
 	const execute = async <T>(
 		fn: AsyncFunction<T>,
 		onErrorNotifyMessage?: string,
-		options: SafeTaskLoadingOptions = {}
+		options: LoadingStateOptions = {}
 	): Promise<TaskResult<T>> => {
 		const { skipErrorNotification, ...loadingOptions } = options;
 		const { result, success, error } = await withLoadingState(() => safeExec<T>(fn), loadingOptions);
@@ -120,7 +116,7 @@ export const useSafeAxiosRunner = <T>(
 	options: {
 		immediate?: boolean;
 		onErrorNotifyMessage?: string;
-		loadingOptions?: SafeTaskLoadingOptions;
+		loadingOptions?: LoadingStateOptions;
 	} = {}
 ) => {
 	const { immediate = true, onErrorNotifyMessage, loadingOptions } = options;

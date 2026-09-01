@@ -712,5 +712,30 @@ describe("useBoardSocketApi", () => {
 				columnId: "columnId",
 			});
 		});
+
+		it("should resolve when duplicateColumnSuccess is received", async () => {
+			const { dispatch, duplicateColumnRequest } = useBoardSocketApi();
+			const pendingRequest = duplicateColumnRequest({ columnId: "columnId" });
+
+			dispatch(
+				BoardActions.duplicateColumnSuccess({
+					columnId: "columnId",
+					duplicatedColumn: columnFullResponseFactory.build(),
+					status: CopyStatusEnum.SUCCESS,
+					isOwnAction: true,
+				})
+			);
+
+			await expect(pendingRequest).resolves.toBeUndefined();
+		});
+
+		it("should reject when duplicateColumnFailure is received", async () => {
+			const { dispatch, duplicateColumnRequest } = useBoardSocketApi();
+			const pendingRequest = duplicateColumnRequest({ columnId: "columnId" });
+
+			dispatch(BoardActions.duplicateColumnFailure({ columnId: "columnId" }));
+
+			await expect(pendingRequest).rejects.toThrow("Duplicate column failed");
+		});
 	});
 });

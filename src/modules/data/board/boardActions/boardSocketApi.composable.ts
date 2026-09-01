@@ -2,6 +2,7 @@ import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificati
 import { useBoardStore } from "../Board.store";
 import * as CardActions from "../cardActions/cardActions";
 import { useForceRender } from "../fixSamePositionDnD.composable";
+import { usePendingRequestMap } from "../PendingRequestMap.composable";
 import { useSocketConnection } from "../socket/socket";
 import {
 	CreateCardRequestPayload,
@@ -28,36 +29,7 @@ import { useAppStore } from "@data-app";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
-	const pendingDuplicateColumnRequests = new Map<
-		string,
-		{
-			resolve: () => void;
-			reject: (error?: unknown) => void;
-		}
-	>();
-
-	const resolveDuplicateColumnRequest = (columnId: string) => {
-		const pendingRequest = pendingDuplicateColumnRequests.get(columnId);
-		if (!pendingRequest) return;
-
-		pendingDuplicateColumnRequests.delete(columnId);
-		pendingRequest.resolve();
-	};
-
-	const rejectDuplicateColumnRequest = (columnId: string, errorMessage: string) => {
-		const pendingRequest = pendingDuplicateColumnRequests.get(columnId);
-		if (!pendingRequest) return;
-
-		pendingDuplicateColumnRequests.delete(columnId);
-		pendingRequest.reject(new Error(errorMessage));
-	};
-
-	const rejectAllPendingDuplicateColumnRequests = (errorMessage: string) => {
-		for (const [columnId, pendingRequest] of pendingDuplicateColumnRequests) {
-			pendingRequest.reject(new Error(errorMessage));
-			pendingDuplicateColumnRequests.delete(columnId);
-		}
-	};
+	const pendingDuplicateColumnRequests = usePendingRequestMap();
 
 	const {
 		notifyCreateCardSuccess,
@@ -95,7 +67,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.updateReaderCanEditSuccess, boardStore.updateReaderCanEditSuccess),
 			on(BoardActions.duplicateColumnSuccess, (payload) => {
 				boardStore.duplicateColumnSuccess(payload);
-				resolveDuplicateColumnRequest(payload.columnId);
+				pendingDuplicateColumnRequests.resolve(payload.columnId);
 			}),
 		];
 
@@ -115,7 +87,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.updateReaderCanEditFailure, reloadBoard),
 			on(BoardActions.duplicateColumnFailure, ({ columnId }) => {
 				reloadBoard();
-				rejectDuplicateColumnRequest(columnId, "Duplicate column failed");
+				pendingDuplicateColumnRequests.reject(columnId, "Duplicate column failed");
 			}),
 		];
 
@@ -162,7 +134,7 @@ export const useBoardSocketApi = () => {
 	};
 
 	const disconnectSocketRequest = () => {
-		rejectAllPendingDuplicateColumnRequests("Socket disconnected before duplicate column request completed");
+		pendingDuplicateColumnRequests.rejectAll("Socket disconnected before duplicate column request completed");
 		disconnectSocket();
 	};
 
@@ -236,20 +208,12 @@ export const useBoardSocketApi = () => {
 	};
 
 	const duplicateColumnRequest = (payload: DuplicateColumnRequestPayload) => {
-		const existingPendingRequest = pendingDuplicateColumnRequests.get(payload.columnId);
-		if (existingPendingRequest) {
-			existingPendingRequest.reject(new Error("Duplicate column request replaced by a newer request"));
-			pendingDuplicateColumnRequests.delete(payload.columnId);
-		}
-
-		return new Promise<void>((resolve, reject) => {
-			pendingDuplicateColumnRequests.set(payload.columnId, {
-				resolve,
-				reject,
-			});
-
-			emitOnSocket("duplicate-column-request", payload);
-		});
+		const pendingRequest = pendingDuplicateColumnRequests.create(
+			payload.columnId,
+			"Duplicate column request replaced by a newer request"
+		);
+		emitOnSocket("duplicate-column-request", payload);
+		return pendingRequest;
 	};
 
 	const reloadBoard = () => {
