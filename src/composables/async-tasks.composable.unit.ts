@@ -248,6 +248,22 @@ describe("useSafeAxiosTask", () => {
 			await promise;
 		});
 
+		it("should respect a custom loading delay", async () => {
+			const { execute, loadingState } = useSafeAxiosTask();
+			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
+
+			const promise = execute(fn, undefined, { delay: 500 });
+
+			await vi.advanceTimersByTimeAsync(499);
+			expect(loadingState.value).not.toBe("loading");
+
+			await vi.advanceTimersByTimeAsync(1);
+			expect(loadingState.value).toBe("loading");
+
+			await vi.runAllTimersAsync();
+			await promise;
+		});
+
 		it("should transition to 'loaded' without showing the spinner for fast operations", async () => {
 			const { execute, loadingState } = useSafeAxiosTask();
 			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("fast"), 100)));
@@ -366,6 +382,25 @@ describe("useSafeAxiosQuery", () => {
 			const promise = execute();
 
 			await vi.advanceTimersByTimeAsync(199);
+			expect(loadingState.value).not.toBe("loading");
+
+			await vi.advanceTimersByTimeAsync(1);
+			expect(loadingState.value).toBe("loading");
+
+			await vi.runAllTimersAsync();
+			await promise;
+		});
+
+		it("should forward custom loading options", async () => {
+			const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
+			const { execute, loadingState } = useSafeAxiosRunner(fn, {
+				immediate: false,
+				loadingOptions: { delay: 500 },
+			});
+
+			const promise = execute();
+
+			await vi.advanceTimersByTimeAsync(499);
 			expect(loadingState.value).not.toBe("loading");
 
 			await vi.advanceTimersByTimeAsync(1);

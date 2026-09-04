@@ -87,9 +87,6 @@
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
-		<VCard v-if="isDuplicating" class="mt-3">
-			<CardSkeleton :height />
-		</VCard>
 	</div>
 </template>
 
@@ -113,6 +110,7 @@ import {
 	useCardStore,
 	useCourseBoardEditMode,
 } from "@data-board";
+import { withGlobalLoadingState } from "@feature-dialog";
 import { BoardMenu, BoardMenuScope, DetailViewButton } from "@ui-board";
 import { SvsColorPickerMenu } from "@ui-controls";
 import {
@@ -275,8 +273,11 @@ const boardMenuClasses = computed(() => {
 	return "hidden";
 });
 
-const { run: duplicateCard, isRunning: isDuplicating } = useSafeTaskRunner(async () => {
-	await cardStore.duplicateCard({ cardId: props.cardId });
+const { run: duplicateCard } = useSafeTaskRunner(async () => {
+	await withGlobalLoadingState(
+		() => cardStore.duplicateCard({ cardId: props.cardId }),
+		t("feature-copy.inProgress.title.loading")
+	);
 });
 
 const onOpenDetailView = () => {

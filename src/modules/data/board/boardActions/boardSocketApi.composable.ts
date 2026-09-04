@@ -2,6 +2,7 @@ import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificati
 import { useBoardStore } from "../Board.store";
 import * as CardActions from "../cardActions/cardActions";
 import { useForceRender } from "../fixSamePositionDnD.composable";
+import { usePendingRequestMap } from "../PendingRequestMap.composable";
 import { useSocketConnection } from "../socket/socket";
 import {
 	CreateCardRequestPayload,
@@ -28,6 +29,8 @@ import { useAppStore } from "@data-app";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
+	const pendingDuplicateColumnRequests = usePendingRequestMap();
+
 	const {
 		notifyCreateCardSuccess,
 		notifyCreateColumnSuccess,
@@ -62,7 +65,10 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.updateBoardVisibilitySuccess, boardStore.updateBoardVisibilitySuccess),
 			on(BoardActions.updateBoardLayoutSuccess, boardStore.updateBoardLayoutSuccess),
 			on(BoardActions.updateReaderCanEditSuccess, boardStore.updateReaderCanEditSuccess),
-			on(BoardActions.duplicateColumnSuccess, boardStore.duplicateColumnSuccess),
+			on(BoardActions.duplicateColumnSuccess, (payload) => {
+				boardStore.duplicateColumnSuccess(payload);
+				pendingDuplicateColumnRequests.resolve(payload.columnId);
+			}),
 		];
 
 		const failureActions = [
@@ -79,7 +85,10 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.updateBoardVisibilityFailure, reloadBoard),
 			on(BoardActions.updateBoardLayoutFailure, reloadBoard),
 			on(BoardActions.updateReaderCanEditFailure, reloadBoard),
-			on(BoardActions.duplicateColumnFailure, reloadBoard),
+			on(BoardActions.duplicateColumnFailure, ({ columnId }) => {
+				reloadBoard();
+				pendingDuplicateColumnRequests.reject(columnId, "Duplicate column failed");
+			}),
 		];
 
 		const ariaLiveNotifications = [
@@ -125,6 +134,7 @@ export const useBoardSocketApi = () => {
 	};
 
 	const disconnectSocketRequest = () => {
+		pendingDuplicateColumnRequests.rejectAll("Socket disconnected before duplicate column request completed");
 		disconnectSocket();
 	};
 
@@ -198,7 +208,12 @@ export const useBoardSocketApi = () => {
 	};
 
 	const duplicateColumnRequest = (payload: DuplicateColumnRequestPayload) => {
+		const pendingRequest = pendingDuplicateColumnRequests.create(
+			payload.columnId,
+			"Duplicate column request replaced by a newer request"
+		);
 		emitOnSocket("duplicate-column-request", payload);
+		return pendingRequest;
 	};
 
 	const reloadBoard = () => {

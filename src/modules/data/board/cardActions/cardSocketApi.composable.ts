@@ -1,6 +1,7 @@
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 import { useBoardStore } from "../Board.store";
 import { useCardStore } from "../Card.store";
+import { usePendingRequestMap } from "../PendingRequestMap.composable";
 import { useSocketConnection } from "../socket/socket";
 import {
 	CreateElementRequestPayload,
@@ -32,6 +33,8 @@ export const useCardSocketApi = () => {
 	const MAX_WAIT_BEFORE_FIRST_CALL_IN_MS = 200;
 	let cardIdsToFetch: string[] = [];
 
+	const pendingDuplicateCardRequests = usePendingRequestMap();
+
 	const {
 		notifyUpdateCardTitleSuccess,
 		notifyUpdateCardColorSuccess,
@@ -53,7 +56,10 @@ export const useCardSocketApi = () => {
 			on(CardActions.updateCardTitleSuccess, cardStore.updateCardTitleSuccess),
 			on(CardActions.updateCardColorSuccess, cardStore.updateCardColorSuccess),
 			on(CardActions.updateCardHeightSuccess, cardStore.updateCardHeightSuccess),
-			on(CardActions.duplicateCardSuccess, cardStore.duplicateCardSuccess),
+			on(CardActions.duplicateCardSuccess, (payload) => {
+				cardStore.duplicateCardSuccess(payload);
+				pendingDuplicateCardRequests.resolve(payload.cardId);
+			}),
 		];
 
 		const failureActions = [
@@ -65,7 +71,10 @@ export const useCardSocketApi = () => {
 			on(CardActions.updateCardTitleFailure, ({ cardId }) => reloadBoard(cardId)),
 			on(CardActions.updateCardColorFailure, ({ cardId }) => reloadBoard(cardId)),
 			on(CardActions.deleteCardFailure, ({ cardId }) => reloadBoard(cardId)),
-			on(CardActions.duplicateCardFailure, ({ cardId }) => reloadBoard(cardId)),
+			on(CardActions.duplicateCardFailure, ({ cardId }) => {
+				reloadBoard(cardId);
+				pendingDuplicateCardRequests.reject(cardId, "Duplicate card failed");
+			}),
 		];
 
 		const ariaLiveNotification = [
@@ -90,6 +99,7 @@ export const useCardSocketApi = () => {
 	const { emitOnSocket, disconnectSocket, emitWithAck } = useSocketConnection(dispatch);
 
 	const disconnectSocketRequest = () => {
+		pendingDuplicateCardRequests.rejectAll("Socket disconnected before duplicate card request completed");
 		disconnectSocket();
 	};
 
@@ -153,7 +163,12 @@ export const useCardSocketApi = () => {
 	};
 
 	const duplicateCardRequest = (payload: DuplicateCardRequestPayload) => {
+		const pendingRequest = pendingDuplicateCardRequests.create(
+			payload.cardId,
+			"Duplicate card request replaced by a newer request"
+		);
 		emitOnSocket("duplicate-card-request", payload);
+		return pendingRequest;
 	};
 
 	const reloadBoard = (cardId = "") => {

@@ -1,17 +1,17 @@
 import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
-import CardSkeleton from "./CardSkeleton.vue";
 import ContentElementList from "./ContentElementList.vue";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { mockComposable } from "@@/tests/test-utils";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardResponseAllowedOperations, CardResponse, Colors } from "@api-server";
 import { useBoardFocusHandler, useCardStore, useCourseBoardEditMode, useSharedEditMode } from "@data-board";
+import * as featureDialog from "@feature-dialog";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
 import {
@@ -31,6 +31,10 @@ import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock"
 import { VCard } from "vuetify/components";
 
 vi.mock("@util-board");
+
+vi.mock("@feature-dialog", () => ({
+	withGlobalLoadingState: vi.fn(async (fn: () => Promise<unknown>) => await fn()),
+}));
 
 vi.mock("@vueuse/core", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("@vueuse/core")>();
@@ -255,21 +259,13 @@ describe("CardHost", () => {
 				expect(useCardStore().duplicateCard).toHaveBeenCalledWith({ cardId });
 			});
 
-			it("should show card skeleton while duplicating", async () => {
+			it("should trigger the global loading dialog while duplicating", async () => {
 				const { wrapper } = setup({ allowedOperations: { copyCard: true } });
-				const cardStore = mockedPiniaStoreTyping(useCardStore);
-				cardStore.duplicateCard.mockResolvedValueOnce();
-
 				const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
+
 				await duplicateButton.trigger("click");
 
-				const cardSkeletons = wrapper.findAllComponents(CardSkeleton);
-				expect(cardSkeletons).toHaveLength(1);
-
-				await wrapper.vm.$nextTick();
-
-				const cardSkeletonsAfterDuplicationFinished = wrapper.findAllComponents(CardSkeleton);
-				expect(cardSkeletonsAfterDuplicationFinished).toHaveLength(0);
+				expect(featureDialog.withGlobalLoadingState).toHaveBeenCalledOnce();
 			});
 		});
 

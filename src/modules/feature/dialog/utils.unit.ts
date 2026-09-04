@@ -78,4 +78,19 @@ describe("withLoadingState", () => {
 
 		expect(cancelMock).toHaveBeenCalled();
 	});
+
+	it("respects custom delay option", async () => {
+		const fn = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve("ok"), 1000)));
+
+		const promise = withGlobalLoadingState(fn, "Loading...", { delay: 500 });
+
+		await vi.advanceTimersByTimeAsync(499);
+		expect(openCancellableDialogSpy).not.toHaveBeenCalled();
+
+		await vi.advanceTimersByTimeAsync(1);
+		expect(openCancellableDialogSpy).toHaveBeenCalledOnce();
+
+		await vi.runAllTimersAsync();
+		await promise;
+	});
 });
