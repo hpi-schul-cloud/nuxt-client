@@ -1,5 +1,5 @@
 <template>
-	<CKEditorVue
+	<Ckeditor
 		ref="ck"
 		v-model="content"
 		:editor="ClassicEditor"
@@ -14,9 +14,8 @@
 <script setup lang="ts">
 import { corePlugins, mediaFormattingToolbar, prominentHeadings } from "./config";
 import { useEditorConfig } from "./EditorConfig.composable";
-import { Editor } from "@ckeditor/ckeditor5-core";
-import CKEditor from "@ckeditor/ckeditor5-vue";
-import { ClassicEditor } from "@hpi-schul-cloud/ckeditor";
+import { Ckeditor } from "@ckeditor/ckeditor5-vue";
+import { ClassicEditor, type Editor } from "@hpi-schul-cloud/ckeditor";
 import { computed, ref } from "vue";
 
 const props = defineProps({
@@ -35,7 +34,6 @@ const props = defineProps({
 
 const emit = defineEmits(["ready", "focus", "blur", "keyboard:delete"]);
 
-const CKEditorVue = CKEditor.component;
 const { generalConfig, registerDeletionHandler } = useEditorConfig();
 
 const ck = ref(null);
@@ -85,7 +83,7 @@ defineExpose({
 </script>
 
 <style lang="scss">
-@import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
+@import "@hpi-schul-cloud/ckeditor/build/style.css";
 
 .ck-content {
 	ul,
