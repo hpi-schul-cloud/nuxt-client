@@ -7,7 +7,12 @@ import { createSharedComposable } from "@vueuse/core";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, reactive } from "vue";
 
-export const defaultConfigEnvs: ConfigResponse = {
+export type EnvConfig = ConfigResponse & {
+	FEATURE_NOTIFICATIONS_ENABLED?: boolean;
+};
+
+export const defaultConfigEnvs: EnvConfig = {
+	FEATURE_NOTIFICATIONS_ENABLED: false,
 	NOT_AUTHENTICATED_REDIRECT_URL: "",
 	SC_THEME: SchulcloudTheme.DEFAULT,
 	JWT_TIMEOUT_SECONDS: -1,
@@ -94,9 +99,9 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		COLLABORA_MAX_FILE_SIZE_IN_BYTES: 104857600,
 		FILES_STORAGE_MAX_FILES_PER_PARENT: 1000,
 	});
-	const env = reactive<ConfigResponse>(defaultConfigEnvs);
+	const env = reactive<EnvConfig>(defaultConfigEnvs);
 
-	const setEnvs = (envConfig: ConfigResponse) => {
+	const setEnvs = (envConfig: EnvConfig) => {
 		Object.assign(env, envConfig);
 	};
 

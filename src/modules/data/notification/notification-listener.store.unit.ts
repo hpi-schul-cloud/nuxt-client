@@ -1,4 +1,5 @@
 import { ServerNotificationMessage, useNotificationListenerStore } from "./notification-listener.store";
+import { useEnvStore } from "@data-env";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -60,6 +61,7 @@ describe("useNotificationListenerStore", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		vi.clearAllMocks();
+		useEnvStore().env.FEATURE_NOTIFICATIONS_ENABLED = true;
 	});
 
 	afterEach(() => {
@@ -67,6 +69,16 @@ describe("useNotificationListenerStore", () => {
 	});
 
 	describe("startListening", () => {
+		it.each([false, undefined])("should not connect when the feature flag is %s", (enabled) => {
+			useEnvStore().env.FEATURE_NOTIFICATIONS_ENABLED = enabled;
+			const store = useNotificationListenerStore();
+
+			store.startListening();
+
+			expect(mockConnect).not.toHaveBeenCalled();
+			expect(store.isInitialized).toBe(false);
+		});
+
 		it("should call connect on first start", () => {
 			const store = useNotificationListenerStore();
 
