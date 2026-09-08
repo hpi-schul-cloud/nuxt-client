@@ -2,7 +2,7 @@ import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificati
 import { useBoardStore } from "../Board.store";
 import * as CardActions from "../cardActions/cardActions";
 import { useForceRender } from "../fixSamePositionDnD.composable";
-import { usePendingRequestMap } from "../PendingRequestMap.composable";
+import { usePendingRequestTracker } from "../PendingRequestMap.composable";
 import { useSocketConnection } from "../socket/socket";
 import {
 	CreateCardRequestPayload,
@@ -29,7 +29,7 @@ import { useAppStore } from "@data-app";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
-	const pendingDuplicateColumnRequests = usePendingRequestMap();
+	const pendingDuplicateColumnRequests = usePendingRequestTracker();
 
 	const {
 		notifyCreateCardSuccess,
@@ -67,7 +67,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.updateReaderCanEditSuccess, boardStore.updateReaderCanEditSuccess),
 			on(BoardActions.duplicateColumnSuccess, (payload) => {
 				boardStore.duplicateColumnSuccess(payload);
-				pendingDuplicateColumnRequests.resolve(payload.columnId);
+				pendingDuplicateColumnRequests.resolveById(payload.columnId);
 			}),
 		];
 
@@ -87,7 +87,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.updateReaderCanEditFailure, reloadBoard),
 			on(BoardActions.duplicateColumnFailure, ({ columnId }) => {
 				reloadBoard();
-				pendingDuplicateColumnRequests.reject(columnId, "Duplicate column failed");
+				pendingDuplicateColumnRequests.rejectById(columnId, "Duplicate column failed");
 			}),
 		];
 
@@ -208,7 +208,7 @@ export const useBoardSocketApi = () => {
 	};
 
 	const duplicateColumnRequest = (payload: DuplicateColumnRequestPayload) => {
-		const pendingRequest = pendingDuplicateColumnRequests.create(
+		const pendingRequest = pendingDuplicateColumnRequests.register(
 			payload.columnId,
 			"Duplicate column request replaced by a newer request"
 		);

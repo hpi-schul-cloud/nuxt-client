@@ -1,7 +1,7 @@
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 import { useBoardStore } from "../Board.store";
 import { useCardStore } from "../Card.store";
-import { usePendingRequestMap } from "../PendingRequestMap.composable";
+import { usePendingRequestTracker } from "../PendingRequestMap.composable";
 import { useSocketConnection } from "../socket/socket";
 import {
 	CreateElementRequestPayload,
@@ -33,7 +33,7 @@ export const useCardSocketApi = () => {
 	const MAX_WAIT_BEFORE_FIRST_CALL_IN_MS = 200;
 	let cardIdsToFetch: string[] = [];
 
-	const pendingDuplicateCardRequests = usePendingRequestMap();
+	const pendingDuplicateCardRequests = usePendingRequestTracker();
 
 	const {
 		notifyUpdateCardTitleSuccess,
@@ -58,7 +58,7 @@ export const useCardSocketApi = () => {
 			on(CardActions.updateCardHeightSuccess, cardStore.updateCardHeightSuccess),
 			on(CardActions.duplicateCardSuccess, (payload) => {
 				cardStore.duplicateCardSuccess(payload);
-				pendingDuplicateCardRequests.resolve(payload.cardId);
+				pendingDuplicateCardRequests.resolveById(payload.cardId);
 			}),
 		];
 
@@ -73,7 +73,7 @@ export const useCardSocketApi = () => {
 			on(CardActions.deleteCardFailure, ({ cardId }) => reloadBoard(cardId)),
 			on(CardActions.duplicateCardFailure, ({ cardId }) => {
 				reloadBoard(cardId);
-				pendingDuplicateCardRequests.reject(cardId, "Duplicate card failed");
+				pendingDuplicateCardRequests.rejectById(cardId, "Duplicate card failed");
 			}),
 		];
 
@@ -163,7 +163,7 @@ export const useCardSocketApi = () => {
 	};
 
 	const duplicateCardRequest = (payload: DuplicateCardRequestPayload) => {
-		const pendingRequest = pendingDuplicateCardRequests.create(
+		const pendingRequest = pendingDuplicateCardRequests.register(
 			payload.cardId,
 			"Duplicate card request replaced by a newer request"
 		);

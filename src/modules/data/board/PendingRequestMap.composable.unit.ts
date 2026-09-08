@@ -1,8 +1,8 @@
-import { usePendingRequestMap } from "./PendingRequestMap.composable";
+import { usePendingRequestTracker } from "./PendingRequestMap.composable";
 
 describe("usePendingRequestMap", () => {
 	it("resolves a pending request", async () => {
-		const { create, resolve } = usePendingRequestMap();
+		const { create, resolve } = usePendingRequestTracker();
 		const pendingRequest = create("id", "Request was replaced");
 
 		resolve("id");
@@ -11,7 +11,7 @@ describe("usePendingRequestMap", () => {
 	});
 
 	it("rejects a pending request", async () => {
-		const { create, reject } = usePendingRequestMap();
+		const { create, reject } = usePendingRequestTracker();
 		const pendingRequest = create("id", "Request was replaced");
 
 		reject("id", "Request failed");
@@ -20,7 +20,7 @@ describe("usePendingRequestMap", () => {
 	});
 
 	it("rejects the replaced request and resolves the newer request", async () => {
-		const { create, resolve } = usePendingRequestMap();
+		const { create, resolve } = usePendingRequestTracker();
 		const replacedRequest = create("id", "Request was replaced");
 		const newerRequest = create("id", "Request was replaced");
 
@@ -31,7 +31,7 @@ describe("usePendingRequestMap", () => {
 	});
 
 	it("rejects all pending requests", async () => {
-		const { create, rejectAll } = usePendingRequestMap();
+		const { create, rejectAll } = usePendingRequestTracker();
 		const firstRequest = create("first", "Request was replaced");
 		const secondRequest = create("second", "Request was replaced");
 

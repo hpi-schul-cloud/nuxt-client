@@ -6,7 +6,7 @@ type PendingRequest = {
 // TODO Funktionen aus utils.ts nach async-tasks.composable verschieben
 // TODO type SafeTaskResult ist redundant und kann ersetzt werden
 
-export const usePendingRequestMap = () => {
+export const usePendingRequestTracker = () => {
 	// for now these requests are only used for duplicating cards or columns, so there won't be any id conflicts.
 	// but in the future, if more types of requests are added, id conflicts might occur.
 	// therefore, it might be necessary to include the type of operation in the id to avoid conflicts.
@@ -18,25 +18,23 @@ export const usePendingRequestMap = () => {
 		return pendingRequest;
 	};
 
-	const resolve = (id: string) => {
+	const resolveById = (id: string) => {
 		takePendingRequest(id)?.resolve();
 	};
 
-	const reject = (id: string, errorMessage: string) => {
+	const rejectById = (id: string, errorMessage: string) => {
 		takePendingRequest(id)?.reject(new Error(errorMessage));
 	};
 
 	const rejectAll = (errorMessage: string) => {
 		for (const id of pendingRequests.keys()) {
-			reject(id, errorMessage);
+			rejectById(id, errorMessage);
 		}
 	};
 
-	// TODO vielleicht umbenennen in createAndPotentiallyCancelPrevious aber ich finde das naming create, resolve, reject stimmig
-	// und das Verhalten kann mit rejectActiveRequest übersteuert werden
-	const create = (id: string, replacementErrorMessage: string, rejectActiveRequest = true): Promise<void> => {
+	const register = (id: string, replacementErrorMessage: string, rejectActiveRequest = true): Promise<void> => {
 		if (rejectActiveRequest) {
-			reject(id, replacementErrorMessage);
+			rejectById(id, replacementErrorMessage);
 		}
 
 		return new Promise<void>((resolve, reject) => {
@@ -44,5 +42,5 @@ export const usePendingRequestMap = () => {
 		});
 	};
 
-	return { create, resolve, reject, rejectAll };
+	return { register, resolveById, rejectById, rejectAll };
 };
