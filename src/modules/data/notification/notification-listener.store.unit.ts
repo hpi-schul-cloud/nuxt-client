@@ -69,8 +69,8 @@ describe("useNotificationListenerStore", () => {
 	});
 
 	describe("startListening", () => {
-		it.each([false, undefined])("should not connect when the feature flag is %s", (enabled) => {
-			useEnvStore().env.FEATURE_NOTIFICATIONS_ENABLED = enabled;
+		it("should not connect when the feature flag is disabled", () => {
+			useEnvStore().env.FEATURE_NOTIFICATIONS_ENABLED = false;
 			const store = useNotificationListenerStore();
 
 			store.startListening();
