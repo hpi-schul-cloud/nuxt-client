@@ -8,7 +8,12 @@
 					:label="t('pages.administration.school.index.generalSettings.labels.nameOfSchool')"
 					density="compact"
 					:readonly="!hasSchoolEditPermission"
-					:disabled="isSchoolSynced || isSchoolDataReadonlyEnabled"
+					:disabled="isSchoolSynced || isSchoolDataReadOnlyEnabled"
+					:hint="
+						isSchoolDataReadOnlyEnabled
+							? t('pages.administration.school.index.generalSettings.schoolDataReadOnlyHint')
+							: undefined
+					"
 					data-testid="school-name"
 					:rules="[validateOnOpeningTag]"
 				/>
@@ -21,7 +26,8 @@
 					class="school-year"
 					:label="t('pages.administration.school.index.generalSettings.labels.schoolYear')"
 					density="compact"
-					:disabled="isSchoolDataReadonlyEnabled"
+					readonly
+					:disabled="isSchoolDataReadOnlyEnabled"
 					:hint="t('pages.administration.school.index.generalSettings.disabledHint')"
 					persistent-hint
 					data-testid="school-year"
@@ -36,8 +42,12 @@
 					data-testid="school-number"
 					:label="t('pages.administration.school.index.generalSettings.labels.schoolNumber')"
 					density="compact"
-					:disabled="!!schoolDetails.officialSchoolNumber"
-					:hint="t('pages.administration.school.index.generalSettings.changeSchoolValueWarning')"
+					:disabled="!!schoolDetails.officialSchoolNumber || isSchoolDataReadOnlyEnabled"
+					:hint="
+						isSchoolDataReadOnlyEnabled
+							? t('pages.administration.school.index.generalSettings.schoolDataReadOnlyHint')
+							: t('pages.administration.school.index.generalSettings.changeSchoolValueWarning')
+					"
 					persistent-hint
 					:readonly="!hasSchoolEditPermission"
 				/>
@@ -154,7 +164,7 @@ const { updateSchool } = useSchoolStore();
 const { schoolDetails, schoolFeatureObject, isSchoolSynced, isLoadingSchoolData } = useSchoolStoreRefs();
 
 const availableLanguages = computed(() => useEnvConfig().value.I18N__AVAILABLE_LANGUAGES);
-const isSchoolDataReadonlyEnabled = computed(() => useEnvConfig().value.FEATURE_SCHOOL_DATA_READONLY_ENABLED);
+const isSchoolDataReadOnlyEnabled = computed(() => useEnvConfig().value.FEATURE_SCHOOL_DATA_READONLY_ENABLED);
 const federalState = computed(() => schoolDetails.value.federalState);
 const languages = computed(() =>
 	availableLanguages.value.map((lang: string) => {

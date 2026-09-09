@@ -53,6 +53,30 @@ describe("GeneralSettings", () => {
 		return { wrapper, schoolDetails, schoolStore };
 	};
 
+	describe("school data readonly hints", () => {
+		it.each(["school-name", "school-number"])("should show a support hint for %s when enabled", (testId) => {
+			createTestEnvStore({ FEATURE_SCHOOL_DATA_READONLY_ENABLED: true });
+			const { wrapper } = setup();
+
+			const textField = wrapper.findComponent<typeof VTextField>(`[data-testid='${testId}']`);
+
+			expect(textField.props("hint")).toBe("pages.administration.school.index.generalSettings.schoolDataReadOnlyHint");
+		});
+
+		it("should preserve the original hints when disabled", () => {
+			createTestEnvStore({ FEATURE_SCHOOL_DATA_READONLY_ENABLED: false });
+			const { wrapper } = setup();
+
+			const schoolName = wrapper.findComponent<typeof VTextField>("[data-testid='school-name']");
+			const schoolNumber = wrapper.findComponent<typeof VTextField>("[data-testid='school-number']");
+
+			expect(schoolName.props("hint")).toBeUndefined();
+			expect(schoolNumber.props("hint")).toBe(
+				"pages.administration.school.index.generalSettings.changeSchoolValueWarning"
+			);
+		});
+	});
+
 	describe("displaying correct data", () => {
 		describe("school name", () => {
 			it("should display the school name", () => {
