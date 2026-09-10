@@ -1291,6 +1291,8 @@ export default {
 		"¡Una vez configurado no puedrá ser cambiado!",
 	"pages.administration.school.index.generalSettings.disabledHint":
 		"No se puede editar aquí, más información en el cambio de año escolar de la sección",
+	"pages.administration.school.index.generalSettings.schoolDataReadOnlyHint":
+		"El campo está desactivado. Se pueden solicitar cambios autorizados al servicio de asistencia.",
 	"pages.administration.school.index.generalSettings.labels.chooseACounty":
 		"Por favor, seleccione el distrito al que pertenece la escuela",
 	"pages.administration.school.index.generalSettings.labels.cloudStorageProvider":
