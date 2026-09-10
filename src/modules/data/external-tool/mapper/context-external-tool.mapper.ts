@@ -24,8 +24,8 @@ export class ContextExternalToolMapper {
 			logoUrl: response.logoUrl,
 			name: response.name,
 			baseUrl: response.baseUrl,
-			parameters: response.parameters.map(
-				(parameter): ToolParameter => ExternalToolMapper.mapToToolParameter(parameter)
+			parameters: response.parameters.map((parameter): ToolParameter =>
+				ExternalToolMapper.mapToToolParameter(parameter)
 			),
 		};
 
@@ -79,12 +79,10 @@ export class ContextExternalToolMapper {
 			contextType: response.contextType,
 			displayName: response.displayName,
 			schoolToolId: response.schoolToolId,
-			parameters: response.parameters.map(
-				(parameter): ToolParameterEntry => ({
-					name: parameter.name,
-					value: parameter.value,
-				})
-			),
+			parameters: response.parameters.map((parameter): ToolParameterEntry => ({
+				name: parameter.name,
+				value: parameter.value,
+			})),
 		};
 
 		return mapped;

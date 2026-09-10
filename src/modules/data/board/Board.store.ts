@@ -186,12 +186,10 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 		const duplicatedColumnSkeleton: ColumnResponse = {
 			...duplicatedColumn,
-			cards: duplicatedColumn.cards.map(
-				(card): CardSkeletonResponse => ({
-					cardId: card.id,
-					height: card.height,
-				})
-			),
+			cards: duplicatedColumn.cards.map((card): CardSkeletonResponse => ({
+				cardId: card.id,
+				height: card.height,
+			})),
 		};
 
 		board.value.columns?.splice(columnIndex + 1, 0, duplicatedColumnSkeleton);
