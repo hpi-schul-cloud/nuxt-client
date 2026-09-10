@@ -28,7 +28,6 @@
 					:label="t('pages.administration.school.index.generalSettings.labels.schoolYear')"
 					density="compact"
 					readonly
-					:disabled="isSchoolDataReadOnlyEnabled"
 					:hint="t('pages.administration.school.index.generalSettings.disabledHint')"
 					persistent-hint
 					data-testid="school-year"
