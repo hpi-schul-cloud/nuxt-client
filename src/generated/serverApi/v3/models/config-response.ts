@@ -25,6 +25,12 @@ import { Timezone } from './timezone';
 export interface ConfigResponse {
     /**
      * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_NOTIFICATIONS_ENABLED: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof ConfigResponse
      */

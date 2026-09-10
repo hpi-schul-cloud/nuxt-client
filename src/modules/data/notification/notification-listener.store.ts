@@ -1,6 +1,7 @@
 import { useNotificationStream } from "./notification-sse.composable";
 import { i18nKeyExists } from "@/plugins/i18n";
 import { AlertStatus, useNotificationStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
 import { ref } from "vue";
@@ -102,6 +103,7 @@ const notifyByType: Record<
  * ```
  */
 export const useNotificationListenerStore = defineStore("notificationListenerStore", () => {
+	const env = useEnvConfig();
 	const isInitialized = ref(false);
 
 	const {
@@ -155,6 +157,10 @@ export const useNotificationListenerStore = defineStore("notificationListenerSto
 	 * Should be called after user login.
 	 */
 	const startListening = () => {
+		if (env.value.FEATURE_NOTIFICATIONS_ENABLED !== true) {
+			return;
+		}
+
 		if (isInitialized.value) {
 			logger.info("[NotificationListener] Already listening, skipping start");
 			return;

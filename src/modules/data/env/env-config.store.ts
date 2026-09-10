@@ -8,6 +8,7 @@ import { defineStore, storeToRefs } from "pinia";
 import { computed, reactive } from "vue";
 
 export const defaultConfigEnvs: ConfigResponse = {
+	FEATURE_NOTIFICATIONS_ENABLED: false,
 	NOT_AUTHENTICATED_REDIRECT_URL: "",
 	SC_THEME: SchulcloudTheme.DEFAULT,
 	JWT_TIMEOUT_SECONDS: -1,
