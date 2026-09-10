@@ -14,6 +14,7 @@
 							? t('pages.administration.school.index.generalSettings.schoolDataReadOnlyHint')
 							: undefined
 					"
+					persistent-hint
 					data-testid="school-name"
 					:rules="[validateOnOpeningTag]"
 				/>
