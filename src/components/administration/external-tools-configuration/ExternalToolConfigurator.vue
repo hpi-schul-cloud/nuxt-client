@@ -160,12 +160,10 @@ const onSave = () => {
 
 const mapValidParameterEntries = (template: T) => {
 	const parameterEntries: ToolParameterEntry[] = template.parameters
-		.map(
-			(parameter: ToolParameter, index: number): ToolParameterEntry => ({
-				name: parameter.name,
-				value: parameterConfiguration.value[index],
-			})
-		)
+		.map((parameter: ToolParameter, index: number): ToolParameterEntry => ({
+			name: parameter.name,
+			value: parameterConfiguration.value[index],
+		}))
 		.filter((parameterEntry: ToolParameterEntry) => parameterEntry.value !== undefined && parameterEntry.value !== "");
 
 	return parameterEntries;

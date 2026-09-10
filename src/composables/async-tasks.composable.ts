@@ -9,8 +9,7 @@ import { logger } from "@util-logger";
 import { computed, readonly, ref } from "vue";
 
 type TaskResult<T> =
-	| { success: true; result: T; error?: undefined }
-	| { success: false; result?: undefined; error: Error };
+	{ success: true; result: T; error?: undefined } | { success: false; result?: undefined; error: Error };
 
 export const useSafeTask = () => {
 	const error = ref<Error>();
