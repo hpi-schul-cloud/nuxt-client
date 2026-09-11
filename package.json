@@ -26,7 +26,7 @@
 	"dependencies": {
 		"@braintree/sanitize-url": "^7.1.2",
 		"@ckeditor/ckeditor5-vue": "^7.4.2",
-		"@hpi-schul-cloud/ckeditor": "https://raw.githubusercontent.com/hpi-schul-cloud/ckeditor/SVSDEV-116-bump-ckeditor/hpi-schul-cloud-ckeditor-3.0.0.tgz",
+		"@hpi-schul-cloud/ckeditor": "https://raw.githubusercontent.com/hpi-schul-cloud/ckeditor/SVSDEV-116-bump-ckeditor/hpi-schul-cloud-ckeditor-3.0.1.tgz",
 		"@lumieducation/h5p-webcomponents": "^10.0.4",
 		"@types/lodash-es": "^4.17.12",
 		"@vueuse/components": "^14.3.0",
