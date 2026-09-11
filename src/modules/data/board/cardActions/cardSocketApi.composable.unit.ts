@@ -353,6 +353,15 @@ describe("useCardSocketApi", () => {
 
 			expect(socketMock.disconnectSocket).toHaveBeenCalled();
 		});
+
+		it("should reject pending duplicateCardRequest promises", async () => {
+			const { disconnectSocketRequest, duplicateCardRequest } = useCardSocketApi();
+			const pendingRequest = duplicateCardRequest({ cardId: "cardId" });
+
+			disconnectSocketRequest();
+
+			await expect(pendingRequest).rejects.toThrow("Socket disconnected before duplicate card request completed");
+		});
 	});
 
 	describe("createElementRequest", () => {
@@ -439,6 +448,31 @@ describe("useCardSocketApi", () => {
 			duplicateCardRequest(payload);
 
 			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("duplicate-card-request", payload);
+		});
+
+		it("should resolve when duplicateCardSuccess is received", async () => {
+			const { dispatch, duplicateCardRequest } = useCardSocketApi();
+			const pendingRequest = duplicateCardRequest({ cardId: "cardId" });
+
+			dispatch(
+				CardActions.duplicateCardSuccess({
+					cardId: "cardId",
+					duplicatedCard: cardResponseFactory.build(),
+					status: CopyStatusEnum.SUCCESS,
+					isOwnAction: true,
+				})
+			);
+
+			await expect(pendingRequest).resolves.toBeUndefined();
+		});
+
+		it("should reject when duplicateCardFailure is received", async () => {
+			const { dispatch, duplicateCardRequest } = useCardSocketApi();
+			const pendingRequest = duplicateCardRequest({ cardId: "cardId" });
+
+			dispatch(CardActions.duplicateCardFailure({ cardId: "cardId" }));
+
+			await expect(pendingRequest).rejects.toThrow("Duplicate card failed");
 		});
 	});
 

@@ -5,7 +5,6 @@ import {
 	UpdateBoardLayoutSuccessPayload,
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
-import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";
 import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import {
@@ -33,9 +32,6 @@ const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 vi.mock("../fixSamePositionDnD.composable");
 const mockedUseForceRender = vi.mocked(useForceRender);
 
-vi.mock("./boardRestApi.composable");
-const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
-
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
@@ -48,7 +44,6 @@ vi.mock("vue-i18n", () => ({
 
 describe("useBoardSocketApi", () => {
 	let socketMock: Mocked<ReturnType<typeof useSocketConnection>>;
-	let mockedBoardRestApiHandler: Mocked<ReturnType<typeof useBoardRestApi>>;
 	let mockedErrorHandler: Mocked<ReturnType<typeof useErrorHandler>>;
 	let mockedSharedLastCreatedElementActions: Mocked<ReturnType<typeof useSharedLastCreatedElement>>;
 	let mockedUseForceRenderHandler: ReturnType<typeof useForceRender>;
@@ -58,9 +53,6 @@ describe("useBoardSocketApi", () => {
 
 		socketMock = mockComposable(useSocketConnection);
 		mockedUseSocketConnection.mockReturnValue(socketMock);
-
-		mockedBoardRestApiHandler = mockComposable(useBoardRestApi);
-		mockedUseBoardRestApi.mockReturnValue(mockedBoardRestApiHandler);
 
 		mockedErrorHandler = mockComposable(useErrorHandler);
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
@@ -458,6 +450,15 @@ describe("useBoardSocketApi", () => {
 
 			expect(socketMock.disconnectSocket).toHaveBeenCalled();
 		});
+
+		it("should reject pending duplicateColumnRequest promises", async () => {
+			const { disconnectSocketRequest, duplicateColumnRequest } = useBoardSocketApi();
+			const pendingRequest = duplicateColumnRequest({ columnId: "columnId" });
+
+			disconnectSocketRequest();
+
+			await expect(pendingRequest).rejects.toThrow("Socket disconnected before duplicate column request completed");
+		});
 	});
 
 	describe("createCardRequest", () => {
@@ -702,7 +703,7 @@ describe("useBoardSocketApi", () => {
 	});
 
 	describe("duplicateColumnRequest", () => {
-		it("should call action with correct parameters", () => {
+		it("should call emitOnSocket with correct parameters", () => {
 			const { duplicateColumnRequest } = useBoardSocketApi();
 
 			duplicateColumnRequest({ columnId: "columnId" });
@@ -710,6 +711,31 @@ describe("useBoardSocketApi", () => {
 			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("duplicate-column-request", {
 				columnId: "columnId",
 			});
+		});
+
+		it("should resolve when duplicateColumnSuccess is received", async () => {
+			const { dispatch, duplicateColumnRequest } = useBoardSocketApi();
+			const pendingRequest = duplicateColumnRequest({ columnId: "columnId" });
+
+			dispatch(
+				BoardActions.duplicateColumnSuccess({
+					columnId: "columnId",
+					duplicatedColumn: columnFullResponseFactory.build(),
+					status: CopyStatusEnum.SUCCESS,
+					isOwnAction: true,
+				})
+			);
+
+			await expect(pendingRequest).resolves.toBeUndefined();
+		});
+
+		it("should reject when duplicateColumnFailure is received", async () => {
+			const { dispatch, duplicateColumnRequest } = useBoardSocketApi();
+			const pendingRequest = duplicateColumnRequest({ columnId: "columnId" });
+
+			dispatch(BoardActions.duplicateColumnFailure({ columnId: "columnId" }));
+
+			await expect(pendingRequest).rejects.toThrow("Duplicate column failed");
 		});
 	});
 });
