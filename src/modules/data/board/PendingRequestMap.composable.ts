@@ -3,9 +3,6 @@ type PendingRequest = {
 	reject: (error: Error) => void;
 };
 
-// TODO Funktionen aus utils.ts nach async-tasks.composable verschieben
-// TODO type SafeTaskResult ist redundant und kann ersetzt werden
-
 export const usePendingRequestTracker = () => {
 	// for now these requests are only used for duplicating cards or columns, so there won't be any id conflicts.
 	// but in the future, if more types of requests are added, id conflicts might occur.
