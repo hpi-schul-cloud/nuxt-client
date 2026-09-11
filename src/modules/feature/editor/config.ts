@@ -1,12 +1,8 @@
+import type { EditorConfig } from "@hpi-schul-cloud/ckeditor";
+
 type ToolbarItem = string;
 type PluginName = string;
-
-interface HeadingOption {
-	model: string;
-	view?: string;
-	title: string;
-	class: string;
-}
+type HeadingConfig = NonNullable<EditorConfig["heading"]>;
 
 interface FontColor {
 	color: string;
@@ -98,7 +94,7 @@ export const mediaFormattingToolbar: ToolbarItem[] = [
 	"link",
 ];
 
-export const compactHeadings: { options: HeadingOption[] } = {
+export const compactHeadings: HeadingConfig = {
 	options: [
 		{
 			model: "paragraph",
@@ -120,7 +116,7 @@ export const compactHeadings: { options: HeadingOption[] } = {
 	],
 };
 
-export const prominentHeadings: { options: HeadingOption[] } = {
+export const prominentHeadings: HeadingConfig = {
 	options: [
 		{
 			model: "paragraph",

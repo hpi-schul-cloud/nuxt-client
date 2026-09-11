@@ -1,6 +1,6 @@
 import { fontBackgroundColors, fontColors } from "./config";
-import { Editor } from "@ckeditor/ckeditor5-core";
 import { useEnvStore } from "@data-env";
+import type { Editor } from "@hpi-schul-cloud/ckeditor";
 import { reactive } from "vue";
 import { useI18n } from "vue-i18n";
 
