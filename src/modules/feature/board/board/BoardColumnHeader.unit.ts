@@ -6,6 +6,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { ConfigResponse } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useBoardStore, useCourseBoardEditMode } from "@data-board";
 import { BoardColumnInteractionHandler } from "@feature-board";
+import * as featureDialog from "@feature-dialog";
 import { createTestingPinia } from "@pinia/testing";
 import {
 	KebabMenuActionDelete,
@@ -21,6 +22,10 @@ import { shallowMount } from "@vue/test-utils";
 import { flatten } from "lodash-es";
 import { setActivePinia } from "pinia";
 import { computed } from "vue";
+
+vi.mock("@feature-dialog", () => ({
+	withGlobalLoadingState: vi.fn(async (fn: () => Promise<unknown>) => await fn()),
+}));
 
 vi.mock("@data-board");
 const mockUseBoardFocusHandler = vi.mocked(useBoardFocusHandler);
@@ -471,6 +476,7 @@ describe("BoardColumnHeader", () => {
 					await duplicateButton.vm.$emit("click");
 
 					expect(mockedDuplicateColumn).toHaveBeenCalledWith({ columnId: "abc123" });
+					expect(featureDialog.withGlobalLoadingState).toHaveBeenCalledOnce();
 				});
 			});
 		});

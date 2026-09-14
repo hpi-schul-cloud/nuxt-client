@@ -27,7 +27,6 @@ import {
 	UpdateReaderCanEditRequestPayload,
 	UpdateReaderCanEditSuccessPayload,
 } from "./boardActions/boardActionPayload.types";
-import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardStore } from "./Card.store";
@@ -43,7 +42,6 @@ import {
 	CopyStatusEnum,
 } from "@api-server";
 import { notifyError, notifyInfo, notifySuccess, useAppStore, useNotificationStore } from "@data-app";
-import { useEnvConfig } from "@data-env";
 import { useErrorHandler } from "@util-error-handling";
 import { defineStore } from "pinia";
 import { computed, nextTick, ref } from "vue";
@@ -56,11 +54,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const { setFocus, forceFocus } = useBoardFocusHandler();
 	const roomId = ref<string | undefined>(undefined);
 
-	const restApi = useBoardRestApi();
-	const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
-
-	const socketOrRest = isSocketEnabled ? useBoardSocketApi() : restApi;
-	const isConnected = computed(() => socketOrRest.connected.value);
+	const socketApi = useBoardSocketApi();
+	const isConnected = computed(() => socketApi.connected.value);
 
 	const { setEditModeId } = useSharedEditMode();
 	const router = useRouter();
@@ -110,7 +105,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		isLoading.value = loading;
 	};
 
-	const createCardRequest = (payload: CreateCardRequestPayload) => socketOrRest.createCardRequest(payload);
+	const createCardRequest = (payload: CreateCardRequestPayload) => socketApi.createCardRequest(payload);
 
 	const createCardSuccess = (payload: CreateCardSuccessPayload) => {
 		if (!board.value) return;
@@ -136,7 +131,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const createColumnRequest = async (payload: CreateColumnRequestPayload) => {
-		socketOrRest.createColumnRequest(payload);
+		socketApi.createColumnRequest(payload);
 	};
 
 	const createColumnSuccess = (payload: CreateColumnSuccessPayload) => {
@@ -164,7 +159,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		});
 	};
 
-	const duplicateColumn = socketOrRest.duplicateColumnRequest;
+	const duplicateColumn = socketApi.duplicateColumnRequest;
 
 	const hasRelevantContentForDuplicationWarning = (column: ColumnFullResponse): boolean =>
 		column.cards.some((card) =>
@@ -228,7 +223,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const deleteColumnRequest = async (payload: DeleteColumnRequestPayload) => {
-		await socketOrRest.deleteColumnRequest(payload);
+		await socketApi.deleteColumnRequest(payload);
 	};
 
 	const deleteColumnSuccess = (payload: DeleteColumnSuccessPayload) => {
@@ -249,7 +244,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const updateBoardTitleRequest = async (payload: UpdateBoardTitleRequestPayload) => {
-		await socketOrRest.updateBoardTitleRequest(payload);
+		await socketApi.updateBoardTitleRequest(payload);
 	};
 
 	const updateBoardTitleSuccess = (payload: UpdateBoardTitleSuccessPayload) => {
@@ -259,7 +254,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const updateColumnTitleRequest = async (payload: UpdateColumnTitleRequestPayload) => {
-		await socketOrRest.updateColumnTitleRequest(payload);
+		await socketApi.updateColumnTitleRequest(payload);
 	};
 
 	const updateColumnTitleSuccess = (payload: UpdateColumnTitleSuccessPayload) => {
@@ -272,7 +267,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const updateBoardVisibilityRequest = async (payload: UpdateBoardVisibilityRequestPayload) => {
-		await socketOrRest.updateBoardVisibilityRequest(payload);
+		await socketApi.updateBoardVisibilityRequest(payload);
 	};
 
 	const updateBoardVisibilitySuccess = (payload: UpdateBoardVisibilitySuccessPayload) => {
@@ -282,7 +277,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const updateReaderCanEditRequest = async (payload: UpdateReaderCanEditRequestPayload) => {
-		await socketOrRest.updateReaderCanEditRequest(payload);
+		await socketApi.updateReaderCanEditRequest(payload);
 	};
 
 	const updateReaderCanEditSuccess = (payload: UpdateReaderCanEditSuccessPayload) => {
@@ -291,11 +286,11 @@ export const useBoardStore = defineStore("boardStore", () => {
 		const { isOwnAction, readersCanEdit } = payload;
 
 		board.value.readersCanEdit = readersCanEdit;
-		if (!isOwnAction) socketOrRest.fetchBoardRequest({ boardId: board.value.id });
+		if (!isOwnAction) socketApi.fetchBoardRequest({ boardId: board.value.id });
 	};
 
 	const updateBoardLayoutRequest = async (payload: UpdateBoardLayoutRequestPayload): Promise<void> => {
-		await socketOrRest.updateBoardLayoutRequest(payload);
+		await socketApi.updateBoardLayoutRequest(payload);
 	};
 
 	const updateBoardLayoutSuccess = (payload: UpdateBoardLayoutSuccessPayload): void => {
@@ -305,7 +300,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const moveColumnRequest = async (payload: MoveColumnRequestPayload) => {
-		await socketOrRest.moveColumnRequest({
+		await socketApi.moveColumnRequest({
 			targetBoardId: board.value?.id,
 			...payload,
 		});
@@ -335,7 +330,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 		const { columnIndex: fromColumnIndex, columnId: fromColumnId, cardIndex: oldIndex } = cardLocation;
 
-		await socketOrRest.moveCardRequest({
+		await socketApi.moveCardRequest({
 			cardId,
 			fromColumnId,
 			fromColumnIndex,
@@ -345,7 +340,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const moveCardRequest = async (payload: MoveCardRequestPayload) => {
-		await socketOrRest.moveCardRequest(payload);
+		await socketApi.moveCardRequest(payload);
 	};
 
 	const moveCardSuccess = async (payload: MoveCardSuccessPayload) => {
@@ -380,7 +375,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const moveCardToBoardRequest = async (payload: MoveCardToBoardRequestPayload) => {
-		await socketOrRest.moveCardToBoardRequest(payload);
+		await socketApi.moveCardToBoardRequest(payload);
 	};
 
 	const moveCardToBoardSuccess = async (payload: MoveCardToBoardSuccessPayload) => {
@@ -414,15 +409,15 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const disconnectSocketRequest = () => {
-		socketOrRest.disconnectSocketRequest();
+		socketApi.disconnectSocketRequest();
 	};
 
 	const cancelSocketReconnection = () => {
-		socketOrRest.cancelSocketReconnection();
+		socketApi.cancelSocketReconnection();
 	};
 
 	const fetchBoardRequest = async (payload: FetchBoardRequestPayload) => {
-		await socketOrRest.fetchBoardRequest(payload);
+		await socketApi.fetchBoardRequest(payload);
 	};
 
 	const fetchBoardSuccess = (payload: FetchBoardSuccessPayload) => {
@@ -432,7 +427,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const deleteBoardRequest = async (payload: DeleteBoardRequestPayload, paramRoomId: string | undefined) => {
 		if (paramRoomId) roomId.value = paramRoomId;
-		await socketOrRest.deleteBoardRequest(payload);
+		await socketApi.deleteBoardRequest(payload);
 	};
 
 	const deleteBoardSuccess = (payload: DeleteBoardSuccessPayload) => {
@@ -449,7 +444,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const reloadBoard = async () => {
 		if (!board.value) return;
 
-		await socketOrRest.fetchBoardRequest({ boardId: board.value.id });
+		await socketApi.fetchBoardRequest({ boardId: board.value.id });
 	};
 
 	const getPreviousCardId = (cardId: string): string | undefined => {
