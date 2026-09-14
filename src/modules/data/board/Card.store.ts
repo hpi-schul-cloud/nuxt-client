@@ -19,7 +19,6 @@ import { useSharedEditMode } from "./edit-mode.composable";
 import { FileRecordParent } from "@/types/file/File";
 import { CardResponse, ContentElementType, CopyStatusEnum, PreferredToolResponse, ToolContextType } from "@api-server";
 import { notifyError, notifyInfo } from "@data-app";
-import { useEnvConfig } from "@data-env";
 import { CollaboraFileType, useFileStorageApi } from "@data-file";
 import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { useErrorHandler } from "@util-error-handling";
@@ -35,16 +34,14 @@ export const useCardStore = defineStore("cardStore", () => {
 	const { disableFileSelectOnMount, resetFileSelectOnMountEnabled } = useSharedFileSelect();
 
 	const restApi = useCardRestApi();
-	const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
-
-	const socketOrRest = isSocketEnabled ? useCardSocketApi() : restApi;
+	const socketApi = useCardSocketApi();
 
 	const { setFocus, forceFocus } = useBoardFocusHandler();
 	const { setEditModeId, editModeId } = useSharedEditMode();
 	const { uploadCollaboraFile } = useFileStorageApi();
 	const { generateErrorText } = useErrorHandler();
 
-	const fetchCardRequest = socketOrRest.fetchCardRequest;
+	const fetchCardRequest = socketApi.fetchCardRequest;
 
 	const fetchCardSuccess = (payload: FetchCardSuccessPayload) => {
 		for (const card of payload.cards) {
@@ -64,7 +61,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		}
 	};
 
-	const updateCardTitleRequest = socketOrRest.updateCardTitleRequest;
+	const updateCardTitleRequest = socketApi.updateCardTitleRequest;
 
 	const updateCardTitleSuccess = (payload: UpdateCardTitleSuccessPayload) => {
 		const card = cards.value[payload.cardId];
@@ -73,7 +70,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		card.title = payload.newTitle;
 	};
 
-	const updateCardColorRequest = socketOrRest.updateCardColorRequest;
+	const updateCardColorRequest = socketApi.updateCardColorRequest;
 
 	const updateCardColorSuccess = (payload: UpdateCardColorSuccessPayload) => {
 		const card = cards.value[payload.cardId];
@@ -82,7 +79,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		card.backgroundColor = payload.backgroundColor;
 	};
 
-	const updateCardHeightRequest = socketOrRest.updateCardHeightRequest;
+	const updateCardHeightRequest = socketApi.updateCardHeightRequest;
 
 	const updateCardHeightSuccess = (payload: UpdateCardHeightSuccessPayload) => {
 		const card = cards.value[payload.cardId];
@@ -91,7 +88,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		card.height = payload.newHeight;
 	};
 
-	const duplicateCard = socketOrRest.duplicateCardRequest;
+	const duplicateCard = socketApi.duplicateCardRequest;
 
 	const hasRelevantContentForDuplicationWarning = (card: CardResponse): boolean =>
 		card.elements.some((element) =>
@@ -120,7 +117,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		}
 	};
 
-	const deleteCardRequest = socketOrRest.deleteCardRequest;
+	const deleteCardRequest = socketApi.deleteCardRequest;
 
 	const deleteCardSuccess = (payload: DeleteCardSuccessPayload) => {
 		const card = cards.value[payload.cardId];
@@ -132,7 +129,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		delete cards.value[payload.cardId];
 	};
 
-	const createElementRequest = socketOrRest.createElementRequest;
+	const createElementRequest = socketApi.createElementRequest;
 
 	const createFileElementWithCollabora = async (type: CollaboraFileType, fileName: string) => {
 		if (!editModeId.value) {
@@ -198,7 +195,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (toPosition < 0) return;
 		if (toPosition >= card.elements.length) return;
 
-		await socketOrRest.moveElementRequest({
+		await socketApi.moveElementRequest({
 			elementId,
 			toCardId: cardId,
 			toPosition,
@@ -219,7 +216,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		}
 	};
 
-	const deleteElementRequest = socketOrRest.deleteElementRequest;
+	const deleteElementRequest = socketApi.deleteElementRequest;
 
 	const deleteElementSuccess = (payload: DeleteElementSuccessPayload) => {
 		const card = cards.value[payload.cardId];
@@ -240,7 +237,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		setEditModeId(payload.cardId);
 	};
 
-	const updateElementRequest = socketOrRest.updateElementRequest;
+	const updateElementRequest = socketApi.updateElementRequest;
 
 	const updateElementSuccess = (payload: UpdateElementSuccessPayload) => {
 		const cardToUpdate = Object.values(cards.value).find((c) => c.elements.some((e) => e.id === payload.elementId));
@@ -278,7 +275,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	};
 
 	const disconnectSocketRequest = () => {
-		socketOrRest.disconnectSocketRequest();
+		socketApi.disconnectSocketRequest();
 	};
 
 	return {
