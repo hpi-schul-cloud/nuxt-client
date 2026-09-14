@@ -60,6 +60,7 @@ describe("GeneralSettings", () => {
 
 			const textField = wrapper.findComponent<typeof VTextField>(`[data-testid='${testId}']`);
 
+			expect(textField.props("disabled")).toBe(true);
 			expect(textField.props("hint")).toBe("pages.administration.school.index.generalSettings.schoolDataReadOnlyHint");
 		});
 
