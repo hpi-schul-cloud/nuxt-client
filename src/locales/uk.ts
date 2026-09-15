@@ -1285,6 +1285,8 @@ export default {
 		"Після налаштування цей параметр буде неможливо змінити!",
 	"pages.administration.school.index.generalSettings.disabledHint":
 		"Не можна редагувати тут, більше інформації у зміні навчального року розділу",
+	"pages.administration.school.index.generalSettings.schoolDataReadOnlyHint":
+		"Поле неактивне. Авторизовані зміни можна запросити у службі підтримки.",
 	"pages.administration.school.index.generalSettings.labels.chooseACounty":
 		"Виберіть округ, до якого належить ваша школа",
 	"pages.administration.school.index.generalSettings.labels.cloudStorageProvider":

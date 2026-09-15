@@ -1267,6 +1267,8 @@ export default {
 	"pages.administration.school.index.generalSettings.changeSchoolValueWarning": "Once set, it cannot be changed!",
 	"pages.administration.school.index.generalSettings.disabledHint":
 		"Cannot be edited here, more information in the section school year change",
+	"pages.administration.school.index.generalSettings.schoolDataReadOnlyHint":
+		"The input field is disabled. Authorized changes can be requested from support.",
 	"pages.administration.school.index.generalSettings.labels.chooseACounty":
 		"Please choose the county your school belongs to",
 	"pages.administration.school.index.generalSettings.labels.cloudStorageProvider": "Cloud storage provider",

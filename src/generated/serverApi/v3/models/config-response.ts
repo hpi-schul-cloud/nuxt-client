@@ -166,6 +166,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_SCHOOL_DATA_READONLY_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_VIDEOCONFERENCE_ENABLED: boolean;
     /**
      * 

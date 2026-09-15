@@ -1296,6 +1296,8 @@ export default {
 		"Kann nur einmal gesetzt werden und wird danach deaktiviert!",
 	"pages.administration.school.index.generalSettings.disabledHint":
 		"Kann hier nicht bearbeitet werden, weitere Informationen im Abschnitt Schuljahreswechsel",
+	"pages.administration.school.index.generalSettings.schoolDataReadOnlyHint":
+		"Feld ist deaktiviert. Berechtigte Änderungen können beim Support angefragt werden.",
 	"pages.administration.school.index.generalSettings.labels.chooseACounty":
 		"Bitte wählen Sie den Kreis, zu dem die Schule gehört",
 	"pages.administration.school.index.generalSettings.labels.cloudStorageProvider": "Cloud-Storage-Anbieter",
