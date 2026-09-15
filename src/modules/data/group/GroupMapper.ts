@@ -68,12 +68,10 @@ export class GroupMapper {
 					id: classInfoResponse.id,
 					isUpgradable: classInfoResponse.isUpgradable,
 					studentCount: classInfoResponse.studentCount,
-					synchronizedCourses: classInfoResponse.synchronizedCourses?.map(
-						(course: CourseInfoResponse): CourseInfo => ({
-							id: course.id,
-							name: course.name,
-						})
-					),
+					synchronizedCourses: classInfoResponse.synchronizedCourses?.map((course: CourseInfoResponse): CourseInfo => ({
+						id: course.id,
+						name: course.name,
+					})),
 				})
 		);
 
