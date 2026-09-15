@@ -1,5 +1,5 @@
 <template>
-	<CKEditorVue
+	<Ckeditor
 		ref="ck"
 		v-model="modelValue"
 		:editor="InlineEditor"
@@ -14,9 +14,8 @@
 <script setup lang="ts">
 import { advancedFormattingToolbar, advancedPlugins, compactHeadings } from "./config";
 import { useEditorConfig } from "./EditorConfig.composable";
-import { Editor } from "@ckeditor/ckeditor5-core";
-import CKEditor from "@ckeditor/ckeditor5-vue";
-import { InlineEditor } from "@hpi-schul-cloud/ckeditor";
+import { Ckeditor } from "@ckeditor/ckeditor5-vue";
+import { type Editor, InlineEditor } from "@hpi-schul-cloud/ckeditor";
 import { useVModel } from "@vueuse/core";
 import katex from "katex";
 import { computed, watch } from "vue";
@@ -42,7 +41,6 @@ const props = defineProps({
 
 const emit = defineEmits(["ready", "focus", "update:value", "blur", "keyboard:delete"]);
 
-const CKEditorVue = CKEditor.component;
 const { generalConfig, registerDeletionHandler } = useEditorConfig();
 
 const modelValue = useVModel(props, "value", emit);
@@ -106,7 +104,7 @@ watch(
 
 <style lang="css">
 /* we can't import css in scss anymore, so it is moved to this css style block */
-@import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
+@import "@hpi-schul-cloud/ckeditor/build/style.css";
 @import "katex/dist/katex.min.css";
 </style>
 

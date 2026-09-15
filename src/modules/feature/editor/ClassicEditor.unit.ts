@@ -51,7 +51,7 @@ describe("@feature-editor/ClassicEditor", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: {
-					CKEditorVue: { template: "<div />" },
+					CKEditor: { template: "<div />" },
 				},
 			},
 			props,
