@@ -6,8 +6,7 @@ import { openCancellableDialog } from "@feature-dialog";
 import { watch } from "vue";
 
 type SafeTaskResult<T> =
-	| { success: true; result: T; error?: undefined }
-	| { success: false; result?: undefined; error: Error };
+	{ success: true; result: T; error?: undefined } | { success: false; result?: undefined; error: Error };
 
 type SafeTaskExecute = <T>(
 	fn: AsyncFunction<T>,

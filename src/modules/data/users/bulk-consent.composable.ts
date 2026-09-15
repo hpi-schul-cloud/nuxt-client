@@ -57,14 +57,12 @@ export const useBulkConsent = () => {
 
 		selectedStudentsData.value = result?.data.data
 			.filter((item: UserResponse) => item.consentStatus !== "ok")
-			.map(
-				(student: UserResponse): ConsentStudent => ({
-					...student,
-					fullName: student.firstName + " " + student.lastName,
-					password: generatePassword(),
-					birthday: student.birthday,
-				})
-			);
+			.map((student: UserResponse): ConsentStudent => ({
+				...student,
+				fullName: student.firstName + " " + student.lastName,
+				password: generatePassword(),
+				birthday: student.birthday,
+			}));
 	};
 
 	const updateStudent = ({ id, birthDate, pass }: { id: string; birthDate?: string; pass?: string }) => {
