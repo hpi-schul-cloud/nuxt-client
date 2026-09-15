@@ -1,5 +1,4 @@
 import { useBoardStore } from "../Board.store";
-import { useBoardRestApi } from "../boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "../boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "../BoardFocusHandler.composable";
 import { useCardSocketApi } from "../cardActions/cardSocketApi.composable";
@@ -15,9 +14,6 @@ import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("../boardActions/boardSocketApi.composable");
 const mockedUseBoardSocketApi = vi.mocked(useBoardSocketApi);
-
-vi.mock("../boardActions/boardRestApi.composable");
-const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
 
 vi.mock("@util-board");
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
@@ -55,8 +51,6 @@ describe("BoardStore - moveCardSuccess", () => {
 
 		mockedUseSocketConnection.mockReturnValue(mockComposable(useSocketConnection));
 		mockedUseBoardSocketApi.mockReturnValue(mockComposable(useBoardSocketApi));
-
-		mockedUseBoardRestApi.mockReturnValue(mockComposable(useBoardRestApi));
 
 		mockedUseCardSocketApi.mockReturnValue(
 			mockComposable(useCardSocketApi, {

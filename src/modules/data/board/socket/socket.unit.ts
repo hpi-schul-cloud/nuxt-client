@@ -45,9 +45,6 @@ vi.mock("@vueuse/core", async (importOriginal) => {
 vi.mock("../boardActions/boardSocketApi.composable", () => ({
 	useBoardSocketApi: vi.fn(() => ({ duplicateColumnRequest: vi.fn() })),
 }));
-vi.mock("../boardActions/boardRestApi.composable", () => ({
-	useBoardRestApi: vi.fn(() => ({ duplicateColumnRequest: vi.fn() })),
-}));
 
 vi.mock("@vueuse/shared", () => ({
 	useTimeoutFn: vi.fn().mockImplementation((cb: () => void) => {
