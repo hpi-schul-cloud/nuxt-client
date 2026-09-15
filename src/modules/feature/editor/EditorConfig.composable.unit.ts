@@ -2,7 +2,7 @@ import { useEditorConfig } from "./EditorConfig.composable";
 import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { LanguageType } from "@api-server";
-import { Editor } from "@ckeditor/ckeditor5-core";
+import type { Editor } from "@hpi-schul-cloud/ckeditor";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 
