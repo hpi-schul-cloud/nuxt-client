@@ -9,11 +9,7 @@
 					density="compact"
 					:readonly="!hasSchoolEditPermission"
 					:disabled="isSchoolSynced || isSchoolDataReadOnlyEnabled"
-					:hint="
-						isSchoolDataReadOnlyEnabled
-							? t('pages.administration.school.index.generalSettings.schoolDataReadOnlyHint')
-							: undefined
-					"
+					:hint="schoolNameHint"
 					persistent-hint
 					data-testid="school-name"
 					:rules="[validateOnOpeningTag]"
@@ -43,11 +39,7 @@
 					:label="t('pages.administration.school.index.generalSettings.labels.schoolNumber')"
 					density="compact"
 					:disabled="!!schoolDetails.officialSchoolNumber || isSchoolDataReadOnlyEnabled"
-					:hint="
-						isSchoolDataReadOnlyEnabled
-							? t('pages.administration.school.index.generalSettings.schoolDataReadOnlyHint')
-							: t('pages.administration.school.index.generalSettings.changeSchoolValueWarning')
-					"
+					:hint="schoolNumberHint"
 					persistent-hint
 					:readonly="!hasSchoolEditPermission"
 				/>
@@ -166,6 +158,16 @@ const { schoolDetails, schoolFeatureObject, isSchoolSynced, isLoadingSchoolData 
 const availableLanguages = computed(() => useEnvConfig().value.I18N__AVAILABLE_LANGUAGES);
 const isSchoolDataReadOnlyEnabled = computed(() => useEnvConfig().value.FEATURE_SCHOOL_DATA_READONLY_ENABLED);
 const federalState = computed(() => schoolDetails.value.federalState);
+const schoolNameHint = computed(() =>
+	isSchoolDataReadOnlyEnabled.value
+		? t("pages.administration.school.index.generalSettings.schoolDataReadOnlyHint")
+		: undefined
+);
+const schoolNumberHint = computed(() =>
+	isSchoolDataReadOnlyEnabled.value
+		? t("pages.administration.school.index.generalSettings.schoolDataReadOnlyHint")
+		: t("pages.administration.school.index.generalSettings.changeSchoolValueWarning")
+);
 const languages = computed(() =>
 	availableLanguages.value.map((lang: string) => {
 		const name = t(`common.words.languages.${lang}`);
