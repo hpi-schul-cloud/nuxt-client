@@ -18,7 +18,6 @@ describe("loggedOutLayout", () => {
 
 	const mountComponent = () => {
 		createTestEnvStore({
-			GHOST_BASE_URL: "https://works-like-charm.com",
 			// SC_THEME must be set here because of dependency to NavigationBar
 			SC_THEME: SchulcloudTheme.DEFAULT,
 		});
@@ -39,10 +38,8 @@ describe("loggedOutLayout", () => {
 			.findAll('[data-testid="logged-out-top-bar"] .link-container > a')
 			.map((el) => el.element as HTMLLinkElement);
 
-		expect(links.length).toBe(3);
-		expect(new URL(links[0].href).host).toEqual("works-like-charm.com");
-		expect(new URL(links[1].href).host).toEqual("works-like-charm.com");
-		expect(new URL(links[2].href).host).toEqual("works-like-charm.com");
+		expect(links.length).toBe(1);
+		expect(new URL(links[0].href).pathname).toEqual("/");
 	});
 
 	it("should not routeToErrorPage without any errors", () => {
