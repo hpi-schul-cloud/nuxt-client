@@ -80,10 +80,11 @@ export const useAppStore = defineStore("applicationStore", () => {
 	// Actions
 	const login = async () => {
 		const { data } = await meApi.meControllerMe();
-
 		userLocale.value = data.language;
 		meResponse.value = data;
 		isLoggedIn.value = true;
+
+		setCookie("USER_LANG", locale.value, 30);
 
 		await useSchoolStore().fetchSchoolDetails();
 	};
