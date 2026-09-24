@@ -26,25 +26,12 @@ const { xs } = useDisplay();
 const { applicationError } = useAppStoreRefs();
 const router = useRouter();
 
-const ghostBaseUrl = computed(() => useEnvConfig().value.GHOST_BASE_URL);
-
 const logo = computed(() => imgLogoMonoAssets[useEnvConfig().value.SC_THEME]?.logo);
 
 const navbarItems = computed(() => [
 	{
-		title: t("global.topbar.loggedOut.actions.steps"),
-		href: `${ghostBaseUrl.value}/erste-schritte/`,
-		target: "_blank",
-	},
-	{
-		title: t("global.topbar.loggedOut.actions.blog"),
-		href: `${ghostBaseUrl.value}/`,
-		target: "_blank",
-	},
-	{
-		title: t("global.topbar.loggedOut.actions.faq"),
-		href: `${ghostBaseUrl.value}/faqs/`,
-		target: "_blank",
+		title: t("common.labels.login"),
+		href: `/`,
 	},
 ]);
 

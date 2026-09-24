@@ -632,7 +632,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @summary Get a list of room statistics.
          * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 1000.
+         * @param {number} [limit] Page limit, defaults to 500.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1133,7 +1133,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get a list of room statistics.
          * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 1000.
+         * @param {number} [limit] Page limit, defaults to 500.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1380,7 +1380,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
          * 
          * @summary Get a list of room statistics.
          * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 1000.
+         * @param {number} [limit] Page limit, defaults to 500.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1618,7 +1618,7 @@ export interface RoomApiInterface {
      * 
      * @summary Get a list of room statistics.
      * @param {number} [skip] Number of elements (not pages) to be skipped
-     * @param {number} [limit] Page limit, defaults to 1000.
+     * @param {number} [limit] Page limit, defaults to 500.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
@@ -1884,7 +1884,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      * 
      * @summary Get a list of room statistics.
      * @param {number} [skip] Number of elements (not pages) to be skipped
-     * @param {number} [limit] Page limit, defaults to 1000.
+     * @param {number} [limit] Page limit, defaults to 500.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi
