@@ -181,6 +181,16 @@ describe("useApplicationStore", () => {
 
 			expect(useAppStore().isLoggedIn).toBe(true);
 			expect(useAppStore().locale).toBe(LanguageType.ES);
+			expect(document.cookie).toContain("USER_LANG=es");
+		});
+
+		it("should overwrite an existing language cookie on login", async () => {
+			document.cookie = "USER_LANG=en";
+
+			await setup({ language: LanguageType.ES });
+
+			expect(document.cookie).toContain("USER_LANG=es");
+			expect(document.cookie).not.toContain("USER_LANG=en");
 		});
 
 		it("should not log in on api error", async () => {
