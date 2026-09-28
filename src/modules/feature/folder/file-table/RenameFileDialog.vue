@@ -29,13 +29,14 @@ import { useInvalidCharactersValidator, useOpeningTagValidator } from "@util-val
 import { computed, PropType, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { fileRecords, name } = defineProps({
+const { fileRecords, name, isFolder } = defineProps({
 	entityName: { type: String, required: false, default: "" },
 	fileRecords: {
 		type: Array as PropType<FileRecord[]>,
 		required: true,
 	},
 	name: { type: String, required: false, default: "" },
+	isFolder: { type: Boolean, required: false, default: false },
 });
 
 const isDialogOpen = defineModel("is-dialog-open", {
@@ -51,7 +52,7 @@ watch(
 	() => name,
 	(newName) => {
 		if (newName !== "") {
-			nameRef.value = removeFileExtension(newName);
+			nameRef.value = isFolder ? newName : removeFileExtension(newName);
 		}
 	},
 	{ immediate: true }
@@ -62,20 +63,22 @@ const { t } = useI18n();
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const { validateInvalidCharacters } = useInvalidCharactersValidator();
 
+const buildComparableName = (value: string): string => {
+	if (isFolder) return value;
+
+	const fileExtension = getFileExtension(name);
+
+	return `${value}.${fileExtension}`;
+};
+
 const rules = reactive({
 	required: (value: string) => !!value || t("common.validation.required"),
-	validateOnOpeningTag: (value: string) => {
-		const fileExtension = getFileExtension(name);
-		const nameWithExtension = `${value}.${fileExtension}`;
-
-		return validateOnOpeningTag(nameWithExtension);
-	},
+	validateOnOpeningTag: (value: string) => validateOnOpeningTag(buildComparableName(value)),
 	checkDuplicatedNames: (value: string) => {
-		const fileExtension = getFileExtension(name);
-		const nameWithExtension = `${value}.${fileExtension}`;
+		const comparableName = buildComparableName(value);
 
 		return (
-			!fileRecords.find((item) => item.name === nameWithExtension && item.name !== name) ||
+			!fileRecords.find((item) => item.name === comparableName && item.name !== name) ||
 			t("pages.folder.rename-file-dialog.validation.duplicate-file-name")
 		);
 	},

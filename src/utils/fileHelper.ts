@@ -2,6 +2,7 @@ import {
 	ArchiveFileParams,
 	FilePreviewStatus,
 	FilePreviewWidth,
+	FileRecord,
 	FileRecordVirusScanStatus,
 	PreviewOutputMimeTypes,
 } from "@/types/file/File";
@@ -9,6 +10,14 @@ import { useI18n } from "vue-i18n";
 
 const toClampedPercent = (loaded: number, total: number): number =>
 	Math.min(100, Math.max(0, Math.round((loaded / total) * 100)));
+
+/**
+ * The file store keeps every FileRecord under a folder-element's parentId flat, regardless of
+ * nesting level (see docs/nested-folders.md). This filters to one nesting level, undefined =
+ * root level of the folder element.
+ */
+export const filterByFolderId = (fileRecords: FileRecord[], folderId?: string): FileRecord[] =>
+	fileRecords.filter((fileRecord) => fileRecord.folderId === folderId);
 
 export const buildUploadOptions = (onUploadProgress?: (progress: number) => void) => {
 	if (!onUploadProgress) return undefined;

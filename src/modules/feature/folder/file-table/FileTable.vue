@@ -46,7 +46,16 @@
 		<div class="mt-2">
 			<DataTable :table-headers="headers" :items="fileRecordItems" :show-select="true">
 				<template #[`item.preview`]="{ item }">
-					<FileInteractionHandler :file-record-item="item" :has-edit-permission="props.hasEditPermission">
+					<button
+						v-if="item.isFolder"
+						type="button"
+						class="folder-interactive-area bg-transparent pa-0 cursor-pointer"
+						:aria-label="t('pages.folder.ariaLabels.openFolder', { name: item.name })"
+						@click="onNavigateIntoFolder(item)"
+					>
+						<VIcon :icon="mdiFolderOpenOutline" :data-testid="`folder-preview-${item.name}`" />
+					</button>
+					<FileInteractionHandler v-else :file-record-item="item" :has-edit-permission="props.hasEditPermission">
 						<FilePreview
 							:file-record="item"
 							:data-testid="`file-preview-${item.name}`"
@@ -55,7 +64,16 @@
 					</FileInteractionHandler>
 				</template>
 				<template #[`item.name`]="{ item }">
-					<FileInteractionHandler :file-record-item="item" :has-edit-permission="props.hasEditPermission">
+					<button
+						v-if="item.isFolder"
+						type="button"
+						class="folder-interactive-area bg-transparent pa-0 cursor-pointer text-left"
+						:data-testid="`name-${item.name}`"
+						@click="onNavigateIntoFolder(item)"
+					>
+						{{ item.name }}
+					</button>
+					<FileInteractionHandler v-else :file-record-item="item" :has-edit-permission="props.hasEditPermission">
 						<span :data-testid="`name-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }">
 							{{ item.name }}
 							<FileStatus :file-record="item" />
@@ -69,12 +87,13 @@
 				</template>
 				<template #[`item.size`]="{ item }">
 					<span :data-testid="`size-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }"
-						>{{ formatFileSize(item.size) }}
+						>{{ item.isFolder ? "—" : formatFileSize(item.size) }}
 					</span>
 				</template>
 				<template #[`item.actions`]="{ item }">
 					<KebabMenu :data-testid="`kebab-menu-${item.name}`" :aria-label="buildActionMenuAriaLabel(item)">
 						<KebabMenuActionDownloadFiles
+							v-if="!item.isFolder"
 							:disabled="!item.isSelectable"
 							:selected-ids="[item.id]"
 							:aria-label="t('common.actions.download')"
@@ -86,6 +105,15 @@
 							:aria-label="t('common.actions.rename')"
 							@click="onRenameButtonClick(item)"
 						/>
+						<KebabMenuAction
+							v-if="props.hasEditPermission"
+							:icon="mdiFolderMoveOutline"
+							:disabled="!item.isSelectable"
+							:aria-label="t('common.actions.move')"
+							@click="onMoveButtonClick(item)"
+						>
+							{{ t("common.actions.move") }}
+						</KebabMenuAction>
 						<KebabMenuActionDeleteFiles
 							v-if="props.hasEditPermission"
 							:file-records="fileRecords"
@@ -123,7 +151,8 @@
 				v-model:is-dialog-open="isRenameDialogOpen"
 				:file-records="fileRecords"
 				:name="fileRecordToRename?.name"
-				:entity-name="t('components.cardElement.fileElement')"
+				:is-folder="fileRecordToRename?.isFolder"
+				:entity-name="fileRecordToRename?.isFolder ? t('pages.folder.title') : t('components.cardElement.fileElement')"
 				@cancel="onRenameDialogCancel"
 				@confirm="onRenameDialogConfirm"
 			/>
@@ -133,11 +162,19 @@
 				@confirm="onDeleteFilesConfirm"
 				@cancel="onDeleteFilesCancel"
 			/>
+			<MoveFileDialog
+				v-model:is-dialog-open="isMoveDialogOpen"
+				:available-folders="availableMoveTargets"
+				:is-at-root="!props.currentFolderId"
+				@confirm="onMoveDialogConfirm"
+				@cancel="onMoveDialogCancel"
+			/>
 		</div>
 	</template>
 </template>
 
 <script setup lang="ts">
+import MoveFileDialog from "../MoveFileDialog.vue";
 import DeleteFileDialog from "./DeleteFileDialog.vue";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FileInteractionHandler from "./FileInteractionHandler.vue";
@@ -150,10 +187,10 @@ import RenameFileDialog from "./RenameFileDialog.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
 import { FileRecord } from "@/types/file/File";
 import { formatFileSize, getFileExtension, isScanStatusBlocked } from "@/utils/fileHelper";
-import { mdiTrayArrowUp } from "@icons/material";
+import { mdiFolderMoveOutline, mdiFolderOpenOutline, mdiTrayArrowUp } from "@icons/material";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
-import { KebabMenu, KebabMenuActionRename } from "@ui-kebab-menu";
+import { KebabMenu, KebabMenuAction, KebabMenuActionRename } from "@ui-kebab-menu";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -195,6 +232,10 @@ const props = defineProps({
 		type: Boolean,
 		default: false,
 	},
+	currentFolderId: {
+		type: String,
+		default: undefined,
+	},
 });
 
 const emit = defineEmits([
@@ -204,6 +245,8 @@ const emit = defineEmits([
 	"download-file",
 	"download-files-as-archive",
 	"click:browse",
+	"navigate-into-folder",
+	"move-record",
 ]);
 
 const headers = [
@@ -223,6 +266,12 @@ const fileRecordToRename = ref<FileRecord | undefined>(undefined);
 const isRenameDialogOpen = ref(false);
 const isDeleteFilesDialogOpen = ref(false);
 const fileRecordsToDelete = ref<FileRecord[]>([]);
+const fileRecordToMove = ref<FileRecord | undefined>(undefined);
+const isMoveDialogOpen = ref(false);
+
+const availableMoveTargets = computed(() =>
+	props.fileRecords.filter((record) => record.isFolder && record.id !== fileRecordToMove.value?.id)
+);
 
 const fileRecordItems = computed(() =>
 	props.fileRecords.map((item) => ({
@@ -275,15 +324,39 @@ const onRenameDialogCancel = () => {
 const onRenameDialogConfirm = (newName: string) => {
 	if (!fileRecordToRename.value) return;
 
-	const fileExtension = getFileExtension(fileRecordToRename.value.name);
-	const nameWithExtension = `${newName}.${fileExtension}`;
+	const finalName = fileRecordToRename.value.isFolder
+		? newName
+		: `${newName}.${getFileExtension(fileRecordToRename.value.name)}`;
 
-	if (fileRecordToRename.value.name !== nameWithExtension) {
-		emit("update:name", nameWithExtension, fileRecordToRename.value);
+	if (fileRecordToRename.value.name !== finalName) {
+		emit("update:name", finalName, fileRecordToRename.value);
 	}
 
 	isRenameDialogOpen.value = false;
 	fileRecordToRename.value = undefined;
+};
+
+const onNavigateIntoFolder = (item: FileRecord) => {
+	emit("navigate-into-folder", item);
+};
+
+const onMoveButtonClick = (item: FileRecord) => {
+	fileRecordToMove.value = item;
+	isMoveDialogOpen.value = true;
+};
+
+const onMoveDialogConfirm = (targetFolderId: string | undefined) => {
+	if (fileRecordToMove.value) {
+		emit("move-record", fileRecordToMove.value, targetFolderId);
+	}
+
+	isMoveDialogOpen.value = false;
+	fileRecordToMove.value = undefined;
+};
+
+const onMoveDialogCancel = () => {
+	isMoveDialogOpen.value = false;
+	fileRecordToMove.value = undefined;
 };
 
 const buildActionMenuAriaLabel = (item: FileRecord): string =>
@@ -293,6 +366,11 @@ const buildActionMenuAriaLabel = (item: FileRecord): string =>
 </script>
 
 <style scoped>
+.folder-interactive-area {
+	border: none;
+	width: 100%;
+}
+
 .drop-zone-empty {
 	min-height: 240px;
 	border: 2px dashed rgb(var(--v-theme-primary));

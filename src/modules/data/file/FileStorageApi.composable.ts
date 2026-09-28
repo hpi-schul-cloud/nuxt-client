@@ -61,10 +61,20 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const fetchFiles = async (parentId: string, parentType: FileRecordParent): Promise<void> => {
+	const fetchFiles = async (parentId: string, parentType: FileRecordParent, folderId?: string): Promise<void> => {
 		try {
 			const schoolId = useAppStore().school?.id as string;
-			const response = await fileApi.list(schoolId, StorageLocation.SCHOOL, parentId, parentType);
+			const response = await fileApi.list(
+				schoolId,
+				StorageLocation.SCHOOL,
+				parentId,
+				parentType,
+				undefined,
+				undefined,
+				{
+					query: { folderId },
+				}
+			);
 
 			upsertFileRecords(response.data.data);
 		} catch (error) {
@@ -77,16 +87,58 @@ export const useFileStorageApi = () => {
 		file: File,
 		parentId: string,
 		parentType: FileRecordParent,
-		onUploadProgress?: (progress: number) => void
+		onUploadProgress?: (progress: number) => void,
+		folderId?: string
 	): Promise<void> => {
 		try {
 			const schoolId = useAppStore().school?.id as string;
-			const options = buildUploadOptions(onUploadProgress);
+			const options = { ...buildUploadOptions(onUploadProgress), query: { folderId } };
 			const response = await fileApi.upload(schoolId, StorageLocation.SCHOOL, parentId, parentType, file, options);
 			upsertFileRecords([response.data]);
 		} catch (error) {
 			showError(error);
 			throw error;
+		}
+	};
+
+	/**
+	 * The create-folder and move endpoints were added to the files-storage backend for nested
+	 * folder support but are not yet part of the generated OpenAPI client (regenerating it
+	 * requires a running files-storage instance - see docs/nested-folders.md). These call the
+	 * shared $axios instance directly with the same request shape the generator would produce;
+	 * replace with fileApi.createFolder/fileApi.move once `npm run generate-client:filestorage`
+	 * has been run against the updated backend.
+	 */
+	const createFolder = async (
+		name: string,
+		parentId: string,
+		parentType: FileRecordParent,
+		folderId?: string
+	): Promise<FileRecord | void> => {
+		try {
+			const schoolId = useAppStore().school?.id as string;
+			const response = await $axios.post<FileRecord>(
+				`/v3/file/folder/${StorageLocation.SCHOOL}/${schoolId}/${parentType}/${parentId}`,
+				{ name, folderId }
+			);
+
+			upsertFileRecords([response.data]);
+
+			return response.data;
+		} catch (error) {
+			showError(error);
+		}
+	};
+
+	const moveFile = async (fileRecordId: string, targetFolderId?: string): Promise<FileRecord | void> => {
+		try {
+			const response = await $axios.patch<FileRecord>(`/v3/file/move/${fileRecordId}`, { folderId: targetFolderId });
+
+			upsertFileRecords([response.data]);
+
+			return response.data;
+		} catch (error) {
+			showError(error);
 		}
 	};
 
@@ -116,7 +168,8 @@ export const useFileStorageApi = () => {
 		type: CollaboraFileType,
 		parentId: string,
 		parentType: FileRecordParent,
-		fileName: string
+		fileName: string,
+		folderId?: string
 	) => {
 		const fileExtension = getOfficeDocumentFileExtension(type);
 		const fullFileName = `${fileName}.${fileExtension}`;
@@ -132,7 +185,8 @@ export const useFileStorageApi = () => {
 				StorageLocation.SCHOOL,
 				parentId,
 				parentType,
-				addDocumentToParentParams
+				addDocumentToParentParams,
+				{ query: { folderId } }
 			);
 
 			upsertFileRecords([response.data]);
@@ -301,5 +355,7 @@ export const useFileStorageApi = () => {
 		getAuthorizedCollaboraDocumentUrl,
 		fetchFileById,
 		uploadCollaboraFile,
+		createFolder,
+		moveFile,
 	};
 };

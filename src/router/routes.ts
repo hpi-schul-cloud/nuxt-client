@@ -177,12 +177,13 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		},
 	},
 	{
-		path: `/folder/:id(${REGEX_ID})`,
+		path: `/folder/:id(${REGEX_ID})/:subPath*`,
 		component: async () => (await import("@page-folder")).FolderPage,
 		beforeEnter: [checkFolderFeature],
 		name: "folder-id",
 		props: (route: RouteLocationNormalized) => ({
 			folderId: route.params.id,
+			subFolderPath: Array.isArray(route.params.subPath) ? route.params.subPath : [],
 		}),
 	},
 	{

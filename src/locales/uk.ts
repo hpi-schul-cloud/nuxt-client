@@ -2423,4 +2423,10 @@ export default {
 	"pages.folder.dropZone.emptyState.orText": "або",
 	"pages.folder.dropZone.emptyState.browse": "оглянути файли",
 	"pages.folder.error.404": "Папку не знайдено",
+	"pages.folder.fab.create-folder": "Створити папку",
+	"pages.folder.createFolderDialog.title": "Створити нову папку",
+	"pages.folder.moveDialog.title": "Перемістити до",
+	"pages.folder.moveDialog.targetLabel": "Цільова папка",
+	"pages.folder.moveDialog.rootLevel": "Верхній рівень",
+	"pages.folder.ariaLabels.openFolder": "Відкрити папку {name}",
 };

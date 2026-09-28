@@ -2456,4 +2456,10 @@ export default {
 	"pages.folder.dropZone.emptyState.orText": "o",
 	"pages.folder.dropZone.emptyState.browse": "buscar tus archivos",
 	"pages.folder.error.404": "Carpeta no encontrada",
+	"pages.folder.fab.create-folder": "Crear carpeta",
+	"pages.folder.createFolderDialog.title": "Crear nueva carpeta",
+	"pages.folder.moveDialog.title": "Mover a",
+	"pages.folder.moveDialog.targetLabel": "Carpeta de destino",
+	"pages.folder.moveDialog.rootLevel": "Nivel superior",
+	"pages.folder.ariaLabels.openFolder": "Abrir carpeta {name}",
 };

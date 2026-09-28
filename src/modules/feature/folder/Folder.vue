@@ -1,12 +1,12 @@
 <template>
-	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabItems">
+	<DefaultWireframe max-width="full" :breadcrumbs="extendedBreadcrumbs" :fab-items="fabItems">
 		<template #header>
 			<div class="d-flex align-center">
 				<h1 data-testid="folder-title">
-					{{ folderName }}
+					{{ displayName }}
 				</h1>
 				<FolderMenu
-					v-if="allowedOperations.createFileElement"
+					v-if="allowedOperations.createFileElement && !currentFolderId"
 					:folder-name="folderName"
 					@delete="onDelete"
 					@rename="onRenameActionClick"
@@ -20,6 +20,7 @@
 				:file-storage-error="fileStorageError"
 				:has-edit-permission="allowedOperations.createFileElement"
 				:file-records="uploadedFileRecords"
+				:current-folder-id="currentFolderId"
 				:upload-progress="uploadProgress"
 				:are-upload-stats-visible="areUploadStatsVisible"
 				:is-over-drop-zone="isOverDropZone"
@@ -29,6 +30,8 @@
 				@download-file="downloadFileHandler"
 				@download-files-as-archive="downloadFilesAsArchiveHandler"
 				@click:browse="uploadFile"
+				@navigate-into-folder="onNavigateIntoFolder"
+				@move-record="onMoveRecord"
 			/>
 			<div
 				v-if="isOverDropZone && allowedOperations.createFileElement && !isEmpty"
@@ -50,19 +53,25 @@
 		@confirm="onRename"
 		@cancel="onRenameCancel"
 	/>
+	<CreateFolderDialog
+		v-model:is-dialog-open="isCreateFolderDialogOpen"
+		@confirm="onCreateSubfolderConfirm"
+		@cancel="onCreateSubfolderCancel"
+	/>
 	<input ref="fileInput" type="file" multiple hidden data-testid="input-folder-fileupload" aria-hidden="true" />
 	<LightBox />
 	<AddCollaboraFileDialog @create-collabora-file="onCreateCollaboraFile" />
 </template>
 
 <script setup lang="ts">
+import CreateFolderDialog from "./CreateFolderDialog.vue";
 import FileTable from "./file-table/FileTable.vue";
 import FolderMenu from "./FolderMenu.vue";
 import RenameFolderDialog from "./RenameFolderDialog.vue";
 import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
-import { downloadFile, downloadFilesAsArchive, extractFilesFromItems } from "@/utils/fileHelper";
+import { downloadFile, downloadFilesAsArchive, extractFilesFromItems, filterByFolderId } from "@/utils/fileHelper";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useSharedBoardPageInformation } from "@data-board";
 import { useEnvConfig } from "@data-env";
@@ -70,14 +79,14 @@ import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
 import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog, useAddCollaboraFile } from "@feature-collabora";
-import { mdiFileDocumentPlusOutline, mdiPlus, mdiTrayArrowUp } from "@icons/material";
-import { DefaultWireframe } from "@ui-layout";
+import { mdiFileDocumentPlusOutline, mdiFolderPlusOutline, mdiPlus, mdiTrayArrowUp } from "@icons/material";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { FabAction } from "@ui-speed-dial-menu";
 import { useErrorHandler } from "@util-error-handling";
 import { useDropZone, useEventListener } from "@vueuse/core";
 import dayjs from "dayjs";
-import { computed, onMounted, ref, toRef, watch } from "vue";
+import { computed, onMounted, PropType, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -88,6 +97,10 @@ const props = defineProps({
 	folderId: {
 		type: String,
 		required: true,
+	},
+	subFolderPath: {
+		type: Array as PropType<string[]>,
+		default: () => [],
 	},
 });
 
@@ -110,18 +123,67 @@ const {
 
 const { createPageInformation } = useSharedBoardPageInformation();
 
-const { fetchFiles, upload, uploadCollaboraFile, getFileRecordsByParentId, deleteFiles, rename } = useFileStorageApi();
+const {
+	fetchFiles,
+	upload,
+	uploadCollaboraFile,
+	getFileRecordsByParentId,
+	deleteFiles,
+	rename,
+	createFolder,
+	moveFile,
+} = useFileStorageApi();
 
 const { handleError, notifyWithTemplate } = useErrorHandler();
 
 const { openCollaboraFileDialog } = useAddCollaboraFile();
 
 const folderId = toRef(props, "folderId");
-const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
+const subFolderPath = toRef(props, "subFolderPath");
+const currentFolderId = computed<string | undefined>(() => subFolderPath.value.at(-1));
+
+/**
+ * Names of nested subfolders, populated when navigating into them via a row click so the
+ * breadcrumb can show a real name instead of a raw id. Not populated on a direct/deep-link
+ * page load - see docs/nested-folders.md for this accepted limitation.
+ */
+const subfolderNameCache = ref<Map<string, string>>(new Map());
+
+const displayName = computed(() => {
+	if (!currentFolderId.value) return folderName.value;
+
+	return subfolderNameCache.value.get(currentFolderId.value) ?? t("pages.folder.untitled");
+});
+
+const extendedBreadcrumbs = computed<Breadcrumb[]>(() => {
+	if (subFolderPath.value.length === 0 || breadcrumbs.value.length === 0) return breadcrumbs.value;
+
+	const rootCrumbIndex = breadcrumbs.value.length - 1;
+	const items: Breadcrumb[] = [
+		...breadcrumbs.value.slice(0, rootCrumbIndex),
+		{ ...breadcrumbs.value[rootCrumbIndex], disabled: false, to: `/folder/${folderId.value}` },
+	];
+
+	subFolderPath.value.forEach((id, index) => {
+		const isLast = index === subFolderPath.value.length - 1;
+
+		items.push({
+			title: subfolderNameCache.value.get(id) ?? t("pages.folder.untitled"),
+			disabled: isLast,
+			to: isLast ? undefined : `/folder/${folderId.value}/${subFolderPath.value.slice(0, index + 1).join("/")}`,
+		});
+	});
+
+	return items;
+});
+
+const allFileRecords = computed(() => getFileRecordsByParentId(folderId.value));
+const fileRecords = computed(() => filterByFolderId(allFileRecords.value, currentFolderId.value));
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const dropZoneRef = ref<HTMLDivElement | null>(null);
 const isRenameDialogOpen = ref(false);
+const isCreateFolderDialogOpen = ref(false);
 
 const isCollaboraEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED);
 
@@ -150,6 +212,15 @@ const fabItems = computed(() => {
 			clickHandler: openCollaboraFileDialog,
 		});
 	}
+
+	actions.push({
+		icon: mdiFolderPlusOutline,
+		label: t("pages.folder.fab.create-folder"),
+		dataTestId: "fab-button-create-folder",
+		clickHandler: () => {
+			isCreateFolderDialogOpen.value = true;
+		},
+	});
 
 	return actions;
 });
@@ -203,7 +274,7 @@ const downloadFileHandler = (selectedIds: string[]) => {
 
 const downloadFilesAsArchiveHandler = async (selectedIds: string[]) => {
 	const now = dayjs().format("YYYYMMDD");
-	const archiveName = `${now}_${folderName.value}`;
+	const archiveName = `${now}_${displayName.value}`;
 
 	downloadFilesAsArchive({
 		fileRecordIds: selectedIds,
@@ -241,12 +312,34 @@ const onRenameCancel = () => {
 	isRenameDialogOpen.value = false;
 };
 
+const onNavigateIntoFolder = (record: FileRecord) => {
+	subfolderNameCache.value.set(record.id, record.name);
+	router.push({
+		name: "folder-id",
+		params: { id: folderId.value, subPath: [...subFolderPath.value, record.id] },
+	});
+};
+
+const onMoveRecord = async (record: FileRecord, targetFolderId: string | undefined) => {
+	await moveFile(record.id, targetFolderId);
+};
+
+const onCreateSubfolderConfirm = async (name: string) => {
+	await createFolder(name, folderId.value, FileRecordParent.BOARDNODES, currentFolderId.value);
+	isCreateFolderDialogOpen.value = false;
+};
+
+const onCreateSubfolderCancel = () => {
+	isCreateFolderDialogOpen.value = false;
+};
+
 const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
 	const newFile = await uploadCollaboraFile(
 		payload.type,
 		props.folderId,
 		FileRecordParent.BOARDNODES,
-		payload.fileName
+		payload.fileName,
+		currentFolderId.value
 	);
 	if (!newFile) return;
 
@@ -305,6 +398,20 @@ const decrementRunningUploads = (count: number) => {
 	runningUploads.value -= count;
 };
 
+const loadCurrentLevelFiles = async () => {
+	try {
+		await fetchFiles(folderId.value, FileRecordParent.BOARDNODES, currentFolderId.value);
+	} catch {
+		fileStorageError.value = true;
+	}
+};
+
+watch(currentFolderId, () => {
+	if (fileFolderElement.value) {
+		loadCurrentLevelFiles();
+	}
+});
+
 onMounted(async () => {
 	if (fileInput.value) {
 		fileInput.value.addEventListener("change", async (event) => onFileSelection(event));
@@ -316,11 +423,7 @@ onMounted(async () => {
 		return;
 	}
 
-	try {
-		await fetchFiles(folderId.value, FileRecordParent.BOARDNODES);
-	} catch {
-		fileStorageError.value = true;
-	}
+	await loadCurrentLevelFiles();
 
 	await fetchAllowedOperations(parent.value.id);
 
@@ -354,7 +457,7 @@ const uploadFiles = async (files: File[]) => {
 
 	await Promise.allSettled(
 		files.map(async (file) => {
-			await upload(file, props.folderId, FileRecordParent.BOARDNODES);
+			await upload(file, props.folderId, FileRecordParent.BOARDNODES, undefined, currentFolderId.value);
 			incrementUploadProgressUploaded(1);
 		})
 	);
@@ -375,7 +478,7 @@ watch(
 );
 
 watch(
-	() => folderName.value,
+	() => displayName.value,
 	(newName) => {
 		emit("update:folder-name", buildPageTitle(newName, parent.value?.name));
 	},

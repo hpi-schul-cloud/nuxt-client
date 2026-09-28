@@ -2402,4 +2402,10 @@ export default {
 	"pages.folder.dropZone.emptyState.orText": "or",
 	"pages.folder.dropZone.emptyState.browse": "browse your files",
 	"pages.folder.error.404": "Folder not found",
+	"pages.folder.fab.create-folder": "Create folder",
+	"pages.folder.createFolderDialog.title": "Create new folder",
+	"pages.folder.moveDialog.title": "Move to",
+	"pages.folder.moveDialog.targetLabel": "Target folder",
+	"pages.folder.moveDialog.rootLevel": "Top level",
+	"pages.folder.ariaLabels.openFolder": "Open folder {name}",
 };

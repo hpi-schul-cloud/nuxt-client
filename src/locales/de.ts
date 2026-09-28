@@ -2446,4 +2446,10 @@ export default {
 	"pages.folder.dropZone.emptyState.orText": "oder",
 	"pages.folder.dropZone.emptyState.browse": "Dateien durchsuchen",
 	"pages.folder.error.404": "Ordner nicht gefunden",
+	"pages.folder.fab.create-folder": "Ordner erstellen",
+	"pages.folder.createFolderDialog.title": "Neuen Ordner erstellen",
+	"pages.folder.moveDialog.title": "Verschieben nach",
+	"pages.folder.moveDialog.targetLabel": "Zielordner",
+	"pages.folder.moveDialog.rootLevel": "Oberste Ebene",
+	"pages.folder.ariaLabels.openFolder": "Ordner {name} öffnen",
 };

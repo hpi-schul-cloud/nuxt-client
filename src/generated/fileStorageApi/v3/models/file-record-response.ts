@@ -126,11 +126,23 @@ export interface FileRecordResponse {
      */
     contentLastModifiedAt?: string;
     /**
-     * 
+     *
      * @type {string}
      * @memberof FileRecordResponse
      */
     expiresAt?: string;
+    /**
+     * True if this entry represents a folder rather than an uploaded file.
+     * @type {boolean}
+     * @memberof FileRecordResponse
+     */
+    isFolder?: boolean;
+    /**
+     * Id of the containing folder. Omitted/undefined for the root level.
+     * @type {string}
+     * @memberof FileRecordResponse
+     */
+    folderId?: string;
 }
 
 
