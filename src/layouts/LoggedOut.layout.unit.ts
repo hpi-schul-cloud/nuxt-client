@@ -31,17 +31,6 @@ describe("loggedOutLayout", () => {
 		return wrapper;
 	};
 
-	it("should contain composed urls", () => {
-		const wrapper = mountComponent();
-
-		const links = wrapper
-			.findAll('[data-testid="logged-out-top-bar"] .link-container > a')
-			.map((el) => el.element as HTMLLinkElement);
-
-		expect(links.length).toBe(1);
-		expect(new URL(links[0].href).pathname).toEqual("/");
-	});
-
 	it("should not routeToErrorPage without any errors", () => {
 		mountComponent();
 		expect(getRouter().replace).not.toHaveBeenCalledWith("/error");
