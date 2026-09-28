@@ -2,65 +2,20 @@
 	<div class="header elevation-2">
 		<div class="nav-container">
 			<div class="logo-container">
-				<a :href="logoLink">
+				<a href="/">
 					<img class="logo logo-full" :src="img" alt="Schulcloud Logo" />
 				</a>
-			</div>
-			<div v-if="linksToDisplay.length || hasButtons" class="link-container">
-				<v-btn
-					v-for="route in linksToDisplay"
-					:key="route.href"
-					variant="text"
-					class="nav-item font-weight-regular mx-0"
-					:to="route.to"
-					:href="route.href"
-					:target="route.target"
-				>
-					{{ route.title }}
-				</v-btn>
-				<div v-if="hasButtons" class="buttons-container">
-					<v-btn color="primary" variant="outlined" to="/loginRedirect" class="mx-2">
-						<v-icon size="20" class="mr-1">{{ mdiLogin }}</v-icon>
-						{{ $t("common.labels.login") }}
-					</v-btn>
-					<v-btn color="primary" variant="flat" to="/community">
-						{{ $t("common.labels.register") }}
-					</v-btn>
-				</div>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { SchulcloudTheme } from "@api-server";
-import { useEnvConfig } from "@data-env";
-import { mdiLogin } from "@icons/material";
-import { computed } from "vue";
-
 type Props = {
-	logoLink?: string;
 	img: string;
-	links?: Array<{
-		title: string;
-		href: string;
-		to?: string;
-		target?: string;
-	}>;
-	hideButtons?: boolean;
 };
 
-const props = withDefaults(defineProps<Props>(), {
-	logoLink: "/",
-	links: () => [],
-	hideButtons: false,
-});
-
-const isDefaultTheme = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.DEFAULT);
-
-const hasButtons = computed(() => !props.hideButtons && isDefaultTheme.value);
-
-const linksToDisplay = computed(() => (isDefaultTheme.value ? props.links : []));
+const props = withDefaults(defineProps<Props>(), {});
 </script>
 
 <style lang="scss" scoped>
@@ -113,34 +68,6 @@ const linksToDisplay = computed(() => (isDefaultTheme.value ? props.links : []))
 	}
 }
 
-.link-container {
-	display: flex;
-	flex-flow: row wrap;
-	justify-content: center;
-	padding-bottom: 8px;
-
-	@media (min-width: 750px) {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	@media (min-width: 991px) {
-		justify-content: right;
-		padding-bottom: 0;
-	}
-
-	> a {
-		padding: 9px;
-		margin-right: 0;
-		margin-bottom: 8px;
-
-		@media (min-width: 750px) {
-			margin-bottom: 0;
-		}
-	}
-}
-
 .icon {
 	font-size: 16px;
 }
@@ -149,11 +76,6 @@ const linksToDisplay = computed(() => (isDefaultTheme.value ? props.links : []))
 	.nav-container {
 		width: 540px;
 		max-width: 100%;
-	}
-
-	.link-container > a,
-	.buttons-container > button {
-		margin-right: 8px;
 	}
 }
 
