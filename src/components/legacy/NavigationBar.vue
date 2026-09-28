@@ -2,7 +2,7 @@
 	<div class="header elevation-2">
 		<div class="nav-container">
 			<div class="logo-container">
-				<a href="logoLink">
+				<a href="/">
 					<img class="logo logo-full" :src="img" alt="Schulcloud Logo" />
 				</a>
 			</div>
