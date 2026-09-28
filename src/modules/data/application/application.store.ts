@@ -83,9 +83,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 		userLocale.value = data.language;
 		meResponse.value = data;
 		isLoggedIn.value = true;
-
 		setCookie("USER_LANG", locale.value, 30);
-
 		await useSchoolStore().fetchSchoolDetails();
 	};
 
