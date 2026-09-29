@@ -91,10 +91,5 @@ const inMaintenanceOrMigrationText = computed(() => {
 });
 const { news: latestNews, newsLoadingState } = useNewsList(NEWS_LIMIT);
 
-const helpAriaLabel = computed(
-	() => `${t("pages.rooms.infoAlert.welcome.furtherInformation.help")}, ${t("common.ariaLabel.newTab")}`
-);
-const helpLink = computed(() => `${window.location.origin}/help/confluence/426313035`);
-
 const isDbc = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.DEFAULT);
 </script>
