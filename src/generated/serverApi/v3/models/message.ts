@@ -70,8 +70,8 @@ export interface Message {
     * @enum {string}
     */
 export enum MessageStatus {
-    INFO = 'info',
     DONE = 'done',
+    INFO = 'info',
     DANGER = 'danger'
 }
 

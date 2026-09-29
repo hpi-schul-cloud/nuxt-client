@@ -1,7 +1,7 @@
 <template>
 	<div class="page">
 		<div class="topbar" data-testid="logged-out-top-bar">
-			<NavigationBar :img="logo" :links="navbarItems" />
+			<NavigationBar :img="logo" />
 		</div>
 		<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
 			<slot />
@@ -17,36 +17,14 @@ import { imgLogoMonoAssets } from "@/utils/image.utils";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { computed, watch } from "vue";
-import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 
-const { t } = useI18n();
 const { xs } = useDisplay();
 const { applicationError } = useAppStoreRefs();
 const router = useRouter();
 
-const ghostBaseUrl = computed(() => useEnvConfig().value.GHOST_BASE_URL);
-
 const logo = computed(() => imgLogoMonoAssets[useEnvConfig().value.SC_THEME]?.logo);
-
-const navbarItems = computed(() => [
-	{
-		title: t("global.topbar.loggedOut.actions.steps"),
-		href: `${ghostBaseUrl.value}/erste-schritte/`,
-		target: "_blank",
-	},
-	{
-		title: t("global.topbar.loggedOut.actions.blog"),
-		href: `${ghostBaseUrl.value}/`,
-		target: "_blank",
-	},
-	{
-		title: t("global.topbar.loggedOut.actions.faq"),
-		href: `${ghostBaseUrl.value}/faqs/`,
-		target: "_blank",
-	},
-]);
 
 const isMobile = computed(() => xs.value);
 

@@ -154,6 +154,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_SCHOOL_DATA_READONLY_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_SCHOOL_POLICY_ENABLED_NEW: boolean;
     /**
      * 
@@ -161,12 +167,6 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_SCHOOL_DATA_READONLY_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -323,12 +323,6 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof ConfigResponse
-     */
-    GHOST_BASE_URL: string;
     /**
      * 
      * @type {Array<LanguageType>}
