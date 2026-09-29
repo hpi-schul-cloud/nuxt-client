@@ -5,24 +5,6 @@
 		</template>
 		<template #default>
 			<Announcement class="mt-6" />
-			<!-- Teams to Rooms Migration Alert, should completely be deleted after migration -->
-			<WarningAlert v-if="!isDbc" class="mt-6" data-testid="teams-to-rooms-migration-alert">
-				<span class="font-weight-bold">{{ t("loggedin.text.teamsToRooms") }}</span>
-
-				<ul class="mt-1 pl-5">
-					<li>{{ t("loggedin.text.teamsToRooms.possibilities") }}</li>
-					<li>{{ t("loggedin.text.teamsToRooms.migration") }}</li>
-					<li>
-						<i18n-t keypath="loggedin.text.teamsToRooms.helpLink" scope="global">
-							<template #helpLink>
-								<a :href="helpLink" target="_blank" rel="noopener noreferrer" :aria-label="helpAriaLabel">
-									{{ t("loggedin.text.teamsToRooms.helpLink.help") }}
-								</a>
-							</template>
-						</i18n-t>
-					</li>
-				</ul>
-			</WarningAlert>
 			<InfoAlert v-if="isDbc && isAdmin" class="mt-6">
 				<i18n-t keypath="loggedin.text.backupFeatures" scope="global">
 					<template #helpLink>
