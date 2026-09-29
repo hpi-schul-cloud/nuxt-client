@@ -20,18 +20,15 @@ const setup = (
 	{
 		permissions,
 		sidebarExpanded,
-		isTeamsEnabled,
 	}: {
 		permissions?: Permission[];
 		sidebarExpanded?: boolean;
-		isTeamsEnabled?: boolean;
-	} = { permissions: [], sidebarExpanded: true, isTeamsEnabled: false }
+	} = { permissions: [], sidebarExpanded: true }
 ) => {
 	setActivePinia(createTestingPinia());
 	createTestAppStoreWithPermissions(permissions ?? []);
 	createTestEnvStore({
 		SC_THEME: SchulcloudTheme.BRB,
-		FEATURE_TEAMS_ENABLED: isTeamsEnabled,
 		DOCUMENT_BASE_DIR: "https://example.com/documents/",
 	});
 
@@ -82,26 +79,6 @@ describe("@ui-layout/Sidebar", () => {
 
 			const nav = wrapper.get("nav");
 			expect(nav.classes()).not.toContain("v-navigation-drawer--active");
-		});
-	});
-
-	// when sidebar is expanded should show
-
-	describe("when user does not have needed permission", () => {
-		it("should filter items correctly", () => {
-			const { wrapper } = setup({ permissions: [] });
-
-			expect(wrapper.find("[data-testid='sidebar-teams']").exists()).toBe(false);
-		});
-	});
-
-	describe("when user does have needed permission", () => {
-		it("should display items correctly ", async () => {
-			const { wrapper } = setup({
-				isTeamsEnabled: true,
-			});
-
-			expect(wrapper.find("[data-testid='sidebar-teams']").exists()).toBe(true);
 		});
 	});
 
