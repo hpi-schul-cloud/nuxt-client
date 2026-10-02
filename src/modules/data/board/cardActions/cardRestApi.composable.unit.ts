@@ -42,7 +42,7 @@ describe("useCardRestApi", () => {
 		const card = cardResponseFactory.build();
 		const newElement = cardResponseFactory.build().elements[0];
 		const preferredTool: PreferredToolResponse = {
-			schoolExternalToolId: "mockToolId",
+			schoolExternalToolId: undefined,
 			iconName: "mockIconName",
 			name: "Tool Name",
 		};
