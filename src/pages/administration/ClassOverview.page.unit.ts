@@ -273,12 +273,15 @@ describe("ClassOverview", () => {
 		});
 
 		describe("when clicking on the edit class button", () => {
-			it("should redirect to legacy class edit page", () => {
+			it("should link to class edit page", () => {
 				const { wrapper, useGroupClassMock } = setup();
 				const classId = useGroupClassMock.classes.value[1].id;
 
-				const editBtn = wrapper.find('[data-testid="class-table-edit-btn"]');
-				expect(editBtn.attributes().href).toStrictEqual(`/administration/classes/${classId}/edit`);
+				const editBtn = wrapper.findComponent<typeof VBtn>('[data-testid="class-table-edit-btn"]');
+				expect(editBtn.props("to")).toStrictEqual({
+					name: "administration-classes-edit",
+					params: { classId },
+				});
 			});
 		});
 
@@ -419,10 +422,10 @@ describe("ClassOverview", () => {
 			});
 
 			describe("when clicking on add class fab", () => {
-				it("should have link to legacy create class page", () => {
+				it("should have link to create class page", () => {
 					const { wrapper } = setup({ tab: "current", userPermissions: [Permission.CLASS_CREATE] });
 					const fabComponent = wrapper.findComponent(SpeedDialMenu);
-					expect(fabComponent.vm.actions[0].href).toStrictEqual("/administration/classes/create");
+					expect(fabComponent.vm.actions[0].to).toStrictEqual("/administration/classes/create");
 				});
 			});
 		});

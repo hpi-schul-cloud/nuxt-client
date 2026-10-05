@@ -121,6 +121,21 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		}),
 	},
 	{
+		path: "/administration/classes/create",
+		component: () => import("@/pages/administration/ClassCreate.page.vue"),
+		name: "administration-classes-create",
+		beforeEnter: createPermissionGuard([Permission.CLASS_CREATE]),
+	},
+	{
+		path: `/administration/classes/:classId(${REGEX_ID})/edit`,
+		component: () => import("@/pages/administration/ClassEdit.page.vue"),
+		name: "administration-classes-edit",
+		beforeEnter: createPermissionGuard([Permission.CLASS_EDIT]),
+		props: (to: RouteLocationNormalized) => ({
+			classId: to.params.classId,
+		}),
+	},
+	{
 		path: `/administration/groups/classes/:groupId(${REGEX_ID})`,
 		name: "administration-groups-classes-members",
 		component: async () => (await import("@page-class-members")).ClassMembersPage,
