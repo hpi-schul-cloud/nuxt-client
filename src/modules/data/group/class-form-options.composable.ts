@@ -1,6 +1,6 @@
 import { SchoolYearOption, TeacherOption } from "@/components/administration/ClassForm.vue";
 import { RoleName } from "@api-server";
-import { useSchoolStoreRefs } from "@data-app";
+import { useAppStoreRefs, useSchoolStoreRefs } from "@data-app";
 import { useUsersStore } from "@data-users";
 import { computed } from "vue";
 
@@ -8,7 +8,16 @@ export const useClassFormOptions = () => {
 	const usersStore = useUsersStore();
 	usersStore.init(RoleName.TEACHER);
 
+	const { user, isAdmin } = useAppStoreRefs();
 	const { schoolDetails } = useSchoolStoreRefs();
+
+	const defaultTeacherIds = computed<string[]>(() => {
+		const currentUserId = user.value?.id;
+		if (!isAdmin.value && currentUserId) {
+			return [currentUserId];
+		}
+		return [];
+	});
 
 	const schoolYearOptions = computed<SchoolYearOption[]>(() => {
 		const years = schoolDetails.value?.years?.schoolYears ?? [];
@@ -35,6 +44,7 @@ export const useClassFormOptions = () => {
 		schoolYearOptions,
 		activeYearId,
 		teacherOptions,
+		defaultTeacherIds,
 		loadTeachers,
 	};
 };

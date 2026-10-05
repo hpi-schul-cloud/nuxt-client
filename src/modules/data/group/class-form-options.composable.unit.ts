@@ -1,5 +1,10 @@
 import { useClassFormOptions } from "./class-form-options.composable";
-import { createTestSchoolStore, mockComposable, userResponseFactory } from "@@/tests/test-utils";
+import {
+	createTestAppStoreWithRole,
+	createTestSchoolStore,
+	mockComposable,
+	userResponseFactory,
+} from "@@/tests/test-utils";
 import { RoleName } from "@api-server";
 import { useUsersStore } from "@data-users";
 import { createTestingPinia } from "@pinia/testing";
@@ -15,6 +20,7 @@ describe("useClassFormOptions", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+		createTestAppStoreWithRole(RoleName.TEACHER);
 		createTestSchoolStore({
 			schoolDetails: {
 				years: {
@@ -48,10 +54,11 @@ describe("useClassFormOptions", () => {
 	});
 
 	it("initializes teacher store and returns formatted school years and teachers", () => {
-		const { schoolYearOptions, activeYearId, teacherOptions } = useClassFormOptions();
+		const { schoolYearOptions, activeYearId, teacherOptions, defaultTeacherIds } = useClassFormOptions();
 
 		expect(useUsersMockHandler.init).toHaveBeenCalledWith(RoleName.TEACHER);
 		expect(activeYearId.value).toBe("year1");
+		expect(defaultTeacherIds.value.length).toBeGreaterThan(0);
 		expect(schoolYearOptions.value).toEqual([
 			{ title: "2023/2024", value: "year1" },
 			{ title: "2024/2025", value: "year2" },

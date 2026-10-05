@@ -27,7 +27,7 @@ const { t } = useI18n();
 const router = useRouter();
 
 const { createClass, isMutating } = useGroupClasses();
-const { schoolYearOptions, activeYearId, teacherOptions, loadTeachers } = useClassFormOptions();
+const { schoolYearOptions, activeYearId, teacherOptions, defaultTeacherIds, loadTeachers } = useClassFormOptions();
 
 const breadcrumbs = [
 	{
@@ -44,7 +44,7 @@ document.title = buildPageTitle(t("pages.administration.classes.new.title"));
 
 const initialFormData = ref<Partial<ClassFormData>>({
 	year: activeYearId.value,
-	teacherIds: [],
+	teacherIds: [...defaultTeacherIds.value],
 	isCustom: false,
 	gradeLevel: undefined,
 	classSuffix: "",
@@ -54,12 +54,13 @@ const initialFormData = ref<Partial<ClassFormData>>({
 
 onMounted(async () => {
 	await loadTeachers();
-	if (activeYearId.value) {
-		initialFormData.value = {
-			...initialFormData.value,
-			year: activeYearId.value,
-		};
-	}
+	initialFormData.value = {
+		...initialFormData.value,
+		year: activeYearId.value || initialFormData.value.year,
+		teacherIds: initialFormData.value.teacherIds?.length
+			? initialFormData.value.teacherIds
+			: [...defaultTeacherIds.value],
+	};
 });
 
 const onSubmit = async (payload: { name: string; gradeLevel?: number; year?: string; teacherIds?: string[] }) => {

@@ -33,6 +33,7 @@ describe("ClassCreate.page", () => {
 			schoolYearOptions: computed(() => [{ title: "2023/2024", value: "year123" }]),
 			activeYearId: computed(() => "year123"),
 			teacherOptions: computed(() => [{ title: "Max Mustermann", value: "teacher1" }]),
+			defaultTeacherIds: computed(() => ["teacher1"]),
 			loadTeachers: vi.fn().mockResolvedValue(undefined),
 		});
 		useClassFormOptionsMock.mockReturnValue(useClassFormOptionsMockHandler);
