@@ -1,5 +1,5 @@
 import { useClassFormOptions } from "./class-form-options.composable";
-import { createTestSchoolStore, mockComposable } from "@@/tests/test-utils";
+import { createTestSchoolStore, mockComposable, userResponseFactory } from "@@/tests/test-utils";
 import { RoleName } from "@api-server";
 import { useUsersStore } from "@data-users";
 import { createTestingPinia } from "@pinia/testing";
@@ -18,20 +18,25 @@ describe("useClassFormOptions", () => {
 		createTestSchoolStore({
 			schoolDetails: {
 				years: {
-					activeYear: { _id: "year1", name: "2023/2024" } as any,
+					activeYear: { id: "year1", name: "2023/2024" },
 					schoolYears: [
-						{ _id: "year1", name: "2023/2024" },
-						{ _id: "year2", name: "2024/2025" },
-					] as any,
+						{ id: "year1", name: "2023/2024" },
+						{ id: "year2", name: "2024/2025" },
+					],
 				},
 			},
 		});
 
 		useUsersMockHandler = mockComposable(useUsersStore, {
 			userList: [
-				{ _id: "teacher1", firstName: "Max", lastName: "Mustermann", email: "max@example.com" },
-				{ _id: "teacher2", firstName: "", lastName: "", email: "anna@example.com" },
-			] as any,
+				userResponseFactory.build({
+					_id: "teacher1",
+					firstName: "Max",
+					lastName: "Mustermann",
+					email: "max@example.com",
+				}),
+				userResponseFactory.build({ _id: "teacher2", firstName: "", lastName: "", email: "anna@example.com" }),
+			],
 			fetchUsers: vi.fn().mockResolvedValue({}),
 			init: vi.fn(),
 		});

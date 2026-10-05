@@ -62,12 +62,7 @@ onMounted(async () => {
 	}
 });
 
-const onSubmit = async (payload: {
-	name: string;
-	gradeLevel?: number;
-	year?: string;
-	teacherIds?: string[];
-}) => {
+const onSubmit = async (payload: { name: string; gradeLevel?: number; year?: string; teacherIds?: string[] }) => {
 	const { success } = await createClass(payload);
 	if (success) {
 		router.push("/administration/groups/classes");

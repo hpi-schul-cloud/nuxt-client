@@ -116,12 +116,20 @@
 						{{ t("pages.administration.classes.form.previewTitle") }}
 					</span>
 				</div>
-				<VChip color="primary" size="small" variant="flat" class="font-weight-bold" data-testid="class_preview_year_chip">
+				<VChip
+					color="primary"
+					size="small"
+					variant="flat"
+					class="font-weight-bold"
+					data-testid="class_preview_year_chip"
+				>
 					{{ selectedYearTitle || "-" }}
 				</VChip>
 			</div>
 			<div class="d-flex align-center gap-2 mt-2">
-				<span class="text-body-2 font-weight-medium">{{ t("pages.administration.classes.form.previewClassName") }}</span>
+				<span class="text-body-2 font-weight-medium">{{
+					t("pages.administration.classes.form.previewClassName")
+				}}</span>
 				<span data-testid="class_preview_name" class="text-h6 font-weight-bold">
 					{{ computedClassName || "-" }}
 				</span>
@@ -130,21 +138,10 @@
 
 		<!-- Actions -->
 		<div class="d-flex flex-column-reverse flex-sm-row justify-end ga-3">
-			<VBtn
-				variant="outlined"
-				data-testid="button_class_cancel"
-				class="px-6"
-				@click="onCancel"
-			>
+			<VBtn variant="outlined" data-testid="button_class_cancel" class="px-6" @click="onCancel">
 				{{ t("common.actions.cancel") }}
 			</VBtn>
-			<VBtn
-				color="primary"
-				type="submit"
-				:loading="loading"
-				data-testid="button_class_submit"
-				class="px-8"
-			>
+			<VBtn color="primary" type="submit" :loading="loading" data-testid="button_class_submit" class="px-8">
 				{{ isEdit ? t("common.actions.save") : t("common.actions.add") }}
 			</VBtn>
 		</div>
@@ -154,7 +151,7 @@
 <script setup lang="ts">
 import { mdiAccountGroupOutline, mdiCheckCircleOutline, mdiSchoolOutline } from "@icons/material";
 import { isRequired } from "@util-validators";
-import { computed, PropType, reactive, ref, useTemplateRef, watch } from "vue";
+import { computed, PropType, reactive, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { VForm } from "vuetify/components";
@@ -203,12 +200,15 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-	(e: "submit", payload: {
-		name: string;
-		gradeLevel?: number;
-		year?: string;
-		teacherIds?: string[];
-	}): void;
+	(
+		e: "submit",
+		payload: {
+			name: string;
+			gradeLevel?: number;
+			year?: string;
+			teacherIds?: string[];
+		}
+	): void;
 }>();
 
 const { t } = useI18n();
@@ -219,13 +219,13 @@ const formRef = useTemplateRef<InstanceType<typeof VForm>>("formRef");
 const gradeLevels = Array.from({ length: 13 }, (_, i) => i + 1);
 
 const formData = reactive<ClassFormData>({
-	year: props.initialData.year ?? "",
-	teacherIds: props.initialData.teacherIds ? [...props.initialData.teacherIds] : [],
-	isCustom: props.initialData.isCustom ?? false,
-	gradeLevel: props.initialData.gradeLevel,
-	classSuffix: props.initialData.classSuffix ?? "",
-	customName: props.initialData.customName ?? "",
-	keepYear: props.initialData.keepYear ?? true,
+	year: "",
+	teacherIds: [],
+	isCustom: false,
+	gradeLevel: undefined,
+	classSuffix: "",
+	customName: "",
+	keepYear: true,
 });
 
 watch(
@@ -241,7 +241,7 @@ watch(
 			if (val.keepYear !== undefined) formData.keepYear = val.keepYear;
 		}
 	},
-	{ deep: true }
+	{ immediate: true, deep: true }
 );
 
 const computedClassName = computed(() => {
@@ -268,7 +268,7 @@ const onSubmit = async () => {
 	const valid = await formRef.value?.validate();
 	if (!valid?.valid) return;
 
-	let name = "";
+	let name: string;
 	let gradeLevel: number | undefined = undefined;
 	let year: string | undefined = undefined;
 

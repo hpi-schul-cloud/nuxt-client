@@ -14,20 +14,18 @@ export const useClassFormOptions = () => {
 		const years = schoolDetails.value?.years?.schoolYears ?? [];
 		return years.map((y) => ({
 			title: y.name,
-			value: (y as any)._id || y.id,
+			value: y.id,
 		}));
 	});
 
-	const activeYearId = computed<string>(() => {
-		return (schoolDetails.value?.years?.activeYear as any)?._id || schoolDetails.value?.years?.activeYear?.id || "";
-	});
+	const activeYearId = computed<string>(() => schoolDetails.value?.years?.activeYear?.id ?? "");
 
-	const teacherOptions = computed<TeacherOption[]>(() => {
-		return usersStore.userList.map((u) => ({
+	const teacherOptions = computed<TeacherOption[]>(() =>
+		usersStore.userList.map((u) => ({
 			title: `${u.firstName ?? ""} ${u.lastName ?? ""}`.trim() || u.email,
-			value: (u as any)._id || (u as any).id,
-		}));
-	});
+			value: u._id,
+		}))
+	);
 
 	const loadTeachers = async () => {
 		await usersStore.fetchUsers({ $limit: 200, $skip: 0, $sort: { lastName: 1 } });

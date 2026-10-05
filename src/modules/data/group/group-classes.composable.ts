@@ -27,20 +27,12 @@ export const useGroupClasses = () => {
 	const { execute: execMutate, isRunning: isMutating } = useSafeAxiosTask();
 
 	const fetchClassById = async (classId: string) => {
-		const { result, success } = await execFetch(
-			() => $axios.get(`/v1/classes/${classId}`),
-			t("error.load")
-		);
+		const { result, success } = await execFetch(() => $axios.get(`/v1/classes/${classId}`), t("error.load"));
 
 		return success && result ? result.data : undefined;
 	};
 
-	const createClass = async (payload: {
-		name: string;
-		gradeLevel?: number;
-		year?: string;
-		teacherIds?: string[];
-	}) => {
+	const createClass = async (payload: { name: string; gradeLevel?: number; year?: string; teacherIds?: string[] }) => {
 		const { result, success } = await execMutate(
 			() => $axios.post("/v1/classes", payload),
 			t("common.notifications.errors.notCreated", { type: t("common.labels.class") })

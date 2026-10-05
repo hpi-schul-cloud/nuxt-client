@@ -1,9 +1,5 @@
 <template>
-	<DefaultWireframe
-		:headline="t('pages.administration.classes.edit')"
-		:breadcrumbs="breadcrumbs"
-		max-width="short"
-	>
+	<DefaultWireframe :headline="t('pages.administration.classes.edit')" :breadcrumbs="breadcrumbs" max-width="short">
 		<div class="d-flex justify-end flex-wrap ga-2 mb-4">
 			<VBtn
 				variant="outlined"
@@ -98,12 +94,7 @@ onMounted(async () => {
 	]);
 });
 
-const onSubmit = async (payload: {
-	name: string;
-	gradeLevel?: number;
-	year?: string;
-	teacherIds?: string[];
-}) => {
+const onSubmit = async (payload: { name: string; gradeLevel?: number; year?: string; teacherIds?: string[] }) => {
 	const { success } = await updateClass(props.classId, payload);
 	if (success) {
 		router.push("/administration/groups/classes");

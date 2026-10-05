@@ -5,8 +5,8 @@ import { useClassFormOptions, useGroupClasses } from "@data-group";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { computed } from "vue";
 import { Mocked } from "vitest";
+import { computed, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("@data-group");
@@ -32,7 +32,7 @@ describe("ClassEdit.page", () => {
 				teacherIds: ["teacher1"],
 			}),
 			updateClass: vi.fn().mockResolvedValue({ success: true }),
-			isMutating: false as any,
+			isMutating: ref(false),
 		});
 		useGroupClassesMock.mockReturnValue(useGroupClassesMockHandler);
 
