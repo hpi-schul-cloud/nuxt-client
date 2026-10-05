@@ -60,7 +60,7 @@ export const useGroupClasses = () => {
 	) => {
 		const { result, success } = await execMutate(
 			() => $axios.patch(`/v1/classes/${classId}`, payload),
-			t("common.notifications.errors.notUpdated", { type: t("common.labels.class") })
+			t("common.notifications.errors.notSaved", { type: t("common.labels.class") })
 		);
 
 		return { success, data: result?.data };
