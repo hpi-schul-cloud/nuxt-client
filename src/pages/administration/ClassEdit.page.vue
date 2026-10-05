@@ -9,6 +9,7 @@
 					params: { groupId: classId },
 				}"
 				data-testid="link_manage_class_members"
+				data-test-id="manage-class-btn"
 			>
 				<VIcon :icon="mdiAccountGroupOutline" class="me-1" />
 				{{ t("pages.administration.classes.manage") }}

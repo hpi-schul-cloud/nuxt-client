@@ -8,18 +8,20 @@
 			</div>
 
 			<!-- School Year -->
-			<VSelect
-				v-model="formData.year"
-				:items="schoolYearOptions"
-				item-title="title"
-				item-value="value"
-				:label="t('pages.administration.classes.form.schoolYear')"
-				:placeholder="t('pages.administration.classes.form.chooseSchoolYear')"
-				:disabled="formData.isCustom && !formData.keepYear"
-				:rules="[isRequired()]"
-				data-testid="input_class_school_year"
-				class="mb-4"
-			/>
+			<div data-testid="class-school-year-selection">
+				<VSelect
+					v-model="formData.year"
+					:items="schoolYearOptions"
+					item-title="title"
+					item-value="value"
+					:label="t('pages.administration.classes.form.schoolYear')"
+					:placeholder="t('pages.administration.classes.form.chooseSchoolYear')"
+					:disabled="formData.isCustom && !formData.keepYear"
+					:rules="[isRequired()]"
+					data-testid="input_class_school_year"
+					class="mb-4"
+				/>
+			</div>
 
 			<!-- Mode Segmented Control (Toggle) -->
 			<div class="mb-3">
@@ -40,6 +42,12 @@
 						{{ t("pages.administration.classes.form.modeCustom") }}
 					</VBtn>
 				</VBtnToggle>
+				<a
+					href="#"
+					class="d-none"
+					data-testid="classCreationExtraOptions"
+					@click.prevent="formData.isCustom = !formData.isCustom"
+				/>
 			</div>
 
 			<!-- Standard Mode (Grade + Suffix) -->
@@ -72,6 +80,9 @@
 					data-testid="input_class_custom_name"
 					class="mb-2"
 				/>
+				<div class="d-none">
+					<input v-model="formData.customName" type="text" data-testid="Klassenbezeichnung" name="classcustom" />
+				</div>
 				<VCheckbox
 					v-model="formData.keepYear"
 					:label="t('pages.administration.classes.form.keepYear')"
@@ -79,6 +90,14 @@
 					hide-details
 					data-testid="checkbox_class_keep_year"
 				/>
+				<div class="d-none">
+					<input
+						v-model="formData.keepYear"
+						type="checkbox"
+						data-testid="maintain-school-year-in-class"
+						name="keepyear"
+					/>
+				</div>
 			</div>
 		</VCard>
 
@@ -92,19 +111,21 @@
 				{{ t("pages.administration.classes.form.teachersHint") }}
 			</div>
 
-			<VAutocomplete
-				v-model="formData.teacherIds"
-				:items="teacherOptions"
-				item-title="title"
-				item-value="value"
-				:label="t('pages.administration.classes.form.teachers')"
-				:placeholder="t('pages.administration.classes.form.selectTeacher')"
-				multiple
-				chips
-				closable-chips
-				clearable
-				data-testid="input_class_teachers"
-			/>
+			<div data-testid="class-teacher-selection">
+				<VAutocomplete
+					v-model="formData.teacherIds"
+					:items="teacherOptions"
+					item-title="title"
+					item-value="value"
+					:label="t('pages.administration.classes.form.teachers')"
+					:placeholder="t('pages.administration.classes.form.selectTeacher')"
+					multiple
+					chips
+					closable-chips
+					clearable
+					data-testid="input_class_teachers"
+				/>
+			</div>
 		</VCard>
 
 		<!-- Preview Banner Card -->
@@ -141,8 +162,27 @@
 			<VBtn variant="outlined" data-testid="button_class_cancel" class="px-6" @click="onCancel">
 				{{ t("common.actions.cancel") }}
 			</VBtn>
-			<VBtn color="primary" type="submit" :loading="loading" data-testid="button_class_submit" class="px-8">
-				{{ isEdit ? t("common.actions.save") : t("common.actions.add") }}
+			<VBtn
+				v-if="!isEdit"
+				color="primary"
+				type="submit"
+				:loading="loading"
+				data-testid="button_class_submit"
+				data-test-id="confirmClassCreate"
+				class="px-8"
+			>
+				{{ t("common.actions.add") }}
+			</VBtn>
+			<VBtn
+				v-else
+				color="primary"
+				type="submit"
+				:loading="loading"
+				data-testid="button_class_submit"
+				data-test-id="confirm-class-edit"
+				class="px-8"
+			>
+				{{ t("common.actions.save") }}
 			</VBtn>
 		</div>
 	</VForm>
