@@ -40,15 +40,12 @@
 </template>
 
 <script setup lang="ts">
-import ClassForm, { ClassFormData, SchoolYearOption, TeacherOption } from "@/components/administration/ClassForm.vue";
+import ClassForm, { ClassFormData } from "@/components/administration/ClassForm.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { RoleName } from "@api-server";
-import { useSchoolStoreRefs } from "@data-app";
-import { useGroupClasses } from "@data-group";
-import { useUsersStore } from "@data-users";
+import { useClassFormOptions, useGroupClasses } from "@data-group";
 import { mdiAccountGroupOutline, mdiArrowUp } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
-import { computed, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -63,10 +60,7 @@ const { t } = useI18n();
 const router = useRouter();
 
 const { fetchClassById, updateClass, isMutating } = useGroupClasses();
-const usersStore = useUsersStore();
-usersStore.init(RoleName.TEACHER);
-
-const { schoolDetails } = useSchoolStoreRefs();
+const { schoolYearOptions, teacherOptions, loadTeachers } = useClassFormOptions();
 
 const breadcrumbs = [
 	{
@@ -81,26 +75,11 @@ const breadcrumbs = [
 
 document.title = buildPageTitle(t("pages.administration.classes.edit"));
 
-const schoolYearOptions = computed<SchoolYearOption[]>(() => {
-	const years = schoolDetails.value?.years?.schoolYears ?? [];
-	return years.map((y) => ({
-		title: y.name,
-		value: (y as any)._id || y.id,
-	}));
-});
-
-const teacherOptions = computed<TeacherOption[]>(() => {
-	return usersStore.userList.map((u) => ({
-		title: `${u.firstName ?? ""} ${u.lastName ?? ""}`.trim() || u.email,
-		value: (u as any)._id || (u as any).id,
-	}));
-});
-
 const initialFormData = ref<Partial<ClassFormData>>({});
 
 onMounted(async () => {
 	await Promise.all([
-		usersStore.fetchUsers({ $limit: 200, $skip: 0, $sort: { lastName: 1 } }),
+		loadTeachers(),
 		(async () => {
 			const cls = await fetchClassById(props.classId);
 			if (cls) {

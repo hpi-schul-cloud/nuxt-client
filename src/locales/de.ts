@@ -1085,7 +1085,8 @@ export default {
 	"pages.administration.classes.form.isCustom": "Jahrgangsunabhängige Klasse mit freier Bezeichnung",
 	"pages.administration.classes.form.modeStandard": "Klassenstufe (z.B. 5a)",
 	"pages.administration.classes.form.modeCustom": "Freie Bezeichnung",
-	"pages.administration.classes.form.teachersHint": "Ordne mindestens eine Lehrkraft zu, damit diese die Klasse verwalten kann.",
+	"pages.administration.classes.form.teachersHint":
+		"Ordne mindestens eine Lehrkraft zu, damit diese die Klasse verwalten kann.",
 	"pages.administration.classes.form.sectionGeneral": "Allgemeine Angaben",
 	"pages.administration.classes.form.sectionTeachers": "Klassenleitung & Lehrkräfte",
 	"pages.administration.classes.form.keepYear": "Schuljahreszuordnung beibehalten",
