@@ -5,7 +5,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
-import { VCheckbox, VForm, VSelect, VSwitch, VTextField } from "vuetify/components";
+import { VBtnToggle, VCheckbox, VForm, VSelect, VTextField } from "vuetify/components";
 
 describe("ClassForm.vue", () => {
 	const router = createRouterMock();
@@ -67,8 +67,8 @@ describe("ClassForm.vue", () => {
 	it("switches to custom mode and updates preview", async () => {
 		const { wrapper } = setup();
 
-		const customSwitch = wrapper.findComponent<typeof VSwitch>('[data-testid="switch_class_is_custom"]');
-		await customSwitch.vm.$emit("update:modelValue", true);
+		const modeToggle = wrapper.findComponent<typeof VBtnToggle>('[data-testid="toggle_class_mode"]');
+		await modeToggle.vm.$emit("update:modelValue", true);
 		await flushPromises();
 
 		const customNameInput = wrapper.findComponent<typeof VTextField>('[data-testid="input_class_custom_name"]');
@@ -82,8 +82,8 @@ describe("ClassForm.vue", () => {
 	it("disables school year selector when custom class keepYear is false", async () => {
 		const { wrapper } = setup();
 
-		const customSwitch = wrapper.findComponent<typeof VSwitch>('[data-testid="switch_class_is_custom"]');
-		await customSwitch.vm.$emit("update:modelValue", true);
+		const modeToggle = wrapper.findComponent<typeof VBtnToggle>('[data-testid="toggle_class_mode"]');
+		await modeToggle.vm.$emit("update:modelValue", true);
 		await flushPromises();
 
 		const keepYearCheckbox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox_class_keep_year"]');

@@ -4,7 +4,7 @@
 		:breadcrumbs="breadcrumbs"
 		max-width="short"
 	>
-		<div class="d-flex justify-end mb-4">
+		<div class="d-flex justify-end flex-wrap ga-2 mb-4">
 			<VBtn
 				variant="outlined"
 				size="small"
@@ -14,7 +14,17 @@
 				}"
 				data-testid="link_manage_class_members"
 			>
+				<VIcon :icon="mdiAccountGroupOutline" class="me-1" />
 				{{ t("pages.administration.classes.manage") }}
+			</VBtn>
+			<VBtn
+				variant="outlined"
+				size="small"
+				:href="`/administration/classes/${classId}/createSuccessor`"
+				data-testid="link_create_successor"
+			>
+				<VIcon :icon="mdiArrowUp" class="me-1" />
+				{{ t("pages.administration.classes.createSuccessor") }}
 			</VBtn>
 		</div>
 
@@ -36,6 +46,7 @@ import { RoleName } from "@api-server";
 import { useSchoolStoreRefs } from "@data-app";
 import { useGroupClasses } from "@data-group";
 import { useUsersStore } from "@data-users";
+import { mdiAccountGroupOutline, mdiArrowUp } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
