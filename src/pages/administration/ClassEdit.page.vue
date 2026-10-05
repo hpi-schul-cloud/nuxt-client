@@ -5,8 +5,8 @@
 				variant="outlined"
 				size="small"
 				:to="{
-					name: 'administration-groups-classes-members',
-					params: { groupId: classId },
+					name: 'administration-classes-manage',
+					params: { classId: classId },
 				}"
 				data-testid="link_manage_class_members"
 				data-test-id="manage-class-btn"

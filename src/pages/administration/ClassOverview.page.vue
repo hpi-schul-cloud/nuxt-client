@@ -62,7 +62,10 @@
 						data-testid="legacy-class-table-manage-btn"
 						variant="outlined"
 						size="small"
-						:href="`/administration/classes/${item.id}/manage`"
+						:to="{
+							name: 'administration-classes-manage',
+							params: { classId: item.id },
+						}"
 						class="mx-1 px-1"
 						min-width="0"
 					>

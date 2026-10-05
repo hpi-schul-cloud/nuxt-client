@@ -245,14 +245,17 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on the manage class button", () => {
 			describe("when group class root type is class", () => {
-				it("should redirect to legacy class manage page", () => {
+				it("should redirect to nuxt class manage page", () => {
 					const { wrapper, useGroupClassMock } = setup();
 					const classId = useGroupClassMock.classes.value[1].id;
 
-					const manageBtn = wrapper.find('[data-testid="legacy-class-table-manage-btn"]');
+					const manageBtn = wrapper.findComponent<typeof VBtn>('[data-testid="legacy-class-table-manage-btn"]');
 
-					expect(manageBtn.attributes().href).toStrictEqual(`/administration/classes/${classId}/manage`);
-					expect(manageBtn.findComponent({ name: "router-link" }).exists()).toBe(false);
+					expect(manageBtn.attributes().href).toBeUndefined();
+					expect(manageBtn.props("to")).toStrictEqual({
+						name: "administration-classes-manage",
+						params: { classId },
+					});
 				});
 			});
 
