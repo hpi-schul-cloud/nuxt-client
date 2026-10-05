@@ -131,13 +131,22 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 		roomsData.value = roomsData.value.filter((item) => item.id !== id);
 	};
 
+	const PAGE_SIZE = 100;
+
+	const fetchAllCourses = async (
+		skip = 0,
+		accumulated: CourseMetadataResponse[] = []
+	): Promise<CourseMetadataResponse[]> => {
+		const { data } = await coursesApi.courseControllerFindForUser(skip, PAGE_SIZE);
+		const all = [...accumulated, ...data.data];
+		return skip + PAGE_SIZE < data.total ? fetchAllCourses(skip + PAGE_SIZE, all) : all;
+	};
+
 	const fetchAllElements = async (): Promise<void> => {
-		const { success, result } = await fetchAllElementsCall.execute(() =>
-			coursesApi.courseControllerFindForUser(0, 100)
-		);
+		const { success, result } = await fetchAllElementsCall.execute(() => fetchAllCourses());
 
 		if (success && result) {
-			allElements.value = extendCourseMetadataResponse(result.data.data);
+			allElements.value = extendCourseMetadataResponse(result);
 		}
 	};
 
