@@ -1096,6 +1096,30 @@ export default {
 	"pages.administration.common.label.archive": "Archivo",
 	"pages.administration.common.label.active": "Actual",
 	"pages.administration.classes.manage": "Administrar clase",
+	"pages.administration.classes.rename": "Renombrar clase",
+	"pages.administration.classes.manageTeachers": "Profesorado",
+	"pages.administration.classes.manageTeachersPlaceholder": "Seleccionar profesor/a",
+	"pages.administration.classes.manageStudents": "Alumnado",
+	"pages.administration.classes.manageStudentsPlaceholder": "Seleccionar alumno/a",
+	"pages.administration.classes.studentsNotInSystem": "¿Estudiantes aún no en el sistema?",
+	"pages.administration.classes.inviteParentsViaLink":
+		"Invite a los tutores legales o estudiantes a través de un enlace de registro.",
+	"pages.administration.classes.obtainConsent": "Obtener declaración de consentimiento",
+	"pages.administration.classes.ldapLoginPresence": "Los estudiantes inician sesión en presencia de tutores legales.",
+	"pages.administration.classes.sendRegistrationLinks": "Enviar enlaces de registro a correos de estudiantes",
+	"pages.administration.classes.pleaseNote": "Por favor tenga en cuenta",
+	"pages.administration.classes.noteAnalogueConsentTitle": "Consentimiento analógico",
+	"pages.administration.classes.noteAnalogueConsentText":
+		"Si desea obtener el consentimiento en papel, puede activar a los estudiantes en la administración de estudiantes y obtener las contraseñas iniciales.",
+	"pages.administration.classes.noteUnder16Title": "Estudiantes menores de 16 años",
+	"pages.administration.classes.noteUnder16Text":
+		"Para estudiantes menores de 16 años, se requiere el consentimiento de los tutores durante el registro.",
+	"pages.administration.classes.noteOver16Title": "Estudiantes de 16 años o más",
+	"pages.administration.classes.noteOver16Text":
+		"Los estudiantes de 16 años o más pueden recibir el enlace directamente y registrarse de forma independiente.",
+	"pages.administration.classes.notePasswordTitle": "Cambiar contraseña",
+	"pages.administration.classes.notePasswordText":
+		"Al iniciar sesión por primera vez, se pedirá a los estudiantes que establezcan su propia contraseña.",
 	"pages.administration.classes.header.sync": "Sincronizado con",
 	"pages.administration.courses.delete": "Eliminar curso",
 	"pages.administration.courses.deleteDialog.content": '¿Realmente quieres este curso? "{itemName}" eliminar?',

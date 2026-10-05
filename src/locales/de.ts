@@ -1102,6 +1102,31 @@ export default {
 	"pages.administration.common.label.archive": "Archiv",
 	"pages.administration.common.label.active": "Aktuell",
 	"pages.administration.classes.manage": "Klasse verwalten",
+	"pages.administration.classes.rename": "Klasse umbenennen",
+	"pages.administration.classes.manageTeachers": "Lehrkräfte",
+	"pages.administration.classes.manageTeachersPlaceholder": "Lehrkraft auswählen",
+	"pages.administration.classes.manageStudents": "Schüler:innen",
+	"pages.administration.classes.manageStudentsPlaceholder": "Schüler:innen auswählen",
+	"pages.administration.classes.studentsNotInSystem": "Schüler:innen noch nicht im System?",
+	"pages.administration.classes.inviteParentsViaLink":
+		"Laden Sie die Erziehungsberechtigten bzw. Schüler:innen über einen Registrierungslink ein.",
+	"pages.administration.classes.obtainConsent": "Einverständniserklärung einholen",
+	"pages.administration.classes.ldapLoginPresence":
+		"Schüler:innen melden sich im Beisein der Erziehungsberechtigten an.",
+	"pages.administration.classes.sendRegistrationLinks": "Registrierungslinks an Schüler-E-Mail-Adressen senden",
+	"pages.administration.classes.pleaseNote": "Bitte beachten",
+	"pages.administration.classes.noteAnalogueConsentTitle": "Analoge Einverständniserklärung",
+	"pages.administration.classes.noteAnalogueConsentText":
+		"Wenn Sie das Einverständnis in Papierform einholen möchten, können Sie die Schüler:innen in der Schüler:innenverwaltung freischalten und die Startpasswörter abrufen.",
+	"pages.administration.classes.noteUnder16Title": "Schüler:innen unter 16 Jahren",
+	"pages.administration.classes.noteUnder16Text":
+		"Bei Schüler:innen unter 16 Jahren wird während der Registrierung die Zustimmung eines Erziehungsberechtigten verlangt.",
+	"pages.administration.classes.noteOver16Title": "Schüler:innen ab 16 Jahren",
+	"pages.administration.classes.noteOver16Text":
+		"Schüler:innen ab 16 Jahren können den Registrierungslink direkt erhalten und sich selbstständig registrieren.",
+	"pages.administration.classes.notePasswordTitle": "Passwort ändern",
+	"pages.administration.classes.notePasswordText":
+		"Beim ersten Anmelden werden die Schüler:innen aufgefordert, ein eigenes Passwort festzulegen.",
 	"pages.administration.classes.header.sync": "Synchronisiert mit",
 	"pages.administration.courses.delete": "Kurs löschen",
 	"pages.administration.courses.deleteDialog.content": 'Möchten Sie wirklich diesen Kurs "{itemName}" löschen?',
