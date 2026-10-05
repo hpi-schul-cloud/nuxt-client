@@ -1,4 +1,5 @@
 import ClassCreate from "./ClassCreate.page.vue";
+import ClassForm from "@/components/administration/ClassForm.vue";
 import { mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useClassFormOptions, useGroupClasses } from "@data-group";
@@ -6,7 +7,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("@data-group");
@@ -24,8 +25,8 @@ describe("ClassCreate.page", () => {
 		setActivePinia(createTestingPinia());
 
 		useGroupClassesMockHandler = mockComposable(useGroupClasses, {
-			createClass: vi.fn().mockResolvedValue({ success: true }),
-			isMutating: ref(false),
+			createClass: vi.fn().mockResolvedValue({ success: true, data: { _id: "new-class-123" } }),
+			isMutating: computed(() => false),
 		});
 		useGroupClassesMock.mockReturnValue(useGroupClassesMockHandler);
 
@@ -35,6 +36,7 @@ describe("ClassCreate.page", () => {
 			teacherOptions: computed(() => [{ title: "Max Mustermann", value: "teacher1" }]),
 			defaultTeacherIds: computed(() => ["teacher1"]),
 			loadTeachers: vi.fn().mockResolvedValue(undefined),
+			isAdmin: computed(() => true),
 		});
 		useClassFormOptionsMock.mockReturnValue(useClassFormOptionsMockHandler);
 	});
@@ -60,11 +62,27 @@ describe("ClassCreate.page", () => {
 		expect(useClassFormOptionsMockHandler.loadTeachers).toHaveBeenCalled();
 	});
 
-	it("submits create request and navigates on success", async () => {
+	it("submits create request and navigates to overview on success for admin", async () => {
 		const { wrapper } = setup();
 		await flushPromises();
 
-		const submitBtn = wrapper.find('[data-testid="button_class_submit"]');
-		expect(submitBtn.exists()).toBe(true);
+		await wrapper.findComponent(ClassForm).vm.$emit("submit", { name: "5a", gradeLevel: 5 });
+		await flushPromises();
+
+		expect(useGroupClassesMockHandler.createClass).toHaveBeenCalledWith({ name: "5a", gradeLevel: 5 });
+		expect(router.push).toHaveBeenCalledWith("/administration/groups/classes");
+	});
+
+	it("submits create request and navigates to manage class page on success for non-admin", async () => {
+		useClassFormOptionsMockHandler.isAdmin = computed(() => false);
+
+		const { wrapper } = setup();
+		await flushPromises();
+
+		await wrapper.findComponent(ClassForm).vm.$emit("submit", { name: "5a", gradeLevel: 5 });
+		await flushPromises();
+
+		expect(useGroupClassesMockHandler.createClass).toHaveBeenCalledWith({ name: "5a", gradeLevel: 5 });
+		expect(router.push).toHaveBeenCalledWith("/administration/classes/new-class-123/manage");
 	});
 });

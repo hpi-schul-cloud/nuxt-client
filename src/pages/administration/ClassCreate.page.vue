@@ -27,7 +27,8 @@ const { t } = useI18n();
 const router = useRouter();
 
 const { createClass, isMutating } = useGroupClasses();
-const { schoolYearOptions, activeYearId, teacherOptions, defaultTeacherIds, loadTeachers } = useClassFormOptions();
+const { schoolYearOptions, activeYearId, teacherOptions, defaultTeacherIds, loadTeachers, isAdmin } =
+	useClassFormOptions();
 
 const breadcrumbs = [
 	{
@@ -64,9 +65,18 @@ onMounted(async () => {
 });
 
 const onSubmit = async (payload: { name: string; gradeLevel?: number; year?: string; teacherIds?: string[] }) => {
-	const { success } = await createClass(payload);
+	const { success, data } = await createClass(payload);
 	if (success) {
-		router.push("/administration/groups/classes");
+		if (isAdmin.value) {
+			router.push("/administration/groups/classes");
+		} else {
+			const classId = data?._id ?? data?.id;
+			if (classId) {
+				router.push(`/administration/classes/${classId}/manage`);
+			} else {
+				router.push("/administration/groups/classes");
+			}
+		}
 	}
 };
 </script>
