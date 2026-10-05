@@ -220,9 +220,11 @@ describe("GroupModule", () => {
 			axiosMock.get.mockResolvedValue({ data: mockData });
 
 			const { fetchClassById } = useGroupClasses();
-			const result = await fetchClassById("class1");
+			const result = await fetchClassById("class1", { $populate: ["teacherIds", "userIds"] });
 
-			expect(axiosMock.get).toHaveBeenCalledWith("/v1/classes/class1");
+			expect(axiosMock.get).toHaveBeenCalledWith("/v1/classes/class1", {
+				params: { $populate: ["teacherIds", "userIds"] },
+			});
 			expect(result).toEqual(mockData);
 		});
 	});
@@ -244,7 +246,7 @@ describe("GroupModule", () => {
 
 	describe("updateClass", () => {
 		it("calls PATCH /v1/classes/:id and returns result", async () => {
-			const payload = { name: "b", gradeLevel: 6 };
+			const payload = { name: "b", gradeLevel: 6, teacherIds: ["t1"], userIds: ["s1", "s2"] };
 			const updatedData = { _id: "class1", ...payload };
 			axiosMock.patch.mockResolvedValue({ data: updatedData });
 
@@ -254,6 +256,20 @@ describe("GroupModule", () => {
 			expect(axiosMock.patch).toHaveBeenCalledWith("/v1/classes/class1", payload);
 			expect(success).toBe(true);
 			expect(data).toEqual(updatedData);
+		});
+	});
+
+	describe("sendRegistrationLinks", () => {
+		it("calls GET /administration/users-without-consent/send-email and notifies success", async () => {
+			axiosMock.get.mockResolvedValue({ data: {} });
+
+			const { sendRegistrationLinks } = useGroupClasses();
+			const { success } = await sendRegistrationLinks("class1", "student");
+
+			expect(axiosMock.get).toHaveBeenCalledWith("/administration/users-without-consent/send-email", {
+				params: { classId: "class1", role: "student" },
+			});
+			expect(success).toBe(true);
 		});
 	});
 });

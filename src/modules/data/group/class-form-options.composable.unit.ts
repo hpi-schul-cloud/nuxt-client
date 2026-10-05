@@ -5,7 +5,7 @@ import {
 	mockComposable,
 	userResponseFactory,
 } from "@@/tests/test-utils";
-import { RoleName } from "@api-server";
+import { RoleName, SchoolYearResponse } from "@api-server";
 import { useUsersStore } from "@data-users";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
@@ -24,11 +24,11 @@ describe("useClassFormOptions", () => {
 		createTestSchoolStore({
 			schoolDetails: {
 				years: {
-					activeYear: { id: "year1", name: "2023/2024" },
+					activeYear: { id: "year1", name: "2023/2024" } as unknown as SchoolYearResponse,
 					schoolYears: [
 						{ id: "year1", name: "2023/2024" },
 						{ id: "year2", name: "2024/2025" },
-					],
+					] as unknown as SchoolYearResponse[],
 				},
 			},
 		});
@@ -78,5 +78,21 @@ describe("useClassFormOptions", () => {
 			$skip: 0,
 			$sort: { lastName: 1 },
 		});
+	});
+
+	it("calls init and fetchUsers when loadStudents is called", async () => {
+		const { loadStudents, studentOptions } = useClassFormOptions();
+		useUsersMockHandler.userList = [
+			userResponseFactory.build({ _id: "student1", firstName: "Tim", lastName: "Tester", email: "tim@example.com" }),
+		];
+		await loadStudents();
+
+		expect(useUsersMockHandler.init).toHaveBeenCalledWith(RoleName.STUDENT);
+		expect(useUsersMockHandler.fetchUsers).toHaveBeenCalledWith({
+			$limit: 1000,
+			$skip: 0,
+			$sort: { lastName: 1 },
+		});
+		expect(studentOptions.value).toEqual([{ title: "Tim Tester", value: "student1" }]);
 	});
 });

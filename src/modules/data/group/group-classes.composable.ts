@@ -4,6 +4,7 @@ import { Pagination } from "@/types/common/commons";
 import { SortOrder } from "@/types/enum/sort-order.enum";
 import { $axios } from "@/utils/api";
 import { ClassSortQueryType, GroupApiFactory, SchoolYearQueryType } from "@api-server";
+import { notifySuccess } from "@data-app";
 import { ClassInfo, GroupMapper } from "@data-group";
 import { ref } from "vue";
 
@@ -26,8 +27,11 @@ export const useGroupClasses = () => {
 	const { execute: execFetch, isRunning: isFetching } = useSafeAxiosTask();
 	const { execute: execMutate, isRunning: isMutating } = useSafeAxiosTask();
 
-	const fetchClassById = async (classId: string) => {
-		const { result, success } = await execFetch(() => $axios.get(`/v1/classes/${classId}`), t("error.load"));
+	const fetchClassById = async (classId: string, params?: { $populate?: string[] }) => {
+		const { result, success } = await execFetch(
+			() => $axios.get(`/v1/classes/${classId}`, { params }),
+			t("error.load")
+		);
 
 		return success && result ? result.data : undefined;
 	};
@@ -44,10 +48,11 @@ export const useGroupClasses = () => {
 	const updateClass = async (
 		classId: string,
 		payload: {
-			name: string;
+			name?: string;
 			gradeLevel?: number;
 			year?: string;
 			teacherIds?: string[];
+			userIds?: string[];
 		}
 	) => {
 		const { result, success } = await execMutate(
@@ -93,11 +98,25 @@ export const useGroupClasses = () => {
 		}
 	};
 
+	const sendRegistrationLinks = async (classId: string, role = "student") => {
+		const { success } = await execMutate(
+			() => $axios.get("/administration/users-without-consent/send-email", { params: { classId, role } }),
+			t("pages.administration.sendMail.error")
+		);
+
+		if (success) {
+			notifySuccess(t("pages.administration.sendMail.success"));
+		}
+
+		return { success };
+	};
+
 	return {
 		fetchClassById,
 		createClass,
 		updateClass,
 		deleteClass,
+		sendRegistrationLinks,
 		fetchClassesForSchool,
 		classes,
 		isFetching,
