@@ -53,6 +53,7 @@ describe("useCourseRoomListStore", () => {
 	};
 
 	beforeEach(() => {
+		vi.clearAllMocks();
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		vi.mocked(DashboardApiFactory).mockReturnValue(dashboardApiMock);
 		vi.mocked(CoursesApiFactory).mockReturnValue(coursesApiMock);
@@ -340,6 +341,30 @@ describe("useCourseRoomListStore", () => {
 
 			expect(store.allElements).toHaveLength(3);
 			expect(store.hasRooms).toBe(true);
+		});
+
+		it("should call the API until all courses are loaded", async () => {
+			const firstPage = courseMetadataResponseFactory.buildList(100);
+			const secondPage = courseMetadataResponseFactory.buildList(23);
+			coursesApiMock.courseControllerFindForUser
+				.mockResolvedValueOnce(
+					mockApiResponse<CourseMetadataListResponse>({
+						data: { data: firstPage, total: 123, skip: 0, limit: 100 },
+					})
+				)
+				.mockResolvedValueOnce(
+					mockApiResponse<CourseMetadataListResponse>({
+						data: { data: secondPage, total: 123, skip: 100, limit: 100 },
+					})
+				);
+
+			const store = useCourseRoomListStore();
+			await store.fetchAllElements();
+
+			expect(coursesApiMock.courseControllerFindForUser).toHaveBeenCalledTimes(2);
+			expect(coursesApiMock.courseControllerFindForUser).toHaveBeenNthCalledWith(1, 0, 100);
+			expect(coursesApiMock.courseControllerFindForUser).toHaveBeenNthCalledWith(2, 100, 100);
+			expect(store.allElements).toHaveLength(123);
 		});
 
 		it("should add 'to' property to course elements", async () => {
