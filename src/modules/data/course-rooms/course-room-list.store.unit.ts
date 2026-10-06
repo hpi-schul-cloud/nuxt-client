@@ -327,7 +327,7 @@ describe("useCourseRoomListStore", () => {
 		});
 	});
 
-	describe("fetchAllElements", () => {
+	describe("fetchAllCourses", () => {
 		it("should load all course elements successfully", async () => {
 			const mockCourses = courseMetadataResponseFactory.buildList(3);
 			coursesApiMock.courseControllerFindForUser.mockResolvedValue(
@@ -337,7 +337,7 @@ describe("useCourseRoomListStore", () => {
 			);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect(store.allElements).toHaveLength(3);
 			expect(store.hasRooms).toBe(true);
@@ -359,7 +359,7 @@ describe("useCourseRoomListStore", () => {
 				);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect(coursesApiMock.courseControllerFindForUser).toHaveBeenCalledTimes(2);
 			expect(coursesApiMock.courseControllerFindForUser).toHaveBeenNthCalledWith(1, 0, 100);
@@ -376,7 +376,7 @@ describe("useCourseRoomListStore", () => {
 			);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect(store.allElements[0]).toHaveProperty("to", "/rooms/course-456");
 		});
@@ -397,7 +397,7 @@ describe("useCourseRoomListStore", () => {
 			);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect(store.allElements[0]).toHaveProperty("isArchived", true);
 			expect(store.allElements[0]).toHaveProperty("titleDate");
@@ -419,7 +419,7 @@ describe("useCourseRoomListStore", () => {
 			);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect(store.allElements[0]).toHaveProperty("isArchived", false);
 		});
@@ -439,7 +439,7 @@ describe("useCourseRoomListStore", () => {
 			);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect((store.allElements[0] as { titleDate?: string }).titleDate).toBe("2019/20");
 		});
@@ -460,7 +460,7 @@ describe("useCourseRoomListStore", () => {
 				);
 
 				const store = useCourseRoomListStore();
-				await store.fetchAllElements();
+				await store.fetchAllCourses();
 
 				expect((store.allElements[0] as { titleDate?: string }).titleDate).toBe("2018-2020");
 			});
@@ -482,7 +482,7 @@ describe("useCourseRoomListStore", () => {
 				);
 
 				const store = useCourseRoomListStore();
-				await store.fetchAllElements();
+				await store.fetchAllCourses();
 
 				expect((store.allElements[0] as { titleDate?: string }).titleDate).toBe("2020");
 			});
@@ -502,7 +502,7 @@ describe("useCourseRoomListStore", () => {
 			);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect(store.allElements[0]).toHaveProperty("to", "");
 		});
@@ -522,7 +522,7 @@ describe("useCourseRoomListStore", () => {
 			);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect(store.allElements[0]).toHaveProperty("isArchived", true);
 			expect((store.allElements[0] as { titleDate?: string }).titleDate).toBe("-2020");
@@ -543,7 +543,7 @@ describe("useCourseRoomListStore", () => {
 			);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect(store.allElements[0]).not.toHaveProperty("titleDate");
 		});
@@ -553,7 +553,7 @@ describe("useCourseRoomListStore", () => {
 				coursesApiMock.courseControllerFindForUser.mockRejectedValue(new Error("API Error"));
 
 				const store = useCourseRoomListStore();
-				await store.fetchAllElements();
+				await store.fetchAllCourses();
 
 				expect(store.allElements).toEqual([]);
 				expect(store.hasRooms).toBe(false);
@@ -580,7 +580,7 @@ describe("useCourseRoomListStore", () => {
 					);
 
 					const store = useCourseRoomListStore();
-					await store.fetchAllElements();
+					await store.fetchAllCourses();
 
 					expect(store.hasRooms).toBe(true);
 				});
