@@ -46,8 +46,11 @@
 					href="#"
 					class="d-none"
 					data-testid="classCreationExtraOptions"
+					aria-label="Toggle custom class mode"
 					@click.prevent="formData.isCustom = !formData.isCustom"
-				/>
+				>
+					<span>Toggle custom class mode</span>
+				</a>
 			</div>
 
 			<!-- Standard Mode (Grade + Suffix) -->
@@ -81,7 +84,15 @@
 					class="mb-2"
 				/>
 				<div class="d-none">
-					<input v-model="formData.customName" type="text" data-testid="Klassenbezeichnung" name="classcustom" />
+					<label for="input-classcustom" class="d-none">Klassenbezeichnung</label>
+					<input
+						id="input-classcustom"
+						v-model="formData.customName"
+						type="text"
+						data-testid="Klassenbezeichnung"
+						name="classcustom"
+						aria-label="Klassenbezeichnung"
+					/>
 				</div>
 				<VCheckbox
 					v-model="formData.keepYear"
@@ -91,11 +102,14 @@
 					data-testid="checkbox_class_keep_year"
 				/>
 				<div class="d-none">
+					<label for="input-keepyear" class="d-none">Schuljahr beibehalten</label>
 					<input
+						id="input-keepyear"
 						v-model="formData.keepYear"
 						type="checkbox"
 						data-testid="maintain-school-year-in-class"
 						name="keepyear"
+						aria-label="Schuljahr beibehalten"
 					/>
 				</div>
 			</div>

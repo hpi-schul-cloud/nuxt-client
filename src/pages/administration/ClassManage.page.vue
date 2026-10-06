@@ -40,7 +40,8 @@
 					/>
 				</div>
 				<div class="d-none">
-					<select name="teacherIds[]" multiple>
+					<label for="select-teacher-ids" class="d-none">Teacher IDs</label>
+					<select id="select-teacher-ids" name="teacherIds[]" multiple aria-label="Teacher IDs">
 						<option v-for="id in selectedTeacherIds" :key="id" :value="id" selected>{{ id }}</option>
 					</select>
 				</div>
@@ -69,7 +70,8 @@
 					/>
 				</div>
 				<div class="d-none">
-					<select name="userIds" multiple>
+					<label for="select-user-ids" class="d-none">User IDs</label>
+					<select id="select-user-ids" name="userIds" multiple aria-label="User IDs">
 						<option v-for="id in selectedUserIds" :key="id" :value="id" selected>{{ id }}</option>
 					</select>
 				</div>
@@ -278,41 +280,35 @@ const extractIdAndOption = (item: unknown): { id: string; option?: UserSelectOpt
 	return { id: "" };
 };
 
+const parseMembers = (items?: unknown[]): { ids: string[]; options: UserSelectOption[] } => {
+	const ids: string[] = [];
+	const options: UserSelectOption[] = [];
+	for (const item of items ?? []) {
+		const { id, option } = extractIdAndOption(item);
+		if (id) {
+			ids.push(id);
+			if (option) options.push(option);
+		}
+	}
+	return { ids, options };
+};
+
+const loadClassData = async () => {
+	const cls = await fetchClassById(props.classId, { $populate: ["teacherIds", "userIds"] });
+	if (!cls) return;
+
+	currentClassName.value = cls.name ?? "";
+	const teachers = parseMembers(cls.teacherIds);
+	selectedTeacherIds.value = teachers.ids;
+	extraTeachers.value = teachers.options;
+
+	const students = parseMembers(cls.userIds);
+	selectedUserIds.value = students.ids;
+	extraStudents.value = students.options;
+};
+
 onMounted(async () => {
-	await Promise.all([
-		loadTeachers(),
-		loadStudents(),
-		(async () => {
-			const cls = await fetchClassById(props.classId, { $populate: ["teacherIds", "userIds"] });
-			if (cls) {
-				currentClassName.value = cls.name ?? "";
-
-				const tIds: string[] = [];
-				const tOpts: UserSelectOption[] = [];
-				for (const t of cls.teacherIds ?? []) {
-					const { id, option } = extractIdAndOption(t);
-					if (id) {
-						tIds.push(id);
-						if (option) tOpts.push(option);
-					}
-				}
-				selectedTeacherIds.value = tIds;
-				extraTeachers.value = tOpts;
-
-				const sIds: string[] = [];
-				const sOpts: UserSelectOption[] = [];
-				for (const s of cls.userIds ?? []) {
-					const { id, option } = extractIdAndOption(s);
-					if (id) {
-						sIds.push(id);
-						if (option) sOpts.push(option);
-					}
-				}
-				selectedUserIds.value = sIds;
-				extraStudents.value = sOpts;
-			}
-		})(),
-	]);
+	await Promise.all([loadTeachers(), loadStudents(), loadClassData()]);
 });
 
 const onSave = async () => {
