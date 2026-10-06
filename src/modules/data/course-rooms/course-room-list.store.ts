@@ -131,19 +131,19 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 		roomsData.value = roomsData.value.filter((item) => item.id !== id);
 	};
 
-	const PAGE_SIZE = 100;
-
-	const fetchAllCourses = async (
+	const fetchAllCoursesRecursively = async (
 		skip = 0,
+		limit = 100,
 		accumulated: CourseMetadataResponse[] = []
 	): Promise<CourseMetadataResponse[]> => {
-		const { data } = await coursesApi.courseControllerFindForUser(skip, PAGE_SIZE);
+		const { data } = await coursesApi.courseControllerFindForUser(skip, limit);
 		const all = [...accumulated, ...data.data];
-		return skip + PAGE_SIZE < data.total ? fetchAllCourses(skip + PAGE_SIZE, all) : all;
+		const hasFetchedAll = skip + limit >= data.total;
+		return hasFetchedAll ? all : fetchAllCoursesRecursively(skip + limit, limit, all);
 	};
 
 	const fetchAllElements = async (): Promise<void> => {
-		const { success, result } = await fetchAllElementsCall.execute(() => fetchAllCourses());
+		const { success, result } = await fetchAllElementsCall.execute(() => fetchAllCoursesRecursively());
 
 		if (success && result) {
 			allElements.value = extendCourseMetadataResponse(result);
