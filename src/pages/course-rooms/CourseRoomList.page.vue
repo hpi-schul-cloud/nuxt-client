@@ -70,7 +70,7 @@ useTitle(buildPageTitle(t("pages.courseRooms.index.courses.all")));
 
 onMounted(async () => {
 	if (!allElements.value.length) {
-		await courseRoomListStore.fetchAllElements();
+		await courseRoomListStore.fetchAllCourses();
 	}
 });
 </script>

@@ -17,12 +17,12 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 	const allElements = ref<CourseMetadataResponse[]>([]);
 
 	const fetchCall = useSafeAxiosTask();
-	const fetchAllElementsCall = useSafeAxiosTask();
+	const fetchAllCoursesCall = useSafeAxiosTask();
 	const alignElementCall = useSafeAxiosTask();
 	const updateElementCall = useSafeAxiosTask();
 
 	const loading = computed(() =>
-		[fetchCall, fetchAllElementsCall, alignElementCall, updateElementCall].some((task) => task.isRunning.value)
+		[fetchCall, fetchAllCoursesCall, alignElementCall, updateElementCall].some((task) => task.isRunning.value)
 	);
 
 	const dashboardApi = DashboardApiFactory(undefined, "/v3", $axios);
@@ -131,13 +131,22 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 		roomsData.value = roomsData.value.filter((item) => item.id !== id);
 	};
 
-	const fetchAllElements = async (): Promise<void> => {
-		const { success, result } = await fetchAllElementsCall.execute(() =>
-			coursesApi.courseControllerFindForUser(0, 100)
-		);
+	const fetchAllCoursesRecursively = async (
+		skip = 0,
+		limit = 100,
+		accumulated: CourseMetadataResponse[] = []
+	): Promise<CourseMetadataResponse[]> => {
+		const { data } = await coursesApi.courseControllerFindForUser(skip, limit);
+		const all = [...accumulated, ...data.data];
+		const hasFetchedAll = skip + limit >= data.total;
+		return hasFetchedAll ? all : fetchAllCoursesRecursively(skip + limit, limit, all);
+	};
+
+	const fetchAllCourses = async (): Promise<void> => {
+		const { success, result } = await fetchAllCoursesCall.execute(() => fetchAllCoursesRecursively());
 
 		if (success && result) {
-			allElements.value = extendCourseMetadataResponse(result.data.data);
+			allElements.value = extendCourseMetadataResponse(result);
 		}
 	};
 
@@ -152,6 +161,6 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 		alignCourse,
 		updateCourse,
 		delete: deleteRoom,
-		fetchAllElements,
+		fetchAllCourses,
 	};
 });
