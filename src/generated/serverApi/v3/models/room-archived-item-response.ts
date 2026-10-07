@@ -13,70 +13,56 @@
  */
 
 
-import { RoomColor } from './room-color';
-import { RoomFeatures } from './room-features';
 import { RoomItemResponseAllowedOperations } from './room-item-response-allowed-operations';
 
 /**
  * 
  * @export
- * @interface RoomDetailsResponse
+ * @interface RoomArchivedItemResponse
  */
-export interface RoomDetailsResponse {
+export interface RoomArchivedItemResponse {
     /**
      * 
      * @type {string}
-     * @memberof RoomDetailsResponse
+     * @memberof RoomArchivedItemResponse
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof RoomDetailsResponse
+     * @memberof RoomArchivedItemResponse
      */
     name: string;
     /**
      * 
-     * @type {RoomColor}
-     * @memberof RoomDetailsResponse
+     * @type {string}
+     * @memberof RoomArchivedItemResponse
      */
-    color: RoomColor;
+    ownerName?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof RoomArchivedItemResponse
+     */
+    totalMembers: number;
     /**
      * 
      * @type {string}
-     * @memberof RoomDetailsResponse
+     * @memberof RoomArchivedItemResponse
      */
-    schoolId: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomDetailsResponse
-     */
-    isArchived: boolean;
+    archivedAt: string;
     /**
      * 
      * @type {string}
-     * @memberof RoomDetailsResponse
+     * @memberof RoomArchivedItemResponse
      */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    updatedAt: string;
+    schoolName: string;
     /**
      * 
      * @type {RoomItemResponseAllowedOperations}
-     * @memberof RoomDetailsResponse
+     * @memberof RoomArchivedItemResponse
      */
     allowedOperations?: RoomItemResponseAllowedOperations;
-    /**
-     * 
-     * @type {Array<RoomFeatures>}
-     * @memberof RoomDetailsResponse
-     */
-    features: Array<RoomFeatures>;
 }
 
 

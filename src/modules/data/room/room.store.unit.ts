@@ -5,10 +5,17 @@ import {
 	expectNotification,
 	mockApi,
 	mockApiResponse,
+	roomArchivedItemResponseFactory,
 	roomItemFactory,
 	roomItemResponseFactory,
 } from "@@/tests/test-utils";
-import { RoomApiFactory, RoomColor, RoomCreatedResponse, RoomListResponse } from "@api-server";
+import {
+	RoomApiFactory,
+	RoomArchivedListResponse,
+	RoomColor,
+	RoomCreatedResponse,
+	RoomListResponse,
+} from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
@@ -94,6 +101,61 @@ describe("useRoomStore", () => {
 			vi.spyOn(logger, "error").mockImplementation(vi.fn());
 			roomApiMock.roomControllerLeaveRoom.mockRejectedValue(new Error("Leave failed"));
 			await useRoomStore().leaveRoom("room-123");
+			expectNotification("error");
+		});
+	});
+
+	describe("fetchArchivedRooms", () => {
+		it("should load archived rooms successfully", async () => {
+			const mockRooms = roomArchivedItemResponseFactory.buildList(2);
+			roomApiMock.roomControllerGetArchivedRooms.mockResolvedValue(
+				mockApiResponse<RoomArchivedListResponse>({ data: { data: mockRooms } })
+			);
+
+			const store = useRoomStore();
+			await store.fetchArchivedRooms();
+
+			expect(store.archivedRooms).toEqual(mockRooms);
+			expect(useNotificationStore().notify).not.toHaveBeenCalled();
+		});
+
+		it("should show error notification when fetch fails", async () => {
+			vi.spyOn(logger, "error").mockImplementation(vi.fn());
+			roomApiMock.roomControllerGetArchivedRooms.mockRejectedValue(new Error("Network error"));
+
+			await useRoomStore().fetchArchivedRooms();
+
+			expect(useRoomStore().archivedRooms).toEqual([]);
+			expectNotification("error");
+		});
+	});
+
+	describe("archiveRoom", () => {
+		it("should archive room successfully", async () => {
+			roomApiMock.roomControllerArchiveRoom.mockResolvedValue(mockApiResponse({ data: "" }));
+			await useRoomStore().archiveRoom("room-123");
+			expect(roomApiMock.roomControllerArchiveRoom).toHaveBeenCalledWith("room-123");
+		});
+
+		it("should show error notification when archive fails", async () => {
+			vi.spyOn(logger, "error").mockImplementation(vi.fn());
+			roomApiMock.roomControllerArchiveRoom.mockRejectedValue(new Error("Archive failed"));
+			await useRoomStore().archiveRoom("room-123");
+			expectNotification("error");
+		});
+	});
+
+	describe("unarchiveRoom", () => {
+		it("should unarchive room successfully", async () => {
+			roomApiMock.roomControllerUnarchiveRoom.mockResolvedValue(mockApiResponse({ data: "" }));
+			await useRoomStore().unarchiveRoom("room-123");
+			expect(roomApiMock.roomControllerUnarchiveRoom).toHaveBeenCalledWith("room-123");
+		});
+
+		it("should show error notification when unarchive fails", async () => {
+			vi.spyOn(logger, "error").mockImplementation(vi.fn());
+			roomApiMock.roomControllerUnarchiveRoom.mockRejectedValue(new Error("Unarchive failed"));
+			await useRoomStore().unarchiveRoom("room-123");
 			expectNotification("error");
 		});
 	});

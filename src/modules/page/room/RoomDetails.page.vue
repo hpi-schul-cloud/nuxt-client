@@ -3,15 +3,20 @@
 		<template #header>
 			<div class="d-flex align-center">
 				<h1 data-testid="room-title">{{ roomTitle }}</h1>
+				<VChip v-if="room.isArchived" size="small" class="ml-2" data-testid="archived-room-chip">
+					{{ t("pages.rooms.archived.chip") }}
+				</VChip>
 				<RoomMenu
 					class="pt-1"
 					:room-name="room.name"
+					:is-archived="room.isArchived"
 					@room:edit="onEdit"
 					@room:manage-members="onManageMembers"
 					@room:copy="onCopy"
 					@room:share="onShare"
 					@room:delete="onDelete"
 					@room:leave="onLeaveRoom"
+					@room:archive="onArchive"
 				/>
 			</div>
 		</template>
@@ -47,7 +52,7 @@ import { ShareTokenParentType } from "@/types/sharing/Token";
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RoomBoardItemResponse } from "@api-server";
-import { useAppStoreRefs } from "@data-app";
+import { useAppStoreRefs, useNotificationStore } from "@data-app";
 import { useRoomAllowedOperations, useRoomDetailsStore, useRoomStore } from "@data-room";
 import { useCopyFlow } from "@feature-copy";
 import { RoomBoardGrid, RoomMenu } from "@feature-room";
@@ -70,7 +75,7 @@ const router = useRouter();
 const { t } = useI18n();
 
 const roomDetailsStore = useRoomDetailsStore();
-const { leaveRoom, deleteRoom } = useRoomStore();
+const { leaveRoom, deleteRoom, archiveRoom, unarchiveRoom, fetchRooms } = useRoomStore();
 
 const { roomBoards } = storeToRefs(roomDetailsStore);
 const { createBoard, updateBoardVisibility, deleteBoard, fetchRoomAndBoards } = roomDetailsStore;
@@ -97,6 +102,14 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 		title: t("pages.rooms.title"),
 		to: "/rooms",
 	},
+	...(room.value.isArchived
+		? [
+				{
+					title: t("pages.rooms.archived.title"),
+					to: "/rooms/archive",
+				},
+			]
+		: []),
 	{
 		title: roomTitle.value,
 		disabled: true,
@@ -147,6 +160,26 @@ const onCopy = async () => {
 	if (copyResult?.id) {
 		await router.replace({ name: "room-details", params: { id: copyResult.id } });
 	}
+};
+
+const onArchive = async () => {
+	const { success } = await archiveRoom(room.value.id);
+	if (!success) return;
+
+	const roomId = room.value.id;
+	useNotificationStore().notify({
+		text: t("pages.rooms.archive.success", { roomName: room.value.name }),
+		status: "success",
+		duration: 10000,
+		action: {
+			text: t("common.actions.undo"),
+			handler: async () => {
+				const { success } = await unarchiveRoom(roomId);
+				if (success) await fetchRooms();
+			},
+		},
+	});
+	router.push({ name: "rooms" });
 };
 
 const { executeShare } = useShareFlow();

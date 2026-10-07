@@ -1,4 +1,5 @@
 export * from "./room-test.utils";
+export * from "./roomArchivedItemResponseFactory";
 export * from "./roomBoardTileFactory";
 export * from "./roomFactory";
 export * from "./roomItemFactory";

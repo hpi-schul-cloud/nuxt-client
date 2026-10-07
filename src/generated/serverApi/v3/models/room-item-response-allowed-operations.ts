@@ -55,6 +55,12 @@ export interface RoomItemResponseAllowedOperations {
      * @type {boolean}
      * @memberof RoomItemResponseAllowedOperations
      */
+    archiveRoom: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
     arrangeRooms: boolean;
     /**
      * 
