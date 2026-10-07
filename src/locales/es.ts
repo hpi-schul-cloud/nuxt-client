@@ -160,6 +160,7 @@ export default {
 	"common.notifications.errors.notFinished": "{type} no se pudo completar. | {type} no se pudieron completar.",
 	"common.notifications.errors.notReverted": "{type} no se pudo restablecer. | {type} no se pudieron restablecer.",
 	"common.notifications.errors.notRestored": "No se ha podido restaurar {type}. | No se han podido restaurar {type}.",
+	"common.notifications.errors.notArchived": "No se ha podido archivar {type}. | No se han podido archivar {type}.",
 	"common.notifications.errors.notShared": "{type} no se pudo compartir. | {type} no se pudieron compartir.",
 	"common.notification.error.preferences.update": "No se han podido actualizar las preferencias del usuario.",
 	"common.notification.error.preferences.retrieve": "No se han podido recuperar las preferencias del usuario.",

@@ -166,6 +166,7 @@ export default {
 	"common.notifications.errors.notFinished": "{type} не вдалося завершити. | {type} не вдалося завершити.",
 	"common.notifications.errors.notReverted": "{type} не вдалося скинути. | {type} не вдалося скинути.",
 	"common.notifications.errors.notRestored": "{type} не вдалося відновити. | Не вдалося відновити {type}.",
+	"common.notifications.errors.notArchived": "{type} не вдалося архівувати. | Не вдалося архівувати {type}.",
 	"common.notifications.errors.notShared": "{type} не вдалося поділитися. | {type} не вдалося поділитися.",
 	"common.notification.error.preferences.update": "Налаштування користувача не вдалося оновити.",
 	"common.notification.error.preferences.retrieve": "Налаштування користувача не вдалося отримати.",

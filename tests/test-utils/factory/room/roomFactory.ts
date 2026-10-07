@@ -9,6 +9,7 @@ export const roomFactory = Factory.define<RoomDetails>(({ sequence }) => ({
 	startDate: new Date().toISOString(),
 	endDate: new Date().toISOString(),
 	permissions: [],
+	isArchived: false,
 	createdAt: new Date().toISOString(),
 	updatedAt: new Date().toISOString(),
 	features: [],
