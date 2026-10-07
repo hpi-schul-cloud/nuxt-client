@@ -1,7 +1,23 @@
 <template>
 	<DefaultWireframe max-width="full" :fab-items="fabAction" main-with-bottom-padding>
 		<template #header>
-			<h1>{{ t("pages.rooms.title") }}</h1>
+			<div class="d-flex align-center">
+				<h1>{{ t("pages.rooms.title") }}</h1>
+				<KebabMenu
+					v-if="isRoomArchiveFeatureEnabled"
+					class="mx-2"
+					:aria-label="t('pages.rooms.menu.ariaLabel')"
+					data-testid="rooms-menu"
+				>
+					<KebabMenuAction
+						:icon="mdiArchiveOutline"
+						data-testid="rooms-menu-archived-rooms"
+						@click="router.push({ name: 'rooms-archive' })"
+					>
+						{{ t("pages.rooms.archived.title") }}
+					</KebabMenuAction>
+				</KebabMenu>
+			</div>
 		</template>
 		<RoomsWelcomeInfo class="mt-8" />
 		<VContainer v-if="isLoading && isEmpty" class="loader">
@@ -20,11 +36,13 @@
 import { buildPageTitle } from "@/utils/pageTitle";
 import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { useRoomStore } from "@data-room";
 import { useImportFlow } from "@feature-import";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
-import { mdiPlus } from "@icons/material";
+import { mdiArchiveOutline, mdiPlus } from "@icons/material";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
+import { KebabMenu, KebabMenuAction } from "@ui-kebab-menu";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { sortBy } from "lodash-es";
@@ -42,6 +60,8 @@ const { fetchRooms } = useRoomStore();
 
 const pageTitle = computed(() => buildPageTitle(t("pages.rooms.title")));
 useTitle(pageTitle);
+
+const isRoomArchiveFeatureEnabled = computed(() => useEnvConfig().value.FEATURE_ROOM_ARCHIVE_ENABLED);
 
 const fabAction = computed(() => {
 	const canCreateRoom = toValue(useAppStore().hasPermission(Permission.SCHOOL_CREATE_ROOM));
