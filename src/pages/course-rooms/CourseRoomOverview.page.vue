@@ -131,7 +131,7 @@ const display = useDisplay();
 const refs = reactive<Record<string, unknown>>({});
 const courseRoomListStore = useCourseRoomListStore();
 const { hasCurrentRooms, roomsData, allElements } = storeToRefs(courseRoomListStore);
-const { alignCourse, updateCourse, fetchCourses, fetchAllElements } = courseRoomListStore;
+const { alignCourse, updateCourse, fetchCourses, fetchAllCourses } = courseRoomListStore;
 
 const device = ref("mobile");
 const dimensions = reactive({
@@ -195,7 +195,7 @@ const { executeImport } = useImportFlow();
 
 const executeImportFlow = async (token: string) => {
 	//  courses might not be loaded yet, so we need to fetch them before executing the import
-	await fetchAllElements();
+	await fetchAllCourses();
 	const { destinations: importDestinations, success } = await executeImport(token, availableDestinations, "course");
 
 	if (!success) {
@@ -379,7 +379,7 @@ const initializeComponent = async () => {
 	dimensions.colCount = newDims.colCount;
 	dimensions.cellWidth = newDims.cellWidth;
 
-	await Promise.allSettled([fetchCourses(), fetchAllElements()]);
+	await Promise.allSettled([fetchCourses(), fetchAllCourses()]);
 	setRowCount();
 
 	if (hasRoomsBeingCopied.value) {
