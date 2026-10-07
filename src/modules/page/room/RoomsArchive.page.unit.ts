@@ -2,7 +2,7 @@ import RoomsArchivePage from "./RoomsArchive.page.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestRoomStore, roomArchivedItemResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { RoomArchivedItemResponse, RoomItemResponseAllowedOperations } from "@api-server";
+import { RoomArchivedItemResponse } from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { DataTable } from "@ui-data-table";
@@ -102,10 +102,10 @@ describe("RoomsArchivePage", () => {
 		describe("row actions", () => {
 			it("should show restore for a room the user can archive, and hide it otherwise", async () => {
 				const restorable = roomArchivedItemResponseFactory.build({
-					allowedOperations: { archiveRoom: true, deleteRoom: false } as RoomItemResponseAllowedOperations,
+					allowedOperations: { archiveRoom: true, deleteRoom: false },
 				});
 				const notRestorable = roomArchivedItemResponseFactory.build({
-					allowedOperations: { archiveRoom: false, deleteRoom: true } as RoomItemResponseAllowedOperations,
+					allowedOperations: { archiveRoom: false, deleteRoom: true },
 				});
 				const { wrapper } = setup([restorable, notRestorable]);
 
@@ -118,10 +118,10 @@ describe("RoomsArchivePage", () => {
 
 			it("should show delete for a room the user can delete, and hide it otherwise", async () => {
 				const deletable = roomArchivedItemResponseFactory.build({
-					allowedOperations: { archiveRoom: false, deleteRoom: true } as RoomItemResponseAllowedOperations,
+					allowedOperations: { archiveRoom: false, deleteRoom: true },
 				});
 				const notDeletable = roomArchivedItemResponseFactory.build({
-					allowedOperations: { archiveRoom: true, deleteRoom: false } as RoomItemResponseAllowedOperations,
+					allowedOperations: { archiveRoom: true, deleteRoom: false },
 				});
 				const { wrapper } = setup([deletable, notDeletable]);
 
@@ -134,7 +134,7 @@ describe("RoomsArchivePage", () => {
 
 			it("should restore a room and refetch the list when the restore action is clicked", async () => {
 				const room = roomArchivedItemResponseFactory.build({
-					allowedOperations: { archiveRoom: true } as RoomItemResponseAllowedOperations,
+					allowedOperations: { archiveRoom: true },
 				});
 				const { wrapper, roomStore } = setup([room]);
 				roomStore.fetchArchivedRooms.mockClear();
@@ -149,7 +149,7 @@ describe("RoomsArchivePage", () => {
 
 			it("should show a success notification after restoring a room", async () => {
 				const room = roomArchivedItemResponseFactory.build({
-					allowedOperations: { archiveRoom: true } as RoomItemResponseAllowedOperations,
+					allowedOperations: { archiveRoom: true },
 				});
 				const { wrapper } = setup([room]);
 
@@ -165,7 +165,7 @@ describe("RoomsArchivePage", () => {
 			it("should ask for confirmation before deleting a room, and only delete when confirmed", async () => {
 				const askDeletionSpy = vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
 				const room = roomArchivedItemResponseFactory.build({
-					allowedOperations: { deleteRoom: true } as RoomItemResponseAllowedOperations,
+					allowedOperations: { deleteRoom: true },
 				});
 				const { wrapper, roomStore } = setup([room]);
 
@@ -194,10 +194,10 @@ describe("RoomsArchivePage", () => {
 
 			it("should only restore the selected rooms the user is allowed to restore", async () => {
 				const restorable = roomArchivedItemResponseFactory.build({
-					allowedOperations: { archiveRoom: true } as RoomItemResponseAllowedOperations,
+					allowedOperations: { archiveRoom: true },
 				});
 				const notRestorable = roomArchivedItemResponseFactory.build({
-					allowedOperations: { archiveRoom: false } as RoomItemResponseAllowedOperations,
+					allowedOperations: { archiveRoom: false },
 				});
 				const { wrapper, roomStore } = setup([restorable, notRestorable]);
 				roomStore.fetchArchivedRooms.mockClear();
@@ -214,10 +214,10 @@ describe("RoomsArchivePage", () => {
 
 			it("should warn when only some of the selected rooms could be restored", async () => {
 				const restorable = roomArchivedItemResponseFactory.build({
-					allowedOperations: { archiveRoom: true } as RoomItemResponseAllowedOperations,
+					allowedOperations: { archiveRoom: true },
 				});
 				const notRestorable = roomArchivedItemResponseFactory.build({
-					allowedOperations: { archiveRoom: false } as RoomItemResponseAllowedOperations,
+					allowedOperations: { archiveRoom: false },
 				});
 				const { wrapper } = setup([restorable, notRestorable]);
 
@@ -233,7 +233,7 @@ describe("RoomsArchivePage", () => {
 
 			it("should not offer a bulk restore action when no selected room can be restored", async () => {
 				const notRestorable = roomArchivedItemResponseFactory.build({
-					allowedOperations: { archiveRoom: false } as RoomItemResponseAllowedOperations,
+					allowedOperations: { archiveRoom: false },
 				});
 				const { wrapper } = setup([notRestorable]);
 
@@ -246,10 +246,10 @@ describe("RoomsArchivePage", () => {
 			it("should ask for confirmation and only delete the selected rooms the user is allowed to delete", async () => {
 				const askDeletionSpy = vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 				const deletable = roomArchivedItemResponseFactory.build({
-					allowedOperations: { deleteRoom: true } as RoomItemResponseAllowedOperations,
+					allowedOperations: { deleteRoom: true },
 				});
 				const notDeletable = roomArchivedItemResponseFactory.build({
-					allowedOperations: { deleteRoom: false } as RoomItemResponseAllowedOperations,
+					allowedOperations: { deleteRoom: false },
 				});
 				const { wrapper, roomStore } = setup([deletable, notDeletable]);
 
@@ -266,10 +266,10 @@ describe("RoomsArchivePage", () => {
 			it("should warn when only some of the selected rooms could be deleted", async () => {
 				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 				const deletable = roomArchivedItemResponseFactory.build({
-					allowedOperations: { deleteRoom: true } as RoomItemResponseAllowedOperations,
+					allowedOperations: { deleteRoom: true },
 				});
 				const notDeletable = roomArchivedItemResponseFactory.build({
-					allowedOperations: { deleteRoom: false } as RoomItemResponseAllowedOperations,
+					allowedOperations: { deleteRoom: false },
 				});
 				const { wrapper } = setup([deletable, notDeletable]);
 
