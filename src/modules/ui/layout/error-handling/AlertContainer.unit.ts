@@ -87,6 +87,43 @@ describe("AlertContainer", () => {
 		expect(result.exists()).toBe(true);
 	});
 
+	describe("when a notification has an action", () => {
+		it("should render the action button with the action text", () => {
+			useNotificationStore().notify({
+				text: "hello world",
+				status: "success",
+				action: { text: "Undo", handler: vi.fn() },
+			});
+			const { wrapper } = getWrapper();
+
+			const actionButton = wrapper.find("[data-testId='alert-action']");
+			expect(actionButton.exists()).toBe(true);
+			expect(actionButton.text()).toBe("Undo");
+		});
+
+		it("should call the handler and remove the notification when clicked", async () => {
+			const handler = vi.fn();
+			useNotificationStore().notify({
+				text: "hello world",
+				status: "success",
+				action: { text: "Undo", handler },
+			});
+			const { wrapper } = getWrapper();
+
+			await wrapper.find("[data-testId='alert-action']").trigger("click");
+
+			expect(handler).toHaveBeenCalled();
+			expect(wrapper.findComponent(VAlert).exists()).toBe(false);
+		});
+	});
+
+	it("should not render an action button when the notification has none", () => {
+		useNotificationStore().notify({ text: "hello world", status: "info" });
+		const { wrapper } = getWrapper();
+
+		expect(wrapper.find("[data-testId='alert-action']").exists()).toBe(false);
+	});
+
 	describe("i18n-t component with links and replacements", () => {
 		it("should render i18n-t with link slot when notification contains link", async () => {
 			const { wrapper } = getWrapper();
