@@ -61,6 +61,12 @@ export interface RoomDetailsResponse {
     endDate?: string;
     /**
      * 
+     * @type {boolean}
+     * @memberof RoomDetailsResponse
+     */
+    isArchived: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof RoomDetailsResponse
      */
