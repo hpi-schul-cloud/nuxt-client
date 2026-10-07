@@ -7,6 +7,7 @@ import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/facto
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
 import { CopyElementType, CopyStatusEnum } from "@api-server";
+import { useNotificationStore } from "@data-app";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { useCopyFlow } from "@feature-copy";
 import { RoomBoardGrid, RoomMenu } from "@feature-room";
@@ -48,6 +49,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		options?: Partial<{
 			roomBoards: RoomBoardItem[];
 			allowedOperations: Partial<serverApi.RoomItemResponseAllowedOperations> | undefined;
+			isArchived: boolean;
 		}>
 	) => {
 		const { roomBoards } = {
@@ -55,7 +57,10 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			...options,
 		};
 
-		const room = roomFactory.build({ allowedOperations: options?.allowedOperations });
+		const room = roomFactory.build({
+			allowedOperations: options?.allowedOperations,
+			isArchived: options?.isArchived ?? false,
+		});
 
 		setActivePinia(createTestingPinia());
 		const { roomStore } = createTestRoomStore();
@@ -122,6 +127,39 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				expect(breadcrumbItems[1].text()).toContain(room.name);
 			});
 		});
+
+		describe("and the room is archived", () => {
+			it("should render an additional breadcrumb linking to the archived rooms list", () => {
+				const { wrapper, room } = setup({ isArchived: true });
+
+				const breadcrumbs = wrapper.getComponent({ name: "Breadcrumbs" });
+				const breadcrumbItems = breadcrumbs.findAllComponents(VBreadcrumbsItem);
+
+				expect(breadcrumbItems).toHaveLength(3);
+				expect(breadcrumbItems[0].text()).toBe("pages.rooms.title");
+				expect(breadcrumbItems[1].text()).toBe("pages.rooms.archived.title");
+				expect(breadcrumbItems[1].props("to")).toBe("/rooms/archive");
+				expect(breadcrumbItems[2].text()).toContain(room.name);
+			});
+		});
+
+		describe("and the room is archived", () => {
+			it("should render an archived chip next to the title", () => {
+				const { wrapper } = setup({ isArchived: true });
+
+				const chip = wrapper.find("[data-testid='archived-room-chip']");
+				expect(chip.exists()).toBe(true);
+				expect(chip.text()).toBe("pages.rooms.archived.chip");
+			});
+		});
+
+		describe("and the room is not archived", () => {
+			it("should not render an archived chip", () => {
+				const { wrapper } = setup({ isArchived: false });
+
+				expect(wrapper.find("[data-testid='archived-room-chip']").exists()).toBe(false);
+			});
+		});
 	});
 
 	describe("when user deletes the room", () => {
@@ -147,6 +185,78 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 			expect(roomStore.deleteRoom).not.toHaveBeenCalled();
 			expect(router.push).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("when user archives the room", () => {
+		describe("and archiving succeeds", () => {
+			it("should call archiveRoom and reroute to the rooms overview", async () => {
+				const { wrapper, router, roomStore, room } = setup({
+					allowedOperations: { accessRoom: true, archiveRoom: true },
+				});
+				roomStore.archiveRoom.mockResolvedValue({ success: true, result: undefined, error: undefined } as never);
+
+				const menu = wrapper.getComponent({ name: "RoomMenu" });
+				await menu.vm.$emit("room:archive");
+				await flushPromises();
+
+				expect(roomStore.archiveRoom).toHaveBeenCalledWith(room.id);
+				expect(router.push).toHaveBeenCalledWith({ name: "rooms" });
+			});
+
+			it("should show a success notification offering to undo the archiving", async () => {
+				const { wrapper, roomStore } = setup({
+					allowedOperations: { accessRoom: true, archiveRoom: true },
+				});
+				roomStore.archiveRoom.mockResolvedValue({ success: true, result: undefined, error: undefined } as never);
+
+				const menu = wrapper.getComponent({ name: "RoomMenu" });
+				await menu.vm.$emit("room:archive");
+				await flushPromises();
+
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({
+						text: "pages.rooms.archive.success",
+						status: "success",
+						action: expect.objectContaining({ text: "common.actions.undo" }),
+					})
+				);
+			});
+
+			it("should unarchive the room again when the undo action is triggered", async () => {
+				const { wrapper, roomStore } = setup({
+					allowedOperations: { accessRoom: true, archiveRoom: true },
+				});
+				roomStore.archiveRoom.mockResolvedValue({ success: true, result: undefined, error: undefined } as never);
+				roomStore.unarchiveRoom.mockResolvedValue({ success: true, result: undefined, error: undefined } as never);
+
+				const menu = wrapper.getComponent({ name: "RoomMenu" });
+				await menu.vm.$emit("room:archive");
+				await flushPromises();
+
+				const notifyMock = vi.mocked(useNotificationStore().notify);
+				const [{ action }] = notifyMock.mock.calls[0];
+				await action?.handler();
+
+				expect(roomStore.unarchiveRoom).toHaveBeenCalled();
+				expect(roomStore.fetchRooms).toHaveBeenCalled();
+			});
+		});
+
+		describe("and archiving fails", () => {
+			it("should not navigate away or show a success notification", async () => {
+				const { wrapper, router, roomStore } = setup({
+					allowedOperations: { accessRoom: true, archiveRoom: true },
+				});
+				roomStore.archiveRoom.mockResolvedValue({ success: false, result: undefined, error: new Error("Any") });
+
+				const menu = wrapper.getComponent({ name: "RoomMenu" });
+				await menu.vm.$emit("room:archive");
+				await flushPromises();
+
+				expect(router.push).not.toHaveBeenCalled();
+				expect(useNotificationStore().notify).not.toHaveBeenCalled();
+			});
 		});
 	});
 
