@@ -49,18 +49,6 @@ export interface RoomDetailsResponse {
     schoolId: string;
     /**
      * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    startDate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    endDate?: string;
-    /**
-     * 
      * @type {boolean}
      * @memberof RoomDetailsResponse
      */
