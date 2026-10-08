@@ -4,6 +4,7 @@
 			<CardHostDetailView
 				v-if="cardId"
 				:key="cardId"
+				v-model:table-of-contents-open="isTableOfContentsOpen"
 				:card-id="cardId"
 				:previous-card-route="previousCardRoute"
 				:next-card-route="nextCardRoute"
@@ -530,6 +531,11 @@ const onSaveEditBoardSettings = async (isEditableForEveryone: boolean) => {
 const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
 	cardStore.createFileElementWithCollabora(payload.type, payload.fileName);
 };
+
+const isTableOfContentsOpen = ref(false);
+watch(cardId, (newCardId) => {
+	if (!newCardId) isTableOfContentsOpen.value = false;
+});
 
 const onCloseDetailView = () => {
 	router.replace({

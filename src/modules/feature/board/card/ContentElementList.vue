@@ -1,7 +1,7 @@
 <template>
 	<VCardText class="mb-n4">
 		<template v-for="(element, index) in elements" :key="element.id">
-			<div :data-testid="`board-contentelement-${columnIndex}-${rowIndex}-${index}`">
+			<div :data-testid="`board-contentelement-${columnIndex}-${rowIndex}-${index}`" :data-element-id="element.id">
 				<component
 					:is="mapToComponent(element.type)"
 					:id="element.id"
@@ -25,10 +25,10 @@
 </template>
 
 <script setup lang="ts">
+import { isContentElementTypeEnabled } from "../shared/content-element-type-meta";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { ContentElementType } from "@api-server";
-import { useEnvConfig } from "@data-env";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
 import { DeletedElement } from "@feature-board-deleted-element";
 import { DrawingContentElement } from "@feature-board-drawing-element";
@@ -100,50 +100,29 @@ const onMoveElementKeyboard = (elementIndex: number, element: AnyContentElement,
 };
 
 const mapToComponent = (type: ContentElementType) => {
-	const envConfig = useEnvConfig();
+	if (!isContentElementTypeEnabled(type)) return;
 
 	switch (type) {
 		case ContentElementType.COLLABORATIVE_TEXT_EDITOR:
-			if (envConfig.value.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED) {
-				return CollaborativeTextEditorElement;
-			}
-			break;
+			return CollaborativeTextEditorElement;
 		case ContentElementType.DRAWING:
-			if (envConfig.value.FEATURE_TLDRAW_ENABLED) {
-				return DrawingContentElement;
-			}
-			break;
+			return DrawingContentElement;
 		case ContentElementType.EXTERNAL_TOOL:
-			if (envConfig.value.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
-				return ExternalToolElement;
-			}
-			break;
+			return ExternalToolElement;
 		case ContentElementType.FILE:
 			return FileContentElement;
 		case ContentElementType.LINK:
-			if (envConfig.value.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
-				return LinkContentElement;
-			}
-			break;
+			return LinkContentElement;
 		case ContentElementType.RICH_TEXT:
 			return RichTextContentElement;
 		case ContentElementType.VIDEO_CONFERENCE:
-			if (envConfig.value.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED) {
-				return VideoConferenceContentElement;
-			}
-			break;
+			return VideoConferenceContentElement;
 		case ContentElementType.DELETED:
 			return DeletedElement;
 		case ContentElementType.FILE_FOLDER:
-			if (envConfig.value.FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED) {
-				return FolderContentElement;
-			}
-			break;
+			return FolderContentElement;
 		case ContentElementType.H5P:
-			if (envConfig.value.FEATURE_COLUMN_BOARD_H5P_ENABLED) {
-				return H5pElement;
-			}
-			break;
+			return H5pElement;
 		default:
 			return "span";
 	}
