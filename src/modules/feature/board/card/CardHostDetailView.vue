@@ -11,9 +11,9 @@
 				<VBtn
 					:icon="mdiFormatListBulleted"
 					data-testid="toggle-table-of-contents-button"
-					:aria-label="t('components.board.dialog.detail-view.tableOfContents.toggle')"
+					:aria-label="t('components.board.dialog.detail-view.tableOfContents.title')"
 					:aria-expanded="isTableOfContentsOpen"
-					aria-controls="card-detail-view-toc"
+					:aria-controls="isTableOfContentsOpen ? 'card-detail-view-toc' : undefined"
 					:variant="isTableOfContentsOpen ? 'tonal' : 'text'"
 					@click="isTableOfContentsOpen = !isTableOfContentsOpen"
 				/>
@@ -56,15 +56,16 @@
 			</VToolbar>
 			<div class="detail-view__body">
 				<Transition name="toc-slide">
-					<aside v-if="isTableOfContentsOpen" id="card-detail-view-toc" class="toc-panel">
+					<div v-if="isTableOfContentsOpen" id="card-detail-view-toc" class="toc-panel">
 						<CardTableOfContents
 							:sections="sections"
 							:elements="currentElements"
 							:active-element-id="activeElementId"
+							:focus-current-card="wasTableOfContentsOpenOnMount"
 							@select:element="onSelectElement"
 							@select:card="onSelectCard"
 						/>
-					</aside>
+					</div>
 				</Transition>
 				<div ref="scroller" class="detail-view__scroller">
 					<div
@@ -94,6 +95,7 @@ import { useActiveCardElement } from "./activeCardElement.composable";
 import CardHost from "./CardHost.vue";
 import { useCardTableOfContents } from "./cardTableOfContents.composable";
 import CardTableOfContents from "./CardTableOfContents.vue";
+import { scrollToCardElement } from "./scrollToCardElement";
 import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { Colors } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
@@ -114,15 +116,23 @@ const emit = defineEmits<{
 	(e: "close:detail-view"): void;
 }>();
 
-const SCROLL_TARGET_GAP_PX = 32;
-
 const isTableOfContentsOpen = defineModel<boolean>("tableOfContentsOpen", { default: false });
+// The view remounts per card, so an already open panel means the user just switched cards.
+const wasTableOfContentsOpenOnMount = isTableOfContentsOpen.value;
 
 const { t } = useI18n();
 const { smAndDown: isSmallScreen } = useDisplay();
-const { sections, currentElements } = useCardTableOfContents(cardRef);
+const { sections, currentElements } = useCardTableOfContents(cardRef, isTableOfContentsOpen);
 const scroller = useTemplateRef<HTMLElement>("scroller");
-const { activeElementId, refresh: refreshActiveElement } = useActiveCardElement(scroller, isTableOfContentsOpen);
+const {
+	activeElementId,
+	refresh: refreshActiveElement,
+	select: selectActiveElement,
+} = useActiveCardElement(
+	scroller,
+	isTableOfContentsOpen,
+	computed(() => currentElements.value.map(({ id }) => id))
+);
 watch(currentElements, refreshActiveElement, { flush: "post" });
 
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardRef.value);
@@ -160,37 +170,14 @@ const cardBorderColor = computed(() => {
 	return colorToHexLighten3(color);
 });
 
-const FOCUSABLE_SELECTOR = "a[href], button, input, textarea, select, [tabindex]:not([tabindex='-1'])";
-
-const focusElement = (wrapper: HTMLElement) => {
-	const focusTarget = wrapper.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
-	if (focusTarget) {
-		focusTarget.focus({ preventScroll: true });
-		return;
-	}
-
-	wrapper.tabIndex = -1;
-	wrapper.focus({ preventScroll: true });
-};
-
 const onSelectElement = (elementId: string) => {
-	const container = scroller.value;
-	const target = Array.from(container?.querySelectorAll<HTMLElement>("[data-element-id]") ?? []).find(
-		(element) => element.dataset.elementId === elementId
-	);
-	if (!container || !target) return;
+	if (!scroller.value) return;
 
 	const isFirstElement = currentElements.value[0]?.id === elementId;
-	const top = isFirstElement
-		? 0
-		: container.scrollTop +
-			target.getBoundingClientRect().top -
-			container.getBoundingClientRect().top -
-			SCROLL_TARGET_GAP_PX;
-	const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-	container.scrollTo({ top: Math.max(0, top), behavior: prefersReducedMotion ? "auto" : "smooth" });
-	focusElement(target);
+	const wasFound = scrollToCardElement(scroller.value, elementId, isFirstElement);
+	if (!wasFound) return;
 
+	selectActiveElement(elementId);
 	if (isSmallScreen.value) isTableOfContentsOpen.value = false;
 };
 
@@ -232,34 +219,31 @@ const onDialogClose = () => {
 	overflow-y: auto;
 }
 
-$toc-duration: 0.32s;
-$toc-easing: cubic-bezier(0.16, 1, 0.3, 1);
-
 .toc-panel {
 	display: flex;
 	flex: none;
 	flex-direction: column;
-	width: 18rem;
+	width: 20rem;
 	overflow: hidden;
 	border-inline-end: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
+.toc-slide-enter-active {
+	--toc-duration: 0.32s;
+}
+
+.toc-slide-leave-active {
+	--toc-duration: 0.2s;
 }
 
 .toc-slide-enter-active,
 .toc-slide-leave-active {
 	transition:
-		width $toc-duration $toc-easing,
-		opacity $toc-duration $toc-easing;
+		width var(--toc-duration) cubic-bezier(0.16, 1, 0.3, 1),
+		opacity var(--toc-duration) cubic-bezier(0.16, 1, 0.3, 1);
 
 	:deep(.card-toc) {
-		transition: transform $toc-duration $toc-easing;
-	}
-}
-
-.toc-slide-leave-active {
-	transition-duration: 0.2s;
-
-	:deep(.card-toc) {
-		transition-duration: 0.2s;
+		transition: transform var(--toc-duration) cubic-bezier(0.16, 1, 0.3, 1);
 	}
 }
 
@@ -273,7 +257,7 @@ $toc-easing: cubic-bezier(0.16, 1, 0.3, 1);
 	}
 }
 
-@media (max-width: 959.98px) {
+@media (max-width: 959.98px) and (min-height: 30rem) {
 	.detail-view__body {
 		flex-direction: column;
 	}
@@ -294,18 +278,15 @@ $toc-easing: cubic-bezier(0.16, 1, 0.3, 1);
 	.toc-slide-leave-to {
 		width: 100%;
 		max-height: 0;
-
-		:deep(.card-toc) {
-			transform: translateY(-1rem);
-		}
 	}
 }
 
 @media (prefers-reduced-motion: reduce) {
 	.toc-slide-enter-active,
 	.toc-slide-leave-active {
+		--toc-duration: 0.15s;
+
 		transition-property: opacity;
-		transition-duration: 0.15s;
 
 		:deep(.card-toc) {
 			transition: none;
@@ -313,10 +294,8 @@ $toc-easing: cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
 	.toc-slide-enter-from,
-	.toc-slide-leave-to {
-		:deep(.card-toc) {
-			transform: none;
-		}
+	.toc-slide-leave-to :deep(.card-toc) {
+		transform: none;
 	}
 }
 

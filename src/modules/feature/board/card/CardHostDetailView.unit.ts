@@ -271,6 +271,14 @@ describe("CardHostDetailView", () => {
 		const findTableOfContents = (wrapper: VueWrapper) => wrapper.findComponent({ name: "CardTableOfContents" });
 
 		describe("when it is closed", () => {
+			it("should not move focus to the current card when opened later", async () => {
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id });
+
+				await wrapper.setProps({ tableOfContentsOpen: true });
+
+				expect(findTableOfContents(wrapper).props("focusCurrentCard")).toBe(false);
+			});
+
 			it("should not render the table of contents", () => {
 				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id });
 
@@ -282,7 +290,7 @@ describe("CardHostDetailView", () => {
 
 				const toggle = wrapper.find(TOC_TOGGLE);
 				expect(toggle.attributes("aria-expanded")).toBe("false");
-				expect(toggle.attributes("aria-controls")).toBe("card-detail-view-toc");
+				expect(toggle.attributes("aria-controls")).toBeUndefined();
 			});
 
 			it("should request opening when the toggle is clicked", async () => {
@@ -305,7 +313,9 @@ describe("CardHostDetailView", () => {
 			it("should expose the expanded state on the toggle", () => {
 				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
 
-				expect(wrapper.find(TOC_TOGGLE).attributes("aria-expanded")).toBe("true");
+				const toggle = wrapper.find(TOC_TOGGLE);
+				expect(toggle.attributes("aria-expanded")).toBe("true");
+				expect(toggle.attributes("aria-controls")).toBe("card-detail-view-toc");
 			});
 
 			it("should request closing when the toggle is clicked", async () => {
@@ -314,6 +324,12 @@ describe("CardHostDetailView", () => {
 				await wrapper.find(TOC_TOGGLE).trigger("click");
 
 				expect(wrapper.emitted("update:tableOfContentsOpen")).toEqual([[false]]);
+			});
+
+			it("should move focus to the current card only when the panel was already open on mount", () => {
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+
+				expect(findTableOfContents(wrapper).props("focusCurrentCard")).toBe(true);
 			});
 
 			it("should hand the cards of the board and the elements of the card to the table of contents", () => {
@@ -355,6 +371,14 @@ describe("CardHostDetailView", () => {
 				await findTableOfContents(wrapper).vm.$emit("select:element", secondElement.id);
 
 				expect(scroller.scrollTo).toHaveBeenCalledWith({ top: 100 + 400 - 50 - 32, behavior: "smooth" });
+			});
+
+			it("should mark the selected element as active in the table of contents", async () => {
+				const { wrapper } = setupWithRenderedElements();
+
+				await findTableOfContents(wrapper).vm.$emit("select:element", secondElement.id);
+
+				expect(findTableOfContents(wrapper).props("activeElementId")).toBe(secondElement.id);
 			});
 
 			it("should move focus to the focusable content of the element", async () => {
