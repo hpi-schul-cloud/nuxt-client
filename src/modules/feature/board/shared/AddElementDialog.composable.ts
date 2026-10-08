@@ -1,4 +1,4 @@
-import { getContentElementTypeMeta } from "./content-element-type-meta";
+import { getContentElementTypeMeta, isContentElementTypeEnabled } from "./content-element-type-meta";
 import { ElementTypeSelectionOptions, useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { BoardFeature, ContentElementType, PreferredToolResponse } from "@api-server";
@@ -85,9 +85,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			},
 		];
 
-		const envConfig = useEnvConfig();
-
-		if (envConfig.value.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
+		if (isContentElementTypeEnabled(ContentElementType.EXTERNAL_TOOL)) {
 			options.push({
 				...elementTypeOption(ContentElementType.EXTERNAL_TOOL),
 				action: () => onElementClick(ContentElementType.EXTERNAL_TOOL),
@@ -95,7 +93,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			});
 		}
 
-		if (envConfig.value.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
+		if (isContentElementTypeEnabled(ContentElementType.LINK)) {
 			options.push({
 				...elementTypeOption(ContentElementType.LINK),
 				action: () => onElementClick(ContentElementType.LINK),
@@ -103,7 +101,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			});
 		}
 
-		if (envConfig.value.FEATURE_TLDRAW_ENABLED) {
+		if (isContentElementTypeEnabled(ContentElementType.DRAWING)) {
 			options.push({
 				...elementTypeOption(ContentElementType.DRAWING),
 				action: () => onElementClick(ContentElementType.DRAWING),
@@ -111,7 +109,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			});
 		}
 
-		if (envConfig.value.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED) {
+		if (isContentElementTypeEnabled(ContentElementType.COLLABORATIVE_TEXT_EDITOR)) {
 			options.push({
 				...elementTypeOption(ContentElementType.COLLABORATIVE_TEXT_EDITOR),
 				action: () => onElementClick(ContentElementType.COLLABORATIVE_TEXT_EDITOR),
@@ -120,7 +118,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		}
 
 		if (
-			envConfig.value.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED &&
+			isContentElementTypeEnabled(ContentElementType.VIDEO_CONFERENCE) &&
 			isVideoConferenceEnabled.value &&
 			allowedOperations.value.manageVideoConference
 		) {
@@ -131,7 +129,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			});
 		}
 
-		if (envConfig.value.FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED) {
+		if (isContentElementTypeEnabled(ContentElementType.FILE_FOLDER)) {
 			options.push({
 				...elementTypeOption(ContentElementType.FILE_FOLDER),
 				action: () => onElementClick(ContentElementType.FILE_FOLDER),
@@ -139,7 +137,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			});
 		}
 
-		if (envConfig.value.FEATURE_COLUMN_BOARD_H5P_ENABLED) {
+		if (isContentElementTypeEnabled(ContentElementType.H5P)) {
 			options.push({
 				...elementTypeOption(ContentElementType.H5P),
 				action: () => onElementClick(ContentElementType.H5P),
@@ -147,7 +145,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			});
 		}
 
-		if (envConfig.value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED) {
+		if (useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED) {
 			options.push({
 				icon: mdiFileDocumentOutline,
 				label: t("components.elementTypeSelection.elements.collabora.subtitle"),

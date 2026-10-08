@@ -5,8 +5,10 @@ import {
 	cardSkeletonResponseFactory,
 	collaborativeTextEditorElementResponseFactory,
 	columnResponseFactory,
+	createTestEnvStore,
 	deletedElementResponseFactory,
 	drawingElementResponseFactory,
+	externalToolElementResponseFactory,
 	fileElementResponseFactory,
 	fileFolderElementResponseFactory,
 	mockComposable,
@@ -16,15 +18,40 @@ import {
 import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { ConfigResponse } from "@api-server";
 import { useBoardStore, useCardStore } from "@data-board";
+import { useExternalToolReferenceApi } from "@data-external-tool";
 import { useFileStorageApi } from "@data-file";
 import { createTestingPinia } from "@pinia/testing";
+import { logger } from "@util-logger";
+import { flushPromises } from "@vue/test-utils";
 import { ref } from "vue";
 
 vi.mock("@data-file");
+vi.mock("@data-external-tool", async (importOriginal) => ({
+	...(await importOriginal<typeof import("@data-external-tool")>()),
+	useExternalToolReferenceApi: vi.fn(),
+}));
+
+const ALL_ELEMENT_FLAGS: Partial<ConfigResponse> = {
+	FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
+	FEATURE_TLDRAW_ENABLED: true,
+	FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
+	FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
+	FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
+	FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: true,
+	FEATURE_COLUMN_BOARD_H5P_ENABLED: true,
+};
 
 describe("cardTableOfContents.composable", () => {
-	const setup = (options: { currentCardId?: string; cards?: ReturnType<typeof cardResponseFactory.build>[] } = {}) => {
+	const setup = (
+		options: {
+			currentCardId?: string;
+			cards?: ReturnType<typeof cardResponseFactory.build>[];
+			isEnabled?: boolean;
+			flags?: Partial<ConfigResponse>;
+		} = {}
+	) => {
 		const cards = options.cards ?? [cardResponseFactory.build()];
 		const column = columnResponseFactory.build({
 			cards: cards.map((card) => cardSkeletonResponseFactory.build({ cardId: card.id })),
@@ -34,23 +61,38 @@ describe("cardTableOfContents.composable", () => {
 		const getFileRecordsByParentId = vi.fn().mockReturnValue([]);
 		vi.mocked(useFileStorageApi).mockReturnValue(mockComposable(useFileStorageApi, { getFileRecordsByParentId }));
 
+		const fetchDisplayDataCall = vi.fn().mockResolvedValue({ name: "Tool name" });
+		vi.mocked(useExternalToolReferenceApi).mockReturnValue(
+			mockComposable(useExternalToolReferenceApi, { fetchDisplayDataCall })
+		);
+
+		const pinia = createTestingPinia({
+			initialState: {
+				boardStore: { board },
+				cardStore: { cards: Object.fromEntries(cards.map((card) => [card.id, card])) },
+			},
+			stubActions: false,
+		});
+		createTestEnvStore({ ...ALL_ELEMENT_FLAGS, ...options.flags }, undefined, pinia);
+
 		const currentCardId = ref(options.currentCardId ?? cards[0].id);
-		const composable = mountComposable(() => useCardTableOfContents(currentCardId), {
+		const isEnabled = ref(options.isEnabled ?? true);
+		const composable = mountComposable(() => useCardTableOfContents(currentCardId, isEnabled), {
 			global: {
-				plugins: [
-					createTestingPinia({
-						initialState: {
-							boardStore: { board },
-							cardStore: { cards: Object.fromEntries(cards.map((card) => [card.id, card])) },
-						},
-						stubActions: false,
-					}),
-					createTestingI18n(),
-				],
+				plugins: [pinia, createTestingI18n()],
 			},
 		});
 
-		return { ...composable, board, column, cards, currentCardId, getFileRecordsByParentId };
+		return {
+			...composable,
+			board,
+			column,
+			cards,
+			currentCardId,
+			getFileRecordsByParentId,
+			fetchDisplayDataCall,
+			isEnabled,
+		};
 	};
 
 	const elementLabelOf = (element: Parameters<typeof cardResponseFactory.build>[0]) => {
@@ -110,6 +152,14 @@ describe("cardTableOfContents.composable", () => {
 			expect(sections.value[0].title).toBe("components.board.column.defaultTitle");
 		});
 
+		it("should omit columns without cards", () => {
+			const { sections, board } = setup();
+			board.columns.push(columnResponseFactory.build({ cards: [] }));
+			useBoardStore().board = board;
+
+			expect(sections.value).toHaveLength(1);
+		});
+
 		it("should be empty when no board is loaded", () => {
 			const { sections } = setup();
 			useBoardStore().board = undefined;
@@ -146,6 +196,15 @@ describe("cardTableOfContents.composable", () => {
 			expect(currentElements.value).toHaveLength(1);
 		});
 
+		it("should not list elements whose type is disabled by feature flag", () => {
+			const card = cardResponseFactory.build({
+				elements: [richTextElementResponseFactory.build(), linkElementResponseFactory.build()],
+			});
+			const { currentElements } = setup({ cards: [card], flags: { FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: false } });
+
+			expect(currentElements.value.map(({ id }) => id)).toEqual([card.elements[0].id]);
+		});
+
 		it("should be empty for an unknown card", () => {
 			const { currentElements, currentCardId } = setup();
 
@@ -169,13 +228,16 @@ describe("cardTableOfContents.composable", () => {
 				expect(elementLabelOf({ elements: [element] })).toHaveLength(80);
 			});
 
-			it("should fall back to the type name for empty text elements", () => {
-				const element = richTextElementResponseFactory.build();
-				element.content.text = "<p>&nbsp;</p>";
+			it("should leave out empty text elements", () => {
+				const emptyElement = richTextElementResponseFactory.build();
+				emptyElement.content.text = "<p>&nbsp;</p>";
+				const textElement = richTextElementResponseFactory.build();
+				textElement.content.text = "<p>Visible</p>";
+				const card = cardResponseFactory.build({ elements: [emptyElement, textElement] });
 
-				expect(elementLabelOf({ elements: [element] })).toBe(
-					"components.elementTypeSelection.elements.textElement.subtitle"
-				);
+				const { currentElements } = setup({ cards: [card] });
+
+				expect(currentElements.value.map(({ id }) => id)).toEqual([textElement.id]);
 			});
 
 			it("should not execute markup of text elements", () => {
@@ -213,9 +275,7 @@ describe("cardTableOfContents.composable", () => {
 				element.content.url = "";
 				element.content.title = "";
 
-				expect(elementLabelOf({ elements: [element] })).toBe(
-					"components.elementTypeSelection.elements.linkElement.subtitle"
-				);
+				expect(elementLabelOf({ elements: [element] })).toBe("components.cardElement.LinkElement");
 			});
 
 			it.each([
@@ -233,9 +293,7 @@ describe("cardTableOfContents.composable", () => {
 				const element = videoConferenceElementResponseFactory.build();
 				element.content.title = "";
 
-				expect(elementLabelOf({ elements: [element] })).toBe(
-					"components.elementTypeSelection.elements.videoConferenceElement.subtitle"
-				);
+				expect(elementLabelOf({ elements: [element] })).toBe("components.cardElement.videoConferenceElement");
 			});
 
 			it("should use the file name for file elements", () => {
@@ -256,12 +314,88 @@ describe("cardTableOfContents.composable", () => {
 				expect(elementLabelOf({ elements: [element] })).toBe("A caption");
 			});
 
+			describe("external tool elements", () => {
+				const buildToolCard = (contextExternalToolId: string | null) => {
+					const element = externalToolElementResponseFactory.build();
+					element.content.contextExternalToolId = contextExternalToolId;
+
+					return cardResponseFactory.build({ elements: [element] });
+				};
+
+				it("should use the name of the tool", async () => {
+					const { currentElements } = setup({ cards: [buildToolCard("tool-1")] });
+					await flushPromises();
+
+					expect(currentElements.value[0].label).toBe("Tool name");
+				});
+
+				it("should neither request tool names nor list elements while the table of contents is closed", async () => {
+					const { fetchDisplayDataCall, currentElements } = setup({
+						cards: [buildToolCard("tool-1")],
+						isEnabled: false,
+					});
+					await flushPromises();
+
+					expect(fetchDisplayDataCall).not.toHaveBeenCalled();
+					expect(currentElements.value).toEqual([]);
+				});
+
+				it("should request the tool name once the table of contents gets opened", async () => {
+					const { fetchDisplayDataCall, currentElements, isEnabled } = setup({
+						cards: [buildToolCard("tool-1")],
+						isEnabled: false,
+					});
+
+					isEnabled.value = true;
+					await flushPromises();
+
+					expect(fetchDisplayDataCall).toHaveBeenCalledWith("tool-1");
+					expect(currentElements.value[0].label).toBe("Tool name");
+				});
+
+				it("should request every tool only once", async () => {
+					const { fetchDisplayDataCall, isEnabled } = setup({ cards: [buildToolCard("tool-1")] });
+					await flushPromises();
+
+					isEnabled.value = false;
+					await flushPromises();
+					isEnabled.value = true;
+					await flushPromises();
+
+					expect(fetchDisplayDataCall).toHaveBeenCalledTimes(1);
+				});
+
+				it("should not request a name for a tool element without tool", async () => {
+					const { fetchDisplayDataCall, currentElements } = setup({ cards: [buildToolCard(null)] });
+					await flushPromises();
+
+					expect(fetchDisplayDataCall).not.toHaveBeenCalled();
+					expect(currentElements.value[0].label).toBe("components.cardElement.externalToolElement");
+				});
+
+				it("should fall back to the type name when the request fails", async () => {
+					const warn = vi.spyOn(logger, "warn").mockImplementation(() => undefined);
+					const { currentElements, fetchDisplayDataCall, isEnabled } = setup({
+						cards: [buildToolCard("tool-1")],
+						isEnabled: false,
+					});
+					fetchDisplayDataCall.mockRejectedValue(new Error("not available"));
+
+					isEnabled.value = true;
+					await flushPromises();
+
+					expect(currentElements.value[0].label).toBe("components.cardElement.externalToolElement");
+					expect(warn).toHaveBeenCalled();
+					warn.mockRestore();
+				});
+			});
+
 			it("should use the type name for elements without title", () => {
 				expect(elementLabelOf({ elements: [drawingElementResponseFactory.build()] })).toBe(
 					"components.cardElement.drawingElement"
 				);
 				expect(elementLabelOf({ elements: [collaborativeTextEditorElementResponseFactory.build()] })).toBe(
-					"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle"
+					"components.cardElement.collaborativeTextEditorElement"
 				);
 			});
 		});
