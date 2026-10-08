@@ -4,6 +4,7 @@
 			<CardHostDetailView
 				v-if="cardId"
 				:key="cardId"
+				v-model:table-of-contents-open="isTableOfContentsOpen"
 				:card-id="cardId"
 				:previous-card-route="previousCardRoute"
 				:next-card-route="nextCardRoute"
@@ -531,7 +532,10 @@ const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
 	cardStore.createFileElementWithCollabora(payload.type, payload.fileName);
 };
 
+const isTableOfContentsOpen = ref(false);
+
 const onCloseDetailView = () => {
+	isTableOfContentsOpen.value = false;
 	router.replace({
 		name: "boards-id",
 		params: { id: props.boardId },

@@ -1,88 +1,107 @@
 <template>
-	<VDialog
-		:model-value="isOpen"
-		fullscreen
-		scrollable
-		scrim="transparent"
-		:transition="false"
-		@keydown.escape="onDialogClose"
-	>
-		<VToolbar id="card-detail-view-toolbar" class="toolbar border-b-thin">
-			<VBtn
-				:icon="mdiClose"
-				data-testid="close-detail-view-button"
-				:aria-label="t('common.labels.close')"
-				@click="onDialogClose"
-			/>
-			<VToolbarTitle>{{ $t("components.board.dialog.detail-view.title") }}</VToolbarTitle>
-			<VBtn
-				:icon="mdiChevronLeft"
-				data-testid="prev-detail-view-button"
-				:aria-label="t('components.board.action.prev-detail-view')"
-				:to="previousCardRoute"
-				:disabled="!previousCardRoute"
-			/>
-			<VBtn
-				:icon="mdiChevronRight"
-				data-testid="next-detail-view-button"
-				:aria-label="t('components.board.action.next-detail-view')"
-				:to="nextCardRoute"
-				:disabled="!nextCardRoute"
-			/>
-			<VSpacer />
-			<VBtn
-				v-if="allowedOperations?.deleteCard && !isEditMode"
-				class="mr-4 keep-inline-edit-mode"
-				data-testid="toolbar-edit-button"
-				variant="flat"
-				color="primary"
-				@click="startEditMode"
-			>
-				{{ $t("common.actions.edit") }}
-			</VBtn>
-			<VBtn
-				v-if="allowedOperations?.deleteCard && isEditMode"
-				class="mr-4 keep-inline-edit-mode"
-				data-testid="toolbar-view-button"
-				variant="flat"
-				color="primary"
-				@click="stopEditMode"
-			>
-				{{ $t("common.actions.view") }}
-			</VBtn>
-		</VToolbar>
-		<VCard :style="{ backgroundColor: cardBackground }">
-			<VCardText>
-				<div
-					class="detail-view-size w-100 mx-auto elevation-3 rounded-lg mt-4"
-					:style="{
-						backgroundColor: 'white',
-						borderLeft: cardBorderColor ? `3px solid ${cardBorderColor}` : undefined,
-					}"
+	<VDialog :model-value="isOpen" fullscreen scrim="transparent" :transition="false" @keydown.escape="onDialogClose">
+		<div class="detail-view" :style="{ backgroundColor: cardBackground }">
+			<VToolbar id="card-detail-view-toolbar" class="border-b-thin">
+				<VBtn
+					:icon="mdiClose"
+					data-testid="close-detail-view-button"
+					:aria-label="t('common.labels.close')"
+					@click="onDialogClose"
+				/>
+				<VBtn
+					:icon="mdiFormatListBulleted"
+					data-testid="toggle-table-of-contents-button"
+					:aria-label="t('components.board.dialog.detail-view.tableOfContents.toggle')"
+					:aria-expanded="isTableOfContentsOpen"
+					aria-controls="card-detail-view-toc"
+					:variant="isTableOfContentsOpen ? 'tonal' : 'text'"
+					@click="isTableOfContentsOpen = !isTableOfContentsOpen"
+				/>
+				<VToolbarTitle>{{ $t("components.board.dialog.detail-view.title") }}</VToolbarTitle>
+				<VBtn
+					:icon="mdiChevronLeft"
+					data-testid="prev-detail-view-button"
+					:aria-label="t('components.board.action.prev-detail-view')"
+					:to="previousCardRoute"
+					:disabled="!previousCardRoute"
+				/>
+				<VBtn
+					:icon="mdiChevronRight"
+					data-testid="next-detail-view-button"
+					:aria-label="t('components.board.action.next-detail-view')"
+					:to="nextCardRoute"
+					:disabled="!nextCardRoute"
+				/>
+				<VSpacer />
+				<VBtn
+					v-if="allowedOperations?.deleteCard && !isEditMode"
+					class="mr-4 keep-inline-edit-mode"
+					data-testid="toolbar-edit-button"
+					variant="flat"
+					color="primary"
+					@click="startEditMode"
 				>
-					<CardHost
-						:height="100"
-						:card-id="cardId"
-						:row-index="-1"
-						:column-index="-1"
-						:focus-title-on-edit-start="true"
-						@click.stop
-					/>
+					{{ $t("common.actions.edit") }}
+				</VBtn>
+				<VBtn
+					v-if="allowedOperations?.deleteCard && isEditMode"
+					class="mr-4 keep-inline-edit-mode"
+					data-testid="toolbar-view-button"
+					variant="flat"
+					color="primary"
+					@click="stopEditMode"
+				>
+					{{ $t("common.actions.view") }}
+				</VBtn>
+			</VToolbar>
+			<div class="detail-view__body">
+				<Transition name="toc-slide">
+					<aside v-if="isTableOfContentsOpen" id="card-detail-view-toc" class="toc-panel">
+						<CardTableOfContents
+							:sections="sections"
+							:elements="currentElements"
+							:active-element-id="activeElementId"
+							@select:element="onSelectElement"
+							@select:card="onSelectCard"
+						/>
+					</aside>
+				</Transition>
+				<div ref="scroller" class="detail-view__scroller">
+					<div
+						class="detail-view-size w-100 mx-auto elevation-3 rounded-lg mt-4"
+						:style="{
+							backgroundColor: 'white',
+							borderLeft: cardBorderColor ? `3px solid ${cardBorderColor}` : undefined,
+						}"
+					>
+						<CardHost
+							:height="100"
+							:card-id="cardId"
+							:row-index="-1"
+							:column-index="-1"
+							:focus-title-on-edit-start="true"
+							@click.stop
+						/>
+					</div>
 				</div>
-			</VCardText>
-		</VCard>
+			</div>
+		</div>
 	</VDialog>
 </template>
 
 <script setup lang="ts">
+import { useActiveCardElement } from "./activeCardElement.composable";
 import CardHost from "./CardHost.vue";
+import { useCardTableOfContents } from "./cardTableOfContents.composable";
+import CardTableOfContents from "./CardTableOfContents.vue";
 import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { Colors } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
-import { mdiChevronLeft, mdiChevronRight, mdiClose } from "@icons/material";
-import { computed, ref, toRef, watchEffect } from "vue";
+import { mdiChevronLeft, mdiChevronRight, mdiClose, mdiFormatListBulleted } from "@icons/material";
+import { computed, ref, toRef, useTemplateRef, watch, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import type { RouteLocationRaw } from "vue-router";
+import { useDisplay } from "vuetify";
 
 const props = defineProps<{
 	cardId: string;
@@ -95,7 +114,16 @@ const emit = defineEmits<{
 	(e: "close:detail-view"): void;
 }>();
 
+const SCROLL_TARGET_GAP_PX = 32;
+
+const isTableOfContentsOpen = defineModel<boolean>("tableOfContentsOpen", { default: false });
+
 const { t } = useI18n();
+const { smAndDown: isSmallScreen } = useDisplay();
+const { sections, currentElements } = useCardTableOfContents(cardRef);
+const scroller = useTemplateRef<HTMLElement>("scroller");
+const { activeElementId, refresh: refreshActiveElement } = useActiveCardElement(scroller, isTableOfContentsOpen);
+watch(currentElements, refreshActiveElement, { flush: "post" });
 
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardRef.value);
 const { allowedOperations } = useBoardAllowedOperations();
@@ -132,6 +160,44 @@ const cardBorderColor = computed(() => {
 	return colorToHexLighten3(color);
 });
 
+const FOCUSABLE_SELECTOR = "a[href], button, input, textarea, select, [tabindex]:not([tabindex='-1'])";
+
+const focusElement = (wrapper: HTMLElement) => {
+	const focusTarget = wrapper.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+	if (focusTarget) {
+		focusTarget.focus({ preventScroll: true });
+		return;
+	}
+
+	wrapper.tabIndex = -1;
+	wrapper.focus({ preventScroll: true });
+};
+
+const onSelectElement = (elementId: string) => {
+	const container = scroller.value;
+	const target = Array.from(container?.querySelectorAll<HTMLElement>("[data-element-id]") ?? []).find(
+		(element) => element.dataset.elementId === elementId
+	);
+	if (!container || !target) return;
+
+	const isFirstElement = currentElements.value[0]?.id === elementId;
+	const top = isFirstElement
+		? 0
+		: container.scrollTop +
+			target.getBoundingClientRect().top -
+			container.getBoundingClientRect().top -
+			SCROLL_TARGET_GAP_PX;
+	const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+	container.scrollTo({ top: Math.max(0, top), behavior: prefersReducedMotion ? "auto" : "smooth" });
+	focusElement(target);
+
+	if (isSmallScreen.value) isTableOfContentsOpen.value = false;
+};
+
+const onSelectCard = () => {
+	if (isSmallScreen.value) isTableOfContentsOpen.value = false;
+};
+
 const onDialogClose = () => {
 	isOpen.value = false;
 	emit("close:detail-view");
@@ -147,14 +213,111 @@ const onDialogClose = () => {
 	min-width: 17rem;
 }
 
-.toolbar {
-	position: absolute;
-	width: 100%;
-	z-index: 2001;
+.detail-view {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 }
 
-.v-card {
-	padding-top: 64px;
+.detail-view__body {
+	display: flex;
+	flex: 1;
+	min-height: 0;
+}
+
+.detail-view__scroller {
+	flex: 1;
+	min-width: 0;
+	padding: 1rem;
+	overflow-y: auto;
+}
+
+$toc-duration: 0.32s;
+$toc-easing: cubic-bezier(0.16, 1, 0.3, 1);
+
+.toc-panel {
+	display: flex;
+	flex: none;
+	flex-direction: column;
+	width: 18rem;
+	overflow: hidden;
+	border-inline-end: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
+.toc-slide-enter-active,
+.toc-slide-leave-active {
+	transition:
+		width $toc-duration $toc-easing,
+		opacity $toc-duration $toc-easing;
+
+	:deep(.card-toc) {
+		transition: transform $toc-duration $toc-easing;
+	}
+}
+
+.toc-slide-leave-active {
+	transition-duration: 0.2s;
+
+	:deep(.card-toc) {
+		transition-duration: 0.2s;
+	}
+}
+
+.toc-slide-enter-from,
+.toc-slide-leave-to {
+	width: 0;
+	opacity: 0;
+
+	:deep(.card-toc) {
+		transform: translateX(-2rem);
+	}
+}
+
+@media (max-width: 959.98px) {
+	.detail-view__body {
+		flex-direction: column;
+	}
+
+	.toc-panel {
+		width: 100%;
+		max-height: 40vh;
+		border-inline-end: 0;
+		border-block-end: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+	}
+
+	.toc-slide-enter-active,
+	.toc-slide-leave-active {
+		transition-property: max-height, opacity;
+	}
+
+	.toc-slide-enter-from,
+	.toc-slide-leave-to {
+		width: 100%;
+		max-height: 0;
+
+		:deep(.card-toc) {
+			transform: translateY(-1rem);
+		}
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.toc-slide-enter-active,
+	.toc-slide-leave-active {
+		transition-property: opacity;
+		transition-duration: 0.15s;
+
+		:deep(.card-toc) {
+			transition: none;
+		}
+	}
+
+	.toc-slide-enter-from,
+	.toc-slide-leave-to {
+		:deep(.card-toc) {
+			transform: none;
+		}
+	}
 }
 
 .v-dialog {

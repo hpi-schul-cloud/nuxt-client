@@ -1,7 +1,7 @@
 <template>
 	<VCardText class="mb-n4">
 		<template v-for="(element, index) in elements" :key="element.id">
-			<div :data-testid="`board-contentelement-${columnIndex}-${rowIndex}-${index}`">
+			<div :data-testid="`board-contentelement-${columnIndex}-${rowIndex}-${index}`" :data-element-id="element.id">
 				<component
 					:is="mapToComponent(element.type)"
 					:id="element.id"
