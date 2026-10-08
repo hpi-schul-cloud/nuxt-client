@@ -1,11 +1,26 @@
 import UserLoginMigrationSuccessPage from "./UserLoginMigrationSuccess.page.vue";
+import { DebouncedLoadingState } from "@/types/loading.types";
+import { mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useSystem } from "@data-access";
 import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import type { Mocked } from "vitest";
+import { computed, ref } from "vue";
+
+vi.mock("@data-access");
 
 describe("UserLoginMigrationSuccess", () => {
+	let useSystemMock: Mocked<ReturnType<typeof useSystem>>;
+
 	const setup = (props: { targetSystemId: string }) => {
+		useSystemMock = mockComposable(useSystem, {
+			systemName: computed(() => "Target System"),
+			loadingState: ref<DebouncedLoadingState>("loaded"),
+		});
+		vi.mocked(useSystem).mockReturnValue(useSystemMock);
+
 		const wrapper = shallowMount(UserLoginMigrationSuccessPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
