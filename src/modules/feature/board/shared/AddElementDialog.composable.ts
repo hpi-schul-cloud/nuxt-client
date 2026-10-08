@@ -1,3 +1,4 @@
+import { getContentElementTypeMeta } from "./content-element-type-meta";
 import { ElementTypeSelectionOptions, useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { BoardFeature, ContentElementType, PreferredToolResponse } from "@api-server";
@@ -10,17 +11,7 @@ import {
 } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { useAddCollaboraFile } from "@feature-collabora";
-import {
-	mdiFileDocumentOutline,
-	mdiFolderOpenOutline,
-	mdiFormatText,
-	mdiLink,
-	mdiPresentation,
-	mdiPuzzleOutline,
-	mdiTextBoxEditOutline,
-	mdiTrayArrowUp,
-	mdiVideoOutline,
-} from "@icons/material";
+import { mdiFileDocumentOutline } from "@icons/material";
 import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -75,17 +66,20 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		}
 	};
 
+	const elementTypeOption = (type: ContentElementType) => {
+		const { icon, labelKey } = getContentElementTypeMeta(type);
+		return { icon, label: t(labelKey) };
+	};
+
 	const getStaticElementOptions = (): ElementTypeSelectionOptions[] => {
 		const options: ElementTypeSelectionOptions[] = [
 			{
-				icon: mdiFormatText,
-				label: t("components.elementTypeSelection.elements.textElement.subtitle"),
+				...elementTypeOption(ContentElementType.RICH_TEXT),
 				action: () => onElementClick(ContentElementType.RICH_TEXT),
 				testId: "create-element-text",
 			},
 			{
-				icon: mdiTrayArrowUp,
-				label: t("components.elementTypeSelection.elements.fileElement.subtitle"),
+				...elementTypeOption(ContentElementType.FILE),
 				action: () => onElementClick(ContentElementType.FILE),
 				testId: "create-element-file",
 			},
@@ -95,8 +89,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 		if (envConfig.value.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
 			options.push({
-				icon: mdiPuzzleOutline,
-				label: t("components.elementTypeSelection.elements.externalToolElement.subtitle"),
+				...elementTypeOption(ContentElementType.EXTERNAL_TOOL),
 				action: () => onElementClick(ContentElementType.EXTERNAL_TOOL),
 				testId: "create-element-external-tool-container",
 			});
@@ -104,8 +97,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 		if (envConfig.value.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
 			options.push({
-				icon: mdiLink,
-				label: t("components.elementTypeSelection.elements.linkElement.subtitle"),
+				...elementTypeOption(ContentElementType.LINK),
 				action: () => onElementClick(ContentElementType.LINK),
 				testId: "create-element-link",
 			});
@@ -113,8 +105,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 		if (envConfig.value.FEATURE_TLDRAW_ENABLED) {
 			options.push({
-				icon: mdiPresentation,
-				label: t("components.cardElement.drawingElement"),
+				...elementTypeOption(ContentElementType.DRAWING),
 				action: () => onElementClick(ContentElementType.DRAWING),
 				testId: "create-element-drawing-element",
 			});
@@ -122,8 +113,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 		if (envConfig.value.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED) {
 			options.push({
-				icon: mdiTextBoxEditOutline,
-				label: t("components.elementTypeSelection.elements.collaborativeTextEditor.subtitle"),
+				...elementTypeOption(ContentElementType.COLLABORATIVE_TEXT_EDITOR),
 				action: () => onElementClick(ContentElementType.COLLABORATIVE_TEXT_EDITOR),
 				testId: "create-element-collaborative-text-editor",
 			});
@@ -135,8 +125,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			allowedOperations.value.manageVideoConference
 		) {
 			options.push({
-				icon: mdiVideoOutline,
-				label: t("components.elementTypeSelection.elements.videoConferenceElement.subtitle"),
+				...elementTypeOption(ContentElementType.VIDEO_CONFERENCE),
 				action: () => onElementClick(ContentElementType.VIDEO_CONFERENCE),
 				testId: "create-element-video-conference",
 			});
@@ -144,8 +133,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 		if (envConfig.value.FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED) {
 			options.push({
-				icon: mdiFolderOpenOutline,
-				label: t("components.elementTypeSelection.elements.folderElement.subtitle"),
+				...elementTypeOption(ContentElementType.FILE_FOLDER),
 				action: () => onElementClick(ContentElementType.FILE_FOLDER),
 				testId: "create-element-file-folder",
 			});
@@ -153,8 +141,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 		if (envConfig.value.FEATURE_COLUMN_BOARD_H5P_ENABLED) {
 			options.push({
-				icon: "$h5pOutline",
-				label: t("components.elementTypeSelection.elements.h5pElement.subtitle"),
+				...elementTypeOption(ContentElementType.H5P),
 				action: () => onElementClick(ContentElementType.H5P),
 				testId: "create-element-h5p",
 			});
