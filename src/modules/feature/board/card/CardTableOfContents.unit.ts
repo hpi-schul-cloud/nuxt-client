@@ -2,10 +2,11 @@ import type { TableOfContentsElement, TableOfContentsSection } from "./cardTable
 import CardTableOfContents from "./CardTableOfContents.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mdiLink } from "@icons/material";
+import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 describe("CardTableOfContents", () => {
-	const setup = (elements?: TableOfContentsElement[], activeElementId?: string) => {
+	const setup = (elements?: TableOfContentsElement[], activeElementId?: string, focusCurrentCard = false) => {
 		const router = createRouterMock({ spy: { create: (fn) => vi.fn(fn), reset: (fn) => fn.mockReset() } });
 		injectRouterMock(router);
 
@@ -29,6 +30,7 @@ describe("CardTableOfContents", () => {
 			props: {
 				sections,
 				activeElementId,
+				focusCurrentCard,
 				elements: elements ?? [
 					{ id: "element-1", icon: mdiLink, label: "example.org" },
 					{ id: "element-2", icon: mdiLink, label: "Second element" },
@@ -44,8 +46,9 @@ describe("CardTableOfContents", () => {
 		const { wrapper } = setup();
 
 		const nav = wrapper.find("nav[data-testid='card-toc']");
-		expect(nav.attributes("aria-label")).toBe("components.board.dialog.detail-view.tableOfContents.title");
-		expect(nav.find("h2").text()).toBe("components.board.dialog.detail-view.tableOfContents.title");
+		const heading = nav.find("h2");
+		expect(heading.text()).toBe("components.board.dialog.detail-view.tableOfContents.title");
+		expect(nav.attributes("aria-labelledby")).toBe(heading.attributes("id"));
 	});
 
 	it("should render a heading for every column", () => {
@@ -94,12 +97,63 @@ describe("CardTableOfContents", () => {
 		expect(element.attributes("title")).toBe("example.org");
 	});
 
+	describe("when the current card should be focused", () => {
+		it("should focus the entry of the current card without scrolling the page", () => {
+			const focus = vi.spyOn(HTMLElement.prototype, "focus").mockImplementation(() => undefined);
+			const { wrapper } = setup(undefined, undefined, true);
+
+			expect(focus).toHaveBeenCalledTimes(1);
+			expect(focus.mock.contexts[0]).toBe(wrapper.find("[data-testid='card-toc-card-card-1']").element);
+			expect(focus).toHaveBeenCalledWith({ preventScroll: true });
+			focus.mockRestore();
+		});
+	});
+
+	describe("when the current card should not be focused", () => {
+		it("should leave focus untouched", () => {
+			const focus = vi.spyOn(HTMLElement.prototype, "focus").mockImplementation(() => undefined);
+			setup();
+
+			expect(focus).not.toHaveBeenCalled();
+			focus.mockRestore();
+		});
+	});
+
 	describe("when an element is active", () => {
 		it("should mark only that element as current location", () => {
 			const { wrapper } = setup(undefined, "element-2");
 
 			expect(wrapper.find("[data-testid='card-toc-element-element-2']").attributes("aria-current")).toBe("location");
 			expect(wrapper.find("[data-testid='card-toc-element-element-1']").attributes("aria-current")).toBeUndefined();
+		});
+
+		it("should show the marker without sliding on first placement", async () => {
+			const { wrapper } = setup(undefined, "element-2");
+			await nextTick();
+
+			const marker = wrapper.find("[data-testid='active-element-marker']");
+			expect(marker.classes()).toContain("card-toc__marker--visible");
+			expect(marker.classes()).not.toContain("card-toc__marker--sliding");
+		});
+
+		it("should slide the marker when another element becomes active", async () => {
+			const { wrapper } = setup(undefined, "element-1");
+
+			await wrapper.setProps({ activeElementId: "element-2" });
+
+			const marker = wrapper.find("[data-testid='active-element-marker']");
+			expect(marker.classes()).toContain("card-toc__marker--visible");
+			expect(marker.classes()).toContain("card-toc__marker--sliding");
+		});
+	});
+
+	describe("when no element is active", () => {
+		it("should hide the marker", () => {
+			const { wrapper } = setup();
+
+			expect(wrapper.find("[data-testid='active-element-marker']").classes()).not.toContain(
+				"card-toc__marker--visible"
+			);
 		});
 	});
 
