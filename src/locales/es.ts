@@ -482,8 +482,7 @@ export default {
 	"components.board.dialog.readerCanEdit.alert.text":
 		"El tablero debe publicarse primero antes de que se puedan ajustar los ajustes de edición.",
 	"components.board.dialog.detail-view.title": "Vista detallada",
-	"components.board.dialog.detail-view.tableOfContents.toggle": "Mostrar u ocultar el índice",
-	"components.board.dialog.detail-view.tableOfContents.title": "Índice",
+	"components.board.dialog.detail-view.tableOfContents.title": "Resumen",
 	"components.board.dialog.detail-view.tableOfContents.empty": "Esta tarjeta aún no tiene contenido",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",

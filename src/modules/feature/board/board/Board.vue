@@ -533,9 +533,11 @@ const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
 };
 
 const isTableOfContentsOpen = ref(false);
+watch(cardId, (newCardId) => {
+	if (!newCardId) isTableOfContentsOpen.value = false;
+});
 
 const onCloseDetailView = () => {
-	isTableOfContentsOpen.value = false;
 	router.replace({
 		name: "boards-id",
 		params: { id: props.boardId },

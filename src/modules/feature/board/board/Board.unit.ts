@@ -1426,10 +1426,13 @@ describe("Board", () => {
 			});
 
 			it("should be closed again after the detail view was left", async () => {
-				const { detailView } = setupDetailView();
+				const { wrapper, detailView } = setupDetailView();
 				await detailView().vm.$emit("update:tableOfContentsOpen", true);
 
-				await detailView().vm.$emit("close:detail-view");
+				router.currentRoute.value = { ...router.currentRoute.value, params: {} };
+				await wrapper.vm.$nextTick();
+				router.currentRoute.value = { ...router.currentRoute.value, params: { cardId: "test-card-id-123" } };
+				await wrapper.vm.$nextTick();
 
 				expect(detailView().props("tableOfContentsOpen")).toBe(false);
 			});

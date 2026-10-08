@@ -484,8 +484,7 @@ export default {
 	"components.board.dialog.readerCanEdit.alert.text":
 		"Дошка спочатку повинна бути опублікована, перш ніж можна буде налаштувати параметри редагування.",
 	"components.board.dialog.detail-view.title": "Детальний вигляд",
-	"components.board.dialog.detail-view.tableOfContents.toggle": "Показати або сховати зміст",
-	"components.board.dialog.detail-view.tableOfContents.title": "Зміст",
+	"components.board.dialog.detail-view.tableOfContents.title": "Огляд",
 	"components.board.dialog.detail-view.tableOfContents.empty": "Ця картка ще не має вмісту",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
