@@ -6,6 +6,7 @@ import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi
 import {
 	boardResponseFactory,
 	cardResponseFactory,
+	createTestEnvStore,
 	fileElementResponseFactory,
 	mockComposable,
 } from "@@/tests/test-utils";
@@ -61,7 +62,8 @@ describe("CardHostDetailView", () => {
 	const setup = (
 		props: ComponentProps<typeof CardHostDetailView>,
 		allowedOperations?: Partial<BoardResponseAllowedOperations>,
-		editMode?: boolean
+		editMode?: boolean,
+		isTableOfContentsEnabled = true
 	) => {
 		const testBoard = allowedOperations
 			? boardResponseFactory.build({ allowedOperations })
@@ -83,25 +85,24 @@ describe("CardHostDetailView", () => {
 		});
 		mockedUseSharedEditMode.mockReturnValue(mockedSharedEditMode);
 
+		const pinia = createTestingPinia({
+			initialState: {
+				cardStore: {
+					cards: {
+						[CARD_WITH_ELEMENTS.id]: CARD_WITH_ELEMENTS,
+					},
+				},
+				boardStore: {
+					board: testBoard,
+				},
+			},
+			stubActions: false,
+		});
+		createTestEnvStore({ FEATURE_COLUMN_BOARD_TABLE_OF_CONTENTS_ENABLED: isTableOfContentsEnabled }, undefined, pinia);
+
 		const wrapper = shallowMount(CardHostDetailView, {
 			global: {
-				plugins: [
-					createTestingPinia({
-						initialState: {
-							cardStore: {
-								cards: {
-									[CARD_WITH_ELEMENTS.id]: CARD_WITH_ELEMENTS,
-								},
-							},
-							boardStore: {
-								board: testBoard,
-							},
-						},
-						stubActions: false,
-					}),
-					createTestingVuetify(),
-					createTestingI18n(),
-				],
+				plugins: [pinia, createTestingVuetify(), createTestingI18n()],
 			},
 			propsData: props,
 			attachTo: document.body,
@@ -269,6 +270,25 @@ describe("CardHostDetailView", () => {
 		const TOC_TOGGLE = "[data-testid='toggle-table-of-contents-button']";
 
 		const findTableOfContents = (wrapper: VueWrapper) => wrapper.findComponent({ name: "CardTableOfContents" });
+
+		describe("when the feature is disabled", () => {
+			it("should not render the toggle", () => {
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id }, undefined, undefined, false);
+
+				expect(wrapper.find(TOC_TOGGLE).exists()).toBe(false);
+			});
+
+			it("should not render the table of contents even if requested open", () => {
+				const { wrapper } = setup(
+					{ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true },
+					undefined,
+					undefined,
+					false
+				);
+
+				expect(findTableOfContents(wrapper).exists()).toBe(false);
+			});
+		});
 
 		describe("when it is closed", () => {
 			it("should not move focus to the current card when opened later", async () => {

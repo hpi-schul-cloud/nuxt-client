@@ -9,6 +9,7 @@
 					@click="onDialogClose"
 				/>
 				<VBtn
+					v-if="isTableOfContentsEnabled"
 					:icon="mdiFormatListBulleted"
 					data-testid="toggle-table-of-contents-button"
 					:aria-label="t('components.board.dialog.detail-view.tableOfContents.title')"
@@ -56,7 +57,7 @@
 			</VToolbar>
 			<div class="detail-view__body">
 				<Transition name="toc-slide">
-					<div v-if="isTableOfContentsOpen" id="card-detail-view-toc" class="toc-panel">
+					<div v-if="isTableOfContentsShown" id="card-detail-view-toc" class="toc-panel">
 						<CardTableOfContents
 							:sections="sections"
 							:elements="currentElements"
@@ -99,6 +100,7 @@ import { scrollToCardElement } from "./scrollToCardElement";
 import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { Colors } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
+import { useEnvConfig } from "@data-env";
 import { mdiChevronLeft, mdiChevronRight, mdiClose, mdiFormatListBulleted } from "@icons/material";
 import { computed, ref, toRef, useTemplateRef, watch, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
@@ -117,12 +119,14 @@ const emit = defineEmits<{
 }>();
 
 const isTableOfContentsOpen = defineModel<boolean>("tableOfContentsOpen", { default: false });
+const isTableOfContentsEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_TABLE_OF_CONTENTS_ENABLED);
+const isTableOfContentsShown = computed(() => isTableOfContentsEnabled.value && isTableOfContentsOpen.value);
 // The view remounts per card, so an already open panel means the user just switched cards.
-const wasTableOfContentsOpenOnMount = isTableOfContentsOpen.value;
+const wasTableOfContentsOpenOnMount = isTableOfContentsShown.value;
 
 const { t } = useI18n();
 const { smAndDown: isSmallScreen } = useDisplay();
-const { sections, currentElements } = useCardTableOfContents(cardRef, isTableOfContentsOpen);
+const { sections, currentElements } = useCardTableOfContents(cardRef, isTableOfContentsShown);
 const scroller = useTemplateRef<HTMLElement>("scroller");
 const {
 	activeElementId,
@@ -130,7 +134,7 @@ const {
 	select: selectActiveElement,
 } = useActiveCardElement(
 	scroller,
-	isTableOfContentsOpen,
+	isTableOfContentsShown,
 	computed(() => currentElements.value.map(({ id }) => id))
 );
 watch(currentElements, refreshActiveElement, { flush: "post" });
