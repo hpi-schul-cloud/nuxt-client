@@ -351,8 +351,8 @@ describe("news composable", () => {
 
 		it("should keep creator undefined when loaded news has no creator", async () => {
 			const newsId = ref("news-1");
-			const mockedNews = newsResponseFactory.build() as serverApi.NewsResponse;
-			mockedNews.creator = undefined as never;
+			const mockedNews = newsResponseFactory.build();
+			mockedNews.creator = undefined;
 			newsApiMock.newsControllerFindOne.mockResolvedValueOnce(mockApiResponse({ data: mockedNews }));
 
 			const { creator, newsInstance } = useNews(newsId);
