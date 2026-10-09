@@ -110,7 +110,7 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 	});
 
 	const creator = computed(() => {
-		if (!newsInstance.value) return undefined;
+		if (!newsInstance.value || !newsInstance.value.creator) return undefined;
 		return `${newsInstance.value.creator?.firstName} ${newsInstance.value.creator.lastName}`;
 	});
 

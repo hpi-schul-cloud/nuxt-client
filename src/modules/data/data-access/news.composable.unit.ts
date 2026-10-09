@@ -349,6 +349,19 @@ describe("news composable", () => {
 			expect(dateTimeUtils.fromNowUtc).toHaveBeenCalledWith(displayAt);
 		});
 
+		it("should keep creator undefined when loaded news has no creator", async () => {
+			const newsId = ref("news-1");
+			const mockedNews = newsResponseFactory.build() as serverApi.NewsResponse;
+			mockedNews.creator = undefined as never;
+			newsApiMock.newsControllerFindOne.mockResolvedValueOnce(mockApiResponse({ data: mockedNews }));
+
+			const { creator, newsInstance } = useNews(newsId);
+			await flushPromises();
+
+			expect(newsInstance.value).toEqual(mockedNews);
+			expect(creator.value).toBeUndefined();
+		});
+
 		it("should keep formatted dates undefined when displayAt is missing", async () => {
 			const newsId = ref("news-1");
 			const mockedNews = {
