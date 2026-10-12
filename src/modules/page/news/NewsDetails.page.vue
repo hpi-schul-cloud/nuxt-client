@@ -21,7 +21,7 @@
 						<VIcon :icon="mdiClockOutline" size="sm" class="mr-1" />
 						{{ displayedDateText }}
 					</div>
-					<div class="d-flex align-center mr-3" data-testid="news-creator">
+					<div v-if="creator" class="d-flex align-center mr-3" data-testid="news-creator">
 						<VIcon :icon="mdiAccountCircleOutline" size="sm" class="mr-1" />
 						{{ creator }}
 					</div>
