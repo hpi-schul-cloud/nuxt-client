@@ -22,7 +22,7 @@
 		"generate-client:h5p-editor": "npm run generate-client -- --generator-key h5p-editor-api",
 		"generate-client:common-cartridge": "npm run generate-client -- --generator-key common-cartridge-api",
 		"generate-client:notification": "npm run generate-client -- --generator-key notification-api",
-		"generate-client": "TS_POST_PROCESS_FILE='node ./scripts/openapi-generator-postprocess.mjs' openapi-generator-cli generate -c ./openapitools.json"
+		"generate-client": "openapi-generator-cli generate -c ./openapitools.json"
 	},
 	"dependencies": {
 		"@braintree/sanitize-url": "^7.1.2",

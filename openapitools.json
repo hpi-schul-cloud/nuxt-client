@@ -6,6 +6,7 @@
     "generators": {
       "server-api": {
         "generatorName": "typescript-axios",
+        "templateDir": "./config/openapi-generator/typescript-axios",
         "inputSpec": "http://localhost:3030/api/v3/docs-json/",
         "output": "./src/generated/serverApi/v3",
         "skipValidateSpec": true,
@@ -30,6 +31,7 @@
       },
       "fwu-api": {
         "generatorName": "typescript-axios",
+        "templateDir": "./config/openapi-generator/typescript-axios",
         "inputSpec": "http://localhost:4446/api/v3/docs-json/",
         "output": "./src/generated/fwuApi/v3",
         "skipValidateSpec": true,
@@ -52,6 +54,7 @@
       },
       "common-cartridge-api": {
         "generatorName": "typescript-axios",
+        "templateDir": "./config/openapi-generator/typescript-axios",
         "inputSpec": "http://localhost:3350/api/v3/docs-json/",
         "output": "./src/generated/commonCartridgeApi/v3",
         "skipValidateSpec": true,
@@ -75,6 +78,7 @@
       },
       "h5p-editor-api": {
         "generatorName": "typescript-axios",
+        "templateDir": "./config/openapi-generator/typescript-axios",
         "inputSpec": "http://localhost:4448/api/v3/h5p/docs-json/",
         "output": "./src/generated/h5pEditorApi/v3",
         "skipValidateSpec": true,
@@ -98,6 +102,7 @@
       },
       "file-storage-api": {
         "generatorName": "typescript-axios",
+        "templateDir": "./config/openapi-generator/typescript-axios",
         "inputSpec": "http://localhost:4444/api/v3/file/docs-json/",
         "output": "./src/generated/fileStorageApi/v3",
         "skipValidateSpec": true,
@@ -121,6 +126,7 @@
       },
       "notification-api": {
         "generatorName": "typescript-axios",
+        "templateDir": "./config/openapi-generator/typescript-axios",
         "inputSpec": "http://localhost:3033/docs-json/",
         "output": "./src/generated/notificationApi/v1",
         "skipValidateSpec": true,
