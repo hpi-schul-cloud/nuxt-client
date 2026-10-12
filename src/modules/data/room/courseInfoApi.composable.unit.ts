@@ -3,7 +3,12 @@ import { initializeAxios } from "@/utils/api";
 import { mockApi, mockApiResponse, mockAxiosInstance } from "@@/tests/test-utils";
 import { courseInfoDataResponseFactory } from "@@/tests/test-utils/factory/courseInfoDataResponseFactory";
 import * as serverApi from "@api-server";
-import { CourseInfoListResponse, CourseSortProps, CourseStatus } from "@api-server";
+import {
+	CourseInfoControllerGetCourseInfoSortOrder,
+	CourseInfoListResponse,
+	CourseSortProps,
+	CourseStatus,
+} from "@api-server";
 import { AxiosInstance } from "axios";
 import { Mocked } from "vitest";
 
@@ -51,6 +56,21 @@ describe("courseInfoApi.composable", () => {
 				0,
 				10,
 				"asc",
+				"name",
+				"current",
+				true
+			);
+		});
+
+		it("should map desc order to api enum", async () => {
+			setup();
+
+			await useCourseInfoApi().loadCoursesForSchool(CourseStatus.CURRENT, true, 10, 0, CourseSortProps.NAME, "desc");
+
+			expect(courseInfoApi.courseInfoControllerGetCourseInfo).toHaveBeenCalledWith(
+				0,
+				10,
+				CourseInfoControllerGetCourseInfoSortOrder.DESC,
 				"name",
 				"current",
 				true
