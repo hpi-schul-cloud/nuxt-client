@@ -1,15 +1,38 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { BoardApiFactory, CourseRoomsApiFactory, RoomApiFactory, TaskApiFactory } from "@api-server";
+import {
+	BoardApiFactory,
+	CopyApiResponse,
+	CopyElementType,
+	CopyStatusEnum,
+	CourseRoomsApiFactory,
+	RoomApiFactory,
+	TaskApiFactory,
+} from "@api-server";
 import { notifySuccess, notifyWarning } from "@data-app";
 import { openDialog, withGlobalLoadingState } from "@feature-dialog";
+import { useFailedFilesNotifier } from "@util-error-handling";
 import { isAxiosError } from "axios";
 import { useI18n } from "vue-i18n";
+
+const collectFailedFileNames = (response: CopyApiResponse | undefined): string[] => {
+	if (!response) return [];
+
+	const childFileNames = (response.elements ?? []).flatMap((element) => collectFailedFileNames(element));
+
+	const isFailedFile = response.type === CopyElementType.FILE && response.status === CopyStatusEnum.FAILURE;
+	if (isFailedFile && response.title) {
+		return [response.title, ...childFileNames];
+	}
+
+	return childFileNames;
+};
 
 export const useCopyFlow = () => {
 	const { t } = useI18n();
 	const { execute } = useSafeAxiosTask();
+	const { notifyFailedFiles } = useFailedFilesNotifier();
 
 	const courseRoomApi = CourseRoomsApiFactory(undefined, "/v3", $axios);
 	const taskApi = TaskApiFactory(undefined, "/v3", $axios);
@@ -47,7 +70,7 @@ export const useCopyFlow = () => {
 		notifyWarning(t("feature-copy.notifications.duplicationInProgress", { type: getTypeLabel(type) }));
 	};
 
-	const executeCopyRequest = async <T>(
+	const executeCopyRequest = async <T extends CopyApiResponse>(
 		type: ContentItemTypeEnum,
 		request: () => Promise<{ data: T }>
 	): Promise<{ result: T | undefined; success: boolean; error: Error | undefined }> => {
@@ -56,7 +79,12 @@ export const useCopyFlow = () => {
 		);
 
 		if (success) {
-			notifyCopySuccess(type);
+			const failedFileNames = collectFailedFileNames(result?.data);
+			if (failedFileNames.length > 0) {
+				notifyFailedFiles(`feature-copy.copyInfo.type.${type}`, failedFileNames);
+			} else {
+				notifyCopySuccess(type);
+			}
 			return { result: result?.data, success: true, error: undefined };
 		}
 
