@@ -70,7 +70,7 @@ export interface NewsResponse {
     /**
      * Reference to the User that created the News entity
      */
-    'creator': UserInfoResponse;
+    'creator'?: UserInfoResponse;
     /**
      * Reference to the User that updated the News entity
      */

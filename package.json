@@ -16,12 +16,13 @@
 		"test:unit:ci": "vitest run --coverage",
 		"lint": "eslint src/**/*.{ts,js,vue}",
 		"lint:fix": "eslint src/**/*.{ts,js,vue} --fix",
-		"generate-client:server": "openapi-generator-cli generate -c ./openapitools.json --generator-key server-api",
-		"generate-client:fwu": "openapi-generator-cli generate -c ./openapitools.json --generator-key fwu-api",
-		"generate-client:filestorage": "openapi-generator-cli generate -c ./openapitools.json --generator-key file-storage-api",
-		"generate-client:h5p-editor": "openapi-generator-cli generate -c ./openapitools.json --generator-key h5p-editor-api",
-		"generate-client:common-cartridge": "openapi-generator-cli generate -c ./openapitools.json --generator-key common-cartridge-api",
-		"generate-client:notification": "openapi-generator-cli generate -c ./openapitools.json --generator-key notification-api"
+		"generate-client:server": "npm run generate-client -- --generator-key server-api",
+		"generate-client:fwu": "npm run generate-client -- --generator-key fwu-api",
+		"generate-client:filestorage": "npm run generate-client -- --generator-key file-storage-api",
+		"generate-client:h5p-editor": "npm run generate-client -- --generator-key h5p-editor-api",
+		"generate-client:common-cartridge": "npm run generate-client -- --generator-key common-cartridge-api",
+		"generate-client:notification": "npm run generate-client -- --generator-key notification-api",
+		"generate-client": "TS_POST_PROCESS_FILE='node ./scripts/openapi-generator-postprocess.mjs' openapi-generator-cli generate -c ./openapitools.json"
 	},
 	"dependencies": {
 		"@braintree/sanitize-url": "^7.1.2",
