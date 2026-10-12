@@ -13,20 +13,13 @@
  */
 
 
-import { Colors } from './colors';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { Colors } from './colors';
 
-/**
- * 
- * @export
- * @interface ColorBodyParams
- */
 export interface ColorBodyParams {
-    /**
-     * 
-     * @type {Colors}
-     * @memberof ColorBodyParams
-     */
-    backgroundColor: Colors;
+    'backgroundColor': Colors;
 }
+
 
 

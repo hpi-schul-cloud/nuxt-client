@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface SessionInfoResponse
- */
 export interface SessionInfoResponse {
-    /**
-     * 
-     * @type {number}
-     * @memberof SessionInfoResponse
-     */
-    expiresInSeconds: number;
+    'expiresInSeconds': number;
 }
-
 

@@ -13,20 +13,14 @@
  */
 
 
-import { ExternalToolCreateParams } from './external-tool-create-params';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ExternalToolCreateParams } from './external-tool-create-params';
 
-/**
- * 
- * @export
- * @interface ExternalToolBulkCreateParams
- */
 export interface ExternalToolBulkCreateParams {
     /**
      * List of external tools
-     * @type {Array<ExternalToolCreateParams>}
-     * @memberof ExternalToolBulkCreateParams
      */
-    data: Array<ExternalToolCreateParams>;
+    'data': Array<ExternalToolCreateParams>;
 }
-
 

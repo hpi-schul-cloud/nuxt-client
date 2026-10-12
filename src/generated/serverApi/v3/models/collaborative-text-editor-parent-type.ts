@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum CollaborativeTextEditorParentType {
     CONTENT_ELEMENT = 'content-element'
 }

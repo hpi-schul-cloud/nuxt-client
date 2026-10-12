@@ -16,9 +16,8 @@
 
 /**
  * Configuration type of the tool.
- * @export
- * @enum {string}
  */
+
 export enum ToolConfigType {
     BASIC = 'basic',
     OAUTH2 = 'oauth2',

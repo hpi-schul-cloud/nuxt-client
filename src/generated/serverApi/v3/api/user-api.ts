@@ -13,20 +13,20 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ChangeLanguageParams } from '../models';
+import type { ChangeLanguageParams } from '../models';
 // @ts-ignore
-import { SuccessfulResponse } from '../models';
+import type { SuccessfulResponse } from '../models';
 /**
  * UserApi - axios parameter creator
- * @export
  */
 export const UserApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -36,7 +36,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerChangeLanguage: async (changeLanguageParams: ChangeLanguageParams, options: any = {}): Promise<RequestArgs> => {
+        userControllerChangeLanguage: async (changeLanguageParams: ChangeLanguageParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'changeLanguageParams' is not null or undefined
             assertParamExists('userControllerChangeLanguage', 'changeLanguageParams', changeLanguageParams)
             const localVarPath = `/user/language`;
@@ -55,11 +55,10 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(changeLanguageParams, localVarRequestOptions, configuration)
@@ -74,7 +73,6 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
 
 /**
  * UserApi - functional programming interface
- * @export
  */
 export const UserApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UserApiAxiosParamCreator(configuration)
@@ -85,16 +83,17 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessfulResponse>> {
+        async userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessfulResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerChangeLanguage(changeLanguageParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.userControllerChangeLanguage']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * UserApi - factory interface
- * @export
  */
 export const UserApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = UserApiFp(configuration)
@@ -105,7 +104,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any): AxiosPromise<SuccessfulResponse> {
+        userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: RawAxiosRequestConfig): AxiosPromise<SuccessfulResponse> {
             return localVarFp.userControllerChangeLanguage(changeLanguageParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -113,8 +112,6 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
 
 /**
  * UserApi - interface
- * @export
- * @interface UserApi
  */
 export interface UserApiInterface {
     /**
@@ -122,17 +119,13 @@ export interface UserApiInterface {
      * @param {ChangeLanguageParams} changeLanguageParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserApiInterface
      */
-    userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any): AxiosPromise<SuccessfulResponse>;
+    userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: RawAxiosRequestConfig): AxiosPromise<SuccessfulResponse>;
 
 }
 
 /**
  * UserApi - object-oriented interface
- * @export
- * @class UserApi
- * @extends {BaseAPI}
  */
 export class UserApi extends BaseAPI implements UserApiInterface {
     /**
@@ -140,9 +133,9 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      * @param {ChangeLanguageParams} changeLanguageParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserApi
      */
-    public userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any) {
+    public userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: RawAxiosRequestConfig) {
         return UserApiFp(this.configuration).userControllerChangeLanguage(changeLanguageParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

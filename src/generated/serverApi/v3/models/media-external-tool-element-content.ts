@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface MediaExternalToolElementContent
- */
 export interface MediaExternalToolElementContent {
     /**
      * The id of the context external tool
-     * @type {string}
-     * @memberof MediaExternalToolElementContent
      */
-    contextExternalToolId: string;
+    'contextExternalToolId': string;
 }
-
 

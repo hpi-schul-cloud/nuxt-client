@@ -16,9 +16,8 @@
 
 /**
  * The state of the video conference.
- * @export
- * @enum {string}
  */
+
 export enum VideoConferenceStateResponse {
     NOT_STARTED = 'NOT_STARTED',
     RUNNING = 'RUNNING',

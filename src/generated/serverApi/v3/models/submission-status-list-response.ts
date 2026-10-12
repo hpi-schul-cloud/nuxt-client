@@ -13,20 +13,11 @@
  */
 
 
-import { SubmissionStatusResponse } from './submission-status-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SubmissionStatusResponse } from './submission-status-response';
 
-/**
- * 
- * @export
- * @interface SubmissionStatusListResponse
- */
 export interface SubmissionStatusListResponse {
-    /**
-     * 
-     * @type {Array<SubmissionStatusResponse>}
-     * @memberof SubmissionStatusListResponse
-     */
-    data: Array<SubmissionStatusResponse>;
+    'data': Array<SubmissionStatusResponse>;
 }
-
 

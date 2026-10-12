@@ -13,44 +13,15 @@
  */
 
 
-import { ProviderConfigResponse } from './provider-config-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ProviderConfigResponse } from './provider-config-response';
 
-/**
- * 
- * @export
- * @interface SchoolSystemResponse
- */
 export interface SchoolSystemResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolSystemResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolSystemResponse
-     */
-    type: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolSystemResponse
-     */
-    alias?: string;
-    /**
-     * 
-     * @type {ProviderConfigResponse}
-     * @memberof SchoolSystemResponse
-     */
-    ldapConfig?: ProviderConfigResponse;
-    /**
-     * 
-     * @type {ProviderConfigResponse}
-     * @memberof SchoolSystemResponse
-     */
-    oauthConfig?: ProviderConfigResponse;
+    'id': string;
+    'type': string;
+    'alias'?: string;
+    'ldapConfig'?: ProviderConfigResponse;
+    'oauthConfig'?: ProviderConfigResponse;
 }
-
 

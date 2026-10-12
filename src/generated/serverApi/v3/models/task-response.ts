@@ -13,93 +13,29 @@
  */
 
 
-import { RichText } from './rich-text';
-import { TaskStatusResponse } from './task-status-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RichText } from './rich-text';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { TaskStatusResponse } from './task-status-response';
 
-/**
- * 
- * @export
- * @interface TaskResponse
- */
 export interface TaskResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskResponse
-     */
-    availableDate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskResponse
-     */
-    dueDate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskResponse
-     */
-    courseName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskResponse
-     */
-    lessonName?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskResponse
-     */
-    courseId: string;
+    'id': string;
+    'name': string;
+    'availableDate'?: string;
+    'dueDate'?: string;
+    'courseName': string;
+    'lessonName'?: string;
+    'courseId': string;
     /**
      * Task description object, with props content: string and type: input format types
-     * @type {RichText}
-     * @memberof TaskResponse
      */
-    description?: RichText;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof TaskResponse
-     */
-    lessonHidden: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskResponse
-     */
-    displayColor?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskResponse
-     */
-    updatedAt: string;
-    /**
-     * 
-     * @type {TaskStatusResponse}
-     * @memberof TaskResponse
-     */
-    status: TaskStatusResponse;
+    'description'?: RichText;
+    'lessonHidden': boolean;
+    'displayColor'?: string;
+    'createdAt': string;
+    'updatedAt': string;
+    'status': TaskStatusResponse;
 }
-
 

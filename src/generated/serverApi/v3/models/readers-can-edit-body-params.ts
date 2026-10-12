@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface ReadersCanEditBodyParams
- */
 export interface ReadersCanEditBodyParams {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ReadersCanEditBodyParams
-     */
-    readersCanEdit: boolean;
+    'readersCanEdit': boolean;
 }
-
 

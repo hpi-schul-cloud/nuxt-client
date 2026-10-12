@@ -13,38 +13,26 @@
  */
 
 
-import { TaskResponse } from './task-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { TaskResponse } from './task-response';
 
-/**
- * 
- * @export
- * @interface TaskListResponse
- */
 export interface TaskListResponse {
     /**
      * The items for the current page.
-     * @type {Array<TaskResponse>}
-     * @memberof TaskListResponse
      */
-    data: Array<TaskResponse>;
+    'data': Array<TaskResponse>;
     /**
      * The total amount of items.
-     * @type {number}
-     * @memberof TaskListResponse
      */
-    total: number;
+    'total': number;
     /**
      * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof TaskListResponse
      */
-    skip: number;
+    'skip': number;
     /**
      * The page size of the response.
-     * @type {number}
-     * @memberof TaskListResponse
      */
-    limit: number;
+    'limit': number;
 }
-
 

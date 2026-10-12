@@ -13,70 +13,70 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ContextExternalToolBodyParams } from '../models';
+import type { ContextExternalToolBodyParams } from '../models';
 // @ts-ignore
-import { ContextExternalToolConfigurationTemplateListResponse } from '../models';
+import type { ContextExternalToolConfigurationTemplateListResponse } from '../models';
 // @ts-ignore
-import { ContextExternalToolConfigurationTemplateResponse } from '../models';
+import type { ContextExternalToolConfigurationTemplateResponse } from '../models';
 // @ts-ignore
-import { ContextExternalToolPostParams } from '../models';
+import type { ContextExternalToolPostParams } from '../models';
 // @ts-ignore
-import { ContextExternalToolResponse } from '../models';
+import type { ContextExternalToolResponse } from '../models';
 // @ts-ignore
-import { ContextExternalToolSearchListResponse } from '../models';
+import type { ContextExternalToolSearchListResponse } from '../models';
 // @ts-ignore
-import { ExternalToolBulkCreateParams } from '../models';
+import type { ExternalToolBulkCreateParams } from '../models';
 // @ts-ignore
-import { ExternalToolCreateParams } from '../models';
+import type { ExternalToolCreateParams } from '../models';
 // @ts-ignore
-import { ExternalToolImportResultListResponse } from '../models';
+import type { ExternalToolImportResultListResponse } from '../models';
 // @ts-ignore
-import { ExternalToolResponse } from '../models';
+import type { ExternalToolResponse } from '../models';
 // @ts-ignore
-import { ExternalToolSearchListResponse } from '../models';
+import type { ExternalToolSearchListResponse } from '../models';
 // @ts-ignore
-import { ExternalToolUpdateParams } from '../models';
+import type { ExternalToolUpdateParams } from '../models';
 // @ts-ignore
-import { ExternalToolUtilizationResponse } from '../models';
+import type { ExternalToolUtilizationResponse } from '../models';
 // @ts-ignore
-import { Lti11DeepLinkParamsRaw } from '../models';
+import type { Lti11DeepLinkParamsRaw } from '../models';
 // @ts-ignore
-import { PreferredToolListResponse } from '../models';
+import type { PreferredToolListResponse } from '../models';
 // @ts-ignore
-import { SchoolExternalToolConfigurationTemplateListResponse } from '../models';
+import type { SchoolExternalToolConfigurationTemplateListResponse } from '../models';
 // @ts-ignore
-import { SchoolExternalToolConfigurationTemplateResponse } from '../models';
+import type { SchoolExternalToolConfigurationTemplateResponse } from '../models';
 // @ts-ignore
-import { SchoolExternalToolMetadataResponse } from '../models';
+import type { SchoolExternalToolMetadataResponse } from '../models';
 // @ts-ignore
-import { SchoolExternalToolPostParams } from '../models';
+import type { SchoolExternalToolPostParams } from '../models';
 // @ts-ignore
-import { SchoolExternalToolResponse } from '../models';
+import type { SchoolExternalToolResponse } from '../models';
 // @ts-ignore
-import { SchoolExternalToolSearchListResponse } from '../models';
+import type { SchoolExternalToolSearchListResponse } from '../models';
 // @ts-ignore
-import { ToolContextType } from '../models';
+import type { ToolContextType } from '../models';
 // @ts-ignore
-import { ToolContextTypesListResponse } from '../models';
+import type { ToolContextTypesListResponse } from '../models';
 // @ts-ignore
-import { ToolLaunchRequestResponse } from '../models';
+import type { ToolLaunchRequestResponse } from '../models';
 // @ts-ignore
-import { ToolReferenceListResponse } from '../models';
+import type { ToolReferenceListResponse } from '../models';
 // @ts-ignore
-import { ToolReferenceResponse } from '../models';
+import type { ToolReferenceResponse } from '../models';
 // @ts-ignore
-import { ValidationError } from '../models';
+import type { ValidationError } from '../models';
 /**
  * ToolApi - axios parameter creator
- * @export
  */
 export const ToolApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -86,11 +86,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerAddAndActivateToolForAllSchools: async (contextExternalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolConfigurationControllerAddAndActivateToolForAllSchools: async (contextExternalToolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'contextExternalToolId' is not null or undefined
             assertParamExists('toolConfigurationControllerAddAndActivateToolForAllSchools', 'contextExternalToolId', contextExternalToolId)
             const localVarPath = `/tools/add-and-activate-for-all-schools/{contextExternalToolId}`
-                .replace(`{${"contextExternalToolId"}}`, encodeURIComponent(String(contextExternalToolId)));
+                .replace('{contextExternalToolId}', encodeURIComponent(String(contextExternalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -107,8 +107,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -125,14 +124,14 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetAvailableToolsForContext: async (contextType: ToolContextType, contextId: string, options: any = {}): Promise<RequestArgs> => {
+        toolConfigurationControllerGetAvailableToolsForContext: async (contextType: ToolContextType, contextId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'contextType' is not null or undefined
             assertParamExists('toolConfigurationControllerGetAvailableToolsForContext', 'contextType', contextType)
             // verify required parameter 'contextId' is not null or undefined
             assertParamExists('toolConfigurationControllerGetAvailableToolsForContext', 'contextId', contextId)
             const localVarPath = `/tools/{contextType}/{contextId}/available-tools`
-                .replace(`{${"contextType"}}`, encodeURIComponent(String(contextType)))
-                .replace(`{${"contextId"}}`, encodeURIComponent(String(contextId)));
+                .replace('{contextType}', encodeURIComponent(String(contextType)))
+                .replace('{contextId}', encodeURIComponent(String(contextId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -148,9 +147,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -166,11 +165,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetAvailableToolsForSchool: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolConfigurationControllerGetAvailableToolsForSchool: async (schoolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('toolConfigurationControllerGetAvailableToolsForSchool', 'schoolId', schoolId)
             const localVarPath = `/tools/school/{schoolId}/available-tools`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+                .replace('{schoolId}', encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -186,9 +185,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -204,11 +203,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetConfigurationTemplateForContext: async (contextExternalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolConfigurationControllerGetConfigurationTemplateForContext: async (contextExternalToolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'contextExternalToolId' is not null or undefined
             assertParamExists('toolConfigurationControllerGetConfigurationTemplateForContext', 'contextExternalToolId', contextExternalToolId)
             const localVarPath = `/tools/context-external-tools/{contextExternalToolId}/configuration-template`
-                .replace(`{${"contextExternalToolId"}}`, encodeURIComponent(String(contextExternalToolId)));
+                .replace('{contextExternalToolId}', encodeURIComponent(String(contextExternalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -224,9 +223,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -242,11 +241,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetConfigurationTemplateForSchool: async (schoolExternalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolConfigurationControllerGetConfigurationTemplateForSchool: async (schoolExternalToolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolExternalToolId' is not null or undefined
             assertParamExists('toolConfigurationControllerGetConfigurationTemplateForSchool', 'schoolExternalToolId', schoolExternalToolId)
             const localVarPath = `/tools/school-external-tools/{schoolExternalToolId}/configuration-template`
-                .replace(`{${"schoolExternalToolId"}}`, encodeURIComponent(String(schoolExternalToolId)));
+                .replace('{schoolExternalToolId}', encodeURIComponent(String(schoolExternalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -262,9 +261,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -280,7 +279,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetPreferredToolsForContext: async (contextType?: ToolContextType, options: any = {}): Promise<RequestArgs> => {
+        toolConfigurationControllerGetPreferredToolsForContext: async (contextType?: ToolContextType, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/tools/preferred-tools`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -301,9 +300,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['contextType'] = contextType;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -318,7 +317,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetToolContextTypes: async (options: any = {}): Promise<RequestArgs> => {
+        toolConfigurationControllerGetToolContextTypes: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/tools/context-types`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -335,9 +334,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -353,7 +352,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolContextControllerCreateContextExternalTool: async (contextExternalToolPostParams: ContextExternalToolPostParams, options: any = {}): Promise<RequestArgs> => {
+        toolContextControllerCreateContextExternalTool: async (contextExternalToolPostParams: ContextExternalToolPostParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'contextExternalToolPostParams' is not null or undefined
             assertParamExists('toolContextControllerCreateContextExternalTool', 'contextExternalToolPostParams', contextExternalToolPostParams)
             const localVarPath = `/tools/context-external-tools`;
@@ -372,11 +371,10 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(contextExternalToolPostParams, localVarRequestOptions, configuration)
@@ -393,11 +391,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolContextControllerDeleteContextExternalTool: async (contextExternalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolContextControllerDeleteContextExternalTool: async (contextExternalToolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'contextExternalToolId' is not null or undefined
             assertParamExists('toolContextControllerDeleteContextExternalTool', 'contextExternalToolId', contextExternalToolId)
             const localVarPath = `/tools/context-external-tools/{contextExternalToolId}`
-                .replace(`{${"contextExternalToolId"}}`, encodeURIComponent(String(contextExternalToolId)));
+                .replace('{contextExternalToolId}', encodeURIComponent(String(contextExternalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -414,8 +412,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -431,11 +428,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolContextControllerGetContextExternalTool: async (contextExternalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolContextControllerGetContextExternalTool: async (contextExternalToolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'contextExternalToolId' is not null or undefined
             assertParamExists('toolContextControllerGetContextExternalTool', 'contextExternalToolId', contextExternalToolId)
             const localVarPath = `/tools/context-external-tools/{contextExternalToolId}`
-                .replace(`{${"contextExternalToolId"}}`, encodeURIComponent(String(contextExternalToolId)));
+                .replace('{contextExternalToolId}', encodeURIComponent(String(contextExternalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -451,9 +448,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -470,14 +467,14 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolContextControllerGetContextExternalToolsForContext: async (contextId: string, contextType: ToolContextType, options: any = {}): Promise<RequestArgs> => {
+        toolContextControllerGetContextExternalToolsForContext: async (contextId: string, contextType: ToolContextType, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'contextId' is not null or undefined
             assertParamExists('toolContextControllerGetContextExternalToolsForContext', 'contextId', contextId)
             // verify required parameter 'contextType' is not null or undefined
             assertParamExists('toolContextControllerGetContextExternalToolsForContext', 'contextType', contextType)
             const localVarPath = `/tools/context-external-tools/{contextType}/{contextId}`
-                .replace(`{${"contextId"}}`, encodeURIComponent(String(contextId)))
-                .replace(`{${"contextType"}}`, encodeURIComponent(String(contextType)));
+                .replace('{contextId}', encodeURIComponent(String(contextId)))
+                .replace('{contextType}', encodeURIComponent(String(contextType)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -493,9 +490,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -512,13 +509,13 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolContextControllerUpdateContextExternalTool: async (contextExternalToolId: string, contextExternalToolPostParams: ContextExternalToolPostParams, options: any = {}): Promise<RequestArgs> => {
+        toolContextControllerUpdateContextExternalTool: async (contextExternalToolId: string, contextExternalToolPostParams: ContextExternalToolPostParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'contextExternalToolId' is not null or undefined
             assertParamExists('toolContextControllerUpdateContextExternalTool', 'contextExternalToolId', contextExternalToolId)
             // verify required parameter 'contextExternalToolPostParams' is not null or undefined
             assertParamExists('toolContextControllerUpdateContextExternalTool', 'contextExternalToolPostParams', contextExternalToolPostParams)
             const localVarPath = `/tools/context-external-tools/{contextExternalToolId}`
-                .replace(`{${"contextExternalToolId"}}`, encodeURIComponent(String(contextExternalToolId)));
+                .replace('{contextExternalToolId}', encodeURIComponent(String(contextExternalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -534,11 +531,10 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(contextExternalToolPostParams, localVarRequestOptions, configuration)
@@ -555,7 +551,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerCreateExternalTool: async (externalToolCreateParams: ExternalToolCreateParams, options: any = {}): Promise<RequestArgs> => {
+        toolControllerCreateExternalTool: async (externalToolCreateParams: ExternalToolCreateParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'externalToolCreateParams' is not null or undefined
             assertParamExists('toolControllerCreateExternalTool', 'externalToolCreateParams', externalToolCreateParams)
             const localVarPath = `/tools/external-tools`;
@@ -574,11 +570,10 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(externalToolCreateParams, localVarRequestOptions, configuration)
@@ -595,11 +590,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerDeleteExternalTool: async (externalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolControllerDeleteExternalTool: async (externalToolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'externalToolId' is not null or undefined
             assertParamExists('toolControllerDeleteExternalTool', 'externalToolId', externalToolId)
             const localVarPath = `/tools/external-tools/{externalToolId}`
-                .replace(`{${"externalToolId"}}`, encodeURIComponent(String(externalToolId)));
+                .replace('{externalToolId}', encodeURIComponent(String(externalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -616,8 +611,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -633,12 +627,12 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {string} [clientId] OAuth2 client id of the external tool
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
-         * @param {'asc' | 'desc'} [sortOrder] 
-         * @param {'id' | 'name'} [sortBy] 
+         * @param {ToolControllerFindExternalToolSortOrder} [sortOrder] 
+         * @param {ToolControllerFindExternalToolSortBy} [sortBy] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerFindExternalTool: async (name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options: any = {}): Promise<RequestArgs> => {
+        toolControllerFindExternalTool: async (name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: ToolControllerFindExternalToolSortOrder, sortBy?: ToolControllerFindExternalToolSortBy, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/tools/external-tools`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -679,9 +673,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['sortBy'] = sortBy;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -697,11 +691,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetDatasheet: async (externalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolControllerGetDatasheet: async (externalToolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'externalToolId' is not null or undefined
             assertParamExists('toolControllerGetDatasheet', 'externalToolId', externalToolId)
             const localVarPath = `/tools/external-tools/{externalToolId}/datasheet`
-                .replace(`{${"externalToolId"}}`, encodeURIComponent(String(externalToolId)));
+                .replace('{externalToolId}', encodeURIComponent(String(externalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -718,8 +712,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -735,11 +728,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetExternalTool: async (externalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolControllerGetExternalTool: async (externalToolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'externalToolId' is not null or undefined
             assertParamExists('toolControllerGetExternalTool', 'externalToolId', externalToolId)
             const localVarPath = `/tools/external-tools/{externalToolId}`
-                .replace(`{${"externalToolId"}}`, encodeURIComponent(String(externalToolId)));
+                .replace('{externalToolId}', encodeURIComponent(String(externalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -755,9 +748,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -773,11 +766,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetExternalToolLogo: async (externalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolControllerGetExternalToolLogo: async (externalToolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'externalToolId' is not null or undefined
             assertParamExists('toolControllerGetExternalToolLogo', 'externalToolId', externalToolId)
             const localVarPath = `/tools/external-tools/{externalToolId}/logo`
-                .replace(`{${"externalToolId"}}`, encodeURIComponent(String(externalToolId)));
+                .replace('{externalToolId}', encodeURIComponent(String(externalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -794,8 +787,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -811,11 +803,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetUtilizationForExternalTool: async (externalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolControllerGetUtilizationForExternalTool: async (externalToolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'externalToolId' is not null or undefined
             assertParamExists('toolControllerGetUtilizationForExternalTool', 'externalToolId', externalToolId)
             const localVarPath = `/tools/external-tools/{externalToolId}/metadata`
-                .replace(`{${"externalToolId"}}`, encodeURIComponent(String(externalToolId)));
+                .replace('{externalToolId}', encodeURIComponent(String(externalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -831,9 +823,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -849,7 +841,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerImportExternalTools: async (externalToolBulkCreateParams: ExternalToolBulkCreateParams, options: any = {}): Promise<RequestArgs> => {
+        toolControllerImportExternalTools: async (externalToolBulkCreateParams: ExternalToolBulkCreateParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'externalToolBulkCreateParams' is not null or undefined
             assertParamExists('toolControllerImportExternalTools', 'externalToolBulkCreateParams', externalToolBulkCreateParams)
             const localVarPath = `/tools/external-tools/import`;
@@ -868,11 +860,10 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(externalToolBulkCreateParams, localVarRequestOptions, configuration)
@@ -890,13 +881,13 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerUpdateExternalTool: async (externalToolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options: any = {}): Promise<RequestArgs> => {
+        toolControllerUpdateExternalTool: async (externalToolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'externalToolId' is not null or undefined
             assertParamExists('toolControllerUpdateExternalTool', 'externalToolId', externalToolId)
             // verify required parameter 'externalToolUpdateParams' is not null or undefined
             assertParamExists('toolControllerUpdateExternalTool', 'externalToolUpdateParams', externalToolUpdateParams)
             const localVarPath = `/tools/external-tools/{externalToolId}`
-                .replace(`{${"externalToolId"}}`, encodeURIComponent(String(externalToolId)));
+                .replace('{externalToolId}', encodeURIComponent(String(externalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -912,11 +903,10 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(externalToolUpdateParams, localVarRequestOptions, configuration)
@@ -933,13 +923,13 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolDeepLinkControllerDeepLink: async (contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options: any = {}): Promise<RequestArgs> => {
+        toolDeepLinkControllerDeepLink: async (contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'contextExternalToolId' is not null or undefined
             assertParamExists('toolDeepLinkControllerDeepLink', 'contextExternalToolId', contextExternalToolId)
             // verify required parameter 'lti11DeepLinkParamsRaw' is not null or undefined
             assertParamExists('toolDeepLinkControllerDeepLink', 'lti11DeepLinkParamsRaw', lti11DeepLinkParamsRaw)
             const localVarPath = `/tools/context-external-tools/{contextExternalToolId}/lti11-deep-link-callback`
-                .replace(`{${"contextExternalToolId"}}`, encodeURIComponent(String(contextExternalToolId)));
+                .replace('{contextExternalToolId}', encodeURIComponent(String(contextExternalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -951,11 +941,10 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(lti11DeepLinkParamsRaw, localVarRequestOptions, configuration)
@@ -972,11 +961,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolLaunchControllerGetContextExternalToolLaunchRequest: async (contextExternalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolLaunchControllerGetContextExternalToolLaunchRequest: async (contextExternalToolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'contextExternalToolId' is not null or undefined
             assertParamExists('toolLaunchControllerGetContextExternalToolLaunchRequest', 'contextExternalToolId', contextExternalToolId)
             const localVarPath = `/tools/context/{contextExternalToolId}/launch`
-                .replace(`{${"contextExternalToolId"}}`, encodeURIComponent(String(contextExternalToolId)));
+                .replace('{contextExternalToolId}', encodeURIComponent(String(contextExternalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -992,9 +981,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -1011,13 +1000,13 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolLaunchControllerGetSchoolExternalToolLaunchRequest: async (schoolExternalToolId: string, contextExternalToolBodyParams: ContextExternalToolBodyParams, options: any = {}): Promise<RequestArgs> => {
+        toolLaunchControllerGetSchoolExternalToolLaunchRequest: async (schoolExternalToolId: string, contextExternalToolBodyParams: ContextExternalToolBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolExternalToolId' is not null or undefined
             assertParamExists('toolLaunchControllerGetSchoolExternalToolLaunchRequest', 'schoolExternalToolId', schoolExternalToolId)
             // verify required parameter 'contextExternalToolBodyParams' is not null or undefined
             assertParamExists('toolLaunchControllerGetSchoolExternalToolLaunchRequest', 'contextExternalToolBodyParams', contextExternalToolBodyParams)
             const localVarPath = `/tools/school/{schoolExternalToolId}/launch`
-                .replace(`{${"schoolExternalToolId"}}`, encodeURIComponent(String(schoolExternalToolId)));
+                .replace('{schoolExternalToolId}', encodeURIComponent(String(schoolExternalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1033,11 +1022,10 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(contextExternalToolBodyParams, localVarRequestOptions, configuration)
@@ -1054,11 +1042,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolReferenceControllerGetToolReference: async (contextExternalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolReferenceControllerGetToolReference: async (contextExternalToolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'contextExternalToolId' is not null or undefined
             assertParamExists('toolReferenceControllerGetToolReference', 'contextExternalToolId', contextExternalToolId)
             const localVarPath = `/tools/tool-references/context-external-tools/{contextExternalToolId}`
-                .replace(`{${"contextExternalToolId"}}`, encodeURIComponent(String(contextExternalToolId)));
+                .replace('{contextExternalToolId}', encodeURIComponent(String(contextExternalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1074,9 +1062,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -1093,14 +1081,14 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolReferenceControllerGetToolReferencesForContext: async (contextId: string, contextType: ToolContextType, options: any = {}): Promise<RequestArgs> => {
+        toolReferenceControllerGetToolReferencesForContext: async (contextId: string, contextType: ToolContextType, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'contextId' is not null or undefined
             assertParamExists('toolReferenceControllerGetToolReferencesForContext', 'contextId', contextId)
             // verify required parameter 'contextType' is not null or undefined
             assertParamExists('toolReferenceControllerGetToolReferencesForContext', 'contextType', contextType)
             const localVarPath = `/tools/tool-references/{contextType}/{contextId}`
-                .replace(`{${"contextId"}}`, encodeURIComponent(String(contextId)))
-                .replace(`{${"contextType"}}`, encodeURIComponent(String(contextType)));
+                .replace('{contextId}', encodeURIComponent(String(contextId)))
+                .replace('{contextType}', encodeURIComponent(String(contextType)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1116,9 +1104,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -1134,7 +1122,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolSchoolControllerCreateSchoolExternalTool: async (schoolExternalToolPostParams: SchoolExternalToolPostParams, options: any = {}): Promise<RequestArgs> => {
+        toolSchoolControllerCreateSchoolExternalTool: async (schoolExternalToolPostParams: SchoolExternalToolPostParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolExternalToolPostParams' is not null or undefined
             assertParamExists('toolSchoolControllerCreateSchoolExternalTool', 'schoolExternalToolPostParams', schoolExternalToolPostParams)
             const localVarPath = `/tools/school-external-tools`;
@@ -1153,11 +1141,10 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(schoolExternalToolPostParams, localVarRequestOptions, configuration)
@@ -1174,11 +1161,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolSchoolControllerDeleteSchoolExternalTool: async (schoolExternalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolSchoolControllerDeleteSchoolExternalTool: async (schoolExternalToolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolExternalToolId' is not null or undefined
             assertParamExists('toolSchoolControllerDeleteSchoolExternalTool', 'schoolExternalToolId', schoolExternalToolId)
             const localVarPath = `/tools/school-external-tools/{schoolExternalToolId}`
-                .replace(`{${"schoolExternalToolId"}}`, encodeURIComponent(String(schoolExternalToolId)));
+                .replace('{schoolExternalToolId}', encodeURIComponent(String(schoolExternalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1195,8 +1182,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -1212,11 +1198,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolSchoolControllerGetMetaDataForExternalTool: async (schoolExternalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolSchoolControllerGetMetaDataForExternalTool: async (schoolExternalToolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolExternalToolId' is not null or undefined
             assertParamExists('toolSchoolControllerGetMetaDataForExternalTool', 'schoolExternalToolId', schoolExternalToolId)
             const localVarPath = `/tools/school-external-tools/{schoolExternalToolId}/metadata`
-                .replace(`{${"schoolExternalToolId"}}`, encodeURIComponent(String(schoolExternalToolId)));
+                .replace('{schoolExternalToolId}', encodeURIComponent(String(schoolExternalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1232,9 +1218,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -1250,11 +1236,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolSchoolControllerGetSchoolExternalTool: async (schoolExternalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolSchoolControllerGetSchoolExternalTool: async (schoolExternalToolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolExternalToolId' is not null or undefined
             assertParamExists('toolSchoolControllerGetSchoolExternalTool', 'schoolExternalToolId', schoolExternalToolId)
             const localVarPath = `/tools/school-external-tools/{schoolExternalToolId}`
-                .replace(`{${"schoolExternalToolId"}}`, encodeURIComponent(String(schoolExternalToolId)));
+                .replace('{schoolExternalToolId}', encodeURIComponent(String(schoolExternalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1270,9 +1256,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -1288,7 +1274,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolSchoolControllerGetSchoolExternalTools: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolSchoolControllerGetSchoolExternalTools: async (schoolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('toolSchoolControllerGetSchoolExternalTools', 'schoolId', schoolId)
             const localVarPath = `/tools/school-external-tools`;
@@ -1311,9 +1297,9 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['schoolId'] = schoolId;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -1330,13 +1316,13 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolSchoolControllerUpdateSchoolExternalTool: async (schoolExternalToolId: string, schoolExternalToolPostParams: SchoolExternalToolPostParams, options: any = {}): Promise<RequestArgs> => {
+        toolSchoolControllerUpdateSchoolExternalTool: async (schoolExternalToolId: string, schoolExternalToolPostParams: SchoolExternalToolPostParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolExternalToolId' is not null or undefined
             assertParamExists('toolSchoolControllerUpdateSchoolExternalTool', 'schoolExternalToolId', schoolExternalToolId)
             // verify required parameter 'schoolExternalToolPostParams' is not null or undefined
             assertParamExists('toolSchoolControllerUpdateSchoolExternalTool', 'schoolExternalToolPostParams', schoolExternalToolPostParams)
             const localVarPath = `/tools/school-external-tools/{schoolExternalToolId}`
-                .replace(`{${"schoolExternalToolId"}}`, encodeURIComponent(String(schoolExternalToolId)));
+                .replace('{schoolExternalToolId}', encodeURIComponent(String(schoolExternalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1352,11 +1338,10 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(schoolExternalToolPostParams, localVarRequestOptions, configuration)
@@ -1371,7 +1356,6 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
 
 /**
  * ToolApi - functional programming interface
- * @export
  */
 export const ToolApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ToolApiAxiosParamCreator(configuration)
@@ -1382,9 +1366,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolConfigurationControllerAddAndActivateToolForAllSchools']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1394,9 +1380,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolConfigurationControllerGetAvailableToolsForContext(contextType: ToolContextType, contextId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolConfigurationTemplateListResponse>> {
+        async toolConfigurationControllerGetAvailableToolsForContext(contextType: ToolContextType, contextId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolConfigurationTemplateListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetAvailableToolsForContext(contextType, contextId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolConfigurationControllerGetAvailableToolsForContext']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1405,9 +1393,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolConfigurationControllerGetAvailableToolsForSchool(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolConfigurationTemplateListResponse>> {
+        async toolConfigurationControllerGetAvailableToolsForSchool(schoolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolConfigurationTemplateListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetAvailableToolsForSchool(schoolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolConfigurationControllerGetAvailableToolsForSchool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1416,9 +1406,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolConfigurationControllerGetConfigurationTemplateForContext(contextExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolConfigurationTemplateResponse>> {
+        async toolConfigurationControllerGetConfigurationTemplateForContext(contextExternalToolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolConfigurationTemplateResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetConfigurationTemplateForContext(contextExternalToolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolConfigurationControllerGetConfigurationTemplateForContext']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1427,9 +1419,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolConfigurationTemplateResponse>> {
+        async toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolConfigurationTemplateResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolConfigurationControllerGetConfigurationTemplateForSchool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1438,9 +1432,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolConfigurationControllerGetPreferredToolsForContext(contextType?: ToolContextType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PreferredToolListResponse>> {
+        async toolConfigurationControllerGetPreferredToolsForContext(contextType?: ToolContextType, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PreferredToolListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetPreferredToolsForContext(contextType, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolConfigurationControllerGetPreferredToolsForContext']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1448,9 +1444,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolConfigurationControllerGetToolContextTypes(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolContextTypesListResponse>> {
+        async toolConfigurationControllerGetToolContextTypes(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolContextTypesListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetToolContextTypes(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolConfigurationControllerGetToolContextTypes']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1459,9 +1457,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolContextControllerCreateContextExternalTool(contextExternalToolPostParams: ContextExternalToolPostParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolResponse>> {
+        async toolContextControllerCreateContextExternalTool(contextExternalToolPostParams: ContextExternalToolPostParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolContextControllerCreateContextExternalTool(contextExternalToolPostParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolContextControllerCreateContextExternalTool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1470,9 +1470,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolContextControllerDeleteContextExternalTool(contextExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async toolContextControllerDeleteContextExternalTool(contextExternalToolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolContextControllerDeleteContextExternalTool(contextExternalToolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolContextControllerDeleteContextExternalTool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1481,9 +1483,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolContextControllerGetContextExternalTool(contextExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolResponse>> {
+        async toolContextControllerGetContextExternalTool(contextExternalToolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolContextControllerGetContextExternalTool(contextExternalToolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolContextControllerGetContextExternalTool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1493,9 +1497,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: ToolContextType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolSearchListResponse>> {
+        async toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: ToolContextType, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolSearchListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolContextControllerGetContextExternalToolsForContext(contextId, contextType, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolContextControllerGetContextExternalToolsForContext']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1505,9 +1511,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolContextControllerUpdateContextExternalTool(contextExternalToolId: string, contextExternalToolPostParams: ContextExternalToolPostParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolResponse>> {
+        async toolContextControllerUpdateContextExternalTool(contextExternalToolId: string, contextExternalToolPostParams: ContextExternalToolPostParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContextExternalToolResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolContextControllerUpdateContextExternalTool(contextExternalToolId, contextExternalToolPostParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolContextControllerUpdateContextExternalTool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1516,9 +1524,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerCreateExternalTool(externalToolCreateParams: ExternalToolCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolResponse>> {
+        async toolControllerCreateExternalTool(externalToolCreateParams: ExternalToolCreateParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerCreateExternalTool(externalToolCreateParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolControllerCreateExternalTool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1527,9 +1537,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerDeleteExternalTool(externalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async toolControllerDeleteExternalTool(externalToolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerDeleteExternalTool(externalToolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolControllerDeleteExternalTool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1538,14 +1550,16 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {string} [clientId] OAuth2 client id of the external tool
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
-         * @param {'asc' | 'desc'} [sortOrder] 
-         * @param {'id' | 'name'} [sortBy] 
+         * @param {ToolControllerFindExternalToolSortOrder} [sortOrder] 
+         * @param {ToolControllerFindExternalToolSortBy} [sortBy] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolSearchListResponse>> {
+        async toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: ToolControllerFindExternalToolSortOrder, sortBy?: ToolControllerFindExternalToolSortBy, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolSearchListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerFindExternalTool(name, clientId, skip, limit, sortOrder, sortBy, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolControllerFindExternalTool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1554,9 +1568,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerGetDatasheet(externalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async toolControllerGetDatasheet(externalToolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetDatasheet(externalToolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolControllerGetDatasheet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1565,9 +1581,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerGetExternalTool(externalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolResponse>> {
+        async toolControllerGetExternalTool(externalToolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetExternalTool(externalToolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolControllerGetExternalTool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1576,9 +1594,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerGetExternalToolLogo(externalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async toolControllerGetExternalToolLogo(externalToolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetExternalToolLogo(externalToolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolControllerGetExternalToolLogo']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1587,9 +1607,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerGetUtilizationForExternalTool(externalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolUtilizationResponse>> {
+        async toolControllerGetUtilizationForExternalTool(externalToolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolUtilizationResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetUtilizationForExternalTool(externalToolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolControllerGetUtilizationForExternalTool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1598,9 +1620,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolImportResultListResponse>> {
+        async toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolImportResultListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerImportExternalTools(externalToolBulkCreateParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolControllerImportExternalTools']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1610,9 +1634,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerUpdateExternalTool(externalToolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolResponse>> {
+        async toolControllerUpdateExternalTool(externalToolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerUpdateExternalTool(externalToolId, externalToolUpdateParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolControllerUpdateExternalTool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1621,9 +1647,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolDeepLinkControllerDeepLink(contextExternalToolId, lti11DeepLinkParamsRaw, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolDeepLinkControllerDeepLink']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1632,9 +1660,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolLaunchControllerGetContextExternalToolLaunchRequest(contextExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolLaunchRequestResponse>> {
+        async toolLaunchControllerGetContextExternalToolLaunchRequest(contextExternalToolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolLaunchRequestResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolLaunchControllerGetContextExternalToolLaunchRequest(contextExternalToolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolLaunchControllerGetContextExternalToolLaunchRequest']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1644,9 +1674,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolLaunchControllerGetSchoolExternalToolLaunchRequest(schoolExternalToolId: string, contextExternalToolBodyParams: ContextExternalToolBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolLaunchRequestResponse>> {
+        async toolLaunchControllerGetSchoolExternalToolLaunchRequest(schoolExternalToolId: string, contextExternalToolBodyParams: ContextExternalToolBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolLaunchRequestResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolLaunchControllerGetSchoolExternalToolLaunchRequest(schoolExternalToolId, contextExternalToolBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolLaunchControllerGetSchoolExternalToolLaunchRequest']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1655,9 +1687,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolReferenceControllerGetToolReference(contextExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolReferenceResponse>> {
+        async toolReferenceControllerGetToolReference(contextExternalToolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolReferenceResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolReferenceControllerGetToolReference(contextExternalToolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolReferenceControllerGetToolReference']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1667,9 +1701,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolReferenceControllerGetToolReferencesForContext(contextId: string, contextType: ToolContextType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolReferenceListResponse>> {
+        async toolReferenceControllerGetToolReferencesForContext(contextId: string, contextType: ToolContextType, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolReferenceListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolReferenceControllerGetToolReferencesForContext(contextId, contextType, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolReferenceControllerGetToolReferencesForContext']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1678,9 +1714,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolSchoolControllerCreateSchoolExternalTool(schoolExternalToolPostParams: SchoolExternalToolPostParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolResponse>> {
+        async toolSchoolControllerCreateSchoolExternalTool(schoolExternalToolPostParams: SchoolExternalToolPostParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolSchoolControllerCreateSchoolExternalTool(schoolExternalToolPostParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolSchoolControllerCreateSchoolExternalTool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1689,9 +1727,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolSchoolControllerDeleteSchoolExternalTool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1700,9 +1740,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolMetadataResponse>> {
+        async toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolMetadataResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolSchoolControllerGetMetaDataForExternalTool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1711,9 +1753,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolResponse>> {
+        async toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolSchoolControllerGetSchoolExternalTool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1722,9 +1766,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolSchoolControllerGetSchoolExternalTools(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolSearchListResponse>> {
+        async toolSchoolControllerGetSchoolExternalTools(schoolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolSearchListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolSchoolControllerGetSchoolExternalTools(schoolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolSchoolControllerGetSchoolExternalTools']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -1734,16 +1780,17 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolSchoolControllerUpdateSchoolExternalTool(schoolExternalToolId: string, schoolExternalToolPostParams: SchoolExternalToolPostParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolResponse>> {
+        async toolSchoolControllerUpdateSchoolExternalTool(schoolExternalToolId: string, schoolExternalToolPostParams: SchoolExternalToolPostParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolSchoolControllerUpdateSchoolExternalTool(schoolExternalToolId, schoolExternalToolPostParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ToolApi.toolSchoolControllerUpdateSchoolExternalTool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * ToolApi - factory interface
- * @export
  */
 export const ToolApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = ToolApiFp(configuration)
@@ -1754,7 +1801,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId: string, options?: any): AxiosPromise<void> {
+        toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1765,7 +1812,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetAvailableToolsForContext(contextType: ToolContextType, contextId: string, options?: any): AxiosPromise<ContextExternalToolConfigurationTemplateListResponse> {
+        toolConfigurationControllerGetAvailableToolsForContext(contextType: ToolContextType, contextId: string, options?: RawAxiosRequestConfig): AxiosPromise<ContextExternalToolConfigurationTemplateListResponse> {
             return localVarFp.toolConfigurationControllerGetAvailableToolsForContext(contextType, contextId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1775,7 +1822,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetAvailableToolsForSchool(schoolId: string, options?: any): AxiosPromise<SchoolExternalToolConfigurationTemplateListResponse> {
+        toolConfigurationControllerGetAvailableToolsForSchool(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolExternalToolConfigurationTemplateListResponse> {
             return localVarFp.toolConfigurationControllerGetAvailableToolsForSchool(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1785,7 +1832,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetConfigurationTemplateForContext(contextExternalToolId: string, options?: any): AxiosPromise<ContextExternalToolConfigurationTemplateResponse> {
+        toolConfigurationControllerGetConfigurationTemplateForContext(contextExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<ContextExternalToolConfigurationTemplateResponse> {
             return localVarFp.toolConfigurationControllerGetConfigurationTemplateForContext(contextExternalToolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1795,7 +1842,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId: string, options?: any): AxiosPromise<SchoolExternalToolConfigurationTemplateResponse> {
+        toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolExternalToolConfigurationTemplateResponse> {
             return localVarFp.toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1805,7 +1852,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetPreferredToolsForContext(contextType?: ToolContextType, options?: any): AxiosPromise<PreferredToolListResponse> {
+        toolConfigurationControllerGetPreferredToolsForContext(contextType?: ToolContextType, options?: RawAxiosRequestConfig): AxiosPromise<PreferredToolListResponse> {
             return localVarFp.toolConfigurationControllerGetPreferredToolsForContext(contextType, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1814,7 +1861,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetToolContextTypes(options?: any): AxiosPromise<ToolContextTypesListResponse> {
+        toolConfigurationControllerGetToolContextTypes(options?: RawAxiosRequestConfig): AxiosPromise<ToolContextTypesListResponse> {
             return localVarFp.toolConfigurationControllerGetToolContextTypes(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1824,7 +1871,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolContextControllerCreateContextExternalTool(contextExternalToolPostParams: ContextExternalToolPostParams, options?: any): AxiosPromise<ContextExternalToolResponse> {
+        toolContextControllerCreateContextExternalTool(contextExternalToolPostParams: ContextExternalToolPostParams, options?: RawAxiosRequestConfig): AxiosPromise<ContextExternalToolResponse> {
             return localVarFp.toolContextControllerCreateContextExternalTool(contextExternalToolPostParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1834,7 +1881,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolContextControllerDeleteContextExternalTool(contextExternalToolId: string, options?: any): AxiosPromise<void> {
+        toolContextControllerDeleteContextExternalTool(contextExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.toolContextControllerDeleteContextExternalTool(contextExternalToolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1844,7 +1891,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolContextControllerGetContextExternalTool(contextExternalToolId: string, options?: any): AxiosPromise<ContextExternalToolResponse> {
+        toolContextControllerGetContextExternalTool(contextExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<ContextExternalToolResponse> {
             return localVarFp.toolContextControllerGetContextExternalTool(contextExternalToolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1855,7 +1902,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: ToolContextType, options?: any): AxiosPromise<ContextExternalToolSearchListResponse> {
+        toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: ToolContextType, options?: RawAxiosRequestConfig): AxiosPromise<ContextExternalToolSearchListResponse> {
             return localVarFp.toolContextControllerGetContextExternalToolsForContext(contextId, contextType, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1866,7 +1913,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolContextControllerUpdateContextExternalTool(contextExternalToolId: string, contextExternalToolPostParams: ContextExternalToolPostParams, options?: any): AxiosPromise<ContextExternalToolResponse> {
+        toolContextControllerUpdateContextExternalTool(contextExternalToolId: string, contextExternalToolPostParams: ContextExternalToolPostParams, options?: RawAxiosRequestConfig): AxiosPromise<ContextExternalToolResponse> {
             return localVarFp.toolContextControllerUpdateContextExternalTool(contextExternalToolId, contextExternalToolPostParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1876,7 +1923,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerCreateExternalTool(externalToolCreateParams: ExternalToolCreateParams, options?: any): AxiosPromise<ExternalToolResponse> {
+        toolControllerCreateExternalTool(externalToolCreateParams: ExternalToolCreateParams, options?: RawAxiosRequestConfig): AxiosPromise<ExternalToolResponse> {
             return localVarFp.toolControllerCreateExternalTool(externalToolCreateParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1886,7 +1933,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerDeleteExternalTool(externalToolId: string, options?: any): AxiosPromise<void> {
+        toolControllerDeleteExternalTool(externalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.toolControllerDeleteExternalTool(externalToolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1896,12 +1943,12 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {string} [clientId] OAuth2 client id of the external tool
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
-         * @param {'asc' | 'desc'} [sortOrder] 
-         * @param {'id' | 'name'} [sortBy] 
+         * @param {ToolControllerFindExternalToolSortOrder} [sortOrder] 
+         * @param {ToolControllerFindExternalToolSortBy} [sortBy] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): AxiosPromise<ExternalToolSearchListResponse> {
+        toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: ToolControllerFindExternalToolSortOrder, sortBy?: ToolControllerFindExternalToolSortBy, options?: RawAxiosRequestConfig): AxiosPromise<ExternalToolSearchListResponse> {
             return localVarFp.toolControllerFindExternalTool(name, clientId, skip, limit, sortOrder, sortBy, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1911,7 +1958,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetDatasheet(externalToolId: string, options?: any): AxiosPromise<void> {
+        toolControllerGetDatasheet(externalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.toolControllerGetDatasheet(externalToolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1921,7 +1968,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetExternalTool(externalToolId: string, options?: any): AxiosPromise<ExternalToolResponse> {
+        toolControllerGetExternalTool(externalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<ExternalToolResponse> {
             return localVarFp.toolControllerGetExternalTool(externalToolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1931,7 +1978,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetExternalToolLogo(externalToolId: string, options?: any): AxiosPromise<void> {
+        toolControllerGetExternalToolLogo(externalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.toolControllerGetExternalToolLogo(externalToolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1941,7 +1988,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetUtilizationForExternalTool(externalToolId: string, options?: any): AxiosPromise<ExternalToolUtilizationResponse> {
+        toolControllerGetUtilizationForExternalTool(externalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<ExternalToolUtilizationResponse> {
             return localVarFp.toolControllerGetUtilizationForExternalTool(externalToolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1951,7 +1998,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): AxiosPromise<ExternalToolImportResultListResponse> {
+        toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: RawAxiosRequestConfig): AxiosPromise<ExternalToolImportResultListResponse> {
             return localVarFp.toolControllerImportExternalTools(externalToolBulkCreateParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1962,7 +2009,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerUpdateExternalTool(externalToolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options?: any): AxiosPromise<ExternalToolResponse> {
+        toolControllerUpdateExternalTool(externalToolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options?: RawAxiosRequestConfig): AxiosPromise<ExternalToolResponse> {
             return localVarFp.toolControllerUpdateExternalTool(externalToolId, externalToolUpdateParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1972,7 +2019,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: any): AxiosPromise<string> {
+        toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: RawAxiosRequestConfig): AxiosPromise<string> {
             return localVarFp.toolDeepLinkControllerDeepLink(contextExternalToolId, lti11DeepLinkParamsRaw, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1982,7 +2029,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolLaunchControllerGetContextExternalToolLaunchRequest(contextExternalToolId: string, options?: any): AxiosPromise<ToolLaunchRequestResponse> {
+        toolLaunchControllerGetContextExternalToolLaunchRequest(contextExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<ToolLaunchRequestResponse> {
             return localVarFp.toolLaunchControllerGetContextExternalToolLaunchRequest(contextExternalToolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1993,7 +2040,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolLaunchControllerGetSchoolExternalToolLaunchRequest(schoolExternalToolId: string, contextExternalToolBodyParams: ContextExternalToolBodyParams, options?: any): AxiosPromise<ToolLaunchRequestResponse> {
+        toolLaunchControllerGetSchoolExternalToolLaunchRequest(schoolExternalToolId: string, contextExternalToolBodyParams: ContextExternalToolBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<ToolLaunchRequestResponse> {
             return localVarFp.toolLaunchControllerGetSchoolExternalToolLaunchRequest(schoolExternalToolId, contextExternalToolBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2003,7 +2050,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolReferenceControllerGetToolReference(contextExternalToolId: string, options?: any): AxiosPromise<ToolReferenceResponse> {
+        toolReferenceControllerGetToolReference(contextExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<ToolReferenceResponse> {
             return localVarFp.toolReferenceControllerGetToolReference(contextExternalToolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2014,7 +2061,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolReferenceControllerGetToolReferencesForContext(contextId: string, contextType: ToolContextType, options?: any): AxiosPromise<ToolReferenceListResponse> {
+        toolReferenceControllerGetToolReferencesForContext(contextId: string, contextType: ToolContextType, options?: RawAxiosRequestConfig): AxiosPromise<ToolReferenceListResponse> {
             return localVarFp.toolReferenceControllerGetToolReferencesForContext(contextId, contextType, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2024,7 +2071,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolSchoolControllerCreateSchoolExternalTool(schoolExternalToolPostParams: SchoolExternalToolPostParams, options?: any): AxiosPromise<SchoolExternalToolResponse> {
+        toolSchoolControllerCreateSchoolExternalTool(schoolExternalToolPostParams: SchoolExternalToolPostParams, options?: RawAxiosRequestConfig): AxiosPromise<SchoolExternalToolResponse> {
             return localVarFp.toolSchoolControllerCreateSchoolExternalTool(schoolExternalToolPostParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2034,7 +2081,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId: string, options?: any): AxiosPromise<void> {
+        toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2044,7 +2091,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId: string, options?: any): AxiosPromise<SchoolExternalToolMetadataResponse> {
+        toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolExternalToolMetadataResponse> {
             return localVarFp.toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2054,7 +2101,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId: string, options?: any): AxiosPromise<SchoolExternalToolResponse> {
+        toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolExternalToolResponse> {
             return localVarFp.toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2064,7 +2111,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolSchoolControllerGetSchoolExternalTools(schoolId: string, options?: any): AxiosPromise<SchoolExternalToolSearchListResponse> {
+        toolSchoolControllerGetSchoolExternalTools(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolExternalToolSearchListResponse> {
             return localVarFp.toolSchoolControllerGetSchoolExternalTools(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2075,7 +2122,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolSchoolControllerUpdateSchoolExternalTool(schoolExternalToolId: string, schoolExternalToolPostParams: SchoolExternalToolPostParams, options?: any): AxiosPromise<SchoolExternalToolResponse> {
+        toolSchoolControllerUpdateSchoolExternalTool(schoolExternalToolId: string, schoolExternalToolPostParams: SchoolExternalToolPostParams, options?: RawAxiosRequestConfig): AxiosPromise<SchoolExternalToolResponse> {
             return localVarFp.toolSchoolControllerUpdateSchoolExternalTool(schoolExternalToolId, schoolExternalToolPostParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -2083,8 +2130,6 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
 
 /**
  * ToolApi - interface
- * @export
- * @interface ToolApi
  */
 export interface ToolApiInterface {
     /**
@@ -2092,9 +2137,8 @@ export interface ToolApiInterface {
      * @param {string} contextExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId: string, options?: any): AxiosPromise<void>;
+    toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -2103,9 +2147,8 @@ export interface ToolApiInterface {
      * @param {string} contextId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolConfigurationControllerGetAvailableToolsForContext(contextType: ToolContextType, contextId: string, options?: any): AxiosPromise<ContextExternalToolConfigurationTemplateListResponse>;
+    toolConfigurationControllerGetAvailableToolsForContext(contextType: ToolContextType, contextId: string, options?: RawAxiosRequestConfig): AxiosPromise<ContextExternalToolConfigurationTemplateListResponse>;
 
     /**
      * 
@@ -2113,9 +2156,8 @@ export interface ToolApiInterface {
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolConfigurationControllerGetAvailableToolsForSchool(schoolId: string, options?: any): AxiosPromise<SchoolExternalToolConfigurationTemplateListResponse>;
+    toolConfigurationControllerGetAvailableToolsForSchool(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolExternalToolConfigurationTemplateListResponse>;
 
     /**
      * 
@@ -2123,9 +2165,8 @@ export interface ToolApiInterface {
      * @param {string} contextExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolConfigurationControllerGetConfigurationTemplateForContext(contextExternalToolId: string, options?: any): AxiosPromise<ContextExternalToolConfigurationTemplateResponse>;
+    toolConfigurationControllerGetConfigurationTemplateForContext(contextExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<ContextExternalToolConfigurationTemplateResponse>;
 
     /**
      * 
@@ -2133,9 +2174,8 @@ export interface ToolApiInterface {
      * @param {string} schoolExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId: string, options?: any): AxiosPromise<SchoolExternalToolConfigurationTemplateResponse>;
+    toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolExternalToolConfigurationTemplateResponse>;
 
     /**
      * 
@@ -2143,18 +2183,16 @@ export interface ToolApiInterface {
      * @param {ToolContextType} [contextType] Context types for tools
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolConfigurationControllerGetPreferredToolsForContext(contextType?: ToolContextType, options?: any): AxiosPromise<PreferredToolListResponse>;
+    toolConfigurationControllerGetPreferredToolsForContext(contextType?: ToolContextType, options?: RawAxiosRequestConfig): AxiosPromise<PreferredToolListResponse>;
 
     /**
      * 
      * @summary Lists all context types available in the SVS
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolConfigurationControllerGetToolContextTypes(options?: any): AxiosPromise<ToolContextTypesListResponse>;
+    toolConfigurationControllerGetToolContextTypes(options?: RawAxiosRequestConfig): AxiosPromise<ToolContextTypesListResponse>;
 
     /**
      * 
@@ -2162,9 +2200,8 @@ export interface ToolApiInterface {
      * @param {ContextExternalToolPostParams} contextExternalToolPostParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolContextControllerCreateContextExternalTool(contextExternalToolPostParams: ContextExternalToolPostParams, options?: any): AxiosPromise<ContextExternalToolResponse>;
+    toolContextControllerCreateContextExternalTool(contextExternalToolPostParams: ContextExternalToolPostParams, options?: RawAxiosRequestConfig): AxiosPromise<ContextExternalToolResponse>;
 
     /**
      * 
@@ -2172,9 +2209,8 @@ export interface ToolApiInterface {
      * @param {string} contextExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolContextControllerDeleteContextExternalTool(contextExternalToolId: string, options?: any): AxiosPromise<void>;
+    toolContextControllerDeleteContextExternalTool(contextExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -2182,9 +2218,8 @@ export interface ToolApiInterface {
      * @param {string} contextExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolContextControllerGetContextExternalTool(contextExternalToolId: string, options?: any): AxiosPromise<ContextExternalToolResponse>;
+    toolContextControllerGetContextExternalTool(contextExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<ContextExternalToolResponse>;
 
     /**
      * 
@@ -2193,9 +2228,8 @@ export interface ToolApiInterface {
      * @param {ToolContextType} contextType 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: ToolContextType, options?: any): AxiosPromise<ContextExternalToolSearchListResponse>;
+    toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: ToolContextType, options?: RawAxiosRequestConfig): AxiosPromise<ContextExternalToolSearchListResponse>;
 
     /**
      * 
@@ -2204,9 +2238,8 @@ export interface ToolApiInterface {
      * @param {ContextExternalToolPostParams} contextExternalToolPostParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolContextControllerUpdateContextExternalTool(contextExternalToolId: string, contextExternalToolPostParams: ContextExternalToolPostParams, options?: any): AxiosPromise<ContextExternalToolResponse>;
+    toolContextControllerUpdateContextExternalTool(contextExternalToolId: string, contextExternalToolPostParams: ContextExternalToolPostParams, options?: RawAxiosRequestConfig): AxiosPromise<ContextExternalToolResponse>;
 
     /**
      * 
@@ -2214,9 +2247,8 @@ export interface ToolApiInterface {
      * @param {ExternalToolCreateParams} externalToolCreateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolControllerCreateExternalTool(externalToolCreateParams: ExternalToolCreateParams, options?: any): AxiosPromise<ExternalToolResponse>;
+    toolControllerCreateExternalTool(externalToolCreateParams: ExternalToolCreateParams, options?: RawAxiosRequestConfig): AxiosPromise<ExternalToolResponse>;
 
     /**
      * 
@@ -2224,9 +2256,8 @@ export interface ToolApiInterface {
      * @param {string} externalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolControllerDeleteExternalTool(externalToolId: string, options?: any): AxiosPromise<void>;
+    toolControllerDeleteExternalTool(externalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -2235,13 +2266,12 @@ export interface ToolApiInterface {
      * @param {string} [clientId] OAuth2 client id of the external tool
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
-     * @param {'asc' | 'desc'} [sortOrder] 
-     * @param {'id' | 'name'} [sortBy] 
+     * @param {ToolControllerFindExternalToolSortOrder} [sortOrder] 
+     * @param {ToolControllerFindExternalToolSortBy} [sortBy] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): AxiosPromise<ExternalToolSearchListResponse>;
+    toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: ToolControllerFindExternalToolSortOrder, sortBy?: ToolControllerFindExternalToolSortBy, options?: RawAxiosRequestConfig): AxiosPromise<ExternalToolSearchListResponse>;
 
     /**
      * 
@@ -2249,9 +2279,8 @@ export interface ToolApiInterface {
      * @param {string} externalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolControllerGetDatasheet(externalToolId: string, options?: any): AxiosPromise<void>;
+    toolControllerGetDatasheet(externalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -2259,9 +2288,8 @@ export interface ToolApiInterface {
      * @param {string} externalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolControllerGetExternalTool(externalToolId: string, options?: any): AxiosPromise<ExternalToolResponse>;
+    toolControllerGetExternalTool(externalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<ExternalToolResponse>;
 
     /**
      * 
@@ -2269,9 +2297,8 @@ export interface ToolApiInterface {
      * @param {string} externalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolControllerGetExternalToolLogo(externalToolId: string, options?: any): AxiosPromise<void>;
+    toolControllerGetExternalToolLogo(externalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -2279,9 +2306,8 @@ export interface ToolApiInterface {
      * @param {string} externalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolControllerGetUtilizationForExternalTool(externalToolId: string, options?: any): AxiosPromise<ExternalToolUtilizationResponse>;
+    toolControllerGetUtilizationForExternalTool(externalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<ExternalToolUtilizationResponse>;
 
     /**
      * 
@@ -2289,9 +2315,8 @@ export interface ToolApiInterface {
      * @param {ExternalToolBulkCreateParams} externalToolBulkCreateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): AxiosPromise<ExternalToolImportResultListResponse>;
+    toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: RawAxiosRequestConfig): AxiosPromise<ExternalToolImportResultListResponse>;
 
     /**
      * 
@@ -2300,9 +2325,8 @@ export interface ToolApiInterface {
      * @param {ExternalToolUpdateParams} externalToolUpdateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolControllerUpdateExternalTool(externalToolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options?: any): AxiosPromise<ExternalToolResponse>;
+    toolControllerUpdateExternalTool(externalToolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options?: RawAxiosRequestConfig): AxiosPromise<ExternalToolResponse>;
 
     /**
      * 
@@ -2310,9 +2334,8 @@ export interface ToolApiInterface {
      * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: any): AxiosPromise<string>;
+    toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: RawAxiosRequestConfig): AxiosPromise<string>;
 
     /**
      * 
@@ -2320,9 +2343,8 @@ export interface ToolApiInterface {
      * @param {string} contextExternalToolId The id of the context external tool
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolLaunchControllerGetContextExternalToolLaunchRequest(contextExternalToolId: string, options?: any): AxiosPromise<ToolLaunchRequestResponse>;
+    toolLaunchControllerGetContextExternalToolLaunchRequest(contextExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<ToolLaunchRequestResponse>;
 
     /**
      * 
@@ -2331,9 +2353,8 @@ export interface ToolApiInterface {
      * @param {ContextExternalToolBodyParams} contextExternalToolBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolLaunchControllerGetSchoolExternalToolLaunchRequest(schoolExternalToolId: string, contextExternalToolBodyParams: ContextExternalToolBodyParams, options?: any): AxiosPromise<ToolLaunchRequestResponse>;
+    toolLaunchControllerGetSchoolExternalToolLaunchRequest(schoolExternalToolId: string, contextExternalToolBodyParams: ContextExternalToolBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<ToolLaunchRequestResponse>;
 
     /**
      * 
@@ -2341,9 +2362,8 @@ export interface ToolApiInterface {
      * @param {string} contextExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolReferenceControllerGetToolReference(contextExternalToolId: string, options?: any): AxiosPromise<ToolReferenceResponse>;
+    toolReferenceControllerGetToolReference(contextExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<ToolReferenceResponse>;
 
     /**
      * 
@@ -2352,9 +2372,8 @@ export interface ToolApiInterface {
      * @param {ToolContextType} contextType 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolReferenceControllerGetToolReferencesForContext(contextId: string, contextType: ToolContextType, options?: any): AxiosPromise<ToolReferenceListResponse>;
+    toolReferenceControllerGetToolReferencesForContext(contextId: string, contextType: ToolContextType, options?: RawAxiosRequestConfig): AxiosPromise<ToolReferenceListResponse>;
 
     /**
      * 
@@ -2362,9 +2381,8 @@ export interface ToolApiInterface {
      * @param {SchoolExternalToolPostParams} schoolExternalToolPostParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolSchoolControllerCreateSchoolExternalTool(schoolExternalToolPostParams: SchoolExternalToolPostParams, options?: any): AxiosPromise<SchoolExternalToolResponse>;
+    toolSchoolControllerCreateSchoolExternalTool(schoolExternalToolPostParams: SchoolExternalToolPostParams, options?: RawAxiosRequestConfig): AxiosPromise<SchoolExternalToolResponse>;
 
     /**
      * 
@@ -2372,9 +2390,8 @@ export interface ToolApiInterface {
      * @param {string} schoolExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId: string, options?: any): AxiosPromise<void>;
+    toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -2382,9 +2399,8 @@ export interface ToolApiInterface {
      * @param {string} schoolExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId: string, options?: any): AxiosPromise<SchoolExternalToolMetadataResponse>;
+    toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolExternalToolMetadataResponse>;
 
     /**
      * 
@@ -2392,9 +2408,8 @@ export interface ToolApiInterface {
      * @param {string} schoolExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId: string, options?: any): AxiosPromise<SchoolExternalToolResponse>;
+    toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolExternalToolResponse>;
 
     /**
      * 
@@ -2402,9 +2417,8 @@ export interface ToolApiInterface {
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolSchoolControllerGetSchoolExternalTools(schoolId: string, options?: any): AxiosPromise<SchoolExternalToolSearchListResponse>;
+    toolSchoolControllerGetSchoolExternalTools(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolExternalToolSearchListResponse>;
 
     /**
      * 
@@ -2413,17 +2427,13 @@ export interface ToolApiInterface {
      * @param {SchoolExternalToolPostParams} schoolExternalToolPostParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApiInterface
      */
-    toolSchoolControllerUpdateSchoolExternalTool(schoolExternalToolId: string, schoolExternalToolPostParams: SchoolExternalToolPostParams, options?: any): AxiosPromise<SchoolExternalToolResponse>;
+    toolSchoolControllerUpdateSchoolExternalTool(schoolExternalToolId: string, schoolExternalToolPostParams: SchoolExternalToolPostParams, options?: RawAxiosRequestConfig): AxiosPromise<SchoolExternalToolResponse>;
 
 }
 
 /**
  * ToolApi - object-oriented interface
- * @export
- * @class ToolApi
- * @extends {BaseAPI}
  */
 export class ToolApi extends BaseAPI implements ToolApiInterface {
     /**
@@ -2431,9 +2441,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} contextExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId: string, options?: any) {
+    public toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2444,9 +2453,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} contextId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolConfigurationControllerGetAvailableToolsForContext(contextType: ToolContextType, contextId: string, options?: any) {
+    public toolConfigurationControllerGetAvailableToolsForContext(contextType: ToolContextType, contextId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolConfigurationControllerGetAvailableToolsForContext(contextType, contextId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2456,9 +2464,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolConfigurationControllerGetAvailableToolsForSchool(schoolId: string, options?: any) {
+    public toolConfigurationControllerGetAvailableToolsForSchool(schoolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolConfigurationControllerGetAvailableToolsForSchool(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2468,9 +2475,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} contextExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolConfigurationControllerGetConfigurationTemplateForContext(contextExternalToolId: string, options?: any) {
+    public toolConfigurationControllerGetConfigurationTemplateForContext(contextExternalToolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolConfigurationControllerGetConfigurationTemplateForContext(contextExternalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2480,9 +2486,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} schoolExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId: string, options?: any) {
+    public toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2492,9 +2497,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {ToolContextType} [contextType] Context types for tools
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolConfigurationControllerGetPreferredToolsForContext(contextType?: ToolContextType, options?: any) {
+    public toolConfigurationControllerGetPreferredToolsForContext(contextType?: ToolContextType, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolConfigurationControllerGetPreferredToolsForContext(contextType, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2503,9 +2507,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @summary Lists all context types available in the SVS
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolConfigurationControllerGetToolContextTypes(options?: any) {
+    public toolConfigurationControllerGetToolContextTypes(options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolConfigurationControllerGetToolContextTypes(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2515,9 +2518,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {ContextExternalToolPostParams} contextExternalToolPostParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolContextControllerCreateContextExternalTool(contextExternalToolPostParams: ContextExternalToolPostParams, options?: any) {
+    public toolContextControllerCreateContextExternalTool(contextExternalToolPostParams: ContextExternalToolPostParams, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolContextControllerCreateContextExternalTool(contextExternalToolPostParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2527,9 +2529,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} contextExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolContextControllerDeleteContextExternalTool(contextExternalToolId: string, options?: any) {
+    public toolContextControllerDeleteContextExternalTool(contextExternalToolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolContextControllerDeleteContextExternalTool(contextExternalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2539,9 +2540,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} contextExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolContextControllerGetContextExternalTool(contextExternalToolId: string, options?: any) {
+    public toolContextControllerGetContextExternalTool(contextExternalToolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolContextControllerGetContextExternalTool(contextExternalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2552,9 +2552,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {ToolContextType} contextType 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: ToolContextType, options?: any) {
+    public toolContextControllerGetContextExternalToolsForContext(contextId: string, contextType: ToolContextType, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolContextControllerGetContextExternalToolsForContext(contextId, contextType, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2565,9 +2564,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {ContextExternalToolPostParams} contextExternalToolPostParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolContextControllerUpdateContextExternalTool(contextExternalToolId: string, contextExternalToolPostParams: ContextExternalToolPostParams, options?: any) {
+    public toolContextControllerUpdateContextExternalTool(contextExternalToolId: string, contextExternalToolPostParams: ContextExternalToolPostParams, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolContextControllerUpdateContextExternalTool(contextExternalToolId, contextExternalToolPostParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2577,9 +2575,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {ExternalToolCreateParams} externalToolCreateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolControllerCreateExternalTool(externalToolCreateParams: ExternalToolCreateParams, options?: any) {
+    public toolControllerCreateExternalTool(externalToolCreateParams: ExternalToolCreateParams, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolControllerCreateExternalTool(externalToolCreateParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2589,9 +2586,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} externalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolControllerDeleteExternalTool(externalToolId: string, options?: any) {
+    public toolControllerDeleteExternalTool(externalToolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolControllerDeleteExternalTool(externalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2602,13 +2598,12 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} [clientId] OAuth2 client id of the external tool
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
-     * @param {'asc' | 'desc'} [sortOrder] 
-     * @param {'id' | 'name'} [sortBy] 
+     * @param {ToolControllerFindExternalToolSortOrder} [sortOrder] 
+     * @param {ToolControllerFindExternalToolSortBy} [sortBy] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any) {
+    public toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: ToolControllerFindExternalToolSortOrder, sortBy?: ToolControllerFindExternalToolSortBy, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolControllerFindExternalTool(name, clientId, skip, limit, sortOrder, sortBy, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2618,9 +2613,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} externalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolControllerGetDatasheet(externalToolId: string, options?: any) {
+    public toolControllerGetDatasheet(externalToolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolControllerGetDatasheet(externalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2630,9 +2624,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} externalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolControllerGetExternalTool(externalToolId: string, options?: any) {
+    public toolControllerGetExternalTool(externalToolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolControllerGetExternalTool(externalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2642,9 +2635,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} externalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolControllerGetExternalToolLogo(externalToolId: string, options?: any) {
+    public toolControllerGetExternalToolLogo(externalToolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolControllerGetExternalToolLogo(externalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2654,9 +2646,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} externalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolControllerGetUtilizationForExternalTool(externalToolId: string, options?: any) {
+    public toolControllerGetUtilizationForExternalTool(externalToolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolControllerGetUtilizationForExternalTool(externalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2666,9 +2657,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {ExternalToolBulkCreateParams} externalToolBulkCreateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any) {
+    public toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolControllerImportExternalTools(externalToolBulkCreateParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2679,9 +2669,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {ExternalToolUpdateParams} externalToolUpdateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolControllerUpdateExternalTool(externalToolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options?: any) {
+    public toolControllerUpdateExternalTool(externalToolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolControllerUpdateExternalTool(externalToolId, externalToolUpdateParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2691,9 +2680,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: any) {
+    public toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolDeepLinkControllerDeepLink(contextExternalToolId, lti11DeepLinkParamsRaw, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2703,9 +2691,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} contextExternalToolId The id of the context external tool
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolLaunchControllerGetContextExternalToolLaunchRequest(contextExternalToolId: string, options?: any) {
+    public toolLaunchControllerGetContextExternalToolLaunchRequest(contextExternalToolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolLaunchControllerGetContextExternalToolLaunchRequest(contextExternalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2716,9 +2703,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {ContextExternalToolBodyParams} contextExternalToolBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolLaunchControllerGetSchoolExternalToolLaunchRequest(schoolExternalToolId: string, contextExternalToolBodyParams: ContextExternalToolBodyParams, options?: any) {
+    public toolLaunchControllerGetSchoolExternalToolLaunchRequest(schoolExternalToolId: string, contextExternalToolBodyParams: ContextExternalToolBodyParams, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolLaunchControllerGetSchoolExternalToolLaunchRequest(schoolExternalToolId, contextExternalToolBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2728,9 +2714,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} contextExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolReferenceControllerGetToolReference(contextExternalToolId: string, options?: any) {
+    public toolReferenceControllerGetToolReference(contextExternalToolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolReferenceControllerGetToolReference(contextExternalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2741,9 +2726,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {ToolContextType} contextType 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolReferenceControllerGetToolReferencesForContext(contextId: string, contextType: ToolContextType, options?: any) {
+    public toolReferenceControllerGetToolReferencesForContext(contextId: string, contextType: ToolContextType, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolReferenceControllerGetToolReferencesForContext(contextId, contextType, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2753,9 +2737,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {SchoolExternalToolPostParams} schoolExternalToolPostParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolSchoolControllerCreateSchoolExternalTool(schoolExternalToolPostParams: SchoolExternalToolPostParams, options?: any) {
+    public toolSchoolControllerCreateSchoolExternalTool(schoolExternalToolPostParams: SchoolExternalToolPostParams, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolSchoolControllerCreateSchoolExternalTool(schoolExternalToolPostParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2765,9 +2748,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} schoolExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId: string, options?: any) {
+    public toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2777,9 +2759,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} schoolExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId: string, options?: any) {
+    public toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2789,9 +2770,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} schoolExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId: string, options?: any) {
+    public toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2801,9 +2781,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolSchoolControllerGetSchoolExternalTools(schoolId: string, options?: any) {
+    public toolSchoolControllerGetSchoolExternalTools(schoolId: string, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolSchoolControllerGetSchoolExternalTools(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2814,9 +2793,17 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @param {SchoolExternalToolPostParams} schoolExternalToolPostParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ToolApi
      */
-    public toolSchoolControllerUpdateSchoolExternalTool(schoolExternalToolId: string, schoolExternalToolPostParams: SchoolExternalToolPostParams, options?: any) {
+    public toolSchoolControllerUpdateSchoolExternalTool(schoolExternalToolId: string, schoolExternalToolPostParams: SchoolExternalToolPostParams, options?: RawAxiosRequestConfig) {
         return ToolApiFp(this.configuration).toolSchoolControllerUpdateSchoolExternalTool(schoolExternalToolId, schoolExternalToolPostParams, options).then((request) => request(this.axios, this.basePath));
     }
+}
+
+export enum ToolControllerFindExternalToolSortOrder {
+    ASC = 'asc',
+    DESC = 'desc'
+}
+export enum ToolControllerFindExternalToolSortBy {
+    ID = 'id',
+    NAME = 'name'
 }

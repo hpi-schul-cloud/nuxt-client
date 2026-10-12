@@ -13,76 +13,28 @@
  */
 
 
-import { RoomColor } from './room-color';
-import { RoomFeatures } from './room-features';
-import { RoomItemResponseAllowedOperations } from './room-item-response-allowed-operations';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomColor } from './room-color';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomFeatures } from './room-features';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomItemResponseAllowedOperations } from './room-item-response-allowed-operations';
 
-/**
- * 
- * @export
- * @interface RoomDetailsResponse
- */
 export interface RoomDetailsResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {RoomColor}
-     * @memberof RoomDetailsResponse
-     */
-    color: RoomColor;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    schoolId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    startDate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    endDate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    updatedAt: string;
-    /**
-     * 
-     * @type {RoomItemResponseAllowedOperations}
-     * @memberof RoomDetailsResponse
-     */
-    allowedOperations?: RoomItemResponseAllowedOperations;
-    /**
-     * 
-     * @type {Array<RoomFeatures>}
-     * @memberof RoomDetailsResponse
-     */
-    features: Array<RoomFeatures>;
+    'id': string;
+    'name': string;
+    'color': RoomColor;
+    'schoolId': string;
+    'startDate'?: string;
+    'endDate'?: string;
+    'createdAt': string;
+    'updatedAt': string;
+    'allowedOperations'?: RoomItemResponseAllowedOperations;
+    'features': Array<RoomFeatures>;
 }
+
 
 

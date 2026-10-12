@@ -13,81 +13,26 @@
  */
 
 
-import { RoomColor } from './room-color';
-import { RoomItemResponseAllowedOperations } from './room-item-response-allowed-operations';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomColor } from './room-color';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomItemResponseAllowedOperations } from './room-item-response-allowed-operations';
 
-/**
- * 
- * @export
- * @interface RoomItemResponse
- */
 export interface RoomItemResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomItemResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomItemResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {RoomColor}
-     * @memberof RoomItemResponse
-     */
-    color: RoomColor;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomItemResponse
-     */
-    schoolId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomItemResponse
-     */
-    startDate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomItemResponse
-     */
-    endDate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomItemResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomItemResponse
-     */
-    updatedAt: string;
-    /**
-     * 
-     * @type {RoomItemResponseAllowedOperations}
-     * @memberof RoomItemResponse
-     */
-    allowedOperations?: RoomItemResponseAllowedOperations;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponse
-     */
-    isLocked: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof RoomItemResponse
-     */
-    totalMembers: number;
+    'id': string;
+    'name': string;
+    'color': RoomColor;
+    'schoolId': string;
+    'startDate'?: string;
+    'endDate'?: string;
+    'createdAt': string;
+    'updatedAt': string;
+    'allowedOperations'?: RoomItemResponseAllowedOperations;
+    'isLocked': boolean;
+    'totalMembers': number;
 }
+
 
 

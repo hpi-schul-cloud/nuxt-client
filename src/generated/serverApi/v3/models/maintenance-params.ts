@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface MaintenanceParams
- */
 export interface MaintenanceParams {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof MaintenanceParams
-     */
-    maintenance: boolean;
+    'maintenance': boolean;
 }
-
 

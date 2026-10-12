@@ -13,27 +13,20 @@
  */
 
 
-import { ContentElementType } from './content-element-type';
-import { FileContentBody } from './file-content-body';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContentElementType } from './content-element-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { FileContentBody } from './file-content-body';
 
-/**
- * 
- * @export
- * @interface FileElementContentBody
- */
 export interface FileElementContentBody {
     /**
      * the type of the updated element
-     * @type {ContentElementType}
-     * @memberof FileElementContentBody
      */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {FileContentBody}
-     * @memberof FileElementContentBody
-     */
-    content: FileContentBody;
+    'type': ContentElementType;
+    'content': FileContentBody;
 }
+
 
 

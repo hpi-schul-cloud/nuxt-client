@@ -14,53 +14,33 @@
 
 
 
-/**
- * 
- * @export
- * @interface CreateNewsParams
- */
 export interface CreateNewsParams {
     /**
      * Title of the News entity
-     * @type {string}
-     * @memberof CreateNewsParams
      */
-    title: string;
+    'title': string;
     /**
      * Content of the News entity
-     * @type {string}
-     * @memberof CreateNewsParams
      */
-    content: string;
+    'content': string;
     /**
      * The point in time from when the News entity schould be displayed. Defaults to now so that the news is published
-     * @type {string}
-     * @memberof CreateNewsParams
      */
-    displayAt?: string;
+    'displayAt'?: string;
     /**
      * Target model to which the News entity is related
-     * @type {string}
-     * @memberof CreateNewsParams
      */
-    targetModel: CreateNewsParamsTargetModel;
+    'targetModel': CreateNewsParamsTargetModel;
     /**
      * Specific target id to which the News entity is related
-     * @type {string}
-     * @memberof CreateNewsParams
      */
-    targetId: string;
+    'targetId': string;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum CreateNewsParamsTargetModel {
     SCHOOLS = 'schools',
     COURSES = 'courses',
     TEAMS = 'teams'
 }
-
 
 

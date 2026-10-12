@@ -13,38 +13,26 @@
  */
 
 
-import { ExternalToolResponse } from './external-tool-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ExternalToolResponse } from './external-tool-response';
 
-/**
- * 
- * @export
- * @interface ExternalToolSearchListResponse
- */
 export interface ExternalToolSearchListResponse {
     /**
      * The items for the current page.
-     * @type {Array<ExternalToolResponse>}
-     * @memberof ExternalToolSearchListResponse
      */
-    data: Array<ExternalToolResponse>;
+    'data': Array<ExternalToolResponse>;
     /**
      * The total amount of items.
-     * @type {number}
-     * @memberof ExternalToolSearchListResponse
      */
-    total: number;
+    'total': number;
     /**
      * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof ExternalToolSearchListResponse
      */
-    skip: number;
+    'skip': number;
     /**
      * The page size of the response.
-     * @type {number}
-     * @memberof ExternalToolSearchListResponse
      */
-    limit: number;
+    'limit': number;
 }
-
 

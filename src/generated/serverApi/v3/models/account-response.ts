@@ -14,42 +14,11 @@
 
 
 
-/**
- * 
- * @export
- * @interface AccountResponse
- */
 export interface AccountResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof AccountResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AccountResponse
-     */
-    username: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AccountResponse
-     */
-    userId: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AccountResponse
-     */
-    activated: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof AccountResponse
-     */
-    updatedAt: string;
+    'id': string;
+    'username': string;
+    'userId': string;
+    'activated': boolean;
+    'updatedAt': string;
 }
-
 

@@ -14,36 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface CountyResponse
- */
 export interface CountyResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof CountyResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CountyResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof CountyResponse
-     */
-    countyId: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof CountyResponse
-     */
-    antaresKey: string;
+    'id': string;
+    'name': string;
+    'countyId': number;
+    'antaresKey': string;
 }
-
 

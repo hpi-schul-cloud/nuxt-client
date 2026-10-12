@@ -2,7 +2,7 @@
   "$schema": "node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "5.1.0",
+    "version": "7.25.0",
     "generators": {
       "server-api": {
         "generatorName": "typescript-axios",
@@ -10,11 +10,19 @@
         "output": "./src/generated/serverApi/v3",
         "skipValidateSpec": true,
         "enablePostProcessFile": true,
+        "globalProperty": {
+          "apiDocs": false,
+          "modelDocs": false,
+          "models": "",
+          "apis": "",
+          "supportingFiles": ""
+        },
         "additionalProperties": {
           "apiPackage": "api",
           "enumNameSuffix": "",
           "enumPropertyNaming": "UPPERCASE",
           "modelPackage": "models",
+          "stringEnums": true,
           "supportsES6": true,
           "withInterfaces": true,
           "withSeparateModelsAndApi": true
@@ -25,6 +33,12 @@
         "inputSpec": "http://localhost:4446/api/v3/docs-json/",
         "output": "./src/generated/fwuApi/v3",
         "skipValidateSpec": true,
+        "globalProperty": {
+          "apiDocs": false,
+          "modelDocs": false,
+          "apis": "",
+          "supportingFiles": ""
+        },
         "enablePostProcessFile": true,
         "additionalProperties": {
           "apiPackage": "api",
@@ -42,6 +56,13 @@
         "output": "./src/generated/commonCartridgeApi/v3",
         "skipValidateSpec": true,
         "enablePostProcessFile": true,
+        "globalProperty": {
+          "apiDocs": false,
+          "modelDocs": false,
+          "models": "RobjExportKlasse:RobjExportLehrerMigration:RobjExportLehrer:RobjExportSchuelerMigration:RobjExportSchueler:RobjExportSchule:VersionResponse",
+          "apis": "",
+          "supportingFiles": ""
+        },
         "additionalProperties": {
           "apiPackage": "api",
           "enumNameSuffix": "",
@@ -58,6 +79,13 @@
         "output": "./src/generated/h5pEditorApi/v3",
         "skipValidateSpec": true,
         "enablePostProcessFile": true,
+        "globalProperty": {
+          "apiDocs": false,
+          "modelDocs": false,
+          "models": "RobjExportKlasse:RobjExportLehrerMigration:RobjExportLehrer:RobjExportSchuelerMigration:RobjExportSchueler:RobjExportSchule:VersionResponse",
+          "apis": "",
+          "supportingFiles": ""
+        },
         "additionalProperties": {
           "apiPackage": "api",
           "enumNameSuffix": "",
@@ -74,6 +102,13 @@
         "output": "./src/generated/fileStorageApi/v3",
         "skipValidateSpec": true,
         "enablePostProcessFile": true,
+        "globalProperty": {
+          "apiDocs": false,
+          "modelDocs": false,
+          "models": "RobjExportKlasse:RobjExportLehrerMigration:RobjExportLehrer:RobjExportSchuelerMigration:RobjExportSchueler:RobjExportSchule:VersionResponse",
+          "apis": "",
+          "supportingFiles": ""
+        },
         "additionalProperties": {
           "apiPackage": "api",
           "enumNameSuffix": "",
@@ -90,6 +125,13 @@
         "output": "./src/generated/notificationApi/v1",
         "skipValidateSpec": true,
         "enablePostProcessFile": true,
+        "globalProperty": {
+          "apiDocs": false,
+          "modelDocs": false,
+          "models": "RobjExportKlasse:RobjExportLehrerMigration:RobjExportLehrer:RobjExportSchuelerMigration:RobjExportSchueler:RobjExportSchule:VersionResponse",
+          "apis": "",
+          "supportingFiles": ""
+        },
         "additionalProperties": {
           "apiPackage": "api",
           "enumNameSuffix": "",

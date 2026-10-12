@@ -13,20 +13,11 @@
  */
 
 
-import { ContextExternalToolConfigurationTemplateResponse } from './context-external-tool-configuration-template-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContextExternalToolConfigurationTemplateResponse } from './context-external-tool-configuration-template-response';
 
-/**
- * 
- * @export
- * @interface ContextExternalToolConfigurationTemplateListResponse
- */
 export interface ContextExternalToolConfigurationTemplateListResponse {
-    /**
-     * 
-     * @type {Array<ContextExternalToolConfigurationTemplateResponse>}
-     * @memberof ContextExternalToolConfigurationTemplateListResponse
-     */
-    data: Array<ContextExternalToolConfigurationTemplateResponse>;
+    'data': Array<ContextExternalToolConfigurationTemplateResponse>;
 }
-
 

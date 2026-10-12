@@ -16,9 +16,8 @@
 
 /**
  * Copy progress status of copied element
- * @export
- * @enum {string}
  */
+
 export enum CopyStatusEnum {
     SUCCESS = 'success',
     FAILURE = 'failure',

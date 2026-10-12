@@ -13,20 +13,11 @@
  */
 
 
-import { ContextExternalToolCountPerContextResponse } from './context-external-tool-count-per-context-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContextExternalToolCountPerContextResponse } from './context-external-tool-count-per-context-response';
 
-/**
- * 
- * @export
- * @interface SchoolExternalToolMetadataResponse
- */
 export interface SchoolExternalToolMetadataResponse {
-    /**
-     * 
-     * @type {ContextExternalToolCountPerContextResponse}
-     * @memberof SchoolExternalToolMetadataResponse
-     */
-    contextExternalToolCountPerContext: ContextExternalToolCountPerContextResponse;
+    'contextExternalToolCountPerContext': ContextExternalToolCountPerContextResponse;
 }
-
 

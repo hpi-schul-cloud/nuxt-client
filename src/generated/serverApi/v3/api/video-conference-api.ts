@@ -13,24 +13,24 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { VideoConferenceCreateParams } from '../models';
+import type { VideoConferenceCreateParams } from '../models';
 // @ts-ignore
-import { VideoConferenceInfoResponse } from '../models';
+import type { VideoConferenceInfoResponse } from '../models';
 // @ts-ignore
-import { VideoConferenceJoinResponse } from '../models';
+import type { VideoConferenceJoinResponse } from '../models';
 // @ts-ignore
-import { VideoConferenceScope } from '../models';
+import type { VideoConferenceScope } from '../models';
 /**
  * VideoConferenceApi - axios parameter creator
- * @export
  */
 export const VideoConferenceApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -42,14 +42,14 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerEnd: async (scope: VideoConferenceScope, scopeId: string, options: any = {}): Promise<RequestArgs> => {
+        videoConferenceControllerEnd: async (scope: VideoConferenceScope, scopeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'scope' is not null or undefined
             assertParamExists('videoConferenceControllerEnd', 'scope', scope)
             // verify required parameter 'scopeId' is not null or undefined
             assertParamExists('videoConferenceControllerEnd', 'scopeId', scopeId)
             const localVarPath = `/videoconference2/{scope}/{scopeId}/end`
-                .replace(`{${"scope"}}`, encodeURIComponent(String(scope)))
-                .replace(`{${"scopeId"}}`, encodeURIComponent(String(scopeId)));
+                .replace('{scope}', encodeURIComponent(String(scope)))
+                .replace('{scopeId}', encodeURIComponent(String(scopeId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -66,8 +66,7 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -84,14 +83,14 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerInfo: async (scope: VideoConferenceScope, scopeId: string, options: any = {}): Promise<RequestArgs> => {
+        videoConferenceControllerInfo: async (scope: VideoConferenceScope, scopeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'scope' is not null or undefined
             assertParamExists('videoConferenceControllerInfo', 'scope', scope)
             // verify required parameter 'scopeId' is not null or undefined
             assertParamExists('videoConferenceControllerInfo', 'scopeId', scopeId)
             const localVarPath = `/videoconference2/{scope}/{scopeId}/info`
-                .replace(`{${"scope"}}`, encodeURIComponent(String(scope)))
-                .replace(`{${"scopeId"}}`, encodeURIComponent(String(scopeId)));
+                .replace('{scope}', encodeURIComponent(String(scope)))
+                .replace('{scopeId}', encodeURIComponent(String(scopeId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -107,9 +106,9 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -126,14 +125,14 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerJoin: async (scope: VideoConferenceScope, scopeId: string, options: any = {}): Promise<RequestArgs> => {
+        videoConferenceControllerJoin: async (scope: VideoConferenceScope, scopeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'scope' is not null or undefined
             assertParamExists('videoConferenceControllerJoin', 'scope', scope)
             // verify required parameter 'scopeId' is not null or undefined
             assertParamExists('videoConferenceControllerJoin', 'scopeId', scopeId)
             const localVarPath = `/videoconference2/{scope}/{scopeId}/join`
-                .replace(`{${"scope"}}`, encodeURIComponent(String(scope)))
-                .replace(`{${"scopeId"}}`, encodeURIComponent(String(scopeId)));
+                .replace('{scope}', encodeURIComponent(String(scope)))
+                .replace('{scopeId}', encodeURIComponent(String(scopeId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -149,9 +148,9 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -169,7 +168,7 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerStart: async (scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options: any = {}): Promise<RequestArgs> => {
+        videoConferenceControllerStart: async (scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'scope' is not null or undefined
             assertParamExists('videoConferenceControllerStart', 'scope', scope)
             // verify required parameter 'scopeId' is not null or undefined
@@ -177,8 +176,8 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
             // verify required parameter 'videoConferenceCreateParams' is not null or undefined
             assertParamExists('videoConferenceControllerStart', 'videoConferenceCreateParams', videoConferenceCreateParams)
             const localVarPath = `/videoconference2/{scope}/{scopeId}/start`
-                .replace(`{${"scope"}}`, encodeURIComponent(String(scope)))
-                .replace(`{${"scopeId"}}`, encodeURIComponent(String(scopeId)));
+                .replace('{scope}', encodeURIComponent(String(scope)))
+                .replace('{scopeId}', encodeURIComponent(String(scopeId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -194,11 +193,9 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(videoConferenceCreateParams, localVarRequestOptions, configuration)
@@ -217,7 +214,7 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceDeprecatedControllerCreateAndJoin: async (scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options: any = {}): Promise<RequestArgs> => {
+        videoConferenceDeprecatedControllerCreateAndJoin: async (scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'scope' is not null or undefined
             assertParamExists('videoConferenceDeprecatedControllerCreateAndJoin', 'scope', scope)
             // verify required parameter 'scopeId' is not null or undefined
@@ -225,8 +222,8 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
             // verify required parameter 'videoConferenceCreateParams' is not null or undefined
             assertParamExists('videoConferenceDeprecatedControllerCreateAndJoin', 'videoConferenceCreateParams', videoConferenceCreateParams)
             const localVarPath = `/videoconference/{scope}/{scopeId}`
-                .replace(`{${"scope"}}`, encodeURIComponent(String(scope)))
-                .replace(`{${"scopeId"}}`, encodeURIComponent(String(scopeId)));
+                .replace('{scope}', encodeURIComponent(String(scope)))
+                .replace('{scopeId}', encodeURIComponent(String(scopeId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -242,11 +239,10 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(videoConferenceCreateParams, localVarRequestOptions, configuration)
@@ -264,14 +260,14 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceDeprecatedControllerEnd: async (scope: string, scopeId: string, options: any = {}): Promise<RequestArgs> => {
+        videoConferenceDeprecatedControllerEnd: async (scope: string, scopeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'scope' is not null or undefined
             assertParamExists('videoConferenceDeprecatedControllerEnd', 'scope', scope)
             // verify required parameter 'scopeId' is not null or undefined
             assertParamExists('videoConferenceDeprecatedControllerEnd', 'scopeId', scopeId)
             const localVarPath = `/videoconference/{scope}/{scopeId}`
-                .replace(`{${"scope"}}`, encodeURIComponent(String(scope)))
-                .replace(`{${"scopeId"}}`, encodeURIComponent(String(scopeId)));
+                .replace('{scope}', encodeURIComponent(String(scope)))
+                .replace('{scopeId}', encodeURIComponent(String(scopeId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -287,9 +283,9 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -306,14 +302,14 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceDeprecatedControllerInfo: async (scope: string, scopeId: string, options: any = {}): Promise<RequestArgs> => {
+        videoConferenceDeprecatedControllerInfo: async (scope: string, scopeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'scope' is not null or undefined
             assertParamExists('videoConferenceDeprecatedControllerInfo', 'scope', scope)
             // verify required parameter 'scopeId' is not null or undefined
             assertParamExists('videoConferenceDeprecatedControllerInfo', 'scopeId', scopeId)
             const localVarPath = `/videoconference/{scope}/{scopeId}`
-                .replace(`{${"scope"}}`, encodeURIComponent(String(scope)))
-                .replace(`{${"scopeId"}}`, encodeURIComponent(String(scopeId)));
+                .replace('{scope}', encodeURIComponent(String(scope)))
+                .replace('{scopeId}', encodeURIComponent(String(scopeId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -329,9 +325,9 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -345,7 +341,6 @@ export const VideoConferenceApiAxiosParamCreator = function (configuration?: Con
 
 /**
  * VideoConferenceApi - functional programming interface
- * @export
  */
 export const VideoConferenceApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = VideoConferenceApiAxiosParamCreator(configuration)
@@ -358,9 +353,11 @@ export const VideoConferenceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceControllerEnd(scope, scopeId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['VideoConferenceApi.videoConferenceControllerEnd']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * Use this endpoint to get information about a running video conference.
@@ -370,9 +367,11 @@ export const VideoConferenceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videoConferenceControllerInfo(scope: VideoConferenceScope, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VideoConferenceInfoResponse>> {
+        async videoConferenceControllerInfo(scope: VideoConferenceScope, scopeId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VideoConferenceInfoResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceControllerInfo(scope, scopeId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['VideoConferenceApi.videoConferenceControllerInfo']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * Use this endpoint to get a link to join an existing video conference. The conference must be running.
@@ -382,9 +381,11 @@ export const VideoConferenceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videoConferenceControllerJoin(scope: VideoConferenceScope, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VideoConferenceJoinResponse>> {
+        async videoConferenceControllerJoin(scope: VideoConferenceScope, scopeId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VideoConferenceJoinResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceControllerJoin(scope, scopeId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['VideoConferenceApi.videoConferenceControllerJoin']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * Use this endpoint to start a video conference. If the conference is not yet running, it will be created.
@@ -395,9 +396,11 @@ export const VideoConferenceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceControllerStart(scope, scopeId, videoConferenceCreateParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['VideoConferenceApi.videoConferenceControllerStart']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -408,9 +411,11 @@ export const VideoConferenceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videoConferenceDeprecatedControllerCreateAndJoin(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async videoConferenceDeprecatedControllerCreateAndJoin(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceDeprecatedControllerCreateAndJoin(scope, scopeId, videoConferenceCreateParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['VideoConferenceApi.videoConferenceDeprecatedControllerCreateAndJoin']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -420,9 +425,11 @@ export const VideoConferenceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videoConferenceDeprecatedControllerEnd(scope: string, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async videoConferenceDeprecatedControllerEnd(scope: string, scopeId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceDeprecatedControllerEnd(scope, scopeId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['VideoConferenceApi.videoConferenceDeprecatedControllerEnd']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -432,16 +439,17 @@ export const VideoConferenceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceDeprecatedControllerInfo(scope, scopeId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['VideoConferenceApi.videoConferenceDeprecatedControllerInfo']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * VideoConferenceApi - factory interface
- * @export
  */
 export const VideoConferenceApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = VideoConferenceApiFp(configuration)
@@ -454,7 +462,7 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<void> {
+        videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.videoConferenceControllerEnd(scope, scopeId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -465,7 +473,7 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerInfo(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<VideoConferenceInfoResponse> {
+        videoConferenceControllerInfo(scope: VideoConferenceScope, scopeId: string, options?: RawAxiosRequestConfig): AxiosPromise<VideoConferenceInfoResponse> {
             return localVarFp.videoConferenceControllerInfo(scope, scopeId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -476,7 +484,7 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerJoin(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<VideoConferenceJoinResponse> {
+        videoConferenceControllerJoin(scope: VideoConferenceScope, scopeId: string, options?: RawAxiosRequestConfig): AxiosPromise<VideoConferenceJoinResponse> {
             return localVarFp.videoConferenceControllerJoin(scope, scopeId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -488,7 +496,7 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): AxiosPromise<void> {
+        videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.videoConferenceControllerStart(scope, scopeId, videoConferenceCreateParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -500,7 +508,7 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceDeprecatedControllerCreateAndJoin(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): AxiosPromise<object> {
+        videoConferenceDeprecatedControllerCreateAndJoin(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: RawAxiosRequestConfig): AxiosPromise<object> {
             return localVarFp.videoConferenceDeprecatedControllerCreateAndJoin(scope, scopeId, videoConferenceCreateParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -511,7 +519,7 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceDeprecatedControllerEnd(scope: string, scopeId: string, options?: any): AxiosPromise<object> {
+        videoConferenceDeprecatedControllerEnd(scope: string, scopeId: string, options?: RawAxiosRequestConfig): AxiosPromise<object> {
             return localVarFp.videoConferenceDeprecatedControllerEnd(scope, scopeId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -522,7 +530,7 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: any): AxiosPromise<object> {
+        videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: RawAxiosRequestConfig): AxiosPromise<object> {
             return localVarFp.videoConferenceDeprecatedControllerInfo(scope, scopeId, options).then((request) => request(axios, basePath));
         },
     };
@@ -530,8 +538,6 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
 
 /**
  * VideoConferenceApi - interface
- * @export
- * @interface VideoConferenceApi
  */
 export interface VideoConferenceApiInterface {
     /**
@@ -541,9 +547,8 @@ export interface VideoConferenceApiInterface {
      * @param {string} scopeId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof VideoConferenceApiInterface
      */
-    videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<void>;
+    videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * Use this endpoint to get information about a running video conference.
@@ -552,9 +557,8 @@ export interface VideoConferenceApiInterface {
      * @param {string} scopeId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof VideoConferenceApiInterface
      */
-    videoConferenceControllerInfo(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<VideoConferenceInfoResponse>;
+    videoConferenceControllerInfo(scope: VideoConferenceScope, scopeId: string, options?: RawAxiosRequestConfig): AxiosPromise<VideoConferenceInfoResponse>;
 
     /**
      * Use this endpoint to get a link to join an existing video conference. The conference must be running.
@@ -563,9 +567,8 @@ export interface VideoConferenceApiInterface {
      * @param {string} scopeId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof VideoConferenceApiInterface
      */
-    videoConferenceControllerJoin(scope: VideoConferenceScope, scopeId: string, options?: any): AxiosPromise<VideoConferenceJoinResponse>;
+    videoConferenceControllerJoin(scope: VideoConferenceScope, scopeId: string, options?: RawAxiosRequestConfig): AxiosPromise<VideoConferenceJoinResponse>;
 
     /**
      * Use this endpoint to start a video conference. If the conference is not yet running, it will be created.
@@ -575,9 +578,8 @@ export interface VideoConferenceApiInterface {
      * @param {VideoConferenceCreateParams} videoConferenceCreateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof VideoConferenceApiInterface
      */
-    videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): AxiosPromise<void>;
+    videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -587,9 +589,8 @@ export interface VideoConferenceApiInterface {
      * @param {VideoConferenceCreateParams} videoConferenceCreateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof VideoConferenceApiInterface
      */
-    videoConferenceDeprecatedControllerCreateAndJoin(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any): AxiosPromise<object>;
+    videoConferenceDeprecatedControllerCreateAndJoin(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
      * 
@@ -598,9 +599,8 @@ export interface VideoConferenceApiInterface {
      * @param {string} scopeId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof VideoConferenceApiInterface
      */
-    videoConferenceDeprecatedControllerEnd(scope: string, scopeId: string, options?: any): AxiosPromise<object>;
+    videoConferenceDeprecatedControllerEnd(scope: string, scopeId: string, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
      * 
@@ -609,17 +609,13 @@ export interface VideoConferenceApiInterface {
      * @param {string} scopeId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof VideoConferenceApiInterface
      */
-    videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: any): AxiosPromise<object>;
+    videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
 }
 
 /**
  * VideoConferenceApi - object-oriented interface
- * @export
- * @class VideoConferenceApi
- * @extends {BaseAPI}
  */
 export class VideoConferenceApi extends BaseAPI implements VideoConferenceApiInterface {
     /**
@@ -629,9 +625,8 @@ export class VideoConferenceApi extends BaseAPI implements VideoConferenceApiInt
      * @param {string} scopeId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof VideoConferenceApi
      */
-    public videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: any) {
+    public videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: RawAxiosRequestConfig) {
         return VideoConferenceApiFp(this.configuration).videoConferenceControllerEnd(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -642,9 +637,8 @@ export class VideoConferenceApi extends BaseAPI implements VideoConferenceApiInt
      * @param {string} scopeId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof VideoConferenceApi
      */
-    public videoConferenceControllerInfo(scope: VideoConferenceScope, scopeId: string, options?: any) {
+    public videoConferenceControllerInfo(scope: VideoConferenceScope, scopeId: string, options?: RawAxiosRequestConfig) {
         return VideoConferenceApiFp(this.configuration).videoConferenceControllerInfo(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -655,9 +649,8 @@ export class VideoConferenceApi extends BaseAPI implements VideoConferenceApiInt
      * @param {string} scopeId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof VideoConferenceApi
      */
-    public videoConferenceControllerJoin(scope: VideoConferenceScope, scopeId: string, options?: any) {
+    public videoConferenceControllerJoin(scope: VideoConferenceScope, scopeId: string, options?: RawAxiosRequestConfig) {
         return VideoConferenceApiFp(this.configuration).videoConferenceControllerJoin(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -669,9 +662,8 @@ export class VideoConferenceApi extends BaseAPI implements VideoConferenceApiInt
      * @param {VideoConferenceCreateParams} videoConferenceCreateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof VideoConferenceApi
      */
-    public videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any) {
+    public videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: RawAxiosRequestConfig) {
         return VideoConferenceApiFp(this.configuration).videoConferenceControllerStart(scope, scopeId, videoConferenceCreateParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -683,9 +675,8 @@ export class VideoConferenceApi extends BaseAPI implements VideoConferenceApiInt
      * @param {VideoConferenceCreateParams} videoConferenceCreateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof VideoConferenceApi
      */
-    public videoConferenceDeprecatedControllerCreateAndJoin(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: any) {
+    public videoConferenceDeprecatedControllerCreateAndJoin(scope: string, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: RawAxiosRequestConfig) {
         return VideoConferenceApiFp(this.configuration).videoConferenceDeprecatedControllerCreateAndJoin(scope, scopeId, videoConferenceCreateParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -696,9 +687,8 @@ export class VideoConferenceApi extends BaseAPI implements VideoConferenceApiInt
      * @param {string} scopeId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof VideoConferenceApi
      */
-    public videoConferenceDeprecatedControllerEnd(scope: string, scopeId: string, options?: any) {
+    public videoConferenceDeprecatedControllerEnd(scope: string, scopeId: string, options?: RawAxiosRequestConfig) {
         return VideoConferenceApiFp(this.configuration).videoConferenceDeprecatedControllerEnd(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -709,9 +699,9 @@ export class VideoConferenceApi extends BaseAPI implements VideoConferenceApiInt
      * @param {string} scopeId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof VideoConferenceApi
      */
-    public videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: any) {
+    public videoConferenceDeprecatedControllerInfo(scope: string, scopeId: string, options?: RawAxiosRequestConfig) {
         return VideoConferenceApiFp(this.configuration).videoConferenceDeprecatedControllerInfo(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

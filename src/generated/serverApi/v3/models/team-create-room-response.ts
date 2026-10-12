@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface TeamCreateRoomResponse
- */
 export interface TeamCreateRoomResponse {
     /**
      * The id of the exported room.
-     * @type {string}
-     * @memberof TeamCreateRoomResponse
      */
-    roomId: string;
+    'roomId': string;
 }
-
 
