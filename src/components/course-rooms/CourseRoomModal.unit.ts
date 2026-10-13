@@ -15,7 +15,7 @@ describe("CourseRoomModal", () => {
 
 	const getWrapper = (props: { isOpen: boolean }) => {
 		const { isOpen } = props;
-		const pinia = createTestingPinia({ stubActions: false });
+		const pinia = createTestingPinia();
 		setActivePinia(pinia);
 
 		const courseRoomListStore = mockedPiniaStoreTyping(useCourseRoomListStore);
