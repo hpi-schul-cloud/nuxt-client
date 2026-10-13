@@ -178,7 +178,7 @@ export default {
 	"common.notifications.errors.notShared": "{type} konnte nicht geteilt werden. | {type} konnten nicht geteilt werden.",
 	"common.notifications.listWithMore": "{list} ... ({count} weitere)",
 	"common.notifications.warning.filesNotCopied":
-		"{type} wurde dupliziert, aber folgende Dateien konnten nicht kopiert werden: {files}",
+		"{type} wurde dupliziert, aber einige Dateien konnten nicht kopiert werden: {files}",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.email.confirmation": "E-Mail-Adresse wiederholen",
 	"common.placeholder.email.update": "Neue E-Mail-Adresse",

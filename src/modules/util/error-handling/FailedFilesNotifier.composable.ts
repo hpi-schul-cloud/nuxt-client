@@ -1,12 +1,12 @@
 import { useI18nGlobal } from "@/plugins/i18n";
 import { notifyWarning } from "@data-app";
 
-const MAX_FILE_NAMES_LENGTH = 100;
+const MAX_FILE_LIST_CHARLENGTH = 150;
 const SEPARATOR = ", ";
 
 export const truncateFileNames = (
 	fileNames: string[],
-	maxLength = MAX_FILE_NAMES_LENGTH
+	maxLength = MAX_FILE_LIST_CHARLENGTH
 ): { list: string; remainingCount: number } => {
 	const includedNames: string[] = [];
 	let length = 0;

@@ -295,7 +295,7 @@ describe("useCopyFlow", () => {
 				});
 			});
 
-			describe("and the api call is successfull but files could not be copied", () => {
+			describe("and the api call is successful but files could not be copied", () => {
 				const setup = () => {
 					const response = mockApiSuccess(type);
 					response.data.status = CopyStatusEnum.PARTIAL;
