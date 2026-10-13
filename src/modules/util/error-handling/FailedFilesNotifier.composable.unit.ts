@@ -14,7 +14,7 @@ describe("FailedFilesNotifier", () => {
 	describe("truncateFileNames", () => {
 		describe("when all names fit into the limit", () => {
 			it("should return all names without remaining count", () => {
-				const result = truncateFileNames(["a.pdf", "b.mp4"], 100);
+				const result = truncateFileNames(["a.pdf", "b.mp4"], 150);
 
 				expect(result).toEqual({ list: "a.pdf, b.mp4", remainingCount: 0 });
 			});
@@ -32,19 +32,19 @@ describe("FailedFilesNotifier", () => {
 			it("should still return the first name", () => {
 				const longName = `${"x".repeat(150)}.mp4`;
 
-				const result = truncateFileNames([longName, "b.mp4"], 100);
+				const result = truncateFileNames([longName, "b.mp4"], 150);
 
 				expect(result).toEqual({ list: longName, remainingCount: 1 });
 			});
 		});
 
 		describe("when no limit is given", () => {
-			it("should limit the list to about 100 characters", () => {
+			it("should limit the list to about 150 characters", () => {
 				const names = Array.from({ length: 20 }, (_, index) => `file-${index}.pdf`);
 
 				const { list, remainingCount } = truncateFileNames(names);
 
-				expect(list.length).toBeLessThanOrEqual(100);
+				expect(list.length).toBeLessThanOrEqual(150);
 				expect(remainingCount).toBeGreaterThan(0);
 			});
 		});
