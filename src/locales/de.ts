@@ -2091,6 +2091,8 @@ export default {
 	"feature.quickNav.hint.open": "↵ öffnen",
 	"feature.quickNav.hint.close": "Esc schließen",
 	"feature.quickNav.shortcut.ctrlK": "Strg+K",
+	"feature.quickNav.dialog": "Schnellnavigation",
+	"feature.quickNav.resultCount": "Treffer: {count}",
 	"feature.media-shelf.title": "Medienregal",
 	"feature.media-shelf.emptyState": "Aktuell sind keine Medien zur Verwendung vorhanden",
 	"feature.media-shelf.createLine": "Abschnitt hinzufügen",

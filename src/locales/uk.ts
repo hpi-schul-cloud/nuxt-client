@@ -2071,6 +2071,8 @@ export default {
 	"feature.quickNav.hint.open": "↵ відкрити",
 	"feature.quickNav.hint.close": "Esc закрити",
 	"feature.quickNav.shortcut.ctrlK": "Ctrl+K",
+	"feature.quickNav.dialog": "Швидка навігація",
+	"feature.quickNav.resultCount": "Результати: {count}",
 	"feature.media-shelf.title": "Полиця для медіа",
 	"feature.media-shelf.emptyState": "Наразі немає медіафайлів, доступних для використання",
 	"feature.media-shelf.createLine": "Додайте лінію",

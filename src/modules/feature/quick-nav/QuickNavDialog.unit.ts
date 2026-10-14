@@ -7,7 +7,7 @@ import { createTestAppStoreWithPermissions, createTestEnvStore, mountComposable 
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
-import { mount } from "@vue/test-utils";
+import { enableAutoUnmount, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
@@ -32,6 +32,8 @@ const entry = (kind: QuickNavKind, title: string, target: Partial<QuickNavEntry>
 });
 
 describe("QuickNavDialog", () => {
+	enableAutoUnmount(afterEach);
+
 	const setup = () => {
 		const pinia = createTestingPinia();
 		setActivePinia(pinia);
@@ -243,6 +245,90 @@ describe("QuickNavDialog", () => {
 				const { palette } = await setupAndClickAction();
 
 				expect(palette.isOpen.value).toBe(false);
+			});
+		});
+	});
+
+	describe("accessibility", () => {
+		it("names the dialog", async () => {
+			const { wrapper, palette } = setup();
+
+			palette.open();
+			await nextTick();
+
+			expect(wrapper.get(".v-dialog-stub").attributes("aria-label")).toBe("Quick navigation");
+		});
+
+		it("labels each group of results with its heading", async () => {
+			const { wrapper, sourcesStore, openWith } = setup();
+			sourcesStore.tasks = [entry(QuickNavKind.TASK, "Hausaufgabe")];
+			await openWith("Hausaufgabe");
+
+			const group = wrapper.get("[role=group]");
+			const heading = wrapper.get(`[id="${group.attributes("aria-labelledby")}"]`);
+
+			expect(heading.text()).toBe("Tasks");
+		});
+
+		it("keeps the empty message out of the list of results", async () => {
+			const { wrapper, openWith } = setup();
+
+			await openWith("zzzzzz");
+
+			expect(wrapper.get("[role=listbox]").find("[data-testid=quick-nav-empty]").exists()).toBe(false);
+		});
+
+		describe("status message for screen readers", () => {
+			it("announces how many results were found", async () => {
+				const { wrapper, sourcesStore, openWith } = setup();
+				sourcesStore.rooms = [entry(QuickNavKind.ROOM, "Theater A"), entry(QuickNavKind.ROOM, "Theater B")];
+
+				await openWith("Theater");
+
+				expect(wrapper.get("[data-testid=quick-nav-status]").text()).toBe("Results: 2");
+			});
+
+			it("announces when nothing was found", async () => {
+				const { wrapper, openWith } = setup();
+
+				await openWith("zzzzzz");
+
+				expect(wrapper.get("[data-testid=quick-nav-status]").text()).toBe("Nothing found.");
+			});
+
+			it("announces nothing before anything is typed", async () => {
+				const { wrapper, palette } = setup();
+
+				palette.open();
+				await nextTick();
+
+				expect(wrapper.get("[data-testid=quick-nav-status]").text()).toBe("");
+			});
+
+			it("is a polite live region", async () => {
+				const { wrapper, palette } = setup();
+
+				palette.open();
+				await nextTick();
+
+				expect(wrapper.get("[data-testid=quick-nav-status]").attributes("role")).toBe("status");
+			});
+		});
+
+		describe("when the palette closes", () => {
+			it("returns focus to where it was before opening", async () => {
+				const { palette } = setup();
+				const button = document.createElement("button");
+				document.body.appendChild(button);
+				button.focus();
+
+				palette.open();
+				await nextTick();
+				await nextTick();
+				palette.close();
+				await nextTick();
+
+				expect(document.activeElement).toBe(button);
 			});
 		});
 	});

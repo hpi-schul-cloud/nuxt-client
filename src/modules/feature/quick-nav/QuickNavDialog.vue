@@ -5,6 +5,7 @@
 		scrollable
 		location="top"
 		content-class="quick-nav-dialog"
+		:aria-label="t('feature.quickNav.dialog')"
 		data-testid="quick-nav-dialog"
 		@after-leave="close"
 		@click:outside="close"
@@ -43,8 +44,13 @@
 					density="compact"
 					class="py-1"
 				>
-					<template v-for="group in groups" :key="group.label">
-						<VListSubheader>{{ group.label }}</VListSubheader>
+					<div
+						v-for="(group, groupIndex) in groups"
+						:key="group.label"
+						role="group"
+						:aria-labelledby="`quick-nav-${uid}-group-${groupIndex}`"
+					>
+						<VListSubheader :id="`quick-nav-${uid}-group-${groupIndex}`">{{ group.label }}</VListSubheader>
 						<VListItem
 							v-for="entry in group.entries"
 							:id="`quick-nav-${uid}-${entry.id}`"
@@ -67,15 +73,14 @@
 							</VListItemTitle>
 							<VListItemSubtitle v-if="entry.subtitle">{{ entry.subtitle }}</VListItemSubtitle>
 						</VListItem>
-					</template>
-
-					<VListItem v-if="groups.length === 0" data-testid="quick-nav-empty">
-						<VListItemTitle class="text-medium-emphasis">
-							{{ hasFailed ? t("feature.quickNav.failed") : t("feature.quickNav.empty") }}
-						</VListItemTitle>
-					</VListItem>
+					</div>
 				</VList>
+				<p v-if="groups.length === 0" class="px-4 py-3 mb-0 text-medium-emphasis" data-testid="quick-nav-empty">
+					{{ emptyMessage }}
+				</p>
 			</VCardText>
+
+			<div class="d-sr-only" role="status" data-testid="quick-nav-status">{{ statusMessage }}</div>
 
 			<div class="d-flex ga-4 px-4 py-2 border-t text-caption text-medium-emphasis">
 				<span>{{ t("feature.quickNav.hint.move") }}</span>
@@ -91,7 +96,7 @@ import { matchRange, useQuickNav } from "./QuickNav.composable";
 import { QuickNavEntry } from "./types";
 import { useUid } from "@/utils/uid";
 import { mdiMagnify } from "@icons/material";
-import { nextTick, useTemplateRef, watch } from "vue";
+import { computed, nextTick, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -99,14 +104,32 @@ const { t } = useI18n();
 const router = useRouter();
 const { uid } = useUid();
 
-const { isOpen, query, groups, selectedEntry, isLoading, hasFailed, moveSelection, select, close } = useQuickNav();
+const { isOpen, query, groups, flatEntries, selectedEntry, isLoading, hasFailed, moveSelection, select, close } =
+	useQuickNav();
 
 const input = useTemplateRef<HTMLInputElement>("input");
 
-// VDialog mounts its content only when it opens, so the field can only be focused afterwards
-watch(isOpen, async (opened) => {
-	if (!opened) return;
+const emptyMessage = computed(() => (hasFailed.value ? t("feature.quickNav.failed") : t("feature.quickNav.empty")));
 
+const statusMessage = computed(() => {
+	if (query.value.trim().length === 0) return "";
+	if (flatEntries.value.length === 0) return emptyMessage.value;
+
+	return t("feature.quickNav.resultCount", { count: flatEntries.value.length });
+});
+
+// opened from code rather than a Vuetify activator, so Vuetify does not return focus on close
+let focusedBeforeOpening: HTMLElement | null = null;
+
+watch(isOpen, async (opened) => {
+	if (!opened) {
+		focusedBeforeOpening?.focus();
+		focusedBeforeOpening = null;
+		return;
+	}
+
+	focusedBeforeOpening = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+	// VDialog mounts its content only when it opens, so the field can only be focused afterwards
 	await nextTick();
 	input.value?.focus();
 });

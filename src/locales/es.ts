@@ -2099,6 +2099,8 @@ export default {
 	"feature.quickNav.hint.open": "↵ para abrir",
 	"feature.quickNav.hint.close": "Esc para cerrar",
 	"feature.quickNav.shortcut.ctrlK": "Ctrl+K",
+	"feature.quickNav.dialog": "Navegación rápida",
+	"feature.quickNav.resultCount": "Resultados: {count}",
 	"feature.media-shelf.title": "Estante multimedia",
 	"feature.media-shelf.emptyState": "Actualmente no hay medios disponibles para su uso",
 	"feature.media-shelf.createLine": "Añadir línea",

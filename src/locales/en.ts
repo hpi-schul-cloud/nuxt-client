@@ -2049,6 +2049,8 @@ export default {
 	"feature.quickNav.hint.open": "↵ to open",
 	"feature.quickNav.hint.close": "Esc to close",
 	"feature.quickNav.shortcut.ctrlK": "Ctrl+K",
+	"feature.quickNav.dialog": "Quick navigation",
+	"feature.quickNav.resultCount": "Results: {count}",
 	"feature.media-shelf.title": "Media shelf",
 	"feature.media-shelf.emptyState": "Currently there are no media available for use",
 	"feature.media-shelf.createLine": "Add line",

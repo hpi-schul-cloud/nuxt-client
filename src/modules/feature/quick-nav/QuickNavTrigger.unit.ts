@@ -5,12 +5,15 @@ import { createTestAppStoreWithPermissions, createTestEnvStore, mountComposable 
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
-import { mount } from "@vue/test-utils";
+import { enableAutoUnmount, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 
 vi.mock("@util-logger");
 
 describe("QuickNavTrigger", () => {
+	// every mounted trigger registers its own shortcut listener on window
+	enableAutoUnmount(afterEach);
+
 	const setup = (platform: string) => {
 		vi.spyOn(navigator, "platform", "get").mockReturnValue(platform);
 
@@ -44,6 +47,12 @@ describe("QuickNavTrigger", () => {
 		const wrapper = setup("Win32");
 
 		expect(wrapper.find("kbd").text()).toBe("Ctrl+K");
+	});
+
+	it("tells assistive technology about the shortcut", () => {
+		const wrapper = setup("Win32");
+
+		expect(wrapper.get("[data-testid=quick-nav-trigger]").attributes("aria-keyshortcuts")).toBe("Control+K Meta+K");
 	});
 
 	describe("keyboard shortcut", () => {

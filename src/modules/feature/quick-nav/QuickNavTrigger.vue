@@ -5,6 +5,7 @@
 		rounded="pill"
 		class="quick-nav-trigger text-none text-medium-emphasis px-3"
 		:aria-label="t('feature.quickNav.placeholder')"
+		aria-keyshortcuts="Control+K Meta+K"
 		data-testid="quick-nav-trigger"
 		@click="open"
 	>
@@ -17,6 +18,7 @@
 		:icon="mdiMagnify"
 		variant="text"
 		:aria-label="t('feature.quickNav.placeholder')"
+		aria-keyshortcuts="Control+K Meta+K"
 		data-testid="quick-nav-trigger"
 		@click="open"
 	/>
