@@ -5,8 +5,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { RoomItemResponseAllowedOperations } from "@api-server";
 import { useRoomDetailsStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
-import { mount } from "@vue/test-utils";
-import { RouterLinkStub } from "@vue/test-utils";
+import { mount, RouterLinkStub } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("@feature-room/RoomBoardGrid", () => {
