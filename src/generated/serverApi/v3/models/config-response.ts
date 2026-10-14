@@ -124,6 +124,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_QUICK_NAVIGATION_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_TEAM_CREATE_ROOM_ENABLED: boolean;
     /**
      * 
