@@ -94,25 +94,43 @@ describe("QuickNavSources Store", () => {
 			expect(store.courses.map((entry) => entry.title)).toEqual(["Biologie"]);
 		});
 
-		it("loads every page of tasks", async () => {
-			const store = setup();
-			const firstPage = taskResponseFactory.buildList(99);
-			const secondPage = taskResponseFactory.buildList(1);
-			taskApiMock.taskControllerFindAll
-				.mockResolvedValueOnce(
-					mockApiResponse<TaskListResponse>({ data: { data: firstPage, total: 100, skip: 0, limit: 99 } })
-				)
-				.mockResolvedValueOnce(
-					mockApiResponse<TaskListResponse>({ data: { data: secondPage, total: 100, skip: 99, limit: 99 } })
+		describe("when the tasks span more than one page", () => {
+			const setupWithTwoPages = async () => {
+				const store = setup();
+				const firstPage = taskResponseFactory.buildList(99);
+				const secondPage = taskResponseFactory.buildList(1);
+				taskApiMock.taskControllerFindAll
+					.mockResolvedValueOnce(
+						mockApiResponse<TaskListResponse>({ data: { data: firstPage, total: 100, skip: 0, limit: 99 } })
+					)
+					.mockResolvedValueOnce(
+						mockApiResponse<TaskListResponse>({ data: { data: secondPage, total: 100, skip: 99, limit: 99 } })
+					);
+
+				await store.load();
+
+				return { store, firstPage };
+			};
+
+			it("asks for the next page", async () => {
+				await setupWithTwoPages();
+
+				expect(taskApiMock.taskControllerFindAll).toHaveBeenNthCalledWith(2, 99, 99);
+			});
+
+			it("keeps the tasks of every page", async () => {
+				const { store } = await setupWithTwoPages();
+
+				expect(store.tasks).toHaveLength(100);
+			});
+
+			it("links each task to its legacy page", async () => {
+				const { store, firstPage } = await setupWithTwoPages();
+
+				expect(store.tasks[0]).toEqual(
+					expect.objectContaining({ kind: QuickNavKind.TASK, href: `/homework/${firstPage[0].id}` })
 				);
-
-			await store.load();
-
-			expect(taskApiMock.taskControllerFindAll).toHaveBeenNthCalledWith(2, 99, 99);
-			expect(store.tasks).toHaveLength(100);
-			expect(store.tasks[0]).toEqual(
-				expect.objectContaining({ kind: QuickNavKind.TASK, href: `/homework/${firstPage[0].id}` })
-			);
+			});
 		});
 
 		it("finds people through the member lists of rooms, without the user themselves", async () => {
@@ -150,15 +168,50 @@ describe("QuickNavSources Store", () => {
 			expect(roomApiMock.roomControllerGetMembers).not.toHaveBeenCalled();
 		});
 
-		it("keeps the other results when one source fails", async () => {
-			const store = setup({ rooms: [roomWithMembersVisible("Theater-AG", false)] });
-			taskApiMock.taskControllerFindAll.mockRejectedValue(new Error("network"));
+		describe("when one source fails", () => {
+			const setupWithFailingTasks = async () => {
+				const store = setup({ rooms: [roomWithMembersVisible("Theater-AG", false)] });
+				taskApiMock.taskControllerFindAll.mockRejectedValue(new Error("network"));
 
+				await store.load();
+
+				return store;
+			};
+
+			it("reports the failure", async () => {
+				const store = await setupWithFailingTasks();
+
+				expect(store.hasFailed).toBe(true);
+			});
+
+			it("keeps the results of the other sources", async () => {
+				const store = await setupWithFailingTasks();
+
+				expect(store.rooms).toHaveLength(1);
+			});
+
+			it("stops loading", async () => {
+				const store = await setupWithFailingTasks();
+
+				expect(store.isLoading).toBe(false);
+			});
+		});
+
+		it("drops the people of a room whose member list can no longer be loaded", async () => {
+			const store = setup({ rooms: [roomWithMembersVisible("A")] });
+			roomApiMock.roomControllerGetMembers.mockResolvedValueOnce(
+				mockApiResponse<RoomMemberListResponse>({ data: { data: [member("anna", "Anna", "Müller")] } })
+			);
 			await store.load();
 
-			expect(store.hasFailed).toBe(true);
-			expect(store.rooms).toHaveLength(1);
-			expect(store.isLoading).toBe(false);
+			vi.useFakeTimers({ toFake: ["Date"] });
+			vi.setSystemTime(Date.now() + 31 * 60 * 1000);
+			roomApiMock.roomControllerGetMembers.mockRejectedValueOnce(new Error("forbidden"));
+			await store.load();
+			vi.useRealTimers();
+
+			expect(store.people).toEqual([]);
+			expect(store.hasFailed).toBe(false);
 		});
 
 		it("shares one request between calls that overlap", async () => {

@@ -117,6 +117,19 @@ describe("QuickNav Composable", () => {
 		});
 	});
 
+	describe("when the user may create a course", () => {
+		it("offers that as an action that opens the legacy page", () => {
+			const { quickNav } = setup([Permission.COURSE_CREATE]);
+
+			quickNav.query.value = "Kurs";
+
+			const actions = quickNav.flatEntries.value.filter((entry) => entry.kind === QuickNavKind.ACTION);
+
+			expect(actions).toHaveLength(1);
+			expect(actions[0].href).toBe("/courses/add");
+		});
+	});
+
 	describe("when the user may not create a room", () => {
 		it("does not offer it", () => {
 			const { quickNav } = setup();
@@ -259,6 +272,59 @@ describe("QuickNav Composable", () => {
 			quickNav.query.value = "Aufgabe";
 
 			expect(groupOf(quickNav.groups.value, "Aufgaben")?.entries).toHaveLength(5);
+		});
+
+		it("ranks a title start above a word start above a match inside a word", () => {
+			const { quickNav } = setup();
+			const sourcesStore = useQuickNavSourcesStore();
+			sourcesStore.rooms = [
+				entry(QuickNavKind.ROOM, "Mikrobiologie"),
+				entry(QuickNavKind.ROOM, "AG Biologie"),
+				entry(QuickNavKind.ROOM, "Biologie"),
+			];
+
+			quickNav.query.value = "Bio";
+
+			expect(titlesOf([groupOf(quickNav.groups.value, "Räume und Kurse")!])).toEqual([
+				"Biologie",
+				"AG Biologie",
+				"Mikrobiologie",
+			]);
+		});
+	});
+
+	describe("select", () => {
+		it("makes the given entry the selected one", () => {
+			const { quickNav } = setup();
+			quickNav.query.value = "e";
+			const second = quickNav.flatEntries.value[1];
+
+			quickNav.select(second.id);
+
+			expect(quickNav.selectedEntry.value).toBe(second);
+		});
+	});
+
+	describe("toggle", () => {
+		describe("when the palette is closed", () => {
+			it("opens it", () => {
+				const { quickNav } = setup();
+
+				quickNav.toggle();
+
+				expect(quickNav.isOpen.value).toBe(true);
+			});
+		});
+
+		describe("when the palette is open", () => {
+			it("closes it", () => {
+				const { quickNav } = setup();
+				quickNav.open();
+
+				quickNav.toggle();
+
+				expect(quickNav.isOpen.value).toBe(false);
+			});
 		});
 	});
 });
