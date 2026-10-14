@@ -3,11 +3,11 @@
 		<SkipLink />
 		<Sidebar v-model="sidebarExpanded" />
 		<Topbar :sidebar-expanded="sidebarExpanded" @sidebar-toggled="onToggleSidebar">
-			<template #search>
+			<template v-if="isQuickNavigationEnabled" #search>
 				<QuickNavTrigger />
 			</template>
 		</Topbar>
-		<QuickNavDialog />
+		<QuickNavDialog v-if="isQuickNavigationEnabled" />
 		<VMain id="main-content" :class="{ 'position-fixed w-100': !isDesktop && sidebarExpanded }">
 			<ApplicationError>
 				<AlertContainer />
@@ -22,6 +22,7 @@
 
 <script setup lang="ts">
 import { notifyFromQueryParams } from "@/utils/toast-query.utils";
+import { useEnvConfig } from "@data-env";
 import { useNotificationListenerStore } from "@data-notification";
 import { AutoLogoutWarning } from "@feature-auto-logout";
 import { QuickNavDialog, QuickNavTrigger } from "@feature-quick-nav";
@@ -35,6 +36,8 @@ import { useDisplay } from "vuetify";
 const { lgAndUp } = useDisplay();
 
 const isDesktop = computed(() => lgAndUp.value);
+
+const isQuickNavigationEnabled = computed(() => useEnvConfig().value.FEATURE_QUICK_NAVIGATION_ENABLED);
 
 const sidebarExpanded = useStorage("sidebarExpanded", isDesktop.value);
 
