@@ -56,6 +56,50 @@ describe("CourseRoomModal", () => {
 				expect(iterator.props("itemSize")).toBe("5em");
 			});
 
+			it("should use default prop values when optional props are omitted", () => {
+				const pinia = createTestingPinia();
+				setActivePinia(pinia);
+
+				const wrapper = mount(CourseRoomModal, {
+					global: { plugins: [pinia, createTestingVuetify(), createTestingI18n()] },
+					props: {
+						isOpen: true,
+						groupData: courseRoomGroupFactory.build({ title: "dummy title", groupElements: [] }),
+					},
+				});
+
+				const iterator = wrapper.findComponent(CourseRoomAvatarIterator);
+				expect(iterator.props("canDraggable")).toBe(false);
+				expect(iterator.props("itemSize")).toBe("5em");
+			});
+
+			it("should use an empty dialog title when the group title is undefined", () => {
+				const pinia = createTestingPinia();
+				setActivePinia(pinia);
+
+				const wrapper = mount(CourseRoomModal, {
+					global: { plugins: [pinia, createTestingVuetify(), createTestingI18n()] },
+					props: {
+						isOpen: true,
+						groupData: {
+							id: "",
+							title: undefined!,
+							shortTitle: "",
+							displayColor: "",
+							xPosition: -1,
+							yPosition: -1,
+							groupId: "",
+							groupElements: [],
+							copyingSince: "",
+							isSynchronized: false,
+							isLocked: false,
+						} as ReturnType<typeof courseRoomGroupFactory.build>,
+					},
+				});
+
+				expect(wrapper.findComponent(SvsDialog).props("title")).toBe("");
+			});
+
 			it("should pass groupElements prop to room-avatar-iterator", () => {
 				const { wrapper } = setup();
 
