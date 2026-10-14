@@ -93,7 +93,7 @@ describe("CourseRoomModal", () => {
 							copyingSince: "",
 							isSynchronized: false,
 							isLocked: false,
-						} as ReturnType<typeof courseRoomGroupFactory.build>,
+						},
 					},
 				});
 
