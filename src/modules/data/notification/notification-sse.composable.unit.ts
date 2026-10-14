@@ -49,9 +49,9 @@ class MockEventSource {
 describe("useNotificationStream", () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
-		vi.spyOn(logger, "info").mockImplementation(() => {});
-		vi.spyOn(logger, "warn").mockImplementation(() => {});
-		vi.spyOn(logger, "error").mockImplementation(() => {});
+		vi.spyOn(logger, "info").mockImplementation(vi.fn());
+		vi.spyOn(logger, "warn").mockImplementation(vi.fn());
+		vi.spyOn(logger, "error").mockImplementation(vi.fn());
 		MockEventSource.instances = [];
 		vi.stubGlobal("EventSource", MockEventSource);
 		vi.stubGlobal("location", { origin: "http://localhost:4000" });
@@ -65,7 +65,7 @@ describe("useNotificationStream", () => {
 
 	describe("connect", () => {
 		it("should not warn when used outside component setup", () => {
-			const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+			const warnSpy = vi.spyOn(console, "warn").mockImplementation(vi.fn());
 
 			useNotificationStream();
 

@@ -6,6 +6,7 @@ import { RoomItemResponseAllowedOperations } from "@api-server";
 import { useRoomDetailsStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
+import { RouterLinkStub } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("@feature-room/RoomBoardGrid", () => {
@@ -38,7 +39,7 @@ describe("@feature-room/RoomBoardGrid", () => {
 						},
 					}),
 				],
-				stubs: { RoomContentGridItem: true },
+				stubs: { RoomContentGridItem: true, RouterLink: RouterLinkStub },
 			},
 			props: {
 				roomId: "test-room",
@@ -73,50 +74,50 @@ describe("@feature-room/RoomBoardGrid", () => {
 	});
 
 	describe("when using arrow key reorder features", () => {
-		it("should handle keyboard navigation - ArrowRight", () => {
+		it("should handle keyboard navigation - ArrowRight", async () => {
 			const { wrapper, boards } = setup({ allowedOperations: { editContent: true } });
 
 			const boardItem = wrapper.findAllComponents(RoomBoardGridItem).at(0);
-			boardItem?.vm.$emit("keydown", { key: "ArrowRight" });
+			await boardItem?.trigger("keydown", { key: "ArrowRight" });
 
 			expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[0].id, 1);
 		});
 
-		it("should handle keyboard navigation - ArrowLeft", () => {
+		it("should handle keyboard navigation - ArrowLeft", async () => {
 			const { wrapper, boards } = setup({ allowedOperations: { editContent: true } });
 
 			const boardItem = wrapper.findAllComponents(RoomBoardGridItem).at(2);
-			boardItem?.vm.$emit("keydown", { key: "ArrowLeft" });
+			await boardItem?.trigger("keydown", { key: "ArrowLeft" });
 
 			expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[2].id, 1);
 		});
 
-		it("should handle keyboard navigation - ArrowDown", () => {
+		it("should handle keyboard navigation - ArrowDown", async () => {
 			const { wrapper, boards } = setup({ allowedOperations: { editContent: true } });
 
 			const boardItem = wrapper.findAllComponents(RoomBoardGridItem)[0];
-			boardItem.vm.$emit("keydown", { key: "ArrowDown" });
+			await boardItem.trigger("keydown", { key: "ArrowDown" });
 
 			expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[0].id, 1);
 		});
 
-		it("should handle keyboard navigation - ArrowUp", () => {
+		it("should handle keyboard navigation - ArrowUp", async () => {
 			const { wrapper, boards } = setup({ allowedOperations: { editContent: true } });
 
 			const boardItem = wrapper.findAllComponents(RoomBoardGridItem)[2];
-			boardItem.vm.$emit("keydown", { key: "ArrowUp" });
+			await boardItem.trigger("keydown", { key: "ArrowUp" });
 
 			expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[2].id, 1);
 		});
 	});
 
-	it("should respect board boundaries in keyboard navigation", () => {
+	it("should respect board boundaries in keyboard navigation", async () => {
 		const { wrapper } = setup();
 		const boardItems = wrapper.findAllComponents(RoomBoardGridItem);
 		// Attempt to go left at first index
-		boardItems[0].vm.$emit("keydown", { key: "ArrowLeft" });
+		await boardItems[0].trigger("keydown", { key: "ArrowLeft" });
 		// Attempt to go right at last index
-		boardItems[2].vm.$emit("keydown", { key: "ArrowRight" }, 2);
+		await boardItems[2].trigger("keydown", { key: "ArrowRight" });
 		expect(useRoomDetailsStore().moveBoard).not.toHaveBeenCalled();
 	});
 
