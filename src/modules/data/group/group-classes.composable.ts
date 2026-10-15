@@ -4,6 +4,7 @@ import { Pagination } from "@/types/common/commons";
 import { SortOrder } from "@/types/enum/sort-order.enum";
 import { $axios } from "@/utils/api";
 import { ClassSortQueryType, GroupApiFactory, SchoolYearQueryType } from "@api-server";
+import { notifySuccess } from "@data-app";
 import { ClassInfo, GroupMapper } from "@data-group";
 import { ref } from "vue";
 
@@ -24,6 +25,43 @@ export const useGroupClasses = () => {
 
 	const { execute: execDelete } = useSafeAxiosTask();
 	const { execute: execFetch, isRunning: isFetching } = useSafeAxiosTask();
+	const { execute: execMutate, isRunning: isMutating } = useSafeAxiosTask();
+
+	const fetchClassById = async (classId: string, params?: { $populate?: string[] }) => {
+		const { result, success } = await execFetch(
+			() => $axios.get(`/v1/classes/${classId}`, { params }),
+			t("error.load")
+		);
+
+		return success && result ? result.data : undefined;
+	};
+
+	const createClass = async (payload: { name: string; gradeLevel?: number; year?: string; teacherIds?: string[] }) => {
+		const { result, success } = await execMutate(
+			() => $axios.post("/v1/classes", payload),
+			t("common.notifications.errors.notCreated", { type: t("common.labels.class") })
+		);
+
+		return { success, data: result?.data };
+	};
+
+	const updateClass = async (
+		classId: string,
+		payload: {
+			name?: string;
+			gradeLevel?: number;
+			year?: string;
+			teacherIds?: string[];
+			userIds?: string[];
+		}
+	) => {
+		const { result, success } = await execMutate(
+			() => $axios.patch(`/v1/classes/${classId}`, payload),
+			t("common.notifications.errors.notSaved", { type: t("common.labels.class") })
+		);
+
+		return { success, data: result?.data };
+	};
 
 	const deleteClass = async (deleteQuery: { classId: string; query?: SchoolYearQueryType }): Promise<void> => {
 		const { success } = await execDelete(
@@ -60,11 +98,29 @@ export const useGroupClasses = () => {
 		}
 	};
 
+	const sendRegistrationLinks = async (classId: string, role = "student") => {
+		const { success } = await execMutate(
+			() => $axios.get("/administration/users-without-consent/send-email", { params: { classId, role } }),
+			t("pages.administration.sendMail.error")
+		);
+
+		if (success) {
+			notifySuccess(t("pages.administration.sendMail.success"));
+		}
+
+		return { success };
+	};
+
 	return {
+		fetchClassById,
+		createClass,
+		updateClass,
 		deleteClass,
+		sendRegistrationLinks,
 		fetchClassesForSchool,
 		classes,
 		isFetching,
+		isMutating,
 		pagination,
 		page,
 		sortBy,

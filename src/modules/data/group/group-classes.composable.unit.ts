@@ -213,4 +213,63 @@ describe("GroupModule", () => {
 			});
 		});
 	});
+
+	describe("fetchClassById", () => {
+		it("calls GET /v1/classes/:id and returns data", async () => {
+			const mockData = { _id: "class1", name: "5a", gradeLevel: 5 };
+			axiosMock.get.mockResolvedValue({ data: mockData });
+
+			const { fetchClassById } = useGroupClasses();
+			const result = await fetchClassById("class1", { $populate: ["teacherIds", "userIds"] });
+
+			expect(axiosMock.get).toHaveBeenCalledWith("/v1/classes/class1", {
+				params: { $populate: ["teacherIds", "userIds"] },
+			});
+			expect(result).toEqual(mockData);
+		});
+	});
+
+	describe("createClass", () => {
+		it("calls POST /v1/classes and returns result", async () => {
+			const payload = { name: "a", gradeLevel: 5, year: "year1" };
+			const createdData = { _id: "newClass", ...payload };
+			axiosMock.post.mockResolvedValue({ data: createdData });
+
+			const { createClass } = useGroupClasses();
+			const { success, data } = await createClass(payload);
+
+			expect(axiosMock.post).toHaveBeenCalledWith("/v1/classes", payload);
+			expect(success).toBe(true);
+			expect(data).toEqual(createdData);
+		});
+	});
+
+	describe("updateClass", () => {
+		it("calls PATCH /v1/classes/:id and returns result", async () => {
+			const payload = { name: "b", gradeLevel: 6, teacherIds: ["t1"], userIds: ["s1", "s2"] };
+			const updatedData = { _id: "class1", ...payload };
+			axiosMock.patch.mockResolvedValue({ data: updatedData });
+
+			const { updateClass } = useGroupClasses();
+			const { success, data } = await updateClass("class1", payload);
+
+			expect(axiosMock.patch).toHaveBeenCalledWith("/v1/classes/class1", payload);
+			expect(success).toBe(true);
+			expect(data).toEqual(updatedData);
+		});
+	});
+
+	describe("sendRegistrationLinks", () => {
+		it("calls GET /administration/users-without-consent/send-email and notifies success", async () => {
+			axiosMock.get.mockResolvedValue({ data: {} });
+
+			const { sendRegistrationLinks } = useGroupClasses();
+			const { success } = await sendRegistrationLinks("class1", "student");
+
+			expect(axiosMock.get).toHaveBeenCalledWith("/administration/users-without-consent/send-email", {
+				params: { classId: "class1", role: "student" },
+			});
+			expect(success).toBe(true);
+		});
+	});
 });
