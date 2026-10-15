@@ -259,6 +259,8 @@ export * from './rich-text-element-content';
 export * from './rich-text-element-content-body';
 export * from './rich-text-element-response';
 export * from './role-name';
+export * from './room-archived-item-response';
+export * from './room-archived-list-response';
 export * from './room-board-item-response';
 export * from './room-board-item-response-allowed-operations';
 export * from './room-board-list-response';

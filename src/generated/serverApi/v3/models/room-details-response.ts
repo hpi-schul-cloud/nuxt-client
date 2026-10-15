@@ -49,16 +49,10 @@ export interface RoomDetailsResponse {
     schoolId: string;
     /**
      * 
-     * @type {string}
+     * @type {boolean}
      * @memberof RoomDetailsResponse
      */
-    startDate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    endDate?: string;
+    isArchived: boolean;
     /**
      * 
      * @type {string}

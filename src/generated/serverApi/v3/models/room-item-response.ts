@@ -51,18 +51,6 @@ export interface RoomItemResponse {
      * @type {string}
      * @memberof RoomItemResponse
      */
-    startDate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomItemResponse
-     */
-    endDate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomItemResponse
-     */
     createdAt: string;
     /**
      * 

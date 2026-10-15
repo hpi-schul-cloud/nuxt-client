@@ -35,18 +35,6 @@ export interface UpdateRoomBodyParams {
      */
     color: RoomColor;
     /**
-     * Start date of the room
-     * @type {string}
-     * @memberof UpdateRoomBodyParams
-     */
-    startDate?: string;
-    /**
-     * Start date of the room
-     * @type {string}
-     * @memberof UpdateRoomBodyParams
-     */
-    endDate?: string;
-    /**
      * The features of the room
      * @type {Array<RoomFeatures>}
      * @memberof UpdateRoomBodyParams

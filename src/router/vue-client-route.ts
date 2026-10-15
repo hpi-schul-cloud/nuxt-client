@@ -56,6 +56,7 @@ const vueRoutes = [
 	`^/rooms/invitation-link/${mongoId}?$`,
 	`^/rooms/?$`,
 	`^/rooms/new/?$`,
+	`^/rooms/archive/?$`,
 	`^/rooms/${mongoId}/?$`,
 	`^/rooms/${mongoId}/board/?$`,
 	`^/rooms/${mongoId}/edit/?$`,

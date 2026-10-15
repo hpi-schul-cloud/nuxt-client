@@ -41,6 +41,8 @@ import { PassOwnershipBodyParams } from '../models';
 // @ts-ignore
 import { RemoveRoomMembersBodyParams } from '../models';
 // @ts-ignore
+import { RoomArchivedListResponse } from '../models';
+// @ts-ignore
 import { RoomBoardListResponse } from '../models';
 // @ts-ignore
 import { RoomCreatedResponse } from '../models';
@@ -146,6 +148,44 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(addRoomMembersBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Archive a room
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerArchiveRoom: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerArchiveRoom', 'roomId', roomId)
+            const localVarPath = `/rooms/{roomId}/archive`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -412,6 +452,40 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
             assertParamExists('roomControllerGetApplicants', 'roomId', roomId)
             const localVarPath = `/rooms/{roomId}/applicants`
                 .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get the archived rooms of the current user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerGetArchivedRooms: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/rooms/archived`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -918,6 +992,44 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Restore an archived room
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerUnarchiveRoom: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerUnarchiveRoom', 'roomId', roomId)
+            const localVarPath = `/rooms/{roomId}/unarchive`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Update an existing room
          * @param {string} roomId The id of the room.
          * @param {UpdateRoomBodyParams} updateRoomBodyParams 
@@ -992,6 +1104,17 @@ export const RoomApiFp = function(configuration?: Configuration) {
          */
         async roomControllerAddMembers(roomId: string, addRoomMembersBodyParams: AddRoomMembersBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomRoleResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerAddMembers(roomId, addRoomMembersBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Archive a room
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerArchiveRoom(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerArchiveRoom(roomId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1072,6 +1195,16 @@ export const RoomApiFp = function(configuration?: Configuration) {
          */
         async roomControllerGetApplicants(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomMemberListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetApplicants(roomId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get the archived rooms of the current user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerGetArchivedRooms(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomArchivedListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetArchivedRooms(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1211,6 +1344,17 @@ export const RoomApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Restore an archived room
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerUnarchiveRoom(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerUnarchiveRoom(roomId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Update an existing room
          * @param {string} roomId The id of the room.
          * @param {UpdateRoomBodyParams} updateRoomBodyParams 
@@ -1252,6 +1396,16 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
          */
         roomControllerAddMembers(roomId: string, addRoomMembersBodyParams: AddRoomMembersBodyParams, options?: any): AxiosPromise<RoomRoleResponse> {
             return localVarFp.roomControllerAddMembers(roomId, addRoomMembersBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Archive a room
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerArchiveRoom(roomId: string, options?: any): AxiosPromise<string> {
+            return localVarFp.roomControllerArchiveRoom(roomId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1325,6 +1479,15 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
          */
         roomControllerGetApplicants(roomId: string, options?: any): AxiosPromise<RoomMemberListResponse> {
             return localVarFp.roomControllerGetApplicants(roomId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get the archived rooms of the current user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerGetArchivedRooms(options?: any): AxiosPromise<RoomArchivedListResponse> {
+            return localVarFp.roomControllerGetArchivedRooms(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1451,6 +1614,16 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Restore an archived room
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerUnarchiveRoom(roomId: string, options?: any): AxiosPromise<string> {
+            return localVarFp.roomControllerUnarchiveRoom(roomId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Update an existing room
          * @param {string} roomId The id of the room.
          * @param {UpdateRoomBodyParams} updateRoomBodyParams 
@@ -1490,6 +1663,16 @@ export interface RoomApiInterface {
      * @memberof RoomApiInterface
      */
     roomControllerAddMembers(roomId: string, addRoomMembersBodyParams: AddRoomMembersBodyParams, options?: any): AxiosPromise<RoomRoleResponse>;
+
+    /**
+     * 
+     * @summary Archive a room
+     * @param {string} roomId The id of the room.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerArchiveRoom(roomId: string, options?: any): AxiosPromise<string>;
 
     /**
      * 
@@ -1563,6 +1746,15 @@ export interface RoomApiInterface {
      * @memberof RoomApiInterface
      */
     roomControllerGetApplicants(roomId: string, options?: any): AxiosPromise<RoomMemberListResponse>;
+
+    /**
+     * 
+     * @summary Get the archived rooms of the current user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerGetArchivedRooms(options?: any): AxiosPromise<RoomArchivedListResponse>;
 
     /**
      * 
@@ -1689,6 +1881,16 @@ export interface RoomApiInterface {
 
     /**
      * 
+     * @summary Restore an archived room
+     * @param {string} roomId The id of the room.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerUnarchiveRoom(roomId: string, options?: any): AxiosPromise<string>;
+
+    /**
+     * 
      * @summary Update an existing room
      * @param {string} roomId The id of the room.
      * @param {UpdateRoomBodyParams} updateRoomBodyParams 
@@ -1731,6 +1933,18 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      */
     public roomControllerAddMembers(roomId: string, addRoomMembersBodyParams: AddRoomMembersBodyParams, options?: any) {
         return RoomApiFp(this.configuration).roomControllerAddMembers(roomId, addRoomMembersBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Archive a room
+     * @param {string} roomId The id of the room.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerArchiveRoom(roomId: string, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerArchiveRoom(roomId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1818,6 +2032,17 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      */
     public roomControllerGetApplicants(roomId: string, options?: any) {
         return RoomApiFp(this.configuration).roomControllerGetApplicants(roomId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get the archived rooms of the current user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerGetArchivedRooms(options?: any) {
+        return RoomApiFp(this.configuration).roomControllerGetArchivedRooms(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1965,6 +2190,18 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      */
     public roomControllerRemoveMembers(roomId: string, removeRoomMembersBodyParams: RemoveRoomMembersBodyParams, options?: any) {
         return RoomApiFp(this.configuration).roomControllerRemoveMembers(roomId, removeRoomMembersBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Restore an archived room
+     * @param {string} roomId The id of the room.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerUnarchiveRoom(roomId: string, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerUnarchiveRoom(roomId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

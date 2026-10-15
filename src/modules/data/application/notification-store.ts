@@ -22,6 +22,10 @@ export interface AlertPayload {
 		text: string;
 	};
 	replace?: NamedValue;
+	action?: {
+		text: string;
+		handler: () => void | Promise<void>;
+	};
 }
 
 export interface Alert extends AlertPayload {

@@ -5,6 +5,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { ConfigResponse, RoomItemResponseAllowedOperations } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import {
+	KebabMenuAction,
 	KebabMenuActionDelete,
 	KebabMenuActionEdit,
 	KebabMenuActionLeaveRoom,
@@ -19,7 +20,11 @@ import { RouterLink } from "vue-router";
 describe("@feature-room/RoomMenu", () => {
 	const setup = (
 		envs: Partial<ConfigResponse> = {},
-		options?: { allowedOperations: Partial<RoomItemResponseAllowedOperations>; roomName?: string }
+		options?: {
+			allowedOperations: Partial<RoomItemResponseAllowedOperations>;
+			roomName?: string;
+			isArchived?: boolean;
+		}
 	) => {
 		options ??= { allowedOperations: {} };
 		setActivePinia(createTestingPinia());
@@ -32,6 +37,7 @@ describe("@feature-room/RoomMenu", () => {
 		const wrapper = mount(RoomMenu, {
 			props: {
 				roomName: options.roomName ?? "My Room",
+				isArchived: options.isArchived ?? false,
 			},
 			global: {
 				plugins: [
@@ -57,6 +63,11 @@ describe("@feature-room/RoomMenu", () => {
 
 		return { wrapper, menuBtn };
 	};
+
+	const findArchiveAction = (wrapper: VueWrapper) =>
+		wrapper
+			.findAllComponents(KebabMenuAction)
+			.find((action) => action.attributes("data-testid") === "kebab-menu-action-archive");
 
 	const findKebabActions = (wrapper: VueWrapper) => {
 		const kebabActionDelete = wrapper.findComponent(KebabMenuActionDelete);
@@ -252,6 +263,72 @@ describe("@feature-room/RoomMenu", () => {
 			const { kebabActionDelete } = findKebabActions(wrapper);
 
 			expect(kebabActionDelete.exists()).toBe(true);
+		});
+	});
+
+	describe("when archiving a room", () => {
+		describe("and the feature is enabled, room is not archived and user owns the room", () => {
+			it("should show the archive menu item", async () => {
+				const { wrapper, menuBtn } = setup(
+					{ FEATURE_ROOM_ARCHIVE_ENABLED: true },
+					{ allowedOperations: { archiveRoom: true }, isArchived: false }
+				);
+				await menuBtn.trigger("click");
+
+				expect(findArchiveAction(wrapper)?.exists()).toBe(true);
+			});
+		});
+
+		describe("and the feature is disabled", () => {
+			it("should NOT show the archive menu item even if the user owns the room", async () => {
+				const { wrapper, menuBtn } = setup(
+					{ FEATURE_ROOM_ARCHIVE_ENABLED: false },
+					{ allowedOperations: { archiveRoom: true }, isArchived: false }
+				);
+				await menuBtn.trigger("click");
+
+				expect(findArchiveAction(wrapper)).toBeUndefined();
+			});
+		});
+
+		describe("and the user does not own the room", () => {
+			it("should NOT show the archive menu item", async () => {
+				const { wrapper, menuBtn } = setup(
+					{ FEATURE_ROOM_ARCHIVE_ENABLED: true },
+					{ allowedOperations: { archiveRoom: false }, isArchived: false }
+				);
+				await menuBtn.trigger("click");
+
+				expect(findArchiveAction(wrapper)).toBeUndefined();
+			});
+		});
+
+		describe("and the room is already archived", () => {
+			it("should NOT show the archive menu item even if the user owns the room", async () => {
+				const { wrapper, menuBtn } = setup(
+					{ FEATURE_ROOM_ARCHIVE_ENABLED: true },
+					{ allowedOperations: { archiveRoom: true }, isArchived: true }
+				);
+				await menuBtn.trigger("click");
+
+				expect(findArchiveAction(wrapper)).toBeUndefined();
+			});
+		});
+
+		describe("and the user clicks the archive menu item", () => {
+			it("should emit 'room:archive' without asking for confirmation", async () => {
+				const askConfirmationSpy = vi.spyOn(confirmDialogUtils, "askDeletionForItem");
+				const { wrapper, menuBtn } = setup(
+					{ FEATURE_ROOM_ARCHIVE_ENABLED: true },
+					{ allowedOperations: { archiveRoom: true }, isArchived: false }
+				);
+				await menuBtn.trigger("click");
+
+				await findArchiveAction(wrapper)!.trigger("click");
+
+				expect(wrapper.emitted("room:archive")).toHaveLength(1);
+				expect(askConfirmationSpy).not.toHaveBeenCalled();
+			});
 		});
 	});
 
