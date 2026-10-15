@@ -10,6 +10,16 @@
 				@click="() => $emit('sidebar-toggled')"
 			/>
 		</template>
+		<!-- the quick navigation lives in a feature module, so the layout fills this in -->
+		<VSpacer />
+		<div
+			class="d-flex align-center"
+			:class="{ 'top-bar-search-centered': isDesktop }"
+			:style="isDesktop ? { left: `calc(${mainRect.left}px + (100% - ${mainRect.left}px) / 2)` } : undefined"
+			data-testid="topbar-search"
+		>
+			<slot name="search" />
+		</div>
 		<VSpacer />
 		<TopbarItem
 			v-if="showStatusAlertIcon"
@@ -55,7 +65,7 @@ import { mdiAlert, mdiMenu, mdiQrcode } from "@icons/material";
 import { useWindowScroll } from "@vueuse/core";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useDisplay } from "vuetify";
+import { useDisplay, useLayout } from "vuetify";
 
 const { y } = useWindowScroll();
 const isScrollingDown = ref(false);
@@ -76,6 +86,8 @@ defineProps({
 defineEmits(["sidebar-toggled"]);
 
 const { lgAndUp: isDesktop, mdAndUp: isTabletOrBigger } = useDisplay();
+// the topbar runs under the sidebar, so centre the search over the content area like the page below it
+const { mainRect } = useLayout();
 
 onMounted(() => {
 	fetchStatusAlerts();
@@ -105,6 +117,12 @@ const appBarHeight = computed(() => {
 	top: 0;
 	z-index: var(--z-floating);
 	transition: top 0.2s ease-in-out;
+}
+
+.top-bar-search-centered {
+	position: absolute;
+	top: 50%;
+	transform: translate(-50%, -50%);
 }
 
 .school-name {
