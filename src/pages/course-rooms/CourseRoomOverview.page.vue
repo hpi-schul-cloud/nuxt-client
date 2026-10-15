@@ -140,9 +140,23 @@ const dimensions = reactive({
 	rowCount: 6,
 	defaultRowCount: 6,
 });
+const createEmptyGroupData = (): GroupDataType => ({
+	id: "",
+	title: "",
+	shortTitle: "",
+	displayColor: "",
+	xPosition: -1,
+	yPosition: -1,
+	groupId: "",
+	groupElements: [],
+	copyingSince: "",
+	isSynchronized: false,
+	isLocked: false,
+});
+
 const groupDialog = reactive({
 	isOpen: false,
-	groupData: {} as GroupDataType,
+	groupData: createEmptyGroupData(),
 });
 const draggedElement = reactive<{
 	from: { x: number; y: number; groupIndex?: number } | null;
@@ -274,7 +288,7 @@ const onStartDrag = (element: Record<string, unknown>, pos: { x: number; y: numb
 const savePosition = async () => {
 	if (!draggedElement.from || !draggedElement.to) return;
 	await alignCourse(draggedElement as DroppedObject);
-	groupDialog.groupData = {} as GroupDataType;
+	groupDialog.groupData = createEmptyGroupData();
 };
 
 const defaultNaming = (pos: { x: number; y: number }) => {

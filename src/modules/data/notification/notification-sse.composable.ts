@@ -1,5 +1,5 @@
 import { logger } from "@util-logger";
-import { computed, onUnmounted, readonly, ref, shallowRef } from "vue";
+import { computed, getCurrentInstance, onUnmounted, readonly, ref, shallowRef } from "vue";
 
 export type NotificationStreamStatus = "disconnected" | "connecting" | "connected" | "error";
 
@@ -165,10 +165,12 @@ export const useNotificationStream = (options: UseNotificationStreamOptions = {}
 		reconnectAttempts.value = 0;
 	};
 
-	// Cleanup on unmount
-	onUnmounted(() => {
-		disconnect();
-	});
+	// Cleanup on unmount only when the composable is used in a component setup.
+	if (getCurrentInstance()) {
+		onUnmounted(() => {
+			disconnect();
+		});
+	}
 
 	return {
 		// State

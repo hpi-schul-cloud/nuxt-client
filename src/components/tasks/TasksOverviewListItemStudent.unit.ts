@@ -1,16 +1,40 @@
 import TasksOverviewListItemStudent from "./TasksOverviewListItemStudent.vue";
-import { createTestAppStore, taskResponseFactory } from "@@/tests/test-utils";
+import { createTestAppStore, mockComposable, taskResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { TaskResponse } from "@api-server";
+import { useTaskActions, useTasksOfOverview } from "@data-tasks";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { beforeAll } from "vitest";
+import { Mocked } from "vitest";
+import { computed } from "vue";
+
+vi.mock("@data-tasks");
 
 describe("TasksOverviewListItemStudent", () => {
-	beforeAll(() => {
+	let useTasksOfOverviewMock: Mocked<ReturnType<typeof useTasksOfOverview>>;
+	let useTaskActionsMock: Mocked<ReturnType<typeof useTaskActions>>;
+
+	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestAppStore();
+
+		useTasksOfOverviewMock = mockComposable(useTasksOfOverview, {
+			fetchTasks: vi.fn(),
+			fetchFinishedTasks: vi.fn(),
+		});
+		useTaskActionsMock = mockComposable(useTaskActions, {
+			isMutating: computed(() => false),
+			finishTask: vi.fn(),
+			restoreFinishedTask: vi.fn(),
+		});
+
+		vi.mocked(useTasksOfOverview).mockReturnValue(useTasksOfOverviewMock);
+		vi.mocked(useTaskActions).mockReturnValue(useTaskActionsMock);
+	});
+
+	afterEach(() => {
+		vi.clearAllMocks();
 	});
 
 	const setup = (props: { task: TaskResponse } = { task: taskResponseFactory.build() }) =>

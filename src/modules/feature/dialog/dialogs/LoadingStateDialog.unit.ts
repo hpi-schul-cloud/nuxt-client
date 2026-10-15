@@ -1,6 +1,15 @@
 import LoadingStateDialog from "./LoadingStateDialog.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import { VCard, VDialog, VProgressLinear } from "vuetify/lib/components/index";
+import { VCard, VProgressLinear } from "vuetify/lib/components/index";
+
+const VDialogStub = {
+	name: "VDialog",
+	props: {
+		modelValue: Boolean,
+	},
+	emits: ["update:modelValue", "after-leave"],
+	template: `<div v-if="modelValue"><slot /></div>`,
+};
 
 describe("LoadingStateDialog", () => {
 	const setup = (modelValue: boolean, loadingText = "") => {
@@ -8,6 +17,7 @@ describe("LoadingStateDialog", () => {
 			props: { modelValue, loadingText },
 			global: {
 				plugins: [createTestingVuetify()],
+				stubs: { VDialog: VDialogStub },
 			},
 		});
 
@@ -17,7 +27,7 @@ describe("LoadingStateDialog", () => {
 	it("should display its contents when modelValue is true", () => {
 		const { wrapper } = setup(true);
 
-		const dialog = wrapper.findComponent(VDialog);
+		const dialog = wrapper.findComponent(VDialogStub);
 		const card = dialog.findComponent(VCard);
 		expect(card.exists()).toBe(true);
 	});
@@ -33,7 +43,7 @@ describe("LoadingStateDialog", () => {
 		const loadingText = "Loading...";
 		const { wrapper } = setup(true, loadingText);
 
-		const card = wrapper.findComponent(VDialog).findComponent(VCard);
+		const card = wrapper.findComponent(VDialogStub).findComponent(VCard);
 		expect(card.text()).toContain(loadingText);
 	});
 
@@ -46,7 +56,7 @@ describe("LoadingStateDialog", () => {
 	it("should emit after-leave when the VDialog transition ends", async () => {
 		const { wrapper } = setup(true);
 
-		await wrapper.findComponent(VDialog).vm.$emit("after-leave");
+		await wrapper.findComponent(VDialogStub).vm.$emit("after-leave");
 
 		expect(wrapper.emitted("after-leave")).toBeDefined();
 	});

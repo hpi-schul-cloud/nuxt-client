@@ -4,6 +4,7 @@ import { useAppStore, useAppStoreRefs } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
+import { logger } from "@util-logger";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { ref } from "vue";
@@ -39,6 +40,7 @@ describe("AutoLogoutWarning", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		injectRouterMock(createRouterMock());
+		vi.spyOn(logger, "warn").mockImplementation(vi.fn());
 
 		vi.mocked(useAppStore).mockReturnValue({
 			extendSession: mockExtendSession,
@@ -57,6 +59,7 @@ describe("AutoLogoutWarning", () => {
 		currentWrapper?.unmount();
 		currentWrapper = undefined;
 		vi.clearAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	const setup = (options?: { sessionTimeoutTimestamp?: number | null }) => {
