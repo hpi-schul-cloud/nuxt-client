@@ -2137,4 +2137,23 @@ export default {
 	"pages.folder.dropZone.emptyState.orText": "oder",
 	"pages.folder.dropZone.emptyState.browse": "Dateien durchsuchen",
 	"pages.folder.error.404": "Ordner nicht gefunden",
+	"formerMemberships.banner.title": "Materialien früherer Schulen übernehmen",
+	"formerMemberships.banner.description":
+		"Sie haben {courseCount} Kurs(e) und {roomCount} Raum/Räume an Ihrer früheren Schule. Möchten Sie diese in Ihre neue Schule mitnehmen?",
+	"formerMemberships.banner.showDetails": "Details anzeigen",
+	"formerMemberships.banner.hideDetails": "Details ausblenden",
+	"formerMemberships.actions.transfer": "Inhalte übernehmen",
+	"formerMemberships.actions.transferAll": "Alle übernehmen",
+	"formerMemberships.actions.discard": "Verwerfen",
+	"formerMemberships.types.course": "Kurs",
+	"formerMemberships.types.room": "Raum",
+	"formerMemberships.notifications.fetchError": "Frühere Mitgliedschaften konnten nicht geladen werden.",
+	"formerMemberships.notifications.transferSuccess": "„{name}“ wurde erfolgreich in Ihre Schule übernommen.",
+	"formerMemberships.notifications.transferAllSuccess":
+		"Alle Materialien wurden erfolgreich in Ihre Schule übernommen.",
+	"formerMemberships.notifications.transferAllError": "Fehler beim Übernehmen der Materialien.",
+	"formerMemberships.notifications.transferAllPartialError": "{count} Material(ien) konnten nicht übernommen werden.",
+	"formerMemberships.notifications.discardSuccess": "„{name}“ wurde verworfen.",
+	"formerMemberships.notifications.transferError": "Fehler beim Übernehmen von „{name}“.",
+	"formerMemberships.notifications.discardError": "Fehler beim Verwerfen von „{name}“.",
 };
