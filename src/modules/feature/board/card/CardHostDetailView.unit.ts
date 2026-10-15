@@ -6,6 +6,7 @@ import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi
 import {
 	boardResponseFactory,
 	cardResponseFactory,
+	createTestEnvStore,
 	fileElementResponseFactory,
 	mockComposable,
 } from "@@/tests/test-utils";
@@ -19,10 +20,17 @@ import { computed, ref } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
 import { VBtn, VDialog } from "vuetify/components";
 
+const { mockSmAndDown } = vi.hoisted(() => ({ mockSmAndDown: { value: false } }));
+
+vi.mock("vuetify", async (importOriginal) => ({
+	...(await importOriginal<typeof import("vuetify")>()),
+	useDisplay: () => ({ smAndDown: computed(() => mockSmAndDown.value) }),
+}));
+
 const backgroundColor = Colors.BLUE;
 
 const CARD_WITH_ELEMENTS: CardResponse = cardResponseFactory.build({
-	elements: [fileElementResponseFactory.build()],
+	elements: fileElementResponseFactory.buildList(2),
 	backgroundColor: backgroundColor,
 });
 
@@ -48,12 +56,14 @@ const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
 describe("CardHostDetailView", () => {
 	afterEach(() => {
 		vi.clearAllMocks();
+		mockSmAndDown.value = false;
 	});
 
 	const setup = (
 		props: ComponentProps<typeof CardHostDetailView>,
 		allowedOperations?: Partial<BoardResponseAllowedOperations>,
-		editMode?: boolean
+		editMode?: boolean,
+		isTableOfContentsEnabled = true
 	) => {
 		const testBoard = allowedOperations
 			? boardResponseFactory.build({ allowedOperations })
@@ -75,25 +85,24 @@ describe("CardHostDetailView", () => {
 		});
 		mockedUseSharedEditMode.mockReturnValue(mockedSharedEditMode);
 
+		const pinia = createTestingPinia({
+			initialState: {
+				cardStore: {
+					cards: {
+						[CARD_WITH_ELEMENTS.id]: CARD_WITH_ELEMENTS,
+					},
+				},
+				boardStore: {
+					board: testBoard,
+				},
+			},
+			stubActions: false,
+		});
+		createTestEnvStore({ FEATURE_COLUMN_BOARD_TABLE_OF_CONTENTS_ENABLED: isTableOfContentsEnabled }, undefined, pinia);
+
 		const wrapper = shallowMount(CardHostDetailView, {
 			global: {
-				plugins: [
-					createTestingPinia({
-						initialState: {
-							cardStore: {
-								cards: {
-									[CARD_WITH_ELEMENTS.id]: CARD_WITH_ELEMENTS,
-								},
-							},
-							boardStore: {
-								board: testBoard,
-							},
-						},
-						stubActions: false,
-					}),
-					createTestingVuetify(),
-					createTestingI18n(),
-				],
+				plugins: [pinia, createTestingVuetify(), createTestingI18n()],
 			},
 			propsData: props,
 			attachTo: document.body,
@@ -254,6 +263,223 @@ describe("CardHostDetailView", () => {
 			closeButton.trigger("click");
 
 			expect(wrapper.emitted("close:detail-view")).toBeTruthy();
+		});
+	});
+
+	describe("table of contents", () => {
+		const TOC_TOGGLE = "[data-testid='toggle-table-of-contents-button']";
+
+		const findTableOfContents = (wrapper: VueWrapper) => wrapper.findComponent({ name: "CardTableOfContents" });
+
+		describe("when the feature is disabled", () => {
+			it("should not render the toggle", () => {
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id }, undefined, undefined, false);
+
+				expect(wrapper.find(TOC_TOGGLE).exists()).toBe(false);
+			});
+
+			it("should not render the table of contents even if requested open", () => {
+				const { wrapper } = setup(
+					{ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true },
+					undefined,
+					undefined,
+					false
+				);
+
+				expect(findTableOfContents(wrapper).exists()).toBe(false);
+			});
+		});
+
+		describe("when it is closed", () => {
+			it("should not move focus to the current card when opened later", async () => {
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id });
+
+				await wrapper.setProps({ tableOfContentsOpen: true });
+
+				expect(findTableOfContents(wrapper).props("focusCurrentCard")).toBe(false);
+			});
+
+			it("should not render the table of contents", () => {
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id });
+
+				expect(findTableOfContents(wrapper).exists()).toBe(false);
+			});
+
+			it("should expose the collapsed state on the toggle", () => {
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id });
+
+				const toggle = wrapper.find(TOC_TOGGLE);
+				expect(toggle.attributes("aria-expanded")).toBe("false");
+				expect(toggle.attributes("aria-controls")).toBeUndefined();
+			});
+
+			it("should request opening when the toggle is clicked", async () => {
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id });
+
+				await wrapper.find(TOC_TOGGLE).trigger("click");
+
+				expect(wrapper.emitted("update:tableOfContentsOpen")).toEqual([[true]]);
+			});
+		});
+
+		describe("when it is open", () => {
+			it("should render the table of contents", () => {
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+
+				expect(findTableOfContents(wrapper).exists()).toBe(true);
+				expect(wrapper.find("#card-detail-view-toc").exists()).toBe(true);
+			});
+
+			it("should expose the expanded state on the toggle", () => {
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+
+				const toggle = wrapper.find(TOC_TOGGLE);
+				expect(toggle.attributes("aria-expanded")).toBe("true");
+				expect(toggle.attributes("aria-controls")).toBe("card-detail-view-toc");
+			});
+
+			it("should request closing when the toggle is clicked", async () => {
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+
+				await wrapper.find(TOC_TOGGLE).trigger("click");
+
+				expect(wrapper.emitted("update:tableOfContentsOpen")).toEqual([[false]]);
+			});
+
+			it("should move focus to the current card only when the panel was already open on mount", () => {
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+
+				expect(findTableOfContents(wrapper).props("focusCurrentCard")).toBe(true);
+			});
+
+			it("should hand the cards of the board and the elements of the card to the table of contents", () => {
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+
+				const toc = findTableOfContents(wrapper);
+				expect(toc.props("elements").map(({ id }: { id: string }) => id)).toEqual(
+					CARD_WITH_ELEMENTS.elements.map(({ id }) => id)
+				);
+				expect(toc.props("sections")).toBeInstanceOf(Array);
+			});
+		});
+
+		describe("when an element is selected", () => {
+			const [firstElement, secondElement] = CARD_WITH_ELEMENTS.elements;
+
+			const setupWithRenderedElements = () => {
+				const result = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+				const scroller = result.wrapper.find(".detail-view__scroller").element as HTMLElement;
+				scroller.scrollTo = vi.fn();
+				scroller.scrollTop = 100;
+				vi.spyOn(scroller, "getBoundingClientRect").mockReturnValue({ top: 50 } as DOMRect);
+
+				const targets = [firstElement, secondElement].map((element) => {
+					const target = document.createElement("div");
+					target.dataset.elementId = element.id;
+					vi.spyOn(target, "getBoundingClientRect").mockReturnValue({ top: 400 } as DOMRect);
+					scroller.appendChild(target);
+
+					return target;
+				});
+
+				return { ...result, scroller, targets };
+			};
+
+			it("should scroll the element of the dialog below a gap into view", async () => {
+				const { wrapper, scroller } = setupWithRenderedElements();
+
+				await findTableOfContents(wrapper).vm.$emit("select:element", secondElement.id);
+
+				expect(scroller.scrollTo).toHaveBeenCalledWith({ top: 100 + 400 - 50 - 32, behavior: "smooth" });
+			});
+
+			it("should mark the selected element as active in the table of contents", async () => {
+				const { wrapper } = setupWithRenderedElements();
+
+				await findTableOfContents(wrapper).vm.$emit("select:element", secondElement.id);
+
+				expect(findTableOfContents(wrapper).props("activeElementId")).toBe(secondElement.id);
+			});
+
+			it("should move focus to the focusable content of the element", async () => {
+				const { wrapper, targets } = setupWithRenderedElements();
+				const button = document.createElement("button");
+				targets[1].appendChild(button);
+
+				await findTableOfContents(wrapper).vm.$emit("select:element", secondElement.id);
+
+				expect(document.activeElement).toBe(button);
+			});
+
+			it("should move focus to the element itself when it has nothing focusable", async () => {
+				const { wrapper, targets } = setupWithRenderedElements();
+
+				await findTableOfContents(wrapper).vm.$emit("select:element", secondElement.id);
+
+				expect(document.activeElement).toBe(targets[1]);
+			});
+
+			it("should scroll to the top for the first element", async () => {
+				const { wrapper, scroller } = setupWithRenderedElements();
+
+				await findTableOfContents(wrapper).vm.$emit("select:element", firstElement.id);
+
+				expect(scroller.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
+			});
+
+			it("should not scroll smoothly when the user prefers reduced motion", async () => {
+				vi.spyOn(window, "matchMedia").mockReturnValue({ matches: true } as MediaQueryList);
+				const { wrapper, scroller } = setupWithRenderedElements();
+
+				await findTableOfContents(wrapper).vm.$emit("select:element", secondElement.id);
+
+				expect(scroller.scrollTo).toHaveBeenCalledWith({ top: 418, behavior: "auto" });
+			});
+
+			it("should do nothing when the element is not rendered", async () => {
+				const { wrapper, scroller } = setupWithRenderedElements();
+
+				await findTableOfContents(wrapper).vm.$emit("select:element", "unknown-element");
+
+				expect(scroller.scrollTo).not.toHaveBeenCalled();
+				expect(wrapper.emitted("update:tableOfContentsOpen")).toBeUndefined();
+			});
+
+			it("should keep the table of contents open on large screens", async () => {
+				const { wrapper } = setupWithRenderedElements();
+
+				await findTableOfContents(wrapper).vm.$emit("select:element", secondElement.id);
+
+				expect(wrapper.emitted("update:tableOfContentsOpen")).toBeUndefined();
+			});
+
+			it("should close the table of contents on small screens", async () => {
+				mockSmAndDown.value = true;
+				const { wrapper } = setupWithRenderedElements();
+
+				await findTableOfContents(wrapper).vm.$emit("select:element", secondElement.id);
+
+				expect(wrapper.emitted("update:tableOfContentsOpen")).toEqual([[false]]);
+			});
+		});
+
+		describe("when a card is selected", () => {
+			it("should keep the table of contents open on large screens", async () => {
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+
+				await findTableOfContents(wrapper).vm.$emit("select:card");
+
+				expect(wrapper.emitted("update:tableOfContentsOpen")).toBeUndefined();
+			});
+
+			it("should close the table of contents on small screens", async () => {
+				mockSmAndDown.value = true;
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+
+				await findTableOfContents(wrapper).vm.$emit("select:card");
+
+				expect(wrapper.emitted("update:tableOfContentsOpen")).toEqual([[false]]);
+			});
 		});
 	});
 });

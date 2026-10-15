@@ -1396,5 +1396,46 @@ describe("Board", () => {
 				expect(router.replace).toHaveBeenCalled();
 			});
 		});
+
+		describe("table of contents", () => {
+			const setupDetailView = () => {
+				router.currentRoute.value = {
+					...router.currentRoute.value,
+					params: { cardId: "test-card-id-123" },
+				};
+				const { wrapper } = setup();
+				const detailView = () => wrapper.findComponent({ name: "CardHostDetailView" });
+
+				return { wrapper, detailView };
+			};
+
+			it("should be closed initially", () => {
+				const { detailView } = setupDetailView();
+
+				expect(detailView().props("tableOfContentsOpen")).toBe(false);
+			});
+
+			it("should stay open when switching to another card", async () => {
+				const { wrapper, detailView } = setupDetailView();
+				await detailView().vm.$emit("update:tableOfContentsOpen", true);
+
+				router.currentRoute.value = { ...router.currentRoute.value, params: { cardId: "another-card-id" } };
+				await wrapper.vm.$nextTick();
+
+				expect(detailView().props("tableOfContentsOpen")).toBe(true);
+			});
+
+			it("should be closed again after the detail view was left", async () => {
+				const { wrapper, detailView } = setupDetailView();
+				await detailView().vm.$emit("update:tableOfContentsOpen", true);
+
+				router.currentRoute.value = { ...router.currentRoute.value, params: {} };
+				await wrapper.vm.$nextTick();
+				router.currentRoute.value = { ...router.currentRoute.value, params: { cardId: "test-card-id-123" } };
+				await wrapper.vm.$nextTick();
+
+				expect(detailView().props("tableOfContentsOpen")).toBe(false);
+			});
+		});
 	});
 });
