@@ -13,20 +13,20 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { ReleaseListResponse } from '../models';
+import type { ReleaseListResponse } from '../models';
 /**
  * ReleaseApi - axios parameter creator
- * @export
  */
 export const ReleaseApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -38,7 +38,7 @@ export const ReleaseApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        releaseControllerGetReleases: async (skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        releaseControllerGetReleases: async (skip?: number, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/releases`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -63,9 +63,9 @@ export const ReleaseApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['limit'] = limit;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -79,7 +79,6 @@ export const ReleaseApiAxiosParamCreator = function (configuration?: Configurati
 
 /**
  * ReleaseApi - functional programming interface
- * @export
  */
 export const ReleaseApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ReleaseApiAxiosParamCreator(configuration)
@@ -92,16 +91,17 @@ export const ReleaseApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async releaseControllerGetReleases(skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReleaseListResponse>> {
+        async releaseControllerGetReleases(skip?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReleaseListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.releaseControllerGetReleases(skip, limit, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ReleaseApi.releaseControllerGetReleases']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * ReleaseApi - factory interface
- * @export
  */
 export const ReleaseApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = ReleaseApiFp(configuration)
@@ -114,7 +114,7 @@ export const ReleaseApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        releaseControllerGetReleases(skip?: number, limit?: number, options?: any): AxiosPromise<ReleaseListResponse> {
+        releaseControllerGetReleases(skip?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<ReleaseListResponse> {
             return localVarFp.releaseControllerGetReleases(skip, limit, options).then((request) => request(axios, basePath));
         },
     };
@@ -122,8 +122,6 @@ export const ReleaseApiFactory = function (configuration?: Configuration, basePa
 
 /**
  * ReleaseApi - interface
- * @export
- * @interface ReleaseApi
  */
 export interface ReleaseApiInterface {
     /**
@@ -133,17 +131,13 @@ export interface ReleaseApiInterface {
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ReleaseApiInterface
      */
-    releaseControllerGetReleases(skip?: number, limit?: number, options?: any): AxiosPromise<ReleaseListResponse>;
+    releaseControllerGetReleases(skip?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<ReleaseListResponse>;
 
 }
 
 /**
  * ReleaseApi - object-oriented interface
- * @export
- * @class ReleaseApi
- * @extends {BaseAPI}
  */
 export class ReleaseApi extends BaseAPI implements ReleaseApiInterface {
     /**
@@ -153,9 +147,9 @@ export class ReleaseApi extends BaseAPI implements ReleaseApiInterface {
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ReleaseApi
      */
-    public releaseControllerGetReleases(skip?: number, limit?: number, options?: any) {
+    public releaseControllerGetReleases(skip?: number, limit?: number, options?: RawAxiosRequestConfig) {
         return ReleaseApiFp(this.configuration).releaseControllerGetReleases(skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

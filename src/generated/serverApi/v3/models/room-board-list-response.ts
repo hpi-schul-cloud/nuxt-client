@@ -13,38 +13,26 @@
  */
 
 
-import { RoomBoardItemResponse } from './room-board-item-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomBoardItemResponse } from './room-board-item-response';
 
-/**
- * 
- * @export
- * @interface RoomBoardListResponse
- */
 export interface RoomBoardListResponse {
     /**
      * The items for the current page.
-     * @type {Array<RoomBoardItemResponse>}
-     * @memberof RoomBoardListResponse
      */
-    data: Array<RoomBoardItemResponse>;
+    'data': Array<RoomBoardItemResponse>;
     /**
      * The total amount of items.
-     * @type {number}
-     * @memberof RoomBoardListResponse
      */
-    total: number;
+    'total': number;
     /**
      * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof RoomBoardListResponse
      */
-    skip: number;
+    'skip': number;
     /**
      * The page size of the response.
-     * @type {number}
-     * @memberof RoomBoardListResponse
      */
-    limit: number;
+    'limit': number;
 }
-
 

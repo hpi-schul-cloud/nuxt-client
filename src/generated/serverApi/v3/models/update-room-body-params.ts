@@ -13,45 +13,35 @@
  */
 
 
-import { RoomColor } from './room-color';
-import { RoomFeatures } from './room-features';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomColor } from './room-color';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomFeatures } from './room-features';
 
-/**
- * 
- * @export
- * @interface UpdateRoomBodyParams
- */
 export interface UpdateRoomBodyParams {
     /**
      * The name of the room
-     * @type {string}
-     * @memberof UpdateRoomBodyParams
      */
-    name: string;
+    'name': string;
     /**
      * The display color of the room
-     * @type {RoomColor}
-     * @memberof UpdateRoomBodyParams
      */
-    color: RoomColor;
+    'color': RoomColor;
     /**
      * Start date of the room
-     * @type {string}
-     * @memberof UpdateRoomBodyParams
      */
-    startDate?: string;
+    'startDate'?: string;
     /**
      * Start date of the room
-     * @type {string}
-     * @memberof UpdateRoomBodyParams
      */
-    endDate?: string;
+    'endDate'?: string;
     /**
      * The features of the room
-     * @type {Array<RoomFeatures>}
-     * @memberof UpdateRoomBodyParams
      */
-    features: Array<RoomFeatures>;
+    'features': Array<RoomFeatures>;
 }
+
 
 

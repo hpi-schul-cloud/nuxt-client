@@ -13,26 +13,26 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ForceMigrationParams } from '../models';
+import type { ForceMigrationParams } from '../models';
 // @ts-ignore
-import { Oauth2MigrationParams } from '../models';
+import type { Oauth2MigrationParams } from '../models';
 // @ts-ignore
-import { UserLoginMigrationMandatoryParams } from '../models';
+import type { UserLoginMigrationMandatoryParams } from '../models';
 // @ts-ignore
-import { UserLoginMigrationResponse } from '../models';
+import type { UserLoginMigrationResponse } from '../models';
 // @ts-ignore
-import { UserLoginMigrationSearchListResponse } from '../models';
+import type { UserLoginMigrationSearchListResponse } from '../models';
 /**
  * UserLoginMigrationApi - axios parameter creator
- * @export
  */
 export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -41,7 +41,7 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerCloseMigration: async (options: any = {}): Promise<RequestArgs> => {
+        userLoginMigrationControllerCloseMigration: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/user-login-migrations/close`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -58,9 +58,9 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -75,11 +75,11 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerFindUserLoginMigrationBySchool: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+        userLoginMigrationControllerFindUserLoginMigrationBySchool: async (schoolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('userLoginMigrationControllerFindUserLoginMigrationBySchool', 'schoolId', schoolId)
             const localVarPath = `/user-login-migrations/schools/{schoolId}`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+                .replace('{schoolId}', encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -95,9 +95,9 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -113,7 +113,7 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerForceMigration: async (forceMigrationParams: ForceMigrationParams, options: any = {}): Promise<RequestArgs> => {
+        userLoginMigrationControllerForceMigration: async (forceMigrationParams: ForceMigrationParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'forceMigrationParams' is not null or undefined
             assertParamExists('userLoginMigrationControllerForceMigration', 'forceMigrationParams', forceMigrationParams)
             const localVarPath = `/user-login-migrations/force-migration`;
@@ -132,11 +132,9 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(forceMigrationParams, localVarRequestOptions, configuration)
@@ -153,7 +151,7 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerGetMigrations: async (userId?: string, options: any = {}): Promise<RequestArgs> => {
+        userLoginMigrationControllerGetMigrations: async (userId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/user-login-migrations`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -174,9 +172,9 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
                 localVarQueryParameter['userId'] = userId;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -191,7 +189,7 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerMigrateUserLogin: async (oauth2MigrationParams: Oauth2MigrationParams, options: any = {}): Promise<RequestArgs> => {
+        userLoginMigrationControllerMigrateUserLogin: async (oauth2MigrationParams: Oauth2MigrationParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'oauth2MigrationParams' is not null or undefined
             assertParamExists('userLoginMigrationControllerMigrateUserLogin', 'oauth2MigrationParams', oauth2MigrationParams)
             const localVarPath = `/user-login-migrations/migrate-to-oauth2`;
@@ -210,11 +208,9 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(oauth2MigrationParams, localVarRequestOptions, configuration)
@@ -229,7 +225,7 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerRestartMigration: async (options: any = {}): Promise<RequestArgs> => {
+        userLoginMigrationControllerRestartMigration: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/user-login-migrations/restart`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -246,9 +242,9 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -263,7 +259,7 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerSetMigrationMandatory: async (userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options: any = {}): Promise<RequestArgs> => {
+        userLoginMigrationControllerSetMigrationMandatory: async (userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userLoginMigrationMandatoryParams' is not null or undefined
             assertParamExists('userLoginMigrationControllerSetMigrationMandatory', 'userLoginMigrationMandatoryParams', userLoginMigrationMandatoryParams)
             const localVarPath = `/user-login-migrations/mandatory`;
@@ -282,11 +278,10 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(userLoginMigrationMandatoryParams, localVarRequestOptions, configuration)
@@ -301,7 +296,7 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerStartMigration: async (options: any = {}): Promise<RequestArgs> => {
+        userLoginMigrationControllerStartMigration: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/user-login-migrations/start`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -318,9 +313,9 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -334,7 +329,6 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
 
 /**
  * UserLoginMigrationApi - functional programming interface
- * @export
  */
 export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UserLoginMigrationApiAxiosParamCreator(configuration)
@@ -344,9 +338,11 @@ export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userLoginMigrationControllerCloseMigration(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
+        async userLoginMigrationControllerCloseMigration(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerCloseMigration(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserLoginMigrationApi.userLoginMigrationControllerCloseMigration']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -354,9 +350,11 @@ export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
+        async userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserLoginMigrationApi.userLoginMigrationControllerFindUserLoginMigrationBySchool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -365,9 +363,11 @@ export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerForceMigration(forceMigrationParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserLoginMigrationApi.userLoginMigrationControllerForceMigration']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * Currently there can only be one migration for a user. Therefore only one migration is returned.
@@ -376,9 +376,11 @@ export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userLoginMigrationControllerGetMigrations(userId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationSearchListResponse>> {
+        async userLoginMigrationControllerGetMigrations(userId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationSearchListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerGetMigrations(userId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserLoginMigrationApi.userLoginMigrationControllerGetMigrations']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -386,18 +388,22 @@ export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserLoginMigrationApi.userLoginMigrationControllerMigrateUserLogin']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userLoginMigrationControllerRestartMigration(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
+        async userLoginMigrationControllerRestartMigration(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerRestartMigration(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserLoginMigrationApi.userLoginMigrationControllerRestartMigration']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -405,25 +411,28 @@ export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
+        async userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserLoginMigrationApi.userLoginMigrationControllerSetMigrationMandatory']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userLoginMigrationControllerStartMigration(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
+        async userLoginMigrationControllerStartMigration(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserLoginMigrationResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerStartMigration(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserLoginMigrationApi.userLoginMigrationControllerStartMigration']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * UserLoginMigrationApi - factory interface
- * @export
  */
 export const UserLoginMigrationApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = UserLoginMigrationApiFp(configuration)
@@ -433,7 +442,7 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerCloseMigration(options?: any): AxiosPromise<UserLoginMigrationResponse> {
+        userLoginMigrationControllerCloseMigration(options?: RawAxiosRequestConfig): AxiosPromise<UserLoginMigrationResponse> {
             return localVarFp.userLoginMigrationControllerCloseMigration(options).then((request) => request(axios, basePath));
         },
         /**
@@ -442,7 +451,7 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any): AxiosPromise<UserLoginMigrationResponse> {
+        userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<UserLoginMigrationResponse> {
             return localVarFp.userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -452,7 +461,7 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: any): AxiosPromise<void> {
+        userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.userLoginMigrationControllerForceMigration(forceMigrationParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -462,7 +471,7 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerGetMigrations(userId?: string, options?: any): AxiosPromise<UserLoginMigrationSearchListResponse> {
+        userLoginMigrationControllerGetMigrations(userId?: string, options?: RawAxiosRequestConfig): AxiosPromise<UserLoginMigrationSearchListResponse> {
             return localVarFp.userLoginMigrationControllerGetMigrations(userId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -471,7 +480,7 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: any): AxiosPromise<void> {
+        userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -479,7 +488,7 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerRestartMigration(options?: any): AxiosPromise<UserLoginMigrationResponse> {
+        userLoginMigrationControllerRestartMigration(options?: RawAxiosRequestConfig): AxiosPromise<UserLoginMigrationResponse> {
             return localVarFp.userLoginMigrationControllerRestartMigration(options).then((request) => request(axios, basePath));
         },
         /**
@@ -488,7 +497,7 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options?: any): AxiosPromise<UserLoginMigrationResponse> {
+        userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options?: RawAxiosRequestConfig): AxiosPromise<UserLoginMigrationResponse> {
             return localVarFp.userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -496,7 +505,7 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationControllerStartMigration(options?: any): AxiosPromise<UserLoginMigrationResponse> {
+        userLoginMigrationControllerStartMigration(options?: RawAxiosRequestConfig): AxiosPromise<UserLoginMigrationResponse> {
             return localVarFp.userLoginMigrationControllerStartMigration(options).then((request) => request(axios, basePath));
         },
     };
@@ -504,26 +513,22 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
 
 /**
  * UserLoginMigrationApi - interface
- * @export
- * @interface UserLoginMigrationApi
  */
 export interface UserLoginMigrationApiInterface {
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationApiInterface
      */
-    userLoginMigrationControllerCloseMigration(options?: any): AxiosPromise<UserLoginMigrationResponse>;
+    userLoginMigrationControllerCloseMigration(options?: RawAxiosRequestConfig): AxiosPromise<UserLoginMigrationResponse>;
 
     /**
      * 
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationApiInterface
      */
-    userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any): AxiosPromise<UserLoginMigrationResponse>;
+    userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<UserLoginMigrationResponse>;
 
     /**
      * 
@@ -531,9 +536,8 @@ export interface UserLoginMigrationApiInterface {
      * @param {ForceMigrationParams} forceMigrationParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationApiInterface
      */
-    userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: any): AxiosPromise<void>;
+    userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * Currently there can only be one migration for a user. Therefore only one migration is returned.
@@ -541,60 +545,51 @@ export interface UserLoginMigrationApiInterface {
      * @param {string} [userId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationApiInterface
      */
-    userLoginMigrationControllerGetMigrations(userId?: string, options?: any): AxiosPromise<UserLoginMigrationSearchListResponse>;
+    userLoginMigrationControllerGetMigrations(userId?: string, options?: RawAxiosRequestConfig): AxiosPromise<UserLoginMigrationSearchListResponse>;
 
     /**
      * 
      * @param {Oauth2MigrationParams} oauth2MigrationParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationApiInterface
      */
-    userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: any): AxiosPromise<void>;
+    userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationApiInterface
      */
-    userLoginMigrationControllerRestartMigration(options?: any): AxiosPromise<UserLoginMigrationResponse>;
+    userLoginMigrationControllerRestartMigration(options?: RawAxiosRequestConfig): AxiosPromise<UserLoginMigrationResponse>;
 
     /**
      * 
      * @param {UserLoginMigrationMandatoryParams} userLoginMigrationMandatoryParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationApiInterface
      */
-    userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options?: any): AxiosPromise<UserLoginMigrationResponse>;
+    userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options?: RawAxiosRequestConfig): AxiosPromise<UserLoginMigrationResponse>;
 
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationApiInterface
      */
-    userLoginMigrationControllerStartMigration(options?: any): AxiosPromise<UserLoginMigrationResponse>;
+    userLoginMigrationControllerStartMigration(options?: RawAxiosRequestConfig): AxiosPromise<UserLoginMigrationResponse>;
 
 }
 
 /**
  * UserLoginMigrationApi - object-oriented interface
- * @export
- * @class UserLoginMigrationApi
- * @extends {BaseAPI}
  */
 export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigrationApiInterface {
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationApi
      */
-    public userLoginMigrationControllerCloseMigration(options?: any) {
+    public userLoginMigrationControllerCloseMigration(options?: RawAxiosRequestConfig) {
         return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerCloseMigration(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -603,9 +598,8 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationApi
      */
-    public userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any) {
+    public userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: RawAxiosRequestConfig) {
         return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -615,9 +609,8 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
      * @param {ForceMigrationParams} forceMigrationParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationApi
      */
-    public userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: any) {
+    public userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: RawAxiosRequestConfig) {
         return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerForceMigration(forceMigrationParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -627,9 +620,8 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
      * @param {string} [userId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationApi
      */
-    public userLoginMigrationControllerGetMigrations(userId?: string, options?: any) {
+    public userLoginMigrationControllerGetMigrations(userId?: string, options?: RawAxiosRequestConfig) {
         return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerGetMigrations(userId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -638,9 +630,8 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
      * @param {Oauth2MigrationParams} oauth2MigrationParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationApi
      */
-    public userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: any) {
+    public userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams: Oauth2MigrationParams, options?: RawAxiosRequestConfig) {
         return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerMigrateUserLogin(oauth2MigrationParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -648,9 +639,8 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationApi
      */
-    public userLoginMigrationControllerRestartMigration(options?: any) {
+    public userLoginMigrationControllerRestartMigration(options?: RawAxiosRequestConfig) {
         return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerRestartMigration(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -659,9 +649,8 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
      * @param {UserLoginMigrationMandatoryParams} userLoginMigrationMandatoryParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationApi
      */
-    public userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options?: any) {
+    public userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams: UserLoginMigrationMandatoryParams, options?: RawAxiosRequestConfig) {
         return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerSetMigrationMandatory(userLoginMigrationMandatoryParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -669,9 +658,9 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationApi
      */
-    public userLoginMigrationControllerStartMigration(options?: any) {
+    public userLoginMigrationControllerStartMigration(options?: RawAxiosRequestConfig) {
         return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerStartMigration(options).then((request) => request(this.axios, this.basePath));
     }
 }
+

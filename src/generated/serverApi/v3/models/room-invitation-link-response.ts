@@ -14,72 +14,16 @@
 
 
 
-/**
- * 
- * @export
- * @interface RoomInvitationLinkResponse
- */
 export interface RoomInvitationLinkResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomInvitationLinkResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomInvitationLinkResponse
-     */
-    roomId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomInvitationLinkResponse
-     */
-    title: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomInvitationLinkResponse
-     */
-    restrictedToCreatorSchool: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomInvitationLinkResponse
-     */
-    isUsableByExternalPersons: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomInvitationLinkResponse
-     */
-    isUsableByStudents: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomInvitationLinkResponse
-     */
-    activeUntil?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomInvitationLinkResponse
-     */
-    requiresConfirmation: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomInvitationLinkResponse
-     */
-    creatorUserId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomInvitationLinkResponse
-     */
-    creatorSchoolId: string;
+    'id': string;
+    'roomId': string;
+    'title': string;
+    'restrictedToCreatorSchool': boolean;
+    'isUsableByExternalPersons': boolean;
+    'isUsableByStudents': boolean;
+    'activeUntil'?: string;
+    'requiresConfirmation': boolean;
+    'creatorUserId': string;
+    'creatorSchoolId': string;
 }
-
 

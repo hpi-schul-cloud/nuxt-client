@@ -13,103 +13,72 @@
  */
 
 
-import { BasicToolConfigParams } from './basic-tool-config-params';
-import { CustomParameterPostParams } from './custom-parameter-post-params';
-import { ExternalToolMediumParams } from './external-tool-medium-params';
-import { Lti11ToolConfigCreateParams } from './lti11-tool-config-create-params';
-import { Oauth2ToolConfigCreateParams } from './oauth2-tool-config-create-params';
-import { ToolContextType } from './tool-context-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CustomParameterPostParams } from './custom-parameter-post-params';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ExternalToolCreateParamsConfig } from './external-tool-create-params-config';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ExternalToolMediumParams } from './external-tool-medium-params';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ToolContextType } from './tool-context-type';
 
-/**
- * 
- * @export
- * @interface ExternalToolCreateParams
- */
 export interface ExternalToolCreateParams {
     /**
      * Name of the external tool
-     * @type {string}
-     * @memberof ExternalToolCreateParams
      */
-    name: string;
+    'name': string;
     /**
      * Description of the external tool
-     * @type {string}
-     * @memberof ExternalToolCreateParams
      */
-    description?: string;
+    'description'?: string;
     /**
      * URL of the external tool
-     * @type {string}
-     * @memberof ExternalToolCreateParams
      */
-    url?: string;
+    'url'?: string;
     /**
      * URL of the logo of the external tool
-     * @type {string}
-     * @memberof ExternalToolCreateParams
      */
-    logoUrl?: string;
+    'logoUrl'?: string;
     /**
      * URL of the thumbnail of the external tool
-     * @type {string}
-     * @memberof ExternalToolCreateParams
      */
-    thumbnailUrl?: string;
-    /**
-     * Configuration of the external tool
-     * @type {BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams}
-     * @memberof ExternalToolCreateParams
-     */
-    config: BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams;
+    'thumbnailUrl'?: string;
+    'config': ExternalToolCreateParamsConfig;
     /**
      * Custom parameters of the external tool
-     * @type {Array<CustomParameterPostParams>}
-     * @memberof ExternalToolCreateParams
      */
-    parameters?: Array<CustomParameterPostParams>;
+    'parameters'?: Array<CustomParameterPostParams>;
     /**
      * Tool can be hidden, those tools cant be added to e.g. school, course or board
-     * @type {boolean}
-     * @memberof ExternalToolCreateParams
      */
-    isHidden: boolean;
+    'isHidden': boolean;
     /**
      * Tool can be deactivated, related tools can not be added to e.g. school, course or board anymore
-     * @type {boolean}
-     * @memberof ExternalToolCreateParams
      */
-    isDeactivated: boolean;
+    'isDeactivated': boolean;
     /**
      * Tool should be opened in a new tab
-     * @type {boolean}
-     * @memberof ExternalToolCreateParams
      */
-    openNewTab: boolean;
+    'openNewTab': boolean;
     /**
      * Restrict tools to specific contexts
-     * @type {Array<ToolContextType>}
-     * @memberof ExternalToolCreateParams
      */
-    restrictToContexts?: Array<ToolContextType>;
+    'restrictToContexts'?: Array<ToolContextType>;
     /**
      * Medium of the external tool
-     * @type {ExternalToolMediumParams}
-     * @memberof ExternalToolCreateParams
      */
-    medium?: ExternalToolMediumParams;
+    'medium'?: ExternalToolMediumParams;
     /**
      * Should the tool be a preferred tool
-     * @type {boolean}
-     * @memberof ExternalToolCreateParams
      */
-    isPreferred: boolean;
+    'isPreferred': boolean;
     /**
      * Name of the icon to be rendered when displaying it as a preferred tool
-     * @type {string}
-     * @memberof ExternalToolCreateParams
      */
-    iconName?: string;
+    'iconName'?: string;
 }
-
 

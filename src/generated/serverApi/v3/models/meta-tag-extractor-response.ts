@@ -13,62 +13,20 @@
  */
 
 
-import { MetaDataEntityType } from './meta-data-entity-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MetaDataEntityType } from './meta-data-entity-type';
 
-/**
- * 
- * @export
- * @interface MetaTagExtractorResponse
- */
 export interface MetaTagExtractorResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof MetaTagExtractorResponse
-     */
-    url: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MetaTagExtractorResponse
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MetaTagExtractorResponse
-     */
-    description: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MetaTagExtractorResponse
-     */
-    originalImageUrl?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MetaTagExtractorResponse
-     */
-    imageUrl?: string;
-    /**
-     * 
-     * @type {MetaDataEntityType}
-     * @memberof MetaTagExtractorResponse
-     */
-    type: MetaDataEntityType;
-    /**
-     * 
-     * @type {string}
-     * @memberof MetaTagExtractorResponse
-     */
-    parentTitle?: string;
-    /**
-     * 
-     * @type {MetaDataEntityType}
-     * @memberof MetaTagExtractorResponse
-     */
-    parentType?: MetaDataEntityType;
+    'url': string;
+    'title': string;
+    'description': string;
+    'originalImageUrl'?: string;
+    'imageUrl'?: string;
+    'type': MetaDataEntityType;
+    'parentTitle'?: string;
+    'parentType'?: MetaDataEntityType;
 }
+
 
 

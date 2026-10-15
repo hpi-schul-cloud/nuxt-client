@@ -13,56 +13,19 @@
  */
 
 
-import { BoardLayout } from './board-layout';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { BoardLayout } from './board-layout';
 
-/**
- * 
- * @export
- * @interface BoardColumnBoardResponse
- */
 export interface BoardColumnBoardResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardColumnBoardResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardColumnBoardResponse
-     */
-    title: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BoardColumnBoardResponse
-     */
-    published: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardColumnBoardResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardColumnBoardResponse
-     */
-    updatedAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardColumnBoardResponse
-     */
-    columnBoardId: string;
-    /**
-     * 
-     * @type {BoardLayout}
-     * @memberof BoardColumnBoardResponse
-     */
-    layout: BoardLayout;
+    'id': string;
+    'title': string;
+    'published': boolean;
+    'createdAt': string;
+    'updatedAt': string;
+    'columnBoardId': string;
+    'layout': BoardLayout;
 }
+
 
 

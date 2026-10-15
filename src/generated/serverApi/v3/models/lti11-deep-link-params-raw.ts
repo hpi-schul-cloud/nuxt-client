@@ -14,78 +14,17 @@
 
 
 
-/**
- * 
- * @export
- * @interface Lti11DeepLinkParamsRaw
- */
 export interface Lti11DeepLinkParamsRaw {
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParamsRaw
-     */
-    lti_message_type: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParamsRaw
-     */
-    lti_version: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParamsRaw
-     */
-    content_items?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParamsRaw
-     */
-    data: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParamsRaw
-     */
-    oauth_version: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParamsRaw
-     */
-    oauth_nonce: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof Lti11DeepLinkParamsRaw
-     */
-    oauth_timestamp: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParamsRaw
-     */
-    oauth_signature_method: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParamsRaw
-     */
-    oauth_consumer_key: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParamsRaw
-     */
-    oauth_signature: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParamsRaw
-     */
-    oauth_callback?: string;
+    'lti_message_type': string;
+    'lti_version': string;
+    'content_items'?: string;
+    'data': string;
+    'oauth_version': string;
+    'oauth_nonce': string;
+    'oauth_timestamp': number;
+    'oauth_signature_method': string;
+    'oauth_consumer_key': string;
+    'oauth_signature': string;
+    'oauth_callback'?: string;
 }
-
 

@@ -13,57 +13,22 @@
  */
 
 
-import { BoardLayout } from './board-layout';
-import { RoomBoardItemResponseAllowedOperations } from './room-board-item-response-allowed-operations';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { BoardLayout } from './board-layout';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomBoardItemResponseAllowedOperations } from './room-board-item-response-allowed-operations';
 
-/**
- * 
- * @export
- * @interface RoomBoardItemResponse
- */
 export interface RoomBoardItemResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomBoardItemResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomBoardItemResponse
-     */
-    title: string;
-    /**
-     * 
-     * @type {BoardLayout}
-     * @memberof RoomBoardItemResponse
-     */
-    layout: BoardLayout;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponse
-     */
-    isVisible: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomBoardItemResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomBoardItemResponse
-     */
-    updatedAt: string;
-    /**
-     * 
-     * @type {RoomBoardItemResponseAllowedOperations}
-     * @memberof RoomBoardItemResponse
-     */
-    allowedOperations: RoomBoardItemResponseAllowedOperations;
+    'id': string;
+    'title': string;
+    'layout': BoardLayout;
+    'isVisible': boolean;
+    'createdAt': string;
+    'updatedAt': string;
+    'allowedOperations': RoomBoardItemResponseAllowedOperations;
 }
+
 
 

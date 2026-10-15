@@ -13,20 +13,13 @@
  */
 
 
-import { LanguageType } from './language-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { LanguageType } from './language-type';
 
-/**
- * 
- * @export
- * @interface ChangeLanguageParams
- */
 export interface ChangeLanguageParams {
-    /**
-     * 
-     * @type {LanguageType}
-     * @memberof ChangeLanguageParams
-     */
-    language: LanguageType;
+    'language': LanguageType;
 }
+
 
 

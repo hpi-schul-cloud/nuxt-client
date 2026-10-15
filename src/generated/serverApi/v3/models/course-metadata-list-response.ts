@@ -13,38 +13,26 @@
  */
 
 
-import { CourseMetadataResponse } from './course-metadata-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CourseMetadataResponse } from './course-metadata-response';
 
-/**
- * 
- * @export
- * @interface CourseMetadataListResponse
- */
 export interface CourseMetadataListResponse {
     /**
      * The items for the current page.
-     * @type {Array<CourseMetadataResponse>}
-     * @memberof CourseMetadataListResponse
      */
-    data: Array<CourseMetadataResponse>;
+    'data': Array<CourseMetadataResponse>;
     /**
      * The total amount of items.
-     * @type {number}
-     * @memberof CourseMetadataListResponse
      */
-    total: number;
+    'total': number;
     /**
      * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof CourseMetadataListResponse
      */
-    skip: number;
+    'skip': number;
     /**
      * The page size of the response.
-     * @type {number}
-     * @memberof CourseMetadataListResponse
      */
-    limit: number;
+    'limit': number;
 }
-
 

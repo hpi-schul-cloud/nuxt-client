@@ -13,78 +13,25 @@
  */
 
 
-import { CourseInfoResponse } from './course-info-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CourseInfoResponse } from './course-info-response';
 
-/**
- * 
- * @export
- * @interface ClassInfoResponse
- */
 export interface ClassInfoResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ClassInfoResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ClassInfoResponse
-     */
-    type: ClassInfoResponseType;
-    /**
-     * 
-     * @type {string}
-     * @memberof ClassInfoResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ClassInfoResponse
-     */
-    externalSourceName?: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof ClassInfoResponse
-     */
-    teacherNames: Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof ClassInfoResponse
-     */
-    schoolYear?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ClassInfoResponse
-     */
-    isUpgradable?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof ClassInfoResponse
-     */
-    studentCount: number;
-    /**
-     * 
-     * @type {Array<CourseInfoResponse>}
-     * @memberof ClassInfoResponse
-     */
-    synchronizedCourses?: Array<CourseInfoResponse>;
+    'id': string;
+    'type': ClassInfoResponseType;
+    'name': string;
+    'externalSourceName'?: string;
+    'teacherNames': Array<string>;
+    'schoolYear'?: string;
+    'isUpgradable'?: boolean;
+    'studentCount': number;
+    'synchronizedCourses'?: Array<CourseInfoResponse>;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum ClassInfoResponseType {
     CLASS = 'class',
     GROUP = 'group'
 }
-
 
 

@@ -13,38 +13,26 @@
  */
 
 
-import { AccountResponse } from './account-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { AccountResponse } from './account-response';
 
-/**
- * 
- * @export
- * @interface AccountSearchListResponse
- */
 export interface AccountSearchListResponse {
     /**
      * The items for the current page.
-     * @type {Array<AccountResponse>}
-     * @memberof AccountSearchListResponse
      */
-    data: Array<AccountResponse>;
+    'data': Array<AccountResponse>;
     /**
      * The total amount of items.
-     * @type {number}
-     * @memberof AccountSearchListResponse
      */
-    total: number;
+    'total': number;
     /**
      * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof AccountSearchListResponse
      */
-    skip: number;
+    'skip': number;
     /**
      * The page size of the response.
-     * @type {number}
-     * @memberof AccountSearchListResponse
      */
-    limit: number;
+    'limit': number;
 }
-
 

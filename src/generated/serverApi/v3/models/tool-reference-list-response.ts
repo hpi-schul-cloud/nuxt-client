@@ -13,20 +13,11 @@
  */
 
 
-import { ToolReferenceResponse } from './tool-reference-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ToolReferenceResponse } from './tool-reference-response';
 
-/**
- * 
- * @export
- * @interface ToolReferenceListResponse
- */
 export interface ToolReferenceListResponse {
-    /**
-     * 
-     * @type {Array<ToolReferenceResponse>}
-     * @memberof ToolReferenceListResponse
-     */
-    data: Array<ToolReferenceResponse>;
+    'data': Array<ToolReferenceResponse>;
 }
-
 

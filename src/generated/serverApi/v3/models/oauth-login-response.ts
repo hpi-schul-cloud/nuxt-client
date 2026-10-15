@@ -14,24 +14,11 @@
 
 
 
-/**
- * 
- * @export
- * @interface OauthLoginResponse
- */
 export interface OauthLoginResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof OauthLoginResponse
-     */
-    accessToken: string;
+    'accessToken': string;
     /**
      * The external id token which is from the external oauth system and set when scope openid is available.
-     * @type {string}
-     * @memberof OauthLoginResponse
      */
-    externalIdToken?: string;
+    'externalIdToken'?: string;
 }
-
 

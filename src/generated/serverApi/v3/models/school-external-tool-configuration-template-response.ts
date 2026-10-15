@@ -13,51 +13,22 @@
  */
 
 
-import { CustomParameterResponse } from './custom-parameter-response';
-import { ExternalToolMediumResponse } from './external-tool-medium-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CustomParameterResponse } from './custom-parameter-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ExternalToolMediumResponse } from './external-tool-medium-response';
 
-/**
- * 
- * @export
- * @interface SchoolExternalToolConfigurationTemplateResponse
- */
 export interface SchoolExternalToolConfigurationTemplateResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolExternalToolConfigurationTemplateResponse
-     */
-    externalToolId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolExternalToolConfigurationTemplateResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolExternalToolConfigurationTemplateResponse
-     */
-    baseUrl: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolExternalToolConfigurationTemplateResponse
-     */
-    logoUrl?: string;
-    /**
-     * 
-     * @type {Array<CustomParameterResponse>}
-     * @memberof SchoolExternalToolConfigurationTemplateResponse
-     */
-    parameters: Array<CustomParameterResponse>;
+    'externalToolId': string;
+    'name': string;
+    'baseUrl': string;
+    'logoUrl'?: string;
+    'parameters': Array<CustomParameterResponse>;
     /**
      * Medium of the external tool
-     * @type {ExternalToolMediumResponse}
-     * @memberof SchoolExternalToolConfigurationTemplateResponse
      */
-    medium?: ExternalToolMediumResponse;
+    'medium'?: ExternalToolMediumResponse;
 }
-
 

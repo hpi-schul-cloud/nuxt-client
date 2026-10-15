@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface UpdateBoardTitleParams
- */
 export interface UpdateBoardTitleParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateBoardTitleParams
-     */
-    title: string;
+    'title': string;
 }
-
 

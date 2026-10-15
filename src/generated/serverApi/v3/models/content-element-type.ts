@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum ContentElementType {
     FILE = 'file',
     DRAWING = 'drawing',

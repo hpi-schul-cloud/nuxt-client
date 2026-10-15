@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum LanguageType {
     DE = 'de',
     EN = 'en',

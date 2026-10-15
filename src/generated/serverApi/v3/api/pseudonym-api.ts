@@ -13,18 +13,18 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { PseudonymResponse } from '../models';
+import type { PseudonymResponse } from '../models';
 /**
  * PseudonymApi - axios parameter creator
- * @export
  */
 export const PseudonymApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -35,11 +35,11 @@ export const PseudonymApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        pseudonymControllerGetPseudonym: async (pseudonym: string, options: any = {}): Promise<RequestArgs> => {
+        pseudonymControllerGetPseudonym: async (pseudonym: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'pseudonym' is not null or undefined
             assertParamExists('pseudonymControllerGetPseudonym', 'pseudonym', pseudonym)
             const localVarPath = `/pseudonyms/{pseudonym}`
-                .replace(`{${"pseudonym"}}`, encodeURIComponent(String(pseudonym)));
+                .replace('{pseudonym}', encodeURIComponent(String(pseudonym)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -55,9 +55,9 @@ export const PseudonymApiAxiosParamCreator = function (configuration?: Configura
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -71,7 +71,6 @@ export const PseudonymApiAxiosParamCreator = function (configuration?: Configura
 
 /**
  * PseudonymApi - functional programming interface
- * @export
  */
 export const PseudonymApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = PseudonymApiAxiosParamCreator(configuration)
@@ -83,16 +82,17 @@ export const PseudonymApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async pseudonymControllerGetPseudonym(pseudonym: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PseudonymResponse>> {
+        async pseudonymControllerGetPseudonym(pseudonym: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PseudonymResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.pseudonymControllerGetPseudonym(pseudonym, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PseudonymApi.pseudonymControllerGetPseudonym']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * PseudonymApi - factory interface
- * @export
  */
 export const PseudonymApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = PseudonymApiFp(configuration)
@@ -104,7 +104,7 @@ export const PseudonymApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        pseudonymControllerGetPseudonym(pseudonym: string, options?: any): AxiosPromise<PseudonymResponse> {
+        pseudonymControllerGetPseudonym(pseudonym: string, options?: RawAxiosRequestConfig): AxiosPromise<PseudonymResponse> {
             return localVarFp.pseudonymControllerGetPseudonym(pseudonym, options).then((request) => request(axios, basePath));
         },
     };
@@ -112,8 +112,6 @@ export const PseudonymApiFactory = function (configuration?: Configuration, base
 
 /**
  * PseudonymApi - interface
- * @export
- * @interface PseudonymApi
  */
 export interface PseudonymApiInterface {
     /**
@@ -122,17 +120,13 @@ export interface PseudonymApiInterface {
      * @param {string} pseudonym 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof PseudonymApiInterface
      */
-    pseudonymControllerGetPseudonym(pseudonym: string, options?: any): AxiosPromise<PseudonymResponse>;
+    pseudonymControllerGetPseudonym(pseudonym: string, options?: RawAxiosRequestConfig): AxiosPromise<PseudonymResponse>;
 
 }
 
 /**
  * PseudonymApi - object-oriented interface
- * @export
- * @class PseudonymApi
- * @extends {BaseAPI}
  */
 export class PseudonymApi extends BaseAPI implements PseudonymApiInterface {
     /**
@@ -141,9 +135,9 @@ export class PseudonymApi extends BaseAPI implements PseudonymApiInterface {
      * @param {string} pseudonym 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof PseudonymApi
      */
-    public pseudonymControllerGetPseudonym(pseudonym: string, options?: any) {
+    public pseudonymControllerGetPseudonym(pseudonym: string, options?: RawAxiosRequestConfig) {
         return PseudonymApiFp(this.configuration).pseudonymControllerGetPseudonym(pseudonym, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface RedirectResponse
- */
 export interface RedirectResponse {
     /**
      * RedirectURL is the URL which you should redirect the user to once the authentication process is completed.
-     * @type {string}
-     * @memberof RedirectResponse
      */
-    redirect_to: string;
+    'redirect_to': string;
 }
-
 

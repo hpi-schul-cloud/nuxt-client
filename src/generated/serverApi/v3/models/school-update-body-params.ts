@@ -13,80 +13,33 @@
  */
 
 
-import { LanguageType } from './language-type';
-import { SchoolFeature } from './school-feature';
-import { SchoolLogo } from './school-logo';
-import { SchoolPermissionsParams } from './school-permissions-params';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { LanguageType } from './language-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchoolFeature } from './school-feature';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchoolLogo } from './school-logo';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchoolPermissionsParams } from './school-permissions-params';
 
-/**
- * 
- * @export
- * @interface SchoolUpdateBodyParams
- */
 export interface SchoolUpdateBodyParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolUpdateBodyParams
-     */
-    name?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolUpdateBodyParams
-     */
-    officialSchoolNumber?: string;
-    /**
-     * 
-     * @type {SchoolLogo}
-     * @memberof SchoolUpdateBodyParams
-     */
-    logo?: SchoolLogo;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolUpdateBodyParams
-     */
-    fileStorageType?: SchoolUpdateBodyParamsFileStorageType;
-    /**
-     * 
-     * @type {LanguageType}
-     * @memberof SchoolUpdateBodyParams
-     */
-    language?: LanguageType;
-    /**
-     * 
-     * @type {Array<SchoolFeature>}
-     * @memberof SchoolUpdateBodyParams
-     */
-    features?: Array<SchoolFeature>;
-    /**
-     * 
-     * @type {SchoolPermissionsParams}
-     * @memberof SchoolUpdateBodyParams
-     */
-    permissions?: SchoolPermissionsParams;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolUpdateBodyParams
-     */
-    countyId?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SchoolUpdateBodyParams
-     */
-    enableStudentTeamCreation?: boolean;
+    'name'?: string;
+    'officialSchoolNumber'?: string;
+    'logo'?: SchoolLogo;
+    'fileStorageType'?: SchoolUpdateBodyParamsFileStorageType;
+    'language'?: LanguageType;
+    'features'?: Array<SchoolFeature>;
+    'permissions'?: SchoolPermissionsParams;
+    'countyId'?: string;
+    'enableStudentTeamCreation'?: boolean;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum SchoolUpdateBodyParamsFileStorageType {
     AWS_S3 = 'awsS3'
 }
-
 
 

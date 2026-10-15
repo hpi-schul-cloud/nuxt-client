@@ -14,30 +14,11 @@
 
 
 
-/**
- * 
- * @export
- * @interface ShareTokenPayloadResponse
- */
 export interface ShareTokenPayloadResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ShareTokenPayloadResponse
-     */
-    parentType: ShareTokenPayloadResponseParentType;
-    /**
-     * 
-     * @type {string}
-     * @memberof ShareTokenPayloadResponse
-     */
-    parentId: string;
+    'parentType': ShareTokenPayloadResponseParentType;
+    'parentId': string;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum ShareTokenPayloadResponseParentType {
     COURSES = 'courses',
     TASKS = 'tasks',
@@ -47,6 +28,5 @@ export enum ShareTokenPayloadResponseParentType {
     CARD = 'card',
     COLUMN = 'column'
 }
-
 
 

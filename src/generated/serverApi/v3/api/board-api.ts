@@ -13,38 +13,38 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { BoardContextResponse } from '../models';
+import type { BoardContextResponse } from '../models';
 // @ts-ignore
-import { BoardResponse } from '../models';
+import type { BoardResponse } from '../models';
 // @ts-ignore
-import { ColumnResponse } from '../models';
+import type { ColumnResponse } from '../models';
 // @ts-ignore
-import { CopyApiResponse } from '../models';
+import type { CopyApiResponse } from '../models';
 // @ts-ignore
-import { CreateBoardBodyParams } from '../models';
+import type { CreateBoardBodyParams } from '../models';
 // @ts-ignore
-import { CreateBoardResponse } from '../models';
+import type { CreateBoardResponse } from '../models';
 // @ts-ignore
-import { LayoutBodyParams } from '../models';
+import type { LayoutBodyParams } from '../models';
 // @ts-ignore
-import { ReadersCanEditBodyParams } from '../models';
+import type { ReadersCanEditBodyParams } from '../models';
 // @ts-ignore
-import { UpdateBoardTitleParams } from '../models';
+import type { UpdateBoardTitleParams } from '../models';
 // @ts-ignore
-import { VisibilityBodyParams } from '../models';
+import type { VisibilityBodyParams } from '../models';
 /**
  * BoardApi - axios parameter creator
- * @export
  */
 export const BoardApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -55,11 +55,11 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerCopyBoard: async (boardId: string, options: any = {}): Promise<RequestArgs> => {
+        boardControllerCopyBoard: async (boardId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('boardControllerCopyBoard', 'boardId', boardId)
             const localVarPath = `/boards/{boardId}/copy`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+                .replace('{boardId}', encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -75,9 +75,9 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -93,7 +93,7 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerCreateBoard: async (createBoardBodyParams: CreateBoardBodyParams, options: any = {}): Promise<RequestArgs> => {
+        boardControllerCreateBoard: async (createBoardBodyParams: CreateBoardBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'createBoardBodyParams' is not null or undefined
             assertParamExists('boardControllerCreateBoard', 'createBoardBodyParams', createBoardBodyParams)
             const localVarPath = `/boards`;
@@ -112,11 +112,10 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(createBoardBodyParams, localVarRequestOptions, configuration)
@@ -133,11 +132,11 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerCreateColumn: async (boardId: string, options: any = {}): Promise<RequestArgs> => {
+        boardControllerCreateColumn: async (boardId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('boardControllerCreateColumn', 'boardId', boardId)
             const localVarPath = `/boards/{boardId}/columns`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+                .replace('{boardId}', encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -153,9 +152,9 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -171,11 +170,11 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerDeleteBoard: async (boardId: string, options: any = {}): Promise<RequestArgs> => {
+        boardControllerDeleteBoard: async (boardId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('boardControllerDeleteBoard', 'boardId', boardId)
             const localVarPath = `/boards/{boardId}`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+                .replace('{boardId}', encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -191,9 +190,9 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -209,11 +208,11 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerGetBoardContext: async (boardId: string, options: any = {}): Promise<RequestArgs> => {
+        boardControllerGetBoardContext: async (boardId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('boardControllerGetBoardContext', 'boardId', boardId)
             const localVarPath = `/boards/{boardId}/context`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+                .replace('{boardId}', encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -229,9 +228,9 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -247,11 +246,11 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerGetBoardSkeleton: async (boardId: string, options: any = {}): Promise<RequestArgs> => {
+        boardControllerGetBoardSkeleton: async (boardId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('boardControllerGetBoardSkeleton', 'boardId', boardId)
             const localVarPath = `/boards/{boardId}`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+                .replace('{boardId}', encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -267,9 +266,9 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -286,13 +285,13 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerUpdateBoardTitle: async (boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options: any = {}): Promise<RequestArgs> => {
+        boardControllerUpdateBoardTitle: async (boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('boardControllerUpdateBoardTitle', 'boardId', boardId)
             // verify required parameter 'updateBoardTitleParams' is not null or undefined
             assertParamExists('boardControllerUpdateBoardTitle', 'updateBoardTitleParams', updateBoardTitleParams)
             const localVarPath = `/boards/{boardId}/title`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+                .replace('{boardId}', encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -308,11 +307,10 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(updateBoardTitleParams, localVarRequestOptions, configuration)
@@ -330,13 +328,13 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerUpdateLayout: async (boardId: string, layoutBodyParams: LayoutBodyParams, options: any = {}): Promise<RequestArgs> => {
+        boardControllerUpdateLayout: async (boardId: string, layoutBodyParams: LayoutBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('boardControllerUpdateLayout', 'boardId', boardId)
             // verify required parameter 'layoutBodyParams' is not null or undefined
             assertParamExists('boardControllerUpdateLayout', 'layoutBodyParams', layoutBodyParams)
             const localVarPath = `/boards/{boardId}/layout`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+                .replace('{boardId}', encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -352,11 +350,10 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(layoutBodyParams, localVarRequestOptions, configuration)
@@ -374,13 +371,13 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerUpdateReadersCanEdit: async (boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options: any = {}): Promise<RequestArgs> => {
+        boardControllerUpdateReadersCanEdit: async (boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('boardControllerUpdateReadersCanEdit', 'boardId', boardId)
             // verify required parameter 'readersCanEditBodyParams' is not null or undefined
             assertParamExists('boardControllerUpdateReadersCanEdit', 'readersCanEditBodyParams', readersCanEditBodyParams)
             const localVarPath = `/boards/{boardId}/readers-can-edit`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+                .replace('{boardId}', encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -396,11 +393,10 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(readersCanEditBodyParams, localVarRequestOptions, configuration)
@@ -418,13 +414,13 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerUpdateVisibility: async (boardId: string, visibilityBodyParams: VisibilityBodyParams, options: any = {}): Promise<RequestArgs> => {
+        boardControllerUpdateVisibility: async (boardId: string, visibilityBodyParams: VisibilityBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('boardControllerUpdateVisibility', 'boardId', boardId)
             // verify required parameter 'visibilityBodyParams' is not null or undefined
             assertParamExists('boardControllerUpdateVisibility', 'visibilityBodyParams', visibilityBodyParams)
             const localVarPath = `/boards/{boardId}/visibility`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+                .replace('{boardId}', encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -440,11 +436,10 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(visibilityBodyParams, localVarRequestOptions, configuration)
@@ -459,7 +454,6 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
 
 /**
  * BoardApi - functional programming interface
- * @export
  */
 export const BoardApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = BoardApiAxiosParamCreator(configuration)
@@ -471,9 +465,11 @@ export const BoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardControllerCopyBoard(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
+        async boardControllerCopyBoard(boardId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerCopyBoard(boardId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BoardApi.boardControllerCopyBoard']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -482,9 +478,11 @@ export const BoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateBoardResponse>> {
+        async boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateBoardResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerCreateBoard(createBoardBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BoardApi.boardControllerCreateBoard']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -493,9 +491,11 @@ export const BoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardControllerCreateColumn(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ColumnResponse>> {
+        async boardControllerCreateColumn(boardId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ColumnResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerCreateColumn(boardId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BoardApi.boardControllerCreateColumn']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -504,9 +504,11 @@ export const BoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardControllerDeleteBoard(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async boardControllerDeleteBoard(boardId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerDeleteBoard(boardId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BoardApi.boardControllerDeleteBoard']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -515,9 +517,11 @@ export const BoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardControllerGetBoardContext(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardContextResponse>> {
+        async boardControllerGetBoardContext(boardId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardContextResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerGetBoardContext(boardId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BoardApi.boardControllerGetBoardContext']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -526,9 +530,11 @@ export const BoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardControllerGetBoardSkeleton(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardResponse>> {
+        async boardControllerGetBoardSkeleton(boardId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BoardResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerGetBoardSkeleton(boardId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BoardApi.boardControllerGetBoardSkeleton']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -538,9 +544,11 @@ export const BoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateBoardTitle(boardId, updateBoardTitleParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BoardApi.boardControllerUpdateBoardTitle']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -550,9 +558,11 @@ export const BoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardControllerUpdateLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async boardControllerUpdateLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateLayout(boardId, layoutBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BoardApi.boardControllerUpdateLayout']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -562,9 +572,11 @@ export const BoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardControllerUpdateReadersCanEdit(boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async boardControllerUpdateReadersCanEdit(boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateReadersCanEdit(boardId, readersCanEditBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BoardApi.boardControllerUpdateReadersCanEdit']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -574,16 +586,17 @@ export const BoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateVisibility(boardId, visibilityBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BoardApi.boardControllerUpdateVisibility']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * BoardApi - factory interface
- * @export
  */
 export const BoardApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = BoardApiFp(configuration)
@@ -595,7 +608,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerCopyBoard(boardId: string, options?: any): AxiosPromise<CopyApiResponse> {
+        boardControllerCopyBoard(boardId: string, options?: RawAxiosRequestConfig): AxiosPromise<CopyApiResponse> {
             return localVarFp.boardControllerCopyBoard(boardId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -605,7 +618,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any): AxiosPromise<CreateBoardResponse> {
+        boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<CreateBoardResponse> {
             return localVarFp.boardControllerCreateBoard(createBoardBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -615,7 +628,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerCreateColumn(boardId: string, options?: any): AxiosPromise<ColumnResponse> {
+        boardControllerCreateColumn(boardId: string, options?: RawAxiosRequestConfig): AxiosPromise<ColumnResponse> {
             return localVarFp.boardControllerCreateColumn(boardId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -625,7 +638,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerDeleteBoard(boardId: string, options?: any): AxiosPromise<void> {
+        boardControllerDeleteBoard(boardId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.boardControllerDeleteBoard(boardId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -635,7 +648,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerGetBoardContext(boardId: string, options?: any): AxiosPromise<BoardContextResponse> {
+        boardControllerGetBoardContext(boardId: string, options?: RawAxiosRequestConfig): AxiosPromise<BoardContextResponse> {
             return localVarFp.boardControllerGetBoardContext(boardId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -645,7 +658,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerGetBoardSkeleton(boardId: string, options?: any): AxiosPromise<BoardResponse> {
+        boardControllerGetBoardSkeleton(boardId: string, options?: RawAxiosRequestConfig): AxiosPromise<BoardResponse> {
             return localVarFp.boardControllerGetBoardSkeleton(boardId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -656,7 +669,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any): AxiosPromise<void> {
+        boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.boardControllerUpdateBoardTitle(boardId, updateBoardTitleParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -667,7 +680,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerUpdateLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any): AxiosPromise<void> {
+        boardControllerUpdateLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.boardControllerUpdateLayout(boardId, layoutBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -678,7 +691,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerUpdateReadersCanEdit(boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options?: any): AxiosPromise<void> {
+        boardControllerUpdateReadersCanEdit(boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.boardControllerUpdateReadersCanEdit(boardId, readersCanEditBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -689,7 +702,7 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: any): AxiosPromise<void> {
+        boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.boardControllerUpdateVisibility(boardId, visibilityBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -697,8 +710,6 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
 
 /**
  * BoardApi - interface
- * @export
- * @interface BoardApi
  */
 export interface BoardApiInterface {
     /**
@@ -707,9 +718,8 @@ export interface BoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApiInterface
      */
-    boardControllerCopyBoard(boardId: string, options?: any): AxiosPromise<CopyApiResponse>;
+    boardControllerCopyBoard(boardId: string, options?: RawAxiosRequestConfig): AxiosPromise<CopyApiResponse>;
 
     /**
      * 
@@ -717,9 +727,8 @@ export interface BoardApiInterface {
      * @param {CreateBoardBodyParams} createBoardBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApiInterface
      */
-    boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any): AxiosPromise<CreateBoardResponse>;
+    boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<CreateBoardResponse>;
 
     /**
      * 
@@ -727,9 +736,8 @@ export interface BoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApiInterface
      */
-    boardControllerCreateColumn(boardId: string, options?: any): AxiosPromise<ColumnResponse>;
+    boardControllerCreateColumn(boardId: string, options?: RawAxiosRequestConfig): AxiosPromise<ColumnResponse>;
 
     /**
      * 
@@ -737,9 +745,8 @@ export interface BoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApiInterface
      */
-    boardControllerDeleteBoard(boardId: string, options?: any): AxiosPromise<void>;
+    boardControllerDeleteBoard(boardId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -747,9 +754,8 @@ export interface BoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApiInterface
      */
-    boardControllerGetBoardContext(boardId: string, options?: any): AxiosPromise<BoardContextResponse>;
+    boardControllerGetBoardContext(boardId: string, options?: RawAxiosRequestConfig): AxiosPromise<BoardContextResponse>;
 
     /**
      * 
@@ -757,9 +763,8 @@ export interface BoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApiInterface
      */
-    boardControllerGetBoardSkeleton(boardId: string, options?: any): AxiosPromise<BoardResponse>;
+    boardControllerGetBoardSkeleton(boardId: string, options?: RawAxiosRequestConfig): AxiosPromise<BoardResponse>;
 
     /**
      * 
@@ -768,9 +773,8 @@ export interface BoardApiInterface {
      * @param {UpdateBoardTitleParams} updateBoardTitleParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApiInterface
      */
-    boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any): AxiosPromise<void>;
+    boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -779,9 +783,8 @@ export interface BoardApiInterface {
      * @param {LayoutBodyParams} layoutBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApiInterface
      */
-    boardControllerUpdateLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any): AxiosPromise<void>;
+    boardControllerUpdateLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -790,9 +793,8 @@ export interface BoardApiInterface {
      * @param {ReadersCanEditBodyParams} readersCanEditBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApiInterface
      */
-    boardControllerUpdateReadersCanEdit(boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options?: any): AxiosPromise<void>;
+    boardControllerUpdateReadersCanEdit(boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -801,17 +803,13 @@ export interface BoardApiInterface {
      * @param {VisibilityBodyParams} visibilityBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApiInterface
      */
-    boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: any): AxiosPromise<void>;
+    boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
  * BoardApi - object-oriented interface
- * @export
- * @class BoardApi
- * @extends {BaseAPI}
  */
 export class BoardApi extends BaseAPI implements BoardApiInterface {
     /**
@@ -820,9 +818,8 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApi
      */
-    public boardControllerCopyBoard(boardId: string, options?: any) {
+    public boardControllerCopyBoard(boardId: string, options?: RawAxiosRequestConfig) {
         return BoardApiFp(this.configuration).boardControllerCopyBoard(boardId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -832,9 +829,8 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      * @param {CreateBoardBodyParams} createBoardBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApi
      */
-    public boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any) {
+    public boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: RawAxiosRequestConfig) {
         return BoardApiFp(this.configuration).boardControllerCreateBoard(createBoardBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -844,9 +840,8 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApi
      */
-    public boardControllerCreateColumn(boardId: string, options?: any) {
+    public boardControllerCreateColumn(boardId: string, options?: RawAxiosRequestConfig) {
         return BoardApiFp(this.configuration).boardControllerCreateColumn(boardId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -856,9 +851,8 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApi
      */
-    public boardControllerDeleteBoard(boardId: string, options?: any) {
+    public boardControllerDeleteBoard(boardId: string, options?: RawAxiosRequestConfig) {
         return BoardApiFp(this.configuration).boardControllerDeleteBoard(boardId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -868,9 +862,8 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApi
      */
-    public boardControllerGetBoardContext(boardId: string, options?: any) {
+    public boardControllerGetBoardContext(boardId: string, options?: RawAxiosRequestConfig) {
         return BoardApiFp(this.configuration).boardControllerGetBoardContext(boardId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -880,9 +873,8 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApi
      */
-    public boardControllerGetBoardSkeleton(boardId: string, options?: any) {
+    public boardControllerGetBoardSkeleton(boardId: string, options?: RawAxiosRequestConfig) {
         return BoardApiFp(this.configuration).boardControllerGetBoardSkeleton(boardId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -893,9 +885,8 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      * @param {UpdateBoardTitleParams} updateBoardTitleParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApi
      */
-    public boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any) {
+    public boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: RawAxiosRequestConfig) {
         return BoardApiFp(this.configuration).boardControllerUpdateBoardTitle(boardId, updateBoardTitleParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -906,9 +897,8 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      * @param {LayoutBodyParams} layoutBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApi
      */
-    public boardControllerUpdateLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any) {
+    public boardControllerUpdateLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: RawAxiosRequestConfig) {
         return BoardApiFp(this.configuration).boardControllerUpdateLayout(boardId, layoutBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -919,9 +909,8 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      * @param {ReadersCanEditBodyParams} readersCanEditBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApi
      */
-    public boardControllerUpdateReadersCanEdit(boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options?: any) {
+    public boardControllerUpdateReadersCanEdit(boardId: string, readersCanEditBodyParams: ReadersCanEditBodyParams, options?: RawAxiosRequestConfig) {
         return BoardApiFp(this.configuration).boardControllerUpdateReadersCanEdit(boardId, readersCanEditBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -932,9 +921,9 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      * @param {VisibilityBodyParams} visibilityBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardApi
      */
-    public boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: any) {
+    public boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: RawAxiosRequestConfig) {
         return BoardApiFp(this.configuration).boardControllerUpdateVisibility(boardId, visibilityBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

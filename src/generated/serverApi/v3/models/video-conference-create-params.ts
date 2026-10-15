@@ -14,30 +14,9 @@
 
 
 
-/**
- * 
- * @export
- * @interface VideoConferenceCreateParams
- */
 export interface VideoConferenceCreateParams {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VideoConferenceCreateParams
-     */
-    everyAttendeeJoinsMuted?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VideoConferenceCreateParams
-     */
-    everybodyJoinsAsModerator?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VideoConferenceCreateParams
-     */
-    moderatorMustApproveJoinRequests?: boolean;
+    'everyAttendeeJoinsMuted'?: boolean;
+    'everybodyJoinsAsModerator'?: boolean;
+    'moderatorMustApproveJoinRequests'?: boolean;
 }
-
 

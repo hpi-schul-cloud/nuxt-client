@@ -13,20 +13,11 @@
  */
 
 
-import { CardResponse } from './card-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CardResponse } from './card-response';
 
-/**
- * 
- * @export
- * @interface CardListResponse
- */
 export interface CardListResponse {
-    /**
-     * 
-     * @type {Array<CardResponse>}
-     * @memberof CardListResponse
-     */
-    data: Array<CardResponse>;
+    'data': Array<CardResponse>;
 }
-
 

@@ -13,27 +13,20 @@
  */
 
 
-import { ContentElementType } from './content-element-type';
-import { ExternalToolContentBody } from './external-tool-content-body';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContentElementType } from './content-element-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ExternalToolContentBody } from './external-tool-content-body';
 
-/**
- * 
- * @export
- * @interface ExternalToolElementContentBody
- */
 export interface ExternalToolElementContentBody {
     /**
      * the type of the updated element
-     * @type {ContentElementType}
-     * @memberof ExternalToolElementContentBody
      */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {ExternalToolContentBody}
-     * @memberof ExternalToolElementContentBody
-     */
-    content: ExternalToolContentBody;
+    'type': ContentElementType;
+    'content': ExternalToolContentBody;
 }
+
 
 

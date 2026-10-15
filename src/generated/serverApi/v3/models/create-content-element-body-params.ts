@@ -13,26 +13,20 @@
  */
 
 
-import { ContentElementType } from './content-element-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContentElementType } from './content-element-type';
 
-/**
- * 
- * @export
- * @interface CreateContentElementBodyParams
- */
 export interface CreateContentElementBodyParams {
     /**
      * The type of element
-     * @type {ContentElementType}
-     * @memberof CreateContentElementBodyParams
      */
-    type: ContentElementType;
+    'type': ContentElementType;
     /**
      * to bring element to a specific position, default is last position
-     * @type {number}
-     * @memberof CreateContentElementBodyParams
      */
-    toPosition?: number;
+    'toPosition'?: number;
 }
+
 
 

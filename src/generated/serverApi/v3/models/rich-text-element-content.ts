@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface RichTextElementContent
- */
 export interface RichTextElementContent {
-    /**
-     * 
-     * @type {string}
-     * @memberof RichTextElementContent
-     */
-    text: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RichTextElementContent
-     */
-    inputFormat: string;
+    'text': string;
+    'inputFormat': string;
 }
-
 

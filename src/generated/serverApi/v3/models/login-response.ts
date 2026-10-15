@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface LoginResponse
- */
 export interface LoginResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginResponse
-     */
-    accessToken: string;
+    'accessToken': string;
 }
-
 

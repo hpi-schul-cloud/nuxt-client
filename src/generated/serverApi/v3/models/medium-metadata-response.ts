@@ -14,48 +14,30 @@
 
 
 
-/**
- * 
- * @export
- * @interface MediumMetadataResponse
- */
 export interface MediumMetadataResponse {
     /**
      * The Name
-     * @type {string}
-     * @memberof MediumMetadataResponse
      */
-    name: string;
+    'name': string;
     /**
      * The Description
-     * @type {string}
-     * @memberof MediumMetadataResponse
      */
-    description?: string;
+    'description'?: string;
     /**
      * The Publisher
-     * @type {string}
-     * @memberof MediumMetadataResponse
      */
-    publisher?: string;
+    'publisher'?: string;
     /**
      * The Logo URL
-     * @type {string}
-     * @memberof MediumMetadataResponse
      */
-    logoUrl?: string;
+    'logoUrl'?: string;
     /**
      * The Preview Logo URL
-     * @type {string}
-     * @memberof MediumMetadataResponse
      */
-    previewLogoUrl?: string;
+    'previewLogoUrl'?: string;
     /**
      * The last Modified Date
-     * @type {string}
-     * @memberof MediumMetadataResponse
      */
-    modifiedAt?: string;
+    'modifiedAt'?: string;
 }
-
 
