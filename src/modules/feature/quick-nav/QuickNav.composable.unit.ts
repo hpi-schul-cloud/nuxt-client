@@ -324,6 +324,22 @@ describe("QuickNav Composable", () => {
 			expect(titlesOf([groupOf(quickNav.groups.value, "Räume und Kurse")!])).toEqual(["Biologie AG", "Biologie 7a"]);
 		});
 
+		it("labels a room as a room", () => {
+			const { quickNav } = setupWithSources();
+
+			quickNav.query.value = "Biologie AG";
+
+			expect(groupOf(quickNav.groups.value, "Räume und Kurse")?.entries[0].subtitle).toBe("Raum");
+		});
+
+		it("labels a course as a course", () => {
+			const { quickNav } = setupWithSources();
+
+			quickNav.query.value = "Biologie 7a";
+
+			expect(groupOf(quickNav.groups.value, "Räume und Kurse")?.entries[0].subtitle).toBe("Kurs");
+		});
+
 		it("lists matching tasks in their own group", () => {
 			const { quickNav } = setupWithSources();
 

@@ -77,6 +77,12 @@ export const useQuickNav = () => {
 
 	const trimmedQuery = computed(() => query.value.trim());
 
+	// rooms and courses share a group, so each line says which one it is
+	const roomsAndCourses = computed(() => [
+		...rooms.value.map((entry) => ({ ...entry, subtitle: t("common.labels.room", 1) })),
+		...courses.value.map((entry) => ({ ...entry, subtitle: t("common.labels.course") })),
+	]);
+
 	const groups: ComputedRef<QuickNavGroup[]> = computed(() => {
 		const q = trimmedQuery.value;
 
@@ -91,7 +97,7 @@ export const useQuickNav = () => {
 
 		return [
 			{ label: t("feature.quickNav.group.navigation"), entries: byQuery(navigationEntries.value, q) },
-			{ label: t("feature.quickNav.group.roomsAndCourses"), entries: topMatches([...rooms.value, ...courses.value]) },
+			{ label: t("feature.quickNav.group.roomsAndCourses"), entries: topMatches(roomsAndCourses.value) },
 			{ label: t("feature.quickNav.group.tasks"), entries: topMatches(tasks.value) },
 			{ label: t("feature.quickNav.group.people"), entries: topMatches(people.value) },
 			{ label: t("feature.quickNav.group.actions"), entries: byQuery(actionEntries.value, q) },
