@@ -80,6 +80,12 @@ export interface RoomStatsItemResponse {
      * @memberof RoomStatsItemResponse
      */
     updatedAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomStatsItemResponse
+     */
+    archivedAt?: string;
 }
 
 

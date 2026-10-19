@@ -60,6 +60,12 @@ export interface RoomItemResponse {
     updatedAt: string;
     /**
      * 
+     * @type {string}
+     * @memberof RoomItemResponse
+     */
+    archivedAt?: string;
+    /**
+     * 
      * @type {RoomItemResponseAllowedOperations}
      * @memberof RoomItemResponse
      */

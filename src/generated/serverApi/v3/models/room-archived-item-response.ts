@@ -56,6 +56,18 @@ export interface RoomArchivedItemResponse {
      * @type {string}
      * @memberof RoomArchivedItemResponse
      */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomArchivedItemResponse
+     */
+    updatedAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomArchivedItemResponse
+     */
     schoolName: string;
     /**
      * 

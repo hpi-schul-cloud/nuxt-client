@@ -7,6 +7,8 @@ export const roomArchivedItemResponseFactory = Factory.define<RoomArchivedItemRe
 	ownerName: `Owner ${sequence}`,
 	totalMembers: 1,
 	archivedAt: new Date().toISOString(),
+	createdAt: new Date().toISOString(),
+	updatedAt: new Date().toISOString(),
 	schoolName: `School ${sequence}`,
 	allowedOperations: {
 		archiveRoom: false,
