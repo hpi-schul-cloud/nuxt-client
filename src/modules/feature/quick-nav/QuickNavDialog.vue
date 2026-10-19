@@ -174,6 +174,10 @@ const openEntry = (entry: QuickNavEntry): void => {
 		void router.push(entry.to);
 		return;
 	}
+	if (entry.href && entry.target === "_blank") {
+		window.open(entry.href, "_blank", "noopener");
+		return;
+	}
 	if (entry.href) {
 		window.location.assign(entry.href);
 	}

@@ -22,6 +22,8 @@ export type QuickNavEntry = {
 	to?: string;
 	/** a full page load, for the parts of the cloud that are not in this client */
 	href?: string;
+	/** "_blank" opens `href` in a new tab, as the sidebar does for external links */
+	target?: string;
 	action?: () => void;
 };
 

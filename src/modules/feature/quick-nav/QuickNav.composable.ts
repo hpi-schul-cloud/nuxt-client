@@ -68,7 +68,7 @@ const RESULTS_PER_GROUP = 5;
 
 export const useQuickNav = () => {
 	const { t } = useI18n();
-	const { navigationEntries, actionEntries } = useQuickNavEntries();
+	const { navigationEntries, actionEntries, helpEntries } = useQuickNavEntries();
 	const sourcesStore = useQuickNavSourcesStore();
 	const { rooms, courses, tasks, people, isLoading, hasFailed } = storeToRefs(sourcesStore);
 
@@ -90,6 +90,8 @@ export const useQuickNav = () => {
 			return [
 				{ label: t("feature.quickNav.group.navigation"), entries: navigationEntries.value.slice(0, SUGGESTION_COUNT) },
 				{ label: t("feature.quickNav.group.actions"), entries: actionEntries.value },
+				// the help articles only; the other help pages are found by typing
+				{ label: t("global.sidebar.item.helpArea"), entries: helpEntries.value.slice(0, 1) },
 			].filter((group) => group.entries.length > 0);
 		}
 
@@ -101,6 +103,7 @@ export const useQuickNav = () => {
 			{ label: t("feature.quickNav.group.tasks"), entries: topMatches(tasks.value) },
 			{ label: t("feature.quickNav.group.people"), entries: topMatches(people.value) },
 			{ label: t("feature.quickNav.group.actions"), entries: byQuery(actionEntries.value, q) },
+			{ label: t("global.sidebar.item.helpArea"), entries: byQuery(helpEntries.value, q) },
 		].filter((group) => group.entries.length > 0);
 	});
 

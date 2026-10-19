@@ -14,6 +14,7 @@ import { useI18n } from "vue-i18n";
 
 // file pages would suggest that files can be searched, which the palette cannot do yet
 const EXCLUDED_SIDEBAR_ITEMS = ["sidebar-files"];
+const HELP_SIDEBAR_GROUP = "sidebar-helpsection";
 
 /**
  * The entries the palette knows without asking the server: the pages of the main navigation and a
@@ -22,7 +23,7 @@ const EXCLUDED_SIDEBAR_ITEMS = ["sidebar-files"];
  */
 export const useQuickNavEntries = () => {
 	const { t } = useI18n();
-	const { pageLinks } = useSidebarItems();
+	const { pageLinks, metaLinks } = useSidebarItems();
 	const { getItemsForUser } = useSidebarItemsForUser();
 	const { isStudent } = useAppStoreRefs();
 
@@ -53,6 +54,15 @@ export const useQuickNavEntries = () => {
 		getItemsForUser(pageLinks.value)
 			.filter((item) => !EXCLUDED_SIDEBAR_ITEMS.includes(item.testId))
 			.flatMap(flatten)
+	);
+
+	const helpEntries: ComputedRef<QuickNavEntry[]> = computed(() =>
+		getItemsForUser(metaLinks.value)
+			.filter(isSidebarCategoryItem)
+			.filter((group) => group.testId === HELP_SIDEBAR_GROUP)
+			.flatMap((group) =>
+				group.children.map((child) => ({ ...toEntry(child, group), subtitle: undefined, target: child.target }))
+			)
 	);
 
 	const actionEntries: ComputedRef<QuickNavEntry[]> = computed(() => {
@@ -102,5 +112,5 @@ export const useQuickNavEntries = () => {
 		return entries;
 	});
 
-	return { navigationEntries, actionEntries };
+	return { navigationEntries, actionEntries, helpEntries };
 };

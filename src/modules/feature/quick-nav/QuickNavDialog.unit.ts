@@ -223,6 +223,19 @@ describe("QuickNavDialog", () => {
 			expect(window.location.assign).toHaveBeenCalledWith("/homework/1");
 		});
 
+		it("opens entries meant for a new tab in a new tab", async () => {
+			const { wrapper, sourcesStore, openWith } = setup();
+			const openSpy = vi.spyOn(window, "open").mockReturnValue(null);
+			sourcesStore.tasks = [
+				entry(QuickNavKind.TASK, "Fortbildung", { to: undefined, href: "https://example.org", target: "_blank" }),
+			];
+			await openWith("Fortbildung");
+
+			await wrapper.get("[data-testid='quick-nav-entry-task:Fortbildung']").trigger("click");
+
+			expect(openSpy).toHaveBeenCalledWith("https://example.org", "_blank", "noopener");
+		});
+
 		describe("when the user clicks an action entry", () => {
 			const setupAndClickAction = async () => {
 				const result = setup();

@@ -72,7 +72,7 @@ describe("QuickNav Composable", () => {
 		it("suggests a few pages to jump to", () => {
 			const { quickNav } = setup();
 
-			expect(quickNav.groups.value).toHaveLength(1);
+			expect(quickNav.groups.value[0].label).toBe("Springen zu");
 			expect(quickNav.groups.value[0].entries.length).toBeGreaterThan(0);
 			expect(quickNav.groups.value[0].entries.every((entry) => entry.kind === QuickNavKind.NAVIGATION)).toBe(true);
 		});
@@ -143,6 +143,39 @@ describe("QuickNav Composable", () => {
 				const { quickNav } = setup();
 
 				expect(quickNav.placeholder.value).toBe("Suchen und springen");
+			});
+		});
+	});
+
+	describe("help", () => {
+		const lastGroup = (groups: QuickNavGroup[]) => groups[groups.length - 1];
+
+		describe("when nothing has been typed", () => {
+			it("ends with a link to the help articles", () => {
+				const { quickNav } = setup([Permission.SCHOOL_CREATE_ROOM]);
+
+				const help = lastGroup(quickNav.groups.value);
+
+				expect(help.label).toBe("Hilfebereich");
+				expect(titlesOf([help])).toEqual(["Hilfeartikel"]);
+			});
+		});
+
+		describe("when searching for a help page", () => {
+			it("finds it in the help group at the end", () => {
+				const { quickNav } = setup();
+
+				quickNav.query.value = "Kontakt";
+
+				expect(titlesOf([lastGroup(quickNav.groups.value)])).toEqual(["Kontakt"]);
+			});
+
+			it("opens external help pages in a new tab, like the sidebar", () => {
+				const { quickNav } = setup();
+
+				quickNav.query.value = "Fortbildungen";
+
+				expect(lastGroup(quickNav.groups.value).entries[0].target).toBe("_blank");
 			});
 		});
 	});
