@@ -40,6 +40,8 @@ export const useNotificationStore = defineStore("notifyStore", () => {
 
 	const removeNotifier = (id: string) => {
 		const index = notifierItems.value.findIndex((alert) => alert.id === id);
+		// the alert may already be gone (e.g. closed manually before its timeout fires)
+		if (index === -1) return;
 		notifierItems.value.splice(index, 1);
 	};
 
