@@ -83,6 +83,24 @@ describe("QuickNav Composable", () => {
 		});
 	});
 
+	describe("file pages", () => {
+		const isFilePage = (entry: QuickNavEntry) => entry.id.startsWith("navigation:sidebar-files");
+
+		it("are not suggested before anything is typed", () => {
+			const { quickNav } = setup();
+
+			expect(quickNav.flatEntries.value.some(isFilePage)).toBe(false);
+		});
+
+		it("are not found when searching for them", () => {
+			const { quickNav } = setup();
+
+			quickNav.query.value = "Dateien";
+
+			expect(quickNav.flatEntries.value.some(isFilePage)).toBe(false);
+		});
+	});
+
 	describe("when a query matches a page", () => {
 		it("keeps only the matching pages", () => {
 			const { quickNav } = setup();

@@ -12,6 +12,9 @@ import {
 import { computed, ComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
 
+// file pages would suggest that files can be searched, which the palette cannot do yet
+const EXCLUDED_SIDEBAR_ITEMS = ["sidebar-files"];
+
 /**
  * The entries the palette knows without asking the server: the pages of the main navigation and a
  * handful of things a user starts often. They are available the moment the palette opens, which is
@@ -46,7 +49,9 @@ export const useQuickNavEntries = () => {
 	};
 
 	const navigationEntries: ComputedRef<QuickNavEntry[]> = computed(() =>
-		getItemsForUser(pageLinks.value).flatMap(flatten)
+		getItemsForUser(pageLinks.value)
+			.filter((item) => !EXCLUDED_SIDEBAR_ITEMS.includes(item.testId))
+			.flatMap(flatten)
 	);
 
 	const actionEntries: ComputedRef<QuickNavEntry[]> = computed(() => {
