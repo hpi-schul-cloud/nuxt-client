@@ -191,7 +191,6 @@ const openSelected = (): void => {
 	background-color: rgba(var(--v-theme-primary), 0.16);
 	color: inherit;
 	border-radius: 2px;
-	padding: 0 1px;
 }
 
 :deep(.quick-nav-dialog) {
