@@ -16,9 +16,8 @@
 
 /**
  * Format of the media source data
- * @export
- * @enum {string}
  */
+
 export enum MediaSourceDataFormat {
     BILDUNGSLOGIN = 'BILDUNGSLOGIN',
     VIDIS = 'VIDIS'

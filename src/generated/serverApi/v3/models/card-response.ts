@@ -13,68 +13,28 @@
  */
 
 
-import { CollaborativeTextEditorElementResponse } from './collaborative-text-editor-element-response';
-import { Colors } from './colors';
-import { DeletedElementResponse } from './deleted-element-response';
-import { DrawingElementResponse } from './drawing-element-response';
-import { ExternalToolElementResponse } from './external-tool-element-response';
-import { FileElementResponse } from './file-element-response';
-import { FileFolderElementResponse } from './file-folder-element-response';
-import { H5pElementResponse } from './h5p-element-response';
-import { LinkElementResponse } from './link-element-response';
-import { RichTextElementResponse } from './rich-text-element-response';
-import { TimestampsResponse } from './timestamps-response';
-import { VideoConferenceElementResponse } from './video-conference-element-response';
-import { VisibilitySettingsResponse } from './visibility-settings-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CardResponseElementsInner } from './card-response-elements-inner';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { Colors } from './colors';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { TimestampsResponse } from './timestamps-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { VisibilitySettingsResponse } from './visibility-settings-response';
 
-/**
- * 
- * @export
- * @interface CardResponse
- */
 export interface CardResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof CardResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CardResponse
-     */
-    title?: string;
-    /**
-     * 
-     * @type {Colors}
-     * @memberof CardResponse
-     */
-    backgroundColor: Colors;
-    /**
-     * 
-     * @type {number}
-     * @memberof CardResponse
-     */
-    height: number;
-    /**
-     * 
-     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse>}
-     * @memberof CardResponse
-     */
-    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse>;
-    /**
-     * 
-     * @type {VisibilitySettingsResponse}
-     * @memberof CardResponse
-     */
-    visibilitySettings: VisibilitySettingsResponse;
-    /**
-     * 
-     * @type {TimestampsResponse}
-     * @memberof CardResponse
-     */
-    timestamps: TimestampsResponse;
+    'id': string;
+    'title'?: string;
+    'backgroundColor': Colors;
+    'height': number;
+    'elements': Array<CardResponseElementsInner>;
+    'visibilitySettings': VisibilitySettingsResponse;
+    'timestamps': TimestampsResponse;
 }
+
 
 

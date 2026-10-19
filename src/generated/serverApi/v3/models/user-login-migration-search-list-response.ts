@@ -13,38 +13,26 @@
  */
 
 
-import { UserLoginMigrationResponse } from './user-login-migration-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { UserLoginMigrationResponse } from './user-login-migration-response';
 
-/**
- * 
- * @export
- * @interface UserLoginMigrationSearchListResponse
- */
 export interface UserLoginMigrationSearchListResponse {
     /**
      * Contains user login migration responses
-     * @type {Array<UserLoginMigrationResponse>}
-     * @memberof UserLoginMigrationSearchListResponse
      */
-    data: Array<UserLoginMigrationResponse>;
+    'data': Array<UserLoginMigrationResponse>;
     /**
      * The total amount of items.
-     * @type {number}
-     * @memberof UserLoginMigrationSearchListResponse
      */
-    total: number;
+    'total': number;
     /**
      * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof UserLoginMigrationSearchListResponse
      */
-    skip: number;
+    'skip': number;
     /**
      * The page size of the response.
-     * @type {number}
-     * @memberof UserLoginMigrationSearchListResponse
      */
-    limit: number;
+    'limit': number;
 }
-
 

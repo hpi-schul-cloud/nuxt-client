@@ -13,38 +13,16 @@
  */
 
 
-import { RoleName } from './role-name';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoleName } from './role-name';
 
-/**
- * 
- * @export
- * @interface GroupUserResponse
- */
 export interface GroupUserResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof GroupUserResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GroupUserResponse
-     */
-    firstName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GroupUserResponse
-     */
-    lastName: string;
-    /**
-     * 
-     * @type {RoleName}
-     * @memberof GroupUserResponse
-     */
-    role: RoleName;
+    'id': string;
+    'firstName': string;
+    'lastName': string;
+    'role': RoleName;
 }
+
 
 

@@ -13,40 +13,22 @@
  */
 
 
-import { ContentElementType } from './content-element-type';
-import { TimestampsResponse } from './timestamps-response';
-import { VideoConferenceElementContent } from './video-conference-element-content';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContentElementType } from './content-element-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { TimestampsResponse } from './timestamps-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { VideoConferenceElementContent } from './video-conference-element-content';
 
-/**
- * 
- * @export
- * @interface VideoConferenceElementResponse
- */
 export interface VideoConferenceElementResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof VideoConferenceElementResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {ContentElementType}
-     * @memberof VideoConferenceElementResponse
-     */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {TimestampsResponse}
-     * @memberof VideoConferenceElementResponse
-     */
-    timestamps: TimestampsResponse;
-    /**
-     * 
-     * @type {VideoConferenceElementContent}
-     * @memberof VideoConferenceElementResponse
-     */
-    content: VideoConferenceElementContent;
+    'id': string;
+    'type': ContentElementType;
+    'timestamps': TimestampsResponse;
+    'content': VideoConferenceElementContent;
 }
+
 
 

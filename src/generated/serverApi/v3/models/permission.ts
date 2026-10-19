@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum Permission {
     ACCOUNT_CREATE = 'ACCOUNT_CREATE',
     ACCOUNT_DELETE = 'ACCOUNT_DELETE',

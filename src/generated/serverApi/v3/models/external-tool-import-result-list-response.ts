@@ -13,20 +13,14 @@
  */
 
 
-import { ExternalToolImportResultResponse } from './external-tool-import-result-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ExternalToolImportResultResponse } from './external-tool-import-result-response';
 
-/**
- * 
- * @export
- * @interface ExternalToolImportResultListResponse
- */
 export interface ExternalToolImportResultListResponse {
     /**
      * List of operation results for the provided external tools
-     * @type {Array<ExternalToolImportResultResponse>}
-     * @memberof ExternalToolImportResultListResponse
      */
-    results: Array<ExternalToolImportResultResponse>;
+    'results': Array<ExternalToolImportResultResponse>;
 }
-
 

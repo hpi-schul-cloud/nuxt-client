@@ -14,54 +14,34 @@
 
 
 
-/**
- * 
- * @export
- * @interface MaterialResponse
- */
 export interface MaterialResponse {
     /**
      * The id of the Material entity
-     * @type {string}
-     * @memberof MaterialResponse
      */
-    _id: string;
+    '_id': string;
     /**
      * The id of the Material entity
-     * @type {string}
-     * @memberof MaterialResponse
      */
-    id: string;
+    'id': string;
     /**
      * Title of the Material entity
-     * @type {string}
-     * @memberof MaterialResponse
      */
-    title: string;
+    'title': string;
     /**
      * ?
-     * @type {Array<string>}
-     * @memberof MaterialResponse
      */
-    relatedResources: Array<string>;
+    'relatedResources': Array<string>;
     /**
      * Url of the material
-     * @type {string}
-     * @memberof MaterialResponse
      */
-    url: string;
+    'url': string;
     /**
      * Position of the Lesson entity
-     * @type {string}
-     * @memberof MaterialResponse
      */
-    client: string;
+    'client': string;
     /**
      * Description of the material license
-     * @type {Array<string>}
-     * @memberof MaterialResponse
      */
-    license: Array<string>;
+    'license': Array<string>;
 }
-
 

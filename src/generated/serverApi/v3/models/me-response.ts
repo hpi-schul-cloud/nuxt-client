@@ -13,68 +13,38 @@
  */
 
 
-import { LanguageType } from './language-type';
-import { MeAccountResponse } from './me-account-response';
-import { MePreferencesResponse } from './me-preferences-response';
-import { MeRoleResponse } from './me-role-response';
-import { MeSchoolResponse } from './me-school-response';
-import { MeUserResponse } from './me-user-response';
-import { Permission } from './permission';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { LanguageType } from './language-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MeAccountResponse } from './me-account-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MePreferencesResponse } from './me-preferences-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MeRoleResponse } from './me-role-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MeSchoolResponse } from './me-school-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MeUserResponse } from './me-user-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { Permission } from './permission';
 
-/**
- * 
- * @export
- * @interface MeResponse
- */
 export interface MeResponse {
-    /**
-     * 
-     * @type {MeSchoolResponse}
-     * @memberof MeResponse
-     */
-    school: MeSchoolResponse;
-    /**
-     * 
-     * @type {MeUserResponse}
-     * @memberof MeResponse
-     */
-    user: MeUserResponse;
-    /**
-     * 
-     * @type {Array<MeRoleResponse>}
-     * @memberof MeResponse
-     */
-    roles: Array<MeRoleResponse>;
-    /**
-     * 
-     * @type {Array<Permission>}
-     * @memberof MeResponse
-     */
-    permissions: Array<Permission>;
-    /**
-     * 
-     * @type {LanguageType}
-     * @memberof MeResponse
-     */
-    language: LanguageType;
-    /**
-     * 
-     * @type {MePreferencesResponse}
-     * @memberof MeResponse
-     */
-    preferences: MePreferencesResponse;
-    /**
-     * 
-     * @type {MeAccountResponse}
-     * @memberof MeResponse
-     */
-    account: MeAccountResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof MeResponse
-     */
-    systemId?: string;
+    'school': MeSchoolResponse;
+    'user': MeUserResponse;
+    'roles': Array<MeRoleResponse>;
+    'permissions': Array<Permission>;
+    'language': LanguageType;
+    'preferences': MePreferencesResponse;
+    'account': MeAccountResponse;
+    'systemId'?: string;
 }
+
 
 

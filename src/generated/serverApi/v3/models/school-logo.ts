@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface SchoolLogo
- */
 export interface SchoolLogo {
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolLogo
-     */
-    dataUrl?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolLogo
-     */
-    name?: string;
+    'dataUrl'?: string;
+    'name'?: string;
 }
-
 

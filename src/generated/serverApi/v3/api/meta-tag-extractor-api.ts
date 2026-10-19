@@ -13,20 +13,20 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { GetMetaTagDataBody } from '../models';
+import type { GetMetaTagDataBody } from '../models';
 // @ts-ignore
-import { MetaTagExtractorResponse } from '../models';
+import type { MetaTagExtractorResponse } from '../models';
 /**
  * MetaTagExtractorApi - axios parameter creator
- * @export
  */
 export const MetaTagExtractorApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -37,7 +37,7 @@ export const MetaTagExtractorApiAxiosParamCreator = function (configuration?: Co
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        metaTagExtractorControllerGetMetaTags: async (getMetaTagDataBody: GetMetaTagDataBody, options: any = {}): Promise<RequestArgs> => {
+        metaTagExtractorControllerGetMetaTags: async (getMetaTagDataBody: GetMetaTagDataBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'getMetaTagDataBody' is not null or undefined
             assertParamExists('metaTagExtractorControllerGetMetaTags', 'getMetaTagDataBody', getMetaTagDataBody)
             const localVarPath = `/meta-tag-extractor`;
@@ -56,11 +56,10 @@ export const MetaTagExtractorApiAxiosParamCreator = function (configuration?: Co
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(getMetaTagDataBody, localVarRequestOptions, configuration)
@@ -75,7 +74,6 @@ export const MetaTagExtractorApiAxiosParamCreator = function (configuration?: Co
 
 /**
  * MetaTagExtractorApi - functional programming interface
- * @export
  */
 export const MetaTagExtractorApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MetaTagExtractorApiAxiosParamCreator(configuration)
@@ -87,16 +85,17 @@ export const MetaTagExtractorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async metaTagExtractorControllerGetMetaTags(getMetaTagDataBody: GetMetaTagDataBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MetaTagExtractorResponse>> {
+        async metaTagExtractorControllerGetMetaTags(getMetaTagDataBody: GetMetaTagDataBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MetaTagExtractorResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.metaTagExtractorControllerGetMetaTags(getMetaTagDataBody, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MetaTagExtractorApi.metaTagExtractorControllerGetMetaTags']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * MetaTagExtractorApi - factory interface
- * @export
  */
 export const MetaTagExtractorApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = MetaTagExtractorApiFp(configuration)
@@ -108,7 +107,7 @@ export const MetaTagExtractorApiFactory = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        metaTagExtractorControllerGetMetaTags(getMetaTagDataBody: GetMetaTagDataBody, options?: any): AxiosPromise<MetaTagExtractorResponse> {
+        metaTagExtractorControllerGetMetaTags(getMetaTagDataBody: GetMetaTagDataBody, options?: RawAxiosRequestConfig): AxiosPromise<MetaTagExtractorResponse> {
             return localVarFp.metaTagExtractorControllerGetMetaTags(getMetaTagDataBody, options).then((request) => request(axios, basePath));
         },
     };
@@ -116,8 +115,6 @@ export const MetaTagExtractorApiFactory = function (configuration?: Configuratio
 
 /**
  * MetaTagExtractorApi - interface
- * @export
- * @interface MetaTagExtractorApi
  */
 export interface MetaTagExtractorApiInterface {
     /**
@@ -126,17 +123,13 @@ export interface MetaTagExtractorApiInterface {
      * @param {GetMetaTagDataBody} getMetaTagDataBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MetaTagExtractorApiInterface
      */
-    metaTagExtractorControllerGetMetaTags(getMetaTagDataBody: GetMetaTagDataBody, options?: any): AxiosPromise<MetaTagExtractorResponse>;
+    metaTagExtractorControllerGetMetaTags(getMetaTagDataBody: GetMetaTagDataBody, options?: RawAxiosRequestConfig): AxiosPromise<MetaTagExtractorResponse>;
 
 }
 
 /**
  * MetaTagExtractorApi - object-oriented interface
- * @export
- * @class MetaTagExtractorApi
- * @extends {BaseAPI}
  */
 export class MetaTagExtractorApi extends BaseAPI implements MetaTagExtractorApiInterface {
     /**
@@ -145,9 +138,9 @@ export class MetaTagExtractorApi extends BaseAPI implements MetaTagExtractorApiI
      * @param {GetMetaTagDataBody} getMetaTagDataBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MetaTagExtractorApi
      */
-    public metaTagExtractorControllerGetMetaTags(getMetaTagDataBody: GetMetaTagDataBody, options?: any) {
+    public metaTagExtractorControllerGetMetaTags(getMetaTagDataBody: GetMetaTagDataBody, options?: RawAxiosRequestConfig) {
         return MetaTagExtractorApiFp(this.configuration).metaTagExtractorControllerGetMetaTags(getMetaTagDataBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

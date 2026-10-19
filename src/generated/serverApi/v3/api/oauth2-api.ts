@@ -13,34 +13,34 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ConsentRequestBody } from '../models';
+import type { ConsentRequestBody } from '../models';
 // @ts-ignore
-import { ConsentResponse } from '../models';
+import type { ConsentResponse } from '../models';
 // @ts-ignore
-import { ConsentSessionResponse } from '../models';
+import type { ConsentSessionResponse } from '../models';
 // @ts-ignore
-import { LoginRequestBody } from '../models';
+import type { LoginRequestBody } from '../models';
 // @ts-ignore
-import { OauthClientCreateBody } from '../models';
+import type { OauthClientCreateBody } from '../models';
 // @ts-ignore
-import { OauthClientResponse } from '../models';
+import type { OauthClientResponse } from '../models';
 // @ts-ignore
-import { OauthClientUpdateBody } from '../models';
+import type { OauthClientUpdateBody } from '../models';
 // @ts-ignore
-import { OauthProviderLoginResponse } from '../models';
+import type { OauthProviderLoginResponse } from '../models';
 // @ts-ignore
-import { RedirectResponse } from '../models';
+import type { RedirectResponse } from '../models';
 /**
  * Oauth2Api - axios parameter creator
- * @export
  */
 export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -50,11 +50,11 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerAcceptLogoutRequest: async (challenge: string, options: any = {}): Promise<RequestArgs> => {
+        oauthProviderControllerAcceptLogoutRequest: async (challenge: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'challenge' is not null or undefined
             assertParamExists('oauthProviderControllerAcceptLogoutRequest', 'challenge', challenge)
             const localVarPath = `/oauth2/logoutRequest/{challenge}`
-                .replace(`{${"challenge"}}`, encodeURIComponent(String(challenge)));
+                .replace('{challenge}', encodeURIComponent(String(challenge)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -70,9 +70,9 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -87,7 +87,7 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerCreateOAuth2Client: async (oauthClientCreateBody: OauthClientCreateBody, options: any = {}): Promise<RequestArgs> => {
+        oauthProviderControllerCreateOAuth2Client: async (oauthClientCreateBody: OauthClientCreateBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'oauthClientCreateBody' is not null or undefined
             assertParamExists('oauthProviderControllerCreateOAuth2Client', 'oauthClientCreateBody', oauthClientCreateBody)
             const localVarPath = `/oauth2/clients`;
@@ -106,11 +106,10 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(oauthClientCreateBody, localVarRequestOptions, configuration)
@@ -126,11 +125,11 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerDeleteOAuth2Client: async (id: string, options: any = {}): Promise<RequestArgs> => {
+        oauthProviderControllerDeleteOAuth2Client: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('oauthProviderControllerDeleteOAuth2Client', 'id', id)
             const localVarPath = `/oauth2/clients/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -147,8 +146,7 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -163,11 +161,11 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerGetConsentRequest: async (challenge: string, options: any = {}): Promise<RequestArgs> => {
+        oauthProviderControllerGetConsentRequest: async (challenge: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'challenge' is not null or undefined
             assertParamExists('oauthProviderControllerGetConsentRequest', 'challenge', challenge)
             const localVarPath = `/oauth2/consentRequest/{challenge}`
-                .replace(`{${"challenge"}}`, encodeURIComponent(String(challenge)));
+                .replace('{challenge}', encodeURIComponent(String(challenge)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -183,9 +181,9 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -200,11 +198,11 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerGetLoginRequest: async (challenge: string, options: any = {}): Promise<RequestArgs> => {
+        oauthProviderControllerGetLoginRequest: async (challenge: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'challenge' is not null or undefined
             assertParamExists('oauthProviderControllerGetLoginRequest', 'challenge', challenge)
             const localVarPath = `/oauth2/loginRequest/{challenge}`
-                .replace(`{${"challenge"}}`, encodeURIComponent(String(challenge)));
+                .replace('{challenge}', encodeURIComponent(String(challenge)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -216,9 +214,9 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -233,11 +231,11 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerGetOAuth2Client: async (id: string, options: any = {}): Promise<RequestArgs> => {
+        oauthProviderControllerGetOAuth2Client: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('oauthProviderControllerGetOAuth2Client', 'id', id)
             const localVarPath = `/oauth2/clients/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -253,9 +251,9 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -269,7 +267,7 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerListConsentSessions: async (options: any = {}): Promise<RequestArgs> => {
+        oauthProviderControllerListConsentSessions: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/oauth2/auth/sessions/consent`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -286,9 +284,9 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -299,27 +297,19 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
-         * @param {number} limit The maximum amount of clients to returned, upper bound is 500 clients.
-         * @param {number} offset The offset from where to start looking.
-         * @param {string} clientName The name of the clients to filter by.
-         * @param {string} owner The owner of the clients to filter by.
+         * @param {number} [limit] The maximum amount of clients to returned, upper bound is 500 clients.
+         * @param {number} [offset] The offset from where to start looking.
+         * @param {string} [clientName] The name of the clients to filter by.
+         * @param {string} [owner] The owner of the clients to filter by.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerListOAuth2Clients: async (limit: number, offset: number, clientName: string, owner: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'limit' is not null or undefined
-            assertParamExists('oauthProviderControllerListOAuth2Clients', 'limit', limit)
-            // verify required parameter 'offset' is not null or undefined
-            assertParamExists('oauthProviderControllerListOAuth2Clients', 'offset', offset)
-            // verify required parameter 'clientName' is not null or undefined
-            assertParamExists('oauthProviderControllerListOAuth2Clients', 'clientName', clientName)
-            // verify required parameter 'owner' is not null or undefined
-            assertParamExists('oauthProviderControllerListOAuth2Clients', 'owner', owner)
+        oauthProviderControllerListOAuth2Clients: async (limit?: number, offset?: number, clientName?: string, owner?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/oauth2/clients`
-                .replace(`{${"limit"}}`, encodeURIComponent(String(limit)))
-                .replace(`{${"offset"}}`, encodeURIComponent(String(offset)))
-                .replace(`{${"client_name"}}`, encodeURIComponent(String(clientName)))
-                .replace(`{${"owner"}}`, encodeURIComponent(String(owner)));
+                .replace('{limit}', encodeURIComponent(String(limit)))
+                .replace('{offset}', encodeURIComponent(String(offset)))
+                .replace('{client_name}', encodeURIComponent(String(clientName)))
+                .replace('{owner}', encodeURIComponent(String(owner)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -335,9 +325,9 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -354,13 +344,13 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerPatchConsentRequest: async (challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options: any = {}): Promise<RequestArgs> => {
+        oauthProviderControllerPatchConsentRequest: async (challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'challenge' is not null or undefined
             assertParamExists('oauthProviderControllerPatchConsentRequest', 'challenge', challenge)
             // verify required parameter 'consentRequestBody' is not null or undefined
             assertParamExists('oauthProviderControllerPatchConsentRequest', 'consentRequestBody', consentRequestBody)
             const localVarPath = `/oauth2/consentRequest/{challenge}`
-                .replace(`{${"challenge"}}`, encodeURIComponent(String(challenge)));
+                .replace('{challenge}', encodeURIComponent(String(challenge)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -380,11 +370,10 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['accept'] = accept;
             }
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(consentRequestBody, localVarRequestOptions, configuration)
@@ -402,13 +391,13 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerPatchLoginRequest: async (challenge: string, loginRequestBody: LoginRequestBody, accept?: boolean, options: any = {}): Promise<RequestArgs> => {
+        oauthProviderControllerPatchLoginRequest: async (challenge: string, loginRequestBody: LoginRequestBody, accept?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'challenge' is not null or undefined
             assertParamExists('oauthProviderControllerPatchLoginRequest', 'challenge', challenge)
             // verify required parameter 'loginRequestBody' is not null or undefined
             assertParamExists('oauthProviderControllerPatchLoginRequest', 'loginRequestBody', loginRequestBody)
             const localVarPath = `/oauth2/loginRequest/{challenge}`
-                .replace(`{${"challenge"}}`, encodeURIComponent(String(challenge)));
+                .replace('{challenge}', encodeURIComponent(String(challenge)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -428,11 +417,10 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['accept'] = accept;
             }
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(loginRequestBody, localVarRequestOptions, configuration)
@@ -448,7 +436,7 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerRevokeConsentSession: async (client: string, options: any = {}): Promise<RequestArgs> => {
+        oauthProviderControllerRevokeConsentSession: async (client: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'client' is not null or undefined
             assertParamExists('oauthProviderControllerRevokeConsentSession', 'client', client)
             const localVarPath = `/oauth2/auth/sessions/consent`;
@@ -472,8 +460,7 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
             }
 
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -489,13 +476,13 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerUpdateOAuth2Client: async (id: string, oauthClientUpdateBody: OauthClientUpdateBody, options: any = {}): Promise<RequestArgs> => {
+        oauthProviderControllerUpdateOAuth2Client: async (id: string, oauthClientUpdateBody: OauthClientUpdateBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('oauthProviderControllerUpdateOAuth2Client', 'id', id)
             // verify required parameter 'oauthClientUpdateBody' is not null or undefined
             assertParamExists('oauthProviderControllerUpdateOAuth2Client', 'oauthClientUpdateBody', oauthClientUpdateBody)
             const localVarPath = `/oauth2/clients/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -511,11 +498,10 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(oauthClientUpdateBody, localVarRequestOptions, configuration)
@@ -530,7 +516,6 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
 
 /**
  * Oauth2Api - functional programming interface
- * @export
  */
 export const Oauth2ApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = Oauth2ApiAxiosParamCreator(configuration)
@@ -541,9 +526,11 @@ export const Oauth2ApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerAcceptLogoutRequest(challenge: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RedirectResponse>> {
+        async oauthProviderControllerAcceptLogoutRequest(challenge: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RedirectResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerAcceptLogoutRequest(challenge, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['Oauth2Api.oauthProviderControllerAcceptLogoutRequest']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -551,9 +538,11 @@ export const Oauth2ApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody: OauthClientCreateBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthClientResponse>> {
+        async oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody: OauthClientCreateBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthClientResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['Oauth2Api.oauthProviderControllerCreateOAuth2Client']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -561,9 +550,11 @@ export const Oauth2ApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerDeleteOAuth2Client(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async oauthProviderControllerDeleteOAuth2Client(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerDeleteOAuth2Client(id, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['Oauth2Api.oauthProviderControllerDeleteOAuth2Client']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -571,9 +562,11 @@ export const Oauth2ApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerGetConsentRequest(challenge: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ConsentResponse>> {
+        async oauthProviderControllerGetConsentRequest(challenge: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ConsentResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerGetConsentRequest(challenge, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['Oauth2Api.oauthProviderControllerGetConsentRequest']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -581,9 +574,11 @@ export const Oauth2ApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerGetLoginRequest(challenge: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthProviderLoginResponse>> {
+        async oauthProviderControllerGetLoginRequest(challenge: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthProviderLoginResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerGetLoginRequest(challenge, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['Oauth2Api.oauthProviderControllerGetLoginRequest']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -591,31 +586,37 @@ export const Oauth2ApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerGetOAuth2Client(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthClientResponse>> {
+        async oauthProviderControllerGetOAuth2Client(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthClientResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerGetOAuth2Client(id, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['Oauth2Api.oauthProviderControllerGetOAuth2Client']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerListConsentSessions(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ConsentSessionResponse>>> {
+        async oauthProviderControllerListConsentSessions(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ConsentSessionResponse>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerListConsentSessions(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['Oauth2Api.oauthProviderControllerListConsentSessions']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {number} limit The maximum amount of clients to returned, upper bound is 500 clients.
-         * @param {number} offset The offset from where to start looking.
-         * @param {string} clientName The name of the clients to filter by.
-         * @param {string} owner The owner of the clients to filter by.
+         * @param {number} [limit] The maximum amount of clients to returned, upper bound is 500 clients.
+         * @param {number} [offset] The offset from where to start looking.
+         * @param {string} [clientName] The name of the clients to filter by.
+         * @param {string} [owner] The owner of the clients to filter by.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerListOAuth2Clients(limit: number, offset: number, clientName: string, owner: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OauthClientResponse>>> {
+        async oauthProviderControllerListOAuth2Clients(limit?: number, offset?: number, clientName?: string, owner?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OauthClientResponse>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerListOAuth2Clients(limit, offset, clientName, owner, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['Oauth2Api.oauthProviderControllerListOAuth2Clients']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -625,9 +626,11 @@ export const Oauth2ApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RedirectResponse>> {
+        async oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RedirectResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerPatchConsentRequest(challenge, consentRequestBody, accept, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['Oauth2Api.oauthProviderControllerPatchConsentRequest']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -637,9 +640,11 @@ export const Oauth2ApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerPatchLoginRequest(challenge: string, loginRequestBody: LoginRequestBody, accept?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RedirectResponse>> {
+        async oauthProviderControllerPatchLoginRequest(challenge: string, loginRequestBody: LoginRequestBody, accept?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RedirectResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerPatchLoginRequest(challenge, loginRequestBody, accept, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['Oauth2Api.oauthProviderControllerPatchLoginRequest']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -647,9 +652,11 @@ export const Oauth2ApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerRevokeConsentSession(client: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async oauthProviderControllerRevokeConsentSession(client: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerRevokeConsentSession(client, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['Oauth2Api.oauthProviderControllerRevokeConsentSession']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -658,16 +665,17 @@ export const Oauth2ApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientUpdateBody: OauthClientUpdateBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthClientResponse>> {
+        async oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientUpdateBody: OauthClientUpdateBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthClientResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerUpdateOAuth2Client(id, oauthClientUpdateBody, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['Oauth2Api.oauthProviderControllerUpdateOAuth2Client']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * Oauth2Api - factory interface
- * @export
  */
 export const Oauth2ApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = Oauth2ApiFp(configuration)
@@ -678,7 +686,7 @@ export const Oauth2ApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerAcceptLogoutRequest(challenge: string, options?: any): AxiosPromise<RedirectResponse> {
+        oauthProviderControllerAcceptLogoutRequest(challenge: string, options?: RawAxiosRequestConfig): AxiosPromise<RedirectResponse> {
             return localVarFp.oauthProviderControllerAcceptLogoutRequest(challenge, options).then((request) => request(axios, basePath));
         },
         /**
@@ -687,7 +695,7 @@ export const Oauth2ApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody: OauthClientCreateBody, options?: any): AxiosPromise<OauthClientResponse> {
+        oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody: OauthClientCreateBody, options?: RawAxiosRequestConfig): AxiosPromise<OauthClientResponse> {
             return localVarFp.oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody, options).then((request) => request(axios, basePath));
         },
         /**
@@ -696,7 +704,7 @@ export const Oauth2ApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerDeleteOAuth2Client(id: string, options?: any): AxiosPromise<void> {
+        oauthProviderControllerDeleteOAuth2Client(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.oauthProviderControllerDeleteOAuth2Client(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -705,7 +713,7 @@ export const Oauth2ApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerGetConsentRequest(challenge: string, options?: any): AxiosPromise<ConsentResponse> {
+        oauthProviderControllerGetConsentRequest(challenge: string, options?: RawAxiosRequestConfig): AxiosPromise<ConsentResponse> {
             return localVarFp.oauthProviderControllerGetConsentRequest(challenge, options).then((request) => request(axios, basePath));
         },
         /**
@@ -714,7 +722,7 @@ export const Oauth2ApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerGetLoginRequest(challenge: string, options?: any): AxiosPromise<OauthProviderLoginResponse> {
+        oauthProviderControllerGetLoginRequest(challenge: string, options?: RawAxiosRequestConfig): AxiosPromise<OauthProviderLoginResponse> {
             return localVarFp.oauthProviderControllerGetLoginRequest(challenge, options).then((request) => request(axios, basePath));
         },
         /**
@@ -723,7 +731,7 @@ export const Oauth2ApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerGetOAuth2Client(id: string, options?: any): AxiosPromise<OauthClientResponse> {
+        oauthProviderControllerGetOAuth2Client(id: string, options?: RawAxiosRequestConfig): AxiosPromise<OauthClientResponse> {
             return localVarFp.oauthProviderControllerGetOAuth2Client(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -731,19 +739,19 @@ export const Oauth2ApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerListConsentSessions(options?: any): AxiosPromise<Array<ConsentSessionResponse>> {
+        oauthProviderControllerListConsentSessions(options?: RawAxiosRequestConfig): AxiosPromise<Array<ConsentSessionResponse>> {
             return localVarFp.oauthProviderControllerListConsentSessions(options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {number} limit The maximum amount of clients to returned, upper bound is 500 clients.
-         * @param {number} offset The offset from where to start looking.
-         * @param {string} clientName The name of the clients to filter by.
-         * @param {string} owner The owner of the clients to filter by.
+         * @param {number} [limit] The maximum amount of clients to returned, upper bound is 500 clients.
+         * @param {number} [offset] The offset from where to start looking.
+         * @param {string} [clientName] The name of the clients to filter by.
+         * @param {string} [owner] The owner of the clients to filter by.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerListOAuth2Clients(limit: number, offset: number, clientName: string, owner: string, options?: any): AxiosPromise<Array<OauthClientResponse>> {
+        oauthProviderControllerListOAuth2Clients(limit?: number, offset?: number, clientName?: string, owner?: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<OauthClientResponse>> {
             return localVarFp.oauthProviderControllerListOAuth2Clients(limit, offset, clientName, owner, options).then((request) => request(axios, basePath));
         },
         /**
@@ -754,7 +762,7 @@ export const Oauth2ApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: any): AxiosPromise<RedirectResponse> {
+        oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<RedirectResponse> {
             return localVarFp.oauthProviderControllerPatchConsentRequest(challenge, consentRequestBody, accept, options).then((request) => request(axios, basePath));
         },
         /**
@@ -765,7 +773,7 @@ export const Oauth2ApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerPatchLoginRequest(challenge: string, loginRequestBody: LoginRequestBody, accept?: boolean, options?: any): AxiosPromise<RedirectResponse> {
+        oauthProviderControllerPatchLoginRequest(challenge: string, loginRequestBody: LoginRequestBody, accept?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<RedirectResponse> {
             return localVarFp.oauthProviderControllerPatchLoginRequest(challenge, loginRequestBody, accept, options).then((request) => request(axios, basePath));
         },
         /**
@@ -774,7 +782,7 @@ export const Oauth2ApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerRevokeConsentSession(client: string, options?: any): AxiosPromise<void> {
+        oauthProviderControllerRevokeConsentSession(client: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.oauthProviderControllerRevokeConsentSession(client, options).then((request) => request(axios, basePath));
         },
         /**
@@ -784,7 +792,7 @@ export const Oauth2ApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientUpdateBody: OauthClientUpdateBody, options?: any): AxiosPromise<OauthClientResponse> {
+        oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientUpdateBody: OauthClientUpdateBody, options?: RawAxiosRequestConfig): AxiosPromise<OauthClientResponse> {
             return localVarFp.oauthProviderControllerUpdateOAuth2Client(id, oauthClientUpdateBody, options).then((request) => request(axios, basePath));
         },
     };
@@ -792,8 +800,6 @@ export const Oauth2ApiFactory = function (configuration?: Configuration, basePat
 
 /**
  * Oauth2Api - interface
- * @export
- * @interface Oauth2Api
  */
 export interface Oauth2ApiInterface {
     /**
@@ -801,74 +807,66 @@ export interface Oauth2ApiInterface {
      * @param {string} challenge The login challenge.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2ApiInterface
      */
-    oauthProviderControllerAcceptLogoutRequest(challenge: string, options?: any): AxiosPromise<RedirectResponse>;
+    oauthProviderControllerAcceptLogoutRequest(challenge: string, options?: RawAxiosRequestConfig): AxiosPromise<RedirectResponse>;
 
     /**
      * 
      * @param {OauthClientCreateBody} oauthClientCreateBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2ApiInterface
      */
-    oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody: OauthClientCreateBody, options?: any): AxiosPromise<OauthClientResponse>;
+    oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody: OauthClientCreateBody, options?: RawAxiosRequestConfig): AxiosPromise<OauthClientResponse>;
 
     /**
      * 
      * @param {string} id The Oauth Client Id.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2ApiInterface
      */
-    oauthProviderControllerDeleteOAuth2Client(id: string, options?: any): AxiosPromise<void>;
+    oauthProviderControllerDeleteOAuth2Client(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
      * @param {string} challenge The login challenge.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2ApiInterface
      */
-    oauthProviderControllerGetConsentRequest(challenge: string, options?: any): AxiosPromise<ConsentResponse>;
+    oauthProviderControllerGetConsentRequest(challenge: string, options?: RawAxiosRequestConfig): AxiosPromise<ConsentResponse>;
 
     /**
      * 
      * @param {string} challenge The login challenge.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2ApiInterface
      */
-    oauthProviderControllerGetLoginRequest(challenge: string, options?: any): AxiosPromise<OauthProviderLoginResponse>;
+    oauthProviderControllerGetLoginRequest(challenge: string, options?: RawAxiosRequestConfig): AxiosPromise<OauthProviderLoginResponse>;
 
     /**
      * 
      * @param {string} id The Oauth Client Id.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2ApiInterface
      */
-    oauthProviderControllerGetOAuth2Client(id: string, options?: any): AxiosPromise<OauthClientResponse>;
+    oauthProviderControllerGetOAuth2Client(id: string, options?: RawAxiosRequestConfig): AxiosPromise<OauthClientResponse>;
 
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2ApiInterface
      */
-    oauthProviderControllerListConsentSessions(options?: any): AxiosPromise<Array<ConsentSessionResponse>>;
+    oauthProviderControllerListConsentSessions(options?: RawAxiosRequestConfig): AxiosPromise<Array<ConsentSessionResponse>>;
 
     /**
      * 
-     * @param {number} limit The maximum amount of clients to returned, upper bound is 500 clients.
-     * @param {number} offset The offset from where to start looking.
-     * @param {string} clientName The name of the clients to filter by.
-     * @param {string} owner The owner of the clients to filter by.
+     * @param {number} [limit] The maximum amount of clients to returned, upper bound is 500 clients.
+     * @param {number} [offset] The offset from where to start looking.
+     * @param {string} [clientName] The name of the clients to filter by.
+     * @param {string} [owner] The owner of the clients to filter by.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2ApiInterface
      */
-    oauthProviderControllerListOAuth2Clients(limit: number, offset: number, clientName: string, owner: string, options?: any): AxiosPromise<Array<OauthClientResponse>>;
+    oauthProviderControllerListOAuth2Clients(limit?: number, offset?: number, clientName?: string, owner?: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<OauthClientResponse>>;
 
     /**
      * 
@@ -877,9 +875,8 @@ export interface Oauth2ApiInterface {
      * @param {boolean} [accept] Accepts the login request.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2ApiInterface
      */
-    oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: any): AxiosPromise<RedirectResponse>;
+    oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<RedirectResponse>;
 
     /**
      * 
@@ -888,18 +885,16 @@ export interface Oauth2ApiInterface {
      * @param {boolean} [accept] Accepts the login request.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2ApiInterface
      */
-    oauthProviderControllerPatchLoginRequest(challenge: string, loginRequestBody: LoginRequestBody, accept?: boolean, options?: any): AxiosPromise<RedirectResponse>;
+    oauthProviderControllerPatchLoginRequest(challenge: string, loginRequestBody: LoginRequestBody, accept?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<RedirectResponse>;
 
     /**
      * 
      * @param {string} client The Oauth2 client id.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2ApiInterface
      */
-    oauthProviderControllerRevokeConsentSession(client: string, options?: any): AxiosPromise<void>;
+    oauthProviderControllerRevokeConsentSession(client: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -907,17 +902,13 @@ export interface Oauth2ApiInterface {
      * @param {OauthClientUpdateBody} oauthClientUpdateBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2ApiInterface
      */
-    oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientUpdateBody: OauthClientUpdateBody, options?: any): AxiosPromise<OauthClientResponse>;
+    oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientUpdateBody: OauthClientUpdateBody, options?: RawAxiosRequestConfig): AxiosPromise<OauthClientResponse>;
 
 }
 
 /**
  * Oauth2Api - object-oriented interface
- * @export
- * @class Oauth2Api
- * @extends {BaseAPI}
  */
 export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
     /**
@@ -925,9 +916,8 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
      * @param {string} challenge The login challenge.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2Api
      */
-    public oauthProviderControllerAcceptLogoutRequest(challenge: string, options?: any) {
+    public oauthProviderControllerAcceptLogoutRequest(challenge: string, options?: RawAxiosRequestConfig) {
         return Oauth2ApiFp(this.configuration).oauthProviderControllerAcceptLogoutRequest(challenge, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -936,9 +926,8 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
      * @param {OauthClientCreateBody} oauthClientCreateBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2Api
      */
-    public oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody: OauthClientCreateBody, options?: any) {
+    public oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody: OauthClientCreateBody, options?: RawAxiosRequestConfig) {
         return Oauth2ApiFp(this.configuration).oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -947,9 +936,8 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
      * @param {string} id The Oauth Client Id.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2Api
      */
-    public oauthProviderControllerDeleteOAuth2Client(id: string, options?: any) {
+    public oauthProviderControllerDeleteOAuth2Client(id: string, options?: RawAxiosRequestConfig) {
         return Oauth2ApiFp(this.configuration).oauthProviderControllerDeleteOAuth2Client(id, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -958,9 +946,8 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
      * @param {string} challenge The login challenge.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2Api
      */
-    public oauthProviderControllerGetConsentRequest(challenge: string, options?: any) {
+    public oauthProviderControllerGetConsentRequest(challenge: string, options?: RawAxiosRequestConfig) {
         return Oauth2ApiFp(this.configuration).oauthProviderControllerGetConsentRequest(challenge, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -969,9 +956,8 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
      * @param {string} challenge The login challenge.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2Api
      */
-    public oauthProviderControllerGetLoginRequest(challenge: string, options?: any) {
+    public oauthProviderControllerGetLoginRequest(challenge: string, options?: RawAxiosRequestConfig) {
         return Oauth2ApiFp(this.configuration).oauthProviderControllerGetLoginRequest(challenge, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -980,9 +966,8 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
      * @param {string} id The Oauth Client Id.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2Api
      */
-    public oauthProviderControllerGetOAuth2Client(id: string, options?: any) {
+    public oauthProviderControllerGetOAuth2Client(id: string, options?: RawAxiosRequestConfig) {
         return Oauth2ApiFp(this.configuration).oauthProviderControllerGetOAuth2Client(id, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -990,23 +975,21 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2Api
      */
-    public oauthProviderControllerListConsentSessions(options?: any) {
+    public oauthProviderControllerListConsentSessions(options?: RawAxiosRequestConfig) {
         return Oauth2ApiFp(this.configuration).oauthProviderControllerListConsentSessions(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {number} limit The maximum amount of clients to returned, upper bound is 500 clients.
-     * @param {number} offset The offset from where to start looking.
-     * @param {string} clientName The name of the clients to filter by.
-     * @param {string} owner The owner of the clients to filter by.
+     * @param {number} [limit] The maximum amount of clients to returned, upper bound is 500 clients.
+     * @param {number} [offset] The offset from where to start looking.
+     * @param {string} [clientName] The name of the clients to filter by.
+     * @param {string} [owner] The owner of the clients to filter by.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2Api
      */
-    public oauthProviderControllerListOAuth2Clients(limit: number, offset: number, clientName: string, owner: string, options?: any) {
+    public oauthProviderControllerListOAuth2Clients(limit?: number, offset?: number, clientName?: string, owner?: string, options?: RawAxiosRequestConfig) {
         return Oauth2ApiFp(this.configuration).oauthProviderControllerListOAuth2Clients(limit, offset, clientName, owner, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1017,9 +1000,8 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
      * @param {boolean} [accept] Accepts the login request.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2Api
      */
-    public oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: any) {
+    public oauthProviderControllerPatchConsentRequest(challenge: string, consentRequestBody: ConsentRequestBody, accept?: boolean, options?: RawAxiosRequestConfig) {
         return Oauth2ApiFp(this.configuration).oauthProviderControllerPatchConsentRequest(challenge, consentRequestBody, accept, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1030,9 +1012,8 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
      * @param {boolean} [accept] Accepts the login request.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2Api
      */
-    public oauthProviderControllerPatchLoginRequest(challenge: string, loginRequestBody: LoginRequestBody, accept?: boolean, options?: any) {
+    public oauthProviderControllerPatchLoginRequest(challenge: string, loginRequestBody: LoginRequestBody, accept?: boolean, options?: RawAxiosRequestConfig) {
         return Oauth2ApiFp(this.configuration).oauthProviderControllerPatchLoginRequest(challenge, loginRequestBody, accept, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1041,9 +1022,8 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
      * @param {string} client The Oauth2 client id.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2Api
      */
-    public oauthProviderControllerRevokeConsentSession(client: string, options?: any) {
+    public oauthProviderControllerRevokeConsentSession(client: string, options?: RawAxiosRequestConfig) {
         return Oauth2ApiFp(this.configuration).oauthProviderControllerRevokeConsentSession(client, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1053,9 +1033,9 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
      * @param {OauthClientUpdateBody} oauthClientUpdateBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2Api
      */
-    public oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientUpdateBody: OauthClientUpdateBody, options?: any) {
+    public oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientUpdateBody: OauthClientUpdateBody, options?: RawAxiosRequestConfig) {
         return Oauth2ApiFp(this.configuration).oauthProviderControllerUpdateOAuth2Client(id, oauthClientUpdateBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

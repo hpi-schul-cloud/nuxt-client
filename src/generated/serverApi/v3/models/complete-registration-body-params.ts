@@ -13,26 +13,17 @@
  */
 
 
-import { LanguageType } from './language-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { LanguageType } from './language-type';
 
-/**
- * 
- * @export
- * @interface CompleteRegistrationBodyParams
- */
 export interface CompleteRegistrationBodyParams {
     /**
      * The prefered language of the new user.
-     * @type {LanguageType}
-     * @memberof CompleteRegistrationBodyParams
      */
-    language: LanguageType;
-    /**
-     * 
-     * @type {string}
-     * @memberof CompleteRegistrationBodyParams
-     */
-    password: string;
+    'language': LanguageType;
+    'password': string;
 }
+
 
 

@@ -14,24 +14,11 @@
 
 
 
-/**
- * 
- * @export
- * @interface MoveColumnBodyParams
- */
 export interface MoveColumnBodyParams {
     /**
      * The id of the target board
-     * @type {string}
-     * @memberof MoveColumnBodyParams
      */
-    toBoardId: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof MoveColumnBodyParams
-     */
-    toPosition: number;
+    'toBoardId': string;
+    'toPosition': number;
 }
-
 

@@ -14,48 +14,30 @@
 
 
 
-/**
- * 
- * @export
- * @interface ContextExternalToolConfigurationStatusResponse
- */
 export interface ContextExternalToolConfigurationStatusResponse {
     /**
      * Is the tool outdated on school scope, because of non matching versions or required parameter changes on ExternalTool?
-     * @type {boolean}
-     * @memberof ContextExternalToolConfigurationStatusResponse
      */
-    isOutdatedOnScopeSchool: boolean;
+    'isOutdatedOnScopeSchool': boolean;
     /**
      * Is the tool outdated on context scope, because of non matching versions or required parameter changes on SchoolExternalTool?
-     * @type {boolean}
-     * @memberof ContextExternalToolConfigurationStatusResponse
      */
-    isOutdatedOnScopeContext: boolean;
+    'isOutdatedOnScopeContext': boolean;
     /**
      * True, if a mandatory parameter on the context external tool is missing a value
-     * @type {boolean}
-     * @memberof ContextExternalToolConfigurationStatusResponse
      */
-    isIncompleteOnScopeContext: boolean;
+    'isIncompleteOnScopeContext': boolean;
     /**
      * True, if a optional parameter on the context external tool is missing a value. This is happening, when course is copied.
-     * @type {boolean}
-     * @memberof ContextExternalToolConfigurationStatusResponse
      */
-    isIncompleteOperationalOnScopeContext: boolean;
+    'isIncompleteOperationalOnScopeContext': boolean;
     /**
      * Is the tool deactivated, because of superhero or school administrator
-     * @type {boolean}
-     * @memberof ContextExternalToolConfigurationStatusResponse
      */
-    isDeactivated: boolean;
+    'isDeactivated': boolean;
     /**
      * True if the tool is not licensed for user
-     * @type {boolean}
-     * @memberof ContextExternalToolConfigurationStatusResponse
      */
-    isNotLicensed: boolean;
+    'isNotLicensed': boolean;
 }
-
 

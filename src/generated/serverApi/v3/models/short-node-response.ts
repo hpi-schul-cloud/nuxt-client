@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface ShortNodeResponse
- */
 export interface ShortNodeResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ShortNodeResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ShortNodeResponse
-     */
-    title: string;
+    'id': string;
+    'title': string;
 }
-
 

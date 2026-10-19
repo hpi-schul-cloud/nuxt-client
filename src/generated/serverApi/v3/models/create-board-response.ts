@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface CreateBoardResponse
- */
 export interface CreateBoardResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateBoardResponse
-     */
-    id: string;
+    'id': string;
 }
-
 

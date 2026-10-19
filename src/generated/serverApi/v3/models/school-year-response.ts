@@ -14,42 +14,11 @@
 
 
 
-/**
- * 
- * @export
- * @interface SchoolYearResponse
- */
 export interface SchoolYearResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolYearResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolYearResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolYearResponse
-     */
-    startDate: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolYearResponse
-     */
-    endDate: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SchoolYearResponse
-     */
-    courseCreationInNextYear: boolean;
+    'id': string;
+    'name': string;
+    'startDate': string;
+    'endDate': string;
+    'courseCreationInNextYear': boolean;
 }
-
 

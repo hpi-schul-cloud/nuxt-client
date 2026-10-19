@@ -14,42 +14,26 @@
 
 
 
-/**
- * 
- * @export
- * @interface ExternalToolImportResultResponse
- */
 export interface ExternalToolImportResultResponse {
     /**
      * Name of the external tool
-     * @type {string}
-     * @memberof ExternalToolImportResultResponse
      */
-    toolName: string;
+    'toolName': string;
     /**
      * Medium id of the external tool
-     * @type {string}
-     * @memberof ExternalToolImportResultResponse
      */
-    mediumId: string;
+    'mediumId': string;
     /**
      * Medium source of the external tool
-     * @type {string}
-     * @memberof ExternalToolImportResultResponse
      */
-    mediumSourceId: string;
+    'mediumSourceId': string;
     /**
      * ObjectId of the created external tool
-     * @type {string}
-     * @memberof ExternalToolImportResultResponse
      */
-    toolId: string;
+    'toolId': string;
     /**
      * Status message of the error that occurred
-     * @type {string}
-     * @memberof ExternalToolImportResultResponse
      */
-    error: string;
+    'error': string;
 }
-
 

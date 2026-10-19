@@ -13,50 +13,30 @@
  */
 
 
-import { AuthorizationContextParams } from './authorization-context-params';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { AuthorizationContextParams } from './authorization-context-params';
 
-/**
- * 
- * @export
- * @interface CreateAccessTokenParams
- */
 export interface CreateAccessTokenParams {
-    /**
-     * 
-     * @type {AuthorizationContextParams}
-     * @memberof CreateAccessTokenParams
-     */
-    context: AuthorizationContextParams;
+    'context': AuthorizationContextParams;
     /**
      * The entity or domain object the operation should be performed on.
-     * @type {string}
-     * @memberof CreateAccessTokenParams
      */
-    referenceType: CreateAccessTokenParamsReferenceType;
+    'referenceType': CreateAccessTokenParamsReferenceType;
     /**
      * The id of the entity/domain object of the defined referenceType.
-     * @type {string}
-     * @memberof CreateAccessTokenParams
      */
-    referenceId: string;
+    'referenceId': string;
     /**
      * Lifetime of token
-     * @type {number}
-     * @memberof CreateAccessTokenParams
      */
-    tokenTtlInSeconds: number;
+    'tokenTtlInSeconds': number;
     /**
      * The payload of the access token.
-     * @type {object}
-     * @memberof CreateAccessTokenParams
      */
-    payload: object;
+    'payload': object;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum CreateAccessTokenParamsReferenceType {
     USERS = 'users',
     SCHOOLS = 'schools',
@@ -72,6 +52,5 @@ export enum CreateAccessTokenParamsReferenceType {
     EXTERNAL_TOOLS = 'external-tools',
     INSTANCES = 'instances'
 }
-
 
 

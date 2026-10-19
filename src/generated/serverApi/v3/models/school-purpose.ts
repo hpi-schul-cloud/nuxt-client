@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum SchoolPurpose {
     EXTERNAL_PERSON_SCHOOL = 'external_person_school',
     TOMBSTONE = 'tombstone',

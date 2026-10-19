@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum VideoConferenceScope {
     COURSE = 'course',
     EVENT = 'event',

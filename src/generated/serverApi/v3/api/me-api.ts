@@ -13,20 +13,20 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { MeResponse } from '../models';
+import type { MeResponse } from '../models';
 // @ts-ignore
-import { UpdatePreferencesBodyParams } from '../models';
+import type { UpdatePreferencesBodyParams } from '../models';
 /**
  * MeApi - axios parameter creator
- * @export
  */
 export const MeApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -36,7 +36,7 @@ export const MeApiAxiosParamCreator = function (configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        meControllerMe: async (options: any = {}): Promise<RequestArgs> => {
+        meControllerMe: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/me`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -53,9 +53,9 @@ export const MeApiAxiosParamCreator = function (configuration?: Configuration) {
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -71,7 +71,7 @@ export const MeApiAxiosParamCreator = function (configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        meControllerUpdateMePreferences: async (updatePreferencesBodyParams: UpdatePreferencesBodyParams, options: any = {}): Promise<RequestArgs> => {
+        meControllerUpdateMePreferences: async (updatePreferencesBodyParams: UpdatePreferencesBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'updatePreferencesBodyParams' is not null or undefined
             assertParamExists('meControllerUpdateMePreferences', 'updatePreferencesBodyParams', updatePreferencesBodyParams)
             const localVarPath = `/me/preferences`;
@@ -90,11 +90,9 @@ export const MeApiAxiosParamCreator = function (configuration?: Configuration) {
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(updatePreferencesBodyParams, localVarRequestOptions, configuration)
@@ -109,7 +107,6 @@ export const MeApiAxiosParamCreator = function (configuration?: Configuration) {
 
 /**
  * MeApi - functional programming interface
- * @export
  */
 export const MeApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MeApiAxiosParamCreator(configuration)
@@ -120,9 +117,11 @@ export const MeApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async meControllerMe(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MeResponse>> {
+        async meControllerMe(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MeResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.meControllerMe(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MeApi.meControllerMe']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -131,16 +130,17 @@ export const MeApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async meControllerUpdateMePreferences(updatePreferencesBodyParams: UpdatePreferencesBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async meControllerUpdateMePreferences(updatePreferencesBodyParams: UpdatePreferencesBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.meControllerUpdateMePreferences(updatePreferencesBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MeApi.meControllerUpdateMePreferences']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * MeApi - factory interface
- * @export
  */
 export const MeApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = MeApiFp(configuration)
@@ -151,7 +151,7 @@ export const MeApiFactory = function (configuration?: Configuration, basePath?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        meControllerMe(options?: any): AxiosPromise<MeResponse> {
+        meControllerMe(options?: RawAxiosRequestConfig): AxiosPromise<MeResponse> {
             return localVarFp.meControllerMe(options).then((request) => request(axios, basePath));
         },
         /**
@@ -161,7 +161,7 @@ export const MeApiFactory = function (configuration?: Configuration, basePath?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        meControllerUpdateMePreferences(updatePreferencesBodyParams: UpdatePreferencesBodyParams, options?: any): AxiosPromise<void> {
+        meControllerUpdateMePreferences(updatePreferencesBodyParams: UpdatePreferencesBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.meControllerUpdateMePreferences(updatePreferencesBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -169,8 +169,6 @@ export const MeApiFactory = function (configuration?: Configuration, basePath?: 
 
 /**
  * MeApi - interface
- * @export
- * @interface MeApi
  */
 export interface MeApiInterface {
     /**
@@ -178,9 +176,8 @@ export interface MeApiInterface {
      * @summary Resolve jwt and response informations about the owner of the jwt.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeApiInterface
      */
-    meControllerMe(options?: any): AxiosPromise<MeResponse>;
+    meControllerMe(options?: RawAxiosRequestConfig): AxiosPromise<MeResponse>;
 
     /**
      * 
@@ -188,17 +185,13 @@ export interface MeApiInterface {
      * @param {UpdatePreferencesBodyParams} updatePreferencesBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeApiInterface
      */
-    meControllerUpdateMePreferences(updatePreferencesBodyParams: UpdatePreferencesBodyParams, options?: any): AxiosPromise<void>;
+    meControllerUpdateMePreferences(updatePreferencesBodyParams: UpdatePreferencesBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
  * MeApi - object-oriented interface
- * @export
- * @class MeApi
- * @extends {BaseAPI}
  */
 export class MeApi extends BaseAPI implements MeApiInterface {
     /**
@@ -206,9 +199,8 @@ export class MeApi extends BaseAPI implements MeApiInterface {
      * @summary Resolve jwt and response informations about the owner of the jwt.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeApi
      */
-    public meControllerMe(options?: any) {
+    public meControllerMe(options?: RawAxiosRequestConfig) {
         return MeApiFp(this.configuration).meControllerMe(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -218,9 +210,9 @@ export class MeApi extends BaseAPI implements MeApiInterface {
      * @param {UpdatePreferencesBodyParams} updatePreferencesBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeApi
      */
-    public meControllerUpdateMePreferences(updatePreferencesBodyParams: UpdatePreferencesBodyParams, options?: any) {
+    public meControllerUpdateMePreferences(updatePreferencesBodyParams: UpdatePreferencesBodyParams, options?: RawAxiosRequestConfig) {
         return MeApiFp(this.configuration).meControllerUpdateMePreferences(updatePreferencesBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

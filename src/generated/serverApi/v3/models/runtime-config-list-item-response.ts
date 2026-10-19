@@ -13,48 +13,21 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RuntimeConfigListItemResponseValue } from './runtime-config-list-item-response-value';
 
-/**
- * 
- * @export
- * @interface RuntimeConfigListItemResponse
- */
 export interface RuntimeConfigListItemResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof RuntimeConfigListItemResponse
-     */
-    key: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RuntimeConfigListItemResponse
-     */
-    type: RuntimeConfigListItemResponseType;
-    /**
-     * guaranteed to be of the type defined in \"type\" property
-     * @type {string | number | boolean}
-     * @memberof RuntimeConfigListItemResponse
-     */
-    value: string | number | boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof RuntimeConfigListItemResponse
-     */
-    description?: string;
+    'key': string;
+    'type': RuntimeConfigListItemResponseType;
+    'value': RuntimeConfigListItemResponseValue;
+    'description'?: string;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum RuntimeConfigListItemResponseType {
     STRING = 'string',
     NUMBER = 'number',
     BOOLEAN = 'boolean'
 }
-
 
 

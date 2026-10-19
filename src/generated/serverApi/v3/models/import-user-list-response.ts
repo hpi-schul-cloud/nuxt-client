@@ -13,38 +13,26 @@
  */
 
 
-import { ImportUserResponse } from './import-user-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ImportUserResponse } from './import-user-response';
 
-/**
- * 
- * @export
- * @interface ImportUserListResponse
- */
 export interface ImportUserListResponse {
     /**
      * The items for the current page.
-     * @type {Array<ImportUserResponse>}
-     * @memberof ImportUserListResponse
      */
-    data: Array<ImportUserResponse>;
+    'data': Array<ImportUserResponse>;
     /**
      * The total amount of items.
-     * @type {number}
-     * @memberof ImportUserListResponse
      */
-    total: number;
+    'total': number;
     /**
      * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof ImportUserListResponse
      */
-    skip: number;
+    'skip': number;
     /**
      * The page size of the response.
-     * @type {number}
-     * @memberof ImportUserListResponse
      */
-    limit: number;
+    'limit': number;
 }
-
 

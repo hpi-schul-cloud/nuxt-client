@@ -2,19 +2,28 @@
   "$schema": "node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "5.1.0",
+    "version": "7.25.0",
     "generators": {
       "server-api": {
         "generatorName": "typescript-axios",
+        "templateDir": "./config/openapi-generator/typescript-axios",
         "inputSpec": "http://localhost:3030/api/v3/docs-json/",
         "output": "./src/generated/serverApi/v3",
         "skipValidateSpec": true,
         "enablePostProcessFile": true,
+        "globalProperty": {
+          "apiDocs": false,
+          "modelDocs": false,
+          "models": "",
+          "apis": "",
+          "supportingFiles": ""
+        },
         "additionalProperties": {
           "apiPackage": "api",
           "enumNameSuffix": "",
           "enumPropertyNaming": "UPPERCASE",
           "modelPackage": "models",
+          "stringEnums": true,
           "supportsES6": true,
           "withInterfaces": true,
           "withSeparateModelsAndApi": true
@@ -22,9 +31,16 @@
       },
       "fwu-api": {
         "generatorName": "typescript-axios",
+        "templateDir": "./config/openapi-generator/typescript-axios",
         "inputSpec": "http://localhost:4446/api/v3/docs-json/",
         "output": "./src/generated/fwuApi/v3",
         "skipValidateSpec": true,
+        "globalProperty": {
+          "apiDocs": false,
+          "modelDocs": false,
+          "apis": "",
+          "supportingFiles": ""
+        },
         "enablePostProcessFile": true,
         "additionalProperties": {
           "apiPackage": "api",
@@ -38,10 +54,18 @@
       },
       "common-cartridge-api": {
         "generatorName": "typescript-axios",
+        "templateDir": "./config/openapi-generator/typescript-axios",
         "inputSpec": "http://localhost:3350/api/v3/docs-json/",
         "output": "./src/generated/commonCartridgeApi/v3",
         "skipValidateSpec": true,
         "enablePostProcessFile": true,
+        "globalProperty": {
+          "apiDocs": false,
+          "modelDocs": false,
+          "models": "RobjExportKlasse:RobjExportLehrerMigration:RobjExportLehrer:RobjExportSchuelerMigration:RobjExportSchueler:RobjExportSchule:VersionResponse",
+          "apis": "",
+          "supportingFiles": ""
+        },
         "additionalProperties": {
           "apiPackage": "api",
           "enumNameSuffix": "",
@@ -54,10 +78,18 @@
       },
       "h5p-editor-api": {
         "generatorName": "typescript-axios",
+        "templateDir": "./config/openapi-generator/typescript-axios",
         "inputSpec": "http://localhost:4448/api/v3/h5p/docs-json/",
         "output": "./src/generated/h5pEditorApi/v3",
         "skipValidateSpec": true,
         "enablePostProcessFile": true,
+        "globalProperty": {
+          "apiDocs": false,
+          "modelDocs": false,
+          "models": "RobjExportKlasse:RobjExportLehrerMigration:RobjExportLehrer:RobjExportSchuelerMigration:RobjExportSchueler:RobjExportSchule:VersionResponse",
+          "apis": "",
+          "supportingFiles": ""
+        },
         "additionalProperties": {
           "apiPackage": "api",
           "enumNameSuffix": "",
@@ -70,10 +102,18 @@
       },
       "file-storage-api": {
         "generatorName": "typescript-axios",
+        "templateDir": "./config/openapi-generator/typescript-axios",
         "inputSpec": "http://localhost:4444/api/v3/file/docs-json/",
         "output": "./src/generated/fileStorageApi/v3",
         "skipValidateSpec": true,
         "enablePostProcessFile": true,
+        "globalProperty": {
+          "apiDocs": false,
+          "modelDocs": false,
+          "models": "RobjExportKlasse:RobjExportLehrerMigration:RobjExportLehrer:RobjExportSchuelerMigration:RobjExportSchueler:RobjExportSchule:VersionResponse",
+          "apis": "",
+          "supportingFiles": ""
+        },
         "additionalProperties": {
           "apiPackage": "api",
           "enumNameSuffix": "",
@@ -86,10 +126,18 @@
       },
       "notification-api": {
         "generatorName": "typescript-axios",
+        "templateDir": "./config/openapi-generator/typescript-axios",
         "inputSpec": "http://localhost:3033/docs-json/",
         "output": "./src/generated/notificationApi/v1",
         "skipValidateSpec": true,
         "enablePostProcessFile": true,
+        "globalProperty": {
+          "apiDocs": false,
+          "modelDocs": false,
+          "models": "RobjExportKlasse:RobjExportLehrerMigration:RobjExportLehrer:RobjExportSchuelerMigration:RobjExportSchueler:RobjExportSchule:VersionResponse",
+          "apis": "",
+          "supportingFiles": ""
+        },
         "additionalProperties": {
           "apiPackage": "api",
           "enumNameSuffix": "",

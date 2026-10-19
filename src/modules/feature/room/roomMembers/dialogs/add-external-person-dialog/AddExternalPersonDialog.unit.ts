@@ -13,8 +13,9 @@ import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { VTextField } from "vuetify/components";
 
+vi.mock("@vueuse/integrations/useFocusTrap");
+
 describe("AddExternalPersonDialog", () => {
-	vi.mock("@vueuse/integrations/useFocusTrap");
 	let wrapper: VueWrapper<InstanceType<typeof AddExternalPersonDialog>>;
 
 	beforeEach(() => {

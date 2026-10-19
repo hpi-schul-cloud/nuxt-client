@@ -16,9 +16,8 @@
 
 /**
  * The type of the parent
- * @export
- * @enum {string}
  */
+
 export enum BoardParentType {
     COURSE = 'course',
     ROOM = 'room',

@@ -13,38 +13,22 @@
  */
 
 
-import { AuthorizationContextParams } from './authorization-context-params';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { AuthorizationContextParams } from './authorization-context-params';
 
-/**
- * 
- * @export
- * @interface AuthorizationBodyParams
- */
 export interface AuthorizationBodyParams {
-    /**
-     * 
-     * @type {AuthorizationContextParams}
-     * @memberof AuthorizationBodyParams
-     */
-    context: AuthorizationContextParams;
+    'context': AuthorizationContextParams;
     /**
      * The entity or domain object the operation should be performed on.
-     * @type {string}
-     * @memberof AuthorizationBodyParams
      */
-    referenceType: AuthorizationBodyParamsReferenceType;
+    'referenceType': AuthorizationBodyParamsReferenceType;
     /**
      * The id of the entity/domain object of the defined referenceType.
-     * @type {string}
-     * @memberof AuthorizationBodyParams
      */
-    referenceId: string;
+    'referenceId': string;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum AuthorizationBodyParamsReferenceType {
     USERS = 'users',
     SCHOOLS = 'schools',
@@ -60,6 +44,5 @@ export enum AuthorizationBodyParamsReferenceType {
     EXTERNAL_TOOLS = 'external-tools',
     INSTANCES = 'instances'
 }
-
 
 

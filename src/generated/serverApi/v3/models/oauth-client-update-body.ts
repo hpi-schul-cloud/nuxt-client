@@ -14,66 +14,42 @@
 
 
 
-/**
- * 
- * @export
- * @interface OauthClientUpdateBody
- */
 export interface OauthClientUpdateBody {
     /**
      * The Oauth2 client name.
-     * @type {string}
-     * @memberof OauthClientUpdateBody
      */
-    client_name: string;
+    'client_name': string;
     /**
      * The Oauth2 client secret.
-     * @type {string}
-     * @memberof OauthClientUpdateBody
      */
-    client_secret?: string;
+    'client_secret'?: string;
     /**
      * The allowed redirect urls of the Oauth2 client.
-     * @type {Array<string>}
-     * @memberof OauthClientUpdateBody
      */
-    redirect_uris?: Array<string>;
+    'redirect_uris'?: Array<string>;
     /**
      * Requested Client Authentication method for the Token Endpoint. The options are client_secret_post, client_secret_basic, private_key_jwt, and none.
-     * @type {string}
-     * @memberof OauthClientUpdateBody
      */
-    token_endpoint_auth_method: string;
+    'token_endpoint_auth_method': string;
     /**
      * SubjectType requested for responses to this Client. The subject_types_supported Discovery parameter contains a list of the supported subject_type values for this server. Valid types include pairwise and public.
-     * @type {string}
-     * @memberof OauthClientUpdateBody
      */
-    subject_type: string;
+    'subject_type': string;
     /**
      * Scope is a string containing a space-separated list of scope values (as described in Section 3.3 of OAuth 2.0 [RFC6749]) that the client can use when requesting access tokens.
-     * @type {string}
-     * @memberof OauthClientUpdateBody
      */
-    scope?: string;
+    'scope'?: string;
     /**
      * Thr frontchannel logout uri.
-     * @type {string}
-     * @memberof OauthClientUpdateBody
      */
-    frontchannel_logout_uri?: string;
+    'frontchannel_logout_uri'?: string;
     /**
      * The grant types of the Oauth2 client.
-     * @type {Array<string>}
-     * @memberof OauthClientUpdateBody
      */
-    grant_types?: Array<string>;
+    'grant_types'?: Array<string>;
     /**
      * The response types of the Oauth2 client.
-     * @type {Array<string>}
-     * @memberof OauthClientUpdateBody
      */
-    response_types?: Array<string>;
+    'response_types'?: Array<string>;
 }
-
 

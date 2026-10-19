@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface RoomRoleResponse
- */
 export interface RoomRoleResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomRoleResponse
-     */
-    roomRoleName: string;
+    'roomRoleName': string;
 }
-
 

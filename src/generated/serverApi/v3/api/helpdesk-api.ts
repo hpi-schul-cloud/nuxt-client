@@ -13,22 +13,22 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { HelpdeskProblemCreateParams } from '../models';
+import type { HelpdeskProblemCreateParams } from '../models';
 // @ts-ignore
-import { HelpdeskWishCreateParams } from '../models';
+import type { HelpdeskWishCreateParams } from '../models';
 /**
  * HelpdeskApi - axios parameter creator
- * @export
  */
 export const HelpdeskApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -40,7 +40,7 @@ export const HelpdeskApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        helpdeskControllerCreateProblem: async (userAgent: string, helpdeskProblemCreateParams: HelpdeskProblemCreateParams, options: any = {}): Promise<RequestArgs> => {
+        helpdeskControllerCreateProblem: async (userAgent: string, helpdeskProblemCreateParams: HelpdeskProblemCreateParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userAgent' is not null or undefined
             assertParamExists('helpdeskControllerCreateProblem', 'userAgent', userAgent)
             // verify required parameter 'helpdeskProblemCreateParams' is not null or undefined
@@ -61,15 +61,13 @@ export const HelpdeskApiAxiosParamCreator = function (configuration?: Configurat
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (userAgent !== undefined && userAgent !== null) {
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (userAgent != null) {
                 localVarHeaderParameter['user-agent'] = String(userAgent);
             }
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(helpdeskProblemCreateParams, localVarRequestOptions, configuration)
@@ -87,7 +85,7 @@ export const HelpdeskApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        helpdeskControllerCreateWish: async (userAgent: string, helpdeskWishCreateParams: HelpdeskWishCreateParams, options: any = {}): Promise<RequestArgs> => {
+        helpdeskControllerCreateWish: async (userAgent: string, helpdeskWishCreateParams: HelpdeskWishCreateParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userAgent' is not null or undefined
             assertParamExists('helpdeskControllerCreateWish', 'userAgent', userAgent)
             // verify required parameter 'helpdeskWishCreateParams' is not null or undefined
@@ -108,15 +106,13 @@ export const HelpdeskApiAxiosParamCreator = function (configuration?: Configurat
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (userAgent !== undefined && userAgent !== null) {
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (userAgent != null) {
                 localVarHeaderParameter['user-agent'] = String(userAgent);
             }
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(helpdeskWishCreateParams, localVarRequestOptions, configuration)
@@ -131,7 +127,6 @@ export const HelpdeskApiAxiosParamCreator = function (configuration?: Configurat
 
 /**
  * HelpdeskApi - functional programming interface
- * @export
  */
 export const HelpdeskApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = HelpdeskApiAxiosParamCreator(configuration)
@@ -144,9 +139,11 @@ export const HelpdeskApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async helpdeskControllerCreateProblem(userAgent: string, helpdeskProblemCreateParams: HelpdeskProblemCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async helpdeskControllerCreateProblem(userAgent: string, helpdeskProblemCreateParams: HelpdeskProblemCreateParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.helpdeskControllerCreateProblem(userAgent, helpdeskProblemCreateParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['HelpdeskApi.helpdeskControllerCreateProblem']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -156,16 +153,17 @@ export const HelpdeskApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async helpdeskControllerCreateWish(userAgent: string, helpdeskWishCreateParams: HelpdeskWishCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async helpdeskControllerCreateWish(userAgent: string, helpdeskWishCreateParams: HelpdeskWishCreateParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.helpdeskControllerCreateWish(userAgent, helpdeskWishCreateParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['HelpdeskApi.helpdeskControllerCreateWish']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * HelpdeskApi - factory interface
- * @export
  */
 export const HelpdeskApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = HelpdeskApiFp(configuration)
@@ -178,7 +176,7 @@ export const HelpdeskApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        helpdeskControllerCreateProblem(userAgent: string, helpdeskProblemCreateParams: HelpdeskProblemCreateParams, options?: any): AxiosPromise<void> {
+        helpdeskControllerCreateProblem(userAgent: string, helpdeskProblemCreateParams: HelpdeskProblemCreateParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.helpdeskControllerCreateProblem(userAgent, helpdeskProblemCreateParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -189,7 +187,7 @@ export const HelpdeskApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        helpdeskControllerCreateWish(userAgent: string, helpdeskWishCreateParams: HelpdeskWishCreateParams, options?: any): AxiosPromise<void> {
+        helpdeskControllerCreateWish(userAgent: string, helpdeskWishCreateParams: HelpdeskWishCreateParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.helpdeskControllerCreateWish(userAgent, helpdeskWishCreateParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -197,8 +195,6 @@ export const HelpdeskApiFactory = function (configuration?: Configuration, baseP
 
 /**
  * HelpdeskApi - interface
- * @export
- * @interface HelpdeskApi
  */
 export interface HelpdeskApiInterface {
     /**
@@ -208,9 +204,8 @@ export interface HelpdeskApiInterface {
      * @param {HelpdeskProblemCreateParams} helpdeskProblemCreateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof HelpdeskApiInterface
      */
-    helpdeskControllerCreateProblem(userAgent: string, helpdeskProblemCreateParams: HelpdeskProblemCreateParams, options?: any): AxiosPromise<void>;
+    helpdeskControllerCreateProblem(userAgent: string, helpdeskProblemCreateParams: HelpdeskProblemCreateParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -219,17 +214,13 @@ export interface HelpdeskApiInterface {
      * @param {HelpdeskWishCreateParams} helpdeskWishCreateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof HelpdeskApiInterface
      */
-    helpdeskControllerCreateWish(userAgent: string, helpdeskWishCreateParams: HelpdeskWishCreateParams, options?: any): AxiosPromise<void>;
+    helpdeskControllerCreateWish(userAgent: string, helpdeskWishCreateParams: HelpdeskWishCreateParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
  * HelpdeskApi - object-oriented interface
- * @export
- * @class HelpdeskApi
- * @extends {BaseAPI}
  */
 export class HelpdeskApi extends BaseAPI implements HelpdeskApiInterface {
     /**
@@ -239,9 +230,8 @@ export class HelpdeskApi extends BaseAPI implements HelpdeskApiInterface {
      * @param {HelpdeskProblemCreateParams} helpdeskProblemCreateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof HelpdeskApi
      */
-    public helpdeskControllerCreateProblem(userAgent: string, helpdeskProblemCreateParams: HelpdeskProblemCreateParams, options?: any) {
+    public helpdeskControllerCreateProblem(userAgent: string, helpdeskProblemCreateParams: HelpdeskProblemCreateParams, options?: RawAxiosRequestConfig) {
         return HelpdeskApiFp(this.configuration).helpdeskControllerCreateProblem(userAgent, helpdeskProblemCreateParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -252,9 +242,9 @@ export class HelpdeskApi extends BaseAPI implements HelpdeskApiInterface {
      * @param {HelpdeskWishCreateParams} helpdeskWishCreateParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof HelpdeskApi
      */
-    public helpdeskControllerCreateWish(userAgent: string, helpdeskWishCreateParams: HelpdeskWishCreateParams, options?: any) {
+    public helpdeskControllerCreateWish(userAgent: string, helpdeskWishCreateParams: HelpdeskWishCreateParams, options?: RawAxiosRequestConfig) {
         return HelpdeskApiFp(this.configuration).helpdeskControllerCreateWish(userAgent, helpdeskWishCreateParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

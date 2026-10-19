@@ -13,33 +13,27 @@
  */
 
 
-import { Colors } from './colors';
-import { MediaAvailableLineElementResponse } from './media-available-line-element-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { Colors } from './colors';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MediaAvailableLineElementResponse } from './media-available-line-element-response';
 
-/**
- * 
- * @export
- * @interface MediaAvailableLineResponse
- */
 export interface MediaAvailableLineResponse {
     /**
      * Available media elements in the line
-     * @type {Array<MediaAvailableLineElementResponse>}
-     * @memberof MediaAvailableLineResponse
      */
-    elements: Array<MediaAvailableLineElementResponse>;
+    'elements': Array<MediaAvailableLineElementResponse>;
     /**
      * Background color of available media line
-     * @type {Colors}
-     * @memberof MediaAvailableLineResponse
      */
-    backgroundColor: Colors;
+    'backgroundColor': Colors;
     /**
      * Collapse available media line
-     * @type {boolean}
-     * @memberof MediaAvailableLineResponse
      */
-    collapsed: boolean;
+    'collapsed': boolean;
 }
+
 
 

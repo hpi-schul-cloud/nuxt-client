@@ -13,39 +13,17 @@
  */
 
 
-import { CardResponse } from './card-response';
-import { TimestampsResponse } from './timestamps-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CardResponse } from './card-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { TimestampsResponse } from './timestamps-response';
 
-/**
- * 
- * @export
- * @interface ColumnFullResponse
- */
 export interface ColumnFullResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ColumnFullResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColumnFullResponse
-     */
-    title: string;
-    /**
-     * 
-     * @type {Array<CardResponse>}
-     * @memberof ColumnFullResponse
-     */
-    cards: Array<CardResponse>;
-    /**
-     * 
-     * @type {TimestampsResponse}
-     * @memberof ColumnFullResponse
-     */
-    timestamps: TimestampsResponse;
+    'id': string;
+    'title': string;
+    'cards': Array<CardResponse>;
+    'timestamps': TimestampsResponse;
 }
-
 

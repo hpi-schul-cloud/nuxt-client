@@ -13,20 +13,11 @@
  */
 
 
-import { PublicSystemResponse } from './public-system-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { PublicSystemResponse } from './public-system-response';
 
-/**
- * 
- * @export
- * @interface PublicSystemListResponse
- */
 export interface PublicSystemListResponse {
-    /**
-     * 
-     * @type {Array<PublicSystemResponse>}
-     * @memberof PublicSystemListResponse
-     */
-    data: Array<PublicSystemResponse>;
+    'data': Array<PublicSystemResponse>;
 }
-
 

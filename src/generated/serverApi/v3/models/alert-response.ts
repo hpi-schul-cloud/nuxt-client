@@ -13,20 +13,11 @@
  */
 
 
-import { Message } from './message';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { Message } from './message';
 
-/**
- * 
- * @export
- * @interface AlertResponse
- */
 export interface AlertResponse {
-    /**
-     * 
-     * @type {Array<Message>}
-     * @memberof AlertResponse
-     */
-    data: Array<Message>;
+    'data': Array<Message>;
 }
-
 

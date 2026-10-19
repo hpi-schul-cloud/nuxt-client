@@ -13,20 +13,11 @@
  */
 
 
-import { RuntimeConfigListItemResponse } from './runtime-config-list-item-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RuntimeConfigListItemResponse } from './runtime-config-list-item-response';
 
-/**
- * 
- * @export
- * @interface RuntimeConfigListResponse
- */
 export interface RuntimeConfigListResponse {
-    /**
-     * 
-     * @type {Array<RuntimeConfigListItemResponse>}
-     * @memberof RuntimeConfigListResponse
-     */
-    data: Array<RuntimeConfigListItemResponse>;
+    'data': Array<RuntimeConfigListItemResponse>;
 }
-
 

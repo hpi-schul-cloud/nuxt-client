@@ -13,40 +13,22 @@
  */
 
 
-import { ContentElementType } from './content-element-type';
-import { FileElementContent } from './file-element-content';
-import { TimestampsResponse } from './timestamps-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContentElementType } from './content-element-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { FileElementContent } from './file-element-content';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { TimestampsResponse } from './timestamps-response';
 
-/**
- * 
- * @export
- * @interface FileElementResponse
- */
 export interface FileElementResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof FileElementResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {ContentElementType}
-     * @memberof FileElementResponse
-     */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {FileElementContent}
-     * @memberof FileElementResponse
-     */
-    content: FileElementContent;
-    /**
-     * 
-     * @type {TimestampsResponse}
-     * @memberof FileElementResponse
-     */
-    timestamps: TimestampsResponse;
+    'id': string;
+    'type': ContentElementType;
+    'content': FileElementContent;
+    'timestamps': TimestampsResponse;
 }
+
 
 

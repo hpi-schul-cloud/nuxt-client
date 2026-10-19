@@ -1,19 +1,23 @@
 import UserLoginMigrationError from "./UserLoginMigrationError.page.vue";
+import { DebouncedLoadingState } from "@/types/loading.types";
 import { createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { userLoginMigrationFactory } from "@@/tests/test-utils/factory/userLoginMigration.factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useSystem } from "@data-access";
 import { useUserLoginMigration } from "@data-user-login-migration";
 import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import type { Mocked } from "vitest";
-import { nextTick, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 
+vi.mock("@data-access");
 vi.mock("@data-user-login-migration");
 const useUserLoginMigrationMock = vi.mocked(useUserLoginMigration);
 
 describe("UserLoginMigrationError", () => {
 	let useUserLoginMigrationMockReturn: Mocked<ReturnType<typeof useUserLoginMigration>>;
+	let useSystemMock: Mocked<ReturnType<typeof useSystem>>;
 
 	const setup = (props: { sourceSchoolNumber?: string; targetSchoolNumber?: string; multipleUsersFound?: boolean }) => {
 		setActivePinia(createTestingPinia());
@@ -24,6 +28,12 @@ describe("UserLoginMigrationError", () => {
 		useUserLoginMigrationMockReturn = mockComposable(useUserLoginMigration);
 		useUserLoginMigrationMock.mockReturnValue(useUserLoginMigrationMockReturn);
 		useUserLoginMigrationMockReturn.userLoginMigration = ref(userLoginMigrationFactory.build());
+
+		useSystemMock = mockComposable(useSystem, {
+			systemName: computed(() => "Target System"),
+			loadingState: ref<DebouncedLoadingState>("loaded"),
+		});
+		vi.mocked(useSystem).mockReturnValue(useSystemMock);
 
 		const wrapper = shallowMount(UserLoginMigrationError, {
 			global: {

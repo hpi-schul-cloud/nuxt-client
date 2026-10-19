@@ -14,36 +14,22 @@
 
 
 
-/**
- * 
- * @export
- * @interface LernstoreResources
- */
 export interface LernstoreResources {
     /**
      * client
-     * @type {string}
-     * @memberof LernstoreResources
      */
-    client: string;
+    'client': string;
     /**
      * description
-     * @type {string}
-     * @memberof LernstoreResources
      */
-    description: string;
+    'description': string;
     /**
      * title
-     * @type {string}
-     * @memberof LernstoreResources
      */
-    title: string;
+    'title': string;
     /**
      * url
-     * @type {string}
-     * @memberof LernstoreResources
      */
-    url?: string;
+    'url'?: string;
 }
-
 

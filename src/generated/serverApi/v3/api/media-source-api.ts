@@ -13,18 +13,18 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { MediaSourceListResponse } from '../models';
+import type { MediaSourceListResponse } from '../models';
 /**
  * MediaSourceApi - axios parameter creator
- * @export
  */
 export const MediaSourceApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -34,7 +34,7 @@ export const MediaSourceApiAxiosParamCreator = function (configuration?: Configu
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaSourceControllerGetMediaSourceList: async (options: any = {}): Promise<RequestArgs> => {
+        mediaSourceControllerGetMediaSourceList: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/media-sources`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -51,9 +51,9 @@ export const MediaSourceApiAxiosParamCreator = function (configuration?: Configu
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -67,7 +67,6 @@ export const MediaSourceApiAxiosParamCreator = function (configuration?: Configu
 
 /**
  * MediaSourceApi - functional programming interface
- * @export
  */
 export const MediaSourceApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MediaSourceApiAxiosParamCreator(configuration)
@@ -78,16 +77,17 @@ export const MediaSourceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaSourceControllerGetMediaSourceList(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaSourceListResponse>> {
+        async mediaSourceControllerGetMediaSourceList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaSourceListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaSourceControllerGetMediaSourceList(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaSourceApi.mediaSourceControllerGetMediaSourceList']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * MediaSourceApi - factory interface
- * @export
  */
 export const MediaSourceApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = MediaSourceApiFp(configuration)
@@ -98,7 +98,7 @@ export const MediaSourceApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaSourceControllerGetMediaSourceList(options?: any): AxiosPromise<MediaSourceListResponse> {
+        mediaSourceControllerGetMediaSourceList(options?: RawAxiosRequestConfig): AxiosPromise<MediaSourceListResponse> {
             return localVarFp.mediaSourceControllerGetMediaSourceList(options).then((request) => request(axios, basePath));
         },
     };
@@ -106,8 +106,6 @@ export const MediaSourceApiFactory = function (configuration?: Configuration, ba
 
 /**
  * MediaSourceApi - interface
- * @export
- * @interface MediaSourceApi
  */
 export interface MediaSourceApiInterface {
     /**
@@ -115,17 +113,13 @@ export interface MediaSourceApiInterface {
      * @summary Get a list of all media sources
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaSourceApiInterface
      */
-    mediaSourceControllerGetMediaSourceList(options?: any): AxiosPromise<MediaSourceListResponse>;
+    mediaSourceControllerGetMediaSourceList(options?: RawAxiosRequestConfig): AxiosPromise<MediaSourceListResponse>;
 
 }
 
 /**
  * MediaSourceApi - object-oriented interface
- * @export
- * @class MediaSourceApi
- * @extends {BaseAPI}
  */
 export class MediaSourceApi extends BaseAPI implements MediaSourceApiInterface {
     /**
@@ -133,9 +127,9 @@ export class MediaSourceApi extends BaseAPI implements MediaSourceApiInterface {
      * @summary Get a list of all media sources
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaSourceApi
      */
-    public mediaSourceControllerGetMediaSourceList(options?: any) {
+    public mediaSourceControllerGetMediaSourceList(options?: RawAxiosRequestConfig) {
         return MediaSourceApiFp(this.configuration).mediaSourceControllerGetMediaSourceList(options).then((request) => request(this.axios, this.basePath));
     }
 }
+

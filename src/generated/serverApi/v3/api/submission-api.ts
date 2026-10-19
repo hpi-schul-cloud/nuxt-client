@@ -13,18 +13,18 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { SubmissionStatusListResponse } from '../models';
+import type { SubmissionStatusListResponse } from '../models';
 /**
  * SubmissionApi - axios parameter creator
- * @export
  */
 export const SubmissionApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -34,11 +34,11 @@ export const SubmissionApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        submissionControllerDelete: async (submissionId: string, options: any = {}): Promise<RequestArgs> => {
+        submissionControllerDelete: async (submissionId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'submissionId' is not null or undefined
             assertParamExists('submissionControllerDelete', 'submissionId', submissionId)
             const localVarPath = `/submissions/{submissionId}`
-                .replace(`{${"submissionId"}}`, encodeURIComponent(String(submissionId)));
+                .replace('{submissionId}', encodeURIComponent(String(submissionId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -54,9 +54,9 @@ export const SubmissionApiAxiosParamCreator = function (configuration?: Configur
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -71,11 +71,11 @@ export const SubmissionApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        submissionControllerFindStatusesByTask: async (taskId: string, options: any = {}): Promise<RequestArgs> => {
+        submissionControllerFindStatusesByTask: async (taskId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'taskId' is not null or undefined
             assertParamExists('submissionControllerFindStatusesByTask', 'taskId', taskId)
             const localVarPath = `/submissions/status/task/{taskId}`
-                .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
+                .replace('{taskId}', encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -91,9 +91,9 @@ export const SubmissionApiAxiosParamCreator = function (configuration?: Configur
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -107,7 +107,6 @@ export const SubmissionApiAxiosParamCreator = function (configuration?: Configur
 
 /**
  * SubmissionApi - functional programming interface
- * @export
  */
 export const SubmissionApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = SubmissionApiAxiosParamCreator(configuration)
@@ -118,9 +117,11 @@ export const SubmissionApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async submissionControllerDelete(submissionId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+        async submissionControllerDelete(submissionId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.submissionControllerDelete(submissionId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SubmissionApi.submissionControllerDelete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -128,16 +129,17 @@ export const SubmissionApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async submissionControllerFindStatusesByTask(taskId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmissionStatusListResponse>> {
+        async submissionControllerFindStatusesByTask(taskId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmissionStatusListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.submissionControllerFindStatusesByTask(taskId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SubmissionApi.submissionControllerFindStatusesByTask']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * SubmissionApi - factory interface
- * @export
  */
 export const SubmissionApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = SubmissionApiFp(configuration)
@@ -148,7 +150,7 @@ export const SubmissionApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        submissionControllerDelete(submissionId: string, options?: any): AxiosPromise<boolean> {
+        submissionControllerDelete(submissionId: string, options?: RawAxiosRequestConfig): AxiosPromise<boolean> {
             return localVarFp.submissionControllerDelete(submissionId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -157,7 +159,7 @@ export const SubmissionApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        submissionControllerFindStatusesByTask(taskId: string, options?: any): AxiosPromise<SubmissionStatusListResponse> {
+        submissionControllerFindStatusesByTask(taskId: string, options?: RawAxiosRequestConfig): AxiosPromise<SubmissionStatusListResponse> {
             return localVarFp.submissionControllerFindStatusesByTask(taskId, options).then((request) => request(axios, basePath));
         },
     };
@@ -165,8 +167,6 @@ export const SubmissionApiFactory = function (configuration?: Configuration, bas
 
 /**
  * SubmissionApi - interface
- * @export
- * @interface SubmissionApi
  */
 export interface SubmissionApiInterface {
     /**
@@ -174,26 +174,21 @@ export interface SubmissionApiInterface {
      * @param {string} submissionId The id of the submission.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SubmissionApiInterface
      */
-    submissionControllerDelete(submissionId: string, options?: any): AxiosPromise<boolean>;
+    submissionControllerDelete(submissionId: string, options?: RawAxiosRequestConfig): AxiosPromise<boolean>;
 
     /**
      * 
      * @param {string} taskId The id of the task.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SubmissionApiInterface
      */
-    submissionControllerFindStatusesByTask(taskId: string, options?: any): AxiosPromise<SubmissionStatusListResponse>;
+    submissionControllerFindStatusesByTask(taskId: string, options?: RawAxiosRequestConfig): AxiosPromise<SubmissionStatusListResponse>;
 
 }
 
 /**
  * SubmissionApi - object-oriented interface
- * @export
- * @class SubmissionApi
- * @extends {BaseAPI}
  */
 export class SubmissionApi extends BaseAPI implements SubmissionApiInterface {
     /**
@@ -201,9 +196,8 @@ export class SubmissionApi extends BaseAPI implements SubmissionApiInterface {
      * @param {string} submissionId The id of the submission.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SubmissionApi
      */
-    public submissionControllerDelete(submissionId: string, options?: any) {
+    public submissionControllerDelete(submissionId: string, options?: RawAxiosRequestConfig) {
         return SubmissionApiFp(this.configuration).submissionControllerDelete(submissionId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -212,9 +206,9 @@ export class SubmissionApi extends BaseAPI implements SubmissionApiInterface {
      * @param {string} taskId The id of the task.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SubmissionApi
      */
-    public submissionControllerFindStatusesByTask(taskId: string, options?: any) {
+    public submissionControllerFindStatusesByTask(taskId: string, options?: RawAxiosRequestConfig) {
         return SubmissionApiFp(this.configuration).submissionControllerFindStatusesByTask(taskId, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

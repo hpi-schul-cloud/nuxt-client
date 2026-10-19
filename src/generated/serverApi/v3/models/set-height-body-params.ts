@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface SetHeightBodyParams
- */
 export interface SetHeightBodyParams {
-    /**
-     * 
-     * @type {number}
-     * @memberof SetHeightBodyParams
-     */
-    height: number;
+    'height': number;
 }
-
 

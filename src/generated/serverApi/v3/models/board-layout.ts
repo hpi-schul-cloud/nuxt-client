@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum BoardLayout {
     COLUMNS = 'columns',
     LIST = 'list',

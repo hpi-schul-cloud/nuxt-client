@@ -14,30 +14,18 @@
 
 
 
-/**
- * 
- * @export
- * @interface UserInfoResponse
- */
 export interface UserInfoResponse {
     /**
      * The id of the User entity
-     * @type {string}
-     * @memberof UserInfoResponse
      */
-    id: string;
+    'id': string;
     /**
      * First name of the user
-     * @type {string}
-     * @memberof UserInfoResponse
      */
-    firstName?: string;
+    'firstName'?: string;
     /**
      * Last name of the user
-     * @type {string}
-     * @memberof UserInfoResponse
      */
-    lastName?: string;
+    'lastName'?: string;
 }
-
 
