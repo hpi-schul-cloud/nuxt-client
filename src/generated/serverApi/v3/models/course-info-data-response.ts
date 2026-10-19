@@ -14,42 +14,11 @@
 
 
 
-/**
- * 
- * @export
- * @interface CourseInfoDataResponse
- */
 export interface CourseInfoDataResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseInfoDataResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseInfoDataResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof CourseInfoDataResponse
-     */
-    teacherNames: Array<string>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof CourseInfoDataResponse
-     */
-    classNames: Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseInfoDataResponse
-     */
-    syncedGroup?: string;
+    'id': string;
+    'name': string;
+    'teacherNames': Array<string>;
+    'classNames': Array<string>;
+    'syncedGroup'?: string;
 }
-
 

@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface VisibilityBodyParams
- */
 export interface VisibilityBodyParams {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof VisibilityBodyParams
-     */
-    isVisible: boolean;
+    'isVisible': boolean;
 }
-
 

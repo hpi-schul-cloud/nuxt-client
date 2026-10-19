@@ -13,50 +13,34 @@
  */
 
 
-import { BoardElementResponse } from './board-element-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { BoardElementResponse } from './board-element-response';
 
-/**
- * 
- * @export
- * @interface SingleColumnBoardResponse
- */
 export interface SingleColumnBoardResponse {
     /**
      * The id of the room this board belongs to
-     * @type {string}
-     * @memberof SingleColumnBoardResponse
      */
-    roomId: string;
+    'roomId': string;
     /**
      * Title of the Board
-     * @type {string}
-     * @memberof SingleColumnBoardResponse
      */
-    title: string;
+    'title': string;
     /**
      * Color of the Board
-     * @type {string}
-     * @memberof SingleColumnBoardResponse
      */
-    displayColor: string;
+    'displayColor': string;
     /**
      * Array of board specific tasks or lessons with matching type property
-     * @type {Array<BoardElementResponse>}
-     * @memberof SingleColumnBoardResponse
      */
-    elements: Array<BoardElementResponse>;
+    'elements': Array<BoardElementResponse>;
     /**
      * Boolean if the room this board belongs to is archived
-     * @type {boolean}
-     * @memberof SingleColumnBoardResponse
      */
-    isArchived: boolean;
+    'isArchived': boolean;
     /**
      * Is the course synchronized with a group?
-     * @type {boolean}
-     * @memberof SingleColumnBoardResponse
      */
-    isSynchronized: boolean;
+    'isSynchronized': boolean;
 }
-
 

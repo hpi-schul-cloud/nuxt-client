@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface MeSchoolLogoResponse
- */
 export interface MeSchoolLogoResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof MeSchoolLogoResponse
-     */
-    url?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MeSchoolLogoResponse
-     */
-    name?: string;
+    'url'?: string;
+    'name'?: string;
 }
-
 

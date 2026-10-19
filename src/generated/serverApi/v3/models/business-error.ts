@@ -14,42 +14,26 @@
 
 
 
-/**
- * 
- * @export
- * @interface BusinessError
- */
 export interface BusinessError {
     /**
      * The response status code.
-     * @type {number}
-     * @memberof BusinessError
      */
-    code: number;
+    'code': number;
     /**
      * The error type.
-     * @type {string}
-     * @memberof BusinessError
      */
-    type: string;
+    'type': string;
     /**
      * The error title.
-     * @type {string}
-     * @memberof BusinessError
      */
-    title: string;
+    'title': string;
     /**
      * The error message.
-     * @type {string}
-     * @memberof BusinessError
      */
-    message: string;
+    'message': string;
     /**
      * The error details.
-     * @type {object}
-     * @memberof BusinessError
      */
-    details?: object;
+    'details'?: object;
 }
-
 

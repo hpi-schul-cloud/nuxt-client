@@ -14,30 +14,18 @@
 
 
 
-/**
- * 
- * @export
- * @interface UpdateNewsParams
- */
 export interface UpdateNewsParams {
     /**
      * Title of the News entity
-     * @type {string}
-     * @memberof UpdateNewsParams
      */
-    title?: string;
+    'title'?: string;
     /**
      * Content of the News entity
-     * @type {string}
-     * @memberof UpdateNewsParams
      */
-    content?: string;
+    'content'?: string;
     /**
      * The point in time from when the News entity schould be displayed
-     * @type {string}
-     * @memberof UpdateNewsParams
      */
-    displayAt?: string;
+    'displayAt'?: string;
 }
-
 

@@ -13,117 +13,85 @@
  */
 
 
-import { NewsTargetModel } from './news-target-model';
-import { SchoolInfoResponse } from './school-info-response';
-import { TargetInfoResponse } from './target-info-response';
-import { UserInfoResponse } from './user-info-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { NewsTargetModel } from './news-target-model';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchoolInfoResponse } from './school-info-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { TargetInfoResponse } from './target-info-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { UserInfoResponse } from './user-info-response';
 
-/**
- * 
- * @export
- * @interface NewsResponse
- */
 export interface NewsResponse {
     /**
      * The id of the News entity
-     * @type {string}
-     * @memberof NewsResponse
      */
-    id: string;
+    'id': string;
     /**
      * Title of the News entity
-     * @type {string}
-     * @memberof NewsResponse
      */
-    title: string;
+    'title': string;
     /**
      * Content of the News entity
-     * @type {string}
-     * @memberof NewsResponse
      */
-    content: string;
+    'content': string;
     /**
      * The point in time from when the News entity schould be displayed
-     * @type {string}
-     * @memberof NewsResponse
      */
-    displayAt: string;
+    'displayAt': string;
     /**
      * The type of source of the News entity
-     * @type {string}
-     * @memberof NewsResponse
      */
-    source?: NewsResponseSource;
+    'source'?: NewsResponseSource;
     /**
      * The source description of the News entity
-     * @type {string}
-     * @memberof NewsResponse
      */
-    sourceDescription?: string;
+    'sourceDescription'?: string;
     /**
      * Target model to which the News entity is related
-     * @type {NewsTargetModel}
-     * @memberof NewsResponse
      */
-    targetModel: NewsTargetModel;
+    'targetModel': NewsTargetModel;
     /**
      * Specific target id to which the News entity is related
-     * @type {string}
-     * @memberof NewsResponse
      */
-    targetId: string;
+    'targetId': string;
     /**
      * The target object with id and name, could be the school, team, or course name
-     * @type {TargetInfoResponse}
-     * @memberof NewsResponse
      */
-    target: TargetInfoResponse;
+    'target': TargetInfoResponse;
     /**
      * The School ownership
-     * @type {SchoolInfoResponse}
-     * @memberof NewsResponse
      */
-    school: SchoolInfoResponse;
+    'school': SchoolInfoResponse;
     /**
      * Reference to the User that created the News entity
-     * @type {UserInfoResponse}
-     * @memberof NewsResponse
      */
-    creator?: UserInfoResponse;
+    'creator'?: UserInfoResponse;
     /**
      * Reference to the User that updated the News entity
-     * @type {UserInfoResponse}
-     * @memberof NewsResponse
      */
-    updater?: UserInfoResponse;
+    'updater'?: UserInfoResponse;
     /**
      * The creation timestamp
-     * @type {string}
-     * @memberof NewsResponse
      */
-    createdAt: string;
+    'createdAt': string;
     /**
      * The update timestamp
-     * @type {string}
-     * @memberof NewsResponse
      */
-    updatedAt: string;
+    'updatedAt': string;
     /**
      * List of permissions the current user has for the News entity
-     * @type {Array<string>}
-     * @memberof NewsResponse
      */
-    permissions: Array<string>;
+    'permissions': Array<string>;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum NewsResponseSource {
     INTERNAL = 'internal',
     RSS = 'rss'
 }
-
 
 

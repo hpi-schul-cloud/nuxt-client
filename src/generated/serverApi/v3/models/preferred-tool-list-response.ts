@@ -13,20 +13,11 @@
  */
 
 
-import { PreferredToolResponse } from './preferred-tool-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { PreferredToolResponse } from './preferred-tool-response';
 
-/**
- * 
- * @export
- * @interface PreferredToolListResponse
- */
 export interface PreferredToolListResponse {
-    /**
-     * 
-     * @type {Array<PreferredToolResponse>}
-     * @memberof PreferredToolListResponse
-     */
-    data: Array<PreferredToolResponse>;
+    'data': Array<PreferredToolResponse>;
 }
-
 

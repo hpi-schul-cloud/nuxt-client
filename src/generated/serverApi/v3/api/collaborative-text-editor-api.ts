@@ -13,22 +13,22 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { CollaborativeTextEditorParentType } from '../models';
+import type { CollaborativeTextEditorParentType } from '../models';
 // @ts-ignore
-import { CollaborativeTextEditorResponse } from '../models';
+import type { CollaborativeTextEditorResponse } from '../models';
 /**
  * CollaborativeTextEditorApi - axios parameter creator
- * @export
  */
 export const CollaborativeTextEditorApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -38,7 +38,7 @@ export const CollaborativeTextEditorApiAxiosParamCreator = function (configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        collaborativeTextEditorControllerDeleteSessionsByUser: async (options: any = {}): Promise<RequestArgs> => {
+        collaborativeTextEditorControllerDeleteSessionsByUser: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/collaborative-text-editor/delete-sessions`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -55,9 +55,9 @@ export const CollaborativeTextEditorApiAxiosParamCreator = function (configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -74,14 +74,14 @@ export const CollaborativeTextEditorApiAxiosParamCreator = function (configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent: async (parentId: string, parentType: CollaborativeTextEditorParentType, options: any = {}): Promise<RequestArgs> => {
+        collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent: async (parentId: string, parentType: CollaborativeTextEditorParentType, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'parentId' is not null or undefined
             assertParamExists('collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent', 'parentId', parentId)
             // verify required parameter 'parentType' is not null or undefined
             assertParamExists('collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent', 'parentType', parentType)
             const localVarPath = `/collaborative-text-editor/{parentType}/{parentId}`
-                .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)))
-                .replace(`{${"parentType"}}`, encodeURIComponent(String(parentType)));
+                .replace('{parentId}', encodeURIComponent(String(parentId)))
+                .replace('{parentType}', encodeURIComponent(String(parentType)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -97,9 +97,9 @@ export const CollaborativeTextEditorApiAxiosParamCreator = function (configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -113,7 +113,6 @@ export const CollaborativeTextEditorApiAxiosParamCreator = function (configurati
 
 /**
  * CollaborativeTextEditorApi - functional programming interface
- * @export
  */
 export const CollaborativeTextEditorApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = CollaborativeTextEditorApiAxiosParamCreator(configuration)
@@ -124,9 +123,11 @@ export const CollaborativeTextEditorApiFp = function(configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async collaborativeTextEditorControllerDeleteSessionsByUser(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async collaborativeTextEditorControllerDeleteSessionsByUser(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.collaborativeTextEditorControllerDeleteSessionsByUser(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CollaborativeTextEditorApi.collaborativeTextEditorControllerDeleteSessionsByUser']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -136,16 +137,17 @@ export const CollaborativeTextEditorApiFp = function(configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollaborativeTextEditorResponse>> {
+        async collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollaborativeTextEditorResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId, parentType, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CollaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * CollaborativeTextEditorApi - factory interface
- * @export
  */
 export const CollaborativeTextEditorApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = CollaborativeTextEditorApiFp(configuration)
@@ -156,7 +158,7 @@ export const CollaborativeTextEditorApiFactory = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        collaborativeTextEditorControllerDeleteSessionsByUser(options?: any): AxiosPromise<void> {
+        collaborativeTextEditorControllerDeleteSessionsByUser(options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.collaborativeTextEditorControllerDeleteSessionsByUser(options).then((request) => request(axios, basePath));
         },
         /**
@@ -167,7 +169,7 @@ export const CollaborativeTextEditorApiFactory = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: any): AxiosPromise<CollaborativeTextEditorResponse> {
+        collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: RawAxiosRequestConfig): AxiosPromise<CollaborativeTextEditorResponse> {
             return localVarFp.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId, parentType, options).then((request) => request(axios, basePath));
         },
     };
@@ -175,8 +177,6 @@ export const CollaborativeTextEditorApiFactory = function (configuration?: Confi
 
 /**
  * CollaborativeTextEditorApi - interface
- * @export
- * @interface CollaborativeTextEditorApi
  */
 export interface CollaborativeTextEditorApiInterface {
     /**
@@ -184,9 +184,8 @@ export interface CollaborativeTextEditorApiInterface {
      * @summary Delete all etherpad sessions for user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CollaborativeTextEditorApiInterface
      */
-    collaborativeTextEditorControllerDeleteSessionsByUser(options?: any): AxiosPromise<void>;
+    collaborativeTextEditorControllerDeleteSessionsByUser(options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -195,17 +194,13 @@ export interface CollaborativeTextEditorApiInterface {
      * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CollaborativeTextEditorApiInterface
      */
-    collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: any): AxiosPromise<CollaborativeTextEditorResponse>;
+    collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: RawAxiosRequestConfig): AxiosPromise<CollaborativeTextEditorResponse>;
 
 }
 
 /**
  * CollaborativeTextEditorApi - object-oriented interface
- * @export
- * @class CollaborativeTextEditorApi
- * @extends {BaseAPI}
  */
 export class CollaborativeTextEditorApi extends BaseAPI implements CollaborativeTextEditorApiInterface {
     /**
@@ -213,9 +208,8 @@ export class CollaborativeTextEditorApi extends BaseAPI implements Collaborative
      * @summary Delete all etherpad sessions for user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CollaborativeTextEditorApi
      */
-    public collaborativeTextEditorControllerDeleteSessionsByUser(options?: any) {
+    public collaborativeTextEditorControllerDeleteSessionsByUser(options?: RawAxiosRequestConfig) {
         return CollaborativeTextEditorApiFp(this.configuration).collaborativeTextEditorControllerDeleteSessionsByUser(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -226,9 +220,9 @@ export class CollaborativeTextEditorApi extends BaseAPI implements Collaborative
      * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CollaborativeTextEditorApi
      */
-    public collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: any) {
+    public collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: RawAxiosRequestConfig) {
         return CollaborativeTextEditorApiFp(this.configuration).collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId, parentType, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

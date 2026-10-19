@@ -14,48 +14,12 @@
 
 
 
-/**
- * 
- * @export
- * @interface ParentConsentResponse
- */
 export interface ParentConsentResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ParentConsentResponse
-     */
-    form: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ParentConsentResponse
-     */
-    privacyConsent: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ParentConsentResponse
-     */
-    termsOfUseConsent: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof ParentConsentResponse
-     */
-    dateOfPrivacyConsent: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ParentConsentResponse
-     */
-    dateOfTermsOfUseConsent: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ParentConsentResponse
-     */
-    _id: string;
+    'form': string;
+    'privacyConsent': boolean;
+    'termsOfUseConsent': boolean;
+    'dateOfPrivacyConsent': string;
+    'dateOfTermsOfUseConsent': string;
+    '_id': string;
 }
-
 

@@ -13,40 +13,22 @@
  */
 
 
-import { ContentElementType } from './content-element-type';
-import { DeletedElementContent } from './deleted-element-content';
-import { TimestampsResponse } from './timestamps-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContentElementType } from './content-element-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { DeletedElementContent } from './deleted-element-content';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { TimestampsResponse } from './timestamps-response';
 
-/**
- * 
- * @export
- * @interface DeletedElementResponse
- */
 export interface DeletedElementResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof DeletedElementResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {ContentElementType}
-     * @memberof DeletedElementResponse
-     */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {DeletedElementContent}
-     * @memberof DeletedElementResponse
-     */
-    content: DeletedElementContent;
-    /**
-     * 
-     * @type {TimestampsResponse}
-     * @memberof DeletedElementResponse
-     */
-    timestamps: TimestampsResponse;
+    'id': string;
+    'type': ContentElementType;
+    'content': DeletedElementContent;
+    'timestamps': TimestampsResponse;
 }
+
 
 

@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum SchoolFeature {
     VIDEOCONFERENCE = 'videoconference',
     NEXTCLOUD = 'nextcloud',

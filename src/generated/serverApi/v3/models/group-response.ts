@@ -13,70 +13,31 @@
  */
 
 
-import { ExternalSourceResponse } from './external-source-response';
-import { GroupUserResponse } from './group-user-response';
-import { PeriodResponse } from './period-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ExternalSourceResponse } from './external-source-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { GroupUserResponse } from './group-user-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { PeriodResponse } from './period-response';
 
-/**
- * 
- * @export
- * @interface GroupResponse
- */
 export interface GroupResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof GroupResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GroupResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GroupResponse
-     */
-    type: GroupResponseType;
-    /**
-     * 
-     * @type {Array<GroupUserResponse>}
-     * @memberof GroupResponse
-     */
-    users: Array<GroupUserResponse>;
-    /**
-     * 
-     * @type {ExternalSourceResponse}
-     * @memberof GroupResponse
-     */
-    externalSource?: ExternalSourceResponse;
-    /**
-     * 
-     * @type {PeriodResponse}
-     * @memberof GroupResponse
-     */
-    validPeriod?: PeriodResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof GroupResponse
-     */
-    organizationId?: string;
+    'id': string;
+    'name': string;
+    'type': GroupResponseType;
+    'users': Array<GroupUserResponse>;
+    'externalSource'?: ExternalSourceResponse;
+    'validPeriod'?: PeriodResponse;
+    'organizationId'?: string;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum GroupResponseType {
     CLASS = 'class',
     COURSE = 'course',
     ROOM = 'room',
     OTHER = 'other'
 }
-
 
 

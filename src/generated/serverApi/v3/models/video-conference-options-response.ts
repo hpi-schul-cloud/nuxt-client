@@ -14,30 +14,18 @@
 
 
 
-/**
- * 
- * @export
- * @interface VideoConferenceOptionsResponse
- */
 export interface VideoConferenceOptionsResponse {
     /**
      * Every attendee joins muted
-     * @type {boolean}
-     * @memberof VideoConferenceOptionsResponse
      */
-    everyAttendeeJoinsMuted: boolean;
+    'everyAttendeeJoinsMuted': boolean;
     /**
      * Every attendee joins as a moderator
-     * @type {boolean}
-     * @memberof VideoConferenceOptionsResponse
      */
-    everybodyJoinsAsModerator: boolean;
+    'everybodyJoinsAsModerator': boolean;
     /**
      * Moderator must approve join requests
-     * @type {boolean}
-     * @memberof VideoConferenceOptionsResponse
      */
-    moderatorMustApproveJoinRequests: boolean;
+    'moderatorMustApproveJoinRequests': boolean;
 }
-
 

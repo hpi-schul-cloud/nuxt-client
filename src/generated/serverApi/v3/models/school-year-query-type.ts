@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum SchoolYearQueryType {
     NEXT_YEAR = 'nextYear',
     CURRENT_YEAR = 'currentYear',

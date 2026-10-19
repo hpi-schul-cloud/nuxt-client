@@ -13,28 +13,28 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { BusinessError } from '../models';
+import type { BusinessError } from '../models';
 // @ts-ignore
-import { CreateRoomInvitationLinkBodyParams } from '../models';
+import type { CreateRoomInvitationLinkBodyParams } from '../models';
 // @ts-ignore
-import { RoomIdResponse } from '../models';
+import type { RoomIdResponse } from '../models';
 // @ts-ignore
-import { RoomInvitationLinkResponse } from '../models';
+import type { RoomInvitationLinkResponse } from '../models';
 // @ts-ignore
-import { UpdateRoomInvitationLinkBodyParams } from '../models';
+import type { UpdateRoomInvitationLinkBodyParams } from '../models';
 /**
  * RoomInvitationLinkApi - axios parameter creator
- * @export
  */
 export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -45,7 +45,7 @@ export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomInvitationLinkControllerCreateRoomInvitationLink: async (createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options: any = {}): Promise<RequestArgs> => {
+        roomInvitationLinkControllerCreateRoomInvitationLink: async (createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'createRoomInvitationLinkBodyParams' is not null or undefined
             assertParamExists('roomInvitationLinkControllerCreateRoomInvitationLink', 'createRoomInvitationLinkBodyParams', createRoomInvitationLinkBodyParams)
             const localVarPath = `/room-invitation-links`;
@@ -64,11 +64,10 @@ export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: 
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(createRoomInvitationLinkBodyParams, localVarRequestOptions, configuration)
@@ -85,7 +84,7 @@ export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomInvitationLinkControllerDeleteLinks: async (roomInvitationLinkIds: Array<string>, options: any = {}): Promise<RequestArgs> => {
+        roomInvitationLinkControllerDeleteLinks: async (roomInvitationLinkIds: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'roomInvitationLinkIds' is not null or undefined
             assertParamExists('roomInvitationLinkControllerDeleteLinks', 'roomInvitationLinkIds', roomInvitationLinkIds)
             const localVarPath = `/room-invitation-links`;
@@ -108,9 +107,9 @@ export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: 
                 localVarQueryParameter['roomInvitationLinkIds'] = roomInvitationLinkIds;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -127,13 +126,13 @@ export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomInvitationLinkControllerUpdateLink: async (roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options: any = {}): Promise<RequestArgs> => {
+        roomInvitationLinkControllerUpdateLink: async (roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'roomInvitationLinkId' is not null or undefined
             assertParamExists('roomInvitationLinkControllerUpdateLink', 'roomInvitationLinkId', roomInvitationLinkId)
             // verify required parameter 'updateRoomInvitationLinkBodyParams' is not null or undefined
             assertParamExists('roomInvitationLinkControllerUpdateLink', 'updateRoomInvitationLinkBodyParams', updateRoomInvitationLinkBodyParams)
             const localVarPath = `/room-invitation-links/{roomInvitationLinkId}`
-                .replace(`{${"roomInvitationLinkId"}}`, encodeURIComponent(String(roomInvitationLinkId)));
+                .replace('{roomInvitationLinkId}', encodeURIComponent(String(roomInvitationLinkId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -149,11 +148,10 @@ export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: 
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(updateRoomInvitationLinkBodyParams, localVarRequestOptions, configuration)
@@ -170,11 +168,11 @@ export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomInvitationLinkControllerUseLink: async (roomInvitationLinkId: string, options: any = {}): Promise<RequestArgs> => {
+        roomInvitationLinkControllerUseLink: async (roomInvitationLinkId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'roomInvitationLinkId' is not null or undefined
             assertParamExists('roomInvitationLinkControllerUseLink', 'roomInvitationLinkId', roomInvitationLinkId)
             const localVarPath = `/room-invitation-links/{roomInvitationLinkId}`
-                .replace(`{${"roomInvitationLinkId"}}`, encodeURIComponent(String(roomInvitationLinkId)));
+                .replace('{roomInvitationLinkId}', encodeURIComponent(String(roomInvitationLinkId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -190,9 +188,9 @@ export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: 
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -206,7 +204,6 @@ export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: 
 
 /**
  * RoomInvitationLinkApi - functional programming interface
- * @export
  */
 export const RoomInvitationLinkApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = RoomInvitationLinkApiAxiosParamCreator(configuration)
@@ -218,9 +215,11 @@ export const RoomInvitationLinkApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomInvitationLinkResponse>> {
+        async roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomInvitationLinkResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RoomInvitationLinkApi.roomInvitationLinkControllerCreateRoomInvitationLink']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -229,9 +228,11 @@ export const RoomInvitationLinkApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RoomInvitationLinkApi.roomInvitationLinkControllerDeleteLinks']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -241,9 +242,11 @@ export const RoomInvitationLinkApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomInvitationLinkControllerUpdateLink(roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomInvitationLinkResponse>> {
+        async roomInvitationLinkControllerUpdateLink(roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomInvitationLinkResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomInvitationLinkControllerUpdateLink(roomInvitationLinkId, updateRoomInvitationLinkBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RoomInvitationLinkApi.roomInvitationLinkControllerUpdateLink']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -252,16 +255,17 @@ export const RoomInvitationLinkApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomIdResponse>> {
+        async roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomIdResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomInvitationLinkControllerUseLink(roomInvitationLinkId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RoomInvitationLinkApi.roomInvitationLinkControllerUseLink']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * RoomInvitationLinkApi - factory interface
- * @export
  */
 export const RoomInvitationLinkApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = RoomInvitationLinkApiFp(configuration)
@@ -273,7 +277,7 @@ export const RoomInvitationLinkApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options?: any): AxiosPromise<RoomInvitationLinkResponse> {
+        roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RoomInvitationLinkResponse> {
             return localVarFp.roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -283,7 +287,7 @@ export const RoomInvitationLinkApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds: Array<string>, options?: any): AxiosPromise<void> {
+        roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds: Array<string>, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds, options).then((request) => request(axios, basePath));
         },
         /**
@@ -294,7 +298,7 @@ export const RoomInvitationLinkApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomInvitationLinkControllerUpdateLink(roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options?: any): AxiosPromise<RoomInvitationLinkResponse> {
+        roomInvitationLinkControllerUpdateLink(roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RoomInvitationLinkResponse> {
             return localVarFp.roomInvitationLinkControllerUpdateLink(roomInvitationLinkId, updateRoomInvitationLinkBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -304,7 +308,7 @@ export const RoomInvitationLinkApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any): AxiosPromise<RoomIdResponse> {
+        roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: RawAxiosRequestConfig): AxiosPromise<RoomIdResponse> {
             return localVarFp.roomInvitationLinkControllerUseLink(roomInvitationLinkId, options).then((request) => request(axios, basePath));
         },
     };
@@ -312,8 +316,6 @@ export const RoomInvitationLinkApiFactory = function (configuration?: Configurat
 
 /**
  * RoomInvitationLinkApi - interface
- * @export
- * @interface RoomInvitationLinkApi
  */
 export interface RoomInvitationLinkApiInterface {
     /**
@@ -322,9 +324,8 @@ export interface RoomInvitationLinkApiInterface {
      * @param {CreateRoomInvitationLinkBodyParams} createRoomInvitationLinkBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomInvitationLinkApiInterface
      */
-    roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options?: any): AxiosPromise<RoomInvitationLinkResponse>;
+    roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RoomInvitationLinkResponse>;
 
     /**
      * 
@@ -332,9 +333,8 @@ export interface RoomInvitationLinkApiInterface {
      * @param {Array<string>} roomInvitationLinkIds Array of room invitation link ids
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomInvitationLinkApiInterface
      */
-    roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds: Array<string>, options?: any): AxiosPromise<void>;
+    roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds: Array<string>, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -343,9 +343,8 @@ export interface RoomInvitationLinkApiInterface {
      * @param {UpdateRoomInvitationLinkBodyParams} updateRoomInvitationLinkBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomInvitationLinkApiInterface
      */
-    roomInvitationLinkControllerUpdateLink(roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options?: any): AxiosPromise<RoomInvitationLinkResponse>;
+    roomInvitationLinkControllerUpdateLink(roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RoomInvitationLinkResponse>;
 
     /**
      * 
@@ -353,17 +352,13 @@ export interface RoomInvitationLinkApiInterface {
      * @param {string} roomInvitationLinkId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomInvitationLinkApiInterface
      */
-    roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any): AxiosPromise<RoomIdResponse>;
+    roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: RawAxiosRequestConfig): AxiosPromise<RoomIdResponse>;
 
 }
 
 /**
  * RoomInvitationLinkApi - object-oriented interface
- * @export
- * @class RoomInvitationLinkApi
- * @extends {BaseAPI}
  */
 export class RoomInvitationLinkApi extends BaseAPI implements RoomInvitationLinkApiInterface {
     /**
@@ -372,9 +367,8 @@ export class RoomInvitationLinkApi extends BaseAPI implements RoomInvitationLink
      * @param {CreateRoomInvitationLinkBodyParams} createRoomInvitationLinkBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomInvitationLinkApi
      */
-    public roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options?: any) {
+    public roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options?: RawAxiosRequestConfig) {
         return RoomInvitationLinkApiFp(this.configuration).roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -384,9 +378,8 @@ export class RoomInvitationLinkApi extends BaseAPI implements RoomInvitationLink
      * @param {Array<string>} roomInvitationLinkIds Array of room invitation link ids
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomInvitationLinkApi
      */
-    public roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds: Array<string>, options?: any) {
+    public roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds: Array<string>, options?: RawAxiosRequestConfig) {
         return RoomInvitationLinkApiFp(this.configuration).roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -397,9 +390,8 @@ export class RoomInvitationLinkApi extends BaseAPI implements RoomInvitationLink
      * @param {UpdateRoomInvitationLinkBodyParams} updateRoomInvitationLinkBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomInvitationLinkApi
      */
-    public roomInvitationLinkControllerUpdateLink(roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options?: any) {
+    public roomInvitationLinkControllerUpdateLink(roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options?: RawAxiosRequestConfig) {
         return RoomInvitationLinkApiFp(this.configuration).roomInvitationLinkControllerUpdateLink(roomInvitationLinkId, updateRoomInvitationLinkBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -409,9 +401,9 @@ export class RoomInvitationLinkApi extends BaseAPI implements RoomInvitationLink
      * @param {string} roomInvitationLinkId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomInvitationLinkApi
      */
-    public roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any) {
+    public roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: RawAxiosRequestConfig) {
         return RoomInvitationLinkApiFp(this.configuration).roomInvitationLinkControllerUseLink(roomInvitationLinkId, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

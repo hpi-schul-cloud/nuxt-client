@@ -16,9 +16,8 @@
 
 /**
  * Type of copied element
- * @export
- * @enum {string}
  */
+
 export enum CopyElementType {
     ROOM = 'ROOM',
     BOARD = 'BOARD',

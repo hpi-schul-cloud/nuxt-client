@@ -13,7 +13,7 @@ import {
 import { classInfoFactory } from "@@/tests/test-utils/factory/classInfoFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import * as serverApi from "@api-server";
-import { GroupApiInterface, SchoolYearQueryType } from "@api-server";
+import { GroupApiInterface, GroupControllerFindClassesSortOrder, SchoolYearQueryType } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
@@ -85,6 +85,22 @@ describe("GroupModule", () => {
 					pagination.skip,
 					pagination.limit,
 					sortOrder,
+					sortBy,
+					undefined
+				);
+			});
+
+			it("should pass descending sort order to the api", async () => {
+				const { pagination, sortBy } = setup();
+				const { fetchClassesForSchool, sortOrder } = useGroupClasses();
+				sortOrder.value = SortOrder.DESC;
+
+				await fetchClassesForSchool();
+
+				expect(apiMock.groupControllerFindClasses).toHaveBeenCalledWith(
+					pagination.skip,
+					pagination.limit,
+					GroupControllerFindClassesSortOrder.DESC,
 					sortBy,
 					undefined
 				);

@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface SchoolExistsResponse
- */
 export interface SchoolExistsResponse {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SchoolExistsResponse
-     */
-    exists: boolean;
+    'exists': boolean;
 }
-
 

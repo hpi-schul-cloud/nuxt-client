@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface MessageOrigin
- */
 export interface MessageOrigin {
-    /**
-     * 
-     * @type {number}
-     * @memberof MessageOrigin
-     */
-    message_id: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof MessageOrigin
-     */
-    page: string;
+    'message_id': number;
+    'page': string;
 }
-
 

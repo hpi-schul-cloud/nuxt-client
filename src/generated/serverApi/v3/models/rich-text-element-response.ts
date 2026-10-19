@@ -13,40 +13,22 @@
  */
 
 
-import { ContentElementType } from './content-element-type';
-import { RichTextElementContent } from './rich-text-element-content';
-import { TimestampsResponse } from './timestamps-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContentElementType } from './content-element-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RichTextElementContent } from './rich-text-element-content';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { TimestampsResponse } from './timestamps-response';
 
-/**
- * 
- * @export
- * @interface RichTextElementResponse
- */
 export interface RichTextElementResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof RichTextElementResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {ContentElementType}
-     * @memberof RichTextElementResponse
-     */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {RichTextElementContent}
-     * @memberof RichTextElementResponse
-     */
-    content: RichTextElementContent;
-    /**
-     * 
-     * @type {TimestampsResponse}
-     * @memberof RichTextElementResponse
-     */
-    timestamps: TimestampsResponse;
+    'id': string;
+    'type': ContentElementType;
+    'content': RichTextElementContent;
+    'timestamps': TimestampsResponse;
 }
+
 
 

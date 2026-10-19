@@ -14,72 +14,16 @@
 
 
 
-/**
- * 
- * @export
- * @interface RoomStatsItemResponse
- */
 export interface RoomStatsItemResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomStatsItemResponse
-     */
-    roomId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomStatsItemResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomStatsItemResponse
-     */
-    owner: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomStatsItemResponse
-     */
-    schoolId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomStatsItemResponse
-     */
-    schoolName: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof RoomStatsItemResponse
-     */
-    totalMembers: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof RoomStatsItemResponse
-     */
-    internalMembers: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof RoomStatsItemResponse
-     */
-    externalMembers: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomStatsItemResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomStatsItemResponse
-     */
-    updatedAt: string;
+    'roomId': string;
+    'name': string;
+    'owner': string;
+    'schoolId': string;
+    'schoolName': string;
+    'totalMembers': number;
+    'internalMembers': number;
+    'externalMembers': number;
+    'createdAt': string;
+    'updatedAt': string;
 }
-
 

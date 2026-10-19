@@ -13,26 +13,18 @@
  */
 
 
-import { DashboardGridElementResponse } from './dashboard-grid-element-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { DashboardGridElementResponse } from './dashboard-grid-element-response';
 
-/**
- * 
- * @export
- * @interface DashboardResponse
- */
 export interface DashboardResponse {
     /**
      * The id of the Dashboard entity
-     * @type {string}
-     * @memberof DashboardResponse
      */
-    id: string;
+    'id': string;
     /**
      * List of all elements visible on the dashboard
-     * @type {Array<DashboardGridElementResponse>}
-     * @memberof DashboardResponse
      */
-    gridElements: Array<DashboardGridElementResponse>;
+    'gridElements': Array<DashboardGridElementResponse>;
 }
-
 

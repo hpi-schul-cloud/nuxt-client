@@ -14,54 +14,34 @@
 
 
 
-/**
- * 
- * @export
- * @interface CreateRoomInvitationLinkBodyParams
- */
 export interface CreateRoomInvitationLinkBodyParams {
     /**
      * Id of the room
-     * @type {string}
-     * @memberof CreateRoomInvitationLinkBodyParams
      */
-    roomId: string;
+    'roomId': string;
     /**
      * Title of the link.
-     * @type {string}
-     * @memberof CreateRoomInvitationLinkBodyParams
      */
-    title: string;
+    'title': string;
     /**
      * Expiration date of the invitation link
-     * @type {string}
-     * @memberof CreateRoomInvitationLinkBodyParams
      */
-    activeUntil?: string;
+    'activeUntil'?: string;
     /**
      * Indicates if the link is also usable by external persons
-     * @type {boolean}
-     * @memberof CreateRoomInvitationLinkBodyParams
      */
-    isUsableByExternalPersons: boolean;
+    'isUsableByExternalPersons': boolean;
     /**
      * Indicates if the link is also usable by students
-     * @type {boolean}
-     * @memberof CreateRoomInvitationLinkBodyParams
      */
-    isUsableByStudents: boolean;
+    'isUsableByStudents': boolean;
     /**
      * Indicates if the link is restricted to the creators school
-     * @type {boolean}
-     * @memberof CreateRoomInvitationLinkBodyParams
      */
-    restrictedToCreatorSchool: boolean;
+    'restrictedToCreatorSchool': boolean;
     /**
      * Indicates if the link requires confirmation by room admins / room owners
-     * @type {boolean}
-     * @memberof CreateRoomInvitationLinkBodyParams
      */
-    requiresConfirmation: boolean;
+    'requiresConfirmation': boolean;
 }
-
 

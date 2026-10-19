@@ -14,48 +14,30 @@
 
 
 
-/**
- * 
- * @export
- * @interface BoardErrorReportBodyParams
- */
 export interface BoardErrorReportBodyParams {
     /**
      * Type of the board error
-     * @type {string}
-     * @memberof BoardErrorReportBodyParams
      */
-    type: string;
+    'type': string;
     /**
      * Error message
-     * @type {string}
-     * @memberof BoardErrorReportBodyParams
      */
-    message: string;
+    'message': string;
     /**
      * URL of the page the user was working on
-     * @type {string}
-     * @memberof BoardErrorReportBodyParams
      */
-    url: string;
+    'url': string;
     /**
      * Id of the board the error occurred on
-     * @type {string}
-     * @memberof BoardErrorReportBodyParams
      */
-    boardId: string;
+    'boardId': string;
     /**
      * Count of connection retries.
-     * @type {number}
-     * @memberof BoardErrorReportBodyParams
      */
-    retryCount: number;
+    'retryCount': number;
     /**
      * Logged steps
-     * @type {string}
-     * @memberof BoardErrorReportBodyParams
      */
-    logSteps: string;
+    'logSteps': string;
 }
-
 

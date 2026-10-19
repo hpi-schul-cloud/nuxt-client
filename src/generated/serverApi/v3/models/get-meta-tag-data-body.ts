@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface GetMetaTagDataBody
- */
 export interface GetMetaTagDataBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof GetMetaTagDataBody
-     */
-    url: string;
+    'url': string;
 }
-
 

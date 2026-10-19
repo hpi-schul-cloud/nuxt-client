@@ -13,20 +13,20 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { RuntimeConfigListResponse } from '../models';
+import type { RuntimeConfigListResponse } from '../models';
 // @ts-ignore
-import { UpdateRuntimeConfigValueBodyParams } from '../models';
+import type { UpdateRuntimeConfigValueBodyParams } from '../models';
 /**
  * RuntimeConfigApi - axios parameter creator
- * @export
  */
 export const RuntimeConfigApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -35,7 +35,7 @@ export const RuntimeConfigApiAxiosParamCreator = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        runtimeConfigControllerGetRuntimeConfig: async (options: any = {}): Promise<RequestArgs> => {
+        runtimeConfigControllerGetRuntimeConfig: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/runtime-config`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -52,9 +52,9 @@ export const RuntimeConfigApiAxiosParamCreator = function (configuration?: Confi
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -70,13 +70,13 @@ export const RuntimeConfigApiAxiosParamCreator = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        runtimeConfigControllerUpdateRuntimeConfigValue: async (key: string, updateRuntimeConfigValueBodyParams: UpdateRuntimeConfigValueBodyParams, options: any = {}): Promise<RequestArgs> => {
+        runtimeConfigControllerUpdateRuntimeConfigValue: async (key: string, updateRuntimeConfigValueBodyParams: UpdateRuntimeConfigValueBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'key' is not null or undefined
             assertParamExists('runtimeConfigControllerUpdateRuntimeConfigValue', 'key', key)
             // verify required parameter 'updateRuntimeConfigValueBodyParams' is not null or undefined
             assertParamExists('runtimeConfigControllerUpdateRuntimeConfigValue', 'updateRuntimeConfigValueBodyParams', updateRuntimeConfigValueBodyParams)
             const localVarPath = `/runtime-config/{key}`
-                .replace(`{${"key"}}`, encodeURIComponent(String(key)));
+                .replace('{key}', encodeURIComponent(String(key)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -92,11 +92,9 @@ export const RuntimeConfigApiAxiosParamCreator = function (configuration?: Confi
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(updateRuntimeConfigValueBodyParams, localVarRequestOptions, configuration)
@@ -111,7 +109,6 @@ export const RuntimeConfigApiAxiosParamCreator = function (configuration?: Confi
 
 /**
  * RuntimeConfigApi - functional programming interface
- * @export
  */
 export const RuntimeConfigApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = RuntimeConfigApiAxiosParamCreator(configuration)
@@ -121,9 +118,11 @@ export const RuntimeConfigApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async runtimeConfigControllerGetRuntimeConfig(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RuntimeConfigListResponse>> {
+        async runtimeConfigControllerGetRuntimeConfig(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RuntimeConfigListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.runtimeConfigControllerGetRuntimeConfig(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RuntimeConfigApi.runtimeConfigControllerGetRuntimeConfig']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -132,16 +131,17 @@ export const RuntimeConfigApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async runtimeConfigControllerUpdateRuntimeConfigValue(key: string, updateRuntimeConfigValueBodyParams: UpdateRuntimeConfigValueBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async runtimeConfigControllerUpdateRuntimeConfigValue(key: string, updateRuntimeConfigValueBodyParams: UpdateRuntimeConfigValueBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.runtimeConfigControllerUpdateRuntimeConfigValue(key, updateRuntimeConfigValueBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RuntimeConfigApi.runtimeConfigControllerUpdateRuntimeConfigValue']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * RuntimeConfigApi - factory interface
- * @export
  */
 export const RuntimeConfigApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = RuntimeConfigApiFp(configuration)
@@ -151,7 +151,7 @@ export const RuntimeConfigApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        runtimeConfigControllerGetRuntimeConfig(options?: any): AxiosPromise<RuntimeConfigListResponse> {
+        runtimeConfigControllerGetRuntimeConfig(options?: RawAxiosRequestConfig): AxiosPromise<RuntimeConfigListResponse> {
             return localVarFp.runtimeConfigControllerGetRuntimeConfig(options).then((request) => request(axios, basePath));
         },
         /**
@@ -161,7 +161,7 @@ export const RuntimeConfigApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        runtimeConfigControllerUpdateRuntimeConfigValue(key: string, updateRuntimeConfigValueBodyParams: UpdateRuntimeConfigValueBodyParams, options?: any): AxiosPromise<void> {
+        runtimeConfigControllerUpdateRuntimeConfigValue(key: string, updateRuntimeConfigValueBodyParams: UpdateRuntimeConfigValueBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.runtimeConfigControllerUpdateRuntimeConfigValue(key, updateRuntimeConfigValueBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -169,17 +169,14 @@ export const RuntimeConfigApiFactory = function (configuration?: Configuration, 
 
 /**
  * RuntimeConfigApi - interface
- * @export
- * @interface RuntimeConfigApi
  */
 export interface RuntimeConfigApiInterface {
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RuntimeConfigApiInterface
      */
-    runtimeConfigControllerGetRuntimeConfig(options?: any): AxiosPromise<RuntimeConfigListResponse>;
+    runtimeConfigControllerGetRuntimeConfig(options?: RawAxiosRequestConfig): AxiosPromise<RuntimeConfigListResponse>;
 
     /**
      * 
@@ -187,26 +184,21 @@ export interface RuntimeConfigApiInterface {
      * @param {UpdateRuntimeConfigValueBodyParams} updateRuntimeConfigValueBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RuntimeConfigApiInterface
      */
-    runtimeConfigControllerUpdateRuntimeConfigValue(key: string, updateRuntimeConfigValueBodyParams: UpdateRuntimeConfigValueBodyParams, options?: any): AxiosPromise<void>;
+    runtimeConfigControllerUpdateRuntimeConfigValue(key: string, updateRuntimeConfigValueBodyParams: UpdateRuntimeConfigValueBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
  * RuntimeConfigApi - object-oriented interface
- * @export
- * @class RuntimeConfigApi
- * @extends {BaseAPI}
  */
 export class RuntimeConfigApi extends BaseAPI implements RuntimeConfigApiInterface {
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RuntimeConfigApi
      */
-    public runtimeConfigControllerGetRuntimeConfig(options?: any) {
+    public runtimeConfigControllerGetRuntimeConfig(options?: RawAxiosRequestConfig) {
         return RuntimeConfigApiFp(this.configuration).runtimeConfigControllerGetRuntimeConfig(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -216,9 +208,9 @@ export class RuntimeConfigApi extends BaseAPI implements RuntimeConfigApiInterfa
      * @param {UpdateRuntimeConfigValueBodyParams} updateRuntimeConfigValueBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RuntimeConfigApi
      */
-    public runtimeConfigControllerUpdateRuntimeConfigValue(key: string, updateRuntimeConfigValueBodyParams: UpdateRuntimeConfigValueBodyParams, options?: any) {
+    public runtimeConfigControllerUpdateRuntimeConfigValue(key: string, updateRuntimeConfigValueBodyParams: UpdateRuntimeConfigValueBodyParams, options?: RawAxiosRequestConfig) {
         return RuntimeConfigApiFp(this.configuration).runtimeConfigControllerUpdateRuntimeConfigValue(key, updateRuntimeConfigValueBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

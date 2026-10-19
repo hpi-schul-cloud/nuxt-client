@@ -14,54 +14,13 @@
 
 
 
-/**
- * 
- * @export
- * @interface RegistrationItemResponse
- */
 export interface RegistrationItemResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof RegistrationItemResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RegistrationItemResponse
-     */
-    email: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RegistrationItemResponse
-     */
-    firstName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RegistrationItemResponse
-     */
-    lastName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RegistrationItemResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RegistrationItemResponse
-     */
-    updatedAt: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RegistrationItemResponse
-     */
-    registeredUserExists?: boolean;
+    'id': string;
+    'email': string;
+    'firstName': string;
+    'lastName': string;
+    'createdAt': string;
+    'updatedAt': string;
+    'registeredUserExists'?: boolean;
 }
-
 

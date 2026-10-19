@@ -14,30 +14,17 @@
 
 
 
-/**
- * 
- * @export
- * @interface RichText
- */
 export interface RichText {
     /**
      * Content of the rich text element
-     * @type {string}
-     * @memberof RichText
      */
-    content: string;
+    'content': string;
     /**
      * Input format of the rich text element
-     * @type {string}
-     * @memberof RichText
      */
-    type: RichTextType;
+    'type': RichTextType;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum RichTextType {
     PLAIN_TEXT = 'plainText',
     RICH_TEXT_CK5_SIMPLE = 'richTextCk5Simple',
@@ -45,6 +32,5 @@ export enum RichTextType {
     RICH_TEXT_CK5 = 'richTextCk5',
     RICH_TEXT_CK5_NEWS = 'richTextCk5News'
 }
-
 
 
