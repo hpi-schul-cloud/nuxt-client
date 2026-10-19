@@ -69,6 +69,11 @@ describe("@feature-room/RoomMenu", () => {
 			.findAllComponents(KebabMenuAction)
 			.find((action) => action.attributes("data-testid") === "kebab-menu-action-archive");
 
+	const findUnarchiveAction = (wrapper: VueWrapper) =>
+		wrapper
+			.findAllComponents(KebabMenuAction)
+			.find((action) => action.attributes("data-testid") === "kebab-menu-action-unarchive");
+
 	const findKebabActions = (wrapper: VueWrapper) => {
 		const kebabActionDelete = wrapper.findComponent(KebabMenuActionDelete);
 		const kebabActionEdit = wrapper.findComponent(KebabMenuActionEdit);
@@ -328,6 +333,70 @@ describe("@feature-room/RoomMenu", () => {
 
 				expect(wrapper.emitted("room:archive")).toHaveLength(1);
 				expect(askConfirmationSpy).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("when restoring a room", () => {
+		describe("and the feature is enabled, room is archived and user owns the room", () => {
+			it("should show the restore menu item", async () => {
+				const { wrapper, menuBtn } = setup(
+					{ FEATURE_ROOM_ARCHIVE_ENABLED: true },
+					{ allowedOperations: { archiveRoom: true }, isArchived: true }
+				);
+				await menuBtn.trigger("click");
+
+				expect(findUnarchiveAction(wrapper)?.exists()).toBe(true);
+			});
+		});
+
+		describe("and the room is not archived", () => {
+			it("should NOT show the restore menu item", async () => {
+				const { wrapper, menuBtn } = setup(
+					{ FEATURE_ROOM_ARCHIVE_ENABLED: true },
+					{ allowedOperations: { archiveRoom: true }, isArchived: false }
+				);
+				await menuBtn.trigger("click");
+
+				expect(findUnarchiveAction(wrapper)).toBeUndefined();
+			});
+		});
+
+		describe("and the user does not own the room", () => {
+			it("should NOT show the restore menu item", async () => {
+				const { wrapper, menuBtn } = setup(
+					{ FEATURE_ROOM_ARCHIVE_ENABLED: true },
+					{ allowedOperations: { archiveRoom: false, leaveRoom: true }, isArchived: true }
+				);
+				await menuBtn.trigger("click");
+
+				expect(findUnarchiveAction(wrapper)).toBeUndefined();
+			});
+		});
+
+		describe("and the feature is disabled", () => {
+			it("should NOT show the restore menu item", async () => {
+				const { wrapper, menuBtn } = setup(
+					{ FEATURE_ROOM_ARCHIVE_ENABLED: false },
+					{ allowedOperations: { archiveRoom: true }, isArchived: true }
+				);
+				await menuBtn.trigger("click");
+
+				expect(findUnarchiveAction(wrapper)).toBeUndefined();
+			});
+		});
+
+		describe("and the user clicks the restore menu item", () => {
+			it("should emit 'room:unarchive'", async () => {
+				const { wrapper, menuBtn } = setup(
+					{ FEATURE_ROOM_ARCHIVE_ENABLED: true },
+					{ allowedOperations: { archiveRoom: true }, isArchived: true }
+				);
+				await menuBtn.trigger("click");
+
+				await findUnarchiveAction(wrapper)!.trigger("click");
+
+				expect(wrapper.emitted("room:unarchive")).toHaveLength(1);
 			});
 		});
 	});

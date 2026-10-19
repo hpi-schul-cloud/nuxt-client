@@ -22,6 +22,14 @@
 		>
 			{{ t("pages.rooms.archive.menu") }}
 		</KebabMenuAction>
+		<KebabMenuAction
+			v-if="isRoomArchiveFeatureEnabled && isArchived && allowedOperations.archiveRoom"
+			:icon="mdiRestore"
+			data-testid="kebab-menu-action-unarchive"
+			@click="() => $emit('room:unarchive')"
+		>
+			{{ t("common.actions.restore") }}
+		</KebabMenuAction>
 		<KebabMenuActionDelete v-if="allowedOperations.deleteRoom" :name="roomName" @click="onDeleteRoom" />
 		<KebabMenuActionLeaveRoom @click="() => $emit('room:leave')" />
 	</KebabMenu>
@@ -31,7 +39,7 @@
 import { askDeletionForItem } from "@/utils/confirmation-dialog.utils";
 import { useEnvConfig } from "@data-env";
 import { useRoomAllowedOperations } from "@data-room";
-import { mdiArchiveOutline } from "@icons/material";
+import { mdiArchiveOutline, mdiRestore } from "@icons/material";
 import {
 	KebabMenu,
 	KebabMenuAction,
@@ -58,6 +66,7 @@ const emit = defineEmits([
 	"room:share",
 	"room:leave",
 	"room:archive",
+	"room:unarchive",
 ]);
 
 const { t } = useI18n();

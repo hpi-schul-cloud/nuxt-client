@@ -141,15 +141,21 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				expect(breadcrumbItems[1].props("to")).toBe("/rooms/archive");
 				expect(breadcrumbItems[2].text()).toContain(room.name);
 			});
-		});
 
-		describe("and the room is archived", () => {
 			it("should render an archived chip next to the title", () => {
 				const { wrapper } = setup({ isArchived: true });
 
 				const chip = wrapper.find("[data-testid='archived-room-chip']");
 				expect(chip.exists()).toBe(true);
 				expect(chip.text()).toBe("pages.rooms.archived.chip");
+			});
+
+			it("should render an info that the room is read-only", () => {
+				const { wrapper } = setup({ isArchived: true });
+
+				const info = wrapper.find("[data-testid='archived-room-info']");
+				expect(info.exists()).toBe(true);
+				expect(info.text()).toContain("pages.roomDetails.archived.info");
 			});
 		});
 
@@ -158,6 +164,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const { wrapper } = setup({ isArchived: false });
 
 				expect(wrapper.find("[data-testid='archived-room-chip']").exists()).toBe(false);
+			});
+
+			it("should not render the read-only info", () => {
+				const { wrapper } = setup({ isArchived: false });
+
+				expect(wrapper.find("[data-testid='archived-room-info']").exists()).toBe(false);
 			});
 		});
 	});
@@ -190,8 +202,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	describe("when user archives the room", () => {
 		describe("and archiving succeeds", () => {
-			it("should call archiveRoom and reroute to the rooms overview", async () => {
-				const { wrapper, router, roomStore, room } = setup({
+			it("should archive the room and stay on the room page", async () => {
+				const { wrapper, router, roomStore, roomDetailsStore, room } = setup({
 					allowedOperations: { accessRoom: true, archiveRoom: true },
 				});
 				roomStore.archiveRoom.mockResolvedValue({ success: true, result: undefined, error: undefined } as never);
@@ -201,7 +213,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				await flushPromises();
 
 				expect(roomStore.archiveRoom).toHaveBeenCalledWith(room.id);
-				expect(router.push).toHaveBeenCalledWith({ name: "rooms" });
+				expect(roomDetailsStore.fetchRoomAndBoards).toHaveBeenCalledWith(room.id);
+				expect(router.push).not.toHaveBeenCalled();
 			});
 
 			it("should show a success notification offering to undo the archiving", async () => {
@@ -224,7 +237,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			});
 
 			it("should unarchive the room again when the undo action is triggered", async () => {
-				const { wrapper, roomStore } = setup({
+				const { wrapper, roomStore, roomDetailsStore, room } = setup({
 					allowedOperations: { accessRoom: true, archiveRoom: true },
 				});
 				roomStore.archiveRoom.mockResolvedValue({ success: true, result: undefined, error: undefined } as never);
@@ -234,12 +247,13 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				await menu.vm.$emit("room:archive");
 				await flushPromises();
 
+				roomDetailsStore.fetchRoomAndBoards.mockClear();
 				const notifyMock = vi.mocked(useNotificationStore().notify);
 				const [{ action }] = notifyMock.mock.calls[0];
 				await action?.handler();
 
-				expect(roomStore.unarchiveRoom).toHaveBeenCalled();
-				expect(roomStore.fetchRooms).toHaveBeenCalled();
+				expect(roomStore.unarchiveRoom).toHaveBeenCalledWith(room.id);
+				expect(roomDetailsStore.fetchRoomAndBoards).toHaveBeenCalledWith(room.id);
 			});
 		});
 
@@ -256,6 +270,45 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 				expect(router.push).not.toHaveBeenCalled();
 				expect(useNotificationStore().notify).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("when user restores the room", () => {
+		describe("and restoring succeeds", () => {
+			it("should restore the room, show a success message and reload the room", async () => {
+				const { wrapper, roomStore, roomDetailsStore, room } = setup({
+					allowedOperations: { accessRoom: true, archiveRoom: true },
+					isArchived: true,
+				});
+				roomStore.unarchiveRoom.mockResolvedValue({ success: true, result: undefined, error: undefined } as never);
+
+				const menu = wrapper.getComponent({ name: "RoomMenu" });
+				await menu.vm.$emit("room:unarchive");
+				await flushPromises();
+
+				expect(roomStore.unarchiveRoom).toHaveBeenCalledWith(room.id);
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({ text: "pages.rooms.archived.restore.success", status: "success" })
+				);
+				expect(roomDetailsStore.fetchRoomAndBoards).toHaveBeenCalledWith(room.id);
+			});
+		});
+
+		describe("and restoring fails", () => {
+			it("should neither show a success message nor reload the room", async () => {
+				const { wrapper, roomStore, roomDetailsStore } = setup({
+					allowedOperations: { accessRoom: true, archiveRoom: true },
+					isArchived: true,
+				});
+				roomStore.unarchiveRoom.mockResolvedValue({ success: false, result: undefined, error: new Error("Any") });
+
+				const menu = wrapper.getComponent({ name: "RoomMenu" });
+				await menu.vm.$emit("room:unarchive");
+				await flushPromises();
+
+				expect(useNotificationStore().notify).not.toHaveBeenCalled();
+				expect(roomDetailsStore.fetchRoomAndBoards).not.toHaveBeenCalled();
 			});
 		});
 	});

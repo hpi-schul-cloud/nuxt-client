@@ -1757,6 +1757,8 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Кімната редагування",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Видалити кімнату",
 	"pages.roomDetails.fab.add.board": "Створити дошку",
+	"pages.roomDetails.archived.info":
+		"Ця кімната архівована і доступна лише для перегляду. Відновіть її, щоб вносити зміни.",
 	"pages.roomDetails.board.defaultName": "Космічна дошка",
 	"pages.roomDetails.emptyState": "Наразі в цьому просторі немає навчальних матеріалів",
 	"pages.rooms.emptyState": "Наразі немає вільних кімнат",
@@ -1908,7 +1910,7 @@ export default {
 	"pages.rooms.archive.menu": "Архівувати",
 	"pages.rooms.archive.success": "Кімнату «{roomName}» архівовано.",
 	"pages.rooms.archived.title": "Архівовані кімнати",
-	"pages.rooms.archived.chip": "Архів",
+	"pages.rooms.archived.chip": "Архівована кімната",
 	"pages.rooms.archived.emptyState": "Наразі немає архівованих кімнат",
 	"pages.rooms.archived.table.header.archivedAt": "Архівовано",
 	"pages.rooms.archived.table.row.actionMenu.ariaLabel": "Меню дій для архівованої кімнати «{roomName}»",
