@@ -14,9 +14,9 @@
 		</EmptyState>
 		<DataTable
 			v-else
-			:items="archivedRooms"
+			:items="tableItems"
 			:table-headers="tableHeaders"
-			show-select
+			:show-select="hasSelectableRooms"
 			data-testid="rooms-archive-table"
 			:external-selected-ids="selectedIds"
 			@update:selected-ids="selectedIds = $event"
@@ -105,7 +105,7 @@ import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { DataTableHeader } from "vuetify";
 
-type ArchivedRoomTableItem = { item: RoomArchivedItemResponse };
+type ArchivedRoomTableItem = { item: RoomArchivedItemResponse & { isSelectable: boolean } };
 type ArchivedRoomTableHeaderKey = keyof RoomArchivedItemResponse | "actions";
 type ArchivedRoomTableHeader = Omit<DataTableHeader, "key"> & {
 	key: ArchivedRoomTableHeaderKey;
@@ -132,6 +132,15 @@ const breadcrumbs: Breadcrumb[] = [
 ];
 
 const isEmpty = computed(() => archivedRooms.value.length === 0);
+
+// rooms without any bulk action (e.g. for readers) can't be selected, so the batch menu never opens empty
+const tableItems = computed(() =>
+	archivedRooms.value.map((room) => ({
+		...room,
+		isSelectable: !!(room.allowedOperations?.archiveRoom || room.allowedOperations?.deleteRoom),
+	}))
+);
+const hasSelectableRooms = computed(() => tableItems.value.some((room) => room.isSelectable));
 const selectedIds = ref<string[]>([]);
 
 const tableHeaders = computed((): ArchivedRoomTableHeader[] => [
@@ -162,12 +171,13 @@ const onUnarchiveOne = async (item: RoomArchivedItemResponse) => {
 const onUnarchiveMany = async (roomIds: string[]) => {
 	const restorableIds = permittedRoomIds(roomIds, "archiveRoom");
 
-	await Promise.all(restorableIds.map((roomId) => unarchiveRoom(roomId)));
+	const results = await Promise.all(restorableIds.map((roomId) => unarchiveRoom(roomId)));
+	const restoredCount = results.filter(({ success }) => success).length;
 
-	if (restorableIds.length > 0 && restorableIds.length < roomIds.length) {
-		notifyWarning(t("pages.rooms.archived.restore.partial", { count: restorableIds.length, total: roomIds.length }));
-	} else if (restorableIds.length > 0) {
-		notifySuccess(t("pages.rooms.archived.restore.success", { count: restorableIds.length }, restorableIds.length));
+	if (restoredCount > 0 && restoredCount < roomIds.length) {
+		notifyWarning(t("pages.rooms.archived.restore.partial", { count: restoredCount, total: roomIds.length }));
+	} else if (restoredCount > 0) {
+		notifySuccess(t("pages.rooms.archived.restore.success", { count: restoredCount }, restoredCount));
 	}
 
 	selectedIds.value = [];
@@ -188,10 +198,11 @@ const onDeleteMany = async (roomIds: string[]) => {
 
 	const deletableIds = permittedRoomIds(roomIds, "deleteRoom");
 
-	await Promise.all(deletableIds.map((roomId) => deleteRoom(roomId)));
+	const results = await Promise.all(deletableIds.map((roomId) => deleteRoom(roomId)));
+	const deletedCount = results.filter(({ success }) => success).length;
 
-	if (deletableIds.length > 0 && deletableIds.length < roomIds.length) {
-		notifyWarning(t("pages.rooms.archived.delete.partial", { count: deletableIds.length, total: roomIds.length }));
+	if (deletedCount > 0 && deletedCount < roomIds.length) {
+		notifyWarning(t("pages.rooms.archived.delete.partial", { count: deletedCount, total: roomIds.length }));
 	}
 
 	selectedIds.value = [];

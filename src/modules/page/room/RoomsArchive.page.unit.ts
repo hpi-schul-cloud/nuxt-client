@@ -162,26 +162,78 @@ describe("RoomsArchivePage", () => {
 				);
 			});
 
-			it("should ask for confirmation before deleting a room, and only delete when confirmed", async () => {
-				const askDeletionSpy = vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
-				const room = roomArchivedItemResponseFactory.build({
-					allowedOperations: { deleteRoom: true },
+			describe("when the user uses the delete action", () => {
+				const clickDelete = async (isConfirmed: boolean) => {
+					const askDeletionSpy = vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(isConfirmed);
+					const room = roomArchivedItemResponseFactory.build({
+						allowedOperations: { deleteRoom: true },
+					});
+					const { wrapper, roomStore } = setup([room]);
+
+					await openRowMenu(wrapper, room.id);
+					await findAction(wrapper, `menu-delete-room-${room.id}`)!.trigger("click");
+					await flushPromises();
+
+					return { askDeletionSpy, roomStore, room };
+				};
+
+				it("should ask for confirmation", async () => {
+					const { askDeletionSpy, room } = await clickDelete(false);
+
+					expect(askDeletionSpy).toHaveBeenCalledWith(room.name, "common.labels.room");
 				});
-				const { wrapper, roomStore } = setup([room]);
 
-				await openRowMenu(wrapper, room.id);
-				await findAction(wrapper, `menu-delete-room-${room.id}`)!.trigger("click");
-				await flushPromises();
+				describe("and the user cancels", () => {
+					it("should not delete the room", async () => {
+						const { roomStore } = await clickDelete(false);
 
-				expect(askDeletionSpy).toHaveBeenCalledWith(room.name, "common.labels.room");
-				expect(roomStore.deleteRoom).not.toHaveBeenCalled();
+						expect(roomStore.deleteRoom).not.toHaveBeenCalled();
+					});
+				});
 
-				askDeletionSpy.mockResolvedValue(true);
-				await openRowMenu(wrapper, room.id);
-				await findAction(wrapper, `menu-delete-room-${room.id}`)!.trigger("click");
-				await flushPromises();
+				describe("and the user confirms", () => {
+					it("should delete the room", async () => {
+						const { roomStore, room } = await clickDelete(true);
 
-				expect(roomStore.deleteRoom).toHaveBeenCalledWith(room.id);
+						expect(roomStore.deleteRoom).toHaveBeenCalledWith(room.id);
+					});
+				});
+			});
+		});
+
+		describe("selection", () => {
+			it("should only make rooms selectable that offer a restore or delete action", () => {
+				const restorable = roomArchivedItemResponseFactory.build({ allowedOperations: { archiveRoom: true } });
+				const deletable = roomArchivedItemResponseFactory.build({ allowedOperations: { deleteRoom: true } });
+				const readOnly = roomArchivedItemResponseFactory.build();
+				const { wrapper } = setup([restorable, deletable, readOnly]);
+
+				const items = wrapper.findComponent(DataTable).props("items") as { id: string; isSelectable: boolean }[];
+
+				expect(items.map(({ id, isSelectable }) => ({ id, isSelectable }))).toEqual([
+					{ id: restorable.id, isSelectable: true },
+					{ id: deletable.id, isSelectable: true },
+					{ id: readOnly.id, isSelectable: false },
+				]);
+			});
+
+			describe("when the user has no restore or delete permission for any room", () => {
+				it("should not show the selection checkboxes", () => {
+					const { wrapper } = setup(roomArchivedItemResponseFactory.buildList(2));
+
+					expect(wrapper.findComponent(DataTable).props("showSelect")).toBe(false);
+				});
+			});
+
+			describe("when the user may restore or delete at least one room", () => {
+				it("should show the selection checkboxes", () => {
+					const { wrapper } = setup([
+						roomArchivedItemResponseFactory.build({ allowedOperations: { archiveRoom: true } }),
+						roomArchivedItemResponseFactory.build(),
+					]);
+
+					expect(wrapper.findComponent(DataTable).props("showSelect")).toBe(true);
+				});
 			});
 		});
 
@@ -243,6 +295,49 @@ describe("RoomsArchivePage", () => {
 				expect(findAction(wrapper, "rooms-archive-restore-selected")).toBeUndefined();
 			});
 
+			describe("when some of the restore requests fail", () => {
+				it("should only count the rooms that were actually restored", async () => {
+					const rooms = roomArchivedItemResponseFactory.buildList(2, { allowedOperations: { archiveRoom: true } });
+					const { wrapper, roomStore } = setup(rooms);
+					roomStore.unarchiveRoom
+						.mockResolvedValueOnce({ success: true, result: undefined, error: undefined } as never)
+						.mockResolvedValueOnce({ success: false, result: undefined, error: new Error("Any") });
+
+					await selectRooms(
+						wrapper,
+						rooms.map((room) => room.id)
+					);
+					await openBulkMenu(wrapper);
+					await findAction(wrapper, "rooms-archive-restore-selected")!.trigger("click");
+					await flushPromises();
+
+					expect(useNotificationStore().notify).toHaveBeenCalledWith(
+						expect.objectContaining({ text: "pages.rooms.archived.restore.partial", status: "warning" })
+					);
+					expect(useNotificationStore().notify).not.toHaveBeenCalledWith(
+						expect.objectContaining({ text: "pages.rooms.archived.restore.success" })
+					);
+				});
+			});
+
+			describe("when all restore requests fail", () => {
+				it("should not show a success or partial message", async () => {
+					const rooms = roomArchivedItemResponseFactory.buildList(2, { allowedOperations: { archiveRoom: true } });
+					const { wrapper, roomStore } = setup(rooms);
+					roomStore.unarchiveRoom.mockResolvedValue({ success: false, result: undefined, error: new Error("Any") });
+
+					await selectRooms(
+						wrapper,
+						rooms.map((room) => room.id)
+					);
+					await openBulkMenu(wrapper);
+					await findAction(wrapper, "rooms-archive-restore-selected")!.trigger("click");
+					await flushPromises();
+
+					expect(useNotificationStore().notify).not.toHaveBeenCalled();
+				});
+			});
+
 			it("should ask for confirmation and only delete the selected rooms the user is allowed to delete", async () => {
 				const askDeletionSpy = vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 				const deletable = roomArchivedItemResponseFactory.build({
@@ -281,6 +376,29 @@ describe("RoomsArchivePage", () => {
 				expect(useNotificationStore().notify).toHaveBeenCalledWith(
 					expect.objectContaining({ text: "pages.rooms.archived.delete.partial", status: "warning" })
 				);
+			});
+
+			describe("when some of the delete requests fail", () => {
+				it("should warn that only some of the rooms were deleted", async () => {
+					vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
+					const rooms = roomArchivedItemResponseFactory.buildList(2, { allowedOperations: { deleteRoom: true } });
+					const { wrapper, roomStore } = setup(rooms);
+					roomStore.deleteRoom
+						.mockResolvedValueOnce({ success: true, result: undefined, error: undefined } as never)
+						.mockResolvedValueOnce({ success: false, result: undefined, error: new Error("Any") });
+
+					await selectRooms(
+						wrapper,
+						rooms.map((room) => room.id)
+					);
+					await openBulkMenu(wrapper);
+					await findAction(wrapper, "rooms-archive-delete-selected")!.trigger("click");
+					await flushPromises();
+
+					expect(useNotificationStore().notify).toHaveBeenCalledWith(
+						expect.objectContaining({ text: "pages.rooms.archived.delete.partial", status: "warning" })
+					);
+				});
 			});
 		});
 	});
