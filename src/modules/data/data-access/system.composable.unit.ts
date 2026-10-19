@@ -4,6 +4,7 @@ import { publicSystemResponseFactory } from "@@/tests/test-utils/factory/publicS
 import * as serverApi from "@api-server";
 import { useOAuthApi } from "@data-oauth";
 import { createTestingPinia } from "@pinia/testing";
+import { logger } from "@util-logger";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, Mocked, vi } from "vitest";
@@ -19,6 +20,7 @@ describe("useSystem", () => {
 		setActivePinia(createTestingPinia());
 		systemApiMock = mockApi<serverApi.SystemsApiInterface>();
 		vi.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemApiMock);
+		vi.spyOn(logger, "error").mockImplementation(vi.fn());
 
 		useOAuthApiMock = mockComposable(useOAuthApi);
 		vi.mocked(useOAuthApi).mockReturnValue(useOAuthApiMock);
@@ -51,12 +53,13 @@ describe("useSystem", () => {
 
 	it("does not set system if fetch fails", async () => {
 		const systemId = ref("fail");
-		systemApiMock.systemControllerGetSystem.mockRejectedValueOnce({});
+		systemApiMock.systemControllerGetSystem.mockRejectedValueOnce(new Error("API call failed"));
 
 		const { system } = useSystem(systemId);
 		await flushPromises();
 
 		expect(system.value).toBeUndefined();
+		expect(logger.error).toHaveBeenCalled();
 	});
 
 	describe("sessionTokenExpiration", () => {
