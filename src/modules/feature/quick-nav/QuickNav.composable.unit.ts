@@ -3,14 +3,9 @@ import { useQuickNavSourcesStore } from "./QuickNavSources.store";
 import { QuickNavEntry, QuickNavGroup, QuickNavKind } from "./types";
 import de from "@/locales/de";
 import { initializeAxios } from "@/utils/api";
-import {
-	createTestAppStoreWithPermissions,
-	createTestEnvStore,
-	mockAxiosInstance,
-	mountComposable,
-} from "@@/tests/test-utils";
+import { createTestAppStore, createTestEnvStore, mockAxiosInstance, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { Permission, SchulcloudTheme } from "@api-server";
+import { Permission, RoleName, SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
@@ -18,10 +13,10 @@ import { Mocked } from "vitest";
 
 vi.mock("@util-logger");
 
-const setup = (permissions: Permission[] = []) => {
+const setup = (permissions: Permission[] = [], roles: RoleName[] = []) => {
 	const pinia = createTestingPinia();
 	setActivePinia(pinia);
-	createTestAppStoreWithPermissions(permissions, pinia);
+	createTestAppStore({ me: { permissions, roles: roles.map((name) => ({ id: name, name })) }, pinia });
 	createTestEnvStore({
 		ALERT_STATUS_URL: "https://status.dbildungscloud.de",
 		ACCESSIBILITY_REPORT_EMAIL: "email",
@@ -80,6 +75,75 @@ describe("QuickNav Composable", () => {
 			expect(quickNav.groups.value).toHaveLength(1);
 			expect(quickNav.groups.value[0].entries.length).toBeGreaterThan(0);
 			expect(quickNav.groups.value[0].entries.every((entry) => entry.kind === QuickNavKind.NAVIGATION)).toBe(true);
+		});
+
+		describe("when the user may create something", () => {
+			it("also shows what they can create", () => {
+				const { quickNav } = setup([Permission.SCHOOL_CREATE_ROOM]);
+
+				const actions = quickNav.flatEntries.value.filter((entry) => entry.kind === QuickNavKind.ACTION);
+
+				expect(actions.map((action) => action.id)).toEqual(["action:create-room"]);
+			});
+		});
+	});
+
+	describe("create actions", () => {
+		const actionIds = (quickNav: ReturnType<typeof setup>["quickNav"]) =>
+			quickNav.flatEntries.value.filter((entry) => entry.kind === QuickNavKind.ACTION).map((entry) => entry.id);
+
+		describe("when a teacher may create tasks", () => {
+			it("offers to create a task on the legacy task page", () => {
+				const { quickNav } = setup([Permission.HOMEWORK_CREATE], [RoleName.TEACHER]);
+
+				const createTask = quickNav.flatEntries.value.find((entry) => entry.id === "action:create-task");
+
+				expect(createTask?.href).toBe("/homework/new?returnUrl=tasks");
+			});
+		});
+
+		describe("when a student has the permission to create tasks", () => {
+			it("does not offer it, like the task overview", () => {
+				const { quickNav } = setup([Permission.HOMEWORK_CREATE], [RoleName.STUDENT]);
+
+				expect(actionIds(quickNav)).not.toContain("action:create-task");
+			});
+		});
+
+		describe("when the user may create news", () => {
+			it("offers to create news", () => {
+				const { quickNav } = setup([Permission.NEWS_CREATE]);
+
+				const createNews = quickNav.flatEntries.value.find((entry) => entry.id === "action:create-news");
+
+				expect(createNews?.to).toBe("/news/new");
+			});
+		});
+
+		describe("when the user may not create anything", () => {
+			it("offers no actions", () => {
+				const { quickNav } = setup([], [RoleName.STUDENT]);
+
+				expect(actionIds(quickNav)).toEqual([]);
+			});
+		});
+	});
+
+	describe("placeholder", () => {
+		describe("when the user may create something", () => {
+			it("mentions creating", () => {
+				const { quickNav } = setup([Permission.NEWS_CREATE]);
+
+				expect(quickNav.placeholder.value).toBe("Suchen, springen oder anlegen");
+			});
+		});
+
+		describe("when the user may not create anything", () => {
+			it("does not mention creating", () => {
+				const { quickNav } = setup();
+
+				expect(quickNav.placeholder.value).toBe("Suchen und springen");
+			});
 		});
 	});
 

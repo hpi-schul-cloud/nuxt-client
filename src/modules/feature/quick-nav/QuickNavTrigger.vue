@@ -4,20 +4,20 @@
 		variant="outlined"
 		rounded="pill"
 		class="quick-nav-trigger text-none text-medium-emphasis px-3"
-		:aria-label="t('feature.quickNav.placeholder')"
+		:aria-label="placeholder"
 		aria-keyshortcuts="Control+K Meta+K"
 		data-testid="quick-nav-trigger"
 		@click="open"
 	>
 		<VIcon :icon="mdiMagnify" start aria-hidden="true" />
-		<span class="quick-nav-trigger-label">{{ t("feature.quickNav.placeholder") }}</span>
+		<span class="quick-nav-trigger-label">{{ placeholder }}</span>
 		<kbd class="quick-nav-shortcut ml-3">{{ shortcutLabel }}</kbd>
 	</VBtn>
 	<VBtn
 		v-else
 		:icon="mdiMagnify"
 		variant="text"
-		:aria-label="t('feature.quickNav.placeholder')"
+		:aria-label="placeholder"
 		aria-keyshortcuts="Control+K Meta+K"
 		data-testid="quick-nav-trigger"
 		@click="open"
@@ -34,7 +34,7 @@ import { useDisplay } from "vuetify";
 
 const { t } = useI18n();
 const { mdAndUp: isTabletOrBigger } = useDisplay();
-const { open, toggle } = useQuickNav();
+const { open, toggle, placeholder } = useQuickNav();
 
 const isApple = computed(() => /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent));
 

@@ -1,7 +1,7 @@
 import { QuickNavEntry, QuickNavKind } from "./types";
 import { Permission } from "@api-server";
-import { useAppStore } from "@data-app";
-import { mdiPlus, mdiSchoolOutline } from "@icons/material";
+import { useAppStore, useAppStoreRefs } from "@data-app";
+import { mdiFormatListChecks, mdiNewspaperVariantOutline, mdiPlus, mdiSchoolOutline } from "@icons/material";
 import {
 	isSidebarCategoryItem,
 	SidebarGroupItem,
@@ -24,6 +24,7 @@ export const useQuickNavEntries = () => {
 	const { t } = useI18n();
 	const { pageLinks } = useSidebarItems();
 	const { getItemsForUser } = useSidebarItemsForUser();
+	const { isStudent } = useAppStoreRefs();
 
 	/** read the same way the sidebar reads it, so both agree on what the user may do */
 	const hasPermission = (permission: Permission) => useAppStore().userPermissions.includes(permission);
@@ -74,6 +75,27 @@ export const useQuickNavEntries = () => {
 				title: t("pages.rooms.fab.create.course"),
 				icon: mdiSchoolOutline,
 				href: "/courses/add",
+			});
+		}
+
+		// same rule as the add button on the task overview
+		if (!isStudent.value && hasPermission(Permission.HOMEWORK_CREATE)) {
+			entries.push({
+				id: "action:create-task",
+				kind: QuickNavKind.ACTION,
+				title: t("components.organisms.TasksDashboardMain.fab.createTask"),
+				icon: mdiFormatListChecks,
+				href: "/homework/new?returnUrl=tasks",
+			});
+		}
+
+		if (hasPermission(Permission.NEWS_CREATE)) {
+			entries.push({
+				id: "action:create-news",
+				kind: QuickNavKind.ACTION,
+				title: t("pages.news.index.new"),
+				icon: mdiNewspaperVariantOutline,
+				to: "/news/new",
 			});
 		}
 

@@ -2087,6 +2087,7 @@ export default {
 	"utils.adminFilter.placeholder.date.from": "Creado entre el 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020",
 	"feature.quickNav.placeholder": "Buscar, ir o crear",
+	"feature.quickNav.placeholderWithoutCreate": "Buscar e ir",
 	"feature.quickNav.results": "Resultados de búsqueda",
 	"feature.quickNav.empty": "No se ha encontrado nada.",
 	"feature.quickNav.failed": "No se han podido cargar por completo las salas, los cursos, las tareas y las personas.",

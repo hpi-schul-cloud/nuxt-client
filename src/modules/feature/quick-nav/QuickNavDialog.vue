@@ -25,8 +25,8 @@
 					aria-expanded="true"
 					:aria-controls="`quick-nav-${uid}-results`"
 					:aria-activedescendant="selectedEntry ? `quick-nav-${uid}-${selectedEntry.id}` : undefined"
-					:placeholder="t('feature.quickNav.placeholder')"
-					:aria-label="t('feature.quickNav.placeholder')"
+					:placeholder="placeholder"
+					:aria-label="placeholder"
 					data-testid="quick-nav-input"
 					@keydown.down.prevent="moveSelection(1)"
 					@keydown.up.prevent="moveSelection(-1)"
@@ -104,8 +104,19 @@ const { t } = useI18n();
 const router = useRouter();
 const { uid } = useUid();
 
-const { isOpen, query, groups, flatEntries, selectedEntry, isLoading, hasFailed, moveSelection, select, close } =
-	useQuickNav();
+const {
+	isOpen,
+	query,
+	groups,
+	flatEntries,
+	selectedEntry,
+	placeholder,
+	isLoading,
+	hasFailed,
+	moveSelection,
+	select,
+	close,
+} = useQuickNav();
 
 const input = useTemplateRef<HTMLInputElement>("input");
 

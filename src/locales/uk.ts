@@ -2059,6 +2059,7 @@ export default {
 	"utils.adminFilter.placeholder.date.from": "Створено між 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020",
 	"feature.quickNav.placeholder": "Шукати, перейти або створити",
+	"feature.quickNav.placeholderWithoutCreate": "Шукати та перейти",
 	"feature.quickNav.results": "Результати пошуку",
 	"feature.quickNav.empty": "Нічого не знайдено.",
 	"feature.quickNav.failed": "Не вдалося повністю завантажити кімнати, курси, завдання та людей.",

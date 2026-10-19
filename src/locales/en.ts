@@ -2037,6 +2037,7 @@ export default {
 	"utils.adminFilter.placeholder.date.from": "Created between 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... and 03.03.2020",
 	"feature.quickNav.placeholder": "Search, jump or create",
+	"feature.quickNav.placeholderWithoutCreate": "Search and jump",
 	"feature.quickNav.results": "Search results",
 	"feature.quickNav.empty": "Nothing found.",
 	"feature.quickNav.failed": "Rooms, courses, tasks and people could not be fully loaded.",

@@ -81,10 +81,10 @@ export const useQuickNav = () => {
 		const q = trimmedQuery.value;
 
 		if (q.length === 0) {
-			const suggestions = navigationEntries.value.slice(0, SUGGESTION_COUNT);
-			return [{ label: t("feature.quickNav.group.navigation"), entries: suggestions }].filter(
-				(group) => group.entries.length > 0
-			);
+			return [
+				{ label: t("feature.quickNav.group.navigation"), entries: navigationEntries.value.slice(0, SUGGESTION_COUNT) },
+				{ label: t("feature.quickNav.group.actions"), entries: actionEntries.value },
+			].filter((group) => group.entries.length > 0);
 		}
 
 		const topMatches = (entries: QuickNavEntry[]) => byQuery(entries, q).slice(0, RESULTS_PER_GROUP);
@@ -97,6 +97,11 @@ export const useQuickNav = () => {
 			{ label: t("feature.quickNav.group.actions"), entries: byQuery(actionEntries.value, q) },
 		].filter((group) => group.entries.length > 0);
 	});
+
+	// only promise "create" to users who can actually create something
+	const placeholder = computed(() =>
+		actionEntries.value.length > 0 ? t("feature.quickNav.placeholder") : t("feature.quickNav.placeholderWithoutCreate")
+	);
 
 	/** the groups laid out end to end, which is the order the arrow keys walk */
 	const flatEntries: ComputedRef<QuickNavEntry[]> = computed(() => groups.value.flatMap((group) => group.entries));
@@ -148,6 +153,7 @@ export const useQuickNav = () => {
 		groups,
 		flatEntries,
 		selectedEntry,
+		placeholder,
 		isLoading,
 		hasFailed,
 		moveSelection,

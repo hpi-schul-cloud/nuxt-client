@@ -2079,6 +2079,7 @@ export default {
 	"utils.adminFilter.placeholder.date.from": "Erstellt zwischen 02/02/2020",
 	"utils.adminFilter.placeholder.date.until": "... und 03/03/2020",
 	"feature.quickNav.placeholder": "Suchen, springen oder anlegen",
+	"feature.quickNav.placeholderWithoutCreate": "Suchen und springen",
 	"feature.quickNav.results": "Suchergebnisse",
 	"feature.quickNav.empty": "Nichts gefunden.",
 	"feature.quickNav.failed": "Räume, Kurse, Aufgaben und Personen konnten nicht vollständig geladen werden.",
