@@ -1,4 +1,5 @@
 import { useNotificationStream } from "./notification-sse.composable";
+import { logger } from "@util-logger";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock EventSource
@@ -48,6 +49,9 @@ class MockEventSource {
 describe("useNotificationStream", () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
+		vi.spyOn(logger, "info").mockImplementation(vi.fn());
+		vi.spyOn(logger, "warn").mockImplementation(vi.fn());
+		vi.spyOn(logger, "error").mockImplementation(vi.fn());
 		MockEventSource.instances = [];
 		vi.stubGlobal("EventSource", MockEventSource);
 		vi.stubGlobal("location", { origin: "http://localhost:4000" });
@@ -56,9 +60,22 @@ describe("useNotificationStream", () => {
 	afterEach(() => {
 		vi.useRealTimers();
 		vi.unstubAllGlobals();
+		vi.restoreAllMocks();
 	});
 
 	describe("connect", () => {
+		it("should not warn when used outside component setup", () => {
+			const warnSpy = vi.spyOn(console, "warn").mockImplementation(vi.fn());
+
+			useNotificationStream();
+
+			expect(warnSpy).not.toHaveBeenCalledWith(
+				expect.stringContaining("onUnmounted is called when there is no active component instance")
+			);
+
+			warnSpy.mockRestore();
+		});
+
 		it("should create EventSource with correct URL", () => {
 			const { connect } = useNotificationStream();
 
@@ -314,6 +331,9 @@ describe("useNotificationStream", () => {
 
 			// Should still be 3 instances (no new connection attempt)
 			expect(MockEventSource.instances).toHaveLength(3);
+			expect(logger.warn).toHaveBeenCalledWith(
+				"[NotificationStream] Max reconnection attempts (2) reached. Giving up."
+			);
 		});
 
 		it("should not reconnect when autoReconnect is false", () => {
