@@ -88,6 +88,39 @@ describe("QuickNavTrigger", () => {
 			expect(palette.isOpen.value).toBe(false);
 		});
 
+		describe("when the keys are held down", () => {
+			const holdK = () =>
+				window.dispatchEvent(
+					new KeyboardEvent("keydown", { key: "k", metaKey: true, repeat: true, bubbles: true, cancelable: true })
+				);
+
+			it("opens the palette once and keeps it open", () => {
+				const { palette } = setupWithPalette();
+
+				pressK({ metaKey: true });
+				holdK();
+				holdK();
+				holdK();
+
+				expect(palette.isOpen.value).toBe(true);
+			});
+
+			it("still keeps the browser from handling the repeats", () => {
+				setupWithPalette();
+				const repeat = new KeyboardEvent("keydown", {
+					key: "k",
+					metaKey: true,
+					repeat: true,
+					bubbles: true,
+					cancelable: true,
+				});
+
+				window.dispatchEvent(repeat);
+
+				expect(repeat.defaultPrevented).toBe(true);
+			});
+		});
+
 		it("ignores K without a modifier, so typing is not interrupted", () => {
 			const { palette } = setupWithPalette();
 

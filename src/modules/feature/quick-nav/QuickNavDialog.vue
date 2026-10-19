@@ -145,6 +145,17 @@ watch(isOpen, async (opened) => {
 	input.value?.focus();
 });
 
+// focus stays in the field, so the browser does not scroll the highlighted option along by itself
+watch(
+	() => selectedEntry.value?.id,
+	async (id) => {
+		if (!id) return;
+
+		await nextTick();
+		document.getElementById(`quick-nav-${uid.value}-${id}`)?.scrollIntoView({ block: "nearest" });
+	}
+);
+
 type TitlePart = { text: string; isMatch: boolean };
 
 /** Shows the user why a line matched, which is the difference between a list and an answer. */

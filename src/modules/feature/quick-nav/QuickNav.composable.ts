@@ -31,10 +31,16 @@ const foldChars = (value: string): string[] =>
 export const matchRange = (title: string, query: string): [number, number] | undefined => {
 	if (query.length === 0) return undefined;
 
+	// compared character by character, so an emoji (two code units) cannot shift the range
 	const characters = foldChars(title);
-	const at = characters.join("").indexOf(foldChars(query).join(""));
+	const needle = foldChars(query);
+	for (let at = 0; at + needle.length <= characters.length; at += 1) {
+		if (needle.every((character, offset) => characters[at + offset] === character)) {
+			return [at, at + needle.length];
+		}
+	}
 
-	return at < 0 ? undefined : [at, at + [...query].length];
+	return undefined;
 };
 
 /**
@@ -98,12 +104,12 @@ export const useQuickNav = () => {
 		const topMatches = (entries: QuickNavEntry[]) => byQuery(entries, q).slice(0, RESULTS_PER_GROUP);
 
 		return [
-			{ label: t("feature.quickNav.group.navigation"), entries: byQuery(navigationEntries.value, q) },
+			{ label: t("feature.quickNav.group.navigation"), entries: topMatches(navigationEntries.value) },
 			{ label: t("feature.quickNav.group.roomsAndCourses"), entries: topMatches(roomsAndCourses.value) },
 			{ label: t("feature.quickNav.group.tasks"), entries: topMatches(tasks.value) },
 			{ label: t("feature.quickNav.group.people"), entries: topMatches(people.value) },
-			{ label: t("feature.quickNav.group.actions"), entries: byQuery(actionEntries.value, q) },
-			{ label: t("global.sidebar.item.helpArea"), entries: byQuery(helpEntries.value, q) },
+			{ label: t("feature.quickNav.group.actions"), entries: topMatches(actionEntries.value) },
+			{ label: t("global.sidebar.item.helpArea"), entries: topMatches(helpEntries.value) },
 		].filter((group) => group.entries.length > 0);
 	});
 

@@ -7,7 +7,7 @@ import { createTestAppStoreWithPermissions, createTestEnvStore, mountComposable 
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
-import { enableAutoUnmount, mount } from "@vue/test-utils";
+import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
@@ -33,6 +33,11 @@ const entry = (kind: QuickNavKind, title: string, target: Partial<QuickNavEntry>
 
 describe("QuickNavDialog", () => {
 	enableAutoUnmount(afterEach);
+
+	beforeAll(() => {
+		// jsdom does not implement scrolling
+		Element.prototype.scrollIntoView = vi.fn();
+	});
 
 	const setup = () => {
 		const pinia = createTestingPinia();
@@ -191,6 +196,20 @@ describe("QuickNavDialog", () => {
 			await input.trigger("keydown.enter");
 
 			expect(router.push).toHaveBeenCalledWith("/room/Theater B");
+		});
+
+		it("scrolls the selected entry into view", async () => {
+			const { input } = await setupWithRooms();
+			const scrollIntoView = vi.mocked(Element.prototype.scrollIntoView);
+			scrollIntoView.mockClear();
+
+			await input.trigger("keydown.down");
+			await flushPromises();
+
+			expect(scrollIntoView).toHaveBeenCalledWith({ block: "nearest" });
+			expect(scrollIntoView.mock.contexts.at(-1)).toBe(
+				document.getElementById(input.attributes("aria-activedescendant") ?? "")
+			);
 		});
 
 		it("closes on Escape", async () => {

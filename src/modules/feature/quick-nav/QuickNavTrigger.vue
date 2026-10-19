@@ -48,6 +48,9 @@ onKeyStroke(
 
 		// the browsers that bind ⌘K to the address bar must not win here
 		event.preventDefault();
+		// holding the keys repeats the event; only the first press toggles
+		if (event.repeat) return;
+
 		toggle();
 	},
 	{ eventName: "keydown" }

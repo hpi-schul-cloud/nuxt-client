@@ -1,4 +1,4 @@
-import { matchRange, useQuickNav } from "./QuickNav.composable";
+import { matchRange, score, useQuickNav } from "./QuickNav.composable";
 import { useQuickNavSourcesStore } from "./QuickNavSources.store";
 import { QuickNavEntry, QuickNavGroup, QuickNavKind } from "./types";
 import de from "@/locales/de";
@@ -64,6 +64,16 @@ describe("matchRange", () => {
 
 	it("gives nothing for an empty query", () => {
 		expect(matchRange("Räume", "")).toBeUndefined();
+	});
+
+	it("counts an emoji before the match as one character", () => {
+		expect(matchRange("😀 See", "See")).toEqual([2, 5]);
+	});
+});
+
+describe("score", () => {
+	it("ranks a word after an emoji as a word start", () => {
+		expect(score("😀 See", "See")).toBe(2);
 	});
 });
 
@@ -403,6 +413,15 @@ describe("QuickNav Composable", () => {
 			quickNav.query.value = "Aufgabe";
 
 			expect(groupOf(quickNav.groups.value, "Aufgaben")?.entries).toHaveLength(5);
+		});
+
+		it("shows at most five pages, too", () => {
+			// administrators see many more sidebar pages than anyone else
+			const { quickNav } = setup([Permission.ADMIN_VIEW, Permission.TEACHER_LIST, Permission.STUDENT_LIST]);
+
+			quickNav.query.value = "e";
+
+			expect(groupOf(quickNav.groups.value, "Springen zu")?.entries.length).toBeLessThanOrEqual(5);
 		});
 
 		it("ranks a title start above a word start above a match inside a word", () => {
