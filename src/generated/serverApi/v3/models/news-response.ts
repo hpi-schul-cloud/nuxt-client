@@ -89,7 +89,7 @@ export interface NewsResponse {
      * @type {UserInfoResponse}
      * @memberof NewsResponse
      */
-    creator: UserInfoResponse;
+    creator?: UserInfoResponse;
     /**
      * Reference to the User that updated the News entity
      * @type {UserInfoResponse}

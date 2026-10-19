@@ -259,12 +259,12 @@ describe("Board", () => {
 		});
 
 		describe("when the url has a hash", () => {
+			afterEach(() => {
+				window.location.hash = "";
+			});
+
 			const setup2 = () => {
-				Object.defineProperty(globalThis, "location", {
-					get: () => ({
-						hash: "#card-12345",
-					}),
-				});
+				window.location.hash = "#card-12345";
 
 				const domElementMock = mock<HTMLElement>();
 				const querySelectorSpy = vi.spyOn(document, "querySelector");

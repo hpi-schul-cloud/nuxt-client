@@ -54,7 +54,7 @@ const props = defineProps({
 });
 
 const courseRoomListStore = useCourseRoomListStore();
-const { fetchCourses, fetchAllElements } = courseRoomListStore;
+const { fetchCourses, fetchAllCourses } = courseRoomListStore;
 const { loading } = storeToRefs(courseRoomListStore);
 
 const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
@@ -120,7 +120,7 @@ const handleImport = async (file: File): Promise<void> => {
 		await commonCartridgeImport.importCommonCartridgeFile(file);
 	}, t("pages.rooms.ccImportCourse.loading"));
 
-	await Promise.allSettled([fetchCourses(), fetchAllElements()]);
+	await Promise.allSettled([fetchCourses(), fetchAllCourses()]);
 
 	if (commonCartridgeImport.isSuccess.value) {
 		notifySuccess(t("pages.rooms.ccImportCourse.success"));

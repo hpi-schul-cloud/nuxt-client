@@ -25,7 +25,7 @@
 			:room-id="roomId"
 			data-testid="room-external-tool-section"
 			@delete="onDeleteTool"
-			@refresh="() => fetchDisplayData(props.roomId, ToolContextType.COURSE)"
+			@refresh="onRefresh"
 		/>
 	</div>
 </template>
@@ -43,6 +43,10 @@ import { EmptyState, ToolsEmptyStateSvg } from "@ui-empty-state";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, onUnmounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
+
+const onRefresh = async () => {
+	await fetchDisplayData(props.roomId, ToolContextType.COURSE);
+};
 
 const props = defineProps({
 	roomId: {
