@@ -162,4 +162,25 @@ describe("@ui-layout/Topbar", () => {
 		expect(schoolLogo.exists()).toBe(false);
 		expect(userMenu.exists()).toBe(true);
 	});
+
+	describe("search slot", () => {
+		const isFollowedBySpacer = (topbar: ReturnType<typeof setup>["topbar"]) =>
+			topbar.get("[data-testid=topbar-search]").element.nextElementSibling?.classList.contains("v-spacer");
+
+		describe("on small screens", () => {
+			it("sits with the actions next to the user menu", () => {
+				const { topbar } = setup(500);
+
+				expect(isFollowedBySpacer(topbar)).toBe(false);
+			});
+		});
+
+		describe("on medium sized screens", () => {
+			it("keeps space on both sides", () => {
+				const { topbar } = setup(1000);
+
+				expect(isFollowedBySpacer(topbar)).toBe(true);
+			});
+		});
+	});
 });

@@ -20,7 +20,8 @@
 		>
 			<slot name="search" />
 		</div>
-		<VSpacer />
+		<!-- on phones the search is just an icon, so it sits with the other actions next to the user menu -->
+		<VSpacer v-if="isTabletOrBigger" />
 		<TopbarItem
 			v-if="showStatusAlertIcon"
 			class="mr-2"
