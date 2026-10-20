@@ -296,7 +296,8 @@ describe("QuickNavDialog", () => {
 			sourcesStore.tasks = [entry(QuickNavKind.TASK, "Hausaufgabe")];
 			await openWith("Hausaufgabe");
 
-			const group = wrapper.get("[role=group]");
+			// a fieldset is a group without needing the role attribute
+			const group = wrapper.get("[role=listbox] fieldset");
 			const heading = wrapper.get(`[id="${group.attributes("aria-labelledby")}"]`);
 
 			expect(heading.text()).toBe("Tasks");
@@ -337,13 +338,22 @@ describe("QuickNavDialog", () => {
 				expect(wrapper.get("[data-testid=quick-nav-status]").text()).toBe("");
 			});
 
-			it("is a polite live region", async () => {
+			it("is a status output", async () => {
 				const { wrapper, palette } = setup();
 
 				palette.open();
 				await nextTick();
 
-				expect(wrapper.get("[data-testid=quick-nav-status]").attributes("role")).toBe("status");
+				expect(wrapper.get("[data-testid=quick-nav-status]").element.tagName).toBe("OUTPUT");
+			});
+
+			it("is announced politely", async () => {
+				const { wrapper, palette } = setup();
+
+				palette.open();
+				await nextTick();
+
+				expect(wrapper.get("[data-testid=quick-nav-status]").attributes("aria-live")).toBe("polite");
 			});
 		});
 

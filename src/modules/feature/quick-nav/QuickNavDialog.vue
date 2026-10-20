@@ -44,10 +44,10 @@
 					density="compact"
 					class="py-1"
 				>
-					<div
+					<fieldset
 						v-for="(group, groupIndex) in groups"
 						:key="group.label"
-						role="group"
+						class="quick-nav-group"
 						:aria-labelledby="`quick-nav-${uid}-group-${groupIndex}`"
 					>
 						<VListSubheader :id="`quick-nav-${uid}-group-${groupIndex}`">{{ group.label }}</VListSubheader>
@@ -73,14 +73,14 @@
 							</VListItemTitle>
 							<VListItemSubtitle v-if="entry.subtitle">{{ entry.subtitle }}</VListItemSubtitle>
 						</VListItem>
-					</div>
+					</fieldset>
 				</VList>
 				<p v-if="groups.length === 0" class="px-4 py-3 mb-0 text-medium-emphasis" data-testid="quick-nav-empty">
 					{{ emptyMessage }}
 				</p>
 			</VCardText>
 
-			<div class="d-sr-only" role="status" data-testid="quick-nav-status">{{ statusMessage }}</div>
+			<output class="d-sr-only" aria-live="polite" data-testid="quick-nav-status">{{ statusMessage }}</output>
 
 			<div class="d-flex ga-4 px-4 py-2 border-t text-caption text-medium-emphasis">
 				<span>{{ t("feature.quickNav.hint.move") }}</span>
@@ -211,6 +211,14 @@ const openSelected = (): void => {
 
 .quick-nav-results {
 	max-height: 60vh;
+}
+
+/* a fieldset is the native group; only its default frame is unwanted */
+.quick-nav-group {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	min-width: 0;
 }
 
 .quick-nav-match {

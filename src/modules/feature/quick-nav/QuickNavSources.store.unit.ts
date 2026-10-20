@@ -34,7 +34,7 @@ const member = (userId: string, firstName: string, lastName: string) =>
 const roomWithMembersVisible = (name: string, getRoomMembers = true): RoomItemResponse =>
 	roomItemResponseFactory.build({
 		name,
-		allowedOperations: { getRoomMembers } as RoomItemResponse["allowedOperations"],
+		allowedOperations: { getRoomMembers },
 	});
 
 describe("QuickNavSources Store", () => {
