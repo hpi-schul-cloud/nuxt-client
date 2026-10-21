@@ -1779,6 +1779,10 @@ export default {
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
 	"pages.roomDetails.emptyState": "Actualmente no hay contenidos de aprendizaje en esta sala",
 	"pages.rooms.emptyState": "Actualmente no hay salas",
+	"pages.rooms.search.label": "Buscar sala",
+	"pages.rooms.search.results": "Salas encontradas: {count}",
+	"pages.rooms.search.noResults": "No se han encontrado salas.",
+	"pages.rooms.search.clear": "Borrar búsqueda",
 	"pages.rooms.fab.title": "Crear sala",
 	"pages.rooms.infoAlert.welcome": "¡Bienvenidos a las nuevas Salas!",
 	"pages.rooms.infoAlert.welcome.collaboration":
