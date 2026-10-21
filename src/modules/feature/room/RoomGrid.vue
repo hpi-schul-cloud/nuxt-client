@@ -1,18 +1,19 @@
 <template>
 	<Sortable
 		ref="gridRef"
-		role="application"
+		:role="isSortable ? 'application' : undefined"
 		:list="rooms"
 		class="room-grid mt-8"
 		item-key="id"
 		:options="getSortableOptions()"
-		@focusin.once="notifyOnScreenReader(t('common.instructions.orderBy.arrowKeys'))"
+		@focusin="announceSortingInstructions"
 		@start="isDragging = true"
 		@end="onDropEnd"
 	>
 		<template #item="{ element, index }">
 			<RoomGridItem
-				class="draggable user-select-none room-grid-item cursor-grab"
+				class="user-select-none room-grid-item"
+				:class="{ 'draggable cursor-grab': isSortable }"
 				:room="element"
 				:index
 				@contextmenu.prevent
@@ -48,7 +49,18 @@ const { fetchRooms, moveRoom } = useRoomStore();
 
 const props = defineProps({
 	rooms: { type: Array<RoomItem>, required: true },
+	isSortable: { type: Boolean, default: true },
 });
+
+let hasAnnouncedSortingInstructions = false;
+
+const announceSortingInstructions = () => {
+	if (!props.isSortable || hasAnnouncedSortingInstructions) return;
+
+	hasAnnouncedSortingInstructions = true;
+	notifyOnScreenReader(t("common.instructions.orderBy.arrowKeys"));
+};
+
 const isDragging = ref(false);
 
 // Fix for firefox
@@ -59,7 +71,7 @@ const onItemClick = (evt: Event) => {
 };
 
 const reorderRoom = (newIndex: number, oldIndex: number) => {
-	if (newIndex === oldIndex) return;
+	if (!props.isSortable || newIndex === oldIndex) return;
 
 	const room = props.rooms[oldIndex];
 	execute(async () => {
@@ -111,10 +123,17 @@ const onArrowKeyDown = (e: KeyboardEvent, oldIndex: number) => {
 	reorderRoom(newIndex, oldIndex);
 };
 
+const isFocusOutsideGrid = () => {
+	const active = document.activeElement;
+	return active !== null && active !== document.body && !gridRef.value?.containerRef?.contains(active);
+};
+
 watch(
 	() => props.rooms,
 	async () => {
 		await nextTick();
+		if (isFocusOutsideGrid()) return;
+
 		focusedRoom.value?.focus();
 	}
 );

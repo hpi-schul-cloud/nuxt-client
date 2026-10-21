@@ -1745,6 +1745,10 @@ export default {
 	"pages.roomDetails.board.defaultName": "Room Board",
 	"pages.roomDetails.emptyState": "Currently there is no learning content in this room",
 	"pages.rooms.emptyState": "Currently there are no rooms",
+	"pages.rooms.search.label": "Search room",
+	"pages.rooms.search.results": "Rooms found: {count}",
+	"pages.rooms.search.noResults": "No rooms found.",
+	"pages.rooms.search.clear": "Clear search",
 	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.infoAlert.welcome": "Welcome to the new Rooms!",
 	"pages.rooms.infoAlert.welcome.collaboration":
