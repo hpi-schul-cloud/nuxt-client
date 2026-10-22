@@ -11,6 +11,7 @@ import {
 	externalToolElementResponseFactory,
 	fileElementResponseFactory,
 	fileFolderElementResponseFactory,
+	h5pElementResponseFactory,
 	mockComposable,
 	richTextElementResponseFactory,
 	videoConferenceElementResponseFactory,
@@ -18,8 +19,8 @@ import {
 import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { ConfigResponse } from "@api-server";
-import { useBoardStore, useCardStore } from "@data-board";
+import { BoardResponseAllowedOperations, ConfigResponse } from "@api-server";
+import { useBoardStore, useCardStore, useSharedEditMode } from "@data-board";
 import { useExternalToolReferenceApi } from "@data-external-tool";
 import { useFileStorageApi } from "@data-file";
 import { createTestingPinia } from "@pinia/testing";
@@ -44,19 +45,28 @@ const ALL_ELEMENT_FLAGS: Partial<ConfigResponse> = {
 };
 
 describe("cardTableOfContents.composable", () => {
+	afterEach(() => {
+		useSharedEditMode().setEditModeId(undefined);
+	});
+
 	const setup = (
 		options: {
 			currentCardId?: string;
 			cards?: ReturnType<typeof cardResponseFactory.build>[];
 			isEnabled?: boolean;
 			flags?: Partial<ConfigResponse>;
+			isEditMode?: boolean;
+			allowedOperations?: Partial<BoardResponseAllowedOperations>;
 		} = {}
 	) => {
 		const cards = options.cards ?? [cardResponseFactory.build()];
 		const column = columnResponseFactory.build({
 			cards: cards.map((card) => cardSkeletonResponseFactory.build({ cardId: card.id })),
 		});
-		const board = boardResponseFactory.build({ columns: [column] });
+		const board = boardResponseFactory.build({
+			columns: [column],
+			allowedOperations: { updateElement: options.isEditMode, ...options.allowedOperations },
+		});
 
 		const getFileRecordsByParentId = vi.fn().mockReturnValue([]);
 		vi.mocked(useFileStorageApi).mockReturnValue(mockComposable(useFileStorageApi, { getFileRecordsByParentId }));
@@ -76,6 +86,7 @@ describe("cardTableOfContents.composable", () => {
 		createTestEnvStore({ ...ALL_ELEMENT_FLAGS, ...options.flags }, undefined, pinia);
 
 		const currentCardId = ref(options.currentCardId ?? cards[0].id);
+		if (options.isEditMode) useSharedEditMode().setEditModeId(currentCardId.value);
 		const isEnabled = ref(options.isEnabled ?? true);
 		const composable = mountComposable(() => useCardTableOfContents(currentCardId, isEnabled), {
 			global: {
@@ -97,7 +108,7 @@ describe("cardTableOfContents.composable", () => {
 
 	const elementLabelOf = (element: Parameters<typeof cardResponseFactory.build>[0]) => {
 		const card = cardResponseFactory.build(element);
-		const { currentElements } = setup({ cards: [card] });
+		const { currentElements } = setup({ cards: [card], isEditMode: true, allowedOperations: { deleteElement: true } });
 
 		return currentElements.value[0].label;
 	};
@@ -211,6 +222,105 @@ describe("cardTableOfContents.composable", () => {
 			currentCardId.value = "unknown";
 
 			expect(currentElements.value).toEqual([]);
+		});
+
+		describe("visibility", () => {
+			const buildCard = (element: ReturnType<typeof cardResponseFactory.build>["elements"][number]) =>
+				cardResponseFactory.build({ elements: [element] });
+			const idsOf = (options: Parameters<typeof setup>[0]) => setup(options).currentElements.value.map(({ id }) => id);
+
+			it("should list every element in edit mode", () => {
+				const link = linkElementResponseFactory.build();
+				link.content.url = "";
+				const h5p = h5pElementResponseFactory.build();
+				h5p.content.contentId = null;
+				const card = cardResponseFactory.build({ elements: [link, h5p] });
+
+				expect(idsOf({ cards: [card], isEditMode: true })).toEqual([link.id, h5p.id]);
+			});
+
+			it("should leave out links without url", () => {
+				const element = linkElementResponseFactory.build();
+				element.content.url = "";
+
+				expect(idsOf({ cards: [buildCard(element)] })).toEqual([]);
+			});
+
+			it("should leave out unconfigured h5p elements and keep configured ones", () => {
+				const empty = h5pElementResponseFactory.build();
+				empty.content.contentId = null;
+				const linked = h5pElementResponseFactory.build();
+				linked.content.contentId = "content-id";
+				const card = cardResponseFactory.build({ elements: [empty, linked] });
+
+				expect(idsOf({ cards: [card] })).toEqual([linked.id]);
+			});
+
+			it("should leave out external tool elements without tool", () => {
+				const element = externalToolElementResponseFactory.build();
+				element.content.contextExternalToolId = null;
+
+				expect(idsOf({ cards: [buildCard(element)] })).toEqual([]);
+			});
+
+			it("should leave out file elements without file record", () => {
+				const element = fileElementResponseFactory.build();
+				const card = buildCard(element);
+				const { currentElements, getFileRecordsByParentId } = setup({ cards: [card] });
+				getFileRecordsByParentId.mockReturnValue([]);
+				useCardStore().cards[card.id].elements = [element];
+
+				expect(currentElements.value).toEqual([]);
+			});
+
+			it("should leave out deleted elements without permission to delete them", () => {
+				const element = deletedElementResponseFactory.build();
+
+				expect(idsOf({ cards: [buildCard(element)] })).toEqual([]);
+			});
+
+			it("should list empty elements that show a placeholder to users who can manage them", () => {
+				const link = linkElementResponseFactory.build();
+				link.content.url = "";
+				const h5p = h5pElementResponseFactory.build();
+				h5p.content.contentId = null;
+				const tool = externalToolElementResponseFactory.build();
+				tool.content.contextExternalToolId = null;
+				const card = cardResponseFactory.build({ elements: [link, h5p, tool] });
+
+				expect(idsOf({ cards: [card], allowedOperations: { updateElement: true } })).toEqual([
+					link.id,
+					h5p.id,
+					tool.id,
+				]);
+			});
+
+			it("should leave out deleted elements in edit mode without permission to delete them", () => {
+				const element = deletedElementResponseFactory.build();
+
+				expect(idsOf({ cards: [buildCard(element)], isEditMode: true })).toEqual([]);
+			});
+
+			it("should list deleted elements with permission to delete them", () => {
+				const element = deletedElementResponseFactory.build();
+
+				expect(idsOf({ cards: [buildCard(element)], allowedOperations: { deleteElement: true } })).toEqual([
+					element.id,
+				]);
+			});
+
+			it.each([
+				["a horizontal line", "<hr>"],
+				["a table with empty cells", "<table><tbody><tr><td>&nbsp;</td></tr></tbody></table>"],
+			])("should list text elements that only contain %s with the type name", (_name, html) => {
+				const element = richTextElementResponseFactory.build();
+				element.content.text = html;
+				const { currentElements } = setup({ cards: [buildCard(element)] });
+
+				expect(currentElements.value).toEqual([
+					expect.objectContaining({ id: element.id, label: "components.cardElement.richTextElement" }),
+				]);
+			});
 		});
 
 		describe("labels", () => {
@@ -353,6 +463,21 @@ describe("cardTableOfContents.composable", () => {
 					expect(currentElements.value[0].label).toBe("Tool name");
 				});
 
+				it("should request the name when a tool gets configured while the table of contents is open", async () => {
+					const card = buildToolCard(null);
+					const { currentElements, fetchDisplayDataCall } = setup({ cards: [card], isEditMode: true });
+					await flushPromises();
+					expect(fetchDisplayDataCall).not.toHaveBeenCalled();
+
+					const configured = externalToolElementResponseFactory.build();
+					configured.content.contextExternalToolId = "tool-2";
+					useCardStore().cards[card.id].elements[0].content = configured.content;
+					await flushPromises();
+
+					expect(fetchDisplayDataCall).toHaveBeenCalledWith("tool-2");
+					expect(currentElements.value[0].label).toBe("Tool name");
+				});
+
 				it("should request every tool only once", async () => {
 					const { fetchDisplayDataCall, isEnabled } = setup({ cards: [buildToolCard("tool-1")] });
 					await flushPromises();
@@ -366,7 +491,7 @@ describe("cardTableOfContents.composable", () => {
 				});
 
 				it("should not request a name for a tool element without tool", async () => {
-					const { fetchDisplayDataCall, currentElements } = setup({ cards: [buildToolCard(null)] });
+					const { fetchDisplayDataCall, currentElements } = setup({ cards: [buildToolCard(null)], isEditMode: true });
 					await flushPromises();
 
 					expect(fetchDisplayDataCall).not.toHaveBeenCalled();

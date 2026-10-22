@@ -324,14 +324,14 @@ describe("CardHostDetailView", () => {
 
 		describe("when it is open", () => {
 			it("should render the table of contents", () => {
-				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true }, undefined, true);
 
 				expect(findTableOfContents(wrapper).exists()).toBe(true);
 				expect(wrapper.find("#card-detail-view-toc").exists()).toBe(true);
 			});
 
 			it("should expose the expanded state on the toggle", () => {
-				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true }, undefined, true);
 
 				const toggle = wrapper.find(TOC_TOGGLE);
 				expect(toggle.attributes("aria-expanded")).toBe("true");
@@ -339,7 +339,7 @@ describe("CardHostDetailView", () => {
 			});
 
 			it("should request closing when the toggle is clicked", async () => {
-				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true }, undefined, true);
 
 				await wrapper.find(TOC_TOGGLE).trigger("click");
 
@@ -347,13 +347,13 @@ describe("CardHostDetailView", () => {
 			});
 
 			it("should move focus to the current card only when the panel was already open on mount", () => {
-				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true }, undefined, true);
 
 				expect(findTableOfContents(wrapper).props("focusCurrentCard")).toBe(true);
 			});
 
 			it("should hand the cards of the board and the elements of the card to the table of contents", () => {
-				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true }, undefined, true);
 
 				const toc = findTableOfContents(wrapper);
 				expect(toc.props("elements").map(({ id }: { id: string }) => id)).toEqual(
@@ -367,7 +367,7 @@ describe("CardHostDetailView", () => {
 			const [firstElement, secondElement] = CARD_WITH_ELEMENTS.elements;
 
 			const setupWithRenderedElements = () => {
-				const result = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+				const result = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true }, undefined, true);
 				const scroller = result.wrapper.find(".detail-view__scroller").element as HTMLElement;
 				scroller.scrollTo = vi.fn();
 				scroller.scrollTop = 100;
@@ -465,7 +465,7 @@ describe("CardHostDetailView", () => {
 
 		describe("when a card is selected", () => {
 			it("should keep the table of contents open on large screens", async () => {
-				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true }, undefined, true);
 
 				await findTableOfContents(wrapper).vm.$emit("select:card");
 
@@ -474,7 +474,7 @@ describe("CardHostDetailView", () => {
 
 			it("should close the table of contents on small screens", async () => {
 				mockSmAndDown.value = true;
-				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true });
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true }, undefined, true);
 
 				await findTableOfContents(wrapper).vm.$emit("select:card");
 

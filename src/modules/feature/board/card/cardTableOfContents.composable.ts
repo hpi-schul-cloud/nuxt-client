@@ -1,4 +1,5 @@
 import { getContentElementTypeMeta, isContentElementTypeEnabled } from "../shared/content-element-type-meta";
+import { hasVisibleMarkup, toDomain, toTeaser } from "./cardElementText";
 import {
 	type CardResponse,
 	ContentElementType,
@@ -6,11 +7,24 @@ import {
 	type ExternalToolElementResponse,
 	type FileElementResponse,
 	type FileFolderElementResponse,
+	type H5pElementResponse,
 	type LinkElementResponse,
 	type RichTextElementResponse,
 	type VideoConferenceElementResponse,
 } from "@api-server";
-import { getCardDetailRoute, useBoardStore, useCardStore } from "@data-board";
+import {
+	canManageExternalToolElements,
+	canManageFileElements,
+	canManageH5pElements,
+	canManageLinkElements,
+	canSeeDeletedElements,
+	getCardDetailRoute,
+	isContentElementShown,
+	useBoardAllowedOperations,
+	useBoardStore,
+	useCardStore,
+	useCourseBoardEditMode,
+} from "@data-board";
 import { useExternalToolReferenceApi } from "@data-external-tool";
 import { useFileStorageApi } from "@data-file";
 import { logger } from "@util-logger";
@@ -24,14 +38,13 @@ export type TableOfContentsElement = { id: string; icon: string; label: string }
 type TableOfContentsCard = { cardId: string; title: string; route: RouteLocationRaw; isCurrent: boolean };
 export type TableOfContentsSection = { columnId: string; title: string; cards: TableOfContentsCard[] };
 
-const TEASER_MAX_LENGTH = 80;
-
 const isRichText = (element: CardElement): element is RichTextElementResponse =>
 	element.type === ContentElementType.RICH_TEXT;
 const isLink = (element: CardElement): element is LinkElementResponse => element.type === ContentElementType.LINK;
 const isFile = (element: CardElement): element is FileElementResponse => element.type === ContentElementType.FILE;
 const isExternalTool = (element: CardElement): element is ExternalToolElementResponse =>
 	element.type === ContentElementType.EXTERNAL_TOOL;
+const isH5p = (element: CardElement): element is H5pElementResponse => element.type === ContentElementType.H5P;
 const isTitledElement = (
 	element: CardElement
 ): element is VideoConferenceElementResponse | FileFolderElementResponse | DeletedElementResponse =>
@@ -39,33 +52,15 @@ const isTitledElement = (
 	element.type === ContentElementType.FILE_FOLDER ||
 	element.type === ContentElementType.DELETED;
 
-const BLOCK_BREAK_REGEX = /<\/?(?:p|div|li|h[1-6]|blockquote|tr)>|<br\s*\/?>/gi;
-
-const toPlainText = (html: string): string => {
-	const spacedHtml = html.replace(BLOCK_BREAK_REGEX, "$& ");
-	const text = new DOMParser().parseFromString(spacedHtml, "text/html").body.textContent ?? "";
-
-	return text.replace(/\s+/g, " ").trim();
-};
-
-const toTeaser = (html: string): string => toPlainText(html).slice(0, TEASER_MAX_LENGTH);
-
-const toDomain = (url: string): string => {
-	try {
-		const hostname = new URL(url.includes("://") ? url : `https://${url}`).hostname;
-
-		return hostname.replace(/^www\./, "");
-	} catch {
-		return "";
-	}
-};
-
 export const useCardTableOfContents = (currentCardId: Ref<string>, isEnabled: Readonly<Ref<boolean>>) => {
 	const { t } = useI18n();
 	const boardStore = useBoardStore();
 	const cardStore = useCardStore();
 	const { getFileRecordsByParentId } = useFileStorageApi();
 	const { fetchDisplayDataCall } = useExternalToolReferenceApi();
+	const { allowedOperations } = useBoardAllowedOperations();
+	// The detail view remounts per card, so the card of its edit mode never changes.
+	const { isEditMode } = useCourseBoardEditMode(currentCardId.value);
 
 	const sections = computed<TableOfContentsSection[]>(() => {
 		const board = boardStore.board;
@@ -88,21 +83,18 @@ export const useCardTableOfContents = (currentCardId: Ref<string>, isEnabled: Re
 	const toolNames = ref<Record<string, string>>({});
 	const requestedToolIds = new Set<string>();
 
-	const loadToolNames = async (elements: CardElement[]) => {
-		const toolIds = elements
-			.filter(isExternalTool)
-			.flatMap(({ content }) => (content.contextExternalToolId ? [content.contextExternalToolId] : []))
-			.filter((toolId) => !requestedToolIds.has(toolId));
-
+	const loadToolNames = async (ids: string[]) => {
 		await Promise.all(
-			toolIds.map(async (toolId) => {
-				requestedToolIds.add(toolId);
-				try {
-					toolNames.value[toolId] = (await fetchDisplayDataCall(toolId)).name;
-				} catch (error) {
-					logger.warn(error);
-				}
-			})
+			ids
+				.filter((toolId) => !requestedToolIds.has(toolId))
+				.map(async (toolId) => {
+					requestedToolIds.add(toolId);
+					try {
+						toolNames.value[toolId] = (await fetchDisplayDataCall(toolId)).name;
+					} catch (error) {
+						logger.warn(error);
+					}
+				})
 		);
 	};
 
@@ -125,21 +117,45 @@ export const useCardTableOfContents = (currentCardId: Ref<string>, isEnabled: Re
 		)
 	);
 
+	// Replacing only an element's content (e.g. configuring a tool) must trigger loading, so watch the ids.
+	const toolIds = computed(() =>
+		cardElements.value.filter(isExternalTool).flatMap(({ content }) => content.contextExternalToolId ?? [])
+	);
+
 	watch(
-		[cardElements, isEnabled],
-		([elements, enabled]) => {
-			if (enabled) loadToolNames(elements);
+		[toolIds, isEnabled],
+		([ids, enabled]) => {
+			if (enabled) loadToolNames(ids);
 		},
 		{ immediate: true }
 	);
+
+	// Uses the renderers' rules, so the overview lists exactly what the card shows.
+	const isElementVisible = (element: CardElement, text: string): boolean => {
+		const operations = allowedOperations.value;
+		const isShown = (hasContent: boolean, canManage = false) =>
+			isContentElementShown({ isEditMode: isEditMode.value, hasContent, canManage });
+
+		if (isRichText(element)) return isShown(text !== "" || hasVisibleMarkup(element.content.text));
+		if (isLink(element)) return isShown(element.content.url !== "", canManageLinkElements(operations));
+		if (isH5p(element)) return isShown(!!element.content.contentId, canManageH5pElements(operations));
+		if (isExternalTool(element)) {
+			return isShown(!!element.content.contextExternalToolId, canManageExternalToolElements(operations));
+		}
+		if (isFile(element)) {
+			return isShown(getFileRecordsByParentId(element.id).length > 0, canManageFileElements(operations));
+		}
+		if (element.type === ContentElementType.DELETED) return canSeeDeletedElements(operations);
+
+		return true;
+	};
 
 	const currentElements = computed<TableOfContentsElement[]>(() => {
 		if (!isEnabled.value) return [];
 
 		return cardElements.value.flatMap((element) => {
 			const text = getElementText(element).trim();
-			// Empty text elements render nothing outside edit mode, so there is nothing to navigate to.
-			if (isRichText(element) && text === "") return [];
+			if (!isElementVisible(element, text)) return [];
 
 			const { icon, nameKey } = getContentElementTypeMeta(element.type);
 			return [{ id: element.id, icon, label: text || t(nameKey) }];
