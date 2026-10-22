@@ -51,6 +51,21 @@ describe("useNotificationStore", () => {
 		expect(store.notifierItems[0].text).toBe("Second");
 	});
 
+	describe("when the notification was already removed before its timeout", () => {
+		it("should not remove another notification", () => {
+			const store = useNotificationStore();
+			store.notify({ text: "First", status: "info", duration: 3000 });
+			const alert = store.notifierItems[0];
+			store.removeNotifier(alert.id);
+			store.notify({ text: "Second", status: "success", autoClose: false });
+
+			vi.advanceTimersByTime(3000);
+
+			expect(store.notifierItems).toHaveLength(1);
+			expect(store.notifierItems[0].text).toBe("Second");
+		});
+	});
+
 	it("should clear all notifications", () => {
 		const store = useNotificationStore();
 

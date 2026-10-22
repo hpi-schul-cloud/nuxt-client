@@ -12,6 +12,7 @@ export default {
 	"common.actions.delete": "Löschen",
 	"common.actions.moveToTrash": "In Papierkorb verschieben",
 	"common.actions.restore": "Wiederherstellen",
+	"common.actions.undo": "Rückgängig machen",
 	"common.actions.discard": "Verwerfen",
 	"common.actions.download": "Herunterladen",
 	"common.actions.edit": "Bearbeiten",
@@ -175,6 +176,8 @@ export default {
 		"{type} konnte nicht zurückgesetzt werden. | {type} konnten nicht zurückgesetzt werden.",
 	"common.notifications.errors.notRestored":
 		"{type} konnte nicht wiederhergestellt werden. | {type} konnten nicht wiederhergestellt werden.",
+	"common.notifications.errors.notArchived":
+		"{type} konnte nicht archiviert werden. | {type} konnten nicht archiviert werden.",
 	"common.notifications.errors.notShared": "{type} konnte nicht geteilt werden. | {type} konnten nicht geteilt werden.",
 	"common.notifications.listWithMore": "{list} ... ({count} weitere)",
 	"common.notifications.warning.filesNotCopied":
@@ -1775,6 +1778,8 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Raum bearbeiten",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Raum löschen",
 	"pages.roomDetails.fab.add.board": "Bereich erstellen",
+	"pages.roomDetails.archived.info":
+		"Dieser Raum ist archiviert und kann nur angesehen werden. Für Änderungen muss er zuerst wiederhergestellt werden.",
 	"pages.roomDetails.board.defaultName": "Raum-Bereich",
 	"pages.roomDetails.emptyState": "Aktuell gibt es keine Lerninhalte in diesem Raum",
 	"pages.rooms.emptyState": "Aktuell gibt es keine Räume",
@@ -1925,6 +1930,17 @@ export default {
 	"pages.rooms.invitationlinks.error.load": "Die Einladungsliste konnte nicht geladen werden.",
 	"pages.rooms.invitationlinks.error.delete": "Die Einladungsliste konnte nicht gelöscht werden.",
 	"pages.rooms.title": "Räume",
+	"pages.rooms.menu.ariaLabel": "Räume-Menü",
+	"pages.rooms.archive.menu": "Archivieren",
+	"pages.rooms.archive.success": "Raum „{roomName}“ wurde archiviert.",
+	"pages.rooms.archived.title": "Archivierte Räume",
+	"pages.rooms.archived.chip": "Archivierter Raum",
+	"pages.rooms.archived.emptyState": "Aktuell gibt es keine archivierten Räume",
+	"pages.rooms.archived.table.header.archivedAt": "Archiviert am",
+	"pages.rooms.archived.table.row.actionMenu.ariaLabel": "Aktionsmenü für den archivierten Raum “{roomName}”",
+	"pages.rooms.archived.restore.success": "Raum wiederhergestellt. | {count} Räume wiederhergestellt.",
+	"pages.rooms.archived.restore.partial": "{count} von {total} Räumen wiederhergestellt.",
+	"pages.rooms.archived.delete.partial": "{count} von {total} Räumen gelöscht.",
 	"pages.rooms.administration.title": "Räume verwalten",
 	"pages.rooms.administration.table.header.roomName": "Raumname",
 	"pages.rooms.administration.table.header.roomOwner": "Besitzend",

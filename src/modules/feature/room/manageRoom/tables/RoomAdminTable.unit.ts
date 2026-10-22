@@ -1,6 +1,8 @@
 import RoomAdminTable from "./RoomAdminTable.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
+import { formatUtc } from "@/utils/date-time.utils";
 import { mockedPiniaStoreTyping, roomStatsItemResponseFactory, schoolFactory } from "@@/tests/test-utils";
+import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomStatsItemResponse } from "@api-server";
@@ -80,6 +82,36 @@ describe("RoomAdminTable", () => {
 			const dataTable = wrapper.getComponent(DataTable);
 			expect(dataTable.props("items")).toEqual(roomList);
 			expect(dataTable.props("tableHeaders")!.map((header) => header.title)).toEqual(tableHeaders);
+		});
+
+		describe("when the room archive feature is enabled", () => {
+			it("should add an 'archived on' column after the creation date", () => {
+				createTestEnvStore({ FEATURE_ROOM_ARCHIVE_ENABLED: true });
+				const { wrapper } = setup();
+
+				const titles = wrapper
+					.getComponent(DataTable)
+					.props("tableHeaders")!
+					.map((header) => header.title);
+
+				expect(titles).toEqual([
+					...tableHeaders.slice(0, 6),
+					"pages.rooms.archived.table.header.archivedAt",
+					...tableHeaders.slice(6),
+				]);
+			});
+
+			it("should show the archive date only for archived rooms", () => {
+				createTestEnvStore({ FEATURE_ROOM_ARCHIVE_ENABLED: true });
+				const archivedRoom = roomStatsItemResponseFactory.build({ archivedAt: "2026-10-01T10:00:00.000Z" });
+				const activeRoom = roomStatsItemResponseFactory.build({ archivedAt: undefined });
+				const { wrapper } = setup({ roomList: [archivedRoom, activeRoom] });
+
+				expect(wrapper.find(`[data-testid="room-admin-table-archived-at-${archivedRoom.roomId}"]`).text()).toBe(
+					formatUtc(archivedRoom.archivedAt!, "date")
+				);
+				expect(wrapper.find(`[data-testid="room-admin-table-archived-at-${activeRoom.roomId}"]`).exists()).toBe(false);
+			});
 		});
 
 		it("should render icon with text if room has no owner", () => {

@@ -28,8 +28,7 @@ export interface RoomDetailsResponse {
     'name': string;
     'color': RoomColor;
     'schoolId': string;
-    'startDate'?: string;
-    'endDate'?: string;
+    'isArchived': boolean;
     'createdAt': string;
     'updatedAt': string;
     'allowedOperations'?: RoomItemResponseAllowedOperations;

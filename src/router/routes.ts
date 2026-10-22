@@ -1,5 +1,10 @@
 import { Layouts } from "@/layouts/types";
-import { checkFolderFeature, checkRegisterExternalPersonsFeature, validateQueryParameters } from "@/router/guards";
+import {
+	checkFolderFeature,
+	checkRegisterExternalPersonsFeature,
+	checkRoomArchiveFeature,
+	validateQueryParameters,
+} from "@/router/guards";
 import { boardCardLinkRedirect } from "@/router/guards/board-card-link-redirect";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
@@ -342,6 +347,12 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		component: async () => (await import("@page-room")).RoomCreatePage,
 		beforeEnter: [createPermissionGuard([Permission.SCHOOL_CREATE_ROOM])],
 		name: "rooms-new",
+	},
+	{
+		path: `/rooms/archive`,
+		component: async () => (await import("@page-room")).RoomsArchivePage,
+		beforeEnter: checkRoomArchiveFeature,
+		name: "rooms-archive",
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})`,

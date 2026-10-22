@@ -729,7 +729,7 @@ describe("Board", () => {
 					describe("when the user has edit permissions for board visibility", () => {
 						it("should not call 'handleApplicationError' method", async () => {
 							const { boardStore, wrapperVM } = setup({
-								allowedOperations: { updateBoardVisibility: true, createCard: true },
+								allowedOperations: { updateBoardVisibility: true, findBoard: true },
 							});
 							expect(wrapperVM.isBoardVisible).toBe(true);
 
@@ -739,6 +739,18 @@ describe("Board", () => {
 							expect(wrapperVM.isBoardVisible).toBe(false);
 							expect(useAppStore().handleApplicationError).not.toHaveBeenCalled();
 						});
+					});
+				});
+
+				describe("when board is in draft mode in a read-only (archived) room", () => {
+					it("should not redirect a user who may find the board, even though content can't be created", async () => {
+						const { boardStore } = setup({ allowedOperations: { findBoard: true, createCard: false } });
+
+						boardStore.board!.isVisible = false;
+						await nextTick();
+
+						expect(router.replace).not.toHaveBeenCalled();
+						expect(useAppStore().handleApplicationError).not.toHaveBeenCalled();
 					});
 				});
 

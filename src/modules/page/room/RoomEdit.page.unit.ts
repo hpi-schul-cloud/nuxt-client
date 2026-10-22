@@ -39,10 +39,11 @@ describe("@pages/RoomEdit.page.vue", () => {
 			isRoomDefined: boolean;
 			room: RoomDetails | undefined;
 			allowedOperations: Partial<RoomItemResponseAllowedOperations> | undefined;
+			isArchived: boolean;
 		}>
 	) => {
-		const { isRoomDefined = true, allowedOperations = {} } = options ?? {};
-		const room = isRoomDefined ? roomFactory.build({ allowedOperations }) : undefined;
+		const { isRoomDefined = true, allowedOperations = {}, isArchived = false } = options ?? {};
+		const room = isRoomDefined ? roomFactory.build({ allowedOperations, isArchived }) : undefined;
 		const roomId = room ? room.id : "test-room-id";
 
 		router.setParams({ id: roomId });
@@ -158,6 +159,23 @@ describe("@pages/RoomEdit.page.vue", () => {
 				const breadcrumb = breadcrumbsProp.find((breadcrumb: Breadcrumb) => breadcrumb.title === room?.name);
 
 				expect(breadcrumb?.to).toContain(roomId);
+			});
+
+			describe("when the room is archived", () => {
+				it("should add the archived rooms breadcrumb before the room", async () => {
+					const { wrapper, room } = setup({ allowedOperations: { updateRoom: true }, isArchived: true });
+					await nextTick();
+
+					const breadcrumbsProp: Breadcrumb[] = wrapper.findComponent({ name: "DefaultWireframe" }).props().breadcrumbs;
+
+					expect(breadcrumbsProp.map((breadcrumb) => breadcrumb.title)).toEqual([
+						"pages.rooms.title",
+						"pages.rooms.archived.title",
+						room?.name,
+						"pages.roomDetails.ariaLabels.menu.action.edit",
+					]);
+					expect(breadcrumbsProp[1].to).toBe("/rooms/archive");
+				});
 			});
 
 			describe("when roomFormComponent emits save event", () => {

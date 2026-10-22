@@ -39,6 +39,18 @@
 						{{ getNotificationText(notification.text) }}
 					</template>
 				</div>
+
+				<VBtn
+					v-if="notification.action"
+					variant="text"
+					color="primary"
+					size="small"
+					class="mt-1 px-0"
+					data-testId="alert-action"
+					@click="onAction(notification)"
+				>
+					{{ notification.action.text }}
+				</VBtn>
 			</v-alert>
 		</transition-group>
 	</div>
@@ -46,7 +58,7 @@
 
 <script setup lang="ts">
 import { i18nKeyExists } from "@/plugins/i18n";
-import { AlertStatus, useNotificationStore } from "@data-app";
+import { Alert, AlertStatus, useNotificationStore } from "@data-app";
 import { mdiAlert, mdiAlertCircle, mdiCheckCircle, mdiInformation } from "@icons/material";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
@@ -70,6 +82,10 @@ const statusIcons: { [status in AlertStatus]: string } = {
 };
 
 const getNotificationText = (text: string) => (i18nKeyExists(text) ? t(text) : text);
+const onAction = (notification: Alert) => {
+	removeNotifier(notification.id);
+	notification.action?.handler();
+};
 </script>
 
 <style lang="scss" scoped>
