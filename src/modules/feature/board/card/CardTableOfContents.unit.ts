@@ -97,6 +97,13 @@ describe("CardTableOfContents", () => {
 		expect(element.attributes("title")).toBe("example.org");
 	});
 
+	it("should not end the edit mode when an element is selected", () => {
+		const { wrapper } = setup();
+
+		const element = wrapper.find("[data-testid='card-toc-element-element-1']");
+		expect(element.classes()).toContain("keep-inline-edit-mode");
+	});
+
 	describe("when the current card should be focused", () => {
 		it("should focus the entry of the current card without scrolling the page", () => {
 			const focus = vi.spyOn(HTMLElement.prototype, "focus").mockImplementation(() => undefined);

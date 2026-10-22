@@ -38,7 +38,7 @@
 									<li v-for="element in elements" :key="element.id">
 										<button
 											type="button"
-											class="card-toc__item card-toc__element"
+											class="card-toc__item card-toc__element keep-inline-edit-mode"
 											:class="{ 'card-toc__element--active': element.id === activeElementId }"
 											:aria-current="element.id === activeElementId ? 'location' : undefined"
 											:title="element.label"
