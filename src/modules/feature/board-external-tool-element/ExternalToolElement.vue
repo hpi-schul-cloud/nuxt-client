@@ -71,7 +71,12 @@ import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigu
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { ExternalToolElementResponse } from "@api-server";
-import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";
+import {
+	canManageExternalToolElements as canManageExternalToolElementsWith,
+	useBoardAllowedOperations,
+	useBoardFocusHandler,
+	useContentElementState,
+} from "@data-board";
 import { useEnvConfig } from "@data-env";
 import {
 	ContextExternalTool,
@@ -146,9 +151,7 @@ const showTool = computed(() => {
 	return isDeepLinkingTool.value ? hasDeepLink.value : true;
 });
 
-const canManageExternalToolElements = computed(
-	() => allowedOperations.value.updateElement || allowedOperations.value.createExternalToolElement
-);
+const canManageExternalToolElements = computed(() => canManageExternalToolElementsWith(allowedOperations.value));
 
 const toolDisplayName = computed(() => displayData.value?.name ?? "...");
 

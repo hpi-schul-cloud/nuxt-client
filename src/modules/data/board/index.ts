@@ -15,6 +15,7 @@ import { useSocketConnection } from "./socket/socket";
 export { useBoardAllowedOperations } from "./board-allowed-operations.composable";
 export { getCardDetailRoute, useBoardCardNavigation } from "./board-card-navigation.composable";
 export * from "./cardActions/cardActionPayload.types";
+export * from "./content-element-visibility";
 export * from "./edit-mode.composable";
 
 export {
