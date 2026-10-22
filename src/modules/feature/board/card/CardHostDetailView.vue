@@ -8,30 +8,42 @@
 					:aria-label="t('common.labels.close')"
 					@click="onDialogClose"
 				/>
-				<VBtn
+				<VTooltip
 					v-if="isTableOfContentsEnabled"
-					:icon="mdiFormatListBulleted"
-					data-testid="toggle-table-of-contents-button"
-					:aria-label="t('components.board.dialog.detail-view.tableOfContents.title')"
-					:aria-expanded="isTableOfContentsOpen"
-					:aria-controls="isTableOfContentsOpen ? 'card-detail-view-toc' : undefined"
-					:variant="isTableOfContentsOpen ? 'tonal' : 'text'"
-					@click="isTableOfContentsOpen = !isTableOfContentsOpen"
-				/>
+					:text="t('components.board.dialog.detail-view.tableOfContents.toggle')"
+					location="bottom"
+				>
+					<template #activator="{ props: tooltipProps }">
+						<VBtn
+							v-bind="tooltipProps"
+							:icon="mdiFormatListBulleted"
+							data-testid="toggle-table-of-contents-button"
+							:aria-label="t('components.board.dialog.detail-view.tableOfContents.toggle')"
+							:aria-expanded="isTableOfContentsOpen"
+							:aria-controls="isTableOfContentsOpen ? 'card-detail-view-toc' : undefined"
+							:variant="isTableOfContentsOpen ? 'tonal' : 'text'"
+							@click="isTableOfContentsOpen = !isTableOfContentsOpen"
+						/>
+					</template>
+				</VTooltip>
 				<VToolbarTitle>{{ $t("components.board.dialog.detail-view.title") }}</VToolbarTitle>
 				<VBtn
+					ref="previous-button"
 					:icon="mdiChevronLeft"
 					data-testid="prev-detail-view-button"
 					:aria-label="t('components.board.action.prev-detail-view')"
 					:to="previousCardRoute"
 					:disabled="!previousCardRoute"
+					@click="focusTarget = 'previous-card'"
 				/>
 				<VBtn
+					ref="next-button"
 					:icon="mdiChevronRight"
 					data-testid="next-detail-view-button"
 					:aria-label="t('components.board.action.next-detail-view')"
 					:to="nextCardRoute"
 					:disabled="!nextCardRoute"
+					@click="focusTarget = 'next-card'"
 				/>
 				<VSpacer />
 				<VBtn
@@ -55,14 +67,14 @@
 					{{ $t("common.actions.view") }}
 				</VBtn>
 			</VToolbar>
-			<div class="detail-view__body">
+			<div class="detail-view__body" :class="{ 'detail-view__body--stacked': isStacked }">
 				<Transition name="toc-slide">
 					<div v-if="isTableOfContentsShown" id="card-detail-view-toc" class="toc-panel">
 						<CardTableOfContents
 							:sections="sections"
 							:elements="currentElements"
 							:active-element-id="activeElementId"
-							:focus-current-card="wasTableOfContentsOpenOnMount"
+							:focus-current-card="initialFocusTarget === 'table-of-contents'"
 							@select:element="onSelectElement"
 							@select:card="onSelectCard"
 						/>
@@ -96,13 +108,14 @@ import { useActiveCardElement } from "./activeCardElement.composable";
 import CardHost from "./CardHost.vue";
 import { useCardTableOfContents } from "./cardTableOfContents.composable";
 import CardTableOfContents from "./CardTableOfContents.vue";
+import type { DetailViewFocusTarget } from "./detailViewFocusTarget";
 import { scrollToCardElement } from "./scrollToCardElement";
 import { colorToHexLighten3, colorToHexLighten5 } from "@/utils/color.utils";
 import { Colors } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { mdiChevronLeft, mdiChevronRight, mdiClose, mdiFormatListBulleted } from "@icons/material";
-import { computed, ref, toRef, useTemplateRef, watch, watchEffect } from "vue";
+import { type ComponentPublicInstance, computed, onMounted, ref, toRef, useTemplateRef, watch, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import type { RouteLocationRaw } from "vue-router";
 import { useDisplay } from "vuetify";
@@ -119,13 +132,21 @@ const emit = defineEmits<{
 }>();
 
 const isTableOfContentsOpen = defineModel<boolean>("tableOfContentsOpen", { default: false });
-const isTableOfContentsEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_TABLE_OF_CONTENTS_ENABLED);
+// The view remounts per card, so the previous view hands over where focus belongs after a card switch.
+const focusTarget = defineModel<DetailViewFocusTarget | undefined>("focusTarget", { default: undefined });
+const initialFocusTarget = focusTarget.value;
+focusTarget.value = undefined;
+
+const envConfig = useEnvConfig();
+const isTableOfContentsEnabled = computed(() => envConfig.value.FEATURE_COLUMN_BOARD_TABLE_OF_CONTENTS_ENABLED);
 const isTableOfContentsShown = computed(() => isTableOfContentsEnabled.value && isTableOfContentsOpen.value);
-// The view remounts per card, so an already open panel means the user just switched cards.
-const wasTableOfContentsOpenOnMount = isTableOfContentsShown.value;
+
+// Below the md breakpoint the panel sits above the card, unless the screen is too short for that.
+const STACKED_MIN_HEIGHT_PX = 480;
+const { smAndDown, height } = useDisplay();
+const isStacked = computed(() => smAndDown.value && height.value >= STACKED_MIN_HEIGHT_PX);
 
 const { t } = useI18n();
-const { smAndDown: isSmallScreen } = useDisplay();
 const { sections, currentElements } = useCardTableOfContents(cardRef, isTableOfContentsShown);
 const scroller = useTemplateRef<HTMLElement>("scroller");
 const {
@@ -174,6 +195,25 @@ const cardBorderColor = computed(() => {
 	return colorToHexLighten3(color);
 });
 
+const previousButton = useTemplateRef<ComponentPublicInstance>("previous-button");
+const nextButton = useTemplateRef<ComponentPublicInstance>("next-button");
+
+// At the first or last card the used button is disabled, so focus moves to the other one.
+const focusCardNavigationButton = (target: "previous-card" | "next-card") => {
+	const previous = { button: previousButton, route: props.previousCardRoute };
+	const next = { button: nextButton, route: props.nextCardRoute };
+	const candidates = target === "next-card" ? [next, previous] : [previous, next];
+	const element = candidates.find(({ route }) => route)?.button.value?.$el;
+
+	if (element instanceof HTMLElement) element.focus();
+};
+
+onMounted(() => {
+	if (initialFocusTarget === "previous-card" || initialFocusTarget === "next-card") {
+		focusCardNavigationButton(initialFocusTarget);
+	}
+});
+
 const onSelectElement = (elementId: string) => {
 	if (!scroller.value) return;
 
@@ -182,11 +222,12 @@ const onSelectElement = (elementId: string) => {
 	if (!wasFound) return;
 
 	selectActiveElement(elementId);
-	if (isSmallScreen.value) isTableOfContentsOpen.value = false;
+	if (isStacked.value) isTableOfContentsOpen.value = false;
 };
 
 const onSelectCard = () => {
-	if (isSmallScreen.value) isTableOfContentsOpen.value = false;
+	if (isStacked.value) isTableOfContentsOpen.value = false;
+	else focusTarget.value = "table-of-contents";
 };
 
 const onDialogClose = () => {
@@ -211,9 +252,19 @@ const onDialogClose = () => {
 }
 
 .detail-view__body {
+	/* Also read by CardTableOfContents. */
+	--toc-width: 20rem;
+	--toc-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
 	display: flex;
 	flex: 1;
 	min-height: 0;
+}
+
+.detail-view__body--stacked {
+	--toc-width: 100%;
+
+	flex-direction: column;
 }
 
 .detail-view__scroller {
@@ -227,9 +278,15 @@ const onDialogClose = () => {
 	display: flex;
 	flex: none;
 	flex-direction: column;
-	width: 20rem;
+	width: var(--toc-width);
 	overflow: hidden;
 	border-inline-end: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+
+	.detail-view__body--stacked & {
+		max-height: 40vh;
+		border-inline-end: 0;
+		border-block-end: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+	}
 }
 
 .toc-slide-enter-active {
@@ -243,12 +300,9 @@ const onDialogClose = () => {
 .toc-slide-enter-active,
 .toc-slide-leave-active {
 	transition:
-		width var(--toc-duration) cubic-bezier(0.16, 1, 0.3, 1),
-		opacity var(--toc-duration) cubic-bezier(0.16, 1, 0.3, 1);
-
-	:deep(.card-toc) {
-		transition: transform var(--toc-duration) cubic-bezier(0.16, 1, 0.3, 1);
-	}
+		width var(--toc-duration) var(--toc-ease),
+		max-height var(--toc-duration) var(--toc-ease),
+		opacity var(--toc-duration) var(--toc-ease);
 }
 
 .toc-slide-enter-from,
@@ -256,31 +310,8 @@ const onDialogClose = () => {
 	width: 0;
 	opacity: 0;
 
-	:deep(.card-toc) {
-		transform: translateX(-2rem);
-	}
-}
-
-@media (max-width: 959.98px) and (min-height: 30rem) {
-	.detail-view__body {
-		flex-direction: column;
-	}
-
-	.toc-panel {
-		width: 100%;
-		max-height: 40vh;
-		border-inline-end: 0;
-		border-block-end: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
-	}
-
-	.toc-slide-enter-active,
-	.toc-slide-leave-active {
-		transition-property: max-height, opacity;
-	}
-
-	.toc-slide-enter-from,
-	.toc-slide-leave-to {
-		width: 100%;
+	.detail-view__body--stacked & {
+		width: var(--toc-width);
 		max-height: 0;
 	}
 }
@@ -291,15 +322,6 @@ const onDialogClose = () => {
 		--toc-duration: 0.15s;
 
 		transition-property: opacity;
-
-		:deep(.card-toc) {
-			transition: none;
-		}
-	}
-
-	.toc-slide-enter-from,
-	.toc-slide-leave-to :deep(.card-toc) {
-		transform: none;
 	}
 }
 

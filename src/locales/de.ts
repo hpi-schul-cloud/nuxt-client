@@ -487,6 +487,7 @@ export default {
 		"Der Bereich muss zuerst veröffentlicht werden, bevor die Bearbeitungseinstellungen angepasst werden können.",
 	"components.board.dialog.detail-view.title": "Vollansicht",
 	"components.board.dialog.detail-view.tableOfContents.title": "Übersicht",
+	"components.board.dialog.detail-view.tableOfContents.toggle": "Übersicht ein-/ausblenden",
 	"components.board.dialog.detail-view.tableOfContents.empty": "Diese Karte hat noch keine Inhalte",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Abschnitt-Einstellungen",

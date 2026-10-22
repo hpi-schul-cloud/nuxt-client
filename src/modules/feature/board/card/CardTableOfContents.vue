@@ -6,12 +6,14 @@
 			</h2>
 		</header>
 		<div ref="body" class="card-toc__body">
+			<!-- Native lists on purpose: VList puts links and options directly into role="list" without list items. -->
 			<ol>
 				<li v-for="section in sections" :key="section.columnId" class="card-toc__section">
 					<h3 class="card-toc__column">{{ section.title }}</h3>
 					<ol>
 						<li v-for="card in section.cards" :key="card.cardId">
 							<RouterLink
+								:ref="card.isCurrent ? setCurrentCardLink : undefined"
 								class="card-toc__item card-toc__card"
 								:class="{ 'card-toc__card--current': card.isCurrent }"
 								:to="card.route"
@@ -20,7 +22,7 @@
 								:data-testid="`card-toc-card-${card.cardId}`"
 								@click="emit('select:card')"
 							>
-								<span class="card-toc__card-label">{{ card.title }}</span>
+								<span class="card-toc__label">{{ card.title }}</span>
 							</RouterLink>
 							<div v-if="card.isCurrent" class="card-toc__outline">
 								<span
@@ -37,6 +39,7 @@
 								<ol v-if="elements.length > 0">
 									<li v-for="element in elements" :key="element.id">
 										<button
+											:ref="(button) => setElementButton(element.id, button)"
 											type="button"
 											class="card-toc__item card-toc__element keep-inline-edit-mode"
 											:class="{ 'card-toc__element--active': element.id === activeElementId }"
@@ -46,7 +49,7 @@
 											@click="emit('select:element', element.id)"
 										>
 											<VIcon :icon="element.icon" size="20" aria-hidden="true" />
-											<span class="card-toc__element-label">{{ element.label }}</span>
+											<span class="card-toc__label">{{ element.label }}</span>
 										</button>
 									</li>
 								</ol>
@@ -64,7 +67,7 @@
 
 <script setup lang="ts">
 import type { TableOfContentsElement, TableOfContentsSection } from "./cardTableOfContents.composable";
-import { onMounted, ref, useTemplateRef, watch } from "vue";
+import { type ComponentPublicInstance, onMounted, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps<{
@@ -81,47 +84,68 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
+// The current card is scrolled into the upper third of the panel, leaving room for its elements below.
+const CURRENT_CARD_SCROLL_RATIO = 1 / 3;
+
+type TemplateRefValue = Element | ComponentPublicInstance | null;
+
+const toHtmlElement = (value: TemplateRefValue) => {
+	const element = value instanceof Element ? value : value?.$el;
+	return element instanceof HTMLElement ? element : undefined;
+};
+
 const body = useTemplateRef<HTMLElement>("body");
+let currentCardLink: HTMLElement | undefined;
+const elementButtons = new Map<string, HTMLElement>();
+
+const setCurrentCardLink = (value: TemplateRefValue) => {
+	currentCardLink = toHtmlElement(value);
+};
+
+const setElementButton = (elementId: string, value: TemplateRefValue) => {
+	const button = toHtmlElement(value);
+	if (button) elementButtons.set(elementId, button);
+	else elementButtons.delete(elementId);
+};
 
 const markerY = ref(0);
 const isMarkerVisible = ref(false);
 const isMarkerSliding = ref(false);
 
 const placeMarker = () => {
-	const activeElement = body.value?.querySelector<HTMLElement>("[aria-current='location']");
-	if (!activeElement) {
+	const activeButton = props.activeElementId ? elementButtons.get(props.activeElementId) : undefined;
+	if (!activeButton) {
 		isMarkerVisible.value = false;
 		return;
 	}
 
 	// Only slide between two elements; when the marker (re)appears it fades in at its target.
 	isMarkerSliding.value = isMarkerVisible.value;
-	markerY.value = activeElement.offsetTop + activeElement.offsetHeight / 2;
+	markerY.value = activeButton.offsetTop + activeButton.offsetHeight / 2;
 	isMarkerVisible.value = true;
 };
 
-watch(() => [props.activeElementId, props.elements], placeMarker, { flush: "post" });
+watch([() => props.activeElementId, () => props.elements], placeMarker, { flush: "post" });
 
 onMounted(() => {
 	placeMarker();
 
-	const currentCard = body.value?.querySelector<HTMLElement>("[aria-current='page']");
-	if (!body.value || !currentCard) return;
+	if (!body.value || !currentCardLink) return;
 
-	body.value.scrollTop = currentCard.offsetTop - body.value.clientHeight / 3;
-	if (props.focusCurrentCard) currentCard.focus({ preventScroll: true });
+	body.value.scrollTop = currentCardLink.offsetTop - body.value.clientHeight * CURRENT_CARD_SCROLL_RATIO;
+	if (props.focusCurrentCard) currentCardLink.focus({ preventScroll: true });
 });
 </script>
 
 <style lang="scss" scoped>
 .card-toc {
-	--toc-ease: cubic-bezier(0.16, 1, 0.3, 1);
 	--toc-rail-inset: 1.375rem;
 
 	display: flex;
 	flex: 1;
 	flex-direction: column;
-	width: 20rem;
+	/* Set by the surrounding panel, so the content keeps its width while the panel slides. */
+	width: var(--toc-width, 100%);
 	min-height: 0;
 	font-size: var(--text-sm);
 	line-height: var(--line-height-md);
@@ -217,7 +241,7 @@ onMounted(() => {
 	min-height: 2.5rem;
 }
 
-.card-toc__card-label {
+.card-toc__label {
 	display: -webkit-box;
 	min-width: 0;
 	overflow: hidden;
@@ -301,23 +325,10 @@ onMounted(() => {
 	color: rgb(var(--v-theme-primary));
 }
 
-.card-toc__element-label {
-	min-width: 0;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
 .card-toc__empty {
 	padding: 0.5rem 0.75rem 0.5rem 1.25rem;
 	margin: 0;
 	color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-
-@media (max-width: 959.98px) {
-	.card-toc {
-		width: 100%;
-	}
 }
 
 @media (prefers-reduced-motion: reduce) {

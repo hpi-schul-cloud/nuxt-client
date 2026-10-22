@@ -5,6 +5,7 @@
 				v-if="cardId"
 				:key="cardId"
 				v-model:table-of-contents-open="isTableOfContentsOpen"
+				v-model:focus-target="detailViewFocusTarget"
 				:card-id="cardId"
 				:previous-card-route="previousCardRoute"
 				:next-card-route="nextCardRoute"
@@ -141,6 +142,7 @@
 
 <script setup lang="ts">
 import CardHostDetailView from "../card/CardHostDetailView.vue";
+import type { DetailViewFocusTarget } from "../card/detailViewFocusTarget";
 import MoveCardDialog from "../card/MoveCardDialog.vue";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
@@ -533,8 +535,12 @@ const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
 };
 
 const isTableOfContentsOpen = ref(false);
+const detailViewFocusTarget = ref<DetailViewFocusTarget>();
 watch(cardId, (newCardId) => {
-	if (!newCardId) isTableOfContentsOpen.value = false;
+	if (newCardId) return;
+
+	isTableOfContentsOpen.value = false;
+	detailViewFocusTarget.value = undefined;
 });
 
 const onCloseDetailView = () => {

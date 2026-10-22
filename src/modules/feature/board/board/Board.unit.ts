@@ -1436,6 +1436,26 @@ describe("Board", () => {
 
 				expect(detailView().props("tableOfContentsOpen")).toBe(false);
 			});
+
+			it("should keep the focus target that the detail view hands over to the next card", async () => {
+				const { detailView } = setupDetailView();
+
+				await detailView().vm.$emit("update:focusTarget", "next-card");
+
+				expect(detailView().props("focusTarget")).toBe("next-card");
+			});
+
+			it("should forget the focus target after the detail view was left", async () => {
+				const { wrapper, detailView } = setupDetailView();
+				await detailView().vm.$emit("update:focusTarget", "table-of-contents");
+
+				router.currentRoute.value = { ...router.currentRoute.value, params: {} };
+				await wrapper.vm.$nextTick();
+				router.currentRoute.value = { ...router.currentRoute.value, params: { cardId: "test-card-id-123" } };
+				await wrapper.vm.$nextTick();
+
+				expect(detailView().props("focusTarget")).toBeUndefined();
+			});
 		});
 	});
 });

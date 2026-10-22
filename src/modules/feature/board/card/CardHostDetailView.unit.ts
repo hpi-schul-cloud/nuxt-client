@@ -20,11 +20,17 @@ import { computed, ref } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
 import { VBtn, VDialog } from "vuetify/components";
 
-const { mockSmAndDown } = vi.hoisted(() => ({ mockSmAndDown: { value: false } }));
+const { mockSmAndDown, mockHeight } = vi.hoisted(() => ({
+	mockSmAndDown: { value: false },
+	mockHeight: { value: 800 },
+}));
 
 vi.mock("vuetify", async (importOriginal) => ({
 	...(await importOriginal<typeof import("vuetify")>()),
-	useDisplay: () => ({ smAndDown: computed(() => mockSmAndDown.value) }),
+	useDisplay: () => ({
+		smAndDown: computed(() => mockSmAndDown.value),
+		height: computed(() => mockHeight.value),
+	}),
 }));
 
 const backgroundColor = Colors.BLUE;
@@ -57,6 +63,7 @@ describe("CardHostDetailView", () => {
 	afterEach(() => {
 		vi.clearAllMocks();
 		mockSmAndDown.value = false;
+		mockHeight.value = 800;
 	});
 
 	const setup = (
@@ -103,6 +110,7 @@ describe("CardHostDetailView", () => {
 		const wrapper = shallowMount(CardHostDetailView, {
 			global: {
 				plugins: [pinia, createTestingVuetify(), createTestingI18n()],
+				stubs: { VTooltip: { template: '<div><slot name="activator" :props="{}" /></div>' } },
 			},
 			propsData: props,
 			attachTo: document.body,
@@ -346,10 +354,32 @@ describe("CardHostDetailView", () => {
 				expect(wrapper.emitted("update:tableOfContentsOpen")).toEqual([[false]]);
 			});
 
-			it("should move focus to the current card only when the panel was already open on mount", () => {
-				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true }, undefined, true);
+			it("should move focus to the current card when the card was selected in the table of contents", () => {
+				const { wrapper } = setup(
+					{ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true, focusTarget: "table-of-contents" },
+					undefined,
+					true
+				);
 
 				expect(findTableOfContents(wrapper).props("focusCurrentCard")).toBe(true);
+			});
+
+			it("should not move focus to the current card when the card was switched otherwise", () => {
+				const { wrapper } = setup(
+					{ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true, focusTarget: "next-card" },
+					undefined,
+					true
+				);
+
+				expect(findTableOfContents(wrapper).props("focusCurrentCard")).toBe(false);
+			});
+
+			it("should label the toggle as showing and hiding the table of contents", () => {
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true }, undefined, true);
+
+				expect(wrapper.find(TOC_TOGGLE).attributes("aria-label")).toBe(
+					"components.board.dialog.detail-view.tableOfContents.toggle"
+				);
 			});
 
 			it("should hand the cards of the board and the elements of the card to the table of contents", () => {
@@ -368,15 +398,15 @@ describe("CardHostDetailView", () => {
 
 			const setupWithRenderedElements = () => {
 				const result = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true }, undefined, true);
-				const scroller = result.wrapper.find(".detail-view__scroller").element as HTMLElement;
+				const scroller = result.wrapper.find<HTMLElement>(".detail-view__scroller").element;
 				scroller.scrollTo = vi.fn();
 				scroller.scrollTop = 100;
-				vi.spyOn(scroller, "getBoundingClientRect").mockReturnValue({ top: 50 } as DOMRect);
+				vi.spyOn(scroller, "getBoundingClientRect").mockReturnValue(new DOMRect(0, 50));
 
 				const targets = [firstElement, secondElement].map((element) => {
 					const target = document.createElement("div");
 					target.dataset.elementId = element.id;
-					vi.spyOn(target, "getBoundingClientRect").mockReturnValue({ top: 400 } as DOMRect);
+					vi.spyOn(target, "getBoundingClientRect").mockReturnValue(new DOMRect(0, 400));
 					scroller.appendChild(target);
 
 					return target;
@@ -428,7 +458,8 @@ describe("CardHostDetailView", () => {
 			});
 
 			it("should not scroll smoothly when the user prefers reduced motion", async () => {
-				vi.spyOn(window, "matchMedia").mockReturnValue({ matches: true } as MediaQueryList);
+				const matchMedia = window.matchMedia;
+				vi.spyOn(window, "matchMedia").mockImplementation((query) => ({ ...matchMedia(query), matches: true }));
 				const { wrapper, scroller } = setupWithRenderedElements();
 
 				await findTableOfContents(wrapper).vm.$emit("select:element", secondElement.id);
@@ -472,6 +503,25 @@ describe("CardHostDetailView", () => {
 				expect(wrapper.emitted("update:tableOfContentsOpen")).toBeUndefined();
 			});
 
+			it("should hand the focus over to the table of contents of the next card", async () => {
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true }, undefined, true);
+
+				await findTableOfContents(wrapper).vm.$emit("select:card");
+
+				expect(wrapper.emitted("update:focusTarget")?.at(-1)).toEqual(["table-of-contents"]);
+			});
+
+			it("should keep the table of contents open on small screens that are too short to stack it", async () => {
+				mockSmAndDown.value = true;
+				mockHeight.value = 400;
+				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true }, undefined, true);
+
+				await findTableOfContents(wrapper).vm.$emit("select:card");
+
+				expect(wrapper.emitted("update:tableOfContentsOpen")).toBeUndefined();
+				expect(wrapper.find(".detail-view__body--stacked").exists()).toBe(false);
+			});
+
 			it("should close the table of contents on small screens", async () => {
 				mockSmAndDown.value = true;
 				const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, tableOfContentsOpen: true }, undefined, true);
@@ -479,7 +529,60 @@ describe("CardHostDetailView", () => {
 				await findTableOfContents(wrapper).vm.$emit("select:card");
 
 				expect(wrapper.emitted("update:tableOfContentsOpen")).toEqual([[false]]);
+				expect(wrapper.find(".detail-view__body--stacked").exists()).toBe(true);
 			});
+		});
+	});
+
+	describe("focus after a card switch", () => {
+		const PREV_BUTTON = "[data-testid='prev-detail-view-button']";
+		const NEXT_BUTTON = "[data-testid='next-detail-view-button']";
+
+		it("should consume the focus target handed over by the previous view", () => {
+			const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, focusTarget: "next-card" });
+
+			expect(wrapper.emitted("update:focusTarget")).toEqual([[undefined]]);
+		});
+
+		it.each([
+			["previous", PREV_BUTTON, "update:focusTarget", "previous-card"],
+			["next", NEXT_BUTTON, "update:focusTarget", "next-card"],
+		])("should remember the %s button as focus target when it is clicked", async (_name, selector, event, target) => {
+			const { wrapper } = setup({ cardId: CARD_WITH_ELEMENTS.id, previousCardRoute: "/prev", nextCardRoute: "/next" });
+
+			await wrapper.findComponent(selector).trigger("click");
+
+			expect(wrapper.emitted(event)?.at(-1)).toEqual([target]);
+		});
+
+		it.each([
+			["previous-card", PREV_BUTTON],
+			["next-card", NEXT_BUTTON],
+		] as const)("should move focus back to the button of %s", (focusTarget, selector) => {
+			const focus = vi.spyOn(HTMLElement.prototype, "focus");
+
+			const { wrapper } = setup({
+				cardId: CARD_WITH_ELEMENTS.id,
+				previousCardRoute: "/prev",
+				nextCardRoute: "/next",
+				focusTarget,
+			});
+
+			expect(focus.mock.contexts).toContain(wrapper.find(selector).element);
+			focus.mockRestore();
+		});
+
+		it("should move focus to the other button when the used one is disabled at the end of the board", () => {
+			const focus = vi.spyOn(HTMLElement.prototype, "focus");
+
+			const { wrapper } = setup({
+				cardId: CARD_WITH_ELEMENTS.id,
+				previousCardRoute: "/prev",
+				focusTarget: "next-card",
+			});
+
+			expect(focus.mock.contexts).toContain(wrapper.find(PREV_BUTTON).element);
+			focus.mockRestore();
 		});
 	});
 });

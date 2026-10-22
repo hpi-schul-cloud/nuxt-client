@@ -485,6 +485,7 @@ export default {
 		"Дошка спочатку повинна бути опублікована, перш ніж можна буде налаштувати параметри редагування.",
 	"components.board.dialog.detail-view.title": "Детальний вигляд",
 	"components.board.dialog.detail-view.tableOfContents.title": "Огляд",
+	"components.board.dialog.detail-view.tableOfContents.toggle": "Показати/приховати огляд",
 	"components.board.dialog.detail-view.tableOfContents.empty": "Ця картка ще не має вмісту",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
