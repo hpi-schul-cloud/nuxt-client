@@ -25,6 +25,7 @@ import {
 import {
 	ContextExternalTool,
 	ExternalToolDisplayData,
+	hasExternalToolContent,
 	useContextExternalToolConfigurationStatus,
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
@@ -55,6 +56,8 @@ describe("ExternalToolElement", () => {
 	beforeEach(async () => {
 		const actual = await vi.importActual<typeof import("@data-board")>("@data-board");
 		vi.mocked(canManageExternalToolElements).mockImplementation(actual.canManageExternalToolElements);
+		const actualExternalTool = await vi.importActual<typeof import("@data-external-tool")>("@data-external-tool");
+		vi.mocked(hasExternalToolContent).mockImplementation(actualExternalTool.hasExternalToolContent);
 	});
 
 	beforeEach(() => {

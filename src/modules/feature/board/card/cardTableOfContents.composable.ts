@@ -25,7 +25,7 @@ import {
 	useCardStore,
 	useCourseBoardEditMode,
 } from "@data-board";
-import { useExternalToolReferenceApi } from "@data-external-tool";
+import { type ExternalToolDisplayData, hasExternalToolContent, useExternalToolReferenceApi } from "@data-external-tool";
 import { useFileStorageApi } from "@data-file";
 import { logger } from "@util-logger";
 import { computed, type Ref, ref, watch } from "vue";
@@ -80,31 +80,32 @@ export const useCardTableOfContents = (currentCardId: Ref<string>, isEnabled: Re
 			}));
 	});
 
-	const toolNames = ref<Record<string, string>>({});
+	const toolDisplayData = ref<Record<string, ExternalToolDisplayData>>({});
 	const requestedToolIds = new Set<string>();
 
-	const loadToolNames = async (ids: string[]) => {
+	const loadToolDisplayData = async (ids: string[]) => {
 		await Promise.all(
-			ids
+			[...new Set(ids)]
 				.filter((toolId) => !requestedToolIds.has(toolId))
 				.map(async (toolId) => {
 					requestedToolIds.add(toolId);
 					try {
-						toolNames.value[toolId] = (await fetchDisplayDataCall(toolId)).name;
-					} catch (error) {
-						logger.warn(error);
+						toolDisplayData.value[toolId] = await fetchDisplayDataCall(toolId);
+					} catch {
+						requestedToolIds.delete(toolId);
+						logger.warn("Could not load table of contents tool name", { toolId });
 					}
 				})
 		);
 	};
 
-	const getToolName = ({ content }: ExternalToolElementResponse): string =>
-		(content.contextExternalToolId && toolNames.value[content.contextExternalToolId]) || "";
+	const getToolDisplayData = ({ content }: ExternalToolElementResponse) =>
+		content.contextExternalToolId ? toolDisplayData.value[content.contextExternalToolId] : undefined;
 
 	const getElementText = (element: CardElement): string => {
 		if (isRichText(element)) return toTeaser(element.content.text);
 		if (isLink(element)) return toDomain(element.content.url) || element.content.title;
-		if (isExternalTool(element)) return getToolName(element);
+		if (isExternalTool(element)) return getToolDisplayData(element)?.name ?? "";
 		if (isFile(element)) return getFileRecordsByParentId(element.id)[0]?.name || element.content.caption;
 		if (isTitledElement(element)) return element.content.title;
 
@@ -125,7 +126,7 @@ export const useCardTableOfContents = (currentCardId: Ref<string>, isEnabled: Re
 	watch(
 		[toolIds, isEnabled],
 		([ids, enabled]) => {
-			if (enabled) loadToolNames(ids);
+			if (enabled) loadToolDisplayData(ids);
 		},
 		{ immediate: true }
 	);
@@ -140,7 +141,7 @@ export const useCardTableOfContents = (currentCardId: Ref<string>, isEnabled: Re
 		if (isLink(element)) return isShown(element.content.url !== "", canManageLinkElements(operations));
 		if (isH5p(element)) return isShown(!!element.content.contentId, canManageH5pElements(operations));
 		if (isExternalTool(element)) {
-			return isShown(!!element.content.contextExternalToolId, canManageExternalToolElements(operations));
+			return isShown(hasExternalToolContent(getToolDisplayData(element)), canManageExternalToolElements(operations));
 		}
 		if (isFile(element)) {
 			return isShown(getFileRecordsByParentId(element.id).length > 0, canManageFileElements(operations));

@@ -16,6 +16,7 @@ import {
 	richTextElementResponseFactory,
 	videoConferenceElementResponseFactory,
 } from "@@/tests/test-utils";
+import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
@@ -71,7 +72,7 @@ describe("cardTableOfContents.composable", () => {
 		const getFileRecordsByParentId = vi.fn().mockReturnValue([]);
 		vi.mocked(useFileStorageApi).mockReturnValue(mockComposable(useFileStorageApi, { getFileRecordsByParentId }));
 
-		const fetchDisplayDataCall = vi.fn().mockResolvedValue({ name: "Tool name" });
+		const fetchDisplayDataCall = vi.fn().mockResolvedValue(externalToolDisplayDataFactory.build({ name: "Tool name" }));
 		vi.mocked(useExternalToolReferenceApi).mockReturnValue(
 			mockComposable(useExternalToolReferenceApi, { fetchDisplayDataCall })
 		);
@@ -439,6 +440,43 @@ describe("cardTableOfContents.composable", () => {
 					expect(currentElements.value[0].label).toBe("Tool name");
 				});
 
+				it("should hide tools until their display data is available to readers", async () => {
+					const { currentElements } = setup({ cards: [buildToolCard("tool-1")] });
+
+					expect(currentElements.value).toEqual([]);
+					await flushPromises();
+					expect(currentElements.value).toHaveLength(1);
+				});
+
+				it.each([false, true])("should match deep-link placeholder visibility for managers: %s", async (canManage) => {
+					const { currentElements, fetchDisplayDataCall, isEnabled } = setup({
+						cards: [buildToolCard("tool-1")],
+						isEnabled: false,
+						allowedOperations: { updateElement: canManage },
+					});
+					fetchDisplayDataCall.mockResolvedValue(externalToolDisplayDataFactory.build({ isLtiDeepLinkingTool: true }));
+
+					isEnabled.value = true;
+					await flushPromises();
+
+					expect(currentElements.value).toHaveLength(canManage ? 1 : 0);
+				});
+
+				it("should hide a tool from readers when its display data cannot be loaded", async () => {
+					const warn = vi.spyOn(logger, "warn").mockImplementation(() => undefined);
+					const { currentElements, fetchDisplayDataCall, isEnabled } = setup({
+						cards: [buildToolCard("tool-1")],
+						isEnabled: false,
+					});
+					fetchDisplayDataCall.mockRejectedValueOnce(new Error("unavailable"));
+
+					isEnabled.value = true;
+					await flushPromises();
+
+					expect(currentElements.value).toEqual([]);
+					warn.mockRestore();
+				});
+
 				it("should neither request tool names nor list elements while the table of contents is closed", async () => {
 					const { fetchDisplayDataCall, currentElements } = setup({
 						cards: [buildToolCard("tool-1")],
@@ -490,6 +528,34 @@ describe("cardTableOfContents.composable", () => {
 					expect(fetchDisplayDataCall).toHaveBeenCalledTimes(1);
 				});
 
+				it("should deduplicate tool references within the same card", async () => {
+					const card = buildToolCard("tool-1");
+					card.elements.push(...buildToolCard("tool-1").elements);
+					const { fetchDisplayDataCall } = setup({ cards: [card] });
+					await flushPromises();
+
+					expect(fetchDisplayDataCall).toHaveBeenCalledTimes(1);
+				});
+
+				it("should retry failed tool names when the panel is reopened", async () => {
+					const warn = vi.spyOn(logger, "warn").mockImplementation(() => undefined);
+					const { currentElements, fetchDisplayDataCall, isEnabled } = setup({
+						cards: [buildToolCard("tool-1")],
+						isEnabled: false,
+					});
+					fetchDisplayDataCall.mockRejectedValueOnce(new Error("unavailable"));
+					isEnabled.value = true;
+					await flushPromises();
+					isEnabled.value = false;
+					await flushPromises();
+					isEnabled.value = true;
+					await flushPromises();
+
+					expect(fetchDisplayDataCall).toHaveBeenCalledTimes(2);
+					expect(currentElements.value[0].label).toBe("Tool name");
+					warn.mockRestore();
+				});
+
 				it("should not request a name for a tool element without tool", async () => {
 					const { fetchDisplayDataCall, currentElements } = setup({ cards: [buildToolCard(null)], isEditMode: true });
 					await flushPromises();
@@ -503,6 +569,7 @@ describe("cardTableOfContents.composable", () => {
 					const { currentElements, fetchDisplayDataCall, isEnabled } = setup({
 						cards: [buildToolCard("tool-1")],
 						isEnabled: false,
+						isEditMode: true,
 					});
 					fetchDisplayDataCall.mockRejectedValue(new Error("not available"));
 
@@ -510,7 +577,7 @@ describe("cardTableOfContents.composable", () => {
 					await flushPromises();
 
 					expect(currentElements.value[0].label).toBe("components.cardElement.externalToolElement");
-					expect(warn).toHaveBeenCalled();
+					expect(warn).toHaveBeenCalledWith("Could not load table of contents tool name", { toolId: "tool-1" });
 					warn.mockRestore();
 				});
 			});

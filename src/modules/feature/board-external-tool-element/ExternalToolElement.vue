@@ -81,6 +81,7 @@ import { useEnvConfig } from "@data-env";
 import {
 	ContextExternalTool,
 	ContextExternalToolConfigurationStatus,
+	hasExternalToolContent,
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
@@ -143,13 +144,7 @@ const isDeepLinkingTool = computed(() => !!displayData.value?.isLtiDeepLinkingTo
 
 const hasDeepLink = computed(() => !!displayData.value?.ltiDeepLink);
 
-const showTool = computed(() => {
-	if (!displayData.value || !hasLinkedTool.value) {
-		return false;
-	}
-
-	return isDeepLinkingTool.value ? hasDeepLink.value : true;
-});
+const showTool = computed(() => hasLinkedTool.value && hasExternalToolContent(displayData.value));
 
 const canManageExternalToolElements = computed(() => canManageExternalToolElementsWith(allowedOperations.value));
 

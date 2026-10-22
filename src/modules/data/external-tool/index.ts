@@ -2,6 +2,7 @@ export * from "./contextExternalToolApi.composable";
 export * from "./contextExternalToolConfigurationState.composable";
 export * from "./ContextExternalToolConfigurationStatus.composable";
 export * from "./contextExternalToolState.composable";
+export * from "./external-tool-visibility";
 export * from "./externalToolDisplayListState.composable";
 export * from "./externalToolDisplayState.composable";
 export * from "./ExternalToolLaunchState.composable";
