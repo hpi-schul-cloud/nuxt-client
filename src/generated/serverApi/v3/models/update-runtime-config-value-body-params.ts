@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface UpdateRuntimeConfigValueBodyParams
- */
 export interface UpdateRuntimeConfigValueBodyParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateRuntimeConfigValueBodyParams
-     */
-    value: string;
+    'value': string;
 }
-
 

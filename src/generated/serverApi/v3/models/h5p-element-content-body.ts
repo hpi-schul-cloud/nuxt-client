@@ -13,27 +13,20 @@
  */
 
 
-import { ContentElementType } from './content-element-type';
-import { H5pContentBody } from './h5p-content-body';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContentElementType } from './content-element-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { H5pContentBody } from './h5p-content-body';
 
-/**
- * 
- * @export
- * @interface H5pElementContentBody
- */
 export interface H5pElementContentBody {
     /**
      * the type of the updated element
-     * @type {ContentElementType}
-     * @memberof H5pElementContentBody
      */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {H5pContentBody}
-     * @memberof H5pElementContentBody
-     */
-    content: H5pContentBody;
+    'type': ContentElementType;
+    'content': H5pContentBody;
 }
+
 
 

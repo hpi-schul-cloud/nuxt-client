@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface MeRoleResponse
- */
 export interface MeRoleResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof MeRoleResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MeRoleResponse
-     */
-    name: string;
+    'id': string;
+    'name': string;
 }
-
 

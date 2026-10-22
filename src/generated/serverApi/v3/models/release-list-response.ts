@@ -13,20 +13,11 @@
  */
 
 
-import { ReleaseItemResponse } from './release-item-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ReleaseItemResponse } from './release-item-response';
 
-/**
- * 
- * @export
- * @interface ReleaseListResponse
- */
 export interface ReleaseListResponse {
-    /**
-     * 
-     * @type {Array<ReleaseItemResponse>}
-     * @memberof ReleaseListResponse
-     */
-    data: Array<ReleaseItemResponse>;
+    'data': Array<ReleaseItemResponse>;
 }
-
 

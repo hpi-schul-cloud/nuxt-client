@@ -13,32 +13,32 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { AccountByIdBodyParams } from '../models';
+import type { AccountByIdBodyParams } from '../models';
 // @ts-ignore
-import { AccountResponse } from '../models';
+import type { AccountResponse } from '../models';
 // @ts-ignore
-import { AccountSearchListResponse } from '../models';
+import type { AccountSearchListResponse } from '../models';
 // @ts-ignore
-import { EntityNotFoundError } from '../models';
+import type { EntityNotFoundError } from '../models';
 // @ts-ignore
-import { ForbiddenOperationError } from '../models';
+import type { ForbiddenOperationError } from '../models';
 // @ts-ignore
-import { PatchMyAccountParams } from '../models';
+import type { PatchMyAccountParams } from '../models';
 // @ts-ignore
-import { PatchMyPasswordParams } from '../models';
+import type { PatchMyPasswordParams } from '../models';
 // @ts-ignore
-import { ValidationError } from '../models';
+import type { ValidationError } from '../models';
 /**
  * AccountApi - axios parameter creator
- * @export
  */
 export const AccountApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -49,11 +49,11 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountControllerDeleteAccountById: async (id: string, options: any = {}): Promise<RequestArgs> => {
+        accountControllerDeleteAccountById: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('accountControllerDeleteAccountById', 'id', id)
             const localVarPath = `/account/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -69,9 +69,9 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -87,11 +87,11 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountControllerFindAccountById: async (id: string, options: any = {}): Promise<RequestArgs> => {
+        accountControllerFindAccountById: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('accountControllerFindAccountById', 'id', id)
             const localVarPath = `/account/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -107,9 +107,9 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -125,7 +125,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountControllerReplaceMyPassword: async (patchMyPasswordParams: PatchMyPasswordParams, options: any = {}): Promise<RequestArgs> => {
+        accountControllerReplaceMyPassword: async (patchMyPasswordParams: PatchMyPasswordParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'patchMyPasswordParams' is not null or undefined
             assertParamExists('accountControllerReplaceMyPassword', 'patchMyPasswordParams', patchMyPasswordParams)
             const localVarPath = `/account/me/password`;
@@ -144,11 +144,10 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(patchMyPasswordParams, localVarRequestOptions, configuration)
@@ -161,14 +160,14 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary Returns all accounts which satisfies the given criteria. For unlimited access Superhero role is REQUIRED.
-         * @param {'userId' | 'username'} type The search criteria.
+         * @param {AccountControllerSearchAccountsType} type The search criteria.
          * @param {string} value The search value.
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountControllerSearchAccounts: async (type: 'userId' | 'username', value: string, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        accountControllerSearchAccounts: async (type: AccountControllerSearchAccountsType, value: string, skip?: number, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'type' is not null or undefined
             assertParamExists('accountControllerSearchAccounts', 'type', type)
             // verify required parameter 'value' is not null or undefined
@@ -205,9 +204,9 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['value'] = value;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -224,13 +223,13 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountControllerUpdateAccountById: async (id: string, accountByIdBodyParams: AccountByIdBodyParams, options: any = {}): Promise<RequestArgs> => {
+        accountControllerUpdateAccountById: async (id: string, accountByIdBodyParams: AccountByIdBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('accountControllerUpdateAccountById', 'id', id)
             // verify required parameter 'accountByIdBodyParams' is not null or undefined
             assertParamExists('accountControllerUpdateAccountById', 'accountByIdBodyParams', accountByIdBodyParams)
             const localVarPath = `/account/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -246,11 +245,10 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(accountByIdBodyParams, localVarRequestOptions, configuration)
@@ -267,7 +265,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountControllerUpdateMyAccount: async (patchMyAccountParams: PatchMyAccountParams, options: any = {}): Promise<RequestArgs> => {
+        accountControllerUpdateMyAccount: async (patchMyAccountParams: PatchMyAccountParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'patchMyAccountParams' is not null or undefined
             assertParamExists('accountControllerUpdateMyAccount', 'patchMyAccountParams', patchMyAccountParams)
             const localVarPath = `/account/me`;
@@ -286,11 +284,10 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(patchMyAccountParams, localVarRequestOptions, configuration)
@@ -305,7 +302,6 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
 
 /**
  * AccountApi - functional programming interface
- * @export
  */
 export const AccountApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = AccountApiAxiosParamCreator(configuration)
@@ -317,9 +313,11 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accountControllerDeleteAccountById(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountResponse>> {
+        async accountControllerDeleteAccountById(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accountControllerDeleteAccountById(id, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountApi.accountControllerDeleteAccountById']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -328,9 +326,11 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accountControllerFindAccountById(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountResponse>> {
+        async accountControllerFindAccountById(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accountControllerFindAccountById(id, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountApi.accountControllerFindAccountById']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -339,23 +339,27 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accountControllerReplaceMyPassword(patchMyPasswordParams: PatchMyPasswordParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async accountControllerReplaceMyPassword(patchMyPasswordParams: PatchMyPasswordParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accountControllerReplaceMyPassword(patchMyPasswordParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountApi.accountControllerReplaceMyPassword']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
          * @summary Returns all accounts which satisfies the given criteria. For unlimited access Superhero role is REQUIRED.
-         * @param {'userId' | 'username'} type The search criteria.
+         * @param {AccountControllerSearchAccountsType} type The search criteria.
          * @param {string} value The search value.
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accountControllerSearchAccounts(type: 'userId' | 'username', value: string, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountSearchListResponse>> {
+        async accountControllerSearchAccounts(type: AccountControllerSearchAccountsType, value: string, skip?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountSearchListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accountControllerSearchAccounts(type, value, skip, limit, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountApi.accountControllerSearchAccounts']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -365,9 +369,11 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accountControllerUpdateAccountById(id: string, accountByIdBodyParams: AccountByIdBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountResponse>> {
+        async accountControllerUpdateAccountById(id: string, accountByIdBodyParams: AccountByIdBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accountControllerUpdateAccountById(id, accountByIdBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountApi.accountControllerUpdateAccountById']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -376,16 +382,17 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accountControllerUpdateMyAccount(patchMyAccountParams: PatchMyAccountParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async accountControllerUpdateMyAccount(patchMyAccountParams: PatchMyAccountParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accountControllerUpdateMyAccount(patchMyAccountParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountApi.accountControllerUpdateMyAccount']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * AccountApi - factory interface
- * @export
  */
 export const AccountApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = AccountApiFp(configuration)
@@ -397,7 +404,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountControllerDeleteAccountById(id: string, options?: any): AxiosPromise<AccountResponse> {
+        accountControllerDeleteAccountById(id: string, options?: RawAxiosRequestConfig): AxiosPromise<AccountResponse> {
             return localVarFp.accountControllerDeleteAccountById(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -407,7 +414,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountControllerFindAccountById(id: string, options?: any): AxiosPromise<AccountResponse> {
+        accountControllerFindAccountById(id: string, options?: RawAxiosRequestConfig): AxiosPromise<AccountResponse> {
             return localVarFp.accountControllerFindAccountById(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -417,20 +424,20 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountControllerReplaceMyPassword(patchMyPasswordParams: PatchMyPasswordParams, options?: any): AxiosPromise<void> {
+        accountControllerReplaceMyPassword(patchMyPasswordParams: PatchMyPasswordParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.accountControllerReplaceMyPassword(patchMyPasswordParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Returns all accounts which satisfies the given criteria. For unlimited access Superhero role is REQUIRED.
-         * @param {'userId' | 'username'} type The search criteria.
+         * @param {AccountControllerSearchAccountsType} type The search criteria.
          * @param {string} value The search value.
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountControllerSearchAccounts(type: 'userId' | 'username', value: string, skip?: number, limit?: number, options?: any): AxiosPromise<AccountSearchListResponse> {
+        accountControllerSearchAccounts(type: AccountControllerSearchAccountsType, value: string, skip?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<AccountSearchListResponse> {
             return localVarFp.accountControllerSearchAccounts(type, value, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
@@ -441,7 +448,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountControllerUpdateAccountById(id: string, accountByIdBodyParams: AccountByIdBodyParams, options?: any): AxiosPromise<AccountResponse> {
+        accountControllerUpdateAccountById(id: string, accountByIdBodyParams: AccountByIdBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<AccountResponse> {
             return localVarFp.accountControllerUpdateAccountById(id, accountByIdBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -451,7 +458,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountControllerUpdateMyAccount(patchMyAccountParams: PatchMyAccountParams, options?: any): AxiosPromise<void> {
+        accountControllerUpdateMyAccount(patchMyAccountParams: PatchMyAccountParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.accountControllerUpdateMyAccount(patchMyAccountParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -459,8 +466,6 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
 
 /**
  * AccountApi - interface
- * @export
- * @interface AccountApi
  */
 export interface AccountApiInterface {
     /**
@@ -469,9 +474,8 @@ export interface AccountApiInterface {
      * @param {string} id The id for the account.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountApiInterface
      */
-    accountControllerDeleteAccountById(id: string, options?: any): AxiosPromise<AccountResponse>;
+    accountControllerDeleteAccountById(id: string, options?: RawAxiosRequestConfig): AxiosPromise<AccountResponse>;
 
     /**
      * 
@@ -479,9 +483,8 @@ export interface AccountApiInterface {
      * @param {string} id The id for the account.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountApiInterface
      */
-    accountControllerFindAccountById(id: string, options?: any): AxiosPromise<AccountResponse>;
+    accountControllerFindAccountById(id: string, options?: RawAxiosRequestConfig): AxiosPromise<AccountResponse>;
 
     /**
      * 
@@ -489,22 +492,20 @@ export interface AccountApiInterface {
      * @param {PatchMyPasswordParams} patchMyPasswordParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountApiInterface
      */
-    accountControllerReplaceMyPassword(patchMyPasswordParams: PatchMyPasswordParams, options?: any): AxiosPromise<void>;
+    accountControllerReplaceMyPassword(patchMyPasswordParams: PatchMyPasswordParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
      * @summary Returns all accounts which satisfies the given criteria. For unlimited access Superhero role is REQUIRED.
-     * @param {'userId' | 'username'} type The search criteria.
+     * @param {AccountControllerSearchAccountsType} type The search criteria.
      * @param {string} value The search value.
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountApiInterface
      */
-    accountControllerSearchAccounts(type: 'userId' | 'username', value: string, skip?: number, limit?: number, options?: any): AxiosPromise<AccountSearchListResponse>;
+    accountControllerSearchAccounts(type: AccountControllerSearchAccountsType, value: string, skip?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<AccountSearchListResponse>;
 
     /**
      * 
@@ -513,9 +514,8 @@ export interface AccountApiInterface {
      * @param {AccountByIdBodyParams} accountByIdBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountApiInterface
      */
-    accountControllerUpdateAccountById(id: string, accountByIdBodyParams: AccountByIdBodyParams, options?: any): AxiosPromise<AccountResponse>;
+    accountControllerUpdateAccountById(id: string, accountByIdBodyParams: AccountByIdBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<AccountResponse>;
 
     /**
      * 
@@ -523,17 +523,13 @@ export interface AccountApiInterface {
      * @param {PatchMyAccountParams} patchMyAccountParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountApiInterface
      */
-    accountControllerUpdateMyAccount(patchMyAccountParams: PatchMyAccountParams, options?: any): AxiosPromise<void>;
+    accountControllerUpdateMyAccount(patchMyAccountParams: PatchMyAccountParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
  * AccountApi - object-oriented interface
- * @export
- * @class AccountApi
- * @extends {BaseAPI}
  */
 export class AccountApi extends BaseAPI implements AccountApiInterface {
     /**
@@ -542,9 +538,8 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
      * @param {string} id The id for the account.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountApi
      */
-    public accountControllerDeleteAccountById(id: string, options?: any) {
+    public accountControllerDeleteAccountById(id: string, options?: RawAxiosRequestConfig) {
         return AccountApiFp(this.configuration).accountControllerDeleteAccountById(id, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -554,9 +549,8 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
      * @param {string} id The id for the account.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountApi
      */
-    public accountControllerFindAccountById(id: string, options?: any) {
+    public accountControllerFindAccountById(id: string, options?: RawAxiosRequestConfig) {
         return AccountApiFp(this.configuration).accountControllerFindAccountById(id, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -566,24 +560,22 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
      * @param {PatchMyPasswordParams} patchMyPasswordParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountApi
      */
-    public accountControllerReplaceMyPassword(patchMyPasswordParams: PatchMyPasswordParams, options?: any) {
+    public accountControllerReplaceMyPassword(patchMyPasswordParams: PatchMyPasswordParams, options?: RawAxiosRequestConfig) {
         return AccountApiFp(this.configuration).accountControllerReplaceMyPassword(patchMyPasswordParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Returns all accounts which satisfies the given criteria. For unlimited access Superhero role is REQUIRED.
-     * @param {'userId' | 'username'} type The search criteria.
+     * @param {AccountControllerSearchAccountsType} type The search criteria.
      * @param {string} value The search value.
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountApi
      */
-    public accountControllerSearchAccounts(type: 'userId' | 'username', value: string, skip?: number, limit?: number, options?: any) {
+    public accountControllerSearchAccounts(type: AccountControllerSearchAccountsType, value: string, skip?: number, limit?: number, options?: RawAxiosRequestConfig) {
         return AccountApiFp(this.configuration).accountControllerSearchAccounts(type, value, skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -594,9 +586,8 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
      * @param {AccountByIdBodyParams} accountByIdBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountApi
      */
-    public accountControllerUpdateAccountById(id: string, accountByIdBodyParams: AccountByIdBodyParams, options?: any) {
+    public accountControllerUpdateAccountById(id: string, accountByIdBodyParams: AccountByIdBodyParams, options?: RawAxiosRequestConfig) {
         return AccountApiFp(this.configuration).accountControllerUpdateAccountById(id, accountByIdBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -606,9 +597,13 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
      * @param {PatchMyAccountParams} patchMyAccountParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AccountApi
      */
-    public accountControllerUpdateMyAccount(patchMyAccountParams: PatchMyAccountParams, options?: any) {
+    public accountControllerUpdateMyAccount(patchMyAccountParams: PatchMyAccountParams, options?: RawAxiosRequestConfig) {
         return AccountApiFp(this.configuration).accountControllerUpdateMyAccount(patchMyAccountParams, options).then((request) => request(this.axios, this.basePath));
     }
+}
+
+export enum AccountControllerSearchAccountsType {
+    USER_ID = 'userId',
+    USERNAME = 'username'
 }

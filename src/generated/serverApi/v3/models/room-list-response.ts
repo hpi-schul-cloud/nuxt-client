@@ -13,20 +13,11 @@
  */
 
 
-import { RoomItemResponse } from './room-item-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomItemResponse } from './room-item-response';
 
-/**
- * 
- * @export
- * @interface RoomListResponse
- */
 export interface RoomListResponse {
-    /**
-     * 
-     * @type {Array<RoomItemResponse>}
-     * @memberof RoomListResponse
-     */
-    data: Array<RoomItemResponse>;
+    'data': Array<RoomItemResponse>;
 }
-
 

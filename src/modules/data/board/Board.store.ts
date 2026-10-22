@@ -42,7 +42,7 @@ import {
 	CopyStatusEnum,
 } from "@api-server";
 import { notifyError, notifyInfo, notifySuccess, useAppStore, useNotificationStore } from "@data-app";
-import { useErrorHandler } from "@util-error-handling";
+import { useErrorHandler, useFailedFilesNotifier } from "@util-error-handling";
 import { defineStore } from "pinia";
 import { computed, nextTick, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -61,6 +61,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const router = useRouter();
 
 	const { generateErrorText } = useErrorHandler();
+	const { notifyFailedFiles } = useFailedFilesNotifier();
 
 	const getLastColumnIndex = () => board.value!.columns.length - 1;
 
@@ -190,7 +191,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board.value.columns?.splice(columnIndex + 1, 0, duplicatedColumnSkeleton);
 
 		if (payload.isOwnAction === true) {
-			if (payload.status !== CopyStatusEnum.SUCCESS) {
+			if (payload.failedFileNames?.length) {
+				notifyFailedFiles("components.boardColumn", payload.failedFileNames);
+			} else if (payload.status !== CopyStatusEnum.SUCCESS) {
 				notifyError(generateErrorText("notDuplicated", "boardColumn"));
 			} else {
 				notifySuccess("components.board.notifications.success.columnDuplicated");

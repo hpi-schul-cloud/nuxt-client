@@ -14,36 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface SchoolUserResponse
- */
 export interface SchoolUserResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolUserResponse
-     */
-    firstName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolUserResponse
-     */
-    lastName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolUserResponse
-     */
-    schoolName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolUserResponse
-     */
-    id: string;
+    'firstName': string;
+    'lastName': string;
+    'schoolName': string;
+    'id': string;
 }
-
 

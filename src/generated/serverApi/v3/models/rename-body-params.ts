@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface RenameBodyParams
- */
 export interface RenameBodyParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof RenameBodyParams
-     */
-    title: string;
+    'title': string;
 }
-
 

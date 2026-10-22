@@ -13,16 +13,16 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 /**
  * UserLoginMigrationRollbackApi - axios parameter creator
- * @export
  */
 export const UserLoginMigrationRollbackApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -33,11 +33,11 @@ export const UserLoginMigrationRollbackApiAxiosParamCreator = function (configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationRollbackControllerMigrateUserLogin: async (userId: string, options: any = {}): Promise<RequestArgs> => {
+        userLoginMigrationRollbackControllerMigrateUserLogin: async (userId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('userLoginMigrationRollbackControllerMigrateUserLogin', 'userId', userId)
             const localVarPath = `/user-login-migrations/users/{userId}/rollback-migration`
-                .replace(`{${"userId"}}`, encodeURIComponent(String(userId)));
+                .replace('{userId}', encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -54,8 +54,7 @@ export const UserLoginMigrationRollbackApiAxiosParamCreator = function (configur
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -69,7 +68,6 @@ export const UserLoginMigrationRollbackApiAxiosParamCreator = function (configur
 
 /**
  * UserLoginMigrationRollbackApi - functional programming interface
- * @export
  */
 export const UserLoginMigrationRollbackApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UserLoginMigrationRollbackApiAxiosParamCreator(configuration)
@@ -81,16 +79,17 @@ export const UserLoginMigrationRollbackApiFp = function(configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userLoginMigrationRollbackControllerMigrateUserLogin(userId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async userLoginMigrationRollbackControllerMigrateUserLogin(userId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationRollbackControllerMigrateUserLogin(userId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserLoginMigrationRollbackApi.userLoginMigrationRollbackControllerMigrateUserLogin']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * UserLoginMigrationRollbackApi - factory interface
- * @export
  */
 export const UserLoginMigrationRollbackApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = UserLoginMigrationRollbackApiFp(configuration)
@@ -102,7 +101,7 @@ export const UserLoginMigrationRollbackApiFactory = function (configuration?: Co
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userLoginMigrationRollbackControllerMigrateUserLogin(userId: string, options?: any): AxiosPromise<void> {
+        userLoginMigrationRollbackControllerMigrateUserLogin(userId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.userLoginMigrationRollbackControllerMigrateUserLogin(userId, options).then((request) => request(axios, basePath));
         },
     };
@@ -110,8 +109,6 @@ export const UserLoginMigrationRollbackApiFactory = function (configuration?: Co
 
 /**
  * UserLoginMigrationRollbackApi - interface
- * @export
- * @interface UserLoginMigrationRollbackApi
  */
 export interface UserLoginMigrationRollbackApiInterface {
     /**
@@ -120,17 +117,13 @@ export interface UserLoginMigrationRollbackApiInterface {
      * @param {string} userId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationRollbackApiInterface
      */
-    userLoginMigrationRollbackControllerMigrateUserLogin(userId: string, options?: any): AxiosPromise<void>;
+    userLoginMigrationRollbackControllerMigrateUserLogin(userId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
  * UserLoginMigrationRollbackApi - object-oriented interface
- * @export
- * @class UserLoginMigrationRollbackApi
- * @extends {BaseAPI}
  */
 export class UserLoginMigrationRollbackApi extends BaseAPI implements UserLoginMigrationRollbackApiInterface {
     /**
@@ -139,9 +132,9 @@ export class UserLoginMigrationRollbackApi extends BaseAPI implements UserLoginM
      * @param {string} userId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserLoginMigrationRollbackApi
      */
-    public userLoginMigrationRollbackControllerMigrateUserLogin(userId: string, options?: any) {
+    public userLoginMigrationRollbackControllerMigrateUserLogin(userId: string, options?: RawAxiosRequestConfig) {
         return UserLoginMigrationRollbackApiFp(this.configuration).userLoginMigrationRollbackControllerMigrateUserLogin(userId, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

@@ -13,20 +13,11 @@
  */
 
 
-import { MediaSchoolLicenseResponse } from './media-school-license-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MediaSchoolLicenseResponse } from './media-school-license-response';
 
-/**
- * 
- * @export
- * @interface MediaSchoolLicenseListResponse
- */
 export interface MediaSchoolLicenseListResponse {
-    /**
-     * 
-     * @type {Array<MediaSchoolLicenseResponse>}
-     * @memberof MediaSchoolLicenseListResponse
-     */
-    data: Array<MediaSchoolLicenseResponse>;
+    'data': Array<MediaSchoolLicenseResponse>;
 }
-
 

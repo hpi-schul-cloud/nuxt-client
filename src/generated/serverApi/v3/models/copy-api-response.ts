@@ -13,51 +13,39 @@
  */
 
 
-import { CopyElementType } from './copy-element-type';
-import { CopyStatusEnum } from './copy-status-enum';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CopyElementType } from './copy-element-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CopyStatusEnum } from './copy-status-enum';
 
-/**
- * 
- * @export
- * @interface CopyApiResponse
- */
 export interface CopyApiResponse {
     /**
      * Id of copied element
-     * @type {string}
-     * @memberof CopyApiResponse
      */
-    id?: string;
+    'id'?: string;
     /**
      * Title of copied element
-     * @type {string}
-     * @memberof CopyApiResponse
      */
-    title?: string;
+    'title'?: string;
     /**
      * Type of copied element
-     * @type {CopyElementType}
-     * @memberof CopyApiResponse
      */
-    type: CopyElementType;
+    'type': CopyElementType;
     /**
      * Id of destination parent reference
-     * @type {string}
-     * @memberof CopyApiResponse
      */
-    destinationId?: string;
+    'destinationId'?: string;
     /**
      * Copy progress status of copied element
-     * @type {CopyStatusEnum}
-     * @memberof CopyApiResponse
      */
-    status: CopyStatusEnum;
+    'status': CopyStatusEnum;
     /**
      * List of included sub elements with recursive type structure
-     * @type {Array<CopyApiResponse>}
-     * @memberof CopyApiResponse
      */
-    elements?: Array<CopyApiResponse>;
+    'elements'?: Array<CopyApiResponse>;
 }
+
 
 

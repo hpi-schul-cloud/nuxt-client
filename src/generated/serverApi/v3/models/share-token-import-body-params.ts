@@ -14,24 +14,14 @@
 
 
 
-/**
- * 
- * @export
- * @interface ShareTokenImportBodyParams
- */
 export interface ShareTokenImportBodyParams {
     /**
      * the new name of the imported object.
-     * @type {string}
-     * @memberof ShareTokenImportBodyParams
      */
-    newName: string;
+    'newName': string;
     /**
      * Id of the parent to which the imported object will be added.
-     * @type {string}
-     * @memberof ShareTokenImportBodyParams
      */
-    destinationId?: string | null;
+    'destinationId'?: string | null;
 }
-
 

@@ -14,36 +14,22 @@
 
 
 
-/**
- * 
- * @export
- * @interface ForceMigrationParams
- */
 export interface ForceMigrationParams {
     /**
      * Email of the administrator
-     * @type {string}
-     * @memberof ForceMigrationParams
      */
-    email: string;
+    'email': string;
     /**
      * Target externalId to link it with an external account
-     * @type {string}
-     * @memberof ForceMigrationParams
      */
-    externalUserId: string;
+    'externalUserId': string;
     /**
      * Target externalId to link it with an external school
-     * @type {string}
-     * @memberof ForceMigrationParams
      */
-    externalSchoolId: string;
+    'externalSchoolId': string;
     /**
      * Should extended mode be used
-     * @type {boolean}
-     * @memberof ForceMigrationParams
      */
-    forceExtendedMode: boolean;
+    'forceExtendedMode': boolean;
 }
-
 

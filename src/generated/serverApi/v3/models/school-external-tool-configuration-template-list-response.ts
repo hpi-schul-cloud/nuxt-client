@@ -13,20 +13,11 @@
  */
 
 
-import { SchoolExternalToolConfigurationTemplateResponse } from './school-external-tool-configuration-template-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchoolExternalToolConfigurationTemplateResponse } from './school-external-tool-configuration-template-response';
 
-/**
- * 
- * @export
- * @interface SchoolExternalToolConfigurationTemplateListResponse
- */
 export interface SchoolExternalToolConfigurationTemplateListResponse {
-    /**
-     * 
-     * @type {Array<SchoolExternalToolConfigurationTemplateResponse>}
-     * @memberof SchoolExternalToolConfigurationTemplateListResponse
-     */
-    data: Array<SchoolExternalToolConfigurationTemplateResponse>;
+    'data': Array<SchoolExternalToolConfigurationTemplateResponse>;
 }
-
 

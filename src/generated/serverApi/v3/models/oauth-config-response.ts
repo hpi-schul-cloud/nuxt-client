@@ -14,90 +14,58 @@
 
 
 
-/**
- * 
- * @export
- * @interface OauthConfigResponse
- */
 export interface OauthConfigResponse {
     /**
      * Client id
-     * @type {string}
-     * @memberof OauthConfigResponse
      */
-    clientId: string;
+    'clientId': string;
     /**
      * Hint for idp redirects (optional)
-     * @type {string}
-     * @memberof OauthConfigResponse
      */
-    idpHint?: string | null;
+    'idpHint'?: string | null;
     /**
      * Redirect uri
-     * @type {string}
-     * @memberof OauthConfigResponse
      */
-    redirectUri: string;
+    'redirectUri': string;
     /**
      * Grant type
-     * @type {string}
-     * @memberof OauthConfigResponse
      */
-    grantType: string;
+    'grantType': string;
     /**
      * Token endpoint
-     * @type {string}
-     * @memberof OauthConfigResponse
      */
-    tokenEndpoint: string;
+    'tokenEndpoint': string;
     /**
      * Auth endpoint
-     * @type {string}
-     * @memberof OauthConfigResponse
      */
-    authEndpoint: string;
+    'authEndpoint': string;
     /**
      * Response type
-     * @type {string}
-     * @memberof OauthConfigResponse
      */
-    responseType: string;
+    'responseType': string;
     /**
      * Scope
-     * @type {string}
-     * @memberof OauthConfigResponse
      */
-    scope: string;
+    'scope': string;
     /**
      * Provider
-     * @type {string}
-     * @memberof OauthConfigResponse
      */
-    provider: string;
+    'provider': string;
     /**
      * Logout endpoint
-     * @type {string}
-     * @memberof OauthConfigResponse
      */
-    logoutEndpoint?: string;
+    'logoutEndpoint'?: string;
     /**
      * Issuer
-     * @type {string}
-     * @memberof OauthConfigResponse
      */
-    issuer: string;
+    'issuer': string;
     /**
      * Jwks endpoint
-     * @type {string}
-     * @memberof OauthConfigResponse
      */
-    jwksEndpoint: string;
+    'jwksEndpoint': string;
     /**
      * End session endpoint
-     * @type {string}
-     * @memberof OauthConfigResponse
      */
-    endSessionEndpoint?: string;
+    'endSessionEndpoint'?: string;
 }
-
 

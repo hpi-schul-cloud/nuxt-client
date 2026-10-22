@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface Lti11DeepLinkContentItemListParams
- */
 export interface Lti11DeepLinkContentItemListParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkContentItemListParams
-     */
-    context: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof Lti11DeepLinkContentItemListParams
-     */
-    graph: Array<string>;
+    '@context': string;
+    '@graph': Array<string>;
 }
-
 

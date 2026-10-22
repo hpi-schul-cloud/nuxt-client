@@ -13,75 +13,50 @@
  */
 
 
-import { ContextExternalToolConfigurationStatusResponse } from './context-external-tool-configuration-status-response';
-import { LtiDeepLinkResponse } from './lti-deep-link-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContextExternalToolConfigurationStatusResponse } from './context-external-tool-configuration-status-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { LtiDeepLinkResponse } from './lti-deep-link-response';
 
-/**
- * 
- * @export
- * @interface ToolReferenceResponse
- */
 export interface ToolReferenceResponse {
     /**
      * The id of the tool in the context
-     * @type {string}
-     * @memberof ToolReferenceResponse
      */
-    contextToolId: string;
+    'contextToolId': string;
     /**
      * The description of the tool
-     * @type {string}
-     * @memberof ToolReferenceResponse
      */
-    description?: string;
+    'description'?: string;
     /**
      * The url of the logo which is stored in the db
-     * @type {string}
-     * @memberof ToolReferenceResponse
      */
-    logoUrl?: string;
+    'logoUrl'?: string;
     /**
      * The url of the thumbnail which is stored in the db
-     * @type {string}
-     * @memberof ToolReferenceResponse
      */
-    thumbnailUrl?: string;
+    'thumbnailUrl'?: string;
     /**
      * The display name of the tool
-     * @type {string}
-     * @memberof ToolReferenceResponse
      */
-    displayName: string;
+    'displayName': string;
     /**
      * The domain of the tool url
-     * @type {string}
-     * @memberof ToolReferenceResponse
      */
-    domain: string;
+    'domain': string;
     /**
      * Whether the tool should be opened in a new tab
-     * @type {boolean}
-     * @memberof ToolReferenceResponse
      */
-    openInNewTab: boolean;
+    'openInNewTab': boolean;
     /**
      * The status of the tool
-     * @type {ContextExternalToolConfigurationStatusResponse}
-     * @memberof ToolReferenceResponse
      */
-    status: ContextExternalToolConfigurationStatusResponse;
+    'status': ContextExternalToolConfigurationStatusResponse;
     /**
      * Whether the tool is a lti deep linking tool
-     * @type {boolean}
-     * @memberof ToolReferenceResponse
      */
-    isLtiDeepLinkingTool: boolean;
-    /**
-     * 
-     * @type {LtiDeepLinkResponse}
-     * @memberof ToolReferenceResponse
-     */
-    ltiDeepLink?: LtiDeepLinkResponse;
+    'isLtiDeepLinkingTool': boolean;
+    'ltiDeepLink'?: LtiDeepLinkResponse;
 }
-
 

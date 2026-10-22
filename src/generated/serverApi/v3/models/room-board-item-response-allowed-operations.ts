@@ -14,258 +14,47 @@
 
 
 
-/**
- * 
- * @export
- * @interface RoomBoardItemResponseAllowedOperations
- */
 export interface RoomBoardItemResponseAllowedOperations {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    copyBoard?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    deleteBoard?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    findBoard?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    relocateContent?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    shareBoard?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    updateBoardLayout?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    updateBoardTitle?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    updateReadersCanEditSetting?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    copyColumn?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    createColumn?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    deleteColumn?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    moveColumn?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    shareColumn?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    updateColumnTitle?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    copyCard?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    createCard?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    deleteCard?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    findCards?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    moveCard?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    shareCard?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    updateCardHeight?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    updateCardTitle?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    updateCardColor?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    createElement?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    deleteElement?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    moveElement?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    updateElement?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    viewElement?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    createExternalToolElement?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    createFileElement?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    manageVideoConference?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    collapseMediaBoard?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    updateBoardVisibility?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    updateMediaBoardColor?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    updateMediaBoardLayout?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    viewMediaBoard?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    collapseMediaBoardLine?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    createMediaBoardLine?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    deleteMediaBoardLine?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    updateMediaBoardLine?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomBoardItemResponseAllowedOperations
-     */
-    updateMediaBoardLineColor?: boolean;
+    'copyBoard'?: boolean;
+    'deleteBoard'?: boolean;
+    'findBoard'?: boolean;
+    'relocateContent'?: boolean;
+    'shareBoard'?: boolean;
+    'updateBoardLayout'?: boolean;
+    'updateBoardTitle'?: boolean;
+    'updateReadersCanEditSetting'?: boolean;
+    'copyColumn'?: boolean;
+    'createColumn'?: boolean;
+    'deleteColumn'?: boolean;
+    'moveColumn'?: boolean;
+    'shareColumn'?: boolean;
+    'updateColumnTitle'?: boolean;
+    'copyCard'?: boolean;
+    'createCard'?: boolean;
+    'deleteCard'?: boolean;
+    'findCards'?: boolean;
+    'moveCard'?: boolean;
+    'shareCard'?: boolean;
+    'updateCardHeight'?: boolean;
+    'updateCardTitle'?: boolean;
+    'updateCardColor'?: boolean;
+    'createElement'?: boolean;
+    'deleteElement'?: boolean;
+    'moveElement'?: boolean;
+    'updateElement'?: boolean;
+    'viewElement'?: boolean;
+    'createExternalToolElement'?: boolean;
+    'createFileElement'?: boolean;
+    'manageVideoConference'?: boolean;
+    'collapseMediaBoard'?: boolean;
+    'updateBoardVisibility'?: boolean;
+    'updateMediaBoardColor'?: boolean;
+    'updateMediaBoardLayout'?: boolean;
+    'viewMediaBoard'?: boolean;
+    'collapseMediaBoardLine'?: boolean;
+    'createMediaBoardLine'?: boolean;
+    'deleteMediaBoardLine'?: boolean;
+    'updateMediaBoardLine'?: boolean;
+    'updateMediaBoardLineColor'?: boolean;
 }
-
 

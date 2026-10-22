@@ -13,490 +13,97 @@
  */
 
 
-import { LanguageType } from './language-type';
-import { SchulcloudTheme } from './schulcloud-theme';
-import { Timezone } from './timezone';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { LanguageType } from './language-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchulcloudTheme } from './schulcloud-theme';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { Timezone } from './timezone';
 
-/**
- * 
- * @export
- * @interface ConfigResponse
- */
 export interface ConfigResponse {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_NOTIFICATIONS_ENABLED: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof ConfigResponse
-     */
-    ACCESSIBILITY_REPORT_EMAIL: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ConfigResponse
-     */
-    SC_CONTACT_EMAIL: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ConfigResponse
-     */
-    SC_CONTACT_EMAIL_SUBJECT: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof ConfigResponse
-     */
-    MIGRATION_END_GRACE_PERIOD_MS: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_SHOW_OUTDATED_USERS: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof ConfigResponse
-     */
-    CTL_TOOLS_RELOAD_TIME_MS: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_CTL_TOOLS_COPY_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_PREFERRED_CTL_TOOLS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_SHOW_MIGRATION_WIZARD: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof ConfigResponse
-     */
-    MIGRATION_WIZARD_DOCUMENTATION_LINK?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_TLDRAW_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof ConfigResponse
-     */
-    ALERT_STATUS_URL: string | null;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_TEAMS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_TEAM_CREATE_ROOM_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_FWU_CONTENT_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_SCHOOL_DATA_READONLY_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_SCHOOL_POLICY_ENABLED_NEW: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_VIDEOCONFERENCE_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COLUMN_BOARD_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COLUMN_BOARD_SHARE: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COLUMN_BOARD_SOCKET_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COLUMN_BOARD_TABLE_OF_CONTENTS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COLUMN_BOARD_H5P_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COURSE_SHARE: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_LOGIN_LINK_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_LESSON_SHARE: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_TASK_SHARE: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_BOARD_LAYOUT_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_USER_MIGRATION_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    CALENDAR_SERVICE_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COPY_SERVICE_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_CONSENT_NECESSARY: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_MAX_FILE_SIZE: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_USER_LOGIN_MIGRATION_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: boolean;
-    /**
-     * 
-     * @type {Array<LanguageType>}
-     * @memberof ConfigResponse
-     */
-    I18N__AVAILABLE_LANGUAGES: Array<LanguageType>;
-    /**
-     * 
-     * @type {LanguageType}
-     * @memberof ConfigResponse
-     */
-    I18N__DEFAULT_LANGUAGE: LanguageType;
-    /**
-     * 
-     * @type {LanguageType}
-     * @memberof ConfigResponse
-     */
-    I18N__FALLBACK_LANGUAGE: LanguageType;
-    /**
-     * 
-     * @type {Timezone}
-     * @memberof ConfigResponse
-     */
-    I18N__DEFAULT_TIMEZONE: Timezone;
-    /**
-     * 
-     * @type {number}
-     * @memberof ConfigResponse
-     */
-    JWT_SHOW_TIMEOUT_WARNING_SECONDS: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ConfigResponse
-     */
-    JWT_TIMEOUT_SECONDS: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof ConfigResponse
-     */
-    NOT_AUTHENTICATED_REDIRECT_URL: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ConfigResponse
-     */
-    DOCUMENT_BASE_DIR: string;
-    /**
-     * 
-     * @type {SchulcloudTheme}
-     * @memberof ConfigResponse
-     */
-    SC_THEME: SchulcloudTheme;
-    /**
-     * 
-     * @type {string}
-     * @memberof ConfigResponse
-     */
-    SC_TITLE: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ConfigResponse
-     */
-    TRAINING_URL: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_MEDIA_SHELF_ENABLED: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof ConfigResponse
-     */
-    BOARD_COLLABORATION_URI: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_AI_TUTOR_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_EXTERNAL_PERSON_REGISTRATION_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_ROOM_COPY_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_ROOM_SHARE: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_ROOM_ADD_EXTERNAL_PERSONS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_ROOM_REGISTER_EXTERNAL_PERSONS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_ADMINISTRATE_ROOMS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof ConfigResponse
-     */
-    LICENSE_SUMMARY_URL?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ConfigResponse
-     */
-    ROOM_MEMBER_INFO_URL: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof ConfigResponse
-     */
-    ROOM_MEMBER_ADD_EXTERNAL_PERSON_REQUIREMENTS_URL: string | null;
+    'FEATURE_NOTIFICATIONS_ENABLED': boolean;
+    'ACCESSIBILITY_REPORT_EMAIL': string;
+    'SC_CONTACT_EMAIL': string;
+    'SC_CONTACT_EMAIL_SUBJECT': string;
+    'MIGRATION_END_GRACE_PERIOD_MS': number;
+    'FEATURE_SHOW_OUTDATED_USERS': boolean;
+    'FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION': boolean;
+    'CTL_TOOLS_RELOAD_TIME_MS': number;
+    'FEATURE_CTL_TOOLS_COPY_ENABLED': boolean;
+    'FEATURE_PREFERRED_CTL_TOOLS_ENABLED': boolean;
+    'FEATURE_SHOW_MIGRATION_WIZARD': boolean;
+    'MIGRATION_WIZARD_DOCUMENTATION_LINK'?: string;
+    'FEATURE_TLDRAW_ENABLED': boolean;
+    'ADMIN_TABLES_DISPLAY_CONSENT_COLUMN': boolean;
+    'ALERT_STATUS_URL': string | null;
+    'FEATURE_TEAMS_ENABLED': boolean;
+    'FEATURE_TEAM_CREATE_ROOM_ENABLED': boolean;
+    'FEATURE_FWU_CONTENT_ENABLED': boolean;
+    'TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE': boolean;
+    'TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT': boolean;
+    'TEACHER_STUDENT_VISIBILITY__IS_VISIBLE': boolean;
+    'FEATURE_SCHOOL_DATA_READONLY_ENABLED': boolean;
+    'FEATURE_SCHOOL_POLICY_ENABLED_NEW': boolean;
+    'FEATURE_SCHOOL_TERMS_OF_USE_ENABLED': boolean;
+    'FEATURE_VIDEOCONFERENCE_ENABLED': boolean;
+    'FEATURE_COLUMN_BOARD_ENABLED': boolean;
+    'FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED': boolean;
+    'FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED': boolean;
+    'FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED': boolean;
+    'FEATURE_COLUMN_BOARD_SHARE': boolean;
+    'FEATURE_COLUMN_BOARD_SOCKET_ENABLED': boolean;
+    'FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED': boolean;
+    'FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED': boolean;
+    'FEATURE_COLUMN_BOARD_TABLE_OF_CONTENTS_ENABLED': boolean;
+    'FEATURE_COLUMN_BOARD_H5P_ENABLED': boolean;
+    'FEATURE_COLUMN_BOARD_COLLABORA_ENABLED': boolean;
+    'FEATURE_COURSE_SHARE': boolean;
+    'FEATURE_LOGIN_LINK_ENABLED': boolean;
+    'FEATURE_LESSON_SHARE': boolean;
+    'FEATURE_TASK_SHARE': boolean;
+    'FEATURE_BOARD_LAYOUT_ENABLED': boolean;
+    'FEATURE_USER_MIGRATION_ENABLED': boolean;
+    'CALENDAR_SERVICE_ENABLED': boolean;
+    'FEATURE_COPY_SERVICE_ENABLED': boolean;
+    'FEATURE_CONSENT_NECESSARY': boolean;
+    'FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED': boolean;
+    'FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED': boolean;
+    'FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_MAX_FILE_SIZE': number;
+    'FEATURE_USER_LOGIN_MIGRATION_ENABLED': boolean;
+    'FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED': boolean;
+    'FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED': boolean;
+    'I18N__AVAILABLE_LANGUAGES': Array<LanguageType>;
+    'I18N__DEFAULT_LANGUAGE': LanguageType;
+    'I18N__FALLBACK_LANGUAGE': LanguageType;
+    'I18N__DEFAULT_TIMEZONE': Timezone;
+    'JWT_SHOW_TIMEOUT_WARNING_SECONDS': number;
+    'JWT_TIMEOUT_SECONDS': number;
+    'NOT_AUTHENTICATED_REDIRECT_URL': string;
+    'DOCUMENT_BASE_DIR': string;
+    'SC_THEME': SchulcloudTheme;
+    'SC_TITLE': string;
+    'TRAINING_URL': string;
+    'FEATURE_MEDIA_SHELF_ENABLED': boolean;
+    'BOARD_COLLABORATION_URI': string;
+    'FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED': boolean;
+    'FEATURE_AI_TUTOR_ENABLED': boolean;
+    'FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE': boolean;
+    'FEATURE_EXTERNAL_PERSON_REGISTRATION_ENABLED': boolean;
+    'FEATURE_ROOM_COPY_ENABLED': boolean;
+    'FEATURE_ROOM_SHARE': boolean;
+    'FEATURE_ROOM_ADD_EXTERNAL_PERSONS_ENABLED': boolean;
+    'FEATURE_ROOM_REGISTER_EXTERNAL_PERSONS_ENABLED': boolean;
+    'FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED': boolean;
+    'FEATURE_ADMINISTRATE_ROOMS_ENABLED': boolean;
+    'FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED': boolean;
+    'FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED': boolean;
+    'LICENSE_SUMMARY_URL'?: string;
+    'ROOM_MEMBER_INFO_URL': string | null;
+    'ROOM_MEMBER_ADD_EXTERNAL_PERSON_REQUIREMENTS_URL': string | null;
 }
+
 
 

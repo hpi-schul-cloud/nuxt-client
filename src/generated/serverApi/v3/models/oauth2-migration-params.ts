@@ -14,30 +14,9 @@
 
 
 
-/**
- * 
- * @export
- * @interface Oauth2MigrationParams
- */
 export interface Oauth2MigrationParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof Oauth2MigrationParams
-     */
-    redirectUri: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Oauth2MigrationParams
-     */
-    code: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Oauth2MigrationParams
-     */
-    systemId: string;
+    'redirectUri': string;
+    'code': string;
+    'systemId': string;
 }
-
 

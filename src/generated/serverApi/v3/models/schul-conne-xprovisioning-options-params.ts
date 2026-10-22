@@ -14,36 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface SchulConneXProvisioningOptionsParams
- */
 export interface SchulConneXProvisioningOptionsParams {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SchulConneXProvisioningOptionsParams
-     */
-    groupProvisioningClassesEnabled: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SchulConneXProvisioningOptionsParams
-     */
-    groupProvisioningCoursesEnabled: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SchulConneXProvisioningOptionsParams
-     */
-    groupProvisioningOtherEnabled: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SchulConneXProvisioningOptionsParams
-     */
-    schoolExternalToolProvisioningEnabled: boolean;
+    'groupProvisioningClassesEnabled': boolean;
+    'groupProvisioningCoursesEnabled': boolean;
+    'groupProvisioningOtherEnabled': boolean;
+    'schoolExternalToolProvisioningEnabled': boolean;
 }
-
 

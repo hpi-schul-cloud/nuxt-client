@@ -14,42 +14,26 @@
 
 
 
-/**
- * 
- * @export
- * @interface ValidationError
- */
 export interface ValidationError {
     /**
      * The response status code.
-     * @type {number}
-     * @memberof ValidationError
      */
-    code: number;
+    'code': number;
     /**
      * The error type.
-     * @type {string}
-     * @memberof ValidationError
      */
-    type: string;
+    'type': string;
     /**
      * The error title.
-     * @type {string}
-     * @memberof ValidationError
      */
-    title: string;
+    'title': string;
     /**
      * The error message.
-     * @type {string}
-     * @memberof ValidationError
      */
-    message: string;
+    'message': string;
     /**
      * The error details.
-     * @type {object}
-     * @memberof ValidationError
      */
-    details?: object;
+    'details'?: object;
 }
-
 

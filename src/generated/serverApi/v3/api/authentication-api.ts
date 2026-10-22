@@ -13,38 +13,38 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { ForbiddenOperationError } from '../models';
+import type { ForbiddenOperationError } from '../models';
 // @ts-ignore
-import { LdapAuthorizationBodyParams } from '../models';
+import type { LdapAuthorizationBodyParams } from '../models';
 // @ts-ignore
-import { LocalAuthorizationBodyParams } from '../models';
+import type { LocalAuthorizationBodyParams } from '../models';
 // @ts-ignore
-import { LoginResponse } from '../models';
+import type { LoginResponse } from '../models';
 // @ts-ignore
-import { Oauth2AuthorizationBodyParams } from '../models';
+import type { Oauth2AuthorizationBodyParams } from '../models';
 // @ts-ignore
-import { OauthLoginResponse } from '../models';
+import type { OauthLoginResponse } from '../models';
 // @ts-ignore
-import { OidcLogoutBodyParams } from '../models';
+import type { OidcLogoutBodyParams } from '../models';
 // @ts-ignore
-import { SessionInfoResponse } from '../models';
+import type { SessionInfoResponse } from '../models';
 // @ts-ignore
-import { TargetUserIdParams } from '../models';
+import type { TargetUserIdParams } from '../models';
 // @ts-ignore
-import { ValidationError } from '../models';
+import type { ValidationError } from '../models';
 /**
  * AuthenticationApi - axios parameter creator
- * @export
  */
 export const AuthenticationApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -54,7 +54,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerExtendSession: async (options: any = {}): Promise<RequestArgs> => {
+        loginControllerExtendSession: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/authentication/refresh-session`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -71,9 +71,9 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -89,7 +89,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginLdap: async (ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options: any = {}): Promise<RequestArgs> => {
+        loginControllerLoginLdap: async (ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'ldapAuthorizationBodyParams' is not null or undefined
             assertParamExists('loginControllerLoginLdap', 'ldapAuthorizationBodyParams', ldapAuthorizationBodyParams)
             const localVarPath = `/authentication/ldap`;
@@ -104,11 +104,10 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(ldapAuthorizationBodyParams, localVarRequestOptions, configuration)
@@ -125,7 +124,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginLocal: async (localAuthorizationBodyParams: LocalAuthorizationBodyParams, options: any = {}): Promise<RequestArgs> => {
+        loginControllerLoginLocal: async (localAuthorizationBodyParams: LocalAuthorizationBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'localAuthorizationBodyParams' is not null or undefined
             assertParamExists('loginControllerLoginLocal', 'localAuthorizationBodyParams', localAuthorizationBodyParams)
             const localVarPath = `/authentication/local`;
@@ -140,11 +139,10 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(localAuthorizationBodyParams, localVarRequestOptions, configuration)
@@ -161,7 +159,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginLocalServiceAccount: async (localAuthorizationBodyParams: LocalAuthorizationBodyParams, options: any = {}): Promise<RequestArgs> => {
+        loginControllerLoginLocalServiceAccount: async (localAuthorizationBodyParams: LocalAuthorizationBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'localAuthorizationBodyParams' is not null or undefined
             assertParamExists('loginControllerLoginLocalServiceAccount', 'localAuthorizationBodyParams', localAuthorizationBodyParams)
             const localVarPath = `/authentication/local-service-account`;
@@ -176,11 +174,10 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(localAuthorizationBodyParams, localVarRequestOptions, configuration)
@@ -197,7 +194,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginOauth2: async (oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options: any = {}): Promise<RequestArgs> => {
+        loginControllerLoginOauth2: async (oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'oauth2AuthorizationBodyParams' is not null or undefined
             assertParamExists('loginControllerLoginOauth2', 'oauth2AuthorizationBodyParams', oauth2AuthorizationBodyParams)
             const localVarPath = `/authentication/oauth2`;
@@ -212,11 +209,10 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(oauth2AuthorizationBodyParams, localVarRequestOptions, configuration)
@@ -233,7 +229,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerSupportJwt: async (targetUserIdParams: TargetUserIdParams, options: any = {}): Promise<RequestArgs> => {
+        loginControllerSupportJwt: async (targetUserIdParams: TargetUserIdParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'targetUserIdParams' is not null or undefined
             assertParamExists('loginControllerSupportJwt', 'targetUserIdParams', targetUserIdParams)
             const localVarPath = `/authentication/support-jwt`;
@@ -252,11 +248,10 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(targetUserIdParams, localVarRequestOptions, configuration)
@@ -272,7 +267,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        logoutControllerExternalSystemLogout: async (options: any = {}): Promise<RequestArgs> => {
+        logoutControllerExternalSystemLogout: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/logout/external`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -290,8 +285,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -306,7 +300,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        logoutControllerLogout: async (options: any = {}): Promise<RequestArgs> => {
+        logoutControllerLogout: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/logout`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -324,8 +318,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -341,7 +334,7 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        logoutControllerLogoutOidc: async (oidcLogoutBodyParams: OidcLogoutBodyParams, options: any = {}): Promise<RequestArgs> => {
+        logoutControllerLogoutOidc: async (oidcLogoutBodyParams: OidcLogoutBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'oidcLogoutBodyParams' is not null or undefined
             assertParamExists('logoutControllerLogoutOidc', 'oidcLogoutBodyParams', oidcLogoutBodyParams)
             const localVarPath = `/logout/oidc`;
@@ -356,11 +349,9 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(oidcLogoutBodyParams, localVarRequestOptions, configuration)
@@ -375,7 +366,6 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
 
 /**
  * AuthenticationApi - functional programming interface
- * @export
  */
 export const AuthenticationApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = AuthenticationApiAxiosParamCreator(configuration)
@@ -386,9 +376,11 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginControllerExtendSession(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SessionInfoResponse>> {
+        async loginControllerExtendSession(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SessionInfoResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerExtendSession(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthenticationApi.loginControllerExtendSession']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -397,9 +389,11 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginControllerLoginLdap(ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
+        async loginControllerLoginLdap(ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginLdap(ldapAuthorizationBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthenticationApi.loginControllerLoginLdap']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -408,9 +402,11 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
+        async loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginLocal(localAuthorizationBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthenticationApi.loginControllerLoginLocal']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -419,9 +415,11 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
+        async loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthenticationApi.loginControllerLoginLocalServiceAccount']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -430,9 +428,11 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthLoginResponse>> {
+        async loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthLoginResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginOauth2(oauth2AuthorizationBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthenticationApi.loginControllerLoginOauth2']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -441,9 +441,11 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
+        async loginControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerSupportJwt(targetUserIdParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthenticationApi.loginControllerSupportJwt']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -451,9 +453,11 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async logoutControllerExternalSystemLogout(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async logoutControllerExternalSystemLogout(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.logoutControllerExternalSystemLogout(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthenticationApi.logoutControllerExternalSystemLogout']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -461,9 +465,11 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async logoutControllerLogout(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async logoutControllerLogout(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.logoutControllerLogout(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthenticationApi.logoutControllerLogout']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -472,16 +478,17 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.logoutControllerLogoutOidc(oidcLogoutBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthenticationApi.logoutControllerLogoutOidc']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * AuthenticationApi - factory interface
- * @export
  */
 export const AuthenticationApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = AuthenticationApiFp(configuration)
@@ -492,7 +499,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerExtendSession(options?: any): AxiosPromise<SessionInfoResponse> {
+        loginControllerExtendSession(options?: RawAxiosRequestConfig): AxiosPromise<SessionInfoResponse> {
             return localVarFp.loginControllerExtendSession(options).then((request) => request(axios, basePath));
         },
         /**
@@ -502,7 +509,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginLdap(ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse> {
+        loginControllerLoginLdap(ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<LoginResponse> {
             return localVarFp.loginControllerLoginLdap(ldapAuthorizationBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -512,7 +519,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse> {
+        loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<LoginResponse> {
             return localVarFp.loginControllerLoginLocal(localAuthorizationBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -522,7 +529,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse> {
+        loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<LoginResponse> {
             return localVarFp.loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -532,7 +539,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): AxiosPromise<OauthLoginResponse> {
+        loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<OauthLoginResponse> {
             return localVarFp.loginControllerLoginOauth2(oauth2AuthorizationBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -542,7 +549,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any): AxiosPromise<LoginResponse> {
+        loginControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: RawAxiosRequestConfig): AxiosPromise<LoginResponse> {
             return localVarFp.loginControllerSupportJwt(targetUserIdParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -551,7 +558,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        logoutControllerExternalSystemLogout(options?: any): AxiosPromise<void> {
+        logoutControllerExternalSystemLogout(options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.logoutControllerExternalSystemLogout(options).then((request) => request(axios, basePath));
         },
         /**
@@ -560,7 +567,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        logoutControllerLogout(options?: any): AxiosPromise<void> {
+        logoutControllerLogout(options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.logoutControllerLogout(options).then((request) => request(axios, basePath));
         },
         /**
@@ -570,7 +577,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: any): AxiosPromise<void> {
+        logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.logoutControllerLogoutOidc(oidcLogoutBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -578,8 +585,6 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
 
 /**
  * AuthenticationApi - interface
- * @export
- * @interface AuthenticationApi
  */
 export interface AuthenticationApiInterface {
     /**
@@ -587,9 +592,8 @@ export interface AuthenticationApiInterface {
      * @summary Extends the lifetime of the current session.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApiInterface
      */
-    loginControllerExtendSession(options?: any): AxiosPromise<SessionInfoResponse>;
+    loginControllerExtendSession(options?: RawAxiosRequestConfig): AxiosPromise<SessionInfoResponse>;
 
     /**
      * 
@@ -597,9 +601,8 @@ export interface AuthenticationApiInterface {
      * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApiInterface
      */
-    loginControllerLoginLdap(ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse>;
+    loginControllerLoginLdap(ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<LoginResponse>;
 
     /**
      * 
@@ -607,9 +610,8 @@ export interface AuthenticationApiInterface {
      * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApiInterface
      */
-    loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse>;
+    loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<LoginResponse>;
 
     /**
      * 
@@ -617,9 +619,8 @@ export interface AuthenticationApiInterface {
      * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApiInterface
      */
-    loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse>;
+    loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<LoginResponse>;
 
     /**
      * 
@@ -627,9 +628,8 @@ export interface AuthenticationApiInterface {
      * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApiInterface
      */
-    loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): AxiosPromise<OauthLoginResponse>;
+    loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<OauthLoginResponse>;
 
     /**
      * 
@@ -637,27 +637,24 @@ export interface AuthenticationApiInterface {
      * @param {TargetUserIdParams} targetUserIdParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApiInterface
      */
-    loginControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any): AxiosPromise<LoginResponse>;
+    loginControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: RawAxiosRequestConfig): AxiosPromise<LoginResponse>;
 
     /**
      * 
      * @summary Logs out a user from the external system.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApiInterface
      */
-    logoutControllerExternalSystemLogout(options?: any): AxiosPromise<void>;
+    logoutControllerExternalSystemLogout(options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
      * @summary Logs out a user.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApiInterface
      */
-    logoutControllerLogout(options?: any): AxiosPromise<void>;
+    logoutControllerLogout(options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -665,17 +662,13 @@ export interface AuthenticationApiInterface {
      * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApiInterface
      */
-    logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: any): AxiosPromise<void>;
+    logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
  * AuthenticationApi - object-oriented interface
- * @export
- * @class AuthenticationApi
- * @extends {BaseAPI}
  */
 export class AuthenticationApi extends BaseAPI implements AuthenticationApiInterface {
     /**
@@ -683,9 +676,8 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      * @summary Extends the lifetime of the current session.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApi
      */
-    public loginControllerExtendSession(options?: any) {
+    public loginControllerExtendSession(options?: RawAxiosRequestConfig) {
         return AuthenticationApiFp(this.configuration).loginControllerExtendSession(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -695,9 +687,8 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApi
      */
-    public loginControllerLoginLdap(ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options?: any) {
+    public loginControllerLoginLdap(ldapAuthorizationBodyParams: LdapAuthorizationBodyParams, options?: RawAxiosRequestConfig) {
         return AuthenticationApiFp(this.configuration).loginControllerLoginLdap(ldapAuthorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -707,9 +698,8 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApi
      */
-    public loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any) {
+    public loginControllerLoginLocal(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: RawAxiosRequestConfig) {
         return AuthenticationApiFp(this.configuration).loginControllerLoginLocal(localAuthorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -719,9 +709,8 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      * @param {LocalAuthorizationBodyParams} localAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApi
      */
-    public loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: any) {
+    public loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams: LocalAuthorizationBodyParams, options?: RawAxiosRequestConfig) {
         return AuthenticationApiFp(this.configuration).loginControllerLoginLocalServiceAccount(localAuthorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -731,9 +720,8 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      * @param {Oauth2AuthorizationBodyParams} oauth2AuthorizationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApi
      */
-    public loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any) {
+    public loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: RawAxiosRequestConfig) {
         return AuthenticationApiFp(this.configuration).loginControllerLoginOauth2(oauth2AuthorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -743,9 +731,8 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      * @param {TargetUserIdParams} targetUserIdParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApi
      */
-    public loginControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any) {
+    public loginControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: RawAxiosRequestConfig) {
         return AuthenticationApiFp(this.configuration).loginControllerSupportJwt(targetUserIdParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -754,9 +741,8 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      * @summary Logs out a user from the external system.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApi
      */
-    public logoutControllerExternalSystemLogout(options?: any) {
+    public logoutControllerExternalSystemLogout(options?: RawAxiosRequestConfig) {
         return AuthenticationApiFp(this.configuration).logoutControllerExternalSystemLogout(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -765,9 +751,8 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      * @summary Logs out a user.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApi
      */
-    public logoutControllerLogout(options?: any) {
+    public logoutControllerLogout(options?: RawAxiosRequestConfig) {
         return AuthenticationApiFp(this.configuration).logoutControllerLogout(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -777,9 +762,9 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApi
      */
-    public logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: any) {
+    public logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: RawAxiosRequestConfig) {
         return AuthenticationApiFp(this.configuration).logoutControllerLogoutOidc(oidcLogoutBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

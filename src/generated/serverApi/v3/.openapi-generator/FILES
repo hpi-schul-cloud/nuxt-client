@@ -76,6 +76,7 @@ models/authorized-response.ts
 models/basic-tool-config-params.ts
 models/board-column-board-response.ts
 models/board-context-response.ts
+models/board-element-response-content.ts
 models/board-element-response.ts
 models/board-error-report-body-params.ts
 models/board-external-reference-type.ts
@@ -88,7 +89,9 @@ models/board-response.ts
 models/board-task-response.ts
 models/board-task-status-response.ts
 models/business-error.ts
+models/card-controller-create-element201-response.ts
 models/card-list-response.ts
+models/card-response-elements-inner.ts
 models/card-response.ts
 models/card-skeleton-response.ts
 models/change-language-params.ts
@@ -166,11 +169,14 @@ models/drawing-content-body.ts
 models/drawing-element-content-body.ts
 models/drawing-element-content.ts
 models/drawing-element-response.ts
+models/element-controller-update-element200-response.ts
+models/element-with-parent-hierarchy-response-element.ts
 models/element-with-parent-hierarchy-response.ts
 models/entity-not-found-error.ts
 models/external-source-response.ts
 models/external-tool-bulk-create-params.ts
 models/external-tool-content-body.ts
+models/external-tool-create-params-config.ts
 models/external-tool-create-params.ts
 models/external-tool-element-content-body.ts
 models/external-tool-element-content.ts
@@ -182,6 +188,7 @@ models/external-tool-medium-response.ts
 models/external-tool-medium-status.ts
 models/external-tool-response.ts
 models/external-tool-search-list-response.ts
+models/external-tool-update-params-config.ts
 models/external-tool-update-params.ts
 models/external-tool-utilization-response.ts
 models/federal-state-response.ts
@@ -216,6 +223,7 @@ models/launch-type.ts
 models/layout-body-params.ts
 models/ldap-authorization-body-params.ts
 models/lernstore-resources.ts
+models/lesson-content-response-content.ts
 models/lesson-content-response.ts
 models/lesson-copy-api-params.ts
 models/lesson-linked-task-response.ts
@@ -251,6 +259,7 @@ models/media-available-line-response.ts
 models/media-board-response.ts
 models/media-external-tool-element-content.ts
 models/media-external-tool-element-response.ts
+models/media-line-response-elements-inner.ts
 models/media-line-response.ts
 models/media-school-license-list-response.ts
 models/media-school-license-response.ts
@@ -341,6 +350,7 @@ models/room-member-response.ts
 models/room-role-response.ts
 models/room-stats-item-response.ts
 models/room-stats-list-response.ts
+models/runtime-config-list-item-response-value.ts
 models/runtime-config-list-item-response.ts
 models/runtime-config-list-response.ts
 models/school-exists-response.ts
@@ -404,6 +414,7 @@ models/tool-launch-request-response.ts
 models/tool-reference-list-response.ts
 models/tool-reference-response.ts
 models/update-board-title-params.ts
+models/update-element-content-body-params-data.ts
 models/update-element-content-body-params.ts
 models/update-flag-params.ts
 models/update-match-params.ts

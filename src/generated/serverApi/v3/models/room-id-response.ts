@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface RoomIdResponse
- */
 export interface RoomIdResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomIdResponse
-     */
-    id: string;
+    'id': string;
 }
-
 

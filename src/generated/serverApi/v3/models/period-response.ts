@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface PeriodResponse
- */
 export interface PeriodResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof PeriodResponse
-     */
-    from: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PeriodResponse
-     */
-    until: string;
+    'from': string;
+    'until': string;
 }
-
 

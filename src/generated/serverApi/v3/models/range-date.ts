@@ -14,36 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface RangeDate
- */
 export interface RangeDate {
-    /**
-     * 
-     * @type {string}
-     * @memberof RangeDate
-     */
-    $gt?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RangeDate
-     */
-    $gte?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RangeDate
-     */
-    $lt?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RangeDate
-     */
-    $lte?: string;
+    '$gt'?: string;
+    '$gte'?: string;
+    '$lt'?: string;
+    '$lte'?: string;
 }
-
 

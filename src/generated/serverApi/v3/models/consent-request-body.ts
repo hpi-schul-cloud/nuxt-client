@@ -14,60 +14,38 @@
 
 
 
-/**
- * 
- * @export
- * @interface ConsentRequestBody
- */
 export interface ConsentRequestBody {
     /**
      * The error should follow the OAuth2 error format (e.g. invalid_request, login_required). Defaults to request_denied.
-     * @type {string}
-     * @memberof ConsentRequestBody
      */
-    error?: string;
+    'error'?: string;
     /**
      * Debug contains information to help resolve the problem as a developer. Usually not exposed to the public but only in the server logs.
-     * @type {string}
-     * @memberof ConsentRequestBody
      */
-    error_debug?: string;
+    'error_debug'?: string;
     /**
      * Description of the error in a human readable format.
-     * @type {string}
-     * @memberof ConsentRequestBody
      */
-    error_description?: string;
+    'error_description'?: string;
     /**
      * Hint to help resolve the error.
-     * @type {string}
-     * @memberof ConsentRequestBody
      */
-    error_hint?: string;
+    'error_hint'?: string;
     /**
      * Represents the HTTP status code of the error (e.g. 401 or 403). Defaults to 400.
-     * @type {number}
-     * @memberof ConsentRequestBody
      */
-    status_code?: number;
+    'status_code'?: number;
     /**
      * The Oauth2 client id.
-     * @type {Array<string>}
-     * @memberof ConsentRequestBody
      */
-    grant_scope?: Array<string>;
+    'grant_scope'?: Array<string>;
     /**
      * Remember, if set to true, tells the oauth provider to remember this consent authorization and reuse it if the same client asks the same user for the same, or a subset of, scope.
-     * @type {boolean}
-     * @memberof ConsentRequestBody
      */
-    remember?: boolean;
+    'remember'?: boolean;
     /**
      * RememberFor sets how long the consent authorization should be remembered for in seconds. If set to 0, the authorization will be remembered indefinitely.
-     * @type {number}
-     * @memberof ConsentRequestBody
      */
-    remember_for?: number;
+    'remember_for'?: number;
 }
-
 

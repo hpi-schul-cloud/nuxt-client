@@ -14,42 +14,11 @@
 
 
 
-/**
- * 
- * @export
- * @interface UserConsentResponse
- */
 export interface UserConsentResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof UserConsentResponse
-     */
-    form: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof UserConsentResponse
-     */
-    privacyConsent: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof UserConsentResponse
-     */
-    termsOfUseConsent: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserConsentResponse
-     */
-    dateOfPrivacyConsent: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserConsentResponse
-     */
-    dateOfTermsOfUseConsent: string;
+    'form': string;
+    'privacyConsent': boolean;
+    'termsOfUseConsent': boolean;
+    'dateOfPrivacyConsent': string;
+    'dateOfTermsOfUseConsent': string;
 }
-
 

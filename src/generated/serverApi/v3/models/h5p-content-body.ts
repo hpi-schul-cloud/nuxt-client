@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface H5pContentBody
- */
 export interface H5pContentBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof H5pContentBody
-     */
-    contentId?: string;
+    'contentId'?: string;
 }
-
 

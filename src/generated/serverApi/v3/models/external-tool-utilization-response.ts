@@ -13,26 +13,12 @@
  */
 
 
-import { ContextExternalToolCountPerContextResponse } from './context-external-tool-count-per-context-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContextExternalToolCountPerContextResponse } from './context-external-tool-count-per-context-response';
 
-/**
- * 
- * @export
- * @interface ExternalToolUtilizationResponse
- */
 export interface ExternalToolUtilizationResponse {
-    /**
-     * 
-     * @type {number}
-     * @memberof ExternalToolUtilizationResponse
-     */
-    schoolExternalToolCount: number;
-    /**
-     * 
-     * @type {ContextExternalToolCountPerContextResponse}
-     * @memberof ExternalToolUtilizationResponse
-     */
-    contextExternalToolCountPerContext: ContextExternalToolCountPerContextResponse;
+    'schoolExternalToolCount': number;
+    'contextExternalToolCountPerContext': ContextExternalToolCountPerContextResponse;
 }
-
 

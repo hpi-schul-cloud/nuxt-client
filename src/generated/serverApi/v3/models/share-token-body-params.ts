@@ -14,42 +14,25 @@
 
 
 
-/**
- * 
- * @export
- * @interface ShareTokenBodyParams
- */
 export interface ShareTokenBodyParams {
     /**
      * the type of the object being shared
-     * @type {string}
-     * @memberof ShareTokenBodyParams
      */
-    parentType: ShareTokenBodyParamsParentType;
+    'parentType': ShareTokenBodyParamsParentType;
     /**
      * the id of the object being shared.
-     * @type {string}
-     * @memberof ShareTokenBodyParams
      */
-    parentId: string;
+    'parentId': string;
     /**
      * when defined, the sharetoken will expire after the given number of days.
-     * @type {number}
-     * @memberof ShareTokenBodyParams
      */
-    expiresInDays?: number | null;
+    'expiresInDays'?: number | null;
     /**
      * when defined, the sharetoken will be usable exclusively by members of the users school.
-     * @type {boolean}
-     * @memberof ShareTokenBodyParams
      */
-    schoolExclusive?: boolean | null;
+    'schoolExclusive'?: boolean | null;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum ShareTokenBodyParamsParentType {
     COURSES = 'courses',
     TASKS = 'tasks',
@@ -59,6 +42,5 @@ export enum ShareTokenBodyParamsParentType {
     CARD = 'card',
     COLUMN = 'column'
 }
-
 
 

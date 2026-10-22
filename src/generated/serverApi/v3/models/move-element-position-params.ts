@@ -14,30 +14,12 @@
 
 
 
-/**
- * 
- * @export
- * @interface MoveElementPositionParams
- */
 export interface MoveElementPositionParams {
-    /**
-     * 
-     * @type {number}
-     * @memberof MoveElementPositionParams
-     */
-    x: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof MoveElementPositionParams
-     */
-    y: number;
+    'x': number;
+    'y': number;
     /**
      * used to identify a position within a group.
-     * @type {number}
-     * @memberof MoveElementPositionParams
      */
-    groupIndex?: number;
+    'groupIndex'?: number;
 }
-
 
