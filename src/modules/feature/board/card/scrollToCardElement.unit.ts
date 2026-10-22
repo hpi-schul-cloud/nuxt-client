@@ -5,11 +5,11 @@ describe("scrollToCardElement", () => {
 		const container = document.createElement("div");
 		container.scrollTo = vi.fn();
 		container.scrollTop = 100;
-		vi.spyOn(container, "getBoundingClientRect").mockReturnValue({ top: 50 } as DOMRect);
+		vi.spyOn(container, "getBoundingClientRect").mockReturnValue(new DOMRect(0, 50));
 
 		const target = document.createElement("div");
 		target.dataset.elementId = "element-1";
-		vi.spyOn(target, "getBoundingClientRect").mockReturnValue({ top: 400 } as DOMRect);
+		vi.spyOn(target, "getBoundingClientRect").mockReturnValue(new DOMRect(0, 400));
 		container.appendChild(target);
 		document.body.appendChild(container);
 
@@ -40,7 +40,7 @@ describe("scrollToCardElement", () => {
 
 	it("should never scroll above the top", () => {
 		const { container, target } = setup();
-		vi.spyOn(target, "getBoundingClientRect").mockReturnValue({ top: -500 } as DOMRect);
+		vi.spyOn(target, "getBoundingClientRect").mockReturnValue(new DOMRect(0, -500));
 
 		scrollToCardElement(container, "element-1", false);
 
@@ -48,7 +48,8 @@ describe("scrollToCardElement", () => {
 	});
 
 	it("should respect reduced motion", () => {
-		vi.spyOn(window, "matchMedia").mockReturnValue({ matches: true } as MediaQueryList);
+		const matchMedia = window.matchMedia;
+		vi.spyOn(window, "matchMedia").mockImplementation((query) => ({ ...matchMedia(query), matches: true }));
 		const { container } = setup();
 
 		scrollToCardElement(container, "element-1", false);

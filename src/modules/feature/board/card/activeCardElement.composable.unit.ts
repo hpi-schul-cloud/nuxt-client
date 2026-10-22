@@ -30,7 +30,7 @@ describe("activeCardElement.composable", () => {
 		elementIds?: string[];
 	}) => {
 		const container = document.createElement("div");
-		vi.spyOn(container, "getBoundingClientRect").mockReturnValue({ top: 100 } as DOMRect);
+		vi.spyOn(container, "getBoundingClientRect").mockReturnValue(new DOMRect(0, 100));
 		Object.defineProperty(container, "clientHeight", { value: 500 });
 		Object.defineProperty(container, "scrollHeight", { value: 2000 });
 		const scrollTop = options.atBottom ? 1500 : (options.scrollTop ?? 0);
@@ -39,7 +39,7 @@ describe("activeCardElement.composable", () => {
 		options.tops.forEach((top, index) => {
 			const element = document.createElement("div");
 			element.dataset.elementId = `element-${index}`;
-			vi.spyOn(element, "getBoundingClientRect").mockReturnValue({ top } as DOMRect);
+			vi.spyOn(element, "getBoundingClientRect").mockReturnValue(new DOMRect(0, top));
 			container.appendChild(element);
 		});
 
@@ -50,6 +50,31 @@ describe("activeCardElement.composable", () => {
 
 		return { ...composable, container, scroller, isEnabled };
 	};
+
+	it("should update when the content changes its size without scrolling", async () => {
+		let notifyResize: (() => void) | undefined;
+		vi.stubGlobal(
+			"ResizeObserver",
+			class {
+				constructor(callback: () => void) {
+					notifyResize = callback;
+				}
+				observe = vi.fn();
+				unobserve = vi.fn();
+				disconnect = vi.fn();
+			}
+		);
+		const { activeElementId, container } = setup({ tops: [150, 200, 1200], scrollTop: 300 });
+		await nextTick();
+		flushFrames();
+		expect(activeElementId.value).toBe("element-1");
+
+		vi.spyOn(container.children[2], "getBoundingClientRect").mockReturnValue(new DOMRect(0, 220));
+		notifyResize?.();
+		flushFrames();
+
+		expect(activeElementId.value).toBe("element-2");
+	});
 
 	it("should mark the first element as active before scrolling", async () => {
 		const { activeElementId } = setup({ tops: [150, 700, 1200] });
@@ -232,7 +257,7 @@ describe("activeCardElement.composable", () => {
 			flushFrames();
 			const element = document.createElement("div");
 			element.dataset.elementId = "late-element";
-			vi.spyOn(element, "getBoundingClientRect").mockReturnValue({ top: 120 } as DOMRect);
+			vi.spyOn(element, "getBoundingClientRect").mockReturnValue(new DOMRect(0, 120));
 			container.appendChild(element);
 
 			refresh();

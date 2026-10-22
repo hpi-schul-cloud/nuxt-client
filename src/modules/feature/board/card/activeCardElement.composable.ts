@@ -1,3 +1,5 @@
+import { getRenderedCardElements } from "./renderedCardElements";
+import { useResizeObserver } from "@vueuse/core";
 import { onScopeDispose, type Ref, ref, watch } from "vue";
 
 const READING_LINE_RATIO = 0.3;
@@ -30,9 +32,8 @@ export const useActiveCardElement = (
 		const container = scroller.value;
 		if (!container) return;
 
-		const elements = Array.from(container.querySelectorAll<HTMLElement>("[data-element-id]")).filter(
-			(element) => !elementIds || elementIds.value.includes(element.dataset.elementId ?? "")
-		);
+		const listedIds = elementIds && new Set(elementIds.value);
+		const elements = getRenderedCardElements(container).filter(({ id }) => !listedIds || listedIds.has(id));
 		if (elements.length === 0) {
 			unpin();
 			activeElementId.value = undefined;
@@ -40,7 +41,7 @@ export const useActiveCardElement = (
 		}
 
 		if (pinnedElementId !== undefined) {
-			if (elements.some((element) => element.dataset.elementId === pinnedElementId)) {
+			if (elements.some(({ id }) => id === pinnedElementId)) {
 				activeElementId.value = pinnedElementId;
 				return;
 			}
@@ -48,7 +49,7 @@ export const useActiveCardElement = (
 		}
 
 		if (container.scrollTop <= 0) {
-			activeElementId.value = elements[0].dataset.elementId;
+			activeElementId.value = elements[0].id;
 			return;
 		}
 
@@ -62,9 +63,9 @@ export const useActiveCardElement = (
 
 		const containerRect = container.getBoundingClientRect();
 		const readingLine = containerRect.top + container.clientHeight * readingLineRatio;
-		const passed = elements.filter((element) => element.getBoundingClientRect().top <= readingLine);
+		const passed = elements.filter(({ node }) => node.getBoundingClientRect().top <= readingLine);
 
-		activeElementId.value = (passed[passed.length - 1] ?? elements[0]).dataset.elementId;
+		activeElementId.value = (passed[passed.length - 1] ?? elements[0]).id;
 	};
 
 	const scheduleUpdate = () => {
@@ -116,6 +117,14 @@ export const useActiveCardElement = (
 		},
 		{ immediate: true, flush: "post" }
 	);
+
+	// Content can change height without scrolling (images loading, edit mode, window resize).
+	useResizeObserver(() => {
+		const container = scroller.value;
+		if (!container || !isEnabled.value) return [];
+
+		return [container, ...Array.from(container.children).filter((child) => child instanceof HTMLElement)];
+	}, scheduleUpdate);
 
 	onScopeDispose(() => {
 		stop();

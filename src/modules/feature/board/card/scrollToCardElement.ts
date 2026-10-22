@@ -1,3 +1,5 @@
+import { getRenderedCardElements } from "./renderedCardElements";
+
 const SCROLL_TARGET_GAP_PX = 32;
 const FOCUSABLE_SELECTOR = "a[href], button, input, textarea, select, [tabindex]:not([tabindex='-1'])";
 
@@ -13,9 +15,7 @@ const focusElement = (wrapper: HTMLElement) => {
 };
 
 export const scrollToCardElement = (container: HTMLElement, elementId: string, isFirstElement: boolean): boolean => {
-	const target = Array.from(container.querySelectorAll<HTMLElement>("[data-element-id]")).find(
-		(element) => element.dataset.elementId === elementId
-	);
+	const target = getRenderedCardElements(container).find(({ id }) => id === elementId)?.node;
 	if (!target) return false;
 
 	const offsetTop = target.getBoundingClientRect().top - container.getBoundingClientRect().top;
