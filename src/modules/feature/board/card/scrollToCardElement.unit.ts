@@ -67,6 +67,29 @@ describe("scrollToCardElement", () => {
 	});
 
 	describe("focus", () => {
+		it("should skip a disabled control and focus the next usable control", () => {
+			const { container, target } = setup();
+			const disabledButton = document.createElement("button");
+			disabledButton.disabled = true;
+			const button = document.createElement("button");
+			target.append(disabledButton, button);
+
+			scrollToCardElement(container, "element-1", false);
+
+			expect(document.activeElement).toBe(button);
+		});
+
+		it("should focus the wrapper when its controls cannot receive focus", () => {
+			const { container, target } = setup();
+			const input = document.createElement("input");
+			input.type = "hidden";
+			target.append(input);
+
+			scrollToCardElement(container, "element-1", false);
+
+			expect(document.activeElement).toBe(target);
+		});
+
 		it("should focus the first focusable descendant", () => {
 			const { container, target } = setup();
 			const button = document.createElement("button");

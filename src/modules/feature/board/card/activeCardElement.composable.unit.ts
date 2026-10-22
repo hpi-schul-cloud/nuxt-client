@@ -140,6 +140,16 @@ describe("activeCardElement.composable", () => {
 	});
 
 	describe("when it is disabled", () => {
+		it("should ignore explicit refreshes", async () => {
+			const { activeElementId, refresh } = setup({ tops: [150, 700], enabled: false });
+			await nextTick();
+
+			refresh();
+			flushFrames();
+
+			expect(activeElementId.value).toBeUndefined();
+		});
+
 		it("should have no active element and ignore scrolling", async () => {
 			const { activeElementId, container } = setup({ tops: [-400, 200], enabled: false });
 			await nextTick();

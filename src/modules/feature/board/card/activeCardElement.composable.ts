@@ -30,7 +30,7 @@ export const useActiveCardElement = (
 	const update = () => {
 		frame = undefined;
 		const container = scroller.value;
-		if (!container) return;
+		if (!container || !isEnabled.value) return;
 
 		const listedIds = elementIds && new Set(elementIds.value);
 		const elements = getRenderedCardElements(container).filter(({ id }) => !listedIds || listedIds.has(id));
@@ -69,6 +69,7 @@ export const useActiveCardElement = (
 	};
 
 	const scheduleUpdate = () => {
+		if (!scroller.value || !isEnabled.value) return;
 		frame ??= requestAnimationFrame(update);
 	};
 

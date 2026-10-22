@@ -4,10 +4,9 @@ const SCROLL_TARGET_GAP_PX = 32;
 const FOCUSABLE_SELECTOR = "a[href], button, input, textarea, select, [tabindex]:not([tabindex='-1'])";
 
 const focusElement = (wrapper: HTMLElement) => {
-	const focusTarget = wrapper.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
-	if (focusTarget) {
+	for (const focusTarget of wrapper.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)) {
 		focusTarget.focus({ preventScroll: true });
-		return;
+		if (wrapper.ownerDocument.activeElement === focusTarget) return;
 	}
 
 	wrapper.tabIndex = -1;
