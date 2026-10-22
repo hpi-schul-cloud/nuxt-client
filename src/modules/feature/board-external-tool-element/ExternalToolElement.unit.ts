@@ -16,10 +16,16 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ExternalToolElementResponse } from "@api-server";
-import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";
+import {
+	canManageExternalToolElements,
+	useBoardAllowedOperations,
+	useBoardFocusHandler,
+	useContentElementState,
+} from "@data-board";
 import {
 	ContextExternalTool,
 	ExternalToolDisplayData,
+	hasExternalToolContent,
 	useContextExternalToolConfigurationStatus,
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
@@ -46,6 +52,13 @@ describe("ExternalToolElement", () => {
 	let useSharedLastCreatedElementMock: Mocked<ReturnType<typeof useSharedLastCreatedElement>>;
 
 	let useToolConfigurationStatusMock: Mocked<ReturnType<typeof useContextExternalToolConfigurationStatus>>;
+
+	beforeEach(async () => {
+		const actual = await vi.importActual<typeof import("@data-board")>("@data-board");
+		vi.mocked(canManageExternalToolElements).mockImplementation(actual.canManageExternalToolElements);
+		const actualExternalTool = await vi.importActual<typeof import("@data-external-tool")>("@data-external-tool");
+		vi.mocked(hasExternalToolContent).mockImplementation(actualExternalTool.hasExternalToolContent);
+	});
 
 	beforeEach(() => {
 		useContentElementStateMock = mockComposable(useContentElementState);

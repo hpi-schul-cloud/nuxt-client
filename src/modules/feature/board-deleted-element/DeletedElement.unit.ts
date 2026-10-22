@@ -2,7 +2,7 @@ import DeletedElement from "./DeletedElement.vue";
 import DeletedElementMenu from "./DeletedElementMenu.vue";
 import { deletedElementResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useBoardAllowedOperations, useBoardFocusHandler } from "@data-board";
+import { canSeeDeletedElements, useBoardAllowedOperations, useBoardFocusHandler } from "@data-board";
 import { WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
 import { Mocked } from "vitest";
@@ -13,6 +13,11 @@ vi.mock("@data-board");
 
 describe("DeletedElement", () => {
 	let useBoardFocusHandlerMock: Mocked<ReturnType<typeof useBoardFocusHandler>>;
+
+	beforeEach(async () => {
+		const actual = await vi.importActual<typeof import("@data-board")>("@data-board");
+		vi.mocked(canSeeDeletedElements).mockImplementation(actual.canSeeDeletedElements);
+	});
 
 	beforeEach(() => {
 		useBoardFocusHandlerMock = mockComposable(useBoardFocusHandler);
