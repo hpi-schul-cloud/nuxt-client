@@ -13,27 +13,15 @@
  */
 
 
-import { ParentConsentResponse } from './parent-consent-response';
-import { UserConsentResponse } from './user-consent-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ParentConsentResponse } from './parent-consent-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { UserConsentResponse } from './user-consent-response';
 
-/**
- * 
- * @export
- * @interface ConsentsResponse
- */
 export interface ConsentsResponse {
-    /**
-     * 
-     * @type {UserConsentResponse}
-     * @memberof ConsentsResponse
-     */
-    userConsent: UserConsentResponse;
-    /**
-     * 
-     * @type {Array<ParentConsentResponse>}
-     * @memberof ConsentsResponse
-     */
-    parentConsents: Array<ParentConsentResponse>;
+    'userConsent': UserConsentResponse;
+    'parentConsents': Array<ParentConsentResponse>;
 }
-
 

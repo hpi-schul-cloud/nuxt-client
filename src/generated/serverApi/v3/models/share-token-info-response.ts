@@ -14,36 +14,12 @@
 
 
 
-/**
- * 
- * @export
- * @interface ShareTokenInfoResponse
- */
 export interface ShareTokenInfoResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ShareTokenInfoResponse
-     */
-    token: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ShareTokenInfoResponse
-     */
-    parentType: ShareTokenInfoResponseParentType;
-    /**
-     * 
-     * @type {string}
-     * @memberof ShareTokenInfoResponse
-     */
-    parentName: string;
+    'token': string;
+    'parentType': ShareTokenInfoResponseParentType;
+    'parentName': string;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum ShareTokenInfoResponseParentType {
     COURSES = 'courses',
     TASKS = 'tasks',
@@ -53,6 +29,5 @@ export enum ShareTokenInfoResponseParentType {
     CARD = 'card',
     COLUMN = 'column'
 }
-
 
 

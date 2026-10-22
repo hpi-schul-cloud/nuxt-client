@@ -13,80 +13,21 @@
  */
 
 
-import { Lti11DeepLinkContentItemListParams } from './lti11-deep-link-content-item-list-params';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { Lti11DeepLinkContentItemListParams } from './lti11-deep-link-content-item-list-params';
 
-/**
- * 
- * @export
- * @interface Lti11DeepLinkParams
- */
 export interface Lti11DeepLinkParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParams
-     */
-    lti_message_type: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParams
-     */
-    lti_version: string;
-    /**
-     * 
-     * @type {Lti11DeepLinkContentItemListParams}
-     * @memberof Lti11DeepLinkParams
-     */
-    content_items?: Lti11DeepLinkContentItemListParams;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParams
-     */
-    data: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParams
-     */
-    oauth_version: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParams
-     */
-    oauth_nonce: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof Lti11DeepLinkParams
-     */
-    oauth_timestamp: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParams
-     */
-    oauth_signature_method: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParams
-     */
-    oauth_consumer_key: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParams
-     */
-    oauth_signature: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11DeepLinkParams
-     */
-    oauth_callback?: string;
+    'lti_message_type': string;
+    'lti_version': string;
+    'content_items'?: Lti11DeepLinkContentItemListParams;
+    'data': string;
+    'oauth_version': string;
+    'oauth_nonce': string;
+    'oauth_timestamp': number;
+    'oauth_signature_method': string;
+    'oauth_consumer_key': string;
+    'oauth_signature': string;
+    'oauth_callback'?: string;
 }
-
 

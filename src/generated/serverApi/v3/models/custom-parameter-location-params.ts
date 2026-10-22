@@ -16,9 +16,8 @@
 
 /**
  * Location where the parameter is transmitted in the HTTP request to the tool provider.
- * @export
- * @enum {string}
  */
+
 export enum CustomParameterLocationParams {
     PATH = 'path',
     BODY = 'body',

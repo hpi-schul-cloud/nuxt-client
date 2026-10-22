@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface DrawingContentBody
- */
 export interface DrawingContentBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof DrawingContentBody
-     */
-    description: string;
+    'description': string;
 }
-
 

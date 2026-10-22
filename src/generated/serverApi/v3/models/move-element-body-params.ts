@@ -14,24 +14,14 @@
 
 
 
-/**
- * 
- * @export
- * @interface MoveElementBodyParams
- */
 export interface MoveElementBodyParams {
     /**
      * The id of the line where the element is moved to
-     * @type {string}
-     * @memberof MoveElementBodyParams
      */
-    toLineId: string;
+    'toLineId': string;
     /**
      * The position where the element is moved to
-     * @type {number}
-     * @memberof MoveElementBodyParams
      */
-    toPosition: number;
+    'toPosition': number;
 }
-
 

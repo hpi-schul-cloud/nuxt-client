@@ -295,6 +295,33 @@ describe("useCopyFlow", () => {
 				});
 			});
 
+			describe("and the api call is successful but files could not be copied", () => {
+				const setup = () => {
+					const response = mockApiSuccess(type);
+					response.data.status = CopyStatusEnum.PARTIAL;
+					response.data.elements = [
+						{
+							type: CopyElementType.FILE_ELEMENT,
+							status: CopyStatusEnum.FAILURE,
+							elements: [{ type: CopyElementType.FILE, status: CopyStatusEnum.FAILURE, title: "video.mp4" }],
+						},
+					];
+					vi.mocked(featureDialog.openDialog).mockResolvedValue({ completed: true, data: true });
+					const composable = mountCopyFlowComposable(type);
+					const resultPromise = composable.executeCopyMethod();
+					return { ...composable, resultPromise };
+				};
+
+				it("should show a warning instead of a success notification", async () => {
+					const { resultPromise } = setup();
+					await resultPromise;
+					expectNotification("warning");
+					expect(useNotificationStore().notify).not.toHaveBeenCalledWith(
+						expect.objectContaining({ status: "success" })
+					);
+				});
+			});
+
 			describe("and the api call fails", () => {
 				const setup = () => {
 					const error = mockApiFailure(type);

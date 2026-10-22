@@ -13,20 +13,11 @@
  */
 
 
-import { ContextExternalToolResponse } from './context-external-tool-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContextExternalToolResponse } from './context-external-tool-response';
 
-/**
- * 
- * @export
- * @interface ContextExternalToolSearchListResponse
- */
 export interface ContextExternalToolSearchListResponse {
-    /**
-     * 
-     * @type {Array<ContextExternalToolResponse>}
-     * @memberof ContextExternalToolSearchListResponse
-     */
-    data: Array<ContextExternalToolResponse>;
+    'data': Array<ContextExternalToolResponse>;
 }
-
 

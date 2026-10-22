@@ -13,20 +13,11 @@
  */
 
 
-import { RoomMemberResponse } from './room-member-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomMemberResponse } from './room-member-response';
 
-/**
- * 
- * @export
- * @interface RoomMemberListResponse
- */
 export interface RoomMemberListResponse {
-    /**
-     * 
-     * @type {Array<RoomMemberResponse>}
-     * @memberof RoomMemberListResponse
-     */
-    data: Array<RoomMemberResponse>;
+    'data': Array<RoomMemberResponse>;
 }
-
 

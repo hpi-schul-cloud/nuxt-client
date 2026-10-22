@@ -14,42 +14,11 @@
 
 
 
-/**
- * 
- * @export
- * @interface TeamPermissionsBody
- */
 export interface TeamPermissionsBody {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof TeamPermissionsBody
-     */
-    read: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof TeamPermissionsBody
-     */
-    write: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof TeamPermissionsBody
-     */
-    create: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof TeamPermissionsBody
-     */
-    _delete: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof TeamPermissionsBody
-     */
-    share: boolean;
+    'read': boolean;
+    'write': boolean;
+    'create': boolean;
+    'delete': boolean;
+    'share': boolean;
 }
-
 

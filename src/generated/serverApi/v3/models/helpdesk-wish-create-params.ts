@@ -14,82 +14,22 @@
 
 
 
-/**
- * 
- * @export
- * @interface HelpdeskWishCreateParams
- */
 export interface HelpdeskWishCreateParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof HelpdeskWishCreateParams
-     */
-    supportType: HelpdeskWishCreateParamsSupportType;
-    /**
-     * 
-     * @type {string}
-     * @memberof HelpdeskWishCreateParams
-     */
-    subject: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof HelpdeskWishCreateParams
-     */
-    replyEmail: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof HelpdeskWishCreateParams
-     */
-    problemArea: Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof HelpdeskWishCreateParams
-     */
-    device?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof HelpdeskWishCreateParams
-     */
-    consent?: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof HelpdeskWishCreateParams
-     */
-    role: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof HelpdeskWishCreateParams
-     */
-    desire: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof HelpdeskWishCreateParams
-     */
-    benefit: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof HelpdeskWishCreateParams
-     */
-    acceptanceCriteria?: string;
+    'supportType': HelpdeskWishCreateParamsSupportType;
+    'subject': string;
+    'replyEmail': string;
+    'problemArea': Array<string>;
+    'device'?: string;
+    'consent'?: boolean;
+    'role': string;
+    'desire': string;
+    'benefit': string;
+    'acceptanceCriteria'?: string;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum HelpdeskWishCreateParamsSupportType {
     PROBLEM = 'problem',
     WISH = 'wish'
 }
-
 
 

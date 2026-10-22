@@ -14,30 +14,9 @@
 
 
 
-/**
- * 
- * @export
- * @interface Oauth2AuthorizationBodyParams
- */
 export interface Oauth2AuthorizationBodyParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof Oauth2AuthorizationBodyParams
-     */
-    redirectUri: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Oauth2AuthorizationBodyParams
-     */
-    code: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Oauth2AuthorizationBodyParams
-     */
-    systemId: string;
+    'redirectUri': string;
+    'code': string;
+    'systemId': string;
 }
-
 

@@ -13,45 +13,35 @@
  */
 
 
-import { LaunchRequestMethod } from './launch-request-method';
-import { LaunchType } from './launch-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { LaunchRequestMethod } from './launch-request-method';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { LaunchType } from './launch-type';
 
-/**
- * 
- * @export
- * @interface ToolLaunchRequestResponse
- */
 export interface ToolLaunchRequestResponse {
     /**
      * The Launch Request method (GET or POST)
-     * @type {LaunchRequestMethod}
-     * @memberof ToolLaunchRequestResponse
      */
-    method: LaunchRequestMethod;
+    'method': LaunchRequestMethod;
     /**
      * The URL for the Tool Launch Request
-     * @type {string}
-     * @memberof ToolLaunchRequestResponse
      */
-    url: string;
+    'url': string;
     /**
      * The payload for the Tool Launch Request (optional)
-     * @type {string}
-     * @memberof ToolLaunchRequestResponse
      */
-    payload?: string;
+    'payload'?: string;
     /**
      * Specifies whether the Tool should be launched in a new tab
-     * @type {boolean}
-     * @memberof ToolLaunchRequestResponse
      */
-    openNewTab?: boolean;
+    'openNewTab'?: boolean;
     /**
      * Specifies the underlying type of the request
-     * @type {LaunchType}
-     * @memberof ToolLaunchRequestResponse
      */
-    launchType: LaunchType;
+    'launchType': LaunchType;
 }
+
 
 

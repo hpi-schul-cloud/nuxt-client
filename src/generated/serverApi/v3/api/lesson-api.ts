@@ -13,20 +13,20 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { LessonLinkedTaskResponse } from '../models';
+import type { LessonLinkedTaskResponse } from '../models';
 // @ts-ignore
-import { LessonResponse } from '../models';
+import type { LessonResponse } from '../models';
 /**
  * LessonApi - axios parameter creator
- * @export
  */
 export const LessonApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -36,11 +36,11 @@ export const LessonApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        lessonControllerDelete: async (lessonId: string, options: any = {}): Promise<RequestArgs> => {
+        lessonControllerDelete: async (lessonId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'lessonId' is not null or undefined
             assertParamExists('lessonControllerDelete', 'lessonId', lessonId)
             const localVarPath = `/lessons/{lessonId}`
-                .replace(`{${"lessonId"}}`, encodeURIComponent(String(lessonId)));
+                .replace('{lessonId}', encodeURIComponent(String(lessonId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -56,9 +56,9 @@ export const LessonApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -73,11 +73,11 @@ export const LessonApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        lessonControllerGetLesson: async (lessonId: string, options: any = {}): Promise<RequestArgs> => {
+        lessonControllerGetLesson: async (lessonId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'lessonId' is not null or undefined
             assertParamExists('lessonControllerGetLesson', 'lessonId', lessonId)
             const localVarPath = `/lessons/{lessonId}`
-                .replace(`{${"lessonId"}}`, encodeURIComponent(String(lessonId)));
+                .replace('{lessonId}', encodeURIComponent(String(lessonId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -93,9 +93,9 @@ export const LessonApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -110,11 +110,11 @@ export const LessonApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        lessonControllerGetLessonTasks: async (lessonId: string, options: any = {}): Promise<RequestArgs> => {
+        lessonControllerGetLessonTasks: async (lessonId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'lessonId' is not null or undefined
             assertParamExists('lessonControllerGetLessonTasks', 'lessonId', lessonId)
             const localVarPath = `/lessons/{lessonId}/tasks`
-                .replace(`{${"lessonId"}}`, encodeURIComponent(String(lessonId)));
+                .replace('{lessonId}', encodeURIComponent(String(lessonId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -130,9 +130,9 @@ export const LessonApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -146,7 +146,6 @@ export const LessonApiAxiosParamCreator = function (configuration?: Configuratio
 
 /**
  * LessonApi - functional programming interface
- * @export
  */
 export const LessonApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = LessonApiAxiosParamCreator(configuration)
@@ -157,9 +156,11 @@ export const LessonApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async lessonControllerDelete(lessonId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+        async lessonControllerDelete(lessonId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.lessonControllerDelete(lessonId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['LessonApi.lessonControllerDelete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -167,9 +168,11 @@ export const LessonApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async lessonControllerGetLesson(lessonId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LessonResponse>> {
+        async lessonControllerGetLesson(lessonId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LessonResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.lessonControllerGetLesson(lessonId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['LessonApi.lessonControllerGetLesson']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -177,16 +180,17 @@ export const LessonApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async lessonControllerGetLessonTasks(lessonId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<LessonLinkedTaskResponse>>> {
+        async lessonControllerGetLessonTasks(lessonId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<LessonLinkedTaskResponse>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.lessonControllerGetLessonTasks(lessonId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['LessonApi.lessonControllerGetLessonTasks']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * LessonApi - factory interface
- * @export
  */
 export const LessonApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = LessonApiFp(configuration)
@@ -197,7 +201,7 @@ export const LessonApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        lessonControllerDelete(lessonId: string, options?: any): AxiosPromise<boolean> {
+        lessonControllerDelete(lessonId: string, options?: RawAxiosRequestConfig): AxiosPromise<boolean> {
             return localVarFp.lessonControllerDelete(lessonId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -206,7 +210,7 @@ export const LessonApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        lessonControllerGetLesson(lessonId: string, options?: any): AxiosPromise<LessonResponse> {
+        lessonControllerGetLesson(lessonId: string, options?: RawAxiosRequestConfig): AxiosPromise<LessonResponse> {
             return localVarFp.lessonControllerGetLesson(lessonId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -215,7 +219,7 @@ export const LessonApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        lessonControllerGetLessonTasks(lessonId: string, options?: any): AxiosPromise<Array<LessonLinkedTaskResponse>> {
+        lessonControllerGetLessonTasks(lessonId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<LessonLinkedTaskResponse>> {
             return localVarFp.lessonControllerGetLessonTasks(lessonId, options).then((request) => request(axios, basePath));
         },
     };
@@ -223,8 +227,6 @@ export const LessonApiFactory = function (configuration?: Configuration, basePat
 
 /**
  * LessonApi - interface
- * @export
- * @interface LessonApi
  */
 export interface LessonApiInterface {
     /**
@@ -232,35 +234,29 @@ export interface LessonApiInterface {
      * @param {string} lessonId The id of the lesson.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof LessonApiInterface
      */
-    lessonControllerDelete(lessonId: string, options?: any): AxiosPromise<boolean>;
+    lessonControllerDelete(lessonId: string, options?: RawAxiosRequestConfig): AxiosPromise<boolean>;
 
     /**
      * 
      * @param {string} lessonId The id of the lesson.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof LessonApiInterface
      */
-    lessonControllerGetLesson(lessonId: string, options?: any): AxiosPromise<LessonResponse>;
+    lessonControllerGetLesson(lessonId: string, options?: RawAxiosRequestConfig): AxiosPromise<LessonResponse>;
 
     /**
      * 
      * @param {string} lessonId The id of the lesson.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof LessonApiInterface
      */
-    lessonControllerGetLessonTasks(lessonId: string, options?: any): AxiosPromise<Array<LessonLinkedTaskResponse>>;
+    lessonControllerGetLessonTasks(lessonId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<LessonLinkedTaskResponse>>;
 
 }
 
 /**
  * LessonApi - object-oriented interface
- * @export
- * @class LessonApi
- * @extends {BaseAPI}
  */
 export class LessonApi extends BaseAPI implements LessonApiInterface {
     /**
@@ -268,9 +264,8 @@ export class LessonApi extends BaseAPI implements LessonApiInterface {
      * @param {string} lessonId The id of the lesson.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof LessonApi
      */
-    public lessonControllerDelete(lessonId: string, options?: any) {
+    public lessonControllerDelete(lessonId: string, options?: RawAxiosRequestConfig) {
         return LessonApiFp(this.configuration).lessonControllerDelete(lessonId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -279,9 +274,8 @@ export class LessonApi extends BaseAPI implements LessonApiInterface {
      * @param {string} lessonId The id of the lesson.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof LessonApi
      */
-    public lessonControllerGetLesson(lessonId: string, options?: any) {
+    public lessonControllerGetLesson(lessonId: string, options?: RawAxiosRequestConfig) {
         return LessonApiFp(this.configuration).lessonControllerGetLesson(lessonId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -290,9 +284,9 @@ export class LessonApi extends BaseAPI implements LessonApiInterface {
      * @param {string} lessonId The id of the lesson.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof LessonApi
      */
-    public lessonControllerGetLessonTasks(lessonId: string, options?: any) {
+    public lessonControllerGetLessonTasks(lessonId: string, options?: RawAxiosRequestConfig) {
         return LessonApiFp(this.configuration).lessonControllerGetLessonTasks(lessonId, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

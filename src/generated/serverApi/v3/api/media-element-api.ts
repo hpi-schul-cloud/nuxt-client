@@ -13,24 +13,24 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { CreateMediaElementBodyParams } from '../models';
+import type { CreateMediaElementBodyParams } from '../models';
 // @ts-ignore
-import { MediaExternalToolElementResponse } from '../models';
+import type { MediaExternalToolElementResponse } from '../models';
 // @ts-ignore
-import { MoveElementBodyParams } from '../models';
+import type { MoveElementBodyParams } from '../models';
 /**
  * MediaElementApi - axios parameter creator
- * @export
  */
 export const MediaElementApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -41,7 +41,7 @@ export const MediaElementApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaElementControllerCreateElement: async (createMediaElementBodyParams: CreateMediaElementBodyParams, options: any = {}): Promise<RequestArgs> => {
+        mediaElementControllerCreateElement: async (createMediaElementBodyParams: CreateMediaElementBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'createMediaElementBodyParams' is not null or undefined
             assertParamExists('mediaElementControllerCreateElement', 'createMediaElementBodyParams', createMediaElementBodyParams)
             const localVarPath = `/media-elements`;
@@ -60,11 +60,10 @@ export const MediaElementApiAxiosParamCreator = function (configuration?: Config
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(createMediaElementBodyParams, localVarRequestOptions, configuration)
@@ -81,11 +80,11 @@ export const MediaElementApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaElementControllerDeleteElement: async (elementId: string, options: any = {}): Promise<RequestArgs> => {
+        mediaElementControllerDeleteElement: async (elementId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'elementId' is not null or undefined
             assertParamExists('mediaElementControllerDeleteElement', 'elementId', elementId)
             const localVarPath = `/media-elements/{elementId}`
-                .replace(`{${"elementId"}}`, encodeURIComponent(String(elementId)));
+                .replace('{elementId}', encodeURIComponent(String(elementId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -101,9 +100,9 @@ export const MediaElementApiAxiosParamCreator = function (configuration?: Config
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -120,13 +119,13 @@ export const MediaElementApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaElementControllerMoveElement: async (elementId: string, moveElementBodyParams: MoveElementBodyParams, options: any = {}): Promise<RequestArgs> => {
+        mediaElementControllerMoveElement: async (elementId: string, moveElementBodyParams: MoveElementBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'elementId' is not null or undefined
             assertParamExists('mediaElementControllerMoveElement', 'elementId', elementId)
             // verify required parameter 'moveElementBodyParams' is not null or undefined
             assertParamExists('mediaElementControllerMoveElement', 'moveElementBodyParams', moveElementBodyParams)
             const localVarPath = `/media-elements/{elementId}/position`
-                .replace(`{${"elementId"}}`, encodeURIComponent(String(elementId)));
+                .replace('{elementId}', encodeURIComponent(String(elementId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -142,11 +141,10 @@ export const MediaElementApiAxiosParamCreator = function (configuration?: Config
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(moveElementBodyParams, localVarRequestOptions, configuration)
@@ -161,7 +159,6 @@ export const MediaElementApiAxiosParamCreator = function (configuration?: Config
 
 /**
  * MediaElementApi - functional programming interface
- * @export
  */
 export const MediaElementApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MediaElementApiAxiosParamCreator(configuration)
@@ -173,9 +170,11 @@ export const MediaElementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaExternalToolElementResponse>> {
+        async mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaExternalToolElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaElementControllerCreateElement(createMediaElementBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaElementApi.mediaElementControllerCreateElement']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -184,9 +183,11 @@ export const MediaElementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaElementControllerDeleteElement(elementId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async mediaElementControllerDeleteElement(elementId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaElementControllerDeleteElement(elementId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaElementApi.mediaElementControllerDeleteElement']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -196,16 +197,17 @@ export const MediaElementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaElementControllerMoveElement(elementId: string, moveElementBodyParams: MoveElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async mediaElementControllerMoveElement(elementId: string, moveElementBodyParams: MoveElementBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaElementControllerMoveElement(elementId, moveElementBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaElementApi.mediaElementControllerMoveElement']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * MediaElementApi - factory interface
- * @export
  */
 export const MediaElementApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = MediaElementApiFp(configuration)
@@ -217,7 +219,7 @@ export const MediaElementApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: any): AxiosPromise<MediaExternalToolElementResponse> {
+        mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<MediaExternalToolElementResponse> {
             return localVarFp.mediaElementControllerCreateElement(createMediaElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -227,7 +229,7 @@ export const MediaElementApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaElementControllerDeleteElement(elementId: string, options?: any): AxiosPromise<void> {
+        mediaElementControllerDeleteElement(elementId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.mediaElementControllerDeleteElement(elementId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -238,7 +240,7 @@ export const MediaElementApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaElementControllerMoveElement(elementId: string, moveElementBodyParams: MoveElementBodyParams, options?: any): AxiosPromise<void> {
+        mediaElementControllerMoveElement(elementId: string, moveElementBodyParams: MoveElementBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.mediaElementControllerMoveElement(elementId, moveElementBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -246,8 +248,6 @@ export const MediaElementApiFactory = function (configuration?: Configuration, b
 
 /**
  * MediaElementApi - interface
- * @export
- * @interface MediaElementApi
  */
 export interface MediaElementApiInterface {
     /**
@@ -256,9 +256,8 @@ export interface MediaElementApiInterface {
      * @param {CreateMediaElementBodyParams} createMediaElementBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaElementApiInterface
      */
-    mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: any): AxiosPromise<MediaExternalToolElementResponse>;
+    mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<MediaExternalToolElementResponse>;
 
     /**
      * 
@@ -266,9 +265,8 @@ export interface MediaElementApiInterface {
      * @param {string} elementId The id of the element
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaElementApiInterface
      */
-    mediaElementControllerDeleteElement(elementId: string, options?: any): AxiosPromise<void>;
+    mediaElementControllerDeleteElement(elementId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -277,17 +275,13 @@ export interface MediaElementApiInterface {
      * @param {MoveElementBodyParams} moveElementBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaElementApiInterface
      */
-    mediaElementControllerMoveElement(elementId: string, moveElementBodyParams: MoveElementBodyParams, options?: any): AxiosPromise<void>;
+    mediaElementControllerMoveElement(elementId: string, moveElementBodyParams: MoveElementBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
  * MediaElementApi - object-oriented interface
- * @export
- * @class MediaElementApi
- * @extends {BaseAPI}
  */
 export class MediaElementApi extends BaseAPI implements MediaElementApiInterface {
     /**
@@ -296,9 +290,8 @@ export class MediaElementApi extends BaseAPI implements MediaElementApiInterface
      * @param {CreateMediaElementBodyParams} createMediaElementBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaElementApi
      */
-    public mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: any) {
+    public mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: RawAxiosRequestConfig) {
         return MediaElementApiFp(this.configuration).mediaElementControllerCreateElement(createMediaElementBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -308,9 +301,8 @@ export class MediaElementApi extends BaseAPI implements MediaElementApiInterface
      * @param {string} elementId The id of the element
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaElementApi
      */
-    public mediaElementControllerDeleteElement(elementId: string, options?: any) {
+    public mediaElementControllerDeleteElement(elementId: string, options?: RawAxiosRequestConfig) {
         return MediaElementApiFp(this.configuration).mediaElementControllerDeleteElement(elementId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -321,9 +313,9 @@ export class MediaElementApi extends BaseAPI implements MediaElementApiInterface
      * @param {MoveElementBodyParams} moveElementBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaElementApi
      */
-    public mediaElementControllerMoveElement(elementId: string, moveElementBodyParams: MoveElementBodyParams, options?: any) {
+    public mediaElementControllerMoveElement(elementId: string, moveElementBodyParams: MoveElementBodyParams, options?: RawAxiosRequestConfig) {
         return MediaElementApiFp(this.configuration).mediaElementControllerMoveElement(elementId, moveElementBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

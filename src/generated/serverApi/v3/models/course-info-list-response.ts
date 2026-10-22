@@ -13,38 +13,26 @@
  */
 
 
-import { CourseInfoDataResponse } from './course-info-data-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CourseInfoDataResponse } from './course-info-data-response';
 
-/**
- * 
- * @export
- * @interface CourseInfoListResponse
- */
 export interface CourseInfoListResponse {
     /**
      * The items for the current page.
-     * @type {Array<CourseInfoDataResponse>}
-     * @memberof CourseInfoListResponse
      */
-    data: Array<CourseInfoDataResponse>;
+    'data': Array<CourseInfoDataResponse>;
     /**
      * The total amount of items.
-     * @type {number}
-     * @memberof CourseInfoListResponse
      */
-    total: number;
+    'total': number;
     /**
      * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof CourseInfoListResponse
      */
-    skip: number;
+    'skip': number;
     /**
      * The page size of the response.
-     * @type {number}
-     * @memberof CourseInfoListResponse
      */
-    limit: number;
+    'limit': number;
 }
-
 

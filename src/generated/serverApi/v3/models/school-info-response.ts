@@ -14,24 +14,14 @@
 
 
 
-/**
- * 
- * @export
- * @interface SchoolInfoResponse
- */
 export interface SchoolInfoResponse {
     /**
      * The id of the School entity
-     * @type {string}
-     * @memberof SchoolInfoResponse
      */
-    id: string;
+    'id': string;
     /**
      * The name of the School entity
-     * @type {string}
-     * @memberof SchoolInfoResponse
      */
-    name: string;
+    'name': string;
 }
-
 

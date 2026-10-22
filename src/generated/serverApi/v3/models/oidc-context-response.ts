@@ -14,42 +14,11 @@
 
 
 
-/**
- * 
- * @export
- * @interface OidcContextResponse
- */
 export interface OidcContextResponse {
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof OidcContextResponse
-     */
-    acr_values: Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcContextResponse
-     */
-    display: string;
-    /**
-     * 
-     * @type {object}
-     * @memberof OidcContextResponse
-     */
-    id_token_hint_claims: object;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcContextResponse
-     */
-    login_hint: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof OidcContextResponse
-     */
-    ui_locales: Array<string>;
+    'acr_values': Array<string>;
+    'display': string;
+    'id_token_hint_claims': object;
+    'login_hint': string;
+    'ui_locales': Array<string>;
 }
-
 

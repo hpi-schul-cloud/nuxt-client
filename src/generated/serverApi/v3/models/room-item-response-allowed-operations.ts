@@ -14,162 +14,31 @@
 
 
 
-/**
- * 
- * @export
- * @interface RoomItemResponseAllowedOperations
- */
 export interface RoomItemResponseAllowedOperations {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    accessRoom: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    accessRoomBoards: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    addAllStudents: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    addExternalPersonByEmail: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    addMembers: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    archiveRoom: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    arrangeRooms: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    changeRolesOfMembers: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    copyRoom: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    createRoom: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    deleteRoom: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    editContent: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    getRoomMembers: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    getRoomMembersRedacted: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    leaveRoom: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    manageRoomApplicants: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    shareRoom: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    updateRoom: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    createRoomInvitationLinks: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    listRoomInvitationLinks: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    updateRoomInvitationLinks: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    deleteRoomInvitationLinks: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    viewContent: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    viewDraftContent: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
-    viewMemberlist: boolean;
+    'accessRoom': boolean;
+    'accessRoomBoards': boolean;
+    'addAllStudents': boolean;
+    'addExternalPersonByEmail': boolean;
+    'addMembers': boolean;
+    'archiveRoom': boolean;
+    'arrangeRooms': boolean;
+    'changeRolesOfMembers': boolean;
+    'copyRoom': boolean;
+    'createRoom': boolean;
+    'deleteRoom': boolean;
+    'editContent': boolean;
+    'getRoomMembers': boolean;
+    'getRoomMembersRedacted': boolean;
+    'leaveRoom': boolean;
+    'manageRoomApplicants': boolean;
+    'shareRoom': boolean;
+    'updateRoom': boolean;
+    'createRoomInvitationLinks': boolean;
+    'listRoomInvitationLinks': boolean;
+    'updateRoomInvitationLinks': boolean;
+    'deleteRoomInvitationLinks': boolean;
+    'viewContent': boolean;
+    'viewDraftContent': boolean;
+    'viewMemberlist': boolean;
 }
-
 

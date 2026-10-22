@@ -14,30 +14,9 @@
 
 
 
-/**
- * 
- * @export
- * @interface RoomMemberResponseAllowedOperations
- */
 export interface RoomMemberResponseAllowedOperations {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomMemberResponseAllowedOperations
-     */
-    changeRole: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomMemberResponseAllowedOperations
-     */
-    passOwnershipTo: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomMemberResponseAllowedOperations
-     */
-    removeMember: boolean;
+    'changeRole': boolean;
+    'passOwnershipTo': boolean;
+    'removeMember': boolean;
 }
-
 

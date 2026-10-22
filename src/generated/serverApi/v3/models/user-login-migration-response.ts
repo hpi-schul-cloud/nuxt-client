@@ -14,54 +14,34 @@
 
 
 
-/**
- * 
- * @export
- * @interface UserLoginMigrationResponse
- */
 export interface UserLoginMigrationResponse {
     /**
      * Id of the migration
-     * @type {string}
-     * @memberof UserLoginMigrationResponse
      */
-    id: string;
+    'id': string;
     /**
      * Id of the system which is the origin of the migration
-     * @type {string}
-     * @memberof UserLoginMigrationResponse
      */
-    sourceSystemId?: string;
+    'sourceSystemId'?: string;
     /**
      * Id of the system which is the target of the migration
-     * @type {string}
-     * @memberof UserLoginMigrationResponse
      */
-    targetSystemId: string;
+    'targetSystemId': string;
     /**
      * Date when the migration was marked as required
-     * @type {string}
-     * @memberof UserLoginMigrationResponse
      */
-    mandatorySince?: string;
+    'mandatorySince'?: string;
     /**
      * Date when the migration was started
-     * @type {string}
-     * @memberof UserLoginMigrationResponse
      */
-    startedAt: string;
+    'startedAt': string;
     /**
      * Date when the migration was completed
-     * @type {string}
-     * @memberof UserLoginMigrationResponse
      */
-    closedAt?: string;
+    'closedAt'?: string;
     /**
      * Date when the migration was completed including the grace period
-     * @type {string}
-     * @memberof UserLoginMigrationResponse
      */
-    finishedAt?: string;
+    'finishedAt'?: string;
 }
-
 

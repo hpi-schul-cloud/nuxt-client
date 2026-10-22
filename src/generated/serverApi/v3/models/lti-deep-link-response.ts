@@ -14,54 +14,13 @@
 
 
 
-/**
- * 
- * @export
- * @interface LtiDeepLinkResponse
- */
 export interface LtiDeepLinkResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof LtiDeepLinkResponse
-     */
-    mediaType: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LtiDeepLinkResponse
-     */
-    title?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LtiDeepLinkResponse
-     */
-    text?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LtiDeepLinkResponse
-     */
-    availableFrom?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LtiDeepLinkResponse
-     */
-    availableUntil?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LtiDeepLinkResponse
-     */
-    submissionFrom?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LtiDeepLinkResponse
-     */
-    submissionUntil?: string;
+    'mediaType': string;
+    'title'?: string;
+    'text'?: string;
+    'availableFrom'?: string;
+    'availableUntil'?: string;
+    'submissionFrom'?: string;
+    'submissionUntil'?: string;
 }
-
 

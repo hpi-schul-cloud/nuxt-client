@@ -14,90 +14,21 @@
 
 
 
-/**
- * 
- * @export
- * @interface LessonLinkedTaskResponse
- */
 export interface LessonLinkedTaskResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonLinkedTaskResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonLinkedTaskResponse
-     */
-    description: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonLinkedTaskResponse
-     */
-    descriptionInputFormat: LessonLinkedTaskResponseDescriptionInputFormat;
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonLinkedTaskResponse
-     */
-    availableDate: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonLinkedTaskResponse
-     */
-    dueDate: string | null;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof LessonLinkedTaskResponse
-     */
-    _private: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof LessonLinkedTaskResponse
-     */
-    publicSubmissions: boolean | null;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof LessonLinkedTaskResponse
-     */
-    teamSubmissions: boolean | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonLinkedTaskResponse
-     */
-    creator: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonLinkedTaskResponse
-     */
-    courseId: string | null;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof LessonLinkedTaskResponse
-     */
-    submissionIds: Array<string>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof LessonLinkedTaskResponse
-     */
-    finishedIds: Array<string>;
+    'name': string;
+    'description': string;
+    'descriptionInputFormat': LessonLinkedTaskResponseDescriptionInputFormat;
+    'availableDate': string | null;
+    'dueDate': string | null;
+    'private': boolean;
+    'publicSubmissions': boolean | null;
+    'teamSubmissions': boolean | null;
+    'creator': string | null;
+    'courseId': string | null;
+    'submissionIds': Array<string>;
+    'finishedIds': Array<string>;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum LessonLinkedTaskResponseDescriptionInputFormat {
     PLAIN_TEXT = 'plainText',
     RICH_TEXT_CK5_SIMPLE = 'richTextCk5Simple',
@@ -105,6 +36,5 @@ export enum LessonLinkedTaskResponseDescriptionInputFormat {
     RICH_TEXT_CK5 = 'richTextCk5',
     RICH_TEXT_CK5_NEWS = 'richTextCk5News'
 }
-
 
 

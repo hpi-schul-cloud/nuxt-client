@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface ExternalToolContentBody
- */
 export interface ExternalToolContentBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof ExternalToolContentBody
-     */
-    contextExternalToolId?: string;
+    'contextExternalToolId'?: string;
 }
-
 

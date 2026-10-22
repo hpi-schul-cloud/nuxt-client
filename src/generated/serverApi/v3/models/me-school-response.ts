@@ -13,32 +13,13 @@
  */
 
 
-import { MeSchoolLogoResponse } from './me-school-logo-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MeSchoolLogoResponse } from './me-school-logo-response';
 
-/**
- * 
- * @export
- * @interface MeSchoolResponse
- */
 export interface MeSchoolResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof MeSchoolResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MeSchoolResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {MeSchoolLogoResponse}
-     * @memberof MeSchoolResponse
-     */
-    logo: MeSchoolLogoResponse;
+    'id': string;
+    'name': string;
+    'logo': MeSchoolLogoResponse;
 }
-
 

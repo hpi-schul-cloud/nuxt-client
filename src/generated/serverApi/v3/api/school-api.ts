@@ -13,42 +13,42 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { MaintenanceParams } from '../models';
+import type { MaintenanceParams } from '../models';
 // @ts-ignore
-import { MaintenanceResponse } from '../models';
+import type { MaintenanceResponse } from '../models';
 // @ts-ignore
-import { SchoolExistsResponse } from '../models';
+import type { SchoolExistsResponse } from '../models';
 // @ts-ignore
-import { SchoolForExternalInviteResponse } from '../models';
+import type { SchoolForExternalInviteResponse } from '../models';
 // @ts-ignore
-import { SchoolForLdapLoginResponse } from '../models';
+import type { SchoolForLdapLoginResponse } from '../models';
 // @ts-ignore
-import { SchoolListResponse } from '../models';
+import type { SchoolListResponse } from '../models';
 // @ts-ignore
-import { SchoolResponse } from '../models';
+import type { SchoolResponse } from '../models';
 // @ts-ignore
-import { SchoolSystemResponse } from '../models';
+import type { SchoolSystemResponse } from '../models';
 // @ts-ignore
-import { SchoolUpdateBodyParams } from '../models';
+import type { SchoolUpdateBodyParams } from '../models';
 // @ts-ignore
-import { SchoolUserListResponse } from '../models';
+import type { SchoolUserListResponse } from '../models';
 // @ts-ignore
-import { SchulConneXProvisioningOptionsParams } from '../models';
+import type { SchulConneXProvisioningOptionsParams } from '../models';
 // @ts-ignore
-import { SchulConneXProvisioningOptionsResponse } from '../models';
+import type { SchulConneXProvisioningOptionsResponse } from '../models';
 /**
  * SchoolApi - axios parameter creator
- * @export
  */
 export const SchoolApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -58,11 +58,11 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerDoesSchoolExist: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerDoesSchoolExist: async (schoolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('schoolControllerDoesSchoolExist', 'schoolId', schoolId)
             const localVarPath = `/school/exists/id/{schoolId}`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+                .replace('{schoolId}', encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -74,9 +74,9 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -92,11 +92,11 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetMaintenanceStatus: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerGetMaintenanceStatus: async (schoolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('schoolControllerGetMaintenanceStatus', 'schoolId', schoolId)
             const localVarPath = `/school/{schoolId}/maintenance`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+                .replace('{schoolId}', encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -112,9 +112,9 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -125,19 +125,20 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * Gets all provisioning options for a system at a school
+         * @summary 
          * @param {string} schoolId 
          * @param {string} systemId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetProvisioningOptions: async (schoolId: string, systemId: string, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerGetProvisioningOptions: async (schoolId: string, systemId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('schoolControllerGetProvisioningOptions', 'schoolId', schoolId)
             // verify required parameter 'systemId' is not null or undefined
             assertParamExists('schoolControllerGetProvisioningOptions', 'systemId', systemId)
             const localVarPath = `/schools/{schoolId}/systems/{systemId}/provisioning-options`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)))
-                .replace(`{${"systemId"}}`, encodeURIComponent(String(systemId)));
+                .replace('{schoolId}', encodeURIComponent(String(schoolId)))
+                .replace('{systemId}', encodeURIComponent(String(systemId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -153,9 +154,9 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -170,11 +171,11 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolById: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerGetSchoolById: async (schoolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('schoolControllerGetSchoolById', 'schoolId', schoolId)
             const localVarPath = `/school/id/{schoolId}`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+                .replace('{schoolId}', encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -190,9 +191,9 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -209,7 +210,7 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolList: async (skip?: number, limit?: number, federalStateId?: string, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerGetSchoolList: async (skip?: number, limit?: number, federalStateId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/school`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -238,9 +239,9 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['federalStateId'] = federalStateId;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -257,7 +258,7 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolListForExternalInvite: async (skip?: number, limit?: number, federalStateId?: string, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerGetSchoolListForExternalInvite: async (skip?: number, limit?: number, federalStateId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/school/list-for-external-invite`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -286,9 +287,9 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['federalStateId'] = federalStateId;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -302,7 +303,7 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolListForLadpLogin: async (options: any = {}): Promise<RequestArgs> => {
+        schoolControllerGetSchoolListForLadpLogin: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/school/list-for-ldap-login`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -315,9 +316,9 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -333,11 +334,11 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolSystems: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerGetSchoolSystems: async (schoolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('schoolControllerGetSchoolSystems', 'schoolId', schoolId)
             const localVarPath = `/school/{schoolId}/systems`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+                .replace('{schoolId}', encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -353,9 +354,9 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -370,11 +371,11 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetStudents: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerGetStudents: async (schoolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('schoolControllerGetStudents', 'schoolId', schoolId)
             const localVarPath = `/school/{schoolId}/students`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+                .replace('{schoolId}', encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -390,9 +391,9 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -407,11 +408,11 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetTeachers: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerGetTeachers: async (schoolId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('schoolControllerGetTeachers', 'schoolId', schoolId)
             const localVarPath = `/school/{schoolId}/teachers`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+                .replace('{schoolId}', encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -427,9 +428,9 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -445,14 +446,14 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerRemoveSystemFromSchool: async (schoolId: string, systemId: string, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerRemoveSystemFromSchool: async (schoolId: string, systemId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('schoolControllerRemoveSystemFromSchool', 'schoolId', schoolId)
             // verify required parameter 'systemId' is not null or undefined
             assertParamExists('schoolControllerRemoveSystemFromSchool', 'systemId', systemId)
             const localVarPath = `/school/{schoolId}/system/{systemId}/remove`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)))
-                .replace(`{${"systemId"}}`, encodeURIComponent(String(systemId)));
+                .replace('{schoolId}', encodeURIComponent(String(schoolId)))
+                .replace('{systemId}', encodeURIComponent(String(systemId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -469,8 +470,7 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -487,13 +487,13 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerSetMaintenanceStatus: async (schoolId: string, maintenanceParams: MaintenanceParams, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerSetMaintenanceStatus: async (schoolId: string, maintenanceParams: MaintenanceParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('schoolControllerSetMaintenanceStatus', 'schoolId', schoolId)
             // verify required parameter 'maintenanceParams' is not null or undefined
             assertParamExists('schoolControllerSetMaintenanceStatus', 'maintenanceParams', maintenanceParams)
             const localVarPath = `/school/{schoolId}/maintenance`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+                .replace('{schoolId}', encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -509,11 +509,10 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(maintenanceParams, localVarRequestOptions, configuration)
@@ -525,13 +524,14 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * Sets all provisioning options for a system at a school
+         * @summary 
          * @param {string} schoolId 
          * @param {string} systemId 
          * @param {SchulConneXProvisioningOptionsParams} schulConneXProvisioningOptionsParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerSetProvisioningOptions: async (schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerSetProvisioningOptions: async (schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('schoolControllerSetProvisioningOptions', 'schoolId', schoolId)
             // verify required parameter 'systemId' is not null or undefined
@@ -539,8 +539,8 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             // verify required parameter 'schulConneXProvisioningOptionsParams' is not null or undefined
             assertParamExists('schoolControllerSetProvisioningOptions', 'schulConneXProvisioningOptionsParams', schulConneXProvisioningOptionsParams)
             const localVarPath = `/schools/{schoolId}/systems/{systemId}/provisioning-options`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)))
-                .replace(`{${"systemId"}}`, encodeURIComponent(String(systemId)));
+                .replace('{schoolId}', encodeURIComponent(String(schoolId)))
+                .replace('{systemId}', encodeURIComponent(String(systemId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -556,11 +556,10 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(schulConneXProvisioningOptionsParams, localVarRequestOptions, configuration)
@@ -578,13 +577,13 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerUpdateSchool: async (schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerUpdateSchool: async (schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('schoolControllerUpdateSchool', 'schoolId', schoolId)
             // verify required parameter 'schoolUpdateBodyParams' is not null or undefined
             assertParamExists('schoolControllerUpdateSchool', 'schoolUpdateBodyParams', schoolUpdateBodyParams)
             const localVarPath = `/school/{schoolId}`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+                .replace('{schoolId}', encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -600,11 +599,10 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(schoolUpdateBodyParams, localVarRequestOptions, configuration)
@@ -619,7 +617,6 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
 
 /**
  * SchoolApi - functional programming interface
- * @export
  */
 export const SchoolApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = SchoolApiAxiosParamCreator(configuration)
@@ -630,9 +627,11 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerDoesSchoolExist(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExistsResponse>> {
+        async schoolControllerDoesSchoolExist(schoolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExistsResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerDoesSchoolExist(schoolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SchoolApi.schoolControllerDoesSchoolExist']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -641,20 +640,25 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetMaintenanceStatus(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MaintenanceResponse>> {
+        async schoolControllerGetMaintenanceStatus(schoolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MaintenanceResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetMaintenanceStatus(schoolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SchoolApi.schoolControllerGetMaintenanceStatus']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * Gets all provisioning options for a system at a school
+         * @summary 
          * @param {string} schoolId 
          * @param {string} systemId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetProvisioningOptions(schoolId: string, systemId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchulConneXProvisioningOptionsResponse>> {
+        async schoolControllerGetProvisioningOptions(schoolId: string, systemId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchulConneXProvisioningOptionsResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetProvisioningOptions(schoolId, systemId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SchoolApi.schoolControllerGetProvisioningOptions']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -662,9 +666,11 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetSchoolById(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolResponse>> {
+        async schoolControllerGetSchoolById(schoolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolById(schoolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SchoolApi.schoolControllerGetSchoolById']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -674,9 +680,11 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolListResponse>> {
+        async schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolList(skip, limit, federalStateId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SchoolApi.schoolControllerGetSchoolList']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -686,18 +694,22 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetSchoolListForExternalInvite(skip?: number, limit?: number, federalStateId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SchoolForExternalInviteResponse>>> {
+        async schoolControllerGetSchoolListForExternalInvite(skip?: number, limit?: number, federalStateId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SchoolForExternalInviteResponse>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolListForExternalInvite(skip, limit, federalStateId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SchoolApi.schoolControllerGetSchoolListForExternalInvite']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetSchoolListForLadpLogin(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SchoolForLdapLoginResponse>>> {
+        async schoolControllerGetSchoolListForLadpLogin(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SchoolForLdapLoginResponse>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolListForLadpLogin(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SchoolApi.schoolControllerGetSchoolListForLadpLogin']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -706,9 +718,11 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetSchoolSystems(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SchoolSystemResponse>>> {
+        async schoolControllerGetSchoolSystems(schoolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SchoolSystemResponse>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolSystems(schoolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SchoolApi.schoolControllerGetSchoolSystems']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -716,9 +730,11 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetStudents(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolUserListResponse>> {
+        async schoolControllerGetStudents(schoolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolUserListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetStudents(schoolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SchoolApi.schoolControllerGetStudents']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -726,9 +742,11 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetTeachers(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolUserListResponse>> {
+        async schoolControllerGetTeachers(schoolId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolUserListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetTeachers(schoolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SchoolApi.schoolControllerGetTeachers']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -737,9 +755,11 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerRemoveSystemFromSchool(schoolId, systemId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SchoolApi.schoolControllerRemoveSystemFromSchool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -749,21 +769,26 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerSetMaintenanceStatus(schoolId: string, maintenanceParams: MaintenanceParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MaintenanceResponse>> {
+        async schoolControllerSetMaintenanceStatus(schoolId: string, maintenanceParams: MaintenanceParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MaintenanceResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerSetMaintenanceStatus(schoolId, maintenanceParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SchoolApi.schoolControllerSetMaintenanceStatus']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * Sets all provisioning options for a system at a school
+         * @summary 
          * @param {string} schoolId 
          * @param {string} systemId 
          * @param {SchulConneXProvisioningOptionsParams} schulConneXProvisioningOptionsParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchulConneXProvisioningOptionsResponse>> {
+        async schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchulConneXProvisioningOptionsResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerSetProvisioningOptions(schoolId, systemId, schulConneXProvisioningOptionsParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SchoolApi.schoolControllerSetProvisioningOptions']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -773,16 +798,17 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerUpdateSchool(schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolResponse>> {
+        async schoolControllerUpdateSchool(schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerUpdateSchool(schoolId, schoolUpdateBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SchoolApi.schoolControllerUpdateSchool']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * SchoolApi - factory interface
- * @export
  */
 export const SchoolApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = SchoolApiFp(configuration)
@@ -793,7 +819,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerDoesSchoolExist(schoolId: string, options?: any): AxiosPromise<SchoolExistsResponse> {
+        schoolControllerDoesSchoolExist(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolExistsResponse> {
             return localVarFp.schoolControllerDoesSchoolExist(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -803,17 +829,18 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetMaintenanceStatus(schoolId: string, options?: any): AxiosPromise<MaintenanceResponse> {
+        schoolControllerGetMaintenanceStatus(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<MaintenanceResponse> {
             return localVarFp.schoolControllerGetMaintenanceStatus(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
          * Gets all provisioning options for a system at a school
+         * @summary 
          * @param {string} schoolId 
          * @param {string} systemId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetProvisioningOptions(schoolId: string, systemId: string, options?: any): AxiosPromise<SchulConneXProvisioningOptionsResponse> {
+        schoolControllerGetProvisioningOptions(schoolId: string, systemId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchulConneXProvisioningOptionsResponse> {
             return localVarFp.schoolControllerGetProvisioningOptions(schoolId, systemId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -822,7 +849,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolById(schoolId: string, options?: any): AxiosPromise<SchoolResponse> {
+        schoolControllerGetSchoolById(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolResponse> {
             return localVarFp.schoolControllerGetSchoolById(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -833,7 +860,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: any): AxiosPromise<SchoolListResponse> {
+        schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolListResponse> {
             return localVarFp.schoolControllerGetSchoolList(skip, limit, federalStateId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -844,7 +871,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolListForExternalInvite(skip?: number, limit?: number, federalStateId?: string, options?: any): AxiosPromise<Array<SchoolForExternalInviteResponse>> {
+        schoolControllerGetSchoolListForExternalInvite(skip?: number, limit?: number, federalStateId?: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<SchoolForExternalInviteResponse>> {
             return localVarFp.schoolControllerGetSchoolListForExternalInvite(skip, limit, federalStateId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -852,7 +879,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolListForLadpLogin(options?: any): AxiosPromise<Array<SchoolForLdapLoginResponse>> {
+        schoolControllerGetSchoolListForLadpLogin(options?: RawAxiosRequestConfig): AxiosPromise<Array<SchoolForLdapLoginResponse>> {
             return localVarFp.schoolControllerGetSchoolListForLadpLogin(options).then((request) => request(axios, basePath));
         },
         /**
@@ -862,7 +889,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<Array<SchoolSystemResponse>> {
+        schoolControllerGetSchoolSystems(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<SchoolSystemResponse>> {
             return localVarFp.schoolControllerGetSchoolSystems(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -871,7 +898,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetStudents(schoolId: string, options?: any): AxiosPromise<SchoolUserListResponse> {
+        schoolControllerGetStudents(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolUserListResponse> {
             return localVarFp.schoolControllerGetStudents(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -880,7 +907,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetTeachers(schoolId: string, options?: any): AxiosPromise<SchoolUserListResponse> {
+        schoolControllerGetTeachers(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolUserListResponse> {
             return localVarFp.schoolControllerGetTeachers(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -890,7 +917,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: any): AxiosPromise<void> {
+        schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.schoolControllerRemoveSystemFromSchool(schoolId, systemId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -901,18 +928,19 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerSetMaintenanceStatus(schoolId: string, maintenanceParams: MaintenanceParams, options?: any): AxiosPromise<MaintenanceResponse> {
+        schoolControllerSetMaintenanceStatus(schoolId: string, maintenanceParams: MaintenanceParams, options?: RawAxiosRequestConfig): AxiosPromise<MaintenanceResponse> {
             return localVarFp.schoolControllerSetMaintenanceStatus(schoolId, maintenanceParams, options).then((request) => request(axios, basePath));
         },
         /**
          * Sets all provisioning options for a system at a school
+         * @summary 
          * @param {string} schoolId 
          * @param {string} systemId 
          * @param {SchulConneXProvisioningOptionsParams} schulConneXProvisioningOptionsParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: any): AxiosPromise<SchulConneXProvisioningOptionsResponse> {
+        schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: RawAxiosRequestConfig): AxiosPromise<SchulConneXProvisioningOptionsResponse> {
             return localVarFp.schoolControllerSetProvisioningOptions(schoolId, systemId, schulConneXProvisioningOptionsParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -923,7 +951,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerUpdateSchool(schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options?: any): AxiosPromise<SchoolResponse> {
+        schoolControllerUpdateSchool(schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<SchoolResponse> {
             return localVarFp.schoolControllerUpdateSchool(schoolId, schoolUpdateBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -931,8 +959,6 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
 
 /**
  * SchoolApi - interface
- * @export
- * @interface SchoolApi
  */
 export interface SchoolApiInterface {
     /**
@@ -940,9 +966,8 @@ export interface SchoolApiInterface {
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApiInterface
      */
-    schoolControllerDoesSchoolExist(schoolId: string, options?: any): AxiosPromise<SchoolExistsResponse>;
+    schoolControllerDoesSchoolExist(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolExistsResponse>;
 
     /**
      * 
@@ -950,28 +975,26 @@ export interface SchoolApiInterface {
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApiInterface
      */
-    schoolControllerGetMaintenanceStatus(schoolId: string, options?: any): AxiosPromise<MaintenanceResponse>;
+    schoolControllerGetMaintenanceStatus(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<MaintenanceResponse>;
 
     /**
      * Gets all provisioning options for a system at a school
+     * @summary 
      * @param {string} schoolId 
      * @param {string} systemId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApiInterface
      */
-    schoolControllerGetProvisioningOptions(schoolId: string, systemId: string, options?: any): AxiosPromise<SchulConneXProvisioningOptionsResponse>;
+    schoolControllerGetProvisioningOptions(schoolId: string, systemId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchulConneXProvisioningOptionsResponse>;
 
     /**
      * 
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApiInterface
      */
-    schoolControllerGetSchoolById(schoolId: string, options?: any): AxiosPromise<SchoolResponse>;
+    schoolControllerGetSchoolById(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolResponse>;
 
     /**
      * 
@@ -980,9 +1003,8 @@ export interface SchoolApiInterface {
      * @param {string} [federalStateId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApiInterface
      */
-    schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: any): AxiosPromise<SchoolListResponse>;
+    schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolListResponse>;
 
     /**
      * 
@@ -991,17 +1013,15 @@ export interface SchoolApiInterface {
      * @param {string} [federalStateId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApiInterface
      */
-    schoolControllerGetSchoolListForExternalInvite(skip?: number, limit?: number, federalStateId?: string, options?: any): AxiosPromise<Array<SchoolForExternalInviteResponse>>;
+    schoolControllerGetSchoolListForExternalInvite(skip?: number, limit?: number, federalStateId?: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<SchoolForExternalInviteResponse>>;
 
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApiInterface
      */
-    schoolControllerGetSchoolListForLadpLogin(options?: any): AxiosPromise<Array<SchoolForLdapLoginResponse>>;
+    schoolControllerGetSchoolListForLadpLogin(options?: RawAxiosRequestConfig): AxiosPromise<Array<SchoolForLdapLoginResponse>>;
 
     /**
      * 
@@ -1009,27 +1029,24 @@ export interface SchoolApiInterface {
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApiInterface
      */
-    schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<Array<SchoolSystemResponse>>;
+    schoolControllerGetSchoolSystems(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<SchoolSystemResponse>>;
 
     /**
      * 
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApiInterface
      */
-    schoolControllerGetStudents(schoolId: string, options?: any): AxiosPromise<SchoolUserListResponse>;
+    schoolControllerGetStudents(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolUserListResponse>;
 
     /**
      * 
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApiInterface
      */
-    schoolControllerGetTeachers(schoolId: string, options?: any): AxiosPromise<SchoolUserListResponse>;
+    schoolControllerGetTeachers(schoolId: string, options?: RawAxiosRequestConfig): AxiosPromise<SchoolUserListResponse>;
 
     /**
      * 
@@ -1037,9 +1054,8 @@ export interface SchoolApiInterface {
      * @param {string} systemId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApiInterface
      */
-    schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: any): AxiosPromise<void>;
+    schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -1048,20 +1064,19 @@ export interface SchoolApiInterface {
      * @param {MaintenanceParams} maintenanceParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApiInterface
      */
-    schoolControllerSetMaintenanceStatus(schoolId: string, maintenanceParams: MaintenanceParams, options?: any): AxiosPromise<MaintenanceResponse>;
+    schoolControllerSetMaintenanceStatus(schoolId: string, maintenanceParams: MaintenanceParams, options?: RawAxiosRequestConfig): AxiosPromise<MaintenanceResponse>;
 
     /**
      * Sets all provisioning options for a system at a school
+     * @summary 
      * @param {string} schoolId 
      * @param {string} systemId 
      * @param {SchulConneXProvisioningOptionsParams} schulConneXProvisioningOptionsParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApiInterface
      */
-    schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: any): AxiosPromise<SchulConneXProvisioningOptionsResponse>;
+    schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: RawAxiosRequestConfig): AxiosPromise<SchulConneXProvisioningOptionsResponse>;
 
     /**
      * 
@@ -1070,17 +1085,13 @@ export interface SchoolApiInterface {
      * @param {SchoolUpdateBodyParams} schoolUpdateBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApiInterface
      */
-    schoolControllerUpdateSchool(schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options?: any): AxiosPromise<SchoolResponse>;
+    schoolControllerUpdateSchool(schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<SchoolResponse>;
 
 }
 
 /**
  * SchoolApi - object-oriented interface
- * @export
- * @class SchoolApi
- * @extends {BaseAPI}
  */
 export class SchoolApi extends BaseAPI implements SchoolApiInterface {
     /**
@@ -1088,9 +1099,8 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApi
      */
-    public schoolControllerDoesSchoolExist(schoolId: string, options?: any) {
+    public schoolControllerDoesSchoolExist(schoolId: string, options?: RawAxiosRequestConfig) {
         return SchoolApiFp(this.configuration).schoolControllerDoesSchoolExist(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1100,21 +1110,20 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApi
      */
-    public schoolControllerGetMaintenanceStatus(schoolId: string, options?: any) {
+    public schoolControllerGetMaintenanceStatus(schoolId: string, options?: RawAxiosRequestConfig) {
         return SchoolApiFp(this.configuration).schoolControllerGetMaintenanceStatus(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Gets all provisioning options for a system at a school
+     * @summary 
      * @param {string} schoolId 
      * @param {string} systemId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApi
      */
-    public schoolControllerGetProvisioningOptions(schoolId: string, systemId: string, options?: any) {
+    public schoolControllerGetProvisioningOptions(schoolId: string, systemId: string, options?: RawAxiosRequestConfig) {
         return SchoolApiFp(this.configuration).schoolControllerGetProvisioningOptions(schoolId, systemId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1123,9 +1132,8 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApi
      */
-    public schoolControllerGetSchoolById(schoolId: string, options?: any) {
+    public schoolControllerGetSchoolById(schoolId: string, options?: RawAxiosRequestConfig) {
         return SchoolApiFp(this.configuration).schoolControllerGetSchoolById(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1136,9 +1144,8 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @param {string} [federalStateId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApi
      */
-    public schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: any) {
+    public schoolControllerGetSchoolList(skip?: number, limit?: number, federalStateId?: string, options?: RawAxiosRequestConfig) {
         return SchoolApiFp(this.configuration).schoolControllerGetSchoolList(skip, limit, federalStateId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1149,9 +1156,8 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @param {string} [federalStateId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApi
      */
-    public schoolControllerGetSchoolListForExternalInvite(skip?: number, limit?: number, federalStateId?: string, options?: any) {
+    public schoolControllerGetSchoolListForExternalInvite(skip?: number, limit?: number, federalStateId?: string, options?: RawAxiosRequestConfig) {
         return SchoolApiFp(this.configuration).schoolControllerGetSchoolListForExternalInvite(skip, limit, federalStateId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1159,9 +1165,8 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApi
      */
-    public schoolControllerGetSchoolListForLadpLogin(options?: any) {
+    public schoolControllerGetSchoolListForLadpLogin(options?: RawAxiosRequestConfig) {
         return SchoolApiFp(this.configuration).schoolControllerGetSchoolListForLadpLogin(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1171,9 +1176,8 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApi
      */
-    public schoolControllerGetSchoolSystems(schoolId: string, options?: any) {
+    public schoolControllerGetSchoolSystems(schoolId: string, options?: RawAxiosRequestConfig) {
         return SchoolApiFp(this.configuration).schoolControllerGetSchoolSystems(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1182,9 +1186,8 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApi
      */
-    public schoolControllerGetStudents(schoolId: string, options?: any) {
+    public schoolControllerGetStudents(schoolId: string, options?: RawAxiosRequestConfig) {
         return SchoolApiFp(this.configuration).schoolControllerGetStudents(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1193,9 +1196,8 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @param {string} schoolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApi
      */
-    public schoolControllerGetTeachers(schoolId: string, options?: any) {
+    public schoolControllerGetTeachers(schoolId: string, options?: RawAxiosRequestConfig) {
         return SchoolApiFp(this.configuration).schoolControllerGetTeachers(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1205,9 +1207,8 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @param {string} systemId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApi
      */
-    public schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: any) {
+    public schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: RawAxiosRequestConfig) {
         return SchoolApiFp(this.configuration).schoolControllerRemoveSystemFromSchool(schoolId, systemId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1218,22 +1219,21 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @param {MaintenanceParams} maintenanceParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApi
      */
-    public schoolControllerSetMaintenanceStatus(schoolId: string, maintenanceParams: MaintenanceParams, options?: any) {
+    public schoolControllerSetMaintenanceStatus(schoolId: string, maintenanceParams: MaintenanceParams, options?: RawAxiosRequestConfig) {
         return SchoolApiFp(this.configuration).schoolControllerSetMaintenanceStatus(schoolId, maintenanceParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Sets all provisioning options for a system at a school
+     * @summary 
      * @param {string} schoolId 
      * @param {string} systemId 
      * @param {SchulConneXProvisioningOptionsParams} schulConneXProvisioningOptionsParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApi
      */
-    public schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: any) {
+    public schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: RawAxiosRequestConfig) {
         return SchoolApiFp(this.configuration).schoolControllerSetProvisioningOptions(schoolId, systemId, schulConneXProvisioningOptionsParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1244,9 +1244,9 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @param {SchoolUpdateBodyParams} schoolUpdateBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SchoolApi
      */
-    public schoolControllerUpdateSchool(schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options?: any) {
+    public schoolControllerUpdateSchool(schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options?: RawAxiosRequestConfig) {
         return SchoolApiFp(this.configuration).schoolControllerUpdateSchool(schoolId, schoolUpdateBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

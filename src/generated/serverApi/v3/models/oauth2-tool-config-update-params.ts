@@ -13,69 +13,51 @@
  */
 
 
-import { TokenEndpointAuthMethod } from './token-endpoint-auth-method';
-import { ToolConfigType } from './tool-config-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { TokenEndpointAuthMethod } from './token-endpoint-auth-method';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ToolConfigType } from './tool-config-type';
 
-/**
- * 
- * @export
- * @interface Oauth2ToolConfigUpdateParams
- */
 export interface Oauth2ToolConfigUpdateParams {
     /**
      * Configuration type of the tool.
-     * @type {ToolConfigType}
-     * @memberof Oauth2ToolConfigUpdateParams
      */
-    type: ToolConfigType;
+    'type': ToolConfigType;
     /**
      * Defines the target URL that is launched. Can be automatically filled with parameter values when using : in-front of the parameter name. Must be HTTPS.
-     * @type {string}
-     * @memberof Oauth2ToolConfigUpdateParams
      */
-    baseUrl: string;
+    'baseUrl': string;
     /**
      * OAuth2 client id.
-     * @type {string}
-     * @memberof Oauth2ToolConfigUpdateParams
      */
-    clientId: string;
+    'clientId': string;
     /**
      * OAuth2 client secret.
-     * @type {string}
-     * @memberof Oauth2ToolConfigUpdateParams
      */
-    clientSecret?: string;
+    'clientSecret'?: string;
     /**
      * If true, skips the users consent request before launching the tool for the first time.
-     * @type {boolean}
-     * @memberof Oauth2ToolConfigUpdateParams
      */
-    skipConsent: boolean;
+    'skipConsent': boolean;
     /**
      * OAuth2 frontchannel logout uri.
-     * @type {string}
-     * @memberof Oauth2ToolConfigUpdateParams
      */
-    frontchannelLogoutUri?: string;
+    'frontchannelLogoutUri'?: string;
     /**
      * OAuth2 scopes.
-     * @type {string}
-     * @memberof Oauth2ToolConfigUpdateParams
      */
-    scope?: string;
+    'scope'?: string;
     /**
      * Allowed OAuth2 redirect uris.
-     * @type {Array<string>}
-     * @memberof Oauth2ToolConfigUpdateParams
      */
-    redirectUris: Array<string>;
+    'redirectUris': Array<string>;
     /**
      * OAuth2 token endpoint method
-     * @type {TokenEndpointAuthMethod}
-     * @memberof Oauth2ToolConfigUpdateParams
      */
-    tokenEndpointAuthMethod: TokenEndpointAuthMethod;
+    'tokenEndpointAuthMethod': TokenEndpointAuthMethod;
 }
+
 
 

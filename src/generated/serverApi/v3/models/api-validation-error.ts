@@ -14,42 +14,26 @@
 
 
 
-/**
- * 
- * @export
- * @interface ApiValidationError
- */
 export interface ApiValidationError {
     /**
      * The response status code.
-     * @type {number}
-     * @memberof ApiValidationError
      */
-    code: number;
+    'code': number;
     /**
      * The error type.
-     * @type {string}
-     * @memberof ApiValidationError
      */
-    type: string;
+    'type': string;
     /**
      * The error title.
-     * @type {string}
-     * @memberof ApiValidationError
      */
-    title: string;
+    'title': string;
     /**
      * The error message.
-     * @type {string}
-     * @memberof ApiValidationError
      */
-    message: string;
+    'message': string;
     /**
      * The error details.
-     * @type {object}
-     * @memberof ApiValidationError
      */
-    details?: object;
+    'details'?: object;
 }
-
 

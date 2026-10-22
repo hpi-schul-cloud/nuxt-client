@@ -160,6 +160,8 @@ export default {
 	"common.notifications.errors.notRestored": "{type} could not be restored.",
 	"common.notifications.errors.notArchived": "{type} could not be archived.",
 	"common.notifications.errors.notShared": "{type} could not be shared. | {type} could not be shared.",
+	"common.notifications.listWithMore": "{list} ... ({count} more)",
+	"common.notifications.warning.filesNotCopied": "{type} was duplicated, but some files could not be copied: {files}",
 	"common.notification.error.preferences.update": "User preferences could not be updated.",
 	"common.notification.error.preferences.retrieve": "User preferences could not be retrieved.",
 	"common.notification.error.videoConference.notFetched": "The video conference could not be fetched.",

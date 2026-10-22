@@ -13,26 +13,26 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { CollapsableBodyParams } from '../models';
+import type { CollapsableBodyParams } from '../models';
 // @ts-ignore
-import { ColorBodyParams } from '../models';
+import type { ColorBodyParams } from '../models';
 // @ts-ignore
-import { MoveColumnBodyParams } from '../models';
+import type { MoveColumnBodyParams } from '../models';
 // @ts-ignore
-import { RenameBodyParams } from '../models';
+import type { RenameBodyParams } from '../models';
 /**
  * MediaLineApi - axios parameter creator
- * @export
  */
 export const MediaLineApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -44,13 +44,13 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaLineControllerCollapseMediaLine: async (lineId: string, collapsableBodyParams: CollapsableBodyParams, options: any = {}): Promise<RequestArgs> => {
+        mediaLineControllerCollapseMediaLine: async (lineId: string, collapsableBodyParams: CollapsableBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'lineId' is not null or undefined
             assertParamExists('mediaLineControllerCollapseMediaLine', 'lineId', lineId)
             // verify required parameter 'collapsableBodyParams' is not null or undefined
             assertParamExists('mediaLineControllerCollapseMediaLine', 'collapsableBodyParams', collapsableBodyParams)
             const localVarPath = `/media-lines/{lineId}/collapse`
-                .replace(`{${"lineId"}}`, encodeURIComponent(String(lineId)));
+                .replace('{lineId}', encodeURIComponent(String(lineId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -66,11 +66,10 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(collapsableBodyParams, localVarRequestOptions, configuration)
@@ -87,11 +86,11 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaLineControllerDeleteLine: async (lineId: string, options: any = {}): Promise<RequestArgs> => {
+        mediaLineControllerDeleteLine: async (lineId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'lineId' is not null or undefined
             assertParamExists('mediaLineControllerDeleteLine', 'lineId', lineId)
             const localVarPath = `/media-lines/{lineId}`
-                .replace(`{${"lineId"}}`, encodeURIComponent(String(lineId)));
+                .replace('{lineId}', encodeURIComponent(String(lineId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -107,9 +106,9 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -126,13 +125,13 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaLineControllerMoveLine: async (lineId: string, moveColumnBodyParams: MoveColumnBodyParams, options: any = {}): Promise<RequestArgs> => {
+        mediaLineControllerMoveLine: async (lineId: string, moveColumnBodyParams: MoveColumnBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'lineId' is not null or undefined
             assertParamExists('mediaLineControllerMoveLine', 'lineId', lineId)
             // verify required parameter 'moveColumnBodyParams' is not null or undefined
             assertParamExists('mediaLineControllerMoveLine', 'moveColumnBodyParams', moveColumnBodyParams)
             const localVarPath = `/media-lines/{lineId}/position`
-                .replace(`{${"lineId"}}`, encodeURIComponent(String(lineId)));
+                .replace('{lineId}', encodeURIComponent(String(lineId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -148,11 +147,10 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(moveColumnBodyParams, localVarRequestOptions, configuration)
@@ -170,13 +168,13 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaLineControllerUpdateBackgroundColor: async (lineId: string, colorBodyParams: ColorBodyParams, options: any = {}): Promise<RequestArgs> => {
+        mediaLineControllerUpdateBackgroundColor: async (lineId: string, colorBodyParams: ColorBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'lineId' is not null or undefined
             assertParamExists('mediaLineControllerUpdateBackgroundColor', 'lineId', lineId)
             // verify required parameter 'colorBodyParams' is not null or undefined
             assertParamExists('mediaLineControllerUpdateBackgroundColor', 'colorBodyParams', colorBodyParams)
             const localVarPath = `/media-lines/{lineId}/color`
-                .replace(`{${"lineId"}}`, encodeURIComponent(String(lineId)));
+                .replace('{lineId}', encodeURIComponent(String(lineId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -192,11 +190,10 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(colorBodyParams, localVarRequestOptions, configuration)
@@ -214,13 +211,13 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaLineControllerUpdateLineTitle: async (lineId: string, renameBodyParams: RenameBodyParams, options: any = {}): Promise<RequestArgs> => {
+        mediaLineControllerUpdateLineTitle: async (lineId: string, renameBodyParams: RenameBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'lineId' is not null or undefined
             assertParamExists('mediaLineControllerUpdateLineTitle', 'lineId', lineId)
             // verify required parameter 'renameBodyParams' is not null or undefined
             assertParamExists('mediaLineControllerUpdateLineTitle', 'renameBodyParams', renameBodyParams)
             const localVarPath = `/media-lines/{lineId}/title`
-                .replace(`{${"lineId"}}`, encodeURIComponent(String(lineId)));
+                .replace('{lineId}', encodeURIComponent(String(lineId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -236,11 +233,10 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(renameBodyParams, localVarRequestOptions, configuration)
@@ -255,7 +251,6 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
 
 /**
  * MediaLineApi - functional programming interface
- * @export
  */
 export const MediaLineApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MediaLineApiAxiosParamCreator(configuration)
@@ -268,9 +263,11 @@ export const MediaLineApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaLineControllerCollapseMediaLine(lineId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async mediaLineControllerCollapseMediaLine(lineId: string, collapsableBodyParams: CollapsableBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaLineControllerCollapseMediaLine(lineId, collapsableBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaLineApi.mediaLineControllerCollapseMediaLine']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -279,9 +276,11 @@ export const MediaLineApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaLineControllerDeleteLine(lineId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async mediaLineControllerDeleteLine(lineId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaLineControllerDeleteLine(lineId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaLineApi.mediaLineControllerDeleteLine']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -291,9 +290,11 @@ export const MediaLineApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaLineControllerMoveLine(lineId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async mediaLineControllerMoveLine(lineId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaLineControllerMoveLine(lineId, moveColumnBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaLineApi.mediaLineControllerMoveLine']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -303,9 +304,11 @@ export const MediaLineApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaLineControllerUpdateBackgroundColor(lineId: string, colorBodyParams: ColorBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async mediaLineControllerUpdateBackgroundColor(lineId: string, colorBodyParams: ColorBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaLineControllerUpdateBackgroundColor(lineId, colorBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaLineApi.mediaLineControllerUpdateBackgroundColor']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -315,16 +318,17 @@ export const MediaLineApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaLineControllerUpdateLineTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async mediaLineControllerUpdateLineTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaLineControllerUpdateLineTitle(lineId, renameBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaLineApi.mediaLineControllerUpdateLineTitle']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * MediaLineApi - factory interface
- * @export
  */
 export const MediaLineApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = MediaLineApiFp(configuration)
@@ -337,7 +341,7 @@ export const MediaLineApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaLineControllerCollapseMediaLine(lineId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): AxiosPromise<void> {
+        mediaLineControllerCollapseMediaLine(lineId: string, collapsableBodyParams: CollapsableBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.mediaLineControllerCollapseMediaLine(lineId, collapsableBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -347,7 +351,7 @@ export const MediaLineApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaLineControllerDeleteLine(lineId: string, options?: any): AxiosPromise<void> {
+        mediaLineControllerDeleteLine(lineId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.mediaLineControllerDeleteLine(lineId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -358,7 +362,7 @@ export const MediaLineApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaLineControllerMoveLine(lineId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): AxiosPromise<void> {
+        mediaLineControllerMoveLine(lineId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.mediaLineControllerMoveLine(lineId, moveColumnBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -369,7 +373,7 @@ export const MediaLineApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaLineControllerUpdateBackgroundColor(lineId: string, colorBodyParams: ColorBodyParams, options?: any): AxiosPromise<void> {
+        mediaLineControllerUpdateBackgroundColor(lineId: string, colorBodyParams: ColorBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.mediaLineControllerUpdateBackgroundColor(lineId, colorBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -380,7 +384,7 @@ export const MediaLineApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaLineControllerUpdateLineTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void> {
+        mediaLineControllerUpdateLineTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.mediaLineControllerUpdateLineTitle(lineId, renameBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -388,8 +392,6 @@ export const MediaLineApiFactory = function (configuration?: Configuration, base
 
 /**
  * MediaLineApi - interface
- * @export
- * @interface MediaLineApi
  */
 export interface MediaLineApiInterface {
     /**
@@ -399,9 +401,8 @@ export interface MediaLineApiInterface {
      * @param {CollapsableBodyParams} collapsableBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaLineApiInterface
      */
-    mediaLineControllerCollapseMediaLine(lineId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): AxiosPromise<void>;
+    mediaLineControllerCollapseMediaLine(lineId: string, collapsableBodyParams: CollapsableBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -409,9 +410,8 @@ export interface MediaLineApiInterface {
      * @param {string} lineId The id of the line
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaLineApiInterface
      */
-    mediaLineControllerDeleteLine(lineId: string, options?: any): AxiosPromise<void>;
+    mediaLineControllerDeleteLine(lineId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -420,9 +420,8 @@ export interface MediaLineApiInterface {
      * @param {MoveColumnBodyParams} moveColumnBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaLineApiInterface
      */
-    mediaLineControllerMoveLine(lineId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): AxiosPromise<void>;
+    mediaLineControllerMoveLine(lineId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -431,9 +430,8 @@ export interface MediaLineApiInterface {
      * @param {ColorBodyParams} colorBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaLineApiInterface
      */
-    mediaLineControllerUpdateBackgroundColor(lineId: string, colorBodyParams: ColorBodyParams, options?: any): AxiosPromise<void>;
+    mediaLineControllerUpdateBackgroundColor(lineId: string, colorBodyParams: ColorBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -442,17 +440,13 @@ export interface MediaLineApiInterface {
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaLineApiInterface
      */
-    mediaLineControllerUpdateLineTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void>;
+    mediaLineControllerUpdateLineTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
  * MediaLineApi - object-oriented interface
- * @export
- * @class MediaLineApi
- * @extends {BaseAPI}
  */
 export class MediaLineApi extends BaseAPI implements MediaLineApiInterface {
     /**
@@ -462,9 +456,8 @@ export class MediaLineApi extends BaseAPI implements MediaLineApiInterface {
      * @param {CollapsableBodyParams} collapsableBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaLineApi
      */
-    public mediaLineControllerCollapseMediaLine(lineId: string, collapsableBodyParams: CollapsableBodyParams, options?: any) {
+    public mediaLineControllerCollapseMediaLine(lineId: string, collapsableBodyParams: CollapsableBodyParams, options?: RawAxiosRequestConfig) {
         return MediaLineApiFp(this.configuration).mediaLineControllerCollapseMediaLine(lineId, collapsableBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -474,9 +467,8 @@ export class MediaLineApi extends BaseAPI implements MediaLineApiInterface {
      * @param {string} lineId The id of the line
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaLineApi
      */
-    public mediaLineControllerDeleteLine(lineId: string, options?: any) {
+    public mediaLineControllerDeleteLine(lineId: string, options?: RawAxiosRequestConfig) {
         return MediaLineApiFp(this.configuration).mediaLineControllerDeleteLine(lineId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -487,9 +479,8 @@ export class MediaLineApi extends BaseAPI implements MediaLineApiInterface {
      * @param {MoveColumnBodyParams} moveColumnBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaLineApi
      */
-    public mediaLineControllerMoveLine(lineId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any) {
+    public mediaLineControllerMoveLine(lineId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: RawAxiosRequestConfig) {
         return MediaLineApiFp(this.configuration).mediaLineControllerMoveLine(lineId, moveColumnBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -500,9 +491,8 @@ export class MediaLineApi extends BaseAPI implements MediaLineApiInterface {
      * @param {ColorBodyParams} colorBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaLineApi
      */
-    public mediaLineControllerUpdateBackgroundColor(lineId: string, colorBodyParams: ColorBodyParams, options?: any) {
+    public mediaLineControllerUpdateBackgroundColor(lineId: string, colorBodyParams: ColorBodyParams, options?: RawAxiosRequestConfig) {
         return MediaLineApiFp(this.configuration).mediaLineControllerUpdateBackgroundColor(lineId, colorBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -513,9 +503,9 @@ export class MediaLineApi extends BaseAPI implements MediaLineApiInterface {
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaLineApi
      */
-    public mediaLineControllerUpdateLineTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: any) {
+    public mediaLineControllerUpdateLineTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: RawAxiosRequestConfig) {
         return MediaLineApiFp(this.configuration).mediaLineControllerUpdateLineTitle(lineId, renameBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

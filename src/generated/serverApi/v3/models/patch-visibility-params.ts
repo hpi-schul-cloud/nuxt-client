@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface PatchVisibilityParams
- */
 export interface PatchVisibilityParams {
     /**
      * true to publish the element, false to unpublish
-     * @type {boolean}
-     * @memberof PatchVisibilityParams
      */
-    visibility: boolean;
+    'visibility': boolean;
 }
-
 

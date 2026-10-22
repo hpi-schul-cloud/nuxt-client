@@ -13,18 +13,18 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { OAuthSessionTokenExpirationResponse } from '../models';
+import type { OAuthSessionTokenExpirationResponse } from '../models';
 /**
  * OAuthApi - axios parameter creator
- * @export
  */
 export const OAuthApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -34,7 +34,7 @@ export const OAuthApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oAuthControllerGetSessionTokenExpiration: async (options: any = {}): Promise<RequestArgs> => {
+        oAuthControllerGetSessionTokenExpiration: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/oauth/session-token/expiration`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -51,9 +51,9 @@ export const OAuthApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -67,7 +67,6 @@ export const OAuthApiAxiosParamCreator = function (configuration?: Configuration
 
 /**
  * OAuthApi - functional programming interface
- * @export
  */
 export const OAuthApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = OAuthApiAxiosParamCreator(configuration)
@@ -78,16 +77,17 @@ export const OAuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oAuthControllerGetSessionTokenExpiration(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OAuthSessionTokenExpirationResponse>> {
+        async oAuthControllerGetSessionTokenExpiration(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OAuthSessionTokenExpirationResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oAuthControllerGetSessionTokenExpiration(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['OAuthApi.oAuthControllerGetSessionTokenExpiration']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * OAuthApi - factory interface
- * @export
  */
 export const OAuthApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = OAuthApiFp(configuration)
@@ -98,7 +98,7 @@ export const OAuthApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oAuthControllerGetSessionTokenExpiration(options?: any): AxiosPromise<OAuthSessionTokenExpirationResponse> {
+        oAuthControllerGetSessionTokenExpiration(options?: RawAxiosRequestConfig): AxiosPromise<OAuthSessionTokenExpirationResponse> {
             return localVarFp.oAuthControllerGetSessionTokenExpiration(options).then((request) => request(axios, basePath));
         },
     };
@@ -106,8 +106,6 @@ export const OAuthApiFactory = function (configuration?: Configuration, basePath
 
 /**
  * OAuthApi - interface
- * @export
- * @interface OAuthApi
  */
 export interface OAuthApiInterface {
     /**
@@ -115,17 +113,13 @@ export interface OAuthApiInterface {
      * @summary Get the expiration date of the current oauth session token of the user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof OAuthApiInterface
      */
-    oAuthControllerGetSessionTokenExpiration(options?: any): AxiosPromise<OAuthSessionTokenExpirationResponse>;
+    oAuthControllerGetSessionTokenExpiration(options?: RawAxiosRequestConfig): AxiosPromise<OAuthSessionTokenExpirationResponse>;
 
 }
 
 /**
  * OAuthApi - object-oriented interface
- * @export
- * @class OAuthApi
- * @extends {BaseAPI}
  */
 export class OAuthApi extends BaseAPI implements OAuthApiInterface {
     /**
@@ -133,9 +127,9 @@ export class OAuthApi extends BaseAPI implements OAuthApiInterface {
      * @summary Get the expiration date of the current oauth session token of the user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof OAuthApi
      */
-    public oAuthControllerGetSessionTokenExpiration(options?: any) {
+    public oAuthControllerGetSessionTokenExpiration(options?: RawAxiosRequestConfig) {
         return OAuthApiFp(this.configuration).oAuthControllerGetSessionTokenExpiration(options).then((request) => request(this.axios, this.basePath));
     }
 }
+
