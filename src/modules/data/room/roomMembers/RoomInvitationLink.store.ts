@@ -83,7 +83,7 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 			).data;
 
 			roomInvitationLinks.value.push(checkDefaultExpiredDate(response));
-			sharedUrl.value = BASE_SHARED_URL + response.id;
+			sharedUrl.value = BASE_SHARED_URL + (response.invitationToken ?? response.id);
 			invitationStep.value = InvitationStep.SHARE;
 		} catch {
 			notifyError(t("pages.rooms.invitationlinks.error.create"));
@@ -104,7 +104,7 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 				roomInvitationLinks.value[existingLinkIndex] = checkDefaultExpiredDate(response);
 			}
 
-			sharedUrl.value = BASE_SHARED_URL + response.id;
+			sharedUrl.value = BASE_SHARED_URL + (response.invitationToken ?? response.id);
 			invitationStep.value = InvitationStep.SHARE;
 		} catch {
 			notifyError(t("pages.rooms.invitationlinks.error.update"));
@@ -116,6 +116,7 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 	};
 
 	const deleteLinks = async (linkIds: string | string[]) => {
+		// TODO also token instead of id?
 		try {
 			if (typeof linkIds === "string") {
 				linkIds = [linkIds];
@@ -167,6 +168,7 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 
 			return {
 				id: link.id,
+				invitationToken: link.invitationToken ?? link.id,
 				title: link.title,
 				isUsableByStudents: link.isUsableByStudents ? YES : NO,
 				isUsableByExternalPersons: link.isUsableByExternalPersons ? YES : NO,

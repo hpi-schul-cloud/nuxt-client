@@ -93,7 +93,7 @@ export const setSearchParams = function (url: URL, ...objects: any[]) {
 
 /**
  * JSON serialization helper function which replaces instances of unserializable types with serializable ones.
- * This function will run for every key-value pair encountered by JSON.stringify while traversing the object.
+ * This function will run for every key-value pair encountered by JSON.stringify while traversing an object.
  * Converting a set to a string will return an empty object, so an intermediate conversion to an array is required.
  */
 // @ts-ignore
