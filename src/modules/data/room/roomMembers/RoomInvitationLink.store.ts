@@ -130,14 +130,14 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 		}
 	};
 
-	const useLink = async (linkId: string): Promise<UseLinkResult> => {
+	const useLink = async (invitationTokenOrId: string): Promise<UseLinkResult> => {
 		const result: UseLinkResult = {
 			roomId: "",
 			validationMessage: "",
 			schoolName: "",
 		};
 		try {
-			const response = await api.roomInvitationLinkControllerUseLink(linkId);
+			const response = await api.roomInvitationLinkControllerUseLink(invitationTokenOrId);
 			result.roomId = response.data.id;
 		} catch (error) {
 			if (isAxiosError(error)) {
