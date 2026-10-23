@@ -4,6 +4,7 @@
 
 const mongoId = "[a-z0-9]{24}";
 const h5pId = "[a-z0-9]+";
+const invitationToken = "[A-Za-z0-9_-]{43}";
 
 const vueRoutes = [
 	`^/favicon.png$`,
@@ -53,7 +54,7 @@ const vueRoutes = [
 	`^/poc-files/?$`,
 	`^/folder/${mongoId}/?$`,
 	`^/folder/${mongoId}/trash/?$`,
-	`^/rooms/invitation-link/${mongoId}?$`,
+	`^/rooms/invitation-link/(${mongoId}|${invitationToken})/?$`,
 	`^/rooms/?$`,
 	`^/rooms/new/?$`,
 	`^/rooms/${mongoId}/?$`,
