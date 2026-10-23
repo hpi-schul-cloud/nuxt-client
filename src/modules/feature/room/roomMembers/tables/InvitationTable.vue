@@ -25,7 +25,7 @@
 					"
 					:data-testid="`share-button-${item.id}`"
 					:icon="mdiShareVariantOutline"
-					@click="onOpenShareModal(item.id)"
+					@click="onOpenShareModal(item.invitationToken ?? item.id)"
 				/>
 				<KebabMenu
 					:data-testid="`kebab-menu-${item.id}`"
@@ -39,7 +39,7 @@
 					<KebabMenuActionShare
 						:text="t('common.actions.share')"
 						:data-testid="`menu-share-button-${item.id}`"
-						@click="onOpenShareModal(item.id)"
+						@click="onOpenShareModal(item.invitationToken ?? item.id)"
 					/>
 					<KebabMenuActionDelete
 						:name="item.title"
@@ -160,9 +160,9 @@ const tableHeaders = [
 	},
 ].filter(isNotNullish);
 
-const onOpenShareModal = (itemId: string) => {
+const onOpenShareModal = (invitationTokenOrId: string) => {
 	invitationStep.value = InvitationStep.SHARE;
-	sharedUrl.value = `${window.location.origin}/rooms/invitation-link/${itemId}`;
+	sharedUrl.value = `${window.location.origin}/rooms/invitation-link/${invitationTokenOrId}`;
 	isInvitationDialogOpen.value = true;
 };
 </script>
