@@ -53,12 +53,12 @@
 		"vue-router": "^5.0.7",
 		"vuedraggable": "^4.1.0",
 		"vuetify": "^3.12.6",
-		"zod": "^4.4.3"
+		"zod": "^4.6.7"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@mdi/js": "^7.4.47",
-		"@openapitools/openapi-generator-cli": "^2.41.0",
+		"@openapitools/openapi-generator-cli": "^2.42.0",
 		"@pinia/testing": "^1.0.3",
 		"@types/katex": "^0.16.8",
 		"@types/sortablejs": "^1.15.9",
