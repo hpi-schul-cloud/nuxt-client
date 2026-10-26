@@ -116,7 +116,6 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 	};
 
 	const deleteLinks = async (linkIds: string | string[]) => {
-		// TODO also token instead of id?
 		try {
 			if (typeof linkIds === "string") {
 				linkIds = [linkIds];
