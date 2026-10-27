@@ -101,11 +101,11 @@ const onSubmitInvitation = async () => {
 			firstName: firstName.value,
 			lastName: lastName.value,
 		});
+		notifySuccess(t("pages.rooms.members.dialog.addExternalPerson.success.addingMember", { email: email.value }));
 	} catch {
 		notifyError(t("pages.rooms.members.dialog.addExternalPerson.errors.addingMember"));
 	} finally {
 		closeDialog();
-		notifySuccess(t("pages.rooms.members.dialog.addExternalPerson.success.addingMember", { email: email.value }));
 		await registrationStore.fetchRegistrationsForCurrentRoom();
 	}
 };

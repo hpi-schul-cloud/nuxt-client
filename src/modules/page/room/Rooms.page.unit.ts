@@ -2,6 +2,7 @@ import RoomsPage from "./Rooms.page.vue";
 import { RoomItem } from "@/types/room/Room";
 import {
 	createTestAppStoreWithPermissions,
+	createTestEnvStore,
 	createTestRoomStore,
 	mockApi,
 	mockComposable,
@@ -10,6 +11,7 @@ import {
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
 import {
+	ConfigResponse,
 	CopyApiResponse,
 	CopyElementType,
 	CopyStatusEnum,
@@ -21,6 +23,7 @@ import { RoomGrid } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";
 import { EmptyState } from "@ui-empty-state";
+import { KebabMenuAction } from "@ui-kebab-menu";
 import { DefaultWireframe } from "@ui-layout";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -55,12 +58,14 @@ describe("RoomsPage", () => {
 
 	const setup = (
 		roomItems: RoomItem[] = [roomItemFactory.build({ isLocked: false }), roomItemFactory.build({ isLocked: true })],
-		isLoading = false
+		isLoading = false,
+		envs: Partial<ConfigResponse> = {}
 	) => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		const { roomStore } = createTestRoomStore(roomItems);
 		roomStore.isLoading = isLoading;
 		roomStore.fetchRooms.mockResolvedValue();
+		createTestEnvStore(envs);
 
 		createTestAppStoreWithPermissions([Permission.SCHOOL_CREATE_ROOM]);
 
@@ -264,6 +269,30 @@ describe("RoomsPage", () => {
 				const roomGrid = wrapper.findComponent(RoomGrid);
 
 				expect(roomGrid.exists()).toBe(true);
+			});
+		});
+	});
+
+	describe("archived rooms entry point", () => {
+		describe("when the feature is enabled", () => {
+			it("should show the rooms menu with an entry to navigate to archived rooms", async () => {
+				const { wrapper } = setup(undefined, false, { FEATURE_ROOM_ARCHIVE_ENABLED: true });
+
+				const menuBtn = wrapper.find("[data-testid=rooms-menu]");
+				expect(menuBtn.exists()).toBe(true);
+
+				await menuBtn.trigger("click");
+				await wrapper.findComponent(KebabMenuAction).trigger("click");
+
+				expect(router.push).toHaveBeenCalledWith({ name: "rooms-archive" });
+			});
+		});
+
+		describe("when the feature is disabled", () => {
+			it("should NOT show the rooms menu", () => {
+				const { wrapper } = setup(undefined, false, { FEATURE_ROOM_ARCHIVE_ENABLED: false });
+
+				expect(wrapper.find("[data-testid=rooms-menu]").exists()).toBe(false);
 			});
 		});
 	});

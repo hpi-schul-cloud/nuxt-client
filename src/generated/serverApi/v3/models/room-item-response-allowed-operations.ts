@@ -20,6 +20,7 @@ export interface RoomItemResponseAllowedOperations {
     'addAllStudents': boolean;
     'addExternalPersonByEmail': boolean;
     'addMembers': boolean;
+    'archiveRoom': boolean;
     'arrangeRooms': boolean;
     'changeRolesOfMembers': boolean;
     'copyRoom': boolean;
