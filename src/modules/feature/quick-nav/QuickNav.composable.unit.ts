@@ -161,13 +161,18 @@ describe("QuickNav Composable", () => {
 		const lastGroup = (groups: QuickNavGroup[]) => groups[groups.length - 1];
 
 		describe("when nothing has been typed", () => {
-			it("ends with a link to the help articles", () => {
+			it("leaves the help pages out of the overview", () => {
 				const { quickNav } = setup([Permission.SCHOOL_CREATE_ROOM]);
 
-				const help = lastGroup(quickNav.groups.value);
+				expect(quickNav.groups.value.map((group) => group.label)).not.toContain("Hilfebereich");
+			});
 
-				expect(help.label).toBe("Hilfebereich");
-				expect(titlesOf([help])).toEqual(["Hilfeartikel"]);
+			it("still finds the help articles when searched for", () => {
+				const { quickNav } = setup();
+
+				quickNav.query.value = "Hilfeartikel";
+
+				expect(titlesOf([lastGroup(quickNav.groups.value)])).toEqual(["Hilfeartikel"]);
 			});
 		});
 
@@ -235,10 +240,9 @@ describe("QuickNav Composable", () => {
 
 			quickNav.query.value = "Raum";
 
-			const actions = quickNav.flatEntries.value.filter((entry) => entry.kind === QuickNavKind.ACTION);
+			const action = quickNav.flatEntries.value.find((entry) => entry.id === "action:create-room");
 
-			expect(actions).toHaveLength(1);
-			expect(actions[0].to).toBe("/rooms/new");
+			expect(action?.to).toBe("/rooms/new");
 		});
 	});
 
@@ -359,28 +363,23 @@ describe("QuickNav Composable", () => {
 
 		const groupOf = (groups: QuickNavGroup[], label: string) => groups.find((group) => group.label === label);
 
-		it("lists matching rooms and courses together", () => {
+		it("lists matching rooms and courses in groups of their own, like the filters", () => {
 			const { quickNav } = setupWithSources();
 
 			quickNav.query.value = "Bio";
 
-			expect(titlesOf([groupOf(quickNav.groups.value, "Räume und Kurse")!])).toEqual(["Biologie AG", "Biologie 7a"]);
+			expect(titlesOf([groupOf(quickNav.groups.value, "Räume")!])).toEqual(["Biologie AG"]);
+			expect(titlesOf([groupOf(quickNav.groups.value, "Kurse")!])).toEqual(["Biologie 7a"]);
 		});
 
-		it("labels a room as a room", () => {
+		it("does not let many matching rooms hide the matching courses", () => {
 			const { quickNav } = setupWithSources();
+			const sourcesStore = useQuickNavSourcesStore();
+			sourcesStore.rooms = Array.from({ length: 8 }, (_, index) => entry(QuickNavKind.ROOM, `Biologie ${index}`));
 
-			quickNav.query.value = "Biologie AG";
+			quickNav.query.value = "Bio";
 
-			expect(groupOf(quickNav.groups.value, "Räume und Kurse")?.entries[0].subtitle).toBe("Raum");
-		});
-
-		it("labels a course as a course", () => {
-			const { quickNav } = setupWithSources();
-
-			quickNav.query.value = "Biologie 7a";
-
-			expect(groupOf(quickNav.groups.value, "Räume und Kurse")?.entries[0].subtitle).toBe("Kurs");
+			expect(titlesOf([groupOf(quickNav.groups.value, "Kurse")!])).toEqual(["Biologie 7a"]);
 		});
 
 		it("lists matching tasks in their own group", () => {
@@ -399,10 +398,14 @@ describe("QuickNav Composable", () => {
 			expect(titlesOf([groupOf(quickNav.groups.value, "Personen")!])).toEqual(["Anna Müller"]);
 		});
 
-		it("shows no loaded entries before anything is typed", () => {
+		it("shows no courses, people or undated tasks before anything is typed", () => {
 			const { quickNav } = setupWithSources();
 
-			expect(titlesOf(quickNav.groups.value)).not.toContain("Biologie AG");
+			const titles = titlesOf(quickNav.groups.value);
+
+			expect(titles).not.toContain("Biologie 7a");
+			expect(titles).not.toContain("Anna Müller");
+			expect(titles).not.toContain("Biologie Hausaufgabe");
 		});
 
 		it("shows at most five entries per group", () => {
@@ -412,7 +415,54 @@ describe("QuickNav Composable", () => {
 
 			quickNav.query.value = "Aufgabe";
 
-			expect(groupOf(quickNav.groups.value, "Aufgaben")?.entries).toHaveLength(5);
+			expect(
+				groupOf(quickNav.groups.value, "Aufgaben")?.entries.filter((e) => e.kind === QuickNavKind.TASK)
+			).toHaveLength(5);
+		});
+
+		describe("when a group is cut short", () => {
+			const setupWithManyTasks = () => {
+				const result = setup();
+				useQuickNavSourcesStore().tasks = Array.from({ length: 8 }, (_, index) =>
+					entry(QuickNavKind.TASK, `Aufgabe ${index}`)
+				);
+				result.quickNav.query.value = "Aufgabe";
+
+				return result;
+			};
+
+			it("ends it with a line that opens the whole category", () => {
+				const { quickNav } = setupWithManyTasks();
+
+				const last = groupOf(quickNav.groups.value, "Aufgaben")?.entries.at(-1);
+
+				expect(last).toEqual(
+					expect.objectContaining({
+						kind: QuickNavKind.SHOW_ALL,
+						showsAll: "tasks",
+						title: "Aufgaben: alle 8 anzeigen",
+					})
+				);
+			});
+
+			it("counts what is shown against everything that matches", () => {
+				const { quickNav } = setupWithManyTasks();
+
+				expect(quickNav.resultCount.value).toBe(5);
+				expect(quickNav.matchCount.value).toBe(8);
+			});
+		});
+
+		it("counts the matches of each category before any group is cut short", () => {
+			const { quickNav } = setup();
+			useQuickNavSourcesStore().tasks = Array.from({ length: 8 }, (_, index) =>
+				entry(QuickNavKind.TASK, `Aufgabe ${index}`)
+			);
+
+			quickNav.query.value = "Aufgabe";
+
+			expect(quickNav.countIn("tasks")).toBe(8);
+			expect(quickNav.countIn("rooms")).toBe(0);
 		});
 
 		it("shows at most five pages, too", () => {
@@ -435,11 +485,348 @@ describe("QuickNav Composable", () => {
 
 			quickNav.query.value = "Bio";
 
-			expect(titlesOf([groupOf(quickNav.groups.value, "Räume und Kurse")!])).toEqual([
+			expect(titlesOf([groupOf(quickNav.groups.value, "Räume")!])).toEqual([
 				"Biologie",
 				"AG Biologie",
 				"Mikrobiologie",
 			]);
+		});
+	});
+
+	describe("creating a room under the searched name", () => {
+		const room = (title: string): QuickNavEntry => ({ id: `room:${title}`, kind: QuickNavKind.ROOM, title, icon: "" });
+
+		it("is offered to someone who may create rooms", () => {
+			const { quickNav } = setup([Permission.SCHOOL_CREATE_ROOM]);
+
+			quickNav.query.value = "Theater AG";
+
+			expect(quickNav.flatEntries.value.find((entry) => entry.id === "action:create-room-named")).toEqual(
+				expect.objectContaining({ title: "Raum „Theater AG“ erstellen", to: "/rooms/new?name=Theater%20AG" })
+			);
+		});
+
+		it("is not offered when a room of that name exists, however it is spelled", () => {
+			const { quickNav } = setup([Permission.SCHOOL_CREATE_ROOM]);
+			useQuickNavSourcesStore().rooms = [room("Theater-Ä")];
+
+			quickNav.query.value = "theater-a";
+
+			expect(quickNav.flatEntries.value.some((entry) => entry.id === "action:create-room-named")).toBe(false);
+		});
+
+		it("is not offered to someone who may not create rooms", () => {
+			const { quickNav } = setup();
+
+			quickNav.query.value = "Theater AG";
+
+			expect(quickNav.groups.value).toEqual([]);
+		});
+
+		it("is not counted as a result", () => {
+			const { quickNav } = setup([Permission.SCHOOL_CREATE_ROOM]);
+
+			quickNav.query.value = "zzzzzz";
+
+			expect(quickNav.resultCount.value).toBe(0);
+		});
+	});
+
+	describe("recently opened", () => {
+		const course = (title: string): QuickNavEntry => ({
+			id: `course:${title}`,
+			kind: QuickNavKind.COURSE,
+			title,
+			icon: "",
+		});
+
+		beforeEach(() => {
+			localStorage.clear();
+		});
+
+		it("leads the overview with what was opened last", () => {
+			const { quickNav } = setup();
+			useQuickNavSourcesStore().courses = [course("Biologie"), course("Chemie")];
+
+			quickNav.remember(course("Biologie"));
+			quickNav.remember(course("Chemie"));
+
+			expect(quickNav.groups.value[0]).toEqual({
+				label: "Zuletzt geöffnet",
+				entries: [expect.objectContaining({ title: "Chemie" }), expect.objectContaining({ title: "Biologie" })],
+				isRecent: true,
+				isWide: true,
+			});
+		});
+
+		it("shows only the last two", () => {
+			const { quickNav } = setup();
+			const courses = ["Biologie", "Chemie", "Physik"].map(course);
+			useQuickNavSourcesStore().courses = courses;
+
+			courses.forEach((entry) => quickNav.remember(entry));
+
+			expect(quickNav.groups.value[0].entries.map((entry) => entry.title)).toEqual(["Physik", "Chemie"]);
+		});
+
+		it("forgets everything when cleared, also for the next time", () => {
+			const { quickNav } = setup();
+			useQuickNavSourcesStore().courses = [course("Chemie")];
+			quickNav.remember(course("Chemie"));
+
+			quickNav.clearRecent();
+
+			expect(quickNav.groups.value.map((group) => group.label)).not.toContain("Zuletzt geöffnet");
+			expect(Object.values(localStorage).every((value) => value === "[]")).toBe(true);
+		});
+
+		it("leaves out what no longer exists", () => {
+			const { quickNav } = setup();
+			useQuickNavSourcesStore().courses = [course("Chemie")];
+
+			quickNav.remember(course("Gelöscht"));
+
+			expect(titlesOf(quickNav.groups.value)).not.toContain("Gelöscht");
+		});
+
+		it("does not remember pages, which are one click away in the sidebar", () => {
+			const { quickNav } = setup();
+
+			quickNav.remember({ id: "navigation:x", kind: QuickNavKind.NAVIGATION, title: "Räume", icon: "" });
+
+			expect(quickNav.groups.value[0].label).not.toBe("Zuletzt geöffnet");
+		});
+	});
+
+	describe("ranking", () => {
+		const room = (title: string, memberCount?: number): QuickNavEntry => ({
+			id: `room:${title}`,
+			kind: QuickNavKind.ROOM,
+			title,
+			icon: "",
+			memberCount,
+		});
+
+		beforeEach(() => {
+			localStorage.clear();
+		});
+
+		it("orders equally good matches by name, with numbers in their natural order", () => {
+			const { quickNav } = setup();
+			useQuickNavSourcesStore().rooms = [room("Biologie 10a"), room("Biologie 5a"), room("Biologie 7a")];
+
+			quickNav.query.value = "Bio";
+
+			expect(titlesOf(quickNav.groups.value)).toEqual(["Biologie 5a", "Biologie 7a", "Biologie 10a"]);
+		});
+
+		it("puts what was opened recently ahead of equally good matches", () => {
+			const { quickNav } = setup();
+			useQuickNavSourcesStore().rooms = [room("Biologie 5a"), room("Biologie 7a")];
+			quickNav.remember(room("Biologie 7a"));
+
+			quickNav.query.value = "Bio";
+
+			expect(titlesOf(quickNav.groups.value)[0]).toBe("Biologie 7a");
+		});
+
+		it("puts the room whose whole name was typed ahead of a recent one that starts the same", () => {
+			const { quickNav } = setup();
+			useQuickNavSourcesStore().rooms = [room("Mathematik Leistungskurs"), room("Mathe")];
+			quickNav.remember(room("Mathematik Leistungskurs"));
+
+			quickNav.query.value = "mathe";
+
+			expect(titlesOf(quickNav.groups.value)[0]).toBe("Mathe");
+		});
+
+		it("keeps a better match ahead of a recent one", () => {
+			const { quickNav } = setup();
+			useQuickNavSourcesStore().rooms = [room("Biologie"), room("AG Biologie")];
+			quickNav.remember(room("AG Biologie"));
+
+			quickNav.query.value = "Bio";
+
+			expect(titlesOf(quickNav.groups.value)[0]).toBe("Biologie");
+		});
+
+		it("sorts a whole category by name when nothing is typed", () => {
+			const { quickNav } = setup();
+			useQuickNavSourcesStore().rooms = [room("Deutsch 7a"), room("Biologie 10a"), room("Biologie 5a")];
+
+			quickNav.scope.value = "rooms";
+
+			expect(titlesOf(quickNav.groups.value)).toEqual(["Biologie 5a", "Biologie 10a", "Deutsch 7a"]);
+		});
+
+		it("gives each room its number of members as a second line", () => {
+			const { quickNav } = setup();
+			useQuickNavSourcesStore().rooms = [room("Theater", 3)];
+
+			quickNav.query.value = "Theater";
+
+			expect(quickNav.flatEntries.value[0].subtitle).toBe("3 Mitglieder");
+		});
+
+		it("says in the recently opened group which lines are courses or tasks rather than rooms", () => {
+			const { quickNav } = setup();
+			const sourcesStore = useQuickNavSourcesStore();
+			sourcesStore.rooms = [room("Theater", 1)];
+			sourcesStore.courses = [{ id: "course:Mathe", kind: QuickNavKind.COURSE, title: "Mathe", icon: "" }];
+			quickNav.remember(sourcesStore.rooms[0]);
+			quickNav.remember(sourcesStore.courses[0]);
+
+			expect(quickNav.groups.value[0].entries.map((entry) => entry.subtitle)).toEqual(["Kurs", "1 Mitglied"]);
+		});
+	});
+
+	describe("due soon", () => {
+		const inDays = (days: number) => new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+		const task = (title: string, dueDate?: string): QuickNavEntry => ({
+			id: `task:${title}`,
+			kind: QuickNavKind.TASK,
+			title,
+			subtitle: "Biologie 7a",
+			icon: "",
+			dueDate,
+		});
+		const upcomingOf = (groups: QuickNavGroup[]) => groups.find((group) => group.label === "Bald fällig");
+
+		it("lists the next tasks with a deadline in the coming two weeks, soonest first, at most three", () => {
+			const { quickNav } = setup();
+			useQuickNavSourcesStore().tasks = [
+				task("Referat", inDays(5)),
+				task("Vokabeltest", inDays(1)),
+				task("Projekt", inDays(20)),
+				task("Überfällig", inDays(-1)),
+				task("Ohne Termin"),
+				task("Protokoll", inDays(2)),
+				task("Lesetagebuch", inDays(9)),
+			];
+
+			expect(titlesOf([upcomingOf(quickNav.groups.value)!])).toEqual(["Vokabeltest", "Protokoll", "Referat"]);
+		});
+
+		it("says which course a task belongs to and when it is due", () => {
+			const { quickNav } = setup();
+			useQuickNavSourcesStore().tasks = [task("Referat", inDays(1))];
+
+			expect(upcomingOf(quickNav.groups.value)?.entries[0].subtitle).toMatch(/^Biologie 7a · fällig \S+/);
+		});
+
+		it("is left out when nothing is due soon", () => {
+			const { quickNav } = setup();
+			useQuickNavSourcesStore().tasks = [task("Projekt", inDays(30))];
+
+			expect(upcomingOf(quickNav.groups.value)).toBeUndefined();
+		});
+
+		it("spans the full width with the recent lines, above the columns", () => {
+			const { quickNav } = setup();
+			useQuickNavSourcesStore().tasks = [task("Referat", inDays(1))];
+			quickNav.columnCount.value = 2;
+
+			const [lead] = quickNav.blocks.value;
+
+			expect(lead).toEqual(expect.objectContaining({ isFullWidth: true }));
+			expect(lead.groups.map((group) => group.label)).toEqual(["Bald fällig"]);
+		});
+	});
+
+	describe("a group with one entry more than it shows", () => {
+		it("shows that entry instead of a line that opens the category", () => {
+			const { quickNav } = setup();
+			useQuickNavSourcesStore().tasks = Array.from({ length: 6 }, (_, index) => ({
+				id: `task:${index}`,
+				kind: QuickNavKind.TASK,
+				title: `Aufgabe ${index}`,
+				icon: "",
+			}));
+
+			quickNav.query.value = "Aufgabe";
+
+			const kinds = quickNav.flatEntries.value.map((entry) => entry.kind);
+			expect(kinds.filter((kind) => kind === QuickNavKind.TASK)).toHaveLength(6);
+			expect(kinds).not.toContain(QuickNavKind.SHOW_ALL);
+		});
+	});
+
+	describe("overview in two columns", () => {
+		const setupInColumns = () => {
+			const result = setup([Permission.SCHOOL_CREATE_ROOM]);
+			result.quickNav.columnCount.value = 2;
+			return result;
+		};
+
+		it("walks down the first column before the second", () => {
+			const { quickNav } = setupInColumns();
+
+			const order = quickNav.columns.value.flat().flatMap((group) => group.entries.map((entry) => entry.id));
+
+			expect(quickNav.flatEntries.value.map((entry) => entry.id)).toEqual(order);
+		});
+
+		it("moves to the line at the same height in the other column", () => {
+			const { quickNav } = setupInColumns();
+			const [left, right] = quickNav.columns.value.map((column) => column.flatMap((group) => group.entries));
+
+			expect(quickNav.moveColumn(1)).toBe(true);
+			expect(quickNav.selectedEntry.value?.id).toBe(right[0].id);
+
+			quickNav.moveColumn(-1);
+			expect(quickNav.selectedEntry.value?.id).toBe(left[0].id);
+		});
+
+		it("does nothing beyond the last column", () => {
+			const { quickNav } = setupInColumns();
+			quickNav.moveColumn(1);
+			const before = quickNav.selectedEntry.value?.id;
+
+			expect(quickNav.moveColumn(1)).toBe(false);
+			expect(quickNav.selectedEntry.value?.id).toBe(before);
+		});
+
+		describe("with something opened recently", () => {
+			const setupWithRecent = () => {
+				const result = setupInColumns();
+				const course: QuickNavEntry = { id: "course:Mathe", kind: QuickNavKind.COURSE, title: "Mathe", icon: "" };
+				useQuickNavSourcesStore().courses = [course];
+				result.quickNav.remember(course);
+				return result;
+			};
+
+			it("puts it across the full width on top, with the rest in columns below", () => {
+				const { quickNav } = setupWithRecent();
+
+				const [lead, ...rest] = quickNav.blocks.value;
+
+				expect(lead.isFullWidth).toBe(true);
+				expect(lead.groups.map((group) => group.label)).toEqual(["Zuletzt geöffnet"]);
+				expect(rest).toHaveLength(2);
+				expect(rest.every((block) => !block.isFullWidth)).toBe(true);
+			});
+
+			it("starts the arrow keys on it", () => {
+				const { quickNav } = setupWithRecent();
+
+				expect(quickNav.selectedEntry.value?.title).toBe("Mathe");
+			});
+
+			it("has no column to move sideways to from there", () => {
+				const { quickNav } = setupWithRecent();
+
+				expect(quickNav.moveColumn(1)).toBe(false);
+				expect(quickNav.selectedEntry.value?.title).toBe("Mathe");
+			});
+		});
+
+		it("is one column again while searching", () => {
+			const { quickNav } = setupInColumns();
+
+			quickNav.query.value = "Raum";
+
+			expect(quickNav.blocks.value).toEqual([expect.objectContaining({ isFullWidth: true })]);
+			expect(quickNav.moveColumn(1)).toBe(false);
 		});
 	});
 

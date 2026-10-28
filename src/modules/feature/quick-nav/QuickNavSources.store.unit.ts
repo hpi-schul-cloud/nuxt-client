@@ -11,14 +11,17 @@ import {
 import * as serverApi from "@api-server";
 import {
 	CourseMetadataListResponse,
+	CourseMetadataResponse,
 	CoursesApiInterface,
 	RoomApiInterface,
+	RoomColor,
 	RoomItemResponse,
 	RoomListResponse,
 	RoomMemberListResponse,
 	RoomMemberResponse,
 	TaskApiInterface,
 	TaskListResponse,
+	TaskResponse,
 } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
@@ -79,6 +82,136 @@ describe("QuickNavSources Store", () => {
 			await store.load();
 
 			expect(store.rooms).toEqual([expect.objectContaining({ title: "Theater-AG", to: `/rooms/${room.id}` })]);
+		});
+
+		it("shows a room with the letters and colour of its tile in the room overview", async () => {
+			const room = roomItemResponseFactory.build({ name: "Theater-AG", color: RoomColor.BLUE });
+			const store = setup({ rooms: [room] });
+
+			await store.load();
+
+			expect(store.rooms[0].avatar).toEqual({ initials: "Th", colorClass: "room-color--blue", isLight: false });
+		});
+
+		it.each([
+			[RoomColor.YELLOW, true],
+			[RoomColor.GREEN, false],
+			[RoomColor.PINK, false],
+		])(
+			"writes the letters of a %s room in dark letters: %s, like the room overview except on yellow",
+			async (color, isLight) => {
+				const store = setup({ rooms: [roomItemResponseFactory.build({ color })] });
+
+				await store.load();
+
+				expect(store.rooms[0].avatar?.isLight).toBe(isLight);
+			}
+		);
+
+		it.each([
+			["#FFEE58", true],
+			["#546E7A", false],
+			["#fe5", true],
+		])("shows a course in its colour %s, with dark letters: %s", async (displayColor, isLight) => {
+			const store = setup();
+			const course = courseMetadataResponseFactory.build({ shortTitle: "Bi", displayColor });
+			courseApiMock.courseControllerFindForUser.mockResolvedValue(
+				mockApiResponse<CourseMetadataListResponse>({ data: { data: [course], total: 1, skip: 0, limit: 99 } })
+			);
+
+			await store.load();
+
+			expect(store.courses[0].avatar).toEqual({ initials: "Bi", color: displayColor, isLight });
+		});
+
+		describe("when a tile could not be read", () => {
+			const loadCourse = async (overrides: Partial<CourseMetadataResponse>) => {
+				const store = setup();
+				const course = courseMetadataResponseFactory.build({ displayColor: "#546E7A", ...overrides });
+				courseApiMock.courseControllerFindForUser.mockResolvedValue(
+					mockApiResponse<CourseMetadataListResponse>({ data: { data: [course], total: 1, skip: 0, limit: 99 } })
+				);
+				await store.load();
+
+				return store.courses[0];
+			};
+
+			it.each(["", "red", "rgb(0, 0, 0)", "#12345"])(
+				"falls back to the icon for a course colour like %j",
+				async (displayColor) => {
+					expect((await loadCourse({ displayColor })).avatar).toBeUndefined();
+				}
+			);
+
+			it("takes the letters from the title when the course has no short title", async () => {
+				expect((await loadCourse({ shortTitle: "", title: "Chemie" })).avatar?.initials).toBe("Ch");
+			});
+
+			it("keeps at most two letters of a long short title", async () => {
+				expect((await loadCourse({ shortTitle: "Bio-LK" })).avatar?.initials).toBe("Bi");
+			});
+
+			it("falls back to the icon for a room colour this client does not know", async () => {
+				const store = setup({
+					rooms: [roomItemResponseFactory.build({ color: "ultraviolet" as RoomColor })],
+				});
+
+				await store.load();
+
+				expect(store.rooms[0].avatar).toBeUndefined();
+			});
+
+			it("falls back to the icon for a room without a name", async () => {
+				const store = setup({ rooms: [roomItemResponseFactory.build({ name: "   " })] });
+
+				await store.load();
+
+				expect(store.rooms[0].avatar).toBeUndefined();
+			});
+		});
+
+		it.each([
+			["👩‍🔬 Labor", "👩‍🔬"],
+			["🇩🇪 Deutsch", "🇩🇪"],
+			["  Theater", "Th"],
+		])("keeps the letters of %j whole", async (name, initials) => {
+			const store = setup({ rooms: [roomItemResponseFactory.build({ name })] });
+
+			await store.load();
+
+			expect(store.rooms[0].avatar?.initials).toBe(initials);
+		});
+
+		describe("overdue tasks", () => {
+			const loadTask = async (overrides: Partial<TaskResponse>) => {
+				const store = setup();
+				taskApiMock.taskControllerFindAll.mockResolvedValue(
+					mockApiResponse<TaskListResponse>({
+						data: { data: [taskResponseFactory.build(overrides)], total: 1, skip: 0, limit: 99 },
+					})
+				);
+				await store.load();
+				return store.tasks[0];
+			};
+			const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+			const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+
+			it("marks a task whose due date has passed", async () => {
+				expect((await loadTask({ dueDate: yesterday })).isOverdue).toBe(true);
+			});
+
+			it("does not mark a task that is due later", async () => {
+				expect((await loadTask({ dueDate: tomorrow })).isOverdue).toBe(false);
+			});
+
+			it("does not mark a task without a due date", async () => {
+				expect((await loadTask({ dueDate: undefined })).isOverdue).toBe(false);
+			});
+
+			it("does not mark a finished task", async () => {
+				const status = { ...taskResponseFactory.build().status, isFinished: true };
+				expect((await loadTask({ dueDate: yesterday, status })).isOverdue).toBe(false);
+			});
 		});
 
 		it("leaves out courses that have already ended", async () => {
@@ -178,10 +311,10 @@ describe("QuickNavSources Store", () => {
 				return store;
 			};
 
-			it("reports the failure", async () => {
+			it("reports which category is missing", async () => {
 				const store = await setupWithFailingTasks();
 
-				expect(store.hasFailed).toBe(true);
+				expect(store.failedScopes).toEqual(["tasks"]);
 			});
 
 			it("keeps the results of the other sources", async () => {
@@ -195,6 +328,15 @@ describe("QuickNavSources Store", () => {
 
 				expect(store.isLoading).toBe(false);
 			});
+		});
+
+		it("reports rooms and people as missing when the rooms cannot be loaded", async () => {
+			const store = setup();
+			roomApiMock.roomControllerGetRooms.mockRejectedValueOnce(new Error("offline"));
+
+			await store.load();
+
+			expect(store.failedScopes).toEqual(["rooms", "people"]);
 		});
 
 		it("drops the people of a room whose member list can no longer be loaded", async () => {
@@ -211,7 +353,7 @@ describe("QuickNavSources Store", () => {
 			vi.useRealTimers();
 
 			expect(store.people).toEqual([]);
-			expect(store.hasFailed).toBe(false);
+			expect(store.failedScopes).toEqual([]);
 		});
 
 		it("shares one request between calls that overlap", async () => {
