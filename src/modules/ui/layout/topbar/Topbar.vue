@@ -21,6 +21,9 @@
 		>
 			<CloudStatusMessages :status-alerts="statusAlerts" />
 		</TopbarItem>
+		<div class="d-flex align-center mr-2" data-testid="topbar-search">
+			<slot name="search" />
+		</div>
 		<TopbarItem
 			v-if="isTabletOrBigger"
 			class="mr-2"
@@ -66,6 +69,8 @@ watch(y, (newVal, oldVal) => {
 	isScrollingDown.value = newVal > oldVal;
 });
 
+defineEmits(["sidebar-toggled"]);
+
 defineProps({
 	sidebarExpanded: {
 		type: Boolean,
@@ -73,10 +78,7 @@ defineProps({
 	},
 });
 
-defineEmits(["sidebar-toggled"]);
-
 const { lgAndUp: isDesktop, mdAndUp: isTabletOrBigger } = useDisplay();
-
 onMounted(() => {
 	fetchStatusAlerts();
 });
