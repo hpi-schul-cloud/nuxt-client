@@ -1,27 +1,27 @@
 <template>
 	<VBtn
-		v-if="isTabletOrBigger"
-		variant="outlined"
-		rounded="pill"
-		class="quick-nav-trigger text-none text-medium-emphasis px-3"
-		:aria-label="placeholder"
+		variant="text"
+		rounded="lg"
+		min-width="44"
+		class="quick-nav-trigger text-none text-body-2"
+		height="44"
+		:aria-label="label"
+		:aria-expanded="isOpen"
+		aria-haspopup="dialog"
 		aria-keyshortcuts="Control+K Meta+K"
 		data-testid="quick-nav-trigger"
 		@click="open"
 	>
-		<VIcon :icon="mdiMagnify" start aria-hidden="true" />
-		<span class="quick-nav-trigger-label">{{ placeholder }}</span>
-		<kbd class="quick-nav-shortcut ml-3">{{ shortcutLabel }}</kbd>
+		<VIcon :icon="mdiMagnify" size="22" aria-hidden="true" />
+		<span class="quick-nav-label" aria-hidden="true">
+			<span class="quick-nav-label-clip">
+				<span class="quick-nav-label-text">
+					<span>{{ label }}</span>
+					<kbd class="quick-nav-shortcut" data-testid="quick-nav-shortcut">{{ shortcutLabel }}</kbd>
+				</span>
+			</span>
+		</span>
 	</VBtn>
-	<VBtn
-		v-else
-		:icon="mdiMagnify"
-		variant="text"
-		:aria-label="placeholder"
-		aria-keyshortcuts="Control+K Meta+K"
-		data-testid="quick-nav-trigger"
-		@click="open"
-	/>
 </template>
 
 <script setup lang="ts">
@@ -30,16 +30,13 @@ import { mdiMagnify } from "@icons/material";
 import { onKeyStroke } from "@vueuse/core";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useDisplay } from "vuetify";
 
 const { t } = useI18n();
-const { mdAndUp: isTabletOrBigger } = useDisplay();
-const { open, toggle, placeholder } = useQuickNav();
+const { open, toggle, isOpen } = useQuickNav();
 
 const isApple = computed(() => /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent));
-
-/** what the key actually is on this machine, so the hint is not a lie on either platform */
 const shortcutLabel = computed(() => (isApple.value ? "⌘K" : t("feature.quickNav.shortcut.ctrlK")));
+const label = computed(() => t("feature.quickNav.searchEverywhere"));
 
 onKeyStroke(
 	"k",
@@ -59,20 +56,65 @@ onKeyStroke(
 
 <style scoped>
 .quick-nav-trigger {
-	max-width: 320px;
+	padding-inline: 11px;
+	font-weight: normal;
+	letter-spacing: normal;
 }
 
-.quick-nav-trigger-label {
+.quick-nav-label {
+	display: grid;
+	grid-template-columns: 0fr;
+	opacity: 0;
+	transition:
+		grid-template-columns 260ms cubic-bezier(0.22, 1, 0.36, 1),
+		opacity 100ms ease-out;
+}
+
+.quick-nav-label-clip {
+	min-width: 0;
 	overflow: hidden;
-	text-overflow: ellipsis;
+}
+
+.quick-nav-label-text {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding-inline-start: 8px;
 	white-space: nowrap;
 }
 
 .quick-nav-shortcut {
-	border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+	padding: 2px 5px;
+	border: 1px solid rgba(var(--v-theme-on-surface), 0.16);
 	border-radius: 4px;
-	padding: 0 4px;
-	font-size: 0.7rem;
-	line-height: 1.4;
+	font: inherit;
+	font-size: var(--text-xs);
+	line-height: 1.25;
+}
+
+@media (min-width: 960px) {
+	.quick-nav-trigger:focus-visible .quick-nav-label {
+		grid-template-columns: 1fr;
+		opacity: 1;
+		transition-duration: 420ms, 240ms;
+		transition-delay: 0ms, 80ms;
+	}
+}
+
+@media (min-width: 960px) and (hover: hover) {
+	.quick-nav-trigger:hover .quick-nav-label {
+		grid-template-columns: 1fr;
+		opacity: 1;
+		transition-duration: 420ms, 240ms;
+		transition-delay: 0ms, 80ms;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.quick-nav-trigger .quick-nav-label,
+	.quick-nav-trigger:hover .quick-nav-label,
+	.quick-nav-trigger:focus-visible .quick-nav-label {
+		transition: none;
+	}
 }
 </style>

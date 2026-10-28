@@ -37,16 +37,19 @@ describe("QuickNavTrigger", () => {
 		vi.restoreAllMocks();
 	});
 
-	it("shows ⌘K on Apple devices", () => {
+	it("names the icon button for assistive technology", () => {
 		const wrapper = setup("MacIntel");
 
-		expect(wrapper.find("kbd").text()).toBe("⌘K");
+		expect(wrapper.get("[data-testid=quick-nav-trigger]").attributes("aria-label")).toBe("Search everywhere");
 	});
 
-	it("shows the translated Ctrl+K on other devices", () => {
-		const wrapper = setup("Win32");
+	it.each([
+		["MacIntel", "⌘K"],
+		["Win32", "Ctrl+K"],
+	])("shows the shortcut inline for %s", (platform, shortcut) => {
+		const wrapper = setup(platform);
 
-		expect(wrapper.find("kbd").text()).toBe("Ctrl+K");
+		expect(wrapper.get("[data-testid=quick-nav-shortcut]").text()).toBe(shortcut);
 	});
 
 	it("tells assistive technology about the shortcut", () => {

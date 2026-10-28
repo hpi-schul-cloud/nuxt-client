@@ -19,7 +19,7 @@ vi.mocked(useStatusAlerts).mockReturnValue({
 });
 
 describe("@ui-layout/Topbar", () => {
-	const setup = (windowWidth = 1300, isSidebarExpanded?: boolean) => {
+	const setup = (windowWidth = 1300, isSidebarExpanded?: boolean, withSearch = true) => {
 		setActivePinia(createTestingPinia());
 		createTestAppStore({
 			me: {
@@ -60,9 +60,11 @@ describe("@ui-layout/Topbar", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			slots: {
-				default: h(Topbar, {
-					sidebarExpanded: isSidebarExpanded ?? true,
-				}),
+				default: h(
+					Topbar,
+					{ sidebarExpanded: isSidebarExpanded ?? true },
+					withSearch ? { search: () => h("button", { "data-testid": "search-trigger" }) } : {}
+				),
 			},
 		});
 
@@ -164,23 +166,33 @@ describe("@ui-layout/Topbar", () => {
 	});
 
 	describe("search slot", () => {
-		const isFollowedBySpacer = (topbar: ReturnType<typeof setup>["topbar"]) =>
-			topbar.get("[data-testid=topbar-search]").element.nextElementSibling?.classList.contains("v-spacer");
+		const search = (topbar: ReturnType<typeof setup>["topbar"]) => topbar.get("[data-testid=topbar-search]");
 
-		describe("on small screens", () => {
-			it("sits with the actions next to the user menu", () => {
-				const { topbar } = setup(500);
+		it.each([1000, 1300])("keeps the search slot with toolbar actions at a width of %ipx", (width) => {
+			const { topbar } = setup(width);
 
-				expect(isFollowedBySpacer(topbar)).toBe(false);
-			});
+			expect(search(topbar).classes()).toContain("align-center");
 		});
 
-		describe("on medium sized screens", () => {
-			it("keeps space on both sides", () => {
-				const { topbar } = setup(1000);
+		it("does not draw a brand line for search", () => {
+			const { topbar } = setup(1300);
 
-				expect(isFollowedBySpacer(topbar)).toBe(true);
-			});
+			expect(topbar.classes()).not.toContain("top-bar-brand-edge");
+		});
+
+		it("draws neither notch nor line when there is no search to show", () => {
+			const { topbar } = setup(1300, true, false);
+
+			expect(topbar.classes()).not.toContain("top-bar-brand-edge");
+			expect(search(topbar).classes()).not.toContain("top-bar-search-notch");
+		});
+
+		it("sits with the actions next to the user menu on phones", () => {
+			const { topbar } = setup(500);
+
+			expect(search(topbar).classes()).not.toContain("top-bar-search-notch");
+			expect(topbar.find("[data-testid=search-trigger]").exists()).toBe(true);
+			expect(search(topbar).element.nextElementSibling?.classList.contains("v-spacer")).toBe(false);
 		});
 	});
 });
