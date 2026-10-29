@@ -1,6 +1,6 @@
 <template>
 	<VCard
-		v-show="allowedOperations.deleteElement"
+		v-show="canSeeDeletedElements(allowedOperations)"
 		ref="deletedElement"
 		class="content-element-card mb-4"
 		data-testid="board-deleted-element"
@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import DeletedElementMenu from "./DeletedElementMenu.vue";
 import { ContentElementType, DeletedElementResponse } from "@api-server";
-import { useBoardAllowedOperations, useBoardFocusHandler } from "@data-board";
+import { canSeeDeletedElements, useBoardAllowedOperations, useBoardFocusHandler } from "@data-board";
 import { mdiPuzzleOutline } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
 import { ContentElementBar } from "@ui-board";

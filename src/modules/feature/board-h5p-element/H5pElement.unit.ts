@@ -6,7 +6,7 @@ import { h5pElementResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { H5PContentParentType } from "@api-h5p";
 import { H5pElementResponse } from "@api-server";
-import { useBoardAllowedOperations, useBoardFocusHandler } from "@data-board";
+import { canManageH5pElements, useBoardAllowedOperations, useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
 import { ContentElementBar, EmptyElement } from "@ui-board";
 import { LineClamp } from "@ui-line-clamp";
@@ -25,6 +25,11 @@ describe("H5pElement", () => {
 	let useBoardFocusHandlerMock: Mocked<ReturnType<typeof useBoardFocusHandler>>;
 	let useH5PEditorMock: Mocked<ReturnType<typeof useH5PEditorApi>>;
 	let router: RouterMock;
+
+	beforeEach(async () => {
+		const actual = await vi.importActual<typeof import("@data-board")>("@data-board");
+		vi.mocked(canManageH5pElements).mockImplementation(actual.canManageH5pElements);
+	});
 
 	beforeEach(() => {
 		router = createRouterMock({
