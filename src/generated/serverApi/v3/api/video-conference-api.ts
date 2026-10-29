@@ -35,47 +35,6 @@ import type { VideoConferenceScope } from '../models';
 export const VideoConferenceApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Use this endpoint to end a running video conference.
-         * @summary Ends a running video conference.
-         * @param {VideoConferenceScope} scope 
-         * @param {string} scopeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        videoConferenceControllerEnd: async (scope: VideoConferenceScope, scopeId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'scope' is not null or undefined
-            assertParamExists('videoConferenceControllerEnd', 'scope', scope)
-            // verify required parameter 'scopeId' is not null or undefined
-            assertParamExists('videoConferenceControllerEnd', 'scopeId', scopeId)
-            const localVarPath = `/videoconference2/{scope}/{scopeId}/end`
-                .replace('{scope}', encodeURIComponent(String(scope)))
-                .replace('{scopeId}', encodeURIComponent(String(scopeId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * Use this endpoint to get information about a running video conference.
          * @summary Returns information about a running video conference.
          * @param {VideoConferenceScope} scope 
@@ -346,20 +305,6 @@ export const VideoConferenceApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = VideoConferenceApiAxiosParamCreator(configuration)
     return {
         /**
-         * Use this endpoint to end a running video conference.
-         * @summary Ends a running video conference.
-         * @param {VideoConferenceScope} scope 
-         * @param {string} scopeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.videoConferenceControllerEnd(scope, scopeId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['VideoConferenceApi.videoConferenceControllerEnd']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
          * Use this endpoint to get information about a running video conference.
          * @summary Returns information about a running video conference.
          * @param {VideoConferenceScope} scope 
@@ -455,17 +400,6 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
     const localVarFp = VideoConferenceApiFp(configuration)
     return {
         /**
-         * Use this endpoint to end a running video conference.
-         * @summary Ends a running video conference.
-         * @param {VideoConferenceScope} scope 
-         * @param {string} scopeId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.videoConferenceControllerEnd(scope, scopeId, options).then((request) => request(axios, basePath));
-        },
-        /**
          * Use this endpoint to get information about a running video conference.
          * @summary Returns information about a running video conference.
          * @param {VideoConferenceScope} scope 
@@ -541,16 +475,6 @@ export const VideoConferenceApiFactory = function (configuration?: Configuration
  */
 export interface VideoConferenceApiInterface {
     /**
-     * Use this endpoint to end a running video conference.
-     * @summary Ends a running video conference.
-     * @param {VideoConferenceScope} scope 
-     * @param {string} scopeId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
-
-    /**
      * Use this endpoint to get information about a running video conference.
      * @summary Returns information about a running video conference.
      * @param {VideoConferenceScope} scope 
@@ -618,18 +542,6 @@ export interface VideoConferenceApiInterface {
  * VideoConferenceApi - object-oriented interface
  */
 export class VideoConferenceApi extends BaseAPI implements VideoConferenceApiInterface {
-    /**
-     * Use this endpoint to end a running video conference.
-     * @summary Ends a running video conference.
-     * @param {VideoConferenceScope} scope 
-     * @param {string} scopeId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public videoConferenceControllerEnd(scope: VideoConferenceScope, scopeId: string, options?: RawAxiosRequestConfig) {
-        return VideoConferenceApiFp(this.configuration).videoConferenceControllerEnd(scope, scopeId, options).then((request) => request(this.axios, this.basePath));
-    }
-
     /**
      * Use this endpoint to get information about a running video conference.
      * @summary Returns information about a running video conference.
