@@ -3,7 +3,7 @@ import { checkFolderFeature, checkRegisterExternalPersonsFeature, validateQueryP
 import { boardCardLinkRedirect } from "@/router/guards/board-card-link-redirect";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
-import { isEnum, isMongoId, isOfficialSchoolNumber, REGEX_ID } from "@/utils/validation";
+import { isEnum, isMongoId, isOfficialSchoolNumber, REGEX_ID, REGEX_INVITATION_TOKEN } from "@/utils/validation";
 import { H5PContentParentType } from "@api-h5p";
 import { Permission, ToolContextType } from "@api-server";
 import { useAppStore } from "@data-app";
@@ -382,7 +382,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "rooms-board",
 	},
 	{
-		path: `/rooms/invitation-link/:id(${REGEX_ID})`,
+		path: `/rooms/invitation-link/:id(${REGEX_ID}|${REGEX_INVITATION_TOKEN})`,
 		component: async () => (await import("@page-room")).RoomInvitationLinkStatusPage,
 		name: "rooms-invitation-link-id",
 		props: (route: RouteLocationNormalized) => ({

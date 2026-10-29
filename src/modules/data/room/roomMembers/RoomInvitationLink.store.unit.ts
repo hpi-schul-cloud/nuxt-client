@@ -264,21 +264,23 @@ describe("useRoomInvitationLinkStore", () => {
 		});
 
 		describe("when the API call succeeds", () => {
-			it("should return the roomId", async () => {
-				const links = roomInvitationLinkFactory.buildList(3);
-				const { roomInvitationLinkStore } = setup(links);
-				const roomId = "some-id";
-				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink.mockResolvedValue(
-					mockApiResponse<RoomIdResponse>({
-						data: { id: roomId },
-					})
-				);
-				const firstLink = links[0];
+			it.each(["507f1f77bcf86cd799439011", `Ab0_-${"x".repeat(38)}`])(
+				"should return the roomId for %s",
+				async (credential) => {
+					const links = roomInvitationLinkFactory.buildList(3);
+					const { roomInvitationLinkStore } = setup(links);
+					const roomId = "some-id";
+					roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink.mockResolvedValue(
+						mockApiResponse<RoomIdResponse>({
+							data: { id: roomId },
+						})
+					);
+					const result = await roomInvitationLinkStore.useLink(credential);
 
-				const result = await roomInvitationLinkStore.useLink(firstLink.id);
-
-				expect(result.roomId).toBe(roomId);
-			});
+					expect(result.roomId).toBe(roomId);
+					expect(roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink).toHaveBeenCalledWith(credential);
+				}
+			);
 		});
 
 		describe("when the API call fails", () => {
