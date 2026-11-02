@@ -1761,6 +1761,10 @@ export default {
 	"pages.roomDetails.board.defaultName": "Космічна дошка",
 	"pages.roomDetails.emptyState": "Наразі в цьому просторі немає навчальних матеріалів",
 	"pages.rooms.emptyState": "Наразі немає вільних кімнат",
+	"pages.rooms.search.label": "Шукати кімнату",
+	"pages.rooms.search.results": "Знайдено кімнат: {count}",
+	"pages.rooms.search.noResults": "Кімнат не знайдено.",
+	"pages.rooms.search.clear": "Очистити пошук",
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.infoAlert.welcome": "Ласкаво просимо до нових Кімнат!",
 	"pages.rooms.infoAlert.welcome.collaboration":

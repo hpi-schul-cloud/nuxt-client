@@ -15,6 +15,7 @@ import Confirmations from "./roomMembers/tabs/Confirmations.vue";
 import Invitations from "./roomMembers/tabs/Invitations.vue";
 import Members from "./roomMembers/tabs/Members.vue";
 import RoomMenu from "./RoomMenu.vue";
+import { filterRoomsByName } from "./roomSearch";
 import RoomsWelcomeInfo from "./RoomsWelcomeInfo.vue";
 
 export {
@@ -23,6 +24,7 @@ export {
 	ChangeRole,
 	Confirmations,
 	ConfirmationTable,
+	filterRoomsByName,
 	Invitations,
 	InvitationTable,
 	InviteMembersDialog,

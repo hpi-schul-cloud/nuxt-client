@@ -12,24 +12,46 @@
 				<RoomsEmptyStateSvg />
 			</template>
 		</EmptyState>
-		<RoomGrid v-else :rooms />
+		<template v-else>
+			<div v-if="isRoomSearchEnabled" class="room-search mt-8">
+				<SvsSearchField
+					ref="search-field"
+					v-model="searchQuery"
+					density="default"
+					class="px-1"
+					:label="t('pages.rooms.search.label')"
+					data-testid="room-search"
+					@keydown.esc="clearSearch"
+				/>
+			</div>
+			<div v-if="isSearching && filteredRooms.length === 0" class="mt-8" data-testid="room-search-empty">
+				<p class="mb-4">{{ t("pages.rooms.search.noResults") }}</p>
+				<VBtn variant="outlined" data-testid="room-search-clear" @click="clearSearch">
+					{{ t("pages.rooms.search.clear") }}
+				</VBtn>
+			</div>
+			<RoomGrid v-else :rooms="filteredRooms" :is-sortable="!isSearching" />
+		</template>
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
+import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { useRoomStore } from "@data-room";
 import { useImportFlow } from "@feature-import";
-import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
+import { filterRoomsByName, RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
+import { SvsSearchField } from "@ui-controls";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
-import { useTitle } from "@vueuse/core";
+import { useDebounceFn, useTitle } from "@vueuse/core";
 import { sortBy } from "lodash-es";
 import { storeToRefs } from "pinia";
-import { computed, onMounted, toValue, watch } from "vue";
+import { type ComponentPublicInstance, computed, onMounted, ref, toValue, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
@@ -39,6 +61,32 @@ const router = useRouter();
 const { rooms, isLoading, isEmpty } = storeToRefs(useRoomStore());
 
 const { fetchRooms } = useRoomStore();
+
+const isRoomSearchEnabled = computed(() => useEnvConfig().value.FEATURE_ROOM_SEARCH_ENABLED);
+const searchQuery = ref("");
+const trimmedQuery = computed(() => (searchQuery.value ?? "").trim());
+const isSearching = computed(() => isRoomSearchEnabled.value && trimmedQuery.value.length > 0);
+const filteredRooms = computed(() =>
+	isSearching.value ? filterRoomsByName(rooms.value, trimmedQuery.value) : rooms.value
+);
+
+const searchField = useTemplateRef<ComponentPublicInstance>("search-field");
+
+const clearSearch = () => {
+	searchQuery.value = "";
+	searchField.value?.$el.querySelector("input")?.focus();
+};
+
+const { notifyOnScreenReader } = useAriaLiveNotifier();
+
+const announceResults = useDebounceFn(() => {
+	if (!isSearching.value) return;
+
+	const count = filteredRooms.value.length;
+	notifyOnScreenReader(count === 0 ? t("pages.rooms.search.noResults") : t("pages.rooms.search.results", { count }));
+}, 500);
+
+watch(trimmedQuery, () => announceResults());
 
 const pageTitle = computed(() => buildPageTitle(t("pages.rooms.title")));
 useTitle(pageTitle);
@@ -105,3 +153,11 @@ onMounted(() => {
 	fetchRooms();
 });
 </script>
+
+<style scoped>
+.room-search {
+	max-width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+}
+</style>

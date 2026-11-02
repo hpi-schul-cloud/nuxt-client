@@ -2,6 +2,7 @@ import RoomsPage from "./Rooms.page.vue";
 import { RoomItem } from "@/types/room/Room";
 import {
 	createTestAppStoreWithPermissions,
+	createTestEnvStore,
 	createTestRoomStore,
 	mockApi,
 	mockComposable,
@@ -22,7 +23,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
-import { flushPromises } from "@vue/test-utils";
+import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { nextTick, toValue } from "vue";
@@ -31,7 +32,14 @@ import { VSkeletonLoader } from "vuetify/components";
 
 vi.mock("@feature-import/import-flow.composable");
 
+const mockNotifyOnScreenReader = vi.hoisted(() => vi.fn());
+vi.mock("@/composables/ariaLiveNotifier", () => ({
+	useAriaLiveNotifier: () => ({ notifyOnScreenReader: mockNotifyOnScreenReader }),
+}));
+
 describe("RoomsPage", () => {
+	enableAutoUnmount(afterEach);
+
 	let router: RouterMock;
 	let useImportFlowMock: Mocked<ReturnType<typeof useImportFlow>>;
 
@@ -55,9 +63,11 @@ describe("RoomsPage", () => {
 
 	const setup = (
 		roomItems: RoomItem[] = [roomItemFactory.build({ isLocked: false }), roomItemFactory.build({ isLocked: true })],
-		isLoading = false
+		isLoading = false,
+		isRoomSearchEnabled = false
 	) => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
+		createTestEnvStore({ FEATURE_ROOM_SEARCH_ENABLED: isRoomSearchEnabled });
 		const { roomStore } = createTestRoomStore(roomItems);
 		roomStore.isLoading = isLoading;
 		roomStore.fetchRooms.mockResolvedValue();
@@ -65,6 +75,7 @@ describe("RoomsPage", () => {
 		createTestAppStoreWithPermissions([Permission.SCHOOL_CREATE_ROOM]);
 
 		const wrapper = mount(RoomsPage, {
+			attachTo: document.body,
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 				stubs: { RouterLink: true },
@@ -264,6 +275,145 @@ describe("RoomsPage", () => {
 				const roomGrid = wrapper.findComponent(RoomGrid);
 
 				expect(roomGrid.exists()).toBe(true);
+			});
+		});
+	});
+
+	describe("Room search", () => {
+		const searchRooms = [
+			roomItemFactory.build({ name: "Biologie 6a" }),
+			roomItemFactory.build({ name: "Ökologie AG" }),
+			roomItemFactory.build({ name: "Mathematik 7b" }),
+		];
+
+		const setupSearch = (isRoomSearchEnabled = true) => setup(searchRooms, false, isRoomSearchEnabled);
+
+		const findSearchInput = (wrapper: ReturnType<typeof setup>["wrapper"]) =>
+			wrapper.find('[data-testid="room-search"] input');
+
+		beforeEach(() => {
+			mockNotifyOnScreenReader.mockClear();
+		});
+
+		afterEach(() => {
+			vi.useRealTimers();
+		});
+
+		describe("when the feature flag is off", () => {
+			it("should not render the search field", () => {
+				const { wrapper } = setupSearch(false);
+
+				expect(wrapper.find('[data-testid="room-search"]').exists()).toBe(false);
+			});
+		});
+
+		describe("when the feature flag is on", () => {
+			it("should render the search field with a label", () => {
+				const { wrapper } = setupSearch();
+
+				expect(wrapper.find('[data-testid="room-search"]').text()).toContain("pages.rooms.search.label");
+			});
+
+			it("should keep the grid sortable", () => {
+				const { wrapper } = setupSearch();
+
+				expect(wrapper.findComponent(RoomGrid).props("isSortable")).toBe(true);
+			});
+		});
+
+		describe("when the user types a query", () => {
+			it("should pass only the matching rooms to the grid", async () => {
+				const { wrapper } = setupSearch();
+
+				await findSearchInput(wrapper).setValue("okolo");
+
+				const rooms = wrapper.findComponent(RoomGrid).props("rooms") as RoomItem[];
+				expect(rooms.map((room) => room.name)).toEqual(["Ökologie AG"]);
+			});
+
+			it("should make the grid not sortable", async () => {
+				const { wrapper } = setupSearch();
+
+				await findSearchInput(wrapper).setValue("Bio");
+
+				expect(wrapper.findComponent(RoomGrid).props("isSortable")).toBe(false);
+			});
+
+			it("should announce the number of results once typing pauses", async () => {
+				vi.useFakeTimers();
+				const { wrapper } = setupSearch();
+
+				await findSearchInput(wrapper).setValue("Bio");
+				expect(mockNotifyOnScreenReader).not.toHaveBeenCalled();
+				await vi.advanceTimersByTimeAsync(500);
+
+				expect(mockNotifyOnScreenReader).toHaveBeenCalledWith("pages.rooms.search.results");
+			});
+		});
+
+		describe("when no room matches the query", () => {
+			it("should show the empty search state instead of the grid", async () => {
+				const { wrapper } = setupSearch();
+
+				await findSearchInput(wrapper).setValue("Chemie");
+
+				expect(wrapper.find('[data-testid="room-search-empty"]').exists()).toBe(true);
+				expect(wrapper.findComponent(RoomGrid).exists()).toBe(false);
+			});
+
+			it("should announce that no rooms were found", async () => {
+				vi.useFakeTimers();
+				const { wrapper } = setupSearch();
+
+				await findSearchInput(wrapper).setValue("Chemie");
+				await vi.advanceTimersByTimeAsync(500);
+
+				expect(mockNotifyOnScreenReader).toHaveBeenCalledWith("pages.rooms.search.noResults");
+			});
+		});
+
+		describe("when the clear button is clicked", () => {
+			it("should show all rooms again", async () => {
+				const { wrapper } = setupSearch();
+				await findSearchInput(wrapper).setValue("Chemie");
+
+				await wrapper.find('[data-testid="room-search-clear"]').trigger("click");
+
+				expect(wrapper.findComponent(RoomGrid).props("rooms")).toHaveLength(3);
+			});
+
+			it("should move the focus back to the search field", async () => {
+				const { wrapper } = setupSearch();
+				await findSearchInput(wrapper).setValue("Chemie");
+
+				await wrapper.find('[data-testid="room-search-clear"]').trigger("click");
+
+				expect(document.activeElement).toBe(findSearchInput(wrapper).element);
+			});
+		});
+
+		describe("when escape is pressed in the search field", () => {
+			it("should clear the query", async () => {
+				const { wrapper } = setupSearch();
+				const input = findSearchInput(wrapper);
+				await input.setValue("Bio");
+
+				await input.trigger("keydown", { key: "Escape" });
+
+				expect((input.element as HTMLInputElement).value).toBe("");
+				expect(wrapper.findComponent(RoomGrid).props("rooms")).toHaveLength(3);
+			});
+		});
+
+		describe("when the field's clear icon resets the query to null", () => {
+			it("should pass all rooms to the grid", async () => {
+				const { wrapper } = setupSearch();
+				await findSearchInput(wrapper).setValue("Bio");
+
+				wrapper.findComponent({ name: "SvsSearchField" }).vm.$emit("update:modelValue", null);
+				await nextTick();
+
+				expect(wrapper.findComponent(RoomGrid).props("rooms")).toHaveLength(3);
 			});
 		});
 	});
