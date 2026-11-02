@@ -104,7 +104,6 @@ describe("RoomsPage", () => {
 			const expectedListHeaderTexts = "pages.rooms.infoAlert.welcome";
 			const expectedListText = [
 				"pages.rooms.infoAlert.welcome.collaboration",
-				"pages.rooms.infoAlert.welcome.teamsAndCourses",
 				"pages.rooms.infoAlert.welcome.furtherInformation",
 			].join("");
 

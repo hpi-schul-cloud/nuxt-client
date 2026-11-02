@@ -72,7 +72,6 @@ export default {
 	"common.labels.complete.lastName": "Vollständiger Nachname",
 	"common.labels.consent": "Einverständnis",
 	"common.labels.course": "Kurs",
-	"common.labels.team": "Team",
 	"common.labels.createAt": "Erstellt:",
 	"common.labels.createdAt": "Erstellungsdatum",
 	"common.labels.date": "Datum",
@@ -355,7 +354,7 @@ export default {
 	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete.secondParagraph":
 		"Die Wartefrist ist abgelaufen. Migration wurde am {finishDate} um {finishTime} Uhr endgültig beendet!",
 	"components.administration.adminMigrationSection.showOutdatedUsers.description":
-		"Veraltete Accounts der Schüler:innen und Lehrkräfte werden bei der Zuordnung der Nutzer zu Klassen, Kursen und Teams in den entsprechenden Auswahllisten angezeigt.",
+		"Veraltete Accounts der Schüler:innen und Lehrkräfte werden bei der Zuordnung zu Klassen und Kursen in den entsprechenden Auswahllisten angezeigt.",
 	"components.administration.adminMigrationSection.showOutdatedUsers.label": "Veraltete Nutzer-Accounts anzeigen",
 	"components.administration.adminMigrationSection.startWarningCard.agree": "Starten",
 	"components.administration.adminMigrationSection.startWarningCard.disagree": "Abbrechen",
@@ -1010,7 +1009,6 @@ export default {
 	"global.sidebar.item.system": "System",
 	"global.sidebar.item.tasks": "Aufgaben",
 	"global.sidebar.item.teacher": "Lernbegleitende",
-	"global.sidebar.item.teams": "Teams",
 	"global.sidebar.item.training": "Fortbildungen",
 	"global.sidebar.item.licenses": "Lizenzen",
 	"global.skipLink.mainContent": "Zum Hauptinhalt wechseln",
@@ -1318,7 +1316,7 @@ export default {
 	"pages.administration.school.index.privacySettings.labels.videoConference": "Videokonferenzen aktivieren",
 	"pages.administration.school.index.privacySettings.labels.aiTutor": "KI-Tutor an Schule aktivieren",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
-		"Sind Chats an deiner Schule aktiviert, können Team-Admins im jeweiligen Team die Chatfunktion gezielt freischalten.",
+		"Sind Chats an deiner Schule aktiviert, können Lehrkräfte die Chatfunktion in ihren Kursen gezielt freischalten.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
 		"Dies ist eine instanzweite, nicht editierbare Einstellung, die die Sichtbarkeit von Schüler:innen für Lehrkräfte steuert.",
 	"pages.administration.school.index.privacySettings.longText.studentVisibility":
@@ -1328,7 +1326,7 @@ export default {
 	"pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen":
 		"Wenn diese Option nicht aktiviert ist, können die Lehrkräfte ausschließlich die Klassen sowie deren Schülerinnen und Schüler sehen, in denen sie Mitglied sind.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
-		"Sind Videokonferenzen an deiner Schule aktiviert, können Lehrkräfte in Räumen, Kursen und Teams Videokonferenzen für alle Kursteilnehmer:innen starten. In Räumen und Kursen können Videokonferenzen als Element zu Bereichen (einspaltig und mehrspaltig) hinzugefügt werden, in Kursen sind Videokonferenzen unter 'Tools' nutzbar und in Teams innerhalb der Termin-Funktion.",
+		"Sind Videokonferenzen an deiner Schule aktiviert, können Lehrkräfte in Räumen und Kursen Videokonferenzen starten. Sie können als Element zu Bereichen hinzugefügt werden und sind in Kursen auch unter Tools nutzbar.",
 	"pages.administration.school.index.privacySettings.longText.aiTutor":
 		"Ist der KI-Tutor an deiner Schule aktiviert, können Lehrkräfte in ihren Bereichen den KI-Tutor hinzufügen.",
 	"pages.administration.school.index.privacySettings": "Datenschutzeinstellungen",
@@ -1563,7 +1561,6 @@ export default {
 	"pages.files.overview.favorites": "Favoriten",
 	"pages.files.overview.personalFiles": "Meine persönlichen Dateien",
 	"pages.files.overview.sharedFiles": "Mit mir geteilte Dateien",
-	"pages.files.overview.teamFiles": "Team-Dateien",
 	"pages.h5p.api.success.save": "Inhalt wurde erfolgreich gespeichert.",
 	"pages.impressum.title": "Impressum",
 	"pages.licenseList.title": "Open-Source-Lizenzliste",
@@ -1786,9 +1783,7 @@ export default {
 	"pages.rooms.fab.title": "Raum erstellen",
 	"pages.rooms.infoAlert.welcome": "Willkommen in den neuen Räumen!",
 	"pages.rooms.infoAlert.welcome.collaboration":
-		"Räume werden zukünftig Funktionen aus Kursen und Teams vereinen, um mehr Möglichkeiten für das schulübergreifende Arbeiten zu bieten.",
-	"pages.rooms.infoAlert.welcome.teamsAndCourses":
-		"Räume werden weiter ausgebaut. Teams und Kurse bleiben bestehen, bis die Inhalte in Räume überführt werden können.",
+		"Räume ermöglichen es, Inhalte zu organisieren und schulübergreifend zusammenzuarbeiten.",
 	"pages.rooms.infoAlert.welcome.furtherInformation":
 		"Weitere Information gibt es auf unserer {helpLink}. Wir freuen uns über {feedbackLink} zum aktuellen Stand.", // tada
 	"pages.rooms.infoAlert.welcome.furtherInformation.help": "Hilfeseite",
