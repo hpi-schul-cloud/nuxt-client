@@ -8,6 +8,7 @@ import RoomInvitationLinkStatusPage from "./RoomInvitationLinkStatus.page.vue";
 import RoomLockedPage from "./RoomLocked.page.vue";
 import RoomMembersPage from "./RoomMembers.page.vue";
 import RoomsPage from "./Rooms.page.vue";
+import RoomsArchivePage from "./RoomsArchive.page.vue";
 
 export {
 	AdministrationRoomMembersPage,
@@ -19,5 +20,6 @@ export {
 	RoomInvitationLinkStatusPage,
 	RoomLockedPage,
 	RoomMembersPage,
+	RoomsArchivePage,
 	RoomsPage,
 };

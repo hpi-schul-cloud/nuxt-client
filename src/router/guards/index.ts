@@ -1,5 +1,6 @@
 export { checkFolderFeature } from "./check-folder-feature.guard";
 export * from "./check-register-external-persons-feature";
+export * from "./check-room-archive-feature";
 export * from "./clear-application-error.guard";
 export * from "./is-authenticated.guard";
 export * from "./legacy-route-compatibility.guard";

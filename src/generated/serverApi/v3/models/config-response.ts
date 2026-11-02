@@ -102,6 +102,7 @@ export interface ConfigResponse {
     'LICENSE_SUMMARY_URL'?: string;
     'ROOM_MEMBER_INFO_URL': string | null;
     'ROOM_MEMBER_ADD_EXTERNAL_PERSON_REQUIREMENTS_URL': string | null;
+    'FEATURE_ROOM_ARCHIVE_ENABLED': boolean;
 }
 
 
