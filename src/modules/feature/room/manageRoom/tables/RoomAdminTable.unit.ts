@@ -1,8 +1,12 @@
 import RoomAdminTable from "./RoomAdminTable.vue";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { formatUtc } from "@/utils/date-time.utils";
-import { mockedPiniaStoreTyping, roomStatsItemResponseFactory, schoolFactory } from "@@/tests/test-utils";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import {
+	createTestEnvStore,
+	mockedPiniaStoreTyping,
+	roomStatsItemResponseFactory,
+	schoolFactory,
+} from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomStatsItemResponse } from "@api-server";
