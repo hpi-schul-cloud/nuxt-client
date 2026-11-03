@@ -17,9 +17,7 @@ describe("useEnvStore", () => {
 	const doMockServerApiData = (data: ClientConfig) => {
 		mockedServerApi.mockReturnValue({
 			serverConfigControllerPublicConfig(): Promise<AxiosResponse<ConfigResponse>> {
-				return Promise.resolve(
-					mockApiResponse({ data: { FEATURE_TEAM_CREATE_ROOM_ENABLED: false, ...data } })
-				);
+				return Promise.resolve(mockApiResponse({ data: { FEATURE_TEAM_CREATE_ROOM_ENABLED: false, ...data } }));
 			},
 		});
 	};
