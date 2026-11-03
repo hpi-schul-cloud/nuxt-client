@@ -153,7 +153,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         *
+         * 
          * @summary Archive a room
          * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
@@ -191,10 +191,10 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         *
+         * 
          * @summary Change the roles that members have within the room
          * @param {string} roomId The id of the room.
-         * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams
+         * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -473,7 +473,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         *
+         * 
          * @summary Get the archived rooms of the current user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -507,7 +507,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         *
+         * 
          * @summary Get the list of room invitation links of a room.
          * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
@@ -981,7 +981,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         *
+         * 
          * @summary Restore an archived room
          * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
@@ -1019,10 +1019,10 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         *
+         * 
          * @summary Update an existing room
          * @param {string} roomId The id of the room.
-         * @param {UpdateRoomBodyParams} updateRoomBodyParams
+         * @param {UpdateRoomBodyParams} updateRoomBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1099,7 +1099,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         *
+         * 
          * @summary Archive a room
          * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
@@ -1112,10 +1112,10 @@ export const RoomApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         *
+         * 
          * @summary Change the roles that members have within the room
          * @param {string} roomId The id of the room.
-         * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams
+         * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1206,7 +1206,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         *
+         * 
          * @summary Get the archived rooms of the current user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1218,7 +1218,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         *
+         * 
          * @summary Get the list of room invitation links of a room.
          * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
@@ -1377,7 +1377,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         *
+         * 
          * @summary Restore an archived room
          * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
@@ -1390,10 +1390,10 @@ export const RoomApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         *
+         * 
          * @summary Update an existing room
          * @param {string} roomId The id of the room.
-         * @param {UpdateRoomBodyParams} updateRoomBodyParams
+         * @param {UpdateRoomBodyParams} updateRoomBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1435,7 +1435,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.roomControllerAddMembers(roomId, addRoomMembersBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
-         *
+         * 
          * @summary Archive a room
          * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
@@ -1445,10 +1445,10 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.roomControllerArchiveRoom(roomId, options).then((request) => request(axios, basePath));
         },
         /**
-         *
+         * 
          * @summary Change the roles that members have within the room
          * @param {string} roomId The id of the room.
-         * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams
+         * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1518,7 +1518,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.roomControllerGetApplicants(roomId, options).then((request) => request(axios, basePath));
         },
         /**
-         *
+         * 
          * @summary Get the archived rooms of the current user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1527,7 +1527,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.roomControllerGetArchivedRooms(options).then((request) => request(axios, basePath));
         },
         /**
-         *
+         * 
          * @summary Get the list of room invitation links of a room.
          * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
@@ -1650,7 +1650,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.roomControllerRemoveMembers(roomId, removeRoomMembersBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
-         *
+         * 
          * @summary Restore an archived room
          * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
@@ -1660,10 +1660,10 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.roomControllerUnarchiveRoom(roomId, options).then((request) => request(axios, basePath));
         },
         /**
-         *
+         * 
          * @summary Update an existing room
          * @param {string} roomId The id of the room.
-         * @param {UpdateRoomBodyParams} updateRoomBodyParams
+         * @param {UpdateRoomBodyParams} updateRoomBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1698,7 +1698,7 @@ export interface RoomApiInterface {
     roomControllerAddMembers(roomId: string, addRoomMembersBodyParams: AddRoomMembersBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RoomRoleResponse>;
 
     /**
-     *
+     * 
      * @summary Archive a room
      * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
@@ -1707,10 +1707,10 @@ export interface RoomApiInterface {
     roomControllerArchiveRoom(roomId: string, options?: RawAxiosRequestConfig): AxiosPromise<string>;
 
     /**
-     *
+     * 
      * @summary Change the roles that members have within the room
      * @param {string} roomId The id of the room.
-     * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams
+     * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1773,7 +1773,7 @@ export interface RoomApiInterface {
     roomControllerGetApplicants(roomId: string, options?: RawAxiosRequestConfig): AxiosPromise<RoomMemberListResponse>;
 
     /**
-     *
+     * 
      * @summary Get the archived rooms of the current user.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1781,7 +1781,7 @@ export interface RoomApiInterface {
     roomControllerGetArchivedRooms(options?: RawAxiosRequestConfig): AxiosPromise<RoomArchivedListResponse>;
 
     /**
-     *
+     * 
      * @summary Get the list of room invitation links of a room.
      * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
@@ -1892,7 +1892,7 @@ export interface RoomApiInterface {
     roomControllerRemoveMembers(roomId: string, removeRoomMembersBodyParams: RemoveRoomMembersBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<string>;
 
     /**
-     *
+     * 
      * @summary Restore an archived room
      * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
@@ -1901,10 +1901,10 @@ export interface RoomApiInterface {
     roomControllerUnarchiveRoom(roomId: string, options?: RawAxiosRequestConfig): AxiosPromise<string>;
 
     /**
-     *
+     * 
      * @summary Update an existing room
      * @param {string} roomId The id of the room.
-     * @param {UpdateRoomBodyParams} updateRoomBodyParams
+     * @param {UpdateRoomBodyParams} updateRoomBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1941,7 +1941,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     }
 
     /**
-     *
+     * 
      * @summary Archive a room
      * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
@@ -1952,10 +1952,10 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     }
 
     /**
-     *
+     * 
      * @summary Change the roles that members have within the room
      * @param {string} roomId The id of the room.
-     * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams
+     * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2032,7 +2032,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     }
 
     /**
-     *
+     * 
      * @summary Get the archived rooms of the current user.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2042,7 +2042,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     }
 
     /**
-     *
+     * 
      * @summary Get the list of room invitation links of a room.
      * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
@@ -2177,7 +2177,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     }
 
     /**
-     *
+     * 
      * @summary Restore an archived room
      * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
@@ -2188,10 +2188,10 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     }
 
     /**
-     *
+     * 
      * @summary Update an existing room
      * @param {string} roomId The id of the room.
-     * @param {UpdateRoomBodyParams} updateRoomBodyParams
+     * @param {UpdateRoomBodyParams} updateRoomBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */

@@ -7,7 +7,7 @@ import { createSharedComposable } from "@vueuse/core";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, reactive } from "vue";
 
-export type ClientConfig = Omit<ConfigResponse, "FEATURE_TEAMS_ENABLED" | "FEATURE_TEAM_CREATE_ROOM_ENABLED">;
+export type ClientConfig = Omit<ConfigResponse, "FEATURE_TEAM_CREATE_ROOM_ENABLED">;
 
 export const defaultConfigEnvs: ClientConfig = {
 	FEATURE_NOTIFICATIONS_ENABLED: false,

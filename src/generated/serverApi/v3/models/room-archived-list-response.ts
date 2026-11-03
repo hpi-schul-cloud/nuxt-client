@@ -13,20 +13,11 @@
  */
 
 
-import { RoomArchivedItemResponse } from './room-archived-item-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomArchivedItemResponse } from './room-archived-item-response';
 
-/**
- * 
- * @export
- * @interface RoomArchivedListResponse
- */
 export interface RoomArchivedListResponse {
-    /**
-     * 
-     * @type {Array<RoomArchivedItemResponse>}
-     * @memberof RoomArchivedListResponse
-     */
-    data: Array<RoomArchivedItemResponse>;
+    'data': Array<RoomArchivedItemResponse>;
 }
-
 

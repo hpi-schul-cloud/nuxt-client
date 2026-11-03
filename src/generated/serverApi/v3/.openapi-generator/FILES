@@ -12,7 +12,6 @@ api/board-card-api.ts
 api/board-column-api.ts
 api/board-element-api.ts
 api/board-error-report-api.ts
-api/collaborative-storage-api.ts
 api/collaborative-text-editor-api.ts
 api/course-info-api.ts
 api/course-rooms-api.ts
@@ -46,7 +45,6 @@ api/share-token-api.ts
 api/submission-api.ts
 api/systems-api.ts
 api/task-api.ts
-api/team-api.ts
 api/tool-api.ts
 api/user-api.ts
 api/user-import-api.ts
@@ -404,8 +402,6 @@ models/task-list-response.ts
 models/task-response.ts
 models/task-status-response.ts
 models/teacher-permission-params.ts
-models/team-create-room-response.ts
-models/team-permissions-body.ts
 models/timestamps-response.ts
 models/timezone.ts
 models/token-endpoint-auth-method.ts

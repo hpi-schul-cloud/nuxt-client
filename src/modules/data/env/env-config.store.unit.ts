@@ -18,7 +18,7 @@ describe("useEnvStore", () => {
 		mockedServerApi.mockReturnValue({
 			serverConfigControllerPublicConfig(): Promise<AxiosResponse<ConfigResponse>> {
 				return Promise.resolve(
-					mockApiResponse({ data: { FEATURE_TEAMS_ENABLED: false, FEATURE_TEAM_CREATE_ROOM_ENABLED: false, ...data } })
+					mockApiResponse({ data: { FEATURE_TEAM_CREATE_ROOM_ENABLED: false, ...data } })
 				);
 			},
 		});
@@ -120,11 +120,9 @@ describe("useEnvStore", () => {
 
 	describe("loadConfiguration", () => {
 		it("should ignore removed Teams flags in old server responses", async () => {
-			await setup(true, { FEATURE_TEAMS_ENABLED: true, FEATURE_TEAM_CREATE_ROOM_ENABLED: true });
+			await setup(true, { FEATURE_TEAM_CREATE_ROOM_ENABLED: true });
 
-			expect(defaultConfigEnvs).not.toHaveProperty("FEATURE_TEAMS_ENABLED");
 			expect(defaultConfigEnvs).not.toHaveProperty("FEATURE_TEAM_CREATE_ROOM_ENABLED");
-			expect(useEnvStore().env).not.toHaveProperty("FEATURE_TEAMS_ENABLED");
 			expect(useEnvStore().env).not.toHaveProperty("FEATURE_TEAM_CREATE_ROOM_ENABLED");
 		});
 
