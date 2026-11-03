@@ -25,10 +25,9 @@ export interface RoomItemResponse {
     'name': string;
     'color': RoomColor;
     'schoolId': string;
-    'startDate'?: string;
-    'endDate'?: string;
     'createdAt': string;
     'updatedAt': string;
+    'archivedAt'?: string;
     'allowedOperations'?: RoomItemResponseAllowedOperations;
     'isLocked': boolean;
     'totalMembers': number;
