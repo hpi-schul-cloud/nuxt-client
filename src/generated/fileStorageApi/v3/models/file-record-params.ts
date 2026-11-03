@@ -13,39 +13,19 @@
  */
 
 
-import { FileRecordParentType } from './file-record-parent-type';
-import { StorageLocation } from './storage-location';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { FileRecordParentType } from './file-record-parent-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { StorageLocation } from './storage-location';
 
-/**
- * 
- * @export
- * @interface FileRecordParams
- */
 export interface FileRecordParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof FileRecordParams
-     */
-    storageLocationId: string;
-    /**
-     * 
-     * @type {StorageLocation}
-     * @memberof FileRecordParams
-     */
-    storageLocation: StorageLocation;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileRecordParams
-     */
-    parentId: string;
-    /**
-     * 
-     * @type {FileRecordParentType}
-     * @memberof FileRecordParams
-     */
-    parentType: FileRecordParentType;
+    'storageLocationId': string;
+    'storageLocation': StorageLocation;
+    'parentId': string;
+    'parentType': FileRecordParentType;
 }
+
 
 

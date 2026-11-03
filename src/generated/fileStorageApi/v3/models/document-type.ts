@@ -14,16 +14,14 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
-export enum DocumentType {
-    WORDPROCESSINGML_DOCUMENT = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    SPREADSHEETML_SHEET = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    PRESENTATIONML_PRESENTATION = 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-}
+
+export const DocumentType = {
+    APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_WORDPROCESSINGML_DOCUMENT: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_SPREADSHEETML_SHEET: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_PRESENTATION: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+} as const;
+
+export type DocumentType = typeof DocumentType[keyof typeof DocumentType];
 
 
 

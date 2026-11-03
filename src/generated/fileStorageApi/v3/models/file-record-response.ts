@@ -13,124 +13,36 @@
  */
 
 
-import { FileRecordParentType } from './file-record-parent-type';
-import { FileRecordScanStatus } from './file-record-scan-status';
-import { PreviewStatus } from './preview-status';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { FileRecordParentType } from './file-record-parent-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { FileRecordScanStatus } from './file-record-scan-status';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { PreviewStatus } from './preview-status';
 
-/**
- * 
- * @export
- * @interface FileRecordResponse
- */
 export interface FileRecordResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof FileRecordResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileRecordResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileRecordResponse
-     */
-    parentId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileRecordResponse
-     */
-    url: string;
-    /**
-     * 
-     * @type {FileRecordScanStatus}
-     * @memberof FileRecordResponse
-     */
-    securityCheckStatus: FileRecordScanStatus;
-    /**
-     * 
-     * @type {number}
-     * @memberof FileRecordResponse
-     */
-    size: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileRecordResponse
-     */
-    creatorId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileRecordResponse
-     */
-    mimeType: string;
-    /**
-     * 
-     * @type {FileRecordParentType}
-     * @memberof FileRecordResponse
-     */
-    parentType: FileRecordParentType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof FileRecordResponse
-     */
-    isUploading?: boolean;
-    /**
-     * 
-     * @type {PreviewStatus}
-     * @memberof FileRecordResponse
-     */
-    previewStatus: PreviewStatus;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof FileRecordResponse
-     */
-    isCollaboraEditable: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof FileRecordResponse
-     */
-    exceedsCollaboraEditableFileSize: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileRecordResponse
-     */
-    deletedSince?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileRecordResponse
-     */
-    createdAt?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileRecordResponse
-     */
-    updatedAt?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileRecordResponse
-     */
-    contentLastModifiedAt?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileRecordResponse
-     */
-    expiresAt?: string;
+    'id': string;
+    'name': string;
+    'parentId': string;
+    'url': string;
+    'securityCheckStatus': FileRecordScanStatus;
+    'size': number;
+    'creatorId': string;
+    'mimeType': string;
+    'parentType': FileRecordParentType;
+    'isUploading'?: boolean;
+    'previewStatus': PreviewStatus;
+    'isCollaboraEditable': boolean;
+    'exceedsCollaboraEditableFileSize': boolean;
+    'deletedSince'?: string;
+    'createdAt'?: string;
+    'updatedAt'?: string;
+    'contentLastModifiedAt'?: string;
+    'expiresAt'?: string;
 }
+
 
 

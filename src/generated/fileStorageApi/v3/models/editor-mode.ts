@@ -14,15 +14,13 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
-export enum EditorMode {
-    EDIT = 'edit',
-    VIEW = 'view'
-}
+
+export const EditorMode = {
+    EDIT: 'edit',
+    VIEW: 'view',
+} as const;
+
+export type EditorMode = typeof EditorMode[keyof typeof EditorMode];
 
 
 

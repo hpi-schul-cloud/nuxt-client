@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface RenameFileParams
- */
 export interface RenameFileParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof RenameFileParams
-     */
-    fileName: string;
+    'fileName': string;
 }
-
 

@@ -14,24 +14,14 @@
 
 
 
-/**
- * 
- * @export
- * @interface ParentStatisticResponse
- */
 export interface ParentStatisticResponse {
     /**
      * The number of files for the parent entity.
-     * @type {number}
-     * @memberof ParentStatisticResponse
      */
-    fileCount: number;
+    'fileCount': number;
     /**
      * The total size in bytes of all files for the parent entity.
-     * @type {number}
-     * @memberof ParentStatisticResponse
      */
-    totalSizeInBytes: number;
+    'totalSizeInBytes': number;
 }
-
 

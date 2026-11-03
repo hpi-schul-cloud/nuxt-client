@@ -14,30 +14,13 @@
 
 
 
-/**
- * 
- * @export
- * @interface FileUrlParams
- */
 export interface FileUrlParams {
     /**
-     * 
-     * @type {string}
-     * @memberof FileUrlParams
+     * Require PNG, JPEG, GIF or WebP content matching the HTTP Content-Type before storing the file.
      */
-    url: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileUrlParams
-     */
-    fileName: string;
-    /**
-     * 
-     * @type {object}
-     * @memberof FileUrlParams
-     */
-    headers?: object;
+    'previewOnly'?: boolean;
+    'url': string;
+    'fileName': string;
+    'headers'?: object;
 }
-
 

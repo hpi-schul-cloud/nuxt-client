@@ -110,7 +110,7 @@
         "globalProperty": {
           "apiDocs": false,
           "modelDocs": false,
-          "models": "RobjExportKlasse:RobjExportLehrerMigration:RobjExportLehrer:RobjExportSchuelerMigration:RobjExportSchueler:RobjExportSchule:VersionResponse",
+          "models": "",
           "apis": "",
           "supportingFiles": ""
         },

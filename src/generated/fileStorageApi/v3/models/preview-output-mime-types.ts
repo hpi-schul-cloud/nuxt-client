@@ -14,14 +14,12 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
-export enum PreviewOutputMimeTypes {
-    IMAGE_WEBP = 'image/webp'
-}
+
+export const PreviewOutputMimeTypes = {
+    IMAGE_WEBP: 'image/webp',
+} as const;
+
+export type PreviewOutputMimeTypes = typeof PreviewOutputMimeTypes[keyof typeof PreviewOutputMimeTypes];
 
 
 

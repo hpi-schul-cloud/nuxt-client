@@ -13,22 +13,22 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { DeleteByStorageLocationResponse } from '../models';
+import type { DeleteByStorageLocationResponse } from '../models';
 // @ts-ignore
-import { StorageLocation } from '../models';
+import type { StorageLocation } from '../models';
 /**
  * AdminApi - axios parameter creator
- * @export
  */
 export const AdminApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -40,14 +40,14 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteByStorageLocation: async (storageLocationId: string, storageLocation: StorageLocation, options: any = {}): Promise<RequestArgs> => {
+        deleteByStorageLocation: async (storageLocationId: string, storageLocation: StorageLocation, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'storageLocationId' is not null or undefined
             assertParamExists('deleteByStorageLocation', 'storageLocationId', storageLocationId)
             // verify required parameter 'storageLocation' is not null or undefined
             assertParamExists('deleteByStorageLocation', 'storageLocation', storageLocation)
             const localVarPath = `/admin/file/storage-location/{storageLocation}/{storageLocationId}`
-                .replace(`{${"storageLocationId"}}`, encodeURIComponent(String(storageLocationId)))
-                .replace(`{${"storageLocation"}}`, encodeURIComponent(String(storageLocation)));
+                .replace('{storageLocationId}', encodeURIComponent(String(storageLocationId)))
+                .replace('{storageLocation}', encodeURIComponent(String(storageLocation)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -63,9 +63,9 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -79,7 +79,6 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
 
 /**
  * AdminApi - functional programming interface
- * @export
  */
 export const AdminApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = AdminApiAxiosParamCreator(configuration)
@@ -92,16 +91,17 @@ export const AdminApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteByStorageLocation(storageLocationId: string, storageLocation: StorageLocation, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteByStorageLocationResponse>> {
+        async deleteByStorageLocation(storageLocationId: string, storageLocation: StorageLocation, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteByStorageLocationResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteByStorageLocation(storageLocationId, storageLocation, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminApi.deleteByStorageLocation']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * AdminApi - factory interface
- * @export
  */
 export const AdminApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = AdminApiFp(configuration)
@@ -114,7 +114,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteByStorageLocation(storageLocationId: string, storageLocation: StorageLocation, options?: any): AxiosPromise<DeleteByStorageLocationResponse> {
+        deleteByStorageLocation(storageLocationId: string, storageLocation: StorageLocation, options?: RawAxiosRequestConfig): AxiosPromise<DeleteByStorageLocationResponse> {
             return localVarFp.deleteByStorageLocation(storageLocationId, storageLocation, options).then((request) => request(axios, basePath));
         },
     };
@@ -122,8 +122,6 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
 
 /**
  * AdminApi - interface
- * @export
- * @interface AdminApi
  */
 export interface AdminApiInterface {
     /**
@@ -133,17 +131,13 @@ export interface AdminApiInterface {
      * @param {StorageLocation} storageLocation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AdminApiInterface
      */
-    deleteByStorageLocation(storageLocationId: string, storageLocation: StorageLocation, options?: any): AxiosPromise<DeleteByStorageLocationResponse>;
+    deleteByStorageLocation(storageLocationId: string, storageLocation: StorageLocation, options?: RawAxiosRequestConfig): AxiosPromise<DeleteByStorageLocationResponse>;
 
 }
 
 /**
  * AdminApi - object-oriented interface
- * @export
- * @class AdminApi
- * @extends {BaseAPI}
  */
 export class AdminApi extends BaseAPI implements AdminApiInterface {
     /**
@@ -153,9 +147,9 @@ export class AdminApi extends BaseAPI implements AdminApiInterface {
      * @param {StorageLocation} storageLocation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AdminApi
      */
-    public deleteByStorageLocation(storageLocationId: string, storageLocation: StorageLocation, options?: any) {
+    public deleteByStorageLocation(storageLocationId: string, storageLocation: StorageLocation, options?: RawAxiosRequestConfig) {
         return AdminApiFp(this.configuration).deleteByStorageLocation(storageLocationId, storageLocation, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

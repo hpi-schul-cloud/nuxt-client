@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface ArchiveFileParams
- */
 export interface ArchiveFileParams {
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof ArchiveFileParams
-     */
-    fileRecordIds: Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof ArchiveFileParams
-     */
-    archiveName: string;
+    'fileRecordIds': Array<string>;
+    'archiveName': string;
 }
-
 

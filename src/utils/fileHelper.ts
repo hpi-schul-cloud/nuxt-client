@@ -5,6 +5,7 @@ import {
 	FileRecordVirusScanStatus,
 	PreviewOutputMimeTypes,
 } from "@/types/file/File";
+import type { AxiosProgressEvent } from "axios";
 import { useI18n } from "vue-i18n";
 
 const toClampedPercent = (loaded: number, total: number): number =>
@@ -14,7 +15,7 @@ export const buildUploadOptions = (onUploadProgress?: (progress: number) => void
 	if (!onUploadProgress) return undefined;
 
 	return {
-		onUploadProgress: (event: ProgressEvent) => {
+		onUploadProgress: (event: AxiosProgressEvent) => {
 			if (event.total && event.total > 0) {
 				onUploadProgress(toClampedPercent(event.loaded, event.total));
 			}
