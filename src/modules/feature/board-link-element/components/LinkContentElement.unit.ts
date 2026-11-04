@@ -591,7 +591,10 @@ describe("LinkContentElement", () => {
 				expect(useFileStorageApiMock.uploadFromUrl).toHaveBeenCalledWith(
 					fakeMetaTags.originalImageUrl,
 					element.id,
-					FileRecordParentType.BOARDNODES
+					FileRecordParentType.BOARDNODES,
+					{
+						previewOnly: true,
+					}
 				);
 			});
 
