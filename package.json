@@ -34,7 +34,7 @@
 		"@vueuse/core": "^14.3.0",
 		"@vueuse/integrations": "^14.3.0",
 		"axios": "^1.18.1",
-		"ckeditor5": "48.3.0",
+		"ckeditor5": "48.5.3",
 		"dayjs": "^1.11.21",
 		"focus-trap": "^8.2.1",
 		"katex": "^0.19.1",
