@@ -39,8 +39,7 @@ export interface CreateNewsParams {
 
 export enum CreateNewsParamsTargetModel {
     SCHOOLS = 'schools',
-    COURSES = 'courses',
-    TEAMS = 'teams'
+    COURSES = 'courses'
 }
 
 

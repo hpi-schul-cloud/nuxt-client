@@ -28,8 +28,8 @@ export interface Message {
 }
 
 export enum MessageStatus {
-    INFO = 'info',
     DONE = 'done',
+    INFO = 'info',
     DANGER = 'danger'
 }
 

@@ -44,21 +44,24 @@ const pageTitle = computed(() => buildPageTitle(`${t("pages.news.new.title")}`))
 useTitle(pageTitle);
 
 onMounted(() => {
-	if (!newsTargetFromQueryParams.value) return;
-
-	const { targetId, targetModel } = newsTargetFromQueryParams.value;
-	const areQueryParamsValid =
-		targetId &&
-		typeof targetId === "string" &&
-		Object.values(CreateNewsParamsTargetModel).includes(targetModel as CreateNewsParamsTargetModel);
-
-	if (!areQueryParamsValid) useAppStore().handleApplicationError(HttpStatusCode.BadRequest);
+	if (!isNewsTargetValid.value) useAppStore().handleApplicationError(HttpStatusCode.BadRequest);
 });
 
 const newsTargetFromQueryParams = computed(() => {
 	const { target, targetmodel, context, contextId } = route.query;
 
 	return parseNewsTarget(target, targetmodel) ?? parseNewsTarget(contextId, context);
+});
+
+const isNewsTargetValid = computed(() => {
+	const target = newsTargetFromQueryParams.value;
+	if (!target) return true;
+
+	return (
+		Boolean(target.targetId) &&
+		typeof target.targetId === "string" &&
+		[CreateNewsParamsTargetModel.SCHOOLS, CreateNewsParamsTargetModel.COURSES].includes(target.targetModel)
+	);
 });
 
 const parseNewsTarget = (
@@ -73,6 +76,11 @@ const parseNewsTarget = (
 };
 
 const onCreate = async (news: Pick<CreateNewsParams, "title" | "content" | "displayAt">) => {
+	if (!isNewsTargetValid.value) {
+		useAppStore().handleApplicationError(HttpStatusCode.BadRequest);
+		return;
+	}
+
 	const newsTarget = newsTargetFromQueryParams.value ?? {
 		targetId: useAppStore()?.school?.id ?? "",
 		targetModel: CreateNewsParamsTargetModel.SCHOOLS,

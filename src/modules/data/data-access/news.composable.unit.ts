@@ -116,6 +116,20 @@ describe("news composable", () => {
 	});
 
 	describe("useNewsList", () => {
+		it("should exclude old Teams news and keep school and course news", async () => {
+			const schoolNews = newsResponseFactory.build({ targetModel: serverApi.NewsTargetModel.SCHOOLS });
+			const courseNews = newsResponseFactory.build({ targetModel: serverApi.NewsTargetModel.COURSES });
+			const teamNews = newsResponseFactory.build({ targetModel: "teams" as serverApi.NewsTargetModel });
+			newsApiMock.newsControllerFindAll.mockResolvedValueOnce(
+				mockApiResponse({ data: { data: [schoolNews, teamNews, courseNews], total: 3, skip: 0, limit: 4 } })
+			);
+
+			const { news } = useNewsList(4);
+			await flushPromises();
+
+			expect(news.value).toEqual([schoolNews, courseNews]);
+		});
+
 		it("should return an empty list immediately before the first fetch resolves", () => {
 			newsApiMock.newsControllerFindAll.mockResolvedValueOnce(
 				mockApiResponse({ data: { data: [newsResponseFactory.build()], total: 1, skip: 0, limit: 4 } })
@@ -166,6 +180,22 @@ describe("news composable", () => {
 	});
 
 	describe("useNewsOverview", () => {
+		it("should exclude Teams news from published and unpublished pages", async () => {
+			const schoolNews = newsResponseFactory.build({ targetModel: serverApi.NewsTargetModel.SCHOOLS });
+			const teamNews = newsResponseFactory.build({ targetModel: "teams" as serverApi.NewsTargetModel });
+			newsApiMock.newsControllerFindAll.mockResolvedValue(
+				mockApiResponse({ data: { data: [schoolNews, teamNews], total: 2, skip: 0, limit: 10 } })
+			);
+
+			const overview = useNewsOverview({ canEditNews: ref(true) });
+			await flushPromises();
+			expect(overview.newsList.value).toEqual([schoolNews]);
+
+			overview.activeTab.value = "unpublished";
+			await flushPromises();
+			expect(overview.newsList.value).toEqual([schoolNews]);
+		});
+
 		it("should keep defaults when initial published fetch fails", async () => {
 			newsApiMock.newsControllerFindAll.mockRejectedValueOnce(new Error("fetch failed"));
 
@@ -276,6 +306,22 @@ describe("news composable", () => {
 	});
 
 	describe("useNews", () => {
+		it("should clear the previous news when navigating to removed Teams news", async () => {
+			const schoolNews = newsResponseFactory.build({ targetModel: serverApi.NewsTargetModel.SCHOOLS });
+			const teamNews = newsResponseFactory.build({ targetModel: "teams" as serverApi.NewsTargetModel });
+			newsApiMock.newsControllerFindOne
+				.mockResolvedValueOnce(mockApiResponse({ data: schoolNews }))
+				.mockResolvedValueOnce(mockApiResponse({ data: teamNews }));
+			const newsId = ref("school-news");
+			const { newsInstance } = useNews(newsId);
+			await flushPromises();
+			expect(newsInstance.value).toEqual(schoolNews);
+
+			newsId.value = "team-news";
+			await flushPromises();
+			expect(newsInstance.value).toBeUndefined();
+		});
+
 		it("should expose undefined formatted fields and creator before data is loaded", async () => {
 			const newsId = ref<string | undefined>(undefined);
 			const { creator, displayAtFormattedFromNow, displayAtFormattedStandard } = useNews(newsId);
