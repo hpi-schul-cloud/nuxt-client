@@ -25,7 +25,7 @@
 			:title="computedElement.content.title"
 			:image-url="modelValue.imageUrl"
 			:is-edit-mode="isEditMode"
-			:is-wide-layout="isDetailView"
+			:is-detail-view="isDetailView"
 		>
 			<BoardMenu
 				:scope="BoardMenuScope.LINK_ELEMENT"

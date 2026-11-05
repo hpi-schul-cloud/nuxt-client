@@ -8,7 +8,7 @@ type Props = {
 	title?: string;
 	imageUrl?: string;
 	isEditMode?: boolean;
-	isWideLayout?: boolean;
+	isDetailView?: boolean;
 };
 
 describe("LinkContentElementDisplay", () => {
@@ -163,7 +163,7 @@ describe("LinkContentElementDisplay", () => {
 		});
 	});
 
-	describe("when wide layout is requested", () => {
+	describe("when detail view is enabled", () => {
 		it.each`
 			screenSize  | px
 			${"small"}  | ${600}
@@ -174,7 +174,7 @@ describe("LinkContentElementDisplay", () => {
 				props: {
 					url: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus",
 					imageUrl: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus.jpg",
-					isWideLayout: true,
+					isDetailView: true,
 				},
 				isListBoard: false,
 				windowWidth,
@@ -188,7 +188,7 @@ describe("LinkContentElementDisplay", () => {
 				props: {
 					url: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus",
 					imageUrl: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus.jpg",
-					isWideLayout: true,
+					isDetailView: true,
 				},
 				isListBoard: false,
 				windowWidth: 599,
@@ -201,7 +201,7 @@ describe("LinkContentElementDisplay", () => {
 			const { wrapper } = setup({
 				props: {
 					url: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus",
-					isWideLayout: true,
+					isDetailView: true,
 				},
 				isListBoard: false,
 			});
