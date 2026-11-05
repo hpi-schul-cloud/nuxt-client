@@ -34,7 +34,7 @@ const { t } = useI18n();
 
 const releasesApi = ReleaseApiFactory(undefined, "/v3", $axios);
 
-const { data: releasesResponse } = useSafeAxiosRunner(() => releasesApi.releaseControllerGetReleases(0, 1));
+const { data: releasesResponse } = useSafeAxiosRunner(() => releasesApi.releasesControllerGetReleases(0, 1));
 const latestRelease = computed(() => releasesResponse.value?.data.data?.[0]);
 
 // New users should not see release notes on first login. Thus it is not shown when no preference is set.
