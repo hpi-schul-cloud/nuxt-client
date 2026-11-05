@@ -20,14 +20,18 @@ import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
 
 const router = useRouter();
+const route = useRoute();
+
+// the quick navigation offers to create a room under the name that was searched for
+const suggestedName = typeof route.query.name === "string" ? route.query.name.trim() : "";
 
 const roomData = ref<RoomCreateParams>({
-	name: "",
+	name: suggestedName,
 	color: RoomColor.BLUE_GREY,
 	features: [],
 });

@@ -10,8 +10,8 @@ import { setActivePinia } from "pinia";
 import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 
 describe("@pages/RoomCreate.page.vue", () => {
-	const setup = () => {
-		injectRouterMock(createRouterMock());
+	const setup = (initialLocation = "/rooms/new") => {
+		injectRouterMock(createRouterMock({ initialLocation }));
 
 		const wrapper = mount(RoomCreatePage, {
 			global: {
@@ -59,6 +59,18 @@ describe("@pages/RoomCreate.page.vue", () => {
 			name: "room-details",
 			params: { id: "123" },
 		});
+	});
+
+	it("should start with the name passed in the address", () => {
+		const { roomFormComponent } = setup("/rooms/new?name=%20Theater-AG%20");
+
+		expect(roomFormComponent.props("room").name).toBe("Theater-AG");
+	});
+
+	it("should start with an empty name otherwise", () => {
+		const { roomFormComponent } = setup();
+
+		expect(roomFormComponent.props("room").name).toBe("");
 	});
 
 	it("should navigate to 'rooms' on cancel", () => {
