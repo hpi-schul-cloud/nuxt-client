@@ -72,7 +72,12 @@ import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { convertDownloadToPreviewUrl, downloadFile, isPreviewPossible, isScanStatusBlocked } from "@/utils/fileHelper";
 import { FileRecordParentType, PreviewWidth } from "@api-file-storage";
 import { FileElementResponse } from "@api-server";
-import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";
+import {
+	canManageFileElements as canManageFileElementsWith,
+	useBoardAllowedOperations,
+	useBoardFocusHandler,
+	useContentElementState,
+} from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { useFileStorageApi } from "@data-file";
 import { mdiFileDocumentOutline } from "@icons/material";
@@ -146,9 +151,7 @@ const fileProperties = computed(() => {
 	};
 });
 
-const canManageFileElements = computed(
-	() => allowedOperations.value.updateElement || allowedOperations.value.createFileElement
-);
+const canManageFileElements = computed(() => canManageFileElementsWith(allowedOperations.value));
 
 const cardVariant = computed(() => {
 	const { isEditMode } = props;

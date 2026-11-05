@@ -1,0 +1,112 @@
+import { scrollToCardElement } from "./scrollToCardElement";
+
+describe("scrollToCardElement", () => {
+	const setup = () => {
+		const container = document.createElement("div");
+		container.scrollTo = vi.fn();
+		container.scrollTop = 100;
+		vi.spyOn(container, "getBoundingClientRect").mockReturnValue(new DOMRect(0, 50));
+
+		const target = document.createElement("div");
+		target.dataset.elementId = "element-1";
+		vi.spyOn(target, "getBoundingClientRect").mockReturnValue(new DOMRect(0, 400));
+		container.appendChild(target);
+		document.body.appendChild(container);
+
+		return { container, target };
+	};
+
+	afterEach(() => {
+		document.body.innerHTML = "";
+		vi.restoreAllMocks();
+	});
+
+	it("should scroll the target below a gap and report success", () => {
+		const { container } = setup();
+
+		const result = scrollToCardElement(container, "element-1", false);
+
+		expect(result).toBe(true);
+		expect(container.scrollTo).toHaveBeenCalledWith({ top: 100 + 350 - 32, behavior: "smooth" });
+	});
+
+	it("should scroll to the very top for the first element", () => {
+		const { container } = setup();
+
+		scrollToCardElement(container, "element-1", true);
+
+		expect(container.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
+	});
+
+	it("should never scroll above the top", () => {
+		const { container, target } = setup();
+		vi.spyOn(target, "getBoundingClientRect").mockReturnValue(new DOMRect(0, -500));
+
+		scrollToCardElement(container, "element-1", false);
+
+		expect(container.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
+	});
+
+	it("should respect reduced motion", () => {
+		const matchMedia = window.matchMedia;
+		vi.spyOn(window, "matchMedia").mockImplementation((query) => ({ ...matchMedia(query), matches: true }));
+		const { container } = setup();
+
+		scrollToCardElement(container, "element-1", false);
+
+		expect(container.scrollTo).toHaveBeenCalledWith(expect.objectContaining({ behavior: "auto" }));
+	});
+
+	it("should report failure and not scroll when the element is not rendered", () => {
+		const { container } = setup();
+
+		const result = scrollToCardElement(container, "unknown", false);
+
+		expect(result).toBe(false);
+		expect(container.scrollTo).not.toHaveBeenCalled();
+	});
+
+	describe("focus", () => {
+		it("should skip a disabled control and focus the next usable control", () => {
+			const { container, target } = setup();
+			const disabledButton = document.createElement("button");
+			disabledButton.disabled = true;
+			const button = document.createElement("button");
+			target.append(disabledButton, button);
+
+			scrollToCardElement(container, "element-1", false);
+
+			expect(document.activeElement).toBe(button);
+		});
+
+		it("should focus the wrapper when its controls cannot receive focus", () => {
+			const { container, target } = setup();
+			const input = document.createElement("input");
+			input.type = "hidden";
+			target.append(input);
+
+			scrollToCardElement(container, "element-1", false);
+
+			expect(document.activeElement).toBe(target);
+		});
+
+		it("should focus the first focusable descendant", () => {
+			const { container, target } = setup();
+			const button = document.createElement("button");
+			target.appendChild(button);
+
+			scrollToCardElement(container, "element-1", false);
+
+			expect(document.activeElement).toBe(button);
+		});
+
+		it("should focus the element wrapper when nothing inside is focusable", () => {
+			const { container, target } = setup();
+
+			scrollToCardElement(container, "element-1", false);
+
+			expect(document.activeElement).toBe(target);
+			expect(target.tabIndex).toBe(-1);
+		});
+	});
+});

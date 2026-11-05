@@ -3,6 +3,11 @@ import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { RouteLocationRaw, useRoute } from "vue-router";
 
+export const getCardDetailRoute = (boardId: string, cardId: string): RouteLocationRaw => ({
+	name: "boards-card-detail",
+	params: { boardId, cardId },
+});
+
 export const useBoardCardNavigation = () => {
 	const { board } = storeToRefs(useBoardStore());
 	const route = useRoute();
@@ -32,8 +37,7 @@ export const useBoardCardNavigation = () => {
 			return undefined;
 		}
 
-		const prevCardId = allCardIds.value[currentCardIndex.value - 1];
-		return { name: "boards-card-detail", params: { boardId: board.value.id, cardId: prevCardId } };
+		return getCardDetailRoute(board.value.id, allCardIds.value[currentCardIndex.value - 1]);
 	});
 
 	const nextCardRoute = computed((): RouteLocationRaw | undefined => {
@@ -41,8 +45,7 @@ export const useBoardCardNavigation = () => {
 			return undefined;
 		}
 
-		const nextCardId = allCardIds.value[currentCardIndex.value + 1];
-		return { name: "boards-card-detail", params: { boardId: board.value.id, cardId: nextCardId } };
+		return getCardDetailRoute(board.value.id, allCardIds.value[currentCardIndex.value + 1]);
 	});
 
 	return {

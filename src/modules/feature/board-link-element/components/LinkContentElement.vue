@@ -61,7 +61,12 @@ import { convertDownloadToPreviewUrl, isPreviewPossible } from "@/utils/fileHelp
 import { FileRecordParentType } from "@api-file-storage";
 import { LinkElementResponse } from "@api-server";
 import { sanitizeUrl } from "@braintree/sanitize-url";
-import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";
+import {
+	canManageLinkElements as canManageLinkElementsWith,
+	useBoardAllowedOperations,
+	useBoardFocusHandler,
+	useContentElementState,
+} from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { mdiLink } from "@icons/material";
 import { BoardMenu, BoardMenuScope, EmptyElement } from "@ui-board";
@@ -98,7 +103,7 @@ const cardVariant = computed(() =>
 	props.isEditMode === true || computedElement.value.content.url !== "" ? "outlined" : "text"
 );
 
-const canManageLinkElements = computed(() => allowedOperations.value.updateElement);
+const canManageLinkElements = computed(() => canManageLinkElementsWith(allowedOperations.value));
 
 const autofocus = ref(false);
 useBoardFocusHandler(element.value.id, linkContentElement, () => {
