@@ -18,6 +18,21 @@
 import type { ReleaseItemResponse } from './release-item-response';
 
 export interface ReleaseListResponse {
+    /**
+     * The items for the current page.
+     */
     'data': Array<ReleaseItemResponse>;
+    /**
+     * The total amount of items.
+     */
+    'total': number;
+    /**
+     * The amount of items skipped from the start.
+     */
+    'skip': number;
+    /**
+     * The page size of the response.
+     */
+    'limit': number;
 }
 
