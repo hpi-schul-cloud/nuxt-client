@@ -17,7 +17,7 @@
 					:label="t('pages.administration.classes.form.schoolYear')"
 					:placeholder="t('pages.administration.classes.form.chooseSchoolYear')"
 					:disabled="formData.isCustom && !formData.keepYear"
-					:rules="[isRequired()]"
+					:rules="formData.isCustom && !formData.keepYear ? [] : [isRequired()]"
 					data-testid="input_class_school_year"
 					class="mb-4"
 				/>
