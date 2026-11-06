@@ -5,6 +5,7 @@
 		max-width="short"
 	>
 		<ClassForm
+			v-if="isReady"
 			:initial-data="initialFormData"
 			:school-year-options="schoolYearOptions"
 			:teacher-options="teacherOptions"
@@ -53,6 +54,8 @@ const initialFormData = ref<Partial<ClassFormData>>({
 	keepYear: true,
 });
 
+const isReady = ref(false);
+
 onMounted(async () => {
 	await loadTeachers();
 	initialFormData.value = {
@@ -62,6 +65,7 @@ onMounted(async () => {
 			? initialFormData.value.teacherIds
 			: [...defaultTeacherIds.value],
 	};
+	isReady.value = true;
 });
 
 const onSubmit = async (payload: { name: string; gradeLevel?: number; year?: string; teacherIds?: string[] }) => {

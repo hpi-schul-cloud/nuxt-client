@@ -85,4 +85,21 @@ describe("ClassCreate.page", () => {
 		expect(useGroupClassesMockHandler.createClass).toHaveBeenCalledWith({ name: "5a", gradeLevel: 5 });
 		expect(router.push).toHaveBeenCalledWith("/administration/classes/new-class-123/manage");
 	});
+
+	it("renders the form only after the teachers have been loaded", async () => {
+		let resolveTeachers: (() => void) | undefined;
+		useClassFormOptionsMockHandler.loadTeachers.mockReturnValue(
+			new Promise<void>((resolve) => {
+				resolveTeachers = resolve;
+			})
+		);
+
+		const { wrapper } = setup();
+		await flushPromises();
+		expect(wrapper.findComponent(ClassForm).exists()).toBe(false);
+
+		resolveTeachers?.();
+		await flushPromises();
+		expect(wrapper.findComponent(ClassForm).exists()).toBe(true);
+	});
 });
