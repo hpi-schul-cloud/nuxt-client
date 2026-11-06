@@ -1,3 +1,4 @@
+export * from "./class-form-options.composable";
 export * from "./group-classes.composable";
 export * from "./GroupApi.composable";
 export * from "./groupListState.composable";
