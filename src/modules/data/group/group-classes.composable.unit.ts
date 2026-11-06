@@ -274,18 +274,4 @@ describe("GroupModule", () => {
 			expect(data).toEqual(updatedData);
 		});
 	});
-
-	describe("sendRegistrationLinks", () => {
-		it("calls GET /administration/users-without-consent/send-email and notifies success", async () => {
-			axiosMock.get.mockResolvedValue({ data: {} });
-
-			const { sendRegistrationLinks } = useGroupClasses();
-			const { success } = await sendRegistrationLinks("class1", "student");
-
-			expect(axiosMock.get).toHaveBeenCalledWith("/administration/users-without-consent/send-email", {
-				params: { classId: "class1", role: "student" },
-			});
-			expect(success).toBe(true);
-		});
-	});
 });

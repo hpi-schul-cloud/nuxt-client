@@ -9,7 +9,6 @@ import {
 	GroupControllerFindClassesSortOrder,
 	SchoolYearQueryType,
 } from "@api-server";
-import { notifySuccess } from "@data-app";
 import { ClassInfo, GroupMapper } from "@data-group";
 import { ref } from "vue";
 
@@ -105,25 +104,11 @@ export const useGroupClasses = () => {
 		}
 	};
 
-	const sendRegistrationLinks = async (classId: string, role = "student") => {
-		const { success } = await execMutate(
-			() => $axios.get("/administration/users-without-consent/send-email", { params: { classId, role } }),
-			t("pages.administration.sendMail.error")
-		);
-
-		if (success) {
-			notifySuccess(t("pages.administration.sendMail.success"));
-		}
-
-		return { success };
-	};
-
 	return {
 		fetchClassById,
 		createClass,
 		updateClass,
 		deleteClass,
-		sendRegistrationLinks,
 		fetchClassesForSchool,
 		classes,
 		isFetching,

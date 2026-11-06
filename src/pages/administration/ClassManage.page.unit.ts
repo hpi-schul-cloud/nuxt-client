@@ -3,6 +3,7 @@ import { createTestAppStoreWithPermissions, mockComposable } from "@@/tests/test
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Permission } from "@api-server";
 import { useClassFormOptions, useGroupClasses } from "@data-group";
+import { useUsersStore } from "@data-users";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -11,6 +12,7 @@ import { computed } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("@data-group");
+vi.mock("@data-users");
 vi.mock("@data-env", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("@data-env")>();
 	const { ref } = await import("vue");
@@ -28,10 +30,12 @@ vi.mock("@data-env", async (importOriginal) => {
 
 const useGroupClassesMock = vi.mocked(useGroupClasses);
 const useClassFormOptionsMock = vi.mocked(useClassFormOptions);
+const useUsersStoreMock = vi.mocked(useUsersStore);
 
 describe("ClassManage.page", () => {
 	let useGroupClassesMockHandler: Mocked<ReturnType<typeof useGroupClasses>>;
 	let useClassFormOptionsMockHandler: Mocked<ReturnType<typeof useClassFormOptions>>;
+	let useUsersStoreMockHandler: Mocked<ReturnType<typeof useUsersStore>>;
 	const router = createRouterMock();
 	injectRouterMock(router);
 
@@ -48,7 +52,6 @@ describe("ClassManage.page", () => {
 				userIds: [{ _id: "student1", firstName: "Tim", lastName: "Tester" }],
 			}),
 			updateClass: vi.fn().mockResolvedValue({ success: true }),
-			sendRegistrationLinks: vi.fn().mockResolvedValue({ success: true }),
 			isMutating: computed(() => false),
 		});
 		useGroupClassesMock.mockReturnValue(useGroupClassesMockHandler);
@@ -70,6 +73,11 @@ describe("ClassManage.page", () => {
 			isAdmin: computed(() => true),
 		});
 		useClassFormOptionsMock.mockReturnValue(useClassFormOptionsMockHandler);
+
+		useUsersStoreMockHandler = mockComposable(useUsersStore, {
+			sendRegistrationLink: vi.fn().mockResolvedValue(undefined),
+		});
+		useUsersStoreMock.mockReturnValue(useUsersStoreMockHandler);
 	});
 
 	afterEach(() => {
@@ -154,7 +162,59 @@ describe("ClassManage.page", () => {
 		await sendBtn.trigger("click");
 		await flushPromises();
 
-		expect(useGroupClassesMockHandler.sendRegistrationLinks).toHaveBeenCalledWith("class123", "student");
+		expect(useUsersStoreMockHandler.sendRegistrationLink).toHaveBeenCalledWith({
+			userIds: ["student1"],
+			selectionType: "inclusive",
+		});
+	});
+
+	it("disables the registration links button when the class has no students", async () => {
+		useGroupClassesMockHandler.fetchClassById.mockResolvedValue({
+			_id: "class123",
+			name: "5a",
+			teacherIds: [],
+			userIds: [],
+		});
+
+		const { wrapper } = setup();
+		await flushPromises();
+
+		const sendBtn = wrapper.find('[data-testid="send-registration-links-btn"]');
+		expect(sendBtn.attributes("disabled")).toBeDefined();
+	});
+
+	describe("when the class could not be loaded", () => {
+		beforeEach(() => {
+			useGroupClassesMockHandler.fetchClassById.mockResolvedValue(undefined);
+		});
+
+		it("disables the save button", async () => {
+			const { wrapper } = setup();
+			await flushPromises();
+
+			const saveBtn = wrapper.find('[data-testid="manage-confirm"]');
+			expect(saveBtn.attributes("disabled")).toBeDefined();
+		});
+
+		it("does not send an update when the form is submitted", async () => {
+			const { wrapper } = setup();
+			await flushPromises();
+
+			await wrapper.find("form").trigger("submit");
+			await flushPromises();
+
+			expect(useGroupClassesMockHandler.updateClass).not.toHaveBeenCalled();
+		});
+
+		it("does not send registration links", async () => {
+			const { wrapper } = setup();
+			await flushPromises();
+
+			await wrapper.find('[data-testid="send-registration-links-btn"]').trigger("click");
+			await flushPromises();
+
+			expect(useUsersStoreMockHandler.sendRegistrationLink).not.toHaveBeenCalled();
+		});
 	});
 
 	it("renders expansion panels for guidance notes", async () => {

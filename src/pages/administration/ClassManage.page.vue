@@ -82,7 +82,14 @@
 				<VBtn variant="outlined" data-testid="button_manage_cancel" class="btn-cancel px-6" @click="onCancel">
 					{{ t("common.actions.cancel") }}
 				</VBtn>
-				<VBtn color="primary" type="submit" data-testid="manage-confirm" :loading="isMutating" class="px-6">
+				<VBtn
+					color="primary"
+					type="submit"
+					data-testid="manage-confirm"
+					:loading="isMutating"
+					:disabled="!isClassLoaded"
+					class="px-6"
+				>
 					{{ t("common.actions.save") }}
 				</VBtn>
 			</div>
@@ -108,6 +115,7 @@
 						color="secondary"
 						variant="tonal"
 						:loading="isSendingEmails"
+						:disabled="!isClassLoaded || savedStudentIds.length === 0"
 						data-testid="send-registration-links-btn"
 						class="btn-send-links-emails my-2"
 						:data-class="classId"
@@ -133,6 +141,7 @@ import { Permission } from "@api-server";
 import { useAppStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useClassFormOptions, useGroupClasses, UserSelectOption } from "@data-group";
+import { useUsersStore } from "@data-users";
 import { mdiAccountGroupOutline, mdiAccountMultipleOutline, mdiPencilOutline } from "@icons/material";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { computed, onMounted, ref } from "vue";
@@ -152,8 +161,9 @@ const router = useRouter();
 const appStore = useAppStore();
 const formRef = ref<VForm>();
 
-const { fetchClassById, updateClass, sendRegistrationLinks, isMutating } = useGroupClasses();
+const { fetchClassById, updateClass, isMutating } = useGroupClasses();
 const { teacherOptions, studentOptions, loadTeachers, loadStudents, isAdmin } = useClassFormOptions();
+const { sendRegistrationLink } = useUsersStore();
 const { isSchoolSynced } = useSchoolStoreRefs();
 
 const isConsentNecessary = computed(() => useEnvConfig().value.FEATURE_CONSENT_NECESSARY);
@@ -169,6 +179,8 @@ const selectedTeacherIds = ref<string[]>([]);
 const selectedUserIds = ref<string[]>([]);
 const extraTeachers = ref<UserSelectOption[]>([]);
 const extraStudents = ref<UserSelectOption[]>([]);
+const savedStudentIds = ref<string[]>([]);
+const isClassLoaded = ref(false);
 const isSendingEmails = ref(false);
 
 const headline = computed(() =>
@@ -304,7 +316,9 @@ const loadClassData = async () => {
 
 	const students = parseMembers(cls.userIds);
 	selectedUserIds.value = students.ids;
+	savedStudentIds.value = [...students.ids];
 	extraStudents.value = students.options;
+	isClassLoaded.value = true;
 };
 
 onMounted(async () => {
@@ -313,6 +327,8 @@ onMounted(async () => {
 });
 
 const onSave = async () => {
+	if (!isClassLoaded.value) return;
+
 	const validation = await formRef.value?.validate();
 	if (validation && !validation.valid) return;
 
@@ -333,7 +349,7 @@ const onCancel = () => {
 const onSendRegistrationLinks = async () => {
 	isSendingEmails.value = true;
 	try {
-		await sendRegistrationLinks(props.classId, "student");
+		await sendRegistrationLink({ userIds: savedStudentIds.value, selectionType: "inclusive" });
 	} finally {
 		isSendingEmails.value = false;
 	}
