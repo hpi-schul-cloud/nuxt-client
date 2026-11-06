@@ -14,66 +14,15 @@
 
 
 
-/**
- * 
- * @export
- * @interface WopiFileInfoResponse
- */
 export interface WopiFileInfoResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof WopiFileInfoResponse
-     */
-    BaseFileName: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WopiFileInfoResponse
-     */
-    IsAdminUser: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof WopiFileInfoResponse
-     */
-    PostMessageOrigin: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof WopiFileInfoResponse
-     */
-    Size: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof WopiFileInfoResponse
-     */
-    UserId: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WopiFileInfoResponse
-     */
-    UserCanWrite: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof WopiFileInfoResponse
-     */
-    UserFriendlyName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof WopiFileInfoResponse
-     */
-    LastModifiedTime: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof WopiFileInfoResponse
-     */
-    OwnerId: string;
+    'BaseFileName': string;
+    'IsAdminUser': boolean;
+    'PostMessageOrigin': string;
+    'Size': number;
+    'UserId': string;
+    'UserCanWrite': boolean;
+    'UserFriendlyName': string;
+    'LastModifiedTime': string;
+    'OwnerId': string;
 }
-
 

@@ -14,16 +14,14 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
-export enum PreviewWidth {
-    _50 = '50',
-    _150 = '150',
-    _500 = '500'
-}
+
+export const PreviewWidth = {
+    _50: '50',
+    _150: '150',
+    _500: '500',
+} as const;
+
+export type PreviewWidth = typeof PreviewWidth[keyof typeof PreviewWidth];
 
 
 

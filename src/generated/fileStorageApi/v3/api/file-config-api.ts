@@ -13,18 +13,18 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { FilesStorageConfigResponse } from '../models';
+import type { FilesStorageConfigResponse } from '../models';
 /**
  * FileConfigApi - axios parameter creator
- * @export
  */
 export const FileConfigApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -34,7 +34,7 @@ export const FileConfigApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        publicConfig: async (options: any = {}): Promise<RequestArgs> => {
+        publicConfig: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/file/config/public`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -47,9 +47,9 @@ export const FileConfigApiAxiosParamCreator = function (configuration?: Configur
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -63,7 +63,6 @@ export const FileConfigApiAxiosParamCreator = function (configuration?: Configur
 
 /**
  * FileConfigApi - functional programming interface
- * @export
  */
 export const FileConfigApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = FileConfigApiAxiosParamCreator(configuration)
@@ -74,16 +73,17 @@ export const FileConfigApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async publicConfig(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FilesStorageConfigResponse>> {
+        async publicConfig(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FilesStorageConfigResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.publicConfig(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['FileConfigApi.publicConfig']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * FileConfigApi - factory interface
- * @export
  */
 export const FileConfigApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = FileConfigApiFp(configuration)
@@ -94,7 +94,7 @@ export const FileConfigApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        publicConfig(options?: any): AxiosPromise<FilesStorageConfigResponse> {
+        publicConfig(options?: RawAxiosRequestConfig): AxiosPromise<FilesStorageConfigResponse> {
             return localVarFp.publicConfig(options).then((request) => request(axios, basePath));
         },
     };
@@ -102,8 +102,6 @@ export const FileConfigApiFactory = function (configuration?: Configuration, bas
 
 /**
  * FileConfigApi - interface
- * @export
- * @interface FileConfigApi
  */
 export interface FileConfigApiInterface {
     /**
@@ -111,17 +109,13 @@ export interface FileConfigApiInterface {
      * @summary Useable configuration for clients
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof FileConfigApiInterface
      */
-    publicConfig(options?: any): AxiosPromise<FilesStorageConfigResponse>;
+    publicConfig(options?: RawAxiosRequestConfig): AxiosPromise<FilesStorageConfigResponse>;
 
 }
 
 /**
  * FileConfigApi - object-oriented interface
- * @export
- * @class FileConfigApi
- * @extends {BaseAPI}
  */
 export class FileConfigApi extends BaseAPI implements FileConfigApiInterface {
     /**
@@ -129,9 +123,9 @@ export class FileConfigApi extends BaseAPI implements FileConfigApiInterface {
      * @summary Useable configuration for clients
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof FileConfigApi
      */
-    public publicConfig(options?: any) {
+    public publicConfig(options?: RawAxiosRequestConfig) {
         return FileConfigApiFp(this.configuration).publicConfig(options).then((request) => request(this.axios, this.basePath));
     }
 }
+

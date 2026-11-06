@@ -13,32 +13,15 @@
  */
 
 
-import { StorageLocation } from './storage-location';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { StorageLocation } from './storage-location';
 
-/**
- * 
- * @export
- * @interface DeleteByStorageLocationResponse
- */
 export interface DeleteByStorageLocationResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof DeleteByStorageLocationResponse
-     */
-    storageLocationId: string;
-    /**
-     * 
-     * @type {StorageLocation}
-     * @memberof DeleteByStorageLocationResponse
-     */
-    storageLocation: StorageLocation;
-    /**
-     * 
-     * @type {number}
-     * @memberof DeleteByStorageLocationResponse
-     */
-    deletedFiles: number;
+    'storageLocationId': string;
+    'storageLocation': StorageLocation;
+    'deletedFiles': number;
 }
+
 
 

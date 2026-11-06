@@ -13,26 +13,14 @@
  */
 
 
-import { DocumentType } from './document-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { DocumentType } from './document-type';
 
-/**
- * 
- * @export
- * @interface AddDocumentToParentParams
- */
 export interface AddDocumentToParentParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof AddDocumentToParentParams
-     */
-    fileName: string;
-    /**
-     * 
-     * @type {DocumentType}
-     * @memberof AddDocumentToParentParams
-     */
-    documentType: DocumentType;
+    'fileName': string;
+    'documentType': DocumentType;
 }
+
 
 

@@ -13,24 +13,24 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { AuthorizedCollaboraDocumentUrlResponse } from '../models';
+import type { AuthorizedCollaboraDocumentUrlResponse } from '../models';
 // @ts-ignore
-import { EditorMode } from '../models';
+import type { EditorMode } from '../models';
 // @ts-ignore
-import { WopiFileInfoResponse } from '../models';
+import type { WopiFileInfoResponse } from '../models';
 /**
  * WopiApi - axios parameter creator
- * @export
  */
 export const WopiApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -42,13 +42,13 @@ export const WopiApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        checkFileInfo: async (fileRecordId: string, accessToken: string, options: any = {}): Promise<RequestArgs> => {
+        checkFileInfo: async (fileRecordId: string, accessToken: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'fileRecordId' is not null or undefined
             assertParamExists('checkFileInfo', 'fileRecordId', fileRecordId)
             // verify required parameter 'accessToken' is not null or undefined
             assertParamExists('checkFileInfo', 'accessToken', accessToken)
             const localVarPath = `/wopi/files/{fileRecordId}`
-                .replace(`{${"fileRecordId"}}`, encodeURIComponent(String(fileRecordId)));
+                .replace('{fileRecordId}', encodeURIComponent(String(fileRecordId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -64,9 +64,9 @@ export const WopiApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['access_token'] = accessToken;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -84,7 +84,7 @@ export const WopiApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAuthorizedCollaboraDocumentUrl: async (fileRecordId: string, editorMode: EditorMode, userDisplayName: string, options: any = {}): Promise<RequestArgs> => {
+        getAuthorizedCollaboraDocumentUrl: async (fileRecordId: string, editorMode: EditorMode, userDisplayName: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'fileRecordId' is not null or undefined
             assertParamExists('getAuthorizedCollaboraDocumentUrl', 'fileRecordId', fileRecordId)
             // verify required parameter 'editorMode' is not null or undefined
@@ -119,9 +119,9 @@ export const WopiApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['userDisplayName'] = userDisplayName;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -138,13 +138,13 @@ export const WopiApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFile: async (fileRecordId: string, accessToken: string, options: any = {}): Promise<RequestArgs> => {
+        getFile: async (fileRecordId: string, accessToken: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'fileRecordId' is not null or undefined
             assertParamExists('getFile', 'fileRecordId', fileRecordId)
             // verify required parameter 'accessToken' is not null or undefined
             assertParamExists('getFile', 'accessToken', accessToken)
             const localVarPath = `/wopi/files/{fileRecordId}/contents`
-                .replace(`{${"fileRecordId"}}`, encodeURIComponent(String(fileRecordId)));
+                .replace('{fileRecordId}', encodeURIComponent(String(fileRecordId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -160,9 +160,9 @@ export const WopiApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['access_token'] = accessToken;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -179,13 +179,13 @@ export const WopiApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putFile: async (fileRecordId: string, accessToken: string, options: any = {}): Promise<RequestArgs> => {
+        putFile: async (fileRecordId: string, accessToken: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'fileRecordId' is not null or undefined
             assertParamExists('putFile', 'fileRecordId', fileRecordId)
             // verify required parameter 'accessToken' is not null or undefined
             assertParamExists('putFile', 'accessToken', accessToken)
             const localVarPath = `/wopi/files/{fileRecordId}/contents`
-                .replace(`{${"fileRecordId"}}`, encodeURIComponent(String(fileRecordId)));
+                .replace('{fileRecordId}', encodeURIComponent(String(fileRecordId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -201,9 +201,9 @@ export const WopiApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['access_token'] = accessToken;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -217,7 +217,6 @@ export const WopiApiAxiosParamCreator = function (configuration?: Configuration)
 
 /**
  * WopiApi - functional programming interface
- * @export
  */
 export const WopiApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = WopiApiAxiosParamCreator(configuration)
@@ -230,9 +229,11 @@ export const WopiApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async checkFileInfo(fileRecordId: string, accessToken: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WopiFileInfoResponse>> {
+        async checkFileInfo(fileRecordId: string, accessToken: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WopiFileInfoResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.checkFileInfo(fileRecordId, accessToken, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WopiApi.checkFileInfo']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -243,9 +244,11 @@ export const WopiApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAuthorizedCollaboraDocumentUrl(fileRecordId: string, editorMode: EditorMode, userDisplayName: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthorizedCollaboraDocumentUrlResponse>> {
+        async getAuthorizedCollaboraDocumentUrl(fileRecordId: string, editorMode: EditorMode, userDisplayName: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthorizedCollaboraDocumentUrlResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAuthorizedCollaboraDocumentUrl(fileRecordId, editorMode, userDisplayName, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WopiApi.getAuthorizedCollaboraDocumentUrl']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -255,9 +258,11 @@ export const WopiApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getFile(fileRecordId: string, accessToken: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async getFile(fileRecordId: string, accessToken: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getFile(fileRecordId, accessToken, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WopiApi.getFile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -267,16 +272,17 @@ export const WopiApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async putFile(fileRecordId: string, accessToken: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async putFile(fileRecordId: string, accessToken: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.putFile(fileRecordId, accessToken, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WopiApi.putFile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * WopiApi - factory interface
- * @export
  */
 export const WopiApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = WopiApiFp(configuration)
@@ -289,7 +295,7 @@ export const WopiApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        checkFileInfo(fileRecordId: string, accessToken: string, options?: any): AxiosPromise<WopiFileInfoResponse> {
+        checkFileInfo(fileRecordId: string, accessToken: string, options?: RawAxiosRequestConfig): AxiosPromise<WopiFileInfoResponse> {
             return localVarFp.checkFileInfo(fileRecordId, accessToken, options).then((request) => request(axios, basePath));
         },
         /**
@@ -301,7 +307,7 @@ export const WopiApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAuthorizedCollaboraDocumentUrl(fileRecordId: string, editorMode: EditorMode, userDisplayName: string, options?: any): AxiosPromise<AuthorizedCollaboraDocumentUrlResponse> {
+        getAuthorizedCollaboraDocumentUrl(fileRecordId: string, editorMode: EditorMode, userDisplayName: string, options?: RawAxiosRequestConfig): AxiosPromise<AuthorizedCollaboraDocumentUrlResponse> {
             return localVarFp.getAuthorizedCollaboraDocumentUrl(fileRecordId, editorMode, userDisplayName, options).then((request) => request(axios, basePath));
         },
         /**
@@ -312,7 +318,7 @@ export const WopiApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFile(fileRecordId: string, accessToken: string, options?: any): AxiosPromise<void> {
+        getFile(fileRecordId: string, accessToken: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.getFile(fileRecordId, accessToken, options).then((request) => request(axios, basePath));
         },
         /**
@@ -323,7 +329,7 @@ export const WopiApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putFile(fileRecordId: string, accessToken: string, options?: any): AxiosPromise<void> {
+        putFile(fileRecordId: string, accessToken: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.putFile(fileRecordId, accessToken, options).then((request) => request(axios, basePath));
         },
     };
@@ -331,8 +337,6 @@ export const WopiApiFactory = function (configuration?: Configuration, basePath?
 
 /**
  * WopiApi - interface
- * @export
- * @interface WopiApi
  */
 export interface WopiApiInterface {
     /**
@@ -342,9 +346,8 @@ export interface WopiApiInterface {
      * @param {string} accessToken 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof WopiApiInterface
      */
-    checkFileInfo(fileRecordId: string, accessToken: string, options?: any): AxiosPromise<WopiFileInfoResponse>;
+    checkFileInfo(fileRecordId: string, accessToken: string, options?: RawAxiosRequestConfig): AxiosPromise<WopiFileInfoResponse>;
 
     /**
      * 
@@ -354,9 +357,8 @@ export interface WopiApiInterface {
      * @param {string} userDisplayName 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof WopiApiInterface
      */
-    getAuthorizedCollaboraDocumentUrl(fileRecordId: string, editorMode: EditorMode, userDisplayName: string, options?: any): AxiosPromise<AuthorizedCollaboraDocumentUrlResponse>;
+    getAuthorizedCollaboraDocumentUrl(fileRecordId: string, editorMode: EditorMode, userDisplayName: string, options?: RawAxiosRequestConfig): AxiosPromise<AuthorizedCollaboraDocumentUrlResponse>;
 
     /**
      * 
@@ -365,9 +367,8 @@ export interface WopiApiInterface {
      * @param {string} accessToken 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof WopiApiInterface
      */
-    getFile(fileRecordId: string, accessToken: string, options?: any): AxiosPromise<void>;
+    getFile(fileRecordId: string, accessToken: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -376,17 +377,13 @@ export interface WopiApiInterface {
      * @param {string} accessToken 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof WopiApiInterface
      */
-    putFile(fileRecordId: string, accessToken: string, options?: any): AxiosPromise<void>;
+    putFile(fileRecordId: string, accessToken: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
  * WopiApi - object-oriented interface
- * @export
- * @class WopiApi
- * @extends {BaseAPI}
  */
 export class WopiApi extends BaseAPI implements WopiApiInterface {
     /**
@@ -396,9 +393,8 @@ export class WopiApi extends BaseAPI implements WopiApiInterface {
      * @param {string} accessToken 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof WopiApi
      */
-    public checkFileInfo(fileRecordId: string, accessToken: string, options?: any) {
+    public checkFileInfo(fileRecordId: string, accessToken: string, options?: RawAxiosRequestConfig) {
         return WopiApiFp(this.configuration).checkFileInfo(fileRecordId, accessToken, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -410,9 +406,8 @@ export class WopiApi extends BaseAPI implements WopiApiInterface {
      * @param {string} userDisplayName 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof WopiApi
      */
-    public getAuthorizedCollaboraDocumentUrl(fileRecordId: string, editorMode: EditorMode, userDisplayName: string, options?: any) {
+    public getAuthorizedCollaboraDocumentUrl(fileRecordId: string, editorMode: EditorMode, userDisplayName: string, options?: RawAxiosRequestConfig) {
         return WopiApiFp(this.configuration).getAuthorizedCollaboraDocumentUrl(fileRecordId, editorMode, userDisplayName, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -423,9 +418,8 @@ export class WopiApi extends BaseAPI implements WopiApiInterface {
      * @param {string} accessToken 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof WopiApi
      */
-    public getFile(fileRecordId: string, accessToken: string, options?: any) {
+    public getFile(fileRecordId: string, accessToken: string, options?: RawAxiosRequestConfig) {
         return WopiApiFp(this.configuration).getFile(fileRecordId, accessToken, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -436,9 +430,9 @@ export class WopiApi extends BaseAPI implements WopiApiInterface {
      * @param {string} accessToken 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof WopiApi
      */
-    public putFile(fileRecordId: string, accessToken: string, options?: any) {
+    public putFile(fileRecordId: string, accessToken: string, options?: RawAxiosRequestConfig) {
         return WopiApiFp(this.configuration).putFile(fileRecordId, accessToken, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

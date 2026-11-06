@@ -14,30 +14,9 @@
 
 
 
-/**
- * 
- * @export
- * @interface CopyFileResponse
- */
 export interface CopyFileResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof CopyFileResponse
-     */
-    id?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CopyFileResponse
-     */
-    sourceId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CopyFileResponse
-     */
-    name: string;
+    'id'?: string;
+    'sourceId': string;
+    'name': string;
 }
-
 
