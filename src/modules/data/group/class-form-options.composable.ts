@@ -37,7 +37,7 @@ export const useClassFormOptions = () => {
 	const activeYearId = computed<string>(() => schoolDetails.value?.years?.activeYear?.id ?? "");
 
 	const teacherOptions = computed<TeacherOption[]>(() => {
-		const list = teachersList.value.length ? teachersList.value : teachersStore.userList;
+		const list = teachersList.value;
 		return list.map((u) => ({
 			title: `${u.firstName ?? ""} ${u.lastName ?? ""}`.trim() || u.email,
 			value: u._id,
