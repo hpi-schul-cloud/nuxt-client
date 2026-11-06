@@ -26,6 +26,7 @@
 		</div>
 
 		<ClassForm
+			v-if="isClassLoaded"
 			:is-edit="true"
 			:initial-data="initialFormData"
 			:school-year-options="schoolYearOptions"
@@ -73,6 +74,7 @@ const breadcrumbs = [
 document.title = buildPageTitle(t("pages.administration.classes.edit"));
 
 const initialFormData = ref<Partial<ClassFormData>>({});
+const isClassLoaded = ref(false);
 
 onMounted(async () => {
 	await Promise.all([
@@ -90,12 +92,15 @@ onMounted(async () => {
 					customName: !cls.gradeLevel ? cls.name : "",
 					keepYear: !!cls.year,
 				};
+				isClassLoaded.value = true;
 			}
 		})(),
 	]);
 });
 
 const onSubmit = async (payload: { name: string; gradeLevel?: number; year?: string; teacherIds?: string[] }) => {
+	if (!isClassLoaded.value) return;
+
 	const { success } = await updateClass(props.classId, payload);
 	if (success) {
 		router.push("/administration/groups/classes");

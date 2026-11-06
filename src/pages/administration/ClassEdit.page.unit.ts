@@ -1,4 +1,5 @@
 import ClassEdit from "./ClassEdit.page.vue";
+import ClassForm from "@/components/administration/ClassForm.vue";
 import { mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useClassFormOptions, useGroupClasses } from "@data-group";
@@ -87,5 +88,19 @@ describe("ClassEdit.page", () => {
 		await flushPromises();
 
 		expect(useGroupClassesMockHandler.updateClass).toHaveBeenCalled();
+	});
+
+	describe("when the class could not be loaded", () => {
+		beforeEach(() => {
+			useGroupClassesMockHandler.fetchClassById.mockResolvedValue(undefined);
+		});
+
+		it("does not render the form", async () => {
+			const { wrapper } = setup();
+			await flushPromises();
+
+			expect(wrapper.findComponent(ClassForm).exists()).toBe(false);
+			expect(wrapper.find('[data-testid="button_class_submit"]').exists()).toBe(false);
+		});
 	});
 });
