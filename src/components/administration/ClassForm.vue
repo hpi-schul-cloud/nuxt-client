@@ -81,8 +81,8 @@
 					:label="t('pages.administration.classes.form.customName')"
 					:placeholder="t('pages.administration.classes.form.customNamePlaceholder')"
 					:rules="[formData.isCustom ? isRequired() : true]"
-					data-testid="input_class_custom_name"
-					data-test-id="Klassenbezeichnung"
+					data-testid="Klassenbezeichnung"
+					data-test-id="input_class_custom_name"
 					name="classcustom"
 					class="mb-2"
 				/>
@@ -91,8 +91,8 @@
 					:label="t('pages.administration.classes.form.keepYear')"
 					density="compact"
 					hide-details
-					data-testid="checkbox_class_keep_year"
-					data-test-id="maintain-school-year-in-class"
+					data-testid="maintain-school-year-in-class"
+					data-test-id="checkbox_class_keep_year"
 				/>
 			</div>
 		</VCard>

@@ -71,7 +71,7 @@ describe("ClassForm.vue", () => {
 		await modeToggle.vm.$emit("update:modelValue", true);
 		await flushPromises();
 
-		const customNameInput = wrapper.findComponent<typeof VTextField>('[data-testid="input_class_custom_name"]');
+		const customNameInput = wrapper.findComponent<typeof VTextField>('[data-testid="Klassenbezeichnung"]');
 		await customNameInput.vm.$emit("update:modelValue", "Froschklasse");
 		await flushPromises();
 
@@ -86,7 +86,7 @@ describe("ClassForm.vue", () => {
 		await modeToggle.vm.$emit("update:modelValue", true);
 		await flushPromises();
 
-		const keepYearCheckbox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox_class_keep_year"]');
+		const keepYearCheckbox = wrapper.findComponent<typeof VCheckbox>('[data-testid="maintain-school-year-in-class"]');
 		await keepYearCheckbox.vm.$emit("update:modelValue", false);
 		await flushPromises();
 
