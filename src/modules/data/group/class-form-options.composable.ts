@@ -9,6 +9,8 @@ export interface UserSelectOption {
 	value: string;
 }
 
+const USERS_PAGE_SIZE = 1000;
+
 export const useClassFormOptions = () => {
 	const teachersStore = useUsersStore();
 	teachersStore.init(RoleName.TEACHER);
@@ -51,16 +53,29 @@ export const useClassFormOptions = () => {
 		}))
 	);
 
+	const fetchAllUsers = async (role: RoleName.TEACHER | RoleName.STUDENT): Promise<UserResponse[]> => {
+		teachersStore.init(role);
+
+		const users: UserResponse[] = [];
+		let hasMore = true;
+		while (hasMore) {
+			teachersStore.resetState();
+			await teachersStore.fetchUsers({ $limit: USERS_PAGE_SIZE, $skip: users.length, $sort: { lastName: 1 } });
+
+			const page = teachersStore.userList;
+			users.push(...page);
+			hasMore = page.length > 0 && users.length < teachersStore.pagination.total;
+		}
+
+		return users;
+	};
+
 	const loadTeachers = async () => {
-		teachersStore.init(RoleName.TEACHER);
-		await teachersStore.fetchUsers({ $limit: 200, $skip: 0, $sort: { lastName: 1 } });
-		teachersList.value = [...teachersStore.userList];
+		teachersList.value = await fetchAllUsers(RoleName.TEACHER);
 	};
 
 	const loadStudents = async () => {
-		teachersStore.init(RoleName.STUDENT);
-		await teachersStore.fetchUsers({ $limit: 1000, $skip: 0, $sort: { lastName: 1 } });
-		studentsList.value = [...teachersStore.userList];
+		studentsList.value = await fetchAllUsers(RoleName.STUDENT);
 	};
 
 	return {
