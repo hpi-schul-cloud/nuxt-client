@@ -76,42 +76,24 @@
 			<!-- Custom Mode -->
 			<div v-else>
 				<VTextField
+					id="input-classcustom"
 					v-model="formData.customName"
 					:label="t('pages.administration.classes.form.customName')"
 					:placeholder="t('pages.administration.classes.form.customNamePlaceholder')"
 					:rules="[formData.isCustom ? isRequired() : true]"
 					data-testid="input_class_custom_name"
+					data-test-id="Klassenbezeichnung"
+					name="classcustom"
 					class="mb-2"
 				/>
-				<div class="d-none">
-					<label for="input-classcustom" class="d-none">Klassenbezeichnung</label>
-					<input
-						id="input-classcustom"
-						v-model="formData.customName"
-						type="text"
-						data-testid="Klassenbezeichnung"
-						name="classcustom"
-						aria-label="Klassenbezeichnung"
-					/>
-				</div>
 				<VCheckbox
 					v-model="formData.keepYear"
 					:label="t('pages.administration.classes.form.keepYear')"
 					density="compact"
 					hide-details
 					data-testid="checkbox_class_keep_year"
+					data-test-id="maintain-school-year-in-class"
 				/>
-				<div class="d-none">
-					<label for="input-keepyear" class="d-none">Schuljahr beibehalten</label>
-					<input
-						id="input-keepyear"
-						v-model="formData.keepYear"
-						type="checkbox"
-						data-testid="maintain-school-year-in-class"
-						name="keepyear"
-						aria-label="Schuljahr beibehalten"
-					/>
-				</div>
 			</div>
 		</VCard>
 
