@@ -8,6 +8,7 @@ type Props = {
 	title?: string;
 	imageUrl?: string;
 	isEditMode?: boolean;
+	isDetailView?: boolean;
 };
 
 describe("LinkContentElementDisplay", () => {
@@ -89,7 +90,7 @@ describe("LinkContentElementDisplay", () => {
 			${"small"}  | ${600}
 			${"medium"} | ${960}
 			${"large"}  | ${1280}
-		`("content should have row style for $screenSize display sizes when image url is given", ({ px: windowWidth }) => {
+		`("should have row style for $screenSize display sizes when image url is given", ({ px: windowWidth }) => {
 			const { wrapper } = setup({
 				props: {
 					url: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus",
@@ -102,7 +103,7 @@ describe("LinkContentElementDisplay", () => {
 			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-row");
 		});
 
-		it("content should have column style when display size is smaller than 600px", () => {
+		it("should have column style when display size is smaller than 600px", () => {
 			const { wrapper } = setup({
 				props: {
 					url: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus",
@@ -115,7 +116,7 @@ describe("LinkContentElementDisplay", () => {
 			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
 		});
 
-		it("content should have column style when no imageUrl is given", () => {
+		it("should have column style when no imageUrl is given", () => {
 			const { wrapper } = setup({
 				props: {
 					url: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus",
@@ -134,26 +135,70 @@ describe("LinkContentElementDisplay", () => {
 			${"small"}  | ${600}
 			${"medium"} | ${960}
 			${"large"}  | ${1280}
-		`(
-			"content should have column style for $screenSize display sizes when image url is given",
-			({ px: windowWidth }) => {
-				const { wrapper } = setup({
-					props: {
-						url: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus",
-						imageUrl: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus.jpg",
-					},
-					isListBoard: false,
-					windowWidth,
-				});
-
-				expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
-			}
-		);
-
-		it("content should have column style when no imageUrl is given", () => {
+		`("should have column style for $screenSize display sizes when image url is given", ({ px: windowWidth }) => {
 			const { wrapper } = setup({
 				props: {
 					url: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus",
+					imageUrl: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus.jpg",
+				},
+				isListBoard: false,
+				windowWidth,
+			});
+
+			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
+		});
+
+		it("should have column style when no imageUrl is given", () => {
+			const { wrapper } = setup({
+				props: {
+					url: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus",
+				},
+				isListBoard: false,
+			});
+
+			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
+		});
+	});
+
+	describe("when detail view is enabled", () => {
+		it.each`
+			screenSize  | px
+			${"small"}  | ${600}
+			${"medium"} | ${960}
+			${"large"}  | ${1280}
+		`("should have row style for $screenSize display sizes when image url is given", ({ px: windowWidth }) => {
+			const { wrapper } = setup({
+				props: {
+					url: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus",
+					imageUrl: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus.jpg",
+					isDetailView: true,
+				},
+				isListBoard: false,
+				windowWidth,
+			});
+
+			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-row");
+		});
+
+		it("should have column style when display size is smaller than 600px", () => {
+			const { wrapper } = setup({
+				props: {
+					url: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus",
+					imageUrl: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus.jpg",
+					isDetailView: true,
+				},
+				isListBoard: false,
+				windowWidth: 599,
+			});
+
+			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-column");
+		});
+
+		it("should have column style when no imageUrl is given", () => {
+			const { wrapper } = setup({
+				props: {
+					url: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus",
+					isDetailView: true,
 				},
 				isListBoard: false,
 			});
