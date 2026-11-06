@@ -308,7 +308,8 @@ const loadClassData = async () => {
 };
 
 onMounted(async () => {
-	await Promise.all([loadTeachers(), loadStudents(), loadClassData()]);
+	await loadTeachers();
+	await Promise.all([loadStudents(), loadClassData()]);
 });
 
 const onSave = async () => {
