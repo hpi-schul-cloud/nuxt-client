@@ -16,6 +16,10 @@
 
 export interface RoomInvitationLinkResponse {
     'id': string;
+    /**
+     * Secret invitation credential used in share URLs. Only legacy invitations omit this field; use id for those.
+     */
+    'invitationToken'?: string;
     'roomId': string;
     'title': string;
     'restrictedToCreatorSchool': boolean;
