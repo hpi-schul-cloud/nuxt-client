@@ -65,7 +65,8 @@ describe("AuthSystems", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		createTestSchoolStore({ schoolDetails: mockSchool });
+		const { schoolStore } = createTestSchoolStore({ schoolDetails: mockSchool });
+		schoolStore.deleteSchoolSystem.mockResolvedValue(undefined);
 	});
 
 	describe("login link", () => {

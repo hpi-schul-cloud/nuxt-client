@@ -9,6 +9,7 @@ import {
 	VideoConferenceStateResponse,
 } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
+import { logger } from "@util-logger";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
@@ -21,6 +22,7 @@ describe("VideoConferenceComposable", () => {
 		setActivePinia(createTestingPinia());
 		videoConferenceApi = mockApi<serverApi.VideoConferenceApiInterface>();
 		vi.spyOn(serverApi, "VideoConferenceApiFactory").mockReturnValue(videoConferenceApi);
+		vi.spyOn(logger, "error").mockImplementation(vi.fn());
 	});
 
 	afterEach(() => {
@@ -58,7 +60,7 @@ describe("VideoConferenceComposable", () => {
 				},
 			});
 
-			const { fetchVideoConferenceInfo, fetchError, videoConferenceInfo } = useVideoConference(scope, scopeId);
+			const { fetchVideoConferenceInfo, fetchError, videoConferenceInfo } = useVideoConference(scope, scopeId, false);
 
 			return { scope, scopeId, FAKE_RESPONSE, fetchVideoConferenceInfo, fetchError, videoConferenceInfo };
 		};
@@ -110,7 +112,7 @@ describe("VideoConferenceComposable", () => {
 				everybodyJoinsAsModerator: false,
 				moderatorMustApproveJoinRequests: true,
 			};
-			const { startVideoConference, videoConferenceInfo, startError } = useVideoConference(scope, scopeId);
+			const { startVideoConference, videoConferenceInfo, startError } = useVideoConference(scope, scopeId, false);
 
 			return { scope, scopeId, startVideoConference, videoConferenceInfo, startError, options };
 		};
@@ -174,7 +176,7 @@ describe("VideoConferenceComposable", () => {
 
 			videoConferenceApi.videoConferenceControllerJoin.mockResolvedValueOnce(FAKE_RESPONSE);
 
-			const { joinVideoConference, joinError } = useVideoConference(scope, scopeId);
+			const { joinVideoConference, joinError } = useVideoConference(scope, scopeId, false);
 
 			return { scope, scopeId, joinVideoConference, joinError, url };
 		};
@@ -210,7 +212,7 @@ describe("VideoConferenceComposable", () => {
 			const mockError = new Error("API call failed");
 			videoConferenceApi.videoConferenceControllerJoin.mockRejectedValueOnce(mockError);
 
-			const { joinVideoConference, joinError } = useVideoConference(scope, scopeId);
+			const { joinVideoConference, joinError } = useVideoConference(scope, scopeId, false);
 			const taskResult = await joinVideoConference();
 			const url = taskResult.result?.data.url;
 
@@ -223,7 +225,7 @@ describe("VideoConferenceComposable", () => {
 		const setup = () => {
 			const scope = VideoConferenceScope.ROOM;
 			const scopeId = "123124";
-			const { isConferenceRunning, videoConferenceInfo } = useVideoConference(scope, scopeId);
+			const { isConferenceRunning, videoConferenceInfo } = useVideoConference(scope, scopeId, false);
 
 			return { isConferenceRunning, videoConferenceInfo };
 		};
@@ -254,7 +256,7 @@ describe("VideoConferenceComposable", () => {
 		const setup = () => {
 			const scope = VideoConferenceScope.ROOM;
 			const scopeId = "123124";
-			const { isWaitingRoomActive, videoConferenceInfo } = useVideoConference(scope, scopeId);
+			const { isWaitingRoomActive, videoConferenceInfo } = useVideoConference(scope, scopeId, false);
 
 			return { isWaitingRoomActive, videoConferenceInfo };
 		};

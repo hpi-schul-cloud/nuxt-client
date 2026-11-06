@@ -13,28 +13,28 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { CompleteRegistrationBodyParams } from '../models';
+import type { CompleteRegistrationBodyParams } from '../models';
 // @ts-ignore
-import { CreateOrUpdateRegistrationBodyParams } from '../models';
+import type { CreateOrUpdateRegistrationBodyParams } from '../models';
 // @ts-ignore
-import { RegistrationBodyParams } from '../models';
+import type { RegistrationBodyParams } from '../models';
 // @ts-ignore
-import { RegistrationItemResponse } from '../models';
+import type { RegistrationItemResponse } from '../models';
 // @ts-ignore
-import { RegistrationListResponse } from '../models';
+import type { RegistrationListResponse } from '../models';
 /**
  * RegistrationApi - axios parameter creator
- * @export
  */
 export const RegistrationApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -46,13 +46,13 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerCancelRegistrations: async (roomId: string, registrationBodyParams: RegistrationBodyParams, options: any = {}): Promise<RequestArgs> => {
+        registrationControllerCancelRegistrations: async (roomId: string, registrationBodyParams: RegistrationBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'roomId' is not null or undefined
             assertParamExists('registrationControllerCancelRegistrations', 'roomId', roomId)
             // verify required parameter 'registrationBodyParams' is not null or undefined
             assertParamExists('registrationControllerCancelRegistrations', 'registrationBodyParams', registrationBodyParams)
             const localVarPath = `/registrations/cancel/{roomId}`
-                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+                .replace('{roomId}', encodeURIComponent(String(roomId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -68,11 +68,10 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(registrationBodyParams, localVarRequestOptions, configuration)
@@ -90,13 +89,13 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerCompleteRegistration: async (registrationSecret: string, completeRegistrationBodyParams: CompleteRegistrationBodyParams, options: any = {}): Promise<RequestArgs> => {
+        registrationControllerCompleteRegistration: async (registrationSecret: string, completeRegistrationBodyParams: CompleteRegistrationBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'registrationSecret' is not null or undefined
             assertParamExists('registrationControllerCompleteRegistration', 'registrationSecret', registrationSecret)
             // verify required parameter 'completeRegistrationBodyParams' is not null or undefined
             assertParamExists('registrationControllerCompleteRegistration', 'completeRegistrationBodyParams', completeRegistrationBodyParams)
             const localVarPath = `/registrations/by-secret/{registrationSecret}/complete`
-                .replace(`{${"registrationSecret"}}`, encodeURIComponent(String(registrationSecret)));
+                .replace('{registrationSecret}', encodeURIComponent(String(registrationSecret)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -108,11 +107,10 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(completeRegistrationBodyParams, localVarRequestOptions, configuration)
@@ -129,7 +127,7 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerCreateOrUpdateRegistration: async (createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options: any = {}): Promise<RequestArgs> => {
+        registrationControllerCreateOrUpdateRegistration: async (createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'createOrUpdateRegistrationBodyParams' is not null or undefined
             assertParamExists('registrationControllerCreateOrUpdateRegistration', 'createOrUpdateRegistrationBodyParams', createOrUpdateRegistrationBodyParams)
             const localVarPath = `/registrations`;
@@ -148,11 +146,10 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(createOrUpdateRegistrationBodyParams, localVarRequestOptions, configuration)
@@ -169,11 +166,11 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerFindByRoom: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
+        registrationControllerFindByRoom: async (roomId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'roomId' is not null or undefined
             assertParamExists('registrationControllerFindByRoom', 'roomId', roomId)
             const localVarPath = `/registrations/by-room/{roomId}`
-                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+                .replace('{roomId}', encodeURIComponent(String(roomId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -189,9 +186,9 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -207,11 +204,11 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerGetBySecret: async (registrationSecret: string, options: any = {}): Promise<RequestArgs> => {
+        registrationControllerGetBySecret: async (registrationSecret: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'registrationSecret' is not null or undefined
             assertParamExists('registrationControllerGetBySecret', 'registrationSecret', registrationSecret)
             const localVarPath = `/registrations/by-secret/{registrationSecret}`
-                .replace(`{${"registrationSecret"}}`, encodeURIComponent(String(registrationSecret)));
+                .replace('{registrationSecret}', encodeURIComponent(String(registrationSecret)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -223,9 +220,9 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -242,13 +239,13 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerResendRegistrationMails: async (roomId: string, registrationBodyParams: RegistrationBodyParams, options: any = {}): Promise<RequestArgs> => {
+        registrationControllerResendRegistrationMails: async (roomId: string, registrationBodyParams: RegistrationBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'roomId' is not null or undefined
             assertParamExists('registrationControllerResendRegistrationMails', 'roomId', roomId)
             // verify required parameter 'registrationBodyParams' is not null or undefined
             assertParamExists('registrationControllerResendRegistrationMails', 'registrationBodyParams', registrationBodyParams)
             const localVarPath = `/registrations/resend-mail/{roomId}`
-                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+                .replace('{roomId}', encodeURIComponent(String(roomId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -264,11 +261,10 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(registrationBodyParams, localVarRequestOptions, configuration)
@@ -283,7 +279,6 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
 
 /**
  * RegistrationApi - functional programming interface
- * @export
  */
 export const RegistrationApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = RegistrationApiAxiosParamCreator(configuration)
@@ -296,9 +291,11 @@ export const RegistrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async registrationControllerCancelRegistrations(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationListResponse>> {
+        async registrationControllerCancelRegistrations(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerCancelRegistrations(roomId, registrationBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RegistrationApi.registrationControllerCancelRegistrations']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -308,9 +305,11 @@ export const RegistrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async registrationControllerCompleteRegistration(registrationSecret: string, completeRegistrationBodyParams: CompleteRegistrationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async registrationControllerCompleteRegistration(registrationSecret: string, completeRegistrationBodyParams: CompleteRegistrationBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerCompleteRegistration(registrationSecret, completeRegistrationBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RegistrationApi.registrationControllerCompleteRegistration']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -319,9 +318,11 @@ export const RegistrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationItemResponse>> {
+        async registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationItemResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RegistrationApi.registrationControllerCreateOrUpdateRegistration']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -330,9 +331,11 @@ export const RegistrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async registrationControllerFindByRoom(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationListResponse>> {
+        async registrationControllerFindByRoom(roomId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerFindByRoom(roomId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RegistrationApi.registrationControllerFindByRoom']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -341,9 +344,11 @@ export const RegistrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async registrationControllerGetBySecret(registrationSecret: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationItemResponse>> {
+        async registrationControllerGetBySecret(registrationSecret: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationItemResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerGetBySecret(registrationSecret, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RegistrationApi.registrationControllerGetBySecret']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -353,16 +358,17 @@ export const RegistrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async registrationControllerResendRegistrationMails(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationListResponse>> {
+        async registrationControllerResendRegistrationMails(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerResendRegistrationMails(roomId, registrationBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RegistrationApi.registrationControllerResendRegistrationMails']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * RegistrationApi - factory interface
- * @export
  */
 export const RegistrationApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = RegistrationApiFp(configuration)
@@ -375,7 +381,7 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerCancelRegistrations(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: any): AxiosPromise<RegistrationListResponse> {
+        registrationControllerCancelRegistrations(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RegistrationListResponse> {
             return localVarFp.registrationControllerCancelRegistrations(roomId, registrationBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -386,7 +392,7 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerCompleteRegistration(registrationSecret: string, completeRegistrationBodyParams: CompleteRegistrationBodyParams, options?: any): AxiosPromise<void> {
+        registrationControllerCompleteRegistration(registrationSecret: string, completeRegistrationBodyParams: CompleteRegistrationBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.registrationControllerCompleteRegistration(registrationSecret, completeRegistrationBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -396,7 +402,7 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options?: any): AxiosPromise<RegistrationItemResponse> {
+        registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RegistrationItemResponse> {
             return localVarFp.registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -406,7 +412,7 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerFindByRoom(roomId: string, options?: any): AxiosPromise<RegistrationListResponse> {
+        registrationControllerFindByRoom(roomId: string, options?: RawAxiosRequestConfig): AxiosPromise<RegistrationListResponse> {
             return localVarFp.registrationControllerFindByRoom(roomId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -416,7 +422,7 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerGetBySecret(registrationSecret: string, options?: any): AxiosPromise<RegistrationItemResponse> {
+        registrationControllerGetBySecret(registrationSecret: string, options?: RawAxiosRequestConfig): AxiosPromise<RegistrationItemResponse> {
             return localVarFp.registrationControllerGetBySecret(registrationSecret, options).then((request) => request(axios, basePath));
         },
         /**
@@ -427,7 +433,7 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerResendRegistrationMails(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: any): AxiosPromise<RegistrationListResponse> {
+        registrationControllerResendRegistrationMails(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RegistrationListResponse> {
             return localVarFp.registrationControllerResendRegistrationMails(roomId, registrationBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -435,8 +441,6 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
 
 /**
  * RegistrationApi - interface
- * @export
- * @interface RegistrationApi
  */
 export interface RegistrationApiInterface {
     /**
@@ -446,9 +450,8 @@ export interface RegistrationApiInterface {
      * @param {RegistrationBodyParams} registrationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RegistrationApiInterface
      */
-    registrationControllerCancelRegistrations(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: any): AxiosPromise<RegistrationListResponse>;
+    registrationControllerCancelRegistrations(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RegistrationListResponse>;
 
     /**
      * 
@@ -457,9 +460,8 @@ export interface RegistrationApiInterface {
      * @param {CompleteRegistrationBodyParams} completeRegistrationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RegistrationApiInterface
      */
-    registrationControllerCompleteRegistration(registrationSecret: string, completeRegistrationBodyParams: CompleteRegistrationBodyParams, options?: any): AxiosPromise<void>;
+    registrationControllerCompleteRegistration(registrationSecret: string, completeRegistrationBodyParams: CompleteRegistrationBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -467,9 +469,8 @@ export interface RegistrationApiInterface {
      * @param {CreateOrUpdateRegistrationBodyParams} createOrUpdateRegistrationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RegistrationApiInterface
      */
-    registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options?: any): AxiosPromise<RegistrationItemResponse>;
+    registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RegistrationItemResponse>;
 
     /**
      * 
@@ -477,9 +478,8 @@ export interface RegistrationApiInterface {
      * @param {string} roomId The id of the room a registration is attached to.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RegistrationApiInterface
      */
-    registrationControllerFindByRoom(roomId: string, options?: any): AxiosPromise<RegistrationListResponse>;
+    registrationControllerFindByRoom(roomId: string, options?: RawAxiosRequestConfig): AxiosPromise<RegistrationListResponse>;
 
     /**
      * 
@@ -487,9 +487,8 @@ export interface RegistrationApiInterface {
      * @param {string} registrationSecret The secret of the registration.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RegistrationApiInterface
      */
-    registrationControllerGetBySecret(registrationSecret: string, options?: any): AxiosPromise<RegistrationItemResponse>;
+    registrationControllerGetBySecret(registrationSecret: string, options?: RawAxiosRequestConfig): AxiosPromise<RegistrationItemResponse>;
 
     /**
      * 
@@ -498,17 +497,13 @@ export interface RegistrationApiInterface {
      * @param {RegistrationBodyParams} registrationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RegistrationApiInterface
      */
-    registrationControllerResendRegistrationMails(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: any): AxiosPromise<RegistrationListResponse>;
+    registrationControllerResendRegistrationMails(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RegistrationListResponse>;
 
 }
 
 /**
  * RegistrationApi - object-oriented interface
- * @export
- * @class RegistrationApi
- * @extends {BaseAPI}
  */
 export class RegistrationApi extends BaseAPI implements RegistrationApiInterface {
     /**
@@ -518,9 +513,8 @@ export class RegistrationApi extends BaseAPI implements RegistrationApiInterface
      * @param {RegistrationBodyParams} registrationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RegistrationApi
      */
-    public registrationControllerCancelRegistrations(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: any) {
+    public registrationControllerCancelRegistrations(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: RawAxiosRequestConfig) {
         return RegistrationApiFp(this.configuration).registrationControllerCancelRegistrations(roomId, registrationBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -531,9 +525,8 @@ export class RegistrationApi extends BaseAPI implements RegistrationApiInterface
      * @param {CompleteRegistrationBodyParams} completeRegistrationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RegistrationApi
      */
-    public registrationControllerCompleteRegistration(registrationSecret: string, completeRegistrationBodyParams: CompleteRegistrationBodyParams, options?: any) {
+    public registrationControllerCompleteRegistration(registrationSecret: string, completeRegistrationBodyParams: CompleteRegistrationBodyParams, options?: RawAxiosRequestConfig) {
         return RegistrationApiFp(this.configuration).registrationControllerCompleteRegistration(registrationSecret, completeRegistrationBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -543,9 +536,8 @@ export class RegistrationApi extends BaseAPI implements RegistrationApiInterface
      * @param {CreateOrUpdateRegistrationBodyParams} createOrUpdateRegistrationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RegistrationApi
      */
-    public registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options?: any) {
+    public registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options?: RawAxiosRequestConfig) {
         return RegistrationApiFp(this.configuration).registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -555,9 +547,8 @@ export class RegistrationApi extends BaseAPI implements RegistrationApiInterface
      * @param {string} roomId The id of the room a registration is attached to.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RegistrationApi
      */
-    public registrationControllerFindByRoom(roomId: string, options?: any) {
+    public registrationControllerFindByRoom(roomId: string, options?: RawAxiosRequestConfig) {
         return RegistrationApiFp(this.configuration).registrationControllerFindByRoom(roomId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -567,9 +558,8 @@ export class RegistrationApi extends BaseAPI implements RegistrationApiInterface
      * @param {string} registrationSecret The secret of the registration.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RegistrationApi
      */
-    public registrationControllerGetBySecret(registrationSecret: string, options?: any) {
+    public registrationControllerGetBySecret(registrationSecret: string, options?: RawAxiosRequestConfig) {
         return RegistrationApiFp(this.configuration).registrationControllerGetBySecret(registrationSecret, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -580,9 +570,9 @@ export class RegistrationApi extends BaseAPI implements RegistrationApiInterface
      * @param {RegistrationBodyParams} registrationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RegistrationApi
      */
-    public registrationControllerResendRegistrationMails(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: any) {
+    public registrationControllerResendRegistrationMails(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: RawAxiosRequestConfig) {
         return RegistrationApiFp(this.configuration).registrationControllerResendRegistrationMails(roomId, registrationBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

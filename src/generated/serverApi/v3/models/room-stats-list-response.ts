@@ -13,38 +13,26 @@
  */
 
 
-import { RoomStatsItemResponse } from './room-stats-item-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomStatsItemResponse } from './room-stats-item-response';
 
-/**
- * 
- * @export
- * @interface RoomStatsListResponse
- */
 export interface RoomStatsListResponse {
     /**
      * The items for the current page.
-     * @type {Array<RoomStatsItemResponse>}
-     * @memberof RoomStatsListResponse
      */
-    data: Array<RoomStatsItemResponse>;
+    'data': Array<RoomStatsItemResponse>;
     /**
      * The total amount of items.
-     * @type {number}
-     * @memberof RoomStatsListResponse
      */
-    total: number;
+    'total': number;
     /**
      * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof RoomStatsListResponse
      */
-    skip: number;
+    'skip': number;
     /**
      * The page size of the response.
-     * @type {number}
-     * @memberof RoomStatsListResponse
      */
-    limit: number;
+    'limit': number;
 }
-
 

@@ -13,28 +13,28 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { CopyApiResponse } from '../models';
+import type { CopyApiResponse } from '../models';
 // @ts-ignore
-import { ShareTokenBodyParams } from '../models';
+import type { ShareTokenBodyParams } from '../models';
 // @ts-ignore
-import { ShareTokenImportBodyParams } from '../models';
+import type { ShareTokenImportBodyParams } from '../models';
 // @ts-ignore
-import { ShareTokenInfoResponse } from '../models';
+import type { ShareTokenInfoResponse } from '../models';
 // @ts-ignore
-import { ShareTokenResponse } from '../models';
+import type { ShareTokenResponse } from '../models';
 /**
  * ShareTokenApi - axios parameter creator
- * @export
  */
 export const ShareTokenApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -45,7 +45,7 @@ export const ShareTokenApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shareTokenControllerCreateShareToken: async (shareTokenBodyParams: ShareTokenBodyParams, options: any = {}): Promise<RequestArgs> => {
+        shareTokenControllerCreateShareToken: async (shareTokenBodyParams: ShareTokenBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'shareTokenBodyParams' is not null or undefined
             assertParamExists('shareTokenControllerCreateShareToken', 'shareTokenBodyParams', shareTokenBodyParams)
             const localVarPath = `/sharetoken`;
@@ -64,11 +64,10 @@ export const ShareTokenApiAxiosParamCreator = function (configuration?: Configur
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(shareTokenBodyParams, localVarRequestOptions, configuration)
@@ -86,13 +85,13 @@ export const ShareTokenApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shareTokenControllerImportShareToken: async (token: string, shareTokenImportBodyParams: ShareTokenImportBodyParams, options: any = {}): Promise<RequestArgs> => {
+        shareTokenControllerImportShareToken: async (token: string, shareTokenImportBodyParams: ShareTokenImportBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'token' is not null or undefined
             assertParamExists('shareTokenControllerImportShareToken', 'token', token)
             // verify required parameter 'shareTokenImportBodyParams' is not null or undefined
             assertParamExists('shareTokenControllerImportShareToken', 'shareTokenImportBodyParams', shareTokenImportBodyParams)
             const localVarPath = `/sharetoken/{token}/import`
-                .replace(`{${"token"}}`, encodeURIComponent(String(token)));
+                .replace('{token}', encodeURIComponent(String(token)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -108,11 +107,10 @@ export const ShareTokenApiAxiosParamCreator = function (configuration?: Configur
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(shareTokenImportBodyParams, localVarRequestOptions, configuration)
@@ -129,11 +127,11 @@ export const ShareTokenApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shareTokenControllerLookupShareToken: async (token: string, options: any = {}): Promise<RequestArgs> => {
+        shareTokenControllerLookupShareToken: async (token: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'token' is not null or undefined
             assertParamExists('shareTokenControllerLookupShareToken', 'token', token)
             const localVarPath = `/sharetoken/{token}`
-                .replace(`{${"token"}}`, encodeURIComponent(String(token)));
+                .replace('{token}', encodeURIComponent(String(token)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -149,9 +147,9 @@ export const ShareTokenApiAxiosParamCreator = function (configuration?: Configur
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -165,7 +163,6 @@ export const ShareTokenApiAxiosParamCreator = function (configuration?: Configur
 
 /**
  * ShareTokenApi - functional programming interface
- * @export
  */
 export const ShareTokenApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ShareTokenApiAxiosParamCreator(configuration)
@@ -177,9 +174,11 @@ export const ShareTokenApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async shareTokenControllerCreateShareToken(shareTokenBodyParams: ShareTokenBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShareTokenResponse>> {
+        async shareTokenControllerCreateShareToken(shareTokenBodyParams: ShareTokenBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShareTokenResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.shareTokenControllerCreateShareToken(shareTokenBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ShareTokenApi.shareTokenControllerCreateShareToken']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -189,9 +188,11 @@ export const ShareTokenApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async shareTokenControllerImportShareToken(token: string, shareTokenImportBodyParams: ShareTokenImportBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
+        async shareTokenControllerImportShareToken(token: string, shareTokenImportBodyParams: ShareTokenImportBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.shareTokenControllerImportShareToken(token, shareTokenImportBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ShareTokenApi.shareTokenControllerImportShareToken']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -200,16 +201,17 @@ export const ShareTokenApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async shareTokenControllerLookupShareToken(token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShareTokenInfoResponse>> {
+        async shareTokenControllerLookupShareToken(token: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ShareTokenInfoResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.shareTokenControllerLookupShareToken(token, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ShareTokenApi.shareTokenControllerLookupShareToken']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * ShareTokenApi - factory interface
- * @export
  */
 export const ShareTokenApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = ShareTokenApiFp(configuration)
@@ -221,7 +223,7 @@ export const ShareTokenApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shareTokenControllerCreateShareToken(shareTokenBodyParams: ShareTokenBodyParams, options?: any): AxiosPromise<ShareTokenResponse> {
+        shareTokenControllerCreateShareToken(shareTokenBodyParams: ShareTokenBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<ShareTokenResponse> {
             return localVarFp.shareTokenControllerCreateShareToken(shareTokenBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -232,7 +234,7 @@ export const ShareTokenApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shareTokenControllerImportShareToken(token: string, shareTokenImportBodyParams: ShareTokenImportBodyParams, options?: any): AxiosPromise<CopyApiResponse> {
+        shareTokenControllerImportShareToken(token: string, shareTokenImportBodyParams: ShareTokenImportBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<CopyApiResponse> {
             return localVarFp.shareTokenControllerImportShareToken(token, shareTokenImportBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -242,7 +244,7 @@ export const ShareTokenApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shareTokenControllerLookupShareToken(token: string, options?: any): AxiosPromise<ShareTokenInfoResponse> {
+        shareTokenControllerLookupShareToken(token: string, options?: RawAxiosRequestConfig): AxiosPromise<ShareTokenInfoResponse> {
             return localVarFp.shareTokenControllerLookupShareToken(token, options).then((request) => request(axios, basePath));
         },
     };
@@ -250,8 +252,6 @@ export const ShareTokenApiFactory = function (configuration?: Configuration, bas
 
 /**
  * ShareTokenApi - interface
- * @export
- * @interface ShareTokenApi
  */
 export interface ShareTokenApiInterface {
     /**
@@ -260,9 +260,8 @@ export interface ShareTokenApiInterface {
      * @param {ShareTokenBodyParams} shareTokenBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ShareTokenApiInterface
      */
-    shareTokenControllerCreateShareToken(shareTokenBodyParams: ShareTokenBodyParams, options?: any): AxiosPromise<ShareTokenResponse>;
+    shareTokenControllerCreateShareToken(shareTokenBodyParams: ShareTokenBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<ShareTokenResponse>;
 
     /**
      * 
@@ -271,9 +270,8 @@ export interface ShareTokenApiInterface {
      * @param {ShareTokenImportBodyParams} shareTokenImportBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ShareTokenApiInterface
      */
-    shareTokenControllerImportShareToken(token: string, shareTokenImportBodyParams: ShareTokenImportBodyParams, options?: any): AxiosPromise<CopyApiResponse>;
+    shareTokenControllerImportShareToken(token: string, shareTokenImportBodyParams: ShareTokenImportBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<CopyApiResponse>;
 
     /**
      * 
@@ -281,17 +279,13 @@ export interface ShareTokenApiInterface {
      * @param {string} token The token that identifies the shared object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ShareTokenApiInterface
      */
-    shareTokenControllerLookupShareToken(token: string, options?: any): AxiosPromise<ShareTokenInfoResponse>;
+    shareTokenControllerLookupShareToken(token: string, options?: RawAxiosRequestConfig): AxiosPromise<ShareTokenInfoResponse>;
 
 }
 
 /**
  * ShareTokenApi - object-oriented interface
- * @export
- * @class ShareTokenApi
- * @extends {BaseAPI}
  */
 export class ShareTokenApi extends BaseAPI implements ShareTokenApiInterface {
     /**
@@ -300,9 +294,8 @@ export class ShareTokenApi extends BaseAPI implements ShareTokenApiInterface {
      * @param {ShareTokenBodyParams} shareTokenBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ShareTokenApi
      */
-    public shareTokenControllerCreateShareToken(shareTokenBodyParams: ShareTokenBodyParams, options?: any) {
+    public shareTokenControllerCreateShareToken(shareTokenBodyParams: ShareTokenBodyParams, options?: RawAxiosRequestConfig) {
         return ShareTokenApiFp(this.configuration).shareTokenControllerCreateShareToken(shareTokenBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -313,9 +306,8 @@ export class ShareTokenApi extends BaseAPI implements ShareTokenApiInterface {
      * @param {ShareTokenImportBodyParams} shareTokenImportBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ShareTokenApi
      */
-    public shareTokenControllerImportShareToken(token: string, shareTokenImportBodyParams: ShareTokenImportBodyParams, options?: any) {
+    public shareTokenControllerImportShareToken(token: string, shareTokenImportBodyParams: ShareTokenImportBodyParams, options?: RawAxiosRequestConfig) {
         return ShareTokenApiFp(this.configuration).shareTokenControllerImportShareToken(token, shareTokenImportBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -325,9 +317,9 @@ export class ShareTokenApi extends BaseAPI implements ShareTokenApiInterface {
      * @param {string} token The token that identifies the shared object
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ShareTokenApi
      */
-    public shareTokenControllerLookupShareToken(token: string, options?: any) {
+    public shareTokenControllerLookupShareToken(token: string, options?: RawAxiosRequestConfig) {
         return ShareTokenApiFp(this.configuration).shareTokenControllerLookupShareToken(token, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

@@ -14,30 +14,18 @@
 
 
 
-/**
- * 
- * @export
- * @interface ContextExternalToolCountPerContextResponse
- */
 export interface ContextExternalToolCountPerContextResponse {
     /**
      * Amount of usages in courses
-     * @type {number}
-     * @memberof ContextExternalToolCountPerContextResponse
      */
-    course: number;
+    'course': number;
     /**
      * Amount of usages in boards
-     * @type {number}
-     * @memberof ContextExternalToolCountPerContextResponse
      */
-    boardElement: number;
+    'boardElement': number;
     /**
      * Amount of usages in media boards
-     * @type {number}
-     * @memberof ContextExternalToolCountPerContextResponse
      */
-    mediaBoard: number;
+    'mediaBoard': number;
 }
-
 

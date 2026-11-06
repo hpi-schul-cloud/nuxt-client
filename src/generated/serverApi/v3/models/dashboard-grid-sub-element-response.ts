@@ -14,42 +14,26 @@
 
 
 
-/**
- * 
- * @export
- * @interface DashboardGridSubElementResponse
- */
 export interface DashboardGridSubElementResponse {
     /**
      * The id of the Grid element
-     * @type {string}
-     * @memberof DashboardGridSubElementResponse
      */
-    id: string;
+    'id': string;
     /**
      * Title of the Grid element
-     * @type {string}
-     * @memberof DashboardGridSubElementResponse
      */
-    title: string;
+    'title': string;
     /**
      * Short title of the Grid element
-     * @type {string}
-     * @memberof DashboardGridSubElementResponse
      */
-    shortTitle: string;
+    'shortTitle': string;
     /**
      * Color of the Grid element
-     * @type {string}
-     * @memberof DashboardGridSubElementResponse
      */
-    displayColor: string;
+    'displayColor': string;
     /**
      * Indicates if the course is locked and cannot be accessed.
-     * @type {boolean}
-     * @memberof DashboardGridSubElementResponse
      */
-    isLocked: boolean;
+    'isLocked': boolean;
 }
-
 

@@ -98,6 +98,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 				title: t("pages.rooms.title"),
 				to: "/rooms",
 			},
+			...(room.value?.isArchived ? [{ title: t("pages.rooms.archived.title"), to: "/rooms/archive" }] : []),
 			{
 				title: roomData.value.name,
 				to: `/rooms/${route.params.id}`,

@@ -45,6 +45,7 @@ export type DuplicateColumnSuccessPayload = {
 	columnId: string;
 	duplicatedColumn: ColumnFullResponse;
 	status: CopyStatusEnum;
+	failedFileNames?: string[];
 	isOwnAction: boolean;
 };
 export type DuplicateColumnFailurePayload = DuplicateColumnRequestPayload;

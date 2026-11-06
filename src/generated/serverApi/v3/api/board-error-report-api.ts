@@ -13,20 +13,20 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { BoardErrorReportBodyParams } from '../models';
+import type { BoardErrorReportBodyParams } from '../models';
 /**
  * BoardErrorReportApi - axios parameter creator
- * @export
  */
 export const BoardErrorReportApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -37,7 +37,7 @@ export const BoardErrorReportApiAxiosParamCreator = function (configuration?: Co
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardErrorReportControllerReportError: async (boardErrorReportBodyParams: BoardErrorReportBodyParams, options: any = {}): Promise<RequestArgs> => {
+        boardErrorReportControllerReportError: async (boardErrorReportBodyParams: BoardErrorReportBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardErrorReportBodyParams' is not null or undefined
             assertParamExists('boardErrorReportControllerReportError', 'boardErrorReportBodyParams', boardErrorReportBodyParams)
             const localVarPath = `/report-board-error`;
@@ -56,11 +56,10 @@ export const BoardErrorReportApiAxiosParamCreator = function (configuration?: Co
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(boardErrorReportBodyParams, localVarRequestOptions, configuration)
@@ -75,7 +74,6 @@ export const BoardErrorReportApiAxiosParamCreator = function (configuration?: Co
 
 /**
  * BoardErrorReportApi - functional programming interface
- * @export
  */
 export const BoardErrorReportApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = BoardErrorReportApiAxiosParamCreator(configuration)
@@ -87,16 +85,17 @@ export const BoardErrorReportApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardErrorReportControllerReportError(boardErrorReportBodyParams: BoardErrorReportBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async boardErrorReportControllerReportError(boardErrorReportBodyParams: BoardErrorReportBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardErrorReportControllerReportError(boardErrorReportBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BoardErrorReportApi.boardErrorReportControllerReportError']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * BoardErrorReportApi - factory interface
- * @export
  */
 export const BoardErrorReportApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = BoardErrorReportApiFp(configuration)
@@ -108,7 +107,7 @@ export const BoardErrorReportApiFactory = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardErrorReportControllerReportError(boardErrorReportBodyParams: BoardErrorReportBodyParams, options?: any): AxiosPromise<void> {
+        boardErrorReportControllerReportError(boardErrorReportBodyParams: BoardErrorReportBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.boardErrorReportControllerReportError(boardErrorReportBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -116,8 +115,6 @@ export const BoardErrorReportApiFactory = function (configuration?: Configuratio
 
 /**
  * BoardErrorReportApi - interface
- * @export
- * @interface BoardErrorReportApi
  */
 export interface BoardErrorReportApiInterface {
     /**
@@ -126,17 +123,13 @@ export interface BoardErrorReportApiInterface {
      * @param {BoardErrorReportBodyParams} boardErrorReportBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardErrorReportApiInterface
      */
-    boardErrorReportControllerReportError(boardErrorReportBodyParams: BoardErrorReportBodyParams, options?: any): AxiosPromise<void>;
+    boardErrorReportControllerReportError(boardErrorReportBodyParams: BoardErrorReportBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
  * BoardErrorReportApi - object-oriented interface
- * @export
- * @class BoardErrorReportApi
- * @extends {BaseAPI}
  */
 export class BoardErrorReportApi extends BaseAPI implements BoardErrorReportApiInterface {
     /**
@@ -145,9 +138,9 @@ export class BoardErrorReportApi extends BaseAPI implements BoardErrorReportApiI
      * @param {BoardErrorReportBodyParams} boardErrorReportBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardErrorReportApi
      */
-    public boardErrorReportControllerReportError(boardErrorReportBodyParams: BoardErrorReportBodyParams, options?: any) {
+    public boardErrorReportControllerReportError(boardErrorReportBodyParams: BoardErrorReportBodyParams, options?: RawAxiosRequestConfig) {
         return BoardErrorReportApiFp(this.configuration).boardErrorReportControllerReportError(boardErrorReportBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface UserLoginMigrationMandatoryParams
- */
 export interface UserLoginMigrationMandatoryParams {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof UserLoginMigrationMandatoryParams
-     */
-    mandatory: boolean;
+    'mandatory': boolean;
 }
-
 

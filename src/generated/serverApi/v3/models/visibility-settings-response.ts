@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface VisibilitySettingsResponse
- */
 export interface VisibilitySettingsResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof VisibilitySettingsResponse
-     */
-    publishedAt?: string;
+    'publishedAt'?: string;
 }
-
 

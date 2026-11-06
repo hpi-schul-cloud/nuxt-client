@@ -13,32 +13,13 @@
  */
 
 
-import { ShareTokenPayloadResponse } from './share-token-payload-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ShareTokenPayloadResponse } from './share-token-payload-response';
 
-/**
- * 
- * @export
- * @interface ShareTokenResponse
- */
 export interface ShareTokenResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ShareTokenResponse
-     */
-    token: string;
-    /**
-     * 
-     * @type {ShareTokenPayloadResponse}
-     * @memberof ShareTokenResponse
-     */
-    payload: ShareTokenPayloadResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof ShareTokenResponse
-     */
-    expiresAt?: string;
+    'token': string;
+    'payload': ShareTokenPayloadResponse;
+    'expiresAt'?: string;
 }
-
 

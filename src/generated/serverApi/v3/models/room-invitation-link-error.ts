@@ -13,44 +13,32 @@
  */
 
 
-import { RoomInvitationLinkValidationError } from './room-invitation-link-validation-error';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomInvitationLinkValidationError } from './room-invitation-link-validation-error';
 
-/**
- * 
- * @export
- * @interface RoomInvitationLinkError
- */
 export interface RoomInvitationLinkError {
     /**
      * The response status code.
-     * @type {number}
-     * @memberof RoomInvitationLinkError
      */
-    code: number;
+    'code': number;
     /**
      * The error type.
-     * @type {string}
-     * @memberof RoomInvitationLinkError
      */
-    type: string;
+    'type': string;
     /**
      * The error title.
-     * @type {string}
-     * @memberof RoomInvitationLinkError
      */
-    title: string;
+    'title': string;
     /**
      * The error message.
-     * @type {string}
-     * @memberof RoomInvitationLinkError
      */
-    message: string;
+    'message': string;
     /**
      * The error details.
-     * @type {RoomInvitationLinkValidationError}
-     * @memberof RoomInvitationLinkError
      */
-    details?: RoomInvitationLinkValidationError;
+    'details'?: RoomInvitationLinkValidationError;
 }
+
 
 

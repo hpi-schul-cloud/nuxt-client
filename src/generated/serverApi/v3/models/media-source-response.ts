@@ -13,38 +13,28 @@
  */
 
 
-import { MediaSourceDataFormat } from './media-source-data-format';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MediaSourceDataFormat } from './media-source-data-format';
 
-/**
- * 
- * @export
- * @interface MediaSourceResponse
- */
 export interface MediaSourceResponse {
     /**
      * Id of the media source
-     * @type {string}
-     * @memberof MediaSourceResponse
      */
-    id: string;
+    'id': string;
     /**
      * External Id of the media source
-     * @type {string}
-     * @memberof MediaSourceResponse
      */
-    sourceId: string;
+    'sourceId': string;
     /**
      * Name of the media source
-     * @type {string}
-     * @memberof MediaSourceResponse
      */
-    name?: string;
+    'name'?: string;
     /**
      * Format of the media source data
-     * @type {MediaSourceDataFormat}
-     * @memberof MediaSourceResponse
      */
-    format?: MediaSourceDataFormat;
+    'format'?: MediaSourceDataFormat;
 }
+
 
 

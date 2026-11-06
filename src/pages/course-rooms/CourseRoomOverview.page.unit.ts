@@ -114,7 +114,7 @@ describe("CourseRoomOverview.page", () => {
 			allElements: mockCourseData as never,
 		});
 		courseRoomListStore.fetchCourses.mockResolvedValue();
-		courseRoomListStore.fetchAllElements.mockResolvedValue();
+		courseRoomListStore.fetchAllCourses.mockResolvedValue();
 		courseRoomListStore.alignCourse.mockResolvedValue();
 		courseRoomListStore.updateCourse.mockResolvedValue();
 

@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface CollapsableBodyParams
- */
 export interface CollapsableBodyParams {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof CollapsableBodyParams
-     */
-    collapsed: boolean;
+    'collapsed': boolean;
 }
-
 

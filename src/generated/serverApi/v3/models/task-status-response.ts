@@ -14,48 +14,12 @@
 
 
 
-/**
- * 
- * @export
- * @interface TaskStatusResponse
- */
 export interface TaskStatusResponse {
-    /**
-     * 
-     * @type {number}
-     * @memberof TaskStatusResponse
-     */
-    submitted: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof TaskStatusResponse
-     */
-    maxSubmissions: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof TaskStatusResponse
-     */
-    graded: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof TaskStatusResponse
-     */
-    isDraft: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof TaskStatusResponse
-     */
-    isSubstitutionTeacher: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof TaskStatusResponse
-     */
-    isFinished: boolean;
+    'submitted': number;
+    'maxSubmissions': number;
+    'graded': number;
+    'isDraft': boolean;
+    'isSubstitutionTeacher': boolean;
+    'isFinished': boolean;
 }
-
 

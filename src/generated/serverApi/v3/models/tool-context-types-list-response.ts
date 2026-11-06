@@ -13,20 +13,11 @@
  */
 
 
-import { ToolContextType } from './tool-context-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ToolContextType } from './tool-context-type';
 
-/**
- * 
- * @export
- * @interface ToolContextTypesListResponse
- */
 export interface ToolContextTypesListResponse {
-    /**
-     * 
-     * @type {Array<ToolContextType>}
-     * @memberof ToolContextTypesListResponse
-     */
-    data: Array<ToolContextType>;
+    'data': Array<ToolContextType>;
 }
-
 

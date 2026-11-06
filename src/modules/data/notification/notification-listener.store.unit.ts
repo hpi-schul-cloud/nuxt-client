@@ -1,6 +1,7 @@
 import { ServerNotificationMessage, useNotificationListenerStore } from "./notification-listener.store";
 import { useEnvStore } from "@data-env";
 import { createTestingPinia } from "@pinia/testing";
+import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -61,6 +62,9 @@ describe("useNotificationListenerStore", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		vi.clearAllMocks();
+		vi.spyOn(logger, "info").mockImplementation(vi.fn());
+		vi.spyOn(logger, "warn").mockImplementation(vi.fn());
+		vi.spyOn(logger, "error").mockImplementation(vi.fn());
 		useEnvStore().env.FEATURE_NOTIFICATIONS_ENABLED = true;
 	});
 
@@ -206,6 +210,7 @@ describe("useNotificationListenerStore", () => {
 			});
 
 			expect(mockNotify).not.toHaveBeenCalled();
+			expect(logger.warn).toHaveBeenCalled();
 		});
 	});
 });

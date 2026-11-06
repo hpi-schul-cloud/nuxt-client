@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface MoveContentElementBody
- */
 export interface MoveContentElementBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof MoveContentElementBody
-     */
-    toCardId: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof MoveContentElementBody
-     */
-    toPosition: number;
+    'toCardId': string;
+    'toPosition': number;
 }
-
 

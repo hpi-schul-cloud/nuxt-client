@@ -13,50 +13,16 @@
  */
 
 
-import { CustomParameterResponse } from './custom-parameter-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CustomParameterResponse } from './custom-parameter-response';
 
-/**
- * 
- * @export
- * @interface ContextExternalToolConfigurationTemplateResponse
- */
 export interface ContextExternalToolConfigurationTemplateResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ContextExternalToolConfigurationTemplateResponse
-     */
-    externalToolId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ContextExternalToolConfigurationTemplateResponse
-     */
-    schoolExternalToolId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ContextExternalToolConfigurationTemplateResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ContextExternalToolConfigurationTemplateResponse
-     */
-    baseUrl: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ContextExternalToolConfigurationTemplateResponse
-     */
-    logoUrl?: string;
-    /**
-     * 
-     * @type {Array<CustomParameterResponse>}
-     * @memberof ContextExternalToolConfigurationTemplateResponse
-     */
-    parameters: Array<CustomParameterResponse>;
+    'externalToolId': string;
+    'schoolExternalToolId': string;
+    'name': string;
+    'baseUrl': string;
+    'logoUrl'?: string;
+    'parameters': Array<CustomParameterResponse>;
 }
-
 

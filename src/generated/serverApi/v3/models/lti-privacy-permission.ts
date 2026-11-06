@@ -16,9 +16,8 @@
 
 /**
  * Describes the amount of personal information that the tool provider gets.
- * @export
- * @enum {string}
  */
+
 export enum LtiPrivacyPermission {
     ANONYMOUS = 'anonymous',
     E_MAIL = 'e-mail',

@@ -14,42 +14,11 @@
 
 
 
-/**
- * 
- * @export
- * @interface MediaSchoolLicenseResponse
- */
 export interface MediaSchoolLicenseResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof MediaSchoolLicenseResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MediaSchoolLicenseResponse
-     */
-    schoolId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MediaSchoolLicenseResponse
-     */
-    mediumId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MediaSchoolLicenseResponse
-     */
-    mediaSourceId?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MediaSchoolLicenseResponse
-     */
-    mediaSourceName?: string;
+    'id': string;
+    'schoolId': string;
+    'mediumId': string;
+    'mediaSourceId'?: string;
+    'mediaSourceName'?: string;
 }
-
 

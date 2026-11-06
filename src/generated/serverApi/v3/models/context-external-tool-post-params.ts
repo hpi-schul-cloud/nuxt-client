@@ -13,44 +13,15 @@
  */
 
 
-import { CustomParameterEntryParam } from './custom-parameter-entry-param';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CustomParameterEntryParam } from './custom-parameter-entry-param';
 
-/**
- * 
- * @export
- * @interface ContextExternalToolPostParams
- */
 export interface ContextExternalToolPostParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof ContextExternalToolPostParams
-     */
-    schoolToolId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ContextExternalToolPostParams
-     */
-    contextId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ContextExternalToolPostParams
-     */
-    contextType: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ContextExternalToolPostParams
-     */
-    displayName?: string;
-    /**
-     * 
-     * @type {Array<CustomParameterEntryParam>}
-     * @memberof ContextExternalToolPostParams
-     */
-    parameters?: Array<CustomParameterEntryParam>;
+    'schoolToolId': string;
+    'contextId': string;
+    'contextType': string;
+    'displayName'?: string;
+    'parameters'?: Array<CustomParameterEntryParam>;
 }
-
 

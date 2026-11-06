@@ -13,28 +13,28 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { EntityNotFoundError } from '../models';
+import type { EntityNotFoundError } from '../models';
 // @ts-ignore
-import { ForbiddenOperationError } from '../models';
+import type { ForbiddenOperationError } from '../models';
 // @ts-ignore
-import { RangeDate } from '../models';
+import type { RangeDate } from '../models';
 // @ts-ignore
-import { UserListResponse } from '../models';
+import type { UserListResponse } from '../models';
 // @ts-ignore
-import { UserResponse } from '../models';
+import type { UserResponse } from '../models';
 // @ts-ignore
-import { ValidationError } from '../models';
+import type { ValidationError } from '../models';
 /**
  * AdminTeachersApi - axios parameter creator
- * @export
  */
 export const AdminTeachersApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -45,11 +45,11 @@ export const AdminTeachersApiAxiosParamCreator = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        adminApiTeachersControllerFindTeacherById: async (id: string, options: any = {}): Promise<RequestArgs> => {
+        adminApiTeachersControllerFindTeacherById: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('adminApiTeachersControllerFindTeacherById', 'id', id)
             const localVarPath = `/users/admin/teachers/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -65,9 +65,9 @@ export const AdminTeachersApiAxiosParamCreator = function (configuration?: Confi
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -94,7 +94,7 @@ export const AdminTeachersApiAxiosParamCreator = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        adminApiTeachersControllerSearchTeachers: async (skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options: any = {}): Promise<RequestArgs> => {
+        adminApiTeachersControllerSearchTeachers: async (skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/users/admin/teachers`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -128,11 +128,15 @@ export const AdminTeachersApiAxiosParamCreator = function (configuration?: Confi
             }
 
             if ($sort !== undefined) {
-                localVarQueryParameter['$sort'] = $sort;
+                for (const [key, value] of Object.entries($sort)) {
+                    localVarQueryParameter[key] = value;
+                }
             }
 
             if (consentStatus !== undefined) {
-                localVarQueryParameter['consentStatus'] = consentStatus;
+                for (const [key, value] of Object.entries(consentStatus)) {
+                    localVarQueryParameter[key] = value;
+                }
             }
 
             if (classes) {
@@ -140,15 +144,21 @@ export const AdminTeachersApiAxiosParamCreator = function (configuration?: Confi
             }
 
             if (createdAt !== undefined) {
-                localVarQueryParameter['createdAt'] = createdAt;
+                for (const [key, value] of Object.entries(createdAt)) {
+                    localVarQueryParameter[key] = value;
+                }
             }
 
             if (lastLoginSystemChange !== undefined) {
-                localVarQueryParameter['lastLoginSystemChange'] = lastLoginSystemChange;
+                for (const [key, value] of Object.entries(lastLoginSystemChange)) {
+                    localVarQueryParameter[key] = value;
+                }
             }
 
             if (outdatedSince !== undefined) {
-                localVarQueryParameter['outdatedSince'] = outdatedSince;
+                for (const [key, value] of Object.entries(outdatedSince)) {
+                    localVarQueryParameter[key] = value;
+                }
             }
 
             if (searchQuery !== undefined) {
@@ -159,9 +169,9 @@ export const AdminTeachersApiAxiosParamCreator = function (configuration?: Confi
                 localVarQueryParameter['users'] = users;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -175,7 +185,6 @@ export const AdminTeachersApiAxiosParamCreator = function (configuration?: Confi
 
 /**
  * AdminTeachersApi - functional programming interface
- * @export
  */
 export const AdminTeachersApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = AdminTeachersApiAxiosParamCreator(configuration)
@@ -187,9 +196,11 @@ export const AdminTeachersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async adminApiTeachersControllerFindTeacherById(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserResponse>> {
+        async adminApiTeachersControllerFindTeacherById(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.adminApiTeachersControllerFindTeacherById(id, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminTeachersApi.adminApiTeachersControllerFindTeacherById']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -209,16 +220,17 @@ export const AdminTeachersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserListResponse>> {
+        async adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.adminApiTeachersControllerSearchTeachers(skip, limit, $limit, $skip, $sort, consentStatus, classes, createdAt, lastLoginSystemChange, outdatedSince, searchQuery, users, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminTeachersApi.adminApiTeachersControllerSearchTeachers']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * AdminTeachersApi - factory interface
- * @export
  */
 export const AdminTeachersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = AdminTeachersApiFp(configuration)
@@ -230,7 +242,7 @@ export const AdminTeachersApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        adminApiTeachersControllerFindTeacherById(id: string, options?: any): AxiosPromise<UserResponse> {
+        adminApiTeachersControllerFindTeacherById(id: string, options?: RawAxiosRequestConfig): AxiosPromise<UserResponse> {
             return localVarFp.adminApiTeachersControllerFindTeacherById(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -251,7 +263,7 @@ export const AdminTeachersApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse> {
+        adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: RawAxiosRequestConfig): AxiosPromise<UserListResponse> {
             return localVarFp.adminApiTeachersControllerSearchTeachers(skip, limit, $limit, $skip, $sort, consentStatus, classes, createdAt, lastLoginSystemChange, outdatedSince, searchQuery, users, options).then((request) => request(axios, basePath));
         },
     };
@@ -259,8 +271,6 @@ export const AdminTeachersApiFactory = function (configuration?: Configuration, 
 
 /**
  * AdminTeachersApi - interface
- * @export
- * @interface AdminTeachersApi
  */
 export interface AdminTeachersApiInterface {
     /**
@@ -269,9 +279,8 @@ export interface AdminTeachersApiInterface {
      * @param {string} id The id of the user.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AdminTeachersApiInterface
      */
-    adminApiTeachersControllerFindTeacherById(id: string, options?: any): AxiosPromise<UserResponse>;
+    adminApiTeachersControllerFindTeacherById(id: string, options?: RawAxiosRequestConfig): AxiosPromise<UserResponse>;
 
     /**
      * 
@@ -290,17 +299,13 @@ export interface AdminTeachersApiInterface {
      * @param {Array<string>} [users] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AdminTeachersApiInterface
      */
-    adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse>;
+    adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: RawAxiosRequestConfig): AxiosPromise<UserListResponse>;
 
 }
 
 /**
  * AdminTeachersApi - object-oriented interface
- * @export
- * @class AdminTeachersApi
- * @extends {BaseAPI}
  */
 export class AdminTeachersApi extends BaseAPI implements AdminTeachersApiInterface {
     /**
@@ -309,9 +314,8 @@ export class AdminTeachersApi extends BaseAPI implements AdminTeachersApiInterfa
      * @param {string} id The id of the user.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AdminTeachersApi
      */
-    public adminApiTeachersControllerFindTeacherById(id: string, options?: any) {
+    public adminApiTeachersControllerFindTeacherById(id: string, options?: RawAxiosRequestConfig) {
         return AdminTeachersApiFp(this.configuration).adminApiTeachersControllerFindTeacherById(id, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -332,9 +336,9 @@ export class AdminTeachersApi extends BaseAPI implements AdminTeachersApiInterfa
      * @param {Array<string>} [users] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AdminTeachersApi
      */
-    public adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any) {
+    public adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: RawAxiosRequestConfig) {
         return AdminTeachersApiFp(this.configuration).adminApiTeachersControllerSearchTeachers(skip, limit, $limit, $skip, $sort, consentStatus, classes, createdAt, lastLoginSystemChange, outdatedSince, searchQuery, users, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

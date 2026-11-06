@@ -13,61 +13,29 @@
  */
 
 
-import { ComponentEtherpadPropsImpl } from './component-etherpad-props-impl';
-import { ComponentGeogebraPropsImpl } from './component-geogebra-props-impl';
-import { ComponentInternalPropsImpl } from './component-internal-props-impl';
-import { ComponentLernstorePropsImpl } from './component-lernstore-props-impl';
-import { ComponentTextPropsImpl } from './component-text-props-impl';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { LessonContentResponseContent } from './lesson-content-response-content';
 
-/**
- * 
- * @export
- * @interface LessonContentResponse
- */
 export interface LessonContentResponse {
-    /**
-     * 
-     * @type {ComponentTextPropsImpl | ComponentEtherpadPropsImpl | ComponentGeogebraPropsImpl | ComponentInternalPropsImpl | ComponentLernstorePropsImpl}
-     * @memberof LessonContentResponse
-     */
-    content: ComponentTextPropsImpl | ComponentEtherpadPropsImpl | ComponentGeogebraPropsImpl | ComponentInternalPropsImpl | ComponentLernstorePropsImpl;
+    'content': LessonContentResponseContent;
     /**
      * The id of the Material entity
-     * @type {string}
-     * @memberof LessonContentResponse
      * @deprecated
      */
-    _id: string;
+    '_id': string;
     /**
      * The id of the Material entity
-     * @type {string}
-     * @memberof LessonContentResponse
      */
-    id: string;
+    'id': string;
     /**
      * Title of the Material entity
-     * @type {string}
-     * @memberof LessonContentResponse
      */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonContentResponse
-     */
-    component: LessonContentResponseComponent;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof LessonContentResponse
-     */
-    hidden: boolean;
+    'title': string;
+    'component': LessonContentResponseComponent;
+    'hidden': boolean;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum LessonContentResponseComponent {
     ETHERPAD = 'Etherpad',
     GEO_GEBRA = 'geoGebra',
@@ -75,6 +43,5 @@ export enum LessonContentResponseComponent {
     RESOURCES = 'resources',
     TEXT = 'text'
 }
-
 
 

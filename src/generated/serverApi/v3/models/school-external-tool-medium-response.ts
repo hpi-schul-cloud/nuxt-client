@@ -13,45 +13,35 @@
  */
 
 
-import { ExternalToolMediumStatus } from './external-tool-medium-status';
-import { MediaSourceLicenseType } from './media-source-license-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ExternalToolMediumStatus } from './external-tool-medium-status';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MediaSourceLicenseType } from './media-source-license-type';
 
-/**
- * 
- * @export
- * @interface SchoolExternalToolMediumResponse
- */
 export interface SchoolExternalToolMediumResponse {
     /**
      * The type of the medium
-     * @type {ExternalToolMediumStatus}
-     * @memberof SchoolExternalToolMediumResponse
      */
-    status: ExternalToolMediumStatus;
+    'status': ExternalToolMediumStatus;
     /**
      * Id of the medium
-     * @type {string}
-     * @memberof SchoolExternalToolMediumResponse
      */
-    mediumId?: string;
+    'mediumId'?: string;
     /**
      * The id of the media source
-     * @type {string}
-     * @memberof SchoolExternalToolMediumResponse
      */
-    mediaSourceId?: string;
+    'mediaSourceId'?: string;
     /**
      * Name of the media source
-     * @type {string}
-     * @memberof SchoolExternalToolMediumResponse
      */
-    mediaSourceName?: string;
+    'mediaSourceName'?: string;
     /**
      * License type of the media source
-     * @type {MediaSourceLicenseType}
-     * @memberof SchoolExternalToolMediumResponse
      */
-    mediaSourceLicenseType?: MediaSourceLicenseType;
+    'mediaSourceLicenseType'?: MediaSourceLicenseType;
 }
+
 
 

@@ -13,38 +13,26 @@
  */
 
 
-import { ClassInfoResponse } from './class-info-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ClassInfoResponse } from './class-info-response';
 
-/**
- * 
- * @export
- * @interface ClassInfoSearchListResponse
- */
 export interface ClassInfoSearchListResponse {
     /**
      * The items for the current page.
-     * @type {Array<ClassInfoResponse>}
-     * @memberof ClassInfoSearchListResponse
      */
-    data: Array<ClassInfoResponse>;
+    'data': Array<ClassInfoResponse>;
     /**
      * The total amount of items.
-     * @type {number}
-     * @memberof ClassInfoSearchListResponse
      */
-    total: number;
+    'total': number;
     /**
      * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof ClassInfoSearchListResponse
      */
-    skip: number;
+    'skip': number;
     /**
      * The page size of the response.
-     * @type {number}
-     * @memberof ClassInfoSearchListResponse
      */
-    limit: number;
+    'limit': number;
 }
-
 

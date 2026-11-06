@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface ComponentGeogebraPropsImpl
- */
 export interface ComponentGeogebraPropsImpl {
     /**
      * materialId of a Geogebra component
-     * @type {string}
-     * @memberof ComponentGeogebraPropsImpl
      */
-    materialId: string;
+    'materialId': string;
 }
-
 

@@ -16,9 +16,8 @@
 
 /**
  * Specifies the underlying type of the request
- * @export
- * @enum {string}
  */
+
 export enum LaunchType {
     BASIC = 'basic',
     OAUTH2 = 'oauth2',

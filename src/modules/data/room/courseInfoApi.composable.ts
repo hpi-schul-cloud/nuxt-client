@@ -1,5 +1,10 @@
 import { $axios } from "@/utils/api";
-import { CourseInfoApiFactory, CourseSortProps, CourseStatus } from "@api-server";
+import {
+	CourseInfoApiFactory,
+	CourseInfoControllerGetCourseInfoSortOrder,
+	CourseSortProps,
+	CourseStatus,
+} from "@api-server";
 
 export const useCourseInfoApi = () => {
 	const courseInfoApi = CourseInfoApiFactory(undefined, "/v3", $axios);
@@ -15,7 +20,9 @@ export const useCourseInfoApi = () => {
 		const response = await courseInfoApi.courseInfoControllerGetCourseInfo(
 			skip,
 			limit,
-			order,
+			order === "asc"
+				? CourseInfoControllerGetCourseInfoSortOrder.ASC
+				: CourseInfoControllerGetCourseInfoSortOrder.DESC,
 			key,
 			courseStatusQueryType,
 			withoutTeacher

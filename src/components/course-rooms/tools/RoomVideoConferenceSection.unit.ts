@@ -5,6 +5,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { Permission, RoleName, VideoConferenceScope, VideoConferenceStateResponse } from "@api-server";
 import { useVideoConference } from "@data-access";
 import { createTestingPinia } from "@pinia/testing";
+import { SvsDialog } from "@ui-dialog";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import { createAxiosError } from "@util-error-handling";
 import { setActivePinia } from "pinia";
@@ -319,8 +320,7 @@ describe("RoomVideoConferenceSection", () => {
 	});
 
 	describe("error dialog", () => {
-		const getErrorDialog = (wrapper: ReturnType<typeof getWrapper>["wrapper"]) =>
-			wrapper.findAllComponents({ name: "VDialog" })[0];
+		const getErrorDialog = (wrapper: ReturnType<typeof getWrapper>["wrapper"]) => wrapper.findComponent(SvsDialog);
 
 		describe("when a fetchError is present", () => {
 			it("should display the error dialog", () => {
@@ -402,7 +402,7 @@ describe("RoomVideoConferenceSection", () => {
 				const errorDialog = getErrorDialog(wrapper);
 				expect(errorDialog.props("modelValue")).toBe(true);
 
-				await errorDialog.vm.$emit("click:outside");
+				await errorDialog.vm.$emit("cancel");
 				await nextTick();
 
 				expect(errorDialog.props("modelValue")).toBe(false);

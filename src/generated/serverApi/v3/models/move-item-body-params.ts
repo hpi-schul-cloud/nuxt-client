@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface MoveItemBodyParams
- */
 export interface MoveItemBodyParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof MoveItemBodyParams
-     */
-    id: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof MoveItemBodyParams
-     */
-    toPosition: number;
+    'id': string;
+    'toPosition': number;
 }
-
 

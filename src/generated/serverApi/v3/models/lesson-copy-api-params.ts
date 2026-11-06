@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface LessonCopyApiParams
- */
 export interface LessonCopyApiParams {
     /**
      * Destination course parent Id the lesson is copied to
-     * @type {string}
-     * @memberof LessonCopyApiParams
      */
-    courseId?: string;
+    'courseId'?: string;
 }
-
 

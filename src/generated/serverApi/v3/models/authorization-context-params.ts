@@ -14,38 +14,21 @@
 
 
 
-/**
- * 
- * @export
- * @interface AuthorizationContextParams
- */
 export interface AuthorizationContextParams {
     /**
      * Define for which action the operation should be performend.
-     * @type {string}
-     * @memberof AuthorizationContextParams
      */
-    action: AuthorizationContextParamsAction;
+    'action': AuthorizationContextParamsAction;
     /**
      * User permissions that are needed to execute the operation.
-     * @type {Array<string>}
-     * @memberof AuthorizationContextParams
      */
-    requiredPermissions: Array<AuthorizationContextParamsRequiredPermissions>;
+    'requiredPermissions': Array<AuthorizationContextParamsRequiredPermissions>;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum AuthorizationContextParamsAction {
     READ = 'read',
     WRITE = 'write'
 }
-/**
-    * @export
-    * @enum {string}
-    */
 export enum AuthorizationContextParamsRequiredPermissions {
     ACCOUNT_CREATE = 'ACCOUNT_CREATE',
     ACCOUNT_DELETE = 'ACCOUNT_DELETE',
@@ -156,6 +139,7 @@ export enum AuthorizationContextParamsRequiredPermissions {
     ROOM_EDIT_ROOM = 'ROOM_EDIT_ROOM',
     ROOM_LIST_CONTENT = 'ROOM_LIST_CONTENT',
     ROOM_DELETE_ROOM = 'ROOM_DELETE_ROOM',
+    ROOM_ARCHIVE_ROOM = 'ROOM_ARCHIVE_ROOM',
     ROOM_LEAVE_ROOM = 'ROOM_LEAVE_ROOM',
     ROOM_COPY_ROOM = 'ROOM_COPY_ROOM',
     ROOM_SHARE_ROOM = 'ROOM_SHARE_ROOM',
@@ -237,6 +221,5 @@ export enum AuthorizationContextParamsRequiredPermissions {
     USER_UPDATE = 'USER_UPDATE',
     YEARS_EDIT = 'YEARS_EDIT'
 }
-
 
 

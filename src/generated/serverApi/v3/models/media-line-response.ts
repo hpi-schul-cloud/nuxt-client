@@ -13,53 +13,42 @@
  */
 
 
-import { Colors } from './colors';
-import { DeletedElementResponse } from './deleted-element-response';
-import { MediaExternalToolElementResponse } from './media-external-tool-element-response';
-import { TimestampsResponse } from './timestamps-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { Colors } from './colors';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MediaLineResponseElementsInner } from './media-line-response-elements-inner';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { TimestampsResponse } from './timestamps-response';
 
-/**
- * 
- * @export
- * @interface MediaLineResponse
- */
 export interface MediaLineResponse {
     /**
      * The id of the media line
-     * @type {string}
-     * @memberof MediaLineResponse
      */
-    id: string;
+    'id': string;
     /**
      * The title of the media line
-     * @type {string}
-     * @memberof MediaLineResponse
      */
-    title: string;
+    'title': string;
     /**
      * The elements of the media line
-     * @type {Array<MediaExternalToolElementResponse | DeletedElementResponse>}
-     * @memberof MediaLineResponse
      */
-    elements: Array<MediaExternalToolElementResponse | DeletedElementResponse>;
+    'elements': Array<MediaLineResponseElementsInner>;
     /**
      * The timestamps of the media line
-     * @type {TimestampsResponse}
-     * @memberof MediaLineResponse
      */
-    timestamps: TimestampsResponse;
+    'timestamps': TimestampsResponse;
     /**
      * The background color of the media line
-     * @type {Colors}
-     * @memberof MediaLineResponse
      */
-    backgroundColor: Colors;
+    'backgroundColor': Colors;
     /**
      * Collapse the media line
-     * @type {boolean}
-     * @memberof MediaLineResponse
      */
-    collapsed: boolean;
+    'collapsed': boolean;
 }
+
 
 

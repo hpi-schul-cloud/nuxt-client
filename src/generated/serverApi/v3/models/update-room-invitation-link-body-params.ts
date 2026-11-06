@@ -14,48 +14,30 @@
 
 
 
-/**
- * 
- * @export
- * @interface UpdateRoomInvitationLinkBodyParams
- */
 export interface UpdateRoomInvitationLinkBodyParams {
     /**
      * Title of the link.
-     * @type {string}
-     * @memberof UpdateRoomInvitationLinkBodyParams
      */
-    title: string;
+    'title': string;
     /**
      * Expiration date of the invitation link
-     * @type {string}
-     * @memberof UpdateRoomInvitationLinkBodyParams
      */
-    activeUntil?: string;
+    'activeUntil'?: string;
     /**
      * Indicates if the link is also usable by external persons
-     * @type {boolean}
-     * @memberof UpdateRoomInvitationLinkBodyParams
      */
-    isUsableByExternalPersons: boolean;
+    'isUsableByExternalPersons': boolean;
     /**
      * Indicates if the link is also usable by students
-     * @type {boolean}
-     * @memberof UpdateRoomInvitationLinkBodyParams
      */
-    isUsableByStudents: boolean;
+    'isUsableByStudents': boolean;
     /**
      * Indicates if the link is restricted to the creators school
-     * @type {boolean}
-     * @memberof UpdateRoomInvitationLinkBodyParams
      */
-    restrictedToCreatorSchool: boolean;
+    'restrictedToCreatorSchool': boolean;
     /**
      * Indicates if the link requires confirmation by room admins / room owners
-     * @type {boolean}
-     * @memberof UpdateRoomInvitationLinkBodyParams
      */
-    requiresConfirmation: boolean;
+    'requiresConfirmation': boolean;
 }
-
 

@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface VideoConferenceJoinResponse
- */
 export interface VideoConferenceJoinResponse {
     /**
      * The URL to join the video conference.
-     * @type {string}
-     * @memberof VideoConferenceJoinResponse
      */
-    url: string;
+    'url': string;
 }
-
 

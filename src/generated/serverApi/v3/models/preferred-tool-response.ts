@@ -14,30 +14,18 @@
 
 
 
-/**
- * 
- * @export
- * @interface PreferredToolResponse
- */
 export interface PreferredToolResponse {
     /**
      * Id of the school external tool
-     * @type {string}
-     * @memberof PreferredToolResponse
      */
-    schoolExternalToolId: string;
+    'schoolExternalToolId': string;
     /**
      * Name of the external tool
-     * @type {string}
-     * @memberof PreferredToolResponse
      */
-    name: string;
+    'name': string;
     /**
      * Name of the icon to be rendered when displaying it as a preferred tool
-     * @type {string}
-     * @memberof PreferredToolResponse
      */
-    iconName: string;
+    'iconName': string;
 }
-
 

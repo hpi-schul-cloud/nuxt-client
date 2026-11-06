@@ -1,7 +1,8 @@
 import { useBoardApi } from "../BoardApi.composable";
 import { useCardRestApi } from "./cardRestApi.composable";
-import { mockApiResponse, mockComposable, mockedPiniaStoreTyping, mountComposable } from "@@/tests/test-utils";
+import { mockApiResponse, mockComposable, mountComposable } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
+import { richTextElementResponseFactory } from "@@/tests/test-utils/factory/richTextElementResponseFactory";
 import { ContentElementType, PreferredToolResponse, ToolContextType } from "@api-server";
 import { useCardStore } from "@data-board";
 import { useContextExternalToolApi } from "@data-external-tool";
@@ -38,16 +39,28 @@ describe("useCardRestApi", () => {
 	});
 
 	it("creates a preferred element and adds it to the card store", async () => {
-		const cardStore = mockedPiniaStoreTyping(useCardStore);
-		const card = cardResponseFactory.build();
-		const newElement = cardResponseFactory.build().elements[0];
+		const cardStore = useCardStore();
+		vi.spyOn(cardStore, "createElementSuccess").mockImplementation((payload) => payload.newElement);
+		const newElement = richTextElementResponseFactory.build();
+		const card = cardResponseFactory.build({ elements: [newElement] });
 		const preferredTool: PreferredToolResponse = {
-			schoolExternalToolId: undefined,
+			schoolExternalToolId: "mockSchoolExternalToolId",
 			iconName: "mockIconName",
 			name: "Tool Name",
 		};
-		cardStore.getCard.mockReturnValue(card);
+		vi.mocked(cardStore.getCard).mockReturnValue(card);
 		boardApi.createElementCall.mockResolvedValue(mockApiResponse({ data: newElement }));
+		contextExternalToolApi.fetchAvailableToolsForContextCall.mockResolvedValue([
+			{
+				externalToolId: "externalToolId",
+				schoolExternalToolId: preferredTool.schoolExternalToolId,
+				baseUrl: "https://example.com",
+				name: preferredTool.name,
+				parameters: [],
+			} as never,
+		]);
+		contextExternalToolApi.createContextExternalToolCall.mockResolvedValue({ id: "contextToolId" } as never);
+		boardApi.updateElementCall.mockResolvedValue(mockApiResponse({ data: newElement }));
 
 		await useCardRestApi().createPreferredElement(
 			{ cardId: card.id, type: ContentElementType.RICH_TEXT, toPosition: 0 },

@@ -21,7 +21,7 @@ import { CardResponse, ContentElementType, CopyStatusEnum, PreferredToolResponse
 import { notifyError, notifyInfo } from "@data-app";
 import { CollaboraFileType, useFileStorageApi } from "@data-file";
 import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
-import { useErrorHandler } from "@util-error-handling";
+import { useErrorHandler, useFailedFilesNotifier } from "@util-error-handling";
 import { defineStore } from "pinia";
 import { nextTick, Ref, ref } from "vue";
 
@@ -40,6 +40,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	const { setEditModeId, editModeId } = useSharedEditMode();
 	const { uploadCollaboraFile } = useFileStorageApi();
 	const { generateErrorText } = useErrorHandler();
+	const { notifyFailedFiles } = useFailedFilesNotifier();
 
 	const fetchCardRequest = socketApi.fetchCardRequest;
 
@@ -103,7 +104,9 @@ export const useCardStore = defineStore("cardStore", () => {
 		const { duplicatedCard } = payload;
 
 		if (payload.isOwnAction === true) {
-			if (payload.status !== CopyStatusEnum.SUCCESS) {
+			if (payload.failedFileNames?.length) {
+				notifyFailedFiles("components.boardCard", payload.failedFileNames);
+			} else if (payload.status !== CopyStatusEnum.SUCCESS) {
 				notifyError(generateErrorText("notDuplicated", "boardCard"));
 			}
 			if (!duplicatedCard.id) {

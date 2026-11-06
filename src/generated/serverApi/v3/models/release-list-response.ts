@@ -13,20 +13,26 @@
  */
 
 
-import { ReleaseItemResponse } from './release-item-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ReleaseItemResponse } from './release-item-response';
 
-/**
- * 
- * @export
- * @interface ReleaseListResponse
- */
 export interface ReleaseListResponse {
     /**
-     * 
-     * @type {Array<ReleaseItemResponse>}
-     * @memberof ReleaseListResponse
+     * The items for the current page.
      */
-    data: Array<ReleaseItemResponse>;
+    'data': Array<ReleaseItemResponse>;
+    /**
+     * The total amount of items.
+     */
+    'total': number;
+    /**
+     * The amount of items skipped from the start.
+     */
+    'skip': number;
+    /**
+     * The page size of the response.
+     */
+    'limit': number;
 }
-
 

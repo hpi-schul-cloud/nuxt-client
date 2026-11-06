@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface SchoolForExternalInviteResponse
- */
 export interface SchoolForExternalInviteResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolForExternalInviteResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolForExternalInviteResponse
-     */
-    name: string;
+    'id': string;
+    'name': string;
 }
-
 

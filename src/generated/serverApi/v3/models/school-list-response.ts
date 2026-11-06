@@ -13,38 +13,26 @@
  */
 
 
-import { SchoolItemResponse } from './school-item-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchoolItemResponse } from './school-item-response';
 
-/**
- * 
- * @export
- * @interface SchoolListResponse
- */
 export interface SchoolListResponse {
     /**
      * The items for the current page.
-     * @type {Array<SchoolItemResponse>}
-     * @memberof SchoolListResponse
      */
-    data: Array<SchoolItemResponse>;
+    'data': Array<SchoolItemResponse>;
     /**
      * The total amount of items.
-     * @type {number}
-     * @memberof SchoolListResponse
      */
-    total: number;
+    'total': number;
     /**
      * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof SchoolListResponse
      */
-    skip: number;
+    'skip': number;
     /**
      * The page size of the response.
-     * @type {number}
-     * @memberof SchoolListResponse
      */
-    limit: number;
+    'limit': number;
 }
-
 

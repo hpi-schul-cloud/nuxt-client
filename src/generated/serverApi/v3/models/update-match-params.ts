@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface UpdateMatchParams
- */
 export interface UpdateMatchParams {
     /**
      * updates local user reference for an import user
-     * @type {string}
-     * @memberof UpdateMatchParams
      */
-    userId: string;
+    'userId': string;
 }
-
 

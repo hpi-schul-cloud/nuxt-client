@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface OAuthSessionTokenExpirationResponse
- */
 export interface OAuthSessionTokenExpirationResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof OAuthSessionTokenExpirationResponse
-     */
-    expiresAt: string;
+    'expiresAt': string;
 }
-
 

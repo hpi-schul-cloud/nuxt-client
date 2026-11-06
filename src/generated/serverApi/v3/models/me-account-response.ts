@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface MeAccountResponse
- */
 export interface MeAccountResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof MeAccountResponse
-     */
-    id: string;
+    'id': string;
 }
-
 

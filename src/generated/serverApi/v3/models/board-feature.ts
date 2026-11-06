@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum BoardFeature {
     VIDEOCONFERENCE = 'videoconference'
 }

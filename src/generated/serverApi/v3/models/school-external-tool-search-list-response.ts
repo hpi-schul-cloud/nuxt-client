@@ -13,20 +13,11 @@
  */
 
 
-import { SchoolExternalToolResponse } from './school-external-tool-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchoolExternalToolResponse } from './school-external-tool-response';
 
-/**
- * 
- * @export
- * @interface SchoolExternalToolSearchListResponse
- */
 export interface SchoolExternalToolSearchListResponse {
-    /**
-     * 
-     * @type {Array<SchoolExternalToolResponse>}
-     * @memberof SchoolExternalToolSearchListResponse
-     */
-    data: Array<SchoolExternalToolResponse>;
+    'data': Array<SchoolExternalToolResponse>;
 }
-
 

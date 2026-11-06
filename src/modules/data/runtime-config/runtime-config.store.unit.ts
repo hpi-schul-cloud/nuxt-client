@@ -99,10 +99,16 @@ describe("useRuntimeConfigStore", () => {
 			const store = useRuntimeConfigStore();
 			await store.fetchRuntimeConfig();
 
-			// Attempting to modify should have no effect (readonly)
-			const originalValue = store.runtimeConfig[configItems[0].key];
-			(store.runtimeConfig as Record<string, string>)[configItems[0].key] = "modified";
-			expect(store.runtimeConfig[configItems[0].key]).toBe(originalValue);
+			const key = configItems[0].key;
+			const originalValue = store.runtimeConfig[key];
+			const warnSpy = vi.spyOn(console, "warn").mockImplementation(vi.fn());
+
+			try {
+				(store.runtimeConfig as Record<string, string>)[key] = "modified";
+				expect(store.runtimeConfig[key]).toBe(originalValue);
+			} finally {
+				warnSpy.mockRestore();
+			}
 		});
 	});
 

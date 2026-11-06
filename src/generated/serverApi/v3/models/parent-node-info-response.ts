@@ -13,32 +13,24 @@
  */
 
 
-import { ParentNodeType } from './parent-node-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ParentNodeType } from './parent-node-type';
 
-/**
- * 
- * @export
- * @interface ParentNodeInfoResponse
- */
 export interface ParentNodeInfoResponse {
     /**
      * The ID of the parent node
-     * @type {string}
-     * @memberof ParentNodeInfoResponse
      */
-    id: string;
+    'id': string;
     /**
      * The type of the parent node
-     * @type {ParentNodeType}
-     * @memberof ParentNodeInfoResponse
      */
-    type: ParentNodeType;
+    'type': ParentNodeType;
     /**
      * The name of the parent node
-     * @type {string}
-     * @memberof ParentNodeInfoResponse
      */
-    name: string;
+    'name': string;
 }
+
 
 

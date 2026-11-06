@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum Colors {
     TRANSPARENT = 'transparent',
     RED = 'red',

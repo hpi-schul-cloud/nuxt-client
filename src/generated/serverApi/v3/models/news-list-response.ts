@@ -13,38 +13,26 @@
  */
 
 
-import { NewsResponse } from './news-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { NewsResponse } from './news-response';
 
-/**
- * 
- * @export
- * @interface NewsListResponse
- */
 export interface NewsListResponse {
     /**
      * The items for the current page.
-     * @type {Array<NewsResponse>}
-     * @memberof NewsListResponse
      */
-    data: Array<NewsResponse>;
+    'data': Array<NewsResponse>;
     /**
      * The total amount of items.
-     * @type {number}
-     * @memberof NewsListResponse
      */
-    total: number;
+    'total': number;
     /**
      * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof NewsListResponse
      */
-    skip: number;
+    'skip': number;
     /**
      * The page size of the response.
-     * @type {number}
-     * @memberof NewsListResponse
      */
-    limit: number;
+    'limit': number;
 }
-
 

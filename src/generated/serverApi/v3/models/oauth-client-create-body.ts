@@ -14,72 +14,46 @@
 
 
 
-/**
- * 
- * @export
- * @interface OauthClientCreateBody
- */
 export interface OauthClientCreateBody {
     /**
      * The Oauth2 client id.
-     * @type {string}
-     * @memberof OauthClientCreateBody
      */
-    client_id: string;
+    'client_id': string;
     /**
      * The Oauth2 client name.
-     * @type {string}
-     * @memberof OauthClientCreateBody
      */
-    client_name: string;
+    'client_name': string;
     /**
      * The Oauth2 client secret.
-     * @type {string}
-     * @memberof OauthClientCreateBody
      */
-    client_secret: string;
+    'client_secret': string;
     /**
      * The allowed redirect urls of the Oauth2 client.
-     * @type {Array<string>}
-     * @memberof OauthClientCreateBody
      */
-    redirect_uris?: Array<string>;
+    'redirect_uris'?: Array<string>;
     /**
      * Requested Client Authentication method for the Token Endpoint. The options are client_secret_post, client_secret_basic, private_key_jwt, and none.
-     * @type {string}
-     * @memberof OauthClientCreateBody
      */
-    token_endpoint_auth_method: string;
+    'token_endpoint_auth_method': string;
     /**
      * SubjectType requested for responses to this Client. The subject_types_supported Discovery parameter contains a list of the supported subject_type values for this server. Valid types include pairwise and public.
-     * @type {string}
-     * @memberof OauthClientCreateBody
      */
-    subject_type: string;
+    'subject_type': string;
     /**
      * Scope is a string containing a space-separated list of scope values (as described in Section 3.3 of OAuth 2.0 [RFC6749]) that the client can use when requesting access tokens.
-     * @type {string}
-     * @memberof OauthClientCreateBody
      */
-    scope?: string;
+    'scope'?: string;
     /**
      * Thr frontchannel logout uri.
-     * @type {string}
-     * @memberof OauthClientCreateBody
      */
-    frontchannel_logout_uri?: string;
+    'frontchannel_logout_uri'?: string;
     /**
      * The grant types of the Oauth2 client.
-     * @type {Array<string>}
-     * @memberof OauthClientCreateBody
      */
-    grant_types?: Array<string>;
+    'grant_types'?: Array<string>;
     /**
      * The response types of the Oauth2 client.
-     * @type {Array<string>}
-     * @memberof OauthClientCreateBody
      */
-    response_types?: Array<string>;
+    'response_types'?: Array<string>;
 }
-
 

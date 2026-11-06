@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface ApplicantIdsBodyParams
- */
 export interface ApplicantIdsBodyParams {
     /**
      * The IDs of the applicants
-     * @type {Array<string>}
-     * @memberof ApplicantIdsBodyParams
      */
-    userIds: Array<string>;
+    'userIds': Array<string>;
 }
-
 

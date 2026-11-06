@@ -16,9 +16,8 @@
 
 /**
  * License type of the media source
- * @export
- * @enum {string}
  */
+
 export enum MediaSourceLicenseType {
     USER_LICENSE = 'user-license',
     SCHOOL_LICENSE = 'school-license'

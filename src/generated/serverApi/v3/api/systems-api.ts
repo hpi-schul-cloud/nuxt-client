@@ -13,22 +13,22 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { PublicSystemListResponse } from '../models';
+import type { PublicSystemListResponse } from '../models';
 // @ts-ignore
-import { PublicSystemResponse } from '../models';
+import type { PublicSystemResponse } from '../models';
 // @ts-ignore
-import { SystemType } from '../models';
+import type { SystemType } from '../models';
 /**
  * SystemsApi - axios parameter creator
- * @export
  */
 export const SystemsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -39,11 +39,11 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        systemControllerDeleteSystem: async (systemId: string, options: any = {}): Promise<RequestArgs> => {
+        systemControllerDeleteSystem: async (systemId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'systemId' is not null or undefined
             assertParamExists('systemControllerDeleteSystem', 'systemId', systemId)
             const localVarPath = `/systems/{systemId}`
-                .replace(`{${"systemId"}}`, encodeURIComponent(String(systemId)));
+                .replace('{systemId}', encodeURIComponent(String(systemId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -60,8 +60,7 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -77,7 +76,7 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        systemControllerFind: async (types?: SystemType, options: any = {}): Promise<RequestArgs> => {
+        systemControllerFind: async (types?: SystemType, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/systems/public`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -94,9 +93,9 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['types'] = types;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -112,11 +111,11 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        systemControllerGetSystem: async (systemId: string, options: any = {}): Promise<RequestArgs> => {
+        systemControllerGetSystem: async (systemId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'systemId' is not null or undefined
             assertParamExists('systemControllerGetSystem', 'systemId', systemId)
             const localVarPath = `/systems/public/{systemId}`
-                .replace(`{${"systemId"}}`, encodeURIComponent(String(systemId)));
+                .replace('{systemId}', encodeURIComponent(String(systemId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -128,9 +127,9 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -144,7 +143,6 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
 
 /**
  * SystemsApi - functional programming interface
- * @export
  */
 export const SystemsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = SystemsApiAxiosParamCreator(configuration)
@@ -156,9 +154,11 @@ export const SystemsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async systemControllerDeleteSystem(systemId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async systemControllerDeleteSystem(systemId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.systemControllerDeleteSystem(systemId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SystemsApi.systemControllerDeleteSystem']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -167,9 +167,11 @@ export const SystemsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async systemControllerFind(types?: SystemType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicSystemListResponse>> {
+        async systemControllerFind(types?: SystemType, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicSystemListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.systemControllerFind(types, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SystemsApi.systemControllerFind']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -178,16 +180,17 @@ export const SystemsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async systemControllerGetSystem(systemId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicSystemResponse>> {
+        async systemControllerGetSystem(systemId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicSystemResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.systemControllerGetSystem(systemId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SystemsApi.systemControllerGetSystem']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * SystemsApi - factory interface
- * @export
  */
 export const SystemsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = SystemsApiFp(configuration)
@@ -199,7 +202,7 @@ export const SystemsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        systemControllerDeleteSystem(systemId: string, options?: any): AxiosPromise<void> {
+        systemControllerDeleteSystem(systemId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.systemControllerDeleteSystem(systemId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -209,7 +212,7 @@ export const SystemsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        systemControllerFind(types?: SystemType, options?: any): AxiosPromise<PublicSystemListResponse> {
+        systemControllerFind(types?: SystemType, options?: RawAxiosRequestConfig): AxiosPromise<PublicSystemListResponse> {
             return localVarFp.systemControllerFind(types, options).then((request) => request(axios, basePath));
         },
         /**
@@ -219,7 +222,7 @@ export const SystemsApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        systemControllerGetSystem(systemId: string, options?: any): AxiosPromise<PublicSystemResponse> {
+        systemControllerGetSystem(systemId: string, options?: RawAxiosRequestConfig): AxiosPromise<PublicSystemResponse> {
             return localVarFp.systemControllerGetSystem(systemId, options).then((request) => request(axios, basePath));
         },
     };
@@ -227,8 +230,6 @@ export const SystemsApiFactory = function (configuration?: Configuration, basePa
 
 /**
  * SystemsApi - interface
- * @export
- * @interface SystemsApi
  */
 export interface SystemsApiInterface {
     /**
@@ -237,9 +238,8 @@ export interface SystemsApiInterface {
      * @param {string} systemId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SystemsApiInterface
      */
-    systemControllerDeleteSystem(systemId: string, options?: any): AxiosPromise<void>;
+    systemControllerDeleteSystem(systemId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -247,9 +247,8 @@ export interface SystemsApiInterface {
      * @param {SystemType} [types] The type of the system.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SystemsApiInterface
      */
-    systemControllerFind(types?: SystemType, options?: any): AxiosPromise<PublicSystemListResponse>;
+    systemControllerFind(types?: SystemType, options?: RawAxiosRequestConfig): AxiosPromise<PublicSystemListResponse>;
 
     /**
      * 
@@ -257,17 +256,13 @@ export interface SystemsApiInterface {
      * @param {string} systemId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SystemsApiInterface
      */
-    systemControllerGetSystem(systemId: string, options?: any): AxiosPromise<PublicSystemResponse>;
+    systemControllerGetSystem(systemId: string, options?: RawAxiosRequestConfig): AxiosPromise<PublicSystemResponse>;
 
 }
 
 /**
  * SystemsApi - object-oriented interface
- * @export
- * @class SystemsApi
- * @extends {BaseAPI}
  */
 export class SystemsApi extends BaseAPI implements SystemsApiInterface {
     /**
@@ -276,9 +271,8 @@ export class SystemsApi extends BaseAPI implements SystemsApiInterface {
      * @param {string} systemId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SystemsApi
      */
-    public systemControllerDeleteSystem(systemId: string, options?: any) {
+    public systemControllerDeleteSystem(systemId: string, options?: RawAxiosRequestConfig) {
         return SystemsApiFp(this.configuration).systemControllerDeleteSystem(systemId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -288,9 +282,8 @@ export class SystemsApi extends BaseAPI implements SystemsApiInterface {
      * @param {SystemType} [types] The type of the system.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SystemsApi
      */
-    public systemControllerFind(types?: SystemType, options?: any) {
+    public systemControllerFind(types?: SystemType, options?: RawAxiosRequestConfig) {
         return SystemsApiFp(this.configuration).systemControllerFind(types, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -300,9 +293,9 @@ export class SystemsApi extends BaseAPI implements SystemsApiInterface {
      * @param {string} systemId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SystemsApi
      */
-    public systemControllerGetSystem(systemId: string, options?: any) {
+    public systemControllerGetSystem(systemId: string, options?: RawAxiosRequestConfig) {
         return SystemsApiFp(this.configuration).systemControllerGetSystem(systemId, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

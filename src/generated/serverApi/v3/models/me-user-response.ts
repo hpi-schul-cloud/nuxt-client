@@ -14,36 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface MeUserResponse
- */
 export interface MeUserResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof MeUserResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MeUserResponse
-     */
-    firstName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MeUserResponse
-     */
-    lastName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MeUserResponse
-     */
-    customAvatarBackgroundColor?: string;
+    'id': string;
+    'firstName': string;
+    'lastName': string;
+    'customAvatarBackgroundColor'?: string;
 }
-
 

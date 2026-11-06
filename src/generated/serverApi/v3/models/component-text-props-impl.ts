@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface ComponentTextPropsImpl
- */
 export interface ComponentTextPropsImpl {
-    /**
-     * 
-     * @type {string}
-     * @memberof ComponentTextPropsImpl
-     */
-    text: string;
+    'text': string;
 }
-
 

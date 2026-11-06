@@ -14,42 +14,26 @@
 
 
 
-/**
- * 
- * @export
- * @interface EntityNotFoundError
- */
 export interface EntityNotFoundError {
     /**
      * The response status code.
-     * @type {number}
-     * @memberof EntityNotFoundError
      */
-    code: number;
+    'code': number;
     /**
      * The error type.
-     * @type {string}
-     * @memberof EntityNotFoundError
      */
-    type: string;
+    'type': string;
     /**
      * The error title.
-     * @type {string}
-     * @memberof EntityNotFoundError
      */
-    title: string;
+    'title': string;
     /**
      * The error message.
-     * @type {string}
-     * @memberof EntityNotFoundError
      */
-    message: string;
+    'message': string;
     /**
      * The error details.
-     * @type {object}
-     * @memberof EntityNotFoundError
      */
-    details?: object;
+    'details'?: object;
 }
-
 

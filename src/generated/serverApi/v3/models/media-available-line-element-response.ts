@@ -14,48 +14,30 @@
 
 
 
-/**
- * 
- * @export
- * @interface MediaAvailableLineElementResponse
- */
 export interface MediaAvailableLineElementResponse {
     /**
      * School External tool id of the media available line element
-     * @type {string}
-     * @memberof MediaAvailableLineElementResponse
      */
-    schoolExternalToolId: string;
+    'schoolExternalToolId': string;
     /**
      * Name of the media available line element
-     * @type {string}
-     * @memberof MediaAvailableLineElementResponse
      */
-    name: string;
+    'name': string;
     /**
      * Domain of the tool url
-     * @type {string}
-     * @memberof MediaAvailableLineElementResponse
      */
-    domain: string;
+    'domain': string;
     /**
      * Description of the media available line element
-     * @type {string}
-     * @memberof MediaAvailableLineElementResponse
      */
-    description?: string;
+    'description'?: string;
     /**
      * Logo url of the media available line element
-     * @type {string}
-     * @memberof MediaAvailableLineElementResponse
      */
-    logoUrl?: string;
+    'logoUrl'?: string;
     /**
      * Thumbnail url of the media available line element
-     * @type {string}
-     * @memberof MediaAvailableLineElementResponse
      */
-    thumbnailUrl?: string;
+    'thumbnailUrl'?: string;
 }
-
 

@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface ProviderConfigResponse
- */
 export interface ProviderConfigResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ProviderConfigResponse
-     */
-    provider: string;
+    'provider': string;
 }
-
 

@@ -13,8 +13,9 @@ import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { VTextField } from "vuetify/components";
 
+vi.mock("@vueuse/integrations/useFocusTrap");
+
 describe("AddExternalPersonDialog", () => {
-	vi.mock("@vueuse/integrations/useFocusTrap");
 	let wrapper: VueWrapper<InstanceType<typeof AddExternalPersonDialog>>;
 
 	beforeEach(() => {
@@ -229,6 +230,9 @@ describe("AddExternalPersonDialog", () => {
 					status: "error",
 					text: "pages.rooms.members.dialog.addExternalPerson.errors.addingMember",
 				});
+				expect(useNotificationStore().notify).not.toHaveBeenCalledWith(
+					expect.objectContaining({ text: "pages.rooms.members.dialog.addExternalPerson.success.addingMember" })
+				);
 				expect(wrapper.emitted("update:modelValue")?.[0][0]).toEqual(false);
 			});
 		});

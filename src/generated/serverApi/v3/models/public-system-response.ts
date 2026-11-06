@@ -13,44 +13,30 @@
  */
 
 
-import { OauthConfigResponse } from './oauth-config-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { OauthConfigResponse } from './oauth-config-response';
 
-/**
- * 
- * @export
- * @interface PublicSystemResponse
- */
 export interface PublicSystemResponse {
     /**
      * Id of the system.
-     * @type {string}
-     * @memberof PublicSystemResponse
      */
-    id: string;
+    'id': string;
     /**
      * Flag to request only systems with oauth-config.
-     * @type {string}
-     * @memberof PublicSystemResponse
      */
-    type?: string | null;
+    'type'?: string | null;
     /**
      * Alias of the system.
-     * @type {string}
-     * @memberof PublicSystemResponse
      */
-    alias?: string | null;
+    'alias'?: string | null;
     /**
      * Display name of the system.
-     * @type {string}
-     * @memberof PublicSystemResponse
      */
-    displayName?: string | null;
+    'displayName'?: string | null;
     /**
      * Oauth config of the system.
-     * @type {OauthConfigResponse}
-     * @memberof PublicSystemResponse
      */
-    oauthConfig?: OauthConfigResponse | null;
+    'oauthConfig'?: OauthConfigResponse | null;
 }
-
 

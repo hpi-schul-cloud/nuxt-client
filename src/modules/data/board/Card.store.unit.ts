@@ -382,6 +382,21 @@ describe("CardStore", () => {
 				expectNotification("error");
 			});
 
+			it("should show warning notification when isOwnAction is true and files could not be copied", () => {
+				const { cardStore } = setup();
+
+				cardStore.duplicateCardSuccess({
+					cardId: "originalCardId",
+					duplicatedCard: cardResponseFactory.build({ id: "newCardId", elements: [] }),
+					status: CopyStatusEnum.PARTIAL,
+					failedFileNames: ["video.mp4"],
+					isOwnAction: true,
+				});
+
+				expectNotification("warning");
+				expect(useNotificationStore().notify).not.toHaveBeenCalledWith(expect.objectContaining({ status: "error" }));
+			});
+
 			it("should not show notification when duplicating card with only regular elements (text, files)", () => {
 				setupDuplicate([
 					fileElementResponseFactory.build(),

@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface PatchGroupParams
- */
 export interface PatchGroupParams {
     /**
      * Title of the Group grid element
-     * @type {string}
-     * @memberof PatchGroupParams
      */
-    title: string;
+    'title': string;
 }
-
 

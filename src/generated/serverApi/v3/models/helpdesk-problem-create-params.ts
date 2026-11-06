@@ -14,64 +14,19 @@
 
 
 
-/**
- * 
- * @export
- * @interface HelpdeskProblemCreateParams
- */
 export interface HelpdeskProblemCreateParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof HelpdeskProblemCreateParams
-     */
-    supportType: HelpdeskProblemCreateParamsSupportType;
-    /**
-     * 
-     * @type {string}
-     * @memberof HelpdeskProblemCreateParams
-     */
-    subject: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof HelpdeskProblemCreateParams
-     */
-    replyEmail: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof HelpdeskProblemCreateParams
-     */
-    problemArea: Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof HelpdeskProblemCreateParams
-     */
-    device?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof HelpdeskProblemCreateParams
-     */
-    consent?: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof HelpdeskProblemCreateParams
-     */
-    problemDescription: string;
+    'supportType': HelpdeskProblemCreateParamsSupportType;
+    'subject': string;
+    'replyEmail': string;
+    'problemArea': Array<string>;
+    'device'?: string;
+    'consent'?: boolean;
+    'problemDescription': string;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum HelpdeskProblemCreateParamsSupportType {
     PROBLEM = 'problem',
     WISH = 'wish'
 }
-
 
 

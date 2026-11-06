@@ -13,18 +13,18 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { TeamPermissionsBody } from '../models';
+import type { TeamPermissionsBody } from '../models';
 /**
  * CollaborativeStorageApi - axios parameter creator
- * @export
  */
 export const CollaborativeStorageApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -37,7 +37,7 @@ export const CollaborativeStorageApiAxiosParamCreator = function (configuration?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        collaborativeStorageControllerUpdateTeamPermissionsForRole: async (teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options: any = {}): Promise<RequestArgs> => {
+        collaborativeStorageControllerUpdateTeamPermissionsForRole: async (teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamId' is not null or undefined
             assertParamExists('collaborativeStorageControllerUpdateTeamPermissionsForRole', 'teamId', teamId)
             // verify required parameter 'roleId' is not null or undefined
@@ -45,8 +45,8 @@ export const CollaborativeStorageApiAxiosParamCreator = function (configuration?
             // verify required parameter 'teamPermissionsBody' is not null or undefined
             assertParamExists('collaborativeStorageControllerUpdateTeamPermissionsForRole', 'teamPermissionsBody', teamPermissionsBody)
             const localVarPath = `/collaborative-storage/team/{teamId}/role/{roleId}/permissions`
-                .replace(`{${"teamId"}}`, encodeURIComponent(String(teamId)))
-                .replace(`{${"roleId"}}`, encodeURIComponent(String(roleId)));
+                .replace('{teamId}', encodeURIComponent(String(teamId)))
+                .replace('{roleId}', encodeURIComponent(String(roleId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -62,11 +62,9 @@ export const CollaborativeStorageApiAxiosParamCreator = function (configuration?
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(teamPermissionsBody, localVarRequestOptions, configuration)
@@ -81,7 +79,6 @@ export const CollaborativeStorageApiAxiosParamCreator = function (configuration?
 
 /**
  * CollaborativeStorageApi - functional programming interface
- * @export
  */
 export const CollaborativeStorageApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = CollaborativeStorageApiAxiosParamCreator(configuration)
@@ -95,16 +92,17 @@ export const CollaborativeStorageApiFp = function(configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId, roleId, teamPermissionsBody, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CollaborativeStorageApi.collaborativeStorageControllerUpdateTeamPermissionsForRole']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * CollaborativeStorageApi - factory interface
- * @export
  */
 export const CollaborativeStorageApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = CollaborativeStorageApiFp(configuration)
@@ -118,7 +116,7 @@ export const CollaborativeStorageApiFactory = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options?: any): AxiosPromise<void> {
+        collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId, roleId, teamPermissionsBody, options).then((request) => request(axios, basePath));
         },
     };
@@ -126,8 +124,6 @@ export const CollaborativeStorageApiFactory = function (configuration?: Configur
 
 /**
  * CollaborativeStorageApi - interface
- * @export
- * @interface CollaborativeStorageApi
  */
 export interface CollaborativeStorageApiInterface {
     /**
@@ -138,17 +134,13 @@ export interface CollaborativeStorageApiInterface {
      * @param {TeamPermissionsBody} teamPermissionsBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CollaborativeStorageApiInterface
      */
-    collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options?: any): AxiosPromise<void>;
+    collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
  * CollaborativeStorageApi - object-oriented interface
- * @export
- * @class CollaborativeStorageApi
- * @extends {BaseAPI}
  */
 export class CollaborativeStorageApi extends BaseAPI implements CollaborativeStorageApiInterface {
     /**
@@ -159,9 +151,9 @@ export class CollaborativeStorageApi extends BaseAPI implements CollaborativeSto
      * @param {TeamPermissionsBody} teamPermissionsBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CollaborativeStorageApi
      */
-    public collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options?: any) {
+    public collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options?: RawAxiosRequestConfig) {
         return CollaborativeStorageApiFp(this.configuration).collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId, roleId, teamPermissionsBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

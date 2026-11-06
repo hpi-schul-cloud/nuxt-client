@@ -41,7 +41,7 @@ describe("CourseRoomListPage", () => {
 				allElements: mockProcessedData as never,
 			});
 		}
-		courseRoomListStore.fetchAllElements.mockResolvedValue();
+		courseRoomListStore.fetchAllCourses.mockResolvedValue();
 
 		const wrapper = mount(CourseRoomList, {
 			global: {
@@ -100,11 +100,11 @@ describe("CourseRoomListPage", () => {
 	});
 
 	describe("when store is empty on mount", () => {
-		it("should call fetchAllElements", async () => {
+		it("should call fetchAllCourses", async () => {
 			const { courseRoomListStore } = setup({ withEmptyStore: true });
 			await nextTick();
 
-			expect(courseRoomListStore.fetchAllElements).toHaveBeenCalled();
+			expect(courseRoomListStore.fetchAllCourses).toHaveBeenCalled();
 		});
 	});
 });

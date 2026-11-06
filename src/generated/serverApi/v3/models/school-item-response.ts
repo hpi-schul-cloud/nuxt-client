@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface SchoolItemResponse
- */
 export interface SchoolItemResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolItemResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolItemResponse
-     */
-    name: string;
+    'id': string;
+    'name': string;
 }
-
 

@@ -37,7 +37,7 @@ describe("CourseRoomWrapper.vue", () => {
 
 		courseRoomListStore = useCourseRoomListStore();
 		courseRoomListStore.fetchCourses = vi.fn().mockResolvedValue(undefined);
-		courseRoomListStore.fetchAllElements = vi.fn().mockResolvedValue(undefined);
+		courseRoomListStore.fetchAllCourses = vi.fn().mockResolvedValue(undefined);
 
 		useCommonCartridgeImportMockReturn = mockComposable(useCommonCartridgeImport, {
 			isOpen: ref(false),

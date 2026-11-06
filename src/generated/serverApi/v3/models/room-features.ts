@@ -16,9 +16,8 @@
 
 /**
  * The features of the room
- * @export
- * @enum {string}
  */
+
 export enum RoomFeatures {
     EDITOR_MANAGE_VIDEOCONFERENCE = 'editor_manage_videoconference'
 }

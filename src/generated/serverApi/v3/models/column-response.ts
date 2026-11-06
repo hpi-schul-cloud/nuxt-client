@@ -13,39 +13,17 @@
  */
 
 
-import { CardSkeletonResponse } from './card-skeleton-response';
-import { TimestampsResponse } from './timestamps-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CardSkeletonResponse } from './card-skeleton-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { TimestampsResponse } from './timestamps-response';
 
-/**
- * 
- * @export
- * @interface ColumnResponse
- */
 export interface ColumnResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ColumnResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ColumnResponse
-     */
-    title: string;
-    /**
-     * 
-     * @type {Array<CardSkeletonResponse>}
-     * @memberof ColumnResponse
-     */
-    cards: Array<CardSkeletonResponse>;
-    /**
-     * 
-     * @type {TimestampsResponse}
-     * @memberof ColumnResponse
-     */
-    timestamps: TimestampsResponse;
+    'id': string;
+    'title': string;
+    'cards': Array<CardSkeletonResponse>;
+    'timestamps': TimestampsResponse;
 }
-
 

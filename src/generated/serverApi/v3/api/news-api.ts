@@ -13,24 +13,24 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { CreateNewsParams } from '../models';
+import type { CreateNewsParams } from '../models';
 // @ts-ignore
-import { NewsListResponse } from '../models';
+import type { NewsListResponse } from '../models';
 // @ts-ignore
-import { NewsResponse } from '../models';
+import type { NewsResponse } from '../models';
 // @ts-ignore
-import { UpdateNewsParams } from '../models';
+import type { UpdateNewsParams } from '../models';
 /**
  * NewsApi - axios parameter creator
- * @export
  */
 export const NewsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -41,7 +41,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerCreate: async (createNewsParams: CreateNewsParams, options: any = {}): Promise<RequestArgs> => {
+        newsControllerCreate: async (createNewsParams: CreateNewsParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'createNewsParams' is not null or undefined
             assertParamExists('newsControllerCreate', 'createNewsParams', createNewsParams)
             const localVarPath = `/news`;
@@ -60,11 +60,10 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(createNewsParams, localVarRequestOptions, configuration)
@@ -81,11 +80,11 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerDelete: async (newsId: string, options: any = {}): Promise<RequestArgs> => {
+        newsControllerDelete: async (newsId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'newsId' is not null or undefined
             assertParamExists('newsControllerDelete', 'newsId', newsId)
             const localVarPath = `/news/{newsId}`
-                .replace(`{${"newsId"}}`, encodeURIComponent(String(newsId)));
+                .replace('{newsId}', encodeURIComponent(String(newsId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -101,9 +100,9 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -115,7 +114,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Responds with all news for a user.
-         * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
+         * @param {NewsControllerFindAllTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -123,7 +122,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerFindAll: async (targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        newsControllerFindAll: async (targetModel?: NewsControllerFindAllTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/news`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -160,9 +159,9 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['limit'] = limit;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -178,11 +177,11 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerFindOne: async (newsId: string, options: any = {}): Promise<RequestArgs> => {
+        newsControllerFindOne: async (newsId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'newsId' is not null or undefined
             assertParamExists('newsControllerFindOne', 'newsId', newsId)
             const localVarPath = `/news/{newsId}`
-                .replace(`{${"newsId"}}`, encodeURIComponent(String(newsId)));
+                .replace('{newsId}', encodeURIComponent(String(newsId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -198,9 +197,9 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -217,13 +216,13 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerUpdate: async (newsId: string, updateNewsParams: UpdateNewsParams, options: any = {}): Promise<RequestArgs> => {
+        newsControllerUpdate: async (newsId: string, updateNewsParams: UpdateNewsParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'newsId' is not null or undefined
             assertParamExists('newsControllerUpdate', 'newsId', newsId)
             // verify required parameter 'updateNewsParams' is not null or undefined
             assertParamExists('newsControllerUpdate', 'updateNewsParams', updateNewsParams)
             const localVarPath = `/news/{newsId}`
-                .replace(`{${"newsId"}}`, encodeURIComponent(String(newsId)));
+                .replace('{newsId}', encodeURIComponent(String(newsId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -239,11 +238,10 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(updateNewsParams, localVarRequestOptions, configuration)
@@ -257,7 +255,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @summary Responds with news of a given team for a user.
          * @param {string} teamId The id of the team.
-         * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
+         * @param {TeamNewsControllerFindAllForTeamTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -265,11 +263,11 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        teamNewsControllerFindAllForTeam: async (teamId: string, targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        teamNewsControllerFindAllForTeam: async (teamId: string, targetModel?: TeamNewsControllerFindAllForTeamTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamId' is not null or undefined
             assertParamExists('teamNewsControllerFindAllForTeam', 'teamId', teamId)
             const localVarPath = `/team/{teamId}/news`
-                .replace(`{${"teamId"}}`, encodeURIComponent(String(teamId)));
+                .replace('{teamId}', encodeURIComponent(String(teamId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -305,9 +303,9 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['limit'] = limit;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -321,7 +319,6 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
 
 /**
  * NewsApi - functional programming interface
- * @export
  */
 export const NewsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = NewsApiAxiosParamCreator(configuration)
@@ -333,9 +330,11 @@ export const NewsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async newsControllerCreate(createNewsParams: CreateNewsParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsResponse>> {
+        async newsControllerCreate(createNewsParams: CreateNewsParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.newsControllerCreate(createNewsParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NewsApi.newsControllerCreate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -344,14 +343,16 @@ export const NewsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async newsControllerDelete(newsId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async newsControllerDelete(newsId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.newsControllerDelete(newsId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NewsApi.newsControllerDelete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
          * @summary Responds with all news for a user.
-         * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
+         * @param {NewsControllerFindAllTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -359,9 +360,11 @@ export const NewsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async newsControllerFindAll(targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsListResponse>> {
+        async newsControllerFindAll(targetModel?: NewsControllerFindAllTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.newsControllerFindAll(targetModel, targetId, unpublished, skip, limit, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NewsApi.newsControllerFindAll']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -370,9 +373,11 @@ export const NewsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async newsControllerFindOne(newsId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsResponse>> {
+        async newsControllerFindOne(newsId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.newsControllerFindOne(newsId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NewsApi.newsControllerFindOne']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -382,15 +387,17 @@ export const NewsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async newsControllerUpdate(newsId: string, updateNewsParams: UpdateNewsParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsResponse>> {
+        async newsControllerUpdate(newsId: string, updateNewsParams: UpdateNewsParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.newsControllerUpdate(newsId, updateNewsParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NewsApi.newsControllerUpdate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
          * @summary Responds with news of a given team for a user.
          * @param {string} teamId The id of the team.
-         * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
+         * @param {TeamNewsControllerFindAllForTeamTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -398,16 +405,17 @@ export const NewsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async teamNewsControllerFindAllForTeam(teamId: string, targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsListResponse>> {
+        async teamNewsControllerFindAllForTeam(teamId: string, targetModel?: TeamNewsControllerFindAllForTeamTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.teamNewsControllerFindAllForTeam(teamId, targetModel, targetId, unpublished, skip, limit, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NewsApi.teamNewsControllerFindAllForTeam']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * NewsApi - factory interface
- * @export
  */
 export const NewsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = NewsApiFp(configuration)
@@ -419,7 +427,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerCreate(createNewsParams: CreateNewsParams, options?: any): AxiosPromise<NewsResponse> {
+        newsControllerCreate(createNewsParams: CreateNewsParams, options?: RawAxiosRequestConfig): AxiosPromise<NewsResponse> {
             return localVarFp.newsControllerCreate(createNewsParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -429,13 +437,13 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerDelete(newsId: string, options?: any): AxiosPromise<string> {
+        newsControllerDelete(newsId: string, options?: RawAxiosRequestConfig): AxiosPromise<string> {
             return localVarFp.newsControllerDelete(newsId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Responds with all news for a user.
-         * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
+         * @param {NewsControllerFindAllTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -443,7 +451,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerFindAll(targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse> {
+        newsControllerFindAll(targetModel?: NewsControllerFindAllTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<NewsListResponse> {
             return localVarFp.newsControllerFindAll(targetModel, targetId, unpublished, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
@@ -453,7 +461,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerFindOne(newsId: string, options?: any): AxiosPromise<NewsResponse> {
+        newsControllerFindOne(newsId: string, options?: RawAxiosRequestConfig): AxiosPromise<NewsResponse> {
             return localVarFp.newsControllerFindOne(newsId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -464,14 +472,14 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerUpdate(newsId: string, updateNewsParams: UpdateNewsParams, options?: any): AxiosPromise<NewsResponse> {
+        newsControllerUpdate(newsId: string, updateNewsParams: UpdateNewsParams, options?: RawAxiosRequestConfig): AxiosPromise<NewsResponse> {
             return localVarFp.newsControllerUpdate(newsId, updateNewsParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Responds with news of a given team for a user.
          * @param {string} teamId The id of the team.
-         * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
+         * @param {TeamNewsControllerFindAllForTeamTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -479,7 +487,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        teamNewsControllerFindAllForTeam(teamId: string, targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse> {
+        teamNewsControllerFindAllForTeam(teamId: string, targetModel?: TeamNewsControllerFindAllForTeamTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<NewsListResponse> {
             return localVarFp.teamNewsControllerFindAllForTeam(teamId, targetModel, targetId, unpublished, skip, limit, options).then((request) => request(axios, basePath));
         },
     };
@@ -487,8 +495,6 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
 
 /**
  * NewsApi - interface
- * @export
- * @interface NewsApi
  */
 export interface NewsApiInterface {
     /**
@@ -497,9 +503,8 @@ export interface NewsApiInterface {
      * @param {CreateNewsParams} createNewsParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof NewsApiInterface
      */
-    newsControllerCreate(createNewsParams: CreateNewsParams, options?: any): AxiosPromise<NewsResponse>;
+    newsControllerCreate(createNewsParams: CreateNewsParams, options?: RawAxiosRequestConfig): AxiosPromise<NewsResponse>;
 
     /**
      * 
@@ -507,23 +512,21 @@ export interface NewsApiInterface {
      * @param {string} newsId The id of the news.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof NewsApiInterface
      */
-    newsControllerDelete(newsId: string, options?: any): AxiosPromise<string>;
+    newsControllerDelete(newsId: string, options?: RawAxiosRequestConfig): AxiosPromise<string>;
 
     /**
      * 
      * @summary Responds with all news for a user.
-     * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
+     * @param {NewsControllerFindAllTargetModel} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
      * @param {boolean} [unpublished] Flag that filters if the news should be published or not
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof NewsApiInterface
      */
-    newsControllerFindAll(targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse>;
+    newsControllerFindAll(targetModel?: NewsControllerFindAllTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<NewsListResponse>;
 
     /**
      * 
@@ -531,9 +534,8 @@ export interface NewsApiInterface {
      * @param {string} newsId The id of the news.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof NewsApiInterface
      */
-    newsControllerFindOne(newsId: string, options?: any): AxiosPromise<NewsResponse>;
+    newsControllerFindOne(newsId: string, options?: RawAxiosRequestConfig): AxiosPromise<NewsResponse>;
 
     /**
      * 
@@ -542,32 +544,27 @@ export interface NewsApiInterface {
      * @param {UpdateNewsParams} updateNewsParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof NewsApiInterface
      */
-    newsControllerUpdate(newsId: string, updateNewsParams: UpdateNewsParams, options?: any): AxiosPromise<NewsResponse>;
+    newsControllerUpdate(newsId: string, updateNewsParams: UpdateNewsParams, options?: RawAxiosRequestConfig): AxiosPromise<NewsResponse>;
 
     /**
      * 
      * @summary Responds with news of a given team for a user.
      * @param {string} teamId The id of the team.
-     * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
+     * @param {TeamNewsControllerFindAllForTeamTargetModel} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
      * @param {boolean} [unpublished] Flag that filters if the news should be published or not
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof NewsApiInterface
      */
-    teamNewsControllerFindAllForTeam(teamId: string, targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse>;
+    teamNewsControllerFindAllForTeam(teamId: string, targetModel?: TeamNewsControllerFindAllForTeamTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<NewsListResponse>;
 
 }
 
 /**
  * NewsApi - object-oriented interface
- * @export
- * @class NewsApi
- * @extends {BaseAPI}
  */
 export class NewsApi extends BaseAPI implements NewsApiInterface {
     /**
@@ -576,9 +573,8 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
      * @param {CreateNewsParams} createNewsParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof NewsApi
      */
-    public newsControllerCreate(createNewsParams: CreateNewsParams, options?: any) {
+    public newsControllerCreate(createNewsParams: CreateNewsParams, options?: RawAxiosRequestConfig) {
         return NewsApiFp(this.configuration).newsControllerCreate(createNewsParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -588,25 +584,23 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
      * @param {string} newsId The id of the news.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof NewsApi
      */
-    public newsControllerDelete(newsId: string, options?: any) {
+    public newsControllerDelete(newsId: string, options?: RawAxiosRequestConfig) {
         return NewsApiFp(this.configuration).newsControllerDelete(newsId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Responds with all news for a user.
-     * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
+     * @param {NewsControllerFindAllTargetModel} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
      * @param {boolean} [unpublished] Flag that filters if the news should be published or not
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof NewsApi
      */
-    public newsControllerFindAll(targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any) {
+    public newsControllerFindAll(targetModel?: NewsControllerFindAllTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: RawAxiosRequestConfig) {
         return NewsApiFp(this.configuration).newsControllerFindAll(targetModel, targetId, unpublished, skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -616,9 +610,8 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
      * @param {string} newsId The id of the news.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof NewsApi
      */
-    public newsControllerFindOne(newsId: string, options?: any) {
+    public newsControllerFindOne(newsId: string, options?: RawAxiosRequestConfig) {
         return NewsApiFp(this.configuration).newsControllerFindOne(newsId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -629,9 +622,8 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
      * @param {UpdateNewsParams} updateNewsParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof NewsApi
      */
-    public newsControllerUpdate(newsId: string, updateNewsParams: UpdateNewsParams, options?: any) {
+    public newsControllerUpdate(newsId: string, updateNewsParams: UpdateNewsParams, options?: RawAxiosRequestConfig) {
         return NewsApiFp(this.configuration).newsControllerUpdate(newsId, updateNewsParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -639,16 +631,26 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
      * 
      * @summary Responds with news of a given team for a user.
      * @param {string} teamId The id of the team.
-     * @param {'schools' | 'courses' | 'teams'} [targetModel] Target model to which the news are related
+     * @param {TeamNewsControllerFindAllForTeamTargetModel} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
      * @param {boolean} [unpublished] Flag that filters if the news should be published or not
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof NewsApi
      */
-    public teamNewsControllerFindAllForTeam(teamId: string, targetModel?: 'schools' | 'courses' | 'teams', targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any) {
+    public teamNewsControllerFindAllForTeam(teamId: string, targetModel?: TeamNewsControllerFindAllForTeamTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: RawAxiosRequestConfig) {
         return NewsApiFp(this.configuration).teamNewsControllerFindAllForTeam(teamId, targetModel, targetId, unpublished, skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
+}
+
+export enum NewsControllerFindAllTargetModel {
+    SCHOOLS = 'schools',
+    COURSES = 'courses',
+    TEAMS = 'teams'
+}
+export enum TeamNewsControllerFindAllForTeamTargetModel {
+    SCHOOLS = 'schools',
+    COURSES = 'courses',
+    TEAMS = 'teams'
 }

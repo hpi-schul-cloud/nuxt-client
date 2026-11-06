@@ -14,30 +14,9 @@
 
 
 
-/**
- * 
- * @export
- * @interface SystemForLdapLoginResponse
- */
 export interface SystemForLdapLoginResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof SystemForLdapLoginResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SystemForLdapLoginResponse
-     */
-    type: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SystemForLdapLoginResponse
-     */
-    alias: string;
+    'id': string;
+    'type': string;
+    'alias': string;
 }
-
 

@@ -13,23 +13,95 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { ReleaseListResponse } from '../models';
+import type { ReleaseListResponse } from '../models';
 /**
  * ReleaseApi - axios parameter creator
- * @export
  */
 export const ReleaseApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @summary Fetch the latest releases from the configured remote repository
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        releasesControllerFetchReleases: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/releases/fetch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get a single image embedded in a release
+         * @param {string} imageId The id of the release image
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        releasesControllerGetImage: async (imageId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'imageId' is not null or undefined
+            assertParamExists('releasesControllerGetImage', 'imageId', imageId)
+            const localVarPath = `/releases/images/{imageId}`
+                .replace('{imageId}', encodeURIComponent(String(imageId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @summary Get the list of available releases
@@ -38,7 +110,7 @@ export const ReleaseApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        releaseControllerGetReleases: async (skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        releasesControllerGetReleases: async (skip?: number, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/releases`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -63,9 +135,9 @@ export const ReleaseApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['limit'] = limit;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -79,33 +151,35 @@ export const ReleaseApiAxiosParamCreator = function (configuration?: Configurati
 
 /**
  * ReleaseApi - functional programming interface
- * @export
  */
 export const ReleaseApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ReleaseApiAxiosParamCreator(configuration)
     return {
         /**
          * 
-         * @summary Get the list of available releases
-         * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 10.
+         * @summary Fetch the latest releases from the configured remote repository
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async releaseControllerGetReleases(skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReleaseListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.releaseControllerGetReleases(skip, limit, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        async releasesControllerFetchReleases(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.releasesControllerFetchReleases(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ReleaseApi.releasesControllerFetchReleases']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
-    }
-};
-
-/**
- * ReleaseApi - factory interface
- * @export
- */
-export const ReleaseApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = ReleaseApiFp(configuration)
-    return {
+        /**
+         * 
+         * @summary Get a single image embedded in a release
+         * @param {string} imageId The id of the release image
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async releasesControllerGetImage(imageId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.releasesControllerGetImage(imageId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ReleaseApi.releasesControllerGetImage']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
         /**
          * 
          * @summary Get the list of available releases
@@ -114,18 +188,75 @@ export const ReleaseApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        releaseControllerGetReleases(skip?: number, limit?: number, options?: any): AxiosPromise<ReleaseListResponse> {
-            return localVarFp.releaseControllerGetReleases(skip, limit, options).then((request) => request(axios, basePath));
+        async releasesControllerGetReleases(skip?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReleaseListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.releasesControllerGetReleases(skip, limit, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ReleaseApi.releasesControllerGetReleases']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * ReleaseApi - factory interface
+ */
+export const ReleaseApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ReleaseApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Fetch the latest releases from the configured remote repository
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        releasesControllerFetchReleases(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.releasesControllerFetchReleases(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a single image embedded in a release
+         * @param {string} imageId The id of the release image
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        releasesControllerGetImage(imageId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.releasesControllerGetImage(imageId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get the list of available releases
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        releasesControllerGetReleases(skip?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<ReleaseListResponse> {
+            return localVarFp.releasesControllerGetReleases(skip, limit, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
  * ReleaseApi - interface
- * @export
- * @interface ReleaseApi
  */
 export interface ReleaseApiInterface {
+    /**
+     * 
+     * @summary Fetch the latest releases from the configured remote repository
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    releasesControllerFetchReleases(options?: RawAxiosRequestConfig): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Get a single image embedded in a release
+     * @param {string} imageId The id of the release image
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    releasesControllerGetImage(imageId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
+
     /**
      * 
      * @summary Get the list of available releases
@@ -133,19 +264,36 @@ export interface ReleaseApiInterface {
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ReleaseApiInterface
      */
-    releaseControllerGetReleases(skip?: number, limit?: number, options?: any): AxiosPromise<ReleaseListResponse>;
+    releasesControllerGetReleases(skip?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<ReleaseListResponse>;
 
 }
 
 /**
  * ReleaseApi - object-oriented interface
- * @export
- * @class ReleaseApi
- * @extends {BaseAPI}
  */
 export class ReleaseApi extends BaseAPI implements ReleaseApiInterface {
+    /**
+     * 
+     * @summary Fetch the latest releases from the configured remote repository
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public releasesControllerFetchReleases(options?: RawAxiosRequestConfig) {
+        return ReleaseApiFp(this.configuration).releasesControllerFetchReleases(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a single image embedded in a release
+     * @param {string} imageId The id of the release image
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public releasesControllerGetImage(imageId: string, options?: RawAxiosRequestConfig) {
+        return ReleaseApiFp(this.configuration).releasesControllerGetImage(imageId, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Get the list of available releases
@@ -153,9 +301,9 @@ export class ReleaseApi extends BaseAPI implements ReleaseApiInterface {
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ReleaseApi
      */
-    public releaseControllerGetReleases(skip?: number, limit?: number, options?: any) {
-        return ReleaseApiFp(this.configuration).releaseControllerGetReleases(skip, limit, options).then((request) => request(this.axios, this.basePath));
+    public releasesControllerGetReleases(skip?: number, limit?: number, options?: RawAxiosRequestConfig) {
+        return ReleaseApiFp(this.configuration).releasesControllerGetReleases(skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

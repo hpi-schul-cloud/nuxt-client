@@ -13,148 +13,57 @@
  */
 
 
-import { CountyResponse } from './county-response';
-import { FederalStateResponse } from './federal-state-response';
-import { FileStorageType } from './file-storage-type';
-import { InstanceFeature } from './instance-feature';
-import { SchoolFeature } from './school-feature';
-import { SchoolLogo } from './school-logo';
-import { SchoolPurpose } from './school-purpose';
-import { SchoolYearResponse } from './school-year-response';
-import { YearsResponse } from './years-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CountyResponse } from './county-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { FederalStateResponse } from './federal-state-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { FileStorageType } from './file-storage-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { InstanceFeature } from './instance-feature';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchoolFeature } from './school-feature';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchoolLogo } from './school-logo';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchoolPurpose } from './school-purpose';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchoolYearResponse } from './school-year-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { YearsResponse } from './years-response';
 
-/**
- * 
- * @export
- * @interface SchoolResponse
- */
 export interface SchoolResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolResponse
-     */
-    updatedAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolResponse
-     */
-    officialSchoolNumber?: string;
-    /**
-     * 
-     * @type {SchoolYearResponse}
-     * @memberof SchoolResponse
-     */
-    currentYear?: SchoolYearResponse;
-    /**
-     * 
-     * @type {FederalStateResponse}
-     * @memberof SchoolResponse
-     */
-    federalState?: FederalStateResponse;
-    /**
-     * 
-     * @type {CountyResponse}
-     * @memberof SchoolResponse
-     */
-    county?: CountyResponse;
-    /**
-     * 
-     * @type {SchoolPurpose}
-     * @memberof SchoolResponse
-     */
-    purpose?: SchoolPurpose;
-    /**
-     * 
-     * @type {Array<SchoolFeature>}
-     * @memberof SchoolResponse
-     */
-    features: Array<SchoolFeature>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof SchoolResponse
-     */
-    systemIds: Array<string>;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SchoolResponse
-     */
-    inUserMigration?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SchoolResponse
-     */
-    inMaintenance: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SchoolResponse
-     */
-    isExternal: boolean;
-    /**
-     * 
-     * @type {SchoolLogo}
-     * @memberof SchoolResponse
-     */
-    logo?: SchoolLogo;
-    /**
-     * 
-     * @type {FileStorageType}
-     * @memberof SchoolResponse
-     */
-    fileStorageType?: FileStorageType;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolResponse
-     */
-    language?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolResponse
-     */
-    timezone?: string;
-    /**
-     * 
-     * @type {object}
-     * @memberof SchoolResponse
-     */
-    permissions?: object;
-    /**
-     * 
-     * @type {YearsResponse}
-     * @memberof SchoolResponse
-     */
-    years: YearsResponse;
-    /**
-     * 
-     * @type {Array<InstanceFeature>}
-     * @memberof SchoolResponse
-     */
-    instanceFeatures: Array<InstanceFeature>;
+    'id': string;
+    'createdAt': string;
+    'updatedAt': string;
+    'name': string;
+    'officialSchoolNumber'?: string;
+    'currentYear'?: SchoolYearResponse;
+    'federalState'?: FederalStateResponse;
+    'county'?: CountyResponse;
+    'purpose'?: SchoolPurpose;
+    'features': Array<SchoolFeature>;
+    'systemIds': Array<string>;
+    'inUserMigration'?: boolean;
+    'inMaintenance': boolean;
+    'isExternal': boolean;
+    'logo'?: SchoolLogo;
+    'fileStorageType'?: FileStorageType;
+    'language'?: string;
+    'timezone'?: string;
+    'permissions'?: object;
+    'years': YearsResponse;
+    'instanceFeatures': Array<InstanceFeature>;
 }
+
 
 

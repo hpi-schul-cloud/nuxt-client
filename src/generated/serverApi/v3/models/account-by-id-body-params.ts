@@ -14,30 +14,18 @@
 
 
 
-/**
- * 
- * @export
- * @interface AccountByIdBodyParams
- */
 export interface AccountByIdBodyParams {
     /**
      * The new user name for the user.
-     * @type {string}
-     * @memberof AccountByIdBodyParams
      */
-    username?: string;
+    'username'?: string;
     /**
      * The new password for the user.
-     * @type {string}
-     * @memberof AccountByIdBodyParams
      */
-    password?: string;
+    'password'?: string;
     /**
      * The new activation state of the user.
-     * @type {boolean}
-     * @memberof AccountByIdBodyParams
      */
-    activated?: boolean;
+    'activated'?: boolean;
 }
-
 

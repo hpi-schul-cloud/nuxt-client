@@ -13,18 +13,18 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ConfigResponse } from '../models';
+import type { ConfigResponse } from '../models';
 /**
  * ServerConfigApi - axios parameter creator
- * @export
  */
 export const ServerConfigApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -34,7 +34,7 @@ export const ServerConfigApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        serverConfigControllerPublicConfig: async (options: any = {}): Promise<RequestArgs> => {
+        serverConfigControllerPublicConfig: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/config/public`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -47,9 +47,9 @@ export const ServerConfigApiAxiosParamCreator = function (configuration?: Config
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -63,7 +63,6 @@ export const ServerConfigApiAxiosParamCreator = function (configuration?: Config
 
 /**
  * ServerConfigApi - functional programming interface
- * @export
  */
 export const ServerConfigApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ServerConfigApiAxiosParamCreator(configuration)
@@ -74,16 +73,17 @@ export const ServerConfigApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async serverConfigControllerPublicConfig(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ConfigResponse>> {
+        async serverConfigControllerPublicConfig(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ConfigResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.serverConfigControllerPublicConfig(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ServerConfigApi.serverConfigControllerPublicConfig']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * ServerConfigApi - factory interface
- * @export
  */
 export const ServerConfigApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = ServerConfigApiFp(configuration)
@@ -94,7 +94,7 @@ export const ServerConfigApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        serverConfigControllerPublicConfig(options?: any): AxiosPromise<ConfigResponse> {
+        serverConfigControllerPublicConfig(options?: RawAxiosRequestConfig): AxiosPromise<ConfigResponse> {
             return localVarFp.serverConfigControllerPublicConfig(options).then((request) => request(axios, basePath));
         },
     };
@@ -102,8 +102,6 @@ export const ServerConfigApiFactory = function (configuration?: Configuration, b
 
 /**
  * ServerConfigApi - interface
- * @export
- * @interface ServerConfigApi
  */
 export interface ServerConfigApiInterface {
     /**
@@ -111,17 +109,13 @@ export interface ServerConfigApiInterface {
      * @summary Useable configuration for clients
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ServerConfigApiInterface
      */
-    serverConfigControllerPublicConfig(options?: any): AxiosPromise<ConfigResponse>;
+    serverConfigControllerPublicConfig(options?: RawAxiosRequestConfig): AxiosPromise<ConfigResponse>;
 
 }
 
 /**
  * ServerConfigApi - object-oriented interface
- * @export
- * @class ServerConfigApi
- * @extends {BaseAPI}
  */
 export class ServerConfigApi extends BaseAPI implements ServerConfigApiInterface {
     /**
@@ -129,9 +123,9 @@ export class ServerConfigApi extends BaseAPI implements ServerConfigApiInterface
      * @summary Useable configuration for clients
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ServerConfigApi
      */
-    public serverConfigControllerPublicConfig(options?: any) {
+    public serverConfigControllerPublicConfig(options?: RawAxiosRequestConfig) {
         return ServerConfigApiFp(this.configuration).serverConfigControllerPublicConfig(options).then((request) => request(this.axios, this.basePath));
     }
 }
+

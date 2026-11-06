@@ -13,26 +13,26 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { CourseCommonCartridgeMetadataResponse } from '../models';
+import type { CourseCommonCartridgeMetadataResponse } from '../models';
 // @ts-ignore
-import { CourseMetadataListResponse } from '../models';
+import type { CourseMetadataListResponse } from '../models';
 // @ts-ignore
-import { CourseSyncBodyParams } from '../models';
+import type { CourseSyncBodyParams } from '../models';
 // @ts-ignore
-import { CreateCourseBodyParams } from '../models';
+import type { CreateCourseBodyParams } from '../models';
 // @ts-ignore
-import { CreateCourseResponse } from '../models';
+import type { CreateCourseResponse } from '../models';
 /**
  * CoursesApi - axios parameter creator
- * @export
  */
 export const CoursesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -43,7 +43,7 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerCreateCourse: async (createCourseBodyParams: CreateCourseBodyParams, options: any = {}): Promise<RequestArgs> => {
+        courseControllerCreateCourse: async (createCourseBodyParams: CreateCourseBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'createCourseBodyParams' is not null or undefined
             assertParamExists('courseControllerCreateCourse', 'createCourseBodyParams', createCourseBodyParams)
             const localVarPath = `/courses`;
@@ -62,11 +62,10 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(createCourseBodyParams, localVarRequestOptions, configuration)
@@ -83,7 +82,7 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerFindForUser: async (skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        courseControllerFindForUser: async (skip?: number, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/courses`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -108,9 +107,9 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['limit'] = limit;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -126,11 +125,11 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerGetCourseCcMetadataById: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
+        courseControllerGetCourseCcMetadataById: async (courseId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('courseControllerGetCourseCcMetadataById', 'courseId', courseId)
             const localVarPath = `/courses/{courseId}/cc-metadata`
-                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+                .replace('{courseId}', encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -146,9 +145,9 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -164,11 +163,11 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerGetUserPermissions: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
+        courseControllerGetUserPermissions: async (courseId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('courseControllerGetUserPermissions', 'courseId', courseId)
             const localVarPath = `/courses/{courseId}/user-permissions`
-                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+                .replace('{courseId}', encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -184,9 +183,9 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -203,13 +202,13 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerStartSynchronization: async (courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options: any = {}): Promise<RequestArgs> => {
+        courseControllerStartSynchronization: async (courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('courseControllerStartSynchronization', 'courseId', courseId)
             // verify required parameter 'courseSyncBodyParams' is not null or undefined
             assertParamExists('courseControllerStartSynchronization', 'courseSyncBodyParams', courseSyncBodyParams)
             const localVarPath = `/courses/{courseId}/start-sync`
-                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+                .replace('{courseId}', encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -225,11 +224,9 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(courseSyncBodyParams, localVarRequestOptions, configuration)
@@ -246,11 +243,11 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerStopSynchronization: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
+        courseControllerStopSynchronization: async (courseId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('courseControllerStopSynchronization', 'courseId', courseId)
             const localVarPath = `/courses/{courseId}/stop-sync`
-                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+                .replace('{courseId}', encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -267,8 +264,7 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -282,7 +278,6 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
 
 /**
  * CoursesApi - functional programming interface
- * @export
  */
 export const CoursesApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = CoursesApiAxiosParamCreator(configuration)
@@ -294,9 +289,11 @@ export const CoursesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateCourseResponse>> {
+        async courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateCourseResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerCreateCourse(createCourseBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CoursesApi.courseControllerCreateCourse']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -305,9 +302,11 @@ export const CoursesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerFindForUser(skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseMetadataListResponse>> {
+        async courseControllerFindForUser(skip?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseMetadataListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerFindForUser(skip, limit, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CoursesApi.courseControllerFindForUser']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -316,9 +315,11 @@ export const CoursesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerGetCourseCcMetadataById(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseCommonCartridgeMetadataResponse>> {
+        async courseControllerGetCourseCcMetadataById(courseId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseCommonCartridgeMetadataResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerGetCourseCcMetadataById(courseId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CoursesApi.courseControllerGetCourseCcMetadataById']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -327,9 +328,11 @@ export const CoursesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerGetUserPermissions(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: Array<string>; }>> {
+        async courseControllerGetUserPermissions(courseId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: Array<string>; }>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerGetUserPermissions(courseId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CoursesApi.courseControllerGetUserPermissions']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -339,9 +342,11 @@ export const CoursesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerStartSynchronization(courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async courseControllerStartSynchronization(courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerStartSynchronization(courseId, courseSyncBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CoursesApi.courseControllerStartSynchronization']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -350,16 +355,17 @@ export const CoursesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerStopSynchronization(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async courseControllerStopSynchronization(courseId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerStopSynchronization(courseId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CoursesApi.courseControllerStopSynchronization']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * CoursesApi - factory interface
- * @export
  */
 export const CoursesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = CoursesApiFp(configuration)
@@ -371,7 +377,7 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): AxiosPromise<CreateCourseResponse> {
+        courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<CreateCourseResponse> {
             return localVarFp.courseControllerCreateCourse(createCourseBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -381,7 +387,7 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerFindForUser(skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse> {
+        courseControllerFindForUser(skip?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<CourseMetadataListResponse> {
             return localVarFp.courseControllerFindForUser(skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
@@ -391,7 +397,7 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerGetCourseCcMetadataById(courseId: string, options?: any): AxiosPromise<CourseCommonCartridgeMetadataResponse> {
+        courseControllerGetCourseCcMetadataById(courseId: string, options?: RawAxiosRequestConfig): AxiosPromise<CourseCommonCartridgeMetadataResponse> {
             return localVarFp.courseControllerGetCourseCcMetadataById(courseId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -401,7 +407,7 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerGetUserPermissions(courseId: string, options?: any): AxiosPromise<{ [key: string]: Array<string>; }> {
+        courseControllerGetUserPermissions(courseId: string, options?: RawAxiosRequestConfig): AxiosPromise<{ [key: string]: Array<string>; }> {
             return localVarFp.courseControllerGetUserPermissions(courseId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -412,7 +418,7 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerStartSynchronization(courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options?: any): AxiosPromise<void> {
+        courseControllerStartSynchronization(courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.courseControllerStartSynchronization(courseId, courseSyncBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -422,7 +428,7 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerStopSynchronization(courseId: string, options?: any): AxiosPromise<void> {
+        courseControllerStopSynchronization(courseId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.courseControllerStopSynchronization(courseId, options).then((request) => request(axios, basePath));
         },
     };
@@ -430,8 +436,6 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
 
 /**
  * CoursesApi - interface
- * @export
- * @interface CoursesApi
  */
 export interface CoursesApiInterface {
     /**
@@ -440,9 +444,8 @@ export interface CoursesApiInterface {
      * @param {CreateCourseBodyParams} createCourseBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CoursesApiInterface
      */
-    courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): AxiosPromise<CreateCourseResponse>;
+    courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<CreateCourseResponse>;
 
     /**
      * 
@@ -450,9 +453,8 @@ export interface CoursesApiInterface {
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CoursesApiInterface
      */
-    courseControllerFindForUser(skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse>;
+    courseControllerFindForUser(skip?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<CourseMetadataListResponse>;
 
     /**
      * 
@@ -460,9 +462,8 @@ export interface CoursesApiInterface {
      * @param {string} courseId The id of the course
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CoursesApiInterface
      */
-    courseControllerGetCourseCcMetadataById(courseId: string, options?: any): AxiosPromise<CourseCommonCartridgeMetadataResponse>;
+    courseControllerGetCourseCcMetadataById(courseId: string, options?: RawAxiosRequestConfig): AxiosPromise<CourseCommonCartridgeMetadataResponse>;
 
     /**
      * 
@@ -470,9 +471,8 @@ export interface CoursesApiInterface {
      * @param {string} courseId The id of the course
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CoursesApiInterface
      */
-    courseControllerGetUserPermissions(courseId: string, options?: any): AxiosPromise<{ [key: string]: Array<string>; }>;
+    courseControllerGetUserPermissions(courseId: string, options?: RawAxiosRequestConfig): AxiosPromise<{ [key: string]: Array<string>; }>;
 
     /**
      * 
@@ -481,9 +481,8 @@ export interface CoursesApiInterface {
      * @param {CourseSyncBodyParams} courseSyncBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CoursesApiInterface
      */
-    courseControllerStartSynchronization(courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options?: any): AxiosPromise<void>;
+    courseControllerStartSynchronization(courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -491,17 +490,13 @@ export interface CoursesApiInterface {
      * @param {string} courseId The id of the course
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CoursesApiInterface
      */
-    courseControllerStopSynchronization(courseId: string, options?: any): AxiosPromise<void>;
+    courseControllerStopSynchronization(courseId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
  * CoursesApi - object-oriented interface
- * @export
- * @class CoursesApi
- * @extends {BaseAPI}
  */
 export class CoursesApi extends BaseAPI implements CoursesApiInterface {
     /**
@@ -510,9 +505,8 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      * @param {CreateCourseBodyParams} createCourseBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CoursesApi
      */
-    public courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any) {
+    public courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: RawAxiosRequestConfig) {
         return CoursesApiFp(this.configuration).courseControllerCreateCourse(createCourseBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -522,9 +516,8 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CoursesApi
      */
-    public courseControllerFindForUser(skip?: number, limit?: number, options?: any) {
+    public courseControllerFindForUser(skip?: number, limit?: number, options?: RawAxiosRequestConfig) {
         return CoursesApiFp(this.configuration).courseControllerFindForUser(skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -534,9 +527,8 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      * @param {string} courseId The id of the course
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CoursesApi
      */
-    public courseControllerGetCourseCcMetadataById(courseId: string, options?: any) {
+    public courseControllerGetCourseCcMetadataById(courseId: string, options?: RawAxiosRequestConfig) {
         return CoursesApiFp(this.configuration).courseControllerGetCourseCcMetadataById(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -546,9 +538,8 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      * @param {string} courseId The id of the course
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CoursesApi
      */
-    public courseControllerGetUserPermissions(courseId: string, options?: any) {
+    public courseControllerGetUserPermissions(courseId: string, options?: RawAxiosRequestConfig) {
         return CoursesApiFp(this.configuration).courseControllerGetUserPermissions(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -559,9 +550,8 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      * @param {CourseSyncBodyParams} courseSyncBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CoursesApi
      */
-    public courseControllerStartSynchronization(courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options?: any) {
+    public courseControllerStartSynchronization(courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options?: RawAxiosRequestConfig) {
         return CoursesApiFp(this.configuration).courseControllerStartSynchronization(courseId, courseSyncBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -571,9 +561,9 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      * @param {string} courseId The id of the course
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CoursesApi
      */
-    public courseControllerStopSynchronization(courseId: string, options?: any) {
+    public courseControllerStopSynchronization(courseId: string, options?: RawAxiosRequestConfig) {
         return CoursesApiFp(this.configuration).courseControllerStopSynchronization(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

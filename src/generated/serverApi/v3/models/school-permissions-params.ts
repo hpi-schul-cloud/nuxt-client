@@ -13,20 +13,11 @@
  */
 
 
-import { TeacherPermissionParams } from './teacher-permission-params';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { TeacherPermissionParams } from './teacher-permission-params';
 
-/**
- * 
- * @export
- * @interface SchoolPermissionsParams
- */
 export interface SchoolPermissionsParams {
-    /**
-     * 
-     * @type {TeacherPermissionParams}
-     * @memberof SchoolPermissionsParams
-     */
-    teacher?: TeacherPermissionParams;
+    'teacher'?: TeacherPermissionParams;
 }
-
 

@@ -14,67 +14,41 @@
 
 
 
-/**
- * 
- * @export
- * @interface UserMatchResponse
- */
 export interface UserMatchResponse {
     /**
      * local user id
-     * @type {string}
-     * @memberof UserMatchResponse
      */
-    userId: string;
+    'userId': string;
     /**
      * login name of local user
-     * @type {string}
-     * @memberof UserMatchResponse
      */
-    loginName: string;
+    'loginName': string;
     /**
      * firstname of local user
-     * @type {string}
-     * @memberof UserMatchResponse
      */
-    firstName: string;
+    'firstName': string;
     /**
      * lastname of local user
-     * @type {string}
-     * @memberof UserMatchResponse
      */
-    lastName: string;
+    'lastName': string;
     /**
      * list of user roles from external system: student, teacher, admin
-     * @type {Array<string>}
-     * @memberof UserMatchResponse
      */
-    roleNames: Array<UserMatchResponseRoleNames>;
+    'roleNames': Array<UserMatchResponseRoleNames>;
     /**
      * match type: admin (manual) or auto (set, when names match exactly for a single user
-     * @type {string}
-     * @memberof UserMatchResponse
      */
-    matchedBy?: UserMatchResponseMatchedBy;
+    'matchedBy'?: UserMatchResponseMatchedBy;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum UserMatchResponseRoleNames {
     STUDENT = 'student',
     TEACHER = 'teacher',
     ADMIN = 'admin'
 }
-/**
-    * @export
-    * @enum {string}
-    */
 export enum UserMatchResponseMatchedBy {
     AUTO = 'auto',
     ADMIN = 'admin'
 }
-
 
 

@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface CustomParameterEntryResponse
- */
 export interface CustomParameterEntryResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof CustomParameterEntryResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CustomParameterEntryResponse
-     */
-    value?: string;
+    'name': string;
+    'value'?: string;
 }
-
 

@@ -14,66 +14,15 @@
 
 
 
-/**
- * 
- * @export
- * @interface ReleaseItemResponse
- */
 export interface ReleaseItemResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ReleaseItemResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ReleaseItemResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ReleaseItemResponse
-     */
-    body: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ReleaseItemResponse
-     */
-    url: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ReleaseItemResponse
-     */
-    author: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ReleaseItemResponse
-     */
-    authorUrl: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ReleaseItemResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ReleaseItemResponse
-     */
-    publishedAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ReleaseItemResponse
-     */
-    zipUrl?: string;
+    'id': string;
+    'name': string;
+    'body': string;
+    'url': string;
+    'author': string;
+    'authorUrl': string;
+    'createdAt': string;
+    'publishedAt': string;
+    'zipUrl'?: string;
 }
-
 

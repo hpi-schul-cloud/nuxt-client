@@ -3,18 +3,27 @@
 		<template #header>
 			<div class="d-flex align-center">
 				<h1 data-testid="room-title">{{ roomTitle }}</h1>
+				<VChip v-if="room.isArchived" size="small" class="ml-2" data-testid="archived-room-chip">
+					{{ t("pages.rooms.archived.chip") }}
+				</VChip>
 				<RoomMenu
 					class="pt-1"
 					:room-name="room.name"
+					:is-archived="room.isArchived"
 					@room:edit="onEdit"
 					@room:manage-members="onManageMembers"
 					@room:copy="onCopy"
 					@room:share="onShare"
 					@room:delete="onDelete"
 					@room:leave="onLeaveRoom"
+					@room:archive="onArchive"
+					@room:unarchive="onUnarchive"
 				/>
 			</div>
 		</template>
+		<InfoAlert v-if="room.isArchived" class="mb-6" data-testid="archived-room-info">
+			{{ t("pages.roomDetails.archived.info") }}
+		</InfoAlert>
 		<EmptyState
 			v-if="visibleBoards.length === 0"
 			data-testid="empty-state-room-details"
@@ -47,12 +56,13 @@ import { ShareTokenParentType } from "@/types/sharing/Token";
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RoomBoardItemResponse } from "@api-server";
-import { useAppStoreRefs } from "@data-app";
+import { notifySuccess, useAppStoreRefs, useNotificationStore } from "@data-app";
 import { useRoomAllowedOperations, useRoomDetailsStore, useRoomStore } from "@data-room";
 import { useCopyFlow } from "@feature-copy";
 import { RoomBoardGrid, RoomMenu } from "@feature-room";
 import { useShareFlow } from "@feature-share";
 import { mdiPlus } from "@icons/material";
+import { InfoAlert } from "@ui-alert";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
@@ -70,9 +80,9 @@ const router = useRouter();
 const { t } = useI18n();
 
 const roomDetailsStore = useRoomDetailsStore();
-const { leaveRoom, deleteRoom } = useRoomStore();
+const { leaveRoom, deleteRoom, archiveRoom, unarchiveRoom } = useRoomStore();
 
-const { roomBoards } = storeToRefs(roomDetailsStore);
+const { roomBoards, room: currentRoom } = storeToRefs(roomDetailsStore);
 const { createBoard, updateBoardVisibility, deleteBoard, fetchRoomAndBoards } = roomDetailsStore;
 
 const isLeaveRoomProhibitedDialogOpen = ref(false);
@@ -97,6 +107,14 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 		title: t("pages.rooms.title"),
 		to: "/rooms",
 	},
+	...(room.value.isArchived
+		? [
+				{
+					title: t("pages.rooms.archived.title"),
+					to: "/rooms/archive",
+				},
+			]
+		: []),
 	{
 		title: roomTitle.value,
 		disabled: true,
@@ -147,6 +165,41 @@ const onCopy = async () => {
 	if (copyResult?.id) {
 		await router.replace({ name: "room-details", params: { id: copyResult.id } });
 	}
+};
+
+const refreshRoomIfStillOpen = async (roomId: string) => {
+	if (currentRoom.value?.id === roomId) {
+		await fetchRoomAndBoards(roomId);
+	}
+};
+
+const onArchive = async () => {
+	const roomId = room.value.id;
+	const { success } = await archiveRoom(roomId);
+	if (!success) return;
+
+	useNotificationStore().notify({
+		text: t("pages.rooms.archive.success", { roomName: room.value.name }),
+		status: "success",
+		duration: 10000,
+		action: {
+			text: t("common.actions.undo"),
+			handler: async () => {
+				const { success } = await unarchiveRoom(roomId);
+				if (success) await refreshRoomIfStillOpen(roomId);
+			},
+		},
+	});
+	await fetchRoomAndBoards(roomId);
+};
+
+const onUnarchive = async () => {
+	const roomId = room.value.id;
+	const { success } = await unarchiveRoom(roomId);
+	if (!success) return;
+
+	notifySuccess(t("pages.rooms.archived.restore.success", { count: 1 }, 1));
+	await fetchRoomAndBoards(roomId);
 };
 
 const { executeShare } = useShareFlow();

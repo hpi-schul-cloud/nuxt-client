@@ -13,27 +13,23 @@
  */
 
 
-import { VideoConferenceOptionsResponse } from './video-conference-options-response';
-import { VideoConferenceStateResponse } from './video-conference-state-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { VideoConferenceOptionsResponse } from './video-conference-options-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { VideoConferenceStateResponse } from './video-conference-state-response';
 
-/**
- * 
- * @export
- * @interface VideoConferenceInfoResponse
- */
 export interface VideoConferenceInfoResponse {
     /**
      * The state of the video conference.
-     * @type {VideoConferenceStateResponse}
-     * @memberof VideoConferenceInfoResponse
      */
-    state: VideoConferenceStateResponse;
+    'state': VideoConferenceStateResponse;
     /**
      * The options for the video conference.
-     * @type {VideoConferenceOptionsResponse}
-     * @memberof VideoConferenceInfoResponse
      */
-    options: VideoConferenceOptionsResponse;
+    'options': VideoConferenceOptionsResponse;
 }
+
 
 

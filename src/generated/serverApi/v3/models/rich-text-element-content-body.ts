@@ -13,27 +13,20 @@
  */
 
 
-import { ContentElementType } from './content-element-type';
-import { RichTextContentBody } from './rich-text-content-body';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContentElementType } from './content-element-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RichTextContentBody } from './rich-text-content-body';
 
-/**
- * 
- * @export
- * @interface RichTextElementContentBody
- */
 export interface RichTextElementContentBody {
     /**
      * the type of the updated element
-     * @type {ContentElementType}
-     * @memberof RichTextElementContentBody
      */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {RichTextContentBody}
-     * @memberof RichTextElementContentBody
-     */
-    content: RichTextContentBody;
+    'type': ContentElementType;
+    'content': RichTextContentBody;
 }
+
 
 

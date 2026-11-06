@@ -13,20 +13,11 @@
  */
 
 
-import { RoomInvitationLinkResponse } from './room-invitation-link-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomInvitationLinkResponse } from './room-invitation-link-response';
 
-/**
- * 
- * @export
- * @interface RoomInvitationLinkListResponse
- */
 export interface RoomInvitationLinkListResponse {
-    /**
-     * 
-     * @type {Array<RoomInvitationLinkResponse>}
-     * @memberof RoomInvitationLinkListResponse
-     */
-    roomInvitationLinks: Array<RoomInvitationLinkResponse>;
+    'roomInvitationLinks': Array<RoomInvitationLinkResponse>;
 }
-
 

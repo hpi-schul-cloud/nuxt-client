@@ -8,6 +8,10 @@ import { AnyContentElement } from "@/types/board/ContentElement";
 import { cardResponseFactory, columnFullResponseFactory, columnResponseFactory } from "@@/tests/test-utils";
 import { BoardLayout, Colors, ContentElementType, CopyStatusEnum } from "@api-server";
 
+const { mockNotifyOnScreenReader } = vi.hoisted(() => ({
+	mockNotifyOnScreenReader: vi.fn(),
+}));
+
 vi.mock("vue-i18n", () => ({
 	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 }));
@@ -38,18 +42,16 @@ vi.mock("../Card.store", () => {
 	};
 });
 
+vi.mock("@/composables/ariaLiveNotifier", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@/composables/ariaLiveNotifier")>();
+	return {
+		...actual,
+		notifyOnScreenReader: () => mockNotifyOnScreenReader,
+	};
+});
+
 describe("useBoardAriaNotification", () => {
 	vi.useFakeTimers();
-
-	const mockNotifyOnScreenReader = vi.fn();
-	vi.mock("@/composables/ariaLiveNotifier", async (importOriginal) => {
-		const actual = await importOriginal<typeof import("@/composables/ariaLiveNotifier")>();
-		return {
-			...actual,
-
-			notifyOnScreenReader: () => mockNotifyOnScreenReader,
-		};
-	});
 
 	beforeEach(() => {
 		document.body.innerHTML = `

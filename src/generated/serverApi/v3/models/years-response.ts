@@ -13,38 +13,14 @@
  */
 
 
-import { SchoolYearResponse } from './school-year-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchoolYearResponse } from './school-year-response';
 
-/**
- * 
- * @export
- * @interface YearsResponse
- */
 export interface YearsResponse {
-    /**
-     * 
-     * @type {Array<SchoolYearResponse>}
-     * @memberof YearsResponse
-     */
-    schoolYears: Array<SchoolYearResponse>;
-    /**
-     * 
-     * @type {SchoolYearResponse}
-     * @memberof YearsResponse
-     */
-    activeYear: SchoolYearResponse;
-    /**
-     * 
-     * @type {SchoolYearResponse}
-     * @memberof YearsResponse
-     */
-    lastYear: SchoolYearResponse;
-    /**
-     * 
-     * @type {SchoolYearResponse}
-     * @memberof YearsResponse
-     */
-    nextYear: SchoolYearResponse;
+    'schoolYears': Array<SchoolYearResponse>;
+    'activeYear': SchoolYearResponse;
+    'lastYear': SchoolYearResponse;
+    'nextYear': SchoolYearResponse;
 }
-
 

@@ -13,44 +13,15 @@
  */
 
 
-import { CountyResponse } from './county-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CountyResponse } from './county-response';
 
-/**
- * 
- * @export
- * @interface FederalStateResponse
- */
 export interface FederalStateResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof FederalStateResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FederalStateResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FederalStateResponse
-     */
-    abbreviation: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FederalStateResponse
-     */
-    logoUrl: string;
-    /**
-     * 
-     * @type {Array<CountyResponse>}
-     * @memberof FederalStateResponse
-     */
-    counties: Array<CountyResponse>;
+    'id': string;
+    'name': string;
+    'abbreviation': string;
+    'logoUrl': string;
+    'counties': Array<CountyResponse>;
 }
-
 

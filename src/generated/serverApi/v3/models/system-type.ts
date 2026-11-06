@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum SystemType {
     OAUTH = 'oauth',
     LDAP = 'ldap',

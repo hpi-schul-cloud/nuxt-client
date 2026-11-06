@@ -3,7 +3,12 @@ import { useI18nGlobal } from "@/plugins/i18n";
 import { Pagination } from "@/types/common/commons";
 import { SortOrder } from "@/types/enum/sort-order.enum";
 import { $axios } from "@/utils/api";
-import { ClassSortQueryType, GroupApiFactory, SchoolYearQueryType } from "@api-server";
+import {
+	ClassSortQueryType,
+	GroupApiFactory,
+	GroupControllerFindClassesSortOrder,
+	SchoolYearQueryType,
+} from "@api-server";
 import { notifySuccess } from "@data-app";
 import { ClassInfo, GroupMapper } from "@data-group";
 import { ref } from "vue";
@@ -80,7 +85,9 @@ export const useGroupClasses = () => {
 				groupApi.groupControllerFindClasses(
 					pagination.value.skip,
 					pagination.value.limit,
-					sortOrder.value,
+					sortOrder.value === SortOrder.ASC
+						? GroupControllerFindClassesSortOrder.ASC
+						: GroupControllerFindClassesSortOrder.DESC,
 					sortBy.value,
 					data?.schoolYearQuery
 				),

@@ -239,7 +239,7 @@ const calculateWidth = () => {
 	if (!inputWidthCalcSpan.value) return;
 	const title = boardTitle.value || t("components.cardElement.titleElement.placeholder");
 
-	inputWidthCalcSpan.value.innerHTML = title.replaceAll(/\s/g, "&nbsp;");
+	inputWidthCalcSpan.value.textContent = title;
 
 	const width = inputWidthCalcSpan.value.offsetWidth;
 
@@ -274,6 +274,7 @@ html.board-page-scroll .column-board {
 	font-size: var(--heading-1);
 	font-family: var(--font-accent);
 	letter-spacing: $field-letter-spacing;
+	white-space: pre;
 }
 
 .input-container {

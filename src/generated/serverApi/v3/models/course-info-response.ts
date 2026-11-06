@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface CourseInfoResponse
- */
 export interface CourseInfoResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseInfoResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseInfoResponse
-     */
-    name: string;
+    'id': string;
+    'name': string;
 }
-
 

@@ -14,30 +14,18 @@
 
 
 
-/**
- * 
- * @export
- * @interface CreateMediaElementBodyParams
- */
 export interface CreateMediaElementBodyParams {
     /**
      * The id of the line where the element is created
-     * @type {string}
-     * @memberof CreateMediaElementBodyParams
      */
-    lineId: string;
+    'lineId': string;
     /**
      * The position where the element is created
-     * @type {number}
-     * @memberof CreateMediaElementBodyParams
      */
-    position: number;
+    'position': number;
     /**
      * The id of the school external tool
-     * @type {string}
-     * @memberof CreateMediaElementBodyParams
      */
-    schoolExternalToolId: string;
+    'schoolExternalToolId': string;
 }
-
 

@@ -13,40 +13,22 @@
  */
 
 
-import { ContentElementType } from './content-element-type';
-import { ExternalToolElementContent } from './external-tool-element-content';
-import { TimestampsResponse } from './timestamps-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContentElementType } from './content-element-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ExternalToolElementContent } from './external-tool-element-content';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { TimestampsResponse } from './timestamps-response';
 
-/**
- * 
- * @export
- * @interface ExternalToolElementResponse
- */
 export interface ExternalToolElementResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ExternalToolElementResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {ContentElementType}
-     * @memberof ExternalToolElementResponse
-     */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {ExternalToolElementContent}
-     * @memberof ExternalToolElementResponse
-     */
-    content: ExternalToolElementContent;
-    /**
-     * 
-     * @type {TimestampsResponse}
-     * @memberof ExternalToolElementResponse
-     */
-    timestamps: TimestampsResponse;
+    'id': string;
+    'type': ContentElementType;
+    'content': ExternalToolElementContent;
+    'timestamps': TimestampsResponse;
 }
+
 
 

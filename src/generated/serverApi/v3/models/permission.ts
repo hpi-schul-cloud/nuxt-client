@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum Permission {
     ACCOUNT_CREATE = 'ACCOUNT_CREATE',
     ACCOUNT_DELETE = 'ACCOUNT_DELETE',
@@ -129,6 +125,7 @@ export enum Permission {
     ROOM_EDIT_ROOM = 'ROOM_EDIT_ROOM',
     ROOM_LIST_CONTENT = 'ROOM_LIST_CONTENT',
     ROOM_DELETE_ROOM = 'ROOM_DELETE_ROOM',
+    ROOM_ARCHIVE_ROOM = 'ROOM_ARCHIVE_ROOM',
     ROOM_LEAVE_ROOM = 'ROOM_LEAVE_ROOM',
     ROOM_COPY_ROOM = 'ROOM_COPY_ROOM',
     ROOM_SHARE_ROOM = 'ROOM_SHARE_ROOM',

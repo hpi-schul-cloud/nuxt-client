@@ -18,6 +18,12 @@
 			<span>{{ formatUtc(item.createdAt, "date") }}</span>
 		</template>
 
+		<template #[`item.archivedAt`]="{ item }: RoomAdminTableItem">
+			<span v-if="item.archivedAt" :data-testid="`room-admin-table-archived-at-${item.roomId}`">
+				{{ formatUtc(item.archivedAt, "date") }}
+			</span>
+		</template>
+
 		<template #[`item.actions`]="{ item }: RoomAdminTableItem">
 			<KebabMenu
 				:data-testid="`kebab-menu-room-${item.roomId}`"
@@ -49,6 +55,7 @@
 import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { formatUtc } from "@/utils/date-time.utils";
 import { RoomStatsItemResponse } from "@api-server";
+import { useEnvConfig } from "@data-env";
 import { useAdministrationRoomStore } from "@data-room";
 import { mdiAlert, mdiTrashCanOutline } from "@icons/material";
 import { DataTable } from "@ui-data-table";
@@ -102,6 +109,8 @@ type RoomTableHeader = Omit<DataTableHeader, "key"> & {
 	key: RoomTableHeaderKey;
 };
 
+const isRoomArchiveFeatureEnabled = computed(() => useEnvConfig().value.FEATURE_ROOM_ARCHIVE_ENABLED);
+
 const tableHeaders = computed((): RoomTableHeader[] => [
 	{
 		title: t("pages.rooms.administration.table.header.roomName"),
@@ -130,6 +139,9 @@ const tableHeaders = computed((): RoomTableHeader[] => [
 		title: t("pages.rooms.administration.table.header.creationDate"),
 		key: "createdAt",
 	},
+	...(isRoomArchiveFeatureEnabled.value
+		? [{ title: t("pages.rooms.archived.table.header.archivedAt"), key: "archivedAt" as const }]
+		: []),
 	{
 		title: t("pages.rooms.administration.table.header.mainSchool"),
 		key: "schoolName",

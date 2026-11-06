@@ -13,93 +13,26 @@
  */
 
 
-import { ClassResponse } from './class-response';
-import { ConsentsResponse } from './consents-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ClassResponse } from './class-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ConsentsResponse } from './consents-response';
 
-/**
- * 
- * @export
- * @interface UserResponse
- */
 export interface UserResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof UserResponse
-     */
-    _id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserResponse
-     */
-    firstName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserResponse
-     */
-    lastName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserResponse
-     */
-    email: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserResponse
-     */
-    birthday: string;
-    /**
-     * 
-     * @type {object}
-     * @memberof UserResponse
-     */
-    preferences: object;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserResponse
-     */
-    consentStatus: string;
-    /**
-     * 
-     * @type {ConsentsResponse}
-     * @memberof UserResponse
-     */
-    consent: ConsentsResponse;
-    /**
-     * 
-     * @type {Array<ClassResponse>}
-     * @memberof UserResponse
-     */
-    classes: Array<ClassResponse>;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserResponse
-     */
-    importHash: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserResponse
-     */
-    lastLoginSystemChange: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserResponse
-     */
-    outdatedSince: string;
+    '_id': string;
+    'firstName': string;
+    'lastName': string;
+    'email': string;
+    'createdAt': string;
+    'birthday': string;
+    'preferences': object;
+    'consentStatus': string;
+    'consent': ConsentsResponse;
+    'classes': Array<ClassResponse>;
+    'importHash': string;
+    'lastLoginSystemChange': string;
+    'outdatedSince': string;
 }
-
 

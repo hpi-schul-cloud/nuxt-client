@@ -13,26 +13,14 @@
  */
 
 
-import { ToolContextType } from './tool-context-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ToolContextType } from './tool-context-type';
 
-/**
- * 
- * @export
- * @interface ContextExternalToolBodyParams
- */
 export interface ContextExternalToolBodyParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof ContextExternalToolBodyParams
-     */
-    contextId: string;
-    /**
-     * 
-     * @type {ToolContextType}
-     * @memberof ContextExternalToolBodyParams
-     */
-    contextType: ToolContextType;
+    'contextId': string;
+    'contextType': ToolContextType;
 }
+
 
 

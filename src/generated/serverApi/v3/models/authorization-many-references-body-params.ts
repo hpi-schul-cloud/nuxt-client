@@ -13,20 +13,14 @@
  */
 
 
-import { AuthorizationBodyParams } from './authorization-body-params';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { AuthorizationBodyParams } from './authorization-body-params';
 
-/**
- * 
- * @export
- * @interface AuthorizationManyReferencesBodyParams
- */
 export interface AuthorizationManyReferencesBodyParams {
     /**
      * List of references to authorize against.
-     * @type {Array<AuthorizationBodyParams>}
-     * @memberof AuthorizationManyReferencesBodyParams
      */
-    references: Array<AuthorizationBodyParams>;
+    'references': Array<AuthorizationBodyParams>;
 }
-
 

@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface OidcLogoutBodyParams
- */
 export interface OidcLogoutBodyParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcLogoutBodyParams
-     */
-    logout_token: string;
+    'logout_token': string;
 }
-
 

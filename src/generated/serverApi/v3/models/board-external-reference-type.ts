@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum BoardExternalReferenceType {
     COURSE = 'course',
     ROOM = 'room',

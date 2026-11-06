@@ -53,6 +53,7 @@ describe("useCourseRoomListStore", () => {
 	};
 
 	beforeEach(() => {
+		vi.clearAllMocks();
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		vi.mocked(DashboardApiFactory).mockReturnValue(dashboardApiMock);
 		vi.mocked(CoursesApiFactory).mockReturnValue(coursesApiMock);
@@ -326,7 +327,7 @@ describe("useCourseRoomListStore", () => {
 		});
 	});
 
-	describe("fetchAllElements", () => {
+	describe("fetchAllCourses", () => {
 		it("should load all course elements successfully", async () => {
 			const mockCourses = courseMetadataResponseFactory.buildList(3);
 			coursesApiMock.courseControllerFindForUser.mockResolvedValue(
@@ -336,10 +337,34 @@ describe("useCourseRoomListStore", () => {
 			);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect(store.allElements).toHaveLength(3);
 			expect(store.hasRooms).toBe(true);
+		});
+
+		it("should call the API until all courses are loaded", async () => {
+			const firstPage = courseMetadataResponseFactory.buildList(100);
+			const secondPage = courseMetadataResponseFactory.buildList(23);
+			coursesApiMock.courseControllerFindForUser
+				.mockResolvedValueOnce(
+					mockApiResponse<CourseMetadataListResponse>({
+						data: { data: firstPage, total: 123, skip: 0, limit: 100 },
+					})
+				)
+				.mockResolvedValueOnce(
+					mockApiResponse<CourseMetadataListResponse>({
+						data: { data: secondPage, total: 123, skip: 100, limit: 100 },
+					})
+				);
+
+			const store = useCourseRoomListStore();
+			await store.fetchAllCourses();
+
+			expect(coursesApiMock.courseControllerFindForUser).toHaveBeenCalledTimes(2);
+			expect(coursesApiMock.courseControllerFindForUser).toHaveBeenNthCalledWith(1, 0, 100);
+			expect(coursesApiMock.courseControllerFindForUser).toHaveBeenNthCalledWith(2, 100, 100);
+			expect(store.allElements).toHaveLength(123);
 		});
 
 		it("should add 'to' property to course elements", async () => {
@@ -351,7 +376,7 @@ describe("useCourseRoomListStore", () => {
 			);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect(store.allElements[0]).toHaveProperty("to", "/rooms/course-456");
 		});
@@ -372,7 +397,7 @@ describe("useCourseRoomListStore", () => {
 			);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect(store.allElements[0]).toHaveProperty("isArchived", true);
 			expect(store.allElements[0]).toHaveProperty("titleDate");
@@ -394,7 +419,7 @@ describe("useCourseRoomListStore", () => {
 			);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect(store.allElements[0]).toHaveProperty("isArchived", false);
 		});
@@ -414,7 +439,7 @@ describe("useCourseRoomListStore", () => {
 			);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect((store.allElements[0] as { titleDate?: string }).titleDate).toBe("2019/20");
 		});
@@ -435,7 +460,7 @@ describe("useCourseRoomListStore", () => {
 				);
 
 				const store = useCourseRoomListStore();
-				await store.fetchAllElements();
+				await store.fetchAllCourses();
 
 				expect((store.allElements[0] as { titleDate?: string }).titleDate).toBe("2018-2020");
 			});
@@ -457,7 +482,7 @@ describe("useCourseRoomListStore", () => {
 				);
 
 				const store = useCourseRoomListStore();
-				await store.fetchAllElements();
+				await store.fetchAllCourses();
 
 				expect((store.allElements[0] as { titleDate?: string }).titleDate).toBe("2020");
 			});
@@ -477,7 +502,7 @@ describe("useCourseRoomListStore", () => {
 			);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect(store.allElements[0]).toHaveProperty("to", "");
 		});
@@ -497,7 +522,7 @@ describe("useCourseRoomListStore", () => {
 			);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect(store.allElements[0]).toHaveProperty("isArchived", true);
 			expect((store.allElements[0] as { titleDate?: string }).titleDate).toBe("-2020");
@@ -518,7 +543,7 @@ describe("useCourseRoomListStore", () => {
 			);
 
 			const store = useCourseRoomListStore();
-			await store.fetchAllElements();
+			await store.fetchAllCourses();
 
 			expect(store.allElements[0]).not.toHaveProperty("titleDate");
 		});
@@ -528,7 +553,7 @@ describe("useCourseRoomListStore", () => {
 				coursesApiMock.courseControllerFindForUser.mockRejectedValue(new Error("API Error"));
 
 				const store = useCourseRoomListStore();
-				await store.fetchAllElements();
+				await store.fetchAllCourses();
 
 				expect(store.allElements).toEqual([]);
 				expect(store.hasRooms).toBe(false);
@@ -555,7 +580,7 @@ describe("useCourseRoomListStore", () => {
 					);
 
 					const store = useCourseRoomListStore();
-					await store.fetchAllElements();
+					await store.fetchAllCourses();
 
 					expect(store.hasRooms).toBe(true);
 				});

@@ -13,39 +13,17 @@
  */
 
 
-import { MaintenanceStatusResponse } from './maintenance-status-response';
-import { SchoolYearResponse } from './school-year-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MaintenanceStatusResponse } from './maintenance-status-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchoolYearResponse } from './school-year-response';
 
-/**
- * 
- * @export
- * @interface MaintenanceResponse
- */
 export interface MaintenanceResponse {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof MaintenanceResponse
-     */
-    schoolUsesLdap: boolean;
-    /**
-     * 
-     * @type {MaintenanceStatusResponse}
-     * @memberof MaintenanceResponse
-     */
-    maintenance: MaintenanceStatusResponse;
-    /**
-     * 
-     * @type {SchoolYearResponse}
-     * @memberof MaintenanceResponse
-     */
-    currentYear: SchoolYearResponse;
-    /**
-     * 
-     * @type {SchoolYearResponse}
-     * @memberof MaintenanceResponse
-     */
-    nextYear: SchoolYearResponse;
+    'schoolUsesLdap': boolean;
+    'maintenance': MaintenanceStatusResponse;
+    'currentYear': SchoolYearResponse;
+    'nextYear': SchoolYearResponse;
 }
-
 

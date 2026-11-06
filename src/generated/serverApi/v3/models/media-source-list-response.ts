@@ -13,20 +13,11 @@
  */
 
 
-import { MediaSourceResponse } from './media-source-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MediaSourceResponse } from './media-source-response';
 
-/**
- * 
- * @export
- * @interface MediaSourceListResponse
- */
 export interface MediaSourceListResponse {
-    /**
-     * 
-     * @type {Array<MediaSourceResponse>}
-     * @memberof MediaSourceListResponse
-     */
-    responses: Array<MediaSourceResponse>;
+    'responses': Array<MediaSourceResponse>;
 }
-
 

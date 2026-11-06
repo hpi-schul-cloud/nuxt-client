@@ -14,42 +14,11 @@
 
 
 
-/**
- * 
- * @export
- * @interface LinkContentBody
- */
 export interface LinkContentBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof LinkContentBody
-     */
-    url: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LinkContentBody
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LinkContentBody
-     */
-    description: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LinkContentBody
-     */
-    imageUrl: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LinkContentBody
-     */
-    originalImageUrl: string;
+    'url': string;
+    'title': string;
+    'description': string;
+    'imageUrl': string;
+    'originalImageUrl': string;
 }
-
 

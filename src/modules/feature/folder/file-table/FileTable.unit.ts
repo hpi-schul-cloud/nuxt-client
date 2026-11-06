@@ -42,7 +42,6 @@ describe("FileTable", () => {
 				isLoading: props.isLoading,
 				isEmpty: props.isEmpty,
 				fileStorageError: props.fileStorageError,
-				isStudent: false,
 				fileRecords: props.fileRecords,
 				uploadProgress: props.uploadProgress,
 				hasEditPermission: props.hasEditPermission ?? true,

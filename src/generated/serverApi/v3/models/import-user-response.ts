@@ -13,79 +13,53 @@
  */
 
 
-import { UserMatchResponse } from './user-match-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { UserMatchResponse } from './user-match-response';
 
-/**
- * 
- * @export
- * @interface ImportUserResponse
- */
 export interface ImportUserResponse {
     /**
      * id reference to a import user
-     * @type {string}
-     * @memberof ImportUserResponse
      */
-    importUserId: string;
+    'importUserId': string;
     /**
      * login name from external system
-     * @type {string}
-     * @memberof ImportUserResponse
      */
-    loginName: string;
+    'loginName': string;
     /**
      * external systems user firstname
-     * @type {string}
-     * @memberof ImportUserResponse
      */
-    firstName: string;
+    'firstName': string;
     /**
      * external systems user lastname
-     * @type {string}
-     * @memberof ImportUserResponse
      */
-    lastName: string;
+    'lastName': string;
     /**
      * list of user roles from external system: student, teacher, admin
-     * @type {Array<string>}
-     * @memberof ImportUserResponse
      */
-    roleNames: Array<ImportUserResponseRoleNames>;
+    'roleNames': Array<ImportUserResponseRoleNames>;
     /**
      * names of classes the user attends from external system
-     * @type {Array<string>}
-     * @memberof ImportUserResponse
      */
-    classNames: Array<string>;
+    'classNames': Array<string>;
     /**
      * assignemnt to a local user account
-     * @type {UserMatchResponse}
-     * @memberof ImportUserResponse
      */
-    match?: UserMatchResponse;
+    'match'?: UserMatchResponse;
     /**
      * manual flag to apply it as filter
-     * @type {boolean}
-     * @memberof ImportUserResponse
      */
-    flagged: boolean;
+    'flagged': boolean;
     /**
      * exact user roles from the external system
-     * @type {Array<string>}
-     * @memberof ImportUserResponse
      */
-    externalRoleNames?: Array<string>;
+    'externalRoleNames'?: Array<string>;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum ImportUserResponseRoleNames {
     STUDENT = 'student',
     TEACHER = 'teacher',
     ADMIN = 'admin'
 }
-
 
 

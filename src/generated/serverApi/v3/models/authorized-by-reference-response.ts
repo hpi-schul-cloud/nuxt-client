@@ -14,36 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface AuthorizedByReferenceResponse
- */
 export interface AuthorizedByReferenceResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof AuthorizedByReferenceResponse
-     */
-    userId: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AuthorizedByReferenceResponse
-     */
-    isAuthorized: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof AuthorizedByReferenceResponse
-     */
-    referenceType: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AuthorizedByReferenceResponse
-     */
-    referenceId: string;
+    'userId': string;
+    'isAuthorized': boolean;
+    'referenceType': string;
+    'referenceId': string;
 }
-
 

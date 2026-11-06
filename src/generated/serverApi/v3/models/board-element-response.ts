@@ -13,39 +13,22 @@
  */
 
 
-import { BoardColumnBoardResponse } from './board-column-board-response';
-import { BoardLessonResponse } from './board-lesson-response';
-import { BoardTaskResponse } from './board-task-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { BoardElementResponseContent } from './board-element-response-content';
 
-/**
- * 
- * @export
- * @interface BoardElementResponse
- */
 export interface BoardElementResponse {
     /**
      * the type of the element in the content. For possible types, please refer to the enum
-     * @type {string}
-     * @memberof BoardElementResponse
      */
-    type: BoardElementResponseType;
-    /**
-     * Content of the Board, either: a task or a lesson specific for the board
-     * @type {BoardTaskResponse | BoardLessonResponse | BoardColumnBoardResponse}
-     * @memberof BoardElementResponse
-     */
-    content: BoardTaskResponse | BoardLessonResponse | BoardColumnBoardResponse;
+    'type': BoardElementResponseType;
+    'content': BoardElementResponseContent;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum BoardElementResponseType {
     TASK = 'task',
     LESSON = 'lesson',
     COLUMN_BOARD = 'column-board'
 }
-
 
 

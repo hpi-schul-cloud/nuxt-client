@@ -14,30 +14,14 @@
 
 
 
-/**
- * 
- * @export
- * @interface CreateCardBodyParams
- */
 export interface CreateCardBodyParams {
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof CreateCardBodyParams
-     */
-    requiredEmptyElements?: Array<CreateCardBodyParamsRequiredEmptyElements>;
+    'requiredEmptyElements'?: Array<CreateCardBodyParamsRequiredEmptyElements>;
     /**
      * Position within the column at which to insert the card. If omitted, the card is appended at the end.
-     * @type {number}
-     * @memberof CreateCardBodyParams
      */
-    position?: number;
+    'position'?: number;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum CreateCardBodyParamsRequiredEmptyElements {
     FILE = 'file',
     DRAWING = 'drawing',
@@ -50,6 +34,5 @@ export enum CreateCardBodyParamsRequiredEmptyElements {
     DELETED = 'deleted',
     H5P = 'h5p'
 }
-
 
 

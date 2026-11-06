@@ -75,6 +75,7 @@ export type DuplicateCardSuccessPayload = {
 	cardId: string;
 	duplicatedCard: CardResponse;
 	status: CopyStatusEnum;
+	failedFileNames?: string[];
 	isOwnAction: boolean;
 };
 export type DuplicateCardFailurePayload = DuplicateCardRequestPayload;

@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface TargetUserIdParams
- */
 export interface TargetUserIdParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof TargetUserIdParams
-     */
-    userId: string;
+    'userId': string;
 }
-
 

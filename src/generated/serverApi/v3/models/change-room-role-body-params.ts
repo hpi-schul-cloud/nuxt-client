@@ -14,35 +14,21 @@
 
 
 
-/**
- * 
- * @export
- * @interface ChangeRoomRoleBodyParams
- */
 export interface ChangeRoomRoleBodyParams {
     /**
      * The IDs of the users
-     * @type {Array<string>}
-     * @memberof ChangeRoomRoleBodyParams
      */
-    userIds: Array<string>;
+    'userIds': Array<string>;
     /**
      * The role to assign to the users. Must be a Room Role role other than ROOMOWNER.
-     * @type {string}
-     * @memberof ChangeRoomRoleBodyParams
      */
-    roleName: ChangeRoomRoleBodyParamsRoleName;
+    'roleName': ChangeRoomRoleBodyParamsRoleName;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum ChangeRoomRoleBodyParamsRoleName {
     ROOMADMIN = 'roomadmin',
     ROOMEDITOR = 'roomeditor',
     ROOMVIEWER = 'roomviewer'
 }
-
 
 

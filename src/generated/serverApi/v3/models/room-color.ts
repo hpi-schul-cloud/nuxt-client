@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum RoomColor {
     BLUE_GREY = 'blue-grey',
     PINK = 'pink',

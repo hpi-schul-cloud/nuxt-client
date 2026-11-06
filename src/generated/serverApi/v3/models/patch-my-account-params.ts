@@ -14,42 +14,26 @@
 
 
 
-/**
- * 
- * @export
- * @interface PatchMyAccountParams
- */
 export interface PatchMyAccountParams {
     /**
      * The current user password to authorize the update action.
-     * @type {string}
-     * @memberof PatchMyAccountParams
      */
-    passwordOld: string;
+    'passwordOld': string;
     /**
      * The new password for the current user.
-     * @type {string}
-     * @memberof PatchMyAccountParams
      */
-    passwordNew?: string;
+    'passwordNew'?: string;
     /**
      * The new email address for the current user.
-     * @type {string}
-     * @memberof PatchMyAccountParams
      */
-    email?: string;
+    'email'?: string;
     /**
      * The new first name for the current user.
-     * @type {string}
-     * @memberof PatchMyAccountParams
      */
-    firstName?: string;
+    'firstName'?: string;
     /**
      * The new last name for the current user.
-     * @type {string}
-     * @memberof PatchMyAccountParams
      */
-    lastName?: string;
+    'lastName'?: string;
 }
-
 

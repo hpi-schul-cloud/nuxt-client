@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface PassOwnershipBodyParams
- */
 export interface PassOwnershipBodyParams {
     /**
      * The ID of the user
-     * @type {string}
-     * @memberof PassOwnershipBodyParams
      */
-    userId: string;
+    'userId': string;
 }
-
 

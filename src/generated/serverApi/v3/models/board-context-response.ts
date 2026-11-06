@@ -13,26 +13,14 @@
  */
 
 
-import { BoardExternalReferenceType } from './board-external-reference-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { BoardExternalReferenceType } from './board-external-reference-type';
 
-/**
- * 
- * @export
- * @interface BoardContextResponse
- */
 export interface BoardContextResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof BoardContextResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {BoardExternalReferenceType}
-     * @memberof BoardContextResponse
-     */
-    type: BoardExternalReferenceType;
+    'id': string;
+    'type': BoardExternalReferenceType;
 }
+
 
 

@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface AddByEmailBodyParams
- */
 export interface AddByEmailBodyParams {
     /**
      * The email of external person to add to the room
-     * @type {string}
-     * @memberof AddByEmailBodyParams
      */
-    email: string;
+    'email': string;
 }
-
 

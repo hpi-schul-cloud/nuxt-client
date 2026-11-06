@@ -14,42 +14,26 @@
 
 
 
-/**
- * 
- * @export
- * @interface ForbiddenOperationError
- */
 export interface ForbiddenOperationError {
     /**
      * The response status code.
-     * @type {number}
-     * @memberof ForbiddenOperationError
      */
-    code: number;
+    'code': number;
     /**
      * The error type.
-     * @type {string}
-     * @memberof ForbiddenOperationError
      */
-    type: string;
+    'type': string;
     /**
      * The error title.
-     * @type {string}
-     * @memberof ForbiddenOperationError
      */
-    title: string;
+    'title': string;
     /**
      * The error message.
-     * @type {string}
-     * @memberof ForbiddenOperationError
      */
-    message: string;
+    'message': string;
     /**
      * The error details.
-     * @type {object}
-     * @memberof ForbiddenOperationError
      */
-    details?: object;
+    'details'?: object;
 }
-
 

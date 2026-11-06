@@ -13,109 +13,70 @@
  */
 
 
-import { BasicToolConfigParams } from './basic-tool-config-params';
-import { CustomParameterPostParams } from './custom-parameter-post-params';
-import { ExternalToolMediumParams } from './external-tool-medium-params';
-import { Lti11ToolConfigUpdateParams } from './lti11-tool-config-update-params';
-import { Oauth2ToolConfigUpdateParams } from './oauth2-tool-config-update-params';
-import { ToolContextType } from './tool-context-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CustomParameterPostParams } from './custom-parameter-post-params';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ExternalToolMediumParams } from './external-tool-medium-params';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ExternalToolUpdateParamsConfig } from './external-tool-update-params-config';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ToolContextType } from './tool-context-type';
 
-/**
- * 
- * @export
- * @interface ExternalToolUpdateParams
- */
 export interface ExternalToolUpdateParams {
     /**
      * ID of the external tool
-     * @type {string}
-     * @memberof ExternalToolUpdateParams
      */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExternalToolUpdateParams
-     */
-    name: string;
+    'id': string;
+    'name': string;
     /**
      * Description of the external tool
-     * @type {string}
-     * @memberof ExternalToolUpdateParams
      */
-    description?: string;
+    'description'?: string;
     /**
      * URL of the external tool
-     * @type {string}
-     * @memberof ExternalToolUpdateParams
      */
-    url?: string;
+    'url'?: string;
     /**
      * URL of the logo of the external tool
-     * @type {string}
-     * @memberof ExternalToolUpdateParams
      */
-    logoUrl?: string;
+    'logoUrl'?: string;
     /**
      * URL of the thumbnail of the external tool
-     * @type {string}
-     * @memberof ExternalToolUpdateParams
      */
-    thumbnailUrl?: string;
-    /**
-     * Configuration of the external tool
-     * @type {BasicToolConfigParams | Lti11ToolConfigUpdateParams | Oauth2ToolConfigUpdateParams}
-     * @memberof ExternalToolUpdateParams
-     */
-    config: BasicToolConfigParams | Lti11ToolConfigUpdateParams | Oauth2ToolConfigUpdateParams;
+    'thumbnailUrl'?: string;
+    'config': ExternalToolUpdateParamsConfig;
     /**
      * Custom parameters of the external tool
-     * @type {Array<CustomParameterPostParams>}
-     * @memberof ExternalToolUpdateParams
      */
-    parameters?: Array<CustomParameterPostParams>;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ExternalToolUpdateParams
-     */
-    isHidden: boolean;
+    'parameters'?: Array<CustomParameterPostParams>;
+    'isHidden': boolean;
     /**
      * Tool can be deactivated, related tools can not be added to e.g. school, course or board anymore
-     * @type {boolean}
-     * @memberof ExternalToolUpdateParams
      */
-    isDeactivated: boolean;
+    'isDeactivated': boolean;
     /**
      * Open the tool in a new tab
-     * @type {boolean}
-     * @memberof ExternalToolUpdateParams
      */
-    openNewTab: boolean;
+    'openNewTab': boolean;
     /**
      * Restrict the tool to certain contexts
-     * @type {Array<ToolContextType>}
-     * @memberof ExternalToolUpdateParams
      */
-    restrictToContexts?: Array<ToolContextType>;
+    'restrictToContexts'?: Array<ToolContextType>;
     /**
      * Medium of the external tool
-     * @type {ExternalToolMediumParams}
-     * @memberof ExternalToolUpdateParams
      */
-    medium?: ExternalToolMediumParams;
+    'medium'?: ExternalToolMediumParams;
     /**
      * Should the tool be a preferred tool
-     * @type {boolean}
-     * @memberof ExternalToolUpdateParams
      */
-    isPreferred: boolean;
+    'isPreferred': boolean;
     /**
      * Name of the icon to be rendered when displaying it as a preferred tool
-     * @type {string}
-     * @memberof ExternalToolUpdateParams
      */
-    iconName?: string;
+    'iconName'?: string;
 }
-
 

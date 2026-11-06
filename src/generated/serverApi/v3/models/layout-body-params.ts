@@ -13,20 +13,13 @@
  */
 
 
-import { BoardLayout } from './board-layout';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { BoardLayout } from './board-layout';
 
-/**
- * 
- * @export
- * @interface LayoutBodyParams
- */
 export interface LayoutBodyParams {
-    /**
-     * 
-     * @type {BoardLayout}
-     * @memberof LayoutBodyParams
-     */
-    layout: BoardLayout;
+    'layout': BoardLayout;
 }
+
 
 

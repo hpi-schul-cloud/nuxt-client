@@ -13,26 +13,12 @@
  */
 
 
-import { MoveElementPositionParams } from './move-element-position-params';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MoveElementPositionParams } from './move-element-position-params';
 
-/**
- * 
- * @export
- * @interface MoveElementParams
- */
 export interface MoveElementParams {
-    /**
-     * 
-     * @type {MoveElementPositionParams}
-     * @memberof MoveElementParams
-     */
-    from: MoveElementPositionParams;
-    /**
-     * 
-     * @type {MoveElementPositionParams}
-     * @memberof MoveElementParams
-     */
-    to: MoveElementPositionParams;
+    'from': MoveElementPositionParams;
+    'to': MoveElementPositionParams;
 }
-
 

@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface CourseSyncBodyParams
- */
 export interface CourseSyncBodyParams {
     /**
      * The id of the group
-     * @type {string}
-     * @memberof CourseSyncBodyParams
      */
-    groupId: string;
+    'groupId': string;
 }
-
 

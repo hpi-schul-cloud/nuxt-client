@@ -13,71 +13,28 @@
  */
 
 
-import { CustomParameterEntryResponse } from './custom-parameter-entry-response';
-import { SchoolExternalToolConfigurationStatusResponse } from './school-external-tool-configuration-status-response';
-import { SchoolExternalToolMediumResponse } from './school-external-tool-medium-response';
-import { ToolContextType } from './tool-context-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CustomParameterEntryResponse } from './custom-parameter-entry-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchoolExternalToolConfigurationStatusResponse } from './school-external-tool-configuration-status-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchoolExternalToolMediumResponse } from './school-external-tool-medium-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ToolContextType } from './tool-context-type';
 
-/**
- * 
- * @export
- * @interface SchoolExternalToolResponse
- */
 export interface SchoolExternalToolResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolExternalToolResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolExternalToolResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolExternalToolResponse
-     */
-    toolId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolExternalToolResponse
-     */
-    schoolId: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SchoolExternalToolResponse
-     */
-    isDeactivated: boolean;
-    /**
-     * 
-     * @type {Array<CustomParameterEntryResponse>}
-     * @memberof SchoolExternalToolResponse
-     */
-    parameters: Array<CustomParameterEntryResponse>;
-    /**
-     * 
-     * @type {SchoolExternalToolConfigurationStatusResponse}
-     * @memberof SchoolExternalToolResponse
-     */
-    status: SchoolExternalToolConfigurationStatusResponse;
-    /**
-     * 
-     * @type {Array<ToolContextType>}
-     * @memberof SchoolExternalToolResponse
-     */
-    restrictToContexts?: Array<ToolContextType>;
-    /**
-     * 
-     * @type {SchoolExternalToolMediumResponse}
-     * @memberof SchoolExternalToolResponse
-     */
-    medium?: SchoolExternalToolMediumResponse;
+    'id': string;
+    'name': string;
+    'toolId': string;
+    'schoolId': string;
+    'isDeactivated': boolean;
+    'parameters': Array<CustomParameterEntryResponse>;
+    'status': SchoolExternalToolConfigurationStatusResponse;
+    'restrictToContexts'?: Array<ToolContextType>;
+    'medium'?: SchoolExternalToolMediumResponse;
 }
-
 

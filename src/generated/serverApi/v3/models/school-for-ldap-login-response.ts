@@ -13,32 +13,13 @@
  */
 
 
-import { SystemForLdapLoginResponse } from './system-for-ldap-login-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SystemForLdapLoginResponse } from './system-for-ldap-login-response';
 
-/**
- * 
- * @export
- * @interface SchoolForLdapLoginResponse
- */
 export interface SchoolForLdapLoginResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolForLdapLoginResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolForLdapLoginResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {Array<SystemForLdapLoginResponse>}
-     * @memberof SchoolForLdapLoginResponse
-     */
-    systems: Array<SystemForLdapLoginResponse>;
+    'id': string;
+    'name': string;
+    'systems': Array<SystemForLdapLoginResponse>;
 }
-
 

@@ -14,36 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface LdapAuthorizationBodyParams
- */
 export interface LdapAuthorizationBodyParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof LdapAuthorizationBodyParams
-     */
-    systemId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LdapAuthorizationBodyParams
-     */
-    username: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LdapAuthorizationBodyParams
-     */
-    password: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LdapAuthorizationBodyParams
-     */
-    schoolId: string;
+    'systemId': string;
+    'username': string;
+    'password': string;
+    'schoolId': string;
 }
-
 

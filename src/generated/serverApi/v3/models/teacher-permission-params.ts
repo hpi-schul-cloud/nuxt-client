@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface TeacherPermissionParams
- */
 export interface TeacherPermissionParams {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof TeacherPermissionParams
-     */
-    STUDENT_LIST?: boolean;
+    'STUDENT_LIST'?: boolean;
 }
-
 

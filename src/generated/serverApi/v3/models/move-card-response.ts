@@ -13,45 +13,18 @@
  */
 
 
-import { CardSkeletonResponse } from './card-skeleton-response';
-import { ShortNodeResponse } from './short-node-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CardSkeletonResponse } from './card-skeleton-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ShortNodeResponse } from './short-node-response';
 
-/**
- * 
- * @export
- * @interface MoveCardResponse
- */
 export interface MoveCardResponse {
-    /**
-     * 
-     * @type {ShortNodeResponse}
-     * @memberof MoveCardResponse
-     */
-    fromBoard: ShortNodeResponse;
-    /**
-     * 
-     * @type {ShortNodeResponse}
-     * @memberof MoveCardResponse
-     */
-    toBoard: ShortNodeResponse;
-    /**
-     * 
-     * @type {ShortNodeResponse}
-     * @memberof MoveCardResponse
-     */
-    fromColumn: ShortNodeResponse;
-    /**
-     * 
-     * @type {ShortNodeResponse}
-     * @memberof MoveCardResponse
-     */
-    toColumn: ShortNodeResponse;
-    /**
-     * 
-     * @type {CardSkeletonResponse}
-     * @memberof MoveCardResponse
-     */
-    card: CardSkeletonResponse;
+    'fromBoard': ShortNodeResponse;
+    'toBoard': ShortNodeResponse;
+    'fromColumn': ShortNodeResponse;
+    'toColumn': ShortNodeResponse;
+    'card': CardSkeletonResponse;
 }
-
 

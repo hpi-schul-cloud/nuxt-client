@@ -14,36 +14,22 @@
 
 
 
-/**
- * 
- * @export
- * @interface CreateOrUpdateRegistrationBodyParams
- */
 export interface CreateOrUpdateRegistrationBodyParams {
     /**
      * The mail adress of the new user. Will also be used as username.
-     * @type {string}
-     * @memberof CreateOrUpdateRegistrationBodyParams
      */
-    email: string;
+    'email': string;
     /**
      * The firstname of the new user.
-     * @type {string}
-     * @memberof CreateOrUpdateRegistrationBodyParams
      */
-    firstName: string;
+    'firstName': string;
     /**
      * The lastname of the new user.
-     * @type {string}
-     * @memberof CreateOrUpdateRegistrationBodyParams
      */
-    lastName: string;
+    'lastName': string;
     /**
      * The id of the room the user is invited to.
-     * @type {string}
-     * @memberof CreateOrUpdateRegistrationBodyParams
      */
-    roomId: string;
+    'roomId': string;
 }
-
 

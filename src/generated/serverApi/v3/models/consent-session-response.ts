@@ -14,30 +14,18 @@
 
 
 
-/**
- * 
- * @export
- * @interface ConsentSessionResponse
- */
 export interface ConsentSessionResponse {
     /**
      * The id of the client.
-     * @type {string}
-     * @memberof ConsentSessionResponse
      */
-    client_id: string;
+    'client_id': string;
     /**
      * The name of the client.
-     * @type {string}
-     * @memberof ConsentSessionResponse
      */
-    client_name: string;
+    'client_name': string;
     /**
      * The id/challenge of the consent authorization request.
-     * @type {string}
-     * @memberof ConsentSessionResponse
      */
-    challenge: string;
+    'challenge': string;
 }
-
 

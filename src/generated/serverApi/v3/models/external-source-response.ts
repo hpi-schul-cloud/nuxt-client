@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface ExternalSourceResponse
- */
 export interface ExternalSourceResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ExternalSourceResponse
-     */
-    externalId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExternalSourceResponse
-     */
-    systemId: string;
+    'externalId': string;
+    'systemId': string;
 }
-
 

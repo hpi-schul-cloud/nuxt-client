@@ -1,5 +1,5 @@
 <template>
-	<SvsDialog :model-value="isOpen" no-actions :title="data.title" @cancel="emit('update:isOpen', false)">
+	<SvsDialog :model-value="isOpen" no-actions :title="data.title ?? ''" @cancel="emit('update:isOpen', false)">
 		<template #content>
 			<VTextField
 				v-model="data.title"

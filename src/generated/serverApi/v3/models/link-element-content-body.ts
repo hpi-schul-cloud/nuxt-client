@@ -13,27 +13,20 @@
  */
 
 
-import { ContentElementType } from './content-element-type';
-import { LinkContentBody } from './link-content-body';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContentElementType } from './content-element-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { LinkContentBody } from './link-content-body';
 
-/**
- * 
- * @export
- * @interface LinkElementContentBody
- */
 export interface LinkElementContentBody {
     /**
      * the type of the updated element
-     * @type {ContentElementType}
-     * @memberof LinkElementContentBody
      */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {LinkContentBody}
-     * @memberof LinkElementContentBody
-     */
-    content: LinkContentBody;
+    'type': ContentElementType;
+    'content': LinkContentBody;
 }
+
 
 

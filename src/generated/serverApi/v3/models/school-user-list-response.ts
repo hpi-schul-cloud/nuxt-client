@@ -13,20 +13,11 @@
  */
 
 
-import { SchoolUserResponse } from './school-user-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { SchoolUserResponse } from './school-user-response';
 
-/**
- * 
- * @export
- * @interface SchoolUserListResponse
- */
 export interface SchoolUserListResponse {
-    /**
-     * 
-     * @type {Array<SchoolUserResponse>}
-     * @memberof SchoolUserListResponse
-     */
-    data: Array<SchoolUserResponse>;
+    'data': Array<SchoolUserResponse>;
 }
-
 

@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface CreateCourseResponse
- */
 export interface CreateCourseResponse {
     /**
      * The id of the created course
-     * @type {string}
-     * @memberof CreateCourseResponse
      */
-    courseId: string;
+    'courseId': string;
 }
-
 

@@ -2,7 +2,7 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { RoomCreateParams, RoomItem } from "@/types/room/Room";
 import { $axios } from "@/utils/api";
-import { MoveItemBodyParams, RoomApiFactory } from "@api-server";
+import { MoveItemBodyParams, RoomApiFactory, RoomArchivedItemResponse } from "@api-server";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
@@ -12,6 +12,7 @@ export const useRoomStore = defineStore("room-store", () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 
 	const rooms = ref<RoomItem[]>([]);
+	const archivedRooms = ref<RoomArchivedItemResponse[]>([]);
 	const isEmpty = computed(() => rooms.value.length === 0);
 
 	const { execute, isRunning: isLoading } = useSafeAxiosTask();
@@ -29,6 +30,13 @@ export const useRoomStore = defineStore("room-store", () => {
 		if (result) {
 			rooms.value = result?.data.data;
 		}
+	};
+	const fetchArchivedRooms = async () => {
+		const { result } = await execute(
+			roomApi.roomControllerGetArchivedRooms,
+			t("common.notifications.errors.notLoaded", { type: t("common.labels.room", PLURAL_COUNT) }, PLURAL_COUNT)
+		);
+		if (result) archivedRooms.value = result.data.data;
 	};
 
 	const createRoom = async (params: RoomCreateParams) =>
@@ -61,16 +69,32 @@ export const useRoomStore = defineStore("room-store", () => {
 			t("common.notifications.errors.notExited", { type: t("common.labels.room") })
 		);
 
+	const archiveRoom = async (roomId: string) =>
+		await execute(
+			() => roomApi.roomControllerArchiveRoom(roomId),
+			t("common.notifications.errors.notArchived", { type: t("common.labels.room") })
+		);
+
+	const unarchiveRoom = async (roomId: string) =>
+		await execute(
+			() => roomApi.roomControllerUnarchiveRoom(roomId),
+			t("common.notifications.errors.notRestored", { type: t("common.labels.room") })
+		);
+
 	return {
 		rooms,
+		archivedRooms,
 		isLoading,
 		isEmpty,
 		fetchRooms,
+		fetchArchivedRooms,
 		fetchRoomsPlain,
 		createRoom,
 		copyRoom,
 		moveRoom,
 		deleteRoom,
 		leaveRoom,
+		archiveRoom,
+		unarchiveRoom,
 	};
 });

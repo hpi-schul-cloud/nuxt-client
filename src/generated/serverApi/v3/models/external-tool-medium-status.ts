@@ -16,9 +16,8 @@
 
 /**
  * The type of the medium
- * @export
- * @enum {string}
  */
+
 export enum ExternalToolMediumStatus {
     ACTIVE = 'active',
     TEMPLATE = 'template',

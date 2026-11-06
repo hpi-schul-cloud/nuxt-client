@@ -13,20 +13,11 @@
  */
 
 
-import { RegistrationItemResponse } from './registration-item-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RegistrationItemResponse } from './registration-item-response';
 
-/**
- * 
- * @export
- * @interface RegistrationListResponse
- */
 export interface RegistrationListResponse {
-    /**
-     * 
-     * @type {Array<RegistrationItemResponse>}
-     * @memberof RegistrationListResponse
-     */
-    data: Array<RegistrationItemResponse>;
+    'data': Array<RegistrationItemResponse>;
 }
-
 

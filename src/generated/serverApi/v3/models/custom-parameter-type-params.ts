@@ -16,9 +16,8 @@
 
 /**
  * Input field type. Auto parameters have to be global and cannot have a defaultValue.
- * @export
- * @enum {string}
  */
+
 export enum CustomParameterTypeParams {
     STRING = 'string',
     NUMBER = 'number',

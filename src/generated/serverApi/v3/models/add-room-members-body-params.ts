@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface AddRoomMembersBodyParams
- */
 export interface AddRoomMembersBodyParams {
     /**
      * The IDs of the users
-     * @type {Array<string>}
-     * @memberof AddRoomMembersBodyParams
      */
-    userIds: Array<string>;
+    'userIds': Array<string>;
 }
-
 

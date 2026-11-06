@@ -13,16 +13,16 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 /**
  * DeletionRequestApi - axios parameter creator
- * @export
  */
 export const DeletionRequestApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -33,7 +33,7 @@ export const DeletionRequestApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletionRequestPublicControllerCreateDeletionRequestPublic: async (ids: Array<string>, options: any = {}): Promise<RequestArgs> => {
+        deletionRequestPublicControllerCreateDeletionRequestPublic: async (ids: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'ids' is not null or undefined
             assertParamExists('deletionRequestPublicControllerCreateDeletionRequestPublic', 'ids', ids)
             const localVarPath = `/deletionRequestsPublic`;
@@ -57,8 +57,7 @@ export const DeletionRequestApiAxiosParamCreator = function (configuration?: Con
             }
 
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -72,7 +71,6 @@ export const DeletionRequestApiAxiosParamCreator = function (configuration?: Con
 
 /**
  * DeletionRequestApi - functional programming interface
- * @export
  */
 export const DeletionRequestApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DeletionRequestApiAxiosParamCreator(configuration)
@@ -84,16 +82,17 @@ export const DeletionRequestApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deletionRequestPublicControllerCreateDeletionRequestPublic(ids: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async deletionRequestPublicControllerCreateDeletionRequestPublic(ids: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deletionRequestPublicControllerCreateDeletionRequestPublic(ids, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DeletionRequestApi.deletionRequestPublicControllerCreateDeletionRequestPublic']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * DeletionRequestApi - factory interface
- * @export
  */
 export const DeletionRequestApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = DeletionRequestApiFp(configuration)
@@ -105,7 +104,7 @@ export const DeletionRequestApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletionRequestPublicControllerCreateDeletionRequestPublic(ids: Array<string>, options?: any): AxiosPromise<void> {
+        deletionRequestPublicControllerCreateDeletionRequestPublic(ids: Array<string>, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.deletionRequestPublicControllerCreateDeletionRequestPublic(ids, options).then((request) => request(axios, basePath));
         },
     };
@@ -113,8 +112,6 @@ export const DeletionRequestApiFactory = function (configuration?: Configuration
 
 /**
  * DeletionRequestApi - interface
- * @export
- * @interface DeletionRequestApi
  */
 export interface DeletionRequestApiInterface {
     /**
@@ -123,17 +120,13 @@ export interface DeletionRequestApiInterface {
      * @param {Array<string>} ids The IDs of the users to be deleted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DeletionRequestApiInterface
      */
-    deletionRequestPublicControllerCreateDeletionRequestPublic(ids: Array<string>, options?: any): AxiosPromise<void>;
+    deletionRequestPublicControllerCreateDeletionRequestPublic(ids: Array<string>, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
  * DeletionRequestApi - object-oriented interface
- * @export
- * @class DeletionRequestApi
- * @extends {BaseAPI}
  */
 export class DeletionRequestApi extends BaseAPI implements DeletionRequestApiInterface {
     /**
@@ -142,9 +135,9 @@ export class DeletionRequestApi extends BaseAPI implements DeletionRequestApiInt
      * @param {Array<string>} ids The IDs of the users to be deleted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DeletionRequestApi
      */
-    public deletionRequestPublicControllerCreateDeletionRequestPublic(ids: Array<string>, options?: any) {
+    public deletionRequestPublicControllerCreateDeletionRequestPublic(ids: Array<string>, options?: RawAxiosRequestConfig) {
         return DeletionRequestApiFp(this.configuration).deletionRequestPublicControllerCreateDeletionRequestPublic(ids, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

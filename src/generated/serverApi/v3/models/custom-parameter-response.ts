@@ -13,82 +13,62 @@
  */
 
 
-import { CustomParameterLocationParams } from './custom-parameter-location-params';
-import { CustomParameterScopeTypeParams } from './custom-parameter-scope-type-params';
-import { CustomParameterTypeParams } from './custom-parameter-type-params';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CustomParameterLocationParams } from './custom-parameter-location-params';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CustomParameterScopeTypeParams } from './custom-parameter-scope-type-params';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CustomParameterTypeParams } from './custom-parameter-type-params';
 
-/**
- * 
- * @export
- * @interface CustomParameterResponse
- */
 export interface CustomParameterResponse {
     /**
      * Technical name of the parameter that is send to the tool provider.
-     * @type {string}
-     * @memberof CustomParameterResponse
      */
-    name: string;
+    'name': string;
     /**
      * Display name that is shown in the user interface.
-     * @type {string}
-     * @memberof CustomParameterResponse
      */
-    displayName: string;
+    'displayName': string;
     /**
      * Additional description of the parameter in the user interface.
-     * @type {string}
-     * @memberof CustomParameterResponse
      */
-    description?: string;
+    'description'?: string;
     /**
      * Pre-fill value for the parameter. Required for global parameters.
-     * @type {string}
-     * @memberof CustomParameterResponse
      */
-    defaultValue?: string;
+    'defaultValue'?: string;
     /**
      * Regular expression to limit user input for this field.
-     * @type {string}
-     * @memberof CustomParameterResponse
      */
-    regex?: string;
+    'regex'?: string;
     /**
      * A description for the regex.
-     * @type {string}
-     * @memberof CustomParameterResponse
      */
-    regexComment?: string;
+    'regexComment'?: string;
     /**
      * Scope where the parameter has to be configured.
-     * @type {CustomParameterScopeTypeParams}
-     * @memberof CustomParameterResponse
      */
-    scope: CustomParameterScopeTypeParams;
+    'scope': CustomParameterScopeTypeParams;
     /**
      * Location where the parameter is transmitted in the HTTP request to the tool provider.
-     * @type {CustomParameterLocationParams}
-     * @memberof CustomParameterResponse
      */
-    location: CustomParameterLocationParams;
+    'location': CustomParameterLocationParams;
     /**
      * Input field type. Auto parameters have to be global and cannot have a defaultValue.
-     * @type {CustomParameterTypeParams}
-     * @memberof CustomParameterResponse
      */
-    type: CustomParameterTypeParams;
+    'type': CustomParameterTypeParams;
     /**
      * If true, the parameter does not have to be filled out during configuration.
-     * @type {boolean}
-     * @memberof CustomParameterResponse
      */
-    isOptional: boolean;
+    'isOptional': boolean;
     /**
      * If true, the parameter value is not copied to other contexts.
-     * @type {boolean}
-     * @memberof CustomParameterResponse
      */
-    isProtected: boolean;
+    'isProtected': boolean;
 }
+
 
 

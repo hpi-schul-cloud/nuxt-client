@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface FileContentBody
- */
 export interface FileContentBody {
-    /**
-     * 
-     * @type {string}
-     * @memberof FileContentBody
-     */
-    caption: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileContentBody
-     */
-    alternativeText: string;
+    'caption': string;
+    'alternativeText': string;
 }
-
 

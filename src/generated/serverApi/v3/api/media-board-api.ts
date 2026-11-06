@@ -13,30 +13,30 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { CollapsableBodyParams } from '../models';
+import type { CollapsableBodyParams } from '../models';
 // @ts-ignore
-import { ColorBodyParams } from '../models';
+import type { ColorBodyParams } from '../models';
 // @ts-ignore
-import { LayoutBodyParams } from '../models';
+import type { LayoutBodyParams } from '../models';
 // @ts-ignore
-import { MediaAvailableLineResponse } from '../models';
+import type { MediaAvailableLineResponse } from '../models';
 // @ts-ignore
-import { MediaBoardResponse } from '../models';
+import type { MediaBoardResponse } from '../models';
 // @ts-ignore
-import { MediaLineResponse } from '../models';
+import type { MediaLineResponse } from '../models';
 /**
  * MediaBoardApi - axios parameter creator
- * @export
  */
 export const MediaBoardApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -48,13 +48,13 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaBoardControllerCollapseMediaAvailableLine: async (boardId: string, collapsableBodyParams: CollapsableBodyParams, options: any = {}): Promise<RequestArgs> => {
+        mediaBoardControllerCollapseMediaAvailableLine: async (boardId: string, collapsableBodyParams: CollapsableBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('mediaBoardControllerCollapseMediaAvailableLine', 'boardId', boardId)
             // verify required parameter 'collapsableBodyParams' is not null or undefined
             assertParamExists('mediaBoardControllerCollapseMediaAvailableLine', 'collapsableBodyParams', collapsableBodyParams)
             const localVarPath = `/media-boards/{boardId}/media-available-line/collapse`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+                .replace('{boardId}', encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -70,11 +70,10 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(collapsableBodyParams, localVarRequestOptions, configuration)
@@ -91,11 +90,11 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaBoardControllerCreateLine: async (boardId: string, options: any = {}): Promise<RequestArgs> => {
+        mediaBoardControllerCreateLine: async (boardId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('mediaBoardControllerCreateLine', 'boardId', boardId)
             const localVarPath = `/media-boards/{boardId}/media-lines`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+                .replace('{boardId}', encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -111,9 +110,9 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -129,11 +128,11 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaBoardControllerGetMediaAvailableLine: async (boardId: string, options: any = {}): Promise<RequestArgs> => {
+        mediaBoardControllerGetMediaAvailableLine: async (boardId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('mediaBoardControllerGetMediaAvailableLine', 'boardId', boardId)
             const localVarPath = `/media-boards/{boardId}/media-available-line`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+                .replace('{boardId}', encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -149,9 +148,9 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -166,7 +165,7 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaBoardControllerGetMediaBoardForUser: async (options: any = {}): Promise<RequestArgs> => {
+        mediaBoardControllerGetMediaBoardForUser: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/media-boards/me`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -183,9 +182,9 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -202,13 +201,13 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaBoardControllerSetMediaBoardLayout: async (boardId: string, layoutBodyParams: LayoutBodyParams, options: any = {}): Promise<RequestArgs> => {
+        mediaBoardControllerSetMediaBoardLayout: async (boardId: string, layoutBodyParams: LayoutBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('mediaBoardControllerSetMediaBoardLayout', 'boardId', boardId)
             // verify required parameter 'layoutBodyParams' is not null or undefined
             assertParamExists('mediaBoardControllerSetMediaBoardLayout', 'layoutBodyParams', layoutBodyParams)
             const localVarPath = `/media-boards/{boardId}/layout`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+                .replace('{boardId}', encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -224,11 +223,10 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(layoutBodyParams, localVarRequestOptions, configuration)
@@ -246,13 +244,13 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaBoardControllerUpdateMediaAvailableLineColor: async (boardId: string, colorBodyParams: ColorBodyParams, options: any = {}): Promise<RequestArgs> => {
+        mediaBoardControllerUpdateMediaAvailableLineColor: async (boardId: string, colorBodyParams: ColorBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('mediaBoardControllerUpdateMediaAvailableLineColor', 'boardId', boardId)
             // verify required parameter 'colorBodyParams' is not null or undefined
             assertParamExists('mediaBoardControllerUpdateMediaAvailableLineColor', 'colorBodyParams', colorBodyParams)
             const localVarPath = `/media-boards/{boardId}/media-available-line/color`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+                .replace('{boardId}', encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -268,11 +266,10 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(colorBodyParams, localVarRequestOptions, configuration)
@@ -287,7 +284,6 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
 
 /**
  * MediaBoardApi - functional programming interface
- * @export
  */
 export const MediaBoardApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MediaBoardApiAxiosParamCreator(configuration)
@@ -300,9 +296,11 @@ export const MediaBoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaBoardControllerCollapseMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async mediaBoardControllerCollapseMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerCollapseMediaAvailableLine(boardId, collapsableBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaBoardApi.mediaBoardControllerCollapseMediaAvailableLine']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -311,9 +309,11 @@ export const MediaBoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaBoardControllerCreateLine(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaLineResponse>> {
+        async mediaBoardControllerCreateLine(boardId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaLineResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerCreateLine(boardId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaBoardApi.mediaBoardControllerCreateLine']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -322,9 +322,11 @@ export const MediaBoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaBoardControllerGetMediaAvailableLine(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaAvailableLineResponse>> {
+        async mediaBoardControllerGetMediaAvailableLine(boardId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaAvailableLineResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerGetMediaAvailableLine(boardId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaBoardApi.mediaBoardControllerGetMediaAvailableLine']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -332,9 +334,11 @@ export const MediaBoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaBoardControllerGetMediaBoardForUser(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaBoardResponse>> {
+        async mediaBoardControllerGetMediaBoardForUser(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaBoardResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerGetMediaBoardForUser(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaBoardApi.mediaBoardControllerGetMediaBoardForUser']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -344,9 +348,11 @@ export const MediaBoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaBoardControllerSetMediaBoardLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async mediaBoardControllerSetMediaBoardLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerSetMediaBoardLayout(boardId, layoutBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaBoardApi.mediaBoardControllerSetMediaBoardLayout']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -356,16 +362,17 @@ export const MediaBoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaBoardControllerUpdateMediaAvailableLineColor(boardId: string, colorBodyParams: ColorBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async mediaBoardControllerUpdateMediaAvailableLineColor(boardId: string, colorBodyParams: ColorBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerUpdateMediaAvailableLineColor(boardId, colorBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaBoardApi.mediaBoardControllerUpdateMediaAvailableLineColor']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * MediaBoardApi - factory interface
- * @export
  */
 export const MediaBoardApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = MediaBoardApiFp(configuration)
@@ -378,7 +385,7 @@ export const MediaBoardApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaBoardControllerCollapseMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): AxiosPromise<void> {
+        mediaBoardControllerCollapseMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.mediaBoardControllerCollapseMediaAvailableLine(boardId, collapsableBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -388,7 +395,7 @@ export const MediaBoardApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaBoardControllerCreateLine(boardId: string, options?: any): AxiosPromise<MediaLineResponse> {
+        mediaBoardControllerCreateLine(boardId: string, options?: RawAxiosRequestConfig): AxiosPromise<MediaLineResponse> {
             return localVarFp.mediaBoardControllerCreateLine(boardId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -398,7 +405,7 @@ export const MediaBoardApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaBoardControllerGetMediaAvailableLine(boardId: string, options?: any): AxiosPromise<MediaAvailableLineResponse> {
+        mediaBoardControllerGetMediaAvailableLine(boardId: string, options?: RawAxiosRequestConfig): AxiosPromise<MediaAvailableLineResponse> {
             return localVarFp.mediaBoardControllerGetMediaAvailableLine(boardId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -407,7 +414,7 @@ export const MediaBoardApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaBoardControllerGetMediaBoardForUser(options?: any): AxiosPromise<MediaBoardResponse> {
+        mediaBoardControllerGetMediaBoardForUser(options?: RawAxiosRequestConfig): AxiosPromise<MediaBoardResponse> {
             return localVarFp.mediaBoardControllerGetMediaBoardForUser(options).then((request) => request(axios, basePath));
         },
         /**
@@ -418,7 +425,7 @@ export const MediaBoardApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaBoardControllerSetMediaBoardLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any): AxiosPromise<void> {
+        mediaBoardControllerSetMediaBoardLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.mediaBoardControllerSetMediaBoardLayout(boardId, layoutBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -429,7 +436,7 @@ export const MediaBoardApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaBoardControllerUpdateMediaAvailableLineColor(boardId: string, colorBodyParams: ColorBodyParams, options?: any): AxiosPromise<void> {
+        mediaBoardControllerUpdateMediaAvailableLineColor(boardId: string, colorBodyParams: ColorBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.mediaBoardControllerUpdateMediaAvailableLineColor(boardId, colorBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -437,8 +444,6 @@ export const MediaBoardApiFactory = function (configuration?: Configuration, bas
 
 /**
  * MediaBoardApi - interface
- * @export
- * @interface MediaBoardApi
  */
 export interface MediaBoardApiInterface {
     /**
@@ -448,9 +453,8 @@ export interface MediaBoardApiInterface {
      * @param {CollapsableBodyParams} collapsableBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaBoardApiInterface
      */
-    mediaBoardControllerCollapseMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): AxiosPromise<void>;
+    mediaBoardControllerCollapseMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -458,9 +462,8 @@ export interface MediaBoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaBoardApiInterface
      */
-    mediaBoardControllerCreateLine(boardId: string, options?: any): AxiosPromise<MediaLineResponse>;
+    mediaBoardControllerCreateLine(boardId: string, options?: RawAxiosRequestConfig): AxiosPromise<MediaLineResponse>;
 
     /**
      * 
@@ -468,18 +471,16 @@ export interface MediaBoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaBoardApiInterface
      */
-    mediaBoardControllerGetMediaAvailableLine(boardId: string, options?: any): AxiosPromise<MediaAvailableLineResponse>;
+    mediaBoardControllerGetMediaAvailableLine(boardId: string, options?: RawAxiosRequestConfig): AxiosPromise<MediaAvailableLineResponse>;
 
     /**
      * 
      * @summary Get the media shelf of the user.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaBoardApiInterface
      */
-    mediaBoardControllerGetMediaBoardForUser(options?: any): AxiosPromise<MediaBoardResponse>;
+    mediaBoardControllerGetMediaBoardForUser(options?: RawAxiosRequestConfig): AxiosPromise<MediaBoardResponse>;
 
     /**
      * 
@@ -488,9 +489,8 @@ export interface MediaBoardApiInterface {
      * @param {LayoutBodyParams} layoutBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaBoardApiInterface
      */
-    mediaBoardControllerSetMediaBoardLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any): AxiosPromise<void>;
+    mediaBoardControllerSetMediaBoardLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -499,17 +499,13 @@ export interface MediaBoardApiInterface {
      * @param {ColorBodyParams} colorBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaBoardApiInterface
      */
-    mediaBoardControllerUpdateMediaAvailableLineColor(boardId: string, colorBodyParams: ColorBodyParams, options?: any): AxiosPromise<void>;
+    mediaBoardControllerUpdateMediaAvailableLineColor(boardId: string, colorBodyParams: ColorBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
  * MediaBoardApi - object-oriented interface
- * @export
- * @class MediaBoardApi
- * @extends {BaseAPI}
  */
 export class MediaBoardApi extends BaseAPI implements MediaBoardApiInterface {
     /**
@@ -519,9 +515,8 @@ export class MediaBoardApi extends BaseAPI implements MediaBoardApiInterface {
      * @param {CollapsableBodyParams} collapsableBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaBoardApi
      */
-    public mediaBoardControllerCollapseMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any) {
+    public mediaBoardControllerCollapseMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: RawAxiosRequestConfig) {
         return MediaBoardApiFp(this.configuration).mediaBoardControllerCollapseMediaAvailableLine(boardId, collapsableBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -531,9 +526,8 @@ export class MediaBoardApi extends BaseAPI implements MediaBoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaBoardApi
      */
-    public mediaBoardControllerCreateLine(boardId: string, options?: any) {
+    public mediaBoardControllerCreateLine(boardId: string, options?: RawAxiosRequestConfig) {
         return MediaBoardApiFp(this.configuration).mediaBoardControllerCreateLine(boardId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -543,9 +537,8 @@ export class MediaBoardApi extends BaseAPI implements MediaBoardApiInterface {
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaBoardApi
      */
-    public mediaBoardControllerGetMediaAvailableLine(boardId: string, options?: any) {
+    public mediaBoardControllerGetMediaAvailableLine(boardId: string, options?: RawAxiosRequestConfig) {
         return MediaBoardApiFp(this.configuration).mediaBoardControllerGetMediaAvailableLine(boardId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -554,9 +547,8 @@ export class MediaBoardApi extends BaseAPI implements MediaBoardApiInterface {
      * @summary Get the media shelf of the user.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaBoardApi
      */
-    public mediaBoardControllerGetMediaBoardForUser(options?: any) {
+    public mediaBoardControllerGetMediaBoardForUser(options?: RawAxiosRequestConfig) {
         return MediaBoardApiFp(this.configuration).mediaBoardControllerGetMediaBoardForUser(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -567,9 +559,8 @@ export class MediaBoardApi extends BaseAPI implements MediaBoardApiInterface {
      * @param {LayoutBodyParams} layoutBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaBoardApi
      */
-    public mediaBoardControllerSetMediaBoardLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any) {
+    public mediaBoardControllerSetMediaBoardLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: RawAxiosRequestConfig) {
         return MediaBoardApiFp(this.configuration).mediaBoardControllerSetMediaBoardLayout(boardId, layoutBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -580,9 +571,9 @@ export class MediaBoardApi extends BaseAPI implements MediaBoardApiInterface {
      * @param {ColorBodyParams} colorBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediaBoardApi
      */
-    public mediaBoardControllerUpdateMediaAvailableLineColor(boardId: string, colorBodyParams: ColorBodyParams, options?: any) {
+    public mediaBoardControllerUpdateMediaAvailableLineColor(boardId: string, colorBodyParams: ColorBodyParams, options?: RawAxiosRequestConfig) {
         return MediaBoardApiFp(this.configuration).mediaBoardControllerUpdateMediaAvailableLineColor(boardId, colorBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

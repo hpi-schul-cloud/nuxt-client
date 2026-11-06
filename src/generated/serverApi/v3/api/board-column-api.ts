@@ -13,28 +13,28 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { ApiValidationError } from '../models';
+import type { ApiValidationError } from '../models';
 // @ts-ignore
-import { CardResponse } from '../models';
+import type { CardResponse } from '../models';
 // @ts-ignore
-import { ColumnFullResponse } from '../models';
+import type { ColumnFullResponse } from '../models';
 // @ts-ignore
-import { CreateCardBodyParams } from '../models';
+import type { CreateCardBodyParams } from '../models';
 // @ts-ignore
-import { MoveColumnBodyParams } from '../models';
+import type { MoveColumnBodyParams } from '../models';
 // @ts-ignore
-import { RenameBodyParams } from '../models';
+import type { RenameBodyParams } from '../models';
 /**
  * BoardColumnApi - axios parameter creator
- * @export
  */
 export const BoardColumnApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -45,11 +45,11 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        columnControllerCopyColumn: async (columnId: string, options: any = {}): Promise<RequestArgs> => {
+        columnControllerCopyColumn: async (columnId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'columnId' is not null or undefined
             assertParamExists('columnControllerCopyColumn', 'columnId', columnId)
             const localVarPath = `/columns/{columnId}/copy`
-                .replace(`{${"columnId"}}`, encodeURIComponent(String(columnId)));
+                .replace('{columnId}', encodeURIComponent(String(columnId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -65,9 +65,9 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -84,11 +84,11 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        columnControllerCreateCard: async (columnId: string, createCardBodyParams?: CreateCardBodyParams, options: any = {}): Promise<RequestArgs> => {
+        columnControllerCreateCard: async (columnId: string, createCardBodyParams?: CreateCardBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'columnId' is not null or undefined
             assertParamExists('columnControllerCreateCard', 'columnId', columnId)
             const localVarPath = `/columns/{columnId}/cards`
-                .replace(`{${"columnId"}}`, encodeURIComponent(String(columnId)));
+                .replace('{columnId}', encodeURIComponent(String(columnId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -104,11 +104,10 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(createCardBodyParams, localVarRequestOptions, configuration)
@@ -125,11 +124,11 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        columnControllerDeleteColumn: async (columnId: string, options: any = {}): Promise<RequestArgs> => {
+        columnControllerDeleteColumn: async (columnId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'columnId' is not null or undefined
             assertParamExists('columnControllerDeleteColumn', 'columnId', columnId)
             const localVarPath = `/columns/{columnId}`
-                .replace(`{${"columnId"}}`, encodeURIComponent(String(columnId)));
+                .replace('{columnId}', encodeURIComponent(String(columnId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -145,9 +144,9 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -164,13 +163,13 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        columnControllerMoveColumn: async (columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options: any = {}): Promise<RequestArgs> => {
+        columnControllerMoveColumn: async (columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'columnId' is not null or undefined
             assertParamExists('columnControllerMoveColumn', 'columnId', columnId)
             // verify required parameter 'moveColumnBodyParams' is not null or undefined
             assertParamExists('columnControllerMoveColumn', 'moveColumnBodyParams', moveColumnBodyParams)
             const localVarPath = `/columns/{columnId}/position`
-                .replace(`{${"columnId"}}`, encodeURIComponent(String(columnId)));
+                .replace('{columnId}', encodeURIComponent(String(columnId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -186,11 +185,10 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(moveColumnBodyParams, localVarRequestOptions, configuration)
@@ -208,13 +206,13 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        columnControllerUpdateColumnTitle: async (columnId: string, renameBodyParams: RenameBodyParams, options: any = {}): Promise<RequestArgs> => {
+        columnControllerUpdateColumnTitle: async (columnId: string, renameBodyParams: RenameBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'columnId' is not null or undefined
             assertParamExists('columnControllerUpdateColumnTitle', 'columnId', columnId)
             // verify required parameter 'renameBodyParams' is not null or undefined
             assertParamExists('columnControllerUpdateColumnTitle', 'renameBodyParams', renameBodyParams)
             const localVarPath = `/columns/{columnId}/title`
-                .replace(`{${"columnId"}}`, encodeURIComponent(String(columnId)));
+                .replace('{columnId}', encodeURIComponent(String(columnId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -230,11 +228,10 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(renameBodyParams, localVarRequestOptions, configuration)
@@ -249,7 +246,6 @@ export const BoardColumnApiAxiosParamCreator = function (configuration?: Configu
 
 /**
  * BoardColumnApi - functional programming interface
- * @export
  */
 export const BoardColumnApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = BoardColumnApiAxiosParamCreator(configuration)
@@ -261,9 +257,11 @@ export const BoardColumnApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async columnControllerCopyColumn(columnId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ColumnFullResponse>> {
+        async columnControllerCopyColumn(columnId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ColumnFullResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.columnControllerCopyColumn(columnId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BoardColumnApi.columnControllerCopyColumn']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -273,9 +271,11 @@ export const BoardColumnApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async columnControllerCreateCard(columnId: string, createCardBodyParams?: CreateCardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CardResponse>> {
+        async columnControllerCreateCard(columnId: string, createCardBodyParams?: CreateCardBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CardResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.columnControllerCreateCard(columnId, createCardBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BoardColumnApi.columnControllerCreateCard']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -284,9 +284,11 @@ export const BoardColumnApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async columnControllerDeleteColumn(columnId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async columnControllerDeleteColumn(columnId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.columnControllerDeleteColumn(columnId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BoardColumnApi.columnControllerDeleteColumn']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -296,9 +298,11 @@ export const BoardColumnApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.columnControllerMoveColumn(columnId, moveColumnBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BoardColumnApi.columnControllerMoveColumn']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -308,16 +312,17 @@ export const BoardColumnApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async columnControllerUpdateColumnTitle(columnId: string, renameBodyParams: RenameBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async columnControllerUpdateColumnTitle(columnId: string, renameBodyParams: RenameBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.columnControllerUpdateColumnTitle(columnId, renameBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BoardColumnApi.columnControllerUpdateColumnTitle']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * BoardColumnApi - factory interface
- * @export
  */
 export const BoardColumnApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = BoardColumnApiFp(configuration)
@@ -329,7 +334,7 @@ export const BoardColumnApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        columnControllerCopyColumn(columnId: string, options?: any): AxiosPromise<ColumnFullResponse> {
+        columnControllerCopyColumn(columnId: string, options?: RawAxiosRequestConfig): AxiosPromise<ColumnFullResponse> {
             return localVarFp.columnControllerCopyColumn(columnId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -340,7 +345,7 @@ export const BoardColumnApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        columnControllerCreateCard(columnId: string, createCardBodyParams?: CreateCardBodyParams, options?: any): AxiosPromise<CardResponse> {
+        columnControllerCreateCard(columnId: string, createCardBodyParams?: CreateCardBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<CardResponse> {
             return localVarFp.columnControllerCreateCard(columnId, createCardBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -350,7 +355,7 @@ export const BoardColumnApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        columnControllerDeleteColumn(columnId: string, options?: any): AxiosPromise<void> {
+        columnControllerDeleteColumn(columnId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.columnControllerDeleteColumn(columnId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -361,7 +366,7 @@ export const BoardColumnApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): AxiosPromise<void> {
+        columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.columnControllerMoveColumn(columnId, moveColumnBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -372,7 +377,7 @@ export const BoardColumnApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        columnControllerUpdateColumnTitle(columnId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void> {
+        columnControllerUpdateColumnTitle(columnId: string, renameBodyParams: RenameBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.columnControllerUpdateColumnTitle(columnId, renameBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -380,8 +385,6 @@ export const BoardColumnApiFactory = function (configuration?: Configuration, ba
 
 /**
  * BoardColumnApi - interface
- * @export
- * @interface BoardColumnApi
  */
 export interface BoardColumnApiInterface {
     /**
@@ -390,9 +393,8 @@ export interface BoardColumnApiInterface {
      * @param {string} columnId The id of the column.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnApiInterface
      */
-    columnControllerCopyColumn(columnId: string, options?: any): AxiosPromise<ColumnFullResponse>;
+    columnControllerCopyColumn(columnId: string, options?: RawAxiosRequestConfig): AxiosPromise<ColumnFullResponse>;
 
     /**
      * 
@@ -401,9 +403,8 @@ export interface BoardColumnApiInterface {
      * @param {CreateCardBodyParams} [createCardBodyParams] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnApiInterface
      */
-    columnControllerCreateCard(columnId: string, createCardBodyParams?: CreateCardBodyParams, options?: any): AxiosPromise<CardResponse>;
+    columnControllerCreateCard(columnId: string, createCardBodyParams?: CreateCardBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<CardResponse>;
 
     /**
      * 
@@ -411,9 +412,8 @@ export interface BoardColumnApiInterface {
      * @param {string} columnId The id of the column.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnApiInterface
      */
-    columnControllerDeleteColumn(columnId: string, options?: any): AxiosPromise<void>;
+    columnControllerDeleteColumn(columnId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -422,9 +422,8 @@ export interface BoardColumnApiInterface {
      * @param {MoveColumnBodyParams} moveColumnBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnApiInterface
      */
-    columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): AxiosPromise<void>;
+    columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * 
@@ -433,17 +432,13 @@ export interface BoardColumnApiInterface {
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnApiInterface
      */
-    columnControllerUpdateColumnTitle(columnId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void>;
+    columnControllerUpdateColumnTitle(columnId: string, renameBodyParams: RenameBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
  * BoardColumnApi - object-oriented interface
- * @export
- * @class BoardColumnApi
- * @extends {BaseAPI}
  */
 export class BoardColumnApi extends BaseAPI implements BoardColumnApiInterface {
     /**
@@ -452,9 +447,8 @@ export class BoardColumnApi extends BaseAPI implements BoardColumnApiInterface {
      * @param {string} columnId The id of the column.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnApi
      */
-    public columnControllerCopyColumn(columnId: string, options?: any) {
+    public columnControllerCopyColumn(columnId: string, options?: RawAxiosRequestConfig) {
         return BoardColumnApiFp(this.configuration).columnControllerCopyColumn(columnId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -465,9 +459,8 @@ export class BoardColumnApi extends BaseAPI implements BoardColumnApiInterface {
      * @param {CreateCardBodyParams} [createCardBodyParams] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnApi
      */
-    public columnControllerCreateCard(columnId: string, createCardBodyParams?: CreateCardBodyParams, options?: any) {
+    public columnControllerCreateCard(columnId: string, createCardBodyParams?: CreateCardBodyParams, options?: RawAxiosRequestConfig) {
         return BoardColumnApiFp(this.configuration).columnControllerCreateCard(columnId, createCardBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -477,9 +470,8 @@ export class BoardColumnApi extends BaseAPI implements BoardColumnApiInterface {
      * @param {string} columnId The id of the column.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnApi
      */
-    public columnControllerDeleteColumn(columnId: string, options?: any) {
+    public columnControllerDeleteColumn(columnId: string, options?: RawAxiosRequestConfig) {
         return BoardColumnApiFp(this.configuration).columnControllerDeleteColumn(columnId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -490,9 +482,8 @@ export class BoardColumnApi extends BaseAPI implements BoardColumnApiInterface {
      * @param {MoveColumnBodyParams} moveColumnBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnApi
      */
-    public columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any) {
+    public columnControllerMoveColumn(columnId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: RawAxiosRequestConfig) {
         return BoardColumnApiFp(this.configuration).columnControllerMoveColumn(columnId, moveColumnBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -503,9 +494,9 @@ export class BoardColumnApi extends BaseAPI implements BoardColumnApiInterface {
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof BoardColumnApi
      */
-    public columnControllerUpdateColumnTitle(columnId: string, renameBodyParams: RenameBodyParams, options?: any) {
+    public columnControllerUpdateColumnTitle(columnId: string, renameBodyParams: RenameBodyParams, options?: RawAxiosRequestConfig) {
         return BoardColumnApiFp(this.configuration).columnControllerUpdateColumnTitle(columnId, renameBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

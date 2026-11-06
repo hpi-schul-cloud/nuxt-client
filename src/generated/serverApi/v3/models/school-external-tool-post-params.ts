@@ -13,38 +13,17 @@
  */
 
 
-import { CustomParameterEntryParam } from './custom-parameter-entry-param';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CustomParameterEntryParam } from './custom-parameter-entry-param';
 
-/**
- * 
- * @export
- * @interface SchoolExternalToolPostParams
- */
 export interface SchoolExternalToolPostParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolExternalToolPostParams
-     */
-    toolId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolExternalToolPostParams
-     */
-    schoolId: string;
-    /**
-     * 
-     * @type {Array<CustomParameterEntryParam>}
-     * @memberof SchoolExternalToolPostParams
-     */
-    parameters?: Array<CustomParameterEntryParam>;
+    'toolId': string;
+    'schoolId': string;
+    'parameters'?: Array<CustomParameterEntryParam>;
     /**
      * Tool can be deactivated, related tools can not be added to e.g. course or board anymore
-     * @type {boolean}
-     * @memberof SchoolExternalToolPostParams
      */
-    isDeactivated: boolean;
+    'isDeactivated': boolean;
 }
-
 

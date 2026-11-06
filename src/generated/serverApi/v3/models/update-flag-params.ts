@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface UpdateFlagParams
- */
 export interface UpdateFlagParams {
     /**
      * updates flag for an import user
-     * @type {boolean}
-     * @memberof UpdateFlagParams
      */
-    flagged: boolean;
+    'flagged': boolean;
 }
-
 

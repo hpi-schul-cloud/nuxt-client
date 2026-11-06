@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum MetaDataEntityType {
     UNKNOWN = 'unknown',
     EXTERNAL = 'external',

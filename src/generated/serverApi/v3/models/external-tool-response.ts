@@ -13,109 +13,76 @@
  */
 
 
-import { BasicToolConfigParams } from './basic-tool-config-params';
-import { CustomParameterResponse } from './custom-parameter-response';
-import { ExternalToolMediumResponse } from './external-tool-medium-response';
-import { Lti11ToolConfigCreateParams } from './lti11-tool-config-create-params';
-import { Oauth2ToolConfigCreateParams } from './oauth2-tool-config-create-params';
-import { ToolContextType } from './tool-context-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CustomParameterResponse } from './custom-parameter-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ExternalToolCreateParamsConfig } from './external-tool-create-params-config';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ExternalToolMediumResponse } from './external-tool-medium-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ToolContextType } from './tool-context-type';
 
-/**
- * 
- * @export
- * @interface ExternalToolResponse
- */
 export interface ExternalToolResponse {
     /**
      * Id of the external tool
-     * @type {string}
-     * @memberof ExternalToolResponse
      */
-    id: string;
+    'id': string;
     /**
      * Name of the external tool
-     * @type {string}
-     * @memberof ExternalToolResponse
      */
-    name: string;
+    'name': string;
     /**
      * Description of the external tool
-     * @type {string}
-     * @memberof ExternalToolResponse
      */
-    description?: string;
+    'description'?: string;
     /**
      * URL of the external tool
-     * @type {string}
-     * @memberof ExternalToolResponse
      */
-    url?: string;
+    'url'?: string;
     /**
      * URL of the logo of the external tool
-     * @type {string}
-     * @memberof ExternalToolResponse
      */
-    logoUrl?: string;
+    'logoUrl'?: string;
     /**
      * URL of the thumbnail of the external tool
-     * @type {string}
-     * @memberof ExternalToolResponse
      */
-    thumbnailUrl?: string;
-    /**
-     * Configuration of the external tool
-     * @type {BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams}
-     * @memberof ExternalToolResponse
-     */
-    config: BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams;
+    'thumbnailUrl'?: string;
+    'config': ExternalToolCreateParamsConfig;
     /**
      * Custom parameters of the external tool
-     * @type {Array<CustomParameterResponse>}
-     * @memberof ExternalToolResponse
      */
-    parameters: Array<CustomParameterResponse>;
+    'parameters': Array<CustomParameterResponse>;
     /**
      * Is the external tool hidden
-     * @type {boolean}
-     * @memberof ExternalToolResponse
      */
-    isHidden: boolean;
+    'isHidden': boolean;
     /**
      * Is the external tool deactivated
-     * @type {boolean}
-     * @memberof ExternalToolResponse
      */
-    isDeactivated: boolean;
+    'isDeactivated': boolean;
     /**
      * Should the external tool be opened in a new tab
-     * @type {boolean}
-     * @memberof ExternalToolResponse
      */
-    openNewTab: boolean;
+    'openNewTab': boolean;
     /**
      * Contexts in which the external tool is restricted
-     * @type {Array<ToolContextType>}
-     * @memberof ExternalToolResponse
      */
-    restrictToContexts?: Array<ToolContextType>;
+    'restrictToContexts'?: Array<ToolContextType>;
     /**
      * Medium of the external tool
-     * @type {ExternalToolMediumResponse}
-     * @memberof ExternalToolResponse
      */
-    medium?: ExternalToolMediumResponse;
+    'medium'?: ExternalToolMediumResponse;
     /**
      * Should the tool be a preferred tool
-     * @type {boolean}
-     * @memberof ExternalToolResponse
      */
-    isPreferred: boolean;
+    'isPreferred': boolean;
     /**
      * Name of the icon to be rendered when displaying it as a preferred tool
-     * @type {string}
-     * @memberof ExternalToolResponse
      */
-    iconName?: string;
+    'iconName'?: string;
 }
-
 

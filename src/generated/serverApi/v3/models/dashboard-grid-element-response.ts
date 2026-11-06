@@ -13,80 +13,54 @@
  */
 
 
-import { DashboardGridSubElementResponse } from './dashboard-grid-sub-element-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { DashboardGridSubElementResponse } from './dashboard-grid-sub-element-response';
 
-/**
- * 
- * @export
- * @interface DashboardGridElementResponse
- */
 export interface DashboardGridElementResponse {
     /**
      * The id of the Grid element
-     * @type {string}
-     * @memberof DashboardGridElementResponse
      */
-    id: string;
+    'id': string;
     /**
      * Title of the Grid element
-     * @type {string}
-     * @memberof DashboardGridElementResponse
      */
-    title: string;
+    'title': string;
     /**
      * Short title of the Grid element
-     * @type {string}
-     * @memberof DashboardGridElementResponse
      */
-    shortTitle: string;
+    'shortTitle': string;
     /**
      * Color of the Grid element
-     * @type {string}
-     * @memberof DashboardGridElementResponse
      */
-    displayColor: string;
+    'displayColor': string;
     /**
      * X position of the Grid element
-     * @type {number}
-     * @memberof DashboardGridElementResponse
      */
-    xPosition: number;
+    'xPosition': number;
     /**
      * Y position of the Grid element
-     * @type {number}
-     * @memberof DashboardGridElementResponse
      */
-    yPosition: number;
+    'yPosition': number;
     /**
      * The id of the group element
-     * @type {string}
-     * @memberof DashboardGridElementResponse
      */
-    groupId: string;
+    'groupId': string;
     /**
      * List of all subelements in the group
-     * @type {Array<DashboardGridSubElementResponse>}
-     * @memberof DashboardGridElementResponse
      */
-    groupElements: Array<DashboardGridSubElementResponse>;
+    'groupElements': Array<DashboardGridSubElementResponse>;
     /**
      * Start of the copying process if it is still ongoing - otherwise property is not set.
-     * @type {string}
-     * @memberof DashboardGridElementResponse
      */
-    copyingSince: string;
+    'copyingSince': string;
     /**
      * Is the course synchronized with a group?
-     * @type {boolean}
-     * @memberof DashboardGridElementResponse
      */
-    isSynchronized: boolean;
+    'isSynchronized': boolean;
     /**
      * Indicates if the course is locked and cannot be accessed.
-     * @type {boolean}
-     * @memberof DashboardGridElementResponse
      */
-    isLocked: boolean;
+    'isLocked': boolean;
 }
-
 

@@ -67,7 +67,13 @@ export const useAriaLiveNotifier = () => {
 		const element = getElement(importance);
 
 		if (element && notifications.value[importance].length > 0) {
-			element.innerHTML = notifications.value[importance].map((m) => `<span>${m}</span>`).join("");
+			element.replaceChildren(
+				...notifications.value[importance].map((m) => {
+					const span = document.createElement("span");
+					span.textContent = m;
+					return span;
+				})
+			);
 			notifications.value[importance] = [];
 		}
 	};

@@ -13,38 +13,26 @@
  */
 
 
-import { GroupResponse } from './group-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { GroupResponse } from './group-response';
 
-/**
- * 
- * @export
- * @interface GroupListResponse
- */
 export interface GroupListResponse {
     /**
      * The items for the current page.
-     * @type {Array<GroupResponse>}
-     * @memberof GroupListResponse
      */
-    data: Array<GroupResponse>;
+    'data': Array<GroupResponse>;
     /**
      * The total amount of items.
-     * @type {number}
-     * @memberof GroupListResponse
      */
-    total: number;
+    'total': number;
     /**
      * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof GroupListResponse
      */
-    skip: number;
+    'skip': number;
     /**
      * The page size of the response.
-     * @type {number}
-     * @memberof GroupListResponse
      */
-    limit: number;
+    'limit': number;
 }
-
 

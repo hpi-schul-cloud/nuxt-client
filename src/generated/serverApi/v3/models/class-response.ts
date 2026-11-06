@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface ClassResponse
- */
 export interface ClassResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ClassResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof ClassResponse
-     */
-    gradeLevel: number;
+    'name': string;
+    'gradeLevel': number;
 }
-
 

@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum SchulcloudTheme {
     BRB = 'brb',
     DEFAULT = 'default',

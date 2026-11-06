@@ -70,6 +70,7 @@ describe("RoomMembersPage", () => {
 		envConfig?: Partial<ConfigResponse>;
 		allowedOperations?: Partial<RoomDetailsResponse["allowedOperations"]>;
 		memberSchoolRoleNames?: RoleName[];
+		isArchived?: boolean;
 	}) => {
 		const { createRoom, activeTab, isLoading, envConfig, allowedOperations, memberSchoolRoleNames } = {
 			createRoom: true,
@@ -83,7 +84,9 @@ describe("RoomMembersPage", () => {
 		createTestAppStore({ me: { user: { id: "test-user-id" } } });
 		createTestSchoolStore();
 
-		const room = createRoom ? roomFactory.build({ allowedOperations }) : undefined;
+		const room = createRoom
+			? roomFactory.build({ allowedOperations, isArchived: options?.isArchived ?? false })
+			: undefined;
 
 		const members = roomMemberFactory.buildList(3, { roomRoleName: RoleName.ROOMEDITOR }).map((member) => ({
 			...member,
@@ -359,6 +362,23 @@ describe("RoomMembersPage", () => {
 				const expectedBreadcrumbs = buildBreadcrumbs(room!, false);
 
 				expect(wireframe.props("breadcrumbs")).toEqual(expectedBreadcrumbs);
+			});
+
+			describe("when the room is archived", () => {
+				it("should add the archived rooms breadcrumb before the room", () => {
+					const { wrapper, room } = setup({
+						allowedOperations: { addMembers: false, viewMemberlist: true },
+						isArchived: true,
+					});
+					const wireframe = wrapper.findComponent(DefaultWireframe);
+					const [roomsBreadcrumb, ...rest] = buildBreadcrumbs(room!, false);
+
+					expect(wireframe.props("breadcrumbs")).toEqual([
+						roomsBreadcrumb,
+						{ title: "pages.rooms.archived.title", to: "/rooms/archive" },
+						...rest,
+					]);
+				});
 			});
 		});
 	});

@@ -14,48 +14,12 @@
 
 
 
-/**
- * 
- * @export
- * @interface SubmissionStatusResponse
- */
 export interface SubmissionStatusResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof SubmissionStatusResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof SubmissionStatusResponse
-     */
-    submitters: Array<string>;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SubmissionStatusResponse
-     */
-    isSubmitted: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof SubmissionStatusResponse
-     */
-    grade?: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SubmissionStatusResponse
-     */
-    isGraded: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof SubmissionStatusResponse
-     */
-    submittingCourseGroupName?: string;
+    'id': string;
+    'submitters': Array<string>;
+    'isSubmitted': boolean;
+    'grade'?: number;
+    'isGraded': boolean;
+    'submittingCourseGroupName'?: string;
 }
-
 

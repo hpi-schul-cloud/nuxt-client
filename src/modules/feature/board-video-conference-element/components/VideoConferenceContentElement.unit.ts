@@ -97,7 +97,7 @@ describe("VideoConferenceContentElement", () => {
 		const element = {
 			...defaultElement,
 			content: videoConferenceElementContentFactory.build({
-				title: undefined,
+				title: "",
 				...content,
 			}),
 		};

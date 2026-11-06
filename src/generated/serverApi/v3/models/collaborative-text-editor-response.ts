@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface CollaborativeTextEditorResponse
- */
 export interface CollaborativeTextEditorResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof CollaborativeTextEditorResponse
-     */
-    url: string;
+    'url': string;
 }
-
 

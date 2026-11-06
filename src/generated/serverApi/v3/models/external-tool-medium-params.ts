@@ -13,44 +13,32 @@
  */
 
 
-import { ExternalToolMediumStatus } from './external-tool-medium-status';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ExternalToolMediumStatus } from './external-tool-medium-status';
 
-/**
- * 
- * @export
- * @interface ExternalToolMediumParams
- */
 export interface ExternalToolMediumParams {
     /**
      * The status of the medium
-     * @type {ExternalToolMediumStatus}
-     * @memberof ExternalToolMediumParams
      */
-    status: ExternalToolMediumStatus;
+    'status': ExternalToolMediumStatus;
     /**
      * Id of the medium
-     * @type {string}
-     * @memberof ExternalToolMediumParams
      */
-    mediumId?: string;
+    'mediumId'?: string;
     /**
      * Publisher of the medium
-     * @type {string}
-     * @memberof ExternalToolMediumParams
      */
-    publisher?: string;
+    'publisher'?: string;
     /**
      * The id of the media source
-     * @type {string}
-     * @memberof ExternalToolMediumParams
      */
-    mediaSourceId?: string;
+    'mediaSourceId'?: string;
     /**
      * The date the medium was last modified
-     * @type {string}
-     * @memberof ExternalToolMediumParams
      */
-    modifiedAt?: string;
+    'modifiedAt'?: string;
 }
+
 
 

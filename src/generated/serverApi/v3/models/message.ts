@@ -13,67 +13,24 @@
  */
 
 
-import { MessageOrigin } from './message-origin';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MessageOrigin } from './message-origin';
 
-/**
- * 
- * @export
- * @interface Message
- */
 export interface Message {
-    /**
-     * 
-     * @type {string}
-     * @memberof Message
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Message
-     */
-    text: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Message
-     */
-    timestamp: string;
-    /**
-     * 
-     * @type {MessageOrigin}
-     * @memberof Message
-     */
-    origin: MessageOrigin;
-    /**
-     * 
-     * @type {string}
-     * @memberof Message
-     */
-    url: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Message
-     */
-    status: MessageStatus;
-    /**
-     * 
-     * @type {string}
-     * @memberof Message
-     */
-    createdAt: string;
+    'title': string;
+    'text': string;
+    'timestamp': string;
+    'origin': MessageOrigin;
+    'url': string;
+    'status': MessageStatus;
+    'createdAt': string;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
 export enum MessageStatus {
-    DONE = 'done',
     INFO = 'info',
+    DONE = 'done',
     DANGER = 'danger'
 }
-
 
 

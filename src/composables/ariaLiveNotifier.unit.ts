@@ -18,7 +18,9 @@ describe("useAriaLiveNotifier", () => {
 		notifyOnScreenReader(message, "assertive");
 
 		vi.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(`<span>${message}</span>`);
+		expect(element?.textContent).toBe(message);
+		expect(element?.children).toHaveLength(1);
+		expect(element?.children[0].tagName).toBe("SPAN");
 	});
 
 	it("should notify on screen reader on 'aria-live=polite' mode", () => {
@@ -28,7 +30,22 @@ describe("useAriaLiveNotifier", () => {
 		notifyOnScreenReader(message, "polite");
 
 		vi.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(`<span>${message}</span>`);
+		expect(element?.textContent).toBe(message);
+		expect(element?.children).toHaveLength(1);
+		expect(element?.children[0].tagName).toBe("SPAN");
+	});
+
+	it("should treat markup in messages as plain text", () => {
+		const { notifyOnScreenReader } = useAriaLiveNotifier();
+		const element = document.getElementById("notify-screen-reader-polite");
+		const message = '<img src=x onerror="alert(1)">';
+		notifyOnScreenReader(message, "polite");
+
+		vi.advanceTimersByTime(3000);
+		expect(element?.children).toHaveLength(1);
+		expect(element?.children[0].tagName).toBe("SPAN");
+		expect(element?.children[0].textContent).toBe(message);
+		expect(element?.querySelector("img")).toBeNull();
 	});
 
 	describe("ensurePoliteNotifications", () => {
@@ -47,7 +64,9 @@ describe("useAriaLiveNotifier", () => {
 
 				vi.advanceTimersByTime(3000);
 
-				expect(element?.innerHTML).toBe(`<span>${message1}</span><span>${message2}</span>`);
+				expect(element?.children).toHaveLength(2);
+				expect(element?.children[0].textContent).toBe(message1);
+				expect(element?.children[1].textContent).toBe(message2);
 			});
 		});
 	});

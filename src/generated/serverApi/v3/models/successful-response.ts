@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface SuccessfulResponse
- */
 export interface SuccessfulResponse {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SuccessfulResponse
-     */
-    successful: boolean;
+    'successful': boolean;
 }
-
 

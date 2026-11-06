@@ -13,63 +13,23 @@
  */
 
 
-import { RoleName } from './role-name';
-import { RoomMemberResponseAllowedOperations } from './room-member-response-allowed-operations';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoleName } from './role-name';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomMemberResponseAllowedOperations } from './room-member-response-allowed-operations';
 
-/**
- * 
- * @export
- * @interface RoomMemberResponse
- */
 export interface RoomMemberResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomMemberResponse
-     */
-    firstName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomMemberResponse
-     */
-    lastName: string;
-    /**
-     * 
-     * @type {RoleName}
-     * @memberof RoomMemberResponse
-     */
-    roomRoleName: RoleName;
-    /**
-     * 
-     * @type {Array<RoleName>}
-     * @memberof RoomMemberResponse
-     */
-    schoolRoleNames: Array<RoleName>;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomMemberResponse
-     */
-    schoolId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomMemberResponse
-     */
-    schoolName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomMemberResponse
-     */
-    userId: string;
-    /**
-     * 
-     * @type {RoomMemberResponseAllowedOperations}
-     * @memberof RoomMemberResponse
-     */
-    allowedOperations?: RoomMemberResponseAllowedOperations;
+    'firstName': string;
+    'lastName': string;
+    'roomRoleName': RoleName;
+    'schoolRoleNames': Array<RoleName>;
+    'schoolId': string;
+    'schoolName': string;
+    'userId': string;
+    'allowedOperations'?: RoomMemberResponseAllowedOperations;
 }
+
 
 

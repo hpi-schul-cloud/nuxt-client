@@ -16,9 +16,8 @@
 
 /**
  * OAuth2 token endpoint method
- * @export
- * @enum {string}
  */
+
 export enum TokenEndpointAuthMethod {
     CLIENT_SECRET_POST = 'client_secret_post',
     CLIENT_SECRET_BASIC = 'client_secret_basic',

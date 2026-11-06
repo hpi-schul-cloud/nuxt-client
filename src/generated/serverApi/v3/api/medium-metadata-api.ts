@@ -13,18 +13,18 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { MediumMetadataResponse } from '../models';
+import type { MediumMetadataResponse } from '../models';
 /**
  * MediumMetadataApi - axios parameter creator
- * @export
  */
 export const MediumMetadataApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -36,14 +36,14 @@ export const MediumMetadataApiAxiosParamCreator = function (configuration?: Conf
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediumMetadataControllerGetMediumMetadata: async (mediumId: string, mediaSourceId: string, options: any = {}): Promise<RequestArgs> => {
+        mediumMetadataControllerGetMediumMetadata: async (mediumId: string, mediaSourceId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'mediumId' is not null or undefined
             assertParamExists('mediumMetadataControllerGetMediumMetadata', 'mediumId', mediumId)
             // verify required parameter 'mediaSourceId' is not null or undefined
             assertParamExists('mediumMetadataControllerGetMediumMetadata', 'mediaSourceId', mediaSourceId)
             const localVarPath = `/medium-metadata/medium/{mediumId}/media-source/{mediaSourceId}`
-                .replace(`{${"mediumId"}}`, encodeURIComponent(String(mediumId)))
-                .replace(`{${"mediaSourceId"}}`, encodeURIComponent(String(mediaSourceId)));
+                .replace('{mediumId}', encodeURIComponent(String(mediumId)))
+                .replace('{mediaSourceId}', encodeURIComponent(String(mediaSourceId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -59,9 +59,9 @@ export const MediumMetadataApiAxiosParamCreator = function (configuration?: Conf
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -75,7 +75,6 @@ export const MediumMetadataApiAxiosParamCreator = function (configuration?: Conf
 
 /**
  * MediumMetadataApi - functional programming interface
- * @export
  */
 export const MediumMetadataApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MediumMetadataApiAxiosParamCreator(configuration)
@@ -88,16 +87,17 @@ export const MediumMetadataApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediumMetadataControllerGetMediumMetadata(mediumId: string, mediaSourceId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediumMetadataResponse>> {
+        async mediumMetadataControllerGetMediumMetadata(mediumId: string, mediaSourceId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediumMetadataResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediumMetadataControllerGetMediumMetadata(mediumId, mediaSourceId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediumMetadataApi.mediumMetadataControllerGetMediumMetadata']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
  * MediumMetadataApi - factory interface
- * @export
  */
 export const MediumMetadataApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = MediumMetadataApiFp(configuration)
@@ -110,7 +110,7 @@ export const MediumMetadataApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediumMetadataControllerGetMediumMetadata(mediumId: string, mediaSourceId: string, options?: any): AxiosPromise<MediumMetadataResponse> {
+        mediumMetadataControllerGetMediumMetadata(mediumId: string, mediaSourceId: string, options?: RawAxiosRequestConfig): AxiosPromise<MediumMetadataResponse> {
             return localVarFp.mediumMetadataControllerGetMediumMetadata(mediumId, mediaSourceId, options).then((request) => request(axios, basePath));
         },
     };
@@ -118,8 +118,6 @@ export const MediumMetadataApiFactory = function (configuration?: Configuration,
 
 /**
  * MediumMetadataApi - interface
- * @export
- * @interface MediumMetadataApi
  */
 export interface MediumMetadataApiInterface {
     /**
@@ -129,17 +127,13 @@ export interface MediumMetadataApiInterface {
      * @param {string} mediaSourceId The id of the media source.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediumMetadataApiInterface
      */
-    mediumMetadataControllerGetMediumMetadata(mediumId: string, mediaSourceId: string, options?: any): AxiosPromise<MediumMetadataResponse>;
+    mediumMetadataControllerGetMediumMetadata(mediumId: string, mediaSourceId: string, options?: RawAxiosRequestConfig): AxiosPromise<MediumMetadataResponse>;
 
 }
 
 /**
  * MediumMetadataApi - object-oriented interface
- * @export
- * @class MediumMetadataApi
- * @extends {BaseAPI}
  */
 export class MediumMetadataApi extends BaseAPI implements MediumMetadataApiInterface {
     /**
@@ -149,9 +143,9 @@ export class MediumMetadataApi extends BaseAPI implements MediumMetadataApiInter
      * @param {string} mediaSourceId The id of the media source.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MediumMetadataApi
      */
-    public mediumMetadataControllerGetMediumMetadata(mediumId: string, mediaSourceId: string, options?: any) {
+    public mediumMetadataControllerGetMediumMetadata(mediumId: string, mediaSourceId: string, options?: RawAxiosRequestConfig) {
         return MediumMetadataApiFp(this.configuration).mediumMetadataControllerGetMediumMetadata(mediumId, mediaSourceId, options).then((request) => request(this.axios, this.basePath));
     }
 }
+

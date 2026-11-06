@@ -13,70 +13,50 @@
  */
 
 
-import { LessonContentResponse } from './lesson-content-response';
-import { MaterialResponse } from './material-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { LessonContentResponse } from './lesson-content-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { MaterialResponse } from './material-response';
 
-/**
- * 
- * @export
- * @interface LessonResponse
- */
 export interface LessonResponse {
     /**
      * The id of the Lesson entity
-     * @type {string}
-     * @memberof LessonResponse
      * @deprecated
      */
-    _id: string;
+    '_id': string;
     /**
      * The id of the Lesson entity
-     * @type {string}
-     * @memberof LessonResponse
      */
-    id: string;
+    'id': string;
     /**
      * Name of the Lesson entity
-     * @type {string}
-     * @memberof LessonResponse
      */
-    name: string;
+    'name': string;
     /**
      * The id of the Course entity
-     * @type {string}
-     * @memberof LessonResponse
      */
-    courseId?: string;
+    'courseId'?: string;
     /**
      * The id of the Course-group entity
-     * @type {string}
-     * @memberof LessonResponse
      */
-    courseGroupId?: string;
+    'courseGroupId'?: string;
     /**
      * Hidden status of the Lesson entity
-     * @type {boolean}
-     * @memberof LessonResponse
      */
-    hidden: boolean;
+    'hidden': boolean;
     /**
      * Position of the Lesson entity
-     * @type {number}
-     * @memberof LessonResponse
      */
-    position: number;
+    'position': number;
     /**
      * Contents of the Lesson entity
-     * @type {Array<LessonContentResponse>}
-     * @memberof LessonResponse
      */
-    contents: Array<LessonContentResponse>;
+    'contents': Array<LessonContentResponse>;
     /**
      * Materials of the Lesson entity
-     * @type {Array<MaterialResponse>}
-     * @memberof LessonResponse
      */
-    materials: Array<MaterialResponse>;
+    'materials': Array<MaterialResponse>;
 }
-
 

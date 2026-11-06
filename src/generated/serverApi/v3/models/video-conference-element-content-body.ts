@@ -13,27 +13,20 @@
  */
 
 
-import { ContentElementType } from './content-element-type';
-import { VideoConferenceContentBody } from './video-conference-content-body';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ContentElementType } from './content-element-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { VideoConferenceContentBody } from './video-conference-content-body';
 
-/**
- * 
- * @export
- * @interface VideoConferenceElementContentBody
- */
 export interface VideoConferenceElementContentBody {
     /**
      * the type of the updated element
-     * @type {ContentElementType}
-     * @memberof VideoConferenceElementContentBody
      */
-    type: ContentElementType;
-    /**
-     * 
-     * @type {VideoConferenceContentBody}
-     * @memberof VideoConferenceElementContentBody
-     */
-    content: VideoConferenceContentBody;
+    'type': ContentElementType;
+    'content': VideoConferenceContentBody;
 }
+
 
 

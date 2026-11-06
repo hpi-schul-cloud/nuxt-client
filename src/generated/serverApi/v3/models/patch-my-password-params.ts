@@ -14,24 +14,14 @@
 
 
 
-/**
- * 
- * @export
- * @interface PatchMyPasswordParams
- */
 export interface PatchMyPasswordParams {
     /**
      * The new user password.
-     * @type {string}
-     * @memberof PatchMyPasswordParams
      */
-    password: string;
+    'password': string;
     /**
      * The confirmed new user password. Must match the password field.
-     * @type {string}
-     * @memberof PatchMyPasswordParams
      */
-    confirmPassword: string;
+    'confirmPassword': string;
 }
-
 

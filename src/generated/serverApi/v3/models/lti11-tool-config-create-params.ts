@@ -13,58 +13,46 @@
  */
 
 
-import { LtiMessageType } from './lti-message-type';
-import { LtiPrivacyPermission } from './lti-privacy-permission';
-import { ToolConfigType } from './tool-config-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { LtiMessageType } from './lti-message-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { LtiPrivacyPermission } from './lti-privacy-permission';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ToolConfigType } from './tool-config-type';
 
-/**
- * 
- * @export
- * @interface Lti11ToolConfigCreateParams
- */
 export interface Lti11ToolConfigCreateParams {
     /**
      * Configuration type of the tool.
-     * @type {ToolConfigType}
-     * @memberof Lti11ToolConfigCreateParams
      */
-    type: ToolConfigType;
+    'type': ToolConfigType;
     /**
      * Defines the target URL that is launched. Can be automatically filled with parameter values when using : in-front of the parameter name. Must be HTTPS.
-     * @type {string}
-     * @memberof Lti11ToolConfigCreateParams
      */
-    baseUrl: string;
+    'baseUrl': string;
     /**
      * LTI 1.1 encryption key.
-     * @type {string}
-     * @memberof Lti11ToolConfigCreateParams
      */
-    key: string;
+    'key': string;
     /**
      * LTI 1.1 encryption secret.
-     * @type {string}
-     * @memberof Lti11ToolConfigCreateParams
      */
-    secret: string;
+    'secret': string;
     /**
      * LTI 1.1 message type.
-     * @type {LtiMessageType}
-     * @memberof Lti11ToolConfigCreateParams
      */
-    lti_message_type: LtiMessageType;
+    'lti_message_type': LtiMessageType;
     /**
      * Describes the amount of personal information that the tool provider gets.
-     * @type {LtiPrivacyPermission}
-     * @memberof Lti11ToolConfigCreateParams
      */
-    privacy_permission: LtiPrivacyPermission;
+    'privacy_permission': LtiPrivacyPermission;
     /**
      * LTI 1.1 requested language.
-     * @type {string}
-     * @memberof Lti11ToolConfigCreateParams
      */
-    launch_presentation_locale: string;
+    'launch_presentation_locale': string;
 }
+
 
 

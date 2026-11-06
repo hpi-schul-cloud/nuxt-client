@@ -13,38 +13,26 @@
  */
 
 
-import { UserMatchResponse } from './user-match-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { UserMatchResponse } from './user-match-response';
 
-/**
- * 
- * @export
- * @interface UserMatchListResponse
- */
 export interface UserMatchListResponse {
     /**
      * The items for the current page.
-     * @type {Array<UserMatchResponse>}
-     * @memberof UserMatchListResponse
      */
-    data: Array<UserMatchResponse>;
+    'data': Array<UserMatchResponse>;
     /**
      * The total amount of items.
-     * @type {number}
-     * @memberof UserMatchListResponse
      */
-    total: number;
+    'total': number;
     /**
      * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof UserMatchListResponse
      */
-    skip: number;
+    'skip': number;
     /**
      * The page size of the response.
-     * @type {number}
-     * @memberof UserMatchListResponse
      */
-    limit: number;
+    'limit': number;
 }
-
 

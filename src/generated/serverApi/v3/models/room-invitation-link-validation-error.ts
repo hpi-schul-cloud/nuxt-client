@@ -16,9 +16,8 @@
 
 /**
  * The error details.
- * @export
- * @enum {string}
  */
+
 export enum RoomInvitationLinkValidationError {
     EXPIRED = 'EXPIRED',
     NOT_USABLE_FOR_CURRENT_ROLE = 'NOT_USABLE_FOR_CURRENT_ROLE',

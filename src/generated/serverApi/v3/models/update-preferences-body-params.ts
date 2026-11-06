@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface UpdatePreferencesBodyParams
- */
 export interface UpdatePreferencesBodyParams {
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdatePreferencesBodyParams
-     */
-    releaseDate: string;
+    'releaseDate': string;
 }
-
 

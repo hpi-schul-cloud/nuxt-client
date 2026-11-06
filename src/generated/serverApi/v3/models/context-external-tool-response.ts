@@ -13,51 +13,21 @@
  */
 
 
-import { CustomParameterEntryResponse } from './custom-parameter-entry-response';
-import { ToolContextType } from './tool-context-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CustomParameterEntryResponse } from './custom-parameter-entry-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ToolContextType } from './tool-context-type';
 
-/**
- * 
- * @export
- * @interface ContextExternalToolResponse
- */
 export interface ContextExternalToolResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ContextExternalToolResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ContextExternalToolResponse
-     */
-    schoolToolId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ContextExternalToolResponse
-     */
-    contextId: string;
-    /**
-     * 
-     * @type {ToolContextType}
-     * @memberof ContextExternalToolResponse
-     */
-    contextType: ToolContextType;
-    /**
-     * 
-     * @type {string}
-     * @memberof ContextExternalToolResponse
-     */
-    displayName?: string;
-    /**
-     * 
-     * @type {Array<CustomParameterEntryResponse>}
-     * @memberof ContextExternalToolResponse
-     */
-    parameters: Array<CustomParameterEntryResponse>;
+    'id': string;
+    'schoolToolId': string;
+    'contextId': string;
+    'contextType': ToolContextType;
+    'displayName'?: string;
+    'parameters': Array<CustomParameterEntryResponse>;
 }
+
 
 

@@ -14,30 +14,9 @@
 
 
 
-/**
- * 
- * @export
- * @interface RoomCreatedResponse
- */
 export interface RoomCreatedResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomCreatedResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomCreatedResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomCreatedResponse
-     */
-    updatedAt: string;
+    'id': string;
+    'createdAt': string;
+    'updatedAt': string;
 }
-
 

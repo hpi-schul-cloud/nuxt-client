@@ -14,24 +14,8 @@
 
 
 
-/**
- * 
- * @export
- * @interface MaintenanceStatusResponse
- */
 export interface MaintenanceStatusResponse {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof MaintenanceStatusResponse
-     */
-    active: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof MaintenanceStatusResponse
-     */
-    startDate?: string;
+    'active': boolean;
+    'startDate'?: string;
 }
-
 

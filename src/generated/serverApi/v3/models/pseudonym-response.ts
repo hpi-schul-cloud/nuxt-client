@@ -14,30 +14,9 @@
 
 
 
-/**
- * 
- * @export
- * @interface PseudonymResponse
- */
 export interface PseudonymResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof PseudonymResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PseudonymResponse
-     */
-    toolId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PseudonymResponse
-     */
-    userId: string;
+    'id': string;
+    'toolId': string;
+    'userId': string;
 }
-
 

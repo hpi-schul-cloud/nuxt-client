@@ -14,60 +14,38 @@
 
 
 
-/**
- * 
- * @export
- * @interface CourseMetadataResponse
- */
 export interface CourseMetadataResponse {
     /**
      * The id of the Grid element
-     * @type {string}
-     * @memberof CourseMetadataResponse
      */
-    id: string;
+    'id': string;
     /**
      * Title of the Grid element
-     * @type {string}
-     * @memberof CourseMetadataResponse
      */
-    title: string;
+    'title': string;
     /**
      * Short title of the Grid element
-     * @type {string}
-     * @memberof CourseMetadataResponse
      */
-    shortTitle: string;
+    'shortTitle': string;
     /**
      * Color of the Grid element
-     * @type {string}
-     * @memberof CourseMetadataResponse
      */
-    displayColor: string;
+    'displayColor': string;
     /**
      * Indicates if the course is locked and cannot be accessed.
-     * @type {boolean}
-     * @memberof CourseMetadataResponse
      */
-    isLocked: boolean;
+    'isLocked': boolean;
     /**
      * Start date of the course
-     * @type {string}
-     * @memberof CourseMetadataResponse
      */
-    startDate?: string;
+    'startDate'?: string;
     /**
      * End date of the course. After this the course counts as archived
-     * @type {string}
-     * @memberof CourseMetadataResponse
      */
-    untilDate?: string;
+    'untilDate'?: string;
     /**
      * Start of the copying process if it is still ongoing - otherwise property is not set.
-     * @type {string}
-     * @memberof CourseMetadataResponse
      */
-    copyingSince?: string;
+    'copyingSince'?: string;
 }
-
 

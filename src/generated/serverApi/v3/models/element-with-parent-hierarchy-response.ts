@@ -13,36 +13,18 @@
  */
 
 
-import { CollaborativeTextEditorElementResponse } from './collaborative-text-editor-element-response';
-import { DeletedElementResponse } from './deleted-element-response';
-import { DrawingElementResponse } from './drawing-element-response';
-import { ExternalToolElementResponse } from './external-tool-element-response';
-import { FileElementResponse } from './file-element-response';
-import { FileFolderElementResponse } from './file-folder-element-response';
-import { H5pElementResponse } from './h5p-element-response';
-import { LinkElementResponse } from './link-element-response';
-import { ParentNodeInfoResponse } from './parent-node-info-response';
-import { RichTextElementResponse } from './rich-text-element-response';
-import { VideoConferenceElementResponse } from './video-conference-element-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ElementWithParentHierarchyResponseElement } from './element-with-parent-hierarchy-response-element';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ParentNodeInfoResponse } from './parent-node-info-response';
 
-/**
- * 
- * @export
- * @interface ElementWithParentHierarchyResponse
- */
 export interface ElementWithParentHierarchyResponse {
-    /**
-     * The element data
-     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse}
-     * @memberof ElementWithParentHierarchyResponse
-     */
-    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse;
+    'element': ElementWithParentHierarchyResponseElement;
     /**
      * The hierarchical path of parent elements
-     * @type {Array<ParentNodeInfoResponse>}
-     * @memberof ElementWithParentHierarchyResponse
      */
-    parentHierarchy: Array<ParentNodeInfoResponse>;
+    'parentHierarchy': Array<ParentNodeInfoResponse>;
 }
-
 

@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface RegistrationBodyParams
- */
 export interface RegistrationBodyParams {
     /**
      * The registration ids the room is attached to
-     * @type {Array<string>}
-     * @memberof RegistrationBodyParams
      */
-    registrationIds: Array<string>;
+    'registrationIds': Array<string>;
 }
-
 

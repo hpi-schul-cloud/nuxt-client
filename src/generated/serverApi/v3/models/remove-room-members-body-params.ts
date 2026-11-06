@@ -14,18 +14,10 @@
 
 
 
-/**
- * 
- * @export
- * @interface RemoveRoomMembersBodyParams
- */
 export interface RemoveRoomMembersBodyParams {
     /**
      * The IDs of the users
-     * @type {Array<string>}
-     * @memberof RemoveRoomMembersBodyParams
      */
-    userIds: Array<string>;
+    'userIds': Array<string>;
 }
-
 

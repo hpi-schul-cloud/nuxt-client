@@ -6,6 +6,7 @@ import {
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import {
@@ -25,7 +26,7 @@ import {
 } from "@@/tests/test-utils/factory";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { BoardLayout, CopyStatusEnum } from "@api-server";
-import { useAppStore } from "@data-app";
+import { useAppStore, useNotificationStore } from "@data-app";
 import { useCardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
@@ -66,6 +67,9 @@ vi.mock("vue-i18n", () => ({
 	useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
 }));
 
+vi.mock("@/plugins/i18n");
+const mockedUseI18nGlobal = vi.mocked(useI18nGlobal);
+
 describe("BoardStore", () => {
 	let mockedBoardSocketApi: Mocked<ReturnType<typeof useBoardSocketApi>>;
 	let mockedSharedEditMode: Mocked<ReturnType<typeof useSharedEditMode>>;
@@ -76,6 +80,7 @@ describe("BoardStore", () => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 
 		mockedUseErrorHandler.mockReturnValue(mockComposable(useErrorHandler));
+		mockedUseI18nGlobal.mockReturnValue({ t: (key: string) => key } as unknown as ReturnType<typeof useI18nGlobal>);
 
 		mockedUseSocketConnection.mockReturnValue(
 			mockComposable(useSocketConnection, {
@@ -475,125 +480,153 @@ describe("BoardStore", () => {
 	});
 
 	describe("duplicateColumnSuccess", () => {
-		it("should not duplicate column when board is undefined", () => {
-			const { boardStore, firstColumn } = setup({ createBoard: false });
-			const duplicatedColumn = columnFullResponseFactory.build();
+		describe("when isOwnAction is true", () => {
+			describe("when board is undefined", () => {
+				it("should not duplicate column", () => {
+					const { boardStore, firstColumn } = setup({ createBoard: false });
+					const duplicatedColumn = columnFullResponseFactory.build();
 
-			boardStore.duplicateColumnSuccess({
-				columnId: firstColumn.id,
-				duplicatedColumn,
-				status: CopyStatusEnum.SUCCESS,
-				isOwnAction: true,
+					boardStore.duplicateColumnSuccess({
+						columnId: firstColumn.id,
+						duplicatedColumn,
+						status: CopyStatusEnum.SUCCESS,
+						isOwnAction: true,
+					});
+
+					expect(boardStore.board).toBe(undefined);
+				});
 			});
 
-			expect(boardStore.board).toBe(undefined);
+			it("should duplicate a column and insert it after the original", () => {
+				const { boardStore, firstColumn, secondColumn } = setup();
+				const duplicatedColumn = columnFullResponseFactory.build();
+
+				boardStore.duplicateColumnSuccess({
+					columnId: firstColumn.id,
+					duplicatedColumn,
+					status: CopyStatusEnum.SUCCESS,
+					isOwnAction: true,
+				});
+
+				expect(boardStore.board?.columns.length).toBe(3);
+				expect(boardStore.board?.columns[0]).toEqual(firstColumn);
+				expect(boardStore.board?.columns[1]).toEqual(duplicatedColumn);
+				expect(boardStore.board?.columns[2]).toEqual(secondColumn);
+			});
+
+			describe("when copy was successful", () => {
+				it("should show success notification", () => {
+					const { boardStore, firstColumn } = setup();
+					const duplicatedColumn = columnFullResponseFactory.build();
+
+					boardStore.duplicateColumnSuccess({
+						columnId: firstColumn.id,
+						duplicatedColumn,
+						status: CopyStatusEnum.SUCCESS,
+						isOwnAction: true,
+					});
+
+					expectNotification("success");
+				});
+			});
+
+			describe("when copy was not fully successful", () => {
+				it("should show error notification", () => {
+					const { boardStore, firstColumn } = setup();
+					const duplicatedColumn = columnFullResponseFactory.build();
+
+					boardStore.duplicateColumnSuccess({
+						columnId: firstColumn.id,
+						duplicatedColumn,
+						status: CopyStatusEnum.PARTIAL,
+						isOwnAction: true,
+					});
+
+					expectNotification("error");
+				});
+			});
+
+			describe("when files could not be copied", () => {
+				it("should show warning notification ", () => {
+					const { boardStore, firstColumn } = setup();
+					const duplicatedColumn = columnFullResponseFactory.build();
+
+					boardStore.duplicateColumnSuccess({
+						columnId: firstColumn.id,
+						duplicatedColumn,
+						status: CopyStatusEnum.PARTIAL,
+						failedFileNames: ["video.mp4"],
+						isOwnAction: true,
+					});
+
+					expectNotification("warning");
+					expect(useNotificationStore().notify).not.toHaveBeenCalledWith(expect.objectContaining({ status: "error" }));
+				});
+			});
+
+			it("should show info notification when column contains external tool element", () => {
+				const { boardStore, firstColumn } = setup();
+				const element = externalToolElementResponseFactory.build();
+				const card = cardResponseFactory.build({ elements: [element] });
+				const duplicatedColumn = columnFullResponseFactory.build({ cards: [card] });
+
+				boardStore.duplicateColumnSuccess({
+					columnId: firstColumn.id,
+					duplicatedColumn,
+					status: CopyStatusEnum.SUCCESS,
+					isOwnAction: true,
+				});
+
+				expectNotification("info");
+			});
+
+			it("should show info notification when column contains collaborative editor element", () => {
+				const { boardStore, firstColumn } = setup();
+				const element = collaborativeTextEditorElementResponseFactory.build();
+				const card = cardResponseFactory.build({ elements: [element] });
+				const duplicatedColumn = columnFullResponseFactory.build({ cards: [card] });
+
+				boardStore.duplicateColumnSuccess({
+					columnId: firstColumn.id,
+					duplicatedColumn,
+					status: CopyStatusEnum.SUCCESS,
+					isOwnAction: true,
+				});
+
+				expectNotification("info");
+			});
+
+			it("should show info notification when column contains drawing element", () => {
+				const { boardStore, firstColumn } = setup();
+				const element = drawingElementResponseFactory.build();
+				const card = cardResponseFactory.build({ elements: [element] });
+				const duplicatedColumn = columnFullResponseFactory.build({ cards: [card] });
+
+				boardStore.duplicateColumnSuccess({
+					columnId: firstColumn.id,
+					duplicatedColumn,
+					status: CopyStatusEnum.SUCCESS,
+					isOwnAction: true,
+				});
+
+				expectNotification("info");
+			});
 		});
 
-		it("should duplicate a column and insert it after the original", () => {
-			const { boardStore, firstColumn, secondColumn } = setup();
-			const duplicatedColumn = columnFullResponseFactory.build();
+		describe("when isOwnAction is false", () => {
+			it("should not show notification", () => {
+				const { boardStore, firstColumn } = setup();
+				const duplicatedColumn = columnFullResponseFactory.build();
 
-			boardStore.duplicateColumnSuccess({
-				columnId: firstColumn.id,
-				duplicatedColumn,
-				status: CopyStatusEnum.SUCCESS,
-				isOwnAction: true,
+				boardStore.duplicateColumnSuccess({
+					columnId: firstColumn.id,
+					duplicatedColumn,
+					status: CopyStatusEnum.SUCCESS,
+					isOwnAction: false,
+				});
+
+				expect(boardStore.board?.columns.length).toBe(3);
 			});
-
-			expect(boardStore.board?.columns.length).toBe(3);
-			expect(boardStore.board?.columns[0]).toEqual(firstColumn);
-			expect(boardStore.board?.columns[1]).toEqual(duplicatedColumn);
-			expect(boardStore.board?.columns[2]).toEqual(secondColumn);
-		});
-
-		it("should show success notification when isOwnAction is true and copy was successful", () => {
-			const { boardStore, firstColumn } = setup();
-			const duplicatedColumn = columnFullResponseFactory.build();
-
-			boardStore.duplicateColumnSuccess({
-				columnId: firstColumn.id,
-				duplicatedColumn,
-				status: CopyStatusEnum.SUCCESS,
-				isOwnAction: true,
-			});
-
-			expectNotification("success");
-		});
-
-		it("should show error notification when isOwnAction is true and copy was not fully successful", () => {
-			const { boardStore, firstColumn } = setup();
-			const duplicatedColumn = columnFullResponseFactory.build();
-
-			boardStore.duplicateColumnSuccess({
-				columnId: firstColumn.id,
-				duplicatedColumn,
-				status: CopyStatusEnum.PARTIAL,
-				isOwnAction: true,
-			});
-
-			expectNotification("error");
-		});
-
-		it("should show info notification when column contains external tool element", () => {
-			const { boardStore, firstColumn } = setup();
-			const element = externalToolElementResponseFactory.build();
-			const card = cardResponseFactory.build({ elements: [element] });
-			const duplicatedColumn = columnFullResponseFactory.build({ cards: [card] });
-
-			boardStore.duplicateColumnSuccess({
-				columnId: firstColumn.id,
-				duplicatedColumn,
-				status: CopyStatusEnum.SUCCESS,
-				isOwnAction: true,
-			});
-
-			expectNotification("info");
-		});
-
-		it("should show info notification when column contains collaborative editor element", () => {
-			const { boardStore, firstColumn } = setup();
-			const element = collaborativeTextEditorElementResponseFactory.build();
-			const card = cardResponseFactory.build({ elements: [element] });
-			const duplicatedColumn = columnFullResponseFactory.build({ cards: [card] });
-
-			boardStore.duplicateColumnSuccess({
-				columnId: firstColumn.id,
-				duplicatedColumn,
-				status: CopyStatusEnum.SUCCESS,
-				isOwnAction: true,
-			});
-
-			expectNotification("info");
-		});
-
-		it("should show info notification when column contains drawing element", () => {
-			const { boardStore, firstColumn } = setup();
-			const element = drawingElementResponseFactory.build();
-			const card = cardResponseFactory.build({ elements: [element] });
-			const duplicatedColumn = columnFullResponseFactory.build({ cards: [card] });
-
-			boardStore.duplicateColumnSuccess({
-				columnId: firstColumn.id,
-				duplicatedColumn,
-				status: CopyStatusEnum.SUCCESS,
-				isOwnAction: true,
-			});
-
-			expectNotification("info");
-		});
-
-		it("should not show notification when isOwnAction is false", () => {
-			const { boardStore, firstColumn } = setup();
-			const duplicatedColumn = columnFullResponseFactory.build();
-
-			boardStore.duplicateColumnSuccess({
-				columnId: firstColumn.id,
-				duplicatedColumn,
-				status: CopyStatusEnum.SUCCESS,
-				isOwnAction: false,
-			});
-
-			expect(boardStore.board?.columns.length).toBe(3);
 		});
 	});
 

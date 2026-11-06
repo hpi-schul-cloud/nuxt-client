@@ -13,26 +13,20 @@
  */
 
 
-import { ToolConfigType } from './tool-config-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ToolConfigType } from './tool-config-type';
 
-/**
- * 
- * @export
- * @interface BasicToolConfigParams
- */
 export interface BasicToolConfigParams {
     /**
      * Configuration type of the tool.
-     * @type {ToolConfigType}
-     * @memberof BasicToolConfigParams
      */
-    type: ToolConfigType;
+    'type': ToolConfigType;
     /**
      * Defines the target URL that is launched. Can be automatically filled with parameter values when using : in-front of the parameter name. Must be HTTPS.
-     * @type {string}
-     * @memberof BasicToolConfigParams
      */
-    baseUrl: string;
+    'baseUrl': string;
 }
+
 
 

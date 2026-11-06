@@ -14,11 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
+
 export enum RoleName {
     ADMINISTRATOR = 'administrator',
     COURSE_ADMINISTRATOR = 'courseAdministrator',
