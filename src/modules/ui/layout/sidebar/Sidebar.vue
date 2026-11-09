@@ -32,12 +32,11 @@
 
 <script setup lang="ts">
 import CloudLogo from "../CloudLogo.vue";
-import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";
+import { SidebarGroupItem, SidebarSingleItem } from "../types";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import SidebarItem from "./SidebarItem.vue";
 import { useSidebarItems } from "./SidebarItems.composable";
-import { useAppStore } from "@data-app";
-import { useEnvConfig } from "@data-env";
+import { isSidebarCategoryItem, useSidebarItemsForUser } from "./SidebarItemsForUser.composable";
 import { mdiMenuOpen } from "@icons/material";
 import { computed } from "vue";
 
@@ -48,36 +47,7 @@ const sidebarExpanded = defineModel({
 
 const { pageLinks, legalLinks, metaLinks } = useSidebarItems();
 
-const isSidebarCategoryItem = (item: SidebarSingleItem | SidebarGroupItem): item is SidebarGroupItem =>
-	(item as SidebarGroupItem).children !== undefined;
-
-const userHasPermission = (item: SidebarSingleItem | SidebarGroupItem) =>
-	!item.permissions || item.permissions.some((permission) => useAppStore().userPermissions.includes(permission));
-
-const hasFeatureEnabled = (item: SidebarSingleItem | SidebarGroupItem) => {
-	if (!item.feature) return true;
-
-	return useEnvConfig().value[item.feature] === (item.featureValue ?? true);
-};
-
-const isEnabledForTheme = (item: SidebarSingleItem | SidebarGroupItem) => {
-	if (!item.theme) return true;
-
-	return item.theme.includes(useEnvConfig().value.SC_THEME);
-};
-
-const getItemsForUser = (items: SidebarItems) => {
-	const sidebarItems = items.filter((item) => {
-		if (isSidebarCategoryItem(item)) {
-			item.children = item.children.filter(
-				(child) => userHasPermission(child) && hasFeatureEnabled(child) && isEnabledForTheme(child)
-			);
-		}
-		return userHasPermission(item) && hasFeatureEnabled(item) && isEnabledForTheme(item);
-	});
-
-	return sidebarItems;
-};
+const { getItemsForUser } = useSidebarItemsForUser();
 
 const legalItems = computed(() => getItemsForUser(legalLinks.value) as SidebarSingleItem[]);
 const metaItems = computed(() => getItemsForUser(metaLinks.value) as SidebarGroupItem[]);

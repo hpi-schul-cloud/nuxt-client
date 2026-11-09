@@ -40,6 +40,7 @@ export interface ConfigResponse {
     'ADMIN_TABLES_DISPLAY_CONSENT_COLUMN': boolean;
     'ALERT_STATUS_URL': string | null;
     'FEATURE_TEAMS_ENABLED': boolean;
+    'FEATURE_QUICK_NAVIGATION_ENABLED': boolean;
     'FEATURE_TEAM_CREATE_ROOM_ENABLED': boolean;
     'FEATURE_FWU_CONTENT_ENABLED': boolean;
     'TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE': boolean;

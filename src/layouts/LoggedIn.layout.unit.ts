@@ -3,6 +3,7 @@ import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useStatusAlerts } from "@data-app";
+import { QuickNavDialog, QuickNavTrigger } from "@feature-quick-nav";
 import { createTestingPinia } from "@pinia/testing";
 import { Sidebar, Topbar } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
@@ -27,11 +28,12 @@ vi.mocked(useStatusAlerts).mockReturnValue({
 	fetchStatusAlerts: vi.fn(),
 });
 
-const setup = () => {
+const setup = (options: { isQuickNavigationEnabled?: boolean } = {}) => {
 	injectRouterMock(createRouterMock());
 	setActivePinia(createTestingPinia());
 	createTestEnvStore({
 		DOCUMENT_BASE_DIR: "https://example.com/documents/",
+		FEATURE_QUICK_NAVIGATION_ENABLED: options.isQuickNavigationEnabled ?? false,
 	});
 	createTestSchoolStore();
 
@@ -192,6 +194,26 @@ describe("LoggedIn.layout.vue", () => {
 
 					expect(nav.classes()).toContain("v-navigation-drawer--active");
 				});
+			});
+		});
+	});
+
+	describe("Quick navigation", () => {
+		describe("when the feature is enabled", () => {
+			it("should render the trigger and the dialog", () => {
+				const { wrapper } = setup({ isQuickNavigationEnabled: true });
+
+				expect(wrapper.findComponent(QuickNavTrigger).exists()).toBe(true);
+				expect(wrapper.findComponent(QuickNavDialog).exists()).toBe(true);
+			});
+		});
+
+		describe("when the feature is disabled", () => {
+			it("should render neither the trigger nor the dialog", () => {
+				const { wrapper } = setup({ isQuickNavigationEnabled: false });
+
+				expect(wrapper.findComponent(QuickNavTrigger).exists()).toBe(false);
+				expect(wrapper.findComponent(QuickNavDialog).exists()).toBe(false);
 			});
 		});
 	});
