@@ -623,6 +623,44 @@ describe("FileStorageApi Composable", () => {
 					expect.objectContaining({
 						url: imageUrl,
 						fileName,
+						previewOnly: false,
+					})
+				);
+			});
+
+			it("should forward previewOnly", async () => {
+				const { parentId, parentType, fileApi, imageUrl } = setup();
+				const { uploadFromUrl } = useFileStorageApi();
+
+				await uploadFromUrl(imageUrl, parentId, parentType, { previewOnly: true });
+
+				expect(fileApi.uploadFromUrl).toHaveBeenCalledWith(
+					"schoolId",
+					StorageLocation.SCHOOL,
+					parentId,
+					parentType,
+					expect.objectContaining({
+						url: imageUrl,
+						previewOnly: true,
+					})
+				);
+			});
+
+			it("should use the given file name instead of the url name", async () => {
+				const { parentId, parentType, fileApi, imageUrl } = setup();
+				const { uploadFromUrl } = useFileStorageApi();
+
+				await uploadFromUrl(imageUrl, parentId, parentType, { fileName: "custom-preview.png" });
+
+				expect(fileApi.uploadFromUrl).toHaveBeenCalledWith(
+					"schoolId",
+					StorageLocation.SCHOOL,
+					parentId,
+					parentType,
+					expect.objectContaining({
+						url: imageUrl,
+						fileName: "custom-preview.png",
+						previewOnly: false,
 					})
 				);
 			});
@@ -700,6 +738,50 @@ describe("FileStorageApi Composable", () => {
 					expect.objectContaining({
 						status: "error",
 						text: "components.board.notifications.errors.fileToBig",
+					})
+				);
+			});
+		});
+
+		describe("when the imported content type is rejected", () => {
+			const setup = () => {
+				const imageUrl = "https://www.example.com/preview.svg";
+				const parentId = ObjectIdMock();
+				const parentType = FileRecordParent.BOARDNODES;
+				const { responseError, expectedPayload } = setupErrorResponse(ErrorType.MIME_TYPE_MISMATCH, 422);
+
+				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
+
+				const fileApi = mockApi<serverApi.FileApiInterface>();
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				fileApi.uploadFromUrl.mockRejectedValueOnce(responseError);
+
+				return {
+					imageUrl,
+					parentId,
+					parentType,
+				};
+			};
+
+			it("should not notify when a preview-only upload is rejected", async () => {
+				const { imageUrl, parentId, parentType } = setup();
+				const { uploadFromUrl } = useFileStorageApi();
+
+				await expect(uploadFromUrl(imageUrl, parentId, parentType, { previewOnly: true })).resolves.toBeUndefined();
+
+				expect(useNotificationStore().notify).not.toHaveBeenCalled();
+			});
+
+			it("should notify that the file service is unavailable without previewOnly", async () => {
+				const { imageUrl, parentId, parentType } = setup();
+				const { uploadFromUrl } = useFileStorageApi();
+
+				await uploadFromUrl(imageUrl, parentId, parentType);
+
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({
+						status: "error",
+						text: "components.board.notifications.errors.fileServiceNotAvailable",
 					})
 				);
 			});

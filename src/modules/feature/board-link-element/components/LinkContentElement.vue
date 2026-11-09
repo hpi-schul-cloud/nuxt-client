@@ -136,7 +136,6 @@ const target = computed<string>(() => {
 const { getMetaTags } = useMetaTagExtractorApi();
 const { uploadFromUrl } = useFileStorageApi();
 
-// hier previewOnly
 const createPreviewImage = async (externalImageUrl: string): Promise<string | undefined> => {
 	const uploadedFileRecord = await uploadFromUrl(externalImageUrl, element.value.id, FileRecordParentType.BOARDNODES, {
 		previewOnly: true,

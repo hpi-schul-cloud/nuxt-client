@@ -30,6 +30,7 @@ export enum ErrorType {
 	COULD_NOT_CREATE_PATH = "COULD_NOT_CREATE_PATH",
 	FILE_TOO_BIG = "FILE_TOO_BIG",
 	FILE_LIMIT_PER_PARENT_EXCEEDED = "FILE_LIMIT_PER_PARENT_EXCEEDED",
+	MIME_TYPE_MISMATCH = "MIME_TYPE_MISMATCH",
 	Unauthorized = "Unauthorized",
 	Forbidden = "Forbidden",
 }
@@ -175,6 +176,10 @@ export const useFileStorageApi = () => {
 
 			return response.data;
 		} catch (error) {
+			if (options?.previewOnly && mapAxiosErrorToResponseError(error).message === ErrorType.MIME_TYPE_MISMATCH) {
+				return;
+			}
+
 			showError(error);
 		}
 	};
