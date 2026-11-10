@@ -25,13 +25,6 @@
 						<VIcon :icon="mdiAccountCircleOutline" size="sm" class="mr-1" />
 						{{ creator }}
 					</div>
-
-					<div class="d-flex align-center" data-testid="news-creator">
-						<template v-if="newsInstance.targetModel === 'teams'">
-							<VIcon :icon="mdiAccountGroupOutline" size="sm" class="mr-1" />
-							<a :href="`/teams/${newsInstance.targetId}`">{{ newsInstance.target.name }}</a>
-						</template>
-					</div>
 				</div>
 				<VDivider class="mb-4" />
 				<RenderHTML :html="newsInstance.content" class="ck-content" data-testid="news-content" />
@@ -77,7 +70,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useNews, useNewsActions } from "@data-access";
 import { notifySuccess, useAppStoreRefs } from "@data-app";
 import { RenderHTML } from "@feature-render-html";
-import { mdiAccountCircleOutline, mdiAccountGroupOutline, mdiClockOutline } from "@icons/material";
+import { mdiAccountCircleOutline, mdiClockOutline } from "@icons/material";
 import { SvsLoading } from "@ui-containers";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";

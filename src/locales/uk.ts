@@ -72,7 +72,6 @@ export default {
 	"common.labels.complete.lastName": "Повне прізвище",
 	"common.labels.consent": "Згода",
 	"common.labels.course": "Курс",
-	"common.labels.team": "Команда",
 	"common.labels.createAt": "Створено:",
 	"common.labels.createdAt": "Створено в",
 	"common.labels.date": "Дата",
@@ -349,7 +348,7 @@ export default {
 	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete.secondParagraph":
 		"Період очікування минув. Перенесення нарешті завершено {finishDate} о {finishTime}!",
 	"components.administration.adminMigrationSection.showOutdatedUsers.description":
-		"Застарілі облікові записи студентів і викладачів відображаються у відповідних списках вибору, коли користувачів призначають до класів, курсів і команд.",
+		"Застарілі облікові записи учнів і викладачів відображаються у відповідних списках під час призначення користувачів до класів і курсів.",
 	"components.administration.adminMigrationSection.showOutdatedUsers.label":
 		"Показати застарілі облікові записи користувачів",
 	"components.administration.adminMigrationSection.startWarningCard.agree": "старт",
@@ -999,7 +998,6 @@ export default {
 	"global.sidebar.item.system": "Cистема",
 	"global.sidebar.item.tasks": "Завдання",
 	"global.sidebar.item.teacher": "Викладачі",
-	"global.sidebar.item.teams": "Команди",
 	"global.sidebar.item.training": "Поглиблене навчання",
 	"global.sidebar.item.licenses": "Ліцензії",
 	"global.skipLink.mainContent": "Перейти до основного вмісту",
@@ -1307,7 +1305,7 @@ export default {
 	"pages.administration.school.index.privacySettings.labels.videoConference": "Увімкнути відеоконференцію",
 	"pages.administration.school.index.privacySettings.labels.aiTutor": "Активуйте репетитора ШІ в школі",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
-		"Якщо у вашому навчальному закладі увімкнені чати, адміністратори команд можуть вибірково увімкнути функцію чату для своєї команди.",
+		"Якщо у вашій школі ввімкнено чати, викладачі можуть активувати функцію чату у своїх курсах.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
 		"Це налаштування, яке не підлягає редагуванню і контролює видимість учнів для вчителів у всьому екземплярі.",
 	"pages.administration.school.index.privacySettings.longText.studentVisibility":
@@ -1317,7 +1315,7 @@ export default {
 	"pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen":
 		"Якщо цю опцію не ввімкнено, вчителі бачитимуть лише ті класи та учнів, учасниками яких вони є.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
-		"Якщо у вашому навчальному закладі активовано відеоконференції, вчителі можуть розпочати відеоконференції для всіх учасників курсу в кімнатах, курсах і командах. У кімнатах і курсах відеоконференції можна додати як елемент до розділів (одноколонкових і багатоколонкових), у курсах відеоконференції можна використовувати в розділі «Інструменти», а в командах - за допомогою функції призначення.",
+		"Якщо у вашій школі ввімкнено відеоконференції, викладачі можуть проводити їх у кімнатах і курсах. Конференції можна додавати як елементи дошки, а в курсах вони також доступні в розділі інструментів.",
 	"pages.administration.school.index.privacySettings.longText.aiTutor":
 		"Якщо AI Tutor активовано у вашій школі, вчителі можуть додати AI Tutor у своїх областях.",
 	"pages.administration.school.index.privacySettings": "Параметри конфіденційності",
@@ -1546,7 +1544,6 @@ export default {
 	"pages.files.overview.favorites": "Обрані",
 	"pages.files.overview.personalFiles": "Мої особисті справи",
 	"pages.files.overview.sharedFiles": "Файли, якими я поділився",
-	"pages.files.overview.teamFiles": "Командні файли",
 	"pages.h5p.api.success.save": "Вміст успішно збережено.",
 	"pages.impressum.title": "Вихідні дані",
 	"pages.licenseList.title": "Список ліцензій на відкритий код",
@@ -1768,9 +1765,7 @@ export default {
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.infoAlert.welcome": "Ласкаво просимо до нових Кімнат!",
 	"pages.rooms.infoAlert.welcome.collaboration":
-		"У майбутньому кімнати об'єднають функції курсів і команд, щоб запропонувати більше можливостей для міжшкільної співпраці.",
-	"pages.rooms.infoAlert.welcome.teamsAndCourses":
-		"Кімнати будуть розширюватися і надалі. Команди та курси залишатимуться на місці, доки контент не буде перенесено до кімнат.",
+		"Кімнати дають змогу впорядковувати матеріали та співпрацювати між школами.",
 	"pages.rooms.infoAlert.welcome.furtherInformation":
 		"Додаткову інформацію можна знайти на нашій {helpLink}. Ми будемо вдячні за ваші {feedbackLink} щодо поточного стану.",
 	"pages.rooms.infoAlert.welcome.furtherInformation.help": "Сторінка допомоги",

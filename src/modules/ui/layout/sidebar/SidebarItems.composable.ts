@@ -214,12 +214,6 @@ export const useSidebarItems = () => {
 					permissions: [Permission.ADMIN_VIEW, Permission.TEACHER_LIST],
 				},
 				{
-					title: "global.sidebar.item.teams",
-					href: "/administration/teams",
-					permissions: [Permission.ADMIN_VIEW],
-					testId: "sidebar-management-teams",
-				},
-				{
 					title: "global.sidebar.item.school",
 					to: "/administration/school-settings",
 					testId: "sidebar-management-school",

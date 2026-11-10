@@ -53,4 +53,19 @@ describe("SidebarItems Composable", () => {
 
 		expect(metaLinks.value).toHaveLength(3);
 	});
+
+	it("should keep independent administration links without Teams", () => {
+		const { metaLinks } = setup();
+		const management = metaLinks.value.find((link) => link.testId === "sidebar-management");
+
+		expect(management?.children.map((link) => link.testId)).toEqual([
+			"sidebar-management-students",
+			"sidebar-management-teachers",
+			"sidebar-room-management",
+			"sidebar-management-courses",
+			"sidebar-management-classes",
+			"sidebar-management-school",
+		]);
+		expect(management?.children.some((link) => link.href === "/administration/teams")).toBe(false);
+	});
 });
