@@ -4,7 +4,7 @@
 
 const mongoId = "[a-z0-9]{24}";
 const h5pId = "[a-z0-9]+";
-const invitationToken = "[A-Za-z0-9_-]{43}";
+const invitationToken = "[A-Za-z0-9_-]{21}";
 
 const vueRoutes = [
 	`^/favicon.png$`,

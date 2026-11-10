@@ -8,7 +8,7 @@ describe("invitation link routing", () => {
 		routes: routes.filter((route) => route.name === "rooms-invitation-link-id"),
 	});
 
-	it.each(["507f1f77bcf86cd799439011", `Ab0_-${"x".repeat(38)}`])(
+	it.each(["507f1f77bcf86cd799439011", `Ab0_-${"x".repeat(16)}`])(
 		"routes invitation credential %s to the Vue invitation page",
 		(credential) => {
 			for (const suffix of ["", "/"]) {
