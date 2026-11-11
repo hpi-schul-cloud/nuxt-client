@@ -57,7 +57,7 @@ describe("LinkContentElementDisplay", () => {
 		expect(wrapper.html()).toEqual(expect.stringContaining(title));
 	});
 
-	it("should display the image when image url is given", async () => {
+	it("should embed the preview only with an img element", async () => {
 		const imageUrl = "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus.jpg";
 		const { wrapper } = setup({
 			props: {
@@ -66,10 +66,19 @@ describe("LinkContentElementDisplay", () => {
 			},
 		});
 
-		const image = wrapper.find("img");
+		const images = wrapper.findAll("img");
+		const image = wrapper.get("[data-testid=link-preview-image]");
 
+		expect(images).toHaveLength(1);
+		expect(image.element.tagName).toBe("IMG");
 		expect(image.attributes("src")).toEqual(imageUrl);
 		expect(image.attributes("alt")).toEqual("");
+		expect(wrapper.find("object").exists()).toBe(false);
+		expect(wrapper.find("embed").exists()).toBe(false);
+		expect(wrapper.find("iframe").exists()).toBe(false);
+		expect(wrapper.findAll(`[src="${imageUrl}"]`)).toHaveLength(1);
+		expect(wrapper.find(`[src="${imageUrl}"]`).element.tagName).toBe("IMG");
+		expect(wrapper.find(`a[href="${imageUrl}"]`).exists()).toBe(false);
 	});
 
 	it("should not display the image when image url is not given", async () => {
@@ -101,6 +110,7 @@ describe("LinkContentElementDisplay", () => {
 			});
 
 			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-row");
+			expect(wrapper.get("[data-testid=link-preview-image]").classes()).toContain("link-preview-image--cover");
 		});
 
 		it("should have column style when display size is smaller than 600px", () => {
@@ -178,6 +188,7 @@ describe("LinkContentElementDisplay", () => {
 			});
 
 			expect(wrapper.find(".content-element-bar").classes()).toContain("flex-row");
+			expect(wrapper.get("[data-testid=link-preview-image]").classes()).toContain("link-preview-image--cover");
 		});
 
 		it("should have column style when display size is smaller than 600px", () => {
