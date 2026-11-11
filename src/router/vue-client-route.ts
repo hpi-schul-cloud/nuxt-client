@@ -35,6 +35,7 @@ const vueRoutes = [
 	`^/boards/${mongoId}%23card[^/]+/?$`,
 	`^/boards/${mongoId}/cards/${mongoId}/?$`,
 	`^/collabora/${mongoId}/?$`,
+	`^/account/?$`,
 	`^/error/?$`,
 	`^/h5p/player/${h5pId}/?$`,
 	`^/h5p/editor/?$`,

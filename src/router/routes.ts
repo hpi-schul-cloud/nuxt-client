@@ -135,6 +135,11 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		}),
 	},
 	{
+		path: "/account",
+		component: () => import("@/pages/account/Account.page.vue"),
+		name: "account",
+	},
+	{
 		path: "/dashboard",
 		component: () => import("@/pages/Dashboard.page.vue"),
 		name: "dashboard",
