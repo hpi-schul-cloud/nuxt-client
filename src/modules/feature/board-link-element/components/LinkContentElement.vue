@@ -137,7 +137,9 @@ const { getMetaTags } = useMetaTagExtractorApi();
 const { uploadFromUrl } = useFileStorageApi();
 
 const createPreviewImage = async (externalImageUrl: string): Promise<string | undefined> => {
-	const uploadedFileRecord = await uploadFromUrl(externalImageUrl, element.value.id, FileRecordParentType.BOARDNODES);
+	const uploadedFileRecord = await uploadFromUrl(externalImageUrl, element.value.id, FileRecordParentType.BOARDNODES, {
+		previewOnly: true,
+	});
 
 	if (uploadedFileRecord?.previewStatus && isPreviewPossible(uploadedFileRecord.previewStatus)) {
 		return convertDownloadToPreviewUrl(uploadedFileRecord.url);

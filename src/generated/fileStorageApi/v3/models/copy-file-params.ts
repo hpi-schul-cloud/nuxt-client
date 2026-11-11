@@ -13,20 +13,11 @@
  */
 
 
-import { FileRecordParams } from './file-record-params';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { FileRecordParams } from './file-record-params';
 
-/**
- * 
- * @export
- * @interface CopyFileParams
- */
 export interface CopyFileParams {
-    /**
-     * 
-     * @type {FileRecordParams}
-     * @memberof CopyFileParams
-     */
-    target: FileRecordParams;
+    'target': FileRecordParams;
 }
-
 

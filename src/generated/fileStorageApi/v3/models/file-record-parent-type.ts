@@ -14,22 +14,20 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
-export enum FileRecordParentType {
-    USERS = 'users',
-    SCHOOLS = 'schools',
-    COURSES = 'courses',
-    TASKS = 'tasks',
-    LESSONS = 'lessons',
-    SUBMISSIONS = 'submissions',
-    GRADINGS = 'gradings',
-    BOARDNODES = 'boardnodes',
-    EXTERNALTOOLS = 'externaltools'
-}
+
+export const FileRecordParentType = {
+    USERS: 'users',
+    SCHOOLS: 'schools',
+    COURSES: 'courses',
+    TASKS: 'tasks',
+    LESSONS: 'lessons',
+    SUBMISSIONS: 'submissions',
+    GRADINGS: 'gradings',
+    BOARDNODES: 'boardnodes',
+    EXTERNALTOOLS: 'externaltools',
+} as const;
+
+export type FileRecordParentType = typeof FileRecordParentType[keyof typeof FileRecordParentType];
 
 
 

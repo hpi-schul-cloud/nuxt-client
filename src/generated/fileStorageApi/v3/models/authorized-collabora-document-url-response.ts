@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface AuthorizedCollaboraDocumentUrlResponse
- */
 export interface AuthorizedCollaboraDocumentUrlResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof AuthorizedCollaboraDocumentUrlResponse
-     */
-    authorizedCollaboraDocumentUrl: string;
+    'authorizedCollaboraDocumentUrl': string;
 }
-
 

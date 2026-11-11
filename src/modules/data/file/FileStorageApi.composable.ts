@@ -30,6 +30,7 @@ export enum ErrorType {
 	COULD_NOT_CREATE_PATH = "COULD_NOT_CREATE_PATH",
 	FILE_TOO_BIG = "FILE_TOO_BIG",
 	FILE_LIMIT_PER_PARENT_EXCEEDED = "FILE_LIMIT_PER_PARENT_EXCEEDED",
+	MIME_TYPE_MISMATCH = "MIME_TYPE_MISMATCH",
 	Unauthorized = "Unauthorized",
 	Forbidden = "Forbidden",
 }
@@ -92,13 +93,13 @@ export const useFileStorageApi = () => {
 
 	const getDocumentType = (collaboraFileType: CollaboraFileType): DocumentType => {
 		if (collaboraFileType === CollaboraFileType.Text) {
-			return DocumentType.WORDPROCESSINGML_DOCUMENT;
+			return DocumentType.APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_WORDPROCESSINGML_DOCUMENT;
 		}
 		if (collaboraFileType === CollaboraFileType.Spreadsheet) {
-			return DocumentType.SPREADSHEETML_SHEET;
+			return DocumentType.APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_SPREADSHEETML_SHEET;
 		}
 
-		return DocumentType.PRESENTATIONML_PRESENTATION;
+		return DocumentType.APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_PRESENTATION;
 	};
 
 	const getOfficeDocumentFileExtension = (collaboraFileType: CollaboraFileType): string => {
@@ -143,20 +144,25 @@ export const useFileStorageApi = () => {
 		}
 	};
 
+	type UploadFromUrlOptionalParams = {
+		fileName?: string;
+		previewOnly?: boolean;
+	};
 	const uploadFromUrl = async (
 		imageUrl: string,
 		parentId: string,
 		parentType: FileRecordParent,
-		fileName?: string
+		options?: UploadFromUrlOptionalParams
 	): Promise<FileRecord | void> => {
 		try {
 			const { pathname } = new URL(imageUrl);
-			fileName = fileName ?? pathname.substring(pathname.lastIndexOf("/") + 1);
+			const fileName = options?.fileName ?? pathname.substring(pathname.lastIndexOf("/") + 1);
 			const schoolId = useAppStore().school?.id as string;
 			const fileUrlParams: FileUrlParams = {
 				url: imageUrl,
 				fileName: fileName === "" ? "file" : fileName,
 				headers: { "User-Agent": "Embed Request User Agent" },
+				previewOnly: options?.previewOnly ?? false,
 			};
 			const response = await fileApi.uploadFromUrl(
 				schoolId,
@@ -170,6 +176,10 @@ export const useFileStorageApi = () => {
 
 			return response.data;
 		} catch (error) {
+			if (options?.previewOnly && mapAxiosErrorToResponseError(error).message === ErrorType.MIME_TYPE_MISMATCH) {
+				return;
+			}
+
 			showError(error);
 		}
 	};

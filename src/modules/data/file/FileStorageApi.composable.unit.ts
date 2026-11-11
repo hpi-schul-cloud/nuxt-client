@@ -24,8 +24,10 @@ import * as serverApi from "@api-file-storage";
 import * as wopiApi from "@api-file-storage";
 import { useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
+import type { AxiosProgressEvent } from "axios";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
+import { mock } from "vitest-mock-extended";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: vi.fn(() => ({
@@ -449,9 +451,9 @@ describe("FileStorageApi Composable", () => {
 				await upload(file, parentId, parentType, onUploadProgress);
 
 				const capturedOptions = fileApi.upload.mock.calls[0][5] as {
-					onUploadProgress: (event: ProgressEvent) => void;
+					onUploadProgress: (event: AxiosProgressEvent) => void;
 				};
-				capturedOptions.onUploadProgress({ loaded: 50, total: 100 } as ProgressEvent);
+				capturedOptions.onUploadProgress(mock<AxiosProgressEvent>({ loaded: 50, total: 100 }));
 
 				expect(onUploadProgress).toHaveBeenCalledWith(50);
 			});
@@ -464,9 +466,9 @@ describe("FileStorageApi Composable", () => {
 				await upload(file, parentId, parentType, onUploadProgress);
 
 				const capturedOptions = fileApi.upload.mock.calls[0][5] as {
-					onUploadProgress: (event: ProgressEvent) => void;
+					onUploadProgress: (event: AxiosProgressEvent) => void;
 				};
-				capturedOptions.onUploadProgress({ loaded: 110, total: 100 } as ProgressEvent);
+				capturedOptions.onUploadProgress(mock<AxiosProgressEvent>({ loaded: 110, total: 100 }));
 
 				expect(onUploadProgress).toHaveBeenCalledWith(100);
 			});
@@ -479,9 +481,9 @@ describe("FileStorageApi Composable", () => {
 				await upload(file, parentId, parentType, onUploadProgress);
 
 				const capturedOptions = fileApi.upload.mock.calls[0][5] as {
-					onUploadProgress: (event: ProgressEvent) => void;
+					onUploadProgress: (event: AxiosProgressEvent) => void;
 				};
-				capturedOptions.onUploadProgress({ loaded: 0, total: 0 } as ProgressEvent);
+				capturedOptions.onUploadProgress(mock<AxiosProgressEvent>({ loaded: 0, total: 0 }));
 
 				expect(onUploadProgress).not.toHaveBeenCalled();
 			});
@@ -494,9 +496,9 @@ describe("FileStorageApi Composable", () => {
 				await upload(file, parentId, parentType, onUploadProgress);
 
 				const capturedOptions = fileApi.upload.mock.calls[0][5] as {
-					onUploadProgress: (event: ProgressEvent) => void;
+					onUploadProgress: (event: AxiosProgressEvent) => void;
 				};
-				capturedOptions.onUploadProgress({ loaded: 50, total: undefined } as unknown as ProgressEvent);
+				capturedOptions.onUploadProgress(mock<AxiosProgressEvent>({ loaded: 50, total: undefined }));
 
 				expect(onUploadProgress).not.toHaveBeenCalled();
 			});
@@ -621,6 +623,44 @@ describe("FileStorageApi Composable", () => {
 					expect.objectContaining({
 						url: imageUrl,
 						fileName,
+						previewOnly: false,
+					})
+				);
+			});
+
+			it("should forward previewOnly", async () => {
+				const { parentId, parentType, fileApi, imageUrl } = setup();
+				const { uploadFromUrl } = useFileStorageApi();
+
+				await uploadFromUrl(imageUrl, parentId, parentType, { previewOnly: true });
+
+				expect(fileApi.uploadFromUrl).toHaveBeenCalledWith(
+					"schoolId",
+					StorageLocation.SCHOOL,
+					parentId,
+					parentType,
+					expect.objectContaining({
+						url: imageUrl,
+						previewOnly: true,
+					})
+				);
+			});
+
+			it("should use the given file name instead of the url name", async () => {
+				const { parentId, parentType, fileApi, imageUrl } = setup();
+				const { uploadFromUrl } = useFileStorageApi();
+
+				await uploadFromUrl(imageUrl, parentId, parentType, { fileName: "custom-preview.png" });
+
+				expect(fileApi.uploadFromUrl).toHaveBeenCalledWith(
+					"schoolId",
+					StorageLocation.SCHOOL,
+					parentId,
+					parentType,
+					expect.objectContaining({
+						url: imageUrl,
+						fileName: "custom-preview.png",
+						previewOnly: false,
 					})
 				);
 			});
@@ -698,6 +738,50 @@ describe("FileStorageApi Composable", () => {
 					expect.objectContaining({
 						status: "error",
 						text: "components.board.notifications.errors.fileToBig",
+					})
+				);
+			});
+		});
+
+		describe("when the imported content type is rejected", () => {
+			const setup = () => {
+				const imageUrl = "https://www.example.com/preview.svg";
+				const parentId = ObjectIdMock();
+				const parentType = FileRecordParent.BOARDNODES;
+				const { responseError, expectedPayload } = setupErrorResponse(ErrorType.MIME_TYPE_MISMATCH, 422);
+
+				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
+
+				const fileApi = mockApi<serverApi.FileApiInterface>();
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				fileApi.uploadFromUrl.mockRejectedValueOnce(responseError);
+
+				return {
+					imageUrl,
+					parentId,
+					parentType,
+				};
+			};
+
+			it("should not notify when a preview-only upload is rejected", async () => {
+				const { imageUrl, parentId, parentType } = setup();
+				const { uploadFromUrl } = useFileStorageApi();
+
+				await expect(uploadFromUrl(imageUrl, parentId, parentType, { previewOnly: true })).resolves.toBeUndefined();
+
+				expect(useNotificationStore().notify).not.toHaveBeenCalled();
+			});
+
+			it("should notify that the file service is unavailable without previewOnly", async () => {
+				const { imageUrl, parentId, parentType } = setup();
+				const { uploadFromUrl } = useFileStorageApi();
+
+				await uploadFromUrl(imageUrl, parentId, parentType);
+
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({
+						status: "error",
+						text: "components.board.notifications.errors.fileServiceNotAvailable",
 					})
 				);
 			});
@@ -1115,7 +1199,8 @@ describe("FileStorageApi Composable", () => {
 					parentType,
 					{
 						fileName: `${fileName}.docx`,
-						documentType: serverApi.DocumentType.WORDPROCESSINGML_DOCUMENT,
+						documentType:
+							serverApi.DocumentType.APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_WORDPROCESSINGML_DOCUMENT,
 					}
 				);
 			});
@@ -1179,7 +1264,7 @@ describe("FileStorageApi Composable", () => {
 					parentType,
 					{
 						fileName: `${fileName}.xlsx`,
-						documentType: serverApi.DocumentType.SPREADSHEETML_SHEET,
+						documentType: serverApi.DocumentType.APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_SPREADSHEETML_SHEET,
 					}
 				);
 			});
@@ -1243,7 +1328,8 @@ describe("FileStorageApi Composable", () => {
 					parentType,
 					{
 						fileName: `${fileName}.pptx`,
-						documentType: serverApi.DocumentType.PRESENTATIONML_PRESENTATION,
+						documentType:
+							serverApi.DocumentType.APPLICATION_VND_OPENXMLFORMATS_OFFICEDOCUMENT_PRESENTATIONML_PRESENTATION,
 					}
 				);
 			});

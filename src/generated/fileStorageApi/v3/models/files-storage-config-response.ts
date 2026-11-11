@@ -14,30 +14,9 @@
 
 
 
-/**
- * 
- * @export
- * @interface FilesStorageConfigResponse
- */
 export interface FilesStorageConfigResponse {
-    /**
-     * 
-     * @type {number}
-     * @memberof FilesStorageConfigResponse
-     */
-    MAX_FILE_SIZE: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof FilesStorageConfigResponse
-     */
-    COLLABORA_MAX_FILE_SIZE_IN_BYTES: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof FilesStorageConfigResponse
-     */
-    FILES_STORAGE_MAX_FILES_PER_PARENT: number;
+    'MAX_FILE_SIZE': number;
+    'COLLABORA_MAX_FILE_SIZE_IN_BYTES': number;
+    'FILES_STORAGE_MAX_FILES_PER_PARENT': number;
 }
-
 

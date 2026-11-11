@@ -2,11 +2,13 @@
 	<div data-testid="board-link-element" tabindex="-1">
 		<ContentElementBar :icon="mdiLink" :has-row-style="!!imageUrl && isSmallOrLargerListBoard">
 			<template v-if="imageUrl" #display>
-				<VImg
+				<!-- img only: object, embed, and iframe would run script in a stored SVG (SVSDEV-470). -->
+				<img
+					class="link-preview-image"
+					:class="{ 'link-preview-image--cover': isSmallOrLargerListBoard }"
 					:src="imageUrl"
 					alt=""
-					:aspect-ratio="isSmallOrLargerListBoard ? 1.77777 : undefined"
-					:cover="isSmallOrLargerListBoard"
+					data-testid="link-preview-image"
 				/>
 			</template>
 			<template #title>
@@ -52,3 +54,16 @@ const { smAndUp } = useDisplay();
 
 const isSmallOrLargerListBoard = computed(() => smAndUp.value && (isListLayout.value || props.isDetailView));
 </script>
+
+<style scoped lang="scss">
+.link-preview-image {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.link-preview-image--cover {
+	aspect-ratio: 1.77777;
+	object-fit: cover;
+}
+</style>

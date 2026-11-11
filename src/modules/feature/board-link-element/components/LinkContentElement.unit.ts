@@ -387,7 +387,23 @@ describe("LinkContentElement", () => {
 
 				expect(linkDisplay.props().url).toEqual(element.content.url);
 				expect(linkDisplay.props().title).toEqual(element.content.title);
+				expect(linkDisplay.props().imageUrl).toEqual(element.content.imageUrl);
 				expect(linkDisplay.props().isEditMode).toEqual(false);
+			});
+
+			it("should keep the card link on the page url when a preview image is set", () => {
+				const imageUrl = "https://some.schulcloud.de/file/preview/poc.png";
+				const linkElementContent = linkElementContentFactory.build({ imageUrl });
+				const { wrapper } = setupWrapper({
+					content: linkElementContent,
+					isEditMode: false,
+				});
+
+				const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
+
+				expect(wrapper.findComponent(LinkContentElementDisplay).props("imageUrl")).toBe(imageUrl);
+				expect(linkElement.attributes("href")).toBe(linkElementContent.url);
+				expect(linkElement.attributes("href")).not.toBe(imageUrl);
 			});
 
 			it("should not render LinkContentElementCreate", () => {
@@ -591,7 +607,10 @@ describe("LinkContentElement", () => {
 				expect(useFileStorageApiMock.uploadFromUrl).toHaveBeenCalledWith(
 					fakeMetaTags.originalImageUrl,
 					element.id,
-					FileRecordParentType.BOARDNODES
+					FileRecordParentType.BOARDNODES,
+					{
+						previewOnly: true,
+					}
 				);
 			});
 

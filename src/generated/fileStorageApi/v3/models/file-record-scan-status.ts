@@ -14,18 +14,16 @@
 
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
-export enum FileRecordScanStatus {
-    PENDING = 'pending',
-    VERIFIED = 'verified',
-    BLOCKED = 'blocked',
-    WONT_CHECK = 'wont_check',
-    ERROR = 'error'
-}
+
+export const FileRecordScanStatus = {
+    PENDING: 'pending',
+    VERIFIED: 'verified',
+    BLOCKED: 'blocked',
+    WONT_CHECK: 'wont_check',
+    ERROR: 'error',
+} as const;
+
+export type FileRecordScanStatus = typeof FileRecordScanStatus[keyof typeof FileRecordScanStatus];
 
 
 

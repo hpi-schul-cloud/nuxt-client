@@ -14,18 +14,7 @@
 
 
 
-/**
- * 
- * @export
- * @interface MultiFileParams
- */
 export interface MultiFileParams {
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof MultiFileParams
-     */
-    fileRecordIds: Array<string>;
+    'fileRecordIds': Array<string>;
 }
-
 
