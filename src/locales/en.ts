@@ -1059,6 +1059,8 @@ export default {
 	"pages.administration.classes.form.classSuffixPlaceholder": "e.g. a, b, c",
 	"pages.administration.classes.form.customName": "Custom class name",
 	"pages.administration.classes.form.customNamePlaceholder": "e.g. Frog class 3-4",
+	"pages.administration.classes.form.customNameHint":
+		"You can create year-independent classes with a custom name. These classes cannot be moved up by the admin, they must be updated manually.",
 	"pages.administration.classes.form.isCustom": "Year-independent class with custom name",
 	"pages.administration.classes.form.modeStandard": "Grade level (e.g. 5a)",
 	"pages.administration.classes.form.modeCustom": "Custom name",

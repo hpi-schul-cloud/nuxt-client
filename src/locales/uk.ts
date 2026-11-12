@@ -1077,6 +1077,8 @@ export default {
 	"pages.administration.classes.form.classSuffixPlaceholder": "наприклад, a, b, c",
 	"pages.administration.classes.form.customName": "Вільна назва класу",
 	"pages.administration.classes.form.customNamePlaceholder": "наприклад, Клас 3-4",
+	"pages.administration.classes.form.customNameHint":
+		"Можна створювати незалежні від року класи з вільними назвами. Ці класи не можуть бути «переміщені» адміністратором, вони мають оновлюватися вручну.",
 	"pages.administration.classes.form.isCustom": "Клас незалежний від навчального року з вільною назвою",
 	"pages.administration.classes.form.modeStandard": "Рівень класу (напр. 5a)",
 	"pages.administration.classes.form.modeCustom": "Вільна назва",

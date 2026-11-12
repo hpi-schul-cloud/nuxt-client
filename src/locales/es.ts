@@ -1082,6 +1082,8 @@ export default {
 	"pages.administration.classes.form.classSuffixPlaceholder": "p. ej. a, b, c",
 	"pages.administration.classes.form.customName": "Nombre de clase personalizado",
 	"pages.administration.classes.form.customNamePlaceholder": "p. ej. Clase de ranas 3-4",
+	"pages.administration.classes.form.customNameHint":
+		"Puedes crear clases independientes del año con nombres libres. El administrador no puede 'mover' estas clases, sino que deben actualizarse manualmente.",
 	"pages.administration.classes.form.isCustom": "Clase independiente del año con nombre personalizado",
 	"pages.administration.classes.form.modeStandard": "Nivel de grado (p. ej. 5a)",
 	"pages.administration.classes.form.modeCustom": "Nombre personalizado",

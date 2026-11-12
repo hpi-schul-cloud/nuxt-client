@@ -3,7 +3,7 @@
 		<!-- Section 1: Core Details -->
 		<VCard variant="outlined" class="pa-4 mb-4 rounded-lg">
 			<div class="text-subtitle-1 font-weight-bold mb-3 d-flex align-center">
-				<VIcon :icon="mdiSchoolOutline" size="small" class="me-2 text-primary" />
+				<VIcon :icon="mdiAccountMultipleOutline" size="small" class="me-2 text-primary" />
 				{{ t("pages.administration.classes.form.sectionGeneral") }}
 			</div>
 
@@ -73,7 +73,7 @@
 				/>
 			</div>
 
-			<!-- Custom Mode -->
+			<!-- Custom Mode: replaces grade and suffix, a class has only one of them -->
 			<div v-else>
 				<VTextField
 					id="input-classcustom"
@@ -94,13 +94,16 @@
 					data-testid="maintain-school-year-in-class"
 					data-test-id="checkbox_class_keep_year"
 				/>
+				<VAlert type="info" variant="tonal" density="compact" class="mt-3" data-testid="class_custom_name_hint">
+					{{ t("pages.administration.classes.form.customNameHint") }}
+				</VAlert>
 			</div>
 		</VCard>
 
 		<!-- Section 2: Teachers -->
 		<VCard variant="outlined" class="pa-4 mb-4 rounded-lg">
 			<div class="text-subtitle-1 font-weight-bold mb-1 d-flex align-center">
-				<VIcon :icon="mdiAccountGroupOutline" size="small" class="me-2 text-primary" />
+				<VIcon :icon="mdiAccountSchoolOutline" size="small" class="me-2 text-primary" />
 				{{ t("pages.administration.classes.form.sectionTeachers") }}
 			</div>
 			<div class="text-caption text-medium-emphasis mb-3">
@@ -185,7 +188,7 @@
 </template>
 
 <script setup lang="ts">
-import { mdiAccountGroupOutline, mdiCheckCircleOutline, mdiSchoolOutline } from "@icons/material";
+import { mdiAccountMultipleOutline, mdiAccountSchoolOutline, mdiCheckCircleOutline } from "@icons/material";
 import { isRequired } from "@util-validators";
 import { computed, PropType, reactive, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";

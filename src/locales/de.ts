@@ -1088,6 +1088,8 @@ export default {
 	"pages.administration.classes.form.classSuffixPlaceholder": "z.B. a, b, c",
 	"pages.administration.classes.form.customName": "Freie Klassenbezeichnung",
 	"pages.administration.classes.form.customNamePlaceholder": "z.B. Froschklasse 3-4",
+	"pages.administration.classes.form.customNameHint":
+		"Du kannst jahrgangsunabhängige Klassen mit freier Bezeichnung erstellen. Diese Klassen können nicht vom Admin ‘versetzt’ werden, sondern müssen manuell aktualisiert werden.",
 	"pages.administration.classes.form.isCustom": "Jahrgangsunabhängige Klasse mit freier Bezeichnung",
 	"pages.administration.classes.form.modeStandard": "Klassenstufe (z.B. 5a)",
 	"pages.administration.classes.form.modeCustom": "Freie Bezeichnung",
