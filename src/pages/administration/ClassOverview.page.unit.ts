@@ -245,14 +245,17 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on the manage class button", () => {
 			describe("when group class root type is class", () => {
-				it("should redirect to legacy class manage page", () => {
+				it("should redirect to nuxt class manage page", () => {
 					const { wrapper, useGroupClassMock } = setup();
 					const classId = useGroupClassMock.classes.value[1].id;
 
-					const manageBtn = wrapper.find('[data-testid="legacy-class-table-manage-btn"]');
+					const manageBtn = wrapper.findComponent<typeof VBtn>('[data-testid="legacy-class-table-manage-btn"]');
 
-					expect(manageBtn.attributes().href).toStrictEqual(`/administration/classes/${classId}/manage`);
-					expect(manageBtn.findComponent({ name: "router-link" }).exists()).toBe(false);
+					expect(manageBtn.attributes().href).toBeUndefined();
+					expect(manageBtn.props("to")).toStrictEqual({
+						name: "administration-classes-manage",
+						params: { classId },
+					});
 				});
 			});
 
@@ -273,12 +276,15 @@ describe("ClassOverview", () => {
 		});
 
 		describe("when clicking on the edit class button", () => {
-			it("should redirect to legacy class edit page", () => {
+			it("should link to class edit page", () => {
 				const { wrapper, useGroupClassMock } = setup();
 				const classId = useGroupClassMock.classes.value[1].id;
 
-				const editBtn = wrapper.find('[data-testid="class-table-edit-btn"]');
-				expect(editBtn.attributes().href).toStrictEqual(`/administration/classes/${classId}/edit`);
+				const editBtn = wrapper.findComponent<typeof VBtn>('[data-testid="class-table-edit-btn"]');
+				expect(editBtn.props("to")).toStrictEqual({
+					name: "administration-classes-edit",
+					params: { classId },
+				});
 			});
 		});
 
@@ -419,10 +425,10 @@ describe("ClassOverview", () => {
 			});
 
 			describe("when clicking on add class fab", () => {
-				it("should have link to legacy create class page", () => {
+				it("should have link to create class page", () => {
 					const { wrapper } = setup({ tab: "current", userPermissions: [Permission.CLASS_CREATE] });
 					const fabComponent = wrapper.findComponent(SpeedDialMenu);
-					expect(fabComponent.vm.actions[0].href).toStrictEqual("/administration/classes/create");
+					expect(fabComponent.vm.actions[0].to).toStrictEqual("/administration/classes/create");
 				});
 			});
 		});

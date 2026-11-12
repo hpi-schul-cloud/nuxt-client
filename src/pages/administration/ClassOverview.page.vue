@@ -62,7 +62,10 @@
 						data-testid="legacy-class-table-manage-btn"
 						variant="outlined"
 						size="small"
-						:href="`/administration/classes/${item.id}/manage`"
+						:to="{
+							name: 'administration-classes-manage',
+							params: { classId: item.id },
+						}"
 						class="mx-1 px-1"
 						min-width="0"
 					>
@@ -74,7 +77,10 @@
 						data-testid="class-table-edit-btn"
 						variant="outlined"
 						size="small"
-						:href="`/administration/classes/${item.id}/edit`"
+						:to="{
+							name: 'administration-classes-edit',
+							params: { classId: item.id },
+						}"
 						class="mx-1 px-1"
 						min-width="0"
 					>
@@ -247,7 +253,7 @@ const fab: ComputedRef<FabAction[] | undefined> = computed(() =>
 				{
 					icon: mdiPlus,
 					label: t("pages.administration.classes.index.add"),
-					href: "/administration/classes/create",
+					to: "/administration/classes/create",
 					dataTestId: "fab_button_add_class",
 				},
 			]
