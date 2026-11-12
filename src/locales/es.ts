@@ -1109,6 +1109,13 @@ export default {
 	"pages.administration.classes.manageStudents": "Alumnado",
 	"pages.administration.classes.manageStudentsPlaceholder": "Seleccionar alumno/a",
 	"pages.administration.classes.studentsNotInSystem": "¿Estudiantes aún no en el sistema?",
+	"pages.administration.classes.noConsentNecessary.n21.headline":
+		"¿Estudiantes aún no en la Niedersächsische Bildungscloud?",
+	"pages.administration.classes.noConsentNecessary.n21.firstParagraph":
+		"No es necesario obtener una declaración de consentimiento al registrar estudiantes. El uso de la Niedersächsischen Bildungscloud está regulado por la Ley de escuelas de Baja Sajonia (artículo 31, párrafo 5 de la NSchG).",
+	"pages.administration.classes.noConsentNecessary.brb.headline": "¿Estudiantes aún no en la Schul-Cloud Brandenburg?",
+	"pages.administration.classes.noConsentNecessary.brb.firstParagraph":
+		"No es necesario obtener una declaración de consentimiento al registrar estudiantes. El uso de la Schul-Cloud Brandenburg está regulado por la Ley de escuelas de Brandeburgo (artículo 65, párrafo 2, BbGSchulG).",
 	"pages.administration.classes.inviteParentsViaLink":
 		"Invite a los tutores legales o estudiantes a través de un enlace de registro.",
 	"pages.administration.classes.obtainConsent": "Obtener declaración de consentimiento",

@@ -2,13 +2,14 @@ import ClassManage from "./ClassManage.page.vue";
 import { createTestAppStoreWithPermissions, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Permission } from "@api-server";
+import { useEnvConfig } from "@data-env";
 import { useClassFormOptions, useGroupClasses } from "@data-group";
 import { useUsersStore } from "@data-users";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("@data-group");
@@ -236,5 +237,55 @@ describe("ClassManage.page", () => {
 
 		expect(wrapper.find('[data-testid="teacher-selection-on-manage-class"]').exists()).toBe(true);
 		expect(wrapper.find('[data-testid="student-selection-on-manage-class"]').exists()).toBe(true);
+	});
+
+	describe("consent notice", () => {
+		const mockEnvConfig = (config: { FEATURE_CONSENT_NECESSARY: boolean; SC_THEME: string }) => {
+			vi.mocked(useEnvConfig).mockReturnValue(
+				ref({ SC_TITLE: "dbildungscloud", ...config }) as ReturnType<typeof useEnvConfig>
+			);
+		};
+
+		afterEach(() => {
+			mockEnvConfig({ FEATURE_CONSENT_NECESSARY: true, SC_THEME: "default" });
+		});
+
+		it("shows the Niedersachsen notice when consent is not necessary", async () => {
+			mockEnvConfig({ FEATURE_CONSENT_NECESSARY: false, SC_THEME: "n21" });
+			const { wrapper } = setup();
+			await flushPromises();
+
+			expect(wrapper.find('[data-testid="class-manage-no-consent-notice"]').exists()).toBe(true);
+			expect(wrapper.text()).toContain("pages.administration.classes.noConsentNecessary.n21.headline");
+			expect(wrapper.text()).toContain("pages.administration.classes.noConsentNecessary.n21.firstParagraph");
+		});
+
+		it("shows the Brandenburg notice when consent is not necessary", async () => {
+			mockEnvConfig({ FEATURE_CONSENT_NECESSARY: false, SC_THEME: "brb" });
+			const { wrapper } = setup();
+			await flushPromises();
+
+			expect(wrapper.text()).toContain("pages.administration.classes.noConsentNecessary.brb.headline");
+			expect(wrapper.text()).toContain("pages.administration.classes.noConsentNecessary.brb.firstParagraph");
+			expect(wrapper.text()).not.toContain("pages.administration.classes.noConsentNecessary.n21");
+		});
+
+		it("shows the generic notice without a state-specific paragraph for other themes", async () => {
+			mockEnvConfig({ FEATURE_CONSENT_NECESSARY: false, SC_THEME: "default" });
+			const { wrapper } = setup();
+			await flushPromises();
+
+			expect(wrapper.find('[data-testid="class-manage-no-consent-notice"]').exists()).toBe(true);
+			expect(wrapper.text()).toContain("pages.administration.classes.studentsNotInSystem");
+			expect(wrapper.text()).not.toContain("pages.administration.classes.noConsentNecessary");
+		});
+
+		it("does not show the notice when consent is necessary", async () => {
+			mockEnvConfig({ FEATURE_CONSENT_NECESSARY: true, SC_THEME: "n21" });
+			const { wrapper } = setup();
+			await flushPromises();
+
+			expect(wrapper.find('[data-testid="class-manage-no-consent-notice"]').exists()).toBe(false);
+		});
 	});
 });

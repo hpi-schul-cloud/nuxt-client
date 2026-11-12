@@ -1116,6 +1116,14 @@ export default {
 	"pages.administration.classes.manageStudents": "Schüler:innen",
 	"pages.administration.classes.manageStudentsPlaceholder": "Schüler:innen auswählen",
 	"pages.administration.classes.studentsNotInSystem": "Schüler:innen noch nicht im System?",
+	"pages.administration.classes.noConsentNecessary.n21.headline":
+		"Schüler:innen sind noch nicht in der Niedersächsischen Bildungscloud?",
+	"pages.administration.classes.noConsentNecessary.n21.firstParagraph":
+		"Eine Einverständniserklärung bei der Registrierung von Schüler:innen muss {0} eingeholt werden. Die Nutzung der Niedersächsischen Bildungscloud ist im niedersächsischen Schulgesetz (§ 31 Abs. 5 NSchG) geregelt.",
+	"pages.administration.classes.noConsentNecessary.brb.headline":
+		"Schüler:innen sind noch nicht in der Schul-Cloud Brandenburg?",
+	"pages.administration.classes.noConsentNecessary.brb.firstParagraph":
+		"Eine Einverständniserklärung bei der Registrierung von Schüler:innen muss {0} eingeholt werden. Die Nutzung der Schul-Cloud Brandenburg ist im brandenburgischen Schulgesetz (§ 65 Abs. 2 BbGSchulG) geregelt.",
 	"pages.administration.classes.inviteParentsViaLink":
 		"Laden Sie die Erziehungsberechtigten bzw. Schüler:innen über einen Registrierungslink ein.",
 	"pages.administration.classes.obtainConsent": "Einverständniserklärung einholen",

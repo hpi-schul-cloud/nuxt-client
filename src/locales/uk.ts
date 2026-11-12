@@ -1104,6 +1104,12 @@ export default {
 	"pages.administration.classes.manageStudents": "Учні",
 	"pages.administration.classes.manageStudentsPlaceholder": "Вибрати учня",
 	"pages.administration.classes.studentsNotInSystem": "Учні ще не в системі?",
+	"pages.administration.classes.noConsentNecessary.n21.headline": "Учні ще не в Niedersächsischen Bildungscloud?",
+	"pages.administration.classes.noConsentNecessary.n21.firstParagraph":
+		"Заява про згоду {0} потрібна під час реєстрації студентів. Використання Niedersächsischen Bildungscloud регулюється Законом про школи Нижньої Саксонії (розділ 31, параграф 5 NSchG).",
+	"pages.administration.classes.noConsentNecessary.brb.headline": "Учні ще не в Schul-Cloud Brandenburg?",
+	"pages.administration.classes.noConsentNecessary.brb.firstParagraph":
+		"Заява про згоду {0} потрібна під час реєстрації студентів. Використання Schul-Cloud Brandenburg регулюється Шкільним законом Бранденбурга (розділ 65, абзац 2, BbGSchulG).",
 	"pages.administration.classes.inviteParentsViaLink": "Запросіть батьків або учнів через посилання для реєстрації.",
 	"pages.administration.classes.obtainConsent": "Отримати заяву про згоду",
 	"pages.administration.classes.ldapLoginPresence": "Учні входять у присутності законних представників.",

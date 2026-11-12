@@ -100,7 +100,7 @@
 		<!-- Guidance & Registration Links Section -->
 		<div class="mb-4">
 			<h2 class="text-h6 font-weight-bold mb-2">
-				{{ t("pages.administration.classes.studentsNotInSystem") }}
+				{{ t(notInSystemHeadlineKey) }}
 			</h2>
 			<div v-if="isConsentNecessary" class="mb-3">
 				<p class="text-body-2 mb-2">{{ t("pages.administration.classes.inviteParentsViaLink") }}</p>
@@ -126,6 +126,25 @@
 					</VBtn>
 				</div>
 			</div>
+			<div v-else class="mb-3" data-testid="class-manage-no-consent-notice">
+				<i18n-t
+					v-if="noConsentNoticeTheme"
+					:keypath="`pages.administration.classes.noConsentNecessary.${noConsentNoticeTheme}.firstParagraph`"
+					scope="global"
+					tag="p"
+					class="text-body-2 mb-2"
+				>
+					<span class="font-weight-bold">{{ t("pages.classMembers.infoBox.text.firstParagraph.bold") }}</span>
+				</i18n-t>
+				<p class="text-body-2 mb-2">{{ t("pages.classMembers.infoBox.text.secondParagraph") }}</p>
+				<p class="text-body-2 mb-2">{{ t("pages.classMembers.infoBox.text.thirdParagraph") }}</p>
+				<ul class="text-body-2 pl-4">
+					<li>{{ t("pages.classMembers.infoBox.text.listItem.first") }}</li>
+					<li>{{ t("pages.classMembers.infoBox.text.listItem.second") }}</li>
+					<li>{{ t("pages.classMembers.infoBox.text.listItem.third") }}</li>
+					<li>{{ t("pages.classMembers.infoBox.text.listItem.last") }}</li>
+				</ul>
+			</div>
 
 			<h2 class="text-h6 font-weight-bold mt-4 mb-2">{{ t("pages.administration.classes.pleaseNote") }}</h2>
 			<VExpansionPanels variant="accordion" data-testid="class-manage-expansion-panels">
@@ -137,7 +156,7 @@
 
 <script setup lang="ts">
 import { buildPageTitle } from "@/utils/pageTitle";
-import { Permission } from "@api-server";
+import { Permission, SchulcloudTheme } from "@api-server";
 import { useAppStore, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useClassFormOptions, useGroupClasses, UserSelectOption } from "@data-group";
@@ -167,6 +186,15 @@ const { sendRegistrationLink } = useUsersStore();
 const { isSchoolSynced } = useSchoolStoreRefs();
 
 const isConsentNecessary = computed(() => useEnvConfig().value.FEATURE_CONSENT_NECESSARY);
+const noConsentNoticeTheme = computed(() => {
+	const theme = useEnvConfig().value.SC_THEME;
+	return theme === SchulcloudTheme.N21 || theme === SchulcloudTheme.BRB ? theme : undefined;
+});
+const notInSystemHeadlineKey = computed(() =>
+	isConsentNecessary.value || !noConsentNoticeTheme.value
+		? "pages.administration.classes.studentsNotInSystem"
+		: `pages.administration.classes.noConsentNecessary.${noConsentNoticeTheme.value}.headline`
+);
 const canListStudents = computed(
 	() =>
 		isAdmin.value ||
