@@ -1,6 +1,6 @@
 import ContentElementList from "./ContentElementList.vue";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestEnvStore, drawingElementResponseFactory, richTextElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ContentElementType } from "@api-server";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
@@ -53,6 +53,15 @@ describe("ContentElementList", () => {
 					isDetailView: false,
 				});
 				expect(wrapper.findComponent(ContentElementList).exists()).toBe(true);
+			});
+
+			it("should mark every element wrapper with the element id", () => {
+				const elements = [richTextElementResponseFactory.build(), drawingElementResponseFactory.build()];
+				const { wrapper } = setup({ elements, isEditMode: false, isDetailView: true });
+
+				const ids = wrapper.findAll("[data-element-id]").map((wrapper) => wrapper.attributes("data-element-id"));
+
+				expect(ids).toEqual(elements.map(({ id }) => id));
 			});
 
 			const elementComponents = [
