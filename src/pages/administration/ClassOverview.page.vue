@@ -329,7 +329,7 @@ const headers = computed(() => {
 		{
 			key: "teacherNames",
 			value: (item: ClassInfo) => item.teacherNames.join(", "),
-			title: t("common.labels.teacher"),
+			title: t("common.labels.teacher.neutral"),
 			sortable: true,
 		},
 		{
