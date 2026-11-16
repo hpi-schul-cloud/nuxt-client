@@ -46,6 +46,8 @@ const { open, toggle, isOpen, categories } = useQuickNav();
 // On a list page, searching starts in that list; everywhere else it searches across everything.
 const PAGE_SCOPES: Partial<Record<string, QuickNavScope>> = {
 	rooms: "rooms",
+	// the sidebar opens the course tiles; the list of all courses is one click further
+	"course-room-overview": "courses",
 	"course-room-list": "courses",
 	tasks: "tasks",
 };

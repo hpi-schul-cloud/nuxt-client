@@ -90,6 +90,7 @@ describe("QuickNavTrigger", () => {
 	describe("on a page with its own list", () => {
 		it.each([
 			["rooms", "Search in Rooms", "rooms"],
+			["course-room-overview", "Search in Courses", "courses"],
 			["course-room-list", "Search in Courses", "courses"],
 			["tasks", "Search in Tasks", "tasks"],
 		])("on %s says what it searches and opens in that list", async (routeName, label, scope) => {
