@@ -2,7 +2,7 @@ import { useBoardStore } from "./Board.store";
 import { useBoardApi } from "./BoardApi.composable";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { BoardContextType } from "@/types/board/BoardContext";
-import { boardResponseFactory, mockComposable } from "@@/tests/test-utils";
+import { boardResponseFactory, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
@@ -49,6 +49,7 @@ describe("BoardPageInformation.composable", () => {
 					id: "courseId",
 					type: BoardContextType.COURSE,
 					name: "Course #1",
+					isArchived: false,
 				});
 
 				const { createPageInformation, breadcrumbs, contextType, pageTitle, roomId } = mountComposable(() =>
@@ -111,6 +112,7 @@ describe("BoardPageInformation.composable", () => {
 					id: "roomId",
 					type: BoardContextType.ROOM,
 					name: "Room #1",
+					isArchived: false,
 				});
 
 				const { createPageInformation, breadcrumbs, contextType, pageTitle, roomId } = mountComposable(() =>
@@ -164,6 +166,66 @@ describe("BoardPageInformation.composable", () => {
 				await createPageInformation(fakeId);
 
 				expect(contextType.value).toEqual(BoardContextType.ROOM);
+			});
+		});
+	});
+
+	describe("archived rooms breadcrumb", () => {
+		const setup = (isRoomArchiveEnabled: boolean, isArchived = true) => {
+			createTestEnvStore({ FEATURE_ROOM_ARCHIVE_ENABLED: isRoomArchiveEnabled });
+			mockedBoardApiCalls.getContextInfo.mockResolvedValue({
+				id: "roomId",
+				type: BoardContextType.ROOM,
+				name: "Room #1",
+				isArchived,
+			});
+
+			const { createPageInformation, breadcrumbs } = mountComposable(() => useSharedBoardPageInformation());
+
+			return { createPageInformation, breadcrumbs };
+		};
+
+		describe("when the room is not archived and the room archive feature is enabled", () => {
+			it("should not contain the archived rooms breadcrumb", async () => {
+				const { createPageInformation, breadcrumbs } = setup(true, false);
+
+				await createPageInformation("abc123");
+
+				expect(breadcrumbs.value.map((breadcrumb) => breadcrumb.title)).toEqual([
+					"pages.rooms.title",
+					"Room #1",
+					expect.any(String),
+				]);
+			});
+		});
+
+		describe("when the room is archived and the room archive feature is enabled", () => {
+			it("should return breadcrumbs: room-overview-page > archived-rooms-page > room-page > board-page", async () => {
+				const { createPageInformation, breadcrumbs } = setup(true);
+
+				await createPageInformation("abc123");
+
+				expect(breadcrumbs.value.map((breadcrumb) => breadcrumb.title)).toEqual([
+					"pages.rooms.title",
+					"pages.rooms.archived.title",
+					"Room #1",
+					expect.any(String),
+				]);
+				expect(breadcrumbs.value[1].to).toEqual("/rooms/archive");
+			});
+		});
+
+		describe("when the room is archived and the room archive feature is disabled", () => {
+			it("should not contain the archived rooms breadcrumb", async () => {
+				const { createPageInformation, breadcrumbs } = setup(false);
+
+				await createPageInformation("abc123");
+
+				expect(breadcrumbs.value.map((breadcrumb) => breadcrumb.title)).toEqual([
+					"pages.rooms.title",
+					"Room #1",
+					expect.any(String),
+				]);
 			});
 		});
 	});

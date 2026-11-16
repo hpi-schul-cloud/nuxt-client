@@ -248,16 +248,20 @@ export const useBoardApi = () => {
 			toPosition,
 		});
 
-	const fetchRoomName = async (type: BoardContextType, id: string): Promise<string | undefined> => {
-		const name =
-			type === BoardContextType.ROOM
-				? (await roomApi.roomControllerGetRoomDetails(id)).data.name
-				: (await courseRoomApi.courseRoomsControllerGetRoomBoard(id)).data.title;
+	const fetchContextDetails = async (
+		type: BoardContextType,
+		id: string
+	): Promise<{ name: string | undefined; isArchived: boolean }> => {
+		if (type === BoardContextType.ROOM) {
+			const { name, isArchived } = (await roomApi.roomControllerGetRoomDetails(id)).data;
+			return { name, isArchived };
+		}
 
-		return name;
+		const { title } = (await courseRoomApi.courseRoomsControllerGetRoomBoard(id)).data;
+		return { name: title, isArchived: false };
 	};
 
-	type ContextInfo = { id: string; type: BoardContextType; name: string };
+	type ContextInfo = { id: string; type: BoardContextType; name: string; isArchived: boolean };
 
 	const getContextInfo = async (boardId: string): Promise<ContextInfo | undefined> => {
 		const contextResponse = await boardApi.boardControllerGetBoardContext(boardId);
@@ -266,17 +270,13 @@ export const useBoardApi = () => {
 		}
 		const context = contextResponse.data;
 
-		const roomName = await fetchRoomName(context.type, context.id);
+		const { name, isArchived } = await fetchContextDetails(context.type, context.id);
 
-		if (roomName === undefined) {
+		if (name === undefined) {
 			return undefined;
 		}
 
-		return {
-			id: context.id,
-			type: context.type,
-			name: roomName,
-		};
+		return { id: context.id, type: context.type, name, isArchived };
 	};
 
 	const updateBoardVisibilityCall = async (boardId: string, isVisible: boolean) =>
