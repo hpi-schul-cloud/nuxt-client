@@ -1,126 +1,122 @@
 <template>
-	<VCard variant="outlined" class="pa-6 rounded-lg mb-6">
-		<div class="text-h6 font-weight-bold mb-4 d-flex align-center">
-			<VIcon :icon="mdiAccountCircleOutline" size="small" class="me-2 text-primary" />
-			{{ t("pages.account.profile.headline") }}
-		</div>
-
-		<!-- SSO Central Management Notice -->
-		<VAlert v-if="isSSO" type="info" variant="tonal" density="compact" class="mb-4" data-testid="sso-notice">
+	<section class="mb-8" data-testid="profile-section">
+		<InfoAlert v-if="isSSO" class="mb-6" data-testid="sso-notice">
 			{{ t("pages.account.profile.ssoNotice") }}
-		</VAlert>
+		</InfoAlert>
 
-		<VForm ref="formRef" @submit.prevent="handleSubmit">
-			<!-- Name fields (hidden for students) -->
-			<div v-if="!isStudent" class="d-flex flex-column flex-sm-row gap-4 mb-4">
+		<!-- Validating only invalid fields on input keeps the passwords cleared after a save from turning red -->
+		<VForm ref="formRef" validate-on="invalid-input" @submit.prevent="handleSubmit">
+			<div v-if="showNameFields" class="d-flex" :class="{ 'flex-column': xs, 'ga-6': !xs }">
 				<VTextField
+					id="firstName"
 					v-model="formData.firstName"
 					v-input-attrs="{ 'data-testid': 'user_first_name' }"
-					:label="t('pages.account.profile.firstName')"
+					:label="t('common.labels.firstName')"
 					:readonly="isSSO"
 					:disabled="loading"
+					autocomplete="given-name"
 					data-test-id="input_first_name"
-					class="flex-grow-1"
+					class="flex-fill"
 				/>
 				<VTextField
+					id="lastName"
 					v-model="formData.lastName"
 					v-input-attrs="{ 'data-testid': 'user_last_name' }"
-					:label="t('pages.account.profile.lastName')"
+					:label="t('common.labels.lastName')"
 					:readonly="isSSO"
 					:disabled="loading"
+					autocomplete="family-name"
 					data-test-id="input_last_name"
-					class="flex-grow-1"
+					class="flex-fill"
 				/>
 			</div>
 
-			<!-- Email field -->
 			<VTextField
+				id="email"
 				v-model="formData.email"
-				v-input-attrs="{
-					id: 'email',
-					'data-testid': isSSO ? 'user_email_readonly' : 'user_email',
-				}"
+				v-input-attrs="{ 'data-testid': isSSO ? 'user_email_readonly' : 'user_email' }"
 				:label="t('pages.account.profile.email')"
 				:readonly="isSSO"
 				:disabled="loading"
-				:rules="[isRequired(), isValidEmail()]"
+				:rules="isSSO ? [] : [isRequired(), isValidEmail()]"
+				type="email"
 				name="email"
+				autocomplete="email"
 				data-test-id="input_email"
-				class="mb-4"
 			/>
 
-			<!-- Password Section (for non-SSO users with PASSWORD_EDIT permission) -->
-			<div v-if="!isSSO && canEditPassword" class="mt-6">
-				<VDivider class="mb-4" />
-				<div class="text-subtitle-1 font-weight-bold mb-2 d-flex align-center">
-					<VIcon :icon="mdiLockOutline" size="small" class="me-2 text-primary" />
-					{{ t("pages.account.password.headline") }}
-				</div>
-				<div class="text-caption text-medium-emphasis mb-4">
-					{{ t("pages.account.password.hint") }}
-				</div>
-
-				<VTextField
+			<template v-if="!isSSO">
+				<SvsPasswordField
 					v-model="formData.passwordOld"
 					v-input-attrs="{ 'data-testid': 'settings_password_current' }"
 					:label="t('pages.account.password.currentPassword')"
+					:hint="t('pages.account.password.currentPasswordHint')"
 					:rules="currentPasswordRules"
 					:disabled="loading"
-					type="password"
+					persistent-hint
 					autocomplete="current-password"
 					data-test-id="input_current_password"
-					class="mb-4"
+					class="mt-2"
 				/>
 
-				<VTextField
-					v-model="formData.passwordNew"
-					v-input-attrs="{ 'data-testid': 'settings_password_new' }"
-					:label="t('pages.account.password.newPassword')"
-					:rules="newPasswordRules"
-					:disabled="loading"
-					type="password"
-					autocomplete="new-password"
-					data-test-id="input_new_password"
-					class="mb-4"
-				/>
+				<template v-if="canEditPassword">
+					<h2 class="mt-8">{{ t("pages.account.password.headline") }}</h2>
+					<ul id="password-instructions" class="pl-5 mb-4">
+						<li>{{ t("pages.account.password.instructions.rules") }}</li>
+						<li>{{ t("pages.account.password.instructions.specialCharacters") }}</li>
+					</ul>
+					<div class="d-flex" :class="{ 'flex-column': xs, 'ga-6': !xs }">
+						<SvsPasswordField
+							v-model="formData.passwordNew"
+							v-input-attrs="{ 'data-testid': 'settings_password_new' }"
+							:label="t('pages.account.password.newPassword')"
+							:rules="newPasswordRules"
+							:disabled="loading"
+							aria-describedby="password-instructions"
+							autocomplete="new-password"
+							data-test-id="input_new_password"
+							class="flex-fill"
+						/>
+						<SvsPasswordField
+							v-model="formData.passwordConfirm"
+							v-input-attrs="{ 'data-testid': 'settings_password_control' }"
+							:label="t('pages.account.password.confirmPassword')"
+							:rules="confirmPasswordRules"
+							:disabled="loading"
+							autocomplete="new-password"
+							data-test-id="input_confirm_password"
+							class="flex-fill"
+						/>
+					</div>
+				</template>
 
-				<VTextField
-					v-model="formData.passwordConfirm"
-					v-input-attrs="{ 'data-testid': 'settings_password_control' }"
-					:label="t('pages.account.password.confirmPassword')"
-					:rules="confirmPasswordRules"
-					:disabled="loading"
-					type="password"
-					autocomplete="new-password"
-					data-test-id="input_confirm_password"
-					class="mb-4"
-				/>
-			</div>
-
-			<!-- Form Actions -->
-			<div class="d-flex justify-end gap-3 mt-6">
-				<VBtn
-					v-if="!isSSO"
-					type="submit"
-					color="primary"
-					:loading="loading"
-					data-testid="submit_new_password_btn"
-					class="px-6"
-				>
-					{{ t("common.actions.save") }}
-				</VBtn>
-			</div>
+				<div class="d-flex justify-end mt-4">
+					<VBtn type="submit" color="primary" variant="flat" :loading="loading" data-testid="submit_new_password_btn">
+						{{ t("pages.account.profile.saveButton") }}
+					</VBtn>
+				</div>
+			</template>
 		</VForm>
-	</VCard>
+	</section>
 </template>
 
 <script setup lang="ts">
 import { vInputAttrs } from "@/directives/inputAttrs.directive";
 import { UpdateProfilePayload } from "@data-account";
-import { mdiAccountCircleOutline, mdiLockOutline } from "@icons/material";
-import { isRequired, isValidEmail } from "@util-validators";
-import { reactive, useTemplateRef, watch } from "vue";
+import { InfoAlert } from "@ui-alert";
+import { SvsPasswordField } from "@ui-controls";
+import {
+	hasLowercaseLetter,
+	hasNumber,
+	hasSpecialCharacter,
+	hasUppercaseLetter,
+	isOfMinLength,
+	isRequired,
+	isValidEmail,
+} from "@util-validators";
+import { computed, reactive, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
 import { VForm } from "vuetify/components";
 
 const props = defineProps({
@@ -155,6 +151,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { xs } = useDisplay();
 const formRef = useTemplateRef<VForm>("formRef");
 
 const formData = reactive({
@@ -166,58 +163,52 @@ const formData = reactive({
 	passwordConfirm: "",
 });
 
+// Students may not change their name, but SSO users see it read-only like everyone else
+const showNameFields = computed(() => props.isSSO || !props.isStudent);
+
+// A new profile object arrives after loading and after every successful save
 watch(
 	() => props.initialData,
 	(newData) => {
-		formData.firstName = newData.firstName;
-		formData.lastName = newData.lastName;
-		formData.email = newData.email;
+		Object.assign(formData, {
+			firstName: newData.firstName,
+			lastName: newData.lastName,
+			email: newData.email,
+			passwordOld: "",
+			passwordNew: "",
+			passwordConfirm: "",
+		});
+		formRef.value?.resetValidation();
 	},
-	{ immediate: true, deep: true }
+	{ immediate: true }
 );
 
-const currentPasswordRules = [
-	(v: string) => {
-		const isEmailChanged = formData.email !== props.initialData.email;
-		const isNewPasswordEntered = Boolean(formData.passwordNew);
-		if ((isEmailChanged || isNewPasswordEntered) && !v) {
-			return t("pages.account.password.errors.currentRequired");
-		}
-		return true;
-	},
-];
+const currentPasswordRules = [isRequired(t("pages.account.password.errors.currentRequired"))];
 
 const newPasswordRules = [
-	(v: string) => {
-		if (!v) return true;
-		if (v.length < 8) return t("pages.account.password.errors.minLength");
-		if (!/[a-z]/.test(v)) return t("pages.account.password.errors.lowerCase");
-		if (!/[A-Z]/.test(v)) return t("pages.account.password.errors.upperCase");
-		if (!/[0-9]/.test(v)) return t("pages.account.password.errors.number");
-		if (!/[!§$%&()=?;:,.#+*~-]/.test(v)) return t("pages.account.password.errors.specialChar");
-		return true;
-	},
-];
+	isOfMinLength(8)(),
+	hasUppercaseLetter(),
+	hasLowercaseLetter(),
+	hasNumber(),
+	hasSpecialCharacter(),
+].map((rule) => (value: string) => !value || rule(value));
 
 const confirmPasswordRules = [
-	(v: string) => {
-		if (formData.passwordNew && v !== formData.passwordNew) {
-			return t("pages.account.password.errors.mismatch");
-		}
-		return true;
-	},
+	(value: string) =>
+		!formData.passwordNew || value === formData.passwordNew || t("pages.account.password.errors.mismatch"),
 ];
 
 const handleSubmit = async () => {
 	const validation = await formRef.value?.validate();
 	if (!validation?.valid) return;
 
+	const canEditName = !props.isStudent;
 	const payload: UpdateProfilePayload = {
 		passwordOld: formData.passwordOld,
 		email: formData.email !== props.initialData.email ? formData.email : undefined,
-		firstName: !props.isStudent && formData.firstName !== props.initialData.firstName ? formData.firstName : undefined,
-		lastName: !props.isStudent && formData.lastName !== props.initialData.lastName ? formData.lastName : undefined,
-		passwordNew: formData.passwordNew ? formData.passwordNew : undefined,
+		firstName: canEditName && formData.firstName !== props.initialData.firstName ? formData.firstName : undefined,
+		lastName: canEditName && formData.lastName !== props.initialData.lastName ? formData.lastName : undefined,
+		passwordNew: formData.passwordNew || undefined,
 	};
 
 	emit("submit", payload);

@@ -1,35 +1,39 @@
 <template>
-	<VCard variant="outlined" class="pa-6 rounded-lg mb-6">
-		<div class="text-h6 font-weight-bold mb-2 d-flex align-center">
-			<VIcon :icon="mdiAccountEye" size="small" class="me-2 text-primary" />
-			{{ t("pages.account.visibility.headline") }}
-		</div>
-		<div class="text-body-2 text-medium-emphasis mb-4">
-			{{ t("pages.account.visibility.description") }}
-		</div>
+	<section class="mb-8" data-testid="directory-visibility-section">
+		<h2>{{ t("pages.account.visibility.headline") }}</h2>
+		<p class="font-weight-bold mb-1">{{ t("pages.account.visibility.subheadline") }}</p>
+		<p class="text-medium-emphasis">
+			{{ t("pages.account.visibility.hint", { themeTitle }) }}
+		</p>
 
 		<VCheckbox
 			v-model="discoverableModel"
 			v-input-attrs="{ 'data-testid': 'checkbox-show-in-directory' }"
 			:label="t('pages.account.visibility.checkboxLabel')"
 			:disabled="loading"
-			density="compact"
+			hide-details
 			data-test-id="checkbox_directory_visibility"
 			class="mb-4"
 		/>
 
 		<div class="d-flex justify-end">
-			<VBtn color="primary" :loading="loading" data-testid="submit_visibility_settings_btn" @click="handleSave">
+			<VBtn
+				color="primary"
+				variant="flat"
+				:loading="loading"
+				data-testid="submit_visibility_settings_btn"
+				@click="emit('submit', discoverableModel)"
+			>
 				{{ t("pages.account.visibility.saveButton") }}
 			</VBtn>
 		</div>
-	</VCard>
+	</section>
 </template>
 
 <script setup lang="ts">
 import { vInputAttrs } from "@/directives/inputAttrs.directive";
-import { mdiAccountEye } from "@icons/material";
-import { ref, watch } from "vue";
+import { useEnvConfig } from "@data-env";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -48,6 +52,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const themeTitle = computed(() => useEnvConfig().value.SC_TITLE);
 const discoverableModel = ref(false);
 
 watch(
@@ -57,8 +62,4 @@ watch(
 	},
 	{ immediate: true }
 );
-
-const handleSave = () => {
-	emit("submit", discoverableModel.value);
-};
 </script>

@@ -1,71 +1,51 @@
 <template>
-	<VExpansionPanels variant="accordion" class="mb-6">
-		<VExpansionPanel>
+	<VExpansionPanels class="mb-6">
+		<VExpansionPanel data-testid="third-party-logins-panel">
 			<VExpansionPanelTitle>
-				<div class="d-flex align-center">
-					<VIcon :icon="mdiShieldAccountVariantOutline" size="small" class="me-2 text-primary" />
-					<span class="font-weight-bold">{{ t("pages.account.thirdParty.headline") }}</span>
-				</div>
+				<h2 class="ma-0">{{ t("pages.account.thirdParty.headline") }}</h2>
+				<template #actions="{ expanded }">
+					<VIcon :icon="expanded ? mdiMinus : mdiPlus" />
+				</template>
 			</VExpansionPanelTitle>
 			<VExpansionPanelText eager>
-				<p class="text-body-2 text-medium-emphasis mb-4">
-					{{ t("pages.account.thirdParty.description") }}
+				<ErrorAlert v-if="hasLoadError" data-testid="third-party-logins-error">
+					{{ t("pages.account.thirdParty.loadError") }}
+				</ErrorAlert>
+
+				<p v-else-if="sessions.length === 0" class="text-medium-emphasis mb-0" data-testid="third-party-logins-empty">
+					{{ t("pages.account.thirdParty.empty") }}
 				</p>
 
-				<div v-if="sessions.length === 0" class="text-body-2 text-disabled py-2">
-					{{ t("pages.account.thirdParty.empty") }}
-				</div>
-
-				<VList v-else lines="two">
+				<VList v-else class="py-0">
 					<VListItem
 						v-for="session in sessions"
 						:key="session.client_id"
 						:title="session.client_name"
-						:subtitle="session.client_id"
 						class="px-0"
+						data-testid="third-party-login"
 					>
 						<template #append>
 							<VBtn
-								variant="outlined"
-								color="error"
-								size="small"
+								:icon="mdiTrashCanOutline"
+								:aria-label="t('pages.account.thirdParty.revokeLabel', { clientName: session.client_name })"
 								:loading="revokingId === session.client_id"
-								@click="openRevokeDialog(session.client_id, session.client_name)"
-							>
-								{{ t("pages.account.thirdParty.revoke") }}
-							</VBtn>
+								variant="text"
+								data-testid="revoke-third-party-login"
+								@click="confirmRevoke(session)"
+							/>
 						</template>
 					</VListItem>
 				</VList>
 			</VExpansionPanelText>
 		</VExpansionPanel>
 	</VExpansionPanels>
-
-	<!-- Confirmation Dialog -->
-	<VDialog v-model="dialogOpen" max-width="500">
-		<VCard>
-			<VCardTitle class="text-h6 font-weight-bold">
-				{{ t("pages.account.thirdParty.dialogTitle") }}
-			</VCardTitle>
-			<VCardText>
-				{{ t("pages.account.thirdParty.dialogText", { clientName: targetClientName }) }}
-			</VCardText>
-			<VCardActions class="justify-end">
-				<VBtn variant="text" @click="dialogOpen = false">
-					{{ t("common.actions.cancel") }}
-				</VBtn>
-				<VBtn color="error" variant="flat" @click="confirmRevoke">
-					{{ t("pages.account.thirdParty.revoke") }}
-				</VBtn>
-			</VCardActions>
-		</VCard>
-	</VDialog>
 </template>
 
 <script setup lang="ts">
+import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { ConsentSessionResponse } from "@data-account";
-import { mdiShieldAccountVariantOutline } from "@icons/material";
-import { ref } from "vue";
+import { mdiMinus, mdiPlus, mdiTrashCanOutline } from "@icons/material";
+import { ErrorAlert } from "@ui-alert";
 import { useI18n } from "vue-i18n";
 
 defineProps({
@@ -77,6 +57,10 @@ defineProps({
 		type: String,
 		default: "",
 	},
+	hasLoadError: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const emit = defineEmits<{
@@ -84,18 +68,14 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const dialogOpen = ref(false);
-const targetClientId = ref("");
-const targetClientName = ref("");
 
-const openRevokeDialog = (clientId: string, clientName: string) => {
-	targetClientId.value = clientId;
-	targetClientName.value = clientName;
-	dialogOpen.value = true;
-};
-
-const confirmRevoke = () => {
-	dialogOpen.value = false;
-	emit("revoke", targetClientId.value);
+const confirmRevoke = async (session: ConsentSessionResponse) => {
+	const isConfirmed = await askConfirmation({
+		title: t("pages.account.thirdParty.dialogText", { clientName: session.client_name }),
+		confirmBtnKey: "pages.account.thirdParty.revoke",
+	});
+	if (isConfirmed) {
+		emit("revoke", session.client_id);
+	}
 };
 </script>
