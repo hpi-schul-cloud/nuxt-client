@@ -7,8 +7,6 @@ export const roomItemFactory = Factory.define<RoomItem>(({ sequence }) => ({
 	name: `room #${sequence}`,
 	color: RoomColor.BLUE_GREY,
 	schoolId: `school${sequence}`,
-	startDate: new Date().toISOString(),
-	endDate: new Date().toISOString(),
 	permissions: [],
 	createdAt: new Date().toISOString(),
 	updatedAt: new Date().toISOString(),

@@ -230,6 +230,9 @@ describe("AddExternalPersonDialog", () => {
 					status: "error",
 					text: "pages.rooms.members.dialog.addExternalPerson.errors.addingMember",
 				});
+				expect(useNotificationStore().notify).not.toHaveBeenCalledWith(
+					expect.objectContaining({ text: "pages.rooms.members.dialog.addExternalPerson.success.addingMember" })
+				);
 				expect(wrapper.emitted("update:modelValue")?.[0][0]).toEqual(false);
 			});
 		});

@@ -17,8 +17,6 @@ describe("@feature-room/RoomForm", () => {
 		const defaultRoom: RoomCreateParams = {
 			name: "A11Y for Beginners",
 			color: RoomColor.MAGENTA,
-			startDate: "",
-			endDate: "",
 			features: [],
 		};
 		const room = roomFactory.build({

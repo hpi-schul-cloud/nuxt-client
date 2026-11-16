@@ -4,6 +4,7 @@ import { useI18nGlobal } from "@/plugins/i18n";
 import { createTestAppStore, mountComposable } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingPinia } from "@pinia/testing";
+import { enableAutoUnmount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock, vi } from "vitest";
 
@@ -12,23 +13,11 @@ vi.mock("@/plugins/i18n");
 
 const setup = (userType: User) => mountComposable(() => useDataTableFilter(userType));
 
-const removeAllFilters = () => {
-	const { removeFilter, selectedFilterType, filterQuery } = setup(User.STUDENT);
-	selectedFilterType.value = FilterOption.LAST_MIGRATION_ON;
-	removeFilter();
-	selectedFilterType.value = FilterOption.REGISTRATION;
-	removeFilter();
-	selectedFilterType.value = FilterOption.CLASSES;
-	removeFilter();
-	selectedFilterType.value = FilterOption.CREATION_DATE;
-	removeFilter();
-	selectedFilterType.value = FilterOption.OBSOLOTE_SINCE;
-	removeFilter();
-	filterQuery.value = {};
-};
+enableAutoUnmount(afterEach);
 
 describe("filter composable", () => {
-	beforeAll(() => {
+	beforeEach(() => {
+		localStorage.removeItem("filterState");
 		setActivePinia(createTestingPinia());
 		createTestAppStore();
 		createTestSchoolStore();
@@ -115,9 +104,6 @@ describe("filter composable", () => {
 	});
 
 	describe("removeFilter", () => {
-		beforeEach(() => {
-			removeAllFilters();
-		});
 		it("should remove filter from filterQuery", () => {
 			const { filterQuery, removeFilter, selectedFilterType } = setup(User.STUDENT);
 
@@ -199,7 +185,6 @@ describe("filter composable", () => {
 		});
 
 		it("should return an empty array when no filter is set ", () => {
-			removeAllFilters();
 			const { filterChipTitles } = setup(User.STUDENT);
 
 			expect(filterChipTitles.value.length).toEqual(0);

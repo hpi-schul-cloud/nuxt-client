@@ -35,6 +35,7 @@ const props = defineProps<{
 	title: string;
 	imageUrl?: string;
 	isEditMode: boolean;
+	isDetailView?: boolean;
 }>();
 
 const hostname = computed<string>(() => {
@@ -49,5 +50,5 @@ const hostname = computed<string>(() => {
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
-const isSmallOrLargerListBoard = computed(() => smAndUp.value && isListLayout.value);
+const isSmallOrLargerListBoard = computed(() => smAndUp.value && (isListLayout.value || props.isDetailView));
 </script>

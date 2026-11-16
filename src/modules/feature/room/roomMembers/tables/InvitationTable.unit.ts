@@ -134,23 +134,71 @@ describe("InvitationTable", () => {
 			}
 		);
 
+		it("should not call deleteLinks when deletion is canceled", async () => {
+			vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(false);
+			const { wrapper, roomInvitationLinkStore } = setup();
+			roomInvitationLinkStore.selectedIds = [roomInvitationLinks[0].id];
+			await nextTick();
+
+			const actionButton = wrapper.find('[data-testid="action-menu-button"]');
+			await actionButton.trigger("click");
+
+			const deleteButton = wrapper.findComponent(".v-list-item");
+			await deleteButton.trigger("click");
+			await flushPromises();
+
+			expect(confirmDialogUtils.askConfirmation).toHaveBeenCalled();
+			expect(roomInvitationLinkStore.deleteLinks).not.toHaveBeenCalled();
+		});
+
 		describe("when share button clicked", () => {
-			it("should set invitation step to 'share'", async () => {
-				const { wrapper, roomInvitationLinkStore } = setup();
-				await nextTick();
+			it.each([undefined, "secret-invitation-token"])(
+				"should share using token %s with legacy ID fallback",
+				async (invitationToken) => {
+					const { wrapper, roomInvitationLinkStore } = setup();
+					roomInvitationLinkStore.roomInvitationLinks = [{ ...roomInvitationLinks[0], invitationToken }];
+					await nextTick();
 
-				expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(false);
-				expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.PREPARE);
+					expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(false);
+					expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.PREPARE);
 
-				const shareButton = wrapper.findComponent(`[data-testid="share-button-${roomInvitationLinks[0].id}"]`);
-				await shareButton.trigger("click");
-				await nextTick();
-				const expectedLink = `/rooms/invitation-link/${roomInvitationLinks[0].id}`;
+					const shareButton = wrapper.findComponent(`[data-testid="share-button-${roomInvitationLinks[0].id}"]`);
+					await shareButton.trigger("click");
+					await nextTick();
+					const expectedLink = `${window.location.origin}/rooms/invitation-link/${invitationToken ?? roomInvitationLinks[0].id}`;
 
-				expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(true);
-				expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.SHARE);
-				expect(roomInvitationLinkStore.sharedUrl).toContain(expectedLink);
-			});
+					expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(true);
+					expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.SHARE);
+					expect(roomInvitationLinkStore.sharedUrl).toBe(expectedLink);
+				}
+			);
+
+			it.each(["share button", "menu share button"])(
+				"should use the ID fallback when %s is clicked",
+				async (control) => {
+					const { wrapper, roomInvitationLinkStore } = setup();
+					const legacyInvitation = {
+						...roomInvitationLinkStore.invitationTableData.find((link) => link.id === roomInvitationLinks[0].id)!,
+					};
+					Reflect.deleteProperty(legacyInvitation, "invitationToken");
+					roomInvitationLinkStore.invitationTableData = [legacyInvitation];
+					await nextTick();
+
+					if (control === "share button") {
+						await wrapper.find(`[data-testid="share-button-${roomInvitationLinks[0].id}"]`).trigger("click");
+					} else {
+						const dataTable = wrapper.findComponent({ name: "DataTable" });
+						const kebabMenu = dataTable.findComponent(`[data-testid="kebab-menu-${roomInvitationLinks[0].id}"]`);
+						await kebabMenu.trigger("click");
+						const shareButton = wrapper.findComponent(`[data-testid="menu-share-button-${roomInvitationLinks[0].id}"]`);
+						await shareButton.trigger("click");
+					}
+
+					expect(roomInvitationLinkStore.sharedUrl).toBe(
+						`${window.location.origin}/rooms/invitation-link/${roomInvitationLinks[0].id}`
+					);
+				}
+			);
 		});
 
 		describe("when edit button clicked", () => {
@@ -171,28 +219,54 @@ describe("InvitationTable", () => {
 
 				expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(true);
 				expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.EDIT);
+				expect(roomInvitationLinkStore.editedLink).toEqual(roomInvitationLinks[0]);
 			});
-		});
 
-		describe("when menu share button clicked", () => {
-			it("should set invitation step to 'share'", async () => {
+			it("should clear editedLink when the selected link no longer exists", async () => {
 				const { wrapper, roomInvitationLinkStore } = setup();
+				const invitationTableData = roomInvitationLinkStore.invitationTableData;
+				roomInvitationLinkStore.roomInvitationLinks = [];
+				roomInvitationLinkStore.invitationTableData = invitationTableData;
 				await nextTick();
-
-				expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(false);
-				expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.PREPARE);
 
 				const dataTable = wrapper.findComponent({ name: "DataTable" });
 				const kebabMenu = dataTable.findComponent(`[data-testid="kebab-menu-${roomInvitationLinks[0].id}"]`);
 				await kebabMenu.trigger("click");
 
-				const shareButton = wrapper.findComponent(`[data-testid="menu-share-button-${roomInvitationLinks[0].id}"]`);
-				await shareButton.trigger("click");
+				const editButton = wrapper.findComponent(`[data-testid="menu-edit-button-${roomInvitationLinks[0].id}"]`);
+				await editButton.trigger("click");
 				await nextTick();
 
-				expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(true);
-				expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.SHARE);
+				expect(roomInvitationLinkStore.editedLink).toBeNull();
 			});
+		});
+
+		describe("when menu share button clicked", () => {
+			it.each([undefined, "secret-invitation-token"])(
+				"should share using token %s with legacy ID fallback",
+				async (invitationToken) => {
+					const { wrapper, roomInvitationLinkStore } = setup();
+					roomInvitationLinkStore.roomInvitationLinks = [{ ...roomInvitationLinks[0], invitationToken }];
+					await nextTick();
+
+					expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(false);
+					expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.PREPARE);
+
+					const dataTable = wrapper.findComponent({ name: "DataTable" });
+					const kebabMenu = dataTable.findComponent(`[data-testid="kebab-menu-${roomInvitationLinks[0].id}"]`);
+					await kebabMenu.trigger("click");
+
+					const shareButton = wrapper.findComponent(`[data-testid="menu-share-button-${roomInvitationLinks[0].id}"]`);
+					await shareButton.trigger("click");
+					await nextTick();
+
+					expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(true);
+					expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.SHARE);
+					expect(roomInvitationLinkStore.sharedUrl).toBe(
+						`${window.location.origin}/rooms/invitation-link/${invitationToken ?? roomInvitationLinks[0].id}`
+					);
+				}
+			);
 		});
 
 		describe("when menu delete button clicked", () => {
@@ -251,6 +325,7 @@ describe("InvitationTable", () => {
 			roomInvitationLinkStore.invitationTableData = [
 				{
 					id: "test-id",
+					invitationToken: "test-token",
 					title: "Test",
 					isUsableByStudents: "yes",
 					isUsableByExternalPersons: "yes",
@@ -262,6 +337,7 @@ describe("InvitationTable", () => {
 				},
 				{
 					id: "test-id-2",
+					invitationToken: "test-token-2",
 					title: "Test-2",
 					isUsableByStudents: "yes",
 					isUsableByExternalPersons: "no",

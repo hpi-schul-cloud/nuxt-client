@@ -372,7 +372,8 @@ watch(
 watch(
 	[isBoardVisible, allowedOperations],
 	() => {
-		const canAccessBoard = isBoardVisible.value || allowedOperations.value.createCard;
+		// drafts are only accessible for users the backend allows to find them (editors), which also holds in read-only archived rooms
+		const canAccessBoard = isBoardVisible.value || allowedOperations.value.findBoard;
 
 		if (board.value !== undefined && !canAccessBoard) {
 			router.replace({ name: "room-details", params: { id: roomId.value } });

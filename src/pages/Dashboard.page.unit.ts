@@ -79,7 +79,7 @@ describe("DashboardPage", () => {
 			? [{ id: "release-1", publishedAt: options.latestReleasePublishedAt } as ReleaseItemResponse]
 			: [];
 
-		releasesApi.releaseControllerGetReleases.mockResolvedValue(
+		releasesApi.releasesControllerGetReleases.mockResolvedValue(
 			mockApiResponse({
 				data: { data: releaseData, total: releaseData.length, skip: 0, limit: 1 },
 			})
