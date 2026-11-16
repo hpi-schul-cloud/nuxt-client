@@ -1044,7 +1044,7 @@ export default {
 		'Die Schule kann Benutzerkonten von Schulportal importieren. Um die Migration der Benutzer durchzuführen, besuchen Sie bitte <a href="/administration/migration/">diese Seite</a>.',
 	"pages.account.title": "Dein Account",
 	"pages.account.profile.ssoNotice":
-		"Deine Nutzerdaten werden automatisch von einem Identitätsmanagement (IDM) synchronisiert. Änderungen daran können nur in dem Ausgangssystem erfolgen (z.B. Schulserver oder Schulportal), das den Daten im IDM zugrunde liegt. Bitte wende dich an den lokalen Admin deiner Schule, um Änderungen an deinen Nutzerdaten vorzunehmen.",
+		"Deine Nutzerdaten werden automatisch von einem Identitätsmanagement (IDM) synchronisiert. Änderungen daran können nur in dem Ausgangssystem erfolgen (z. B. Schulserver oder Schulportal), das den Daten im IDM zugrunde liegt. Bitte wende dich an den lokalen Admin deiner Schule, um Änderungen an deinen Nutzerdaten vorzunehmen.",
 	"pages.account.profile.email": "E-Mail-Adresse",
 	"pages.account.profile.saveButton": "Accounteinstellungen speichern",
 	"pages.account.password.headline": "Passwort ändern",
@@ -1053,7 +1053,7 @@ export default {
 	"pages.account.password.newPassword": "Neues Passwort",
 	"pages.account.password.confirmPassword": "Neues Passwort wiederholen",
 	"pages.account.password.instructions.rules":
-		"Mindestens 8 Zeichen mit Groß- und Kleinschreibung, davon jeweils mindestens eine Zahl und ein Sonderzeichen.",
+		"Mindestens 8 Zeichen mit Groß- und Kleinbuchstaben, darunter mindestens eine Zahl und ein Sonderzeichen.",
 	"pages.account.password.instructions.specialCharacters":
 		"Erlaubte Sonderzeichen sind: ! § $ % & / ( ) = ? \\ ; : , . # + * ~ -",
 	"pages.account.password.errors.currentRequired": "Bitte gib dein aktuelles Passwort ein.",
@@ -1061,7 +1061,7 @@ export default {
 	"pages.account.visibility.headline": "Räume und Teams",
 	"pages.account.visibility.subheadline": "Sichtbarkeit für Einladungen in Teams und Räume",
 	"pages.account.visibility.hint":
-		"Lehrkräfte anderer Schulen können dich über den zentralen Verzeichnisdienst der {themeTitle} bequem in ein schulübergreifendes Team einladen oder einem schulübergreifenden Raum hinzufügen. Dein Name ist dabei deiner Schule zugeordnet und in der Verzeichnisstruktur unter Name deines Bundeslandes » Name deiner Schule » dein Name aufrufbar.",
+		"Lernbegleitende anderer Schulen können dich über den zentralen Verzeichnisdienst der {themeTitle} bequem in ein schulübergreifendes Team einladen oder einem schulübergreifenden Raum hinzufügen. Dein Name ist dabei deiner Schule zugeordnet und in der Verzeichnisstruktur unter „Name deines Bundeslandes » Name deiner Schule » dein Name“ aufrufbar.",
 	"pages.account.visibility.checkboxLabel": "Sichtbarkeit im zentralen Verzeichnis aktivieren",
 	"pages.account.visibility.saveButton": "Einstellungen für Teams und Räume speichern",
 	"pages.account.thirdParty.headline": "Drittanbieter-Logins",
@@ -1069,7 +1069,7 @@ export default {
 	"pages.account.thirdParty.loadError": "Deine Drittanbieter-Logins konnten nicht geladen werden.",
 	"pages.account.thirdParty.revoke": "Zugriff widerrufen",
 	"pages.account.thirdParty.revokeLabel": "Zugriff für {clientName} widerrufen",
-	"pages.account.thirdParty.dialogText": 'Möchtest du den Zugriff für "{clientName}" wirklich widerrufen?',
+	"pages.account.thirdParty.dialogText": "Möchtest du den Zugriff für „{clientName}“ wirklich widerrufen?",
 	"pages.account.notifications.success": "Änderungen erfolgreich gespeichert.",
 	"pages.account.notifications.visibilitySuccess": "Einstellungen für Teams und Räume erfolgreich gespeichert.",
 	"pages.account.notifications.revokeSuccess": "Zugriff erfolgreich widerrufen.",
