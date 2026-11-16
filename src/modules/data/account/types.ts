@@ -8,9 +8,11 @@ export interface AccountProfileData {
 	isSSO: boolean;
 	isStudent: boolean;
 	discoverable: boolean;
-	currentPassword?: string;
-	newPassword?: string;
-	confirmPassword?: string;
+}
+
+export interface UpdateProfileResult {
+	success: boolean;
+	errorMessage?: string;
 }
 
 export interface UpdateProfilePayload {

@@ -8,16 +8,6 @@ import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, Mocked, vi } from "vitest";
 
-vi.mock("vue-i18n", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("vue-i18n")>();
-	return {
-		...actual,
-		useI18n: vi.fn(() => ({
-			t: vi.fn((key: string) => key),
-		})),
-	};
-});
-
 describe("useAccount", () => {
 	let axiosMock: Mocked<AxiosInstance>;
 	let userId: string;
@@ -72,12 +62,13 @@ describe("useAccount", () => {
 		});
 
 		const { updateProfile } = useAccount();
-		const success = await updateProfile({
+		const result = await updateProfile({
 			passwordOld: "currentPassword",
 			email: "new@example.com",
 		});
 
-		expect(success).toBe(true);
+		expect(result).toEqual({ success: true });
+		expect(useAppStore().login).toHaveBeenCalled();
 		expect(mockAccountApi.accountControllerUpdateMyAccount).toHaveBeenCalledWith({
 			passwordOld: "currentPassword",
 			email: "new@example.com",
@@ -120,5 +111,72 @@ describe("useAccount", () => {
 		const success = await revokeConsentSession("client-1");
 		expect(success).toBe(true);
 		expect(consentSessions.value).toHaveLength(0);
+	});
+
+	it("reports a successful update even if refreshing the user afterwards fails", async () => {
+		mockAccountApi.accountControllerUpdateMyAccount.mockResolvedValueOnce({});
+		vi.mocked(useAppStore().login).mockRejectedValueOnce(new Error("network"));
+		axiosMock.get.mockResolvedValueOnce({
+			data: { firstName: "Max", lastName: "Mustermann", email: "new@example.com" },
+		});
+
+		const { updateProfile, profile, isUpdating } = useAccount();
+		const result = await updateProfile({ passwordOld: "currentPassword", email: "new@example.com" });
+
+		expect(result).toEqual({ success: true });
+		expect(profile.value?.email).toBe("new@example.com");
+		expect(isUpdating.value).toBe(false);
+	});
+
+	it("returns the server error message when the profile update fails", async () => {
+		mockAccountApi.accountControllerUpdateMyAccount.mockRejectedValueOnce({
+			response: { data: { message: "Wrong password" } },
+		});
+
+		const { updateProfile, isUpdating } = useAccount();
+		const result = await updateProfile({ passwordOld: "wrong" });
+
+		expect(result).toEqual({ success: false, errorMessage: "Wrong password" });
+		expect(isUpdating.value).toBe(false);
+	});
+
+	it("returns null when loading the profile fails", async () => {
+		axiosMock.get.mockRejectedValueOnce(new Error("network"));
+
+		const { loadProfile, profile } = useAccount();
+
+		expect(await loadProfile()).toBeNull();
+		expect(profile.value).toBeNull();
+	});
+
+	it("returns false when the visibility update fails", async () => {
+		axiosMock.patch.mockRejectedValueOnce(new Error("network"));
+
+		const { updateVisibility } = useAccount();
+
+		expect(await updateVisibility(true)).toBe(false);
+	});
+
+	it("flags an error when consent sessions cannot be loaded", async () => {
+		mockOauth2Api.oauthProviderControllerListConsentSessions.mockRejectedValueOnce(new Error("network"));
+
+		const { loadConsentSessions, consentSessions, hasConsentSessionsError } = useAccount();
+		await loadConsentSessions();
+
+		expect(consentSessions.value).toEqual([]);
+		expect(hasConsentSessionsError.value).toBe(true);
+	});
+
+	it("keeps the session list when revoking fails", async () => {
+		mockOauth2Api.oauthProviderControllerListConsentSessions.mockResolvedValueOnce({
+			data: [{ client_id: "client-1", client_name: "App 1", challenge: "ch-1" }],
+		});
+		mockOauth2Api.oauthProviderControllerRevokeConsentSession.mockRejectedValueOnce(new Error("network"));
+
+		const { loadConsentSessions, revokeConsentSession, consentSessions } = useAccount();
+		await loadConsentSessions();
+
+		expect(await revokeConsentSession("client-1")).toBe(false);
+		expect(consentSessions.value).toHaveLength(1);
 	});
 });

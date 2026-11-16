@@ -1,13 +1,11 @@
-import { AccountProfileData, ConsentSessionResponse, UpdateProfilePayload } from "./types";
+import { AccountProfileData, ConsentSessionResponse, UpdateProfilePayload, UpdateProfileResult } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { AccountApiFactory, Oauth2ApiFactory } from "@api-server";
-import { notifyError, notifySuccess, useAppStore, useAppStoreRefs } from "@data-app";
+import { useAppStore, useAppStoreRefs } from "@data-app";
 import { computed, ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 export const useAccount = () => {
-	const { t } = useI18n();
 	const { execute, isRunning } = useSafeAxiosTask();
 	const appStore = useAppStore();
 	const { user, isStudent, systemId } = useAppStoreRefs();
@@ -17,6 +15,7 @@ export const useAccount = () => {
 
 	const profile = ref<AccountProfileData | null>(null);
 	const consentSessions = ref<ConsentSessionResponse[]>([]);
+	const hasConsentSessionsError = ref(false);
 	const isUpdating = ref(false);
 
 	const isSSO = computed(() => Boolean(systemId.value));
@@ -43,22 +42,20 @@ export const useAccount = () => {
 		return profile.value;
 	};
 
-	const updateProfile = async (payload: UpdateProfilePayload): Promise<boolean> => {
+	const updateProfile = async (payload: UpdateProfilePayload): Promise<UpdateProfileResult> => {
 		isUpdating.value = true;
 		try {
 			await accountApi.accountControllerUpdateMyAccount(payload);
-			notifySuccess(t("pages.account.notifications.success"));
-			await appStore.login();
-			await loadProfile();
-			return true;
 		} catch (error: unknown) {
 			const axiosError = error as { response?: { data?: { message?: string } } };
-			const message = axiosError?.response?.data?.message || t("pages.account.notifications.error");
-			notifyError(message);
-			return false;
-		} finally {
 			isUpdating.value = false;
+			return { success: false, errorMessage: axiosError?.response?.data?.message };
 		}
+
+		// The changes are saved at this point, so a failed refresh must not be reported as a failed save
+		await Promise.allSettled([appStore.login(), loadProfile()]);
+		isUpdating.value = false;
+		return { success: true };
 	};
 
 	const updateVisibility = async (discoverable: boolean): Promise<boolean> => {
@@ -71,10 +68,8 @@ export const useAccount = () => {
 			if (profile.value) {
 				profile.value.discoverable = discoverable;
 			}
-			notifySuccess(t("pages.account.notifications.visibilitySuccess"));
 			return true;
 		} catch {
-			notifyError(t("pages.account.notifications.error"));
 			return false;
 		} finally {
 			isUpdating.value = false;
@@ -85,21 +80,20 @@ export const useAccount = () => {
 		try {
 			const response = await oauth2Api.oauthProviderControllerListConsentSessions();
 			consentSessions.value = response.data || [];
-			return consentSessions.value;
+			hasConsentSessionsError.value = false;
 		} catch {
 			consentSessions.value = [];
-			return [];
+			hasConsentSessionsError.value = true;
 		}
+		return consentSessions.value;
 	};
 
 	const revokeConsentSession = async (clientId: string): Promise<boolean> => {
 		try {
 			await oauth2Api.oauthProviderControllerRevokeConsentSession(clientId);
 			consentSessions.value = consentSessions.value.filter((session) => session.client_id !== clientId);
-			notifySuccess(t("pages.account.notifications.revokeSuccess"));
 			return true;
 		} catch {
-			notifyError(t("pages.account.notifications.revokeError"));
 			return false;
 		}
 	};
@@ -107,6 +101,7 @@ export const useAccount = () => {
 	return {
 		profile,
 		consentSessions,
+		hasConsentSessionsError,
 		isLoading,
 		isUpdating,
 		isSSO,

@@ -1,35 +1,17 @@
 <template>
 	<DefaultWireframe :headline="t('pages.account.title')" max-width="native">
-		<!-- Success notification for Cypress test compatibility -->
-		<VAlert
-			v-if="successNotification"
-			type="success"
-			variant="tonal"
-			class="mb-6"
-			closable
-			data-testid="notification"
-			@click:close="successNotification = ''"
-		>
-			{{ successNotification }}
-		</VAlert>
-
-		<VAlert
-			v-if="errorNotification"
-			type="error"
-			variant="tonal"
-			class="mb-6"
-			closable
-			data-testid="error-alert"
-			@click:close="errorNotification = ''"
-		>
-			{{ errorNotification }}
-		</VAlert>
+		<div v-if="successNotification" class="mb-6">
+			<SuccessAlert data-testid="notification">{{ successNotification }}</SuccessAlert>
+		</div>
+		<div v-if="errorNotification" class="mb-6">
+			<ErrorAlert data-testid="error-alert">{{ errorNotification }}</ErrorAlert>
+		</div>
 
 		<div v-if="isLoading && !profile" class="d-flex justify-center pa-8">
 			<VProgressCircular indeterminate color="primary" />
 		</div>
 
-		<div v-else-if="profile">
+		<template v-else-if="profile">
 			<ProfileForm
 				:initial-data="profile"
 				:is-s-s-o="isSSO"
@@ -40,14 +22,19 @@
 			/>
 
 			<DirectoryVisibilityCard
-				v-if="showVisibilityCard"
+				v-if="showVisibilitySection"
 				:initial-discoverable="profile.discoverable"
 				:loading="isUpdating"
 				@submit="handleVisibilitySubmit"
 			/>
 
-			<OAuthConsentPanel :sessions="consentSessions" :revoking-id="revokingId" @revoke="handleRevokeConsent" />
-		</div>
+			<OAuthConsentPanel
+				:sessions="consentSessions"
+				:revoking-id="revokingId"
+				:has-load-error="hasConsentSessionsError"
+				@revoke="handleRevokeConsent"
+			/>
+		</template>
 	</DefaultWireframe>
 </template>
 
@@ -59,20 +46,20 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { Permission } from "@api-server";
 import { UpdateProfilePayload, useAccount } from "@data-account";
 import { useAppStore, useAppStoreRefs } from "@data-app";
-import { useEnvConfig } from "@data-env";
+import { ErrorAlert, SuccessAlert } from "@ui-alert";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const appStore = useAppStore();
 const { isStudent } = useAppStoreRefs();
-const env = useEnvConfig();
 
 const {
 	profile,
 	consentSessions,
+	hasConsentSessionsError,
 	isLoading,
 	isUpdating,
 	isSSO,
@@ -91,45 +78,40 @@ const revokingId = ref("");
 
 const canEditPassword = appStore.hasPermission(Permission.PASSWORD_EDIT);
 
-const showVisibilityCard = computed(() => {
-	if (isStudent.value) return false;
-	return Boolean(env.value?.TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE);
-});
+// Legacy gated this on TEACHER_VISIBILITY_FOR_EXTERNAL_TEAM_INVITATION, which is "opt-in" in every
+// instance but not exposed by the public config endpoint, so only the opt-in variant is supported
+const showVisibilitySection = !isStudent.value;
 
 onMounted(async () => {
-	await Promise.all([loadProfile(), loadConsentSessions()]);
+	const [loadedProfile] = await Promise.all([loadProfile(), loadConsentSessions()]);
+	if (!loadedProfile) {
+		errorNotification.value = t("pages.account.notifications.loadError");
+	}
 });
 
-const handleProfileSubmit = async (payload: UpdateProfilePayload) => {
-	successNotification.value = "";
-	errorNotification.value = "";
+const showResult = (
+	success: boolean,
+	successMessage: string,
+	errorMessage = t("pages.account.notifications.error")
+) => {
+	successNotification.value = success ? successMessage : "";
+	errorNotification.value = success ? "" : errorMessage;
+};
 
-	const ok = await updateProfile(payload);
-	if (ok) {
-		successNotification.value = t("pages.account.notifications.success");
-	} else {
-		errorNotification.value = t("pages.account.notifications.error");
-	}
+const handleProfileSubmit = async (payload: UpdateProfilePayload) => {
+	const { success, errorMessage } = await updateProfile(payload);
+	showResult(success, t("pages.account.notifications.success"), errorMessage);
 };
 
 const handleVisibilitySubmit = async (discoverable: boolean) => {
-	successNotification.value = "";
-	errorNotification.value = "";
-
-	const ok = await updateVisibility(discoverable);
-	if (ok) {
-		successNotification.value = t("pages.account.notifications.visibilitySuccess");
-	} else {
-		errorNotification.value = t("pages.account.notifications.error");
-	}
+	const success = await updateVisibility(discoverable);
+	showResult(success, t("pages.account.notifications.visibilitySuccess"));
 };
 
 const handleRevokeConsent = async (clientId: string) => {
 	revokingId.value = clientId;
-	try {
-		await revokeConsentSession(clientId);
-	} finally {
-		revokingId.value = "";
-	}
+	const success = await revokeConsentSession(clientId);
+	revokingId.value = "";
+	showResult(success, t("pages.account.notifications.revokeSuccess"), t("pages.account.notifications.revokeError"));
 };
 </script>
