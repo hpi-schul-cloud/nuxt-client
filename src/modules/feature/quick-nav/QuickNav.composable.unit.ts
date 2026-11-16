@@ -78,6 +78,43 @@ describe("score", () => {
 });
 
 describe("QuickNav Composable", () => {
+	describe("opening", () => {
+		it("starts in the given category", () => {
+			const { quickNav } = setup();
+
+			quickNav.open("rooms");
+
+			expect(quickNav.isOpen.value).toBe(true);
+			expect(quickNav.scope.value).toBe("rooms");
+		});
+
+		it("starts across all categories when none is given", () => {
+			const { quickNav } = setup();
+
+			quickNav.open();
+
+			expect(quickNav.scope.value).toBeUndefined();
+		});
+
+		it("forgets the category when it closes", () => {
+			const { quickNav } = setup();
+			quickNav.open("tasks");
+
+			quickNav.toggle();
+
+			expect(quickNav.isOpen.value).toBe(false);
+			expect(quickNav.scope.value).toBeUndefined();
+		});
+
+		it("opens in the given category when toggled open", () => {
+			const { quickNav } = setup();
+
+			quickNav.toggle("courses");
+
+			expect(quickNav.scope.value).toBe("courses");
+		});
+	});
+
 	describe("when nothing has been typed", () => {
 		it("suggests a few pages to jump to", () => {
 			const { quickNav } = setup();

@@ -121,6 +121,9 @@ const writeRecentIds = (key: string, ids: string[]): void => {
 	}
 };
 
+/** shared like `isOpen`, so the trigger can open the dialog already narrowed to a category */
+const scope = ref<QuickNavScope>();
+
 /** the line that offers to create a room under the searched name */
 export const CREATE_ROOM_NAMED_ID = "action:create-room-named";
 
@@ -139,7 +142,6 @@ export const useQuickNav = () => {
 	}
 
 	const query = ref("");
-	const scope = ref<QuickNavScope>();
 	const selectedId = ref<string | undefined>(undefined);
 
 	const trimmedQuery = computed(() => query.value.trim());
@@ -404,7 +406,9 @@ export const useQuickNav = () => {
 		if (storageKey) writeRecentIds(storageKey, []);
 	};
 
-	const open = (): void => {
+	/** opens the palette, optionally already narrowed to one category */
+	const open = (initialScope?: QuickNavScope): void => {
+		scope.value = initialScope;
 		isOpen.value = true;
 		void sourcesStore.load();
 	};
@@ -416,11 +420,11 @@ export const useQuickNav = () => {
 		selectedId.value = undefined;
 	};
 
-	const toggle = (): void => {
+	const toggle = (initialScope?: QuickNavScope): void => {
 		if (isOpen.value) {
 			close();
 		} else {
-			open();
+			open(initialScope);
 		}
 	};
 

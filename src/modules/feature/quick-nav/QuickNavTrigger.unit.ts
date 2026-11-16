@@ -10,12 +10,16 @@ import { setActivePinia } from "pinia";
 
 vi.mock("@util-logger");
 
+const { mockRoute } = vi.hoisted(() => ({ mockRoute: { name: "" } }));
+vi.mock("vue-router", () => ({ useRoute: () => mockRoute }));
+
 describe("QuickNavTrigger", () => {
 	// every mounted trigger registers its own shortcut listener on window
 	enableAutoUnmount(afterEach);
 
-	const setup = ({ platform = "MacIntel", width = 1300 } = {}) => {
+	const setup = ({ platform = "MacIntel", routeName = "rooms-board", width = 1300 } = {}) => {
 		vi.spyOn(navigator, "platform", "get").mockReturnValue(platform);
+		mockRoute.name = routeName;
 		Object.defineProperty(window, "innerWidth", { writable: true, configurable: true, value: width });
 
 		const pinia = createTestingPinia();
@@ -83,12 +87,31 @@ describe("QuickNavTrigger", () => {
 		});
 	});
 
-	it("opens the palette when clicked", async () => {
-		const { trigger, palette } = setup();
+	describe("on a page with its own list", () => {
+		it.each([
+			["rooms", "Search in Rooms", "rooms"],
+			["course-room-list", "Search in Courses", "courses"],
+			["tasks", "Search in Tasks", "tasks"],
+		])("on %s says what it searches and opens in that list", async (routeName, label, scope) => {
+			const { wrapper, trigger, palette } = setup({ routeName });
 
-		await trigger().trigger("click");
+			expect(wrapper.get("[data-testid=quick-nav-trigger-label]").text()).toBe(label);
+			await trigger().trigger("click");
 
-		expect(palette.isOpen.value).toBe(true);
+			expect(palette.isOpen.value).toBe(true);
+			expect(palette.scope.value).toBe(scope);
+		});
+	});
+
+	describe("on any other page", () => {
+		it("searches everything", async () => {
+			const { trigger, palette } = setup({ routeName: "rooms-board" });
+
+			await trigger().trigger("click");
+
+			expect(palette.isOpen.value).toBe(true);
+			expect(palette.scope.value).toBeUndefined();
+		});
 	});
 
 	it("tells assistive technology about the shortcut", () => {
@@ -109,6 +132,14 @@ describe("QuickNavTrigger", () => {
 			pressK({ metaKey: true });
 
 			expect(palette.isOpen.value).toBe(true);
+		});
+
+		it("opens in the list of the current page, like the field", () => {
+			const { palette } = setup({ routeName: "tasks" });
+
+			pressK({ metaKey: true });
+
+			expect(palette.scope.value).toBe("tasks");
 		});
 
 		it("closes the palette when Ctrl+K is pressed again", () => {

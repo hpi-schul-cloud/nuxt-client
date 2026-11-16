@@ -9,7 +9,7 @@
 		aria-haspopup="dialog"
 		aria-keyshortcuts="Control+K Meta+K"
 		data-testid="quick-nav-trigger"
-		@click="open()"
+		@click="open(pageScope)"
 	/>
 	<!-- Looks like a search field, but is a button: typing happens in the dialog it opens. -->
 	<button
@@ -20,7 +20,7 @@
 		aria-haspopup="dialog"
 		aria-keyshortcuts="Control+K Meta+K"
 		data-testid="quick-nav-trigger"
-		@click="open()"
+		@click="open(pageScope)"
 	>
 		<VIcon :icon="mdiMagnify" size="20" class="quick-nav-field-icon" aria-hidden="true" />
 		<span class="quick-nav-field-label" data-testid="quick-nav-trigger-label">{{ label }}</span>
@@ -30,17 +30,34 @@
 
 <script setup lang="ts">
 import { useQuickNav } from "./QuickNav.composable";
+import type { QuickNavScope } from "./types";
 import { mdiMagnify } from "@icons/material";
 import { onKeyStroke } from "@vueuse/core";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 import { useDisplay } from "vuetify";
 
 const { t } = useI18n();
 const { xs } = useDisplay();
-const { open, toggle, isOpen } = useQuickNav();
+const route = useRoute();
+const { open, toggle, isOpen, categories } = useQuickNav();
 
-const label = computed(() => t("feature.quickNav.searchEverywhere"));
+// On a list page, searching starts in that list; everywhere else it searches across everything.
+const PAGE_SCOPES: Partial<Record<string, QuickNavScope>> = {
+	rooms: "rooms",
+	"course-room-list": "courses",
+	tasks: "tasks",
+};
+
+const pageScope = computed(() => PAGE_SCOPES[String(route.name ?? "")]);
+const pageCategory = computed(() => categories.value.find(({ scope }) => scope === pageScope.value));
+
+const label = computed(() =>
+	pageCategory.value
+		? t("feature.quickNav.scopedPlaceholder", { category: pageCategory.value.label })
+		: t("feature.quickNav.searchEverywhere")
+);
 
 const isApple = computed(() => /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent));
 const shortcutLabel = computed(() => (isApple.value ? "⌘K" : t("feature.quickNav.shortcut.ctrlK")));
@@ -55,7 +72,7 @@ onKeyStroke(
 		// holding the keys repeats the event; only the first press toggles
 		if (event.repeat) return;
 
-		toggle();
+		toggle(pageScope.value);
 	},
 	{ eventName: "keydown" }
 );
