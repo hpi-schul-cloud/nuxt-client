@@ -166,21 +166,12 @@
 				color="primary"
 				type="submit"
 				:loading="loading"
-				data-testid="button_class_submit"
-				data-test-id="confirmClassCreate"
+				data-testid="confirmClassCreate"
 				class="px-8"
 			>
 				{{ t("common.actions.add") }}
 			</VBtn>
-			<VBtn
-				v-else
-				color="primary"
-				type="submit"
-				:loading="loading"
-				data-testid="button_class_submit"
-				data-test-id="confirm-class-edit"
-				class="px-8"
-			>
+			<VBtn v-else color="primary" type="submit" :loading="loading" data-testid="confirm-class-edit" class="px-8">
 				{{ t("common.actions.save") }}
 			</VBtn>
 		</div>

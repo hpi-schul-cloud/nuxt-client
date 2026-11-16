@@ -81,7 +81,7 @@ describe("ClassEdit.page", () => {
 		const { wrapper } = setup();
 		await flushPromises();
 
-		const submitBtn = wrapper.find('[data-testid="button_class_submit"]');
+		const submitBtn = wrapper.find('[data-testid="confirm-class-edit"]');
 		expect(submitBtn.exists()).toBe(true);
 
 		await submitBtn.trigger("submit");
@@ -100,7 +100,7 @@ describe("ClassEdit.page", () => {
 			await flushPromises();
 
 			expect(wrapper.findComponent(ClassForm).exists()).toBe(false);
-			expect(wrapper.find('[data-testid="button_class_submit"]').exists()).toBe(false);
+			expect(wrapper.find('[data-testid="confirm-class-edit"]').exists()).toBe(false);
 		});
 	});
 });

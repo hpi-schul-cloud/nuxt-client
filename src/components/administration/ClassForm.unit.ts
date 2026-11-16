@@ -90,6 +90,13 @@ describe("ClassForm.vue", () => {
 		expect(wrapper.find('input[type="checkbox"][data-testid="maintain-school-year-in-class"]').exists()).toBe(true);
 	});
 
+	it("uses the legacy e2e test id on the add button", () => {
+		const { wrapper } = setup();
+
+		expect(wrapper.find('[data-testid="confirmClassCreate"]').exists()).toBe(true);
+		expect(wrapper.find('[data-testid="confirm-class-edit"]').exists()).toBe(false);
+	});
+
 	it("does not submit a custom name that only contains whitespace", async () => {
 		const { wrapper } = setup();
 
