@@ -14,48 +14,87 @@ describe("QuickNavTrigger", () => {
 	// every mounted trigger registers its own shortcut listener on window
 	enableAutoUnmount(afterEach);
 
-	const setup = (platform: string) => {
+	const setup = ({ platform = "MacIntel", width = 1300 } = {}) => {
 		vi.spyOn(navigator, "platform", "get").mockReturnValue(platform);
+		Object.defineProperty(window, "innerWidth", { writable: true, configurable: true, value: width });
 
 		const pinia = createTestingPinia();
 		setActivePinia(pinia);
 		createTestAppStoreWithPermissions([], pinia);
 		createTestEnvStore({ SC_THEME: SchulcloudTheme.BRB });
 
-		return mount(QuickNavTrigger, {
-			global: {
-				plugins: [
-					pinia,
-					createTestingVuetify(),
-					createTestingI18n({ locale: "en", fallbackLocale: ["en"], messages: { en } }),
-				],
-			},
+		const i18n = createTestingI18n({ locale: "en", fallbackLocale: ["en"], messages: { en } });
+		const wrapper = mount(QuickNavTrigger, {
+			global: { plugins: [pinia, createTestingVuetify(), i18n] },
 		});
+		const palette = mountComposable(() => useQuickNav(), { global: { plugins: [i18n] } });
+		palette.close();
+
+		return { wrapper, palette, trigger: () => wrapper.get("[data-testid=quick-nav-trigger]") };
 	};
 
 	afterEach(() => {
 		vi.restoreAllMocks();
 	});
 
-	it("names the icon button for assistive technology", () => {
-		const wrapper = setup("MacIntel");
+	describe("on tablets and larger screens", () => {
+		it("looks like a search field but is a button that opens a dialog", () => {
+			const { trigger } = setup();
 
-		expect(wrapper.get("[data-testid=quick-nav-trigger]").attributes("aria-label")).toBe("Search everywhere");
+			expect(trigger().element.tagName).toBe("BUTTON");
+			expect(trigger().attributes("type")).toBe("button");
+			expect(trigger().attributes("aria-haspopup")).toBe("dialog");
+			expect(trigger().classes()).toContain("quick-nav-field");
+		});
+
+		it("names itself with its visible text, without reading out the shortcut badge", () => {
+			const { wrapper } = setup();
+
+			expect(wrapper.get("[data-testid=quick-nav-trigger-label]").text()).toBe("Search everywhere");
+			expect(wrapper.get("[data-testid=quick-nav-shortcut]").attributes("aria-hidden")).toBe("true");
+		});
+
+		it.each([
+			["MacIntel", "⌘K"],
+			["Win32", "Ctrl+K"],
+		])("shows the shortcut inside the field for %s", (platform, shortcut) => {
+			const { wrapper } = setup({ platform });
+
+			expect(wrapper.get("[data-testid=quick-nav-shortcut]").text()).toBe(shortcut);
+		});
 	});
 
-	it.each([
-		["MacIntel", "⌘K"],
-		["Win32", "Ctrl+K"],
-	])("shows the shortcut inline for %s", (platform, shortcut) => {
-		const wrapper = setup(platform);
+	describe("on phones", () => {
+		it("stays a compact icon button with a name for assistive technology", () => {
+			const { trigger } = setup({ width: 500 });
 
-		expect(wrapper.get("[data-testid=quick-nav-shortcut]").text()).toBe(shortcut);
+			expect(trigger().classes()).not.toContain("quick-nav-field");
+			expect(trigger().attributes("aria-label")).toBe("Search everywhere");
+			expect(trigger().find("[data-testid=quick-nav-shortcut]").exists()).toBe(false);
+		});
+
+		it("opens the same palette as the field", async () => {
+			const { trigger, palette } = setup({ width: 500 });
+
+			await trigger().trigger("click");
+
+			expect(palette.isOpen.value).toBe(true);
+			expect(trigger().attributes("aria-expanded")).toBe("true");
+		});
+	});
+
+	it("opens the palette when clicked", async () => {
+		const { trigger, palette } = setup();
+
+		await trigger().trigger("click");
+
+		expect(palette.isOpen.value).toBe(true);
 	});
 
 	it("tells assistive technology about the shortcut", () => {
-		const wrapper = setup("Win32");
+		const { trigger } = setup({ platform: "Win32" });
 
-		expect(wrapper.get("[data-testid=quick-nav-trigger]").attributes("aria-keyshortcuts")).toBe("Control+K Meta+K");
+		expect(trigger().attributes("aria-keyshortcuts")).toBe("Control+K Meta+K");
 	});
 
 	describe("keyboard shortcut", () => {
@@ -64,18 +103,8 @@ describe("QuickNavTrigger", () => {
 
 		const pressK = (modifiers: { metaKey?: boolean; ctrlKey?: boolean } = {}) => window.dispatchEvent(keyK(modifiers));
 
-		const setupWithPalette = () => {
-			const wrapper = setup("MacIntel");
-			const palette = mountComposable(() => useQuickNav(), {
-				global: { plugins: [createTestingI18n()] },
-			});
-			palette.close();
-
-			return { wrapper, palette };
-		};
-
 		it("opens the palette with ⌘K", () => {
-			const { palette } = setupWithPalette();
+			const { palette } = setup();
 
 			pressK({ metaKey: true });
 
@@ -83,7 +112,7 @@ describe("QuickNavTrigger", () => {
 		});
 
 		it("closes the palette when Ctrl+K is pressed again", () => {
-			const { palette } = setupWithPalette();
+			const { palette } = setup();
 
 			pressK({ ctrlKey: true });
 			pressK({ ctrlKey: true });
@@ -98,7 +127,7 @@ describe("QuickNavTrigger", () => {
 				);
 
 			it("opens the palette once and keeps it open", () => {
-				const { palette } = setupWithPalette();
+				const { palette } = setup();
 
 				pressK({ metaKey: true });
 				holdK();
@@ -109,7 +138,7 @@ describe("QuickNavTrigger", () => {
 			});
 
 			it("still keeps the browser from handling the repeats", () => {
-				setupWithPalette();
+				setup();
 				const repeat = new KeyboardEvent("keydown", {
 					key: "k",
 					metaKey: true,
@@ -125,7 +154,7 @@ describe("QuickNavTrigger", () => {
 		});
 
 		it("ignores K without a modifier, so typing is not interrupted", () => {
-			const { palette } = setupWithPalette();
+			const { palette } = setup();
 
 			pressK();
 
@@ -133,7 +162,7 @@ describe("QuickNavTrigger", () => {
 		});
 
 		it("keeps the browser from handling the shortcut itself", () => {
-			setupWithPalette();
+			setup();
 			const event = keyK({ metaKey: true });
 
 			window.dispatchEvent(event);

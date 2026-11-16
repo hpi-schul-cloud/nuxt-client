@@ -1,5 +1,5 @@
 <template>
-	<VNavigationDrawer v-model="sidebarExpanded">
+	<VNavigationDrawer v-model="sidebarExpanded" :width="SIDEBAR_WIDTH">
 		<VList open-strategy="multiple">
 			<div class="d-flex align-center">
 				<VBtn
@@ -33,6 +33,7 @@
 <script setup lang="ts">
 import CloudLogo from "../CloudLogo.vue";
 import { SidebarGroupItem, SidebarSingleItem } from "../types";
+import { SIDEBAR_WIDTH } from "./sidebar-width";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import SidebarItem from "./SidebarItem.vue";
 import { useSidebarItems } from "./SidebarItems.composable";

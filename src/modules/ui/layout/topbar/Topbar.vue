@@ -1,9 +1,17 @@
 <template>
 	<VToolbar :height="appBarHeight" class="top-bar">
 		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
-		<template #prepend>
+		<div
+			v-if="$slots.search && !isPhone"
+			class="top-bar-search"
+			:style="{ marginInlineStart: `${searchInset}px` }"
+			data-testid="topbar-search"
+		>
+			<slot name="search" />
+		</div>
+		<!-- VToolbar keeps an empty prepend slot as a 4px box, which would push the search off the content edge -->
+		<template v-if="!sidebarExpanded" #prepend>
 			<VAppBarNavIcon
-				v-if="!sidebarExpanded"
 				:icon="mdiMenu"
 				size="default"
 				data-test-id="sidebar-toggle"
@@ -21,7 +29,7 @@
 		>
 			<CloudStatusMessages :status-alerts="statusAlerts" />
 		</TopbarItem>
-		<div class="d-flex align-center mr-2" data-testid="topbar-search">
+		<div v-if="$slots.search && isPhone" class="d-flex align-center mr-2" data-testid="topbar-search">
 			<slot name="search" />
 		</div>
 		<TopbarItem
@@ -49,6 +57,7 @@
 
 <script setup lang="ts">
 import CloudLogo from "../CloudLogo.vue";
+import { SIDEBAR_WIDTH } from "../sidebar/sidebar-width";
 import CloudStatusMessages from "./CloudStatusMessages.vue";
 import PageShare from "./PageShare.vue";
 import TopbarItem from "./TopbarItem.vue";
@@ -71,14 +80,23 @@ watch(y, (newVal, oldVal) => {
 
 defineEmits(["sidebar-toggled"]);
 
-defineProps({
+const props = defineProps({
 	sidebarExpanded: {
 		type: Boolean,
 		required: true,
 	},
 });
 
-const { lgAndUp: isDesktop, mdAndUp: isTabletOrBigger } = useDisplay();
+const { lgAndUp: isDesktop, mdAndUp: isTabletOrBigger, xs: isPhone } = useDisplay();
+
+// Same as the horizontal padding of DefaultWireframe, where breadcrumbs and page titles start.
+const CONTENT_GUTTER = 24;
+
+// The toolbar runs underneath the sidebar, which only stays open beside the content on desktop.
+// There the search starts where the page content starts; otherwise it follows the logo.
+const searchInset = computed(() =>
+	isDesktop.value && props.sidebarExpanded ? SIDEBAR_WIDTH + CONTENT_GUTTER : CONTENT_GUTTER
+);
 onMounted(() => {
 	fetchStatusAlerts();
 });
@@ -107,6 +125,14 @@ const appBarHeight = computed(() => {
 	top: 0;
 	z-index: var(--z-floating);
 	transition: top 0.2s ease-in-out;
+}
+
+/* Shrinks along with the school name when space runs out, but never below a width that still reads as a field. */
+.top-bar-search {
+	display: flex;
+	flex: 0 1 360px;
+	min-width: 180px;
+	margin-inline-end: 16px;
 }
 
 .school-name {

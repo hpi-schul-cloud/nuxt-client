@@ -1,27 +1,31 @@
 <template>
 	<VBtn
+		v-if="xs"
 		variant="text"
 		rounded="lg"
-		min-width="44"
-		class="quick-nav-trigger text-none text-body-2"
-		height="44"
+		:icon="mdiMagnify"
 		:aria-label="label"
 		:aria-expanded="isOpen"
 		aria-haspopup="dialog"
 		aria-keyshortcuts="Control+K Meta+K"
 		data-testid="quick-nav-trigger"
-		@click="open"
+		@click="open()"
+	/>
+	<!-- Looks like a search field, but is a button: typing happens in the dialog it opens. -->
+	<button
+		v-else
+		type="button"
+		class="quick-nav-field"
+		:aria-expanded="isOpen"
+		aria-haspopup="dialog"
+		aria-keyshortcuts="Control+K Meta+K"
+		data-testid="quick-nav-trigger"
+		@click="open()"
 	>
-		<VIcon :icon="mdiMagnify" size="22" aria-hidden="true" />
-		<span class="quick-nav-label" aria-hidden="true">
-			<span class="quick-nav-label-clip">
-				<span class="quick-nav-label-text">
-					<span>{{ label }}</span>
-					<kbd class="quick-nav-shortcut" data-testid="quick-nav-shortcut">{{ shortcutLabel }}</kbd>
-				</span>
-			</span>
-		</span>
-	</VBtn>
+		<VIcon :icon="mdiMagnify" size="20" class="quick-nav-field-icon" aria-hidden="true" />
+		<span class="quick-nav-field-label" data-testid="quick-nav-trigger-label">{{ label }}</span>
+		<kbd class="quick-nav-shortcut" aria-hidden="true" data-testid="quick-nav-shortcut">{{ shortcutLabel }}</kbd>
+	</button>
 </template>
 
 <script setup lang="ts">
@@ -30,13 +34,16 @@ import { mdiMagnify } from "@icons/material";
 import { onKeyStroke } from "@vueuse/core";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
 
 const { t } = useI18n();
+const { xs } = useDisplay();
 const { open, toggle, isOpen } = useQuickNav();
+
+const label = computed(() => t("feature.quickNav.searchEverywhere"));
 
 const isApple = computed(() => /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent));
 const shortcutLabel = computed(() => (isApple.value ? "⌘K" : t("feature.quickNav.shortcut.ctrlK")));
-const label = computed(() => t("feature.quickNav.searchEverywhere"));
 
 onKeyStroke(
 	"k",
@@ -54,66 +61,64 @@ onKeyStroke(
 );
 </script>
 
-<style scoped>
-.quick-nav-trigger {
-	padding-inline: 11px;
-	font-weight: normal;
-	letter-spacing: normal;
-}
-
-.quick-nav-label {
-	display: grid;
-	grid-template-columns: 0fr;
-	opacity: 0;
+<style lang="scss" scoped>
+.quick-nav-field {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	width: 100%;
+	min-width: 0;
+	height: 40px;
+	padding-inline: 12px 8px;
+	font: inherit;
+	font-size: var(--text-md);
+	/* the visible text is the button's only name, so it needs full text contrast, not placeholder grey */
+	color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
+	text-align: start;
+	cursor: pointer;
+	background-color: rgba(var(--v-theme-on-surface), 0.04);
+	border: thin solid rgba(var(--v-theme-on-surface), 0.24);
+	border-radius: 8px;
 	transition:
-		grid-template-columns 260ms cubic-bezier(0.22, 1, 0.36, 1),
-		opacity 100ms ease-out;
+		background-color 150ms ease-out,
+		border-color 150ms ease-out;
+
+	&:hover {
+		background-color: rgba(var(--v-theme-on-surface), 0.06);
+		border-color: rgba(var(--v-theme-on-surface), 0.4);
+	}
+
+	&:focus-visible {
+		outline: 2px solid rgb(var(--v-theme-primary));
+		outline-offset: 2px;
+	}
 }
 
-.quick-nav-label-clip {
+.quick-nav-field-icon {
+	flex: none;
+}
+
+.quick-nav-field-label {
+	flex: 1;
 	min-width: 0;
 	overflow: hidden;
-}
-
-.quick-nav-label-text {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	padding-inline-start: 8px;
+	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
 .quick-nav-shortcut {
-	padding: 2px 5px;
-	border: 1px solid rgba(var(--v-theme-on-surface), 0.16);
-	border-radius: 4px;
+	flex: none;
+	padding: 2px 6px;
 	font: inherit;
 	font-size: var(--text-xs);
-	line-height: 1.25;
-}
-
-@media (min-width: 960px) {
-	.quick-nav-trigger:focus-visible .quick-nav-label {
-		grid-template-columns: 1fr;
-		opacity: 1;
-		transition-duration: 420ms, 240ms;
-		transition-delay: 0ms, 80ms;
-	}
-}
-
-@media (min-width: 960px) and (hover: hover) {
-	.quick-nav-trigger:hover .quick-nav-label {
-		grid-template-columns: 1fr;
-		opacity: 1;
-		transition-duration: 420ms, 240ms;
-		transition-delay: 0ms, 80ms;
-	}
+	line-height: var(--line-height-md);
+	background-color: rgb(var(--v-theme-surface));
+	border: thin solid rgba(var(--v-theme-on-surface), 0.16);
+	border-radius: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.quick-nav-trigger .quick-nav-label,
-	.quick-nav-trigger:hover .quick-nav-label,
-	.quick-nav-trigger:focus-visible .quick-nav-label {
+	.quick-nav-field {
 		transition: none;
 	}
 }
