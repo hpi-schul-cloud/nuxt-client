@@ -6,26 +6,16 @@ import {
 	RoomApiFactory,
 	RoomColor,
 	RoomItemResponse,
-	RoomMemberResponse,
 	TaskApiFactory,
 	TaskResponse,
 } from "@api-server";
-import { useAppStore } from "@data-app";
-import {
-	mdiAccountOutline,
-	mdiAccountSupervisorCircleOutline,
-	mdiFormatListChecks,
-	mdiSchoolOutline,
-} from "@icons/material";
+import { mdiAccountSupervisorCircleOutline, mdiFormatListChecks, mdiSchoolOutline } from "@icons/material";
 import { logger } from "@util-logger";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-// a member count can stay equal while people swap, so every member list is reloaded now and then
-const FULL_MEMBER_REFRESH_MS = 30 * 60 * 1000;
 const PAGE_SIZE = 99; // the server's maximum page size
 const MAX_ITEMS_PER_KIND = 500;
-const MEMBER_REQUESTS_AT_ONCE = 5;
 
 type Page<T> = { data: { data: T[]; total: number } };
 
@@ -147,74 +137,16 @@ export const useQuickNavSourcesStore = defineStore("quickNavSources", () => {
 	const rooms = ref<QuickNavEntry[]>([]);
 	const courses = ref<QuickNavEntry[]>([]);
 	const tasks = ref<QuickNavEntry[]>([]);
-	const people = ref<QuickNavEntry[]>([]);
 	const isLoading = ref(false);
 	/** which categories could not be loaded, so the palette can say what is missing */
 	const failedScopes = ref<QuickNavScope[]>([]);
 
-	const membersByRoom = new Map<string, { totalMembers: number; members: RoomMemberResponse[] }>();
-	let membersRefreshedAt: number | undefined;
 	let pendingLoad: Promise<void> | undefined;
 
-	// people are found through the member lists of shared rooms, so the palette is not a school directory
-	const toPeopleEntries = (roomItems: RoomItemResponse[]): QuickNavEntry[] => {
-		const currentUserId = useAppStore().user?.id;
-		const found = new Map<string, QuickNavEntry>();
-
-		for (const room of roomItems) {
-			for (const member of membersByRoom.get(room.id)?.members ?? []) {
-				if (member.userId === currentUserId || found.has(member.userId)) continue;
-
-				found.set(member.userId, {
-					id: `person:${member.userId}`,
-					kind: QuickNavKind.PERSON,
-					title: `${member.firstName} ${member.lastName}`.trim(),
-					subtitle: room.name,
-					icon: mdiAccountOutline,
-					to: `/rooms/${room.id}/members`,
-				});
-			}
-		}
-
-		return [...found.values()];
-	};
-
-	const loadPeople = async (roomItems: RoomItemResponse[]): Promise<void> => {
-		const roomsWithVisibleMembers = roomItems.filter((room) => room.allowedOperations?.getRoomMembers);
-		const visibleRoomIds = new Set(roomsWithVisibleMembers.map((room) => room.id));
-		[...membersByRoom.keys()].filter((roomId) => !visibleRoomIds.has(roomId)).forEach((id) => membersByRoom.delete(id));
-
-		const isFullRefresh = membersRefreshedAt === undefined || Date.now() - membersRefreshedAt >= FULL_MEMBER_REFRESH_MS;
-		const outdatedRooms = roomsWithVisibleMembers.filter(
-			(room) => isFullRefresh || membersByRoom.get(room.id)?.totalMembers !== room.totalMembers
-		);
-
-		people.value = toPeopleEntries(roomsWithVisibleMembers);
-
-		for (let start = 0; start < outdatedRooms.length; start += MEMBER_REQUESTS_AT_ONCE) {
-			const batch = outdatedRooms.slice(start, start + MEMBER_REQUESTS_AT_ONCE);
-			const responses = await Promise.allSettled(batch.map((room) => roomApi.roomControllerGetMembers(room.id)));
-
-			responses.forEach((response, index) => {
-				const room = batch[index];
-				if (response.status === "rejected") {
-					membersByRoom.delete(room.id);
-					return;
-				}
-				membersByRoom.set(room.id, { totalMembers: room.totalMembers, members: response.value.data.data });
-			});
-
-			people.value = toPeopleEntries(roomsWithVisibleMembers);
-		}
-
-		if (isFullRefresh) membersRefreshedAt = Date.now();
-	};
-
-	const loadRoomsAndPeople = async (): Promise<void> => {
+	// the member count comes with the room list, so no member list has to be asked for
+	const loadRooms = async (): Promise<void> => {
 		const { data } = await roomApi.roomControllerGetRooms();
 		rooms.value = data.data.map(toRoomEntry);
-
-		await loadPeople(data.data);
 	};
 
 	const loadCourses = async (): Promise<void> => {
@@ -230,11 +162,10 @@ export const useQuickNavSourcesStore = defineStore("quickNavSources", () => {
 	const fetchAll = async (): Promise<void> => {
 		isLoading.value = true;
 
-		// people are found through the rooms, so they fail together
-		const sources: QuickNavScope[][] = [["rooms", "people"], ["courses"], ["tasks"]];
-		const results = await Promise.allSettled([loadRoomsAndPeople(), loadCourses(), loadTasks()]);
+		const sources: QuickNavScope[] = ["rooms", "courses", "tasks"];
+		const results = await Promise.allSettled([loadRooms(), loadCourses(), loadTasks()]);
 
-		failedScopes.value = results.flatMap((result, index) => (result.status === "rejected" ? sources[index] : []));
+		failedScopes.value = sources.filter((_source, index) => results[index].status === "rejected");
 		results.forEach((result) => {
 			if (result.status === "rejected") logger.error("Quick navigation could not load its entries", result.reason);
 		});
@@ -250,5 +181,5 @@ export const useQuickNavSourcesStore = defineStore("quickNavSources", () => {
 		return pendingLoad;
 	};
 
-	return { rooms, courses, tasks, people, isLoading, failedScopes, load };
+	return { rooms, courses, tasks, isLoading, failedScopes, load };
 });

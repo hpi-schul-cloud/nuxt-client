@@ -5,7 +5,6 @@ export enum QuickNavKind {
 	ROOM = "room",
 	COURSE = "course",
 	TASK = "task",
-	PERSON = "person",
 	/** something the palette does instead of navigating, e.g. creating a room */
 	ACTION = "action",
 	/** the last line of a group cut short, which opens the whole category */
@@ -37,6 +36,8 @@ export type QuickNavEntry = {
 	action?: () => void;
 	/** opens this category inside the palette instead of going anywhere */
 	showsAll?: QuickNavScope;
+	/** actions only: the id of the page this action stands beside in the overview, "Raum erstellen" beside "Räume" */
+	pageId?: string;
 };
 
 export type QuickNavAvatar = {
@@ -59,4 +60,4 @@ export type QuickNavGroup = {
 	isWide?: boolean;
 };
 
-export type QuickNavScope = "rooms" | "courses" | "tasks" | "people";
+export type QuickNavScope = "rooms" | "courses" | "tasks";

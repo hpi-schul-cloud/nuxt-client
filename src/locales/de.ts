@@ -2098,7 +2098,6 @@ export default {
 	"feature.quickNav.failedSources": "{sources} konnten nicht geladen werden. Die Ergebnisse sind unvollständig.",
 	"feature.quickNav.group.navigation": "Springen zu",
 	"feature.quickNav.group.tasks": "Aufgaben",
-	"feature.quickNav.group.people": "Personen",
 	"feature.quickNav.group.actions": "Aktionen",
 	"feature.quickNav.hint.move": "{keys} auswählen",
 	"feature.quickNav.hint.open": "{keys} öffnen",

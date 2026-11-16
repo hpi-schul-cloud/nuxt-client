@@ -141,17 +141,21 @@
 						aria-hidden="true"
 					/>
 					<!-- one block while searching and on a phone; the overview puts its recent lines on top and the rest in columns -->
+					<!-- the columns lay their lines into rows they share, so a page and its action stand side by side -->
 					<div
 						v-for="(block, columnIndex) in blocks"
 						:key="columnIndex"
 						class="quick-nav-column"
-						:class="{ 'quick-nav-column-full': block.isFullWidth }"
+						:class="{ 'quick-nav-column-full': block.isFullWidth, 'quick-nav-column-rows': block.rowOf !== undefined }"
+						:style="block.rowOf ? { '--quick-nav-rows': (block.rowCount ?? 0) + 1 } : undefined"
 						role="presentation"
 					>
-						<fieldset
+						<!-- a div rather than a fieldset: a fieldset's content box does not take part in the subgrid below -->
+						<div
 							v-for="(group, groupIndex) in block.groups"
 							:key="group.label"
 							class="quick-nav-group"
+							role="group"
 							:aria-labelledby="`quick-nav-${uid}-group-${columnIndex}-${groupIndex}`"
 						>
 							<div class="quick-nav-group-header" role="presentation">
@@ -177,10 +181,11 @@
 								:is-selected="entry.id === selectedEntry?.id"
 								:query="isEcho(entry) ? '' : trimmedQuery"
 								:data-testid="`quick-nav-entry-${entry.id}`"
+								:style="block.rowOf ? { '--quick-nav-row': block.rowOf[entry.id] + 2 } : undefined"
 								@open="openEntry(entry)"
 								@select="select(entry.id)"
 							/>
-						</fieldset>
+						</div>
 					</div>
 				</VList>
 				<div v-if="isEmpty" class="quick-nav-empty px-6 py-8" data-testid="quick-nav-empty">
@@ -675,9 +680,6 @@ const openSelected = (): void => {
 }
 
 .quick-nav-group {
-	border: 0;
-	margin: 0;
-	padding: 0;
 	min-width: 0;
 }
 
@@ -730,7 +732,39 @@ const openSelected = (): void => {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		align-items: start;
 		column-gap: 8px;
-		row-gap: 8px;
+	}
+
+	/* the gap between the recent lines and the columns; a row gap would also open up between the lines */
+	.quick-nav-overview .quick-nav-column-full {
+		margin-bottom: 8px;
+	}
+
+	/*
+	 * Both columns and their groups take the rows of the overview as their own (subgrid), so a row is
+	 * as tall as the taller of its two lines and "Räume" stays beside "Raum erstellen" even when one
+	 * of them wraps. Row 1 is the group header, the lines follow in the row the composable gave them.
+	 */
+	.quick-nav-column-rows,
+	.quick-nav-column-rows > .quick-nav-group {
+		display: grid;
+		grid-template-rows: subgrid;
+		align-items: start;
+	}
+
+	.quick-nav-column-rows {
+		grid-row: span var(--quick-nav-rows);
+	}
+
+	.quick-nav-column-rows > .quick-nav-group {
+		grid-row: 1 / -1;
+	}
+
+	.quick-nav-column-rows .quick-nav-group-header {
+		grid-row: 1;
+	}
+
+	.quick-nav-column-rows .quick-nav-result {
+		grid-row: var(--quick-nav-row);
 	}
 }
 

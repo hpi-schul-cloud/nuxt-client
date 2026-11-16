@@ -66,7 +66,17 @@ const isWholeTitle = (title: string, query: string): boolean => {
 };
 
 /** a stretch of the list: either the full width, or one of the columns side by side */
-type QuickNavBlock = { groups: QuickNavGroup[]; isFullWidth: boolean };
+type QuickNavBlock = {
+	groups: QuickNavGroup[];
+	isFullWidth: boolean;
+	/**
+	 * Columns only: the row of each line, counted from 0 below the group headers, in rows the columns
+	 * share. A row can be empty in one column, so a line keeps its row beside its partner.
+	 */
+	rowOf?: Record<string, number>;
+	/** columns only: how many rows the columns share, the longest column's */
+	rowCount?: number;
+};
 
 type Comparator = (a: QuickNavEntry, b: QuickNavEntry) => number;
 
@@ -131,7 +141,7 @@ export const useQuickNav = () => {
 	const { t, locale } = useI18n();
 	const { navigationEntries, actionEntries, helpEntries } = useQuickNavEntries();
 	const sourcesStore = useQuickNavSourcesStore();
-	const { rooms, courses, tasks, people, isLoading, failedScopes } = storeToRefs(sourcesStore);
+	const { rooms, courses, tasks, isLoading, failedScopes } = storeToRefs(sourcesStore);
 
 	const userId = useAppStore().user?.id;
 	// per user, because school computers are shared
@@ -171,7 +181,6 @@ export const useQuickNav = () => {
 		{ scope: "rooms" as const, label: t("common.labels.room", 2), entries: roomsWithMembers.value },
 		{ scope: "courses" as const, label: t("feature.quickNav.group.courses"), entries: courses.value },
 		{ scope: "tasks" as const, label: t("feature.quickNav.group.tasks"), entries: tasks.value },
-		{ scope: "people" as const, label: t("feature.quickNav.group.people"), entries: people.value },
 	]);
 	const activeCategory = computed(() => categories.value.find((category) => category.scope === scope.value));
 
@@ -277,6 +286,59 @@ export const useQuickNav = () => {
 		].filter((group) => group.entries.length > 0);
 	});
 
+	const overviewPages = computed(() => navigationEntries.value.slice(0, SUGGESTION_COUNT));
+
+	/**
+	 * Which row of the overview each page and action stands in. The pages go top to bottom, and an
+	 * action takes the row of the page it belongs to, so "Raum erstellen" stands beside "Räume" and
+	 * the eye can go across. A page without its action (a student may not create rooms) leaves the
+	 * cell beside it empty rather than moving every action up a row beside the wrong page.
+	 */
+	const overviewRows = computed(() => {
+		const rowOf: Record<string, number> = {};
+		overviewPages.value.forEach((page, row) => {
+			rowOf[page.id] = row;
+		});
+
+		// one action per page: a second one for the same page would land in the same cell
+		const paired: QuickNavEntry[] = [];
+		const takenPages = new Set<string>();
+		actionEntries.value.forEach((action) => {
+			if (!action.pageId || rowOf[action.pageId] === undefined || takenPages.has(action.pageId)) return;
+
+			takenPages.add(action.pageId);
+			paired.push(action);
+			rowOf[action.id] = rowOf[action.pageId];
+		});
+
+		// The rest continue the actions column below the last paired one. That may put one beside a
+		// page it has nothing to do with (the calendar, say); a gap in the column would look broken
+		// instead, and the actions read as a list of their own anyway.
+		let nextFree = Math.max(-1, ...paired.map((action) => rowOf[action.id])) + 1;
+		actionEntries.value
+			.filter((action) => !paired.includes(action))
+			.forEach((action) => {
+				rowOf[action.id] = nextFree;
+				nextFree += 1;
+			});
+
+		return rowOf;
+	});
+
+	/** the actions in the order of their rows, so the arrow keys and screen readers go the way the eye does */
+	const overviewActions = computed(() =>
+		[...actionEntries.value].sort((a, b) => overviewRows.value[a.id] - overviewRows.value[b.id])
+	);
+
+	const overviewPagesGroup = computed((): QuickNavGroup => ({
+		label: t("feature.quickNav.group.navigation"),
+		entries: overviewPages.value,
+	}));
+	const overviewActionsGroup = computed((): QuickNavGroup => ({
+		label: t("feature.quickNav.group.actions"),
+		entries: overviewActions.value,
+	}));
+
 	const groups: ComputedRef<QuickNavGroup[]> = computed(() => {
 		const q = trimmedQuery.value;
 
@@ -290,9 +352,9 @@ export const useQuickNav = () => {
 			return [
 				{ label: t("feature.quickNav.group.recent"), entries: recentEntries.value, isRecent: true, isWide: true },
 				{ label: t("feature.quickNav.group.upcoming"), entries: upcomingEntries.value, isWide: true },
-				{ label: t("feature.quickNav.group.navigation"), entries: navigationEntries.value.slice(0, SUGGESTION_COUNT) },
 				// the help pages are found by typing, so the overview stays with what is used every day
-				{ label: t("feature.quickNav.group.actions"), entries: actionEntries.value },
+				overviewPagesGroup.value,
+				overviewActionsGroup.value,
 			].filter((group) => group.entries.length > 0);
 		}
 
@@ -331,30 +393,38 @@ export const useQuickNav = () => {
 			: t("feature.quickNav.placeholderWithoutCreate");
 	});
 
-	/** set by the dialog from the width it has; the overview lays its groups out in this many columns */
+	/** set by the dialog from the width it has; from two on, the overview puts pages and actions side by side */
 	const columnCount = ref(1);
 	const isOverview = computed(() => trimmedQuery.value.length === 0 && !scope.value);
 
 	/**
 	 * How the overview is laid out. What was opened recently spans the full width on top: it is what
 	 * people come back for, and its lines need the room for their context. The pages and actions below
-	 * are short single lines, so they share the width in columns that line up.
+	 * are short single lines, so they share the width in two columns, pages on the left and actions on
+	 * the right, whose rows line up (see `overviewRows`).
 	 */
 	const blocks = computed((): QuickNavBlock[] => {
 		if (!isOverview.value || columnCount.value < 2) return [{ groups: groups.value, isFullWidth: true }];
 
 		const lead = groups.value.filter((group) => group.isWide);
-		const rest = groups.value.filter((group) => !group.isWide);
-		const columns = Array.from({ length: columnCount.value }, (_, column) => ({
-			groups: rest.filter((_group, index) => index % columnCount.value === column),
+		const rowOf = overviewRows.value;
+		const rowCount = Math.max(0, ...Object.values(rowOf).map((row) => row + 1));
+		const columns = [overviewPagesGroup.value, overviewActionsGroup.value].map((group): QuickNavBlock => ({
+			groups: group.entries.length > 0 ? [group] : [],
 			isFullWidth: false,
+			rowOf,
+			rowCount,
 		}));
 
 		return lead.length > 0 ? [{ groups: lead, isFullWidth: true }, ...columns] : columns;
 	});
 
-	/** the columns only, which is what the left and right arrow keys move between */
-	const columns = computed(() => blocks.value.filter((block) => !block.isFullWidth).map((block) => block.groups));
+	/** the columns with lines in them, which is what the left and right arrow keys move between */
+	const columns = computed(() =>
+		blocks.value
+			.filter((block) => !block.isFullWidth && block.groups.some((group) => group.entries.length > 0))
+			.map((block) => block.groups)
+	);
 
 	/** top to bottom, and down one column before the next, which is the order the arrow keys walk */
 	const flatEntries: ComputedRef<QuickNavEntry[]> = computed(() =>
@@ -374,17 +444,29 @@ export const useQuickNav = () => {
 		selectedId.value = entries[next].id;
 	};
 
-	/** to the line at the same height in the next column over, or the last one when that column is shorter */
-	const moveColumn = (direction: 1 | -1): boolean => {
-		if (columns.value.length < 2) return false;
+	/** the row a line stands in within its column; the shared row where the columns line up */
+	const rowIn = (block: QuickNavBlock, lines: QuickNavEntry[], entry: QuickNavEntry): number =>
+		block.rowOf?.[entry.id] ?? lines.indexOf(entry);
 
-		const lines = columns.value.map((column) => column.flatMap((group) => group.entries));
+	/**
+	 * To the line in the same row of the next column over. When that cell is empty (a page without
+	 * its action), to the nearest line in that column, the upper one when two are equally near.
+	 */
+	const moveColumn = (direction: 1 | -1): boolean => {
+		const columnBlocks = blocks.value.filter((block) => !block.isFullWidth);
+		if (columnBlocks.length < 2) return false;
+
+		const lines = columnBlocks.map((block) => block.groups.flatMap((group) => group.entries));
 		const from = lines.findIndex((column) => column.some((entry) => entry.id === selectedEntry.value?.id));
 		const target = lines[from + direction];
 		if (from === -1 || !target?.length) return false;
 
-		const row = lines[from].findIndex((entry) => entry.id === selectedEntry.value?.id);
-		selectedId.value = target[Math.min(row, target.length - 1)].id;
+		const current = lines[from].find((entry) => entry.id === selectedEntry.value?.id) as QuickNavEntry;
+		const row = rowIn(columnBlocks[from], lines[from], current);
+		const distance = (entry: QuickNavEntry) => Math.abs(rowIn(columnBlocks[from + direction], target, entry) - row);
+		const nearest = target.reduce((best, entry) => (distance(entry) < distance(best) ? entry : best));
+
+		selectedId.value = nearest.id;
 		return true;
 	};
 

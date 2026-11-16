@@ -1,4 +1,5 @@
 import { matchRange, score, useQuickNav } from "./QuickNav.composable";
+import { useQuickNavEntries } from "./QuickNavEntries.composable";
 import { useQuickNavSourcesStore } from "./QuickNavSources.store";
 import { QuickNavEntry, QuickNavGroup, QuickNavKind } from "./types";
 import de from "@/locales/de";
@@ -10,8 +11,14 @@ import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
+import { computed } from "vue";
 
 vi.mock("@util-logger");
+// the real entries, wrapped so a test can add actions the sidebar does not have yet
+vi.mock("./QuickNavEntries.composable", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("./QuickNavEntries.composable")>();
+	return { useQuickNavEntries: vi.fn(actual.useQuickNavEntries) };
+});
 
 const setup = (permissions: Permission[] = [], roles: RoleName[] = []) => {
 	const pinia = createTestingPinia();
@@ -158,12 +165,14 @@ describe("QuickNav Composable", () => {
 		});
 
 		describe("when the user may create news", () => {
-			it("offers to create news", () => {
+			it("does not offer it, to keep the palette on what is searched for", () => {
 				const { quickNav } = setup([Permission.NEWS_CREATE]);
 
-				const createNews = quickNav.flatEntries.value.find((entry) => entry.id === "action:create-news");
+				expect(actionIds(quickNav)).not.toContain("action:create-news");
 
-				expect(createNews?.to).toBe("/news/new");
+				quickNav.query.value = "News";
+
+				expect(actionIds(quickNav)).not.toContain("action:create-news");
 			});
 		});
 
@@ -179,7 +188,7 @@ describe("QuickNav Composable", () => {
 	describe("placeholder", () => {
 		describe("when the user may create something", () => {
 			it("mentions creating", () => {
-				const { quickNav } = setup([Permission.NEWS_CREATE]);
+				const { quickNav } = setup([Permission.SCHOOL_CREATE_ROOM]);
 
 				expect(quickNav.placeholder.value).toBe("Suchen, springen oder anlegen");
 			});
@@ -229,6 +238,48 @@ describe("QuickNav Composable", () => {
 
 				expect(lastGroup(quickNav.groups.value).entries[0].target).toBe("_blank");
 			});
+		});
+	});
+
+	describe("pages left to the sidebar", () => {
+		const navigationIds = (quickNav: ReturnType<typeof setup>["quickNav"]) =>
+			quickNav.flatEntries.value.filter((entry) => entry.kind === QuickNavKind.NAVIGATION).map((entry) => entry.id);
+
+		it.each(["Übersicht", "Neuigkeiten"])("does not find %s when searching for it", (title) => {
+			const { quickNav } = setup();
+
+			quickNav.query.value = title;
+
+			expect(titlesOf(quickNav.groups.value)).not.toContain(title);
+		});
+
+		it("suggests neither the overview nor the news before anything is typed", () => {
+			const { quickNav } = setup();
+
+			expect(navigationIds(quickNav)).not.toContain("navigation:sidebar-dashboard");
+			expect(navigationIds(quickNav)).not.toContain("navigation:sidebar-news");
+		});
+
+		it("still suggests the other pages of the sidebar, rooms first", () => {
+			const { quickNav } = setup();
+
+			expect(navigationIds(quickNav).slice(0, 2)).toEqual(["navigation:sidebar-rooms", "navigation:sidebar-courses"]);
+		});
+	});
+
+	describe("people", () => {
+		it("are no category of their own, so there is no filter for them", () => {
+			const { quickNav } = setup();
+
+			expect(quickNav.categories.value.map((category) => category.scope)).toEqual(["rooms", "courses", "tasks"]);
+		});
+
+		it("get no group while searching", () => {
+			const { quickNav } = setup();
+
+			quickNav.query.value = "Personen";
+
+			expect(quickNav.groups.value.map((group) => group.label)).not.toContain("Personen");
 		});
 	});
 
@@ -368,7 +419,7 @@ describe("QuickNav Composable", () => {
 	});
 
 	describe("when the palette opens", () => {
-		it("loads the rooms, courses, tasks and people to search", () => {
+		it("loads the rooms, courses and tasks to search", () => {
 			const { quickNav } = setup();
 			const sourcesStore = useQuickNavSourcesStore();
 
@@ -393,7 +444,6 @@ describe("QuickNav Composable", () => {
 			sourcesStore.rooms = [entry(QuickNavKind.ROOM, "Biologie AG"), entry(QuickNavKind.ROOM, "Theater")];
 			sourcesStore.courses = [entry(QuickNavKind.COURSE, "Biologie 7a")];
 			sourcesStore.tasks = [entry(QuickNavKind.TASK, "Biologie Hausaufgabe")];
-			sourcesStore.people = [entry(QuickNavKind.PERSON, "Anna Müller")];
 
 			return result;
 		};
@@ -427,21 +477,21 @@ describe("QuickNav Composable", () => {
 			expect(titlesOf([groupOf(quickNav.groups.value, "Aufgaben")!])).toEqual(["Biologie Hausaufgabe"]);
 		});
 
-		it("finds people regardless of umlauts", () => {
+		it("finds rooms regardless of umlauts", () => {
 			const { quickNav } = setupWithSources();
+			useQuickNavSourcesStore().rooms = [entry(QuickNavKind.ROOM, "Müller-Lyer AG")];
 
 			quickNav.query.value = "muller";
 
-			expect(titlesOf([groupOf(quickNav.groups.value, "Personen")!])).toEqual(["Anna Müller"]);
+			expect(titlesOf([groupOf(quickNav.groups.value, "Räume")!])).toEqual(["Müller-Lyer AG"]);
 		});
 
-		it("shows no courses, people or undated tasks before anything is typed", () => {
+		it("shows no courses or undated tasks before anything is typed", () => {
 			const { quickNav } = setupWithSources();
 
 			const titles = titlesOf(quickNav.groups.value);
 
 			expect(titles).not.toContain("Biologie 7a");
-			expect(titles).not.toContain("Anna Müller");
 			expect(titles).not.toContain("Biologie Hausaufgabe");
 		});
 
@@ -854,6 +904,100 @@ describe("QuickNav Composable", () => {
 
 				expect(quickNav.moveColumn(1)).toBe(false);
 				expect(quickNav.selectedEntry.value?.title).toBe("Mathe");
+			});
+		});
+
+		describe("rows", () => {
+			const ALL_CREATE = [Permission.SCHOOL_CREATE_ROOM, Permission.COURSE_CREATE, Permission.HOMEWORK_CREATE];
+			const TASK_PAGE = [Permission.TASK_DASHBOARD_VIEW_V3];
+
+			const setupRows = (permissions: Permission[]) => {
+				const result = setup(permissions, [RoleName.TEACHER]);
+				result.quickNav.columnCount.value = 2;
+				const [pages, actions] = result.quickNav.blocks.value.filter((block) => !block.isFullWidth);
+				return { ...result, pages, actions };
+			};
+
+			it("puts each create action in the row of its page", () => {
+				const { pages, actions } = setupRows([...ALL_CREATE, ...TASK_PAGE]);
+				const rowOf = pages.rowOf ?? {};
+
+				expect(rowOf["action:create-room"]).toBe(rowOf["navigation:sidebar-rooms"]);
+				expect(rowOf["action:create-course"]).toBe(rowOf["navigation:sidebar-courses"]);
+				expect(rowOf["action:create-task"]).toBe(rowOf["navigation:sidebar-tasks"]);
+				// both columns lay their lines into the same rows
+				expect(actions.rowOf).toBe(pages.rowOf);
+				expect(actions.rowCount).toBe(pages.rowCount);
+			});
+
+			it("leaves the cell beside a page empty when its action is not allowed", () => {
+				const { pages } = setupRows([Permission.COURSE_CREATE, Permission.HOMEWORK_CREATE, ...TASK_PAGE]);
+				const rowOf = pages.rowOf ?? {};
+
+				expect(rowOf["navigation:sidebar-rooms"]).toBe(0);
+				expect(rowOf["action:create-course"]).toBe(rowOf["navigation:sidebar-courses"]);
+				expect(rowOf["action:create-task"]).toBe(rowOf["navigation:sidebar-tasks"]);
+				expect(Object.entries(rowOf).filter(([id, row]) => id.startsWith("action:") && row === 0)).toEqual([]);
+			});
+
+			it("puts an action whose page is not shown below the paired ones", () => {
+				// without the task overview, creating a task has no page to stand beside
+				const { pages, actions } = setupRows(ALL_CREATE);
+				const rowOf = pages.rowOf ?? {};
+
+				expect(rowOf["action:create-task"]).toBe(rowOf["action:create-course"] + 1);
+				expect(actions.groups[0].entries.map((entry) => entry.id)).toEqual([
+					"action:create-room",
+					"action:create-course",
+					"action:create-task",
+				]);
+			});
+
+			it("gives a page's row to only the first of two actions that belong to it", () => {
+				const second: QuickNavEntry = {
+					id: "action:create-room-from-template",
+					kind: QuickNavKind.ACTION,
+					title: "Raum aus Vorlage",
+					icon: "",
+					pageId: "navigation:sidebar-rooms",
+				};
+				vi.mocked(useQuickNavEntries).mockImplementationOnce(() => {
+					const real = useQuickNavEntries();
+					return { ...real, actionEntries: computed(() => [...real.actionEntries.value, second]) };
+				});
+				const { pages } = setupRows([...ALL_CREATE, ...TASK_PAGE]);
+				const rowOf = pages.rowOf ?? {};
+
+				expect(rowOf["action:create-room"]).toBe(rowOf["navigation:sidebar-rooms"]);
+				expect(rowOf[second.id]).toBe(rowOf["action:create-task"] + 1);
+			});
+
+			it("walks the actions top to bottom in the order of their rows", () => {
+				const { quickNav, actions } = setupRows([...ALL_CREATE, ...TASK_PAGE]);
+				const rows = actions.groups[0].entries.map((entry) => actions.rowOf?.[entry.id]);
+
+				expect(rows).toEqual([...rows].sort((a = 0, b = 0) => a - b));
+				expect(quickNav.flatEntries.value.map((entry) => entry.id).slice(-3)).toEqual(
+					actions.groups[0].entries.map((entry) => entry.id)
+				);
+			});
+
+			it("moves sideways to the action in the same row", () => {
+				const { quickNav } = setupRows([...ALL_CREATE, ...TASK_PAGE]);
+				quickNav.select("navigation:sidebar-courses");
+
+				quickNav.moveColumn(1);
+
+				expect(quickNav.selectedEntry.value?.id).toBe("action:create-course");
+			});
+
+			it("moves sideways to the nearest action when the cell beside is empty", () => {
+				const { quickNav } = setupRows([Permission.COURSE_CREATE]);
+				quickNav.select("navigation:sidebar-rooms");
+
+				quickNav.moveColumn(1);
+
+				expect(quickNav.selectedEntry.value?.id).toBe("action:create-course");
 			});
 		});
 

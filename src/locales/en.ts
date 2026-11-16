@@ -2055,7 +2055,6 @@ export default {
 	"feature.quickNav.failedSources": "{sources} could not be loaded. The results are incomplete.",
 	"feature.quickNav.group.navigation": "Jump to",
 	"feature.quickNav.group.tasks": "Tasks",
-	"feature.quickNav.group.people": "People",
 	"feature.quickNav.group.actions": "Actions",
 	"feature.quickNav.hint.move": "{keys} to select",
 	"feature.quickNav.hint.open": "{keys} to open",

@@ -169,12 +169,12 @@ describe("QuickNavDialog", () => {
 
 		it("names what could not be loaded", async () => {
 			const { wrapper, sourcesStore, openWith } = setup();
-			sourcesStore.failedScopes = ["rooms", "people"];
+			sourcesStore.failedScopes = ["rooms", "courses"];
 
 			await openWith("zzzzzz");
 
 			expect(wrapper.get("[data-testid=quick-nav-error]").text()).toContain(
-				"Rooms and People could not be loaded. The results are incomplete."
+				"Rooms and Courses could not be loaded. The results are incomplete."
 			);
 		});
 
@@ -233,7 +233,21 @@ describe("QuickNavDialog", () => {
 			await openWith("Theater");
 
 			expect(wrapper.get("[data-testid=quick-nav-filter-rooms]").classes()).not.toContain("quick-nav-filter-empty");
-			expect(wrapper.get("[data-testid=quick-nav-filter-people]").classes()).toContain("quick-nav-filter-empty");
+			expect(wrapper.get("[data-testid=quick-nav-filter-courses]").classes()).toContain("quick-nav-filter-empty");
+		});
+
+		it("offers no filter for people", async () => {
+			const { wrapper, openWith } = setup();
+			await openWith("");
+
+			const filters = wrapper.findAll("[data-testid^=quick-nav-filter-]").map((chip) => chip.attributes("data-testid"));
+
+			expect(filters).toEqual([
+				"quick-nav-filter-all",
+				"quick-nav-filter-rooms",
+				"quick-nav-filter-courses",
+				"quick-nav-filter-tasks",
+			]);
 		});
 
 		it("browses a category without a query and resets the scope when closed", async () => {
@@ -249,12 +263,11 @@ describe("QuickNavDialog", () => {
 			expect(wrapper.get("[data-testid=quick-nav-filter-all]").attributes("aria-pressed")).toBe("true");
 		});
 
-		it.each(["courses", "tasks", "people"] as const)("isolates %s", async (scope) => {
+		it.each(["courses", "tasks"] as const)("isolates %s", async (scope) => {
 			const { wrapper, sourcesStore, openWith } = setup();
 			sourcesStore.rooms = [entry(QuickNavKind.ROOM, "Room")];
 			sourcesStore.courses = [entry(QuickNavKind.COURSE, "Course")];
 			sourcesStore.tasks = [entry(QuickNavKind.TASK, "Task")];
-			sourcesStore.people = [entry(QuickNavKind.PERSON, "Person")];
 			await openWith("");
 			await wrapper.get(`[data-testid=quick-nav-filter-${scope}]`).trigger("click");
 
@@ -592,6 +605,59 @@ describe("QuickNavDialog", () => {
 		});
 	});
 
+	describe("overview in two columns", () => {
+		const rowOf = (wrapper: ReturnType<typeof setup>["wrapper"], id: string) =>
+			wrapper.get(`[data-testid="quick-nav-entry-${id}"]`).attributes("style");
+
+		it("puts a page and its action on the same grid row", async () => {
+			const { wrapper, openWith } = setup([Permission.SCHOOL_CREATE_ROOM, Permission.COURSE_CREATE]);
+
+			await openWith("");
+
+			expect(wrapper.findAll(".quick-nav-column-rows")).toHaveLength(2);
+			expect(rowOf(wrapper, "action:create-room")).toBe(rowOf(wrapper, "navigation:sidebar-rooms"));
+			expect(rowOf(wrapper, "action:create-course")).toBe(rowOf(wrapper, "navigation:sidebar-courses"));
+			expect(rowOf(wrapper, "action:create-room")).not.toBe(rowOf(wrapper, "action:create-course"));
+		});
+
+		it("keeps the pages and the actions in a group of their own each, named by its heading", async () => {
+			const { wrapper, openWith } = setup([Permission.SCHOOL_CREATE_ROOM]);
+
+			await openWith("");
+
+			const headings = wrapper
+				.findAll("[role=listbox] [role=group]")
+				.map((group) => wrapper.get(`[id="${group.attributes("aria-labelledby")}"]`).text());
+			expect(headings).toEqual(["Jump to", "Actions"]);
+		});
+
+		it("offers the left and right arrow keys when both columns have lines", async () => {
+			const { wrapper, openWith } = setup([Permission.SCHOOL_CREATE_ROOM]);
+
+			await openWith("");
+
+			expect(wrapper.get(".quick-nav-keyboard").text()).toContain("←");
+		});
+
+		it("does not offer the left and right arrow keys when there is nothing to create", async () => {
+			const { wrapper, openWith } = setup();
+
+			await openWith("");
+
+			expect(wrapper.get(".quick-nav-keyboard").text()).not.toContain("←");
+			expect(wrapper.get(".quick-nav-keyboard").text()).toContain("↓");
+		});
+
+		it("lays the lines out in plain rows again while searching", async () => {
+			const { wrapper, openWith } = setup([Permission.SCHOOL_CREATE_ROOM]);
+
+			await openWith("Room");
+
+			expect(wrapper.find(".quick-nav-column-rows").exists()).toBe(false);
+			expect(rowOf(wrapper, "action:create-room")).toBeUndefined();
+		});
+	});
+
 	describe("accessibility", () => {
 		it("names the dialog", async () => {
 			const { wrapper, palette } = setup();
@@ -607,8 +673,7 @@ describe("QuickNavDialog", () => {
 			sourcesStore.tasks = [entry(QuickNavKind.TASK, "Hausaufgabe")];
 			await openWith("Hausaufgabe");
 
-			// a fieldset is a group without needing the role attribute
-			const group = wrapper.get("[role=listbox] fieldset");
+			const group = wrapper.get("[role=listbox] [role=group]");
 			const heading = wrapper.get(`[id="${group.attributes("aria-labelledby")}"]`);
 
 			expect(heading.text()).toBe("Tasks");

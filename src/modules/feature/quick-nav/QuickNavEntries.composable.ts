@@ -1,7 +1,7 @@
 import { QuickNavEntry, QuickNavKind } from "./types";
 import { Permission } from "@api-server";
 import { useAppStore, useAppStoreRefs } from "@data-app";
-import { mdiFormatListChecks, mdiNewspaperVariantOutline, mdiPlus, mdiSchoolOutline } from "@icons/material";
+import { mdiFormatListChecks, mdiPlus, mdiSchoolOutline } from "@icons/material";
 import {
 	isSidebarCategoryItem,
 	SidebarGroupItem,
@@ -12,8 +12,12 @@ import {
 import { computed, ComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
 
-// file pages would suggest that files can be searched, which the palette cannot do yet
-const EXCLUDED_SIDEBAR_ITEMS = ["sidebar-files"];
+/**
+ * Left to the sidebar on purpose. File pages would suggest that files can be searched, which the
+ * palette cannot do yet. The overview and the news are where people land anyway, not where they
+ * jump to, and only crowd out the results that are searched for.
+ */
+const EXCLUDED_SIDEBAR_ITEMS = ["sidebar-files", "sidebar-dashboard", "sidebar-news"];
 const HELP_SIDEBAR_GROUP = "sidebar-helpsection";
 
 /**
@@ -75,6 +79,7 @@ export const useQuickNavEntries = () => {
 				title: t("pages.rooms.fab.title"),
 				icon: mdiPlus,
 				to: "/rooms/new",
+				pageId: "navigation:sidebar-rooms",
 			});
 		}
 
@@ -85,6 +90,7 @@ export const useQuickNavEntries = () => {
 				title: t("pages.rooms.fab.create.course"),
 				icon: mdiSchoolOutline,
 				href: "/courses/add",
+				pageId: "navigation:sidebar-courses",
 			});
 		}
 
@@ -96,16 +102,7 @@ export const useQuickNavEntries = () => {
 				title: t("components.organisms.TasksDashboardMain.fab.createTask"),
 				icon: mdiFormatListChecks,
 				href: "/homework/new?returnUrl=tasks",
-			});
-		}
-
-		if (hasPermission(Permission.NEWS_CREATE)) {
-			entries.push({
-				id: "action:create-news",
-				kind: QuickNavKind.ACTION,
-				title: t("pages.news.index.new"),
-				icon: mdiNewspaperVariantOutline,
-				to: "/news/new",
+				pageId: "navigation:sidebar-tasks",
 			});
 		}
 

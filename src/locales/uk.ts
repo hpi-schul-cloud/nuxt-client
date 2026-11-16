@@ -2078,7 +2078,6 @@ export default {
 	"feature.quickNav.failedSources": "Не вдалося завантажити: {sources}. Результати неповні.",
 	"feature.quickNav.group.navigation": "Перейти до",
 	"feature.quickNav.group.tasks": "Завдання",
-	"feature.quickNav.group.people": "Люди",
 	"feature.quickNav.group.actions": "Дії",
 	"feature.quickNav.hint.move": "{keys} вибрати",
 	"feature.quickNav.hint.open": "{keys} відкрити",
