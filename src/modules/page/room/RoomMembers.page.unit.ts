@@ -216,6 +216,22 @@ describe("RoomMembersPage", () => {
 		});
 	});
 
+	describe("archived chip", () => {
+		it("should render an archived chip next to the heading when the room is archived", () => {
+			const { wrapper } = setup({ allowedOperations: { viewMemberlist: true }, isArchived: true });
+
+			const chip = wrapper.find("[data-testid='archived-room-chip']");
+			expect(chip.exists()).toBe(true);
+			expect(chip.text()).toBe("pages.rooms.archived.chip");
+		});
+
+		it("should not render an archived chip when the room is not archived", () => {
+			const { wrapper } = setup({ allowedOperations: { viewMemberlist: true }, isArchived: false });
+
+			expect(wrapper.find("[data-testid='archived-room-chip']").exists()).toBe(false);
+		});
+	});
+
 	describe("onLeaveRoom", () => {
 		it("should render kebab menu with leave room menu item", async () => {
 			const { wrapper } = setup({ allowedOperations: { leaveRoom: true, viewMemberlist: true } });
@@ -365,19 +381,48 @@ describe("RoomMembersPage", () => {
 			});
 
 			describe("when the room is archived", () => {
-				it("should add the archived rooms breadcrumb before the room", () => {
+				describe("and the room archive feature is enabled", () => {
+					it("should add the archived rooms breadcrumb before the room", () => {
+						const { wrapper, room } = setup({
+							allowedOperations: { addMembers: false, viewMemberlist: true },
+							isArchived: true,
+							envConfig: { FEATURE_ROOM_ARCHIVE_ENABLED: true },
+						});
+						const wireframe = wrapper.findComponent(DefaultWireframe);
+						const [roomsBreadcrumb, ...rest] = buildBreadcrumbs(room!, false);
+
+						expect(wireframe.props("breadcrumbs")).toEqual([
+							roomsBreadcrumb,
+							{ title: "pages.rooms.archived.title", to: "/rooms/archive" },
+							...rest,
+						]);
+					});
+				});
+
+				describe("and the room archive feature is disabled", () => {
+					it("should not add the archived rooms breadcrumb", () => {
+						const { wrapper, room } = setup({
+							allowedOperations: { addMembers: false, viewMemberlist: true },
+							isArchived: true,
+							envConfig: { FEATURE_ROOM_ARCHIVE_ENABLED: false },
+						});
+						const wireframe = wrapper.findComponent(DefaultWireframe);
+
+						expect(wireframe.props("breadcrumbs")).toEqual(buildBreadcrumbs(room!, false));
+					});
+				});
+			});
+
+			describe("when the room is not archived and the room archive feature is enabled", () => {
+				it("should not add the archived rooms breadcrumb", () => {
 					const { wrapper, room } = setup({
 						allowedOperations: { addMembers: false, viewMemberlist: true },
-						isArchived: true,
+						isArchived: false,
+						envConfig: { FEATURE_ROOM_ARCHIVE_ENABLED: true },
 					});
 					const wireframe = wrapper.findComponent(DefaultWireframe);
-					const [roomsBreadcrumb, ...rest] = buildBreadcrumbs(room!, false);
 
-					expect(wireframe.props("breadcrumbs")).toEqual([
-						roomsBreadcrumb,
-						{ title: "pages.rooms.archived.title", to: "/rooms/archive" },
-						...rest,
-					]);
+					expect(wireframe.props("breadcrumbs")).toEqual(buildBreadcrumbs(room!, false));
 				});
 			});
 		});

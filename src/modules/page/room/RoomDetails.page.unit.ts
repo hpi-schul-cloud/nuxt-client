@@ -2,7 +2,13 @@ import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { createTestAppStore, createTestRoomStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import {
+	createTestAppStore,
+	createTestEnvStore,
+	createTestRoomStore,
+	mockComposable,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
 import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/factory/room";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
@@ -50,6 +56,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			roomBoards: RoomBoardItem[];
 			allowedOperations: Partial<serverApi.RoomItemResponseAllowedOperations> | undefined;
 			isArchived: boolean;
+			isRoomArchiveEnabled: boolean;
 		}>
 	) => {
 		const { roomBoards } = {
@@ -63,6 +70,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		setActivePinia(createTestingPinia());
+		createTestEnvStore({ FEATURE_ROOM_ARCHIVE_ENABLED: options?.isRoomArchiveEnabled ?? false });
 		const { roomStore } = createTestRoomStore();
 
 		useRoomDetailsStore().$patch({
@@ -129,8 +137,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		describe("and the room is archived", () => {
-			it("should render an additional breadcrumb linking to the archived rooms list", () => {
-				const { wrapper, room } = setup({ isArchived: true });
+			it("should render an additional breadcrumb linking to the archived rooms list when the archive feature is enabled", () => {
+				const { wrapper, room } = setup({ isArchived: true, isRoomArchiveEnabled: true });
 
 				const breadcrumbs = wrapper.getComponent({ name: "Breadcrumbs" });
 				const breadcrumbItems = breadcrumbs.findAllComponents(VBreadcrumbsItem);
@@ -140,6 +148,17 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				expect(breadcrumbItems[1].text()).toBe("pages.rooms.archived.title");
 				expect(breadcrumbItems[1].props("to")).toBe("/rooms/archive");
 				expect(breadcrumbItems[2].text()).toContain(room.name);
+			});
+
+			it("should not render the archived rooms breadcrumb when the archive feature is disabled", () => {
+				const { wrapper, room } = setup({ isArchived: true, isRoomArchiveEnabled: false });
+
+				const breadcrumbs = wrapper.getComponent({ name: "Breadcrumbs" });
+				const breadcrumbItems = breadcrumbs.findAllComponents(VBreadcrumbsItem);
+
+				expect(breadcrumbItems).toHaveLength(2);
+				expect(breadcrumbItems[0].text()).toBe("pages.rooms.title");
+				expect(breadcrumbItems[1].text()).toContain(room.name);
 			});
 
 			it("should render an archived chip next to the title", () => {
@@ -160,6 +179,16 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		describe("and the room is not archived", () => {
+			it("should not render the archived rooms breadcrumb even when the archive feature is enabled", () => {
+				const { wrapper } = setup({ isArchived: false, isRoomArchiveEnabled: true });
+
+				const breadcrumbs = wrapper.getComponent({ name: "Breadcrumbs" });
+				const breadcrumbItems = breadcrumbs.findAllComponents(VBreadcrumbsItem);
+
+				expect(breadcrumbItems).toHaveLength(2);
+				expect(breadcrumbItems.map((item) => item.text())).not.toContain("pages.rooms.archived.title");
+			});
+
 			it("should not render an archived chip", () => {
 				const { wrapper } = setup({ isArchived: false });
 

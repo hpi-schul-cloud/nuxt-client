@@ -5,13 +5,16 @@ import { createApplicationError } from "@/utils/create-application-error.factory
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	axiosErrorFactory,
+	createTestEnvStore,
 	fileFolderElementResponseFactory,
 	mockApi,
+	mockApiResponse,
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
 import * as serverApi from "@api-server";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
+import { flushPromises } from "@vue/test-utils";
 import { AxiosPromise } from "axios";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
@@ -25,9 +28,16 @@ describe("useFolderState", () => {
 		setActivePinia(createTestingPinia());
 	});
 
-	const setup = (props?: { element?: unknown; parentNodeInfos?: ParentNodeInfo[] }) => {
+	const setup = (props?: {
+		element?: unknown;
+		parentNodeInfos?: ParentNodeInfo[];
+		isRoomArchived?: boolean;
+		isRoomArchiveEnabled?: boolean;
+	}) => {
+		createTestEnvStore({ FEATURE_ROOM_ARCHIVE_ENABLED: props?.isRoomArchiveEnabled ?? false });
 		const boardElementApi = mockApi<serverApi.BoardElementApiInterface>();
 		const boardApi = mockApi<serverApi.BoardApiInterface>();
+		const roomApi = mockApi<serverApi.RoomApiInterface>();
 		const folderElement = fileFolderElementResponseFactory.build();
 		const parentNodeInfos = parentNodeInfoFactory.build();
 
@@ -40,6 +50,10 @@ describe("useFolderState", () => {
 
 		vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardElementApi);
 		vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApi);
+		roomApi.roomControllerGetRoomDetails.mockResolvedValue(
+			mockApiResponse({ data: { isArchived: props?.isRoomArchived ?? false } as serverApi.RoomDetailsResponse })
+		);
+		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApi);
 
 		return {
 			testId: folderElement.id,
@@ -48,6 +62,7 @@ describe("useFolderState", () => {
 			lastUpdatedAt: folderElement.timestamps.lastUpdatedAt,
 			boardElementApi,
 			boardApi,
+			roomApi,
 		};
 	};
 
@@ -231,6 +246,95 @@ describe("useFolderState", () => {
 				});
 			});
 
+			describe("when root parent node is an archived room", () => {
+				const roomParentNodeInfos = [{ id: "room-id", name: "Room", type: ParentNodeType.ROOM }];
+
+				describe("when the room archive feature is enabled", () => {
+					it("should add the archived rooms breadcrumb after the rooms breadcrumb", async () => {
+						const { testId, title, roomApi } = setup({
+							parentNodeInfos: roomParentNodeInfos,
+							isRoomArchived: true,
+							isRoomArchiveEnabled: true,
+						});
+
+						const { fetchFileFolderElement, breadcrumbs } = useFolderState();
+
+						await fetchFileFolderElement(testId);
+						await flushPromises();
+
+						expect(roomApi.roomControllerGetRoomDetails).toHaveBeenCalledWith("room-id");
+						expect(breadcrumbs.value).toEqual([
+							{ title: "pages.rooms.title", to: "/rooms" },
+							{ title: "pages.rooms.archived.title", to: "/rooms/archive" },
+							{ title: "Room", to: "/rooms/room-id" },
+							{ disabled: true, title },
+						]);
+					});
+
+					it("should fall back to the default breadcrumbs when the room details can not be fetched", async () => {
+						const { testId, title, roomApi } = setup({
+							parentNodeInfos: roomParentNodeInfos,
+							isRoomArchiveEnabled: true,
+						});
+						roomApi.roomControllerGetRoomDetails.mockRejectedValueOnce(axiosErrorFactory.build());
+
+						const { fetchFileFolderElement, breadcrumbs } = useFolderState();
+
+						await fetchFileFolderElement(testId);
+						await flushPromises();
+
+						expect(breadcrumbs.value).toEqual([
+							{ title: "pages.rooms.title", to: "/rooms" },
+							{ title: "Room", to: "/rooms/room-id" },
+							{ disabled: true, title },
+						]);
+					});
+				});
+
+				describe("when the room archive feature is disabled", () => {
+					it("should not fetch the room and not add the archived rooms breadcrumb", async () => {
+						const { testId, title, roomApi } = setup({
+							parentNodeInfos: roomParentNodeInfos,
+							isRoomArchived: true,
+							isRoomArchiveEnabled: false,
+						});
+
+						const { fetchFileFolderElement, breadcrumbs } = useFolderState();
+
+						await fetchFileFolderElement(testId);
+						await flushPromises();
+
+						expect(roomApi.roomControllerGetRoomDetails).not.toHaveBeenCalled();
+						expect(breadcrumbs.value).toEqual([
+							{ title: "pages.rooms.title", to: "/rooms" },
+							{ title: "Room", to: "/rooms/room-id" },
+							{ disabled: true, title },
+						]);
+					});
+				});
+			});
+
+			describe("when root parent node is a not archived room and the room archive feature is enabled", () => {
+				it("should not add the archived rooms breadcrumb", async () => {
+					const { testId, title } = setup({
+						parentNodeInfos: [{ id: "room-id", name: "Room", type: ParentNodeType.ROOM }],
+						isRoomArchived: false,
+						isRoomArchiveEnabled: true,
+					});
+
+					const { fetchFileFolderElement, breadcrumbs } = useFolderState();
+
+					await fetchFileFolderElement(testId);
+					await flushPromises();
+
+					expect(breadcrumbs.value).toEqual([
+						{ title: "pages.rooms.title", to: "/rooms" },
+						{ title: "Room", to: "/rooms/room-id" },
+						{ disabled: true, title },
+					]);
+				});
+			});
+
 			describe("when root parent node is a user", () => {
 				it("should throw", async () => {
 					const { testId } = setup({
@@ -269,6 +373,85 @@ describe("useFolderState", () => {
 					]);
 				});
 			});
+		});
+	});
+
+	describe("archived room check", () => {
+		const roomHierarchy = (roomId: string): ParentNodeInfo[] => [
+			{ id: roomId, name: `Room ${roomId}`, type: ParentNodeType.ROOM },
+		];
+
+		const mockHierarchyResponse = (
+			boardElementApi: ReturnType<typeof setup>["boardElementApi"],
+			parentHierarchy: ParentNodeInfo[]
+		) => {
+			boardElementApi.elementControllerGetElementWithParentHierarchy.mockResolvedValueOnce({
+				data: { element: fileFolderElementResponseFactory.build(), parentHierarchy },
+			} as unknown as Awaited<AxiosPromise>);
+		};
+
+		it("should not wait for the room details request before resolving", async () => {
+			const { testId, roomApi } = setup({ parentNodeInfos: roomHierarchy("room-1"), isRoomArchiveEnabled: true });
+			roomApi.roomControllerGetRoomDetails.mockReset();
+			roomApi.roomControllerGetRoomDetails.mockReturnValue(new Promise(() => undefined) as AxiosPromise);
+
+			const { fetchFileFolderElement, fileFolderElement, breadcrumbs } = useFolderState();
+
+			await fetchFileFolderElement(testId);
+
+			expect(roomApi.roomControllerGetRoomDetails).toHaveBeenCalledWith("room-1");
+			expect(fileFolderElement.value).toBeDefined();
+			expect(breadcrumbs.value.map((breadcrumb) => breadcrumb.title)).not.toContain("pages.rooms.archived.title");
+		});
+
+		it("should not request the room details again when renaming a folder of the same room", async () => {
+			const { testId, roomApi, boardElementApi } = setup({
+				parentNodeInfos: roomHierarchy("room-1"),
+				isRoomArchived: true,
+				isRoomArchiveEnabled: true,
+			});
+			boardElementApi.elementControllerUpdateElement.mockResolvedValue({} as Awaited<AxiosPromise>);
+			mockHierarchyResponse(boardElementApi, roomHierarchy("room-1"));
+
+			const { fetchFileFolderElement, renameFolder, breadcrumbs } = useFolderState();
+
+			await fetchFileFolderElement(testId);
+			await flushPromises();
+			await renameFolder("Updated Title", testId);
+			await flushPromises();
+
+			expect(roomApi.roomControllerGetRoomDetails).toHaveBeenCalledTimes(1);
+			expect(breadcrumbs.value[1]).toEqual({ title: "pages.rooms.archived.title", to: "/rooms/archive" });
+		});
+
+		it("should ignore a late room details response for a previous room", async () => {
+			const { testId, roomApi, boardElementApi } = setup({
+				parentNodeInfos: roomHierarchy("room-1"),
+				isRoomArchiveEnabled: true,
+			});
+			mockHierarchyResponse(boardElementApi, roomHierarchy("room-2"));
+
+			let resolveFirstRoom: (value: Awaited<AxiosPromise>) => void = () => undefined;
+			roomApi.roomControllerGetRoomDetails.mockReset();
+			roomApi.roomControllerGetRoomDetails
+				.mockReturnValueOnce(
+					new Promise((resolve) => {
+						resolveFirstRoom = resolve;
+					}) as AxiosPromise
+				)
+				.mockResolvedValueOnce(mockApiResponse({ data: { isArchived: false } as serverApi.RoomDetailsResponse }));
+
+			const { fetchFileFolderElement, breadcrumbs } = useFolderState();
+
+			await fetchFileFolderElement(testId);
+			await fetchFileFolderElement("other-folder-id");
+			await flushPromises();
+			resolveFirstRoom(mockApiResponse({ data: { isArchived: true } as serverApi.RoomDetailsResponse }));
+			await flushPromises();
+
+			expect(roomApi.roomControllerGetRoomDetails).toHaveBeenNthCalledWith(1, "room-1");
+			expect(roomApi.roomControllerGetRoomDetails).toHaveBeenNthCalledWith(2, "room-2");
+			expect(breadcrumbs.value.map((breadcrumb) => breadcrumb.title)).not.toContain("pages.rooms.archived.title");
 		});
 	});
 

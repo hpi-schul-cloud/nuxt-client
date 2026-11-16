@@ -1,6 +1,13 @@
 import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { RoomColor, RoomDetails, RoomUpdateParams } from "@/types/room/Room";
-import { expectNotification, mockApi, mockApiResponse, mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
+import {
+	createTestEnvStore,
+	expectNotification,
+	mockApi,
+	mockApiResponse,
+	mockedPiniaStoreTyping,
+	roomFactory,
+} from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomApiFactory, RoomDetailsResponse, RoomItemResponseAllowedOperations } from "@api-server";
 import { useAppStore } from "@data-app";
@@ -9,6 +16,7 @@ import { RoomForm } from "@feature-room";
 import { RoomEditPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock, type RouterMock } from "vue-router-mock";
 
@@ -40,29 +48,35 @@ describe("@pages/RoomEdit.page.vue", () => {
 			room: RoomDetails | undefined;
 			allowedOperations: Partial<RoomItemResponseAllowedOperations> | undefined;
 			isArchived: boolean;
+			isRoomArchiveEnabled: boolean;
 		}>
 	) => {
-		const { isRoomDefined = true, allowedOperations = {}, isArchived = false } = options ?? {};
+		const {
+			isRoomDefined = true,
+			allowedOperations = {},
+			isArchived = false,
+			isRoomArchiveEnabled = false,
+		} = options ?? {};
 		const room = isRoomDefined ? roomFactory.build({ allowedOperations, isArchived }) : undefined;
 		const roomId = room ? room.id : "test-room-id";
 
 		router.setParams({ id: roomId });
 
+		const pinia = createTestingPinia({
+			stubActions: false,
+			initialState: {
+				roomDetailsStore: {
+					isLoading: options?.isLoading ?? false,
+					room: options?.isLoading ? undefined : room,
+				},
+			},
+		});
+		setActivePinia(pinia);
+		createTestEnvStore({ FEATURE_ROOM_ARCHIVE_ENABLED: isRoomArchiveEnabled });
+
 		const wrapper = mount(RoomEditPage, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					createTestingPinia({
-						stubActions: false,
-						initialState: {
-							roomDetailsStore: {
-								isLoading: options?.isLoading ?? false,
-								room: options?.isLoading ? undefined : room,
-							},
-						},
-					}),
-				],
+				plugins: [createTestingVuetify(), createTestingI18n(), pinia],
 			},
 		});
 
@@ -162,19 +176,67 @@ describe("@pages/RoomEdit.page.vue", () => {
 			});
 
 			describe("when the room is archived", () => {
-				it("should add the archived rooms breadcrumb before the room", async () => {
-					const { wrapper, room } = setup({ allowedOperations: { updateRoom: true }, isArchived: true });
+				describe("and the room archive feature is enabled", () => {
+					it("should add the archived rooms breadcrumb before the room", async () => {
+						const { wrapper, room } = setup({
+							allowedOperations: { updateRoom: true },
+							isArchived: true,
+							isRoomArchiveEnabled: true,
+						});
+						await nextTick();
+
+						const breadcrumbsProp: Breadcrumb[] = wrapper
+							.findComponent({ name: "DefaultWireframe" })
+							.props().breadcrumbs;
+
+						expect(breadcrumbsProp.map((breadcrumb) => breadcrumb.title)).toEqual([
+							"pages.rooms.title",
+							"pages.rooms.archived.title",
+							room?.name,
+							"pages.roomDetails.ariaLabels.menu.action.edit",
+						]);
+						expect(breadcrumbsProp[1].to).toBe("/rooms/archive");
+					});
+				});
+
+				describe("and the room archive feature is disabled", () => {
+					it("should not add the archived rooms breadcrumb", async () => {
+						const { wrapper, room } = setup({
+							allowedOperations: { updateRoom: true },
+							isArchived: true,
+							isRoomArchiveEnabled: false,
+						});
+						await nextTick();
+
+						const breadcrumbsProp: Breadcrumb[] = wrapper
+							.findComponent({ name: "DefaultWireframe" })
+							.props().breadcrumbs;
+
+						expect(breadcrumbsProp.map((breadcrumb) => breadcrumb.title)).toEqual([
+							"pages.rooms.title",
+							room?.name,
+							"pages.roomDetails.ariaLabels.menu.action.edit",
+						]);
+					});
+				});
+			});
+
+			describe("when the room is not archived and the room archive feature is enabled", () => {
+				it("should not add the archived rooms breadcrumb", async () => {
+					const { wrapper, room } = setup({
+						allowedOperations: { updateRoom: true },
+						isArchived: false,
+						isRoomArchiveEnabled: true,
+					});
 					await nextTick();
 
 					const breadcrumbsProp: Breadcrumb[] = wrapper.findComponent({ name: "DefaultWireframe" }).props().breadcrumbs;
 
 					expect(breadcrumbsProp.map((breadcrumb) => breadcrumb.title)).toEqual([
 						"pages.rooms.title",
-						"pages.rooms.archived.title",
 						room?.name,
 						"pages.roomDetails.ariaLabels.menu.action.edit",
 					]);
-					expect(breadcrumbsProp[1].to).toBe("/rooms/archive");
 				});
 			});
 

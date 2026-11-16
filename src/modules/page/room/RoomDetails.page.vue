@@ -57,7 +57,7 @@ import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RoomBoardItemResponse } from "@api-server";
 import { notifySuccess, useAppStoreRefs, useNotificationStore } from "@data-app";
-import { useRoomAllowedOperations, useRoomDetailsStore, useRoomStore } from "@data-room";
+import { useRoomAllowedOperations, useRoomBreadcrumbs, useRoomDetailsStore, useRoomStore } from "@data-room";
 import { useCopyFlow } from "@feature-copy";
 import { RoomBoardGrid, RoomMenu } from "@feature-room";
 import { useShareFlow } from "@feature-share";
@@ -102,19 +102,10 @@ const roomTitle = computed(() => room.value.name);
 
 const boardLayoutDialogIsOpen = ref(false);
 
+const { getRoomsRootBreadcrumbs } = useRoomBreadcrumbs();
+
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
-	{
-		title: t("pages.rooms.title"),
-		to: "/rooms",
-	},
-	...(room.value.isArchived
-		? [
-				{
-					title: t("pages.rooms.archived.title"),
-					to: "/rooms/archive",
-				},
-			]
-		: []),
+	...getRoomsRootBreadcrumbs(room.value.isArchived),
 	{
 		title: roomTitle.value,
 		disabled: true,

@@ -11,6 +11,9 @@
 					<h1 data-testid="room-title">
 						{{ membersInfoText }}
 					</h1>
+					<VChip v-if="room?.isArchived" size="small" class="ml-2" data-testid="archived-room-chip">
+						{{ t("pages.rooms.archived.chip") }}
+					</VChip>
 					<KebabMenu
 						class="mx-2"
 						data-testid="room-member-menu"
@@ -74,6 +77,7 @@ import {
 	InvitationStep,
 	useRegistrationStore,
 	useRoomAllowedOperations,
+	useRoomBreadcrumbs,
 	useRoomDetailsStore,
 	useRoomInvitationLinkStore,
 	useRoomMembersStore,
@@ -285,15 +289,13 @@ onUnmounted(() => {
 	resetRegistrationStore();
 });
 
+const { getRoomsRootBreadcrumbs } = useRoomBreadcrumbs();
+
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	if (room === undefined) return [];
 
 	return [
-		{
-			title: t("pages.rooms.title"),
-			to: "/rooms",
-		},
-		...(room.value?.isArchived ? [{ title: t("pages.rooms.archived.title"), to: "/rooms/archive" }] : []),
+		...getRoomsRootBreadcrumbs(room.value?.isArchived),
 		{
 			title: room.value?.name || "",
 			to: `/rooms/${route.params.id}`,

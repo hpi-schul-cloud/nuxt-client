@@ -3,6 +3,7 @@ import { useBoardApi } from "./BoardApi.composable";
 import { BoardContextType } from "@/types/board/BoardContext";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useRoomBreadcrumbs } from "@data-room";
 import { Breadcrumb } from "@ui-layout";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -12,6 +13,7 @@ const useBoardPageInformation = () => {
 
 	const { getContextInfo } = useBoardApi();
 	const boardStore = useBoardStore();
+	const { getRoomsRootBreadcrumbs } = useRoomBreadcrumbs();
 
 	const boardContext = ref<Awaited<ReturnType<typeof getContextInfo>>>();
 	const roomId = computed(() => boardContext.value?.id);
@@ -60,10 +62,7 @@ const useBoardPageInformation = () => {
 				to: "/rooms/courses-overview",
 			});
 		} else if (isRoom.value) {
-			crumbs.unshift({
-				title: t("pages.rooms.title"),
-				to: "/rooms",
-			});
+			crumbs.unshift(...getRoomsRootBreadcrumbs(boardContext.value?.isArchived));
 		}
 
 		return crumbs;

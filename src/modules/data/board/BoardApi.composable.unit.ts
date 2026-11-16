@@ -19,6 +19,7 @@ let columnApi: Mocked<serverApi.BoardColumnApiInterface>;
 let cardApi: Mocked<serverApi.BoardCardApiInterface>;
 let elementApi: Mocked<serverApi.BoardElementApiInterface>;
 let roomsApi: Mocked<serverApi.CourseRoomsApiInterface>;
+let roomApi: Mocked<serverApi.RoomApiInterface>;
 
 describe("BoardApi.composable", () => {
 	beforeEach(() => {
@@ -27,12 +28,14 @@ describe("BoardApi.composable", () => {
 		cardApi = mockApi<serverApi.BoardCardApiInterface>();
 		elementApi = mockApi<serverApi.BoardElementApiInterface>();
 		roomsApi = mockApi<serverApi.CourseRoomsApiInterface>();
+		roomApi = mockApi<serverApi.RoomApiInterface>();
 
 		vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApi);
 		vi.spyOn(serverApi, "BoardColumnApiFactory").mockReturnValue(columnApi);
 		vi.spyOn(serverApi, "BoardCardApiFactory").mockReturnValue(cardApi);
 		vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(elementApi);
 		vi.spyOn(serverApi, "CourseRoomsApiFactory").mockReturnValue(roomsApi);
+		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApi);
 	});
 
 	afterEach(() => {
@@ -511,8 +514,25 @@ describe("BoardApi.composable", () => {
 					id: FAKE_CONTEXT_RESPONSE.data.id,
 					type: FAKE_CONTEXT_RESPONSE.data.type,
 					name: FAKE_ROOM_RESPONSE.data.title,
+					isArchived: false,
 				})
 			);
+		});
+
+		it.each([true, false])("should return id, name and archived state %s of the parent room", async (isArchived) => {
+			const { getContextInfo } = useBoardApi();
+
+			boardApi.boardControllerGetBoardContext = vi
+				.fn()
+				.mockResolvedValueOnce({ status: 200, data: { id: "room-id", type: "room" } });
+			roomApi.roomControllerGetRoomDetails.mockResolvedValueOnce(
+				mockApiResponse({ data: { id: "room-id", name: "My room", isArchived } as serverApi.RoomDetailsResponse })
+			);
+
+			const result = await getContextInfo("board-id");
+
+			expect(roomApi.roomControllerGetRoomDetails).toHaveBeenCalledWith("room-id");
+			expect(result).toEqual({ id: "room-id", type: "room", name: "My room", isArchived });
 		});
 	});
 
