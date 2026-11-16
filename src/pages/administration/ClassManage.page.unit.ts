@@ -1,5 +1,10 @@
 import ClassManage from "./ClassManage.page.vue";
-import { createTestAppStoreWithPermissions, mockComposable } from "@@/tests/test-utils";
+import {
+	createTestAppStoreWithPermissions,
+	createTestSchoolStore,
+	mockComposable,
+	schoolFactory,
+} from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Permission } from "@api-server";
 import { useEnvConfig } from "@data-env";
@@ -11,6 +16,7 @@ import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { computed, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
+import { VAutocomplete } from "vuetify/components";
 
 vi.mock("@data-group");
 vi.mock("@data-users");
@@ -44,6 +50,7 @@ describe("ClassManage.page", () => {
 		const pinia = createTestingPinia();
 		setActivePinia(pinia);
 		createTestAppStoreWithPermissions([Permission.CLASS_EDIT, Permission.STUDENT_LIST], pinia);
+		createTestSchoolStore({ schoolDetails: schoolFactory.build(), pinia });
 
 		useGroupClassesMockHandler = mockComposable(useGroupClasses, {
 			fetchClassById: vi.fn().mockResolvedValue({
@@ -231,12 +238,41 @@ describe("ClassManage.page", () => {
 		const pinia = createTestingPinia();
 		setActivePinia(pinia);
 		createTestAppStoreWithPermissions([Permission.CLASS_EDIT], pinia);
+		createTestSchoolStore({ schoolDetails: schoolFactory.build(), pinia });
 
 		const { wrapper } = setup();
 		await flushPromises();
 
 		expect(wrapper.find('[data-testid="teacher-selection-on-manage-class"]').exists()).toBe(true);
 		expect(wrapper.find('[data-testid="student-selection-on-manage-class"]').exists()).toBe(true);
+	});
+
+	it("keeps a removed student selectable when lacking STUDENT_LIST permission", async () => {
+		useClassFormOptionsMockHandler.isAdmin = computed(() => false);
+		const pinia = createTestingPinia();
+		setActivePinia(pinia);
+		createTestAppStoreWithPermissions([Permission.CLASS_EDIT], pinia);
+		createTestSchoolStore({ schoolDetails: schoolFactory.build(), pinia });
+
+		const { wrapper } = setup();
+		await flushPromises();
+
+		const studentSelect = wrapper.findComponent<typeof VAutocomplete>('[data-testid="input_manage_students"]');
+		await studentSelect.vm.$emit("update:modelValue", []);
+		await flushPromises();
+
+		const items = studentSelect.props("items") as { value: string }[];
+		expect(items.map((item) => item.value)).toEqual(["student1"]);
+	});
+
+	it("shows the synced school hint instead of the registration links button for externally managed schools", async () => {
+		createTestSchoolStore({ schoolDetails: schoolFactory.build({ isExternal: true }) });
+
+		const { wrapper } = setup();
+		await flushPromises();
+
+		expect(wrapper.text()).toContain("pages.administration.classes.ldapLoginPresence");
+		expect(wrapper.find('[data-testid="send-registration-links-btn"]').exists()).toBe(false);
 	});
 
 	describe("consent notice", () => {

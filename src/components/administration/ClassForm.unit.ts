@@ -71,12 +71,38 @@ describe("ClassForm.vue", () => {
 		await modeToggle.vm.$emit("update:modelValue", true);
 		await flushPromises();
 
-		const customNameInput = wrapper.findComponent<typeof VTextField>('[data-testid="Klassenbezeichnung"]');
+		const customNameInput = wrapper.findComponent<typeof VTextField>('[data-testid="input_class_custom_name"]');
 		await customNameInput.vm.$emit("update:modelValue", "Froschklasse");
 		await flushPromises();
 
 		const previewName = wrapper.find('[data-testid="class_preview_name"]');
 		expect(previewName.text()).toBe("Froschklasse");
+	});
+
+	it("puts the legacy e2e test ids on the inner custom name and keep year inputs", async () => {
+		const { wrapper } = setup();
+
+		const modeToggle = wrapper.findComponent<typeof VBtnToggle>('[data-testid="toggle_class_mode"]');
+		await modeToggle.vm.$emit("update:modelValue", true);
+		await flushPromises();
+
+		expect(wrapper.find('input[data-testid="Klassenbezeichnung"]').exists()).toBe(true);
+		expect(wrapper.find('input[type="checkbox"][data-testid="maintain-school-year-in-class"]').exists()).toBe(true);
+	});
+
+	it("does not submit a custom name that only contains whitespace", async () => {
+		const { wrapper } = setup();
+
+		const modeToggle = wrapper.findComponent<typeof VBtnToggle>('[data-testid="toggle_class_mode"]');
+		await modeToggle.vm.$emit("update:modelValue", true);
+		await flushPromises();
+
+		const customNameInput = wrapper.findComponent<typeof VTextField>('[data-testid="input_class_custom_name"]');
+		await customNameInput.vm.$emit("update:modelValue", "   ");
+		await wrapper.findComponent(VForm).trigger("submit.prevent");
+		await flushPromises();
+
+		expect(wrapper.emitted("submit")).toBeUndefined();
 	});
 
 	it("disables school year selector when custom class keepYear is false", async () => {
@@ -86,7 +112,7 @@ describe("ClassForm.vue", () => {
 		await modeToggle.vm.$emit("update:modelValue", true);
 		await flushPromises();
 
-		const keepYearCheckbox = wrapper.findComponent<typeof VCheckbox>('[data-testid="maintain-school-year-in-class"]');
+		const keepYearCheckbox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox_class_keep_year"]');
 		await keepYearCheckbox.vm.$emit("update:modelValue", false);
 		await flushPromises();
 

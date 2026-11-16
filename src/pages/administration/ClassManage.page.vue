@@ -58,6 +58,7 @@
 					<VAutocomplete
 						v-model="selectedUserIds"
 						:items="visibleStudentOptions"
+						:menu-props="{ contentClass: 'chosen-results' }"
 						item-title="title"
 						item-value="value"
 						:label="t('pages.administration.classes.manageStudents')"
@@ -107,7 +108,7 @@
 				<h3 class="text-subtitle-1 font-weight-bold mt-3 mb-2">
 					{{ t("pages.administration.classes.obtainConsent") }}
 				</h3>
-				<p v-if="isSchoolSynced" class="text-body-2">
+				<p v-if="isSchoolExternallyManaged" class="text-body-2">
 					{{ t("pages.administration.classes.ldapLoginPresence") }}
 				</p>
 				<div v-else>
@@ -183,7 +184,7 @@ const formRef = ref<VForm>();
 const { fetchClassById, updateClass, isMutating } = useGroupClasses();
 const { teacherOptions, studentOptions, loadTeachers, loadStudents, isAdmin } = useClassFormOptions();
 const { sendRegistrationLink } = useUsersStore();
-const { isSchoolSynced } = useSchoolStoreRefs();
+const { isSchoolExternallyManaged } = useSchoolStoreRefs();
 
 const isConsentNecessary = computed(() => useEnvConfig().value.FEATURE_CONSENT_NECESSARY);
 const noConsentNoticeTheme = computed(() => {
@@ -260,7 +261,7 @@ const visibleStudentOptions = computed<UserSelectOption[]>(() => {
 	if (canListStudents.value) {
 		return allStudentOptions.value;
 	}
-	return allStudentOptions.value.filter((opt) => selectedUserIds.value.includes(opt.value));
+	return allStudentOptions.value.filter((opt) => savedStudentIds.value.includes(opt.value));
 });
 
 const teacherRules = [

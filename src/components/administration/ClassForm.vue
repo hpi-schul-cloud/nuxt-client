@@ -78,21 +78,21 @@
 				<VTextField
 					id="input-classcustom"
 					v-model="formData.customName"
+					v-input-attrs="{ 'data-testid': 'Klassenbezeichnung' }"
 					:label="t('pages.administration.classes.form.customName')"
 					:placeholder="t('pages.administration.classes.form.customNamePlaceholder')"
-					:rules="[formData.isCustom ? isRequired() : true]"
-					data-testid="Klassenbezeichnung"
-					data-test-id="input_class_custom_name"
+					:rules="[formData.isCustom ? isNonEmptyString(t('common.validation.required')) : true]"
+					data-testid="input_class_custom_name"
 					name="classcustom"
 					class="mb-2"
 				/>
 				<VCheckbox
 					v-model="formData.keepYear"
+					v-input-attrs="{ 'data-testid': 'maintain-school-year-in-class' }"
 					:label="t('pages.administration.classes.form.keepYear')"
 					density="compact"
 					hide-details
-					data-testid="maintain-school-year-in-class"
-					data-test-id="checkbox_class_keep_year"
+					data-testid="checkbox_class_keep_year"
 				/>
 				<VAlert type="info" variant="tonal" density="compact" class="mt-3" data-testid="class_custom_name_hint">
 					{{ t("pages.administration.classes.form.customNameHint") }}
@@ -188,8 +188,9 @@
 </template>
 
 <script setup lang="ts">
+import { vInputAttrs } from "@/directives/inputAttrs.directive";
 import { mdiAccountMultipleOutline, mdiAccountSchoolOutline, mdiCheckCircleOutline } from "@icons/material";
-import { isRequired } from "@util-validators";
+import { isNonEmptyString, isRequired } from "@util-validators";
 import { computed, PropType, reactive, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
