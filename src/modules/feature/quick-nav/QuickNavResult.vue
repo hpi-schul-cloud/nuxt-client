@@ -29,9 +29,20 @@
 					<mark v-if="part.isMatch" class="quick-nav-match">{{ part.text }}</mark>
 					<template v-else>{{ part.text }}</template>
 				</template>
-				<span v-if="entry.isOverdue" class="quick-nav-badge" data-testid="quick-nav-overdue">{{
-					t("pages.tasks.overdue")
-				}}</span>
+				<!--
+					Inline after the title, so a long title wraps and the labels stay visible at its end, together
+					on one line. The hidden comma keeps each label a word of its own in what a screen reader reads.
+				-->
+				<span v-if="isRoom && (entry.isArchived || entry.isExternal)" class="quick-nav-labels"
+					><VChip v-if="entry.isArchived" size="small" class="quick-nav-label" data-testid="quick-nav-archived"
+						><span class="d-sr-only">, </span>{{ t("pages.rooms.archived.chip") }}</VChip
+					><VChip v-if="entry.isExternal" size="small" class="quick-nav-label" data-testid="quick-nav-external"
+						><span class="d-sr-only">, </span>{{ t("common.words.external") }}</VChip
+					></span
+				>
+				<span v-if="entry.isOverdue" class="quick-nav-badge" data-testid="quick-nav-overdue"
+					><span class="d-sr-only">, </span>{{ t("pages.tasks.overdue") }}</span
+				>
 			</span>
 			<span v-if="entry.subtitle" class="quick-nav-meta" data-testid="quick-nav-meta">{{ entry.subtitle }}</span>
 		</VListItemTitle>
@@ -51,7 +62,7 @@
 
 <script setup lang="ts">
 import { matchRange } from "./QuickNav.composable";
-import { QuickNavEntry } from "./types";
+import { QuickNavEntry, QuickNavKind } from "./types";
 import { mdiArrowRight, mdiOpenInNew } from "@icons/material";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -73,6 +84,9 @@ const emit = defineEmits<{
 	(e: "open"): void;
 	(e: "select"): void;
 }>();
+
+// the labels say something about a room; on any other line they would be a mistake in the data
+const isRoom = computed(() => props.entry.kind === QuickNavKind.ROOM);
 
 type TitlePart = { text: string; isMatch: boolean };
 
@@ -208,6 +222,20 @@ const titleParts = computed((): TitlePart[] => {
 	line-height: 18px;
 	vertical-align: 1px;
 	white-space: nowrap;
+}
+
+/* the chips of the room overview, kept beside the title they describe and on one line with each other */
+.quick-nav-labels {
+	margin-inline-start: 8px;
+	white-space: nowrap;
+}
+
+.quick-nav-label {
+	vertical-align: 1px;
+}
+
+.quick-nav-label + .quick-nav-label {
+	margin-inline-start: 4px;
 }
 
 .quick-nav-match {

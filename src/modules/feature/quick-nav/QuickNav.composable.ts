@@ -158,13 +158,17 @@ export const useQuickNav = () => {
 
 	// "5a" before "10a", and "Ärzte" next to "Arzt", as people sort names themselves
 	const collator = computed(() => new Intl.Collator(locale.value, { numeric: true, sensitivity: "base" }));
-	/** among equally good matches, what was opened recently comes first, then the rest by name */
+	/**
+	 * Among equally good matches, archived rooms come last, since people look for the rooms they work
+	 * in; then what was opened recently comes first, then the rest by name.
+	 */
 	const tieBreak: Comparator = (a, b) => {
+		const archived = (entry: QuickNavEntry) => (entry.isArchived ? 1 : 0);
 		const recency = (entry: QuickNavEntry) => {
 			const index = recentIds.value.indexOf(entry.id);
 			return index === -1 ? recentIds.value.length : index;
 		};
-		return recency(a) - recency(b) || collator.value.compare(a.title, b.title);
+		return archived(a) - archived(b) || recency(a) - recency(b) || collator.value.compare(a.title, b.title);
 	};
 	const rank = (entries: QuickNavEntry[], q: string) => byQuery(entries, q, tieBreak);
 
@@ -240,7 +244,9 @@ export const useQuickNav = () => {
 	const createRoomEntry = computed((): QuickNavEntry | undefined => {
 		const name = trimmedQuery.value.slice(0, ROOM_NAME_MAX_LENGTH);
 		const mayCreateRoom = actionEntries.value.some((entry) => entry.id === "action:create-room");
-		if (!name || !mayCreateRoom || rooms.value.some((room) => isWholeTitle(room.title, name))) return undefined;
+		// an archived room of that name is no reason not to start a new one, e.g. for the next school year
+		const exists = rooms.value.some((room) => !room.isArchived && isWholeTitle(room.title, name));
+		if (!name || !mayCreateRoom || exists) return undefined;
 
 		return {
 			id: CREATE_ROOM_NAMED_ID,

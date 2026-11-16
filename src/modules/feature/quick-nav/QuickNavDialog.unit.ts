@@ -129,7 +129,73 @@ describe("QuickNavDialog", () => {
 
 			await openWith("Referat");
 
-			expect(wrapper.get("[data-testid=quick-nav-overdue]").text()).toBe("Overdue");
+			expect(wrapper.get("[data-testid=quick-nav-overdue]").text()).toContain("Overdue");
+		});
+
+		it("reads the overdue mark as a word of its own after the title, so screen readers say it apart", async () => {
+			const { wrapper, sourcesStore, openWith } = setup();
+			sourcesStore.tasks = [entry(QuickNavKind.TASK, "Referat", { isOverdue: true })];
+
+			await openWith("Referat");
+
+			expect(wrapper.get("[role=option]").text().replace(/\s+/g, " ")).toContain("Referat, Overdue");
+		});
+
+		describe("labels of rooms", () => {
+			const optionText = (wrapper: ReturnType<typeof setup>["wrapper"]) =>
+				wrapper.get("[role=option]").text().replace(/\s+/g, " ");
+
+			it("labels an archived room, the way the room page does", async () => {
+				const { wrapper, sourcesStore, openWith } = setup();
+				sourcesStore.rooms = [entry(QuickNavKind.ROOM, "Theater-AG", { isArchived: true })];
+
+				await openWith("Theater");
+
+				expect(wrapper.get("[data-testid=quick-nav-archived]").text()).toContain("Archived room");
+			});
+
+			it("labels a room of another school as external, the way the room overview does", async () => {
+				const { wrapper, sourcesStore, openWith } = setup();
+				sourcesStore.rooms = [entry(QuickNavKind.ROOM, "Theater-AG", { isExternal: true })];
+
+				await openWith("Theater");
+
+				expect(wrapper.get("[data-testid=quick-nav-external]").text()).toContain("external");
+			});
+
+			it("reads the labels as words of their own after the title, so screen readers say them", async () => {
+				const { wrapper, sourcesStore, openWith } = setup();
+				sourcesStore.rooms = [entry(QuickNavKind.ROOM, "Theater-AG", { isArchived: true, isExternal: true })];
+
+				await openWith("Theater");
+
+				expect(optionText(wrapper)).toContain("Theater-AG, Archived room, external");
+			});
+
+			it("does not label a room that is in use at the user's own school", async () => {
+				const { wrapper, sourcesStore, openWith } = setup();
+				sourcesStore.rooms = [entry(QuickNavKind.ROOM, "Theater-AG", { isArchived: false, isExternal: false })];
+
+				await openWith("Theater");
+
+				expect(wrapper.find("[data-testid=quick-nav-archived]").exists()).toBe(false);
+				expect(wrapper.find("[data-testid=quick-nav-external]").exists()).toBe(false);
+			});
+
+			it.each([QuickNavKind.COURSE, QuickNavKind.TASK])(
+				"never labels a %s line, as the labels only describe rooms",
+				async (kind) => {
+					const { wrapper, sourcesStore, openWith } = setup();
+					const flagged = entry(kind, "Theater-AG", { isArchived: true, isExternal: true });
+					if (kind === QuickNavKind.COURSE) sourcesStore.courses = [flagged];
+					if (kind === QuickNavKind.TASK) sourcesStore.tasks = [flagged];
+
+					await openWith("Theater");
+
+					expect(wrapper.find("[data-testid=quick-nav-archived]").exists()).toBe(false);
+					expect(wrapper.find("[data-testid=quick-nav-external]").exists()).toBe(false);
+				}
+			);
 		});
 
 		it("shows the subtitle of the entry", async () => {

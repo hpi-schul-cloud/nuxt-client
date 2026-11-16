@@ -25,6 +25,10 @@ export type QuickNavEntry = {
 	isOverdue?: boolean;
 	/** rooms only: how many people are in it, shown as the second line */
 	memberCount?: number;
+	/** rooms only: archived, so read-only; found by searching, but ranked after the rooms in use */
+	isArchived?: boolean;
+	/** rooms only: belongs to another school than the user's, like the "extern" chip in the room overview */
+	isExternal?: boolean;
 	/** shown instead of the icon: the coloured tile people know a room or course by from its overview */
 	avatar?: QuickNavAvatar;
 	/** an in-app route; exactly one of `to`, `href`, `action` and `showsAll` is set */

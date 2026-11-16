@@ -602,6 +602,15 @@ describe("QuickNav Composable", () => {
 			expect(quickNav.flatEntries.value.some((entry) => entry.id === "action:create-room-named")).toBe(false);
 		});
 
+		it("is still offered when only an archived room has that name", () => {
+			const { quickNav } = setup([Permission.SCHOOL_CREATE_ROOM]);
+			useQuickNavSourcesStore().rooms = [{ ...room("Theater AG"), isArchived: true }];
+
+			quickNav.query.value = "Theater AG";
+
+			expect(quickNav.flatEntries.value.some((entry) => entry.id === "action:create-room-named")).toBe(true);
+		});
+
 		it("is not offered to someone who may not create rooms", () => {
 			const { quickNav } = setup();
 
@@ -744,6 +753,64 @@ describe("QuickNav Composable", () => {
 			quickNav.scope.value = "rooms";
 
 			expect(titlesOf(quickNav.groups.value)).toEqual(["Biologie 5a", "Biologie 10a", "Deutsch 7a"]);
+		});
+
+		describe("archived rooms", () => {
+			const archived = (title: string): QuickNavEntry => ({ ...room(title), isArchived: true });
+
+			it("puts an archived room after an equally good match that is in use", () => {
+				const { quickNav } = setup();
+				useQuickNavSourcesStore().rooms = [archived("Biologie 5a"), room("Biologie 7a")];
+
+				quickNav.query.value = "Bio";
+
+				expect(titlesOf(quickNav.groups.value)).toEqual(["Biologie 7a", "Biologie 5a"]);
+			});
+
+			it("puts an archived room after one in use even when it was opened more recently", () => {
+				const { quickNav } = setup();
+				useQuickNavSourcesStore().rooms = [archived("Biologie 5a"), room("Biologie 7a")];
+				quickNav.remember(archived("Biologie 5a"));
+
+				quickNav.query.value = "Bio";
+
+				expect(titlesOf(quickNav.groups.value)).toEqual(["Biologie 7a", "Biologie 5a"]);
+			});
+
+			it("keeps an archived room ahead of a worse match", () => {
+				const { quickNav } = setup();
+				useQuickNavSourcesStore().rooms = [archived("Biologie 5a"), room("AG Biologie")];
+
+				quickNav.query.value = "Bio";
+
+				expect(titlesOf(quickNav.groups.value)).toEqual(["Biologie 5a", "AG Biologie"]);
+			});
+
+			it("lists the archived rooms after the rooms in use when the category is opened", () => {
+				const { quickNav } = setup();
+				useQuickNavSourcesStore().rooms = [archived("Biologie 5a"), room("Deutsch 7a"), room("Chemie 9b")];
+
+				quickNav.scope.value = "rooms";
+
+				expect(titlesOf(quickNav.groups.value)).toEqual(["Chemie 9b", "Deutsch 7a", "Biologie 5a"]);
+			});
+
+			it("does not suggest an archived room before anything is typed, unless it was opened", () => {
+				const { quickNav } = setup();
+				useQuickNavSourcesStore().rooms = [archived("Biologie 5a")];
+
+				expect(titlesOf(quickNav.groups.value)).not.toContain("Biologie 5a");
+			});
+
+			it("keeps the label of an archived room among the recently opened", () => {
+				const { quickNav } = setup();
+				useQuickNavSourcesStore().rooms = [archived("Biologie 5a")];
+				quickNav.remember(archived("Biologie 5a"));
+
+				expect(quickNav.groups.value[0].entries[0]).toEqual(
+					expect.objectContaining({ title: "Biologie 5a", isArchived: true })
+				);
+			});
 		});
 
 		it("gives each room its number of members as a second line", () => {

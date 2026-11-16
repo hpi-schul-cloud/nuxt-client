@@ -4,11 +4,14 @@ import {
 	CourseMetadataResponse,
 	CoursesApiFactory,
 	RoomApiFactory,
+	RoomArchivedItemResponse,
 	RoomColor,
 	RoomItemResponse,
 	TaskApiFactory,
 	TaskResponse,
 } from "@api-server";
+import { useSchoolStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { mdiAccountSupervisorCircleOutline, mdiFormatListChecks, mdiSchoolOutline } from "@icons/material";
 import { logger } from "@util-logger";
 import { defineStore } from "pinia";
@@ -79,7 +82,11 @@ const ROOM_COLORS: string[] = Object.values(RoomColor);
  */
 const LIGHT_ROOM_COLORS: string[] = [RoomColor.YELLOW];
 
-const toRoomEntry = (room: RoomItemResponse): QuickNavEntry => {
+/**
+ * `ownSchoolId` is the user's school. A room from the archive list carries no school id, only the
+ * school's name, and names are not unique, so such a room is never called external.
+ */
+const toRoomEntry = (room: RoomItemResponse, ownSchoolId: string | undefined): QuickNavEntry => {
 	const initials = initialsOf(room.name);
 	// a colour this client has no class for would leave white letters on nothing
 	const hasTile = initials.length > 0 && ROOM_COLORS.includes(room.color);
@@ -94,9 +101,32 @@ const toRoomEntry = (room: RoomItemResponse): QuickNavEntry => {
 		avatar: hasTile
 			? { initials, colorClass: `room-color--${room.color}`, isLight: LIGHT_ROOM_COLORS.includes(room.color) }
 			: undefined,
+		// without the archive feature, archived rooms stay in the room list and only carry the date;
+		// a restored room can come back with `null` there, so like the server only a date counts
+		isArchived: !!room.archivedAt,
+		// the same rule as the "extern" chip on the room's tile, but only when both schools are known
+		isExternal: ownSchoolId !== undefined && room.schoolId !== ownSchoolId,
 		to: `/rooms/${room.id}`,
 	};
 };
+
+/**
+ * The archive list has no colour, so the line shows the room icon instead of a tile. The room page
+ * itself opens archived rooms too and says there that they are archived.
+ *
+ * Known limitation: the archive list has no school id either, only the school's name, which is not
+ * unique. So an archived room of another school is not labelled external; `isExternal` stays unset
+ * until the server sends the school id.
+ */
+const toArchivedRoomEntry = (room: RoomArchivedItemResponse): QuickNavEntry => ({
+	id: `room:${room.id}`,
+	kind: QuickNavKind.ROOM,
+	title: room.name,
+	memberCount: room.totalMembers,
+	icon: mdiAccountSupervisorCircleOutline,
+	isArchived: true,
+	to: `/rooms/${room.id}`,
+});
 
 // course rooms share the /rooms/:id route; the client's RoomDetailsSwitch page picks the course view
 const toCourseEntry = (course: CourseMetadataResponse): QuickNavEntry => {
@@ -143,10 +173,44 @@ export const useQuickNavSourcesStore = defineStore("quickNavSources", () => {
 
 	let pendingLoad: Promise<void> | undefined;
 
+	/** the two room lists as last loaded; each is kept when its request fails */
+	let activeRooms: QuickNavEntry[] = [];
+	let archivedRooms: QuickNavEntry[] = [];
+
+	const combineRooms = (): void => {
+		// a room archived or restored between the two requests would otherwise be listed twice
+		const activeIds = new Set(activeRooms.map((room) => room.id));
+		rooms.value = [...activeRooms, ...archivedRooms.filter((room) => !activeIds.has(room.id))];
+	};
+
 	// the member count comes with the room list, so no member list has to be asked for
 	const loadRooms = async (): Promise<void> => {
+		const ownSchoolId = useSchoolStore().schoolDetails?.id;
 		const { data } = await roomApi.roomControllerGetRooms();
-		rooms.value = data.data.map(toRoomEntry);
+
+		activeRooms = data.data.map((room) => toRoomEntry(room, ownSchoolId));
+		combineRooms();
+	};
+
+	/**
+	 * With the archive feature on, the room list leaves archived rooms out and they come from a list of
+	 * their own. They are extras: they are added when they arrive, without holding up the rooms people
+	 * work in, and when that list fails the archived rooms from before stay and the rooms are not
+	 * reported as missing. Never rejects.
+	 */
+	const loadArchivedRooms = async (): Promise<void> => {
+		if (!useEnvConfig().value.FEATURE_ROOM_ARCHIVE_ENABLED) {
+			archivedRooms = [];
+			return;
+		}
+
+		try {
+			const { data } = await roomApi.roomControllerGetArchivedRooms();
+			archivedRooms = data.data.map(toArchivedRoomEntry);
+			combineRooms();
+		} catch (error) {
+			logger.error("Quick navigation could not load the archived rooms", error);
+		}
 	};
 
 	const loadCourses = async (): Promise<void> => {
@@ -162,6 +226,7 @@ export const useQuickNavSourcesStore = defineStore("quickNavSources", () => {
 	const fetchAll = async (): Promise<void> => {
 		isLoading.value = true;
 
+		const archived = loadArchivedRooms();
 		const sources: QuickNavScope[] = ["rooms", "courses", "tasks"];
 		const results = await Promise.allSettled([loadRooms(), loadCourses(), loadTasks()]);
 
@@ -169,7 +234,11 @@ export const useQuickNavSourcesStore = defineStore("quickNavSources", () => {
 		results.forEach((result) => {
 			if (result.status === "rejected") logger.error("Quick navigation could not load its entries", result.reason);
 		});
+		// the spinner is for what people came for; archived rooms that are still on their way just appear
 		isLoading.value = false;
+
+		// still part of this load, so a load that overlaps it cannot write older archived rooms over newer ones
+		await archived;
 	};
 
 	// runs on every open; the previous entries stay visible until the new ones arrive
