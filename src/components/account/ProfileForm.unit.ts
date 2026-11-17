@@ -82,7 +82,11 @@ describe("ProfileForm.vue", () => {
 			const wrapper = setup({ isSSO: true, isStudent });
 
 			expect(wrapper.find('[data-testid="sso-notice"]').exists()).toBe(true);
-			expect(wrapper.find('[data-test-id="input_first_name"] input').attributes("readonly")).toBeDefined();
+			["input_first_name", "input_last_name", "input_email"].forEach((testId) => {
+				const input = wrapper.find(`[data-test-id="${testId}"] input`);
+				expect(input.attributes("readonly")).toBeDefined();
+				expect(input.attributes("disabled")).toBeDefined();
+			});
 			expect(wrapper.find('[data-test-id="input_email"] input').attributes("data-testid")).toBe("user_email_readonly");
 			expect(wrapper.find('[data-test-id="input_current_password"]').exists()).toBe(false);
 			expect(wrapper.find('[data-testid="submit_new_password_btn"]').exists()).toBe(false);
