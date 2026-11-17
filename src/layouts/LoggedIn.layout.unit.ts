@@ -6,11 +6,13 @@ import { useStatusAlerts } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { Sidebar, Topbar } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
-import { mount } from "@vue/test-utils";
+import { enableAutoUnmount, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { h, nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VApp } from "vuetify/components";
+
+enableAutoUnmount(afterEach);
 
 vi.mock("@data-app/status-alerts.composable");
 

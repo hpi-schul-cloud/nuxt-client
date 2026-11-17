@@ -30,6 +30,8 @@ import type { CreateRoomInvitationLinkBodyParams } from '../models';
 // @ts-ignore
 import type { RoomIdResponse } from '../models';
 // @ts-ignore
+import type { RoomInvitationLinkError } from '../models';
+// @ts-ignore
 import type { RoomInvitationLinkResponse } from '../models';
 // @ts-ignore
 import type { UpdateRoomInvitationLinkBodyParams } from '../models';
@@ -164,7 +166,7 @@ export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: 
         /**
          * 
          * @summary Use a room invitation link to join a room
-         * @param {string} roomInvitationLinkId 
+         * @param {string} roomInvitationLinkId Invitation token (43 base64url characters), or the ObjectId of a legacy invitation without a token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -251,7 +253,7 @@ export const RoomInvitationLinkApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Use a room invitation link to join a room
-         * @param {string} roomInvitationLinkId 
+         * @param {string} roomInvitationLinkId Invitation token (43 base64url characters), or the ObjectId of a legacy invitation without a token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -304,7 +306,7 @@ export const RoomInvitationLinkApiFactory = function (configuration?: Configurat
         /**
          * 
          * @summary Use a room invitation link to join a room
-         * @param {string} roomInvitationLinkId 
+         * @param {string} roomInvitationLinkId Invitation token (43 base64url characters), or the ObjectId of a legacy invitation without a token
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -349,7 +351,7 @@ export interface RoomInvitationLinkApiInterface {
     /**
      * 
      * @summary Use a room invitation link to join a room
-     * @param {string} roomInvitationLinkId 
+     * @param {string} roomInvitationLinkId Invitation token (43 base64url characters), or the ObjectId of a legacy invitation without a token
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -398,7 +400,7 @@ export class RoomInvitationLinkApi extends BaseAPI implements RoomInvitationLink
     /**
      * 
      * @summary Use a room invitation link to join a room
-     * @param {string} roomInvitationLinkId 
+     * @param {string} roomInvitationLinkId Invitation token (43 base64url characters), or the ObjectId of a legacy invitation without a token
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
