@@ -78,8 +78,8 @@ const revokingId = ref("");
 
 const canEditPassword = appStore.hasPermission(Permission.PASSWORD_EDIT);
 
-// Legacy gated this on TEACHER_VISIBILITY_FOR_EXTERNAL_TEAM_INVITATION, which is "opt-in" in every
-// instance but not exposed by the public config endpoint, so only the opt-in variant is supported
+// Legacy gated this on an instance config, which is "opt-in" in every instance but not exposed
+// by the public config endpoint, so only the opt-in variant is supported
 const showVisibilitySection = !isStudent.value;
 
 onMounted(async () => {
