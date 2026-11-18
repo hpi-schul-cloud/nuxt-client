@@ -339,6 +339,5 @@ export class VideoConferenceApi extends BaseAPI implements VideoConferenceApiInt
     public videoConferenceControllerStart(scope: VideoConferenceScope, scopeId: string, videoConferenceCreateParams: VideoConferenceCreateParams, options?: RawAxiosRequestConfig) {
         return VideoConferenceApiFp(this.configuration).videoConferenceControllerStart(scope, scopeId, videoConferenceCreateParams, options).then((request) => request(this.axios, this.basePath));
     }
-
 }
 

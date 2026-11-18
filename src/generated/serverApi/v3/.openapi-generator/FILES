@@ -32,6 +32,7 @@ api/news-api.ts
 api/oauth-api.ts
 api/oauth2-api.ts
 api/pseudonym-api.ts
+api/pseudonym-username-api.ts
 api/registration-api.ts
 api/release-api.ts
 api/room-api.ts
@@ -396,7 +397,6 @@ models/successful-response.ts
 models/system-for-ldap-login-response.ts
 models/system-type.ts
 models/target-info-response.ts
-models/target-user-id-params.ts
 models/task-copy-api-params.ts
 models/task-list-response.ts
 models/task-response.ts

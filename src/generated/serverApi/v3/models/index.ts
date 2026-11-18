@@ -337,7 +337,6 @@ export * from './successful-response';
 export * from './system-for-ldap-login-response';
 export * from './system-type';
 export * from './target-info-response';
-export * from './target-user-id-params';
 export * from './task-copy-api-params';
 export * from './task-list-response';
 export * from './task-response';
