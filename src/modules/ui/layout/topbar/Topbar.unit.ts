@@ -19,7 +19,7 @@ vi.mocked(useStatusAlerts).mockReturnValue({
 });
 
 describe("@ui-layout/Topbar", () => {
-	const setup = (windowWidth = 1300, isSidebarExpanded?: boolean) => {
+	const setup = (windowWidth = 1300, isSidebarExpanded?: boolean, withSearch = true) => {
 		setActivePinia(createTestingPinia());
 		createTestAppStore({
 			me: {
@@ -60,9 +60,11 @@ describe("@ui-layout/Topbar", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			slots: {
-				default: h(Topbar, {
-					sidebarExpanded: isSidebarExpanded ?? true,
-				}),
+				default: h(
+					Topbar,
+					{ sidebarExpanded: isSidebarExpanded ?? true },
+					withSearch ? { search: () => h("button", { "data-testid": "search-trigger" }) } : {}
+				),
 			},
 		});
 
@@ -161,5 +163,57 @@ describe("@ui-layout/Topbar", () => {
 		expect(schoolName.exists()).toBe(false);
 		expect(schoolLogo.exists()).toBe(false);
 		expect(userMenu.exists()).toBe(true);
+	});
+
+	describe("search slot", () => {
+		const search = (topbar: ReturnType<typeof setup>["topbar"]) =>
+			topbar.get<HTMLElement>("[data-testid=topbar-search]");
+
+		describe("on desktop with the sidebar open", () => {
+			it("starts where the page content starts, beside the sidebar", () => {
+				const { topbar } = setup(1300, true);
+
+				expect(search(topbar).element.style.marginInlineStart).toBe("280px");
+			});
+
+			it("leaves out the empty prepend box, so nothing pushes the search past the content edge", () => {
+				const { topbar } = setup(1300, true);
+
+				expect(topbar.find(".v-toolbar__prepend").exists()).toBe(false);
+			});
+
+			it("leads the toolbar, before the actions are pushed to the end", () => {
+				const { topbar } = setup(1300, true);
+
+				expect(search(topbar).classes()).toContain("top-bar-search");
+				expect(search(topbar).element.nextElementSibling?.classList.contains("v-spacer")).toBe(true);
+			});
+		});
+
+		describe("when the sidebar does not stay open beside the content", () => {
+			it.each([
+				["collapsed on desktop", 1300, false],
+				["open over the page on tablets", 1000, true],
+			])("follows the logo when the sidebar is %s", (_case, width, isSidebarExpanded) => {
+				const { topbar } = setup(width, isSidebarExpanded);
+
+				expect(search(topbar).classes()).toContain("top-bar-search");
+				expect(search(topbar).element.style.marginInlineStart).toBe("24px");
+			});
+		});
+
+		it("sits with the actions next to the user menu on phones", () => {
+			const { topbar } = setup(500);
+
+			expect(search(topbar).classes()).not.toContain("top-bar-search");
+			expect(topbar.find("[data-testid=search-trigger]").exists()).toBe(true);
+			expect(search(topbar).element.nextElementSibling?.classList.contains("v-spacer")).toBe(false);
+		});
+
+		it.each([1300, 500])("leaves no gap when there is no search to show at a width of %ipx", (width) => {
+			const { topbar } = setup(width, true, false);
+
+			expect(topbar.find("[data-testid=topbar-search]").exists()).toBe(false);
+		});
 	});
 });

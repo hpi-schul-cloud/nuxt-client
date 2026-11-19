@@ -62,6 +62,7 @@
 			"@feature-media-shelf": ["./src/modules/feature/media-shelf"],
 			"@feature-board-deleted-element": ["./src/modules/feature/board-deleted-element"],
 			"@feature-room": ["./src/modules/feature/room"],
+			"@feature-quick-nav": ["./src/modules/feature/quick-nav"],
 			"@feature-board-folder-element": ["./src/modules/feature/board-folder-element"],
 			"@feature-folder": ["./src/modules/feature/folder"],
 			"@feature-collabora": ["./src/modules/feature/collabora"],
