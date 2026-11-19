@@ -37,6 +37,7 @@ describe("CourseGroupForm", () => {
 			const select = wrapper.find('select[data-testid="group-member-field"]');
 			expect(select.attributes("style")).toContain("display: none");
 			expect(select.attributes("aria-hidden")).toBe("true");
+			expect(wrapper.find(`label[for="${select.attributes("id")}"]`).exists()).toBe(true);
 			expect(select.findAll("option").map((option) => option.text())).toEqual(["Ada Lovelace", "Alan Turing"]);
 		});
 

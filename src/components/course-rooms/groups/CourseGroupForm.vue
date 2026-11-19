@@ -25,7 +25,11 @@
 			Hidden native select in sync with the autocomplete, like the chosen.js select of the legacy form.
 			The e2e suite (pageCourses.js selectGroupMember) shows it and picks the members with cy.select().
 		-->
+		<label :for="nativeSelectId" style="display: none">
+			{{ t("pages.courseRoomDetails.groups.form.members.label") }}
+		</label>
 		<select
+			:id="nativeSelectId"
 			v-model="memberIds"
 			multiple
 			style="display: none"
@@ -54,7 +58,7 @@
 import { vInputAttrs } from "@/directives/inputAttrs.directive";
 import { CourseGroupPayload } from "@data-course-group";
 import { isNonEmptyString, isRequired } from "@util-validators";
-import { PropType, ref, useTemplateRef, watch } from "vue";
+import { PropType, ref, useId, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { VForm } from "vuetify/components";
 
@@ -90,6 +94,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const formRef = useTemplateRef<InstanceType<typeof VForm>>("formRef");
+const nativeSelectId = `course-group-members-${useId()}`;
 
 const name = ref("");
 const memberIds = ref<string[]>([]);
