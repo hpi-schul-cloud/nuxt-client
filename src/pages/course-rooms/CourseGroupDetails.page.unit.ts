@@ -195,6 +195,20 @@ describe("CourseGroupDetails.page", () => {
 			expect(deleteDialog(wrapper).props("modelValue")).toBe(false);
 		});
 
+		it("should not navigate when the page was left while deleting", async () => {
+			const { wrapper, router, groups } = await setup();
+			let resolveDelete: (value: boolean) => void = () => undefined;
+			groups.deleteGroup.mockReturnValueOnce(new Promise((resolve) => (resolveDelete = resolve)));
+
+			await wrapper.find('[data-testid="delete-course-group"]').trigger("click");
+			wrapper.findComponent(SvsDialogBtnConfirm).vm.$emit("click");
+			wrapper.unmount();
+			resolveDelete(true);
+			await flushPromises();
+
+			expect(router.push).not.toHaveBeenCalled();
+		});
+
 		it("should stay on the page when deleting fails", async () => {
 			const { wrapper, router, groups } = await setup();
 			groups.deleteGroup.mockResolvedValueOnce(false);

@@ -108,7 +108,7 @@ import { mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
 import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed, ref, watch } from "vue";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -128,6 +128,12 @@ const router = useRouter();
 const appStore = useAppStore();
 const { fetchCourse, fetchGroup, deleteGroup, isMutating } = useCourseGroups();
 const { fetchTopics, deleteTopic, fetchGroupTasks } = useCourseGroupDetails();
+
+// Users may leave the page while a request is running; do not navigate them back afterwards
+let isLeft = false;
+onBeforeUnmount(() => {
+	isLeft = true;
+});
 
 const course = ref<CourseGroupCourse>();
 const group = ref<CourseGroup>();
@@ -158,13 +164,14 @@ const onDeleteTopic = async (topic: CourseGroupTopic) => {
 
 const onDeleteGroup = async () => {
 	isDeleteDialogOpen.value = false;
-	if (await deleteGroup(props.groupId)) {
+	if ((await deleteGroup(props.groupId)) && !isLeft) {
 		await router.push({ name: "room-details", params: { id: props.courseId }, query: { tab: "groups" } });
 	}
 };
 
 const load = async () => {
 	const loadedGroup = await fetchGroup(props.groupId);
+	if (isLeft) return;
 	if (loadedGroup && loadedGroup.courseId !== props.courseId) {
 		// The URL combines the group with another course: show it under its own course instead
 		await router.replace({

@@ -82,6 +82,19 @@ describe("CourseGroupCreate.page", () => {
 		expect(router.push).not.toHaveBeenCalled();
 	});
 
+	it("should not navigate when the page was left while creating", async () => {
+		const { wrapper, router, composable } = await setup();
+		let resolveCreate: (value: unknown) => void = () => undefined;
+		composable.createGroup.mockReturnValueOnce(new Promise((resolve) => (resolveCreate = resolve)));
+
+		wrapper.findComponent(CourseGroupForm).vm.$emit("submit", { name: "Group A", userIds: [] });
+		wrapper.unmount();
+		resolveCreate({ id: "group-1" });
+		await flushPromises();
+
+		expect(router.push).not.toHaveBeenCalled();
+	});
+
 	it("should go back to the groups tab on cancel", async () => {
 		const { wrapper, router } = await setup();
 

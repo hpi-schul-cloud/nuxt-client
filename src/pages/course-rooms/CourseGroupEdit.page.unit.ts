@@ -113,6 +113,19 @@ describe("CourseGroupEdit.page", () => {
 		expect(wrapper.findComponent(CourseGroupForm).exists()).toBe(false);
 	});
 
+	it("should not navigate when the page was left while saving", async () => {
+		const { wrapper, router, composable } = await setup();
+		let resolveUpdate: (value: boolean) => void = () => undefined;
+		composable.updateGroup.mockReturnValueOnce(new Promise((resolve) => (resolveUpdate = resolve)));
+
+		wrapper.findComponent(CourseGroupForm).vm.$emit("submit", { name: "Renamed", userIds: [] });
+		wrapper.unmount();
+		resolveUpdate(true);
+		await flushPromises();
+
+		expect(router.push).not.toHaveBeenCalled();
+	});
+
 	it("should go to the group page on cancel", async () => {
 		const { wrapper, router } = await setup();
 
