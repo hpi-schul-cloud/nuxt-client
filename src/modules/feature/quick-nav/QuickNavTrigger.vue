@@ -54,8 +54,11 @@ const PAGE_SCOPES: Partial<Record<string, QuickNavScope>> = {
 
 const pageScope = computed(() => PAGE_SCOPES[String(route.name ?? "")]);
 
-// the same words as the field in the palette it opens, so the search reads the same before and after
-const label = computed(() => t(`feature.quickNav.placeholder.${pageScope.value ?? "all"}`));
+// On a list page, the same words as the field in the palette it opens. Elsewhere a shorter form of the
+// palette's "Nach Räumen, Kursen oder Aufgaben suchen", which would not fit the field in the top bar.
+const label = computed(() =>
+	pageScope.value ? t(`feature.quickNav.placeholder.${pageScope.value}`) : t("feature.quickNav.triggerLabel")
+);
 
 const isApple = computed(() => /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent));
 const shortcutLabel = computed(() => (isApple.value ? "⌘K" : t("feature.quickNav.shortcut.ctrlK")));

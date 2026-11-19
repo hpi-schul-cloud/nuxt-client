@@ -54,7 +54,7 @@ describe("QuickNavTrigger", () => {
 		it("names itself with its visible text, without reading out the shortcut badge", () => {
 			const { wrapper } = setup();
 
-			expect(wrapper.get("[data-testid=quick-nav-trigger-label]").text()).toBe("Search for rooms, courses or tasks");
+			expect(wrapper.get("[data-testid=quick-nav-trigger-label]").text()).toBe("Search rooms, courses, tasks");
 			expect(wrapper.get("[data-testid=quick-nav-shortcut]").attributes("aria-hidden")).toBe("true");
 		});
 
@@ -73,7 +73,7 @@ describe("QuickNavTrigger", () => {
 			const { trigger } = setup({ width: 500 });
 
 			expect(trigger().classes()).not.toContain("quick-nav-field");
-			expect(trigger().attributes("aria-label")).toBe("Search for rooms, courses or tasks");
+			expect(trigger().attributes("aria-label")).toBe("Search rooms, courses, tasks");
 			expect(trigger().find("[data-testid=quick-nav-shortcut]").exists()).toBe(false);
 		});
 

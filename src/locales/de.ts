@@ -2106,6 +2106,7 @@ export default {
 	"feature.quickNav.emptyHelp": "{hint}. Versuche es mit einem Namen oder wähle eine andere Kategorie.",
 	"feature.quickNav.dialog": "Schnellnavigation",
 	"feature.quickNav.placeholder.all": "Nach Räumen, Kursen oder Aufgaben suchen",
+	"feature.quickNav.triggerLabel": "Räume, Kurse, Aufgaben suchen",
 	"feature.quickNav.placeholder.rooms": "Nach Räumen suchen",
 	"feature.quickNav.placeholder.courses": "Nach Kursen suchen",
 	"feature.quickNav.placeholder.tasks": "Nach Aufgaben suchen",

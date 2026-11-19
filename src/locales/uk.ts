@@ -2085,6 +2085,7 @@ export default {
 	"feature.quickNav.emptyHelp": "{hint}. Спробуйте ввести назву або виберіть іншу категорію.",
 	"feature.quickNav.dialog": "Швидка навігація",
 	"feature.quickNav.placeholder.all": "Шукати кімнати, курси або завдання",
+	"feature.quickNav.triggerLabel": "Пошук кімнат, курсів, завдань",
 	"feature.quickNav.placeholder.rooms": "Шукати кімнати",
 	"feature.quickNav.placeholder.courses": "Шукати курси",
 	"feature.quickNav.placeholder.tasks": "Шукати завдання",
