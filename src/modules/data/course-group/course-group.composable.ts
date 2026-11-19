@@ -80,12 +80,12 @@ export const useCourseGroups = () => {
 		return success ? mapCourseGroup(result.data) : undefined;
 	};
 
-	const updateGroup = async (groupId: string, courseId: string, payload: CourseGroupPayload): Promise<boolean> => {
+	// Only name and members change; the group never moves to another course
+	const updateGroup = async (groupId: string, payload: CourseGroupPayload): Promise<boolean> => {
 		const { success } = await execMutate(
 			() =>
 				$axios.patch(`/v1/courseGroups/${groupId}`, {
 					name: payload.name,
-					courseId,
 					userIds: withCurrentUser(payload.userIds),
 				}),
 			t("common.notifications.errors.notSaved", { type: groupLabel.value })

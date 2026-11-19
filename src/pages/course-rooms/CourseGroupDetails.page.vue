@@ -108,7 +108,7 @@ import { mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
 import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -163,14 +163,28 @@ const onDeleteGroup = async () => {
 	}
 };
 
-onMounted(async () => {
-	[course.value, group.value] = await Promise.all([fetchCourse(props.courseId), fetchGroup(props.groupId)]);
-	if (!group.value) return;
+const load = async () => {
+	const loadedGroup = await fetchGroup(props.groupId);
+	if (loadedGroup && loadedGroup.courseId !== props.courseId) {
+		// The URL combines the group with another course: show it under its own course instead
+		await router.replace({
+			name: "course-room-group-details",
+			params: { id: loadedGroup.courseId, groupId: props.groupId },
+		});
+		return;
+	}
 
-	const [loadedTasks] = await Promise.all([
-		fetchGroupTasks(props.groupId, props.courseId, group.value.members.length),
+	group.value = loadedGroup;
+	if (!loadedGroup) return;
+
+	const [loadedCourse, loadedTasks] = await Promise.all([
+		fetchCourse(props.courseId),
+		fetchGroupTasks(props.groupId, props.courseId, loadedGroup.members.length),
 		loadTopics(),
 	]);
+	course.value = loadedCourse;
 	tasks.value = loadedTasks;
-});
+};
+
+watch(() => [props.courseId, props.groupId], load, { immediate: true });
 </script>

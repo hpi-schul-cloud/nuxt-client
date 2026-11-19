@@ -17,7 +17,7 @@ describe("CourseGroupEdit.page", () => {
 	// Alan already left the course but is still in the group
 	const group: CourseGroup = { id: "group-1", name: "Group A", courseId: "course-1", members: [ada, alan] };
 
-	const setup = async ({ updateSuccess = true } = {}) => {
+	const setup = async ({ updateSuccess = true, loadedGroup = group } = {}) => {
 		setActivePinia(createTestingPinia());
 		createTestAppStore();
 		const router = createRouterMock();
@@ -25,7 +25,7 @@ describe("CourseGroupEdit.page", () => {
 
 		const composable = {
 			fetchCourse: vi.fn().mockResolvedValue(course),
-			fetchGroup: vi.fn().mockResolvedValue(group),
+			fetchGroup: vi.fn().mockResolvedValue(loadedGroup),
 			updateGroup: vi.fn().mockResolvedValue(updateSuccess),
 			isMutating: ref(false),
 		};
@@ -73,7 +73,7 @@ describe("CourseGroupEdit.page", () => {
 		wrapper.findComponent(CourseGroupForm).vm.$emit("submit", { name: "Renamed", userIds: ["user-1"] });
 		await flushPromises();
 
-		expect(composable.updateGroup).toHaveBeenCalledWith("group-1", "course-1", {
+		expect(composable.updateGroup).toHaveBeenCalledWith("group-1", {
 			name: "Renamed",
 			userIds: ["user-1"],
 		});
@@ -90,6 +90,27 @@ describe("CourseGroupEdit.page", () => {
 		await flushPromises();
 
 		expect(router.push).not.toHaveBeenCalled();
+	});
+
+	it("should not reset the form when the page re-renders while saving", async () => {
+		const { wrapper, composable } = await setup();
+		const before = wrapper.findComponent(CourseGroupForm).props("initialMemberIds");
+
+		composable.isMutating.value = true;
+		await flushPromises();
+
+		expect(wrapper.findComponent(CourseGroupForm).props("initialMemberIds")).toBe(before);
+	});
+
+	it("should redirect to the group's own course when the URL combines it with another course", async () => {
+		const { wrapper, router, composable } = await setup({ loadedGroup: { ...group, courseId: "course-2" } });
+
+		expect(router.replace).toHaveBeenCalledWith({
+			name: "course-room-group-edit",
+			params: { id: "course-2", groupId: "group-1" },
+		});
+		expect(composable.fetchCourse).not.toHaveBeenCalled();
+		expect(wrapper.findComponent(CourseGroupForm).exists()).toBe(false);
 	});
 
 	it("should go to the group page on cancel", async () => {

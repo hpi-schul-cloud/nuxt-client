@@ -172,14 +172,13 @@ describe("useCourseGroups", () => {
 			setupUser();
 			axiosMock.patch.mockResolvedValueOnce(mockApiResponse({}));
 
-			const result = await useCourseGroups().updateGroup("group-1", "course-1", {
+			const result = await useCourseGroups().updateGroup("group-1", {
 				name: "Renamed",
 				userIds: ["user-2"],
 			});
 
 			expect(axiosMock.patch).toHaveBeenCalledWith("/v1/courseGroups/group-1", {
 				name: "Renamed",
-				courseId: "course-1",
 				userIds: ["user-2", "user-1"],
 			});
 			expect(result).toBe(true);
@@ -189,7 +188,7 @@ describe("useCourseGroups", () => {
 			setupUser();
 			axiosMock.patch.mockRejectedValueOnce(axiosErrorFactory.build());
 
-			expect(await useCourseGroups().updateGroup("group-1", "course-1", { name: "x", userIds: [] })).toBe(false);
+			expect(await useCourseGroups().updateGroup("group-1", { name: "x", userIds: [] })).toBe(false);
 		});
 	});
 

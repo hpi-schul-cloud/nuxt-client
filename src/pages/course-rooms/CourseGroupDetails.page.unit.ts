@@ -38,6 +38,7 @@ describe("CourseGroupDetails.page", () => {
 		isArchived = false,
 		confirmed = true,
 		groupLoadFails = false,
+		groupCourseId = "course-1",
 	} = {}) => {
 		setActivePinia(createTestingPinia());
 		createTestAppStoreWithPermissions(permissions);
@@ -55,7 +56,7 @@ describe("CourseGroupDetails.page", () => {
 		};
 		const groups = {
 			fetchCourse: vi.fn().mockResolvedValue(course),
-			fetchGroup: vi.fn().mockResolvedValue(groupLoadFails ? undefined : group),
+			fetchGroup: vi.fn().mockResolvedValue(groupLoadFails ? undefined : { ...group, courseId: groupCourseId }),
 			deleteGroup: vi.fn().mockResolvedValue(true),
 			isMutating: ref(false),
 		};
@@ -103,6 +104,17 @@ describe("CourseGroupDetails.page", () => {
 		const taskLists = wrapper.findAllComponents(CourseGroupTaskList);
 		expect(taskLists.map((list) => list.props("tasks"))).toEqual([tasks.done, tasks.open]);
 		expect(taskLists[0].props("color")).toBe("#ff0000");
+	});
+
+	it("should redirect to the group's own course when the URL combines it with another course", async () => {
+		const { router, groups, details } = await setup({ groupCourseId: "course-2" });
+
+		expect(router.replace).toHaveBeenCalledWith({
+			name: "course-room-group-details",
+			params: { id: "course-2", groupId: "group-1" },
+		});
+		expect(groups.fetchCourse).not.toHaveBeenCalled();
+		expect(details.fetchTopics).not.toHaveBeenCalled();
 	});
 
 	it("should not load topics and tasks when the group cannot be loaded", async () => {

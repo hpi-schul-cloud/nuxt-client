@@ -3,7 +3,7 @@
 		<CourseGroupForm
 			v-if="course && group"
 			:initial-name="group.name"
-			:initial-member-ids="group.members.map((member) => member.id)"
+			:initial-member-ids="initialMemberIds"
 			:student-options="studentOptions"
 			:loading="isMutating"
 			is-edit
@@ -19,7 +19,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { CourseGroup, CourseGroupCourse, CourseGroupPayload, useCourseGroups } from "@data-course-group";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -65,13 +65,29 @@ const goToDetails = () =>
 	router.push({ name: "course-room-group-details", params: { id: props.courseId, groupId: props.groupId } });
 
 const onSubmit = async (payload: CourseGroupPayload) => {
-	const success = await updateGroup(props.groupId, props.courseId, payload);
+	const success = await updateGroup(props.groupId, payload);
 	if (success) {
 		await goToDetails();
 	}
 };
 
-onMounted(async () => {
-	[course.value, group.value] = await Promise.all([fetchCourse(props.courseId), fetchGroup(props.groupId)]);
-});
+// Stable array, so re-renders (e.g. while saving) do not reset the form
+const initialMemberIds = computed(() => group.value?.members.map((member) => member.id) ?? []);
+
+const load = async () => {
+	const loadedGroup = await fetchGroup(props.groupId);
+	if (loadedGroup && loadedGroup.courseId !== props.courseId) {
+		// The URL combines the group with another course: show it under its own course instead
+		await router.replace({
+			name: "course-room-group-edit",
+			params: { id: loadedGroup.courseId, groupId: props.groupId },
+		});
+		return;
+	}
+
+	group.value = loadedGroup;
+	course.value = loadedGroup ? await fetchCourse(props.courseId) : undefined;
+};
+
+watch(() => [props.courseId, props.groupId], load, { immediate: true });
 </script>
