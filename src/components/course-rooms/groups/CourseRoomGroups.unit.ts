@@ -5,6 +5,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { Permission } from "@api-server";
 import * as courseGroupModule from "@data-course-group";
 import { CourseGroup } from "@data-course-group";
+import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -24,6 +25,7 @@ describe("CourseRoomGroups", () => {
 	}: { groups?: CourseGroup[]; permissions?: Permission[]; isArchived?: boolean } = {}) => {
 		setActivePinia(createTestingPinia());
 		createTestAppStoreWithPermissions(permissions);
+		useCourseRoomDetailsStore().roomData.isArchived = isArchived;
 
 		const fetchGroups = vi.fn().mockResolvedValue(groups);
 		vi.spyOn(courseGroupModule, "useCourseGroups").mockReturnValue({
@@ -32,7 +34,7 @@ describe("CourseRoomGroups", () => {
 		} as unknown as ReturnType<typeof courseGroupModule.useCourseGroups>);
 
 		const wrapper = mount(CourseRoomGroups, {
-			props: { courseId: "course-1", isArchived },
+			props: { roomId: "course-1" },
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 		await flushPromises();
