@@ -10,7 +10,6 @@
 		/>
 		<VAutocomplete
 			v-model="memberIds"
-			v-input-attrs="{ 'data-testid': 'group-member-field' }"
 			:items="studentOptions"
 			:label="t('pages.courseRoomDetails.groups.form.members.label')"
 			:placeholder="t('pages.courseRoomDetails.groups.form.members.placeholder')"
@@ -22,6 +21,20 @@
 			closable-chips
 			class="mb-4"
 		/>
+		<!--
+			Hidden native select in sync with the autocomplete, like the chosen.js select of the legacy form.
+			The e2e suite (pageCourses.js selectGroupMember) shows it and picks the members with cy.select().
+		-->
+		<select
+			v-model="memberIds"
+			multiple
+			style="display: none"
+			aria-hidden="true"
+			tabindex="-1"
+			data-testid="group-member-field"
+		>
+			<option v-for="option in studentOptions" :key="option.value" :value="option.value">{{ option.title }}</option>
+		</select>
 		<div class="d-flex flex-column-reverse flex-sm-row justify-end ga-3">
 			<VBtn variant="outlined" class="px-6" data-testid="course-group-cancel" @click="emit('cancel')">
 				{{ t("common.actions.cancel") }}

@@ -24,11 +24,29 @@ describe("CourseGroupForm", () => {
 			attachTo: document.body,
 		});
 
-	it("should put the legacy test ids on the inner inputs", () => {
+	it("should put the legacy name test id on the inner input", () => {
 		const wrapper = setup();
 
 		expect(wrapper.find('input[data-testid="group-name-field"]').exists()).toBe(true);
-		expect(wrapper.find('input[data-testid="group-member-field"]').exists()).toBe(true);
+	});
+
+	describe("hidden native member select for the legacy e2e suite", () => {
+		it("should be hidden from users and offer the students", () => {
+			const wrapper = setup();
+
+			const select = wrapper.find('select[data-testid="group-member-field"]');
+			expect(select.attributes("style")).toContain("display: none");
+			expect(select.attributes("aria-hidden")).toBe("true");
+			expect(select.findAll("option").map((option) => option.text())).toEqual(["Ada Lovelace", "Alan Turing"]);
+		});
+
+		it("should update the selected members like the autocomplete", async () => {
+			const wrapper = setup();
+
+			await wrapper.find('select[data-testid="group-member-field"]').setValue(["user-2"]);
+
+			expect(wrapper.findComponent(VAutocomplete).props("modelValue")).toEqual(["user-2"]);
+		});
 	});
 
 	it("should prefill name and members", () => {

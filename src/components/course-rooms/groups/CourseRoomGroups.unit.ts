@@ -11,6 +11,7 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { computed } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
+import { VBtn } from "vuetify/components";
 
 describe("CourseRoomGroups", () => {
 	const router = createRouterMock();
@@ -67,6 +68,33 @@ describe("CourseRoomGroups", () => {
 		expect(wrapper.find('[data-testid="course-groups-headline"]').text()).toBe(
 			"pages.courseRoomDetails.groups.headline.mine"
 		);
+	});
+
+	describe("create button", () => {
+		it("should link to the create page with COURSEGROUP_CREATE", async () => {
+			const { wrapper } = await setup();
+
+			const button = wrapper.findComponent<typeof VBtn>('[data-testid="add-course-group"]');
+			expect(button.props("to")).toEqual({ name: "course-room-group-create", params: { id: "course-1" } });
+		});
+
+		it("should be shown in the empty state too", async () => {
+			const { wrapper } = await setup({ groups: [] });
+
+			expect(wrapper.find('[data-testid="add-course-group"]').exists()).toBe(true);
+		});
+
+		it("should be hidden without COURSEGROUP_CREATE", async () => {
+			const { wrapper } = await setup({ permissions: [Permission.COURSE_EDIT] });
+
+			expect(wrapper.find('[data-testid="add-course-group"]').exists()).toBe(false);
+		});
+
+		it("should be hidden in an archived course", async () => {
+			const { wrapper } = await setup({ isArchived: true });
+
+			expect(wrapper.find('[data-testid="add-course-group"]').exists()).toBe(false);
+		});
 	});
 
 	describe("empty state", () => {

@@ -253,24 +253,12 @@ const tabItems = computed<TabItem[]>(() => {
 		fabItems: canEditTools.value ? ctlToolFabItems : undefined,
 	});
 
-	const canCreateGroup =
-		!roomData.value.isArchived && useAppStore().userPermissions.includes(Permission.COURSEGROUP_CREATE);
-	const groupFabItems: FabAction[] = [
-		{
-			icon: mdiPlus,
-			label: t("pages.courseRoomDetails.groups.action.create"),
-			dataTestId: "add-course-group",
-			to: `/rooms/${courseId.value}/groups/add`,
-		},
-	];
-
 	tabs.push({
 		name: "groups",
 		label: t("pages.courseRooms.tabLabel.groups"),
 		icon: mdiAccountGroupOutline,
 		dataTestId: "groups-tab",
 		component: CourseRoomGroups,
-		fabItems: canCreateGroup ? groupFabItems : undefined,
 	});
 
 	return tabs;

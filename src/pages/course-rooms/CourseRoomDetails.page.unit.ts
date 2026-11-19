@@ -499,27 +499,8 @@ describe("CourseRoomDetails.page.vue", () => {
 			expect(groups.props("roomId")).toBe(singleColumnBoard.roomId);
 		});
 
-		it("should offer creating a group with COURSEGROUP_CREATE", async () => {
-			const { wrapper, singleColumnBoard } = setupGroupsTab({ permissionData: [Permission.COURSEGROUP_CREATE] });
-			await flushPromises();
-
-			expect(groupFabItems(wrapper)).toEqual([
-				expect.objectContaining({
-					dataTestId: "add-course-group",
-					to: `/rooms/${singleColumnBoard.roomId}/groups/add`,
-				}),
-			]);
-		});
-
-		it("should not offer creating a group without COURSEGROUP_CREATE", async () => {
-			const { wrapper } = setupGroupsTab({ permissionData: [] });
-			await flushPromises();
-
-			expect(groupFabItems(wrapper)).toEqual([]);
-		});
-
-		it("should not offer creating a group in an archived course", async () => {
-			const { wrapper } = setupGroupsTab({ permissionData: [Permission.COURSEGROUP_CREATE], isArchived: true });
+		it("should not show a FAB on the groups tab (the tab has its own create button)", async () => {
+			const { wrapper } = setupGroupsTab({ permissionData: [Permission.COURSEGROUP_CREATE] });
 			await flushPromises();
 
 			expect(groupFabItems(wrapper)).toEqual([]);

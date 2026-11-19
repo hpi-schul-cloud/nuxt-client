@@ -8,6 +8,7 @@ import { Permission } from "@api-server";
 import * as courseGroupModule from "@data-course-group";
 import { CourseGroup, CourseGroupCourse } from "@data-course-group";
 import { createTestingPinia } from "@pinia/testing";
+import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { ref } from "vue";
@@ -142,14 +143,28 @@ describe("CourseGroupDetails.page", () => {
 	});
 
 	describe("delete group", () => {
+		const deleteDialog = (wrapper: Awaited<ReturnType<typeof setup>>["wrapper"]) => wrapper.findComponent(SvsDialog);
+
+		it("should ask in a dialog with the legacy confirm button id", async () => {
+			const { wrapper, groups } = await setup();
+
+			await wrapper.find('[data-testid="delete-course-group"]').trigger("click");
+
+			expect(deleteDialog(wrapper).props("modelValue")).toBe(true);
+			expect(deleteDialog(wrapper).props("title")).toBe("ui-confirmation-dialog.ask-delete");
+			expect(wrapper.findComponent(SvsDialogBtnConfirm).attributes("data-testid")).toBe("delete-course-group-btn");
+			expect(groups.deleteGroup).not.toHaveBeenCalled();
+		});
+
 		it("should delete after confirmation and go back to the groups tab", async () => {
 			const { wrapper, router, groups } = await setup();
 
 			await wrapper.find('[data-testid="delete-course-group"]').trigger("click");
+			wrapper.findComponent(SvsDialogBtnConfirm).vm.$emit("click");
 			await flushPromises();
 
-			expect(askDeletionForItem).toHaveBeenCalledWith("Group A", "pages.courseRoomDetails.groups.group");
 			expect(groups.deleteGroup).toHaveBeenCalledWith("group-1");
+			expect(deleteDialog(wrapper).props("modelValue")).toBe(false);
 			expect(router.push).toHaveBeenCalledWith({
 				name: "room-details",
 				params: { id: "course-1" },
@@ -157,13 +172,26 @@ describe("CourseGroupDetails.page", () => {
 			});
 		});
 
-		it("should not delete without confirmation", async () => {
-			const { wrapper, groups } = await setup({ confirmed: false });
+		it("should close without deleting on cancel", async () => {
+			const { wrapper, groups } = await setup();
 
 			await wrapper.find('[data-testid="delete-course-group"]').trigger("click");
+			wrapper.findComponent(SvsDialogBtnCancel).vm.$emit("click");
 			await flushPromises();
 
 			expect(groups.deleteGroup).not.toHaveBeenCalled();
+			expect(deleteDialog(wrapper).props("modelValue")).toBe(false);
+		});
+
+		it("should stay on the page when deleting fails", async () => {
+			const { wrapper, router, groups } = await setup();
+			groups.deleteGroup.mockResolvedValueOnce(false);
+
+			await wrapper.find('[data-testid="delete-course-group"]').trigger("click");
+			wrapper.findComponent(SvsDialogBtnConfirm).vm.$emit("click");
+			await flushPromises();
+
+			expect(router.push).not.toHaveBeenCalled();
 		});
 	});
 

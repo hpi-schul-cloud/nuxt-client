@@ -59,11 +59,32 @@
 					:loading="isMutating"
 					variant="outlined"
 					data-testid="delete-course-group"
-					@click="onDeleteGroup"
+					@click="isDeleteDialogOpen = true"
 				>
 					{{ t("pages.courseRoomDetails.groups.details.actions.delete") }}
 				</VBtn>
 			</div>
+
+			<!-- Own dialog instead of askDeletion: the e2e suite confirms with the legacy id delete-course-group-btn -->
+			<SvsDialog
+				v-model="isDeleteDialogOpen"
+				:title="
+					t('ui-confirmation-dialog.ask-delete', {
+						itemType: t('pages.courseRoomDetails.groups.group'),
+						itemTitle: group.name,
+					})
+				"
+				data-testid="delete-course-group-dialog"
+			>
+				<template #actions>
+					<SvsDialogBtnCancel data-testid="delete-course-group-cancel" @click="isDeleteDialogOpen = false" />
+					<SvsDialogBtnConfirm
+						text-lang-key="common.actions.delete"
+						data-testid="delete-course-group-btn"
+						@click="onDeleteGroup"
+					/>
+				</template>
+			</SvsDialog>
 		</template>
 	</DefaultWireframe>
 </template>
@@ -84,6 +105,7 @@ import {
 	useCourseGroups,
 } from "@data-course-group";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
+import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
@@ -111,6 +133,7 @@ const course = ref<CourseGroupCourse>();
 const group = ref<CourseGroup>();
 const topics = ref<CourseGroupTopic[]>([]);
 const tasks = ref<CourseGroupTasks>({ done: [], open: [] });
+const isDeleteDialogOpen = ref(false);
 
 const hasPermission = (permission: Permission) => appStore.userPermissions.includes(permission);
 
@@ -134,10 +157,8 @@ const onDeleteTopic = async (topic: CourseGroupTopic) => {
 };
 
 const onDeleteGroup = async () => {
-	if (!group.value) return;
-
-	const confirmed = await askDeletionForItem(group.value.name, t("pages.courseRoomDetails.groups.group"));
-	if (confirmed && (await deleteGroup(props.groupId))) {
+	isDeleteDialogOpen.value = false;
+	if (await deleteGroup(props.groupId)) {
 		await router.push({ name: "room-details", params: { id: props.courseId }, query: { tab: "groups" } });
 	}
 };

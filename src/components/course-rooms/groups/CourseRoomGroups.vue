@@ -22,6 +22,17 @@
 				{{ t("pages.courseRoomDetails.groups.empty.create.text") }}
 			</template>
 		</EmptyState>
+		<!-- A button instead of the course room FAB, like the legacy page: the e2e suite clicks add-course-group directly -->
+		<div v-if="canCreate" class="d-flex justify-center mt-6">
+			<VBtn
+				:to="{ name: 'course-room-group-create', params: { id: roomId } }"
+				:prepend-icon="mdiPlus"
+				color="primary"
+				data-testid="add-course-group"
+			>
+				{{ t("pages.courseRoomDetails.groups.action.create") }}
+			</VBtn>
+		</div>
 	</div>
 </template>
 
@@ -31,6 +42,7 @@ import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { CourseGroup, useCourseGroups } from "@data-course-group";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
+import { mdiPlus } from "@icons/material";
 import { ContentEmptySvg, EmptyState } from "@ui-empty-state";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, ref } from "vue";
