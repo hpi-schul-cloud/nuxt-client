@@ -41,7 +41,7 @@ import { useDisplay } from "vuetify";
 const { t } = useI18n();
 const { xs } = useDisplay();
 const route = useRoute();
-const { open, toggle, isOpen, categories } = useQuickNav();
+const { open, toggle, isOpen } = useQuickNav();
 
 // On a list page, searching starts in that list; everywhere else it searches across everything.
 const PAGE_SCOPES: Partial<Record<string, QuickNavScope>> = {
@@ -53,13 +53,9 @@ const PAGE_SCOPES: Partial<Record<string, QuickNavScope>> = {
 };
 
 const pageScope = computed(() => PAGE_SCOPES[String(route.name ?? "")]);
-const pageCategory = computed(() => categories.value.find(({ scope }) => scope === pageScope.value));
 
-const label = computed(() =>
-	pageCategory.value
-		? t("feature.quickNav.scopedPlaceholder", { category: pageCategory.value.label })
-		: t("feature.quickNav.searchEverywhere")
-);
+// the same words as the field in the palette it opens, so the search reads the same before and after
+const label = computed(() => t(`feature.quickNav.placeholder.${pageScope.value ?? "all"}`));
 
 const isApple = computed(() => /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent));
 const shortcutLabel = computed(() => (isApple.value ? "⌘K" : t("feature.quickNav.shortcut.ctrlK")));

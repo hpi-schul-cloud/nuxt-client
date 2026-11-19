@@ -127,10 +127,13 @@ const appBarHeight = computed(() => {
 	transition: top 0.2s ease-in-out;
 }
 
-/* Shrinks along with the school name when space runs out, but never below a width that still reads as a field. */
+/*
+ * Wide enough for "Nach Räumen, Kursen oder Aufgaben suchen" with the shortcut badge. Shrinks along with the
+ * school name when space runs out, but never below a width that still reads as a field.
+ */
 .top-bar-search {
 	display: flex;
-	flex: 0 1 360px;
+	flex: 0 1 420px;
 	min-width: 180px;
 	margin-inline-end: 16px;
 }

@@ -2111,8 +2111,6 @@ export default {
 	"feature.quickNav.loading": "Cargando resultados…",
 	"feature.quickNav.emptyHelp": "{hint}. Prueba con un nombre o elige otra categoría.",
 	"feature.quickNav.dialog": "Navegación rápida",
-	"feature.quickNav.searchEverywhere": "Buscar en todas partes",
-	"feature.quickNav.scopedPlaceholder": "Buscar en {category}",
 	"feature.quickNav.placeholder.all": "Buscar salas, cursos o tareas",
 	"feature.quickNav.placeholder.rooms": "Buscar salas",
 	"feature.quickNav.placeholder.courses": "Buscar cursos",

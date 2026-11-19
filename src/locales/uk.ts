@@ -2084,8 +2084,6 @@ export default {
 	"feature.quickNav.loading": "Завантаження результатів…",
 	"feature.quickNav.emptyHelp": "{hint}. Спробуйте ввести назву або виберіть іншу категорію.",
 	"feature.quickNav.dialog": "Швидка навігація",
-	"feature.quickNav.searchEverywhere": "Шукати всюди",
-	"feature.quickNav.scopedPlaceholder": "Шукати в {category}",
 	"feature.quickNav.placeholder.all": "Шукати кімнати, курси або завдання",
 	"feature.quickNav.placeholder.rooms": "Шукати кімнати",
 	"feature.quickNav.placeholder.courses": "Шукати курси",

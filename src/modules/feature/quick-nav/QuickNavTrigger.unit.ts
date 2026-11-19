@@ -54,7 +54,7 @@ describe("QuickNavTrigger", () => {
 		it("names itself with its visible text, without reading out the shortcut badge", () => {
 			const { wrapper } = setup();
 
-			expect(wrapper.get("[data-testid=quick-nav-trigger-label]").text()).toBe("Search everywhere");
+			expect(wrapper.get("[data-testid=quick-nav-trigger-label]").text()).toBe("Search for rooms, courses or tasks");
 			expect(wrapper.get("[data-testid=quick-nav-shortcut]").attributes("aria-hidden")).toBe("true");
 		});
 
@@ -73,7 +73,7 @@ describe("QuickNavTrigger", () => {
 			const { trigger } = setup({ width: 500 });
 
 			expect(trigger().classes()).not.toContain("quick-nav-field");
-			expect(trigger().attributes("aria-label")).toBe("Search everywhere");
+			expect(trigger().attributes("aria-label")).toBe("Search for rooms, courses or tasks");
 			expect(trigger().find("[data-testid=quick-nav-shortcut]").exists()).toBe(false);
 		});
 
@@ -89,10 +89,10 @@ describe("QuickNavTrigger", () => {
 
 	describe("on a page with its own list", () => {
 		it.each([
-			["rooms", "Search in Rooms", "rooms"],
-			["course-room-overview", "Search in Courses", "courses"],
-			["course-room-list", "Search in Courses", "courses"],
-			["tasks", "Search in Tasks", "tasks"],
+			["rooms", "Search for rooms", "rooms"],
+			["course-room-overview", "Search for courses", "courses"],
+			["course-room-list", "Search for courses", "courses"],
+			["tasks", "Search for tasks", "tasks"],
 		])("on %s says what it searches and opens in that list", async (routeName, label, scope) => {
 			const { wrapper, trigger, palette } = setup({ routeName });
 

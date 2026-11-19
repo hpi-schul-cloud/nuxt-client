@@ -2060,8 +2060,6 @@ export default {
 	"feature.quickNav.loading": "Loading results…",
 	"feature.quickNav.emptyHelp": "{hint}. Try a name instead, or choose another category.",
 	"feature.quickNav.dialog": "Quick navigation",
-	"feature.quickNav.searchEverywhere": "Search everywhere",
-	"feature.quickNav.scopedPlaceholder": "Search in {category}",
 	"feature.quickNav.placeholder.all": "Search for rooms, courses or tasks",
 	"feature.quickNav.placeholder.rooms": "Search for rooms",
 	"feature.quickNav.placeholder.courses": "Search for courses",

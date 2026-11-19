@@ -2105,8 +2105,6 @@ export default {
 	"feature.quickNav.loading": "Ergebnisse werden geladen…",
 	"feature.quickNav.emptyHelp": "{hint}. Versuche es mit einem Namen oder wähle eine andere Kategorie.",
 	"feature.quickNav.dialog": "Schnellnavigation",
-	"feature.quickNav.searchEverywhere": "Überall suchen",
-	"feature.quickNav.scopedPlaceholder": "{category} durchsuchen",
 	"feature.quickNav.placeholder.all": "Nach Räumen, Kursen oder Aufgaben suchen",
 	"feature.quickNav.placeholder.rooms": "Nach Räumen suchen",
 	"feature.quickNav.placeholder.courses": "Nach Kursen suchen",
