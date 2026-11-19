@@ -15,50 +15,60 @@
 	>
 		<VCard class="quick-nav-surface" :rounded="xs ? 0 : 'lg'">
 			<h2 class="d-sr-only">{{ activeCategory?.label ?? t("feature.quickNav.dialog") }}</h2>
-			<div class="quick-nav-search d-flex align-center ga-3 ps-6 pe-4">
-				<VIcon :icon="mdiMagnify" class="quick-nav-search-icon" aria-hidden="true" color="primary" />
-				<input
-					:id="`quick-nav-${uid}-input`"
-					ref="input"
-					v-model="query"
-					type="text"
-					class="quick-nav-input"
-					aria-autocomplete="list"
-					autocomplete="off"
-					spellcheck="false"
-					role="combobox"
-					aria-expanded="true"
-					:aria-controls="`quick-nav-${uid}-results`"
-					:aria-activedescendant="selectedEntry ? `quick-nav-${uid}-${selectedEntry.id}` : undefined"
-					:placeholder="placeholder"
-					:aria-label="placeholder"
-					data-testid="quick-nav-input"
-					@keydown.down.prevent="moveSelection(1)"
-					@keydown.left="moveColumnFromKey($event, -1)"
-					@keydown.right="moveColumnFromKey($event, 1)"
-					@keydown.up.prevent="moveSelection(-1)"
-					@keydown.enter.prevent="openSelected"
-					@keydown.esc.stop.prevent="stepBack"
-					@keydown.backspace="leaveScopeWhenEmpty"
-				/>
-				<VProgressCircular v-if="isLoading" indeterminate size="18" width="2" aria-hidden="true" />
-				<VBtn
-					v-if="query"
-					:icon="mdiCloseCircle"
-					variant="text"
-					size="small"
-					class="text-medium-emphasis"
-					:aria-label="t('feature.quickNav.clear')"
-					data-testid="quick-nav-clear"
-					@click="clearQuery"
-				/>
-				<VBtn
-					:icon="mdiClose"
-					variant="text"
-					:aria-label="t('common.labels.close')"
-					data-testid="quick-nav-close"
-					@click="close"
-				/>
+			<!-- the hint is part of the field: both sit above its focus line and start in the same column -->
+			<div class="quick-nav-search d-flex ga-3 ps-6 pe-4">
+				<div class="quick-nav-search-line d-flex align-center">
+					<VIcon :icon="mdiMagnify" class="quick-nav-search-icon" aria-hidden="true" color="primary" />
+				</div>
+				<div class="quick-nav-field">
+					<input
+						:id="`quick-nav-${uid}-input`"
+						ref="input"
+						v-model="query"
+						type="text"
+						class="quick-nav-input"
+						aria-autocomplete="list"
+						autocomplete="off"
+						spellcheck="false"
+						role="combobox"
+						aria-expanded="true"
+						:aria-controls="`quick-nav-${uid}-results`"
+						:aria-activedescendant="selectedEntry ? `quick-nav-${uid}-${selectedEntry.id}` : undefined"
+						:placeholder="placeholder"
+						:aria-label="placeholder"
+						:aria-describedby="`quick-nav-${uid}-hint`"
+						data-testid="quick-nav-input"
+						@keydown.down.prevent="moveSelection(1)"
+						@keydown.up.prevent="moveSelection(-1)"
+						@keydown.enter.prevent="openSelected"
+						@keydown.esc.stop.prevent="stepBack"
+						@keydown.backspace="leaveScopeWhenEmpty"
+					/>
+					<!-- stays in view while typing: what is not searched matters most when nothing is found -->
+					<p :id="`quick-nav-${uid}-hint`" class="quick-nav-hint" data-testid="quick-nav-hint">
+						{{ contentHint }}
+					</p>
+				</div>
+				<div class="quick-nav-search-line d-flex align-center ga-3">
+					<VProgressCircular v-if="isLoading" indeterminate size="18" width="2" aria-hidden="true" />
+					<VBtn
+						v-if="query"
+						:icon="mdiCloseCircle"
+						variant="text"
+						size="small"
+						class="text-medium-emphasis"
+						:aria-label="t('feature.quickNav.clear')"
+						data-testid="quick-nav-clear"
+						@click="clearQuery"
+					/>
+					<VBtn
+						:icon="mdiClose"
+						variant="text"
+						:aria-label="t('common.labels.close')"
+						data-testid="quick-nav-close"
+						@click="close"
+					/>
+				</div>
 			</div>
 
 			<div
@@ -120,9 +130,15 @@
 					<h3 class="quick-nav-section-label">{{ t("feature.quickNav.group.recent") }}</h3>
 					<p class="quick-nav-placeholder-line">{{ t("feature.quickNav.recentPlaceholder") }}</p>
 				</section>
-				<p v-if="onlyOffersCreating" class="px-6 pt-4 mb-0 text-medium-emphasis" data-testid="quick-nav-nothing-for">
-					{{ nothingFoundFor }}
-				</p>
+				<template v-if="onlyOffersCreating">
+					<p class="px-6 pt-4 mb-0 text-medium-emphasis" data-testid="quick-nav-nothing-for">
+						{{ nothingFoundFor }}
+					</p>
+					<!-- the same explanation as the empty state: someone looking for content lands here, too -->
+					<p class="px-6 pt-1 mb-0 text-medium-emphasis text-body-2" data-testid="quick-nav-empty-help">
+						{{ t("feature.quickNav.emptyHelp", { hint: contentHint }) }}
+					</p>
+				</template>
 				<VList
 					:id="`quick-nav-${uid}-results`"
 					ref="list"
@@ -131,7 +147,6 @@
 					:aria-label="t('feature.quickNav.results')"
 					density="compact"
 					class="px-2 pt-0 pb-2"
-					:class="{ 'quick-nav-overview': !trimmedQuery && !scope }"
 				>
 					<div
 						v-if="selectionBox"
@@ -140,58 +155,45 @@
 						:style="selectionBox.style"
 						aria-hidden="true"
 					/>
-					<!-- one block while searching and on a phone; the overview puts its recent lines on top and the rest in columns -->
-					<!-- the columns lay their lines into rows they share, so a page and its action stand side by side -->
 					<div
-						v-for="(block, columnIndex) in blocks"
-						:key="columnIndex"
-						class="quick-nav-column"
-						:class="{ 'quick-nav-column-full': block.isFullWidth, 'quick-nav-column-rows': block.rowOf !== undefined }"
-						:style="block.rowOf ? { '--quick-nav-rows': (block.rowCount ?? 0) + 1 } : undefined"
-						role="presentation"
+						v-for="(group, groupIndex) in groups"
+						:key="group.label"
+						class="quick-nav-group"
+						role="group"
+						:aria-labelledby="`quick-nav-${uid}-group-${groupIndex}`"
 					>
-						<!-- a div rather than a fieldset: a fieldset's content box does not take part in the subgrid below -->
-						<div
-							v-for="(group, groupIndex) in block.groups"
-							:key="group.label"
-							class="quick-nav-group"
-							role="group"
-							:aria-labelledby="`quick-nav-${uid}-group-${columnIndex}-${groupIndex}`"
-						>
-							<div class="quick-nav-group-header" role="presentation">
-								<VListSubheader :id="`quick-nav-${uid}-group-${columnIndex}-${groupIndex}`">{{
-									group.label
-								}}</VListSubheader>
-								<VBtn
-									v-if="group.isRecent"
-									variant="text"
-									size="small"
-									class="quick-nav-clear-recent"
-									:aria-label="t('feature.quickNav.clearRecentLabel')"
-									data-testid="quick-nav-clear-recent"
-									@click="clearRecentAndRefocus"
-									>{{ t("feature.quickNav.clearRecent") }}</VBtn
-								>
-							</div>
-							<QuickNavResult
-								v-for="entry in group.entries"
-								:id="`quick-nav-${uid}-${entry.id}`"
-								:key="entry.id"
-								:entry="entry"
-								:is-selected="entry.id === selectedEntry?.id"
-								:query="isEcho(entry) ? '' : trimmedQuery"
-								:data-testid="`quick-nav-entry-${entry.id}`"
-								:style="block.rowOf ? { '--quick-nav-row': block.rowOf[entry.id] + 2 } : undefined"
-								@open="openEntry(entry)"
-								@select="select(entry.id)"
-							/>
+						<div class="quick-nav-group-header" role="presentation">
+							<VListSubheader :id="`quick-nav-${uid}-group-${groupIndex}`">{{ group.label }}</VListSubheader>
+							<VBtn
+								v-if="group.isRecent"
+								variant="text"
+								size="small"
+								class="quick-nav-clear-recent"
+								:aria-label="t('feature.quickNav.clearRecentLabel')"
+								data-testid="quick-nav-clear-recent"
+								@click="clearRecentAndRefocus"
+								>{{ t("feature.quickNav.clearRecent") }}</VBtn
+							>
 						</div>
+						<QuickNavResult
+							v-for="entry in group.entries"
+							:id="`quick-nav-${uid}-${entry.id}`"
+							:key="entry.id"
+							:entry="entry"
+							:is-selected="entry.id === selectedEntry?.id"
+							:query="isEcho(entry) ? '' : trimmedQuery"
+							:data-testid="`quick-nav-entry-${entry.id}`"
+							@open="openEntry(entry)"
+							@select="select(entry.id)"
+						/>
 					</div>
 				</VList>
 				<div v-if="isEmpty" class="quick-nav-empty px-6 py-8" data-testid="quick-nav-empty">
 					<VIcon :icon="mdiMagnify" size="32" class="mb-3" aria-hidden="true" />
 					<p class="font-weight-bold mb-2">{{ emptyMessage }}</p>
-					<p class="text-medium-emphasis mb-4">{{ t("feature.quickNav.emptyHelp") }}</p>
+					<p class="text-medium-emphasis mb-4" data-testid="quick-nav-empty-help">
+						{{ t("feature.quickNav.emptyHelp", { hint: contentHint }) }}
+					</p>
 					<VBtn v-if="query" variant="tonal" color="primary" @click="clearQuery">{{
 						t("feature.quickNav.clear")
 					}}</VBtn>
@@ -259,14 +261,11 @@ const {
 	hasResultsOutsideScope,
 	failedCategories,
 	placeholder,
+	contentHint,
 	isLoading,
 	hasFailed,
 	failedScopes,
 	moveSelection,
-	moveColumn,
-	blocks,
-	columns,
-	columnCount,
 	isFirstRun,
 	select,
 	remember,
@@ -321,21 +320,14 @@ const showsCounts = computed(() => trimmedQuery.value.length > 0 && !isLoading.v
 // a category with no hits stays clickable, but should not read as loudly as one with hits
 const isEmptyCategory = (value: QuickNavScope) => showsCounts.value && countIn(value) === 0;
 
-const isEmpty = computed(() => groups.value.length === 0 && !isLoading.value && !hasFailed.value);
-
-// the overview stands in columns from this width on, which the arrow keys follow
-watch(
-	xs,
-	(isPhone) => {
-		columnCount.value = isPhone ? 1 : 2;
-	},
-	{ immediate: true }
+// the overview of someone who has opened nothing and may create nothing is empty, but nothing was searched yet
+const isEmpty = computed(
+	() =>
+		(trimmedQuery.value.length > 0 || scope.value !== undefined) &&
+		groups.value.length === 0 &&
+		!isLoading.value &&
+		!hasFailed.value
 );
-
-// only reached with an empty field (the overview), so the caret has nowhere to move anyway
-const moveColumnFromKey = (event: KeyboardEvent, direction: 1 | -1): void => {
-	if (moveColumn(direction)) event.preventDefault();
-};
 
 const results = useTemplateRef<ComponentPublicInstance>("results");
 
@@ -347,7 +339,7 @@ watch([trimmedQuery, scope], () => {
 
 // Esc leaves a category before it closes the palette, so the hint says which of the two comes next
 const keyboardHints = computed(() => [
-	{ keypath: "feature.quickNav.hint.move", keys: columns.value.length > 1 ? ["↑", "↓", "←", "→"] : ["↑", "↓"] },
+	{ keypath: "feature.quickNav.hint.move", keys: ["↑", "↓"] },
 	{ keypath: "feature.quickNav.hint.open", keys: ["↵"] },
 	{ keypath: scope.value ? "feature.quickNav.hint.back" : "feature.quickNav.hint.close", keys: ["Esc"] },
 ]);
@@ -483,9 +475,22 @@ const openSelected = (): void => {
 </script>
 
 <style scoped>
+/* 12px above the text line and below the hint, so the text sits where it did before the hint came */
 .quick-nav-search {
-	min-height: 64px;
+	align-items: flex-start;
+	padding-block: 12px;
 	flex-shrink: 0;
+}
+
+/* the icon and the buttons centre on the line that is typed in, not on the field with its hint */
+.quick-nav-search-line {
+	height: 40px;
+	flex-shrink: 0;
+}
+
+.quick-nav-field {
+	flex: 1;
+	min-width: 0;
 }
 
 .quick-nav-search:focus-within {
@@ -498,7 +503,8 @@ const openSelected = (): void => {
 }
 
 .quick-nav-input {
-	flex: 1;
+	display: block;
+	width: 100%;
 	border: none;
 	outline: none;
 	background: transparent;
@@ -506,13 +512,20 @@ const openSelected = (): void => {
 	caret-color: rgb(var(--v-theme-primary));
 	/* the field is what the whole dialog is about, so it reads larger than the results */
 	font-size: var(--text-lg);
-	min-height: 48px;
-	min-width: 0;
+	height: 40px;
 }
 
 .quick-nav-input::placeholder {
 	color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 	opacity: 1;
+}
+
+/* quieter and smaller than the field, close under it: a footnote to what is typed */
+.quick-nav-hint {
+	margin: 0;
+	font-size: var(--text-sm);
+	line-height: 20px;
+	color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 
 .quick-nav-filters {
@@ -645,7 +658,7 @@ const openSelected = (): void => {
 /* small, bold and quiet: a label for the group, never mistaken for a line of it */
 /*
  * Spacing, on a 4px grid: 16 from the filters to the first header, 8 from a header to its lines,
- * 24 from the last line of a group to the next header, the same inside a column and between blocks.
+ * 24 from the last line of a group to the next header.
  */
 .quick-nav-results :deep(.v-list-subheader) {
 	min-height: 0;
@@ -720,52 +733,6 @@ const openSelected = (): void => {
 
 .quick-nav-surface :deep(::selection) {
 	background: rgba(var(--v-theme-primary), 0.2);
-}
-
-.quick-nav-column-full {
-	grid-column: 1 / -1;
-}
-
-@media (min-width: 600px) {
-	.quick-nav-overview {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		align-items: start;
-		column-gap: 8px;
-	}
-
-	/* the gap between the recent lines and the columns; a row gap would also open up between the lines */
-	.quick-nav-overview .quick-nav-column-full {
-		margin-bottom: 8px;
-	}
-
-	/*
-	 * Both columns and their groups take the rows of the overview as their own (subgrid), so a row is
-	 * as tall as the taller of its two lines and "Räume" stays beside "Raum erstellen" even when one
-	 * of them wraps. Row 1 is the group header, the lines follow in the row the composable gave them.
-	 */
-	.quick-nav-column-rows,
-	.quick-nav-column-rows > .quick-nav-group {
-		display: grid;
-		grid-template-rows: subgrid;
-		align-items: start;
-	}
-
-	.quick-nav-column-rows {
-		grid-row: span var(--quick-nav-rows);
-	}
-
-	.quick-nav-column-rows > .quick-nav-group {
-		grid-row: 1 / -1;
-	}
-
-	.quick-nav-column-rows .quick-nav-group-header {
-		grid-row: 1;
-	}
-
-	.quick-nav-column-rows .quick-nav-result {
-		grid-row: var(--quick-nav-row);
-	}
 }
 
 /* high contrast drops backgrounds and shadows, which is what the selection and the focus line are drawn with */

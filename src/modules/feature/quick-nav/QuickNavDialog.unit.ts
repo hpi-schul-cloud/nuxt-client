@@ -233,6 +233,18 @@ describe("QuickNavDialog", () => {
 			expect(wrapper.get("[data-testid=quick-nav-empty]").text()).toContain("Nothing found.");
 		});
 
+		it("explains that only names are searched, for the category that is open", async () => {
+			const { wrapper, palette } = setup();
+
+			palette.open("rooms");
+			await nextTick();
+			await wrapper.get("[data-testid=quick-nav-input]").setValue("Bruchrechnung");
+
+			expect(wrapper.get("[data-testid=quick-nav-empty-help]").text()).toBe(
+				"Content of rooms is currently not searched. Try a name instead, or choose another category."
+			);
+		});
+
 		it("names what could not be loaded", async () => {
 			const { wrapper, sourcesStore, openWith } = setup();
 			sourcesStore.failedScopes = ["rooms", "courses"];
@@ -403,6 +415,16 @@ describe("QuickNavDialog", () => {
 
 			expect(wrapper.get("[data-testid=quick-nav-nothing-for]").text()).toBe("Nothing found for “Theater AG”.");
 			expect(wrapper.get("[data-testid=quick-nav-status]").text()).toBe("Nothing found for “Theater AG”.");
+		});
+
+		it("explains that content is not searched when the only line left offers to create a room", async () => {
+			const { wrapper, openWith } = setup([Permission.SCHOOL_CREATE_ROOM]);
+
+			await openWith("Bruchrechnung");
+
+			expect(wrapper.get("[data-testid=quick-nav-empty-help]").text()).toBe(
+				"Content is currently not searched. Try a name instead, or choose another category."
+			);
 		});
 
 		it("clears what was opened recently and puts the focus back into the field", async () => {
@@ -671,22 +693,52 @@ describe("QuickNavDialog", () => {
 		});
 	});
 
-	describe("overview in two columns", () => {
-		const rowOf = (wrapper: ReturnType<typeof setup>["wrapper"], id: string) =>
-			wrapper.get(`[data-testid="quick-nav-entry-${id}"]`).attributes("style");
-
-		it("puts a page and its action on the same grid row", async () => {
-			const { wrapper, openWith } = setup([Permission.SCHOOL_CREATE_ROOM, Permission.COURSE_CREATE]);
+	describe("before anything is typed", () => {
+		it("says what the field searches for", async () => {
+			const { wrapper, openWith } = setup();
 
 			await openWith("");
 
-			expect(wrapper.findAll(".quick-nav-column-rows")).toHaveLength(2);
-			expect(rowOf(wrapper, "action:create-room")).toBe(rowOf(wrapper, "navigation:sidebar-rooms"));
-			expect(rowOf(wrapper, "action:create-course")).toBe(rowOf(wrapper, "navigation:sidebar-courses"));
-			expect(rowOf(wrapper, "action:create-room")).not.toBe(rowOf(wrapper, "action:create-course"));
+			expect(wrapper.get("[data-testid=quick-nav-input]").attributes("placeholder")).toBe(
+				"Search for rooms, courses or tasks"
+			);
 		});
 
-		it("keeps the pages and the actions in a group of their own each, named by its heading", async () => {
+		it.each([
+			["rooms", "Search for rooms"],
+			["courses", "Search for courses"],
+			["tasks", "Search for tasks"],
+		] as const)("says what the field searches for in the category %s", async (scope, placeholder) => {
+			const { wrapper, palette } = setup();
+
+			palette.open(scope);
+			await nextTick();
+
+			expect(wrapper.get("[data-testid=quick-nav-input]").attributes("placeholder")).toBe(placeholder);
+		});
+
+		it("says below the field that content is not searched", async () => {
+			const { wrapper, openWith } = setup();
+
+			await openWith("");
+
+			expect(wrapper.get("[data-testid=quick-nav-hint]").text()).toBe("Content is currently not searched");
+		});
+
+		it.each([
+			["rooms", "Content of rooms is currently not searched"],
+			["courses", "Content of courses is currently not searched"],
+			["tasks", "Content of tasks is currently not searched"],
+		] as const)("names the content that is not searched in the category %s", async (scope, hint) => {
+			const { wrapper, palette } = setup();
+
+			palette.open(scope);
+			await nextTick();
+
+			expect(wrapper.get("[data-testid=quick-nav-hint]").text()).toBe(hint);
+		});
+
+		it("lists what can be created, but no pages to jump to", async () => {
 			const { wrapper, openWith } = setup([Permission.SCHOOL_CREATE_ROOM]);
 
 			await openWith("");
@@ -694,33 +746,34 @@ describe("QuickNavDialog", () => {
 			const headings = wrapper
 				.findAll("[role=listbox] [role=group]")
 				.map((group) => wrapper.get(`[id="${group.attributes("aria-labelledby")}"]`).text());
-			expect(headings).toEqual(["Jump to", "Actions"]);
+			expect(headings).toEqual(["Actions"]);
 		});
 
-		it("offers the left and right arrow keys when both columns have lines", async () => {
-			const { wrapper, openWith } = setup([Permission.SCHOOL_CREATE_ROOM]);
-
-			await openWith("");
-
-			expect(wrapper.get(".quick-nav-keyboard").text()).toContain("←");
-		});
-
-		it("does not offer the left and right arrow keys when there is nothing to create", async () => {
+		it("does not say that nothing was found when there is nothing to show yet", async () => {
 			const { wrapper, openWith } = setup();
 
 			await openWith("");
 
-			expect(wrapper.get(".quick-nav-keyboard").text()).not.toContain("←");
-			expect(wrapper.get(".quick-nav-keyboard").text()).toContain("↓");
+			expect(wrapper.find("[data-testid=quick-nav-empty]").exists()).toBe(false);
 		});
 
-		it("lays the lines out in plain rows again while searching", async () => {
+		it("offers only the up and down arrow keys", async () => {
 			const { wrapper, openWith } = setup([Permission.SCHOOL_CREATE_ROOM]);
 
-			await openWith("Room");
+			await openWith("");
 
-			expect(wrapper.find(".quick-nav-column-rows").exists()).toBe(false);
-			expect(rowOf(wrapper, "action:create-room")).toBeUndefined();
+			expect(wrapper.get(".quick-nav-keyboard").text()).toContain("↓");
+			expect(wrapper.get(".quick-nav-keyboard").text()).not.toContain("←");
+		});
+	});
+
+	describe("while searching", () => {
+		it("keeps saying that the content is not searched", async () => {
+			const { wrapper, openWith } = setup();
+
+			await openWith("zzzzzz");
+
+			expect(wrapper.find("[data-testid=quick-nav-hint]").exists()).toBe(true);
 		});
 	});
 
@@ -732,6 +785,17 @@ describe("QuickNavDialog", () => {
 			await nextTick();
 
 			expect(wrapper.get(".v-dialog-stub").attributes("aria-label")).toBe("Quick navigation");
+		});
+
+		it("describes the field with the hint below it", async () => {
+			const { wrapper, openWith } = setup();
+
+			await openWith("");
+
+			const input = wrapper.get("[data-testid=quick-nav-input]");
+			const hint = wrapper.get("[data-testid=quick-nav-hint]");
+
+			expect(input.attributes("aria-describedby")).toBe(hint.attributes("id"));
 		});
 
 		it("labels each group of results with its heading", async () => {

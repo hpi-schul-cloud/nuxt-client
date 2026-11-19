@@ -1,5 +1,4 @@
 import { matchRange, score, useQuickNav } from "./QuickNav.composable";
-import { useQuickNavEntries } from "./QuickNavEntries.composable";
 import { useQuickNavSourcesStore } from "./QuickNavSources.store";
 import { QuickNavEntry, QuickNavGroup, QuickNavKind } from "./types";
 import de from "@/locales/de";
@@ -11,14 +10,9 @@ import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
-import { computed } from "vue";
+import { nextTick } from "vue";
 
 vi.mock("@util-logger");
-// the real entries, wrapped so a test can add actions the sidebar does not have yet
-vi.mock("./QuickNavEntries.composable", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("./QuickNavEntries.composable")>();
-	return { useQuickNavEntries: vi.fn(actual.useQuickNavEntries) };
-});
 
 const setup = (permissions: Permission[] = [], roles: RoleName[] = []) => {
 	const pinia = createTestingPinia();
@@ -123,12 +117,16 @@ describe("QuickNav Composable", () => {
 	});
 
 	describe("when nothing has been typed", () => {
-		it("suggests a few pages to jump to", () => {
+		it("suggests no pages to jump to, which the sidebar already offers", () => {
+			const { quickNav } = setup([Permission.SCHOOL_CREATE_ROOM]);
+
+			expect(quickNav.groups.value.map((group) => group.label)).toEqual(["Aktionen"]);
+		});
+
+		it("shows nothing to someone who has opened nothing and may create nothing", () => {
 			const { quickNav } = setup();
 
-			expect(quickNav.groups.value[0].label).toBe("Springen zu");
-			expect(quickNav.groups.value[0].entries.length).toBeGreaterThan(0);
-			expect(quickNav.groups.value[0].entries.every((entry) => entry.kind === QuickNavKind.NAVIGATION)).toBe(true);
+			expect(quickNav.groups.value).toEqual([]);
 		});
 
 		describe("when the user may create something", () => {
@@ -185,21 +183,43 @@ describe("QuickNav Composable", () => {
 		});
 	});
 
-	describe("placeholder", () => {
-		describe("when the user may create something", () => {
-			it("mentions creating", () => {
-				const { quickNav } = setup([Permission.SCHOOL_CREATE_ROOM]);
+	describe("hint below the field", () => {
+		it("says that content is not searched", () => {
+			const { quickNav } = setup();
 
-				expect(quickNav.placeholder.value).toBe("Suchen, springen oder anlegen");
-			});
+			expect(quickNav.contentHint.value).toBe("Inhalte werden derzeit nicht durchsucht");
 		});
 
-		describe("when the user may not create anything", () => {
-			it("does not mention creating", () => {
-				const { quickNav } = setup();
+		it.each([
+			["rooms", "Inhalte von Räumen werden derzeit nicht durchsucht"],
+			["courses", "Inhalte von Kursen werden derzeit nicht durchsucht"],
+			["tasks", "Inhalte von Aufgaben werden derzeit nicht durchsucht"],
+		] as const)("names the content of the category %s", (scope, hint) => {
+			const { quickNav } = setup();
 
-				expect(quickNav.placeholder.value).toBe("Suchen und springen");
-			});
+			quickNav.open(scope);
+
+			expect(quickNav.contentHint.value).toBe(hint);
+		});
+	});
+
+	describe("placeholder", () => {
+		it("names what can be searched for", () => {
+			const { quickNav } = setup([Permission.SCHOOL_CREATE_ROOM]);
+
+			expect(quickNav.placeholder.value).toBe("Nach Räumen, Kursen oder Aufgaben suchen");
+		});
+
+		it.each([
+			["rooms", "Nach Räumen suchen"],
+			["courses", "Nach Kursen suchen"],
+			["tasks", "Nach Aufgaben suchen"],
+		] as const)("names what is searched in the category %s", (scope, placeholder) => {
+			const { quickNav } = setup();
+
+			quickNav.open(scope);
+
+			expect(quickNav.placeholder.value).toBe(placeholder);
 		});
 	});
 
@@ -241,30 +261,17 @@ describe("QuickNav Composable", () => {
 		});
 	});
 
-	describe("pages left to the sidebar", () => {
-		const navigationIds = (quickNav: ReturnType<typeof setup>["quickNav"]) =>
-			quickNav.flatEntries.value.filter((entry) => entry.kind === QuickNavKind.NAVIGATION).map((entry) => entry.id);
+	describe("pages of the sidebar", () => {
+		it.each(["Räume", "Kurse", "Aufgaben", "Übersicht", "Neuigkeiten"])(
+			"does not find the page %s when searching for it",
+			(title) => {
+				const { quickNav } = setup();
 
-		it.each(["Übersicht", "Neuigkeiten"])("does not find %s when searching for it", (title) => {
-			const { quickNav } = setup();
+				quickNav.query.value = title;
 
-			quickNav.query.value = title;
-
-			expect(titlesOf(quickNav.groups.value)).not.toContain(title);
-		});
-
-		it("suggests neither the overview nor the news before anything is typed", () => {
-			const { quickNav } = setup();
-
-			expect(navigationIds(quickNav)).not.toContain("navigation:sidebar-dashboard");
-			expect(navigationIds(quickNav)).not.toContain("navigation:sidebar-news");
-		});
-
-		it("still suggests the other pages of the sidebar, rooms first", () => {
-			const { quickNav } = setup();
-
-			expect(navigationIds(quickNav).slice(0, 2)).toEqual(["navigation:sidebar-rooms", "navigation:sidebar-courses"]);
-		});
+				expect(titlesOf(quickNav.groups.value)).not.toContain(title);
+			}
+		);
 	});
 
 	describe("people", () => {
@@ -298,27 +305,6 @@ describe("QuickNav Composable", () => {
 			quickNav.query.value = "Dateien";
 
 			expect(quickNav.flatEntries.value.some(isFilePage)).toBe(false);
-		});
-	});
-
-	describe("when a query matches a page", () => {
-		it("keeps only the matching pages", () => {
-			const { quickNav } = setup();
-
-			quickNav.query.value = "Räume";
-
-			expect(titlesOf(quickNav.groups.value)).toContain("Räume");
-			expect(titlesOf(quickNav.groups.value)).not.toContain("Aufgaben");
-		});
-	});
-
-	describe("when the query is spelled without the umlaut", () => {
-		it("still matches", () => {
-			const { quickNav } = setup();
-
-			quickNav.query.value = "raume";
-
-			expect(titlesOf(quickNav.groups.value)).toContain("Räume");
 		});
 	});
 
@@ -368,14 +354,17 @@ describe("QuickNav Composable", () => {
 	});
 
 	describe("selection", () => {
+		const setupWithEntries = () =>
+			setup([Permission.SCHOOL_CREATE_ROOM, Permission.COURSE_CREATE, Permission.HOMEWORK_CREATE], [RoleName.TEACHER]);
+
 		it("starts on the first entry", () => {
-			const { quickNav } = setup();
+			const { quickNav } = setupWithEntries();
 
 			expect(quickNav.selectedEntry.value).toBe(quickNav.flatEntries.value[0]);
 		});
 
 		it("moves down and wraps around at the end", () => {
-			const { quickNav } = setup();
+			const { quickNav } = setupWithEntries();
 			const last = quickNav.flatEntries.value.length;
 
 			quickNav.moveSelection(1);
@@ -388,19 +377,21 @@ describe("QuickNav Composable", () => {
 		});
 
 		it("moves up from the first entry to the last", () => {
-			const { quickNav } = setup();
+			const { quickNav } = setupWithEntries();
 
 			quickNav.moveSelection(-1);
 
 			expect(quickNav.selectedEntry.value).toBe(quickNav.flatEntries.value.at(-1));
 		});
 
-		it("returns to the first entry when the query changes", () => {
-			const { quickNav } = setup();
+		it("returns to the first entry when the query changes", async () => {
+			const { quickNav } = setupWithEntries();
 
 			quickNav.moveSelection(1);
-			quickNav.query.value = "Räume";
+			quickNav.query.value = "erstellen";
+			await nextTick();
 
+			expect(quickNav.flatEntries.value.length).toBeGreaterThan(1);
 			expect(quickNav.selectedEntry.value).toBe(quickNav.flatEntries.value[0]);
 		});
 	});
@@ -552,15 +543,6 @@ describe("QuickNav Composable", () => {
 			expect(quickNav.countIn("rooms")).toBe(0);
 		});
 
-		it("shows at most five pages, too", () => {
-			// administrators see many more sidebar pages than anyone else
-			const { quickNav } = setup([Permission.ADMIN_VIEW, Permission.TEACHER_LIST, Permission.STUDENT_LIST]);
-
-			quickNav.query.value = "e";
-
-			expect(groupOf(quickNav.groups.value, "Springen zu")?.entries.length).toBeLessThanOrEqual(5);
-		});
-
 		it("ranks a title start above a word start above a match inside a word", () => {
 			const { quickNav } = setup();
 			const sourcesStore = useQuickNavSourcesStore();
@@ -651,7 +633,6 @@ describe("QuickNav Composable", () => {
 				label: "Zuletzt geöffnet",
 				entries: [expect.objectContaining({ title: "Chemie" }), expect.objectContaining({ title: "Biologie" })],
 				isRecent: true,
-				isWide: true,
 			});
 		});
 
@@ -688,9 +669,9 @@ describe("QuickNav Composable", () => {
 		it("does not remember pages, which are one click away in the sidebar", () => {
 			const { quickNav } = setup();
 
-			quickNav.remember({ id: "navigation:x", kind: QuickNavKind.NAVIGATION, title: "Räume", icon: "" });
+			quickNav.remember({ id: "navigation:x", kind: QuickNavKind.NAVIGATION, title: "Kontakt", icon: "" });
 
-			expect(quickNav.groups.value[0].label).not.toBe("Zuletzt geöffnet");
+			expect(quickNav.groups.value.map((group) => group.label)).not.toContain("Zuletzt geöffnet");
 		});
 	});
 
@@ -875,15 +856,11 @@ describe("QuickNav Composable", () => {
 			expect(upcomingOf(quickNav.groups.value)).toBeUndefined();
 		});
 
-		it("spans the full width with the recent lines, above the columns", () => {
-			const { quickNav } = setup();
+		it("comes before what can be created", () => {
+			const { quickNav } = setup([Permission.SCHOOL_CREATE_ROOM]);
 			useQuickNavSourcesStore().tasks = [task("Referat", inDays(1))];
-			quickNav.columnCount.value = 2;
 
-			const [lead] = quickNav.blocks.value;
-
-			expect(lead).toEqual(expect.objectContaining({ isFullWidth: true }));
-			expect(lead.groups.map((group) => group.label)).toEqual(["Bald fällig"]);
+			expect(quickNav.groups.value.map((group) => group.label)).toEqual(["Bald fällig", "Aktionen"]);
 		});
 	});
 
@@ -902,179 +879,6 @@ describe("QuickNav Composable", () => {
 			const kinds = quickNav.flatEntries.value.map((entry) => entry.kind);
 			expect(kinds.filter((kind) => kind === QuickNavKind.TASK)).toHaveLength(6);
 			expect(kinds).not.toContain(QuickNavKind.SHOW_ALL);
-		});
-	});
-
-	describe("overview in two columns", () => {
-		const setupInColumns = () => {
-			const result = setup([Permission.SCHOOL_CREATE_ROOM]);
-			result.quickNav.columnCount.value = 2;
-			return result;
-		};
-
-		it("walks down the first column before the second", () => {
-			const { quickNav } = setupInColumns();
-
-			const order = quickNav.columns.value.flat().flatMap((group) => group.entries.map((entry) => entry.id));
-
-			expect(quickNav.flatEntries.value.map((entry) => entry.id)).toEqual(order);
-		});
-
-		it("moves to the line at the same height in the other column", () => {
-			const { quickNav } = setupInColumns();
-			const [left, right] = quickNav.columns.value.map((column) => column.flatMap((group) => group.entries));
-
-			expect(quickNav.moveColumn(1)).toBe(true);
-			expect(quickNav.selectedEntry.value?.id).toBe(right[0].id);
-
-			quickNav.moveColumn(-1);
-			expect(quickNav.selectedEntry.value?.id).toBe(left[0].id);
-		});
-
-		it("does nothing beyond the last column", () => {
-			const { quickNav } = setupInColumns();
-			quickNav.moveColumn(1);
-			const before = quickNav.selectedEntry.value?.id;
-
-			expect(quickNav.moveColumn(1)).toBe(false);
-			expect(quickNav.selectedEntry.value?.id).toBe(before);
-		});
-
-		describe("with something opened recently", () => {
-			const setupWithRecent = () => {
-				const result = setupInColumns();
-				const course: QuickNavEntry = { id: "course:Mathe", kind: QuickNavKind.COURSE, title: "Mathe", icon: "" };
-				useQuickNavSourcesStore().courses = [course];
-				result.quickNav.remember(course);
-				return result;
-			};
-
-			it("puts it across the full width on top, with the rest in columns below", () => {
-				const { quickNav } = setupWithRecent();
-
-				const [lead, ...rest] = quickNav.blocks.value;
-
-				expect(lead.isFullWidth).toBe(true);
-				expect(lead.groups.map((group) => group.label)).toEqual(["Zuletzt geöffnet"]);
-				expect(rest).toHaveLength(2);
-				expect(rest.every((block) => !block.isFullWidth)).toBe(true);
-			});
-
-			it("starts the arrow keys on it", () => {
-				const { quickNav } = setupWithRecent();
-
-				expect(quickNav.selectedEntry.value?.title).toBe("Mathe");
-			});
-
-			it("has no column to move sideways to from there", () => {
-				const { quickNav } = setupWithRecent();
-
-				expect(quickNav.moveColumn(1)).toBe(false);
-				expect(quickNav.selectedEntry.value?.title).toBe("Mathe");
-			});
-		});
-
-		describe("rows", () => {
-			const ALL_CREATE = [Permission.SCHOOL_CREATE_ROOM, Permission.COURSE_CREATE, Permission.HOMEWORK_CREATE];
-			const TASK_PAGE = [Permission.TASK_DASHBOARD_VIEW_V3];
-
-			const setupRows = (permissions: Permission[]) => {
-				const result = setup(permissions, [RoleName.TEACHER]);
-				result.quickNav.columnCount.value = 2;
-				const [pages, actions] = result.quickNav.blocks.value.filter((block) => !block.isFullWidth);
-				return { ...result, pages, actions };
-			};
-
-			it("puts each create action in the row of its page", () => {
-				const { pages, actions } = setupRows([...ALL_CREATE, ...TASK_PAGE]);
-				const rowOf = pages.rowOf ?? {};
-
-				expect(rowOf["action:create-room"]).toBe(rowOf["navigation:sidebar-rooms"]);
-				expect(rowOf["action:create-course"]).toBe(rowOf["navigation:sidebar-courses"]);
-				expect(rowOf["action:create-task"]).toBe(rowOf["navigation:sidebar-tasks"]);
-				// both columns lay their lines into the same rows
-				expect(actions.rowOf).toBe(pages.rowOf);
-				expect(actions.rowCount).toBe(pages.rowCount);
-			});
-
-			it("leaves the cell beside a page empty when its action is not allowed", () => {
-				const { pages } = setupRows([Permission.COURSE_CREATE, Permission.HOMEWORK_CREATE, ...TASK_PAGE]);
-				const rowOf = pages.rowOf ?? {};
-
-				expect(rowOf["navigation:sidebar-rooms"]).toBe(0);
-				expect(rowOf["action:create-course"]).toBe(rowOf["navigation:sidebar-courses"]);
-				expect(rowOf["action:create-task"]).toBe(rowOf["navigation:sidebar-tasks"]);
-				expect(Object.entries(rowOf).filter(([id, row]) => id.startsWith("action:") && row === 0)).toEqual([]);
-			});
-
-			it("puts an action whose page is not shown below the paired ones", () => {
-				// without the task overview, creating a task has no page to stand beside
-				const { pages, actions } = setupRows(ALL_CREATE);
-				const rowOf = pages.rowOf ?? {};
-
-				expect(rowOf["action:create-task"]).toBe(rowOf["action:create-course"] + 1);
-				expect(actions.groups[0].entries.map((entry) => entry.id)).toEqual([
-					"action:create-room",
-					"action:create-course",
-					"action:create-task",
-				]);
-			});
-
-			it("gives a page's row to only the first of two actions that belong to it", () => {
-				const second: QuickNavEntry = {
-					id: "action:create-room-from-template",
-					kind: QuickNavKind.ACTION,
-					title: "Raum aus Vorlage",
-					icon: "",
-					pageId: "navigation:sidebar-rooms",
-				};
-				vi.mocked(useQuickNavEntries).mockImplementationOnce(() => {
-					const real = useQuickNavEntries();
-					return { ...real, actionEntries: computed(() => [...real.actionEntries.value, second]) };
-				});
-				const { pages } = setupRows([...ALL_CREATE, ...TASK_PAGE]);
-				const rowOf = pages.rowOf ?? {};
-
-				expect(rowOf["action:create-room"]).toBe(rowOf["navigation:sidebar-rooms"]);
-				expect(rowOf[second.id]).toBe(rowOf["action:create-task"] + 1);
-			});
-
-			it("walks the actions top to bottom in the order of their rows", () => {
-				const { quickNav, actions } = setupRows([...ALL_CREATE, ...TASK_PAGE]);
-				const rows = actions.groups[0].entries.map((entry) => actions.rowOf?.[entry.id]);
-
-				expect(rows).toEqual([...rows].sort((a = 0, b = 0) => a - b));
-				expect(quickNav.flatEntries.value.map((entry) => entry.id).slice(-3)).toEqual(
-					actions.groups[0].entries.map((entry) => entry.id)
-				);
-			});
-
-			it("moves sideways to the action in the same row", () => {
-				const { quickNav } = setupRows([...ALL_CREATE, ...TASK_PAGE]);
-				quickNav.select("navigation:sidebar-courses");
-
-				quickNav.moveColumn(1);
-
-				expect(quickNav.selectedEntry.value?.id).toBe("action:create-course");
-			});
-
-			it("moves sideways to the nearest action when the cell beside is empty", () => {
-				const { quickNav } = setupRows([Permission.COURSE_CREATE]);
-				quickNav.select("navigation:sidebar-rooms");
-
-				quickNav.moveColumn(1);
-
-				expect(quickNav.selectedEntry.value?.id).toBe("action:create-course");
-			});
-		});
-
-		it("is one column again while searching", () => {
-			const { quickNav } = setupInColumns();
-
-			quickNav.query.value = "Raum";
-
-			expect(quickNav.blocks.value).toEqual([expect.objectContaining({ isFullWidth: true })]);
-			expect(quickNav.moveColumn(1)).toBe(false);
 		});
 	});
 

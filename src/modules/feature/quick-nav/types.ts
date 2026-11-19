@@ -1,6 +1,6 @@
 /** What a line in the palette stands for. Also decides which group it is listed under. */
 export enum QuickNavKind {
-	/** a page from the main navigation */
+	/** a page from the help section of the sidebar */
 	NAVIGATION = "navigation",
 	ROOM = "room",
 	COURSE = "course",
@@ -40,8 +40,6 @@ export type QuickNavEntry = {
 	action?: () => void;
 	/** opens this category inside the palette instead of going anywhere */
 	showsAll?: QuickNavScope;
-	/** actions only: the id of the page this action stands beside in the overview, "Raum erstellen" beside "Räume" */
-	pageId?: string;
 };
 
 export type QuickNavAvatar = {
@@ -60,8 +58,6 @@ export type QuickNavGroup = {
 	entries: QuickNavEntry[];
 	/** the history of recently opened lines, which the user can clear */
 	isRecent?: boolean;
-	/** spans the full width of the overview, above the columns of pages and actions */
-	isWide?: boolean;
 };
 
 export type QuickNavScope = "rooms" | "courses" | "tasks";

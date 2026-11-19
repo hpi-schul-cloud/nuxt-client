@@ -12,22 +12,16 @@ import {
 import { computed, ComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
 
-/**
- * Left to the sidebar on purpose. File pages would suggest that files can be searched, which the
- * palette cannot do yet. The overview and the news are where people land anyway, not where they
- * jump to, and only crowd out the results that are searched for.
- */
-const EXCLUDED_SIDEBAR_ITEMS = ["sidebar-files", "sidebar-dashboard", "sidebar-news"];
 const HELP_SIDEBAR_GROUP = "sidebar-helpsection";
 
 /**
- * The entries the palette knows without asking the server: the pages of the main navigation and a
- * handful of things a user starts often. They are available the moment the palette opens, which is
- * what lets ⌘K replace reaching for the sidebar.
+ * The entries the palette knows without asking the server: the help pages and a handful of things a
+ * user starts often. The other pages of the sidebar are left to the sidebar, so the palette stays
+ * with finding rooms, courses and tasks.
  */
 export const useQuickNavEntries = () => {
 	const { t } = useI18n();
-	const { pageLinks, metaLinks } = useSidebarItems();
+	const { metaLinks } = useSidebarItems();
 	const { getItemsForUser } = useSidebarItemsForUser();
 	const { isStudent } = useAppStoreRefs();
 
@@ -44,21 +38,6 @@ export const useQuickNavEntries = () => {
 		to: item.to,
 		href: item.href,
 	});
-
-	/** a group in the sidebar is one click away there, so in the palette its children stand alone */
-	const flatten = (item: SidebarSingleItem | SidebarGroupItem): QuickNavEntry[] => {
-		if (isSidebarCategoryItem(item)) {
-			return item.children.map((child) => toEntry(child, item));
-		}
-
-		return [toEntry(item)];
-	};
-
-	const navigationEntries: ComputedRef<QuickNavEntry[]> = computed(() =>
-		getItemsForUser(pageLinks.value)
-			.filter((item) => !EXCLUDED_SIDEBAR_ITEMS.includes(item.testId))
-			.flatMap(flatten)
-	);
 
 	const helpEntries: ComputedRef<QuickNavEntry[]> = computed(() =>
 		getItemsForUser(metaLinks.value)
@@ -79,7 +58,6 @@ export const useQuickNavEntries = () => {
 				title: t("pages.rooms.fab.title"),
 				icon: mdiPlus,
 				to: "/rooms/new",
-				pageId: "navigation:sidebar-rooms",
 			});
 		}
 
@@ -90,7 +68,6 @@ export const useQuickNavEntries = () => {
 				title: t("pages.rooms.fab.create.course"),
 				icon: mdiSchoolOutline,
 				href: "/courses/add",
-				pageId: "navigation:sidebar-courses",
 			});
 		}
 
@@ -102,12 +79,11 @@ export const useQuickNavEntries = () => {
 				title: t("components.organisms.TasksDashboardMain.fab.createTask"),
 				icon: mdiFormatListChecks,
 				href: "/homework/new?returnUrl=tasks",
-				pageId: "navigation:sidebar-tasks",
 			});
 		}
 
 		return entries;
 	});
 
-	return { navigationEntries, actionEntries, helpEntries };
+	return { actionEntries, helpEntries };
 };
