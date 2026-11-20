@@ -78,7 +78,7 @@ export const useNewsList = (limit: number) => {
 	} = useSafeAxiosRunner(async () => {
 		const { result } = await fetchNewsList({ limit });
 
-		return (result?.data.data ?? []).filter((item) => item.targetModel !== "teams");
+		return result?.data.data ?? [];
 	});
 
 	const news = computed(() => newsData.value ?? []);
@@ -95,7 +95,7 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 		newsInstance.value = undefined;
 		if (!newsId.value) return;
 		const { success, result } = await fetchNews(newsId.value);
-		if (success && result?.data?.targetModel !== "teams") newsInstance.value = result?.data;
+		if (success) newsInstance.value = result?.data;
 	};
 
 	watch(newsId, loadNews, { immediate: true });
@@ -153,7 +153,7 @@ export const useNewsOverview = (params: { canEditNews: Ref<boolean> }) => {
 
 		if (!success || !result) return;
 
-		newsList.value = result.data.data.filter((item) => item.targetModel !== "teams");
+		newsList.value = result.data.data;
 		total.value = result.data.total;
 
 		if (unpublished) unpublishedTotal.value = result.data.total;
