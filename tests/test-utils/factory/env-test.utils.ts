@@ -1,14 +1,13 @@
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { FilesStorageConfigResponse } from "@api-file-storage";
-import { ConfigResponse } from "@api-server";
-import { defaultConfigEnvs, useEnvStore } from "@data-env";
+import { ClientConfig, defaultConfigEnvs, useEnvStore } from "@data-env";
 import { Factory } from "fishery";
 import { Pinia } from "pinia";
 
-export const envsFactory = Factory.define<ConfigResponse>(() => defaultConfigEnvs);
+export const envsFactory = Factory.define<ClientConfig>(() => defaultConfigEnvs);
 
 export const createTestEnvStore = (
-	config?: Partial<ConfigResponse>,
+	config?: Partial<ClientConfig>,
 	fileConfig?: Partial<FilesStorageConfigResponse>,
 	pinia?: Pinia
 ) => {

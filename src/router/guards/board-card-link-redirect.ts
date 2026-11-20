@@ -10,7 +10,7 @@ export const boardCardLinkRedirect = (to: RouteLocation): RouteLocationRaw => {
 		return { name: "error" };
 	}
 
-	const [_, boardId, cardId] = match;
+	const [, boardId, cardId] = match;
 
 	return {
 		name: "boards-id",

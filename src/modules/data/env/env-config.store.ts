@@ -7,7 +7,9 @@ import { createSharedComposable } from "@vueuse/core";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, reactive } from "vue";
 
-export const defaultConfigEnvs: ConfigResponse = {
+export type ClientConfig = Omit<ConfigResponse, "FEATURE_TEAM_CREATE_ROOM_ENABLED">;
+
+export const defaultConfigEnvs: ClientConfig = {
 	FEATURE_NOTIFICATIONS_ENABLED: false,
 	NOT_AUTHENTICATED_REDIRECT_URL: "",
 	SC_THEME: SchulcloudTheme.DEFAULT,
@@ -35,8 +37,6 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_SHOW_MIGRATION_WIZARD: false,
 	FEATURE_TLDRAW_ENABLED: false,
 	ALERT_STATUS_URL: null,
-	FEATURE_TEAMS_ENABLED: false,
-	FEATURE_TEAM_CREATE_ROOM_ENABLED: false,
 	TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
 	TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT: false,
 	TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: false,
@@ -96,10 +96,10 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		COLLABORA_MAX_FILE_SIZE_IN_BYTES: 104857600,
 		FILES_STORAGE_MAX_FILES_PER_PARENT: 1000,
 	});
-	const env = reactive<ConfigResponse>(defaultConfigEnvs);
+	const env = reactive<ClientConfig>(defaultConfigEnvs);
 
-	const setEnvs = (envConfig: ConfigResponse) => {
-		Object.assign(env, envConfig);
+	const setEnvs = (envConfig: ClientConfig) => {
+		Object.assign(env, Object.fromEntries(Object.entries(envConfig).filter(([key]) => key in defaultConfigEnvs)));
 	};
 
 	const setFileEnvs = (fileEnvsConfig: FilesStorageConfigResponse) => {

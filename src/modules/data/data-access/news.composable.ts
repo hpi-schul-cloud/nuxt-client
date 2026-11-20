@@ -92,6 +92,7 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 	const newsInstance = ref<NewsResponse>();
 
 	const loadNews = async () => {
+		newsInstance.value = undefined;
 		if (!newsId.value) return;
 		const { success, result } = await fetchNews(newsId.value);
 		if (success) newsInstance.value = result?.data;

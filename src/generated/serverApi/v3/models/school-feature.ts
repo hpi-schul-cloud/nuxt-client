@@ -17,7 +17,6 @@
 
 export enum SchoolFeature {
     VIDEOCONFERENCE = 'videoconference',
-    NEXTCLOUD = 'nextcloud',
     STUDENT_VISIBILITY = 'studentVisibility',
     LDAP_UNIVENTION_MIGRATION_SCHOOL = 'ldapUniventionMigrationSchool',
     OAUTH_PROVISIONING_ENABLED = 'oauthProvisioningEnabled',

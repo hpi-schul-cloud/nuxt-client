@@ -55,17 +55,17 @@ describe("NewsCard", () => {
 		expect(renderHtml.props("config")).toBe("richTextNoLinks");
 	});
 
-	it("should show team chip when target model is teams", () => {
+	it("should not render old Teams news", () => {
 		const wrapper = setup({
 			newsItem: {
 				...baseNewsItem,
-				targetModel: NewsTargetModel.TEAMS,
+				targetModel: "teams" as NewsTargetModel,
 				target: { name: "Class Team" },
 			},
 		});
 
-		expect(wrapper.findComponent({ name: "VChip" }).exists()).toBe(true);
-		expect(wrapper.findComponent({ name: "VChip" }).text()).toContain("Class Team");
+		expect(wrapper.findComponent({ name: "VCard" }).exists()).toBe(false);
+		expect(wrapper.text()).not.toContain("Class Team");
 	});
 
 	it("should not show team chip for non-team target models", () => {

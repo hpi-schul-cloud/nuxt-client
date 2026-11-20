@@ -30,14 +30,6 @@ export interface CreateRoomBodyParams {
      */
     'color': RoomColor;
     /**
-     * Start date of the room
-     */
-    'startDate'?: string;
-    /**
-     * End date of the room
-     */
-    'endDate'?: string;
-    /**
      * The features of the room
      */
     'features': Array<RoomFeatures>;
