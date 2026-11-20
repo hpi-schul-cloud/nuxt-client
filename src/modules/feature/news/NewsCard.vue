@@ -1,10 +1,5 @@
 <template>
-	<VCard
-		v-if="newsItem.targetModel !== 'teams'"
-		class="d-flex flex-column news-card"
-		:to="`/news/${newsItem.id}`"
-		:data-testid="`news-card-item-${index}`"
-	>
+	<VCard class="d-flex flex-column news-card" :to="`/news/${newsItem.id}`" :data-testid="`news-card-item-${index}`">
 		<VCardTitle class="news-card-title bg-primary-lighten text-wrap" :data-testid="`news-header-${index}`">
 			<div class="d-flex align-center">
 				<VIcon size="14" class="mr-1" :icon="mdiNewspaperVariantOutline" />
