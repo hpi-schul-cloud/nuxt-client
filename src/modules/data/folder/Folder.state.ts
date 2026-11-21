@@ -9,8 +9,10 @@ import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { $axios } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { BoardApiFactory, BoardElementApiFactory, BoardResponseAllowedOperations } from "@api-server";
+import { BoardApiFactory, BoardElementApiFactory, BoardResponseAllowedOperations, RoomApiFactory } from "@api-server";
 import { useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
+import { useRoomBreadcrumbs } from "@data-room";
 import { Breadcrumb } from "@ui-layout";
 import { isAxiosError } from "axios";
 import { computed, Ref, ref } from "vue";
@@ -19,10 +21,15 @@ import { useI18n } from "vue-i18n";
 export const useFolderState = () => {
 	const boardElementApi = BoardElementApiFactory(undefined, "/v3", $axios);
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
+	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const { t } = useI18n();
+	const envConfig = useEnvConfig();
+	const { getRoomsRootBreadcrumbs } = useRoomBreadcrumbs();
 
 	const fileFolderElement = ref<FileFolderElement | undefined>(undefined);
 	const parentNodeInfos = ref<ParentNodeInfo[]>([]);
+	const isRoomArchived = ref(false);
+	let archivedCheckRoomId: string | undefined;
 
 	const parent = computed(() => {
 		const indexOfDirectParent = parentNodeInfos.value.length - 1;
@@ -49,8 +56,7 @@ export const useFolderState = () => {
 
 		if (parentNodeInfos.value?.length === 0) return breadcrumbItems;
 
-		const rootItem = buildRootBreadCrumbItem(parentNodeInfos);
-		if (rootItem) breadcrumbItems.push(rootItem);
+		breadcrumbItems.push(...buildRootBreadCrumbItems(parentNodeInfos));
 
 		parentNodeInfos.value.forEach((item) => {
 			breadcrumbItems.push({
@@ -70,6 +76,8 @@ export const useFolderState = () => {
 
 			fileFolderElement.value = castToFileFolderElement(response.data.element);
 			parentNodeInfos.value = response.data.parentHierarchy;
+			// not awaited: the archived breadcrumb must not delay loading the folder and its files
+			void updateIsRoomArchived(response.data.parentHierarchy);
 		} catch (error) {
 			handleApplicationError(error);
 		}
@@ -101,19 +109,44 @@ export const useFolderState = () => {
 		}
 	};
 
-	const buildRootBreadCrumbItem = (parentNodeInfos: Ref<ParentNodeInfo[]>) => {
-		if (!parentNodeInfos.value[0]) return;
+	const updateIsRoomArchived = async (parentHierarchy: ParentNodeInfo[]): Promise<void> => {
+		const rootNode = parentHierarchy[0];
+		const isRoomRoot = rootNode?.type === ParentNodeType.ROOM;
+		const roomId = isRoomRoot && envConfig.value.FEATURE_ROOM_ARCHIVE_ENABLED ? rootNode.id : undefined;
+
+		if (roomId === archivedCheckRoomId) return;
+
+		archivedCheckRoomId = roomId;
+		isRoomArchived.value = false;
+		if (roomId === undefined) return;
+
+		try {
+			const response = await roomApi.roomControllerGetRoomDetails(roomId);
+			if (archivedCheckRoomId === roomId) {
+				isRoomArchived.value = response.data.isArchived;
+			}
+		} catch {
+			// the archived breadcrumb is only additional context, so the folder page must not fail without it
+		}
+	};
+
+	const buildRootBreadCrumbItems = (parentNodeInfos: Ref<ParentNodeInfo[]>): Breadcrumb[] => {
+		if (!parentNodeInfos.value[0]) return [];
 
 		const firstItem = parentNodeInfos.value[0];
 
 		if (firstItem.type === ParentNodeType.COURSE) {
-			return {
-				title: t("common.words.courses"),
-				to: "/rooms/courses-overview",
-			};
+			return [
+				{
+					title: t("common.words.courses"),
+					to: "/rooms/courses-overview",
+				},
+			];
 		} else if (firstItem.type === ParentNodeType.ROOM) {
-			return { title: t("pages.rooms.title"), to: "/rooms" };
+			return getRoomsRootBreadcrumbs(isRoomArchived.value);
 		}
+
+		return [];
 	};
 
 	const castToFileFolderElement = (element: AnyContentElement): FileFolderElement => {

@@ -17,7 +17,7 @@ import { HttpStatusCode } from "@/types/enum/http-status-code.enum";
 import { RoomUpdateParams } from "@/types/room/Room";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, useAppStore } from "@data-app";
-import { useRoomAllowedOperations, useRoomDetailsStore } from "@data-room";
+import { useRoomAllowedOperations, useRoomBreadcrumbs, useRoomDetailsStore } from "@data-room";
 import { RoomForm } from "@feature-room";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
@@ -91,14 +91,12 @@ const onCancel = () => {
 	});
 };
 
+const { getRoomsRootBreadcrumbs } = useRoomBreadcrumbs();
+
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	if (roomData.value !== undefined) {
 		return [
-			{
-				title: t("pages.rooms.title"),
-				to: "/rooms",
-			},
-			...(room.value?.isArchived ? [{ title: t("pages.rooms.archived.title"), to: "/rooms/archive" }] : []),
+			...getRoomsRootBreadcrumbs(room.value?.isArchived),
 			{
 				title: roomData.value.name,
 				to: `/rooms/${route.params.id}`,

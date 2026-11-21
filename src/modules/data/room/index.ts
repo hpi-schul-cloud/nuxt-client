@@ -6,6 +6,7 @@ export { type Registration, useRegistrationStore } from "./registration/registra
 export { useRegistrationStepper } from "./registration/registrationStepper.composable";
 export * from "./room.store";
 export { useRoomAllowedOperations } from "./room-allowed-operations.composable";
+export { useRoomBreadcrumbs } from "./room-breadcrumbs.composable";
 export { RoomVariant, useRoomDetailsStore } from "./RoomDetails.store";
 export { useRoomInvitationLinkStore } from "./roomMembers/RoomInvitationLink.store";
 export { useRoomMembersStore } from "./roomMembers/RoomMembers.store";
