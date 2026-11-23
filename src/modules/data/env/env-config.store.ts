@@ -84,7 +84,12 @@ export const defaultConfigEnvs: ConfigResponse = {
 	LICENSE_SUMMARY_URL: "",
 	ROOM_MEMBER_INFO_URL: "",
 	ROOM_MEMBER_ADD_EXTERNAL_PERSON_REQUIREMENTS_URL: "",
+	MIGRATION_WIZARD_DOCUMENTATION_LINK: undefined,
 };
+
+// Keys not listed in the defaults (e.g. removed flags sent by older servers) are not stored.
+const supportedConfigKeys = new Set<string>(Object.keys(defaultConfigEnvs));
+
 export const useEnvStore = defineStore("envConfigStore", () => {
 	const serverApi = ServerConfigApiFactory(undefined, "/v3", $axios);
 	const fileConfigApi = FileConfigApiFactory(undefined, "/v3", $axios);
@@ -97,7 +102,8 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 	const env = reactive<ConfigResponse>(defaultConfigEnvs);
 
 	const setEnvs = (envConfig: ConfigResponse) => {
-		Object.assign(env, envConfig);
+		const supportedEnvs = Object.fromEntries(Object.entries(envConfig).filter(([key]) => supportedConfigKeys.has(key)));
+		Object.assign(env, supportedEnvs);
 	};
 
 	const setFileEnvs = (fileEnvsConfig: FilesStorageConfigResponse) => {
