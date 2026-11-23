@@ -1,5 +1,4 @@
-import { Permission, SchulcloudTheme } from "@api-server";
-import type { ClientConfig } from "@data-env";
+import { ConfigResponse, Permission, SchulcloudTheme } from "@api-server";
 
 export type ExternalLink = {
 	href: string;
@@ -22,7 +21,7 @@ export type SidebarItemBaseData = {
 	title: string;
 	testId: string;
 	permissions?: Permission[];
-	feature?: keyof ClientConfig;
+	feature?: keyof ConfigResponse;
 	featureValue?: FeatureValue;
 	theme?: SchulcloudTheme[];
 };
