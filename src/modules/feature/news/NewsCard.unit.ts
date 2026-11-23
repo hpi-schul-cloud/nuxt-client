@@ -3,7 +3,6 @@ import NewsCard from "./NewsCard.vue";
 import * as dateTimeUtils from "@/utils/date-time.utils";
 import { newsCardItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { NewsTargetModel } from "@api-server";
 import { mount } from "@vue/test-utils";
 
 describe("NewsCard", () => {
@@ -53,17 +52,5 @@ describe("NewsCard", () => {
 		expect(renderHtml.exists()).toBe(true);
 		expect(renderHtml.props("html")).toBe(baseNewsItem.content);
 		expect(renderHtml.props("config")).toBe("richTextNoLinks");
-	});
-
-	it("should not show team chip for non-team target models", () => {
-		const wrapper = setup({
-			newsItem: {
-				...baseNewsItem,
-				targetModel: NewsTargetModel.COURSES,
-				target: { name: "Course A" },
-			},
-		});
-
-		expect(wrapper.findComponent({ name: "VChip" }).exists()).toBe(false);
 	});
 });

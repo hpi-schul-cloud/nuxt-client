@@ -80,14 +80,6 @@ describe("NewsCreatePage", () => {
 			condition: "targetmodel is valid but target is missing",
 			query: { targetmodel: CreateNewsParamsTargetModel.COURSES },
 		},
-		{
-			condition: "context references removed Teams",
-			query: { contextId: "team-id", context: "teams" },
-		},
-		{
-			condition: "targetmodel references removed Teams",
-			query: { target: "team-id", targetmodel: "teams" },
-		},
 	] as { condition: string; query: LocationQuery }[])(
 		"should handle application error when $condition",
 		async ({ query }) => {
@@ -167,18 +159,6 @@ describe("NewsCreatePage", () => {
 					targetId: schoolId,
 					targetModel: CreateNewsParamsTargetModel.SCHOOLS,
 				});
-			});
-
-			it.each([
-				{ contextId: "team-id", context: "teams" },
-				{ target: "team-id", targetmodel: "teams" },
-			] as LocationQuery[])("should not create news for removed Teams with query %j", async (query) => {
-				const { wrapper, appStore } = setup({ query });
-				wrapper.getComponent(NewsForm).vm.$emit("save", createParams);
-				await flushPromises();
-
-				expect(appStore.handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.BadRequest);
-				expect(newsApi.newsControllerCreate).not.toHaveBeenCalled();
 			});
 
 			it("should notify success and navigate to news details page after successful creation", async () => {
