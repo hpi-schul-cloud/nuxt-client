@@ -155,7 +155,6 @@ export * from './helpdesk-problem-create-params';
 export * from './helpdesk-wish-create-params';
 export * from './import-user-list-response';
 export * from './import-user-response';
-export * from './instance-feature';
 export * from './language-type';
 export * from './launch-request-method';
 export * from './launch-type';

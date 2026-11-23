@@ -215,7 +215,6 @@ models/helpdesk-wish-create-params.ts
 models/import-user-list-response.ts
 models/import-user-response.ts
 models/index.ts
-models/instance-feature.ts
 models/language-type.ts
 models/launch-request-method.ts
 models/launch-type.ts
