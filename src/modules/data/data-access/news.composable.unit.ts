@@ -326,6 +326,50 @@ describe("news composable", () => {
 
 				expect(newsInstance.value).toEqual(secondNews);
 			});
+
+			describe("when the next news is a teams news", () => {
+				it("should clear the previous news and have the newInstance undefined", async () => {
+					const newsId = ref("news-1");
+					const firstNews = newsResponseFactory.build({ id: "news-1" });
+					const teamsNews = {
+						...newsResponseFactory.build({ id: "news-2" }),
+						targetModel: "teams",
+					} as unknown as serverApi.NewsResponse;
+					newsApiMock.newsControllerFindOne
+						.mockResolvedValueOnce(mockApiResponse({ data: firstNews }))
+						.mockResolvedValueOnce(mockApiResponse({ data: teamsNews }));
+
+					const { newsInstance } = useNews(newsId);
+					await flushPromises();
+					expect(newsInstance.value).toEqual(firstNews);
+
+					newsId.value = "news-2";
+					await flushPromises();
+
+					expect(newsInstance.value).toBeUndefined();
+				});
+			});
+
+			describe("when loading news fails", () => {
+				it("should clear the previous news", async () => {
+					const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
+					const newsId = ref("news-1");
+					const firstNews = newsResponseFactory.build({ id: "news-1" });
+					newsApiMock.newsControllerFindOne
+						.mockResolvedValueOnce(mockApiResponse({ data: firstNews }))
+						.mockRejectedValueOnce(new Error("Not found"));
+
+					const { newsInstance } = useNews(newsId);
+					await flushPromises();
+					expect(newsInstance.value).toEqual(firstNews);
+
+					newsId.value = "news-2";
+					await flushPromises();
+
+					expect(newsInstance.value).toBeUndefined();
+					consoleErrorSpy.mockRestore();
+				});
+			});
 		});
 
 		it("should compute creator and formatted dates from the loaded news", async () => {
