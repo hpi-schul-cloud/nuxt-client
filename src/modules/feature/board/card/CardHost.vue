@@ -2,6 +2,7 @@
 	<div>
 		<CardHostInteractionHandler
 			:is-edit-mode="isEditMode"
+			:is-detail-view="isDetailView"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
 			@move:card-keyboard="onMoveCardKeyboard"

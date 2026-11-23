@@ -2,9 +2,9 @@ import CardHostInteractionHandlerVue from "./CardHostInteractionHandler.vue";
 import { shallowMount } from "@vue/test-utils";
 
 describe("CardHostInteractionHandler", () => {
-	const setup = (options: { isEditMode: boolean }) => {
+	const setup = (options: { isEditMode: boolean; isDetailView?: boolean }) => {
 		const wrapper = shallowMount(CardHostInteractionHandlerVue, {
-			propsData: { isEditMode: options?.isEditMode },
+			propsData: { isEditMode: options?.isEditMode, isDetailView: options?.isDetailView },
 		});
 
 		return { wrapper };
@@ -39,6 +39,25 @@ describe("CardHostInteractionHandler", () => {
 					await eventHandle.trigger(`keydown.${key}`);
 					const emitted: KeyboardEvent[][] = wrapper.emitted("move:card-keyboard") || [[]];
 					expect(emitted[0][0]).toBeFalsy();
+				}
+			);
+		});
+
+		describe("when arrow key is pressed in the detail view", () => {
+			it.each(["up", "down", "left", "right"])(
+				"should neither emit 'move:card-keyboard' nor prevent the native '%s' key behaviour",
+				async (key) => {
+					const { wrapper } = setup({ isEditMode: false, isDetailView: true });
+					const event = new KeyboardEvent("keydown", {
+						key: `Arrow${key[0].toUpperCase()}${key.slice(1)}`,
+						bubbles: true,
+						cancelable: true,
+					});
+
+					wrapper.find("[data-testid=event-handle]").element.dispatchEvent(event);
+
+					expect(wrapper.emitted("move:card-keyboard")).toBeUndefined();
+					expect(event.defaultPrevented).toBe(false);
 				}
 			);
 		});

@@ -1,5 +1,5 @@
 import { useBoardStore } from "./Board.store";
-import { useBoardCardNavigation } from "./board-card-navigation.composable";
+import { getCardDetailRoute, useBoardCardNavigation } from "./board-card-navigation.composable";
 import { Board } from "@/types/board/Board";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { mockComposable } from "@@/tests/test-utils/mockComposable";
@@ -193,6 +193,15 @@ describe("board-card-navigation.composable", () => {
 					name: "boards-card-detail",
 					params: { boardId: board.id, cardId: cardsA[1].cardId },
 				});
+			});
+		});
+	});
+
+	describe("getCardDetailRoute", () => {
+		it("should return the card detail route of the board", () => {
+			expect(getCardDetailRoute("board-id", "card-id")).toEqual({
+				name: "boards-card-detail",
+				params: { boardId: "board-id", cardId: "card-id" },
 			});
 		});
 	});

@@ -12,7 +12,7 @@ import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordRespons
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { FileRecordScanStatus, PreviewStatus, PreviewWidth } from "@api-file-storage";
 import { FileElementResponse } from "@api-server";
-import { useBoardAllowedOperations, useContentElementState } from "@data-board";
+import { canManageFileElements, useBoardAllowedOperations, useContentElementState } from "@data-board";
 import * as FileStorageApi from "@data-file";
 import { mdiFileDocumentOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
@@ -46,6 +46,11 @@ vi.mock("@ui-light-box", () => ({
 }));
 
 describe("FileContentElement", () => {
+	beforeEach(async () => {
+		const actual = await vi.importActual<typeof import("@data-board")>("@data-board");
+		vi.mocked(canManageFileElements).mockImplementation(actual.canManageFileElements);
+	});
+
 	beforeEach(() => {
 		const router = createRouterMock({
 			routes: [{ path: "/collabora/:id", name: "collabora", component: { template: "<div />" } }],

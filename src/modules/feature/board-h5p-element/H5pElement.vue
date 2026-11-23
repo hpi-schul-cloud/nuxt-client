@@ -61,7 +61,11 @@ import { injectStrict } from "@/utils/inject";
 import { decodeHtmlEntities } from "@/utils/textFormatting";
 import { H5PContentParentType } from "@api-h5p";
 import { H5pElementResponse } from "@api-server";
-import { useBoardAllowedOperations, useBoardFocusHandler } from "@data-board";
+import {
+	canManageH5pElements as canManageH5pElementsWith,
+	useBoardAllowedOperations,
+	useBoardFocusHandler,
+} from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
 import { ContentElementBar, EmptyElement } from "@ui-board";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
@@ -100,7 +104,7 @@ useBoardFocusHandler(element.value.id, elementCard);
 
 const hasLinkedContent = computed(() => !!element.value.content.contentId);
 
-const canManageH5pElements = computed(() => allowedOperations.value.updateElement);
+const canManageH5pElements = computed(() => canManageH5pElementsWith(allowedOperations.value));
 
 const router = useRouter();
 const editorWindow = ref<Window | null>(null);

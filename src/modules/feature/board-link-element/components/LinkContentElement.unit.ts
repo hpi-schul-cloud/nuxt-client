@@ -10,7 +10,12 @@ import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElem
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { FileRecordParentType } from "@api-file-storage";
 import { LinkElementContent, LinkElementResponse } from "@api-server";
-import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";
+import {
+	canManageLinkElements,
+	useBoardAllowedOperations,
+	useBoardFocusHandler,
+	useContentElementState,
+} from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { LinkContentElement } from "@feature-board-link-element";
 import { mdiLink } from "@icons/material";
@@ -42,6 +47,11 @@ describe("LinkContentElement", () => {
 		Object.defineProperty(URL, "canParse", {
 			value: vi.fn().mockReturnValue(true),
 		});
+	});
+
+	beforeEach(async () => {
+		const actual = await vi.importActual<typeof import("@data-board")>("@data-board");
+		vi.mocked(canManageLinkElements).mockImplementation(actual.canManageLinkElements);
 	});
 
 	beforeEach(() => {
