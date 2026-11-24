@@ -163,8 +163,8 @@ const isArrangeMenuVisible = computed(
 
 .room-card-menu {
 	position: absolute;
-	top: 8px;
-	right: 4px;
+	inset-block-start: 8px;
+	inset-inline-end: 4px;
 }
 
 .room-grid-avatar {

@@ -49,6 +49,21 @@ describe("RoomMoveDialog", () => {
 		expect(current?.props("label")).toBe("pages.rooms.groups.moveDialog.current");
 	});
 
+	it("keeps its actions reachable when many groups exist by scrolling only the list", () => {
+		setup();
+
+		expect(wrapper?.findComponent(SvsDialog).props("scrollable")).toBe(true);
+	});
+
+	it("labels the target list with the question", () => {
+		setup();
+
+		const radioGroup = document.body.querySelector("[role='radiogroup']");
+		const questionId = radioGroup?.getAttribute("aria-labelledby") ?? "";
+		const question = document.getElementById(questionId);
+		expect(question?.textContent).toContain("pages.rooms.groups.moveDialog.text");
+	});
+
 	it("does not allow confirming without a new target", () => {
 		setup();
 

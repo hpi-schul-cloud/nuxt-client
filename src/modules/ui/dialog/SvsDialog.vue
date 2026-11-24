@@ -5,6 +5,7 @@
 		:data-testid="testId"
 		:max-width="maxWidth"
 		:persistent
+		:scrollable
 		:aria-labelledby="`dialog-${uid}-title`"
 		@after-leave="emit('after-leave')"
 		@click:outside="onDismiss"
@@ -67,6 +68,8 @@ const props = withDefaults(
 		isOpenStateManagedExternally?: boolean;
 		/** Prevents closing by outside click or Escape, e.g. while a request is pending. */
 		persistent?: boolean;
+		/** Keeps title and actions visible and scrolls only the content when it is taller than the viewport. */
+		scrollable?: boolean;
 	}>(),
 	{
 		isLoading: false,
@@ -80,6 +83,7 @@ const props = withDefaults(
 		noCancel: false,
 		isOpenStateManagedExternally: false,
 		persistent: false,
+		scrollable: false,
 	}
 );
 

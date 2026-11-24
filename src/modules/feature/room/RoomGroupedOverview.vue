@@ -475,6 +475,10 @@ const onDeleteConfirm = (disableFutureConfirmation: boolean) => {
 	margin-bottom: 32px;
 }
 
+.room-grouped-overview :deep(.room-group-section--collapsed) {
+	margin-bottom: 8px;
+}
+
 .room-group-add-row :deep(.v-btn__content) {
 	white-space: normal;
 }

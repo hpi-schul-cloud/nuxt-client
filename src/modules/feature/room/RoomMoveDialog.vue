@@ -2,6 +2,7 @@
 	<SvsDialog
 		v-model="isOpen"
 		is-open-state-managed-externally
+		scrollable
 		:title="t('pages.rooms.groups.moveDialog.title')"
 		:is-loading="isMoving"
 		:persistent="isMoving"

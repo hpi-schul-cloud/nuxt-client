@@ -8,6 +8,14 @@
 		:aria-labelledby="showHeading ? headingId : undefined"
 	>
 		<div v-if="showHeading" class="room-group-header d-flex align-center ga-1">
+			<div class="room-group-heading">
+				<h2 :id="headingId" tabindex="-1" class="room-group-title text-h4 ma-0" data-testid="room-group-title">
+					{{ title }}
+				</h2>
+				<span class="room-group-count text-body-2 text-medium-emphasis text-no-wrap" data-testid="room-group-count">
+					{{ t("pages.rooms.groups.roomCount", { count: rooms.length }, rooms.length) }}
+				</span>
+			</div>
 			<span
 				v-if="group"
 				class="room-group-drag-handle d-flex align-center justify-center"
@@ -22,7 +30,7 @@
 				v-if="group"
 				variant="text"
 				size="40"
-				:icon="isCollapsed ? mdiChevronRight : mdiChevronDown"
+				:icon="isCollapsed ? mdiChevronDown : mdiChevronUp"
 				:aria-expanded="isCollapsed ? 'false' : 'true'"
 				:aria-controls="contentId"
 				:aria-label="
@@ -35,13 +43,6 @@
 				data-testid="room-group-toggle"
 				@click="onToggle"
 			/>
-			<h2 :id="headingId" tabindex="-1" class="room-group-title text-h4 ma-0" data-testid="room-group-title">
-				{{ title }}
-			</h2>
-			<span class="room-group-count text-body-2 text-medium-emphasis text-no-wrap" data-testid="room-group-count">
-				{{ t("pages.rooms.groups.roomCount", { count: rooms.length }, rooms.length) }}
-			</span>
-			<VSpacer />
 			<KebabMenu
 				v-if="group"
 				data-testid="room-group-menu"
@@ -81,7 +82,7 @@
 				</KebabMenuAction>
 			</KebabMenu>
 		</div>
-		<VDivider v-if="showHeading" class="mb-4" />
+		<VDivider v-if="showHeading" :class="{ 'mb-4': !isCollapsed }" />
 		<div v-show="!isCollapsed" :id="contentId" ref="contentRef" class="room-group-content">
 			<div class="room-group-drop-area">
 				<RoomGrid
@@ -133,7 +134,7 @@ import {
 	mdiArrowDown,
 	mdiArrowUp,
 	mdiChevronDown,
-	mdiChevronRight,
+	mdiChevronUp,
 	mdiDrag,
 	mdiRenameOutline,
 	mdiTrashCanOutline,
@@ -216,14 +217,21 @@ const onToggle = async () => {
 <style scoped>
 .room-group-header {
 	min-height: 48px;
-	flex-wrap: wrap;
+}
+
+.room-group-heading {
+	flex: 1 1 auto;
+	min-width: 0;
 }
 
 .room-group-title {
-	min-width: 0;
-	flex: 0 1 auto;
+	display: inline;
 	overflow-wrap: anywhere;
 	hyphens: auto;
+}
+
+.room-group-count {
+	margin-inline-start: 8px;
 }
 
 .room-group-drag-handle {
@@ -263,7 +271,6 @@ const onToggle = async () => {
 }
 
 .room-group-collapsed-drop {
-	min-height: 8px;
 	border-radius: 4px;
 }
 

@@ -33,6 +33,7 @@ describe("SvsDialog", () => {
 			noActions?: boolean;
 			isOpenStateManagedExternally?: boolean;
 			persistent?: boolean;
+			scrollable?: boolean;
 		} = {}
 	) => {
 		const title = "title of dialog";
@@ -49,6 +50,7 @@ describe("SvsDialog", () => {
 				noCancel: props.noCancel ?? false,
 				isOpenStateManagedExternally: props.isOpenStateManagedExternally ?? false,
 				persistent: props.persistent ?? false,
+				scrollable: props.scrollable ?? false,
 			},
 			slots: {
 				content: slotContent,
@@ -201,6 +203,20 @@ describe("SvsDialog", () => {
 			await wrapper.vm.$nextTick();
 
 			expect(wrapper.emitted("cancel")).toBeTruthy();
+		});
+
+		describe("when the dialog is scrollable", () => {
+			it("should pass scrollable to VDialog", () => {
+				const { dialog } = setup({ scrollable: true });
+
+				expect(dialog.props("scrollable")).toBe(true);
+			});
+
+			it("should not be scrollable by default", () => {
+				const { dialog } = setup();
+
+				expect(dialog.props("scrollable")).toBe(false);
+			});
 		});
 
 		describe("when the dialog is persistent", () => {
