@@ -1,7 +1,7 @@
 <template>
 	<DefaultWireframe max-width="full" :fab-items="fabAction" main-with-bottom-padding>
 		<template #header>
-			<div class="d-flex align-center">
+			<div class="d-flex flex-wrap align-center ga-2">
 				<h1>{{ t("pages.rooms.title") }}</h1>
 				<KebabMenu
 					v-if="isRoomArchiveFeatureEnabled || isRoomGroupingEnabled"

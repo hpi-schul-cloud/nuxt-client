@@ -1,14 +1,15 @@
 <template>
-	<div class="room-groups-onboarding d-flex flex-wrap align-center column-gap-2" data-testid="room-groups-onboarding">
-		<!-- A quiet line instead of an alert: the hint is optional and must not be announced as urgent. -->
-		<span class="room-groups-onboarding-text text-body-2 text-medium-emphasis">
+	<div class="room-groups-onboarding" data-testid="room-groups-onboarding">
+		<!-- Optional guidance stays out of the live region and keeps its actions beside the explanation. -->
+		<h2 class="text-body-1 font-weight-bold mb-1">{{ t("pages.rooms.groups.onboarding.title") }}</h2>
+		<p class="room-groups-onboarding-text text-body-2 text-medium-emphasis mb-3">
 			{{ t("pages.rooms.groups.onboarding.text") }}
-		</span>
-		<span class="d-inline-flex flex-wrap">
+		</p>
+		<div class="room-groups-onboarding-actions d-flex flex-wrap ga-2">
 			<VBtn
-				variant="text"
+				variant="tonal"
 				color="primary"
-				height="40"
+				min-height="44"
 				:prepend-icon="mdiPlus"
 				:disabled="disabled"
 				data-testid="room-groups-onboarding-add"
@@ -16,10 +17,16 @@
 			>
 				{{ t("pages.rooms.groups.add") }}
 			</VBtn>
-			<VBtn variant="text" height="40" data-testid="room-groups-onboarding-dismiss" @click="emit('dismiss')">
+			<VBtn
+				variant="text"
+				min-height="44"
+				class="font-weight-regular"
+				data-testid="room-groups-onboarding-dismiss"
+				@click="emit('dismiss')"
+			>
 				{{ t("pages.rooms.groups.onboarding.dismiss") }}
 			</VBtn>
-		</span>
+		</div>
 	</div>
 </template>
 
@@ -39,6 +46,18 @@ const { t } = useI18n();
 
 <style scoped>
 .room-groups-onboarding-text {
+	max-inline-size: 65ch;
 	line-height: 1.5;
+}
+
+.room-groups-onboarding-actions :deep(.v-btn) {
+	max-inline-size: 100%;
+	height: auto;
+	white-space: normal;
+}
+
+.room-groups-onboarding-actions :deep(.v-btn__content) {
+	min-inline-size: 0;
+	overflow-wrap: anywhere;
 }
 </style>

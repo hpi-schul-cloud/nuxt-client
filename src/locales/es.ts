@@ -2000,15 +2000,16 @@ export default {
 	"pages.rooms.groups.moveDialog.titleMany": "Mover salas",
 	"pages.rooms.groups.moveDialog.textMany":
 		"¿A dónde se debe mover la sala seleccionada? | ¿A dónde se deben mover las {count} salas seleccionadas?",
+	"pages.rooms.groups.onboarding.title": "Organiza las salas en grupos",
 	"pages.rooms.groups.onboarding.text":
-		"Mantén la visión general: crea grupos, por ejemplo, para tus asignaturas. Después podrás arrastrar salas a un grupo o moverlas mediante el menú de una sala.",
+		"Crea grupos, por ejemplo, para tus asignaturas. Arrastra salas a un grupo o muévelas desde el menú de una sala.",
 	"pages.rooms.groups.announce.allCollapsed": "Se han contraído todos los grupos.",
 	"pages.rooms.groups.announce.allExpanded": "Se han expandido todos los grupos.",
 	"pages.rooms.menu.collapseAllGroups": "Contraer todos los grupos",
 	"pages.rooms.menu.expandAllGroups": "Expandir todos los grupos",
 	"pages.rooms.groups.deleteDialog.textEmpty":
 		"Se eliminará el grupo «{name}». Este grupo está vacío, no se moverá ninguna sala.",
-	"pages.rooms.groups.onboarding.dismiss": "Ocultar",
+	"pages.rooms.groups.onboarding.dismiss": "Ocultar consejo",
 	"pages.rooms.groups.selection.selectAll": "Seleccionar todo: salas de «{name}»",
 	"pages.rooms.groups.selection.instruction": "Haz clic en las salas para seleccionarlas. Esc termina la selección.",
 	"pages.rooms.groups.selection.selectAllShort": "Seleccionar todo",

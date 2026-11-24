@@ -1999,15 +1999,16 @@ export default {
 	"pages.rooms.groups.moveDialog.titleMany": "Räume verschieben",
 	"pages.rooms.groups.moveDialog.textMany":
 		"Wohin soll der ausgewählte Raum verschoben werden? | Wohin sollen die {count} ausgewählten Räume verschoben werden?",
+	"pages.rooms.groups.onboarding.title": "Räume gruppieren",
 	"pages.rooms.groups.onboarding.text":
-		"Behalte den Überblick: Lege Gruppen an, z. B. für deine Fächer. Danach kannst du Räume in eine Gruppe ziehen oder über das Menü eines Raums verschieben.",
+		"Lege Gruppen an, z. B. für deine Fächer. Ziehe Räume in eine Gruppe oder verschiebe sie über das Menü eines Raums.",
 	"pages.rooms.groups.announce.allCollapsed": "Alle Gruppen wurden eingeklappt.",
 	"pages.rooms.groups.announce.allExpanded": "Alle Gruppen wurden ausgeklappt.",
 	"pages.rooms.menu.collapseAllGroups": "Alle Gruppen einklappen",
 	"pages.rooms.menu.expandAllGroups": "Alle Gruppen ausklappen",
 	"pages.rooms.groups.deleteDialog.textEmpty":
 		"Die Gruppe „{name}“ wird gelöscht. Diese Gruppe ist leer, es werden keine Räume verschoben.",
-	"pages.rooms.groups.onboarding.dismiss": "Ausblenden",
+	"pages.rooms.groups.onboarding.dismiss": "Hinweis ausblenden",
 	"pages.rooms.groups.selection.selectAll": "Alle auswählen: Räume in „{name}“",
 	"pages.rooms.groups.selection.instruction": "Räume anklicken, um sie auszuwählen. Esc beendet die Auswahl.",
 	"pages.rooms.groups.selection.selectAllShort": "Alle auswählen",

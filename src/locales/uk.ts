@@ -1973,15 +1973,16 @@ export default {
 	"pages.rooms.groups.moveDialog.titleMany": "Перемістити кімнати",
 	"pages.rooms.groups.moveDialog.textMany":
 		"Куди перемістити вибрану кімнату? | Куди перемістити вибрані кімнати ({count})?",
+	"pages.rooms.groups.onboarding.title": "Об’єднуйте кімнати в групи",
 	"pages.rooms.groups.onboarding.text":
-		"Зберігайте огляд: створюйте групи, наприклад для своїх предметів. Потім ви зможете перетягувати кімнати в групу або переміщувати їх через меню кімнати.",
+		"Створюйте групи, наприклад для своїх предметів. Перетягуйте кімнати в групу або переміщуйте їх через меню кімнати.",
 	"pages.rooms.groups.announce.allCollapsed": "Усі групи згорнуто.",
 	"pages.rooms.groups.announce.allExpanded": "Усі групи розгорнуто.",
 	"pages.rooms.menu.collapseAllGroups": "Згорнути всі групи",
 	"pages.rooms.menu.expandAllGroups": "Розгорнути всі групи",
 	"pages.rooms.groups.deleteDialog.textEmpty":
 		"Групу «{name}» буде видалено. Ця група порожня, жодну кімнату не буде переміщено.",
-	"pages.rooms.groups.onboarding.dismiss": "Приховати",
+	"pages.rooms.groups.onboarding.dismiss": "Приховати підказку",
 	"pages.rooms.groups.selection.selectAll": "Вибрати всі: кімнати в «{name}»",
 	"pages.rooms.groups.selection.instruction": "Натисніть на кімнати, щоб вибрати їх. Esc завершує вибір.",
 	"pages.rooms.groups.selection.selectAllShort": "Вибрати всі",

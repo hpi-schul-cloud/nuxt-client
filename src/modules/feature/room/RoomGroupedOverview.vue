@@ -86,13 +86,12 @@
 			/>
 		</template>
 
-		<!-- While the first-run line is shown, its own button is the entry for adding a group. -->
+		<!-- While the first-run hint is shown, its own button is the entry for adding a group. -->
 		<div v-if="!hasLoadError && !isOnboardingVisible" class="room-group-add-row mt-6">
 			<VBtn
-				variant="tonal"
-				size="large"
-				block
-				class="justify-start"
+				variant="text"
+				color="primary"
+				min-height="44"
 				:prepend-icon="mdiPlus"
 				:disabled="!isReady || selection.isActive"
 				data-testid="room-group-add"
@@ -100,7 +99,6 @@
 			>
 				{{ t("pages.rooms.groups.add") }}
 			</VBtn>
-			<VDivider />
 		</div>
 
 		<div

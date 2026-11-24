@@ -852,14 +852,14 @@ describe("RoomGroupedOverview", () => {
 
 		afterEach(() => setWindowWidth(1024));
 
-		it("shows the first-run hint as a quiet line above the rooms", async () => {
+		it("shows the first-run guidance above the rooms", async () => {
 			await setup({ ungroupedRoomIds: rooms.map((room) => room.id), groups: [] });
 
 			const hint = wrapper?.get("[data-testid='room-groups-onboarding']");
 			expect(hint?.get(".room-groups-onboarding-text").classes()).toEqual(
 				expect.arrayContaining(["text-body-2", "text-medium-emphasis"])
 			);
-			expect(hint?.get("[data-testid='room-groups-onboarding-add']").attributes("style")).toContain("height: 40px");
+			expect(hint?.get("[data-testid='room-groups-onboarding-add']").attributes("style")).toContain("min-height: 44px");
 			const order = wrapper?.findAll("[data-testid='room-groups-onboarding'], [data-testid='room-group-list']");
 			expect(order?.[0].attributes("data-testid")).toBe("room-groups-onboarding");
 		});

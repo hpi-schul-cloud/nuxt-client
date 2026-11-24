@@ -1954,15 +1954,16 @@ export default {
 	"pages.rooms.groups.moveDialog.titleMany": "Move rooms",
 	"pages.rooms.groups.moveDialog.textMany":
 		"Where should the selected room be moved? | Where should the {count} selected rooms be moved?",
+	"pages.rooms.groups.onboarding.title": "Organize rooms into groups",
 	"pages.rooms.groups.onboarding.text":
-		"Keep track: create groups, for example for your subjects. Then you can drag rooms into a group or move them using the menu of a room.",
+		"Create groups, for example for your subjects. Drag rooms into a group or move them using a room’s menu.",
 	"pages.rooms.groups.announce.allCollapsed": "All groups were collapsed.",
 	"pages.rooms.groups.announce.allExpanded": "All groups were expanded.",
 	"pages.rooms.menu.collapseAllGroups": "Collapse all groups",
 	"pages.rooms.menu.expandAllGroups": "Expand all groups",
 	"pages.rooms.groups.deleteDialog.textEmpty":
 		'The group "{name}" will be deleted. This group is empty, no rooms will be moved.',
-	"pages.rooms.groups.onboarding.dismiss": "Hide",
+	"pages.rooms.groups.onboarding.dismiss": "Hide tip",
 	"pages.rooms.groups.selection.selectAll": 'Select all: rooms in "{name}"',
 	"pages.rooms.groups.selection.instruction": "Click rooms to select them. Esc ends the selection.",
 	"pages.rooms.groups.selection.selectAllShort": "Select all",

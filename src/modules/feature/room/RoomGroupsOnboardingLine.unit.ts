@@ -8,21 +8,22 @@ describe("RoomGroupsOnboardingLine", () => {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
-	it("renders the hint as quiet text without an alert", () => {
+	it("renders a heading and optional guidance without an alert", () => {
 		const wrapper = setup();
 
+		expect(wrapper.get("h2").text()).toBe("pages.rooms.groups.onboarding.title");
 		expect(wrapper.get(".room-groups-onboarding-text").text()).toBe("pages.rooms.groups.onboarding.text");
 		expect(wrapper.find("[role='alert']").exists()).toBe(false);
 		expect(wrapper.attributes("data-testid")).toBe("room-groups-onboarding");
 	});
 
-	it("emits add and dismiss from its 40 px text buttons", async () => {
+	it("emits add and dismiss from its touch-sized buttons", async () => {
 		const wrapper = setup();
 
 		const add = wrapper.get("[data-testid='room-groups-onboarding-add']");
 		const dismiss = wrapper.get("[data-testid='room-groups-onboarding-dismiss']");
-		expect(add.attributes("style")).toContain("height: 40px");
-		expect(dismiss.attributes("style")).toContain("height: 40px");
+		expect(add.attributes("style")).toContain("min-height: 44px");
+		expect(dismiss.attributes("style")).toContain("min-height: 44px");
 		await add.trigger("click");
 		await dismiss.trigger("click");
 
