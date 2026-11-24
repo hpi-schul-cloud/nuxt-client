@@ -4,43 +4,67 @@
 			<div class="d-flex align-center">
 				<h1>{{ t("pages.rooms.title") }}</h1>
 				<KebabMenu
-					v-if="isRoomArchiveFeatureEnabled"
+					v-if="isRoomArchiveFeatureEnabled || isRestoreGroupDeleteConfirmationVisible"
 					class="mx-2"
 					:aria-label="t('pages.rooms.menu.ariaLabel')"
 					data-testid="rooms-menu"
 				>
 					<KebabMenuAction
+						v-if="isRoomArchiveFeatureEnabled"
 						:icon="mdiArchiveOutline"
 						data-testid="rooms-menu-archived-rooms"
 						@click="router.push({ name: 'rooms-archive' })"
 					>
 						{{ t("pages.rooms.archived.title") }}
 					</KebabMenuAction>
+					<KebabMenuAction
+						v-if="isRestoreGroupDeleteConfirmationVisible"
+						:icon="mdiAlertCircleOutline"
+						data-testid="rooms-menu-restore-group-delete-confirmation"
+						@click="restoreGroupDeleteConfirmation"
+					>
+						{{ t("pages.rooms.menu.restoreGroupDeleteConfirmation") }}
+					</KebabMenuAction>
 				</KebabMenu>
 			</div>
 		</template>
 		<RoomsWelcomeInfo class="mt-8" />
-		<VContainer v-if="isLoading && isEmpty" class="loader">
-			<VSkeletonLoader ref="skeleton-loader" type="date-picker-days" class="mt-6" />
-		</VContainer>
-		<EmptyState v-else-if="isEmpty" :title="t('pages.rooms.emptyState')">
-			<template #media>
-				<RoomsEmptyStateSvg />
+		<template v-if="isRoomGroupingEnabled">
+			<VContainer v-if="isArrangementInitialLoading" class="loader">
+				<VSkeletonLoader ref="skeleton-loader" type="date-picker-days" class="mt-6" />
+			</VContainer>
+			<template v-else>
+				<EmptyState v-if="isArrangementEmpty" :title="t('pages.rooms.emptyState')">
+					<template #media>
+						<RoomsEmptyStateSvg />
+					</template>
+				</EmptyState>
+				<RoomGroupedOverview />
 			</template>
-		</EmptyState>
-		<RoomGrid v-else :rooms />
+		</template>
+		<template v-else>
+			<VContainer v-if="isLoading && isEmpty" class="loader">
+				<VSkeletonLoader ref="skeleton-loader" type="date-picker-days" class="mt-6" />
+			</VContainer>
+			<EmptyState v-else-if="isEmpty" :title="t('pages.rooms.emptyState')">
+				<template #media>
+					<RoomsEmptyStateSvg />
+				</template>
+			</EmptyState>
+			<RoomGrid v-else :rooms />
+		</template>
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
 import { buildPageTitle } from "@/utils/pageTitle";
 import { Permission } from "@api-server";
-import { useAppStore } from "@data-app";
+import { notifySuccess, useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { useRoomStore } from "@data-room";
+import { useRoomArrangementStore, useRoomStore } from "@data-room";
 import { useImportFlow } from "@feature-import";
-import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
-import { mdiArchiveOutline, mdiPlus } from "@icons/material";
+import { RoomGrid, RoomGroupedOverview, RoomsWelcomeInfo } from "@feature-room";
+import { mdiAlertCircleOutline, mdiArchiveOutline, mdiPlus } from "@icons/material";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { KebabMenu, KebabMenuAction } from "@ui-kebab-menu";
 import { DefaultWireframe } from "@ui-layout";
@@ -58,10 +82,32 @@ const { rooms, isLoading, isEmpty } = storeToRefs(useRoomStore());
 
 const { fetchRooms } = useRoomStore();
 
+const arrangementStore = useRoomArrangementStore();
+const {
+	isInitialLoading: isArrangementInitialLoading,
+	isEmpty: isArrangementEmpty,
+	isReady: isArrangementReady,
+	confirmGroupDeletion,
+} = storeToRefs(arrangementStore);
+
 const pageTitle = computed(() => buildPageTitle(t("pages.rooms.title")));
 useTitle(pageTitle);
 
 const isRoomArchiveFeatureEnabled = computed(() => useEnvConfig().value.FEATURE_ROOM_ARCHIVE_ENABLED);
+const isRoomGroupingEnabled = computed(() => useEnvConfig().value.FEATURE_ROOM_GROUPING_ENABLED);
+
+const isRestoreGroupDeleteConfirmationVisible = computed(
+	() => isRoomGroupingEnabled.value && isArrangementReady.value && !confirmGroupDeletion.value
+);
+
+const restoreGroupDeleteConfirmation = async () => {
+	const result = await arrangementStore.setConfirmGroupDeletion(true);
+	if (result.success) {
+		notifySuccess(t("pages.rooms.groups.confirmationRestored"));
+	}
+};
+
+const loadRooms = () => (isRoomGroupingEnabled.value ? arrangementStore.loadOverview() : fetchRooms());
 
 const fabAction = computed(() => {
 	const canCreateRoom = toValue(useAppStore().hasPermission(Permission.SCHOOL_CREATE_ROOM));
@@ -106,7 +152,7 @@ const executeImportFlow = async (token: string) => {
 		router.replace({ name: "boards-id", params: { id: destinations[0].id } });
 	} else {
 		router.replace({ name: "rooms" });
-		fetchRooms();
+		loadRooms();
 	}
 };
 
@@ -122,6 +168,6 @@ watch(
 );
 
 onMounted(() => {
-	fetchRooms();
+	loadRooms();
 });
 </script>

@@ -4,6 +4,7 @@ import Registration from "./registration/Registration.vue";
 import RoomBoardGrid from "./RoomBoardGrid.vue";
 import RoomForm from "./RoomForm.vue";
 import RoomGrid from "./RoomGrid.vue";
+import RoomGroupedOverview from "./RoomGroupedOverview.vue";
 import AddExternalPersonDialog from "./roomMembers/dialogs/add-external-person-dialog/AddExternalPersonDialog.vue";
 import AddMembersDialog from "./roomMembers/dialogs/AddMembersDialog.vue";
 import ChangeRole from "./roomMembers/dialogs/ChangeRole.vue";
@@ -34,6 +35,7 @@ export {
 	RoomBoardGrid,
 	RoomForm,
 	RoomGrid,
+	RoomGroupedOverview,
 	RoomMenu,
 	RoomsWelcomeInfo,
 };

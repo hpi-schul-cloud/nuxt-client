@@ -3,7 +3,9 @@ import { RoomColor } from "@/types/room/Room";
 import { roomItemFactory } from "@@/tests/test-utils";
 import { createTestSchoolStore } from "@@/tests/test-utils/factory/school-test.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoomItemResponseAllowedOperations } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
+import { KebabMenuAction } from "@ui-kebab-menu";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
@@ -68,6 +70,75 @@ describe("@feature-room/RoomGridItem", () => {
 		it("should show external chip when room belongs to a different school", () => {
 			const { wrapper } = setup({ room: { ...mockRoom, schoolId: "other-school-456" }, index: 0 });
 			expect(wrapper.find("[data-testid=room--external-school-0]").exists()).toBe(true);
+		});
+	});
+
+	describe("arrange menu", () => {
+		const arrangeableRoom = {
+			...mockRoom,
+			allowedOperations: { arrangeRooms: true } as unknown as RoomItemResponseAllowedOperations,
+		};
+
+		it("is not shown outside the grouped overview", () => {
+			const { wrapper } = setup({ room: arrangeableRoom, index: 0 });
+			expect(wrapper.find("[data-testid=room-card-menu]").exists()).toBe(false);
+		});
+
+		it("is hidden for rooms that cannot be arranged", () => {
+			const { wrapper } = setup({ room: mockRoom, index: 0, showArrangeMenu: true });
+			expect(wrapper.find("[data-testid=room-card-menu]").exists()).toBe(false);
+			expect(wrapper.find("[data-testid=room-open-button-0]").exists()).toBe(true);
+		});
+
+		it("keeps the existing test ids and adds the room id", () => {
+			const { wrapper } = setup({ room: arrangeableRoom, index: 4, showArrangeMenu: true });
+			const card = wrapper.get("[data-testid=board-grid-item-4]");
+			expect(card.attributes("data-room-id")).toBe(mockRoom.id);
+			expect(wrapper.find("[data-testid=room-card-menu]").exists()).toBe(true);
+		});
+
+		it.each([
+			{ testId: "room-card-menu-move-to-group", event: "move-to-group" },
+			{ testId: "room-card-menu-move-earlier", event: "move-earlier" },
+			{ testId: "room-card-menu-move-later", event: "move-later" },
+		])("emits $event", async ({ testId, event }) => {
+			const { wrapper } = setup({
+				room: arrangeableRoom,
+				index: 0,
+				showArrangeMenu: true,
+				canMoveEarlier: true,
+				canMoveLater: true,
+			});
+			await wrapper.get("[data-testid=room-card-menu]").trigger("click");
+			await wrapper
+				.findAllComponents(KebabMenuAction)
+				.find((a) => a.attributes("data-testid") === testId)
+				?.trigger("click");
+
+			expect(wrapper.emitted(event)).toHaveLength(1);
+		});
+
+		it("disables moving beyond the section boundaries", async () => {
+			const { wrapper } = setup({ room: arrangeableRoom, index: 0, showArrangeMenu: true, canMoveLater: true });
+			await wrapper.get("[data-testid=room-card-menu]").trigger("click");
+
+			const actions = wrapper.findAllComponents(KebabMenuAction);
+			const byTestId = (testId: string) => actions.find((a) => a.attributes("data-testid") === testId);
+			expect(byTestId("room-card-menu-move-earlier")?.props("disabled")).toBe(true);
+			expect(byTestId("room-card-menu-move-later")?.props("disabled")).toBe(false);
+		});
+
+		it("disables all arrange actions while a change is being saved", async () => {
+			const { wrapper } = setup({
+				room: arrangeableRoom,
+				index: 0,
+				showArrangeMenu: true,
+				arrangeDisabled: true,
+			});
+			await wrapper.get("[data-testid=room-card-menu]").trigger("click");
+
+			const disabledStates = wrapper.findAllComponents(KebabMenuAction).map((action) => action.props("disabled"));
+			expect(disabledStates).toEqual([true, true, true]);
 		});
 	});
 });

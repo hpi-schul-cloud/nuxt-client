@@ -2,10 +2,11 @@
 	<VCard
 		class="room-grid-item d-flex flex-column"
 		:data-testid="`board-grid-item-${index}`"
+		:data-room-id="room.id"
 		:ripple="false"
 		variant="elevated"
 	>
-		<VCardItem class="d-block flex-grow-1">
+		<VCardItem class="d-block flex-grow-1" :class="{ 'room-grid-item__content--with-menu': isArrangeMenuVisible }">
 			<RouterLink tabindex="-1" :to="roomPath" class="room-link-item overflow-visible">
 				<VBadge :model-value="room.isLocked" bordered :icon="mdiLock" :data-testid="`room-badge-lock-${index}`">
 					<VAvatar rounded="lg" :class="avatarColor" class="room-grid-avatar" :data-testid="`room-avatar-${index}`">
@@ -16,7 +17,7 @@
 				</VBadge>
 				<div>
 					<VCardTitle class="mb-1" :data-testid="`room--title-${index}`">
-						<h2 class="text-break text-body-1 font-weight-bold ma-0">{{ room.name }}</h2>
+						<component :is="titleTag" class="text-break text-body-1 font-weight-bold ma-0">{{ room.name }}</component>
 					</VCardTitle>
 					<div class="d-flex ga-2">
 						<VChip
@@ -38,6 +39,37 @@
 					</div>
 				</div>
 			</RouterLink>
+			<div v-if="isArrangeMenuVisible" class="room-card-menu">
+				<KebabMenu
+					data-testid="room-card-menu"
+					:aria-label="t('pages.rooms.groups.roomMenu.ariaLabel', { name: room.name })"
+				>
+					<KebabMenuAction
+						:icon="mdiFolderMoveOutline"
+						:disabled="arrangeDisabled"
+						data-testid="room-card-menu-move-to-group"
+						@click="emit('move-to-group')"
+					>
+						{{ t("pages.rooms.groups.roomMenu.moveToGroup") }}
+					</KebabMenuAction>
+					<KebabMenuAction
+						:icon="mdiArrowLeft"
+						:disabled="!canMoveEarlier"
+						data-testid="room-card-menu-move-earlier"
+						@click="emit('move-earlier')"
+					>
+						{{ t("pages.rooms.groups.roomMenu.moveEarlier") }}
+					</KebabMenuAction>
+					<KebabMenuAction
+						:icon="mdiArrowRight"
+						:disabled="!canMoveLater"
+						data-testid="room-card-menu-move-later"
+						@click="emit('move-later')"
+					>
+						{{ t("pages.rooms.groups.roomMenu.moveLater") }}
+					</KebabMenuAction>
+				</KebabMenu>
+			</div>
 		</VCardItem>
 		<VCardActions class="justify-end pr-4">
 			<VBtn
@@ -57,17 +89,30 @@
 <script setup lang="ts">
 import { RoomItem } from "@/types/room/Room";
 import { useSchoolStoreRefs } from "@data-app";
-import { mdiAccountMultipleOutline, mdiLock } from "@icons/material";
-import { computed, PropType } from "vue";
+import { mdiAccountMultipleOutline, mdiArrowLeft, mdiArrowRight, mdiFolderMoveOutline, mdiLock } from "@icons/material";
+import { KebabMenu, KebabMenuAction } from "@ui-kebab-menu";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-const props = defineProps({
-	room: {
-		type: Object as PropType<RoomItem>,
-		required: true,
-	},
-	index: { type: Number, required: true },
-});
+const props = withDefaults(
+	defineProps<{
+		room: RoomItem;
+		index: number;
+		showArrangeMenu?: boolean;
+		canMoveEarlier?: boolean;
+		canMoveLater?: boolean;
+		/** Arranging is temporarily not possible, e.g. while another change is being saved. */
+		arrangeDisabled?: boolean;
+		titleTag?: "h2" | "h3";
+	}>(),
+	{ showArrangeMenu: false, canMoveEarlier: false, canMoveLater: false, arrangeDisabled: false, titleTag: "h2" }
+);
+
+const emit = defineEmits<{
+	"move-to-group": [];
+	"move-earlier": [];
+	"move-later": [];
+}>();
 
 const { t } = useI18n();
 
@@ -79,6 +124,9 @@ const roomPath = computed(() => `/rooms/${props.room.id}`);
 const roomShortName = computed(() => props.room?.name?.slice(0, 2) ?? "");
 const avatarColor = computed(() => `room-color--${props.room.color}`);
 const roomAriaLabel = computed(() => `${t("common.labels.room")} ${props.room.name}`);
+const isArrangeMenuVisible = computed(
+	() => props.showArrangeMenu && props.room.allowedOperations?.arrangeRooms === true
+);
 </script>
 
 <style lang="scss" scoped>
@@ -107,6 +155,16 @@ const roomAriaLabel = computed(() => `${t("common.labels.room")} ${props.room.na
 			text-decoration: underline;
 		}
 	}
+}
+
+.room-grid-item__content--with-menu {
+	padding-inline-end: 48px;
+}
+
+.room-card-menu {
+	position: absolute;
+	top: 8px;
+	right: 4px;
 }
 
 .room-grid-avatar {

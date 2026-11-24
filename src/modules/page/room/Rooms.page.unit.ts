@@ -4,8 +4,12 @@ import {
 	createTestAppStoreWithPermissions,
 	createTestEnvStore,
 	createTestRoomStore,
+	expectNotification,
 	mockApi,
+	mockApiResponse,
 	mockComposable,
+	roomArrangementResponseFactory,
+	roomGroupResponseFactory,
 	roomItemFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -16,10 +20,11 @@ import {
 	CopyElementType,
 	CopyStatusEnum,
 	Permission,
+	RoomArrangementResponse,
 	RoomItemResponseAllowedOperations,
 } from "@api-server";
 import { useImportFlow } from "@feature-import";
-import { RoomGrid } from "@feature-room";
+import { RoomGrid, RoomGroupedOverview } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";
 import { EmptyState } from "@ui-empty-state";
@@ -64,7 +69,7 @@ describe("RoomsPage", () => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		const { roomStore } = createTestRoomStore(roomItems);
 		roomStore.isLoading = isLoading;
-		roomStore.fetchRooms.mockResolvedValue();
+		roomStore.fetchRooms.mockResolvedValue(true);
 		createTestEnvStore(envs);
 
 		createTestAppStoreWithPermissions([Permission.SCHOOL_CREATE_ROOM]);
@@ -293,6 +298,122 @@ describe("RoomsPage", () => {
 				const { wrapper } = setup(undefined, false, { FEATURE_ROOM_ARCHIVE_ENABLED: false });
 
 				expect(wrapper.find("[data-testid=rooms-menu]").exists()).toBe(false);
+			});
+		});
+	});
+
+	describe("room grouping", () => {
+		const mockArrangementApi = (arrangement: Partial<RoomArrangementResponse> = {}) => {
+			const arrangementApi = mockApi<ReturnType<typeof serverApi.RoomArrangementApiFactory>>();
+			const response = roomArrangementResponseFactory.build(arrangement);
+			arrangementApi.roomArrangementControllerGetArrangement.mockResolvedValue(mockApiResponse({ data: response }));
+			arrangementApi.roomArrangementControllerUpdatePreferences.mockResolvedValue(
+				mockApiResponse({ data: { ...response, revision: response.revision + 1, confirmGroupDeletion: true } })
+			);
+			vi.spyOn(serverApi, "RoomArrangementApiFactory").mockReturnValue(arrangementApi);
+			return arrangementApi;
+		};
+
+		describe("when the feature is disabled", () => {
+			it("should render the legacy room grid without arrangement requests", async () => {
+				const arrangementApi = mockArrangementApi();
+				const { wrapper, roomStore } = setup(undefined, false, { FEATURE_ROOM_GROUPING_ENABLED: false });
+				await flushPromises();
+
+				expect(wrapper.findComponent(RoomGrid).exists()).toBe(true);
+				expect(wrapper.findComponent(RoomGrid).props("sectionKey")).toBeUndefined();
+				expect(wrapper.findComponent(RoomGroupedOverview).exists()).toBe(false);
+				expect(roomStore.fetchRooms).toHaveBeenCalled();
+				expect(arrangementApi.roomArrangementControllerGetArrangement).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when the feature is enabled", () => {
+			it("should load the arrangement and render the grouped overview", async () => {
+				const rooms = roomItemFactory.buildList(2);
+				const arrangementApi = mockArrangementApi({ ungroupedRoomIds: rooms.map((room) => room.id) });
+				const { wrapper } = setup(rooms, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+				await flushPromises();
+
+				expect(arrangementApi.roomArrangementControllerGetArrangement).toHaveBeenCalledTimes(1);
+				expect(wrapper.findComponent(RoomGroupedOverview).exists()).toBe(true);
+				expect(wrapper.find("[data-testid='room-group-ungrouped']").exists()).toBe(true);
+				expect(wrapper.findComponent(EmptyState).exists()).toBe(false);
+			});
+
+			it("should show the loading state until the arrangement is loaded", () => {
+				mockArrangementApi();
+				const { wrapper } = setup([], false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+
+				expect(wrapper.findComponent(VSkeletonLoader).exists()).toBe(true);
+			});
+
+			it("should show the empty state and the add group entry without rooms and groups", async () => {
+				mockArrangementApi();
+				const { wrapper } = setup([], false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+				await flushPromises();
+
+				expect(wrapper.findComponent(EmptyState).exists()).toBe(true);
+				expect(wrapper.find("[data-testid='room-group-add']").exists()).toBe(true);
+			});
+
+			it("should not show the empty state when only an empty group exists", async () => {
+				mockArrangementApi({ groups: [roomGroupResponseFactory.build()] });
+				const { wrapper } = setup([], false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+				await flushPromises();
+
+				expect(wrapper.findComponent(EmptyState).exists()).toBe(false);
+				expect(wrapper.find("[data-testid='room-group-0']").exists()).toBe(true);
+			});
+
+			it("should keep the archive entry point", async () => {
+				mockArrangementApi();
+				const { wrapper } = setup(undefined, false, {
+					FEATURE_ROOM_GROUPING_ENABLED: true,
+					FEATURE_ROOM_ARCHIVE_ENABLED: true,
+				});
+				await flushPromises();
+
+				expect(wrapper.find("[data-testid=rooms-menu]").exists()).toBe(true);
+			});
+
+			it("should execute the import flow", async () => {
+				mockArrangementApi();
+				router.setQuery({ import: "6S6s-CWVVxEG" });
+				setup(undefined, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+				await flushPromises();
+
+				expect(useImportFlowMock.executeImport).toHaveBeenCalledWith("6S6s-CWVVxEG", expect.anything());
+			});
+
+			it("should not offer restoring delete confirmations while they are enabled", async () => {
+				mockArrangementApi({ confirmGroupDeletion: true });
+				const { wrapper } = setup(undefined, false, {
+					FEATURE_ROOM_GROUPING_ENABLED: true,
+					FEATURE_ROOM_ARCHIVE_ENABLED: false,
+				});
+				await flushPromises();
+
+				expect(wrapper.find("[data-testid=rooms-menu]").exists()).toBe(false);
+			});
+
+			it("should restore delete confirmations from the rooms menu", async () => {
+				const arrangementApi = mockArrangementApi({ revision: 2, confirmGroupDeletion: false });
+				const { wrapper } = setup(undefined, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+				await flushPromises();
+
+				await wrapper.get("[data-testid=rooms-menu]").trigger("click");
+				await wrapper
+					.findAllComponents(KebabMenuAction)
+					.find((action) => action.attributes("data-testid") === "rooms-menu-restore-group-delete-confirmation")
+					?.trigger("click");
+				await flushPromises();
+
+				expect(arrangementApi.roomArrangementControllerUpdatePreferences).toHaveBeenCalledWith({
+					expectedRevision: 2,
+					confirmGroupDeletion: true,
+				});
+				expectNotification("success");
 			});
 		});
 	});

@@ -1,0 +1,452 @@
+import RoomGroupDeleteDialog from "./RoomGroupDeleteDialog.vue";
+import RoomGroupedOverview from "./RoomGroupedOverview.vue";
+import RoomGroupNameDialog from "./RoomGroupNameDialog.vue";
+import RoomGroupSection from "./RoomGroupSection.vue";
+import RoomMoveDialog from "./RoomMoveDialog.vue";
+import { RoomItem } from "@/types/room/Room";
+import {
+	expectNotification,
+	mockApi,
+	mockApiResponse,
+	roomArrangementResponseFactory,
+	roomGroupResponseFactory,
+	roomItemFactory,
+} from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import {
+	RoomApiFactory,
+	RoomArrangementApiFactory,
+	RoomArrangementResponse,
+	RoomItemResponseAllowedOperations,
+	RoomListResponse,
+} from "@api-server";
+import { useRoomArrangementStore } from "@data-room";
+import { createTestingPinia } from "@pinia/testing";
+import { logger } from "@util-logger";
+import { flushPromises } from "@vue/test-utils";
+import { AxiosError, AxiosHeaders } from "axios";
+import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
+
+vi.mock("@api-server");
+
+type ArrangementApi = ReturnType<typeof RoomArrangementApiFactory>;
+
+const arrangeable = { arrangeRooms: true } as unknown as RoomItemResponseAllowedOperations;
+
+describe("RoomGroupedOverview", () => {
+	let wrapper: ReturnType<typeof mount<typeof RoomGroupedOverview>> | undefined;
+	let arrangementApi: Mocked<ArrangementApi>;
+	let rooms: RoomItem[];
+
+	const groupA = roomGroupResponseFactory.build({ id: "aaaaaaaaaaaaaaaaaaaaaaaa", name: "Informatik" });
+	const groupB = roomGroupResponseFactory.build({ id: "bbbbbbbbbbbbbbbbbbbbbbbb", name: "Deutsch" });
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		arrangementApi = mockApi<ArrangementApi>();
+		const roomApi = mockApi<ReturnType<typeof RoomApiFactory>>();
+		vi.mocked(RoomArrangementApiFactory).mockReturnValue(arrangementApi);
+		vi.mocked(RoomApiFactory).mockReturnValue(roomApi);
+		vi.spyOn(logger, "error").mockImplementation(vi.fn());
+
+		rooms = roomItemFactory.buildList(3, { allowedOperations: arrangeable });
+		roomApi.roomControllerGetRooms.mockImplementation(async () =>
+			mockApiResponse<RoomListResponse>({ data: { data: rooms } })
+		);
+	});
+
+	afterEach(() => {
+		wrapper?.unmount();
+	});
+
+	const respond = (arrangement: RoomArrangementResponse) => mockApiResponse({ data: arrangement });
+
+	const setup = async (arrangement: Partial<RoomArrangementResponse> = {}) => {
+		const initial = roomArrangementResponseFactory.build({
+			revision: 5,
+			ungroupedRoomIds: rooms.slice(0, 1).map((room) => room.id),
+			groups: [
+				{ ...groupA, roomIds: rooms.slice(1).map((room) => room.id) },
+				{ ...groupB, roomIds: [] },
+			],
+			...arrangement,
+		});
+		arrangementApi.roomArrangementControllerGetArrangement.mockResolvedValue(respond(initial));
+		arrangementApi.roomArrangementControllerMoveRoom.mockResolvedValue(respond(initial));
+		arrangementApi.roomArrangementControllerUpdateGroup.mockResolvedValue(respond(initial));
+		arrangementApi.roomArrangementControllerUpdateGroupOrder.mockResolvedValue(respond(initial));
+		arrangementApi.roomArrangementControllerDeleteGroup.mockResolvedValue(respond(initial));
+		await useRoomArrangementStore().loadOverview();
+
+		wrapper = mount(RoomGroupedOverview, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: { RouterLink: true, UseFocusTrap: true },
+			},
+			attachTo: document.body,
+		});
+		await flushPromises();
+		return { wrapper, initial };
+	};
+
+	const sections = () => wrapper?.findAllComponents(RoomGroupSection) ?? [];
+	const clickInDocument = (selector: string) => document.querySelector<HTMLElement>(selector)?.click();
+
+	describe("rendering", () => {
+		it("renders the fixed ungrouped section first, followed by the named groups in saved order", async () => {
+			await setup();
+
+			const testIds = sections().map((section) => section.attributes("data-testid"));
+			expect(testIds).toEqual(["room-group-ungrouped", "room-group-0", "room-group-1"]);
+			expect(sections()[0].classes()).not.toContain("room-group-sortable-item");
+		});
+
+		it("renders empty groups", async () => {
+			await setup();
+
+			expect(wrapper?.find("[data-testid='room-group-1'] [data-testid='room-group-empty']").exists()).toBe(true);
+		});
+
+		it("keeps index based room test ids unique across the overview", async () => {
+			await setup();
+
+			const ids = wrapper?.findAll("[data-testid^='board-grid-item-']").map((item) => item.attributes("data-testid"));
+			expect(ids).toEqual(["board-grid-item-0", "board-grid-item-1", "board-grid-item-2"]);
+		});
+
+		it("offers adding a group with zero rooms and without room creation permission", async () => {
+			rooms = [];
+			await setup({ ungroupedRoomIds: [], groups: [] });
+
+			const addButton = wrapper?.get("[data-testid='room-group-add']");
+			expect(addButton?.attributes("disabled")).toBeUndefined();
+		});
+
+		it("shows a retry state instead of an empty arrangement when the arrangement cannot be loaded", async () => {
+			arrangementApi.roomArrangementControllerGetArrangement.mockRejectedValue(new Error("failed"));
+			await useRoomArrangementStore().loadOverview();
+			wrapper = mount(RoomGroupedOverview, {
+				global: { plugins: [createTestingVuetify(), createTestingI18n()], stubs: { RouterLink: true } },
+			});
+
+			expect(wrapper.find("[data-testid='room-groups-load-error']").exists()).toBe(true);
+			expect(wrapper.find("[data-testid='room-group-add']").exists()).toBe(false);
+			expect(wrapper.findAll("[data-testid^='board-grid-item-']")).toHaveLength(3);
+			expect(wrapper.find("[data-testid='room-group-grid']").exists()).toBe(false);
+
+			arrangementApi.roomArrangementControllerGetArrangement.mockResolvedValue(
+				respond(roomArrangementResponseFactory.build())
+			);
+			await wrapper.get("[data-testid='room-groups-retry']").trigger("click");
+			await flushPromises();
+
+			expect(wrapper.find("[data-testid='room-groups-load-error']").exists()).toBe(false);
+		});
+	});
+
+	describe("moving rooms", () => {
+		it("moves a room via the move dialog with exactly one appending command", async () => {
+			await setup();
+
+			sections()[0].vm.$emit("move-to-group", rooms[0]);
+			await flushPromises();
+			const dialog = wrapper?.findComponent(RoomMoveDialog);
+			expect(dialog?.props("currentKey")).toBe("ungrouped");
+			dialog?.vm.$emit("confirm", groupB.id);
+			await flushPromises();
+
+			expect(arrangementApi.roomArrangementControllerMoveRoom).toHaveBeenCalledTimes(1);
+			expect(arrangementApi.roomArrangementControllerMoveRoom).toHaveBeenCalledWith({
+				expectedRevision: 5,
+				roomId: rooms[0].id,
+				sourceGroupId: null,
+				targetGroupId: groupB.id,
+				beforeRoomId: null,
+			});
+		});
+
+		it("converts a completed drag between sections into exactly one command", async () => {
+			await setup();
+			const sortable = sections()[0].findComponent({ name: "Sortable" });
+			const target = wrapper?.get("[data-testid='room-group-0'] [data-testid='room-group-grid']").element;
+			const source = sortable.element;
+			const item = wrapper?.get(`[data-room-id='${rooms[0].id}']`).element;
+
+			sortable.vm.$emit("start", { item });
+			sortable.vm.$emit("end", { item, from: source, to: target, oldIndex: 0, newIndex: 1 });
+			await flushPromises();
+
+			expect(arrangementApi.roomArrangementControllerMoveRoom).toHaveBeenCalledTimes(1);
+			expect(arrangementApi.roomArrangementControllerMoveRoom).toHaveBeenCalledWith({
+				expectedRevision: 5,
+				roomId: rooms[0].id,
+				sourceGroupId: null,
+				targetGroupId: groupA.id,
+				beforeRoomId: rooms[2].id,
+			});
+		});
+
+		it("writes nothing for a drop at the original position", async () => {
+			await setup();
+			const sortable = sections()[1].findComponent({ name: "Sortable" });
+			const item = wrapper?.get(`[data-room-id='${rooms[1].id}']`).element;
+
+			sortable.vm.$emit("end", { item, from: sortable.element, to: sortable.element, oldIndex: 0, newIndex: 0 });
+			await flushPromises();
+
+			expect(arrangementApi.roomArrangementControllerMoveRoom).not.toHaveBeenCalled();
+		});
+
+		it("moves a room later via its menu", async () => {
+			await setup();
+
+			await wrapper?.get(`[data-room-id='${rooms[1].id}'] [data-testid='room-card-menu']`).trigger("click");
+			clickInDocument("[data-testid='room-card-menu-move-later']");
+			await flushPromises();
+
+			expect(arrangementApi.roomArrangementControllerMoveRoom).toHaveBeenCalledWith(
+				expect.objectContaining({
+					roomId: rooms[1].id,
+					sourceGroupId: groupA.id,
+					targetGroupId: groupA.id,
+					beforeRoomId: null,
+				})
+			);
+		});
+	});
+
+	describe("groups", () => {
+		it("persists collapsing a group", async () => {
+			const { initial } = await setup();
+			arrangementApi.roomArrangementControllerUpdateGroup.mockResolvedValue(
+				respond({ ...initial, revision: 6, groups: [{ ...initial.groups[0], collapsed: true }, initial.groups[1]] })
+			);
+
+			await wrapper?.get("[data-testid='room-group-0'] [data-testid='room-group-toggle']").trigger("click");
+			await flushPromises();
+
+			expect(arrangementApi.roomArrangementControllerUpdateGroup).toHaveBeenCalledWith(groupA.id, {
+				expectedRevision: 5,
+				collapsed: true,
+			});
+			expect(
+				wrapper?.get("[data-testid='room-group-0'] [data-testid='room-group-toggle']").attributes("aria-expanded")
+			).toBe("false");
+		});
+
+		it("creates a group and closes the dialog on success", async () => {
+			const { initial } = await setup();
+			const createdId = "cccccccccccccccccccccccc";
+			arrangementApi.roomArrangementControllerCreateGroup.mockResolvedValue(
+				mockApiResponse({
+					data: {
+						...initial,
+						revision: 6,
+						groups: [...initial.groups, { id: createdId, name: "Mathe", collapsed: false, roomIds: [] }],
+						createdGroupId: createdId,
+					},
+				})
+			);
+
+			await wrapper?.get("[data-testid='room-group-add']").trigger("click");
+			const dialog = wrapper?.findComponent(RoomGroupNameDialog);
+			expect(dialog?.props("modelValue")).toBe(true);
+			dialog?.vm.$emit("submit", "Mathe");
+			await flushPromises();
+
+			expect(arrangementApi.roomArrangementControllerCreateGroup).toHaveBeenCalledWith({
+				expectedRevision: 5,
+				name: "Mathe",
+			});
+			expect(dialog?.props("modelValue")).toBe(false);
+			expect(wrapper?.find(`[data-group-id='${createdId}']`).exists()).toBe(true);
+		});
+
+		it("keeps the name dialog open with an inline error when the server rejects the name", async () => {
+			await setup();
+			arrangementApi.roomArrangementControllerCreateGroup.mockRejectedValue(
+				new AxiosError("Bad Request", "ERR_BAD_REQUEST", undefined, undefined, {
+					status: 400,
+					statusText: "",
+					headers: {},
+					config: { headers: new AxiosHeaders() },
+					data: { code: 400, type: "ROOM_GROUP_NAME_DUPLICATE", title: "", message: "", details: { field: "name" } },
+				})
+			);
+
+			await wrapper?.get("[data-testid='room-group-add']").trigger("click");
+			const dialog = wrapper?.findComponent(RoomGroupNameDialog);
+			dialog?.vm.$emit("submit", "Informatik");
+			await flushPromises();
+
+			expect(dialog?.props("modelValue")).toBe(true);
+			expect(dialog?.props("serverError")).toBe("DUPLICATE");
+		});
+
+		it("asks for confirmation before deleting and sends the opt-out with the delete", async () => {
+			await setup();
+
+			sections()[1].vm.$emit("delete");
+			await flushPromises();
+			const dialog = wrapper?.findComponent(RoomGroupDeleteDialog);
+			expect(dialog?.props("modelValue")).toBe(true);
+			expect(arrangementApi.roomArrangementControllerDeleteGroup).not.toHaveBeenCalled();
+
+			dialog?.vm.$emit("confirm", true);
+			await flushPromises();
+
+			expect(arrangementApi.roomArrangementControllerDeleteGroup).toHaveBeenCalledWith(groupA.id, {
+				expectedRevision: 5,
+				disableFutureConfirmation: true,
+			});
+		});
+
+		it("does not delete when the confirmation is cancelled", async () => {
+			await setup();
+
+			sections()[1].vm.$emit("delete");
+			await flushPromises();
+			wrapper?.findComponent(RoomGroupDeleteDialog).vm.$emit("cancel");
+			await flushPromises();
+
+			expect(wrapper?.findComponent(RoomGroupDeleteDialog).props("modelValue")).toBe(false);
+			expect(arrangementApi.roomArrangementControllerDeleteGroup).not.toHaveBeenCalled();
+		});
+
+		it("deletes directly with visible feedback when confirmations are disabled", async () => {
+			const { initial } = await setup({ confirmGroupDeletion: false });
+			arrangementApi.roomArrangementControllerDeleteGroup.mockResolvedValue(
+				respond({ ...initial, revision: 6, groups: [initial.groups[1]] })
+			);
+
+			sections()[1].vm.$emit("delete");
+			await flushPromises();
+
+			expect(wrapper?.findComponent(RoomGroupDeleteDialog).props("modelValue")).toBe(false);
+			expect(arrangementApi.roomArrangementControllerDeleteGroup).toHaveBeenCalledWith(groupA.id, {
+				expectedRevision: 5,
+			});
+			expectNotification("success");
+		});
+
+		it("moves a group down via its menu", async () => {
+			await setup();
+
+			sections()[1].vm.$emit("move-down");
+			await flushPromises();
+
+			expect(arrangementApi.roomArrangementControllerUpdateGroupOrder).toHaveBeenCalledWith({
+				expectedRevision: 5,
+				groupIds: [groupB.id, groupA.id],
+			});
+		});
+
+		it("reorders groups after a completed group drag", async () => {
+			await setup();
+			const groupSortable = wrapper
+				?.findAllComponents({ name: "Sortable" })
+				.find((sortable) => sortable.classes().includes("room-group-list"));
+			const item = wrapper?.get("[data-testid='room-group-1']").element;
+
+			groupSortable?.vm.$emit("end", { item, oldIndex: 1, newIndex: 0 });
+			await flushPromises();
+
+			expect(arrangementApi.roomArrangementControllerUpdateGroupOrder).toHaveBeenCalledTimes(1);
+			expect(arrangementApi.roomArrangementControllerUpdateGroupOrder).toHaveBeenCalledWith({
+				expectedRevision: 5,
+				groupIds: [groupB.id, groupA.id],
+			});
+		});
+	});
+
+	describe("while a change is being saved", () => {
+		const keepPending = () => new Promise<never>(() => undefined);
+
+		it("ignores further group and room actions", async () => {
+			await setup();
+			arrangementApi.roomArrangementControllerUpdateGroup.mockReturnValue(keepPending());
+
+			sections()[1].vm.$emit("toggle", true);
+			await flushPromises();
+			sections()[1].vm.$emit("delete");
+			sections()[1].vm.$emit("move-down");
+			sections()[1].vm.$emit("rename");
+			sections()[0].vm.$emit("move-to-group", rooms[0]);
+			await flushPromises();
+
+			expect(sections()[1].props("disabled")).toBe(true);
+			expect(wrapper?.findComponent(RoomGroupDeleteDialog).props("modelValue")).toBe(false);
+			expect(wrapper?.findComponent(RoomMoveDialog).props("modelValue")).toBe(false);
+			expect(wrapper?.findComponent(RoomGroupNameDialog).props("modelValue")).toBe(false);
+			expect(arrangementApi.roomArrangementControllerUpdateGroup).toHaveBeenCalledTimes(1);
+			expect(arrangementApi.roomArrangementControllerUpdateGroupOrder).not.toHaveBeenCalled();
+		});
+
+		it("keeps the delete dialog open and not dismissible until the request finished", async () => {
+			await setup();
+			arrangementApi.roomArrangementControllerDeleteGroup.mockReturnValue(keepPending());
+			sections()[1].vm.$emit("delete");
+			await flushPromises();
+			const dialog = wrapper?.findComponent(RoomGroupDeleteDialog);
+
+			dialog?.vm.$emit("confirm", false);
+			await flushPromises();
+			dialog?.vm.$emit("cancel");
+			await flushPromises();
+
+			expect(dialog?.props("modelValue")).toBe(true);
+			expect(dialog?.props("isDeleting")).toBe(true);
+			expect(dialog?.findComponent({ name: "SvsDialog" }).props("persistent")).toBe(true);
+		});
+
+		it("keeps the move dialog open and not dismissible until the request finished", async () => {
+			await setup();
+			arrangementApi.roomArrangementControllerMoveRoom.mockReturnValue(keepPending());
+			sections()[0].vm.$emit("move-to-group", rooms[0]);
+			await flushPromises();
+			const dialog = wrapper?.findComponent(RoomMoveDialog);
+
+			dialog?.vm.$emit("confirm", groupB.id);
+			await flushPromises();
+			dialog?.vm.$emit("cancel");
+			await flushPromises();
+
+			expect(dialog?.props("modelValue")).toBe(true);
+			expect(dialog?.props("isMoving")).toBe(true);
+			expect(dialog?.findComponent({ name: "SvsDialog" }).props("persistent")).toBe(true);
+		});
+
+		it("keeps the name dialog not dismissible while saving", async () => {
+			await setup();
+			arrangementApi.roomArrangementControllerCreateGroup.mockReturnValue(keepPending());
+			await wrapper?.get("[data-testid='room-group-add']").trigger("click");
+			const dialog = wrapper?.findComponent(RoomGroupNameDialog);
+
+			dialog?.vm.$emit("submit", "Mathe");
+			await flushPromises();
+			dialog?.vm.$emit("cancel");
+			await flushPromises();
+
+			expect(dialog?.props("modelValue")).toBe(true);
+			expect(dialog?.findComponent({ name: "SvsDialog" }).props("persistent")).toBe(true);
+		});
+	});
+
+	describe("heading hierarchy", () => {
+		it("renders room titles as h2 when no named group exists", async () => {
+			await setup({ ungroupedRoomIds: rooms.map((room) => room.id), groups: [] });
+
+			expect(wrapper?.find("[data-testid='room-group-title']").exists()).toBe(false);
+			expect(wrapper?.findAll(".room-grid-item h2")).toHaveLength(3);
+			expect(wrapper?.findAll(".room-grid-item h3")).toHaveLength(0);
+		});
+
+		it("renders room titles as h3 below the section headings when groups exist", async () => {
+			await setup();
+
+			expect(wrapper?.findAll("h2[data-testid='room-group-title']")).toHaveLength(3);
+			expect(wrapper?.findAll(".room-grid-item h3")).toHaveLength(3);
+		});
+	});
+});
