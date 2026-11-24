@@ -24,7 +24,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { flushPromises } from "@vue/test-utils";
 import { AxiosError, AxiosHeaders } from "axios";
-import { cloneDeep } from "lodash-es";
+import { cloneDeep, omit } from "lodash-es";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 
@@ -123,6 +123,10 @@ describe("RoomGroupedOverview", () => {
 			const group = state.groups.find((g) => g.id === groupId);
 			state.groups = state.groups.filter((g) => g.id !== groupId);
 			state.ungroupedRoomIds.push(...(group?.roomIds ?? []));
+			return commit();
+		});
+		arrangementApi.roomArrangementControllerUpdatePreferences.mockImplementation(async (body) => {
+			Object.assign(state, omit(body, "expectedRevision"));
 			return commit();
 		});
 		arrangementApi.roomArrangementControllerCreateGroup.mockImplementation(async (body) => {
@@ -895,23 +899,6 @@ describe("RoomGroupedOverview", () => {
 			expect(wrapper?.get("[data-testid='room-selection-instruction']").classes()).toContain("d-sr-only");
 			expect(wrapper?.get("[data-testid='room-selection-bar']").classes()).toContain("room-selection-bar--xs");
 		});
-
-		it("reserves space for the floating create room button from md up", async () => {
-			await setup();
-			await wrapper?.setProps({ reserveFabSpace: true });
-			expect(wrapper?.classes()).toContain("room-grouped-overview--fab-clearance");
-
-			await wrapper?.setProps({ reserveFabSpace: false });
-			expect(wrapper?.classes()).not.toContain("room-grouped-overview--fab-clearance");
-		});
-
-		it("does not reserve inline space on phones", async () => {
-			setWindowWidth(400);
-			await setup();
-			await wrapper?.setProps({ reserveFabSpace: true });
-
-			expect(wrapper?.classes()).not.toContain("room-grouped-overview--fab-clearance");
-		});
 	});
 
 	describe("round 5 addendum", () => {
@@ -962,6 +949,69 @@ describe("RoomGroupedOverview", () => {
 			await flushPromises();
 
 			expect(wrapper?.classes()).toContain("room-grouped-overview--selecting");
+		});
+	});
+
+	describe("round 6", () => {
+		it("hides the bottom add row while the first-run line is shown", async () => {
+			await setup({ ungroupedRoomIds: rooms.map((room) => room.id), groups: [] });
+
+			expect(wrapper?.find("[data-testid='room-groups-onboarding']").exists()).toBe(true);
+			expect(wrapper?.find("[data-testid='room-group-add']").exists()).toBe(false);
+		});
+
+		it("offers undo after moving a group via its menu", async () => {
+			const { server } = await setup();
+
+			sections()[1].vm.$emit("move-down");
+			await flushPromises();
+			expect(undoSnackbarText()).toContain("pages.rooms.groups.undo.groupMoved");
+
+			document.querySelector<HTMLElement>("[data-testid='room-arrangement-undo-action']")?.click();
+			await flushPromises();
+
+			expect(server.getState().groups.map((g) => g.id)).toEqual([groupA.id, groupB.id]);
+		});
+	});
+
+	describe("persisted hint dismissal", () => {
+		it("saves the dismissal as a preference and hides the hint at once", async () => {
+			const { server } = await setup({ ungroupedRoomIds: rooms.map((room) => room.id), groups: [] });
+
+			await wrapper?.get("[data-testid='room-groups-onboarding-dismiss']").trigger("click");
+
+			expect(wrapper?.find("[data-testid='room-groups-onboarding']").exists()).toBe(false);
+			await flushPromises();
+			expect(arrangementApi.roomArrangementControllerUpdatePreferences).toHaveBeenCalledWith({
+				expectedRevision: 5,
+				groupingHintDismissed: true,
+			});
+			expect(server.getState().groupingHintDismissed).toBe(true);
+		});
+
+		it("shows the hint again when saving the dismissal fails", async () => {
+			await setup({ ungroupedRoomIds: rooms.map((room) => room.id), groups: [] });
+			arrangementApi.roomArrangementControllerUpdatePreferences.mockRejectedValue(
+				new AxiosError("Forbidden", "ERR_BAD_REQUEST", undefined, undefined, {
+					status: 403,
+					statusText: "",
+					headers: {},
+					config: { headers: new AxiosHeaders() },
+					data: { code: 403, type: "FORBIDDEN", title: "", message: "" },
+				})
+			);
+
+			await wrapper?.get("[data-testid='room-groups-onboarding-dismiss']").trigger("click");
+			await flushPromises();
+
+			expect(wrapper?.find("[data-testid='room-groups-onboarding']").exists()).toBe(true);
+		});
+
+		it("does not show the hint when it was dismissed before", async () => {
+			await setup({ ungroupedRoomIds: rooms.map((room) => room.id), groups: [], groupingHintDismissed: true });
+
+			expect(wrapper?.find("[data-testid='room-groups-onboarding']").exists()).toBe(false);
+			expect(wrapper?.find("[data-testid='room-group-add']").exists()).toBe(true);
 		});
 	});
 });

@@ -12,7 +12,7 @@
 					<KebabMenuAction
 						v-if="isRoomGroupingEnabled"
 						:icon="mdiPlus"
-						:disabled="!isArrangementReady"
+						:disabled="!isArrangementReady || isSelectingRooms"
 						data-testid="rooms-menu-add-group"
 						@click="groupedOverview?.openCreateDialog(roomsMenuSelector)"
 					>
@@ -21,6 +21,7 @@
 					<KebabMenuAction
 						v-if="isRoomSelectionAvailable"
 						:icon="mdiCheckboxOutline"
+						:disabled="isSelectingRooms"
 						data-testid="rooms-menu-select-rooms"
 						@click="groupedOverview?.startSelection()"
 					>
@@ -59,27 +60,22 @@
 						{{ t("pages.rooms.menu.restoreGroupDeleteConfirmation") }}
 					</KebabMenuAction>
 				</KebabMenu>
-				<template v-if="isRoomSelectionAvailable && !isSelectingRooms">
-					<VBtn
-						v-if="xs"
-						variant="text"
-						height="40"
-						:icon="mdiCheckboxOutline"
-						:aria-label="t('pages.rooms.groups.selection.start')"
-						data-testid="room-selection-start"
-						@click="groupedOverview?.startSelection()"
-					/>
-					<VBtn
-						v-else
-						variant="text"
-						height="40"
-						:prepend-icon="mdiCheckboxOutline"
-						data-testid="room-selection-start"
-						@click="groupedOverview?.startSelection()"
-					>
-						{{ t("pages.rooms.groups.selection.start") }}
+				<VBtn
+					v-if="isRoomSelectionAvailable && !isSelectingRooms"
+					variant="text"
+					height="40"
+					:prepend-icon="mdiCheckboxOutline"
+					data-testid="room-selection-start"
+					@click="groupedOverview?.startSelection()"
+				>
+					{{ t(xs ? "pages.rooms.groups.selection.startShort" : "pages.rooms.groups.selection.start") }}
+				</VBtn>
+				<!-- Grouped overview: a regular header action instead of the floating button, which covered controls. -->
+				<div v-if="isHeaderCreateButtonVisible" class="ml-auto" data-testid="fab-add-room">
+					<VBtn color="primary" :variant="xs ? 'text' : 'flat'" height="40" :prepend-icon="mdiPlus" to="/rooms/new">
+						{{ t(xs ? "common.actions.create" : "pages.rooms.fab.title") }}
 					</VBtn>
-				</template>
+				</div>
 			</div>
 		</template>
 		<RoomsWelcomeInfo class="mt-8" />
@@ -93,11 +89,7 @@
 						<RoomsEmptyStateSvg />
 					</template>
 				</EmptyState>
-				<RoomGroupedOverview
-					ref="groupedOverview"
-					:reserve-fab-space="fabAction !== undefined"
-					@selection-change="isSelectingRooms = $event"
-				/>
+				<RoomGroupedOverview ref="groupedOverview" @selection-change="isSelectingRooms = $event" />
 			</template>
 		</template>
 		<template v-else>
@@ -207,11 +199,15 @@ const isSelectingRooms = ref(false);
 // The create dialog returns focus to the page menu trigger when it was opened from there.
 const roomsMenuSelector = "[data-testid='rooms-menu']";
 
-// While rooms are selected, the button would cover the selection bar at the bottom of the viewport.
+const canCreateRoom = computed(() => toValue(useAppStore().hasPermission(Permission.SCHOOL_CREATE_ROOM)));
+
+const isHeaderCreateButtonVisible = computed(
+	() => isRoomGroupingEnabled.value && canCreateRoom.value && !isSelectingRooms.value
+);
+
+// The floating button is only used for the flat list; the grouped overview has a header action instead.
 const fabAction = computed(() => {
-	if (isSelectingRooms.value) return;
-	const canCreateRoom = toValue(useAppStore().hasPermission(Permission.SCHOOL_CREATE_ROOM));
-	if (!canCreateRoom) return;
+	if (isRoomGroupingEnabled.value || !canCreateRoom.value) return;
 
 	return [
 		{

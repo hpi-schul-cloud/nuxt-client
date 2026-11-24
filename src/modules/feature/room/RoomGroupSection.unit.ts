@@ -9,6 +9,9 @@ import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { VCheckbox } from "vuetify/components";
 
+const { notifyOnScreenReader } = vi.hoisted(() => ({ notifyOnScreenReader: vi.fn() }));
+vi.mock("@/composables/ariaLiveNotifier", () => ({ useAriaLiveNotifier: () => ({ notifyOnScreenReader }) }));
+
 describe("RoomGroupSection", () => {
 	let wrapper: ReturnType<typeof mount<typeof RoomGroupSection>> | undefined;
 
@@ -369,6 +372,52 @@ describe("RoomGroupSection", () => {
 
 			expect(wrapper?.get("h2").classes()).not.toContain("room-group-heading-title--ungrouped");
 			expect(wrapper?.find("h2 > [data-testid='room-group-toggle']").exists()).toBe(true);
+		});
+	});
+
+	describe("round 6", () => {
+		const arrangeable = { arrangeRooms: true } as unknown as RoomItemResponseAllowedOperations;
+		const mountSelecting = (rooms: RoomItem[], selectedRoomIds: string[], collapsed = false) =>
+			mount(RoomGroupSection, {
+				props: { rooms, group: group({ name: "Mathe", rooms, collapsed }), selectable: true, selectedRoomIds },
+				global: { plugins: [createTestingVuetify(), createTestingI18n()], stubs: { RouterLink: true } },
+			});
+
+		it("labels the select all checkbox visibly from sm up", () => {
+			wrapper = mountSelecting(roomItemFactory.buildList(1, { allowedOperations: arrangeable }), []);
+
+			expect(wrapper.getComponent(VCheckbox).props("label")).toBe("pages.rooms.groups.selection.selectAllShort");
+		});
+
+		it("shows how many rooms of a collapsed group are selected", () => {
+			const rooms = roomItemFactory.buildList(3, { allowedOperations: arrangeable });
+			wrapper = mountSelecting(rooms, [rooms[0].id], true);
+
+			expect(wrapper.get("[data-testid='room-group-selected-count']").text()).toBe(
+				"pages.rooms.groups.selection.selectedOfTotal"
+			);
+		});
+
+		it("does not show the selected count for an expanded group", () => {
+			const rooms = roomItemFactory.buildList(2, { allowedOperations: arrangeable });
+			wrapper = mountSelecting(rooms, [rooms[0].id]);
+
+			expect(wrapper.find("[data-testid='room-group-selected-count']").exists()).toBe(false);
+		});
+
+		it("announces how many hidden rooms were selected in a collapsed group", async () => {
+			const rooms = roomItemFactory.buildList(2, { allowedOperations: arrangeable });
+			wrapper = mountSelecting(rooms, [], true);
+
+			await wrapper.get("[data-testid='room-group-select-all'] input").setValue(true);
+
+			expect(notifyOnScreenReader).toHaveBeenCalledWith("pages.rooms.groups.selection.hiddenSelected");
+		});
+
+		it("names the single section when no heading is shown", () => {
+			setup({ rooms: roomItemFactory.buildList(1), showHeading: false });
+
+			expect(wrapper?.get("[data-testid='room-group-ungrouped']").attributes("aria-label")).toBe("pages.rooms.title");
 		});
 	});
 });

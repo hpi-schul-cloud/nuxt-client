@@ -11,6 +11,7 @@ import {
 	RoomArrangementApiFactory,
 	RoomArrangementResponse,
 	RoomGroupCreatedResponse,
+	UpdateRoomArrangementPreferencesBodyParams,
 } from "@api-server";
 import { notifyError, useAppStore } from "@data-app";
 import { AxiosPromise, isAxiosError } from "axios";
@@ -57,12 +58,15 @@ export type RoomArrangementMutationKind =
 export type RoomArrangementUndoDescription =
 	| { kind: "moveRoom"; roomName: string; targetName: string | null; targetCollapsed: boolean; reordered: boolean }
 	| { kind: "moveRooms"; count: number; targetName: string | null; targetCollapsed: boolean }
-	| { kind: "deleteGroup"; groupName: string };
+	| { kind: "deleteGroup"; groupName: string }
+	| { kind: "reorderGroups"; groupName: string };
 
-type UndoAction = { id: number; revision: number; description: RoomArrangementUndoDescription } & (
+type UndoRestore =
 	| { type: "restoreRooms"; placements: RoomPlacement[] }
 	| { type: "restoreGroup"; name: string; collapsed: boolean; index: number; roomIds: string[] }
-);
+	| { type: "restoreGroupOrder"; groupIds: string[] };
+
+type UndoAction = { id: number; revision: number; description: RoomArrangementUndoDescription } & UndoRestore;
 
 type MutationOptions = {
 	/** Step of an undo sequence: no notifications and no refetch, the sequence handles failures itself. */
@@ -105,6 +109,7 @@ const toSnapshot = (response: RoomArrangementResponse): RoomArrangement => ({
 	ungroupedRoomIds: [...response.ungroupedRoomIds],
 	groups: response.groups.map((group) => ({ ...group, roomIds: [...group.roomIds] })),
 	confirmGroupDeletion: response.confirmGroupDeletion,
+	groupingHintDismissed: response.groupingHintDismissed,
 });
 
 const getSectionRoomIds = (arrangement: RoomArrangement, groupId: string | null) =>
@@ -148,8 +153,6 @@ export const useRoomArrangementStore = defineStore("room-arrangement-store", () 
 	const roomsStatus = ref<RoomArrangementLoadStatus>("idle");
 	const pendingMutation = ref<RoomArrangementMutationKind | null>(null);
 	const undoAction = ref<UndoAction | null>(null);
-	// Kept in memory only: hiding the first-run hint lasts for this page session.
-	const isOnboardingDismissed = ref(false);
 	const isUndoing = ref(false);
 
 	// Collapse toggles made while another change is saved: shown at once, persisted afterwards.
@@ -484,7 +487,7 @@ export const useRoomArrangementStore = defineStore("room-arrangement-store", () 
 		return result;
 	};
 
-	const updateGroupOrder = (groupIds: string[], options: MutationOptions = {}) =>
+	const updateGroupOrderCommand = (groupIds: string[], options: MutationOptions = {}) =>
 		runMutation(
 			"reorderGroups",
 			(expectedRevision) => arrangementApi.roomArrangementControllerUpdateGroupOrder({ expectedRevision, groupIds }),
@@ -498,6 +501,21 @@ export const useRoomArrangementStore = defineStore("room-arrangement-store", () 
 			options
 		);
 
+	/** Saves a new group order; the moved group names the change in the undo offer. */
+	const updateGroupOrder = async (groupIds: string[], movedGroupId?: string) => {
+		const base = confirmed.value;
+		const result = await updateGroupOrderCommand(groupIds);
+		if (result.success && base && result.arrangement.revision !== base.revision) {
+			const movedGroup = result.arrangement.groups.find((g) => g.id === movedGroupId);
+			recordUndo(
+				result.arrangement.revision,
+				{ kind: "reorderGroups", groupName: movedGroup?.name ?? "" },
+				{ type: "restoreGroupOrder", groupIds: base.groups.map((g) => g.id) }
+			);
+		}
+		return result;
+	};
+
 	const moveGroup = (groupId: string, offset: -1 | 1) => {
 		const ids = (confirmed.value?.groups ?? []).map((g) => g.id);
 		const index = ids.indexOf(groupId);
@@ -506,7 +524,7 @@ export const useRoomArrangementStore = defineStore("room-arrangement-store", () 
 			return Promise.resolve<RoomArrangementMutationResult>({ success: false, failure: "rejected" });
 		}
 		[ids[index], ids[targetIndex]] = [ids[targetIndex], ids[index]];
-		return updateGroupOrder(ids);
+		return updateGroupOrder(ids, groupId);
 	};
 
 	const sectionName = (arrangement: RoomArrangement, groupId: string | null) =>
@@ -581,19 +599,7 @@ export const useRoomArrangementStore = defineStore("room-arrangement-store", () 
 	};
 
 	// Undo
-	const recordUndo = (
-		revision: number,
-		description: RoomArrangementUndoDescription,
-		action:
-			| { type: "restoreRooms"; placements: RoomPlacement[] }
-			| {
-					type: "restoreGroup";
-					name: string;
-					collapsed: boolean;
-					index: number;
-					roomIds: string[];
-			  }
-	) => {
+	const recordUndo = (revision: number, description: RoomArrangementUndoDescription, action: UndoRestore) => {
 		undoActionId++;
 		undoAction.value = { id: undoActionId, revision, description, ...action };
 	};
@@ -647,7 +653,7 @@ export const useRoomArrangementStore = defineStore("room-arrangement-store", () 
 		const targetIndex = Math.min(action.index, order.length);
 		if (targetIndex < order.length) {
 			order.splice(targetIndex, 0, groupId);
-			const reordered = await updateGroupOrder(order, { undoStep: true });
+			const reordered = await updateGroupOrderCommand(order, { undoStep: true });
 			if (!reordered.success) return false;
 		}
 
@@ -656,6 +662,26 @@ export const useRoomArrangementStore = defineStore("room-arrangement-store", () 
 			if (!collapsed.success) return false;
 		}
 		return true;
+	};
+
+	// Only possible while the same groups exist; anything else is a change made elsewhere.
+	const restoreGroupOrder = async (groupIds: string[]) => {
+		const currentIds = (confirmed.value?.groups ?? []).map((g) => g.id);
+		const isSameSet = currentIds.length === groupIds.length && groupIds.every((id) => currentIds.includes(id));
+		if (!isSameSet) return false;
+		const result = await updateGroupOrderCommand(groupIds, { undoStep: true });
+		return result.success;
+	};
+
+	const runUndoRestore = (action: UndoRestore) => {
+		switch (action.type) {
+			case "restoreRooms":
+				return restoreRooms(action.placements);
+			case "restoreGroup":
+				return restoreGroup(action);
+			case "restoreGroupOrder":
+				return restoreGroupOrder(action.groupIds);
+		}
 	};
 
 	/** Reverts the last undoable change with ordinary revisioned commands, one request at a time. */
@@ -668,7 +694,7 @@ export const useRoomArrangementStore = defineStore("room-arrangement-store", () 
 		undoAction.value = null;
 		let success: boolean;
 		try {
-			success = action.type === "restoreRooms" ? await restoreRooms(action.placements) : await restoreGroup(action);
+			success = await runUndoRestore(action);
 		} finally {
 			if (requestEpoch === epoch) isUndoing.value = false;
 		}
@@ -686,16 +712,29 @@ export const useRoomArrangementStore = defineStore("room-arrangement-store", () 
 		undoAction.value = null;
 	};
 
-	const setConfirmGroupDeletion = (value: boolean) =>
+	type ArrangementPreferences = Omit<UpdateRoomArrangementPreferencesBodyParams, "expectedRevision">;
+
+	// Generic, so further preferences only need the regenerated body type.
+	const updatePreferences = (preferences: ArrangementPreferences) =>
 		runMutation(
 			"updatePreferences",
 			(expectedRevision) =>
-				arrangementApi.roomArrangementControllerUpdatePreferences({ expectedRevision, confirmGroupDeletion: value }),
+				arrangementApi.roomArrangementControllerUpdatePreferences({ expectedRevision, ...preferences }),
 			t("common.notification.error.preferences.update"),
 			(draft) => {
-				draft.confirmGroupDeletion = value;
+				Object.assign(draft, preferences);
 			}
 		);
+
+	const setConfirmGroupDeletion = (value: boolean) => updatePreferences({ confirmGroupDeletion: value });
+
+	// Saved per user like the other preferences; the working snapshot reflects the optimistic state.
+	const isOnboardingDismissed = computed(() => working.value?.groupingHintDismissed === true);
+
+	const dismissOnboarding = async () => {
+		const result = await updatePreferences({ groupingHintDismissed: true });
+		return result.success;
+	};
 
 	const reset = () => {
 		epoch++;
@@ -707,7 +746,6 @@ export const useRoomArrangementStore = defineStore("room-arrangement-store", () 
 		pendingMutation.value = null;
 		undoAction.value = null;
 		isUndoing.value = false;
-		isOnboardingDismissed.value = false;
 		queuedCollapse.clear();
 	};
 
@@ -761,9 +799,8 @@ export const useRoomArrangementStore = defineStore("room-arrangement-store", () 
 		undo,
 		dismissUndo,
 		isOnboardingDismissed,
-		dismissOnboarding: () => {
-			isOnboardingDismissed.value = true;
-		},
+		dismissOnboarding,
+		updatePreferences,
 		reset,
 	};
 });

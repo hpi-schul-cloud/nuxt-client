@@ -2010,8 +2010,14 @@ export default {
 	"pages.rooms.groups.deleteDialog.textEmpty":
 		"Se eliminará el grupo «{name}». Este grupo está vacío, no se moverá ninguna sala.",
 	"pages.rooms.groups.onboarding.dismiss": "Ocultar",
-	"pages.rooms.groups.selection.selectAll": "Seleccionar todas las salas de «{name}»",
+	"pages.rooms.groups.selection.selectAll": "Seleccionar todo: salas de «{name}»",
 	"pages.rooms.groups.selection.instruction": "Haz clic en las salas para seleccionarlas. Esc termina la selección.",
+	"pages.rooms.groups.selection.selectAllShort": "Seleccionar todo",
+	"pages.rooms.groups.selection.selectedOfTotal": "{selected} de {total} seleccionadas",
+	"pages.rooms.groups.selection.hiddenSelected":
+		"{count} sala oculta de «{name}» seleccionada. | {count} salas ocultas de «{name}» seleccionadas.",
+	"pages.rooms.groups.selection.startShort": "Seleccionar",
+	"pages.rooms.groups.undo.groupMoved": "Se ha movido el grupo «{name}».",
 	"pages.rooms.archived.title": "Salas archivadas",
 	"pages.rooms.archived.chip": "Sala archivada",
 	"pages.rooms.archived.emptyState": "Actualmente no hay salas archivadas",

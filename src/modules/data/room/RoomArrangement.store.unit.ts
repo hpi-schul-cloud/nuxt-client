@@ -717,4 +717,83 @@ describe("useRoomArrangementStore", () => {
 			expect(store.isUndoOffered).toBe(false);
 		});
 	});
+
+	describe("round 6", () => {
+		it("offers undo for a group move and restores the previous order", async () => {
+			const { store, initial } = await setupLoaded();
+			const swapped = { ...initial, revision: 4, groups: [initial.groups[1], initial.groups[0]] };
+			arrangementApi.roomArrangementControllerUpdateGroupOrder
+				.mockResolvedValueOnce(respond(swapped))
+				.mockResolvedValueOnce(respond({ ...initial, revision: 5 }));
+
+			await store.moveGroup(groupA.id, 1);
+			expect(store.undoDescription).toEqual({ kind: "reorderGroups", groupName: "Informatik" });
+
+			const isUndone = await store.undo();
+
+			expect(isUndone).toBe(true);
+			expect(arrangementApi.roomArrangementControllerUpdateGroupOrder).toHaveBeenLastCalledWith({
+				expectedRevision: 4,
+				groupIds: [groupA.id, groupB.id],
+			});
+		});
+
+		it("does not offer undo for the group order restored by an undo itself", async () => {
+			const { store, initial } = await setupLoaded();
+			arrangementApi.roomArrangementControllerUpdateGroupOrder
+				.mockResolvedValueOnce(respond({ ...initial, revision: 4, groups: [initial.groups[1], initial.groups[0]] }))
+				.mockResolvedValueOnce(respond({ ...initial, revision: 5 }));
+
+			await store.moveGroup(groupA.id, 1);
+			await store.undo();
+
+			expect(store.isUndoOffered).toBe(false);
+		});
+
+		it("updates preferences generically with an optimistic change", async () => {
+			const { store } = await setupLoaded();
+
+			store.updatePreferences({ confirmGroupDeletion: false });
+
+			expect(store.working?.confirmGroupDeletion).toBe(false);
+			expect(arrangementApi.roomArrangementControllerUpdatePreferences).toHaveBeenCalledWith({
+				expectedRevision: 3,
+				confirmGroupDeletion: false,
+			});
+		});
+
+		it("persists the dismissed first-run hint as a preference", async () => {
+			const { store, initial } = await setupLoaded();
+			arrangementApi.roomArrangementControllerUpdatePreferences.mockResolvedValue(
+				respond({ ...initial, revision: 4, groupingHintDismissed: true })
+			);
+
+			const pending = store.dismissOnboarding();
+			expect(store.isOnboardingDismissed).toBe(true);
+
+			expect(await pending).toBe(true);
+			expect(arrangementApi.roomArrangementControllerUpdatePreferences).toHaveBeenCalledWith({
+				expectedRevision: 3,
+				groupingHintDismissed: true,
+			});
+			expect(store.confirmed?.groupingHintDismissed).toBe(true);
+		});
+
+		it("rolls the dismissed hint back when saving fails", async () => {
+			const { store } = await setupLoaded();
+			arrangementApi.roomArrangementControllerUpdatePreferences.mockRejectedValue(apiError(403, "FORBIDDEN"));
+
+			expect(await store.dismissOnboarding()).toBe(false);
+			expect(store.isOnboardingDismissed).toBe(false);
+		});
+
+		it("restores delete confirmations without touching the hint preference", async () => {
+			const { store } = await setupLoaded({ confirmGroupDeletion: false });
+
+			store.setConfirmGroupDeletion(true);
+
+			const [body] = arrangementApi.roomArrangementControllerUpdatePreferences.mock.calls[0];
+			expect(body).toStrictEqual({ expectedRevision: 3, confirmGroupDeletion: true });
+		});
+	});
 });

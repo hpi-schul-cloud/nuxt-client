@@ -1983,8 +1983,14 @@ export default {
 	"pages.rooms.groups.deleteDialog.textEmpty":
 		"Групу «{name}» буде видалено. Ця група порожня, жодну кімнату не буде переміщено.",
 	"pages.rooms.groups.onboarding.dismiss": "Приховати",
-	"pages.rooms.groups.selection.selectAll": "Вибрати всі кімнати в «{name}»",
+	"pages.rooms.groups.selection.selectAll": "Вибрати всі: кімнати в «{name}»",
 	"pages.rooms.groups.selection.instruction": "Натисніть на кімнати, щоб вибрати їх. Esc завершує вибір.",
+	"pages.rooms.groups.selection.selectAllShort": "Вибрати всі",
+	"pages.rooms.groups.selection.selectedOfTotal": "Вибрано {selected} з {total}",
+	"pages.rooms.groups.selection.hiddenSelected":
+		"Вибрано приховані кімнати в «{name}»: {count}. | Вибрано приховані кімнати в «{name}»: {count}.",
+	"pages.rooms.groups.selection.startShort": "Вибрати",
+	"pages.rooms.groups.undo.groupMoved": "Групу «{name}» переміщено.",
 	"pages.rooms.archived.title": "Архівовані кімнати",
 	"pages.rooms.archived.chip": "Архівована кімната",
 	"pages.rooms.archived.emptyState": "Наразі немає архівованих кімнат",

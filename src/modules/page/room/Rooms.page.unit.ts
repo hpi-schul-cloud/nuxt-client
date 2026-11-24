@@ -35,7 +35,7 @@ import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { nextTick, toValue } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
-import { VSkeletonLoader } from "vuetify/components";
+import { VBtn, VSkeletonLoader } from "vuetify/components";
 
 vi.mock("@feature-import/import-flow.composable");
 
@@ -482,20 +482,88 @@ describe("RoomsPage", () => {
 				expect(wrapper.findAll("[data-testid=room-card-select]")).toHaveLength(2);
 			});
 
-			it("should hide the create room button while rooms are selected", async () => {
+			it("should show a header create button instead of the floating button", async () => {
 				mockArrangementApi({ groups: [roomGroupResponseFactory.build()] });
 				const { wrapper } = setup(undefined, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
 				await flushPromises();
-				const wireframe = wrapper.findComponent(DefaultWireframe);
-				expect(wireframe.props("fabItems")).toBeTruthy();
+
+				expect(wrapper.findComponent(DefaultWireframe).props("fabItems")).toBeUndefined();
+				const button = wrapper.get("[data-testid=fab-add-room]").getComponent(VBtn);
+				expect(button.props("to")).toBe("/rooms/new");
+				expect(button.text()).toBe("pages.rooms.fab.title");
+				expect(button.props("color")).toBe("primary");
+			});
+
+			it("should hide the header create button while rooms are selected", async () => {
+				mockArrangementApi({ groups: [roomGroupResponseFactory.build()] });
+				const { wrapper } = setup(undefined, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+				await flushPromises();
 
 				wrapper.findComponent(RoomGroupedOverview).vm.$emit("selection-change", true);
 				await flushPromises();
-				expect(wireframe.props("fabItems")).toBeUndefined();
+				expect(wrapper.find("[data-testid=fab-add-room]").exists()).toBe(false);
 
 				wrapper.findComponent(RoomGroupedOverview).vm.$emit("selection-change", false);
 				await flushPromises();
-				expect(wireframe.props("fabItems")).toBeTruthy();
+				expect(wrapper.find("[data-testid=fab-add-room]").exists()).toBe(true);
+			});
+
+			it("should not show the header create button without the permission", async () => {
+				mockArrangementApi();
+				const { wrapper } = setup(undefined, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+				createTestAppStoreWithPermissions([]);
+				await flushPromises();
+
+				expect(wrapper.find("[data-testid=fab-add-room]").exists()).toBe(false);
+				expect(wrapper.findComponent(DefaultWireframe).props("fabItems")).toBeUndefined();
+			});
+
+			it("should disable adding a group and selecting rooms in the page menu while selecting", async () => {
+				const rooms = roomItemFactory.buildList(2, {
+					allowedOperations: { arrangeRooms: true } as unknown as RoomItemResponseAllowedOperations,
+				});
+				mockArrangementApi({
+					ungroupedRoomIds: rooms.map((room) => room.id),
+					groups: [roomGroupResponseFactory.build()],
+				});
+				const { wrapper } = setup(rooms, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+				await flushPromises();
+				wrapper.findComponent(RoomGroupedOverview).vm.$emit("selection-change", true);
+				await flushPromises();
+
+				await wrapper.get("[data-testid=rooms-menu]").trigger("click");
+				const actions = wrapper.findAllComponents(KebabMenuAction);
+				const byTestId = (testId: string) => actions.find((action) => action.attributes("data-testid") === testId);
+				expect(byTestId("rooms-menu-add-group")?.props("disabled")).toBe(true);
+				expect(byTestId("rooms-menu-select-rooms")?.props("disabled")).toBe(true);
+			});
+
+			describe("on phones", () => {
+				beforeEach(() => {
+					Object.defineProperty(window, "innerWidth", { writable: true, configurable: true, value: 400 });
+				});
+				afterEach(() => {
+					Object.defineProperty(window, "innerWidth", { writable: true, configurable: true, value: 1024 });
+				});
+
+				it("should use short labels for create and select", async () => {
+					const rooms = roomItemFactory.buildList(2, {
+						allowedOperations: { arrangeRooms: true } as unknown as RoomItemResponseAllowedOperations,
+					});
+					mockArrangementApi({
+						ungroupedRoomIds: rooms.map((room) => room.id),
+						groups: [roomGroupResponseFactory.build()],
+					});
+					const { wrapper } = setup(rooms, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+					await flushPromises();
+
+					const create = wrapper.get("[data-testid=fab-add-room]").getComponent(VBtn);
+					expect(create.text()).toBe("common.actions.create");
+					expect(create.props("variant")).toBe("text");
+					expect(wrapper.get("[data-testid=room-selection-start]").text()).toBe(
+						"pages.rooms.groups.selection.startShort"
+					);
+				});
 			});
 
 			it("should offer selecting rooms in the page header when a group exists", async () => {
@@ -525,14 +593,6 @@ describe("RoomsPage", () => {
 				await flushPromises();
 
 				expect(wrapper.find("[data-testid=room-selection-start]").exists()).toBe(false);
-			});
-
-			it("should let the overview reserve space for the create room button", async () => {
-				mockArrangementApi({ groups: [roomGroupResponseFactory.build()] });
-				const { wrapper } = setup(undefined, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
-				await flushPromises();
-
-				expect(wrapper.findComponent(RoomGroupedOverview).props("reserveFabSpace")).toBe(true);
 			});
 
 			it("should restore delete confirmations from the rooms menu", async () => {

@@ -3,7 +3,6 @@
 		ref="rootRef"
 		class="room-grouped-overview mt-8"
 		:class="{
-			'room-grouped-overview--fab-clearance': reserveFabSpace && mdAndUp,
 			'room-grouped-overview--selecting': selection.isActive,
 		}"
 		data-testid="room-grouped-overview"
@@ -87,7 +86,8 @@
 			/>
 		</template>
 
-		<div v-if="!hasLoadError" class="room-group-add-row mt-6">
+		<!-- While the first-run line is shown, its own button is the entry for adding a group. -->
+		<div v-if="!hasLoadError && !isOnboardingVisible" class="room-group-add-row mt-6">
 			<VBtn
 				variant="tonal"
 				size="large"
@@ -231,14 +231,6 @@ import { computed, nextTick, reactive, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
-withDefaults(
-	defineProps<{
-		/** The page shows the floating create room button, which must not cover controls of the overview. */
-		reserveFabSpace?: boolean;
-	}>(),
-	{ reserveFabSpace: false }
-);
-
 const { t } = useI18n();
 const { notifyOnScreenReader } = useAriaLiveNotifier();
 
@@ -263,7 +255,7 @@ const {
 const { rooms } = storeToRefs(useRoomStore());
 
 const rootRef = useTemplateRef("rootRef");
-const { xs, mdAndUp } = useDisplay();
+const { xs } = useDisplay();
 const reducedMotion = usePreferredReducedMotion();
 
 const isDraggingRoom = ref(false);
@@ -478,7 +470,7 @@ const onGroupDropEnd = async (event: SortableEvent) => {
 	ids.splice(newIndex, 0, movedId);
 
 	const movedGroup = groups.value.find((group) => group.id === movedId);
-	const result = await arrangementStore.updateGroupOrder(ids);
+	const result = await arrangementStore.updateGroupOrder(ids, movedId);
 	if (result.success && movedGroup) {
 		notifyOnScreenReader(
 			t("pages.rooms.groups.announce.groupMoved", { name: movedGroup.name, position: groupPosition(movedId) })
@@ -637,7 +629,7 @@ const isOnboardingVisible = computed(() => {
 });
 
 const dismissOnboarding = async () => {
-	arrangementStore.dismissOnboarding();
+	await arrangementStore.dismissOnboarding();
 	await nextTick();
 	focusElement(addButtonSelector);
 };
@@ -763,6 +755,8 @@ const describeUndo = (description: RoomArrangementUndoDescription) => {
 			);
 		case "deleteGroup":
 			return t("pages.rooms.groups.announce.deleted", { name: description.groupName });
+		case "reorderGroups":
+			return t("pages.rooms.groups.undo.groupMoved", { name: description.groupName });
 	}
 };
 
@@ -802,11 +796,6 @@ defineExpose({ openCreateDialog, startSelection });
 
 .room-group-add-row :deep(.v-btn__content) {
 	white-space: normal;
-}
-
-/* Space for the floating create room button (large pill plus its offset), see DefaultWireframe. */
-.room-grouped-overview--fab-clearance {
-	padding-inline-end: 216px;
 }
 
 /* Room below the content while selecting, so the last cards can be scrolled fully above the sticky bar. */

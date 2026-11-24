@@ -13,4 +13,5 @@ export const roomArrangementResponseFactory = Factory.define<RoomArrangementResp
 	ungroupedRoomIds: [],
 	groups: [],
 	confirmGroupDeletion: true,
+	groupingHintDismissed: false,
 }));

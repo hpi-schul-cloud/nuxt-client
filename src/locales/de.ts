@@ -2009,8 +2009,14 @@ export default {
 	"pages.rooms.groups.deleteDialog.textEmpty":
 		"Die Gruppe „{name}“ wird gelöscht. Diese Gruppe ist leer, es werden keine Räume verschoben.",
 	"pages.rooms.groups.onboarding.dismiss": "Ausblenden",
-	"pages.rooms.groups.selection.selectAll": "Alle Räume in „{name}“ auswählen",
+	"pages.rooms.groups.selection.selectAll": "Alle auswählen: Räume in „{name}“",
 	"pages.rooms.groups.selection.instruction": "Räume anklicken, um sie auszuwählen. Esc beendet die Auswahl.",
+	"pages.rooms.groups.selection.selectAllShort": "Alle auswählen",
+	"pages.rooms.groups.selection.selectedOfTotal": "{selected} von {total} ausgewählt",
+	"pages.rooms.groups.selection.hiddenSelected":
+		"{count} ausgeblendeter Raum in „{name}“ ausgewählt. | {count} ausgeblendete Räume in „{name}“ ausgewählt.",
+	"pages.rooms.groups.selection.startShort": "Auswählen",
+	"pages.rooms.groups.undo.groupMoved": "Die Gruppe „{name}“ wurde verschoben.",
 	"pages.rooms.archived.title": "Archivierte Räume",
 	"pages.rooms.archived.chip": "Archivierter Raum",
 	"pages.rooms.archived.emptyState": "Aktuell gibt es keine archivierten Räume",

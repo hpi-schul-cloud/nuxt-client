@@ -1964,8 +1964,14 @@ export default {
 	"pages.rooms.groups.deleteDialog.textEmpty":
 		'The group "{name}" will be deleted. This group is empty, no rooms will be moved.',
 	"pages.rooms.groups.onboarding.dismiss": "Hide",
-	"pages.rooms.groups.selection.selectAll": 'Select all rooms in "{name}"',
+	"pages.rooms.groups.selection.selectAll": 'Select all: rooms in "{name}"',
 	"pages.rooms.groups.selection.instruction": "Click rooms to select them. Esc ends the selection.",
+	"pages.rooms.groups.selection.selectAllShort": "Select all",
+	"pages.rooms.groups.selection.selectedOfTotal": "{selected} of {total} selected",
+	"pages.rooms.groups.selection.hiddenSelected":
+		'{count} hidden room in "{name}" selected. | {count} hidden rooms in "{name}" selected.',
+	"pages.rooms.groups.selection.startShort": "Select",
+	"pages.rooms.groups.undo.groupMoved": 'The group "{name}" was moved.',
 	"pages.rooms.archived.title": "Archived rooms",
 	"pages.rooms.archived.chip": "Archived room",
 	"pages.rooms.archived.emptyState": "There are currently no archived rooms",

@@ -10,6 +10,7 @@
 		:data-testid="group ? `room-group-${groupIndex}` : 'room-group-ungrouped'"
 		:data-group-id="group?.id"
 		:aria-labelledby="showHeading ? headingId : undefined"
+		:aria-label="showHeading ? undefined : t('pages.rooms.title')"
 	>
 		<div v-if="showHeading" class="room-group-header d-flex align-center ga-2">
 			<div class="room-group-heading">
@@ -29,6 +30,13 @@
 							data-testid="room-group-count"
 						>
 							{{ roomCountText }}
+						</span>
+						<span
+							v-if="selectable && isCollapsed"
+							class="room-group-selected-count text-body-2 text-medium-emphasis text-no-wrap"
+							data-testid="room-group-selected-count"
+						>
+							{{ t("pages.rooms.groups.selection.selectedOfTotal", { selected: selectedCount, total: rooms.length }) }}
 						</span>
 						<VIcon
 							class="room-group-chevron"
@@ -61,10 +69,11 @@
 				:model-value="isAllSelected"
 				:indeterminate="isSomeSelected"
 				:disabled="selectableRoomIds.length === 0"
+				:label="xs ? undefined : t('pages.rooms.groups.selection.selectAllShort')"
 				:aria-label="t('pages.rooms.groups.selection.selectAll', { name: title })"
 				hide-details
 				data-testid="room-group-select-all"
-				@update:model-value="emit('select-all', selectableRoomIds, $event === true)"
+				@update:model-value="onSelectAll($event === true)"
 			/>
 			<span
 				v-if="group && !selectable"
@@ -166,6 +175,7 @@
 <script setup lang="ts">
 import { ROOM_SORTABLE_GROUP, RoomDrop, UNGROUPED_SECTION_KEY } from "./room-arrangement-drop";
 import RoomGrid from "./RoomGrid.vue";
+import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 import { RoomItem } from "@/types/room/Room";
 import { RoomGroupView } from "@data-room";
 import {
@@ -181,6 +191,7 @@ import { KebabMenu, KebabMenuAction } from "@ui-kebab-menu";
 import { Sortable } from "sortablejs-vue3";
 import { computed, nextTick, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
 
 const props = withDefaults(
 	defineProps<{
@@ -227,6 +238,8 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { xs } = useDisplay();
+const { notifyOnScreenReader } = useAriaLiveNotifier();
 
 const sectionRef = useTemplateRef("sectionRef");
 const contentRef = useTemplateRef("contentRef");
@@ -252,6 +265,15 @@ const isAllSelected = computed(
 	() => selectableRoomIds.value.length > 0 && selectedCount.value === selectableRoomIds.value.length
 );
 const isSomeSelected = computed(() => selectedCount.value > 0 && !isAllSelected.value);
+
+// Rooms of a collapsed group are not visible, so their selection is confirmed for screen readers.
+const onSelectAll = (selected: boolean) => {
+	emit("select-all", selectableRoomIds.value, selected);
+	if (selected && isCollapsed.value) {
+		const count = selectableRoomIds.value.length;
+		notifyOnScreenReader(t("pages.rooms.groups.selection.hiddenSelected", { count, name: title.value }, count));
+	}
+};
 
 // Renaming, moving or deleting groups would interfere with a running selection.
 const isGroupActionDisabled = computed(() => props.disabled || props.selectable);
