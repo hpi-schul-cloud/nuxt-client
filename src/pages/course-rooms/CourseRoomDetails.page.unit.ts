@@ -10,6 +10,7 @@ import {
 	singleColumnBoardResponseFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardImportTargetType } from "@api-board-import";
 import {
 	BoardElementResponse,
 	BoardElementResponseType as BoardTypes,
@@ -21,12 +22,13 @@ import {
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
+import { BoardImportDialog } from "@feature-board-import";
 import { useCopyFlow } from "@feature-copy";
 import { useShareFlow } from "@feature-share";
 import { createTestingPinia } from "@pinia/testing";
 import { DefaultWireframe } from "@ui-layout";
 import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
-import { SpeedDialMenu } from "@ui-speed-dial-menu";
+import { FabAction, SpeedDialMenu } from "@ui-speed-dial-menu";
 import { flushPromises, shallowMount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
@@ -229,6 +231,53 @@ describe("CourseRoomDetails.page.vue", () => {
 					const addTaskActionButton = wrapper.find('[data-testid="fab_button_add_task"]');
 
 					expect(addTaskActionButton.exists()).toBe(true);
+				});
+			});
+		});
+
+		describe("'import board' button", () => {
+			const getImportAction = (wrapper: VueWrapper) => {
+				const fabItems = wrapper.findComponent(DefaultWireframe).props("fabItems") as FabAction[] | undefined;
+				const importAction = fabItems?.find((item) => item.dataTestId === "fab_button_import_board");
+
+				return importAction;
+			};
+
+			describe("when 'FEATURE_BOARD_IMPORT_ENABLED' is turned off", () => {
+				it("should not offer the import", async () => {
+					createTestEnvStore({ FEATURE_BOARD_IMPORT_ENABLED: false });
+					const { wrapper } = setup({ permissionData: [Permission.COURSE_EDIT] });
+					await flushPromises();
+
+					expect(getImportAction(wrapper)).toBeUndefined();
+					expect(wrapper.findComponent(BoardImportDialog).exists()).toBe(false);
+				});
+			});
+
+			describe("when 'FEATURE_BOARD_IMPORT_ENABLED' is turned on", () => {
+				it("should not offer the import when user does not have course edit permission", async () => {
+					createTestEnvStore({ FEATURE_BOARD_IMPORT_ENABLED: true });
+					const { wrapper } = setup({ permissionData: [Permission.HOMEWORK_CREATE] });
+					await flushPromises();
+
+					expect(getImportAction(wrapper)).toBeUndefined();
+					expect(wrapper.findComponent(BoardImportDialog).exists()).toBe(false);
+				});
+
+				it("should open the import dialog for the course", async () => {
+					createTestEnvStore({ FEATURE_BOARD_IMPORT_ENABLED: true });
+					const { wrapper } = setup({ permissionData: [Permission.COURSE_EDIT] });
+					await flushPromises();
+
+					getImportAction(wrapper)?.clickHandler?.();
+					await nextTick();
+
+					const dialog = wrapper.findComponent(BoardImportDialog);
+					expect(dialog.props()).toMatchObject({
+						modelValue: true,
+						targetType: BoardImportTargetType.COURSE,
+						targetId: useCourseRoomDetailsStore().roomData.roomId,
+					});
 				});
 			});
 		});

@@ -73,6 +73,12 @@
 			@success="refreshCourseRoom"
 		/>
 		<SelectBoardLayoutDialog v-model="isBoardLayoutDialogOpen" @select="onLayoutSelected" />
+		<BoardImportDialog
+			v-if="canImportBoard"
+			v-model="isBoardImportDialogOpen"
+			:target-type="BoardImportTargetType.COURSE"
+			:target-id="roomData.roomId"
+		/>
 	</DefaultWireframe>
 </template>
 
@@ -83,6 +89,7 @@ import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.v
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { BoardImportTargetType } from "@api-board-import";
 import {
 	BoardLayout,
 	BoardParentType,
@@ -94,6 +101,7 @@ import { useAppStore } from "@data-app";
 import { useCourseRoomDetailsStore } from "@data-course-rooms";
 import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
+import { BoardImportDialog } from "@feature-board-import";
 import { useCopyFlow } from "@feature-copy";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
 import { ShareParams, useShareFlow } from "@feature-share";
@@ -103,6 +111,7 @@ import {
 	mdiExport,
 	mdiFileDocumentOutline,
 	mdiFormatListChecks,
+	mdiImport,
 	mdiPencilOutline,
 	mdiPlus,
 	mdiPuzzleOutline,
@@ -157,7 +166,12 @@ const isExportDialogOpen = ref(false);
 const isEndSyncDialogOpen = ref(false);
 const isStartSyncDialogOpen = ref(false);
 const isBoardLayoutDialogOpen = ref(false);
+const isBoardImportDialogOpen = ref(false);
 
+const canCreateBoard = computed(
+	() => useAppStore().userPermissions.includes(Permission.COURSE_EDIT) && useAppStore().isTeacher
+);
+const canImportBoard = computed(() => useEnvConfig().value.FEATURE_BOARD_IMPORT_ENABLED && canCreateBoard.value);
 const canEditTools = computed(() => !!useAppStore().userPermissions?.includes(Permission.CONTEXT_TOOL_ADMIN));
 
 const breadcrumbs = computed<Breadcrumb[]>(() => [
@@ -199,12 +213,23 @@ const learnContentFabItems = computed<FabAction[] | undefined>(() => {
 		});
 	}
 
-	if (useAppStore().userPermissions.includes(Permission.COURSE_EDIT) && useAppStore().isTeacher) {
+	if (canCreateBoard.value) {
 		actions.push({
 			label: t("pages.courseRoomDetails.fab.add.board"),
 			icon: mdiViewGridPlusOutline,
 			dataTestId: "fab_button_add_board",
 			clickHandler: onOpenBoardLayoutDialog,
+		});
+	}
+
+	if (canImportBoard.value) {
+		actions.push({
+			label: t("feature-board-import.title"),
+			icon: mdiImport,
+			dataTestId: "fab_button_import_board",
+			clickHandler: () => {
+				isBoardImportDialogOpen.value = true;
+			},
 		});
 	}
 
