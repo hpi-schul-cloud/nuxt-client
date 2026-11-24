@@ -1,5 +1,13 @@
 <template>
-	<div ref="rootRef" class="room-grouped-overview mt-8" data-testid="room-grouped-overview">
+	<div
+		ref="rootRef"
+		class="room-grouped-overview mt-8"
+		:class="{
+			'room-grouped-overview--fab-clearance': reserveFabSpace && mdAndUp,
+			'room-grouped-overview--selecting': selection.isActive,
+		}"
+		data-testid="room-grouped-overview"
+	>
 		<template v-if="hasLoadError">
 			<WarningAlert data-testid="room-groups-load-error">
 				<div class="d-flex flex-wrap align-center ga-2">
@@ -12,25 +20,13 @@
 			<RoomGrid v-if="roomsStatus === 'loaded' && rooms.length > 0" :rooms readonly />
 		</template>
 		<template v-else-if="view">
-			<!-- role="note": a hint is not urgent, so it must not be announced like VAlert's default role="alert". -->
-			<InfoAlert v-if="isOnboardingVisible" class="mb-6" role="note" data-testid="room-groups-onboarding">
-				<p class="room-groups-onboarding-text mb-3">{{ t("pages.rooms.groups.onboarding.text") }}</p>
-				<div class="d-flex flex-wrap align-center ga-2">
-					<VBtn
-						variant="outlined"
-						size="large"
-						:prepend-icon="mdiPlus"
-						:disabled="!isReady"
-						data-testid="room-groups-onboarding-add"
-						@click="openCreateDialog"
-					>
-						{{ t("pages.rooms.groups.add") }}
-					</VBtn>
-					<VBtn variant="text" size="large" data-testid="room-groups-onboarding-dismiss" @click="dismissOnboarding">
-						{{ t("pages.rooms.groups.onboarding.dismiss") }}
-					</VBtn>
-				</div>
-			</InfoAlert>
+			<RoomGroupsOnboardingLine
+				v-if="isOnboardingVisible && !isOnboardingAfterGrid"
+				class="mb-4"
+				:disabled="!isReady"
+				@add="openCreateDialog(onboardingAddSelector)"
+				@dismiss="dismissOnboarding"
+			/>
 			<RoomGroupSection
 				v-if="isUngroupedVisible"
 				:rooms="view.ungrouped"
@@ -46,21 +42,8 @@
 				@drag-end="isDraggingRoom = false"
 				@move-to-group="openMoveDialog"
 				@select-room="onSelectRoom"
-			>
-				<template #header-actions>
-					<VBtn
-						v-if="isSelectionStartVisible"
-						variant="text"
-						size="large"
-						:prepend-icon="mdiCheckboxOutline"
-						:disabled="!isReady"
-						data-testid="room-selection-start"
-						@click="startSelection"
-					>
-						{{ t("pages.rooms.groups.selection.start") }}
-					</VBtn>
-				</template>
-			</RoomGroupSection>
+				@select-all="onSelectAll"
+			/>
 			<Sortable
 				:list="view.groups"
 				item-key="id"
@@ -91,9 +74,17 @@
 						@move-up="onMoveGroup(element, -1)"
 						@move-down="onMoveGroup(element, 1)"
 						@select-room="onSelectRoom"
+						@select-all="onSelectAll"
 					/>
 				</template>
 			</Sortable>
+			<RoomGroupsOnboardingLine
+				v-if="isOnboardingVisible && isOnboardingAfterGrid"
+				class="mt-4"
+				:disabled="!isReady"
+				@add="openCreateDialog(onboardingAddSelector)"
+				@dismiss="dismissOnboarding"
+			/>
 		</template>
 
 		<div v-if="!hasLoadError" class="room-group-add-row mt-6">
@@ -103,9 +94,9 @@
 				block
 				class="justify-start"
 				:prepend-icon="mdiPlus"
-				:disabled="!isReady"
+				:disabled="!isReady || selection.isActive"
 				data-testid="room-group-add"
-				@click="openCreateDialog"
+				@click="openCreateDialog(addButtonSelector)"
 			>
 				{{ t("pages.rooms.groups.add") }}
 			</VBtn>
@@ -115,27 +106,40 @@
 		<div
 			v-if="selection.isActive"
 			class="room-selection-bar d-flex flex-wrap align-center ga-2 pa-3 mt-4 rounded elevation-8"
+			:class="{ 'room-selection-bar--xs': xs }"
 			role="region"
 			:aria-label="t('pages.rooms.groups.selection.label')"
 			data-testid="room-selection-bar"
 		>
-			<span class="text-body-1 flex-grow-1" aria-live="polite" data-testid="room-selection-count">
-				{{ t("pages.rooms.groups.selection.count", { count: selectedRoomIds.length }, selectedRoomIds.length) }}
-			</span>
-			<VBtn variant="text" size="large" data-testid="room-selection-cancel" @click="endSelection">
-				{{ t("common.actions.cancel") }}
-			</VBtn>
-			<VBtn
-				color="primary"
-				variant="flat"
-				size="large"
-				:prepend-icon="mdiFolderMoveOutline"
-				:disabled="selectedRoomIds.length === 0 || !canEdit"
-				data-testid="room-selection-move"
-				@click="openBulkMoveDialog"
-			>
-				{{ t("pages.rooms.groups.roomMenu.moveToGroup") }}
-			</VBtn>
+			<div class="room-selection-summary">
+				<span class="text-body-1 d-block" aria-live="polite" data-testid="room-selection-count">
+					{{ t("pages.rooms.groups.selection.count", { count: selectedRoomIds.length }, selectedRoomIds.length) }}
+				</span>
+				<span
+					class="text-body-2 text-medium-emphasis"
+					:class="xs ? 'd-sr-only' : 'd-block'"
+					data-testid="room-selection-instruction"
+				>
+					{{ t("pages.rooms.groups.selection.instruction") }}
+				</span>
+			</div>
+			<div class="room-selection-actions d-flex align-center ga-2">
+				<VBtn variant="text" size="large" data-testid="room-selection-cancel" @click="endSelection">
+					{{ t("common.actions.cancel") }}
+				</VBtn>
+				<VBtn
+					class="room-selection-move"
+					color="primary"
+					variant="flat"
+					size="large"
+					:prepend-icon="mdiFolderMoveOutline"
+					:disabled="selectedRoomIds.length === 0 || !canEdit"
+					data-testid="room-selection-move"
+					@click="openBulkMoveDialog"
+				>
+					{{ t("pages.rooms.groups.roomMenu.moveToGroup") }}
+				</VBtn>
+			</div>
 		</div>
 
 		<VSnackbar
@@ -203,6 +207,7 @@ import RoomGrid from "./RoomGrid.vue";
 import RoomGroupDeleteDialog from "./RoomGroupDeleteDialog.vue";
 import RoomGroupNameDialog from "./RoomGroupNameDialog.vue";
 import RoomGroupSection from "./RoomGroupSection.vue";
+import RoomGroupsOnboardingLine from "./RoomGroupsOnboardingLine.vue";
 import RoomMoveDialog from "./RoomMoveDialog.vue";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 import { RoomItem } from "@/types/room/Room";
@@ -215,8 +220,8 @@ import {
 	useRoomArrangementStore,
 	useRoomStore,
 } from "@data-room";
-import { mdiCheckboxOutline, mdiFolderMoveOutline, mdiPlus } from "@icons/material";
-import { InfoAlert, WarningAlert } from "@ui-alert";
+import { mdiFolderMoveOutline, mdiPlus } from "@icons/material";
+import { WarningAlert } from "@ui-alert";
 import { getSortableOptions } from "@util-sorting";
 import { useEventListener, usePreferredReducedMotion } from "@vueuse/core";
 import { storeToRefs } from "pinia";
@@ -224,6 +229,15 @@ import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, nextTick, reactive, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
+
+withDefaults(
+	defineProps<{
+		/** The page shows the floating create room button, which must not cover controls of the overview. */
+		reserveFabSpace?: boolean;
+	}>(),
+	{ reserveFabSpace: false }
+);
 
 const { t } = useI18n();
 const { notifyOnScreenReader } = useAriaLiveNotifier();
@@ -249,6 +263,7 @@ const {
 const { rooms } = storeToRefs(useRoomStore());
 
 const rootRef = useTemplateRef("rootRef");
+const { xs, mdAndUp } = useDisplay();
 const reducedMotion = usePreferredReducedMotion();
 
 const isDraggingRoom = ref(false);
@@ -291,8 +306,9 @@ const retry = () => arrangementStore.loadOverview();
 // Focus handling
 let pendingFocusSelector: string | undefined;
 
+// Triggers outside this component (e.g. the page menu) are found in the document.
 const focusElement = (selector: string) => {
-	const element = rootRef.value?.querySelector<HTMLElement>(selector);
+	const element = rootRef.value?.querySelector<HTMLElement>(selector) ?? document.querySelector<HTMLElement>(selector);
 	element?.focus();
 	return element !== null && element !== undefined;
 };
@@ -490,10 +506,20 @@ const nameDialog = reactive<{
 	initialName: string;
 	isSaving: boolean;
 	serverError?: RoomGroupNameErrorReason;
+	/** Control that opened the create dialog; it gets focus back when the dialog is cancelled. */
+	returnFocusSelector?: string;
 }>({ isOpen: false, mode: "create", initialName: "", isSaving: false });
 
-const openCreateDialog = () => {
-	Object.assign(nameDialog, { mode: "create", groupId: undefined, initialName: "", serverError: undefined });
+const onboardingAddSelector = "[data-testid='room-groups-onboarding-add']";
+
+const openCreateDialog = (returnFocusSelector: string = addButtonSelector) => {
+	Object.assign(nameDialog, {
+		mode: "create",
+		groupId: undefined,
+		initialName: "",
+		serverError: undefined,
+		returnFocusSelector,
+	});
 	nameDialog.isOpen = true;
 };
 
@@ -506,7 +532,9 @@ const openRenameDialog = (group: RoomGroupView) => {
 const closeNameDialog = () => {
 	if (nameDialog.isSaving) return;
 	pendingFocusSelector =
-		nameDialog.mode === "rename" && nameDialog.groupId ? groupMenuSelector(nameDialog.groupId) : addButtonSelector;
+		nameDialog.mode === "rename" && nameDialog.groupId
+			? groupMenuSelector(nameDialog.groupId)
+			: (nameDialog.returnFocusSelector ?? addButtonSelector);
 	nameDialog.isOpen = false;
 };
 
@@ -614,6 +642,9 @@ const dismissOnboarding = async () => {
 	focusElement(addButtonSelector);
 };
 
+// On phones the hint follows the rooms, so the rooms stay the first thing to see.
+const isOnboardingAfterGrid = computed(() => xs.value);
+
 // Selection of several rooms for one move
 const selection = reactive<{ isActive: boolean; roomIds: string[] }>({ isActive: false, roomIds: [] });
 
@@ -639,10 +670,6 @@ const arrangeableRoomIds = computed(() => {
 // Display order, so the rooms keep their relative order in the target.
 const selectedRoomIds = computed(() => arrangeableRoomIds.value.filter((id) => selection.roomIds.includes(id)));
 
-const isSelectionStartVisible = computed(
-	() => (view.value?.groups.length ?? 0) > 0 && !selection.isActive && arrangeableRoomIds.value.length > 0
-);
-
 const startSelection = async () => {
 	if (!isReady.value || selection.isActive) return;
 	selection.roomIds = [];
@@ -657,7 +684,15 @@ const endSelection = async () => {
 	selection.isActive = false;
 	selection.roomIds = [];
 	await nextTick();
-	if (!focusElement("[data-testid='room-selection-start']")) focusElement(addButtonSelector);
+	// The start button lives in the page header, outside of this component.
+	const startButton = document.querySelector<HTMLElement>("[data-testid='room-selection-start']");
+	if (startButton) startButton.focus();
+	else focusElement(addButtonSelector);
+};
+
+const onSelectAll = (roomIds: string[], selected: boolean) => {
+	const others = selection.roomIds.filter((id) => !roomIds.includes(id));
+	selection.roomIds = selected ? [...others, ...roomIds] : others;
 };
 
 const onSelectRoom = (roomId: string, selected: boolean) => {
@@ -769,8 +804,32 @@ defineExpose({ openCreateDialog, startSelection });
 	white-space: normal;
 }
 
-.room-groups-onboarding-text {
-	line-height: 1.5;
+/* Space for the floating create room button (large pill plus its offset), see DefaultWireframe. */
+.room-grouped-overview--fab-clearance {
+	padding-inline-end: 216px;
+}
+
+/* Room below the content while selecting, so the last cards can be scrolled fully above the sticky bar. */
+.room-grouped-overview--selecting .room-group-add-row {
+	margin-bottom: 160px;
+}
+
+.room-selection-summary {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.room-selection-bar--xs .room-selection-summary {
+	flex-basis: 100%;
+}
+
+.room-selection-bar--xs .room-selection-actions {
+	width: 100%;
+	justify-content: flex-end;
+}
+
+.room-selection-bar--xs .room-selection-move {
+	flex-grow: 1;
 }
 
 /* Stays in view at the bottom of the viewport while rooms are selected. */

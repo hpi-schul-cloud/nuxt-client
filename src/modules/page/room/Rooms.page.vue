@@ -14,7 +14,7 @@
 						:icon="mdiPlus"
 						:disabled="!isArrangementReady"
 						data-testid="rooms-menu-add-group"
-						@click="groupedOverview?.openCreateDialog()"
+						@click="groupedOverview?.openCreateDialog(roomsMenuSelector)"
 					>
 						{{ t("pages.rooms.groups.add") }}
 					</KebabMenuAction>
@@ -59,6 +59,18 @@
 						{{ t("pages.rooms.menu.restoreGroupDeleteConfirmation") }}
 					</KebabMenuAction>
 				</KebabMenu>
+				<VBtn
+					v-if="isRoomSelectionAvailable && !isSelectingRooms"
+					variant="text"
+					height="40"
+					:icon="xs ? mdiCheckboxOutline : undefined"
+					:prepend-icon="xs ? undefined : mdiCheckboxOutline"
+					:aria-label="xs ? t('pages.rooms.groups.selection.start') : undefined"
+					data-testid="room-selection-start"
+					@click="groupedOverview?.startSelection()"
+				>
+					<template v-if="!xs">{{ t("pages.rooms.groups.selection.start") }}</template>
+				</VBtn>
 			</div>
 		</template>
 		<RoomsWelcomeInfo class="mt-8" />
@@ -72,7 +84,11 @@
 						<RoomsEmptyStateSvg />
 					</template>
 				</EmptyState>
-				<RoomGroupedOverview ref="groupedOverview" @selection-change="isSelectingRooms = $event" />
+				<RoomGroupedOverview
+					ref="groupedOverview"
+					:reserve-fab-space="fabAction !== undefined"
+					@selection-change="isSelectingRooms = $event"
+				/>
 			</template>
 		</template>
 		<template v-else>
@@ -115,8 +131,10 @@ import { storeToRefs } from "pinia";
 import { computed, onMounted, ref, toValue, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
+import { useDisplay } from "vuetify";
 
 const { t } = useI18n();
+const { xs } = useDisplay();
 const route = useRoute();
 const router = useRouter();
 const { rooms, isLoading, isEmpty } = storeToRefs(useRoomStore());
@@ -177,6 +195,8 @@ const restoreGroupDeleteConfirmation = async () => {
 const loadRooms = () => (isRoomGroupingEnabled.value ? arrangementStore.loadOverview() : fetchRooms());
 
 const isSelectingRooms = ref(false);
+// The create dialog returns focus to the page menu trigger when it was opened from there.
+const roomsMenuSelector = "[data-testid='rooms-menu']";
 
 // While rooms are selected, the button would cover the selection bar at the bottom of the viewport.
 const fabAction = computed(() => {

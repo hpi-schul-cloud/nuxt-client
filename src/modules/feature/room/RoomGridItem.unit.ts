@@ -185,6 +185,19 @@ describe("@feature-room/RoomGridItem", () => {
 			expect(wrapper.emitted("select")).toEqual([[true]]);
 		});
 
+		it("moves focus to the checkbox after a click on the card body", async () => {
+			const wrapper = mount(RoomGridItem, {
+				global: { plugins: [createTestingVuetify(), createTestingI18n()], stubs: ["RouterLink"] },
+				props: { room: arrangeable, index: 0, selectable: true },
+				attachTo: document.body,
+			});
+
+			await wrapper.get(".v-card-item").trigger("click");
+
+			expect(document.activeElement).toBe(wrapper.get("[data-testid=room-card-select] input").element);
+			wrapper.unmount();
+		});
+
 		it("does not toggle twice when the checkbox itself is clicked", async () => {
 			const { wrapper } = setup({ room: arrangeable, index: 0, selectable: true, selected: true });
 

@@ -159,8 +159,12 @@ const roomAriaLabel = computed(() => `${t("common.labels.room")} ${props.room.na
 const isSelectable = computed(() => props.selectable && props.room.allowedOperations?.arrangeRooms === true);
 const linkAttrs = computed(() => (isSelectable.value ? {} : { to: roomPath.value, tabindex: -1 }));
 
-const onCardBodyClick = () => {
-	if (isSelectable.value) emit("select", !props.selected);
+// Focus goes to the checkbox, so keyboard users continue where the selection changed.
+const onCardBodyClick = (event: MouseEvent) => {
+	if (!isSelectable.value) return;
+	emit("select", !props.selected);
+	const card = event.currentTarget instanceof HTMLElement ? event.currentTarget.closest(".room-grid-item") : null;
+	card?.querySelector<HTMLInputElement>("[data-testid='room-card-select'] input")?.focus();
 };
 
 const isArrangeMenuVisible = computed(

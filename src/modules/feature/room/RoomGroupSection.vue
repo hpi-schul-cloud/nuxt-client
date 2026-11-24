@@ -23,7 +23,11 @@
 						@click="onToggle"
 					>
 						<span class="room-group-title" data-testid="room-group-title">{{ title }}</span>
-						<span class="room-group-count text-body-2 text-medium-emphasis text-no-wrap" data-testid="room-group-count">
+						<span
+							v-if="isCountVisible"
+							class="room-group-count text-body-2 text-medium-emphasis text-no-wrap"
+							data-testid="room-group-count"
+						>
 							{{ roomCountText }}
 						</span>
 						<VIcon
@@ -35,17 +39,35 @@
 					</button>
 				</h2>
 				<template v-else>
-					<h2 :id="headingId" tabindex="-1" class="room-group-heading-title text-h4 ma-0">
+					<h2
+						:id="headingId"
+						tabindex="-1"
+						class="room-group-heading-title room-group-heading-title--ungrouped text-h4 ma-0"
+					>
 						<span class="room-group-title" data-testid="room-group-title">{{ title }}</span>
 					</h2>
-					<span class="room-group-count text-body-2 text-medium-emphasis text-no-wrap" data-testid="room-group-count">
+					<span
+						v-if="isCountVisible"
+						class="room-group-count text-body-2 text-medium-emphasis text-no-wrap"
+						data-testid="room-group-count"
+					>
 						{{ roomCountText }}
 					</span>
 				</template>
 			</div>
-			<slot name="header-actions" />
+			<VCheckbox
+				v-if="selectable"
+				class="room-group-select-all flex-grow-0"
+				:model-value="isAllSelected"
+				:indeterminate="isSomeSelected"
+				:disabled="selectableRoomIds.length === 0"
+				:aria-label="t('pages.rooms.groups.selection.selectAll', { name: title })"
+				hide-details
+				data-testid="room-group-select-all"
+				@update:model-value="emit('select-all', selectableRoomIds, $event === true)"
+			/>
 			<span
-				v-if="group"
+				v-if="group && !selectable"
 				class="room-group-drag-handle d-flex align-center justify-center"
 				:class="{ 'room-group-drag-handle--disabled': isGroupActionDisabled }"
 				data-testid="room-group-drag-handle"
@@ -55,7 +77,7 @@
 				<VIcon :icon="mdiDrag" />
 			</span>
 			<KebabMenu
-				v-if="group"
+				v-if="group && !selectable"
 				data-testid="room-group-menu"
 				:aria-label="t('pages.rooms.groups.menu.ariaLabel', { name: group.name })"
 			>
@@ -201,6 +223,7 @@ const emit = defineEmits<{
 	"move-up": [];
 	"move-down": [];
 	"select-room": [roomId: string, selected: boolean];
+	"select-all": [roomIds: string[], selected: boolean];
 }>();
 
 const { t } = useI18n();
@@ -218,6 +241,18 @@ const isCollapsed = computed(() => props.group?.collapsed === true);
 const roomCountText = computed(() =>
 	t("pages.rooms.groups.roomCount", { count: props.rooms.length }, props.rooms.length)
 );
+// An empty group shows its hint instead of "0 rooms"; a collapsed one keeps the count as its only content hint.
+const isCountVisible = computed(() => props.rooms.length > 0 || isCollapsed.value);
+
+const selectableRoomIds = computed(() =>
+	props.rooms.filter((room) => room.allowedOperations?.arrangeRooms === true).map((room) => room.id)
+);
+const selectedCount = computed(() => selectableRoomIds.value.filter((id) => props.selectedRoomIds.includes(id)).length);
+const isAllSelected = computed(
+	() => selectableRoomIds.value.length > 0 && selectedCount.value === selectableRoomIds.value.length
+);
+const isSomeSelected = computed(() => selectedCount.value > 0 && !isAllSelected.value);
+
 // Renaming, moving or deleting groups would interfere with a running selection.
 const isGroupActionDisabled = computed(() => props.disabled || props.selectable);
 const isFirstGroup = computed(() => props.groupIndex === 0);
@@ -261,9 +296,17 @@ const onToggle = async () => {
 }
 
 .room-group-heading-title {
-	display: inline;
-	font-weight: 400;
+	display: flex;
+	flex: 1 1 auto;
 	min-width: 0;
+	font-weight: 700;
+}
+
+/* The fixed inbox reads quieter than the user's own groups. */
+.room-group-heading-title--ungrouped {
+	flex: 0 1 auto;
+	font-weight: 400;
+	color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 
 .room-group-title {
@@ -271,12 +314,15 @@ const onToggle = async () => {
 	hyphens: auto;
 }
 
+/* Stretches up to the trailing actions, so the whole header row toggles. */
 .room-group-toggle {
-	display: inline-flex;
+	display: flex;
+	flex: 1 1 auto;
+	justify-content: flex-start;
 	flex-wrap: wrap;
 	align-items: baseline;
 	column-gap: 8px;
-	gap: 4px;
+	row-gap: 4px;
 	min-height: 40px;
 	padding: 0 4px;
 	margin-inline-start: -4px;

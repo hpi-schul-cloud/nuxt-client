@@ -602,13 +602,18 @@ describe("RoomGroupedOverview", () => {
 	});
 
 	describe("selecting several rooms", () => {
+		const startSelecting = async () => {
+			wrapper?.vm.startSelection();
+			await flushPromises();
+		};
+
 		const selectRoom = async (roomId: string) => {
 			await wrapper?.get(`[data-room-id='${roomId}'] [data-testid='room-card-select'] input`).setValue(true);
 		};
 
 		it("moves the selected rooms with one request, ends the selection and offers undo", async () => {
 			const { server } = await setup();
-			await wrapper?.get("[data-testid='room-selection-start']").trigger("click");
+			await startSelecting();
 
 			expect(wrapper?.findAll("[data-testid='room-card-select']")).toHaveLength(3);
 			expect(wrapper?.find("[data-testid='room-card-menu']").exists()).toBe(false);
@@ -636,14 +641,14 @@ describe("RoomGroupedOverview", () => {
 
 		it("disables dragging while selecting", async () => {
 			await setup();
-			await wrapper?.get("[data-testid='room-selection-start']").trigger("click");
+			await startSelecting();
 
 			expect(wrapper?.find(".room-grid-item.draggable").exists()).toBe(false);
 		});
 
 		it("ends the selection with Escape and with cancel", async () => {
 			await setup();
-			await wrapper?.get("[data-testid='room-selection-start']").trigger("click");
+			await startSelecting();
 
 			document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
 			await flushPromises();
@@ -781,8 +786,9 @@ describe("RoomGroupedOverview", () => {
 			await setup({ ungroupedRoomIds: rooms.map((room) => room.id), groups: [] });
 
 			const hint = wrapper?.get("[data-testid='room-groups-onboarding']");
-			expect(hint?.attributes("role")).toBe("note");
-			expect(wrapper?.find("[data-testid='room-groups-onboarding'] [role='alert']").exists()).toBe(false);
+			expect(hint?.attributes("role")).toBeUndefined();
+			expect(hint?.find("[role='alert']").exists()).toBe(false);
+			expect(hint?.find(".v-alert").exists()).toBe(false);
 		});
 
 		it("hides the first-run hint for this page session and moves focus to adding a group", async () => {
@@ -794,28 +800,6 @@ describe("RoomGroupedOverview", () => {
 			expect(wrapper?.find("[data-testid='room-groups-onboarding']").exists()).toBe(false);
 			expect(useRoomArrangementStore().isOnboardingDismissed).toBe(true);
 			expect(document.activeElement?.getAttribute("data-testid")).toBe("room-group-add");
-		});
-
-		it("returns focus to adding a group when the create dialog from the hint is cancelled", async () => {
-			await setup({ ungroupedRoomIds: rooms.map((room) => room.id), groups: [] });
-			await wrapper?.get("[data-testid='room-groups-onboarding-add']").trigger("click");
-
-			const dialog = wrapper?.findComponent(RoomGroupNameDialog);
-			dialog?.vm.$emit("cancel");
-			dialog?.vm.$emit("after-leave");
-			await flushPromises();
-
-			expect(document.activeElement?.getAttribute("data-testid")).toBe("room-group-add");
-		});
-
-		it("offers selecting rooms in the header row of the ungrouped section", async () => {
-			await setup();
-
-			expect(
-				wrapper
-					?.find("[data-testid='room-group-ungrouped'] .room-group-header [data-testid='room-selection-start']")
-					.exists()
-			).toBe(true);
 		});
 
 		it("reports the selection mode so the page can hide covering controls", async () => {
@@ -848,6 +832,136 @@ describe("RoomGroupedOverview", () => {
 
 			expect(wrapper?.get("[data-testid='room-selection-count']").text()).toBe("pages.rooms.groups.selection.count");
 			expect(wrapper?.get(`[data-room-id='${rooms[0].id}']`).classes()).toContain("room-grid-item--selected");
+		});
+	});
+
+	describe("round 5", () => {
+		const setWindowWidth = (width: number) =>
+			Object.defineProperty(window, "innerWidth", { writable: true, configurable: true, value: width });
+
+		afterEach(() => setWindowWidth(1024));
+
+		it("shows the first-run hint as a quiet line above the rooms", async () => {
+			await setup({ ungroupedRoomIds: rooms.map((room) => room.id), groups: [] });
+
+			const hint = wrapper?.get("[data-testid='room-groups-onboarding']");
+			expect(hint?.get(".room-groups-onboarding-text").classes()).toEqual(
+				expect.arrayContaining(["text-body-2", "text-medium-emphasis"])
+			);
+			expect(hint?.get("[data-testid='room-groups-onboarding-add']").attributes("style")).toContain("height: 40px");
+			const order = wrapper?.findAll("[data-testid='room-groups-onboarding'], [data-testid='room-group-list']");
+			expect(order?.[0].attributes("data-testid")).toBe("room-groups-onboarding");
+		});
+
+		it("puts the first-run hint after the rooms on phones", async () => {
+			setWindowWidth(400);
+			await setup({ ungroupedRoomIds: rooms.map((room) => room.id), groups: [] });
+
+			const order = wrapper?.findAll("[data-testid='room-groups-onboarding'], [data-testid='room-group-list']");
+			expect(order?.map((element) => element.attributes("data-testid"))).toEqual([
+				"room-group-list",
+				"room-groups-onboarding",
+			]);
+		});
+
+		it("selects all arrangeable rooms of a section and disables adding groups while selecting", async () => {
+			await setup();
+			wrapper?.vm.startSelection();
+			await flushPromises();
+
+			await wrapper?.get("[data-testid='room-group-0'] [data-testid='room-group-select-all'] input").setValue(true);
+
+			expect(wrapper?.get("[data-testid='room-selection-move']").attributes("disabled")).toBeUndefined();
+			expect(wrapper?.findAll(".room-grid-item--selected")).toHaveLength(2);
+			expect(wrapper?.get("[data-testid='room-group-add']").attributes("disabled")).toBeDefined();
+		});
+
+		it("shows the selection instruction from sm up", async () => {
+			await setup();
+			wrapper?.vm.startSelection();
+			await flushPromises();
+
+			const instruction = wrapper?.get("[data-testid='room-selection-instruction']");
+			expect(instruction?.text()).toBe("pages.rooms.groups.selection.instruction");
+			expect(instruction?.classes()).not.toContain("d-sr-only");
+		});
+
+		it("keeps the instruction for screen readers only and stacks the bar on phones", async () => {
+			setWindowWidth(400);
+			await setup();
+			wrapper?.vm.startSelection();
+			await flushPromises();
+
+			expect(wrapper?.get("[data-testid='room-selection-instruction']").classes()).toContain("d-sr-only");
+			expect(wrapper?.get("[data-testid='room-selection-bar']").classes()).toContain("room-selection-bar--xs");
+		});
+
+		it("reserves space for the floating create room button from md up", async () => {
+			await setup();
+			await wrapper?.setProps({ reserveFabSpace: true });
+			expect(wrapper?.classes()).toContain("room-grouped-overview--fab-clearance");
+
+			await wrapper?.setProps({ reserveFabSpace: false });
+			expect(wrapper?.classes()).not.toContain("room-grouped-overview--fab-clearance");
+		});
+
+		it("does not reserve inline space on phones", async () => {
+			setWindowWidth(400);
+			await setup();
+			await wrapper?.setProps({ reserveFabSpace: true });
+
+			expect(wrapper?.classes()).not.toContain("room-grouped-overview--fab-clearance");
+		});
+	});
+
+	describe("round 5 addendum", () => {
+		const cancelNameDialog = async () => {
+			const dialog = wrapper?.findComponent(RoomGroupNameDialog);
+			dialog?.vm.$emit("cancel");
+			dialog?.vm.$emit("after-leave");
+			await flushPromises();
+		};
+
+		it("returns focus to the onboarding button that opened the create dialog", async () => {
+			await setup({ ungroupedRoomIds: rooms.map((room) => room.id), groups: [] });
+			await wrapper?.get("[data-testid='room-groups-onboarding-add']").trigger("click");
+
+			await cancelNameDialog();
+
+			expect(document.activeElement?.getAttribute("data-testid")).toBe("room-groups-onboarding-add");
+		});
+
+		it("returns focus to the add row when the create dialog was opened there", async () => {
+			await setup();
+			await wrapper?.get("[data-testid='room-group-add']").trigger("click");
+
+			await cancelNameDialog();
+
+			expect(document.activeElement?.getAttribute("data-testid")).toBe("room-group-add");
+		});
+
+		it("returns focus to a trigger outside of the overview", async () => {
+			const trigger = document.createElement("button");
+			trigger.dataset.testid = "rooms-menu";
+			document.body.appendChild(trigger);
+			await setup();
+
+			wrapper?.vm.openCreateDialog("[data-testid='rooms-menu']");
+			await flushPromises();
+			await cancelNameDialog();
+
+			expect(document.activeElement).toBe(trigger);
+			trigger.remove();
+		});
+
+		it("leaves room below the content for the sticky selection bar while selecting", async () => {
+			await setup();
+			expect(wrapper?.classes()).not.toContain("room-grouped-overview--selecting");
+
+			wrapper?.vm.startSelection();
+			await flushPromises();
+
+			expect(wrapper?.classes()).toContain("room-grouped-overview--selecting");
 		});
 	});
 });

@@ -3,9 +3,11 @@ import RoomGroupSection from "./RoomGroupSection.vue";
 import { RoomItem } from "@/types/room/Room";
 import { roomItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoomItemResponseAllowedOperations } from "@api-server";
 import { RoomGroupView } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
+import { VCheckbox } from "vuetify/components";
 
 describe("RoomGroupSection", () => {
 	let wrapper: ReturnType<typeof mount<typeof RoomGroupSection>> | undefined;
@@ -291,27 +293,82 @@ describe("RoomGroupSection", () => {
 			expect(children[2]?.classList).toContain("room-group-chevron");
 		});
 
-		it("renders header actions in the header row", () => {
-			wrapper = mount(RoomGroupSection, {
-				props: { rooms: roomItemFactory.buildList(1), showHeading: true },
-				slots: { "header-actions": '<button data-testid="header-action">x</button>' },
-				global: { plugins: [createTestingVuetify(), createTestingI18n()], stubs: { RouterLink: true } },
-			});
-
-			expect(wrapper.find(".room-group-header [data-testid='header-action']").exists()).toBe(true);
-		});
-
-		it("disables group actions while rooms are selected", async () => {
+		it("hides drag handle and group menu while rooms are selected", () => {
 			wrapper = mount(RoomGroupSection, {
 				props: { rooms: [], group: group(), groupIndex: 1, groupCount: 3, selectable: true },
 				global: { plugins: [createTestingVuetify(), createTestingI18n()], stubs: { RouterLink: true } },
-				attachTo: document.body,
 			});
-			await wrapper.get("[data-testid='room-group-menu']").trigger("click");
 
-			for (const testId of ["room-group-menu-rename", "room-group-menu-move-up", "room-group-menu-delete"]) {
-				expect(document.querySelector(`[data-testid='${testId}']`)?.classList).toContain("v-list-item--disabled");
-			}
+			expect(wrapper.find("[data-testid='room-group-drag-handle']").exists()).toBe(false);
+			expect(wrapper.find("[data-testid='room-group-menu']").exists()).toBe(false);
+		});
+	});
+
+	describe("round 5", () => {
+		const arrangeable = { arrangeRooms: true } as unknown as RoomItemResponseAllowedOperations;
+		const mountSelecting = (rooms: RoomItem[], selectedRoomIds: string[]) =>
+			mount(RoomGroupSection, {
+				props: { rooms, group: group({ name: "Mathe", rooms }), selectable: true, selectedRoomIds },
+				global: { plugins: [createTestingVuetify(), createTestingI18n()], stubs: { RouterLink: true } },
+			});
+
+		it("offers a tri-state select all checkbox for the arrangeable rooms of the section", async () => {
+			const rooms = [...roomItemFactory.buildList(2, { allowedOperations: arrangeable }), roomItemFactory.build()];
+			wrapper = mountSelecting(rooms, [rooms[0].id]);
+
+			const selectAll = wrapper.getComponent(VCheckbox);
+			expect(selectAll.attributes("data-testid")).toBe("room-group-select-all");
+			expect(selectAll.props("indeterminate")).toBe(true);
+			expect(selectAll.props("modelValue")).toBe(false);
+			expect(wrapper.get("[data-testid='room-group-select-all'] input").attributes("aria-label")).toBe(
+				"pages.rooms.groups.selection.selectAll"
+			);
+
+			await wrapper.get("[data-testid='room-group-select-all'] input").setValue(true);
+
+			expect(wrapper.emitted("select-all")).toEqual([[[rooms[0].id, rooms[1].id], true]]);
+		});
+
+		it("shows a checked select all checkbox when every arrangeable room is selected", () => {
+			const rooms = roomItemFactory.buildList(2, { allowedOperations: arrangeable });
+			wrapper = mountSelecting(
+				rooms,
+				rooms.map((room) => room.id)
+			);
+
+			const selectAll = wrapper.getComponent(VCheckbox);
+			expect(selectAll.props("modelValue")).toBe(true);
+			expect(selectAll.props("indeterminate")).toBe(false);
+		});
+
+		it("has no select all checkbox outside selection mode", () => {
+			setup({ group: group() });
+
+			expect(wrapper?.find("[data-testid='room-group-select-all']").exists()).toBe(false);
+		});
+
+		it("hides the room count while the empty hint is shown, but not for a collapsed group", () => {
+			setup({ group: group() });
+			expect(wrapper?.find("[data-testid='room-group-count']").exists()).toBe(false);
+			expect(wrapper?.find("[data-testid='room-group-empty']").exists()).toBe(true);
+			expect(wrapper?.get("[data-testid='room-group-toggle']").text()).toContain("Informatik");
+
+			wrapper?.unmount();
+			setup({ group: group({ collapsed: true }) });
+			expect(wrapper?.find("[data-testid='room-group-count']").exists()).toBe(true);
+		});
+
+		it("marks the ungrouped title as the quieter inbox heading", () => {
+			setup({ rooms: roomItemFactory.buildList(1) });
+
+			expect(wrapper?.get("h2").classes()).toContain("room-group-heading-title--ungrouped");
+		});
+
+		it("lets the toggle button take the heading row of a named group", () => {
+			setup({ group: group() });
+
+			expect(wrapper?.get("h2").classes()).not.toContain("room-group-heading-title--ungrouped");
+			expect(wrapper?.find("h2 > [data-testid='room-group-toggle']").exists()).toBe(true);
 		});
 	});
 });

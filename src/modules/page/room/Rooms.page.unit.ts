@@ -498,6 +498,43 @@ describe("RoomsPage", () => {
 				expect(wireframe.props("fabItems")).toBeTruthy();
 			});
 
+			it("should offer selecting rooms in the page header when a group exists", async () => {
+				const rooms = roomItemFactory.buildList(2, {
+					allowedOperations: { arrangeRooms: true } as unknown as RoomItemResponseAllowedOperations,
+				});
+				mockArrangementApi({
+					ungroupedRoomIds: rooms.map((room) => room.id),
+					groups: [roomGroupResponseFactory.build()],
+				});
+				const { wrapper } = setup(rooms, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+				await flushPromises();
+
+				const startButton = wrapper.get("[data-testid=room-selection-start]");
+				expect(startButton.attributes("style")).toContain("height: 40px");
+				expect(startButton.text()).toBe("pages.rooms.groups.selection.start");
+				await startButton.trigger("click");
+				await flushPromises();
+
+				expect(wrapper.find("[data-testid=room-selection-bar]").exists()).toBe(true);
+				expect(wrapper.find("[data-testid=room-selection-start]").exists()).toBe(false);
+			});
+
+			it("should not offer selecting rooms without groups", async () => {
+				mockArrangementApi();
+				const { wrapper } = setup(undefined, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+				await flushPromises();
+
+				expect(wrapper.find("[data-testid=room-selection-start]").exists()).toBe(false);
+			});
+
+			it("should let the overview reserve space for the create room button", async () => {
+				mockArrangementApi({ groups: [roomGroupResponseFactory.build()] });
+				const { wrapper } = setup(undefined, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+				await flushPromises();
+
+				expect(wrapper.findComponent(RoomGroupedOverview).props("reserveFabSpace")).toBe(true);
+			});
+
 			it("should restore delete confirmations from the rooms menu", async () => {
 				const arrangementApi = mockArrangementApi({ revision: 2, confirmGroupDeletion: false });
 				const { wrapper } = setup(undefined, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
