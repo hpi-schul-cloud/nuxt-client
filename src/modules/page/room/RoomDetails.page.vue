@@ -70,7 +70,7 @@ import { BoardImportDialog } from "@feature-board-import";
 import { useCopyFlow } from "@feature-copy";
 import { RoomBoardGrid, RoomMenu } from "@feature-room";
 import { useShareFlow } from "@feature-share";
-import { mdiImport, mdiPlus } from "@icons/material";
+import { mdiImport, mdiPlus, mdiViewGridPlusOutline } from "@icons/material";
 import { InfoAlert } from "@ui-alert";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
@@ -135,32 +135,42 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 	},
 ]);
 
-const fabAction = computed<FabAction[] | undefined>(() =>
-	allowedOperations.value.editContent
-		? [
-				{
-					icon: mdiPlus,
-					label: t("pages.roomDetails.fab.add.board"),
-					dataTestId: "add-content-button",
-					clickHandler: () => {
-						boardLayoutDialogIsOpen.value = true;
-					},
-				},
-				...(canImportBoard.value
-					? [
-							{
-								icon: mdiImport,
-								label: t("feature-board-import.title"),
-								dataTestId: "import-board-button",
-								clickHandler: () => {
-									boardImportDialogIsOpen.value = true;
-								},
-							},
-						]
-					: []),
-			]
-		: undefined
-);
+const openBoardLayoutDialog = () => {
+	boardLayoutDialogIsOpen.value = true;
+};
+
+const fabAction = computed<FabAction[] | undefined>(() => {
+	if (!allowedOperations.value.editContent) return undefined;
+
+	const primaryAction = {
+		icon: mdiPlus,
+		label: t("pages.roomDetails.fab.add.board"),
+		dataTestId: "add-content-button",
+	};
+
+	if (!canImportBoard.value) {
+		return [{ ...primaryAction, clickHandler: openBoardLayoutDialog }];
+	}
+
+	// With more than one item, the first item only opens the menu.
+	return [
+		primaryAction,
+		{
+			icon: mdiViewGridPlusOutline,
+			label: t("pages.courseRoomDetails.fab.add.board"),
+			dataTestId: "create-board-button",
+			clickHandler: openBoardLayoutDialog,
+		},
+		{
+			icon: mdiImport,
+			label: t("feature-board-import.title"),
+			dataTestId: "import-board-button",
+			clickHandler: () => {
+				boardImportDialogIsOpen.value = true;
+			},
+		},
+	];
+});
 
 const onEdit = () => {
 	router.push({

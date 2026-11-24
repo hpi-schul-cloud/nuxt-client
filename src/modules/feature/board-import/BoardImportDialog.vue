@@ -19,13 +19,20 @@
 				:label="t('feature-board-import.dialog.link')"
 				data-testid="board-import-link"
 			/>
-			<dl v-else>
-				<dt>{{ t("feature-board-import.dialog.jobId") }}</dt>
-				<dd data-testid="board-import-job-id">{{ job.id }}</dd>
-				<dt>{{ t("common.labels.status") }}</dt>
-				<dd data-testid="board-import-job-status">{{ job.status }}</dd>
-			</dl>
-			<ErrorAlert v-if="hasError" data-testid="board-import-error">
+			<div v-else class="d-flex flex-column ga-4">
+				<div class="d-flex align-center ga-3">
+					<span>{{ t("common.labels.status") }}</span>
+					<VChip :color="statusColor" variant="flat" size="small" data-testid="board-import-job-status">
+						{{ job.status }}
+					</VChip>
+				</div>
+				<VProgressLinear v-if="isPending" indeterminate color="primary" data-testid="board-import-progress" />
+				<div class="text-caption text-medium-emphasis">
+					{{ t("feature-board-import.dialog.jobId") }}:
+					<code data-testid="board-import-job-id">{{ job.id }}</code>
+				</div>
+			</div>
+			<ErrorAlert v-if="hasError" class="mt-4" data-testid="board-import-error">
 				{{ t("feature-board-import.dialog.error") }}
 			</ErrorAlert>
 		</template>
@@ -33,11 +40,11 @@
 </template>
 
 <script setup lang="ts">
-import { BoardImportTargetType } from "@api-board-import";
+import { BoardImportJobStatus, BoardImportTargetType } from "@api-board-import";
 import { useBoardImportJob } from "@data-board-import";
 import { ErrorAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 defineProps<{
@@ -51,6 +58,19 @@ const { t } = useI18n();
 const { job, hasError, isStarting, startImport, reset } = useBoardImportJob();
 
 const link = ref("");
+
+const statusColors: Record<BoardImportJobStatus, string> = {
+	[BoardImportJobStatus.WAITING]: "info",
+	[BoardImportJobStatus.RUNNING]: "info",
+	[BoardImportJobStatus.FINISHED]: "success",
+	[BoardImportJobStatus.FAILED]: "error",
+};
+
+const statusColor = computed(() => (job.value ? statusColors[job.value.status] : undefined));
+
+const isPending = computed(
+	() => job.value?.status === BoardImportJobStatus.WAITING || job.value?.status === BoardImportJobStatus.RUNNING
+);
 
 const onClose = () => {
 	isOpen.value = false;

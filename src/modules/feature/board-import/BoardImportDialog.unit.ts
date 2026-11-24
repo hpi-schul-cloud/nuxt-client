@@ -69,8 +69,17 @@ describe("@feature-board-import/BoardImportDialog", () => {
 			const { wrapper } = setup({ job });
 
 			expect(document.querySelector("[data-testid='board-import-job-id']")?.textContent).toBe(job.id);
-			expect(document.querySelector("[data-testid='board-import-job-status']")?.textContent).toBe(job.status);
+			expect(document.querySelector("[data-testid='board-import-job-status']")?.textContent?.trim()).toBe(job.status);
+			expect(document.querySelector("[data-testid='board-import-progress']")).not.toBeNull();
 			expect(wrapper.findComponent("[data-testid='board-import-link']").exists()).toBe(false);
+		});
+	});
+
+	describe("when the import ended", () => {
+		it("should not show the progress bar", () => {
+			setup({ job: { id: "job-id", status: BoardImportJobStatus.FINISHED } });
+
+			expect(document.querySelector("[data-testid='board-import-progress']")).toBeNull();
 		});
 	});
 

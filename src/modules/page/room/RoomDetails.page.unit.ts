@@ -505,6 +505,20 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			const dialog = wrapper.getComponent(BoardImportDialog);
 			expect(dialog.props()).toMatchObject({ modelValue: true, targetId: room.id });
 		});
+
+		it("should still offer to create a board when the feature is enabled", async () => {
+			const { wrapper } = setup({
+				allowedOperations: { accessRoom: true, editContent: true },
+				isBoardImportEnabled: true,
+			});
+
+			const [menuButton, createAction] = getFabItems(wrapper);
+			createAction.clickHandler?.();
+			await flushPromises();
+
+			expect(menuButton.clickHandler).toBeUndefined();
+			expect(wrapper.getComponent(SelectBoardLayoutDialog).props("modelValue")).toBe(true);
+		});
 	});
 
 	describe("when user wants to create a board", () => {
