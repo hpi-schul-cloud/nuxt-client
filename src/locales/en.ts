@@ -1934,6 +1934,7 @@ export default {
 	"pages.rooms.groups.announce.roomMoved":
 		'The room "{name}" was moved from "{source}" to "{target}" at position {position}.',
 	"pages.rooms.groups.announce.roomReordered": 'The room "{name}" was moved to position {position} in "{target}".',
+	"pages.rooms.groups.notification.movedIntoCollapsed": '"{name}" was moved to the collapsed group "{target}".',
 	"pages.rooms.groups.notification.outcomeUnknown":
 		"The groups were changed elsewhere or the change is unconfirmed. View refreshed – please try again.",
 	"pages.rooms.groups.loadError":

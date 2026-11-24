@@ -16,6 +16,7 @@
 				v-if="isUngroupedVisible"
 				:rooms="view.ungrouped"
 				:show-heading="view.groups.length > 0"
+				:has-move-targets="view.groups.length > 0"
 				:index-offset="0"
 				:disabled="!canEdit"
 				:is-dragging-room="isDraggingRoom"
@@ -205,6 +206,7 @@ const headingSelector = (key: string) => `#room-group-heading-${key}`;
 const addButtonSelector = "[data-testid='room-group-add']";
 const groupMenuSelector = (groupId: string) => `[data-group-id='${groupId}'] [data-testid='room-group-menu']`;
 const roomMenuSelector = (roomId: string) => `[data-room-id='${roomId}'] [data-testid='room-card-menu']`;
+const groupToggleSelector = (groupId: string) => `[data-group-id='${groupId}'] [data-testid='room-group-toggle']`;
 
 const applyPendingFocus = async () => {
 	if (!pendingFocusSelector) return;
@@ -247,11 +249,21 @@ const announceRoomMove = (
 	notifyOnScreenReader(message);
 };
 
+const collapsedTargetGroup = (command: RoomMoveCommand) =>
+	groups.value.find((group) => group.id === command.targetGroupId && group.collapsed);
+
 const executeRoomMove = async (command: RoomMoveCommand) => {
 	const room = rooms.value.find((r) => r.id === command.roomId);
 	const result = await arrangementStore.moveRoom(command);
 	if (result.success) {
 		announceRoomMove(view.value, command, room);
+		// A room moved into a collapsed group disappears from view, so the move is confirmed visibly.
+		const collapsedGroup = collapsedTargetGroup(command);
+		if (collapsedGroup && room) {
+			notifySuccess(
+				t("pages.rooms.groups.notification.movedIntoCollapsed", { name: room.name, target: collapsedGroup.name })
+			);
+		}
 	}
 	return result;
 };
@@ -311,7 +323,8 @@ const onMoveDialogConfirm = async (targetKey: string) => {
 		moveDialog.isOpen = false;
 	}
 	if (result.success) {
-		pendingFocusSelector = roomMenuSelector(room.id);
+		const isTargetCollapsed = groups.value.some((group) => group.id === targetKey && group.collapsed);
+		pendingFocusSelector = isTargetCollapsed ? groupToggleSelector(targetKey) : roomMenuSelector(room.id);
 		await applyPendingFocus();
 	}
 };
@@ -397,6 +410,10 @@ const closeNameDialog = () => {
 };
 
 const onNameSubmit = async (name: string) => {
+	if (nameDialog.mode === "rename" && name === nameDialog.initialName) {
+		closeNameDialog();
+		return;
+	}
 	nameDialog.isSaving = true;
 	const groupId = nameDialog.groupId;
 	const result =
@@ -479,6 +496,8 @@ const onDeleteConfirm = (disableFutureConfirmation: boolean) => {
 		performDelete(deleteDialog.group, disableFutureConfirmation, true);
 	}
 };
+
+defineExpose({ openCreateDialog });
 </script>
 
 <style scoped>

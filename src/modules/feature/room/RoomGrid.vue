@@ -22,6 +22,7 @@
 				:room="element"
 				:index="indexOffset + index"
 				:show-arrange-menu="isGrouped && !readonly"
+				:can-move-to-group
 				:can-move-earlier="!disabled && index > 0"
 				:can-move-later="!disabled && index < rooms.length - 1"
 				:arrange-disabled="disabled"
@@ -73,8 +74,11 @@ const props = withDefaults(
 		titleTag?: "h2" | "h3";
 		/** Id of the section heading that names this grid. */
 		labelledBy?: string;
+		/** Grouped mode only: another section exists that rooms can be moved to. */
+		canMoveToGroup?: boolean;
 	}>(),
 	{
+		canMoveToGroup: true,
 		sectionKey: undefined,
 		indexOffset: 0,
 		disabled: false,

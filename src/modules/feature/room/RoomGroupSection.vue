@@ -11,7 +11,7 @@
 		:data-group-id="group?.id"
 		:aria-labelledby="showHeading ? headingId : undefined"
 	>
-		<div v-if="showHeading" class="room-group-header d-flex align-center ga-1">
+		<div v-if="showHeading" class="room-group-header d-flex align-center ga-2">
 			<div class="room-group-heading">
 				<h2 :id="headingId" tabindex="-1" class="room-group-title text-h4 ma-0" data-testid="room-group-title">
 					{{ title }}
@@ -95,6 +95,7 @@
 					:disabled
 					:title-tag="showHeading ? 'h3' : 'h2'"
 					:labelled-by="showHeading ? headingId : undefined"
+					:can-move-to-group="hasMoveTargets"
 					@drop="emit('drop', $event)"
 					@drag-start="emit('drag-start')"
 					@drag-end="emit('drag-end')"
@@ -159,8 +160,10 @@ const props = withDefaults(
 		showHeading?: boolean;
 		disabled?: boolean;
 		isDraggingRoom?: boolean;
+		hasMoveTargets?: boolean;
 	}>(),
 	{
+		hasMoveTargets: true,
 		group: undefined,
 		groupIndex: 0,
 		groupCount: 0,

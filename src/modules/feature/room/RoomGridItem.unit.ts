@@ -118,6 +118,15 @@ describe("@feature-room/RoomGridItem", () => {
 			expect(wrapper.emitted(event)).toHaveLength(1);
 		});
 
+		it("hides moving to another section when there is none", async () => {
+			const { wrapper } = setup({ room: arrangeableRoom, index: 0, showArrangeMenu: true, canMoveToGroup: false });
+			await wrapper.get("[data-testid=room-card-menu]").trigger("click");
+
+			const testIds = wrapper.findAllComponents(KebabMenuAction).map((a) => a.attributes("data-testid"));
+			expect(testIds).not.toContain("room-card-menu-move-to-group");
+			expect(testIds).toContain("room-card-menu-move-later");
+		});
+
 		it("disables moving beyond the section boundaries", async () => {
 			const { wrapper } = setup({ room: arrangeableRoom, index: 0, showArrangeMenu: true, canMoveLater: true });
 			await wrapper.get("[data-testid=room-card-menu]").trigger("click");

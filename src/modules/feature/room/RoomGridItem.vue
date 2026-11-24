@@ -45,6 +45,7 @@
 					:aria-label="t('pages.rooms.groups.roomMenu.ariaLabel', { name: room.name })"
 				>
 					<KebabMenuAction
+						v-if="canMoveToGroup"
 						:icon="mdiFolderMoveOutline"
 						:disabled="arrangeDisabled"
 						data-testid="room-card-menu-move-to-group"
@@ -104,8 +105,17 @@ const props = withDefaults(
 		/** Arranging is temporarily not possible, e.g. while another change is being saved. */
 		arrangeDisabled?: boolean;
 		titleTag?: "h2" | "h3";
+		/** False when there is no other section to move to, so the move dialog would be a dead end. */
+		canMoveToGroup?: boolean;
 	}>(),
-	{ showArrangeMenu: false, canMoveEarlier: false, canMoveLater: false, arrangeDisabled: false, titleTag: "h2" }
+	{
+		showArrangeMenu: false,
+		canMoveEarlier: false,
+		canMoveLater: false,
+		arrangeDisabled: false,
+		titleTag: "h2",
+		canMoveToGroup: true,
+	}
 );
 
 const emit = defineEmits<{

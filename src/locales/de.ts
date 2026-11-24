@@ -1977,6 +1977,8 @@ export default {
 		"Der Raum „{name}“ wurde von „{source}“ nach „{target}“ an Position {position} verschoben.",
 	"pages.rooms.groups.announce.roomReordered":
 		"Der Raum „{name}“ wurde in „{target}“ an Position {position} verschoben.",
+	"pages.rooms.groups.notification.movedIntoCollapsed":
+		"„{name}“ wurde in die eingeklappte Gruppe „{target}“ verschoben.",
 	"pages.rooms.groups.notification.outcomeUnknown":
 		"Die Gruppen wurden zwischenzeitlich geändert oder die Änderung ist unbestätigt. Ansicht aktualisiert – bitte erneut versuchen.",
 	"pages.rooms.groups.loadError":

@@ -166,6 +166,32 @@ describe("RoomGroupedOverview", () => {
 			});
 		});
 
+		it("confirms a move into a collapsed group visibly and focuses that group's toggle", async () => {
+			await setup({
+				groups: [
+					{ ...groupA, roomIds: rooms.slice(1).map((room) => room.id) },
+					{ ...groupB, roomIds: [], collapsed: true },
+				],
+			});
+
+			sections()[0].vm.$emit("move-to-group", rooms[0]);
+			await flushPromises();
+			wrapper?.findComponent(RoomMoveDialog).vm.$emit("confirm", groupB.id);
+			await flushPromises();
+			wrapper?.findComponent(RoomMoveDialog).vm.$emit("after-leave");
+			await flushPromises();
+
+			expectNotification("success");
+			expect(document.activeElement?.getAttribute("data-testid")).toBe("room-group-toggle");
+			expect(document.activeElement?.closest("[data-group-id]")?.getAttribute("data-group-id")).toBe(groupB.id);
+		});
+
+		it("offers moving rooms of the ungrouped section only when a group exists", async () => {
+			await setup({ groups: [] });
+
+			expect(sections()[0].props("hasMoveTargets")).toBe(false);
+		});
+
 		it("converts a completed drag between sections into exactly one command", async () => {
 			await setup();
 			const sortable = sections()[0].findComponent({ name: "Sortable" });
@@ -356,6 +382,18 @@ describe("RoomGroupedOverview", () => {
 				const focusedRoom = document.activeElement?.closest("[data-room-id]");
 				expect(focusedRoom?.getAttribute("data-room-id")).toBe(rooms[0].id);
 			});
+		});
+
+		it("does not save a rename that keeps the name", async () => {
+			await setup();
+
+			sections()[1].vm.$emit("rename");
+			await flushPromises();
+			wrapper?.findComponent(RoomGroupNameDialog).vm.$emit("submit", groupA.name);
+			await flushPromises();
+
+			expect(arrangementApi.roomArrangementControllerUpdateGroup).not.toHaveBeenCalled();
+			expect(wrapper?.findComponent(RoomGroupNameDialog).props("modelValue")).toBe(false);
 		});
 
 		it("deletes directly with visible feedback when confirmations are disabled", async () => {

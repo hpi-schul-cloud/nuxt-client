@@ -1980,6 +1980,7 @@ export default {
 	"pages.rooms.groups.announce.roomMoved":
 		"La sala «{name}» se ha movido de «{source}» a «{target}» en la posición {position}.",
 	"pages.rooms.groups.announce.roomReordered": "La sala «{name}» se ha movido a la posición {position} en «{target}».",
+	"pages.rooms.groups.notification.movedIntoCollapsed": "«{name}» se ha movido al grupo contraído «{target}».",
 	"pages.rooms.groups.notification.outcomeUnknown":
 		"Los grupos se han modificado en otro lugar o el cambio no está confirmado. Vista actualizada: inténtalo de nuevo.",
 	"pages.rooms.groups.loadError":

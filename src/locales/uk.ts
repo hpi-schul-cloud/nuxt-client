@@ -1953,6 +1953,7 @@ export default {
 	"pages.rooms.groups.announce.roomMoved":
 		"Кімнату «{name}» переміщено з «{source}» до «{target}» на позицію {position}.",
 	"pages.rooms.groups.announce.roomReordered": "Кімнату «{name}» переміщено на позицію {position} у «{target}».",
+	"pages.rooms.groups.notification.movedIntoCollapsed": "«{name}» переміщено до згорнутої групи «{target}».",
 	"pages.rooms.groups.notification.outcomeUnknown":
 		"Групи змінено деінде або зміну не підтверджено. Подання оновлено – спробуйте ще раз.",
 	"pages.rooms.groups.loadError":

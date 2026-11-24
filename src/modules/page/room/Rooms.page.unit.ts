@@ -394,7 +394,25 @@ describe("RoomsPage", () => {
 				});
 				await flushPromises();
 
-				expect(wrapper.find("[data-testid=rooms-menu]").exists()).toBe(false);
+				await wrapper.get("[data-testid=rooms-menu]").trigger("click");
+				const testIds = wrapper.findAllComponents(KebabMenuAction).map((action) => action.attributes("data-testid"));
+				expect(testIds).toContain("rooms-menu-add-group");
+				expect(testIds).not.toContain("rooms-menu-restore-group-delete-confirmation");
+			});
+
+			it("should open the create group dialog from the rooms menu", async () => {
+				mockArrangementApi({ revision: 2 });
+				const { wrapper } = setup(undefined, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+				await flushPromises();
+
+				await wrapper.get("[data-testid=rooms-menu]").trigger("click");
+				await wrapper
+					.findAllComponents(KebabMenuAction)
+					.find((action) => action.attributes("data-testid") === "rooms-menu-add-group")
+					?.trigger("click");
+				await flushPromises();
+
+				expect(wrapper.findComponent({ name: "RoomGroupNameDialog" }).props("modelValue")).toBe(true);
 			});
 
 			it("should restore delete confirmations from the rooms menu", async () => {

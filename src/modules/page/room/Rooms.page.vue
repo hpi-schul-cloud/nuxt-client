@@ -4,11 +4,20 @@
 			<div class="d-flex align-center">
 				<h1>{{ t("pages.rooms.title") }}</h1>
 				<KebabMenu
-					v-if="isRoomArchiveFeatureEnabled || isRestoreGroupDeleteConfirmationVisible"
+					v-if="isRoomArchiveFeatureEnabled || isRoomGroupingEnabled"
 					class="mx-2"
 					:aria-label="t('pages.rooms.menu.ariaLabel')"
 					data-testid="rooms-menu"
 				>
+					<KebabMenuAction
+						v-if="isRoomGroupingEnabled"
+						:icon="mdiPlus"
+						:disabled="!isArrangementReady"
+						data-testid="rooms-menu-add-group"
+						@click="groupedOverview?.openCreateDialog()"
+					>
+						{{ t("pages.rooms.groups.add") }}
+					</KebabMenuAction>
 					<KebabMenuAction
 						v-if="isRoomArchiveFeatureEnabled"
 						:icon="mdiArchiveOutline"
@@ -39,7 +48,7 @@
 						<RoomsEmptyStateSvg />
 					</template>
 				</EmptyState>
-				<RoomGroupedOverview />
+				<RoomGroupedOverview ref="groupedOverview" />
 			</template>
 		</template>
 		<template v-else>
@@ -71,7 +80,7 @@ import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { sortBy } from "lodash-es";
 import { storeToRefs } from "pinia";
-import { computed, onMounted, toValue, watch } from "vue";
+import { computed, onMounted, toValue, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
@@ -83,6 +92,7 @@ const { rooms, isLoading, isEmpty } = storeToRefs(useRoomStore());
 const { fetchRooms } = useRoomStore();
 
 const arrangementStore = useRoomArrangementStore();
+const groupedOverview = useTemplateRef("groupedOverview");
 const {
 	isInitialLoading: isArrangementInitialLoading,
 	isEmpty: isArrangementEmpty,
