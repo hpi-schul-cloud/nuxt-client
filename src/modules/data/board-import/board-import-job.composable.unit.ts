@@ -1,6 +1,6 @@
 import { useBoardImportJob } from "./board-import-job.composable";
 import { initializeAxios } from "@/utils/api";
-import { mockApi, mockApiResponse, mockAxiosInstance, mountComposable } from "@@/tests/test-utils";
+import { axiosErrorFactory, mockApi, mockApiResponse, mockAxiosInstance, mountComposable } from "@@/tests/test-utils";
 import * as boardImportApiModule from "@api-board-import";
 import { BoardImportJobStatus, BoardImportTargetType } from "@api-board-import";
 import { Mocked } from "vitest";
@@ -62,6 +62,73 @@ describe("useBoardImportJob", () => {
 			expect(hasError.value).toBe(true);
 			expect(job.value).toBeUndefined();
 			expect(boardImportApi.boardImportControllerGetJob).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("error messages", () => {
+		const rejectWithPayload = (data: unknown) => {
+			const error = axiosErrorFactory.build();
+			if (error.response) error.response.data = data;
+			boardImportApi.boardImportControllerStartImport.mockRejectedValue(error);
+		};
+
+		it("should give the title and the message of the backend error", async () => {
+			const { startImport, errorMessages } = setup();
+			rejectWithPayload({ code: 403, type: "FORBIDDEN", title: "Forbidden", message: "Feature disabled" });
+
+			await startImport(link, targetType, targetId);
+
+			expect(errorMessages.value).toEqual(["Forbidden: Feature disabled"]);
+		});
+
+		it("should give the validation errors of the backend", async () => {
+			const { startImport, errorMessages } = setup();
+			rejectWithPayload({
+				title: "API Validation Error",
+				message: "API validation failed, see validationErrors for details",
+				validationErrors: [{ field: ["link"], errors: ["link must be a URL address"] }],
+			});
+
+			await startImport(link, targetType, targetId);
+
+			expect(errorMessages.value).toEqual([
+				"API Validation Error: API validation failed, see validationErrors for details",
+				"link: link must be a URL address",
+			]);
+		});
+
+		it.each([
+			["a string", "Bad Gateway"],
+			["an object without message", { foo: "bar" }],
+			["nothing", undefined],
+		])("should give no messages when the payload is %s", async (_name, payload) => {
+			const { startImport, errorMessages, hasError } = setup();
+			rejectWithPayload(payload);
+
+			await startImport(link, targetType, targetId);
+
+			expect(hasError.value).toBe(true);
+			expect(errorMessages.value).toEqual([]);
+		});
+
+		it("should give no messages when the error is not a response error", async () => {
+			const { startImport, errorMessages } = setup();
+			boardImportApi.boardImportControllerStartImport.mockRejectedValue(new Error("failed"));
+
+			await startImport(link, targetType, targetId);
+
+			expect(errorMessages.value).toEqual([]);
+		});
+
+		it("should clear the messages on the next start", async () => {
+			const { startImport, errorMessages } = setup();
+			rejectWithPayload({ title: "Forbidden", message: "Feature disabled" });
+			await startImport(link, targetType, targetId);
+			boardImportApi.boardImportControllerStartImport.mockResolvedValue(mockJobResponse(BoardImportJobStatus.WAITING));
+
+			await startImport(link, targetType, targetId);
+
+			expect(errorMessages.value).toEqual([]);
 		});
 	});
 

@@ -33,7 +33,10 @@
 				</div>
 			</div>
 			<ErrorAlert v-if="hasError" class="mt-4" data-testid="board-import-error">
-				{{ t("feature-board-import.dialog.error") }}
+				<template v-if="errorMessages.length">
+					<div v-for="message in errorMessages" :key="message">{{ message }}</div>
+				</template>
+				<template v-else>{{ t("feature-board-import.dialog.error") }}</template>
 			</ErrorAlert>
 		</template>
 	</SvsDialog>
@@ -55,7 +58,7 @@ defineProps<{
 const isOpen = defineModel({ type: Boolean, default: false });
 
 const { t } = useI18n();
-const { job, hasError, isStarting, startImport, reset } = useBoardImportJob();
+const { job, hasError, errorMessages, isStarting, startImport, reset } = useBoardImportJob();
 
 const link = ref("");
 

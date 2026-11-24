@@ -23,10 +23,11 @@ describe("@feature-board-import/BoardImportDialog", () => {
 		vi.clearAllMocks();
 	});
 
-	const setup = (options?: { job?: BoardImportJobResponse; hasError?: boolean }) => {
+	const setup = (options?: { job?: BoardImportJobResponse; hasError?: boolean; errorMessages?: string[] }) => {
 		const boardImportJob = mockComposable(useBoardImportJob, {
 			job: ref(options?.job),
 			hasError: ref(options?.hasError ?? false),
+			errorMessages: ref(options?.errorMessages ?? []),
 			isStarting: ref(false),
 		});
 		vi.mocked(useBoardImportJob).mockReturnValue(boardImportJob);
@@ -84,10 +85,23 @@ describe("@feature-board-import/BoardImportDialog", () => {
 	});
 
 	describe("when a request failed", () => {
-		it("should show an error", () => {
+		it("should show the generic error when the backend gave no message", () => {
 			const { wrapper } = setup({ hasError: true });
 
-			expect(wrapper.findComponent("[data-testid='board-import-error']").exists()).toBe(true);
+			const alert = wrapper.findComponent("[data-testid='board-import-error']");
+
+			expect(alert.text()).toContain("feature-board-import.dialog.error");
+		});
+
+		it("should show the messages of the backend", () => {
+			const errorMessages = ["Forbidden: Feature disabled", "link: must be a URL"];
+			const { wrapper } = setup({ hasError: true, errorMessages });
+
+			const alert = wrapper.findComponent("[data-testid='board-import-error']");
+
+			expect(alert.text()).toContain(errorMessages[0]);
+			expect(alert.text()).toContain(errorMessages[1]);
+			expect(alert.text()).not.toContain("feature-board-import.dialog.error");
 		});
 	});
 
