@@ -3,7 +3,7 @@
 		v-model="isOpen"
 		is-open-state-managed-externally
 		scrollable
-		:title="t('pages.rooms.groups.moveDialog.title')"
+		:title="t(roomCount > 1 ? 'pages.rooms.groups.moveDialog.titleMany' : 'pages.rooms.groups.moveDialog.title')"
 		:is-loading="isMoving"
 		:persistent="isMoving"
 		:are-actions-disabled="isMoving"
@@ -14,7 +14,7 @@
 		@cancel="emit('cancel')"
 	>
 		<template #content>
-			<p :id="questionId" class="mb-2">{{ t("pages.rooms.groups.moveDialog.text", { name: roomName }) }}</p>
+			<p :id="questionId" class="mb-2">{{ question }}</p>
 			<VRadioGroup v-model="selectedKey" :aria-labelledby="questionId" :disabled="isMoving" hide-details>
 				<VRadio
 					v-for="target in targets"
@@ -46,8 +46,10 @@ const props = withDefaults(
 		targets: RoomMoveTarget[];
 		currentKey?: string;
 		isMoving?: boolean;
+		/** Number of rooms moved at once; the room name is only used for a single room. */
+		roomCount?: number;
 	}>(),
-	{ currentKey: undefined, isMoving: false }
+	{ currentKey: undefined, isMoving: false, roomCount: 1 }
 );
 
 const emit = defineEmits<{
@@ -61,6 +63,12 @@ const questionId = `room-move-question-${useId()}`;
 const { t } = useI18n();
 
 const selectedKey = ref<string | null>(null);
+
+const question = computed(() =>
+	props.roomCount > 1
+		? t("pages.rooms.groups.moveDialog.textMany", { count: props.roomCount }, props.roomCount)
+		: t("pages.rooms.groups.moveDialog.text", { name: props.roomName })
+);
 
 const canConfirm = computed(
 	() =>

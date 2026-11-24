@@ -66,7 +66,7 @@ describe("RoomGroupSection", () => {
 			const section = wrapper?.get("[data-testid='room-group-1']");
 			expect(section?.attributes("data-group-id")).toBe("aaaaaaaaaaaaaaaaaaaaaaaa");
 			expect(section?.attributes("aria-labelledby")).toBe("room-group-heading-aaaaaaaaaaaaaaaaaaaaaaaa");
-			expect(wrapper?.get("h2[data-testid='room-group-title']").text()).toBe("Informatik");
+			expect(wrapper?.get("[data-testid='room-group-title']").text()).toBe("Informatik");
 			expect(wrapper?.get("[data-testid='room-group-count']").text()).toBe("pages.rooms.groups.roomCount");
 			expect(wrapper?.find("[data-testid='room-group-drag-handle']").exists()).toBe(true);
 		});
@@ -158,7 +158,7 @@ describe("RoomGroupSection", () => {
 		it("names the room grid with the section heading", () => {
 			setup({ group: group(), rooms: roomItemFactory.buildList(1) });
 
-			const headingId = wrapper?.get("[data-testid='room-group-title']").attributes("id");
+			const headingId = wrapper?.get("h2").attributes("id");
 			expect(wrapper?.get("[data-testid='room-group-grid']").attributes("aria-labelledby")).toBe(headingId);
 		});
 	});
@@ -205,15 +205,14 @@ describe("RoomGroupSection", () => {
 			}
 		});
 
-		it("keeps the toggle focusable but ignores it", async () => {
+		it("keeps the toggle usable so the click is not dropped", async () => {
 			setup({ group: group(), disabled: true });
 			const toggle = wrapper?.get("[data-testid='room-group-toggle']");
 
 			await toggle?.trigger("click");
 
-			expect(toggle?.attributes("aria-disabled")).toBe("true");
 			expect(toggle?.attributes("disabled")).toBeUndefined();
-			expect(wrapper?.emitted("toggle")).toBeUndefined();
+			expect(wrapper?.emitted("toggle")).toEqual([[true]]);
 		});
 	});
 
@@ -230,6 +229,51 @@ describe("RoomGroupSection", () => {
 
 			expect(wrapper?.find("[data-testid='room-group-title']").exists()).toBe(false);
 			expect(wrapper?.findComponent(RoomGrid).props("titleTag")).toBe("h2");
+		});
+	});
+
+	describe("accordion header", () => {
+		it("puts the disclosure button with the group name inside the heading", () => {
+			setup({ group: group({ name: "Informatik" }) });
+
+			const button = wrapper?.get("h2 > button[data-testid='room-group-toggle']");
+			expect(button?.attributes("type")).toBe("button");
+			expect(button?.attributes("aria-label")).toBeUndefined();
+			expect(button?.get("[data-testid='room-group-title']").text()).toBe("Informatik");
+		});
+
+		it("toggles when the group name is clicked", async () => {
+			setup({ group: group() });
+
+			await wrapper?.get("[data-testid='room-group-title']").trigger("click");
+
+			expect(wrapper?.emitted("toggle")).toEqual([[true]]);
+		});
+
+		it("keeps a plain heading without button for the ungrouped section", () => {
+			setup({ rooms: roomItemFactory.buildList(1) });
+
+			expect(wrapper?.get("h2[data-testid], h2 [data-testid='room-group-title']").text()).toBe(
+				"pages.rooms.groups.ungrouped"
+			);
+			expect(wrapper?.find("h2 button").exists()).toBe(false);
+		});
+	});
+
+	describe("selection mode", () => {
+		it("passes the selection to the room grid and forwards selections", () => {
+			const rooms = roomItemFactory.buildList(1);
+			wrapper = mount(RoomGroupSection, {
+				props: { rooms, group: group({ rooms }), selectable: true, selectedRoomIds: [rooms[0].id] },
+				global: { plugins: [createTestingVuetify(), createTestingI18n()], stubs: { RouterLink: true } },
+			});
+			const grid = wrapper.findComponent(RoomGrid);
+			expect(grid.props("selectable")).toBe(true);
+			expect(grid.props("selectedRoomIds")).toEqual([rooms[0].id]);
+
+			grid.vm.$emit("select-room", rooms[0].id, false);
+
+			expect(wrapper.emitted("select-room")).toEqual([[rooms[0].id, false]]);
 		});
 	});
 });

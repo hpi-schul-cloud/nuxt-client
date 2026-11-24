@@ -79,4 +79,18 @@ describe("RoomMoveDialog", () => {
 
 		expect(wrapper?.emitted("confirm")).toEqual([["ungrouped"]]);
 	});
+
+	it("asks for a target of several rooms without a current location", () => {
+		wrapper = mount(RoomMoveDialog, {
+			props: { modelValue: true, roomName: "", targets, roomCount: 3 },
+			global: { plugins: [createTestingVuetify(), createTestingI18n()], stubs: { UseFocusTrap: true } },
+			attachTo: document.body,
+		});
+
+		expect(wrapper.findComponent(SvsDialog).props("title")).toBe("pages.rooms.groups.moveDialog.titleMany");
+		expect(document.querySelector("[data-testid='room-move-dialog']")?.textContent).toContain(
+			"pages.rooms.groups.moveDialog.textMany"
+		);
+		expect(wrapper.findAllComponents(VRadio).every((radio) => radio.props("disabled") !== true)).toBe(true);
+	});
 });

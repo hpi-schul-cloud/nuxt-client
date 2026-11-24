@@ -19,6 +19,30 @@
 						{{ t("pages.rooms.groups.add") }}
 					</KebabMenuAction>
 					<KebabMenuAction
+						v-if="isRoomSelectionAvailable"
+						:icon="mdiCheckboxOutline"
+						data-testid="rooms-menu-select-rooms"
+						@click="groupedOverview?.startSelection()"
+					>
+						{{ t("pages.rooms.groups.selection.start") }}
+					</KebabMenuAction>
+					<KebabMenuAction
+						v-if="isCollapseAllVisible"
+						:icon="mdiArrowCollapseUp"
+						data-testid="rooms-menu-collapse-all-groups"
+						@click="setAllGroupsCollapsed(true)"
+					>
+						{{ t("pages.rooms.menu.collapseAllGroups") }}
+					</KebabMenuAction>
+					<KebabMenuAction
+						v-if="isExpandAllVisible"
+						:icon="mdiArrowExpandDown"
+						data-testid="rooms-menu-expand-all-groups"
+						@click="setAllGroupsCollapsed(false)"
+					>
+						{{ t("pages.rooms.menu.expandAllGroups") }}
+					</KebabMenuAction>
+					<KebabMenuAction
 						v-if="isRoomArchiveFeatureEnabled"
 						:icon="mdiArchiveOutline"
 						data-testid="rooms-menu-archived-rooms"
@@ -66,6 +90,7 @@
 </template>
 
 <script setup lang="ts">
+import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { Permission } from "@api-server";
 import { notifySuccess, useAppStore } from "@data-app";
@@ -73,7 +98,14 @@ import { useEnvConfig } from "@data-env";
 import { useRoomArrangementStore, useRoomStore } from "@data-room";
 import { useImportFlow } from "@feature-import";
 import { RoomGrid, RoomGroupedOverview, RoomsWelcomeInfo } from "@feature-room";
-import { mdiAlertCircleOutline, mdiArchiveOutline, mdiPlus } from "@icons/material";
+import {
+	mdiAlertCircleOutline,
+	mdiArchiveOutline,
+	mdiArrowCollapseUp,
+	mdiArrowExpandDown,
+	mdiCheckboxOutline,
+	mdiPlus,
+} from "@icons/material";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { KebabMenu, KebabMenuAction } from "@ui-kebab-menu";
 import { DefaultWireframe } from "@ui-layout";
@@ -98,7 +130,9 @@ const {
 	isEmpty: isArrangementEmpty,
 	isReady: isArrangementReady,
 	confirmGroupDeletion,
+	groups: arrangementGroups,
 } = storeToRefs(arrangementStore);
+const { notifyOnScreenReader } = useAriaLiveNotifier();
 
 const pageTitle = computed(() => buildPageTitle(t("pages.rooms.title")));
 useTitle(pageTitle);
@@ -109,6 +143,29 @@ const isRoomGroupingEnabled = computed(() => useEnvConfig().value.FEATURE_ROOM_G
 const isRestoreGroupDeleteConfirmationVisible = computed(
 	() => isRoomGroupingEnabled.value && isArrangementReady.value && !confirmGroupDeletion.value
 );
+
+const isRoomSelectionAvailable = computed(
+	() =>
+		isRoomGroupingEnabled.value &&
+		isArrangementReady.value &&
+		arrangementGroups.value.length > 0 &&
+		rooms.value.some((room) => room.allowedOperations?.arrangeRooms === true)
+);
+const isCollapseAllVisible = computed(
+	() => isRoomGroupingEnabled.value && isArrangementReady.value && arrangementGroups.value.some((g) => !g.collapsed)
+);
+const isExpandAllVisible = computed(
+	() => isRoomGroupingEnabled.value && isArrangementReady.value && arrangementGroups.value.some((g) => g.collapsed)
+);
+
+const setAllGroupsCollapsed = async (collapsed: boolean) => {
+	const isApplied = await arrangementStore.setAllGroupsCollapsed(collapsed);
+	if (isApplied) {
+		notifyOnScreenReader(
+			t(collapsed ? "pages.rooms.groups.announce.allCollapsed" : "pages.rooms.groups.announce.allExpanded")
+		);
+	}
+};
 
 const restoreGroupDeleteConfirmation = async () => {
 	const result = await arrangementStore.setConfirmGroupDeletion(true);

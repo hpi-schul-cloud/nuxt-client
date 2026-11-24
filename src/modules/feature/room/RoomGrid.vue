@@ -21,7 +21,9 @@
 				:class="{ 'draggable cursor-grab': isRoomDraggable(element) }"
 				:room="element"
 				:index="indexOffset + index"
-				:show-arrange-menu="isGrouped && !readonly"
+				:show-arrange-menu="isGrouped && !readonly && !selectable"
+				:selectable="isGrouped && selectable"
+				:selected="selectedRoomIds.includes(element.id)"
 				:can-move-to-group
 				:can-move-earlier="!disabled && index > 0"
 				:can-move-later="!disabled && index < rooms.length - 1"
@@ -34,6 +36,7 @@
 				@move-to-group="emit('move-to-group', element)"
 				@move-earlier="emitReorder(element, index, index - 1)"
 				@move-later="emitReorder(element, index, index + 1)"
+				@select="emit('select-room', element.id, $event)"
 			/>
 		</template>
 	</Sortable>
@@ -76,8 +79,13 @@ const props = withDefaults(
 		labelledBy?: string;
 		/** Grouped mode only: another section exists that rooms can be moved to. */
 		canMoveToGroup?: boolean;
+		/** Grouped mode only: rooms are selected for a bulk move; dragging is off meanwhile. */
+		selectable?: boolean;
+		selectedRoomIds?: string[];
 	}>(),
 	{
+		selectable: false,
+		selectedRoomIds: () => [],
 		canMoveToGroup: true,
 		sectionKey: undefined,
 		indexOffset: 0,
@@ -93,6 +101,7 @@ const emit = defineEmits<{
 	"drag-start": [];
 	"drag-end": [];
 	"move-to-group": [room: RoomItem];
+	"select-room": [roomId: string, selected: boolean];
 }>();
 
 const { notifyOnScreenReader } = useAriaLiveNotifier();
@@ -114,7 +123,7 @@ const sortableOptions = computed(() => {
 	}
 	return getSortableOptions({
 		group: ROOM_SORTABLE_GROUP,
-		disabled: props.readonly || props.disabled,
+		disabled: props.readonly || props.disabled || props.selectable,
 		animation: reducedMotion.value === "reduce" ? 0 : 250,
 	});
 });
@@ -122,7 +131,7 @@ const sortableOptions = computed(() => {
 const isRoomDraggable = (room: RoomItem) => {
 	if (props.readonly) return false;
 	if (!isGrouped.value) return true;
-	return !props.disabled && room.allowedOperations?.arrangeRooms === true;
+	return !props.disabled && !props.selectable && room.allowedOperations?.arrangeRooms === true;
 };
 
 const onItemFocusIn = (event: FocusEvent) => {
@@ -169,7 +178,7 @@ const reorderRoom = (newIndex: number, oldIndex: number) => {
 };
 
 const emitReorder = (room: RoomItem, oldIndex: number, newIndex: number) => {
-	if (props.sectionKey === undefined || props.disabled || props.readonly) return;
+	if (props.sectionKey === undefined || props.disabled || props.readonly || props.selectable) return;
 	if (newIndex < 0 || newIndex >= props.rooms.length || newIndex === oldIndex) return;
 
 	emit("drop", { roomId: room.id, fromKey: props.sectionKey, toKey: props.sectionKey, oldIndex, newIndex });

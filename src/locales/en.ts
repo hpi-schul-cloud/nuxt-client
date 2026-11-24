@@ -1936,12 +1936,33 @@ export default {
 	"pages.rooms.groups.announce.roomReordered": 'The room "{name}" was moved to position {position} in "{target}".',
 	"pages.rooms.groups.notification.movedIntoCollapsed": '"{name}" was moved to the collapsed group "{target}".',
 	"pages.rooms.groups.notification.outcomeUnknown":
-		"The groups were changed elsewhere or the change is unconfirmed. View refreshed – please try again.",
+		"The groups were changed in the meantime. The view is up to date – please try again.",
 	"pages.rooms.groups.loadError":
 		"The groups could not be loaded. Rooms are shown without groups and cannot be arranged right now.",
 	"pages.rooms.groups.retry": "Reload",
 	"pages.rooms.groups.confirmationRestored": "You will be asked again before a group is deleted.",
 	"pages.rooms.menu.restoreGroupDeleteConfirmation": "Ask before deleting groups",
+	"pages.rooms.groups.undo.action": "Undo",
+	"pages.rooms.groups.undo.roomMoved": '"{name}" was moved to "{target}".',
+	"pages.rooms.groups.undo.roomReordered": '"{name}" was moved.',
+	"pages.rooms.groups.undo.roomsMoved":
+		'{count} room was moved to "{target}". | {count} rooms were moved to "{target}".',
+	"pages.rooms.groups.undo.done": "The change was undone.",
+	"pages.rooms.groups.selection.start": "Select rooms",
+	"pages.rooms.groups.selection.selectRoom": 'Select room "{name}"',
+	"pages.rooms.groups.selection.count": "{count} room selected | {count} rooms selected",
+	"pages.rooms.groups.selection.label": "Room selection",
+	"pages.rooms.groups.selection.started":
+		"Selection mode: select rooms using their checkboxes. Press Escape to end the selection.",
+	"pages.rooms.groups.moveDialog.titleMany": "Move rooms",
+	"pages.rooms.groups.moveDialog.textMany":
+		"Where should the selected room be moved? | Where should the {count} selected rooms be moved?",
+	"pages.rooms.groups.onboarding.text":
+		'Keep track: combine your rooms into groups, e.g. by subject. Drag rooms into a group or use ⋮ › "Move to…".',
+	"pages.rooms.groups.announce.allCollapsed": "All groups were collapsed.",
+	"pages.rooms.groups.announce.allExpanded": "All groups were expanded.",
+	"pages.rooms.menu.collapseAllGroups": "Collapse all groups",
+	"pages.rooms.menu.expandAllGroups": "Expand all groups",
 	"pages.rooms.archived.title": "Archived rooms",
 	"pages.rooms.archived.chip": "Archived room",
 	"pages.rooms.archived.emptyState": "There are currently no archived rooms",

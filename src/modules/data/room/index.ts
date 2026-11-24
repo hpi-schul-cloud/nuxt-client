@@ -6,6 +6,7 @@ export { type Registration, useRegistrationStore } from "./registration/registra
 export { useRegistrationStepper } from "./registration/registrationStepper.composable";
 export * from "./room.store";
 export { useRoomAllowedOperations } from "./room-allowed-operations.composable";
+export { applyRoomsMove } from "./room-arrangement-undo";
 export {
 	countRoomGroupNameLength,
 	normalizeRoomGroupName,
@@ -19,6 +20,7 @@ export {
 	type RoomArrangement,
 	type RoomArrangementLoadStatus,
 	type RoomArrangementMutationResult,
+	type RoomArrangementUndoDescription,
 	type RoomArrangementView,
 	type RoomGroupView,
 	type RoomMoveCommand,

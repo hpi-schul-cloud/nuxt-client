@@ -12,6 +12,33 @@
 			<RoomGrid v-if="roomsStatus === 'loaded' && rooms.length > 0" :rooms readonly />
 		</template>
 		<template v-else-if="view">
+			<InfoAlert v-if="isOnboardingVisible" class="mb-6" data-testid="room-groups-onboarding">
+				<div class="d-flex flex-wrap align-center ga-3">
+					<span>{{ t("pages.rooms.groups.onboarding.text") }}</span>
+					<VBtn
+						variant="outlined"
+						size="small"
+						:prepend-icon="mdiPlus"
+						:disabled="!isReady"
+						data-testid="room-groups-onboarding-add"
+						@click="openCreateDialog"
+					>
+						{{ t("pages.rooms.groups.add") }}
+					</VBtn>
+				</div>
+			</InfoAlert>
+			<div v-if="isSelectionStartVisible" class="d-flex justify-end mb-2">
+				<VBtn
+					variant="text"
+					size="small"
+					:prepend-icon="mdiCheckboxOutline"
+					:disabled="!isReady"
+					data-testid="room-selection-start"
+					@click="startSelection"
+				>
+					{{ t("pages.rooms.groups.selection.start") }}
+				</VBtn>
+			</div>
 			<RoomGroupSection
 				v-if="isUngroupedVisible"
 				:rooms="view.ungrouped"
@@ -20,10 +47,13 @@
 				:index-offset="0"
 				:disabled="!canEdit"
 				:is-dragging-room="isDraggingRoom"
+				:selectable="selection.isActive"
+				:selected-room-ids="selection.roomIds"
 				@drop="onRoomDrop"
 				@drag-start="isDraggingRoom = true"
 				@drag-end="isDraggingRoom = false"
 				@move-to-group="openMoveDialog"
+				@select-room="onSelectRoom"
 			/>
 			<Sortable
 				:list="view.groups"
@@ -43,6 +73,8 @@
 						:index-offset="groupIndexOffsets[index]"
 						:disabled="!canEdit"
 						:is-dragging-room="isDraggingRoom"
+						:selectable="selection.isActive"
+						:selected-room-ids="selection.roomIds"
 						@drop="onRoomDrop"
 						@drag-start="isDraggingRoom = true"
 						@drag-end="isDraggingRoom = false"
@@ -52,6 +84,7 @@
 						@delete="requestDelete(element)"
 						@move-up="onMoveGroup(element, -1)"
 						@move-down="onMoveGroup(element, 1)"
+						@select-room="onSelectRoom"
 					/>
 				</template>
 			</Sortable>
@@ -72,6 +105,44 @@
 			</VBtn>
 			<VDivider />
 		</div>
+
+		<div
+			v-if="selection.isActive"
+			class="room-selection-bar d-flex flex-wrap align-center ga-2 pa-3 mt-4 rounded elevation-4"
+			role="region"
+			:aria-label="t('pages.rooms.groups.selection.label')"
+			data-testid="room-selection-bar"
+		>
+			<span class="text-body-1 flex-grow-1" aria-live="polite" data-testid="room-selection-count">
+				{{ t("pages.rooms.groups.selection.count", { count: selectedRoomIds.length }, selectedRoomIds.length) }}
+			</span>
+			<VBtn variant="text" data-testid="room-selection-cancel" @click="endSelection">
+				{{ t("common.actions.cancel") }}
+			</VBtn>
+			<VBtn
+				color="primary"
+				variant="flat"
+				:prepend-icon="mdiFolderMoveOutline"
+				:disabled="selectedRoomIds.length === 0 || !canEdit"
+				data-testid="room-selection-move"
+				@click="openBulkMoveDialog"
+			>
+				{{ t("pages.rooms.groups.roomMenu.moveToGroup") }}
+			</VBtn>
+		</div>
+
+		<VSnackbar
+			v-model="isUndoSnackbarOpen"
+			:timeout="isUndoFocused ? -1 : UNDO_TIMEOUT_MS"
+			:content-props="undoContentProps"
+		>
+			{{ undoMessage }}
+			<template #actions>
+				<VBtn :disabled="!canUndo" :loading="isUndoing" data-testid="room-arrangement-undo-action" @click="onUndo">
+					{{ t("pages.rooms.groups.undo.action") }}
+				</VBtn>
+			</template>
+		</VSnackbar>
 
 		<RoomGroupNameDialog
 			v-model="nameDialog.isOpen"
@@ -99,6 +170,7 @@
 			:room-name="moveDialog.room?.name ?? ''"
 			:targets="moveTargets"
 			:current-key="moveDialog.sourceKey"
+			:room-count="moveDialog.roomIds?.length ?? 1"
 			:is-moving="moveDialog.isMoving || isMutating"
 			@confirm="onMoveDialogConfirm"
 			@cancel="closeMoveDialog"
@@ -126,8 +198,8 @@ import RoomGroupSection from "./RoomGroupSection.vue";
 import RoomMoveDialog from "./RoomMoveDialog.vue";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 import { RoomItem } from "@/types/room/Room";
-import { notifySuccess } from "@data-app";
 import {
+	RoomArrangementUndoDescription,
 	RoomArrangementView,
 	RoomGroupNameErrorReason,
 	RoomGroupView,
@@ -135,22 +207,36 @@ import {
 	useRoomArrangementStore,
 	useRoomStore,
 } from "@data-room";
-import { mdiPlus } from "@icons/material";
-import { WarningAlert } from "@ui-alert";
+import { mdiCheckboxOutline, mdiFolderMoveOutline, mdiPlus } from "@icons/material";
+import { InfoAlert, WarningAlert } from "@ui-alert";
 import { getSortableOptions } from "@util-sorting";
-import { usePreferredReducedMotion } from "@vueuse/core";
+import { useEventListener, usePreferredReducedMotion } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, nextTick, reactive, ref, useTemplateRef } from "vue";
+import { computed, nextTick, reactive, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const { notifyOnScreenReader } = useAriaLiveNotifier();
 
 const arrangementStore = useRoomArrangementStore();
-const { view, groups, canEdit, isReady, isMutating, isLoading, hasLoadError, roomsStatus, confirmGroupDeletion } =
-	storeToRefs(arrangementStore);
+const {
+	view,
+	groups,
+	canEdit,
+	isReady,
+	isMutating,
+	isLoading,
+	hasLoadError,
+	roomsStatus,
+	confirmGroupDeletion,
+	canUndo,
+	isUndoing,
+	isUndoOffered,
+	undoDescription,
+	undoId,
+} = storeToRefs(arrangementStore);
 const { rooms } = storeToRefs(useRoomStore());
 
 const rootRef = useTemplateRef("rootRef");
@@ -181,7 +267,7 @@ const groupSortableOptions = computed(() =>
 		group: "room-groups",
 		handle: ".room-group-drag-handle",
 		draggable: ".room-group-sortable-item",
-		disabled: !canEdit.value,
+		disabled: !canEdit.value || selection.isActive,
 		animation: reducedMotion.value === "reduce" ? 0 : 250,
 	})
 );
@@ -202,7 +288,9 @@ const focusElement = (selector: string) => {
 	return element !== null && element !== undefined;
 };
 
-const headingSelector = (key: string) => `#room-group-heading-${key}`;
+// Named groups are focused via their accordion button; the ungrouped heading itself is focusable.
+const headingSelector = (key: string) =>
+	key === UNGROUPED_SECTION_KEY ? `#room-group-heading-${key}` : `#room-group-heading-${key} button`;
 const addButtonSelector = "[data-testid='room-group-add']";
 const groupMenuSelector = (groupId: string) => `[data-group-id='${groupId}'] [data-testid='room-group-menu']`;
 const roomMenuSelector = (roomId: string) => `[data-room-id='${roomId}'] [data-testid='room-card-menu']`;
@@ -249,21 +337,12 @@ const announceRoomMove = (
 	notifyOnScreenReader(message);
 };
 
-const collapsedTargetGroup = (command: RoomMoveCommand) =>
-	groups.value.find((group) => group.id === command.targetGroupId && group.collapsed);
-
+// Moves are confirmed visibly by the undo snackbar, also when the room disappears into a collapsed group.
 const executeRoomMove = async (command: RoomMoveCommand) => {
 	const room = rooms.value.find((r) => r.id === command.roomId);
 	const result = await arrangementStore.moveRoom(command);
 	if (result.success) {
 		announceRoomMove(view.value, command, room);
-		// A room moved into a collapsed group disappears from view, so the move is confirmed visibly.
-		const collapsedGroup = collapsedTargetGroup(command);
-		if (collapsedGroup && room) {
-			notifySuccess(
-				t("pages.rooms.groups.notification.movedIntoCollapsed", { name: room.name, target: collapsedGroup.name })
-			);
-		}
 	}
 	return result;
 };
@@ -278,7 +357,14 @@ const onRoomDrop = async (drop: RoomDrop) => {
 	await executeRoomMove(command);
 };
 
-const moveDialog = reactive<{ isOpen: boolean; room?: RoomItem; sourceKey?: string; isMoving: boolean }>({
+const moveDialog = reactive<{
+	isOpen: boolean;
+	room?: RoomItem;
+	sourceKey?: string;
+	/** Set for a bulk move of selected rooms. */
+	roomIds?: string[];
+	isMoving: boolean;
+}>({
 	isOpen: false,
 	isMoving: false,
 });
@@ -291,7 +377,8 @@ const moveTargets = computed<RoomMoveTarget[]>(() => [
 // Dialogs are opened from menu items that no longer exist once closed, so focus returns to a stable trigger.
 const closeMoveDialog = () => {
 	if (moveDialog.isMoving) return;
-	if (moveDialog.room) pendingFocusSelector = roomMenuSelector(moveDialog.room.id);
+	if (moveDialog.roomIds) pendingFocusSelector = selectionMoveSelector;
+	else if (moveDialog.room) pendingFocusSelector = roomMenuSelector(moveDialog.room.id);
 	moveDialog.isOpen = false;
 };
 
@@ -303,10 +390,15 @@ const openMoveDialog = (room: RoomItem) => {
 
 	moveDialog.room = room;
 	moveDialog.sourceKey = sourceKey;
+	moveDialog.roomIds = undefined;
 	moveDialog.isOpen = true;
 };
 
 const onMoveDialogConfirm = async (targetKey: string) => {
+	if (moveDialog.roomIds) {
+		await moveSelectedRooms(moveDialog.roomIds, targetKey);
+		return;
+	}
 	const { room, sourceKey } = moveDialog;
 	if (!room || !sourceKey || targetKey === sourceKey) return;
 
@@ -369,10 +461,10 @@ const onGroupDropEnd = async (event: SortableEvent) => {
 	}
 };
 
+// Not blocked while another change is saved: the store shows the new state at once and persists it afterwards.
 const onToggleGroup = async (group: RoomGroupView, collapsed: boolean) => {
-	if (!canEdit.value) return;
-	const result = await arrangementStore.setGroupCollapsed(group.id, collapsed);
-	if (result.success) {
+	const isApplied = await arrangementStore.requestGroupCollapsed(group.id, collapsed);
+	if (isApplied) {
 		notifyOnScreenReader(
 			t(collapsed ? "pages.rooms.groups.announce.collapsed" : "pages.rooms.groups.announce.expanded", {
 				name: group.name,
@@ -454,6 +546,7 @@ const getFocusSelectorAfterDelete = (groupId: string) => {
 	return addButtonSelector;
 };
 
+// The undo snackbar shows and announces the result, with or without confirmation dialog.
 const performDelete = async (group: RoomGroupView, disableFutureConfirmation: boolean, withDialog: boolean) => {
 	const focusSelector = getFocusSelectorAfterDelete(group.id);
 	deleteDialog.isDeleting = true;
@@ -466,13 +559,11 @@ const performDelete = async (group: RoomGroupView, disableFutureConfirmation: bo
 	}
 
 	deleteDialog.isOpen = false;
-	const message = t("pages.rooms.groups.announce.deleted", { name: group.name });
 	if (withDialog) {
-		notifyOnScreenReader(message);
+		await focusAfterDialog(focusSelector);
 	} else {
-		notifySuccess(message);
+		focusElement(focusSelector);
 	}
-	await focusAfterDialog(focusSelector);
 };
 
 const closeDeleteDialog = () => {
@@ -497,7 +588,137 @@ const onDeleteConfirm = (disableFutureConfirmation: boolean) => {
 	}
 };
 
-defineExpose({ openCreateDialog });
+// Onboarding while no group exists
+const isOnboardingVisible = computed(() => {
+	const current = view.value;
+	return current !== undefined && current.groups.length === 0 && current.ungrouped.length >= 2;
+});
+
+// Selection of several rooms for one move
+const selection = reactive<{ isActive: boolean; roomIds: string[] }>({ isActive: false, roomIds: [] });
+const selectionMoveSelector = "[data-testid='room-selection-move']";
+
+const arrangeableRoomIds = computed(() => {
+	const current = view.value;
+	if (!current) return [];
+	return [...current.ungrouped, ...current.groups.flatMap((group) => group.rooms)]
+		.filter((room) => room.allowedOperations?.arrangeRooms === true)
+		.map((room) => room.id);
+});
+
+// Display order, so the rooms keep their relative order in the target.
+const selectedRoomIds = computed(() => arrangeableRoomIds.value.filter((id) => selection.roomIds.includes(id)));
+
+const isSelectionStartVisible = computed(
+	() => (view.value?.groups.length ?? 0) > 0 && !selection.isActive && arrangeableRoomIds.value.length > 0
+);
+
+const startSelection = async () => {
+	if (!isReady.value || selection.isActive) return;
+	selection.roomIds = [];
+	selection.isActive = true;
+	notifyOnScreenReader(t("pages.rooms.groups.selection.started"));
+	await nextTick();
+	focusElement("[data-testid='room-card-select'] input");
+};
+
+const endSelection = async () => {
+	if (!selection.isActive) return;
+	selection.isActive = false;
+	selection.roomIds = [];
+	await nextTick();
+	if (!focusElement("[data-testid='room-selection-start']")) focusElement(addButtonSelector);
+};
+
+const onSelectRoom = (roomId: string, selected: boolean) => {
+	const others = selection.roomIds.filter((id) => id !== roomId);
+	selection.roomIds = selected ? [...others, roomId] : others;
+};
+
+const openBulkMoveDialog = () => {
+	if (selectedRoomIds.value.length === 0 || !canEdit.value) return;
+	moveDialog.room = undefined;
+	moveDialog.sourceKey = undefined;
+	moveDialog.roomIds = [...selectedRoomIds.value];
+	moveDialog.isOpen = true;
+};
+
+const moveSelectedRooms = async (roomIds: string[], targetKey: string) => {
+	moveDialog.isMoving = true;
+	const result = await arrangementStore.moveRooms(roomIds, sectionKeyToGroupId(targetKey));
+	moveDialog.isMoving = false;
+
+	if (result.success || result.failure !== "busy") {
+		moveDialog.isOpen = false;
+	}
+	if (result.success) {
+		pendingFocusSelector = undefined;
+		await endSelection();
+	}
+};
+
+const isInsideOverlay = (target: EventTarget | null) =>
+	target instanceof Element && target.closest(".v-overlay__content") !== null;
+
+useEventListener(document, "keydown", (event: KeyboardEvent) => {
+	if (event.key === "Escape" && selection.isActive && !moveDialog.isOpen && !isInsideOverlay(event.target)) {
+		endSelection();
+	}
+});
+
+// Undo
+const UNDO_TIMEOUT_MS = 8000;
+const isUndoSnackbarOpen = ref(false);
+const isUndoFocused = ref(false);
+
+// The timer pauses while keyboard focus is inside the snackbar.
+const undoContentProps = {
+	"data-testid": "room-arrangement-undo",
+	onFocusin: () => (isUndoFocused.value = true),
+	onFocusout: () => (isUndoFocused.value = false),
+};
+
+const sectionName = (name: string | null) => name ?? t("pages.rooms.groups.ungrouped");
+
+const describeUndo = (description: RoomArrangementUndoDescription) => {
+	switch (description.kind) {
+		case "moveRoom":
+			if (description.reordered) return t("pages.rooms.groups.undo.roomReordered", { name: description.roomName });
+			return t(
+				description.targetCollapsed
+					? "pages.rooms.groups.notification.movedIntoCollapsed"
+					: "pages.rooms.groups.undo.roomMoved",
+				{ name: description.roomName, target: sectionName(description.targetName) }
+			);
+		case "moveRooms":
+			return t(
+				"pages.rooms.groups.undo.roomsMoved",
+				{ count: description.count, target: sectionName(description.targetName) },
+				description.count
+			);
+		case "deleteGroup":
+			return t("pages.rooms.groups.announce.deleted", { name: description.groupName });
+	}
+};
+
+const undoMessage = computed(() => (undoDescription.value ? describeUndo(undoDescription.value) : ""));
+
+watch(undoId, (id) => {
+	if (id !== undefined && isUndoOffered.value) isUndoSnackbarOpen.value = true;
+});
+
+watch(isUndoOffered, (offered) => {
+	if (!offered && !isUndoing.value) isUndoSnackbarOpen.value = false;
+});
+
+const onUndo = async () => {
+	const isUndone = await arrangementStore.undo();
+	isUndoSnackbarOpen.value = false;
+	isUndoFocused.value = false;
+	if (isUndone) notifyOnScreenReader(t("pages.rooms.groups.undo.done"));
+};
+
+defineExpose({ openCreateDialog, startSelection });
 </script>
 
 <style scoped>

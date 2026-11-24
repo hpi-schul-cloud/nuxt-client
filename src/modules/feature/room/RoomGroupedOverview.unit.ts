@@ -5,7 +5,6 @@ import RoomGroupSection from "./RoomGroupSection.vue";
 import RoomMoveDialog from "./RoomMoveDialog.vue";
 import { RoomItem } from "@/types/room/Room";
 import {
-	expectNotification,
 	mockApi,
 	mockApiResponse,
 	roomArrangementResponseFactory,
@@ -20,11 +19,12 @@ import {
 	RoomItemResponseAllowedOperations,
 	RoomListResponse,
 } from "@api-server";
-import { useRoomArrangementStore } from "@data-room";
+import { applyRoomMove, applyRoomsMove, useRoomArrangementStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { flushPromises } from "@vue/test-utils";
 import { AxiosError, AxiosHeaders } from "axios";
+import { cloneDeep } from "lodash-es";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 
@@ -72,11 +72,7 @@ describe("RoomGroupedOverview", () => {
 			],
 			...arrangement,
 		});
-		arrangementApi.roomArrangementControllerGetArrangement.mockResolvedValue(respond(initial));
-		arrangementApi.roomArrangementControllerMoveRoom.mockResolvedValue(respond(initial));
-		arrangementApi.roomArrangementControllerUpdateGroup.mockResolvedValue(respond(initial));
-		arrangementApi.roomArrangementControllerUpdateGroupOrder.mockResolvedValue(respond(initial));
-		arrangementApi.roomArrangementControllerDeleteGroup.mockResolvedValue(respond(initial));
+		const server = useFakeArrangementServer(initial);
 		await useRoomArrangementStore().loadOverview();
 
 		wrapper = mount(RoomGroupedOverview, {
@@ -87,10 +83,60 @@ describe("RoomGroupedOverview", () => {
 			attachTo: document.body,
 		});
 		await flushPromises();
-		return { wrapper, initial };
+		return { wrapper, initial, server };
+	};
+
+	// Applies every mutation like the backend does, so undo sequences can be followed end to end.
+	const useFakeArrangementServer = (initial: RoomArrangementResponse) => {
+		let state = cloneDeep(initial);
+		let createdCount = 0;
+		const commit = () => {
+			state = { ...state, revision: state.revision + 1 };
+			return respond(cloneDeep(state));
+		};
+		arrangementApi.roomArrangementControllerGetArrangement.mockImplementation(async () => respond(cloneDeep(state)));
+		arrangementApi.roomArrangementControllerMoveRoom.mockImplementation(async (body) => {
+			applyRoomMove(state, body);
+			return commit();
+		});
+		arrangementApi.roomArrangementControllerMoveRooms.mockImplementation(async (body) => {
+			applyRoomsMove(state, body.roomIds, body.targetGroupId);
+			return commit();
+		});
+		arrangementApi.roomArrangementControllerUpdateGroup.mockImplementation(async (groupId, body) => {
+			const group = state.groups.find((g) => g.id === groupId);
+			if (group && body.collapsed !== undefined) group.collapsed = body.collapsed;
+			if (group && body.name !== undefined) group.name = body.name;
+			return commit();
+		});
+		arrangementApi.roomArrangementControllerUpdateGroupsCollapsed.mockImplementation(async (body) => {
+			state.groups.forEach((group) => {
+				group.collapsed = body.collapsed;
+			});
+			return commit();
+		});
+		arrangementApi.roomArrangementControllerUpdateGroupOrder.mockImplementation(async (body) => {
+			state.groups = body.groupIds.map((id) => state.groups.find((g) => g.id === id)).filter((g) => g !== undefined);
+			return commit();
+		});
+		arrangementApi.roomArrangementControllerDeleteGroup.mockImplementation(async (groupId) => {
+			const group = state.groups.find((g) => g.id === groupId);
+			state.groups = state.groups.filter((g) => g.id !== groupId);
+			state.ungroupedRoomIds.push(...(group?.roomIds ?? []));
+			return commit();
+		});
+		arrangementApi.roomArrangementControllerCreateGroup.mockImplementation(async (body) => {
+			createdCount++;
+			const id = `${createdCount}`.padStart(24, "c");
+			state.groups.push({ id, name: body.name, collapsed: false, roomIds: [] });
+			const response = commit();
+			return mockApiResponse({ data: { ...response.data, createdGroupId: id } });
+		});
+		return { getState: () => state };
 	};
 
 	const sections = () => wrapper?.findAllComponents(RoomGroupSection) ?? [];
+	const undoSnackbarText = () => document.querySelector("[data-testid='room-arrangement-undo']")?.textContent ?? "";
 	const clickInDocument = (selector: string) => document.querySelector<HTMLElement>(selector)?.click();
 
 	describe("rendering", () => {
@@ -181,7 +227,7 @@ describe("RoomGroupedOverview", () => {
 			wrapper?.findComponent(RoomMoveDialog).vm.$emit("after-leave");
 			await flushPromises();
 
-			expectNotification("success");
+			expect(undoSnackbarText()).toContain("pages.rooms.groups.notification.movedIntoCollapsed");
 			expect(document.activeElement?.getAttribute("data-testid")).toBe("room-group-toggle");
 			expect(document.activeElement?.closest("[data-group-id]")?.getAttribute("data-group-id")).toBe(groupB.id);
 		});
@@ -397,10 +443,7 @@ describe("RoomGroupedOverview", () => {
 		});
 
 		it("deletes directly with visible feedback when confirmations are disabled", async () => {
-			const { initial } = await setup({ confirmGroupDeletion: false });
-			arrangementApi.roomArrangementControllerDeleteGroup.mockResolvedValue(
-				respond({ ...initial, revision: 6, groups: [initial.groups[1]] })
-			);
+			await setup({ confirmGroupDeletion: false });
 
 			sections()[1].vm.$emit("delete");
 			await flushPromises();
@@ -409,7 +452,7 @@ describe("RoomGroupedOverview", () => {
 			expect(arrangementApi.roomArrangementControllerDeleteGroup).toHaveBeenCalledWith(groupA.id, {
 				expectedRevision: 5,
 			});
-			expectNotification("success");
+			expect(undoSnackbarText()).toContain("pages.rooms.groups.announce.deleted");
 		});
 
 		it("moves a group down via its menu", async () => {
@@ -527,8 +570,209 @@ describe("RoomGroupedOverview", () => {
 		it("renders room titles as h3 below the section headings when groups exist", async () => {
 			await setup();
 
-			expect(wrapper?.findAll("h2[data-testid='room-group-title']")).toHaveLength(3);
+			expect(wrapper?.findAll("h2 [data-testid='room-group-title']")).toHaveLength(3);
 			expect(wrapper?.findAll(".room-grid-item h3")).toHaveLength(3);
+		});
+	});
+
+	describe("first-run guidance", () => {
+		it("shows a hint with an add group action while no group exists and there are at least two rooms", async () => {
+			await setup({ ungroupedRoomIds: rooms.map((room) => room.id), groups: [] });
+
+			expect(wrapper?.find("[data-testid='room-groups-onboarding']").text()).toContain(
+				"pages.rooms.groups.onboarding.text"
+			);
+			await wrapper?.get("[data-testid='room-groups-onboarding-add']").trigger("click");
+
+			expect(wrapper?.findComponent(RoomGroupNameDialog).props("modelValue")).toBe(true);
+		});
+
+		it("hides the hint once a group exists", async () => {
+			await setup();
+
+			expect(wrapper?.find("[data-testid='room-groups-onboarding-add']").exists()).toBe(false);
+		});
+
+		it("hides the hint with fewer than two rooms", async () => {
+			rooms = rooms.slice(0, 1);
+			await setup({ ungroupedRoomIds: [rooms[0].id], groups: [] });
+
+			expect(wrapper?.find("[data-testid='room-groups-onboarding-add']").exists()).toBe(false);
+		});
+	});
+
+	describe("selecting several rooms", () => {
+		const selectRoom = async (roomId: string) => {
+			await wrapper?.get(`[data-room-id='${roomId}'] [data-testid='room-card-select'] input`).setValue(true);
+		};
+
+		it("moves the selected rooms with one request, ends the selection and offers undo", async () => {
+			const { server } = await setup();
+			await wrapper?.get("[data-testid='room-selection-start']").trigger("click");
+
+			expect(wrapper?.findAll("[data-testid='room-card-select']")).toHaveLength(3);
+			expect(wrapper?.find("[data-testid='room-card-menu']").exists()).toBe(false);
+			await selectRoom(rooms[2].id);
+			await selectRoom(rooms[0].id);
+			expect(wrapper?.get("[data-testid='room-selection-bar']").text()).toContain("pages.rooms.groups.selection.count");
+
+			await wrapper?.get("[data-testid='room-selection-move']").trigger("click");
+			const dialog = wrapper?.findComponent(RoomMoveDialog);
+			expect(dialog?.props("roomCount")).toBe(2);
+			expect(dialog?.props("currentKey")).toBeUndefined();
+			dialog?.vm.$emit("confirm", groupB.id);
+			await flushPromises();
+
+			expect(arrangementApi.roomArrangementControllerMoveRooms).toHaveBeenCalledTimes(1);
+			expect(arrangementApi.roomArrangementControllerMoveRooms).toHaveBeenCalledWith({
+				expectedRevision: 5,
+				roomIds: [rooms[0].id, rooms[2].id],
+				targetGroupId: groupB.id,
+			});
+			expect(server.getState().groups[1].roomIds).toEqual([rooms[0].id, rooms[2].id]);
+			expect(wrapper?.find("[data-testid='room-selection-bar']").exists()).toBe(false);
+			expect(undoSnackbarText()).toContain("pages.rooms.groups.undo.roomsMoved");
+		});
+
+		it("disables dragging while selecting", async () => {
+			await setup();
+			await wrapper?.get("[data-testid='room-selection-start']").trigger("click");
+
+			expect(wrapper?.find(".room-grid-item.draggable").exists()).toBe(false);
+		});
+
+		it("ends the selection with Escape and with cancel", async () => {
+			await setup();
+			await wrapper?.get("[data-testid='room-selection-start']").trigger("click");
+
+			document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+			await flushPromises();
+			expect(wrapper?.find("[data-testid='room-selection-bar']").exists()).toBe(false);
+
+			wrapper?.vm.startSelection();
+			await flushPromises();
+			await wrapper?.get("[data-testid='room-selection-cancel']").trigger("click");
+			expect(wrapper?.find("[data-testid='room-selection-bar']").exists()).toBe(false);
+		});
+
+		it("does not offer moving before a room is selected", async () => {
+			await setup();
+			wrapper?.vm.startSelection();
+			await flushPromises();
+
+			expect(wrapper?.get("[data-testid='room-selection-move']").attributes("disabled")).toBeDefined();
+		});
+	});
+
+	describe("undo", () => {
+		const clickUndo = async () => {
+			document.querySelector<HTMLElement>("[data-testid='room-arrangement-undo-action']")?.click();
+			await flushPromises();
+		};
+
+		it("moves a room back to its original place", async () => {
+			const { server } = await setup();
+			sections()[1].vm.$emit("move-to-group", rooms[1]);
+			await flushPromises();
+			wrapper?.findComponent(RoomMoveDialog).vm.$emit("confirm", groupB.id);
+			await flushPromises();
+			expect(server.getState().groups[1].roomIds).toEqual([rooms[1].id]);
+
+			await clickUndo();
+
+			expect(server.getState().groups[0].roomIds).toEqual([rooms[1].id, rooms[2].id]);
+			expect(server.getState().groups[1].roomIds).toEqual([]);
+			expect(useRoomArrangementStore().isUndoOffered).toBe(false);
+		});
+
+		it("offers undo after a keyboard reorder", async () => {
+			await setup();
+
+			sections()[1].vm.$emit("drop", {
+				roomId: rooms[1].id,
+				fromKey: groupA.id,
+				toKey: groupA.id,
+				oldIndex: 0,
+				newIndex: 1,
+			});
+			await flushPromises();
+
+			expect(undoSnackbarText()).toContain("pages.rooms.groups.undo.roomReordered");
+		});
+
+		it("restores a deleted group at its position with its rooms", async () => {
+			const { server } = await setup({
+				groups: [
+					{ ...groupA, roomIds: rooms.slice(1).map((room) => room.id) },
+					{ ...groupB, roomIds: [] },
+				],
+			});
+			sections()[1].vm.$emit("delete");
+			await flushPromises();
+			wrapper?.findComponent(RoomGroupDeleteDialog).vm.$emit("confirm", false);
+			await flushPromises();
+			expect(server.getState().groups.map((g) => g.name)).toEqual(["Deutsch"]);
+
+			await clickUndo();
+
+			expect(server.getState().groups.map((g) => g.name)).toEqual(["Informatik", "Deutsch"]);
+			expect(server.getState().groups[0].roomIds).toEqual(rooms.slice(1).map((room) => room.id));
+			expect(server.getState().ungroupedRoomIds).toEqual([rooms[0].id]);
+		});
+	});
+
+	describe("collapse toggles while a change is saved", () => {
+		it("shows the toggle result at once and persists it afterwards", async () => {
+			await setup();
+			let resolveOrder: () => void = () => undefined;
+			const orderImplementation = arrangementApi.roomArrangementControllerUpdateGroupOrder.getMockImplementation();
+			arrangementApi.roomArrangementControllerUpdateGroupOrder.mockImplementationOnce(
+				(body) =>
+					new Promise((resolve) => {
+						resolveOrder = () => orderImplementation && resolve(orderImplementation(body));
+					})
+			);
+
+			sections()[1].vm.$emit("move-down");
+			await flushPromises();
+			await wrapper?.get(`[data-group-id='${groupB.id}'] [data-testid='room-group-toggle']`).trigger("click");
+			await flushPromises();
+
+			expect(
+				wrapper?.get(`[data-group-id='${groupB.id}'] [data-testid='room-group-toggle']`).attributes("aria-expanded")
+			).toBe("false");
+			expect(arrangementApi.roomArrangementControllerUpdateGroup).not.toHaveBeenCalled();
+
+			resolveOrder();
+			await flushPromises();
+
+			expect(arrangementApi.roomArrangementControllerUpdateGroup).toHaveBeenCalledWith(groupB.id, {
+				expectedRevision: 6,
+				collapsed: true,
+			});
+		});
+	});
+
+	describe("focus targets", () => {
+		it("focuses the accordion button of a newly created group", async () => {
+			await setup();
+			await wrapper?.get("[data-testid='room-group-add']").trigger("click");
+
+			wrapper?.findComponent(RoomGroupNameDialog).vm.$emit("submit", "Mathe");
+			await flushPromises();
+
+			expect(document.activeElement?.getAttribute("data-testid")).toBe("room-group-toggle");
+			expect(document.activeElement?.textContent?.trim()).toBe("Mathe");
+		});
+
+		it("focuses the accordion button of the neighbouring group after a delete", async () => {
+			await setup({ confirmGroupDeletion: false });
+
+			sections()[1].vm.$emit("delete");
+			await flushPromises();
+
+			expect(document.activeElement?.closest("[data-group-id]")?.getAttribute("data-group-id")).toBe(groupB.id);
+			expect(document.activeElement?.getAttribute("data-testid")).toBe("room-group-toggle");
 		});
 	});
 });

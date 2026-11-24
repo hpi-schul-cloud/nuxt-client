@@ -501,4 +501,220 @@ describe("useRoomArrangementStore", () => {
 			expect(store.confirmed).toBeNull();
 		});
 	});
+
+	describe("round 3 commands", () => {
+		it("collapses all groups with one request", async () => {
+			const { store } = await setupLoaded();
+
+			store.setAllGroupsCollapsed(true);
+
+			expect(arrangementApi.roomArrangementControllerUpdateGroupsCollapsed).toHaveBeenCalledWith({
+				expectedRevision: 3,
+				collapsed: true,
+			});
+			expect(store.view?.groups.every((group) => group.collapsed)).toBe(true);
+		});
+
+		it("moves several rooms with one request and appends them in the given order", async () => {
+			const { store } = await setupLoaded();
+
+			store.moveRooms([rooms[2].id, rooms[0].id], groupB.id);
+
+			expect(arrangementApi.roomArrangementControllerMoveRooms).toHaveBeenCalledWith({
+				expectedRevision: 3,
+				roomIds: [rooms[2].id, rooms[0].id],
+				targetGroupId: groupB.id,
+			});
+			expect(store.view?.groups[1].rooms.map((r) => r.id)).toEqual([rooms[2].id, rooms[0].id]);
+			expect(store.view?.ungrouped).toEqual([]);
+		});
+	});
+
+	describe("collapse toggles while a change is saved", () => {
+		it("shows the new state at once and persists it after the pending change", async () => {
+			const { initial } = await setupLoaded();
+			const store = useRoomArrangementStore();
+			const order = deferred<AxiosResponse<RoomArrangementResponse>>();
+			arrangementApi.roomArrangementControllerUpdateGroupOrder.mockReturnValue(order.promise);
+			const reordered = { ...initial, revision: 4, groups: [initial.groups[1], initial.groups[0]] };
+			arrangementApi.roomArrangementControllerUpdateGroup.mockResolvedValue(
+				respond({
+					...reordered,
+					revision: 5,
+					groups: [{ ...reordered.groups[0], collapsed: true }, reordered.groups[1]],
+				})
+			);
+
+			const pendingOrder = store.moveGroup(groupA.id, 1);
+			const isApplied = await store.requestGroupCollapsed(groupB.id, true);
+
+			expect(isApplied).toBe(true);
+			expect(store.view?.groups.find((g) => g.id === groupB.id)?.collapsed).toBe(true);
+			expect(arrangementApi.roomArrangementControllerUpdateGroup).not.toHaveBeenCalled();
+
+			order.resolve(respond(reordered));
+			await pendingOrder;
+
+			expect(arrangementApi.roomArrangementControllerUpdateGroup).toHaveBeenCalledWith(groupB.id, {
+				expectedRevision: 4,
+				collapsed: true,
+			});
+			expect(store.confirmed?.revision).toBe(5);
+			expect(store.view?.groups.find((g) => g.id === groupB.id)?.collapsed).toBe(true);
+		});
+
+		it("does not send anything when the queued state equals the saved state", async () => {
+			const { initial } = await setupLoaded();
+			const store = useRoomArrangementStore();
+			const order = deferred<AxiosResponse<RoomArrangementResponse>>();
+			arrangementApi.roomArrangementControllerUpdateGroupOrder.mockReturnValue(order.promise);
+
+			const pendingOrder = store.moveGroup(groupA.id, 1);
+			await store.requestGroupCollapsed(groupB.id, true);
+			await store.requestGroupCollapsed(groupB.id, false);
+			order.resolve(respond({ ...initial, revision: 4 }));
+			await pendingOrder;
+
+			expect(arrangementApi.roomArrangementControllerUpdateGroup).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("undo", () => {
+		it("moves a room back before its original neighbour", async () => {
+			const { store, initial } = await setupLoaded();
+			const moved = {
+				...initial,
+				revision: 4,
+				ungroupedRoomIds: [rooms[0].id, rooms[1].id],
+				groups: [{ ...initial.groups[0], roomIds: [rooms[2].id] }, initial.groups[1]],
+			};
+			arrangementApi.roomArrangementControllerMoveRoom
+				.mockResolvedValueOnce(respond(moved))
+				.mockResolvedValueOnce(respond({ ...initial, revision: 5 }));
+
+			await store.moveRoom({ roomId: rooms[1].id, sourceGroupId: groupA.id, targetGroupId: null, beforeRoomId: null });
+			expect(store.canUndo).toBe(true);
+			expect(store.undoDescription).toEqual(
+				expect.objectContaining({ kind: "moveRoom", targetName: null, reordered: false })
+			);
+
+			const isUndone = await store.undo();
+
+			expect(isUndone).toBe(true);
+			expect(arrangementApi.roomArrangementControllerMoveRoom).toHaveBeenLastCalledWith({
+				expectedRevision: 4,
+				roomId: rooms[1].id,
+				sourceGroupId: null,
+				targetGroupId: groupA.id,
+				beforeRoomId: rooms[2].id,
+			});
+			expect(store.canUndo).toBe(false);
+		});
+
+		it("is only offered while nothing changed since the action", async () => {
+			const { store, initial } = await setupLoaded();
+			arrangementApi.roomArrangementControllerMoveRoom.mockResolvedValue(respond({ ...initial, revision: 4 }));
+			arrangementApi.roomArrangementControllerUpdateGroup.mockResolvedValue(respond({ ...initial, revision: 5 }));
+
+			await store.moveRoom({ roomId: rooms[0].id, sourceGroupId: null, targetGroupId: groupB.id, beforeRoomId: null });
+			await store.setGroupCollapsed(groupB.id, true);
+
+			expect(store.isUndoOffered).toBe(false);
+			expect(await store.undo()).toBe(false);
+			expect(arrangementApi.roomArrangementControllerMoveRoom).toHaveBeenCalledTimes(1);
+		});
+
+		it("restores a deleted group with its name, rooms, position and collapsed state", async () => {
+			const collapsedA = { ...groupA, collapsed: true, roomIds: [rooms[1].id, rooms[2].id] };
+			const { store } = await setupLoaded({ groups: [collapsedA, { ...groupB, roomIds: [] }] });
+			const restoredId = "c".repeat(24);
+			const afterDelete = roomArrangementResponseFactory.build({
+				revision: 4,
+				ungroupedRoomIds: rooms.map((room) => room.id),
+				groups: [{ ...groupB, roomIds: [] }],
+			});
+			arrangementApi.roomArrangementControllerDeleteGroup.mockResolvedValue(respond(afterDelete));
+			arrangementApi.roomArrangementControllerCreateGroup.mockResolvedValue(
+				respond({
+					...afterDelete,
+					revision: 5,
+					groups: [...afterDelete.groups, { id: restoredId, name: "Informatik", collapsed: false, roomIds: [] }],
+					createdGroupId: restoredId,
+				})
+			);
+			const withRooms = {
+				...afterDelete,
+				revision: 6,
+				ungroupedRoomIds: [rooms[0].id],
+				groups: [
+					...afterDelete.groups,
+					{ id: restoredId, name: "Informatik", collapsed: false, roomIds: [rooms[1].id, rooms[2].id] },
+				],
+			};
+			arrangementApi.roomArrangementControllerMoveRooms.mockResolvedValue(respond(withRooms));
+			const reordered = { ...withRooms, revision: 7, groups: [withRooms.groups[1], withRooms.groups[0]] };
+			arrangementApi.roomArrangementControllerUpdateGroupOrder.mockResolvedValue(respond(reordered));
+			arrangementApi.roomArrangementControllerUpdateGroup.mockResolvedValue(
+				respond({
+					...reordered,
+					revision: 8,
+					groups: [{ ...reordered.groups[0], collapsed: true }, reordered.groups[1]],
+				})
+			);
+
+			await store.deleteGroup(groupA.id);
+			expect(store.undoDescription).toEqual({ kind: "deleteGroup", groupName: "Informatik" });
+			const isUndone = await store.undo();
+
+			expect(isUndone).toBe(true);
+			expect(arrangementApi.roomArrangementControllerCreateGroup).toHaveBeenCalledWith({
+				expectedRevision: 4,
+				name: "Informatik",
+			});
+			expect(arrangementApi.roomArrangementControllerMoveRooms).toHaveBeenCalledWith({
+				expectedRevision: 5,
+				roomIds: [rooms[1].id, rooms[2].id],
+				targetGroupId: restoredId,
+			});
+			expect(arrangementApi.roomArrangementControllerUpdateGroupOrder).toHaveBeenCalledWith({
+				expectedRevision: 6,
+				groupIds: [restoredId, groupB.id],
+			});
+			expect(arrangementApi.roomArrangementControllerUpdateGroup).toHaveBeenCalledWith(restoredId, {
+				expectedRevision: 7,
+				collapsed: true,
+			});
+			expect(store.view?.groups[0]).toEqual(expect.objectContaining({ name: "Informatik", collapsed: true }));
+			expect(useNotificationStore().notify).not.toHaveBeenCalled();
+		});
+
+		it("refetches and shows the changed elsewhere notice when undo fails", async () => {
+			const { store, initial } = await setupLoaded();
+			arrangementApi.roomArrangementControllerDeleteGroup.mockResolvedValue(
+				respond({ ...initial, revision: 4, groups: [initial.groups[1]] })
+			);
+			arrangementApi.roomArrangementControllerCreateGroup.mockRejectedValue(
+				apiError(409, "ROOM_ARRANGEMENT_CONFLICT", { reason: "REVISION" })
+			);
+
+			await store.deleteGroup(groupA.id);
+			const isUndone = await store.undo();
+
+			expect(isUndone).toBe(false);
+			expect(arrangementApi.roomArrangementControllerCreateGroup).toHaveBeenCalledTimes(1);
+			expect(arrangementApi.roomArrangementControllerGetArrangement).toHaveBeenCalledTimes(2);
+			expect(useNotificationStore().notify).toHaveBeenCalledTimes(1);
+			expectNotification("error");
+			expect(store.isUndoOffered).toBe(false);
+		});
+
+		it("does not offer undo for a move that changed nothing", async () => {
+			const { store, initial } = await setupLoaded();
+			arrangementApi.roomArrangementControllerMoveRoom.mockResolvedValue(respond(initial));
+
+			await store.moveRoom({ roomId: rooms[0].id, sourceGroupId: null, targetGroupId: null, beforeRoomId: null });
+
+			expect(store.isUndoOffered).toBe(false);
+		});
+	});
 });

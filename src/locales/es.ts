@@ -1982,12 +1982,33 @@ export default {
 	"pages.rooms.groups.announce.roomReordered": "La sala «{name}» se ha movido a la posición {position} en «{target}».",
 	"pages.rooms.groups.notification.movedIntoCollapsed": "«{name}» se ha movido al grupo contraído «{target}».",
 	"pages.rooms.groups.notification.outcomeUnknown":
-		"Los grupos se han modificado en otro lugar o el cambio no está confirmado. Vista actualizada: inténtalo de nuevo.",
+		"Los grupos se han modificado entretanto. La vista está actualizada; inténtalo de nuevo.",
 	"pages.rooms.groups.loadError":
 		"No se han podido cargar los grupos. Las salas se muestran sin grupos y no se pueden ordenar en este momento.",
 	"pages.rooms.groups.retry": "Volver a cargar",
 	"pages.rooms.groups.confirmationRestored": "Se volverá a preguntar antes de eliminar un grupo.",
 	"pages.rooms.menu.restoreGroupDeleteConfirmation": "Preguntar antes de eliminar grupos",
+	"pages.rooms.groups.undo.action": "Deshacer",
+	"pages.rooms.groups.undo.roomMoved": "«{name}» se ha movido a «{target}».",
+	"pages.rooms.groups.undo.roomReordered": "«{name}» se ha movido.",
+	"pages.rooms.groups.undo.roomsMoved":
+		"{count} sala se ha movido a «{target}». | {count} salas se han movido a «{target}».",
+	"pages.rooms.groups.undo.done": "Se ha deshecho el cambio.",
+	"pages.rooms.groups.selection.start": "Seleccionar salas",
+	"pages.rooms.groups.selection.selectRoom": "Seleccionar la sala «{name}»",
+	"pages.rooms.groups.selection.count": "{count} sala seleccionada | {count} salas seleccionadas",
+	"pages.rooms.groups.selection.label": "Selección de salas",
+	"pages.rooms.groups.selection.started":
+		"Modo de selección: selecciona salas con sus casillas. Pulsa Escape para terminar la selección.",
+	"pages.rooms.groups.moveDialog.titleMany": "Mover salas",
+	"pages.rooms.groups.moveDialog.textMany":
+		"¿A dónde se debe mover la sala seleccionada? | ¿A dónde se deben mover las {count} salas seleccionadas?",
+	"pages.rooms.groups.onboarding.text":
+		"Mantén la visión general: agrupa tus salas, p. ej., por asignaturas. Arrastra salas a un grupo o usa ⋮ › «Mover a…».",
+	"pages.rooms.groups.announce.allCollapsed": "Se han contraído todos los grupos.",
+	"pages.rooms.groups.announce.allExpanded": "Se han expandido todos los grupos.",
+	"pages.rooms.menu.collapseAllGroups": "Contraer todos los grupos",
+	"pages.rooms.menu.expandAllGroups": "Expandir todos los grupos",
 	"pages.rooms.archived.title": "Salas archivadas",
 	"pages.rooms.archived.chip": "Sala archivada",
 	"pages.rooms.archived.emptyState": "Actualmente no hay salas archivadas",

@@ -13,8 +13,26 @@
 	>
 		<div v-if="showHeading" class="room-group-header d-flex align-center ga-2">
 			<div class="room-group-heading">
-				<h2 :id="headingId" tabindex="-1" class="room-group-title text-h4 ma-0" data-testid="room-group-title">
-					{{ title }}
+				<h2 v-if="group" :id="headingId" class="room-group-heading-title text-h4 ma-0">
+					<button
+						type="button"
+						class="room-group-toggle"
+						:aria-expanded="isCollapsed ? 'false' : 'true'"
+						:aria-controls="contentId"
+						data-testid="room-group-toggle"
+						@click="onToggle"
+					>
+						<span class="room-group-title" data-testid="room-group-title">{{ title }}</span>
+						<VIcon
+							class="room-group-chevron"
+							:icon="isCollapsed ? mdiChevronDown : mdiChevronUp"
+							size="small"
+							aria-hidden="true"
+						/>
+					</button>
+				</h2>
+				<h2 v-else :id="headingId" tabindex="-1" class="room-group-heading-title text-h4 ma-0">
+					<span class="room-group-title" data-testid="room-group-title">{{ title }}</span>
 				</h2>
 				<span class="room-group-count text-body-2 text-medium-emphasis text-no-wrap" data-testid="room-group-count">
 					{{ t("pages.rooms.groups.roomCount", { count: rooms.length }, rooms.length) }}
@@ -30,22 +48,6 @@
 			>
 				<VIcon :icon="mdiDrag" />
 			</span>
-			<VBtn
-				v-if="group"
-				variant="text"
-				size="40"
-				:icon="isCollapsed ? mdiChevronDown : mdiChevronUp"
-				:aria-expanded="isCollapsed ? 'false' : 'true'"
-				:aria-controls="contentId"
-				:aria-label="
-					t(isCollapsed ? 'pages.rooms.groups.toggle.expand' : 'pages.rooms.groups.toggle.collapse', {
-						name: group.name,
-					})
-				"
-				:aria-disabled="disabled ? 'true' : undefined"
-				data-testid="room-group-toggle"
-				@click="onToggle"
-			/>
 			<KebabMenu
 				v-if="group"
 				data-testid="room-group-menu"
@@ -96,10 +98,13 @@
 					:title-tag="showHeading ? 'h3' : 'h2'"
 					:labelled-by="showHeading ? headingId : undefined"
 					:can-move-to-group="hasMoveTargets"
+					:selectable
+					:selected-room-ids="selectedRoomIds"
 					@drop="emit('drop', $event)"
 					@drag-start="emit('drag-start')"
 					@drag-end="emit('drag-end')"
 					@move-to-group="emit('move-to-group', $event)"
+					@select-room="(roomId, selected) => emit('select-room', roomId, selected)"
 				/>
 				<p
 					v-if="rooms.length === 0"
@@ -161,8 +166,13 @@ const props = withDefaults(
 		disabled?: boolean;
 		isDraggingRoom?: boolean;
 		hasMoveTargets?: boolean;
+		/** Selection mode for moving several rooms at once. */
+		selectable?: boolean;
+		selectedRoomIds?: string[];
 	}>(),
 	{
+		selectable: false,
+		selectedRoomIds: () => [],
 		hasMoveTargets: true,
 		group: undefined,
 		groupIndex: 0,
@@ -184,6 +194,7 @@ const emit = defineEmits<{
 	delete: [];
 	"move-up": [];
 	"move-down": [];
+	"select-room": [roomId: string, selected: boolean];
 }>();
 
 const { t } = useI18n();
@@ -213,9 +224,8 @@ const collapsedDropOptions = computed(() => ({
 	draggable: ".draggable",
 }));
 
-// The toggle stays focusable while a change is saved (aria-disabled), so keyboard focus is not lost.
+// Toggling stays possible while another change is saved: the store shows it at once and persists it afterwards.
 const onToggle = async () => {
-	if (props.disabled) return;
 	const collapse = !isCollapsed.value;
 	if (collapse && contentRef.value?.contains(document.activeElement)) {
 		sectionRef.value?.querySelector<HTMLElement>("[data-testid='room-group-toggle']")?.focus();
@@ -233,17 +243,50 @@ const onToggle = async () => {
 .room-group-heading {
 	flex: 1 1 auto;
 	min-width: 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	column-gap: 8px;
+}
+
+.room-group-heading-title {
+	display: inline;
+	font-weight: 400;
+	min-width: 0;
 }
 
 .room-group-title {
-	display: inline;
-	font-weight: 400;
 	overflow-wrap: anywhere;
 	hyphens: auto;
 }
 
-.room-group-count {
-	margin-inline-start: 8px;
+.room-group-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	min-height: 40px;
+	padding: 0 4px;
+	margin-inline-start: -4px;
+	font: inherit;
+	color: inherit;
+	text-align: start;
+	background: none;
+	border: 0;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.room-group-toggle:hover .room-group-title {
+	text-decoration: underline;
+}
+
+.room-group-toggle:focus-visible {
+	outline: 2px solid rgba(var(--v-theme-primary));
+	outline-offset: 2px;
+}
+
+.room-group-chevron {
+	flex-shrink: 0;
 }
 
 .room-group-drag-handle {

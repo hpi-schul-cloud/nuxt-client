@@ -415,6 +415,73 @@ describe("RoomsPage", () => {
 				expect(wrapper.findComponent({ name: "RoomGroupNameDialog" }).props("modelValue")).toBe(true);
 			});
 
+			const openRoomsMenu = async (wrapper: ReturnType<typeof setup>["wrapper"]) => {
+				await wrapper.get("[data-testid=rooms-menu]").trigger("click");
+				return wrapper.findAllComponents(KebabMenuAction);
+			};
+			const menuAction = (
+				actions: ReturnType<ReturnType<typeof setup>["wrapper"]["findAllComponents"]>,
+				testId: string
+			) => actions.find((action) => action.attributes("data-testid") === testId);
+
+			it("should collapse all groups from the rooms menu", async () => {
+				const groups = [roomGroupResponseFactory.build(), roomGroupResponseFactory.build({ collapsed: true })];
+				const arrangementApi = mockArrangementApi({ revision: 2, groups });
+				arrangementApi.roomArrangementControllerUpdateGroupsCollapsed.mockResolvedValue(
+					mockApiResponse({
+						data: roomArrangementResponseFactory.build({
+							revision: 3,
+							groups: groups.map((group) => ({ ...group, collapsed: true })),
+						}),
+					})
+				);
+				const { wrapper } = setup([], false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+				await flushPromises();
+
+				const actions = await openRoomsMenu(wrapper);
+				expect(menuAction(actions, "rooms-menu-expand-all-groups")).toBeDefined();
+				await menuAction(actions, "rooms-menu-collapse-all-groups")?.trigger("click");
+				await flushPromises();
+
+				expect(arrangementApi.roomArrangementControllerUpdateGroupsCollapsed).toHaveBeenCalledWith({
+					expectedRevision: 2,
+					collapsed: true,
+				});
+				const actionsAfter = await openRoomsMenu(wrapper);
+				expect(menuAction(actionsAfter, "rooms-menu-collapse-all-groups")).toBeUndefined();
+				expect(menuAction(actionsAfter, "rooms-menu-expand-all-groups")).toBeDefined();
+			});
+
+			it("should not offer collapsing or expanding all groups without groups", async () => {
+				mockArrangementApi();
+				const { wrapper } = setup(undefined, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+				await flushPromises();
+
+				const actions = await openRoomsMenu(wrapper);
+				expect(menuAction(actions, "rooms-menu-collapse-all-groups")).toBeUndefined();
+				expect(menuAction(actions, "rooms-menu-expand-all-groups")).toBeUndefined();
+				expect(menuAction(actions, "rooms-menu-select-rooms")).toBeUndefined();
+			});
+
+			it("should start selecting rooms from the rooms menu", async () => {
+				const rooms = roomItemFactory.buildList(2, {
+					allowedOperations: { arrangeRooms: true } as unknown as RoomItemResponseAllowedOperations,
+				});
+				mockArrangementApi({
+					ungroupedRoomIds: rooms.map((room) => room.id),
+					groups: [roomGroupResponseFactory.build()],
+				});
+				const { wrapper } = setup(rooms, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+				await flushPromises();
+
+				const actions = await openRoomsMenu(wrapper);
+				await menuAction(actions, "rooms-menu-select-rooms")?.trigger("click");
+				await flushPromises();
+
+				expect(wrapper.find("[data-testid=room-selection-bar]").exists()).toBe(true);
+				expect(wrapper.findAll("[data-testid=room-card-select]")).toHaveLength(2);
+			});
+
 			it("should restore delete confirmations from the rooms menu", async () => {
 				const arrangementApi = mockArrangementApi({ revision: 2, confirmGroupDeletion: false });
 				const { wrapper } = setup(undefined, false, { FEATURE_ROOM_GROUPING_ENABLED: true });

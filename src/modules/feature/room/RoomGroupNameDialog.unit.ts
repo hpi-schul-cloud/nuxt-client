@@ -141,4 +141,10 @@ describe("RoomGroupNameDialog", () => {
 		expect(wrapper?.findComponent(SvsDialog).props("areActionsDisabled")).toBe(true);
 		expect(wrapper?.emitted("submit")).toBeUndefined();
 	});
+
+	it("labels the confirm button like the create title", () => {
+		setup();
+
+		expect(wrapper?.findComponent(SvsDialog).props("confirmBtnLangKey")).toBe("common.actions.add");
+	});
 });

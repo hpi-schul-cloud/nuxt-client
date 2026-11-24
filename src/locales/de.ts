@@ -1980,12 +1980,33 @@ export default {
 	"pages.rooms.groups.notification.movedIntoCollapsed":
 		"„{name}“ wurde in die eingeklappte Gruppe „{target}“ verschoben.",
 	"pages.rooms.groups.notification.outcomeUnknown":
-		"Die Gruppen wurden zwischenzeitlich geändert oder die Änderung ist unbestätigt. Ansicht aktualisiert – bitte erneut versuchen.",
+		"Die Gruppen wurden zwischenzeitlich geändert. Die Ansicht ist aktualisiert – bitte versuche es noch einmal.",
 	"pages.rooms.groups.loadError":
 		"Die Gruppen konnten nicht geladen werden. Die Räume werden ohne Gruppen angezeigt und können gerade nicht sortiert werden.",
 	"pages.rooms.groups.retry": "Erneut laden",
 	"pages.rooms.groups.confirmationRestored": "Vor dem Löschen einer Gruppe wird wieder nachgefragt.",
 	"pages.rooms.menu.restoreGroupDeleteConfirmation": "Vor dem Löschen von Gruppen nachfragen",
+	"pages.rooms.groups.undo.action": "Rückgängig",
+	"pages.rooms.groups.undo.roomMoved": "„{name}“ wurde nach „{target}“ verschoben.",
+	"pages.rooms.groups.undo.roomReordered": "„{name}“ wurde verschoben.",
+	"pages.rooms.groups.undo.roomsMoved":
+		"{count} Raum wurde nach „{target}“ verschoben. | {count} Räume wurden nach „{target}“ verschoben.",
+	"pages.rooms.groups.undo.done": "Die Änderung wurde rückgängig gemacht.",
+	"pages.rooms.groups.selection.start": "Räume auswählen",
+	"pages.rooms.groups.selection.selectRoom": "Raum „{name}“ auswählen",
+	"pages.rooms.groups.selection.count": "{count} Raum ausgewählt | {count} Räume ausgewählt",
+	"pages.rooms.groups.selection.label": "Raumauswahl",
+	"pages.rooms.groups.selection.started":
+		"Auswahlmodus: Wähle Räume über ihr Kontrollkästchen aus. Mit Escape beendest du die Auswahl.",
+	"pages.rooms.groups.moveDialog.titleMany": "Räume verschieben",
+	"pages.rooms.groups.moveDialog.textMany":
+		"Wohin soll der ausgewählte Raum verschoben werden? | Wohin sollen die {count} ausgewählten Räume verschoben werden?",
+	"pages.rooms.groups.onboarding.text":
+		"Behalte den Überblick: Fasse deine Räume in Gruppen zusammen, z. B. nach Fächern. Ziehe Räume in eine Gruppe oder nutze ⋮ › „Verschieben nach…“.",
+	"pages.rooms.groups.announce.allCollapsed": "Alle Gruppen wurden eingeklappt.",
+	"pages.rooms.groups.announce.allExpanded": "Alle Gruppen wurden ausgeklappt.",
+	"pages.rooms.menu.collapseAllGroups": "Alle Gruppen einklappen",
+	"pages.rooms.menu.expandAllGroups": "Alle Gruppen ausklappen",
 	"pages.rooms.archived.title": "Archivierte Räume",
 	"pages.rooms.archived.chip": "Archivierter Raum",
 	"pages.rooms.archived.emptyState": "Aktuell gibt es keine archivierten Räume",

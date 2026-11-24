@@ -6,7 +6,10 @@
 		:ripple="false"
 		variant="elevated"
 	>
-		<VCardItem class="d-block flex-grow-1" :class="{ 'room-grid-item__content--with-menu': isArrangeMenuVisible }">
+		<VCardItem
+			class="d-block flex-grow-1"
+			:class="{ 'room-grid-item__content--with-menu': isArrangeMenuVisible || isSelectable }"
+		>
 			<RouterLink tabindex="-1" :to="roomPath" class="room-link-item overflow-visible">
 				<VBadge :model-value="room.isLocked" bordered :icon="mdiLock" :data-testid="`room-badge-lock-${index}`">
 					<VAvatar rounded="lg" :class="avatarColor" class="room-grid-avatar" :data-testid="`room-avatar-${index}`">
@@ -39,7 +42,17 @@
 					</div>
 				</div>
 			</RouterLink>
-			<div v-if="isArrangeMenuVisible" class="room-card-menu">
+			<div v-if="isSelectable" class="room-card-menu">
+				<VCheckbox
+					:model-value="selected"
+					:aria-label="t('pages.rooms.groups.selection.selectRoom', { name: room.name })"
+					hide-details
+					density="comfortable"
+					data-testid="room-card-select"
+					@update:model-value="emit('select', $event === true)"
+				/>
+			</div>
+			<div v-else-if="isArrangeMenuVisible" class="room-card-menu">
 				<KebabMenu
 					data-testid="room-card-menu"
 					:aria-label="t('pages.rooms.groups.roomMenu.ariaLabel', { name: room.name })"
@@ -107,8 +120,13 @@ const props = withDefaults(
 		titleTag?: "h2" | "h3";
 		/** False when there is no other section to move to, so the move dialog would be a dead end. */
 		canMoveToGroup?: boolean;
+		/** Selection mode: arrangeable rooms show a checkbox instead of their menu. */
+		selectable?: boolean;
+		selected?: boolean;
 	}>(),
 	{
+		selectable: false,
+		selected: false,
 		showArrangeMenu: false,
 		canMoveEarlier: false,
 		canMoveLater: false,
@@ -122,6 +140,7 @@ const emit = defineEmits<{
 	"move-to-group": [];
 	"move-earlier": [];
 	"move-later": [];
+	select: [selected: boolean];
 }>();
 
 const { t } = useI18n();
@@ -134,6 +153,7 @@ const roomPath = computed(() => `/rooms/${props.room.id}`);
 const roomShortName = computed(() => props.room?.name?.slice(0, 2) ?? "");
 const avatarColor = computed(() => `room-color--${props.room.color}`);
 const roomAriaLabel = computed(() => `${t("common.labels.room")} ${props.room.name}`);
+const isSelectable = computed(() => props.selectable && props.room.allowedOperations?.arrangeRooms === true);
 const isArrangeMenuVisible = computed(
 	() => props.showArrangeMenu && props.room.allowedOperations?.arrangeRooms === true
 );

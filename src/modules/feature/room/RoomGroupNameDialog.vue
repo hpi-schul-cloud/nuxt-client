@@ -6,7 +6,7 @@
 		:is-loading="isSaving"
 		:persistent="isSaving"
 		:are-actions-disabled="isSaving"
-		:confirm-btn-lang-key="mode === 'create' ? 'common.actions.create' : 'common.actions.save'"
+		:confirm-btn-lang-key="mode === 'create' ? 'common.actions.add' : 'common.actions.save'"
 		data-testid="room-group-name-dialog"
 		@confirm="onSubmit"
 		@cancel="emit('cancel')"

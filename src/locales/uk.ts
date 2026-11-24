@@ -1955,12 +1955,33 @@ export default {
 	"pages.rooms.groups.announce.roomReordered": "Кімнату «{name}» переміщено на позицію {position} у «{target}».",
 	"pages.rooms.groups.notification.movedIntoCollapsed": "«{name}» переміщено до згорнутої групи «{target}».",
 	"pages.rooms.groups.notification.outcomeUnknown":
-		"Групи змінено деінде або зміну не підтверджено. Подання оновлено – спробуйте ще раз.",
+		"Тим часом групи було змінено. Подання оновлено – спробуйте ще раз.",
 	"pages.rooms.groups.loadError":
 		"Не вдалося завантажити групи. Кімнати показано без груп, і зараз їх не можна впорядкувати.",
 	"pages.rooms.groups.retry": "Завантажити знову",
 	"pages.rooms.groups.confirmationRestored": "Перед видаленням групи знову буде запит на підтвердження.",
 	"pages.rooms.menu.restoreGroupDeleteConfirmation": "Запитувати перед видаленням груп",
+	"pages.rooms.groups.undo.action": "Скасувати",
+	"pages.rooms.groups.undo.roomMoved": "«{name}» переміщено до «{target}».",
+	"pages.rooms.groups.undo.roomReordered": "«{name}» переміщено.",
+	"pages.rooms.groups.undo.roomsMoved":
+		"Кімнат переміщено до «{target}»: {count}. | Кімнат переміщено до «{target}»: {count}.",
+	"pages.rooms.groups.undo.done": "Зміну скасовано.",
+	"pages.rooms.groups.selection.start": "Вибрати кімнати",
+	"pages.rooms.groups.selection.selectRoom": "Вибрати кімнату «{name}»",
+	"pages.rooms.groups.selection.count": "Вибрано кімнат: {count} | Вибрано кімнат: {count}",
+	"pages.rooms.groups.selection.label": "Вибір кімнат",
+	"pages.rooms.groups.selection.started":
+		"Режим вибору: вибирайте кімнати за допомогою прапорців. Натисніть Escape, щоб завершити вибір.",
+	"pages.rooms.groups.moveDialog.titleMany": "Перемістити кімнати",
+	"pages.rooms.groups.moveDialog.textMany":
+		"Куди перемістити вибрану кімнату? | Куди перемістити вибрані кімнати ({count})?",
+	"pages.rooms.groups.onboarding.text":
+		"Зберігайте огляд: об'єднуйте кімнати в групи, наприклад за предметами. Перетягуйте кімнати в групу або використовуйте ⋮ › «Перемістити до…».",
+	"pages.rooms.groups.announce.allCollapsed": "Усі групи згорнуто.",
+	"pages.rooms.groups.announce.allExpanded": "Усі групи розгорнуто.",
+	"pages.rooms.menu.collapseAllGroups": "Згорнути всі групи",
+	"pages.rooms.menu.expandAllGroups": "Розгорнути всі групи",
 	"pages.rooms.archived.title": "Архівовані кімнати",
 	"pages.rooms.archived.chip": "Архівована кімната",
 	"pages.rooms.archived.emptyState": "Наразі немає архівованих кімнат",

@@ -150,6 +150,23 @@ describe("@feature-room/RoomGrid", () => {
 			]);
 		});
 
+		it("turns dragging and keyboard reordering off in selection mode", async () => {
+			const { wrapper } = setupGrouped();
+			await wrapper.setProps({ selectable: true });
+
+			expect(wrapper.findAllComponents(RoomGridItem).every((item) => item.props("selectable"))).toBe(true);
+			expect(wrapper.findAll(".draggable")).toHaveLength(0);
+			wrapper.findAllComponents(RoomGridItem)[0].vm.$emit("keydown", { key: "ArrowRight" });
+			expect(wrapper.emitted("drop")).toBeUndefined();
+		});
+
+		it("forwards room selections with the room id", () => {
+			const { wrapper, rooms } = setupGrouped();
+			wrapper.findAllComponents(RoomGridItem)[1].vm.$emit("select", true);
+
+			expect(wrapper.emitted("select-room")).toEqual([[rooms[1].id, true]]);
+		});
+
 		it("does not emit anything while disabled", async () => {
 			const { wrapper } = setupGrouped();
 			await wrapper.setProps({ disabled: true });

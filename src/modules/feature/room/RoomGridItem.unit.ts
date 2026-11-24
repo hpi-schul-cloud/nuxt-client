@@ -149,5 +149,25 @@ describe("@feature-room/RoomGridItem", () => {
 			const disabledStates = wrapper.findAllComponents(KebabMenuAction).map((action) => action.props("disabled"));
 			expect(disabledStates).toEqual([true, true, true]);
 		});
+
+		describe("selection mode", () => {
+			it("shows an accessible checkbox instead of the menu and emits the selection", async () => {
+				const { wrapper } = setup({ room: arrangeableRoom, index: 0, showArrangeMenu: true, selectable: true });
+
+				expect(wrapper.find("[data-testid=room-card-menu]").exists()).toBe(false);
+				const input = wrapper.get("[data-testid=room-card-select] input");
+				expect(input.attributes("aria-label")).toBe("pages.rooms.groups.selection.selectRoom");
+				await input.setValue(true);
+
+				expect(wrapper.emitted("select")).toEqual([[true]]);
+				expect(wrapper.find("[data-testid=room-open-button-0]").exists()).toBe(true);
+			});
+
+			it("does not offer selecting rooms that cannot be arranged", () => {
+				const { wrapper } = setup({ room: mockRoom, index: 0, selectable: true });
+
+				expect(wrapper.find("[data-testid=room-card-select]").exists()).toBe(false);
+			});
+		});
 	});
 });
