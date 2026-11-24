@@ -284,6 +284,7 @@ models/move-element-params.ts
 models/move-element-position-params.ts
 models/move-item-body-params.ts
 models/move-room-in-arrangement-body-params.ts
+models/move-rooms-in-arrangement-body-params.ts
 models/news-list-response.ts
 models/news-response.ts
 models/news-target-model.ts
@@ -433,6 +434,7 @@ models/update-room-arrangement-preferences-body-params.ts
 models/update-room-body-params.ts
 models/update-room-group-body-params.ts
 models/update-room-group-order-body-params.ts
+models/update-room-groups-collapsed-body-params.ts
 models/update-room-invitation-link-body-params.ts
 models/update-runtime-config-value-body-params.ts
 models/user-consent-response.ts

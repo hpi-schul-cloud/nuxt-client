@@ -30,6 +30,8 @@ import type { DeleteRoomGroupBodyParams } from '../models';
 // @ts-ignore
 import type { MoveRoomInArrangementBodyParams } from '../models';
 // @ts-ignore
+import type { MoveRoomsInArrangementBodyParams } from '../models';
+// @ts-ignore
 import type { RoomArrangementResponse } from '../models';
 // @ts-ignore
 import type { RoomGroupCreatedResponse } from '../models';
@@ -39,6 +41,8 @@ import type { UpdateRoomArrangementPreferencesBodyParams } from '../models';
 import type { UpdateRoomGroupBodyParams } from '../models';
 // @ts-ignore
 import type { UpdateRoomGroupOrderBodyParams } from '../models';
+// @ts-ignore
+import type { UpdateRoomGroupsCollapsedBodyParams } from '../models';
 /**
  * RoomArrangementApi - axios parameter creator
  */
@@ -201,6 +205,45 @@ export const RoomArrangementApiAxiosParamCreator = function (configuration?: Con
         },
         /**
          * 
+         * @summary Move several rooms at once to the end of a section. A null group id means the ungrouped rooms.
+         * @param {MoveRoomsInArrangementBodyParams} moveRoomsInArrangementBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomArrangementControllerMoveRooms: async (moveRoomsInArrangementBodyParams: MoveRoomsInArrangementBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'moveRoomsInArrangementBodyParams' is not null or undefined
+            assertParamExists('roomArrangementControllerMoveRooms', 'moveRoomsInArrangementBodyParams', moveRoomsInArrangementBodyParams)
+            const localVarPath = `/room-arrangements/me/room-positions`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(moveRoomsInArrangementBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Rename a room group and/or change its collapsed state.
          * @param {string} groupId The id of the room group.
          * @param {UpdateRoomGroupBodyParams} updateRoomGroupBodyParams 
@@ -275,6 +318,45 @@ export const RoomArrangementApiAxiosParamCreator = function (configuration?: Con
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(updateRoomGroupOrderBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Collapse or expand all room groups at once.
+         * @param {UpdateRoomGroupsCollapsedBodyParams} updateRoomGroupsCollapsedBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomArrangementControllerUpdateGroupsCollapsed: async (updateRoomGroupsCollapsedBodyParams: UpdateRoomGroupsCollapsedBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateRoomGroupsCollapsedBodyParams' is not null or undefined
+            assertParamExists('roomArrangementControllerUpdateGroupsCollapsed', 'updateRoomGroupsCollapsedBodyParams', updateRoomGroupsCollapsedBodyParams)
+            const localVarPath = `/room-arrangements/me/group-collapse`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateRoomGroupsCollapsedBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -383,6 +465,19 @@ export const RoomArrangementApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Move several rooms at once to the end of a section. A null group id means the ungrouped rooms.
+         * @param {MoveRoomsInArrangementBodyParams} moveRoomsInArrangementBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomArrangementControllerMoveRooms(moveRoomsInArrangementBodyParams: MoveRoomsInArrangementBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomArrangementResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomArrangementControllerMoveRooms(moveRoomsInArrangementBodyParams, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RoomArrangementApi.roomArrangementControllerMoveRooms']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary Rename a room group and/or change its collapsed state.
          * @param {string} groupId The id of the room group.
          * @param {UpdateRoomGroupBodyParams} updateRoomGroupBodyParams 
@@ -406,6 +501,19 @@ export const RoomArrangementApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomArrangementControllerUpdateGroupOrder(updateRoomGroupOrderBodyParams, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RoomArrangementApi.roomArrangementControllerUpdateGroupOrder']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Collapse or expand all room groups at once.
+         * @param {UpdateRoomGroupsCollapsedBodyParams} updateRoomGroupsCollapsedBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomArrangementControllerUpdateGroupsCollapsed(updateRoomGroupsCollapsedBodyParams: UpdateRoomGroupsCollapsedBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomArrangementResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomArrangementControllerUpdateGroupsCollapsed(updateRoomGroupsCollapsedBodyParams, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RoomArrangementApi.roomArrangementControllerUpdateGroupsCollapsed']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -472,6 +580,16 @@ export const RoomArrangementApiFactory = function (configuration?: Configuration
         },
         /**
          * 
+         * @summary Move several rooms at once to the end of a section. A null group id means the ungrouped rooms.
+         * @param {MoveRoomsInArrangementBodyParams} moveRoomsInArrangementBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomArrangementControllerMoveRooms(moveRoomsInArrangementBodyParams: MoveRoomsInArrangementBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RoomArrangementResponse> {
+            return localVarFp.roomArrangementControllerMoveRooms(moveRoomsInArrangementBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Rename a room group and/or change its collapsed state.
          * @param {string} groupId The id of the room group.
          * @param {UpdateRoomGroupBodyParams} updateRoomGroupBodyParams 
@@ -490,6 +608,16 @@ export const RoomArrangementApiFactory = function (configuration?: Configuration
          */
         roomArrangementControllerUpdateGroupOrder(updateRoomGroupOrderBodyParams: UpdateRoomGroupOrderBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RoomArrangementResponse> {
             return localVarFp.roomArrangementControllerUpdateGroupOrder(updateRoomGroupOrderBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Collapse or expand all room groups at once.
+         * @param {UpdateRoomGroupsCollapsedBodyParams} updateRoomGroupsCollapsedBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomArrangementControllerUpdateGroupsCollapsed(updateRoomGroupsCollapsedBodyParams: UpdateRoomGroupsCollapsedBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RoomArrangementResponse> {
+            return localVarFp.roomArrangementControllerUpdateGroupsCollapsed(updateRoomGroupsCollapsedBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -546,6 +674,15 @@ export interface RoomArrangementApiInterface {
 
     /**
      * 
+     * @summary Move several rooms at once to the end of a section. A null group id means the ungrouped rooms.
+     * @param {MoveRoomsInArrangementBodyParams} moveRoomsInArrangementBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    roomArrangementControllerMoveRooms(moveRoomsInArrangementBodyParams: MoveRoomsInArrangementBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RoomArrangementResponse>;
+
+    /**
+     * 
      * @summary Rename a room group and/or change its collapsed state.
      * @param {string} groupId The id of the room group.
      * @param {UpdateRoomGroupBodyParams} updateRoomGroupBodyParams 
@@ -562,6 +699,15 @@ export interface RoomArrangementApiInterface {
      * @throws {RequiredError}
      */
     roomArrangementControllerUpdateGroupOrder(updateRoomGroupOrderBodyParams: UpdateRoomGroupOrderBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RoomArrangementResponse>;
+
+    /**
+     * 
+     * @summary Collapse or expand all room groups at once.
+     * @param {UpdateRoomGroupsCollapsedBodyParams} updateRoomGroupsCollapsedBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    roomArrangementControllerUpdateGroupsCollapsed(updateRoomGroupsCollapsedBodyParams: UpdateRoomGroupsCollapsedBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<RoomArrangementResponse>;
 
     /**
      * 
@@ -624,6 +770,17 @@ export class RoomArrangementApi extends BaseAPI implements RoomArrangementApiInt
 
     /**
      * 
+     * @summary Move several rooms at once to the end of a section. A null group id means the ungrouped rooms.
+     * @param {MoveRoomsInArrangementBodyParams} moveRoomsInArrangementBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public roomArrangementControllerMoveRooms(moveRoomsInArrangementBodyParams: MoveRoomsInArrangementBodyParams, options?: RawAxiosRequestConfig) {
+        return RoomArrangementApiFp(this.configuration).roomArrangementControllerMoveRooms(moveRoomsInArrangementBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Rename a room group and/or change its collapsed state.
      * @param {string} groupId The id of the room group.
      * @param {UpdateRoomGroupBodyParams} updateRoomGroupBodyParams 
@@ -643,6 +800,17 @@ export class RoomArrangementApi extends BaseAPI implements RoomArrangementApiInt
      */
     public roomArrangementControllerUpdateGroupOrder(updateRoomGroupOrderBodyParams: UpdateRoomGroupOrderBodyParams, options?: RawAxiosRequestConfig) {
         return RoomArrangementApiFp(this.configuration).roomArrangementControllerUpdateGroupOrder(updateRoomGroupOrderBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Collapse or expand all room groups at once.
+     * @param {UpdateRoomGroupsCollapsedBodyParams} updateRoomGroupsCollapsedBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public roomArrangementControllerUpdateGroupsCollapsed(updateRoomGroupsCollapsedBodyParams: UpdateRoomGroupsCollapsedBodyParams, options?: RawAxiosRequestConfig) {
+        return RoomArrangementApiFp(this.configuration).roomArrangementControllerUpdateGroupsCollapsed(updateRoomGroupsCollapsedBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
