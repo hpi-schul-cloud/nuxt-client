@@ -4,10 +4,11 @@
 		capture-focus
 		:data-testid="testId"
 		:max-width="maxWidth"
+		:persistent
 		:aria-labelledby="`dialog-${uid}-title`"
 		@after-leave="emit('after-leave')"
-		@click:outside="emit('cancel')"
-		@keydown.esc="emit('cancel')"
+		@click:outside="onDismiss"
+		@keydown.esc="onDismiss"
 	>
 		<VCard :loading="isLoading">
 			<VCardItem class="pa-4">
@@ -64,6 +65,8 @@ const props = withDefaults(
 		noConfirm?: boolean;
 		noCancel?: boolean;
 		isOpenStateManagedExternally?: boolean;
+		/** Prevents closing by outside click or Escape, e.g. while a request is pending. */
+		persistent?: boolean;
 	}>(),
 	{
 		isLoading: false,
@@ -76,6 +79,7 @@ const props = withDefaults(
 		noConfirm: false,
 		noCancel: false,
 		isOpenStateManagedExternally: false,
+		persistent: false,
 	}
 );
 
@@ -97,6 +101,12 @@ const attrs = useAttrs();
 
 const testId = attrs["data-testid"] ?? "dialog";
 const titleString = computed(() => (i18nKeyExists(props.title) ? t(props.title) : props.title));
+
+const onDismiss = () => {
+	if (!props.persistent) {
+		emit("cancel");
+	}
+};
 
 const onCancel = () => {
 	emit("cancel");

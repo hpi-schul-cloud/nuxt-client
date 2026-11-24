@@ -32,6 +32,7 @@ describe("SvsDialog", () => {
 			noConfirm?: boolean;
 			noActions?: boolean;
 			isOpenStateManagedExternally?: boolean;
+			persistent?: boolean;
 		} = {}
 	) => {
 		const title = "title of dialog";
@@ -47,6 +48,7 @@ describe("SvsDialog", () => {
 				noConfirm: props.noConfirm ?? false,
 				noCancel: props.noCancel ?? false,
 				isOpenStateManagedExternally: props.isOpenStateManagedExternally ?? false,
+				persistent: props.persistent ?? false,
 			},
 			slots: {
 				content: slotContent,
@@ -199,6 +201,31 @@ describe("SvsDialog", () => {
 			await wrapper.vm.$nextTick();
 
 			expect(wrapper.emitted("cancel")).toBeTruthy();
+		});
+
+		describe("when the dialog is persistent", () => {
+			it("should pass persistent to VDialog", () => {
+				const { dialog } = setup({ persistent: true });
+
+				expect(dialog.props("persistent")).toBe(true);
+			});
+
+			it("should not emit cancel when clicking outside", () => {
+				const { wrapper, dialog } = setup({ persistent: true });
+
+				dialog.vm.$emit("click:outside");
+
+				expect(wrapper.emitted("cancel")).toBeUndefined();
+			});
+
+			it("should not emit cancel on escape keydown", async () => {
+				const { wrapper, dialog } = setup({ persistent: true });
+
+				dialog.vm.$emit("keydown", new KeyboardEvent("keydown", { key: "Escape", keyCode: 27 }));
+				await wrapper.vm.$nextTick();
+
+				expect(wrapper.emitted("cancel")).toBeUndefined();
+			});
 		});
 	});
 });
