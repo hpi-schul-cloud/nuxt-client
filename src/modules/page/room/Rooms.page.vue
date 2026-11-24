@@ -59,18 +59,27 @@
 						{{ t("pages.rooms.menu.restoreGroupDeleteConfirmation") }}
 					</KebabMenuAction>
 				</KebabMenu>
-				<VBtn
-					v-if="isRoomSelectionAvailable && !isSelectingRooms"
-					variant="text"
-					height="40"
-					:icon="xs ? mdiCheckboxOutline : undefined"
-					:prepend-icon="xs ? undefined : mdiCheckboxOutline"
-					:aria-label="xs ? t('pages.rooms.groups.selection.start') : undefined"
-					data-testid="room-selection-start"
-					@click="groupedOverview?.startSelection()"
-				>
-					<template v-if="!xs">{{ t("pages.rooms.groups.selection.start") }}</template>
-				</VBtn>
+				<template v-if="isRoomSelectionAvailable && !isSelectingRooms">
+					<VBtn
+						v-if="xs"
+						variant="text"
+						height="40"
+						:icon="mdiCheckboxOutline"
+						:aria-label="t('pages.rooms.groups.selection.start')"
+						data-testid="room-selection-start"
+						@click="groupedOverview?.startSelection()"
+					/>
+					<VBtn
+						v-else
+						variant="text"
+						height="40"
+						:prepend-icon="mdiCheckboxOutline"
+						data-testid="room-selection-start"
+						@click="groupedOverview?.startSelection()"
+					>
+						{{ t("pages.rooms.groups.selection.start") }}
+					</VBtn>
+				</template>
 			</div>
 		</template>
 		<RoomsWelcomeInfo class="mt-8" />
