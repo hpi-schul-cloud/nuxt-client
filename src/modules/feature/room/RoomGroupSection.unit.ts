@@ -26,6 +26,7 @@ describe("RoomGroupSection", () => {
 			groupCount?: number;
 			disabled?: boolean;
 			showHeading?: boolean;
+			isDraggingRoom?: boolean;
 		} = {}
 	) => {
 		const rooms = options.rooms ?? [];
@@ -38,6 +39,7 @@ describe("RoomGroupSection", () => {
 				indexOffset: 3,
 				disabled: options.disabled ?? false,
 				showHeading: options.showHeading ?? true,
+				isDraggingRoom: options.isDraggingRoom ?? false,
 			},
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -126,6 +128,10 @@ describe("RoomGroupSection", () => {
 					document.querySelector(`[data-testid='${testId}']`)?.classList.contains("v-list-item--disabled");
 				expect(isDisabled("room-group-menu-move-up")).toBe(up);
 				expect(isDisabled("room-group-menu-move-down")).toBe(down);
+				const ariaDisabled = (testId: string) =>
+					document.querySelector(`[data-testid='${testId}']`)?.getAttribute("aria-disabled") === "true";
+				expect(ariaDisabled("room-group-menu-move-up")).toBe(up);
+				expect(ariaDisabled("room-group-menu-move-down")).toBe(down);
 			}
 		);
 
@@ -139,6 +145,35 @@ describe("RoomGroupSection", () => {
 			document.querySelector<HTMLElement>(`[data-testid='${testId}']`)?.click();
 
 			expect(wrapper?.emitted(event)).toHaveLength(1);
+		});
+	});
+
+	describe("compact collapsed state and naming", () => {
+		it("marks a collapsed group so it takes less vertical space", () => {
+			setup({ group: group({ collapsed: true }) });
+
+			expect(wrapper?.get("section").classes()).toContain("room-group-section--collapsed");
+		});
+
+		it("names the room grid with the section heading", () => {
+			setup({ group: group(), rooms: roomItemFactory.buildList(1) });
+
+			const headingId = wrapper?.get("[data-testid='room-group-title']").attributes("id");
+			expect(wrapper?.get("[data-testid='room-group-grid']").attributes("aria-labelledby")).toBe(headingId);
+		});
+	});
+
+	describe("empty ungrouped section", () => {
+		it("states that all rooms are assigned while nothing is dragged", () => {
+			setup({ rooms: [] });
+
+			expect(wrapper?.get("[data-testid='room-group-empty']").text()).toBe("pages.rooms.groups.ungroupedAllAssigned");
+		});
+
+		it("explains the drop target while a room is dragged", () => {
+			setup({ rooms: [], isDraggingRoom: true });
+
+			expect(wrapper?.get("[data-testid='room-group-empty']").text()).toBe("pages.rooms.groups.ungroupedEmpty");
 		});
 	});
 

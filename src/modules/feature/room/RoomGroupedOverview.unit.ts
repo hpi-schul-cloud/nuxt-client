@@ -314,6 +314,50 @@ describe("RoomGroupedOverview", () => {
 			expect(arrangementApi.roomArrangementControllerDeleteGroup).not.toHaveBeenCalled();
 		});
 
+		describe("focus after a dialog is cancelled", () => {
+			it("returns focus to the add button after cancelling the create dialog", async () => {
+				await setup();
+
+				clickInDocument("[data-testid='room-group-add']");
+				await flushPromises();
+				const dialog = wrapper?.findComponent(RoomGroupNameDialog);
+				dialog?.vm.$emit("cancel");
+				dialog?.vm.$emit("after-leave");
+				await flushPromises();
+
+				expect(document.activeElement?.getAttribute("data-testid")).toBe("room-group-add");
+			});
+
+			it("returns focus to the group menu after cancelling the delete dialog", async () => {
+				await setup();
+
+				sections()[1].vm.$emit("delete");
+				await flushPromises();
+				const dialog = wrapper?.findComponent(RoomGroupDeleteDialog);
+				dialog?.vm.$emit("cancel");
+				dialog?.vm.$emit("after-leave");
+				await flushPromises();
+
+				const focusedGroup = document.activeElement?.closest("[data-group-id]");
+				expect(document.activeElement?.getAttribute("data-testid")).toBe("room-group-menu");
+				expect(focusedGroup?.getAttribute("data-group-id")).toBe(groupA.id);
+			});
+
+			it("returns focus to the room menu after cancelling the move dialog", async () => {
+				await setup();
+
+				sections()[0].vm.$emit("move-to-group", rooms[0]);
+				await flushPromises();
+				const dialog = wrapper?.findComponent(RoomMoveDialog);
+				dialog?.vm.$emit("cancel");
+				dialog?.vm.$emit("after-leave");
+				await flushPromises();
+
+				const focusedRoom = document.activeElement?.closest("[data-room-id]");
+				expect(focusedRoom?.getAttribute("data-room-id")).toBe(rooms[0].id);
+			});
+		});
+
 		it("deletes directly with visible feedback when confirmations are disabled", async () => {
 			const { initial } = await setup({ confirmGroupDeletion: false });
 			arrangementApi.roomArrangementControllerDeleteGroup.mockResolvedValue(

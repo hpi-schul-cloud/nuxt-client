@@ -1924,6 +1924,7 @@ export default {
 	"pages.rooms.groups.dragHandle": "Перетягніть, щоб перемістити групу «{name}»",
 	"pages.rooms.groups.empty": "Ця група порожня. Перетягніть сюди кімнати або призначте їх через меню кімнати.",
 	"pages.rooms.groups.ungroupedEmpty": "Перетягніть сюди, щоб вилучити кімнати з груп.",
+	"pages.rooms.groups.ungroupedAllAssigned": "Усі кімнати призначено до груп.",
 	"pages.rooms.groups.collapsedDrop": "Перетягніть сюди, щоб додати кімнату в кінець групи.",
 	"pages.rooms.groups.dialog.create.title": "Додати групу",
 	"pages.rooms.groups.dialog.rename.title": "Перейменувати групу",
@@ -1936,11 +1937,11 @@ export default {
 	"pages.rooms.groups.deleteDialog.text":
 		"Групу «{name}» буде видалено. Кімнати в ній не буде видалено, їх буде переміщено до «Без групи».",
 	"pages.rooms.groups.deleteDialog.dontAskAgain": "Більше не запитувати",
-	"pages.rooms.groups.moveDialog.title": "Перемістити до групи",
+	"pages.rooms.groups.moveDialog.title": "Перемістити кімнату",
 	"pages.rooms.groups.moveDialog.text": "Куди перемістити кімнату «{name}»?",
 	"pages.rooms.groups.moveDialog.current": "{name} (поточне розташування)",
 	"pages.rooms.groups.roomMenu.ariaLabel": "Меню дій для кімнати «{name}»",
-	"pages.rooms.groups.roomMenu.moveToGroup": "Перемістити до групи…",
+	"pages.rooms.groups.roomMenu.moveToGroup": "Перемістити до…",
 	"pages.rooms.groups.roomMenu.moveEarlier": "Перемістити раніше",
 	"pages.rooms.groups.roomMenu.moveLater": "Перемістити пізніше",
 	"pages.rooms.groups.announce.created": "Групу «{name}» додано.",
@@ -1953,7 +1954,7 @@ export default {
 		"Кімнату «{name}» переміщено з «{source}» до «{target}» на позицію {position}.",
 	"pages.rooms.groups.announce.roomReordered": "Кімнату «{name}» переміщено на позицію {position} у «{target}».",
 	"pages.rooms.groups.notification.outcomeUnknown":
-		"Групування було змінено деінде або зміну не вдалося підтвердити. Подання оновлено. Спробуйте ще раз.",
+		"Групи змінено деінде або зміну не підтверджено. Подання оновлено – спробуйте ще раз.",
 	"pages.rooms.groups.loadError":
 		"Не вдалося завантажити групи. Кімнати показано без груп, і зараз їх не можна впорядкувати.",
 	"pages.rooms.groups.retry": "Завантажити знову",

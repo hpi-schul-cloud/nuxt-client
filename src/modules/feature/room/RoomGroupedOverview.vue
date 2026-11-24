@@ -83,7 +83,7 @@
 			@submit="onNameSubmit"
 			@cancel="closeNameDialog"
 			@clear-server-error="nameDialog.serverError = undefined"
-			@after-leave="applyPendingFocus"
+			@after-leave="onDialogAfterLeave"
 		/>
 		<RoomGroupDeleteDialog
 			v-model="deleteDialog.isOpen"
@@ -91,6 +91,7 @@
 			:is-deleting="deleteDialog.isDeleting || isMutating"
 			@confirm="onDeleteConfirm"
 			@cancel="closeDeleteDialog"
+			@after-leave="onDialogAfterLeave"
 		/>
 		<RoomMoveDialog
 			v-model="moveDialog.isOpen"
@@ -100,6 +101,7 @@
 			:is-moving="moveDialog.isMoving || isMutating"
 			@confirm="onMoveDialogConfirm"
 			@cancel="closeMoveDialog"
+			@after-leave="onDialogAfterLeave"
 		/>
 	</div>
 </template>
@@ -201,13 +203,19 @@ const focusElement = (selector: string) => {
 
 const headingSelector = (key: string) => `#room-group-heading-${key}`;
 const addButtonSelector = "[data-testid='room-group-add']";
+const groupMenuSelector = (groupId: string) => `[data-group-id='${groupId}'] [data-testid='room-group-menu']`;
+const roomMenuSelector = (roomId: string) => `[data-room-id='${roomId}'] [data-testid='room-card-menu']`;
 
 const applyPendingFocus = async () => {
 	if (!pendingFocusSelector) return;
 	await nextTick();
-	if (focusElement(pendingFocusSelector)) {
-		pendingFocusSelector = undefined;
-	}
+	focusElement(pendingFocusSelector);
+};
+
+// The dialog's own focus return runs when its leave transition ends, so the target is applied again afterwards.
+const onDialogAfterLeave = async () => {
+	await applyPendingFocus();
+	pendingFocusSelector = undefined;
 };
 
 const focusAfterDialog = async (selector: string) => {
@@ -268,8 +276,11 @@ const moveTargets = computed<RoomMoveTarget[]>(() => [
 	...groups.value.map((group, index) => ({ key: group.id, label: group.name, testId: `room-move-target-${index}` })),
 ]);
 
+// Dialogs are opened from menu items that no longer exist once closed, so focus returns to a stable trigger.
 const closeMoveDialog = () => {
-	if (!moveDialog.isMoving) moveDialog.isOpen = false;
+	if (moveDialog.isMoving) return;
+	if (moveDialog.room) pendingFocusSelector = roomMenuSelector(moveDialog.room.id);
+	moveDialog.isOpen = false;
 };
 
 const openMoveDialog = (room: RoomItem) => {
@@ -300,8 +311,8 @@ const onMoveDialogConfirm = async (targetKey: string) => {
 		moveDialog.isOpen = false;
 	}
 	if (result.success) {
-		await nextTick();
-		focusElement(`[data-room-id='${room.id}'] [data-testid='room-card-menu']`);
+		pendingFocusSelector = roomMenuSelector(room.id);
+		await applyPendingFocus();
 	}
 };
 
@@ -379,7 +390,10 @@ const openRenameDialog = (group: RoomGroupView) => {
 };
 
 const closeNameDialog = () => {
-	if (!nameDialog.isSaving) nameDialog.isOpen = false;
+	if (nameDialog.isSaving) return;
+	pendingFocusSelector =
+		nameDialog.mode === "rename" && nameDialog.groupId ? groupMenuSelector(nameDialog.groupId) : addButtonSelector;
+	nameDialog.isOpen = false;
 };
 
 const onNameSubmit = async (name: string) => {
@@ -445,7 +459,9 @@ const performDelete = async (group: RoomGroupView, disableFutureConfirmation: bo
 };
 
 const closeDeleteDialog = () => {
-	if (!deleteDialog.isDeleting) deleteDialog.isOpen = false;
+	if (deleteDialog.isDeleting) return;
+	if (deleteDialog.group) pendingFocusSelector = groupMenuSelector(deleteDialog.group.id);
+	deleteDialog.isOpen = false;
 };
 
 const requestDelete = (group: RoomGroupView) => {

@@ -1950,6 +1950,7 @@ export default {
 	"pages.rooms.groups.dragHandle": "Arrastrar para mover el grupo «{name}»",
 	"pages.rooms.groups.empty": "Este grupo está vacío. Arrastra salas aquí o asígnalas mediante el menú de la sala.",
 	"pages.rooms.groups.ungroupedEmpty": "Suelta aquí para quitar salas de sus grupos.",
+	"pages.rooms.groups.ungroupedAllAssigned": "Todas las salas están asignadas a un grupo.",
 	"pages.rooms.groups.collapsedDrop": "Suelta aquí para añadir la sala al final del grupo.",
 	"pages.rooms.groups.dialog.create.title": "Añadir grupo",
 	"pages.rooms.groups.dialog.rename.title": "Cambiar el nombre del grupo",
@@ -1963,11 +1964,11 @@ export default {
 	"pages.rooms.groups.deleteDialog.text":
 		"Se eliminará el grupo «{name}». Sus salas no se eliminarán, sino que se moverán a «Sin agrupar».",
 	"pages.rooms.groups.deleteDialog.dontAskAgain": "No volver a preguntar",
-	"pages.rooms.groups.moveDialog.title": "Mover a un grupo",
+	"pages.rooms.groups.moveDialog.title": "Mover sala",
 	"pages.rooms.groups.moveDialog.text": "¿A dónde se debe mover la sala «{name}»?",
 	"pages.rooms.groups.moveDialog.current": "{name} (ubicación actual)",
 	"pages.rooms.groups.roomMenu.ariaLabel": "Menú de acciones de la sala «{name}»",
-	"pages.rooms.groups.roomMenu.moveToGroup": "Mover a un grupo…",
+	"pages.rooms.groups.roomMenu.moveToGroup": "Mover a…",
 	"pages.rooms.groups.roomMenu.moveEarlier": "Mover hacia delante",
 	"pages.rooms.groups.roomMenu.moveLater": "Mover hacia atrás",
 	"pages.rooms.groups.announce.created": "Se ha añadido el grupo «{name}».",
@@ -1980,7 +1981,7 @@ export default {
 		"La sala «{name}» se ha movido de «{source}» a «{target}» en la posición {position}.",
 	"pages.rooms.groups.announce.roomReordered": "La sala «{name}» se ha movido a la posición {position} en «{target}».",
 	"pages.rooms.groups.notification.outcomeUnknown":
-		"La agrupación se ha modificado en otro lugar o no se ha podido confirmar el cambio. La vista se ha actualizado. Inténtalo de nuevo.",
+		"Los grupos se han modificado en otro lugar o el cambio no está confirmado. Vista actualizada: inténtalo de nuevo.",
 	"pages.rooms.groups.loadError":
 		"No se han podido cargar los grupos. Las salas se muestran sin grupos y no se pueden ordenar en este momento.",
 	"pages.rooms.groups.retry": "Volver a cargar",

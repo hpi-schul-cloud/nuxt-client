@@ -1905,6 +1905,7 @@ export default {
 	"pages.rooms.groups.dragHandle": 'Drag to move the group "{name}"',
 	"pages.rooms.groups.empty": "This group is empty. Drag rooms here or assign them using the room menu.",
 	"pages.rooms.groups.ungroupedEmpty": "Drop here to remove rooms from their groups.",
+	"pages.rooms.groups.ungroupedAllAssigned": "All rooms are assigned to a group.",
 	"pages.rooms.groups.collapsedDrop": "Drop here to add the room to the end of the group.",
 	"pages.rooms.groups.dialog.create.title": "Add group",
 	"pages.rooms.groups.dialog.rename.title": "Rename group",
@@ -1917,11 +1918,11 @@ export default {
 	"pages.rooms.groups.deleteDialog.text":
 		'The group "{name}" will be deleted. Its rooms will not be deleted but moved to "Ungrouped".',
 	"pages.rooms.groups.deleteDialog.dontAskAgain": "Do not ask again",
-	"pages.rooms.groups.moveDialog.title": "Move to group",
+	"pages.rooms.groups.moveDialog.title": "Move room",
 	"pages.rooms.groups.moveDialog.text": 'Where should the room "{name}" be moved?',
 	"pages.rooms.groups.moveDialog.current": "{name} (current location)",
 	"pages.rooms.groups.roomMenu.ariaLabel": 'Action menu for the room "{name}"',
-	"pages.rooms.groups.roomMenu.moveToGroup": "Move to group…",
+	"pages.rooms.groups.roomMenu.moveToGroup": "Move to…",
 	"pages.rooms.groups.roomMenu.moveEarlier": "Move earlier",
 	"pages.rooms.groups.roomMenu.moveLater": "Move later",
 	"pages.rooms.groups.announce.created": 'The group "{name}" was added.',
@@ -1934,7 +1935,7 @@ export default {
 		'The room "{name}" was moved from "{source}" to "{target}" at position {position}.',
 	"pages.rooms.groups.announce.roomReordered": 'The room "{name}" was moved to position {position} in "{target}".',
 	"pages.rooms.groups.notification.outcomeUnknown":
-		"The grouping was changed elsewhere or the change could not be confirmed. The view has been refreshed. Please try again.",
+		"The groups were changed elsewhere or the change is unconfirmed. View refreshed – please try again.",
 	"pages.rooms.groups.loadError":
 		"The groups could not be loaded. Rooms are shown without groups and cannot be arranged right now.",
 	"pages.rooms.groups.retry": "Reload",

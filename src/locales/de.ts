@@ -1945,6 +1945,7 @@ export default {
 	"pages.rooms.groups.dragHandle": "Gruppe „{name}“ ziehen, um sie zu verschieben",
 	"pages.rooms.groups.empty": "Diese Gruppe ist leer. Ziehe Räume hierher oder ordne sie über das Raummenü zu.",
 	"pages.rooms.groups.ungroupedEmpty": "Hier ablegen, um Räume aus Gruppen zu entfernen.",
+	"pages.rooms.groups.ungroupedAllAssigned": "Alle Räume sind einer Gruppe zugeordnet.",
 	"pages.rooms.groups.collapsedDrop": "Hier ablegen, um den Raum am Ende der Gruppe einzufügen.",
 	"pages.rooms.groups.dialog.create.title": "Gruppe hinzufügen",
 	"pages.rooms.groups.dialog.rename.title": "Gruppe umbenennen",
@@ -1958,11 +1959,11 @@ export default {
 	"pages.rooms.groups.deleteDialog.text":
 		"Die Gruppe „{name}“ wird gelöscht. Die Räume darin werden nicht gelöscht, sondern nach „Nicht gruppiert“ verschoben.",
 	"pages.rooms.groups.deleteDialog.dontAskAgain": "Nicht mehr nachfragen",
-	"pages.rooms.groups.moveDialog.title": "In Gruppe verschieben",
+	"pages.rooms.groups.moveDialog.title": "Raum verschieben",
 	"pages.rooms.groups.moveDialog.text": "Wohin soll der Raum „{name}“ verschoben werden?",
 	"pages.rooms.groups.moveDialog.current": "{name} (aktueller Ort)",
 	"pages.rooms.groups.roomMenu.ariaLabel": "Aktionsmenü für den Raum „{name}“",
-	"pages.rooms.groups.roomMenu.moveToGroup": "In Gruppe verschieben…",
+	"pages.rooms.groups.roomMenu.moveToGroup": "Verschieben nach…",
 	"pages.rooms.groups.roomMenu.moveEarlier": "Nach vorne verschieben",
 	"pages.rooms.groups.roomMenu.moveLater": "Nach hinten verschieben",
 	"pages.rooms.groups.announce.created": "Die Gruppe „{name}“ wurde hinzugefügt.",
@@ -1977,7 +1978,7 @@ export default {
 	"pages.rooms.groups.announce.roomReordered":
 		"Der Raum „{name}“ wurde in „{target}“ an Position {position} verschoben.",
 	"pages.rooms.groups.notification.outcomeUnknown":
-		"Die Gruppierung wurde zwischenzeitlich geändert oder die Änderung konnte nicht bestätigt werden. Die Ansicht wurde aktualisiert. Bitte versuche es erneut.",
+		"Die Gruppen wurden zwischenzeitlich geändert oder die Änderung ist unbestätigt. Ansicht aktualisiert – bitte erneut versuchen.",
 	"pages.rooms.groups.loadError":
 		"Die Gruppen konnten nicht geladen werden. Die Räume werden ohne Gruppen angezeigt und können gerade nicht sortiert werden.",
 	"pages.rooms.groups.retry": "Erneut laden",

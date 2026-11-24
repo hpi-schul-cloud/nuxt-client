@@ -2,6 +2,7 @@
 	<Sortable
 		ref="gridRef"
 		:role="readonly ? undefined : 'application'"
+		:aria-labelledby="labelledBy"
 		:list="rooms"
 		class="room-grid"
 		:class="{ 'mt-8': !isGrouped, 'room-grid--grouped': isGrouped }"
@@ -70,8 +71,17 @@ const props = withDefaults(
 		readonly?: boolean;
 		/** Heading level of the room titles; defaults to h2 (flat) or h3 (below a section heading). */
 		titleTag?: "h2" | "h3";
+		/** Id of the section heading that names this grid. */
+		labelledBy?: string;
 	}>(),
-	{ sectionKey: undefined, indexOffset: 0, disabled: false, readonly: false, titleTag: undefined }
+	{
+		sectionKey: undefined,
+		indexOffset: 0,
+		disabled: false,
+		readonly: false,
+		titleTag: undefined,
+		labelledBy: undefined,
+	}
 );
 
 const emit = defineEmits<{

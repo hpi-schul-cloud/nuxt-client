@@ -1,5 +1,11 @@
 <template>
-	<VListItem data-testid="kebab-menu-action" role="menuitem" :aria-label="ariaLabel" :disabled="disabled">
+	<VListItem
+		data-testid="kebab-menu-action"
+		role="menuitem"
+		:aria-label="ariaLabel"
+		:aria-disabled="disabled ? 'true' : undefined"
+		:disabled="disabled"
+	>
 		<template #prepend>
 			<VIcon :icon="icon" data-testid="kebab-menu-action-icon" />
 		</template>

@@ -2,7 +2,11 @@
 	<section
 		ref="sectionRef"
 		class="room-group-section"
-		:class="{ 'room-group-sortable-item': group, 'room-group-section--compact': isCompactUngrouped }"
+		:class="{
+			'room-group-sortable-item': group,
+			'room-group-section--compact': isCompactUngrouped,
+			'room-group-section--collapsed': isCollapsed,
+		}"
 		:data-testid="group ? `room-group-${groupIndex}` : 'room-group-ungrouped'"
 		:data-group-id="group?.id"
 		:aria-labelledby="showHeading ? headingId : undefined"
@@ -39,7 +43,6 @@
 					})
 				"
 				:aria-disabled="disabled ? 'true' : undefined"
-				:class="{ 'room-group-toggle--pending': disabled }"
 				data-testid="room-group-toggle"
 				@click="onToggle"
 			/>
@@ -91,6 +94,7 @@
 					:index-offset="indexOffset"
 					:disabled
 					:title-tag="showHeading ? 'h3' : 'h2'"
+					:labelled-by="showHeading ? headingId : undefined"
 					@drop="emit('drop', $event)"
 					@drag-start="emit('drag-start')"
 					@drag-end="emit('drag-end')"
@@ -101,7 +105,7 @@
 					class="room-group-empty-hint text-body-2 text-medium-emphasis ma-0"
 					data-testid="room-group-empty"
 				>
-					{{ t(group ? "pages.rooms.groups.empty" : "pages.rooms.groups.ungroupedEmpty") }}
+					{{ t(emptyHintKey) }}
 				</p>
 			</div>
 		</div>
@@ -194,6 +198,10 @@ const isCollapsed = computed(() => props.group?.collapsed === true);
 const isFirstGroup = computed(() => props.groupIndex === 0);
 const isLastGroup = computed(() => props.groupIndex >= props.groupCount - 1);
 const isCompactUngrouped = computed(() => !props.group && props.rooms.length === 0);
+const emptyHintKey = computed(() => {
+	if (props.group) return "pages.rooms.groups.empty";
+	return props.isDraggingRoom ? "pages.rooms.groups.ungroupedEmpty" : "pages.rooms.groups.ungroupedAllAssigned";
+});
 
 const collapsedDropOptions = computed(() => ({
 	group: { name: ROOM_SORTABLE_GROUP, pull: false, put: true },
@@ -226,6 +234,7 @@ const onToggle = async () => {
 
 .room-group-title {
 	display: inline;
+	font-weight: 400;
 	overflow-wrap: anywhere;
 	hyphens: auto;
 }
@@ -241,13 +250,8 @@ const onToggle = async () => {
 	touch-action: none;
 }
 
-.room-group-toggle--pending {
-	opacity: 0.6;
-}
-
 .room-group-drag-handle--disabled {
 	cursor: default;
-	opacity: 0.4;
 }
 
 .room-group-drop-area {
