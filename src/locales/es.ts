@@ -1986,7 +1986,6 @@ export default {
 	"pages.rooms.groups.retry": "Volver a cargar",
 	"pages.rooms.groups.confirmationRestored": "Se volverá a preguntar antes de eliminar un grupo.",
 	"pages.rooms.menu.restoreGroupDeleteConfirmation": "Preguntar antes de eliminar grupos",
-	"pages.rooms.groups.undo.action": "Deshacer",
 	"pages.rooms.groups.undo.roomMoved": "«{name}» se ha movido a «{target}».",
 	"pages.rooms.groups.undo.roomReordered": "«{name}» se ha movido.",
 	"pages.rooms.groups.undo.roomsMoved":

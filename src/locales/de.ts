@@ -1985,7 +1985,6 @@ export default {
 	"pages.rooms.groups.retry": "Erneut laden",
 	"pages.rooms.groups.confirmationRestored": "Vor dem Löschen einer Gruppe wird wieder nachgefragt.",
 	"pages.rooms.menu.restoreGroupDeleteConfirmation": "Vor dem Löschen von Gruppen nachfragen",
-	"pages.rooms.groups.undo.action": "Rückgängig",
 	"pages.rooms.groups.undo.roomMoved": "„{name}“ wurde nach „{target}“ verschoben.",
 	"pages.rooms.groups.undo.roomReordered": "„{name}“ wurde verschoben.",
 	"pages.rooms.groups.undo.roomsMoved":

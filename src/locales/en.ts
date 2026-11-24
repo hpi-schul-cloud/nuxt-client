@@ -1940,7 +1940,6 @@ export default {
 	"pages.rooms.groups.retry": "Reload",
 	"pages.rooms.groups.confirmationRestored": "You will be asked again before a group is deleted.",
 	"pages.rooms.menu.restoreGroupDeleteConfirmation": "Ask before deleting groups",
-	"pages.rooms.groups.undo.action": "Undo",
 	"pages.rooms.groups.undo.roomMoved": '"{name}" was moved to "{target}".',
 	"pages.rooms.groups.undo.roomReordered": '"{name}" was moved.',
 	"pages.rooms.groups.undo.roomsMoved":

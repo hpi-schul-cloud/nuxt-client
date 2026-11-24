@@ -142,19 +142,6 @@
 			</div>
 		</div>
 
-		<VSnackbar
-			v-model="isUndoSnackbarOpen"
-			:timeout="isUndoFocused ? -1 : UNDO_TIMEOUT_MS"
-			:content-props="undoContentProps"
-		>
-			{{ undoMessage }}
-			<template #actions>
-				<VBtn :disabled="!canUndo" :loading="isUndoing" data-testid="room-arrangement-undo-action" @click="onUndo">
-					{{ t("pages.rooms.groups.undo.action") }}
-				</VBtn>
-			</template>
-		</VSnackbar>
-
 		<RoomGroupNameDialog
 			v-model="nameDialog.isOpen"
 			:mode="nameDialog.mode"
@@ -211,6 +198,7 @@ import RoomGroupsOnboardingLine from "./RoomGroupsOnboardingLine.vue";
 import RoomMoveDialog from "./RoomMoveDialog.vue";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 import { RoomItem } from "@/types/room/Room";
+import { notifySuccess, useNotificationStore } from "@data-app";
 import {
 	RoomArrangementUndoDescription,
 	RoomArrangementView,
@@ -245,7 +233,6 @@ const {
 	hasLoadError,
 	roomsStatus,
 	confirmGroupDeletion,
-	canUndo,
 	isUndoing,
 	isUndoOffered,
 	undoDescription,
@@ -551,7 +538,7 @@ const onNameSubmit = async (name: string) => {
 	const targetGroupId = result.createdGroupId ?? groupId;
 	const savedName = result.arrangement.groups.find((group) => group.id === targetGroupId)?.name ?? name;
 	nameDialog.isOpen = false;
-	notifyOnScreenReader(
+	notifySuccess(
 		t(nameDialog.mode === "create" ? "pages.rooms.groups.announce.created" : "pages.rooms.groups.announce.renamed", {
 			name: savedName,
 		})
@@ -723,17 +710,9 @@ useEventListener(document, "keydown", (event: KeyboardEvent) => {
 	}
 });
 
-// Undo
-const UNDO_TIMEOUT_MS = 8000;
-const isUndoSnackbarOpen = ref(false);
-const isUndoFocused = ref(false);
-
-// The timer pauses while keyboard focus is inside the snackbar.
-const undoContentProps = {
-	"data-testid": "room-arrangement-undo",
-	onFocusin: () => (isUndoFocused.value = true),
-	onFocusout: () => (isUndoFocused.value = false),
-};
+// Undo: offered through the same success notification with an undo action that archiving uses.
+const UNDO_DURATION_MS = 10000;
+let removeUndoNotification: (() => void) | undefined;
 
 const sectionName = (name: string | null) => name ?? t("pages.rooms.groups.ungrouped");
 
@@ -760,22 +739,30 @@ const describeUndo = (description: RoomArrangementUndoDescription) => {
 	}
 };
 
-const undoMessage = computed(() => (undoDescription.value ? describeUndo(undoDescription.value) : ""));
-
-watch(undoId, (id) => {
-	if (id !== undefined && isUndoOffered.value) isUndoSnackbarOpen.value = true;
-});
-
-watch(isUndoOffered, (offered) => {
-	if (!offered && !isUndoing.value) isUndoSnackbarOpen.value = false;
-});
-
 const onUndo = async () => {
 	const isUndone = await arrangementStore.undo();
-	isUndoSnackbarOpen.value = false;
-	isUndoFocused.value = false;
 	if (isUndone) notifyOnScreenReader(t("pages.rooms.groups.undo.done"));
 };
+
+watch(undoId, (id) => {
+	removeUndoNotification?.();
+	removeUndoNotification = undefined;
+	if (id === undefined || !isUndoOffered.value || !undoDescription.value) return;
+	removeUndoNotification = useNotificationStore().notify({
+		text: describeUndo(undoDescription.value),
+		status: "success",
+		duration: UNDO_DURATION_MS,
+		action: { text: t("common.actions.undo"), handler: onUndo },
+	});
+});
+
+// A later change ends the undo offer, so its notification must not stay clickable.
+watch(isUndoOffered, (offered) => {
+	if (!offered && !isUndoing.value) {
+		removeUndoNotification?.();
+		removeUndoNotification = undefined;
+	}
+});
 
 defineExpose({ openCreateDialog, startSelection });
 </script>

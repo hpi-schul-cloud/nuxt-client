@@ -19,6 +19,7 @@ import {
 	RoomItemResponseAllowedOperations,
 	RoomListResponse,
 } from "@api-server";
+import { useNotificationStore } from "@data-app";
 import { applyRoomMove, applyRoomsMove, useRoomArrangementStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
@@ -140,7 +141,9 @@ describe("RoomGroupedOverview", () => {
 	};
 
 	const sections = () => wrapper?.findAllComponents(RoomGroupSection) ?? [];
-	const undoSnackbarText = () => document.querySelector("[data-testid='room-arrangement-undo']")?.textContent ?? "";
+	// Undo is offered through the shared success notification with an undo action (same as archiving).
+	const undoNotification = () => useNotificationStore().notifierItems.find((item) => item.action !== undefined);
+	const undoSnackbarText = () => undoNotification()?.text ?? "";
 	const clickInDocument = (selector: string) => document.querySelector<HTMLElement>(selector)?.click();
 
 	describe("rendering", () => {
@@ -331,6 +334,10 @@ describe("RoomGroupedOverview", () => {
 			dialog?.vm.$emit("submit", "Mathe");
 			await flushPromises();
 
+			expect(useNotificationStore().notifierItems[0]).toMatchObject({
+				status: "success",
+				text: "pages.rooms.groups.announce.created",
+			});
 			expect(arrangementApi.roomArrangementControllerCreateGroup).toHaveBeenCalledWith({
 				expectedRevision: 5,
 				name: "Mathe",
@@ -675,7 +682,7 @@ describe("RoomGroupedOverview", () => {
 
 	describe("undo", () => {
 		const clickUndo = async () => {
-			document.querySelector<HTMLElement>("[data-testid='room-arrangement-undo-action']")?.click();
+			await undoNotification()?.action?.handler();
 			await flushPromises();
 		};
 
@@ -967,7 +974,7 @@ describe("RoomGroupedOverview", () => {
 			await flushPromises();
 			expect(undoSnackbarText()).toContain("pages.rooms.groups.undo.groupMoved");
 
-			document.querySelector<HTMLElement>("[data-testid='room-arrangement-undo-action']")?.click();
+			await undoNotification()?.action?.handler();
 			await flushPromises();
 
 			expect(server.getState().groups.map((g) => g.id)).toEqual([groupA.id, groupB.id]);

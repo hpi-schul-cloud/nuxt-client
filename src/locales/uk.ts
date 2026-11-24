@@ -1959,7 +1959,6 @@ export default {
 	"pages.rooms.groups.retry": "Завантажити знову",
 	"pages.rooms.groups.confirmationRestored": "Перед видаленням групи знову буде запит на підтвердження.",
 	"pages.rooms.menu.restoreGroupDeleteConfirmation": "Запитувати перед видаленням груп",
-	"pages.rooms.groups.undo.action": "Скасувати",
 	"pages.rooms.groups.undo.roomMoved": "«{name}» переміщено до «{target}».",
 	"pages.rooms.groups.undo.roomReordered": "«{name}» переміщено.",
 	"pages.rooms.groups.undo.roomsMoved":
