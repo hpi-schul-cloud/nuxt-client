@@ -49,6 +49,7 @@ export * from './api/pseudonym-api';
 export * from './api/registration-api';
 export * from './api/release-api';
 export * from './api/room-api';
+export * from './api/room-arrangement-api';
 export * from './api/room-invitation-link-api';
 export * from './api/runtime-config-api';
 export * from './api/school-api';

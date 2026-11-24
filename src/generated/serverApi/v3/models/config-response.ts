@@ -92,6 +92,8 @@ export interface ConfigResponse {
     'FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE': boolean;
     'FEATURE_EXTERNAL_PERSON_REGISTRATION_ENABLED': boolean;
     'FEATURE_ROOM_COPY_ENABLED': boolean;
+    'FEATURE_ROOM_ARCHIVE_ENABLED': boolean;
+    'FEATURE_ROOM_GROUPING_ENABLED': boolean;
     'FEATURE_ROOM_SHARE': boolean;
     'FEATURE_ROOM_ADD_EXTERNAL_PERSONS_ENABLED': boolean;
     'FEATURE_ROOM_REGISTER_EXTERNAL_PERSONS_ENABLED': boolean;
@@ -102,7 +104,6 @@ export interface ConfigResponse {
     'LICENSE_SUMMARY_URL'?: string;
     'ROOM_MEMBER_INFO_URL': string | null;
     'ROOM_MEMBER_ADD_EXTERNAL_PERSON_REQUIREMENTS_URL': string | null;
-    'FEATURE_ROOM_ARCHIVE_ENABLED': boolean;
 }
 
 

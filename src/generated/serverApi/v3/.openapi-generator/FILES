@@ -36,6 +36,7 @@ api/pseudonym-api.ts
 api/registration-api.ts
 api/release-api.ts
 api/room-api.ts
+api/room-arrangement-api.ts
 api/room-invitation-link-api.ts
 api/runtime-config-api.ts
 api/school-api.ts
@@ -152,6 +153,7 @@ models/create-media-element-body-params.ts
 models/create-news-params.ts
 models/create-or-update-registration-body-params.ts
 models/create-room-body-params.ts
+models/create-room-group-body-params.ts
 models/create-room-invitation-link-body-params.ts
 models/custom-parameter-entry-param.ts
 models/custom-parameter-entry-response.ts
@@ -163,6 +165,7 @@ models/custom-parameter-type-params.ts
 models/dashboard-grid-element-response.ts
 models/dashboard-grid-sub-element-response.ts
 models/dashboard-response.ts
+models/delete-room-group-body-params.ts
 models/deleted-element-content.ts
 models/deleted-element-response.ts
 models/drawing-content-body.ts
@@ -280,6 +283,7 @@ models/move-element-body-params.ts
 models/move-element-params.ts
 models/move-element-position-params.ts
 models/move-item-body-params.ts
+models/move-room-in-arrangement-body-params.ts
 models/news-list-response.ts
 models/news-response.ts
 models/news-target-model.ts
@@ -331,6 +335,7 @@ models/rich-text.ts
 models/role-name.ts
 models/room-archived-item-response.ts
 models/room-archived-list-response.ts
+models/room-arrangement-response.ts
 models/room-board-item-response-allowed-operations.ts
 models/room-board-item-response.ts
 models/room-board-list-response.ts
@@ -338,6 +343,8 @@ models/room-color.ts
 models/room-created-response.ts
 models/room-details-response.ts
 models/room-features.ts
+models/room-group-created-response.ts
+models/room-group-response.ts
 models/room-id-response.ts
 models/room-invitation-link-error.ts
 models/room-invitation-link-list-response.ts
@@ -398,7 +405,6 @@ models/successful-response.ts
 models/system-for-ldap-login-response.ts
 models/system-type.ts
 models/target-info-response.ts
-models/target-user-id-params.ts
 models/task-copy-api-params.ts
 models/task-list-response.ts
 models/task-response.ts
@@ -422,7 +428,11 @@ models/update-flag-params.ts
 models/update-match-params.ts
 models/update-news-params.ts
 models/update-preferences-body-params.ts
+models/target-user-id-params.ts
+models/update-room-arrangement-preferences-body-params.ts
 models/update-room-body-params.ts
+models/update-room-group-body-params.ts
+models/update-room-group-order-body-params.ts
 models/update-room-invitation-link-body-params.ts
 models/update-runtime-config-value-body-params.ts
 models/user-consent-response.ts
