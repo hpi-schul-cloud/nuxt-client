@@ -8,8 +8,8 @@
 		is-open-state-managed-externally
 		:is-loading="isStarting"
 		:no-confirm="!!job"
-		:confirm-btn-disabled="!link || isStarting"
-		@confirm="startImport(link, targetType, targetId)"
+		:confirm-btn-disabled="!trimmedLink || isStarting"
+		@confirm="startImport(trimmedLink, targetType, targetId)"
 		@cancel="onClose"
 	>
 		<template #content>
@@ -61,6 +61,7 @@ const { t } = useI18n();
 const { job, hasError, errorMessages, isStarting, startImport, reset } = useBoardImportJob();
 
 const link = ref("");
+const trimmedLink = computed(() => link.value.trim());
 
 const statusColors: Record<BoardImportJobStatus, string> = {
 	[BoardImportJobStatus.WAITING]: "info",
@@ -72,7 +73,9 @@ const statusColors: Record<BoardImportJobStatus, string> = {
 const statusColor = computed(() => (job.value ? statusColors[job.value.status] : undefined));
 
 const isPending = computed(
-	() => job.value?.status === BoardImportJobStatus.WAITING || job.value?.status === BoardImportJobStatus.RUNNING
+	() =>
+		!hasError.value &&
+		(job.value?.status === BoardImportJobStatus.WAITING || job.value?.status === BoardImportJobStatus.RUNNING)
 );
 
 const onClose = () => {

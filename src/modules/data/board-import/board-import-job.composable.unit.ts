@@ -180,5 +180,52 @@ describe("useBoardImportJob", () => {
 			expect(job.value).toBeUndefined();
 			expect(boardImportApi.boardImportControllerGetJob).not.toHaveBeenCalled();
 		});
+
+		it("should ignore a start response that arrives after the reset", async () => {
+			const { startImport, reset, job, isStarting } = setup();
+			const startResponse = Promise.withResolvers<ReturnType<typeof mockJobResponse>>();
+			boardImportApi.boardImportControllerStartImport.mockReturnValueOnce(startResponse.promise);
+
+			const importPromise = startImport(link, targetType, targetId);
+			reset();
+			startResponse.resolve(mockJobResponse(BoardImportJobStatus.WAITING));
+			await importPromise;
+			await vi.advanceTimersByTimeAsync(10000);
+
+			expect(job.value).toBeUndefined();
+			expect(isStarting.value).toBe(false);
+			expect(boardImportApi.boardImportControllerGetJob).not.toHaveBeenCalled();
+		});
+
+		it("should ignore a status response that arrives after the reset", async () => {
+			const { startImport, reset, job } = setup();
+			const statusResponse = Promise.withResolvers<ReturnType<typeof mockJobResponse>>();
+			boardImportApi.boardImportControllerGetJob.mockReturnValueOnce(statusResponse.promise);
+			await startImport(link, targetType, targetId);
+			await vi.advanceTimersByTimeAsync(3000);
+
+			reset();
+			statusResponse.resolve(mockJobResponse(BoardImportJobStatus.RUNNING));
+			await vi.advanceTimersByTimeAsync(10000);
+
+			expect(job.value).toBeUndefined();
+			expect(boardImportApi.boardImportControllerGetJob).toHaveBeenCalledTimes(1);
+		});
+	});
+
+	describe("when the component is unmounted during the start", () => {
+		it("should not start the polling", async () => {
+			const { startImport, wrapper } = setup();
+			const startResponse = Promise.withResolvers<ReturnType<typeof mockJobResponse>>();
+			boardImportApi.boardImportControllerStartImport.mockReturnValueOnce(startResponse.promise);
+
+			const importPromise = startImport(link, targetType, targetId);
+			wrapper.unmount();
+			startResponse.resolve(mockJobResponse(BoardImportJobStatus.WAITING));
+			await importPromise;
+			await vi.advanceTimersByTimeAsync(10000);
+
+			expect(boardImportApi.boardImportControllerGetJob).not.toHaveBeenCalled();
+		});
 	});
 });

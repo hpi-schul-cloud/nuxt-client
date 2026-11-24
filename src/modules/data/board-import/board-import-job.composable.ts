@@ -5,7 +5,7 @@ import {
 	BoardImportJobStatus,
 	BoardImportTargetType,
 } from "@api-board-import";
-import { isObject, useTimeoutPoll } from "@vueuse/core";
+import { isObject, tryOnScopeDispose, useTimeoutPoll } from "@vueuse/core";
 import { isAxiosError } from "axios";
 import { ref } from "vue";
 
@@ -48,6 +48,10 @@ export const useBoardImportJob = () => {
 	const errorMessages = ref<string[]>([]);
 	const isStarting = ref(false);
 
+	// Responses that arrive after reset() or unmount must not change the state or restart the polling.
+	let generation = 0;
+	const isOutdated = (requestGeneration: number): boolean => requestGeneration !== generation;
+
 	const setError = (error: unknown): void => {
 		hasError.value = true;
 		errorMessages.value = getBackendErrorMessages(error);
@@ -61,13 +65,18 @@ export const useBoardImportJob = () => {
 	const fetchJob = async (): Promise<void> => {
 		if (!job.value) return;
 
+		const requestGeneration = generation;
 		try {
 			const response = await boardImportApi.boardImportControllerGetJob(job.value.id);
+			if (isOutdated(requestGeneration)) return;
+
 			job.value = response.data;
 			if (END_STATUSES.includes(response.data.status)) {
 				pause();
 			}
 		} catch (error) {
+			if (isOutdated(requestGeneration)) return;
+
 			setError(error);
 			pause();
 		}
@@ -79,22 +88,35 @@ export const useBoardImportJob = () => {
 		clearError();
 		isStarting.value = true;
 
+		const requestGeneration = generation;
 		try {
 			const response = await boardImportApi.boardImportControllerStartImport({ link, targetType, targetId });
+			if (isOutdated(requestGeneration)) return;
+
 			job.value = response.data;
 			resume();
 		} catch (error) {
+			if (isOutdated(requestGeneration)) return;
+
 			setError(error);
 		} finally {
-			isStarting.value = false;
+			if (!isOutdated(requestGeneration)) {
+				isStarting.value = false;
+			}
 		}
 	};
 
 	const reset = (): void => {
+		generation++;
 		pause();
 		job.value = undefined;
+		isStarting.value = false;
 		clearError();
 	};
+
+	tryOnScopeDispose(() => {
+		generation++;
+	});
 
 	return { job, hasError, errorMessages, isStarting, startImport, reset };
 };

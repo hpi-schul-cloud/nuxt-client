@@ -62,6 +62,25 @@ describe("@feature-board-import/BoardImportDialog", () => {
 
 			expect(boardImportJob.startImport).toHaveBeenCalledWith(link, targetType, targetId);
 		});
+
+		it("should remove the spaces around the link", async () => {
+			const { wrapper, boardImportJob, targetType, targetId } = setup();
+			const link = "https://example.com/board";
+
+			await wrapper.findComponent(VTextField).setValue(`  ${link}\n`);
+			await wrapper.findComponent("[data-testid='board-import-dialog-confirm']").trigger("click");
+
+			expect(boardImportJob.startImport).toHaveBeenCalledWith(link, targetType, targetId);
+		});
+
+		it("should disable the start button while the link has only spaces", async () => {
+			const { wrapper } = setup();
+
+			await wrapper.findComponent(VTextField).setValue("   ");
+			const startButton = wrapper.findComponent("[data-testid='board-import-dialog-confirm']");
+
+			expect(startButton.attributes("disabled")).toBeDefined();
+		});
 	});
 
 	describe("when an import was started", () => {
@@ -102,6 +121,12 @@ describe("@feature-board-import/BoardImportDialog", () => {
 			expect(alert.text()).toContain(errorMessages[0]);
 			expect(alert.text()).toContain(errorMessages[1]);
 			expect(alert.text()).not.toContain("feature-board-import.dialog.error");
+		});
+
+		it("should not show the progress bar when the status could not be read", () => {
+			setup({ job: { id: "job-id", status: BoardImportJobStatus.RUNNING }, hasError: true });
+
+			expect(document.querySelector("[data-testid='board-import-progress']")).toBeNull();
 		});
 	});
 
