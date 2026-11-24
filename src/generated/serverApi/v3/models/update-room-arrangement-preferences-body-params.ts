@@ -20,8 +20,12 @@ export interface UpdateRoomArrangementPreferencesBodyParams {
      */
     'expectedRevision': number;
     /**
-     * Whether deleting a group asks for confirmation.
+     * Whether deleting a group asks for confirmation. At least one preference is required.
      */
-    'confirmGroupDeletion': boolean;
+    'confirmGroupDeletion'?: boolean;
+    /**
+     * Whether the user dismissed the first-run hint about room groups. At least one preference is required.
+     */
+    'groupingHintDismissed'?: boolean;
 }
 

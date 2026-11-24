@@ -28,6 +28,10 @@ export interface RoomGroupCreatedResponse {
     'ungroupedRoomIds': Array<string>;
     'groups': Array<RoomGroupResponse>;
     'confirmGroupDeletion': boolean;
+    /**
+     * Whether the user dismissed the first-run hint about room groups.
+     */
+    'groupingHintDismissed': boolean;
     'createdGroupId': string;
 }
 

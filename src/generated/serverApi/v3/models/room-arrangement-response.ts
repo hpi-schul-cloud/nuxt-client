@@ -28,5 +28,9 @@ export interface RoomArrangementResponse {
     'ungroupedRoomIds': Array<string>;
     'groups': Array<RoomGroupResponse>;
     'confirmGroupDeletion': boolean;
+    /**
+     * Whether the user dismissed the first-run hint about room groups.
+     */
+    'groupingHintDismissed': boolean;
 }
 
