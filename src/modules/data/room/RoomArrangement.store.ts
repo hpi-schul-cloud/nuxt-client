@@ -148,6 +148,8 @@ export const useRoomArrangementStore = defineStore("room-arrangement-store", () 
 	const roomsStatus = ref<RoomArrangementLoadStatus>("idle");
 	const pendingMutation = ref<RoomArrangementMutationKind | null>(null);
 	const undoAction = ref<UndoAction | null>(null);
+	// Kept in memory only: hiding the first-run hint lasts for this page session.
+	const isOnboardingDismissed = ref(false);
 	const isUndoing = ref(false);
 
 	// Collapse toggles made while another change is saved: shown at once, persisted afterwards.
@@ -705,6 +707,7 @@ export const useRoomArrangementStore = defineStore("room-arrangement-store", () 
 		pendingMutation.value = null;
 		undoAction.value = null;
 		isUndoing.value = false;
+		isOnboardingDismissed.value = false;
 		queuedCollapse.clear();
 	};
 
@@ -757,6 +760,10 @@ export const useRoomArrangementStore = defineStore("room-arrangement-store", () 
 		undoId,
 		undo,
 		dismissUndo,
+		isOnboardingDismissed,
+		dismissOnboarding: () => {
+			isOnboardingDismissed.value = true;
+		},
 		reset,
 	};
 });

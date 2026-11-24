@@ -7,6 +7,7 @@
 		:persistent
 		:scrollable
 		:aria-labelledby="`dialog-${uid}-title`"
+		@after-enter="emit('after-enter')"
 		@after-leave="emit('after-leave')"
 		@click:outside="onDismiss"
 		@keydown.esc="onDismiss"
@@ -90,6 +91,7 @@ const props = withDefaults(
 const emit = defineEmits<{
 	(e: "cancel"): void;
 	(e: "confirm"): void;
+	(e: "after-enter"): void;
 	(e: "after-leave"): void;
 }>();
 

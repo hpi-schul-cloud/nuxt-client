@@ -93,4 +93,14 @@ describe("RoomMoveDialog", () => {
 		);
 		expect(wrapper.findAllComponents(VRadio).every((radio) => radio.props("disabled") !== true)).toBe(true);
 	});
+
+	it("focuses the first enabled target when the dialog has opened", () => {
+		setup();
+
+		wrapper?.findComponent(SvsDialog).vm.$emit("after-enter");
+
+		expect(document.activeElement?.closest("[data-testid]")?.getAttribute("data-testid")).toBe(
+			"room-move-target-ungrouped"
+		);
+	});
 });

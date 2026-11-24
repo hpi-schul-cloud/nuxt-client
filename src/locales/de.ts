@@ -1937,13 +1937,12 @@ export default {
 	"pages.rooms.groups.ungrouped": "Nicht gruppiert",
 	"pages.rooms.groups.add": "Gruppe hinzufügen",
 	"pages.rooms.groups.roomCount": "{count} Raum | {count} Räume",
-	"pages.rooms.groups.toggle.collapse": "Gruppe „{name}“ einklappen",
-	"pages.rooms.groups.toggle.expand": "Gruppe „{name}“ ausklappen",
 	"pages.rooms.groups.menu.ariaLabel": "Aktionsmenü für die Gruppe „{name}“",
 	"pages.rooms.groups.menu.moveUp": "Nach oben verschieben",
 	"pages.rooms.groups.menu.moveDown": "Nach unten verschieben",
 	"pages.rooms.groups.dragHandle": "Gruppe „{name}“ ziehen, um sie zu verschieben",
-	"pages.rooms.groups.empty": "Diese Gruppe ist leer. Ziehe Räume hierher oder ordne sie über das Raummenü zu.",
+	"pages.rooms.groups.empty":
+		"Diese Gruppe ist leer. Ziehe Räume hierher oder verschiebe sie über das Menü eines Raums.",
 	"pages.rooms.groups.ungroupedEmpty": "Hier ablegen, um Räume aus Gruppen zu entfernen.",
 	"pages.rooms.groups.ungroupedAllAssigned": "Alle Räume sind einer Gruppe zugeordnet.",
 	"pages.rooms.groups.collapsedDrop": "Hier ablegen, um den Raum am Ende der Gruppe einzufügen.",
@@ -1957,7 +1956,7 @@ export default {
 	"pages.rooms.groups.validation.DUPLICATE": "Es gibt bereits eine Gruppe mit diesem Namen.",
 	"pages.rooms.groups.deleteDialog.title": "Gruppe löschen?",
 	"pages.rooms.groups.deleteDialog.text":
-		"Die Gruppe „{name}“ wird gelöscht. Die Räume darin werden nicht gelöscht, sondern nach „Nicht gruppiert“ verschoben.",
+		"Die Gruppe „{name}“ wird gelöscht. Der Raum darin wird nicht gelöscht, sondern nach „Nicht gruppiert“ verschoben. | Die Gruppe „{name}“ wird gelöscht. Die {count} Räume darin werden nicht gelöscht, sondern nach „Nicht gruppiert“ verschoben.",
 	"pages.rooms.groups.deleteDialog.dontAskAgain": "Nicht mehr nachfragen",
 	"pages.rooms.groups.moveDialog.title": "Raum verschieben",
 	"pages.rooms.groups.moveDialog.text": "Wohin soll der Raum „{name}“ verschoben werden?",
@@ -2002,11 +2001,14 @@ export default {
 	"pages.rooms.groups.moveDialog.textMany":
 		"Wohin soll der ausgewählte Raum verschoben werden? | Wohin sollen die {count} ausgewählten Räume verschoben werden?",
 	"pages.rooms.groups.onboarding.text":
-		"Behalte den Überblick: Fasse deine Räume in Gruppen zusammen, z. B. nach Fächern. Ziehe Räume in eine Gruppe oder nutze ⋮ › „Verschieben nach…“.",
+		"Behalte den Überblick: Lege Gruppen an, z. B. für deine Fächer. Danach kannst du Räume in eine Gruppe ziehen oder über das Menü eines Raums verschieben.",
 	"pages.rooms.groups.announce.allCollapsed": "Alle Gruppen wurden eingeklappt.",
 	"pages.rooms.groups.announce.allExpanded": "Alle Gruppen wurden ausgeklappt.",
 	"pages.rooms.menu.collapseAllGroups": "Alle Gruppen einklappen",
 	"pages.rooms.menu.expandAllGroups": "Alle Gruppen ausklappen",
+	"pages.rooms.groups.deleteDialog.textEmpty":
+		"Die Gruppe „{name}“ wird gelöscht. Diese Gruppe ist leer, es werden keine Räume verschoben.",
+	"pages.rooms.groups.onboarding.dismiss": "Ausblenden",
 	"pages.rooms.archived.title": "Archivierte Räume",
 	"pages.rooms.archived.chip": "Archivierter Raum",
 	"pages.rooms.archived.emptyState": "Aktuell gibt es keine archivierten Räume",

@@ -11,7 +11,7 @@ import { VCard, VCardTitle, VDialog } from "vuetify/components";
 // Create a stub for VDialog that includes the proper emits
 const VDialogStub = {
 	name: "VDialog",
-	emits: ["update:modelValue", "click:outside", "after-leave", "keydown"],
+	emits: ["update:modelValue", "click:outside", "after-enter", "after-leave", "keydown"],
 	props: VDialog.props,
 	template: `
 		<div v-if="modelValue" class="v-dialog-stub" @keydown.esc="$emit('keydown', $event)">
@@ -140,6 +140,14 @@ describe("SvsDialog", () => {
 				await confirmButton.trigger("click");
 
 				expect(dialog.props().modelValue).toBe(true);
+			});
+		});
+
+		describe("when the dialog has finished transition in", () => {
+			it("should emit after-enter", () => {
+				const { wrapper, dialog } = setup();
+				dialog.vm.$emit("after-enter");
+				expect(wrapper.emitted("after-enter")).toHaveLength(1);
 			});
 		});
 

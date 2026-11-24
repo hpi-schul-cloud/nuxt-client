@@ -10,8 +10,12 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it } from "vitest";
 
+const { notifyOnScreenReader } = vi.hoisted(() => ({ notifyOnScreenReader: vi.fn() }));
+vi.mock("@/composables/ariaLiveNotifier", () => ({ useAriaLiveNotifier: () => ({ notifyOnScreenReader }) }));
+
 describe("@feature-room/RoomGrid", () => {
 	beforeEach(() => {
+		notifyOnScreenReader.mockClear();
 		setActivePinia(createTestingPinia({ stubActions: true }));
 	});
 
@@ -131,14 +135,29 @@ describe("@feature-room/RoomGrid", () => {
 			expect(useRoomStore().fetchRooms).not.toHaveBeenCalled();
 		});
 
-		it("emits a reorder intent for arrow keys", () => {
-			const { wrapper, rooms } = setupGrouped();
-			wrapper.findAllComponents(RoomGridItem)[0].vm.$emit("keydown", { key: "ArrowRight" });
+		it("does not save moves with arrow keys", () => {
+			const { wrapper } = setupGrouped();
+			const items = wrapper.findAllComponents(RoomGridItem);
+			["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown"].forEach((key) => items[1].vm.$emit("keydown", { key }));
 
-			expect(wrapper.emitted("drop")).toEqual([
-				[{ roomId: rooms[0].id, fromKey: "group-a", toKey: "group-a", oldIndex: 0, newIndex: 1 }],
-			]);
+			expect(wrapper.emitted("drop")).toBeUndefined();
 			expect(useRoomStore().moveRoom).not.toHaveBeenCalled();
+		});
+
+		it("is not an application widget and gives no arrow key instruction", async () => {
+			const { wrapper } = setupGrouped();
+
+			expect(wrapper.attributes("role")).toBeUndefined();
+			await wrapper.trigger("focusin");
+			expect(notifyOnScreenReader).not.toHaveBeenCalledWith("common.instructions.orderBy.arrowKeys");
+		});
+
+		it("keeps the application role and the arrow key instruction in the legacy flat grid", async () => {
+			const { wrapper } = setup();
+
+			expect(wrapper.attributes("role")).toBe("application");
+			await wrapper.trigger("focusin");
+			expect(notifyOnScreenReader).toHaveBeenCalledWith("common.instructions.orderBy.arrowKeys");
 		});
 
 		it("emits reorder intents from the card menu", () => {

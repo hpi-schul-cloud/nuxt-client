@@ -1,6 +1,7 @@
 <template>
 	<VCard
 		class="room-grid-item d-flex flex-column"
+		:class="{ 'room-grid-item--selectable': isSelectable, 'room-grid-item--selected': isSelectable && selected }"
 		:data-testid="`board-grid-item-${index}`"
 		:data-room-id="room.id"
 		:ripple="false"
@@ -9,8 +10,10 @@
 		<VCardItem
 			class="d-block flex-grow-1"
 			:class="{ 'room-grid-item__content--with-menu': isArrangeMenuVisible || isSelectable }"
+			@click="onCardBodyClick"
 		>
-			<RouterLink tabindex="-1" :to="roomPath" class="room-link-item overflow-visible">
+			<!-- While selecting, the card body toggles the selection; "Öffnen" stays the way to open the room. -->
+			<component :is="isSelectable ? 'div' : RouterLink" v-bind="linkAttrs" class="room-link-item overflow-visible">
 				<VBadge :model-value="room.isLocked" bordered :icon="mdiLock" :data-testid="`room-badge-lock-${index}`">
 					<VAvatar rounded="lg" :class="avatarColor" class="room-grid-avatar" :data-testid="`room-avatar-${index}`">
 						<span class="text-h1 text-white text-decoration-none" :data-testid="`room-short-title-${index}`">
@@ -41,13 +44,12 @@
 						</VChip>
 					</div>
 				</div>
-			</RouterLink>
-			<div v-if="isSelectable" class="room-card-menu">
+			</component>
+			<div v-if="isSelectable" class="room-card-menu" @click.stop>
 				<VCheckbox
 					:model-value="selected"
 					:aria-label="t('pages.rooms.groups.selection.selectRoom', { name: room.name })"
 					hide-details
-					density="comfortable"
 					data-testid="room-card-select"
 					@update:model-value="emit('select', $event === true)"
 				/>
@@ -107,6 +109,7 @@ import { mdiAccountMultipleOutline, mdiArrowLeft, mdiArrowRight, mdiFolderMoveOu
 import { KebabMenu, KebabMenuAction } from "@ui-kebab-menu";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { RouterLink } from "vue-router";
 
 const props = withDefaults(
 	defineProps<{
@@ -154,6 +157,12 @@ const roomShortName = computed(() => props.room?.name?.slice(0, 2) ?? "");
 const avatarColor = computed(() => `room-color--${props.room.color}`);
 const roomAriaLabel = computed(() => `${t("common.labels.room")} ${props.room.name}`);
 const isSelectable = computed(() => props.selectable && props.room.allowedOperations?.arrangeRooms === true);
+const linkAttrs = computed(() => (isSelectable.value ? {} : { to: roomPath.value, tabindex: -1 }));
+
+const onCardBodyClick = () => {
+	if (isSelectable.value) emit("select", !props.selected);
+};
+
 const isArrangeMenuVisible = computed(
 	() => props.showArrangeMenu && props.room.allowedOperations?.arrangeRooms === true
 );
@@ -185,6 +194,20 @@ const isArrangeMenuVisible = computed(
 			text-decoration: underline;
 		}
 	}
+}
+
+.room-grid-item--selectable .v-card-item {
+	cursor: pointer;
+}
+
+.room-grid-item--selected::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	border: 2px solid rgb(var(--v-theme-primary));
+	border-radius: inherit;
+	background-color: rgba(var(--v-theme-primary), 0.06);
 }
 
 .room-grid-item__content--with-menu {

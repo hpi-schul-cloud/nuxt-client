@@ -12,10 +12,17 @@
 		data-testid="room-move-dialog"
 		@confirm="onConfirm"
 		@cancel="emit('cancel')"
+		@after-enter="focusFirstTarget"
 	>
 		<template #content>
 			<p :id="questionId" class="mb-2">{{ question }}</p>
-			<VRadioGroup v-model="selectedKey" :aria-labelledby="questionId" :disabled="isMoving" hide-details>
+			<VRadioGroup
+				ref="radioGroupRef"
+				v-model="selectedKey"
+				:aria-labelledby="questionId"
+				:disabled="isMoving"
+				hide-details
+			>
 				<VRadio
 					v-for="target in targets"
 					:key="target.key"
@@ -37,7 +44,7 @@
 <script setup lang="ts">
 import { RoomMoveTarget } from "./room-arrangement-drop";
 import { SvsDialog } from "@ui-dialog";
-import { computed, ref, useId, watch } from "vue";
+import { computed, ref, useId, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = withDefaults(
@@ -63,6 +70,15 @@ const questionId = `room-move-question-${useId()}`;
 const { t } = useI18n();
 
 const selectedKey = ref<string | null>(null);
+const radioGroupRef = useTemplateRef("radioGroupRef");
+
+// Runs before VDialog's own focus handling, which then keeps focus inside the dialog where it is.
+const focusFirstTarget = () => {
+	const root: unknown = radioGroupRef.value?.$el;
+	if (root instanceof HTMLElement) {
+		root.querySelector<HTMLInputElement>("input[type='radio']:not(:disabled)")?.focus();
+	}
+};
 
 const question = computed(() =>
 	props.roomCount > 1

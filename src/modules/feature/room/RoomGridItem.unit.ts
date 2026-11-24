@@ -170,4 +170,48 @@ describe("@feature-room/RoomGridItem", () => {
 			});
 		});
 	});
+
+	describe("selection mode card behaviour", () => {
+		const arrangeable = {
+			...mockRoom,
+			allowedOperations: { arrangeRooms: true } as unknown as RoomItemResponseAllowedOperations,
+		};
+
+		it("toggles the selection when the card body is clicked", async () => {
+			const { wrapper } = setup({ room: arrangeable, index: 0, selectable: true, selected: false });
+
+			await wrapper.get(".v-card-item").trigger("click");
+
+			expect(wrapper.emitted("select")).toEqual([[true]]);
+		});
+
+		it("does not toggle twice when the checkbox itself is clicked", async () => {
+			const { wrapper } = setup({ room: arrangeable, index: 0, selectable: true, selected: true });
+
+			// The checkbox reports its own change; its click must not also reach the card body toggle.
+			await wrapper.get(".room-card-menu").trigger("click");
+
+			expect(wrapper.emitted("select")).toBeUndefined();
+		});
+
+		it("makes the room link inert and keeps the open button", () => {
+			const { wrapper } = setup({ room: arrangeable, index: 0, selectable: true });
+
+			expect(wrapper.findComponent({ name: "RouterLink" }).exists()).toBe(false);
+			expect(wrapper.find("div.room-link-item").exists()).toBe(true);
+			expect(wrapper.find("[data-testid=room-open-button-0]").exists()).toBe(true);
+		});
+
+		it("marks a selected card visibly", () => {
+			const { wrapper } = setup({ room: arrangeable, index: 0, selectable: true, selected: true });
+
+			expect(wrapper.get("[data-testid=board-grid-item-0]").classes()).toContain("room-grid-item--selected");
+		});
+
+		it("keeps the room link outside selection mode", () => {
+			const { wrapper } = setup({ room: arrangeable, index: 0 });
+
+			expect(wrapper.findComponent({ name: "RouterLink" }).exists()).toBe(true);
+		});
+	});
 });

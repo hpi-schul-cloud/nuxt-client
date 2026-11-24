@@ -482,6 +482,22 @@ describe("RoomsPage", () => {
 				expect(wrapper.findAll("[data-testid=room-card-select]")).toHaveLength(2);
 			});
 
+			it("should hide the create room button while rooms are selected", async () => {
+				mockArrangementApi({ groups: [roomGroupResponseFactory.build()] });
+				const { wrapper } = setup(undefined, false, { FEATURE_ROOM_GROUPING_ENABLED: true });
+				await flushPromises();
+				const wireframe = wrapper.findComponent(DefaultWireframe);
+				expect(wireframe.props("fabItems")).toBeTruthy();
+
+				wrapper.findComponent(RoomGroupedOverview).vm.$emit("selection-change", true);
+				await flushPromises();
+				expect(wireframe.props("fabItems")).toBeUndefined();
+
+				wrapper.findComponent(RoomGroupedOverview).vm.$emit("selection-change", false);
+				await flushPromises();
+				expect(wireframe.props("fabItems")).toBeTruthy();
+			});
+
 			it("should restore delete confirmations from the rooms menu", async () => {
 				const arrangementApi = mockArrangementApi({ revision: 2, confirmGroupDeletion: false });
 				const { wrapper } = setup(undefined, false, { FEATURE_ROOM_GROUPING_ENABLED: true });

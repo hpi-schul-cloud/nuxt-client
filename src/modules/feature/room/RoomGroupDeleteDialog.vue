@@ -9,7 +9,7 @@
 		@cancel="emit('cancel')"
 	>
 		<template #content>
-			<p class="mb-2">{{ t("pages.rooms.groups.deleteDialog.text", { name: groupName }) }}</p>
+			<p class="mb-2" data-testid="room-group-delete-text">{{ text }}</p>
 			<VCheckbox
 				v-model="dontAskAgain"
 				:label="t('pages.rooms.groups.deleteDialog.dontAskAgain')"
@@ -32,10 +32,13 @@
 
 <script setup lang="ts">
 import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
-withDefaults(defineProps<{ groupName: string; isDeleting?: boolean }>(), { isDeleting: false });
+const props = withDefaults(defineProps<{ groupName: string; roomCount?: number; isDeleting?: boolean }>(), {
+	roomCount: 0,
+	isDeleting: false,
+});
 
 const emit = defineEmits<{
 	confirm: [disableFutureConfirmation: boolean];
@@ -47,6 +50,12 @@ const isOpen = defineModel<boolean>({ default: false });
 const { t } = useI18n();
 
 const dontAskAgain = ref(false);
+
+const text = computed(() =>
+	props.roomCount === 0
+		? t("pages.rooms.groups.deleteDialog.textEmpty", { name: props.groupName })
+		: t("pages.rooms.groups.deleteDialog.text", { name: props.groupName, count: props.roomCount }, props.roomCount)
+);
 
 watch(
 	isOpen,

@@ -276,4 +276,42 @@ describe("RoomGroupSection", () => {
 			expect(wrapper.emitted("select-room")).toEqual([[rooms[0].id, false]]);
 		});
 	});
+
+	describe("round 4 header", () => {
+		it("reads name and room count from the accordion button, with the chevron last", () => {
+			const rooms = roomItemFactory.buildList(3);
+			setup({ rooms, group: group({ name: "Mathematik", rooms }) });
+
+			const button = wrapper?.get("[data-testid='room-group-toggle']");
+			const children = button?.element.children ?? [];
+			expect(button?.get("[data-testid='room-group-title']").text()).toBe("Mathematik");
+			expect(button?.find("[data-testid='room-group-count']").exists()).toBe(true);
+			expect(children[0]?.getAttribute("data-testid")).toBe("room-group-title");
+			expect(children[1]?.getAttribute("data-testid")).toBe("room-group-count");
+			expect(children[2]?.classList).toContain("room-group-chevron");
+		});
+
+		it("renders header actions in the header row", () => {
+			wrapper = mount(RoomGroupSection, {
+				props: { rooms: roomItemFactory.buildList(1), showHeading: true },
+				slots: { "header-actions": '<button data-testid="header-action">x</button>' },
+				global: { plugins: [createTestingVuetify(), createTestingI18n()], stubs: { RouterLink: true } },
+			});
+
+			expect(wrapper.find(".room-group-header [data-testid='header-action']").exists()).toBe(true);
+		});
+
+		it("disables group actions while rooms are selected", async () => {
+			wrapper = mount(RoomGroupSection, {
+				props: { rooms: [], group: group(), groupIndex: 1, groupCount: 3, selectable: true },
+				global: { plugins: [createTestingVuetify(), createTestingI18n()], stubs: { RouterLink: true } },
+				attachTo: document.body,
+			});
+			await wrapper.get("[data-testid='room-group-menu']").trigger("click");
+
+			for (const testId of ["room-group-menu-rename", "room-group-menu-move-up", "room-group-menu-delete"]) {
+				expect(document.querySelector(`[data-testid='${testId}']`)?.classList).toContain("v-list-item--disabled");
+			}
+		});
+	});
 });

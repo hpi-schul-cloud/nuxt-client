@@ -1,7 +1,7 @@
 <template>
 	<Sortable
 		ref="gridRef"
-		:role="readonly ? undefined : 'application'"
+		:role="readonly || isGrouped ? undefined : 'application'"
 		:aria-labelledby="labelledBy"
 		:list="rooms"
 		class="room-grid"
@@ -140,8 +140,9 @@ const onItemFocusIn = (event: FocusEvent) => {
 	}
 };
 
+// Grouped mode reorders via the card menu only, so there is no arrow key instruction there.
 const onFirstFocus = () => {
-	if (!props.readonly) {
+	if (!props.readonly && !isGrouped.value) {
 		notifyOnScreenReader(t("common.instructions.orderBy.arrowKeys"));
 	}
 };
@@ -219,8 +220,9 @@ const onDropEnd = async (event: SortableEvent) => {
 	}
 };
 
+// Legacy flat grid only: in grouped mode arrow keys must not save moves by accident.
 const onArrowKeyDown = (e: KeyboardEvent, oldIndex: number) => {
-	if (props.readonly) return;
+	if (props.readonly || isGrouped.value) return;
 
 	let newIndex = 0;
 	const cols = getGridContainerColumnsCount(gridRef.value?.containerRef);
@@ -238,14 +240,6 @@ const onArrowKeyDown = (e: KeyboardEvent, oldIndex: number) => {
 		case "ArrowRight":
 			newIndex = Math.min(props.rooms.length - 1, oldIndex + 1);
 			break;
-	}
-
-	if (isGrouped.value) {
-		const room = props.rooms[oldIndex];
-		if (room && isRoomDraggable(room)) {
-			emitReorder(room, oldIndex, newIndex);
-		}
-		return;
 	}
 
 	reorderRoom(newIndex, oldIndex);

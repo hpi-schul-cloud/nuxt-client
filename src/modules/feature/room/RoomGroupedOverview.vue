@@ -12,12 +12,13 @@
 			<RoomGrid v-if="roomsStatus === 'loaded' && rooms.length > 0" :rooms readonly />
 		</template>
 		<template v-else-if="view">
-			<InfoAlert v-if="isOnboardingVisible" class="mb-6" data-testid="room-groups-onboarding">
-				<div class="d-flex flex-wrap align-center ga-3">
-					<span>{{ t("pages.rooms.groups.onboarding.text") }}</span>
+			<!-- role="note": a hint is not urgent, so it must not be announced like VAlert's default role="alert". -->
+			<InfoAlert v-if="isOnboardingVisible" class="mb-6" role="note" data-testid="room-groups-onboarding">
+				<p class="room-groups-onboarding-text mb-3">{{ t("pages.rooms.groups.onboarding.text") }}</p>
+				<div class="d-flex flex-wrap align-center ga-2">
 					<VBtn
 						variant="outlined"
-						size="small"
+						size="large"
 						:prepend-icon="mdiPlus"
 						:disabled="!isReady"
 						data-testid="room-groups-onboarding-add"
@@ -25,20 +26,11 @@
 					>
 						{{ t("pages.rooms.groups.add") }}
 					</VBtn>
+					<VBtn variant="text" size="large" data-testid="room-groups-onboarding-dismiss" @click="dismissOnboarding">
+						{{ t("pages.rooms.groups.onboarding.dismiss") }}
+					</VBtn>
 				</div>
 			</InfoAlert>
-			<div v-if="isSelectionStartVisible" class="d-flex justify-end mb-2">
-				<VBtn
-					variant="text"
-					size="small"
-					:prepend-icon="mdiCheckboxOutline"
-					:disabled="!isReady"
-					data-testid="room-selection-start"
-					@click="startSelection"
-				>
-					{{ t("pages.rooms.groups.selection.start") }}
-				</VBtn>
-			</div>
 			<RoomGroupSection
 				v-if="isUngroupedVisible"
 				:rooms="view.ungrouped"
@@ -54,7 +46,21 @@
 				@drag-end="isDraggingRoom = false"
 				@move-to-group="openMoveDialog"
 				@select-room="onSelectRoom"
-			/>
+			>
+				<template #header-actions>
+					<VBtn
+						v-if="isSelectionStartVisible"
+						variant="text"
+						size="large"
+						:prepend-icon="mdiCheckboxOutline"
+						:disabled="!isReady"
+						data-testid="room-selection-start"
+						@click="startSelection"
+					>
+						{{ t("pages.rooms.groups.selection.start") }}
+					</VBtn>
+				</template>
+			</RoomGroupSection>
 			<Sortable
 				:list="view.groups"
 				item-key="id"
@@ -108,7 +114,7 @@
 
 		<div
 			v-if="selection.isActive"
-			class="room-selection-bar d-flex flex-wrap align-center ga-2 pa-3 mt-4 rounded elevation-4"
+			class="room-selection-bar d-flex flex-wrap align-center ga-2 pa-3 mt-4 rounded elevation-8"
 			role="region"
 			:aria-label="t('pages.rooms.groups.selection.label')"
 			data-testid="room-selection-bar"
@@ -116,12 +122,13 @@
 			<span class="text-body-1 flex-grow-1" aria-live="polite" data-testid="room-selection-count">
 				{{ t("pages.rooms.groups.selection.count", { count: selectedRoomIds.length }, selectedRoomIds.length) }}
 			</span>
-			<VBtn variant="text" data-testid="room-selection-cancel" @click="endSelection">
+			<VBtn variant="text" size="large" data-testid="room-selection-cancel" @click="endSelection">
 				{{ t("common.actions.cancel") }}
 			</VBtn>
 			<VBtn
 				color="primary"
 				variant="flat"
+				size="large"
 				:prepend-icon="mdiFolderMoveOutline"
 				:disabled="selectedRoomIds.length === 0 || !canEdit"
 				data-testid="room-selection-move"
@@ -160,6 +167,7 @@
 		<RoomGroupDeleteDialog
 			v-model="deleteDialog.isOpen"
 			:group-name="deleteDialog.group?.name ?? ''"
+			:room-count="deleteDialog.group?.rooms.length ?? 0"
 			:is-deleting="deleteDialog.isDeleting || isMutating"
 			@confirm="onDeleteConfirm"
 			@cancel="closeDeleteDialog"
@@ -236,6 +244,7 @@ const {
 	isUndoOffered,
 	undoDescription,
 	undoId,
+	isOnboardingDismissed,
 } = storeToRefs(arrangementStore);
 const { rooms } = storeToRefs(useRoomStore());
 
@@ -591,11 +600,32 @@ const onDeleteConfirm = (disableFutureConfirmation: boolean) => {
 // Onboarding while no group exists
 const isOnboardingVisible = computed(() => {
 	const current = view.value;
-	return current !== undefined && current.groups.length === 0 && current.ungrouped.length >= 2;
+	return (
+		current !== undefined &&
+		current.groups.length === 0 &&
+		current.ungrouped.length >= 2 &&
+		!isOnboardingDismissed.value
+	);
 });
+
+const dismissOnboarding = async () => {
+	arrangementStore.dismissOnboarding();
+	await nextTick();
+	focusElement(addButtonSelector);
+};
 
 // Selection of several rooms for one move
 const selection = reactive<{ isActive: boolean; roomIds: string[] }>({ isActive: false, roomIds: [] });
+
+const emit = defineEmits<{
+	/** Lets the page hide controls, such as the create room button, that would cover the selection bar. */
+	"selection-change": [isActive: boolean];
+}>();
+
+watch(
+	() => selection.isActive,
+	(isActive) => emit("selection-change", isActive)
+);
 const selectionMoveSelector = "[data-testid='room-selection-move']";
 
 const arrangeableRoomIds = computed(() => {
@@ -737,5 +767,18 @@ defineExpose({ openCreateDialog, startSelection });
 
 .room-group-add-row :deep(.v-btn__content) {
 	white-space: normal;
+}
+
+.room-groups-onboarding-text {
+	line-height: 1.5;
+}
+
+/* Stays in view at the bottom of the viewport while rooms are selected. */
+.room-selection-bar {
+	position: sticky;
+	bottom: 16px;
+	z-index: 5;
+	background-color: rgb(var(--v-theme-surface));
+	color: rgb(var(--v-theme-on-surface));
 }
 </style>

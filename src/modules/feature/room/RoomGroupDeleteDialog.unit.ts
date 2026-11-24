@@ -68,4 +68,27 @@ describe("RoomGroupDeleteDialog", () => {
 
 		expect(wrapper?.findComponent(VCheckbox).props("modelValue")).toBe(false);
 	});
+
+	describe("room count", () => {
+		const mountWithCount = (roomCount: number) => {
+			wrapper = mount(RoomGroupDeleteDialog, {
+				props: { modelValue: true, groupName: "Informatik", roomCount },
+				global: { plugins: [createTestingVuetify(), createTestingI18n()], stubs: { UseFocusTrap: true } },
+				attachTo: document.body,
+			});
+		};
+		const text = () => document.querySelector("[data-testid='room-group-delete-text']")?.textContent ?? "";
+
+		it("mentions that the rooms of the group are kept", () => {
+			mountWithCount(2);
+
+			expect(text()).toBe("pages.rooms.groups.deleteDialog.text");
+		});
+
+		it("states that an empty group moves no rooms", () => {
+			mountWithCount(0);
+
+			expect(text()).toBe("pages.rooms.groups.deleteDialog.textEmpty");
+		});
+	});
 });

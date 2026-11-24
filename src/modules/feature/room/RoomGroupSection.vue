@@ -23,6 +23,9 @@
 						@click="onToggle"
 					>
 						<span class="room-group-title" data-testid="room-group-title">{{ title }}</span>
+						<span class="room-group-count text-body-2 text-medium-emphasis text-no-wrap" data-testid="room-group-count">
+							{{ roomCountText }}
+						</span>
 						<VIcon
 							class="room-group-chevron"
 							:icon="isCollapsed ? mdiChevronDown : mdiChevronUp"
@@ -31,17 +34,20 @@
 						/>
 					</button>
 				</h2>
-				<h2 v-else :id="headingId" tabindex="-1" class="room-group-heading-title text-h4 ma-0">
-					<span class="room-group-title" data-testid="room-group-title">{{ title }}</span>
-				</h2>
-				<span class="room-group-count text-body-2 text-medium-emphasis text-no-wrap" data-testid="room-group-count">
-					{{ t("pages.rooms.groups.roomCount", { count: rooms.length }, rooms.length) }}
-				</span>
+				<template v-else>
+					<h2 :id="headingId" tabindex="-1" class="room-group-heading-title text-h4 ma-0">
+						<span class="room-group-title" data-testid="room-group-title">{{ title }}</span>
+					</h2>
+					<span class="room-group-count text-body-2 text-medium-emphasis text-no-wrap" data-testid="room-group-count">
+						{{ roomCountText }}
+					</span>
+				</template>
 			</div>
+			<slot name="header-actions" />
 			<span
 				v-if="group"
 				class="room-group-drag-handle d-flex align-center justify-center"
-				:class="{ 'room-group-drag-handle--disabled': disabled }"
+				:class="{ 'room-group-drag-handle--disabled': isGroupActionDisabled }"
 				data-testid="room-group-drag-handle"
 				:title="t('pages.rooms.groups.dragHandle', { name: group.name })"
 				aria-hidden="true"
@@ -55,7 +61,7 @@
 			>
 				<KebabMenuAction
 					:icon="mdiRenameOutline"
-					:disabled="disabled"
+					:disabled="isGroupActionDisabled"
 					data-testid="room-group-menu-rename"
 					@click="emit('rename')"
 				>
@@ -63,7 +69,7 @@
 				</KebabMenuAction>
 				<KebabMenuAction
 					:icon="mdiArrowUp"
-					:disabled="disabled || isFirstGroup"
+					:disabled="isGroupActionDisabled || isFirstGroup"
 					data-testid="room-group-menu-move-up"
 					@click="emit('move-up')"
 				>
@@ -71,7 +77,7 @@
 				</KebabMenuAction>
 				<KebabMenuAction
 					:icon="mdiArrowDown"
-					:disabled="disabled || isLastGroup"
+					:disabled="isGroupActionDisabled || isLastGroup"
 					data-testid="room-group-menu-move-down"
 					@click="emit('move-down')"
 				>
@@ -79,7 +85,7 @@
 				</KebabMenuAction>
 				<KebabMenuAction
 					:icon="mdiTrashCanOutline"
-					:disabled="disabled"
+					:disabled="isGroupActionDisabled"
 					data-testid="room-group-menu-delete"
 					@click="emit('delete')"
 				>
@@ -209,6 +215,11 @@ const headingId = computed(() => `room-group-heading-${sectionKey.value}`);
 const contentId = computed(() => `room-group-content-${sectionKey.value}`);
 const title = computed(() => props.group?.name ?? t("pages.rooms.groups.ungrouped"));
 const isCollapsed = computed(() => props.group?.collapsed === true);
+const roomCountText = computed(() =>
+	t("pages.rooms.groups.roomCount", { count: props.rooms.length }, props.rooms.length)
+);
+// Renaming, moving or deleting groups would interfere with a running selection.
+const isGroupActionDisabled = computed(() => props.disabled || props.selectable);
 const isFirstGroup = computed(() => props.groupIndex === 0);
 const isLastGroup = computed(() => props.groupIndex >= props.groupCount - 1);
 const isCompactUngrouped = computed(() => !props.group && props.rooms.length === 0);
@@ -262,7 +273,9 @@ const onToggle = async () => {
 
 .room-group-toggle {
 	display: inline-flex;
-	align-items: center;
+	flex-wrap: wrap;
+	align-items: baseline;
+	column-gap: 8px;
 	gap: 4px;
 	min-height: 40px;
 	padding: 0 4px;
@@ -287,6 +300,7 @@ const onToggle = async () => {
 
 .room-group-chevron {
 	flex-shrink: 0;
+	align-self: center;
 }
 
 .room-group-drag-handle {
