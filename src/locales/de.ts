@@ -927,6 +927,10 @@ export default {
 	"feature-autoLogout.warning.remainingTime": "weniger als einer Minute | einer Minute | {remainingTime} Minuten",
 	"feature-autoLogout.warning":
 		"Achtung: Du wirst in {0} automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
+	"feature-board-import.dialog.error": "Der Import konnte nicht gestartet oder der Status nicht abgefragt werden.",
+	"feature-board-import.dialog.jobId": "Job-ID",
+	"feature-board-import.dialog.link": "Freigabelink",
+	"feature-board-import.title": "Bereich importieren",
 	"feature-loggedout.title": "Sitzung abgelaufen",
 	"feature-loggedout.message": "Die Sitzung ist aus Sicherheitsgründen abgelaufen.",
 	"feature-loggedout.button": "Erneut anmelden",

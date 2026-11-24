@@ -2,13 +2,20 @@ import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { createTestAppStore, createTestRoomStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import {
+	createTestAppStore,
+	createTestEnvStore,
+	createTestRoomStore,
+	mockComposable,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
 import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/factory/room";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as serverApi from "@api-server";
 import { CopyElementType, CopyStatusEnum } from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
+import { BoardImportDialog } from "@feature-board-import";
 import { useCopyFlow } from "@feature-copy";
 import { RoomBoardGrid, RoomMenu } from "@feature-room";
 import { useShareFlow } from "@feature-share";
@@ -50,6 +57,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			roomBoards: RoomBoardItem[];
 			allowedOperations: Partial<serverApi.RoomItemResponseAllowedOperations> | undefined;
 			isArchived: boolean;
+			isBoardImportEnabled: boolean;
 		}>
 	) => {
 		const { roomBoards } = {
@@ -64,6 +72,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		setActivePinia(createTestingPinia());
 		const { roomStore } = createTestRoomStore();
+		createTestEnvStore({ FEATURE_BOARD_IMPORT_ENABLED: options?.isBoardImportEnabled ?? false });
 
 		useRoomDetailsStore().$patch({
 			isLoading: false,
@@ -457,6 +466,44 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					expect(useCopyFlowMock.executeCopyRoom).not.toHaveBeenCalled();
 				});
 			});
+		});
+	});
+
+	describe("when user wants to import a board", () => {
+		const getFabItems = (wrapper: VueWrapper) => wrapper.getComponent(DefaultWireframe).props("fabItems") ?? [];
+
+		it("should not offer the import when the feature is disabled", () => {
+			const { wrapper } = setup({
+				allowedOperations: { accessRoom: true, editContent: true },
+				isBoardImportEnabled: false,
+			});
+
+			expect(getFabItems(wrapper)).toHaveLength(1);
+			expect(wrapper.findComponent(BoardImportDialog).exists()).toBe(false);
+		});
+
+		it("should not offer the import when the user cannot edit the room content", () => {
+			const { wrapper } = setup({
+				allowedOperations: { accessRoom: true, editContent: false },
+				isBoardImportEnabled: true,
+			});
+
+			expect(getFabItems(wrapper)).toHaveLength(0);
+			expect(wrapper.findComponent(BoardImportDialog).exists()).toBe(false);
+		});
+
+		it("should open the import dialog for the room when the feature is enabled", async () => {
+			const { wrapper, room } = setup({
+				allowedOperations: { accessRoom: true, editContent: true },
+				isBoardImportEnabled: true,
+			});
+
+			const importAction = getFabItems(wrapper).find((item) => item.dataTestId === "import-board-button");
+			importAction?.clickHandler?.();
+			await flushPromises();
+
+			const dialog = wrapper.getComponent(BoardImportDialog);
+			expect(dialog.props()).toMatchObject({ modelValue: true, targetId: room.id });
 		});
 	});
 

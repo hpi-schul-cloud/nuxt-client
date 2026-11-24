@@ -915,6 +915,10 @@ export default {
 	"feature-autoLogout.warning.remainingTime": "менше однієї хвилини | одна хвилина | {remainingTime} хвилини (хвилин)",
 	"feature-autoLogout.warning":
 		"Увага! Ви автоматично вийдете з системи через {0}. Тепер продовжте час сеансу до двох годин.",
+	"feature-board-import.dialog.error": "Не вдалося почати імпорт або отримати його статус.",
+	"feature-board-import.dialog.jobId": "ID завдання",
+	"feature-board-import.dialog.link": "Посилання для спільного доступу",
+	"feature-board-import.title": "Імпортувати дошку",
 	"feature-loggedout.title": "Термін сеансу минув",
 	"feature-loggedout.message": "Термін дії сеансу минув з міркувань безпеки.",
 	"feature-loggedout.button": "Увійти знову",
