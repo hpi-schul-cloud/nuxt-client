@@ -40,8 +40,9 @@ describe("useRoomStore", () => {
 			);
 
 			const store = useRoomStore();
-			await store.fetchRooms();
+			const success = await store.fetchRooms();
 
+			expect(success).toBe(true);
 			expect(store.rooms).toEqual(mockRooms);
 			expect(store.isEmpty).toBe(false);
 			expect(useNotificationStore().notify).not.toHaveBeenCalled();
@@ -51,8 +52,9 @@ describe("useRoomStore", () => {
 			vi.spyOn(logger, "error").mockImplementation(vi.fn());
 			roomApiMock.roomControllerGetRooms.mockRejectedValue(new Error("Network error"));
 
-			await useRoomStore().fetchRooms();
+			const success = await useRoomStore().fetchRooms();
 
+			expect(success).toBe(false);
 			expect(useRoomStore().rooms).toEqual([]);
 			expectNotification("error");
 		});

@@ -25,11 +25,13 @@ export const useRoomStore = defineStore("room-store", () => {
 		return result;
 	};
 
+	// Resolves to whether the rooms could be loaded; errors are still notified and logged by fetchRoomsPlain.
 	const fetchRooms = async () => {
 		const result = await fetchRoomsPlain();
 		if (result) {
-			rooms.value = result?.data.data;
+			rooms.value = result.data.data;
 		}
+		return result !== undefined;
 	};
 	const fetchArchivedRooms = async () => {
 		const { result } = await execute(
