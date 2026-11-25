@@ -11,6 +11,7 @@ import {
 } from "@@/tests/test-utils";
 import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/factory/room";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardImportTargetType } from "@api-board-import";
 import * as serverApi from "@api-server";
 import { CopyElementType, CopyStatusEnum } from "@api-server";
 import { useNotificationStore } from "@data-app";
@@ -503,7 +504,11 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			await flushPromises();
 
 			const dialog = wrapper.getComponent(BoardImportDialog);
-			expect(dialog.props()).toMatchObject({ modelValue: true, targetId: room.id });
+			expect(dialog.props()).toMatchObject({
+				modelValue: true,
+				targetType: BoardImportTargetType.ROOM,
+				targetId: room.id,
+			});
 		});
 	});
 
@@ -550,9 +555,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const { wrapper } = setup({ allowedOperations: { accessRoom: true, editContent: true }, isBoardImportEnabled });
 
 				const wireframe = wrapper.getComponent(DefaultWireframe);
-				const fabItems = wireframe.props("fabItems");
+				const fabItemIds = wireframe.props("fabItems")?.map((item) => item.dataTestId);
 
-				expect(fabItems).toBeDefined();
+				const expectedIds = isBoardImportEnabled
+					? ["add-content-button", "create-board-button", "import-board-button"]
+					: ["add-content-button"];
+				expect(fabItemIds).toEqual(expectedIds);
 			});
 
 			it("should open dialog when fab button is clicked", async () => {

@@ -1748,6 +1748,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Edit room",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Delete room",
 	"pages.roomDetails.fab.add.board": "Create board",
+	"pages.roomDetails.fab.add.newBoard": "New board",
 	"pages.roomDetails.archived.info": "This room is archived and read-only. Restore it to make changes.",
 	"pages.roomDetails.board.defaultName": "Room Board",
 	"pages.roomDetails.emptyState": "Currently there is no learning content in this room",

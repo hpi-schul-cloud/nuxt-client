@@ -10,7 +10,7 @@
 		:no-confirm="!!job"
 		:confirm-btn-disabled="!trimmedLink || isStarting"
 		@confirm="startImport(trimmedLink, targetType, targetId)"
-		@cancel="onClose"
+		@cancel="isOpen = false"
 	>
 		<template #content>
 			<VTextField
@@ -34,7 +34,7 @@
 			</div>
 			<ErrorAlert v-if="hasError" class="mt-4" data-testid="board-import-error">
 				<template v-if="errorMessages.length">
-					<div v-for="message in errorMessages" :key="message">{{ message }}</div>
+					<div v-for="(message, index) in errorMessages" :key="index">{{ message }}</div>
 				</template>
 				<template v-else>{{ t("feature-board-import.dialog.error") }}</template>
 			</ErrorAlert>
@@ -47,7 +47,7 @@ import { BoardImportJobStatus, BoardImportTargetType } from "@api-board-import";
 import { useBoardImportJob } from "@data-board-import";
 import { ErrorAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 defineProps<{
@@ -78,9 +78,10 @@ const isPending = computed(
 		(job.value?.status === BoardImportJobStatus.WAITING || job.value?.status === BoardImportJobStatus.RUNNING)
 );
 
-const onClose = () => {
-	isOpen.value = false;
-	link.value = "";
-	reset();
-};
+watch(isOpen, (open) => {
+	if (!open) {
+		link.value = "";
+		reset();
+	}
+});
 </script>

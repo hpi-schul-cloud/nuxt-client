@@ -1782,6 +1782,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar sala",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Eliminar sala",
 	"pages.roomDetails.fab.add.board": "Crear tablero",
+	"pages.roomDetails.fab.add.newBoard": "Nuevo tablero",
 	"pages.roomDetails.archived.info": "Esta sala está archivada y es de solo lectura. Restáurala para realizar cambios.",
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
 	"pages.roomDetails.emptyState": "Actualmente no hay contenidos de aprendizaje en esta sala",

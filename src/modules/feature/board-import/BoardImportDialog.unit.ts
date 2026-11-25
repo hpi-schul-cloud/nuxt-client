@@ -37,7 +37,12 @@ describe("@feature-board-import/BoardImportDialog", () => {
 
 		wrapper = mount(BoardImportDialog, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
-			props: { modelValue: true, targetType, targetId },
+			props: {
+				modelValue: true,
+				targetType,
+				targetId,
+				"onUpdate:modelValue": (modelValue: boolean) => wrapper.setProps({ modelValue }),
+			},
 			attachTo: document.body,
 		});
 
@@ -138,6 +143,14 @@ describe("@feature-board-import/BoardImportDialog", () => {
 
 			expect(boardImportJob.reset).toHaveBeenCalled();
 			expect(wrapper.emitted("update:modelValue")).toEqual([[false]]);
+		});
+
+		it("should reset the job when the dialog closes without the close button", async () => {
+			const { wrapper, boardImportJob } = setup();
+
+			await wrapper.setProps({ modelValue: false });
+
+			expect(boardImportJob.reset).toHaveBeenCalled();
 		});
 	});
 });

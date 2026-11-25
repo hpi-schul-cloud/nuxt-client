@@ -9,7 +9,7 @@ import { isObject, tryOnScopeDispose, useTimeoutPoll } from "@vueuse/core";
 import { isAxiosError } from "axios";
 import { ref } from "vue";
 
-const POLL_INTERVAL_MS = 3000;
+const POLL_INTERVAL_MS = 1000;
 const END_STATUSES: BoardImportJobStatus[] = [BoardImportJobStatus.FINISHED, BoardImportJobStatus.FAILED];
 
 const isStringArray = (value: unknown): value is string[] =>
@@ -70,6 +70,7 @@ export const useBoardImportJob = () => {
 			const response = await boardImportApi.boardImportControllerGetJob(job.value.id);
 			if (isOutdated(requestGeneration)) return;
 
+			clearError();
 			job.value = response.data;
 			if (END_STATUSES.includes(response.data.status)) {
 				pause();
@@ -78,7 +79,6 @@ export const useBoardImportJob = () => {
 			if (isOutdated(requestGeneration)) return;
 
 			setError(error);
-			pause();
 		}
 	};
 

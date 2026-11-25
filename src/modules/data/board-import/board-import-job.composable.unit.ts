@@ -133,11 +133,11 @@ describe("useBoardImportJob", () => {
 	});
 
 	describe("polling", () => {
-		it("should update the job every few seconds", async () => {
+		it("should update the job every second", async () => {
 			const { startImport, job } = setup();
 			await startImport(link, targetType, targetId);
 
-			await vi.advanceTimersByTimeAsync(3000);
+			await vi.advanceTimersByTimeAsync(1000);
 
 			expect(boardImportApi.boardImportControllerGetJob).toHaveBeenCalledWith(jobId);
 			expect(job.value?.status).toBe(BoardImportJobStatus.RUNNING);
@@ -157,15 +157,27 @@ describe("useBoardImportJob", () => {
 			}
 		);
 
-		it("should set the error and stop when the request fails", async () => {
+		it("should set the error and continue when the request fails", async () => {
 			const { startImport, hasError } = setup();
 			boardImportApi.boardImportControllerGetJob.mockRejectedValue(new Error("failed"));
 			await startImport(link, targetType, targetId);
 
-			await vi.advanceTimersByTimeAsync(10000);
+			await vi.advanceTimersByTimeAsync(2000);
 
 			expect(hasError.value).toBe(true);
-			expect(boardImportApi.boardImportControllerGetJob).toHaveBeenCalledTimes(1);
+			expect(boardImportApi.boardImportControllerGetJob).toHaveBeenCalledTimes(2);
+		});
+
+		it("should clear the error when a later request succeeds", async () => {
+			const { startImport, hasError, job } = setup();
+			boardImportApi.boardImportControllerGetJob.mockRejectedValueOnce(new Error("failed"));
+			await startImport(link, targetType, targetId);
+			await vi.advanceTimersByTimeAsync(1000);
+
+			await vi.advanceTimersByTimeAsync(1000);
+
+			expect(hasError.value).toBe(false);
+			expect(job.value?.status).toBe(BoardImportJobStatus.RUNNING);
 		});
 	});
 
@@ -179,6 +191,7 @@ describe("useBoardImportJob", () => {
 
 			expect(job.value).toBeUndefined();
 			expect(boardImportApi.boardImportControllerGetJob).not.toHaveBeenCalled();
+			expect(vi.getTimerCount()).toBe(0);
 		});
 
 		it("should ignore a start response that arrives after the reset", async () => {
@@ -202,7 +215,7 @@ describe("useBoardImportJob", () => {
 			const statusResponse = Promise.withResolvers<ReturnType<typeof mockJobResponse>>();
 			boardImportApi.boardImportControllerGetJob.mockReturnValueOnce(statusResponse.promise);
 			await startImport(link, targetType, targetId);
-			await vi.advanceTimersByTimeAsync(3000);
+			await vi.advanceTimersByTimeAsync(1000);
 
 			reset();
 			statusResponse.resolve(mockJobResponse(BoardImportJobStatus.RUNNING));

@@ -309,8 +309,7 @@ describe("CourseRoomDetails.page.vue", () => {
 				});
 
 				describe("when 'add board' button is clicked", () => {
-					it.each([false, true])("should open layout dialog when the board import is %s", async (isEnabled) => {
-						createTestEnvStore({ FEATURE_BOARD_IMPORT_ENABLED: isEnabled });
+					it("should open layout dialog", async () => {
 						const { wrapper } = setup({
 							permissionData: [Permission.COURSE_EDIT],
 						});

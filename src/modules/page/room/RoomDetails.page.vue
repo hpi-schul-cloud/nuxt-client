@@ -157,7 +157,7 @@ const fabAction = computed<FabAction[] | undefined>(() => {
 		primaryAction,
 		{
 			icon: mdiViewGridPlusOutline,
-			label: t("pages.courseRoomDetails.fab.add.board"),
+			label: t("pages.roomDetails.fab.add.newBoard"),
 			dataTestId: "create-board-button",
 			clickHandler: openBoardLayoutDialog,
 		},

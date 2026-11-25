@@ -1782,6 +1782,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Raum bearbeiten",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Raum löschen",
 	"pages.roomDetails.fab.add.board": "Bereich erstellen",
+	"pages.roomDetails.fab.add.newBoard": "Neuer Bereich",
 	"pages.roomDetails.archived.info":
 		"Dieser Raum ist archiviert und kann nur angesehen werden. Für Änderungen muss er zuerst wiederhergestellt werden.",
 	"pages.roomDetails.board.defaultName": "Raum-Bereich",

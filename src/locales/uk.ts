@@ -1764,6 +1764,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Кімната редагування",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Видалити кімнату",
 	"pages.roomDetails.fab.add.board": "Створити дошку",
+	"pages.roomDetails.fab.add.newBoard": "Нова дошка",
 	"pages.roomDetails.archived.info":
 		"Ця кімната архівована і доступна лише для перегляду. Відновіть її, щоб вносити зміни.",
 	"pages.roomDetails.board.defaultName": "Космічна дошка",
