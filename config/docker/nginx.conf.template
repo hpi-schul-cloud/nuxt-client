@@ -55,6 +55,10 @@ server {
         proxy_pass ${LEGACY_CLIENT_URL};
     }
 
+    location ~ '^/account/(teams|thirdPartyProviders)/?$' {
+        return 301 /account;
+    }
+
     location /h5p/ {
         root   /usr/share/nginx/html/h5p;
         index  index.html index.htm;

@@ -17,7 +17,7 @@
 			<VListItem data-testid="active-user"> {{ user.firstName }} {{ user.lastName }} ({{ userRole }}) </VListItem>
 			<VDivider />
 			<LanguageMenu />
-			<VListItem href="/account" data-testid="account-link">
+			<VListItem :to="{ name: 'account' }" data-testid="account-link">
 				{{ $t("global.topbar.settings") }}
 			</VListItem>
 			<VListItem
