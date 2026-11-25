@@ -86,6 +86,9 @@ export const useNewsList = (limit: number) => {
 	return { news, newsLoadingState, updateNews: execute };
 };
 
+// Teams were removed, but older servers may still return legacy Teams news.
+const isTeamsNews = (news: NewsResponse) => (news.targetModel as string) === "teams";
+
 export const useNews = (newsId: Ref<string | undefined>) => {
 	const { fetchNews, loadingState } = useNewsActions();
 
@@ -94,7 +97,10 @@ export const useNews = (newsId: Ref<string | undefined>) => {
 	const loadNews = async () => {
 		if (!newsId.value) return;
 		const { success, result } = await fetchNews(newsId.value);
-		if (success) newsInstance.value = result?.data;
+		const news = success ? result?.data : undefined;
+
+		// Clear on rejection so the previously loaded news isn't left on screen.
+		newsInstance.value = news && !isTeamsNews(news) ? news : undefined;
 	};
 
 	watch(newsId, loadNews, { immediate: true });

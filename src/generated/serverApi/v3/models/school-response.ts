@@ -24,9 +24,6 @@ import type { FederalStateResponse } from './federal-state-response';
 import type { FileStorageType } from './file-storage-type';
 // May contain unused imports in some cases
 // @ts-ignore
-import type { InstanceFeature } from './instance-feature';
-// May contain unused imports in some cases
-// @ts-ignore
 import type { SchoolFeature } from './school-feature';
 // May contain unused imports in some cases
 // @ts-ignore
@@ -62,7 +59,7 @@ export interface SchoolResponse {
     'timezone'?: string;
     'permissions'?: object;
     'years': YearsResponse;
-    'instanceFeatures': Array<InstanceFeature>;
+    'instanceFeatures': Array<number>;
 }
 
 

@@ -128,6 +128,27 @@ describe("useEnvStore", () => {
 			expect(useEnvStore().env).toEqual(mockData);
 		});
 
+		it("should ignore unknown and removed config flags", async () => {
+			const legacyData = {
+				...defaultConfigEnvs,
+				FEATURE_TEAMS_ENABLED: true,
+				FEATURE_TEAM_CREATE_ROOM_ENABLED: true,
+				SOME_UNKNOWN_FLAG: "unknown",
+			} as ConfigResponse;
+			await setup(true, legacyData);
+
+			const { env } = useEnvStore();
+			expect(env).not.toHaveProperty("FEATURE_TEAMS_ENABLED");
+			expect(env).not.toHaveProperty("FEATURE_TEAM_CREATE_ROOM_ENABLED");
+			expect(env).not.toHaveProperty("SOME_UNKNOWN_FLAG");
+		});
+
+		it("should keep optional config values that are part of the defaults", async () => {
+			await setup(true, { MIGRATION_WIZARD_DOCUMENTATION_LINK: "https://docs.example.org" });
+
+			expect(useEnvStore().env.MIGRATION_WIZARD_DOCUMENTATION_LINK).toBe("https://docs.example.org");
+		});
+
 		it("should request, process and provide env file data.", async () => {
 			const mockFileData: FilesStorageConfigResponse = {
 				MAX_FILE_SIZE: 1,

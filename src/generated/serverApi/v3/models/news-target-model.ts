@@ -20,8 +20,7 @@
 
 export enum NewsTargetModel {
     SCHOOLS = 'schools',
-    COURSES = 'courses',
-    TEAMS = 'teams'
+    COURSES = 'courses'
 }
 
 
