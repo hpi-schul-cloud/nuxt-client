@@ -33,7 +33,6 @@ describe("pageInactivity.composable", () => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			BOARD_COLLABORATION_URI: "mockedUri",
-			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
 		});
 
 		mockUseSharedLastCreatedElement.mockReturnValue({

@@ -118,9 +118,7 @@ describe("CardStore", () => {
 		mockedUseSharedEditMode.mockReturnValue(mockedSharedEditMode);
 	});
 
-	const setup = (socketFlag = false) => {
-		createTestEnvStore({ FEATURE_COLUMN_BOARD_SOCKET_ENABLED: socketFlag });
-
+	const setup = () => {
 		const cardStore = useCardStore();
 		const cards = cardResponseFactory.buildList(3);
 		const elements = richTextElementResponseFactory.buildList(3);
@@ -162,17 +160,8 @@ describe("CardStore", () => {
 	});
 
 	describe("fetchCardRequest", () => {
-		it("should call socket Api if feature flag is enabled", async () => {
-			const { cardStore } = setup(true);
-			const cardIds = ["id1", "id2aewr", "id3423"];
-
-			await cardStore.fetchCardRequest({ cardIds });
-			expect(mockedCardSocketApiActions.fetchCardRequest).toHaveBeenCalledWith({
-				cardIds,
-			});
-		});
-		it("should call socket Api when feature flag is disabled", async () => {
-			const { cardStore } = setup(false);
+		it("should call socket Api", async () => {
+			const { cardStore } = setup();
 			const cardIds = ["id1", "id2aewr", "id3423"];
 
 			await cardStore.fetchCardRequest({ cardIds });
@@ -213,19 +202,7 @@ describe("CardStore", () => {
 	});
 
 	describe("deleteCardRequest", () => {
-		it("should call socket Api if feature flag is enabled", () => {
-			const { cardStore, cardId } = setup(true);
-
-			cardStore.deleteCardRequest({
-				cardId,
-			});
-
-			expect(mockedCardSocketApiActions.deleteCardRequest).toHaveBeenCalledWith({
-				cardId,
-			});
-		});
-
-		it("should call socket Api when feature flag is disabled", () => {
+		it("should call socket Api", () => {
 			const { cardStore, cardId } = setup();
 
 			cardStore.deleteCardRequest({
@@ -278,8 +255,8 @@ describe("CardStore", () => {
 	});
 
 	describe("duplicateCardRequest", () => {
-		it("should call socket Api when feature flag is enabled", () => {
-			const { cardStore, cardId } = setup(true);
+		it("should call socket Api", () => {
+			const { cardStore, cardId } = setup();
 
 			cardStore.duplicateCard({
 				cardId,
@@ -288,14 +265,6 @@ describe("CardStore", () => {
 			expect(mockedCardSocketApiActions.duplicateCardRequest).toHaveBeenCalledWith({
 				cardId,
 			});
-		});
-
-		it("should call socket Api when feature flag is disabled", async () => {
-			const { cardStore, cardId } = setup(false);
-
-			cardStore.duplicateCard({ cardId });
-
-			expect(mockedCardSocketApiActions.duplicateCardRequest).toHaveBeenCalledWith({ cardId });
 		});
 	});
 
@@ -424,16 +393,7 @@ describe("CardStore", () => {
 	});
 
 	describe("updateCardTitleRequest", () => {
-		it("should call socket Api if feature flag is enabled", () => {
-			const { cardStore, cardId } = setup(true);
-			const payload = { cardId, newTitle: "newTitle" };
-
-			cardStore.updateCardTitleRequest(payload);
-
-			expect(mockedCardSocketApiActions.updateCardTitleRequest).toHaveBeenCalledWith(payload);
-		});
-
-		it("should call rest Api if feature flag is enabled", () => {
+		it("should call socket Api", () => {
 			const { cardStore, cardId } = setup();
 			const payload = { cardId, newTitle: "newTitle" };
 
@@ -473,16 +433,7 @@ describe("CardStore", () => {
 	});
 
 	describe("updateCardHeightRequest", () => {
-		it("should call socket Api if feature flag is enabled", () => {
-			const { cardStore, cardId } = setup(true);
-			const payload = { cardId, newHeight: 100 };
-
-			cardStore.updateCardHeightRequest(payload);
-
-			expect(mockedCardSocketApiActions.updateCardHeightRequest).toHaveBeenCalledWith(payload);
-		});
-
-		it("should call rest Api if feature flag is enabled", () => {
+		it("should call socket Api", () => {
 			const { cardStore, cardId } = setup();
 			const payload = { cardId, newHeight: 100 };
 
@@ -569,20 +520,7 @@ describe("CardStore", () => {
 	});
 
 	describe("createElementRequest", () => {
-		it("should call socket Api if feature flag is enabled", async () => {
-			const { cardStore, cardId } = setup(true);
-
-			const payload = {
-				type: ContentElementType.LINK,
-				cardId,
-			};
-
-			await cardStore.createElementRequest(payload);
-
-			expect(mockedCardSocketApiActions.createElementRequest).toHaveBeenCalledWith(payload);
-		});
-
-		it("should call rest Api if feature flag is disabled", async () => {
+		it("should call socket Api", async () => {
 			const { cardStore, cardId } = setup();
 
 			const payload = {
@@ -697,20 +635,7 @@ describe("CardStore", () => {
 			expect(cardStore.cards[cardId].elements[4].id).toEqual(elementId);
 		});
 
-		it("should call socket Api if feature flag is enabled", async () => {
-			const { cardStore, cardId, elements } = setup(true);
-			const elementId = elements[0].id;
-
-			await cardStore.moveElementRequest(cardId, elementId, 0, MOVE_DOWN);
-
-			expect(mockedCardSocketApiActions.moveElementRequest).toHaveBeenCalledWith({
-				elementId,
-				toCardId: cardId,
-				toPosition: 1,
-			});
-		});
-
-		it("should call rest Api if feature flag is disabled", async () => {
+		it("should call socket Api", async () => {
 			const { cardStore, cardId, elements } = setup();
 			const elementId = elements[0].id;
 
@@ -997,30 +922,18 @@ describe("CardStore", () => {
 	});
 
 	describe("disconnectSocketRequest", () => {
-		describe("when using socket connection", () => {
-			it("should call disconnectSocket", () => {
-				const { cardStore } = setup(true);
+		it("should call disconnectSocket", () => {
+			const { cardStore } = setup();
 
-				cardStore.disconnectSocketRequest();
+			cardStore.disconnectSocketRequest();
 
-				expect(mockedCardSocketApiActions.disconnectSocketRequest).toHaveBeenCalled();
-			});
-		});
-
-		describe("when using rest connection", () => {
-			it("should call disconnectSocket", () => {
-				const { cardStore } = setup(false);
-
-				cardStore.disconnectSocketRequest();
-
-				expect(mockedCardSocketApiActions.disconnectSocketRequest).toHaveBeenCalled();
-			});
+			expect(mockedCardSocketApiActions.disconnectSocketRequest).toHaveBeenCalled();
 		});
 	});
 
 	describe("createFileElementWithCollabora", () => {
 		const setupCreateFileElementWithCollabora = (editMode = false, createElementFails = false, uploadFails = false) => {
-			const { cardStore } = setup(false);
+			const { cardStore } = setup();
 
 			mockedSharedEditMode.editModeId.value = editMode ? "cardId" : undefined;
 

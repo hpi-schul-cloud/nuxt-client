@@ -5,16 +5,10 @@ import { createApplicationError } from "@/utils/create-application-error.factory
 import {
 	BoardApiFactory,
 	BoardCardApiFactory,
-	BoardColumnApiFactory,
 	BoardElementApiFactory,
-	BoardLayout,
 	BoardResponse,
-	CardResponse,
-	Colors,
-	ColumnResponse,
 	ContentElementType,
 	CourseRoomsApiFactory,
-	CreateCardBodyParamsRequiredEmptyElements,
 	CreateContentElementBodyParams,
 	DrawingElementContentBody,
 	DrawingElementResponse,
@@ -36,11 +30,10 @@ import {
 	VideoConferenceElementContentBody,
 	VideoConferenceElementResponse,
 } from "@api-server";
-import { AxiosPromise, AxiosResponse } from "axios";
+import { AxiosPromise } from "axios";
 
 export const useBoardApi = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
-	const boardColumnApi = BoardColumnApiFactory(undefined, "/v3", $axios);
 	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
 	const elementApi = BoardElementApiFactory(undefined, "/v3", $axios);
 
@@ -57,39 +50,6 @@ export const useBoardApi = () => {
 			throw createApplicationError(responseError.code);
 		}
 	};
-
-	const createColumnCall = async (boardId: string): Promise<ColumnResponse> => {
-		const response = await boardApi.boardControllerCreateColumn(boardId);
-		return response.data;
-	};
-
-	const updateBoardTitleCall = async (id: string, title: string) => {
-		if (title.length < 1) return;
-
-		return boardApi.boardControllerUpdateBoardTitle(id, {
-			title,
-		});
-	};
-
-	const updateCardHeightCall = async (id: string, height: number) =>
-		cardsApi.cardControllerUpdateCardHeight(id, {
-			height,
-		});
-
-	const updateCardTitle = async (id: string, title: string) =>
-		cardsApi.cardControllerUpdateCardTitle(id, {
-			title,
-		});
-
-	const updateCardColor = async (id: string, backgroundColor: Colors) =>
-		cardsApi.cardControllerUpdateCardColor(id, {
-			backgroundColor,
-		});
-
-	const updateColumnTitleCall = async (id: string, title: string) =>
-		boardColumnApi.columnControllerUpdateColumnTitle(id, {
-			title,
-		});
 
 	const updateElementCall = async (element: AnyContentElement) => {
 		const data = generateDataProp(element);
@@ -199,55 +159,6 @@ export const useBoardApi = () => {
 		params: CreateContentElementBodyParams
 	): AxiosPromise<AnyContentElement> => await cardsApi.cardControllerCreateElement(cardId, params);
 
-	const deleteCardCall = async (cardId: string) => cardsApi.cardControllerDeleteCard(cardId);
-
-	const deleteElementCall = async (elementId: string) => elementApi.elementControllerDeleteElement(elementId);
-
-	const deleteColumnCall = async (columnId: string) => boardColumnApi.columnControllerDeleteColumn(columnId);
-
-	const createCardCall = async (columnId: string, position?: number): Promise<CardResponse> => {
-		const response = await boardColumnApi.columnControllerCreateCard(columnId, {
-			requiredEmptyElements: [CreateCardBodyParamsRequiredEmptyElements.RICH_TEXT],
-			position,
-		});
-		return response.data;
-	};
-
-	const duplicateCardCall = async (cardId: string) => {
-		const response = await cardsApi.cardControllerCopyCard(cardId);
-		return response.data;
-	};
-
-	const duplicateColumnCall = async (columnId: string) => {
-		const response = await boardColumnApi.columnControllerCopyColumn(columnId);
-		return response.data;
-	};
-
-	const moveCardCall = async (cardId: string, toColumnId: string, toPosition: number): Promise<void> => {
-		await cardsApi.cardControllerMoveCard(cardId, {
-			toColumnId,
-			toPosition,
-		});
-	};
-
-	const moveCardToBoardCall = async (cardId: string, toColumnId: string) => {
-		const response = await cardsApi.cardControllerMoveCard(cardId, { toColumnId });
-		return response.data;
-	};
-
-	const moveColumnCall = async (columnId: string, toBoardId: string, toPosition: number): Promise<void> => {
-		await boardColumnApi.columnControllerMoveColumn(columnId, {
-			toBoardId,
-			toPosition,
-		});
-	};
-
-	const moveElementCall = async (elementId: string, toCardId: string, toPosition: number) =>
-		elementApi.elementControllerMoveElement(elementId, {
-			toCardId,
-			toPosition,
-		});
-
 	const fetchRoomName = async (type: BoardContextType, id: string): Promise<string | undefined> => {
 		const name =
 			type === BoardContextType.ROOM
@@ -279,17 +190,6 @@ export const useBoardApi = () => {
 		};
 	};
 
-	const updateBoardVisibilityCall = async (boardId: string, isVisible: boolean) =>
-		boardApi.boardControllerUpdateVisibility(boardId, { isVisible });
-
-	const updateReadersCanEditCall = async (boardId: string, readersCanEdit: boolean) =>
-		boardApi.boardControllerUpdateReadersCanEdit(boardId, {
-			readersCanEdit,
-		});
-
-	const updateBoardLayoutCall = async (boardId: string, layout: BoardLayout): Promise<AxiosResponse<void>> =>
-		boardApi.boardControllerUpdateLayout(boardId, { layout });
-
 	const getElementWithParentHierarchyCall = async (
 		elementId: string
 	): AxiosPromise<ElementWithParentHierarchyResponse> =>
@@ -297,28 +197,9 @@ export const useBoardApi = () => {
 
 	return {
 		fetchBoardCall,
-		createColumnCall,
 		createElementCall,
-		deleteElementCall,
-		deleteCardCall,
-		deleteColumnCall,
-		moveCardCall,
-		moveCardToBoardCall,
-		moveColumnCall,
-		moveElementCall,
-		updateBoardTitleCall,
-		updateBoardVisibilityCall,
-		updateReadersCanEditCall,
-		updateCardHeightCall,
-		updateCardTitle,
-		updateCardColor,
-		updateColumnTitleCall,
 		updateElementCall,
-		createCardCall,
-		duplicateCardCall,
-		duplicateColumnCall,
 		getContextInfo,
-		updateBoardLayoutCall,
 		getElementWithParentHierarchyCall,
 	};
 };
