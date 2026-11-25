@@ -36,7 +36,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
-         * @summary Create a news by a user in a given scope (school or team).
+         * @summary Create a news by a user in a given scope (school or course).
          * @param {CreateNewsParams} createNewsParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -262,7 +262,7 @@ export const NewsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Create a news by a user in a given scope (school or team).
+         * @summary Create a news by a user in a given scope (school or course).
          * @param {CreateNewsParams} createNewsParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -341,7 +341,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
-         * @summary Create a news by a user in a given scope (school or team).
+         * @summary Create a news by a user in a given scope (school or course).
          * @param {CreateNewsParams} createNewsParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -403,7 +403,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
 export interface NewsApiInterface {
     /**
      * 
-     * @summary Create a news by a user in a given scope (school or team).
+     * @summary Create a news by a user in a given scope (school or course).
      * @param {CreateNewsParams} createNewsParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -459,7 +459,7 @@ export interface NewsApiInterface {
 export class NewsApi extends BaseAPI implements NewsApiInterface {
     /**
      * 
-     * @summary Create a news by a user in a given scope (school or team).
+     * @summary Create a news by a user in a given scope (school or course).
      * @param {CreateNewsParams} createNewsParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
