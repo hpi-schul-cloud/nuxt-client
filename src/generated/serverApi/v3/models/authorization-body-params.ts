@@ -36,7 +36,6 @@ export enum AuthorizationBodyParamsReferenceType {
     COURSEGROUPS = 'coursegroups',
     TASKS = 'tasks',
     LESSONS = 'lessons',
-    TEAMS = 'teams',
     SUBMISSIONS = 'submissions',
     SCHOOL_EXTERNAL_TOOLS = 'school-external-tools',
     BOARDNODES = 'boardnodes',
