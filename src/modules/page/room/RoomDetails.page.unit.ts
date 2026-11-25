@@ -2,13 +2,21 @@ import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
 import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
-import { createTestAppStore, createTestRoomStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import {
+	createTestAppStore,
+	createTestEnvStore,
+	createTestRoomStore,
+	mockComposable,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
 import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/factory/room";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardImportTargetType } from "@api-board-import";
 import * as serverApi from "@api-server";
 import { CopyElementType, CopyStatusEnum } from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
+import { BoardImportDialog } from "@feature-board-import";
 import { useCopyFlow } from "@feature-copy";
 import { RoomBoardGrid, RoomMenu } from "@feature-room";
 import { useShareFlow } from "@feature-share";
@@ -50,6 +58,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			roomBoards: RoomBoardItem[];
 			allowedOperations: Partial<serverApi.RoomItemResponseAllowedOperations> | undefined;
 			isArchived: boolean;
+			isBoardImportEnabled: boolean;
 		}>
 	) => {
 		const { roomBoards } = {
@@ -64,6 +73,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		setActivePinia(createTestingPinia());
 		const { roomStore } = createTestRoomStore();
+		createTestEnvStore({ FEATURE_BOARD_IMPORT_ENABLED: options?.isBoardImportEnabled ?? false });
 
 		useRoomDetailsStore().$patch({
 			isLoading: false,
@@ -460,6 +470,48 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 	});
 
+	describe("when user wants to import a board", () => {
+		const getFabItems = (wrapper: VueWrapper) => wrapper.getComponent(DefaultWireframe).props("fabItems") ?? [];
+
+		it("should not offer the import when the feature is disabled", () => {
+			const { wrapper } = setup({
+				allowedOperations: { accessRoom: true, editContent: true },
+				isBoardImportEnabled: false,
+			});
+
+			expect(getFabItems(wrapper)).toHaveLength(1);
+			expect(wrapper.findComponent(BoardImportDialog).exists()).toBe(false);
+		});
+
+		it("should not offer the import when the user cannot edit the room content", () => {
+			const { wrapper } = setup({
+				allowedOperations: { accessRoom: true, editContent: false },
+				isBoardImportEnabled: true,
+			});
+
+			expect(getFabItems(wrapper)).toHaveLength(0);
+			expect(wrapper.findComponent(BoardImportDialog).exists()).toBe(false);
+		});
+
+		it("should open the import dialog for the room when the feature is enabled", async () => {
+			const { wrapper, room } = setup({
+				allowedOperations: { accessRoom: true, editContent: true },
+				isBoardImportEnabled: true,
+			});
+
+			const importAction = getFabItems(wrapper).find((item) => item.dataTestId === "import-board-button");
+			importAction?.clickHandler?.();
+			await flushPromises();
+
+			const dialog = wrapper.getComponent(BoardImportDialog);
+			expect(dialog.props()).toMatchObject({
+				modelValue: true,
+				targetType: BoardImportTargetType.ROOM,
+				targetId: room.id,
+			});
+		});
+	});
+
 	describe("when user wants to create a board", () => {
 		describe("and user does not have permission to edit room content", () => {
 			it("should not render fa button", () => {
@@ -490,66 +542,76 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			});
 		});
 
-		const openDialog = async (wrapper: VueWrapper) => {
-			const fab = wrapper.getComponent(VFab).getComponent(VBtn);
-			await fab.trigger("click");
-		};
+		describe.each([false, true])("and the board import feature flag is %s", (isBoardImportEnabled) => {
+			const openDialog = async (wrapper: VueWrapper) => {
+				const fab = wrapper.getComponent(VFab).getComponent(VBtn);
+				await fab.trigger("click");
+				if (isBoardImportEnabled) {
+					await wrapper.getComponent("[data-testid='create-board-button']").trigger("click");
+				}
+			};
 
-		it("should render fab button when user has edit permissions", () => {
-			const { wrapper } = setup({ allowedOperations: { accessRoom: true, editContent: true } });
+			it("should render fab button when user has edit permissions", () => {
+				const { wrapper } = setup({ allowedOperations: { accessRoom: true, editContent: true }, isBoardImportEnabled });
 
-			const wireframe = wrapper.getComponent(DefaultWireframe);
-			const fabItems = wireframe.props("fabItems");
+				const wireframe = wrapper.getComponent(DefaultWireframe);
+				const fabItemIds = wireframe.props("fabItems")?.map((item) => item.dataTestId);
 
-			expect(fabItems).toBeDefined();
-		});
-
-		it("should open dialog when fab button is clicked", async () => {
-			const { wrapper } = setup({ allowedOperations: { accessRoom: true, editContent: true } });
-			await openDialog(wrapper);
-
-			const dialog = wrapper.findComponent(SelectBoardLayoutDialog).findComponent(VCard);
-			expect(dialog.exists()).toBe(true);
-		});
-
-		describe("and user selects a multi-column layout", () => {
-			it("should create a board with multi-column layout", async () => {
-				const { wrapper, roomDetailsStore, room, router } = setup({
-					allowedOperations: { accessRoom: true, editContent: true },
-				});
-				const createdBoardId = "created-board-id";
-				roomDetailsStore.createBoard.mockResolvedValue(createdBoardId);
-				await openDialog(wrapper);
-
-				const selectLayoutDialog = wrapper.getComponent(SelectBoardLayoutDialog);
-				await selectLayoutDialog.vm.$emit("select", BoardLayout.COLUMNS);
-
-				expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
-					room.id,
-					serverApi.BoardLayout.COLUMNS,
-					"pages.roomDetails.board.defaultName"
-				);
-				expect(router.push).toHaveBeenCalledWith(`/boards/${createdBoardId}`);
+				const expectedIds = isBoardImportEnabled
+					? ["add-content-button", "create-board-button", "import-board-button"]
+					: ["add-content-button"];
+				expect(fabItemIds).toEqual(expectedIds);
 			});
-		});
 
-		describe("and user selects a single-column layout", () => {
-			it("should create a board with single-column layout", async () => {
-				const { wrapper, roomDetailsStore, room, router } = setup({
-					allowedOperations: { accessRoom: true, editContent: true },
-				});
-				const createdBoardId = "created-list-board-id";
-				roomDetailsStore.createBoard.mockResolvedValue(createdBoardId);
+			it("should open dialog when fab button is clicked", async () => {
+				const { wrapper } = setup({ allowedOperations: { accessRoom: true, editContent: true }, isBoardImportEnabled });
 				await openDialog(wrapper);
-				const selectLayoutDialog = wrapper.getComponent(SelectBoardLayoutDialog);
-				await selectLayoutDialog.vm.$emit("select", BoardLayout.LIST);
 
-				expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
-					room.id,
-					serverApi.BoardLayout.LIST,
-					"pages.roomDetails.board.defaultName"
-				);
-				expect(router.push).toHaveBeenCalledWith(`/boards/${createdBoardId}`);
+				const dialog = wrapper.findComponent(SelectBoardLayoutDialog).findComponent(VCard);
+				expect(dialog.exists()).toBe(true);
+			});
+
+			describe("and user selects a multi-column layout", () => {
+				it("should create a board with multi-column layout", async () => {
+					const { wrapper, roomDetailsStore, room, router } = setup({
+						allowedOperations: { accessRoom: true, editContent: true },
+						isBoardImportEnabled,
+					});
+					const createdBoardId = "created-board-id";
+					roomDetailsStore.createBoard.mockResolvedValue(createdBoardId);
+					await openDialog(wrapper);
+
+					const selectLayoutDialog = wrapper.getComponent(SelectBoardLayoutDialog);
+					await selectLayoutDialog.vm.$emit("select", BoardLayout.COLUMNS);
+
+					expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
+						room.id,
+						serverApi.BoardLayout.COLUMNS,
+						"pages.roomDetails.board.defaultName"
+					);
+					expect(router.push).toHaveBeenCalledWith(`/boards/${createdBoardId}`);
+				});
+			});
+
+			describe("and user selects a single-column layout", () => {
+				it("should create a board with single-column layout", async () => {
+					const { wrapper, roomDetailsStore, room, router } = setup({
+						allowedOperations: { accessRoom: true, editContent: true },
+						isBoardImportEnabled,
+					});
+					const createdBoardId = "created-list-board-id";
+					roomDetailsStore.createBoard.mockResolvedValue(createdBoardId);
+					await openDialog(wrapper);
+					const selectLayoutDialog = wrapper.getComponent(SelectBoardLayoutDialog);
+					await selectLayoutDialog.vm.$emit("select", BoardLayout.LIST);
+
+					expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
+						room.id,
+						serverApi.BoardLayout.LIST,
+						"pages.roomDetails.board.defaultName"
+					);
+					expect(router.push).toHaveBeenCalledWith(`/boards/${createdBoardId}`);
+				});
 			});
 		});
 	});

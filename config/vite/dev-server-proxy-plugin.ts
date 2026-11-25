@@ -1,5 +1,6 @@
 import {
 	isArchiveDownload,
+	isBoardImport,
 	isCommonCartridge,
 	isFileStorage,
 	isFWUEndpoint,
@@ -47,6 +48,9 @@ const proxyMiddleware: Connect.NextHandleFunction = (req, res, next) => {
 	} else if (isCommonCartridge(path)) {
 		const commonCartridgeProxy = createProxy(3350);
 		commonCartridgeProxy(req, res, next);
+	} else if (isBoardImport(path)) {
+		const boardImportProxy = createProxy(3352);
+		boardImportProxy(req, res, next);
 	} else if (isNotification(path)) {
 		const notificationProxy = createProxy(3033);
 		notificationProxy(req, res, next);
