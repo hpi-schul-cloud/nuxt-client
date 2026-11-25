@@ -898,6 +898,10 @@ export default {
 	"feature-autoLogout.warning.remainingTime": "less than one minute | one minute | {remainingTime} minutes",
 	"feature-autoLogout.warning":
 		"Attention: You will be logged out automatically in {0}. Now extend your session to two hours.",
+	"feature-board-import.dialog.error": "The import could not be started or its status could not be read.",
+	"feature-board-import.dialog.jobId": "Job ID",
+	"feature-board-import.dialog.link": "Share link",
+	"feature-board-import.title": "Import board",
 	"feature-loggedout.title": "Session expired",
 	"feature-loggedout.message": "The session has expired for security reasons.",
 	"feature-loggedout.button": "Log in again",
@@ -1741,6 +1745,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Edit room",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Delete room",
 	"pages.roomDetails.fab.add.board": "Create board",
+	"pages.roomDetails.fab.add.newBoard": "New board",
 	"pages.roomDetails.archived.info": "This room is archived and read-only. Restore it to make changes.",
 	"pages.roomDetails.board.defaultName": "Room Board",
 	"pages.roomDetails.emptyState": "Currently there is no learning content in this room",

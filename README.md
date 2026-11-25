@@ -72,6 +72,7 @@ The app will be available at `http://localhost:4000`.
 | `generate-client:filestorage` | Regenerate the file storage API client from OpenAPI spec |
 | `generate-client:h5p-editor` | Regenerate the H5P editor API client from OpenAPI spec |
 | `generate-client:common-cartridge` | Regenerate the Common Cartridge API client from OpenAPI spec |
+| `generate-client:board-import` | Regenerate the board import API client from OpenAPI spec |
 
 ## 🧪 Testing
 
@@ -91,6 +92,7 @@ npm run generate-client:fwu
 npm run generate-client:filestorage
 npm run generate-client:h5p-editor
 npm run generate-client:common-cartridge
+npm run generate-client:board-import
 ```
 
 ## 💡 Coding Conventions
