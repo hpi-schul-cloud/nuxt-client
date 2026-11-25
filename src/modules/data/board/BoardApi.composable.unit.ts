@@ -3,8 +3,12 @@ import { AnyContentElement } from "@/types/board/ContentElement";
 import { mockApi } from "@@/tests/test-utils";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
 import * as serverApi from "@api-server";
-import { ContentElementType, ExternalToolElementResponse, H5pElementResponse } from "@api-server";
-import { DrawingElementResponse } from "@api-server";
+import {
+	ContentElementType,
+	DrawingElementResponse,
+	ExternalToolElementResponse,
+	H5pElementResponse,
+} from "@api-server";
 import { ApplicationError } from "@data-app";
 import { Mocked } from "vitest";
 
