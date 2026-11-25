@@ -76,6 +76,30 @@
           "withSeparateModelsAndApi": true
         }
       },
+      "board-import-api": {
+        "generatorName": "typescript-axios",
+        "templateDir": "./config/openapi-generator/typescript-axios",
+        "inputSpec": "http://localhost:3352/api/v3/docs-json/",
+        "output": "./src/generated/boardImportApi/v3",
+        "skipValidateSpec": true,
+        "enablePostProcessFile": true,
+        "globalProperty": {
+          "apiDocs": false,
+          "modelDocs": false,
+          "models": "",
+          "apis": "",
+          "supportingFiles": ""
+        },
+        "additionalProperties": {
+          "apiPackage": "api",
+          "enumNameSuffix": "",
+          "enumPropertyNaming": "UPPERCASE",
+          "modelPackage": "models",
+          "supportsES6": true,
+          "withInterfaces": true,
+          "withSeparateModelsAndApi": true
+        }
+      },
       "h5p-editor-api": {
         "generatorName": "typescript-axios",
         "templateDir": "./config/openapi-generator/typescript-axios",

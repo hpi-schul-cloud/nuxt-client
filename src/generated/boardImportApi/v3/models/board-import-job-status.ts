@@ -14,11 +14,15 @@
 
 
 
-export interface TeamPermissionsBody {
-    'read': boolean;
-    'write': boolean;
-    'create': boolean;
-    'delete': boolean;
-    'share': boolean;
-}
+
+export const BoardImportJobStatus = {
+    WAITING: 'waiting',
+    RUNNING: 'running',
+    FINISHED: 'finished',
+    FAILED: 'failed',
+} as const;
+
+export type BoardImportJobStatus = typeof BoardImportJobStatus[keyof typeof BoardImportJobStatus];
+
+
 

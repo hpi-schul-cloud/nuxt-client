@@ -24,6 +24,7 @@
 			"@data-board": ["./src/modules/data/board"],
 			"@data-classes": ["./src/modules/data/classes"],
 			"@data-course-rooms": ["./src/modules/data/course-rooms"],
+			"@data-board-import": ["./src/modules/data/board-import"],
 			"@data-common-cartridge": ["./src/modules/data/common-cartridge"],
 			"@data-env": ["./src/modules/data/env"],
 			"@data-external-tool": ["./src/modules/data/external-tool"],
@@ -61,6 +62,7 @@
 			"@feature-news": ["./src/modules/feature/news"],
 			"@feature-media-shelf": ["./src/modules/feature/media-shelf"],
 			"@feature-board-deleted-element": ["./src/modules/feature/board-deleted-element"],
+			"@feature-board-import": ["./src/modules/feature/board-import"],
 			"@feature-room": ["./src/modules/feature/room"],
 			"@feature-board-folder-element": ["./src/modules/feature/board-folder-element"],
 			"@feature-folder": ["./src/modules/feature/folder"],
@@ -116,6 +118,7 @@
 			"@api-fwu": ["./src/generated/fwuApi/v3"],
 			"@api-h5p": ["./src/generated/h5pEditorApi/v3"],
 			"@api-common-cartridge": ["./src/generated/commonCartridgeApi/v3"],
+			"@api-board-import": ["./src/generated/boardImportApi/v3"],
 			"@api-notification": ["./src/generated/notificationApi/v1"],
 			"@/*": ["./src/*"],
 			"@@/*": ["./*"]

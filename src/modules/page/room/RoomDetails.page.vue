@@ -45,6 +45,12 @@
 			v-model="boardLayoutDialogIsOpen"
 			@select="onCreateBoard"
 		/>
+		<BoardImportDialog
+			v-if="canImportBoard"
+			v-model="boardImportDialogIsOpen"
+			:target-type="BoardImportTargetType.ROOM"
+			:target-id="room.id"
+		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 	</DefaultWireframe>
 </template>
@@ -55,13 +61,16 @@ import { RoomDetails } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
 import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { BoardImportTargetType } from "@api-board-import";
 import { RoomBoardItemResponse } from "@api-server";
 import { notifySuccess, useAppStoreRefs, useNotificationStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { useRoomAllowedOperations, useRoomDetailsStore, useRoomStore } from "@data-room";
+import { BoardImportDialog } from "@feature-board-import";
 import { useCopyFlow } from "@feature-copy";
 import { RoomBoardGrid, RoomMenu } from "@feature-room";
 import { useShareFlow } from "@feature-share";
-import { mdiPlus } from "@icons/material";
+import { mdiImport, mdiPlus, mdiViewGridPlusOutline } from "@icons/material";
 import { InfoAlert } from "@ui-alert";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
@@ -101,6 +110,11 @@ const visibleBoards = computed(() =>
 const roomTitle = computed(() => room.value.name);
 
 const boardLayoutDialogIsOpen = ref(false);
+const boardImportDialogIsOpen = ref(false);
+
+const canImportBoard = computed(
+	() => useEnvConfig().value.FEATURE_BOARD_IMPORT_ENABLED && allowedOperations.value.editContent
+);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 	{
@@ -121,20 +135,42 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 	},
 ]);
 
-const fabAction = computed<FabAction[] | undefined>(() =>
-	allowedOperations.value.editContent
-		? [
-				{
-					icon: mdiPlus,
-					label: t("pages.roomDetails.fab.add.board"),
-					dataTestId: "add-content-button",
-					clickHandler: () => {
-						boardLayoutDialogIsOpen.value = true;
-					},
-				},
-			]
-		: undefined
-);
+const openBoardLayoutDialog = () => {
+	boardLayoutDialogIsOpen.value = true;
+};
+
+const fabAction = computed<FabAction[] | undefined>(() => {
+	if (!allowedOperations.value.editContent) return undefined;
+
+	const primaryAction = {
+		icon: mdiPlus,
+		label: t("pages.roomDetails.fab.add.board"),
+		dataTestId: "add-content-button",
+	};
+
+	if (!canImportBoard.value) {
+		return [{ ...primaryAction, clickHandler: openBoardLayoutDialog }];
+	}
+
+	// With more than one item, the first item only opens the menu.
+	return [
+		primaryAction,
+		{
+			icon: mdiViewGridPlusOutline,
+			label: t("pages.roomDetails.fab.add.newBoard"),
+			dataTestId: "create-board-button",
+			clickHandler: openBoardLayoutDialog,
+		},
+		{
+			icon: mdiImport,
+			label: t("feature-board-import.title"),
+			dataTestId: "import-board-button",
+			clickHandler: () => {
+				boardImportDialogIsOpen.value = true;
+			},
+		},
+	];
+});
 
 const onEdit = () => {
 	router.push({

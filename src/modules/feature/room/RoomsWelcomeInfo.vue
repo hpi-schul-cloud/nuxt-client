@@ -4,7 +4,6 @@
 
 		<ul class="mt-1 pl-5">
 			<li>{{ t("pages.rooms.infoAlert.welcome.collaboration") }}</li>
-			<li>{{ t("pages.rooms.infoAlert.welcome.teamsAndCourses") }}</li>
 			<li>
 				<i18n-t keypath="pages.rooms.infoAlert.welcome.furtherInformation" scope="global">
 					<template #helpLink>

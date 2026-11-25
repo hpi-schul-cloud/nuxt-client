@@ -35,7 +35,6 @@ export interface SchoolUpdateBodyParams {
     'features'?: Array<SchoolFeature>;
     'permissions'?: SchoolPermissionsParams;
     'countyId'?: string;
-    'enableStudentTeamCreation'?: boolean;
 }
 
 export enum SchoolUpdateBodyParamsFileStorageType {
