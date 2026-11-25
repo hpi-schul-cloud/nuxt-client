@@ -13,68 +13,19 @@
  */
 
 
-import { RoomItemResponseAllowedOperations } from './room-item-response-allowed-operations';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { RoomItemResponseAllowedOperations } from './room-item-response-allowed-operations';
 
-/**
- * 
- * @export
- * @interface RoomArchivedItemResponse
- */
 export interface RoomArchivedItemResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomArchivedItemResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomArchivedItemResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomArchivedItemResponse
-     */
-    ownerName?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof RoomArchivedItemResponse
-     */
-    totalMembers: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomArchivedItemResponse
-     */
-    archivedAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomArchivedItemResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomArchivedItemResponse
-     */
-    updatedAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomArchivedItemResponse
-     */
-    schoolName: string;
-    /**
-     * 
-     * @type {RoomItemResponseAllowedOperations}
-     * @memberof RoomArchivedItemResponse
-     */
-    allowedOperations?: RoomItemResponseAllowedOperations;
+    'id': string;
+    'name': string;
+    'ownerName'?: string;
+    'totalMembers': number;
+    'archivedAt': string;
+    'createdAt': string;
+    'updatedAt': string;
+    'schoolName': string;
+    'allowedOperations'?: RoomItemResponseAllowedOperations;
 }
-
 

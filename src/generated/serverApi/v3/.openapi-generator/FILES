@@ -12,7 +12,6 @@ api/board-card-api.ts
 api/board-column-api.ts
 api/board-element-api.ts
 api/board-error-report-api.ts
-api/collaborative-storage-api.ts
 api/collaborative-text-editor-api.ts
 api/course-info-api.ts
 api/course-rooms-api.ts
@@ -33,6 +32,7 @@ api/news-api.ts
 api/oauth-api.ts
 api/oauth2-api.ts
 api/pseudonym-api.ts
+api/pseudonym-username-api.ts
 api/registration-api.ts
 api/release-api.ts
 api/room-api.ts
@@ -46,7 +46,6 @@ api/share-token-api.ts
 api/submission-api.ts
 api/systems-api.ts
 api/task-api.ts
-api/team-api.ts
 api/tool-api.ts
 api/user-api.ts
 api/user-import-api.ts
@@ -216,7 +215,6 @@ models/helpdesk-wish-create-params.ts
 models/import-user-list-response.ts
 models/import-user-response.ts
 models/index.ts
-models/instance-feature.ts
 models/language-type.ts
 models/launch-request-method.ts
 models/launch-type.ts
@@ -398,14 +396,11 @@ models/successful-response.ts
 models/system-for-ldap-login-response.ts
 models/system-type.ts
 models/target-info-response.ts
-models/target-user-id-params.ts
 models/task-copy-api-params.ts
 models/task-list-response.ts
 models/task-response.ts
 models/task-status-response.ts
 models/teacher-permission-params.ts
-models/team-create-room-response.ts
-models/team-permissions-body.ts
 models/timestamps-response.ts
 models/timezone.ts
 models/token-endpoint-auth-method.ts
