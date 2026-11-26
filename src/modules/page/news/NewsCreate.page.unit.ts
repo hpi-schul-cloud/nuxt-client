@@ -74,7 +74,7 @@ describe("NewsCreatePage", () => {
 		},
 		{
 			condition: "context is valid but contextId is missing",
-			query: { context: CreateNewsParamsTargetModel.TEAMS },
+			query: { context: CreateNewsParamsTargetModel.SCHOOLS },
 		},
 		{
 			condition: "targetmodel is valid but target is missing",
@@ -114,7 +114,7 @@ describe("NewsCreatePage", () => {
 			});
 
 			it("should create news with context and contextId from query params", () => {
-				const query = { contextId: "123", context: CreateNewsParamsTargetModel.TEAMS };
+				const query = { contextId: "123", context: CreateNewsParamsTargetModel.SCHOOLS };
 				const { wrapper } = setup({ query });
 
 				const newsForm = wrapper.getComponent(NewsForm);

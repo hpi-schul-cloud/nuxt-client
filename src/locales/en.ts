@@ -70,7 +70,6 @@ export default {
 	"common.labels.complete.lastName": "Full surname",
 	"common.labels.consent": "Consent",
 	"common.labels.course": "Course",
-	"common.labels.team": "Team",
 	"common.labels.createAt": "Created:",
 	"common.labels.createdAt": "Created At",
 	"common.labels.date": "Date",
@@ -340,7 +339,7 @@ export default {
 	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete.secondParagraph":
 		"The waiting period has expired. Migration was finally completed on {finishDate} at {finishTime}!",
 	"components.administration.adminMigrationSection.showOutdatedUsers.description":
-		"Outdated student and teacher accounts are displayed in the corresponding selection lists when users are assigned to classes, courses and teams.",
+		"Outdated student and teacher accounts are displayed in the corresponding selection lists when users are assigned to classes and courses.",
 	"components.administration.adminMigrationSection.showOutdatedUsers.label": "Show outdated user accounts",
 	"components.administration.adminMigrationSection.startWarningCard.agree": "Start",
 	"components.administration.adminMigrationSection.startWarningCard.disagree": "Abort",
@@ -899,6 +898,10 @@ export default {
 	"feature-autoLogout.warning.remainingTime": "less than one minute | one minute | {remainingTime} minutes",
 	"feature-autoLogout.warning":
 		"Attention: You will be logged out automatically in {0}. Now extend your session to two hours.",
+	"feature-board-import.dialog.error": "The import could not be started or its status could not be read.",
+	"feature-board-import.dialog.jobId": "Job ID",
+	"feature-board-import.dialog.link": "Share link",
+	"feature-board-import.title": "Import board",
 	"feature-loggedout.title": "Session expired",
 	"feature-loggedout.message": "The session has expired for security reasons.",
 	"feature-loggedout.button": "Log in again",
@@ -982,7 +985,6 @@ export default {
 	"global.sidebar.item.system": "System",
 	"global.sidebar.item.tasks": "Tasks",
 	"global.sidebar.item.teacher": "Teachers",
-	"global.sidebar.item.teams": "Teams",
 	"global.sidebar.item.training": "Advanced trainings",
 	"global.sidebar.item.licenses": "Licenses",
 	"global.skipLink.mainContent": "Skip to main content",
@@ -1339,7 +1341,7 @@ export default {
 	"pages.administration.school.index.privacySettings.labels.videoConference": "Activate video conferencing",
 	"pages.administration.school.index.privacySettings.labels.aiTutor": "Activate AI tutor at school",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
-		"If chats are enabled at your school, team administrators can selectively unlock the chat function respectively for their team.",
+		"If chats are enabled at your school, teachers can enable the chat function in their courses.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
 		"This is an instance-wide, non-editable setting that controls the visibility of students to teachers.",
 	"pages.administration.school.index.privacySettings.longText.studentVisibility":
@@ -1349,7 +1351,7 @@ export default {
 	"pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen":
 		"If this option is not enabled, teachers can only see the classes and their students in which they are members.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
-		"If video conferencing is activated at your school, teachers can start video conferences for all course participants in rooms, courses and teams. In rooms and courses, video conferences can be added as an element to sections (single-column and multi-column), in courses video conferences can be used under 'Tools' and in teams within the appointment function.",
+		"If video conferencing is enabled at your school, teachers can start conferences in rooms and courses. Conferences can be added as board elements and are also available under Tools in courses.",
 	"pages.administration.school.index.privacySettings.longText.aiTutor":
 		"If AI Tutor is activated at your school, teachers can add the AI Tutor in their areas.",
 	"pages.administration.school.index.privacySettings": "Privacy Settings",
@@ -1580,7 +1582,6 @@ export default {
 	"pages.files.overview.favorites": "Favourites",
 	"pages.files.overview.personalFiles": "My personal files",
 	"pages.files.overview.sharedFiles": "Files shared with me",
-	"pages.files.overview.teamFiles": "Team files",
 	"pages.h5p.api.success.save": "Content was successfully saved.",
 	"pages.impressum.title": "Imprint",
 	"pages.licenseList.title": "Open Source License List",
@@ -1796,16 +1797,14 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Edit room",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Delete room",
 	"pages.roomDetails.fab.add.board": "Create board",
+	"pages.roomDetails.fab.add.newBoard": "New board",
 	"pages.roomDetails.archived.info": "This room is archived and read-only. Restore it to make changes.",
 	"pages.roomDetails.board.defaultName": "Room Board",
 	"pages.roomDetails.emptyState": "Currently there is no learning content in this room",
 	"pages.rooms.emptyState": "Currently there are no rooms",
 	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.infoAlert.welcome": "Welcome to the new Rooms!",
-	"pages.rooms.infoAlert.welcome.collaboration":
-		"Rooms will combine functions from courses and teams in the future to provide more opportunities for cross-school working.",
-	"pages.rooms.infoAlert.welcome.teamsAndCourses":
-		"Rooms will be further developed. Teams and courses will remain until the content can be transferred to rooms.",
+	"pages.rooms.infoAlert.welcome.collaboration": "Rooms allow you to organize content and collaborate across schools.",
 	"pages.rooms.infoAlert.welcome.furtherInformation":
 		"Further information can be found on our {helpLink}. We look forward to receiving {feedbackLink} on the current status.",
 	"pages.rooms.infoAlert.welcome.furtherInformation.help": "help page",

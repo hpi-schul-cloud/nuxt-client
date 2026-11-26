@@ -14,10 +14,16 @@
 
 
 
+/**
+ * The type of the target that gets the imported board.
+ */
 
-export enum InstanceFeature {
-    IS_TEAM_CREATION_BY_STUDENTS_ENABLED = 'isTeamCreationByStudentsEnabled'
-}
+export const BoardImportTargetType = {
+    COURSE: 'course',
+    ROOM: 'room',
+} as const;
+
+export type BoardImportTargetType = typeof BoardImportTargetType[keyof typeof BoardImportTargetType];
 
 
 

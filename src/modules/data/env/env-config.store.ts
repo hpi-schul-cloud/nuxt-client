@@ -35,8 +35,6 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_SHOW_MIGRATION_WIZARD: false,
 	FEATURE_TLDRAW_ENABLED: false,
 	ALERT_STATUS_URL: null,
-	FEATURE_TEAMS_ENABLED: false,
-	FEATURE_TEAM_CREATE_ROOM_ENABLED: false,
 	TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
 	TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT: false,
 	TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: false,
@@ -60,6 +58,7 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_TASK_SHARE: false,
 	FEATURE_USER_MIGRATION_ENABLED: false,
 	FEATURE_COPY_SERVICE_ENABLED: false,
+	FEATURE_BOARD_IMPORT_ENABLED: false,
 	FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: false,
 	FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: false,
 	FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_MAX_FILE_SIZE: 1073741824,
@@ -86,7 +85,12 @@ export const defaultConfigEnvs: ConfigResponse = {
 	LICENSE_SUMMARY_URL: "",
 	ROOM_MEMBER_INFO_URL: "",
 	ROOM_MEMBER_ADD_EXTERNAL_PERSON_REQUIREMENTS_URL: "",
+	MIGRATION_WIZARD_DOCUMENTATION_LINK: undefined,
 };
+
+// Keys not listed in the defaults (e.g. removed flags sent by older servers) are not stored.
+const supportedConfigKeys = new Set<string>(Object.keys(defaultConfigEnvs));
+
 export const useEnvStore = defineStore("envConfigStore", () => {
 	const serverApi = ServerConfigApiFactory(undefined, "/v3", $axios);
 	const fileConfigApi = FileConfigApiFactory(undefined, "/v3", $axios);
@@ -99,7 +103,8 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 	const env = reactive<ConfigResponse>(defaultConfigEnvs);
 
 	const setEnvs = (envConfig: ConfigResponse) => {
-		Object.assign(env, envConfig);
+		const supportedEnvs = Object.fromEntries(Object.entries(envConfig).filter(([key]) => supportedConfigKeys.has(key)));
+		Object.assign(env, supportedEnvs);
 	};
 
 	const setFileEnvs = (fileEnvsConfig: FilesStorageConfigResponse) => {

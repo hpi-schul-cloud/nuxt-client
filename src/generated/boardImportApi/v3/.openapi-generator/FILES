@@ -1,0 +1,16 @@
+.gitignore
+.npmignore
+.openapi-generator-ignore
+api.ts
+api/board-import-api.ts
+base.ts
+common.ts
+configuration.ts
+git_push.sh
+index.ts
+models/api-validation-error.ts
+models/board-import-job-response.ts
+models/board-import-job-status.ts
+models/board-import-target-type.ts
+models/create-board-import-job-body-params.ts
+models/index.ts

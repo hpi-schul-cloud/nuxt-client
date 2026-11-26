@@ -72,7 +72,6 @@ export default {
 	"common.labels.complete.lastName": "Apellido completo",
 	"common.labels.consent": "Consentimiento",
 	"common.labels.course": "Curso",
-	"common.labels.team": "Equipo",
 	"common.labels.createAt": "Creado:",
 	"common.labels.createdAt": "Creado en",
 	"common.labels.date": "Fecha",
@@ -344,7 +343,7 @@ export default {
 	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete.secondParagraph":
 		"El periodo de espera ha expirado. ¡La migración se completó finalmente el {finishDate} a las {finishTime}!",
 	"components.administration.adminMigrationSection.showOutdatedUsers.description":
-		"Las cuentas de estudiantes y profesores obsoletas se muestran en las listas de selección correspondientes cuando los usuarios se asignan a clases, cursos y equipos.",
+		"Las cuentas obsoletas de estudiantes y profesores aparecen en las listas correspondientes al asignar usuarios a clases y cursos.",
 	"components.administration.adminMigrationSection.showOutdatedUsers.label": "Mostrar cuentas de usuario obsoletas",
 	"components.administration.adminMigrationSection.startWarningCard.agree": "Comenzar",
 	"components.administration.adminMigrationSection.startWarningCard.disagree": "Desgaje",
@@ -919,6 +918,10 @@ export default {
 	"feature-autoLogout.message.extending-session-success": "Sesión ampliada correctamente.",
 	"feature-autoLogout.warning.remainingTime": "menos de un minuto | un minuto | {remainingTime} minutos",
 	"feature-autoLogout.warning": "Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
+	"feature-board-import.dialog.error": "No se pudo iniciar la importación o no se pudo consultar su estado.",
+	"feature-board-import.dialog.jobId": "ID del trabajo",
+	"feature-board-import.dialog.link": "Enlace para compartir",
+	"feature-board-import.title": "Importar tablero",
 	"feature-loggedout.title": "Sesión expirada",
 	"feature-loggedout.message": "La sesión ha expirado por razones de seguridad.",
 	"feature-loggedout.button": "Iniciar sesión de nuevo",
@@ -1003,7 +1006,6 @@ export default {
 	"global.sidebar.item.system": "Sistema",
 	"global.sidebar.item.tasks": "Tareas",
 	"global.sidebar.item.teacher": "Profesores",
-	"global.sidebar.item.teams": "Equipos",
 	"global.sidebar.item.training": "Formaciones avanzadas",
 	"global.sidebar.item.licenses": "Licencias",
 	"global.skipLink.mainContent": "Saltar al contenido principal",
@@ -1366,7 +1368,7 @@ export default {
 	"pages.administration.school.index.privacySettings.labels.videoConference": "Activar la videoconferencia",
 	"pages.administration.school.index.privacySettings.labels.aiTutor": "Activar tutor de IA en la escuela",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
-		"Si los chats están habilitados en tu escuela, los administradores del equipo pueden desbloquear la función de chat de manera selectiva y respectivamente para su equipo.",
+		"Si los chats están habilitados en tu escuela, los profesores pueden activar la función de chat en sus cursos.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
 		"Se trata de un ajuste no editable que controla la visibilidad de los alumnos para los profesores.",
 	"pages.administration.school.index.privacySettings.longText.studentVisibility":
@@ -1376,7 +1378,7 @@ export default {
 	"pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen":
 		"Si esta opción no está activada, los profesores sólo podrán ver las clases y sus alumnos de las que son miembros.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
-		"Si la videoconferencia está activada en su centro, los profesores pueden iniciar videoconferencias para todos los participantes del curso en aulas, cursos y equipos. En las aulas y los cursos, las videoconferencias pueden añadirse como elemento a las secciones (de una columna y de varias columnas), en los cursos las videoconferencias pueden utilizarse en «Herramientas» y en los equipos dentro de la función de cita.",
+		"Si las videoconferencias están habilitadas en tu escuela, los profesores pueden iniciarlas en salas y cursos. Se pueden añadir como elementos de los tableros y también están disponibles en Herramientas dentro de los cursos.",
 	"pages.administration.school.index.privacySettings.longText.aiTutor":
 		"Si AI Tutor está activado en tu escuela, los profesores pueden agregar AI Tutor en sus áreas.",
 	"pages.administration.school.index.privacySettings": "Configuración de la privacidad",
@@ -1614,7 +1616,6 @@ export default {
 	"pages.files.overview.favorites": "Favoritos",
 	"pages.files.overview.personalFiles": "Archivos personales",
 	"pages.files.overview.sharedFiles": "Archivos compartidos",
-	"pages.files.overview.teamFiles": "Archivos de equipo",
 	"pages.h5p.api.success.save": "El contenido se ha guardado correctamente.",
 	"pages.impressum.title": "Impresión",
 	"pages.licenseList.title": "Lista de licencias de código abierto",
@@ -1831,16 +1832,14 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar sala",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Eliminar sala",
 	"pages.roomDetails.fab.add.board": "Crear tablero",
+	"pages.roomDetails.fab.add.newBoard": "Nuevo tablero",
 	"pages.roomDetails.archived.info": "Esta sala está archivada y es de solo lectura. Restáurala para realizar cambios.",
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
 	"pages.roomDetails.emptyState": "Actualmente no hay contenidos de aprendizaje en esta sala",
 	"pages.rooms.emptyState": "Actualmente no hay salas",
 	"pages.rooms.fab.title": "Crear sala",
 	"pages.rooms.infoAlert.welcome": "¡Bienvenidos a las nuevas Salas!",
-	"pages.rooms.infoAlert.welcome.collaboration":
-		"En el futuro, las salas combinarán funciones de cursos y equipos para ofrecer más oportunidades de colaboración entre escuelas.",
-	"pages.rooms.infoAlert.welcome.teamsAndCourses":
-		"Las salas se seguirán desarrollando. Los equipos y cursos seguirán existiendo hasta que el contenido pueda ser transferido a las salas.",
+	"pages.rooms.infoAlert.welcome.collaboration": "Las salas permiten organizar contenidos y colaborar entre escuelas.",
 	"pages.rooms.infoAlert.welcome.furtherInformation":
 		"Puede encontrar más información en nuestro {helpLink}. Agradecemos sus {feedbackLink} sobre el estado actual.",
 	"pages.rooms.infoAlert.welcome.furtherInformation.help": "página de ayuda",
