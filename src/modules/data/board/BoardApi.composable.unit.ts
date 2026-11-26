@@ -1,21 +1,18 @@
 import { useBoardApi } from "./BoardApi.composable";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { mockApi, mockApiResponse } from "@@/tests/test-utils";
+import { mockApi } from "@@/tests/test-utils";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
 import * as serverApi from "@api-server";
 import {
-	BoardLayout,
 	ContentElementType,
+	DrawingElementResponse,
 	ExternalToolElementResponse,
 	H5pElementResponse,
-	LayoutBodyParams,
 } from "@api-server";
-import { CardResponse, DrawingElementResponse } from "@api-server";
 import { ApplicationError } from "@data-app";
 import { Mocked } from "vitest";
 
 let boardApi: Mocked<serverApi.BoardApiInterface>;
-let columnApi: Mocked<serverApi.BoardColumnApiInterface>;
 let cardApi: Mocked<serverApi.BoardCardApiInterface>;
 let elementApi: Mocked<serverApi.BoardElementApiInterface>;
 let roomsApi: Mocked<serverApi.CourseRoomsApiInterface>;
@@ -23,13 +20,11 @@ let roomsApi: Mocked<serverApi.CourseRoomsApiInterface>;
 describe("BoardApi.composable", () => {
 	beforeEach(() => {
 		boardApi = mockApi<serverApi.BoardApiInterface>();
-		columnApi = mockApi<serverApi.BoardColumnApiInterface>();
 		cardApi = mockApi<serverApi.BoardCardApiInterface>();
 		elementApi = mockApi<serverApi.BoardElementApiInterface>();
 		roomsApi = mockApi<serverApi.CourseRoomsApiInterface>();
 
 		vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApi);
-		vi.spyOn(serverApi, "BoardColumnApiFactory").mockReturnValue(columnApi);
 		vi.spyOn(serverApi, "BoardCardApiFactory").mockReturnValue(cardApi);
 		vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(elementApi);
 		vi.spyOn(serverApi, "CourseRoomsApiFactory").mockReturnValue(roomsApi);
@@ -37,16 +32,6 @@ describe("BoardApi.composable", () => {
 
 	afterEach(() => {
 		vi.clearAllMocks();
-	});
-
-	describe("createColumnCall", () => {
-		it("should call boardControllerCreateColumn api", async () => {
-			const { createColumnCall } = useBoardApi();
-			const boardId = "test-board-id";
-
-			await createColumnCall(boardId);
-			expect(boardApi.boardControllerCreateColumn).toHaveBeenCalledWith(boardId);
-		});
 	});
 
 	describe("fetchBoardCall", () => {
@@ -66,103 +51,6 @@ describe("BoardApi.composable", () => {
 			boardApi.boardControllerGetBoardSkeleton.mockRejectedValue(new Error());
 
 			await expect(fetchBoardCall(boardId)).rejects.toThrow(ApplicationError);
-		});
-	});
-
-	describe("updateBoardTitle", () => {
-		describe("when title is empty", () => {
-			it("should not call boardControllerUpdateBoardTitle api", async () => {
-				const { updateBoardTitleCall } = useBoardApi();
-				const payload = {
-					id: "update-card-id",
-					title: "",
-				};
-
-				await updateBoardTitleCall(payload.id, payload.title);
-
-				expect(boardApi.boardControllerUpdateBoardTitle).not.toHaveBeenCalled();
-			});
-		});
-
-		describe("when title is not empty", () => {
-			it("should call boardControllerUpdateBoardTitle api", async () => {
-				const { updateBoardTitleCall } = useBoardApi();
-				const payload = {
-					id: "update-card-id",
-					title: "update-title",
-				};
-
-				await updateBoardTitleCall(payload.id, payload.title);
-
-				expect(boardApi.boardControllerUpdateBoardTitle).toHaveBeenCalledWith(payload.id, { title: payload.title });
-			});
-		});
-	});
-
-	describe("updateCardHeight", () => {
-		it("should call cardControllerUpdateCardHeight api", async () => {
-			const { updateCardHeightCall } = useBoardApi();
-			const payload = {
-				id: "update-card-id",
-				height: 200,
-			};
-
-			await updateCardHeightCall(payload.id, payload.height);
-			expect(cardApi.cardControllerUpdateCardHeight).toHaveBeenCalledWith(payload.id, { height: payload.height });
-		});
-	});
-
-	describe("updateCardTitle", () => {
-		it("should call cardControllerUpdateCardTitle api", async () => {
-			const { updateCardTitle } = useBoardApi();
-			const payload = {
-				id: "update-card-id",
-				title: "update-title",
-			};
-
-			await updateCardTitle(payload.id, payload.title);
-			expect(cardApi.cardControllerUpdateCardTitle).toHaveBeenCalledWith(payload.id, { title: payload.title });
-		});
-	});
-
-	describe("updateCardColor", () => {
-		it("should call cardControllerUpdateCardColor api", async () => {
-			const { updateCardColor } = useBoardApi();
-			const payload = {
-				id: "update-card-id",
-				backgroundColor: serverApi.Colors.BLUE,
-			};
-
-			await updateCardColor(payload.id, payload.backgroundColor);
-
-			expect(cardApi.cardControllerUpdateCardColor).toHaveBeenCalledWith(payload.id, {
-				backgroundColor: payload.backgroundColor,
-			});
-		});
-	});
-
-	describe("duplicateCardCall", () => {
-		it("should call cardControllerCopyCard api", async () => {
-			const { duplicateCardCall } = useBoardApi();
-
-			const id = "duplicate-card-id";
-
-			await duplicateCardCall(id);
-
-			expect(cardApi.cardControllerCopyCard).toHaveBeenCalledWith(id);
-		});
-	});
-
-	describe("updateColumnTitleCall", () => {
-		it("should call columnControllerUpdateColumnTitle api", async () => {
-			const { updateColumnTitleCall } = useBoardApi();
-			const payload = {
-				id: "update-column-id",
-				title: "update-title",
-			};
-
-			await updateColumnTitleCall(payload.id, payload.title);
-			expect(columnApi.columnControllerUpdateColumnTitle).toHaveBeenCalledWith(payload.id, { title: payload.title });
 		});
 	});
 
@@ -331,120 +219,6 @@ describe("BoardApi.composable", () => {
 		});
 	});
 
-	describe("deleteCardCall", () => {
-		it("should call cardControllerDeleteCard api", async () => {
-			const { deleteCardCall } = useBoardApi();
-			const payload = "card-id";
-
-			await deleteCardCall(payload);
-			expect(cardApi.cardControllerDeleteCard).toHaveBeenCalledWith(payload);
-		});
-	});
-
-	describe("deleteColumnCall", () => {
-		it("should call columnControllerDeleteColumn api", async () => {
-			const { deleteColumnCall } = useBoardApi();
-			const payload = "column-id";
-
-			await deleteColumnCall(payload);
-			expect(columnApi.columnControllerDeleteColumn).toHaveBeenCalledWith(payload);
-		});
-	});
-
-	describe("deleteElementCall", () => {
-		it("should call elementControllerDeleteElement api", async () => {
-			const { deleteElementCall } = useBoardApi();
-			const payload = "element-id";
-
-			await deleteElementCall(payload);
-			expect(elementApi.elementControllerDeleteElement).toHaveBeenCalledWith(payload);
-		});
-	});
-
-	describe("createCardCall", () => {
-		it("should call columnControllerCreateCard api", async () => {
-			const { createCardCall } = useBoardApi();
-
-			const FAKE_RESPONSE = mockApiResponse<CardResponse>({
-				status: 200,
-				data: {
-					id: "my-little-fake-id",
-				} as CardResponse,
-			});
-
-			columnApi.columnControllerCreateCard.mockResolvedValueOnce(FAKE_RESPONSE);
-
-			const payload = {
-				columnId: "column-id",
-				position: 1,
-			};
-			const INITIAL_ELEMENTS = {
-				requiredEmptyElements: [serverApi.CreateCardBodyParamsRequiredEmptyElements.RICH_TEXT],
-				position: 1,
-			};
-
-			const result = await createCardCall(payload.columnId, payload.position);
-
-			expect(columnApi.columnControllerCreateCard).toHaveBeenCalledWith(payload.columnId, INITIAL_ELEMENTS);
-
-			expect(result).toBe(FAKE_RESPONSE.data);
-		});
-	});
-
-	describe("moveCardCall", () => {
-		it("should call cardControllerMoveCard api", async () => {
-			const { moveCardCall } = useBoardApi();
-			const payload = {
-				cardId: "card-id",
-				position: {
-					toColumnId: "col-id",
-					toPosition: 3,
-				},
-			};
-
-			await moveCardCall(payload.cardId, payload.position.toColumnId, payload.position.toPosition);
-			expect(cardApi.cardControllerMoveCard).toHaveBeenCalledWith(payload.cardId, {
-				...payload.position,
-			});
-		});
-	});
-
-	describe("moveColumnCall", () => {
-		it("should call columnControllerMoveColumn api", async () => {
-			const { moveColumnCall } = useBoardApi();
-			const payload = {
-				columnId: "column-id",
-				position: {
-					toBoardId: "board-id",
-					toPosition: 3,
-				},
-			};
-
-			await moveColumnCall(payload.columnId, payload.position.toBoardId, payload.position.toPosition);
-			expect(columnApi.columnControllerMoveColumn).toHaveBeenCalledWith(payload.columnId, {
-				...payload.position,
-			});
-		});
-	});
-
-	describe("moveElementCall", () => {
-		it("should call elementControllerMoveElement api", async () => {
-			const { moveElementCall } = useBoardApi();
-			const payload = {
-				elementId: "element-id",
-				position: {
-					toCardId: "card-id",
-					toPosition: 3,
-				},
-			};
-
-			await moveElementCall(payload.elementId, payload.position.toCardId, payload.position.toPosition);
-			expect(elementApi.elementControllerMoveElement).toHaveBeenCalledWith(payload.elementId, {
-				...payload.position,
-			});
-		});
-	});
-
 	describe("getContextInfo", () => {
 		it("should call boardControllerGetBoardContext api", async () => {
 			const { getContextInfo } = useBoardApi();
@@ -513,37 +287,6 @@ describe("BoardApi.composable", () => {
 					name: FAKE_ROOM_RESPONSE.data.title,
 				})
 			);
-		});
-	});
-
-	describe("updateBoardVisibilityCall", () => {
-		it("should call boardControllerUpdateVisibility api", async () => {
-			const { updateBoardVisibilityCall } = useBoardApi();
-
-			await updateBoardVisibilityCall("board-id", true);
-			expect(boardApi.boardControllerUpdateVisibility).toHaveBeenCalledWith("board-id", { isVisible: true });
-		});
-	});
-
-	describe("@updateReadersCanEditCall", () => {
-		it("should call boardControllerUpdateReadersCanEdit api", async () => {
-			const { updateReadersCanEditCall } = useBoardApi();
-
-			await updateReadersCanEditCall("board-id", true);
-
-			expect(boardApi.boardControllerUpdateReadersCanEdit).toHaveBeenCalledWith("board-id", { readersCanEdit: true });
-		});
-	});
-
-	describe("updateBoardLayoutCall", () => {
-		it("should call boardControllerUpdateLayout api", async () => {
-			const { updateBoardLayoutCall } = useBoardApi();
-
-			await updateBoardLayoutCall("board-id", BoardLayout.LIST);
-
-			expect(boardApi.boardControllerUpdateLayout).toHaveBeenCalledWith<[string, LayoutBodyParams]>("board-id", {
-				layout: BoardLayout.LIST,
-			});
 		});
 	});
 

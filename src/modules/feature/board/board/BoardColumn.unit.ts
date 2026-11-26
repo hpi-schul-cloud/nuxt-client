@@ -30,7 +30,7 @@ describe("BoardColumn", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		createTestEnvStore({ FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false });
+		createTestEnvStore();
 
 		mockedUseForceRenderHandler = mockComposable(useForceRender);
 		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
