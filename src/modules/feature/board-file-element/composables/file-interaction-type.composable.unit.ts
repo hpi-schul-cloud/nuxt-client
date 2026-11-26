@@ -28,7 +28,7 @@ describe("useFileInteractionType", () => {
 		expect(result).toBe(FileInteractionType.Collabora);
 	});
 
-	it("should return pdf for pdf mime type", () => {
+	it("should return download for pdf mime type", () => {
 		const result = useFileInteractionType({
 			hasFileRecord: true,
 			isCollaboraEnabled: false,
@@ -38,7 +38,33 @@ describe("useFileInteractionType", () => {
 			isDownloadAllowed: true,
 		});
 
-		expect(result).toBe(FileInteractionType.Pdf);
+		expect(result).toBe(FileInteractionType.Download);
+	});
+
+	it("should return download for pdf mime type when preview url is available", () => {
+		const result = useFileInteractionType({
+			hasFileRecord: true,
+			isCollaboraEnabled: false,
+			isCollaboraEditable: false,
+			mimeType: "application/pdf",
+			hasPreviewUrl: true,
+			isDownloadAllowed: true,
+		});
+
+		expect(result).toBe(FileInteractionType.Download);
+	});
+
+	it("should return none for pdf mime type when download is not allowed", () => {
+		const result = useFileInteractionType({
+			hasFileRecord: true,
+			isCollaboraEnabled: false,
+			isCollaboraEditable: false,
+			mimeType: "application/pdf",
+			hasPreviewUrl: false,
+			isDownloadAllowed: false,
+		});
+
+		expect(result).toBe(FileInteractionType.None);
 	});
 
 	it("should return image when preview url is available", () => {

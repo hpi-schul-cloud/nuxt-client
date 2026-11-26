@@ -302,9 +302,6 @@ const onCardInteraction = () => {
 		case FileInteractionType.Collabora:
 			openCollabora();
 			break;
-		case FileInteractionType.Pdf:
-			openPdf();
-			break;
 		case FileInteractionType.Image:
 			openImageLightBox();
 			break;
@@ -318,10 +315,6 @@ const onCardInteraction = () => {
 
 const onDownload = () => {
 	downloadFile(fileRecord.value!.url, fileRecord.value!.name);
-};
-
-const openPdf = () => {
-	window.open(fileRecord.value!.url, "_blank");
 };
 
 const openImageLightBox = () => {

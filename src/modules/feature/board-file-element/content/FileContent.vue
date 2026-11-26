@@ -112,9 +112,8 @@ const showTitle = computed(
 
 const isDescriptionDownloadLink = computed(
 	() =>
-		!hasPdfMimeType.value &&
 		!hasCollaboraType.value &&
-		!props.fileProperties.previewUrl &&
+		(hasPdfMimeType.value || !props.fileProperties.previewUrl) &&
 		!hasVideoMimeType.value &&
 		!hasAudioMimeType.value &&
 		props.fileProperties.isDownloadAllowed
@@ -125,7 +124,7 @@ const fileDescriptionHref = computed(() => {
 		return isCollaboraEnabled.value ? props.collaboraHref : props.fileProperties.url;
 	}
 
-	if (hasPdfMimeType.value || isDescriptionDownloadLink.value) {
+	if (isDescriptionDownloadLink.value) {
 		return props.fileProperties.url;
 	}
 

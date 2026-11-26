@@ -1,6 +1,7 @@
 import { FileRecordItem } from "../types/filerecord-item";
 import FileInteractionHandler from "./FileInteractionHandler.vue";
 import { FilePreviewStatus } from "@/types/file/File";
+import { downloadFile } from "@/utils/fileHelper";
 import { createTestEnvStore, fileRecordFactory } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
@@ -10,8 +11,20 @@ import { ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("@ui-light-box");
+vi.mock("@/utils/fileHelper", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@/utils/fileHelper")>();
+
+	return {
+		...actual,
+		downloadFile: vi.fn(),
+	};
+});
 
 describe("FileInteractionHandler", () => {
+	afterEach(() => {
+		vi.clearAllMocks();
+	});
+
 	const setupMocks = () => {
 		const useLightBoxMock = vi.mocked(useLightBox);
 		useLightBoxMock.mockReturnValue({
@@ -80,6 +93,17 @@ describe("FileInteractionHandler", () => {
 				expect(button.exists()).toBe(true);
 			});
 
+			it("should set open image aria label on button", () => {
+				const { wrapper } = setup({
+					previewStatus: FilePreviewStatus.PREVIEW_POSSIBLE,
+					mimeType: "image/png",
+				});
+
+				const button = wrapper.find("button");
+
+				expect(button.attributes("aria-label")).toBe("common.ariaLabel.openImageInLightBox");
+			});
+
 			it("should open lightbox when button is clicked", () => {
 				const { wrapper, useLightBoxMock } = setup({
 					previewStatus: FilePreviewStatus.PREVIEW_POSSIBLE,
@@ -138,7 +162,15 @@ describe("FileInteractionHandler", () => {
 				expect(button.exists()).toBe(true);
 			});
 
-			it("should call open function", () => {
+			it("should set download aria label on button", () => {
+				const { wrapper } = setup({ mimeType: "application/pdf" });
+
+				const button = wrapper.find("button");
+
+				expect(button.attributes("aria-label")).toBe("common.actions.download");
+			});
+
+			it("should download file instead of opening it", () => {
 				const { wrapper, fileRecordItem, useLightBoxMock } = setup({
 					mimeType: "application/pdf",
 				});
@@ -149,8 +181,9 @@ describe("FileInteractionHandler", () => {
 				const button = wrapper.find("button");
 				button.trigger("click");
 
-				expect(windowOpenSpy).toHaveBeenCalledTimes(1);
-				expect(windowOpenSpy).toHaveBeenCalledWith(fileRecordItem.url, "_blank");
+				expect(downloadFile).toHaveBeenCalledTimes(1);
+				expect(downloadFile).toHaveBeenCalledWith(fileRecordItem.url, fileRecordItem.name);
+				expect(windowOpenSpy).not.toHaveBeenCalled();
 				expect(useLightBoxMock().open).not.toHaveBeenCalled();
 			});
 		});

@@ -1,10 +1,5 @@
 <template>
-	<button
-		v-if="isInteractive"
-		:aria-label="t('common.ariaLabel.openImageInLightBox')"
-		class="interactive-area"
-		@click="handleClick"
-	>
+	<button v-if="isInteractive" :aria-label="ariaLabel" class="interactive-area" @click="handleClick">
 		<slot />
 	</button>
 	<div v-else>
@@ -16,6 +11,7 @@
 import { FileRecordItem } from "../types/filerecord-item";
 import {
 	convertDownloadToPreviewUrl,
+	downloadFile,
 	isAudioMimeType,
 	isPdfMimeType,
 	isPreviewPossible,
@@ -51,6 +47,10 @@ const isInteractive = computed(
 			(isCollaboraEnabled.value && fileRecordItem.isCollaboraEditable))
 );
 
+const ariaLabel = computed(() =>
+	isPdfMimeType(fileRecordItem.mimeType) ? t("common.actions.download") : t("common.ariaLabel.openImageInLightBox")
+);
+
 const handleClick = () => {
 	const hasPreview = isPreviewPossible(fileRecordItem.previewStatus);
 	const isAudio = isAudioMimeType(fileRecordItem.mimeType);
@@ -59,7 +59,7 @@ const handleClick = () => {
 	const isCollabora = fileRecordItem.isCollaboraEditable;
 
 	if (isPdf) {
-		window.open(fileRecordItem.url, "_blank");
+		downloadFile(fileRecordItem.url, fileRecordItem.name);
 	} else if (hasPreview) {
 		openImageInLightbox();
 	} else if (isAudio) {
