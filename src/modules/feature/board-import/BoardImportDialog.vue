@@ -55,13 +55,8 @@
 </template>
 
 <script setup lang="ts">
-import {
-	BoardImportJobFailureReason,
-	BoardImportJobStatus,
-	BoardImportNoteResponse,
-	BoardImportNoteType,
-	BoardImportTargetType,
-} from "@api-board-import";
+import { useBoardImportMessages } from "./board-import-messages.composable";
+import { BoardImportJobStatus, BoardImportTargetType } from "@api-board-import";
 import { useBoardImportJob } from "@data-board-import";
 import { ErrorAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
@@ -77,6 +72,7 @@ const isOpen = defineModel({ type: Boolean, default: false });
 
 const { t } = useI18n();
 const { job, hasError, errorMessages, isStarting, startImport, reset } = useBoardImportJob();
+const { getFailureMessage, getNoteMessage } = useBoardImportMessages();
 
 const link = ref("");
 const trimmedLink = computed(() => link.value.trim());
@@ -96,61 +92,7 @@ const isPending = computed(
 		(job.value?.status === BoardImportJobStatus.WAITING || job.value?.status === BoardImportJobStatus.RUNNING)
 );
 
-// Other reasons are internal and get the general text with the reason code.
-const failureReasonKeys: Partial<Record<BoardImportJobFailureReason, string>> = {
-	[BoardImportJobFailureReason.SOURCE_NOT_READABLE]: "feature-board-import.dialog.failure.sourceNotReadable",
-	[BoardImportJobFailureReason.SOURCE_BOARD_TYPE_NOT_SUPPORTED]:
-		"feature-board-import.dialog.failure.sourceBoardTypeNotSupported",
-	[BoardImportJobFailureReason.SOURCE_RESPONSE_TOO_LARGE]: "feature-board-import.dialog.failure.sourceTooLarge",
-	[BoardImportJobFailureReason.BOARD_API_FORBIDDEN]: "feature-board-import.dialog.failure.forbidden",
-	[BoardImportJobFailureReason.MAX_DURATION]: "feature-board-import.dialog.failure.maxDuration",
-};
-
-const failureMessage = computed(() => {
-	const reason = job.value?.failureReason;
-	const key = reason ? failureReasonKeys[reason] : undefined;
-	if (key) return t(key);
-	if (reason) return t("feature-board-import.dialog.failure.other", { reason });
-
-	return t("feature-board-import.dialog.failure.unknown");
-});
-
-const elementKeys: Record<string, string> = {
-	link: "components.cardElement.LinkElement",
-	file: "components.cardElement.fileElement",
-	"video-conference": "components.cardElement.videoConferenceElement",
-};
-
-const getElementName = (note: BoardImportNoteResponse): string => {
-	const key = note.elementType ? elementKeys[note.elementType] : undefined;
-	if (key) return t(key);
-
-	const kind = note.elementKind || note.elementType || "";
-
-	return t("feature-board-import.dialog.notes.element.other", { kind });
-};
-
-const getNoteMessage = (note: BoardImportNoteResponse): string => {
-	if (note.type === BoardImportNoteType.BOARD_TITLE_SHORTENED) {
-		return t("feature-board-import.dialog.notes.boardTitleShortened");
-	}
-	if (note.type === BoardImportNoteType.BOARD_DESCRIPTION_LEFT_OUT) {
-		return t("feature-board-import.dialog.notes.boardDescriptionLeftOut");
-	}
-
-	if (note.type === BoardImportNoteType.ELEMENT_LEFT_OUT) {
-		const withoutTitle = t("feature-board-import.dialog.notes.withoutTitle");
-
-		return t("feature-board-import.dialog.notes.elementLeftOut", {
-			element: getElementName(note),
-			section: note.sectionTitle || withoutTitle,
-			card: note.cardTitle || withoutTitle,
-		});
-	}
-
-	return t("feature-board-import.dialog.notes.other", { type: note.type });
-};
-
+const failureMessage = computed(() => getFailureMessage(job.value?.failureReason));
 const noteMessages = computed(() => (job.value?.notes ?? []).map(getNoteMessage));
 
 watch(isOpen, (open) => {
