@@ -27,6 +27,18 @@
 					</VChip>
 				</div>
 				<VProgressLinear v-if="isPending" indeterminate color="primary" data-testid="board-import-progress" />
+				<ErrorAlert v-if="job.status === BoardImportJobStatus.FAILED" data-testid="board-import-failure">
+					{{ failureMessage }}
+				</ErrorAlert>
+				<div v-if="job.status === BoardImportJobStatus.FINISHED" data-testid="board-import-notes">
+					<div class="font-weight-bold">{{ t("feature-board-import.dialog.notes.title") }}</div>
+					<ul v-if="noteMessages.length" class="pl-6">
+						<li v-for="(message, index) in noteMessages" :key="index" data-testid="board-import-note">
+							{{ message }}
+						</li>
+					</ul>
+					<div v-else data-testid="board-import-no-notes">{{ t("feature-board-import.dialog.notes.none") }}</div>
+				</div>
 				<div class="text-caption text-medium-emphasis">
 					{{ t("feature-board-import.dialog.jobId") }}:
 					<code data-testid="board-import-job-id">{{ job.id }}</code>
@@ -43,7 +55,13 @@
 </template>
 
 <script setup lang="ts">
-import { BoardImportJobStatus, BoardImportTargetType } from "@api-board-import";
+import {
+	BoardImportJobFailureReason,
+	BoardImportJobStatus,
+	BoardImportNoteResponse,
+	BoardImportNoteType,
+	BoardImportTargetType,
+} from "@api-board-import";
 import { useBoardImportJob } from "@data-board-import";
 import { ErrorAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
@@ -77,6 +95,59 @@ const isPending = computed(
 		!hasError.value &&
 		(job.value?.status === BoardImportJobStatus.WAITING || job.value?.status === BoardImportJobStatus.RUNNING)
 );
+
+// Other reasons are internal and get the general text with the reason code.
+const failureReasonKeys: Partial<Record<BoardImportJobFailureReason, string>> = {
+	[BoardImportJobFailureReason.SOURCE_NOT_READABLE]: "feature-board-import.dialog.failure.sourceNotReadable",
+	[BoardImportJobFailureReason.SOURCE_BOARD_TYPE_NOT_SUPPORTED]:
+		"feature-board-import.dialog.failure.sourceBoardTypeNotSupported",
+	[BoardImportJobFailureReason.SOURCE_RESPONSE_TOO_LARGE]: "feature-board-import.dialog.failure.sourceTooLarge",
+	[BoardImportJobFailureReason.BOARD_API_FORBIDDEN]: "feature-board-import.dialog.failure.forbidden",
+	[BoardImportJobFailureReason.MAX_DURATION]: "feature-board-import.dialog.failure.maxDuration",
+};
+
+const failureMessage = computed(() => {
+	const reason = job.value?.failureReason;
+	const key = reason ? failureReasonKeys[reason] : undefined;
+	if (key) return t(key);
+	if (reason) return t("feature-board-import.dialog.failure.other", { reason });
+
+	return t("feature-board-import.dialog.failure.unknown");
+});
+
+const elementKeys: Record<string, string> = {
+	link: "components.cardElement.LinkElement",
+	file: "components.cardElement.fileElement",
+	"video-conference": "components.cardElement.videoConferenceElement",
+};
+
+const getElementName = (note: BoardImportNoteResponse): string => {
+	const key = note.elementType ? elementKeys[note.elementType] : undefined;
+	if (key) return t(key);
+
+	const kind = note.elementKind ?? note.elementType ?? "";
+
+	return t("feature-board-import.dialog.notes.element.other", { kind });
+};
+
+const getNoteMessage = (note: BoardImportNoteResponse): string => {
+	if (note.type === BoardImportNoteType.BOARD_TITLE_SHORTENED) {
+		return t("feature-board-import.dialog.notes.boardTitleShortened");
+	}
+	if (note.type === BoardImportNoteType.BOARD_DESCRIPTION_LEFT_OUT) {
+		return t("feature-board-import.dialog.notes.boardDescriptionLeftOut");
+	}
+
+	const withoutTitle = t("feature-board-import.dialog.notes.withoutTitle");
+
+	return t("feature-board-import.dialog.notes.elementLeftOut", {
+		element: getElementName(note),
+		section: note.sectionTitle || withoutTitle,
+		card: note.cardTitle || withoutTitle,
+	});
+};
+
+const noteMessages = computed(() => (job.value?.notes ?? []).map(getNoteMessage));
 
 watch(isOpen, (open) => {
 	if (!open) {

@@ -927,8 +927,26 @@ export default {
 	"feature-autoLogout.warning":
 		"Achtung: Du wirst in {0} automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
 	"feature-board-import.dialog.error": "Der Import konnte nicht gestartet oder der Status nicht abgefragt werden.",
+	"feature-board-import.dialog.failure.forbidden":
+		"Der Import ist fehlgeschlagen: Du darfst in diesem Raum oder Kurs keinen Bereich anlegen.",
+	"feature-board-import.dialog.failure.maxDuration": "Der Import ist fehlgeschlagen: Er hat zu lange gedauert.",
+	"feature-board-import.dialog.failure.other": "Der Import ist fehlgeschlagen (Grund: {reason}).",
+	"feature-board-import.dialog.failure.sourceBoardTypeNotSupported":
+		"Der Import ist fehlgeschlagen: Diese Art von Board wird nicht unterstützt.",
+	"feature-board-import.dialog.failure.sourceNotReadable":
+		"Der Import ist fehlgeschlagen: Das Board konnte über den Link nicht gelesen werden.",
+	"feature-board-import.dialog.failure.sourceTooLarge": "Der Import ist fehlgeschlagen: Das Board ist zu groß.",
+	"feature-board-import.dialog.failure.unknown": "Der Import ist fehlgeschlagen.",
 	"feature-board-import.dialog.jobId": "Job-ID",
 	"feature-board-import.dialog.link": "Freigabelink",
+	"feature-board-import.dialog.notes.boardDescriptionLeftOut": "Die Beschreibung des Boards wurde nicht übernommen.",
+	"feature-board-import.dialog.notes.boardTitleShortened": "Der Titel des Bereichs wurde gekürzt.",
+	"feature-board-import.dialog.notes.element.other": "Inhalt ({kind})",
+	"feature-board-import.dialog.notes.elementLeftOut":
+		"{element} nicht übernommen (Abschnitt: {section}, Karte: {card})",
+	"feature-board-import.dialog.notes.none": "Keine Importhinweise.",
+	"feature-board-import.dialog.notes.title": "Importhinweise",
+	"feature-board-import.dialog.notes.withoutTitle": "ohne Titel",
 	"feature-board-import.title": "Bereich importieren",
 	"feature-loggedout.title": "Sitzung abgelaufen",
 	"feature-loggedout.message": "Die Sitzung ist aus Sicherheitsgründen abgelaufen.",

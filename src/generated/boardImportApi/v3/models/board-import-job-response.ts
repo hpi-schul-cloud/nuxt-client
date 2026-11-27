@@ -15,7 +15,13 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
+import type { BoardImportJobFailureReason } from './board-import-job-failure-reason';
+// May contain unused imports in some cases
+// @ts-ignore
 import type { BoardImportJobStatus } from './board-import-job-status';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { BoardImportNoteResponse } from './board-import-note-response';
 
 export interface BoardImportJobResponse {
     /**
@@ -23,6 +29,14 @@ export interface BoardImportJobResponse {
      */
     'id': string;
     'status': BoardImportJobStatus;
+    /**
+     * The reason why the job failed. Only a failed job has a reason.
+     */
+    'failureReason'?: BoardImportJobFailureReason;
+    /**
+     * The content of the source that the board does not contain as the source has it.
+     */
+    'notes': Array<BoardImportNoteResponse>;
 }
 
 

@@ -13,7 +13,7 @@ describe("useBoardImportJob", () => {
 	const targetId = "room-id";
 	const jobId = "job-id";
 
-	const mockJobResponse = (status: BoardImportJobStatus) => mockApiResponse({ data: { id: jobId, status } });
+	const mockJobResponse = (status: BoardImportJobStatus) => mockApiResponse({ data: { id: jobId, status, notes: [] } });
 
 	beforeEach(() => {
 		vi.useFakeTimers();
@@ -49,7 +49,7 @@ describe("useBoardImportJob", () => {
 
 			await startImport(link, targetType, targetId);
 
-			expect(job.value).toEqual({ id: jobId, status: BoardImportJobStatus.WAITING });
+			expect(job.value).toEqual({ id: jobId, status: BoardImportJobStatus.WAITING, notes: [] });
 		});
 
 		it("should set the error and not poll when the request fails", async () => {

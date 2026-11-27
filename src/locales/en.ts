@@ -899,8 +899,25 @@ export default {
 	"feature-autoLogout.warning":
 		"Attention: You will be logged out automatically in {0}. Now extend your session to two hours.",
 	"feature-board-import.dialog.error": "The import could not be started or its status could not be read.",
+	"feature-board-import.dialog.failure.forbidden":
+		"The import failed: You are not allowed to create a board in this room or course.",
+	"feature-board-import.dialog.failure.maxDuration": "The import failed: It took too long.",
+	"feature-board-import.dialog.failure.other": "The import failed (reason: {reason}).",
+	"feature-board-import.dialog.failure.sourceBoardTypeNotSupported":
+		"The import failed: This type of board is not supported.",
+	"feature-board-import.dialog.failure.sourceNotReadable":
+		"The import failed: The board could not be read through the link.",
+	"feature-board-import.dialog.failure.sourceTooLarge": "The import failed: The board is too large.",
+	"feature-board-import.dialog.failure.unknown": "The import failed.",
 	"feature-board-import.dialog.jobId": "Job ID",
 	"feature-board-import.dialog.link": "Share link",
+	"feature-board-import.dialog.notes.boardDescriptionLeftOut": "The description of the board was not imported.",
+	"feature-board-import.dialog.notes.boardTitleShortened": "The title of the board was shortened.",
+	"feature-board-import.dialog.notes.element.other": "Content ({kind})",
+	"feature-board-import.dialog.notes.elementLeftOut": "{element} not imported (section: {section}, card: {card})",
+	"feature-board-import.dialog.notes.none": "No import notes.",
+	"feature-board-import.dialog.notes.title": "Import notes",
+	"feature-board-import.dialog.notes.withoutTitle": "without title",
 	"feature-board-import.title": "Import board",
 	"feature-loggedout.title": "Session expired",
 	"feature-loggedout.message": "The session has expired for security reasons.",
