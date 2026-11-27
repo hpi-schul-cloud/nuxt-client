@@ -86,6 +86,7 @@
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCommonCartridgeExportModal.vue";
 import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.vue";
+import CourseRoomGroups from "@/components/course-rooms/groups/CourseRoomGroups.vue";
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -281,8 +282,8 @@ const tabItems = computed<TabItem[]>(() => {
 		name: "groups",
 		label: t("pages.courseRooms.tabLabel.groups"),
 		icon: mdiAccountGroupOutline,
-		href: `/courses/${roomData.value.roomId}/?activeTab=groups`,
 		dataTestId: "groups-tab",
+		component: CourseRoomGroups,
 	});
 
 	return tabs;

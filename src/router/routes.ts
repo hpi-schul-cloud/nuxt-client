@@ -397,6 +397,34 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		}),
 	},
 	{
+		path: `/rooms/:id(${REGEX_ID})/groups/add`,
+		component: () => import("@/pages/course-rooms/CourseGroupCreate.page.vue"),
+		name: "course-room-group-create",
+		beforeEnter: createPermissionGuard([Permission.COURSEGROUP_CREATE]),
+		props: (route: RouteLocationNormalized) => ({
+			courseId: route.params.id,
+		}),
+	},
+	{
+		path: `/rooms/:id(${REGEX_ID})/groups/:groupId(${REGEX_ID})`,
+		component: () => import("@/pages/course-rooms/CourseGroupDetails.page.vue"),
+		name: "course-room-group-details",
+		props: (route: RouteLocationNormalized) => ({
+			courseId: route.params.id,
+			groupId: route.params.groupId,
+		}),
+	},
+	{
+		path: `/rooms/:id(${REGEX_ID})/groups/:groupId(${REGEX_ID})/edit`,
+		component: () => import("@/pages/course-rooms/CourseGroupEdit.page.vue"),
+		name: "course-room-group-edit",
+		beforeEnter: createPermissionGuard([Permission.COURSEGROUP_EDIT]),
+		props: (route: RouteLocationNormalized) => ({
+			courseId: route.params.id,
+			groupId: route.params.groupId,
+		}),
+	},
+	{
 		path: "/rooms/courses-list",
 		component: () => import("@/pages/course-rooms/CourseRoomList.page.vue"),
 		name: "course-room-list",

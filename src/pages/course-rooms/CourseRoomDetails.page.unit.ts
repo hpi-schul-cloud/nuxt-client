@@ -1,6 +1,7 @@
 import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCommonCartridgeExportModal.vue";
+import CourseRoomGroups from "@/components/course-rooms/groups/CourseRoomGroups.vue";
 import { ContentItemTypeEnum } from "@/types/enum/content-item-type.enum";
 import {
 	createTestAppStore,
@@ -100,9 +101,10 @@ describe("CourseRoomDetails.page.vue", () => {
 			isLocked: boolean;
 			isSynchronized: boolean;
 			isArchived: boolean;
+			tab: string;
 		}>
 	) => {
-		const { permissionData, roleName, isLocked, isSynchronized, isArchived } = {
+		const { permissionData, roleName, isLocked, isSynchronized, isArchived, tab } = {
 			permissionData: mockPermissionsCourseTeacher,
 			roleName: ImportUserResponseRoleNames.TEACHER,
 			isLocked: false,
@@ -142,6 +144,9 @@ describe("CourseRoomDetails.page.vue", () => {
 		vi.spyOn(window, "matchMedia").mockReturnValue(mock<MediaQueryList>());
 
 		router.setParams({ id: singleColumnBoard.roomId });
+		if (tab) {
+			router.setQuery({ tab });
+		}
 
 		const wrapper = shallowMount(CourseRoomDetailsPage, {
 			global: {
@@ -525,6 +530,29 @@ describe("CourseRoomDetails.page.vue", () => {
 					type: ShareTokenBodyParamsParentType.COURSES,
 				});
 			});
+		});
+	});
+
+	describe("groups tab", () => {
+		const setupGroupsTab = (options: Parameters<typeof setup>[0]) => setup({ ...options, tab: "groups" });
+
+		const groupFabItems = (wrapper: ReturnType<typeof setup>["wrapper"]) =>
+			(wrapper.findComponent(DefaultWireframe).props("fabItems") as FabAction[] | undefined) ?? [];
+
+		it("should show the course groups in nuxt-client", async () => {
+			const { wrapper, singleColumnBoard } = setupGroupsTab({ permissionData: [] });
+			await flushPromises();
+
+			const groups = wrapper.findComponent(CourseRoomGroups);
+			expect(groups.exists()).toBe(true);
+			expect(groups.props("roomId")).toBe(singleColumnBoard.roomId);
+		});
+
+		it("should not show a FAB on the groups tab (the tab has its own create button)", async () => {
+			const { wrapper } = setupGroupsTab({ permissionData: [Permission.COURSEGROUP_CREATE] });
+			await flushPromises();
+
+			expect(groupFabItems(wrapper)).toEqual([]);
 		});
 	});
 
