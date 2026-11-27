@@ -68,6 +68,10 @@ defineProps<{
 	targetId: string;
 }>();
 
+const emit = defineEmits<{
+	imported: [];
+}>();
+
 const isOpen = defineModel({ type: Boolean, default: false });
 
 const { t } = useI18n();
@@ -97,8 +101,10 @@ const noteMessages = computed(() => (job.value?.notes ?? []).map(getNoteMessage)
 
 watch(isOpen, (open) => {
 	if (!open) {
+		const isImported = job.value?.status === BoardImportJobStatus.FINISHED;
 		link.value = "";
 		reset();
+		if (isImported) emit("imported");
 	}
 });
 </script>

@@ -50,6 +50,7 @@
 			v-model="boardImportDialogIsOpen"
 			:target-type="BoardImportTargetType.ROOM"
 			:target-id="room.id"
+			@imported="fetchRoomAndBoards(room.id)"
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 	</DefaultWireframe>

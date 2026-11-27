@@ -78,6 +78,7 @@
 			v-model="isBoardImportDialogOpen"
 			:target-type="BoardImportTargetType.COURSE"
 			:target-id="roomData.roomId"
+			@imported="refreshCourseRoom"
 		/>
 	</DefaultWireframe>
 </template>

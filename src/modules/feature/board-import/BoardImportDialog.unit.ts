@@ -228,5 +228,21 @@ describe("@feature-board-import/BoardImportDialog", () => {
 
 			expect(boardImportJob.reset).toHaveBeenCalled();
 		});
+
+		it("should emit imported when the import finished", async () => {
+			const { wrapper } = setup({ job: { id: "job-id", status: BoardImportJobStatus.FINISHED, notes: [] } });
+
+			await wrapper.setProps({ modelValue: false });
+
+			expect(wrapper.emitted("imported")).toHaveLength(1);
+		});
+
+		it("should not emit imported when the import did not finish", async () => {
+			const { wrapper } = setup({ job: { id: "job-id", status: BoardImportJobStatus.FAILED, notes: [] } });
+
+			await wrapper.setProps({ modelValue: false });
+
+			expect(wrapper.emitted("imported")).toBeUndefined();
+		});
 	});
 });
