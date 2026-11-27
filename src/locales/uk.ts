@@ -915,8 +915,26 @@ export default {
 	"feature-autoLogout.warning":
 		"Увага! Ви автоматично вийдете з системи через {0}. Тепер продовжте час сеансу до двох годин.",
 	"feature-board-import.dialog.error": "Не вдалося почати імпорт або отримати його статус.",
+	"feature-board-import.dialog.failure.forbidden":
+		"Імпорт не вдався: Ви не маєте права створювати дошку в цій кімнаті або курсі.",
+	"feature-board-import.dialog.failure.maxDuration": "Імпорт не вдався: Він тривав занадто довго.",
+	"feature-board-import.dialog.failure.other": "Імпорт не вдався (причина: {reason}).",
+	"feature-board-import.dialog.failure.sourceBoardTypeNotSupported":
+		"Імпорт не вдався: Цей тип дошки не підтримується.",
+	"feature-board-import.dialog.failure.sourceNotReadable":
+		"Імпорт не вдався: Не вдалося прочитати дошку за посиланням.",
+	"feature-board-import.dialog.failure.sourceTooLarge": "Імпорт не вдався: Дошка занадто велика.",
+	"feature-board-import.dialog.failure.unknown": "Імпорт не вдався.",
 	"feature-board-import.dialog.jobId": "ID завдання",
 	"feature-board-import.dialog.link": "Посилання для спільного доступу",
+	"feature-board-import.dialog.notes.boardDescriptionLeftOut": "Опис дошки не імпортовано.",
+	"feature-board-import.dialog.notes.boardTitleShortened": "Назву дошки скорочено.",
+	"feature-board-import.dialog.notes.element.other": "Вміст ({kind})",
+	"feature-board-import.dialog.notes.elementLeftOut": "{element} не імпортовано (розділ: {section}, картка: {card})",
+	"feature-board-import.dialog.notes.none": "Немає приміток до імпорту.",
+	"feature-board-import.dialog.notes.other": "Інша примітка до імпорту ({type})",
+	"feature-board-import.dialog.notes.title": "Примітки до імпорту",
+	"feature-board-import.dialog.notes.withoutTitle": "без назви",
 	"feature-board-import.title": "Імпортувати дошку",
 	"feature-loggedout.title": "Термін сеансу минув",
 	"feature-loggedout.message": "Термін дії сеансу минув з міркувань безпеки.",

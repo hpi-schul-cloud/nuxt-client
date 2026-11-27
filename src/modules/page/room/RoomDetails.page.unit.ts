@@ -510,6 +510,18 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				targetId: room.id,
 			});
 		});
+
+		it("should reload the boards when a board was imported", async () => {
+			const { wrapper, roomDetailsStore, room } = setup({
+				allowedOperations: { accessRoom: true, editContent: true },
+				isBoardImportEnabled: true,
+			});
+
+			wrapper.getComponent(BoardImportDialog).vm.$emit("imported");
+			await flushPromises();
+
+			expect(roomDetailsStore.fetchRoomAndBoards).toHaveBeenCalledWith(room.id);
+		});
 	});
 
 	describe("when user wants to create a board", () => {

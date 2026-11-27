@@ -279,6 +279,18 @@ describe("CourseRoomDetails.page.vue", () => {
 						targetId: useCourseRoomDetailsStore().roomData.roomId,
 					});
 				});
+
+				it("should reload the course content when a board was imported", async () => {
+					createTestEnvStore({ FEATURE_BOARD_IMPORT_ENABLED: true });
+					const { wrapper, courseRoomDetailsStore } = setup({ permissionData: [Permission.COURSE_EDIT] });
+					await flushPromises();
+
+					wrapper.findComponent(BoardImportDialog).vm.$emit("imported");
+					await flushPromises();
+
+					// fetchContent is called once during initialization and once after the import
+					expect(courseRoomDetailsStore.fetchContent).toHaveBeenCalledTimes(2);
+				});
 			});
 		});
 

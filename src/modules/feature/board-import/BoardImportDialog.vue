@@ -27,6 +27,18 @@
 					</VChip>
 				</div>
 				<VProgressLinear v-if="isPending" indeterminate color="primary" data-testid="board-import-progress" />
+				<ErrorAlert v-if="job.status === BoardImportJobStatus.FAILED" data-testid="board-import-failure">
+					{{ failureMessage }}
+				</ErrorAlert>
+				<div v-if="job.status === BoardImportJobStatus.FINISHED" data-testid="board-import-notes">
+					<div class="font-weight-bold">{{ t("feature-board-import.dialog.notes.title") }}</div>
+					<ul v-if="noteMessages.length" class="pl-6">
+						<li v-for="(message, index) in noteMessages" :key="index" data-testid="board-import-note">
+							{{ message }}
+						</li>
+					</ul>
+					<div v-else data-testid="board-import-no-notes">{{ t("feature-board-import.dialog.notes.none") }}</div>
+				</div>
 				<div class="text-caption text-medium-emphasis">
 					{{ t("feature-board-import.dialog.jobId") }}:
 					<code data-testid="board-import-job-id">{{ job.id }}</code>
@@ -43,6 +55,7 @@
 </template>
 
 <script setup lang="ts">
+import { useBoardImportMessages } from "./board-import-messages.composable";
 import { BoardImportJobStatus, BoardImportTargetType } from "@api-board-import";
 import { useBoardImportJob } from "@data-board-import";
 import { ErrorAlert } from "@ui-alert";
@@ -55,10 +68,15 @@ defineProps<{
 	targetId: string;
 }>();
 
+const emit = defineEmits<{
+	imported: [];
+}>();
+
 const isOpen = defineModel({ type: Boolean, default: false });
 
 const { t } = useI18n();
 const { job, hasError, errorMessages, isStarting, startImport, reset } = useBoardImportJob();
+const { getFailureMessage, getNoteMessage } = useBoardImportMessages();
 
 const link = ref("");
 const trimmedLink = computed(() => link.value.trim());
@@ -78,10 +96,15 @@ const isPending = computed(
 		(job.value?.status === BoardImportJobStatus.WAITING || job.value?.status === BoardImportJobStatus.RUNNING)
 );
 
+const failureMessage = computed(() => getFailureMessage(job.value?.failureReason));
+const noteMessages = computed(() => (job.value?.notes ?? []).map(getNoteMessage));
+
 watch(isOpen, (open) => {
 	if (!open) {
+		const isImported = job.value?.status === BoardImportJobStatus.FINISHED;
 		link.value = "";
 		reset();
+		if (isImported) emit("imported");
 	}
 });
 </script>

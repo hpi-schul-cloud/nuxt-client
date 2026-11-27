@@ -1,7 +1,14 @@
 import BoardImportDialog from "./BoardImportDialog.vue";
 import { mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { BoardImportJobResponse, BoardImportJobStatus, BoardImportTargetType } from "@api-board-import";
+import {
+	BoardImportJobFailureReason,
+	BoardImportJobResponse,
+	BoardImportJobStatus,
+	BoardImportNoteResponse,
+	BoardImportNoteType,
+	BoardImportTargetType,
+} from "@api-board-import";
 import { useBoardImportJob } from "@data-board-import";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
@@ -90,7 +97,7 @@ describe("@feature-board-import/BoardImportDialog", () => {
 
 	describe("when an import was started", () => {
 		it("should show the id and the status of the job", () => {
-			const job = { id: "job-id", status: BoardImportJobStatus.RUNNING };
+			const job = { id: "job-id", status: BoardImportJobStatus.RUNNING, notes: [] };
 			const { wrapper } = setup({ job });
 
 			expect(document.querySelector("[data-testid='board-import-job-id']")?.textContent).toBe(job.id);
@@ -102,9 +109,78 @@ describe("@feature-board-import/BoardImportDialog", () => {
 
 	describe("when the import ended", () => {
 		it("should not show the progress bar", () => {
-			setup({ job: { id: "job-id", status: BoardImportJobStatus.FINISHED } });
+			setup({ job: { id: "job-id", status: BoardImportJobStatus.FINISHED, notes: [] } });
 
 			expect(document.querySelector("[data-testid='board-import-progress']")).toBeNull();
+		});
+	});
+
+	describe("when the import is running", () => {
+		it("should show no failure and no notes", () => {
+			setup({ job: { id: "job-id", status: BoardImportJobStatus.RUNNING, notes: [] } });
+
+			expect(document.querySelector("[data-testid='board-import-failure']")).toBeNull();
+			expect(document.querySelector("[data-testid='board-import-notes']")).toBeNull();
+		});
+	});
+
+	describe("when the import finished", () => {
+		const setupFinished = (notes: BoardImportNoteResponse[]) => {
+			setup({ job: { id: "job-id", status: BoardImportJobStatus.FINISHED, notes } });
+			const noteTexts = [...document.querySelectorAll("[data-testid='board-import-note']")].map((note) =>
+				note.textContent?.trim()
+			);
+
+			return { noteTexts };
+		};
+
+		it("should show that there are no notes when the job has none", () => {
+			const { noteTexts } = setupFinished([]);
+
+			expect(noteTexts).toEqual([]);
+			expect(document.querySelector("[data-testid='board-import-no-notes']")).not.toBeNull();
+		});
+
+		it("should show one entry for each note", () => {
+			const { noteTexts } = setupFinished([
+				{ type: BoardImportNoteType.BOARD_TITLE_SHORTENED },
+				{ type: BoardImportNoteType.BOARD_DESCRIPTION_LEFT_OUT },
+				{ type: BoardImportNoteType.ELEMENT_LEFT_OUT, sectionTitle: "Section", cardTitle: "Card", elementType: "link" },
+			]);
+
+			expect(noteTexts).toEqual([
+				"feature-board-import.dialog.notes.boardTitleShortened",
+				"feature-board-import.dialog.notes.boardDescriptionLeftOut",
+				"feature-board-import.dialog.notes.elementLeftOut",
+			]);
+			expect(document.querySelector("[data-testid='board-import-no-notes']")).toBeNull();
+		});
+
+		it("should show no failure", () => {
+			setupFinished([]);
+
+			expect(document.querySelector("[data-testid='board-import-failure']")).toBeNull();
+		});
+	});
+
+	describe("when the import failed", () => {
+		const setupFailed = (failureReason?: BoardImportJobFailureReason) => {
+			setup({ job: { id: "job-id", status: BoardImportJobStatus.FAILED, failureReason, notes: [] } });
+			const failureText = document.querySelector("[data-testid='board-import-failure']")?.textContent?.trim();
+
+			return { failureText };
+		};
+
+		it("should show the text of the failure reason", () => {
+			const { failureText } = setupFailed(BoardImportJobFailureReason.SOURCE_NOT_READABLE);
+
+			expect(failureText).toBe("feature-board-import.dialog.failure.sourceNotReadable");
+		});
+
+		it("should show no notes", () => {
+			setupFailed();
+
+			expect(document.querySelector("[data-testid='board-import-notes']")).toBeNull();
 		});
 	});
 
@@ -129,7 +205,7 @@ describe("@feature-board-import/BoardImportDialog", () => {
 		});
 
 		it("should not show the progress bar when the status could not be read", () => {
-			setup({ job: { id: "job-id", status: BoardImportJobStatus.RUNNING }, hasError: true });
+			setup({ job: { id: "job-id", status: BoardImportJobStatus.RUNNING, notes: [] }, hasError: true });
 
 			expect(document.querySelector("[data-testid='board-import-progress']")).toBeNull();
 		});
@@ -151,6 +227,22 @@ describe("@feature-board-import/BoardImportDialog", () => {
 			await wrapper.setProps({ modelValue: false });
 
 			expect(boardImportJob.reset).toHaveBeenCalled();
+		});
+
+		it("should emit imported when the import finished", async () => {
+			const { wrapper } = setup({ job: { id: "job-id", status: BoardImportJobStatus.FINISHED, notes: [] } });
+
+			await wrapper.setProps({ modelValue: false });
+
+			expect(wrapper.emitted("imported")).toHaveLength(1);
+		});
+
+		it("should not emit imported when the import did not finish", async () => {
+			const { wrapper } = setup({ job: { id: "job-id", status: BoardImportJobStatus.FAILED, notes: [] } });
+
+			await wrapper.setProps({ modelValue: false });
+
+			expect(wrapper.emitted("imported")).toBeUndefined();
 		});
 	});
 });

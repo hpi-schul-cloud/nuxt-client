@@ -919,8 +919,27 @@ export default {
 	"feature-autoLogout.warning.remainingTime": "menos de un minuto | un minuto | {remainingTime} minutos",
 	"feature-autoLogout.warning": "Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
 	"feature-board-import.dialog.error": "No se pudo iniciar la importación o no se pudo consultar su estado.",
+	"feature-board-import.dialog.failure.forbidden":
+		"La importación ha fallado: No tienes permiso para crear un tablero en esta sala o curso.",
+	"feature-board-import.dialog.failure.maxDuration": "La importación ha fallado: Ha tardado demasiado.",
+	"feature-board-import.dialog.failure.other": "La importación ha fallado (motivo: {reason}).",
+	"feature-board-import.dialog.failure.sourceBoardTypeNotSupported":
+		"La importación ha fallado: Este tipo de tablero no es compatible.",
+	"feature-board-import.dialog.failure.sourceNotReadable":
+		"La importación ha fallado: No se pudo leer el tablero a través del enlace.",
+	"feature-board-import.dialog.failure.sourceTooLarge": "La importación ha fallado: El tablero es demasiado grande.",
+	"feature-board-import.dialog.failure.unknown": "La importación ha fallado.",
 	"feature-board-import.dialog.jobId": "ID del trabajo",
 	"feature-board-import.dialog.link": "Enlace para compartir",
+	"feature-board-import.dialog.notes.boardDescriptionLeftOut": "La descripción del tablero no se ha importado.",
+	"feature-board-import.dialog.notes.boardTitleShortened": "El título del tablero se ha acortado.",
+	"feature-board-import.dialog.notes.element.other": "Contenido ({kind})",
+	"feature-board-import.dialog.notes.elementLeftOut":
+		"No se ha importado: {element} (sección: {section}, tarjeta: {card})",
+	"feature-board-import.dialog.notes.none": "No hay notas de importación.",
+	"feature-board-import.dialog.notes.other": "Otra nota de importación ({type})",
+	"feature-board-import.dialog.notes.title": "Notas de importación",
+	"feature-board-import.dialog.notes.withoutTitle": "sin título",
 	"feature-board-import.title": "Importar tablero",
 	"feature-loggedout.title": "Sesión expirada",
 	"feature-loggedout.message": "La sesión ha expirado por razones de seguridad.",
