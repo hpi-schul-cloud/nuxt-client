@@ -936,6 +936,8 @@ export default {
 	"feature-board-import.dialog.notes.element.other": "Contenido ({kind})",
 	"feature-board-import.dialog.notes.elementLeftOut":
 		"No se ha importado: {element} (sección: {section}, tarjeta: {card})",
+	"feature-board-import.dialog.notes.linkCreatedAsText":
+		"Enlace importado como texto, porque el elemento de enlace no está activo (sección: {section}, tarjeta: {card})",
 	"feature-board-import.dialog.notes.none": "No hay notas de importación.",
 	"feature-board-import.dialog.notes.other": "Otra nota de importación ({type})",
 	"feature-board-import.dialog.notes.title": "Notas de importación",

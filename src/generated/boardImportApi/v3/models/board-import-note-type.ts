@@ -19,6 +19,7 @@ export const BoardImportNoteType = {
     BOARD_TITLE_SHORTENED: 'board-title-shortened',
     BOARD_DESCRIPTION_LEFT_OUT: 'board-description-left-out',
     ELEMENT_LEFT_OUT: 'element-left-out',
+    LINK_CREATED_AS_TEXT: 'link-created-as-text',
 } as const;
 
 export type BoardImportNoteType = typeof BoardImportNoteType[keyof typeof BoardImportNoteType];

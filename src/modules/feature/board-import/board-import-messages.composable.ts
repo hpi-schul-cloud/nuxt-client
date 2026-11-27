@@ -44,14 +44,13 @@ export const useBoardImportMessages = () => {
 		if (note.type === BoardImportNoteType.BOARD_DESCRIPTION_LEFT_OUT) {
 			return t("feature-board-import.dialog.notes.boardDescriptionLeftOut");
 		}
+		const withoutTitle = t("feature-board-import.dialog.notes.withoutTitle");
+		const place = { section: note.sectionTitle || withoutTitle, card: note.cardTitle || withoutTitle };
 		if (note.type === BoardImportNoteType.ELEMENT_LEFT_OUT) {
-			const withoutTitle = t("feature-board-import.dialog.notes.withoutTitle");
-
-			return t("feature-board-import.dialog.notes.elementLeftOut", {
-				element: getElementName(note),
-				section: note.sectionTitle || withoutTitle,
-				card: note.cardTitle || withoutTitle,
-			});
+			return t("feature-board-import.dialog.notes.elementLeftOut", { element: getElementName(note), ...place });
+		}
+		if (note.type === BoardImportNoteType.LINK_CREATED_AS_TEXT) {
+			return t("feature-board-import.dialog.notes.linkCreatedAsText", place);
 		}
 
 		return t("feature-board-import.dialog.notes.other", { type: note.type });

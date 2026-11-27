@@ -944,6 +944,8 @@ export default {
 	"feature-board-import.dialog.notes.element.other": "Inhalt ({kind})",
 	"feature-board-import.dialog.notes.elementLeftOut":
 		"{element} nicht übernommen (Abschnitt: {section}, Karte: {card})",
+	"feature-board-import.dialog.notes.linkCreatedAsText":
+		"Link als Text übernommen, weil das Link-Element nicht aktiv ist (Abschnitt: {section}, Karte: {card})",
 	"feature-board-import.dialog.notes.none": "Keine Importhinweise.",
 	"feature-board-import.dialog.notes.other": "Anderer Importhinweis ({type})",
 	"feature-board-import.dialog.notes.title": "Importhinweise",

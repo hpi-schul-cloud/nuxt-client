@@ -13,6 +13,7 @@ describe("useBoardImportMessages", () => {
 							en: {
 								"feature-board-import.dialog.failure.other": "other failure {reason}",
 								"feature-board-import.dialog.notes.elementLeftOut": "{element} / {section} / {card}",
+								"feature-board-import.dialog.notes.linkCreatedAsText": "link as text / {section} / {card}",
 								"feature-board-import.dialog.notes.element.other": "other element {kind}",
 								"feature-board-import.dialog.notes.withoutTitle": "without title",
 								"feature-board-import.dialog.notes.other": "other note {type}",
@@ -84,6 +85,18 @@ describe("useBoardImportMessages", () => {
 			const message = getNoteMessage({ type: BoardImportNoteType.ELEMENT_LEFT_OUT, elementType: "link" });
 
 			expect(message).toBe("Link / without title / without title");
+		});
+
+		it("should return the section and the card of a link that was imported as text", () => {
+			const { getNoteMessage } = setup();
+
+			const message = getNoteMessage({
+				type: BoardImportNoteType.LINK_CREATED_AS_TEXT,
+				sectionTitle: "Section",
+				cardTitle: "Card",
+			});
+
+			expect(message).toBe("link as text / Section / Card");
 		});
 
 		it("should use the kind of an element without its own text", () => {

@@ -931,6 +931,8 @@ export default {
 	"feature-board-import.dialog.notes.boardTitleShortened": "Назву дошки скорочено.",
 	"feature-board-import.dialog.notes.element.other": "Вміст ({kind})",
 	"feature-board-import.dialog.notes.elementLeftOut": "{element} не імпортовано (розділ: {section}, картка: {card})",
+	"feature-board-import.dialog.notes.linkCreatedAsText":
+		"Посилання імпортовано як текст, оскільки елемент посилання не активний (розділ: {section}, картка: {card})",
 	"feature-board-import.dialog.notes.none": "Немає приміток до імпорту.",
 	"feature-board-import.dialog.notes.other": "Інша примітка до імпорту ({type})",
 	"feature-board-import.dialog.notes.title": "Примітки до імпорту",
