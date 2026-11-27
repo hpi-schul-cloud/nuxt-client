@@ -919,6 +919,7 @@ export default {
 	"feature-board-import.dialog.notes.other": "Other import note ({type})",
 	"feature-board-import.dialog.notes.title": "Import notes",
 	"feature-board-import.dialog.notes.withoutTitle": "without title",
+	"feature-board-import.dialog.progress": "{imported} of {total} sections and cards created",
 	"feature-board-import.title": "Import board",
 	"feature-loggedout.title": "Session expired",
 	"feature-loggedout.message": "The session has expired for security reasons.",

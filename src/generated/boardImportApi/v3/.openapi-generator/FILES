@@ -13,6 +13,7 @@ models/board-import-job-response.ts
 models/board-import-job-status.ts
 models/board-import-note-response.ts
 models/board-import-note-type.ts
+models/board-import-progress-response.ts
 models/board-import-target-type.ts
 models/create-board-import-job-body-params.ts
 models/index.ts

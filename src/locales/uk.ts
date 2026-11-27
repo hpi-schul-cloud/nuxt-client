@@ -935,6 +935,7 @@ export default {
 	"feature-board-import.dialog.notes.other": "Інша примітка до імпорту ({type})",
 	"feature-board-import.dialog.notes.title": "Примітки до імпорту",
 	"feature-board-import.dialog.notes.withoutTitle": "без назви",
+	"feature-board-import.dialog.progress": "Створено {imported} з {total} розділів і карток",
 	"feature-board-import.title": "Імпортувати дошку",
 	"feature-loggedout.title": "Термін сеансу минув",
 	"feature-loggedout.message": "Термін дії сеансу минув з міркувань безпеки.",

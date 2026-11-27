@@ -4,5 +4,6 @@ export * from './board-import-job-response';
 export * from './board-import-job-status';
 export * from './board-import-note-response';
 export * from './board-import-note-type';
+export * from './board-import-progress-response';
 export * from './board-import-target-type';
 export * from './create-board-import-job-body-params';

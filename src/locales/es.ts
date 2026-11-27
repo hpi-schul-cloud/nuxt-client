@@ -940,6 +940,7 @@ export default {
 	"feature-board-import.dialog.notes.other": "Otra nota de importación ({type})",
 	"feature-board-import.dialog.notes.title": "Notas de importación",
 	"feature-board-import.dialog.notes.withoutTitle": "sin título",
+	"feature-board-import.dialog.progress": "{imported} de {total} secciones y tarjetas creadas",
 	"feature-board-import.title": "Importar tablero",
 	"feature-loggedout.title": "Sesión expirada",
 	"feature-loggedout.message": "La sesión ha expirado por razones de seguridad.",
