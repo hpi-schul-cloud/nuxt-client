@@ -19,6 +19,8 @@
 				<RenderHTML :html="inMaintenanceOrMigrationText" />
 			</WarningAlert>
 
+			<FormerMembershipsBanner v-if="isTeacher" class="mt-4" />
+
 			<SvsLoading :loading-state="newsLoadingState">
 				<h2 class="mb-4">{{ t("pages.news.title") }}</h2>
 
@@ -54,7 +56,7 @@ import { Permission, SchulcloudTheme } from "@api-server";
 import { useNewsList } from "@data-access";
 import { useAppStore, useAppStoreRefs, useSchoolStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { DashboardReleaseDialog, DashboardTasks } from "@feature-dashboard";
+import { DashboardReleaseDialog, DashboardTasks, FormerMembershipsBanner } from "@feature-dashboard";
 import { NewsGrid } from "@feature-news";
 import { RenderHTML } from "@feature-render-html";
 import { InfoAlert, WarningAlert } from "@ui-alert";
