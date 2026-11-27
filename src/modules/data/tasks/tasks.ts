@@ -79,6 +79,7 @@ export const useTasks = (
 		execute: executeFinished,
 		loadingState: finishedTasksLoadingState,
 		error: errorFinished,
+		isRunning: isFinishedTasksRunning,
 	} = useSafeAxiosTask();
 
 	// === Raw Data ===
@@ -92,6 +93,8 @@ export const useTasks = (
 	const hasMoreFinishedTasks = computed(
 		() => finishedTotal.value !== undefined && finishedTasks.value.length < finishedTotal.value
 	);
+
+	const canLoadMoreFinishedTasks = computed(() => finishedTotal.value === undefined || hasMoreFinishedTasks.value);
 
 	const range = ref(options.range);
 
@@ -148,6 +151,8 @@ export const useTasks = (
 	};
 
 	const loadMoreFinishedTasks = async () => {
+		if (isFinishedTasksRunning.value) return;
+
 		const isUninitialized = finishedTotal.value === undefined;
 
 		if (!isUninitialized && !hasMoreFinishedTasks.value) return;
@@ -164,9 +169,12 @@ export const useTasks = (
 		);
 
 		if (success && result) {
-			finishedTasks.value = isUninitialized ? result.data.data : [...finishedTasks.value, ...result.data.data];
-			finishedTotal.value = result.data.total;
+			const page = result.data.data;
+			finishedTasks.value = isUninitialized ? page : [...finishedTasks.value, ...page];
 			finishedPage.value = nextPage;
+			finishedTotal.value = page.length < PAGE_SIZE ? finishedTasks.value.length : result.data.total;
+		} else {
+			finishedTotal.value = finishedTasks.value.length;
 		}
 	};
 
@@ -197,6 +205,7 @@ export const useTasks = (
 		// Finished Tasks
 		finishedTasks,
 		hasMoreFinishedTasks,
+		canLoadMoreFinishedTasks,
 
 		// Range Filter
 		range,

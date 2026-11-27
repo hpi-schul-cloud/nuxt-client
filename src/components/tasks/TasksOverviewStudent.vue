@@ -17,7 +17,7 @@
 					:value="TaskTab.FINISHED"
 					:tasks="finishedTasks"
 					:is-loading-more-items="isLoadingFinishedTasks"
-					has-pagination
+					:has-pagination="canLoadMoreFinishedTasks"
 					@load-more-tasks="loadMoreFinishedTasks"
 				/>
 			</VWindow>
@@ -59,8 +59,14 @@ const activeTab = computed({
 	},
 });
 
-const { openForStudent, finishedTasks, finishedTasksLoadingState, loadMoreFinishedTasks, submittedForStudent } =
-	useTasksOfOverview();
+const {
+	openForStudent,
+	finishedTasks,
+	finishedTasksLoadingState,
+	loadMoreFinishedTasks,
+	submittedForStudent,
+	canLoadMoreFinishedTasks,
+} = useTasksOfOverview();
 
 const isLoadingFinishedTasks = computed(
 	() => finishedTasksLoadingState.value === "loading" || finishedTasksLoadingState.value === "extLoading"

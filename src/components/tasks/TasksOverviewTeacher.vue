@@ -21,7 +21,7 @@
 					:value="TaskTab.FINISHED"
 					:tasks="finishedTasks"
 					:is-loading-more-items="isLoadingFinishedTasks"
-					has-pagination
+					:has-pagination="canLoadMoreFinishedTasks"
 					@load-more-tasks="loadMoreFinishedTasks"
 					@copy-task="onCopyTask"
 					@share-task="onShareTask"
@@ -65,8 +65,15 @@ const activeTab = computed({
 	},
 });
 
-const { drafts, openForTeacher, finishedTasksLoadingState, fetchTasks, loadMoreFinishedTasks, finishedTasks } =
-	useTasksOfOverview();
+const {
+	drafts,
+	openForTeacher,
+	finishedTasksLoadingState,
+	fetchTasks,
+	loadMoreFinishedTasks,
+	finishedTasks,
+	canLoadMoreFinishedTasks,
+} = useTasksOfOverview();
 
 const isLoadingFinishedTasks = computed(
 	() => finishedTasksLoadingState.value === "loading" || finishedTasksLoadingState.value === "extLoading"

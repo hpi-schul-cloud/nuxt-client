@@ -37,7 +37,7 @@ const emit = defineEmits<{ "load-more-tasks": [] }>();
 
 const showSpinner = computed(() => props.hasPagination && props.isLoadingMoreItems);
 const loadMore = (isIntersecting: boolean) => {
-	if (isIntersecting) emit("load-more-tasks");
+	if (isIntersecting && !props.isLoadingMoreItems) emit("load-more-tasks");
 };
 </script>
 <style lang="scss" scoped>
