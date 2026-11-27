@@ -936,6 +936,7 @@ export default {
 	"feature-board-import.dialog.notes.element.other": "Contenido ({kind})",
 	"feature-board-import.dialog.notes.elementLeftOut": "{element} no importado (sección: {section}, tarjeta: {card})",
 	"feature-board-import.dialog.notes.none": "No hay notas de importación.",
+	"feature-board-import.dialog.notes.other": "Otra nota de importación ({type})",
 	"feature-board-import.dialog.notes.title": "Notas de importación",
 	"feature-board-import.dialog.notes.withoutTitle": "sin título",
 	"feature-board-import.title": "Importar tablero",

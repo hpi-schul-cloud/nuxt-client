@@ -916,6 +916,7 @@ export default {
 	"feature-board-import.dialog.notes.element.other": "Content ({kind})",
 	"feature-board-import.dialog.notes.elementLeftOut": "{element} not imported (section: {section}, card: {card})",
 	"feature-board-import.dialog.notes.none": "No import notes.",
+	"feature-board-import.dialog.notes.other": "Other import note ({type})",
 	"feature-board-import.dialog.notes.title": "Import notes",
 	"feature-board-import.dialog.notes.withoutTitle": "without title",
 	"feature-board-import.title": "Import board",

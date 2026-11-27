@@ -945,6 +945,7 @@ export default {
 	"feature-board-import.dialog.notes.elementLeftOut":
 		"{element} nicht übernommen (Abschnitt: {section}, Karte: {card})",
 	"feature-board-import.dialog.notes.none": "Keine Importhinweise.",
+	"feature-board-import.dialog.notes.other": "Anderer Importhinweis ({type})",
 	"feature-board-import.dialog.notes.title": "Importhinweise",
 	"feature-board-import.dialog.notes.withoutTitle": "ohne Titel",
 	"feature-board-import.title": "Bereich importieren",

@@ -932,6 +932,7 @@ export default {
 	"feature-board-import.dialog.notes.element.other": "Вміст ({kind})",
 	"feature-board-import.dialog.notes.elementLeftOut": "{element} не імпортовано (розділ: {section}, картка: {card})",
 	"feature-board-import.dialog.notes.none": "Немає приміток до імпорту.",
+	"feature-board-import.dialog.notes.other": "Інша примітка до імпорту ({type})",
 	"feature-board-import.dialog.notes.title": "Примітки до імпорту",
 	"feature-board-import.dialog.notes.withoutTitle": "без назви",
 	"feature-board-import.title": "Імпортувати дошку",

@@ -138,13 +138,17 @@ const getNoteMessage = (note: BoardImportNoteResponse): string => {
 		return t("feature-board-import.dialog.notes.boardDescriptionLeftOut");
 	}
 
-	const withoutTitle = t("feature-board-import.dialog.notes.withoutTitle");
+	if (note.type === BoardImportNoteType.ELEMENT_LEFT_OUT) {
+		const withoutTitle = t("feature-board-import.dialog.notes.withoutTitle");
 
-	return t("feature-board-import.dialog.notes.elementLeftOut", {
-		element: getElementName(note),
-		section: note.sectionTitle || withoutTitle,
-		card: note.cardTitle || withoutTitle,
-	});
+		return t("feature-board-import.dialog.notes.elementLeftOut", {
+			element: getElementName(note),
+			section: note.sectionTitle || withoutTitle,
+			card: note.cardTitle || withoutTitle,
+		});
+	}
+
+	return t("feature-board-import.dialog.notes.other", { type: note.type });
 };
 
 const noteMessages = computed(() => (job.value?.notes ?? []).map(getNoteMessage));

@@ -43,7 +43,22 @@ describe("@feature-board-import/BoardImportDialog", () => {
 		const targetId = "room-id";
 
 		wrapper = mount(BoardImportDialog, {
-			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+			global: {
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n({
+						messages: {
+							en: {
+								"feature-board-import.dialog.notes.elementLeftOut": "{element} / {section} / {card}",
+								"feature-board-import.dialog.notes.element.other": "other element {kind}",
+								"feature-board-import.dialog.notes.withoutTitle": "without title",
+								"feature-board-import.dialog.notes.other": "other note {type}",
+								"components.cardElement.LinkElement": "Link",
+							},
+						},
+					}),
+				],
+			},
 			props: {
 				modelValue: true,
 				targetType,
@@ -151,9 +166,39 @@ describe("@feature-board-import/BoardImportDialog", () => {
 			expect(noteTexts).toEqual([
 				"feature-board-import.dialog.notes.boardTitleShortened",
 				"feature-board-import.dialog.notes.boardDescriptionLeftOut",
-				"feature-board-import.dialog.notes.elementLeftOut",
+				"Link / Section / Card",
 			]);
 			expect(document.querySelector("[data-testid='board-import-no-notes']")).toBeNull();
+		});
+
+		it("should show a placeholder for a missing section or card title", () => {
+			const { noteTexts } = setupFinished([{ type: BoardImportNoteType.ELEMENT_LEFT_OUT, elementType: "link" }]);
+
+			expect(noteTexts).toEqual(["Link / without title / without title"]);
+		});
+
+		it("should show the kind of an element without its own text", () => {
+			const { noteTexts } = setupFinished([
+				{ type: BoardImportNoteType.ELEMENT_LEFT_OUT, elementType: "not-supported", elementKind: "ExternalTool" },
+			]);
+
+			expect(noteTexts).toEqual(["other element ExternalTool / without title / without title"]);
+		});
+
+		it("should show the element type when the element kind is empty", () => {
+			const { noteTexts } = setupFinished([
+				{ type: BoardImportNoteType.ELEMENT_LEFT_OUT, elementType: "not-supported", elementKind: "" },
+			]);
+
+			expect(noteTexts).toEqual(["other element not-supported / without title / without title"]);
+		});
+
+		it("should show the general text with the type for an unknown note type", () => {
+			const type = "card-left-out" as BoardImportNoteType;
+
+			const { noteTexts } = setupFinished([{ type, sectionTitle: "Section" }]);
+
+			expect(noteTexts).toEqual([`other note ${type}`]);
 		});
 
 		it("should show no failure", () => {
