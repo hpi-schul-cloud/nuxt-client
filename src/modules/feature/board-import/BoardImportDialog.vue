@@ -125,7 +125,7 @@ const getElementName = (note: BoardImportNoteResponse): string => {
 	const key = note.elementType ? elementKeys[note.elementType] : undefined;
 	if (key) return t(key);
 
-	const kind = note.elementKind ?? note.elementType ?? "";
+	const kind = note.elementKind || note.elementType || "";
 
 	return t("feature-board-import.dialog.notes.element.other", { kind });
 };
