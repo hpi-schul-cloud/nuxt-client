@@ -518,23 +518,23 @@ describe("FileContentElement", () => {
 			});
 
 			describe("when mime type is pdf", () => {
-				it("should open pdf url in new tab when file content emits activate", async () => {
+				it("should download pdf when file content emits activate", async () => {
 					const { wrapper, fileRecordResponse } = setup({
 						isCollaboraEnabled: false,
 						mimeType: "application/pdf",
 						isCollaboraEditable: false,
 					});
 
-					const windowOpenMock = vi.fn();
-					const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
+					const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(vi.fn());
 
 					wrapper.findComponent(FileContent).vm.$emit("activate");
 
-					expect(windowOpenSpy).toHaveBeenCalledWith(fileRecordResponse.url, "_blank");
+					expect(vi.mocked(downloadFile)).toHaveBeenCalledWith(fileRecordResponse.url, fileRecordResponse.name);
+					expect(windowOpenSpy).not.toHaveBeenCalled();
 					windowOpenSpy.mockRestore();
 				});
 
-				it("should open pdf url in new tab when card is clicked", async () => {
+				it("should download pdf when card is clicked", async () => {
 					const { wrapper, fileRecordResponse } = setup({
 						isCollaboraEnabled: false,
 						mimeType: "application/pdf",
@@ -542,16 +542,16 @@ describe("FileContentElement", () => {
 					});
 					const card = wrapper.findComponent(VCard);
 
-					const windowOpenMock = vi.fn();
-					const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
+					const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(vi.fn());
 
 					await card.trigger("click");
 
-					expect(windowOpenSpy).toHaveBeenCalledWith(fileRecordResponse.url, "_blank");
+					expect(vi.mocked(downloadFile)).toHaveBeenCalledWith(fileRecordResponse.url, fileRecordResponse.name);
+					expect(windowOpenSpy).not.toHaveBeenCalled();
 					windowOpenSpy.mockRestore();
 				});
 
-				it("should open pdf url in new tab when enter is pressed", async () => {
+				it("should download pdf when enter is pressed", async () => {
 					const { wrapper, fileRecordResponse } = setup({
 						isCollaboraEnabled: false,
 						mimeType: "application/pdf",
@@ -560,13 +560,31 @@ describe("FileContentElement", () => {
 
 					const card = wrapper.findComponent(VCard);
 
-					const windowOpenMock = vi.fn();
-					const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
+					const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(vi.fn());
 
 					await card.trigger("keydown.enter");
 
-					expect(windowOpenSpy).toHaveBeenCalledWith(fileRecordResponse.url, "_blank");
+					expect(vi.mocked(downloadFile)).toHaveBeenCalledWith(fileRecordResponse.url, fileRecordResponse.name);
+					expect(windowOpenSpy).not.toHaveBeenCalled();
+					windowOpenSpy.mockRestore();
+				});
 
+				it("should not download pdf when card is clicked and a virus is detected", async () => {
+					const { wrapper } = setup({
+						scanStatus: FileRecordScanStatus.BLOCKED,
+						previewStatus: PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED,
+						isCollaboraEnabled: false,
+						mimeType: "application/pdf",
+						isCollaboraEditable: false,
+					});
+					const card = wrapper.findComponent(VCard);
+
+					const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(vi.fn());
+
+					await card.trigger("click");
+
+					expect(vi.mocked(downloadFile)).not.toHaveBeenCalled();
+					expect(windowOpenSpy).not.toHaveBeenCalled();
 					windowOpenSpy.mockRestore();
 				});
 			});
@@ -1106,7 +1124,7 @@ describe("FileContentElement", () => {
 				expect(card.classes()).toContain("content-element-card-edit-mode");
 			});
 
-			it("should not open pdf url when card is clicked in edit mode", async () => {
+			it("should not open or download pdf when card is clicked in edit mode", async () => {
 				const { wrapper } = setup({
 					isCollaboraEnabled: false,
 					mimeType: "application/pdf",
@@ -1119,10 +1137,11 @@ describe("FileContentElement", () => {
 				await card.trigger("click");
 
 				expect(windowOpenSpy).not.toHaveBeenCalled();
+				expect(vi.mocked(downloadFile)).not.toHaveBeenCalled();
 				windowOpenSpy.mockRestore();
 			});
 
-			it("should not open pdf url when enter is pressed in edit mode", async () => {
+			it("should not open or download pdf when enter is pressed in edit mode", async () => {
 				const { wrapper } = setup({
 					isCollaboraEnabled: false,
 					mimeType: "application/pdf",
@@ -1135,6 +1154,7 @@ describe("FileContentElement", () => {
 				await card.trigger("keydown.enter");
 
 				expect(windowOpenSpy).not.toHaveBeenCalled();
+				expect(vi.mocked(downloadFile)).not.toHaveBeenCalled();
 				windowOpenSpy.mockRestore();
 			});
 

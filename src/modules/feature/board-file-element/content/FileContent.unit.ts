@@ -686,13 +686,24 @@ describe("FileContent", () => {
 				expect(props.isdownloadlink).toBe("true");
 			});
 
-			it("should pass false when file is pdf", () => {
+			it("should pass true when file is pdf", () => {
 				const { wrapper } = setup({
 					mimeType: "application/pdf",
 				});
 				const props = wrapper.findComponent(FileDescription).attributes();
 
+				expect(props.isdownloadlink).toBe("true");
+			});
+
+			it("should pass false and no href when file is pdf and not downloadable", () => {
+				const { wrapper } = setup({
+					mimeType: "application/pdf",
+					isDownloadAllowed: false,
+				});
+				const props = wrapper.findComponent(FileDescription).attributes();
+
 				expect(props.isdownloadlink).toBe("false");
+				expect(props.href).toBeUndefined();
 			});
 
 			it("should pass false when file is collabora", () => {

@@ -23,8 +23,9 @@ export const useFileInteractionType = (input: FileInteractionTypeInput) => {
 		return FileInteractionType.None;
 	}
 
+	// PDFs have a preview image but must be downloaded, never opened in the image light box
 	if (isPdfMimeType(input.mimeType)) {
-		return FileInteractionType.Pdf;
+		return input.isDownloadAllowed ? FileInteractionType.Download : FileInteractionType.None;
 	}
 
 	if (input.hasPreviewUrl) {
