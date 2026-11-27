@@ -29,6 +29,43 @@ export const useGroupClasses = () => {
 
 	const { execute: execDelete } = useSafeAxiosTask();
 	const { execute: execFetch, isRunning: isFetching } = useSafeAxiosTask();
+	const { execute: execMutate, isRunning: isMutating } = useSafeAxiosTask();
+
+	const fetchClassById = async (classId: string, params?: { $populate?: string[] }) => {
+		const { result, success } = await execFetch(
+			() => $axios.get(`/v1/classes/${classId}`, { params }),
+			t("error.load")
+		);
+
+		return success && result ? result.data : undefined;
+	};
+
+	const createClass = async (payload: { name: string; gradeLevel?: number; year?: string; teacherIds?: string[] }) => {
+		const { result, success } = await execMutate(
+			() => $axios.post("/v1/classes", payload),
+			t("common.notifications.errors.notCreated", { type: t("common.labels.class") })
+		);
+
+		return { success, data: result?.data };
+	};
+
+	const updateClass = async (
+		classId: string,
+		payload: {
+			name?: string;
+			gradeLevel?: number;
+			year?: string;
+			teacherIds?: string[];
+			userIds?: string[];
+		}
+	) => {
+		const { result, success } = await execMutate(
+			() => $axios.patch(`/v1/classes/${classId}`, payload),
+			t("common.notifications.errors.notSaved", { type: t("common.labels.class") })
+		);
+
+		return { success, data: result?.data };
+	};
 
 	const deleteClass = async (deleteQuery: { classId: string; query?: SchoolYearQueryType }): Promise<void> => {
 		const { success } = await execDelete(
@@ -68,10 +105,14 @@ export const useGroupClasses = () => {
 	};
 
 	return {
+		fetchClassById,
+		createClass,
+		updateClass,
 		deleteClass,
 		fetchClassesForSchool,
 		classes,
 		isFetching,
+		isMutating,
 		pagination,
 		page,
 		sortBy,
