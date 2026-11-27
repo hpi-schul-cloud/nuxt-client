@@ -107,7 +107,59 @@ describe("@feature-board-import/BoardImportDialog", () => {
 		});
 	});
 
+	describe("when the running job has a progress", () => {
+		const setupProgress = () => {
+			const progress = { total: 8, imported: 2 };
+			setup({ job: { id: "job-id", status: BoardImportJobStatus.RUNNING, notes: [], progress } });
+			const progressBar = document.querySelector("[data-testid='board-import-progress']");
+			const progressCount = document.querySelector("[data-testid='board-import-progress-count']");
+
+			return { progressBar, progressCount };
+		};
+
+		it("should show the progress as a part of the progress bar", () => {
+			const { progressBar } = setupProgress();
+
+			expect(progressBar?.getAttribute("aria-valuenow")).toBe("25");
+		});
+
+		it("should show the count of the imported sections and cards", () => {
+			const { progressCount } = setupProgress();
+
+			expect(progressCount?.textContent?.trim()).toBe("feature-board-import.dialog.progress");
+		});
+	});
+
+	describe("when the running job has no progress", () => {
+		it("should show a progress bar without a value and no count", () => {
+			setup({ job: { id: "job-id", status: BoardImportJobStatus.RUNNING, notes: [] } });
+
+			const progressBar = document.querySelector("[data-testid='board-import-progress']");
+
+			expect(progressBar?.getAttribute("aria-valuenow")).toBeNull();
+			expect(document.querySelector("[data-testid='board-import-progress-count']")).toBeNull();
+		});
+	});
+
+	describe("when the plan of the job has no sections", () => {
+		it("should show a progress bar without a value", () => {
+			const progress = { total: 0, imported: 0 };
+			setup({ job: { id: "job-id", status: BoardImportJobStatus.RUNNING, notes: [], progress } });
+
+			const progressBar = document.querySelector("[data-testid='board-import-progress']");
+
+			expect(progressBar?.getAttribute("aria-valuenow")).toBeNull();
+		});
+	});
+
 	describe("when the import ended", () => {
+		it("should still show the count of the imported sections and cards", () => {
+			const progress = { total: 8, imported: 8 };
+			setup({ job: { id: "job-id", status: BoardImportJobStatus.FINISHED, notes: [], progress } });
+
+			expect(document.querySelector("[data-testid='board-import-progress-count']")).not.toBeNull();
+		});
+
 		it("should not show the progress bar", () => {
 			setup({ job: { id: "job-id", status: BoardImportJobStatus.FINISHED, notes: [] } });
 

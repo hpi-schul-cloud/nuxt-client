@@ -35,6 +35,7 @@ export const BoardImportJobFailureReason = {
     SOURCE_TOO_MANY_REDIRECTS: 'source-too-many-redirects',
     SOURCE_UNKNOWN: 'source-unknown',
     SOURCE_BOARD_TYPE_NOT_SUPPORTED: 'source-board-type-not-supported',
+    PLAN_VERSION_NOT_SUPPORTED: 'plan-version-not-supported',
 } as const;
 
 export type BoardImportJobFailureReason = typeof BoardImportJobFailureReason[keyof typeof BoardImportJobFailureReason];

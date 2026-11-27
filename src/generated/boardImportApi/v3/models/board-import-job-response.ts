@@ -22,6 +22,9 @@ import type { BoardImportJobStatus } from './board-import-job-status';
 // May contain unused imports in some cases
 // @ts-ignore
 import type { BoardImportNoteResponse } from './board-import-note-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { BoardImportProgressResponse } from './board-import-progress-response';
 
 export interface BoardImportJobResponse {
     /**
@@ -37,6 +40,10 @@ export interface BoardImportJobResponse {
      * The content of the source that the board does not contain as the source has it.
      */
     'notes': Array<BoardImportNoteResponse>;
+    /**
+     * The progress of the import. A job has no progress before the import has read the source.
+     */
+    'progress'?: BoardImportProgressResponse;
 }
 
 

@@ -26,7 +26,16 @@
 						{{ job.status }}
 					</VChip>
 				</div>
-				<VProgressLinear v-if="isPending" indeterminate color="primary" data-testid="board-import-progress" />
+				<VProgressLinear
+					v-if="isPending"
+					:model-value="progressPercent"
+					:indeterminate="progressPercent === undefined"
+					color="primary"
+					data-testid="board-import-progress"
+				/>
+				<div v-if="job.progress" data-testid="board-import-progress-count">
+					{{ t("feature-board-import.dialog.progress", { ...job.progress }) }}
+				</div>
 				<ErrorAlert v-if="job.status === BoardImportJobStatus.FAILED" data-testid="board-import-failure">
 					{{ failureMessage }}
 				</ErrorAlert>
@@ -95,6 +104,14 @@ const isPending = computed(
 		!hasError.value &&
 		(job.value?.status === BoardImportJobStatus.WAITING || job.value?.status === BoardImportJobStatus.RUNNING)
 );
+
+// A plan without sections has no steps, so the bar has no value to show.
+const progressPercent = computed(() => {
+	const progress = job.value?.progress;
+	if (!progress || progress.total === 0) return undefined;
+
+	return (progress.imported / progress.total) * 100;
+});
 
 const failureMessage = computed(() => getFailureMessage(job.value?.failureReason));
 const noteMessages = computed(() => (job.value?.notes ?? []).map(getNoteMessage));

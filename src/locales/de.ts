@@ -948,6 +948,7 @@ export default {
 	"feature-board-import.dialog.notes.other": "Anderer Importhinweis ({type})",
 	"feature-board-import.dialog.notes.title": "Importhinweise",
 	"feature-board-import.dialog.notes.withoutTitle": "ohne Titel",
+	"feature-board-import.dialog.progress": "{imported} von {total} Abschnitten und Karten angelegt",
 	"feature-board-import.title": "Bereich importieren",
 	"feature-loggedout.title": "Sitzung abgelaufen",
 	"feature-loggedout.message": "Die Sitzung ist aus Sicherheitsgründen abgelaufen.",
